@@ -8,9 +8,10 @@
  *
  * A template is human-authored code in this repo. Its id is "setting/name"
  * (e.g. "veridia/vote"). In-world fonts are allowed inside a template only.
- * None are registered yet; register them here when they are built.
+ * Register new ones in DEFAULT_TEMPLATES; each needs a case in `npm run test:render`.
  */
 import type { BlockLike } from '~/lib/reading';
+import { veridiaVote } from './veridia-vote';
 
 export interface ScreenTemplate {
   id: string;
@@ -20,4 +21,4 @@ export interface ScreenTemplate {
   render(block: BlockLike): string;
 }
 
-export const DEFAULT_TEMPLATES: readonly ScreenTemplate[] = [];
+export const DEFAULT_TEMPLATES: readonly ScreenTemplate[] = [veridiaVote];

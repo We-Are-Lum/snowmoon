@@ -1,5 +1,7 @@
 -- 0001_core.sql — core schema (Build Brief v4, sections 4b and 5).
 --
+-- Frozen as of brief v4d. Do not edit; schema changes go in 0002 and later.
+--
 -- Target: a shared studio database. Every object lives in the `studio` schema;
 -- nothing is created in `public`.
 --
@@ -166,7 +168,7 @@ create table studio.take_items (
   take_id uuid not null references studio.takes(id),
   version_id uuid not null references studio.element_versions(id),
   pos int not null default 0,
-  -- beside: shown with the book text. replace: hides the book text; needs lettering.
+  -- beside: shown with the book text. replace: hides the book text; see check_take_item_display.
   display text not null default 'beside' check (display in ('beside','replace')),
   primary key (take_id, version_id)
 );
@@ -307,19 +309,29 @@ create trigger anchors_type
   before insert on studio.anchors
   for each row execute function studio.check_anchor_type();
 
--- display = 'replace' hides the book text, so the version must carry lettering.
+-- display = 'replace' hides the book text, so the version must stand in for it:
+-- an image with non-empty lettering, a text element with non-empty text, or a render
+-- element. The app, not this trigger, checks that a replacing render's anchor covers
+-- only screen or figure blocks.
 create function studio.check_take_item_display() returns trigger
 language plpgsql
 set search_path = ''
 as $$
 begin
   if new.display = 'replace' and not exists (
-    select 1 from studio.element_versions v
+    select 1 from studio.element_versions v join studio.elements e on e.id = v.element_id
     where v.id = new.version_id
-      and jsonb_typeof(v.body->'lettering') = 'array'
-      and jsonb_array_length(v.body->'lettering') > 0
+      and (
+        (e.element_type = 'image'
+          and jsonb_typeof(v.body->'lettering') = 'array'
+          and jsonb_array_length(v.body->'lettering') > 0)
+        or (e.element_type = 'text'
+          and jsonb_typeof(v.body->'text') = 'string'
+          and btrim(v.body->>'text') <> '')
+        or e.element_type = 'render'
+      )
   ) then
-    raise exception 'take_items: display replace needs a version with lettering (version %)', new.version_id;
+    raise exception 'take_items: display replace needs an image with lettering, a text with text, or a render (version %)', new.version_id;
   end if;
   return new;
 end;

@@ -204,12 +204,34 @@ await ok('fixture: a take', W, `
 await ok('display defaults to beside', W,
   `insert into studio.take_items (take_id, version_id) values ('00000000-0000-0000-0000-00000000aa01', '00000000-0000-0000-0000-0000000000f1')`);
 await equal('default is beside', 'postgres', `select display as v from studio.take_items where version_id = '00000000-0000-0000-0000-0000000000f1'`, 'beside');
-await denied('replace without lettering is rejected (empty lettering)', W,
-  `update studio.take_items set display = 'replace' where version_id = '00000000-0000-0000-0000-0000000000f1'`, /needs a version with lettering/);
-await ok('replace with lettering is allowed', W,
-  `insert into studio.take_items (take_id, version_id, display) values ('00000000-0000-0000-0000-00000000aa01', '00000000-0000-0000-0000-0000000000f7', 'replace')`);
-await denied('replace on a design version (no lettering) is rejected', W,
-  `insert into studio.take_items (take_id, version_id, display) values ('00000000-0000-0000-0000-00000000aa01', '00000000-0000-0000-0000-0000000000d1', 'replace')`, /needs a version with lettering/);
+const REPLACE = /display replace needs an image with lettering, a text with text, or a render/;
+const replaceItem = (v: string) => `insert into studio.take_items (take_id, version_id, display) values ('00000000-0000-0000-0000-00000000aa01', '${v}', 'replace')`;
+await denied('replace on an image with empty lettering is rejected', W,
+  `update studio.take_items set display = 'replace' where version_id = '00000000-0000-0000-0000-0000000000f1'`, REPLACE);
+await ok('replace on an image with lettering is allowed', W, replaceItem('00000000-0000-0000-0000-0000000000f7'));
+await denied('replace on a design version is rejected', W, replaceItem('00000000-0000-0000-0000-0000000000d1'), REPLACE);
+await ok('fixture: text, render, and clip versions', 'postgres', `
+  insert into studio.elements (id, work_id, element_type, created_by_fid) values
+    ('00000000-0000-0000-0000-0000000000b3', 'snowmoon', 'text', 2),
+    ('00000000-0000-0000-0000-0000000000b4', 'snowmoon', 'render', 2),
+    ('00000000-0000-0000-0000-0000000000b5', 'snowmoon', 'clip', 2);
+  insert into studio.element_versions (id, element_id, version_no, body) values
+    ('00000000-0000-0000-0000-000000000031', '00000000-0000-0000-0000-0000000000b3', 1, '{"text": "Gladias walked on."}'),
+    ('00000000-0000-0000-0000-000000000032', '00000000-0000-0000-0000-0000000000b3', 2, '{"text": "  "}'),
+    ('00000000-0000-0000-0000-000000000033', '00000000-0000-0000-0000-0000000000b3', 3, '{}'),
+    ('00000000-0000-0000-0000-000000000034', '00000000-0000-0000-0000-0000000000b3', 4,
+     '{"text": "", "lettering": [{"kind": "caption", "text": "x", "lang": "en", "gloss": null, "speaker_entity_id": null, "x": 0, "y": 0, "w": 1}]}'),
+    ('00000000-0000-0000-0000-000000000041', '00000000-0000-0000-0000-0000000000b4', 1, '{"template": "veridia/vote", "template_commit": "x", "state": {}}'),
+    ('00000000-0000-0000-0000-0000000000d2', '00000000-0000-0000-0000-0000000000b2', 2, '{"description": "x", "text": "x"}'),
+    ('00000000-0000-0000-0000-000000000051', '00000000-0000-0000-0000-0000000000b5', 1,
+     '{"lettering": [{"kind": "caption", "text": "x", "lang": "en", "gloss": null, "speaker_entity_id": null, "x": 0, "y": 0, "w": 1}]}');`);
+await ok('replace on a text with text is allowed', W, replaceItem('00000000-0000-0000-0000-000000000031'));
+await denied('replace on a text of only spaces is rejected', W, replaceItem('00000000-0000-0000-0000-000000000032'), REPLACE);
+await denied('replace on a text with no text is rejected', W, replaceItem('00000000-0000-0000-0000-000000000033'), REPLACE);
+await denied('replace on a text with lettering but no text is rejected', W, replaceItem('00000000-0000-0000-0000-000000000034'), REPLACE);
+await denied('replace on a design is rejected, even with text', W, replaceItem('00000000-0000-0000-0000-0000000000d2'), REPLACE);
+await ok('replace on a render is allowed', W, replaceItem('00000000-0000-0000-0000-000000000041'));
+await denied('replace on a clip is rejected, even with lettering', W, replaceItem('00000000-0000-0000-0000-000000000051'), REPLACE);
 await denied('display has only two values', W,
   `update studio.take_items set display = 'overlay'`, /take_items_display_check/);
 

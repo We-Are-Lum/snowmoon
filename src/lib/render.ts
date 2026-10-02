@@ -37,6 +37,16 @@ export function renderScreen(
   return { html: b.content, source: { from: 'book' } };
 }
 
+/**
+ * A render version may replace the book text only where its anchor covers screen or
+ * figure blocks and nothing else. The database allows any render to replace; the
+ * app checks the span with this before writing a `replace` take item.
+ */
+export function renderMayReplace(blocks: readonly BlockLike[], startIdx: number, endIdx: number): boolean {
+  const span = blocks.filter((b) => b.idx >= startIdx && b.idx <= endIdx);
+  return span.length === endIdx - startIdx + 1 && span.every((b) => b.kind === 'screen' || b.kind === 'figure');
+}
+
 /** Base font size for source screens; raised when a screen's smallest text would fall below MIN_TEXT_PX. */
 export const SCREEN_BASE_PX = 14;
 

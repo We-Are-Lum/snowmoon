@@ -11,7 +11,8 @@ records what was adopted.
 | `living-edition.png` | Chapter 1 as the living edition: scroll view (day one, partly and mostly illustrated, dark) and play view; flags 6–11 |
 | `*.dc.html` | The boards' source. They need the design tool's runtime (`support.js`), which is not part of this repo, so view the PNGs instead |
 
-Handles, ratings, costs, and images in the mockups are sample data.
+The handles on the boards are invented placeholders, not real accounts. Ratings,
+costs, and images in the mockups are sample data too.
 
 ## Adopted so far
 
@@ -24,3 +25,5 @@ Handles, ratings, costs, and images in the mockups are sample data.
   other face appears only inside an in-world template.
 - `¶` labels count readable blocks.
 - Flags 1–4 and 6–9 and 11 are resolved in the schema or the renderer (brief §4c).
+- The board's Veridian vote card is the `veridia/vote` template (brief §4d). The
+  slider sits at the centre, as in the source, not where the mockup put it.

@@ -2,7 +2,7 @@
 
 > **What this document is:** The starting brief for a Farcaster miniapp that turns Vitalik Buterin's novel *Snowmoon* into an open, ever-evolving illustrated and narrated edition (and later a film), with every prompt and step recorded in public. Part A is for Claude Code. Part B is for Claude Design. Read the whole document before starting. Working title only.
 
-> **Status:** v4c, Oct 2, 2026. Supersedes v1 to v3. Milestone 1 is built and not yet deployed; migration 0001 is written and not yet applied. Section 4a records the pre-deploy data-model, session, and scaffold changes; 4b the move into a shared studio database; 4c the design direction, version anchors, house narration, and reader restyle. v3 added what a full read of all 32 chapters showed (section 1a).
+> **Status:** v4d, Oct 2, 2026. Supersedes v1 to v3. Milestone 1 is built and not yet deployed; migration 0001 is written and not yet applied, and is now frozen: schema changes go in 0002. Section 4a records the pre-deploy data-model, session, and scaffold changes; 4b the move into a shared studio database; 4c the design direction, version anchors, house narration, and reader restyle; 4d the last edit to 0001 and the first default template. v3 added what a full read of all 32 chapters showed (section 1a).
 
 ---
 
@@ -146,7 +146,7 @@ Useful to a reader on day one, before any contributor shows up.
 - Lettering is rendered in code over the image from structured data. Never ask the image model to draw text.
 - Hand-device screens and tables are rendered with HTML or SVG templates from the repo, with `source = 'human_authored'`. The same applies to the set pieces in section 1a: game boards, scoreboards, and tactical maps. A contributor's version of a screen or figure is a `render` element anchored to that block, with body `{ template, template_commit, state }`; `text_blocks.data` is the starting state.
 - Takes: creating an element can add it to the creator's own take for that chapter. Remix any take, then swap, add, or remove elements.
-- Rendering a take: walk the chapter's blocks in order. Where a take item's version is anchored, show it with that block range: `beside` (the default) keeps the book text, `replace` hides it and needs a version with lettering. Everywhere else, show the book's text. Screens and figures no item covers use their default template if one exists, otherwise the source's own drawing.
+- Rendering a take: walk the chapter's blocks in order. Where a take item's version is anchored, show it with that block range: `beside` (the default) keeps the book text, `replace` hides it and needs a version that can stand in for it (section 4d). Everywhere else, show the book's text. Screens and figures no item covers use their default template if one exists, otherwise the source's own drawing.
 - Within one take, two versions' anchors must be identical or not overlap at all.
 - Ratings on element versions, from -5 to 5, echoing the book's own vote screen. Scoring rules in section 6.
 - Living edition: per chapter, the top-scoring take. It is the default view of every chapter, as a scroll and as a narrated play-through where the image for the current block shows while that block is read.
@@ -305,14 +305,14 @@ Direction boards are in `docs/design/` (PNGs plus their source). They are direct
 ### Schema
 
 1. **Anchors move to versions.** `anchors` is keyed by `version_id`, so v7 of an element can cover ¶ 11–16 where v1 covered ¶ 12–14 without starting a new element. Anchors are append-only, like versions. Only text, image, render, and clip versions can be anchored; a design version cannot.
-2. **`take_items.display`**: `beside` (default) shows the version with the book text; `replace` hides the book text and is rejected unless the version's body has a non-empty `lettering` array. As written, text and render versions cannot `replace` until they carry lettering; revisit if a text element should stand in for the book's words.
+2. **`take_items.display`**: `beside` (default) shows the version with the book text; `replace` hides the book text and is rejected unless the version's body has a non-empty `lettering` array. Widened in 4d to text and render versions.
 3. **House narration.** `narrations` and `narration_segments` move into 0001. `house_narrations` has one row per chapter (primary key `work_id, chapter`) pointing at a narration of that same chapter (composite foreign key). A deferred trigger requires the row whenever the chapter has any narration, so the rule is "exactly one per chapter that has a narration". A chapter with none has none, and the reader shows text only. Switching the house is one update; the house narration cannot be deleted. Narration segments are append-only.
 
 `npm run test:db` covers each rule, including the failure cases. A copy of the migration with each rule removed fails it.
 
 ### Rendering (no schema)
 
-4. **Screens and figures no take covers** render from their default template if one exists, otherwise as the source drew them. Templates live in `src/templates/` (id `setting/name`), are matched on `text_blocks.data`, and may use in-world fonts inside the template only. None are registered yet. A take's `render` element always wins over the default.
+4. **Screens and figures no take covers** render from their default template if one exists, otherwise as the source drew them. Templates live in `src/templates/` (id `setting/name`), are matched on `text_blocks.data`, and may use in-world fonts inside the template only. The first, `veridia/vote`, is registered in 4d. A take's `render` element always wins over the default.
 5. **¶ labels count readable blocks only** (paragraph, quote, screen, figure), 1..N per chapter. Headings, datelines, and breaks have no label. Block IDs (`c{chapter}-b{idx}`) are unchanged and remain the anchor. Each scene ends with "Scene n · ¶ a–b", and each screen or figure is captioned with its label and source.
 
 `npm run test:render` covers labels, settings, the template rule, and figure sizing.
@@ -350,6 +350,13 @@ Direction boards are in `docs/design/` (PNGs plus their source). They are direct
 | 11 | Block indices aren't paragraph numbers | Done: ¶ labels count readable blocks |
 
 Not built in v4c: Listen (play view), takes, ratings.
+
+## 4d. v4d: the last edit to 0001, and veridia/vote (Oct 2, 2026)
+
+Migration 0001 is still unapplied. This is its last in-place edit; from here it is frozen and schema changes go in `0002`.
+
+1. **`replace` widened.** A take item may use `display = 'replace'` when its version is an image whose body has a non-empty `lettering` array, a text element whose `text` is non-empty (not just spaces), or a render element. Designs and clips cannot replace, whatever their body holds. The database does not look at where a render is anchored; the app does, with `renderMayReplace` in `src/lib/render.ts`: a replacing render's anchor must cover screen or figure blocks and nothing else. `npm run test:db` covers each case, and a copy of the migration with any one clause removed fails it.
+2. **`veridia/vote`**, the first default template (`src/templates/veridia-vote.ts`). It matches the vote card on a Veridian screen, a single table headed "Vote on: …" with a summary, a slider, and a button, which in the whole book is c1-b18 and c1-b31. It is drawn from the direction board's in-world screens: Instrument Sans (self-hosted, not preloaded, used only inside Veridian templates), hairline rules, a light device face that stays light in dark mode. It is static: the slider is drawn at the centre, where the source's untouched slider sits, and nothing reacts. `npm run test:render` checks that it covers exactly those two blocks, shows the same words as the source, contains no controls, and yields to a covering take.
 
 ---
 
@@ -498,6 +505,7 @@ create table take_items (
   take_id uuid not null references takes(id),
   version_id uuid not null references element_versions(id),
   pos int not null default 0,
+  -- replace: image with lettering, text with text, or render (section 4d)
   display text not null default 'beside' check (display in ('beside','replace')),
   primary key (take_id, version_id)
 );

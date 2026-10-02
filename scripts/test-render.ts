@@ -9,13 +9,17 @@
  * - Each block's setting comes from the most recent dateline.
  * - An uncovered screen or figure renders from a matching default template, else as
  *   the source drew it; a covered one never uses the default.
+ * - veridia/vote is the default for every vote screen in chapter 1 (b18, b31) and
+ *   nothing else in the book, and shows the same words as the source.
+ * - A render may replace only a span of screen and figure blocks.
  * - A figure's minimum width keeps its smallest text at 12px or more.
  */
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { blockFacts, READABLE_KINDS, type BlockLike } from '../src/lib/reading';
-import { figureMinWidth, MIN_TEXT_PX, renderScreen } from '../src/lib/render';
-import type { ScreenTemplate } from '../src/templates';
+import * as cheerio from 'cheerio';
+import { figureMinWidth, MIN_TEXT_PX, renderMayReplace, renderScreen } from '../src/lib/render';
+import { DEFAULT_TEMPLATES, type ScreenTemplate } from '../src/templates';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const failures: string[] = [];
@@ -71,6 +75,52 @@ for (let n = 1; n <= 32; n++) {
   check('non-matching block stays as drawn', other.source.from === 'book');
   const covered = renderScreen(vote, [fake], true);
   check('a covered block ignores the default', covered.source.from === 'book');
+}
+
+// veridia/vote, the registered default
+{
+  const ids = DEFAULT_TEMPLATES.map((t) => t.id);
+  check('template ids are unique', new Set(ids).size === ids.length, ids.join(','));
+  const words = (html: string) => cheerio.load(html).text().replace(/\s+/g, '');
+  const hits: string[] = [];
+  for (let n = 1; n <= 32; n++) {
+    for (const b of chapter(n)) {
+      if (b.kind !== 'screen' && b.kind !== 'figure') continue;
+      const matched = DEFAULT_TEMPLATES.filter((t) => t.matches(b));
+      check(`c${n}-b${b.idx} matches at most one template`, matched.length <= 1, matched.map((t) => t.id).join(','));
+      if (matched[0]?.id === 'veridia/vote') hits.push(`c${n}-b${b.idx}`);
+    }
+  }
+  const voteScreens = chapter(1).filter((b) => b.kind === 'screen' && b.content.includes('Vote on:')).map((b) => `c1-b${b.idx}`);
+  check('chapter 1 has the two vote screens', voteScreens.join(',') === 'c1-b18,c1-b31', voteScreens.join(','));
+  check('veridia/vote covers exactly the vote screens', hits.join(',') === voteScreens.join(','), hits.join(','));
+  for (const idx of [18, 31]) {
+    const b = chapter(1)[idx];
+    const r = renderScreen(b, DEFAULT_TEMPLATES);
+    check(`c1-b${idx} renders from veridia/vote`, r.source.from === 'template' && r.source.templateId === 'veridia/vote');
+    check(`c1-b${idx} template shows the source's words`, words(r.html) === words(b.content), `${words(r.html)} | ${words(b.content)}`);
+    check(`c1-b${idx} template is static`, !/<(input|button|select|textarea|a|script)\b|\son\w+=/i.test(r.html));
+    check(`c1-b${idx} template marks itself in-world`, r.html.includes('data-template="veridia/vote"'));
+    check(`c1-b${idx} covered ignores veridia/vote`, renderScreen(b, DEFAULT_TEMPLATES, true).source.from === 'book');
+  }
+  const off = { ...chapter(1)[18], data: { ...chapter(1)[18].data, setting: 'dzego' } };
+  check('veridia/vote needs a Veridian screen', !DEFAULT_TEMPLATES.some((t) => t.matches(off)));
+}
+
+// A render replaces only screens and figures
+{
+  const c1 = chapter(1);
+  check('render may replace one screen (b18)', renderMayReplace(c1, 18, 18));
+  check('render may not replace a screen and its paragraph (b17-b18)', !renderMayReplace(c1, 17, 18));
+  check('render may not replace a paragraph (b2)', !renderMayReplace(c1, 2, 2));
+  check('render may not replace past the chapter end', !renderMayReplace(c1, c1.length - 1, c1.length));
+  const isScreen = (b?: BlockLike) => b?.kind === 'screen' || b?.kind === 'figure';
+  const pair = Array.from({ length: 32 }, (_, i) => i + 1).flatMap((n) => {
+    const bs = chapter(n);
+    const i = bs.findIndex((b, j) => isScreen(b) && isScreen(bs[j + 1]));
+    return i >= 0 ? [{ n, bs, i }] : [];
+  })[0];
+  check('render may replace adjacent screens or figures', !!pair && renderMayReplace(pair.bs, pair.bs[pair.i].idx, pair.bs[pair.i + 1].idx));
 }
 
 // Figures keep text at 12px or more
