@@ -1,7 +1,7 @@
 /**
  * Structured data for `screen` and `figure` blocks (text_blocks.data).
  *
- *   world   from the most recent dateline in the chapter (e.g. "Meldan, Veridia" -> "veridia")
+ *   setting from the most recent dateline in the chapter (e.g. "Meldan, Veridia" -> "veridia")
  *   device  PROVISIONAL. What the text says shows the screen, found by keyword in the
  *           paragraphs just before it, with the block index and an exact quote as evidence.
  *           null when the text does not say. A deterministic heuristic, not a reading;
@@ -31,8 +31,8 @@ export interface Evidence {
 }
 
 export interface ScreenData {
-  world: string | null;
-  world_evidence: Evidence | null;
+  setting: string | null;
+  setting_evidence: Evidence | null;
   device: string | null;
   device_evidence: Evidence | null;
   /** Always true until Milestone 2 records each screen's device and owner from the analysis. */
@@ -171,7 +171,7 @@ export function extractFields($: cheerio.CheerioAPI, root: Element, svgFile: (k:
 }
 
 // ---------------------------------------------------------------------------
-// world and device
+// setting and device
 // ---------------------------------------------------------------------------
 
 export interface PriorBlock {
@@ -182,7 +182,7 @@ export interface PriorBlock {
 }
 
 /** "**Meldan, Veridia** · 3724 Snowmoon 3" -> "veridia"; "**Veridia** · …" -> "veridia". */
-export function worldOfDateline(content: string): string | null {
+export function settingOfDateline(content: string): string | null {
   const m = content.match(/^\*\*(.+?)\*\*/);
   if (!m) return null;
   const region = m[1].split(',').pop()!.replace(/\\(.)/g, '$1').trim();

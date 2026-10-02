@@ -420,8 +420,8 @@
       "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th>From</th>\n      <th></th>\n      <th>Message</th>\n      <th>Time</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Jahn</center></td> \n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 133.33333333333331)\">[5 images]</span></td>\n      <td>45904</td>\n    </tr> \n    </tbody>\n</table></div>",
       "sha256": "0e52aef39266a1eca4df1c0e5f91950b7f94f06854465a88ff8d606a69d2c600",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Northglade, Veridia"
         },

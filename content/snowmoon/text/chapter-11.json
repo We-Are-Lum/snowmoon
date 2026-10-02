@@ -558,8 +558,8 @@
       "content": "<div class=\"device-view narrow-device-view\"><div style=\"font-size:150%\"></div>\n<table>\n    <tbody><tr>\n      <td style=\"font-size:150%\" colspan=\"2\">Air</td>\n    </tr>\n<tr>\n<td style=\"font-size:150%\">CO<sub>2</sub></td>\n<td style=\"font-size:150%; color: yellow\">906</td>\n</tr>\n<tr>\n<td style=\"font-size:150%\">PM2.5</td>\n<td style=\"font-size:150%; color: #8f8\">4.4</td>\n</tr>\n</tbody></table>\n<table>\n<tbody><tr>\n<td style=\"font-size:150%\" colspan=\"2\">Devices</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #8f8\">Attested ✓</td>\n<td style=\"font-size:150%; color: #8f8\">16</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #fc8\">Unknown ?</td>\n<td style=\"font-size:150%; color: #8f8\">0</td>\n</tr>\n</tbody></table></div>",
       "sha256": "e2042b724798e67ff585fc05d9fa17ed7e9684aa5c14c9afd438f8e69ba92a32",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Meldan, Veridia"
         },

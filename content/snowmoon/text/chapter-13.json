@@ -174,8 +174,8 @@
       "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th>From</th>\n      <th></th>\n      <th>Message</th>\n      <th>Time</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Mov</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 173.33333333333331)\">I've been following Delwart more, we should talk.</span></td>\n      <td>71256</td>\n    </tr>\n    </tbody>\n</table></div>",
       "sha256": "3b145da94de72c7d0ff1cf4b1bb242b1ee391aecea9d0d644938f6b398abdf2d",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Meldan, Veridia"
         },
@@ -435,8 +435,8 @@
       "content": "<div class=\"device-view wide-device-view device-view-left\" style=\"background-color:#633; font-size:93.75%; color:#fee; --dv-ink:#fee;\"><b> The Dead Hand of Egalitarianism, and the Path of Strength </b>\n<hr>\n<p>All humans are equal, the schools, the posters, the songs, and everything else in Veridia is telling you.</p>\n<p>Maybe not Dreadknot - but that's exactly why Dreadknot's taxes were bumped up to tier 4 in the audit last year.</p>\n<p>Nobody is better than anyone else, and if you even dare claim that one human being is better than another, then you are immediately cast out as evil in Veridia.</p>\n<p>But there is a fundamental flaw in this kind of thinking. If one human being cannot be better than another human being, then that also implies that a human being cannot be better than their former self. Denying the possibility of hierarchy, of vertical difference between people, the fact that there are traits that everyone agrees are good, but that only some actually manage to achieve, is thus also denying the possibility of self-improvement.</p>\n<p>Do not think that the idea that there are multiple dimensions to goodness and to success saves you from this. Even if there are, some people perform better, and others perform worse, across <em>all</em> the dimensions that matter.</p>\n<p>Stop looking to society for answers, to Veridia's institutions to make life fair. Life is not fair - and should not be fair. Embrace the competition. Today, you may be weak. But you have it in you to be strong. Do not believe the lie that you are adequate just the way you are. But do believe a truth - the truth that you have it in you to become strong. Take that opportunity. Grow stronger. Grow so strong, that you later look upon your former self with shame.</p>\n<p>And find the other strong people, the people who will help you on your journey of striving for greatness. Not those who will love you unconditionally - that is slow-burning poison, like sweet candy. But those who will give you love when you win, and a cold shoulder when you lose. Those that give you both the incentive, and the disincentive. You are not good because you are human, you are good because you can win. Only thus, can you train your mind to love winning, and achieve your true potential.</p>\n<p>With regards,</p>\n<p>Lord Ephelion</p>\n<p>Arctic Empire consul to Veridia.</p></div>",
       "sha256": "705d4d6382c265e8a38d83a5c0972ed4050bbee38d951aba459f17d5ff144c78",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Meldan, Veridia"
         },

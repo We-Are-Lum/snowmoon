@@ -21,7 +21,7 @@
 import * as cheerio from 'cheerio';
 import type { AnyNode, Element } from 'domhandler';
 import { createHash } from 'node:crypto';
-import { extractFields, inferDevice, worldOfDateline, type Evidence, type ScreenData } from './screen-data';
+import { extractFields, inferDevice, settingOfDateline, type Evidence, type ScreenData } from './screen-data';
 
 export type BlockKind = 'heading' | 'dateline' | 'paragraph' | 'quote' | 'screen' | 'figure' | 'break';
 
@@ -188,7 +188,7 @@ export function parseChapter(html: string, chapter: number): { blocks: Block[]; 
 
   const blocks: Block[] = [];
   const figures: Figure[] = [];
-  let world: { name: string | null; evidence: Evidence | null } = { name: null, evidence: null };
+  let setting: { name: string | null; evidence: Evidence | null } = { name: null, evidence: null };
 
   const push = (kind: BlockKind, content: string, data?: ScreenData) => {
     const b: Block = { idx: blocks.length, kind, content, sha256: sha256(content) };
@@ -206,8 +206,8 @@ export function parseChapter(html: string, chapter: number): { blocks: Block[]; 
     });
     const { device, evidence } = inferDevice(blocks);
     const data: ScreenData = {
-      world: world.name,
-      world_evidence: world.evidence,
+      setting: setting.name,
+      setting_evidence: setting.evidence,
       device,
       device_evidence: evidence,
       device_provisional: true,
@@ -253,8 +253,8 @@ export function parseChapter(html: string, chapter: number): { blocks: Block[]; 
           if (cls.includes('scene-break')) push('break', '---');
           else if (!cls.includes('chapter-open')) throw new Error(`Unknown dateline: ${cls.join(' ')}`);
           const d = push('dateline', datelineMd($, el));
-          const name = worldOfDateline(d.content);
-          if (name) world = { name, evidence: { idx: d.idx, quote: d.content.match(/^\*\*(.+?)\*\*/)![1] } };
+          const name = settingOfDateline(d.content);
+          if (name) setting = { name, evidence: { idx: d.idx, quote: d.content.match(/^\*\*(.+?)\*\*/)![1] } };
           return;
         }
         if (cls.includes('device-view')) {

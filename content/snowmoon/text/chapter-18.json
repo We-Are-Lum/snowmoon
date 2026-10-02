@@ -306,8 +306,8 @@
       "content": "<div class=\"device-view narrow-device-view\"><table>\n  <tbody>\n    <tr>\n      <td><center><div style=\"border: 1px solid; border-radius: 5px; padding: 5px\">sen hen zi li die fe 100 <br> zo lia kin  <b style=\"font-size: 150%; color: #8f8\">✓</b></div></center></td>\n      <td><center><div style=\"border: 1px solid; border-radius: 5px; padding: 5px\">man dun li jie hu <b style=\"font-size: 150%; color: #8f8\">✓</b></div></center></td>\n    </tr>\n    </tbody>\n</table>\n<b>cau tie zen <br> ci fan zi li 448</b></div>",
       "sha256": "b1e8be35735e9bb9c868138d9157cbb35a4253f38363a4629238dfe23f40b2db",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Pafogai Du, Dzego"
         },
@@ -574,8 +574,8 @@
       "content": "<div class=\"device-view wide-device-view\"><blockquote>\n<p>He took the path less traveled, and that blazed a trail for all.</p>\n<pre style=\"color:#fff\">         jan jo san sia\n   ci pa jan li san sia\n           te bia pin hu fe lo shun\nci fi mu jan li san sia\n       fe fi mu san sia\n           te shun zo bia pin fe jan\n</pre>\n</blockquote></div>",
       "sha256": "e8abc529546bae9bbaf4298c702e35674d69d8dae68afb5cbc8cccb45eb566ba",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Pafogai Du, Dzego"
         },

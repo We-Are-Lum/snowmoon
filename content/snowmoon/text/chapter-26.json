@@ -630,8 +630,8 @@
       "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<rect x=\"150\" y=\"50\" width=\"40\" height=\"14\" fill=\"#89c\"></rect>\n<polygon points=\"170,60 180,60 175,68\" fill=\"#550\"></polygon>\n<circle cx=\"20\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"27\" cy=\"120\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"34\" cy=\"140\" r=\"3\" fill=\"#cef\"></circle>\n<line x1=\"20\" y1=\"100\" x2=\"0\" y2=\"107\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<line x1=\"27\" y1=\"120\" x2=\"7\" y2=\"127\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<line x1=\"34\" y1=\"140\" x2=\"14\" y2=\"147\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n</svg></div>",
       "sha256": "992a1548dbc5a7fd0fb39b67b56b91ee9ffbbe580dce9ef6a23e122e659bfe3d",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 78,
           "quote": "Meldan, Veridia"
         },
@@ -731,8 +731,8 @@
       "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<rect x=\"150\" y=\"50\" width=\"40\" height=\"14\" fill=\"#89c\"></rect>\n<polygon points=\"170,60 180,60 175,68\" fill=\"#550\"></polygon>\n<circle cx=\"100\" cy=\"72\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"107\" cy=\"92\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"114\" cy=\"112\" r=\"3\" fill=\"#cef\"></circle>\n<line x1=\"100\" y1=\"72\" x2=\"80\" y2=\"79\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<line x1=\"107\" y1=\"92\" x2=\"87\" y2=\"99\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<text x=\"107\" y=\"92\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<line x1=\"114\" y1=\"112\" x2=\"94\" y2=\"119\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<circle cx=\"57\" cy=\"76\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"64\" cy=\"96\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"71\" cy=\"116\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"78\" cy=\"136\" r=\"3\" fill=\"#cef\"></circle>\n<line x1=\"57\" y1=\"76\" x2=\"37\" y2=\"83\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<line x1=\"64\" y1=\"96\" x2=\"44\" y2=\"103\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<line x1=\"71\" y1=\"116\" x2=\"51\" y2=\"123\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<text x=\"71\" y=\"116\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<line x1=\"78\" y1=\"136\" x2=\"58\" y2=\"143\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<text x=\"78\" y=\"136\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<circle cx=\"24\" cy=\"110\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"31\" cy=\"130\" r=\"3\" fill=\"#cef\"></circle>\n<line x1=\"24\" y1=\"110\" x2=\"4\" y2=\"117\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<line x1=\"31\" y1=\"130\" x2=\"11\" y2=\"137\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n</svg></div>",
       "sha256": "c453106c54cf17db4bb87540732167640b6fcc73886a3352f9edc14772c23c98",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 78,
           "quote": "Meldan, Veridia"
         },
@@ -848,8 +848,8 @@
       "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<rect x=\"150\" y=\"50\" width=\"40\" height=\"14\" fill=\"#89c\"></rect>\n<circle cx=\"120\" cy=\"67\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"130\" cy=\"72\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"140\" cy=\"80\" r=\"3\" fill=\"#cef\"></circle>\n<line x1=\"120\" y1=\"67\" x2=\"110\" y2=\"77\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<line x1=\"130\" y1=\"72\" x2=\"120\" y2=\"82\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<line x1=\"140\" y1=\"80\" x2=\"133\" y2=\"92\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<text x=\"140\" y=\"52\" fill=\"#cf0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">✓</text>\n<text x=\"147\" y=\"56\" fill=\"#cf0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">✓</text>\n<circle cx=\"79\" cy=\"75\" r=\"3\" fill=\"#cef\"></circle>\n<text x=\"79\" y=\"75\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n</svg></div>",
       "sha256": "7ccd7e63743a8cb0003259543d833d21efd486c379771d0be40cd4f0ed116b2b",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 78,
           "quote": "Meldan, Veridia"
         },
@@ -938,8 +938,8 @@
       "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<circle cx=\"70\" cy=\"50\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"85\" cy=\"55\" r=\"3\" fill=\"#cef\"></circle>\n<line x1=\"70\" y1=\"50\" x2=\"75\" y2=\"75\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<line x1=\"85\" y1=\"55\" x2=\"90\" y2=\"80\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<text x=\"80\" y=\"100\" fill=\"#cf0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">✓</text>\n<text x=\"95\" y=\"105\" fill=\"#cf0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">✓</text>\n<line x1=\"150\" y1=\"0\" x2=\"150\" y2=\"200\" stroke=\"#cef\" width=\"2\"></line>\n<line x1=\"70\" y1=\"100\" x2=\"90\" y2=\"200\" stroke=\"#cef\" width=\"2\"></line>\n<line x1=\"0\" y1=\"100\" x2=\"70\" y2=\"100\" stroke=\"#cef\" width=\"2\"></line>\n</svg></div>",
       "sha256": "6ea058c0744f860faffad71416967e1e1956bb561c8bd40286fc80ada8395477",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 78,
           "quote": "Meldan, Veridia"
         },

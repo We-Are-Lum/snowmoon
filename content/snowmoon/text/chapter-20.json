@@ -72,8 +72,8 @@
       "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>From</th>\n      <th></th>\n      <th>Message</th>\n      <th>Time</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Febric</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 80)\">Hreda and I are both safely inside the Greater Plum Harbor. We will survive the best that we can. <br><br> We love you.</span></td>\n      <td>19867</td>\n    </tr>\n    <tr>\n      <td style=\"width: 25%\"><center>Hreda</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 106.66666666666666)\">Northglade was invaded this morning.</span></td>\n      <td>20045</td>\n    </tr>\n    <tr>\n      <td style=\"width: 25%\"><center>Hreda</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 106.66666666666666)\">It looked like there were barely any battles, as though our politicians and army are totally okay with this happening.</span></td>\n      <td>20060</td>\n    </tr>\n    <tr>\n      <td style=\"width: 25%\"><center>Hreda</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 106.66666666666666)\">Febric and I are safely inside the Greater Plum Harbor. The Arctics seem to be respecting it as some kind of neutral zone, at least for now.</span></td>\n      <td>20071</td>\n    </tr>\n    <tr>\n      <td style=\"width: 25%\"><center>Hreda</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 106.66666666666666)\">I'm scared. I hope everything will be okay. <br><br> Love you.</span></td>\n      <td>20077</td>\n    </tr>\n    </tbody>\n</table></div>",
       "sha256": "e67b5006f6b84583062b53153d97f35e28986a91eb95be6937987c023a659c4e",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Meldan, Veridia"
         },
@@ -183,8 +183,8 @@
       "content": "<div class=\"device-view narrow-device-view\"><div style=\"border: 1px solid; border-radius: 5px; padding: 5px\"><b>Frequent contact of Gladias <br><br> Proof verified.</b> <b style=\"font-size: 150%; color: #8f8\">✓</b></div></div>",
       "sha256": "fd4bdb34aca02fa6198cd282fb04c28f479bc351ef6a75a6bea9efa00abd91c1",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Meldan, Veridia"
         },
@@ -891,8 +891,8 @@
       "content": "<div class=\"device-view narrow-device-view\"><div style=\"border: 1px solid; border-radius: 5px; padding: 15px\"><b>50 zipcoins have just been burned.</b><b style=\"font-size: 150%; color: #8f8\">🔥</b></div></div>",
       "sha256": "e94ad7193a0f2f88acf1f4c8f877c555ce193640deebdcacbc7f54038214ebbf",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Meldan, Veridia"
         },

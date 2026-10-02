@@ -1,8 +1,8 @@
 # Build prompts
 
 The prompts given to the coding agent (Claude Code) that built this repository,
-in order and verbatim, except where a prompt named another project's private
-infrastructure or a local file path; those words are replaced with a
+in order and verbatim, except where a prompt named private infrastructure
+or a local file path; those words are replaced with a
 [bracketed] description. They are part of the pipeline, published under the
 project's GPL-3.0 license along with everything else.
 

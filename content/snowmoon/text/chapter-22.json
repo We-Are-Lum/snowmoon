@@ -78,8 +78,8 @@
       "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th colspan=\"3\">Taxi fare</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td><center>Driver base fare</center></td>\n      <td></td>\n      <td>3.69</td>\n    </tr>\n    <tr>\n      <td><center>Per-minute toll</center></td>\n      <td>9 min</td>\n      <td>1.89</td>\n    </tr>\n    <tr>\n      <td><center>Per-kilometer toll</center></td>\n      <td>5.65 km</td>\n      <td>1.26</td>\n    </tr>\n    <tr>\n      <td><center>Acceleration and deceleration toll</center></td>\n      <td>113 m/s Δv</td>\n      <td>1.03</td>\n    </tr>\n    <tr>\n      <td><center>Road congestion toll</center></td>\n      <td></td>\n      <td>1.50</td>\n    </tr>\n    <tr>\n      <td><center>Road congestion toll</center></td>\n      <td></td>\n      <td>1.00</td>\n    </tr>\n    <tr>\n      <td><center>Road congestion toll</center></td>\n      <td></td>\n      <td>2.25</td>\n    </tr>\n    <tr>\n      <td><center>Total</center></td>\n      <td></td>\n      <td>12.52</td>\n    </tr>\n    </tbody>\n</table></div>",
       "sha256": "d934c30acc3ca27d4e9b962313c1e386c6b9cf243c2d484f122c657ce2c21cc1",
       "data": {
-        "world": "united-cities",
-        "world_evidence": {
+        "setting": "united-cities",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Freetown, United Cities"
         },
@@ -568,8 +568,8 @@
       "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<circle cx=\"60\" cy=\"40\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"140\" cy=\"40\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"170\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"100\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"140\" cy=\"160\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"60\" cy=\"160\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"30\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<rect x=\"85\" y=\"145\" width=\"5\" height=\"5\" fill=\"#f04\"></rect>\n<line x1=\"88\" y1=\"148\" x2=\"93\" y2=\"160\" stroke=\"#f04\" stroke-dasharray=\"2\"></line>\n</svg></div>",
       "sha256": "de8371e1479626cf6a1324b7fcffac9847dd4b6e9818aca020e09716ce13f456",
       "data": {
-        "world": "united-cities",
-        "world_evidence": {
+        "setting": "united-cities",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Freetown, United Cities"
         },
@@ -639,8 +639,8 @@
       "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<circle cx=\"60\" cy=\"40\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"140\" cy=\"40\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"170\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"100\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"140\" cy=\"160\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"60\" cy=\"160\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"30\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<rect x=\"77\" y=\"125\" width=\"5\" height=\"5\" fill=\"#f04\"></rect>\n<line x1=\"80\" y1=\"128\" x2=\"85\" y2=\"140\" stroke=\"#f04\" stroke-dasharray=\"2\"></line>\n</svg></div>",
       "sha256": "5b5cc578d1fc00248428171a3c83799dea943baa9dc1fe491d7340eef3f11334",
       "data": {
-        "world": "united-cities",
-        "world_evidence": {
+        "setting": "united-cities",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Freetown, United Cities"
         },
@@ -692,8 +692,8 @@
       "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<circle cx=\"60\" cy=\"40\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"60\" cy=\"40\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"140\" cy=\"40\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"140\" cy=\"40\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"170\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"170\" cy=\"100\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"100\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"100\" cy=\"100\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"140\" cy=\"160\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"140\" cy=\"160\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"60\" cy=\"160\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"60\" cy=\"160\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"30\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"30\" cy=\"100\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<rect x=\"70\" y=\"105\" width=\"5\" height=\"5\" fill=\"#f04\"></rect>\n<line x1=\"73\" y1=\"108\" x2=\"78\" y2=\"120\" stroke=\"#f04\" stroke-dasharray=\"2\"></line>\n<polygon points=\"95,175 101,175 98,180\" fill=\"#3ef\"></polygon>\n<polygon points=\"75,190 81,190 78,195\" fill=\"#3ef\"></polygon>\n<text x=\"78\" y=\"108\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n</svg></div>",
       "sha256": "0ed73462558ce1231e020c8b040496ce2bc186f4c9255a3e4ac6663cc49fb2b6",
       "data": {
-        "world": "united-cities",
-        "world_evidence": {
+        "setting": "united-cities",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Freetown, United Cities"
         },
@@ -750,8 +750,8 @@
       "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<circle cx=\"60\" cy=\"40\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"60\" cy=\"40\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"140\" cy=\"40\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"140\" cy=\"40\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"170\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"170\" cy=\"100\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"100\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"100\" cy=\"100\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"140\" cy=\"160\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"140\" cy=\"160\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"60\" cy=\"160\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"60\" cy=\"160\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"30\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"30\" cy=\"100\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<rect x=\"68\" y=\"100\" width=\"5\" height=\"5\" fill=\"#f04\"></rect>\n<polygon points=\"65,85 71,85 68,90\" fill=\"#3ef\"></polygon>\n<polygon points=\"90,85 96,85 93,90\" fill=\"#3ef\"></polygon>\n</svg></div>",
       "sha256": "619150b358bfa70fa5dfab8361a6b27f031afe8feaf9a046d28aeb50fa4e63e9",
       "data": {
-        "world": "united-cities",
-        "world_evidence": {
+        "setting": "united-cities",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Freetown, United Cities"
         },
@@ -842,8 +842,8 @@
       "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<circle cx=\"60\" cy=\"40\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"60\" cy=\"40\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"140\" cy=\"40\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"140\" cy=\"40\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"170\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"170\" cy=\"100\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<text x=\"174\" y=\"100\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<circle cx=\"100\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"100\" cy=\"100\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<text x=\"104\" y=\"100\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<text x=\"134\" y=\"160\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<circle cx=\"60\" cy=\"160\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"60\" cy=\"160\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"30\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"30\" cy=\"100\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<rect x=\"60\" y=\"92\" width=\"5\" height=\"5\" fill=\"#f04\"></rect>\n<polygon points=\"70,110 76,110 73,115\" fill=\"#3ef\"></polygon>\n<rect x=\"158\" y=\"190\" width=\"5\" height=\"5\" fill=\"#f04\"></rect>\n<line x1=\"161\" y1=\"193\" x2=\"170\" y2=\"200\" stroke=\"#f04\" stroke-dasharray=\"2\"></line>\n<rect x=\"168\" y=\"170\" width=\"5\" height=\"5\" fill=\"#f04\"></rect>\n<line x1=\"171\" y1=\"173\" x2=\"181\" y2=\"181\" stroke=\"#f04\" stroke-dasharray=\"2\"></line>\n<rect x=\"178\" y=\"150\" width=\"5\" height=\"5\" fill=\"#f04\"></rect>\n<line x1=\"181\" y1=\"153\" x2=\"191\" y2=\"161\" stroke=\"#f04\" stroke-dasharray=\"2\"></line>\n</svg></div>",
       "sha256": "acf8e5bfce9d14c5ea5e3b0626d39a3c6d37af03594efbe75e236372b9ff5eb0",
       "data": {
-        "world": "united-cities",
-        "world_evidence": {
+        "setting": "united-cities",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Freetown, United Cities"
         },
@@ -980,8 +980,8 @@
       "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<circle cx=\"65\" cy=\"60\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"65\" cy=\"60\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<text x=\"69\" y=\"60\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<circle cx=\"95\" cy=\"95\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"95\" cy=\"95\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<text x=\"99\" y=\"95\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<circle cx=\"55\" cy=\"120\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"55\" cy=\"120\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<text x=\"59\" y=\"120\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<circle cx=\"30\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"30\" cy=\"100\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<rect x=\"60\" y=\"90\" width=\"5\" height=\"5\" fill=\"#f04\"></rect>\n<text x=\"67\" y=\"93\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<text x=\"67\" y=\"99\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<rect x=\"45\" y=\"95\" width=\"5\" height=\"5\" fill=\"#f04\"></rect>\n<text x=\"52\" y=\"98\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<rect x=\"65\" y=\"110\" width=\"5\" height=\"5\" fill=\"#f04\"></rect>\n<text x=\"72\" y=\"113\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<text x=\"72\" y=\"119\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<rect x=\"80\" y=\"95\" width=\"5\" height=\"5\" fill=\"#f04\"></rect>\n<text x=\"87\" y=\"98\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n</svg></div>",
       "sha256": "4eac98b82238b7a2897b2fb567669cc1a6da5f11aa82dc2f68458466de8b9bf8",
       "data": {
-        "world": "united-cities",
-        "world_evidence": {
+        "setting": "united-cities",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Freetown, United Cities"
         },

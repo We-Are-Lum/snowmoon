@@ -46,7 +46,7 @@ A full read of all 32 chapters changed these assumptions. Details are in `SNOWMO
 
 | # | Decision | Default in this brief | Why |
 |---|----------|----------------------|-----|
-| 1 | Database | New Supabase project, used only by this app | Public GPL repo; limits blast radius. FID is the join key. |
+| 1 | Database | A shared studio database. Everything lives in the `studio` schema; server writes use the `studio_writer` role | Public GPL repo; the schema and role keep this app's reach to its own tables. FID is the join key. |
 | 2 | Repo license | GPL-3.0, public from the first commit | Matches the source and the author's intent. |
 | 3 | Image, speech, and language models | Not chosen. Build behind adapters; model names come from config. | Models change fast. Record the exact version string the provider reports. |
 | 4 | Uploads of media made outside the app | Not allowed in v1 | Outside prompts cannot be verified. |
@@ -93,7 +93,8 @@ Scaffold the project, ingest the book, and ship a clean reader.
 ```env
 NEXT_PUBLIC_SUPABASE_URL=
 NEXT_PUBLIC_SUPABASE_ANON_KEY=
-SUPABASE_SERVICE_ROLE_KEY=
+# server only: studio_writer through the transaction pooler (section 4b)
+STUDIO_DATABASE_URL=
 NEXT_PUBLIC_URL=
 ```
 
@@ -110,7 +111,7 @@ A scripted, repeatable analysis of every chapter. It is part of the pipeline, so
 - `scripts/analyze.ts` runs a language model over one chapter at a time and writes `content/snowmoon/analysis/chapter-N.json`. Prompt files live in `prompts/` and the output records the prompt file's commit and the model version.
 - Per chapter output: a short summary; sections (one per scene, split at `break` blocks, each with a title, summary, location, characters present, time of day, and mood); entities (characters, locations, props) with visual facts; hand-device screens and tables that should be rendered as code; invented terms (units of time, games, institutions) with their meaning; continuity facts worth tracking; adaptation notes (what is hard to show, what is interior monologue); continuity questions (places where the text seems to contradict itself).
 - **Every fact carries evidence:** the block index and an exact quote from that block.
-- **Screens and their owners.** For each `screen` and `figure` block, record whose device shows it (a character entity), with evidence. This replaces the provisional `text_blocks.data.device`. A character's device keeps its home world's look when they travel (chapter 19 shows both side by side). So a screen's look follows its owner's home world, not the world of the scene (`data.world`).
+- **Screens and their owners.** For each `screen` and `figure` block, record whose device shows it (a character entity), with evidence. This replaces the provisional `text_blocks.data.device`. A character's device keeps its home world's look when they travel (chapter 19 shows both side by side). So a screen's look follows its owner's home world, not the scene's setting (`data.setting`).
 - `scripts/verify-analysis.ts` is a separate, non-model check: every cited block exists and every quote is an exact substring of that block. Any failure fails the run. Show that it fails on a planted bad quote before trusting it.
 - A second pass merges entities across chapters (same character, different chapters) and records each entity's first chapter.
 - Seed `sections`, `entities`, and `entity_mentions` from the verified JSON.
@@ -188,7 +189,7 @@ Useful to a reader on day one, before any contributor shows up.
 - The "stale" flag is gone. An element simply shows which design versions it was built on, and which version is currently most built on.
 - New in v2: book analysis pipeline, audiobook, ratings and scoring, living edition, weekly snapshots, chapter timeline, catch-up, sponsorship credits, `cost_usd` on recipes.
 - New in v3: section 1a, continuity questions and a whole-book sanity check in Milestone 2, a pronunciation table in Milestone 3, code-rendered set pieces, the spoiler rule, and a second world in the design direction.
-- New in v4: `screen` and `figure` block kinds (replacing `table`) with `text_blocks.data`, the `render` element type, `lang` and `gloss` on lettering, `entities.world`, section location, time of day and season, bearer-token sessions, scaffold notes, `docs/prompts/`, and `docs/source-figures/`. Details in section 4a.
+- New in v4: `screen` and `figure` block kinds (replacing `table`) with `text_blocks.data`, the `render` element type, `lang` and `gloss` on lettering, `entities.setting` (named `world` until v4b), section location, time of day and season, bearer-token sessions, scaffold notes, `docs/prompts/`, and `docs/source-figures/`. Details in section 4a.
 
 ## 4a. v4: pre-deploy changes and findings (Oct 2, 2026)
 
@@ -199,7 +200,7 @@ Migration 0001 had not been applied, so it was edited in place.
 - Every `.device-view` in the source was a `table` block. Now a device view containing an SVG is a `figure` (56 blocks) and every other one is a `screen` (84 blocks). Lyric cards stay `quote`. The `table` kind is dropped: no source block used it.
 - Block IDs did not change. All 4,322 blocks kept the same `idx`, content, and sha256; only `kind` moved, and `data` was added.
 - `data` on `screen` and `figure` blocks:
-  - `world`: the region of the most recent dateline (`veridia`, `dzego`, `united-cities`), with `world_evidence` citing the dateline block and quoting its place. This is where the scene is set, not where the device was made.
+  - `setting` (named `world` until v4b): the region of the most recent dateline (`veridia`, `dzego`, `united-cities`), with `setting_evidence` citing the dateline block and quoting its place. This is where the scene is set, not where the device was made.
   - `device` (**provisional**, marked `device_provisional: true`): what the text says shows the screen (`hand_device`, `watch`, `robot`, `screen`, `wall_screen`, `poster`, `page`, `green_circle`, `computer`, `glasses`, `headset`), found by keyword in up to three paragraphs before it, never across a scene break, inheriting from a screen just before. `device_evidence` gives the block and the exact sentence. It is `null` for 35 of 140 blocks, where the text does not say. It is a deterministic keyword heuristic, not a reading; Milestone 2 replaces it with the device's owner.
   - `frame`: the source's width (`narrow`/`wide`), alignment (`center`/`left`), and inline style.
   - `fields`: what the screen shows, in order: `heading`, `text`, `list`, `rule`, `button`, `slider` (with its labels), `table` (header and rows; a cell with controls is `{ text, controls }`), and `svg` (file in `docs/source-figures/`, viewBox, size, text labels, whether it animates).
@@ -209,7 +210,7 @@ Migration 0001 had not been applied, so it was edited in place.
 
 - `elements.element_type` gains `render`: a code-rendered set piece. Body `{ template, template_commit, state }`.
 - Lettering items gain `lang` (`en` or `dz`) and `gloss`.
-- `entities` gain `world`. `sections` gain `location_entity_id` (nullable FK to `entities`), `time_of_day`, and `season`, and are created after `entities`.
+- `entities` gain `setting` (named `world` until v4b). `sections` gain `location_entity_id` (nullable FK to `entities`), `time_of_day`, and `season`, and are created after `entities`.
 
 ### Session
 
@@ -239,8 +240,61 @@ Migration 0001 had not been applied, so it was edited in place.
 
 ### Docs and prompts
 
-- References to a private repo and to another project's database were removed from this brief.
+- References to a private repo and to the shared studio database by name were removed from this brief.
 - `docs/prompts/` holds the prompts given to the coding agent that built this repo, in order. Analysis and generation prompts used by the app itself go in `prompts/` (Milestone 2).
+
+## 4b. v4b: deploying into a shared studio database (Oct 2, 2026)
+
+The app deploys into a shared studio database. Migration 0001 was still unapplied and was edited in place.
+
+### Schema
+
+- Every table, trigger, policy, and the trigger function live in a schema named `studio`. Nothing is created in `public`. `create schema studio` fails if the name is taken, rather than mixing into an existing schema.
+- The trigger function sets an empty `search_path` and is not executable by anyone directly.
+- `world` is renamed `setting`, in `entities` and in `text_blocks.data` (`setting`, `setting_evidence`).
+
+### Roles and grants
+
+| Role | Rights in `studio` | Anything else |
+|------|-------------------|---------------|
+| `anon`, `authenticated` | `usage` on the schema, `select` on every table; RLS shows published rows only | Unchanged |
+| `studio_writer` (new) | `select, insert, update, delete` on every table and `usage` on sequences; an RLS policy lets it see and write every row; the append-only triggers still apply | No DDL, no `create` anywhere, no access to `public` tables or other schemas |
+| `service_role` | None | Unchanged; this app never uses it |
+
+Default privileges give later migrations' tables the same grants.
+
+### Settings to change by hand
+
+1. **Apply 0001** in the SQL Editor (dry run first: swap the final `commit;` for `rollback;`).
+2. **Give `studio_writer` a login**, in the SQL Editor, with a generated password that is never committed: `alter role studio_writer with login password '…';`
+3. **Expose `studio` to the Data API**: Project Settings → Data API → Exposed schemas → add `studio`. Only needed for public reads through the API with the anon key; skip it if all reads go through the app's server.
+4. **Writer connection string**: take the transaction pooler string from the dashboard's Connect panel, change the user to `studio_writer.<project-ref>`, and set it as `STUDIO_DATABASE_URL` in Vercel (server only) and in `.env.local`. Confirm on first connect that the pooler accepts the custom role.
+
+### Why `studio_writer`, and what it costs
+
+A direct Postgres connection as a role that owns nothing and can only touch `studio`, instead of the service role key through the API.
+
+- **Gain.** The service role bypasses RLS on every schema in the shared database. If it leaked from this app's Vercel environment, everything in the shared studio database would be exposed. A leaked `studio_writer` password exposes only `studio` rows; the role cannot change the schema, cannot read other schemas, and cannot get around the append-only triggers.
+- **Cost.**
+  - Writes are SQL through `postgres` (postgres.js) rather than the supabase-js query builder.
+  - Connections go through the transaction pooler. That means one connection per function instance and no prepared statements, and they count against the shared studio database's connection limits.
+  - A password to generate, store, and rotate by hand.
+  - No Supabase admin APIs (Storage, Auth admin). This app needs neither: media go to R2 and sign-in is Farcaster.
+  - Like any role, it can see catalog metadata (other schemas' table names) and call functions granted to `PUBLIC`.
+- **Rejected alternative.** A custom JWT with `role: studio_writer` through the Data API keeps supabase-js. But it needs the database's JWT signing secret on this server, and that secret can mint service-role tokens too, so it is worse than the service role key.
+
+### Tests
+
+`npm run test:db` builds an in-memory Postgres (PGlite) shaped like a shared studio database: the API roles `anon`, `authenticated`, and `service_role`, plus existing tables outside `studio`, in `public` and in another schema. It applies 0001 and checks:
+
+- nothing new in `public`, and RLS and the append-only triggers on every `studio` table;
+- anon and authenticated read published rows only and cannot write;
+- the service role cannot read `studio`;
+- `studio_writer` can write `studio` rows but cannot do DDL, truncate, read other schemas, or get around the append-only rule;
+- the constraints hold;
+- the real seed script, connected over the wire as `studio_writer`, loads all 4,322 blocks.
+
+PGlite runs as a superuser, unlike the database's own admin role, so role creation is approximated.
 
 ---
 
@@ -248,7 +302,7 @@ Migration 0001 had not been applied, so it was edited in place.
 
 ### Core (migration 0001)
 
-`supabase/migrations/0001_core.sql` is the source of truth; it adds indexes, append-only triggers, and RLS policies to the tables below.
+`supabase/migrations/0001_core.sql` is the source of truth. Every table below lives in the `studio` schema (shown unqualified here for reading); the migration adds the schema, the `studio_writer` role, indexes, append-only triggers, RLS policies, and grants.
 
 ```sql
 create table works (
@@ -278,7 +332,7 @@ create table entities (
   work_id text not null references works(id),
   kind text not null check (kind in ('character','location','prop','style')),
   name text not null,
-  world text check (world ~ '^[a-z0-9]+(-[a-z0-9]+)*$'),
+  setting text check (setting ~ '^[a-z0-9]+(-[a-z0-9]+)*$'),
   first_chapter int,
   unique (work_id, kind, name)
 );
@@ -500,9 +554,9 @@ alter table recipes
 - **System generations** (narration, digests, analysis) use the project account's FID as `created_by_fid`.
 - **`body` by type** (typed in `src/lib/element-body.ts`). `design`: `{ "description": "" }`. `text`: `{ "text": "" }`. `image`: `{ "lettering": [ { "kind": "caption|speech|thought|sfx", "text": "", "lang": "en|dz", "gloss": null, "speaker_entity_id": null, "x": 0, "y": 0, "w": 0 } ] }` with x, y, w as fractions from 0 to 1. `text` is the line as shown in its own language; `gloss` is the translation shown with it (a Dzegoban line's English), or null. `render`: `{ "template": "path/in/repo", "template_commit": "<sha>", "state": {} }`.
 - **`assist`.** If a language model helped write a prompt, store its model, the prompt file path and commit, and the user's instruction.
-- **World and seasons.** `entities.world` and `text_blocks.data.world` use the same slugs, taken from the datelines: `veridia`, `dzego`, `united-cities`. `sections.time_of_day` and `sections.season` are free text for now; constrain them once Milestone 2 output shows the real values.
+- **Settings and seasons.** `entities.setting` and `text_blocks.data.setting` use the same slugs, taken from the datelines: `veridia`, `dzego`, `united-cities`. `sections.time_of_day` and `sections.season` are free text for now; constrain them once Milestone 2 output shows the real values.
 - **Grant balance** is the grant amount minus the sum of `cost_usd` on recipes funded by it. Do not store a balance column.
-- **RLS.** Public read on everything except drafts and hidden items. Writes only through server routes using the service role after checking the signed-in FID.
+- **RLS.** Public read on everything except drafts and hidden items. Writes only through server routes connected as `studio_writer`, after checking the signed-in FID. The service role is not used and has no grants in `studio`.
 
 ---
 
@@ -529,7 +583,7 @@ alter table recipes
 
 ## 7. Working rules for this repo
 
-- Migrations are SQL files in the repo. The maintainer applies them by hand in the Supabase SQL Editor after a dry run. Never apply SQL with the service role key from a terminal.
+- Migrations are SQL files in the repo. The maintainer applies them by hand in the Supabase SQL Editor after a dry run. Never apply SQL from a terminal with a privileged key.
 - "Shipped" means verified live with `npm run check:shipped`.
 - Any automated check must be shown to fail on a planted error before it is trusted.
 - Production filesystem on Vercel is read-only. Anything edited at runtime lives in the database.

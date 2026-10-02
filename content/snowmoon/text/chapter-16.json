@@ -384,8 +384,8 @@
       "content": "<div class=\"device-view wide-device-view\"><div style=\"font-size:150%\"></div>\n<table>\n    <thead>\n    <tr>\n      <th></th>\n      <th style=\"font-size:150%; color: yellow\">Yellow</th>\n      <th style=\"font-size:150%; color: #808\">Purple</th>\n    </tr>\n    </thead>\n    <tbody>\n    <tr>\n      <td style=\"font-size:150%; color: red\">Redball captures</td>\n      <td style=\"font-size:150%; color: red\">6</td>\n      <td style=\"font-size:150%; color: red\">11</td>\n    </tr>\n<tr>\n<td style=\"font-size:150%; color: #8f8\">Greenball player hits</td>\n<td style=\"font-size:150%; color: #8f8\">9</td>\n<td style=\"font-size:150%; color: #8f8\">7</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #88f\">Blueball pin knockdowns</td>\n<td style=\"font-size:150%; color: #88f\">31</td>\n<td style=\"font-size:150%; color: #88f\">23</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #fff\">Combined score</td>\n<td style=\"font-size:150%; color: #fff\">1674</td>\n<td style=\"font-size:150%; color: #fff\">1771</td>\n</tr>\n</tbody>\n</table></div>",
       "sha256": "c5696237d139b6cc4c72bdcc69abc469e1cd60458fe12091021f0d5aa8f03e79",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Meldan, Veridia"
         },
@@ -460,8 +460,8 @@
       "content": "<div class=\"device-view wide-device-view\"><div style=\"font-size:150%\"></div>\n<table>\n    <thead>\n    <tr>\n      <th></th>\n      <th style=\"font-size:150%; color: yellow\">Yellow</th>\n      <th style=\"font-size:150%; color: #808\">Purple</th>\n    </tr>\n    </thead>\n    <tbody>\n    <tr>\n      <td style=\"font-size:150%; color: red\">Redball captures</td>\n      <td style=\"font-size:150%; color: red\">6</td>\n      <td style=\"font-size:150%; color: red\">11</td>\n    </tr>\n<tr>\n<td style=\"font-size:150%; color: #8f8\">Greenball player hits</td>\n<td style=\"font-size:150%; color: #8f8\">10</td>\n<td style=\"font-size:150%; color: #8f8\">7</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #88f\">Blueball pin knockdowns</td>\n<td style=\"font-size:150%; color: #88f\">31</td>\n<td style=\"font-size:150%; color: #88f\">23</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #fff\">Combined score</td>\n<td style=\"font-size:150%; color: #fff\">1860</td>\n<td style=\"font-size:150%; color: #fff\">1771</td>\n</tr>\n</tbody>\n</table></div>",
       "sha256": "48b953f225498873ace6ff4195055490a2da7e713036ad6dc8b68d11407a7c28",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Meldan, Veridia"
         },
@@ -671,8 +671,8 @@
       "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th>From</th>\n      <th></th>\n      <th>Message</th>\n      <th>Time</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Gladias</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 93.33333333333333)\">[Wallet 0x8f62... social recovery mode transaction request]</span></td>\n      <td>65129</td>\n    </tr>\n    </tbody>\n</table></div>",
       "sha256": "e34ae35b3a9592c267f9943d403bf55930fbbe14142bb1632df46f8f8a9d9a5f",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Meldan, Veridia"
         },
@@ -746,8 +746,8 @@
       "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th>From</th>\n      <th></th>\n      <th>Message</th>\n      <th>Time</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Seila</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 253.33333333333334)\">Security question: what was the most unusual thing I did on the evening the kids came back from Vil and Daia's?</span></td>\n      <td>73105</td>\n    </tr>\n    </tbody>\n</table></div>",
       "sha256": "413f7e070ccca759ac4ecfe72b3891029530fe8a79dc835668f0bad89e09b8a7",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Meldan, Veridia"
         },
@@ -797,8 +797,8 @@
       "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th>Message</th>\n      <th></th>\n      <th>To</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td><span style=\"color:oklch(0.7 0.15 93.33333333333333)\">You unplugged the screen in the restaurant when it was showing Lord Ephelion's speech.</span></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td style=\"width: 25%\"><center>Seila</center></td>\n    </tr>\n    </tbody>\n</table>\n<button disabled=\"\"> Send </button></div>",
       "sha256": "933517504a162c20bd3605fff76cf67159c5c03b75d62d2e8b4a9b85881c10ca",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Meldan, Veridia"
         },

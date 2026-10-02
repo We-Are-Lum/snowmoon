@@ -42,8 +42,8 @@
       "content": "<div class=\"device-view wide-device-view device-view-left\" style=\"background-color:#633; font-size:93.75%; color:#fee; --dv-ink:#fee;\"><b>From a comfortable Veridia to a strong Veridia</b>\n<hr style=\"background:#fee; margin-top: 10px\">\n<p>Veridia is a beautiful country, you are told in school. You see it every day: the trees, the mountains, the houses and buildings all trying to eke out another few basis points reduction in land tax.</p>\n<p>But you know, in your heart, that there is a problem. When did Veridia last go to space? Twenty years ago. When was Veridia's tallest building built? Forty years ago. Why? Because all your institutions - the Steering system, the Graph Funding mechanism, and the very <em>culture</em> - are built around making people comfortable and happy in the present, with no concern for tomorrow.</p>\n<p>Meanwhile, look at the Arctic Empire. Where is the housing, the transportation, the industry being built the fastest? In the Arctic Empire. All the scientists working to make people live longer? In the Arctic Empire.</p>\n<p>What does Veridia say to those scientists? Living longer is not that important. Death and birth are okay, they are the natural cycle of life. Yes, that's what they believe. The natural cycle of life is the best they have for morality - by that same twisted logic, any injustice could be natural, like a tiger eating a rabbit.</p>\n<p>Veridia's vision of nature is like a plant. Beautiful, but never rising up above its stature. Our vision of nature is like a lion. If this vision appeals to you, if you want Veridia to be stronger, to reach for the stars, to aim beyond incremental public health and seek eternal life, then Veridia needs you, the next generation of leaders, to <em>take charge</em>. Don't mind the mob. Build the future. Join us, and we will build it together.</p>\n<p>With regards,</p>\n<p>Lord Ephelion</p>\n<p>Arctic Empire consul to Veridia.</p></div>",
       "sha256": "669317455602e3de83f70e1cf6bcf986f3d2a4b0d0a30261ae6701f610ac56ef",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Meldan, Veridia"
         },
@@ -293,8 +293,8 @@
       "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th>From</th>\n      <th></th>\n      <th>Message</th>\n      <th>Time</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Seila</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 253.33333333333334)\">[4 images]</span></td>\n      <td>44029</td>\n    </tr>\n    </tbody>\n</table></div>",
       "sha256": "d67e52e655fbdfccd9ad7221f93286ff1478ff69a937ed0aa339ec5922432aee",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Meldan, Veridia"
         },
@@ -428,8 +428,8 @@
       "content": "<div class=\"device-view wide-device-view\"><h3 style=\"color:#d4d\">Greater Plum Harbor Public Activities</h3>\n<table style=\"width:75%\">\n  <tbody>\n    <tr>\n      <td>Environment</td>\n      <td>\n<ul><li>Cleanup</li><li>Pollution monitoring (water, air)</li><li>Animal welfare research</li></ul>\n      </td><td><button disabled=\"\"> Learn more </button></td>\n    </tr>\n    <tr>\n      <td>Health and medicine</td>\n      <td>\n<ul><li>Large-scale studies in effects of food, environment and clean air improvements</li><li>Healthy eating, exercise, other behavior and lifestyle research</li></ul>\n</td>\n      <td><button disabled=\"\"> Learn more </button></td>\n    </tr>\n    <tr>\n      <td>Education</td>\n      <td>\n<ul><li>Writing advanced education curricula targeting ages 4-18</li><li>Youth math and programming competitions</li></ul></td>\n      <td><button disabled=\"\"> Learn more </button></td>\n    </tr>\n    <tr>\n      <td>Art</td>\n      <td>\n<ul><li>Beautiful Cities research</li><li>Publicly available exhibitions and museums</li><li>Movies and shows, three in Veridian Top 20 last year.</li></ul></td>\n      <td><button disabled=\"\"> Learn more </button></td>\n    </tr>\n    <tr><td colspan=\"3\"><button disabled=\"\"> Load more </button></td></tr>\n  </tbody>\n</table>\n<div><b>All research outputs and tooling done by GPH are open source! <br> Partially funded by Veridian Quadratic Funding</b></div></div>",
       "sha256": "75f2cccad6871dca990e8d4e4a709f147fa214ee069b8447404feb2f894b3e74",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Meldan, Veridia"
         },
@@ -657,8 +657,8 @@
       "content": "<div class=\"device-view narrow-device-view\"><div style=\"font-size:150%\"></div>\n<table>\n    <tbody><tr>\n      <td style=\"font-size:150%\" colspan=\"2\">Air</td>\n    </tr>\n<tr>\n<td style=\"font-size:150%\">CO<sub>2</sub></td>\n<td style=\"font-size:150%; color: yellow\">965</td>\n</tr>\n<tr>\n<td style=\"font-size:150%\">PM2.5</td>\n<td style=\"font-size:150%; color: yellow\">22.1</td>\n</tr>\n</tbody></table>\n<table>\n<tbody><tr>\n<td style=\"font-size:150%\" colspan=\"2\">Devices</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #8f8\">Attested ✓</td>\n<td style=\"font-size:150%; color: #8f8\">55</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #fc8\">Unknown ?</td>\n<td style=\"font-size:150%; color: #fc8\">6</td>\n</tr>\n</tbody></table></div>",
       "sha256": "33bc9670c2744f1d0c15eedac321d2dc337120f86ea1e0b5e32b98b3191563a2",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Meldan, Veridia"
         },
@@ -1035,8 +1035,8 @@
       "content": "<div class=\"device-view narrow-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<rect x=\"80\" y=\"100\" width=\"80\" height=\"80\" rx=\"8\" fill=\"#67e\"></rect>\n<rect x=\"120\" y=\"40\" width=\"20\" height=\"70\" rx=\"8\" fill=\"#67e\"></rect>\n<rect x=\"130\" y=\"40\" width=\"70\" height=\"20\" fill=\"#67e\"></rect>\n<circle cx=\"92\" cy=\"150\" r=\"5\" fill=\"#cef\"></circle>\n<text x=\"84\" y=\"169\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"12\">Gladias</text>\n<circle cx=\"130\" cy=\"110\" r=\"5\" fill=\"#cef\"></circle>\n<text x=\"140\" y=\"130\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Mov</text>\n<line x1=\"130\" y1=\"105\" x2=\"130\" y2=\"88\" stroke=\"#cef\" stroke-width=\"1\"></line>\n<polygon points=\"130,85 126,92 134,92\" fill=\"#cef\"></polygon>\n</svg></div>",
       "sha256": "891ca53318d30e11ac23881ad9a78194aa755bee0c4ff675495be9be6d5ef217",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Meldan, Veridia"
         },

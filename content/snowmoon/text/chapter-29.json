@@ -216,8 +216,8 @@
       "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"240\" height=\"240\" viewBox=\"0 0 240 240\">\n<rect width=\"240\" height=\"240\" fill=\"#348\"></rect>\n<path d=\"M136.8 0.5 L107.8 32.6 L104.3 52.4 L95.1 84.6 L93.9 95.9 L76.5 119.5 L74.2 126.1 L77.1 128.5 L81.7 123.8 L88.1 125.2 L138.0 53.4 L183.8 18.9 L191.9 15.1 L219.7 12.3 L228.4 21.3 L218.6 38.7 L196.5 40.6 L187.8 46.8 L186.7 51.5 L191.9 55.7 L210.4 64.3 L215.1 64.3 L222.0 61.4 L222.6 66.6 L219.1 78.0 L239.4 93.5 L240.0 0.5 L137.4 0.0 Z\" fill=\"#89c\"></path>\n<path d=\"M238.8 131.8 L227.2 139.9 L220.1 149.3 L208.6 157.8 L194.7 165.4 L134.5 211.2 L129.9 239.5 L239.4 240.0 L239.4 131.3 Z\" fill=\"#89c\"></path>\n<path d=\"M34.2 178.6 L86.8 149.7 L82.8 123.4\" fill=\"none\" stroke=\"#cef\" stroke-width=\"1.5\" stroke-dasharray=\"3,2\"></path>\n<path d=\"M232.5 176.5 L220.5 138.8\" fill=\"none\" stroke=\"#cef\" stroke-width=\"1.5\" stroke-dasharray=\"3,2\"></path>\n<path d=\"M63.2 200.8 L139.6 143.0\" fill=\"none\" stroke=\"#cef\" stroke-width=\"1.5\" stroke-dasharray=\"3,2\"></path>\n<path d=\"M90 215 L151.4 170.8 L171.6 166.3\" fill=\"none\" stroke=\"#cef\" stroke-width=\"1.5\" stroke-dasharray=\"3,2\"></path>\n<circle cx=\"34.2\" cy=\"178.6\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"63.2\" cy=\"200.8\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"90\" cy=\"215\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"232.5\" cy=\"176.5\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"196.6\" cy=\"162.6\" r=\"3.4\" fill=\"#cef\"></circle>\n<text x=\"34.2\" y=\"192\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#cef\" stroke=\"#348\" stroke-width=\"2.5\" paint-order=\"stroke\" text-anchor=\"middle\">Group<tspan x=\"34.2\" dy=\"9.8\">North</tspan></text>\n<text x=\"63.2\" y=\"215\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#cef\" stroke=\"#348\" stroke-width=\"2.5\" paint-order=\"stroke\" text-anchor=\"middle\">Group<tspan x=\"63.2\" dy=\"9.8\">Center</tspan></text>\n<text x=\"110\" y=\"225\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#cef\" stroke=\"#348\" stroke-width=\"2.5\" paint-order=\"stroke\" text-anchor=\"middle\">Group<tspan x=\"110\" dy=\"10\">South</tspan></text>\n<text x=\"222.5\" y=\"190\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#348\" text-anchor=\"middle\">Group<tspan x=\"222.5\" dy=\"9.8\">Naval</tspan></text>\n<text x=\"185\" y=\"153\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#cef\" stroke=\"#348\" stroke-width=\"2.5\" paint-order=\"stroke\" text-anchor=\"middle\">Northglade</text>\n</svg></div>",
       "sha256": "8167373db7c0dcdc1a67cbdcc89b758ea54664a081a211770399daa4c1bf9243",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Elenar Forest, Veridia"
         },
@@ -401,8 +401,8 @@
       "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"240\" height=\"240\" viewBox=\"0 0 240 240\">\n<rect width=\"240\" height=\"240\" fill=\"#348\"></rect>\n<path d=\"M136.8 0.5 L107.8 32.6 L104.3 52.4 L95.1 84.6 L93.9 95.9 L76.5 119.5 L74.2 126.1 L77.1 128.5 L81.7 123.8 L88.1 125.2 L138.0 53.4 L183.8 18.9 L191.9 15.1 L219.7 12.3 L228.4 21.3 L218.6 38.7 L196.5 40.6 L187.8 46.8 L186.7 51.5 L191.9 55.7 L210.4 64.3 L215.1 64.3 L222.0 61.4 L222.6 66.6 L219.1 78.0 L239.4 93.5 L240.0 0.5 L137.4 0.0 Z\" fill=\"#89c\"></path>\n<path d=\"M238.8 131.8 L227.2 139.9 L220.1 149.3 L208.6 157.8 L194.7 165.4 L134.5 211.2 L129.9 239.5 L239.4 240.0 L239.4 131.3 Z\" fill=\"#89c\"></path>\n<path d=\"M60 164 L86.8 149.7 L82.8 123.4\" fill=\"none\" stroke=\"#cef\" stroke-width=\"1.5\" stroke-dasharray=\"3,2\"></path>\n<path d=\"M232.5 176.5 L220.5 138.8\" fill=\"none\" stroke=\"#cef\" stroke-width=\"1.5\" stroke-dasharray=\"3,2\"></path>\n<path d=\"M85 183 L139.6 143.0\" fill=\"none\" stroke=\"#cef\" stroke-width=\"1.5\" stroke-dasharray=\"3,2\"></path>\n<path d=\"M123 191 L151.4 170.8 L171.6 166.3\" fill=\"none\" stroke=\"#cef\" stroke-width=\"1.5\" stroke-dasharray=\"3,2\"></path>\n<circle cx=\"60\" cy=\"164\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"85\" cy=\"183\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"123\" cy=\"191\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"232.5\" cy=\"176.5\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"196.6\" cy=\"162.6\" r=\"3.4\" fill=\"#cef\"></circle>\n<text x=\"185\" y=\"153\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#cef\" stroke=\"#348\" stroke-width=\"2.5\" paint-order=\"stroke\" text-anchor=\"middle\">Northglade</text>\n<circle cx=\"55\" cy=\"150\" r=\"3.4\" fill=\"#f00\"></circle>\n<circle cx=\"75\" cy=\"160\" r=\"3.4\" fill=\"#f00\"></circle>\n</svg></div>",
       "sha256": "22baa5d55752859326042ddc5d0527520521c209f14991f82bc6111ba36449dd",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Elenar Forest, Veridia"
         },
@@ -483,8 +483,8 @@
       "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"240\" height=\"240\" viewBox=\"0 0 240 240\">\n<rect width=\"240\" height=\"240\" fill=\"#348\"></rect>\n<circle cx=\"40\" cy=\"84\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"55\" cy=\"79\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"70\" cy=\"74\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"80\" cy=\"84\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"90\" cy=\"94\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"100\" cy=\"114\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"135\" cy=\"215\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"145\" cy=\"225\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"155\" cy=\"235\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"30\" cy=\"65\" r=\"3.6\" fill=\"#f00\"></circle>\n<circle cx=\"45\" cy=\"60\" r=\"3.6\" fill=\"#f00\"></circle>\n<circle cx=\"60\" cy=\"55\" r=\"3.6\" fill=\"#f00\"></circle>\n<circle cx=\"100\" cy=\"65\" r=\"3.6\" fill=\"#f00\"></circle>\n<circle cx=\"105\" cy=\"80\" r=\"3.6\" fill=\"#f00\"></circle>\n<circle cx=\"110\" cy=\"95\" r=\"3.6\" fill=\"#f00\"></circle>\n<circle cx=\"120\" cy=\"110\" r=\"3.6\" fill=\"#f00\"></circle>\n</svg></div>",
       "sha256": "28262fee98b64bf2ca30765dba5e017b0bc8934b6e13fa4c6c0a6df1f1147f8b",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Elenar Forest, Veridia"
         },
@@ -548,8 +548,8 @@
       "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"240\" height=\"240\" viewBox=\"0 0 240 240\">\n<rect width=\"240\" height=\"240\" fill=\"#348\"></rect>\n<circle cx=\"40\" cy=\"94\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"60\" cy=\"89\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"80\" cy=\"75\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"95\" cy=\"70\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"98\" cy=\"95\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"100\" cy=\"114\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"125\" cy=\"125\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"140\" cy=\"125\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"150\" cy=\"115\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"30\" cy=\"75\" r=\"3.6\" fill=\"#f00\"></circle>\n<circle cx=\"45\" cy=\"70\" r=\"3.6\" fill=\"#f00\"></circle>\n<circle cx=\"60\" cy=\"65\" r=\"3.6\" fill=\"#f00\"></circle>\n<circle cx=\"105\" cy=\"80\" r=\"3.6\" fill=\"#f00\"></circle>\n<circle cx=\"108\" cy=\"95\" r=\"3.6\" fill=\"#f00\"></circle>\n<circle cx=\"110\" cy=\"110\" r=\"3.6\" fill=\"#f00\"></circle>\n<circle cx=\"130\" cy=\"110\" r=\"3.6\" fill=\"#f00\"></circle>\n</svg></div>",
       "sha256": "6a047b155db785b69f9b61de38ac2ab12d48e07b1d4add331d0cfdbd9b839868",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Elenar Forest, Veridia"
         },
@@ -601,8 +601,8 @@
       "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"240\" height=\"240\" viewBox=\"0 0 240 240\">\n<rect width=\"240\" height=\"240\" fill=\"#348\"></rect>\n<path d=\"M136.8 0.5 L107.8 32.6 L104.3 52.4 L95.1 84.6 L93.9 95.9 L76.5 119.5 L74.2 126.1 L77.1 128.5 L81.7 123.8 L88.1 125.2 L138.0 53.4 L183.8 18.9 L191.9 15.1 L219.7 12.3 L228.4 21.3 L218.6 38.7 L196.5 40.6 L187.8 46.8 L186.7 51.5 L191.9 55.7 L210.4 64.3 L215.1 64.3 L222.0 61.4 L222.6 66.6 L219.1 78.0 L239.4 93.5 L240.0 0.5 L137.4 0.0 Z\" fill=\"#89c\"></path>\n<path d=\"M238.8 131.8 L227.2 139.9 L220.1 149.3 L208.6 157.8 L194.7 165.4 L134.5 211.2 L129.9 239.5 L239.4 240.0 L239.4 131.3 Z\" fill=\"#89c\"></path>\n<path d=\"M75 156 L86.8 149.7 L82.8 123.4\" fill=\"none\" stroke=\"#cef\" stroke-width=\"1.5\" stroke-dasharray=\"3,2\"></path>\n<path d=\"M227 160 L220.5 138.8\" fill=\"none\" stroke=\"#cef\" stroke-width=\"1.5\" stroke-dasharray=\"3,2\"></path>\n<path d=\"M100 172 L139.6 143.0\" fill=\"none\" stroke=\"#cef\" stroke-width=\"1.5\" stroke-dasharray=\"3,2\"></path>\n<path d=\"M135 182 L151.4 170.8 L171.6 166.3\" fill=\"none\" stroke=\"#cef\" stroke-width=\"1.5\" stroke-dasharray=\"3,2\"></path>\n<circle cx=\"63\" cy=\"162\" r=\"2\" fill=\"#cef\"></circle>\n<circle cx=\"75\" cy=\"156\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"100\" cy=\"172\" r=\"3.2\" fill=\"#cef\"></circle>\n<circle cx=\"135\" cy=\"182\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"227\" cy=\"160\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"196.6\" cy=\"162.6\" r=\"3.4\" fill=\"#cef\"></circle>\n<text x=\"185\" y=\"153\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#cef\" stroke=\"#348\" stroke-width=\"2.5\" paint-order=\"stroke\" text-anchor=\"middle\">Northglade</text>\n<circle cx=\"60\" cy=\"155\" r=\"3.2\" fill=\"#f00\"></circle>\n</svg></div>",
       "sha256": "9bc8afd5984dddb36d98c56720e74b9faf3cf129351a301060c6114c652178b9",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Elenar Forest, Veridia"
         },
@@ -647,8 +647,8 @@
       "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"240\" height=\"240\" viewBox=\"0 0 240 240\">\n<rect width=\"240\" height=\"240\" fill=\"#348\"></rect>\n<path d=\"M136.8 0.5 L107.8 32.6 L104.3 52.4 L95.1 84.6 L93.9 95.9 L76.5 119.5 L74.2 126.1 L77.1 128.5 L81.7 123.8 L88.1 125.2 L138.0 53.4 L183.8 18.9 L191.9 15.1 L219.7 12.3 L228.4 21.3 L218.6 38.7 L196.5 40.6 L187.8 46.8 L186.7 51.5 L191.9 55.7 L210.4 64.3 L215.1 64.3 L222.0 61.4 L222.6 66.6 L219.1 78.0 L239.4 93.5 L240.0 0.5 L137.4 0.0 Z\" fill=\"#89c\"></path>\n<path d=\"M238.8 131.8 L227.2 139.9 L220.1 149.3 L208.6 157.8 L194.7 165.4 L134.5 211.2 L129.9 239.5 L239.4 240.0 L239.4 131.3 Z\" fill=\"#89c\"></path>\n<path d=\"M130 150 L139.6 143.0\" fill=\"none\" stroke=\"#cef\" stroke-width=\"1.5\" stroke-dasharray=\"3,2\"></path>\n<path d=\"M160 169 L171.6 166.3\" fill=\"none\" stroke=\"#cef\" stroke-width=\"1.5\" stroke-dasharray=\"3,2\"></path>\n<circle cx=\"63\" cy=\"170\" r=\"2\" fill=\"#cef\"></circle>\n<circle cx=\"84\" cy=\"140\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"130\" cy=\"150\" r=\"3.2\" fill=\"#cef\"></circle>\n<circle cx=\"160\" cy=\"169\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"220\" cy=\"150\" r=\"3.6\" fill=\"#cef\"></circle>\n<circle cx=\"196.6\" cy=\"162.6\" r=\"3.4\" fill=\"#cef\"></circle>\n<text x=\"185\" y=\"153\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#cef\" stroke=\"#348\" stroke-width=\"2.5\" paint-order=\"stroke\" text-anchor=\"middle\">Northglade</text>\n<circle cx=\"60\" cy=\"164\" r=\"3.6\" fill=\"#f00\"></circle>\n<circle cx=\"130\" cy=\"142\" r=\"3.6\" fill=\"#f00\"></circle>\n<circle cx=\"140\" cy=\"148\" r=\"3.6\" fill=\"#f00\"></circle>\n<circle cx=\"150\" cy=\"151\" r=\"3.6\" fill=\"#f00\"></circle>\n<circle cx=\"170\" cy=\"160\" r=\"3.6\" fill=\"#f00\"></circle>\n<circle cx=\"170\" cy=\"175\" r=\"3.6\" fill=\"#f00\"></circle>\n</svg></div>",
       "sha256": "1fe2730fb9d27a26c2994dfb62423d8152f70dadbda8deb3f6eb151dd09559fa",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Elenar Forest, Veridia"
         },
@@ -837,8 +837,8 @@
       "content": "<div class=\"device-view wide-device-view device-view-left\"><p>Rear base #3 appears to have been completely destroyed by highly accurate hits from Arctic missiles.</p>\n<p>Most likely cause: internal traitors revealed the location of the base.</p>\n<p>Current expectation is that almost all personnel in the base did not survive. Probability that Den, commander of Group South, survived is estimated at under 10%.</p></div>",
       "sha256": "5c252a685960480a9ed51362b7c98ce43a577b88cb3451db8f70ef73a7cab449",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Elenar Forest, Veridia"
         },
@@ -905,8 +905,8 @@
       "content": "<div class=\"device-view wide-device-view device-view-left\"><p>This is Deluin.</p>\n<p>Over these past months, I have been executing on my plan. I have earned the Arctics' trust; with the combination of my successful Minpentai background and my parents' status, this proved to be easy. As a result, I am now one of the commanders on the Arctic side.</p>\n<p>We are being heavily surveilled, and there are great limits to what I can do to the Arctic drone fleet without blowing my cover. However, I have managed to set up an exploitable weakness for you.</p>\n<p>This file contains descriptions of tactics that should be effective specifically against the southern flank, which I control. If you apply them, you should be able to break through about twenty kilometers north of the shore, and then proceed north and south to expand the rupture into a complete victory on the southern front.</p>\n<p>From there, it will be up to you to surround the remaining forces from the south, and recover Northglade.</p></div>",
       "sha256": "e93e6bd45f942e9837775e4190495fbfe826ed97d448da10ff95a1f7947850ff",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Elenar Forest, Veridia"
         },

@@ -32,7 +32,7 @@ anything. Commit both directories together.
 | Published here | Never committed |
 |----------------|-----------------|
 | Source HTML snapshots and parsed text | `.env*.local` and any API key |
-| All scripts, checks, and migrations | The Supabase service role key |
+| All scripts, checks, and migrations | The `studio_writer` password and connection string |
 | Prompts, recipes, analysis output (later milestones) | `private/` (local scratch notes) |
 | Planning docs, build prompts, and source figures in `docs/` | |
 
@@ -69,8 +69,8 @@ which is valid in Markdown:
 
 ```json
 {
-  "world": "veridia",
-  "world_evidence": { "idx": 1, "quote": "Meldan, Veridia" },
+  "setting": "veridia",
+  "setting_evidence": { "idx": 1, "quote": "Meldan, Veridia" },
   "device": "hand_device",
   "device_evidence": { "idx": 17, "quote": "Shortly after he began walking beside the soundproof barrier, his hand device buzzed." },
   "device_provisional": true,
@@ -79,7 +79,7 @@ which is valid in Markdown:
 }
 ```
 
-`world` comes from the most recent dateline. `device` is provisional: it is
+`setting` comes from the most recent dateline. `device` is provisional: it is
 found by keyword in the paragraphs just before the screen, is `null` when the
 text doesn't say, and will be replaced in Milestone 2 by the device's owner,
 with evidence. Each comes with a block index and an exact quote, which the ingest check
@@ -92,13 +92,29 @@ ingest is deterministic.
 
 ## Database
 
-`supabase/migrations/` holds SQL files that are applied by hand in the
-Supabase SQL Editor. Do a dry run first: replace the final `commit;` with
-`rollback;`. Never apply migrations from a terminal with the service role
-key.
+The app runs in a shared studio database. Everything it creates lives in the
+`studio` schema, and nothing goes in `public`.
 
-After `0001_core.sql` is applied, `npm run seed:text` loads the text blocks.
-It is safe to re-run. Use `-- --dry-run` to preview it without credentials.
+`supabase/migrations/` holds SQL files that are applied by hand in the SQL
+Editor. Do a dry run first: replace the final `commit;` with `rollback;`.
+Never apply migrations from a terminal with a privileged key.
+
+After applying `0001_core.sql`:
+
+1. In the SQL Editor, give the writer role a login. Generate the password and
+   never commit it: `alter role studio_writer with login password '…';`
+2. Project Settings → Data API → Exposed schemas: add `studio`. This is only
+   needed for public reads through the API.
+3. Set `STUDIO_DATABASE_URL` to the transaction pooler connection string, with
+   the user `studio_writer.<project-ref>`.
+
+Server writes connect as `studio_writer`, which can read and write `studio`
+rows and nothing else. The service role is not used. Brief §4b explains why
+and what this costs.
+
+`npm run seed:text` loads the text blocks as `studio_writer`. It is safe to
+re-run; use `-- --dry-run` to preview without credentials. `npm run test:db`
+runs the migration and permission tests in an in-memory Postgres.
 
 ## Scripts
 
@@ -106,7 +122,8 @@ It is safe to re-run. Use `-- --dry-run` to preview it without credentials.
 |---------|------|
 | `npm run ingest` | Fetch and parse all chapters |
 | `npm run check:ingest` | Ingest checks (fails on any problem) |
-| `npm run seed:text` | Upsert `works` and `text_blocks` into Supabase |
+| `npm run seed:text` | Upsert `studio.works` and `studio.text_blocks` |
+| `npm run test:db` | Migration and permission tests (PGlite) |
 | `npm run check:shipped` | Verify a live deployment runs the expected commit and serves the reader |
 
 ## Sign in

@@ -1,6 +1,6 @@
 # 003: Pre-deploy changes (brief v4)
 
-Date: 2026-10-02. Agent: Claude Code (Claude Opus 5.5). Text in [brackets] is redacted: it named another project's private infrastructure.
+Date: 2026-10-02. Agent: Claude Code (Claude Opus 5.5). Text in [brackets] is redacted: it named private infrastructure.
 
 ```text
 Before deploy. 0001 is not applied, so edit it in place.
@@ -18,7 +18,7 @@ Before deploy. 0001 is not applied, so edit it in place.
    web and mobile. If the cookie is not sent, use a bearer header.
 6. Check the scaffold against the current Farcaster miniapp docs and
    list any differences.
-7. Docs: remove references to the private repo and [another project's] database.
+7. Docs: remove references to the private repo and [the shared studio database].
    Record all of this in the brief as v4. Add docs/prompts/.
 8. Export every source SVG figure to docs/source-figures/, named by
    chapter and block ID.

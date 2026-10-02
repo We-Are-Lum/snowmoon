@@ -138,8 +138,8 @@
       "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>Message</th>\n      <th></th>\n      <th>To</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td><span style=\"color:oklch(0.7 0.15 253.33333333333334)\">Please tell me you're in Freetown and you're okay.</span></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td style=\"width: 25%\"><center>Jahn</center></td>\n    </tr>\n    </tbody>\n</table>\n<button disabled=\"\"> Send </button></div>",
       "sha256": "8b62753ecee3c750006b22535437e48aff672cf8c7ce002962cbc8a7b65b9ff3",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 17,
           "quote": "Meldan, Veridia"
         },
@@ -197,8 +197,8 @@
       "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>From</th>\n      <th></th>\n      <th>Message</th>\n      <th>Time</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Jahn</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 133.33333333333331)\">Don't worry, I am in Freetown.</span></td>\n      <td>32117</td>\n    </tr>\n    </tbody>\n</table></div>",
       "sha256": "e8d460d93361eb4fff7eb7dcbb20e1795de14617f0e2846bf76b516864d77718",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 17,
           "quote": "Meldan, Veridia"
         },
@@ -242,8 +242,8 @@
       "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>From</th>\n      <th></th>\n      <th>Message</th>\n      <th>Time</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Jahn</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 133.33333333333331)\">We've somehow been taking defense seriously here, and Freetown is about as far from Redshire as you can get in the United Cities, except for Silverbeach and Mabuli.</span></td>\n      <td>32124</td>\n    </tr>\n    </tbody>\n</table></div>",
       "sha256": "47da67c8f637b5daaa3c74443e92a64865958ead5b4327851ffabbbf21eca2d5",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 17,
           "quote": "Meldan, Veridia"
         },
@@ -431,8 +431,8 @@
       "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>tie</th>\n      <th></th>\n      <th>dun</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td><span style=\"color:oklch(0.7 0.15 346.66666666666663)\">Are you okay????! <br><br> Please tell me where you are.</span></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n    </tr>\n    </tbody>\n</table>\n<button disabled=\"\"> be </button></div>",
       "sha256": "275e1375c331d1f096787294e2966486ccecaa19dbf55ffdbf33575b0dc43f69",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 48,
           "quote": "Pafogai Du, Dzego"
         },
@@ -490,8 +490,8 @@
       "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>zan</th>\n      <th></th>\n      <th>tie</th>\n      <th>tei</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 53.33333333333333)\">Don't worry, I am alive. <br><br> Though it looks like I'm not going to be getting back to Dzego anytime soon.</span></td>\n      <td>84690</td>\n    </tr>\n    </tbody>\n</table></div>",
       "sha256": "52461aace5b625d07831006ab86aeb389fe9c9f9757f80f15304b46fc1605349",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 48,
           "quote": "Pafogai Du, Dzego"
         },
@@ -541,8 +541,8 @@
       "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>zan</th>\n      <th></th>\n      <th>tie</th>\n      <th>tei</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 53.33333333333333)\">I found a way to send messages out. <br><br> Some Arctic soldier and his friend, or his AI, or something, coded up a way to embed hidden text messages inside real-time health data that he is sending back home to command. <br><br> And someone else in command is relaying that signal into a weather feed, which is then going up to the satellites. <br><br> He's making a whole bunch of zipcoins anonymously rebroadcasting messages for people.</span></td>\n      <td>84714</td>\n    </tr>\n    </tbody>\n</table></div>",
       "sha256": "a6ed579eb105bc0d1149363afa60df37ed84dd630944f45aedff11d0d8406f50",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 48,
           "quote": "Pafogai Du, Dzego"
         },
@@ -592,8 +592,8 @@
       "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>tie</th>\n      <th></th>\n      <th>dun</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td><span style=\"color:oklch(0.7 0.15 346.66666666666663)\">Wow. Are you ... in touch with this soldier?</span></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n    </tr>\n    </tbody>\n</table>\n<button disabled=\"\"> be </button></div>",
       "sha256": "d44862a66540ca625f967638d5f3e4586b6271d6b01d3d5b7c34da2df5de99f5",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 48,
           "quote": "Pafogai Du, Dzego"
         },
@@ -639,8 +639,8 @@
       "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>zan</th>\n      <th></th>\n      <th>tie</th>\n      <th>tei</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 53.33333333333333)\">I have an anonymous link.</span></td>\n      <td>84723</td>\n    </tr>\n    </tbody>\n</table></div>",
       "sha256": "14786a512b112227c52ac37525ba939a8ede44b2f94c5b5966407cfdbee6aeb2",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 48,
           "quote": "Pafogai Du, Dzego"
         },
@@ -684,8 +684,8 @@
       "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>tie</th>\n      <th></th>\n      <th>dun</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td><span style=\"color:oklch(0.7 0.15 346.66666666666663)\">Ask him how he's encoding the messages that he's putting into his health data.</span></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n    </tr>\n    </tbody>\n</table>\n<button disabled=\"\"> be </button></div>",
       "sha256": "fb960bce86e9d149765fb1debec10710ea0f7d4040901a5ff70848a76621d9cb",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 48,
           "quote": "Pafogai Du, Dzego"
         },
@@ -737,8 +737,8 @@
       "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>tie</th>\n      <th></th>\n      <th>dun</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td><span style=\"color:oklch(0.7 0.15 346.66666666666663)\">Or actually, on second thought, he won't answer. But tell him that randomly flipping the least-significant bits, the strategy that everyone always reaches for when they encounter this problem for the first time, is not the ideal solution. Sometimes higher-order bits are totally fine to flip, and sometimes flipping even a least-significant bit is dangerous.<br><br> What you want to do is: <br><br> * Train a language model on the actual distribution, so that conditional on what all the other bits are, it can give you probabilities for whether a given bit should be 0 or 1<br><br> * Split the data up into buckets - make sure to use the decryption key itself to choose the buckets randomly - and require the bits in the i'th bucket to XOR to the i'th bit in the ciphertext. Within each bucket, use the model to determine which bit's probabilities are closest to 50/50 - meaning both values are \"natural\" for that bit to have in that context - and flip that bit to make the bucket XOR correct.<br><br>So you're letting the LLM decide which bits are \"least significant\" and okay to flip, instead of just always taking the lowest-order binary digit in each number.</span></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n    </tr>\n    </tbody>\n</table>\n<button disabled=\"\"> be </button></div>",
       "sha256": "5ab9e0e594023241631af779a67502b2d57e96f9d05a5742aa7706438b78ff6a",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 48,
           "quote": "Pafogai Du, Dzego"
         },
@@ -796,8 +796,8 @@
       "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>tie</th>\n      <th></th>\n      <th>dun</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td><span style=\"color:oklch(0.7 0.15 346.66666666666663)\">If you want to go even further, you can make the buckets partially overlap. Say:<br><br>* the first bucket is 0...199<br>* the second is 20...219<br>* the third is 40...239<br><br>and so on, though remember the whole order should be a pseudorandom permutation.<br><br>Also, choose only a random half of the positions in each bucket to go into the XOR, so there are always bits to flip that affect one bucket but not the bucket before or after it. So say, 204 might be part of the second bucket _but not_ the third.<br><br>The happy-path algorithm is:<br><br>* choose a bit to flip in 0...199 to make the first bucket XOR correctly<br>* choose a bit to flip in 200...219 to make the second bucket XOR correctly<br>* choose a bit to flip in 220...239 to make the third bucket XOR correctly<br><br> and so on... <br><br>But if, let's say, 240...259 gives you 20 bits in a row where _none of them_ are reasonable to flip - think, a very clear picture of a night sky, so you get 20 pixels in a row that are really supposed to be exactly black - or the equivalent of that for health data - then you walk back and try to find a combination of bits to flip in 220...239 that makes both of the last two buckets XOR correctly, and if that fails, you walk back further and try to find a combination of bits to flip in 200...239 to make the last three buckets XOR correctly, and so on.</span></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n    </tr>\n    </tbody>\n</table>\n<button disabled=\"\"> be </button></div>",
       "sha256": "e3b4de22ea07e7621432ea7b76a5e66821aa5fda151d6b1a57fdf5fd9db190b1",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 48,
           "quote": "Pafogai Du, Dzego"
         },
@@ -849,8 +849,8 @@
       "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>tie</th>\n      <th></th>\n      <th>dun</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td><span style=\"color:oklch(0.7 0.15 346.66666666666663)\">I learned that from Den's cryptography textbooks.</span></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n    </tr>\n    </tbody>\n</table>\n<button disabled=\"\"> be </button></div>",
       "sha256": "38b403e9641cf10514493213f90bddd3a6c1030ba334d9e513c85218e293180d",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 48,
           "quote": "Pafogai Du, Dzego"
         },
@@ -896,8 +896,8 @@
       "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>zan</th>\n      <th></th>\n      <th>tie</th>\n      <th>tei</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 53.33333333333333)\">I'll forward that to him. <br><br> But I suspect that for him, first priority is going to be finding higher-bandwidth channels to hide data inside. Optimizing which bits to flip is really smart but it's maybe a 2x gain, finding a better data stream might be a 1000x gain. <br><br> Always take the dumb 1000x gain before the super-clever 2x gain.</span></td>\n      <td>85190</td>\n    </tr>\n    </tbody>\n</table></div>",
       "sha256": "d4a11fc1f783de722430fc8deb919bc9f082d109232917ee62dc8fbf4089cd3d",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 48,
           "quote": "Pafogai Du, Dzego"
         },
@@ -941,8 +941,8 @@
       "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>zan</th>\n      <th></th>\n      <th>tie</th>\n      <th>tei</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 53.33333333333333)\">I learned that in business school.</span></td>\n      <td>85200</td>\n    </tr>\n    </tbody>\n</table></div>",
       "sha256": "7beb3a273a9e4c2f0c444d6fb70dcc31a29a5832ab7373c4bc3bc3c51ac5ef0f",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 48,
           "quote": "Pafogai Du, Dzego"
         },
@@ -992,8 +992,8 @@
       "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>tie</th>\n      <th></th>\n      <th>dun</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td><span style=\"color:oklch(0.7 0.15 346.66666666666663)\">Alright, well stay safe. <br><br>And let me know if there's anything that I can do, or that smart people in my network could do, to help you get out of there safely.</span></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n    </tr>\n    </tbody>\n</table>\n<button disabled=\"\"> be </button></div>",
       "sha256": "67caff9034fa5b07c9659521c591f9c762cf8e146530ae04a3e50700b18f2d39",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 48,
           "quote": "Pafogai Du, Dzego"
         },
@@ -1045,8 +1045,8 @@
       "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>zan</th>\n      <th></th>\n      <th>tie</th>\n      <th>tei</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 53.33333333333333)\">Will do. Thank you for caring about me.</span></td>\n      <td>84821</td>\n    </tr>\n    </tbody>\n</table></div>",
       "sha256": "fe600c73df640bb80b99bbf4448320651f7f0394952e0ebb05615554b76e7aa0",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 48,
           "quote": "Pafogai Du, Dzego"
         },
@@ -1336,8 +1336,8 @@
       "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th>zan</th>\n      <th></th>\n      <th>tie</th>\n      <th>tei</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 53.33333333333333)\">Arctic soldier says thanks, it helped a lot.</span></td>\n      <td>92115</td>\n    </tr>\n    </tbody>\n</table></div>",
       "sha256": "2d6a9a272de2d9f6971b1ab2b35aa9c412cf22f18b433fab7f4945b6c31ea9b5",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 48,
           "quote": "Pafogai Du, Dzego"
         },

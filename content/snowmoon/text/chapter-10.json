@@ -594,8 +594,8 @@
       "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th>From</th>\n      <th></th>\n      <th>Message</th>\n      <th>Time</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Personal reminders</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 213.33333333333331)\">Next Keeper meeting starts in five minutes.</span></td>\n      <td>39500</td>\n    </tr>\n    </tbody>\n</table></div>",
       "sha256": "be4546433980d2fd85bc04ad3b233067c4f9815d837627790c6b89a7296877f9",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 28,
           "quote": "Meldan, Veridia"
         },

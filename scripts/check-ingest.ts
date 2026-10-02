@@ -119,12 +119,12 @@ async function checkScreenData() {
         fail(`${id}: ${b.kind} block has no data`);
         continue;
       }
-      if (!d.world) fail(`${id}: no world`);
+      if (!d.setting) fail(`${id}: no setting`);
       if (d.device_provisional !== true) fail(`${id}: device is not marked provisional`);
       if (!d.fields?.length) fail(`${id}: no fields`);
-      for (const [label, ev] of [['world', d.world_evidence], ['device', d.device_evidence]] as const) {
+      for (const [label, ev] of [['setting', d.setting_evidence], ['device', d.device_evidence]] as const) {
         if (!ev) {
-          if (label === 'world' || d.device) fail(`${id}: ${label} has no evidence`);
+          if (label === 'setting' || d.device) fail(`${id}: ${label} has no evidence`);
           continue;
         }
         const cited = byIdx.get(ev.idx);

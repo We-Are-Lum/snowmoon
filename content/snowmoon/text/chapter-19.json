@@ -54,8 +54,8 @@
       "content": "<div class=\"device-view narrow-device-view\"><div style=\"font-size:150%\"></div>\n<table>\n    <tbody><tr>\n      <td style=\"font-size:150%\" colspan=\"2\">Air</td>\n    </tr>\n<tr>\n<td style=\"font-size:150%\">CO<sub>2</sub></td>\n<td style=\"font-size:150%; color: yellow\">994</td>\n</tr>\n<tr>\n<td style=\"font-size:150%\">PM2.5</td>\n<td style=\"font-size:150%; color: yellow\">30.1</td>\n</tr>\n</tbody></table>\n<table>\n<tbody><tr>\n<td style=\"font-size:150%\" colspan=\"2\">Devices</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #8f8\">Attested ✓</td>\n<td style=\"font-size:150%; color: #8f8\">21</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #f23\">Unknown, increased risk!</td>\n<td style=\"font-size:150%; color: #f23\">4</td>\n</tr>\n</tbody></table></div>",
       "sha256": "ae87740265055bc3c4f1564e13499abd846b1288abb3a425fe3edfd28b74dd91",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Pafogai Du, Dzego"
         },
@@ -138,8 +138,8 @@
       "content": "<div class=\"device-view narrow-device-view\"><div style=\"font-size:150%\"></div>\n<table>\n<tbody><tr>\n<td style=\"font-size:150%\" colspan=\"2\">ten min</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #8f8\">cau tie zen ✓</td>\n<td style=\"font-size:150%; color: #8f8\">25</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #fca\">sen hu ?</td>\n<td style=\"font-size:150%; color: #fca\">0</td>\n</tr>\n</tbody></table></div>",
       "sha256": "13cb86ad9fb1cdf565db4a148952d7dc6a50196c5ca1f8f6c49ba55445d2820b",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Pafogai Du, Dzego"
         },
@@ -187,8 +187,8 @@
       "content": "<div class=\"device-view narrow-device-view\"><div style=\"font-size:150%\"></div>\n<table>\n<tbody><tr>\n<td style=\"font-size:150%; color: #c4f\" colspan=\"2\">gi dai</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #8f8\">fen jan ten lai</td>\n<td style=\"font-size:150%; color: #8f8\">16</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #8f8\">mo fan min jan</td>\n<td style=\"font-size:150%; color: #8f8\">1</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #8f8\">mo fan lai</td>\n<td style=\"font-size:150%; color: #8f8\">4</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #8f8\">kun gau min jan</td>\n<td style=\"font-size:150%; color: #8f8\">4</td>\n</tr>\n</tbody></table></div>",
       "sha256": "aa2437e37bcfefb3aa35226d555c49f5b47230765f0bf953a8e4746bd27df342",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Pafogai Du, Dzego"
         },
@@ -340,8 +340,8 @@
       "content": "<div class=\"device-view narrow-device-view\"><svg width=\"100\" height=\"80\" viewBox=\"0 0 100 80\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"5\" y=\"5\" width=\"90\" height=\"70\" rx=\"8\" fill=\"none\" stroke=\"#cef\" stroke-width=\"4\"></rect>\n<path d=\"M7 12 L50 46 L93 12\" fill=\"none\" stroke=\"#cef\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n</svg>\n<b>fe cau tie dai <br> li shu</b></div>",
       "sha256": "2825effe624a5d8d602013d8280606a0b8dc903da7c42fe7d278a1d559eba559",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Pafogai Du, Dzego"
         },
@@ -403,8 +403,8 @@
       "content": "<div class=\"device-view narrow-device-view\"><div style=\"font-size:150%\"></div>\n<table>\n    <tbody><tr>\n      <td style=\"font-size:150%\" colspan=\"2\">Air</td>\n    </tr>\n<tr>\n<td style=\"font-size:150%\">CO<sub>2</sub></td>\n<td style=\"font-size:150%; color: red\">1015</td>\n</tr>\n<tr>\n<td style=\"font-size:150%\">PM2.5</td>\n<td style=\"font-size:150%; color: yellow\">31.2</td>\n</tr>\n</tbody></table>\n<table>\n<tbody><tr>\n<td style=\"font-size:150%\" colspan=\"2\">Devices</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #8f8\">Attested ✓</td>\n<td style=\"font-size:150%; color: #8f8\">25</td>\n</tr>\n</tbody></table></div>",
       "sha256": "b46dc96cc89310118a01e004e6cb423c5207e9a6d62f33c605ee5019ab8a0eb4",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Pafogai Du, Dzego"
         },
@@ -585,8 +585,8 @@
       "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>zan</th>\n      <th></th>\n      <th>tie</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>sa dzu du de <br>len su 2415 de <br>bun kai mo fan</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td>ci sen hu jan pu zau fe 400 lin man <br> ci cau be fe ti tie <br> ci tan jan pu ciu cu shan jin fe pa bi <br> ci sen hu fe bu</td>\n    </tr>\n    </tbody>\n</table></div>",
       "sha256": "8d0eabee7683e467e001a177bd53fa301ddac6171d5e0fa8ac082bfdf2bfd1e9",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Pafogai Du, Dzego"
         },
@@ -871,8 +871,8 @@
       "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"500\" height=\"250\" viewBox=\"0 0 500 250\">\n<g font-family=\"monospace\" fill=\"#cef\" stroke=\"#cef\">\n<!-- bar 1 -->\n<text x=\"15\" y=\"25\" font-size=\"11\" stroke=\"none\">0x1b568a45...</text>\n<rect x=\"110\" y=\"16\" width=\"330\" height=\"10\" fill=\"none\" stroke-width=\"1\"></rect>\n<rect x=\"110\" y=\"16\" width=\"4.46\" height=\"10\" stroke=\"none\"></rect>\n<text x=\"450\" y=\"25\" font-size=\"11\" stroke=\"none\">1.35%</text>\n<!-- bar 2 -->\n<text x=\"15\" y=\"52\" font-size=\"11\" stroke=\"none\">0x9f3c21d7...</text>\n<rect x=\"110\" y=\"43\" width=\"330\" height=\"10\" fill=\"none\" stroke-width=\"1\"></rect>\n<rect x=\"110\" y=\"43\" width=\"6.83\" height=\"10\" stroke=\"none\"></rect>\n<text x=\"450\" y=\"52\" font-size=\"11\" stroke=\"none\">2.07%</text>\n<!-- bar 3 -->\n<text x=\"15\" y=\"79\" font-size=\"11\" stroke=\"none\">0x4a8e0b62...</text>\n<rect x=\"110\" y=\"70\" width=\"330\" height=\"10\" fill=\"none\" stroke-width=\"1\"></rect>\n<rect x=\"110\" y=\"70\" width=\"5.35\" height=\"10\" stroke=\"none\"></rect>\n<text x=\"450\" y=\"79\" font-size=\"11\" stroke=\"none\">1.62%</text>\n<!-- bar 4 -->\n<text x=\"15\" y=\"106\" font-size=\"11\" stroke=\"none\">0xd714fc98...</text>\n<rect x=\"110\" y=\"97\" width=\"330\" height=\"10\" fill=\"none\" stroke-width=\"1\"></rect>\n<rect x=\"110\" y=\"97\" width=\"9.50\" height=\"10\" stroke=\"none\"></rect>\n<text x=\"450\" y=\"106\" font-size=\"11\" stroke=\"none\">2.88%</text>\n<!-- bar 5 -->\n<text x=\"15\" y=\"133\" font-size=\"11\" stroke=\"none\">0x62bb39a0...</text>\n<rect x=\"110\" y=\"124\" width=\"330\" height=\"10\" fill=\"none\" stroke-width=\"1\"></rect>\n<rect x=\"110\" y=\"124\" width=\"3.93\" height=\"10\" stroke=\"none\"></rect>\n<text x=\"450\" y=\"133\" font-size=\"11\" stroke=\"none\">1.19%</text>\n<!-- bar 6 -->\n<text x=\"15\" y=\"160\" font-size=\"11\" stroke=\"none\">0x8e05d1c4...</text>\n<rect x=\"110\" y=\"151\" width=\"330\" height=\"10\" fill=\"none\" stroke-width=\"1\"></rect>\n<rect x=\"110\" y=\"151\" width=\"8.05\" height=\"10\" stroke=\"none\"></rect>\n<text x=\"450\" y=\"160\" font-size=\"11\" stroke=\"none\">2.44%</text>\n<!-- bar 7 -->\n<text x=\"15\" y=\"187\" font-size=\"11\" stroke=\"none\">0x37ad6f51...</text>\n<rect x=\"110\" y=\"178\" width=\"330\" height=\"10\" fill=\"none\" stroke-width=\"1\"></rect>\n<rect x=\"110\" y=\"178\" width=\"5.71\" height=\"10\" stroke=\"none\"></rect>\n<text x=\"450\" y=\"187\" font-size=\"11\" stroke=\"none\">1.73%</text>\n<!-- bar 8 -->\n<text x=\"15\" y=\"214\" font-size=\"11\" stroke=\"none\">0xc9428e1b...</text>\n<rect x=\"110\" y=\"205\" width=\"330\" height=\"10\" fill=\"none\" stroke-width=\"1\"></rect>\n<rect x=\"110\" y=\"205\" width=\"9.60\" height=\"10\" stroke=\"none\"></rect>\n<text x=\"450\" y=\"214\" font-size=\"11\" stroke=\"none\">2.91%</text>\n<!-- bottom text -->\n<text x=\"250\" y=\"242\" font-size=\"12\" stroke=\"none\" text-anchor=\"middle\" letter-spacing=\"2\">sho hei dai - 827 gei zen</text>\n</g>\n</svg></div>",
       "sha256": "c710e59154fe970a4f7e053e8aff67bc1460f0fb63db4143bd667c209433ae13",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Pafogai Du, Dzego"
         },
@@ -1014,8 +1014,8 @@
       "content": "<div class=\"device-view wide-device-view device-view-left\"><b>What did you do on Firemoon 10th? Explain the day in detail.</b>\n<br><br>\n<div style=\"background-color: #cef; border-radius: 9px; padding: 10px; height: 50px\">\n<b style=\"color: #22b; animation: blinker 1s linear infinite\"> &gt; </b>\n</div></div>",
       "sha256": "2c4d4884c2a435bf1b7f19dec557ee9a93544b837a2ff889488ccff049ed18d5",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Pafogai Du, Dzego"
         },
@@ -1096,8 +1096,8 @@
       "content": "<div class=\"device-view wide-device-view\"><b>sa dzu du de <br> len su 2415 de <br> bun kai mo fan\n</b></div>",
       "sha256": "37d233ceca8d54d73d914b8ae54332cfb7d5587cae9f04cb3cfd5fa46a1c5216",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Pafogai Du, Dzego"
         },
@@ -1216,8 +1216,8 @@
       "content": "<div class=\"device-view wide-device-view device-view-left\"><b> Thinking ... estimated remaining time 440 </b></div>",
       "sha256": "f2b50881c9b2192fb5ce664c14a36390ad6faabd136a7f2189345d8f08bbf520",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Pafogai Du, Dzego"
         },
@@ -1303,8 +1303,8 @@
       "content": "<div class=\"device-view wide-device-view device-view-left\"><p>Hello Zei.</p>\n<p>You may be wondering why I have not communicated any further with you within the past month. I greatly apologize for this, and my goal in sending you this letter is that you are the only friend I have who is outside of Arctic control, and you deserve my explanation about what has been happening.</p>\n<p>The Arctics did a full sweep of Redshire almost a month ago, to confiscate all electronic devices, and give us back only devices that were backdoored and surveilled by them. This is why I lost contact with you. I had no way to reach you, and so I had to encrypt my message to you by wrapping it in this obfuscated language model that asked you to describe our shared experience to verify your identity. I have only been able to construct and send this message through a series of rounds of stealing devices from others, including two watches containing two Arctics' health data, doing the needed work inside of a non-transmitting room, copying the outputs to an inert storage medium, and then chemically destroying the circuits and storage on those devices.</p>\n<p>Physical surveillance of Redshire is, fortunately, much less total than the Arctic itself, though the window on that is closing fast. But there was also another window that was closing fast for me.</p>\n<p>You see, my parents were always on the side of being more sympathetic to the Arctics. And so after the annexation happened, they decided to cooperate with them. They told me that this was the best way to get any chance of autonomy for themselves and for Redshire in the future: to win trust by becoming a helpful part of the Arctic Empire. And so by the time you read this, most likely we will already be on an aeroplane going into the Arctic Empire core territory.</p>\n<p>I do not share their sympathies. But I have decided that the way that I can maximize my chance of being useful, is to play along, and win their trust too. The Arctic Empire respects strength, I have proven my strength by winning the Minpentai semifinals in Dzego, and my parents may be proof enough of my alignment. Hopefully, there will come a moment where I will be able to do something helpful to you. But I do not know.</p>\n<p>And so for this reason, this may well be the last message that you hear from me. I hope that this will not be true, but I cannot guarantee anything. I am sorry for everything.</p>\n<p>dze go ba fau gie</p>\n<p>Your dear friend Deluin.</p></div>",
       "sha256": "4f9220a4bdba9d6463aeb7bfec030ca06f370834fd9bf0e8b66de3f3d49bd3a5",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Pafogai Du, Dzego"
         },

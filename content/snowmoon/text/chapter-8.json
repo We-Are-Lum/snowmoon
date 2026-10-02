@@ -30,8 +30,8 @@
       "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th>From</th>\n      <th></th>\n      <th>Message</th>\n      <th>Time</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Seila</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 253.33333333333334)\">[5 images]</span></td>\n      <td>34125</td>\n    </tr>\n    </tbody>\n</table></div>",
       "sha256": "4f27a4396a7ae1c1b991217e19a33642d14186dc42ef92b341160b8251f47488",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Meldan, Veridia"
         },
@@ -123,8 +123,8 @@
       "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th>From</th>\n      <th></th>\n      <th>Message</th>\n      <th>Time</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 15%\"><center>Mov</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 173.33333333333331)\">Remember that your trial in today is not just about knowledge. It's also about making sure the senators like you.</span></td>\n      <td>34576</td>\n    </tr>\n    </tbody>\n</table></div>",
       "sha256": "6556c44a84893dd7484e9132200125e38e1effc694129d3f9ce5aff56563daaa",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Meldan, Veridia"
         },
@@ -666,8 +666,8 @@
       "content": "<div class=\"device-view narrow-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\">\n<rect width=\"200\" height=\"200\" fill=\"#245\"></rect>\n<text x=\"100.0\" y=\"20\" font-family=\"sans-serif\" font-size=\"12\" fill=\"lightblue\" text-anchor=\"middle\">Acceptance vote: Gladias</text>\n<circle cx=\"100.0\" cy=\"46.0\" r=\"8\" fill=\"#6c6\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"120.4\" cy=\"49.2\" r=\"8\" fill=\"#f66\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"138.8\" cy=\"58.6\" r=\"8\" fill=\"#6c6\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"153.4\" cy=\"73.2\" r=\"8\" fill=\"#f66\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"162.8\" cy=\"91.6\" r=\"8\" fill=\"#f66\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"166.0\" cy=\"112.0\" r=\"8\" fill=\"#6c6\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"162.8\" cy=\"132.4\" r=\"8\" fill=\"#6c6\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"153.4\" cy=\"150.8\" r=\"8\" fill=\"#6c6\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"138.8\" cy=\"165.4\" r=\"8\" fill=\"#f66\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"120.4\" cy=\"174.8\" r=\"8\" fill=\"#6c6\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"100.0\" cy=\"178.0\" r=\"8\" fill=\"#6c6\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"79.6\" cy=\"174.8\" r=\"8\" fill=\"#6c6\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"61.2\" cy=\"165.4\" r=\"8\" fill=\"#f66\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"46.6\" cy=\"150.8\" r=\"8\" fill=\"#6c6\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"37.2\" cy=\"132.4\" r=\"8\" fill=\"#f66\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"34.0\" cy=\"112.0\" r=\"8\" fill=\"#6c6\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"37.2\" cy=\"91.6\" r=\"8\" fill=\"#f66\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"46.6\" cy=\"73.2\" r=\"8\" fill=\"#f66\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"61.2\" cy=\"58.6\" r=\"8\" fill=\"#f66\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"79.6\" cy=\"49.2\" r=\"8\" fill=\"#f66\" stroke=\"#245\" stroke-width=\"1\"></circle>\n</svg></div>",
       "sha256": "ee84b5f52d354e23079dc21ca96e2b2bab30cc3b6fa872269f7e8a26eb67d846",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Meldan, Veridia"
         },
@@ -721,8 +721,8 @@
       "content": "<div class=\"device-view narrow-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\">\n<rect width=\"200\" height=\"200\" fill=\"#245\"></rect>\n<text x=\"100.0\" y=\"20\" font-family=\"sans-serif\" font-size=\"12\" fill=\"lightblue\" text-anchor=\"middle\">Acceptance vote: Gladias</text>\n<circle cx=\"100.0\" cy=\"112.0\" r=\"8\" fill=\"#6c6\" stroke=\"#cef\" stroke-width=\"2\"></circle>\n<circle cx=\"100.0\" cy=\"46.0\" r=\"8\" fill=\"#6c6\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"120.4\" cy=\"49.2\" r=\"8\" fill=\"#f66\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"138.8\" cy=\"58.6\" r=\"8\" fill=\"#6c6\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"153.4\" cy=\"73.2\" r=\"8\" fill=\"#f66\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"162.8\" cy=\"91.6\" r=\"8\" fill=\"#f66\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"166.0\" cy=\"112.0\" r=\"8\" fill=\"#6c6\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"162.8\" cy=\"132.4\" r=\"8\" fill=\"#6c6\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"153.4\" cy=\"150.8\" r=\"8\" fill=\"#6c6\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"138.8\" cy=\"165.4\" r=\"8\" fill=\"#f66\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"120.4\" cy=\"174.8\" r=\"8\" fill=\"#6c6\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"100.0\" cy=\"178.0\" r=\"8\" fill=\"#6c6\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"79.6\" cy=\"174.8\" r=\"8\" fill=\"#6c6\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"61.2\" cy=\"165.4\" r=\"8\" fill=\"#f66\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"46.6\" cy=\"150.8\" r=\"8\" fill=\"#6c6\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"37.2\" cy=\"132.4\" r=\"8\" fill=\"#f66\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"34.0\" cy=\"112.0\" r=\"8\" fill=\"#6c6\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"37.2\" cy=\"91.6\" r=\"8\" fill=\"#f66\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"46.6\" cy=\"73.2\" r=\"8\" fill=\"#f66\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"61.2\" cy=\"58.6\" r=\"8\" fill=\"#f66\" stroke=\"#245\" stroke-width=\"1\"></circle>\n<circle cx=\"79.6\" cy=\"49.2\" r=\"8\" fill=\"#f66\" stroke=\"#245\" stroke-width=\"1\"></circle>\n</svg></div>",
       "sha256": "f144c72e8b85083cd2f0e628a4ee39ffb510c07f98b0173b0a0322274eb4dbb3",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Meldan, Veridia"
         },
@@ -773,8 +773,8 @@
       "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th>From</th>\n      <th></th>\n      <th>Message</th>\n      <th>Time</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 15%\"><center>Vil</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 293.3333333333333)\">Sorry to bother you, but it's about Lily. She just failed a test in civics class. I think she would benefit from seeing you and Seila.</span></td>\n      <td>45183</td>\n    </tr>\n    </tbody>\n</table></div>",
       "sha256": "ba71f309a576691fc2d7cc5b094ef7ac5721a826050f6a54916b3f9b09944ae0",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Meldan, Veridia"
         },
@@ -836,8 +836,8 @@
       "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th>From</th>\n      <th></th>\n      <th>Message</th>\n      <th>Time</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 15%\"><center>Vil</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 293.3333333333333)\">Did you at least get accepted?</span></td>\n      <td>45501</td>\n    </tr>\n    </tbody>\n</table></div>",
       "sha256": "8bac0e86771889cab16c6e935eaa1a511d0d1a4647c54413bb704d85549cae99",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Meldan, Veridia"
         },
@@ -986,8 +986,8 @@
       "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th>From</th>\n      <th></th>\n      <th>Message</th>\n      <th>Time</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Mov</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 173.33333333333331)\">[call requested]</span></td>\n      <td>59063</td>\n    </tr>\n    </tbody>\n</table></div>",
       "sha256": "14de7a1e8115800d0eaa25c03fe7f3ad4978886299f93d59133bcf14b818eb8c",
       "data": {
-        "world": "veridia",
-        "world_evidence": {
+        "setting": "veridia",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Meldan, Veridia"
         },

@@ -30,8 +30,8 @@
       "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\">\n<g fill=\"none\" stroke=\"#666\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-dasharray=\"0.1 6\">\n<rect x=\"1\" y=\"11\" width=\"94\" height=\"84\" rx=\"12\"></rect>\n<rect x=\"105\" y=\"11\" width=\"94\" height=\"84\" rx=\"12\"></rect>\n<rect x=\"1\" y=\"105\" width=\"94\" height=\"84\" rx=\"12\"></rect>\n<rect x=\"105\" y=\"105\" width=\"94\" height=\"84\" rx=\"12\"></rect>\n</g>\n<g fill=\"blue\">\n<!-- pile of 3: rows 1+2 -->\n<circle cx=\"48\" cy=\"46.5\" r=\"6\"></circle>\n<circle cx=\"40.5\" cy=\"59.5\" r=\"6\"></circle>\n<circle cx=\"55.5\" cy=\"59.5\" r=\"6\"></circle>\n<!-- pile of 4: rows 1+3 -->\n<circle cx=\"144.5\" cy=\"46.5\" r=\"6\"></circle>\n<circle cx=\"137\" cy=\"59.5\" r=\"6\"></circle>\n<circle cx=\"152\" cy=\"59.5\" r=\"6\"></circle>\n<circle cx=\"167\" cy=\"59.5\" r=\"6\"></circle>\n<!-- pile of 10: rows 1+2+3+4 -->\n<circle cx=\"48\" cy=\"127.5\" r=\"6\"></circle>\n<circle cx=\"40.5\" cy=\"140.5\" r=\"6\"></circle>\n<circle cx=\"55.5\" cy=\"140.5\" r=\"6\"></circle>\n<circle cx=\"33\" cy=\"153.5\" r=\"6\"></circle>\n<circle cx=\"48\" cy=\"153.5\" r=\"6\"></circle>\n<circle cx=\"63\" cy=\"153.5\" r=\"6\"></circle>\n<circle cx=\"25.5\" cy=\"166.5\" r=\"6\"></circle>\n<circle cx=\"40.5\" cy=\"166.5\" r=\"6\"></circle>\n<circle cx=\"55.5\" cy=\"166.5\" r=\"6\"></circle>\n<circle cx=\"70.5\" cy=\"166.5\" r=\"6\"></circle>\n<!-- pile of 13: rows 1+3+4+5 -->\n<circle cx=\"144.5\" cy=\"127.5\" r=\"6\"></circle>\n<circle cx=\"137\" cy=\"140.5\" r=\"6\"></circle>\n<circle cx=\"152\" cy=\"140.5\" r=\"6\"></circle>\n<circle cx=\"167\" cy=\"140.5\" r=\"6\"></circle>\n<circle cx=\"129.5\" cy=\"153.5\" r=\"6\"></circle>\n<circle cx=\"144.5\" cy=\"153.5\" r=\"6\"></circle>\n<circle cx=\"159.5\" cy=\"153.5\" r=\"6\"></circle>\n<circle cx=\"174.5\" cy=\"153.5\" r=\"6\"></circle>\n<circle cx=\"122\" cy=\"166.5\" r=\"6\"></circle>\n<circle cx=\"137\" cy=\"166.5\" r=\"6\"></circle>\n<circle cx=\"152\" cy=\"166.5\" r=\"6\"></circle>\n<circle cx=\"167\" cy=\"166.5\" r=\"6\"></circle>\n<circle cx=\"182\" cy=\"166.5\" r=\"6\"></circle>\n</g>\n</svg></div>",
       "sha256": "c15e4bf07d2058f854ef45c698b3d2ce4fda874dc7dc31c9831c76ba5cf17e8b",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Pafogai Du, Dzego"
         },
@@ -95,8 +95,8 @@
       "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\">\n<g fill=\"none\" stroke=\"#666\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-dasharray=\"0.1 6\">\n<rect x=\"1\" y=\"11\" width=\"94\" height=\"84\" rx=\"12\"></rect>\n<rect x=\"105\" y=\"11\" width=\"94\" height=\"84\" rx=\"12\"></rect>\n<rect x=\"1\" y=\"105\" width=\"94\" height=\"84\" rx=\"12\"></rect>\n<rect x=\"105\" y=\"105\" width=\"94\" height=\"84\" rx=\"12\"></rect>\n</g>\n<g fill=\"blue\">\n<!-- pile of 2: rows 2 -->\n<circle cx=\"40.5\" cy=\"53\" r=\"6\"></circle>\n<circle cx=\"55.5\" cy=\"53\" r=\"6\"></circle>\n<!-- pile of 4: rows 1+3 -->\n<circle cx=\"144.5\" cy=\"46.5\" r=\"6\"></circle>\n<circle cx=\"137\" cy=\"59.5\" r=\"6\"></circle>\n<circle cx=\"152\" cy=\"59.5\" r=\"6\"></circle>\n<circle cx=\"167\" cy=\"59.5\" r=\"6\"></circle>\n<!-- pile of 10: rows 1+2+3+4 -->\n<circle cx=\"48\" cy=\"127.5\" r=\"6\"></circle>\n<circle cx=\"40.5\" cy=\"140.5\" r=\"6\"></circle>\n<circle cx=\"55.5\" cy=\"140.5\" r=\"6\"></circle>\n<circle cx=\"33\" cy=\"153.5\" r=\"6\"></circle>\n<circle cx=\"48\" cy=\"153.5\" r=\"6\"></circle>\n<circle cx=\"63\" cy=\"153.5\" r=\"6\"></circle>\n<circle cx=\"25.5\" cy=\"166.5\" r=\"6\"></circle>\n<circle cx=\"40.5\" cy=\"166.5\" r=\"6\"></circle>\n<circle cx=\"55.5\" cy=\"166.5\" r=\"6\"></circle>\n<circle cx=\"70.5\" cy=\"166.5\" r=\"6\"></circle>\n<!-- pile of 13: rows 1+3+4+5 -->\n<circle cx=\"144.5\" cy=\"127.5\" r=\"6\"></circle>\n<circle cx=\"137\" cy=\"140.5\" r=\"6\"></circle>\n<circle cx=\"152\" cy=\"140.5\" r=\"6\"></circle>\n<circle cx=\"167\" cy=\"140.5\" r=\"6\"></circle>\n<circle cx=\"129.5\" cy=\"153.5\" r=\"6\"></circle>\n<circle cx=\"144.5\" cy=\"153.5\" r=\"6\"></circle>\n<circle cx=\"159.5\" cy=\"153.5\" r=\"6\"></circle>\n<circle cx=\"174.5\" cy=\"153.5\" r=\"6\"></circle>\n<circle cx=\"122\" cy=\"166.5\" r=\"6\"></circle>\n<circle cx=\"137\" cy=\"166.5\" r=\"6\"></circle>\n<circle cx=\"152\" cy=\"166.5\" r=\"6\"></circle>\n<circle cx=\"167\" cy=\"166.5\" r=\"6\"></circle>\n<circle cx=\"182\" cy=\"166.5\" r=\"6\"></circle>\n</g>\n</svg></div>",
       "sha256": "95403795ddf9c85c98f0ef3009732ebbbc3a6dd7661ad0923d3b8d12a304e2a4",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Pafogai Du, Dzego"
         },
@@ -133,8 +133,8 @@
       "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\">\n<g fill=\"none\" stroke=\"#666\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-dasharray=\"0.1 6\">\n<rect x=\"1\" y=\"11\" width=\"94\" height=\"84\" rx=\"12\"></rect>\n<rect x=\"105\" y=\"11\" width=\"94\" height=\"84\" rx=\"12\"></rect>\n<rect x=\"1\" y=\"105\" width=\"94\" height=\"84\" rx=\"12\"></rect>\n<rect x=\"105\" y=\"105\" width=\"94\" height=\"84\" rx=\"12\"></rect>\n</g>\n<g fill=\"blue\">\n<!-- pile of 2: rows 2 -->\n<circle cx=\"40.5\" cy=\"53\" r=\"6\"></circle>\n<circle cx=\"55.5\" cy=\"53\" r=\"6\"></circle>\n<!-- pile of 4: rows 1+3 -->\n<circle cx=\"144.5\" cy=\"46.5\" r=\"6\"></circle>\n<circle cx=\"137\" cy=\"59.5\" r=\"6\"></circle>\n<circle cx=\"152\" cy=\"59.5\" r=\"6\"></circle>\n<circle cx=\"167\" cy=\"59.5\" r=\"6\"></circle>\n<!-- pile of 10: rows 1+2+3+4 -->\n<circle cx=\"48\" cy=\"127.5\" r=\"6\"></circle>\n<circle cx=\"40.5\" cy=\"140.5\" r=\"6\"></circle>\n<circle cx=\"55.5\" cy=\"140.5\" r=\"6\"></circle>\n<circle cx=\"33\" cy=\"153.5\" r=\"6\"></circle>\n<circle cx=\"48\" cy=\"153.5\" r=\"6\"></circle>\n<circle cx=\"63\" cy=\"153.5\" r=\"6\"></circle>\n<circle cx=\"25.5\" cy=\"166.5\" r=\"6\"></circle>\n<circle cx=\"40.5\" cy=\"166.5\" r=\"6\"></circle>\n<circle cx=\"55.5\" cy=\"166.5\" r=\"6\"></circle>\n<circle cx=\"70.5\" cy=\"166.5\" r=\"6\"></circle>\n<!-- pile of 12: rows 3+4+5 -->\n<circle cx=\"137\" cy=\"134\" r=\"6\"></circle>\n<circle cx=\"152\" cy=\"134\" r=\"6\"></circle>\n<circle cx=\"167\" cy=\"134\" r=\"6\"></circle>\n<circle cx=\"129.5\" cy=\"147\" r=\"6\"></circle>\n<circle cx=\"144.5\" cy=\"147\" r=\"6\"></circle>\n<circle cx=\"159.5\" cy=\"147\" r=\"6\"></circle>\n<circle cx=\"174.5\" cy=\"147\" r=\"6\"></circle>\n<circle cx=\"122\" cy=\"160\" r=\"6\"></circle>\n<circle cx=\"137\" cy=\"160\" r=\"6\"></circle>\n<circle cx=\"152\" cy=\"160\" r=\"6\"></circle>\n<circle cx=\"167\" cy=\"160\" r=\"6\"></circle>\n<circle cx=\"182\" cy=\"160\" r=\"6\"></circle>\n</g>\n</svg></div>",
       "sha256": "e57370dfa430a8fd0b330b495920de084720e368bbb0d7a5c08391d154399b16",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Pafogai Du, Dzego"
         },
@@ -171,8 +171,8 @@
       "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\">\n<g fill=\"none\" stroke=\"#666\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-dasharray=\"0.1 6\">\n<rect x=\"1\" y=\"11\" width=\"94\" height=\"84\" rx=\"12\"></rect>\n<rect x=\"105\" y=\"11\" width=\"94\" height=\"84\" rx=\"12\"></rect>\n<rect x=\"1\" y=\"105\" width=\"94\" height=\"84\" rx=\"12\"></rect>\n<rect x=\"105\" y=\"105\" width=\"94\" height=\"84\" rx=\"12\"></rect>\n</g>\n<g fill=\"blue\">\n<!-- pile of 2: rows 2 -->\n<circle cx=\"40.5\" cy=\"53\" r=\"6\"></circle>\n<circle cx=\"55.5\" cy=\"53\" r=\"6\"></circle>\n<!-- pile of 4: rows 1+3 -->\n<circle cx=\"144.5\" cy=\"46.5\" r=\"6\"></circle>\n<circle cx=\"137\" cy=\"59.5\" r=\"6\"></circle>\n<circle cx=\"152\" cy=\"59.5\" r=\"6\"></circle>\n<circle cx=\"167\" cy=\"59.5\" r=\"6\"></circle>\n<!-- pile of 7: rows 3+4 -->\n<circle cx=\"33\" cy=\"140.5\" r=\"6\"></circle>\n<circle cx=\"48\" cy=\"140.5\" r=\"6\"></circle>\n<circle cx=\"63\" cy=\"140.5\" r=\"6\"></circle>\n<circle cx=\"25.5\" cy=\"153.5\" r=\"6\"></circle>\n<circle cx=\"40.5\" cy=\"153.5\" r=\"6\"></circle>\n<circle cx=\"55.5\" cy=\"153.5\" r=\"6\"></circle>\n<circle cx=\"70.5\" cy=\"153.5\" r=\"6\"></circle>\n<!-- pile of 12: rows 3+4+5 -->\n<circle cx=\"137\" cy=\"134\" r=\"6\"></circle>\n<circle cx=\"152\" cy=\"134\" r=\"6\"></circle>\n<circle cx=\"167\" cy=\"134\" r=\"6\"></circle>\n<circle cx=\"129.5\" cy=\"147\" r=\"6\"></circle>\n<circle cx=\"144.5\" cy=\"147\" r=\"6\"></circle>\n<circle cx=\"159.5\" cy=\"147\" r=\"6\"></circle>\n<circle cx=\"174.5\" cy=\"147\" r=\"6\"></circle>\n<circle cx=\"122\" cy=\"160\" r=\"6\"></circle>\n<circle cx=\"137\" cy=\"160\" r=\"6\"></circle>\n<circle cx=\"152\" cy=\"160\" r=\"6\"></circle>\n<circle cx=\"167\" cy=\"160\" r=\"6\"></circle>\n<circle cx=\"182\" cy=\"160\" r=\"6\"></circle>\n</g>\n</svg></div>",
       "sha256": "572818da37ab2161f7e7f5735eed8f31e16e3eea30eeb185ebad1b133bc67813",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Pafogai Du, Dzego"
         },
@@ -209,8 +209,8 @@
       "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\">\n<g fill=\"none\" stroke=\"#666\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-dasharray=\"0.1 6\">\n<rect x=\"1\" y=\"11\" width=\"94\" height=\"84\" rx=\"12\"></rect>\n<rect x=\"105\" y=\"11\" width=\"94\" height=\"84\" rx=\"12\"></rect>\n<rect x=\"1\" y=\"105\" width=\"94\" height=\"84\" rx=\"12\"></rect>\n<rect x=\"105\" y=\"105\" width=\"94\" height=\"84\" rx=\"12\"></rect>\n</g>\n<g fill=\"blue\">\n<!-- pile of 2: rows 2 -->\n<circle cx=\"40.5\" cy=\"53\" r=\"6\"></circle>\n<circle cx=\"55.5\" cy=\"53\" r=\"6\"></circle>\n<!-- pile of 4: rows 1+3 -->\n<circle cx=\"144.5\" cy=\"46.5\" r=\"6\"></circle>\n<circle cx=\"137\" cy=\"59.5\" r=\"6\"></circle>\n<circle cx=\"152\" cy=\"59.5\" r=\"6\"></circle>\n<circle cx=\"167\" cy=\"59.5\" r=\"6\"></circle>\n<!-- pile of 7: rows 3+4 -->\n<circle cx=\"33\" cy=\"140.5\" r=\"6\"></circle>\n<circle cx=\"48\" cy=\"140.5\" r=\"6\"></circle>\n<circle cx=\"63\" cy=\"140.5\" r=\"6\"></circle>\n<circle cx=\"25.5\" cy=\"153.5\" r=\"6\"></circle>\n<circle cx=\"40.5\" cy=\"153.5\" r=\"6\"></circle>\n<circle cx=\"55.5\" cy=\"153.5\" r=\"6\"></circle>\n<circle cx=\"70.5\" cy=\"153.5\" r=\"6\"></circle>\n<!-- pile of 1: rows 1 -->\n<circle cx=\"152\" cy=\"147\" r=\"6\"></circle>\n</g>\n</svg></div>",
       "sha256": "3b9d1e2816e1309f4cb78e36d1ae7e880ff94614c8c12987e26702e066cb7a85",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Pafogai Du, Dzego"
         },
@@ -253,8 +253,8 @@
       "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\">\n<g fill=\"none\" stroke=\"#666\" stroke-width=\"2\" stroke-linecap=\"round\" stroke-dasharray=\"0.1 6\">\n<rect x=\"1\" y=\"11\" width=\"94\" height=\"84\" rx=\"12\"></rect>\n<rect x=\"105\" y=\"11\" width=\"94\" height=\"84\" rx=\"12\"></rect>\n<rect x=\"1\" y=\"105\" width=\"94\" height=\"84\" rx=\"12\"></rect>\n<rect x=\"105\" y=\"105\" width=\"94\" height=\"84\" rx=\"12\"></rect>\n</g>\n<g fill=\"blue\">\n<!-- pile of 1: rows 1 -->\n<circle cx=\"152\" cy=\"53\" r=\"6\"></circle>\n<!-- pile of 1: rows 1 -->\n<circle cx=\"152\" cy=\"147\" r=\"6\"></circle>\n</g>\n</svg></div>",
       "sha256": "fd3ab985b365911ad02b50d280fd26278d66b63378a48ab55ce62fda98d20314",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Pafogai Du, Dzego"
         },
@@ -375,8 +375,8 @@
       "content": "<div class=\"device-view wide-device-view\"><div>0011<br>0100<br>1010<br>1101\n</div></div>",
       "sha256": "59d81e6b833df2d0ee78abd20b30a4f5d3ffc880edfb0f97610202d134c08399",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Pafogai Du, Dzego"
         },
@@ -435,8 +435,8 @@
       "content": "<div class=\"device-view wide-device-view\"><div>0010<br>0100<br>1010<br>1101\n</div></div>",
       "sha256": "63d89e00d000fcb8f6373e4f66bc7f8f936b3c47fa089202ad16a3f49a9ff196",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Pafogai Du, Dzego"
         },
@@ -492,8 +492,8 @@
       "content": "<div class=\"device-view wide-device-view\"><div>0010<br>0100<br>1010<br>1100\n</div></div>",
       "sha256": "3e8ddafb7914cad794a75d0dbf52fc11ee142b45b1ffb29c39e6def410c9d89e",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Pafogai Du, Dzego"
         },
@@ -819,8 +819,8 @@
       "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th>Message</th>\n      <th></th>\n      <th>To</th>\n      <th>Time</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td><span style=\"color:oklch(0.7 0.15 93.33333333333333)\">[requesting call]</span></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td style=\"width: 25%\"><center>Senator Verdow</center></td>\n      <td>78145</td>\n    </tr>\n    </tbody>\n</table></div>",
       "sha256": "c2416ce45b225c21c09e270e0eac46e6f3c607c36e5d576b29e00429c2f632aa",
       "data": {
-        "world": "dzego",
-        "world_evidence": {
+        "setting": "dzego",
+        "setting_evidence": {
           "idx": 1,
           "quote": "Pafogai Du, Dzego"
         },
