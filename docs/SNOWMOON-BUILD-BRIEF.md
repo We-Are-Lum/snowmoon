@@ -2,7 +2,7 @@
 
 > **What this document is:** The starting brief for a Farcaster miniapp that turns Vitalik Buterin's novel *Snowmoon* into an open, ever-evolving illustrated and narrated edition (and later a film), with every prompt and step recorded in public. Part A is for Claude Code. Part B is for Claude Design. Read the whole document before starting. Working title only.
 
-> **Status:** v4, Oct 2, 2026. Supersedes v1 to v3. Milestone 1 is built and not yet deployed; migration 0001 is written and not yet applied. v4 records the pre-deploy changes to the data model, the session, and the scaffold (section 4a). v3 added what a full read of all 32 chapters showed (section 1a). A companion file, `SNOWMOON-CHAPTER-NOTES.md`, summarizes every chapter and contains full spoilers. There is no canon anywhere in this design.
+> **Status:** v4c, Oct 2, 2026. Supersedes v1 to v3. Milestone 1 is built and not yet deployed; migration 0001 is written and not yet applied. Section 4a records the pre-deploy data-model, session, and scaffold changes; 4b the move into a shared studio database; 4c the design direction, version anchors, house narration, and reader restyle. v3 added what a full read of all 32 chapters showed (section 1a).
 
 ---
 
@@ -125,6 +125,7 @@ Whole-book sanity check, once all chapters are run. The merged entities should i
 ### Milestone 3: Audiobook for Chapter 1
 Useful to a reader on day one, before any contributor shows up.
 
+- The chapter's narration is its house narration (`house_narrations`); the database allows exactly one per chapter that has any.
 - Generate narration one text block at a time through the speech adapter. Each segment has its own recipe and a stored duration. `break` blocks are a short pause with no audio.
 - `screen` and `figure` blocks do not read well aloud. Use `text_blocks.read_aloud` as an override: a short spoken description. Write these overrides by hand or with model help, and commit them. `text_blocks.data.fields` is the starting point.
 - Player in the reader: play, pause, skip by block, speed. The current block is highlighted and kept in view.
@@ -145,8 +146,8 @@ Useful to a reader on day one, before any contributor shows up.
 - Lettering is rendered in code over the image from structured data. Never ask the image model to draw text.
 - Hand-device screens and tables are rendered with HTML or SVG templates from the repo, with `source = 'human_authored'`. The same applies to the set pieces in section 1a: game boards, scoreboards, and tactical maps. A contributor's version of a screen or figure is a `render` element anchored to that block, with body `{ template, template_commit, state }`; `text_blocks.data` is the starting state.
 - Takes: creating an element can add it to the creator's own take for that chapter. Remix any take, then swap, add, or remove elements.
-- Rendering a take: walk the chapter's blocks in order. Where the take has elements anchored, show them in place of that block range. Everywhere else, show the book's text.
-- Within one take, two elements' anchors must be identical or not overlap at all.
+- Rendering a take: walk the chapter's blocks in order. Where a take item's version is anchored, show it with that block range: `beside` (the default) keeps the book text, `replace` hides it and needs a version with lettering. Everywhere else, show the book's text. Screens and figures no item covers use their default template if one exists, otherwise the source's own drawing.
+- Within one take, two versions' anchors must be identical or not overlap at all.
 - Ratings on element versions, from -5 to 5, echoing the book's own vote screen. Scoring rules in section 6.
 - Living edition: per chapter, the top-scoring take. It is the default view of every chapter, as a scroll and as a narrated play-through where the image for the current block shows while that block is read.
 - "Add an image to this moment" from the player opens the composer on the current block.
@@ -189,6 +190,7 @@ Useful to a reader on day one, before any contributor shows up.
 - The "stale" flag is gone. An element simply shows which design versions it was built on, and which version is currently most built on.
 - New in v2: book analysis pipeline, audiobook, ratings and scoring, living edition, weekly snapshots, chapter timeline, catch-up, sponsorship credits, `cost_usd` on recipes.
 - New in v3: section 1a, continuity questions and a whole-book sanity check in Milestone 2, a pronunciation table in Milestone 3, code-rendered set pieces, the spoiler rule, and a second world in the design direction.
+- New in v4c: version anchors, `take_items.display`, house narration, default screen templates, readable ¶ labels, the reader restyle, and design direction in `docs/design/` (section 4c).
 - New in v4: `screen` and `figure` block kinds (replacing `table`) with `text_blocks.data`, the `render` element type, `lang` and `gloss` on lettering, `entities.setting` (named `world` until v4b), section location, time of day and season, bearer-token sessions, scaffold notes, `docs/prompts/`, and `docs/source-figures/`. Details in section 4a.
 
 ## 4a. v4: pre-deploy changes and findings (Oct 2, 2026)
@@ -295,6 +297,59 @@ A direct Postgres connection as a role that owns nothing and can only touch `stu
 - the real seed script, connected over the wire as `studio_writer`, loads all 4,322 blocks.
 
 PGlite runs as a superuser, unlike the database's own admin role, so role creation is approximated.
+
+## 4c. v4c: design direction, version anchors, house narration, reader restyle (Oct 2, 2026)
+
+Direction boards are in `docs/design/` (PNGs plus their source). They are direction, not spec. Migration 0001 was pushed but still unapplied, so it was edited in place, inside `studio`.
+
+### Schema
+
+1. **Anchors move to versions.** `anchors` is keyed by `version_id`, so v7 of an element can cover ¶ 11–16 where v1 covered ¶ 12–14 without starting a new element. Anchors are append-only, like versions. Only text, image, render, and clip versions can be anchored; a design version cannot.
+2. **`take_items.display`**: `beside` (default) shows the version with the book text; `replace` hides the book text and is rejected unless the version's body has a non-empty `lettering` array. As written, text and render versions cannot `replace` until they carry lettering; revisit if a text element should stand in for the book's words.
+3. **House narration.** `narrations` and `narration_segments` move into 0001. `house_narrations` has one row per chapter (primary key `work_id, chapter`) pointing at a narration of that same chapter (composite foreign key). A deferred trigger requires the row whenever the chapter has any narration, so the rule is "exactly one per chapter that has a narration". A chapter with none has none, and the reader shows text only. Switching the house is one update; the house narration cannot be deleted. Narration segments are append-only.
+
+`npm run test:db` covers each rule, including the failure cases. A copy of the migration with each rule removed fails it.
+
+### Rendering (no schema)
+
+4. **Screens and figures no take covers** render from their default template if one exists, otherwise as the source drew them. Templates live in `src/templates/` (id `setting/name`), are matched on `text_blocks.data`, and may use in-world fonts inside the template only. None are registered yet. A take's `render` element always wins over the default.
+5. **¶ labels count readable blocks only** (paragraph, quote, screen, figure), 1..N per chapter. Headings, datelines, and breaks have no label. Block IDs (`c{chapter}-b{idx}`) are unchanged and remain the anchor. Each scene ends with "Scene n · ¶ a–b", and each screen or figure is captioned with its label and source.
+
+`npm run test:render` covers labels, settings, the template rule, and figure sizing.
+
+### Reader
+
+6. **Colour and type.**
+   - Paper is `#F4F2ED` in every chapter (dark mode `#161614`).
+   - The accent comes from each block's setting, which is taken from the most recent dateline: `#2E5A3A` for Veridia, `#B3306E` for Dzego. Every other setting uses ink, including the United Cities. The Arctic never tints the reader.
+   - The accent appears on the dateline, the linked block, links, and quote rules.
+   - Crimson Pro for reading, DM Mono for labels, both self-hosted at build. Source screens keep their own drawing, and in-world templates may use their own faces, inside the template only.
+7. **Floors.**
+   - Text is never below 12px.
+   - Source screens that set smaller relative sizes get a larger base size. `text_blocks.data.frame.min_font_scale` records the smallest scale.
+   - Figures render wide enough that their smallest SVG text is 12px, and scroll sideways inside their frame when that is wider than the screen. Ingest records `min_text` per SVG.
+   - Tap targets are at least 44×44px. Links inside running text are exempt, per WCAG 2.5.8.
+8. **First screen** says: an independent adaptation, not affiliated with the author, and there is no token.
+
+`npm run check:ui -- --url=…` drives Chrome at 390px, in light and dark, across the home page, About, and all 32 chapters. It checks 12px text (SVG at rendered scale), 44px targets, chrome fonts, paper and accent colours, the first-screen wording, and sideways scroll. Planted CSS errors fail it.
+
+### Design flags from the boards
+
+| # | Flag | Status |
+|---|------|--------|
+| 1 | No element type for code-rendered set pieces | Done in v4: `render`. The suggested `viewport` goes inside `state` |
+| 2 | Tables lose their device | Done in v4: `screen`/`figure` with `data` |
+| 3 | Lettering has no translation | Done in v4: `lang`, `gloss`. The suggested `layout: full \| compact` is not added yet |
+| 4 | Sections don't store a place | Done in v4: `location_entity_id`; locations have `setting` |
+| 5 | Posters won't ingest as quotes | Not an issue: the source draws them as device views, so they ingest as `screen` blocks (c3-b5, c13-b64) |
+| 6 | Device templates only exist inside takes | Done: default templates for uncovered blocks (item 4) |
+| 7 | Images always replace text | Done: `take_items.display`. Put on the take item rather than the anchor, so one version can sit beside the text in one take and replace it in another |
+| 8 | Anchor belongs to the element | Done: anchors per version |
+| 9 | No rule picks the narration | Done: `house_narrations` |
+| 10 | A chapter fills in only as fast as someone curates a take | Open; section-by-section assembly stays in Later |
+| 11 | Block indices aren't paragraph numbers | Done: ¶ labels count readable blocks |
+
+Not built in v4c: Listen (play view), takes, ratings.
 
 ---
 
@@ -409,8 +464,9 @@ create table links (
   check (from_version_id <> to_version_id)
 );
 
+-- Per version, so a later version can cover a different span. Append-only.
 create table anchors (
-  element_id uuid primary key references elements(id),
+  version_id uuid primary key references element_versions(id),
   work_id text not null references works(id),
   chapter int not null,
   start_idx int not null,
@@ -442,6 +498,7 @@ create table take_items (
   take_id uuid not null references takes(id),
   version_id uuid not null references element_versions(id),
   pos int not null default 0,
+  display text not null default 'beside' check (display in ('beside','replace')),
   primary key (take_id, version_id)
 );
 
@@ -461,19 +518,16 @@ create table living_snapshots (
   items jsonb not null,
   score numeric
 );
-```
 
-### Later migrations (draft; create with the milestone that needs them)
-
-```sql
--- Milestone 3
+-- Narration tables are in 0001 so the house rule holds from the start (section 4c).
 create table narrations (
   id uuid primary key default gen_random_uuid(),
   work_id text not null references works(id),
   chapter int not null,
   label text not null,
   created_by_fid bigint not null,
-  created_at timestamptz not null default now()
+  created_at timestamptz not null default now(),
+  unique (id, work_id, chapter)
 );
 
 create table narration_segments (
@@ -486,6 +540,19 @@ create table narration_segments (
   primary key (narration_id, idx)
 );
 
+-- Exactly one per chapter that has any narration (key + deferred trigger).
+create table house_narrations (
+  work_id text not null references works(id),
+  chapter int not null,
+  narration_id uuid not null,
+  primary key (work_id, chapter),
+  foreign key (narration_id, work_id, chapter) references narrations (id, work_id, chapter)
+);
+```
+
+### Later migrations (draft; create with the milestone that needs them)
+
+```sql
 -- Milestone 6
 create table chapter_threads (
   work_id text not null references works(id),
@@ -549,7 +616,7 @@ alter table recipes
 
 - **Version vs remix.** A version is the same author iterating on their own element. A remix is a new element by anyone, linked with `remixed_from` to the exact version it started from.
 - **References have one source of truth.** Which design versions an image used is recorded only as `uses` links. Do not also store a reference list on the recipe.
-- **Anchors are on blocks, never on time.** Time is derived from the narration's segment durations, so alternate narrations work later without touching anchors.
+- **Anchors are per version, on blocks, never on time.** Time is derived from the narration's segment durations, so alternate narrations work later without touching anchors.
 - **Append-only.** `recipes`, `element_versions`, `links`, `narration_segments`, and `digests` reject UPDATE and DELETE (trigger plus RLS). Hiding is done with `status` or `hidden`.
 - **System generations** (narration, digests, analysis) use the project account's FID as `created_by_fid`.
 - **`body` by type** (typed in `src/lib/element-body.ts`). `design`: `{ "description": "" }`. `text`: `{ "text": "" }`. `image`: `{ "lettering": [ { "kind": "caption|speech|thought|sfx", "text": "", "lang": "en|dz", "gloss": null, "speaker_entity_id": null, "x": 0, "y": 0, "w": 0 } ] }` with x, y, w as fractions from 0 to 1. `text` is the line as shown in its own language; `gloss` is the translation shown with it (a Dzegoban line's English), or null. `render`: `{ "template": "path/in/repo", "template_commit": "<sha>", "state": {} }`.
@@ -572,7 +639,7 @@ alter table recipes
    - A take's score is the average, over every block in the chapter, of the score of the element covering that block. Blocks showing book text count as zero.
    - The living edition is the take with the highest score. Ties go to greater coverage, then to the most recently updated.
    - Before any take in a chapter has a ranked element, use the take with the most likes, and with no likes, show the book.
-5. **Text is the spine.** Text and image elements must have an anchor. The default view of a chapter is its living edition.
+5. **Text is the spine.** Every version of a text, image, or render element has an anchor (design versions never do). The default view of a chapter is its living edition.
 6. **Evidence for analysis.** No fact from the analysis pipeline is stored or shown without a block reference and an exact quote that passes the verifier.
 7. **One source of truth for constants.** Caps, thresholds, moderator FIDs, and model names each live in one exported config.
 8. **Everything in the repo.** Ingest and analysis scripts, prompt files, read-aloud overrides, and rendered-screen templates are committed.

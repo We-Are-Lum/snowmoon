@@ -1,9 +1,14 @@
 import type { Metadata, Viewport } from 'next';
+import { Crimson_Pro, DM_Mono } from 'next/font/google';
 import { MiniappBar } from '~/components/miniapp-bar';
 import { APP_NAME, appUrl } from '~/lib/config';
 import './globals.css';
 
 const url = appUrl();
+
+/** The only two families in app chrome. In-world templates may use others, inside the template only. */
+const crimson = Crimson_Pro({ subsets: ['latin'], weight: ['400', '500', '600'], style: ['normal', 'italic'], variable: '--font-reading' });
+const dmMono = DM_Mono({ subsets: ['latin'], weight: ['400', '500'], variable: '--font-label' });
 
 /** Embed shown when the app URL is cast. */
 const miniappEmbed = JSON.stringify({
@@ -12,7 +17,7 @@ const miniappEmbed = JSON.stringify({
   button: {
     title: 'Read Snowmoon',
     // The spec lists launch_frame and view_token as the action types.
-    action: { type: 'launch_frame', name: APP_NAME, url, splashImageUrl: `${url}/splash.png`, splashBackgroundColor: '#f4f1ea' },
+    action: { type: 'launch_frame', name: APP_NAME, url, splashImageUrl: `${url}/splash.png`, splashBackgroundColor: '#F4F2ED' },
   },
 });
 
@@ -27,14 +32,14 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#f4f1ea' },
-    { media: '(prefers-color-scheme: dark)', color: '#16151a' },
+    { media: '(prefers-color-scheme: light)', color: '#F4F2ED' },
+    { media: '(prefers-color-scheme: dark)', color: '#161614' },
   ],
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" className={`${crimson.variable} ${dmMono.variable}`}>
       <body>
         <MiniappBar />
         <main>{children}</main>

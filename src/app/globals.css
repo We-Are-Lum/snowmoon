@@ -1,33 +1,46 @@
-/* App chrome is deliberately neutral, between Veridia and Dzego.
-   Device-view and dateline rules are adapted from the source edition's
-   stylesheet (Snowmoon, GPL v3). */
+/* Reader styles. Direction: docs/design/ (paper never changes; a block's setting
+   tints its accent only). App chrome uses two families: Crimson Pro for reading
+   and headings, DM Mono for labels. Source screens and in-world templates keep
+   their own faces, inside the screen only.
+   Device-view rules are adapted from the source edition's stylesheet (GPL v3).
+   Floors: text 12px, tap targets 44px (checked by `npm run check:ui`). */
 
 :root {
-  --bg: #f4f1ea;
-  --bg-raised: #fbf9f4;
-  --text: #24222a;
-  --text-dim: #6b6773;
-  --rule: #d9d3c7;
-  --link: #3e5f8a;
-  --voice-l: 0.52; /* lightness for speaker colours */
-  --quote-bg: #ebe6db;
+  --paper: #F4F2ED;
+  --ink: #1D1D1B;
+  --muted: #6A675F;
+  --rule: #DAD6CC;
+  --veridia: #2E5A3A;
+  --dzego: #B3306E;
+  --neutral-accent: #1D1D1B;
+  --accent: var(--neutral-accent);
+  --voice-l: 0.5; /* lightness for speaker colours */
+  --quote-bg: #ECE9E2;
+  --reading: var(--font-reading), Georgia, serif;
+  --label: var(--font-label), ui-monospace, monospace;
   --measure: 36rem;
+  --tap: 44px;
   color-scheme: light;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: #16151a;
-    --bg-raised: #1e1d23;
-    --text: #e7e3dc;
-    --text-dim: #9a95a1;
-    --rule: #34323b;
-    --link: #9fbde3;
-    --voice-l: 0.76;
-    --quote-bg: #22212a;
+    --paper: #161614;
+    --ink: #E7E4DD;
+    --muted: #A39F96;
+    --rule: #34322D;
+    --veridia: #8DB58A;
+    --dzego: #F08DB8;
+    --neutral-accent: #E7E4DD;
+    --voice-l: 0.78;
+    --quote-bg: #201F1C;
     color-scheme: dark;
   }
 }
+
+/* The Arctic never tints the reader; settings without a world colour stay neutral. */
+[data-setting='veridia'] { --accent: var(--veridia); }
+[data-setting='dzego'] { --accent: var(--dzego); }
 
 * { box-sizing: border-box; }
 
@@ -35,14 +48,31 @@ html { -webkit-text-size-adjust: 100%; }
 
 body {
   margin: 0;
-  background: var(--bg);
-  color: var(--text);
-  font-family: ui-serif, 'Iowan Old Style', Charter, Georgia, serif;
-  font-size: 1.125rem;
-  line-height: 1.65;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--reading);
+  font-size: 21px;
+  line-height: 1.6;
 }
 
-a { color: var(--link); }
+a { color: var(--accent); text-underline-offset: 0.15em; }
+
+/* Labels: DM Mono, never below 12px. */
+.label,
+.bar-links,
+.byline,
+.ch-dateline,
+.chapter .dateline,
+.block-caption,
+.scene-label,
+.chapter-nav,
+.provenance,
+.notice-link {
+  font-family: var(--label);
+  font-size: 12px;
+  line-height: 1.5;
+  letter-spacing: 0.04em;
+}
 
 /* ---------- top bar ---------- */
 
@@ -53,25 +83,43 @@ a { color: var(--link); }
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  padding: 0.6rem 1rem;
-  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  gap: 8px;
+  padding: 0 8px 0 16px;
+  background: color-mix(in srgb, var(--paper) 94%, transparent);
   backdrop-filter: blur(8px);
   border-bottom: 1px solid var(--rule);
-  font-family: ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.875rem;
 }
-.bar-title { font-weight: 600; letter-spacing: 0.04em; color: var(--text); text-decoration: none; }
-.bar-links { display: flex; gap: 1rem; align-items: center; }
-.bar-links a { color: var(--text-dim); text-decoration: none; }
-.bar-auth { color: var(--text-dim); font-variant-numeric: tabular-nums; }
+.bar-title {
+  display: inline-flex;
+  align-items: center;
+  min-height: var(--tap);
+  font-family: var(--reading);
+  font-size: 20px;
+  font-weight: 500;
+  color: var(--ink);
+  text-decoration: none;
+}
+.bar-links { display: flex; align-items: center; gap: 4px; text-transform: uppercase; }
+.bar-links a,
+.bar-auth button,
+.bar-auth > span {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap);
+  min-width: var(--tap);
+  padding: 0 8px;
+  color: var(--muted);
+  text-decoration: none;
+}
 .bar-auth button {
   font: inherit;
-  color: var(--text);
-  background: var(--bg-raised);
+  text-transform: inherit;
+  letter-spacing: inherit;
+  color: var(--ink);
+  background: transparent;
   border: 1px solid var(--rule);
   border-radius: 4px;
-  padding: 0.2rem 0.7rem;
   cursor: pointer;
 }
 
@@ -80,11 +128,22 @@ a { color: var(--link); }
 .page {
   max-width: var(--measure);
   margin: 0 auto;
-  padding: 1.5rem 1rem 4rem;
+  padding: 24px 16px 64px;
 }
 
-.book-title { font-size: 2.2rem; font-weight: 500; margin: 1rem 0 0.25rem; letter-spacing: 0.02em; }
-.byline { margin: 0 0 2rem; color: var(--text-dim); font-size: 0.95rem; }
+.book-title { font-size: 44px; font-weight: 500; line-height: 1.1; margin: 16px 0 4px; }
+.byline { margin: 0 0 20px; color: var(--muted); text-transform: uppercase; }
+
+.notice {
+  margin: 0 0 28px;
+  padding: 12px 16px 4px;
+  border-left: 3px solid var(--ink);
+  background: var(--quote-bg);
+  font-size: 18px;
+  line-height: 1.45;
+}
+.notice p { margin: 0 0 4px; }
+.notice-link { display: inline-flex; align-items: center; min-height: var(--tap); text-transform: uppercase; color: var(--ink); }
 
 .chapter-list { list-style: none; padding: 0; margin: 0; }
 .chapter-list li { border-top: 1px solid var(--rule); }
@@ -92,35 +151,45 @@ a { color: var(--link); }
 .chapter-list a {
   display: flex;
   flex-wrap: wrap;
+  align-items: baseline;
   justify-content: space-between;
-  gap: 0 1rem;
-  padding: 0.75rem 0.25rem;
-  color: var(--text);
+  gap: 0 16px;
+  min-height: var(--tap);
+  padding: 10px 2px;
+  color: var(--ink);
   text-decoration: none;
 }
 .ch-num { font-weight: 500; }
-.ch-dateline { color: var(--text-dim); font-size: 0.85rem; font-family: ui-sans-serif, system-ui, sans-serif; align-self: center; }
+.ch-dateline { color: var(--accent); text-transform: uppercase; }
 
-.prose h1 { font-weight: 500; }
-.prose h2 { font-size: 1.15rem; margin-top: 2rem; }
+.prose h1 { font-weight: 500; font-size: 36px; }
+.prose h2 { font-size: 24px; font-weight: 500; margin-top: 32px; }
 
 /* ---------- chapter ---------- */
 
-.block { scroll-margin-top: 4rem; }
-.block:target { background: color-mix(in srgb, var(--link) 12%, transparent); border-radius: 4px; }
+.block { scroll-margin-top: 64px; }
+.block:target { box-shadow: -10px 0 0 var(--paper), -12px 0 0 var(--accent); }
+.block:target[data-label]:not(figure)::before {
+  content: '¶ ' attr(data-label);
+  display: block;
+  font-family: var(--label);
+  font-size: 12px;
+  color: var(--accent);
+}
 
-.chapter .heading h1 { font-size: 1.9rem; font-weight: 500; margin: 1rem 0 0.25rem; }
+.chapter .heading h1 { font-size: 40px; font-weight: 500; line-height: 1.15; margin: 4px 0 8px; }
 
 .chapter .dateline {
-  font-family: ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.78rem;
-  letter-spacing: 0.12em;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--accent);
   text-transform: uppercase;
-  color: var(--text-dim);
-  margin: 0 0 1.75rem;
+  margin: 0 0 28px;
 }
-.chapter .dateline strong { font-weight: 600; }
-.chapter .break + .dateline { margin-top: -0.75rem; }
+.chapter .dateline::before { content: ''; flex: 0 0 20px; height: 1px; background: var(--accent); }
+.chapter .dateline strong { font-weight: 500; }
+.chapter .break + .dateline { margin-top: -12px; }
 
 .chapter p.paragraph { margin: 0 0 1em; hyphens: auto; }
 
@@ -128,34 +197,41 @@ a { color: var(--link); }
   border: 0;
   height: 1px;
   background: var(--rule);
-  margin: 2.25rem 20%;
+  margin: 36px 25%;
 }
+
+.scene-label { color: var(--muted); margin: 4px 0 28px; text-transform: uppercase; }
 
 span[data-hue] { color: oklch(var(--voice-l) 0.15 var(--hue)); }
 
+.chapter code { font-family: var(--label); font-size: 0.8em; }
+
 .chapter .quote blockquote {
-  margin: 1.5rem 0;
-  padding: 1rem 1.25rem;
+  margin: 24px 0;
+  padding: 16px 20px;
   background: var(--quote-bg);
-  border-left: 3px solid var(--rule);
+  border-left: 3px solid var(--accent);
   font-style: italic;
 }
-.chapter .quote blockquote p { margin: 0.25rem 0; }
+.chapter .quote blockquote p { margin: 4px 0; }
 
-/* Dzegoban lyric cards */
-.chapter .quote center { margin: 1.5rem 0; }
+/* Dzegoban lyric cards, as the source drew them */
+.chapter .quote center { margin: 24px 0; }
 .dz-card {
   display: inline-block;
   max-width: 100%;
   overflow-x: auto;
-  padding: 0.5rem 1.25rem;
+  padding: 8px 20px;
   background: #1b2233;
   border-radius: 10px;
   color: #e6f4ff;
   text-align: left;
 }
 
-/* ---------- hand-device screens (adapted from the source edition) ---------- */
+/* ---------- screens and figures, as the source drew them ---------- */
+
+figure.block { margin: 24px 0; }
+.block-caption { color: var(--muted); margin-top: 6px; text-transform: uppercase; }
 
 .device-view {
   background-color: #0a0e27;
@@ -163,10 +239,10 @@ span[data-hue] { color: oklch(var(--voice-l) 0.15 var(--hue)); }
   font-family: 'Courier New', Courier, ui-monospace, monospace;
   padding: 16px;
   border-radius: 15px;
-  font-size: 75%;
+  font-size: var(--screen-base, 14px);
   line-height: 1.45;
   display: block;
-  margin: 1.5rem auto;
+  margin: 0 auto;
   text-align: center;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -176,6 +252,8 @@ span[data-hue] { color: oklch(var(--voice-l) 0.15 var(--hue)); }
 .device-view table { width: 100%; border-collapse: collapse; margin: 0 auto; text-align: initial; }
 .device-view svg, .device-view img { display: block; margin: 0 auto; max-width: 100%; height: auto; }
 .device-view-left svg, .device-view-left img { margin-left: 0; }
+/* Figures never shrink their smallest text below 12px; past that they scroll sideways. */
+figure.figure .device-view svg { min-width: var(--fig-min, 0); }
 .device-view th, .device-view td { overflow-wrap: break-word; }
 .device-view h3 { color: #7fbcff; border-bottom: 2px solid #3d70c3; padding-bottom: 10px; margin: 0 0 16px; }
 .device-view thead tr { background-color: #1a2a4a; border: 1px solid #3d70c3; }
@@ -204,10 +282,15 @@ span[data-hue] { color: oklch(var(--voice-l) 0.15 var(--hue)); }
 .chapter-nav {
   display: flex;
   justify-content: space-between;
-  margin-top: 3rem;
-  padding-top: 1rem;
+  margin-top: 48px;
   border-top: 1px solid var(--rule);
-  font-family: ui-sans-serif, system-ui, sans-serif;
-  font-size: 0.9rem;
+  text-transform: uppercase;
 }
-.provenance { color: var(--text-dim); font-size: 0.75rem; font-family: ui-sans-serif, system-ui, sans-serif; overflow-wrap: anywhere; }
+.chapter-nav a { display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 4px; }
+.provenance {
+  display: flex;
+  align-items: center;
+  min-height: var(--tap);
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}

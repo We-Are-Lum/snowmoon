@@ -1,7 +1,6 @@
 import 'server-only';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
-import { marked } from 'marked';
 import { WORK } from './config';
 
 export type BlockKind = 'heading' | 'dateline' | 'paragraph' | 'quote' | 'screen' | 'figure' | 'break';
@@ -43,17 +42,4 @@ export const blockId = (chapter: number, idx: number) => `c${chapter}-b${idx}`;
 export function chapterDateline(ch: Chapter): string {
   const d = ch.blocks.find((b) => b.kind === 'dateline');
   return d ? d.content.replace(/\*\*/g, '').replace(/\\(.)/g, '$1') : '';
-}
-
-/**
- * Block Markdown -> HTML. Content comes only from the committed snapshot, which
- * the ingest step already stripped of scripts and event handlers.
- * Speaker colour spans keep their hue; the theme decides lightness.
- */
-export function renderBlock(b: Block): string {
-  const html =
-    b.kind === 'paragraph' || b.kind === 'dateline'
-      ? (marked.parseInline(b.content, { async: false }) as string)
-      : (marked.parse(b.content, { async: false }) as string);
-  return html.replace(/data-hue="([\d.]+)"/g, 'data-hue="$1" style="--hue:$1"');
 }

@@ -21,7 +21,8 @@
 import * as cheerio from 'cheerio';
 import type { AnyNode, Element } from 'domhandler';
 import { createHash } from 'node:crypto';
-import { extractFields, inferDevice, settingOfDateline, type Evidence, type ScreenData } from './screen-data';
+import { extractFields, inferDevice, minFontScale, type Evidence, type ScreenData } from './screen-data';
+import { settingOfDateline } from '../../src/lib/reading';
 
 export type BlockKind = 'heading' | 'dateline' | 'paragraph' | 'quote' | 'screen' | 'figure' | 'break';
 
@@ -215,6 +216,7 @@ export function parseChapter(html: string, chapter: number): { blocks: Block[]; 
         width: cls.includes('narrow-device-view') ? 'narrow' : 'wide',
         align: cls.includes('device-view-left') ? 'left' : 'center',
         style: $(el).attr('style')?.trim() || null,
+        min_font_scale: minFontScale($, el),
       },
       fields: extractFields($, el, (k) => `docs/source-figures/${figureFile(chapter, idx, k, svgs.length)}`),
     };

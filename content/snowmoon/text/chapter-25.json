@@ -44,7 +44,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -54,7 +55,8 @@
             "width": "200",
             "height": "200",
             "labels": [],
-            "animated": false
+            "animated": false,
+            "min_text": null
           }
         ]
       }
@@ -106,7 +108,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -116,7 +119,8 @@
             "width": "200",
             "height": "200",
             "labels": [],
-            "animated": false
+            "animated": false,
+            "min_text": null
           }
         ]
       }
@@ -144,7 +148,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -154,7 +159,8 @@
             "width": "200",
             "height": "200",
             "labels": [],
-            "animated": false
+            "animated": false,
+            "min_text": null
           }
         ]
       }
@@ -182,7 +188,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -192,7 +199,8 @@
             "width": "200",
             "height": "200",
             "labels": [],
-            "animated": false
+            "animated": false,
+            "min_text": null
           }
         ]
       }
@@ -220,7 +228,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -230,7 +239,8 @@
             "width": "200",
             "height": "200",
             "labels": [],
-            "animated": false
+            "animated": false,
+            "min_text": null
           }
         ]
       }
@@ -264,7 +274,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -274,7 +285,8 @@
             "width": "200",
             "height": "200",
             "labels": [],
-            "animated": false
+            "animated": false,
+            "min_text": null
           }
         ]
       }
@@ -389,7 +401,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -446,7 +459,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -503,7 +517,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -833,7 +848,8 @@
         "frame": {
           "width": "narrow",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {

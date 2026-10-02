@@ -56,7 +56,8 @@
         "frame": {
           "width": "wide",
           "align": "left",
-          "style": "background-color:#633; font-size:93.75%; color:#fee; --dv-ink:#fee;"
+          "style": "background-color:#633; font-size:93.75%; color:#fee; --dv-ink:#fee;",
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -307,7 +308,8 @@
         "frame": {
           "width": "narrow",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -442,7 +444,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -671,7 +674,8 @@
         "frame": {
           "width": "narrow",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -1049,7 +1053,8 @@
         "frame": {
           "width": "narrow",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -1062,7 +1067,8 @@
               "Gladias",
               "Mov"
             ],
-            "animated": false
+            "animated": false,
+            "min_text": 12
           }
         ]
       }

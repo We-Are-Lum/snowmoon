@@ -131,8 +131,10 @@ create table studio.links (
   check (from_version_id <> to_version_id)
 );
 
+-- Where a version sits in the book. Anchored per version, so a later version
+-- of the same element can cover a different span. Append-only, like versions.
 create table studio.anchors (
-  element_id uuid primary key references studio.elements(id),
+  version_id uuid primary key references studio.element_versions(id),
   work_id text not null references studio.works(id),
   chapter int not null,
   start_idx int not null,
@@ -164,6 +166,8 @@ create table studio.take_items (
   take_id uuid not null references studio.takes(id),
   version_id uuid not null references studio.element_versions(id),
   pos int not null default 0,
+  -- beside: shown with the book text. replace: hides the book text; needs lettering.
+  display text not null default 'beside' check (display in ('beside','replace')),
   primary key (take_id, version_id)
 );
 
@@ -184,6 +188,38 @@ create table studio.living_snapshots (
   score numeric
 );
 
+-- Narration (Milestone 3 fills it; the house rule is enforced from the start).
+create table studio.narrations (
+  id uuid primary key default gen_random_uuid(),
+  work_id text not null references studio.works(id),
+  chapter int not null,
+  label text not null,
+  created_by_fid bigint not null,
+  created_at timestamptz not null default now(),
+  unique (id, work_id, chapter)
+);
+
+create table studio.narration_segments (
+  narration_id uuid not null references studio.narrations(id),
+  idx int not null, -- text_blocks.idx in the narration's chapter
+  asset_url text not null,
+  asset_sha256 text not null,
+  duration_ms int not null check (duration_ms > 0),
+  recipe_id uuid not null references studio.recipes(id),
+  primary key (narration_id, idx)
+);
+
+-- The house narration: exactly one per chapter that has any narration.
+-- The primary key allows at most one; a deferred trigger below requires one
+-- whenever the chapter has a narration. The composite key keeps it in its chapter.
+create table studio.house_narrations (
+  work_id text not null references studio.works(id),
+  chapter int not null,
+  narration_id uuid not null,
+  primary key (work_id, chapter),
+  foreign key (narration_id, work_id, chapter) references studio.narrations (id, work_id, chapter)
+);
+
 -- Lookup indexes for foreign keys that are not already the leading column of a key.
 create index on studio.sections (location_entity_id);
 create index on studio.entity_mentions (entity_id);
@@ -196,10 +232,13 @@ create index on studio.anchors (work_id, chapter, start_idx);
 create index on studio.takes (work_id, chapter);
 create index on studio.take_items (version_id);
 create index on studio.living_snapshots (work_id, chapter, taken_at desc);
+create index on studio.narrations (work_id, chapter);
+create index on studio.narration_segments (recipe_id);
+create index on studio.house_narrations (narration_id);
 
 -- ---------------------------------------------------------------------------
--- Append-only: recipes, element_versions, links (section 5 notes).
--- narration_segments and digests get the same trigger in their own migrations.
+-- Append-only: recipes, element_versions, links, anchors, narration_segments.
+-- digests get the same trigger in their own migration.
 -- The trigger also stops the service role, which bypasses RLS.
 -- ---------------------------------------------------------------------------
 
@@ -221,6 +260,12 @@ create trigger element_versions_append_only
 create trigger links_append_only
   before update or delete on studio.links
   for each row execute function studio.reject_mutation();
+create trigger anchors_append_only
+  before update or delete on studio.anchors
+  for each row execute function studio.reject_mutation();
+create trigger narration_segments_append_only
+  before update or delete on studio.narration_segments
+  for each row execute function studio.reject_mutation();
 
 -- TRUNCATE skips row triggers, so block it per statement as well.
 create trigger recipes_no_truncate
@@ -232,6 +277,87 @@ create trigger element_versions_no_truncate
 create trigger links_no_truncate
   before truncate on studio.links
   for each statement execute function studio.reject_mutation();
+create trigger anchors_no_truncate
+  before truncate on studio.anchors
+  for each statement execute function studio.reject_mutation();
+create trigger narration_segments_no_truncate
+  before truncate on studio.narration_segments
+  for each statement execute function studio.reject_mutation();
+
+-- ---------------------------------------------------------------------------
+-- Cross-table rules
+-- ---------------------------------------------------------------------------
+
+-- Only placed elements are anchored: text, image, render, clip. Never a design.
+create function studio.check_anchor_type() returns trigger
+language plpgsql
+set search_path = ''
+as $$
+begin
+  if not exists (
+    select 1 from studio.element_versions v join studio.elements e on e.id = v.element_id
+    where v.id = new.version_id and e.element_type in ('text','image','render','clip')
+  ) then
+    raise exception 'anchors: version % is not a text, image, render, or clip element', new.version_id;
+  end if;
+  return new;
+end;
+$$;
+create trigger anchors_type
+  before insert on studio.anchors
+  for each row execute function studio.check_anchor_type();
+
+-- display = 'replace' hides the book text, so the version must carry lettering.
+create function studio.check_take_item_display() returns trigger
+language plpgsql
+set search_path = ''
+as $$
+begin
+  if new.display = 'replace' and not exists (
+    select 1 from studio.element_versions v
+    where v.id = new.version_id
+      and jsonb_typeof(v.body->'lettering') = 'array'
+      and jsonb_array_length(v.body->'lettering') > 0
+  ) then
+    raise exception 'take_items: display replace needs a version with lettering (version %)', new.version_id;
+  end if;
+  return new;
+end;
+$$;
+create trigger take_items_display
+  before insert or update on studio.take_items
+  for each row execute function studio.check_take_item_display();
+
+-- Exactly one house narration for every chapter that has a narration.
+-- Deferred to commit, so a narration and its house row can arrive in either order,
+-- and the house can switch narrations with a single update.
+create function studio.check_house_narration() returns trigger
+language plpgsql
+set search_path = ''
+as $$
+declare
+  keys text[][] := array[]::text[][];
+  k text[];
+begin
+  if tg_op in ('INSERT', 'UPDATE') then keys := keys || array[[new.work_id, new.chapter::text]]; end if;
+  if tg_op in ('UPDATE', 'DELETE') then keys := keys || array[[old.work_id, old.chapter::text]]; end if;
+  foreach k slice 1 in array keys loop
+    if exists (select 1 from studio.narrations n where n.work_id = k[1] and n.chapter = k[2]::int)
+       and not exists (select 1 from studio.house_narrations h where h.work_id = k[1] and h.chapter = k[2]::int) then
+      raise exception 'chapter % of % has narrations but no house narration', k[2], k[1];
+    end if;
+  end loop;
+  return null;
+end;
+$$;
+create constraint trigger narrations_need_house
+  after insert or update or delete on studio.narrations
+  deferrable initially deferred
+  for each row execute function studio.check_house_narration();
+create constraint trigger house_narration_required
+  after insert or update or delete on studio.house_narrations
+  deferrable initially deferred
+  for each row execute function studio.check_house_narration();
 
 -- ---------------------------------------------------------------------------
 -- RLS: public read on everything except drafts and hidden items.
@@ -255,6 +381,9 @@ alter table studio.takes            enable row level security;
 alter table studio.take_items       enable row level security;
 alter table studio.take_likes       enable row level security;
 alter table studio.living_snapshots enable row level security;
+alter table studio.narrations       enable row level security;
+alter table studio.narration_segments enable row level security;
+alter table studio.house_narrations enable row level security;
 
 create policy public_read on studio.works            for select using (true);
 create policy public_read on studio.text_blocks      for select using (true);
@@ -264,6 +393,9 @@ create policy public_read on studio.entity_mentions  for select using (true);
 create policy public_read on studio.ratings          for select using (true);
 create policy public_read on studio.take_likes       for select using (true);
 create policy public_read on studio.living_snapshots for select using (true);
+create policy public_read on studio.narrations       for select using (true);
+create policy public_read on studio.narration_segments for select using (true);
+create policy public_read on studio.house_narrations for select using (true);
 
 create policy public_read on studio.elements for select using (status = 'published');
 create policy public_read on studio.takes    for select using (status = 'published');
@@ -272,7 +404,8 @@ create policy public_read on studio.element_versions for select using (
   exists (select 1 from studio.elements e where e.id = element_id and e.status = 'published')
 );
 create policy public_read on studio.anchors for select using (
-  exists (select 1 from studio.elements e where e.id = element_id and e.status = 'published')
+  exists (select 1 from studio.element_versions v join studio.elements e on e.id = v.element_id
+          where v.id = version_id and e.status = 'published')
 );
 create policy public_read on studio.links for select using (
   exists (select 1 from studio.element_versions v join studio.elements e on e.id = v.element_id
@@ -297,7 +430,8 @@ do $$
 declare t text;
 begin
   foreach t in array array['works','text_blocks','sections','entities','entity_mentions','elements',
-    'recipes','element_versions','links','anchors','ratings','takes','take_items','take_likes','living_snapshots']
+    'recipes','element_versions','links','anchors','ratings','takes','take_items','take_likes','living_snapshots',
+    'narrations','narration_segments','house_narrations']
   loop
     execute format('create policy writer_all on studio.%I for all to studio_writer using (true) with check (true)', t);
   end loop;
@@ -323,7 +457,10 @@ alter default privileges in schema studio grant select on tables to anon, authen
 alter default privileges in schema studio grant select, insert, update, delete on tables to studio_writer;
 alter default privileges in schema studio grant usage, select on sequences to studio_writer;
 
--- The trigger function is internal; nobody calls it directly.
+-- Trigger functions are internal; nobody calls them directly.
 revoke execute on function studio.reject_mutation() from public;
+revoke execute on function studio.check_anchor_type() from public;
+revoke execute on function studio.check_take_item_display() from public;
+revoke execute on function studio.check_house_narration() from public;
 
 commit;

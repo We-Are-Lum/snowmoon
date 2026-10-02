@@ -152,7 +152,8 @@
         "frame": {
           "width": "wide",
           "align": "left",
-          "style": "background-color:#633; color:#fee; --dv-ink:#fee;"
+          "style": "background-color:#633; color:#fee; --dv-ink:#fee;",
+          "min_font_scale": 0.8
         },
         "fields": [
           {
@@ -608,7 +609,8 @@
         "frame": {
           "width": "narrow",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {

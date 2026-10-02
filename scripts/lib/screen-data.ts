@@ -21,7 +21,17 @@ export type Field =
   | { type: 'button'; label: string }
   | { type: 'slider'; labels: string[] }
   | { type: 'table'; header: Cell[][]; rows: Cell[][] }
-  | { type: 'svg'; file: string; viewBox: string | null; width: string | null; height: string | null; labels: string[]; animated: boolean };
+  | {
+      type: 'svg';
+      file: string;
+      viewBox: string | null;
+      width: string | null;
+      height: string | null;
+      labels: string[];
+      animated: boolean;
+      /** Smallest effective font size of any visible text, in SVG user units; null if no text. */
+      min_text: number | null;
+    };
 
 export type Cell = string | { text: string; controls: Field[] };
 
@@ -37,8 +47,37 @@ export interface ScreenData {
   device_evidence: Evidence | null;
   /** Always true until Milestone 2 records each screen's device and owner from the analysis. */
   device_provisional: true;
-  frame: { width: 'narrow' | 'wide'; align: 'center' | 'left'; style: string | null };
+  frame: {
+    width: 'narrow' | 'wide';
+    align: 'center' | 'left';
+    style: string | null;
+    /** Smallest text inside the screen (outside SVGs) relative to the screen's base size; 1 if none is smaller. */
+    min_font_scale: number;
+  };
   fields: Field[];
+}
+
+/** Base size the source assumes for a screen, used to turn absolute px sizes into a scale. */
+const SCREEN_BASE_PX = 14;
+
+export function minFontScale($: cheerio.CheerioAPI, root: Element): number {
+  let min = 1;
+  const walk = (el: Element, scale: number) => {
+    if (el.tagName === 'svg') return; // figures are sized by min_text
+    let own = scale;
+    if (el !== root) {
+      const raw = ($(el).attr('style') ?? '').match(/font-size:\s*([^;]+)/)?.[1]?.trim();
+      const m = raw?.match(/^([\d.]+)\s*(px|em|%)?$/);
+      if (m) {
+        const n = Number(m[1]);
+        own = m[2] === '%' ? (scale * n) / 100 : m[2] === 'em' ? scale * n : n / SCREEN_BASE_PX;
+      }
+    }
+    if (el.children.some((c) => c.type === 'text' && (c as unknown as { data: string }).data.trim())) min = Math.min(min, own);
+    for (const c of el.children) if (c.type === 'tag') walk(c as Element, own);
+  };
+  walk(root, 1);
+  return Math.round(min * 1000) / 1000;
 }
 
 const squash = (s: string) => s.replace(/\s+/g, ' ').trim();
@@ -52,6 +91,32 @@ const BLOCK_SELECTOR = 'table, ul, ol, svg, hr, button, input, h3, p, pre, block
 
 function hasBlockish($: cheerio.CheerioAPI, el: Element): boolean {
   return $(el).find(BLOCK_SELECTOR).length > 0;
+}
+
+const SVG_DEFAULT_FONT = 16;
+
+/** A font-size from an attribute or inline style, resolved against the parent's size. */
+function ownFontSize($: cheerio.CheerioAPI, el: Element, parent: number): number {
+  const raw = $(el).attr('font-size') ?? ($(el).attr('style') ?? '').match(/font-size:\s*([^;]+)/)?.[1];
+  if (!raw) return parent;
+  const m = raw.trim().match(/^([\d.]+)\s*(px|em|%)?$/);
+  if (!m) return parent;
+  const n = Number(m[1]);
+  return m[2] === 'em' ? n * parent : m[2] === '%' ? (n * parent) / 100 : n;
+}
+
+/** Smallest effective font size among text elements that show characters. */
+function minTextSize($: cheerio.CheerioAPI, svg: Element): number | null {
+  let min: number | null = null;
+  const walk = (el: Element, size: number) => {
+    const own = ownFontSize($, el, size);
+    if ((el.tagName === 'text' || el.tagName === 'tspan') && el.children.some((c) => c.type === 'text' && (c as unknown as { data: string }).data.trim())) {
+      min = min === null ? own : Math.min(min, own);
+    }
+    for (const c of el.children) if (c.type === 'tag') walk(c as Element, own);
+  };
+  walk(svg, SVG_DEFAULT_FONT);
+  return min === null ? null : Math.round((min as number) * 100) / 100;
 }
 
 function sliderLabels($: cheerio.CheerioAPI, input: Element): string[] {
@@ -151,6 +216,7 @@ export function extractFields($: cheerio.CheerioAPI, root: Element, svgFile: (k:
             height: s.attr('height') ?? null,
             labels: s.find('text').map((_, t) => squash($(t).text())).get().filter(Boolean),
             animated: s.find('animate, animateTransform, animateMotion').length > 0,
+            min_text: minTextSize($, el),
           });
           break;
         }
@@ -179,14 +245,6 @@ export interface PriorBlock {
   kind: string;
   content: string;
   data?: ScreenData;
-}
-
-/** "**Meldan, Veridia** · 3724 Snowmoon 3" -> "veridia"; "**Veridia** · …" -> "veridia". */
-export function settingOfDateline(content: string): string | null {
-  const m = content.match(/^\*\*(.+?)\*\*/);
-  if (!m) return null;
-  const region = m[1].split(',').pop()!.replace(/\\(.)/g, '$1').trim();
-  return region.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') || null;
 }
 
 /** Most specific first. Each pattern must match the raw block Markdown. */

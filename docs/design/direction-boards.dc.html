@@ -1,0 +1,669 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&family=Instrument+Sans:wght@400;500;600&family=Rubik:wght@400;500;700&family=DotGothic16&family=Big+Shoulders+Display:wght@700;800&family=Archivo:wght@400;500&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#D9D5CC;-webkit-font-smoothing:antialiased}a{color:#2E5A3A}a:hover{color:#3B2346}</style>
+</helmet>
+<div style="padding:64px;display:flex;flex-direction:column;gap:40px;font-family:'Crimson Pro',serif;color:#1D1D1B">
+  <header style="display:flex;flex-direction:column;gap:8px;max-width:960px">
+    <div style="font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.08em;color:#5E5A52">SNOWMOON LIVING EDITION · DIRECTION BOARDS · REVISION 2</div>
+    <div style="font-size:44px;line-height:1.1">Three worlds and one game board</div>
+    <div style="font-size:18px;line-height:1.5;color:#4A463F;text-wrap:pretty">App chrome uses two families: Crimson Pro for reading and headings, DM Mono for labels, data and recipes. Every other face appears only inside an in-world template. A world tints accents only; the reading paper never changes. Image tiles are placeholders for illustrator references.</div>
+  </header>
+
+  <section style="display:flex;flex-direction:column;gap:24px">
+    <div style="font-family:'DM Mono',monospace;font-size:13px;color:#5E5A52">TURN 1 · REVISED</div>
+    <div style="display:flex;flex-wrap:wrap;gap:48px;align-items:flex-start">
+
+      <!-- 1a VERIDIA -->
+      <div id="1a" style="width:880px;background:#ECE7DC;border-radius:4px;padding:48px;display:flex;flex-direction:column;gap:36px;box-sizing:border-box">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.12em;color:#2E5A3A">VERIDIA · APPROVED</div>
+            <div style="font-size:60px;line-height:1;color:#2E4733">Green, stone, quiet.</div>
+            <div style="font-size:17px;color:#5C574C;margin-top:6px">Reference: the Kalimar path, chapter 1. Meldan, 3724 Snowmoon 3.</div>
+          </div>
+          <div style="font-family:'DM Mono',monospace;font-size:13px;background:#1D1D1B;color:#ECE7DC;padding:4px 10px;border-radius:3px">1a</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:3fr 2fr;gap:12px">
+          <div style="height:260px;border-radius:3px;background:repeating-linear-gradient(135deg,#D7D0C0 0 10px,#CFC7B5 10px 20px);display:flex;align-items:flex-end;padding:14px;box-sizing:border-box;font-family:'DM Mono',monospace;font-size:12px;color:#5C574C">Reference image: foot path, tall trees both sides, stone-brick houses with small shop signs set back behind them</div>
+          <div style="height:260px;border-radius:3px;background:repeating-linear-gradient(135deg,#D7D0C0 0 10px,#CFC7B5 10px 20px);display:flex;align-items:flex-end;padding:14px;box-sizing:border-box;font-family:'DM Mono',monospace;font-size:12px;color:#5C574C">Reference image: sky bridge, looking left to the wooded mountain and castle-tower apartments</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#5C574C">PALETTE · GREEN SEASON</div>
+          <div style="display:grid;grid-template-columns:repeat(9,1fr);gap:8px">
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:72px;background:#2E4733;border-radius:2px"></div><div style="font-size:14px;line-height:1.25">Kalimar canopy<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#6B665B">#2E4733</span></div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:72px;background:#6F8A58;border-radius:2px"></div><div style="font-size:14px;line-height:1.25">Moss<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#6B665B">#6F8A58</span></div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:72px;background:#B8C79A;border-radius:2px"></div><div style="font-size:14px;line-height:1.25">New leaf<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#6B665B">#B8C79A</span></div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:72px;background:#DDD5C4;border-radius:2px;box-shadow:inset 0 0 0 1px #C9C1B0"></div><div style="font-size:14px;line-height:1.25">Limestone<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#6B665B">#DDD5C4</span></div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:72px;background:#8A8274;border-radius:2px"></div><div style="font-size:14px;line-height:1.25">Stone shadow<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#6B665B">#8A8274</span></div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:72px;background:#7E8D97;border-radius:2px"></div><div style="font-size:14px;line-height:1.25">Badra blue-grey<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#6B665B">#7E8D97</span></div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:72px;background:#3B2346;border-radius:2px"></div><div style="font-size:14px;line-height:1.25">Privacy Robe<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#6B665B">#3B2346</span></div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:72px;background:linear-gradient(90deg,#E4C744 50%,#4F8A3C 50%);border-radius:2px"></div><div style="font-size:14px;line-height:1.25">Hydrafill<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#6B665B">#E4C744 #4F8A3C</span></div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:72px;background:#A9442F;border-radius:2px"></div><div style="font-size:14px;line-height:1.25">Maple red<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#6B665B">#A9442F</span></div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;margin-top:4px">
+            <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#5C574C;width:150px">SNOW SEASON · CH 29–31</div>
+            <div style="display:flex;gap:6px">
+              <div style="width:56px;height:28px;background:#F1F3F2;box-shadow:inset 0 0 0 1px #C9C1B0;border-radius:2px"></div>
+              <div style="width:56px;height:28px;background:#2B3A35;border-radius:2px"></div>
+              <div style="width:56px;height:28px;background:#9AA0A2;border-radius:2px"></div>
+              <div style="width:56px;height:28px;background:#2E4C7A;border-radius:2px"></div>
+            </div>
+            <div style="font-size:15px;color:#5C574C">Snow, pine shadow, thermal cloak, dawn blue.</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:3fr 2fr;gap:32px">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#5C574C">BOOK TEXT · CRIMSON PRO 21/1.6 · APP CHROME</div>
+            <div style="font-size:21px;line-height:1.6;text-wrap:pretty">Gladias was walking along a foot path, with tall trees towering on both sides. A series of houses made out of large stone bricks lay behind the trees on both sides, medieval in style but without any of the junk, dust on the ground, or other imperfections that a real medieval structure would have had a thousand years earlier.</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#5C574C">VERIDIAN DEVICES ONLY · INSTRUMENT SANS</div>
+            <div style="font-family:'Instrument Sans',sans-serif;font-size:30px;font-weight:500;line-height:1.15;color:#2E4733">Vote on: Badra St #1103</div>
+            <div style="font-size:16px;line-height:1.45;color:#5C574C">One sans, hairline rules, plain tables. Green means verified. Never used outside a Veridian screen.</div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#5C574C">TEXTURE</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:96px;border-radius:2px;background-color:#D3CAB7;background-image:linear-gradient(#B7AD98 2px,transparent 2px),linear-gradient(90deg,#B7AD98 2px,transparent 2px),linear-gradient(90deg,transparent 32px,#B7AD98 32px,#B7AD98 34px,transparent 34px);background-size:64px 24px,64px 48px,64px 48px;background-position:0 0,0 0,0 24px"></div><div style="font-size:15px">Large stone brick, clean joints</div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:96px;border-radius:2px;background-color:#3B2346;background-image:repeating-linear-gradient(45deg,rgba(255,255,255,.05) 0 1px,transparent 1px 4px),repeating-linear-gradient(-45deg,rgba(0,0,0,.18) 0 1px,transparent 1px 4px)"></div><div style="font-size:15px">Robe cloth, matte, no sheen</div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:96px;border-radius:2px;background-color:#6F8A58;background-image:radial-gradient(circle at 20% 30%,rgba(232,240,200,.55) 0 8px,transparent 18px),radial-gradient(circle at 62% 58%,rgba(232,240,200,.45) 0 6px,transparent 16px),radial-gradient(circle at 84% 22%,rgba(232,240,200,.4) 0 5px,transparent 14px),radial-gradient(circle at 40% 80%,rgba(232,240,200,.35) 0 7px,transparent 16px)"></div><div style="font-size:15px">Dappled shade under trees</div></div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#5C574C">IN-WORLD SCREENS · RENDERED FROM TEMPLATES</div>
+          <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;font-family:'Instrument Sans',sans-serif">
+            <div style="width:250px;background:#F6F3EC;border:1px solid #C9C1B0;border-radius:22px;padding:20px 18px;box-sizing:border-box;display:flex;flex-direction:column;gap:14px;font-size:14px">
+              <div style="font-weight:600;border-bottom:1px solid #D6CFBF;padding-bottom:10px">Vote on: Badra St #1103</div>
+              <div style="line-height:1.45;color:#3E4A40">Emerald AI summary: Five-storey apartment building. Blue-grey colored.</div>
+              <div style="display:flex;flex-direction:column;gap:6px;padding:6px 0">
+                <div style="position:relative;height:18px">
+                  <div style="position:absolute;left:0;right:0;top:8px;height:2px;background:#8A8274"></div>
+                  <div style="position:absolute;left:50%;top:3px;width:1px;height:12px;background:#8A8274"></div>
+                  <div style="position:absolute;left:calc(57% - 9px);top:0;width:18px;height:18px;border-radius:50%;background:#2E4733;box-shadow:0 0 0 3px #F6F3EC"></div>
+                </div>
+                <div style="display:flex;justify-content:space-between;font-size:12px;color:#6B665B"><span>-5</span><span>0</span><span>5</span></div>
+              </div>
+              <div style="border:1px solid #2E4733;color:#2E4733;text-align:center;padding:9px;border-radius:6px;font-weight:500">Select</div>
+            </div>
+            <div style="width:250px;background:#F6F3EC;border:1px solid #C9C1B0;border-radius:22px;padding:20px 18px;box-sizing:border-box;display:flex;flex-direction:column;font-size:14px">
+              <div style="font-weight:600;border-bottom:1px solid #D6CFBF;padding-bottom:10px;margin-bottom:4px">Badra St #1103</div>
+              <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #E3DDD0"><span>Base land tax:</span><span>1.00%</span></div>
+              <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #E3DDD0"><span>Aesthetics tax:</span><span>0.18%</span></div>
+              <div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #E3DDD0"><span>Other rubric taxes:</span><span>0.33%</span></div>
+              <div style="display:flex;justify-content:space-between;padding:8px 0;font-weight:600"><span>Total land tax:</span><span>1.51%</span></div>
+            </div>
+            <div style="display:flex;flex-direction:column;gap:10px;align-items:center;width:150px">
+              <div style="width:130px;height:130px;border-radius:50%;background:#1E2420;border:6px solid #8A8274;box-sizing:border-box;display:flex;align-items:center;justify-content:center">
+                <div style="width:54px;height:54px;border-radius:50%;background:#4F8A3C;color:#F6F3EC;display:flex;align-items:center;justify-content:center;font-size:30px;font-weight:600">✓</div>
+              </div>
+              <div style="font-family:'Crimson Pro',serif;font-size:14px;line-height:1.35;color:#5C574C;text-align:center">Watch: a passing drone checked. A green check and nothing else.</div>
+            </div>
+          </div>
+          <div style="background:#F6F3EC;border:1px solid #C9C1B0;border-radius:14px;padding:14px 18px;display:grid;grid-template-columns:200px 20px 1fr 60px;gap:12px;align-items:center;font-size:14px;font-family:'Instrument Sans',sans-serif">
+            <div style="display:flex;flex-direction:column;gap:2px"><span style="font-weight:600">Anonymous</span><span style="font-size:12px;color:#4F8A3C">Rep score ≥ 200 · Verified ✓</span></div>
+            <div style="color:#8A8274">→</div>
+            <div>I saw you at the concert, I know that you are in the Order.</div>
+            <div style="color:#6B665B;text-align:right">60259</div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#5C574C">IN THE READER · ACCENT #2E5A3A</div>
+          <div style="background:#F4F2ED;border:1px solid #DAD6CC;border-radius:3px;padding:22px 24px;display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:10px"><div style="width:20px;height:2px;background:#2E5A3A"></div><div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;color:#2E5A3A">CHAPTER 1 · MELDAN, VERIDIA</div></div>
+            <div style="font-size:19px;line-height:1.6;color:#1D1D1B">He looked around, breathed in and briefly stopped to enjoy the nature.</div>
+            <div style="border-left:3px solid #2E5A3A;padding:4px 0 4px 14px;font-size:19px;line-height:1.6;color:#1D1D1B">Suddenly, a small drone flew over his head.</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:#6A675F">Paper #F4F2ED in every chapter. Accent on the dateline rule, the active block and links.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1b DZEGO -->
+      <div id="1b" style="width:880px;background:#EEEBE4;border-radius:4px;padding:48px;display:flex;flex-direction:column;gap:36px;box-sizing:border-box">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.12em;color:#B3306E">DZEGO · DAYTIME FIRST</div>
+            <div style="font-size:60px;line-height:1;color:#24252B">Low shops under trees.</div>
+            <div style="font-size:17px;color:#5E5B55;margin-top:6px">Reference: Hun Min street and the foil-lined DU classroom, chapter 2. Pafogai Du, 3724 Snowmoon 5.</div>
+          </div>
+          <div style="font-family:'DM Mono',monospace;font-size:13px;background:#24252B;color:#EEEBE4;padding:4px 10px;border-radius:3px">1b</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;grid-template-rows:200px 150px;gap:12px">
+          <div style="grid-column:1 / 3;border-radius:3px;background-color:#B9B5AC;background-image:radial-gradient(circle at 12% 30%,rgba(60,80,50,.35) 0 30px,transparent 70px),radial-gradient(circle at 46% 20%,rgba(60,80,50,.3) 0 26px,transparent 64px),radial-gradient(circle at 80% 34%,rgba(60,80,50,.32) 0 34px,transparent 76px),repeating-linear-gradient(135deg,rgba(255,255,255,.12) 0 10px,transparent 10px 20px);display:flex;align-items:flex-end;padding:14px;box-sizing:border-box;font-family:'DM Mono',monospace;font-size:12px;color:#3A3832">Reference image: Hun Min street by day. One- and two-storey shops and tiny factories, tree shade between road and sidewalk, stairways leading underground, signs small on the facades</div>
+          <div style="border-radius:3px;background:linear-gradient(180deg,#8CC6EE 0 62%,#7DBF6B 62%);display:flex;align-items:flex-end;padding:14px;box-sizing:border-box;font-family:'DM Mono',monospace;font-size:12px;color:#24252B">Reference image: mural, pig with calculator and hamster with vial holding the DU motto</div>
+          <div style="border-radius:3px;background:repeating-linear-gradient(135deg,#D8D4CC 0 10px,#CFCBC2 10px 20px);display:flex;align-items:flex-end;padding:14px;box-sizing:border-box;font-family:'DM Mono',monospace;font-size:12px;color:#5E5B55">Reference image: two flights of dusty stairs down to floor −1</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#5E5B55">PALETTE · STREET AND MURAL</div>
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px">
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:72px;background:#8D8A83;border-radius:2px"></div><div style="font-size:14px;line-height:1.25">Concrete<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#77746E">#8D8A83</span></div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:72px;background:#B9AA8B;border-radius:2px"></div><div style="font-size:14px;line-height:1.25">Pyramid stone<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#77746E">#B9AA8B</span></div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:72px;background:#8CC6EE;border-radius:2px"></div><div style="font-size:14px;line-height:1.25">Mural sky<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#77746E">#8CC6EE</span></div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:72px;background:#F5A8B8;border-radius:2px"></div><div style="font-size:14px;line-height:1.25">Pig pink<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#77746E">#F5A8B8</span></div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:72px;background:#8FE36B;border-radius:2px"></div><div style="font-size:14px;line-height:1.25">Vial green<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#77746E">#8FE36B</span></div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:72px;background:#C8CCD2;border-radius:2px"></div><div style="font-size:14px;line-height:1.25">Foil<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#77746E">#C8CCD2</span></div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:72px;background:#2A2B31;border-radius:2px"></div><div style="font-size:14px;line-height:1.25">Asphalt<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#77746E">#2A2B31</span></div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:12px;margin-top:4px">
+            <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#5E5B55;width:150px">SIGN SCALE ONLY</div>
+            <div style="display:flex;gap:6px">
+              <div style="width:56px;height:28px;background:#33E1CF;border-radius:2px"></div>
+              <div style="width:56px;height:28px;background:#FF4F9E;border-radius:2px"></div>
+              <div style="width:56px;height:28px;background:#FFB43A;border-radius:2px"></div>
+            </div>
+            <div style="font-size:15px;color:#5E5B55">Sign cyan, sign magenta, sodium amber. Never a fill larger than a shop sign.</div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#5E5B55">TEXTURE</div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:96px;border-radius:2px;background-color:#A9A59C;background-image:radial-gradient(circle at 25% 35%,rgba(40,60,35,.38) 0 10px,transparent 24px),radial-gradient(circle at 70% 60%,rgba(40,60,35,.32) 0 12px,transparent 26px),radial-gradient(circle at 50% 90%,rgba(40,60,35,.3) 0 8px,transparent 20px),repeating-linear-gradient(90deg,transparent 0 46px,rgba(0,0,0,.08) 46px 48px)"></div><div style="font-size:15px">Tree shade on pavement</div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:96px;border-radius:2px;background:linear-gradient(180deg,#8CC6EE 0 62%,#7DBF6B 62%)"></div><div style="font-size:15px">Mural ground: flat sky, flat trees</div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:96px;border-radius:2px;background-color:#B9BDC4;background-image:linear-gradient(115deg,rgba(255,255,255,.55) 0 8%,transparent 14% 30%,rgba(255,255,255,.4) 36%,transparent 44% 58%,rgba(0,0,0,.18) 64%,transparent 72%),linear-gradient(32deg,transparent 0 20%,rgba(0,0,0,.15) 26%,transparent 34% 52%,rgba(255,255,255,.5) 58%,transparent 66%)"></div><div style="font-size:15px">Foil, underground rooms</div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:96px;border-radius:2px;background-color:#6F6C66;background-image:repeating-linear-gradient(180deg,#8D8A83 0 10px,#5E5B55 10px 12px,#77746E 12px 18px)"></div><div style="font-size:15px">Concrete stair going down</div></div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:start">
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#5E5B55">SHOP SIGN AT TRUE SCALE · DOTGOTHIC16</div>
+            <div style="background:#D8D4CC;border-radius:3px;padding:18px;display:flex;flex-direction:column;gap:10px">
+              <div style="display:flex;gap:10px;align-items:flex-end">
+                <div style="flex:1;height:110px;background:#B9B5AC;border-radius:2px;display:flex;flex-direction:column;justify-content:space-between;padding:10px;box-sizing:border-box">
+                  <div style="align-self:flex-start;background:#1A1B20;padding:5px 8px;border-radius:2px;font-family:'DotGothic16',sans-serif;font-size:15px;color:#FFB43A;text-shadow:0 0 6px rgba(255,180,58,.6)">zui fia kun zun</div>
+                  <div style="height:36px;background:repeating-linear-gradient(180deg,#8D8A83 0 5px,#77746E 5px 7px);border-radius:1px"></div>
+                </div>
+                <div style="flex:1;height:84px;background:#C3BFB6;border-radius:2px;padding:10px;box-sizing:border-box"><div style="display:inline-block;background:#1A1B20;padding:4px 7px;border-radius:2px;font-family:'DotGothic16',sans-serif;font-size:13px;color:#33E1CF;text-shadow:0 0 6px rgba(51,225,207,.6)">HUN MIN 1990</div></div>
+              </div>
+              <div style="font-size:15px;line-height:1.4;color:#5E5B55">Glow lives inside the sign box. The street around it stays daylit concrete.</div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#5E5B55">DZEGOBAN LETTERING · FULL</div>
+            <div style="background:#F4F2ED;border-radius:3px;padding:16px 18px;display:flex;flex-direction:column;gap:2px">
+              <div style="font-size:28px;font-weight:600;line-height:1.15;letter-spacing:.01em">gie fe kiu kai ci bin hu</div>
+              <div style="font-size:19px;font-style:italic;color:#6A675F">Grow roots, no head.</div>
+            </div>
+            <div style="font-size:15px;line-height:1.45;color:#5E5B55;text-wrap:pretty">Lettering is app chrome, so it uses Crimson Pro. Original first, set semibold. Translation in italic under it. In-world screens show the original only.</div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#5E5B55">DZEGOBAN LETTERING · COMPACT, FOR LONG BLOCKS (CH 23, 26) · SHOWN AT 390PX</div>
+          <div style="display:flex;gap:24px;align-items:flex-start">
+            <div style="width:390px;background:#F4F2ED;border-radius:3px;padding:14px 16px;box-sizing:border-box;display:flex;flex-direction:column">
+              <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:11px;color:#6A675F;padding-bottom:8px;border-bottom:1px solid #DAD6CC"><span>DZEGOBAN · 6 LINES</span><span style="color:#B3306E">Hide originals</span></div>
+              <div style="display:grid;grid-template-columns:20px 1fr;gap:0 8px;padding:7px 0;border-bottom:1px solid #E6E2D9"><span style="font-family:'DM Mono',monospace;font-size:10px;color:#9A968C;padding-top:3px">1</span><div style="display:flex;flex-direction:column"><span style="font-size:15px;font-weight:600;line-height:1.3">pa jan li sun zo</span><span style="font-size:15px;font-style:italic;color:#6A675F;line-height:1.3">One man learning</span></div></div>
+              <div style="display:grid;grid-template-columns:20px 1fr;gap:0 8px;padding:7px 0;border-bottom:1px solid #E6E2D9"><span style="font-family:'DM Mono',monospace;font-size:10px;color:#9A968C;padding-top:3px">2</span><div style="display:flex;flex-direction:column"><span style="font-size:15px;font-weight:600;line-height:1.3">zai gau fe pa jan</span><span style="font-size:15px;font-style:italic;color:#6A675F;line-height:1.3">will set one man free.</span></div></div>
+              <div style="display:grid;grid-template-columns:20px 1fr;gap:0 8px;padding:7px 0;border-bottom:1px solid #E6E2D9"><span style="font-family:'DM Mono',monospace;font-size:10px;color:#9A968C;padding-top:3px">3</span><div style="display:flex;flex-direction:column"><span style="font-size:15px;font-weight:600;line-height:1.3">go li sun zo</span><span style="font-size:15px;font-style:italic;color:#6A675F;line-height:1.3">A nation learning</span></div></div>
+              <div style="display:grid;grid-template-columns:20px 1fr;gap:0 8px;padding:7px 0;border-bottom:1px solid #E6E2D9"><span style="font-family:'DM Mono',monospace;font-size:10px;color:#9A968C;padding-top:3px">4</span><div style="display:flex;flex-direction:column"><span style="font-size:15px;font-weight:600;line-height:1.3">bai gau fe go</span><span style="font-size:15px;font-style:italic;color:#6A675F;line-height:1.3">will make the nation great.</span></div></div>
+              <div style="display:grid;grid-template-columns:20px 1fr;gap:0 8px;padding:7px 0;border-bottom:1px solid #E6E2D9"><span style="font-family:'DM Mono',monospace;font-size:10px;color:#9A968C;padding-top:3px">5</span><div style="display:flex;flex-direction:column"><span style="font-size:15px;font-weight:600;line-height:1.3">jie mo kai tu jie hei ja ma?</span><span style="font-size:15px;font-style:italic;color:#6A675F;line-height:1.3">Do you want to eat or drink?</span></div></div>
+              <div style="display:grid;grid-template-columns:20px 1fr;gap:0 8px;padding:7px 0"><span style="font-family:'DM Mono',monospace;font-size:10px;color:#9A968C;padding-top:3px">6</span><div style="display:flex;flex-direction:column"><span style="font-size:15px;font-weight:600;line-height:1.3">dze go ba fau gie</span><span style="font-size:15px;font-style:italic;color:#6A675F;line-height:1.3">Dzego will rise again.</span></div></div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:10px;font-size:16px;line-height:1.45;color:#5E5B55;text-wrap:pretty">
+              <div>Lines pair up one to one, numbered, at 15px instead of 28/19. Used when a block has more than two Dzegoban lines, or when a character translates line by line.</div>
+              <div>"Hide originals" collapses to translations only for readers who want speed; the original stays one tap away.</div>
+              <div style="font-family:'DM Mono',monospace;font-size:11px;color:#77746E">Sample lines from chapters 2 and 4. Chapter 23's passage drops in here.</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#5E5B55">IN-WORLD SCREENS · RUBIK INSIDE DEVICES ONLY</div>
+          <div style="display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap;font-family:'Rubik',sans-serif">
+            <div style="display:flex;flex-direction:column;gap:10px;align-items:center;width:200px">
+              <div style="width:170px;height:170px;border-radius:28px;background:#0F1013;border:5px solid #8D8A83;box-sizing:border-box;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;color:#E9E7E2">
+                <div style="font-size:16px;font-weight:500">MUN GUI 1842</div>
+                <div style="font-size:16px;color:#33E1CF">TEI 70000</div>
+                <div style="width:34px;height:34px;border-radius:50%;background:#FFD43A;color:#0F1013;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px">✓</div>
+              </div>
+              <div style="font-family:'Crimson Pro',serif;font-size:14px;line-height:1.35;color:#5E5B55;text-align:center">Classroom location broadcast. Yellow check: new proof system.</div>
+            </div>
+            <div style="flex:1;min-width:300px;display:flex;flex-direction:column;gap:14px">
+              <div style="background:#0F1013;border-radius:14px;padding:14px 18px;display:flex;flex-direction:column;gap:8px;color:#E9E7E2">
+                <div style="display:grid;grid-template-columns:60px 24px 1fr 70px;gap:10px;font-size:12px;color:#8D8A83"><span>zan</span><span></span><span>tie</span><span style="text-align:right">tei</span></div>
+                <div style="display:grid;grid-template-columns:60px 24px 1fr 70px;gap:10px;font-size:15px;align-items:center"><span style="font-weight:500">Fin</span><span style="color:#33E1CF">→</span><span>jie fe hen dzi</span><span style="color:#33E1CF;text-align:right">74160</span></div>
+              </div>
+              <div style="display:flex;align-items:stretch;border-radius:3px;overflow:hidden;font-family:'Crimson Pro',serif">
+                <div style="background:#24252B;padding:14px 16px;display:flex;flex-direction:column;gap:4px;flex:1;color:#E9E7E2">
+                  <div style="font-family:'DM Mono',monospace;font-size:11px;color:#A9A6A0">DECIMAL CLOCK</div>
+                  <div style="font-family:'DM Mono',monospace;font-size:28px">70,001</div>
+                </div>
+                <div style="background:#D8D4CC;padding:14px 16px;display:flex;flex-direction:column;justify-content:center;gap:2px;font-size:15px;color:#3A3832;flex:1.6">
+                  <div>100 ticks · 1 minute</div><div>100 minutes · 1 longhour</div><div>10 longhours · 1 day</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#5E5B55">IN THE READER · ACCENT #B3306E</div>
+          <div style="background:#F4F2ED;border:1px solid #DAD6CC;border-radius:3px;padding:22px 24px;display:flex;flex-direction:column;gap:12px">
+            <div style="display:flex;align-items:center;gap:10px"><div style="width:20px;height:2px;background:#B3306E"></div><div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;color:#B3306E">CHAPTER 2 · PAFOGAI DU, DZEGO</div></div>
+            <div style="font-size:19px;line-height:1.6">Fin and Zei got off the autobus and walked down Hun Min street.</div>
+            <div style="border-left:3px solid #B3306E;padding:4px 0 4px 14px;font-size:19px;line-height:1.6">Fin and Zei both kept walking, enjoying the shade under the trees between the road and the sidewalk.</div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;color:#6A675F">Same paper as Veridia. Pig pink deepened to pass 4.5:1 on paper.</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 1c MINPENTAI -->
+      <div id="1c" style="width:880px;background:#0B0C0F;border-radius:4px;padding:48px;display:flex;flex-direction:column;gap:32px;box-sizing:border-box;color:#E4E2DC">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.12em;color:#8B8A92">MINPENTAI · APPROVED WITH FIXES</div>
+            <div style="font-size:60px;line-height:1">The board, in code.</div>
+            <div style="font-size:17px;color:#9A99A1;margin-top:6px">Reference: the quarter-final, chapter 4, just after Dza is eliminated. Fifteen to fifteen, but Zau now has two players moving in each intervention turn to Pan's one.</div>
+          </div>
+          <div style="font-family:'DM Mono',monospace;font-size:13px;background:#E4E2DC;color:#0B0C0F;padding:4px 10px;border-radius:3px">1c</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column">
+          <div style="display:grid;grid-template-columns:1fr auto 1fr;align-items:center;padding:10px 12px;background:#14151A;font-family:'DM Mono',monospace;font-size:12px;border-radius:3px 3px 0 0">
+            <div style="display:flex;gap:12px;align-items:center"><span style="color:#E4E2DC">ZAU 15</span><span style="color:#46D7E8">■ Zei</span><span style="color:#FFB43A">■ Bai</span></div>
+            <div style="display:flex;gap:14px;color:#8B8A92"><span>INTERVENTION IN 40</span></div>
+            <div style="display:flex;gap:12px;align-items:center;justify-content:flex-end"><span style="color:#FF5C8A">■ Pan</span><span style="color:#5A5966;text-decoration:line-through">■ Dza</span><span style="color:#5A5966">OUT</span><span style="color:#E4E2DC">15 JA</span></div>
+          </div>
+          <canvas ref="{{ mainRef }}" width="1584" height="1008" style="width:784px;height:499px;display:block;background:#060608"></canvas>
+          <div style="padding:8px 12px;background:#14151A;font-family:'DM Mono',monospace;font-size:12px;color:#8B8A92;border-radius:0 0 3px 3px">{{ viewLabel }}</div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px 24px">
+          <div style="display:flex;gap:12px;align-items:center"><div style="width:30px;height:30px;display:grid;grid-template-columns:repeat(3,1fr);gap:2px"><div></div><div style="background:#46D7E8"></div><div></div><div></div><div></div><div style="background:#46D7E8"></div><div style="background:#46D7E8"></div><div style="background:#46D7E8"></div><div style="background:#46D7E8"></div></div><div style="font-size:15px;line-height:1.3">Live cells, gliders<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#8B8A92">Inset squares, owner colour</span></div></div>
+          <div style="display:flex;gap:12px;align-items:center"><div style="width:30px;height:30px;background:#1F5F68;box-shadow:inset 0 0 0 1px #46D7E8"></div><div style="font-size:15px;line-height:1.3">Walls<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#8B8A92">Solid, darkened owner colour</span></div></div>
+          <div style="display:flex;gap:12px;align-items:center"><div style="width:30px;height:30px;outline:1px dashed #46D7E8;outline-offset:3px;display:grid;grid-template-columns:repeat(3,1fr)"><div style="background:#46D7E8"></div><div></div><div style="background:#46D7E8"></div><div></div><div style="background:#46D7E8"></div><div></div><div style="background:#46D7E8"></div><div></div><div style="background:#46D7E8"></div></div><div style="font-size:15px;line-height:1.3">Symbols<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#8B8A92">Full-bleed cells, dashed frame</span></div></div>
+          <div style="display:flex;gap:12px;align-items:center"><div style="width:30px;height:30px;background:#4B4C55"></div><div style="font-size:15px;line-height:1.3">Rock formations<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#8B8A92">Neutral grey, unowned</span></div></div>
+          <div style="display:flex;gap:12px;align-items:center"><div style="width:30px;height:30px;background-image:radial-gradient(#6C6D78 1.5px,transparent 2px);background-size:7px 7px"></div><div style="font-size:15px;line-height:1.3">Debris<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#8B8A92">High-entropy wreckage</span></div></div>
+          <div style="display:flex;gap:12px;align-items:center"><div style="width:30px;height:30px;background:#060608;background-image:radial-gradient(#1D1E24 1px,transparent 1.5px);background-size:6px 6px;box-shadow:inset 0 0 0 1px #2E3039"></div><div style="font-size:15px;line-height:1.3">Fog<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#8B8A92">Beyond 30 squares of a team symbol</span></div></div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#8B8A92">A PANEL FRAMING ONE REGION · 390PX WIDE</div>
+          <div style="display:flex;gap:24px;align-items:flex-start">
+            <div style="width:390px;display:flex;flex-direction:column;background:#F4F2ED;border-radius:3px;overflow:hidden">
+              <div style="position:relative;width:390px;height:260px">
+                <canvas ref="{{ panelRef }}" width="780" height="520" style="width:390px;height:260px;display:block"></canvas>
+                <div style="position:absolute;left:4%;top:5%;width:56%;background:#F4F2ED;color:#1D1D1B;padding:8px 10px;font-size:15px;line-height:1.35;box-shadow:0 1px 0 rgba(0,0,0,.3)">By total symbol count, it was fifteen to fifteen - exactly even.</div>
+              </div>
+              <div style="padding:10px 14px;font-family:'DM Mono',monospace;font-size:11px;line-height:1.6;color:#6A675F">render · minpentai@a41c9e2<br>state ch4/qf1 turn 2,300 · viewport x0 y0 w39 h26 · audience</div>
+            </div>
+            <div style="flex:1;display:flex;flex-direction:column;gap:10px;font-size:16px;line-height:1.45;color:#B4B3BA;text-wrap:pretty">
+              <div>The panel is the same board state with a viewport: a cell rectangle and a choice of audience or player view. Cells scale to fill 390px; here 20px per cell, so a 39 × 26 region.</div>
+              <div>This one frames Pan's northwest base with Bai's symbol, the one Zei's spaceship assembled, now sitting inside it.</div>
+              <div>Lettering sits on top in Crimson on paper, like any other image.</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:24px">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#8B8A92">PLAYER SYMBOLS · SHAPE, NOT ONLY COLOUR</div>
+            <canvas ref="{{ symRef }}" width="760" height="200" style="width:380px;height:100px;display:block"></canvas>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#8B8A92">SANDBOX · ONE GLIDER, FOUR TURNS</div>
+            <canvas ref="{{ gliderRef }}" width="760" height="200" style="width:380px;height:100px;display:block"></canvas>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <canvas ref="{{ summaryRef }}" width="520" height="332" style="width:100%;aspect-ratio:520/332;display:block;border-radius:3px"></canvas>
+            <div style="font-size:15px;line-height:1.35">Summary view<br><span style="color:#8B8A92">What Fin sees on his hand device: symbol locations only.</span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <canvas ref="{{ hexRef }}" width="520" height="332" style="width:100%;aspect-ratio:520/332;display:block;border-radius:3px"></canvas>
+            <div style="font-size:15px;line-height:1.35">Hex grid · chapter 12<br><span style="color:#8B8A92">Same roles and colours on a hexagonal lattice.</span></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <canvas ref="{{ shrineRef }}" width="520" height="332" style="width:100%;aspect-ratio:520/332;display:block;border-radius:3px"></canvas>
+            <div style="font-size:15px;line-height:1.35">Shrines · chapter 14<br><span style="color:#8B8A92">Five shrines spill changes back onto a field full of debris.</span></div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:2px;border-top:1px solid #24252C;padding-top:16px">
+          <div style="font-size:24px;font-weight:600;line-height:1.3">LE MU GEI TAU FA</div>
+          <div style="font-size:19px;font-style:italic;color:#8B8A92">Twenty-five ticks.</div>
+        </div>
+      </div>
+
+      <!-- 1d ARCTIC -->
+      <div id="1d" style="width:880px;background:#E3EAEE;border-radius:4px;padding:48px;display:flex;flex-direction:column;gap:36px;box-sizing:border-box;color:#0E2233">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.12em;color:#3E6A88">ARCTIC EMPIRE · NEW</div>
+            <div style="font-size:60px;line-height:1">Cold, ranked, faceted.</div>
+            <div style="font-size:17px;color:#4A5C68;margin-top:6px">Reference: Ephelion's taped poster in the tunnel, chapter 3, and the restaurant broadcast, chapter 13. Glasscrown, the ice-crystal capital, is only described (chapter 31).</div>
+          </div>
+          <div style="font-family:'DM Mono',monospace;font-size:13px;background:#0E2233;color:#E3EAEE;padding:4px 10px;border-radius:3px">1d</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#4A5C68">PALETTE · NEAR-MONOCHROME, NO WARM COLOUR</div>
+          <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:8px">
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:72px;background:#F5F8FA;border-radius:2px;box-shadow:inset 0 0 0 1px #C3CFD7"></div><div style="font-size:14px;line-height:1.25">Glasscrown white<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#5A6872">#F5F8FA</span></div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:72px;background:#CFE0EA;border-radius:2px"></div><div style="font-size:14px;line-height:1.25">Ice<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#5A6872">#CFE0EA</span></div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:72px;background:#86AFC6;border-radius:2px"></div><div style="font-size:14px;line-height:1.25">Glacier<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#5A6872">#86AFC6</span></div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:72px;background:#AEB8BF;border-radius:2px"></div><div style="font-size:14px;line-height:1.25">Crown silver<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#5A6872">#AEB8BF</span></div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:72px;background:#5A6872;border-radius:2px"></div><div style="font-size:14px;line-height:1.25">Steel<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#5A6872">#5A6872</span></div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:72px;background:#0E2233;border-radius:2px"></div><div style="font-size:14px;line-height:1.25">Polar navy<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#5A6872">#0E2233</span></div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:72px;background:#05101A;border-radius:2px"></div><div style="font-size:14px;line-height:1.25">Black ice<br><span style="font-family:'DM Mono',monospace;font-size:11px;color:#5A6872">#05101A</span></div></div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:32px">
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#4A5C68">ARCTIC MEDIA ONLY · BIG SHOULDERS DISPLAY</div>
+            <div style="font-family:'Big Shoulders Display',sans-serif;font-weight:800;font-size:44px;line-height:.95;text-transform:uppercase;letter-spacing:.01em">The Path of Strength</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:10px">
+            <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#4A5C68">ARCTIC MEDIA ONLY · ARCHIVO</div>
+            <div style="font-family:'Archivo',sans-serif;font-size:16px;line-height:1.5">Stop looking to society for answers, to Veridia's institutions to make life fair. Life is not fair - and should not be fair.</div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#4A5C68">TEXTURE</div>
+          <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:12px">
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:96px;border-radius:2px;background:linear-gradient(135deg,#F5F8FA 0 28%,transparent 28%),linear-gradient(225deg,#CFE0EA 0 38%,transparent 38%),linear-gradient(315deg,#86AFC6 0 30%,transparent 30%),linear-gradient(45deg,#AEB8BF 0 42%,#E6EEF2 42%)"></div><div style="font-size:15px">Faceted ice, hard edges</div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:96px;border-radius:2px;background-color:#CFE0EA;background-image:radial-gradient(rgba(255,255,255,.7) 1px,transparent 1.5px),radial-gradient(rgba(14,34,51,.08) 1px,transparent 1.5px);background-size:5px 5px,7px 7px;background-position:0 0,2px 3px"></div><div style="font-size:15px">Frosted glass</div></div>
+            <div style="display:flex;flex-direction:column;gap:6px"><div style="height:96px;border-radius:2px;background-color:#5A6872;background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.06) 0 1px,transparent 1px 3px)"></div><div style="font-size:15px">Brushed steel</div></div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#4A5C68">TEMPLATE · TUNNEL POSTER, CHAPTER 3</div>
+          <div style="background:#2F3337;background-image:radial-gradient(ellipse at 50% 0%,rgba(255,250,235,.16),transparent 70%);border-radius:3px;padding:36px;display:flex;justify-content:center">
+            <div style="position:relative;width:360px;background:#F5F8FA;padding:30px 28px 26px;box-sizing:border-box;box-shadow:0 2px 0 rgba(0,0,0,.25);display:flex;flex-direction:column;gap:14px">
+              <div style="position:absolute;left:-12px;top:-6px;width:44px;height:16px;background:rgba(235,232,215,.7);transform:rotate(-38deg)"></div>
+              <div style="position:absolute;right:-12px;top:-6px;width:44px;height:16px;background:rgba(235,232,215,.7);transform:rotate(38deg)"></div>
+              <div style="position:absolute;left:-12px;bottom:-6px;width:44px;height:16px;background:rgba(235,232,215,.7);transform:rotate(38deg)"></div>
+              <div style="position:absolute;right:-12px;bottom:-6px;width:44px;height:16px;background:rgba(235,232,215,.7);transform:rotate(-38deg)"></div>
+              <div style="font-family:'Big Shoulders Display',sans-serif;font-weight:800;font-size:34px;line-height:.95;text-transform:uppercase;color:#0E2233">From a comfortable Veridia to a strong Veridia</div>
+              <div style="height:3px;background:#0E2233"></div>
+              <div style="font-family:'Archivo',sans-serif;font-size:12.5px;line-height:1.5;color:#1B2F3E;display:flex;flex-direction:column;gap:8px">
+                <div>Veridia is a beautiful country, you are told in school. You see it every day: the trees, the mountains, the houses and buildings all trying to eke out another few basis points reduction in land tax.</div>
+                <div>But you know, in your heart, that there is a problem. When did Veridia last go to space? Twenty years ago. When was Veridia's tallest building built? Forty years ago.</div>
+                <div style="color:#86AFC6;font-family:'DM Mono',monospace;font-size:10px">[ template renders the full poster text from the block range ]</div>
+              </div>
+              <div style="font-family:'Archivo',sans-serif;font-size:12px;line-height:1.4;color:#1B2F3E;border-top:1px solid #CFE0EA;padding-top:10px">With regards,<br><span style="font-weight:500">Lord Ephelion</span><br>Arctic Empire consul to Veridia.</div>
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#4A5C68">TEMPLATE · RESTAURANT SCREEN TAKEOVER, CHAPTER 13</div>
+          <div style="background:#05101A;border-radius:6px;padding:10px;box-shadow:0 0 0 6px #1A1D21">
+            <div style="aspect-ratio:16/9;background:#0E2233;display:grid;grid-template-columns:38% 1fr">
+              <div style="background:repeating-linear-gradient(135deg,#1B3448 0 10px,#173044 10px 20px);display:flex;align-items:flex-end;padding:14px;box-sizing:border-box;font-family:'DM Mono',monospace;font-size:11px;color:#86AFC6">Image of Lord Ephelion · design element for the entity, any version</div>
+              <div style="padding:26px 28px;display:flex;flex-direction:column;gap:12px;color:#F5F8FA">
+                <div style="font-family:'Big Shoulders Display',sans-serif;font-weight:800;font-size:28px;line-height:.98;text-transform:uppercase">The Dead Hand of Egalitarianism, and the Path of Strength</div>
+                <div style="height:2px;background:#86AFC6;width:64px"></div>
+                <div style="font-family:'Archivo',sans-serif;font-size:13px;line-height:1.5;color:#CFE0EA">All humans are equal, the schools, the posters, the songs, and everything else in Veridia is telling you.</div>
+                <div style="font-family:'Archivo',sans-serif;font-size:13px;line-height:1.5;color:#CFE0EA">Maybe not Dreadknot - but that's exactly why Dreadknot's taxes were bumped up to tier 4 in the audit last year.</div>
+                <div style="margin-top:auto;font-family:'Archivo',sans-serif;font-size:12px;color:#AEB8BF">With regards, Lord Ephelion · Arctic Empire consul to Veridia.</div>
+              </div>
+            </div>
+          </div>
+          <div style="font-size:16px;line-height:1.45;color:#4A5C68;text-wrap:pretty">The text is long, so the broadcast scrolls slowly in the play view while narration reads it. In the scroll view it renders whole.</div>
+        </div>
+
+        <div style="display:flex;flex-direction:column;gap:12px">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#4A5C68">IN THE READER · NO ACCENT</div>
+          <div style="background:#F4F2ED;border:1px solid #DAD6CC;border-radius:3px;padding:22px 24px;font-size:18px;line-height:1.5;color:#1D1D1B;text-wrap:pretty">The Arctic never tints the reader. It appears only through its own media: posters, broadcasts, messages, clinics. Chapters set in occupied Northglade keep the Veridia accent; Glasscrown has no scene of its own.</div>
+        </div>
+      </div>
+
+      <!-- notes -->
+      <div style="width:440px;display:flex;flex-direction:column;gap:24px">
+        <div style="background:#F4F2ED;border-radius:4px;padding:32px;box-sizing:border-box;display:flex;flex-direction:column;gap:16px">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#5E5A52">APP CHROME</div>
+          <div style="display:flex;flex-direction:column;gap:4px"><div style="font-size:30px;line-height:1.1">Crimson Pro</div><div style="font-family:'DM Mono',monospace;font-size:11px;color:#6A675F">Reading, headings, lettering, captions</div></div>
+          <div style="display:flex;flex-direction:column;gap:4px"><div style="font-family:'DM Mono',monospace;font-size:22px;line-height:1.1">DM Mono</div><div style="font-family:'DM Mono',monospace;font-size:11px;color:#6A675F">Labels, controls, recipes, ledger, counts</div></div>
+          <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px">
+            <div style="display:flex;flex-direction:column;gap:4px"><div style="height:40px;background:#F4F2ED;box-shadow:inset 0 0 0 1px #DAD6CC"></div><span style="font-family:'DM Mono',monospace;font-size:10px">paper #F4F2ED</span></div>
+            <div style="display:flex;flex-direction:column;gap:4px"><div style="height:40px;background:#1D1D1B"></div><span style="font-family:'DM Mono',monospace;font-size:10px">ink #1D1D1B</span></div>
+            <div style="display:flex;flex-direction:column;gap:4px"><div style="height:40px;background:#6A675F"></div><span style="font-family:'DM Mono',monospace;font-size:10px">muted #6A675F</span></div>
+            <div style="display:flex;flex-direction:column;gap:4px"><div style="height:40px;background:#DAD6CC"></div><span style="font-family:'DM Mono',monospace;font-size:10px">rule #DAD6CC</span></div>
+            <div style="display:flex;flex-direction:column;gap:4px"><div style="height:40px;background:#161614"></div><span style="font-family:'DM Mono',monospace;font-size:10px">dark paper #161614</span></div>
+            <div style="display:flex;flex-direction:column;gap:4px"><div style="height:40px;background:#E7E4DD;box-shadow:inset 0 0 0 1px #DAD6CC"></div><span style="font-family:'DM Mono',monospace;font-size:10px">dark ink #E7E4DD</span></div>
+            <div style="display:flex;flex-direction:column;gap:4px"><div style="height:40px;background:#2E5A3A"></div><span style="font-family:'DM Mono',monospace;font-size:10px">Veridia #2E5A3A / #8DB58A</span></div>
+            <div style="display:flex;flex-direction:column;gap:4px"><div style="height:40px;background:#B3306E"></div><span style="font-family:'DM Mono',monospace;font-size:10px">Dzego #B3306E / #F08DB8</span></div>
+          </div>
+        </div>
+        <div style="background:#F4F2ED;border-radius:4px;padding:32px;box-sizing:border-box;display:flex;flex-direction:column;gap:18px;font-size:16px;line-height:1.45;color:#2A2A26">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#8A2F2F">DATA MODEL FLAGS · PART A</div>
+          <div style="display:flex;flex-direction:column;gap:4px"><b style="font-weight:600">1. No element type for code-rendered set pieces.</b><span style="color:#4A463F;text-wrap:pretty"><code style="font-family:'DM Mono',monospace;font-size:12px">element_type</code> allows design, text, image, clip. Boards, scoreboards, maps and device screens fit none. Suggest <code style="font-family:'DM Mono',monospace;font-size:12px">render</code> with body <code style="font-family:'DM Mono',monospace;font-size:12px">{template, commit, state, viewport}</code>; the 390px panel shows why viewport belongs in the body.</span></div>
+          <div style="display:flex;flex-direction:column;gap:4px"><b style="font-weight:600">2. Tables lose their device.</b><span style="color:#4A463F;text-wrap:pretty">A <code style="font-family:'DM Mono',monospace;font-size:12px">table</code> block is Markdown. It can't say watch vs hand device, which world, slider position, or check colour.</span></div>
+          <div style="display:flex;flex-direction:column;gap:4px"><b style="font-weight:600">3. Lettering has no translation field.</b><span style="color:#4A463F;text-wrap:pretty">Needs <code style="font-family:'DM Mono',monospace;font-size:12px">text</code>, <code style="font-family:'DM Mono',monospace;font-size:12px">lang</code>, <code style="font-family:'DM Mono',monospace;font-size:12px">gloss</code>, plus a <code style="font-family:'DM Mono',monospace;font-size:12px">layout: full | compact</code> for long blocks.</span></div>
+          <div style="display:flex;flex-direction:column;gap:4px"><b style="font-weight:600">4. Sections don't store a place.</b><span style="color:#4A463F;text-wrap:pretty">Analysis outputs a location per section; <code style="font-family:'DM Mono',monospace;font-size:12px">sections</code> only has a title. The accent needs <code style="font-family:'DM Mono',monospace;font-size:12px">location_entity_id</code>, and the location needs a world.</span></div>
+          <div style="display:flex;flex-direction:column;gap:4px"><b style="font-weight:600">5. Posters won't ingest as quotes.</b><span style="color:#4A463F;text-wrap:pretty">Ephelion's texts in chapters 3 and 13 are a bold line, a rule, then plain paragraphs. Ingest will likely emit paragraph and <code style="font-family:'DM Mono',monospace;font-size:12px">break</code> blocks, and the break will split a section in analysis. Needs a <code style="font-family:'DM Mono',monospace;font-size:12px">document</code> kind or a hand-written block override.</span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;view&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;Zei (fogged)&quot;,&quot;Audience (full)&quot;],&quot;default&quot;:&quot;Zei (fogged)&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Minpentai&quot;}}">
+class Component extends DCLogic {
+  mainRef = React.createRef(); symRef = React.createRef(); gliderRef = React.createRef();
+  summaryRef = React.createRef(); hexRef = React.createRef(); shrineRef = React.createRef(); panelRef = React.createRef();
+  componentDidMount() { this.drawAll(); if (document.fonts) document.fonts.ready.then(() => this.drawAll()); }
+  componentDidUpdate() { this.drawAll(); }
+
+  col = ['#46D7E8', '#FFB43A', '#FF5C8A', '#A98BFF'];
+  dark = ['#1F5F68', '#6E4E1C', '#6E2840', '#4A3D73'];
+  syms = [
+    ['#.#.#', '.#.#.', '#...#', '.#.#.', '#.#.#'],
+    ['##..#', '#..##', '..#..', '##..#', '#..##'],
+    ['#####', '#...#', '#.#.#', '#...#', '##.##'],
+    ['.###.', '#...#', '#.#.#', '.#.#.', '##.##'],
+  ];
+
+  build() {
+    if (this._b) return this._b;
+    const W = 132, H = 84;
+    let seed = 11;
+    const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const g = Array.from({ length: H }, () => Array(W).fill(null));
+    const set = (x, y, t, p) => { if (x >= 0 && y >= 0 && x < W && y < H) g[y][x] = { t, p }; };
+    const stamp = (pat, x0, y0, t, p) => pat.forEach((r, j) => [...r].forEach((c, i) => { if (c === '#') set(x0 + i, y0 + j, t, p); }));
+    const symList = [];
+    const sym = (p, x, y) => { stamp(this.syms[p], x, y, 'sym', p); symList.push({ p, x, y }); };
+    const glider = (p, x, y, dx, dy) => {
+      const base = ['.#.', '..#', '###'];
+      const pat = base.map((_, j) => [0, 1, 2].map(i => base[dy > 0 ? j : 2 - j][dx > 0 ? i : 2 - i]).join(''));
+      stamp(pat, x, y, 'live', p);
+    };
+    for (let k = 0; k < 46; k++) {
+      let x = Math.floor(rnd() * W), y = Math.floor(rnd() * H), n = 5 + Math.floor(rnd() * 9);
+      for (let s = 0; s < n; s++) { set(x, y, 'rock', -1); set(x + 1, y, 'rock', -1); x += Math.floor(rnd() * 3) - 1; y += Math.floor(rnd() * 3) - 1; }
+    }
+    const wallRect = (p, x0, y0, w, h, gaps, keep = 1) => {
+      const put = (x, y) => { if (rnd() < keep) set(x, y, 'wall', p); };
+      for (let i = 0; i < w; i++) for (let t = 0; t < 2; t++) { if (!gaps.includes(i)) { put(x0 + i, y0 + t); put(x0 + i, y0 + h - 1 - t); } }
+      for (let j = 0; j < h; j++) for (let t = 0; t < 2; t++) { if (!gaps.includes(j)) { put(x0 + t, y0 + j); put(x0 + w - 1 - t, y0 + j); } }
+    };
+    const debris = (x0, y0, w, h, d) => { for (let y = y0; y < y0 + h; y++) for (let x = x0; x < x0 + w; x++) if (rnd() < d) set(x, y, 'debris', -1); };
+    debris(36, 52, 40, 30, 0.22); debris(84, 2, 46, 34, 0.26); debris(44, 20, 30, 18, 0.08);
+    wallRect(1, 4, 58, 26, 22, [8, 9, 10, 15]);
+    wallRect(0, 100, 56, 28, 24, [5, 6, 17, 18]);
+    wallRect(2, 4, 4, 28, 22, [12, 13, 14]);
+    wallRect(3, 100, 4, 28, 22, [3, 4, 20], 0.35);
+    wallRect(0, 105, 10, 9, 9, [4]);
+    wallRect(1, 14, 10, 9, 9, [6]);
+    sym(0, 106, 62); sym(0, 116, 70); sym(0, 112, 48); sym(0, 86, 38); sym(0, 108, 12);
+    sym(1, 10, 64); sym(1, 18, 72); sym(1, 34, 66); sym(1, 16, 12);
+    sym(2, 6, 7); sym(2, 24, 18); sym(2, 46, 30); sym(2, 60, 60);
+    [[96, 52], [90, 46], [84, 40], [78, 34]].forEach(([x, y]) => glider(0, x, y, -1, -1));
+    [[100, 34], [104, 28], [94, 26]].forEach(([x, y]) => glider(0, x, y, 1, -1));
+    [[34, 56], [40, 50], [46, 46]].forEach(([x, y]) => glider(1, x, y, 1, -1));
+    [[26, 8], [30, 20], [24, 4]].forEach(([x, y]) => glider(1, x, y, 1, 1));
+    [[30, 30], [36, 36], [42, 42], [56, 50]].forEach(([x, y]) => glider(2, x, y, 1, 1));
+    stamp(['#..#.', '....#', '#...#', '.####'], 64, 42, 'live', 0);
+    stamp(['#..#.', '....#', '#...#', '.####'], 72, 46, 'live', 0);
+    this._b = { g, W, H, symList };
+    return this._b;
+  }
+
+  drawBoard(c, x0, y0, w, h, fogged) {
+    const ctx = c.getContext('2d');
+    const { g, symList } = this.build();
+    const S = c.width / w;
+    const R = 16;
+    const visAt = (x, y) => !fogged || symList.some(s => (s.p === 0 || s.p === 1) && Math.max(Math.abs(x - s.x - 2), Math.abs(y - s.y - 2)) <= R);
+    const V = (x, y) => visAt(x, y);
+    const Vm = Array.from({ length: h }, (_, j) => Array.from({ length: w }, (_, i) => V(x0 + i, y0 + j)));
+    const vis = (i, j) => (i < 0 || j < 0 || i >= w || j >= h) ? true : Vm[j][i];
+    ctx.fillStyle = '#060608'; ctx.fillRect(0, 0, c.width, c.height);
+    const gap = Math.max(2, S / 3);
+    for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) {
+      const X = i * S, Y = j * S;
+      if (!Vm[j][i]) { if ((i + j) % 2 === 0) { ctx.fillStyle = '#17181D'; ctx.fillRect(X + S / 2 - 1, Y + S / 2 - 1, 2, 2); } continue; }
+      ctx.fillStyle = '#0E0F13'; ctx.fillRect(X, Y, S, S);
+      ctx.fillStyle = '#16171C'; ctx.fillRect(X, Y, S, 1); ctx.fillRect(X, Y, 1, S);
+      const cell = g[y0 + j]?.[x0 + i]; if (!cell) continue;
+      if (cell.t === 'rock') { ctx.fillStyle = '#4B4C55'; ctx.fillRect(X, Y, S, S); }
+      else if (cell.t === 'wall') { ctx.fillStyle = this.dark[cell.p]; ctx.fillRect(X, Y, S, S); }
+      else if (cell.t === 'live') { ctx.fillStyle = this.col[cell.p]; ctx.fillRect(X + S / 6, Y + S / 6, S - S / 3, S - S / 3); }
+      else if (cell.t === 'sym') { ctx.fillStyle = this.col[cell.p]; ctx.fillRect(X, Y, S, S); }
+      else if (cell.t === 'debris') { ctx.fillStyle = 'rgba(108,109,120,.7)'; ctx.fillRect(X + gap, Y + gap, S - 2 * gap, S - 2 * gap); }
+    }
+    ctx.setLineDash([S / 2, S / 3]); ctx.lineWidth = Math.max(2, S / 6);
+    symList.forEach(s => {
+      const i = s.x + 2 - x0, j = s.y + 2 - y0;
+      if (i < 0 || j < 0 || i >= w || j >= h || !Vm[j][i]) return;
+      ctx.strokeStyle = this.col[s.p]; ctx.strokeRect((s.x - 1 - x0) * S, (s.y - 1 - y0) * S, 7 * S, 7 * S);
+    });
+    ctx.setLineDash([]);
+    if (fogged) {
+      ctx.fillStyle = '#3A3D48';
+      for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) if (Vm[j][i]) {
+        if (!vis(i - 1, j)) ctx.fillRect(i * S - 1, j * S, 2, S);
+        if (!vis(i + 1, j)) ctx.fillRect((i + 1) * S - 1, j * S, 2, S);
+        if (!vis(i, j - 1)) ctx.fillRect(i * S, j * S - 1, S, 2);
+        if (!vis(i, j + 1)) ctx.fillRect(i * S, (j + 1) * S - 1, S, 2);
+      }
+    }
+  }
+
+  drawMain() {
+    const c = this.mainRef.current; if (!c) return;
+    const { W, H, symList } = this.build();
+    const fogged = (this.props.view ?? 'Zei (fogged)') !== 'Audience (full)';
+    this.drawBoard(c, 0, 0, W, H, fogged);
+    const p = this.panelRef.current;
+    if (p) this.drawBoard(p, 0, 0, 39, 26, false);
+    const sc = this.summaryRef.current;
+    if (sc) {
+      const sx = sc.getContext('2d'), k = sc.width / W;
+      sx.fillStyle = '#14151A'; sx.fillRect(0, 0, sc.width, sc.height);
+      sx.strokeStyle = '#24252C'; sx.lineWidth = 1;
+      for (let i = 1; i < 4; i++) { sx.beginPath(); sx.moveTo(i * sc.width / 4, 0); sx.lineTo(i * sc.width / 4, sc.height); sx.stroke(); }
+      for (let i = 1; i < 3; i++) { sx.beginPath(); sx.moveTo(0, i * sc.height / 3); sx.lineTo(sc.width, i * sc.height / 3); sx.stroke(); }
+      sx.lineWidth = 4;
+      symList.forEach(s => { const cx = (s.x + 2.5) * k, cy = (s.y + 2.5) * k; sx.strokeStyle = this.col[s.p]; sx.beginPath(); sx.moveTo(cx - 10, cy); sx.lineTo(cx + 10, cy); sx.moveTo(cx, cy - 10); sx.lineTo(cx, cy + 10); sx.stroke(); });
+    }
+  }
+
+  drawSyms() {
+    const c = this.symRef.current; if (!c) return;
+    const ctx = c.getContext('2d'); ctx.clearRect(0, 0, c.width, c.height);
+    const S = 26, gap = (c.width - 4 * 5 * S) / 3;
+    this.syms.forEach((pat, p) => {
+      const x0 = p * (5 * S + gap), y0 = (c.height - 5 * S) / 2;
+      ctx.fillStyle = '#14151A'; ctx.fillRect(x0, y0, 5 * S, 5 * S);
+      pat.forEach((r, j) => [...r].forEach((ch, i) => { if (ch === '#') { ctx.fillStyle = this.col[p]; ctx.fillRect(x0 + i * S + 1, y0 + j * S + 1, S - 2, S - 2); } }));
+    });
+  }
+
+  drawGlider() {
+    const c = this.gliderRef.current; if (!c) return;
+    const ctx = c.getContext('2d'); ctx.clearRect(0, 0, c.width, c.height);
+    const N = 7; let b = Array.from({ length: N }, () => Array(N).fill(0));
+    [[1, 0], [2, 1], [0, 2], [1, 2], [2, 2]].forEach(([x, y]) => b[y + 1][x + 1] = 1);
+    const step = a => a.map((r, y) => r.map((v, x) => { let n = 0; for (let dy = -1; dy <= 1; dy++) for (let dx = -1; dx <= 1; dx++) if (dx || dy) n += a[y + dy]?.[x + dx] || 0; return (n === 3 || (v && n === 2)) ? 1 : 0; }));
+    const S = 24, panel = N * S, gap = (c.width - 4 * panel) / 3;
+    for (let f = 0; f < 4; f++) {
+      const x0 = f * (panel + gap), y0 = (c.height - panel) / 2;
+      ctx.fillStyle = '#0E0F13'; ctx.fillRect(x0, y0, panel, panel);
+      for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) {
+        ctx.fillStyle = '#1A1B21'; ctx.fillRect(x0 + x * S, y0 + y * S, S, 1); ctx.fillRect(x0 + x * S, y0 + y * S, 1, S);
+        if (b[y][x]) { ctx.fillStyle = '#46D7E8'; ctx.fillRect(x0 + x * S + 4, y0 + y * S + 4, S - 8, S - 8); }
+      }
+      b = step(b);
+    }
+  }
+
+  drawHex() {
+    const c = this.hexRef.current; if (!c) return;
+    const ctx = c.getContext('2d'); ctx.fillStyle = '#0E0F13'; ctx.fillRect(0, 0, c.width, c.height);
+    let seed = 5; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const r = 11, w = Math.sqrt(3) * r, h = 1.5 * r;
+    const hex = (cx, cy, rr) => { ctx.beginPath(); for (let i = 0; i < 6; i++) { const a = Math.PI / 180 * (60 * i - 30); ctx.lineTo(cx + rr * Math.cos(a), cy + rr * Math.sin(a)); } ctx.closePath(); };
+    const centers = [[0.25, 0.3, 0], [0.7, 0.65, 2], [0.5, 0.45, -1]];
+    for (let row = 0; row * h < c.height + r; row++) for (let q = 0; q * w < c.width + w; q++) {
+      const cx = q * w + (row % 2 ? w / 2 : 0), cy = row * h;
+      hex(cx, cy, r - 1); ctx.strokeStyle = '#1D1E24'; ctx.lineWidth = 1; ctx.stroke();
+      let fill = null;
+      centers.forEach(([fx, fy, p]) => { const d = Math.hypot(cx - fx * c.width, cy - fy * c.height); if (d < 60 && rnd() < 0.55 - d / 140) fill = p; });
+      if (fill !== null) { hex(cx, cy, r - 3); ctx.fillStyle = fill < 0 ? '#4B4C55' : this.col[fill]; ctx.fill(); }
+    }
+  }
+
+  drawShrine() {
+    const c = this.shrineRef.current; if (!c) return;
+    const ctx = c.getContext('2d'); ctx.fillStyle = '#0E0F13'; ctx.fillRect(0, 0, c.width, c.height);
+    let seed = 19; const rnd = () => (seed = (seed * 16807) % 2147483647) / 2147483647;
+    const S = 8, W = c.width / S, H = Math.floor(c.height / S);
+    const shrines = [[10, 8], [52, 8], [31, 20], [12, 33], [50, 33]];
+    for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) {
+      const near = Math.min(...shrines.map(([sx, sy]) => Math.max(Math.abs(x - sx), Math.abs(y - sy))));
+      const ring = near > 4 && near % 3 === 0 && rnd() < 0.5;
+      if (ring) { ctx.fillStyle = 'rgba(232,225,200,.35)'; ctx.fillRect(x * S + 2, y * S + 2, S - 4, S - 4); }
+      else if (rnd() < 0.18) { ctx.fillStyle = 'rgba(108,109,120,.7)'; ctx.fillRect(x * S + 2, y * S + 2, S - 4, S - 4); }
+    }
+    shrines.forEach(([sx, sy]) => { for (let k = 2; k >= 0; k--) { ctx.fillStyle = k % 2 ? '#0E0F13' : '#E8E1C8'; ctx.fillRect((sx - k) * S, (sy - k) * S, (2 * k + 1) * S, (2 * k + 1) * S); } });
+    ctx.fillStyle = '#46D7E8';
+    [[56, 38], [57, 38], [58, 38], [56, 39], [58, 39], [56, 40], [57, 40], [58, 40]].forEach(([x, y]) => ctx.fillRect(x * S, y * S, S, S));
+    ctx.fillStyle = '#1F5F68';
+    for (let i = 53; i < 62; i++) { ctx.fillRect(i * S, 36 * S, S, S); }
+    for (let j = 36; j < 41; j++) { ctx.fillRect(53 * S, j * S, S, S); ctx.fillRect(61 * S, j * S, S, S); }
+  }
+
+  drawAll() { this.drawMain(); this.drawSyms(); this.drawGlider(); this.drawHex(); this.drawShrine(); }
+
+  renderVals() {
+    const fogged = (this.props.view ?? 'Zei (fogged)') !== 'Audience (full)';
+    return {
+      mainRef: this.mainRef, symRef: this.symRef, gliderRef: this.gliderRef, panelRef: this.panelRef,
+      summaryRef: this.summaryRef, hexRef: this.hexRef, shrineRef: this.shrineRef,
+      viewLabel: fogged ? "ZEI'S GLASSES · team Zau shares sight · fog beyond 30 squares of any Zau symbol" : 'AUDIENCE SCREEN · full board, no fog',
+    };
+  }
+}
+</script>
+</body>
+</html>

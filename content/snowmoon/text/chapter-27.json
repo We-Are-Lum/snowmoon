@@ -734,7 +734,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -757,7 +758,8 @@
               "Total confidence",
               "9%"
             ],
-            "animated": false
+            "animated": false,
+            "min_text": 10.5
           }
         ]
       }
@@ -788,7 +790,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -814,7 +817,8 @@
               "advisors",
               "2%"
             ],
-            "animated": false
+            "animated": false,
+            "min_text": 10.5
           }
         ]
       }
@@ -860,7 +864,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -887,7 +892,8 @@
               "advisors",
               "5%"
             ],
-            "animated": false
+            "animated": false,
+            "min_text": 10
           }
         ]
       }
@@ -972,7 +978,8 @@
         "frame": {
           "width": "wide",
           "align": "left",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {

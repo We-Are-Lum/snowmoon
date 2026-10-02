@@ -698,7 +698,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -708,7 +709,8 @@
             "width": "400",
             "height": "200",
             "labels": [],
-            "animated": false
+            "animated": false,
+            "min_text": null
           }
         ]
       }

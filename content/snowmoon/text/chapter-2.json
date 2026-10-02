@@ -170,7 +170,8 @@
         "frame": {
           "width": "narrow",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -387,7 +388,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -402,7 +404,8 @@
               "x 106",
               "[0, 99]"
             ],
-            "animated": false
+            "animated": false,
+            "min_text": 10.8
           }
         ]
       }
@@ -517,7 +520,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -530,7 +534,8 @@
               "x 2 * 106",
               "[0, 499999]"
             ],
-            "animated": false
+            "animated": false,
+            "min_text": 10.8
           }
         ]
       }

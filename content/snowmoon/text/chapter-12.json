@@ -242,7 +242,8 @@
         "frame": {
           "width": "narrow",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -360,7 +361,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -381,7 +383,8 @@
               "fai hie",
               "fai hie"
             ],
-            "animated": false
+            "animated": false,
+            "min_text": 10
           }
         ]
       }
@@ -679,7 +682,8 @@
         "frame": {
           "width": "narrow",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -1279,7 +1283,8 @@
         "frame": {
           "width": "narrow",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -1289,7 +1294,8 @@
             "width": "200",
             "height": "200",
             "labels": [],
-            "animated": false
+            "animated": false,
+            "min_text": null
           }
         ]
       }

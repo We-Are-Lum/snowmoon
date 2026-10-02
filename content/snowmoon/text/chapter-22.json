@@ -92,7 +92,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -582,7 +583,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -592,7 +594,8 @@
             "width": "200",
             "height": "200",
             "labels": [],
-            "animated": false
+            "animated": false,
+            "min_text": null
           }
         ]
       }
@@ -653,7 +656,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -663,7 +667,8 @@
             "width": "200",
             "height": "200",
             "labels": [],
-            "animated": false
+            "animated": false,
+            "min_text": null
           }
         ]
       }
@@ -703,7 +708,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -715,7 +721,8 @@
             "labels": [
               "x"
             ],
-            "animated": false
+            "animated": false,
+            "min_text": 12
           }
         ]
       }
@@ -761,7 +768,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -771,7 +779,8 @@
             "width": "200",
             "height": "200",
             "labels": [],
-            "animated": false
+            "animated": false,
+            "min_text": null
           }
         ]
       }
@@ -853,7 +862,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -867,7 +877,8 @@
               "x",
               "x"
             ],
-            "animated": false
+            "animated": false,
+            "min_text": 12
           }
         ]
       }
@@ -994,7 +1005,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -1014,7 +1026,8 @@
               "x",
               "x"
             ],
-            "animated": false
+            "animated": false,
+            "min_text": 12
           }
         ]
       }

@@ -10,8 +10,8 @@ Working title. Licensed GPL-3.0, the same as the book. See
 
 **Status: Milestone 1 plus brief v4.** Scaffold, ingest, and reader; not
 yet deployed. See [docs/SNOWMOON-BUILD-BRIEF.md](docs/SNOWMOON-BUILD-BRIEF.md)
-for the full plan, and [docs/prompts/](docs/prompts/) for the prompts used to
-build it.
+for the full plan, [docs/design/](docs/design/) for the design direction, and
+[docs/prompts/](docs/prompts/) for the prompts used to build it.
 `docs/SNOWMOON-CHAPTER-NOTES.md` contains full-book spoilers.
 
 ## Replicate it
@@ -124,6 +124,8 @@ runs the migration and permission tests in an in-memory Postgres.
 | `npm run check:ingest` | Ingest checks (fails on any problem) |
 | `npm run seed:text` | Upsert `studio.works` and `studio.text_blocks` |
 | `npm run test:db` | Migration and permission tests (PGlite) |
+| `npm run test:render` | Rendering rules: ¶ labels, settings, default templates, figure sizing |
+| `npm run check:ui -- --url=…` | Reader floors in Chrome at 390px: 12px text, 44px targets, fonts, colours, first screen |
 | `npm run check:shipped` | Verify a live deployment runs the expected commit and serves the reader |
 
 ## Sign in

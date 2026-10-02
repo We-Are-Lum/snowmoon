@@ -30,6 +30,8 @@ async function as<T>(role: string, fn: () => Promise<T>): Promise<T> {
   try {
     return await fn();
   } finally {
+    // A failure inside an explicit transaction leaves it open and aborted; close it.
+    await db.exec('rollback').catch(() => {});
     await db.exec('reset role');
   }
 }
@@ -100,12 +102,17 @@ await equal('nothing new in public', 'postgres', `
   select (select count(*) from pg_class c join pg_namespace n on n.oid = c.relnamespace where n.nspname = 'public')
        + (select count(*) from pg_proc p join pg_namespace n on n.oid = p.pronamespace where n.nspname = 'public')
        + (select count(*) from pg_policies where schemaname = 'public') - ${publicBefore} as v`, 0);
-await equal('15 tables in studio', 'postgres', `select count(*)::int as v from pg_tables where schemaname = 'studio'`, 15);
+await equal('18 tables in studio', 'postgres', `select count(*)::int as v from pg_tables where schemaname = 'studio'`, 18);
 await equal('RLS on every studio table', 'postgres',
   `select count(*)::int as v from pg_tables where schemaname = 'studio' and not rowsecurity`, 0);
-await equal('append-only triggers on studio tables', 'postgres', `
-  select count(*)::int as v from pg_trigger t join pg_class c on c.oid = t.tgrelid
-  join pg_namespace n on n.oid = c.relnamespace where n.nspname = 'studio' and not t.tgisinternal`, 6);
+await equal('append-only row and truncate triggers on the five append-only tables', 'postgres', `
+  select array_agg(c.relname order by c.relname) as v from pg_trigger t join pg_class c on c.oid = t.tgrelid
+  join pg_namespace n on n.oid = c.relnamespace
+  where n.nspname = 'studio' and t.tgname like '%append_only'`,
+  ['anchors', 'element_versions', 'links', 'narration_segments', 'recipes']);
+await equal('truncate blocked on the same five', 'postgres', `
+  select count(*)::int as v from pg_trigger t join pg_namespace n on n.oid = (select relnamespace from pg_class where oid = t.tgrelid)
+  where n.nspname = 'studio' and t.tgname like '%no_truncate'`, 5);
 
 // --- Seed fixture as the owner ----------------------------------------------
 await db.exec(`
@@ -161,6 +168,87 @@ await denied('data only on screen and figure', 'postgres', `insert into studio.t
 await denied('setting must be a slug', 'postgres', `insert into studio.entities (work_id, kind, name, setting) values ('snowmoon', 'location', 'X', 'United Cities')`, /entities_setting_check/);
 await denied('entities has no world column', 'postgres', `select world from studio.entities`, /column "world" does not exist/);
 await denied('section location must exist', 'postgres', `insert into studio.sections (work_id, chapter, idx, start_idx, end_idx, location_entity_id) values ('snowmoon', 1, 5, 0, 1, gen_random_uuid())`, /foreign key/);
+
+// --- Anchors live on versions -------------------------------------------------
+await ok('fixture: elements and versions', 'postgres', `
+  insert into studio.elements (id, work_id, element_type, created_by_fid, entity_id) values
+    ('00000000-0000-0000-0000-0000000000b1', 'snowmoon', 'image', 2, null),
+    ('00000000-0000-0000-0000-0000000000b2', 'snowmoon', 'design', 2, '00000000-0000-0000-0000-00000000e001');
+  insert into studio.element_versions (id, element_id, version_no, body) values
+    ('00000000-0000-0000-0000-0000000000f1', '00000000-0000-0000-0000-0000000000b1', 1, '{"lettering": []}'),
+    ('00000000-0000-0000-0000-0000000000f7', '00000000-0000-0000-0000-0000000000b1', 7,
+     '{"lettering": [{"kind": "speech", "text": "Pause, I want to enjoy the view", "lang": "en", "gloss": null, "speaker_entity_id": null, "x": 0.6, "y": 0.1, "w": 0.35}]}'),
+    ('00000000-0000-0000-0000-0000000000d1', '00000000-0000-0000-0000-0000000000b2', 1, '{"description": "x"}');`);
+await ok('writer anchors v1 to blocks 12-14', W,
+  `insert into studio.anchors (version_id, work_id, chapter, start_idx, end_idx) values ('00000000-0000-0000-0000-0000000000f1', 'snowmoon', 1, 12, 14)`);
+await ok('a later version of the same element covers 11-16', W,
+  `insert into studio.anchors (version_id, work_id, chapter, start_idx, end_idx) values ('00000000-0000-0000-0000-0000000000f7', 'snowmoon', 1, 11, 16)`);
+await equal('two spans for one element', 'postgres', `
+  select array_agg(a.start_idx || '-' || a.end_idx order by v.version_no) as v from studio.anchors a
+  join studio.element_versions v on v.id = a.version_id where v.element_id = '00000000-0000-0000-0000-0000000000b1'`, ['12-14', '11-16']);
+await denied('one anchor per version', W,
+  `insert into studio.anchors (version_id, work_id, chapter, start_idx, end_idx) values ('00000000-0000-0000-0000-0000000000f1', 'snowmoon', 1, 1, 2)`, /anchors_pkey/);
+await denied('anchors are append-only', W, `update studio.anchors set end_idx = 20`, /append-only/);
+await denied('a design version cannot be anchored', W,
+  `insert into studio.anchors (version_id, work_id, chapter, start_idx, end_idx) values ('00000000-0000-0000-0000-0000000000d1', 'snowmoon', 1, 1, 2)`, /not a text, image, render, or clip/);
+await denied('anchors has no element_id', 'postgres', `select element_id from studio.anchors`, /column "element_id" does not exist/);
+await ok('fixture: an anchored version of a hidden element', 'postgres', `
+  insert into studio.element_versions (id, element_id, version_no) values ('00000000-0000-0000-0000-0000000000f9', '00000000-0000-0000-0000-0000000000a1', 1);
+  insert into studio.anchors (version_id, work_id, chapter, start_idx, end_idx) values ('00000000-0000-0000-0000-0000000000f9', 'snowmoon', 1, 30, 31);`);
+await equal('anon sees anchors of published elements only', 'anon', `select count(*)::int as v from studio.anchors`, 2);
+
+// --- take_items.display ---------------------------------------------------------
+await ok('fixture: a take', W, `
+  insert into studio.takes (id, work_id, chapter, title, created_by_fid) values
+    ('00000000-0000-0000-0000-00000000aa01', 'snowmoon', 1, 'Kalimar, first pass', 2)`);
+await ok('display defaults to beside', W,
+  `insert into studio.take_items (take_id, version_id) values ('00000000-0000-0000-0000-00000000aa01', '00000000-0000-0000-0000-0000000000f1')`);
+await equal('default is beside', 'postgres', `select display as v from studio.take_items where version_id = '00000000-0000-0000-0000-0000000000f1'`, 'beside');
+await denied('replace without lettering is rejected (empty lettering)', W,
+  `update studio.take_items set display = 'replace' where version_id = '00000000-0000-0000-0000-0000000000f1'`, /needs a version with lettering/);
+await ok('replace with lettering is allowed', W,
+  `insert into studio.take_items (take_id, version_id, display) values ('00000000-0000-0000-0000-00000000aa01', '00000000-0000-0000-0000-0000000000f7', 'replace')`);
+await denied('replace on a design version (no lettering) is rejected', W,
+  `insert into studio.take_items (take_id, version_id, display) values ('00000000-0000-0000-0000-00000000aa01', '00000000-0000-0000-0000-0000000000d1', 'replace')`, /needs a version with lettering/);
+await denied('display has only two values', W,
+  `update studio.take_items set display = 'overlay'`, /take_items_display_check/);
+
+// --- Exactly one house narration per chapter -----------------------------------
+await ok('fixture: a narration recipe', 'postgres',
+  `insert into studio.recipes (id, source, created_by_fid) values ('00000000-0000-0000-0000-00000000ce01', 'in_app', 1)`);
+await denied('a narration without a house row fails at commit', W, `
+  begin;
+  insert into studio.narrations (id, work_id, chapter, label, created_by_fid) values ('00000000-0000-0000-0000-0000000000a9', 'snowmoon', 1, 'house voice', 1);
+  commit;`, /has narrations but no house narration/);
+await equal('nothing was left behind', 'postgres', `select count(*)::int as v from studio.narrations`, 0);
+await ok('a narration and its house row in one transaction', W, `
+  begin;
+  insert into studio.narrations (id, work_id, chapter, label, created_by_fid) values ('00000000-0000-0000-0000-0000000000a9', 'snowmoon', 1, 'house voice', 1);
+  insert into studio.house_narrations (work_id, chapter, narration_id) values ('snowmoon', 1, '00000000-0000-0000-0000-0000000000a9');
+  commit;`);
+await ok('a second narration for the chapter (not house)', W,
+  `insert into studio.narrations (id, work_id, chapter, label, created_by_fid) values ('00000000-0000-0000-0000-0000000000aa', 'snowmoon', 1, 'alternate', 1)`);
+await denied('a second house row for the chapter', W,
+  `insert into studio.house_narrations (work_id, chapter, narration_id) values ('snowmoon', 1, '00000000-0000-0000-0000-0000000000aa')`, /house_narrations_pkey/);
+await ok('switching the house narration is one update', W,
+  `update studio.house_narrations set narration_id = '00000000-0000-0000-0000-0000000000aa' where work_id = 'snowmoon' and chapter = 1`);
+await denied('removing the house row while narrations exist fails at commit', W, `
+  begin; delete from studio.house_narrations where chapter = 1; commit;`, /has narrations but no house narration/);
+await ok('fixture: a chapter 2 narration with its house row', W, `
+  begin;
+  insert into studio.narrations (id, work_id, chapter, label, created_by_fid) values ('00000000-0000-0000-0000-0000000000ab', 'snowmoon', 2, 'house voice', 1);
+  insert into studio.house_narrations (work_id, chapter, narration_id) values ('snowmoon', 2, '00000000-0000-0000-0000-0000000000ab');
+  commit;`);
+await denied('the house narration must be from its own chapter', W,
+  `update studio.house_narrations set narration_id = '00000000-0000-0000-0000-0000000000ab' where chapter = 1`, /foreign key/);
+await denied('the house narration cannot be deleted', W,
+  `delete from studio.narrations where id = '00000000-0000-0000-0000-0000000000aa'`, /foreign key/);
+await ok('writer adds a narration segment', W, `
+  insert into studio.narration_segments (narration_id, idx, asset_url, asset_sha256, duration_ms, recipe_id)
+  values ('00000000-0000-0000-0000-0000000000aa', 2, 'r2://x', 'h', 4100, '00000000-0000-0000-0000-00000000ce01')`);
+await denied('narration segments are append-only', W, `update studio.narration_segments set duration_ms = 1`, /append-only/);
+await equal('anon reads the house narration', 'anon', `select narration_id::text as v from studio.house_narrations where chapter = 1`, '00000000-0000-0000-0000-0000000000aa');
+await denied('anon cannot set the house narration', 'anon', `update studio.house_narrations set narration_id = narration_id`, PERM);
 
 // --- The real seed script, as studio_writer, over the wire --------------------
 await db.exec(`delete from studio.text_blocks`);

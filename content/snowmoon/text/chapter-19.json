@@ -68,7 +68,8 @@
         "frame": {
           "width": "narrow",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -152,7 +153,8 @@
         "frame": {
           "width": "narrow",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -201,7 +203,8 @@
         "frame": {
           "width": "narrow",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -354,7 +357,8 @@
         "frame": {
           "width": "narrow",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -364,7 +368,8 @@
             "width": "100",
             "height": "80",
             "labels": [],
-            "animated": false
+            "animated": false,
+            "min_text": null
           },
           {
             "type": "heading",
@@ -417,7 +422,8 @@
         "frame": {
           "width": "narrow",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -596,7 +602,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -885,7 +892,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -913,7 +921,8 @@
               "2.91%",
               "sho hei dai - 827 gei zen"
             ],
-            "animated": false
+            "animated": false,
+            "min_text": 11
           }
         ]
       }
@@ -1028,7 +1037,8 @@
         "frame": {
           "width": "wide",
           "align": "left",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -1110,7 +1120,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -1227,7 +1238,8 @@
         "frame": {
           "width": "wide",
           "align": "left",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -1317,7 +1329,8 @@
         "frame": {
           "width": "wide",
           "align": "left",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {

@@ -14,7 +14,7 @@ export function GET() {
         homeUrl: url,
         iconUrl: `${url}/icon.png`,
         splashImageUrl: `${url}/splash.png`,
-        splashBackgroundColor: '#f4f1ea',
+        splashBackgroundColor: '#F4F2ED',
         subtitle: 'An open illustrated Snowmoon',
         description:
           'Read Snowmoon by Vitalik Buterin and build an open illustrated and narrated edition together with every prompt in public',

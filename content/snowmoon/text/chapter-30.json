@@ -50,7 +50,8 @@
         "frame": {
           "width": "wide",
           "align": "left",
-          "style": null
+          "style": null,
+          "min_font_scale": 0.75
         },
         "fields": [
           {
@@ -252,7 +253,8 @@
         "frame": {
           "width": "wide",
           "align": "left",
-          "style": null
+          "style": null,
+          "min_font_scale": 0.75
         },
         "fields": [
           {
@@ -401,7 +403,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -413,7 +416,8 @@
             "labels": [
               "Northglade"
             ],
-            "animated": false
+            "animated": false,
+            "min_text": 10
           }
         ]
       }
@@ -504,7 +508,8 @@
         "frame": {
           "width": "wide",
           "align": "left",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -587,7 +592,8 @@
         "frame": {
           "width": "wide",
           "align": "center",
-          "style": null
+          "style": null,
+          "min_font_scale": 1
         },
         "fields": [
           {
@@ -599,7 +605,8 @@
             "labels": [
               "Northglade"
             ],
-            "animated": false
+            "animated": false,
+            "min_text": 10
           }
         ]
       }
