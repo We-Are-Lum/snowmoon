@@ -1,0 +1,1071 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 3,
+  "source_url": "https://vitalik.eth.limo/snowmoon/html/chapter-3.html",
+  "source_sha256": "9be18bb19b30c0c2058ef946d07273dc8f4b2034452fa1b6946edde742d233a6",
+  "fetched_at": "2026-10-02",
+  "license": "GPL-3.0",
+  "blocks": [
+    {
+      "idx": 0,
+      "kind": "heading",
+      "content": "# Chapter 3",
+      "sha256": "268c09cd665aba2fe1271d73c3a52fbc4b656a4258bbbe3959eb530757b12552"
+    },
+    {
+      "idx": 1,
+      "kind": "dateline",
+      "content": "**Meldan, Veridia** · 3724 Snowmoon 8",
+      "sha256": "2dba54d58ff3984e5a009c7d03b7f16a1d6bfcc7585faa0acea22687a21674d6"
+    },
+    {
+      "idx": 2,
+      "kind": "paragraph",
+      "content": "Gladias was walking forward along a sidewalk. On each side of the road, there were small shops one after the other, selling various goods from flowers to clothing to electronic equipment. He crossed a street.",
+      "sha256": "20abd43bd0a5d8f5746707aa90c3a24c151dcd07595ecc99d7da591b626a09fd"
+    },
+    {
+      "idx": 3,
+      "kind": "paragraph",
+      "content": "On the other side of the street, the road sloped down, and transitioned seamlessly into a tunnel, lit just enough that it was possible to comfortably see and read, but not more.",
+      "sha256": "eb2eddcd6b5be1543a38f5a76640347b5f0e962c2725d7807e177a7e6f1cfb2a"
+    },
+    {
+      "idx": 4,
+      "kind": "paragraph",
+      "content": "Gladias got to a Y-shaped intersection. Pasted on the wall, there was a poster, attached at the corners with four pieces of tape. He stopped right in front of the poster to take a look.",
+      "sha256": "e95a9c36c2e3419f2575d2ecb3f959226a54b47df89857ac81f44001af33622a"
+    },
+    {
+      "idx": 5,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view device-view-left\" style=\"background-color:#633; font-size:93.75%; color:#fee; --dv-ink:#fee;\"><b>From a comfortable Veridia to a strong Veridia</b>\n<hr style=\"background:#fee; margin-top: 10px\">\n<p>Veridia is a beautiful country, you are told in school. You see it every day: the trees, the mountains, the houses and buildings all trying to eke out another few basis points reduction in land tax.</p>\n<p>But you know, in your heart, that there is a problem. When did Veridia last go to space? Twenty years ago. When was Veridia's tallest building built? Forty years ago. Why? Because all your institutions - the Steering system, the Graph Funding mechanism, and the very <em>culture</em> - are built around making people comfortable and happy in the present, with no concern for tomorrow.</p>\n<p>Meanwhile, look at the Arctic Empire. Where is the housing, the transportation, the industry being built the fastest? In the Arctic Empire. All the scientists working to make people live longer? In the Arctic Empire.</p>\n<p>What does Veridia say to those scientists? Living longer is not that important. Death and birth are okay, they are the natural cycle of life. Yes, that's what they believe. The natural cycle of life is the best they have for morality - by that same twisted logic, any injustice could be natural, like a tiger eating a rabbit.</p>\n<p>Veridia's vision of nature is like a plant. Beautiful, but never rising up above its stature. Our vision of nature is like a lion. If this vision appeals to you, if you want Veridia to be stronger, to reach for the stars, to aim beyond incremental public health and seek eternal life, then Veridia needs you, the next generation of leaders, to <em>take charge</em>. Don't mind the mob. Build the future. Join us, and we will build it together.</p>\n<p>With regards,</p>\n<p>Lord Ephelion</p>\n<p>Arctic Empire consul to Veridia.</p></div>",
+      "sha256": "669317455602e3de83f70e1cf6bcf986f3d2a4b0d0a30261ae6701f610ac56ef",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "poster",
+        "device_evidence": {
+          "idx": 4,
+          "quote": "He stopped right in front of the poster to take a look."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "left",
+          "style": "background-color:#633; font-size:93.75%; color:#fee; --dv-ink:#fee;"
+        },
+        "fields": [
+          {
+            "type": "heading",
+            "text": "From a comfortable Veridia to a strong Veridia"
+          },
+          {
+            "type": "rule"
+          },
+          {
+            "type": "text",
+            "text": "Veridia is a beautiful country, you are told in school. You see it every day: the trees, the mountains, the houses and buildings all trying to eke out another few basis points reduction in land tax."
+          },
+          {
+            "type": "text",
+            "text": "But you know, in your heart, that there is a problem. When did Veridia last go to space? Twenty years ago. When was Veridia's tallest building built? Forty years ago. Why? Because all your institutions - the Steering system, the Graph Funding mechanism, and the very culture - are built around making people comfortable and happy in the present, with no concern for tomorrow."
+          },
+          {
+            "type": "text",
+            "text": "Meanwhile, look at the Arctic Empire. Where is the housing, the transportation, the industry being built the fastest? In the Arctic Empire. All the scientists working to make people live longer? In the Arctic Empire."
+          },
+          {
+            "type": "text",
+            "text": "What does Veridia say to those scientists? Living longer is not that important. Death and birth are okay, they are the natural cycle of life. Yes, that's what they believe. The natural cycle of life is the best they have for morality - by that same twisted logic, any injustice could be natural, like a tiger eating a rabbit."
+          },
+          {
+            "type": "text",
+            "text": "Veridia's vision of nature is like a plant. Beautiful, but never rising up above its stature. Our vision of nature is like a lion. If this vision appeals to you, if you want Veridia to be stronger, to reach for the stars, to aim beyond incremental public health and seek eternal life, then Veridia needs you, the next generation of leaders, to take charge. Don't mind the mob. Build the future. Join us, and we will build it together."
+          },
+          {
+            "type": "text",
+            "text": "With regards,"
+          },
+          {
+            "type": "text",
+            "text": "Lord Ephelion"
+          },
+          {
+            "type": "text",
+            "text": "Arctic Empire consul to Veridia."
+          }
+        ]
+      }
+    },
+    {
+      "idx": 6,
+      "kind": "paragraph",
+      "content": "\"Yay, more Arctic propaganda\", Gladias thought. Of course, the Arctic Empire is free to speak just like everyone else, but he wondered what kind of Veridian would feel inclined to vandalize the public environment and put up a printout of their message in the Veridian tunnels. He started mulling over ways to rip the poster down.",
+      "sha256": "3474fd0475e272f673b057d9cf26bf4406bce64c8702a99f9bc3c3275d76a948"
+    },
+    {
+      "idx": 7,
+      "kind": "paragraph",
+      "content": "Suddenly, Gladias felt a tap on his shoulder.",
+      "sha256": "163a512bf16fa63e8bd962fd9fd82e9d24048f8231a4e4dacd50bdcab959535b"
+    },
+    {
+      "idx": 8,
+      "kind": "paragraph",
+      "content": "Gladias turned his head.",
+      "sha256": "0fa009badab108dfc69e4c5e48439b428515a388c633b4b0714b733d3f22dfff"
+    },
+    {
+      "idx": 9,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 10,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Oh, is it you, Mov?\"</span>",
+      "sha256": "22cd89266f23e97dc4d438fba6916d67e6160c84f74eb69fd90b4219eec2ecff"
+    },
+    {
+      "idx": 11,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"No, it's the Arctic Emperor. I'm here to literally suck out your soul.\"</span>",
+      "sha256": "ec573e99f961019a7d0949455687a86304563f23e7269a9f46f850a4d09f7912"
+    },
+    {
+      "idx": 12,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Okay fine... Wait, I'm like one of a hundred people walking toward the Greater Plum Harbor wearing a privacy robe, how did you figure out where I am?\"</span>",
+      "sha256": "277aaaaf69b2851089b28e66861e8b7f701be388ca788ad6ca301f163af5afc9"
+    },
+    {
+      "idx": 13,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"You put me on your trust list a year ago and never took me off, so our local AIs had permission to enable location sharing. Your AI knew that we were supposed to meet before I shadow you when you go see the mysterious gentleman, so it unlocked location sharing with me for today.\"</span>",
+      "sha256": "7cf2f4e61378d6c3b740f8fec9b55b8b17090fa23ad191f4b7d861adcadd8064"
+    },
+    {
+      "idx": 14,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Aaaah, I see ... something something contextual intimacy or whatever the new buzzword is.\"</span>",
+      "sha256": "30cd1d2f7cf81f6da682fbb556090700f61cb1ff82a883ba53a0d5389d07a2ba"
+    },
+    {
+      "idx": 15,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Yep, probably didn't even need the two-party garbled circuit feature to do that.\"</span>",
+      "sha256": "bbaeafa7bd1fbaa7d0f63c24547f98c7cdad5d7c36efb52f3d2d8ec306237b6b"
+    },
+    {
+      "idx": 16,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"So what's been on your mind?\"</span>",
+      "sha256": "a764a31e2e3e1baf26caebd56f2b148e1b53cc4736de831342677b3ccfe1cca5"
+    },
+    {
+      "idx": 17,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Well, I'm assigned to one of the openness rubrics on internet media this year. We've been talking a lot in our Keeper group about bumping up the taxes on API restrictions. I talked to a citizens' assembly about the topic a month ago, and they're really unhappy about how things are going.\"</span>",
+      "sha256": "6c74fc688798f70be602a3fe58a5a843c0c20469075b60d9d401b7b78ac6b0f5"
+    },
+    {
+      "idx": 18,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Why is it such a big issue now?\"</span>",
+      "sha256": "87f81f6b995eed91494890c395598838ad9cf6a0f8a785375011e2f6019ce60d"
+    },
+    {
+      "idx": 19,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Bluewhale announced a month ago that they're cutting their API and are only letting verified hardware interface with the platform. They say it's to prevent automated spam, but basically everyone in the assembly thought they just want to block alternative interfaces so they can control people's attention more and extract more money.\"</span>",
+      "sha256": "a1842cad0fafe0de1510d2d75e7afd6138241419f852eae15f9b7f836cfa7b28"
+    },
+    {
+      "idx": 20,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Do we know exactly what kinds of things they are doing? Are any of their algorithms public?\"</span>",
+      "sha256": "178f354db75392e8cd2fbd61ebf92286369646aea02f13794a473e44d37a1196"
+    },
+    {
+      "idx": 21,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Nah, their algorithms are totally opaque, and they're already paying the max tax bracket for that.\"</span>",
+      "sha256": "c2d6be5b3e5ebb96e601b069eebc241a49d6bf9727d8ba8fb6ba5866d1810a26"
+    },
+    {
+      "idx": 22,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I see...\"</span>",
+      "sha256": "24e0a1267a96ff1837620317102b191e2950d05d64bb231e5ede9eacd695de62"
+    },
+    {
+      "idx": 23,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"So yeah, many of the Keepers think we should bump up more taxes on that kind of behavior. So either they stop, or, well, they keep going and the internet sucks more, but the gov gets enough money that we can pay for everyone to get better healthcare. The problem is, Bluewhale has been driving a hard campaign against it. One Keeper was not careful about their privacy, she and her views got found out recently, it went public, and her husband lost his job only a few days later. No idea if it's connected, but, well, this is why we gotta run this whole tax system with all these cryptographic networks randomly selecting Keepers, anonymous discussion and voting, and privacy robes.\"</span>",
+      "sha256": "c8cec512de443c39057c3e7e2eac6949dff6821fbc6901f2eb51d896de091a1c"
+    },
+    {
+      "idx": 24,
+      "kind": "paragraph",
+      "content": "The mention of Bluewhale brought Gladias back to his younger days, when he had learned programming by writing an alternative client for the other major social platform, Silverchat. That had only been possible, he knew, because the API was open, and the platform allowed developers to make alternative clients and users to export and migrate their data - all decisions that had undoubtedly been motivated, or at least justified to the bean counters, by trying to lower their tax rate on the hardware and software openness rubric. That experience had been what motivated Gladias to contribute back, and get involved in Steering himself.",
+      "sha256": "0c0872c8414fb559e592a9d63ba802d7f858a4ad8b5f9354b78687bfbdad3ebc"
+    },
+    {
+      "idx": 25,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Anyway, speaking of privacy, what's the plan with your 200 rep anon friend?\"</span>",
+      "sha256": "54eec47a988fff993959f66a650021dc971fe7b1ea2671c26c5fb1034b0c331c"
+    },
+    {
+      "idx": 26,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Well, he told me that he thinks the whole Steering mechanism is fundamentally broken. I figured I would hear him out. Often even people who are crazy are at least ten percent right in some way that's interesting. And hopefully figure out some clue about how he found me?\"</span>",
+      "sha256": "d5493763458f61d1f303cddeb192d8a75acac78d5624ab7868891e60f633bcb0"
+    },
+    {
+      "idx": 27,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"And... what if this is a trap, to get even more compromising info on you?\"</span>",
+      "sha256": "39656d3467bb96003a0f27ab7f5d0dee73ac7863219f8e9548e53504c3fe4c56"
+    },
+    {
+      "idx": 28,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Well, if he really wanted to hurt me, he could have just submitted my identity and task into the network and pulled me out of the running for Sentinel status for this whole year. But anyway, figuring out this kind of thing is what you're here for.\"</span>",
+      "sha256": "fbdf559bb61679a49a47d258384380717ad93947ed38bb54373327e04116d144"
+    },
+    {
+      "idx": 29,
+      "kind": "paragraph",
+      "content": "Mov then opened up his privacy robe, and took out a large package from an inside pocket.",
+      "sha256": "fdb50da548f703b099a428969a3d51f0ea38e12e77dbd70ca180e6794b264d0f"
+    },
+    {
+      "idx": 30,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Here, before we get into the rest of the business, put on a fresh privacy robe. Just in case there's some piece of dirt that makes yours trackable. The Arctics are getting better at smuggling their surveillance devices in here, faster than we're getting better at detecting them. We gotta step up our paranoia.\"</span>",
+      "sha256": "8ebb02ea817e613145f3eac5016cd5faddc5f7c0f01de5da438219faacc326c8"
+    },
+    {
+      "idx": 31,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Surely if it's at this level we should have just not met in person at all.\"</span>",
+      "sha256": "6ad04f3f92ccf0bd1c832d53ed3942a8176e87e288de97d932b6d39911424d16"
+    },
+    {
+      "idx": 32,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Come on Glad, you're not just someone about to join me as a Sentinel, you're a friend. I enjoy it when we see each other - while we still can.\"</span>",
+      "sha256": "b97e9f73667d89bc64a842dfb90bba6fbbd8f4817875b6a21c66559484f2ab7e"
+    },
+    {
+      "idx": 33,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 34,
+      "kind": "paragraph",
+      "content": "The tunnel sloped up, and the outdoor light once again shone into Gladias's eyes. Both sides of the path were covered by trees.",
+      "sha256": "5f55546a14058d0189226eb07b3646a2ca85ea0977645bde6683980e44761dd6"
+    },
+    {
+      "idx": 35,
+      "kind": "paragraph",
+      "content": "He passed by two children standing beside a water fountain and talking. He could make out one of them saying something about a recent visit to Northglade with his family, and the other mentioning that he liked their Helisport team.",
+      "sha256": "fc3648ba27f82c15b73fc203a60406fca46dbd5a1e7135fd1fb1d171164daf16"
+    },
+    {
+      "idx": 36,
+      "kind": "paragraph",
+      "content": "Soon after he had walked far enough that he could no longer hear their conversation, his watch buzzed.",
+      "sha256": "448f817548ee03c1e421b5267d39e7063617eb0fac43e519e3450642965322bc"
+    },
+    {
+      "idx": 37,
+      "kind": "screen",
+      "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th>From</th>\n      <th></th>\n      <th>Message</th>\n      <th>Time</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Seila</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 253.33333333333334)\">[4 images]</span></td>\n      <td>44029</td>\n    </tr>\n    </tbody>\n</table></div>",
+      "sha256": "d67e52e655fbdfccd9ad7221f93286ff1478ff69a937ed0aa339ec5922432aee",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "watch",
+        "device_evidence": {
+          "idx": 36,
+          "quote": "Soon after he had walked far enough that he could no longer hear their conversation, his watch buzzed."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "From",
+                "",
+                "Message",
+                "Time"
+              ]
+            ],
+            "rows": [
+              [
+                "Seila",
+                "→",
+                "[4 images]",
+                "44029"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 38,
+      "kind": "paragraph",
+      "content": "He took a look.",
+      "sha256": "c7c9ed95ccdb294329d1dcdfc334830a8b4f2d2584670c3ccaea2b034af95983"
+    },
+    {
+      "idx": 39,
+      "kind": "paragraph",
+      "content": "Seila was sending some photos from Freetown. The first was of the downtown of the city. The second was of a major park, taken from in front of an entrance gate. On the left, he could see a poster with some writing. Bringing his watch closer to his eyes, he could make out a price list.",
+      "sha256": "69e24c795238bbc2a0d8ab6bbbec53d5caa1daf9686ea24025bf50e1b2e031c0"
+    },
+    {
+      "idx": 40,
+      "kind": "paragraph",
+      "content": "Gladias pressed a button, responding back with a heart symbol.",
+      "sha256": "66cc84c11922a275e75fc1f16ca5f6e30ee1a3aca76d77294692961bda8744f3"
+    },
+    {
+      "idx": 41,
+      "kind": "paragraph",
+      "content": "Turning his attention away from his watch screen back to the street, he noticed that he had now entered a more urban and more commercial part of Meldan.",
+      "sha256": "a3064da12837fa8124e9b7ef2fb01411fda6f195fba5305eac07cc5ec5fb53fb"
+    },
+    {
+      "idx": 42,
+      "kind": "paragraph",
+      "content": "To his right, he saw a series of office buildings. The ones further away shone with a clear glass and steel construction, though at that distance they were only partially visible behind the tree cover. The ones close by were under construction, all covered with large tall barriers shielding the construction site from public view.",
+      "sha256": "716197e29b9b741123a1b9f6750c651a582a0645e519c8f41bd5af130f3d1b9d"
+    },
+    {
+      "idx": 43,
+      "kind": "paragraph",
+      "content": "On the first barrier, he saw a poster reminding Veridians to be kind toward their families and their community.",
+      "sha256": "9390155ed0b6797d90beac7d02fd223107e7e88414d142dfecad2a9e66da09ce"
+    },
+    {
+      "idx": 44,
+      "kind": "paragraph",
+      "content": "On the second barrier, he saw another Hydrafill advertisement. On the left side, the advertisement showed the classic Hydrafill water bottle, covered with yellow and green colors.",
+      "sha256": "7d3b2e9ba36f664b52c3560f3ab8eba5348365014ecdcd2c43176e868cad45e0"
+    },
+    {
+      "idx": 45,
+      "kind": "paragraph",
+      "content": "And on the right side, it showed the text:",
+      "sha256": "f52981215a33fdef7c7fd7f326d8d5f5b1ad7d2b9d8a6dc14e40f9858c82716b"
+    },
+    {
+      "idx": 46,
+      "kind": "quote",
+      "content": "> Hydrogen hydroxide is:\n>\n> - A commonly found substance in toxic sewage water\n> - Deadly in large doses\n> - Frequently administered to prisoners undergoing torture\n> - A source of skin damage if held for a prolonged time in its solid form\n>\n> But did you know that you can buy YOUR OWN BOTTLE of fresh drinkable hydrogen hydroxide today?\n>\n> Hydrafill, buy it now.",
+      "sha256": "e809640918f4e6b3ebd57b96862e128eec458564ba820e69dc1d4d31e674146b"
+    },
+    {
+      "idx": 47,
+      "kind": "paragraph",
+      "content": "Gladias smiled again. The construction had been going on for a long time, and he was grateful for both posters that were covering up the construction sites. He vastly preferred looking at Hydrafill advertisements *or* Veridian virtue posters to construction cranes and half-built concrete buildings.",
+      "sha256": "b4c7dee648b58af6bc9bf24966105060ef63adacf059fd1d0b68c3fd4c2743a7"
+    },
+    {
+      "idx": 48,
+      "kind": "paragraph",
+      "content": "He then turned his attention to the long castle-like wall, mixing grey and purple colors, that was on his left.",
+      "sha256": "f79da3c61cd628138221f73c0ce7be977dac4fbc00e44d7cdf727b42591e9147"
+    },
+    {
+      "idx": 49,
+      "kind": "paragraph",
+      "content": "In front of the wall, there were two rows of trees, with a sidewalk in between them.",
+      "sha256": "68d64b7ce57e96caa3c9fff0bcc8bcba9619d0b2d552bb15dada0ab4ab96bb82"
+    },
+    {
+      "idx": 50,
+      "kind": "paragraph",
+      "content": "Behind them, a large poster mounted on the wall:",
+      "sha256": "77dfdcba3a56ac62d8497db65d46a76a02c3f777939ec46ec903fcd6f7fcf679"
+    },
+    {
+      "idx": 51,
+      "kind": "paragraph",
+      "content": "\"Learn about what Greater Plum Harbor is doing for your community!\"",
+      "sha256": "813bb7a3dfb9dfb50a81d22f746aa3baf961a1d3fb3ca5a109ac7a5c36f04ff8"
+    },
+    {
+      "idx": 52,
+      "kind": "paragraph",
+      "content": "The text was in front of a background that featured robots picking up garbage, drawn in a child-friendly cartoon aesthetic. On the bottom right corner there was a two-dimensional barcode. Gladias scanned it out of curiosity.",
+      "sha256": "630e874c79f04f39df1b7aa2fbd3824008f8029716537392dd01408045509970"
+    },
+    {
+      "idx": 53,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view\"><h3 style=\"color:#d4d\">Greater Plum Harbor Public Activities</h3>\n<table style=\"width:75%\">\n  <tbody>\n    <tr>\n      <td>Environment</td>\n      <td>\n<ul><li>Cleanup</li><li>Pollution monitoring (water, air)</li><li>Animal welfare research</li></ul>\n      </td><td><button disabled=\"\"> Learn more </button></td>\n    </tr>\n    <tr>\n      <td>Health and medicine</td>\n      <td>\n<ul><li>Large-scale studies in effects of food, environment and clean air improvements</li><li>Healthy eating, exercise, other behavior and lifestyle research</li></ul>\n</td>\n      <td><button disabled=\"\"> Learn more </button></td>\n    </tr>\n    <tr>\n      <td>Education</td>\n      <td>\n<ul><li>Writing advanced education curricula targeting ages 4-18</li><li>Youth math and programming competitions</li></ul></td>\n      <td><button disabled=\"\"> Learn more </button></td>\n    </tr>\n    <tr>\n      <td>Art</td>\n      <td>\n<ul><li>Beautiful Cities research</li><li>Publicly available exhibitions and museums</li><li>Movies and shows, three in Veridian Top 20 last year.</li></ul></td>\n      <td><button disabled=\"\"> Learn more </button></td>\n    </tr>\n    <tr><td colspan=\"3\"><button disabled=\"\"> Load more </button></td></tr>\n  </tbody>\n</table>\n<div><b>All research outputs and tooling done by GPH are open source! <br> Partially funded by Veridian Quadratic Funding</b></div></div>",
+      "sha256": "75f2cccad6871dca990e8d4e4a709f147fa214ee069b8447404feb2f894b3e74",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "poster",
+        "device_evidence": {
+          "idx": 50,
+          "quote": "Behind them, a large poster mounted on the wall:"
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "heading",
+            "text": "Greater Plum Harbor Public Activities"
+          },
+          {
+            "type": "table",
+            "header": [],
+            "rows": [
+              [
+                "Environment",
+                "CleanupPollution monitoring (water, air)Animal welfare research",
+                {
+                  "text": "",
+                  "controls": [
+                    {
+                      "type": "button",
+                      "label": "Learn more"
+                    }
+                  ]
+                }
+              ],
+              [
+                "Health and medicine",
+                "Large-scale studies in effects of food, environment and clean air improvementsHealthy eating, exercise, other behavior and lifestyle research",
+                {
+                  "text": "",
+                  "controls": [
+                    {
+                      "type": "button",
+                      "label": "Learn more"
+                    }
+                  ]
+                }
+              ],
+              [
+                "Education",
+                "Writing advanced education curricula targeting ages 4-18Youth math and programming competitions",
+                {
+                  "text": "",
+                  "controls": [
+                    {
+                      "type": "button",
+                      "label": "Learn more"
+                    }
+                  ]
+                }
+              ],
+              [
+                "Art",
+                "Beautiful Cities researchPublicly available exhibitions and museumsMovies and shows, three in Veridian Top 20 last year.",
+                {
+                  "text": "",
+                  "controls": [
+                    {
+                      "type": "button",
+                      "label": "Learn more"
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "text": "",
+                  "controls": [
+                    {
+                      "type": "button",
+                      "label": "Load more"
+                    }
+                  ]
+                }
+              ]
+            ]
+          },
+          {
+            "type": "text",
+            "text": "All research outputs and tooling done by GPH are open source! Partially funded by Veridian Quadratic Funding"
+          }
+        ]
+      }
+    },
+    {
+      "idx": 54,
+      "kind": "paragraph",
+      "content": "Gladias saw two people sitting on a bench, each drinking a tea and looking at the billboard, one with a hand device on his lap.",
+      "sha256": "ec9584136757acbd22ce299e595d70b673a71efe603ea2691311c3207df78562"
+    },
+    {
+      "idx": 55,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Have you ever been in there?\"</span>, the first man asked.",
+      "sha256": "580588816074d688be3257aad8af4ef8edf0091acd7d5211c9811075b9c41d21"
+    },
+    {
+      "idx": 56,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"No I haven't, never managed to get a visa\"</span>, the second replied.",
+      "sha256": "5a8b800f712ad0b383b7c981a5ac9ad8d61b03feca94f636e882c3cced56cd2f"
+    },
+    {
+      "idx": 57,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"It's a fascinating place, it looks totally different inside than the rest of Veridia, it's almost like a country inside a country.\"</span>",
+      "sha256": "8a39b984619bda87d75248792fe6309f67149ac7f235aead9022cad60adabef3"
+    },
+    {
+      "idx": 58,
+      "kind": "paragraph",
+      "content": "Gladias stopped, and faced the billboard to avoid arousing suspicion. Overhearing a conversation was slightly impolite, but understanding public sentiment was part of his duty as a future Sentinel. Citizens' advisory assemblies helped, but they were never quite as good as an authentic conversation by people who did not realize that anyone was listening.",
+      "sha256": "2ebf3ee603ca9e87e95bbd1eea7243c6b8174f4aed61b35c7e40862fa67507e9"
+    },
+    {
+      "idx": 59,
+      "kind": "paragraph",
+      "content": "The second man looked down at the hand device that the two were sharing. <span data-hue=\"293.33\">\"Oof, check what taxes they pay.\"</span>",
+      "sha256": "286673ed8b3a62c4681c13216e62f22106776982e7cb32f9e85a1f61756209df"
+    },
+    {
+      "idx": 60,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"What taxes do they pay?\"</span>, Gladias asked Emerald, whispering silently so only his neck band could make out what he was saying.",
+      "sha256": "4b12bafd7f55f1f853077691d153ee42efbc7f91e441c8d3806184883a1832b8"
+    },
+    {
+      "idx": 61,
+      "kind": "paragraph",
+      "content": "Emerald immediately replied.",
+      "sha256": "9d12b62b304f538493c1c4808a9c573de679fb60e8dcb3ab1a1a61d200e257db"
+    },
+    {
+      "idx": 62,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"Sales tax, averaging 5.2%, half of the city average. Total land tax is 1.48%, slightly greater than the city average. Graph Funding and especially Quadratic Funding revenue recovers roughly half of this.\"</span>",
+      "sha256": "9912f419f0ed4df996e878cc038e70edb33084940b3a6d28e34b79175965e49d"
+    },
+    {
+      "idx": 63,
+      "kind": "paragraph",
+      "content": "Gladias turned his attention back to the conversation.",
+      "sha256": "4bfe7f8d08fd09a50fb55674c76b0a7a221cf02523560e3621eded8c7ec7e6b8"
+    },
+    {
+      "idx": 64,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"I don't get it. These guys are just peacefully off in a corner, by themselves. I've never been there, and they've never bothered me. And they even do all this work on the environment, education, healthcare, their museums. They can't even just work on the science they're actually good at, they have to do all these populistic things to push their taxes down and get some of the money back from Quadratic Funding, things that they're not even good at. And even after all this? So many people hate them, and pretend their wall is ugly just to push their land taxes up. What's the point of worrying so much about the Arctics when we're so good at being our own worst enemy?\"</span>",
+      "sha256": "b0783c886eb1f2e2d4c4b2d93269704dbfddac328b00cb06480d3eedfcdf4697"
+    },
+    {
+      "idx": 65,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"At least here that's the worst we can do to them. If this was Devanvil or Inglewore, GPH would be fighting to not get shut down entirely.\"</span>",
+      "sha256": "d625d09896fb4c96b260822995700f6a2be893bda370cd9d871d9cb41d02da3c"
+    },
+    {
+      "idx": 66,
+      "kind": "paragraph",
+      "content": "Gladias had not been inside Greater Plum Harbor for nearly a decade, so this made him all the more curious to see it again. He kept walking.",
+      "sha256": "c84aeb22d8ebb768b9d64bb64d9ea02b5b086acc63a5811614400e05a69d9615"
+    },
+    {
+      "idx": 67,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 68,
+      "kind": "paragraph",
+      "content": "Gladias held his watch near the green circle on the entrance gate, and waited for about one tick.",
+      "sha256": "8ae00c1a95f582af9cbbd8629106073c4c44ec10b729c6ef93decef64ee470e9"
+    },
+    {
+      "idx": 69,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Proof verified, welcome\"</span>, the machine answered in a robotic but approving tone.",
+      "sha256": "04712e4e96be75a89e4b22a46f71466a8f46b78e433eefcaf826597ff98c04ea"
+    },
+    {
+      "idx": 70,
+      "kind": "paragraph",
+      "content": "He walked through the gate.",
+      "sha256": "5f070784a231696afe512cf905158a5d5f4d3dffaf34ead261a20a20ee21d82d"
+    },
+    {
+      "idx": 71,
+      "kind": "paragraph",
+      "content": "He could immediately see why the two people on the bench had described Greater Plum Harbor as being so different from the rest of Veridia.",
+      "sha256": "c4e48a4774b4a0b370128968f72617a3bed35fcce65bb32337b58b39189f1afa"
+    },
+    {
+      "idx": 72,
+      "kind": "paragraph",
+      "content": "The buildings inside Greater Plum Harbor were more uniform than those outside, all with similar circular and rectangular shapes, a mixture of white, grey and purple colors, and roughly five to ten meters in height. The trees were all of a few types, and carefully planted an equal distance apart on the sidewalk. Beyond having distinct names and distinct quarter-meter-wide logos, the stores and restaurants were not trying at all to distinguish themselves, instead accepting their visual role as small elements of the Greater Plum Harbor's whole. The buildings were noticeably more futuristic, more glass-and-steel, and with more sharp edges than the usual structures in Veridia.",
+      "sha256": "8c014ed4fc60c9d64b3416762267adf18486882061a93844a19fea553376a3f7"
+    },
+    {
+      "idx": 73,
+      "kind": "paragraph",
+      "content": "Gladias kept walking forward, following the directions on his watch. After five minutes, he arrived at a tunnel entrance, and went down, briefly passing through a space where there were a large number of people walking.",
+      "sha256": "5a007bb04704f5da8b9ad784850ae950f5002e70591d570cef8899b90040985b"
+    },
+    {
+      "idx": 74,
+      "kind": "paragraph",
+      "content": "Just after he passed through the crowd, his watch buzzed.",
+      "sha256": "26a4866e7309dfb37fef9fe579e5d4a67c86ffabe9b0b6c21516c764dcd28489"
+    },
+    {
+      "idx": 75,
+      "kind": "screen",
+      "content": "<div class=\"device-view narrow-device-view\"><div style=\"font-size:150%\"></div>\n<table>\n    <tbody><tr>\n      <td style=\"font-size:150%\" colspan=\"2\">Air</td>\n    </tr>\n<tr>\n<td style=\"font-size:150%\">CO<sub>2</sub></td>\n<td style=\"font-size:150%; color: yellow\">965</td>\n</tr>\n<tr>\n<td style=\"font-size:150%\">PM2.5</td>\n<td style=\"font-size:150%; color: yellow\">22.1</td>\n</tr>\n</tbody></table>\n<table>\n<tbody><tr>\n<td style=\"font-size:150%\" colspan=\"2\">Devices</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #8f8\">Attested ✓</td>\n<td style=\"font-size:150%; color: #8f8\">55</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #fc8\">Unknown ?</td>\n<td style=\"font-size:150%; color: #fc8\">6</td>\n</tr>\n</tbody></table></div>",
+      "sha256": "33bc9670c2744f1d0c15eedac321d2dc337120f86ea1e0b5e32b98b3191563a2",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "watch",
+        "device_evidence": {
+          "idx": 74,
+          "quote": "Just after he passed through the crowd, his watch buzzed."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [],
+            "rows": [
+              [
+                "Air"
+              ],
+              [
+                "CO2",
+                "965"
+              ],
+              [
+                "PM2.5",
+                "22.1"
+              ]
+            ]
+          },
+          {
+            "type": "table",
+            "header": [],
+            "rows": [
+              [
+                "Devices"
+              ],
+              [
+                "Attested ✓",
+                "55"
+              ],
+              [
+                "Unknown ?",
+                "6"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 76,
+      "kind": "paragraph",
+      "content": "Two problems, Gladias thought.",
+      "sha256": "bf0db2b92d269cbca4ea6a02497594656ea142904c9b71ddb4f6b5729ec38e1b"
+    },
+    {
+      "idx": 77,
+      "kind": "paragraph",
+      "content": "First, too many people, not enough ventilation or filtration. Gladias pulled on the strap on his privacy robe's front face cover, separating the areas above and below his nose.",
+      "sha256": "901e6cdd1b3f194ee701b2cb48e6d05e2629faab870be0971c22318898229dc6"
+    },
+    {
+      "idx": 78,
+      "kind": "paragraph",
+      "content": "Second, no idea what those unattested devices are. These days, almost every device was attested with a zero-knowledge proof verifying that it was produced in a particular batch by a particular manufacturer. Six out of fifty five was an unusually high number unattested. Unfortunately, there was no time to figure things out. It could be a kid's science project, Gladias thought, it could be that it was simply normal in Greater Plum Harbor to have devices without attestation - after all, from Veridia's perspective, the land was all just one giant business's private property - or it could be a hidden spy camera, or worse. He increased his speed slightly, and kept walking.",
+      "sha256": "55290407391f618ea0a05b4675601b777458cbd9593528014aec16e65182ad7e"
+    },
+    {
+      "idx": 79,
+      "kind": "paragraph",
+      "content": "After taking several more turns through the maze, he was once again outside, this time in the middle of a hidden courtyard. There were several tables and chairs, with people eating and drinking water. Gladias found a table in a booth that had a cloth curtain protecting it. He went in and sat down.",
+      "sha256": "ea4a6a1131eb1d713774e8dae1a9bbb9bbf4726d28aa832b79dbd5c290799a0c"
+    },
+    {
+      "idx": 80,
+      "kind": "paragraph",
+      "content": "There was a decorated lamp in the middle of the far end of the table, with one large flower on each side. On the floor, pressed against the corner of the booth, Gladias noticed a white box. He leaned in to look more closely, and his watch buzzed. PM2.5 readings were below 1. Must be an air filter, he thought. He took the hood off his privacy robe.",
+      "sha256": "bc4fbdccecb09328e4b7e0c1dd91d6dfbf7105965a3697a341d695fbe4981ea4"
+    },
+    {
+      "idx": 81,
+      "kind": "paragraph",
+      "content": "He tapped his watch against a green circle in the middle of a table, and a moment later heard a confirmation sound.",
+      "sha256": "dfd0b5db3afdc27a509437afac184694521e768146cb27d0a77bd7ad7fe91c95"
+    },
+    {
+      "idx": 82,
+      "kind": "paragraph",
+      "content": "Two minutes later, a robot with a smiley face slid up to the table, carrying water and a salad. Gladias took both and put them on the table, and the robot slid away.",
+      "sha256": "2ec3ce4017176ceb679157fe790caf73e877223724c28a2f6f65b69d0e34c0f7"
+    },
+    {
+      "idx": 83,
+      "kind": "paragraph",
+      "content": "Five minutes later, another man wearing a privacy robe stepped in.",
+      "sha256": "ffa65b11d68bea715f4fce0f2389f3c2c061cdc330cece5f28e7c20cb08411cf"
+    },
+    {
+      "idx": 84,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 85,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"So, we meet at last.\"</span>",
+      "sha256": "10330ae7954f366eabd1a5c320661f6df02e264654ac748225a69e6251d055b0"
+    },
+    {
+      "idx": 86,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"You track me down, you tell me you know things I need to hear but only want to tell me in person, and you bring me to a far corner of GPH that I did not even know existed. And so far I don't even know your name.\"</span>",
+      "sha256": "9953adf691501d21f0b6e15f6e97901f784fabe119e62e5e27e969cd8d873264"
+    },
+    {
+      "idx": 87,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Ah, my name is Delwart. Pleased to meet you.\"</span>",
+      "sha256": "e88522cc30dc842521e632521cfbb9ca671b0b696f9e03ebc464f259e851b9b8"
+    },
+    {
+      "idx": 88,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"And I'm Gladias.\"</span>",
+      "sha256": "ec227afc18d4196f608afe5e899e13669b6ab4c5d9166178943d481991f39fb0"
+    },
+    {
+      "idx": 89,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"I knew that. And your wife is Seila, your children's names are-\"</span>",
+      "sha256": "1795a6d56e16a6f66b390fb762ce733568de7816d495c5fa12fd0f4494120162"
+    },
+    {
+      "idx": 90,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Are you trying to intimidate me?\"</span>",
+      "sha256": "88e4a0a84d0b4d4e88bf1ebcb6b3f4da02cdfffe154208d9cfcfe2a2d614f059"
+    },
+    {
+      "idx": 91,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Actually no, I guess now that I think about it, that was more showing off than anything else. I do apologize.\"</span>",
+      "sha256": "aa24a181d000d291c478ce4ad98345b91824ea3b0f0d9c114c895ea74d658cce"
+    },
+    {
+      "idx": 92,
+      "kind": "paragraph",
+      "content": "The two went quiet for a couple minutes. Both took off the face covers and hoods from their privacy robes. Gladias started to drink his water and eat his salad. Delwart tapped his own watch against the green circle on the table, and a minute later his own tea, and some kind of rectangular nutrition bar along with a fork, arrived.",
+      "sha256": "06edfee035fc7b621ede323814c94ec7d309aa93b756b7dd886393b0f6852e97"
+    },
+    {
+      "idx": 93,
+      "kind": "paragraph",
+      "content": "Gladias leaned forward again.",
+      "sha256": "83dca79c1679e75cf90e6abc5edc92c157ed2c2a247dddd4d04d62682481f3a8"
+    },
+    {
+      "idx": 94,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"So what do you want?\"</span>",
+      "sha256": "7b9cb78dd36bbe3959978194c490235a281480c46ba3102378c493526924551b"
+    },
+    {
+      "idx": 95,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Do you feel happy with the Steering system lately?\"</span>",
+      "sha256": "99f78fa45dc24d1e7d9751a2343698cfe58868eafc3991195d46236866accaab"
+    },
+    {
+      "idx": 96,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"It has its flaws like any system, but in general it feels fine?\"</span>",
+      "sha256": "58a5f5991ad039ea68604ca275926eb3f152769f637c4b6c3e87dac4b60c5ccf"
+    },
+    {
+      "idx": 97,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"I see, I haven't broken your wall yet. Okay, let's take the Dreadknot concert for example. They're a nice band, they're great fun, right?\"</span>",
+      "sha256": "572213a771c62c6dfbfe12c2868c5ee812a3db59368dac299c82f28fc3ae1f64"
+    },
+    {
+      "idx": 98,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Yeah, I like them.\"</span>",
+      "sha256": "ff13046ec14257ad4f6be0dd19b77b8ce0b19d7bffd9faff396b5ebabd31106c"
+    },
+    {
+      "idx": 99,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"But a bunch of the Sentinels are trying to push them up into Tier 4, because their lyrics are not gentle enough.\"</span>",
+      "sha256": "e7fc201d76800ce5eb419d895403a077cc580148a4039cfe360faae268b15222"
+    },
+    {
+      "idx": 100,
+      "kind": "paragraph",
+      "content": "Gladias nodded in agreement.",
+      "sha256": "6427e531137b1b3eb130eb0b27cbb064296a23a24f5fca2b2420ba17f651575c"
+    },
+    {
+      "idx": 101,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"You were brave, voting Tier 3. Most Acolytes would cave to what they think the Sentinels want. You didn't. That's rare.\"</span>",
+      "sha256": "4824e862c1ec5afc49a9ec4d6a1d3a52c55b8989db6d8e1412a2b5be519cb352"
+    },
+    {
+      "idx": 102,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"But let's take another example. What do you think about GPH?\"</span>",
+      "sha256": "f346ff7b2b807e90882e1dc7669d50ef20c549803e094e89a0fcc76880551a87"
+    },
+    {
+      "idx": 103,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"It's clearly a nice place. Not like Veridia, but beautiful and impressive in its own way. It's not for everyone, but I can see why a lot of people like coming here.\"</span>",
+      "sha256": "d3c0a4b718c21a15fa0f9c38f6da85d8d86d04c2ed5c3968ce0a38b8763b2aec"
+    },
+    {
+      "idx": 104,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Well, do you know what their Steering taxes are?\"</span>",
+      "sha256": "ac5a42f24a91ae1e81193ede2aa899dda9d32d9de966d65c6ae57e05fb0fbfe2"
+    },
+    {
+      "idx": 105,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"The Steering taxes are okay, but they really get dinged on the land tax.\"</span>",
+      "sha256": "5fe8720706c64756edfe5dd5d9dfc75a94660918b5ebaa9cf81a990c0752af26"
+    },
+    {
+      "idx": 106,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Exactly. A well-considered argument about how much this place benefits Veridia is worth less than a barely thought-through 'I don't like you'.\"</span>",
+      "sha256": "accae92bcfd4652375cba691338c831b8bf648d5d18becb3db720ac6bcb22f1d"
+    },
+    {
+      "idx": 107,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"So what do you propose?\"</span>",
+      "sha256": "416f7ec9dce0a33244beedc4f030d537a6c7d6da12b95e67e0c12405d461faa7"
+    },
+    {
+      "idx": 108,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Freedom. Actual freedom. Stop trying to nudge everyone, and let people's true selves come out.\"</span>",
+      "sha256": "d53fcb0ad1e0cde0f650576f10bda6049c25dba60e3f641c91c5cd8e2c83a716"
+    },
+    {
+      "idx": 109,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"And how can I help?\"</span>",
+      "sha256": "80c29b99da418c73ba69482f375a8dd3dee1bab013962fadb14e5c870849420b"
+    },
+    {
+      "idx": 110,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Are you planning to be a Sentinel or a Keeper if you get accepted in two months?\"</span>",
+      "sha256": "bce187be66155813a2b9b3542c28b2edae37689cf91943f3b83ebda16913ff42"
+    },
+    {
+      "idx": 111,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Was thinking Sentinel so far.\"</span>",
+      "sha256": "6abf030c1ddda3b92cbc6ee02be707b5d27898505895438530d99c3647e6bc86"
+    },
+    {
+      "idx": 112,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Be a Keeper. And just vote to delete every rubric you see.\"</span>",
+      "sha256": "8b149de9ab9c3ea00980fcde54c147c5c5c86345a5871e0851636fce8b900c54"
+    },
+    {
+      "idx": 113,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"That's it? That's your plan?\"</span>",
+      "sha256": "b8cd22e7508432e357247db83c2588c61ddd0883b8481da7e96f855280fdb7e1"
+    },
+    {
+      "idx": 114,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"See, there's a lot more Sentinels these days than Keepers. And Sentinels are the people everyone is trying to influence. Why? Because Sentinels get direct connections to specific things in the world. Keepers adjust the global rules. But there's a limit to how much any single rule can affect any single business, and there's like twenty Keepers deciding each on each rule. Being a Sentinel, you have a much more tangible impact. And it's more fun.\"</span>",
+      "sha256": "f21907721f2f8a24aa60eb527468ff24fa5edc1ca6a324b29ba8eed304f007bc"
+    },
+    {
+      "idx": 115,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"My program is different. I'm trying to round up as many Keepers as I can, because what I want is systemic change. It's not about one concert or one enclave that has too much purple in it. It's about releasing Veridians from this tyranny of people's prejudices and letting them be themselves.\"</span>",
+      "sha256": "2c4e42fad69092116de66a9940c749b4f021b8968d42d3d85ef795f3dad9ef31"
+    },
+    {
+      "idx": 116,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Do you want to remove Graph Funding too?\"</span>",
+      "sha256": "20c1b133b87131608dce7e66b59f9b9de120438487b653407da50847a8514689"
+    },
+    {
+      "idx": 117,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"I think Graph Funding definitely overreaches in a bunch of ways too, but my focus is Steering.\"</span>",
+      "sha256": "6d8ea2bf44148603e2b832d84739fd8cba79b5ad287bb5be1efcd17aa9a32a00"
+    },
+    {
+      "idx": 118,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"A lot of the open tech Graph Funding supports has been pretty key to helping Dzego modernize to defend itself, do you not think that's important?\"</span>",
+      "sha256": "12588437d913c6aec594ab2817a837e531daf33be1e8bd312bb8b782ed4ec36f"
+    },
+    {
+      "idx": 119,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Look, I like their people, but really we're playing a dangerous game cutting so close to funding a potential war. We should focus on our own problems first.\"</span>",
+      "sha256": "3824da1440cf36b4ed07da89a6a944c02a51d41b5b2fec4cdc5f5df34ce0618e"
+    },
+    {
+      "idx": 120,
+      "kind": "paragraph",
+      "content": "Delwart stopped speaking, and began to drink his own tea and eat his nutrition bar. Gladias took the moment to ponder Delwart's words, while continuing to drink his water and finishing his salad.",
+      "sha256": "1970fa9ba997c998fc53d9e934275c037526183dc9beaf3d78543112650c78b9"
+    },
+    {
+      "idx": 121,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"It's an interesting thought, that the Steering is just manipulating people too much. I don't know if I fully agree with just dropping it all to zero, and especially killing the Graph Funding - which we would have to do, if the Steering taxes went to zero.\"</span>",
+      "sha256": "1de41380c349df297f78454a78486de10d5cc434e2dc2c745d4418f27c5ef213"
+    },
+    {
+      "idx": 122,
+      "kind": "paragraph",
+      "content": "Gladias paused for a few ticks, and looked at Delwart. Delwart looked back. They each took another sip of their respective drinks.",
+      "sha256": "39e990c2a0c1a43112e55bc06ce90189eb03a299c6b533ac37726ddc5b37c327"
+    },
+    {
+      "idx": 123,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"But okay, even if I might agree on some parts, why should I listen to you?\"</span>",
+      "sha256": "13bfcdf5a6fe3e2694b65e1b66b071b6ce779a4b8acfea1133b07c391e5df6d8"
+    },
+    {
+      "idx": 124,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Well, I know you, I know where you live, I know how you think. And if I can find out all that, imagine what kinds of things Bluewhale might be able to do. Or, for that matter, the Arctics. I can help protect you. But I will need your help too.\"</span>",
+      "sha256": "5938fcc9c07d6e9e47fb61b80a997b0817fb2800da491b17fb3399f3c73e7621"
+    },
+    {
+      "idx": 125,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Anyway, the deadline for you to submit your final track decision is in about a month. Don't go for being a Sentinel, be a Keeper. Let's just start with that.\"</span>",
+      "sha256": "fbd03eaacaacb7e4436059696264e29c2cd2d06eb12d02d96bff10ad121c3928"
+    },
+    {
+      "idx": 126,
+      "kind": "paragraph",
+      "content": "Delwart stood up, and exited the booth.",
+      "sha256": "dabfd5b2b8691a95e64f98eeef4d5180ad2ec5bab1c7db6a5d60ce5110a4416b"
+    },
+    {
+      "idx": 127,
+      "kind": "paragraph",
+      "content": "Gladias kept the crack in the middle of the curtain slightly open, and watched Delwart go. Just before Delwart disappeared from view, another person wearing a privacy robe exited the adjacent booth, and followed Delwart.",
+      "sha256": "8fa238ab86771181585f5642c1329ee8dc5c48881506d122d4687e076cd90d59"
+    },
+    {
+      "idx": 128,
+      "kind": "paragraph",
+      "content": "Gladias checked his watch.",
+      "sha256": "83066a5cb79a20e849e792bb3bba5ca89596d22d7ebdff32400e361365deade1"
+    },
+    {
+      "idx": 129,
+      "kind": "figure",
+      "content": "<div class=\"device-view narrow-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<rect x=\"80\" y=\"100\" width=\"80\" height=\"80\" rx=\"8\" fill=\"#67e\"></rect>\n<rect x=\"120\" y=\"40\" width=\"20\" height=\"70\" rx=\"8\" fill=\"#67e\"></rect>\n<rect x=\"130\" y=\"40\" width=\"70\" height=\"20\" fill=\"#67e\"></rect>\n<circle cx=\"92\" cy=\"150\" r=\"5\" fill=\"#cef\"></circle>\n<text x=\"84\" y=\"169\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"12\">Gladias</text>\n<circle cx=\"130\" cy=\"110\" r=\"5\" fill=\"#cef\"></circle>\n<text x=\"140\" y=\"130\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">Mov</text>\n<line x1=\"130\" y1=\"105\" x2=\"130\" y2=\"88\" stroke=\"#cef\" stroke-width=\"1\"></line>\n<polygon points=\"130,85 126,92 134,92\" fill=\"#cef\"></polygon>\n</svg></div>",
+      "sha256": "891ca53318d30e11ac23881ad9a78194aa755bee0c4ff675495be9be6d5ef217",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "watch",
+        "device_evidence": {
+          "idx": 128,
+          "quote": "Gladias checked his watch."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c3-b129.svg",
+            "viewBox": "0 0 200 200",
+            "width": "200",
+            "height": "200",
+            "labels": [
+              "Gladias",
+              "Mov"
+            ],
+            "animated": false
+          }
+        ]
+      }
+    }
+  ]
+}

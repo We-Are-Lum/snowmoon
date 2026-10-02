@@ -1,0 +1,1327 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 10,
+  "source_url": "https://vitalik.eth.limo/snowmoon/html/chapter-10.html",
+  "source_sha256": "c0f93bbd9e94a20265fd7c1b559c5a5eec6a81d9cbd69d92652ca1a9a6c23dc4",
+  "fetched_at": "2026-10-02",
+  "license": "GPL-3.0",
+  "blocks": [
+    {
+      "idx": 0,
+      "kind": "heading",
+      "content": "# Chapter 10",
+      "sha256": "dc6ad9cc59b8087296d4e6e0c176a9d154c84c660c817b04443e27c576f69182"
+    },
+    {
+      "idx": 1,
+      "kind": "dateline",
+      "content": "**Freetown, United Cities** · 3724 Windmoon 24",
+      "sha256": "3eee6d49be7067e0992978021d9a76e71d04622fa143614737260913a420d86e"
+    },
+    {
+      "idx": 2,
+      "kind": "paragraph",
+      "content": "Jahn's taxi pulled up at the Freetown Economics Institute, where he worked as a researcher, and he got out of the car. He entered the building, and tapped his hand device to pay to get through the turnstile.",
+      "sha256": "301fee161bdd0c5b4b5db34058584752aae53a6941ead7c11774db5b7ebe7ad2"
+    },
+    {
+      "idx": 3,
+      "kind": "paragraph",
+      "content": "Out of the corner of his eye, he noticed that the entrance price was ten percent higher than before.",
+      "sha256": "41355dff35f95e3b4b5233cd172b81df7e302e12accd465c7c7e9fc760699e94"
+    },
+    {
+      "idx": 4,
+      "kind": "paragraph",
+      "content": "He walked to the restaurant section, and saw most tables full. Only one table had empty space, and there was already a woman sitting there.",
+      "sha256": "d6c682fb5fd8dfc2ed62d5c5a2c6930ac41650809e96793f51a0c3aee3f88e1c"
+    },
+    {
+      "idx": 5,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Can I sit down here?\"</span>, Jahn asked.",
+      "sha256": "f3a54d4105e99a066ac0bb09bb84fa751903f60655fc3a401032c9606ef56a87"
+    },
+    {
+      "idx": 6,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"280\">\"Of course.\"</span>",
+      "sha256": "58ba16ac2267be23407f0633d45d0faeb6c4019efd0e55442f64fbd514d49fb2"
+    },
+    {
+      "idx": 7,
+      "kind": "paragraph",
+      "content": "Jahn sat down.",
+      "sha256": "9c6d3a1e739ea22342b1bcb66166f1c38074d08ad1f0467a08d0eb11a20dce9b"
+    },
+    {
+      "idx": 8,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"I'm Jahn\"</span>, he offered.",
+      "sha256": "4d41a8ba708899e5fe87f530d0556d19fe18788fc93beeba857b91f5d4ebb089"
+    },
+    {
+      "idx": 9,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"280\">\"I'm Utaku. I'm from Belpaki, I'm doing my doctorate program here at the Institute.\"</span>",
+      "sha256": "6671ae124d79e19cccd53cba968297b7f108df26a602371caf67322dd9d30604"
+    },
+    {
+      "idx": 10,
+      "kind": "paragraph",
+      "content": "A robot slid up to Jahn, offering a menu.",
+      "sha256": "a0e932292848623443e8801b5af3081547bccd1fc11f2b909c5b8267d835161a"
+    },
+    {
+      "idx": 11,
+      "kind": "paragraph",
+      "content": "Jahn quickly scanned through, and ordered a dish with vegetables and fish, and a glass of water.",
+      "sha256": "d788cad5e240131bd3afc72bb94d1abc5eadbcc16e815f6aa16095d5b8d02a43"
+    },
+    {
+      "idx": 12,
+      "kind": "paragraph",
+      "content": "He noticed that there too, the prices were higher than before.",
+      "sha256": "938d3fe41392b906db2fa28bba161d8f3790182d483a84f613521093b1fddf38"
+    },
+    {
+      "idx": 13,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Wow, the prices are all up now.\"</span>",
+      "sha256": "f625798ec0de92133b88a7904bb547d768f64605c9df5e0daca33515b40bd14b"
+    },
+    {
+      "idx": 14,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"280\">\"Haven't you been following the news?\"</span>",
+      "sha256": "526ad4c11521110a464f13bb5e9a9904c6880d5faf17cc23c68622def082d8ac"
+    },
+    {
+      "idx": 15,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Not since I got back from a meeting in Hapton.\"</span>",
+      "sha256": "6c6e4ee55718a960e312d4b65fefc16b926f7367549f78e7ff884b7f0df15b1f"
+    },
+    {
+      "idx": 16,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"280\">\"Huh, well it should be news in Hapton too. Everyone's been talking about raising their defense budgets.\"</span>",
+      "sha256": "77de7c85b5db92825fe35385b20d4a53a11cf430391a0b649c4f010976de65fe"
+    },
+    {
+      "idx": 17,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Arctic scare?\"</span>",
+      "sha256": "c793a0752e07cbb239fc6ce62744c827b241b1adfb96e684da8fd9db22772a13"
+    },
+    {
+      "idx": 18,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"280\">\"Yeah, their drone activity has been going up. Though there's surprisingly many politicians who seem totally nonchalant about it. Only Redshire and its neighbors seem to be really taking it seriously.\"</span>",
+      "sha256": "1f636345e82318c5117378156e6198ecb361680964f27ceb88007cbc23f5df0f"
+    },
+    {
+      "idx": 19,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"280\">\"Well, somehow, also Freetown.\"</span>",
+      "sha256": "8dd865b301684fb5b2b5afd9a17c62951987cec12eb3e3fa3f2aba8cc41ac21f"
+    },
+    {
+      "idx": 20,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Why us? I'm glad we are, but like half the United Cities are closer to Redshire than we are, they should be worrying more!\"</span>",
+      "sha256": "ad2eab91d23f9e390077bce6eb4d3bf66a1b50e4cc68234273042caa259970ad"
+    },
+    {
+      "idx": 21,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"280\">\"Well, Devanvil is taking it seriously - after all, Redshire chooses twelve percent of the seats in Devanvil's parliament. But yeah, Deplexi, Ondak, Imber, not at all.\"</span>",
+      "sha256": "f539b34dc2808175adcaa5e824ffb9cc1e2684baeee7cf7aa55391b8c44fc574"
+    },
+    {
+      "idx": 22,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"280\">\"It is weird. Remember, the government here is constitutionally banned from collecting more than the basic land tax and some rent from its natural resource holdings. So it's not even the government that's taking the problem seriously, it's the megacorps.\"</span>",
+      "sha256": "3ded9386eee3f464add5a17aa1c53ee68bc7231e74b972b471a591bc745ac975"
+    },
+    {
+      "idx": 23,
+      "kind": "paragraph",
+      "content": "The robot came back, carrying Jahn's food and water. Jahn picked up the plate of food and put it onto the table. He then picked up the glass of water, and immediately took a sip.",
+      "sha256": "f259357aa9c79b503db125a0e7ca7e77da9804ef53c92831158660650236fc13"
+    },
+    {
+      "idx": 24,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"280\">\"They're now donating three percent of their revenues to defense, and even colluding to punish companies that don't. Mogna was unwilling to contribute to defense - they said something about corruption, though everyone thought they were just being cheap - and then the charging station makers came together and threatened to lock out Mogna's cars from their grid, ninety percent of charging stations across Freetown, unless they joined in. Yesterday Mogna folded.\"</span>",
+      "sha256": "d25627b6608a3fd42f4d5bcbe2d3529066c45786d35a5d23faaebcdc4a431381"
+    },
+    {
+      "idx": 25,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"That's ... harsh. If any industry tried that in normal times, they'd get half of Freetown counter-colluding, maybe funding five new competitors against them.\"</span>",
+      "sha256": "db9a1b382c1b868d8968ceb489a250fbe3f242d14a2dcce35ba6660ad97aade8"
+    },
+    {
+      "idx": 26,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"280\">\"Normally yes. But hey, times are different now.\"</span>",
+      "sha256": "31e3eeaa9083cf1fd27671e8c36e05907dec3ad75bf63a3671ec2dd408c2a06c"
+    },
+    {
+      "idx": 27,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 28,
+      "kind": "dateline",
+      "content": "**Meldan, Veridia**",
+      "sha256": "430ca83b7a1bdad49e1382a28a73775e27d56575ba1d13dd6dc806ed60b0072a"
+    },
+    {
+      "idx": 29,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"You off to your first Keeper meeting?\"</span>, Seila asked Gladias.",
+      "sha256": "fd4ab770216817df16038f1abb416d1d3aba2466d2d82083db7a5b64b2e7eb5d"
+    },
+    {
+      "idx": 30,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"My first two Keeper meetings, back to back. First one is on cultural values in public events and performances - actually the exact one that I judged Dreadknot on way back then.\"</span>",
+      "sha256": "12226eb1986d796bfd77346adc28b8d2136c47def72b6a103f59e85dd64f1923"
+    },
+    {
+      "idx": 31,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Oh, what's the topic for cultural values in events going to be?\"</span>",
+      "sha256": "344a41e85a60a9a2d159aac8ca664fcd2028766359843d538809704f80022147"
+    },
+    {
+      "idx": 32,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"In the chat I mentioned how I thought the rubric was encouraging people to be too bland to not offend anyone. Surprisingly, a couple others agreed. I think I'll try to make a big push to fix that.\"</span>",
+      "sha256": "4fc72ab14b2016e2e788b916efd08b841ac3a0f95ef2797c8d1baf7e970747cc"
+    },
+    {
+      "idx": 33,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Veridia ba 'fun' gie!\"</span>, Seila joked.",
+      "sha256": "cbf2fc7a326fbcff67b5ebc321224fb4b6ebab0339e197a0d728e77e75b1d467"
+    },
+    {
+      "idx": 34,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Isn't it the 'gie' that you're supposed to replace? 'fau' just means 'again'.\"</span>",
+      "sha256": "74b9da11c4d532ad4461bdda2f6fcecfd63ca2ede724acd4d039f4ba60d180cd"
+    },
+    {
+      "idx": 35,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Aaah right.\"</span>",
+      "sha256": "d3417f8beb6403262fe69dbf755dcab2ea2d79a5e4e0f5300b9b6aa41ed1ec3b"
+    },
+    {
+      "idx": 36,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"But yes. Veridia will be fun again.\"</span>",
+      "sha256": "10c7fef80042cf53c78423323679fd2f4f3a107693cd3061697692f439f0c57f"
+    },
+    {
+      "idx": 37,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"What about the second one?\"</span>",
+      "sha256": "ee679da729b8709f4723e6c0a3e419b756dccc3c5cc4892c7508723d2b113a8f"
+    },
+    {
+      "idx": 38,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"The hardware openness rubric. The topic is whether or not to modify it to exempt military and surveillance products.\"</span>",
+      "sha256": "33b21d391f6019faa194e20d703aefc355cce9ce9c0975698ffa165d12d2195e"
+    },
+    {
+      "idx": 39,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Huh, what are the tradeoffs of that?\"</span>",
+      "sha256": "19ed11205a6760c001975568fb896255d5493b97c0d7dcab60fa7697c304d83a"
+    },
+    {
+      "idx": 40,
+      "kind": "paragraph",
+      "content": "Gladias thought carefully about how to phrase this. He thought for a moment about whether or not he should mention Delwart, but then decided against it.",
+      "sha256": "9c5011656a58f6a7e2345efa75a41d7ea1f1338cd6c53e0edf3c6bacf96ad7a2"
+    },
+    {
+      "idx": 41,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Well\"</span>, he began, <span data-hue=\"93.33\">\"some of the Keepers think we should be staying out of funding war - it's a negative-sum game, if both sides have better bombs and battle drones, the result is the same, just more things get blown up and more people get hurt.\"</span>",
+      "sha256": "784a2cb6163d1acb53fcdce24360bbf62651f671634be90b5d8d9dc4af7278be"
+    },
+    {
+      "idx": 42,
+      "kind": "paragraph",
+      "content": "He was pleased with himself. He had a feeling that Seila might be sensitive about anything that could hurt Dzego, and would plead for him to take whatever position benefited Dzego the most. He braced himself, preparing for Seila's next question.",
+      "sha256": "203bf909420719a9e758197f169da03c92dbddcf6a14ac1fc64163da6a082578"
+    },
+    {
+      "idx": 43,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"But, funding ... isn't that more of an issue on the Graph Funding side?\"</span>",
+      "sha256": "7d3a673228292bafa33e0f3da94555fe008afc8a61a90952d8991a336c198311"
+    },
+    {
+      "idx": 44,
+      "kind": "paragraph",
+      "content": "Gladias internally sighed with relief.",
+      "sha256": "bb42c956b993610b63322b44bc54fdd3e179494c71aaafe5a105642464c09817"
+    },
+    {
+      "idx": 45,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Well remember, we make some weapons too. Also surveillance products. And the rubrics influence how much of the secret sauce we keep to ourselves.\"</span>",
+      "sha256": "69862d4a43f6dbf2bdc4e58029118708379a3a63f041d387031b0ec7364d7649"
+    },
+    {
+      "idx": 46,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"I see...\"</span>",
+      "sha256": "c662309ab71134be90b5f84a2e4a4ce14c6ce0e901d0c4f9d32171f9b959de20"
+    },
+    {
+      "idx": 47,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Well, tell me how the meetings go!\"</span>",
+      "sha256": "7b71a682fb9783de82376756af7882beae5041ec93e364111aba6be4f2eb85d9"
+    },
+    {
+      "idx": 48,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 49,
+      "kind": "paragraph",
+      "content": "Gladias walked down a hallway, and entered a courtyard. He found a series of booths with thick sliding doors. He went to the rightmost one, as he had been instructed.",
+      "sha256": "c304b32f76e9b2747d56933e00120664e1cf17b3cd5350005c70a79dd77b27f8"
+    },
+    {
+      "idx": 50,
+      "kind": "paragraph",
+      "content": "He slid the barrier open. It took a significant effort for him to do so. He could tell immediately that this was a much more proper booth than the cloth-covered booths from the Greater Plum Harbor. As the barrier was opening, he could see its internal structure: a layer of anti-transmission foil on the inside, followed by layers of soundproofing, and other layers he could not recognize.",
+      "sha256": "bb2804f91596193e7080207432201bcc96dea75e759185d7bc367022dafc6bf3"
+    },
+    {
+      "idx": 51,
+      "kind": "paragraph",
+      "content": "At that moment, he also noticed a constant humming sound that was being emitted from the outside of the booth on all sides. White noise to further mask anything that makes it through the soundproof walls, he realized. If the noise is at forty decibels and the walls are good enough to attenuate sound by fifty, then it can mask up to ninety decibels coming from the inside - perhaps seventy if you want a safety margin. That's enough to completely mask any conversation.",
+      "sha256": "caa3044ef49ae3cdc9c5e53ad9923dbe30ccc77da52ed8e7f1f61e924491d9ba"
+    },
+    {
+      "idx": 52,
+      "kind": "paragraph",
+      "content": "After fully opening the barrier, Gladias looked inside the booth. There was a table stretching from near the entrance to the opposite wall, and a long bench on each side.",
+      "sha256": "cb7beaa4aca18927f94538f7da0f0c391ae02c277b1fff5726344c01de04124f"
+    },
+    {
+      "idx": 53,
+      "kind": "paragraph",
+      "content": "There were five others already sitting down, all wearing privacy robes.",
+      "sha256": "b4faf6e99f454e204d53179922731ef5ce4cc6d4ab366adc63be4c9ed0fa3a54"
+    },
+    {
+      "idx": 54,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"266.67\">\"Welcome! You must be number Four\"</span>, one of them exclaimed.",
+      "sha256": "f1a59059ffc77227dec6287ace59ef1208e0f374f6ed7dac15983c8838faab9b"
+    },
+    {
+      "idx": 55,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Indeed I am.\"</span>",
+      "sha256": "567bd5fd4d30245cee4ae9b443033cc749724f486b6179a063ef030b69c6620e"
+    },
+    {
+      "idx": 56,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"266.67\">\"I'm number Twenty in this circle, a third-year. We have two second-years - though Eleven has not arrived yet - two third-years, two other first-years, and now also you.\"</span>",
+      "sha256": "71fad2385db5e21b21fc0161e7ed808c67c922cc752e14bf4f87070321366cd5"
+    },
+    {
+      "idx": 57,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Glad to meet you all.\"</span>",
+      "sha256": "cd479c40004245e6f8b0ae88a84d40d8f13e921dff9f8dd7d4a9d5c8ac8105ad"
+    },
+    {
+      "idx": 58,
+      "kind": "paragraph",
+      "content": "Gladias sat down on the bench beside Twenty. Twenty had his hand device open, and Gladias could see him scrolling through recent audits measuring various businesses' statuses on the cultural values rubric, and the resulting decisions.",
+      "sha256": "d6755ac34fa24b444bf33a4308b3d321bc725ee763ae29bedfbd86af62fc1474"
+    },
+    {
+      "idx": 59,
+      "kind": "paragraph",
+      "content": "A few moments later, another Keeper walked in. He slid the barrier shut behind him, and sat down.",
+      "sha256": "acb8f0ae1b6f2030a878ef7be0f219aa8de3c2e2793540bd1a94b9a399b7cad7"
+    },
+    {
+      "idx": 60,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"So, cultural values rubric\"</span>, the other third-year began.",
+      "sha256": "086f1b25b9455192f1e68aab2ac458ee6cd8ac24d88c8a2072fcc3b8eaf9e6ea"
+    },
+    {
+      "idx": 61,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"200\">\"Cultural values *in events and performances* rubric\"</span>, the first-year, One, corrected. <span data-hue=\"200\">\"We're not doing social media or other online things, that's a different rubric. And we're not doing architecture and public billboards, that goes into the aesthetics taxes.\"</span>",
+      "sha256": "0000365a779c327013fecb1932f99cd38ab110cac9d46121fefdbbc4a7ecca56"
+    },
+    {
+      "idx": 62,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"We all know that, you don't have to show off here\"</span>, the third-year replied, with a joking tone calibrated to try to make the point without offending One.",
+      "sha256": "b22fcdb0ecbf46b590b76a446a8eda5720641f050a1ed9f0125fe1132eb3a9dd"
+    },
+    {
+      "idx": 63,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"How do we want to do this? Maybe we should first come to a common understanding of what the problems we're trying to solve are?\"</span>",
+      "sha256": "8f013b2dbe76ce071f97f7993cfb85f621c361fe77d2e8e70a45eb20e86ebc1a"
+    },
+    {
+      "idx": 64,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"Let's go through some examples\"</span>, a second year who had not yet spoken up replied.",
+      "sha256": "a80bac099c37e41c251af185fa83b2ffcff9c5503a4cad1b6de1f40b2e1734e0"
+    },
+    {
+      "idx": 65,
+      "kind": "paragraph",
+      "content": "Gladias saw his chance to intervene.",
+      "sha256": "4b623585d247e9fb5685e6df31684729f74c91d95b1498b897dba6c3da7c69a3"
+    },
+    {
+      "idx": 66,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"How do you guys feel about Dreadknot?\"</span>",
+      "sha256": "8c30da705e9f07b6c62706db749b083e7b5131499a11ebbe4859d9f109a373f0"
+    },
+    {
+      "idx": 67,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"What do you mean?\"</span>",
+      "sha256": "ad8961cdc34391713d0437437509255dc69d4e14b446c707c1e037374af81b53"
+    },
+    {
+      "idx": 68,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Their taxes got bumped up to tier 4 in the last audit.\"</span>",
+      "sha256": "c057d02b07e6fcb5786452f9acd0ebe86bc0568574bb1a7fe9716f81fef43ebf"
+    },
+    {
+      "idx": 69,
+      "kind": "paragraph",
+      "content": "Gladias began to read from the rubric.",
+      "sha256": "5c3c9cd14a7121ec9e1e12fcaa88f38250e7dcb112a49b4022bc51f0a5d6778f"
+    },
+    {
+      "idx": 70,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Content weakly promotes one or more of the following: violence, lawless behavior, use of anti-recommended substances, gambling or risky investment, excessive display of wealth, poor conflict resolution practices, religious or ethnic hatred.\"</span>",
+      "sha256": "26313cd38e3882ccf47f6e790ae53f16f9321511757328147a80d3f4ee762cb7"
+    },
+    {
+      "idx": 71,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Do we think Dreadknot is guilty of promoting violence, lawless behavior or hatred?\"</span>",
+      "sha256": "4ca77006043d47b472a90d5d520492f954d75182d30e7e63f1cce50311667361"
+    },
+    {
+      "idx": 72,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"Their last song was about destroying cities and flaying people's flesh. Why not?\"</span>",
+      "sha256": "2f13e061c3eec9992c0a0abca5e22b97c1479a104e6e20bb24bb14590e8042bc"
+    },
+    {
+      "idx": 73,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Do we really think that those words are going to make anyone want to flay anyone's flesh in real life? It's a song. I remember we went through this with games a few years ago, and the science ended up saying that they can slightly increase a few aggressive behaviors but there's no evidence that they actually lead to violence.\"</span>",
+      "sha256": "bd157789e0a8ba95c74102457013697b7507871a942f7c2cfa78e23ef0074f72"
+    },
+    {
+      "idx": 74,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"I remember that too. And my read was that the conclusion of the evidence was harsher than that.\"</span>",
+      "sha256": "f0d627ee82a011a78fdc1f796b2585d7498d65047ffee289086a7729a39c078c"
+    },
+    {
+      "idx": 75,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Do we want to dig up and go through those studies together?\"</span>",
+      "sha256": "5b5ae34815f9b4d4f43bf756f0f3d8380ceb49ce8899118a21de28c23e117b0f"
+    },
+    {
+      "idx": 76,
+      "kind": "paragraph",
+      "content": "A few other Keepers nodded. They started whispering instructions at their hand devices.",
+      "sha256": "3ecc7e1459e7c33a1dd179bbf6a2ad0030dcfe01ef47e640c7434fdad482055d"
+    },
+    {
+      "idx": 77,
+      "kind": "paragraph",
+      "content": "Gladias took the opportunity to continue.",
+      "sha256": "9ff631e6aeb06f81302b7ceeac9fead75dc70644000cf8182a86471216538f6a"
+    },
+    {
+      "idx": 78,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"But even aside from all that, do we really want Veridia to be a society where the artists have to constantly worry about this and all the songs, and the games, and the movies, become boring and pale?\"</span>",
+      "sha256": "e6e45402524fedd36543e9bcedf953c93af023ddb0551e73d06cb7b8b695f6ad"
+    },
+    {
+      "idx": 79,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"200\">\"They don't have to constantly worry. That's the whole point of Veridia's system of regulation. We're not banning them. We're just setting their taxes slightly higher instead of slightly lower. So along with the ten things that they have to worry about a medium amount already, like what their fans will like, what might or might not offend their corporate sponsors, and so on - things that won't break them, but still make a difference - we ask them to think about one extra concern: the public interest.\"</span>",
+      "sha256": "243b87860ce4b120244d676ab168c9f0d7e30373efdd30d5fb8c5f91dd7f0d2e"
+    },
+    {
+      "idx": 80,
+      "kind": "paragraph",
+      "content": "Gladias decided to pursue another line of argument.",
+      "sha256": "41d3f1967c668be198a91e3d55dc40d63700cbedcb8cbdf46f94e437685a68e0"
+    },
+    {
+      "idx": 81,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I actually like this rubric in general. I think it's great that the Northglade Science Center is getting rewarded for being such a wonderful place for kids to learn about chemistry and biology and rockets.\"</span>",
+      "sha256": "81ada485ee7209a8eab1dbcfd21f1d2bd942787b4dd41e0e9c1e9451fee783c6"
+    },
+    {
+      "idx": 82,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"But violence is part of life. The human race started out as monkeys fighting over bananas. When we were still living in forests and caves, a quarter of our men died because someone else killed them. The epic poems they make us study and memorize in schools have violence. Every hero of every Great Book did something violent. I don't think we should be discouraging Veridians completely from engaging with such a central part of our human nature. If we steer the public media away from violence everywhere and always, people will get *all* their ideas about violence from the dark corners of the internet, where nobody gets taxed, and that will be even worse.\"</span>",
+      "sha256": "5bf82d51ffb692afd0a4019352e26697f076c7ecf31736a61439116a494ead55"
+    },
+    {
+      "idx": 83,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"266.67\">\"Are there any studies that try to measure this?\"</span>, Twenty interjected.",
+      "sha256": "c0297e0ccc3051ffb8cb897bf306f0952116a909644c3c53a6911f055f81a18b"
+    },
+    {
+      "idx": 84,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I don't know if you *can* measure this with studies\"</span>, Gladias replied.",
+      "sha256": "083201318b1ce5ad9a3a9683068a4b84e4cce8f4f995293806dd967b996a53c6"
+    },
+    {
+      "idx": 85,
+      "kind": "paragraph",
+      "content": "The other third-year again began to speak.",
+      "sha256": "ec46ae19c7866e3efa390e631e34166732913b7485d3801782b41e9f80fad79d"
+    },
+    {
+      "idx": 86,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"This is good, I feel like we've already surfaced some important questions about not just the science, but also our underlying goals and values.\"</span>",
+      "sha256": "4a733a4e2759c70d5b40cbc996a899b6f3fe0cf5b198dd91755a1f122b2292c4"
+    },
+    {
+      "idx": 87,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"I think we should re-read the studies from back then about games. But also, we should see what the Veridian people think about this. Can we get Emerald to do a broad listen report on what people have been saying about Dreadknot on Bluewhale or Silverchat in the past year?\"</span>",
+      "sha256": "30d0bf98b31008ebdc6557aded0f24988c345d8676758f4016a2c5633edac243"
+    },
+    {
+      "idx": 88,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"I don't think what people say on social media is necessarily a good guide to what's good for people\"</span>, Eleven interjected.",
+      "sha256": "ffe24b7a4e3c31a013780067089a4662bbdd0faa9d29512c7d93ac737c0b70f9"
+    },
+    {
+      "idx": 89,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Okay, but let's take some time right now to read.\"</span>",
+      "sha256": "40d9bed1e8abb3c714d6d90f0cc1fb76d9d44c94f9907baadd05b3b080efae01"
+    },
+    {
+      "idx": 90,
+      "kind": "paragraph",
+      "content": "Gladias nodded. A few other Keepers nodded after him.",
+      "sha256": "f21fde6f20f57d2f174f2efc078754097c3446d2a37df4dbb94cb0b5072211a9"
+    },
+    {
+      "idx": 91,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Just give me a minute. Bluewhale always resists letting you read messages on their platform in any way other than their interface, I have a few hacks to get around that.\"</span>",
+      "sha256": "bf9be8366cf40135c65c35e45213bcc49977eb9f046d5a014e9a5d1f26661a92"
+    },
+    {
+      "idx": 92,
+      "kind": "paragraph",
+      "content": "Almost exactly a minute later, a new window appeared on each Keeper's hand device, showing Emerald think in real time as it fetched and took notes on what people were saying about violence and Dreadknot on Bluewhale and Silverchat.",
+      "sha256": "b009f39dc2074cf044e37c3596d37206af2eb61c7cef53d6bb2498600fba5f43"
+    },
+    {
+      "idx": 93,
+      "kind": "paragraph",
+      "content": "The Keepers all began staring intently at their hand devices - some reading the video game studies, others watching Emerald think.",
+      "sha256": "006df58dba0112f3c8806827714415417aff87c3eeb8f579ac6de94efe79b4a6"
+    },
+    {
+      "idx": 94,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 95,
+      "kind": "paragraph",
+      "content": "Gladias was standing outside, and sipping a cup of warm water. His first Keeper meeting, seventy-five minutes long, had finished, and he was taking the twenty-five minute break.",
+      "sha256": "04e38d33aaaa44b4debed4941c0e9b27299dbd18e97bf223204eb0a2b26a3b98"
+    },
+    {
+      "idx": 96,
+      "kind": "paragraph",
+      "content": "His watch buzzed.",
+      "sha256": "6ef89f1823560dff4e92f6c82c2da9c76ad62a0d9e2ed37cd9bf23ac2ca46f83"
+    },
+    {
+      "idx": 97,
+      "kind": "screen",
+      "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th>From</th>\n      <th></th>\n      <th>Message</th>\n      <th>Time</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Personal reminders</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 213.33333333333331)\">Next Keeper meeting starts in five minutes.</span></td>\n      <td>39500</td>\n    </tr>\n    </tbody>\n</table></div>",
+      "sha256": "be4546433980d2fd85bc04ad3b233067c4f9815d837627790c6b89a7296877f9",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 28,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "watch",
+        "device_evidence": {
+          "idx": 96,
+          "quote": "His watch buzzed."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "From",
+                "",
+                "Message",
+                "Time"
+              ]
+            ],
+            "rows": [
+              [
+                "Personal reminders",
+                "→",
+                "Next Keeper meeting starts in five minutes.",
+                "39500"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 98,
+      "kind": "paragraph",
+      "content": "It was time to go.",
+      "sha256": "f8a4a64e7795d540386c65b60cfa8e159279ecc9d86213fa5a42f02fb3ff2f2d"
+    },
+    {
+      "idx": 99,
+      "kind": "paragraph",
+      "content": "Gladias turned the corner and walked the last few steps toward the booth.",
+      "sha256": "642788c5163d8ed4410025be6a6ecc864ea847311988c6d8950225d1b607fcd3"
+    },
+    {
+      "idx": 100,
+      "kind": "paragraph",
+      "content": "He soon arrived, and slid the barrier open.",
+      "sha256": "c96c4bec81e1e833e912944f553cca2ecbf8aaa3205089f7d87c09ca6283694e"
+    },
+    {
+      "idx": 101,
+      "kind": "paragraph",
+      "content": "There were two other Keepers already sitting inside, one on each side. Both were wearing privacy robes, with their hoods and face coverings still on.",
+      "sha256": "85520ad477752ac4bc8ebcca4594b47b44862066f7ca9813dc55bcdb7f2a1a84"
+    },
+    {
+      "idx": 102,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Hello to you both!\"</span>",
+      "sha256": "4e3280672bf394d473f27c59c70ace3ed9e4db5969c8efa02949128b6c842e18"
+    },
+    {
+      "idx": 103,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"Hello! I'm Eighteen. Which number are you?\"</span>",
+      "sha256": "afe4eea6ea02d60a1db4793c98ca09148998b6df4a27596303acea67471b7b65"
+    },
+    {
+      "idx": 104,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I'm Six.\"</span>",
+      "sha256": "c13e33a4f216bfec6fbb8d1ecaa815122ef0e11c1c6d0ecd5c51c67fca3680eb"
+    },
+    {
+      "idx": 105,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"186.67\">\"And I'm Nine.\"</span>",
+      "sha256": "dbb098aa28c73e620e8b22824897c0856cecd5777f65b9131cf9acefbac513e0"
+    },
+    {
+      "idx": 106,
+      "kind": "paragraph",
+      "content": "Eighteen thought for a few moments, and then stood up.",
+      "sha256": "6306bee787b1860af8b913bc5bbe25ae1f0fd7f4dc66a0afc68c1431a7eea2da"
+    },
+    {
+      "idx": 107,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"Wait, before anyone else comes here, would you all mind standing up again?\"</span>",
+      "sha256": "1872192c96fa884aad1c79de55161aefe285a080000100dc60a8e1cea828a8ce"
+    },
+    {
+      "idx": 108,
+      "kind": "paragraph",
+      "content": "Gladias and Nine both stood up, and briefly exited the booth and looked in from the outside, with the door open.",
+      "sha256": "264908a2f9eb3c4e9b021fe6b97ed8f22712b15c56691c28c9d528c3cfc5cc0b"
+    },
+    {
+      "idx": 109,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"Alright, let's take a look.\"</span>",
+      "sha256": "30c751827cec45320b990e8a251b1b72b14028f32fe85f06d0c4b681a6a5bb74"
+    },
+    {
+      "idx": 110,
+      "kind": "paragraph",
+      "content": "Eighteen switched his hand device to a different mode, and began waving it around the room. He also took out a drone, and pressed a few buttons on his hand device. The drone began flying around the room near the edges, both above and below the table.",
+      "sha256": "717cca40166b2b3914af27c4686e69b01e24643445418cfb0649670aa74bc2d8"
+    },
+    {
+      "idx": 111,
+      "kind": "paragraph",
+      "content": "Eighteen and Nine watched silently as Eighteen did his scan, and two more Keepers arrived and quietly joined them.",
+      "sha256": "fc1f93d5bd82f277de3bf0bea5e5cb11f04a710aed2be8d028b47d66a0b908ac"
+    },
+    {
+      "idx": 112,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"Hmm, nothing transmitting, not picking up any powered electronics with thermal either.\"</span>",
+      "sha256": "cda2f8efd43b4dd781616ba9bc7b7de1165c2ba31e932268c5b3f3013c2b7a37"
+    },
+    {
+      "idx": 113,
+      "kind": "paragraph",
+      "content": "A minute later, the drone beeped unexpectedly just above the middle of the table at the far end.",
+      "sha256": "5ca8ffb07f39018cc06f630c7b34ade8a5aab08fb22adb20d65bb538708dd8b3"
+    },
+    {
+      "idx": 114,
+      "kind": "paragraph",
+      "content": "Eighteen jumped to that position with his hand device, and started looking and poking at the table intensely. A few moments later, he stood up triumphantly holding up in his hand a needle-like device, with a bulb a few millimeters wide at its tip.",
+      "sha256": "ab1c21bca644718b2e499644c47565a9987a73e125c8e1e4e52dd70e9d954ca7"
+    },
+    {
+      "idx": 115,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"What is that?\"</span>, Gladias asked.",
+      "sha256": "92d609b1f00f6ee946280563941030282455ea06b0500a1ab4d943bc467ae86a"
+    },
+    {
+      "idx": 116,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"Spying device. There was a small bump on the table, and this was under it. Definitely takes some skill to insert one of these and then fix up the table this well afterward.\"</span>, Eighteen replied.",
+      "sha256": "cfe9398a71145185a054a42a96c50439c710de9637f9eaec8108e07ae057e408"
+    },
+    {
+      "idx": 117,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Wow.\"</span>",
+      "sha256": "5550336cad3dad794390a3b06bc1a78261920ed6a6a5a33bdbcf6cb368251289"
+    },
+    {
+      "idx": 118,
+      "kind": "paragraph",
+      "content": "Nine stepped forward and looked at the device briefly.",
+      "sha256": "634b8e764d0a4e6b569210bc88c2111f97ff615b32b9da73eaf047fa8b4a62b8"
+    },
+    {
+      "idx": 119,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"186.67\">\"I doubt it was meant against us\"</span>, he said. <span data-hue=\"186.67\">\"Normally, the goal of people who do this is to get information about upcoming business decisions, and trade based on that in the financial markets. Usually, smaller businesses who are less careful. The Order is quite safe against this. Our Keeper group is only one of three discussion groups, so even if you do overhear us all you're only getting one third of the perspective. And we're all speaking through our neck bands so the sound is going between us digitally.\"</span>",
+      "sha256": "8243102b5a2135daf3bd46019e1c254d50794f3b8eca3c657b7c211859750024"
+    },
+    {
+      "idx": 120,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"Actually this one had a camera. It can read your lips and your neck, so there might still be enough information to pick up some words, especially if you're a beginner.\"</span>",
+      "sha256": "74c8bad769881c1ab100b8cf51be8eb82a74f27faf5305961e26bcb93363e855"
+    },
+    {
+      "idx": 121,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"186.67\">\"How do you know?\"</span>",
+      "sha256": "687a15a1d2163ae46be55ddffe26663cdd7dd232e50cc9d3a06b67156c4d4471"
+    },
+    {
+      "idx": 122,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"That's how the drone detected it, infrared light reflected off the camera lens. My hand device caught it too with the nonlinear junction detector, but I may well have missed it if the drone did not tell me where to look.\"</span>",
+      "sha256": "aa199e09f055e21601f2d20b8ee8a9f6903abab6c622a52332f881ee8499196c"
+    },
+    {
+      "idx": 123,
+      "kind": "paragraph",
+      "content": "The last two Keepers arrived.",
+      "sha256": "363ad7590c5a9aa366f903cf568a4d0d2e356bdfdc845c749e8e9a9d8e6c25e4"
+    },
+    {
+      "idx": 124,
+      "kind": "paragraph",
+      "content": "Eighteen stepped out, explained the situation, and the group looked at the listening device together. A few Keepers scanned it with their hand devices. When they were done, Eighteen snapped the listening device in half.",
+      "sha256": "013472d153ab1a251dd07abaa93f538ea101ef516fa14a3a8b19df7c45b5e271"
+    },
+    {
+      "idx": 125,
+      "kind": "paragraph",
+      "content": "Eighteen led the group to another open booth a few meters away, and slid the booth door open.",
+      "sha256": "dfab606db42edf59b2fb6a8e21bcf65ecaea3b65be04172e29cd496de875aa9a"
+    },
+    {
+      "idx": 126,
+      "kind": "paragraph",
+      "content": "He spent two minutes checking the new booth for bugs, again using both his own hand device and his drone. Once he was done, he motioned with his hand, and all seven Keepers entered and sat down on the benches.",
+      "sha256": "3806ed756ba39f57a2c7012188cbe87a1c574c0e60bafa4000d8ac698f4728df"
+    },
+    {
+      "idx": 127,
+      "kind": "paragraph",
+      "content": "One of the newly-arrived Keepers cleared his throat, as though preparing to speak.",
+      "sha256": "403597c4d1f57c26b3d6e923c286a1204c0218fe143095aaf6b6a843f8dfc905"
+    },
+    {
+      "idx": 128,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"266.67\">\"Maybe let's get to business?\"</span>, the Keeper asked.",
+      "sha256": "6abb47f3eede5ef130a2bcbc89e68e54ea6c6367ae7c3d3362023bc25b7400da"
+    },
+    {
+      "idx": 129,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Sure!\"</span>, Gladias replied.",
+      "sha256": "7b2ec4edbb5a291c06dca8a18c1153e0fc46b09ba5f3051df14ae0d014e97430"
+    },
+    {
+      "idx": 130,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"266.67\">\"So we're supposed to be talking about the openness rubric, and how to adjust it for military hardware.\"</span>",
+      "sha256": "5dfc97252c588abb8b75367f0f16e2e5164eef30e7b25171bb0561ffa2f8e2e7"
+    },
+    {
+      "idx": 131,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Yep, I read the docs.\"</span>",
+      "sha256": "07f2fad4ca86854f478bed066555a330acaa496804bb24b8508f5ca8dd2f2022"
+    },
+    {
+      "idx": 132,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"266.67\">\"And I've had some conversations with Zero over there. His argument is that we should just exempt military hardware completely. I'll let him explain why.\"</span>",
+      "sha256": "ec64ce357930fe9e35d9fbd5a5f414f72235e201863d923812a098c0d01ecb9d"
+    },
+    {
+      "idx": 133,
+      "kind": "paragraph",
+      "content": "Zero heard his number, and quickly raised his head.",
+      "sha256": "ca83e31dc73565b05f96a5993f930dd3b77911eb42f16ea0fd7c06d8dde4363d"
+    },
+    {
+      "idx": 134,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"So normally, open hardware is good, because other people can build on it, and everyone benefits, right?\"</span>",
+      "sha256": "b63c4b75111e749a2e8dd20dc7188150daac4e0f0a258b508f2e1ee0d60c604c"
+    },
+    {
+      "idx": 135,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Right.\"</span>",
+      "sha256": "f14f1570903c90c11701f9fbe5b431b7e0df977cf3e291a309d6bdeda067f0e2"
+    },
+    {
+      "idx": 136,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"But think about what happens with anything military. There isn't actually a net benefit to the world from everyone having better weapons. If everyone has twice as good swords and twice as good shields, the two cancel out.\"</span>",
+      "sha256": "c8b54e73f1c0b923b288eb2e024b55f190ef511257096bb79023260ccbde8c11"
+    },
+    {
+      "idx": 137,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"If everyone has twice as good swords but shields stay the same, then the benefits to the two sides in any war still cancel out, but more people get hurt.\"</span>",
+      "sha256": "eff9e7741be23406b5dc6d1d08382620986f52c8f3513e27528dd0b359929bc1"
+    },
+    {
+      "idx": 138,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"But if everyone has twice as good shields but swords stay the same, isn't that good?\"</span>",
+      "sha256": "d5c5201d5986fc1803630d8e1cd68e287a1d18b7535b831953de3618e237a867"
+    },
+    {
+      "idx": 139,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"186.67\">\"Well, maybe\"</span>, Nine interjected. <span data-hue=\"186.67\">\"But actually it's even more complicated than that. What if it's a war of attrition, so if everyone has more defense, the same number of people get hurt, it just takes longer? Or what if increasing defense reduces deterrence, so more wars happen?\"</span>",
+      "sha256": "9db228975187d10db136d968b437344ce9b55e152747a8525b582d91e462073c"
+    },
+    {
+      "idx": 140,
+      "kind": "paragraph",
+      "content": "Gladias was surprised: the argument was eerily similar to an argument that Delwart had expressed to him recently.",
+      "sha256": "5accd85f79987f4fc9ae1fa96625d30229edf3640c5f00d7a70c0ef178239989"
+    },
+    {
+      "idx": 141,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"186.67\">\"Basically, the game tree is just so chaotic that we can't reliably be sure of anything at all. So I think we should just stay out. And instead just increase Steering taxes on all military hardware, open or not, push people to make more useful and pro-human and fun things instead.\"</span>",
+      "sha256": "7a17ad1b3e38afc2a4b52019c6710e3e0801b702a66913c0aa4daae925fa1cf7"
+    },
+    {
+      "idx": 142,
+      "kind": "paragraph",
+      "content": "A third-year interjected:",
+      "sha256": "d56907fe5d9fe270a14a730ab245d216111bb85bf74c20214f9d9117885c54f5"
+    },
+    {
+      "idx": 143,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"I don't think it's true that we can't be sure of anything. Look at the United Cities. I think it's pretty clear that a big reason they all managed to stay independent from each other for centuries, and figured out things like co-governance to nudge each other to cooperate better without just turning into one big blob, is that they have so many mountains and peninsulas on their continent. So if everyone has more defense, more people can keep their freedom and sovereignty. I think we can be quite confident of that.\"</span>",
+      "sha256": "f39273e0b116f79e4a0c2f7657c8ab47026b930b26b5eb49fd0dfdc4f4560c1d"
+    },
+    {
+      "idx": 144,
+      "kind": "paragraph",
+      "content": "Eighteen raised his hand again. The others turned to him, and he began to speak.",
+      "sha256": "b281a2ae38a2d86d99a5d6b1dcbfa7ebd6c46d3daae6f6a8e16a57e8d0135fe1"
+    },
+    {
+      "idx": 145,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"I don't think we can look at the situation like it's a black box like that. Let's look at where we are now. The Arctic Empire's technology is the most advanced. Ours is second. On military tech, Dzego and the United Cities are furthest behind.\"</span>",
+      "sha256": "7ff9be4f5bd74685ab833e8d4d567d7433f12bd72b74c20966515fa4b46e69c1"
+    },
+    {
+      "idx": 146,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"And so when we release open-source military-relevant anything, it doesn't benefit the Arctics at all, and it's marginally good for us because it makes it easier for us to make more.\"</span>",
+      "sha256": "3bc169bc731630502ecae6767d0e08c821f0c42c2de278c58401bc184b4a0c92"
+    },
+    {
+      "idx": 147,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"But for Dzego, it's a lifeline. They're not set up to invent their own proprietary stuff at the top end, but they're really good at building and adapting from open-source plans. Twenty years ago, when we got our programming languages and formal verification to the point where our devices basically stopped having critical errors in their code that could let someone take it over from the outside, the fact that it was open allowed the Dzegojan to adopt those techniques, and protect themselves much better from Arctic sabotage.\"</span>",
+      "sha256": "ce2e69d10c94ebaae9f77a3379f25bd6d1b51cee1c72d27f74a05de6134b469a"
+    },
+    {
+      "idx": 148,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"But do we really want to play this game\"</span>, Zero continued, <span data-hue=\"346.67\">\"being so confident in our view of who's good and who's bad? Computer security was defensive, fine. But the next technology we invent might be offensive. Won't we just accelerate the arms race even more for everyone?\"</span>",
+      "sha256": "c928ac3748d8a7141f834daa6a458c44f17988ca98170146d4a48b4dbe255876"
+    },
+    {
+      "idx": 149,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I'm not even that convinced the Arctics are that big a threat. Sure, they're waving more drones around the northern United Cities now, but I don't think the intention is to attack, I think they're just trying to impress us with their power so we become attracted to their ideology.\"</span>",
+      "sha256": "561d6ae5cd15c7380d0d0f60396760f3254de24594944c778dfc074bc579ced8"
+    },
+    {
+      "idx": 150,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Do *you* think we should be more receptive to their ideology?\"</span>",
+      "sha256": "16d2bb076b698e86563a91bccdc3cd894fcaa05a8a928e1b86d5dde2a23990a4"
+    },
+    {
+      "idx": 151,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I think we should keep an open mind. Just remember, the Dzegojan are definitely trying to manipulate us too.\"</span>",
+      "sha256": "4cc3b385fbafa3f6127700083cca794a50d6be58d7202fde38d796b2eea4f468"
+    },
+    {
+      "idx": 152,
+      "kind": "paragraph",
+      "content": "For a few moments, the discussion went quiet. Gladias let it rest. He was still trying to understand how everyone else was thinking before forming his own views.",
+      "sha256": "49a0196422c90ce11dac88b37c9dace2cb1e07552da81d050f4fd9f80463d452"
+    },
+    {
+      "idx": 153,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"266.67\">\"Let's all think about this more on our own. We'll keep talking about this, we still have a few more discussions, the last one is in four months. And then the actual vote is only in six months.\"</span>",
+      "sha256": "40c79eb2c070dac0df560f35b00a1c1e82e3fc16e091bd801bf8ed6b51647eb2"
+    },
+    {
+      "idx": 154,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 155,
+      "kind": "dateline",
+      "content": "**Pafogai Du, Dzego**",
+      "sha256": "ee614c21729657744a6882e7dca5303d204492c2d39b94c8e01fc8e66f439827"
+    },
+    {
+      "idx": 156,
+      "kind": "paragraph",
+      "content": "Bai and Zei sat together at a courtyard table, both staring at their hand devices.",
+      "sha256": "b88e7f9c6f453e0cc7c01a0eff3dda63676199f4ad5d4fd658a24517324444d5"
+    },
+    {
+      "idx": 157,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Fin not joining us this time?\"</span>, Bai asked.",
+      "sha256": "efe53c833f56cd40c3797e60d9fc6b94c18efd77fc23f2f5b6f2ba3e22b12693"
+    },
+    {
+      "idx": 158,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"No\"</span>, Zei replied with a strong hint of disappointment. <span data-hue=\"346.67\">\"He's busy with the Bansunpei.\"</span>",
+      "sha256": "3b2fd113121accd678e55772f0f9de4ddb3cbe38776d21a330fdb9a6d7712507"
+    },
+    {
+      "idx": 159,
+      "kind": "paragraph",
+      "content": "The hand devices buzzed. It was their intervention turn. Zei arranged a few gliders and symbol-carrying spaceships. A few hundred turns passed.",
+      "sha256": "22809a94c66b68768fbaa659ddbc49a55ab0c4212de97dc60222c4de50be0590"
+    },
+    {
+      "idx": 160,
+      "kind": "paragraph",
+      "content": "Suddenly, as the spaceship hit a rock formation and was in the process of reflecting, gliders from Bai hit it. The spaceship exploded into a storm of gliders.",
+      "sha256": "7bd1fd1deab30e70ed41f3947b581f36d6b8c75c81c8ebe9b3b956c5acf97bef"
+    },
+    {
+      "idx": 161,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"What?\"</span>, Zei shouted.",
+      "sha256": "1458985010bdc0a5a2ff5d1b312f18b919d5fb2247d7fae2caa20415d33f5a14"
+    },
+    {
+      "idx": 162,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Caught you, I had a symbol along the path, right in the position where you could not see it. So I could see the edge of your spaceship coming.\"</span>",
+      "sha256": "adc5b3fd19edd648d6d92198d4c0796850a221ecf88e609499b55ab1271e370c"
+    },
+    {
+      "idx": 163,
+      "kind": "paragraph",
+      "content": "Zei groaned. That had been his last-ditch attempt to rescue the game. More gliders from Bai came in, and shredded through both of his remaining symbols in the southwest corner.",
+      "sha256": "9ec4e197e63d423e8d85aa87c86fa99ea2e3ada6d2a10ea6da9d13a9f19e0204"
+    },
+    {
+      "idx": 164,
+      "kind": "paragraph",
+      "content": "Zei clicked a button to resign.",
+      "sha256": "8acf19e789a6f93e9c88ddeaf54214ec039332df6405bbb4c1dbee99bb7d3865"
+    },
+    {
+      "idx": 165,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Good game\"</span>, Zei said, not yet with total sincerity, but with more sincerity than he had in any game where he had lost to Bai before.",
+      "sha256": "1e4e91866ee87cc14aa53e9fe6a03f0d900cb1667e863ef248e2b2cfbb3f6756"
+    },
+    {
+      "idx": 166,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"You know, I am going to need your help in the nationals.\"</span>",
+      "sha256": "ea5e4ef601f0e9ad4979fe861832d26505d9a74ac45ff9bc86cbdf20614de505"
+    },
+    {
+      "idx": 167,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Happy to. As long as...\"</span>",
+      "sha256": "6a41deeb4ea6ce6b253d1ed9a9feeeee79d9dd3cf5a8fee5c20177bcb67222af"
+    },
+    {
+      "idx": 168,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Yes, I know, you want to visit Veridia now.\"</span>",
+      "sha256": "185f167d07335010587a8e54637d429fb3c0e1560d3f5f87f9575db27c383289"
+    },
+    {
+      "idx": 169,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Anyway, thanks for explaining your thought process in that championship game. Really made me think.\"</span>",
+      "sha256": "535a1ee820fa1834d8ab1195b7cef7542a35a770e35ff0937d10a479b3859ef3"
+    },
+    {
+      "idx": 170,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Of course.\"</span>",
+      "sha256": "b22bf931fb0e446ac050bbc0a3fb0f4bc3709b77c60aaeb925d5fa4d7337965f"
+    },
+    {
+      "idx": 171,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Of course you enjoy reliving the moment you defeated me, just like I enjoyed beating you right now.\"</span>",
+      "sha256": "9ff684663acbf2eb7018ac60c7efde9e7988a2ea89151633e98d67750c8e659d"
+    },
+    {
+      "idx": 172,
+      "kind": "paragraph",
+      "content": "Zei sighed.",
+      "sha256": "14e7905e6af3d8563e2ecb2d74adbabf6e121ebee489fcdc4ff2e95a3080b04f"
+    },
+    {
+      "idx": 173,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Anyway, I have to go. The Kungaupei councilor, Den, is asking to see me again.\"</span>",
+      "sha256": "9723621839cdb4f465d7ec3f8d4b9f4fd6da5b0933e55e306899aa5aa5e71756"
+    },
+    {
+      "idx": 174,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 175,
+      "kind": "paragraph",
+      "content": "Zei entered the long room, and immediately saw Den and Mu sitting on the other side.",
+      "sha256": "4c5f352ae0e419bb36346830680dfd0a63c9756cac40f56ec00d19cc0e053c3b"
+    },
+    {
+      "idx": 176,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Thank you for coming.\"</span>",
+      "sha256": "afc8735243df8fb46f0f19a62625dade0a5b1ab3798e4636b049da34b68ef0cc"
+    },
+    {
+      "idx": 177,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Of course. I went through the hash-based signatures you recommended. It's a really fun set of constructions, especially the stateless tree-of-tree-based ones.\"</span>",
+      "sha256": "2bb6a259577b74a878d660ae568dfb71f35bab1213f19d7ff9b5b499b1469f5f"
+    },
+    {
+      "idx": 178,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Do you see why, when I looked at your style of Minpentai, I knew that you would do well in this?\"</span>",
+      "sha256": "90f098d48f148dfab35effcb022c6ac1e47fd9304d43fed8f56ed219242f66e5"
+    },
+    {
+      "idx": 179,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I think so!\"</span>",
+      "sha256": "2d269f88adf50323257793c9ecb4ca7abefe76e9153e38775bc895c20125ad36"
+    },
+    {
+      "idx": 180,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"You are truly amazing. You've rushed through a third of the cryptography lectures in less than a month, and got a perfect score on both of the first two tests. I can't think of anyone who did better.\"</span>",
+      "sha256": "d994a1a400dd2e21fde6ba7dca5a5c4f10d9b83bd03cf1a4a06cb2774775a2b9"
+    },
+    {
+      "idx": 181,
+      "kind": "paragraph",
+      "content": "Zei's eyes gleamed with satisfaction at receiving the compliment.",
+      "sha256": "02bfac962d541915ca3f052869494c955bd12949ea2022d52e34291b653a7b24"
+    },
+    {
+      "idx": 182,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Zei, do you know why I called you in?\"</span>",
+      "sha256": "ace2546f17f37723eabeaec91e01f8f589820050502119b458c6c429c8e6e064"
+    },
+    {
+      "idx": 183,
+      "kind": "paragraph",
+      "content": "At this point, Zei realized one possible implication of Den's words, and his cheerful facial expression suddenly dropped into a fearful one.",
+      "sha256": "a3c817b2b09a24184cbe48a22fe09ba7b5c9ff1d9deb79e0086c50c9dab1b109"
+    },
+    {
+      "idx": 184,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Are you going to convince me to go into this full-time? Like, abandon the Minpentai nationals?\"</span>",
+      "sha256": "2530bb1997bd19ad95d351470159aa87459cfb849cb88bdf019004d17cd0b9de"
+    },
+    {
+      "idx": 185,
+      "kind": "paragraph",
+      "content": "Mu laughed. <span data-hue=\"173.33\">\"So I guess my hunch was wrong - this part, you still don't get.\"</span>",
+      "sha256": "3151c454fca4e52f900120364d74cf5be5aefb9d46618facf7d19088a0ad7e0f"
+    },
+    {
+      "idx": 186,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Huh?\"</span>",
+      "sha256": "c89737e9207949204128174abbd764d31c9150762f836f13d7c6d65f60ebe0d3"
+    },
+    {
+      "idx": 187,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Have you ever thought about why the Minpentai game is so serious, so much ceremony, the priests going into the dungeon for days, and so well-funded?\"</span>",
+      "sha256": "1e3c5b321f6902d5c9a6a11b6aeb44a23e1b44b68cfd3594ffecbb76b63e8828"
+    },
+    {
+      "idx": 188,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"It's a sport. Sports are taken seriously and well-funded in many countries.\"</span>",
+      "sha256": "3f85bc8a862b3f3774b992adf53ca934540045d2150502ca43708b735916cf2a"
+    },
+    {
+      "idx": 189,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Not sports of the mind. Their audience isn't large enough to fund it just based on advertising and national prestige and all those other reasons.\"</span>",
+      "sha256": "bccc8569483e08830b9104e9f865a9c48ecc0e9aca8d1522790e73de051c8bc2"
+    },
+    {
+      "idx": 190,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"So why then?\"</span>",
+      "sha256": "77920e5d6533baa14223b7724e1b486f76cf30792a9de32c46fbf984634bd6a6"
+    },
+    {
+      "idx": 191,
+      "kind": "paragraph",
+      "content": "Mu leaned forward.",
+      "sha256": "309ef7c3d5945249fb4272d8c55fea6c46636b36036c8121373088a967b5a140"
+    },
+    {
+      "idx": 192,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"It's because Minpentai isn't just a sport.\"</span>",
+      "sha256": "c433e8ded89ff6d12b0b06e0920cc21dd18331406b1b23d789651ee3ac122bdc"
+    },
+    {
+      "idx": 193,
+      "kind": "paragraph",
+      "content": "Zei stared.",
+      "sha256": "1c3e2161baf7bcfea6948bede9221526b34c6a50d3104db3075aabd8095e5717"
+    },
+    {
+      "idx": 194,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"It's military training.\"</span>",
+      "sha256": "ade96ce396fc4474dc697940ec249cff085d855b2c594b80a5e3b85217007093"
+    },
+    {
+      "idx": 195,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"The whole point of the sport, and why we support it so much, is to raise the next generation of defenders.\"</span>",
+      "sha256": "ffe2d92516668c7e671c9932f5f6d2697ceb81975722a953c09b27ee2429f869"
+    },
+    {
+      "idx": 196,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"We need people who can think quickly, and think strategically under pressure.\"</span>",
+      "sha256": "87eb075d83fbfd7cb92cd248e94c9d045b08d5df6e79f22a9346ddea6828d052"
+    },
+    {
+      "idx": 197,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"People who can compete with their foes, but also cooperate with their allies, even allies that they do not personally get along with.\"</span>",
+      "sha256": "6166f7b6c0811da95e0a360cc25d6ebd2f81d3b2582daa37b6813c760f51530b"
+    },
+    {
+      "idx": 198,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"People who can understand a battlefield, including the battle itself, all the way up to grand strategy and resources and logistics, and all the way down to the level of surveillance and secrecy and trickery, and ultimately entropy itself.\"</span>",
+      "sha256": "b1135036653fb53d07a116dfd17193a86ae18681e0a21700ad8ac6f7144e28f1"
+    },
+    {
+      "idx": 199,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"People who can deal with suddenly changing rules.\"</span>",
+      "sha256": "6b404e580ecd23151787f846a242d43efa5ffbcd0220f793d82233c859213344"
+    },
+    {
+      "idx": 200,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"People who are able to micromanage, but are also able to set a plan in motion and watch it unfold.\"</span>",
+      "sha256": "f4c103932c61a165fafdf19f75522a0681cb064706075780c92a446efcf4307e"
+    },
+    {
+      "idx": 201,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"And people who can work with the latest technology - including AI - but also understand and work around its limits.\"</span>",
+      "sha256": "985e3b8897dc64ef374f063cf4a17cb1c62b765b861204aca393ae68ac39919c"
+    },
+    {
+      "idx": 202,
+      "kind": "paragraph",
+      "content": "The realizations hit Zei all at once. At first, he had wanted to ask a basic question: why pretend it's a game, why not just have a regular military with regular recruitment? But as soon as he put together the question, he already knew the answer: the Arctics would put all their energy into targeting anything like that. Minpentai was only safe because it pretended to be just a game. But even then, Zei knew, the ruse could not be safe forever.",
+      "sha256": "c042fc24cf4e08e5886a2985bff51df32348b7bf610b48eff3640c6e6445fccc"
+    },
+    {
+      "idx": 203,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Why are you telling me this now?\"</span>",
+      "sha256": "99a348e73d823cf6142a36ec1d10c3be4fde5f592fc147518c529f7a75aa94db"
+    },
+    {
+      "idx": 204,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Because we have to give you *some* reason why we're now telling you to work hard on cryptography *and* continue to the nationals. If we didn't tell you, you might get suspicious, eventually figure it out for yourself, and then do something stupid, like excitedly blurting out your discovery to a dozen other people.\"</span>",
+      "sha256": "932fb64ee7892e1bb5265538bba9c44af0571590acbe973c6363f9e041a5c0ed"
+    },
+    {
+      "idx": 205,
+      "kind": "paragraph",
+      "content": "Zei nodded.",
+      "sha256": "7a6447b1349453a638ba51c721712d942b6c4469379429153a47cf960d1bf83c"
+    },
+    {
+      "idx": 206,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I won't tell anyone. Not even Fin.\"</span>",
+      "sha256": "3e10570a340a16073a3dfc91cd6f11add5f19c16d46080a45b09705a245bb570"
+    },
+    {
+      "idx": 207,
+      "kind": "paragraph",
+      "content": "Den and Mu nodded.",
+      "sha256": "90fda426ad7765cc72b81eaf1e03fb09f08487dbfba23c6f28e80110ec2d996c"
+    },
+    {
+      "idx": 208,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"And when the nationals come, you'll want a sparring partner who knows your style.\"</span>",
+      "sha256": "7dd7006e035ac72ed2cfbeb5010aa3640ac3d0d66c1be977d61d0476ea8a259e"
+    },
+    {
+      "idx": 209,
+      "kind": "paragraph",
+      "content": "No one said a name. No one had to.",
+      "sha256": "ce4b63e5630d6d838b63f1e7271e31465590f3dff29b9606e58812f2dc78d3b7"
+    },
+    {
+      "idx": 210,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"We appreciate your support\"</span>, Den replied.",
+      "sha256": "d81de883722b964715b91be619da2bf6f6ec1792de4fd444663952049ad1a273"
+    },
+    {
+      "idx": 211,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Dze go ba fau gie\"</span>, Mu added.",
+      "sha256": "23b8a95c8d063b6ddc49bf3708a54b3bb10eb4729d2f214b39b656fceb19cbf3"
+    },
+    {
+      "idx": 212,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Dze go ba fau gie.\"</span>",
+      "sha256": "2a1dd1d4b0c943279944be51a3d57ed80903a1ff130f3d99b3c44838b7f5fc9c"
+    }
+  ]
+}

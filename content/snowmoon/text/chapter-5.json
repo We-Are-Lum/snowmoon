@@ -1,0 +1,859 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 5,
+  "source_url": "https://vitalik.eth.limo/snowmoon/html/chapter-5.html",
+  "source_sha256": "7690993e75d1751c6caa1c7cae33bf58ea2508d55bfcae51b0d21c5860aa2947",
+  "fetched_at": "2026-10-02",
+  "license": "GPL-3.0",
+  "blocks": [
+    {
+      "idx": 0,
+      "kind": "heading",
+      "content": "# Chapter 5",
+      "sha256": "811abc88672f21e9b7c9dc04d8cccdd8e9881d3561ae95d0d3db8d083de1c2b9"
+    },
+    {
+      "idx": 1,
+      "kind": "dateline",
+      "content": "**Freetown, United Cities** · 3724 Rainmoon 11",
+      "sha256": "5d29e57e2e8492dde8444b7a988c88e64f4b88806738f38eac38d5dfce6ff289"
+    },
+    {
+      "idx": 2,
+      "kind": "paragraph",
+      "content": "Zei walked out through the door of the air harbor, and held the door open behind him.",
+      "sha256": "669eb0077d5c00cef1a4b1d8be1389f1c0070a54952b83afb60ed79567665eca"
+    },
+    {
+      "idx": 3,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Come on, Mom!\"</span>, he shouted.",
+      "sha256": "ea77b4860e16003d2919d835ccf745199cce960d903245c64248ec8ad9ae2096"
+    },
+    {
+      "idx": 4,
+      "kind": "paragraph",
+      "content": "Zei's mother, Min, hurried forward and came out through the door. Bai followed along behind, carrying a shopping bag.",
+      "sha256": "06ff8a8269d1d95c9c5a0b61c9f5d5a86763ca19e203dadfaa9b0edadd827323"
+    },
+    {
+      "idx": 5,
+      "kind": "paragraph",
+      "content": "The three of them followed the signs to the taxi stand, and immediately put their luggage into the taxi's luggage trunk, and opened the doors to get in.",
+      "sha256": "bdc2e33a970d8f2e4a895b1954a42ccc5157d1f55869e75c064026b47d3ae372"
+    },
+    {
+      "idx": 6,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Welcome to Freetown, you both!\"</span>, Bai exclaimed.",
+      "sha256": "02f432bc406d82ccc9de335fb6be3803cb34db5b4f134491caa7867fe06c20b0"
+    },
+    {
+      "idx": 7,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Glad to be here\"</span>, Min replied. <span data-hue=\"173.33\">\"Actually my first time abroad.\"</span>",
+      "sha256": "2975915d80cda7441b05b0d0d17e3c337c5a2d84834ed388655ae8005c4df241"
+    },
+    {
+      "idx": 8,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"So how does this compare to Redshire, since I see you've been everywhere by now?\"</span>, Min followed up.",
+      "sha256": "d20ad85689769bef04d01a77d87771637b184b38403e867986113c7f34253c33"
+    },
+    {
+      "idx": 9,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Oh I think Redshire is nicer. Was a shame that the Arctic drones made them cancel all the flights for the past five days.\"</span>",
+      "sha256": "6def7627097dadc5fc892c41d3baa59b1ea991cc3b616b8cceb09e40897bf571"
+    },
+    {
+      "idx": 10,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"That really was too bad. But so far I think Freetown is great! So that means whenever I make it to Redshire I won't be spoiled, and I'll feel just as excited about Redshire then as I am about Freetown now!\"</span>",
+      "sha256": "b8b08813d9f8d09041b5c787b4422ff015c425a332a359e996556467e9b5ec5a"
+    },
+    {
+      "idx": 11,
+      "kind": "paragraph",
+      "content": "The conversation quieted down, and the three of them stared out the windows of their taxi. They were driving along a highway, and there were buildings of all shapes and sizes - some short, some tall, some stone, some concrete, some glass and steel, some beautiful, some ugly. Some halfway under construction, seemingly abandoned. And among them a few genuinely charming places, small parks with benches and carefully arranged trees to make the rest of the city seem invisible to someone inside.",
+      "sha256": "dce28a036f2e4a8d4d0327dc311c307f864f4b00e2b88b994d34d60272cafd65"
+    },
+    {
+      "idx": 12,
+      "kind": "paragraph",
+      "content": "A few small copters buzzed in the sky overhead, some carrying individual passengers and others carrying goods - most likely food for the wealthy and extremely impatient.",
+      "sha256": "6447f2254c96a4427c23cfc09beea7d09370af15e99683f238a18021a0d751bc"
+    },
+    {
+      "idx": 13,
+      "kind": "paragraph",
+      "content": "In the distance, there was one area that seemed noticeably nicer than the others, that was surrounded by a high grey and purple colored wall. Bai and Zei, sitting on the right, both turned their attention toward it.",
+      "sha256": "61389357b70872d87ca5fd56720ced86a344587968aa64b4bc8d0de0bc8010de"
+    },
+    {
+      "idx": 14,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Probably the local Greater Plum Harbor\"</span>, Bai mused.",
+      "sha256": "cc2713e9aaa9724026efd02f696d19eb4834593436860a48c5513285c3e9594c"
+    },
+    {
+      "idx": 15,
+      "kind": "paragraph",
+      "content": "The taxi swerved off the highway to take an exit. It then continued driving along a street, winding through several roundabouts.",
+      "sha256": "721a1b1698c28d249d50b6a043c7bcfc425ebea0d9610af9128f8e3391cc55e4"
+    },
+    {
+      "idx": 16,
+      "kind": "paragraph",
+      "content": "For a few minutes, the people and the insides of the buildings looked considerably richer than anything in Dzego. Suddenly, they passed under a highway, and on the other side the structures looked significantly more run-down, the restaurants and stores more basic, and more people outside were driving motorcycles.",
+      "sha256": "f2e8b652399f29efeee8b32f27f0a9786bb50fefacceca1b0008e350e024edff"
+    },
+    {
+      "idx": 17,
+      "kind": "paragraph",
+      "content": "As they passed through Freetown street by street, Zei, Bai and Min continued looking, observing the surroundings from inside their safe cocoon.",
+      "sha256": "98141451da7640c114266985bdcc54fd70150aaa0bab0139eda202e15d239b0d"
+    },
+    {
+      "idx": 18,
+      "kind": "paragraph",
+      "content": "After five more minutes of driving, the taxi turned, and drove into a garage. It stopped, and the door opened.",
+      "sha256": "0568c39ffe7255263eb09902cf2dfa8626ddadfbf2b03e91e8c3d5a08a8bae10"
+    },
+    {
+      "idx": 19,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Thank you!\"</span>, Min shouted, and opened the trunk. The three of them took their luggage, and entered the hotel.",
+      "sha256": "aad90cc07a168cf0e5948bce11828777ee16238731567f325aabc0fc9142035d"
+    },
+    {
+      "idx": 20,
+      "kind": "paragraph",
+      "content": "Zei slapped his watch against a green circle on top of a one meter tall pole, which was labeled \"Check in\" in the center.",
+      "sha256": "3cd03ad5505041d42fb00063f43b77d9a3fbcfa062fa893b2d691c66e3b5c3b9"
+    },
+    {
+      "idx": 21,
+      "kind": "paragraph",
+      "content": "After one tick, the circle beeped.",
+      "sha256": "5532f72b0188755bfa68064469b7c81805a6cd77a34c25dc3d98db86eb3ddb99"
+    },
+    {
+      "idx": 22,
+      "kind": "screen",
+      "content": "<div class=\"device-view narrow-device-view\"><table>\n  <tbody>\n    <tr>\n      <td><center><div style=\"border: 1px solid; border-radius: 5px; padding: 5px\">Rep score ≥ 100 Verified <b style=\"font-size: 150%; color: #8f8\">✓</b></div></center></td>\n      <td><center><div style=\"border: 1px solid; border-radius: 5px; padding: 5px\">Payment successful <b style=\"font-size: 150%; color: #8f8\">✓</b></div></center></td>\n    </tr>\n    </tbody>\n</table>\n<b>Checked in. Your room numbers are: 714, 715, 716.</b></div>",
+      "sha256": "ed352337dbd1652f8d1a6e12af14560eeda5a3f6ccbad90c45434d8ec27675e4",
+      "data": {
+        "world": "united-cities",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Freetown, United Cities"
+        },
+        "device": "green_circle",
+        "device_evidence": {
+          "idx": 21,
+          "quote": "After one tick, the circle beeped."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [],
+            "rows": [
+              [
+                "Rep score ≥ 100 Verified ✓",
+                "Payment successful ✓"
+              ]
+            ]
+          },
+          {
+            "type": "heading",
+            "text": "Checked in. Your room numbers are: 714, 715, 716."
+          }
+        ]
+      }
+    },
+    {
+      "idx": 23,
+      "kind": "paragraph",
+      "content": "Zei, Bai and Min's watches all buzzed in unison, confirming their room keys.",
+      "sha256": "0cc2010b7c52533c42b041e9156e8eb6382bc1c6de80fd0d5d1ea1946a971714"
+    },
+    {
+      "idx": 24,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 25,
+      "kind": "paragraph",
+      "content": "Having put his luggage into his room and taken a shower, Zei stepped out of the elevator and once again entered the hotel lobby. Bai was already there, looking outside a window.",
+      "sha256": "e8a5e1982312aa97e37f1bacaebb54a436d26244b613b2ab378f71ec11a888ca"
+    },
+    {
+      "idx": 26,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Mom said she needs to sleep, we should go explore\"</span>, Zei suggested.",
+      "sha256": "5ffbd763d0aeffbcac919b3344ba61daf4747b66ee9c0c2e0a0babc3c65e418a"
+    },
+    {
+      "idx": 27,
+      "kind": "paragraph",
+      "content": "Bai nodded. The two exited the hotel, and entered Freetown's great outdoors.",
+      "sha256": "57afe9d63219d37adabd67d725dbd511f5b39ae054b04e130f4d7675109b2da1"
+    },
+    {
+      "idx": 28,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"So why did you agree to come with me anyway?\"</span>, Bai asked.",
+      "sha256": "6e08795038c25f124d34002581f821a2818cca6a2a21dc39d4c3c30da897b7d3"
+    },
+    {
+      "idx": 29,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Well it was obviously the lowest-cost opportunity I would have to go abroad for a long time\"</span>, Zei replied.",
+      "sha256": "ed31c80d0e77fc4b9d7af7d36707becc63afe55b90813493996ebb47886a0839"
+    },
+    {
+      "idx": 30,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"We both won our games in the semi-finals easily - my opponent was just not prepared for the sudden rule change four thousand turns in - and I saw you won even faster. So the finals are between me and you.\"</span>",
+      "sha256": "f11d35863bce4ff755ebb765d47cf05c971c1f2d48e8c840fca003166ab8f2d0"
+    },
+    {
+      "idx": 31,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"And so it's a unique situation. Normally, there's a prisoner's dilemma: neither of us can take a break and enjoy anything, because if either of us does, the other will cram harder right before the big game and gain an advantage. But this time, that's not true - because we can both take a break together, so we're sure that neither of us is doing anything else.\"</span>",
+      "sha256": "6d250814489cc4be8140d86d556f0ad1b284f981f07367983fed9c7d0d0eb45a"
+    },
+    {
+      "idx": 32,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"And the surplus is high - both Mom and I get to go abroad for the first time in our lives.\"</span>",
+      "sha256": "737de5310c1530d6cfecd8d97a1f0834d54b31ea69c4df37989371e97eb13121"
+    },
+    {
+      "idx": 33,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Now why did you agree to take me?\"</span>",
+      "sha256": "d72e344bd8614536b1ebfbdc676b2601b6b1d0c6cd9f77cb0e4f356e327d54f8"
+    },
+    {
+      "idx": 34,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Pretty much the same, now that I think about it. Just without the game theory math.\"</span>",
+      "sha256": "18e799bb871ee8da35516b7a6fa3d7231860516f366af26cde078e7e0096218a"
+    },
+    {
+      "idx": 35,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Though for me what you call the surplus is spending time with you.\"</span>",
+      "sha256": "b7349cdb3c11de6ff776f9cb1a78a65a2152ac9484a524a8f3f387b5735ff374"
+    },
+    {
+      "idx": 36,
+      "kind": "paragraph",
+      "content": "Zei groaned.",
+      "sha256": "eb257125d74b704e3af42272854eeb31e32c6e9d4d7a89413cbf055a3dd84e27"
+    },
+    {
+      "idx": 37,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 38,
+      "kind": "paragraph",
+      "content": "Zei and Bai arrived at a building that looked noticeably larger and nicer than its surroundings.",
+      "sha256": "b1aa579dd73eeb8c3c027a7b9c5571b4e1f94bfab46fd24ac6767d200b0324ed"
+    },
+    {
+      "idx": 39,
+      "kind": "paragraph",
+      "content": "\"Freetown Economics Institute\", a sign read.",
+      "sha256": "6b2a8b2fb2d7bd64b80ff6729eac4eb89871f4e805905feb7807d93764966341"
+    },
+    {
+      "idx": 40,
+      "kind": "paragraph",
+      "content": "Right below the name of the institute, the sign listed a schedule of admission fees, featuring a formula that was a function of two variables: increasing with the square root of how much time you spend inside, and decreasing the higher your academic or intellectual reputation score rises.",
+      "sha256": "ddc8538af1f83e565f724328add096bcc5a0784502d4703e5240928f0415654b"
+    },
+    {
+      "idx": 41,
+      "kind": "paragraph",
+      "content": "Academic and intellectual reputation score was difficult to get. The kind of reputation you could zero-knowledge-collateralize to get loans or check into hotels, that was easy to get; it was only hard if you had failed to pay back loans or trashed hotel rooms multiple times. Academic and intellectual reputation, on the other hand, required doing serious work.",
+      "sha256": "d434ed89ac3a39ff64ab69a1f606b4039d575f28eb01a5fad86670cf26f27336"
+    },
+    {
+      "idx": 42,
+      "kind": "paragraph",
+      "content": "There was an entrance gate with turnstiles and glowing green circles. Zei and Bai tapped their hand devices, and walked through.",
+      "sha256": "178e841d5beddbd5a1d7ab40c2271b6a3fe102f64cf311214fe585721c74664d"
+    },
+    {
+      "idx": 43,
+      "kind": "paragraph",
+      "content": "The inside of the building was a single spiral-shaped sloped floor that looped around several times. If one walked along the outside wall, the slope was barely noticeable - a circumference of perhaps three hundred meters that one could walk around to climb four meters.",
+      "sha256": "2e7870c5efbcccb6fae4d1c758b78e2a7cfec75676b4fb8363b9af8a708f0f31"
+    },
+    {
+      "idx": 44,
+      "kind": "paragraph",
+      "content": "In the middle, there were elevators and staircases, for those who wanted to go up or down faster.",
+      "sha256": "fc1c692689b657d7b3cb7fc78077f6c0ee45a49818162d359c0e17944e2f5483"
+    },
+    {
+      "idx": 45,
+      "kind": "paragraph",
+      "content": "Zei and Bai leisurely walked along the floor, and soon saw a restaurant. Two people, a woman and a man, were sitting, drinking tea and eating a dish with vegetables and rice. There was a large screen, at that moment playing a lecture explaining the United Cities' co-governance system.",
+      "sha256": "1787a309e0ff8866c8f628b0e465d3e2b87cbf981c01ef6460beee9688bb3dd6"
+    },
+    {
+      "idx": 46,
+      "kind": "figure",
+      "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"200\" viewBox=\"0 0 400 200\" style=\"margin-left:35px\">\n<defs>\n<marker id=\"arrow\" viewBox=\"0 0 10 10\" refX=\"5\" refY=\"5\" markerWidth=\"5\" markerHeight=\"5\" orient=\"auto-start-reverse\">\n<polygon points=\"0,0 10,5 0,10\" fill=\"#cef\"></polygon>\n</marker>\n</defs>\n<rect width=\"400\" height=\"200\" fill=\"#348\"></rect>\n<line x1=\"48.6\" y1=\"157.6\" x2=\"96.4\" y2=\"172.4\" stroke=\"#cef\" stroke-width=\"1\" marker-start=\"url(#arrow)\" marker-end=\"url(#arrow)\"></line>\n<line x1=\"46.7\" y1=\"148.9\" x2=\"88.3\" y2=\"111.1\" stroke=\"#cef\" stroke-width=\"1\" marker-start=\"url(#arrow)\" marker-end=\"url(#arrow)\"></line>\n<line x1=\"113.4\" y1=\"171.8\" x2=\"161.6\" y2=\"153.2\" stroke=\"#cef\" stroke-width=\"1\" marker-start=\"url(#arrow)\" marker-end=\"url(#arrow)\"></line>\n<line x1=\"91.3\" y1=\"96.8\" x2=\"68.7\" y2=\"46.2\" stroke=\"#cef\" stroke-width=\"1\" marker-start=\"url(#arrow)\" marker-end=\"url(#arrow)\"></line>\n<line x1=\"103.8\" y1=\"103.4\" x2=\"156.2\" y2=\"93.6\" stroke=\"#cef\" stroke-width=\"1\" marker-start=\"url(#arrow)\" marker-end=\"url(#arrow)\"></line>\n<line x1=\"73.7\" y1=\"40.2\" x2=\"136.3\" y2=\"55.8\" stroke=\"#cef\" stroke-width=\"1\" marker-start=\"url(#arrow)\" marker-end=\"url(#arrow)\"></line>\n<line x1=\"72.9\" y1=\"42.3\" x2=\"157.1\" y2=\"87.7\" stroke=\"#cef\" stroke-width=\"1\" marker-start=\"url(#arrow)\" marker-end=\"url(#arrow)\"></line>\n<line x1=\"154.0\" y1=\"58.0\" x2=\"211.0\" y2=\"58.0\" stroke=\"#cef\" stroke-width=\"1\" marker-start=\"url(#arrow)\" marker-end=\"url(#arrow)\"></line>\n<line x1=\"149.6\" y1=\"65.8\" x2=\"160.4\" y2=\"84.2\" stroke=\"#cef\" stroke-width=\"1\" marker-start=\"url(#arrow)\" marker-end=\"url(#arrow)\"></line>\n<line x1=\"227.7\" y1=\"53.4\" x2=\"292.3\" y2=\"14.6\" stroke=\"#cef\" stroke-width=\"1\" marker-start=\"url(#arrow)\" marker-end=\"url(#arrow)\"></line>\n<line x1=\"228.9\" y1=\"59.4\" x2=\"336.1\" y2=\"76.6\" stroke=\"#cef\" stroke-width=\"1\" marker-start=\"url(#arrow)\" marker-end=\"url(#arrow)\"></line>\n<line x1=\"305.0\" y1=\"17.5\" x2=\"340.0\" y2=\"70.5\" stroke=\"#cef\" stroke-width=\"1\" marker-start=\"url(#arrow)\" marker-end=\"url(#arrow)\"></line>\n<line x1=\"295.2\" y1=\"17.6\" x2=\"244.8\" y2=\"97.4\" stroke=\"#cef\" stroke-width=\"1\" marker-start=\"url(#arrow)\" marker-end=\"url(#arrow)\"></line>\n<line x1=\"336.3\" y1=\"80.2\" x2=\"248.7\" y2=\"102.8\" stroke=\"#cef\" stroke-width=\"1\" marker-start=\"url(#arrow)\" marker-end=\"url(#arrow)\"></line>\n<line x1=\"346.1\" y1=\"86.9\" x2=\"348.9\" y2=\"109.1\" stroke=\"#cef\" stroke-width=\"1\" marker-start=\"url(#arrow)\" marker-end=\"url(#arrow)\"></line>\n<line x1=\"165.8\" y1=\"101.0\" x2=\"169.2\" y2=\"141.0\" stroke=\"#cef\" stroke-width=\"1\" marker-start=\"url(#arrow)\" marker-end=\"url(#arrow)\"></line>\n<line x1=\"173.9\" y1=\"93.5\" x2=\"231.1\" y2=\"103.5\" stroke=\"#cef\" stroke-width=\"1\" marker-start=\"url(#arrow)\" marker-end=\"url(#arrow)\"></line>\n<line x1=\"177.6\" y1=\"145.1\" x2=\"232.4\" y2=\"109.9\" stroke=\"#cef\" stroke-width=\"1\" marker-start=\"url(#arrow)\" marker-end=\"url(#arrow)\"></line>\n<line x1=\"179.0\" y1=\"149.8\" x2=\"246.0\" y2=\"148.2\" stroke=\"#cef\" stroke-width=\"1\" marker-start=\"url(#arrow)\" marker-end=\"url(#arrow)\"></line>\n<line x1=\"243.0\" y1=\"113.5\" x2=\"252.0\" y2=\"139.5\" stroke=\"#cef\" stroke-width=\"1\" marker-start=\"url(#arrow)\" marker-end=\"url(#arrow)\"></line>\n<line x1=\"263.6\" y1=\"145.3\" x2=\"341.4\" y2=\"120.7\" stroke=\"#cef\" stroke-width=\"1\" marker-start=\"url(#arrow)\" marker-end=\"url(#arrow)\"></line>\n<line x1=\"264.0\" y1=\"148.5\" x2=\"366.0\" y2=\"154.5\" stroke=\"#cef\" stroke-width=\"1\" marker-start=\"url(#arrow)\" marker-end=\"url(#arrow)\"></line>\n<line x1=\"263.5\" y1=\"151.0\" x2=\"321.5\" y2=\"172.0\" stroke=\"#cef\" stroke-width=\"1\" marker-start=\"url(#arrow)\" marker-end=\"url(#arrow)\"></line>\n<line x1=\"355.0\" y1=\"125.5\" x2=\"370.0\" y2=\"147.5\" stroke=\"#cef\" stroke-width=\"1\" marker-start=\"url(#arrow)\" marker-end=\"url(#arrow)\"></line>\n<line x1=\"366.8\" y1=\"158.7\" x2=\"338.2\" y2=\"171.3\" stroke=\"#cef\" stroke-width=\"1\" marker-start=\"url(#arrow)\" marker-end=\"url(#arrow)\"></line>\n<line x1=\"347.0\" y1=\"126.5\" x2=\"333.0\" y2=\"166.5\" stroke=\"#cef\" stroke-width=\"1\" marker-start=\"url(#arrow)\" marker-end=\"url(#arrow)\"></line>\n<circle cx=\"72.5\" cy=\"165.0\" r=\"7\" fill=\"#348\" stroke=\"#cef\" stroke-width=\"0.5\"></circle><text x=\"72.5\" y=\"168.0\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">10</text>\n<circle cx=\"67.5\" cy=\"130.0\" r=\"7\" fill=\"#348\" stroke=\"#cef\" stroke-width=\"0.5\"></circle><text x=\"67.5\" y=\"133.0\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">15</text>\n<circle cx=\"137.5\" cy=\"162.5\" r=\"7\" fill=\"#348\" stroke=\"#cef\" stroke-width=\"0.5\"></circle><text x=\"137.5\" y=\"165.5\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">15</text>\n<circle cx=\"80.0\" cy=\"71.5\" r=\"7\" fill=\"#348\" stroke=\"#cef\" stroke-width=\"0.5\"></circle><text x=\"80.0\" y=\"74.5\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">10</text>\n<circle cx=\"130.0\" cy=\"98.5\" r=\"7\" fill=\"#348\" stroke=\"#cef\" stroke-width=\"0.5\"></circle><text x=\"130.0\" y=\"101.5\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">10</text>\n<circle cx=\"105.0\" cy=\"48.0\" r=\"7\" fill=\"#348\" stroke=\"#cef\" stroke-width=\"0.5\"></circle><text x=\"105.0\" y=\"51.0\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">15</text>\n<circle cx=\"115.0\" cy=\"65.0\" r=\"7\" fill=\"#348\" stroke=\"#cef\" stroke-width=\"0.5\"></circle><text x=\"115.0\" y=\"68.0\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">5</text>\n<circle cx=\"182.5\" cy=\"58.0\" r=\"7\" fill=\"#348\" stroke=\"#cef\" stroke-width=\"0.5\"></circle><text x=\"182.5\" y=\"61.0\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">10</text>\n<circle cx=\"155.0\" cy=\"75.0\" r=\"7\" fill=\"#348\" stroke=\"#cef\" stroke-width=\"0.5\"></circle><text x=\"155.0\" y=\"78.0\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">5</text>\n<circle cx=\"260.0\" cy=\"34.0\" r=\"7\" fill=\"#348\" stroke=\"#cef\" stroke-width=\"0.5\"></circle><text x=\"260.0\" y=\"37.0\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">15</text>\n<circle cx=\"282.5\" cy=\"68.0\" r=\"7\" fill=\"#348\" stroke=\"#cef\" stroke-width=\"0.5\"></circle><text x=\"282.5\" y=\"71.0\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">10</text>\n<circle cx=\"322.5\" cy=\"44.0\" r=\"7\" fill=\"#348\" stroke=\"#cef\" stroke-width=\"0.5\"></circle><text x=\"322.5\" y=\"47.0\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">10</text>\n<circle cx=\"270.0\" cy=\"57.5\" r=\"7\" fill=\"#348\" stroke=\"#cef\" stroke-width=\"0.5\"></circle><text x=\"270.0\" y=\"60.5\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">15</text>\n<circle cx=\"292.5\" cy=\"91.5\" r=\"7\" fill=\"#348\" stroke=\"#cef\" stroke-width=\"0.5\"></circle><text x=\"292.5\" y=\"94.5\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">5</text>\n<circle cx=\"347.5\" cy=\"98.0\" r=\"7\" fill=\"#348\" stroke=\"#cef\" stroke-width=\"0.5\"></circle><text x=\"347.5\" y=\"101.0\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">10</text>\n<circle cx=\"167.5\" cy=\"121.0\" r=\"7\" fill=\"#348\" stroke=\"#cef\" stroke-width=\"0.5\"></circle><text x=\"167.5\" y=\"124.0\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">10</text>\n<circle cx=\"202.5\" cy=\"98.5\" r=\"7\" fill=\"#348\" stroke=\"#cef\" stroke-width=\"0.5\"></circle><text x=\"202.5\" y=\"101.5\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">5</text>\n<circle cx=\"205.0\" cy=\"127.5\" r=\"7\" fill=\"#348\" stroke=\"#cef\" stroke-width=\"0.5\"></circle><text x=\"205.0\" y=\"130.5\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">5</text>\n<circle cx=\"212.5\" cy=\"149.0\" r=\"7\" fill=\"#348\" stroke=\"#cef\" stroke-width=\"0.5\"></circle><text x=\"212.5\" y=\"152.0\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">5</text>\n<circle cx=\"247.5\" cy=\"126.5\" r=\"7\" fill=\"#348\" stroke=\"#cef\" stroke-width=\"0.5\"></circle><text x=\"247.5\" y=\"129.5\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">10</text>\n<circle cx=\"302.5\" cy=\"133.0\" r=\"7\" fill=\"#348\" stroke=\"#cef\" stroke-width=\"0.5\"></circle><text x=\"302.5\" y=\"136.0\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">10</text>\n<circle cx=\"315.0\" cy=\"151.5\" r=\"7\" fill=\"#348\" stroke=\"#cef\" stroke-width=\"0.5\"></circle><text x=\"315.0\" y=\"154.5\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">10</text>\n<circle cx=\"292.5\" cy=\"161.5\" r=\"7\" fill=\"#348\" stroke=\"#cef\" stroke-width=\"0.5\"></circle><text x=\"292.5\" y=\"164.5\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">10</text>\n<circle cx=\"362.5\" cy=\"136.5\" r=\"7\" fill=\"#348\" stroke=\"#cef\" stroke-width=\"0.5\"></circle><text x=\"362.5\" y=\"139.5\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">10</text>\n<circle cx=\"352.5\" cy=\"165.0\" r=\"7\" fill=\"#348\" stroke=\"#cef\" stroke-width=\"0.5\"></circle><text x=\"352.5\" y=\"168.0\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">10</text>\n<circle cx=\"340.0\" cy=\"146.5\" r=\"7\" fill=\"#348\" stroke=\"#cef\" stroke-width=\"0.5\"></circle><text x=\"340.0\" y=\"149.5\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">10</text>\n<circle cx=\"40\" cy=\"155\" r=\"5\" fill=\"#cef\"></circle>\n<circle cx=\"105\" cy=\"175\" r=\"5\" fill=\"#cef\"></circle>\n<circle cx=\"95\" cy=\"105\" r=\"5\" fill=\"#cef\"></circle>\n<circle cx=\"65\" cy=\"38\" r=\"5\" fill=\"#cef\"></circle>\n<circle cx=\"145\" cy=\"58\" r=\"5\" fill=\"#cef\"></circle>\n<circle cx=\"220\" cy=\"58\" r=\"5\" fill=\"#cef\"></circle>\n<circle cx=\"165\" cy=\"92\" r=\"5\" fill=\"#cef\"></circle>\n<circle cx=\"170\" cy=\"150\" r=\"5\" fill=\"#cef\"></circle>\n<circle cx=\"300\" cy=\"10\" r=\"5\" fill=\"#cef\"></circle>\n<circle cx=\"345\" cy=\"78\" r=\"5\" fill=\"#cef\"></circle>\n<circle cx=\"240\" cy=\"105\" r=\"5\" fill=\"#cef\"></circle>\n<circle cx=\"255\" cy=\"148\" r=\"5\" fill=\"#cef\"></circle>\n<circle cx=\"350\" cy=\"118\" r=\"5\" fill=\"#cef\"></circle>\n<circle cx=\"375\" cy=\"155\" r=\"5\" fill=\"#cef\"></circle>\n<circle cx=\"330\" cy=\"175\" r=\"5\" fill=\"#cef\"></circle>\n<rect x=\"9.8\" y=\"165.0\" width=\"60.5\" height=\"12\" fill=\"#348\" rx=\"2\"></rect><text x=\"40\" y=\"175\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Silverbeach</text>\n<rect x=\"93.5\" y=\"183.0\" width=\"33.0\" height=\"12\" fill=\"#348\" rx=\"2\"></rect><text x=\"110\" y=\"193\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Mabuli</text>\n<rect x=\"37.5\" y=\"98.0\" width=\"51.5\" height=\"12\" fill=\"#348\" rx=\"2\"></rect><text x=\"88\" y=\"108\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"end\">Inglewore</text>\n<rect x=\"53.5\" y=\"18.0\" width=\"33.0\" height=\"12\" fill=\"#348\" rx=\"2\"></rect><text x=\"70\" y=\"28\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Hapton</text>\n<rect x=\"136.2\" y=\"38.0\" width=\"27.5\" height=\"12\" fill=\"#348\" rx=\"2\"></rect><text x=\"150\" y=\"48\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Imber</text>\n<rect x=\"205.8\" y=\"38.0\" width=\"38.5\" height=\"12\" fill=\"#348\" rx=\"2\"></rect><text x=\"225\" y=\"48\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Arturia</text>\n<rect x=\"108.5\" y=\"78.0\" width=\"40.5\" height=\"12\" fill=\"#348\" rx=\"2\"></rect><text x=\"148\" y=\"88\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"end\">Deplexi</text>\n<rect x=\"153.0\" y=\"155.0\" width=\"44.0\" height=\"12\" fill=\"#348\" rx=\"2\"></rect><text x=\"175\" y=\"165\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Freetown</text>\n<rect x=\"307.0\" y=\"4.0\" width=\"46.0\" height=\"12\" fill=\"#348\" rx=\"2\"></rect><text x=\"308\" y=\"14\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"start\">Redshire</text>\n<rect x=\"354.0\" y=\"63.0\" width=\"51.5\" height=\"12\" fill=\"#348\" rx=\"2\"></rect><text x=\"355\" y=\"73\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"start\">Petersvil</text>\n<rect x=\"216.0\" y=\"88.0\" width=\"44.0\" height=\"12\" fill=\"#348\" rx=\"2\"></rect><text x=\"238\" y=\"98\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Devanvil</text>\n<rect x=\"246.2\" y=\"153.0\" width=\"27.5\" height=\"12\" fill=\"#348\" rx=\"2\"></rect><text x=\"260\" y=\"163\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Ondak</text>\n<rect x=\"364.0\" y=\"112.0\" width=\"29.5\" height=\"12\" fill=\"#348\" rx=\"2\"></rect><text x=\"365\" y=\"122\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"start\">Iptak</text>\n<rect x=\"363.5\" y=\"165.0\" width=\"33.0\" height=\"12\" fill=\"#348\" rx=\"2\"></rect><text x=\"380\" y=\"175\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Mantak</text>\n<rect x=\"315.8\" y=\"183.0\" width=\"38.5\" height=\"12\" fill=\"#348\" rx=\"2\"></rect><text x=\"335\" y=\"193\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"10\" text-anchor=\"middle\">Belpaki</text>\n</svg></div>",
+      "sha256": "3a04f47f9f20bbd9e80a307c21912a2942764e6fdd0531327f505c63bac96830",
+      "data": {
+        "world": "united-cities",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Freetown, United Cities"
+        },
+        "device": "screen",
+        "device_evidence": {
+          "idx": 45,
+          "quote": "There was a large screen, at that moment playing a lecture explaining the United Cities' co-governance system."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c5-b46.svg",
+            "viewBox": "0 0 400 200",
+            "width": "400",
+            "height": "200",
+            "labels": [
+              "10",
+              "15",
+              "15",
+              "10",
+              "10",
+              "15",
+              "5",
+              "10",
+              "5",
+              "15",
+              "10",
+              "10",
+              "15",
+              "5",
+              "10",
+              "10",
+              "5",
+              "5",
+              "5",
+              "10",
+              "10",
+              "10",
+              "10",
+              "10",
+              "10",
+              "10",
+              "Silverbeach",
+              "Mabuli",
+              "Inglewore",
+              "Hapton",
+              "Imber",
+              "Arturia",
+              "Deplexi",
+              "Freetown",
+              "Redshire",
+              "Petersvil",
+              "Devanvil",
+              "Ondak",
+              "Iptak",
+              "Mantak",
+              "Belpaki"
+            ],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 47,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"When two cities are in a co-governance relationship, they each elect a percentage of the other's parliament.\"</span>",
+      "sha256": "ed3c762912aa91df3f100e7926330179455c0adc2891f20b129651f164f21a0c"
+    },
+    {
+      "idx": 48,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"The percentage is based on a pre-agreed number. Whichever city is larger, as computed by a geometric average of population and GDP, elects that pre-agreed share of the smaller city's parliament. Whichever city is smaller elects a share of the larger city's parliament equal to the pre-agreed share, divided by the square root of the ratio in the two cities' sizes.\"</span>",
+      "sha256": "6edf4f5145f374b00c3a8b8e82729c9492c2c2391ce1063afd254ea946f3522c"
+    },
+    {
+      "idx": 49,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"You might ask, why square root? Well, it turns out that the utility of a large share of governance, held by a larger participant, is superlinearly larger than the utility of a smaller share-\"</span>",
+      "sha256": "95afcfd8be33c36f10ba23f4b2048f8dc420b84fc0a0b87218cd6dec9997895d"
+    },
+    {
+      "idx": 50,
+      "kind": "paragraph",
+      "content": "Zei stopped listening, and let his mind ponder, trying to work out the math from first principles.",
+      "sha256": "d4b54e5e46cdc3f66b0a857c26afc5a0610a2b619890877d4d308ea00159ea93"
+    },
+    {
+      "idx": 51,
+      "kind": "paragraph",
+      "content": "Bai started walking toward the two people sitting at the table.",
+      "sha256": "b8f342f808a53d8ee4ebcb23ab192c2d112fa111b9498dd56add078773784a17"
+    },
+    {
+      "idx": 52,
+      "kind": "paragraph",
+      "content": "Zei, still thinking about the math, followed Bai. They kept walking until they were almost standing over the eaters.",
+      "sha256": "c5327b4fc365bfdfc5ae001afec189757c2d6c237e720e5a6ba7a1f0b12c21b2"
+    },
+    {
+      "idx": 53,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Hi, are you guys busy?\"</span>, he blurted out awkwardly.",
+      "sha256": "dce10b36ee4142b29161835a9897de1a387f2a701dbdc0de05894113b5feec37"
+    },
+    {
+      "idx": 54,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Ah no, not at all\"</span>, the woman answered.",
+      "sha256": "55757720f6f3af119dae04387179fc7dbcf135792ddca7591a6aae81cc87c864"
+    },
+    {
+      "idx": 55,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Please come sit down with us, I'm a tourist, always happy to meet locals and understand this place better.\"</span>",
+      "sha256": "d75697ffb2a4f9445fc87eecc24514536ebfa5fabbf4c0c886b085e3d803499b"
+    },
+    {
+      "idx": 56,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Ah, we're also tourists. From Dzego\"</span>, Zei replied. <span data-hue=\"346.67\">\"I'm Zei.\"</span>",
+      "sha256": "5f76f409777551082278d9071da77a3fba7d1aa53d3adddea6fa2f081fa8f538"
+    },
+    {
+      "idx": 57,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"And I'm Bai.\"</span>",
+      "sha256": "36a5d87f99c1dcd461a7ce3142c0f75ed30f1278971dd5512707e657afe32bb4"
+    },
+    {
+      "idx": 58,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"I'm Seila\"</span>, the woman replied. <span data-hue=\"253.33\">\"And this is my ... friend, Jahn.\"</span>",
+      "sha256": "b801cef3bd065e5865f6642aac11727bac553feb7582bbab3f3280e579550af8"
+    },
+    {
+      "idx": 59,
+      "kind": "paragraph",
+      "content": "Zei and Bai sat down.",
+      "sha256": "907de3a9a5895a62f468d4f55de15a3e2bf48c2b942272c5c3850c6439c90616"
+    },
+    {
+      "idx": 60,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"So where are you from?\"</span>, Bai turned to ask.",
+      "sha256": "8c5bca53e8e81d615812ab14ac457e40d7f575eb97982e31d6c7f2350e33ad4d"
+    },
+    {
+      "idx": 61,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Veridia\"</span>, Seila responded.",
+      "sha256": "fa0870052a0d87ef6476435b16b95d81e9b20e69008820f59b7be945470e53aa"
+    },
+    {
+      "idx": 62,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"And I'm actually a local\"</span>, Jahn added.",
+      "sha256": "400d63e166531135ca1151f7fd9ef5a63ccb46050f349bfbab1413f738110c86"
+    },
+    {
+      "idx": 63,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"So what brings you here?\"</span>",
+      "sha256": "867bed18aaed00d83dbc62499e6b04943a4fa62a6f684a29c28f90cbb3ad94cb"
+    },
+    {
+      "idx": 64,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Well, I'm a blogger, I focus on economics and culture. My husband's and my turn to take care of our children just finished, they're with our co-parents now, so we're both taking a break -\"</span>",
+      "sha256": "c9a07a3290708238752ccaef8e5c947465fb884229f617568b6c78aea98fc41a"
+    },
+    {
+      "idx": 65,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Well, not really a break, still working. But traveling and exploring.\"</span>",
+      "sha256": "454618a3116d9be6fd0261ea43f6dd339404776d931729171ecb1de542e06424"
+    },
+    {
+      "idx": 66,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"So how has Freetown been so far?\"</span>",
+      "sha256": "9a788b4d850b4b4825521db539142ec888037132e07cd90b9ae7499180c72877"
+    },
+    {
+      "idx": 67,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Well, free in some ways. Not always in others.\"</span>",
+      "sha256": "71638643acd27fd87468a552de42d671618571b5f91e105d69180f5fd34a6288"
+    },
+    {
+      "idx": 68,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"You don't see as many privacy robes here as in Veridia or Dzego, but that's because people just go around in cars, all the interesting stuff tends to happen in these enclosed compounds.\"</span>",
+      "sha256": "bb6ecd41c9dfed62748f86b8920c8c174d8a4ca55614840b6a1cc838da6af643"
+    },
+    {
+      "idx": 69,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"How is Dzego?\"</span>",
+      "sha256": "1ba7d7d29cd9270fbe2fe6e74db8dca615f3b1bea9beeb25727bea1805505b2e"
+    },
+    {
+      "idx": 70,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Same old. Studying, playing Minpentai. I'm trying to figure out if I'm going into physics or cryptography.\"</span>",
+      "sha256": "7e5ca606f67abbf0770a52fde9141ab1f6809a89774c13c7cabb1c5902f79ab2"
+    },
+    {
+      "idx": 71,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Tell him about your arm\"</span>, Bai whispered, loudly enough that all three of the others could hear.",
+      "sha256": "10b0b0409c3278b4b4a990fb79220513a61f72fd68842ec8365d128b31223fe5"
+    },
+    {
+      "idx": 72,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Oh yeah, my arm broke when our classroom got bombed a while back.\"</span>",
+      "sha256": "81c4d0d0e888f59c6b7daf9aaf9814f4904d92c80fcd5c9ac69593a9b3822d90"
+    },
+    {
+      "idx": 73,
+      "kind": "paragraph",
+      "content": "Seila and Jahn froze in surprise - first at the revelation, and then once again at Zei's total nonchalance in relating the news.",
+      "sha256": "4429527cb9307ccd2df2d114fe14670316c56a86b613b7f9ec8fbc2c97917c40"
+    },
+    {
+      "idx": 74,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Are the attacks getting worse?\"</span>",
+      "sha256": "6f1e03539b3d679eb2df96bb2dd8fa4ee3d10afd4facbdb0a01efd05eceed386"
+    },
+    {
+      "idx": 75,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"They're starting to go after classrooms more. Have also been hearing about more and more surveillance drones getting snuck in.\"</span>",
+      "sha256": "705c33ca69d0ece11056767cdc6fe4e159e1ec99667cf5c62e692acae945d695"
+    },
+    {
+      "idx": 76,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"So is Dzego going to, like, add its own counter-surveillance network to keep up?\"</span>",
+      "sha256": "5e06602c4fb36c542195810cdf0eecb332d9c2a23d3e691addbb0e8c6b6844e6"
+    },
+    {
+      "idx": 77,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Well, the problem is, the Arctics got spies inside all the agencies, so if the counter-surveillance network can see too much, then it becomes their own weapon.\"</span>",
+      "sha256": "1e835aa1e47d55d0d87795b1ad2416e93ef30156934a204d7a017d1966fe3007"
+    },
+    {
+      "idx": 78,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"That's why we've been trying to figure out the cryptography. Each surveillance camera running an algorithm, revealing data only in those cases where it's suspicious, posting a hash to a cryptographic network every time it reveals so we can track how often it's happening, and then a whole system of hardware attestations and randomized infrared scanning to make sure that the cameras are actually running the code that they say they are.\"</span>",
+      "sha256": "067e1c42d04a67ca12e398941a177baf26f19c1757ef11f7593002d7e2f6c851"
+    },
+    {
+      "idx": 79,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"There's even a rule that anyone can go and unscrew any camera in public and inspect it themselves. There's entire clubs that do it and publish their reports online. It's pretty advanced stuff. I wish I could understand how all the math behind these encryptions and proofs and attestations works.\"</span>",
+      "sha256": "af64a8278c614d4c5d3bdd191b13ee3d6cacb1f2073628bf12ee78b870c7fb37"
+    },
+    {
+      "idx": 80,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Come on, our whole DU chapter knows you're a hotshot at understanding thermodynamics, even better than the teacher. You can totally re-spec to cryptography and figure this all out.\"</span>",
+      "sha256": "8a5aa8682a82074b23631ebbcdac3e0a22947974237314e396e2cd73a763c923"
+    },
+    {
+      "idx": 81,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Are you *trying* to distract me from focusing on the Minpentai finals?\"</span>",
+      "sha256": "82e45bde49128aaac5e3b0dd5e1faafeea195b4b1a3dc8420258a450adcab8e1"
+    },
+    {
+      "idx": 82,
+      "kind": "paragraph",
+      "content": "A robot slid up to them, with a menu on its screen.",
+      "sha256": "fa25f4671dec5b9fd45e0a2b8a868e05a4282d6651f4917235cc1084972a6896"
+    },
+    {
+      "idx": 83,
+      "kind": "paragraph",
+      "content": "Bai and Zei started looking, and clicked buttons in turn to order some tea, as well as a similar rice and vegetables dish to what Seila and Jahn were eating.",
+      "sha256": "94012bd9861b3858caf87b4a8d7081a56e69eea5f74bc34ebd4a84201f9e0016"
+    },
+    {
+      "idx": 84,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"How much of your time is this whole arms race taking up?\"</span>, Jahn asked.",
+      "sha256": "3d5dfe92ff8d9d66eb22a01b4303a15ea8e42fc31acc3fff32fd060205379256"
+    },
+    {
+      "idx": 85,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Of our time? Well, a few percent of us are full-time on it, for the rest, it's not supposed to be our job, beyond keeping up with how to stay safe. Of our happiness, our spirits, our souls? That's a different question.\"</span>",
+      "sha256": "91f0fbf4997f54877ee3eaba2971869bd1a368b81ec6a5ab73b347049c61f3fd"
+    },
+    {
+      "idx": 86,
+      "kind": "paragraph",
+      "content": "Jahn and Seila sighed.",
+      "sha256": "6a9ddd9895874f9eea7a85ad174a7dfb106e0635b56de781920547d630400516"
+    },
+    {
+      "idx": 87,
+      "kind": "paragraph",
+      "content": "A few minutes later, the robot came back with their drinks, and a few minutes after that the robot came back again with their food. They ate, at times engaging in light conversation learning more nuances of Dzego culture - Minpentai, the Dzegoban language, the people's strong will to see the nation rise - and at times silently. The screen, continuing to explain co-governance and show various diagrams and mathematical formulas, now went entirely unnoticed.",
+      "sha256": "045565379548f61125794e94f46f4c56981ec8c5fa572a1be29ea7eb16d6ea7b"
+    },
+    {
+      "idx": 88,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 89,
+      "kind": "screen",
+      "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th>From</th>\n      <th></th>\n      <th>Message</th>\n      <th>Time</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Gladias</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 93.33333333333333)\">[now calling]</span></td>\n      <td>58130</td>\n    </tr>\n    </tbody>\n</table></div>",
+      "sha256": "602afb1a2e1105e3bee54e0ee9dde96117d87fe9fb5cf91f9444cf53a083928b",
+      "data": {
+        "world": "united-cities",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Freetown, United Cities"
+        },
+        "device": null,
+        "device_evidence": null,
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "From",
+                "",
+                "Message",
+                "Time"
+              ]
+            ],
+            "rows": [
+              [
+                "Gladias",
+                "→",
+                "[now calling]",
+                "58130"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 90,
+      "kind": "paragraph",
+      "content": "Seila tapped on the watch.",
+      "sha256": "cc0e62666ea90868e67a2124ebd885927c97a0e4ad75ea7f2ee9fa860f6da3a1"
+    },
+    {
+      "idx": 91,
+      "kind": "paragraph",
+      "content": "She could make out Gladias's face.",
+      "sha256": "e928cbf0c0aa9ad949cbf024448c7997477165c926924950224af6712bbf0810"
+    },
+    {
+      "idx": 92,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"How is your time in Freetown?\"</span>, Gladias asked.",
+      "sha256": "f437688cd81d9f9812b2f704cdc954b37375cc85b8d085195ea1039bc84d02d8"
+    },
+    {
+      "idx": 93,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Just had lunch with Jahn, and then these lovely kids from Dzego came by.\"</span>",
+      "sha256": "4159d521a288df851417d8906001b4af1838eefa78f0ca3d29dbdadd53bd231e"
+    },
+    {
+      "idx": 94,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"How were they?\"</span>",
+      "sha256": "64e8615fcc2bfdef984c7d4232e2c01cee1cdc55204b4f8011b44cfc758539d4"
+    },
+    {
+      "idx": 95,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"They were wonderful. Though it's so sad what the Arctics are doing to them - one of the two got his arm injured recently.\"</span>",
+      "sha256": "7073dc87bd57a1689b010cdf9c3c8674a43643c7f2d4a62677cb527efaf7d528"
+    },
+    {
+      "idx": 96,
+      "kind": "paragraph",
+      "content": "Seila decided to change the subject.",
+      "sha256": "ed610b085bb625edfe76f943e29c5a7f1980904d97cc14e8532bacf52226e2bb"
+    },
+    {
+      "idx": 97,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"How have you been?\"</span>",
+      "sha256": "c54951741e26588bd4156b87dc258a914e98bb9a0695d26d790f5e0642a8d71d"
+    },
+    {
+      "idx": 98,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Good.\"</span>",
+      "sha256": "650613f008246bb98c0a47fba6d3a06045705f2b9440caadd9bf9194b74b176b"
+    },
+    {
+      "idx": 99,
+      "kind": "paragraph",
+      "content": "He paused.",
+      "sha256": "4c54eb23ebbc0da2bd42b847e25f0deaf083edd3f3d49dab2f7afefa21092e5c"
+    },
+    {
+      "idx": 100,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I'm pondering something.\"</span>",
+      "sha256": "707abfe0801d28fa7a7a2c96865293801f40816df691e68e932ce21c7649f88b"
+    },
+    {
+      "idx": 101,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"What is it?\"</span>",
+      "sha256": "29cbcc3716e6175eadc17ca1cdc32ba691dd981c83fd8973e2e9d6fadeae4a29"
+    },
+    {
+      "idx": 102,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Someone suggested to me recently - that instead of going for being a Sentinel, I should be a Keeper instead.\"</span>",
+      "sha256": "fa56abaefe6cd9ca4ebfccc3ba827058dc3789fd817db544a7a4fd1aeb72cdff"
+    },
+    {
+      "idx": 103,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Huh!\"</span>",
+      "sha256": "6302c5f00bd539ed1ad282a13ebd061175123f9295783b0c7656a45d2af1efd2"
+    },
+    {
+      "idx": 104,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"What do you think about that?\"</span>",
+      "sha256": "5d7e714b670c1368cfd3a4874dd7ed32123803750b1a4347d5ff4de2f64c7c34"
+    },
+    {
+      "idx": 105,
+      "kind": "paragraph",
+      "content": "Gladias visibly paused for a few moments, to ponder his answer.",
+      "sha256": "085fb272cf15e96a8a2099f7be00380c5f0a0f1a2f85c7a003de5dc2402f31ad"
+    },
+    {
+      "idx": 106,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"It's the more important thing for Veridia, to really make sure that the rubrics themselves are set right. And I feel like the work will be more interesting.\"</span>",
+      "sha256": "87f1891d6d699c09815560247bcfb95b453d1dc5554f3e819c6f275bb633bfc8"
+    },
+    {
+      "idx": 107,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Well my first instinct is that I actually support the decision.\"</span>",
+      "sha256": "b71b8093c5e1690cbfd9a8ffb29d7af0f1d0611a0212f933f282984427c3c731"
+    },
+    {
+      "idx": 108,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"You know, I've been thinking about Dzego for these past fifty minutes or so after those kids left, and then Jahn had to go for a meeting soon after.\"</span>",
+      "sha256": "4d5151aa41d8ca45dc1ad7e25d3599dc83f63e5b640f64d1a1f61bbbbe36e9f6"
+    },
+    {
+      "idx": 109,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"They benefit a lot from our Graph Funding, right?\"</span>",
+      "sha256": "6de028e915c0b0478563615dc9def513dcbf055286b60b0f2684dea92d4eba18"
+    },
+    {
+      "idx": 110,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Indeed they do.\"</span>",
+      "sha256": "18da7c999aad5a3ce7895a9772b8410cf116bb39d7c46d93e78c234668458938"
+    },
+    {
+      "idx": 111,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"What about the rubrics though? Do the rubrics encourage companies to make any of their products more helpful to Dzego in any way?\"</span>",
+      "sha256": "6fbea2b3fe9762c4cd10cde0867a5a4716813df8da8c107ed1763a74f57d544f"
+    },
+    {
+      "idx": 112,
+      "kind": "paragraph",
+      "content": "Gladias thought for a few moments. <span data-hue=\"93.33\">\"Not really, at least I can't think of anything.\"</span>",
+      "sha256": "30e7cd6f7dc6b807c2c8647bd329a66527918bbbf00780a8eb13caa25ea78ab4"
+    },
+    {
+      "idx": 113,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Well maybe you should become a Keeper. And this could be one of your projects! Figure out how to make or adjust the rubrics to support Dzego better.\"</span>",
+      "sha256": "94ac6a068c3c93d0aaeff46173681c335ef67b94c53877557d64b50a8177e785"
+    },
+    {
+      "idx": 114,
+      "kind": "paragraph",
+      "content": "Seila paused for a moment.",
+      "sha256": "bc7c35e08d34c4fc57861e496ac2ea84b4ae3f5c16530da8af5ae46097b7a96d"
+    },
+    {
+      "idx": 115,
+      "kind": "paragraph",
+      "content": "Gladias stared in response, his eyes wide open.",
+      "sha256": "77554594761dda051d755fa22117dc1b92c6ec61910b1dc13a9f15672f5b4737"
+    },
+    {
+      "idx": 116,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Yeah become a Keeper definitely. It's exactly the right choice.\"</span>",
+      "sha256": "ae2bd4d55972aa8b5027cf29ca6353810128bc4fedc938c2507b0fa8e9e9d283"
+    },
+    {
+      "idx": 117,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"It'll be fun. As they say, Dze go ba fau gie!\"</span>",
+      "sha256": "1e68a42d48181fc2d92f3a52b9f41d9d97f5f70760af8d53195bdcf83539082c"
+    }
+  ]
+}

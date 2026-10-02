@@ -1,0 +1,1415 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 15,
+  "source_url": "https://vitalik.eth.limo/snowmoon/html/chapter-15.html",
+  "source_sha256": "64723d2dab98aaf119cd46815076404b7b94e6b7c20b2a4ac77f4beb462de0b8",
+  "fetched_at": "2026-10-02",
+  "license": "GPL-3.0",
+  "blocks": [
+    {
+      "idx": 0,
+      "kind": "heading",
+      "content": "# Chapter 15",
+      "sha256": "fad7e3d89d0c57460e92557be8f8ba2d006b9b94e57dc90e4e095d3d6d0c4406"
+    },
+    {
+      "idx": 1,
+      "kind": "dateline",
+      "content": "**Freetown, United Cities** · 3724 Firemoon 17",
+      "sha256": "7c0d50c0bdd8d16e34ea96d18cc83dd41dd17670dc50e4982c071f63a91e837a"
+    },
+    {
+      "idx": 2,
+      "kind": "paragraph",
+      "content": "Jahn passed through the turnstile in the Freetown Economics Institute, and walked toward the restaurant.",
+      "sha256": "5c041c92703d3ce75862736562e7c2269c8bf7c33730a1bdbedef30c55d3f332"
+    },
+    {
+      "idx": 3,
+      "kind": "paragraph",
+      "content": "It was still early morning, and Jahn had intentionally not yet looked at any of the news on that day - better to clear his mind, and enjoy whatever the lecture on the restaurant screen would end up being.",
+      "sha256": "1b7f2cb6a53fdcd548f9d85a4b08c3b7ea2e11d6dea900aee560680e7eb2d66f"
+    },
+    {
+      "idx": 4,
+      "kind": "paragraph",
+      "content": "After a minute of walking, he arrived.",
+      "sha256": "cd2581e6cb9c55bf96b36f0c2631f26fb5a012c3cbe59932b2068d9787ed2d3a"
+    },
+    {
+      "idx": 5,
+      "kind": "paragraph",
+      "content": "When he saw what was on the screen, his eyes froze with horror.",
+      "sha256": "7d06255db070b15a824aa44f204dcf3b207c57b4b7668ecc87933af0c70b48ce"
+    },
+    {
+      "idx": 6,
+      "kind": "quote",
+      "content": "> Special broadcast\n>\n> ARCTIC EMPIRE INVADES AND ANNEXES REDSHIRE",
+      "sha256": "bacd2e05ca7c427e446c4b3eb04536b322ae407a81c8baef47d203b5f8ba53ad"
+    },
+    {
+      "idx": 7,
+      "kind": "paragraph",
+      "content": "Jahn began to listen intently to the reporter relaying the details of what happened.",
+      "sha256": "6d0155a1a1629f112b88b5203755c43853f6d3a725a7efa4fb6a54e072d0e1d9"
+    },
+    {
+      "idx": 8,
+      "kind": "quote",
+      "content": "> At 15,500 this morning, a large number of Arctic drones and aircraft landed all across the major cities and military bases in Redshire, timed simultaneously with a massive land invasion from the north with thousands of vehicles coming out of never-before-seen underground tunnels.\n>\n> The Redshire military was caught completely unprepared, and many suspect corruption at the highest ranks.\n>\n> Major battles lasted less than two longhours, with very limited casualties. Almost all Redshire garrisons have by now surrendered.",
+      "sha256": "c95912e95ec33b8dbb648a0940b95fe91699e5a739069f18f22b0423b2cf6640"
+    },
+    {
+      "idx": 9,
+      "kind": "paragraph",
+      "content": "He saw about ten people sitting in the restaurant, including Utaku, who seemed just as shocked as Jahn was.",
+      "sha256": "c38b6061bca6b93622d27b0f8729e1c54c2eccb090b0f7fae31830c4900f351e"
+    },
+    {
+      "idx": 10,
+      "kind": "quote",
+      "content": "> Three government aeroplanes containing President Albor, Prime Minister Celedil and most of the parliament attempted to take off. All three were shot down. Current indications suggest no survivors.\n>\n> The president's son, Tafindel, is believed to be in Arctic captivity.",
+      "sha256": "e8da77da54cf749bcac5eaf0a796bd4602e0ea82ecabd13fdfbcbdee69006663"
+    },
+    {
+      "idx": 11,
+      "kind": "paragraph",
+      "content": "The reporter paused briefly, and then began speaking again.",
+      "sha256": "ada682586a2448389ead057128633b8fe904f04feb34034bf9e9f676debdc50d"
+    },
+    {
+      "idx": 12,
+      "kind": "quote",
+      "content": "> JUST IN:\n>\n> The last Redshire garrison in the south has agreed on a conditional surrender. The garrison staff, plus thirty other personnel including two senators, will be allowed to fly to Devanvil, in exchange for the garrison discontinuing all attempts to defend itself.\n>\n> The three aeroplanes will leave in five minutes, and will be the only aeroplanes allowed to leave. Arctic authorities are not allowing any other vehicles to enter or leave Redshire. They have cut off all communications and are already actively setting up jamming equipment.",
+      "sha256": "5dc6ae5d39dbfe267ca1a32f5f7a5fd8363686bbac6f98839543b0eeecf1b626"
+    },
+    {
+      "idx": 13,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"What do we do now?\"</span>, Jahn, by this point standing beside the table with Utaku, mumbled.",
+      "sha256": "2269ba14e5632f1937476d2afda8e86c89d80e473a715b77ea1b94711fc234d2"
+    },
+    {
+      "idx": 14,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"280\">\"Take the threat seriously\"</span>, Utaku replied.",
+      "sha256": "9b540673a70404b31f254eceb9914233e274e7095f525670fe5975e0ab37dae9"
+    },
+    {
+      "idx": 15,
+      "kind": "paragraph",
+      "content": "Before Jahn could look away, Utaku had already begun typing frantically on her hand device.",
+      "sha256": "0c81eb3c643e7b1dba0ef01ce3147d8161b4ad82ef20e2aacc344e00c58519fa"
+    },
+    {
+      "idx": 16,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 17,
+      "kind": "dateline",
+      "content": "**Meldan, Veridia**",
+      "sha256": "430ca83b7a1bdad49e1382a28a73775e27d56575ba1d13dd6dc806ed60b0072a"
+    },
+    {
+      "idx": 18,
+      "kind": "paragraph",
+      "content": "Gladias and Seila stared at the screen with Febric and Hreda beside them. They had just woken up at sunrise, light coming in clean through the window, the trees on the footpath outside already throwing long morning shadows. The news was the first thing they saw.",
+      "sha256": "f076e42beff709e96fcdef4681bfc096b5a88d618961b146ac918edf90045d77"
+    },
+    {
+      "idx": 19,
+      "kind": "paragraph",
+      "content": "Zven was still asleep, and Lily was still in her room.",
+      "sha256": "842ceb450eabb7015c0365b00172fc4af311b37d46a17c055a29666a983aacdc"
+    },
+    {
+      "idx": 20,
+      "kind": "paragraph",
+      "content": "Seila took out her hand device, and began frantically typing.",
+      "sha256": "852eedde479be0ad71cf0500ad56777600429a870f56d1448242fc82d054e9bb"
+    },
+    {
+      "idx": 21,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>Message</th>\n      <th></th>\n      <th>To</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td><span style=\"color:oklch(0.7 0.15 253.33333333333334)\">Please tell me you're in Freetown and you're okay.</span></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td style=\"width: 25%\"><center>Jahn</center></td>\n    </tr>\n    </tbody>\n</table>\n<button disabled=\"\"> Send </button></div>",
+      "sha256": "8b62753ecee3c750006b22535437e48aff672cf8c7ce002962cbc8a7b65b9ff3",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 17,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "hand_device",
+        "device_evidence": {
+          "idx": 20,
+          "quote": "Seila took out her hand device, and began frantically typing."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "Message",
+                "",
+                "To"
+              ]
+            ],
+            "rows": [
+              [
+                "Please tell me you're in Freetown and you're okay.",
+                "→",
+                "Jahn"
+              ]
+            ]
+          },
+          {
+            "type": "button",
+            "label": "Send"
+          }
+        ]
+      }
+    },
+    {
+      "idx": 22,
+      "kind": "paragraph",
+      "content": "She clicked send.",
+      "sha256": "fdd20b900ad4c02a50159425ae33b81ea1cf97f4bc4d6f925243745abef43889"
+    },
+    {
+      "idx": 23,
+      "kind": "paragraph",
+      "content": "A few ticks later:",
+      "sha256": "f1cdc6f3296eb8fd1751d2fe5c0ea2952483b2d9a6ddc399ee17a1bc6c25f793"
+    },
+    {
+      "idx": 24,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>From</th>\n      <th></th>\n      <th>Message</th>\n      <th>Time</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Jahn</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 133.33333333333331)\">Don't worry, I am in Freetown.</span></td>\n      <td>32117</td>\n    </tr>\n    </tbody>\n</table></div>",
+      "sha256": "e8d460d93361eb4fff7eb7dcbb20e1795de14617f0e2846bf76b516864d77718",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 17,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "hand_device",
+        "device_evidence": {
+          "idx": 20,
+          "quote": "Seila took out her hand device, and began frantically typing."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "From",
+                "",
+                "Message",
+                "Time"
+              ]
+            ],
+            "rows": [
+              [
+                "Jahn",
+                "→",
+                "Don't worry, I am in Freetown.",
+                "32117"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 25,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>From</th>\n      <th></th>\n      <th>Message</th>\n      <th>Time</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Jahn</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 133.33333333333331)\">We've somehow been taking defense seriously here, and Freetown is about as far from Redshire as you can get in the United Cities, except for Silverbeach and Mabuli.</span></td>\n      <td>32124</td>\n    </tr>\n    </tbody>\n</table></div>",
+      "sha256": "47da67c8f637b5daaa3c74443e92a64865958ead5b4327851ffabbbf21eca2d5",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 17,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "hand_device",
+        "device_evidence": {
+          "idx": 20,
+          "quote": "Seila took out her hand device, and began frantically typing."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "From",
+                "",
+                "Message",
+                "Time"
+              ]
+            ],
+            "rows": [
+              [
+                "Jahn",
+                "→",
+                "We've somehow been taking defense seriously here, and Freetown is about as far from Redshire as you can get in the United Cities, except for Silverbeach and Mabuli.",
+                "32124"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 26,
+      "kind": "paragraph",
+      "content": "Seila sighed with relief.",
+      "sha256": "ab3284f33f2bf0564a2f6c47b4313cf76a8988be41189c0b7cfb04bd4265a704"
+    },
+    {
+      "idx": 27,
+      "kind": "paragraph",
+      "content": "Gladias saw Seila messaging Jahn, and put his hand on her shoulder to comfort her. He did not respond further.",
+      "sha256": "0cd1623380fd27b5753b99de2392a90a669e0931069a4c43e89ffd95813b0662"
+    },
+    {
+      "idx": 28,
+      "kind": "paragraph",
+      "content": "His mind soon shifted to the rubrics. Now we're definitely not adjusting the hardware openness rubric next month, he thought. Maybe we'll even be increasing the tax brackets.",
+      "sha256": "9adc5e5f412e7581987734f861f8548b117b1b6b6eb5218ba3dd90b93856bc74"
+    },
+    {
+      "idx": 29,
+      "kind": "paragraph",
+      "content": "A moment after that, he flashed with anger toward Delwart.",
+      "sha256": "abaf1bfb0814e0ab9d58afbd236778e91ff000e591471eed631cc42a52a5aca8"
+    },
+    {
+      "idx": 30,
+      "kind": "paragraph",
+      "content": "Seila left the room to wake up Zven and get Lily. Within twenty minutes, the four of them were on their way to school, and Gladias and Seila were alone in the house.",
+      "sha256": "065eb5a6ae645e0d0963dbe54761e3b3c24a1e60fd0587081f0baa92c94b4d87"
+    },
+    {
+      "idx": 31,
+      "kind": "paragraph",
+      "content": "Gladias went down to the basement and closed the door.",
+      "sha256": "500a252cef7153428a34e46776568ef15fb4988b7e548d474356132fe88c50f5"
+    },
+    {
+      "idx": 32,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"What do we do now, Mov?\"</span>, he whispered through his neck band.",
+      "sha256": "d1c23a494aef57fb54eb0d8212269e8c8920814ed08de3e3d60528d925cd7080"
+    },
+    {
+      "idx": 33,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Well clearly Delwart was wrong about a lot of things. And next time we talk to him, we *really* have a lot of questions to ask. We need a straight answer, not excuses.\"</span>",
+      "sha256": "85fcb90f41191bf870962de21ea4c4e6b17cd51ef46b93ba9207649625694594"
+    },
+    {
+      "idx": 34,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Remember, it's not just him turning out to be so wrong on the politics. It's about what I learned a month and a half ago - the sheer level of organization of whatever it is that he's doing.\"</span>",
+      "sha256": "a1579a2b32149fd1e39ef6176e6e2a925614eff33cdaa91bc24df90cd85675fa"
+    },
+    {
+      "idx": 35,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Did you manage to track him down any more after that time?\"</span>",
+      "sha256": "2bd05b94ca69045e41721b92d7fc251b1b70a30c965742c189e27f8ed57df0e4"
+    },
+    {
+      "idx": 36,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Only two more times after that. First was a meeting with someone in a privacy robe, not sure who, and they were talking a bunch about Silverchat. Second was a meeting with a Keeper, I made out some conversation about Dreadknot. Nothing more since about a month ago, he either changed his location or he got much better at hiding.\"</span>",
+      "sha256": "aa9821e653a1ce7a440721bc255a5e36b04a105809814c71840abbf7a76f2266"
+    },
+    {
+      "idx": 37,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"So when is the vote?\"</span>",
+      "sha256": "353bf3307ecac61727d39b38a953450979bd393d58798ba440fbe75f7a689ab9"
+    },
+    {
+      "idx": 38,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"First one is in about twenty days.\"</span>",
+      "sha256": "90e82dcf3428aeed84693b566d790fbfb2fb144db17ca6476b8b791c74ea451a"
+    },
+    {
+      "idx": 39,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Delwart might make a move to try to 'verify' that you voted in the correct way. So remember the machinery that the Order set up to make sure he can't do that.\"</span>",
+      "sha256": "cb292b4af433fcbe12873dcfc18e0960baf9e3050d3265f1fe3dc64e214d14e0"
+    },
+    {
+      "idx": 40,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Only votes signed with a valid key count\"</span>, Gladias recited. <span data-hue=\"93.33\">\"You generate your voting key by meeting at least 3 of 5 people from your Key Allocation Group and registering each blinded share of the voting key with them. Once that's done, the information of which keys are and are not valid is only decryptable by the obfuscated circuit under the conditions that it specifies.\"</span>",
+      "sha256": "e49f0a4a9039fc34b7a45fab1179d14d3c1aaa5f53add47f01ace21f60ba4939"
+    },
+    {
+      "idx": 41,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"So neither Delwart nor anyone else - technically, not even I - will know which key, how many keys or if any key actually got successfully registered. Only the result of the vote gets decrypted. So Delwart can't tell which votes I submit are real or fake. I don't have the ability to prove that to him, even if I wanted to. For Delwart to be able to take over my votes, he would have to take over my identity, which means going to the KAG and *pretending to be me in person* - difficult because the whole point of the KAG is that it includes people I've met in person.\"</span>",
+      "sha256": "204dcbe52a3159481dc82417ea3bcf81cb84bf6d1d3c401aec1717aff8c3a21d"
+    },
+    {
+      "idx": 42,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Humans - the ultimate trusted hardware.\"</span>",
+      "sha256": "3d42440af5b5e73398ce1e228864048a8faf89890edd92a31b495b8d437bf2d2"
+    },
+    {
+      "idx": 43,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"You've studied well.\"</span>",
+      "sha256": "5e4cd09f8649229bd3bb21b81acf6f66e8c5a418eb8c3f6f896d98c0c7666af3"
+    },
+    {
+      "idx": 44,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"But I *hope* that this all won't be necessary, and Delwart is going to give me some sensible explanation for all this.\"</span>",
+      "sha256": "60e50680d3fc49d3edd9a5ce6161bcd3c0b74404fffb01671c44a6f8a7e150ef"
+    },
+    {
+      "idx": 45,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Hope is not a strategy.\"</span>",
+      "sha256": "c20be7e035c36c02321dafc62a74808c5f264944d36da814ec85bc56afca003e"
+    },
+    {
+      "idx": 46,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Indeed it's not.\"</span>",
+      "sha256": "88e91157e0432329717b406bfcfa38389f4776f8989f6ec6a45c434282fe907d"
+    },
+    {
+      "idx": 47,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 48,
+      "kind": "dateline",
+      "content": "**Pafogai Du, Dzego**",
+      "sha256": "ee614c21729657744a6882e7dca5303d204492c2d39b94c8e01fc8e66f439827"
+    },
+    {
+      "idx": 49,
+      "kind": "paragraph",
+      "content": "Zei anxiously tapped buttons on his hand device, and sent off a message for a fifth time.",
+      "sha256": "d12e15f03bf21726efbeaa6361983f56faa0ae32d2721598ba2e70bb294cb652"
+    },
+    {
+      "idx": 50,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>tie</th>\n      <th></th>\n      <th>dun</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td><span style=\"color:oklch(0.7 0.15 346.66666666666663)\">Are you okay????! <br><br> Please tell me where you are.</span></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n    </tr>\n    </tbody>\n</table>\n<button disabled=\"\"> be </button></div>",
+      "sha256": "275e1375c331d1f096787294e2966486ccecaa19dbf55ffdbf33575b0dc43f69",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 48,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "hand_device",
+        "device_evidence": {
+          "idx": 49,
+          "quote": "Zei anxiously tapped buttons on his hand device, and sent off a message for a fifth time."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "tie",
+                "",
+                "dun"
+              ]
+            ],
+            "rows": [
+              [
+                "Are you okay????! Please tell me where you are.",
+                "→",
+                "Deluin"
+              ]
+            ]
+          },
+          {
+            "type": "button",
+            "label": "be"
+          }
+        ]
+      }
+    },
+    {
+      "idx": 51,
+      "kind": "paragraph",
+      "content": "He sat crying at a table in the lobby restaurant of his hotel. There was a tea and a rice and vegetable dish on the table in front of him. He had drunk the tea quickly; the robot had already refilled it four times. The rice and vegetables were uneaten for almost a longhour.",
+      "sha256": "63bcec81b1a6f72f59e33f1e9c51296bff5b55f8a0692bba34342b0439f4eec8"
+    },
+    {
+      "idx": 52,
+      "kind": "paragraph",
+      "content": "Finally, he got a message in response.",
+      "sha256": "53b31655ccb127f2479ce827c443f5dcae359df5c7c40b6629902e9138c03faa"
+    },
+    {
+      "idx": 53,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>zan</th>\n      <th></th>\n      <th>tie</th>\n      <th>tei</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 53.33333333333333)\">Don't worry, I am alive. <br><br> Though it looks like I'm not going to be getting back to Dzego anytime soon.</span></td>\n      <td>84690</td>\n    </tr>\n    </tbody>\n</table></div>",
+      "sha256": "52461aace5b625d07831006ab86aeb389fe9c9f9757f80f15304b46fc1605349",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 48,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "robot",
+        "device_evidence": {
+          "idx": 51,
+          "quote": "He had drunk the tea quickly; the robot had already refilled it four times."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "zan",
+                "",
+                "tie",
+                "tei"
+              ]
+            ],
+            "rows": [
+              [
+                "Deluin",
+                "→",
+                "Don't worry, I am alive. Though it looks like I'm not going to be getting back to Dzego anytime soon.",
+                "84690"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 54,
+      "kind": "paragraph",
+      "content": "It was not the outcome Zei wanted, but still much better than the outcome he feared. He breathed a sigh of relief.",
+      "sha256": "13b1894258c51299a7dfbe601445cb7c67dd5350ba3f54cc426f5926212befe2"
+    },
+    {
+      "idx": 55,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>zan</th>\n      <th></th>\n      <th>tie</th>\n      <th>tei</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 53.33333333333333)\">I found a way to send messages out. <br><br> Some Arctic soldier and his friend, or his AI, or something, coded up a way to embed hidden text messages inside real-time health data that he is sending back home to command. <br><br> And someone else in command is relaying that signal into a weather feed, which is then going up to the satellites. <br><br> He's making a whole bunch of zipcoins anonymously rebroadcasting messages for people.</span></td>\n      <td>84714</td>\n    </tr>\n    </tbody>\n</table></div>",
+      "sha256": "a6ed579eb105bc0d1149363afa60df37ed84dd630944f45aedff11d0d8406f50",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 48,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "robot",
+        "device_evidence": {
+          "idx": 51,
+          "quote": "He had drunk the tea quickly; the robot had already refilled it four times."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "zan",
+                "",
+                "tie",
+                "tei"
+              ]
+            ],
+            "rows": [
+              [
+                "Deluin",
+                "→",
+                "I found a way to send messages out. Some Arctic soldier and his friend, or his AI, or something, coded up a way to embed hidden text messages inside real-time health data that he is sending back home to command. And someone else in command is relaying that signal into a weather feed, which is then going up to the satellites. He's making a whole bunch of zipcoins anonymously rebroadcasting messages for people.",
+                "84714"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 56,
+      "kind": "paragraph",
+      "content": "Zei wiped off his tears, and started typing intently.",
+      "sha256": "14574521eafbcfa2082ecc5ba5b7b041e2ae73fafd2b140b5d76c1f166dd7867"
+    },
+    {
+      "idx": 57,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>tie</th>\n      <th></th>\n      <th>dun</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td><span style=\"color:oklch(0.7 0.15 346.66666666666663)\">Wow. Are you ... in touch with this soldier?</span></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n    </tr>\n    </tbody>\n</table>\n<button disabled=\"\"> be </button></div>",
+      "sha256": "d44862a66540ca625f967638d5f3e4586b6271d6b01d3d5b7c34da2df5de99f5",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 48,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "robot",
+        "device_evidence": {
+          "idx": 51,
+          "quote": "He had drunk the tea quickly; the robot had already refilled it four times."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "tie",
+                "",
+                "dun"
+              ]
+            ],
+            "rows": [
+              [
+                "Wow. Are you ... in touch with this soldier?",
+                "→",
+                "Deluin"
+              ]
+            ]
+          },
+          {
+            "type": "button",
+            "label": "be"
+          }
+        ]
+      }
+    },
+    {
+      "idx": 58,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>zan</th>\n      <th></th>\n      <th>tie</th>\n      <th>tei</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 53.33333333333333)\">I have an anonymous link.</span></td>\n      <td>84723</td>\n    </tr>\n    </tbody>\n</table></div>",
+      "sha256": "14786a512b112227c52ac37525ba939a8ede44b2f94c5b5966407cfdbee6aeb2",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 48,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "robot",
+        "device_evidence": {
+          "idx": 51,
+          "quote": "He had drunk the tea quickly; the robot had already refilled it four times."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "zan",
+                "",
+                "tie",
+                "tei"
+              ]
+            ],
+            "rows": [
+              [
+                "Deluin",
+                "→",
+                "I have an anonymous link.",
+                "84723"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 59,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>tie</th>\n      <th></th>\n      <th>dun</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td><span style=\"color:oklch(0.7 0.15 346.66666666666663)\">Ask him how he's encoding the messages that he's putting into his health data.</span></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n    </tr>\n    </tbody>\n</table>\n<button disabled=\"\"> be </button></div>",
+      "sha256": "fb960bce86e9d149765fb1debec10710ea0f7d4040901a5ff70848a76621d9cb",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 48,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "robot",
+        "device_evidence": {
+          "idx": 51,
+          "quote": "He had drunk the tea quickly; the robot had already refilled it four times."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "tie",
+                "",
+                "dun"
+              ]
+            ],
+            "rows": [
+              [
+                "Ask him how he's encoding the messages that he's putting into his health data.",
+                "→",
+                "Deluin"
+              ]
+            ]
+          },
+          {
+            "type": "button",
+            "label": "be"
+          }
+        ]
+      }
+    },
+    {
+      "idx": 60,
+      "kind": "paragraph",
+      "content": "Zei thought for a moment, and realized that perhaps the time had arrived for him to become the instructor. He took out a keyboard and started typing furiously.",
+      "sha256": "80e2a3e63f0d4a65e53371461f804d9e67103b7c0dcf073b941757ae314a8eb6"
+    },
+    {
+      "idx": 61,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>tie</th>\n      <th></th>\n      <th>dun</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td><span style=\"color:oklch(0.7 0.15 346.66666666666663)\">Or actually, on second thought, he won't answer. But tell him that randomly flipping the least-significant bits, the strategy that everyone always reaches for when they encounter this problem for the first time, is not the ideal solution. Sometimes higher-order bits are totally fine to flip, and sometimes flipping even a least-significant bit is dangerous.<br><br> What you want to do is: <br><br> * Train a language model on the actual distribution, so that conditional on what all the other bits are, it can give you probabilities for whether a given bit should be 0 or 1<br><br> * Split the data up into buckets - make sure to use the decryption key itself to choose the buckets randomly - and require the bits in the i'th bucket to XOR to the i'th bit in the ciphertext. Within each bucket, use the model to determine which bit's probabilities are closest to 50/50 - meaning both values are \"natural\" for that bit to have in that context - and flip that bit to make the bucket XOR correct.<br><br>So you're letting the LLM decide which bits are \"least significant\" and okay to flip, instead of just always taking the lowest-order binary digit in each number.</span></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n    </tr>\n    </tbody>\n</table>\n<button disabled=\"\"> be </button></div>",
+      "sha256": "5ab9e0e594023241631af779a67502b2d57e96f9d05a5742aa7706438b78ff6a",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 48,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "robot",
+        "device_evidence": {
+          "idx": 51,
+          "quote": "He had drunk the tea quickly; the robot had already refilled it four times."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "tie",
+                "",
+                "dun"
+              ]
+            ],
+            "rows": [
+              [
+                "Or actually, on second thought, he won't answer. But tell him that randomly flipping the least-significant bits, the strategy that everyone always reaches for when they encounter this problem for the first time, is not the ideal solution. Sometimes higher-order bits are totally fine to flip, and sometimes flipping even a least-significant bit is dangerous. What you want to do is: * Train a language model on the actual distribution, so that conditional on what all the other bits are, it can give you probabilities for whether a given bit should be 0 or 1 * Split the data up into buckets - make sure to use the decryption key itself to choose the buckets randomly - and require the bits in the i'th bucket to XOR to the i'th bit in the ciphertext. Within each bucket, use the model to determine which bit's probabilities are closest to 50/50 - meaning both values are \"natural\" for that bit to have in that context - and flip that bit to make the bucket XOR correct.So you're letting the LLM decide which bits are \"least significant\" and okay to flip, instead of just always taking the lowest-order binary digit in each number.",
+                "→",
+                "Deluin"
+              ]
+            ]
+          },
+          {
+            "type": "button",
+            "label": "be"
+          }
+        ]
+      }
+    },
+    {
+      "idx": 62,
+      "kind": "paragraph",
+      "content": "Zei sat back briefly, proud that he had managed to understand and explain not just a complicated concept, but *the exact complicated concept that was needed for this exact job*.",
+      "sha256": "55d8d46af789f7303766aefa25bfdde6958802139e5d9afa90cb34805a9ece92"
+    },
+    {
+      "idx": 63,
+      "kind": "paragraph",
+      "content": "He decided to keep going, out of a feeling of personal pride in his understanding as much as out of a desire to let more people in Redshire sneak information past the Arctic censors.",
+      "sha256": "a8d29803ad309ef3c469808d2889c1285f7ac5bec30bbef714808b0ee99d03f9"
+    },
+    {
+      "idx": 64,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>tie</th>\n      <th></th>\n      <th>dun</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td><span style=\"color:oklch(0.7 0.15 346.66666666666663)\">If you want to go even further, you can make the buckets partially overlap. Say:<br><br>* the first bucket is 0...199<br>* the second is 20...219<br>* the third is 40...239<br><br>and so on, though remember the whole order should be a pseudorandom permutation.<br><br>Also, choose only a random half of the positions in each bucket to go into the XOR, so there are always bits to flip that affect one bucket but not the bucket before or after it. So say, 204 might be part of the second bucket _but not_ the third.<br><br>The happy-path algorithm is:<br><br>* choose a bit to flip in 0...199 to make the first bucket XOR correctly<br>* choose a bit to flip in 200...219 to make the second bucket XOR correctly<br>* choose a bit to flip in 220...239 to make the third bucket XOR correctly<br><br> and so on... <br><br>But if, let's say, 240...259 gives you 20 bits in a row where _none of them_ are reasonable to flip - think, a very clear picture of a night sky, so you get 20 pixels in a row that are really supposed to be exactly black - or the equivalent of that for health data - then you walk back and try to find a combination of bits to flip in 220...239 that makes both of the last two buckets XOR correctly, and if that fails, you walk back further and try to find a combination of bits to flip in 200...239 to make the last three buckets XOR correctly, and so on.</span></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n    </tr>\n    </tbody>\n</table>\n<button disabled=\"\"> be </button></div>",
+      "sha256": "e3b4de22ea07e7621432ea7b76a5e66821aa5fda151d6b1a57fdf5fd9db190b1",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 48,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "robot",
+        "device_evidence": {
+          "idx": 51,
+          "quote": "He had drunk the tea quickly; the robot had already refilled it four times."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "tie",
+                "",
+                "dun"
+              ]
+            ],
+            "rows": [
+              [
+                "If you want to go even further, you can make the buckets partially overlap. Say:* the first bucket is 0...199* the second is 20...219* the third is 40...239and so on, though remember the whole order should be a pseudorandom permutation.Also, choose only a random half of the positions in each bucket to go into the XOR, so there are always bits to flip that affect one bucket but not the bucket before or after it. So say, 204 might be part of the second bucket _but not_ the third.The happy-path algorithm is:* choose a bit to flip in 0...199 to make the first bucket XOR correctly* choose a bit to flip in 200...219 to make the second bucket XOR correctly* choose a bit to flip in 220...239 to make the third bucket XOR correctly and so on... But if, let's say, 240...259 gives you 20 bits in a row where _none of them_ are reasonable to flip - think, a very clear picture of a night sky, so you get 20 pixels in a row that are really supposed to be exactly black - or the equivalent of that for health data - then you walk back and try to find a combination of bits to flip in 220...239 that makes both of the last two buckets XOR correctly, and if that fails, you walk back further and try to find a combination of bits to flip in 200...239 to make the last three buckets XOR correctly, and so on.",
+                "→",
+                "Deluin"
+              ]
+            ]
+          },
+          {
+            "type": "button",
+            "label": "be"
+          }
+        ]
+      }
+    },
+    {
+      "idx": 65,
+      "kind": "paragraph",
+      "content": "He then realized that his last message might have come off too much as him trying to be a hotshot, so he sent a followup.",
+      "sha256": "824840899127765c3fb3d35f925715956f211050cb166614e6d7159e7a50554a"
+    },
+    {
+      "idx": 66,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>tie</th>\n      <th></th>\n      <th>dun</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td><span style=\"color:oklch(0.7 0.15 346.66666666666663)\">I learned that from Den's cryptography textbooks.</span></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n    </tr>\n    </tbody>\n</table>\n<button disabled=\"\"> be </button></div>",
+      "sha256": "38b403e9641cf10514493213f90bddd3a6c1030ba334d9e513c85218e293180d",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 48,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "robot",
+        "device_evidence": {
+          "idx": 51,
+          "quote": "He had drunk the tea quickly; the robot had already refilled it four times."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "tie",
+                "",
+                "dun"
+              ]
+            ],
+            "rows": [
+              [
+                "I learned that from Den's cryptography textbooks.",
+                "→",
+                "Deluin"
+              ]
+            ]
+          },
+          {
+            "type": "button",
+            "label": "be"
+          }
+        ]
+      }
+    },
+    {
+      "idx": 67,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>zan</th>\n      <th></th>\n      <th>tie</th>\n      <th>tei</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 53.33333333333333)\">I'll forward that to him. <br><br> But I suspect that for him, first priority is going to be finding higher-bandwidth channels to hide data inside. Optimizing which bits to flip is really smart but it's maybe a 2x gain, finding a better data stream might be a 1000x gain. <br><br> Always take the dumb 1000x gain before the super-clever 2x gain.</span></td>\n      <td>85190</td>\n    </tr>\n    </tbody>\n</table></div>",
+      "sha256": "d4a11fc1f783de722430fc8deb919bc9f082d109232917ee62dc8fbf4089cd3d",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 48,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "robot",
+        "device_evidence": {
+          "idx": 51,
+          "quote": "He had drunk the tea quickly; the robot had already refilled it four times."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "zan",
+                "",
+                "tie",
+                "tei"
+              ]
+            ],
+            "rows": [
+              [
+                "Deluin",
+                "→",
+                "I'll forward that to him. But I suspect that for him, first priority is going to be finding higher-bandwidth channels to hide data inside. Optimizing which bits to flip is really smart but it's maybe a 2x gain, finding a better data stream might be a 1000x gain. Always take the dumb 1000x gain before the super-clever 2x gain.",
+                "85190"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 68,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>zan</th>\n      <th></th>\n      <th>tie</th>\n      <th>tei</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 53.33333333333333)\">I learned that in business school.</span></td>\n      <td>85200</td>\n    </tr>\n    </tbody>\n</table></div>",
+      "sha256": "7beb3a273a9e4c2f0c444d6fb70dcc31a29a5832ab7373c4bc3bc3c51ac5ef0f",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 48,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "robot",
+        "device_evidence": {
+          "idx": 51,
+          "quote": "He had drunk the tea quickly; the robot had already refilled it four times."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "zan",
+                "",
+                "tie",
+                "tei"
+              ]
+            ],
+            "rows": [
+              [
+                "Deluin",
+                "→",
+                "I learned that in business school.",
+                "85200"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 69,
+      "kind": "paragraph",
+      "content": "Zei felt more optimistic about how much of an improvement a better steganographic encoding would be, but decided not to press the point further.",
+      "sha256": "f1ce0407a0a11175e4fd84c69b3baf3f0f7baaaae28bb7d7e3ee61f718da4d71"
+    },
+    {
+      "idx": 70,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>tie</th>\n      <th></th>\n      <th>dun</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td><span style=\"color:oklch(0.7 0.15 346.66666666666663)\">Alright, well stay safe. <br><br>And let me know if there's anything that I can do, or that smart people in my network could do, to help you get out of there safely.</span></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n    </tr>\n    </tbody>\n</table>\n<button disabled=\"\"> be </button></div>",
+      "sha256": "67caff9034fa5b07c9659521c591f9c762cf8e146530ae04a3e50700b18f2d39",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 48,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "robot",
+        "device_evidence": {
+          "idx": 51,
+          "quote": "He had drunk the tea quickly; the robot had already refilled it four times."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "tie",
+                "",
+                "dun"
+              ]
+            ],
+            "rows": [
+              [
+                "Alright, well stay safe. And let me know if there's anything that I can do, or that smart people in my network could do, to help you get out of there safely.",
+                "→",
+                "Deluin"
+              ]
+            ]
+          },
+          {
+            "type": "button",
+            "label": "be"
+          }
+        ]
+      }
+    },
+    {
+      "idx": 71,
+      "kind": "paragraph",
+      "content": "Zei thought about saying \"or that the Kungaupei could do\", or even \"or that advanced Dzegojan secret societies could do\", instead. But he realized that first, it would be a breach of confidentiality to let an outsider, especially an outsider now in hostile occupied territory, know about the existence of those things, and second, he couldn't fully trust the connection - he hadn't even asked Deluin a security question yet. And so \"smart people in my network\" it was.",
+      "sha256": "8eef83fd66654ac9b9f6c3f0bb440851b1b7e891d369b4bc2008d508181d8bf5"
+    },
+    {
+      "idx": 72,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>zan</th>\n      <th></th>\n      <th>tie</th>\n      <th>tei</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 53.33333333333333)\">Will do. Thank you for caring about me.</span></td>\n      <td>84821</td>\n    </tr>\n    </tbody>\n</table></div>",
+      "sha256": "fe600c73df640bb80b99bbf4448320651f7f0394952e0ebb05615554b76e7aa0",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 48,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "robot",
+        "device_evidence": {
+          "idx": 51,
+          "quote": "He had drunk the tea quickly; the robot had already refilled it four times."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "zan",
+                "",
+                "tie",
+                "tei"
+              ]
+            ],
+            "rows": [
+              [
+                "Deluin",
+                "→",
+                "Will do. Thank you for caring about me.",
+                "84821"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 73,
+      "kind": "paragraph",
+      "content": "Zei put down his hand device, and breathed out. His eyes briefly wandered around the restaurant, and he saw that by this point there was no one else there. He finally began eating his rice and vegetable dish.",
+      "sha256": "587d0f1de5769fd428c513d5516cc0a2c5d0fb0ad73c68e3333af318e699b5bf"
+    },
+    {
+      "idx": 74,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 75,
+      "kind": "paragraph",
+      "content": "Zei felt someone put their hands on his shoulder.",
+      "sha256": "7d89cb297ce99763900cc104b9f24a7ee2afe9356d03c0dfc471fce0082e9f50"
+    },
+    {
+      "idx": 76,
+      "kind": "paragraph",
+      "content": "Zei turned around. It was Su.",
+      "sha256": "24cdb51a8f89e139fa40b28d257c774bd68b6b8cf8677a240892c12842dd72fc"
+    },
+    {
+      "idx": 77,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"So sorry to hear about Deluin.\"</span>",
+      "sha256": "6ea17b2b6ab42511ecff56dae13e40b5a414ed8549ad4de43fe6a66fb7b666e1"
+    },
+    {
+      "idx": 78,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I assume the Kungaupei are figuring out how to get him out?\"</span>",
+      "sha256": "f7d215364efef7aaa0fd8c0af736cfff863e56a82fb731c937a53723e343d3a5"
+    },
+    {
+      "idx": 79,
+      "kind": "paragraph",
+      "content": "Zei realized that technically he had just committed an error: he had not actually confirmed that Su knew or was supposed to know about the Kungaupei - so far that was just Den and Mu.",
+      "sha256": "3a4e6c41045695ad698f206311b494ef1d6d58b6d6e2060b4111e310d3d7ff35"
+    },
+    {
+      "idx": 80,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"That was the first thing I asked Den\"</span>, Su began to reply. Zei gave out a barely audible sigh of relief. <span data-hue=\"253.33\">\"So far they've acquired a bunch of internet links into Redshire, and they got a message from Deluin a minute ago, so at least he's safe for now. We'll let you know if there's any kind of rescue plan possible.\"</span>",
+      "sha256": "dfa3b5106761c2fceccaee55d599bfe7796f8daebc0542b80038cb08f0f345ff"
+    },
+    {
+      "idx": 81,
+      "kind": "paragraph",
+      "content": "Zei nodded silently.",
+      "sha256": "551581947ffe26d328731c2de0a6db7de78af4e50c6c5a925079d9dc08cd1246"
+    },
+    {
+      "idx": 82,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"The finals are cancelled\"</span>, Su added.",
+      "sha256": "a9922592d5c826166947743d98587195a9dd6bf423716a33562a12effac43d3d"
+    },
+    {
+      "idx": 83,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Cancelled? Not postponed? What if he comes back tomorrow?\"</span>",
+      "sha256": "763ee1a4caf33d62fb0794247a6886326eb27238cca5e9f21ccb9093497f53de"
+    },
+    {
+      "idx": 84,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Even if he does, at this point it's just not right to have more games. Also we don't want to give the audience false hope, and we don't want to distract people.\"</span>",
+      "sha256": "411c8f245d04347c5597e195ceefbd4b97200b9c861ceabb41739cf7a77f86a6"
+    },
+    {
+      "idx": 85,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"You're the champion this year. And if Deluin does come back, we'll give him the same trophy and the same prize money that we're giving you.\"</span>",
+      "sha256": "d699788b5648ae0f02fa0c4c078805ffef60fd8f5cb6abfd6b591582a85f196d"
+    },
+    {
+      "idx": 86,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"No...\"</span>, Zei pleaded. <span data-hue=\"346.67\">\"I don't want to win like this.\"</span>",
+      "sha256": "6619d2b346d3d30535e6ab29c44d1fd3532ca733c244612bebd7f171c06b9405"
+    },
+    {
+      "idx": 87,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"I know it's already late today, but you should go talk to Den. He's in Sadzu Du, in the southern mountain pyramid right now. He might want you here, or maybe in Pafogai. He will know better than me.\"</span>",
+      "sha256": "7d072057638c0311fe0a4f63edac003db8487980d5f6dd88cff5eff0ddef8d99"
+    },
+    {
+      "idx": 88,
+      "kind": "paragraph",
+      "content": "Zei nodded. Of course this was all more important than the game, he understood. He hoped that Den would put him in Pafogai, so that he could see Fin and his mom again.",
+      "sha256": "1cb766bdca0d8fdaa38b0b6b18c12976fdaf58dad5e791533f80c3a1862f4ff3"
+    },
+    {
+      "idx": 89,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 90,
+      "kind": "paragraph",
+      "content": "Zei's car arrived at an entrance to the mountain pyramid that he had not been at before. This was a series of doors on the side of the mountain pyramid, much nearer to ground level than the usual entrance, though further from the city. The car stopped, its door lined up perfectly with one of the mountain pyramid doors. The car door and the mountain pyramid door slid open simultaneously.",
+      "sha256": "4357b85a55e65daffaf40ad03be886ad0f04d6f9ae95cb3489843f739eaa66be"
+    },
+    {
+      "idx": 91,
+      "kind": "paragraph",
+      "content": "Zei stepped out, and walked down the hallway.",
+      "sha256": "b6fe7a62c45d3bc7e8f60e8bc66c6e4274907278f5bd2c9523682ad2cfa29755"
+    },
+    {
+      "idx": 92,
+      "kind": "paragraph",
+      "content": "A hundred meters and a left and right turn later, he arrived at a door.",
+      "sha256": "f579c4c68d29dbabac58d9f467db91cbb6085a064e2db43da00f52ac9709002e"
+    },
+    {
+      "idx": 93,
+      "kind": "paragraph",
+      "content": "He put his watch against a green circle. The door opened.",
+      "sha256": "345027ad3e6be5ffb8697e8e6d5f9b3c54a929e47c175f4d2bb8bb23d20284d1"
+    },
+    {
+      "idx": 94,
+      "kind": "paragraph",
+      "content": "Zei saw a long room, with a table at the end. Den was sitting on the other side, alone.",
+      "sha256": "422f18811f23e53315248a7195d70437a1aa968bd5ff029eaca12add69f33cc6"
+    },
+    {
+      "idx": 95,
+      "kind": "paragraph",
+      "content": "Zei sat down.",
+      "sha256": "6250eeb6b4a6c07716868ce450cf5beede24e8cac173304eb6afb7174102fde4"
+    },
+    {
+      "idx": 96,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Thank you for coming, Zei.\"</span>",
+      "sha256": "023a12977ba04c5c79fd13c158ce59478500e95acc26fdbba6c9ca800e929673"
+    },
+    {
+      "idx": 97,
+      "kind": "paragraph",
+      "content": "Zei nodded silently.",
+      "sha256": "551581947ffe26d328731c2de0a6db7de78af4e50c6c5a925079d9dc08cd1246"
+    },
+    {
+      "idx": 98,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"I think you're one of the very few people who is in a position to help Dzego get through this next year.\"</span>",
+      "sha256": "fd66d866ff7e31cbae740b0221191700da04546c2d6715119b4e159b8f5ee3ed"
+    },
+    {
+      "idx": 99,
+      "kind": "paragraph",
+      "content": "Zei's eyes opened wide. He was now the national Minpentai champion, and he was getting far in his studies from Den's cryptography books, yes, but ... he still did not know how that made him valuable at this exact moment.",
+      "sha256": "445fdee0483ae903d995356427133177d30f2c507d6018b65f20b724f818d840"
+    },
+    {
+      "idx": 100,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"In your last Minpentai game, you did two things that were crucial to winning. Do you remember what they are?\"</span>",
+      "sha256": "33e5361ee51a8dc03845f9c777f4590a08e8eed61ff395ba8b133b70d93ad91a"
+    },
+    {
+      "idx": 101,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I can think of a few answers, but I'm not sure if any of them are what you had in mind.\"</span>",
+      "sha256": "6e04aa71b57da7c4a56c84c93d837e3079ca660e411fff884fb7758ceb81b715"
+    },
+    {
+      "idx": 102,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"First, you hunkered down and played defense, and outlasted your opponent.\"</span>",
+      "sha256": "46672ee5ab55ec5a3cb8d24be09064a158118ce7f630bc87fc9b76e55202b638"
+    },
+    {
+      "idx": 103,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Second, you made the most out of a very limited-bandwidth information channel, by pre-publishing most of the data - the symbol-carrying spaceship - and then using only a few bits of manipulation at the end to deploy the most important parts of your strategy.\"</span>",
+      "sha256": "55581daaf855d3598f4b1e95c0842c880bd291807bd3eeb127890f12bb8c0933"
+    },
+    {
+      "idx": 104,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Actually a very similar tactic to what you used in your other game months earlier, when you sent out a spaceship that encoded basically every possible glider attack strategy, and then another glider to choose which specific one you wanted to use.\"</span>",
+      "sha256": "bc879296ca5f8d98d535fe7ca1d9081fcc4bfd3323acd72beda3ac95fc02fc8f"
+    },
+    {
+      "idx": 105,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"How is this related?\"</span>",
+      "sha256": "a04756fb1dabd6ebcb4b36931c6dc8eb07b807104d1a4b294d8dcc9bf40c30f9"
+    },
+    {
+      "idx": 106,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"We have contact with Deluin. Do you know how we accomplished that?\"</span>",
+      "sha256": "bc1b646a41aecfca668357665d3e2fd92787614b8dd1ad3b9f8b6643ed8d4ef2"
+    },
+    {
+      "idx": 107,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Actually, he got in touch with me and he told me. Some Arctic soldier is charging people zipcoins to hide their messages in his health data.\"</span>",
+      "sha256": "fe3a152fb25a44ef4ade1d4abfcb7c802121d9d6c13b2a8b8f8dd50648d1d782"
+    },
+    {
+      "idx": 108,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Correct. And so everyone is dropping down to the most efficient, lowest-bandwidth form of communication they can use - raw text - and pushing all that through him. One soldier's health data, communications for thousands of people.\"</span>",
+      "sha256": "9e0aa1dd01b6f325449c223990229469ba7e2e9b44f71cf43ba0c3d024c7c4b4"
+    },
+    {
+      "idx": 109,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"A quarter longhour ago the rates he was charging suddenly dropped by two thirds - we suspect he found some more efficient way to encode data. Interestingly enough neither he nor anyone else has found any better channel than health data so far.\"</span>",
+      "sha256": "d1ab5e538525449de57c7f71aedd118d9a4abf1d02e857957336b348fd4c783a"
+    },
+    {
+      "idx": 110,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Okay, now I wonder if that was me. I told Deluin to tell the soldier to train an LLM on his own health data and then modify the health data that he is sending out in-flight by flipping the bits that the LLM says are safest to flip, and using XOR over buckets to encode the message so he has a lot of freedom in choosing which bit to flip. Much better for reducing the 'suspiciousness' per bit of hidden data encoded, so he could afford to hide more data inside the same cover traffic.\"</span>",
+      "sha256": "7700c4dcb3ebbf6009db8ef0f6048c54c46f5275aba69f824a542bf5aedd70ea"
+    },
+    {
+      "idx": 111,
+      "kind": "paragraph",
+      "content": "Den's eyes opened up.",
+      "sha256": "8fec05b9e667448edaf236cb42e600ce78157b85ae09d3983e2aeba502dee189"
+    },
+    {
+      "idx": 112,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Well we have no way to know if he used that specific trick-\"</span>",
+      "sha256": "1640cd42991c382e80c06a72a8f91496c70a151b95eb3abbe8886c940ab0ed75"
+    },
+    {
+      "idx": 113,
+      "kind": "paragraph",
+      "content": "Zei remembered to check his watch.",
+      "sha256": "de15eb50e0061cb15e925ab212a69260f173a96791e5b58bc9a692958a1b88be"
+    },
+    {
+      "idx": 114,
+      "kind": "screen",
+      "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th>zan</th>\n      <th></th>\n      <th>tie</th>\n      <th>tei</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Deluin</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 53.33333333333333)\">Arctic soldier says thanks, it helped a lot.</span></td>\n      <td>92115</td>\n    </tr>\n    </tbody>\n</table></div>",
+      "sha256": "2d6a9a272de2d9f6971b1ab2b35aa9c412cf22f18b433fab7f4945b6c31ea9b5",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 48,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "watch",
+        "device_evidence": {
+          "idx": 113,
+          "quote": "Zei remembered to check his watch."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "zan",
+                "",
+                "tie",
+                "tei"
+              ]
+            ],
+            "rows": [
+              [
+                "Deluin",
+                "→",
+                "Arctic soldier says thanks, it helped a lot.",
+                "92115"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 115,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Looks like he did.\"</span>",
+      "sha256": "19316dd1260706186fa4d1869211d4719e93222709d3eb9e752d025150f0d205"
+    },
+    {
+      "idx": 116,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"See, you've helped the anti-Arctic resistance already.\"</span>",
+      "sha256": "9c7e2ee7c6342e699a935a0e7b74cea5d427df5c892825ac337c7705856f9da0"
+    },
+    {
+      "idx": 117,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Look, Zei. What's happening now is, our hand has been forced. We can't just keep improving our capabilities secretly anymore. Dzegojan society has to come out of hiding.\"</span>",
+      "sha256": "bdc82b2ecd63798d44fd370e24cee047dc842b9b1a55883f2822caf8cc92b3f6"
+    },
+    {
+      "idx": 118,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"The shadow society has to become the society. The shadow government has to become the government. We have to sprint to deploy everything that we have figured out across all of Dzego - before the Arctics can make any moves on us.\"</span>",
+      "sha256": "dd07b03496cfa65bcf8e7304b97112bf7615bba9e8b85565eec936f146d6dff2"
+    },
+    {
+      "idx": 119,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"The part of this most relevant to you - the cryptographic infrastructure we need so that our coordination can keep functioning and we what needs to be secret can stay secret - is run out of Pafogai Du. So I want you to take the train back - Su can reschedule your ticket for tomorrow - and I'll message you about whom you should reach out to next.\"</span>",
+      "sha256": "5dbf66d387449c6f0bcc3c4a4b7540d0ebe8dfd60b90151bca34668fe5a0c781"
+    },
+    {
+      "idx": 120,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"For now, maybe see if you can come up with any more ideas for that soldier to sell more packets. That seems to be even better cryptography training for you than my textbooks.\"</span>",
+      "sha256": "954c6931429cd01aeecd0c6dc36760ce1b3e8de64c8999b4430c3cc1fa738a2c"
+    }
+  ]
+}

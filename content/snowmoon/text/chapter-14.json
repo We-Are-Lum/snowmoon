@@ -1,0 +1,929 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 14,
+  "source_url": "https://vitalik.eth.limo/snowmoon/html/chapter-14.html",
+  "source_sha256": "8a23379d2961487feb0ba6146996a89b396d5d7f965d14d6ee50715df0e0974d",
+  "fetched_at": "2026-10-02",
+  "license": "GPL-3.0",
+  "blocks": [
+    {
+      "idx": 0,
+      "kind": "heading",
+      "content": "# Chapter 14",
+      "sha256": "aac070ba5a6bf5fbee7b9e165b0cf73e0889589affd9adac20a687588f5dbc71"
+    },
+    {
+      "idx": 1,
+      "kind": "dateline",
+      "content": "**Sadzu Du, Dzego** · 3724 Firemoon 10",
+      "sha256": "e2b91df285a75fd9946ea26df739d042edb909848a1e3a3ef65f545ac3e6cbdc"
+    },
+    {
+      "idx": 2,
+      "kind": "paragraph",
+      "content": "Zei's alarm buzzed.",
+      "sha256": "87a23aa328671c3fcf7314b771da662af8d432ea894afa5c3acb160ba8939128"
+    },
+    {
+      "idx": 3,
+      "kind": "paragraph",
+      "content": "He slowly stood up. He tapped a few buttons on the room service menu, and ordered a fruit and vegetable juice.",
+      "sha256": "9d23e8b8c0d42c23ac84b53661c40d73036667476b305ef22b65e2f4a58dbd86"
+    },
+    {
+      "idx": 4,
+      "kind": "paragraph",
+      "content": "He put on his clothes.",
+      "sha256": "a127891c1da9637c4adb78ad9bd14b906e16a82a1017584c82f5348fa26764eb"
+    },
+    {
+      "idx": 5,
+      "kind": "paragraph",
+      "content": "Three minutes later, the juice arrived. Zei quickly drank it, and without wasting time he opened the door and went downstairs.",
+      "sha256": "8ce8dbd50d00daa14dc1bcced20c28296735a9ecbcaf309f1b5f57645ac6eb97"
+    },
+    {
+      "idx": 6,
+      "kind": "paragraph",
+      "content": "When he was in the lobby, he could see someone in the lobby restaurant waving at him.",
+      "sha256": "04e23425118b72ad6e1b6c9fa0d40f37afe86d54931c15b2c056f52d6e58b1fd"
+    },
+    {
+      "idx": 7,
+      "kind": "paragraph",
+      "content": "He turned to look. It was Bai.",
+      "sha256": "6286e765c2c725e4597cbc3f98b6d564a796c721c34407cf8f9b810d432e82a6"
+    },
+    {
+      "idx": 8,
+      "kind": "paragraph",
+      "content": "Zei walked over, and sat down beside Bai.",
+      "sha256": "06101297ae863de320ff34ac13590f2b7b1e19dc351843db2479cfaa9ab3148f"
+    },
+    {
+      "idx": 9,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"jie mo kai tu jie hei ja ma?\"</span>, she asked, in a cute voice that was unambiguously making fun of the restaurant robots.",
+      "sha256": "c577b9dcab23da1e613c758f8bb31c740743603d7b79493ea304909ff5f51ace"
+    },
+    {
+      "idx": 10,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I already had my juice, I'm fine\"</span>, Zei replied.",
+      "sha256": "59fd4992d20fb7fc7ad5b09f854db1b6671195d967dd5397e7fa00636aa864b0"
+    },
+    {
+      "idx": 11,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"How have you been?\"</span>",
+      "sha256": "3c71ce5b0bf61577be1424efc4cd4c672f69984c4aa0fb179d378be4af422e8d"
+    },
+    {
+      "idx": 12,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"You're not going to ask me what I've learned about the other players' strategies? You're going into the semi-final today\"</span>, Bai replied.",
+      "sha256": "7571f7c4c48a48aeedde75bdbca43e461a7d2f93a04928efdaf639e532429a94"
+    },
+    {
+      "idx": 13,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Well what have you learned about the other players' strategies?\"</span>",
+      "sha256": "cf0c9345a958cfb89eb53a25f2af138ddca75eb96482410d23dd020867bdd9fb"
+    },
+    {
+      "idx": 14,
+      "kind": "paragraph",
+      "content": "Then, he quickly added:",
+      "sha256": "bb6cd6986b85d80c2aa50d122acb6d5fb4ffcf4fc498f0fcacc997ad790d17c3"
+    },
+    {
+      "idx": 15,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"You haven't been doing anything *illicit* to get your information, have you?\"</span>",
+      "sha256": "c77fe8500a8c9637ff934073517225d81cac9d37ff15123d0187086714cceba1"
+    },
+    {
+      "idx": 16,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Don't worry, I'm not some kind of Arctic spy or anything like that. I've just been watching all the games, I made friends with some of the other players, and they let me participate in some of their practice sessions.\"</span>",
+      "sha256": "49a9c08a47bfcfa346e0b565fce185164cfb50e64ff87504b6a03a286ff1c9c9"
+    },
+    {
+      "idx": 17,
+      "kind": "paragraph",
+      "content": "Zei rolled his eyes slightly, and then sighed with relief.",
+      "sha256": "0819e44453520a942a598f8c040f3abd47990bf07e2bcac0325a1b59b34a98db"
+    },
+    {
+      "idx": 18,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Basic social skills. I needed to learn them to survive growing up.\"</span>",
+      "sha256": "7cb9bf091709710840d7631c5f063ccd99ce2bef6adce0b3e3eff833ba69d787"
+    },
+    {
+      "idx": 19,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Thank you Bai, I appreciate you.\"</span>",
+      "sha256": "57ebb11c9487899c2d8383668f2c7fdbf03599b5b693609a99599e8cdcf97d03"
+    },
+    {
+      "idx": 20,
+      "kind": "paragraph",
+      "content": "He paused for a few moments.",
+      "sha256": "86e34a0580a7588609d3529c01486c35dd4db628f18f6a243baa261e63390389"
+    },
+    {
+      "idx": 21,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"So what kind of advice do you have?\"</span>",
+      "sha256": "b670382676c637d39fb9e1255ce77d2afce4eafe1b8766d56fbfa257003e78c1"
+    },
+    {
+      "idx": 22,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"If there was one pattern that came up again and again\"</span>, Bai replied, <span data-hue=\"26.67\">\"it would be this. All the other players - *definitely* Gun, but really all the others too, are way too impatient. They don't just want to win, they want to win quickly.\"</span>",
+      "sha256": "56e15693f24ff5ccf6f9c3350d48dcb81ba92ddc5ee00eb4428fe9e1dc77c9d9"
+    },
+    {
+      "idx": 23,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"I know the scoring system of the qualifying rounds incentivizes this, but ... it carried over even past the eight thousand turn threshold, and even in the practice game that I saw between Gun and Deluin. They're not being strategic, they're being fast for the sake of being fast.\"</span>",
+      "sha256": "0200d4bfbc772982c06c798ce62b568b258e26e17e0351147612f803aaacec75"
+    },
+    {
+      "idx": 24,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"So please don't rush things if you don't have to, okay Zei?\"</span>",
+      "sha256": "027697e6255485b256fcaa65b9a924b7df3cc39997e1c6e1a690343dfe5aed5c"
+    },
+    {
+      "idx": 25,
+      "kind": "paragraph",
+      "content": "Zei nodded.",
+      "sha256": "7a6447b1349453a638ba51c721712d942b6c4469379429153a47cf960d1bf83c"
+    },
+    {
+      "idx": 26,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Thanks for the advice.\"</span>",
+      "sha256": "4bd82030e433207c007263f82eb30d053e350fc19a9109ecdc232e8fd8abe64a"
+    },
+    {
+      "idx": 27,
+      "kind": "paragraph",
+      "content": "The robot arrived, carrying Bai's vegetable and rice dish, and a tea. Zei ordered a tea for himself, and drank while watching Bai eat and drink.",
+      "sha256": "56b3714b64ada084866fdb55306d752a93f9b841cc4f39044d95c8ddf30721ca"
+    },
+    {
+      "idx": 28,
+      "kind": "paragraph",
+      "content": "Ten minutes later, Zei's watch buzzed. The car that would take him to the semi-finals had arrived.",
+      "sha256": "d895638ebc4683a8e95856fdfb3b06b37a53db04f1b84e8e64c3910eceaa1f09"
+    },
+    {
+      "idx": 29,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 30,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"13.33\">\"Welcome to the semi-finals\"</span>, the announcer voice shouted.",
+      "sha256": "eb44809df944f6bcd711b544a928e6a92ee104a5244ce58eac758ca605194bc5"
+    },
+    {
+      "idx": 31,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"13.33\">\"We have come far to get to where we are. We have had forty days of some of the most challenging matches we have seen. The top four players in the qualifiers were: Deluin from Redshire, who won six of six games, Zei Leimin from Pafogai Du who won five of six with an average win time of 5,047 turns, Gun Caibai from Dzundei who won five of six with an average win time of 5,699 turns, and Kau Seiza from Geijaken who won five of six with an average win time of 6,740 turns.\"</span>",
+      "sha256": "f77e83f4afe805d637774af347787aa7e182fbb8729a60e293db37f0009f8ddd"
+    },
+    {
+      "idx": 32,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"13.33\">\"Today, in this very special round, we will see Zei Leimin and Gun Caibai face off. And right after this, the other two players will have their own semi-final match. And in fifteen days, the two winners will face off in an epic best-two-out-of-three, and we will have our national champion!\"</span>",
+      "sha256": "d95da7d19b93e92ce2a90251c0ab83b3bd8fe4b4cce3e2d338de7790ec618eda"
+    },
+    {
+      "idx": 33,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"13.33\">\"And of course, today's rule change. The resources you can allocate in each intervention turn are reduced by eighty percent. But in addition, there will be five shrines, four arranged along the center of each edge of the board, and one in the center. Each thousand turns, any changes that had taken place to the contents of the shrine will be applied as an XOR to the regions near the four corners of the shrine, and the shrine will reset to being a default rock formation.\"</span>",
+      "sha256": "4fca54224f383e5ab1d0118cb8d882d4ed0c9302374a2ca3dcd6120bafa40544"
+    },
+    {
+      "idx": 34,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"FI LE GEI TAU FA.\"</span>",
+      "sha256": "abfba71b6c341bc8fd8012a311f2ae99c3f50e8778d6b946259437cbaf35865a"
+    },
+    {
+      "idx": 35,
+      "kind": "paragraph",
+      "content": "Zei immediately understood the meaning of the new rules. The shrines are the only objects that violate mass conservation - though even still, with these new rules, nothing decreases entropy. XOR is not weight-preserving, but it is reversible. So the game board would get more and more full, and more and more messy, over time. The reduced resource allocation meant that the intervention turns were not for building - they were for *steering*.",
+      "sha256": "98576ec3c25bb525a979867c3c1788812d4f9f757c9f722999c25acbef5c8298"
+    },
+    {
+      "idx": 36,
+      "kind": "paragraph",
+      "content": "Zei put down his usual walls, gliders and spaceships. This time though, he used some different designs - a steerable symbol-carrying spaceship he had developed months prior, that could change its direction if you intervene in only a few cells.",
+      "sha256": "46a677ac968fbe44adf296a12ffb3b89faa4e006746fbf6e03e05f5c0790b6f9"
+    },
+    {
+      "idx": 37,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"MU GU GEI TAU FA.\"</span>",
+      "sha256": "a379317908dfe5890e48a0f8521ee937c017d3c960262d2c6b0f41fb68b9e8db"
+    },
+    {
+      "idx": 38,
+      "kind": "paragraph",
+      "content": "Zei figured out one additional adjustment: he adjusted the positioning of his spaceships so that they could be located right past the shrines after exactly two intervention turns. This would let him send out a glider in exactly the right direction that it would turn a pair of shrines into an eternal glider factory: a glider would bounce back and forth, at each collision it would break off rock to spray even more gliders further north, and then every thousand turns, the rock would reset.",
+      "sha256": "51460a95a4be4f0faaf2f216922e53c9bd84c952fe0326d6de4386da013212ec"
+    },
+    {
+      "idx": 39,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"PA GU...\"</span>",
+      "sha256": "919b59c18b012270c831bb52e3ed0d257195fcec6800116e259d12128c1c0a56"
+    },
+    {
+      "idx": 40,
+      "kind": "paragraph",
+      "content": "Zei put all of his effort into glider storms that would protect his spaceships as they went to the center, east and south; he decided to sacrifice the west.",
+      "sha256": "8c35eedd71dccf2d63d8cd45b010174951719753e2433a1a0976f5fa210e0519"
+    },
+    {
+      "idx": 41,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"SO ... BI ... ZE ... HA ... MU ... FO ... SHI ... LE ... PA ...\"</span>",
+      "sha256": "346832d8c91c52a898251e7162bc1117589c719b8066c1cdca724f6a79871179"
+    },
+    {
+      "idx": 42,
+      "kind": "paragraph",
+      "content": "Until the last moment, Zei kept optimizing his structures.",
+      "sha256": "3cae0d362ab7ca2d515044b7d28da7173a6df44745dcf20031f09854915daf7d"
+    },
+    {
+      "idx": 43,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"TAU FA.\"</span>",
+      "sha256": "c013193772d04fb7b7d408e9bb5b6ff24f4babe6e85f549dc98c420013359c0f"
+    },
+    {
+      "idx": 44,
+      "kind": "paragraph",
+      "content": "The spaceships and gliders started moving.",
+      "sha256": "7b43d66a7a7a6394debd151adfe06806409cdf7174de6d10604a0436d8a39f12"
+    },
+    {
+      "idx": 45,
+      "kind": "paragraph",
+      "content": "A thousand turns later, the first intervention turn came. Zei shot off a few gliders to turn more rock formations into symbols and glider factories.",
+      "sha256": "acadc410931c66343c2e94fc7c30a91cc6035385d53423513f6f40005b6324e1"
+    },
+    {
+      "idx": 46,
+      "kind": "paragraph",
+      "content": "He realized that he had one major weakness: while he could make symbols, it would take him four intervention turns to make a symbol-carrying spaceship or glider factory. That meant that his three symbol-carrying spaceships were all the fleet that he had, and he had to protect them.",
+      "sha256": "15f18a99bc4518ad72b5c40bbc06eac971e48bd47f9a8900e862bd59fe7e3c2c"
+    },
+    {
+      "idx": 47,
+      "kind": "paragraph",
+      "content": "Just before the second intervention turn, his spaceship and two of Gun's spaceships flew past each other in the center. Evidently, Gun was even more intent on doing something in the center than he was.",
+      "sha256": "78f888a7fc11ebc2ec66e4c6295fb88082514d16ebbb0be877410d7f4c5e6bb2"
+    },
+    {
+      "idx": 48,
+      "kind": "paragraph",
+      "content": "Zei realized that he had a choice to make: he could send gliders out to attack Gun's ship, he could put up walls to defend against Gun's ship, or he could set up the eternal glider factory.",
+      "sha256": "e6c64e50fbfcd37b86b993b75ee1d2056e8237abc1ec45f24717a27fd6d28876"
+    },
+    {
+      "idx": 49,
+      "kind": "paragraph",
+      "content": "The second intervention turn came. He decided on the last course of action, sending gliders out that would bounce between the center shrine and the south shrine, the center shrine and the east shrine, and the south shrine and the east shrine.",
+      "sha256": "860254b0cb71bfe4621953394ec754de92eace03f2907bacdd27c6bb94024883"
+    },
+    {
+      "idx": 50,
+      "kind": "paragraph",
+      "content": "Right after the intervention turn finished, Zei noticed that Gun had done the exact same thing, using both his symbol-carrying spaceships in the center. He had also adjusted the heading of both of his ships, so that they would also head south.",
+      "sha256": "1399dc4de95264be32363152025f93565aabce01aadd152ba68cee4f54771d3a"
+    },
+    {
+      "idx": 51,
+      "kind": "paragraph",
+      "content": "Zei and Gun could not see the full view of what was going on, but the audience could.",
+      "sha256": "18e16e858b9cd15a2105254d4c11013a866b861f647ac0ff13dfc93d555012d2"
+    },
+    {
+      "idx": 52,
+      "kind": "figure",
+      "content": "<div class=\"device-view narrow-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<circle cx=\"10\" cy=\"30\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"35\" cy=\"10\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"45\" cy=\"65\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"65\" cy=\"45\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"90\" cy=\"115\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"105\" cy=\"110\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"115\" cy=\"15\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"165\" cy=\"10\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"190\" cy=\"25\" r=\"3\" fill=\"#cef\"></circle>\n<rect x=\"85\" y=\"95\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"85\" y=\"160\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"180\" y=\"85\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"185\" y=\"165\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"160\" y=\"185\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"150\" y=\"170\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"175\" y=\"140\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"15\" y=\"170\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"35\" y=\"185\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<polygon points=\"18,94 32,94 25,106\" fill=\"#3ef\"></polygon>\n<polygon points=\"93,94 107,94 100,106\" fill=\"#3ef\"></polygon>\n<polygon points=\"168,94 182,94 175,106\" fill=\"#3ef\"></polygon>\n<polygon points=\"93,19 107,19 100,31\" fill=\"#3ef\"></polygon>\n<polygon points=\"93,169 107,169 100,181\" fill=\"#3ef\"></polygon>\n</svg></div>",
+      "sha256": "60e8ac21c62b408b5334345db0e66f6eca2dd755d9eb15d2dcd925093af3ffcd",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Sadzu Du, Dzego"
+        },
+        "device": null,
+        "device_evidence": null,
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c14-b52.svg",
+            "viewBox": "0 0 200 200",
+            "width": "200",
+            "height": "200",
+            "labels": [],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 53,
+      "kind": "paragraph",
+      "content": "A few hundred turns later, Zei realized that Gun's attack had been more effective. He had not only created eternal glider factories between the center and south shrines, and the center and west, but he had also unleashed a glider attack that destroyed Zei's symbol-carrying spaceship.",
+      "sha256": "33d3212758a565804219987e824aa33826a600c129435c773da3968976e77ee2"
+    },
+    {
+      "idx": 54,
+      "kind": "paragraph",
+      "content": "Meanwhile, Gun's two symbol-carrying spaceships were moving south, one of them on a collision course with Zei's own - a collision that would happen before the next intervention turn.",
+      "sha256": "60920189c22597adbbddfd95713b33ff6cb62ddd349fe4989dd6701518545fc9"
+    },
+    {
+      "idx": 55,
+      "kind": "paragraph",
+      "content": "Zei would only have one symbol-carrying spaceship left, the one in the east.",
+      "sha256": "085ebbb504390f4ca969d67e74e9d669d249b06dc881a790f00a24da63b7e33a"
+    },
+    {
+      "idx": 56,
+      "kind": "paragraph",
+      "content": "Zei sighed. He realized that his last symbol-carrying spaceship was the last mobile structure he had that Gun knew nothing about. His best advantage might be keeping it that way. On his next intervention turn, he steered that spaceship to temporarily stop, just outside of visual range of Gun's northeastern base. He set the spaceship to fire off gliders to destroy the symbols that were undoubtedly in Gun's northeastern base. To avoid giving up his location, they would not fly north directly - instead, they would reflect off of the northern rock shrine.",
+      "sha256": "5ee9d6a5ad77b4dc0cf677e7a7366e0ae554665803ddf79f4603ed20b823a7ca"
+    },
+    {
+      "idx": 57,
+      "kind": "paragraph",
+      "content": "Meanwhile, in the southeast, Zei's own symbols began to disappear one by one - first, from Gun's eternal glider factories, then from new gliders fired by his symbol-carrying spaceship now moving eastward from the south.",
+      "sha256": "507478ccab8c397d4975256fc9c03cce17d4956eb0758569526b4b76178b39b7"
+    },
+    {
+      "idx": 58,
+      "kind": "paragraph",
+      "content": "And just before the next intervention turn, Zei briefly saw Gun's symbol-carrying spaceship come into view near his southwest base - just before it sent out gliders that destroyed it.",
+      "sha256": "ca9f0bedb41ea20fc612957de1077c65f3d56b67d3b35a6a200e5660b042f3cb"
+    },
+    {
+      "idx": 59,
+      "kind": "paragraph",
+      "content": "Then the fourth intervention turn came.",
+      "sha256": "af5f8c14039ef25d9a6ace30a33c427d2b84b264ffaa37f85f10e34b56cd2091"
+    },
+    {
+      "idx": 60,
+      "kind": "figure",
+      "content": "<div class=\"device-view narrow-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<circle cx=\"10\" cy=\"30\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"35\" cy=\"10\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"45\" cy=\"65\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"150\" cy=\"180\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"20\" cy=\"165\" r=\"3\" fill=\"#cef\"></circle>\n<rect x=\"180\" y=\"35\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"185\" y=\"165\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<polygon points=\"18,94 32,94 25,106\" fill=\"#3ef\"></polygon>\n<polygon points=\"93,94 107,94 100,106\" fill=\"#3ef\"></polygon>\n<polygon points=\"168,94 182,94 175,106\" fill=\"#3ef\"></polygon>\n<polygon points=\"93,19 107,19 100,31\" fill=\"#3ef\"></polygon>\n<polygon points=\"93,169 107,169 100,181\" fill=\"#3ef\"></polygon>\n</svg></div>",
+      "sha256": "6d5a90dbcf6c52a1d9a217f9fca28acdb4d37a686741480e81ab24534a3d069e",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Sadzu Du, Dzego"
+        },
+        "device": null,
+        "device_evidence": null,
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c14-b60.svg",
+            "viewBox": "0 0 200 200",
+            "width": "200",
+            "height": "200",
+            "labels": [],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 61,
+      "kind": "paragraph",
+      "content": "Gun had a large advantage in material, Zei knew. Zei's only advantage was staying hidden. There were also gliders flying all over from the eternal glider factories, and the spot just south of the northeast corner was one of the more comfortable spots to be.",
+      "sha256": "32ca0a0aab143613a0e53c84f1103fe040b2ac4337cfd694fa0fdc17cd46f405"
+    },
+    {
+      "idx": 62,
+      "kind": "paragraph",
+      "content": "Zei decided he would continue to lay low. He stopped his symbol-carrying spaceship, and started on a five-intervention-turn-long quest to build another one.",
+      "sha256": "1e43a40a513bd078b3df205ed24fc008ab812deb431f5798a2c6e00525bf4a64"
+    },
+    {
+      "idx": 63,
+      "kind": "paragraph",
+      "content": "Meanwhile, he remembered what he saw of the rock formations near the center just before his symbol-carrying spaceship there was destroyed, replicated the pattern in his sandbox, and figured out a strategy that would spawn an eternal glider factory between the center and north shrines to wreak havoc on Gun's northwest.",
+      "sha256": "0e997455d911493a5896aef62bafe8a2f782f9b97a5f4fa06c3063d544818337"
+    },
+    {
+      "idx": 64,
+      "kind": "paragraph",
+      "content": "By the fifth intervention turn, his attack succeeded in heavily damaging Gun's bases in the northwest - though Zei had no way to know how much damage was done. Zei continued his quest to build another symbol-carrying ship.",
+      "sha256": "815d0155534ff4e9450b5c594116af6d2768c0523c63ebe1cbf7d64cc34803d3"
+    },
+    {
+      "idx": 65,
+      "kind": "paragraph",
+      "content": "Shortly after that, Zei's last symbol in the southeast got destroyed by a storm of gliders. The last thing he could see in the southeast was Gun's symbol-carrying spaceship starting to move northwards.",
+      "sha256": "5450aba5c5462f097b9972931103f31312ac87559863d9d7da762a5acf030859"
+    },
+    {
+      "idx": 66,
+      "kind": "paragraph",
+      "content": "Zei sent gliders to create another eternal glider factory, this time flooding the space along the center of the west.",
+      "sha256": "e6bf78ee0422fec814c5931b34294252ce1a27f20e15179b2a9af97ae9e42d75"
+    },
+    {
+      "idx": 67,
+      "kind": "paragraph",
+      "content": "He did not move his own spaceship. He could not: for the next three thousand turns he was a sitting duck, as he was building his new spaceship.",
+      "sha256": "c33fd598ab945938fcffcd2676a7df69c6b41c6daac68ae79f151ede1663e8e5"
+    },
+    {
+      "idx": 68,
+      "kind": "figure",
+      "content": "<div class=\"device-view narrow-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<circle cx=\"35\" cy=\"10\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"185\" cy=\"120\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"20\" cy=\"165\" r=\"3\" fill=\"#cef\"></circle>\n<rect x=\"180\" y=\"35\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<polygon points=\"18,94 32,94 25,106\" fill=\"#3ef\"></polygon>\n<polygon points=\"93,94 107,94 100,106\" fill=\"#3ef\"></polygon>\n<polygon points=\"168,94 182,94 175,106\" fill=\"#3ef\"></polygon>\n<polygon points=\"93,19 107,19 100,31\" fill=\"#3ef\"></polygon>\n<polygon points=\"93,169 107,169 100,181\" fill=\"#3ef\"></polygon>\n</svg></div>",
+      "sha256": "6f098a5d4f309aaa34b7e2b2b4dba314f0a56b402b80bff36597acb7fbae4fde",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Sadzu Du, Dzego"
+        },
+        "device": null,
+        "device_evidence": null,
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c14-b68.svg",
+            "viewBox": "0 0 200 200",
+            "width": "200",
+            "height": "200",
+            "labels": [],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 69,
+      "kind": "paragraph",
+      "content": "The sixth intervention turn came, right when Gun's symbol-carrying ship was getting hit by a barrage of gliders. This gave Gun a lucky chance to protect it from gliders, allowing it to survive a little bit longer.",
+      "sha256": "777dadbb0dd8343ad262161981e1c3f0d914a615d49ac4dab734c7ca4e8b7b26"
+    },
+    {
+      "idx": 70,
+      "kind": "paragraph",
+      "content": "The spaceship finally did get destroyed, but only after it had gotten within visual range of Zei's own.",
+      "sha256": "b763b1953c54fb49b1fa85ca41a6009499c476163a8385c6e3ebb326bb3bce8c"
+    },
+    {
+      "idx": 71,
+      "kind": "paragraph",
+      "content": "Zei calculated: Gun had been able to see Zei's ship, but not the new ship that Zei was building.",
+      "sha256": "f2db8406ae31ae3d0550cffd3833eaa1745f69aa84096109a2cca2be0f51941c"
+    },
+    {
+      "idx": 72,
+      "kind": "paragraph",
+      "content": "Zei decided to do the only thing that he could do: he kept building, while putting up extra walls along the west and the diagonal. He judiciously ignored his south: the existing glider storm, and the debris from Gun's ship, would itself be enough protection.",
+      "sha256": "31df143dd45b7b06fc1e2d358520fe07822295a1cba5fc77d140db86e7bb3917"
+    },
+    {
+      "idx": 73,
+      "kind": "paragraph",
+      "content": "The seventh intervention turn came. Zei put all resources into building the new ship. Almost finished. The next turn would be just enough to finish it, and to give a steering instruction to both.",
+      "sha256": "5b4ece7e7d12deef9ab89e71e6e0dbc63ac2bec5d678591738bec6ac49aa601d"
+    },
+    {
+      "idx": 74,
+      "kind": "paragraph",
+      "content": "Then, a glider storm came toward Zei's ship from all directions.",
+      "sha256": "bf24ffaa9dd4d7628dd44742f3822ccdc0d650ca4ee17004e0ee6c62e83c3dd5"
+    },
+    {
+      "idx": 75,
+      "kind": "paragraph",
+      "content": "At first, the walls handled it. But then, the gliders kept coming, and soon they began to breach the walls.",
+      "sha256": "dda8ff546a49d4608b8de2fe79621798c072da3fc9d16226eaf1f99e3d84d111"
+    },
+    {
+      "idx": 76,
+      "kind": "paragraph",
+      "content": "The eighth intervention turn came just in time. Zei's last ship was not quite yet destroyed, but it was almost there. He could now finish his new ship, and give his existing ship one last instruction.",
+      "sha256": "817fdc3faa6b6b8d1f4354cde04c4073ede3b620dad8345684c286083839108d"
+    },
+    {
+      "idx": 77,
+      "kind": "paragraph",
+      "content": "Zei programmed both to head west. He figured that the existing ship's symbol would get destroyed within a hundred turns, but the wreck could still coast west, and crash into the northern shrine and release a large glider storm southward. Meanwhile, the new ship would *also* head west, but stop just north of the northern shrine. This would give it some protection from the glider storms that were getting more and more intense.",
+      "sha256": "520c5dabe27bf09fc6b557b5897611dc33ddf7010b163ca010b5619d94652645"
+    },
+    {
+      "idx": 78,
+      "kind": "paragraph",
+      "content": "When the ninth intervention turn came, Zei used a nearby rock formation, which was almost destroyed by the gliders, to bounce a glider that would then head southward and re-adjust the eternal glider factories that were attacking to the south. He did not have time to calculate what the adjustment would look like, and he did not have any way to know what its exact consequences would be, but he hoped that it would make previously safe territory unsafe. He also launched one more glider attack westward.",
+      "sha256": "cebdc27c7d8fea3956f46cc5858c07b81614d4a4fc9b07c00e546ee337a696cf"
+    },
+    {
+      "idx": 79,
+      "kind": "paragraph",
+      "content": "The tenth intervention turn came. Nothing seemed to happen, except debris. More and more debris.",
+      "sha256": "561ed527b2e989a571013800934cc6b4f9cf5c28760195008556f4e85a37158e"
+    },
+    {
+      "idx": 80,
+      "kind": "figure",
+      "content": "<div class=\"device-view narrow-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<circle cx=\"105\" cy=\"185\" r=\"3\" fill=\"#cef\"></circle>\n<rect x=\"95\" y=\"10\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<polygon points=\"18,94 32,94 25,106\" fill=\"#3ef\"></polygon>\n<polygon points=\"93,94 107,94 100,106\" fill=\"#3ef\"></polygon>\n<polygon points=\"168,94 182,94 175,106\" fill=\"#3ef\"></polygon>\n<polygon points=\"93,19 107,19 100,31\" fill=\"#3ef\"></polygon>\n<polygon points=\"93,169 107,169 100,181\" fill=\"#3ef\"></polygon>\n</svg></div>",
+      "sha256": "d5ef02760b88742938ad1d617154bd4260cadd01fdabd742c851846d9503b41e",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Sadzu Du, Dzego"
+        },
+        "device": null,
+        "device_evidence": null,
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c14-b80.svg",
+            "viewBox": "0 0 200 200",
+            "width": "200",
+            "height": "200",
+            "labels": [],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 81,
+      "kind": "paragraph",
+      "content": "Zei reinforced the eastern and western walls beside his last symbol-carrying spaceship.",
+      "sha256": "97bd5ba39db125b95d4f2093c5f5902f636519352f2f730d1df626d36ef5fe9a"
+    },
+    {
+      "idx": 82,
+      "kind": "paragraph",
+      "content": "He launched a few gliders to try to create more eternal glider factories, that would hopefully create more chaos southward. One of the gliders was destroyed, hit by another stray glider before it even left Zei's visual field.",
+      "sha256": "bf08dcf14476692d8abda1e36baadda2bb2d555e5059868b0621198ffbd7ae7a"
+    },
+    {
+      "idx": 83,
+      "kind": "paragraph",
+      "content": "The eleventh intervention turn came. Zei figured out one last trick. He figured out how to bounce a glider southward off of one of his own walls so that it would hug the edge of the shrine. From his simulations in the sandbox, he saw that if it hit the corner of the middle shrine, it would bounce off back north. The glider would bounce back and forth between the center and the north. Each time it hit the center, it would simultaneously release another glider that would go west. And when *that* glider hit the western shrine, it would bounce off and go southeast, hopefully causing damage to whatever was in the south. He did this, and simultaneously set up a mirror image of the same strategy toward the east.",
+      "sha256": "7f49f11ba67a05dd9011787c2a6f61fbac002c0e8a1b9c0f7d582ee878826059"
+    },
+    {
+      "idx": 84,
+      "kind": "paragraph",
+      "content": "The twelfth intervention turn came. By this point, the debris and stray gliders in the game field were so intense that offense was impossible. Zei simply kept building walls. Hunker down, play defense, outlast.",
+      "sha256": "7f63be10945fff947639b6ff74cb7a7a3e3594ae7a10dc6f90944684272957de"
+    },
+    {
+      "idx": 85,
+      "kind": "paragraph",
+      "content": "The thirteenth intervention turn came. Zei had built four layers of walls around this ship, and finally the walls were beginning to crumble faster than he could create new ones.",
+      "sha256": "6731bd979cf1d1ba9b8a0d37764a3490be320ffe9f5c165d268dd7846a7afc3f"
+    },
+    {
+      "idx": 86,
+      "kind": "paragraph",
+      "content": "Finally, a few hundred turns after that, an alarm buzzed.",
+      "sha256": "239eeb2c8cbf22547b067f82025ad78c63669fc79eb909d29469434647a4a2ae"
+    },
+    {
+      "idx": 87,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"13.33\">\"And ... Zei Leimin is the winner!\"</span>",
+      "sha256": "5a96b9740509200efa29018197b1df747ab8782839d0682cc9a44f1eb1f60d6b"
+    },
+    {
+      "idx": 88,
+      "kind": "paragraph",
+      "content": "Zei let out a sigh of relief.",
+      "sha256": "4fd990d8583949a65d6287bc07205ebdff355f3c16f75d2a601289b617e8e0fc"
+    },
+    {
+      "idx": 89,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 90,
+      "kind": "paragraph",
+      "content": "Zei sat in the waiting room, watching the game between Deluin and Kau. From the beginning, Zei was surprised, and impressed, by Deluin's strategy. Deluin spent all his attention early on to use the resources in the rock formations near his north and northeast to build walls. Simultaneously, he sent out gliders to try to create eternal glider factories pointing southward.",
+      "sha256": "9c1d1b4ef8f7d0ba3302c1705bd1018189953003be719f03aad3667c1efeac80"
+    },
+    {
+      "idx": 91,
+      "kind": "paragraph",
+      "content": "Deluin did not build any mobile symbol-carrying spaceships. Instead, he simply fortified. Kau's eternal glider factories proved to be of limited use: though the gliders would keep coming forever, they would only have any effect for a short period of time. As soon as a storm of gliders came, Deluin would figure out how to reflect it.",
+      "sha256": "5d6e8d905720b14de8b39376c01ee8f7489c4187a8fb5a1ea3dbb7f4fc5379e6"
+    },
+    {
+      "idx": 92,
+      "kind": "paragraph",
+      "content": "Zei was impressed. Looks like Deluin had also managed to figure out that he needed to be more patient.",
+      "sha256": "a9f0e37b250e9269b36e50cc3c93b3161e464b8e9514ac39f11d773d0a61b672"
+    },
+    {
+      "idx": 93,
+      "kind": "paragraph",
+      "content": "Seven thousand turns later, Kau was reduced to hiding behind the southern shrine. But Kau barely survived three thousand turns more: the number of stray gliders and debris kept increasing, and Deluin's walls made him far more protected than Kau was.",
+      "sha256": "a897610cbfd8fa5e9e5da22c619b7b20df2e714672278849bed6a76c4760a046"
+    },
+    {
+      "idx": 94,
+      "kind": "paragraph",
+      "content": "Ten thousand two hundred turns into the game, Deluin was announced the winner.",
+      "sha256": "1fd9c033eb187e9a8d9db97d874cfcb7a04be527f106cb9fc5576d2477944afd"
+    },
+    {
+      "idx": 95,
+      "kind": "paragraph",
+      "content": "Deluin stepped out from the elevator.",
+      "sha256": "bcdc7fc85493c8f90f63b788ff7817f19b6b27fa07a0a2a858517ca877812208"
+    },
+    {
+      "idx": 96,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"That was a really impressive job, Deluin.\"</span>",
+      "sha256": "6535cb486e7edb0b1cd995d4a89fed6a0725525b4e99173a09bc312dab80fb33"
+    },
+    {
+      "idx": 97,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Thanks! I was impressed that the walls held out so well. Now I'm excited to see how you handled your game.\"</span>",
+      "sha256": "256c56ab24a735db2003d65d542291ef5f7d07f3b38e35e978e5aa10b6f9c9ce"
+    },
+    {
+      "idx": 98,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Oh - my style was much uglier than yours. Though I also basically won by playing defense.\"</span>",
+      "sha256": "730dde3372768483bb5f006fca77701ad329c7aca31b75d64e7ff6fad274fcef"
+    },
+    {
+      "idx": 99,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Do you want to get tea later?\"</span>",
+      "sha256": "39e963aeac83511348de082a69f06fffc52468ec8785439d1941044e63a153b3"
+    },
+    {
+      "idx": 100,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Sure!\"</span>",
+      "sha256": "a82648f076bbcb3d5ea0feb7b83837ace8efb2c74bbedf1206fd670e4b0348c8"
+    },
+    {
+      "idx": 101,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 102,
+      "kind": "paragraph",
+      "content": "Deluin was sitting in the courtyard drinking a tea. As soon as Zei saw him, he started running to greet him.",
+      "sha256": "822ed43ee4ffc456d240e924fc664d31624f214d3aeef484523775d222d256af"
+    },
+    {
+      "idx": 103,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Deluin, good to see you!\"</span>",
+      "sha256": "14ddc648d4f7792863c8e5da0fbda2637a5c82c6674a3fd9142c238d7cdb6966"
+    },
+    {
+      "idx": 104,
+      "kind": "paragraph",
+      "content": "Deluin waved back. Zei ran the rest of the way to his table and sat down.",
+      "sha256": "3e8cff53d74cb7b483f2d4739818d25d1b9ab01451f145ca77d5449c917bfe70"
+    },
+    {
+      "idx": 105,
+      "kind": "paragraph",
+      "content": "A robot immediately slid up to their table.",
+      "sha256": "c80004ffac947a311b506975ac9c3ba642661bc60e8c179f6e339d834fb7bfa1"
+    },
+    {
+      "idx": 106,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"240\">\"jie mo kai tu jie hei ja ma?\"</span>",
+      "sha256": "ffc4308d1713fd7dbbcc5220c4b7a60f614f26983ee398b6afd01422da4828db"
+    },
+    {
+      "idx": 107,
+      "kind": "paragraph",
+      "content": "A menu appeared.",
+      "sha256": "4a581855ad29bcfa90b9651143fe14522817fc95e0f47a30497b444b9321114f"
+    },
+    {
+      "idx": 108,
+      "kind": "figure",
+      "content": "<div class=\"device-view narrow-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"203\" height=\"203\" viewBox=\"0 0 203 203\">\n<rect width=\"203\" height=\"203\" fill=\"#6af\"></rect>\n<g transform=\"translate(1 1)\">\n<rect width=\"100\" height=\"100\" fill=\"#245\"></rect>\n<rect x=\"10\" y=\"10\" width=\"80\" height=\"80\" rx=\"12\" fill=\"#cef\"></rect>\n<path d=\"M 60 34 C 60 52 56 62 53 66 L 39 66 C 36 62 32 52 32 34\" fill=\"#cef\" stroke=\"#245\" stroke-width=\"2\"></path>\n<path d=\"M 35.5 31 L 56.5 31 A 3.5 3.5 0 0 1 56.5 38 L 35.5 38 A 3.5 3.5 0 0 1 35.5 31 Z\" fill=\"#cef\" stroke=\"#245\" stroke-width=\"1.5\"></path>\n<path d=\"M 60 40 L 66 40 C 76 40 76 57 68 57 L 57 57\" fill=\"none\" stroke=\"#245\" stroke-width=\"2\" stroke-linecap=\"round\"></path>\n<line x1=\"70\" y1=\"45\" x2=\"78\" y2=\"47.5\" stroke=\"#245\" stroke-width=\"1.8\" stroke-linecap=\"round\"></line>\n<line x1=\"70\" y1=\"49\" x2=\"78\" y2=\"51.5\" stroke=\"#245\" stroke-width=\"1.8\" stroke-linecap=\"round\"></line>\n<line x1=\"70\" y1=\"53\" x2=\"78\" y2=\"55.5\" stroke=\"#245\" stroke-width=\"1.8\" stroke-linecap=\"round\"></line>\n</g>\n<g transform=\"translate(102 1)\">\n<rect width=\"100\" height=\"100\" fill=\"#245\"></rect>\n<rect x=\"10\" y=\"10\" width=\"80\" height=\"80\" rx=\"12\" fill=\"#cef\"></rect>\n<path d=\"M 22 50 C 34 32 58 30 77 49 L 22 50 Z\" fill=\"#cef\" stroke=\"#245\" stroke-width=\"2\"></path>\n<path d=\"M 22 50 C 34 68 58 70 77 49 L 22 50 Z\" fill=\"#cef\" stroke=\"#245\" stroke-width=\"2\"></path>\n<line x1=\"16\" y1=\"50\" x2=\"22\" y2=\"50\" stroke=\"#245\" stroke-width=\"2.5\" stroke-linecap=\"round\"></line>\n<line x1=\"33\" y1=\"42\" x2=\"33\" y2=\"58\" stroke=\"#245\" stroke-width=\"1.8\"></line>\n<line x1=\"33\" y1=\"50\" x2=\"42\" y2=\"43\" stroke=\"#245\" stroke-width=\"1.8\"></line>\n<line x1=\"33\" y1=\"50\" x2=\"42\" y2=\"57\" stroke=\"#245\" stroke-width=\"1.8\"></line>\n<polyline points=\"42.0,50.0 42.5,48.9 43.2,48.1 44.3,47.6 45.4,47.3 46.4,46.7 47.0,45.8 47.5,44.6 48.0,43.6 48.9,42.9 50.0,42.5\" fill=\"none\" stroke=\"#245\" stroke-width=\"1.5\"></polyline>\n<polyline points=\"52.0,50.0 52.1,48.5 52.8,47.7 54.1,47.5 55.7,47.5 56.8,47.1 57.3,46.0 57.3,44.5 57.6,43.2 58.5,42.5 60.0,42.5\" fill=\"none\" stroke=\"#245\" stroke-width=\"1.5\"></polyline>\n<polyline points=\"62.0,50.0 61.8,48.2 62.4,47.3 64.0,47.3 65.9,47.8 67.2,47.6 67.5,46.3 67.2,44.3 67.2,42.8 68.2,42.2 70.0,42.5\" fill=\"none\" stroke=\"#245\" stroke-width=\"1.5\"></polyline>\n<polyline points=\"42.0,50.0 43.1,50.4 44.0,51.1 44.5,52.1 45.0,53.3 45.6,54.2 46.6,54.8 47.7,55.1 48.8,55.6 49.5,56.4 50.0,57.5\" fill=\"none\" stroke=\"#245\" stroke-width=\"1.5\"></polyline>\n<polyline points=\"52.0,50.0 53.5,50.0 54.4,50.7 54.7,52.0 54.7,53.5 55.2,54.6 56.3,55.0 57.9,55.0 59.2,55.2 59.9,56.0 60.0,57.5\" fill=\"none\" stroke=\"#245\" stroke-width=\"1.5\"></polyline>\n<polyline points=\"62.0,50.0 63.8,49.7 64.8,50.3 64.8,51.8 64.5,53.8 64.8,55.1 66.1,55.3 68.0,54.8 69.6,54.8 70.2,55.7 70.0,57.5\" fill=\"none\" stroke=\"#245\" stroke-width=\"1.5\"></polyline>\n</g>\n<g transform=\"translate(1 102)\">\n<rect width=\"100\" height=\"100\" fill=\"#245\"></rect>\n<rect x=\"10\" y=\"10\" width=\"80\" height=\"80\" rx=\"12\" fill=\"#cef\"></rect>\n<circle cx=\"30\" cy=\"52\" r=\"6\" fill=\"#cef\" stroke=\"#245\" stroke-width=\"2\"></circle>\n<circle cx=\"70\" cy=\"52\" r=\"6\" fill=\"#cef\" stroke=\"#245\" stroke-width=\"2\"></circle>\n<path d=\"M 36 44.6 L 36 16 L 42 37.3\" fill=\"#cef\" stroke=\"#245\" stroke-width=\"2\" stroke-linejoin=\"round\"></path>\n<path d=\"M 58 37.3 L 64 16 L 64 44.6\" fill=\"#cef\" stroke=\"#245\" stroke-width=\"2\" stroke-linejoin=\"round\"></path>\n<circle cx=\"64\" cy=\"23.5\" r=\"3.5\" fill=\"none\" stroke=\"#245\" stroke-width=\"1.8\"></circle>\n<circle cx=\"64\" cy=\"33.5\" r=\"3.5\" fill=\"none\" stroke=\"#245\" stroke-width=\"1.8\"></circle>\n<circle cx=\"50\" cy=\"50\" r=\"15\" fill=\"#cef\" stroke=\"#245\" stroke-width=\"2\"></circle>\n<ellipse cx=\"50\" cy=\"69\" rx=\"13\" ry=\"9\" fill=\"#cef\" stroke=\"#245\" stroke-width=\"2\"></ellipse>\n<circle cx=\"43.5\" cy=\"48\" r=\"3.2\" fill=\"#245\"></circle>\n<circle cx=\"56.5\" cy=\"48\" r=\"3.2\" fill=\"#245\"></circle>\n<circle cx=\"45\" cy=\"69\" r=\"2.4\" fill=\"#245\"></circle>\n<circle cx=\"55\" cy=\"69\" r=\"2.4\" fill=\"#245\"></circle>\n</g>\n<g transform=\"translate(102 102)\">\n<rect width=\"100\" height=\"100\" fill=\"#245\"></rect>\n<rect x=\"10\" y=\"10\" width=\"80\" height=\"80\" rx=\"12\" fill=\"#cef\"></rect>\n<g transform=\"translate(-4.5 0)\">\n<polygon points=\"72.0,53.0 84.0,41.0 80.0,53.0 84.0,65.0\" fill=\"#cef\" stroke=\"#245\" stroke-width=\"2\" stroke-linejoin=\"round\"></polygon>\n<ellipse cx=\"48\" cy=\"53\" rx=\"23\" ry=\"12.5\" fill=\"#cef\" stroke=\"#245\" stroke-width=\"2\"></ellipse>\n<path d=\"M 37 52 A 3.5 3.5 0 0 0 44 52 Z\" fill=\"#cef\" stroke=\"#245\" stroke-width=\"1.2\"></path>\n<path d=\"M 45 52 A 3.5 3.5 0 0 0 52 52 Z\" fill=\"#cef\" stroke=\"#245\" stroke-width=\"1.2\"></path>\n<path d=\"M 53 52 A 3.5 3.5 0 0 0 60 52 Z\" fill=\"#cef\" stroke=\"#245\" stroke-width=\"1.2\"></path>\n<path d=\"M 61 52 A 3.5 3.5 0 0 0 68 52 Z\" fill=\"#cef\" stroke=\"#245\" stroke-width=\"1.2\"></path>\n<path d=\"M 41 59 A 3.5 3.5 0 0 0 48 59 Z\" fill=\"#cef\" stroke=\"#245\" stroke-width=\"1.2\"></path>\n<path d=\"M 49 59 A 3.5 3.5 0 0 0 56 59 Z\" fill=\"#cef\" stroke=\"#245\" stroke-width=\"1.2\"></path>\n<path d=\"M 57 59 A 3.5 3.5 0 0 0 64 59 Z\" fill=\"#cef\" stroke=\"#245\" stroke-width=\"1.2\"></path>\n<line x1=\"42\" y1=\"40.5\" x2=\"47.66\" y2=\"34.84\" stroke=\"#245\" stroke-width=\"2\" stroke-linecap=\"round\"></line>\n<line x1=\"42\" y1=\"40.5\" x2=\"47.66\" y2=\"46.16\" stroke=\"#245\" stroke-width=\"2\" stroke-linecap=\"round\"></line>\n<line x1=\"48\" y1=\"40.5\" x2=\"53.66\" y2=\"34.84\" stroke=\"#245\" stroke-width=\"2\" stroke-linecap=\"round\"></line>\n<line x1=\"48\" y1=\"40.5\" x2=\"53.66\" y2=\"46.16\" stroke=\"#245\" stroke-width=\"2\" stroke-linecap=\"round\"></line>\n<circle cx=\"30\" cy=\"50\" r=\"3\" fill=\"#245\"></circle>\n</g>\n</g>\n</svg></div>",
+      "sha256": "deaf8229cdb9870bf04354c45b87f345e97895f3c373699964c1f9e8124896e6",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Sadzu Du, Dzego"
+        },
+        "device": "robot",
+        "device_evidence": {
+          "idx": 105,
+          "quote": "A robot immediately slid up to their table."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c14-b108.svg",
+            "viewBox": "0 0 203 203",
+            "width": "203",
+            "height": "203",
+            "labels": [],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 109,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Whoa\"</span>, Zei gasped.",
+      "sha256": "889148e4c4f654f656279cbc93d59ed6353f309ac640030145ec082bdfaa79a5"
+    },
+    {
+      "idx": 110,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"What is it?\"</span>, Deluin asked.",
+      "sha256": "5a24a6694143bdc87963144b515d8ef161c4cb1d59eabd10733f38f59d3dcebc"
+    },
+    {
+      "idx": 111,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I think these are some of the new symbols they're A/B testing for Dzegoban version nine.\"</span>",
+      "sha256": "ad6d30edb8b0f70e37def05d27a37d6081e054fe0328f928f7b94a8fbe71409b"
+    },
+    {
+      "idx": 112,
+      "kind": "paragraph",
+      "content": "He immediately realized he was talking to a foreigner, and followed up:",
+      "sha256": "b24ab942905b1198c08383733160d090b0ca8aa930ae1b0f4dd5d469bddc51fe"
+    },
+    {
+      "idx": 113,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Have you heard of Dzegoban version nine?\"</span>",
+      "sha256": "cce1459976a8a946cf273b73fc613a2388e7959995a820e6742446d6dc13d672"
+    },
+    {
+      "idx": 114,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Oh yeah I had a couple people mention it to me. Making the language visual. Bringing back hieroglyphs for the individual roots, but pronunciation perfectly readable from the glyph. And also another layer where they're trying to make the grammar look more like math.\"</span>",
+      "sha256": "cbc883775114141ab7cf555085d0e248eadd6df0c8e9685c8d3b488c0f15e795"
+    },
+    {
+      "idx": 115,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Yeah, so I'm trying to parse this. The cup is water - 'ja'. I see two unusual things about the cup. More straight horizontal lines than usual, and the three diagonal lines on the right. Maybe those are the pronunciation markers? One for the consonant, one for the vowel?\"</span>",
+      "sha256": "2651e051a4d0b115be864761ffa3abd22856103f9c9f0fee331e54d1234301ed"
+    },
+    {
+      "idx": 116,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Top right is 'kai'. The unusual things I see are ... the extra vertical vein on the left, and then the transition to veins being more and more squiggly on the right? Although ... I'm not sure if I would make the images so detailed, when they often have different meanings depending on context.\"</span>",
+      "sha256": "3d1c29818092f3741ead054cf50c7ed3e112b02a6fde5a140863158f4f38079f"
+    },
+    {
+      "idx": 117,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Wait, you know Dzegoban?\"</span>",
+      "sha256": "5f08190f27f307e6b81d1df6609e029159efbd2c525c43b482d1e8de497f9531"
+    },
+    {
+      "idx": 118,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Zei, the whole point of Dzegoban is that there's only 256 roots, you can learn it in less than a month, and you don't get all the nuances but you can make your way around just fine.\"</span>, Deluin replied in a lecturing tone.",
+      "sha256": "eb8c5285efaaa3f68dcb62d0b805ef5c00a82afee076066d0a1e2038f9e0a420"
+    },
+    {
+      "idx": 119,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I'm impressed, you're almost a local already.\"</span>",
+      "sha256": "a75bb474cc7dd915b7a595b3bcc7f5380f2ce65ba05152143dc34c48edaafcc9"
+    },
+    {
+      "idx": 120,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Well, wanna come to Redshire with me tomorrow? I have to fly back for my mom and dad's birthdays, they're only a few days apart, and get some last-minute tutoring from our top players. And if you come, I can tell them that it's okay to skip the tutoring if you're doing the same!\"</span>",
+      "sha256": "b17cb311705c14f2f79d23abecfa7ea71d464142044433e0ad1e4ee8cf10c5d7"
+    },
+    {
+      "idx": 121,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I'd love to see Redshire, though unfortunately I just don't have the money for that. Maybe in a few years.\"</span>",
+      "sha256": "3006b56ebc6532a91cece6482b678c4c9e3c0f4e36a482f5ac0d9ec8ace23822"
+    },
+    {
+      "idx": 122,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"But I'm super curious to see what Redshire is like! Send me pictures.\"</span>",
+      "sha256": "07c15d4eb550fb4dd12371955d48e84007d5bf74485324500b3728c37c4427cb"
+    },
+    {
+      "idx": 123,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Oh I can show you a few now.\"</span>",
+      "sha256": "8d0c108209ef644f6ba14b3194212daef8416702b1ac1d49c8e3b479f7ddad94"
+    },
+    {
+      "idx": 124,
+      "kind": "paragraph",
+      "content": "Deluin took out his hand device, and showed Zei some pictures of Redshire. He saw castles, pine forests, large pristine grasslands, red-colored mountains with their tops covered in snow, and one giant icy waterfall.",
+      "sha256": "0e37b06068db692d3fa8d623e9a344ebfc4fb1bf53d6b3f246a21fa152892388"
+    },
+    {
+      "idx": 125,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Wow, that's beautiful.\"</span>",
+      "sha256": "4639b46e877ed6a0bd0e43256935c00e887de58d39fbdadc047cf8f8df9cecd6"
+    },
+    {
+      "idx": 126,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"You know, when I was younger I thought it was a back-handed compliment, almost an insult, to praise someone's country by saying that the nature is beautiful. At the time I thought, if the nicest thing you can say about a country is something that the people did not even make themselves, rather something that the forces of orbital dynamics and biology and tectonics randomly handed them down for free, then that's actually pretty harsh on the people.\"</span>",
+      "sha256": "f1c9dcbc9c1d2b3743805cb7aebcb6da09894924a879433fa05a716e036a136e"
+    },
+    {
+      "idx": 127,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"But as I grew up I've come to realize, that's not true at all. Even beautiful nature takes so much human work to maintain. Human work to build the paths and roads so people can walk or drive there. Human work to maintain a political system that stops people from polluting it, cutting down the forests, putting their houses on the mountainsides and making them ugly, strip-mining the mountains - while still allowing housing to be built where people can enjoy the views, keeping that housing affordable, and maintaining industry. Human work to restore any damage that was done before we got wise enough, or maybe rich enough, to care about these things.\"</span>",
+      "sha256": "ebf2603b0b067ce18a1159c6a68e8d6c2791b13d1501942014a01fd257adeba7"
+    },
+    {
+      "idx": 128,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I'll let you know as soon as I can afford to go.\"</span>",
+      "sha256": "969139c638224198457380c8de79da04bac185cf92c118fe3010132a6d7dd358"
+    },
+    {
+      "idx": 129,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Hopefully that will be in fifteen days\"</span>, he joked.",
+      "sha256": "e629a24cde8e1cf9cf0b9ef1fa509289b735317219ab4842aee876046a954ce8"
+    },
+    {
+      "idx": 130,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Because I use my championship winnings to pay for you to go\"</span>, Deluin playfully snapped back.",
+      "sha256": "78ead6469d700f0cf51660341455c942a6f63661f1d851804a99ccfe705e25e5"
+    }
+  ]
+}

@@ -1,0 +1,899 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 2,
+  "source_url": "https://vitalik.eth.limo/snowmoon/html/chapter-2.html",
+  "source_sha256": "7db744a86f443bf5a1d0726790d5cf378126ba873932e08cca77555f5d712f6d",
+  "fetched_at": "2026-10-02",
+  "license": "GPL-3.0",
+  "blocks": [
+    {
+      "idx": 0,
+      "kind": "heading",
+      "content": "# Chapter 2",
+      "sha256": "e41956dca310aaa613c3efc948f5bec47b37658ea3b1ee8c2f5809ecb3875cf3"
+    },
+    {
+      "idx": 1,
+      "kind": "dateline",
+      "content": "**Pafogai Du, Dzego** · 3724 Snowmoon 5",
+      "sha256": "76a358b5d657df99076ba3389683bd605797d970d5fd98618cbb84285ef5a0b9"
+    },
+    {
+      "idx": 2,
+      "kind": "paragraph",
+      "content": "Fin and Zei got off the autobus and walked down Hun Min street.",
+      "sha256": "0d611c0f77f57ce262b4f4ecd110885dca9881e3ac351f4ec001b7940e4ef758"
+    },
+    {
+      "idx": 3,
+      "kind": "paragraph",
+      "content": "Hun Min street was one of the more lively commercial and industrial streets in Pafogai Du. On both sides of the street, they could see signs with colored blinking lights advertising all kinds of electronics: hand devices, watches, compute boxes, lighting, batteries, sensors and more. Among the stores were miniature factories, building various sophisticated devices and in a few places even computer chips. The buildings were all one or two storeys tall, and many signs were on top of stairways leading underground.",
+      "sha256": "44d1e50b22359d8aae1ab5847f5ca81a0fbfc0200bb6869b1a0b6c98c503660c"
+    },
+    {
+      "idx": 4,
+      "kind": "paragraph",
+      "content": "On the left, there were two adjacent stores. One was selling sensors of all kinds - cameras, microphones, biological and chemical sensors, air quality monitors, and of course, sensors designed to detect sensors. The other was selling anti-transmission foil - a common material used by default in many kinds of rooms, to block wireless signals. Privacy and transparency, monitoring and anti-monitoring - the duality of keeping the Dzegojan safe.",
+      "sha256": "5d013a6225fb67a3f3ae61aba8b34203074470f4ffadb0eeda88b38a78a68cba"
+    },
+    {
+      "idx": 5,
+      "kind": "paragraph",
+      "content": "Between the two stores, a sign read in large letters:",
+      "sha256": "dc28039e6a7e5ca3dd1fe1b121c8516553197db894200f4074e0858ef84093e3"
+    },
+    {
+      "idx": 6,
+      "kind": "quote",
+      "content": "<center><div class=\"dz-card dz-mono\" style=\"font-family:'TeX Gyre Chorus',cursive;font-size:17px;line-height:1.55\"><div class=\"dz-line dz-blank\" style=\"height:1em\"></div>\n<div class=\"dz-line\" style=\"margin:3px 0;padding-left:2ch\"><span style=\"white-space:nowrap\"><span style=\"color:#e6f4ff;font-family:'TeX Gyre Chorus',cursive\">zui fia kun zun</span></span></div>\n<div class=\"dz-line dz-blank\" style=\"height:1em\"></div></div></center>",
+      "sha256": "8cb60145426ecec53ae0f0b47f50b260af555e1909f20520984c3ac29d6701f9"
+    },
+    {
+      "idx": 7,
+      "kind": "paragraph",
+      "content": "\"Underground safe place\".",
+      "sha256": "e160cf7cb96f88d219bc94690cac49878e46eeeafc1f8d0c36be032c003fa1a8"
+    },
+    {
+      "idx": 8,
+      "kind": "paragraph",
+      "content": "\"gie fe kiu kai ci bin hu\", Zei thought to himself. \"Grow roots, no head\". The strategy that Dzego had been employing for half a century to grow and stay protected.",
+      "sha256": "02814a84bc43151ef40353117c1fe7be450598cb8de845076953082fc6bf7077"
+    },
+    {
+      "idx": 9,
+      "kind": "paragraph",
+      "content": "Fin and Zei both kept walking, enjoying the shade under the trees between the road and the sidewalk.",
+      "sha256": "35614d3e4d8e383625b9b62e5dbbe51ad33f3b2f3c14e072dcedc47ef63f1d2b"
+    },
+    {
+      "idx": 10,
+      "kind": "paragraph",
+      "content": "A drone buzzed as it flew overhead. A moment later, their watches buzzed softly once their software had run the authentication protocol and confirmed that it was a friendly security drone that came from a batch that had passed all inspections and was running friendly algorithms. The whole chain of events - the flyby, the authentication, the confirmation - finished within hundreds of milli-ticks, and Fin and Zei both barely noticed that any of it had even happened.",
+      "sha256": "7fcfe4c25b20d0a3c4873b2602fa457922a35c1f3d9c33b0090423d6a042b1ce"
+    },
+    {
+      "idx": 11,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"How was the Minpentai game last night?\"</span>, Fin asked.",
+      "sha256": "bf4fc0b36c0c6bf4c530fe385f2ff005f6be8d0c33598a31bc73e393dc9f8d9d"
+    },
+    {
+      "idx": 12,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I got third place! Finally figured out a wall structure that reflected their gliders right back at them, completely wreaked havoc on their territory.\"</span>",
+      "sha256": "e46d3d992cfe79364c5eebbf3de9ea0bd718a10d31246556b1327121c70f2b9f"
+    },
+    {
+      "idx": 13,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"How about you?\"</span>",
+      "sha256": "a0dd6d46ea800c4bb57d517b6ceeb9ae5afbf2004ee112004aa8103cb8e94ded"
+    },
+    {
+      "idx": 14,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Studying for the geography exam in boring school.\"</span>",
+      "sha256": "1baa571267a1c62bc2a9ab8cdd9816c90d93833d8f13f7a1e372f60b9fe0fa50"
+    },
+    {
+      "idx": 15,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Boring, I take it?\"</span>",
+      "sha256": "63c9d4a71cb35e395f4d20256b19143ac8b48247ab302c7b5e2ca9cc8933fc59"
+    },
+    {
+      "idx": 16,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Yeah, we're covering the United Cities, and they're just making us memorize all the co-governance percentages. Freetown gets five percent votes in Devanvil, Devanvil gets fifteen percent votes in Redshire, Redshire gets...\"</span>",
+      "sha256": "0b603bca88f613482347a2f1a5d2ca19668d14873294c80f162135640eca14cb"
+    },
+    {
+      "idx": 17,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Do you have any new opinions on how effective that whole system is?\"</span>",
+      "sha256": "2ea475568b8c684181766a563c881699649ea91618ba484f08e0b7f84ab562aa"
+    },
+    {
+      "idx": 18,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Oh no, critical governance studies only becomes a topic in university.\"</span>",
+      "sha256": "1a6db6a2ec62b00a0376f321761df2d38b4a9ba2207fa9d22d7ee6eaf479ae3f"
+    },
+    {
+      "idx": 19,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"The same way that chemistry is a topic in high school?\"</span>",
+      "sha256": "b89b848416350739dd142b6b400ed4bfc10a3d8e253abf6a3d4db4c840f43b7d"
+    },
+    {
+      "idx": 20,
+      "kind": "paragraph",
+      "content": "Fin laughed. <span data-hue=\"80\">\"Are they gonna cover an entire year of critical governance studies in ten days in DU now?\"</span>",
+      "sha256": "4248f9205a8ea6ea715ba28fb9f49037c10e2ff8f5e34e44d718ac5445ea7774"
+    },
+    {
+      "idx": 21,
+      "kind": "paragraph",
+      "content": "DU - \"Decentralized University\", or *dzu hu sun du* in Dzegoban - the place they were going. Zei remembered that they needed to make sure they got there on time, and checked his watch.",
+      "sha256": "a2dc4af6c90e10b0ac87d5028196a111c5b5265c86ef39c4cbbffbf8613644dd"
+    },
+    {
+      "idx": 22,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Time just hit sixty-nine thousand. The exact location of the classroom should be getting decrypted and broadcasted any moment now.\"</span>",
+      "sha256": "a0c086ed7a23d334fb72bcab4267da753d49e4855000becf8f27e1b5a9b3c3d4"
+    },
+    {
+      "idx": 23,
+      "kind": "paragraph",
+      "content": "The watch buzzed. Zei got a notification.",
+      "sha256": "a7e013cd394e5b706c32f5dfc665c85f60ac381202d233da615ad2aba4a3f37a"
+    },
+    {
+      "idx": 24,
+      "kind": "screen",
+      "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th>MUN GUI 1842</th>\n      <th>TEI 70000</th>\n      <th style=\"font-size:300%; color: #ff8\">✓</th>\n    </tr>\n  </thead>\n</table></div>",
+      "sha256": "90af757d8f3e5b6377589aac084c0b2854734321552490971349285a9b70b3fb",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "watch",
+        "device_evidence": {
+          "idx": 23,
+          "quote": "The watch buzzed."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "MUN GUI 1842",
+                "TEI 70000",
+                "✓"
+              ]
+            ],
+            "rows": []
+          }
+        ]
+      }
+    },
+    {
+      "idx": 25,
+      "kind": "paragraph",
+      "content": "Zei stopped, and showed his watch to Fin.",
+      "sha256": "12d7794757d23b28d3e679233c26625c455c4131e6bcccb5d09ee18acb1493da"
+    },
+    {
+      "idx": 26,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Huh, yellow checkmark. Looks like they've upgraded to a new cryptographic proof system, gotta make sure we sync our codes when we get to the lesson today.\"</span>",
+      "sha256": "3994fb6bbf112b54b0b228810d079cc386e57d552f34d23fb24aea6ae8c75325"
+    },
+    {
+      "idx": 27,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Again?\"</span>",
+      "sha256": "31586874dc5af0a8909d5fd41c7b5b52938b75f697b22067293793cb891c5ba7"
+    },
+    {
+      "idx": 28,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Guess so. I hear the Arctic Empire is getting more aggressive, so we're stepping up security.\"</span>",
+      "sha256": "55c48769fa05d317478e72c4888f0eecff9fb1c85ed0ca56fd9dbe05cbf564ac"
+    },
+    {
+      "idx": 29,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Okay, anyway, it says Mun Gui 1842. We... just passed 1990 Hun Min. So it's behind us.\"</span>",
+      "sha256": "cba5c02e88d6c74aca0ba6df9ae351136d4bff8b48c3066cadd5f24a75844727"
+    },
+    {
+      "idx": 30,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Let's just turn left here on 20th, and then left again on Mun Gui?\"</span>",
+      "sha256": "da35bac8eaa54468530b29c54fd2f848ed1d67392b80346a83e6b3db9d9eec8d"
+    },
+    {
+      "idx": 31,
+      "kind": "paragraph",
+      "content": "Zei checked over the math in his mind. Named streets were spaced two hundred meters apart, H to M was four streets. House numbers were just meters, so to get from 2000 to 1842 they had to walk one hundred fifty eight meters. Eight hundred and one hundred fifty eight together is ... nine hundred fifty eight meters to walk. The lesson starts at seventy thousand, so they had a little under a thousand ticks, or more colloquially, ten minutes. A slow walking pace is one meter per tick, and Fin and Zei were fast. So they were fine.",
+      "sha256": "c3c544a5a14a46620111b4b10e7d4f29f6bf043f19a9722686e0c4fd4d6cc0d9"
+    },
+    {
+      "idx": 32,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Sounds good!\"</span>",
+      "sha256": "b9a9f85d4b58f8da6bae4e23024f00788281a0073b40ee01435843c877ee7af4"
+    },
+    {
+      "idx": 33,
+      "kind": "paragraph",
+      "content": "They began to walk briskly, to make sure they could get there with time to spare.",
+      "sha256": "7769275dbaa62fd5687c1a7ebdccde7c22604b3364a140e2f16bf99dfa1b4529"
+    },
+    {
+      "idx": 34,
+      "kind": "paragraph",
+      "content": "A few minutes later, they arrived. <span data-hue=\"306.67\">\"Oh Fin, there you are!\"</span>, a young woman shouted. Fin and Zei were led down two flights of somewhat dusty stairs.",
+      "sha256": "98937947d687fdbb262abc14206a06e805262ed20ab3b075c1208ec18a4002e9"
+    },
+    {
+      "idx": 35,
+      "kind": "paragraph",
+      "content": "When they got to the bottom, another man was waiting, and stopped them. <span data-hue=\"173.33\">\"Change of plans, it's in the opposite room on floor -1 now.\"</span>",
+      "sha256": "0dcab24c85c6eeda32298346daef19f89d0f1b9b1c5b0b047206a164558f68bd"
+    },
+    {
+      "idx": 36,
+      "kind": "paragraph",
+      "content": "Zei sighed.",
+      "sha256": "14e7905e6af3d8563e2ecb2d74adbabf6e121ebee489fcdc4ff2e95a3080b04f"
+    },
+    {
+      "idx": 37,
+      "kind": "paragraph",
+      "content": "The four of them walked back up a flight of stairs, entered a large room, and sat down beside each other on one of the rows of chairs.",
+      "sha256": "dea58e1ad672298ba3f73f5992af873c3883fe9a62b0ab3da6dfc61cc2ba774a"
+    },
+    {
+      "idx": 38,
+      "kind": "paragraph",
+      "content": "The walls were covered with a thick, hastily organized layer of anti-transmission foil. Coated on top of the foil was a classic aesthetic of Dzego: pictures of cute cartoon animals playing with electronic gadgets and chemistry lab equipment, with a backdrop of green trees and blue skies. At the front of the room, there was an inflated cartoon-style pig on the left and a hamster on the right. The pig, in its left hand, was holding a calculator. The hamster, in its right hand, was holding a vial of some green liquid. With their other two hands, the two together held up a poster with DU's motto:",
+      "sha256": "9345b4c3cb44651b08952bcd69213f062b2cc74aa6439d3edb0b63ad3c0a044d"
+    },
+    {
+      "idx": 39,
+      "kind": "quote",
+      "content": "<center><div class=\"dz-card dz-mono\" style=\"font-family:'TeX Gyre Chorus',cursive;font-size:17px;line-height:1.55\"><div class=\"dz-line dz-blank\" style=\"height:1em\"></div>\n<div class=\"dz-line\" style=\"margin:3px 0;padding-left:2ch\"><span style=\"white-space:nowrap\"><span style=\"color:#e6f4ff;font-family:'TeX Gyre Chorus',cursive\">pa jan</span></span> <span style=\"white-space:nowrap\"><span style=\"font-family:'TeX Gyre Chorus',cursive;\">li</span>&nbsp;<span style=\"white-space:nowrap\"><span style=\"color:#e6f4ff;font-family:'TeX Gyre Chorus',cursive\">sun</span></span></span> <span style=\"font-family:'TeX Gyre Chorus',cursive;\">zo</span></div>\n<div class=\"dz-line\" style=\"margin:3px 0;padding-left:0ch\"><span style=\"white-space:nowrap\"><span style=\"color:#e6f4ff;font-family:'TeX Gyre Chorus',cursive\">zai gau</span></span> <span style=\"white-space:nowrap\"><span style=\"font-family:'TeX Gyre Chorus',cursive;\">fe</span>&nbsp;<span style=\"white-space:nowrap\"><span style=\"color:#e6f4ff;font-family:'TeX Gyre Chorus',cursive\">pa jan</span></span></span></div>\n<div class=\"dz-line dz-blank\" style=\"height:1em\"></div>\n<div class=\"dz-line\" style=\"margin:3px 0;padding-left:2ch\"><span style=\"white-space:nowrap\"><span style=\"color:#e6f4ff;font-family:'TeX Gyre Chorus',cursive\">go</span></span> <span style=\"white-space:nowrap\"><span style=\"font-family:'TeX Gyre Chorus',cursive;\">li</span>&nbsp;<span style=\"white-space:nowrap\"><span style=\"color:#e6f4ff;font-family:'TeX Gyre Chorus',cursive\">sun</span></span></span> <span style=\"font-family:'TeX Gyre Chorus',cursive;\">zo</span></div>\n<div class=\"dz-line\" style=\"margin:3px 0;padding-left:0ch\"><span style=\"white-space:nowrap\"><span style=\"color:#e6f4ff;font-family:'TeX Gyre Chorus',cursive\">bai gau</span></span> <span style=\"white-space:nowrap\"><span style=\"font-family:'TeX Gyre Chorus',cursive;\">fe</span>&nbsp;<span style=\"white-space:nowrap\"><span style=\"color:#e6f4ff;font-family:'TeX Gyre Chorus',cursive\">go</span></span></span></div>\n<div class=\"dz-line dz-blank\" style=\"height:1em\"></div></div></center>",
+      "sha256": "9ee8597c77e5c84320e123901490cfd1692c5bd51e01bb1be3ad8692096fdf95"
+    },
+    {
+      "idx": 40,
+      "kind": "paragraph",
+      "content": "\"One man learning will set one man free. A nation learning will make the nation great.\"",
+      "sha256": "b9e2ba05dded9f7c05800f4d10e4b95cc0ef7ccf0a7bb8809a08c6b72bc61ac6"
+    },
+    {
+      "idx": 41,
+      "kind": "paragraph",
+      "content": "Behind them, the instructor walked in, and closed the door. Zei checked his watch. 70,001.",
+      "sha256": "c3ed31a7dec7e648a14cae4664aa5a4d5c75cc3ab4f324a4c9bb7fa59d8ad502"
+    },
+    {
+      "idx": 42,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 43,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Welcome to physics class\"</span>, the instructor said.",
+      "sha256": "efdc9bff4ed5d2e8bfe010a67ceeba20f7f1a6fbbd5e213aab869cc76c6329e3"
+    },
+    {
+      "idx": 44,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Today, I'm going to try to introduce an important topic that I think almost everyone gets confused about: thermodynamics.\"</span>",
+      "sha256": "15cc76c49ff12baa771e66cc582ea7b504c98e1ed25b8f816d4cec157e8692f7"
+    },
+    {
+      "idx": 45,
+      "kind": "paragraph",
+      "content": "The more attentive students put away their hand devices, stopped talking, and got ready to listen. The others kept talking at first, but then quickly quieted down.",
+      "sha256": "47a40893d4bae5649b0cebaea44ed3720927e69dfe9f1f0de8eece8e4e42a882"
+    },
+    {
+      "idx": 46,
+      "kind": "paragraph",
+      "content": "A girl beside Zei reached under the table edge and ran a finger along it without looking - a habit, not a serious search. Another student habitually waved her hand device around the room, trying to pick up on any unknown electronic devices. Nobody commented. Nobody ever did.",
+      "sha256": "f9179e0c3c6ca2de29f9196bf690cc901e3c0eb8fbc30d30b2f835c41085ba5d"
+    },
+    {
+      "idx": 47,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Who here has heard of the word 'entropy', in the context of information theory or cryptography?\"</span>",
+      "sha256": "439a1601ae90632c3db0d49c3d56a2dd5a0c388b11ed421a96628afcdce813b9"
+    },
+    {
+      "idx": 48,
+      "kind": "paragraph",
+      "content": "About three quarters of the students raised their hands.",
+      "sha256": "d6559c6453a66fddf27900b3b80e644cedcb62d763be7bd69226120650a09cf3"
+    },
+    {
+      "idx": 49,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"And who here has heard of the word 'entropy', in the context of the second law of thermodynamics - that it always goes up, and one way that happens is that heat always flows from hot to cold, never the reverse?\"</span>",
+      "sha256": "6a33d550734bc8744d3b118b97a79057f722c9f8ffb02b2a1bb9988565b57cc8"
+    },
+    {
+      "idx": 50,
+      "kind": "paragraph",
+      "content": "Almost every student raised their hands. Entropy was a favorite topic of science fiction.",
+      "sha256": "b365f7631b8130b13be415c8076696e9f98014b09ed1e237425303d003aa4922"
+    },
+    {
+      "idx": 51,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Now who here thinks they can explain the connection between the two?\"</span>",
+      "sha256": "00a47e899410eab2f212b631718c99913c2d51d595a3f80d663936f8f3698ce4"
+    },
+    {
+      "idx": 52,
+      "kind": "paragraph",
+      "content": "No one raised their hand.",
+      "sha256": "63287bdc7377ed84c3fca607c2b495240d6af670c06619b61d9eb4674cd9db43"
+    },
+    {
+      "idx": 53,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Alright. Let's begin.\"</span>",
+      "sha256": "7f34dbd355c8686ad1fff7a07682860f1eeac67da931a76159e4116a4da2e52e"
+    },
+    {
+      "idx": 54,
+      "kind": "paragraph",
+      "content": "The instructor pressed a button on his watch, and a slide showed up on the front wall:",
+      "sha256": "2a701e030db03a380edf27fc9077b9ba040dc42e52402691e500d0de72fd33cf"
+    },
+    {
+      "idx": 55,
+      "kind": "figure",
+      "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"422\" height=\"373\" viewBox=\"0 0 422 373\">\n<defs><marker id=\"s1ah\" markerWidth=\"9\" markerHeight=\"9\" refX=\"7\" refY=\"3\" orient=\"auto\" markerUnits=\"userSpaceOnUse\"><path d=\"M0,0 L7,3 L0,6 Z\" fill=\"#99004d\"></path></marker></defs>\n<rect width=\"422\" height=\"373\" fill=\"#ffffff\"></rect>\n<path d=\"M 58 57 L 58 34 C 58 20 71 13 91 13 C 111 13 124 20 124 34 L 124 57 L 156 61 C 165 63 169 70 169 82 L 169 283 C 169 288 165 289 163 289 L 19 289 C 17 289 13 288 13 283 L 13 82 C 13 70 17 63 26 61 Z\" fill=\"#ffffff\" stroke=\"#1f5c99\" stroke-width=\"3\"></path>\n<path d=\"M 298 57 L 298 34 C 298 20 311 13 331 13 C 351 13 364 20 364 34 L 364 57 L 396 61 C 405 63 409 70 409 82 L 409 283 C 409 288 405 289 403 289 L 259 289 C 257 289 253 288 253 283 L 253 82 C 253 70 257 63 266 61 Z\" fill=\"#ffffff\" stroke=\"#1f5c99\" stroke-width=\"3\"></path>\n<line x1=\"73\" y1=\"108\" x2=\"33\" y2=\"139\" stroke=\"#99004d\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\" marker-end=\"url(#s1ah)\"></line>\n<line x1=\"123\" y1=\"140\" x2=\"79\" y2=\"117\" stroke=\"#99004d\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\" marker-end=\"url(#s1ah)\"></line>\n<line x1=\"25\" y1=\"175\" x2=\"35\" y2=\"224\" stroke=\"#99004d\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\" marker-end=\"url(#s1ah)\"></line>\n<line x1=\"104\" y1=\"208\" x2=\"149\" y2=\"186\" stroke=\"#99004d\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\" marker-end=\"url(#s1ah)\"></line>\n<line x1=\"137\" y1=\"235\" x2=\"147\" y2=\"284\" stroke=\"#99004d\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\" marker-end=\"url(#s1ah)\"></line>\n<line x1=\"67\" y1=\"265\" x2=\"20\" y2=\"248\" stroke=\"#99004d\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\" marker-end=\"url(#s1ah)\"></line>\n<line x1=\"277\" y1=\"106\" x2=\"281\" y2=\"114\" stroke=\"#99004d\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\" marker-end=\"url(#s1ah)\"></line>\n<line x1=\"341\" y1=\"110\" x2=\"341\" y2=\"119\" stroke=\"#99004d\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\" marker-end=\"url(#s1ah)\"></line>\n<line x1=\"381\" y1=\"129\" x2=\"385\" y2=\"137\" stroke=\"#99004d\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\" marker-end=\"url(#s1ah)\"></line>\n<line x1=\"312\" y1=\"189\" x2=\"320\" y2=\"193\" stroke=\"#99004d\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\" marker-end=\"url(#s1ah)\"></line>\n<line x1=\"388\" y1=\"193\" x2=\"388\" y2=\"184\" stroke=\"#99004d\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\" marker-end=\"url(#s1ah)\"></line>\n<line x1=\"349\" y1=\"252\" x2=\"357\" y2=\"248\" stroke=\"#99004d\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\" marker-end=\"url(#s1ah)\"></line>\n<circle cx=\"76\" cy=\"106\" r=\"5\" fill=\"#1a1a1a\"></circle>\n<circle cx=\"127\" cy=\"142\" r=\"5\" fill=\"#1a1a1a\"></circle>\n<circle cx=\"24\" cy=\"171\" r=\"5\" fill=\"#1a1a1a\"></circle>\n<circle cx=\"100\" cy=\"210\" r=\"5\" fill=\"#1a1a1a\"></circle>\n<circle cx=\"136\" cy=\"231\" r=\"5\" fill=\"#1a1a1a\"></circle>\n<circle cx=\"71\" cy=\"266\" r=\"5\" fill=\"#1a1a1a\"></circle>\n<circle cx=\"275\" cy=\"102\" r=\"5\" fill=\"#1a1a1a\"></circle>\n<circle cx=\"341\" cy=\"106\" r=\"5\" fill=\"#1a1a1a\"></circle>\n<circle cx=\"379\" cy=\"125\" r=\"5\" fill=\"#1a1a1a\"></circle>\n<circle cx=\"308\" cy=\"187\" r=\"5\" fill=\"#1a1a1a\"></circle>\n<circle cx=\"388\" cy=\"197\" r=\"5\" fill=\"#1a1a1a\"></circle>\n<circle cx=\"345\" cy=\"254\" r=\"5\" fill=\"#1a1a1a\"></circle>\n<circle cx=\"78\" cy=\"312\" r=\"6\" fill=\"#1a1a1a\"></circle>\n<text x=\"94\" y=\"317\" fill=\"#1a1a1a\" font-family=\"sans-serif\" font-size=\"15\">x 10<tspan baseline-shift=\"super\" font-size=\"0.72em\">6</tspan></text>\n<line x1=\"56\" y1=\"340\" x2=\"120\" y2=\"340\" stroke=\"#99004d\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\" marker-end=\"url(#s1ah)\"></line>\n<text x=\"56\" y=\"362\" fill=\"#1a1a1a\" font-family=\"sans-serif\" font-size=\"14\">[0, 999999]</text>\n<circle cx=\"318\" cy=\"312\" r=\"6\" fill=\"#1a1a1a\"></circle>\n<text x=\"334\" y=\"317\" fill=\"#1a1a1a\" font-family=\"sans-serif\" font-size=\"15\">x 10<tspan baseline-shift=\"super\" font-size=\"0.72em\">6</tspan></text>\n<line x1=\"296\" y1=\"340\" x2=\"360\" y2=\"340\" stroke=\"#99004d\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\" marker-end=\"url(#s1ah)\"></line>\n<text x=\"296\" y=\"362\" fill=\"#1a1a1a\" font-family=\"sans-serif\" font-size=\"14\">[0, 99]</text>\n</svg></div>",
+      "sha256": "aabd1821ac15da4fee3017cb3fcaa8a1d77559f0a3fa2f0ec273a03dc799d283",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "wall_screen",
+        "device_evidence": {
+          "idx": 54,
+          "quote": "The instructor pressed a button on his watch, and a slide showed up on the front wall:"
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c2-b55.svg",
+            "viewBox": "0 0 422 373",
+            "width": "422",
+            "height": "373",
+            "labels": [
+              "x 106",
+              "[0, 999999]",
+              "x 106",
+              "[0, 99]"
+            ],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 56,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Imagine that we have two jars of gas. Each jar has a million molecules. But in the jar on the left, the molecules are moving much faster. Suppose, in the jar on the left, you can represent the velocities with six-digit numbers, from zero to 999,999. And in the jar on the right, the molecules are moving slowly, so you can represent the velocities with six-digit numbers, from zero to 99.\"</span>",
+      "sha256": "58457e4d553084f82258c44d17ce9887667279a93b2ed8370bd1cd3c05c82dd6"
+    },
+    {
+      "idx": 57,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Can someone tell me, how many digits do you need to fully represent everything going on in the jar on the left? Assume that they already know it's gas and there's a million molecules, the only free variable is the velocities.\"</span>",
+      "sha256": "5e59e3adda008a07f8ae218646656dde2974fe45c64b6f1f5fec67234bbf0776"
+    },
+    {
+      "idx": 58,
+      "kind": "paragraph",
+      "content": "\"Six million!\", about ten students shouted in unison.",
+      "sha256": "e9ac7fc916ec4caeef1087dc011a663b9d1efc6828a22114ef718bf167382f6d"
+    },
+    {
+      "idx": 59,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Good. Now, what about the jar on the right?\"</span>",
+      "sha256": "04189790672adce7a3493d65d8b8875fdb5cd9ad214f86b531f2398b0879f281"
+    },
+    {
+      "idx": 60,
+      "kind": "paragraph",
+      "content": "\"Two million!\"",
+      "sha256": "b49437aaa39187a90dea0a2a53ee357048998c2d1d2ebc801d443b12b0720a4c"
+    },
+    {
+      "idx": 61,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"So let's recap. From your point of view, as the observer, you know that these are both jars of gas, you know what kind of gas, and that there are a million molecules. But you don't know the velocities of each individual molecule. So for the jar on the left, *the amount of information that you do not know* is...?\"</span>",
+      "sha256": "2e421b13b06231a86cf3d05e4eefe240a2b7f83a66c738e237dffd781b1b32b7"
+    },
+    {
+      "idx": 62,
+      "kind": "paragraph",
+      "content": "\"Six million digits!\"",
+      "sha256": "2fdb0a5084f5ff49a16f51ac34b4bccfd01698c9a5fe768c74f6b9b85c181261"
+    },
+    {
+      "idx": 63,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"And for the right?\"</span>",
+      "sha256": "37010b886ef1132d0756eeaf6ea827fabfe233c99c08cfc3744ff7954468e952"
+    },
+    {
+      "idx": 64,
+      "kind": "paragraph",
+      "content": "\"Two million digits!\"",
+      "sha256": "a6587e859aa36af56e1d5ea02640c458e5c2311fa61a3d226c05e312779161dc"
+    },
+    {
+      "idx": 65,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"So eight million digits in total, information that you do not know. Now, what happens if we put the two jars together and let the gas mix? What will we know about the velocities there?\"</span>",
+      "sha256": "d6b9d0f3d3385bbff7a48b966c2a34af77154c6ef8b90d283c2eb7b90741679d"
+    },
+    {
+      "idx": 66,
+      "kind": "paragraph",
+      "content": "Zei raised his hand.",
+      "sha256": "96e67487fd32e086c6f88a5adc972c1b595ecdd50d29fa45da96767af4c16cdd"
+    },
+    {
+      "idx": 67,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Yes, you there?\"</span>",
+      "sha256": "fb435cd87850c3377a26720b3e8f58c7f9c8444be0a39328b00f3f59bd1ace84"
+    },
+    {
+      "idx": 68,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"The molecules will bounce off each other randomly. When they settle down, because of conservation of energy, the velocities end up somewhere in the middle, between zero and five hundred thousand.\"</span>",
+      "sha256": "51ab7ea0b420cbe89e8e13e2dc63054aa44d3ca2ed7c20b53d1d70e62bbcf857"
+    },
+    {
+      "idx": 69,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Yes, excellent! Now technically, energy is proportional to velocity squared, and we can argue about how these velocities are represented, and by the way we're also completely ignoring positions, but let's just keep it simple and say zero to five hundred thousand.\"</span>",
+      "sha256": "8a08fb90f2068caec89f251357545848916a2e04b0ed9aff381bf3609ed57450"
+    },
+    {
+      "idx": 70,
+      "kind": "paragraph",
+      "content": "The instructor tapped his watch again. Next slide.",
+      "sha256": "0a1c1b2b88dfda2ec0ba0318386900a781f10f79ee830d45fad21578df20aa22"
+    },
+    {
+      "idx": 71,
+      "kind": "figure",
+      "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"542\" height=\"273\" viewBox=\"0 0 542 273\">\n<defs><marker id=\"s2ah\" markerWidth=\"9\" markerHeight=\"9\" refX=\"7\" refY=\"3\" orient=\"auto\" markerUnits=\"userSpaceOnUse\"><path d=\"M0,0 L7,3 L0,6 Z\" fill=\"#99004d\"></path></marker></defs>\n<rect width=\"542\" height=\"273\" fill=\"#ffffff\"></rect>\n<path d=\"M 19 13 L 229 13 C 236 15 240 30 244 58 L 288 58 C 292 30 296 15 313 13 L 523 13 C 527 13 529 17 529 21 L 529 161 C 529 165 527 169 523 169 L 313 169 C 296 167 292 152 288 124 L 244 124 C 240 152 236 167 229 169 L 19 169 C 15 169 13 165 13 161 L 13 21 C 13 17 15 13 19 13 Z\" fill=\"#ffffff\" stroke=\"#1f5c99\" stroke-width=\"3\"></path>\n<line x1=\"83\" y1=\"43\" x2=\"64\" y2=\"24\" stroke=\"#99004d\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\" marker-end=\"url(#s2ah)\"></line>\n<line x1=\"181\" y1=\"56\" x2=\"176\" y2=\"30\" stroke=\"#99004d\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\" marker-end=\"url(#s2ah)\"></line>\n<line x1=\"65\" y1=\"100\" x2=\"40\" y2=\"90\" stroke=\"#99004d\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\" marker-end=\"url(#s2ah)\"></line>\n<line x1=\"133\" y1=\"106\" x2=\"138\" y2=\"132\" stroke=\"#99004d\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\" marker-end=\"url(#s2ah)\"></line>\n<line x1=\"200\" y1=\"107\" x2=\"221\" y2=\"124\" stroke=\"#99004d\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\" marker-end=\"url(#s2ah)\"></line>\n<line x1=\"276\" y1=\"76\" x2=\"249\" y2=\"76\" stroke=\"#99004d\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\" marker-end=\"url(#s2ah)\"></line>\n<line x1=\"354\" y1=\"46\" x2=\"347\" y2=\"20\" stroke=\"#99004d\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\" marker-end=\"url(#s2ah)\"></line>\n<line x1=\"460\" y1=\"45\" x2=\"486\" y2=\"50\" stroke=\"#99004d\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\" marker-end=\"url(#s2ah)\"></line>\n<line x1=\"440\" y1=\"96\" x2=\"465\" y2=\"106\" stroke=\"#99004d\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\" marker-end=\"url(#s2ah)\"></line>\n<line x1=\"341\" y1=\"112\" x2=\"366\" y2=\"122\" stroke=\"#99004d\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\" marker-end=\"url(#s2ah)\"></line>\n<line x1=\"411\" y1=\"116\" x2=\"411\" y2=\"143\" stroke=\"#99004d\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\" marker-end=\"url(#s2ah)\"></line>\n<line x1=\"516\" y1=\"139\" x2=\"490\" y2=\"131\" stroke=\"#99004d\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\" marker-end=\"url(#s2ah)\"></line>\n<circle cx=\"86\" cy=\"46\" r=\"5\" fill=\"#1a1a1a\"></circle>\n<circle cx=\"182\" cy=\"60\" r=\"5\" fill=\"#1a1a1a\"></circle>\n<circle cx=\"69\" cy=\"101\" r=\"5\" fill=\"#1a1a1a\"></circle>\n<circle cx=\"132\" cy=\"102\" r=\"5\" fill=\"#1a1a1a\"></circle>\n<circle cx=\"197\" cy=\"105\" r=\"5\" fill=\"#1a1a1a\"></circle>\n<circle cx=\"280\" cy=\"76\" r=\"5\" fill=\"#1a1a1a\"></circle>\n<circle cx=\"355\" cy=\"50\" r=\"5\" fill=\"#1a1a1a\"></circle>\n<circle cx=\"456\" cy=\"44\" r=\"5\" fill=\"#1a1a1a\"></circle>\n<circle cx=\"436\" cy=\"95\" r=\"5\" fill=\"#1a1a1a\"></circle>\n<circle cx=\"337\" cy=\"111\" r=\"5\" fill=\"#1a1a1a\"></circle>\n<circle cx=\"411\" cy=\"112\" r=\"5\" fill=\"#1a1a1a\"></circle>\n<circle cx=\"520\" cy=\"140\" r=\"5\" fill=\"#1a1a1a\"></circle>\n<circle cx=\"248\" cy=\"208\" r=\"6\" fill=\"#1a1a1a\"></circle>\n<text x=\"264\" y=\"213\" fill=\"#1a1a1a\" font-family=\"sans-serif\" font-size=\"15\">x 2 * 10<tspan baseline-shift=\"super\" font-size=\"0.72em\">6</tspan></text>\n<line x1=\"226\" y1=\"236\" x2=\"290\" y2=\"236\" stroke=\"#99004d\" stroke-width=\"1.2\" stroke-dasharray=\"4 3\" marker-end=\"url(#s2ah)\"></line>\n<text x=\"226\" y=\"258\" fill=\"#1a1a1a\" font-family=\"sans-serif\" font-size=\"14\">[0, 499999]</text>\n</svg></div>",
+      "sha256": "e03198901f88f11b5df40bc0f0085b67d633c2f69d86cc56968cf7c2fb2e0773",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "wall_screen",
+        "device_evidence": {
+          "idx": 70,
+          "quote": "Next slide."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c2-b71.svg",
+            "viewBox": "0 0 542 273",
+            "width": "542",
+            "height": "273",
+            "labels": [
+              "x 2 * 106",
+              "[0, 499999]"
+            ],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 72,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Now, how many digits do we need to represent the information we don't know about this new system?\"</span>",
+      "sha256": "e188d31ff90e02c8edf5719839a52525847f1a03a5f52821fa6b684e181e40b3"
+    },
+    {
+      "idx": 73,
+      "kind": "paragraph",
+      "content": "Another student raised his hand.",
+      "sha256": "980494aecb503ca70880a3223213333b87a00278c1061f975407d62c8e1d00f6"
+    },
+    {
+      "idx": 74,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Go ahead.\"</span>",
+      "sha256": "404c952a0494aeb26b579a1158e43aa4af04045d88082927694d14dd42379d38"
+    },
+    {
+      "idx": 75,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"200\">\"From zero to five hundred thousand is more than five digits but not quite six digits, if we go by logarithm, it should be about five point seven for each molecule.\"</span>",
+      "sha256": "974fd280709f857c5ad291d95eae57cda05fb4dead6b3db81109df9d6f83516e"
+    },
+    {
+      "idx": 76,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"So what's the total?\"</span>",
+      "sha256": "6e6814284d770a8986d8094c6edbb5c0d3bd9315e5440ec4d816049c674dd31f"
+    },
+    {
+      "idx": 77,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"200\">\"Eleven point four million digits.\"</span>",
+      "sha256": "91e9ec248175a34a8318f497620686b802eeb6a07861edf096940034688f78dd"
+    },
+    {
+      "idx": 78,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Very good! So the conclusion is: by mixing the two jars, we have lost knowledge. We know less about the gas than we did before. And we can quantify *how much* knowledge we lost: it's three point four million digits.\"</span>",
+      "sha256": "b1ae5f892982748f8ff04cf4afbb31322d436071dff9a9744de6fdbf810e5c4c"
+    },
+    {
+      "idx": 79,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"This is what we mean, when we say that entropy goes up, when heat flows from hot to cold. For each tiny increment of heat, heating up a cold thing adds more unknown digits than cooling down a hot thing by that same increment takes away, and so the total unknown goes up. Every possible action that you can do to these bottles will, on average, make the total unknown either stay the same or go up - and if you're doing anything useful or making any mistakes, it will go up. This is the second law of thermodynamics.\"</span>",
+      "sha256": "04b1521f9b71b7948b2b0ad5fbf2801ac2b9afb61ed66a460c53be2a3c313d05"
+    },
+    {
+      "idx": 80,
+      "kind": "paragraph",
+      "content": "The instructor paused.",
+      "sha256": "93f8467db245b8bf37a94e23124acd7aa4a1541407f31d85339643d77e1117a1"
+    },
+    {
+      "idx": 81,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Now, how do we prove this?\"</span>",
+      "sha256": "169080b2f78486603a3f642ebdd652d199815689ec5f033ac102f66290993992"
+    },
+    {
+      "idx": 82,
+      "kind": "paragraph",
+      "content": "None of the students answered, but many of them seemed to lean forward with curiosity.",
+      "sha256": "c09452a77d675e4499e082fb21c0b4be3cc6c10d8aedb629bbd435a9557175d3"
+    },
+    {
+      "idx": 83,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Let's prove by contradiction. Suppose we did have a magic procedure that could go in reverse: start with the merged jars with eleven point four million digits of unknown, and bring us to the separate jars with eight million digits of unknown.\"</span>",
+      "sha256": "2fa2b70b958140e4761d86b4f7a8cc6897320f58c9dc44a6fce75a351cfcaa82"
+    },
+    {
+      "idx": 84,
+      "kind": "paragraph",
+      "content": "Zei raised his hand once again.",
+      "sha256": "eb73f5933f0781b513a06d2cd0029c29d187f6a8446f59510ecceafc8c540b25"
+    },
+    {
+      "idx": 85,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Can I try this?\"</span>",
+      "sha256": "754b448214922bb931e5e19211cc42835b478ff6966e5a25ba345079273bf32e"
+    },
+    {
+      "idx": 86,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Go ahead.\"</span>",
+      "sha256": "404c952a0494aeb26b579a1158e43aa4af04045d88082927694d14dd42379d38"
+    },
+    {
+      "idx": 87,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I remember the laws of physics of our universe are fully time-reversible, right? So if you can do something in one direction, you can always run the same steps in reverse.\"</span>",
+      "sha256": "52c719a8149a32f8814ddde767755f09165733d0f31dc9f297c18fde3b933f4b"
+    },
+    {
+      "idx": 88,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Exactly. Now why does that time reversibility, at that level of atom-by-atom physics, imply that temperature equalization is something you cannot reverse? Isn't that a paradox?\"</span>",
+      "sha256": "2fc69f1df42002ad79067a1fa9bf648948da52e66c3cb33b3f65509eec1b062d"
+    },
+    {
+      "idx": 89,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Well, if we *could* separate medium temperature into hot and cold, then we would be able to do unlimited data compression.\"</span>",
+      "sha256": "8e1d60c0d3520f8c99273fa6c2ff80249102cf163981d6da725db96e8eef1265"
+    },
+    {
+      "idx": 90,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Like, imagine you had a file with eleven point four million digits of data. You would make a really perfect double-jar, and have a gun that shoots out the gas molecules with exactly the right velocities. Then, you would use your process to un-mix the gas, then split the jar, and measure the velocities at the end. You would get eight million digits out.\"</span>",
+      "sha256": "b0f634114c5306d279f5e51427302b251993f41b0e1f13dce6d1244a112979d1"
+    },
+    {
+      "idx": 91,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"And because our universe's physics is time-reversible, you would be able to do the same thing in reverse: take those eight million digits, put them into the gun to shoot out gas molecules at the right velocities, apply the exact same un-mixing procedure backwards, measure it, and you would get out whatever your original eleven point four million digits were. The output of the time-reversed process has to equal the input of the original process. And so we get a fully general-purpose way to represent any eleven point four million digits inside of eight million digits. And if we could do that, we could do it again and again, and represent the whole planet in eight million digits, or even make it smaller and do it in eight digits. And that's impossible!\"</span>",
+      "sha256": "8bbcf3f41ce5e377ad0824490265766c3a8ff0f8508f92d621e99384ff12c237"
+    },
+    {
+      "idx": 92,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Exactly. Or in other words, you can't go from not knowing more things to not knowing fewer things in a universe with time-reversible physics. In a universe with time-irreversible physics, you *could*, because you can just destroy all the things you don't know.\"</span>",
+      "sha256": "fc51075e436e62302075eaea0cf38da2cd93b7f87d71e063f18260bf342d9008"
+    },
+    {
+      "idx": 93,
+      "kind": "paragraph",
+      "content": "\"Just like the Arctic Emperor!\", Zei wanted to shout. But he kept quiet. It's bad form to openly explain a joke that is so obvious, that half the students probably already have on their minds. The instructor and the students briefly paused to appreciate the joke and smirk and enjoy a few moments of mental communion. The instructor then moved on.",
+      "sha256": "749ff4fcf10cbb2f878e80f7d2630f2ebb45cef71f7e323bb43c8f58cd41fb6b"
+    },
+    {
+      "idx": 94,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"But in a universe with time-reversible physics, there's always things you don't know, and that lack of knowledge can only be shuffled around, and inevitably increased. The best we can do, is go from not knowing things we care about, to not knowing things we don't care about. Like going from not understanding thermodynamics, to not knowing the velocities of the molecules that are coming out of the projector showing these slides as waste heat.\"</span>",
+      "sha256": "e7c628fd082c272d1d698baede2ab793b37982de95f0564ec063da2a994a1309"
+    },
+    {
+      "idx": 95,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"That was an amazing job, kid. What was your name?\"</span>",
+      "sha256": "1879e4bb373bc49073a4c00db31b276c0a5557be12b460f161cee92a20b924c9"
+    },
+    {
+      "idx": 96,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Zei.\"</span>",
+      "sha256": "76230f5766cd876064e3391cc1a5a46887ed88211d32e728d73f018bdfa1cda7"
+    },
+    {
+      "idx": 97,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Well, Zei, you got it per-\"</span>",
+      "sha256": "fe26c760bde5524477040c0c8c1cfc522b8f23d43b1f7eac00e89c9329fd8d8f"
+    },
+    {
+      "idx": 98,
+      "kind": "paragraph",
+      "content": "A loud noise erupted from a nearby room. The whole room shook.",
+      "sha256": "dfd44b5816481846b38f2d4d777df00b4b5527eb578f958f48cb069e142a6ff8"
+    },
+    {
+      "idx": 99,
+      "kind": "paragraph",
+      "content": "A fraction of a tick later, part of the wall and the floor came crashing down.",
+      "sha256": "c3fc737f5c2d6c17c8b937e7dd9654edcb6c5791b7e8d6955421be541fb557b0"
+    },
+    {
+      "idx": 100,
+      "kind": "paragraph",
+      "content": "The next thing Zei knew, a fragment of stone hit him in the arm.",
+      "sha256": "c4ffd5f2e1ab92bbf9d3c079b1f0e6ff573569db2a7350bb1fe6090a1f8531b3"
+    },
+    {
+      "idx": 101,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 102,
+      "kind": "paragraph",
+      "content": "Zei found himself on the ground, his knocked-over chair beside him.",
+      "sha256": "470aea6711842b3b4cb31380dea181dc6bcb4206f756741944300b30c67f9684"
+    },
+    {
+      "idx": 103,
+      "kind": "paragraph",
+      "content": "His mind flashed back to the man who had redirected them last minute to a different room, one floor above where they had been supposed to go.",
+      "sha256": "93fef622acfc838f876dacddabe030493d7a62016a40905a67360f59712656dd"
+    },
+    {
+      "idx": 104,
+      "kind": "paragraph",
+      "content": "He understood immediately. All of the extra precautions that DU had been taking - the cryptography, the sudden changes in location, the anti-transmission foil - they were not just a game. And the Arctic Empire was not just a unit in geography class. This stuff was *real*.",
+      "sha256": "ba7be5fb41d4e72a9cef3d548d0298b2560c248e9d0916eec3200f98793a84de"
+    },
+    {
+      "idx": 105,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Is everyone okay? Anyone injured?\"</span>, the instructor yelled.",
+      "sha256": "1382b1d72a7eb216bc7718e0bd69e0cf7513f87ecbf9030cc7aae82b403c0884"
+    },
+    {
+      "idx": 106,
+      "kind": "paragraph",
+      "content": "Zei thought for a moment, trying to figure out if his arm was injured enough to be worth complaining. He tried raising and lowering his arm. It did not respond.",
+      "sha256": "c5bff10da3f4e424745762836c6342676104e9a4ddc3e233955702f36e58f32e"
+    },
+    {
+      "idx": 107,
+      "kind": "paragraph",
+      "content": "The next thing he felt was two arms grabbing on to him, and pulling him up off the ground and onto a chair. Zei turned his head. It was Fin - to Zei's relief, completely uninjured.",
+      "sha256": "df16e9b97037fe84e05d248837cf2c2a82f22977e8355d62a20a13e5d934ca43"
+    },
+    {
+      "idx": 108,
+      "kind": "paragraph",
+      "content": "Smoke filled the room. Every student's watch, among its many features including an air quality monitor, started beeping loudly. The students tapped their watches, and soon the beeping died down. Slowly, the students helped each other get back up, as the instructor walked around to check if there was anyone who seriously needed help.",
+      "sha256": "4d168ebc72b1bfde8c90dcc042d557bd17c3fa4d61f39b7fd318f9cdf52caabe"
+    },
+    {
+      "idx": 109,
+      "kind": "paragraph",
+      "content": "The instructor got to Zei, and Zei silently pointed to his left arm. The instructor took out his hand device, and scanned it. AI-generated output filled the bottom of the screen.",
+      "sha256": "7a0c24e3d2125502492cd52ab88a725338cc6525ba1acd0b57ab84b917dcd7a1"
+    },
+    {
+      "idx": 110,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Are you in pain?\"</span>, the instructor asked.",
+      "sha256": "976d8dbeeaf0818ffcb27e80f0c926fe7c5ac2769d510b5d4819f41074e3e3be"
+    },
+    {
+      "idx": 111,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Some, but I can handle it.\"</span>",
+      "sha256": "4c6709265b3586339b227419275f1cf1968653a54758ba470d9fbb34e19cd247"
+    },
+    {
+      "idx": 112,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"It looks like a broken bone. Get it checked out at the hospital today. The sooner you go, the sooner you will get better.\"</span>",
+      "sha256": "44e33933c2bf59fe68c9d591b026c004cd3c4e1a811edea055c337f29e838e9a"
+    },
+    {
+      "idx": 113,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"I'll take you\"</span>, Fin added. <span data-hue=\"80\">\"Gotta be sure you'll be good for your game at the end of the month.\"</span>",
+      "sha256": "07c5ff65b76d199c89055767a2fb1fc0ea31a34d2045796808ebb1d170ccd2f4"
+    },
+    {
+      "idx": 114,
+      "kind": "paragraph",
+      "content": "The instructor kept walking. The room was filled with smoke. The air quality alarms were still blaring, but Fin and Zei could make out the instructor asking different students <span data-hue=\"120\">\"are you okay?\"</span> and a student responding <span data-hue=\"253.33\">\"I'm fine\"</span>.",
+      "sha256": "155ccbb806a0dca01d120b8d3047b3d090237b891467437d7a01fa6b5e1c915d"
+    },
+    {
+      "idx": 115,
+      "kind": "paragraph",
+      "content": "The air filters activated to full power, and soon the smoke cleared. Fin and Zei looked at each other. For a few moments, the students and the instructor sat in an awkward silence.",
+      "sha256": "94ccf20cae7965b60b59bd80674977fec5547a2b361e920ffb0d192dd48a67c3"
+    },
+    {
+      "idx": 116,
+      "kind": "paragraph",
+      "content": "Zei pushed off the table with his uninjured arm, and stood up. <span data-hue=\"346.67\">\"I think we know much less about this wall than we knew two minutes ago\"</span>, he joked.",
+      "sha256": "05183e48ffd43aefbb3efcb75d524af61e6c22902259e54dfac8c3518000f642"
+    },
+    {
+      "idx": 117,
+      "kind": "paragraph",
+      "content": "A few students smiled or gently laughed. He had judged the audience's mood well.",
+      "sha256": "189cf73a625e298e94bb523e02ee53c12ccdee4ada4fadb0f8b65de099dd6e90"
+    },
+    {
+      "idx": 118,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"No one else hurt, are you all sure?\"</span>",
+      "sha256": "9535f0427418734cba3f1e2442df53e18a1949bd18f14acca4837233172530d5"
+    },
+    {
+      "idx": 119,
+      "kind": "paragraph",
+      "content": "\"I'm fine\", about ten people replied.",
+      "sha256": "02d929afc21f01f125fc328e87a68ad38af34c60617ca44afb1f78c42c5d54a4"
+    },
+    {
+      "idx": 120,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Alright, I think we've had enough entropy for one day. Let's go home.\"</span>",
+      "sha256": "a7f825dc526945efeb55f44851ab4bf3a7c8b3bcc3821bdd9a264caa89120efe"
+    },
+    {
+      "idx": 121,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 122,
+      "kind": "paragraph",
+      "content": "Fin and Zei stayed in the classroom longer than the others. Zei sat back down on his chair. Fin grabbed a broom, and pushed all the debris to one side. Soon, only they and the instructor were left.",
+      "sha256": "d1d28fbd7cdf0f5d6cf37ad5d58383a68747a5154a850227e2aa44ae947a7215"
+    },
+    {
+      "idx": 123,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Wow, the Arctics are getting aggressive. They didn't use to go after physics education.\"</span>",
+      "sha256": "b7b1c7a0bb8bff91fe3e323d0dbf60dec92b954737da2df8ad27abc045f9927c"
+    },
+    {
+      "idx": 124,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Whoever moved our room last-minute was a genius. Just saved our lives there.\"</span>",
+      "sha256": "abaf5d55d1f9590438683ae392363d8ea47a77135921a1bb62e9f453e32050a9"
+    },
+    {
+      "idx": 125,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Unfortunately I expect it will only get worse from here.\"</span>",
+      "sha256": "a6dcf4f495c688f3f1658fc99f996763f6ebd22908812479df9d057b34b476f0"
+    },
+    {
+      "idx": 126,
+      "kind": "paragraph",
+      "content": "Fin and Zei looked at the instructor in shock.",
+      "sha256": "477d688f30168ede584b82f9461ef5db92d9e633f021c37de36729d4b57eff7e"
+    },
+    {
+      "idx": 127,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Remember, their game is to permanently keep down our level of heavy industry and technology. Let us live, but only at the level of civilization where we can never be a threat.\"</span>",
+      "sha256": "efc3c34d0067ffb9f364e4413fe9696a863dde223c4e386c2747363e5c3edd0a"
+    },
+    {
+      "idx": 128,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"And our counter-game is 'gie fe kiu kai ci bin hu': grow roots, no head. Use distributed manufacturing to build all our tools. Let the official government keep going, slow and corrupt just like it was when we lost the war a hundred years ago, but use cryptography to coordinate the decisions that matter anonymously, without needing any exposed individual leaders at the helm. All of DU already runs this way. Soon big parts of our power generation, agriculture and medicine will.\"</span>",
+      "sha256": "717b2184f64b394fcc403eeec66618e1486e10f9c1ce49f2414237261dde0d9f"
+    },
+    {
+      "idx": 129,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"It's been effective. After the last few years, we're finally almost at the level where we can stand up for ourselves without needing any centralized heavy industry at all. The problem is, it looks like they're catching on.\"</span>",
+      "sha256": "2e7a44835af30ad22e39e3c27a13e127633cd2bc42e667afb281fbc88af27635"
+    },
+    {
+      "idx": 130,
+      "kind": "paragraph",
+      "content": "\"Dze go ba fau gie\", Fin and Zei said in unison, calmly but defiantly.",
+      "sha256": "5b4cc04b0cc90a23ef92dc49e24eca83d4a903c0eba4e310c9ef7bc68dc79399"
+    },
+    {
+      "idx": 131,
+      "kind": "paragraph",
+      "content": "\"Dzego will rise again.\"",
+      "sha256": "cfa95b818b72b7866e1952a7372ed37136cd813954c1a4ad5d70e05f3e8597e1"
+    }
+  ]
+}

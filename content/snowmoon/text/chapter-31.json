@@ -1,0 +1,619 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 31,
+  "source_url": "https://vitalik.eth.limo/snowmoon/html/chapter-31.html",
+  "source_sha256": "67a0b85f2812cb406b7374907374f0f66064df5aac3a03031eda4f6bd29470c6",
+  "fetched_at": "2026-10-02",
+  "license": "GPL-3.0",
+  "blocks": [
+    {
+      "idx": 0,
+      "kind": "heading",
+      "content": "# Chapter 31",
+      "sha256": "42368124a226702953cbf606c7121ac8e25ff19a838b1cd3e1177c566deeb84f"
+    },
+    {
+      "idx": 1,
+      "kind": "dateline",
+      "content": "**Northglade, Veridia** · 3725 Rainmoon 2",
+      "sha256": "ed6574b65b0272a4e724edddd17bedd69a52b344bffd37b3b660969b5465bf63"
+    },
+    {
+      "idx": 2,
+      "kind": "paragraph",
+      "content": "Zei, Bai and Mu slowly walked up the staircase on the side of the mountain. The mountain was fully covered with snow on both sides, and the sunlight reflected off the snow into their eyes. Only pine trees and the staircase with its handrails were visible above the snow - the trees and the handrails because they were too high for the snow to fully cover them, and the staircase itself because it was being regularly plowed and salted by a drone that they could see about thirty meters further above them.",
+      "sha256": "8a5ac6c22e561425b8f9db009f07be67d18c7e296ebc54092231374a55abc1e0"
+    },
+    {
+      "idx": 3,
+      "kind": "paragraph",
+      "content": "A strong, cold wind blasted into their faces. They continued climbing. Several minutes later, they reached the circular platform at the top of the mountain.",
+      "sha256": "cbc6dc2d364330c9a7895250f68aaca7fc14c2cd6a92cfdde0c659fde311df28"
+    },
+    {
+      "idx": 4,
+      "kind": "paragraph",
+      "content": "From there, they could see a full view of the island on which Northglade was located. It was about twenty kilometers wide - small enough that the most simplified and highly zoomed out maps of the region did not even bother showing it, but at the same time large enough that it seemed like if it really had to, that island alone would be large enough to sustain a civilization. If Northglade had been a Dzego city, Zei thought, it would have a fully self-sufficient emergency industry already.",
+      "sha256": "ec03f09bd06e84d6ebbf52cac5587c1adf3568178731abcd96d9ee8609cd4426"
+    },
+    {
+      "idx": 5,
+      "kind": "paragraph",
+      "content": "To their east, they could see the main city of Northglade. To the west and north, they saw snowy hills for kilometers on end, and a path gently twisting as it descended deeper into the forest. Looking downward to the east, Zei could see another staircase leading up to the summit, and a young man wearing only a sweater and a light hood climbing up.",
+      "sha256": "cd5dc481334f3ab7fdf1dc75c1d41d4e1ec52776f6a07cc658f3fde47d605744"
+    },
+    {
+      "idx": 6,
+      "kind": "paragraph",
+      "content": "As he neared the top of the summit, Zei could recognize a familiar face.",
+      "sha256": "a5e32de0fead43f2b04d8316080258e8db70af09138c9d1e16d8f28cfc5e8cfb"
+    },
+    {
+      "idx": 7,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Deluin!\"</span>, he shouted.",
+      "sha256": "e38c5741e25852bcab92d7bdb0c3371e46aa1a81d3d0a5d6b262b47e449e1a90"
+    },
+    {
+      "idx": 8,
+      "kind": "paragraph",
+      "content": "Deluin raised his head up, saw Zei, and ran up the last twenty meters of the staircase.",
+      "sha256": "622079fdc4275918688c9df22b95dd55a2b494f02a667829bbe8fafe1eeb75ab"
+    },
+    {
+      "idx": 9,
+      "kind": "paragraph",
+      "content": "He reached the top, and almost threw Zei off balance as he threw himself into his arms for a hug.",
+      "sha256": "c7f25906947986377333b7f0765804eec879b1f60d86882fce83c2c508708524"
+    },
+    {
+      "idx": 10,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"I'm so happy you're still alive, Zei, and that I can finally see you again.\"</span>",
+      "sha256": "c8a6a4286bb443acd7e28ad8436d955bfbaa08fd9043e1a81deda352e3068818"
+    },
+    {
+      "idx": 11,
+      "kind": "paragraph",
+      "content": "Deluin slowly let go of Zei and turned toward Bai.",
+      "sha256": "810a81e456f3c74f6a626d71f5ce015095e8ad428fbd843a1a4ecd9a22cc7def"
+    },
+    {
+      "idx": 12,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Wait, do I recognize you?\"</span>",
+      "sha256": "5b910af0f52fc7b811fff36898b22e0bbc89db24467968de7861af194761e01f"
+    },
+    {
+      "idx": 13,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"I'm Bai. You might have seen me watching some of the practice games in Sadzu Du.\"</span>",
+      "sha256": "9c6849801e92719b73717d72ab6e45c2d3e1018f247d41bb54d70e38bba5fdd7"
+    },
+    {
+      "idx": 14,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Ah yes, I remember you!\"</span>, Deluin replied, somewhat unsure if he was genuinely recollecting a memory of seeing her or simply confabulating one.",
+      "sha256": "0d371abef81845bc9ac966a9d3eda10d80918920523b8c9e73975bb4bd56f7ac"
+    },
+    {
+      "idx": 15,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"And I'm Mu. Don't you dare mix me up with Su - she's still back in Dzego, she's a completely different person from me.\"</span>",
+      "sha256": "54498e9e71207e51cfb5cfdde1100b402cc4c50121d914b5e8a18681a5f593a7"
+    },
+    {
+      "idx": 16,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Nice to meet you, Mu\"</span>, Deluin replied, gently laughing.",
+      "sha256": "d0836d9c4ec6f81791d35343fa8c3e7f97af29bed2f80029b3bc0116e74cfcc1"
+    },
+    {
+      "idx": 17,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"So tell me. What happened?\"</span>",
+      "sha256": "4a28311708854e8549013fdf97a771615abf91c5d650cc81ccb4dbcab43c2996"
+    },
+    {
+      "idx": 18,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Well, this is a long story. Are you sure you want it told at the top of a cold snowy mountain?\"</span>",
+      "sha256": "f3872743b7f994609f2e8d08ea3246df1f6ee591180489d0395ff332031dc58f"
+    },
+    {
+      "idx": 19,
+      "kind": "paragraph",
+      "content": "Zei, Bai and Mu all immediately nodded in unison.",
+      "sha256": "e0f34dd823d9fdab391d53425cc214c4d5632f92bbef1f94c08f847fe584a2d9"
+    },
+    {
+      "idx": 20,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"I see you're more fit to live in Redshire than I might have expected!\"</span>",
+      "sha256": "7a643602a4e4b6e7492c20eb0d833dc582baef73251e55281068d05ff29607f8"
+    },
+    {
+      "idx": 21,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Okay fine, I'll start.\"</span>",
+      "sha256": "7e207489bab6efe112dac7d764b96dc4d43f781beac020ca15c4264825217705"
+    },
+    {
+      "idx": 22,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Back in Grapetime, about two months after they occupied Redshire, some Arctic officers came to our house, to talk with my parents. My parents were never particularly worried about the Arctic threat, saying we should be more open to peace and cooperating with them. But once the invasion happened, they quickly flipped to just being full supporters of what the Arctics were doing. Quite a large chunk of the Redshire population did.\"</span>",
+      "sha256": "01a4f2631844b23022c752028f3b685c8fb7ad0ecf7fafcbfccad4fb7be4a369"
+    },
+    {
+      "idx": 23,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"The Arctics offered them a position. They said that they should come to Glasscrown, and advise the top leadership on integration - first of the captured Redshire population, then of Northglade residents and eventually of everyone else that they would conquer.\"</span>",
+      "sha256": "38173233bd226a6b63ef48e266f816be98f30df1c5dbb6509406cecb52ea09fd"
+    },
+    {
+      "idx": 24,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"I made a big risky decision. I decided I would 'go native' - pretend to be a full-on supporter of the Arctic cause, try to use my parents' reputation together with my own status as a Minpentai champion-\"</span>",
+      "sha256": "5dd6ed48e9802c654733ee95ceddf097b753ef131aad62a740640aa0649d5cb4"
+    },
+    {
+      "idx": 25,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I'm the Minpentai champion!\"</span>, Zei playfully interrupted.",
+      "sha256": "d5ec7a0ee3aba077ad07920da71159eb5306899784721476d020e34cf32b4dd4"
+    },
+    {
+      "idx": 26,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Only because the game was cancelled and they gave you the title. You never beat me.\"</span>",
+      "sha256": "3e630d09ad1b0a4470a2b439da1a66c71c8f98f8f9bbfadaf74bdfa0d75d8d7f"
+    },
+    {
+      "idx": 27,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I beat you in the battle two days ago!\"</span>",
+      "sha256": "cb717d9e12b4b5d07db1cec7c456a5cc0f180887b0a85921a8c5abc4ad8dd9b1"
+    },
+    {
+      "idx": 28,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"What was that line from that old poem? mi fu zo de tei ka ciu pin - when I am defeated, I feel like I won?\"</span>",
+      "sha256": "03765032f6bfb952c68ddb391724c6449513341f9b6f016f669ee2a5e015388e"
+    },
+    {
+      "idx": 29,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Now you get it!\"</span>",
+      "sha256": "cc84ae1a49905990d9239c68c8b32f021dfb28d821ef1289010b98e573ead5c9"
+    },
+    {
+      "idx": 30,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Anyway, I used my parents' reputation and my status as a Minpentai *semifinals winner* to climb up the hierarchy myself. Within two months they figured out independently that Minpentai was an effective way to train people for modern warfare-\"</span>",
+      "sha256": "b87095764d3e94b99d7f834e87fb0c75067b6cb0a36896492b77703da804fce2"
+    },
+    {
+      "idx": 31,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Wait, they figured out what Minpentai is for?\"</span>",
+      "sha256": "aa18bc13b61b074f5c85e6ef90f8e190807cac73c2778f2e3fcd15626e58f4b8"
+    },
+    {
+      "idx": 32,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Wait ... you mean you guys *intentionally* designed the Minpentai tournaments to train people for defense?\"</span>",
+      "sha256": "c8eda3ed43a08b0a76de7f83f4541028fae050982af4c297e1aa2c23a6e83a20"
+    },
+    {
+      "idx": 33,
+      "kind": "paragraph",
+      "content": "Zei, Bai and Mu immediately nodded.",
+      "sha256": "394523ea4f52f8c06f7e6ef326ba1d1b4a2508cddf0f467c94e8fd42323034a9"
+    },
+    {
+      "idx": 34,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Then no, they definitely did not figure that out. They just figured out that Minpentai *happened* to be effective for that purpose. And so within three months they put me as one of their top commanders.\"</span>",
+      "sha256": "aca1b710660e2b7b79e58c9049285db3a243c12dbaac8b82e9677ab36e3ab239"
+    },
+    {
+      "idx": 35,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"The Arctics are actually quite easy to play, you know.\"</span>",
+      "sha256": "272c19e5b22317c08feb507ffd9ea1db6feb140064593a7ef6e6054f4724baa6"
+    },
+    {
+      "idx": 36,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"What do you mean?\"</span>",
+      "sha256": "96cb1b55c5cfaea5df9cd5bba5ea3329e7f07ebbb7969ccdae9632f1c4052f75"
+    },
+    {
+      "idx": 37,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Their entire ideology completely de-values alignment, and only values competence. They see top talent as being fungible. People as bots that can just be reallocated by pointing a higher salary at them. They don't really have much of a theory of people having their own motivations, dreaming their own hundred thousand dreams, and how to tell when someone's heart beats together with yours and when they are just pretending. And so if you just say the right slogans, and convince them that you're top talent, they just ... trust you.\"</span>",
+      "sha256": "65336664a207450d18b183b11f79bfc6211eb371aff9898b2a9d07bdcbf4da2e"
+    },
+    {
+      "idx": 38,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Wow.\"</span>",
+      "sha256": "c776f5ee1422d6942382abd2a0856ad0c5194a363b0d1389b0972ea3bcdd9a95"
+    },
+    {
+      "idx": 39,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"I'm ... actually not surprised\"</span>, Bai added. <span data-hue=\"26.67\">\"I'm just glad that you managed to play the game better than any of the others did.\"</span>",
+      "sha256": "9384dd4e605aee48d9851d3b94198894745a67d060879d3e15a79345254f3952"
+    },
+    {
+      "idx": 40,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"So what are the most *interesting* things about the Arctic Empire?\"</span>, Mu quietly asked. <span data-hue=\"173.33\">\"What can we learn from them?\"</span>",
+      "sha256": "97ff65be819ed0627f2a3fa80af994e8c6da571886785f1a31da490f0c9d7e8c"
+    },
+    {
+      "idx": 41,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Their advancements in technology are real, and they are amazing. The medical treatments that they gave to the residents in Northglade are only a sample. They believe that they have already figured out how to make people live a decade longer, and that they're only accelerating.\"</span>",
+      "sha256": "cb01131c2e53a820fd099f14bc7b504e59df5501287937e7548025f2a7bee4ea"
+    },
+    {
+      "idx": 42,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Glasscrown is one of the most fascinating cities I've ever seen. It's beautiful in its own way. It makes you feel like you're living inside of a giant ice crystal. Its tallest tower is a kilometer above ground, and its caverns stretch deep underground.\"</span>",
+      "sha256": "d53461109ea2183bc4ff637e66e9dff0482793c9c90bbbd436c85c4f98a0917c"
+    },
+    {
+      "idx": 43,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"They even have rows of pine trees alongside some of the walls. That itself is an impressive feat of engineering: genetic engineering to help the plants better tolerate cold, together with underground heating and cleverly shaped reflective walls to make their environment warmer.\"</span>",
+      "sha256": "ce0d234bfbbb4b22915eab6b6d39ecdebf4c01fa4477165d595be1ba4fec5bf7"
+    },
+    {
+      "idx": 44,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"In the winter, Glasscrown has a month and a half of polar night with no sun. Then, the whole city gets enveloped with the glow of white and blue artificial light.\"</span>",
+      "sha256": "a7f88988670f57dbde536b56b5cde112a2e291aa0db4be4a4e24d60e3d27d0f7"
+    },
+    {
+      "idx": 45,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Now you sound like you want to go back!\"</span>",
+      "sha256": "79bfb0b597517365da9647184a4f8c42d8108c57ba082f90416ae6adf831204e"
+    },
+    {
+      "idx": 46,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Actually, I want something else. I think it's good that the Arctics have built all of this technology - though if I could shut one of the things down, it would be the research on superviruses. But what's dangerous is how they keep everything they make for themselves and don't let anyone else benefit. Even when they gave some of it to the Northgladers, it was on their own terms - you come to our health clinics, you don't get to learn what we are doing to your body, and if you don't want to go back to how you were before, you have to keep coming back to our clinics again and again.\"</span>",
+      "sha256": "61a938fb07879fa48d32e01146dad75cca3fb940f864b420153947ff659a84b6"
+    },
+    {
+      "idx": 47,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Instead of science and technology bringing the world together, it's turning one group into a bigger and bigger threat that the rest of the world has to fear more and more.\"</span>",
+      "sha256": "375943808cea0f926106ef4841bb4b2b7cdc1594df26f54cff1e8ac8fb96160a"
+    },
+    {
+      "idx": 48,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"But thanks to you, we - we as in all of humanity - have now captured a big pile of their technology. Some that they brought into Northglade. Piles of their military equipment scattered around Elenar Forest. And a bunch on the island of Thaldur, core Arctic territory that has tens of thousands of people living on it.\"</span>",
+      "sha256": "f423fb10a8acc383dd421f11ba70dfc46146f02b5d3910b252655df7729bd095"
+    },
+    {
+      "idx": 49,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"So our next step should be to convince as many of them as we can to volunteer, and share their knowledge and expertise voluntarily, and bring the whole world up to at least the frontier that the Arctics have created to keep for themselves.\"</span>",
+      "sha256": "6a01a342ba12e4fbd7a6d4271d8583cae3f71f5e60125f8e090c91b0827b8425"
+    },
+    {
+      "idx": 50,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Open source - it's not just a good idea, it's the law\"</span>, Zei replied.",
+      "sha256": "ebdd37b582fc5ce9a9d17d197bac4218e7238e7bc0837de52ffe8d5734cb1d6a"
+    },
+    {
+      "idx": 51,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Exactly. Make the whole world a little bit more like Veridia in that way.\"</span>",
+      "sha256": "d4103beb215faff922736a54fc19e9eb878bce115ef8822b3cf084cf57723643"
+    },
+    {
+      "idx": 52,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"And then we can play their strategy in reverse. Show the people in Thaldur that they have more calm, more peace and more actual freedom under our way of life, at the same time as having powerful technology. Then perhaps through them, we can convince even more Arctics to join our side.\"</span>",
+      "sha256": "ed8d9ac17a94accc2486e6b4fda58597dcafac261079965e1f71dfeeabcc8968"
+    },
+    {
+      "idx": 53,
+      "kind": "paragraph",
+      "content": "The conversation paused. Deluin took his turn to walk all around the top of the mountain and enjoy the view of Northglade.",
+      "sha256": "2894a6763d0d24671f4f04364dd1f69fb9801596b804acfa86667ef2b9afa22b"
+    },
+    {
+      "idx": 54,
+      "kind": "paragraph",
+      "content": "About ten minutes later, Mu spoke up again.",
+      "sha256": "731e8e675f348d779657684f5c2fbab6e96399ca8a23c5a4c61adf76d47ce664"
+    },
+    {
+      "idx": 55,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"I got some bad news, Deluin.\"</span>",
+      "sha256": "fe910c4e6a28e7c70d63cee10a4370821a9a03003100a4b4d26923e07a0c8524"
+    },
+    {
+      "idx": 56,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"What is it?\"</span>",
+      "sha256": "64a14109d51d25b2807ba3c7a0406485dc7f57b0421145f0c806b1f9822065bb"
+    },
+    {
+      "idx": 57,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Freetown defense corps are reporting that the Arctic garrison in Redshire has tripled. They tried some sabotage operations with their drones already on Redshire using the tricks that we discovered during the battle two days ago, but they are mostly failing now.\"</span>",
+      "sha256": "7a7efcc1f7499254b1c5e31acf47c13854f4a7bec5f4ac8446b2f0bbab20d366"
+    },
+    {
+      "idx": 58,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"They now think that there is basically no chance of us getting Redshire back.\"</span>",
+      "sha256": "a25899386d2b1f1b394bcdcc7f34b8ffa6a0bd35e043f8cf6dcc37ae4a896f3c"
+    },
+    {
+      "idx": 59,
+      "kind": "paragraph",
+      "content": "Deluin sighed. An expression of deep sadness filled his eyes.",
+      "sha256": "9bc006d751debc336553911179aca9b9b290d500d40c35b84a850c25d0970a2f"
+    },
+    {
+      "idx": 60,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Tafindel is recommending that we play a little bit of hardball. Close the borders between Thaldur and the rest of Arctic territory. And then offer a deal. We let anyone who wants to go back to the Arctic Empire go back, and in exchange anyone in Redshire who wants to leave is allowed to leave. They keep Redshire, we keep Thaldur. And then find a beautiful place in Veridia to make a new Redshire.\"</span>",
+      "sha256": "9f172cb152ae462b01e0bfd8150fa614411837b8985cd042c34181f6ba69dc6b"
+    },
+    {
+      "idx": 61,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Why not just give them the peninsula between here and Thaldur, the one dangling off the eastern end of Northshore? Very beautiful land there.\"</span>",
+      "sha256": "5f6705a35a1fdc39d456b5287b785120e3bc965792cb4ead572629cc1039ad68"
+    },
+    {
+      "idx": 62,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"I think that should be up to them to decide.\"</span>",
+      "sha256": "74c1efee32e05bd4abe72db86ab81e0f67c1885957af5377d736220ed607ae2e"
+    },
+    {
+      "idx": 63,
+      "kind": "paragraph",
+      "content": "Deluin nodded. <span data-hue=\"53.33\">\"Tafindel is probably right. It's as good an outcome as we're going to get.\"</span>",
+      "sha256": "7915b015ac75fbbe7534d0097f8fd594cf94bb1d035ffce325775879b949af49"
+    },
+    {
+      "idx": 64,
+      "kind": "paragraph",
+      "content": "The conversation paused once again. All four of them looked toward the east, and enjoyed the view of snowflakes gently falling on every building in the town of Northglade and covering it with thick snow.",
+      "sha256": "658be123838c527b372053185eb305454f6cea282328e68bf30b9d9b574fbd05"
+    },
+    {
+      "idx": 65,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 66,
+      "kind": "paragraph",
+      "content": "Gladias and Seila walked through the large stone gates at the entrance to the Greater Plum Harbor in Northglade. The turnstile gates had been smashed and thrown to the ground to let people freely move in and out, and the administrative staff did not seem to have the heart to enforce any visa rules at that particular time. Two Greater Plum Harbor security guards, wearing purple and grey attire, simply watched the crowds move in and out, and resigned themselves to meeting the fallback objective of preventing any theft and violence.",
+      "sha256": "97e3ade9d7e161c4ab3158cadef70357c45384be133975ff1ee52e20291c12ee"
+    },
+    {
+      "idx": 67,
+      "kind": "paragraph",
+      "content": "Seila's watch buzzed. She raised up her hand, and took a look.",
+      "sha256": "dc36902f0fbe3ea8130b90bed6bf79eb1cd41096cf6e7f4020095a5afdf1cf5b"
+    },
+    {
+      "idx": 68,
+      "kind": "screen",
+      "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th>From</th>\n      <th></th>\n      <th>Message</th>\n      <th>Time</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Jahn</center></td> \n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 133.33333333333331)\">[5 images]</span></td>\n      <td>45904</td>\n    </tr> \n    </tbody>\n</table></div>",
+      "sha256": "0e52aef39266a1eca4df1c0e5f91950b7f94f06854465a88ff8d606a69d2c600",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Northglade, Veridia"
+        },
+        "device": "watch",
+        "device_evidence": {
+          "idx": 67,
+          "quote": "Seila's watch buzzed."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "From",
+                "",
+                "Message",
+                "Time"
+              ]
+            ],
+            "rows": [
+              [
+                "Jahn",
+                "→",
+                "[5 images]",
+                "45904"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 69,
+      "kind": "paragraph",
+      "content": "She clicked, and took a look at the pictures. The first three were pictures of people in Freetown in its streets and parks celebrating.",
+      "sha256": "f15e386b19f8596bc020033466e432fddb2501c727698927810d2bc99e501784"
+    },
+    {
+      "idx": 70,
+      "kind": "paragraph",
+      "content": "The fourth appeared to be an open public concert hosted in a parking lot. In the background was a giant factory building, on the side of which there was a prominently displayed logo of Ichara - one of the now famous Freetown defense companies.",
+      "sha256": "4d460c245ebe8c2165e446816287a8126f10f1dc4f7a308f121fa2d2452aa4a1"
+    },
+    {
+      "idx": 71,
+      "kind": "paragraph",
+      "content": "The last was a picture of Jahn himself taking a selfie with what appeared to be one of the managers who worked at the defense company.",
+      "sha256": "b8e0deb94692031b46003a1443bf2433113bf6e305d460d578ccfc28d3c527da"
+    },
+    {
+      "idx": 72,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Are you going to go to Freetown and see Jahn?\"</span>",
+      "sha256": "eb7dc9abc08cc4a30c7e3e557ed7b2b51af1a3ffe442f6a6e2f97664d3d28302"
+    },
+    {
+      "idx": 73,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Actually I was thinking to stay in Northglade another five days or so after you leave, and let him come here. He's always wanted to come see Veridia.\"</span>",
+      "sha256": "c0c23a014eada138485704eb487c159b5e789d0646066ea1ad9a8ee8ed057af9"
+    },
+    {
+      "idx": 74,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"You should\"</span>, Gladias replied gently.",
+      "sha256": "57e658685a4da4eb1af6622b334e7411ae7ff94845251df76068b11678eeed6a"
+    },
+    {
+      "idx": 75,
+      "kind": "paragraph",
+      "content": "They walked forward along the street for about a hundred meters, and then descended down into a tunnel. About two hundred meters later, they turned right and walked up a staircase. At the end of the staircase, there was a door.",
+      "sha256": "77aa4478382b202fd134b8ccfae8697d0bf67ded55e986d73bad2fbe41d85e77"
+    },
+    {
+      "idx": 76,
+      "kind": "paragraph",
+      "content": "Gladias prepared to tap his watch against the green circle on the side of the door, but before he could do so, the door opened on its own.",
+      "sha256": "a01e8098de3a1d170cddc10bce182187944ec921c1ada8323755472827430e56"
+    },
+    {
+      "idx": 77,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"Dad!\"</span>, Lily yelled as she ran up to Gladias and hugged him.",
+      "sha256": "82f64d81951a1a155c7f9eb1ab62a94e30f353102dc6bb6d3ab31dc7d5e6bc13"
+    },
+    {
+      "idx": 78,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Lily! I'm so happy you're safe.\"</span>",
+      "sha256": "8e26ec8ea75c29b125b03131a117201ab3e9287ad8ce5570b6d4cabb9e576772"
+    },
+    {
+      "idx": 79,
+      "kind": "paragraph",
+      "content": "Febric and Hreda emerged from another room, and rushed to embrace Gladias and Seila.",
+      "sha256": "887bbd6c7d991c61a5353d73b71c684249bc50ac8ca21ec72d9c2fa2d2ee102c"
+    },
+    {
+      "idx": 80,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"I'm so glad that you are all here together.\"</span>",
+      "sha256": "e394599283e831daee244326ebf19dc20121db36d7a1aed66a29961a4bc71484"
+    },
+    {
+      "idx": 81,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"I'm sorry, Mom.\"</span>",
+      "sha256": "3e24007bd9cac499183085595b70a4da506842e9e2d1760a57ed9de175d97106"
+    },
+    {
+      "idx": 82,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Don't be. We all made lots of mistakes this past year. We've gotten through it now, and if we need to, we can get through even more. We're a family.\"</span>",
+      "sha256": "1bc54a16f3c71470c6dc5974fe4b8acbd03e0450a1579c6aa1598b591227e11f"
+    },
+    {
+      "idx": 83,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"Is Zven here?\"</span>",
+      "sha256": "848fcf726f47d5859d234c1e239053c86213b8ae67bf94b7e9c04ee45ff76fc2"
+    },
+    {
+      "idx": 84,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Oh, Zven, Vil and Daia are coming tomorrow morning!\"</span>",
+      "sha256": "330610b1e69c5448eb3ea97215ebf1f07d5583b5f25d66697eedad39a64d7428"
+    },
+    {
+      "idx": 85,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"106.67\">\"Amazing! I'm so excited to see Mom!\"</span>, Hreda exclaimed.",
+      "sha256": "96e32c5ba3452160c4e7acce032115cafa1510659cf8d090fa83285fd883b465"
+    },
+    {
+      "idx": 86,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"So how has the Greater Plum Harbor been treating you?\"</span>, Gladias asked.",
+      "sha256": "303bf410da3b060047d5ddb738968dd172c96c3fbaaf31d45a3b3461836896fb"
+    },
+    {
+      "idx": 87,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"106.67\">\"It's been actually quite fun.\"</span>, Hreda replied. <span data-hue=\"106.67\">\"They did a very good job of organizing education, entertainment, public activities, all kinds of things to keep people happy. They convinced the Arctics to allow food to get droned in, so aside from being a small enclosed space it's been fine.\"</span>",
+      "sha256": "259ccc42e49ed281c8d94fb328ee5624bc9e3255ed65858040cfcb890bb26754"
+    },
+    {
+      "idx": 88,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"We had Arctic food out of curiosity a few times here\"</span>, Febric added. <span data-hue=\"80\">\"They've figured out like a dozen substances that taste like sugar but don't have any calories. They also have protein contraptions that taste like fish and meat. It's not bad! Whatever taste you want with whatever nutrition profile you need, the slogan goes.\"</span>",
+      "sha256": "f5042089592d1a10b736defb354457d8b75d560f3efaefc540688a7d0ebe135e"
+    },
+    {
+      "idx": 89,
+      "kind": "paragraph",
+      "content": "Seila lowered her face quietly. She was still not entirely used to having to admit that the Arctic ways of doing things sometimes did actually have upsides and they could learn from them.",
+      "sha256": "3daa49396cffa31353aac4d372ba1ab6b08006dc069dd48eae09f6b1631c5d45"
+    },
+    {
+      "idx": 90,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"How about I invite some of our new friends\"</span>, Gladias interjected, <span data-hue=\"93.33\">\"and they can show us what actual properly cooked Dzego food is like?\"</span>",
+      "sha256": "2ee79ae4bb7d031462cfc1b529af6df2f6d23f6641971df64722b851ba61aa64"
+    },
+    {
+      "idx": 91,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"Yay!\"</span>, Lily shouted.",
+      "sha256": "598c2c788202c7ffb510209720dec749a81a1d74693cf81868510fe88882d094"
+    },
+    {
+      "idx": 92,
+      "kind": "paragraph",
+      "content": "Febric and Hreda also nodded eagerly.",
+      "sha256": "6c22ec3147ca2e591090ccee10b79de68931ef17461d5a4b5166ba363ee169bc"
+    },
+    {
+      "idx": 93,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Then I'll ask them to come tonight. I have to go out again this afternoon. There's a military funeral for Den and our fallen soldiers at the top of the mountain. Then we can come back down together and enjoy a nice meal.\"</span>",
+      "sha256": "0fa8ec2fb04c397617078fd3bed7ae10c65380f5fa5f4433d9af550f2d2f2fe6"
+    },
+    {
+      "idx": 94,
+      "kind": "paragraph",
+      "content": "Lily, Febric and Hreda nodded their heads with excitement.",
+      "sha256": "fdd02455f7eaa4d77c428a4a415ada52b8b739431aed5cd02b776681c3e2eb98"
+    }
+  ]
+}

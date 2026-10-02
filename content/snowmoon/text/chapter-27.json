@@ -1,0 +1,1032 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 27,
+  "source_url": "https://vitalik.eth.limo/snowmoon/html/chapter-27.html",
+  "source_sha256": "bfc1768b912085d1cfce1ff68e5fe5f5af847e1faa8d1ec24ff6dbb5f552dd70",
+  "fetched_at": "2026-10-02",
+  "license": "GPL-3.0",
+  "blocks": [
+    {
+      "idx": 0,
+      "kind": "heading",
+      "content": "# Chapter 27",
+      "sha256": "d3bc263e9b091dd7fa7383832ae486c98c10dc3ece71d2c00cf0c6e6ae821ee8"
+    },
+    {
+      "idx": 1,
+      "kind": "dateline",
+      "content": "**Meldan, Veridia** · 3724 Frostime 7",
+      "sha256": "6cfc4dfee199fa4867c441b7ae09cb51dbab1555dd3b54fe8f670dda3cf643a8"
+    },
+    {
+      "idx": 2,
+      "kind": "paragraph",
+      "content": "Gladias heard a knock on the door of his government hotel room. Before he could respond, he heard a buzzing sound, and the door opened.",
+      "sha256": "dd131b15f35f53b9586404376310a1b55b2bdccdbfa41c0602664a810e5aa206"
+    },
+    {
+      "idx": 3,
+      "kind": "paragraph",
+      "content": "Seila walked in through the door.",
+      "sha256": "6bfe42df0d64a3ff4afa061b8f680a274dc3b71bce189fdb82d48d10d39ba601"
+    },
+    {
+      "idx": 4,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I'm so sorry, Seila\"</span>, Gladias said almost immediately with a sad expression on his face. <span data-hue=\"93.33\">\"I don't think this plan is going to work.\"</span>",
+      "sha256": "f9a5db10c0744c60547e9ca5ae294dbd3d507cf86a5aa660a102d03732e1b4bd"
+    },
+    {
+      "idx": 5,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I've failed our whole family. We know where Febric and Hreda are, now we know where Lily is, but there's no path to rescuing any of them - except if the Arctics conquer us completely.\"</span>",
+      "sha256": "9766e7c00f4e92a4cb143ba9ac542d5f8932bad084dca4008b4acf8c633a29bb"
+    },
+    {
+      "idx": 6,
+      "kind": "paragraph",
+      "content": "Seila walked up to Gladias and hugged him.",
+      "sha256": "77822c11881327fd645c2965c79d24c25e6fa5af118ccd137d2049226bcae224"
+    },
+    {
+      "idx": 7,
+      "kind": "paragraph",
+      "content": "For a few moments, neither of them said anything. Then she stepped back and her face broke into a smile.",
+      "sha256": "8a03391e664147682f8b03de04c5673d82cd3b8f7127c9ecce2af7008a8a33ec"
+    },
+    {
+      "idx": 8,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"So I have a new idea.\"</span>",
+      "sha256": "34f1e812e777a6dcca45fa8c6541bd2759e6b09d80d8e45ed003201de96be27d"
+    },
+    {
+      "idx": 9,
+      "kind": "paragraph",
+      "content": "Gladias's eyes perked up.",
+      "sha256": "d1a89f338a7997a2ae5683b1433f0c38acfa24df1eed3e2eadad4ee75e6c8033"
+    },
+    {
+      "idx": 10,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"What is it?\"</span>",
+      "sha256": "42829abc263c443153588db9288ba1cf6f4de1249b75acaf4f0c8157d2782612"
+    },
+    {
+      "idx": 11,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"So what we learned yesterday is that the judges do not feel comfortable doing something that they perceive as being very undemocratic. So I have a solution. We make it democratic.\"</span>",
+      "sha256": "e537b623aa58f5a4f5d856bc25f9d8442e154271de2d39e012d8f650554b0d37"
+    },
+    {
+      "idx": 12,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"What, like we hold an election tomorrow?\"</span>",
+      "sha256": "de7aa1fd9fd840115638dad776e1b9cbd02fd94cf59ab4a45ce809ed6b09cbf4"
+    },
+    {
+      "idx": 13,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"In a sense, exactly.\"</span>",
+      "sha256": "d4fec20b0bb4c51f58e36e810da488ce5ae888d6b16b0e320ae26541de3bf31b"
+    },
+    {
+      "idx": 14,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"While you were in Dzego, Mov and I started making our way up the ladder in Silverchat, talking to people there. We were not too successful at getting their attention at first. Verdow joining in about ten days ago helped a lot, but even then they didn't take us too seriously. But on the day the Kungaupei rescued Tafindel, I took a risk: I told them something interesting military-wise would happen a longhour in advance. And then of course it did. So now, they are listening. And I have a plan for what to ask them.\"</span>",
+      "sha256": "2cf78de664fb7add4f1cdfb29b8cfb45c182057ab9ac8ccc253b92344e3df24d"
+    },
+    {
+      "idx": 15,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Silverchat has a polling feature. You can burn zipcoins - well, pay zipcoins to the company - and it lets you automatically ask a question to a large cross-section of people on the platform. The more zipcoins you burn, the more people it polls. So what we'll do is, ask a lot of people a bunch of questions about how they feel about various Veridian and other government institutions, and other hypothetical scenarios.\"</span>",
+      "sha256": "d0e8c542ee56c617568bd331b26147a9d7cb037e0098ddf4b55901395947af94"
+    },
+    {
+      "idx": 16,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"We'll include 'do you think the parliament represents the people?' and 'how would you feel if Veridia's military was run by the Dzegojan people who rescued the Redshire president's son?'. But we include that alongside hundreds of other decoy questions. That way, the Arctics won't know what's going on.\"</span>",
+      "sha256": "fc354d76cff24215e44b9cd87c3c5d4eeeb0976cf553669bd56435db4717bc4c"
+    },
+    {
+      "idx": 17,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"For the responses to be genuine and well thought out, you need a high priority level, which I imagine would require paying a lot of zipcoins. And for this to function as a social signal with strong legitimacy, there must be common knowledge - everyone in Veridia must know not just that the poll was made and what the results are, but also that everyone else knows that the poll was made and what the results are, and also that everyone else knows that everyone else knows, and so on. That would require *a big chunk of the entire population* to see the poll. So we would have to pay *a lot* of zipcoins.\"</span>",
+      "sha256": "5f8e9b451b36144df81644ed41599f7d529e9861c0a74acacde62d0d642efcc8"
+    },
+    {
+      "idx": 18,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Nine hundred thousand zipcoins was my estimate.\"</span>",
+      "sha256": "f15c243220359d1386ea0fa956c59dd9cc0e4c32499197a560a56d0d71c883e5"
+    },
+    {
+      "idx": 19,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Do we have that many?\"</span>",
+      "sha256": "197acf05de28b66faa68be8f0fec750bef1c2db35679ab8b8ff7d2b88c173afd"
+    },
+    {
+      "idx": 20,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Nope. All our savings combined, including Mov, adds up to only half that.\"</span>",
+      "sha256": "802dda9652205ee6f5cfeba1e1241bfb9ae63e33aa3bbe297045baf8c34cbea5"
+    },
+    {
+      "idx": 21,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"But here's the trick. We don't need to pay. We convince Evelor, the founder of Silverchat, to do it himself, through the company. Then they can set the breadth and the priority as high as they want - they get a hundred percent of the fee back.\"</span>",
+      "sha256": "082478c640cd8e4bba455c731feabbc56b82e85f03e0c46794d09b74fdf9bc45"
+    },
+    {
+      "idx": 22,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Wait, can't they just do it manually at zero cost?\"</span>",
+      "sha256": "7a03919130187aa2ce0b1880bff95ba146cffcab50b1262162c294e6442f365b"
+    },
+    {
+      "idx": 23,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Their platform works by publishing proofs onto a cryptographic network every time the set of readable messages is updated. So there's literally no way for them to break the rules - if they tried, the proof would fail to verify, and the viewers' clients would automatically reject the messages as invalid. The only thing they *could* do is publish a new algorithm hash, but that would come with a twenty-day delay.\"</span>",
+      "sha256": "d479c3c53c9d8b943288663b5bb4e19835d1a8fc719108f83f2fb591808ae9a8"
+    },
+    {
+      "idx": 24,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"And they get one hundred percent back? No sales taxes?\"</span>",
+      "sha256": "356d5441b236cb93c774516ea3a348a7ecac552e5ca967ffb82f0e0748c38736"
+    },
+    {
+      "idx": 25,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"With the latest rubric changes, given how well Silverchat has been behaving with its algorithmic transparency - the exact proof mechanism that doesn't let them just directly backdoor and break their own rules - and interoperability, respecting users' privacy, cooperating with researchers, their taxes have dropped to zero.\"</span>",
+      "sha256": "0b3a5b84deb1ee798916020844151d9bd38bd6b153220b2abea8d6ab7eaaa9a3"
+    },
+    {
+      "idx": 26,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Then let's see what Evelor thinks!\"</span>",
+      "sha256": "91ec0492c361110a31ee0545daeade2aa0ec7a041b70a57daf3f312ac16b7ea3"
+    },
+    {
+      "idx": 27,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 28,
+      "kind": "paragraph",
+      "content": "Gladias, Seila and Zei walked forward together along their usual path through Kalimar, covered with trees and surrounded by stone houses on both sides. They had taken a black car most of the way there as a security precaution, but cars could only go up to the border of the car-free zone. Thus, they had no choice but to go the last few hundred meters on foot. Hopefully the privacy robes will suffice, Gladias thought.",
+      "sha256": "1e93eaddcae5b9d6c12813904e2e153425649f24eac56a5165748fcb6f6732bb"
+    },
+    {
+      "idx": 29,
+      "kind": "paragraph",
+      "content": "A cold breeze blew at them from behind. The cold energized them just as the wind pushed them forward, and they began to walk forward faster.",
+      "sha256": "11111c3cc5399dbd1a8e06e624f870001cb6e5d44a2afda18f4ea1832b976861"
+    },
+    {
+      "idx": 30,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Right turn here\"</span>, Seila whispered through her neck band. By this point, she had become almost as accustomed to having all of her conversations through neck bands as Gladias had been.",
+      "sha256": "a906b9603b376bf2f8b309b0dcf1840e561c3ecf24b70deb2a3206ca2fef1f84"
+    },
+    {
+      "idx": 31,
+      "kind": "paragraph",
+      "content": "They turned right, onto a smaller path. The path continued straight for about a hundred meters. At first, there were stone houses on both sides. After about fifty meters, the houses gave way to what seemed like a deep forest. And after a hundred meters, they could see in front of them what looked like a small hill.",
+      "sha256": "0a0c396b988d34171c351fd28bd54d107b901312d4a9a4086920cac08a7347b5"
+    },
+    {
+      "idx": 32,
+      "kind": "paragraph",
+      "content": "The path sloped downwards, and led to an entrance door to what seemed to be the inside of the hill. Yet another one of those buildings that pays almost no land taxes, Gladias thought. By this point, Veridians had come close to perfecting the art of living and working and putting complex structures into a forest in such a way that the same patch of forest would seem untouched from only a hundred meters away.",
+      "sha256": "7e1f672562b775889815d9756f679e027821be1b18ebcf524537ee43c11c6f7d"
+    },
+    {
+      "idx": 33,
+      "kind": "paragraph",
+      "content": "Zei marveled at the sight, and his mind jumped immediately to comparing it to the mountain pyramids in Dzego. In Dzego, he thought, they crafted natural mountains into pyramids, and made nature seem like the work of man. In Veridia - or at least in the Kalimar district of Meldan - they made what was quite possibly an entirely manmade hill look like nature. Dzego could learn from the Veridian style, he thought. It's probably even better for protection.",
+      "sha256": "f3cd4e8a1bd3fcc5a6e24a312096b3591d3805e86ef70e8c522ce23ac8090887"
+    },
+    {
+      "idx": 34,
+      "kind": "paragraph",
+      "content": "Seila tapped her hand device against the green circle beside the door, and the door opened.",
+      "sha256": "9a30bbf2541a79f9be6a2e2ffd946a1a2797f24b4a7ee1db761292f6e204dde9"
+    },
+    {
+      "idx": 35,
+      "kind": "paragraph",
+      "content": "She led the three of them down a path: turning left, then right and up a slope, then right again, then up a staircase. Finally, she opened another door, and led them up a staircase into the middle of a circular area from where they could see the open sky. They were at the top of the hill, Gladias and Zei realized.",
+      "sha256": "1032b6951de913eb533c7be15785a0ab10f1a2505518ac670b54990b62c0825a"
+    },
+    {
+      "idx": 36,
+      "kind": "paragraph",
+      "content": "They turned around. Another man, wearing a privacy robe without the hood or the face covering, was already there.",
+      "sha256": "e8df7dc546451953ac1bfd3f3ac781468b53fa90675cc1005aae270e018b4230"
+    },
+    {
+      "idx": 37,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"I'm Evelor\"</span>, he said. <span data-hue=\"66.67\">\"Nice to meet you.\"</span>",
+      "sha256": "5ada2522d94ded970bc00f12003f78bf6f5f233aed8b1c1627123b7864227be9"
+    },
+    {
+      "idx": 38,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I'm Gladias. It's a pleasure to meet you too.\"</span>",
+      "sha256": "8c1ccb7a60d6b4482e2774a9037f6e9b7ece601019d9c63f1d0ac05f9cbc0ff7"
+    },
+    {
+      "idx": 39,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"And I'm Zei.\"</span>",
+      "sha256": "de89db8cd49656e27a7121b59c42b1a29bf243522bab221128a4c7dfbe166b9c"
+    },
+    {
+      "idx": 40,
+      "kind": "paragraph",
+      "content": "Evelor pressed a button, and a roof started to close above them. After about ten ticks, the roof was completely closed.",
+      "sha256": "b279f31bf76a2de98e6b726a7468ef02681399520df8adb7f660d31bb8e587a7"
+    },
+    {
+      "idx": 41,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"Just for privacy\"</span>, Evelor said. <span data-hue=\"66.67\">\"Feel free to take off your robes. Also, would any of you like a water or a tea?\"</span>",
+      "sha256": "7f55e4b25f9b79b6a58546fab0983c23e79d8ec0e3ee889423578b65d9b9b506"
+    },
+    {
+      "idx": 42,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I'll have a tea\"</span>, Gladias replied.",
+      "sha256": "772b32ca17fa97faf194df40f1a9df560f4f437278976f0155776ae905b3f024"
+    },
+    {
+      "idx": 43,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I'll have a tea too\"</span>, Zei added.",
+      "sha256": "2ba14f9fa77497f4430c04dfffe0034009fcdb3549e2135f39c1e543edc99676"
+    },
+    {
+      "idx": 44,
+      "kind": "paragraph",
+      "content": "Seila looked around briefly. <span data-hue=\"253.33\">\"Then I guess a tea for me as well.\"</span>",
+      "sha256": "24cf7f501b9526b4d40e21f21aabf91277e3ff9b71445a29e2a923c4f61e417b"
+    },
+    {
+      "idx": 45,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"Sounds good, four teas it is. The robot will be up shortly.\"</span>",
+      "sha256": "83510cdba33a4a4424e855b423e0419604ef5db01ce273c2533944042282a2d1"
+    },
+    {
+      "idx": 46,
+      "kind": "paragraph",
+      "content": "Evelor sat down on a bench pressed against the safety railing behind the opening that the staircase emerged from. He gestured at the circular bench that was all along the circumference of the room. <span data-hue=\"66.67\">\"Please, sit down.\"</span>",
+      "sha256": "15087c0369e8ddf41db55e1b1af090139adde23a3c45eb2cbf2afb5a00ca8dff"
+    },
+    {
+      "idx": 47,
+      "kind": "paragraph",
+      "content": "They took off the hoods and face coverings from their privacy robes, and sat down.",
+      "sha256": "83ff483e89c8a06202d7ecb1ffc012545f50eae2f93db599b1e0f9d7e5375e45"
+    },
+    {
+      "idx": 48,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"So, Seila, you mentioned to me that you had an idea for what Silverchat can do to make the whole Veridian government less stupid\"</span>, he blurted out with a tone of blunt honesty.",
+      "sha256": "4762d89e924c297ace91ba7ae31249e85aca30748e466cf4e1c1ee9ff215fe34"
+    },
+    {
+      "idx": 49,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Yes, I do.\"</span>",
+      "sha256": "aab30b2a774054e5f01da653736a3208af40104216810a46c6a0dcdb908cb824"
+    },
+    {
+      "idx": 50,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Basically, I want to do a poll. I had Emerald come up with about a thousand questions, I reviewed them. Some about how you feel about the present, some about possible futures. A small fraction of the questions are getting at the thing that we actually care about - replacing the military even if the parliament doesn't want to - and the rest are decoys.\"</span>",
+      "sha256": "0ebfa4d571aa9b2ecf3deb937c9aaac4a618e3ad8e9f20561d838acf4d565ce2"
+    },
+    {
+      "idx": 51,
+      "kind": "paragraph",
+      "content": "Zei winced slightly. Seila was volunteering the content of her master plan too quickly, he thought. The Kungaupei would never operate in this way. But maybe Veridian culture is just more trusting - or maybe Evelor had already proven himself to Seila, or even to all of Veridia, to be someone worthy of trust.",
+      "sha256": "2b820f881cb74130f686b1d50b3b939bc12dcacfba819f30d48c171014825caf"
+    },
+    {
+      "idx": 52,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"The goal is to create common knowledge that the poll happened and what the results are. If it goes well, then we will have a much stronger argument to take to the judges that this is something that people would actually want, and would not riot against.\"</span>",
+      "sha256": "ce131be74be3dab19d97d8843aaa015630054926e0658e7c808a9f3fe8ed03d8"
+    },
+    {
+      "idx": 53,
+      "kind": "paragraph",
+      "content": "Seila showed her hand device to Evelor. Evelor briefly scrolled through the questions, and started reading out loud.",
+      "sha256": "19ac6615fa5c69e40723c4e567a112bbdb3715e4bd2fad8647458bb85194f9b6"
+    },
+    {
+      "idx": 54,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"Who would you prefer to run the Veridian military? A: its current leadership. B: a new leadership chosen by parliament. C: the Silverchat leadership. D: the Arctics. E: the Kungaupei (Dzegojan group that recently rescued the Redshire president's son). F: Arturian military advisors.\"</span>",
+      "sha256": "310aa63ae32bc20c6e8f85dc36c06c23409d31882066424a18d653955d211ae4"
+    },
+    {
+      "idx": 55,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"And how much did you want to spend on this?\"</span>",
+      "sha256": "caab829c8bad306fc670db2b9ca71e7b22936cd54f62e1d3bbbaac5599001589"
+    },
+    {
+      "idx": 56,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Three million zipcoins. And I was hoping that Silverchat the company could do it itself, because you get paid back a hundred percent anyway.\"</span>",
+      "sha256": "3ff8195589a1d7d8e62ee85f35b40dc2a6cbea4d70a07898fbda274e032a43e9"
+    },
+    {
+      "idx": 57,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"Interesting! I would say three million is too much, it would be more than any previous poll or advertisement on Silverchat. It would make the Arctics suspicious that something unusual is up. I would do one million. Still in the top three in terms of spending, but not unprecedented.\"</span>",
+      "sha256": "3a28da536250fa3c62253189e212b245e5b5333bedb286625e0627dc0621591d"
+    },
+    {
+      "idx": 58,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Works for me.\"</span>",
+      "sha256": "cd117569e6013b2a64aa3be045cd1c65971d5ac53cd0cfa8b83ab10c02b0920b"
+    },
+    {
+      "idx": 59,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"But there's also another issue\"</span>, Evelor continued. <span data-hue=\"66.67\">\"If we do this we can help the judges see that making a big change would be popular, and that the people don't see the parliament as being all that legitimate. Or of course we'll learn that we're very wrong in our own judgement of how Veridians think. But this won't convince them that this kind of drastic action would actually *work*.\"</span>",
+      "sha256": "ff7f1f121b5119ae48e0a8e30a69bf11bb108b7328705ad3399b3bd45243ef4c"
+    },
+    {
+      "idx": 60,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Do you have an idea in mind?\"</span>",
+      "sha256": "7e902070e1e6bbd35c045668081293319de31afd8fb08a2c3746c7c1f2cbfdc0"
+    },
+    {
+      "idx": 61,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"Actually, yes. Recently we added a feature, Silverchat Predict, that lets people - or bots - make bets on future events. So far bots have been the most effective-\"</span>",
+      "sha256": "1d2c7347d46aa7293c56623e0c41849390f011f0bf484f1bc2fa9b09a0c45aed"
+    },
+    {
+      "idx": 62,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I saw that\"</span>, Gladias interjected. <span data-hue=\"93.33\">\"Prediction markets are cool. But there's two weaknesses. One is that if the Arctics see the market, they could manipulate it. In theory, any attempt to manipulate creates more incentive for arbitrageurs to come in and profit on average by pushing the price back to where it should be, but it's still very untested how well that actually works in practice.\"</span>",
+      "sha256": "edbacc69cbca5e462e35523ff3a4b01303a2805f55ef426ff12b1a7cb9b559b3"
+    },
+    {
+      "idx": 63,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"There's known results that unless the arbitrageurs are either fully risk-neutral or have infinite money, a manipulator can always force at least some shift in the price. And if the underlying variable is something so unprecedented and unknown - like whether or not we will win the second victory against the Arctics that the world has seen in the past century - that makes a hard case for any arbitrageur to want to come in.\"</span>",
+      "sha256": "55868a94f15d1df5adc8970596f062217c7d0047f494348a9ab92e15669fba76"
+    },
+    {
+      "idx": 64,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"The second problem is private information. We're confident in the Kungaupei because we know them well and we trust them and we know a lot about what their capabilities are. But if we reveal that publicly, we reveal it to the Arctics.\"</span>",
+      "sha256": "160bae640335a3c575250f6687c3e59de45e8515ae608edee780e033fcdedf61"
+    },
+    {
+      "idx": 65,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"Right, both good points. Hopefully we can work on improving that first one over time, but ... right now prediction markets are new. The second one is harder to fix.\"</span>",
+      "sha256": "5dea6a1d29789f0c8e6fe313bdd0ee03c8db7c3ea1350ca1fd2f4f478336bf43"
+    },
+    {
+      "idx": 66,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"Okay, I have a different idea. We don't use the markets directly. Instead, we take the five bots that have been performing the highest on the leaderboard, and we use verifiable two-party computation to ask them. We create a sort of ephemeral virtual private sandbox, we feed the private information into the sandbox, they feed the bot into the sandbox, and the sandbox only outputs the bot's answer.\"</span>",
+      "sha256": "35b4e0a521bdec5ba9fcf66c465a00223d1c850fd01fe404ccca9578cf201f10"
+    },
+    {
+      "idx": 67,
+      "kind": "paragraph",
+      "content": "Zei saw the opportunity to speak. <span data-hue=\"346.67\">\"Yep, that's just an extension over garbled circuits - you probably want verifiable garbled circuits. Overhead is quite nasty-\"</span>",
+      "sha256": "c5445978ed70625d0d414998671447c2cae3a190ca59403e5919e38d35c67177"
+    },
+    {
+      "idx": 68,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"There's optimizations specific to AI computation. Remember, almost everything inside a large language model is linear. The nonlinear part is necessary for the language to be smart, but it's only a tenth of a percent of the entire computation.\"</span>",
+      "sha256": "2d7c64a150378c61ecd19f3f4890b73b33cd98465b77445f7993236ac6c6c518"
+    },
+    {
+      "idx": 69,
+      "kind": "paragraph",
+      "content": "Zei realized that, on this particular specialized topic, he had been outmatched. Looks like in his nine months of studying cryptography he had not managed to become smarter than everyone at everything.",
+      "sha256": "9e243e3abdbc05e2c561caaab175a8b3c6e8cc982607b252214ed86dd7fc1f70"
+    },
+    {
+      "idx": 70,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I see...\"</span>",
+      "sha256": "14fe7f63112bbdbf3e302da2dc4dec79026f27c828fca7e059630e000bf06078"
+    },
+    {
+      "idx": 71,
+      "kind": "paragraph",
+      "content": "Their conversation briefly paused as they heard a mechanical noise getting louder and louder below them. A few ticks later, they could see the top of the robot, slowly climbing up the staircase with a raising motion and then a sliding motion at each step, carrying four cups of tea on a tray. Once it got to the top of the staircase, it moved toward Gladias to give him his tea first.",
+      "sha256": "514251723238f49d3067ab4c6811f43607ba6572e6ff1dcba8417b02bfa82d13"
+    },
+    {
+      "idx": 72,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"Gladias\"</span>, Evelor asked. <span data-hue=\"66.67\">\"You seem smart. I have a different question I wanted to ask you.\"</span>",
+      "sha256": "eb3199fafc9e6bd4a41ef3f085fa26af7a08a10554d05e3686b7a2a83ac9bb5a"
+    },
+    {
+      "idx": 73,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"What is it?\"</span>",
+      "sha256": "42829abc263c443153588db9288ba1cf6f4de1249b75acaf4f0c8157d2782612"
+    },
+    {
+      "idx": 74,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"Do you remember Ephelion's debate with Sylka?\"</span>",
+      "sha256": "09d37d160aeaef9b7f8bb78f0f16b431d683a9f2a91fd1c4df12ae13d69f5d52"
+    },
+    {
+      "idx": 75,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I do.\"</span>",
+      "sha256": "011b9aa6f51f7a3fd4be5ce449fa3140d3b9bb4b8b47c3c4bce2860e1278d33f"
+    },
+    {
+      "idx": 76,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"Ephelion said: most of the 'softer' traits in society seem to move in circles. The good creates the seed of the bad, and the bad creates the seed of the good. Disaster to heroism to prosperity to complacency to disaster. Technocracy to democracy to chaos to strongman to technocracy. And so on. The only thing that doesn't behave that way is economic output: growth just keeps compounding on itself. And so we should stop trying to accelerate the thing that goes in circles, and instead just focus on growing economic output. I dislike that argument. It makes me uncomfortable what it implies. But I still can't quite put my finger on what's *wrong* with it. What do you think?\"</span>",
+      "sha256": "ce937dd93a8d2ea73f505a48739be193b8d08400301bbe88afa83c282b01b785"
+    },
+    {
+      "idx": 77,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I don't think it's just economic output that compounds on itself, I think many good things compound on each other. Health makes people more productive. Productivity gives people the resources to be better. Education supports both, and health supports education.\"</span>",
+      "sha256": "f8bc377f35e6ab98b9852986fef2e0c976143760b94aa80355d499e904f8ec5b"
+    },
+    {
+      "idx": 78,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"So in other words, the eigenvector that Ephelion talked about includes more than just one single dimension - which is actually what most eigenvectors are like.\"</span>",
+      "sha256": "0da3ca88f75480b2d15d8da08b3d961ae4bb46cf58e970973f899a7a4e365d1a"
+    },
+    {
+      "idx": 79,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"You clearly understand eigenvectors better than I do!\"</span>",
+      "sha256": "d01c65bf9a0aa5bcb103cce4fb2eaa4e7d2fc44c070a53c8ca54c202819e5a7b"
+    },
+    {
+      "idx": 80,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"Silverchat is a social media website. Eigenvectors are like ... on the first page of the original whitepaper.\"</span>",
+      "sha256": "384ed6e40503e7bf3bcdd4f1723a6ec39132dacb520bdb142b8fa8bad9dbc24e"
+    },
+    {
+      "idx": 81,
+      "kind": "paragraph",
+      "content": "Gladias smiled.",
+      "sha256": "339b4c044c1b108e625e9945642d525472e08665a2b37f0978b40c2cac6e8eb2"
+    },
+    {
+      "idx": 82,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"But on the other hand\"</span>, Evelor continued, <span data-hue=\"66.67\">\"the Arctics do care about health. It's not health with the aesthetic of compassion and love and care that Sylka would want, it's hard metallic longevity clinics, but it's still health.\"</span>",
+      "sha256": "7b2861eb842189ddcd9e5c31bd11eb3442d03ef6c3632e4ee46ca063d86ebe83"
+    },
+    {
+      "idx": 83,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Well Sylka would say it's not having a long life that matters, it's having a healthy life.\"</span>",
+      "sha256": "dc27ab67d46b1bfb1eea5a882a4348816917b18ad6f4c02177f3acb2ad8e3f2d"
+    },
+    {
+      "idx": 84,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"Right, but the medieval tales of people drinking eternal life elixirs and then being doomed to lie on the ground forever with all their bones broken are not how any of the longevity science actually works. A longer life is a healthier life by default. The easiest place to stop damage is at the moment when it begins.\"</span>",
+      "sha256": "278f830d0f584265abfa1ca8b79f08922a1ad32ffdf0ec42f913e13317c0e41d"
+    },
+    {
+      "idx": 85,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"And I guess you'll say the Arctics care about education too. They barely understand music and poetry, but they teach their kids science just fine, and that's the part of education that goes into the largest eigenvector anyway.\"</span>",
+      "sha256": "9b5f1606d433da6a889e377910f2a25f4a32f71eed0cf5e27485ac277f279f1b"
+    },
+    {
+      "idx": 86,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"Right.\"</span>",
+      "sha256": "6d24bdd89b02cc676bbb90a955e2f7519608e42bf77a3f56e841853863af3641"
+    },
+    {
+      "idx": 87,
+      "kind": "paragraph",
+      "content": "Gladias could see Seila frowning with discomfort. His mind raced as he tried to come up with other arguments against Ephelion's way of thinking.",
+      "sha256": "4725b9cd48e4305f886d120c058b23532636c111f8db0e0895d8191a4c1439dc"
+    },
+    {
+      "idx": 88,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"But the Arctics aren't actually maximizing economic output. They're looking to start a war - wars can destroy economies for decades. Their attempt to eliminate anyone in Dzego who goes too far in advancing science and technology, that's not maximizing economic output either - quite the opposite. They're not trying to maximize economic output. They're trying to maximize the economic output that's under their control, and destroy everything else.\"</span>",
+      "sha256": "3179619554160eb1439ad719e96a7acd1c5835eb46480aad3b233a5cfb0cfe55"
+    },
+    {
+      "idx": 89,
+      "kind": "paragraph",
+      "content": "At that point, Zei spoke up.",
+      "sha256": "b8e6525c5db92ae26745b598de13a47ae6f6f01626aad6bb27e68ffc51af6587"
+    },
+    {
+      "idx": 90,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"There is this underlying model that Ephelion is implying, where there's a vector that's shooting outward toward infinity, and the faster it goes toward infinity the faster everyone is happy. But that's not how I see the world at all.\"</span>",
+      "sha256": "b1cfe2c0b642fd18384221cc07a967b5d813be3a8d874ff15e707a255afb2ba0"
+    },
+    {
+      "idx": 91,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"The world that I am seeing is a fragile world. It did not use to be this fragile. In the past, communication was limited and transmission of authority was limited. Any empire united for long enough would eventually fall. The world was reversible. But today, with our modern robots and modern surveillance, if *anyone* manages to take over and consolidate control across the whole world, they could lock their power in. Irreversibly. Forever.\"</span>",
+      "sha256": "c23cde09ba6481d2cb23324b8ca1ea7361901a5038bf00a06160003bdcb70b5e"
+    },
+    {
+      "idx": 92,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"If the Arctics win, a certain kind of entropy - the dimensionality of the space of humanity's future possibilities - would be permanently constricted. From that point forward, the only possible future worlds would be Arctic worlds.\"</span>",
+      "sha256": "3bc46d978bea22577a7ea4e75fb02eeefe07c0c44a23e8c60f710071e8114715"
+    },
+    {
+      "idx": 93,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"And that's not the worst that can happen. If the Arctics, or anyone else, make a mistake with one of their superweapons, and no one else has the means to resist it, they could destroy the living world entirely.\"</span>",
+      "sha256": "e774417d63133724fdf6eb6b5914cea60cad61bb2e1ee578feda62bde5e19457"
+    },
+    {
+      "idx": 94,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Eventually, the world will become reversible again. We will be able to travel between the stars, and our civilization will become too big to completely control or completely destroy. But until that happens, we are in a fragile place, and if within the next decade it all gets multiplied by zero forever, the Arctics will be the reason why it happens.\"</span>",
+      "sha256": "1a35f39351f6378efb425c997001840c20451a7eb7e2ef03aedeb8e2dc02a3a1"
+    },
+    {
+      "idx": 95,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"I have a simpler answer\"</span>, Seila added. <span data-hue=\"253.33\">\"All these arguments about the far future, they're hard to predict. And it's really easy to convince yourself that one path is right, and come up with really smart math to justify it, if that's the path that you already know you want to take. But there is one thing that's easy to predict: if the Arctics conquer Veridia, the war may kill hundreds of thousands or millions of our people, and the Arctics will destroy the beautiful world that we know and cherish. To me, that's already enough to be worth fighting against. And the beauty of our world and our countries and our friendships, that's already enough to be worth fighting for.\"</span>",
+      "sha256": "2c87ae662a3ba37517d9e1e1e384dc13638ae416848511384db5096bf2f427a3"
+    },
+    {
+      "idx": 96,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"All good answers\"</span>, Evelor replied. He took a sip of his tea and sat back in his chair, pondering.",
+      "sha256": "b29455a0c589fb59e08c7a5d5741468158d7952ad6c69b00702e3db4443f8780"
+    },
+    {
+      "idx": 97,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 98,
+      "kind": "dateline",
+      "content": "3724 Frostime 8",
+      "sha256": "607a987f7a05952df600ad3b7010387c56fbeb3c3e6618808b12d4bed029e151"
+    },
+    {
+      "idx": 99,
+      "kind": "paragraph",
+      "content": "Gladias, Seila, Zei, Bai, Verdow, Den and Mu were all sitting around a table inside a meeting room in the government-run hotel. Projected on a wall in front of them was a timer, counting down the ticks until the questionnaire on Silverchat would get published. At that moment, the remaining time was 150 ticks.",
+      "sha256": "60938869aa84a07ae35fd048fad6606eb7bd30854b934d88637aa85fe13c9d56"
+    },
+    {
+      "idx": 100,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Are you all done submitting your information into the package for the bots?\"</span>, Seila asked.",
+      "sha256": "512451c3828af7d9fbcfb3f9b95e80a4539064e35bbc14799d79e5d1a2dbd03e"
+    },
+    {
+      "idx": 101,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Just finished my part\"</span>, Den replied.",
+      "sha256": "7c0bc9ac3892b419f607fad5c6500b9913a4cd6dbc073e2156ab3fe363b19c34"
+    },
+    {
+      "idx": 102,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Remember, it's a bot. It doesn't need any amazing presentation and polish. If you think of something else to say or dump in, just throw it in.\"</span>",
+      "sha256": "2ca948f59c0b4c94f0228635c00dfdc73ce469c28073a1fa3e988fef3a75e4f1"
+    },
+    {
+      "idx": 103,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"I hope you and your bots reviewed the cryptography well, Zei. I'm entrusting a lot of our military secrets to it.\"</span>",
+      "sha256": "aadd856900a23545f5d7157e8a411f221b1872802f6af605c08307a024f51b00"
+    },
+    {
+      "idx": 104,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"There's a machine-checkable mathematical proof that the garbled circuit algorithm satisfies the standard correctness and privacy properties. The proof is end-to-end, it covers everything all the way down to the operating system and even the hardware. I read the statements it proves, and I asked Emerald and two other AIs to check it. It's quite solid. Zero information leakage unless hashes are broken, and if that happens we have much bigger problems.\"</span>",
+      "sha256": "5ea2a092d58cdaa4f1175319a18e7c29e0f265f7da4f2f2e8851f66b4364ab4c"
+    },
+    {
+      "idx": 105,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"I checked too\"</span>, Mu interjected. <span data-hue=\"173.33\">\"I used a different approach, just in case the proof system or the definitions have somehow been broken for over a decade and nobody noticed. I had Emerald read the original academic papers and write its own implementation, and then had a fresh instance read through that code and the original side by side, and look at every difference, see which side is right. Evelor's code is flawless.\"</span>",
+      "sha256": "43d6d4495aae213ab979ab2263dc848b0bec5f75fc92620af3dbb65cb785ff36"
+    },
+    {
+      "idx": 106,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"It's starting in fifty ticks!\"</span>",
+      "sha256": "dfa43edb8fbd85ecabe3caf1531c3423f91f7a4c8b67e6dfe0a09c189d3bb08b"
+    },
+    {
+      "idx": 107,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Not going to imitate the Minpentai announcer voice this time?\"</span>, Bai joked in response.",
+      "sha256": "42e9876234d7e12571edfad8faa4d28138178f7b54ee51280a09df981b50e112"
+    },
+    {
+      "idx": 108,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"MU GU GEI HUI ZIU FA\"</span>, Zei replied in a voice exaggerating the stereotypical robotic tone for comic effect.",
+      "sha256": "2f42fa0e866b25a1f94acdbf3d44dda31cfce120909da946bacceefe68e1d394"
+    },
+    {
+      "idx": 109,
+      "kind": "paragraph",
+      "content": "They sat around the table and waited.",
+      "sha256": "a4afdbd8bd91daa9b767fc5ae393711bf8390f241fe26130befc225429874acd"
+    },
+    {
+      "idx": 110,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"LE MU GEI HUI ZIU FA\"</span>, Bai exclaimed.",
+      "sha256": "0cfe5a4d61a725b9d56179af49f86ef1e5d676ef36a78c4ea3e1f7e9193e82e6"
+    },
+    {
+      "idx": 111,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Hey!\"</span>, Zei replied.",
+      "sha256": "fa74d37a5e8fd88c482102de12e735a74e0fc741b296a937bab1c1fc8b636704"
+    },
+    {
+      "idx": 112,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Beat you!\"</span>",
+      "sha256": "01506f2e3e6c492114427b61fb6ccf150515d4a6c966f4e5d3bb5cf2c3809d11"
+    },
+    {
+      "idx": 113,
+      "kind": "paragraph",
+      "content": "They kept watching the countdown. As soon as it hit ten, they started chanting in unison:",
+      "sha256": "b716eb5ae653a99b5d9ad4587e8cf14f06c6376156fa096ad5d713d7f93a6f39"
+    },
+    {
+      "idx": 114,
+      "kind": "paragraph",
+      "content": "\"PA GU ... SO ... BI ... ZE ... HA ... MU ... FO ... SHI ... LE ... PA ... HUI ZIU FA!\"",
+      "sha256": "1dc989774ad13976c9356735337f2a1d41903a06cd46c11469b4f97da258f614"
+    },
+    {
+      "idx": 115,
+      "kind": "paragraph",
+      "content": "The screen split into two views. On the left, there were five parallel progress bars showing the computation of five garbled-circuit executions with the five bots. On the right, a large collection of pie charts, one for each question that had been asked. Votes quickly began coming in.",
+      "sha256": "16a1d49d32f1e352146492375b5a38f34b99e705995b4d2f38b7ad58925997cc"
+    },
+    {
+      "idx": 116,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Let's zoom in to the ones we care about\"</span>, Verdow offered.",
+      "sha256": "96c00d7081db915e3fd08610666c0653300e5208a9365b16c2be0515d3a6efbe"
+    },
+    {
+      "idx": 117,
+      "kind": "paragraph",
+      "content": "Zei nodded, and clicked on one of the pie charts.",
+      "sha256": "f4f9b58e5b68e918f05ba004988715094fbcd696ee390ea7eed74934e7f51bc9"
+    },
+    {
+      "idx": 118,
+      "kind": "figure",
+      "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"240\" viewBox=\"0 0 400 240\" role=\"img\" aria-labelledby=\"ttl desc\">\n<title id=\"ttl\">How much confidence do you have in the Veridian military?</title>\n<desc id=\"desc\">How much confidence do you have in the Veridian military?: None at all 39%, A little 25%, Some 15%, A lot 12%, Total confidence 9%.</desc>\n<defs>\n<radialGradient id=\"glow\" cx=\"50%\" cy=\"50%\" r=\"50%\">\n<stop offset=\"0%\" stop-color=\"#57ccff\" stop-opacity=\"0.16\"></stop>\n<stop offset=\"70%\" stop-color=\"#57ccff\" stop-opacity=\"0.05\"></stop>\n<stop offset=\"100%\" stop-color=\"#57ccff\" stop-opacity=\"0\"></stop>\n</radialGradient>\n</defs>\n<rect width=\"400\" height=\"240\" fill=\"#334488\"></rect>\n<circle cx=\"200\" cy=\"138\" r=\"88\" fill=\"url(#glow)\"></circle>\n<g font-family=\"Inter, 'Segoe UI', Helvetica, Arial, sans-serif\">\n<text x=\"200\" y=\"17\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#cceeff\">How much confidence do you have in the Veridian</text>\n<text x=\"200\" y=\"31.4\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#cceeff\">military?</text>\n<circle cx=\"200\" cy=\"138\" r=\"60\" fill=\"none\" stroke=\"#cceeff\" stroke-opacity=\"0.18\" stroke-width=\"0.8\"></circle>\n<g id=\"slices\">\n<path d=\"M 200 138 L 157.87 102.65 A 55 55 0 0 1 255 138.38 Z\" fill=\"#dbeeff\" stroke=\"#334488\" stroke-width=\"1.2\" stroke-linejoin=\"round\"></path>\n<path d=\"M 200 138 L 255 138.38 A 55 55 0 0 1 199.62 193 Z\" fill=\"#8fd0f7\" stroke=\"#334488\" stroke-width=\"1.2\" stroke-linejoin=\"round\"></path>\n<path d=\"M 200 138 L 199.62 193 A 55 55 0 0 1 155.28 170.02 Z\" fill=\"#57ccff\" stroke=\"#334488\" stroke-width=\"1.2\" stroke-linejoin=\"round\"></path>\n<path d=\"M 200 138 L 155.28 170.02 A 55 55 0 0 1 145.48 130.73 Z\" fill=\"#3fa9dc\" stroke=\"#334488\" stroke-width=\"1.2\" stroke-linejoin=\"round\"></path>\n<path d=\"M 200 138 L 145.48 130.73 A 55 55 0 0 1 157.87 102.65 Z\" fill=\"#2fbfae\" stroke=\"#334488\" stroke-width=\"1.2\" stroke-linejoin=\"round\"></path>\n</g>\n<g id=\"leaders\">\n<polyline points=\"211.77,106 220.72,81.69 263,81.69\" fill=\"none\" stroke=\"#101f38\" stroke-width=\"2.2\" stroke-opacity=\"0.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"223.94,162.28 242.13,180.72 263,180.72\" fill=\"none\" stroke=\"#101f38\" stroke-width=\"2.2\" stroke-opacity=\"0.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"184.31,168.27 172.39,191.27 137,191.27\" fill=\"none\" stroke=\"#101f38\" stroke-width=\"2.2\" stroke-opacity=\"0.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"166.91,146.25 141.78,152.52 137,152.52\" fill=\"none\" stroke=\"#101f38\" stroke-width=\"2.2\" stroke-opacity=\"0.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"168.8,124.24 145.1,113.79 137,113.79\" fill=\"none\" stroke=\"#101f38\" stroke-width=\"2.2\" stroke-opacity=\"0.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"211.77,106 220.72,81.69 263,81.69\" fill=\"none\" stroke=\"#e8f6ff\" stroke-width=\"1.0\" stroke-opacity=\"0.95\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"223.94,162.28 242.13,180.72 263,180.72\" fill=\"none\" stroke=\"#e8f6ff\" stroke-width=\"1.0\" stroke-opacity=\"0.95\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"184.31,168.27 172.39,191.27 137,191.27\" fill=\"none\" stroke=\"#e8f6ff\" stroke-width=\"1.0\" stroke-opacity=\"0.95\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"166.91,146.25 141.78,152.52 137,152.52\" fill=\"none\" stroke=\"#e8f6ff\" stroke-width=\"1.0\" stroke-opacity=\"0.95\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"168.8,124.24 145.1,113.79 137,113.79\" fill=\"none\" stroke=\"#e8f6ff\" stroke-width=\"1.0\" stroke-opacity=\"0.95\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n</g>\n<g id=\"markers\">\n<circle cx=\"211.77\" cy=\"106\" r=\"2.1\" fill=\"#334488\" stroke=\"#e8f6ff\" stroke-width=\"0.9\"></circle>\n<circle cx=\"223.94\" cy=\"162.28\" r=\"2.1\" fill=\"#334488\" stroke=\"#e8f6ff\" stroke-width=\"0.9\"></circle>\n<circle cx=\"184.31\" cy=\"168.27\" r=\"2.1\" fill=\"#334488\" stroke=\"#e8f6ff\" stroke-width=\"0.9\"></circle>\n<circle cx=\"166.91\" cy=\"146.25\" r=\"2.1\" fill=\"#334488\" stroke=\"#e8f6ff\" stroke-width=\"0.9\"></circle>\n<circle cx=\"168.8\" cy=\"124.24\" r=\"2.1\" fill=\"#334488\" stroke=\"#e8f6ff\" stroke-width=\"0.9\"></circle>\n</g>\n<g id=\"labels\">\n<g text-anchor=\"start\">\n<text x=\"268\" y=\"74.61\" font-size=\"10.5\" fill=\"#cceeff\">None at all</text>\n<text x=\"268\" y=\"90.21\" font-size=\"13\" font-weight=\"700\" fill=\"#dbeeff\">39%</text>\n</g>\n<g text-anchor=\"start\">\n<text x=\"268\" y=\"173.64\" font-size=\"10.5\" fill=\"#cceeff\">A little</text>\n<text x=\"268\" y=\"189.24\" font-size=\"13\" font-weight=\"700\" fill=\"#8fd0f7\">25%</text>\n</g>\n<g text-anchor=\"end\">\n<text x=\"132\" y=\"184.18\" font-size=\"10.5\" fill=\"#cceeff\">Some</text>\n<text x=\"132\" y=\"199.78\" font-size=\"13\" font-weight=\"700\" fill=\"#57ccff\">15%</text>\n</g>\n<g text-anchor=\"end\">\n<text x=\"132\" y=\"145.43\" font-size=\"10.5\" fill=\"#cceeff\">A lot</text>\n<text x=\"132\" y=\"161.03\" font-size=\"13\" font-weight=\"700\" fill=\"#3fa9dc\">12%</text>\n</g>\n<g text-anchor=\"end\">\n<text x=\"132\" y=\"106.7\" font-size=\"10.5\" fill=\"#cceeff\">Total confidence</text>\n<text x=\"132\" y=\"122.3\" font-size=\"13\" font-weight=\"700\" fill=\"#2fbfae\">9%</text>\n</g>\n</g>\n</g>\n</svg></div>",
+      "sha256": "ad83c105662631a65b90e2f35a155aaadb864582bc811aa85e5f4992b30b11e1",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "screen",
+        "device_evidence": {
+          "idx": 115,
+          "quote": "The screen split into two views."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c27-b118.svg",
+            "viewBox": "0 0 400 240",
+            "width": "400",
+            "height": "240",
+            "labels": [
+              "How much confidence do you have in the Veridian",
+              "military?",
+              "None at all",
+              "39%",
+              "A little",
+              "25%",
+              "Some",
+              "15%",
+              "A lot",
+              "12%",
+              "Total confidence",
+              "9%"
+            ],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 119,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"As I expected. Now let's see how people think we should solve this problem.\"</span>",
+      "sha256": "49669fb52f5279af25d3b7dbe1b72fc0d55415ed027f85c27edf978c9e912457"
+    },
+    {
+      "idx": 120,
+      "kind": "figure",
+      "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"240\" viewBox=\"0 0 400 240\" role=\"img\" aria-labelledby=\"ttl desc\">\n<title id=\"ttl\">Who would you prefer to run the Veridian military?</title>\n<desc id=\"desc\">Who would you prefer to run the Veridian military?: Its current leadership 13%, A new leadership chosen by parliament 21%, Silverchat 10%, The Arctics 16%, Kungaupei 38%, Arturian military advisors 2%.</desc>\n<defs>\n<radialGradient id=\"glow\" cx=\"50%\" cy=\"50%\" r=\"50%\">\n<stop offset=\"0%\" stop-color=\"#57ccff\" stop-opacity=\"0.16\"></stop>\n<stop offset=\"70%\" stop-color=\"#57ccff\" stop-opacity=\"0.05\"></stop>\n<stop offset=\"100%\" stop-color=\"#57ccff\" stop-opacity=\"0\"></stop>\n</radialGradient>\n</defs>\n<rect width=\"400\" height=\"240\" fill=\"#334488\"></rect>\n<circle cx=\"200\" cy=\"138\" r=\"88\" fill=\"url(#glow)\"></circle>\n<g font-family=\"Inter, 'Segoe UI', Helvetica, Arial, sans-serif\">\n<text x=\"200\" y=\"17\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#cceeff\">Who would you prefer to run the Veridian military?</text>\n<circle cx=\"200\" cy=\"138\" r=\"60\" fill=\"none\" stroke=\"#cceeff\" stroke-opacity=\"0.18\" stroke-width=\"0.8\"></circle>\n<g id=\"slices\">\n<path d=\"M 200 138 L 200 83 A 55 55 0 0 1 240.09 100.35 Z\" fill=\"#dbeeff\" stroke=\"#334488\" stroke-width=\"1.2\" stroke-linejoin=\"round\"></path>\n<path d=\"M 200 138 L 240.09 100.35 A 55 55 0 0 1 246.44 167.47 Z\" fill=\"#4a90d9\" stroke=\"#334488\" stroke-width=\"1.2\" stroke-linejoin=\"round\"></path>\n<path d=\"M 200 138 L 246.44 167.47 A 55 55 0 0 1 220.25 189.14 Z\" fill=\"#6fe0cf\" stroke=\"#334488\" stroke-width=\"1.2\" stroke-linejoin=\"round\"></path>\n<path d=\"M 200 138 L 220.25 189.14 A 55 55 0 0 1 167.67 182.5 Z\" fill=\"#98a8f8\" stroke=\"#334488\" stroke-width=\"1.2\" stroke-linejoin=\"round\"></path>\n<path d=\"M 200 138 L 167.67 182.5 A 55 55 0 0 1 193.11 83.43 Z\" fill=\"#57ccff\" stroke=\"#334488\" stroke-width=\"1.2\" stroke-linejoin=\"round\"></path>\n<path d=\"M 200 138 L 193.11 83.43 A 55 55 0 0 1 200 83 Z\" fill=\"#2fbfae\" stroke=\"#334488\" stroke-width=\"1.2\" stroke-linejoin=\"round\"></path>\n</g>\n<g id=\"leaders\">\n<polyline points=\"213.54,106.7 223.83,82.93 263,82.93\" fill=\"none\" stroke=\"#101f38\" stroke-width=\"2.2\" stroke-opacity=\"0.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"233.95,134.79 259.73,132.35 263,132.35\" fill=\"none\" stroke=\"#101f38\" stroke-width=\"2.2\" stroke-opacity=\"0.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"221.74,164.27 238.25,184.23 263,184.23\" fill=\"none\" stroke=\"#101f38\" stroke-width=\"2.2\" stroke-opacity=\"0.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"195.73,171.83 192.48,197.53 137,197.53\" fill=\"none\" stroke=\"#101f38\" stroke-width=\"2.2\" stroke-opacity=\"0.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"166.97,129.52 141.89,123.08 137,123.08\" fill=\"none\" stroke=\"#101f38\" stroke-width=\"2.2\" stroke-opacity=\"0.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"196.89,88.6 196.23,78.12 137,78.12\" fill=\"none\" stroke=\"#101f38\" stroke-width=\"2.2\" stroke-opacity=\"0.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"213.54,106.7 223.83,82.93 263,82.93\" fill=\"none\" stroke=\"#e8f6ff\" stroke-width=\"1.0\" stroke-opacity=\"0.95\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"233.95,134.79 259.73,132.35 263,132.35\" fill=\"none\" stroke=\"#e8f6ff\" stroke-width=\"1.0\" stroke-opacity=\"0.95\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"221.74,164.27 238.25,184.23 263,184.23\" fill=\"none\" stroke=\"#e8f6ff\" stroke-width=\"1.0\" stroke-opacity=\"0.95\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"195.73,171.83 192.48,197.53 137,197.53\" fill=\"none\" stroke=\"#e8f6ff\" stroke-width=\"1.0\" stroke-opacity=\"0.95\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"166.97,129.52 141.89,123.08 137,123.08\" fill=\"none\" stroke=\"#e8f6ff\" stroke-width=\"1.0\" stroke-opacity=\"0.95\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"196.89,88.6 196.23,78.12 137,78.12\" fill=\"none\" stroke=\"#e8f6ff\" stroke-width=\"1.0\" stroke-opacity=\"0.95\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n</g>\n<g id=\"markers\">\n<circle cx=\"213.54\" cy=\"106.7\" r=\"2.1\" fill=\"#334488\" stroke=\"#e8f6ff\" stroke-width=\"0.9\"></circle>\n<circle cx=\"233.95\" cy=\"134.79\" r=\"2.1\" fill=\"#334488\" stroke=\"#e8f6ff\" stroke-width=\"0.9\"></circle>\n<circle cx=\"221.74\" cy=\"164.27\" r=\"2.1\" fill=\"#334488\" stroke=\"#e8f6ff\" stroke-width=\"0.9\"></circle>\n<circle cx=\"195.73\" cy=\"171.83\" r=\"2.1\" fill=\"#334488\" stroke=\"#e8f6ff\" stroke-width=\"0.9\"></circle>\n<circle cx=\"166.97\" cy=\"129.52\" r=\"2.1\" fill=\"#334488\" stroke=\"#e8f6ff\" stroke-width=\"0.9\"></circle>\n<circle cx=\"196.89\" cy=\"88.6\" r=\"2.1\" fill=\"#334488\" stroke=\"#e8f6ff\" stroke-width=\"0.9\"></circle>\n</g>\n<g id=\"labels\">\n<g text-anchor=\"start\">\n<text x=\"268\" y=\"75.85\" font-size=\"10.5\" fill=\"#cceeff\">Its current leadership</text>\n<text x=\"268\" y=\"91.45\" font-size=\"13\" font-weight=\"700\" fill=\"#dbeeff\">13%</text>\n</g>\n<g text-anchor=\"start\">\n<text x=\"268\" y=\"118.44\" font-size=\"10.5\" fill=\"#cceeff\">A new leadership</text>\n<text x=\"268\" y=\"132.09\" font-size=\"10.5\" fill=\"#cceeff\">chosen by parliament</text>\n<text x=\"268\" y=\"147.69\" font-size=\"13\" font-weight=\"700\" fill=\"#4a90d9\">21%</text>\n</g>\n<g text-anchor=\"start\">\n<text x=\"268\" y=\"177.15\" font-size=\"10.5\" fill=\"#cceeff\">Silverchat</text>\n<text x=\"268\" y=\"192.75\" font-size=\"13\" font-weight=\"700\" fill=\"#6fe0cf\">10%</text>\n</g>\n<g text-anchor=\"end\">\n<text x=\"132\" y=\"190.44\" font-size=\"10.5\" fill=\"#cceeff\">The Arctics</text>\n<text x=\"132\" y=\"206.04\" font-size=\"13\" font-weight=\"700\" fill=\"#98a8f8\">16%</text>\n</g>\n<g text-anchor=\"end\">\n<text x=\"132\" y=\"115.99\" font-size=\"10.5\" fill=\"#cceeff\">Kungaupei</text>\n<text x=\"132\" y=\"131.59\" font-size=\"13\" font-weight=\"700\" fill=\"#57ccff\">38%</text>\n</g>\n<g text-anchor=\"end\">\n<text x=\"132\" y=\"64.21\" font-size=\"10.5\" fill=\"#cceeff\">Arturian military</text>\n<text x=\"132\" y=\"77.86\" font-size=\"10.5\" fill=\"#cceeff\">advisors</text>\n<text x=\"132\" y=\"93.46\" font-size=\"13\" font-weight=\"700\" fill=\"#2fbfae\">2%</text>\n</g>\n</g>\n</g>\n</svg></div>",
+      "sha256": "8ccc8391b9d5588daf3d9531d1e3f5465fe14be9bf33200154c7f5f41b163c37",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "screen",
+        "device_evidence": {
+          "idx": 115,
+          "quote": "The screen split into two views."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c27-b120.svg",
+            "viewBox": "0 0 400 240",
+            "width": "400",
+            "height": "240",
+            "labels": [
+              "Who would you prefer to run the Veridian military?",
+              "Its current leadership",
+              "13%",
+              "A new leadership",
+              "chosen by parliament",
+              "21%",
+              "Silverchat",
+              "10%",
+              "The Arctics",
+              "16%",
+              "Kungaupei",
+              "38%",
+              "Arturian military",
+              "advisors",
+              "2%"
+            ],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 121,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Restrict to people who are from Northshore.\"</span>",
+      "sha256": "a91b7c5b62a50d59a5170e6e2408e16d8c0a3b9f1b002c492e5e1bfcb75e4398"
+    },
+    {
+      "idx": 122,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Wait, did we set it up to provide that level of granularity? Votes are anonymous, we have no way to tell who sent each one.\"</span>",
+      "sha256": "c78ca4f75a03800e47fbbd9b4cc4c17cbba068436e1e91b22a366d30c86795db"
+    },
+    {
+      "idx": 123,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"We did break it down by age, self-declared most recent senator votes, province, and a couple of personality type axes inferred by a large language model.\"</span>",
+      "sha256": "b2e2ca377202025c28984a3a02aa3d11cd900d36ceb35e1836db00eebdfce186"
+    },
+    {
+      "idx": 124,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Ah, found it.\"</span>",
+      "sha256": "768fff4246fe10ca173a08362c9f369142eb6857811ee4501750107de622f6be"
+    },
+    {
+      "idx": 125,
+      "kind": "figure",
+      "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"240\" viewBox=\"0 0 400 240\" role=\"img\" aria-labelledby=\"ttl desc\">\n<title id=\"ttl\">Who would you prefer to run the Veridian military? — Restricted to people with Northshore ties</title>\n<desc id=\"desc\">Who would you prefer to run the Veridian military? — Restricted to people with Northshore ties: Its current leadership 6%, A new leadership chosen by parliament 8%, Silverchat 16%, The Arctics 13%, Kungaupei 52%, Arturian military advisors 5%.</desc>\n<defs>\n<radialGradient id=\"glow\" cx=\"50%\" cy=\"50%\" r=\"50%\">\n<stop offset=\"0%\" stop-color=\"#57ccff\" stop-opacity=\"0.16\"></stop>\n<stop offset=\"70%\" stop-color=\"#57ccff\" stop-opacity=\"0.05\"></stop>\n<stop offset=\"100%\" stop-color=\"#57ccff\" stop-opacity=\"0\"></stop>\n</radialGradient>\n</defs>\n<rect width=\"400\" height=\"240\" fill=\"#334488\"></rect>\n<circle cx=\"200\" cy=\"138\" r=\"88\" fill=\"url(#glow)\"></circle>\n<g font-family=\"Inter, 'Segoe UI', Helvetica, Arial, sans-serif\">\n<text x=\"200\" y=\"17\" text-anchor=\"middle\" font-size=\"12\" font-weight=\"700\" fill=\"#cceeff\">Who would you prefer to run the Veridian military?</text>\n<text x=\"200\" y=\"31\" text-anchor=\"middle\" font-size=\"10\" fill=\"#8fb8e0\">Restricted to people with Northshore ties</text>\n<circle cx=\"200\" cy=\"138\" r=\"60\" fill=\"none\" stroke=\"#cceeff\" stroke-opacity=\"0.18\" stroke-width=\"0.8\"></circle>\n<g id=\"slices\">\n<path d=\"M 200 138 L 181.19 86.32 A 55 55 0 0 1 201.54 83.02 Z\" fill=\"#dbeeff\" stroke=\"#334488\" stroke-width=\"1.2\" stroke-linejoin=\"round\"></path>\n<path d=\"M 200 138 L 201.54 83.02 A 55 55 0 0 1 227.83 90.56 Z\" fill=\"#4a90d9\" stroke=\"#334488\" stroke-width=\"1.2\" stroke-linejoin=\"round\"></path>\n<path d=\"M 200 138 L 227.83 90.56 A 55 55 0 0 1 254.97 136.08 Z\" fill=\"#6fe0cf\" stroke=\"#334488\" stroke-width=\"1.2\" stroke-linejoin=\"round\"></path>\n<path d=\"M 200 138 L 254.97 136.08 A 55 55 0 0 1 239.03 176.75 Z\" fill=\"#98a8f8\" stroke=\"#334488\" stroke-width=\"1.2\" stroke-linejoin=\"round\"></path>\n<path d=\"M 200 138 L 239.03 176.75 A 55 55 0 1 1 166.14 94.66 Z\" fill=\"#57ccff\" stroke=\"#334488\" stroke-width=\"1.2\" stroke-linejoin=\"round\"></path>\n<path d=\"M 200 138 L 166.14 94.66 A 55 55 0 0 1 181.19 86.32 Z\" fill=\"#2fbfae\" stroke=\"#334488\" stroke-width=\"1.2\" stroke-linejoin=\"round\"></path>\n</g>\n<g id=\"leaders\">\n<polyline points=\"194.55,104.34 190.41,78.77 137,78.77\" fill=\"none\" stroke=\"#101f38\" stroke-width=\"2.2\" stroke-opacity=\"0.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"209.4,105.22 216.54,80.32 263,80.32\" fill=\"none\" stroke=\"#101f38\" stroke-width=\"2.2\" stroke-opacity=\"0.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"229.29,120.54 251.54,107.28 263,121.7\" fill=\"none\" stroke=\"#101f38\" stroke-width=\"2.2\" stroke-opacity=\"0.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"231.75,150.44 255.86,159.89 263,159.89\" fill=\"none\" stroke=\"#101f38\" stroke-width=\"2.2\" stroke-opacity=\"0.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"174.5,160.64 155.13,177.84 137,177.84\" fill=\"none\" stroke=\"#101f38\" stroke-width=\"2.2\" stroke-opacity=\"0.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"183.47,108.18 170.91,85.52 137,120.15\" fill=\"none\" stroke=\"#101f38\" stroke-width=\"2.2\" stroke-opacity=\"0.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"194.55,104.34 190.41,78.77 137,78.77\" fill=\"none\" stroke=\"#e8f6ff\" stroke-width=\"1.0\" stroke-opacity=\"0.95\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"209.4,105.22 216.54,80.32 263,80.32\" fill=\"none\" stroke=\"#e8f6ff\" stroke-width=\"1.0\" stroke-opacity=\"0.95\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"229.29,120.54 251.54,107.28 263,121.7\" fill=\"none\" stroke=\"#e8f6ff\" stroke-width=\"1.0\" stroke-opacity=\"0.95\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"231.75,150.44 255.86,159.89 263,159.89\" fill=\"none\" stroke=\"#e8f6ff\" stroke-width=\"1.0\" stroke-opacity=\"0.95\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"174.5,160.64 155.13,177.84 137,177.84\" fill=\"none\" stroke=\"#e8f6ff\" stroke-width=\"1.0\" stroke-opacity=\"0.95\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n<polyline points=\"183.47,108.18 170.91,85.52 137,120.15\" fill=\"none\" stroke=\"#e8f6ff\" stroke-width=\"1.0\" stroke-opacity=\"0.95\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></polyline>\n</g>\n<g id=\"markers\">\n<circle cx=\"194.55\" cy=\"104.34\" r=\"2.1\" fill=\"#334488\" stroke=\"#e8f6ff\" stroke-width=\"0.9\"></circle>\n<circle cx=\"209.4\" cy=\"105.22\" r=\"2.1\" fill=\"#334488\" stroke=\"#e8f6ff\" stroke-width=\"0.9\"></circle>\n<circle cx=\"229.29\" cy=\"120.54\" r=\"2.1\" fill=\"#334488\" stroke=\"#e8f6ff\" stroke-width=\"0.9\"></circle>\n<circle cx=\"231.75\" cy=\"150.44\" r=\"2.1\" fill=\"#334488\" stroke=\"#e8f6ff\" stroke-width=\"0.9\"></circle>\n<circle cx=\"174.5\" cy=\"160.64\" r=\"2.1\" fill=\"#334488\" stroke=\"#e8f6ff\" stroke-width=\"0.9\"></circle>\n<circle cx=\"183.47\" cy=\"108.18\" r=\"2.1\" fill=\"#334488\" stroke=\"#e8f6ff\" stroke-width=\"0.9\"></circle>\n</g>\n<g id=\"labels\">\n<g text-anchor=\"end\">\n<text x=\"132\" y=\"71.69\" font-size=\"10.5\" fill=\"#cceeff\">Its current leadership</text>\n<text x=\"132\" y=\"87.29\" font-size=\"13\" font-weight=\"700\" fill=\"#dbeeff\">6%</text>\n</g>\n<g text-anchor=\"start\">\n<text x=\"268\" y=\"66.41\" font-size=\"10.5\" fill=\"#cceeff\">A new leadership</text>\n<text x=\"268\" y=\"80.06\" font-size=\"10.5\" fill=\"#cceeff\">chosen by parliament</text>\n<text x=\"268\" y=\"95.66\" font-size=\"13\" font-weight=\"700\" fill=\"#4a90d9\">8%</text>\n</g>\n<g text-anchor=\"start\">\n<text x=\"268\" y=\"114.61\" font-size=\"10.5\" fill=\"#cceeff\">Silverchat</text>\n<text x=\"268\" y=\"130.21\" font-size=\"13\" font-weight=\"700\" fill=\"#6fe0cf\">16%</text>\n</g>\n<g text-anchor=\"start\">\n<text x=\"268\" y=\"152.81\" font-size=\"10.5\" fill=\"#cceeff\">The Arctics</text>\n<text x=\"268\" y=\"168.41\" font-size=\"13\" font-weight=\"700\" fill=\"#98a8f8\">13%</text>\n</g>\n<g text-anchor=\"end\">\n<text x=\"132\" y=\"170.75\" font-size=\"10.5\" fill=\"#cceeff\">Kungaupei</text>\n<text x=\"132\" y=\"186.35\" font-size=\"13\" font-weight=\"700\" fill=\"#57ccff\">52%</text>\n</g>\n<g text-anchor=\"end\">\n<text x=\"132\" y=\"106.24\" font-size=\"10.5\" fill=\"#cceeff\">Arturian military</text>\n<text x=\"132\" y=\"119.89\" font-size=\"10.5\" fill=\"#cceeff\">advisors</text>\n<text x=\"132\" y=\"135.49\" font-size=\"13\" font-weight=\"700\" fill=\"#2fbfae\">5%</text>\n</g>\n</g>\n</g>\n</svg></div>",
+      "sha256": "8186ac04858efaeb648ab0e7037fe1c5d46fd5a7f328a511361de97eb63985db",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": null,
+        "device_evidence": null,
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c27-b125.svg",
+            "viewBox": "0 0 400 240",
+            "width": "400",
+            "height": "240",
+            "labels": [
+              "Who would you prefer to run the Veridian military?",
+              "Restricted to people with Northshore ties",
+              "Its current leadership",
+              "6%",
+              "A new leadership",
+              "chosen by parliament",
+              "8%",
+              "Silverchat",
+              "16%",
+              "The Arctics",
+              "13%",
+              "Kungaupei",
+              "52%",
+              "Arturian military",
+              "advisors",
+              "5%"
+            ],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 126,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Congrats, Evelor\"</span>, Verdow said wryly. <span data-hue=\"293.33\">\"Seems like you are more fit to run Northshore than the actual parliament.\"</span>",
+      "sha256": "ae3a64f61bcf78d0d1cbbf95a91b19c427b8b6f5a9aa844a9973738d5274e4e3"
+    },
+    {
+      "idx": 127,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"I'm a bit scared of these results now\"</span>, Seila interjected. <span data-hue=\"253.33\">\"Haven't we just given the game away to the Arctics?\"</span>",
+      "sha256": "286598da77ccf80357ce2d5a8a813554d0226f100e44dedf01fd984ab0b92ffa"
+    },
+    {
+      "idx": 128,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"I think it's okay\"</span>, Mu replied. <span data-hue=\"173.33\">\"We asked many different questions in the poll. One of them literally has twenty percent saying that we should fund recovering Northshore by legally transferring all of its government-owned territory to Hydrafill and letting them figure it out.\"</span>",
+      "sha256": "9729725ac32c313b120ced9786c0bfdfe0c8ec2ab7e1bf55fc021a8b420b4b36"
+    },
+    {
+      "idx": 129,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"The lawsuit is something that the Arctics will notice and watch, of course. We should delay it by a few days to make it not look too coordinated. But regardless of what we do, we will have made it clear to everyone - including the Arctics - that Veridians recognize that there is a big problem. It's the details of the solution that we need to hide.\"</span>",
+      "sha256": "39720c54c343bd17946aa27ff4979ba0d96f733cdeb9063e2dea7806a4405b2d"
+    },
+    {
+      "idx": 130,
+      "kind": "paragraph",
+      "content": "They paused briefly, and stared at the progress bars.",
+      "sha256": "39d7380198399c65a9ccc026730fe800aaca8b873554b965aeea0eb7b2905f67"
+    },
+    {
+      "idx": 131,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Okay, that will take a while. Let's look at some more pie charts.\"</span>",
+      "sha256": "8ba2fb661570536fe11c65e7eb8ae2e2c49b0fe6ed1946712f9353a22d941efb"
+    },
+    {
+      "idx": 132,
+      "kind": "paragraph",
+      "content": "A robot entered the room, bringing each of the participants a cup of tea.",
+      "sha256": "8dc60f45696d41339fd8d4a0ef9156a15bbda3a92e65ed8f8fce3a8d8478ab5f"
+    },
+    {
+      "idx": 133,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 134,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"And ... done\"</span>, Zei exclaimed triumphantly.",
+      "sha256": "09a1f1fbb5b8a2ea7216f7b41e5beb8bf29c8f9eb6c43f535c78320e573f59f0"
+    },
+    {
+      "idx": 135,
+      "kind": "paragraph",
+      "content": "Five icons representing the responses from five bots appeared onscreen. Zei clicked on the first one.",
+      "sha256": "062a968ed6afe07a9296f001ab02cb9c860ababed14de5b31add8399119ef4ac"
+    },
+    {
+      "idx": 136,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view device-view-left\"><p>Executive summary:</p>\n<ul><li>Under any 'ordinary' scenario, meaning either status quo continuation of the Veridian military, or a reorganization led by the Veridian parliament without large outside pressure, the probability that Veridia will hold the same or greater percent of its own territory after one year is 20%.</li><li>Under a hypothetical transfer to Kungaupei control, the probability increases to 26%.</li><li>The main downside risks involve standard organizational transition costs that are typical of chaotic changes in leadership and replacement of experienced personnel with outsiders.</li><li>Probability of successful outcomes is maximized (up to 50%) in cases that involve Kungaupei participation but minimize the disruptiveness of the transition.</li><li>Note that above probabilities are for <em>same or greater</em> control in one year. Probabilities of strictly greater control are uniformly much lower.</li></ul></div>",
+      "sha256": "8d0828d6ba8378e579f2c091e839ff7ccd7c84dae0cb789d4eb3055d6df4e904",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "screen",
+        "device_evidence": {
+          "idx": 135,
+          "quote": "Five icons representing the responses from five bots appeared onscreen."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "left",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "text",
+            "text": "Executive summary:"
+          },
+          {
+            "type": "list",
+            "items": [
+              "Under any 'ordinary' scenario, meaning either status quo continuation of the Veridian military, or a reorganization led by the Veridian parliament without large outside pressure, the probability that Veridia will hold the same or greater percent of its own territory after one year is 20%.",
+              "Under a hypothetical transfer to Kungaupei control, the probability increases to 26%.",
+              "The main downside risks involve standard organizational transition costs that are typical of chaotic changes in leadership and replacement of experienced personnel with outsiders.",
+              "Probability of successful outcomes is maximized (up to 50%) in cases that involve Kungaupei participation but minimize the disruptiveness of the transition.",
+              "Note that above probabilities are for same or greater control in one year. Probabilities of strictly greater control are uniformly much lower."
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 137,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Hmm\"</span>, Verdow muttered.",
+      "sha256": "889d21157dcfdb345f7250ffa950663fb6047542c204e3470120df548b913e9b"
+    },
+    {
+      "idx": 138,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Do you think it's reasonable?\"</span>, Gladias asked.",
+      "sha256": "97b2fa565076a3dbe4d5caec7d393a3770febc32f27809ed91c74729c140f112"
+    },
+    {
+      "idx": 139,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"The bots definitely have a more conservative temperament than I do, but it's fair.\"</span>",
+      "sha256": "3d2f318421a91b35491c93f2c024e868cf4788dea0615626ef63a8c33c21ee10"
+    },
+    {
+      "idx": 140,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"The other four are saying vaguely similar things. The most pessimistic one says the chances are the same in the status quo and Kungaupei scenarios.\"</span>",
+      "sha256": "730b5cbc0b5fa6f3ac4a9f3ec429a8b56988dd12a6478d06d9b02075ad72af7b"
+    },
+    {
+      "idx": 141,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Also we have much more data coming in from the votes. It's roughly the same as the results we first saw right when the poll began.\"</span>",
+      "sha256": "3c2d8622cbe583830c6ec8e8b3afa5cfaaf511a5c56bd8cdf9c22b42d8143c6f"
+    },
+    {
+      "idx": 142,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I guess we have all the data we will get. Let's get ready to file the case in a few days.\"</span>",
+      "sha256": "141836fa5a5e3fca3c758f0e1f904e6c30beb1509db43591eb3344b9041fa000"
+    }
+  ]
+}

@@ -1,0 +1,213 @@
+/* App chrome is deliberately neutral, between Veridia and Dzego.
+   Device-view and dateline rules are adapted from the source edition's
+   stylesheet (Snowmoon, GPL v3). */
+
+:root {
+  --bg: #f4f1ea;
+  --bg-raised: #fbf9f4;
+  --text: #24222a;
+  --text-dim: #6b6773;
+  --rule: #d9d3c7;
+  --link: #3e5f8a;
+  --voice-l: 0.52; /* lightness for speaker colours */
+  --quote-bg: #ebe6db;
+  --measure: 36rem;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #16151a;
+    --bg-raised: #1e1d23;
+    --text: #e7e3dc;
+    --text-dim: #9a95a1;
+    --rule: #34323b;
+    --link: #9fbde3;
+    --voice-l: 0.76;
+    --quote-bg: #22212a;
+    color-scheme: dark;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: ui-serif, 'Iowan Old Style', Charter, Georgia, serif;
+  font-size: 1.125rem;
+  line-height: 1.65;
+}
+
+a { color: var(--link); }
+
+/* ---------- top bar ---------- */
+
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.6rem 1rem;
+  background: color-mix(in srgb, var(--bg) 92%, transparent);
+  backdrop-filter: blur(8px);
+  border-bottom: 1px solid var(--rule);
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.875rem;
+}
+.bar-title { font-weight: 600; letter-spacing: 0.04em; color: var(--text); text-decoration: none; }
+.bar-links { display: flex; gap: 1rem; align-items: center; }
+.bar-links a { color: var(--text-dim); text-decoration: none; }
+.bar-auth { color: var(--text-dim); font-variant-numeric: tabular-nums; }
+.bar-auth button {
+  font: inherit;
+  color: var(--text);
+  background: var(--bg-raised);
+  border: 1px solid var(--rule);
+  border-radius: 4px;
+  padding: 0.2rem 0.7rem;
+  cursor: pointer;
+}
+
+/* ---------- pages ---------- */
+
+.page {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 1.5rem 1rem 4rem;
+}
+
+.book-title { font-size: 2.2rem; font-weight: 500; margin: 1rem 0 0.25rem; letter-spacing: 0.02em; }
+.byline { margin: 0 0 2rem; color: var(--text-dim); font-size: 0.95rem; }
+
+.chapter-list { list-style: none; padding: 0; margin: 0; }
+.chapter-list li { border-top: 1px solid var(--rule); }
+.chapter-list li:last-child { border-bottom: 1px solid var(--rule); }
+.chapter-list a {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0 1rem;
+  padding: 0.75rem 0.25rem;
+  color: var(--text);
+  text-decoration: none;
+}
+.ch-num { font-weight: 500; }
+.ch-dateline { color: var(--text-dim); font-size: 0.85rem; font-family: ui-sans-serif, system-ui, sans-serif; align-self: center; }
+
+.prose h1 { font-weight: 500; }
+.prose h2 { font-size: 1.15rem; margin-top: 2rem; }
+
+/* ---------- chapter ---------- */
+
+.block { scroll-margin-top: 4rem; }
+.block:target { background: color-mix(in srgb, var(--link) 12%, transparent); border-radius: 4px; }
+
+.chapter .heading h1 { font-size: 1.9rem; font-weight: 500; margin: 1rem 0 0.25rem; }
+
+.chapter .dateline {
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.78rem;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--text-dim);
+  margin: 0 0 1.75rem;
+}
+.chapter .dateline strong { font-weight: 600; }
+.chapter .break + .dateline { margin-top: -0.75rem; }
+
+.chapter p.paragraph { margin: 0 0 1em; hyphens: auto; }
+
+.chapter hr.break {
+  border: 0;
+  height: 1px;
+  background: var(--rule);
+  margin: 2.25rem 20%;
+}
+
+span[data-hue] { color: oklch(var(--voice-l) 0.15 var(--hue)); }
+
+.chapter .quote blockquote {
+  margin: 1.5rem 0;
+  padding: 1rem 1.25rem;
+  background: var(--quote-bg);
+  border-left: 3px solid var(--rule);
+  font-style: italic;
+}
+.chapter .quote blockquote p { margin: 0.25rem 0; }
+
+/* Dzegoban lyric cards */
+.chapter .quote center { margin: 1.5rem 0; }
+.dz-card {
+  display: inline-block;
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 0.5rem 1.25rem;
+  background: #1b2233;
+  border-radius: 10px;
+  color: #e6f4ff;
+  text-align: left;
+}
+
+/* ---------- hand-device screens (adapted from the source edition) ---------- */
+
+.device-view {
+  background-color: #0a0e27;
+  color: #7fbcff;
+  font-family: 'Courier New', Courier, ui-monospace, monospace;
+  padding: 16px;
+  border-radius: 15px;
+  font-size: 75%;
+  line-height: 1.45;
+  display: block;
+  margin: 1.5rem auto;
+  text-align: center;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  max-width: 100%;
+}
+.device-view.device-view-left { text-align: left; }
+.device-view table { width: 100%; border-collapse: collapse; margin: 0 auto; text-align: initial; }
+.device-view svg, .device-view img { display: block; margin: 0 auto; max-width: 100%; height: auto; }
+.device-view-left svg, .device-view-left img { margin-left: 0; }
+.device-view th, .device-view td { overflow-wrap: break-word; }
+.device-view h3 { color: #7fbcff; border-bottom: 2px solid #3d70c3; padding-bottom: 10px; margin: 0 0 16px; }
+.device-view thead tr { background-color: #1a2a4a; border: 1px solid #3d70c3; }
+.device-view th { padding: 10px; text-align: left; border: 1px solid #3d70c3; color: #cef; font-weight: bold; }
+.device-view tbody tr:nth-child(odd) { background-color: #0f1a3a; border: 1px solid #2a4a7a; }
+.device-view tbody tr:nth-child(even) { background-color: #12204a; border: 1px solid #2a4a7a; }
+.device-view td { padding: 8px 10px; border: 1px solid #2a4a7a; color: #b8d8ff; font-weight: bold; }
+.device-view button {
+  background-color: #1a3a6a;
+  border: 1px solid #3d70c3;
+  padding: 8px 22px;
+  font-family: inherit;
+  font-size: 14px;
+  border-radius: 3px;
+  color: #cef;
+}
+.device-view input[type='range'] { accent-color: #7fbcff; }
+.device-view ul, .device-view ol { padding-left: 1.1em; margin: 0; color: var(--dv-ink, #9cc2ff); }
+.device-view p { color: var(--dv-ink, #7fbcff); }
+@media (min-width: 640px) {
+  .narrow-device-view { max-width: 70%; }
+}
+
+/* ---------- chapter footer ---------- */
+
+.chapter-nav {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 3rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--rule);
+  font-family: ui-sans-serif, system-ui, sans-serif;
+  font-size: 0.9rem;
+}
+.provenance { color: var(--text-dim); font-size: 0.75rem; font-family: ui-sans-serif, system-ui, sans-serif; overflow-wrap: anywhere; }

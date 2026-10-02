@@ -1,0 +1,734 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 13,
+  "source_url": "https://vitalik.eth.limo/snowmoon/html/chapter-13.html",
+  "source_sha256": "2b0aa4e71cff0b06a46706ca4088ab221979699d235a88db1be980e931b4fc3e",
+  "fetched_at": "2026-10-02",
+  "license": "GPL-3.0",
+  "blocks": [
+    {
+      "idx": 0,
+      "kind": "heading",
+      "content": "# Chapter 13",
+      "sha256": "bf475d23df5aa6affb265ba56bf9abc1a4174d54c7e869f47d46f4c857b042e3"
+    },
+    {
+      "idx": 1,
+      "kind": "dateline",
+      "content": "**Meldan, Veridia** · 3724 Harvestmoon 8",
+      "sha256": "94e9dd9529ad20877344c061a2e9a19cb36a6eeb6e2b371437b56fa0daef72f2"
+    },
+    {
+      "idx": 2,
+      "kind": "paragraph",
+      "content": "Gladias pulled up the cloth curtain, and entered the booth. By now, he was very familiar with the style: a table, a decorated lamp and two flowers at the end, and an air filter pressed against a corner on the floor.",
+      "sha256": "bc0e08dc35aeca0cb5c89b30f18eef51162ab97fcda048196115800c291219dd"
+    },
+    {
+      "idx": 3,
+      "kind": "paragraph",
+      "content": "Delwart was already sitting inside.",
+      "sha256": "5581898b2f8ecc64cd33dc160c63d69ac3ad295bc5bc2772e2b52265699f4a80"
+    },
+    {
+      "idx": 4,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"So how are the Keeper meetings going?\"</span>, Delwart asked.",
+      "sha256": "41429e5e4d79de01ebf04de8eaa4c29147f0eca95edbccc9ddbebbcaf1cb844d"
+    },
+    {
+      "idx": 5,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"They're interesting\"</span>, Gladias replied.",
+      "sha256": "5d7c6701e15546424541db81f3ca7e908489c24b06878a5eff12833845f17745"
+    },
+    {
+      "idx": 6,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I'm actually surprised. This idea that we should not be intervening so much in everything, we should have fewer rubrics, I'm far from the only one bringing it up. It feels like almost half the first-years have the same idea in mind, and are bringing it up just as proactively as you wanted me to.\"</span>",
+      "sha256": "ae1648c9250fb4d1554559b95a5bfd3f9a76eadd6145e5a2c58787343cba58b9"
+    },
+    {
+      "idx": 7,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"So at least some of them don't want you to get taxed for every bad word in your song and micromanaged on like five different kinds of accessibility for every house or apartment that you build?\"</span>",
+      "sha256": "18df32a4305ec54b9b6374b69540cb4bbc925dee24218bf46339e6838ecf2414"
+    },
+    {
+      "idx": 8,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I mean, I don't think it's that bad now. We're not making people fill forms for everything like they do in Inglewore. The taxes are just another variable for people to watch, along with electricity costs. But even then, I think the Keepers are understanding that we have to be reasonable and not too prescriptive.\"</span>",
+      "sha256": "b27587d0e154575970ae96dc222bb1e4c26adf69e85ed717b20759db80542a57"
+    },
+    {
+      "idx": 9,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Are they making their case well?\"</span>",
+      "sha256": "af5102397fc2531837e352c6e65976692e143c675dc4464c417f117cdd4b4194"
+    },
+    {
+      "idx": 10,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Often better than I could. The second and third years tend to be more skeptical, they have a more traditional mindset. That comes through especially on anything related to Dzego or the Arctic threat.\"</span>",
+      "sha256": "94abdc2552d26311ed7232d453f3805960048b2cfd2878ca6d7be122abbc22e0"
+    },
+    {
+      "idx": 11,
+      "kind": "paragraph",
+      "content": "Delwart sighed. <span data-hue=\"53.33\">\"There's been decades of propaganda on all this stuff. Honestly, the Arctics are not making a great case for themselves; everything they do, their drone patrols near Redshire, even Ephelion's speeches, it just always aggravates people so much.\"</span>",
+      "sha256": "fcdbd5ad6d67503c8dae7a68eb1e1a544f85e6c7b04ca6755d8495188c0dc16b"
+    },
+    {
+      "idx": 12,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Yeah, a bunch of people think they're going to make some kind of more serious sabotage campaign against Redshire.\"</span>",
+      "sha256": "eeb0c8c0890eb3eb2097b8b016cb4df33702c83456ffa4620b4b26bbfa684f24"
+    },
+    {
+      "idx": 13,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Do you think they'll make a more serious sabotage campaign?\"</span>",
+      "sha256": "337dcafa9965725a5fde58432941f9a159417708ac54324786f27a38eae30307"
+    },
+    {
+      "idx": 14,
+      "kind": "paragraph",
+      "content": "Gladias thought for a moment. In his heart, he did not know, and while he expected that nothing would happen anytime soon, he feared that the answer might be yes. But he also knew that if he admitted it to Delwart, he would get a long lecture trying to impress on him how biased his sources of evidence were - and that was all *without* him having told Delwart about the time Seila met Zei and Bai in Freetown.",
+      "sha256": "7e55ffd8140a5fd9aae5770870c386d7702f317c74b3d1f16f52e35a71a611c0"
+    },
+    {
+      "idx": 15,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Probably not.\"</span>",
+      "sha256": "b3ba26e996c589191aac135456ea38f354992726002919c6fe2011ab5f089065"
+    },
+    {
+      "idx": 16,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"So do the best job you can to try to convince them not to worry.\"</span>",
+      "sha256": "d9ecec4afd7c4afc0747f3d9977dfae6118bac1e6b580a5bfe3afb0feb036015"
+    },
+    {
+      "idx": 17,
+      "kind": "paragraph",
+      "content": "A robot came in, and brought Gladias a water and a salad, and Delwart a tea along with a rectangular nutrition bar.",
+      "sha256": "db7cccfb41feced5f382063f1959606913d667a4bd7f873967636e52c6affb86"
+    },
+    {
+      "idx": 18,
+      "kind": "paragraph",
+      "content": "They both quietly drank, and then ate.",
+      "sha256": "cc092601689baeca825b7c5661293406145a900bfdd9afda12f09c39a7b94aea"
+    },
+    {
+      "idx": 19,
+      "kind": "paragraph",
+      "content": "They talked for a little bit more, and then after about twenty minutes, Gladias stood up.",
+      "sha256": "f27290c2bb85ab94be8efe4aefcf44fcf2652a8e1f4b8930ebfec5c6c58c831d"
+    },
+    {
+      "idx": 20,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I'm sorry, I have to leave for a dinner with my family.\"</span>",
+      "sha256": "beaf33d4663841e51eb441a658ab782c6a23daa1d4882c5e5d6379bef8d98051"
+    },
+    {
+      "idx": 21,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Of course you should, family is the most important thing!\"</span>",
+      "sha256": "bb29ab6a880ae895a813362bcf7cedfdcef8acf039f99c11604b40504451e0f3"
+    },
+    {
+      "idx": 22,
+      "kind": "paragraph",
+      "content": "Gladias stepped out, and began to walk through Greater Plum Harbor's tunnels toward the exit.",
+      "sha256": "564b71fd361fc9561fd4f4bd6d76d99019a1e1bc8d3a209ea082f9e54741cbad"
+    },
+    {
+      "idx": 23,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 24,
+      "kind": "paragraph",
+      "content": "After about ten minutes of walking through tunnels, Gladias emerged into a pathway above ground level. The Greater Plum Harbor's tall entrance doors were directly in front. Gladias passed through the turnstile, and exited back out into the mixture of greenery and glass and steel that defined Meldan's commercial district.",
+      "sha256": "744e29c88d888f62040256193c5712ede713913a2d50baa408a8c7ffc586eafd"
+    },
+    {
+      "idx": 25,
+      "kind": "paragraph",
+      "content": "Gladias turned right, and began walking back toward his home.",
+      "sha256": "dd503ba675d80ecfb740fd6b953ab5a6476504e5553486dc01de049e630cb826"
+    },
+    {
+      "idx": 26,
+      "kind": "paragraph",
+      "content": "His watch buzzed.",
+      "sha256": "6ef89f1823560dff4e92f6c82c2da9c76ad62a0d9e2ed37cd9bf23ac2ca46f83"
+    },
+    {
+      "idx": 27,
+      "kind": "screen",
+      "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th>From</th>\n      <th></th>\n      <th>Message</th>\n      <th>Time</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Mov</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 173.33333333333331)\">I've been following Delwart more, we should talk.</span></td>\n      <td>71256</td>\n    </tr>\n    </tbody>\n</table></div>",
+      "sha256": "3b145da94de72c7d0ff1cf4b1bb242b1ee391aecea9d0d644938f6b398abdf2d",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "watch",
+        "device_evidence": {
+          "idx": 26,
+          "quote": "His watch buzzed."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "From",
+                "",
+                "Message",
+                "Time"
+              ]
+            ],
+            "rows": [
+              [
+                "Mov",
+                "→",
+                "I've been following Delwart more, we should talk.",
+                "71256"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 28,
+      "kind": "paragraph",
+      "content": "Gladias whispered into his neck band, and opened a call with Mov.",
+      "sha256": "cb04f5102aabb94c4a324a0614ac3444459343382337177ee7dc302526f2aaae"
+    },
+    {
+      "idx": 29,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"What's going on?\"</span>",
+      "sha256": "1162151712991ae9ad15fa8e0920b40f699c9c02179e3d71b0a5c736c8f04b8e"
+    },
+    {
+      "idx": 30,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"He was a little more careless than usual this time\"</span>, Mov said. <span data-hue=\"173.33\">\"I followed him to his next meeting. It was with another Keeper. I got the adjacent booth, and I could listen through the vibrations on the wall.\"</span>",
+      "sha256": "c4ff39ae4c8be7aa910bb3554e3371941acb1e1bbb0a3b1e5610e5fa2933f513"
+    },
+    {
+      "idx": 31,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Wow. The GPH booths are that much worse than the ones the Keepers use?\"</span>",
+      "sha256": "002f9d9a2941675e1f3911ef5c5a408252d662a2a7314d37712051b2eb9daba8"
+    },
+    {
+      "idx": 32,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Yep. I don't think enough people know the difference yet.\"</span>",
+      "sha256": "27ce78e4a0d9869ac78fbd425ceb5718937c7232ed05ef831324374f24551d10"
+    },
+    {
+      "idx": 33,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"And we were using those booths for our conversations for months...\"</span>",
+      "sha256": "a6e31d27d8e81d0c405ff1c37b82b69456ade4ea073dcee0e091663579e41041"
+    },
+    {
+      "idx": 34,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Indeed... well, now we know.\"</span>",
+      "sha256": "85e39da4176d3d6b6a51db9b175bad050b561fec427692315831d96fae377a21"
+    },
+    {
+      "idx": 35,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Anyway, the other Keeper was in the hardware openness rubric, in a different discussion group from you. He was fully on board with Delwart's program.\"</span>",
+      "sha256": "c6a8009a861567fc4730b18d2c04c9adcb81dec76e30b26fc4da7eefc4e21427"
+    },
+    {
+      "idx": 36,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"And?\"</span>",
+      "sha256": "0944de4d0a1c40a026bc7c96e2f1f339cfd33c2e4474de209ff6030a7a62e6ba"
+    },
+    {
+      "idx": 37,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"The whole conversation was strategizing about how to persuade the other Keepers in that group to go along with his position.\"</span>",
+      "sha256": "99884c333fb06af5ca4659dbfa9a65f3b07898c9e601683001c0d6082b9a610f"
+    },
+    {
+      "idx": 38,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Delwart was really forceful. He seems to really care about this. And, between you and this other Keeper, he has managed to get contacts in two discussion groups for the same rubric. The whole point of splitting the discussion groups is to force people to think independently, to have them all taking cues from the same person!\"</span>",
+      "sha256": "76567a54b4464b330979a75f50a24f382691ae91d253617c54d2349e747864e3"
+    },
+    {
+      "idx": 39,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Anyway, I'm convinced that this whole thing is more organized, and deeper, than we all realize.\"</span>",
+      "sha256": "cfb2600c8d860f808e6f60385068b07a5346405dda167aae9649ff6b5adf1840"
+    },
+    {
+      "idx": 40,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Next time you talk to Delwart, I think you should demand some answers.\"</span>",
+      "sha256": "aae40afbc56c02ba77cb1ba03f1d31d0af1506052aba9c9267566e3f24ef1d35"
+    },
+    {
+      "idx": 41,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"What do you think it could be? Some kind of organized political effort to make Veridia more like Freetown, but without the part where they care about opposing the Arctics? So it's not just one person who believes in the cause, there might be some kind of whole network behind him?\"</span>",
+      "sha256": "1374e537b077805cda333d15a03253bd5d8ce09195181cffa227666838c8adc6"
+    },
+    {
+      "idx": 42,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"I'm curious too.\"</span>",
+      "sha256": "91fd900b09bb33c332661562b8d8706e84f0d435dd8f38d1c9e9169fc266c60a"
+    },
+    {
+      "idx": 43,
+      "kind": "paragraph",
+      "content": "Gladias stepped onto the autobus.",
+      "sha256": "d8dd08359041bf390308e3311fadec7ad284b5ce1cd421880ece4569c4726c74"
+    },
+    {
+      "idx": 44,
+      "kind": "paragraph",
+      "content": "He sighed.",
+      "sha256": "1dd61fb601afb4787fdb6767f018f5cd46c761bcd40d54350f7fa92dc18ef589"
+    },
+    {
+      "idx": 45,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I'll think about it more. I'm heading home now, having dinner with my family. The kids are back home today.\"</span>",
+      "sha256": "cffc1d76a1469d10be452f89f2d165773a79f5c4e500ff676277b66a0e5fb206"
+    },
+    {
+      "idx": 46,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Yeah, please do. And - take care.\"</span>",
+      "sha256": "88755afa13920093456ae2bde7c59c45856bf2b1cb87eea950c6cd9b8279027e"
+    },
+    {
+      "idx": 47,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 48,
+      "kind": "paragraph",
+      "content": "Gladias got off the autobus, and began to walk toward the restaurant. Wearing the privacy robe and walking quickly, he sweated in the hot sun.",
+      "sha256": "d8261d94eb84e41edf5e525695ca3ab38a9bbfd4302f49220f5da74b4c847b47"
+    },
+    {
+      "idx": 49,
+      "kind": "paragraph",
+      "content": "After a few minutes, he arrived. Seila and all four children were already sitting at the table.",
+      "sha256": "ccbd2c6a475e0890dade786dd69571d55f1f6f7f87e93f38a443da872d06fd50"
+    },
+    {
+      "idx": 50,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Surprise!\"</span>, Seila exclaimed. <span data-hue=\"253.33\">\"We got here before you this time.\"</span>",
+      "sha256": "15d8e8daa7f165bf1ab27b34675319775c86f1c0c87536d9946b4f38435e8831"
+    },
+    {
+      "idx": 51,
+      "kind": "paragraph",
+      "content": "Gladias's face turned into a smile. He was happy to see the kids again. It had been two months since his visit to their house for that one evening, and they had been away from his and Seila's home for half a year.",
+      "sha256": "6f93507eaf18e700a916c5df02eb92a314deb001688cbc578acc8a83b33836be"
+    },
+    {
+      "idx": 52,
+      "kind": "paragraph",
+      "content": "Gladias put away his thoughts about Delwart and Mov, and made a deliberate effort to focus his attention on his family.",
+      "sha256": "fbb5e5e21dd4038b3debb18446444c609fc170e26d17a158c722bc287b44e6c8"
+    },
+    {
+      "idx": 53,
+      "kind": "paragraph",
+      "content": "A few minutes later, a robot slid up to them, bringing meals for Febric and Hreda.",
+      "sha256": "0407919fcd26269734574edaf3aebcf1a2100ec6b9de2bd996168872497461b8"
+    },
+    {
+      "idx": 54,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"How did your math exam go?\"</span>, Seila asked Hreda.",
+      "sha256": "75c8e55e17400cc59874c79403f4ed21e03735a752396a0f7068635bc1ba7884"
+    },
+    {
+      "idx": 55,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"106.67\">\"Ninety-six percent\"</span>, Hreda replied.",
+      "sha256": "9ad1b64e57bd162cf409dd8e0b420f1ce0222f081b2b03d45e517c5c57452d9d"
+    },
+    {
+      "idx": 56,
+      "kind": "paragraph",
+      "content": "The look on Seila's face immediately changed to worry. Now it was going to be even more awkward to ask Lily, she knew. She had planned to ask her right after, but now simply congratulated Hreda instead.",
+      "sha256": "6563fc341bfe899c9eb60d4dfb6fb6621cf83be2d772deeea9a143339b5d7273"
+    },
+    {
+      "idx": 57,
+      "kind": "paragraph",
+      "content": "Lily's eyes sank down to look at the table right in front of her.",
+      "sha256": "b04f73baef7c0b3f454ac48943e9b2fdd438114cbb90fc50d16dee5ddea7e610"
+    },
+    {
+      "idx": 58,
+      "kind": "paragraph",
+      "content": "The robot slid up to them once again, and brought the meals for Zven and Lily. Zven eagerly took his. Lily did not move.",
+      "sha256": "6dd9e1aeb9dba0be36c7392e93fcc38c7cc0a78bbdf84c650d8939760f2e95cb"
+    },
+    {
+      "idx": 59,
+      "kind": "paragraph",
+      "content": "Gladias took Lily's meal, and put it down on the table in front of her.",
+      "sha256": "ca7a94e0e7352c15b38a6014e38e0468b908f64da56861a1d2ae81690c5f1839"
+    },
+    {
+      "idx": 60,
+      "kind": "paragraph",
+      "content": "Lily slowly began to eat, and said nothing.",
+      "sha256": "2aa2f8d66e9f9f8ae1502d4db6ac74cecd0fe436d33c0f98a9e888e247e454f2"
+    },
+    {
+      "idx": 61,
+      "kind": "paragraph",
+      "content": "The table went silent. They ate slowly, while watching the professional Helisport game that was playing on a nearby screen.",
+      "sha256": "ea386b68d22a8d23f4dd75a67e5c857076e1ff56c05fe78f7c89696275f35a08"
+    },
+    {
+      "idx": 62,
+      "kind": "paragraph",
+      "content": "Suddenly, the Helisport game cut out, and was replaced by a completely different broadcast.",
+      "sha256": "d51cf2a38689b1e518322234e54683739778aeab95e76281073000ae6b6f50e8"
+    },
+    {
+      "idx": 63,
+      "kind": "paragraph",
+      "content": "An image of Lord Ephelion appeared on the left side of the screen, and a multi-paragraph message on the right side.",
+      "sha256": "45777c021ef67aedc2b8c463e7c5f3d9f2b766d7eebf0700a17f38502dd884ee"
+    },
+    {
+      "idx": 64,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view device-view-left\" style=\"background-color:#633; font-size:93.75%; color:#fee; --dv-ink:#fee;\"><b> The Dead Hand of Egalitarianism, and the Path of Strength </b>\n<hr>\n<p>All humans are equal, the schools, the posters, the songs, and everything else in Veridia is telling you.</p>\n<p>Maybe not Dreadknot - but that's exactly why Dreadknot's taxes were bumped up to tier 4 in the audit last year.</p>\n<p>Nobody is better than anyone else, and if you even dare claim that one human being is better than another, then you are immediately cast out as evil in Veridia.</p>\n<p>But there is a fundamental flaw in this kind of thinking. If one human being cannot be better than another human being, then that also implies that a human being cannot be better than their former self. Denying the possibility of hierarchy, of vertical difference between people, the fact that there are traits that everyone agrees are good, but that only some actually manage to achieve, is thus also denying the possibility of self-improvement.</p>\n<p>Do not think that the idea that there are multiple dimensions to goodness and to success saves you from this. Even if there are, some people perform better, and others perform worse, across <em>all</em> the dimensions that matter.</p>\n<p>Stop looking to society for answers, to Veridia's institutions to make life fair. Life is not fair - and should not be fair. Embrace the competition. Today, you may be weak. But you have it in you to be strong. Do not believe the lie that you are adequate just the way you are. But do believe a truth - the truth that you have it in you to become strong. Take that opportunity. Grow stronger. Grow so strong, that you later look upon your former self with shame.</p>\n<p>And find the other strong people, the people who will help you on your journey of striving for greatness. Not those who will love you unconditionally - that is slow-burning poison, like sweet candy. But those who will give you love when you win, and a cold shoulder when you lose. Those that give you both the incentive, and the disincentive. You are not good because you are human, you are good because you can win. Only thus, can you train your mind to love winning, and achieve your true potential.</p>\n<p>With regards,</p>\n<p>Lord Ephelion</p>\n<p>Arctic Empire consul to Veridia.</p></div>",
+      "sha256": "705d4d6382c265e8a38d83a5c0972ed4050bbee38d951aba459f17d5ff144c78",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "screen",
+        "device_evidence": {
+          "idx": 63,
+          "quote": "An image of Lord Ephelion appeared on the left side of the screen, and a multi-paragraph message on the right side."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "left",
+          "style": "background-color:#633; font-size:93.75%; color:#fee; --dv-ink:#fee;"
+        },
+        "fields": [
+          {
+            "type": "heading",
+            "text": "The Dead Hand of Egalitarianism, and the Path of Strength"
+          },
+          {
+            "type": "rule"
+          },
+          {
+            "type": "text",
+            "text": "All humans are equal, the schools, the posters, the songs, and everything else in Veridia is telling you."
+          },
+          {
+            "type": "text",
+            "text": "Maybe not Dreadknot - but that's exactly why Dreadknot's taxes were bumped up to tier 4 in the audit last year."
+          },
+          {
+            "type": "text",
+            "text": "Nobody is better than anyone else, and if you even dare claim that one human being is better than another, then you are immediately cast out as evil in Veridia."
+          },
+          {
+            "type": "text",
+            "text": "But there is a fundamental flaw in this kind of thinking. If one human being cannot be better than another human being, then that also implies that a human being cannot be better than their former self. Denying the possibility of hierarchy, of vertical difference between people, the fact that there are traits that everyone agrees are good, but that only some actually manage to achieve, is thus also denying the possibility of self-improvement."
+          },
+          {
+            "type": "text",
+            "text": "Do not think that the idea that there are multiple dimensions to goodness and to success saves you from this. Even if there are, some people perform better, and others perform worse, across all the dimensions that matter."
+          },
+          {
+            "type": "text",
+            "text": "Stop looking to society for answers, to Veridia's institutions to make life fair. Life is not fair - and should not be fair. Embrace the competition. Today, you may be weak. But you have it in you to be strong. Do not believe the lie that you are adequate just the way you are. But do believe a truth - the truth that you have it in you to become strong. Take that opportunity. Grow stronger. Grow so strong, that you later look upon your former self with shame."
+          },
+          {
+            "type": "text",
+            "text": "And find the other strong people, the people who will help you on your journey of striving for greatness. Not those who will love you unconditionally - that is slow-burning poison, like sweet candy. But those who will give you love when you win, and a cold shoulder when you lose. Those that give you both the incentive, and the disincentive. You are not good because you are human, you are good because you can win. Only thus, can you train your mind to love winning, and achieve your true potential."
+          },
+          {
+            "type": "text",
+            "text": "With regards,"
+          },
+          {
+            "type": "text",
+            "text": "Lord Ephelion"
+          },
+          {
+            "type": "text",
+            "text": "Arctic Empire consul to Veridia."
+          }
+        ]
+      }
+    },
+    {
+      "idx": 65,
+      "kind": "paragraph",
+      "content": "Gladias quickly scanned the message, and looked around. Seila had already gotten up from the table, and was trying to figure out how to unplug the screen, even before the restaurant staff could get there themselves.",
+      "sha256": "996708879083f1f88f4823760c2ac1b98e6bf5460bf048ac7e030025db40a329"
+    },
+    {
+      "idx": 66,
+      "kind": "paragraph",
+      "content": "Febric and Hreda continued eating. Zven was looking at the onscreen message with curiosity, his mind jumping between the paragraphs, and occasionally moving his attention to watching Seila try to turn the screen off. And Lily was simply staring at the message.",
+      "sha256": "2adc83662206d20239f176fdb66e25b09f8e618be29a7b6b0bff87f1477d1975"
+    },
+    {
+      "idx": 67,
+      "kind": "paragraph",
+      "content": "Finally, the screen turned off.",
+      "sha256": "5d2afacd88a16236d3e9fdeb99231a9e676645ada099b701ce2302785ee67e28"
+    },
+    {
+      "idx": 68,
+      "kind": "paragraph",
+      "content": "The family went silent. Febric took out his hand device, and began to study for school. Lily took out her hand device, and began to intensely tap on it. Gladias could not see what she was doing, though she seemed to be playing some kind of game.",
+      "sha256": "0e4547539e717abba6eb7bd88a51de56aa4d160c898983f1c52a82d92537b7cf"
+    },
+    {
+      "idx": 69,
+      "kind": "paragraph",
+      "content": "The family quietly ate. Five minutes later, Lily's face suddenly lit up, and she quietly cheered. She put down her hand device, and joined the family eating. Despite starting to eat later than they did, she finished the food before everyone else.",
+      "sha256": "667eaea9ff5598f1bec12c07f5f8a99e5d5d72ce8ced82b48d22e47ed2648de5"
+    },
+    {
+      "idx": 70,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 71,
+      "kind": "dateline",
+      "content": "3724 Harvestmoon 9",
+      "sha256": "ecc75ea6f74d63d5415567eaf03db2fdc7ee1406f0dd616d810aca0dcc7a7ee5"
+    },
+    {
+      "idx": 72,
+      "kind": "paragraph",
+      "content": "Gladias slid the barrier open, and walked into the booth. The other Keepers were all already there.",
+      "sha256": "ca3ad8f9ce9b97d3d690fdcd41b9d4cea727af99f95c6695420d9f5631a06412"
+    },
+    {
+      "idx": 73,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"266.67\">\"Good to see you again, Six!\"</span>, Thirteen exclaimed.",
+      "sha256": "513dc94e0807de863356864d95c4048407773fc1097830dc63ed6a07e4d9d0e2"
+    },
+    {
+      "idx": 74,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Wait, how did you know I'm Six?\"</span>",
+      "sha256": "b68e589fdf75bd3aa5b0e1aa33695ca34d0443acab441037d655a59ef6d2520e"
+    },
+    {
+      "idx": 75,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"266.67\">\"By instinct. Probably some subtle detail of your body language - as they say, ninety percent of our communication is subconscious.\"</span>",
+      "sha256": "2cf3c4f71e5e003597ddb62e59f774d5ab75139194d472436b4469744998b889"
+    },
+    {
+      "idx": 76,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Huh, I guess even after hiding our faces, even after speaking through neck bands and sending out our speech with a re-randomized AI-generated voice, though I still can't tell who of you is male and who is female, these physical privacy tools still have their limits. Well good to see you too, Eighteen.\"</span>",
+      "sha256": "50dbc084546d05c989010b1774c5eb8403eaadb1ad29e070f48603f8b7cd4e63"
+    },
+    {
+      "idx": 77,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"266.67\">\"I'm Thirteen!\"</span>, Thirteen replied. <span data-hue=\"266.67\">\"I guess for you communication might be only thirty percent subconscious.\"</span>",
+      "sha256": "0782c9fcc1ab19511f81b6389ad99889e0058b48a8fa55ac4be15e97c5cf428a"
+    },
+    {
+      "idx": 78,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"266.67\">\"I'm female, by the way. I guess that's okay to say, it only cuts down my anonymity set by a factor of two.\"</span>",
+      "sha256": "3085da406605382c24dce8795f89cd12e6e7c79b02e92b6bf0f35c133a8715a7"
+    },
+    {
+      "idx": 79,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"266.67\">\"Anyway, this is the last time we meet before we have to vote on this rubric in about two months.\"</span>",
+      "sha256": "c4029dab52d6e2b3329bb7012a6eea517de533011c2c1eda267a175ce13f01eb"
+    },
+    {
+      "idx": 80,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Do we have a proposal?\"</span>",
+      "sha256": "4804b13fd71644cdb956e62da3d6310069bcecaa8f425c69a31a91c58590edc3"
+    },
+    {
+      "idx": 81,
+      "kind": "paragraph",
+      "content": "Zero raised his head.",
+      "sha256": "a622215b865053eab0c6e9df09bf868e700d8f3e7143b5f384edcc763fa24d23"
+    },
+    {
+      "idx": 82,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I drafted the change in language\"</span>, he interjected. <span data-hue=\"346.67\">\"To exempt all military, surveillance and counter-surveillance products from the more favorable tiers on the openness tax rubric. All that stuff becomes minimum tier 3, unconditionally.\"</span>",
+      "sha256": "c15fdc5eaabd3c79a03d7a07b2066ff21c2df45c762090267f0024a34f4f106c"
+    },
+    {
+      "idx": 83,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Counter-surveillance too?\"</span>",
+      "sha256": "4555ddf5d401901df3754a3a7770c030ac6c3838c1154efb0fe26d9a70a15f7f"
+    },
+    {
+      "idx": 84,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Of course. It's all part of the same zero-sum game.\"</span>",
+      "sha256": "acc83d1342c54df57904070b7522c7630ba380a0a2cd157312ced5b0a6c0f272"
+    },
+    {
+      "idx": 85,
+      "kind": "paragraph",
+      "content": "Eighteen began to speak.",
+      "sha256": "836ab811260479c8e0e1b84c1ecaf304dba0b605e73815a0def6e96fa76209c5"
+    },
+    {
+      "idx": 86,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"I still think you guys are not understanding the Arctic threat at all. They have the technological advantage. This isn't a symmetric game. If everyone has to make their own tech in those areas, the Arctics win.\"</span>",
+      "sha256": "3b7263bdeedc9e3fdaa7826315bc9865425b4d4eb4c28126715704e27cc7431b"
+    },
+    {
+      "idx": 87,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"186.67\">\"Come on! They're not going to attack. They've had drones buzzing around different places for years now, ever since drones were invented. They're not going to start doing anything crazy in Redshire, okay?\"</span>",
+      "sha256": "f56ef9e6a4f0fd6ed725ffc3e9b000c72d0a9136f8870a8d8c6e93ff61dd7b0d"
+    },
+    {
+      "idx": 88,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"You really think so?\"</span>",
+      "sha256": "957e97636d2c7d954140a9a10720adc9055b5639bc1a393c1718dafca647360c"
+    },
+    {
+      "idx": 89,
+      "kind": "paragraph",
+      "content": "Gladias looked around the room. His ability to read body language was indeed not great. But from what he could tell, three of the others were leaning in favor of cutting military, surveillance and counter-surveillance out of the hardware openness rubric, Thirteen was in the middle, and only Eighteen and One were against.",
+      "sha256": "7f5d1a2405d347aff0c29aaa9d0f04d5b6073c85e957fa8142403ff60efb13cb"
+    },
+    {
+      "idx": 90,
+      "kind": "paragraph",
+      "content": "His conversation with Mov the day before put him into a suspicious mood. Before, he had been more open-minded. Now, he started to think, doing nothing at all to the rubric this year might be best. His mind bounced around, trying to think of ways to nudge the situation in a more favorable direction. After about half a minute of thinking, he had his plan.",
+      "sha256": "0baa9b38ffdb43f0ad24d2042396b167a15fd2f165d701c8663034f8dd8f12d6"
+    },
+    {
+      "idx": 91,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I just had an idea.\"</span>",
+      "sha256": "a1091e999b7f433b53b84f87495a59d9e8d0d9945243dd8863d7ef10f1825b84"
+    },
+    {
+      "idx": 92,
+      "kind": "paragraph",
+      "content": "The others turned toward Gladias.",
+      "sha256": "04b499b27c70f853d3b58dae60dc75b68b58b17c62e488bf24ad590638df667f"
+    },
+    {
+      "idx": 93,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"We don't have to decide this now. We still have two months before we have to vote, don't we?\"</span>",
+      "sha256": "8c4077ddd66c35c8503e2992c2eb738c5c9b1f22afc106982d5e8525308ca9d3"
+    },
+    {
+      "idx": 94,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"266.67\">\"Correct.\"</span>",
+      "sha256": "7426ffee93089815994be978ad9ea38cf3d26017d3fba2d55285ee02389773aa"
+    },
+    {
+      "idx": 95,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Eighteen, in what timeframe do you think the Arctic Empire is going to make some kind of move, do some more serious sabotage against Redshire?\"</span>",
+      "sha256": "5f40d90f296bcce2bd39557da87c6ba53855e640a073f1f9e49b6eb4c06b05bb"
+    },
+    {
+      "idx": 96,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"Less than two months, definitely.\"</span>",
+      "sha256": "443ccdf51bc569acaa553482ed7948a1441516366cc6663257d8d22bc7ba022f"
+    },
+    {
+      "idx": 97,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"One, I remember you were also of the mindset that we should take the Arctics seriously as a threat. What's your timeline?\"</span>",
+      "sha256": "53fd2d5ce5c4fdc4519160cff678f15535ab3de6fd9aaf1a8da677e0e6489bd1"
+    },
+    {
+      "idx": 98,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"200\">\"Ten or twenty days, maybe a month. Won't be anything too drastic, but we'll see sabotage of some kind. It might get reported as a big accident, that's how it always happens.\"</span>",
+      "sha256": "5bcf237c20c368f3588f760b6a301d16d2376cd6afc9612add4b9edf877b0aba"
+    },
+    {
+      "idx": 99,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"So how about this? Of course, this is not binding, it's just a preliminary thought. But, how about we all wait for two months and see what happens. If there's no attack, then we'll all be more inclined to accept Zero's amendment. But if there is, then we'll keep the rubric as is, or even increase the distance between the tax brackets.\"</span>",
+      "sha256": "824ead323bcd0689a55932c4675a88975bc6284cbeb5d9daa3cb286f86b0e065"
+    },
+    {
+      "idx": 100,
+      "kind": "paragraph",
+      "content": "Zero softly muttered some disapproval under his breath but did not say anything. He clearly did not like to be pinned down like this. But he could not come up with any argument to rebut Gladias's proposal.",
+      "sha256": "4c5b6b52da18c581ebfd44adcdbaaac5d777d9198cab31c0a9cadf2e98258209"
+    },
+    {
+      "idx": 101,
+      "kind": "paragraph",
+      "content": "Eighteen seemed to have a similar reaction. Like Zero, he did not like being pinned down, but he could not avoid admitting that he could not come up with any better way to break the impasse.",
+      "sha256": "bb7689f59f434ca0f548d27452539fbed71be26518374d799cec6dfdcbed5129"
+    },
+    {
+      "idx": 102,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"So let's leave it at that.\"</span>",
+      "sha256": "f066ea2c9ca7a057beaf5737823bf8b9f51b11def5f5d0b54a0d2268c21b5619"
+    }
+  ]
+}

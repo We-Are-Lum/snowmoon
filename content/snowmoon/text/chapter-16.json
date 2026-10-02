@@ -1,0 +1,944 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 16,
+  "source_url": "https://vitalik.eth.limo/snowmoon/html/chapter-16.html",
+  "source_sha256": "f8a9d74d4b9d4a8ce6fe56a4999e8ec031e965f296773879e1877cac59005d1b",
+  "fetched_at": "2026-10-02",
+  "license": "GPL-3.0",
+  "blocks": [
+    {
+      "idx": 0,
+      "kind": "heading",
+      "content": "# Chapter 16",
+      "sha256": "714f980a31e310f1a801703ef5a4ddee5b82a5e5f12f2a8d73ffdcb6b280660f"
+    },
+    {
+      "idx": 1,
+      "kind": "dateline",
+      "content": "**Meldan, Veridia** · 3724 Firemoon 25",
+      "sha256": "83b0da492c56e824ae83afa80024f8e7c8dc5ab8b4c9964a5f1941086ff4a203"
+    },
+    {
+      "idx": 2,
+      "kind": "paragraph",
+      "content": "Gladias pulled open the barrier on the booth, walked in, and slid the barrier shut behind him. He sat down angrily on the bench across from Delwart.",
+      "sha256": "818572feddfba51182960a4aa2867f588906a5a966fd9f57888099926199db90"
+    },
+    {
+      "idx": 3,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"You have a lot of explaining to do.\"</span>",
+      "sha256": "229575088b3b210ddca0a08c5f762f681e3be4b101b6c16997a8a631236c2403"
+    },
+    {
+      "idx": 4,
+      "kind": "paragraph",
+      "content": "Delwart looked downwards toward the table, with a sorry expression on his face.",
+      "sha256": "b9e006aebbcceb2e079980cc8e1c2c00378f59946d07f3bf3c2de05ac86fe452"
+    },
+    {
+      "idx": 5,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Look, Gladias, you were right, I was wrong. I let my hate for all this interventionism in Veridia's government and culture blind me to the fact that there are things government has always been for, and defense is one of them.\"</span>",
+      "sha256": "71a4a48675a3ab7c67eecb11101ea94f5556e60f30c0c2623951d64fb543b441"
+    },
+    {
+      "idx": 6,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"That's not why I'm angry.\"</span>",
+      "sha256": "28f706620d61867ade624097396b6e972095e2cbbef0db1ef72edf39e5f58f22"
+    },
+    {
+      "idx": 7,
+      "kind": "paragraph",
+      "content": "Delwart looked up, startled.",
+      "sha256": "ba1af50968dc880e6936aede1293b258bee176897e908d13f08817266388b576"
+    },
+    {
+      "idx": 8,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I mean, it's one of the reasons, but far from the primary.\"</span>",
+      "sha256": "ec641d4dbf787cd56b51e1a52b74ab80dde23c36de0650657b20ee59c8364840"
+    },
+    {
+      "idx": 9,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"What is the primary then?\"</span>",
+      "sha256": "a9db8bcdf40a6ba709992de727d16d6abdf5f80af47062019c81dc50b9f63218"
+    },
+    {
+      "idx": 10,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"What the hell is going on? Who are you? Who are you working with?\"</span>",
+      "sha256": "d0f4c789ebef71d872cb1d7adac6726f16381ced66e1213fb784a861cac8a039"
+    },
+    {
+      "idx": 11,
+      "kind": "paragraph",
+      "content": "Delwart sighed. For a few moments he was silent. Then he leaned forward.",
+      "sha256": "9a525540b5b6106e4711d1bd1ac387e1e146a650e3797ce44dcbc72de03c3fb6"
+    },
+    {
+      "idx": 12,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Fine, I will explain.\"</span>",
+      "sha256": "ecbbfee0082ea8decc783bf60c311c1a6f3d3e8d0d1592a8dff38b756ffa447c"
+    },
+    {
+      "idx": 13,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"I'm not just one ideologue who is doing this alone. I, and a group of others - I don't know them - are working for Silverchat.\"</span>",
+      "sha256": "cdbfb713d2fa6845988050dcf45f7a662a23751acd74fd8892b221103b2db37f"
+    },
+    {
+      "idx": 14,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"We were frustrated by these rubrics that were increasing our taxes just because a bunch of people were putting crude jokes on our platform. We wanted Silverchat to be a refuge from the blandness that's taking over so much of the rest of Veridia. We wanted to be a place where Hydrafill and even Dreadknot could be welcome.\"</span>",
+      "sha256": "bcbdbf8941a2f73df1ab56fb9b0aa827ec1e91f0707942b7a15f12ee848503fe"
+    },
+    {
+      "idx": 15,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"And so we decided to take matters into our own hands. Make an organized effort to try to pull the politics in a better direction. Appeal to the Keepers directly.\"</span>",
+      "sha256": "165f4ae2e23de0f39033b3ef1d85c2164f461165707fca208a9fd41f61524ed4"
+    },
+    {
+      "idx": 16,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"And now I realize just how naive this all was. If we manage to ward off blandness, but at the price of the Arctic Empire being able to take over and inflict things far worse - first on Redshire and later on the whole world - then this whole thing was not just not worth it - it was ruinous.\"</span>",
+      "sha256": "e5fef2e9d4400e95ef0e38989529dd257c90958e99903a9206e3c9e821ada1a7"
+    },
+    {
+      "idx": 17,
+      "kind": "paragraph",
+      "content": "Gladias sighed. He was still extremely angry at Delwart, but the anger was now mixed with a dose of sympathy.",
+      "sha256": "d6b28701b0417b4dc1af193c57cc2fa60eede102577d9473567b8758d761770c"
+    },
+    {
+      "idx": 18,
+      "kind": "paragraph",
+      "content": "A robot slid up to them, carrying a salad, a rectangular nutrition bar and water for the two of them to eat and drink.",
+      "sha256": "9c7b6c4192c7d8bcc233ecefe3eabf127525a6445291ddaf1646646a78a46b3e"
+    },
+    {
+      "idx": 19,
+      "kind": "paragraph",
+      "content": "Gladias and Delwart both first picked up their plates of food, and put them down on the table. Gladias then picked up his cup and drank about half the water in one gulp. Delwart did the same.",
+      "sha256": "56626c819ed38380be31b28f2e5f51cb0b12d582c253c869d51c8efb239fc310"
+    },
+    {
+      "idx": 20,
+      "kind": "paragraph",
+      "content": "They began eating, silently. After a few minutes, the conversation resumed.",
+      "sha256": "4e7af19adec6af8b1e1b30269b888eed741eedbe15fad7713b33d363fba27840"
+    },
+    {
+      "idx": 21,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"What do you want me to do now?\"</span>, Gladias asked.",
+      "sha256": "8958e4a69aec6ab1a0f98b994529dd1a0545250de1675002ae28d8870ea1a473"
+    },
+    {
+      "idx": 22,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Obviously don't make the rubric exclude military now. You could even increase the tax brackets, though you doing that would only help a tiny bit - the most important levers there are on the Graph Funding side.\"</span>",
+      "sha256": "5b55644c85018615d1c2a2efcdc5fc19e42562134e57dcc08d0b17b4d5145c23"
+    },
+    {
+      "idx": 23,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"But I also have another idea for what you could do.\"</span>",
+      "sha256": "a504869db246185b6919dd73cfb16f54ceb798526bf5fd3d30e5f3753b1237e2"
+    },
+    {
+      "idx": 24,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"What is it?\"</span>",
+      "sha256": "42829abc263c443153588db9288ba1cf6f4de1249b75acaf4f0c8157d2782612"
+    },
+    {
+      "idx": 25,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"I think you should go to Dzego.\"</span>",
+      "sha256": "fe753628293176d75e2e3db550e83ca121243ab0b9f7bde582fa3d66f9d81f51"
+    },
+    {
+      "idx": 26,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Me? Dzego? Why?\"</span>",
+      "sha256": "cd89fa56a8cd64fc61cc68ac428a03483bc371b4b831d03298bdae4c4a965aa0"
+    },
+    {
+      "idx": 27,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"They clearly have this whole Arctic question figured out much better than we do in Veridia. Study them. Learn from them. See what you can bring back to Veridia.\"</span>",
+      "sha256": "5d7e2b967e3f22f52d9c5a08929905ae0d2fe4ae13bd55d04071ea1970b1eab1"
+    },
+    {
+      "idx": 28,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"And why should I listen to you when you've been so untrustworthy?\"</span>",
+      "sha256": "fe464403317d2b2a2f2b2f74d8004c97fc731bac7c3a2f1c75daef943cd5d57b"
+    },
+    {
+      "idx": 29,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Well definitely don't just listen to me. Ask your closest friends and advisors. See what they think.\"</span>",
+      "sha256": "cf35322b506bbceb2166d860267e925860318f36e20f6273c0cbb754a5ddb482"
+    },
+    {
+      "idx": 30,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 31,
+      "kind": "paragraph",
+      "content": "Gladias walked along the same path through Kalimar that he would usually pass through. As usual, it was covered with trees and surrounded by stone houses on both sides. But on that day, it was unusually hot, and Gladias sweated slightly as some of the sunlight managed to shine through the tree cover and warm up his entire body inside of his privacy robe.",
+      "sha256": "3afaf07d321610edeba03d2eeb7d71866f251d715b2605613f706051bfc7bbfd"
+    },
+    {
+      "idx": 32,
+      "kind": "paragraph",
+      "content": "He passed by one of the houses that he remembered for selling traditional Veridian food products. This time, an additional note was hastily taped on to the poster, advertising packages that offered tasty, nutritionally complete and long-lasting preserved food that was sufficient for thirty days of survival.",
+      "sha256": "0a72e689e1f3c512497dc35e24ef048b10e08cb796801ee9e2056ecdfd8a4334"
+    },
+    {
+      "idx": 33,
+      "kind": "paragraph",
+      "content": "He tapped his watch, and called Mov.",
+      "sha256": "23039f7f08234fd8cc7c08870361004d48c3fa584c04c99f65d3078a9c47432b"
+    },
+    {
+      "idx": 34,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"So I had my chat with Delwart.\"</span>",
+      "sha256": "4fb6b749d3e4149fe1ea91e3f93bea112d54537a1bbe46d0cedcc748df5a1998"
+    },
+    {
+      "idx": 35,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"How did it go?\"</span>",
+      "sha256": "dba37231c0d5c7334b657c8593a0eb003354328467cde843130a4183d5121e7f"
+    },
+    {
+      "idx": 36,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"You're right. There was an organized effort. Turns out - at least he now says - he's been working for Silverchat this whole time.\"</span>",
+      "sha256": "822cbeded55420cb6eee6cce51b59f2e634a65135edc148c368fba34556f5f91"
+    },
+    {
+      "idx": 37,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Silverchat? And here I was expecting some more evil company, like Bluewhale.\"</span>",
+      "sha256": "c71f3ea01d9bb0ebef1f3fde16d55b8bee16c7b45bad943498b9060d06fe71d8"
+    },
+    {
+      "idx": 38,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"I guess it makes sense, probably that conversation I overheard a month and a half ago was with a Silverchat guy.\"</span>",
+      "sha256": "3f7a3f24badb83e958d93f13eb22c6e4e7298069dbe08396f39bf4dce49d2b60"
+    },
+    {
+      "idx": 39,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"So he wants me to go to Dzego now.\"</span>",
+      "sha256": "f3418a09b0e190b1314e1f6f14cf6a0768bc5eb438389cd090d5d98f17625a53"
+    },
+    {
+      "idx": 40,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Dzego? What for?\"</span>",
+      "sha256": "9ea4514ad52b3eedd340357c029146d9b28a86b55f6551bae3ba0ab6e3501b4e"
+    },
+    {
+      "idx": 41,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"He says we in Veridia have a lot to learn from them. Do you think that's true?\"</span>",
+      "sha256": "7dd68f5c2b359815e37a661f8133e8b3da6185403692f6f49f47c6330fbda484"
+    },
+    {
+      "idx": 42,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"You know, one of my friends mentioned something like that to me the day Redshire got taken over. He thought *I* should go, and see how their secret societies work or something.\"</span>",
+      "sha256": "35011837739cbd701b1c55a3ddc058c04b08bcfd4caddc9b7c8ef6f0269b4a0a"
+    },
+    {
+      "idx": 43,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Well you know, Seila has a friend from there now, and the last thing she told me was that he's been climbing up the Minpentai ranks really well, gotten into the nationals. So if I go, maybe I will actually be able to learn a few things.\"</span>",
+      "sha256": "177dfb8190dfc59cff5af8d2be4421e9433b1831b895898c6c4d2cc43c960f9d"
+    },
+    {
+      "idx": 44,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Yeah I can certainly see the appeal. Veridians really need to know the outside world better. Especially the people in the institutions - the Order, the Courts, the parliament, all of them.\"</span>",
+      "sha256": "9416c37a2e7d1fdaeaabe389e4cd34fca7e18c5d95ea30e4985abe6b1acc6026"
+    },
+    {
+      "idx": 45,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Give me a few days to think through this.\"</span>",
+      "sha256": "2469805beb792d2303b07c480eb09d210ad8c889384db32dab39b8989ab56670"
+    },
+    {
+      "idx": 46,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Well, the votes on the rubrics are in eight, twelve and sixteen days, so you have that time to think through it no matter what happens.\"</span>",
+      "sha256": "1a12e66619d3bbd6c4a3733e12c8dbd3504bd87364392593f698f51be38d0c8e"
+    },
+    {
+      "idx": 47,
+      "kind": "paragraph",
+      "content": "Gladias paused for a moment.",
+      "sha256": "9ffe831a30824aa5685d1d2eef2d2e8af01597f4b7c36278e4da243de3a14f5d"
+    },
+    {
+      "idx": 48,
+      "kind": "paragraph",
+      "content": "At that moment, he was walking past the restaurant near his home where he would often stop for food and drinks. Through the window, he could see Febric eating.",
+      "sha256": "94f1d52b5d52c16f85e0727dd5b58007b0c4a2f807bf3e72e1f2e68305e3354e"
+    },
+    {
+      "idx": 49,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I'll think about it too\"</span>, he finally said, and ended the call.",
+      "sha256": "9985558f17a54d4578097433ddb6152bbcfd2cf8c493deba2a91f25d1ee92dea"
+    },
+    {
+      "idx": 50,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 51,
+      "kind": "paragraph",
+      "content": "Gladias entered the restaurant, and almost immediately took off the face cover from his privacy robe, and partially unzipped the front. He could not be that private while eating anyway, and he had been sweating in the hot sun. He sat down beside Febric.",
+      "sha256": "2cc4ea2a4f1e34fa36648e6dca441ab3162a0fd81c29c419e6b7e316a1db0e9f"
+    },
+    {
+      "idx": 52,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Oh uncle Glad, happy to see you here again!\"</span>",
+      "sha256": "7b84e16751dcee2db20a400927c58458136928480b0117819cb05ba3db1705bc"
+    },
+    {
+      "idx": 53,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"And I'm happy to see you!\"</span>",
+      "sha256": "26718845e537045517df7e660a645675f9fa2b5d6fb011915c17bad389f357be"
+    },
+    {
+      "idx": 54,
+      "kind": "paragraph",
+      "content": "Gladias noticed that Febric had been watching the screen. A game of Helisport was actively broadcasting.",
+      "sha256": "d78c3240a9bedda3116c47a96b6c7d690ad1f79cd7824b188f1cd6305a183ab8"
+    },
+    {
+      "idx": 55,
+      "kind": "paragraph",
+      "content": "Gladias let himself watch the action for a minute. The screen was following the lead player wearing a yellow shirt chasing a redball.",
+      "sha256": "4c6122363e3d7ad8a8e715ff0748602ca40d08f8c7699de3f2b992499e09f327"
+    },
+    {
+      "idx": 56,
+      "kind": "paragraph",
+      "content": "Suddenly, out of nowhere, a player from the other team, wearing a purple shirt, whacked him off to the side. The player in the yellow shirt tumbled, and then automatically regained his bearings about five meters further down.",
+      "sha256": "60f5aa08a24be676102d8c825bc723c7ea28c769058b412904f93b6755408bea"
+    },
+    {
+      "idx": 57,
+      "kind": "paragraph",
+      "content": "The screen shifted view to the player wearing the purple shirt. He caught a blueball in midair. Two other players wearing yellow shirts started flying towards him. Before they could get to him, he threw the blueball toward a teammate. That teammate successfully caught it, and began flying forward.",
+      "sha256": "54d200867989dbe8a1f535bc86ef6d58658d2fd4ee5d0fbb0c83e43db2b94ad0"
+    },
+    {
+      "idx": 58,
+      "kind": "paragraph",
+      "content": "The screen shifted view toward ten yellow standing pins arranged in a triangle on a circular board mounted on a pole high above the ground. The player wearing the purple shirt holding the blueball came into view. A player wearing a yellow shirt zoomed into position between him and the pins.",
+      "sha256": "b562f569bdff5a0155f92ad80bd72f9c7a91141eb113c14736338dd345261bcc"
+    },
+    {
+      "idx": 59,
+      "kind": "paragraph",
+      "content": "The player wearing the purple shirt suddenly threw the blueball up high into the air, just as a different player wearing a yellow shirt crashed into him.",
+      "sha256": "6d2f6aed93dcdf87bdda762e6f14e6bbc30f96e8962c7c277a9f29b602624c29"
+    },
+    {
+      "idx": 60,
+      "kind": "paragraph",
+      "content": "The blueball passed about five meters over the player wearing the yellow shirt protecting the pins, and then landed on the board. It knocked three of the pins down.",
+      "sha256": "ab76aeeeba89727bd048c8ae020ebe17a961c6e0dff3f8e95437cca1f4cd74b8"
+    },
+    {
+      "idx": 61,
+      "kind": "paragraph",
+      "content": "A scoreboard onscreen adjusted.",
+      "sha256": "bf69052eb853406bd7ca41d35ab1332741a31296ee753f9855877163c93454fa"
+    },
+    {
+      "idx": 62,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view\"><div style=\"font-size:150%\"></div>\n<table>\n    <thead>\n    <tr>\n      <th></th>\n      <th style=\"font-size:150%; color: yellow\">Yellow</th>\n      <th style=\"font-size:150%; color: #808\">Purple</th>\n    </tr>\n    </thead>\n    <tbody>\n    <tr>\n      <td style=\"font-size:150%; color: red\">Redball captures</td>\n      <td style=\"font-size:150%; color: red\">6</td>\n      <td style=\"font-size:150%; color: red\">11</td>\n    </tr>\n<tr>\n<td style=\"font-size:150%; color: #8f8\">Greenball player hits</td>\n<td style=\"font-size:150%; color: #8f8\">9</td>\n<td style=\"font-size:150%; color: #8f8\">7</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #88f\">Blueball pin knockdowns</td>\n<td style=\"font-size:150%; color: #88f\">31</td>\n<td style=\"font-size:150%; color: #88f\">23</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #fff\">Combined score</td>\n<td style=\"font-size:150%; color: #fff\">1674</td>\n<td style=\"font-size:150%; color: #fff\">1771</td>\n</tr>\n</tbody>\n</table></div>",
+      "sha256": "c5696237d139b6cc4c72bdcc69abc469e1cd60458fe12091021f0d5aa8f03e79",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "screen",
+        "device_evidence": {
+          "idx": 61,
+          "quote": "A scoreboard onscreen adjusted."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "",
+                "Yellow",
+                "Purple"
+              ]
+            ],
+            "rows": [
+              [
+                "Redball captures",
+                "6",
+                "11"
+              ],
+              [
+                "Greenball player hits",
+                "9",
+                "7"
+              ],
+              [
+                "Blueball pin knockdowns",
+                "31",
+                "23"
+              ],
+              [
+                "Combined score",
+                "1674",
+                "1771"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 63,
+      "kind": "paragraph",
+      "content": "Purple's blueball score had just increased from 20 to 23, and their combined score from 1540 to 1771 - enough to push them ahead of their opponents.",
+      "sha256": "e6c7b52acdd4408fec2d8f5a573336e5f02d1e6022800ea81c2ee180a53d4a5b"
+    },
+    {
+      "idx": 64,
+      "kind": "paragraph",
+      "content": "Suddenly, while the player who had just taken down those pins was celebrating, a greenball hit him in the back and splatted its paint over him.",
+      "sha256": "5e5ae5794e959ebdda31858b4a7d4595222c4f0e21ec41032947ac4e2ffbd1a0"
+    },
+    {
+      "idx": 65,
+      "kind": "paragraph",
+      "content": "The score adjusted again.",
+      "sha256": "2bfe29c0884fcf60bba6b8f544a52a8a179274d5c5af495ffd8834d5a58f4914"
+    },
+    {
+      "idx": 66,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view\"><div style=\"font-size:150%\"></div>\n<table>\n    <thead>\n    <tr>\n      <th></th>\n      <th style=\"font-size:150%; color: yellow\">Yellow</th>\n      <th style=\"font-size:150%; color: #808\">Purple</th>\n    </tr>\n    </thead>\n    <tbody>\n    <tr>\n      <td style=\"font-size:150%; color: red\">Redball captures</td>\n      <td style=\"font-size:150%; color: red\">6</td>\n      <td style=\"font-size:150%; color: red\">11</td>\n    </tr>\n<tr>\n<td style=\"font-size:150%; color: #8f8\">Greenball player hits</td>\n<td style=\"font-size:150%; color: #8f8\">10</td>\n<td style=\"font-size:150%; color: #8f8\">7</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #88f\">Blueball pin knockdowns</td>\n<td style=\"font-size:150%; color: #88f\">31</td>\n<td style=\"font-size:150%; color: #88f\">23</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #fff\">Combined score</td>\n<td style=\"font-size:150%; color: #fff\">1860</td>\n<td style=\"font-size:150%; color: #fff\">1771</td>\n</tr>\n</tbody>\n</table></div>",
+      "sha256": "48b953f225498873ace6ff4195055490a2da7e713036ad6dc8b68d11407a7c28",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": null,
+        "device_evidence": null,
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "",
+                "Yellow",
+                "Purple"
+              ]
+            ],
+            "rows": [
+              [
+                "Redball captures",
+                "6",
+                "11"
+              ],
+              [
+                "Greenball player hits",
+                "10",
+                "7"
+              ],
+              [
+                "Blueball pin knockdowns",
+                "31",
+                "23"
+              ],
+              [
+                "Combined score",
+                "1860",
+                "1771"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 67,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"You have to admit, the scoring system is really good now\"</span>, Febric exclaimed.",
+      "sha256": "ef72b99d19ff3770b7fd0307e83ab9994a1dcfb95e555fe4c0c671175b143fc2"
+    },
+    {
+      "idx": 68,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"I remember when I was much younger, they kept adjusting the ratios between what a redball gives you, versus a pin knockdown or a player hit. And they just couldn't get out of having a situation where the rational thing is to just focus all your attention on one.\"</span>",
+      "sha256": "c29a28d8a9630e2fc75c3a15a148e3d86ec06d801608b4dff7e8a582cc3b52ef"
+    },
+    {
+      "idx": 69,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Even when they got it right, within a year the strategies adjusted, and it became lopsided again.\"</span>",
+      "sha256": "2887ac566f292a9830df8f5dcf4f3050f087dbd0752f7b47de3d60f6599c3718"
+    },
+    {
+      "idx": 70,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"I think making the score multiplicative was the only way out. That way you pretty much have to care about all three of the point types.\"</span>",
+      "sha256": "c6a451c87e69264765826d0d329c688cb98218ef24822e6c98edb883b1a27e08"
+    },
+    {
+      "idx": 71,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Or try really hard to make sure your opponent can't get any of one type\"</span>, Gladias interjected.",
+      "sha256": "6901bc7fcd0ad34c4ad4928fe52c8e0aa66745da59db2402aff87b7a23c2037a"
+    },
+    {
+      "idx": 72,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Ah yeah that was the first thing a few people tried\"</span>, Febric replied. <span data-hue=\"80\">\"Holding onto redballs for more than thirty ticks had already been banned for ages, that had been a good cheat for whichever side was worse at redballs even back when the scores were additive. But what one team did try, is knock down a bunch of pins very early in the game, and then use most of their players to protect their pins for the rest of the game.\"</span>",
+      "sha256": "4bfabb1fa4bf646909c8cb3dc5ef7a50888546fe3135f8f56b0ed8f6f92c9c3e"
+    },
+    {
+      "idx": 73,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Turns out it doesn't actually work. People on copters can only pack together so tightly, no matter what you do, the other team always manages to sneak a few blueballs through. And then if you do pack tightly in one place around the pins, you're a sitting duck for the greenballs.\"</span>",
+      "sha256": "84ede468494c17c6283da5806e65839466cdd5ed731f236c82125213061896ca"
+    },
+    {
+      "idx": 74,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Are you thinking of playing?\"</span>, Gladias asked.",
+      "sha256": "9476bc1e21ae4c18ebc74c8e726da9b17b67e8c2d4fe036906538ff800936b0e"
+    },
+    {
+      "idx": 75,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"No, but I just had a bunch of conversations with Zven about this. The math is almost as fun as the actual game!\"</span>",
+      "sha256": "1aaa8e8c63554bcfa17d256ebf240b8f24c3526ec14858114d9eba3dae5c8890"
+    },
+    {
+      "idx": 76,
+      "kind": "paragraph",
+      "content": "Gladias and Febric both turned their attention to the food.",
+      "sha256": "5896f90b044fb2459465cb9e07f1015d54d25d82e10ea97b3793795e84a133ff"
+    },
+    {
+      "idx": 77,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"How's Lily doing by the way?\"</span>, Gladias asked.",
+      "sha256": "f2642eb0dbf4cb7edaec2d850cb8d8ad185737e6226893c5d9bf63df5414adf3"
+    },
+    {
+      "idx": 78,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"She actually started getting a little better over the last couple of months. She mentioned to me a few days ago that she got seventy on her latest civics test. She seems happier. And she's even more engaged playing that game on her hand device.\"</span>",
+      "sha256": "61d45b6518a5a38287ebfbf639eb1f76c27f8f543e0422e7177b6149481ade4e"
+    },
+    {
+      "idx": 79,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Do you know what game?\"</span>, Gladias asked.",
+      "sha256": "18619fdc31f590f1c6ef75a99b1c322caec39f235eae8a1857e85ec9a8900819"
+    },
+    {
+      "idx": 80,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"She doesn't show me either.\"</span>",
+      "sha256": "fb62bf7c42fe51afe23ab81063a7cd7cbc93631f744f5c6a6be9c03fdc3b7830"
+    },
+    {
+      "idx": 81,
+      "kind": "paragraph",
+      "content": "Gladias and Febric both returned to eating. A few minutes later, they were both finished.",
+      "sha256": "71a4c94ae88be42d5e873adb402e25a61e57e0e0c693d24286d47baebc0a26ff"
+    },
+    {
+      "idx": 82,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Did you remember to take out your zipcoins this time?\"</span>, Febric asked playfully.",
+      "sha256": "1ca564cd94c7cb796d0b2ced534fcb476d1151f3c996c171927913c4fe486943"
+    },
+    {
+      "idx": 83,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Hey, I may make lots of mistakes, but I don't make the same mistake twice\"</span>, Gladias snapped back.",
+      "sha256": "5e2ff9d28acb814e02cbfd36eaf229cb8a791071b590ca741cb43ceeb98eacb3"
+    },
+    {
+      "idx": 84,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"By the way, Febric, thanks for reminding me - I need to test my recovery procedure for my coins\"</span>, he whispered through his neck band.",
+      "sha256": "7dcc71070cae85bde1671cfa4af94304aa7b5c11163c53e9f1fe282ed284076e"
+    },
+    {
+      "idx": 85,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Want me to help you sign a test operation?\"</span>",
+      "sha256": "4a987bf423f3b43a21a55bc0f8b33485e321ad193d4dc6f19e12ecd829c9dd69"
+    },
+    {
+      "idx": 86,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Sure! What do you want the test to be?\"</span>",
+      "sha256": "d9f09e92584ecaec13d97e2b09dd6e49a7e7c98abdd82e370ae94a147ceb334f"
+    },
+    {
+      "idx": 87,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"I dunno, buy a Hydrafill bottle?\"</span>",
+      "sha256": "26bad1d13880f15071099fcd80f49122f04f0ffd40db6a5bd24c1c088d1803b1"
+    },
+    {
+      "idx": 88,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Buy a Hydrafill bottle? Straight out of a life savings wallet?\"</span>, Gladias asked incredulously. <span data-hue=\"93.33\">\"Those ads really have been getting to you too, haven't they?\"</span>",
+      "sha256": "9ee616250476f22ab9d716ac06f7806fa0a10414840e3ed7ee6a59a1f2007527"
+    },
+    {
+      "idx": 89,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Hey, you're the one who asked me!\"</span>",
+      "sha256": "e1a96c4e92c930ae3499bb2527d2b4830e302ae7ea8c4ebffe83c6607fb26b3f"
+    },
+    {
+      "idx": 90,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Okay fine ... let me start the operation.\"</span>",
+      "sha256": "7aa4220fda1ef00acd532cc0c3ead8d5fce77ae0aca9e2b405a60ed1c49f1ff5"
+    },
+    {
+      "idx": 91,
+      "kind": "paragraph",
+      "content": "Gladias began whispering into his neck band. Out of the corner of his eye, he saw Febric run off somewhere, though he was too busy to wonder where.",
+      "sha256": "408dedef7897a4e7c9356cb4808dc5cb72b2ace1f72fbdfc84c661f0ac01bcf7"
+    },
+    {
+      "idx": 92,
+      "kind": "paragraph",
+      "content": "A few ticks later, Febric's watch buzzed.",
+      "sha256": "f61495123642c5232e0b94af3e484fc36e67b75cb358350d2e1b70ff658cca07"
+    },
+    {
+      "idx": 93,
+      "kind": "screen",
+      "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th>From</th>\n      <th></th>\n      <th>Message</th>\n      <th>Time</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Gladias</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 93.33333333333333)\">[Wallet 0x8f62... social recovery mode transaction request]</span></td>\n      <td>65129</td>\n    </tr>\n    </tbody>\n</table></div>",
+      "sha256": "e34ae35b3a9592c267f9943d403bf55930fbbe14142bb1632df46f8f8a9d9a5f",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "watch",
+        "device_evidence": {
+          "idx": 92,
+          "quote": "A few ticks later, Febric's watch buzzed."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "From",
+                "",
+                "Message",
+                "Time"
+              ]
+            ],
+            "rows": [
+              [
+                "Gladias",
+                "→",
+                "[Wallet 0x8f62... social recovery mode transaction request]",
+                "65129"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 94,
+      "kind": "paragraph",
+      "content": "Febric opened up his hand device, and a more detailed view of the transaction appeared. He asked Emerald to search for the receiving address online. A few ticks later, Emerald replied with a confirmation that it was, in fact, the Hydrafill purchase address. He then checked the amount - 5.5 zipcoins. It seemed reasonable for a water bottle plus shipping, though the bulk of the cost was definitely the shipping. He checked the transaction data field. Yep, looked like an encoding of Gladias's home address, in the correct format according to the standard online shopping protocol.",
+      "sha256": "922d455ac0e19e232bfc6576e0adee10c731fea0775b11485b342301346c01d3"
+    },
+    {
+      "idx": 95,
+      "kind": "paragraph",
+      "content": "In the cryptographic network that processed these transactions, all of this data was, of course, encrypted.",
+      "sha256": "1756a5c5adb49d56d11245fd505418f5dba2af2c71bd4cdd6de7f85642d8e586"
+    },
+    {
+      "idx": 96,
+      "kind": "paragraph",
+      "content": "Febric clicked \"Confirm\".",
+      "sha256": "beb9e42a208ffa8f4b99652083cc8963ea4850e42ceb43fc85aba3c59d642a3d"
+    },
+    {
+      "idx": 97,
+      "kind": "paragraph",
+      "content": "Gladias's watch immediately buzzed.",
+      "sha256": "bc801af08a8ad29d1b8935dbf3301540f939efbea51f5e08e0936c48e63cc705"
+    },
+    {
+      "idx": 98,
+      "kind": "paragraph",
+      "content": "Less than a minute later, Gladias's watch buzzed again.",
+      "sha256": "4924b487faba815a55fce47f8fe2a0d8ea7f417aac3b65799cbe92fe2b906801"
+    },
+    {
+      "idx": 99,
+      "kind": "screen",
+      "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th>From</th>\n      <th></th>\n      <th>Message</th>\n      <th>Time</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Seila</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 253.33333333333334)\">Security question: what was the most unusual thing I did on the evening the kids came back from Vil and Daia's?</span></td>\n      <td>73105</td>\n    </tr>\n    </tbody>\n</table></div>",
+      "sha256": "413f7e070ccca759ac4ecfe72b3891029530fe8a79dc835668f0bad89e09b8a7",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "watch",
+        "device_evidence": {
+          "idx": 98,
+          "quote": "Less than a minute later, Gladias's watch buzzed again."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "From",
+                "",
+                "Message",
+                "Time"
+              ]
+            ],
+            "rows": [
+              [
+                "Seila",
+                "→",
+                "Security question: what was the most unusual thing I did on the evening the kids came back from Vil and Daia's?",
+                "73105"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 100,
+      "kind": "paragraph",
+      "content": "Gladias immediately whispered into his neck band a reply.",
+      "sha256": "bd3f6c45f9d836661a400498044eec86098cbb26906fa4e15b21e1ed175c701e"
+    },
+    {
+      "idx": 101,
+      "kind": "screen",
+      "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th>Message</th>\n      <th></th>\n      <th>To</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td><span style=\"color:oklch(0.7 0.15 93.33333333333333)\">You unplugged the screen in the restaurant when it was showing Lord Ephelion's speech.</span></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td style=\"width: 25%\"><center>Seila</center></td>\n    </tr>\n    </tbody>\n</table>\n<button disabled=\"\"> Send </button></div>",
+      "sha256": "933517504a162c20bd3605fff76cf67159c5c03b75d62d2e8b4a9b85881c10ca",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "watch",
+        "device_evidence": {
+          "idx": 98,
+          "quote": "Less than a minute later, Gladias's watch buzzed again."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "Message",
+                "",
+                "To"
+              ]
+            ],
+            "rows": [
+              [
+                "You unplugged the screen in the restaurant when it was showing Lord Ephelion's speech.",
+                "→",
+                "Seila"
+              ]
+            ]
+          },
+          {
+            "type": "button",
+            "label": "Send"
+          }
+        ]
+      }
+    },
+    {
+      "idx": 102,
+      "kind": "paragraph",
+      "content": "A few moments later, Gladias's watch buzzed again. Three signatures done, including his own. One to go. Either Mov or Pelow - or, of course, if he really had to, himself running to the vault and picking up his second key.",
+      "sha256": "cd539a0acd6b1f7886239bb122ba6fe0ac2cfe2f60d4a95b9cb7edc4eca2646b"
+    },
+    {
+      "idx": 103,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"I'm obviously not gonna ask who that was, or who else you need to confirm it\"</span>, Febric added. <span data-hue=\"80\">\"But good luck!\"</span>",
+      "sha256": "16422ed2ecb4aea9cbbacad30cc0cfbe04913ffdfde5e799fc2a96892de94aff"
+    },
+    {
+      "idx": 104,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 105,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Seila, I'm home!\"</span>",
+      "sha256": "eb5f889066b7c21260c34a05220193acf69be09205f44b48bd23e5229986946c"
+    },
+    {
+      "idx": 106,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Glad!\"</span>",
+      "sha256": "9d663811067b56b9866dc910c0d72d00f7a5d00b76a471b84808e8afc802c03a"
+    },
+    {
+      "idx": 107,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"So I have interesting news.\"</span>",
+      "sha256": "6859a8311f071cbca41cb54bde3090ef173c3377ce1dee9fb9274b401cc5a29d"
+    },
+    {
+      "idx": 108,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"What is it?\"</span>",
+      "sha256": "29cbcc3716e6175eadc17ca1cdc32ba691dd981c83fd8973e2e9d6fadeae4a29"
+    },
+    {
+      "idx": 109,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"There's some chance I'll be going to Dzego soon.\"</span>",
+      "sha256": "7905af22166b3ac53891b89b8f84be869ad66801804b66541f49a4e83ae8c5f7"
+    },
+    {
+      "idx": 110,
+      "kind": "paragraph",
+      "content": "Seila stared.",
+      "sha256": "db10f5a50681846f4479da25a8708709c964b2388ea3bdf57e36fd331271128d"
+    },
+    {
+      "idx": 111,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Why?\"</span>",
+      "sha256": "9416073ce2fa85b2d9a8f66ff17438e47a2e32a33f6ce87d5ac0904b5a1d61dc"
+    },
+    {
+      "idx": 112,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I talked to Mov about this. He thinks that Veridians, especially Keepers, the Order, the institutions generally, have a lot to learn from what's going on over there.\"</span>",
+      "sha256": "23187e5e84eb61b9af2d24eb9f887e86e9783f9333de33b33ffc4985e282292d"
+    },
+    {
+      "idx": 113,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"I'm not sure about this ... it's a difficult time. You're not really the best person to make good use of a Dzego trip. And the Keepers would benefit from having a strong hand guide them these next few months.\"</span>",
+      "sha256": "ad01a80c6203e21feae242f3b093eb91d849a00177e26439a3c16e13d50933e9"
+    },
+    {
+      "idx": 114,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Arctic stuff is really much more of a military and parliament responsibility, maybe Graph Funding too. And ... maybe I can make good use of a trip if you introduce me to Zei?\"</span>",
+      "sha256": "859108977708fc2e02f556e6c950ee344cd4246d075e419ebdfc2a3e5812cc68"
+    },
+    {
+      "idx": 115,
+      "kind": "paragraph",
+      "content": "Seila retreated into her thoughts for a few moments.",
+      "sha256": "97bd4c0c713a6f5bc8bcb0d5c1c87571014b1f8811cdb7f525c311baaeab33f7"
+    },
+    {
+      "idx": 116,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"If Mov thinks it's a good idea, then fine. But please do your homework first. Find someone, anyone, in Graph Funding or in parliament to talk to, so you get some idea of whether this trip will be useful, and if you do go, how to make it as useful as possible.\"</span>",
+      "sha256": "d8f884f4141d3d803f3e468d645ce2d23feb91a9a0d682746fb49b5f1b0c68a8"
+    },
+    {
+      "idx": 117,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"But really, think hard about this.\"</span>",
+      "sha256": "b65e6475c609de112e7e28c417000f937bbd4a1e4af8d9907ce5bd325187fe6e"
+    },
+    {
+      "idx": 118,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"If you go, then yes, of course I'll introduce you to Zei. And Bai too.\"</span>",
+      "sha256": "85a899d37f9856746ed90b011f1143226ad48e30bbe6f8571bac0b4b23cbb29f"
+    }
+  ]
+}

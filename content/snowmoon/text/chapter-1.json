@@ -1,0 +1,1258 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 1,
+  "source_url": "https://vitalik.eth.limo/snowmoon/html/chapter-1.html",
+  "source_sha256": "8bb6ec4c39d8b3c50e00a7cb195b50ac185635c6bcfaf65079275adc614c01bc",
+  "fetched_at": "2026-10-02",
+  "license": "GPL-3.0",
+  "blocks": [
+    {
+      "idx": 0,
+      "kind": "heading",
+      "content": "# Chapter 1",
+      "sha256": "ead29642732d3e89a6e19f945510260754c140f8e21a5b30699a37239dca9bb5"
+    },
+    {
+      "idx": 1,
+      "kind": "dateline",
+      "content": "**Meldan, Veridia** · 3724 Snowmoon 3",
+      "sha256": "6f1d4eedb154f0fddcdcd02fc33a07eefc3427e45a21b7700b4479214041fd87"
+    },
+    {
+      "idx": 2,
+      "kind": "paragraph",
+      "content": "Gladias was walking along a foot path, with tall trees towering on both sides. A series of houses made out of large stone bricks lay behind the trees on both sides, medieval in style but without any of the junk, dust on the ground, or other imperfections that a real medieval structure would have had a thousand years earlier. A few of the houses featured small signs advertising clothing, flowers or food available for sale. Each house seemed to meld seamlessly into the scattered leaves, plants and trees that surrounded it.",
+      "sha256": "7eb31819416a66f3d01db4b83ce7763dcbf33a3a691b13380d283b54736a0289"
+    },
+    {
+      "idx": 3,
+      "kind": "paragraph",
+      "content": "He looked around, breathed in and briefly stopped to enjoy the nature, dense enough and quiet enough that he almost forgot that he was in the middle of the Kalimar district of Meldan, the capital city of Veridia.",
+      "sha256": "971635a695d9ea35c462a796e7907cfadd20ce5e3fa315d54a6484794bd864c6"
+    },
+    {
+      "idx": 4,
+      "kind": "paragraph",
+      "content": "Suddenly, a small drone flew over his head. Gladias instinctively checked his watch. Almost immediately, a green checkmark lit up. Even before he could fully process what had happened, his watch had engaged in a zero-knowledge authentication protocol, and received a cryptographic attestation verifying that the drone was a toy, and its navigation algorithm had a safety override that would prevent it from coming within five decimeters of a human without permission. His watch had learned that the drone was not a threat - and nothing else.",
+      "sha256": "20996d01077b101fdf3fc639060a62255dfcf752a570c61c004e20242c9669d8"
+    },
+    {
+      "idx": 5,
+      "kind": "paragraph",
+      "content": "The drone flew off, and continued above a sidewalk branching off to the left. For a moment, Gladias could briefly see its shape: a small ball, with feather-like rotors on three sides. And the very next moment, a young boy jumped up, and grabbed it with his hand while it was still in the sky.",
+      "sha256": "afb1d67c7f9cd355895d6eac9a192cf85166337e78a04880f1adb993e8363caf"
+    },
+    {
+      "idx": 6,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Five points for me!\"</span>, the boy shouted excitedly.",
+      "sha256": "d49f3da43c6944313e1d24893800374dbd3140e8db0fc1ff1497333c7eceef48"
+    },
+    {
+      "idx": 7,
+      "kind": "paragraph",
+      "content": "Gladias let his attention wander back to peacefully observing his surroundings. The boy who had just caught the ball was part of a family with four children, the younger two each riding a tricycle.",
+      "sha256": "546270b321624464db5847d1dfa46700f8af9672c6d0173dd1627065c26c6f20"
+    },
+    {
+      "idx": 8,
+      "kind": "paragraph",
+      "content": "On another sidewalk branching off to the right, Gladias could see a grandmother with a small child. As they approached a bench and seemed to stop, a couple that was already sitting on the bench pre-emptively stood up to offer their seats. The grandmother thanked them, and sat down with her child.",
+      "sha256": "3b70241d173c514492fdffdeb37d9afe8e7b1b28759c559137dab7af9705bac2"
+    },
+    {
+      "idx": 9,
+      "kind": "paragraph",
+      "content": "And playing into Gladias's ear this whole time, there was an audio program from Emerald, the local AI running from Gladias's hand device, explaining the nuances of airborne virus transmission and how to calculate how much a given change to a building's ventilation or density might affect total city-wide cases in an epidemic.",
+      "sha256": "7876e8044e8a3f2789a83bc254d38b30738726df58f214988e81022f7b489af4"
+    },
+    {
+      "idx": 10,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 11,
+      "kind": "paragraph",
+      "content": "As Gladias walked forward, the houses soon gave way to thick green shrubbery. As soon as the shrubbery cleared, the foot path started gently curving upward. Smoothly, and suddenly, the path transitioned into a sky bridge above a busy road, with many cars and autobuses and a few autonomous delivery vehicles passing beneath him. A chilly breeze blew into his face.",
+      "sha256": "d3027d10f1d932d572a4e956fbd977176335b8cb7c6230786ce7336dfbeed7ed"
+    },
+    {
+      "idx": 12,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Pause, I want to enjoy the view\"</span>, Gladias said to Emerald, out of habit whispering the sentence so softly that only his throat muscles moved and no sound at all left his lips. The silken cloth band tightly covering Gladias's neck picked it up perfectly.",
+      "sha256": "e2d489e74d1d82bb3e3ea8e6d4aae3ab394674490fc5558910cdd7a8f63ccb95"
+    },
+    {
+      "idx": 13,
+      "kind": "paragraph",
+      "content": "He stopped in the middle of the sky bridge, turned to his left side, and looked forward. The busy road beneath him continued for about two kilometers, and then turned rightward. Beyond that point, he could see a mountain covered with trees. A few apartment buildings about fifteen storeys tall, decorated and shaped like over-sized medieval castle towers though with far more windows on the sides, poked up high above the trees in several places on the lower half of the mountain slope.",
+      "sha256": "4faa186687487d18eaa2864f3bb9f9d519244a7362d449f462a2cd604c6dbf58"
+    },
+    {
+      "idx": 14,
+      "kind": "paragraph",
+      "content": "Gladias turned his face left once again, and took one last look at the natural world. The nature in Veridia is beautiful, he thought. He then turned his face to the right, where the road continued past the sky bridge with a much higher density of buildings. Today, his job was to offer opinions on the human world.",
+      "sha256": "add86ac198b723b347328421e1c193c503bba9cfeaf3bf381f217b0e12cd322c"
+    },
+    {
+      "idx": 15,
+      "kind": "paragraph",
+      "content": "Gladias began to walk forward once more, and stepped off the sky bridge. On the left side, there was now a row of five-storey apartment buildings, interspersed with walking paths and small shops selling various kinds of goods. Both the walking paths and the sidewalk were protected from the sun by tall green trees.",
+      "sha256": "886abc4c445ca4548b55409d45b407b9dbbc4253bbc99f2c8b93ba81384e95bf"
+    },
+    {
+      "idx": 16,
+      "kind": "paragraph",
+      "content": "On the right side, there was now a tall soundproof barrier, painted with green and blue colors, barely visible behind another even thicker row of tall trees.",
+      "sha256": "4cb22946fddb11430b13bd7ff3e01562bb6c2152de84952c80a3dd66560c044a"
+    },
+    {
+      "idx": 17,
+      "kind": "paragraph",
+      "content": "Shortly after he began walking beside the soundproof barrier, his hand device buzzed.",
+      "sha256": "9af0a06ef23f22064496784f0dabc581e7d09cf95352a338935abb942273f452"
+    },
+    {
+      "idx": 18,
+      "kind": "screen",
+      "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th>Vote on: Badra St #1103</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>Emerald AI summary: Five-storey apartment building. Blue-grey colored.</td>\n    </tr>\n    <tr>\n      <td>\n<input type=\"range\" style=\"width:100%\" disabled=\"\">\n<div style=\"display: flex; justify-content: space-between; width:100%\">\n    <span>-5</span>\n    <span>0</span>\n    <span>5</span>\n</div>\n</td>\n</tr><tr><td>\n<button disabled=\"\"> Select </button>\n</td></tr></tbody>\n</table></div>",
+      "sha256": "5c955dba7ecebd6a676c4dd26bf505ecd3831ece2e5059b6f258a7ccebed1e82",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "hand_device",
+        "device_evidence": {
+          "idx": 17,
+          "quote": "Shortly after he began walking beside the soundproof barrier, his hand device buzzed."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "Vote on: Badra St #1103"
+              ]
+            ],
+            "rows": [
+              [
+                "Emerald AI summary: Five-storey apartment building. Blue-grey colored."
+              ],
+              [
+                {
+                  "text": "",
+                  "controls": [
+                    {
+                      "type": "slider",
+                      "labels": [
+                        "-5",
+                        "0",
+                        "5"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "text": "",
+                  "controls": [
+                    {
+                      "type": "button",
+                      "label": "Select"
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 19,
+      "kind": "paragraph",
+      "content": "Gladias immediately knew what he was being asked to do. As a citizen of Veridia, he had been randomly selected by cryptographic sortition to vote on how much he liked the building.",
+      "sha256": "d95a7b6af8cfa106969221f6f0b7e6369968a3e3f8d34a9d9e1f8d0f6c44cf0b"
+    },
+    {
+      "idx": 20,
+      "kind": "paragraph",
+      "content": "The goal of the voting, Gladias remembered from the Veridian civics lessons of his youth, was to determine the public aesthetics tax - a major component of the composite land tax - that each building would have to pay. Developers paid a lot of attention to this. In Veridia, making buildings that the public found appealing was not just a chance to show off their craft - it was profitable.",
+      "sha256": "b94bf9e54302a2c84f6397c4d30e7501f8c6d13248368a9a091fd0b2b3156360"
+    },
+    {
+      "idx": 21,
+      "kind": "paragraph",
+      "content": "Gladias looked at the building, the blue-grey colored Badra St #1103. The structure seemed in-character, not too different from the other buildings on the same street. The style was modern, but tasteful, nothing like the soulless rectangular concrete buildings that he was accustomed to seeing in pictures of places like Freetown. It had footpaths on both sides, and both footpaths were covered by trees - just like the other buildings nearby.",
+      "sha256": "fe9cf035597bff5a6b9c39fa8afef9128146d88dea5d66829a370e85cd71613e"
+    },
+    {
+      "idx": 22,
+      "kind": "paragraph",
+      "content": "This was hard, Gladias realized. To get some inspiration, he waved his hand device, and took a look at the land tax rates that some of the *other* nearby buildings were paying. First, the building that he was supposed to vote on.",
+      "sha256": "9ddbe941919e08590a9474149d1f440ab830b499a2e91adbd54e81a0b7869e8e"
+    },
+    {
+      "idx": 23,
+      "kind": "screen",
+      "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th colspan=\"2\">Badra St #1103</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>Base land tax:</td>\n      <td>1.00%</td>\n    </tr>\n    <tr>\n      <td>Aesthetics tax:</td>\n      <td>0.18%</td>\n    </tr>\n    <tr>\n      <td>Other rubric taxes:</td>\n      <td>0.33%</td>\n    </tr>\n    <tr>\n      <td>Total land tax:</td>\n      <td>1.51%</td>\n    </tr>\n  </tbody>\n</table></div>",
+      "sha256": "ee16bc66a0884ba43de1f0773d6b3231c221cdac5c00920986328c52c506a73e",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "hand_device",
+        "device_evidence": {
+          "idx": 22,
+          "quote": "To get some inspiration, he waved his hand device, and took a look at the land tax rates that some of the *other* nearby buildings were paying."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "Badra St #1103"
+              ]
+            ],
+            "rows": [
+              [
+                "Base land tax:",
+                "1.00%"
+              ],
+              [
+                "Aesthetics tax:",
+                "0.18%"
+              ],
+              [
+                "Other rubric taxes:",
+                "0.33%"
+              ],
+              [
+                "Total land tax:",
+                "1.51%"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 24,
+      "kind": "paragraph",
+      "content": "He then turned to his left, and zoomed his hand device in to point at the first few genuinely different buildings he could find: one building made with an architectural style mixing wood and stone, another with a garden on the roof, and a third, smaller but more luxurious looking, that was shaped like an octahedron, and had a beautifully arranged square garden along the perimeter of the territory with a maple tree brimming with red leaves at each corner. All three paid aesthetics taxes significantly lower than Badra St #1103, and one was even slightly negative.",
+      "sha256": "3c02582cf98636d1011e30cb1e06b6bd1ed9ee6ec44b0ecec0abae97aa1a477f"
+    },
+    {
+      "idx": 25,
+      "kind": "paragraph",
+      "content": "He then zoomed in to another building that he could barely make out in the distance. At this distance, the trees thickly lining the streets cleverly covered it up, but his hand device easily locked on to it and downloaded both a close-up image and the tax percentages.",
+      "sha256": "5678a3f9c1d105a92a3f9e0ecda98cca73af1492f628710c3dde47d08fe8c724"
+    },
+    {
+      "idx": 26,
+      "kind": "paragraph",
+      "content": "The building itself was a corporate headquarters for an aviation company. The company had had the bright idea to make their office look like an aeroplane. It was impressive architecture, he thought, but he would certainly demand some compensation if he had to walk by it every morning.",
+      "sha256": "d7fc289ef721321db8808ae2c31ce067929d39257403edc724f7505fdb849a9d"
+    },
+    {
+      "idx": 27,
+      "kind": "paragraph",
+      "content": "He checked its taxes.",
+      "sha256": "160815f163208ae8748d3e06fa5a0cad1124c0264b2c7dc8a3a24d276062a80d"
+    },
+    {
+      "idx": 28,
+      "kind": "screen",
+      "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th colspan=\"2\">Clearhill Ave #980</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>Base land tax:</td>\n      <td>1.00%</td>\n    </tr>\n    <tr>\n      <td>Aesthetics tax:</td>\n      <td>0.59%</td>\n    </tr>\n    <tr>\n      <td>Other rubric taxes:</td>\n      <td>0.30%</td>\n    </tr>\n    <tr>\n      <td>Total land tax:</td>\n      <td>1.89%</td>\n    </tr>\n  </tbody>\n</table></div>",
+      "sha256": "e8e9c7c7896281332c208c4b55666665f59fac8ea4ab609c9fc4542c8756e51a",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "hand_device",
+        "device_evidence": {
+          "idx": 25,
+          "quote": "At this distance, the trees thickly lining the streets cleverly covered it up, but his hand device easily locked on to it and downloaded both a close-up image and the tax percentages."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "Clearhill Ave #980"
+              ]
+            ],
+            "rows": [
+              [
+                "Base land tax:",
+                "1.00%"
+              ],
+              [
+                "Aesthetics tax:",
+                "0.59%"
+              ],
+              [
+                "Other rubric taxes:",
+                "0.30%"
+              ],
+              [
+                "Total land tax:",
+                "1.89%"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 29,
+      "kind": "paragraph",
+      "content": "Well deserved, Gladias thought. Though he was glad that Veridia's institutions let people with tastes that were so different from his express themselves, even if they had to pay for the privilege.",
+      "sha256": "d369168cb5e0e34b4130abd9f2dc9b037744cdd2f9f92aa72e29bb4cb0894b59"
+    },
+    {
+      "idx": 30,
+      "kind": "paragraph",
+      "content": "Gladias's mind snapped back to his task. He was voting on the blue and grey building right in front of him. He took a look at the interface again.",
+      "sha256": "cbb009e399fcc26babe3803d2aacfe7034f077b3d7d4130f96f1063f41663deb"
+    },
+    {
+      "idx": 31,
+      "kind": "screen",
+      "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th>Vote on: Badra St #1103</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>Emerald AI summary: Five-storey apartment building. Blue-grey colored.</td>\n    </tr>\n    <tr>\n      <td>\n<input type=\"range\" style=\"width:100%\" disabled=\"\">\n<div style=\"display: flex; justify-content: space-between; width:100%\">\n    <span>-5</span>\n    <span>0</span>\n    <span>5</span>\n</div>\n</td>\n</tr><tr><td>\n<button disabled=\"\"> Select </button>\n</td></tr></tbody>\n</table></div>",
+      "sha256": "5c955dba7ecebd6a676c4dd26bf505ecd3831ece2e5059b6f258a7ccebed1e82",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "hand_device",
+        "device_evidence": {
+          "idx": 25,
+          "quote": "At this distance, the trees thickly lining the streets cleverly covered it up, but his hand device easily locked on to it and downloaded both a close-up image and the tax percentages."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "Vote on: Badra St #1103"
+              ]
+            ],
+            "rows": [
+              [
+                "Emerald AI summary: Five-storey apartment building. Blue-grey colored."
+              ],
+              [
+                {
+                  "text": "",
+                  "controls": [
+                    {
+                      "type": "slider",
+                      "labels": [
+                        "-5",
+                        "0",
+                        "5"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "text": "",
+                  "controls": [
+                    {
+                      "type": "button",
+                      "label": "Select"
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 32,
+      "kind": "paragraph",
+      "content": "This was quadratic voting, he remembered. All his votes would be automatically shifted, stretched or squeezed so that the total average of the votes becomes zero, and the average of the squares of the votes becomes one. So there was no point in voting up on everything, down on everything, or overly extreme on everything. It was best, *mathematically provably best*, to vote not just the *direction* you felt right, but also with the *strength* you felt right - not more, not less.",
+      "sha256": "68a76a6c578da3f45f09a58c963a6ec40af87161092f4d984c77a3937677920a"
+    },
+    {
+      "idx": 33,
+      "kind": "paragraph",
+      "content": "Gladias's mind struggled. The aesthetics taxes given to each building seemed ... already fair? Maybe the aeroplane building was perhaps being treated a little *too* harshly. Allowing such a building to stand is not just a concession to people's freedom to do their own thing on their own land, it also brought genuine variety to Meldan. Maybe it's okay to have in what was already a corporate district.",
+      "sha256": "6b888e44fea8fed990ed94becd806f75283a60496db1678e4370044498f61a22"
+    },
+    {
+      "idx": 34,
+      "kind": "paragraph",
+      "content": "Then he reminded himself that he was not voting on the aeroplane building, he was voting on Badra St #1103.",
+      "sha256": "701abe95e96e2b559135fb789d7b036b60b3d5321afc5bc467f900cbe18157a5"
+    },
+    {
+      "idx": 35,
+      "kind": "paragraph",
+      "content": "Right, he thought. What decision to make? Support or oppose?",
+      "sha256": "83a3a8283093e377ecf9af7cd92a3a3e6198282c75fb1879e98966f4e315a03e"
+    },
+    {
+      "idx": 36,
+      "kind": "paragraph",
+      "content": "After thinking for a moment, he finally decided by raw instinct, and pushed the slider only a slight amount toward the right.",
+      "sha256": "b44c257e228227c73c7daba2daec160779c315413cca8e2181a23708fc2682d4"
+    },
+    {
+      "idx": 37,
+      "kind": "paragraph",
+      "content": "He hit \"Select\".",
+      "sha256": "e3a7c3869a07259d0ecd20f1e750dcef73853253d9e0f6b3534499e36bfb7f0d"
+    },
+    {
+      "idx": 38,
+      "kind": "paragraph",
+      "content": "That was just a warmup, he thought - a random fluke that he had been assigned an aesthetics vote as a Veridian citizen right before one of his more consequential votes as an Acolyte in the Order of Steering. That vote had been hard. The vote that he was about to do would be far more challenging - and there, the system would be keeping score.",
+      "sha256": "48fb4d3cd2fb482d7cb80b32e55efc4c995abf00c645ec4349e9380e8997f356"
+    },
+    {
+      "idx": 39,
+      "kind": "paragraph",
+      "content": "He continued walking, and after a minute he arrived at an opening in the soundproof barrier: the entrance to the concert that he was attending.",
+      "sha256": "063ebc1fe49332309518c2306126fe13b603dc27b68681dd6120375d99f33a6a"
+    },
+    {
+      "idx": 40,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 41,
+      "kind": "paragraph",
+      "content": "Gladias held his hand device near a circle with a glowing green outline on the entrance gate. He waited briefly as his hand device produced a cryptographic proof, and then a machine embedded in the entrance gate verified it.",
+      "sha256": "d5b7bbe8c2360392f3f142b85ac44213929763563777a04b9e23b3fc28ec5293"
+    },
+    {
+      "idx": 42,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Verified, welcome\"</span>, the machine said.",
+      "sha256": "c8eaba50b8f33230c1d1c2ba3fc6007fa4cf92ee456efc98ba526c4ddba19807"
+    },
+    {
+      "idx": 43,
+      "kind": "paragraph",
+      "content": "The gate learned that someone holding a valid and unused credential had arrived - and nothing else.",
+      "sha256": "52489db4ca58583f75152a7a1ed38ee6e23e082b36e0b45c3d69da2fa180f5b5"
+    },
+    {
+      "idx": 44,
+      "kind": "paragraph",
+      "content": "Gladias passed through the gate, and headed toward the main concert area.",
+      "sha256": "01acc6e8fbee83b0e6d59c72d2475742a100decc2a85e1e25a27731354e7bcab"
+    },
+    {
+      "idx": 45,
+      "kind": "paragraph",
+      "content": "He could see a few of the attendees wearing the same signature Veridian Privacy Robe that he was wearing. This was a loose-fitting dark purple dress that covered the full body from the hood covering the wearer's head down to the ankles. Below the ankles, privacy robe wearers all wore shoes of the same dark purple color.",
+      "sha256": "2d8bd1226a6e134b3778459b17f804a2f939492bebd310754e7e82a2ad6606bc"
+    },
+    {
+      "idx": 46,
+      "kind": "paragraph",
+      "content": "The other attendees were mostly wearing simple shirts, either plain colored or featuring slogans of their favorite bands.",
+      "sha256": "45c761498b23a034720753ed4c6faf3e7fba13ba5fbd039513efd8e46c0639f3"
+    },
+    {
+      "idx": 47,
+      "kind": "paragraph",
+      "content": "Some were moving forward with clear intent and efficiency, just like Gladias. Others were dancing. Others were chatting with each other. And still others were walking forward calmly, simply trying to passively enjoy the show.",
+      "sha256": "0db195b067e7fcf86e61b442dcc51c31d084c16cb8b8f382b19030b125d9e410"
+    },
+    {
+      "idx": 48,
+      "kind": "paragraph",
+      "content": "Gladias emerged into a large open field surrounded by a high soundproof barrier - the same barrier that Gladias saw before, but from the inside.",
+      "sha256": "ebb1455ecbb879f78ae59fbd084d6280b520d72c1176b72e850fa52397c89756"
+    },
+    {
+      "idx": 49,
+      "kind": "paragraph",
+      "content": "Gladias pushed through the crowd, as the noise became louder. He pulled on a strap on his privacy robe's front face cover, tightening a belt that separated the area below his nose from the area above his nose. The program on airborne virus transmission that he had been listening to only minutes earlier had primed him to take care to not get sick.",
+      "sha256": "8ed3fec21bdac11bd93f3808e383a92479710a2a848bf06acdb169780a361694"
+    },
+    {
+      "idx": 50,
+      "kind": "paragraph",
+      "content": "He soon got to the concert stage area, and was able to clearly hear the gnarly voice of Dreadknot's lead singer.",
+      "sha256": "84397d4380f389cb779d1f3c4443328ddbfada88a42d6d5d915e4c3f49cbe30c"
+    },
+    {
+      "idx": 51,
+      "kind": "quote",
+      "content": "> WE MEET THEM WITH OUR FURY IN OUR HEARTS\n>\n> AND FLAY THEIR FLESH WITH SHINING STEEL AND DARTS",
+      "sha256": "b1e9d61db5fd86437b396df75111fc59ce1e56e8fbd5005053a9d0e135cdd74c"
+    },
+    {
+      "idx": 52,
+      "kind": "paragraph",
+      "content": "Gladias took out his hand device again.",
+      "sha256": "4e09e50e16e147d52e3b295d9f4686449adc1efb961a516caa4e85622c35dd36"
+    },
+    {
+      "idx": 53,
+      "kind": "paragraph",
+      "content": "Most people attending the concert were there to enjoy the music and hang out with their friends. For Gladias, this was certainly not his *ideal* entertainment - his preferred music was of a much softer and gentler variety - but he did not *dislike* it either. More than anything else, he found the concert interesting in an anthropological way, exploring the interests and emotions of people he would otherwise have little interaction with.",
+      "sha256": "69e1e67964ed09f4c5b7ef66adf0f4486b6dd1808005a748743f3b14c99b950a"
+    },
+    {
+      "idx": 54,
+      "kind": "paragraph",
+      "content": "But ultimately, Gladias was at the concert for quite a different purpose. Gladias checked the rubric on his hand device:",
+      "sha256": "cd502d6ff46105a50daf305f0214b3dab40ee7cf4da81e73d57735021837395c"
+    },
+    {
+      "idx": 55,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view\"><h3>Basic summary</h3>\n        \n<table>\n  <thead>\n    <tr>\n      <th>Tier</th>\n      <th>Criteria</th>\n      <th>Tax rate</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>1</td>\n      <td><ul><li>Content strongly promotes two or more of the following: personal development, scientific and technical education, kindness toward others, healthy family relationships, good conflict resolution practices, civic duty</li><li>Does not meet any Tier 4-5 criteria</li></ul></td>      <td>0%</td>\n    </tr>\n    <tr>\n      <td>2</td>\n      <td><ul><li>Content weakly promotes one or more of the following: personal development, scientific and technical education, kindness toward others, healthy family relationships, good conflict resolution practices, civic duty</li><li>Does not meet any Tier 4-5 criteria</li></ul></td>      <td>10%</td>\n    </tr>\n    <tr>\n      <td>3</td>\n      <td><ul><li>Content does not meet any Tier 4-5 criteria</li></ul></td>      <td>20%</td>\n    </tr>\n    <tr>\n      <td>4</td>\n      <td><ul><li>Content weakly promotes one or more of the following: violence, lawless behavior, use of anti-recommended substances, gambling or risky investment, excessive display of wealth, poor conflict resolution practices, religious or ethnic hatred</li></ul></td>      <td>30%</td>\n    </tr>\n    <tr>\n      <td>5</td>\n      <td><ul><li>Content strongly promotes two or more of the following: violence, lawless behavior, use of anti-recommended substances, gambling or risky investment, excessive display of wealth, poor conflict resolution practices, religious or ethnic hatred</li></ul></td>      <td>40%</td>\n    </tr>\n  </tbody>\n</table>\n<div><b> Tax rates increased by 2.5x on proceeds from Veridian national Quadratic Funding and Graph Funding. </b></div><br>\n<div>\n<button disabled=\"\"> View relevant precedents </button>\n<button disabled=\"\"> Back </button>\n</div></div>",
+      "sha256": "e875f67c38a7fef6cdaf915629960c666718e21d278c42cf9318663104ae0719",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "hand_device",
+        "device_evidence": {
+          "idx": 54,
+          "quote": "Gladias checked the rubric on his hand device:"
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "heading",
+            "text": "Basic summary"
+          },
+          {
+            "type": "table",
+            "header": [
+              [
+                "Tier",
+                "Criteria",
+                "Tax rate"
+              ]
+            ],
+            "rows": [
+              [
+                "1",
+                "Content strongly promotes two or more of the following: personal development, scientific and technical education, kindness toward others, healthy family relationships, good conflict resolution practices, civic dutyDoes not meet any Tier 4-5 criteria",
+                "0%"
+              ],
+              [
+                "2",
+                "Content weakly promotes one or more of the following: personal development, scientific and technical education, kindness toward others, healthy family relationships, good conflict resolution practices, civic dutyDoes not meet any Tier 4-5 criteria",
+                "10%"
+              ],
+              [
+                "3",
+                "Content does not meet any Tier 4-5 criteria",
+                "20%"
+              ],
+              [
+                "4",
+                "Content weakly promotes one or more of the following: violence, lawless behavior, use of anti-recommended substances, gambling or risky investment, excessive display of wealth, poor conflict resolution practices, religious or ethnic hatred",
+                "30%"
+              ],
+              [
+                "5",
+                "Content strongly promotes two or more of the following: violence, lawless behavior, use of anti-recommended substances, gambling or risky investment, excessive display of wealth, poor conflict resolution practices, religious or ethnic hatred",
+                "40%"
+              ]
+            ]
+          },
+          {
+            "type": "text",
+            "text": "Tax rates increased by 2.5x on proceeds from Veridian national Quadratic Funding and Graph Funding."
+          },
+          {
+            "type": "button",
+            "label": "View relevant precedents"
+          },
+          {
+            "type": "button",
+            "label": "Back"
+          }
+        ]
+      }
+    },
+    {
+      "idx": 56,
+      "kind": "paragraph",
+      "content": "In Veridia, very few things are strictly *banned*. If Dreadknot wanted to, they could have all their songs repeatedly shouting \"Hail the Arctic Emperor\" and \"we hope all government officials get painfully murdered\" over and over again, and they would never be shut down or go to jail. But what Veridia *does* have is intricate systems of taxes and subsidies, maintained by a government-linked but decentralized collective called the Order of Steering.",
+      "sha256": "2d33e52332cccb994fba4f1041c68db64c46d9513d0a7dd0c08699d6a84f1bb0"
+    },
+    {
+      "idx": 57,
+      "kind": "paragraph",
+      "content": "One part of this collective, the Keepers, voted on tax rubrics that determined what the taxes are. Another part, the Sentinels, audited individual businesses, each audit assigning a particular business a position on a particular rubric. Gladias was an Acolyte: an Order member in training.",
+      "sha256": "fa8ae75033e68b70a733797c05ad9748303fcfafd7607010b0380070ff3dca96"
+    },
+    {
+      "idx": 58,
+      "kind": "paragraph",
+      "content": "And today, Gladias's task was to evaluate Dreadknot's position on the tax rubric for social impact of public performances.",
+      "sha256": "bbb95679e9ec5995a882e80a4e26bf9364fc01d97e968da6bb0e353f4cb0bdab"
+    },
+    {
+      "idx": 59,
+      "kind": "quote",
+      "content": "> THE SMOKE OF CITIES BURNING IN THE NIGHT\n>\n> WE LEAVE NO PLACE TO HIDE FOR ALL IN SIGHT",
+      "sha256": "ff270bd5253dc81567634c5d9011ae4e1619f9a2641fa4092a527c01b351048f"
+    },
+    {
+      "idx": 60,
+      "kind": "paragraph",
+      "content": "Gladias clicked \"View relevant precedents\", and scrolled through them. He pressed a side button. A small popup appeared on the top right: \"Emerald listening mode active\". He did not speak; instead, he simply let Emerald listen to Dreadknot sing. But even after five minutes of listening, only a few relevant precedents showed up.",
+      "sha256": "5b88751f7db1e196a660d65545cfc0986e0f57d0926043a4b20cc129b8f00b50"
+    },
+    {
+      "idx": 61,
+      "kind": "paragraph",
+      "content": "Gladias switched the mode to \"analysis\" and kept it listening for another five minutes. Emerald listed some conclusions that sounded reasonable, but Gladias could tell it was unreliable. There was just not enough source data on this kind of music for the Emerald AI to give good answers, and ultimately, it was Gladias's job to figure out when to defer to Emerald and when to let his own instinct have more of a say. Here, instinct it was.",
+      "sha256": "e9d41dccb702947d6440711a0417921ab7e25610c01688f8c6c34b571286a941"
+    },
+    {
+      "idx": 62,
+      "kind": "paragraph",
+      "content": "Well, the song was definitely violent.",
+      "sha256": "a3084658b905114eaafc55bb94b928baafea108f56f97f047cb881926c4adace"
+    },
+    {
+      "idx": 63,
+      "kind": "paragraph",
+      "content": "But on the other hand, over a century of Veridian civics lore made a distinction between *advocating* violence, and merely *showcasing* it for entertainment value. Gladias could see and hear the audience dancing, cheering and enjoying the music. They seemed to be having fun, not rising up in hatred against anyone.",
+      "sha256": "e83abc56afe81ef11dbfbff406900e698bf2fd0b10339d4545cddbcfe0adfa48"
+    },
+    {
+      "idx": 64,
+      "kind": "paragraph",
+      "content": "But on the *other* other hand, Gladias knew that Sentinels in recent times paid less attention to that distinction than before, and seemed to value a softer and gentler society almost as an end in itself.",
+      "sha256": "edd06169dc492ac29bbfb4f77aa9988aa6d2c1cd5690348760d471f817d18e69"
+    },
+    {
+      "idx": 65,
+      "kind": "paragraph",
+      "content": "Gladias was not quite sure if this was what the Keepers who created that rubric intended, or if it was the right call for society. In a few months, he would be a Sentinel in full standing, and would have more leeway to decide. But for now, his freedom to decide was limited: the system was keeping score.",
+      "sha256": "9995f19284095a4d1241699179aac93d9015d11416ba3cb21c6758cd1567c89f"
+    },
+    {
+      "idx": 66,
+      "kind": "paragraph",
+      "content": "Gladias looked down at his hand device.",
+      "sha256": "18a72233f9d4d2d79eea5c35804cdc1f8b3d889693258d27966f2d59a3ce0739"
+    },
+    {
+      "idx": 67,
+      "kind": "figure",
+      "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"214\" viewBox=\"0 0 400 214\">\n<rect width=\"400\" height=\"214\" fill=\"#348\"></rect>\n<text x=\"200\" y=\"18\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"13\" font-weight=\"bold\" text-anchor=\"middle\">Prediction score</text>\n<rect x=\"40\" y=\"30\" width=\"300\" height=\"156\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1\"></rect>\n<line x1=\"40\" y1=\"186\" x2=\"340\" y2=\"186\" stroke=\"#67e\" stroke-width=\"0.4\" opacity=\"0.45\"></line>\n<text x=\"35\" y=\"189\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"end\">50</text>\n<line x1=\"40\" y1=\"154.8\" x2=\"340\" y2=\"154.8\" stroke=\"#67e\" stroke-width=\"0.4\" opacity=\"0.45\"></line>\n<text x=\"35\" y=\"157.8\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"end\">60</text>\n<line x1=\"40\" y1=\"123.6\" x2=\"340\" y2=\"123.6\" stroke=\"#67e\" stroke-width=\"0.4\" opacity=\"0.45\"></line>\n<text x=\"35\" y=\"126.6\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"end\">70</text>\n<line x1=\"40\" y1=\"92.4\" x2=\"340\" y2=\"92.4\" stroke=\"#67e\" stroke-width=\"0.4\" opacity=\"0.45\"></line>\n<text x=\"35\" y=\"95.4\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"end\">80</text>\n<line x1=\"40\" y1=\"61.2\" x2=\"340\" y2=\"61.2\" stroke=\"#67e\" stroke-width=\"0.4\" opacity=\"0.45\"></line>\n<text x=\"35\" y=\"64.2\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"end\">90</text>\n<line x1=\"40\" y1=\"30\" x2=\"340\" y2=\"30\" stroke=\"#67e\" stroke-width=\"0.4\" opacity=\"0.45\"></line>\n<text x=\"35\" y=\"33\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"end\">100</text>\n<line x1=\"40\" y1=\"61.2\" x2=\"340\" y2=\"61.2\" stroke=\"#cef\" stroke-width=\"1\" stroke-dasharray=\"4 3\" opacity=\"0.9\"></line>\n<line x1=\"40.0\" y1=\"186\" x2=\"40.0\" y2=\"191\" stroke=\"#cef\" stroke-width=\"1\"></line>\n<text x=\"40.0\" y=\"202\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">3722</text>\n<line x1=\"167.1\" y1=\"186\" x2=\"167.1\" y2=\"191\" stroke=\"#cef\" stroke-width=\"1\"></line>\n<text x=\"167.1\" y=\"202\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">3723</text>\n<line x1=\"294.1\" y1=\"186\" x2=\"294.1\" y2=\"191\" stroke=\"#cef\" stroke-width=\"1\"></line>\n<text x=\"294.1\" y=\"202\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"9\" text-anchor=\"middle\">3724</text>\n<path d=\"M 40.0,95.3 L 67.4,95.3\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 67.4,95.3 L 67.4,97.6\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 67.4,97.6 L 98.8,97.6\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 98.8,97.6 L 98.8,89.6\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 98.8,89.6 L 122.4,89.6\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 122.4,89.6 L 122.4,78.4\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 122.4,78.4 L 123.4,78.4\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 123.4,78.4 L 123.4,73.6\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 123.4,73.6 L 132.9,73.6\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 132.9,73.6 L 132.9,71.9\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 132.9,71.9 L 138.7,71.9\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 138.7,71.9 L 138.7,67.2\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 138.7,67.2 L 146.7,67.2\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 146.7,67.2 L 146.7,70.7\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 146.7,70.7 L 148.2,70.7\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 148.2,70.7 L 148.2,72.7\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 148.2,72.7 L 150.4,72.7\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 150.4,72.7 L 150.4,71.4\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 150.4,71.4 L 156.7,71.4\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 156.7,71.4 L 156.7,62.2\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 156.7,62.2 L 159.3,62.2\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 159.3,62.2 L 159.3,66.2\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 159.3,66.2 L 165.7,66.2\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 165.7,66.2 L 165.7,69.1\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 165.7,69.1 L 166.0,69.1\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 166.0,69.1 L 166.0,71.0\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 166.0,71.0 L 166.9,71.0\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 166.9,71.0 L 166.9,73.0\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 166.9,73.0 L 180.0,73.0\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 180.0,73.0 L 180.0,69.1\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 180.0,69.1 L 185.8,69.1\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 185.8,69.1 L 185.8,61.5\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 185.8,61.5 L 193.4,61.5\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 193.4,61.5 L 193.4,61.2\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 193.4,61.2 L 193.4,50.4\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 193.4,50.4 L 207.5,50.4\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 207.5,50.4 L 207.5,55.0\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 207.5,55.0 L 212.2,55.0\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 212.2,55.0 L 212.2,54.6\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 212.2,54.6 L 212.8,54.6\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 212.8,54.6 L 212.8,55.4\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 212.8,55.4 L 229.0,55.4\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 229.0,55.4 L 229.0,55.2\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 229.0,55.2 L 238.4,55.2\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 238.4,55.2 L 238.4,50.8\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 238.4,50.8 L 249.8,50.8\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 249.8,50.8 L 249.8,52.9\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 249.8,52.9 L 260.0,52.9\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 260.0,52.9 L 260.0,55.7\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 260.0,55.7 L 266.1,55.7\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 266.1,55.7 L 266.1,61.2\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 266.1,61.2 L 266.1,64.3\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 266.1,64.3 L 267.8,64.3\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 267.8,64.3 L 267.8,61.2\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 267.8,61.2 L 267.8,57.1\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 267.8,57.1 L 297.4,57.1\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 297.4,57.1 L 297.4,50.7\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 297.4,50.7 L 298.0,50.7\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 298.0,50.7 L 298.0,61.2\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 298.0,61.2 L 298.0,66.8\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 298.0,66.8 L 302.2,66.8\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 302.2,66.8 L 302.2,66.8\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 302.2,66.8 L 308.6,66.8\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 308.6,66.8 L 308.6,61.2\" fill=\"none\" stroke=\"#67e\" stroke-width=\"1.6\"></path>\n<path d=\"M 308.6,61.2 L 308.6,51.5\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 308.6,51.5 L 317.3,51.5\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 317.3,51.5 L 317.3,50.3\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 317.3,50.3 L 322.2,50.3\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 322.2,50.3 L 322.2,55.9\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 322.2,55.9 L 331.2,55.9\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 331.2,55.9 L 331.2,53.0\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 331.2,53.0 L 340.0,53.0\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<path d=\"M 340.0,53.0 L 340.0,55.0\" fill=\"none\" stroke=\"#3fd\" stroke-width=\"1.6\"></path>\n<circle cx=\"340.0\" cy=\"55\" r=\"4\" fill=\"#cef\"></circle>\n<text x=\"349.0\" y=\"59\" fill=\"#cef\" font-family=\"sans-serif\" font-size=\"14\" font-weight=\"bold\">92</text>\n</svg></div>",
+      "sha256": "ca0ebf1927385642fbce911fa7bf3aa3325b386f0277db57dcca0fce8f359067",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "hand_device",
+        "device_evidence": {
+          "idx": 66,
+          "quote": "Gladias looked down at his hand device."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c1-b67.svg",
+            "viewBox": "0 0 400 214",
+            "width": "400",
+            "height": "214",
+            "labels": [
+              "Prediction score",
+              "50",
+              "60",
+              "70",
+              "80",
+              "90",
+              "100",
+              "3722",
+              "3723",
+              "3724",
+              "92"
+            ],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 68,
+      "kind": "paragraph",
+      "content": "Ten percent of the time, any audit made by Acolytes would be repeated by Sentinels. An Acolyte's score reflected how well that portion of their votes predicted the Sentinels' judgements. Today, Gladias's score was ninety two. If it stayed above ninety, he would get in and become a Sentinel - or, if he changed his mind, a Keeper. But if his score dropped by even three points, his career would be on hold for at least another year.",
+      "sha256": "ff76c1f113681602f8fdc0ddaa96395128e3d5379db65b3cd02438eb6fc1640f"
+    },
+    {
+      "idx": 69,
+      "kind": "paragraph",
+      "content": "The rest of the screen was filled with chat messages. There were nine Acolytes assigned to this audit, split into three groups of three. The other two members of his group could not agree. One was insisting on Tier 3 - a sort of neutral judgement - and the other was harsher, demanding Tier 4.",
+      "sha256": "c6aa17b3d855383aa0be7c0523043c519d8913dcbdfee67648bb3ea20b49a80a"
+    },
+    {
+      "idx": 70,
+      "kind": "paragraph",
+      "content": "Gladias sighed. The other two groups were probably thinking the same way. If we simplify and say every other Acolyte was a coin-flip between Tier 3 and Tier 4, then by the binomial formula, the probability the other six would also be evenly split was six choose three - 20 - divided by 64, or about thirty-one percent. Now if the other Acolytes' votes were *not* coin-flips ... eh, calculating that exactly is too hard, but it's definitely lower, let's just say twenty percent. A twenty or thirty percent chance his vote would significantly affect Dreadknot's tax rate for the next year. Oh great. Actual responsibility.",
+      "sha256": "1b43e58e1f1b20096c6e05a2d2a93cd4f7aad6a6f3f518e7e153a971c9bca848"
+    },
+    {
+      "idx": 71,
+      "kind": "paragraph",
+      "content": "Gladias looked around once more at the crowd. The first song finished, and he heard them cheering. He felt a burst of courage. He would take the ten percent chance of a hit to his prediction score. Without thinking further, he pressed Tier 3.",
+      "sha256": "54d7beb5f15ef784083cf562bc3b68c16c50f718f0130fcde1849745bd5951dd"
+    },
+    {
+      "idx": 72,
+      "kind": "paragraph",
+      "content": "For a brief moment, he felt proud of his decision.",
+      "sha256": "90d9addf6f0c89cdd22593b51ebcc8f38e3135c4d885af09f5512db70d8109e1"
+    },
+    {
+      "idx": 73,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"213.33\">\"HEY EVERYONE, IT'S AN ORDER MEMBER!\"</span>, someone behind him yelled.",
+      "sha256": "501187ab3fdd27cb786e8ba2333841beb24930d85c77ff99ab6b0ea438144e9b"
+    },
+    {
+      "idx": 74,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 75,
+      "kind": "paragraph",
+      "content": "Gladias's body froze in shock for a moment. Before his mind could catch up, his eyes had already scanned the venue, and discovered the nearest exit.",
+      "sha256": "70eed0d03d16f7b0bd5279290e632a58f3eda31274c258480c3294ebd72644dc"
+    },
+    {
+      "idx": 76,
+      "kind": "paragraph",
+      "content": "He immediately understood what had happened. The security of the Order, particularly preventing influence and bribery, rests on the privacy of its members. Order members are strictly forbidden to reveal their assigned task. To make sure that Order members take their privacy seriously, they were kept on their toes by a sort of deliberately engineered game. Anyone can connect to the decentralized cryptographic network that manages the Order's operations, and send in a guess about what a particular Order member's assigned task is, along with a small deposit. If their guess is correct, the Order member's salary is docked, and the discoverer gets half as a reward.",
+      "sha256": "addd23a542d1af5ec3148ed2b03fa0f62a2315967457c54ae65c18b2ea95cd97"
+    },
+    {
+      "idx": 77,
+      "kind": "paragraph",
+      "content": "Before he could react any further, another man nearby, also wearing a privacy robe, broke and ran toward the fire exit on the right. Everyone within ten meters took out their hand devices and pointed them at him, recording video. Gladias immediately understood what had happened here too: a decoy. Some member of the public altruistically diverting attention to himself, to give Gladias a chance to escape.",
+      "sha256": "8e68bffd489dc5006b58fce2ee9714d6c78015bcde45adc6b04037a92ee3daaa"
+    },
+    {
+      "idx": 78,
+      "kind": "paragraph",
+      "content": "Gladias turned around, intending to run. But before he could take a step, he saw right in front of him a large burly man, pointing a hand device straight at his face.",
+      "sha256": "390dede26fe92a5f8e447b7751bebdd39bc2cbd1cf3ea8ea0e60e3e39f239034"
+    },
+    {
+      "idx": 79,
+      "kind": "paragraph",
+      "content": "Gladias froze. At first, he thought that he was done for. His mind raced through the possibilities, looking for any possible way out. Finally, Gladias the thoughtful philosopher gave way to a different Gladias, more imaginative and mischievous - a Gladias that had not been awake since recess in middle school.",
+      "sha256": "e1f00495d40dfa571d7e63f5cff22f657561facad49edfa6d47dc482b518f6db"
+    },
+    {
+      "idx": 80,
+      "kind": "paragraph",
+      "content": "Gladias looked toward the right.",
+      "sha256": "b94c61526e59cd6a1253225847e1a4443e3402d7dc976beed6ff8547d941386f"
+    },
+    {
+      "idx": 81,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Wait, is that a new screed from the Arctic Emperor?\"</span>, he asked.",
+      "sha256": "3cfe8818bb24ab29261b0f26863c6397870df22c48eb80c4308af36ef9a561e9"
+    },
+    {
+      "idx": 82,
+      "kind": "paragraph",
+      "content": "The man, confused, looked to where Gladias was looking. At that moment, Gladias snatched the man's hand device from his arm, and suddenly turned around.",
+      "sha256": "f6763915cdf77d7d430de1826bcae997ca1732030c57242fb754a0262ef31599"
+    },
+    {
+      "idx": 83,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Delete all audio, images and video from the last longhour. Reboot.\"</span>",
+      "sha256": "246f80adf25d41b055868dac6742131befbdc34e2f4b50c9e0d5d61c10c77005"
+    },
+    {
+      "idx": 84,
+      "kind": "paragraph",
+      "content": "He began to run. A few ticks later, the device responded, <span data-hue=\"53.33\">\"4 files deleted\"</span>, and briefly showed screenshots of some photos and videos. The one on the bottom right was of Gladias's face. The screen turned black.",
+      "sha256": "035b4b4208609b8494077d08ea27e88a64b1b4c6b4d520b1d462dbdcaebc612f"
+    },
+    {
+      "idx": 85,
+      "kind": "paragraph",
+      "content": "Gladias threw the hand device up into the air, hoping that his pursuer would choose not losing his device over chasing him. He continued running.",
+      "sha256": "37a3f372c0515216a02ca256bc6f4d23dd95a84705e582a9091e06a3e6e58e92"
+    },
+    {
+      "idx": 86,
+      "kind": "paragraph",
+      "content": "Despite being slowed down by his shoes, which had high heels to raise his height to the same level as other robe wearers and deliberately uneven soles to randomize his gait, Gladias managed to quickly reach the exit. Distracted by the rest of the commotion, the crowd seemed not to notice.",
+      "sha256": "557ad44c62c831bf4d5a9f861ba5b30299288be59748e000e28c2f866175eed0"
+    },
+    {
+      "idx": 87,
+      "kind": "paragraph",
+      "content": "He exited the concert venue, and hopped onto a local autobus.",
+      "sha256": "907567a4acbfd4b917d9eba70588d938d556c09a39d2ac2bd65b398347e26abc"
+    },
+    {
+      "idx": 88,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 89,
+      "kind": "paragraph",
+      "content": "The autobus was nearly empty. To his left, Gladias saw two other people, both wearing privacy robes. Were they male, female, young or old, he could not tell. To his right, he saw a teenager wearing ordinary clothes and a backpack, who seemed to be coming home from school.",
+      "sha256": "3ca998fda45ec0f92fe6d3a30c258ba1f88d3c20c0507ab2f689598bfa2551ec"
+    },
+    {
+      "idx": 90,
+      "kind": "paragraph",
+      "content": "His eyes wandered to the advertisements on the inside walls of the autobus.",
+      "sha256": "59d70188eb265307d21c501aa27a22d7ab7f04a86a2bb4afb79f2be6750b618a"
+    },
+    {
+      "idx": 91,
+      "kind": "paragraph",
+      "content": "The first advertisement was a poster reminding Veridians of the importance of lifelong learning. On the left side of the poster was a picture of a classroom with a child, a middle-aged woman, and a much older man, all reading textbooks together. On the right side of the poster was the text:",
+      "sha256": "0b3628e3e52fdcdf9666fff7d4b3dbe704049e3338a5664ea5aa7b19d86c2bb8"
+    },
+    {
+      "idx": 92,
+      "kind": "quote",
+      "content": "> School lasts until age 20. Education is every Veridian's responsibility and duty for a lifetime.\n>\n> Learn about Veridian Graph Funding-subsidized education programs for all ages today.",
+      "sha256": "d73504c4d797a8e07a2261a9912ad118b9b1a6b13d6bb0fa9175431ede6920cc"
+    },
+    {
+      "idx": 93,
+      "kind": "paragraph",
+      "content": "The second advertisement was for Hydrafill, a brand selling water and various kinds of drinks. Nudged gently by Veridian Steering taxes, they had over the last twenty years become almost completely sugar free.",
+      "sha256": "05fe0bf2db7b3516f81c89af0cd41671a9df02896af9b2c19a1a6f1f01d12f5a"
+    },
+    {
+      "idx": 94,
+      "kind": "paragraph",
+      "content": "On the left side of the advertisement, was the classic yellow and green colored Hydrafill bottle. On the right side of the advertisement was the text:",
+      "sha256": "ad04fae69f7c74501c2edea918c1d234f44311d390b62eb8758b5b4980c3ae74"
+    },
+    {
+      "idx": 95,
+      "kind": "quote",
+      "content": "> Hydrafill\n>\n> Our drinks are proudly free of over 2,000 known poisons and anti-recommended substances.",
+      "sha256": "75bd821f17f71224d9e41748c1748ea243c358ec6fe6c4f6c45602a02e9083b5"
+    },
+    {
+      "idx": 96,
+      "kind": "paragraph",
+      "content": "Gladias smiled.",
+      "sha256": "339b4c044c1b108e625e9945642d525472e08665a2b37f0978b40c2cac6e8eb2"
+    },
+    {
+      "idx": 97,
+      "kind": "paragraph",
+      "content": "He wished that it had been the Hydrafill advertisement that he had been selected to vote on, and not the blue and grey building. He would have slid the slider almost all the way to the right for this one, he knew.",
+      "sha256": "f33e5d05aa99bbd87c8cb0ebe87b130f43a92257e1d7667702482acca34625ce"
+    },
+    {
+      "idx": 98,
+      "kind": "paragraph",
+      "content": "We need more fun in the world.",
+      "sha256": "6fcb2efab9d7c2344ff0b480ee1c117ecc38a2a220e7841d8f2ce75f62dde750"
+    },
+    {
+      "idx": 99,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 100,
+      "kind": "paragraph",
+      "content": "Fifteen minutes later, Gladias stepped off the autobus. After a short walk along a street, he arrived at his house. He opened the door.",
+      "sha256": "e19350e30aa6159ea1898042ca3a76e0470687979a23286f89b39bdf91935832"
+    },
+    {
+      "idx": 101,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Are you home, Seila?\"</span>, he shouted.",
+      "sha256": "1e598937fa6a584ed8747589f9bfa426d0de11f5fd7dcb0ad9b0898650ff1d22"
+    },
+    {
+      "idx": 102,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Was just writing up my blog post\"</span>, she replied, and came out of her room to greet Gladias.",
+      "sha256": "b4ef4a97fde0b8ce3d55931cf5a86b889bf1823efcbe0928510f69068fd523bc"
+    },
+    {
+      "idx": 103,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"So, what do we want for dinner?\"</span>",
+      "sha256": "84ee928abb8d2b43c85473a5867dc4210a78b167a13b27e9a5a738ff19520110"
+    },
+    {
+      "idx": 104,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Well, the Dzego food truck is coming in seven minutes, how about we have that again?\"</span>",
+      "sha256": "2f06e8434b1b6aa5b30b9c0992b689ef2168486a8438c3c82bec3f9bfb2f3873"
+    },
+    {
+      "idx": 105,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Sure! I assume the number ten for you again?\"</span>",
+      "sha256": "9be5d76c673a0c486a94d2986295d1928a7a7ccd5665be5e7f768acc36c8569d"
+    },
+    {
+      "idx": 106,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Yep!\"</span>",
+      "sha256": "1edb7b4ab416a2d796a023e937863bac68f1093187930b84278e182b8a5d7a68"
+    },
+    {
+      "idx": 107,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Okay, I'll have the number thirteen this time.\"</span>",
+      "sha256": "d4480c75bb138054263abb8816fb6fd056670ed5490fdc2bbf9db7a7d1491183"
+    },
+    {
+      "idx": 108,
+      "kind": "paragraph",
+      "content": "Seila took out her hand device, and began to place the order.",
+      "sha256": "7d2626df4e5833f78bb319f44d1a5a553a9b6cc2f45546d53416c749d9c67f65"
+    },
+    {
+      "idx": 109,
+      "kind": "paragraph",
+      "content": "They heard loud footsteps coming down the stairs.",
+      "sha256": "454d6936b1e214de334eea35269898e5109ae5f8f34eed6d82dd186652f19204"
+    },
+    {
+      "idx": 110,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Dad is home!\"</span>, the younger boy, Zven, shouted. Zven jumped down the stairs three steps at a time, and ran up to hug Gladias, who obliged.",
+      "sha256": "9dc76e099c570e984c22bf7c35f11e857ffd0ab8b10237f1a6b56331181f5a93"
+    },
+    {
+      "idx": 111,
+      "kind": "paragraph",
+      "content": "The older teenage boy, Febric, walked down more slowly, carrying his hand device in one hand, attached by a cable to a larger compute box in the other.",
+      "sha256": "2243b8e1e6e0713605d4ed45585817fa5b1918c2a733c440122e6a22912ea765"
+    },
+    {
+      "idx": 112,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"We're ordering from the Dzego food truck. What do you guys want?\"</span>, Gladias asked.",
+      "sha256": "4d626a505e9472db156d52e32edcba3886b03e10e6f63c30674c129114225e95"
+    },
+    {
+      "idx": 113,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Number four!\"</span>, Febric answered.",
+      "sha256": "20ca3bcdadb576efd4645d55f655961256459354121e3a45693f0edfeedbb1af"
+    },
+    {
+      "idx": 114,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Number five, I win!\"</span>, Zven shouted.",
+      "sha256": "31a449fe07a00752237bee168e30e0f2c89141fa44f30694e548a47525fff5cd"
+    },
+    {
+      "idx": 115,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"What about Lily and Hreda?\"</span>",
+      "sha256": "8680cdf1911867eb6a9206e398187f23a8233534d29e95247245b27e800468f7"
+    },
+    {
+      "idx": 116,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Lily's in the bathroom. Hreda will be back from after-school number theory in a longhour. Come on, you know she always gets the number nine.\"</span>",
+      "sha256": "371122291eef5d1f1a06b5cd59af6aaf39607c7234e46f193cf3dfb9032b92e4"
+    },
+    {
+      "idx": 117,
+      "kind": "paragraph",
+      "content": "The bathroom door opened, and Lily slowly walked out, her eyes looking to the ground.",
+      "sha256": "68625914f431739f9816e4446ed8034d04a806dd0b075d12b8c0e3c8097465ad"
+    },
+    {
+      "idx": 118,
+      "kind": "paragraph",
+      "content": "Seila sighed. <span data-hue=\"253.33\">\"What happened?\"</span>",
+      "sha256": "95bdef8b33460870b0a9bdce2d01c062d16ed80d847e0689b237fa6a50054e8d"
+    },
+    {
+      "idx": 119,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"Sixty percent on the history exam. Whatever...\"</span>",
+      "sha256": "797ab4fd8f8cecc110535ff5f15d064643d450a16f46f07f455be7882cfd2c93"
+    },
+    {
+      "idx": 120,
+      "kind": "paragraph",
+      "content": "Seila turned, and put her arms around Lily. <span data-hue=\"253.33\">\"It's okay to not be good at everything\"</span>, she said softly.",
+      "sha256": "6cecb962537f016c5e9f5df191d6d08dccb021ea89113363a6834addfb0e44fe"
+    },
+    {
+      "idx": 121,
+      "kind": "paragraph",
+      "content": "Lily turned her face further away from Seila and the family. She ran forward, and sat down on the couch.",
+      "sha256": "77acd43ba13a914f9e4bf8455f4e3e13feb72c280c2c2476f4e909f575eb3944"
+    },
+    {
+      "idx": 122,
+      "kind": "paragraph",
+      "content": "Seila sighed, and ordered Lily the number eight.",
+      "sha256": "cdd85718d1d6fa9c7b6665931afd9d2b649f3e951d09254ce5f0ed5097369e2b"
+    },
+    {
+      "idx": 123,
+      "kind": "paragraph",
+      "content": "Seila clicked order. Gladias, Seila, Zven and Febric sat at the table and waited.",
+      "sha256": "f425afee88a75d6e3cd398df9e9dabe2e08bf7724851cb2a7378718d10b653a5"
+    },
+    {
+      "idx": 124,
+      "kind": "paragraph",
+      "content": "On the couch, Lily took out her hand device, and began intently watching and quickly tapping on the screen, devoting all her attention to some game that Gladias and Seila could never make out.",
+      "sha256": "da13eda8e23e035beb37f6947ee6813554aba7baf0a7ad8ab3114b58ea9ab28e"
+    },
+    {
+      "idx": 125,
+      "kind": "paragraph",
+      "content": "This was Gladias and Seila's fourth last dinner with the kids - of whom Zven and Lily were theirs, and Febric and Hreda were from their co-family, Uncle Vil and Aunt Daia. In four days, Uncle Vil and Aunt Daia were going to come and pick all four kids up, and take care of them for the next half of the year.",
+      "sha256": "a2f930fe9bf957cc108e3e93e74d3321f6ea83892b124023b257a2aeaf3b47dd"
+    },
+    {
+      "idx": 126,
+      "kind": "paragraph",
+      "content": "Gladias sighed. He would miss the kids. But at the same time, he was looking forward to the six months of freedom.",
+      "sha256": "d165cd5f0e0a59cf423174c4c0bc2736653a155127db41eba84426ec18f29058"
+    },
+    {
+      "idx": 127,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Are we still going to stay with Uncle Vil for six months?\"</span>, Zven asked.",
+      "sha256": "85ae812d46eef0e035c49ab3a5095c177799b0cc24dea31d9720562efce9a904"
+    },
+    {
+      "idx": 128,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Of course!\"</span>, Seila replied.",
+      "sha256": "ec42eb2c743abe995b32aac23aac556dda5338a7f9452719ee0ada7daeb67f6f"
+    },
+    {
+      "idx": 129,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Yay, I love Uncle Vil!\"</span>",
+      "sha256": "7f811b0033f786f4afe8dbafb1069a7e257d3226147bed8b258a756d33b23055"
+    },
+    {
+      "idx": 130,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"For me Vil is *Dad*!\"</span>, Febric made a point of reminding. He thought for a moment longer. <span data-hue=\"80\">\"Uncle Glad and Aunt Seila, I love you both too!\"</span>",
+      "sha256": "6c6155688b64b5f5251669613ec34eb3e9632fd4e45a0b942a2717535d657b34"
+    },
+    {
+      "idx": 131,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"And I love you.\"</span>",
+      "sha256": "bccb41f146b4cf79a183a20b94624d25c6fd8ac0aa9a2c0c266753581a2e7f78"
+    },
+    {
+      "idx": 132,
+      "kind": "paragraph",
+      "content": "A doorbell rang. Gladias walked to the door, opened the door, and got a bag full of food boxes. He set the bag on the table, and took out and gave each person the food box with their number on it. Gladias, Seila, Febric and Zven all started eating.",
+      "sha256": "719967121a94f4d55acf770c6efd7cdf9e5aaa3382eabcbfe3f5b0208c9ef65e"
+    },
+    {
+      "idx": 133,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Any plans once Vil is here?\"</span>, Gladias asked.",
+      "sha256": "bcb6f65b3da9b0d01d2377b5b59a65b71f158f0a16cd2c00a4900df242778e6e"
+    },
+    {
+      "idx": 134,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"I'm going to visit Freetown for a month or two, see Jahn, maybe figure out some blog post to write on the United Cities. I've spent so much time reading about their co-governance, actually looking forward to seeing more how it all connects to what's on the ground.\"</span>",
+      "sha256": "3672203103e94c91af982d08e5bc5cc748bd3132d2db4b4e1cb424c8dc0b9012"
+    },
+    {
+      "idx": 135,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Nice! I'm going to go on some long walks in the forest and take a deep dive with the bot on the environment and biology rubrics. Still have four more audits to do before I can become a Sentinel!\"</span>",
+      "sha256": "a3f9ef5fc60a733b73cb38cb4d737e7d6631962205ad2156c7d52821ce0dd4bf"
+    },
+    {
+      "idx": 136,
+      "kind": "paragraph",
+      "content": "Gladias and Seila both resumed eating. Quietly, Lily walked up to the table, and began to open her food box as well.",
+      "sha256": "fbf1ecaa9b089d583b7095c4b7328f021d55a74f5523e33cb4a537463269124f"
+    },
+    {
+      "idx": 137,
+      "kind": "paragraph",
+      "content": "At that moment, Gladias's hand device buzzed. He took it out. A single notification popped up.",
+      "sha256": "c2847347aa17a4b13b20d95c9d2ec44d813ff4bcd86e72de0ad1b20ee5085e15"
+    },
+    {
+      "idx": 138,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>From</th>\n      <th></th>\n      <th>Message</th>\n      <th>Time</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Anonymous <br><br> <div style=\"border: 1px solid; border-radius: 5px; padding: 5px\">Rep score ≥ 200 Verified <b style=\"font-size: 150%; color: #8f8\">✓</b></div></center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 13.333333333333332)\">I saw you at the concert, I know that you are in the Order.</span></td>\n      <td>60259</td>\n    </tr>\n    </tbody>\n</table></div>",
+      "sha256": "e921c62e5f4b8f515d65f9e6c8b69ec5f2927d7a327f8ff18e5adb101ae0cc34",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "hand_device",
+        "device_evidence": {
+          "idx": 137,
+          "quote": "At that moment, Gladias's hand device buzzed."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "From",
+                "",
+                "Message",
+                "Time"
+              ]
+            ],
+            "rows": [
+              [
+                "Anonymous Rep score ≥ 200 Verified ✓",
+                "→",
+                "I saw you at the concert, I know that you are in the Order.",
+                "60259"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 139,
+      "kind": "paragraph",
+      "content": "And a few ticks later, another:",
+      "sha256": "08064627441fe07aa1b874133a8c4b06f37b4e36459b0fa557742d26d252f15e"
+    },
+    {
+      "idx": 140,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view\"><table>\n<thead>\n<tr>\n<th>From</th>\n<th></th>\n<th>Message</th>\n<th>Time</th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td style=\"width: 25%\"><center>Anonymous <br><br> <div style=\"border: 1px solid; border-radius: 5px; padding: 5px\">Rep score ≥ 200 Verified <b style=\"font-size: 150%; color: #8f8\">✓</b></div></center></td>\n<td style=\"width: 6%; text-align:center\">→</td>\n<td><span style=\"color:oklch(0.7 0.15 13.333333333333332)\">Don't worry, I'm not intending to report you for the bounty. But I do have a request that I would like to make.</span></td>\n<td>60266</td>\n</tr>\n</tbody>\n</table></div>",
+      "sha256": "198575f78c0cf1f939477c42fcae6995cd7cba0139113b7b9c38d32136d4e2c6",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "hand_device",
+        "device_evidence": {
+          "idx": 137,
+          "quote": "At that moment, Gladias's hand device buzzed."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "From",
+                "",
+                "Message",
+                "Time"
+              ]
+            ],
+            "rows": [
+              [
+                "Anonymous Rep score ≥ 200 Verified ✓",
+                "→",
+                "Don't worry, I'm not intending to report you for the bounty. But I do have a request that I would like to make.",
+                "60266"
+              ]
+            ]
+          }
+        ]
+      }
+    }
+  ]
+}

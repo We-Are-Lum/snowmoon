@@ -1,0 +1,1363 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 19,
+  "source_url": "https://vitalik.eth.limo/snowmoon/html/chapter-19.html",
+  "source_sha256": "93e9d60f95ef720f928451513f48f4ee0fd1644f7f8869043937af6fba86aacc",
+  "fetched_at": "2026-10-02",
+  "license": "GPL-3.0",
+  "blocks": [
+    {
+      "idx": 0,
+      "kind": "heading",
+      "content": "# Chapter 19",
+      "sha256": "93a450fa3d34c978c08189bb206d5520b86a6e3c353bc1217b8bbdd15624e1af"
+    },
+    {
+      "idx": 1,
+      "kind": "dateline",
+      "content": "**Pafogai Du, Dzego** · 3724 Grapetime 15",
+      "sha256": "8aec156e5506db357f13cd458a4db057a5ad4c35d2c709cba52e16a0584a745a"
+    },
+    {
+      "idx": 2,
+      "kind": "paragraph",
+      "content": "Gladias and Zei were sitting at a table in a cafeteria, deep inside the mountain pryamid. Attached to one of the walls, they could see two large screens, doing the best job that they could to pretend to be windows showing a view of Pafogai Du as though the cafeteria was sitting on top of the mountain, rather than thirty meters below ground.",
+      "sha256": "9218660b74188602ef9cdeb69c3de7cda6e799db712ea11430d47b2415706f93"
+    },
+    {
+      "idx": 3,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"So who is this that you wanted me to meet again?\"</span>, Gladias asked.",
+      "sha256": "69c5760f0750a6d31e0d88c9189d0aaf142bd08640c177b096343ad1af2fc70a"
+    },
+    {
+      "idx": 4,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Den. He is a High Council member of the Kungaupei. You wanted to better understand Dzego's institutions, he helps run the one that's already been protecting us from the Arctic shadow campaign for the last decade. You want Veridia to learn from him, not from our official government.\"</span>",
+      "sha256": "28a2360ecbb24b9b77952ef9b115be5ef600f20266aa53be86f1dc98ad8adf46"
+    },
+    {
+      "idx": 5,
+      "kind": "paragraph",
+      "content": "At that point, they heard a faint buzz that began to rapidly get louder. Almost immediately, a few small drones, similar to those that would check Zei for cheating equipment in the Minpentai championships, flew into view.",
+      "sha256": "65b3c343c51ecb33539add7f247e48e0116973ca639aab6cce741bc5909e99b3"
+    },
+    {
+      "idx": 6,
+      "kind": "paragraph",
+      "content": "Gladias's watch buzzed.",
+      "sha256": "a73e0c24687262b8de3ee3933281c78f5ef862d40fb407f072a02e9ebe48240e"
+    },
+    {
+      "idx": 7,
+      "kind": "screen",
+      "content": "<div class=\"device-view narrow-device-view\"><div style=\"font-size:150%\"></div>\n<table>\n    <tbody><tr>\n      <td style=\"font-size:150%\" colspan=\"2\">Air</td>\n    </tr>\n<tr>\n<td style=\"font-size:150%\">CO<sub>2</sub></td>\n<td style=\"font-size:150%; color: yellow\">994</td>\n</tr>\n<tr>\n<td style=\"font-size:150%\">PM2.5</td>\n<td style=\"font-size:150%; color: yellow\">30.1</td>\n</tr>\n</tbody></table>\n<table>\n<tbody><tr>\n<td style=\"font-size:150%\" colspan=\"2\">Devices</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #8f8\">Attested ✓</td>\n<td style=\"font-size:150%; color: #8f8\">21</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #f23\">Unknown, increased risk!</td>\n<td style=\"font-size:150%; color: #f23\">4</td>\n</tr>\n</tbody></table></div>",
+      "sha256": "ae87740265055bc3c4f1564e13499abd846b1288abb3a425fe3edfd28b74dd91",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "watch",
+        "device_evidence": {
+          "idx": 6,
+          "quote": "Gladias's watch buzzed."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [],
+            "rows": [
+              [
+                "Air"
+              ],
+              [
+                "CO2",
+                "994"
+              ],
+              [
+                "PM2.5",
+                "30.1"
+              ]
+            ]
+          },
+          {
+            "type": "table",
+            "header": [],
+            "rows": [
+              [
+                "Devices"
+              ],
+              [
+                "Attested ✓",
+                "21"
+              ],
+              [
+                "Unknown, increased risk!",
+                "4"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 8,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"What's going on?\"</span>, Zei asked.",
+      "sha256": "d518d4bc24842be0984a2e52d354c724f81d9a04325a5c5b2f2c78b03a2ca5b3"
+    },
+    {
+      "idx": 9,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Ah, I think my watch is detecting those drones as a threat. It's been doing this for many days now, I'm assuming it's just not been updated yet.\"</span>",
+      "sha256": "a0395f4e0fb094b4d34dc6bf7c9f07db122d453d39ed7ee362055f31e01925a8"
+    },
+    {
+      "idx": 10,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Ah, let me check mine\"</span>, Zei replied.",
+      "sha256": "8e2cff391a5a26fd093a008fb2d3a94f67e51e223e4dfb2d407ae17b96610347"
+    },
+    {
+      "idx": 11,
+      "kind": "paragraph",
+      "content": "Zei took out his watch.",
+      "sha256": "d453ac35f83a9ec728576f8246e5e9a07c9abb53cc03425601a28a6e06c450fa"
+    },
+    {
+      "idx": 12,
+      "kind": "screen",
+      "content": "<div class=\"device-view narrow-device-view\"><div style=\"font-size:150%\"></div>\n<table>\n<tbody><tr>\n<td style=\"font-size:150%\" colspan=\"2\">ten min</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #8f8\">cau tie zen ✓</td>\n<td style=\"font-size:150%; color: #8f8\">25</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #fca\">sen hu ?</td>\n<td style=\"font-size:150%; color: #fca\">0</td>\n</tr>\n</tbody></table></div>",
+      "sha256": "13cb86ad9fb1cdf565db4a148952d7dc6a50196c5ca1f8f6c49ba55445d2820b",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "watch",
+        "device_evidence": {
+          "idx": 11,
+          "quote": "Zei took out his watch."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [],
+            "rows": [
+              [
+                "ten min"
+              ],
+              [
+                "cau tie zen ✓",
+                "25"
+              ],
+              [
+                "sen hu ?",
+                "0"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 13,
+      "kind": "paragraph",
+      "content": "He clicked on the green, and scrolled through.",
+      "sha256": "b01a33e3048faccfc59344856223db1b3c8fe26b96e0f38e6e0b18a01d9fdba9"
+    },
+    {
+      "idx": 14,
+      "kind": "screen",
+      "content": "<div class=\"device-view narrow-device-view\"><div style=\"font-size:150%\"></div>\n<table>\n<tbody><tr>\n<td style=\"font-size:150%; color: #c4f\" colspan=\"2\">gi dai</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #8f8\">fen jan ten lai</td>\n<td style=\"font-size:150%; color: #8f8\">16</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #8f8\">mo fan min jan</td>\n<td style=\"font-size:150%; color: #8f8\">1</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #8f8\">mo fan lai</td>\n<td style=\"font-size:150%; color: #8f8\">4</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #8f8\">kun gau min jan</td>\n<td style=\"font-size:150%; color: #8f8\">4</td>\n</tr>\n</tbody></table></div>",
+      "sha256": "aa2437e37bcfefb3aa35226d555c49f5b47230765f0bf953a8e4746bd27df342",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "watch",
+        "device_evidence": {
+          "idx": 11,
+          "quote": "Zei took out his watch."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [],
+            "rows": [
+              [
+                "gi dai"
+              ],
+              [
+                "fen jan ten lai",
+                "16"
+              ],
+              [
+                "mo fan min jan",
+                "1"
+              ],
+              [
+                "mo fan lai",
+                "4"
+              ],
+              [
+                "kun gau min jan",
+                "4"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 15,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Err... let me try this\"</span>, Gladias said, staring intently at the watch.",
+      "sha256": "44eebf8ac1e61d57a0b566482b37fa104abbd29bcb34c28a1a70d36dad38f058"
+    },
+    {
+      "idx": 16,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"'mo fan' is eating room, so something to do with the cafeteria.\"</span>",
+      "sha256": "20cf7a03dbef78e6afa3f2314f31ee2542c0878e6777dd0fd715034d656cbc95"
+    },
+    {
+      "idx": 17,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Yep!\"</span>",
+      "sha256": "3f7dc0f051dbecf0c78c41784d06f73fa78ef167eef055a074dbbc74935b29ac"
+    },
+    {
+      "idx": 18,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"'min' is machine, 'jan' is person, so I guess the two together mean ... robot?\"</span>",
+      "sha256": "80939868725b39256d1fef4b547a2a0bf8da638a251aeab3792d5f2cffbdcd5e"
+    },
+    {
+      "idx": 19,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Yep!\"</span>",
+      "sha256": "3f7dc0f051dbecf0c78c41784d06f73fa78ef167eef055a074dbbc74935b29ac"
+    },
+    {
+      "idx": 20,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"'kun gau' is ... wait, is that connected to the Kungaupei? So these are Kungaupei robots?\"</span>",
+      "sha256": "a02617eb4c5c3fa993039a0969db9fbcdd852537928214bf81e9c1341b7fe3c5"
+    },
+    {
+      "idx": 21,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Yes, but what does 'kun gau' mean?\"</span>",
+      "sha256": "0147637ff43f05ee05f4c8f6823d1d52f97711343396d74a6766d5f4052386a0"
+    },
+    {
+      "idx": 22,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I'll guess security?\"</span>",
+      "sha256": "6a1c0cc858affeca2a5dc401f4b217d00f042b20b7574a69a4b944112282d558"
+    },
+    {
+      "idx": 23,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Exactly.\"</span>",
+      "sha256": "c22466845957f0328bfe18dfeddce07289217ef22d0200178899b54bae3e1c62"
+    },
+    {
+      "idx": 24,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Security robots. Phew, that wasn't hard at all!\"</span>",
+      "sha256": "9f6ad990b5a3284f11ab3f0d5f706c6c810978edaf76f3e3bb232f925735dc4f"
+    },
+    {
+      "idx": 25,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Just be glad I'm not Fin, he would start taking half a longhour to go through this whole interface and explain the history of each and every word and why they decided to keep it as they were shrinking the vocabulary.\"</span>",
+      "sha256": "bc792005e5d975762da72bfbef7169c349d1d458ae868fa78fcc49062d0fa0e0"
+    },
+    {
+      "idx": 26,
+      "kind": "paragraph",
+      "content": "One of the robots buzzed closer to Gladias, and stopped to hover about half a meter to the right of his ear.",
+      "sha256": "aa52b80d710e35b98d7a9c51cca824966d637017172942ecaa7bb543fc817c6f"
+    },
+    {
+      "idx": 27,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"But anyway, why have I been detecting so many hostile devices? Is my watch just not up to date on something?\"</span>",
+      "sha256": "f004122502b87cb34e726ce0b955557f65b0cbbb36c4e889eaf055a44b4e753b"
+    },
+    {
+      "idx": 28,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Ah yeah, it's just every lamp and drone and camera announcing itself; the protocols stepped up a lot these past few days. Your watch just doesn't speak the language yet. Here, let me help you with that.\"</span>",
+      "sha256": "ae880ee1120b774783b5b625a302046bc39214ec59fe14e140ac5587d565bce5"
+    },
+    {
+      "idx": 29,
+      "kind": "paragraph",
+      "content": "Zei then spoke in a softer voice:",
+      "sha256": "50c1514311a11d59b363e5b8a0c3ef805a4d3a221e14377b7a75ee277c5fca92"
+    },
+    {
+      "idx": 30,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"jo sun fe zin ten lai de cau tie dai\"</span>",
+      "sha256": "5ba99369c9d220a6e3222a072ec99eaf1ad0facaf84e1654759db0d68c82f86b"
+    },
+    {
+      "idx": 31,
+      "kind": "paragraph",
+      "content": "About one tick later, his watch buzzed, indicating that the data was received.",
+      "sha256": "ce774d7306cb1eb952532d90f6c7304efc1177a2332f78cbd31ff723aa945a06"
+    },
+    {
+      "idx": 32,
+      "kind": "figure",
+      "content": "<div class=\"device-view narrow-device-view\"><svg width=\"100\" height=\"80\" viewBox=\"0 0 100 80\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"5\" y=\"5\" width=\"90\" height=\"70\" rx=\"8\" fill=\"none\" stroke=\"#cef\" stroke-width=\"4\"></rect>\n<path d=\"M7 12 L50 46 L93 12\" fill=\"none\" stroke=\"#cef\" stroke-width=\"4\" stroke-linecap=\"round\" stroke-linejoin=\"round\"></path>\n</svg>\n<b>fe cau tie dai <br> li shu</b></div>",
+      "sha256": "2825effe624a5d8d602013d8280606a0b8dc903da7c42fe7d278a1d559eba559",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "watch",
+        "device_evidence": {
+          "idx": 31,
+          "quote": "About one tick later, his watch buzzed, indicating that the data was received."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c19-b32.svg",
+            "viewBox": "0 0 100 80",
+            "width": "100",
+            "height": "80",
+            "labels": [],
+            "animated": false
+          },
+          {
+            "type": "heading",
+            "text": "fe cau tie dai li shu"
+          }
+        ]
+      }
+    },
+    {
+      "idx": 33,
+      "kind": "paragraph",
+      "content": "Zei moved his watch beside Gladias's.",
+      "sha256": "cdd7416ef941219f653af9fc667a5a3b6789035dac2fd046254037c702fe64a9"
+    },
+    {
+      "idx": 34,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"be\"</span>",
+      "sha256": "89ff130870b6694bd77701f3e3dc6337e58830aeef301a1a544cee01f5a0e4b4"
+    },
+    {
+      "idx": 35,
+      "kind": "paragraph",
+      "content": "The two watches buzzed at the same time, indicating a connection, and a file transferred from one to the other. Gladias pressed a button on his watch to accept.",
+      "sha256": "aa972c69e194040934ffc8c9e7caf67b6810769bf5dab8f5f2c53d9c3c67a70a"
+    },
+    {
+      "idx": 36,
+      "kind": "paragraph",
+      "content": "He then checked his watch again.",
+      "sha256": "c4b4e65440ac6f5a696898e2454f6560d84ea50eabf9cafa0571fe2ae5c2eabf"
+    },
+    {
+      "idx": 37,
+      "kind": "screen",
+      "content": "<div class=\"device-view narrow-device-view\"><div style=\"font-size:150%\"></div>\n<table>\n    <tbody><tr>\n      <td style=\"font-size:150%\" colspan=\"2\">Air</td>\n    </tr>\n<tr>\n<td style=\"font-size:150%\">CO<sub>2</sub></td>\n<td style=\"font-size:150%; color: red\">1015</td>\n</tr>\n<tr>\n<td style=\"font-size:150%\">PM2.5</td>\n<td style=\"font-size:150%; color: yellow\">31.2</td>\n</tr>\n</tbody></table>\n<table>\n<tbody><tr>\n<td style=\"font-size:150%\" colspan=\"2\">Devices</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #8f8\">Attested ✓</td>\n<td style=\"font-size:150%; color: #8f8\">25</td>\n</tr>\n</tbody></table></div>",
+      "sha256": "b46dc96cc89310118a01e004e6cb423c5207e9a6d62f33c605ee5019ab8a0eb4",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "watch",
+        "device_evidence": {
+          "idx": 36,
+          "quote": "He then checked his watch again."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [],
+            "rows": [
+              [
+                "Air"
+              ],
+              [
+                "CO2",
+                "1015"
+              ],
+              [
+                "PM2.5",
+                "31.2"
+              ]
+            ]
+          },
+          {
+            "type": "table",
+            "header": [],
+            "rows": [
+              [
+                "Devices"
+              ],
+              [
+                "Attested ✓",
+                "25"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 38,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Looks good!\"</span>",
+      "sha256": "90e086633f8fd27b17f06b6e431580ce5b7b824bbccd73141eddc2ead0b32f4e"
+    },
+    {
+      "idx": 39,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Huh, you're measuring CO2 and PM2.5 on there as well?\"</span>",
+      "sha256": "678fab525c860e096737d715a66e57a1b7fc97ec61d29b11ac5c263a37230b59"
+    },
+    {
+      "idx": 40,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Yep! Pretty standard in Veridia. We really care about having a clean environment. We breathe twelve kilograms of air every day, more than what we eat and drink combined. So we're really all under-rating how important the air is.\"</span>",
+      "sha256": "fca522c6cfe605c99c0b7420c7440688546d2e1a4fe60cbbddcff4693f531ef1"
+    },
+    {
+      "idx": 41,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Why is CO2 on there? We have air sensors on our watches too, but that's more for smoke detection and poisons.\"</span>",
+      "sha256": "1082e7dcb94fcf579ffc6a6ec299952885de9c646281e14cca07547ed4f76da8"
+    },
+    {
+      "idx": 42,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"The average concentration of carbon dioxide in our atmosphere is 300 parts per million. Air that we breathe out is 40,000 parts per million. So if the air you're breathing has 700 parts per million, then either there's some other source bringing that extra CO2 in, or, more likely, one percent of the air you're breathing in is air that someone else breathed out. And aerosol particles carrying all kinds of things stick around in the air for a long time - especially airborne viruses.\"</span>",
+      "sha256": "a4229dc498e8f8bdde165e0a5209ff6882010bc4ef1eddab88f8b289f8859db4"
+    },
+    {
+      "idx": 43,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Ah, I see, so it's not even about industrial pollution.\"</span>",
+      "sha256": "8a448cadcb2b4710f1cbf9f24ed8900a573b784a3e1124e51021fa6b4c63be5f"
+    },
+    {
+      "idx": 44,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Actually I'm surprised you're not caught up on this, and that the CO2 numbers are so poor here. I would have thought you would care a lot from the defense side, for pandemic prevention.\"</span>",
+      "sha256": "845c6b91222e19abbabae0c397d280840212e64c7b9c4093c42f40ce8742be89"
+    },
+    {
+      "idx": 45,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Ah well you can ask Den when he comes!\"</span>",
+      "sha256": "c90a366b24d737eb754360e553780cea64dd055ed913bc81895e5241fcedadd3"
+    },
+    {
+      "idx": 46,
+      "kind": "paragraph",
+      "content": "A robot arrived, bringing a salad and tea for Gladias, and a vegetable and rice dish covered with mushrooms and a tea for Zei.",
+      "sha256": "0e98c4e2aff36981acd940d84c9d33c0cd8608e7d7f2fbb8c7a53c449ab071b5"
+    },
+    {
+      "idx": 47,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Wait, that dish you're eating. I think that's exactly what we call Number Ten in our Dzego food trucks!\"</span>, Gladias exclaimed.",
+      "sha256": "ebb603dc0b57869a9ecb7f4d3c407510059c9edb6610cd71d09612a8d65cc6db"
+    },
+    {
+      "idx": 48,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Do you want to try it? I'm happy to take your salad. Tell me how it compares to the version you're used to.\"</span>",
+      "sha256": "353403d977cd8f1183bf2362b5caaed8a42b3306c417e35460e02862a00ff3b3"
+    },
+    {
+      "idx": 49,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Sure!\"</span>",
+      "sha256": "30c85ea7e3839919658c213f6d93e352e0d3ecce42c7ef663887abd5ffd4d105"
+    },
+    {
+      "idx": 50,
+      "kind": "paragraph",
+      "content": "They switched plates, and began eating.",
+      "sha256": "7be12f48394a6f416fc2da8d2011bb48fd5ec2b30b43d810a4dd5f255216aa51"
+    },
+    {
+      "idx": 51,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Okay, this is much better than what we get in Veridia\"</span>, Gladias excitedly remarked.",
+      "sha256": "cd59ceebf591dec93e2a29a6fa7ba3ddec979887e4b82a2d84422073b173b77f"
+    },
+    {
+      "idx": 52,
+      "kind": "paragraph",
+      "content": "They continued eating silently for a few minutes, and after finishing their food switched to drinking tea.",
+      "sha256": "c41100d8a1e7255907280635c5567717295f0345a6cec7f6a210341e6c3d21f2"
+    },
+    {
+      "idx": 53,
+      "kind": "paragraph",
+      "content": "Zei's watch buzzed again. Zei checked his watch, and his eyes opened wide.",
+      "sha256": "f1cd82d029480ffab78a34bb2428e55ec941c29856d9d79998210da2a0a50e8a"
+    },
+    {
+      "idx": 54,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"What is it?\"</span>, Gladias asked.",
+      "sha256": "06beaf138cc51ddf808f60e88972d9ce174f441c5635bab2645cdb5519962c78"
+    },
+    {
+      "idx": 55,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"A message from a courtyard where I ate in Sadzu Du once. This is really weird.\"</span>",
+      "sha256": "9ff48f32ea616e7d8f798d88816734c633114983c5793866969e14420778154f"
+    },
+    {
+      "idx": 56,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"It seems to be addressed directly to me.\"</span>",
+      "sha256": "6912e7676beefb09e9c88439efa579d2ee1656d3ed55f7f694130f0d653accf2"
+    },
+    {
+      "idx": 57,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"How does the courtyard know you ate there? Payment is done in zipcoins, that's fully anonymized.\"</span>",
+      "sha256": "5fa0780bd9de3e07a4b847dec733184515d307d11990dea647e7b3b16aa87a9a"
+    },
+    {
+      "idx": 58,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Exactly. The courtyard seems to have sent it to *all* their guests from the past half year, and it has some kind of tag that my local AI accepted, almost everyone else's filtered out.\"</span>",
+      "sha256": "908761466b1fc48e2325ab28e6e9c9c374013606a97aef72245fb5a2eaa75da6"
+    },
+    {
+      "idx": 59,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>zan</th>\n      <th></th>\n      <th>tie</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>sa dzu du de <br>len su 2415 de <br>bun kai mo fan</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td>ci sen hu jan pu zau fe 400 lin man <br> ci cau be fe ti tie <br> ci tan jan pu ciu cu shan jin fe pa bi <br> ci sen hu fe bu</td>\n    </tr>\n    </tbody>\n</table></div>",
+      "sha256": "8d0eabee7683e467e001a177bd53fa301ddac6171d5e0fa8ac082bfdf2bfd1e9",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": null,
+        "device_evidence": null,
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "zan",
+                "",
+                "tie"
+              ]
+            ],
+            "rows": [
+              [
+                "sa dzu du de len su 2415 de bun kai mo fan",
+                "→",
+                "ci sen hu jan pu zau fe 400 lin man ci cau be fe ti tie ci tan jan pu ciu cu shan jin fe pa bi ci sen hu fe bu"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 60,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"What does it say?\"</span>, Gladias asked.",
+      "sha256": "7a92c3e559447f5eb9ab2d7d439254c043032c99e2d231010b4578bcdb6dc9f2"
+    },
+    {
+      "idx": 61,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"It's from the Beautiful Plants food court, on 2415 Len Su street, in Sadzu Du. An anonymous person burned four hundred zipcoins to send this message. The message envelope says that the recipient 'is successful' and is 18 years old. I know nothing else.\"</span>",
+      "sha256": "e5ff02987f943bcc91483ff014885087fc6b4e6200e9de78704cf070c4426f60"
+    },
+    {
+      "idx": 62,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"That's a ... well-calibrated description.\"</span>",
+      "sha256": "224c24cf6be688556696b69da54ca8de09d95d927d7091adc9eba62f6acf4030"
+    },
+    {
+      "idx": 63,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Indeed. They're trying to make the set wide enough to make sure it contains me, they burned four hundred zipcoins to signal to the courtyard, and to our local AIs, and to us, that the message is worth putting an effort into understanding, but also they made the set narrow enough that they *could* make this broadcast for only four hundred zipcoins.\"</span>",
+      "sha256": "135618a2c096af463651d46769a75d0181dd73bf1997c8594590c7a1c7b52e4d"
+    },
+    {
+      "idx": 64,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"And narrow enough that not too many people find out about this message.\"</span>",
+      "sha256": "a0e07b68a7783156c494448aab9af9b2a6fba7b78a77db1e83db3edd078f8e7c"
+    },
+    {
+      "idx": 65,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Okay, let me open it up...\"</span>",
+      "sha256": "10b5c137fe5523b14d9f03b89c0f3a40ad50cf7be191c2c3f2926afa9ff4f606"
+    },
+    {
+      "idx": 66,
+      "kind": "paragraph",
+      "content": "Zei stared in shock again.",
+      "sha256": "8acce41d5d6554ad962f759ad5a7bdf398cb32e866d9f64e21968ac5db78dc5a"
+    },
+    {
+      "idx": 67,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"What is it?\"</span>",
+      "sha256": "42829abc263c443153588db9288ba1cf6f4de1249b75acaf4f0c8157d2782612"
+    },
+    {
+      "idx": 68,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"The message is a series of links to some files, in total over sixty gigabytes. I need to download eighty percent of them apparently.\"</span>",
+      "sha256": "7c112277fec5ed94c8e0e1bd98fa91a1be6572584eb7cc039f8b907e26090eec"
+    },
+    {
+      "idx": 69,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Will that take a while to download?\"</span>",
+      "sha256": "4f59e5dc39791542991897b8b94bd07f44d7efc8dbc06b2b9a94a5dd668c4374"
+    },
+    {
+      "idx": 70,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"About a day wirelessly. But it looks like the digital archive node inside this mountain pyramid already has enough of the files.\"</span>",
+      "sha256": "0ef2e4bab464b1162e05deedebf0d257a17524c60df7404d84c65f3f92170625"
+    },
+    {
+      "idx": 71,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Shall we just walk there?\"</span>",
+      "sha256": "d4c7dd56f2f29192c214650a37b45774635e001ba03449d139cf5b7ab08806e3"
+    },
+    {
+      "idx": 72,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Exactly what I'm thinking.\"</span>",
+      "sha256": "9ee28420288a4b70a60fc8c9d560a39eb641351adfbd4deb70644ebebc06be19"
+    },
+    {
+      "idx": 73,
+      "kind": "paragraph",
+      "content": "Zei put his watch against a green circle on the corner of the desk. A moment later it buzzed. He stood up, and Gladias stood up immediately after him.",
+      "sha256": "4da454866827ee1afb16cf74f6a2616addbd37435b4cef62180cf89e63c8c0f3"
+    },
+    {
+      "idx": 74,
+      "kind": "paragraph",
+      "content": "They exited the cafeteria, and started walking through the network of tunnels.",
+      "sha256": "62c0059776bb9721e3c9946959de0ff706fdf98159cf7f0ecd5a50dae6a0ec9e"
+    },
+    {
+      "idx": 75,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 76,
+      "kind": "paragraph",
+      "content": "A few minutes later, they arrived at a large ornamented door.",
+      "sha256": "157540af578fac4504f297a86804dcfaf28000baee805574340cf81c90db055a"
+    },
+    {
+      "idx": 77,
+      "kind": "paragraph",
+      "content": "To the left of the door, there was a drawing of a river horse reading a book, with a backdrop of a marsh with green trees and a blue sky in the background. To the right of the door, there was a drawing of a hamster sitting at a computer. Both drawings were a careful balance of cartoon-like playfulness, and a serious aura of mystery.",
+      "sha256": "c3cda5e7e108e4601a952c2aa9a6e6e6060383b09714cb1114e0a914b788896a"
+    },
+    {
+      "idx": 78,
+      "kind": "paragraph",
+      "content": "At the top of the door, Zei could read a slogan:",
+      "sha256": "ff07998008d35b7e472846a194f41f7e7d9ab5326b2e3b97482e69fbd41659fc"
+    },
+    {
+      "idx": 79,
+      "kind": "quote",
+      "content": "<center><div class=\"dz-card dz-mono\" style=\"font-family:'TeX Gyre Chorus',cursive;font-size:17px;line-height:1.55\"><div class=\"dz-line dz-blank\" style=\"height:1em\"></div>\n<div class=\"dz-line\" style=\"margin:3px 0;padding-left:2ch\"><span style=\"white-space:nowrap\"><span style=\"color:#e6f4ff;font-family:'TeX Gyre Chorus',cursive\">mu fu bau hai</span></span> <span style=\"white-space:nowrap\"><span style=\"font-family:'TeX Gyre Chorus',cursive;\">ka</span>&nbsp;<span style=\"white-space:nowrap\"><span style=\"color:#e6f4ff;font-family:'TeX Gyre Chorus',cursive\">sha liu</span></span></span> <span style=\"white-space:nowrap\"><span style=\"font-family:'TeX Gyre Chorus',cursive;\">li</span>&nbsp;<span style=\"white-space:nowrap\"><span style=\"color:#e6f4ff;font-family:'TeX Gyre Chorus',cursive\">dzai hen</span></span></span> <span style=\"white-space:nowrap\"><span style=\"font-family:'TeX Gyre Chorus',cursive;\">ji</span>&nbsp;<span style=\"white-space:nowrap\"><span style=\"color:#e6f4ff;font-family:'TeX Gyre Chorus',cursive\">cin jan</span></span></span> <span style=\"white-space:nowrap\"><span style=\"font-family:'TeX Gyre Chorus',cursive;\">fe</span>&nbsp;<span style=\"white-space:nowrap\"><span style=\"color:#e6f4ff;font-family:'TeX Gyre Chorus',cursive\">jan</span></span></span></div>\n<div class=\"dz-line\" style=\"margin:3px 0;padding-left:0ch\"><span style=\"font-family:'TeX Gyre Chorus',cursive;\">ci</span>&nbsp;<span style=\"white-space:nowrap\"><span style=\"color:#e6f4ff;font-family:'TeX Gyre Chorus',cursive\">mu fu bau fei</span></span> <span style=\"white-space:nowrap\"><span style=\"font-family:'TeX Gyre Chorus',cursive;\">ka</span>&nbsp;<span style=\"white-space:nowrap\"><span style=\"color:#e6f4ff;font-family:'TeX Gyre Chorus',cursive\">zen die jia</span></span></span> <span style=\"white-space:nowrap\"><span style=\"font-family:'TeX Gyre Chorus',cursive;\">cu</span>&nbsp;<span style=\"white-space:nowrap\"><span style=\"color:#e6f4ff;font-family:'TeX Gyre Chorus',cursive\">can hu</span></span></span> <span style=\"font-family:'TeX Gyre Chorus',cursive;\">fe</span> <span style=\"font-family:'TeX Gyre Chorus',cursive;\">lo</span> <span style=\"white-space:nowrap\"><span style=\"color:#e6f4ff;font-family:'TeX Gyre Chorus',cursive\">kin liu</span></span></div>\n<div class=\"dz-line dz-blank\" style=\"height:1em\"></div></div></center>",
+      "sha256": "f0dc23c61b2eb32ff128b3b7dbdaffb71ea6ed41a5b9bc2b0d8d8533cbca4ef6"
+    },
+    {
+      "idx": 80,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Outside of a dog, a book is man's best friend\"</span>, Zei translated for Gladias. <span data-hue=\"346.67\">\"Inside of a dog, it's too dark to read.\"</span>",
+      "sha256": "f0a28aa14eaa8bb2d4b264557b8f5363d96d492cebfd50eebc0f665434efe28f"
+    },
+    {
+      "idx": 81,
+      "kind": "paragraph",
+      "content": "Zei and Gladias stepped through the door, and entered.",
+      "sha256": "ea6a3926e9470872dc5259ebee5548e9ae2d0258cca68f180dc7934403ef9b8f"
+    },
+    {
+      "idx": 82,
+      "kind": "paragraph",
+      "content": "To their left, the entire wall was a large shelf, about five meters tall, filled with physical paper books. The upper half of the shelf was set back about a meter, allowing the roof of the lower half to serve as a walkway to look at and take books from the upper half.",
+      "sha256": "7472c3274269c28e05bcaf1ca64ed8f0d2add9dd0a2780c1766dc0f3824e9072"
+    },
+    {
+      "idx": 83,
+      "kind": "paragraph",
+      "content": "The shelf had openings in two places on the upper floor, leading to two miniature tunnels lined with more books. The shelf also had an opening in one place on the lower floor, also lined with books. All three openings seemed to go inwards for three to six meters; after that, one of the book-lined hallways turned ninety degrees rightward, another ninety degrees leftward, and the third, the one on the lower floor, turned into a T-shaped intersection.",
+      "sha256": "4c45431d95fb4b13dc1d29938baa1fa55f79ea2d9a060b7ebdf71533dc820980"
+    },
+    {
+      "idx": 84,
+      "kind": "paragraph",
+      "content": "It looked like the book section was deliberately constructed to be a maze, Gladias thought.",
+      "sha256": "3d99a7172989776f2753aeb196f83acd19d256fe1e575d13ab8998f00a2ac129"
+    },
+    {
+      "idx": 85,
+      "kind": "paragraph",
+      "content": "To their right, there was an open space with tables, and along the wall, there were many computer terminals.",
+      "sha256": "832ec60575bae37a4c0b5e43ca0eba8df06815360cc1d2fc0beac9e1191f0be9"
+    },
+    {
+      "idx": 86,
+      "kind": "paragraph",
+      "content": "Near the front of the space with tables, Zei saw a woman wearing a robe. He immediately ran toward her.",
+      "sha256": "a2f5b37b6220538350894c46921e9773cce83f6cad78b8fd40343bdb958d8565"
+    },
+    {
+      "idx": 87,
+      "kind": "paragraph",
+      "content": "She turned around.",
+      "sha256": "11621e8ce01eba5164a7a3a1094c1178f5b9afa973df9fa6297c1caf8d3b84ba"
+    },
+    {
+      "idx": 88,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"Welcome to the Pafogai Du grand library. What is it that you seek?\"</span>, she asked.",
+      "sha256": "ce8bafe722223bb9bf4b64eba2ae2456558d18ccf399f144fae9bec82595c992"
+    },
+    {
+      "idx": 89,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"There are very large files in the archive that I would like to load.\"</span>",
+      "sha256": "d47eda702a9a7adf612574808f5f7e0412a89d7318ac0c08b047b3cb5abd7f3d"
+    },
+    {
+      "idx": 90,
+      "kind": "paragraph",
+      "content": "The librarian laughed.",
+      "sha256": "121fa457cd54b4794dce41b282c420fdda4c6120725693a98fcd3ba20d20b2ca"
+    },
+    {
+      "idx": 91,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"Glad you're being honest\"</span>, she replied.",
+      "sha256": "f6a6a33d20f387233b851e2d48b251919ad658d2a7c0a7b419a0f80127ce5c5d"
+    },
+    {
+      "idx": 92,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"Most people tell me they're looking to learn some high-minded thing about history or culture or mathematics, and then go and download their movies as soon as I'm not looking.\"</span>",
+      "sha256": "e1eed9f66c52b167d4fca0aa5e66ef7c669f0600c9909a1552a2b4f55033a0b9"
+    },
+    {
+      "idx": 93,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Well I'm not downloading a movie, it's more ... a mysterious message.\"</span>",
+      "sha256": "1e913136c346d78c7364aa15f8919d591c442fd9af159ba3d66a693070886a91"
+    },
+    {
+      "idx": 94,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"Ah, a quest! Even if that ends up just being an excuse, even that is something new and interesting in my day. Well, just follow me.\"</span>",
+      "sha256": "853bce608e5dc8283ffc846e13b73cefbdb157c877cc3a86cf6fa45448ee6588"
+    },
+    {
+      "idx": 95,
+      "kind": "paragraph",
+      "content": "Zei and Gladias followed.",
+      "sha256": "f241991a9bf17b3a3d001406c6fe4d1d5df71b04e6717d5c7adc8201102c65eb"
+    },
+    {
+      "idx": 96,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"So you got a mysterious message telling you to download some big files? Any idea what kinds?\"</span>",
+      "sha256": "590f765807580cd330b4895934107a2a7f11c4403ab07a9d0bd17318fb2e968c"
+    },
+    {
+      "idx": 97,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Well so far I just saw some hashes...\"</span>",
+      "sha256": "952e1d0d1ad0cc8c6f82e02897398560bb1c7a86b18c605b8e645fa1d14e2f6c"
+    },
+    {
+      "idx": 98,
+      "kind": "paragraph",
+      "content": "They arrived at a computer terminal. The librarian took out a data cable, and put one end of the cable into the terminal.",
+      "sha256": "a1fed728ed161a98fba36c7cc4db4afe5b72ba41e8c72e42a76ea05f753f0e8e"
+    },
+    {
+      "idx": 99,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"Here, put the other end into your hand device.\"</span>",
+      "sha256": "50d59ef0c996a7a92f601cb91cd648008182a266de5fb08f0ee533387f7fefcc"
+    },
+    {
+      "idx": 100,
+      "kind": "paragraph",
+      "content": "Zei followed the librarian's instructions. The download started almost immediately.",
+      "sha256": "5250a38610967c99ace858c06df361c8b262ee6acb5eedbb77de57a30b72ebba"
+    },
+    {
+      "idx": 101,
+      "kind": "figure",
+      "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"500\" height=\"250\" viewBox=\"0 0 500 250\">\n<g font-family=\"monospace\" fill=\"#cef\" stroke=\"#cef\">\n<!-- bar 1 -->\n<text x=\"15\" y=\"25\" font-size=\"11\" stroke=\"none\">0x1b568a45...</text>\n<rect x=\"110\" y=\"16\" width=\"330\" height=\"10\" fill=\"none\" stroke-width=\"1\"></rect>\n<rect x=\"110\" y=\"16\" width=\"4.46\" height=\"10\" stroke=\"none\"></rect>\n<text x=\"450\" y=\"25\" font-size=\"11\" stroke=\"none\">1.35%</text>\n<!-- bar 2 -->\n<text x=\"15\" y=\"52\" font-size=\"11\" stroke=\"none\">0x9f3c21d7...</text>\n<rect x=\"110\" y=\"43\" width=\"330\" height=\"10\" fill=\"none\" stroke-width=\"1\"></rect>\n<rect x=\"110\" y=\"43\" width=\"6.83\" height=\"10\" stroke=\"none\"></rect>\n<text x=\"450\" y=\"52\" font-size=\"11\" stroke=\"none\">2.07%</text>\n<!-- bar 3 -->\n<text x=\"15\" y=\"79\" font-size=\"11\" stroke=\"none\">0x4a8e0b62...</text>\n<rect x=\"110\" y=\"70\" width=\"330\" height=\"10\" fill=\"none\" stroke-width=\"1\"></rect>\n<rect x=\"110\" y=\"70\" width=\"5.35\" height=\"10\" stroke=\"none\"></rect>\n<text x=\"450\" y=\"79\" font-size=\"11\" stroke=\"none\">1.62%</text>\n<!-- bar 4 -->\n<text x=\"15\" y=\"106\" font-size=\"11\" stroke=\"none\">0xd714fc98...</text>\n<rect x=\"110\" y=\"97\" width=\"330\" height=\"10\" fill=\"none\" stroke-width=\"1\"></rect>\n<rect x=\"110\" y=\"97\" width=\"9.50\" height=\"10\" stroke=\"none\"></rect>\n<text x=\"450\" y=\"106\" font-size=\"11\" stroke=\"none\">2.88%</text>\n<!-- bar 5 -->\n<text x=\"15\" y=\"133\" font-size=\"11\" stroke=\"none\">0x62bb39a0...</text>\n<rect x=\"110\" y=\"124\" width=\"330\" height=\"10\" fill=\"none\" stroke-width=\"1\"></rect>\n<rect x=\"110\" y=\"124\" width=\"3.93\" height=\"10\" stroke=\"none\"></rect>\n<text x=\"450\" y=\"133\" font-size=\"11\" stroke=\"none\">1.19%</text>\n<!-- bar 6 -->\n<text x=\"15\" y=\"160\" font-size=\"11\" stroke=\"none\">0x8e05d1c4...</text>\n<rect x=\"110\" y=\"151\" width=\"330\" height=\"10\" fill=\"none\" stroke-width=\"1\"></rect>\n<rect x=\"110\" y=\"151\" width=\"8.05\" height=\"10\" stroke=\"none\"></rect>\n<text x=\"450\" y=\"160\" font-size=\"11\" stroke=\"none\">2.44%</text>\n<!-- bar 7 -->\n<text x=\"15\" y=\"187\" font-size=\"11\" stroke=\"none\">0x37ad6f51...</text>\n<rect x=\"110\" y=\"178\" width=\"330\" height=\"10\" fill=\"none\" stroke-width=\"1\"></rect>\n<rect x=\"110\" y=\"178\" width=\"5.71\" height=\"10\" stroke=\"none\"></rect>\n<text x=\"450\" y=\"187\" font-size=\"11\" stroke=\"none\">1.73%</text>\n<!-- bar 8 -->\n<text x=\"15\" y=\"214\" font-size=\"11\" stroke=\"none\">0xc9428e1b...</text>\n<rect x=\"110\" y=\"205\" width=\"330\" height=\"10\" fill=\"none\" stroke-width=\"1\"></rect>\n<rect x=\"110\" y=\"205\" width=\"9.60\" height=\"10\" stroke=\"none\"></rect>\n<text x=\"450\" y=\"214\" font-size=\"11\" stroke=\"none\">2.91%</text>\n<!-- bottom text -->\n<text x=\"250\" y=\"242\" font-size=\"12\" stroke=\"none\" text-anchor=\"middle\" letter-spacing=\"2\">sho hei dai - 827 gei zen</text>\n</g>\n</svg></div>",
+      "sha256": "c710e59154fe970a4f7e053e8aff67bc1460f0fb63db4143bd667c209433ae13",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "hand_device",
+        "device_evidence": {
+          "idx": 99,
+          "quote": "<span data-hue=\"160\">\"Here, put the other end into your hand device.\"</span>"
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c19-b101.svg",
+            "viewBox": "0 0 500 250",
+            "width": "500",
+            "height": "250",
+            "labels": [
+              "0x1b568a45...",
+              "1.35%",
+              "0x9f3c21d7...",
+              "2.07%",
+              "0x4a8e0b62...",
+              "1.62%",
+              "0xd714fc98...",
+              "2.88%",
+              "0x62bb39a0...",
+              "1.19%",
+              "0x8e05d1c4...",
+              "2.44%",
+              "0x37ad6f51...",
+              "1.73%",
+              "0xc9428e1b...",
+              "2.91%",
+              "sho hei dai - 827 gei zen"
+            ],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 102,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Wow, only eight minutes!\"</span>",
+      "sha256": "3bb092d674b21dfdb64eac23f5866172efeb22998e1c91327e3b0e4ca2c7ef0e"
+    },
+    {
+      "idx": 103,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"So now might you be more open-minded to the things we stodgy librarians say about how physical spaces are still relevant to the pursuit of knowledge after all?\"</span>",
+      "sha256": "4d81509a4cb70fa327e1f3754fed870e77ae1836746520c40ea509058c1136e0"
+    },
+    {
+      "idx": 104,
+      "kind": "paragraph",
+      "content": "A robot slid up to them.",
+      "sha256": "097ae114a65ed03601e46cd3a7b6c3a58abdde8652ce3d070438aa4fcc2c32ce"
+    },
+    {
+      "idx": 105,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"240\">\"jie hei ja ma?\"</span>",
+      "sha256": "1e8880df77eb7b58801e7eb43d38e224987103d795bee2c0475f41e0c28c3dc4"
+    },
+    {
+      "idx": 106,
+      "kind": "paragraph",
+      "content": "A menu appeared onscreen; there was no food, but a selection of drinks was available.",
+      "sha256": "f5d99dff1f6cf95b86f0b3b70276e60563f2f5c8b8ff5548ee1453e6d45c0a0f"
+    },
+    {
+      "idx": 107,
+      "kind": "paragraph",
+      "content": "Gladias immediately clicked a button asking for a tea. Following along, Zei did the same.",
+      "sha256": "80b45c542ab4979e77a3490b307e13d61240c72c408e4e7309f0221bfbca5221"
+    },
+    {
+      "idx": 108,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"This space is beautiful, I am glad you have it.\"</span>",
+      "sha256": "cacc2afb4b15a0ba63fbb82f4dbfd40147ef92b9e743fd66f072e83b8d1a3ed0"
+    },
+    {
+      "idx": 109,
+      "kind": "paragraph",
+      "content": "Gladias stood up and walked over to the shelf with the books. He opened a few one by one. At that moment, not in the mood for straining his brain at reading and interpreting Dzegoban - especially not the earlier-version Dzegoban that the older books were in that he could understand nothing of at all - he focused his attention on the diagrams and pictures.",
+      "sha256": "af4c73130abf0456d806b9e7c7182f85d082f25a0f72fc05307b715274fbddee"
+    },
+    {
+      "idx": 110,
+      "kind": "paragraph",
+      "content": "Two minutes later, the robot slid up to him, and gave him his tea. The tea was in a sealed cup, from which he could only drink through a straw. Surprised, Gladias turned to Zei, and saw that Zei, sitting at a table far away from any books, already had his tea. The cup that Zei received was open-faced, without much protection against the tea spilling.",
+      "sha256": "97b7bc48bbf04c0d588bdb9082c3f1800e3979005daad4570760dab6a8f66ec1"
+    },
+    {
+      "idx": 111,
+      "kind": "paragraph",
+      "content": "Gladias found a book about Dzego architecture, titled \"zui fia pai dan\". He flipped through it. It contained pictures of many designs of basement rooms, shelters and underground rooms inside of mountain pyramids. The book showed them in roughly chronological order starting shortly after the war against the Arctic Empire a hundred years ago.",
+      "sha256": "7aadd9ed6b5b767d18005498e0bca096379ba8adfc6a460b9e69b6e7e4dd2493"
+    },
+    {
+      "idx": 112,
+      "kind": "paragraph",
+      "content": "The earlier designs were very practical in construction, with not much thought put to comfort, or even safety against non-human threats. The designs in the middle started resembling ordinary rooms, with the main glaring exception being lack of windows. And finally, the designs near the end of the book were very well-decorated and comfortable, even more so than above-ground construction. About half had imitation windows, pretending to be outside. The other half did not have windows, and instead had plants, well-decorated walls, and other objects that seemed carefully chosen to make the inhabitant not see any space that they might think is supposed to have a window.",
+      "sha256": "b62fcc1a50788118b5f281517219da1267cfe01a4cb48468322bcb58891b2afc"
+    },
+    {
+      "idx": 113,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Gladias!\"</span>, Zei shouted. <span data-hue=\"346.67\">\"Come back, it's almost done!\"</span>",
+      "sha256": "01da17570da2c884b3ef232e0ae125c0f04b80bf5051a0c739be9e0454a69af9"
+    },
+    {
+      "idx": 114,
+      "kind": "paragraph",
+      "content": "Gladias turned around, and walked back. Just as he arrived, the last progress bar reached 100%. Another window automatically opened. A script began running. \"Reconstructing data... estimated time remaining 175\", it said onscreen - not in Dzegoban.",
+      "sha256": "468002f3a9554f5c3a5b688deba071782cc15210b4e46acd4a14120c9113d42d"
+    },
+    {
+      "idx": 115,
+      "kind": "paragraph",
+      "content": "Gladias and Zei sipped their tea, and stared at the timer counting down. The librarian, curious, hovered quietly about two meters behind them.",
+      "sha256": "c395aad7e2bb8d921f7843bd3631673f0a6f5c4e6b95248f9fa5678aa5b883c0"
+    },
+    {
+      "idx": 116,
+      "kind": "paragraph",
+      "content": "Right on schedule, a little under two minutes later, the script finished, and a screen appeared.",
+      "sha256": "1dac4462ff10fc912f6c6a9d4be1c809b8b827932b20c26107cb909a1d23a34b"
+    },
+    {
+      "idx": 117,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view device-view-left\"><b>What did you do on Firemoon 10th? Explain the day in detail.</b>\n<br><br>\n<div style=\"background-color: #cef; border-radius: 9px; padding: 10px; height: 50px\">\n<b style=\"color: #22b; animation: blinker 1s linear infinite\"> &gt; </b>\n</div></div>",
+      "sha256": "2c4d4884c2a435bf1b7f19dec557ee9a93544b837a2ff889488ccff049ed18d5",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "screen",
+        "device_evidence": {
+          "idx": 116,
+          "quote": "Right on schedule, a little under two minutes later, the script finished, and a screen appeared."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "left",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "heading",
+            "text": "What did you do on Firemoon 10th? Explain the day in detail."
+          },
+          {
+            "type": "text",
+            "text": ">"
+          }
+        ]
+      }
+    },
+    {
+      "idx": 118,
+      "kind": "paragraph",
+      "content": "Zei stared.",
+      "sha256": "1c3e2161baf7bcfea6948bede9221526b34c6a50d3104db3075aabd8095e5717"
+    },
+    {
+      "idx": 119,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Let's reschedule the meeting with Den for tomorrow. I have a feeling this is not going to be a simple task.\"</span>",
+      "sha256": "a0dd2f2a6390e9bf598e25759775c01831b8384bd66f0b8bb953c4b159aa12d0"
+    },
+    {
+      "idx": 120,
+      "kind": "paragraph",
+      "content": "Gladias nodded.",
+      "sha256": "153a6dc6e93c41ecd9afd8fc32af9da287e7574e6d4d6781f6e29cf14b97dc7c"
+    },
+    {
+      "idx": 121,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Are you going to answer?\"</span>",
+      "sha256": "3ae67124a8d6f672080eac76175843f76d1b76a32bb05b03b30e54ed8c50d036"
+    },
+    {
+      "idx": 122,
+      "kind": "paragraph",
+      "content": "Zei pressed a few buttons on his hand device. <span data-hue=\"346.67\">\"I put this program into a sandbox using a journaling file system, so it can't access the internet, and I can always revert it back to start. So there's no privacy leak risk, and if I'm not happy with the outcome I can just revert it back to start and try again. So why not?\"</span>",
+      "sha256": "9a768ecccd552f4c0c9d1e537b0884d9ae978ed20b9a6e888d6e83ca5cda55c7"
+    },
+    {
+      "idx": 123,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Now ... to remember what I did on the 10th of Firemoon ... or rather I'll just ask my hand device.\"</span>",
+      "sha256": "9a2ebacffaae027cbbb36374b8b9e5347cff68805e1b63201ceee1e74a8c7bc6"
+    },
+    {
+      "idx": 124,
+      "kind": "paragraph",
+      "content": "A record of Zei's life events on that day popped up. That day was his last Minpentai game, the semifinal against Gun - the last day when things in his life were at least somewhat normal. Before that game, he woke up and had a meeting with Bai. After that game, he met up in the courtyard with Deluin.",
+      "sha256": "12c1af5f009cbdd492c8bdb89d78bc88e203cc8ceeeb8fec1d4ec8829e9d9529"
+    },
+    {
+      "idx": 125,
+      "kind": "paragraph",
+      "content": "Wait, Zei thought, the courtyard ... what was the address again? He looked it up.",
+      "sha256": "44d33b73ccdc5c8bb3940aad4a63774de03a58b3daaeb98b2a013de831409163"
+    },
+    {
+      "idx": 126,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view\"><b>sa dzu du de <br> len su 2415 de <br> bun kai mo fan\n</b></div>",
+      "sha256": "37d233ceca8d54d73d914b8ae54332cfb7d5587cae9f04cb3cfd5fa46a1c5216",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "hand_device",
+        "device_evidence": {
+          "idx": 123,
+          "quote": "or rather I'll just ask my hand device.\"</span>"
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "heading",
+            "text": "sa dzu du de len su 2415 de bun kai mo fan"
+          }
+        ]
+      }
+    },
+    {
+      "idx": 127,
+      "kind": "paragraph",
+      "content": "The exact same cafeteria that the original message was from.",
+      "sha256": "c399424acc48d8d10a88e2fd480efce0d09c2df1e110049c70654cf072b3189d"
+    },
+    {
+      "idx": 128,
+      "kind": "paragraph",
+      "content": "This was, as his local AI liked to say, the punchline. Zei started typing, recalling that day of his life from a combination of the AI records and his own memories which were rapidly coming back.",
+      "sha256": "c17c64ed1619a1ed7c818ae563c3cdc93af093d8ec12fb220d44ccb71cd56c55"
+    },
+    {
+      "idx": 129,
+      "kind": "paragraph",
+      "content": "Waking up.",
+      "sha256": "6a8a1ddd8549930a02f86f241a81d9b166ba8e0d16845ffab67a4e950b1b3692"
+    },
+    {
+      "idx": 130,
+      "kind": "paragraph",
+      "content": "The meeting with Bai.",
+      "sha256": "7514bdc454bb3935f3f5364e94ecd6c252177bb7f46a26e21db599513dda8362"
+    },
+    {
+      "idx": 131,
+      "kind": "paragraph",
+      "content": "Going to the game.",
+      "sha256": "5f695bce65dd50dca0b68cbc7d8b4f546c0d4cb2ebf33b4ca57eb8512eb9ae3c"
+    },
+    {
+      "idx": 132,
+      "kind": "paragraph",
+      "content": "Waiting for the game.",
+      "sha256": "19e1798159497951bf8823ca3516b6f374066147b48feb1bdcd10b52d56e29e6"
+    },
+    {
+      "idx": 133,
+      "kind": "paragraph",
+      "content": "The game itself.",
+      "sha256": "ef36145fd0ce3cdd3ce87528c6ce60196c61b8ab1fec09abb015492bc07cdacf"
+    },
+    {
+      "idx": 134,
+      "kind": "paragraph",
+      "content": "Watching Deluin's game.",
+      "sha256": "77dcfa7e1b270a8c7e7ce8411cace880f679194829198e53a17f5b867333bb45"
+    },
+    {
+      "idx": 135,
+      "kind": "paragraph",
+      "content": "A brief conversation with Deluin after the game. What was it I had said ... \"my style was uglier than yours. Though I also won by playing defense\"",
+      "sha256": "1048adbe9ac318f90234fe026d2c79c7c393929982a49bb1b3f66a20e34ef0e0"
+    },
+    {
+      "idx": 136,
+      "kind": "paragraph",
+      "content": "And then the meeting with Deluin at the courtyard itself. Zei spent as much time detailing this event as the rest of the day put together.",
+      "sha256": "b07030cac452e33be826e26d98bd15a76ddb520f7812fb12bb90ec9ba11afe5c"
+    },
+    {
+      "idx": 137,
+      "kind": "paragraph",
+      "content": "The robot. A/B testing the new proposed hieroglyphs for Dzegoban.",
+      "sha256": "91cb8984f8c17e22809b43ea2e88124df11a910e404fd101c564378c24a35ed6"
+    },
+    {
+      "idx": 138,
+      "kind": "paragraph",
+      "content": "Deluin invited him to Redshire. He refused. Deluin showed pictures of Redshire.",
+      "sha256": "703932bb429dca41c2ac50ae737e5cf84603e83d61595b87d649e0e5b08d77a3"
+    },
+    {
+      "idx": 139,
+      "kind": "paragraph",
+      "content": "Deluin talking about how the nature of a place being beautiful actually does say something about the civilization there.",
+      "sha256": "3701f3608bab1ac6e0409d03bc4bb2c00cfb0d47433578b50a69640202da3182"
+    },
+    {
+      "idx": 140,
+      "kind": "paragraph",
+      "content": "And then Deluin's gently trolling line: \"I'll use my championship winnings to pay for you to go.\"",
+      "sha256": "fbc9e5f90509b4e7615d5b66837f8027964c6691efd59e2faa70e109b64f64b0"
+    },
+    {
+      "idx": 141,
+      "kind": "paragraph",
+      "content": "After typing everything in, Zei clicked \"send\".",
+      "sha256": "31a3f050d811745f89d4dfb4eb26e8e82e7c4d2aa5e8f39fca17c7a6b1d48e0d"
+    },
+    {
+      "idx": 142,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view device-view-left\"><b> Thinking ... estimated remaining time 440 </b></div>",
+      "sha256": "f2b50881c9b2192fb5ce664c14a36390ad6faabd136a7f2189345d8f08bbf520",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": null,
+        "device_evidence": null,
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "left",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "heading",
+            "text": "Thinking ... estimated remaining time 440"
+          }
+        ]
+      }
+    },
+    {
+      "idx": 143,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Okay, so this is a language model. But how large was that file? After the data reconstruction.\"</span>",
+      "sha256": "292b882c9d8437dcef0ddd6c0440cbf879be478c1260f0bf818707c6aa90445f"
+    },
+    {
+      "idx": 144,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"10.7 gigabytes. The overhead was exactly a factor of six. I had a background thread check where the files were from, they were all recently uploaded. One sixth was a few recent movies - public data, though of course *the selection of which movies they chose* is a secret key of sorts. Another half was a big pile of someone's health data. The last third was also video, though it seemed to be AI-generated. It was all Arctic sermons talking about how fundamentally flawed the Veridian and Dzego civilizations are.\"</span>",
+      "sha256": "328a18bc47bab593d3a1f7db1135977349489fec91a0b506f84661c9d5c58d2b"
+    },
+    {
+      "idx": 145,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"The recombination algorithm was a five-of-six erasure code of five pieces of 10.7 gigabytes each. Each of those pieces, in turn, was a steganographic encoding: they used language models to find bits to flip so that the data still looked plausible, while encoding the actual underlying message, at a very ambitious rate of one bit of plaintext per four bits of ciphertext. And then the movies were a sort of cryptographic pad: if you don't know the exact set of movies that were used, even if you could fully uncover the plaintext, it would just look like random data.\"</span>",
+      "sha256": "51b12f08a7f64480b55e654f615307f57eafe378ce57fd7d53a59deb2c13bbec"
+    },
+    {
+      "idx": 146,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Wait, if they wanted a pad, couldn't they just pseudorandomly generate one by repeatedly hashing some data?\"</span>",
+      "sha256": "844ed9a4d503280407d9e542e22e1dffb4f4dd12e4a37c4d00c6127431dba5fe"
+    },
+    {
+      "idx": 147,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Ah actually you're right. Maybe I was overthinking it, maybe they just did it this way to throw people off.\"</span>",
+      "sha256": "b643a2e410607c1623476b535ed691034fa98bf97a580ccb0d2f03bb635acb16"
+    },
+    {
+      "idx": 148,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Okay, so 10.7 gigabytes, what is it?\"</span>",
+      "sha256": "5d8489df6e446c3f5d23cda977eda234c51b2215f9e99776f7b0f4fed6169422"
+    },
+    {
+      "idx": 149,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"It's not a plaintext language model. It's an obfuscated language model. Level two obfuscation, much weaker parameters than the full cryptographic-grade parameters that are used in the cryptographic networks for voting in DU or Bansunpei or for that matter the Order of Steering, but it's still the same algorithm.\"</span>",
+      "sha256": "926853f3912ad62dcd3fd982f24b9a411b1fa30fc5dc2c4db622ee7fecab191b"
+    },
+    {
+      "idx": 150,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Level two obfuscation is actually the right tradeoff for language models, because language models themselves are big and compute-intensive, so they can't handle the high overhead of going level four, and on the other hand, language models are at least partially obfuscated and resistant to bit flips all on their own. If you uncover the value of a few weights, or get the ability to reliably flip a few values in a few tensors, it's not like you can get anything useful out of that.\"</span>",
+      "sha256": "aa4560490b626df5dc8093899a679c60cfec40cb711f8f14e83da2fb7dd4aa1d"
+    },
+    {
+      "idx": 151,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Overhead factor of level two obfuscation is in the tens to low hundreds on size, and high hundreds to low thousands on compute. So this model is pretty tiny; I suspect whoever sent this fine-tuned it to only do this one task. I also think this language model's wrapper program, the full package that's being obfuscated, is doing the thinking all at once, to verify whether or not my answer is satisfactory. If it is, it will just give us its message at the end.\"</span>",
+      "sha256": "f752a4c5fc57723c8ef43e889c0ffe6ca1643375c1831d6df05ef4d58db43b37"
+    },
+    {
+      "idx": 152,
+      "kind": "paragraph",
+      "content": "As though on cue, Zei's hand device buzzed. The program finished executing. A new message appeared onscreen:",
+      "sha256": "f47a77e6617609a21d564b575de94ce4934ac13288a7c8e4b8bf226ba6125dac"
+    },
+    {
+      "idx": 153,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view device-view-left\"><p>Hello Zei.</p>\n<p>You may be wondering why I have not communicated any further with you within the past month. I greatly apologize for this, and my goal in sending you this letter is that you are the only friend I have who is outside of Arctic control, and you deserve my explanation about what has been happening.</p>\n<p>The Arctics did a full sweep of Redshire almost a month ago, to confiscate all electronic devices, and give us back only devices that were backdoored and surveilled by them. This is why I lost contact with you. I had no way to reach you, and so I had to encrypt my message to you by wrapping it in this obfuscated language model that asked you to describe our shared experience to verify your identity. I have only been able to construct and send this message through a series of rounds of stealing devices from others, including two watches containing two Arctics' health data, doing the needed work inside of a non-transmitting room, copying the outputs to an inert storage medium, and then chemically destroying the circuits and storage on those devices.</p>\n<p>Physical surveillance of Redshire is, fortunately, much less total than the Arctic itself, though the window on that is closing fast. But there was also another window that was closing fast for me.</p>\n<p>You see, my parents were always on the side of being more sympathetic to the Arctics. And so after the annexation happened, they decided to cooperate with them. They told me that this was the best way to get any chance of autonomy for themselves and for Redshire in the future: to win trust by becoming a helpful part of the Arctic Empire. And so by the time you read this, most likely we will already be on an aeroplane going into the Arctic Empire core territory.</p>\n<p>I do not share their sympathies. But I have decided that the way that I can maximize my chance of being useful, is to play along, and win their trust too. The Arctic Empire respects strength, I have proven my strength by winning the Minpentai semifinals in Dzego, and my parents may be proof enough of my alignment. Hopefully, there will come a moment where I will be able to do something helpful to you. But I do not know.</p>\n<p>And so for this reason, this may well be the last message that you hear from me. I hope that this will not be true, but I cannot guarantee anything. I am sorry for everything.</p>\n<p>dze go ba fau gie</p>\n<p>Your dear friend Deluin.</p></div>",
+      "sha256": "4f9220a4bdba9d6463aeb7bfec030ca06f370834fd9bf0e8b66de3f3d49bd3a5",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "screen",
+        "device_evidence": {
+          "idx": 152,
+          "quote": "A new message appeared onscreen:"
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "left",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "text",
+            "text": "Hello Zei."
+          },
+          {
+            "type": "text",
+            "text": "You may be wondering why I have not communicated any further with you within the past month. I greatly apologize for this, and my goal in sending you this letter is that you are the only friend I have who is outside of Arctic control, and you deserve my explanation about what has been happening."
+          },
+          {
+            "type": "text",
+            "text": "The Arctics did a full sweep of Redshire almost a month ago, to confiscate all electronic devices, and give us back only devices that were backdoored and surveilled by them. This is why I lost contact with you. I had no way to reach you, and so I had to encrypt my message to you by wrapping it in this obfuscated language model that asked you to describe our shared experience to verify your identity. I have only been able to construct and send this message through a series of rounds of stealing devices from others, including two watches containing two Arctics' health data, doing the needed work inside of a non-transmitting room, copying the outputs to an inert storage medium, and then chemically destroying the circuits and storage on those devices."
+          },
+          {
+            "type": "text",
+            "text": "Physical surveillance of Redshire is, fortunately, much less total than the Arctic itself, though the window on that is closing fast. But there was also another window that was closing fast for me."
+          },
+          {
+            "type": "text",
+            "text": "You see, my parents were always on the side of being more sympathetic to the Arctics. And so after the annexation happened, they decided to cooperate with them. They told me that this was the best way to get any chance of autonomy for themselves and for Redshire in the future: to win trust by becoming a helpful part of the Arctic Empire. And so by the time you read this, most likely we will already be on an aeroplane going into the Arctic Empire core territory."
+          },
+          {
+            "type": "text",
+            "text": "I do not share their sympathies. But I have decided that the way that I can maximize my chance of being useful, is to play along, and win their trust too. The Arctic Empire respects strength, I have proven my strength by winning the Minpentai semifinals in Dzego, and my parents may be proof enough of my alignment. Hopefully, there will come a moment where I will be able to do something helpful to you. But I do not know."
+          },
+          {
+            "type": "text",
+            "text": "And so for this reason, this may well be the last message that you hear from me. I hope that this will not be true, but I cannot guarantee anything. I am sorry for everything."
+          },
+          {
+            "type": "text",
+            "text": "dze go ba fau gie"
+          },
+          {
+            "type": "text",
+            "text": "Your dear friend Deluin."
+          }
+        ]
+      }
+    }
+  ]
+}

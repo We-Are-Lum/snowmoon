@@ -1,0 +1,1137 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 22,
+  "source_url": "https://vitalik.eth.limo/snowmoon/html/chapter-22.html",
+  "source_sha256": "43cc856f38b7215f4d40b6ec8730064622eeeafa73e70cf1e99564fb8963fc3f",
+  "fetched_at": "2026-10-02",
+  "license": "GPL-3.0",
+  "blocks": [
+    {
+      "idx": 0,
+      "kind": "heading",
+      "content": "# Chapter 22",
+      "sha256": "4870c1f772ed6ce4d56e8817a4bee082457d4c546e738312e37765f958ad738d"
+    },
+    {
+      "idx": 1,
+      "kind": "dateline",
+      "content": "**Freetown, United Cities** · 3724 Mistime 22",
+      "sha256": "1f72854f204b5a353044644cb713259530211a92df061e77bc4888ace19fe926"
+    },
+    {
+      "idx": 2,
+      "kind": "paragraph",
+      "content": "Jahn, sitting in a taxi, looked out through the window. He saw Freetown's usual chaotic mixture of buildings: some glass and steel, some concrete, some stone, some tall, some short, some beautiful, some ugly.",
+      "sha256": "0964928f53bef5b9e7ae7ad543fdc84184cd2300f0ae9c3f178cde48101e6522"
+    },
+    {
+      "idx": 3,
+      "kind": "paragraph",
+      "content": "The taxi passed under a highway, and he could see piles of uncollected garbage on the sides of the road. Almost immediately after the highway, the taxi passed by a small park to the left, and a tall industrial building on the right. A movie with subtitles was playing, projected onto the industrial building's wall. Jahn looked again to the left, to see where the movie was projected from. Just before the taxi moved too far away for Jahn to be able to see, he found the projector, hidden under a bench in the park. Even without Graph Funding or rubrics, he thought, some people will always provide public goods.",
+      "sha256": "4aa7392a022071fbaf2131ab274cf3fa36df98e1d085e6ab4ba8ad6bb91d9b53"
+    },
+    {
+      "idx": 4,
+      "kind": "paragraph",
+      "content": "On the whole, everything seemed normal - though Jahn could just barely notice that the amount of activity on the streets seemed to be lower than usual.",
+      "sha256": "e7193b48719004848a4bcea2fb68c43391eb20e3ae926ce8e8ef13cd54afed9c"
+    },
+    {
+      "idx": 5,
+      "kind": "paragraph",
+      "content": "The taxi passed under another highway. On the other side, on the side of one of the buildings, Jahn noticed a large advertisement.",
+      "sha256": "10259d615fa4068ed39b14222e104dc35465950fa9691873346f9c5d98837a66"
+    },
+    {
+      "idx": 6,
+      "kind": "quote",
+      "content": "> Buy a luxurious room in a shelter, right on the northern edge of central Freetown.\n>\n> 10 meters underground, maximum-grade physical, bio and info filtration and insulation.\n>\n> Only 325,000 zipcoins!",
+      "sha256": "7ad51ed09dcc71a274946c3e5f430ef30acddd847245ce64c776b1bf00cb2c1e"
+    },
+    {
+      "idx": 7,
+      "kind": "paragraph",
+      "content": "A minute later, another advertisement:",
+      "sha256": "73e129cf3490dee1c0cf80e90738b5adf3c6c25fd1c8cbe9cec184fb48c179d6"
+    },
+    {
+      "idx": 8,
+      "kind": "quote",
+      "content": "> Shelters for the common man, in all shapes and sizes.\n>\n> Prices start at only 50,000 zipcoins, mortgage plans available!",
+      "sha256": "6824ae6295666b681b08b57e7552ff07006a7237320e127b0c60703a76c2aaa3"
+    },
+    {
+      "idx": 9,
+      "kind": "paragraph",
+      "content": "As the taxi continued west, it entered the region that the advertisement was talking about. Here, Jahn saw a type of activity that, to him, seemed to have been steadily increasing for the past six months: construction of roads. Jahn had also seen many shelters being constructed, but roads were a close second - particularly on the northern side of the town.",
+      "sha256": "cfce4819909f0d97877ddca4302e62ef118b0070066fcbf64a8a670c4f852d5f"
+    },
+    {
+      "idx": 10,
+      "kind": "paragraph",
+      "content": "Jahn's hand device buzzed in his lap.",
+      "sha256": "a8ab2588d051091cce8e3f104f607aca95dc3e3e08143402ce4c511bfdeb6cb9"
+    },
+    {
+      "idx": 11,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th colspan=\"3\">Taxi fare</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td><center>Driver base fare</center></td>\n      <td></td>\n      <td>3.69</td>\n    </tr>\n    <tr>\n      <td><center>Per-minute toll</center></td>\n      <td>9 min</td>\n      <td>1.89</td>\n    </tr>\n    <tr>\n      <td><center>Per-kilometer toll</center></td>\n      <td>5.65 km</td>\n      <td>1.26</td>\n    </tr>\n    <tr>\n      <td><center>Acceleration and deceleration toll</center></td>\n      <td>113 m/s Δv</td>\n      <td>1.03</td>\n    </tr>\n    <tr>\n      <td><center>Road congestion toll</center></td>\n      <td></td>\n      <td>1.50</td>\n    </tr>\n    <tr>\n      <td><center>Road congestion toll</center></td>\n      <td></td>\n      <td>1.00</td>\n    </tr>\n    <tr>\n      <td><center>Road congestion toll</center></td>\n      <td></td>\n      <td>2.25</td>\n    </tr>\n    <tr>\n      <td><center>Total</center></td>\n      <td></td>\n      <td>12.52</td>\n    </tr>\n    </tbody>\n</table></div>",
+      "sha256": "d934c30acc3ca27d4e9b962313c1e386c6b9cf243c2d484f122c657ce2c21cc1",
+      "data": {
+        "world": "united-cities",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Freetown, United Cities"
+        },
+        "device": "hand_device",
+        "device_evidence": {
+          "idx": 10,
+          "quote": "Jahn's hand device buzzed in his lap."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "Taxi fare"
+              ]
+            ],
+            "rows": [
+              [
+                "Driver base fare",
+                "",
+                "3.69"
+              ],
+              [
+                "Per-minute toll",
+                "9 min",
+                "1.89"
+              ],
+              [
+                "Per-kilometer toll",
+                "5.65 km",
+                "1.26"
+              ],
+              [
+                "Acceleration and deceleration toll",
+                "113 m/s Δv",
+                "1.03"
+              ],
+              [
+                "Road congestion toll",
+                "",
+                "1.50"
+              ],
+              [
+                "Road congestion toll",
+                "",
+                "1.00"
+              ],
+              [
+                "Road congestion toll",
+                "",
+                "2.25"
+              ],
+              [
+                "Total",
+                "",
+                "12.52"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 12,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Hey, Chief?\"</span>, Jahn asked the driver.",
+      "sha256": "e03f5ababb8f6ac2aa501d24320331446f8006c0ffe9a17fbf383f9c3e21ce7b"
+    },
+    {
+      "idx": 13,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"What is it?\"</span>, the driver replied.",
+      "sha256": "98050968d1caa032c880465a06e40ebe2598b7af581294bc55538f94e85d5c80"
+    },
+    {
+      "idx": 14,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Do you know why there's so many congestion charges this time? The road seems quite a bit less congested than usual, why would the tolls be going that high?\"</span>",
+      "sha256": "b1ee3492477ec95839af0a014781327e0f0bcf2d8d3732a095a202ea381942d9"
+    },
+    {
+      "idx": 15,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Ah yeah, they're bumping up every tax and toll they can. Funding defense, they say.\"</span>",
+      "sha256": "2b0d97ac1ba0e99180b750b6c2a440c3ed5c5e005c689eb64e41aba20d4357df"
+    },
+    {
+      "idx": 16,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Huh, the roads too?\"</span>",
+      "sha256": "b5da9c0cc739ab75a558a68f47d8bbabae4ab9df7a6e3e510c7ad13bb2f66902"
+    },
+    {
+      "idx": 17,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Are they bumping up any other fees on you?\"</span>, the driver asked.",
+      "sha256": "a1079a36b607500002a40dfac71bee18e24f55f13ac2604dc1a7f7fb94c9dd7e"
+    },
+    {
+      "idx": 18,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Actually not the government\"</span>, Jahn replied. <span data-hue=\"133.33\">\"At least, not directly. But, the shelters. I heard some interesting gossip there.\"</span>",
+      "sha256": "6e30d15ecd49f5e9731749c1d40a61b4ede3a00c5d0fa92b2f2e64d619ee6241"
+    },
+    {
+      "idx": 19,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"And what is that?\"</span>",
+      "sha256": "5aaa6da11c6786bf92d59c80be54afd2c5b22fda2a9894f360903cc5e8ec96a9"
+    },
+    {
+      "idx": 20,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"The best shelters were originally owned by a few defense companies. Soon after Redshire got annexed, they got together and formed a cartel. Sold off a lot of the shelter space for money, and used that to modernize their armor and weapons a bunch.\"</span>",
+      "sha256": "8c64f362b08a47c64a55b4fa22e706a1139e5f84a4ae1dc26648b0f673a78475"
+    },
+    {
+      "idx": 21,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Huh, all private companies? I guess that's their property, their rules. Less shelter space left for us poor folks than if they just rationed it, but hey, they are trying. And if they use that money to defend us well, less chance we'll end up needing any shelters in the first place. And with fewer cars on the road, I'm enjoying the roads more too.\"</span>",
+      "sha256": "d341ce3ce73215fdf0152cc084a4182f401d0c265f99151a7c6ba9e16245fe09"
+    },
+    {
+      "idx": 22,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Well, yes that's the polite story. Freetown's economic philosophy at its finest. But I'm getting the feeling it's not *quite* that clean. The government seems to be making a special effort to build roads in exactly those places that make it easier to get to and from the shelters. There's no evidence of any collusion between them and the companies - that would get knocked down hard by the courts - but my theory is that it's a sort of retroactive reward. Create the expectation that if you use your private property for the public good, then the government will twist the public work that it does in order to make life easier for you. It's a trick to work around the maximum budget rule - pay people without actually directly paying them.\"</span>",
+      "sha256": "84542cedc6ca6732bc3976d6a3befc958a97d2c799547f6776f59b8f4cc12b4c"
+    },
+    {
+      "idx": 23,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"And if you refuse to use your private property in public-spirited ways, well... if things get really bad the next step might be that they'll start closing some roads for 'maintenance'. Though I guess people can always fly.\"</span>",
+      "sha256": "aece66c90be3bcf016eea922760a6290b5908b994ac379ebf1a8e681b023b6b3"
+    },
+    {
+      "idx": 24,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"The Greater Plum Harbor has been refusing to fund anything that could be seen as going against the Arctics, they're scared that their node in Northglade might get shut down. I guess that's where we'll find out how good Freetown is at staying 'free'.\"</span>",
+      "sha256": "98ea09329a0665551b292740b50b16d2accd079f8bab242c894c43d96cd261be"
+    },
+    {
+      "idx": 25,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"And at defending itself.\"</span>",
+      "sha256": "e752ef935212ec3943b7afa0b167ee7ec9c6987563e7ea59bbb02a96c5cddd74"
+    },
+    {
+      "idx": 26,
+      "kind": "paragraph",
+      "content": "The driver and Jahn stayed silent for a minute. Soon, the taxi slowed to a halt. Jahn looked outside the window. He had arrived at the Freetown Economics Institute.",
+      "sha256": "8b125a42eb732552d2cd2bbddac779d2f48a61b14fb942d8bac4659a53f384ed"
+    },
+    {
+      "idx": 27,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Thank you Chief, and have a good day!\"</span>",
+      "sha256": "e7a30965223c34439c68ad436a35ba831dd6841746a5826f80918d9faef6a73e"
+    },
+    {
+      "idx": 28,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"You too, boss\"</span>, the driver replied.",
+      "sha256": "3a4bcba1e1f694c19af38a49f68daa951c96ca3250f6bd576b589dc402229343"
+    },
+    {
+      "idx": 29,
+      "kind": "paragraph",
+      "content": "Jahn opened the door, and got out of the taxi.",
+      "sha256": "40cd979a97d31fd35acff7231133e7264317f36cf715c6d593c0aee6d8f356bf"
+    },
+    {
+      "idx": 30,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 31,
+      "kind": "paragraph",
+      "content": "Jahn passed through the turnstile in the Freetown Economics Institute, and walked toward the restaurant.",
+      "sha256": "5c041c92703d3ce75862736562e7c2269c8bf7c33730a1bdbedef30c55d3f332"
+    },
+    {
+      "idx": 32,
+      "kind": "paragraph",
+      "content": "After a minute of walking, he arrived. He saw a familiar face: Utaku.",
+      "sha256": "3d4a93187492ab0206d0ff7601f77f7b41a54a63f6f3a7473914ee22a0e61ae1"
+    },
+    {
+      "idx": 33,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Utaku! Surprised to see you still here.\"</span>",
+      "sha256": "9eb36b7275fba9652f5fe49b7a5700f91f798f845a227207a825c6687bbbc1ca"
+    },
+    {
+      "idx": 34,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"280\">\"My parents told me to come back. They think Freetown is taking defense more seriously than the other United Cities, so it's safer than Belpaki here.\"</span>",
+      "sha256": "3e0f9358d7f419e936e3aeb8306693ae63ada637155a4ba4f8eed8c4d1b37c2a"
+    },
+    {
+      "idx": 35,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Do you think that?\"</span>",
+      "sha256": "8e49c7dbf8dc597d15cb4c54ab2989a96ae7f67ae68b1d400720fd622cc64880"
+    },
+    {
+      "idx": 36,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"280\">\"There have been some moves recently to create a unified defense grid between the aks. I'll be more optimistic if that goes through. But even then, I worry it's more theater than anything substantive.\"</span>",
+      "sha256": "0266ea4fcf0273875675755dfa99b4e5d12bd4b48cc8af1bfce1519e061fa685"
+    },
+    {
+      "idx": 37,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Has Freetown been doing anything substantive?\"</span>",
+      "sha256": "39e860b7238c637875d55cd2ee807aea59a7a8ba6e4bac15d633e2e3af15b527"
+    },
+    {
+      "idx": 38,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"280\">\"Well the big corps are paying insurance on all their property, the rates tripled when Redshire was annexed, and doubled again after Northglade. And then apparently the rates dropped back down by a quarter when the corps announced their recent defense packages.\"</span>",
+      "sha256": "66911d2a9588b9d2fde8d2c1103477c9bb1d274e2772a0c79d5f77b5d5fdb014"
+    },
+    {
+      "idx": 39,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"280\">\"So ... somehow the market incentives seem to be working.\"</span>",
+      "sha256": "6f2ff52dd893de4b22cf63a30fd3430ad7d19e49ec5aa7fc0aaa7ee77502ded9"
+    },
+    {
+      "idx": 40,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"You know, I've been talking to Zei from Dzego lately, and learning how quickly they've gotten everyone to start caring about privacy, now about bio safety, average indoor CO2 levels dropped by over a hundred points within a month. All coordinated by machinery that they originally created, supposedly, to upgrade their language - and to give us a much more sensible distance and time system.\"</span>",
+      "sha256": "7d40e24575a854882a47296dfb1d3ee566560107cbb87b2679259f83a6b34d29"
+    },
+    {
+      "idx": 41,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"I've been getting this feeling that maybe almost any system can work well if people accept it and believe in it.\"</span>",
+      "sha256": "35071c5aa824933d72336bb31209ce14c885b1f346f20ac08234e0336ed47408"
+    },
+    {
+      "idx": 42,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"280\">\"Do people in Freetown believe strongly in economic freedom? Everyone in the Economics Institute does, obviously, but what about regular people?\"</span>",
+      "sha256": "3401e80e6428e730c95f909865f41f2a9de2b27dcc7c04942a52f248125a6778"
+    },
+    {
+      "idx": 43,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Are you familiar with the early history of the United Cities, a hundred years ago?\"</span>",
+      "sha256": "6e5616740dff63fdb8f3c04a4d34df9f900480f1aeaeeb5da24ac13e0e00e9de"
+    },
+    {
+      "idx": 44,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"280\">\"Vaguely. I know there were some wars, both between some of the cities and against the Arctics.\"</span>",
+      "sha256": "5a926aa5b53bb3c5aa2395ac1c8434699c9d71bc5aa3d369acca6b40ed41108b"
+    },
+    {
+      "idx": 45,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"But do you know how those wars got resolved?\"</span>",
+      "sha256": "ddadea65152c242d16e92ea8bb70d3cd176a9389433bcf23c28d09a2adc8b0f5"
+    },
+    {
+      "idx": 46,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"280\">\"Eventually the armies of this continent came together and cooperated more, and that was a big part of why the Arctic offensive against Dzego was finally stopped.\"</span>",
+      "sha256": "04b1fc17e01163db72da710003cbe3fa5bccee3e715ec1c673a6f9d13e3bc7ba"
+    },
+    {
+      "idx": 47,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Coming together in a crisis is easy. What's hard is keeping that spirit together through the easy times, the boring times, the times when the founding generation dies out and the kids and the grandkids need someone to fight against and have a hard time resisting the urge to start turning on each other.\"</span>",
+      "sha256": "a01d96a7ee01cb733e5c2413ccc9b4005e30f610245b7b78b0e5a1f04ee8c564"
+    },
+    {
+      "idx": 48,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"280\">\"So what happened? The co-governance system, I'm guessing?\"</span>",
+      "sha256": "e6e695c6dc5a31e10106ee8f4884482ef67438203e135dc081d1492f268a3a8a"
+    },
+    {
+      "idx": 49,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"That's one part of it. Each city gave a percent of the votes in its parliament to its neighbors - not enough to threaten the cities' independence and their unique cultures, but enough that future politicians would not have an incentive to ignore their surrounding continent completely.\"</span>",
+      "sha256": "ed07d86987c530cc1c8669b17e0adc5f0d8c262f70eafec3bdf56a09329958fa"
+    },
+    {
+      "idx": 50,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"But also, they did another thing to preserve unique cultures. They had a period during which they subsidized people swapping homes and citizenships. People who felt more at home in another city were able to move easily and change their allegiance to their new home.\"</span>",
+      "sha256": "d025ad5835908669c78b137ab689c308a53c596007214a162724eb36cf3123f9"
+    },
+    {
+      "idx": 51,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"The government of Freetown made a decision. They passed a new constitution, the one we still have today, which limited the government's power to regulate and tax anything down to a bare minimum. And then they said: this is what we are about. If you are scared of it, go to another city, but if you like it, no matter which city you're from, we welcome you. They even did a personality test without telling people what it's for, and then gave bigger subsidies to people who got what the government thought was a compatible result.\"</span>",
+      "sha256": "4e7fc7d8cbc6a46a27c96678a5d798fc77b5474eaeafdb5af1e77f1da64f4a37"
+    },
+    {
+      "idx": 52,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"280\">\"Wow, I did not know that.\"</span>",
+      "sha256": "fc5777ce797be0e130475107698e45c045f138ac39d6fbdc7fc4760365eca2e8"
+    },
+    {
+      "idx": 53,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Actually Arturia did a similar thing, in a somewhat opposite direction. They described their values as being about peace and quiet, research and learning, and they filtered by conscientiousness and test scores. Today, their whole society is sort of like a big university. If you go against the system too much, you get pushed harder and harder to leave and go to Freetown. But if you're fine with the system, you can learn a lot and have a lot of fun inside it. They actually do quite a lot of good science and have reliable infrastructure.\"</span>",
+      "sha256": "c4df4b454464f8d35675473d82af20fb624ec37d065bec6a9da8b25729a26f9f"
+    },
+    {
+      "idx": 54,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"The strongest legitimacy comes from people buying in to an idea voluntarily - signing the form, knowing exactly what they are getting themselves into and what they are giving up.\"</span>",
+      "sha256": "999edf4b5b2cc2601fb302a2af040ab44733f39175a626f32b026a92a612fc6f"
+    },
+    {
+      "idx": 55,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"280\">\"That sounds like selection matters too. Different styles work for different people. Maybe a Freetown made out of people from Arturia would be a disaster, and same with the reverse.\"</span>",
+      "sha256": "15ac4acb2bbeafb2f28a5faa839167233da74697bfcd20bb3de68b7bad2f42d6"
+    },
+    {
+      "idx": 56,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Of course, now we're several generations into people being just born here, like people get born anywhere else. But for now, Freetown has held.\"</span>",
+      "sha256": "73d768dccbb7b237a0a6b84d673c568ea61b2a3a4690cc7ff195394e419f9e60"
+    },
+    {
+      "idx": 57,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"280\">\"Do you think some people are ... genetically more freedom-loving than others? And Freetown got a lot of those people back then, and those genes got passed down?\"</span>",
+      "sha256": "ea6fdecbcf32d6f66656419cc89ec508fd9f22be14ff1830be3d6dff6ae0f13c"
+    },
+    {
+      "idx": 58,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"People here bring that idea up from time to time. To me it feels unlikely. All the congestion tolls that I paid to get here, all the turnstiles, I somehow doubt that there can exist a gene that would register all that as being \"free\". You need to have a pretty deep education to understand how it's free - how it's all part of a market, each person and institution allocating their private property as they see fit, and how all these payments give people the ability to honestly self-report whether or not they truly value something more than the resources that it costs to make it available for them, and how that's better and more civilized than the government just deciding what things it thinks are wasteful and banning them.\"</span>",
+      "sha256": "11f5fdeea143567f5e9825bffa88371ed689ec1a0f68b3fa963d0114af791273"
+    },
+    {
+      "idx": 59,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"280\">\"I think there might be a core that even someone from the medieval era would understand. I don't bother you, you don't bother me. We're all each just trying to live our own lives, if we can help each other that's great, but not at the expense of leaving each other space to be in peace. You don't get the forager freedom of the great outdoors, especially not in the city, but within your own box you are the master.\"</span>",
+      "sha256": "a6623e0d0e342c89d76781a550e61c3ed742858d651cfee4ae489457049b5a3c"
+    },
+    {
+      "idx": 60,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"280\">\"At least, that's what Freetown always feels like to me.\"</span>",
+      "sha256": "ce542a8290c8c476fea7436459dc935574ec0a21a13fcad81ebdcc6fefc694b2"
+    },
+    {
+      "idx": 61,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"280\">\"Although ... I do love the economists here. Well, the intellectual culture in general. I like that you can honestly bring up the genetics stuff, and even if people disagree, it's not like Belpaki where they just immediately think you must be an Arctic or something.\"</span>",
+      "sha256": "9d148ab3924ad464c4947349d9b2f9464f03441d812fce7a7cd008eceef96e4f"
+    },
+    {
+      "idx": 62,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"280\">\"Changing the subject a bit, of course I know why they would never tell either of us, but I am curious what these defense companies are up to. What do they think the threat model is? Same type of invasion as Redshire and Northglade? But what happens if we resist harder? And how are they going to fight back?\"</span>",
+      "sha256": "94fc6574c92eeed711e3896561e417bf89529ee9cb7651b0f0c0df5f719b1ee4"
+    },
+    {
+      "idx": 63,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Well, funny you ask. I actually do know some gossip, although ... this is military, I don't think I'm allowed to tell you.\"</span>",
+      "sha256": "ba87c6f93b58bbf997427e601b83382507f1dd923517b1d452412ade176b0145"
+    },
+    {
+      "idx": 64,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"280\">\"Huh, I'm surprised you got into those circles at all. Were they interested in your thoughts as an economist on how to raise more funding for defense?\"</span>",
+      "sha256": "26e8de79cbb9535a90c6f76f823561c3823e9edd584d246bcb870b3b42489814"
+    },
+    {
+      "idx": 65,
+      "kind": "paragraph",
+      "content": "Jahn sighed. <span data-hue=\"133.33\">\"Unfortunately, I really can't tell you. Freedom of speech is great for many things, but ... not for military secrets.\"</span>",
+      "sha256": "f14ac2cdfa8942418df871b50631de62ac7fead8494bbe6c2bec929eaa806e67"
+    },
+    {
+      "idx": 66,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 67,
+      "kind": "paragraph",
+      "content": "Jahn ordered a dish with vegetables and a tea, and stayed in the restaurant area studying the internet to better understand exactly the question Utaku had asked: what options Freetown still had to raise more funding for defense. He took out a computer, and made a table, scoring different options in three columns: how much money it could raise, how much economic collateral damage it would cause, and how much it risked making Freetown less ... free.",
+      "sha256": "d3ec8e0d40fd17f53444514079c941e6616623923ad532fcddb2812d68da86a8"
+    },
+    {
+      "idx": 68,
+      "kind": "paragraph",
+      "content": "A longhour later, Jahn's watch buzzed. It was Zei, asking for a call.",
+      "sha256": "e932c49d649b9e2d36e918aea7270b2ab8259cf745072dc2cd31d93ff906d5e3"
+    },
+    {
+      "idx": 69,
+      "kind": "paragraph",
+      "content": "Jahn picked up his computer and his glass of water, and moved over to a nearby calling booth.",
+      "sha256": "eb49a7a7f866555b5f3e396b4eb59b2c05ff1de15209bfd8e736b88eb3772185"
+    },
+    {
+      "idx": 70,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"What's up, Zei?\"</span>",
+      "sha256": "b8d1a1639cd5746969872fbd0ad57215c521dcf2964d289d1d0afe777b2f1aac"
+    },
+    {
+      "idx": 71,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Thank you again for that connection you made with the defense companies last month. I actually have some interesting updates there!\"</span>",
+      "sha256": "c509404e37ad8f370cb50979450fc6ee66b04727e6c3df360119da31155fe7af"
+    },
+    {
+      "idx": 72,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Hey, I only connected you to the Economics Institute director, the connection to the companies was his doing.\"</span>",
+      "sha256": "878c32344e82adcbabff2bcd149afcb3ded55f10b90a3be4d2b4a184dd089ff9"
+    },
+    {
+      "idx": 73,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"But what is it?\"</span>",
+      "sha256": "ad2b74c13a38908c7d379545d5fc1c3e4718d5ad305b779bba9541fe0b95c9e5"
+    },
+    {
+      "idx": 74,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Well, first let me give you a status update. Do you know what the Dzego folks have been doing with the defense companies' help?\"</span>",
+      "sha256": "eb21bf6f95493b50f4782a270dc674feb5abf50499e2eafa1c035a3431455a6a"
+    },
+    {
+      "idx": 75,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"I do not.\"</span>",
+      "sha256": "aad9b8c1225074949418a6c2ec49e06f9853eee00a4de6f10c127c44ee595e89"
+    },
+    {
+      "idx": 76,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"They've been hunting down Arctic drones in Redshire.\"</span>",
+      "sha256": "c1eb54e63bee2780c48450f33144a6ee2ff6a2aac7d0b389957b1d2d76489372"
+    },
+    {
+      "idx": 77,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"If you're allowed to ... tell me more?\"</span>",
+      "sha256": "6b7d4da0a1eebc69d230ecf64077c4b51184a3dbcebc2524688998482c283e4c"
+    },
+    {
+      "idx": 78,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"How about I show you more?\"</span>",
+      "sha256": "8405eae527299f2e1872c7fa47d9d56f26cdb8bf46d7a49ca45be75778339862"
+    },
+    {
+      "idx": 79,
+      "kind": "paragraph",
+      "content": "Jahn's computer buzzed, and he saw a file download. It was a view-once file. If Jahn wanted, he could of course save it clandestinely through the operating system, or just take a picture of the screen with another device. But by default, once opened, the file would stay viewable for five minutes, cannot be copied, and would self-delete at the end. Politeness dictated not interfering with these defaults.",
+      "sha256": "5c18f23d689384eedc4ece0d2cd16c7a6534757b635b4111e73c1f162085e75e"
+    },
+    {
+      "idx": 80,
+      "kind": "paragraph",
+      "content": "Jahn clicked on the file, and a view opened up.",
+      "sha256": "64fa1041e222ca2a8e5771acb065719de5d5d83fb0a6a3a02bc6546c08c6bdcd"
+    },
+    {
+      "idx": 81,
+      "kind": "figure",
+      "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<circle cx=\"60\" cy=\"40\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"140\" cy=\"40\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"170\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"100\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"140\" cy=\"160\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"60\" cy=\"160\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"30\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<rect x=\"85\" y=\"145\" width=\"5\" height=\"5\" fill=\"#f04\"></rect>\n<line x1=\"88\" y1=\"148\" x2=\"93\" y2=\"160\" stroke=\"#f04\" stroke-dasharray=\"2\"></line>\n</svg></div>",
+      "sha256": "de8371e1479626cf6a1324b7fcffac9847dd4b6e9818aca020e09716ce13f456",
+      "data": {
+        "world": "united-cities",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Freetown, United Cities"
+        },
+        "device": "screen",
+        "device_evidence": {
+          "idx": 79,
+          "quote": "If Jahn wanted, he could of course save it clandestinely through the operating system, or just take a picture of the screen with another device."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c22-b81.svg",
+            "viewBox": "0 0 200 200",
+            "width": "200",
+            "height": "200",
+            "labels": [],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 82,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"What am I looking at here?\"</span>",
+      "sha256": "647ade237c68118351e9e543d94ed132aac00ee6fed2707a9a908736ea3914c6"
+    },
+    {
+      "idx": 83,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"This is happening right now as we speak. It's our clandestine kill chain on an Arctic ground drone in Redshire.\"</span>",
+      "sha256": "e7052926f42b0e466a1650a65a903c841630eb73d957d7c8540bbf2a7d54ae47"
+    },
+    {
+      "idx": 84,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"The red square is the enemy. The blue circles are seven of our own drones, that we arranged in a hexagon. Their role is to jam communications. Right now, they are dormant, waiting for the Arctic drone to get fully inside.\"</span>",
+      "sha256": "1f27105b925664f6a02163c2c79fe3afaf5315a8f8ba12474084b54fe7e473d6"
+    },
+    {
+      "idx": 85,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"So what happens next?\"</span>",
+      "sha256": "04536150315a3e84054594a7762df9df543f1be621a58da6097c20e08d5aa7af"
+    },
+    {
+      "idx": 86,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Ah, well let's find out together.\"</span>",
+      "sha256": "1b42e618a447e42105588c54321602fac63ed4b88d211660f6af9a4ccd9144ec"
+    },
+    {
+      "idx": 87,
+      "kind": "paragraph",
+      "content": "About ten ticks later, another view-once file appeared on Jahn's screen.",
+      "sha256": "192bcf70b91f3a70d72b2ac7ba6d4e06efd864e116d6f378d297576fcc3d8f2a"
+    },
+    {
+      "idx": 88,
+      "kind": "figure",
+      "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<circle cx=\"60\" cy=\"40\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"140\" cy=\"40\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"170\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"100\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"140\" cy=\"160\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"60\" cy=\"160\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"30\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<rect x=\"77\" y=\"125\" width=\"5\" height=\"5\" fill=\"#f04\"></rect>\n<line x1=\"80\" y1=\"128\" x2=\"85\" y2=\"140\" stroke=\"#f04\" stroke-dasharray=\"2\"></line>\n</svg></div>",
+      "sha256": "5b5cc578d1fc00248428171a3c83799dea943baa9dc1fe491d7340eef3f11334",
+      "data": {
+        "world": "united-cities",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Freetown, United Cities"
+        },
+        "device": "screen",
+        "device_evidence": {
+          "idx": 87,
+          "quote": "About ten ticks later, another view-once file appeared on Jahn's screen."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c22-b88.svg",
+            "viewBox": "0 0 200 200",
+            "width": "200",
+            "height": "200",
+            "labels": [],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 89,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Just waiting a little bit longer.\"</span>",
+      "sha256": "0954226a674c039d7365a1de53ba263d4c24789d7344871f13ce756d5c3ed47a"
+    },
+    {
+      "idx": 90,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"I'm excited.\"</span>",
+      "sha256": "8fee76cfd4213ba0a89079b87b6d525aeaa0be124bc7f9e8c35433b0eec0ff1b"
+    },
+    {
+      "idx": 91,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"And ... action.\"</span>",
+      "sha256": "7f88e89eb10d458b9442a4d32983cf0f79cee19450eea328f9919feab25f99c3"
+    },
+    {
+      "idx": 92,
+      "kind": "figure",
+      "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<circle cx=\"60\" cy=\"40\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"60\" cy=\"40\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"140\" cy=\"40\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"140\" cy=\"40\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"170\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"170\" cy=\"100\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"100\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"100\" cy=\"100\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"140\" cy=\"160\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"140\" cy=\"160\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"60\" cy=\"160\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"60\" cy=\"160\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"30\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"30\" cy=\"100\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<rect x=\"70\" y=\"105\" width=\"5\" height=\"5\" fill=\"#f04\"></rect>\n<line x1=\"73\" y1=\"108\" x2=\"78\" y2=\"120\" stroke=\"#f04\" stroke-dasharray=\"2\"></line>\n<polygon points=\"95,175 101,175 98,180\" fill=\"#3ef\"></polygon>\n<polygon points=\"75,190 81,190 78,195\" fill=\"#3ef\"></polygon>\n<text x=\"78\" y=\"108\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n</svg></div>",
+      "sha256": "0ed73462558ce1231e020c8b040496ce2bc186f4c9255a3e4ac6663cc49fb2b6",
+      "data": {
+        "world": "united-cities",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Freetown, United Cities"
+        },
+        "device": null,
+        "device_evidence": null,
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c22-b92.svg",
+            "viewBox": "0 0 200 200",
+            "width": "200",
+            "height": "200",
+            "labels": [
+              "x"
+            ],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 93,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Do you see it?\"</span>",
+      "sha256": "233991d9b25a74abb06654587b3baa841e6a747a814ffde2af52e46f3e7d9744"
+    },
+    {
+      "idx": 94,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Yep.\"</span>",
+      "sha256": "457cd8d2fa11135c20f6f9a22fd541c9b933fbdbfbdd784caa19c4f97d614cb2"
+    },
+    {
+      "idx": 95,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"The jammer drones are jamming. The red X signifies that there was a hit on the target. It's supposed to be two hits: one on its main antenna, and the other on its legs, to prevent it from leaving the jamming area. And the blue triangles are our two attack drones.\"</span>",
+      "sha256": "0d66a7c5a5be176ab1d8b8f9c58169b5a007c04bb7e5f16e1d23a9f0703d1405"
+    },
+    {
+      "idx": 96,
+      "kind": "paragraph",
+      "content": "The conversation paused for about twenty ticks.",
+      "sha256": "e33b9657547b0ab8d7aa72a5d91304b75129d78950fb1c6cc3ed3ceb956466b7"
+    },
+    {
+      "idx": 97,
+      "kind": "figure",
+      "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<circle cx=\"60\" cy=\"40\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"60\" cy=\"40\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"140\" cy=\"40\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"140\" cy=\"40\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"170\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"170\" cy=\"100\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"100\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"100\" cy=\"100\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"140\" cy=\"160\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"140\" cy=\"160\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"60\" cy=\"160\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"60\" cy=\"160\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"30\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"30\" cy=\"100\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<rect x=\"68\" y=\"100\" width=\"5\" height=\"5\" fill=\"#f04\"></rect>\n<polygon points=\"65,85 71,85 68,90\" fill=\"#3ef\"></polygon>\n<polygon points=\"90,85 96,85 93,90\" fill=\"#3ef\"></polygon>\n</svg></div>",
+      "sha256": "619150b358bfa70fa5dfab8361a6b27f031afe8feaf9a046d28aeb50fa4e63e9",
+      "data": {
+        "world": "united-cities",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Freetown, United Cities"
+        },
+        "device": null,
+        "device_evidence": null,
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c22-b97.svg",
+            "viewBox": "0 0 200 200",
+            "width": "200",
+            "height": "200",
+            "labels": [],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 98,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Still not dead? What's taking so long?\"</span>",
+      "sha256": "92c2c27493808890dad3ed3ba18d4ba3687ea150513efecdfbe8d743f52b678f"
+    },
+    {
+      "idx": 99,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Our drones, the triangles, are not actually trying to make a kill - if we wanted to do that, we could have just done that with a bigger first strike.\"</span>",
+      "sha256": "11a7c59924fac9074169aef7cd85404db3fe0c14a63b95b4ebdc933b6f5ad246"
+    },
+    {
+      "idx": 100,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"So what are they doing?\"</span>",
+      "sha256": "5b8c90fe2aacbc7b3e10143a75dc055c6a0984cb8f8a2164e28b9964e2b4a0df"
+    },
+    {
+      "idx": 101,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"They are dancing.\"</span>",
+      "sha256": "b75713e7aa89917fd47cbd4a62f5987ff6970904dc406960bddb1aebab7ce428"
+    },
+    {
+      "idx": 102,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Dancing?\"</span>",
+      "sha256": "90245a0ecb56231c8a624cb3c8764026df4ac89cea488db987fce0b65322e26a"
+    },
+    {
+      "idx": 103,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Their goal is to *survive* as long as possible, trying any kind of trick to avoid getting killed, ideally get mistaken for an Arctic drone or even an animal, and eventually only kill when the target is too close to escaping the trap.\"</span>",
+      "sha256": "9f41013701e1392fe7a5cb4c72d2e9e8ddd1c5d54f03bdf1bc0a703e10ed4e28"
+    },
+    {
+      "idx": 104,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"That's our goal. Using Arctic drones as target practice to improve our ability to kill them is expensive. But using Arctic drones as practice to improve our ability to *survive* them, that we can do, for basically as long as either of the triangles is still alive. Then the seven drones in the hexagon can finish the kill, and make sure to fry the target's circuits so the Arctics don't get any training data themselves.\"</span>",
+      "sha256": "142dfb92c4081882a0b4f4d4ba7f40866e0fd44605612b53c5ca7766cbb98d4d"
+    },
+    {
+      "idx": 105,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Wait ...\"</span>",
+      "sha256": "925c705f49a31448dfb8e1ccab9cdad47e5de6b3a8dd6105b4a65f869c9d9816"
+    },
+    {
+      "idx": 106,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"What's the matter?\"</span>",
+      "sha256": "25e9428b3972dabe4ff41561160aeffe503adf88f4eade1dd4c03e5763fcac6c"
+    },
+    {
+      "idx": 107,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"We have a problem.\"</span>",
+      "sha256": "99c08dce474508a89304cddcb6bac0879fff279d2a213679e9a60a1b60a4945b"
+    },
+    {
+      "idx": 108,
+      "kind": "figure",
+      "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<circle cx=\"60\" cy=\"40\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"60\" cy=\"40\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"140\" cy=\"40\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"140\" cy=\"40\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"170\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"170\" cy=\"100\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<text x=\"174\" y=\"100\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<circle cx=\"100\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"100\" cy=\"100\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<text x=\"104\" y=\"100\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<text x=\"134\" y=\"160\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<circle cx=\"60\" cy=\"160\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"60\" cy=\"160\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<circle cx=\"30\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"30\" cy=\"100\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<rect x=\"60\" y=\"92\" width=\"5\" height=\"5\" fill=\"#f04\"></rect>\n<polygon points=\"70,110 76,110 73,115\" fill=\"#3ef\"></polygon>\n<rect x=\"158\" y=\"190\" width=\"5\" height=\"5\" fill=\"#f04\"></rect>\n<line x1=\"161\" y1=\"193\" x2=\"170\" y2=\"200\" stroke=\"#f04\" stroke-dasharray=\"2\"></line>\n<rect x=\"168\" y=\"170\" width=\"5\" height=\"5\" fill=\"#f04\"></rect>\n<line x1=\"171\" y1=\"173\" x2=\"181\" y2=\"181\" stroke=\"#f04\" stroke-dasharray=\"2\"></line>\n<rect x=\"178\" y=\"150\" width=\"5\" height=\"5\" fill=\"#f04\"></rect>\n<line x1=\"181\" y1=\"153\" x2=\"191\" y2=\"161\" stroke=\"#f04\" stroke-dasharray=\"2\"></line>\n</svg></div>",
+      "sha256": "acf8e5bfce9d14c5ea5e3b0626d39a3c6d37af03594efbe75e236372b9ff5eb0",
+      "data": {
+        "world": "united-cities",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Freetown, United Cities"
+        },
+        "device": null,
+        "device_evidence": null,
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c22-b108.svg",
+            "viewBox": "0 0 200 200",
+            "width": "200",
+            "height": "200",
+            "labels": [
+              "x",
+              "x",
+              "x"
+            ],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 109,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Arctic reinforcements? Are you going to take over and pilot your drones to victory now?\"</span>",
+      "sha256": "a27b96c0c2792ae30c5531903d06dfb39ce827fef46e70332698f5858b696dc4"
+    },
+    {
+      "idx": 110,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Yep, that's exactly what I'm doing. Temporarily have the two damaged-but-alive jammers play dead, lure the attackers to center, jammers reactivate, reform a circle, and then make a kill.\"</span>",
+      "sha256": "fb1ec09c31562b977f1e3c63ceaf12184315f4f93117c03329a0ae42faa5f117"
+    },
+    {
+      "idx": 111,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Do your thing, no need to give me a play by play.\"</span>",
+      "sha256": "5a1d03338facdae3174e3dd935ac28aba56dc209321ff3c7b5c187c995fc4792"
+    },
+    {
+      "idx": 112,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I'm talking to the AI and letting you listen.\"</span>",
+      "sha256": "5030b2f1b3af4a6a55b2bcd8dc596706e8611a97fe2a5c2ee977fe033ce217ec"
+    },
+    {
+      "idx": 113,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Circles, finish the northwest square now. Goal: all comms and memory dead.\"</span>",
+      "sha256": "a68c62fd3c2927345c854405688891f027aeb2f656a4bc4172c5baa09ce6834f"
+    },
+    {
+      "idx": 114,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Deactivate all jamming except left and top left.\"</span>",
+      "sha256": "fcf6bd7a9fdf0557f778abe18d3e2c1087c31d01670d097bcb1920cf6b8b9f1c"
+    },
+    {
+      "idx": 115,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"When it makes sense, reform the circle, reactivate jamming and strike. Maximize surprise.\"</span>",
+      "sha256": "870b85dc095871d23becc1144f424f307a15163847e1b0c27962c142c15621da"
+    },
+    {
+      "idx": 116,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"No-\"</span>",
+      "sha256": "d846f21d3a2568726a03f8fd84812d3d3400055a524bcc07d9d02f898d8b83de"
+    },
+    {
+      "idx": 117,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Wha-\"</span>",
+      "sha256": "4172a5d6d78bbed6ce2231930f5b011ab2717989a4a5381d51d69a101c1ab180"
+    },
+    {
+      "idx": 118,
+      "kind": "paragraph",
+      "content": "Jahn stopped mid-word, remembering that he was not supposed to distract Zei.",
+      "sha256": "30a452fe2d895a140d1f1e783775e188f1e166eedae97c416a95a6e757bf85d3"
+    },
+    {
+      "idx": 119,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"They started jamming, I got disconnected.\"</span>",
+      "sha256": "c00a636c587587e20d296bc9c81c83041169606533db0c4ba3209832e94e4f69"
+    },
+    {
+      "idx": 120,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Nothing for me to do now. It's just our AI against the Arctics, AI plus human. And if our jamming works, our AI against theirs.\"</span>",
+      "sha256": "019ae03bd8fb49309a6e73d89b3fb9e3fbfca5c52bf6e5d034c3b1de3b4940e5"
+    },
+    {
+      "idx": 121,
+      "kind": "paragraph",
+      "content": "They both waited silently.",
+      "sha256": "a11fdee718a4b853089abefadcec2fdde2d50cd92fb566b6c6326fd5539b02d3"
+    },
+    {
+      "idx": 122,
+      "kind": "paragraph",
+      "content": "Ten ticks.",
+      "sha256": "d2b0ed44c84a5da3231e8039f264b1964e0d7b9498ea87d8c00e335b866905f7"
+    },
+    {
+      "idx": 123,
+      "kind": "paragraph",
+      "content": "Twenty ticks.",
+      "sha256": "12bc342eca24dbfd26e57de2cfdd1870eceb897406d63d8cea832204d495151b"
+    },
+    {
+      "idx": 124,
+      "kind": "paragraph",
+      "content": "Thirty ticks.",
+      "sha256": "fdcce11a6bab82b2073535887fc8ceacc8cf545ed7772cf68412c7dc1da1218f"
+    },
+    {
+      "idx": 125,
+      "kind": "paragraph",
+      "content": "Finally, the download icon turned on again on Jahn's computer.",
+      "sha256": "bf02e0973f391baa4adbcf0f60e081cca1ed8f1256882fdd57d29baf87d7eedb"
+    },
+    {
+      "idx": 126,
+      "kind": "figure",
+      "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<circle cx=\"65\" cy=\"60\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"65\" cy=\"60\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<text x=\"69\" y=\"60\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<circle cx=\"95\" cy=\"95\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"95\" cy=\"95\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<text x=\"99\" y=\"95\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<circle cx=\"55\" cy=\"120\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"55\" cy=\"120\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<text x=\"59\" y=\"120\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<circle cx=\"30\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"30\" cy=\"100\" r=\"45\" stroke=\"#cef\" fill=\"none\" stroke-dasharray=\"2 10\"></circle>\n<rect x=\"60\" y=\"90\" width=\"5\" height=\"5\" fill=\"#f04\"></rect>\n<text x=\"67\" y=\"93\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<text x=\"67\" y=\"99\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<rect x=\"45\" y=\"95\" width=\"5\" height=\"5\" fill=\"#f04\"></rect>\n<text x=\"52\" y=\"98\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<rect x=\"65\" y=\"110\" width=\"5\" height=\"5\" fill=\"#f04\"></rect>\n<text x=\"72\" y=\"113\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<text x=\"72\" y=\"119\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<rect x=\"80\" y=\"95\" width=\"5\" height=\"5\" fill=\"#f04\"></rect>\n<text x=\"87\" y=\"98\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n</svg></div>",
+      "sha256": "4eac98b82238b7a2897b2fb567669cc1a6da5f11aa82dc2f68458466de8b9bf8",
+      "data": {
+        "world": "united-cities",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Freetown, United Cities"
+        },
+        "device": "computer",
+        "device_evidence": {
+          "idx": 125,
+          "quote": "Finally, the download icon turned on again on Jahn's computer."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c22-b126.svg",
+            "viewBox": "0 0 200 200",
+            "width": "200",
+            "height": "200",
+            "labels": [
+              "x",
+              "x",
+              "x",
+              "x",
+              "x",
+              "x",
+              "x",
+              "x",
+              "x"
+            ],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 127,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"That was really close.\"</span>",
+      "sha256": "273e46a6a4cd4e7082a9e3e897cc84268e6a89cf66a74e7e2190bfe87794c236"
+    },
+    {
+      "idx": 128,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Wow.\"</span>",
+      "sha256": "e9f26beb5325ffce0e21e524ca11dc3b0417eb8f80994d790ffcbd16e8d40362"
+    },
+    {
+      "idx": 129,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Only one undamaged drone on our side. Last step is that it will walk around and chip and memory-kill all the drones, first the Arctics and then the rest of our own just in case. It needs to do that before more Arctic drones come.\"</span>",
+      "sha256": "bed345b066c0c16d40c4931fa526b337660f8c267371bdc9e59497a237166213"
+    },
+    {
+      "idx": 130,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Can the damaged ones help?\"</span>",
+      "sha256": "098f97ef3601fa320815f3a198d43cb53792c03b3fda5269e3af26da10e8dfc1"
+    },
+    {
+      "idx": 131,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"They can't move. They can still attack, but proper chip and memory-killing is best done from ten centimeters away.\"</span>",
+      "sha256": "9db69be12e389cddc8d42f139b7a6f324e3c84e3110b05908c6ed73721a9d4ca"
+    },
+    {
+      "idx": 132,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Even then we can't actually be certain that the Arctics won't be able to salvage training data. We can just hope for the best.\"</span>",
+      "sha256": "cc9597d6a4236d518385547deb85cf69ca649852b758ec7b01f124e9bc58276b"
+    },
+    {
+      "idx": 133,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Okay... I gave it the instructions, now I'm just watching.\"</span>",
+      "sha256": "fd0898176a8cf70c9d64673158fe7d5ce2e4043e1c847933c7c0a81b3b49ea54"
+    },
+    {
+      "idx": 134,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"I am curious. How does your internet link into Redshire work?\"</span>",
+      "sha256": "5b9e3c012d9af566ca252b15cbde22c4d341c06b46e57cb319c533da085f98dd"
+    },
+    {
+      "idx": 135,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Ah, that's one of our other big projects. The problem now is that the Arctics have confiscated all the un-backdoored electronics. There's still many watches, hand devices and compute boxes left hidden in various places, but the Arctics will be able to tell if any device tries to transmit things. So what we do is steganography.\"</span>",
+      "sha256": "c0514a9321c527e46db1f070db92757518aec374d9a173b64723bb9050af5c12"
+    },
+    {
+      "idx": 136,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Two people pretend to have a voice or video call. While the call is happening, the un-backdoored device is sitting nearby, and it's softly playing audio. That audio stream sounds random - it's representing encrypted data wrapped in an erasure code that's highly noise-tolerant - but we use the same tricks I told you before with the health data to maximize how much data we can hide, so that it appears to anyone or any bot spying on the call that there's nothing abnormal.\"</span>",
+      "sha256": "4c559da0252510986cfa6802e241fea959604d09caef9aad758db32e1fe49b37"
+    },
+    {
+      "idx": 137,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"One of ... do you have more big projects?\"</span>",
+      "sha256": "f82b689313d351d00661eeea4d909680c1ff488402f7077795d7643f9dc76cfe"
+    },
+    {
+      "idx": 138,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Well, the next step is that we want to actually kidnap an Arctic drone and bring it back to Dzego for analysis.\"</span>",
+      "sha256": "288eaef0cb4ade2d1dfa20f8ba8489cdbffdd1e4a3dfd4d28b7c44f86f2d728b"
+    },
+    {
+      "idx": 139,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Wow.\"</span>",
+      "sha256": "e9f26beb5325ffce0e21e524ca11dc3b0417eb8f80994d790ffcbd16e8d40362"
+    },
+    {
+      "idx": 140,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Actually, that's what I'll ask for your help one more time for.\"</span>",
+      "sha256": "203b2559b014d8bf277af9336b7c88e02a87b0668858fb3d92adfebc60c17d47"
+    },
+    {
+      "idx": 141,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"So what do you need?\"</span>",
+      "sha256": "3b63f40d665125650abddaccbf50a5f17a3f9f99cf8c2d2c239475506a483fcd"
+    },
+    {
+      "idx": 142,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I want you to introduce me to another defense corp. Preferably not through the Institute director, find a different path.\"</span>",
+      "sha256": "59b42c3ce82bf5c7172c4e6a424a9d8073df23d6c037f8383653a35a32d6ca05"
+    },
+    {
+      "idx": 143,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Why?\"</span>",
+      "sha256": "296ae1d6149d0629ee138de1512e7bbf2f13ed904b237cfd7e019294a822d42b"
+    },
+    {
+      "idx": 144,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"The company the Institute director introduced does seaborne well, I want to find one of the others, that are better at airborne.\"</span>",
+      "sha256": "0496462c2fff19899499a31425b5c9ac162bf86cdc5087edd544d2453abfd003"
+    },
+    {
+      "idx": 145,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Also, come on, it's Freetown, this is a market. You gotta talk to multiple people and compare them against each other, to make sure they're not screwing you over.\"</span>",
+      "sha256": "4279272be8e498962838af04e8a8e0c89817226e5e4b3032fdc7d60acd1fbac1"
+    }
+  ]
+}

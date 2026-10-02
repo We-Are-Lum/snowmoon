@@ -1,0 +1,1045 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 7,
+  "source_url": "https://vitalik.eth.limo/snowmoon/html/chapter-7.html",
+  "source_sha256": "299a435d533c71e147cde6f3e2bbbf3b473d678133724a869169fc246cacf252",
+  "fetched_at": "2026-10-02",
+  "license": "GPL-3.0",
+  "blocks": [
+    {
+      "idx": 0,
+      "kind": "heading",
+      "content": "# Chapter 7",
+      "sha256": "5b61906eb429d0e1302d1c35c9b03f953822817cbfc0c2be6b035d3904876e4e"
+    },
+    {
+      "idx": 1,
+      "kind": "dateline",
+      "content": "**Pafogai Du, Dzego** · 3724 Rainmoon 23",
+      "sha256": "bc567ad6b7a444f3e8c3d451ce20b1fa2046b28c22394446f795c91e6a4ffc01"
+    },
+    {
+      "idx": 2,
+      "kind": "paragraph",
+      "content": "Zei was sitting alone at a table in a courtyard, drinking a tea and eating a rice and vegetable dish. In his left hand, he held his hand device, reviewing Minpentai strategies.",
+      "sha256": "30516e8384f97c93cf8259aea84ca860241533fea67bfe749d8c66ee1b718b18"
+    },
+    {
+      "idx": 3,
+      "kind": "paragraph",
+      "content": "A robot slid up to him.",
+      "sha256": "1b10f007b2a8cdd1c991cdd558d02da3a7a3fd876b1cabc83d1fe33c700090ec"
+    },
+    {
+      "idx": 4,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"240\">\"mo da cu ja li hen ma?\"</span>, it asked. \"Is the food and drink good?\"",
+      "sha256": "9b4ac29fd81cfd3a659508751d6549652b0812bbe603096735b3dd42904011af"
+    },
+    {
+      "idx": 5,
+      "kind": "paragraph",
+      "content": "The screen on the robot turned into a voting view.",
+      "sha256": "c9cfe639c2f4d1bb9eedff22f6c852df24aa318e3e748cccaeb3a579e4d8497e"
+    },
+    {
+      "idx": 6,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view\"><table>\n  <thead>\n    <tr>\n      <th>mo da cu ja li hen ma?</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>\n<input type=\"range\" style=\"width:100%\" disabled=\"\">\n<div style=\"display: flex; justify-content: space-between; width:100%\">\n    <span style=\"font-size:200%\">🙁<sup><sup>2</sup></sup></span>\n    <span style=\"font-size:200%\">🙁<sup><sup>&nbsp;</sup></sup></span>\n    <span style=\"font-size:200%\">😐<sup><sup>&nbsp;</sup></sup></span>\n    <span style=\"font-size:200%\">😊<sup><sup>&nbsp;</sup></sup></span>\n    <span style=\"font-size:200%\">😊<sup><sup>2</sup></sup></span>\n</div>\n</td>\n</tr><tr><td>\n<button disabled=\"\"> Select </button>\n</td></tr></tbody>\n</table></div>",
+      "sha256": "7ecf01342ff125ec5d7e76916ae90b5f449e031f6637df3bfef7148310b519e2",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "robot",
+        "device_evidence": {
+          "idx": 5,
+          "quote": "The screen on the robot turned into a voting view."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "mo da cu ja li hen ma?"
+              ]
+            ],
+            "rows": [
+              [
+                {
+                  "text": "",
+                  "controls": [
+                    {
+                      "type": "slider",
+                      "labels": [
+                        "🙁2",
+                        "🙁",
+                        "😐",
+                        "😊",
+                        "😊2"
+                      ]
+                    }
+                  ]
+                }
+              ],
+              [
+                {
+                  "text": "",
+                  "controls": [
+                    {
+                      "type": "button",
+                      "label": "Select"
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 7,
+      "kind": "paragraph",
+      "content": "Zei thought for a few moments, and moved the bar about three quarters of the way to the right.",
+      "sha256": "5740ca82204336455535055f882f66b5ba1763e6f45cc2baf1cc9b6e651fb8c2"
+    },
+    {
+      "idx": 8,
+      "kind": "paragraph",
+      "content": "The robot beeped, and slowly slid away.",
+      "sha256": "86d7d24ac119ae1365a80344fe0161b4b0999c870450c4d1ccb49348bdebf12e"
+    },
+    {
+      "idx": 9,
+      "kind": "paragraph",
+      "content": "When Zei looked up again, he could see Fin running up to him. Fin arrived, and sat down.",
+      "sha256": "cb56b7bbd30eca09cbe70692c0fd7161ad8f7e4d0056bae4c050c2ec6d8479a9"
+    },
+    {
+      "idx": 10,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Where have you been?\"</span>, Zei asked.",
+      "sha256": "aec90767f17cacd78e9c800f93d918dee677fd115f43107c9505c83d85c98d20"
+    },
+    {
+      "idx": 11,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"More linguistics training\"</span>, Fin replied. <span data-hue=\"80\">\"Looks like the Bansunpei think I'm actually a good fit for them.\"</span>",
+      "sha256": "b8cabaeae47a7801a1e756077f0e18e66f5ae76d11f055a6c3217dfea5432476"
+    },
+    {
+      "idx": 12,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"How is training for the big game?\"</span>",
+      "sha256": "c741e0b9b6e2e3f10c54337aa6bd8abebe2b14e2d1d13089d1fc6bb9cb73d741"
+    },
+    {
+      "idx": 13,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Did about five games against the bots in the past longhour\"</span>, Zei replied. <span data-hue=\"346.67\">\"I feel like this is already hitting diminishing returns. It's all going to hinge on what the rule change this time is.\"</span>",
+      "sha256": "9d013ee782583f2be15392806339abd31c4ba8b558ecba54a9c40e440891d881"
+    },
+    {
+      "idx": 14,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"So in my last two games I asked the bots to come up with random rule changes, and played against them. Problem is, I won easily both times: the bots play better than me on stock Minpentai, but they are much worse at adapting to any new situation they don't have training data for.\"</span>",
+      "sha256": "df9ad4f7ed95d373bf0e78c8cdff206848b6074a8f9a63a754ef4f0c6f6487c7"
+    },
+    {
+      "idx": 15,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Can't you make a pipeline where once they come up with the new rule, they self-play finetune to get good at it, and then you play against that?\"</span>",
+      "sha256": "9c44106b396f56957139021495c03ad484997b856400c60acc335c519657b6d5"
+    },
+    {
+      "idx": 16,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Well if you can go help spin that up for me in the next two longhours, I'd much appreciate it. Game is tomorrow, remember!\"</span>",
+      "sha256": "b5129f90c9c3513fb22547e31d95a14b12cae9211e5a52cab2215b52b19a0a0a"
+    },
+    {
+      "idx": 17,
+      "kind": "paragraph",
+      "content": "Fin thought briefly. <span data-hue=\"80\">\"If I do that I'll have to tell the Bansunpei I am skipping tonight then.\"</span>",
+      "sha256": "3769b018ad7d66b56eda59340386dbddfd479565be4e7f1552973a6eef16614a"
+    },
+    {
+      "idx": 18,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"'Po so dze go ban' can wait, the game against Bai is tomorrow.\"</span>",
+      "sha256": "42e61bf14cc76c14fad91acb61ffabf2fce7ddcd1e8f523cb8476e7d5e8fd6b5"
+    },
+    {
+      "idx": 19,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Please?\"</span>",
+      "sha256": "f8046fc7b6f20e6ccb886927923e068130e486573d392c52e3057ea905ed429b"
+    },
+    {
+      "idx": 20,
+      "kind": "paragraph",
+      "content": "Fin thought for a few ticks more. <span data-hue=\"80\">\"Okay fine, I'll tell them I'm skipping. But I'll have to make it up with them next month.\"</span>",
+      "sha256": "d50117eceb89bb7f9f6097d5f036fd5df2e8316ee038d02960925e14d9753b4c"
+    },
+    {
+      "idx": 21,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 22,
+      "kind": "dateline",
+      "content": "3724 Rainmoon 24",
+      "sha256": "cf0bd9201c9d4d20622882aa35a997edf3c0f25f1dc64f16106d23d0aadd04d5"
+    },
+    {
+      "idx": 23,
+      "kind": "paragraph",
+      "content": "Fin and Zei walked up the slope toward the mountain pyramid. Zei went through Minpentai strategies in his mind, as the tiring climb helped him concentrate, suppressing his mind's desire to wander toward anything else.",
+      "sha256": "7061977b86a910f4025ad7992d37e03c4478e141aee5de96be0551db692bdbfa"
+    },
+    {
+      "idx": 24,
+      "kind": "paragraph",
+      "content": "Suddenly he felt a tap on his shoulder.",
+      "sha256": "10588dc4ba519ad8b7115eaa8b14a66bed1e00f9bce1eb126e5cfc7a4f5a5509"
+    },
+    {
+      "idx": 25,
+      "kind": "paragraph",
+      "content": "Zei turned around. It was Bai.",
+      "sha256": "3987fe5e0b37d5fd5f06dc3cb070bf0e9222b5b6a586aa27d04a1c947171bc61"
+    },
+    {
+      "idx": 26,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"So, excited about today's game?\"</span>, she asked. <span data-hue=\"26.67\">\"I think it'll be a good finish for you, I don't think your mom quite realizes how impressive it is that you are going to come in second across the whole city.\"</span>",
+      "sha256": "36c0004d9f4d4c2b5752fd5b08cae8b6aff611d250dd8a627b0b01572c75d62f"
+    },
+    {
+      "idx": 27,
+      "kind": "paragraph",
+      "content": "Zei's mind raced for a retort.",
+      "sha256": "381b5b197d31f21bcc0a2b3187ab0b01f82733206572d34a0a4644ec16a87951"
+    },
+    {
+      "idx": 28,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"You know if you were nicer to Zei\"</span>, Fin snapped back, <span data-hue=\"80\">\"he might pay for *your* next trip to Redshire or Freetown from the prize money when he wins the nationals.\"</span>",
+      "sha256": "19bf6011c1ad1522babf7db5bd0d2a9b138924c715470eef9c0ba00da403c145"
+    },
+    {
+      "idx": 29,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Maybe bring along your mom too.\"</span>",
+      "sha256": "d1e378a6bdc9cfeaa6f91f7cb3d0d8abd94a9e40c88eafb303b3f7ef4395466d"
+    },
+    {
+      "idx": 30,
+      "kind": "paragraph",
+      "content": "Bai's grin faltered for a moment, then returned.",
+      "sha256": "b713839a66bcd9286c1ecc2f41d300912c117b06e419e3bf14223fdf888b46da"
+    },
+    {
+      "idx": 31,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Thank you, Fin.\"</span>",
+      "sha256": "71a62fffc78c834c0f450b32b2f0f13330819e96e388e113e4e700dfec8f60c0"
+    },
+    {
+      "idx": 32,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"But seriously, let's just concentrate on giving everyone a good game.\"</span>",
+      "sha256": "aeb66c984935a6e643040181db85868432ac4290d8a4ed82bdfc87f47cb6348e"
+    },
+    {
+      "idx": 33,
+      "kind": "paragraph",
+      "content": "Suddenly, the ground shook slightly. A few moments later, from their high vantage point already a third of the way up the mountain, they could see a cloud of smoke emerging in the distance, somewhere in the outskirts of the city.",
+      "sha256": "60f648425e75026c5c6f9a6f19fe72bfe7bfc2f33d40e9f75568e3a8479ce971"
+    },
+    {
+      "idx": 34,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Whoa, what is that?\"</span>, Fin asked.",
+      "sha256": "6b5930ab2c24d30e6e66b32c5c37842c4cd545d2ae6ab2d62a5d4d975fef515f"
+    },
+    {
+      "idx": 35,
+      "kind": "paragraph",
+      "content": "Zei took out his hand device, and pointed it at the cloud of smoke.",
+      "sha256": "a21c95b642d57636ae06063fb186a99976e8714891e9a872f9424f88613ebd78"
+    },
+    {
+      "idx": 36,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Let's check.\"</span>",
+      "sha256": "9e3cd75214ad9e93607c763a38662eb83d22280a5d29739da0e6b6fbaa88aa20"
+    },
+    {
+      "idx": 37,
+      "kind": "paragraph",
+      "content": "Zei held his hand device pointed at the cloud of smoke and the area below for a moment, and then put it down. <span data-hue=\"346.67\">\"Geolocated it. It's the largest computer chip manufacturing facility in the city. Remember, the Arctics have been trying hard to stop us from progressing any more in our technology.\"</span>",
+      "sha256": "8a224fae162c1902d857e7493a6f15711af2526af55a59c78fd1e2e0e6ef89fa"
+    },
+    {
+      "idx": 38,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Looks like this facility was government-run. I imagine they'll just say it was an accident or something.\"</span>",
+      "sha256": "cebba83bcd992ddbc20c2ae7616dc1cfc0c8839e4418f3105cd63cea06df8dcb"
+    },
+    {
+      "idx": 39,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Heh\"</span>, Fin smirked.",
+      "sha256": "b41dc9af0e229c1d0087f3f479e97d79de6ffe40cd0a6e5d20172f48e6bf67a2"
+    },
+    {
+      "idx": 40,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"What part of the 'bin hu' in 'gie fe kiu kai ci bin hu' do these people not get? No head. You're not supposed to centralize stuff this much.\"</span>",
+      "sha256": "b77c28d622bfe5a8676d2848a4bb75587c049cba6a7e1d24de7f0c7c79a7551d"
+    },
+    {
+      "idx": 41,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Again, this is government. Half of them don't understand what they're doing, and many of the rest are probably on the payroll of the Arctics themselves in some form. All of the actually smart and effective stuff in Dzego has been outside of government *or* the big corporations for decades.\"</span>",
+      "sha256": "d41450d324ef276a9e6a5d94e352d96b388e3af44205e35c68537ff6c3370c6e"
+    },
+    {
+      "idx": 42,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"But anyway, we have lots of smaller, distributed underground fabs these days. We'll be fine.\"</span>",
+      "sha256": "0f5e77cd058f36880bac8571b7285e11d9bd57487f3895f6f4f35eb963e9c2fa"
+    },
+    {
+      "idx": 43,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Okay, guys\"</span>, Bai interjected. <span data-hue=\"26.67\">\"We have to actually get to the game.\"</span>",
+      "sha256": "1aba566aa2d2428ec9f47330ffb85ebb3c2b831675ef95d697668913f874457e"
+    },
+    {
+      "idx": 44,
+      "kind": "paragraph",
+      "content": "The three of them resumed climbing. After a few more minutes, they arrived at the main door, and entered the tunnels. On the third turn, Fin turned left to go to the audience section, and Bai and Zei turned right. They walked through the door, and saw Mu waiting for them.",
+      "sha256": "011b0935ec0b9c688aaef67f9f9be38d68c3763d8789cbfe41718379677818ce"
+    },
+    {
+      "idx": 45,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Welcome back to you both\"</span>, Mu said. <span data-hue=\"173.33\">\"Excited to see how you both perform.\"</span>",
+      "sha256": "96e3078c2244b782050f67cb2333149166236b0574dd07b455b9b6c5cb70e482"
+    },
+    {
+      "idx": 46,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I hope the rule change this time is going to be good.\"</span>",
+      "sha256": "94647239d0b995a8e4fdd67d43e0196ef4e0b6a510922c20181ca6d02d8f324a"
+    },
+    {
+      "idx": 47,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Oh, it will be. You'll see.\"</span>",
+      "sha256": "11db3c571b2a2aea58df8c7f56bed04d5442e6fa9253c9eb2b597a4469f3ed22"
+    },
+    {
+      "idx": 48,
+      "kind": "paragraph",
+      "content": "A robot slid toward them, and gave them three glasses of water. Zei, Bai and Mu each took a glass.",
+      "sha256": "d872ff5ccfbff871118988c2f4c0725200f4bf760736f13fa6b3e608ba9eb7b8"
+    },
+    {
+      "idx": 49,
+      "kind": "paragraph",
+      "content": "Mu raised the glass. <span data-hue=\"173.33\">\"To our future,\"</span> she said. <span data-hue=\"173.33\">\"Dze go ba fau gie.\"</span>",
+      "sha256": "dae6fe99ae8794d07d3fc3990d928db1cd76d048e89d3983272daebe9cc4bbe8"
+    },
+    {
+      "idx": 50,
+      "kind": "paragraph",
+      "content": "Zei felt slightly confused - \"Dzego will rise again\" was a beautiful thing to say, but it seemed more appropriate for either an actual battle or some kind of industrial or educational activity than for a Minpentai championship game. But he nevertheless instinctively replied back, at the same time as Bai.",
+      "sha256": "dd2c08dbdeff08ecb74d147febaf227b2805bc2c9928a29e596969626c19d7c4"
+    },
+    {
+      "idx": 51,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Dze go ba fau gie.\"</span>",
+      "sha256": "2a1dd1d4b0c943279944be51a3d57ed80903a1ff130f3d99b3c44838b7f5fc9c"
+    },
+    {
+      "idx": 52,
+      "kind": "paragraph",
+      "content": "The three of them drank their water.",
+      "sha256": "b66ec8428d3b8d22dc7b7750d09b5977b230daaab09e40aa4aa910101f8ab77d"
+    },
+    {
+      "idx": 53,
+      "kind": "paragraph",
+      "content": "They sat down and rested for a few minutes. Then, two elevator doors opened.",
+      "sha256": "983f13a7e0595e0725238862579d5c80c3752caee364c8037d5196dcfe211add"
+    },
+    {
+      "idx": 54,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 55,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"MU GU GEI FA\"</span>, the loud automated voice announced. Starting in fifty ticks.",
+      "sha256": "ca1cbed0024390511a127eac8e44cb6c7b688bdfdcbf973a8d2ca094748a5bf5"
+    },
+    {
+      "idx": 56,
+      "kind": "paragraph",
+      "content": "Zei breathed in and out, and recited his strategies in his head for the last time.",
+      "sha256": "24661f546e0756b2fef2bd092018013b4e26c1f29b95c87b2af694def5e8fd6f"
+    },
+    {
+      "idx": 57,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"LE MU GEI FA\"</span>.",
+      "sha256": "4e90512f0da654de37487289a6b725dce3b76c667aad421d70ebde9d68974598"
+    },
+    {
+      "idx": 58,
+      "kind": "paragraph",
+      "content": "Zei scanned the audience with his eyes. He could barely see most of them, but in the aggregate he could make out more excitement than he saw in both of his previous two games.",
+      "sha256": "66f86333f332af943b82e00c1d3019527463dab2f19d6701c0aafa8086ec4367"
+    },
+    {
+      "idx": 59,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"PA GU GEI FA\"</span>.",
+      "sha256": "6da8922dd55ebce8e90530d01c0bcd0fc5a73e7cec071b10b4d9c29f23d9d397"
+    },
+    {
+      "idx": 60,
+      "kind": "paragraph",
+      "content": "Zei breathed in again, and held his breath for the last remaining ten ticks until the announcement.",
+      "sha256": "dd29d53ae1c6c66fc3ec91fb97e600b6714cbf89af0a8881c57e4b36a4e4d83d"
+    },
+    {
+      "idx": 61,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"13.33\">\"Welcome to the final round of the eighteenth year of the Minpentai tournaments in Pafogai Du. Tonight, we will witness the most decisive game in our entire city, between contestants whose playing skills have both been rated by AI as better than the national champions of only five years before.\"</span>",
+      "sha256": "711126689e9a582b96dd8bc190037c289862fa0bdb2a456af4248fcee55e2288"
+    },
+    {
+      "idx": 62,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"13.33\">\"Today, we have our two finalists, two brilliant minds whom we saw fight side by side as teammates a month earlier: Zei Leimin and Bai Jahen.\"</span>",
+      "sha256": "bfdd92ff29b4df0516d7d2dd944d543fcaf119941d3bea76fac90d83e081cd7a"
+    },
+    {
+      "idx": 63,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"13.33\">\"And today, I am also pleased to announce the new rule for this round. Both players will have access to a powerful personal AI, which will be able to assist them in their gameplay.\"</span>",
+      "sha256": "2807535f81513b9f93d506d7296d54f331f5b22f2b4f26387fc2d4903575cc60"
+    },
+    {
+      "idx": 64,
+      "kind": "paragraph",
+      "content": "A new tab suddenly opened up on Zei's display.",
+      "sha256": "d324176cd4444fbe2c8e25a19611ba018ef80c3d540edd23bda86d1f9eb59229"
+    },
+    {
+      "idx": 65,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"13.33\">\"However, the players and their AIs will have full read access to the thought transcripts of each other's AI.\"</span>",
+      "sha256": "7f8dafb639ac3ef7d31586a8d2f8d463413dc3137050232d7d6c03a59a8ace6b"
+    },
+    {
+      "idx": 66,
+      "kind": "paragraph",
+      "content": "Zei took in the information, and quickly began to formulate his thoughts about how he would use the AI. He asked it to set up standard glider and wall formations, in his own style. To his surprise, the AI knew what his style was.",
+      "sha256": "5b8bb53b4cebfefe41e2e6b848b75e4ac4820c04d1e0d4fdf273e1b8729fffa8"
+    },
+    {
+      "idx": 67,
+      "kind": "paragraph",
+      "content": "He saw Bai's AI transcript in a separate tab to the side; Bai was doing the same, and Bai's AI also knew her style.",
+      "sha256": "eca432ffeff214d99d4d3f2bf2e91b43226b59a379400e09f2bac8392afc1172"
+    },
+    {
+      "idx": 68,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"MU GU GEI TAU FA\"</span>, the loud automated voice blared. The battle begins in fifty ticks.",
+      "sha256": "73c54e43989a4bc58fb0efddb6ba2267ef9f43d5767611472e8bd4d689a116c8"
+    },
+    {
+      "idx": 69,
+      "kind": "paragraph",
+      "content": "The AIs kept optimizing their glider and wall formations. At this point, both AIs started designing countermeasures to the strategies in the other's transcripts.",
+      "sha256": "9217a464e28dc0a9d402fa2ccc9af86243ee67be2d6baf611298336265a03012"
+    },
+    {
+      "idx": 70,
+      "kind": "paragraph",
+      "content": "Zei started planting a few structures by hand, speeding up his work by copying and pasting pieces of what the AI had already made, looking attentively at Bai's transcript to see what strategies Bai's AI had not yet built countermeasures to.",
+      "sha256": "55fd73a68eaec1bc9fbf4a9beaee7d4107b64fe536ff8cc56d4a2b4056efcef0"
+    },
+    {
+      "idx": 71,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"LE MU GEI TAU FA\"</span>",
+      "sha256": "f3ef655ab6b49e2de86a960541f0cb3c5aaea813eb21e8f2709783cf46e1c1ed"
+    },
+    {
+      "idx": 72,
+      "kind": "paragraph",
+      "content": "Zei started planting one last major structure by hand: a symbol-carrying spaceship. There were already four created by his AI, but he figured that he would make one all on his own, so that Bai would not see it, and with a different style of moving wall in front of it. He aimed the symbol-carrying spaceship so that it would reflect off a wall that his AI had already constructed, and then move upwards along the middle of the game field.",
+      "sha256": "be2c22de5e0e7556bfe91df4bbcde1f3859574351e9a792d64901a24a40f3fc4"
+    },
+    {
+      "idx": 73,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"PA GU...\"</span>",
+      "sha256": "919b59c18b012270c831bb52e3ed0d257195fcec6800116e259d12128c1c0a56"
+    },
+    {
+      "idx": 74,
+      "kind": "paragraph",
+      "content": "Come on, Zei thought, finish the symbol-carrying spaceship.",
+      "sha256": "73e9f5d30f18ef58b71dc066f95e285aa695a46dfae083a309c0f629176c0bf9"
+    },
+    {
+      "idx": 75,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"SO ... BI ... ZE ... HA ...\"</span>",
+      "sha256": "7044e017a87cf05b28cacde9c48ac712f3b38c72a7cbc6584b75bad73b5ba902"
+    },
+    {
+      "idx": 76,
+      "kind": "paragraph",
+      "content": "Zei put down a few last squares.",
+      "sha256": "59b3a377f87a135bd939cfeef3b1104bbbf5d31413209889a7a9b36f05b60f99"
+    },
+    {
+      "idx": 77,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"MU ... FO ...\"</span>",
+      "sha256": "1c018dcdddfde3d75ca8708a0dea50bbbcc2a6df48cb761a2cc03bd32326b33c"
+    },
+    {
+      "idx": 78,
+      "kind": "paragraph",
+      "content": "And... done.",
+      "sha256": "1eb5ba2a88516ee44ce69e51342fd55bdde379669bf5555f310d84c25e15f796"
+    },
+    {
+      "idx": 79,
+      "kind": "paragraph",
+      "content": "Zei let out a long breath.",
+      "sha256": "84f2650485574b177eaa16e81874886ed58a0b4f99f3fcadfcf732f9b87592d6"
+    },
+    {
+      "idx": 80,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"SHI ... LE ... PA ... TAU FA\"</span>",
+      "sha256": "91b0ab093cb89739717a0775d547d62f40007dde0f20bf7e3fe35ef1ba9d4ae1"
+    },
+    {
+      "idx": 81,
+      "kind": "paragraph",
+      "content": "Gliders started flying. Zei's symbol-carrying spaceship started moving west from the southeast corner. The portion of the game field that Zei could see increased.",
+      "sha256": "14b95f922232ea67b123c912853939b4c7289e5f3b167729213259920d95e19e"
+    },
+    {
+      "idx": 82,
+      "kind": "paragraph",
+      "content": "Both AI transcripts were focused intensely on exploiting their territories, building more gliders, spaceships and walls, and expanding.",
+      "sha256": "5b96e7722967427dc202c2fdaab679df3f6988d612240f4e19efdbc0815ff498"
+    },
+    {
+      "idx": 83,
+      "kind": "paragraph",
+      "content": "After a few hundred turns, Zei and Bai's gliders began to crash into each other, and then into each other's spaceships and walls.",
+      "sha256": "94fd8a2491b6b1200e1c1bfa8ba8612f78b0d12fc01a7501311b487d8f2bb250"
+    },
+    {
+      "idx": 84,
+      "kind": "paragraph",
+      "content": "And a few hundred turns after that, their symbol-carrying spaceships got within sight of each other.",
+      "sha256": "7beadf6570f51d70dd8a8050e54aa8c4e12c285e540c6b586df0699082e3d560"
+    },
+    {
+      "idx": 85,
+      "kind": "paragraph",
+      "content": "Shortly after that, Zei's symbol-carrying spaceship reflected off the wall in the south, and began moving north.",
+      "sha256": "382c5f0530672e117c28fc8f693e2b93e133d9cda52fa2b5277de7f85a14e35d"
+    },
+    {
+      "idx": 86,
+      "kind": "paragraph",
+      "content": "On the big screen, the audience watched.",
+      "sha256": "30d686fb22c5530f407ff1f1bb95f82cd43dbeb630a1d013af6232e7241bc34a"
+    },
+    {
+      "idx": 87,
+      "kind": "figure",
+      "content": "<div class=\"device-view narrow-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<circle cx=\"10\" cy=\"30\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"35\" cy=\"10\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"30\" cy=\"30\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"60\" cy=\"25\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"190\" cy=\"30\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"165\" cy=\"10\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"170\" cy=\"30\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"130\" cy=\"20\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"15\" cy=\"85\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"30\" cy=\"80\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"50\" cy=\"80\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"180\" cy=\"85\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"165\" cy=\"85\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"150\" cy=\"80\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"75\" cy=\"60\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"125\" cy=\"60\" r=\"3\" fill=\"#cef\"></circle>\n<rect x=\"5\" y=\"170\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"25\" y=\"170\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"25\" y=\"185\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"185\" y=\"170\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"165\" y=\"170\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"160\" y=\"185\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"65\" y=\"175\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"55\" y=\"160\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"125\" y=\"170\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"135\" y=\"150\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"155\" y=\"105\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"170\" y=\"105\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"185\" y=\"110\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"5\" y=\"105\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"25\" y=\"110\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"45\" y=\"110\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"95\" y=\"150\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n</svg></div>",
+      "sha256": "9114b8d89d84afd29d0100f565380f1eeda52dfa89dcd6771c5f07598cb5c737",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "screen",
+        "device_evidence": {
+          "idx": 86,
+          "quote": "On the big screen, the audience watched."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c7-b87.svg",
+            "viewBox": "0 0 200 200",
+            "width": "200",
+            "height": "200",
+            "labels": [],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 88,
+      "kind": "paragraph",
+      "content": "The first intervention turn came. Zei let his AI do the work adjusting structures near the frontline, as the consequences would be immediately visible to Bai anyway.",
+      "sha256": "7a381e5b4e2a868a059522500353b892b978fbf39eef48c4b3005f03444f2f51"
+    },
+    {
+      "idx": 89,
+      "kind": "paragraph",
+      "content": "He scanned Bai's AI's transcript for weak points. He found one: it was not thinking at all about glider attacks coming down the diagonals. He toned down the amount of resources allocated to the AI, and used those resources to manually send a large number of gliders down both diagonals, targeted so that one would pass right after the other, to strike both of Bai's home bases. He also sent a symbol-carrying spaceship, targeted to pass the center hundreds of turns after both sets of gliders.",
+      "sha256": "123fa03012137e0c474b588fe4ff7b881502b82797cf8aef19a3ce38afaa697f"
+    },
+    {
+      "idx": 90,
+      "kind": "paragraph",
+      "content": "The game continued.",
+      "sha256": "b5d1cba6a5574f3a0d2b7f2afa124dbb4b4c4529897889de17bb674b3cc84605"
+    },
+    {
+      "idx": 91,
+      "kind": "paragraph",
+      "content": "The battle along the front lines in the middle was surprisingly even-handed. Both AIs were playing near-optimally, and there was little opportunity for trickery because both sides could see each other's moves and thoughts. However, Bai did put more resources toward the frontline especially on the west side, and as the hundreds of turns went on, it began to show on the board. Soon, one of Zei's symbol-carrying spaceships on the west was breached, and it exploded into a storm of gliders flying in all directions.",
+      "sha256": "1bf1f29271442ce0e6e829180e1c4e06f7d20cada711ec63f9b1fafcd3dee84b"
+    },
+    {
+      "idx": 92,
+      "kind": "paragraph",
+      "content": "Zei kept playing, optimizing the minutiae of the game board. He knew that he would not get to see the results of his attack for a long time.",
+      "sha256": "5525e60da942368449fed0d53534a8081fabc52b171b91a2c9da81d895f511d7"
+    },
+    {
+      "idx": 93,
+      "kind": "paragraph",
+      "content": "The second intervention turn came.",
+      "sha256": "ff81f11e89000991a7f7f3b3f7e4c1d3811964814dbd85451a09557bd03a4aef"
+    },
+    {
+      "idx": 94,
+      "kind": "paragraph",
+      "content": "The best that Zei could come up with was constructing more factories beside his symbol-carrying spaceship that was slowly flying north along the middle of the field. Aside from the attack down the diagonal, this was the one structure that Bai had no way of knowing about - unless his AI decided to ignore Zei's instruction to focus exclusively on the domain it was assigned to, and blurted out the spaceship's position mid-transcript. Zei decided to ignore that possibility; not much he could do about it anyway. He put up more walls along the west side.",
+      "sha256": "7c349d5d07fa4e3cc259696c3ffef803da660392fde039eb7383d1514a71020e"
+    },
+    {
+      "idx": 95,
+      "kind": "paragraph",
+      "content": "More turns passed. On the west side, Bai continued to advance. Some of Bai's gliders got into Zei's base in the southwest, and destroyed two of his symbols. Zei watched as his symbol-carrying spaceship made its way toward the northwest.",
+      "sha256": "681cac062bef30285b2f8cf25f66062216eb1f8ab564ed1dba0f49f5dd3a03f5"
+    },
+    {
+      "idx": 96,
+      "kind": "paragraph",
+      "content": "Then, suddenly, gliders flew at the spaceship from the west, north and east side. It quickly crumbled, and exploded into rubble and a dozen gliders. At that point, Zei realized what had happened. Bai's AI's lack of thought about the diagonals had not been a mistake at all. Rather, Bai had deliberately directed the AI to focus on the other directions, and she had put up a strong multilayered defense along the diagonals herself. It had been a trap, and Zei had fallen squarely into it.",
+      "sha256": "fcc49276a3a23d69b8f9d155f7e72d251aa1bd1f8f9719b14d8bbe9b01d00d88"
+    },
+    {
+      "idx": 97,
+      "kind": "figure",
+      "content": "<div class=\"device-view narrow-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<circle cx=\"10\" cy=\"30\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"35\" cy=\"10\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"30\" cy=\"30\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"60\" cy=\"25\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"100\" cy=\"25\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"190\" cy=\"30\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"165\" cy=\"10\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"170\" cy=\"30\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"130\" cy=\"20\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"170\" cy=\"55\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"15\" cy=\"75\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"35\" cy=\"50\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"15\" cy=\"130\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"20\" cy=\"105\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"50\" cy=\"80\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"180\" cy=\"90\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"75\" cy=\"115\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"185\" cy=\"60\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"165\" cy=\"90\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"150\" cy=\"90\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"75\" cy=\"70\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"125\" cy=\"70\" r=\"3\" fill=\"#cef\"></circle>\n<rect x=\"25\" y=\"170\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"185\" y=\"170\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"165\" y=\"170\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"160\" y=\"185\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"80\" y=\"175\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"55\" y=\"160\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"75\" y=\"130\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"110\" y=\"170\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"135\" y=\"150\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"120\" y=\"120\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"155\" y=\"100\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"185\" y=\"100\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"170\" y=\"105\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"155\" y=\"140\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"170\" y=\"120\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"45\" y=\"100\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"95\" y=\"80\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n</svg></div>",
+      "sha256": "53585781212d21a3844c7250461e8ee7954ee5837522449a519b049572716ee7",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": null,
+        "device_evidence": null,
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c7-b97.svg",
+            "viewBox": "0 0 200 200",
+            "width": "200",
+            "height": "200",
+            "labels": [],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 98,
+      "kind": "paragraph",
+      "content": "Mu felt a pang of disappointment in Zei. Seventeen symbols to twenty-two, she thought. How could he have fallen into that trap, and not come up with anything interesting himself? He had one spaceship going north in the middle, but so what? Bai's bases were well protected against attacks along the diagonals, and Zei's spaceship did not have excellent chances of reaching the north side. Unless Zei came up with something totally unexpected, she figured, this would turn into a game of attrition, which would only shift further in Bai's favor.",
+      "sha256": "b1b1880c77eb81ca3cd0a244882fa632b9af08078c114499952ea1fdda7b33c4"
+    },
+    {
+      "idx": 99,
+      "kind": "paragraph",
+      "content": "An unexpected set of gliders knocked out another two of Zei's symbols, one slightly southwest of the center of the field, and another slightly west of the center near the south end. Another set of gliders unexpectedly hit Zei's southeast base, but bounced off harmlessly against now well-prepared walls.",
+      "sha256": "e864fbd5551519fc5b4bc5fae4ba71a9d505620079e9c51288561c3f17a734e6"
+    },
+    {
+      "idx": 100,
+      "kind": "paragraph",
+      "content": "Sitting on the other side of the room, in less comfortable public seating, Fin gazed with fear at the gameboard as well.",
+      "sha256": "c8c0f571f2ee8714cb2146fcccd3e7b01e31b05bedac0c856d9e2d87a88ddd3d"
+    },
+    {
+      "idx": 101,
+      "kind": "paragraph",
+      "content": "Finally, something inside of Zei's mind clicked.",
+      "sha256": "b430d143146653bcc8f05cd8c37665652920e01187f1f06b21c718165de3b08c"
+    },
+    {
+      "idx": 102,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Take my fourth westernmost symbol\"</span>, he told the AI. <span data-hue=\"346.67\">\"Take the best sixteen strategies that you can come up with. Construct near that symbol a factory capable of executing each of those strategies. It should be activated by a glider coming in from the southwest, and the exact strategy chosen should depend on the type of glider and the time it hits. Then, near my second westernmost symbol, make that glider. Allocate eighty percent of resources this intervention turn to this.\"</span>",
+      "sha256": "8cd754730f2bf6d7ea2732576a8298f59a843a18e0489c02670c73d42450f425"
+    },
+    {
+      "idx": 103,
+      "kind": "paragraph",
+      "content": "The AI started thinking in detail, implementing the factory, and the glider.",
+      "sha256": "8dfe8f51832c5cfc816f22e7d1cb117758cfff30f1aebced9605e5f9a69cf7e0"
+    },
+    {
+      "idx": 104,
+      "kind": "paragraph",
+      "content": "Bai's AI started thinking about countermeasures to all sixteen strategies, but soon hit a limit: it could not optimize defenses against all of them at the same time.",
+      "sha256": "437583c21e9b1d38eaffa4fa4dba5f9dbe99e047238e7c3e17db13f91dde3eac"
+    },
+    {
+      "idx": 105,
+      "kind": "paragraph",
+      "content": "Bai's AI also focused on increasing defenses across her own western flank. Zei's *first* gamble paid off, he realized: Bai herself did not realize just how much damage she had done on the west side, and just how little Zei had done to compensate. And so neither she nor her AI realized that by this point, Zei's fourth westernmost symbol could be in the middle of the field.",
+      "sha256": "a4369da71490ede42bff031c6ee60dff07de5ae3d3dcc0df395767aa90d03be7"
+    },
+    {
+      "idx": 106,
+      "kind": "paragraph",
+      "content": "Then, Zei went to work on his *second* gamble. He used the resources he had not allocated to the AI to add a brick south of his factory to block the glider that the AI was sending, and add two of his own gliders coming in from the south.",
+      "sha256": "805875dc94ae0620274b45c491aebbd1d5bfdd4c1212ff549fff41eb7ee5005a"
+    },
+    {
+      "idx": 107,
+      "kind": "paragraph",
+      "content": "The intervention turn ended. Part of the factory had been built during the intervention turn, the rest continued to be constructed in real time out of nearby rock formations by gliders.",
+      "sha256": "06bc558831f5e91aa4c6ddf8fd929ce16e3a17175affd6b7e2429b6ec52954e3"
+    },
+    {
+      "idx": 108,
+      "kind": "paragraph",
+      "content": "A few hundred turns later, the glider sent by Zei's AI from the west was blocked by the brick that Zei had put in place. A few hundred turns after *that*, the gliders that Zei sent manually crashed into the factory, and activated it.",
+      "sha256": "12d398ec5e44d4b2e3516e09bc54c669a407f15e67cba7d57943f1458a315d2e"
+    },
+    {
+      "idx": 109,
+      "kind": "paragraph",
+      "content": "The factory picked a strategy that was none of the four that Bai's AI had focused on planning for. And it was coming from a place that Bai had not expected: the halfway point between the center of the board and the northern edge. The factory quickly started generating symbol-carrying spaceships that began to move toward the east, and a storm of gliders that moved north, and then bounced off of rock formations and Bai's own walls to move toward the west. Bai, and her AI, were caught completely by surprise.",
+      "sha256": "57958992ebc97819d0e2459044c3ce15b02a1c1300c5ad8df06cabbda24f044a"
+    },
+    {
+      "idx": 110,
+      "kind": "paragraph",
+      "content": "By the time the next intervention turn came, Zei's spaceships had gotten well behind Bai's lines on the east. Zei's AI took the opportunity to design a storm of gliders to attack Bai's flanks from behind, and Zei added a few of his own gliders to attack Bai's northeastern base - building them himself so that they would not appear in the transcript.",
+      "sha256": "355b1050835a4bcd9ff425956e2855ab49128c15d5a30b20cebe775d88f85811"
+    },
+    {
+      "idx": 111,
+      "kind": "paragraph",
+      "content": "Five hundred turns after that, the game board looked very different.",
+      "sha256": "4b674a0572d13ffa7e49c8cf15f75b6a484e7c6f1a8752a07d9f6522d73b765d"
+    },
+    {
+      "idx": 112,
+      "kind": "figure",
+      "content": "<div class=\"device-view narrow-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<circle cx=\"35\" cy=\"10\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"100\" cy=\"25\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"165\" cy=\"10\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"130\" cy=\"20\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"185\" cy=\"75\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"15\" cy=\"75\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"15\" cy=\"140\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"40\" cy=\"110\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"180\" cy=\"90\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"75\" cy=\"70\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"125\" cy=\"70\" r=\"3\" fill=\"#cef\"></circle>\n<rect x=\"25\" y=\"170\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"185\" y=\"170\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"165\" y=\"170\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"160\" y=\"185\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"55\" y=\"160\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"110\" y=\"170\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"135\" y=\"150\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"120\" y=\"120\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"155\" y=\"100\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"185\" y=\"100\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"170\" y=\"105\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"95\" y=\"45\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"145\" y=\"40\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"150\" y=\"50\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n</svg></div>",
+      "sha256": "4d7e066a9de4e9fe7c336b692f64162663feebafbc5f47127d3874ad41d1a3e4",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": null,
+        "device_evidence": null,
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c7-b112.svg",
+            "viewBox": "0 0 200 200",
+            "width": "200",
+            "height": "200",
+            "labels": [],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 113,
+      "kind": "paragraph",
+      "content": "By this point, Mu's solemn head shaking and Fin's expression of fear had both turned into excited smiles.",
+      "sha256": "1b228b44eec2bdc2fa1345420406f89e4bf32cf2163a1644dfe0a037a1abc49b"
+    },
+    {
+      "idx": 114,
+      "kind": "paragraph",
+      "content": "Fourteen to eleven. Zei was winning again. And he had a better position.",
+      "sha256": "2a0abb73eca837008455bcc5abb3a9f7a1a333fc0c839acbb6f9427060490212"
+    },
+    {
+      "idx": 115,
+      "kind": "paragraph",
+      "content": "Soon, the next intervention turn came. At this point, Zei figured, he would just repeat the same strategy, though a more near-term version of it: immediately create many glider factories in the northeast, and have their exact style and direction be set off by a trigger that would only appear in ten turns. Bai could not see the exact internal logic of the trigger, and Zei designed that piece himself, so that it would not appear in the transcript.",
+      "sha256": "1081fad7bb7cfc83b1e124ad9cabc50d7e66f29d135e21fc70f01e3dffe9ded2"
+    },
+    {
+      "idx": 116,
+      "kind": "paragraph",
+      "content": "Bai attempted to copy Zei's strategy. Zei spent half his resources generically shoring up his defenses, without attempting to be particularly clever in outsmarting Bai. He was reasonably safe, he knew: Bai simply did not have any positions behind his lines the way he had behind Bai's.",
+      "sha256": "3fee7e0f0bd6109ac9305fdd06a37a16e4c784622d386411e12ff193712b1e02"
+    },
+    {
+      "idx": 117,
+      "kind": "paragraph",
+      "content": "Five hundred turns later, both attacks came to fruition. Zei's succeeded, Bai's failed. Bai's only significant accomplishment was destroying the remaining symbols in Zei's southwestern base.",
+      "sha256": "500d1f4c3d15ba6cc79ceb1038d8d75475d4e175a0863d282f31fc996b2592e7"
+    },
+    {
+      "idx": 118,
+      "kind": "figure",
+      "content": "<div class=\"device-view narrow-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<circle cx=\"35\" cy=\"10\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"130\" cy=\"20\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"15\" cy=\"75\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"15\" cy=\"155\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"40\" cy=\"110\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"75\" cy=\"70\" r=\"3\" fill=\"#cef\"></circle>\n<rect x=\"185\" y=\"170\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"165\" y=\"170\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"160\" y=\"185\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"110\" y=\"170\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"135\" y=\"150\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"120\" y=\"120\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"155\" y=\"100\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"185\" y=\"100\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"170\" y=\"105\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"95\" y=\"45\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"145\" y=\"40\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"150\" y=\"50\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n</svg></div>",
+      "sha256": "3953ef3c9f6bef7b949000d5bf7f07c4f9a4d1211112f9ab6626c470b8136aa5",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": null,
+        "device_evidence": null,
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c7-b118.svg",
+            "viewBox": "0 0 200 200",
+            "width": "200",
+            "height": "200",
+            "labels": [],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 119,
+      "kind": "paragraph",
+      "content": "Twelve to six.",
+      "sha256": "a75fea5c9f142e652355fdc36880817e171179e98ceab3ba32dba6d6fddfcc8b"
+    },
+    {
+      "idx": 120,
+      "kind": "paragraph",
+      "content": "Bai resigned.",
+      "sha256": "52f51402fdeb619793c9e774a1801a4df9d4f8fd3ad4499d2d340325e1a2cf19"
+    },
+    {
+      "idx": 121,
+      "kind": "paragraph",
+      "content": "The audience cheered.",
+      "sha256": "b52a4b5746a15647911d8504c09461ffda33ef1d714b50b0de191491daed7b11"
+    },
+    {
+      "idx": 122,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 123,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Congratulations, you two-\"</span>, Mu began to speak, standing in the waiting room along with Zei and Bai.",
+      "sha256": "8f5375b4f5123fb7e60ed1d2a03b0e146b7d097405ee92f6d82089b7175494b9"
+    },
+    {
+      "idx": 124,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Congratulations, Zei. You only had to wait until our last season to beat me.\"</span>",
+      "sha256": "736a084f12b379160623620965e62f7a7b2e67c9f1943b592d1c498a0670052b"
+    },
+    {
+      "idx": 125,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"You played the best game of your life today, Bai.\"</span>",
+      "sha256": "678dca68947242869481eb4b05e4be3109a05bb06d85d227a38aba7190700bb2"
+    },
+    {
+      "idx": 126,
+      "kind": "paragraph",
+      "content": "Mu paused for a few moments.",
+      "sha256": "5791fcfa09b39cec743db96737f03476e00a4bd590141ba5857505af1060d93b"
+    },
+    {
+      "idx": 127,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"The priests did not even know what you two would come up with. They told me that they wanted to make the game a little more ... *realistic* - but they were as curious as anyone else to find out what that means.\"</span>",
+      "sha256": "29362f64240c0f8d03062bdff0a3c58b5fa9c3d10af291194e28fdd46329865a"
+    },
+    {
+      "idx": 128,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Realistic?\"</span>, Bai exclaimed incredulously. <span data-hue=\"26.67\">\"How is it at all realistic that AIs can read each other's minds?\"</span>",
+      "sha256": "870bf358c87b76c6ad39fb01e3346c3854fbd1d681942ed1561ed3d94cdf711d"
+    },
+    {
+      "idx": 129,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"It sounded crazy to me too. But the more I think about it, the more I've come to see their point.\"</span>",
+      "sha256": "ae2e415775c0f40d0a2ba11e68d21cea8440df2616ba19478e1c2b28e4b6ff31"
+    },
+    {
+      "idx": 130,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Look at the Veridian Steering system, for example. It's one of the most opaque parts of the government - even the Keepers don't know who each other are - and yet one of the most trustworthy and incorruptible parts precisely for that reason. Similar for the Courts - anonymous, randomly selected committees out of a large pool.\"</span>",
+      "sha256": "f15b97459649e17d9f8f8751cd6d3686e1d7440d3f0b2f9b5594d6ec7331bd55"
+    },
+    {
+      "idx": 131,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"But the Parliament is transparent, and so when it comes to the Parliament's direct decisions - large-scale infrastructure, foreign policy, healthcare, all the things that it's funding - everyone keeps exploiting and outsmarting it. Same with the quadratic funding - actually, it's even worse. Keepers, Sentinels and Court judges are not fully insulated - it is still Parliament committees that are approving them - but at least there's a layer of indirection there, and those positions are also gated by prediction scores.\"</span>",
+      "sha256": "28198620e860b2a5d75fdac2c75d0a82c7e3ec362e41cfd06ee157573955c9f7"
+    },
+    {
+      "idx": 132,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"That's the lesson. In the real world, it's not just thinking well that matters, it's also hiding your thoughts - sometimes, even hiding your thoughts from your allies or the people you're meant to serve.\"</span>",
+      "sha256": "95dedc1140a0af502514fab0cd3ee5537e8a593069e6252a43e3c94fd164d8b0"
+    },
+    {
+      "idx": 133,
+      "kind": "paragraph",
+      "content": "Zei and Bai both stared at Mu.",
+      "sha256": "a346634141b16aa4f5cf768067bfe0dab0cc13d89a33f1a8d76ea61abdd9c5ab"
+    },
+    {
+      "idx": 134,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Anyway, you've both performed extremely well today.\"</span>",
+      "sha256": "6486d2b5c1dd9ee0ac1a297b6a844f0ad4eda470519278af174884f40f4a5060"
+    },
+    {
+      "idx": 135,
+      "kind": "paragraph",
+      "content": "A robot slid in carrying two bags, one with the number 1 on the side and the other with the number 2.",
+      "sha256": "93c54c819f551653b38c8062683c7011365ed3f8b191ccd79c918c1d2e556c72"
+    },
+    {
+      "idx": 136,
+      "kind": "paragraph",
+      "content": "Mu handed the first bag to Zei and the second bag to Bai.",
+      "sha256": "24fb90a2d827e2b734dcfebd8f88899ab9f100bb5411d290856a79da3c329968"
+    },
+    {
+      "idx": 137,
+      "kind": "paragraph",
+      "content": "Zei and Bai both sat down and started looking at the contents inside their bags. A plaque, a scratch-off one-time-scannable code containing some cryptographic tokens and credentials, and smaller gifts: a cup, a handwriting instrument, and an ozone-based electric water disinfection pen.",
+      "sha256": "ae797966c9afcd2e701adeecff18daa1d76ae93a5e064b64e0af3ad77295841d"
+    },
+    {
+      "idx": 138,
+      "kind": "paragraph",
+      "content": "Bai began studying all of the gift items in detail. Zei immediately started to scratch off the cover from the scannable code, and took out his hand device to prepare to scan it. He had been hoping to be able to buy his mom a new compute box for many months now, and he still could not believe that now he could finally actually get it.",
+      "sha256": "f6eead371446608afaf577e6113694645d333580b78ae140056a82b1b7a8c872"
+    },
+    {
+      "idx": 139,
+      "kind": "paragraph",
+      "content": "Mu stood up.",
+      "sha256": "dddedb1073ad949c8552e3aa7a0a5bba7435d45f62513408a6dfcd4fdab048a4"
+    },
+    {
+      "idx": 140,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"I hope you both have a good rest\"</span>, she said, as she turned and began to leave the room.",
+      "sha256": "f302975d401d30137105bfdc1d5a35af2bb7205f83226a15cc8e03c315f38b2c"
+    },
+    {
+      "idx": 141,
+      "kind": "paragraph",
+      "content": "As soon as Mu was gone, Zei noticed that he got one gift that Bai did not: a dark purple letter, with an inscription on the front.",
+      "sha256": "96045bdc672f825a85cf20723520a1a166ce8542dd00723abda1cc62e361ac21"
+    },
+    {
+      "idx": 142,
+      "kind": "quote",
+      "content": "<center><div class=\"dz-card dz-mono\" style=\"font-family:'TeX Gyre Chorus',cursive;font-size:17px;line-height:1.55\"><div class=\"dz-line\" style=\"margin:3px 0;padding-left:2ch\"><span style=\"white-space:nowrap\"><span style=\"color:#e6f4ff;font-family:'TeX Gyre Chorus',cursive\">dun</span></span> <span style=\"white-space:nowrap\"><span style=\"font-family:'TeX Gyre Chorus',cursive;\">fe</span>&nbsp;<span style=\"white-space:nowrap\"><span style=\"color:#e6f4ff;font-family:'TeX Gyre Chorus',cursive\">tin di zei</span></span></span> <span style=\"white-space:nowrap\"><span style=\"font-family:'TeX Gyre Chorus',cursive;\">de</span>&nbsp;<span style=\"white-space:nowrap\"><span style=\"color:#e6f4ff;font-family:'TeX Gyre Chorus',cursive\">kin kie</span></span></span></div></div></center>",
+      "sha256": "8b0cf78380affba35ff87c62b253531e233ecadcc71d4b706cb23f7488ad373c"
+    },
+    {
+      "idx": 143,
+      "kind": "paragraph",
+      "content": "\"For Zei's eyes only\"",
+      "sha256": "baef66c7f49e062bec607f8617eedd224e156d9f68af63bc352a2cb0a675f63a"
+    },
+    {
+      "idx": 144,
+      "kind": "paragraph",
+      "content": "Zei stopped scratching the cover on the scannable code, and instead put the letter into his pocket.",
+      "sha256": "b91bb011323b2856e771563c622bd1eb81253044dba3d81b7967d7f148fd5276"
+    }
+  ]
+}

@@ -1,0 +1,1328 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 12,
+  "source_url": "https://vitalik.eth.limo/snowmoon/html/chapter-12.html",
+  "source_sha256": "c4b9566694b702a38d7c345d63cb0109086dfde52f5f0d64b6502670c55f082e",
+  "fetched_at": "2026-10-02",
+  "license": "GPL-3.0",
+  "blocks": [
+    {
+      "idx": 0,
+      "kind": "heading",
+      "content": "# Chapter 12",
+      "sha256": "159b0692f6db8f7f7df33530fb0f95fd5c2a6fd9baf04d59294842e2afe355f5"
+    },
+    {
+      "idx": 1,
+      "kind": "dateline",
+      "content": "**Sadzu Du, Dzego** · 3724 Grasstime 22",
+      "sha256": "040ec430c137c5bb66aaca281a76c188451300d7c3d45927cf184571d5ffa3c5"
+    },
+    {
+      "idx": 2,
+      "kind": "paragraph",
+      "content": "Zei looked out of the window of the train, as the train began to slow down.",
+      "sha256": "863a81f118e84bff1efa577303e078bd0543c017136c1762573071a6534c4a12"
+    },
+    {
+      "idx": 3,
+      "kind": "paragraph",
+      "content": "At first, he saw trees. Then, he began to see buildings with greater and greater density. Finally, after a few minutes, he saw the station.",
+      "sha256": "489285b40098d506028f56e0d6200e2d3f7b554215b26f5cafde402b4cdddda7"
+    },
+    {
+      "idx": 4,
+      "kind": "paragraph",
+      "content": "A sign slowly passed across the window.",
+      "sha256": "db6d7d6529894c3151f08c1a86c6dc27034b60bde7298084986902bf273ca941"
+    },
+    {
+      "idx": 5,
+      "kind": "quote",
+      "content": "<center><div class=\"dz-card dz-mono\" style=\"font-family:'TeX Gyre Chorus',cursive;font-size:17px;line-height:1.55\"><div class=\"dz-line dz-blank\" style=\"height:1em\"></div>\n<div class=\"dz-line\" style=\"margin:3px 0;padding-left:2ch\"><span style=\"white-space:nowrap\"><span style=\"color:#e6f4ff;font-family:'TeX Gyre Chorus',cursive\">sa dzu du</span></span></div>\n<div class=\"dz-line dz-blank\" style=\"height:1em\"></div></div></center>",
+      "sha256": "7f5937fae76a96364c5b68ddc3c2fad91066e853168e25f026f99b7076c4b69c"
+    },
+    {
+      "idx": 6,
+      "kind": "paragraph",
+      "content": "\"Main city\", Dzego's helpfully-named capital city.",
+      "sha256": "c7fef56b7aeaf075e7de892b6b9b37c9d4e513b51411addc1c76d2dda3282f72"
+    },
+    {
+      "idx": 7,
+      "kind": "paragraph",
+      "content": "The train came to a stop, and Zei could hear the doors open. The other passengers stood up, and started to gather their belongings.",
+      "sha256": "f0883075bd99d5fd93bcf750e9a873111e180a40d1529c482c93e37adbaf2354"
+    },
+    {
+      "idx": 8,
+      "kind": "paragraph",
+      "content": "Zei decided he was not in a rush to leave first, and would maximize the quality of his time instead. For about two minutes, he finished his game of Minpentai against a bot.",
+      "sha256": "792c23bdfc5587fade7a04f488d03869386246e8c0a4b63f85e2155a4c00d77c"
+    },
+    {
+      "idx": 9,
+      "kind": "paragraph",
+      "content": "Fin had never gotten around to writing the harness to fine-tune the AI to play well on custom rulesets, and so Zei was still playing against the stock AI.",
+      "sha256": "bf9161c8c014a395eb32bd1ef08ed9eb525a98aef5a129721b517ac3ec71003e"
+    },
+    {
+      "idx": 10,
+      "kind": "paragraph",
+      "content": "At that moment, the other AIs resigned. Zei had beaten them one-on-three. To compensate for their lack of skill, he had adjusted the game to only give him one corner and three other AIs the other three corners, and put them all on the same team against him. Even despite this, Zei had won. He realized that the three-on-one did not even help the AIs that much - playing in that style was not in their training data, so they made basic mistakes and cannibalized each other's negentropy.",
+      "sha256": "7efaca549c742bb5efc9c1323b271197f35b167ecbc53bf8e699844d77ea1e61"
+    },
+    {
+      "idx": 11,
+      "kind": "paragraph",
+      "content": "Zei put away his hand device and sighed.",
+      "sha256": "9e71b1c7ed82166063567f63c92e7a239cf4dc1ab8af37fcc879cedc8a158ad1"
+    },
+    {
+      "idx": 12,
+      "kind": "paragraph",
+      "content": "By this point, the other passengers were almost all off the train. Zei grabbed his bag, and stood up and began to walk out of the train as well.",
+      "sha256": "b0b9cde1896d699bf8cbec20051db1f25ba3e89f2b5706a177c0cfebd625c329"
+    },
+    {
+      "idx": 13,
+      "kind": "paragraph",
+      "content": "When he stepped out, there were six people wearing Minpentai priest robes waiting for him.",
+      "sha256": "ef8d2dc4c1b068227eaeab96355f6d133e15d6363379bca018177215d8dddd8c"
+    },
+    {
+      "idx": 14,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Welcome to Sadzu Du, Zei\"</span>, the lead priest, an older woman about the same age as Mu, said to him.",
+      "sha256": "3e0e3abe96542a2cbcfc1eb6fae9a3828d9afd816eecb8879a25df868cc48c07"
+    },
+    {
+      "idx": 15,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Excited to be here\"</span>, Zei quickly replied. <span data-hue=\"346.67\">\"Only my second time to the capital.\"</span>",
+      "sha256": "25ef9db64c41a6af83188dbf28e1ead159308acd1dd24242097719fa1c1d10e9"
+    },
+    {
+      "idx": 16,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"I'm Su by the way. I'm one of the organizers of the nationals.\"</span>",
+      "sha256": "d046a4330ece80f5f40bf0becf33cc72ae209bb2e895225cf2c986b10327b1bc"
+    },
+    {
+      "idx": 17,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Well nice to meet you, Su.\"</span>",
+      "sha256": "1280ab5dc01acb9abe4746cf59a4e1a81714d5e891ed8fb52bed3de59d1cf7e9"
+    },
+    {
+      "idx": 18,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"So what's on my itinerary these next few days?\"</span>",
+      "sha256": "caa7bdd339603ad6d35d9ec77a40263b8be24684a906ccf9dc591f55ebc38b64"
+    },
+    {
+      "idx": 19,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Check in to the hotel, then orientation tomorrow morning. Thirty-two contestants, the brightest young minds in Minpentai across all of Dzego. You'll get to meet them all.\"</span>",
+      "sha256": "30d6b00a52348ce12774fd5850e11a4643df43307e3458d984ff2d5b4ff5491c"
+    },
+    {
+      "idx": 20,
+      "kind": "paragraph",
+      "content": "Su led Zei to a room that contained many doors. One of the doors slid open, and on the other side Zei could see the inside of a black car, identical to the one that Den had used to take him to the chip fab a few months earlier.",
+      "sha256": "f64c97cb876e8b38ff63c6ed7ad7466fab4e19a89d942b0569244792ba713bf5"
+    },
+    {
+      "idx": 21,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Unfortunately, I'll have to leave you here, Zei. There's another contestant arriving here on a train in half a longhour. But have a good ride and have a good rest.\"</span>",
+      "sha256": "17dd5c01a145a4f2baac18b53a4d6a6a228b124a263814995dca0380d0d8fbbb"
+    },
+    {
+      "idx": 22,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Thank you so much.\"</span>",
+      "sha256": "cb359ad087d88548b7d6110eb88a0090f55fe0816741c0a9e1b5f01609a2e092"
+    },
+    {
+      "idx": 23,
+      "kind": "paragraph",
+      "content": "Zei got into the car, and the door closed. The car started moving.",
+      "sha256": "dabb145c19f4c1032ded18a4ddb4cb42ae6f532a6f2a91d56f66d99a9511e3b2"
+    },
+    {
+      "idx": 24,
+      "kind": "paragraph",
+      "content": "Zei stared outside the window of the car, marveling at the buildings and trees in the city. Parts of it looked not too different from Pafogai Du, though here there were fewer electronics stores, and instead a wider variety of venues. Some medicine stores.",
+      "sha256": "fbb7dfcf880839aa3a899b9e7556ef6025de546c12833cca52274007d6e94572"
+    },
+    {
+      "idx": 25,
+      "kind": "paragraph",
+      "content": "On the window of one of the stores, Zei saw a sign:",
+      "sha256": "423426bbc8c7734911b40347b743db2fc9bf90aa18ab554ea2c2814bfe4739df"
+    },
+    {
+      "idx": 26,
+      "kind": "quote",
+      "content": "<center><div class=\"dz-card dz-mono\" style=\"font-family:'TeX Gyre Chorus',cursive;font-size:17px;line-height:1.55\"><div class=\"dz-line dz-blank\" style=\"height:1em\"></div>\n<div class=\"dz-line\" style=\"margin:3px 0;padding-left:2ch\"><span style=\"white-space:nowrap\"><span style=\"color:#e6f4ff;font-family:'TeX Gyre Chorus',cursive\">ti</span></span> <span style=\"white-space:nowrap\"><span style=\"font-family:'TeX Gyre Chorus',cursive;\">ka</span>&nbsp;<span style=\"white-space:nowrap\"><span style=\"color:#e6f4ff;font-family:'TeX Gyre Chorus',cursive\">dia shu</span></span></span> <span style=\"white-space:nowrap\"><span style=\"font-family:'TeX Gyre Chorus',cursive;\">fe</span>&nbsp;<span style=\"white-space:nowrap\"><span style=\"color:#e6f4ff;font-family:'TeX Gyre Chorus',cursive\">cen su jui hui</span></span></span></div>\n<div class=\"dz-line dz-blank\" style=\"height:1em\"></div></div></center>",
+      "sha256": "4bb7592ba457e3fb15da262dc8aac8ba1e2301d2065c8e9950a802d1e02f1539"
+    },
+    {
+      "idx": 27,
+      "kind": "paragraph",
+      "content": "\"Get your longevity package here\"",
+      "sha256": "618ba1104b097dbe5eb3672ec6efa06f60439529f3411f040d44bf80629261e7"
+    },
+    {
+      "idx": 28,
+      "kind": "paragraph",
+      "content": "Soon the health stores gave way to some stores selling artistic furniture and other household items.",
+      "sha256": "e35cc31e395f6b67978eacd43e5c6f5709bd97507195747dd579b9b30b5b9f74"
+    },
+    {
+      "idx": 29,
+      "kind": "paragraph",
+      "content": "And after that a few traditional-looking restaurants and tea houses, in a style mimicking Dzego's own medieval era.",
+      "sha256": "191aa2bb17f2d5fa6a1c6267f4d9e431be884d55f57848c0527734b58444f302"
+    },
+    {
+      "idx": 30,
+      "kind": "paragraph",
+      "content": "For a moment, the buildings on the right side stopped completely, and Zei could see a park. Behind the park, Zei could see several mountain pyramids, each about half as tall as the mountain pyramid south of Pafogai Du.",
+      "sha256": "70a93746fce67a37b42f1097646e938e70ec935d0aa184ca118a6648fba45b4c"
+    },
+    {
+      "idx": 31,
+      "kind": "paragraph",
+      "content": "A minute later, the park ended, and the car crossed a bridge across a small river. Zei could see the buildings get denser further ahead.",
+      "sha256": "be4340bce72903c25a4183b62d7c65e081e37ad914addf9119c7a4fb4f7978ae"
+    },
+    {
+      "idx": 32,
+      "kind": "paragraph",
+      "content": "The road slowly descended underground, and turned into a tunnel.",
+      "sha256": "b8c62df3a00839a8fea67e3ce3abdf27cc4584fb909056087bb125f5c7dd56e7"
+    },
+    {
+      "idx": 33,
+      "kind": "paragraph",
+      "content": "A few minutes and a few turns later, the car stopped. When the car's door opened, it was pressed tightly against another door, completely shielding Zei from being visible from outside the car and the building he was entering.",
+      "sha256": "e84668477d7c59fbdfad650660fd17c97cfeec401e7cdc26a3430300f21bf87b"
+    },
+    {
+      "idx": 34,
+      "kind": "paragraph",
+      "content": "Zei stepped out. He was in a hotel.",
+      "sha256": "3015cc76fcfeb146a21af881a2f395147b0d8ed53ddb9983063efe7b6c60fdb2"
+    },
+    {
+      "idx": 35,
+      "kind": "paragraph",
+      "content": "He walked over to the nearest green circle, and tapped his watch against it.",
+      "sha256": "7aacdac3453ad6444abf6bfac2208aaa79ee7e55ea525b0c37045e203e28cceb"
+    },
+    {
+      "idx": 36,
+      "kind": "screen",
+      "content": "<div class=\"device-view narrow-device-view\"><table>\n  <tbody>\n    <tr>\n      <td><center><div style=\"border: 1px solid; border-radius: 5px; padding: 5px\">sen hen zi li die fe 150 <br> zo lia kin  <b style=\"font-size: 150%; color: #8f8\">✓</b></div></center></td>\n      <td><center><div style=\"border: 1px solid; border-radius: 5px; padding: 5px\">man dun li jie hu <b style=\"font-size: 150%; color: #8f8\">✓</b></div></center></td>\n    </tr>\n    </tbody>\n</table>\n<b>cau tie zen <br> ci fan zi li 304</b></div>",
+      "sha256": "bce6e9f5344800d429c5d1eee45a7cf174145085f28406a5261231618bb62b21",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Sadzu Du, Dzego"
+        },
+        "device": "watch",
+        "device_evidence": {
+          "idx": 35,
+          "quote": "He walked over to the nearest green circle, and tapped his watch against it."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [],
+            "rows": [
+              [
+                "sen hen zi li die fe 150 zo lia kin ✓",
+                "man dun li jie hu ✓"
+              ]
+            ]
+          },
+          {
+            "type": "heading",
+            "text": "cau tie zen ci fan zi li 304"
+          }
+        ]
+      }
+    },
+    {
+      "idx": 37,
+      "kind": "paragraph",
+      "content": "Reputation above 150 verified. Payment not needed. Approved, room number is 304.",
+      "sha256": "cc0b88b9ec8eb837772ee5ed1edd1724c7a034a938242f7fea453d78fc7463f4"
+    },
+    {
+      "idx": 38,
+      "kind": "paragraph",
+      "content": "Zei's watch buzzed, confirming his room key.",
+      "sha256": "6e6aa22b0a6003d424d0cc7ce06719259859e51575376dc683afa465c7231cc5"
+    },
+    {
+      "idx": 39,
+      "kind": "paragraph",
+      "content": "Zei entered his room, and took a shower.",
+      "sha256": "6bbd0362b7ad590f0471dc449a10145364d873450e964e4ab4467779d3f06f45"
+    },
+    {
+      "idx": 40,
+      "kind": "paragraph",
+      "content": "He promptly went to sleep.",
+      "sha256": "edcfb524e6340857c3eccb2c21f1b6244daa2bfc8522799c89a5c3dd5a7e7344"
+    },
+    {
+      "idx": 41,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 42,
+      "kind": "paragraph",
+      "content": "An alarm buzzed.",
+      "sha256": "4e58dd761a86a63b40a8f0f12fef2a4e743a318b89ae0eb77897ed921aef3a68"
+    },
+    {
+      "idx": 43,
+      "kind": "paragraph",
+      "content": "Zei tapped on his watch to check what time it was. 30,003, the watch said. Only half a longhour before the commencement ceremony. He tapped a few buttons on the room service menu, and ordered a fruit and vegetable juice.",
+      "sha256": "f1d635cbbf80e3f01c682fa4334db235c84dc3330ee32de645697260d15c0d9d"
+    },
+    {
+      "idx": 44,
+      "kind": "paragraph",
+      "content": "He put on his clothes.",
+      "sha256": "a127891c1da9637c4adb78ad9bd14b906e16a82a1017584c82f5348fa26764eb"
+    },
+    {
+      "idx": 45,
+      "kind": "paragraph",
+      "content": "Three minutes later, the juice arrived, and Zei quickly drank it. He immediately felt energized - or at least, energized enough to take the trip to the venue.",
+      "sha256": "75064b5060a13fa854420a829248755243816198d4acee1ae756c355e9be48a5"
+    },
+    {
+      "idx": 46,
+      "kind": "paragraph",
+      "content": "Without wasting any more time, he opened the door, and went downstairs.",
+      "sha256": "30b4e555226b2945d463ad92203186bf6baf289afdde8bff3c6952af24ff51e2"
+    },
+    {
+      "idx": 47,
+      "kind": "paragraph",
+      "content": "A black car was already waiting for him. Zei walked through the lobby, and immediately stepped through the hotel door and car door that were already open and pressed tightly against each other. The door closed.",
+      "sha256": "d505119e3a39c9ac3387b0865cbc319ccac777e8d31de11c6fd19b73fc337c11"
+    },
+    {
+      "idx": 48,
+      "kind": "paragraph",
+      "content": "As the car began to move, Zei took out the cryptography textbook that Den had recommended to him in one of their meetings, and continued reading it where he had left off.",
+      "sha256": "46947df87e3b00f8a66b43d664dfe014e760a9e4bb1f52ad4ce25827f5368bc9"
+    },
+    {
+      "idx": 49,
+      "kind": "paragraph",
+      "content": "The section was on hash functions. In the middle of the page, there was a large diagram.",
+      "sha256": "89ac7a5d241cdd53fd48ff9655e60b4c477681fa9f3297d7c705aae3d8acf80e"
+    },
+    {
+      "idx": 50,
+      "kind": "figure",
+      "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"250\" viewBox=\"0 0 400 250\">\n<defs>\n<marker id=\"arrowhead-o\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n<path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#fa5\"></path>\n</marker>\n</defs>\n<rect width=\"400\" height=\"250\" fill=\"#245\"></rect>\n<text x=\"200\" y=\"17\" font-family=\"sans-serif\" font-size=\"13\" fill=\"lightblue\" text-anchor=\"middle\">tun bia zi sin de sia</text>\n<line x1=\"50\" y1=\"46\" x2=\"350\" y2=\"74\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"80\" y1=\"46\" x2=\"110\" y2=\"74\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"110\" y1=\"46\" x2=\"380\" y2=\"74\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"140\" y1=\"46\" x2=\"260\" y2=\"74\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"170\" y1=\"46\" x2=\"80\" y2=\"74\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"200\" y1=\"46\" x2=\"140\" y2=\"74\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"230\" y1=\"46\" x2=\"230\" y2=\"74\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"260\" y1=\"46\" x2=\"50\" y2=\"74\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"290\" y1=\"46\" x2=\"290\" y2=\"74\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"320\" y1=\"46\" x2=\"200\" y2=\"74\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"350\" y1=\"46\" x2=\"170\" y2=\"74\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"380\" y1=\"46\" x2=\"320\" y2=\"74\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"50\" y1=\"102\" x2=\"290\" y2=\"124\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"80\" y1=\"102\" x2=\"260\" y2=\"124\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"110\" y1=\"102\" x2=\"50\" y2=\"124\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"140\" y1=\"102\" x2=\"350\" y2=\"124\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"170\" y1=\"102\" x2=\"200\" y2=\"124\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"200\" y1=\"102\" x2=\"80\" y2=\"124\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"230\" y1=\"102\" x2=\"230\" y2=\"124\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"260\" y1=\"102\" x2=\"320\" y2=\"124\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"290\" y1=\"102\" x2=\"140\" y2=\"124\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"320\" y1=\"102\" x2=\"110\" y2=\"124\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"350\" y1=\"102\" x2=\"380\" y2=\"124\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"380\" y1=\"102\" x2=\"170\" y2=\"124\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"50\" y1=\"152\" x2=\"290\" y2=\"174\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"80\" y1=\"152\" x2=\"50\" y2=\"174\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"110\" y1=\"152\" x2=\"380\" y2=\"174\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"140\" y1=\"152\" x2=\"200\" y2=\"174\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"170\" y1=\"152\" x2=\"140\" y2=\"174\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"200\" y1=\"152\" x2=\"80\" y2=\"174\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"230\" y1=\"152\" x2=\"320\" y2=\"174\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"260\" y1=\"152\" x2=\"260\" y2=\"174\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"290\" y1=\"152\" x2=\"170\" y2=\"174\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"320\" y1=\"152\" x2=\"350\" y2=\"174\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"350\" y1=\"152\" x2=\"230\" y2=\"174\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"380\" y1=\"152\" x2=\"110\" y2=\"174\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"110\" y1=\"202\" x2=\"140\" y2=\"230\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"170\" y1=\"202\" x2=\"50\" y2=\"230\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"230\" y1=\"202\" x2=\"80\" y2=\"230\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"260\" y1=\"202\" x2=\"110\" y2=\"230\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"290\" y1=\"202\" x2=\"170\" y2=\"230\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"320\" y1=\"202\" x2=\"200\" y2=\"230\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<path d=\"M 46 40 H 18 Q 10 40 10 48 V 222 Q 10 230 18 230 H 20.5\" stroke=\"#fa5\" stroke-width=\"1.5\" fill=\"none\"></path>\n<circle cx=\"26\" cy=\"230\" r=\"5.5\" fill=\"#245\" stroke=\"#fa5\" stroke-width=\"1.2\"></circle>\n<line x1=\"23.5\" y1=\"230\" x2=\"28.5\" y2=\"230\" stroke=\"#fa5\" stroke-width=\"1.2\"></line>\n<line x1=\"26\" y1=\"227.5\" x2=\"26\" y2=\"232.5\" stroke=\"#fa5\" stroke-width=\"1.2\"></line>\n<line x1=\"31.5\" y1=\"230\" x2=\"45\" y2=\"230\" stroke=\"#fa5\" stroke-width=\"1.5\" marker-end=\"url(#arrowhead-o)\"></line>\n<rect x=\"46.0\" y=\"74\" width=\"98\" height=\"28\" rx=\"3\" fill=\"rgba(204, 238, 255, 0.04)\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"95\" y=\"92\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">fai hie</text>\n<rect x=\"166.0\" y=\"74\" width=\"98\" height=\"28\" rx=\"3\" fill=\"rgba(204, 238, 255, 0.04)\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"215\" y=\"92\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">fai hie</text>\n<rect x=\"286.0\" y=\"74\" width=\"98\" height=\"28\" rx=\"3\" fill=\"rgba(204, 238, 255, 0.04)\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"335\" y=\"92\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">fai hie</text>\n<rect x=\"46.0\" y=\"124\" width=\"98\" height=\"28\" rx=\"3\" fill=\"rgba(204, 238, 255, 0.04)\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"95\" y=\"142\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">fai hie</text>\n<rect x=\"166.0\" y=\"124\" width=\"98\" height=\"28\" rx=\"3\" fill=\"rgba(204, 238, 255, 0.04)\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"215\" y=\"142\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">fai hie</text>\n<rect x=\"286.0\" y=\"124\" width=\"98\" height=\"28\" rx=\"3\" fill=\"rgba(204, 238, 255, 0.04)\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"335\" y=\"142\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">fai hie</text>\n<rect x=\"46.0\" y=\"174\" width=\"98\" height=\"28\" rx=\"3\" fill=\"rgba(204, 238, 255, 0.04)\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"95\" y=\"192\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">fai hie</text>\n<rect x=\"166.0\" y=\"174\" width=\"98\" height=\"28\" rx=\"3\" fill=\"rgba(204, 238, 255, 0.04)\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"215\" y=\"192\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">fai hie</text>\n<rect x=\"286.0\" y=\"174\" width=\"98\" height=\"28\" rx=\"3\" fill=\"rgba(204, 238, 255, 0.04)\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"335\" y=\"192\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">fai hie</text>\n<circle cx=\"50\" cy=\"46\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"80\" cy=\"46\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"110\" cy=\"46\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"140\" cy=\"46\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"170\" cy=\"46\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"200\" cy=\"46\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"230\" cy=\"46\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"260\" cy=\"46\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"290\" cy=\"46\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"320\" cy=\"46\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"350\" cy=\"46\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"380\" cy=\"46\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"50\" cy=\"230\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"80\" cy=\"230\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"110\" cy=\"230\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"140\" cy=\"230\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"170\" cy=\"230\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"200\" cy=\"230\" r=\"4\" fill=\"#cef\"></circle>\n</svg></div>",
+      "sha256": "7f3285f5635eb945e449f6042fce00f9bb0fe5525435c3dc00a4a7d7a1a91c00",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Sadzu Du, Dzego"
+        },
+        "device": "page",
+        "device_evidence": {
+          "idx": 49,
+          "quote": "In the middle of the page, there was a large diagram."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c12-b50.svg",
+            "viewBox": "0 0 400 250",
+            "width": "400",
+            "height": "250",
+            "labels": [
+              "tun bia zi sin de sia",
+              "fai hie",
+              "fai hie",
+              "fai hie",
+              "fai hie",
+              "fai hie",
+              "fai hie",
+              "fai hie",
+              "fai hie",
+              "fai hie"
+            ],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 51,
+      "kind": "paragraph",
+      "content": "\"Conception of a hash algorithm\".",
+      "sha256": "2b9fcdf92f6759a0bdd829da0599202fab31725eea417099c26cfd3a71e32586"
+    },
+    {
+      "idx": 52,
+      "kind": "paragraph",
+      "content": "Zei read the accompanying text.",
+      "sha256": "45b6782abca9228262ea0eadced8734d6b9fadc4adb4da73d08fce59bfc7476b"
+    },
+    {
+      "idx": 53,
+      "kind": "paragraph",
+      "content": "Hash algorithms, it said, were there to create a shrunken fingerprint of a large piece of information, that still uniquely identifies the original. The goal is for it to be infeasibly hard to find two different pieces of data that have the same hash.",
+      "sha256": "2ad993c4daacaedb6208e0da3068c670f5b5f358f9b79ebeaf220a60ec206822"
+    },
+    {
+      "idx": 54,
+      "kind": "paragraph",
+      "content": "Hashes inherently destroy information - representing a larger thing with a smaller thing is their entire goal. But there is a paradox: in the internal workings of all the best hash functions that we build, the largest component is an *entropy-preserving* transformation: a permutation.",
+      "sha256": "5367f4f47216c714a33b292fc4cf47eeb621759a3b3c69ea9cc30f664e144601"
+    },
+    {
+      "idx": 55,
+      "kind": "paragraph",
+      "content": "The core building block maps inputs to outputs one-to-one. And not only that, it can be *efficiently* run both forwards and backwards. The shrinking, and the irreversibility, comes from a simple layer on top: a deletion, and an xor of part of the original input, added to the end.",
+      "sha256": "177aa12e0a44c75a34ef49dc90e7b48dc0991fb969421139f3317d859e59c776"
+    },
+    {
+      "idx": 56,
+      "kind": "paragraph",
+      "content": "Why do this? Why build irreversibility on top of reversibility? The reason is subtle. If you build irreversibility directly, then you cannot control when entropy is destroyed. If you apply an irreversible round function enough times, then about half the entropy collapses, bringing the protocol's security down along with it. And so even when destroying information is your final goal, it's best to cleanly separate out the piece that's going that - destroy information in one precise spot in the algorithm, on your own terms.",
+      "sha256": "bc5c1121898b9adc6bc88ca4a416038345e4003dd45229c4fd8602b5191fd055"
+    },
+    {
+      "idx": 57,
+      "kind": "paragraph",
+      "content": "Zei put away his hand device, and leaned back.",
+      "sha256": "9e35608982f0e837c09a60c6b3a9e69414514f2142cc2ac79d88a99bb4ad4cd0"
+    },
+    {
+      "idx": 58,
+      "kind": "paragraph",
+      "content": "It's all entropy, isn't it, he thought to himself.",
+      "sha256": "51dac2322a52c92c24a6ab22a573b5b6b43b2c0c1bfc03b144d358ca64aa8240"
+    },
+    {
+      "idx": 59,
+      "kind": "paragraph",
+      "content": "A minute later, the car suddenly slowed down, and turned left. To his right, Zei could see an area blocked off by safety tape with various large vehicles further inside.",
+      "sha256": "72cbd32c24d4a1a978ec7e46cd5115637004e60c579b51de9cc440649979aa5f"
+    },
+    {
+      "idx": 60,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"What happened?\"</span>, Zei asked in a voice loud enough that the driver would unambiguously recognize that the question was meant for him.",
+      "sha256": "4dcf07878aa0deb92f3c2158368416a347a780155558c4475bd7751f9a5888f4"
+    },
+    {
+      "idx": 61,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Explosion in an advanced biology research lab. Probably the Arctics, as usual. They're going to spend days cleaning up to make sure everything is safe.\"</span>",
+      "sha256": "a3d1284a8d31637a10dd355fc96440892b4eddd766db0b4469183f08042ae6b7"
+    },
+    {
+      "idx": 62,
+      "kind": "paragraph",
+      "content": "A few minutes after that, the car slowed down and came to a stop. The door opened, leading straight into a hallway.",
+      "sha256": "367c76e4aaf21a2ef19d0dfebaa0e3ce4f538d1edb33e9434ae869776ea137fe"
+    },
+    {
+      "idx": 63,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 64,
+      "kind": "paragraph",
+      "content": "Zei walked through the tunnel, and down the stairs.",
+      "sha256": "17f3cad3d197fcf777eaf8f0c5af83bc2f98ada5e82f27ed0ff189e57e46233e"
+    },
+    {
+      "idx": 65,
+      "kind": "paragraph",
+      "content": "He saw a door in front of him. The door looked similar to the door to the Minpentai room inside the mountain pyramid in Pafogai Du: a series of stone bricks, curving near the top into an arch, and the symbol at the top: two horizontal arms, meeting in the middle with clashing fists.",
+      "sha256": "968aa6afa82d2de75270e7ffad31264f4319e960786bd31c3983936f89d98e44"
+    },
+    {
+      "idx": 66,
+      "kind": "paragraph",
+      "content": "However, this door was noticeably larger, more well-maintained, and the decorations more grand.",
+      "sha256": "13caec2c6b7e22e618af558051412aeda04ebb622b89ea3dc245def6f69d29c4"
+    },
+    {
+      "idx": 67,
+      "kind": "paragraph",
+      "content": "Zei tapped his watch against the green circle, and the door opened. He walked through.",
+      "sha256": "3ef7ea1ecd27174dcad151623588c2bdf859847e3b7b80a622fae72dab893213"
+    },
+    {
+      "idx": 68,
+      "kind": "paragraph",
+      "content": "He entered a room with about fifty chairs, with about twenty contestants already sitting down. On the stage, he recognized Su. Beside her, there were three other priests.",
+      "sha256": "91407983adfbf443705fd1ba4eb6181dca0c0f0885b7f935b6c92e913f10521d"
+    },
+    {
+      "idx": 69,
+      "kind": "paragraph",
+      "content": "Zei sat down. Over the next fifteen minutes, other contestants sat down in their own chairs.",
+      "sha256": "6dd973a82351ffc60bbb440f88d09ad1a8880aa0426bb08ff13a5def10eea69b"
+    },
+    {
+      "idx": 70,
+      "kind": "paragraph",
+      "content": "An older teenage boy sat down beside Zei.",
+      "sha256": "e51ca183affc6106cf808ec919dee74210d5c8d2fe2deae2e7acbf467d96f662"
+    },
+    {
+      "idx": 71,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Hi, I'm Deluin\"</span>, he said.",
+      "sha256": "d641945c966ebc0c766ee3893cac8212850d4b8a86aaf4ef7dafd8b597d3eca8"
+    },
+    {
+      "idx": 72,
+      "kind": "paragraph",
+      "content": "That's not a very Dzegojan name, Zei thought.",
+      "sha256": "0f3bf26be5fedd0f65e2fa315b5b8d14b6a1073e78ba21e579d41d4001e70dd1"
+    },
+    {
+      "idx": 73,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I'm Zei.\"</span>",
+      "sha256": "08fa3db2eb0c253cd9ca703e74fbbdd7f117aeb54618ab7bb44a34c37d2ec799"
+    },
+    {
+      "idx": 74,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Where are you from?\"</span>",
+      "sha256": "d07df7680cdf69b324e7b7c085c1ed9f801b1b6c744fb37616d471da03aab94f"
+    },
+    {
+      "idx": 75,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Ah, I'm from Redshire. My name gave me away, didn't it?\"</span>",
+      "sha256": "b6854c2c221114420a6a042ee783848229c6fbdf8d4f86a819fb9e662856efa5"
+    },
+    {
+      "idx": 76,
+      "kind": "paragraph",
+      "content": "Zei laughed. <span data-hue=\"346.67\">\"Do you get that reaction from everyone?\"</span>",
+      "sha256": "f26664cc14b68e063695baed4c8b74a0fd0b9d8c43b3f029b9357928c6e9ca58"
+    },
+    {
+      "idx": 77,
+      "kind": "paragraph",
+      "content": "Deluin laughed along with Zei.",
+      "sha256": "e3a610d293f44a455a68f5ca92c35bdfcb81011b728ab95862a25c5e8308cd99"
+    },
+    {
+      "idx": 78,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"De lu hin, they call me here. 'A fork with the appearance of'. Lovely name, don't you think?\"</span>",
+      "sha256": "b4ca39f2a1b727e4e5def7d6a7f96354ef9373bbd95c2f9f6a84c344fe65a7c7"
+    },
+    {
+      "idx": 79,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Are you studying here? Did your parents immigrate?\"</span>",
+      "sha256": "6864708f77218b7b76d03b826e844ec42175582b31b61ee2ff26ef90ff976fed"
+    },
+    {
+      "idx": 80,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Ah, I'm a foreign contestant. They brought in four foreign contestants this time, to make things more fun.\"</span>",
+      "sha256": "ee88068ec379842b188717fbbd1c57a49ab5f17e8456ae64798a08ef839793cd"
+    },
+    {
+      "idx": 81,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Are you excited?\"</span>",
+      "sha256": "6fb9846bb6f7405a63b88a6edbbd9a5e2eec58517735a0b1d6b6bc129d28e54d"
+    },
+    {
+      "idx": 82,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Absolutely. Actually my first time in Dzego, super cool place.\"</span>",
+      "sha256": "8175822806ff61f95fad128e77516320ecb3930b0cc0816eeed88b09df336a51"
+    },
+    {
+      "idx": 83,
+      "kind": "paragraph",
+      "content": "A bell rang, and the contestants quickly quieted down.",
+      "sha256": "2ced13d9cdd357e58cdf7219a7f19b09266bfa513d53b98435da2d3327fe0675"
+    },
+    {
+      "idx": 84,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Welcome to the national Minpentai championship\"</span>, Su began. <span data-hue=\"253.33\">\"I am honored to see so many brilliant contestants this year, and I hope that everyone arriving had a good evening and a good morning.\"</span>",
+      "sha256": "194de37be2e4c91a430a9a9920324c53cefc963c68f141181f2327d60aab551f"
+    },
+    {
+      "idx": 85,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"I am pleased to introduce our lead organizer, Taskmaster Jin.\"</span>",
+      "sha256": "7378664168dc5e1171eb4b1d920f6cb154ec44bba93e74a24b8282b1cf4393d6"
+    },
+    {
+      "idx": 86,
+      "kind": "paragraph",
+      "content": "One of the other priests stepped forward, and began speaking.",
+      "sha256": "b719bd8cd0f42bd238538f450bac001c160a4f50109421d93064e2d324d54609"
+    },
+    {
+      "idx": 87,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"This is a special moment for all of us in Dzego, not just for us and for you, but for millions of Dzegojan who watch the games from across the country, as they will get to watch the brightest minds from Dzego's new generation face off against each other.\"</span>",
+      "sha256": "bc8f7f52f1f1e61aaa1f83a24ca3d6107fae5d9cb5bf122d2aaf4ae8005d7974"
+    },
+    {
+      "idx": 88,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"I'm also honored to announce that this year, we have four distinguished foreign guests participating along with us.\"</span>",
+      "sha256": "881da93fde3a61a0063db2a6c3a782c9a1945be4945ab37dfd626ee6abc38bd4"
+    },
+    {
+      "idx": 89,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Today, we will have a walk through the Minpentai museum, right here inside this mountain pyramid. Tomorrow, we will have some tourist excursions around Sadzu Du, and in the evening you will get a chance to rest. Two days after, the first championship games will begin.\"</span>",
+      "sha256": "629d025da8358492ddc5b495776f3be853bd5c069dc69c2ef81d751e954a2c87"
+    },
+    {
+      "idx": 90,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"There will be six rounds of qualifying games, with an eight-day-long break in between each game.\"</span>",
+      "sha256": "c16937530ec2839e78791658ebdf77c8a6fe0059c984b4a997eb854b5ae50376"
+    },
+    {
+      "idx": 91,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Out of the thirty-two of you, the four players who win the most games will advance to the semifinals. If there is no win threshold that exactly four players pass, we will break ties by the geometric average of the number of turns that you survived before losing your losing games and the inverse of the number of turns that you needed to win your winning games, counted up to a maximum of eight thousand turns. Thus, there is no incentive to resign before eight thousand turns. If there are still ties, we will insert an additional qualifying round.\"</span>",
+      "sha256": "a1a209fac2ecdd196cb31e538e583df93bff41e349b6876e07adfcf5cb373191"
+    },
+    {
+      "idx": 92,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"I hope you can enjoy the games, enjoy everything that Sadzu Du has to offer, but also, just as importantly, enjoy each other. Here you are not enemies, you are temporary competitors. Off the arena, you should consider each other friends, and remember that we are all part of a shared project together. Dze go ba fau gie.\"</span>",
+      "sha256": "598f13bc4e95015a5f4e7a6d45574d3a7a35fd6dca02eb8dac7a1bd6b48c9c8b"
+    },
+    {
+      "idx": 93,
+      "kind": "paragraph",
+      "content": "\"Dze go ba fau gie\", all the contestants replied in unison.",
+      "sha256": "dcc58ef96285310e1c24c8c7fef4cd1af1b366646fb63710d52b8e4e03b4c6c7"
+    },
+    {
+      "idx": 94,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"133.33\">\"Now, please follow Su. She will lead the excursion through the museum.\"</span>",
+      "sha256": "56c0f8c23e2d162d03fa522102cf96f5f09a306b4084847e6c2fa2aa27bf5635"
+    },
+    {
+      "idx": 95,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 96,
+      "kind": "dateline",
+      "content": "3724 Grasstime 25",
+      "sha256": "a23c5d32cb242aadd5cba47ea512db7a1a06bb9a0cbbb7e633013fe46abc8e13"
+    },
+    {
+      "idx": 97,
+      "kind": "screen",
+      "content": "<div class=\"device-view narrow-device-view\"><table>\n  <thead>\n    <tr>\n      <th>zan</th>\n      <th></th>\n      <th>tie</th>\n      <th>tei</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 25%\"><center>Bai</center></td>\n      <td style=\"width: 6%; text-align:center\">→</td>\n      <td><span style=\"color:oklch(0.7 0.15 26.666666666666664)\">[dia lau shau]</span></td>\n      <td>23098</td>\n    </tr>\n    </tbody>\n</table></div>",
+      "sha256": "a88761fc6745bea13d1663b0d09beeffb4c7af853211e52cf4c34dfab7fa70fc",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Sadzu Du, Dzego"
+        },
+        "device": null,
+        "device_evidence": null,
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "zan",
+                "",
+                "tie",
+                "tei"
+              ]
+            ],
+            "rows": [
+              [
+                "Bai",
+                "→",
+                "[dia lau shau]",
+                "23098"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 98,
+      "kind": "paragraph",
+      "content": "Zei woke up. Bai was requesting to call.",
+      "sha256": "d4cb2551c4d2ac5b8823346c47307220a11fbe0c5f605780cdaf0536cb0f31a5"
+    },
+    {
+      "idx": 99,
+      "kind": "paragraph",
+      "content": "Zei tapped the watch.",
+      "sha256": "347ad77344f1e0fe4878f7910e0aa70018185921bd91bf068f22ab57fb8b9fe3"
+    },
+    {
+      "idx": 100,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"How are things going over there?\"</span>, Bai asked.",
+      "sha256": "4dea801f3dc08bc32444bf18b8c3f42b13bf0b5efde5ec8f1891cebdb415d37c"
+    },
+    {
+      "idx": 101,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"This is a bit early for a call, isn't it? It's still 19 minutes before my alarm was supposed to wake me up.\"</span>",
+      "sha256": "15c78cb6ae72cc4d7761b1c94c6071fd73d3cdce023c1265358edb7c98526dc7"
+    },
+    {
+      "idx": 102,
+      "kind": "paragraph",
+      "content": "Zei paused for a moment, and decided to answer Bai's question.",
+      "sha256": "fc176a6f30f7f8872cabecce7b7bbd351d13ba3046b19246e16ae432c95ac74d"
+    },
+    {
+      "idx": 103,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Things have been well. Very fascinating exhibition at the museum three days ago, and got to see a bunch of Sadzu Du the next day. Met someone from Redshire too.\"</span>",
+      "sha256": "2ef417dac7364934bd8d9b41e56671e6e640a94aa3c4945525e40c914845e980"
+    },
+    {
+      "idx": 104,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"A contestant?\"</span>",
+      "sha256": "1d7350517d933e272ff75ad3af2f2dcfd7f9aa677fa703cbbba1d54c755c2ecd"
+    },
+    {
+      "idx": 105,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Yep, they've decided to internationalize it a bit this year.\"</span>",
+      "sha256": "c8b955f92771ba3232fc7e9107bfede43514882b4f6b06b7db52b65c50b44c99"
+    },
+    {
+      "idx": 106,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"So how's Pafogai?\"</span>",
+      "sha256": "5800fe6d7ceb1ea18b00ae8774fb5bf4a888cfbb4bff46541fe3efa5567eb491"
+    },
+    {
+      "idx": 107,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Ask me something I can answer. I've been staring at the mountain pyramid you'll be playing in from across the river for the last longhour.\"</span>",
+      "sha256": "afbaa5394cabcb33622e416483e50e309f1984188ae36bada0fc1e4dc169ea73"
+    },
+    {
+      "idx": 108,
+      "kind": "paragraph",
+      "content": "Zei sat up.",
+      "sha256": "b54af48875dc8e1cecffd8f84c832dc073f5a70710375a6321698b8aabb4f898"
+    },
+    {
+      "idx": 109,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"You're HERE?\"</span>",
+      "sha256": "39a7e336bbeca9b6905a0836176d52a30e5729c127219424d4100ba615a2d3c1"
+    },
+    {
+      "idx": 110,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Den's people got hold of me and told me to come and take notes on all the contestants' strategies.\"</span>",
+      "sha256": "b5c24f38ba3957498b5529f852e0ea2b83a71f3ffc71ce0051607d06b2b6ec47"
+    },
+    {
+      "idx": 111,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Your first game is today, right?\"</span>",
+      "sha256": "c56ba2d976be95db2a2980f78c60ccbaa1c45b90a4ff8732866716223d8ded26"
+    },
+    {
+      "idx": 112,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"It is indeed.\"</span>",
+      "sha256": "4981b6a7b8c21e73a64fb0474ec9ad591038fe35da657b458cec0b0d9ca35dcb"
+    },
+    {
+      "idx": 113,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Want me to come over and help you out, or at least watch?\"</span>",
+      "sha256": "7129e76c3eb13e99b3416b7b2df7fd69db9eaea3e491ae7eb039eea46add875d"
+    },
+    {
+      "idx": 114,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I... think I'm fine. And I doubt you can get a ticket to the live stadium.\"</span>",
+      "sha256": "7c88acbb503b7c2654a9bc8e3c5f813533f142e04c01a080efa37903e7348549"
+    },
+    {
+      "idx": 115,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Not if you let me in.\"</span>",
+      "sha256": "f478ce979eba5ce617fa50410f3767b3ab9afa8ec0546ed914b6e2c371e14f0b"
+    },
+    {
+      "idx": 116,
+      "kind": "paragraph",
+      "content": "Zei groaned.",
+      "sha256": "eb257125d74b704e3af42272854eeb31e32c6e9d4d7a89413cbf055a3dd84e27"
+    },
+    {
+      "idx": 117,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"I'll watch from afar then. We're all rooting for you!\"</span>",
+      "sha256": "56152150dceab48d1bdc9297b704001a3d752506f9a0c2ebd34ac56b1cad094a"
+    },
+    {
+      "idx": 118,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"How is Fin? I haven't heard from him in days now.\"</span>",
+      "sha256": "e284f937616633145ec75950018bade41956116efdf6d9283dc53eef2b70bd91"
+    },
+    {
+      "idx": 119,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Busy with Bansunpei stuff I guess. He hasn't said anything to me in days either.\"</span>",
+      "sha256": "137d3b41595d964e428aed8ebfdc59468d7825f481b2012fbc5a3d0bcfb79edd"
+    },
+    {
+      "idx": 120,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Alright then. Well, I gotta start preparing. I hope you enjoy your day!\"</span>",
+      "sha256": "f5cf1f2a549e010b84795c7e35c38b8ed147729e6628d9be0d2ddc384786915b"
+    },
+    {
+      "idx": 121,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Best of luck to you in yours, you'll need it!\"</span>",
+      "sha256": "c9cffaa1cab3ebc485ce50238c634371b6d4f3a153163246ee06cc03ccec836d"
+    },
+    {
+      "idx": 122,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Oh, and, let's play a practice game tomorrow.\"</span>",
+      "sha256": "ab4885cedcbc61c8294174df55b5af02ccd57564f3f5e32f6a2be90e6b4254c6"
+    },
+    {
+      "idx": 123,
+      "kind": "paragraph",
+      "content": "Zei once again ordered a fruit and vegetable juice, and put on his clothes. A few minutes later, the juice arrived, and Zei quickly drank it. He opened the door, went downstairs, and entered the car that was waiting for him.",
+      "sha256": "7f5ccc81633c2d0c978f82081434b38c3fc4c3198a3c41e30bcdc768ea76dcd9"
+    },
+    {
+      "idx": 124,
+      "kind": "paragraph",
+      "content": "Twenty minutes later, the car arrived at an entrance to the pyramid.",
+      "sha256": "103ef7f9855ab2605841211b15f7af5dcecf291eacb88b902485c7b20ed124a8"
+    },
+    {
+      "idx": 125,
+      "kind": "paragraph",
+      "content": "Zei stepped out, and began walking through the tunnels.",
+      "sha256": "8f57c6059e006e8a9e5939d52c9ba69ee4d804fbf7c3a173c033faec38f5affa"
+    },
+    {
+      "idx": 126,
+      "kind": "paragraph",
+      "content": "After a few hundred meters of walking, and a few turns, he once again arrived at the large stone brick door. He entered, and this time immediately turned right, into a hallway that he had not even noticed when he was first there three days ago. He followed the signs, and soon got to a waiting room.",
+      "sha256": "db5eaedd9bbd432b6aab04f980c9cb94242acbc46fba4470759d461265a1aa57"
+    },
+    {
+      "idx": 127,
+      "kind": "paragraph",
+      "content": "He saw Su, and the other contestant.",
+      "sha256": "ea4557496400a44a7a5b5cf91ffc9ba813a4b5696b18e066ac5a7caaf157bfc5"
+    },
+    {
+      "idx": 128,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Welcome Zei! Meet Bo.\"</span>",
+      "sha256": "ae50b47dba95ea1cefdc1b917de8e861b66534ca490b2bbc4175f9d2d03add95"
+    },
+    {
+      "idx": 129,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Nice to meet you, Zei.\"</span>",
+      "sha256": "9ac7df941f0ce25e61704645d380bebc835974749c5637f1d1c6dc22edc0ae17"
+    },
+    {
+      "idx": 130,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Nice to meet you too, Bo.\"</span>",
+      "sha256": "3ec255d3de415696da5af097a804b16f91d166d32d18a8f08a816398b6e07cc0"
+    },
+    {
+      "idx": 131,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"It will be a fun game today, I'm sure of it.\"</span>",
+      "sha256": "56a3556b63bc5a2e6185a4d344ddb1763377232dc2430656cfa385ab721d271e"
+    },
+    {
+      "idx": 132,
+      "kind": "paragraph",
+      "content": "A robot arrived, and gave all three of them a cup of tea. They each drank their cup.",
+      "sha256": "1300fe251dbba93ca1c2f67a3d4fef48d50a163f4f856a2e0ae82e2495210208"
+    },
+    {
+      "idx": 133,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"So what now? We sit here for a longhour without internet while the others play, so we don't learn the new rule ahead of time?\"</span>",
+      "sha256": "9969909aad83193ea3c14e844ea089c93b98463d3e1b38bbcd93bc11b950277e"
+    },
+    {
+      "idx": 134,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Exactly. And no hand devices or watches allowed either. The robot will be coming to pick them up in a minute. You can watch last year's matches on that screen over there.\"</span>",
+      "sha256": "ccaf188e0b4ace83a893e6afe53ae5a5d6ec948ff7f4008de587ba174679562a"
+    },
+    {
+      "idx": 135,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 136,
+      "kind": "paragraph",
+      "content": "A longhour later, the elevator doors opened, and Zei and Bo each stepped in to their respective elevators. Su waved them goodbye. The doors closed.",
+      "sha256": "67e3ccd8b8a8922e4b49683e31b9c7b470c02f71407fbcfae4118f1bdb573983"
+    },
+    {
+      "idx": 137,
+      "kind": "paragraph",
+      "content": "A quarter minute after that, Zei's elevator door opened once again, exposing a giant room much larger than the room in Pafogai Du. About five to ten thousand people seemed to be watching. A path lit up, showing the way to a giant console with a chair.",
+      "sha256": "fe23b9cec0c50e46bb76664411bd108af09b7b2f4ce1050b82bc83539630242b"
+    },
+    {
+      "idx": 138,
+      "kind": "paragraph",
+      "content": "Zei walked forward. He could make out Bo's silhouette walking forward in the distance. He got to the chair, and sat down.",
+      "sha256": "fe163899c6bc6161aad55e6f709d7e331c4a5e84445982ae6a8bb17905a40ab0"
+    },
+    {
+      "idx": 139,
+      "kind": "paragraph",
+      "content": "Drones about the size of a hand device buzzed as they flew around Zei, scanning for any kind of cheating equipment. This time, there were about three times more drones than there were in Pafogai Du, and with even more shapes and sizes. The drones buzzed around for about twenty ticks, and then retreated back to their resting positions.",
+      "sha256": "ab43faf6cc118953d898b4c239bc227447a3d2c30c0086d1d1ab8a50a4b7dcae"
+    },
+    {
+      "idx": 140,
+      "kind": "paragraph",
+      "content": "A loud automated voice, this time sounding more female, announced: <span data-hue=\"160\">\"MU GU GEI FA\"</span>. Starting in fifty ticks.",
+      "sha256": "03c353aef1eea0752c7218d285d0948bb6a1051fcd8c5d96b0c994931cec9d1d"
+    },
+    {
+      "idx": 141,
+      "kind": "paragraph",
+      "content": "Zei closed his eyes, and breathed in and out, trying his best to calm himself. This match was not decisive, he knew: if he lost, he could still make it up in the others. But in another way, that fact made him more scared: armed with the excuse that it's okay to lose, will his mind have the motivation needed to keep his full attention and mindpower on the game and win?",
+      "sha256": "60c420a3bf1c0c609ad2d248a5c8a7f94857faf43c5883f69de41a2138d2db88"
+    },
+    {
+      "idx": 142,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"LE MU GEI FA\"</span>",
+      "sha256": "3e61370b5432531dec38aa7efbae68375420f4ac218f9c897c01092ab829616a"
+    },
+    {
+      "idx": 143,
+      "kind": "paragraph",
+      "content": "Zei opened his eyes again.",
+      "sha256": "a4367cedf30ad3c552ce4124fdfa3bcb499a7859b04fe8d50e9fecf109eca807"
+    },
+    {
+      "idx": 144,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"PA GU GEI FA\"</span>",
+      "sha256": "29368ddad034ea526527b25fa7590ec5f9c58a3e6e1ca5e3956fcf418e3f54e0"
+    },
+    {
+      "idx": 145,
+      "kind": "paragraph",
+      "content": "Zei patiently waited.",
+      "sha256": "24df1c366fb267b8d9653d34cf88733bdcb75a1fda5c44288bb4dfd20a2790d9"
+    },
+    {
+      "idx": 146,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"13.33\">\"Welcome to the fourth qualifying match of the north stadium for today. Everyone, meet our players for this round: Zei Leimin from Pafogai Du, and Bo Zume, from right here in Sadzu Du.\"</span>",
+      "sha256": "b53ad0f2c1f7dc0e8a9e5ee83520dfd736b2989803330a900bafda89ad8eb62c"
+    },
+    {
+      "idx": 147,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"13.33\">\"I am also pleased to announce - perhaps one time too many for the audience, but for the first time, for our contestants - today's rule change. Today, Minpentai will be played on a hex grid.\"</span>",
+      "sha256": "77d21fa2fe1e8b5b10ab899069e9f8ee5ed31ab299c9f71bcaa403d20e570b61"
+    },
+    {
+      "idx": 148,
+      "kind": "paragraph",
+      "content": "Zei opened his mouth in shock.",
+      "sha256": "99c454ab263bf1c360232c890529f57c2361a4f36a2d94049cab778ac9c582d5"
+    },
+    {
+      "idx": 149,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"13.33\">\"You will have twenty minutes to figure out your structures, any gliders, spaceships and walls, to the best of your ability. And then the serene battle over a field of snowflakes will begin.\"</span>",
+      "sha256": "eb9809378f9570de9235b560123651e950b630f27dfc90acafdd86c875e92746"
+    },
+    {
+      "idx": 150,
+      "kind": "paragraph",
+      "content": "Zei's display turned on, and he could see the hexagonal grid in front of him.",
+      "sha256": "e37bfd827cb8f4c07504fdca374480d816dfbee363092db4e42adcddc60d08f0"
+    },
+    {
+      "idx": 151,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"LE FI SHI GEI TAU FA\"</span>, the automated loud voice shouted. The battle begins in two thousand ticks.",
+      "sha256": "8e852819571f2a1862db496be8b7088f778130cbeb838b1f608f919ddd9f6fa6"
+    },
+    {
+      "idx": 152,
+      "kind": "paragraph",
+      "content": "Zei began by quickly drawing random junk in his sandbox, seeing what stayed stable and what turned into a glider. Within one minute, he identified a few gliders and a few static structures that could be used for walls. To his surprise, the gliders that moved the fastest moved ... directly east.",
+      "sha256": "eecf67a44ea5a85fd123b4ceba4743df5d3cd3d117a638319126b7ad731b099d"
+    },
+    {
+      "idx": 153,
+      "kind": "paragraph",
+      "content": "His next move was to deliberately draw different kinds of walls, fly gliders at them, and see what sticks.",
+      "sha256": "1476a335f128eb444fecc23aa157360293f4a32cb417a7e8e6c75118b90d2796"
+    },
+    {
+      "idx": 154,
+      "kind": "paragraph",
+      "content": "He watched the gliders carefully, to try to quickly get an intuition for what kinds of shapes can move while preserving their shape. He did several rounds of defining both the gliders and the walls.",
+      "sha256": "3eec2b6b3a499de977c757a2d6b318c84bcd56718027fee87c9036b834b4cdac"
+    },
+    {
+      "idx": 155,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"PA MU GU GU GEI TAU FA.\"</span> The battle begins in fifteen hundred ticks.",
+      "sha256": "496ecfbc807a7ae3f7352a57e95cc1e4fbb7d744208df24ec1de2a66d98cd4c9"
+    },
+    {
+      "idx": 156,
+      "kind": "paragraph",
+      "content": "Zei began experimenting with shapes that were similar to his symbol, seeing if any of them could function as a glider. He needed to come up with *something* - otherwise he would be able to progress only very slowly, by repeatedly building a new symbol beside his existing symbol during each intervention turn.",
+      "sha256": "10e4f5968f87756ea36caf6327cdd2daea5acb105f5fcfb5dfb72373d5ef8945"
+    },
+    {
+      "idx": 157,
+      "kind": "paragraph",
+      "content": "He realized that to make actual headway, he would need to interact with the rock formations. He made a couple of guesses about what shape the rock formations in the hexgrid version of Minpentai might look like, and examined the behavior of gliders as they crashed into them.",
+      "sha256": "a6752f3a0568abc9efe8b05dc9bc6ab8cf7e4dec36aa066799a3e3ea893d1069"
+    },
+    {
+      "idx": 158,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"FI SHI GEI TAU FA.\"</span> The battle begins in a thousand ticks.",
+      "sha256": "4c02bac3c61c18c8145096bffa26bd507e901e4914a237341c9d3bfa2ac0f889"
+    },
+    {
+      "idx": 159,
+      "kind": "paragraph",
+      "content": "Zei began to sweat. So far, no luck. No combination of a glider, a plausible rock shape and an offset that he tried led to a copy of his symbol.",
+      "sha256": "2e86e3dac6a4c2dfe80501f396814260268de4e421a29959280f2fd6c413dc60"
+    },
+    {
+      "idx": 160,
+      "kind": "paragraph",
+      "content": "He thought more about the exact shape of his symbol.",
+      "sha256": "c2ce6dfb49e490e3df99aa8179ac7452e1687bcd2a72756ebfa62826c31d5647"
+    },
+    {
+      "idx": 161,
+      "kind": "paragraph",
+      "content": "After another two minutes of fruitless exploration, Zei's mind flashed back to the textbook he had been reading less than two longhours before.",
+      "sha256": "83c5dabf1872b52ac40f6d450f5754abea3a683f389764263ab66d4c71d0703b"
+    },
+    {
+      "idx": 162,
+      "kind": "quote",
+      "content": "> *The core building block maps inputs to outputs one-to-one. And not only that, it can be efficiently run both forwards and backwards.*",
+      "sha256": "0bb1e953b0231a5f3db9ec2a5bc1cda4bea349620e5bc36e2096fe5534055ce9"
+    },
+    {
+      "idx": 163,
+      "kind": "paragraph",
+      "content": "But unlike the hash function, here there was no truncate-and-xor wrapper at the end. And so if he knew his desired end state ... he just had to put that end state into the sandbox, and play it backwards.",
+      "sha256": "7c53707d8d086821d34213d60b9d6fdf22225f4030aeeb2c300eb01ab8ff456a"
+    },
+    {
+      "idx": 164,
+      "kind": "paragraph",
+      "content": "But ... how do you play it backwards?",
+      "sha256": "6b19e17c3243cc78350557f29c8e9bc38fde0de4f0d03857192202d7bdbd34d6"
+    },
+    {
+      "idx": 165,
+      "kind": "paragraph",
+      "content": "In the internal permutation of a hash function, you walk backwards from the last layer to the first layer, and invert each step as you go.",
+      "sha256": "2889eb52ae754baa8e510524a3dfee744b85cd5d0928f4706e317299cb490b05"
+    },
+    {
+      "idx": 166,
+      "kind": "paragraph",
+      "content": "Here ... what was the inverse of the hexgrid rules that Zei was interacting with for the first time in his life?",
+      "sha256": "e7d1c63d37c771f821cc27b2328deb16de690d6008a705d7dd4e88458bf05451"
+    },
+    {
+      "idx": 167,
+      "kind": "paragraph",
+      "content": "Zei took the gliders he saw, and tried the most basic transformations: flipping them, rotating them 60 degrees, launching them one timestep later. None worked.",
+      "sha256": "b1db62b9b78873d7454987afecafc531de1b2ccbfcc7d2a17837167555002f8c"
+    },
+    {
+      "idx": 168,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"MU FI LE GEI TAU FA.\"</span> The battle begins in five hundred ticks.",
+      "sha256": "8dcc4d6577ce5e36c5a34db47a31c998c1e4b20295ebbe37b47d7bdba14ae42f"
+    },
+    {
+      "idx": 169,
+      "kind": "paragraph",
+      "content": "Zei stepped through each step more slowly. And then he saw it. During each step, the game board split up into triangles, and the hexagons rotated inside each triangle - clockwise if it had one hex filled, counterclockwise if it had two hexes filled.",
+      "sha256": "7e434dee98dc5ac363ceba36739e24cf8b07f11939599bf9a865594b0799a9c5"
+    },
+    {
+      "idx": 170,
+      "kind": "paragraph",
+      "content": "And so in order to time reverse, he just had to ... let each time step happen twice. The opposite of a 120-degree rotation is, after all, two 120-degree rotations. But there was a problem: after each time step, the split into triangles shifted. So to play a time step backward, he had to... play one step forward, then shift time back one step so that he could play the next step forward under the same tiling, then play a second step forward to bring the total rotation under that tiling to 240 degrees within each triangle, then shift time back *two* steps so that the game would shift to the *previous* tiling. Invert each step, and play the steps in reverse order, just like inverting a permutation in a hash.",
+      "sha256": "00b8903b0f820f045f432ddba86a9dcf090f0b677a1a87146bbe8e7052c44507"
+    },
+    {
+      "idx": 171,
+      "kind": "paragraph",
+      "content": "He confirmed: there was a button to play one step forward, and two buttons to shift time - either forward or backward. So that's what he would have to do. A, B, A, B, B. Like some kind of video game cheat code. Which, in some sense, here it literally was.",
+      "sha256": "95abee8577e9424dc4c578f74ba0c8965cf8a365205d99d5d813bf11eee160c0"
+    },
+    {
+      "idx": 172,
+      "kind": "paragraph",
+      "content": "Fine, he thought.",
+      "sha256": "0a129aedaacc1aeef44d303d35469996cd903d15efdbb3b4c1c2edce5080ff9d"
+    },
+    {
+      "idx": 173,
+      "kind": "paragraph",
+      "content": "He put a glider into the sandbox, and tried it. It was an arduous process, and his fingers quickly tired. But it worked. The glider moved backwards.",
+      "sha256": "47becb81e377bde461e8b313bc655cbbc4ba897f0f0190133a6836926348049f"
+    },
+    {
+      "idx": 174,
+      "kind": "paragraph",
+      "content": "Basic test passed.",
+      "sha256": "8c307675d2b8a8fd0fb7a4e22fcd0396f6d85a3629336d1f9c5744be6b4e0fec"
+    },
+    {
+      "idx": 175,
+      "kind": "paragraph",
+      "content": "Zei tried the real test: using the same technique, starting with a symbol forming beside a rock formation and a glider flying out.",
+      "sha256": "280265f5fa54ee05d013a26a72cbe1bf230d37dc8c0652a4c96475bc659d32bf"
+    },
+    {
+      "idx": 176,
+      "kind": "paragraph",
+      "content": "The first time, it failed: as time went backwards, the glider and the symbol crashed, but then the same symbol re-formed a few steps away, and the glider flew away. So in that particular history that Zei had just sampled, before the crash, the symbol had been there all along.",
+      "sha256": "cb89ee9f8222b16d0704036afc015185b849cd1994fd8f1e958a9b813006aa7e"
+    },
+    {
+      "idx": 177,
+      "kind": "paragraph",
+      "content": "He tried again, with a different glider. This time, it succeeded. As time moved backwards, past the moment of the crash, the rock-formation-plus-symbol turned into a bare rock formation, and two gliders flew back out.",
+      "sha256": "abd869ea68d5cdef6484b3183e616c05d4fff39d17df2975fe56dc77eea5e801"
+    },
+    {
+      "idx": 178,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"FI LE GEI TAU FA.\"</span> The battle begins in one hundred ticks.",
+      "sha256": "1345c3a1ebde0fd5450110c57d080e63eef2e0fa5fb4c4d72b31492cda5b4afb"
+    },
+    {
+      "idx": 179,
+      "kind": "paragraph",
+      "content": "Zei quickly repeated the same experiment with other candidates for a rock formation. He paid no attention to the voice announcing the countdown, and kept trying until he found one for the two other most natural options.",
+      "sha256": "256d359fd6df69b89f9f58487889dadc0652fad0ece03f76bbcc0c12b0b6b6f1"
+    },
+    {
+      "idx": 180,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"MU GU GEI TAU FA.\"</span>",
+      "sha256": "a379317908dfe5890e48a0f8521ee937c017d3c960262d2c6b0f41fb68b9e8db"
+    },
+    {
+      "idx": 181,
+      "kind": "paragraph",
+      "content": "Zei quickly put up symbols, walls, and gliders that would create symbols if they crashed into favorable rock formations.",
+      "sha256": "1a3762ff182bd6ada990552e9fd40a5a9497e4c0157d1e11229405eb64f64241"
+    },
+    {
+      "idx": 182,
+      "kind": "paragraph",
+      "content": "He was surprised at his own speed doing this, given how much longer everything else had taken. But almost immediately he realized in the back of his mind that this made sense: figuring out what to deploy is the hard part, deployment is just copy and paste.",
+      "sha256": "10f43b462c2847d251f4b62b59bf76bc28fb40ee5e5a62c129360e661d116a82"
+    },
+    {
+      "idx": 183,
+      "kind": "paragraph",
+      "content": "After making a basic setup on the board, he breathed out. Just as he breathed back in and started doing a final pass refining his structures, a final countdown began.",
+      "sha256": "b6fec6f904901d607efe932ab7605da0943c60d708a71eadb1620a7985bc0464"
+    },
+    {
+      "idx": 184,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"PA GU ... SO ... BI ... ZE ... HA ... MU ... FO ... SHI ... LE ... PA ...\"</span>",
+      "sha256": "613b2b33c5bb5cf6e8d672e1cc8e3a9a844f9b57b8412742d3f39c1fe54fd68c"
+    },
+    {
+      "idx": 185,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"TAU FA.\"</span>",
+      "sha256": "c013193772d04fb7b7d408e9bb5b6ff24f4babe6e85f549dc98c420013359c0f"
+    },
+    {
+      "idx": 186,
+      "kind": "paragraph",
+      "content": "Gliders started flying out. At first, nothing happened.",
+      "sha256": "cf55f6173c2717770d22430ddcc3387da038c473ed96c71392f9b7c86eff37a3"
+    },
+    {
+      "idx": 187,
+      "kind": "paragraph",
+      "content": "Five hundred turns later, a part of the board came into view. One of his gliders had successfully created a symbol, and revealed a part of the board that showed what the rock formations look like.",
+      "sha256": "83a43f03e51b4418011aa3a7f5b5379c80b3d3c345b2c6f1c4d54a501f971d64"
+    },
+    {
+      "idx": 188,
+      "kind": "paragraph",
+      "content": "Immediately, Zei switched to the next task: figuring out how to build glider factories.",
+      "sha256": "571ffa13c60b46cc3e9471e0c64ff476cc4be47fd7f9549855f727d09838038d"
+    },
+    {
+      "idx": 189,
+      "kind": "paragraph",
+      "content": "When the first intervention turn hit, Zei had not yet figured this out. However, he did send out several more gliders that flew from his home base, ready to create more copies of his symbol if they collided into a rock formation in the right place. He also sent gliders from nearby his new symbol, rapidly heading east.",
+      "sha256": "5c262737e7d4cab8bf7563a249e71d8b7df8f31e2c4ab0823d3d0fde63c1bb40"
+    },
+    {
+      "idx": 190,
+      "kind": "paragraph",
+      "content": "The audience watched intently. From across the river, Bai was also watching intently. And from afar, so were Fin, Mu and Den.",
+      "sha256": "e14ed5f258202a8e6e5b593a8fad8ae2bbc030f1bc7a05c78ccd9ecd9559e895"
+    },
+    {
+      "idx": 191,
+      "kind": "figure",
+      "content": "<div class=\"device-view narrow-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<polygon points=\"100,2 184.9,51 184.9,149 100,198 15.1,149 15.1,51\" fill=\"#348\"></polygon>\n<circle cx=\"80\" cy=\"30\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"100\" cy=\"40\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"120\" cy=\"30\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"75\" cy=\"50\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"120\" cy=\"55\" r=\"3\" fill=\"#cef\"></circle>\n<rect x=\"30\" y=\"120\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"70\" y=\"140\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"95\" y=\"155\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"140\" y=\"120\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"45\" y=\"150\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"80\" y=\"165\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"115\" y=\"165\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n<rect x=\"170\" y=\"125\" width=\"5\" height=\"5\" fill=\"#c9f\"></rect>\n</svg></div>",
+      "sha256": "0a0a4aeeaf837bb524b582590b348a7ddcac23fbbf0b74a1b85ca2e5799440ab",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Sadzu Du, Dzego"
+        },
+        "device": null,
+        "device_evidence": null,
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c12-b191.svg",
+            "viewBox": "0 0 200 200",
+            "width": "200",
+            "height": "200",
+            "labels": [],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 192,
+      "kind": "paragraph",
+      "content": "The audience was surprised. Neither player had managed to figure out any gliders that move vertically, they realized.",
+      "sha256": "dd170a85fdbc604240ef17d3624bd004340d69b0a6d3ee2bcb28369ced71934e"
+    },
+    {
+      "idx": 193,
+      "kind": "paragraph",
+      "content": "On the second intervention turn, Zei launched gliders from the sides of the board, aiming straight toward Bo's home base.",
+      "sha256": "1ab424323a01e3a78829cb9140f0fe7ae66d4863540a34b3f498ac53a8b7238c"
+    },
+    {
+      "idx": 194,
+      "kind": "paragraph",
+      "content": "And just before the third intervention turn, one of Zei's gliders hit a rock formation right beside Bo's home base, allowing Zei to see all of Bo's symbols.",
+      "sha256": "b9ce7f7c8296e183c464330f5918b9f5e6fc2ad89d4f318e6312a69d4f483f6c"
+    },
+    {
+      "idx": 195,
+      "kind": "paragraph",
+      "content": "Zei used that intervention turn to send gliders directly toward the three of Bo's symbols that he could see, and more toward some locations nearby just in case.",
+      "sha256": "5f085334344e8eb36e60083b728f74e71283a497a43cd50d4e4e771e55401b5e"
+    },
+    {
+      "idx": 196,
+      "kind": "paragraph",
+      "content": "Within three hundred turns, all of Bo's symbols were destroyed, and Zei was announced the winner.",
+      "sha256": "a30d00723b41ee29c157642802e99007ccbdadc23b50f71d26cf660583edbb0a"
+    }
+  ]
+}

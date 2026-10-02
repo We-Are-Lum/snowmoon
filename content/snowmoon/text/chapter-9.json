@@ -1,0 +1,885 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 9,
+  "source_url": "https://vitalik.eth.limo/snowmoon/html/chapter-9.html",
+  "source_sha256": "62095a51e65952fc6071ee4a2814d3dd7832e1f691cb760ef519c69ee425dc64",
+  "fetched_at": "2026-10-02",
+  "license": "GPL-3.0",
+  "blocks": [
+    {
+      "idx": 0,
+      "kind": "heading",
+      "content": "# Chapter 9",
+      "sha256": "fef28ef7001485c5487e1ac138fd6f31dddc05eb2d1355f25e937cba9b562173"
+    },
+    {
+      "idx": 1,
+      "kind": "dateline",
+      "content": "**Pafogai Du, Dzego** · 3724 Rainmoon 28",
+      "sha256": "ca4162c5e21b2f3dd03d362a7c625af6f148f2ff1a39a767fe8ae44f08a63d22"
+    },
+    {
+      "idx": 2,
+      "kind": "paragraph",
+      "content": "Bai and Fin were sitting together in a courtyard, eating and drinking. Tears ran down Bai's face.",
+      "sha256": "377098072b656ce7c79c884efe0de11b024f60a4c2476e5e44d4136166c37a0f"
+    },
+    {
+      "idx": 3,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"You know, Zei is really quite a nice kid\"</span>, Fin stated softly. <span data-hue=\"80\">\"If you could just be nicer to him, he could help you so much.\"</span>",
+      "sha256": "13075a714a39391b64efd649802b2da81fe3a0f2fbe0ba21f5df8436fac9b8f1"
+    },
+    {
+      "idx": 4,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Nicer, like you?\"</span>, Bai replied, distressed.",
+      "sha256": "71e9e81ef785b41d8767494a5ce8e72b2f46ef59fb75ee44c98d8cbd00d9bf49"
+    },
+    {
+      "idx": 5,
+      "kind": "paragraph",
+      "content": "Fin hesitated. He did not know how to respond.",
+      "sha256": "927e9b702638b25f382c6b3afafd94ab909cd0e81a56e31cde179a1f923e4ad1"
+    },
+    {
+      "idx": 6,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"You know how I felt when Zei brought his mom along on the trip to Freetown with me?\"</span>, she asked.",
+      "sha256": "7e1922d57562ddc273a8385c4789d82f21a3c389c2b6549257b33b52cd842957"
+    },
+    {
+      "idx": 7,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Sad because you wanted to have the trip alone with him, and you could tell that's not what he wanted?\"</span>, Fin asked.",
+      "sha256": "5333e738f789df47fdf64306562fb251068cd10b82d675cf5b3c56c242023b14"
+    },
+    {
+      "idx": 8,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"NO!\"</span>, Bai shouted.",
+      "sha256": "0ed67bb058d431b23715ed5f7f84c5d375bc7a0bd8a86eb60a4c183dd6f42c7b"
+    },
+    {
+      "idx": 9,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"I'll give you a hint. I felt the same after the game a few days ago when you suggested I bring my mom along for the next trip.\"</span>",
+      "sha256": "df356f6b9c7e6411fab708ee1d02b424ebb068ad65c12a2d2bff7eddc8fda0fa"
+    },
+    {
+      "idx": 10,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"You don't like your mom?\"</span>",
+      "sha256": "922c9701e801bec376b8c9cb77d5b3795f51bc0aaa9f32f750ba8cfad12a67a3"
+    },
+    {
+      "idx": 11,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"You never asked me where or who my mom even is! Not once, in the more than ten times we've met.\"</span>",
+      "sha256": "6f9754c1bdc0339e67a63d5021ae084d1afc07865354a965b3e885e82b42bea6"
+    },
+    {
+      "idx": 12,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Well, sorry. Who is your mom?\"</span>",
+      "sha256": "f12f190421185335687caa7f3e135413d778a90af870ed63c0de097bd2ecffdc"
+    },
+    {
+      "idx": 13,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"My mom is DEAD! My dad too.\"</span>",
+      "sha256": "8f8e710ad921582e62e1ac4c05e27ec5ff45d661960e18b9702de5fdabfe2962"
+    },
+    {
+      "idx": 14,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Killed in an explosion in a lab when I was still a small kid. You know who did it.\"</span>",
+      "sha256": "62f19d06832272f4dd8281e9e0b7593ea649ed5d627d0cd93909165bbe49c34f"
+    },
+    {
+      "idx": 15,
+      "kind": "paragraph",
+      "content": "Fin's face dropped.",
+      "sha256": "b3b1a5804f37f48c62236abe9a7e24fabd59c0809ec8e16f0b07fb160c051e53"
+    },
+    {
+      "idx": 16,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"I stayed in my aunt's place. But she basically ignored me, just gave me a room, and two meals a day, and that's basically it.\"</span>",
+      "sha256": "cfb18af00f6ffba105aa8061b4e8d99aef3b69e02821ae30d64ccdd085c82361"
+    },
+    {
+      "idx": 17,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"So I had to survive with my own bare hands. Learn how to make my own money. Do side jobs even while I was in high school.\"</span>",
+      "sha256": "337e9f44ebd68bb7a4d708da921bbc29d7e5e4a02fa2f5f2751e003d4e089aff"
+    },
+    {
+      "idx": 18,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"So I hope Zei forgives me for those times when I didn't let him get his prize money to give his mom a compute box.\"</span>",
+      "sha256": "93e18f08e6ebac7cc5f22363f4d8d65088e8f8ac49d2743f169d63666d196965"
+    },
+    {
+      "idx": 19,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"I don't even have a mom! All I have is my achievements and my success. And now Zei has taken that away from me too.\"</span>",
+      "sha256": "c80db2927656f62de91e7bf861d2308eab12c1f4dfa8185ed1837e815a3eaf8e"
+    },
+    {
+      "idx": 20,
+      "kind": "paragraph",
+      "content": "She went quiet, and sat back in her chair. She had not planned to say any of that. After a brief pause, she spoke again.",
+      "sha256": "8e73160137b34b1bfc818bff10fb0a79b22dc41a454063d09ad1a40f63fab05e"
+    },
+    {
+      "idx": 21,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"But those tactics of Zei's, they were beautiful. I was so proud when I put up such perfect defenses along my diagonals and tricked Zei into attacking there. I felt like that was the smartest thing I had done in my whole life. And then he came out and did something even smarter.\"</span>",
+      "sha256": "d478b4220987c48377050a5f31e2dc1e27db6e432ee8cfeb9d3bf0a1174c46da"
+    },
+    {
+      "idx": 22,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"I do want to understand you guys better. What drives you, how you think.\"</span>",
+      "sha256": "8f8540cb9d55fc75451fe7f60dfacff8e78746578c46d5e531833737f7221b60"
+    },
+    {
+      "idx": 23,
+      "kind": "paragraph",
+      "content": "Bai and Fin both took a brief break to drink some of their respective teas.",
+      "sha256": "f7bd3bf0d42dfadb7fe9c1c84b5117e8292ea6b32f0eddf8ed71b1548ed83e3a"
+    },
+    {
+      "idx": 24,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Let's talk about something else. Here, do you want to see what they have in mind for the next version of Dzegoban?\"</span>",
+      "sha256": "8b730aac83d987df36870164d2b6653118035a6c9848e92b8d0c5f03bb16b0d0"
+    },
+    {
+      "idx": 25,
+      "kind": "paragraph",
+      "content": "Bai's eyes perked up.",
+      "sha256": "6cfbc3a0afd5e45c649d907cd95a2b8c3ff726eb299098feecea3b44caf43649"
+    },
+    {
+      "idx": 26,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Sure, why not\"</span>, she replied.",
+      "sha256": "7068420f6242c75c4ba4d03e2912b94d360fa710965a5ab7ceb2a71b1f61f08d"
+    },
+    {
+      "idx": 27,
+      "kind": "paragraph",
+      "content": "Fin took out his booklet, with \"po so dze go ban de sia\" - the conception of Dzegoban version nine - on the cover.",
+      "sha256": "cd8646579e61b6b9a19dd3c40675b7d59c8dc86ac58fcc750d9f387a02de6a84"
+    },
+    {
+      "idx": 28,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Dzegoban is a masterpiece\"</span>, Fin explained. <span data-hue=\"80\">\"Always navigating the tough balance between being easy to learn, logical in syntax, but also nice to speak and read, and useful for talking about the things that people care about in the real world.\"</span>",
+      "sha256": "74f4edcf0a053dba3a7d885b90e0207a9baacab99369743adcd44386d8d33892"
+    },
+    {
+      "idx": 29,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"The first versions, started only a decade after we lost the war against the Arctics last century, were simple and uncontroversial. Move from the pictorial script to an alphabet, get rid of the complicated declensions and conjugations and irregular verbs.\"</span>",
+      "sha256": "c46bd1d8b3362059d72bacd471b0832045c02241418e428646cf99a240eb7211"
+    },
+    {
+      "idx": 30,
+      "kind": "paragraph",
+      "content": "By this point, Bai was listening intently, her eyes full of curiosity.",
+      "sha256": "4efcf7c24e36457a699e0d328b05889f8b19f7049a24428328a664b47de51094"
+    },
+    {
+      "idx": 31,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Then came the harder tradeoffs, on the grammar. Dzegoban grammar is very logical, if you want it to be. Take a simple sentence, like in elementary school: 'giu jan li mo fe jia dzu lie'. The man eats the avocado. 'li' is the separator between subject and verb, 'fe' is the separator between verb and object. A computer program can parse that, very unambiguous.\"</span>",
+      "sha256": "90dee1197ad3c7922a09766990cc25072f09ea4242c3d1c8d2ac9d5f5a294384"
+    },
+    {
+      "idx": 32,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"You can get more complex. 'lo mo fe jia dzu lie zo hen jun'. It's healthy to eat an avocado. 'lo' and 'zo' are the opening and closing brackets. And colloquially, you can leave out the 'lo'.\"</span>",
+      "sha256": "8383aef7d16fa898430f1f35a009554ac1ece149626cf91b9a239caa2a10c91d"
+    },
+    {
+      "idx": 33,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"But then you get ambiguity. Let's unpack 'jia dzu lie' - black center fruit. Is it a fruit with a black center, or is it a fruit that is both black and 'central' in some sense? Theoretically, we have the separator for that: 'ji'. We could say 'jia dzu ji lie', and it would be less ambiguous. But you can never remove the ambiguity completely. Papaya seeds have a black center too.\"</span>",
+      "sha256": "6374e58ba86bc1838c84b2b43850a0ce8b7e734bd0a2a9046d4426e3782aee17"
+    },
+    {
+      "idx": 34,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"So you have to balance regularity with practicality. Being easy and pleasant to speak when you talk about things that are common in people's lives. So the Bansunpei priests tried to optimize the regularity of the meaning space, even while knowing they would never - could never - fully succeed.\"</span>",
+      "sha256": "6a422127d9903198bda04e1df8fadc030024d6ead6a20620188c9e482653b41e"
+    },
+    {
+      "idx": 35,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"If all you know are the 256 roots, you can understand more than half of what people are saying. Not all, but much better than the olden days, when you could not tell what some complicated word means at all unless you had seen that exact word before.\"</span>",
+      "sha256": "9795a3497da0d7f5c99ad0093ec6d28a44783ad00abcc37f9f10cc324cec4f6b"
+    },
+    {
+      "idx": 36,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Why are they putting so much work into this? Why not focus more on improving the economy, or technology, or the military or something?\"</span>",
+      "sha256": "c498cbf21d83c1e774e0b37ea644d5c7a6a84eea5c753c602410cfccb540d750"
+    },
+    {
+      "idx": 37,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Well, if we work on those things, the Arctics bomb us. Language is harmless. I think even the Arctics find Dzegoban impressive. Also a couple of times the Bansunpei took time to reform the timing system - that's how we got a hundred ticks a minute, a hundred minutes a longhour and ten longhours a day - and we got that to stick across the whole world. That, even the Arctics adopted.\"</span>",
+      "sha256": "ed77126afd948837c4998c39d64fa0fca43f66ec58471ee8b589c976c5dc23ac"
+    },
+    {
+      "idx": 38,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Do you guys have a secret textbook with a planned version nine of *that*?\"</span>",
+      "sha256": "42e19eee1a3169a28a480649c98c7d3b037fff63a47a73f70e18888f2353e7b4"
+    },
+    {
+      "idx": 39,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Yeah, at some point we want to replace the meter with the lightfoot. Light travels at one billion lightfeet per tick. One lightfoot is two hundred fifty-nine point oh two oh six eight three seven one two millimeters.\"</span>",
+      "sha256": "4528d69cb7cf63ff2f2885c1d46cdae9f4512eb8e55a0bef7ee6ea617a2e391d"
+    },
+    {
+      "idx": 40,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Apparently, people in Inglewore like it because for so long people made fun of their older measurement units for being complicated and illogical, and now we're coming out with a unit that's very close to their older distance unit in length, that's directly based on the very base physical constants of the universe. So in some sense, we're saying that they were right all along.\"</span>",
+      "sha256": "b597bc107c35a3b5f50b46dedc88c4e80dfaf2e8fab9ca8964cf0aca3ed3e515"
+    },
+    {
+      "idx": 41,
+      "kind": "paragraph",
+      "content": "Bai grinned.",
+      "sha256": "2fbfb2f59c4b9653088f6d45da90e6d6c7dc26aacb190de7713dbd3c1da5966c"
+    },
+    {
+      "idx": 42,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"So anyway, the next version of Dzegoban-\"</span>",
+      "sha256": "513aed42a33fdad4ff971481b903b2d98daeb6dc27a138eb90edea66efa49c40"
+    },
+    {
+      "idx": 43,
+      "kind": "paragraph",
+      "content": "Bai cut him off.",
+      "sha256": "3a99d0e95f879501b16455dfffec0cd3f9895cf3c748eeb7ffd1a16d7884bb47"
+    },
+    {
+      "idx": 44,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Maybe next time. This is all making me curious, I feel like I should go study the history of Dzegoban on my own at some point.\"</span>",
+      "sha256": "039076c783b3f88f63c1dc8a9a51fb9d7a58896c506c82e7a3364c630cba9fd4"
+    },
+    {
+      "idx": 45,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Good instinct! I promise, it gets even more fun once we get into version nine. Zei doesn't see the value of all this himself, he's so focused lately on his games.\"</span>",
+      "sha256": "f9b9488040b504fc3ac3bff3c2e766eb5e6b77159ce7d9cc23ba2645555cb008"
+    },
+    {
+      "idx": 46,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"I'm sure he is. And I don't think it will stop, it's clearly paid off very well for him.\"</span>",
+      "sha256": "48e23d0f0df9b17567a1c3125311a67cdad66a9e72bad391bb88e56ee1c1bf46"
+    },
+    {
+      "idx": 47,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Maybe I should play some games with him for fun - or I guess for him, for practice - at some point.\"</span>",
+      "sha256": "34d337c3e819101562969fdacf752d3b13e82edd5ed6bcec261b398e96feb97a"
+    },
+    {
+      "idx": 48,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Oh, and thank you for distracting me and cheering me up!\"</span>",
+      "sha256": "5575b40ae02bb94001d464b201a3f571719058caca2a74dfe9bf1f3ed721cf89"
+    },
+    {
+      "idx": 49,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 50,
+      "kind": "paragraph",
+      "content": "Zei walked through the tunnel, and down the stairs, following the directions that his watch gave him. Every time he got to a fork, he made sure to look in all directions, taking in his surroundings. He had never been this deep into the depths of the mountain pyramid before.",
+      "sha256": "fa8f22668945b3a4ee527a85d122b10ccca4f1ff9698c6b56a86e5c765362cd0"
+    },
+    {
+      "idx": 51,
+      "kind": "paragraph",
+      "content": "Eventually, he got to a sealed door with a green circle beside it. He tapped his watch against the circle. The door slowly opened.",
+      "sha256": "28de415579ddfbd5d173004826cedaeb695db229894ea1fc0a921098ca6b7fd4"
+    },
+    {
+      "idx": 52,
+      "kind": "paragraph",
+      "content": "Behind the door, there was a narrow and long room, and at the end of the room there was a large table. At the table, a man was sitting wearing a shadowy cloak - not a Veridian privacy robe, but the dress of the Minpentai priests.",
+      "sha256": "c1c3567772d48b395a4c102441b9c24ab7718528e27f8b7dce4544288a07f068"
+    },
+    {
+      "idx": 53,
+      "kind": "paragraph",
+      "content": "Zei walked across the room slowly, and sat down across from the priest.",
+      "sha256": "ddc5c3c8377898ff4f6e0d91cc4c5e2f1160fb202f5cd7e87ca1f8bba4adccfd"
+    },
+    {
+      "idx": 54,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Welcome\"</span>, the priest said softly.",
+      "sha256": "cafd4109370d5b3b71d6b0b92c0e5238e8d79f6f3eeaee5cd8bf7b5ad6f298c6"
+    },
+    {
+      "idx": 55,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I am honored to be here\"</span>, Zei replied. <span data-hue=\"346.67\">\"But ... who are you?\"</span>",
+      "sha256": "0a82d422619bd024bdd8bad8f699d949b5c7588b68a7124099ade7743e4cb938"
+    },
+    {
+      "idx": 56,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"I'm Den. High Council member of the Kungaupei. Thank you for coming.\"</span>",
+      "sha256": "c2990f8db07bb39abe303a3a63991761189bbbdba8a8a5503dc2e0f03e8c5bb2"
+    },
+    {
+      "idx": 57,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Kungaupei? We have a secret society for defense too? Growing Dzego a whole secondary shadow army?\"</span>",
+      "sha256": "c489cca17a99dd62b705acaf21f3e524b2faf2da99179cdeadfb44789e526102"
+    },
+    {
+      "idx": 58,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Of course, are you surprised?\"</span>",
+      "sha256": "1fd48c16a4c2e7b6e7da3ac28af0653a247a9aed3abafd23fb0c1f0e7cf51e18"
+    },
+    {
+      "idx": 59,
+      "kind": "paragraph",
+      "content": "Zei hesitated.",
+      "sha256": "01074714518a7d998c1f27a376804a9a3d174e23652bc7a83788429658c260af"
+    },
+    {
+      "idx": 60,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"I was impressed by your performance in the Minpentai game a few days ago.\"</span>",
+      "sha256": "aeccd689b365eeb16494780c8614b293d571355bae6aafa12b8cb3b0e9ccbdb5"
+    },
+    {
+      "idx": 61,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"But I wasn't just impressed because you won. I studied the transcripts from the game. I was impressed because of the kind of strategy that you played.\"</span>",
+      "sha256": "ce1c4e405f5df256b3d0c286d8f95fbed266d7d43f5c79b11a126c1a995f15d7"
+    },
+    {
+      "idx": 62,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Tell me, have you studied any cryptography?\"</span>",
+      "sha256": "1d5040349747033fd873749ed49762ce3304c6c6aa673ccfe6b68c7dff9c6887"
+    },
+    {
+      "idx": 63,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I... know the basics? Factoring is hard, you cube modulo n to encrypt, and only someone who knows the p times q that make up n can invert the cubing to decrypt.\"</span>",
+      "sha256": "976cbe60246407d3eedb32e05ff7bb682da9d4b081053769debdd18307fa73ef"
+    },
+    {
+      "idx": 64,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"No no, that's popular science cryptography. Nobody has been using the factoring-based stuff for decades now, even elliptic curves are falling out of fashion because everyone's worried that the Arctics are going to come out with a quantum computer any year now.\"</span>",
+      "sha256": "73e753cc80b8ae7aaf651209a8d3f51677610e2305ec390b3ada35945b694302"
+    },
+    {
+      "idx": 65,
+      "kind": "paragraph",
+      "content": "Zei did not respond. He stared back, in a mix of appreciation for the update to his knowledge, and curiosity about where this whole conversation was going to lead.",
+      "sha256": "7f3def0d024b7b518b4d259f3ffd34f05d7f125f2f6d2de1068ac7348d121dd5"
+    },
+    {
+      "idx": 66,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Okay, well I think in your last game you've come really close to inventing big parts of cryptography from scratch.\"</span>",
+      "sha256": "708a75949120e456755fa5ec7f1dbc1180f9fa0860adfbe547cba44051613e95"
+    },
+    {
+      "idx": 67,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Think about obfuscation protocols. You want to give someone a program, that they can execute, without being able to see the internal details of the program. It's what our modern cryptographic networks - like the ones that handle payments and reputation and manage governance for Dzego's secret societies - all rely on.\"</span>",
+      "sha256": "e123b125782f4c93875df33062a4bed037625278d84049fdc98a12939d15da6c"
+    },
+    {
+      "idx": 68,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"But how do you make a single protocol that can do that? Hide the program? It's easy to see how to hide the data, and then do addition and multiplication on hidden data, especially when it's all done by hiding it in big vectors under linear transformations and adding errors on top. But how do you hide a program? What kind of a space of possible programs do you even hide a program in?\"</span>",
+      "sha256": "1b54e72f5c7443106f076dd549026b15721de375d3f917392e94f8adfe64119d"
+    },
+    {
+      "idx": 69,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"The solution - well, okay, a small part of one type of solution - is that you create a meta-program. A program that, depending on its input, can run any possible program. And then you've reduced the program to just being a set of numbers that you're doing addition and multiplication to.\"</span>",
+      "sha256": "32383c67c54b7232b9fc5215344f9ada8253ee4af865f7cc4b2853a92cd55665"
+    },
+    {
+      "idx": 70,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"It's one of the most basic tricks in computer science. Our computers, the physical hardware, are meta-programs themselves. But you figured out a really basic version of that - just sixteen possible algorithms, melded into one factory - and used that, plus a hidden glider to provide the input, to hide your intentions.\"</span>",
+      "sha256": "1809108a106312d9cdaee5f93f1bb00ddaba0f8f68df1108af363d8d0bf7e1f6"
+    },
+    {
+      "idx": 71,
+      "kind": "paragraph",
+      "content": "Zei nodded.",
+      "sha256": "7a6447b1349453a638ba51c721712d942b6c4469379429153a47cf960d1bf83c"
+    },
+    {
+      "idx": 72,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Well thank you for the compliment. But ... I'm curious now, where are you going with this?\"</span>",
+      "sha256": "9adf6190a9d536ca7a695eedb74fdde348f69fc83f3344c9773a0339718a776f"
+    },
+    {
+      "idx": 73,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Well, Zei, I want to recruit you into defense.\"</span>",
+      "sha256": "8e17541b08ad942373a2bbb9263591f0961033677e1990abec17fd644d7dc015"
+    },
+    {
+      "idx": 74,
+      "kind": "paragraph",
+      "content": "Zei's eyes and mouth opened.",
+      "sha256": "b9870bdef4336742bacd4ba37a598b350b98634898875c5aeeb2545dd12bd3df"
+    },
+    {
+      "idx": 75,
+      "kind": "paragraph",
+      "content": "Defense. Without thinking, Zei opened and closed each finger of his left arm. That arm had been broken and taken a month to heal, all because of a thermodynamics lecture. What Den was suggesting was not a lecture.",
+      "sha256": "9dcfb235252cfb7f2395e1dfbd1e477146d0f32bed6a38f992176a63f8f0ac84"
+    },
+    {
+      "idx": 76,
+      "kind": "paragraph",
+      "content": "But his life had been saved by exactly that kind of work - a secretive, well-coordinated room change at the last minute. Maybe this was his chance to do the same for someone else.",
+      "sha256": "bb9baf7c0321b759c7f6fb0db8e0d387097341e22025ab443c41688d6fc7159c"
+    },
+    {
+      "idx": 77,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"I do want you to continue Minpentai into the nationals. I think it will be good for you. But for your education, do cryptography. I think it will also help you in your games.\"</span>",
+      "sha256": "7d64ec87addcb4a6b46caf506fc322dd2881a939946f53246ceedf50d9d5dd73"
+    },
+    {
+      "idx": 78,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"And of course I'll stay in touch the whole way, and when you're ready, I will start suggesting some tasks for you.\"</span>",
+      "sha256": "034146b0ff2cb4ff01c3d169aa10504a1f2e5a0c208b0bf22f1be809fd0e4607"
+    },
+    {
+      "idx": 79,
+      "kind": "paragraph",
+      "content": "Zei responded with silence once again.",
+      "sha256": "dc37887f8def9090cb2eeab1f9f28c652fac21c78165810b5428aeb34329b0da"
+    },
+    {
+      "idx": 80,
+      "kind": "paragraph",
+      "content": "Tasks. He noticed how quickly Den had shifted into the register of assuming that Zei would go along with his plans. Part of him was already coming up with reasons to say yes. Another part was watching his enthusiasm slowly build up, and did not entirely trust it.",
+      "sha256": "bea99b096c6900b1cc9415f0c59c3a153dc505a76791f8eb67466d7772dc09f0"
+    },
+    {
+      "idx": 81,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"I have an idea\"</span>, Den began. <span data-hue=\"53.33\">\"Do you know how chip verification works? Like, how I'm automatically verifying that all your electronic devices are friendly right now?\"</span>",
+      "sha256": "8fca31a7b9a69c705d0adda942a8cde52fd6d62a99caf5e9297bfc7715893549"
+    },
+    {
+      "idx": 82,
+      "kind": "paragraph",
+      "content": "Zei began to reply as soon as Den finished. By sheer luck, Den had decided to grill him on one of the areas of applied cryptography that he *had* already researched.",
+      "sha256": "68c1fa5b94cca52058babe99233aee5070fc8aabe0201f5826bd6b4591e46605"
+    },
+    {
+      "idx": 83,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"When a device is manufactured, a physical unclonable function is produced as part of the process - a secret key that gets generated though chemicals settling down as the chip cools down after it's produced. Not even the manufacturer knows what it is. The manufacturer prods the device to get its public key - the p times q, or I guess now I know it's not a p times q at all, it's something totally different. It then signs that key with its key, and publishes that to the cryptographic network.\"</span>",
+      "sha256": "4d93521d739b695486f1dd76b762fe673b46cfd10135ca4fcb4266abfb60f18d"
+    },
+    {
+      "idx": 84,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Okay I guess you can call a function a key, close enough. Go on.\"</span>",
+      "sha256": "464c4a38b18e5661f65b0ae734ed82b435dc6203d5f745b831fc519e83a6b4f9"
+    },
+    {
+      "idx": 85,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"As a user, you can ask the device to sign a value. The device will do that. You can then verify its signature against the public key that you download from the cryptographic network, to check that it actually came from that manufacturer.\"</span>",
+      "sha256": "b2b11cb1a5784ce4c473a75226c4ab02aa72368cb10ca8f727181aad32fa95c4"
+    },
+    {
+      "idx": 86,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"And then you have public inspectors. They buy devices randomly from the manufacturer, and use some kind of scanning to destructively inspect them. Verify that the chips actually have the logic that they are supposed to have.\"</span>",
+      "sha256": "c75b21681d9dd10b7423633772c2cd4aa42e866f05d0ca2fcdce234e175c08df"
+    },
+    {
+      "idx": 87,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Why the cryptographic network? Why not just sign it?\"</span>",
+      "sha256": "730308f32d428d5ed8c0fe05a7ddafb9b4dde890c99d625be152c0513bc0e7df"
+    },
+    {
+      "idx": 88,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"So that you know how many there are, avoiding attacks where either the manufacturer is cheating or someone hacks their key, and they start signing over even more public keys than they should. Also it means you know when the signature was made, so you know it was made when the device was manufactured. And if the manufacturer's key somehow gets stolen, you can tell if the signature was made before or after that happened.\"</span>",
+      "sha256": "529edf27e4c2f7cb1b8755561b9ed2f5e60899381417d041b21697be62f23f31"
+    },
+    {
+      "idx": 89,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"And how do I verify your device?\"</span>",
+      "sha256": "1f640eaaac16645caf2bdeca5bcdfec7b3db183b91e198dbf52d8b4c41fca0d0"
+    },
+    {
+      "idx": 90,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"You ask it for a signature wirelessly, same way I verify it.\"</span>",
+      "sha256": "8bfcf2dd49599f5033ba0e30594402009bdbbfde896965ebfaea2c49b639581d"
+    },
+    {
+      "idx": 91,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"How do I know it's not just forwarding responses from a different device somewhere else?\"</span>",
+      "sha256": "3431d30577e9d87dc66fad009b700be67b8d9ed02ce5726cffff601039cb7bdd"
+    },
+    {
+      "idx": 92,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Here, because we're deep inside a mountain. Generally, I don't know.\"</span>",
+      "sha256": "689140a5231f87467026d94d8cb77a8f01e28ff471ad53cdcefb1c905a4e531d"
+    },
+    {
+      "idx": 93,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"How does the chip inspection process work?\"</span>",
+      "sha256": "cb42317ff160c07a66c7981664891f2aa05c57ec20435828bea4ba6f089d81dc"
+    },
+    {
+      "idx": 94,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"That I don't know.\"</span>",
+      "sha256": "2a31294a2195e35dc1b915dacd5349c9e5e86ed44719dddd752fc8e0ceac54c2"
+    },
+    {
+      "idx": 95,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"How do the inspectors know that they're getting devices from the same pool the public is getting, and not devices specifically chosen by the manufacturer to fool them?\"</span>",
+      "sha256": "3c25f07688fb28de3110d98b64292de47cfa18eba386823b9fb8aa2239fb856d"
+    },
+    {
+      "idx": 96,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I don't know.\"</span>",
+      "sha256": "07cda2ea968deb7a7e3a03cf42364de435b0f39a3c5f7785b7ba522772e2f2b2"
+    },
+    {
+      "idx": 97,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Let's think about a different case first. Take the public security cameras, the ones on the lamp posts or the outsides of the buildings or the autobuses. Every Dzegojan has a right to occasionally randomly pick one, unscrew it and analyze it themselves. That's how we know that they're only recording and transmitting when they're supposed to, and no one in the supply chain from the people manufacturing them right up to the people installing them can bug them and leak any data to a stalker or an insider trader or an Arctic.\"</span>",
+      "sha256": "e66eaeadf7762cb20a1b73b3da1d152a86e00ab086a49f6d173b20a2864f334a"
+    },
+    {
+      "idx": 98,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"That's the random inspection process - assuming at least some of the people who make inspecting cameras their hobby actually choose randomly. So that's for security cameras, that are already in public so anyone can just choose a random one of them to go and unscrew. Now, what do we do here? How do we do random inspection for computer chips that you buy from a manufacturer?\"</span>",
+      "sha256": "0eb6677848c4084d2ae4227522907be1dd215834aab391a0b983c7c932c4e6e3"
+    },
+    {
+      "idx": 99,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Okay, you tell me.\"</span>",
+      "sha256": "195f9e38ba5da7ea9432be480ac9017ef82451f4f0a951afc8412e444c40a7de"
+    },
+    {
+      "idx": 100,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Well, I'm glad there's still a lot that I can teach you. How about we go and visit one of these factories right now?\"</span>",
+      "sha256": "f955eb6fc0d89f312266b01868437434e3c1af208d4164cf82ab413f752d5790"
+    },
+    {
+      "idx": 101,
+      "kind": "paragraph",
+      "content": "Zei thought for a moment. It was not yet a commitment, he reasoned, and it would be something he had never seen before.",
+      "sha256": "68f3a1aa8e516494a12b198be7a4eae4b7d3a24c429794e73ae8d7daf4ddb9f9"
+    },
+    {
+      "idx": 102,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Sure, would be happy to!\"</span>",
+      "sha256": "70edbd4737b74afa10f527b02395305257a221d51cd444fb33dae7da57e658ef"
+    },
+    {
+      "idx": 103,
+      "kind": "paragraph",
+      "content": "Zei and Den walked out of the room, through the tunnels, and to a smaller exit from the pyramid. The exit led directly into the interior of a large rectangular-shaped black car. The pyramid door and the car door were exactly the same shape, and were pressed tightly against each other.",
+      "sha256": "3dd02f147017ba62e335fb57b9cf771fe57c7e9ef6b6025f406155594bd4167b"
+    },
+    {
+      "idx": 104,
+      "kind": "paragraph",
+      "content": "Zei and Den got in.",
+      "sha256": "8c762e15ad16e72b246cd678a7a6b8c6f8421a921b6085fb3fdd2094ac3edbee"
+    },
+    {
+      "idx": 105,
+      "kind": "paragraph",
+      "content": "As the door sealed shut, Zei noticed anti-transmission foil lining the sides of the car. The car had windows, but they seemed to show a dimmed version of the world outside; from the outside, he knew, they would show almost nothing at all.",
+      "sha256": "4a480db812e34043984f4ffc57673c6b222ba1831e8ebcda0bd77f9479f9a37e"
+    },
+    {
+      "idx": 106,
+      "kind": "paragraph",
+      "content": "The car started moving, and a minute later it entered a tunnel.",
+      "sha256": "00e8656155ca04132de2ceaafff1fe3bea4fbcb37d011530b52fcc652bc2f587"
+    },
+    {
+      "idx": 107,
+      "kind": "paragraph",
+      "content": "At that point Zei realized that no one in the world now knew where he was.",
+      "sha256": "232fb6bbbecf7ab73fd0f3493563f7eb8300cce4727f103d03032c04c659ecc9"
+    },
+    {
+      "idx": 108,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 109,
+      "kind": "paragraph",
+      "content": "Zei and Den got out of the black car. The car's door now opened directly into the open door of a staircase leading down to a basement, shielding them from even a tick of being visible to the outside. The two walked down the stairs, and eventually entered a large room.",
+      "sha256": "63d0a29e2a0ce7f926eaf252e2d14883213a5fd008b5bf9eb5e27a685c07e0bd"
+    },
+    {
+      "idx": 110,
+      "kind": "paragraph",
+      "content": "They saw thousands of empty white boxes, with labels on the side containing a two-dimensional barcode, and a machine automatically putting chips into boxes as they came out of a conveyor belt from another room.",
+      "sha256": "03071679c65f4f64945d6ba84432c4f498b3028d3db3036dc6945f6907068d02"
+    },
+    {
+      "idx": 111,
+      "kind": "paragraph",
+      "content": "Den opened up his hand device, and showed a diagram to Zei.",
+      "sha256": "8a57e28f7b07166ab6ad16849234ef911032fb31b3017d3d54ed65205f395c86"
+    },
+    {
+      "idx": 112,
+      "kind": "figure",
+      "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"400\" height=\"200\" viewBox=\"0 0 400 200\">\n<rect width=\"400\" height=\"200\" fill=\"#245\"></rect>\n<line x1=\"80\" y1=\"40\" x2=\"95\" y2=\"80\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"80\" y1=\"40\" x2=\"185\" y2=\"80\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"80\" y1=\"40\" x2=\"35\" y2=\"80\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"160\" y1=\"40\" x2=\"215\" y2=\"80\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"160\" y1=\"40\" x2=\"335\" y2=\"80\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"160\" y1=\"40\" x2=\"155\" y2=\"80\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"240\" y1=\"40\" x2=\"65\" y2=\"80\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"240\" y1=\"40\" x2=\"125\" y2=\"80\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"240\" y1=\"40\" x2=\"305\" y2=\"80\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"320\" y1=\"40\" x2=\"365\" y2=\"80\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"320\" y1=\"40\" x2=\"275\" y2=\"80\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"320\" y1=\"40\" x2=\"245\" y2=\"80\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"35\" y1=\"80\" x2=\"245\" y2=\"130\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"65\" y1=\"80\" x2=\"95\" y2=\"130\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"95\" y1=\"80\" x2=\"155\" y2=\"130\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"125\" y1=\"80\" x2=\"215\" y2=\"130\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"155\" y1=\"80\" x2=\"305\" y2=\"130\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"185\" y1=\"80\" x2=\"275\" y2=\"130\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"215\" y1=\"80\" x2=\"335\" y2=\"130\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"245\" y1=\"80\" x2=\"125\" y2=\"130\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"275\" y1=\"80\" x2=\"35\" y2=\"130\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"305\" y1=\"80\" x2=\"365\" y2=\"130\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"335\" y1=\"80\" x2=\"65\" y2=\"130\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"365\" y1=\"80\" x2=\"185\" y2=\"130\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"35\" y1=\"130\" x2=\"185\" y2=\"180\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"65\" y1=\"130\" x2=\"95\" y2=\"180\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"95\" y1=\"130\" x2=\"215\" y2=\"180\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"125\" y1=\"130\" x2=\"245\" y2=\"180\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"155\" y1=\"130\" x2=\"365\" y2=\"180\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"185\" y1=\"130\" x2=\"155\" y2=\"180\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"215\" y1=\"130\" x2=\"335\" y2=\"180\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"245\" y1=\"130\" x2=\"125\" y2=\"180\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"275\" y1=\"130\" x2=\"305\" y2=\"180\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"305\" y1=\"130\" x2=\"35\" y2=\"180\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"335\" y1=\"130\" x2=\"65\" y2=\"180\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<line x1=\"365\" y1=\"130\" x2=\"275\" y2=\"180\" stroke=\"#9ab\" stroke-width=\"0.8\" opacity=\"0.7\"></line>\n<circle cx=\"35\" cy=\"80\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"65\" cy=\"80\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"95\" cy=\"80\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"125\" cy=\"80\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"155\" cy=\"80\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"185\" cy=\"80\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"215\" cy=\"80\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"245\" cy=\"80\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"275\" cy=\"80\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"305\" cy=\"80\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"335\" cy=\"80\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"365\" cy=\"80\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"35\" cy=\"130\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"65\" cy=\"130\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"95\" cy=\"130\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"125\" cy=\"130\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"155\" cy=\"130\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"185\" cy=\"130\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"215\" cy=\"130\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"245\" cy=\"130\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"275\" cy=\"130\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"305\" cy=\"130\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"335\" cy=\"130\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"365\" cy=\"130\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"35\" cy=\"180\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"65\" cy=\"180\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"95\" cy=\"180\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"125\" cy=\"180\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"155\" cy=\"180\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"185\" cy=\"180\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"215\" cy=\"180\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"245\" cy=\"180\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"275\" cy=\"180\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"305\" cy=\"180\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"335\" cy=\"180\" r=\"4\" fill=\"#cef\"></circle>\n<circle cx=\"365\" cy=\"180\" r=\"4\" fill=\"#cef\"></circle>\n<rect x=\"71\" y=\"22\" width=\"18\" height=\"13\" rx=\"1.5\" fill=\"none\" stroke=\"#cef\" stroke-width=\"1.2\"></rect>\n<line x1=\"80\" y1=\"35\" x2=\"80\" y2=\"39\" fill=\"none\" stroke=\"#cef\" stroke-width=\"1.2\"></line>\n<line x1=\"75\" y1=\"39\" x2=\"85\" y2=\"39\" fill=\"none\" stroke=\"#cef\" stroke-width=\"1.2\"></line>\n<rect x=\"151\" y=\"22\" width=\"18\" height=\"13\" rx=\"1.5\" fill=\"none\" stroke=\"#cef\" stroke-width=\"1.2\"></rect>\n<line x1=\"160\" y1=\"35\" x2=\"160\" y2=\"39\" fill=\"none\" stroke=\"#cef\" stroke-width=\"1.2\"></line>\n<line x1=\"155\" y1=\"39\" x2=\"165\" y2=\"39\" fill=\"none\" stroke=\"#cef\" stroke-width=\"1.2\"></line>\n<rect x=\"231\" y=\"22\" width=\"18\" height=\"13\" rx=\"1.5\" fill=\"none\" stroke=\"#cef\" stroke-width=\"1.2\"></rect>\n<line x1=\"240\" y1=\"35\" x2=\"240\" y2=\"39\" fill=\"none\" stroke=\"#cef\" stroke-width=\"1.2\"></line>\n<line x1=\"235\" y1=\"39\" x2=\"245\" y2=\"39\" fill=\"none\" stroke=\"#cef\" stroke-width=\"1.2\"></line>\n<rect x=\"311\" y=\"22\" width=\"18\" height=\"13\" rx=\"1.5\" fill=\"none\" stroke=\"#cef\" stroke-width=\"1.2\"></rect>\n<line x1=\"320\" y1=\"35\" x2=\"320\" y2=\"39\" fill=\"none\" stroke=\"#cef\" stroke-width=\"1.2\"></line>\n<line x1=\"315\" y1=\"39\" x2=\"325\" y2=\"39\" fill=\"none\" stroke=\"#cef\" stroke-width=\"1.2\"></line>\n</svg></div>",
+      "sha256": "3a9d3b0900b64da0a284c76faee99cacc951db33eeb45a50f380cc0f32b7364b",
+      "data": {
+        "world": "dzego",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Pafogai Du, Dzego"
+        },
+        "device": "hand_device",
+        "device_evidence": {
+          "idx": 111,
+          "quote": "Den opened up his hand device, and showed a diagram to Zei."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c9-b112.svg",
+            "viewBox": "0 0 400 200",
+            "width": "400",
+            "height": "200",
+            "labels": [],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 113,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"You ever seen this before?\"</span>, Den asked.",
+      "sha256": "c016003657c90b6c8b35a318bc5bc2b78c5fb0196ceda8e82b3b51c5ee7cc48d"
+    },
+    {
+      "idx": 114,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Some kind of diagram of the internet?\"</span>",
+      "sha256": "87098e3f4dd81640df9ec3458a57c675907b8ceae7dd31ee0547396da17d5c37"
+    },
+    {
+      "idx": 115,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"It's a mixnet. It's how transactions get onto the cryptographic network without people being able to see who sent them.\"</span>",
+      "sha256": "55c3de62b00362ee0c11fec2281f59f9095ad6f9dca1e099460401a35340a3b8"
+    },
+    {
+      "idx": 116,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Each message from each sender gets wrapped with three layers of encryption. That top-level message gets sent to a node on the first layer.\"</span>",
+      "sha256": "40792a85ade9e88bd4aa5027cde96b06d9d82e652a0147f1347d35341f15e1d4"
+    },
+    {
+      "idx": 117,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"The node on the first layer unwraps the top layer of encryption, and sees another encrypted message, along with the address of which node in the second layer they are supposed to send it to.\"</span>",
+      "sha256": "e1d506263740a80a022b604f233fde3bd8132e7dfee72ddc3eef1e9b409df3c2"
+    },
+    {
+      "idx": 118,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"The node on the second layer unwraps the next layer of encryption, and sees another encrypted message, along with the address of which node in the third layer they are supposed to send it to.\"</span>",
+      "sha256": "0c846fd3f1fc8a29ab4cac0eb0b3e24e15e57fa3b548b298da94962ba2f15d2b"
+    },
+    {
+      "idx": 119,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Finally each node on the third layer unwraps that layer of encryption, and gets the address of the destination, plus the actual payload. And of course, usually, the payload itself is encrypted.\"</span>",
+      "sha256": "955d5ef3555485d238f0c23137aca3031902b51467e4e71b07dc2302be830b51"
+    },
+    {
+      "idx": 120,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Wow, I didn't realize that's how it works. So you need three nodes to collude to unmask the sender of a message.\"</span>",
+      "sha256": "5f0c0ce40dc978d6b347e74c086025395aff3c39912dea0bfac523260cfef606"
+    },
+    {
+      "idx": 121,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Not just three nodes - three *randomly selected* nodes. And if you're paranoid, you can make the inner payload be yet another envelope, requesting to send the message right back through the system in the next round.\"</span>",
+      "sha256": "e0accd1ecf9af0ff78a425b32a1488b43f99390b35e5cff8803b64b8aa5b1174"
+    },
+    {
+      "idx": 122,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"So this is what the packaging step is doing. Those boxes are highly opaque and tamper-proof sealed, and the two-dimensional barcode is the encrypted payload. It's a mixnet, but for delivery of physical goods.\"</span>",
+      "sha256": "18609d8397a5c4b7f17b93f1c85e5239cdf2de4f8ed51835f6eb4f572811ef31"
+    },
+    {
+      "idx": 123,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"If you buy a product through this system, only the last of the three nodes knows your address, and they don't know who the sender was or what they're delivering. And if you're *double paranoid*, you can set your address to a public drop-off point and pick it up yourself.\"</span>",
+      "sha256": "2f2e4cf0583fd2440172bd4358e2dc89f2c5bff7a11b0749988cc124fd248221"
+    },
+    {
+      "idx": 124,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Inspectors buy through the mixnet. And so as a consumer, if you buy through the mixnet yourself, you're getting your chip from the same pool that the inspectors are buying from - the manufacturer has no way to give an honest chip that passes inspection to the inspectors, without almost certainly giving one to you too. They can't tell which chips - or whatever other physical goods are passing through this thing - are going to whom.\"</span>",
+      "sha256": "6b4a18e5149394d56bc5471e2df46921c04a6bc974607aeb066f8abd67e60288"
+    },
+    {
+      "idx": 125,
+      "kind": "paragraph",
+      "content": "Den then walked forward toward a door. Zei followed him.",
+      "sha256": "f78d143de492c6277ed0b639234542ed363847719fd944b58812b80a44f72bfb"
+    },
+    {
+      "idx": 126,
+      "kind": "paragraph",
+      "content": "Den put his watch against a circle with a glowing green outline. The door opened.",
+      "sha256": "99e314e8bca11b8af2e93725be930bddda0610a76dc9e081716c302684e21517"
+    },
+    {
+      "idx": 127,
+      "kind": "paragraph",
+      "content": "They walked through a hallway, took a few turns, and then went through another door. They entered a room with a large microscope.",
+      "sha256": "2409dde5741cb3a704b385a3b9c1541cb55ce6db3c9cfa1c9ab00d8b5a20e3a6"
+    },
+    {
+      "idx": 128,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"This is the inspection facility of this fab. They inspect both their own chips, and those produced by others.\"</span>",
+      "sha256": "412c037f6b20882066c60ad1539fb9e2987a8ceef5ee6e71a1c52ac6ca17c3eb"
+    },
+    {
+      "idx": 129,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"They do multiple types of three-dimensional scanning, at different wavelengths, to make sure that the physical chip exactly matches the specification.\"</span>",
+      "sha256": "06ce3f43c0c988adff7fac2b48cd85bd946ce44b88d85c16438af60173fc791c"
+    },
+    {
+      "idx": 130,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I'm impressed. Say thank you to whoever gave you permission to give us a tour.\"</span>",
+      "sha256": "2eafa4018702c4ceb35ef18db864bf3ee3a28e487d858c7f0f205827ff54d596"
+    },
+    {
+      "idx": 131,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"I will. So Zei, I remember you had another question.\"</span>",
+      "sha256": "98c33ec716caa940bd7e3f832459c13b92faecd46cfd4a95e144e7d9371aea46"
+    },
+    {
+      "idx": 132,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Yeah I remember. Though it wasn't about manufacturing.\"</span>",
+      "sha256": "07229123ccedae7feafd8919a950bb2f5c016780c99c8430a983481076e672fe"
+    },
+    {
+      "idx": 133,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Indeed - it was about how someone verifying could know that responses are not being forwarded from a different device. I can tell you the answer for that too. My hand device has a protocol by which it repeatedly contacts each device a million times, and expects the whole protocol to finish within a tenth of a tick. And so wherever the signature comes from, it has to be within fifty lightfeet away - almost thirteen meters - actually, even closer, because of the latency of the chips themselves.\"</span>",
+      "sha256": "4513c50b92a7e42b258b87a0376900b3dd4c70be39a8891cd38a9e143f46b686"
+    },
+    {
+      "idx": 134,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"So Zei, what do you think?\"</span>",
+      "sha256": "dfd4f3244a93fd88455ee8b0522005c3f939c36affa2e2966bdc208097f6865d"
+    },
+    {
+      "idx": 135,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"You said I can still do the nationals, right?\"</span>",
+      "sha256": "c47cc8e86b09fa83ce2d334da41ab0524772f905806766f7ab192d997d8e25b7"
+    },
+    {
+      "idx": 136,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"I *want* you to do the nationals.\"</span>",
+      "sha256": "a4127231be02466a1b7e725111fc7acde31ff479ee80e61a85ad9a18ef37e254"
+    },
+    {
+      "idx": 137,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Okay yes, I'll join - or at least, I'll commit as far as switching my studies to cryptography and see how that goes.\"</span>",
+      "sha256": "60be2a0dd5ca7e254d92dc066ed6f1a11405bd2ad376cca7f6324b3d9f1be33d"
+    },
+    {
+      "idx": 138,
+      "kind": "paragraph",
+      "content": "Den nodded.",
+      "sha256": "b4cd2819b2255d2bfbcfbae0f0cb31dae6db94aa69a035bb908d340bab980d51"
+    },
+    {
+      "idx": 139,
+      "kind": "paragraph",
+      "content": "When Den kept walking forward, Zei's mind wandered - first, to the large microscope that was directly in front of him, and then to other matters.",
+      "sha256": "827003c64e81a41ee2315225bb616754d9209c9af73806eb3c3e9b3615815ef0"
+    },
+    {
+      "idx": 140,
+      "kind": "paragraph",
+      "content": "He started thinking about what he would tell his mom that afternoon. He could talk about Fin being busy, about himself going for a walk. But he could not tell the full truth. The Kungaupei forbade it - and his mom had already watched him heal from one bomb.",
+      "sha256": "55c66b05a97f9cd990cf135dc36aec018a3a8880ccc5ab5b5ff6d06a19118661"
+    }
+  ]
+}

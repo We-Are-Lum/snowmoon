@@ -1,0 +1,616 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 28,
+  "source_url": "https://vitalik.eth.limo/snowmoon/html/chapter-28.html",
+  "source_sha256": "85b2e1c7d188eb692ca5bbf616f5a31c0817cfbf8ce239d584e99d23eca4b465",
+  "fetched_at": "2026-10-02",
+  "license": "GPL-3.0",
+  "blocks": [
+    {
+      "idx": 0,
+      "kind": "heading",
+      "content": "# Chapter 28",
+      "sha256": "3ecf0f20099363e7707096a50b046b9f1866dcf324994c1b62a2f8a676e87e0c"
+    },
+    {
+      "idx": 1,
+      "kind": "dateline",
+      "content": "**Meldan, Veridia** · 3724 Frostime 15",
+      "sha256": "5f29cb81862a44b19d6933a9e78ce2bcdeb82c904509e2b3b3497bf3a7f4698d"
+    },
+    {
+      "idx": 2,
+      "kind": "paragraph",
+      "content": "Zei, Den, Bai and Mu were sitting around a table inside a conference room.",
+      "sha256": "e11b06a0d938125709a1d4c86ab3f68588733ad66474f7ecf8203a8732b169c8"
+    },
+    {
+      "idx": 3,
+      "kind": "paragraph",
+      "content": "They heard the door buzz. They immediately paused their conversation, and waited to see who was coming inside.",
+      "sha256": "993214afdcf72d5af15ba9b0aa4c5ff61099acf1dd909822b837016571e8eb97"
+    },
+    {
+      "idx": 4,
+      "kind": "paragraph",
+      "content": "The door opened. It was Verdow.",
+      "sha256": "aec1d6d63418e48c18bfae021fe2c7859e774d9a29117f90cc94c1ee9801f042"
+    },
+    {
+      "idx": 5,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"You have a visitor.\"</span>",
+      "sha256": "c509b5ae5e115eada2b1eb47a8564836ab9876ed002547e8480268a564e55d75"
+    },
+    {
+      "idx": 6,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Who is it?\"</span>, Zei asked.",
+      "sha256": "7c827ba7830a9efba09978ce6290a4c2a58068ec1cec9de8d79a5b51ec58b0de"
+    },
+    {
+      "idx": 7,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"One of the generals. Actually one of the few that I respect. I ran an analysis through Emerald, everything I got back is very positive about him.\"</span>",
+      "sha256": "90706065c18614562a9a5f0e01b6ceeeef18feb923f74a0eeb008f19c6e3302b"
+    },
+    {
+      "idx": 8,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"What does he want?\"</span>",
+      "sha256": "4bdb658b381f6674fca11eca2532621b3278b721d9cadd75f2bf6bbfc69fa440"
+    },
+    {
+      "idx": 9,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"To talk. About the ongoing case.\"</span>",
+      "sha256": "b8cc0e237b7af7b15640ddc232464670eb8dce1991fdeea41e5daa5c2c3b0348"
+    },
+    {
+      "idx": 10,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Sure, we're happy to talk to him\"</span>, Bai replied. <span data-hue=\"26.67\">\"Is he here now?\"</span>",
+      "sha256": "d44261b9769c61869a163275a0429ba7f17dce356d46d909a6d02749fa853cd4"
+    },
+    {
+      "idx": 11,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"He is.\"</span>",
+      "sha256": "9e2020e5d0d3042188679db5bcbaf80ed323fee61e31bd5a7ae18c2d99a8a625"
+    },
+    {
+      "idx": 12,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Then let him in.\"</span>",
+      "sha256": "f0b79c78620114d066d084f0d12cbd53e24649cfcf138e6d461804e120100739"
+    },
+    {
+      "idx": 13,
+      "kind": "paragraph",
+      "content": "A middle-aged man entered the room. He was wearing a shirt that seemed almost perfectly designed to strike the balance of looking like traditional Veridian military attire while being comfortable for everyday wear.",
+      "sha256": "bea5613a74747b1b7311547523435cb7fb52d884671f241157971e60db38db09"
+    },
+    {
+      "idx": 14,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"I'm Lektor\"</span>, he exclaimed. <span data-hue=\"160\">\"Nice to meet you.\"</span>",
+      "sha256": "93edf380224a8d28c85167b3f335dcd939c6e092ac864d71683497f7e8f749bf"
+    },
+    {
+      "idx": 15,
+      "kind": "paragraph",
+      "content": "Zei was about to start with a response, but Den motioned for him to stay quiet.",
+      "sha256": "38e2ec3f9ee2e50e0a7e58b7981cedb74ee345286337c32906712a6019110599"
+    },
+    {
+      "idx": 16,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"I'm Den, this is Zei, Mu and Bai. Welcome.\"</span>",
+      "sha256": "5da0ad132e27276f824123df49244bd3b532fe0135306a59880692472896f3ca"
+    },
+    {
+      "idx": 17,
+      "kind": "paragraph",
+      "content": "Lektor walked in, and sat down on one of the empty chairs.",
+      "sha256": "39cb03764f92a0827a5af28e0a4daabf286a3c0d8cd73a65f13950d56f4e0b6c"
+    },
+    {
+      "idx": 18,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"Look\"</span>, he began, <span data-hue=\"160\">\"I want to understand what in the world you guys are thinking.\"</span>",
+      "sha256": "ee31dac55d333a321fd23e694577937be4344c1c5eefea04e64329d0caf82cf5"
+    },
+    {
+      "idx": 19,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"This is the first time in Veridian history we've seen someone try to get a court to fire high-ranking government officials. It seems like madness. I get that people are upset, but you're trying to fire the entire military leadership. You don't get a competent military that way.\"</span>",
+      "sha256": "4000aa10584017a1497b0d5c05cce2b2a00d74e1ce84f6b610a880809a79edb9"
+    },
+    {
+      "idx": 20,
+      "kind": "paragraph",
+      "content": "Then he paused.",
+      "sha256": "c16daf0c537852f722b60cd043768987944a4d5d3badf2b32ab8c7b88a73921a"
+    },
+    {
+      "idx": 21,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"But also ... I get that people are upset. We saw the same Silverchat polls as everyone else.\"</span>",
+      "sha256": "bc0d0fa35048a606611aef7815b1761e1ae52f59609c231c8b7aa2abfd4eb19e"
+    },
+    {
+      "idx": 22,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"So what are you thinking?\"</span>",
+      "sha256": "8909346fb7e1294daca37afef9d38aa8851502b95e5e158b035461dbc1e47818"
+    },
+    {
+      "idx": 23,
+      "kind": "paragraph",
+      "content": "Den began to speak.",
+      "sha256": "b02306765303d8a194f6e22b1481e949dfb2167037015b1cd2b3088089696c9c"
+    },
+    {
+      "idx": 24,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Are you familiar with the operation that rescued Tafindel?\"</span>",
+      "sha256": "81361f07be33d558ca9bb27211576d8f6a5805cf48e9a1dff490e765afd3155f"
+    },
+    {
+      "idx": 25,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"Of course. We've been trying to piece together what happened this whole time.\"</span>",
+      "sha256": "4cb71c71d7456d9d812942cc9d298bb15ec91b90971b81cf73125902945bd121"
+    },
+    {
+      "idx": 26,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"That was us - the Kungaupei. We rescued him, working together with two Freetown defense companies.\"</span>",
+      "sha256": "58f8c1400bd02faee06de7a00ce21c2d0e90cc404c28e005917b56738aad3088"
+    },
+    {
+      "idx": 27,
+      "kind": "paragraph",
+      "content": "Lektor's jaw dropped.",
+      "sha256": "f2d4f0bbaa99ae756bea445c70b5d82b26986cdad278cbb6391f39c098135dfc"
+    },
+    {
+      "idx": 28,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"Wait, you're *here*? How many of you?\"</span>",
+      "sha256": "7c415a09461503b084ad1ff929e68acce7060ea44491506a7dc2bc77a753f6bc"
+    },
+    {
+      "idx": 29,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Dozens of us. I'm one of the High Council members. Zei and Mu over there personally commanded the operation with me.\"</span>",
+      "sha256": "2156a1584e9df8314c0427a4b4c0e8ef58a7c2ab4859a7d5fe8ddd46b99777a9"
+    },
+    {
+      "idx": 30,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"I see...\"</span>",
+      "sha256": "526ed28d8aa4916a369a5ad3e7fe15619705fb0524144e1ac4cd7b6b2fea200a"
+    },
+    {
+      "idx": 31,
+      "kind": "paragraph",
+      "content": "Lektor paused.",
+      "sha256": "4b97b4c9c0ab854268b77bb84837b0d21e4b745f1528154c48d14408ee700728"
+    },
+    {
+      "idx": 32,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"So what's your plan? Personally take control of the Veridian drone fleet and use it to take back Northshore?\"</span>",
+      "sha256": "918ce54715b288c92c5eb78b48dcdf95e19cb354b60e0c43015c472d92cc27af"
+    },
+    {
+      "idx": 33,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"I know it's not a very *polite* plan. But you have to understand. We're desperate. The Arctic Empire is expanding. They're clearly planning to target you before they target us: you're more advanced, and we're better prepared defensively. So we think the Arctics want to knock out Veridia completely within the next year, maybe sooner. Then they will take down the United Cities one by one, and then they will go south and clear out Messalia and Haragmir, or just bomb them to save time. After that it's just them versus us. We can defend well with what we have, but really we've depended on you so much for the most advanced technology. So we have to take a stand. Together, now.\"</span>",
+      "sha256": "534c82273eec064ec33b0e273ca1364f8695d23a4d37fb66a1521783aee1f2b5"
+    },
+    {
+      "idx": 34,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"You can't just commandeer a military the same way you just pick up and drive a new car. Our soldiers, including our commanders and generals, have spent years working together, training together. They know Veridian logistics inside and out. They know how many new drones we can produce, what that would take, what you can do with Helisport copters if you had to turn *those* into drones. They have over a thousand drone pilots, and thousands of support staff of every kind. With your dozens of advisors, you would have to let almost every drone fly on AI alone. They would get lost, and get tricked by the Arctics at the first opportunity.\"</span>",
+      "sha256": "45b667b844dd80611aa2f3a71e85afda2f391967f2c06b22de212684feb72e33"
+    },
+    {
+      "idx": 35,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"I know we've failed completely at Northshore, but you can't just go throw everything we've built away. Even the command structure - that's something they've spent years working inside. You can't just rip that up and replace it and expect to get a good result.\"</span>",
+      "sha256": "e2701270fe3ab79d465cdc3b3be977fc59bf7a705e07cd58e2135df2d0b64053"
+    },
+    {
+      "idx": 36,
+      "kind": "paragraph",
+      "content": "Bai felt that the conversation was going off track, and saw her chance to intervene.",
+      "sha256": "9589f8382755fd46ff7d7f5c70a3f640d0307d06ebd9a25f13da269630f27000"
+    },
+    {
+      "idx": 37,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Lektor\"</span>, Bai began. <span data-hue=\"26.67\">\"We don't actually want to zero out the top three levels of the Veridian military hierarchy. Even if we *could* bring over all of our top thousand Minpentai players tomorrow and get them to pilot all your drone fleets successfully, and somehow all the logistics solve themselves, the court case would take over three months to finalize. We don't have that time. So that was never our plan.\"</span>",
+      "sha256": "07c854cfbf933ac5e0e8cc3247235eeeb07114ff4d50c77b007e68036b6a7e53"
+    },
+    {
+      "idx": 38,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"So what *was* your plan?\"</span>",
+      "sha256": "8b525631a9c1f0f6438b12136171da4e8f7334e897481d9399886b951f08cd0b"
+    },
+    {
+      "idx": 39,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Well, we wanted someone like you to step in and help.\"</span>",
+      "sha256": "14bb5970d110a0a6d574498e3ce68491979a7da6259f89be55817b00e72aac3f"
+    },
+    {
+      "idx": 40,
+      "kind": "paragraph",
+      "content": "Lektor responded with silence.",
+      "sha256": "5a814c1cfbc311d8a6b13254da4a0fb0eb437f1bce4e28792ee275f4fb4db8e3"
+    },
+    {
+      "idx": 41,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Even the most criticized and hated institutions are never quite as irredeemable and talentless as social media makes them seem. We know that. But at the same time, they *can* get stuck in unhealthy places. And your situation is the toughest: you have to shift paradigms from peacetime to wartime, at the exact moment that many of the generals are probably being bribed or blackmailed by the Arctics. We know that's true - the surveillance cameras that we backdoored already caught several. So we don't want to zero out the military, but we also know it can't stay as it was.\"</span>",
+      "sha256": "d2419ccd3e5f2c2b027e0c645e64240b2210263b17a98c8e5f42bea40522cf41"
+    },
+    {
+      "idx": 42,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"So I think there's an opportunity for you to step up here. You're respected by all sides. I checked that while you and Zei were talking. High ratings uniformly across different people of different political persuasions, inside the military and in parliament, and across different personality types. I think you should consider proposing to parliament that you take over and run things. And we can work with you, inside your structure.\"</span>",
+      "sha256": "f94885ea06c3f3967cdba25d61e2fdec6831b9d3f1be581dfeeb0d5c131cd377"
+    },
+    {
+      "idx": 43,
+      "kind": "paragraph",
+      "content": "Den, Zei and Mu immediately nodded. That line of argument was not part of their plan, but they could all recognize that it was the right plan to switch to.",
+      "sha256": "c1100273b3ffbd94675c587c493850f4a5a7b14fa5df17f1c0f315142bf8c444"
+    },
+    {
+      "idx": 44,
+      "kind": "paragraph",
+      "content": "Lektor pondered for a moment, and then responded again.",
+      "sha256": "51c42a9ca3866fe774941afa9c84376dfd1695c019c1647b079da9d2062c0026"
+    },
+    {
+      "idx": 45,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"You've been very quiet about the fact that you're here. Even among all the people who are excited about the idea of the Kungaupei running the Veridian military, and who voted that way in the poll, everyone thinks it's just a fantasy. If I start making the argument that I can run things with your support, would that not blow your cover? Even in a closed door session, if the parliament is as corrupt as you say, the information will leak back to the Arctics.\"</span>",
+      "sha256": "77e149b3f9a2a6529bbfed669c4818e7c3edf1490e7acbf4b216224669f83dd5"
+    },
+    {
+      "idx": 46,
+      "kind": "paragraph",
+      "content": "This time, Mu spoke up.",
+      "sha256": "d306c98ce339679bca128691f2d821ec164397e72393f7646b52068ba6cee4a4"
+    },
+    {
+      "idx": 47,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Don't tell them about us. We have a few exploits against Arctic drones that we can share with you. Those exploits are already outdated against the Arctics themselves - so if the Arctics find out, that's actually *better*, it would help keep their guard down. But the exploits will work great against the damaged drone that you guys managed to recover from Northshore two months ago. You can take the credit for them.\"</span>",
+      "sha256": "d2f938bf50fd6ef69fbdee5e331e9f3144f74f261e2f9e2ea5c1199597bb311b"
+    },
+    {
+      "idx": 48,
+      "kind": "paragraph",
+      "content": "Lektor stared again. They knew about the damaged drone? How did they penetrate Veridia so ... completely? And if the Kungaupei could do that, then the Arctics...",
+      "sha256": "e496c2c3a817985730501510d07e9f683a761a9c12deb0fdc5c9c8241bd07bc7"
+    },
+    {
+      "idx": 49,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Oh we can also tell you about one of the generals that's taking bribes. We have clear evidence, security camera footage of his conversations with an Arctic spy.\"</span>",
+      "sha256": "32f77bb11805800e66f1f91964ab7a78a0b5edb50849a27e75cb9fca542e2714"
+    },
+    {
+      "idx": 50,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"They used the wrong kind of booth for too many discussions\"</span>, Mu grinned.",
+      "sha256": "7242339ddda46675b3b4b61fc4646cdf1d6a7267499ca26061cda850ef70d22d"
+    },
+    {
+      "idx": 51,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"We'll give you a dump of the info we have. You can figure out the plan. After all, it's going to be *your* army, and *your* plan\"</span>, Bai added.",
+      "sha256": "9c0c67bfc713e706a79f42fd627da79b7ccb161dc9f39361acb190da1b67467f"
+    },
+    {
+      "idx": 52,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 53,
+      "kind": "paragraph",
+      "content": "Gladias and Seila heard a knock on the door of her room.",
+      "sha256": "fe745fdec7622e7abae7881ddd860325ebc65dc64c254465d9ca1220bf876256"
+    },
+    {
+      "idx": 54,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Who is it?\"</span>, Seila asked.",
+      "sha256": "3ca3f0db6746ec64f597ad6568ba8667e728bc8a16fb426b3826839892439ec7"
+    },
+    {
+      "idx": 55,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"It's me, Mom!\"</span>",
+      "sha256": "00df72b7d025ef4857bcf5d0b75bc74eb3c6acaa47c776ac90dca41774af5252"
+    },
+    {
+      "idx": 56,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Zven!\"</span>",
+      "sha256": "0612d9a274b733510710ce465664beb5fd287d18d1cc52a926f0617d2a5bc99e"
+    },
+    {
+      "idx": 57,
+      "kind": "paragraph",
+      "content": "She ran to the door and opened it. Zven ran in, and excitedly jumped onto a sofa with his hand device.",
+      "sha256": "e0b743f08ffb71cbd48f9b7eb7e5178936192e9e0cb8a9cd55fa9fcd600172a8"
+    },
+    {
+      "idx": 58,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"What's up, Zven?\"</span>",
+      "sha256": "c98891cb0288c98e5636ff5f4da7d082b42506a6f118bb46f0ac3a8216d821b7"
+    },
+    {
+      "idx": 59,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I have some good news. It's Lily!\"</span>",
+      "sha256": "75fd7dd2e81c57d3f243149b5bfa38881d47c90272ed0daf2e2bd9e1c022611c"
+    },
+    {
+      "idx": 60,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"What is it?\"</span>",
+      "sha256": "29cbcc3716e6175eadc17ca1cdc32ba691dd981c83fd8973e2e9d6fadeae4a29"
+    },
+    {
+      "idx": 61,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"She says that she is starting to feel like she wants to come back now!\"</span>",
+      "sha256": "3b021159e2fe02c4f0edb53d94e4d8b1b4d63d6673f5d26493b0b4ff70388d51"
+    },
+    {
+      "idx": 62,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"What happened?\"</span>",
+      "sha256": "d7e33d50557cbf67be132d1a35ac832cb938c22be36bbbce51743961a4d5dbd3"
+    },
+    {
+      "idx": 63,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"She says that in the Arctic civics class, the instructor was talking about Helisport and how the scoring rules were stupid and an example of how Veridians like to overcomplicate things.\"</span>",
+      "sha256": "8279bacc9c2735f607d30d7e1b31fe66e0cadce2dc1a94587fc8b754ec4fc2a6"
+    },
+    {
+      "idx": 64,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"She was talking with me through her neck band the whole time. I got Febric on the line too. We went through the history of Helisport. She got up and told the instructor how you can prove that if you score by giving each type of ball some number of points and adding those points up, then almost always the best strategy is to just focus on one type of ball. But if you multiply, then the number of points you get from scoring with one type of ball goes up with the number of points you've already scored with the other type. So it makes sense to balance.\"</span>",
+      "sha256": "92188f7efacd0f40091029ee56c852a3b94d4c7cbed10f1c9ca56e651f275146"
+    },
+    {
+      "idx": 65,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"But the instructor did not want to listen. He threw up his hands and said that it doesn't matter in real life, in real life you win by focusing on only one thing, the Arctics understand that and Veridia doesn't, and that's why the Arctics win.\"</span>",
+      "sha256": "176587fda00579079a8bdcec1708139fca13ff6666e0bfe99f584393cb67d026"
+    },
+    {
+      "idx": 66,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"And Lily replied: but think about personal life and work. If you work really hard for almost the whole day every day, you get paid more and you can get a bigger house, but you can only enjoy the house during the time that you're not working. It's exactly the same math! So real life needs balance too!\"</span>",
+      "sha256": "81eecc3d094406adaa62c143b1d8bd8eca4ac3d2714f723219462eae1b0cadb8"
+    },
+    {
+      "idx": 67,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"And then she got thrown in detention.\"</span>",
+      "sha256": "134339db84200a84a32e0da6ee19a75239d643931ba062364e14b26f251a7f99"
+    },
+    {
+      "idx": 68,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"So now she thinks the Arctics are lame and stupid. They talk about striving for the best, but really they just care about their own authority.\"</span>",
+      "sha256": "75f1c13843dc56555b2f0155d0f66d06ef6b970912e734e102599fae11952ac7"
+    },
+    {
+      "idx": 69,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Some of the Arctics are smart\"</span>, Gladias interjected. <span data-hue=\"93.33\">\"They do make very good technology. But that teacher sounds like a total loser.\"</span>",
+      "sha256": "95fd6e0a9f1635fd34c5703b96700b0a287ead2b70b7c9e67863d7d3f0864f31"
+    },
+    {
+      "idx": 70,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"That's exactly how anyone would behave if they were a loser that happened to be born on a winning team. They put their entire identity into the team, they buy into all the ideas about why their team is great, and how it's a big sign of your worth which team you're from. And then they don't even notice that they don't actually carry any of that greatness themselves, and they're just a pathetic shell on the inside.\"</span>",
+      "sha256": "32510e17e3c7b31624e43533980c09c52559b2ac52fd6b3747290736565f6a08"
+    },
+    {
+      "idx": 71,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Glad, don't teach Zven to think about people like that!\"</span>",
+      "sha256": "84a1bfee37f29d95760bbe3e32749be005b02f8d2f67cbae5ec645f0424586fe"
+    },
+    {
+      "idx": 72,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Zven, it's okay to be mean to people who hurt people\"</span>, Gladias continued, his tone becoming increasingly self-righteous. <span data-hue=\"93.33\">\"If someone is struggling or doesn't understand, then help them and be kind. But if someone is whacking others over the head with authority that they do not even deserve, then hit them right back.\"</span>",
+      "sha256": "99088170b973bc39301a8d5738739ed7997f16507225bd492e0eea3931747970"
+    },
+    {
+      "idx": 73,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Glad!\"</span>",
+      "sha256": "9d663811067b56b9866dc910c0d72d00f7a5d00b76a471b84808e8afc802c03a"
+    },
+    {
+      "idx": 74,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"If we want to beat the Arctics, then we have to know how to sometimes be at least a little bit Arctic ourselves. But make sure to channel that energy for good.\"</span>",
+      "sha256": "47bc995864255c5ade6da50d58b33cc1587e21787f86bf3b56bee09e4faca318"
+    },
+    {
+      "idx": 75,
+      "kind": "paragraph",
+      "content": "Seila sighed.",
+      "sha256": "8825b99fe0c440a410efc83004089de836c61d6017dea981952265e534f8d9ee"
+    },
+    {
+      "idx": 76,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"I guess I can see it from that perspective. After all, we did find Lily by doing exactly what the Arctics do - surveiling everything. Does that count as being a little bit Arctic?\"</span>",
+      "sha256": "6ca0fc42754d969a05f2d6868f9d2b5f883693206feb89ec0970f55d1f5315a9"
+    },
+    {
+      "idx": 77,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I suppose it does.\"</span>",
+      "sha256": "d2cae8b0d3e4ee3e5b9719064963ee0dfaab144e7f0183a0bceb23a7368b18b1"
+    },
+    {
+      "idx": 78,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Though I'm sure we don't need unrestricted camera surveillance of our whole country's teenagers to bring our loved ones home. Unrestricted cameras helped us find Lily, but they also helped the Arctics almost break us. I'm confident Zei already knows of some better way to get the good without the bad.\"</span>",
+      "sha256": "4c99814839439ddace38b1861133291587c7bd63a953bfab929772569bd2b630"
+    },
+    {
+      "idx": 79,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Wait...\"</span>",
+      "sha256": "c7703005d71824cdc3c2410b457de3d756753d7014c0366ac408394beb3a3535"
+    },
+    {
+      "idx": 80,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"What is it?\"</span>",
+      "sha256": "42829abc263c443153588db9288ba1cf6f4de1249b75acaf4f0c8157d2782612"
+    },
+    {
+      "idx": 81,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"I think Zei might be the perfect mentor for Lily. She needs to have a good role model of what a real winner is like - someone who doesn't lord over others and push them down, but helps lift other people up and wants others to win along with him.\"</span>",
+      "sha256": "26b90439a941d27a58a5306bfd567cbf577cdf307bb692fe1802d8c39965301a"
+    },
+    {
+      "idx": 82,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Mom, Dad?\"</span>, Zven interjected. <span data-hue=\"346.67\">\"What do we do for Lily now?\"</span>",
+      "sha256": "ae249db65607c55bc1b86ff52dc5c5e346f93ba6c21992ac05c7af00b0ac706e"
+    },
+    {
+      "idx": 83,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Can Lily leave Northshore on her own?\"</span>",
+      "sha256": "2b206f7e4b1d0b2d0ff2fcfa5ba5b1091b2c4ca3bbf210467c51700bcc47bdd7"
+    },
+    {
+      "idx": 84,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I asked. She says the borders of Northshore are open but she is in a boarding school, they will not let her leave.\"</span>",
+      "sha256": "ec0e20bee5b70d0fefb515a0c56115e64f43db2fce2ff8393c8c29494d8b1f8f"
+    },
+    {
+      "idx": 85,
+      "kind": "paragraph",
+      "content": "Gladias groaned.",
+      "sha256": "2a6c4d1034d18af6e2cbb35b02afd694d906eaf73970e5464807b2cd2bc68232"
+    },
+    {
+      "idx": 86,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I guess if nothing else, we'll get all three of our kids back when we take back Northshore.\"</span>",
+      "sha256": "93f10c02f4e84fbfa1afbc50da306e6fa50af6fb1b3c5b1a751b0dbb51dafb98"
+    },
+    {
+      "idx": 87,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Let me and Bai figure out the advice for Lily, Glad. She knows that the Arctics are lame now, she wants to come home. But until we get her back, she needs advice that's not going to get her killed.\"</span>",
+      "sha256": "2924b0e5f33357e3e6815922c20fab7d120a93fa0718f3402de6dd0cd2d0b0a6"
+    },
+    {
+      "idx": 88,
+      "kind": "paragraph",
+      "content": "Gladias grunted with resigned acceptance.",
+      "sha256": "f771ab127cb67b9f0b8009477cb029819d23af327a13c51ddd1cc0d0200d8dc5"
+    },
+    {
+      "idx": 89,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 90,
+      "kind": "dateline",
+      "content": "3724 Frostime 18",
+      "sha256": "9ac5d21a82374f308035005616b34ef448d810a42c1c7526b407c8890e97682b"
+    },
+    {
+      "idx": 91,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Well, I just heard back from Lektor\"</span>, Gladias said to Seila as she was pouring herself a tea in their hotel room.",
+      "sha256": "c6c33ecf7e551c7f8bfc7e04141312254df857fa17e77be5a62ce0294673c38a"
+    },
+    {
+      "idx": 92,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"What did he say?\"</span>",
+      "sha256": "41ed593da15413c6a5d69af0085b743ccd801aaccc0ccef92253ede05711a8d4"
+    },
+    {
+      "idx": 93,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"They convened a special closed session yesterday. Verdow was there.\"</span>",
+      "sha256": "fe8d37482c815ad16207c1ae11b6cbc6c13357db7b76ee4dfaede7c87f3f7f33"
+    },
+    {
+      "idx": 94,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Lektor presented the evidence that one of the other generals was taking bribes. He opened the topic of reforming the military leadership. He took some advice that Bai gave: he led the conversation in a direction that led the detractors themselves to first defend the existing top general, and then propose another general as the obvious leader if there had to be a change. Then he flipped over his cards, and showed more evidence - that the top general had been having regular meetings with someone who turned out to be an Arctic spy, and the other candidate they were proposing as an alternative was being blackmailed.\"</span>",
+      "sha256": "d1c6228ad70e274334c116ac835238ca20653dbc3e254d90cdbdc432c2157329"
+    },
+    {
+      "idx": 95,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"After that, he proposed a different strategy that they could use against Arctics that involved using their dependence on AI against them. He showed some exploits against Arctic drones including some Kungaupei footage from Redshire - though he explained it away as being sent to him through spies that he knows in Redshire.\"</span>",
+      "sha256": "6e3bfe3d587399d28b51d25b197a8b36ee4d79c5d7edd806658a804eb13e4ed0"
+    },
+    {
+      "idx": 96,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"It worked, far more easily than he or Bai expected. It turned out that among the senators who were just lazy and tired, letting Lektor do what he wanted was the path of least resistance - because that meant that the legal case would immediately end. And among the senators who were being blackmailed, they just needed to have an excuse that it would not be feasible to resist, and Lektor's arguments, together with the knowledge that the legal case might at some point start poking into their situations, provided that. So Lektor is the head general now.\"</span>",
+      "sha256": "81b2c0b16c22be7a6de7a30c065afc169ec1900a799cc0d2fa0d2adb4c32b1d2"
+    },
+    {
+      "idx": 97,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"That sounds like a perfect resolution. The Kungaupei can be involved in the military, they can work with Lektor, and he and much of the rest of the structure is still there. So we're not going in and replacing everything, we're preserving continuity. It's exactly what the forecaster bots wanted.\"</span>",
+      "sha256": "3b7c89d7acc79a0b5cf6a3d8d1c02f1676b31448df637831fb8de9fe9b05b32e"
+    },
+    {
+      "idx": 98,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Exactly.\"</span>",
+      "sha256": "0f3ebe95ab525db74666d1486e8391b00f8a1310524d592b927c888b825a2a1c"
+    },
+    {
+      "idx": 99,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"So that's it, we won?\"</span>",
+      "sha256": "a96097563acb5dcc3e5f58f8a2b504c3b921f0628bf0f7c2befe7dfdac9de285"
+    },
+    {
+      "idx": 100,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"The battle for the halls of Meldan is over. The battle of Northshore is about to begin.\"</span>",
+      "sha256": "3d39c1dc77e1cbf99ff7b06a0241c4d899dfc39226df14b676714360668ce09a"
+    }
+  ]
+}

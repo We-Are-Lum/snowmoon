@@ -1,0 +1,983 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 17,
+  "source_url": "https://vitalik.eth.limo/snowmoon/html/chapter-17.html",
+  "source_sha256": "2af0254952016da6f8370845fa19adb9825479e8a6586c7bbc04c0f640bc3640",
+  "fetched_at": "2026-10-02",
+  "license": "GPL-3.0",
+  "blocks": [
+    {
+      "idx": 0,
+      "kind": "heading",
+      "content": "# Chapter 17",
+      "sha256": "7ca3e170c798bcc62b39e3c068544a36385531775c325cc77e074e2f6f202e0c"
+    },
+    {
+      "idx": 1,
+      "kind": "dateline",
+      "content": "**Meldan, Veridia** · 3724 Fruitmoon 11",
+      "sha256": "67dcba17bb9dce1a568f13519c4f2af432c89382ef14311c87d6379d7d28f831"
+    },
+    {
+      "idx": 2,
+      "kind": "paragraph",
+      "content": "Gladias walked forward along a path covered with trees on both sides, toward the large circular parliament building in front.",
+      "sha256": "c74f6c7aa1b5278ac11a1bc8726b8a92fb9fb285245f44a8738cf8940664d746"
+    },
+    {
+      "idx": 3,
+      "kind": "paragraph",
+      "content": "When he arrived at a side door of the building, he tapped his watch on the green circle.",
+      "sha256": "c139e851a765de8ceeb9c53e5f92f93dd34b156df32baa13900f691d8a85c360"
+    },
+    {
+      "idx": 4,
+      "kind": "paragraph",
+      "content": "The circle buzzed.",
+      "sha256": "944b9adce048dfd4232e9ba616422b21a07aede2f6c427593fbdfe108f119286"
+    },
+    {
+      "idx": 5,
+      "kind": "screen",
+      "content": "<div class=\"device-view narrow-device-view\"><div style=\"border-style: solid; border-color: green; margin: -20px; border-radius: 10px; padding: 10px\">\n<table>\n  <thead>\n    <tr>\n      <th>Veridian Parliament</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td>Proof of invitation verified.</td>\n    </tr>\n  </tbody>\n</table>\n</div></div>",
+      "sha256": "6f7b0c8d12538466fd1695080f2fe8753a575840bef554553d35945e0ff94adb",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "green_circle",
+        "device_evidence": {
+          "idx": 4,
+          "quote": "The circle buzzed."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [
+              [
+                "Veridian Parliament"
+              ]
+            ],
+            "rows": [
+              [
+                "Proof of invitation verified."
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 6,
+      "kind": "paragraph",
+      "content": "The door opened. Gladias walked in, and followed the instructions that were being relayed by his watch. Forward, then right turn, then forward, then third door on the left.",
+      "sha256": "b4c80bd7f8fde2c5a603d349f734394a415128318a5fdbe747e7fa9f441965b3"
+    },
+    {
+      "idx": 7,
+      "kind": "paragraph",
+      "content": "Gladias got to the door, and tapped his watch again.",
+      "sha256": "9500d2a5988b4ac6ffdda6e842d582c43bcf83fad1d48ee15a61e16ef2aa563c"
+    },
+    {
+      "idx": 8,
+      "kind": "paragraph",
+      "content": "The door opened.",
+      "sha256": "85397e1c788cbfa48a0b4af642c92d1fdc4a3ae0a88d6ed1434230646046b72f"
+    },
+    {
+      "idx": 9,
+      "kind": "paragraph",
+      "content": "Inside, he saw a man wearing a Veridian parliament robe.",
+      "sha256": "8d7620c3d26d176274530ea27dd1c17749f86e66972fa2f1836bf64ba2c71ddf"
+    },
+    {
+      "idx": 10,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Gladias, thank you for coming!\"</span>, the senator exclaimed.",
+      "sha256": "f6a151d644282a809f3e2bfa45936e046896995f3d067169295e63bfb234c0bf"
+    },
+    {
+      "idx": 11,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"And thank you for seeing me, Senator Verdow!\"</span>",
+      "sha256": "1e2e3bf21a43231460662878351c389a69fd6608bc36b6910ff114b975e9af4c"
+    },
+    {
+      "idx": 12,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Please sit down.\"</span>",
+      "sha256": "31242f8b49520f5dded0b0e364d6f685524f3d5500f9e15401649c225ea702f2"
+    },
+    {
+      "idx": 13,
+      "kind": "paragraph",
+      "content": "A robot slid into the room.",
+      "sha256": "c98048a2e18fc50e6b0df7e9685c983ebeb53afa9dcd342d2cf5fe707e997763"
+    },
+    {
+      "idx": 14,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"240\">\"jie mo kai tu jie hei ja ma?\"</span>, the robot asked.",
+      "sha256": "f5ba1f1909124b42f159f6596024be03c2f2f7c1ccc6f53dc2ad3d2cddc9d295"
+    },
+    {
+      "idx": 15,
+      "kind": "paragraph",
+      "content": "Gladias briefly stared in surprise.",
+      "sha256": "e82838dc9cdc49a3e2aa72cb3e2f35aab31ca1b94c9903efe0f2b2b573b7a2f9"
+    },
+    {
+      "idx": 16,
+      "kind": "paragraph",
+      "content": "Verdow laughed.",
+      "sha256": "b3df5abd7050a1c6ec384187a5f1f3f1ae2cb61bc09f5ae0d20be4188081d94b"
+    },
+    {
+      "idx": 17,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"I adjusted the settings to make it do that a few months ago. Just a little something as a reminder that other countries exist and that they matter.\"</span>",
+      "sha256": "a84e9dcfb8f78b43674674bbf6802abff1243964d949f1006a4b64e3b2ad0a84"
+    },
+    {
+      "idx": 18,
+      "kind": "paragraph",
+      "content": "Verdow tapped a few buttons on the robot's screen, and turned the screen toward Gladias.",
+      "sha256": "aee1431c81d9b33d3676b6f156136422137724a4884bfdf1dc5706934631e6dc"
+    },
+    {
+      "idx": 19,
+      "kind": "paragraph",
+      "content": "The screen was in Dzegoban. Gladias's eyes wandered around with confusion.",
+      "sha256": "3f762e8cbf71c48525210ab1dc2713454f370ea672ca47e7b208f96a4e819c9e"
+    },
+    {
+      "idx": 20,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Oh, if you want water, that's 'ja'. And if you want tea, that's 'kai ja'. Literally 'plant water'.\"</span>",
+      "sha256": "021ee68f9498e16003f7cf54689779c956f02bd1382fb4a3ac787b78cdb7db6d"
+    },
+    {
+      "idx": 21,
+      "kind": "paragraph",
+      "content": "Gladias clicked on 'kai ja'. If he's going to be in Dzego for a few months, might as well get acclimated and start drinking some tea - and knowing the local word for it. The robot beeped, signaling acceptance of the order, and began to quietly glide away from them. The room door briefly opened, and the robot exited the room.",
+      "sha256": "912f534f6951d9608f42306a89634f29f18402b1a933f543b0ca059ff93c145d"
+    },
+    {
+      "idx": 22,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"So you think I should go to Dzego?\"</span>",
+      "sha256": "dfc5c3412f9bddf8f17a5f562ac09987fad8381efb0c2c724e174e7b660cfd7d"
+    },
+    {
+      "idx": 23,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"You're obviously smart. Of course I have no idea what you say in your secret meetings, but judging from everything you said in the hearing, and from your original application to the Order years ago, I think you're a good and smart person. We need people like you to be more active in serving our country. Being a Keeper is nice, but come on, you're only one of over a thousand. I think getting and bringing back some first-hand experience from Dzego could be even more meaningful.\"</span>",
+      "sha256": "5441f53e7b35d03ea933c0cd4c5240fcb99fafae58fc9d4e1ab9b9f45253eefc"
+    },
+    {
+      "idx": 24,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"If you think it's a good idea, I'm happy to. But who should I talk to there? That's what I wanted to get your input on.\"</span>",
+      "sha256": "e9b6c03f884ac4c132f7386c371f61190892a68a43d97449e99caf75ad4ad291"
+    },
+    {
+      "idx": 25,
+      "kind": "paragraph",
+      "content": "Gladias intentionally omitted any mention of Zei - not out of any desire to hide that indirect connection, but because he wanted to get a fully independent answer from Verdow first.",
+      "sha256": "699da54860e282a6814cb5a47f2f4895fff8d15877587544e6dfe3a75c919497"
+    },
+    {
+      "idx": 26,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Well my strongest connections are with some of their authors and musicians\"</span>, he said, gently laughing. <span data-hue=\"293.33\">\"Though I also know a few people in the government there, especially the security and health ministry. I'll send you their contacts, and give them a heads up. I wouldn't stop with them, but I think they can help get you started.\"</span>",
+      "sha256": "58be2c3d9f120d750b563ab257ce3e44aa5ac749ad653ffff2245f2eb1b91ca2"
+    },
+    {
+      "idx": 27,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Thanks, that would help a lot!\"</span>",
+      "sha256": "75673ddfcf1db99bc760e78f042738e99b66905407f089a0663457afa535e133"
+    },
+    {
+      "idx": 28,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I only know two people from there, indirectly; my wife met them at a chance meeting in the Economics Institute in Freetown. Zei and Bai, they were in Minpentai.\"</span>",
+      "sha256": "4a11f98b78facee023862787a5c55bedf1c4986cc184214a9ceb6edeee1b7553"
+    },
+    {
+      "idx": 29,
+      "kind": "paragraph",
+      "content": "Verdow's eyes opened. <span data-hue=\"293.33\">\"Honestly, you might have a better lead than I do. When you see the Minpentai games in Dzego, the players and the people who train them are clearly top-notch. If I had to find someone to defend me against the Arctics, I'd almost trust them over the actual Dzego army.\"</span>",
+      "sha256": "10182d16d451254594d132c2ef4bb554cd2080c229110a607d4ae3060248317f"
+    },
+    {
+      "idx": 30,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"How advanced are Zei and Bai? Did they get into any of the championships?\"</span>",
+      "sha256": "1c7995491fba7a4e2bdd575313322d3e8f04241a7316ba7cd5f5b1020b835eb8"
+    },
+    {
+      "idx": 31,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Last thing Seila told me, Zei won the semi-finals, and then they cancelled the finals when Redshire was invaded.\"</span>",
+      "sha256": "002e8a58938271af65d25f434ccca5d992d1327ab50b8e6d6720f7cbc1be02c5"
+    },
+    {
+      "idx": 32,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"The semi-finals, like municipal level?\"</span>",
+      "sha256": "134ca4b5bea4a1fdb27d85e976f527a7caf827aa19aa1af766d847162ba76c09"
+    },
+    {
+      "idx": 33,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"National.\"</span>",
+      "sha256": "779429dd514a017e3721690fff4819ae13e822f8e3397c733e163e9322d3caa1"
+    },
+    {
+      "idx": 34,
+      "kind": "paragraph",
+      "content": "Verdow stared with a mix of surprise and joy.",
+      "sha256": "151edaf5dea93b3df97d98b1e8b74a58e950bb5fadae092e6399c02b711f607e"
+    },
+    {
+      "idx": 35,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Your connections are definitely better than mine then. When you come back, you'll have to tell me more about Dzego!\"</span>",
+      "sha256": "ce002a45d31efd230c78be4a19c06c92ba410aa6addb74a3fee0afd30d9ed59b"
+    },
+    {
+      "idx": 36,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Anyway, I'll introduce you to the other folks I mentioned so you can see them when you come. It's always good to get more than one perspective.\"</span>",
+      "sha256": "7d90f45f0f2ef16233b4163edbdcf815aaeb1fc43b5a6d8a7c9a64e27d83960f"
+    },
+    {
+      "idx": 37,
+      "kind": "paragraph",
+      "content": "Gladias nodded appreciatively.",
+      "sha256": "79403a4d67d1aec848c25a1a2dba1dcd37a777a13692f973c572acbe641b2884"
+    },
+    {
+      "idx": 38,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Oh, by the way, speaking of getting more perspectives, one of the Graph Funding stewards is here about to visit me. You want to talk to him too?\"</span>",
+      "sha256": "a8662010843dd568abca3228239abe1f618862b39d1644a96b6eff6918b93c08"
+    },
+    {
+      "idx": 39,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"About what?\"</span>",
+      "sha256": "f85e70c307fc49b222a4a6215434d55a04ac62649064d2e4e5f242f7e3d6488b"
+    },
+    {
+      "idx": 40,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Oh, his work, how he's feeling about Graph Funding, and of course Dzego.\"</span>",
+      "sha256": "4d1686cfab176f76439b715c2d415510985062a2df90d23d299bb22536558167"
+    },
+    {
+      "idx": 41,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Sure, why not?\"</span>",
+      "sha256": "f1a4f623ea29123bd506180f0df79057a92ca685a86c73fbe3f6d7f9d7daeb57"
+    },
+    {
+      "idx": 42,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 43,
+      "kind": "paragraph",
+      "content": "A few minutes later, the door opened, and another man, wearing a Veridian privacy robe but without the face cover and hood, walked in.",
+      "sha256": "9e4720a7d6471aa468fb367f2643af2f0cc061bc230c5db063187ec792c368a5"
+    },
+    {
+      "idx": 44,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Belgor, good to see you again!\"</span>",
+      "sha256": "35c4cab5b0f819bbdf5056e7d3e4d835073b21a12a2cac5dfea384356eb00b20"
+    },
+    {
+      "idx": 45,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Good to see you too, Verdow!\"</span>",
+      "sha256": "4070ca71a03edfc1ccb4bc9b87b188c176c9b14c973c680ec392eb8ef9deb693"
+    },
+    {
+      "idx": 46,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"And meet Gladias, he's a Keeper.\"</span>",
+      "sha256": "83f183afc1ae5b2aa8f832f08ce1d79232812a5a52400f0911e786711e57202f"
+    },
+    {
+      "idx": 47,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Nice to meet you, Belgor.\"</span>",
+      "sha256": "c79be33bbc8f8e83ec38aa3fd357e8809618991a160300552ec328e5a967bfb7"
+    },
+    {
+      "idx": 48,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"And nice to meet you, Gladias!\"</span>",
+      "sha256": "8ce24a1f2b957e8774e74d021a0adf128870f248e6f5c789d9501b67da10d9b6"
+    },
+    {
+      "idx": 49,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"So Gladias is thinking of going to Dzego soon. We thought that maybe you should tell him more about Graph Funding, and any advice on what he should do or learn in Dzego.\"</span>",
+      "sha256": "3036e50b5c9ce20d83a3b3d0057e814910c3826fbf4ddee07e3e51d62b2b42dd"
+    },
+    {
+      "idx": 50,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Sure, happy to. How familiar are you with how Graph Funding works?\"</span>",
+      "sha256": "97d79a53ab6e9d52ed8cfdb0778c07ea066124d6e93adcfa2acc0aca19fdd76f"
+    },
+    {
+      "idx": 51,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Honestly, not very.\"</span>",
+      "sha256": "10a10792a4a7acea93856202b568a65cb4c5fddcfb3f268b8d4ff5a7a1cf3b30"
+    },
+    {
+      "idx": 52,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Great.\"</span>",
+      "sha256": "8f5a954e88af0c313475a7953184836da80912a5f1e6195bd32438b542ffa393"
+    },
+    {
+      "idx": 53,
+      "kind": "paragraph",
+      "content": "He took out his hand device, and pressed some buttons. A diagram opened up on the screen, and he showed it to Gladias.",
+      "sha256": "1f46c7be91f8424a6e3bba25808d079650a1c2e64915edb38867b99c081f103c"
+    },
+    {
+      "idx": 54,
+      "kind": "figure",
+      "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"560\" height=\"280\" viewBox=\"0 0 800 400\">\n<defs>\n<marker id=\"arrowhead\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n<path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cef\"></path>\n</marker>\n<marker id=\"arrowhead2\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"5\" markerHeight=\"5\" orient=\"auto\">\n<path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#9ab\"></path>\n</marker>\n</defs>\n<rect width=\"800\" height=\"400\" fill=\"#245\"></rect>\n<line x1=\"477.0\" y1=\"181.2\" x2=\"538.3\" y2=\"171.9\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"514\" y=\"188\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">24%</text>\n<line x1=\"443.2\" y1=\"216.0\" x2=\"514.3\" y2=\"253.9\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"480\" y=\"249\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">22%</text>\n<line x1=\"390.0\" y1=\"216.0\" x2=\"361.2\" y2=\"282.2\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"365\" y=\"254\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">21%</text>\n<line x1=\"323.0\" y1=\"211.5\" x2=\"291.3\" y2=\"219.0\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"303\" y=\"210\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">8%</text>\n<line x1=\"326.3\" y1=\"170.0\" x2=\"271.0\" y2=\"152.8\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"297\" y=\"154\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">20%</text>\n<line x1=\"592.3\" y1=\"155.7\" x2=\"685.1\" y2=\"89.8\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"651\" y=\"128\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">15%</text>\n<line x1=\"613.1\" y1=\"155.7\" x2=\"702.5\" y2=\"130.1\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"667\" y=\"153\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">38%</text>\n<line x1=\"618.3\" y1=\"165.1\" x2=\"724.6\" y2=\"163.5\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"680\" y=\"176\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">33%</text>\n<line x1=\"618.3\" y1=\"174.7\" x2=\"725.1\" y2=\"198.8\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"678\" y=\"200\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">14%</text>\n<line x1=\"585.1\" y1=\"261.0\" x2=\"711.4\" y2=\"254.0\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"659\" y=\"269\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">32%</text>\n<line x1=\"585.1\" y1=\"272.2\" x2=\"671.6\" y2=\"286.0\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"634\" y=\"292\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">12%</text>\n<line x1=\"553.2\" y1=\"273.9\" x2=\"640.8\" y2=\"317.4\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"600\" y=\"310\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">18%</text>\n<line x1=\"540.1\" y1=\"273.9\" x2=\"582.1\" y2=\"334.0\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"557\" y=\"317\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">23%</text>\n<line x1=\"532.2\" y1=\"273.9\" x2=\"524.2\" y2=\"361.5\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"519\" y=\"327\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">15%</text>\n<line x1=\"365.6\" y1=\"302.2\" x2=\"429.7\" y2=\"374.9\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"396\" y=\"353\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">45%</text>\n<line x1=\"356.7\" y1=\"302.2\" x2=\"356.2\" y2=\"369.6\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"347\" y=\"344\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">25%</text>\n<line x1=\"347.0\" y1=\"302.2\" x2=\"290.6\" y2=\"359.4\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"308\" y=\"332\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">15%</text>\n<line x1=\"332.1\" y1=\"302.2\" x2=\"215.1\" y2=\"349.5\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"261\" y=\"324\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">15%</text>\n<line x1=\"206.5\" y1=\"256.7\" x2=\"146.0\" y2=\"314.9\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"165\" y=\"287\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">45%</text>\n<line x1=\"171.3\" y1=\"256.7\" x2=\"111.3\" y2=\"280.0\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"133\" y=\"265\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">18%</text>\n<line x1=\"169.3\" y1=\"239.1\" x2=\"92.7\" y2=\"245.9\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"124\" y=\"237\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">12%</text>\n<line x1=\"169.3\" y1=\"224.9\" x2=\"52.8\" y2=\"208.1\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"103\" y=\"209\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">25%</text>\n<line x1=\"193.0\" y1=\"146.8\" x2=\"72.5\" y2=\"157.3\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"122\" y=\"147\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">55%</text>\n<line x1=\"193.0\" y1=\"136.1\" x2=\"105.6\" y2=\"123.4\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"144\" y=\"123\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">15%</text>\n<line x1=\"218.2\" y1=\"132.8\" x2=\"137.9\" y2=\"94.1\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"176\" y=\"105\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">12%</text>\n<line x1=\"231.0\" y1=\"132.8\" x2=\"171.3\" y2=\"57.5\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"203\" y=\"87\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">18%</text>\n<rect x=\"323\" y=\"170\" width=\"154\" height=\"46\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"400\" y=\"189.2\" font-family=\"sans-serif\" font-size=\"15\" fill=\"lightblue\" text-anchor=\"middle\">Airborne disease</text>\n<text x=\"400\" y=\"208.2\" font-family=\"sans-serif\" font-size=\"15\" fill=\"lightblue\" text-anchor=\"middle\">resistance</text>\n<rect x=\"538\" y=\"156\" width=\"80\" height=\"20\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"578\" y=\"169.9\" font-family=\"sans-serif\" font-size=\"11\" fill=\"lightblue\" text-anchor=\"middle\">Air quality</text>\n<rect x=\"481\" y=\"254\" width=\"104\" height=\"20\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"533\" y=\"268.1\" font-family=\"sans-serif\" font-size=\"11\" fill=\"lightblue\" text-anchor=\"middle\">Early detection</text>\n<rect x=\"321\" y=\"282\" width=\"72\" height=\"20\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"357\" y=\"296.4\" font-family=\"sans-serif\" font-size=\"11\" fill=\"lightblue\" text-anchor=\"middle\">Treatment</text>\n<rect x=\"169\" y=\"211\" width=\"122\" height=\"46\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"230\" y=\"223.9\" font-family=\"sans-serif\" font-size=\"11\" fill=\"lightblue\" text-anchor=\"middle\">Individual</text>\n<text x=\"230\" y=\"237.9\" font-family=\"sans-serif\" font-size=\"11\" fill=\"lightblue\" text-anchor=\"middle\">non-pharmaceutical</text>\n<text x=\"230\" y=\"251.9\" font-family=\"sans-serif\" font-size=\"11\" fill=\"lightblue\" text-anchor=\"middle\">prevention</text>\n<rect x=\"193\" y=\"133\" width=\"92\" height=\"20\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"239\" y=\"147.0\" font-family=\"sans-serif\" font-size=\"11\" fill=\"lightblue\" text-anchor=\"middle\">Prophylactics</text>\n<circle cx=\"695\" cy=\"83\" r=\"12\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></circle>\n<text x=\"695\" y=\"87\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">...</text>\n<rect x=\"700\" y=\"112\" width=\"68\" height=\"18\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"734\" y=\"124.9\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">Ventilation</text>\n<rect x=\"725\" y=\"154\" width=\"62\" height=\"18\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"756\" y=\"166.8\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">Filtration</text>\n<rect x=\"725\" y=\"192\" width=\"68\" height=\"28\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"759\" y=\"204.2\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">Ultraviolet</text>\n<text x=\"759\" y=\"216.2\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">light</text>\n<rect x=\"711\" y=\"238\" width=\"62\" height=\"28\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"742\" y=\"250.1\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">Wastewater</text>\n<text x=\"742\" y=\"262.1\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">scanning</text>\n<rect x=\"672\" y=\"272\" width=\"74\" height=\"40\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"709\" y=\"283.7\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">Social media</text>\n<text x=\"709\" y=\"295.7\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">open-source</text>\n<text x=\"709\" y=\"307.7\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">analysis</text>\n<rect x=\"607\" y=\"317\" width=\"104\" height=\"18\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"659\" y=\"330.2\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">Individual testing</text>\n<rect x=\"560\" y=\"334\" width=\"72\" height=\"40\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"596\" y=\"345.8\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">Airborne</text>\n<text x=\"596\" y=\"357.8\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">environment</text>\n<text x=\"596\" y=\"369.8\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">scanning</text>\n<circle cx=\"523\" cy=\"373\" r=\"12\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></circle>\n<text x=\"523\" y=\"377\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">...</text>\n<rect x=\"407\" y=\"375\" width=\"62\" height=\"18\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"438\" y=\"387.7\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">Antivirals</text>\n<rect x=\"325\" y=\"370\" width=\"62\" height=\"28\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"356\" y=\"381.4\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">Supportive</text>\n<text x=\"356\" y=\"393.4\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">care</text>\n<rect x=\"246\" y=\"359\" width=\"62\" height=\"28\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"277\" y=\"371.2\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">Immuno-</text>\n<text x=\"277\" y=\"383.2\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">modulators</text>\n<circle cx=\"204\" cy=\"354\" r=\"12\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></circle>\n<text x=\"204\" y=\"358\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">...</text>\n<rect x=\"117\" y=\"315\" width=\"40\" height=\"18\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"137\" y=\"327.7\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">Masks</text>\n<rect x=\"55\" y=\"280\" width=\"66\" height=\"18\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"88\" y=\"292.8\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">Nose sprays</text>\n<rect x=\"19\" y=\"235\" width=\"74\" height=\"28\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"56\" y=\"246.9\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">Saline nasal</text>\n<text x=\"56\" y=\"258.9\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">rinsing</text>\n<circle cx=\"41\" cy=\"206\" r=\"12\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></circle>\n<text x=\"41\" y=\"210\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">...</text>\n<rect x=\"18\" y=\"151\" width=\"54\" height=\"18\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"45\" y=\"163.5\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">Vaccines</text>\n<rect x=\"32\" y=\"104\" width=\"74\" height=\"28\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"69\" y=\"115.8\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">Passive</text>\n<text x=\"69\" y=\"127.8\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">immunization</text>\n<rect x=\"75\" y=\"66\" width=\"68\" height=\"28\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"109\" y=\"77.9\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">Chemo-</text>\n<text x=\"109\" y=\"89.9\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">prophylaxis</text>\n<circle cx=\"164\" cy=\"48\" r=\"12\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\" stroke-dasharray=\"3 2\"></circle>\n<text x=\"164\" y=\"52\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">...</text>\n<line x1=\"706.1\" y1=\"78.7\" x2=\"962\" y2=\"-17\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"767.8\" y1=\"113.7\" x2=\"987\" y2=\"67\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"786.6\" y1=\"160.3\" x2=\"998\" y2=\"142\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"793.1\" y1=\"207.7\" x2=\"1000\" y2=\"215\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"773.4\" y1=\"257.7\" x2=\"991\" y2=\"295\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"745.6\" y1=\"303.7\" x2=\"971\" y2=\"376\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"676.4\" y1=\"335.4\" x2=\"933\" y2=\"468\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"620.4\" y1=\"374.0\" x2=\"864\" y2=\"574\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"529.9\" y1=\"383.3\" x2=\"738\" y2=\"689\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"439.4\" y1=\"392.9\" x2=\"516\" y2=\"782\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"352.9\" y1=\"397.6\" x2=\"265\" y2=\"778\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"267.3\" y1=\"387.4\" x2=\"62\" y2=\"689\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"194.7\" y1=\"361.6\" x2=\"-64\" y2=\"574\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"118.6\" y1=\"332.9\" x2=\"-137\" y2=\"460\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"59.0\" y1=\"298.0\" x2=\"-173\" y2=\"370\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"18.7\" y1=\"255.2\" x2=\"-192\" y2=\"290\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"28.9\" y1=\"206.8\" x2=\"-200\" y2=\"215\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"18.5\" y1=\"157.1\" x2=\"-197\" y2=\"137\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"31.6\" y1=\"109.6\" x2=\"-185\" y2=\"61\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"74.8\" y1=\"67.0\" x2=\"-159\" y2=\"-24\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"153.6\" y1=\"41.8\" x2=\"-111\" y2=\"-121\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"400\" y1=\"171\" x2=\"400\" y2=\"-12\" stroke=\"#9ab\" stroke-width=\"1.5\" stroke-dasharray=\"5 4\" marker-end=\"url(#arrowhead2)\"></line>\n<text x=\"408\" y=\"16\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#9ab\" text-anchor=\"start\">rest of portfolio</text>\n</svg></div>",
+      "sha256": "33d50543ec8a3687cfdb1caa5256a5b0d2f6a6bd04ba44620ed5b9e88dfbd508",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "screen",
+        "device_evidence": {
+          "idx": 53,
+          "quote": "A diagram opened up on the screen, and he showed it to Gladias."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c17-b54.svg",
+            "viewBox": "0 0 800 400",
+            "width": "560",
+            "height": "280",
+            "labels": [
+              "24%",
+              "22%",
+              "21%",
+              "8%",
+              "20%",
+              "15%",
+              "38%",
+              "33%",
+              "14%",
+              "32%",
+              "12%",
+              "18%",
+              "23%",
+              "15%",
+              "45%",
+              "25%",
+              "15%",
+              "15%",
+              "45%",
+              "18%",
+              "12%",
+              "25%",
+              "55%",
+              "15%",
+              "12%",
+              "18%",
+              "Airborne disease",
+              "resistance",
+              "Air quality",
+              "Early detection",
+              "Treatment",
+              "Individual",
+              "non-pharmaceutical",
+              "prevention",
+              "Prophylactics",
+              "...",
+              "Ventilation",
+              "Filtration",
+              "Ultraviolet",
+              "light",
+              "Wastewater",
+              "scanning",
+              "Social media",
+              "open-source",
+              "analysis",
+              "Individual testing",
+              "Airborne",
+              "environment",
+              "scanning",
+              "...",
+              "Antivirals",
+              "Supportive",
+              "care",
+              "Immuno-",
+              "modulators",
+              "...",
+              "Masks",
+              "Nose sprays",
+              "Saline nasal",
+              "rinsing",
+              "...",
+              "Vaccines",
+              "Passive",
+              "immunization",
+              "Chemo-",
+              "prophylaxis",
+              "...",
+              "rest of portfolio"
+            ],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 55,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"This is the subgraph for airborne disease resistance. For each node on the graph, the cryptographic network randomly selects a committee, that makes the decision of what weights the edges right below that node get.\"</span>",
+      "sha256": "4764457662e5c22bb6c562b3e67b8356ee67c86e2166d826c927f4b1029f9eaf"
+    },
+    {
+      "idx": 56,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"So it's secure in the same way the Courts and the Order of Steering are. Having something like that for funding is especially important now, given that the Arctics just did the same attack on Quadratic Funding that Bluewhale did but at ten times the scale - and of course any more traditional style of allocation, they would try to interfere with as well.\"</span>",
+      "sha256": "e527e1bba9b15451c46edef853776dd09546a4ee72082756b7717d9dad8ec2e1"
+    },
+    {
+      "idx": 57,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Oh you're definitely right. Even the Keepers are getting attacked lately, though with all the secrecy and internal communication barriers, at least for now the system is holding.\"</span>",
+      "sha256": "8ebf653affc01971fcdd13059e83e882cd9c26dcb07d0008c754b5fd11a3eba5"
+    },
+    {
+      "idx": 58,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Oh is that so? Good to hear. Though I am sad that we don't have a good way to make both of these things more democratic. Listening to citizens' assemblies is good and Heralds are good, but they're not a substitute for actual public accountability.\"</span>",
+      "sha256": "bc87dcf153561db8c5893de3543e67b6a2893d0ee262be66bd17512b75d0964e"
+    },
+    {
+      "idx": 59,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Anyway, one difference between the Graph Funding design and how the Courts and the Order work is that Graph Funding allows even more specialization. After all, funding allocation is a pretty technical task.\"</span>",
+      "sha256": "0660203a9444590de39dcb081efbbd3e3f47cd45d975eda126217b754c016cfe"
+    },
+    {
+      "idx": 60,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"The goal is to try to split up each decision of funding allocation into more manageable pieces. Don't ask 'what percent of all Veridian public funding should go to this study on UVC lamps'. Ask, what percent should go to health, then within health, what percent should go to airborne diseases, and so on.\"</span>",
+      "sha256": "6cd32dade499589023da362bcc121bbd32cce451a62e2eaa38f0bb46057aa891"
+    },
+    {
+      "idx": 61,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"And if one project benefits two areas: say, some lamp that's somehow useful both for UVC lamps and for defense, then the graph stops being a tree, it becomes a proper directed acyclic graph. One node can have multiple parents, and the funding you get along all paths adds up.\"</span>",
+      "sha256": "33a1c3bd1ae1d604a4bc2f9472000cb8f0bb092b16e5457495ca91f0412ee99d"
+    },
+    {
+      "idx": 62,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"So a committee is responsible for allocating the funding going to each node among its direct children?\"</span>",
+      "sha256": "7ba9a91f294faeb7ff7e34d5f49e7f452c8e9072e6626cc0070be0e8518c776e"
+    },
+    {
+      "idx": 63,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Yes.\"</span>",
+      "sha256": "3d0f3e095096b7183b20c1aa268afdcb5b747e38c72f537b083f22dec23a96ac"
+    },
+    {
+      "idx": 64,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Can they remove children or make new ones?\"</span>",
+      "sha256": "1a4ca012c24789ddd80707e20fe068048cbc2bb88784964d2afb8bdd9ec738dc"
+    },
+    {
+      "idx": 65,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Yes, of course. That's how the graph gets made in the first place.\"</span>",
+      "sha256": "4cf9a573d1b5c9cbc008ced5a0f25d3204483c821457d247b5efd2d147764800"
+    },
+    {
+      "idx": 66,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"This is fascinating.\"</span>",
+      "sha256": "dd192c2f0821059c4fd9d1b88683c0cf03b85f455ad8daaf3354b6f8c45f73d0"
+    },
+    {
+      "idx": 67,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I mean, this all hinges completely on how effective these committees are, right? The more you can specialize, the more it might get captured by special interests, and the more you randomize, the more you get decisions made by people who know nothing about what they're deciding?\"</span>",
+      "sha256": "83bcaebc52daafee17db657d28e6b870eceb562e5b33edf5d425f2d311674ae2"
+    },
+    {
+      "idx": 68,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Of course, that's always the tradeoff.\"</span>",
+      "sha256": "86cdae155f001d4b465b9d1d669dfb04ca4ee4e8bbe999cca25cc4f6342c5ddd"
+    },
+    {
+      "idx": 69,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"There's also another tradeoff. It turns out that it's fairly easy to get committees up to the point where they can tell bad projects from good ones, but very hard for them to tell good projects from great ones. So for the lower levels of the graph, there's been a movement lately to just randomize at the top end. If the committee says you're in the top ten percent, you have the same chance of getting in, no matter if you're at ninety one or ninety nine.\"</span>",
+      "sha256": "f513e0ef78ff4bd6486b9b7e8c2f7a4941fb7b9d5261cade621ee23b2291b89b"
+    },
+    {
+      "idx": 70,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"So the further someone is above ninety, the more they basically don't have to worry about optimizing for the committee at all, they can just do what feels right.\"</span>",
+      "sha256": "75d641e910a1d90f0682ee006a366ca51fbaf9d8eb66ed31a6ceb2ea83cd339e"
+    },
+    {
+      "idx": 71,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Exactly. Sometimes you don't actually want accountability, you want to give space for people's intrinsic motivation. The people at the very top may even be smarter than the committee. That's what randomize-above-cutoff does: accountability for those who won't succeed without it, and freedom from incentives for the best - they can convince the committee that their work is good enough with barely any effort at all.\"</span>",
+      "sha256": "8581a67b7bac5d6d169c3ff8b1101261057e5762dd7b1ec0890cfcdc0a044ea4"
+    },
+    {
+      "idx": 72,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Anyway, here's what it looks like zoomed in at the level of individual projects.\"</span>",
+      "sha256": "6c704ac693d60a9fcbf3d29d15c9849c8849a02950b3044125dbf61ec118ea4d"
+    },
+    {
+      "idx": 73,
+      "kind": "figure",
+      "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"560\" height=\"280\" viewBox=\"0 0 800 400\">\n<defs>\n<marker id=\"arrowhead\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"6\" markerHeight=\"6\" orient=\"auto\">\n<path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#cef\"></path>\n</marker>\n<marker id=\"arrowhead2\" viewBox=\"0 0 10 10\" refX=\"8\" refY=\"5\" markerWidth=\"5\" markerHeight=\"5\" orient=\"auto\">\n<path d=\"M 0 0 L 10 5 L 0 10 z\" fill=\"#9ab\"></path>\n</marker>\n</defs>\n<rect width=\"800\" height=\"400\" fill=\"#245\"></rect>\n<line x1=\"472.0\" y1=\"195.0\" x2=\"480.0\" y2=\"195.0\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"477\" y=\"168\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">45%</text>\n<line x1=\"385.9\" y1=\"208.0\" x2=\"340.2\" y2=\"250.3\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"353\" y=\"229\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">30%</text>\n<line x1=\"385.9\" y1=\"182.0\" x2=\"340.2\" y2=\"139.7\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"365\" y=\"154\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">15%</text>\n<line x1=\"570.3\" y1=\"181.0\" x2=\"618.1\" y2=\"148.0\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"603\" y=\"172\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">60%</text>\n<line x1=\"574.1\" y1=\"209.0\" x2=\"608.5\" y2=\"228.9\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"590\" y=\"231\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">30%</text>\n<line x1=\"639.0\" y1=\"120.0\" x2=\"640.5\" y2=\"81.4\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"649\" y=\"101\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">30%</text>\n<line x1=\"682.4\" y1=\"124.9\" x2=\"686.9\" y2=\"123.9\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"662\" y=\"160\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">25%</text>\n<line x1=\"676.6\" y1=\"148.0\" x2=\"733.4\" y2=\"168.8\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"706\" y=\"171\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">20%</text>\n<line x1=\"634.7\" y1=\"270.9\" x2=\"613.2\" y2=\"316.2\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"614\" y=\"296\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">50%</text>\n<line x1=\"704.7\" y1=\"242.8\" x2=\"719.7\" y2=\"241.0\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"712\" y=\"272\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">25%</text>\n<line x1=\"311.5\" y1=\"278.3\" x2=\"261.3\" y2=\"330.5\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"276\" y=\"305\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">45%</text>\n<line x1=\"373.0\" y1=\"275.5\" x2=\"556.5\" y2=\"318.5\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"477\" y=\"312\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">35%</text>\n<line x1=\"272.0\" y1=\"111.7\" x2=\"179.5\" y2=\"87.3\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"221\" y=\"92\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">40%</text>\n<line x1=\"317.1\" y1=\"111.7\" x2=\"281.9\" y2=\"49.0\" stroke=\"#cef\" stroke-width=\"1\" marker-end=\"url(#arrowhead)\"></line>\n<text x=\"305\" y=\"74\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"middle\">45%</text>\n<rect x=\"328\" y=\"182\" width=\"144\" height=\"26\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"400\" y=\"200.3\" font-family=\"sans-serif\" font-size=\"14\" fill=\"lightblue\" text-anchor=\"middle\">Ultraviolet light</text>\n<rect x=\"480\" y=\"181\" width=\"140\" height=\"28\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"550\" y=\"192.2\" font-family=\"sans-serif\" font-size=\"11\" fill=\"lightblue\" text-anchor=\"middle\">222nm lamp efficiency</text>\n<text x=\"550\" y=\"206.2\" font-family=\"sans-serif\" font-size=\"11\" fill=\"lightblue\" text-anchor=\"middle\">improvements</text>\n<rect x=\"277\" y=\"250\" width=\"96\" height=\"28\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"325\" y=\"261.5\" font-family=\"sans-serif\" font-size=\"11\" fill=\"lightblue\" text-anchor=\"middle\">222nm safety</text>\n<text x=\"325\" y=\"275.5\" font-family=\"sans-serif\" font-size=\"11\" fill=\"lightblue\" text-anchor=\"middle\">testing</text>\n<rect x=\"265\" y=\"112\" width=\"120\" height=\"28\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"325\" y=\"122.9\" font-family=\"sans-serif\" font-size=\"11\" fill=\"lightblue\" text-anchor=\"middle\">222nm upper-room</text>\n<text x=\"325\" y=\"136.9\" font-family=\"sans-serif\" font-size=\"11\" fill=\"lightblue\" text-anchor=\"middle\">deployment</text>\n<rect x=\"594\" y=\"120\" width=\"88\" height=\"28\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"638\" y=\"131.8\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">Krypton</text>\n<text x=\"638\" y=\"143.8\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">chloride lamps</text>\n<rect x=\"585\" y=\"229\" width=\"120\" height=\"42\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"645\" y=\"241.7\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">Research into</text>\n<text x=\"645\" y=\"253.7\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">alternative lamp</text>\n<text x=\"645\" y=\"265.7\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">designs</text>\n<rect x=\"604\" y=\"63\" width=\"74\" height=\"18\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"641\" y=\"76.2\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">Dalias et al</text>\n<rect x=\"687\" y=\"104\" width=\"62\" height=\"28\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"718\" y=\"115.3\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">Poppe and</text>\n<text x=\"718\" y=\"127.3\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">Mawart</text>\n<rect x=\"728\" y=\"169\" width=\"60\" height=\"18\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"758\" y=\"181.6\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">Vidrik</text>\n<rect x=\"720\" y=\"229\" width=\"56\" height=\"18\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"748\" y=\"241.5\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">Bonne</text>\n<rect x=\"556\" y=\"316\" width=\"100\" height=\"28\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"606\" y=\"328.0\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">VNU Materials</text>\n<text x=\"606\" y=\"340.0\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">Science Lab</text>\n<rect x=\"158\" y=\"331\" width=\"180\" height=\"28\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"248\" y=\"342.3\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">Kudlin and Melana:</text>\n<text x=\"248\" y=\"354.3\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">effects on household chemicals</text>\n<rect x=\"95\" y=\"69\" width=\"100\" height=\"18\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"145\" y=\"82.1\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">Pov and Imerry</text>\n<rect x=\"218\" y=\"31\" width=\"118\" height=\"18\" rx=\"4\" fill=\"#1c3a4e\" stroke=\"#cef\" stroke-width=\"1\"></rect>\n<text x=\"277\" y=\"43.8\" font-family=\"sans-serif\" font-size=\"10\" fill=\"lightblue\" text-anchor=\"middle\">VNU Aeronautics Lab</text>\n<line x1=\"658.6\" y1=\"63.4\" x2=\"935\" y2=\"-77\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"748.9\" y1=\"110.0\" x2=\"983\" y2=\"53\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"788.0\" y1=\"176.3\" x2=\"999\" y2=\"166\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"775.7\" y1=\"241.1\" x2=\"996\" y2=\"268\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"627.9\" y1=\"344.2\" x2=\"902\" y2=\"524\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"233.6\" y1=\"358.5\" x2=\"-28\" y2=\"616\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"125.8\" y1=\"69.3\" x2=\"-145\" y2=\"-55\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"269.7\" y1=\"31.0\" x2=\"27\" y2=\"-275\" stroke=\"#9ab\" stroke-width=\"0.8\" marker-end=\"url(#arrowhead2)\"></line>\n<line x1=\"400\" y1=\"180\" x2=\"400\" y2=\"-12\" stroke=\"#9ab\" stroke-width=\"1.5\" stroke-dasharray=\"5 4\" marker-end=\"url(#arrowhead2)\"></line>\n<text x=\"408\" y=\"16\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#9ab\" text-anchor=\"start\">Air quality portfolio</text>\n<text x=\"408\" y=\"110\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#fa5\" text-anchor=\"start\">14%</text>\n</svg></div>",
+      "sha256": "e4a0c6c92477c0f464b6ada0486605316ee438ac867ca220d12d5e3c484525b9",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": null,
+        "device_evidence": null,
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c17-b73.svg",
+            "viewBox": "0 0 800 400",
+            "width": "560",
+            "height": "280",
+            "labels": [
+              "45%",
+              "30%",
+              "15%",
+              "60%",
+              "30%",
+              "30%",
+              "25%",
+              "20%",
+              "50%",
+              "25%",
+              "45%",
+              "35%",
+              "40%",
+              "45%",
+              "Ultraviolet light",
+              "222nm lamp efficiency",
+              "improvements",
+              "222nm safety",
+              "testing",
+              "222nm upper-room",
+              "deployment",
+              "Krypton",
+              "chloride lamps",
+              "Research into",
+              "alternative lamp",
+              "designs",
+              "Dalias et al",
+              "Poppe and",
+              "Mawart",
+              "Vidrik",
+              "Bonne",
+              "VNU Materials",
+              "Science Lab",
+              "Kudlin and Melana:",
+              "effects on household chemicals",
+              "Pov and Imerry",
+              "VNU Aeronautics Lab",
+              "Air quality portfolio",
+              "14%"
+            ],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 74,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Is it wise to have these randomly-selected Graph Funding committees making decisions at that level of granularity?\"</span>",
+      "sha256": "a0cfbac8c54dd3b51348a36737de7da0173a580a12578ddefda73e4b71c76572"
+    },
+    {
+      "idx": 75,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"I'm not sure myself. The nice thing about this design is that it can always evolve without changing the structure. Committees could just decide to give the VNU Materials Science Lab 'ownership' of an entire category, and let them allocate internally. Actually, for the open source social media analysis, we basically did just that, eighty percent is just going to Silverchat.\"</span>",
+      "sha256": "207a0d2c0a2791f77532db6a562d3cae33a414e6ba4c898cac0d946df0614aa3"
+    },
+    {
+      "idx": 76,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Bluewhale is unhappy, but, hey, their choice to be so closed and proprietary with everything.\"</span>",
+      "sha256": "c18d4db1ea32dfedc1e9c843ff2833a5c3f754660f8c831c55054459d35dee14"
+    },
+    {
+      "idx": 77,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"So how does this all connect to Dzego?\"</span>",
+      "sha256": "102281258a36b8c45f3798898f8dd5f6832188807d4d4eb195c6763978873a10"
+    },
+    {
+      "idx": 78,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Ah, well a lot of this tech does actually make its way over to Dzego, they're starting to take the air filters and ultraviolet lights more seriously - a few of them are getting paranoid that the Arctics might hit them with a deliberately-released pandemic at some point.\"</span>",
+      "sha256": "5d97d672e7ae1e6ef2494d66a4db49a046e913af706191b98397c87b45394d1b"
+    },
+    {
+      "idx": 79,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Is there any chance that the Arctics could hit them with a pandemic that won't eventually bounce right back to them?\"</span>",
+      "sha256": "57beb6262a8313835bb27e2f7320730546063f723d10ebc2723d697dbc8899c2"
+    },
+    {
+      "idx": 80,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Well, if Arctic anti-pandemic technology shoots far enough ahead of the rest of the world, then yeah, they could release a pandemic that only they can effectively protect only their own people from. That's a big part of why it's so valuable to open-source all this stuff - at least the defensive things. Put the whole world on a more level playing field, so no one is in a position to light a fire and be the only ones with fireproof suits.\"</span>",
+      "sha256": "323c22a1b1bbf28104c5b612b51cf120e5a9811ed8adf80158df2486182b3084"
+    },
+    {
+      "idx": 81,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"Anyway, if you end up going to Dzego, do tell me what you learn about their public health when you get back - I am curious!\"</span>",
+      "sha256": "b0862fbb6b1c3afb80985b353634ccabb5e46211880d86f63e297fc4982e66b6"
+    },
+    {
+      "idx": 82,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 83,
+      "kind": "paragraph",
+      "content": "Gladias opened the door to his house, and entered.",
+      "sha256": "857ef8ed57a4548bff20d716efb4bc3cd87540681c150b004d23054b2cb060fa"
+    },
+    {
+      "idx": 84,
+      "kind": "paragraph",
+      "content": "Seila and the kids were already eating dinner.",
+      "sha256": "ef6310676284318270d8a5b7c6fb727da112d5f1d8d058aa34f94128c13ca08e"
+    },
+    {
+      "idx": 85,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Today is your first vote, isn't it?\"</span>, Seila asked.",
+      "sha256": "90b0390a5c84c1f557cb3f70c8d06216f9c0a1f3f057a0f323ad4323a5c78cb2"
+    },
+    {
+      "idx": 86,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"It is, glad you remembered!\"</span>",
+      "sha256": "c1a3a85316372176cba486ea55a23afcb6ef18e3b375567dad81175487ae0f17"
+    },
+    {
+      "idx": 87,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"So are you leaving again this evening?\"</span>, Zven asked.",
+      "sha256": "2b2a04407e37a10c9d9cec7932f1dba4c922b4729fd2fb99ecc1bce18cc1592a"
+    },
+    {
+      "idx": 88,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Oh no, the in-person part was the discussions months ago, and the key registration, I did that right after my meetings at the Parliament.\"</span>",
+      "sha256": "7797450f3bf101a9929d229bb96abf7934d97448a41a870db79aa5b9bb020a3f"
+    },
+    {
+      "idx": 89,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"There were also some discussions happening more recently in our Keeper discussion group online, though that chat automatically cut off seven days before the vote - have a quiet period to make more space for independent thought, the argument goes.\"</span>",
+      "sha256": "0cdb054619e40f123ee21eb4d658b4616bf59af33044bff258a45a43877f38d7"
+    },
+    {
+      "idx": 90,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Oof, so the cutoff was after Redshire got annexed. What was that like?\"</span>",
+      "sha256": "740368897773f04ca954642eb8c0eee9666cdadb82941e42238c2fffeb2e80d4"
+    },
+    {
+      "idx": 91,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I think everyone who said we should cut military hardware out of the best tiers in the rubric went quiet. Eighteen then proposed a new amendment that increases the tax brackets, pushing up the incentives to open things up even more. I'll probably vote for that.\"</span>",
+      "sha256": "3c2c6897860f29b70344667d0473db2cda57237d876ea0f62c464ef2236e661e"
+    },
+    {
+      "idx": 92,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Glad to hear.\"</span>",
+      "sha256": "57cd2d0e3287ee1b9ec277e4d6f66e37a2371dc8460001779cd99611d517d013"
+    },
+    {
+      "idx": 93,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"How did your Parliament meetings go?\"</span>",
+      "sha256": "9f0d086a4c6a8e430c723c43eebc1039071ca6b909b1fdbad1899942b134306a"
+    },
+    {
+      "idx": 94,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Very well. The Senator and the Graph Funding person both seemed quite supportive of me going. Though they said that Zei might be an even better contact to help me with my visit than anyone they knew!\"</span>",
+      "sha256": "3f77a8bf6f91fba787346a16185ea2bca7b164d1d41b1286a3600af7b32882fc"
+    },
+    {
+      "idx": 95,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"That actually makes sense, everyone knows the official Dzego government is not where any of the interesting action is happening.\"</span>",
+      "sha256": "4158d38436e882e4722774966a13fadd5f74601fc08a91404600256223a7cc95"
+    },
+    {
+      "idx": 96,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"I guess I'll talk to Zei and put you two in touch then!\"</span>",
+      "sha256": "b88478b40e863a449b101d323f60a0f4fd903266c21ccac6ee5c8dd04fc17233"
+    },
+    {
+      "idx": 97,
+      "kind": "paragraph",
+      "content": "Gladias, Seila and the kids took a few bites of their food. Soon, the dinner conversation resumed.",
+      "sha256": "54a941b32ba97f306d422bd253a83436954e44bcdbc2a07eea5092b835dde066"
+    },
+    {
+      "idx": 98,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Febric, Hreda, want to share your news?\"</span>",
+      "sha256": "4d48b9bbf90b01e97075fbf76ed6697571080d202524801e003636cd89350154"
+    },
+    {
+      "idx": 99,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"106.67\">\"We're going on an exchange trip to Northglade for the winter term!\"</span>, Hreda exclaimed proudly.",
+      "sha256": "25090be56857f9d8ae3d2ed2c91cbc3479ad2d6e482f467f9ebffe5615143457"
+    },
+    {
+      "idx": 100,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Ooh, that's pretty far northeast, almost at the Arctic border\"</span>, Gladias replied.",
+      "sha256": "0f30ece179f9821a1b48949ca0e282a38756cd913d322510eab93c1f07614b50"
+    },
+    {
+      "idx": 101,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"106.67\">\"It's fun, we'll get to ski off mountains wearing a copter and then glide back down!\"</span>, Hreda exclaimed. <span data-hue=\"106.67\">\"And it's not like it's right at the border, Northglade is over two hundred kilometers inland. It will be my first time there!\"</span>",
+      "sha256": "e90549b01a7aef538919651e4c5ec62037d3dc23feffcac9d2b6af81da77d797"
+    },
+    {
+      "idx": 102,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"So what are you guys doing there?\"</span>, Gladias asked.",
+      "sha256": "0b1ac0ff7c91fa5e192669ebf97147169c3205c6482f9764d4e9eb37885e1388"
+    },
+    {
+      "idx": 103,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"106.67\">\"Veridia's best math university is there,\"</span> Hreda replied. <span data-hue=\"106.67\">\"I'm in the top five percent in math in my class, so I got accepted to attend some special education there.\"</span>",
+      "sha256": "fa1c879a7a7e973c97ab75500600ab243986a3fc77451934603f0421a814a644"
+    },
+    {
+      "idx": 104,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Same for me,\"</span> Febric added. <span data-hue=\"80\">\"Though I'm in computer science.\"</span>",
+      "sha256": "4999b49e061a417ebfbf4ac8c03920785c6343f3a50dec23daa14a88b052a3d3"
+    },
+    {
+      "idx": 105,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Didn't Lily also want to go to Northglade?\"</span>",
+      "sha256": "2970d13e7dfcc18b0ebf9bb07ce510a4d5c51f89e48b0e7d46d55805e85f4538"
+    },
+    {
+      "idx": 106,
+      "kind": "paragraph",
+      "content": "Lily was in the washroom, so she could not answer.",
+      "sha256": "8b66b65b1555cdc838b02783ed5bb660f40e96fa035ed34ccb6e8e74a0bc1d98"
+    },
+    {
+      "idx": 107,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Vil said that he will take her in the summer if she gets to seventy-five percent in her exams.\"</span>",
+      "sha256": "550f27f4d6295532872da6e520d61b4d5a82611b0869351ecfad53e66308d05f"
+    },
+    {
+      "idx": 108,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"She prefers summer, she doesn't like the cold as much.\"</span>",
+      "sha256": "05ed45f275c4a76a11866442dff37b335e5c0d880ff87c63775e5f90e66e622c"
+    },
+    {
+      "idx": 109,
+      "kind": "paragraph",
+      "content": "Gladias's hand device buzzed.",
+      "sha256": "589ce4c9d3a738ddceb9f32ccb57730d4d123ea4180fa3f15e9a8514507a8c4c"
+    },
+    {
+      "idx": 110,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Well, voting on the hardware openness rubric started.\"</span>",
+      "sha256": "53051720557d4d96d149a73d3cfad2952da20461f36ebd41ca6f2354398c19c2"
+    },
+    {
+      "idx": 111,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view\"><b style=\"font-size:150%\"> Rubric: openness in hardware </b>\n<hr>\n<table>\n  <thead>\n    <tr>\n      <th>Motion</th>\n      <th>Vote</th>\n    </tr>\n  </thead>\n  <tbody>\n    <tr>\n      <td style=\"width: 75%\">Add after line 3 in Tier 1 and line 3 in Tier 2: <br><br>\"Products in military, surveillance and counter-surveillance applications are not eligible for this tier.\"</td>\n      <td style=\"text-align:center\"><button disabled=\"\">Yes</button><br><br><button disabled=\"\">No</button></td>\n    </tr>\n    <tr>\n      <td style=\"width: 75%\">Increase tax brackets from <br><br> 0 / 6 / 12 / 18 / 24 <br><br> to <br><br> 0 / 10 / 20 / 26 / 32</td>\n      <td style=\"text-align:center\"><button disabled=\"\">Yes</button><br><br><button disabled=\"\">No</button></td>\n    </tr>\n    <tr>\n      <td style=\"width: 75%\">Change line 4 in Tier 4 and line 4 in Tier 5, from: <br><br> \"Use of hardware means to prevent third-party repair.\" <br><br> To: <br><br> \"Use of hardware or software means to prevent third-party repair.\"</td>\n      <td style=\"text-align:center\"><button disabled=\"\">Yes</button><br><br><button disabled=\"\">No</button></td>\n    </tr>\n    </tbody>\n</table></div>",
+      "sha256": "ceaa6934d229a54687c2ac2ae92bc63ce49e414c1298db49daae37794ab56812",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "hand_device",
+        "device_evidence": {
+          "idx": 109,
+          "quote": "Gladias's hand device buzzed."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "heading",
+            "text": "Rubric: openness in hardware"
+          },
+          {
+            "type": "rule"
+          },
+          {
+            "type": "table",
+            "header": [
+              [
+                "Motion",
+                "Vote"
+              ]
+            ],
+            "rows": [
+              [
+                "Add after line 3 in Tier 1 and line 3 in Tier 2: \"Products in military, surveillance and counter-surveillance applications are not eligible for this tier.\"",
+                {
+                  "text": "",
+                  "controls": [
+                    {
+                      "type": "button",
+                      "label": "Yes"
+                    },
+                    {
+                      "type": "button",
+                      "label": "No"
+                    }
+                  ]
+                }
+              ],
+              [
+                "Increase tax brackets from 0 / 6 / 12 / 18 / 24 to 0 / 10 / 20 / 26 / 32",
+                {
+                  "text": "",
+                  "controls": [
+                    {
+                      "type": "button",
+                      "label": "Yes"
+                    },
+                    {
+                      "type": "button",
+                      "label": "No"
+                    }
+                  ]
+                }
+              ],
+              [
+                "Change line 4 in Tier 4 and line 4 in Tier 5, from: \"Use of hardware means to prevent third-party repair.\" To: \"Use of hardware or software means to prevent third-party repair.\"",
+                {
+                  "text": "",
+                  "controls": [
+                    {
+                      "type": "button",
+                      "label": "Yes"
+                    },
+                    {
+                      "type": "button",
+                      "label": "No"
+                    }
+                  ]
+                }
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 112,
+      "kind": "paragraph",
+      "content": "This felt anti-climactic, Gladias thought. So much ceremony, in-person meetings, debate and work in the months leading up to the vote. And then the vote itself was just ... tapping buttons on a screen.",
+      "sha256": "2aca7f10fbc33266b29617f7a1c3206cf063cb63b8462585b1d7683d2cd322b1"
+    },
+    {
+      "idx": 113,
+      "kind": "paragraph",
+      "content": "It was reasonable, Gladias supposed. The way that the cryptography worked, as long as key registration was secure, this part could just be done on his own hardware at home. And even if Delwart did come knocking and demand to stare at him from behind his shoulder for the entire fifteen-longhour voting window, he had no way to prove to him that the key on his device even was the one registered - as opposed to being a distraction while the real voting was done by Mov, Seila or even Zven.",
+      "sha256": "68aa3b7b84c0dd7860d349138ce78fef0b08e98a44d1accc2dfe4da661102f30"
+    },
+    {
+      "idx": 114,
+      "kind": "paragraph",
+      "content": "Gladias took one last look at the screen, and nonchalantly pressed: `No`, `Yes`, `Yes`.",
+      "sha256": "abce55f83176cd7a82d8747805a5882bf22d46b62f6074af2f6cb6c1f1dead5e"
+    }
+  ]
+}

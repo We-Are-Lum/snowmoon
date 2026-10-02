@@ -1,0 +1,1307 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 26,
+  "source_url": "https://vitalik.eth.limo/snowmoon/html/chapter-26.html",
+  "source_sha256": "3abdc8434b3767909d23019f1a9ebd78ff6b2ac294317611b0e9955e2a887298",
+  "fetched_at": "2026-10-02",
+  "license": "GPL-3.0",
+  "blocks": [
+    {
+      "idx": 0,
+      "kind": "heading",
+      "content": "# Chapter 26",
+      "sha256": "5b287c858f1270d8704a24a6e9c51b8b166a97e1fd738a3a5a9c04e867039647"
+    },
+    {
+      "idx": 1,
+      "kind": "dateline",
+      "content": "**Veridia** · 3724 Frostime 5",
+      "sha256": "479bc850d01440e92ecb8e1270eb370f2147bf03beae26e8f50220718e0b8852"
+    },
+    {
+      "idx": 2,
+      "kind": "paragraph",
+      "content": "Zei, Bai, Gladias and Den were sitting in a small enclosed cabin in an aeroplane, with Zei and Bai facing forward and Gladias and Den facing backward. All four were looking silently out the window, enjoying the view of a mostly flat, green landscape. The main visible features were a row of small mountains and the city of Meldan further in the background.",
+      "sha256": "dac8915840ecf5887915039032a4591df9d76e482d8e001ab00f47decda0dd44"
+    },
+    {
+      "idx": 3,
+      "kind": "paragraph",
+      "content": "An announcement alarm buzzed. The four of them snapped out of their trance-like state, and prepared to listen.",
+      "sha256": "8dbf5f29bf9bdb5ba4624c60e99a7ddb45b656d10c56cd1b7fe53c37f740268f"
+    },
+    {
+      "idx": 4,
+      "kind": "quote",
+      "content": "> jo hen jei fe fei go de di mei dan du",
+      "sha256": "0f852e5b8554ca2b0521993ad5dd0108c46aa4f0a0777fab96e23da9a39159f1"
+    },
+    {
+      "idx": 5,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Your turn to translate, Gladias!\"</span>, Zei prodded.",
+      "sha256": "ca1a91bf5d3021932d4d3d7d02d8efd2cdb501b0f5dda18e93c9efd539995ca0"
+    },
+    {
+      "idx": 6,
+      "kind": "paragraph",
+      "content": "Gladias scrambled in his mind to understand the words quickly enough to give the answer before the next sentence began. After a few moments, he blurted out:",
+      "sha256": "1191cb43377cc03badd1db30401637de805f1f163d1c17b43d8300ba9bd62d8e"
+    },
+    {
+      "idx": 7,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Everyone, welcome to Meldan, Veridia.\"</span>",
+      "sha256": "f30d1e1dc7df0bc8d5a9f0da9f627076c49686460686c50943373829a729957b"
+    },
+    {
+      "idx": 8,
+      "kind": "quote",
+      "content": "> ti zun no tei li ze fo fi shi ci cin ho li ze ci bia tei gei ka fiu den min ba fia zui",
+      "sha256": "af229e327f533add61c95a1894a3369af6cdc8b8eaae0c7c92e586de797e6c86"
+    },
+    {
+      "idx": 9,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"The local time is 74,000 and the temperature is seven degrees. After a short time, the flying machine will descend to the ground.\"</span>",
+      "sha256": "610ec75c92b34e038245af2fba48aef7064852a4c5aad1be28f088c0b0fc1d4d"
+    },
+    {
+      "idx": 10,
+      "kind": "quote",
+      "content": "> ti tei li dzai hen fe lo kin fe hai bun",
+      "sha256": "2212bd941d732db393acf21d29bc7486d905c254bddc3f67987f3fbca6b42e13"
+    },
+    {
+      "idx": 11,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Now is a great time to look at the beauty outside.\"</span>",
+      "sha256": "d91eedc4a059a0ef2d93b811702e65f9588b877b89c2264e852b796734073a95"
+    },
+    {
+      "idx": 12,
+      "kind": "quote",
+      "content": "> hai ka sho kin ce fe fei go de bun ji dze kai zui liu",
+      "sha256": "8b49ec8e8194568807a080a9c174bc4e15504cb0c875b6dbddc03223507ddab8"
+    },
+    {
+      "idx": 13,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Outside right now, you can see Veridia's beautiful earth sheet of green plants.\"</span>",
+      "sha256": "f44a1d73b2012537d71b442c78ebeac69d0e0c51b2fb6b0dc4b8bc2fa79a3e27"
+    },
+    {
+      "idx": 14,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Landscape of green plants\"</span>, Zei corrected gently.",
+      "sha256": "1fa1f4611323f428a3e34ad6743a21a00b39cd08bb6caa1fbf97e1bfd216450c"
+    },
+    {
+      "idx": 15,
+      "kind": "quote",
+      "content": "> biu ka di ge le bo gai dei li lia",
+      "sha256": "51e7270d80cfe0fede378a266d8e976faf45294f42a389d2e4a381630cde678a"
+    },
+    {
+      "idx": 16,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"On the right, there are the Gelebor mountains.\"</span>",
+      "sha256": "77172bad3bf87f4ebc59bfc3691dab53f1228174dcc4bb69ec7eefe085d61547"
+    },
+    {
+      "idx": 17,
+      "kind": "quote",
+      "content": "> cen hai ka ge le bo gai dei de dziu hai ka ce kin fe di mei dan du ci ti li sa dzu du fe fei go",
+      "sha256": "5b5cdd0d905c2fed1a2980b6fe0725a4b892af3e02ac62bee358ae0878c834a3"
+    },
+    {
+      "idx": 18,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Far outside, continuing beyond the Gelebor mountains, you can see the Meldan city. This is the capital city of Veridia.\"</span>",
+      "sha256": "b6900b000bb3f679694ca60936bd330a2eee57ba4ffcd24628d7d51ece26ebab"
+    },
+    {
+      "idx": 19,
+      "kind": "quote",
+      "content": "> di mei dan du li bai\n>\n> ci di mei dan du de jan zi li pa pi pa fi ha\n>\n> ci dzen fe gi hie pen",
+      "sha256": "4270ffaade490f1acd534c9b17d7663514199124e5ff81b621cd6bdaf9df5850"
+    },
+    {
+      "idx": 20,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Meldan is a large city. The population of Meldan is 1.1 million. It has many different districts.\"</span>",
+      "sha256": "8cadff820e59a1aeb94a57a12c13303e80bece721d1e073b2eeac719ba429d19"
+    },
+    {
+      "idx": 21,
+      "kind": "quote",
+      "content": "> dzu ka kin ce fe bia gai dei\n>\n> ci fia sai pen ka dan fe gi jan\n>\n> ci sei sai pen ka jen bin pei de pen li pai\n>\n> ci mui dau fe ti li cin pin cu bun",
+      "sha256": "b4f33bd03024dd95e2bc155e3d867642c906145a64d73d925b22ba0708f8e225"
+    },
+    {
+      "idx": 22,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"In the center there is a small mountain. In the lower half there are many people's homes. In the upper half part of the government works. Hiking up it is happy and beautiful.\"</span>",
+      "sha256": "a8891b1e5077f1dd81eccf354eedb8879fcd8a4d1fcacde96242cdb3c8b86845"
+    },
+    {
+      "idx": 23,
+      "kind": "quote",
+      "content": "> gai dei de zei biu ka pai hui pen li bia\n>\n> ci pai hui pen fei ka fei go de gi bai pai hui li lia\n>\n> ci sa dzu pai hui li dzen fe ten min de bin dai cu man jei cu su kun gau",
+      "sha256": "987bdf69164877bb061eaa29111426ed620ae7c6b5f60b0a875ecd166313890c"
+    },
+    {
+      "idx": 24,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"East of the mountain, there is the business district. In the business district there are many large companies. The main industries include computer software, finance and health protection.\"</span>",
+      "sha256": "5399feaccff432c0cbc60ffbe751fad414b6459669ce4554fc46773dffc19d39"
+    },
+    {
+      "idx": 25,
+      "kind": "quote",
+      "content": "> gai dei de zei gei ka di ka lia mai pen li lia\n>\n> ci ti pen li lu fe bai kai zun\n>\n> ko ti dzen fe gi pui gau ji dan",
+      "sha256": "6c857aac57a017377251ba4e5e9b18f38bb7bc85518be645f2f00da817466c40"
+    },
+    {
+      "idx": 26,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"South of the mountain, there is Kalimar district. This part looks like a forest, but it contains many hidden homes.\"</span>",
+      "sha256": "f1178e3fca2e7318f9aab5d666c183218a0aa43949e397b237010526c8419862"
+    },
+    {
+      "idx": 27,
+      "kind": "quote",
+      "content": "> gai dei de zei dzun ka gi dan pen li lia\n>\n> co ti ka gi jan li san cu sun cu mo\n>\n> ci ti ju fe gi kai de sai hui cu gi dau kin zun",
+      "sha256": "82bceb67b8c192a05c632fb437a8dd781c170500995fc9db8b5da05e51e06306"
+    },
+    {
+      "idx": 28,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"West of the mountain, there is a large residential district. Many people sleep, learn and eat here. It has many categories of food and many go-and-see places.\"</span>",
+      "sha256": "2a3e1e6c1ad88fec7146b585477015a00181799cb7cc58e268f9e3183b80571c"
+    },
+    {
+      "idx": 29,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Tourist attractions.\"</span>",
+      "sha256": "c46944fa76eeef8cdee9fba9c2b670e3d74eeb40330fd35ece18808da6fda4de"
+    },
+    {
+      "idx": 30,
+      "kind": "quote",
+      "content": "> ti li tin bia pen fe di mei dan du de ce kin ji gi mui sun jui\n>\n> ci di mei dan du fei ka ji gi shan jin tei ka jan ki su\n>\n> te zen hu ka ki kia sin fe ti du",
+      "sha256": "cdfd0b0b5dcd8e133c1ef0e56f5a5dbb91046445a3652e25ba6cbe5f8a7473d3"
+    },
+    {
+      "idx": 31,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"This was only a small part of the many interesting things in Meldan. Even if a person lives for years in Meldan, they will not know the city completely.\"</span>",
+      "sha256": "fd0a6c2d17a95b15cecdeb19f918ed1f8e646a43bff070f1269bdabb1c830600"
+    },
+    {
+      "idx": 32,
+      "kind": "quote",
+      "content": "> jie fe lo cin pin fe lo di mei dan du cu fei go li bun",
+      "sha256": "bfa87b419a9e8b5dcb2b750265f4f7985e78268144c9545f5708d868711b56d8"
+    },
+    {
+      "idx": 33,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"We hope you enjoy Meldan and the beauty of Veridia.\"</span>",
+      "sha256": "be295a10f3f74e220152b3d62ac9e5dd413bdaf6b264dd46f71083062c3b460f"
+    },
+    {
+      "idx": 34,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Well done. Only two months and you're almost a local already.\"</span>",
+      "sha256": "44fc3e5f8bde71cfcfceb487e9113f88508d4fdb787afd8798515b6934623c6a"
+    },
+    {
+      "idx": 35,
+      "kind": "paragraph",
+      "content": "Zei paused for a moment, and then opened his mouth again to speak slowly.",
+      "sha256": "61aeab3c82967b65b64e8f00f2585b545dc11710500738fe9129826b31e1e7f2"
+    },
+    {
+      "idx": 36,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"ci jie fe lo cin pin fe di pa fo gai du\"</span>",
+      "sha256": "a555de95f07bbc38bd843f3d02a4522fe8a69f2c0eb41126030489c0ec3efd40"
+    },
+    {
+      "idx": 37,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I enjoyed Pafogai Du very much.\"</span>",
+      "sha256": "f857a76809f84f2d30d11436fb73704cf7a41d4cf4d27c0b7ae39fa2095c41c3"
+    },
+    {
+      "idx": 38,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I hope you come back.\"</span>",
+      "sha256": "0fe0fad12445ccd7982bf2d44b1c462e52e56ea01385a26b38dd8be89f446522"
+    },
+    {
+      "idx": 39,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Of course I will!\"</span>",
+      "sha256": "c9361bbca5b740cefced3c897e58300c45a1ae7845a80baeb225be70f926fe4d"
+    },
+    {
+      "idx": 40,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Wait, I just realized ... Pafogai means 'fourteen stone'? Where did that name come from?\"</span>",
+      "sha256": "2b01eafa23a411d87cc9df5c6fa6862ad60c7dabd0652a7135fe511ebad0cc9e"
+    },
+    {
+      "idx": 41,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Think of the periodic table.\"</span>",
+      "sha256": "0688f0790c8367ac68ce3a0cc2ee2f591211f3e3eeb7eb74b3fe3f9f93d1f23d"
+    },
+    {
+      "idx": 42,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 43,
+      "kind": "paragraph",
+      "content": "The aeroplane came to a stop. Through the window, they could see over a dozen large autobuses and cars approaching.",
+      "sha256": "58f0c92f168f1178d507445423db059430e5aea176f2183e44e82d5f3849f37e"
+    },
+    {
+      "idx": 44,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"The larger black one is ours. We'll exit last, for our privacy\"</span>, Den stated.",
+      "sha256": "521721aa5410d1eaa15347a92b85cac5d9ef0c0bf2f711e5e18839edf3f31867"
+    },
+    {
+      "idx": 45,
+      "kind": "paragraph",
+      "content": "Zei, Gladias and Bai nodded. The four of them reclined back in their seats and waited.",
+      "sha256": "c006ee6c979cea6e43021f23a8e43acc8e2f4dd49af609facca9e31e1375046e"
+    },
+    {
+      "idx": 46,
+      "kind": "paragraph",
+      "content": "About ten minutes later, the door to their cabin automatically opened. The four of them immediately stood up, grabbed their carry-on bags from under their seats, and walked toward the front of the aeroplane. As they passed through the aeroplane, they could see all of other cabin doors already open and empty, with used blankets and empty bottles and cups littering many of the tables and seats.",
+      "sha256": "8f2aaeadd5591deae0f27db13b28e43653c20e237c43de31a24f14a7d6a35855"
+    },
+    {
+      "idx": 47,
+      "kind": "paragraph",
+      "content": "They exited the aeroplane though a doorway that was directly connected to a staircase, and then to a narrow room that was clearly also the inside of an autobus. The room had an entrance, which they had just passed through, an exit on the other side, and two passage gates blocking the way in the middle.",
+      "sha256": "5b091090a4bf8b08be3290f03990eb0b484e37085a417bb9d3adef0a5e69aeac"
+    },
+    {
+      "idx": 48,
+      "kind": "paragraph",
+      "content": "Zei and Gladias stepped forward first. They each put their watches against the green circle on the side of the gate they were passing through, and looked at the camera in front. A few ticks later, almost in unison, both gates announced: <span data-hue=\"66.67\">\"Welcome to Veridia.\"</span>",
+      "sha256": "4a8c35c53149f53821127c18b07e11614b13c45383002818cf2571bd007021d6"
+    },
+    {
+      "idx": 49,
+      "kind": "paragraph",
+      "content": "The gates opened, and Zei and Gladias stepped through. The exit at the other end of the room led straight into the interior of one of the large black cars that they had seen earlier through the window of the aeroplane. They both stepped in, and found another man already sitting inside.",
+      "sha256": "294517318e76566d56d5e7b0041ffed246206e5f5a461d88a1ad18b10cfa9dad"
+    },
+    {
+      "idx": 50,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Senator Verdow!\"</span>",
+      "sha256": "302fd7f14c206693e0064d23ce84c3dd14ef27c613e3c793b30d642f0056d56b"
+    },
+    {
+      "idx": 51,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Welcome home, Gladias!\"</span>, Verdow replied, with a facial expression and tone warmer than Gladias had ever heard him. He immediately looked to Gladias's side. <span data-hue=\"293.33\">\"And you must be Zei.\"</span>",
+      "sha256": "71e241664a5166b985c77fcda6e1ac35b7d34d23adae14179e96efd945edc4ff"
+    },
+    {
+      "idx": 52,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"It's a pleasure to meet you, Senator.\"</span>",
+      "sha256": "e8d274609b961a7f753f9fba720bbb78af4dcaa8f3274f9ab88bf146f4c77f43"
+    },
+    {
+      "idx": 53,
+      "kind": "paragraph",
+      "content": "As Zei and Gladias were sitting down, Zei could already hear the footsteps of Bai and Den approaching. They also stepped through the opening and entered the car.",
+      "sha256": "ce7de20a4f98fee72382858e2516abdd5d8074d912fa251abc73f59652cecd42"
+    },
+    {
+      "idx": 54,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"And you must be Bai and Den!\"</span>",
+      "sha256": "f89182c956ce9c2ce65b1a8aad994187d6d2e8a84a7673dc215cdb79c5f02992"
+    },
+    {
+      "idx": 55,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"26.67\">\"We are indeed\"</span>, Bai replied.",
+      "sha256": "3ea4ee5aa27d1c570b4a1ef888b09e7a929b1e81be39c4e29b3ee624f87a610f"
+    },
+    {
+      "idx": 56,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Well, let's sit down. We have a lot of work to do.\"</span>",
+      "sha256": "c55336d8f6832b0634fc5757f79175ef388112e786d81819c77d9b7eda20d359"
+    },
+    {
+      "idx": 57,
+      "kind": "paragraph",
+      "content": "All four of them sat down in their seats. The opening linking the car to the entrance room closed. Almost immediately they could feel the car start to accelerate.",
+      "sha256": "7adbd46024408052b38e0a4e611fab78084d40d4f7aa8ec9f37cb5589df599d2"
+    },
+    {
+      "idx": 58,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"So first of all, Gladias, I have some very good news for you.\"</span>",
+      "sha256": "d126add3d47f8e0cdb549341610d458c001c21f98c68cd8cf9592bcd15c5ff82"
+    },
+    {
+      "idx": 59,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Oh, what is that?\"</span>",
+      "sha256": "f3b1b9b10095cac3f721c89fa58f210dacdb40d2ffe06e4329890f69db102bd6"
+    },
+    {
+      "idx": 60,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Looks like we know where Lily is.\"</span>",
+      "sha256": "7a3c636135173bd0bcb4a8715a8cea5b1085859646f9e87d72b6c8df1938edab"
+    },
+    {
+      "idx": 61,
+      "kind": "paragraph",
+      "content": "Gladias's eyes opened.",
+      "sha256": "ee60a75e4e8b2b3d44e66cf198dfcebb291c564e6f62dce4c6e33d002b8af98e"
+    },
+    {
+      "idx": 62,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Seila pushed really hard and got in touch with me, she told me the whole situation. Zven stayed in touch with Lily, and she admitted to him where she was: she had crossed over into Arctic-occupied territory and was in Northglade.\"</span>",
+      "sha256": "9479975d694002c13677469b5ed6e0d34f58a44c627a08c64d100266df7a7edd"
+    },
+    {
+      "idx": 63,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"We then scanned through all the feeds the security cameras that you so brilliantly suggested the Dzegojan should hack into. After a few days, we found her. She is in some kind of boarding school that the Arctics set up. About one kilometer away from the GPH.\"</span>",
+      "sha256": "dee4e8b177d142d45bc25dc8828221c0d7616bc718c26bce940ebbb2df34d215"
+    },
+    {
+      "idx": 64,
+      "kind": "paragraph",
+      "content": "Gladias sighed. <span data-hue=\"93.33\">\"At least we know where she is. It's going to be difficult to get her out of Northglade, but at least that's also the place Febric and Hreda are, so we can get them all together.\"</span>",
+      "sha256": "6fb163a602dec66ff89a1d0d77d7195a6ec0a33180087f3e7eeec7a51e46a731"
+    },
+    {
+      "idx": 65,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Indeed. If you really wanted to, you could even go to Northglade now - though the doors to the GPH are still closed.\"</span>",
+      "sha256": "4d928f22924cb34051b62c81c79ab51110d376fa7d19ea6aea25e62455e95661"
+    },
+    {
+      "idx": 66,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"The Arctics recently started allowing communication and travel both ways between Northshore and the rest of Veridia. They opened up clinics in Northglade offering some of their most advanced treatments, for both longevity and performance enhancement. Looks like they've decided to try to get Veridians to join the Arctic Empire voluntarily, by offering us their shiny technology.\"</span>",
+      "sha256": "72157c33f70034218b16705407760aa9996ae53f602efb8848297009f486039d"
+    },
+    {
+      "idx": 67,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"It's a good strategy.\"</span>",
+      "sha256": "c57218f91d0bd60333649071948d45a610f3cc1a828b233e5a3126dc7051159b"
+    },
+    {
+      "idx": 68,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"What was your line, Zei? Manipulating someone to do something by just showing them how it's in their interest, is just convincing?\"</span>",
+      "sha256": "4d05071c272faa857a54476850e870c91d15bc5902724ad9896ffe3f24f2c563"
+    },
+    {
+      "idx": 69,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"That's definitely how Ephelion would see it. Of course, Sylka would get upset and say they're hiding the hidden cost - if you can live longer but it depends on ongoing infusions of proprietary Arctic medicine, you become dependent on them for your life, you become their slave. Though Ephelion would say that being dead - being inside a coffin where you are not free to move a single muscle or think a single thought - is the worst slavery of all. And that that's not just true for a person, it's true for a civilization.\"</span>",
+      "sha256": "5ea137b73e7bc3f1b8249f9d082a60ce35f5300ca6e119ad2d5df0934ccb641d"
+    },
+    {
+      "idx": 70,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"If we want Veridia to succeed and thrive, we have to find the synthesis. We can admit that the Arctics do some things very well, and that their striving for a radically better future can be healthy. Veridia's north star cannot be to just stay the same as we are but with less greed and a better social fabric. We need to have actual progress, and take the good parts of it without the bad. We need to recognize success, and reward it.\"</span>",
+      "sha256": "d5c5a69fa46278a84c9badcc21692f72298092b705c0b027485b1a52d9e3949b"
+    },
+    {
+      "idx": 71,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"But first, we have to give ourselves breathing room. And that means defeating the Arctics in Northshore.\"</span>",
+      "sha256": "cbc3c8ad9f11bb9310d7aa5711f71b1c79dc7905a3b838b27fa8cf60f936925e"
+    },
+    {
+      "idx": 72,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Exactly. And to do that, we have to be willing to learn from the outside - learn from our enemies in the Arctic Empire, and from our friends in Freetown and Dzego.\"</span>",
+      "sha256": "d4ea35c3da8435ce37019ac52e296a6b6b00664674efddf9fe5ebcff8175250a"
+    },
+    {
+      "idx": 73,
+      "kind": "paragraph",
+      "content": "The car slowly came to a stop. A few moments later, the doors opened, leading straight into the inside of what looked to be a government-run hotel.",
+      "sha256": "1f8506e9a29185f30991723af0d09bda5919caff42208dc39e0e7cdce5f229a4"
+    },
+    {
+      "idx": 74,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Get a good sleep, friends. Zei, Den, the two of you have a big day tomorrow morning. And then once that's done, we'll meet and talk about our big plans. Veridia ba fau gie.\"</span>",
+      "sha256": "e5691c2d1978358b0a1bcd48a25e872ee27bb901a7636889045b9f7e157be6d5"
+    },
+    {
+      "idx": 75,
+      "kind": "paragraph",
+      "content": "Gladias and Zei stepped out of the car first. Almost immediately, Gladias could see a woman waiting in the far corner of the room. She turned toward him, and began running toward him with outstretched arms.",
+      "sha256": "cf23afd331fcee04e3d1214c18140f2ba606c9b374b84be03303088c678fb128"
+    },
+    {
+      "idx": 76,
+      "kind": "paragraph",
+      "content": "It was Seila.",
+      "sha256": "5653cf0ee5070e11bcd122e2da4de76dc59fdb483bde8034fe88c40a306ff7ba"
+    },
+    {
+      "idx": 77,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 78,
+      "kind": "dateline",
+      "content": "**Meldan, Veridia** · 3724 Frostime 6",
+      "sha256": "b55ad5f67ac5c909b6b3c9fae16425886a0c0f955b61e1ef7cebf274393b94a4"
+    },
+    {
+      "idx": 79,
+      "kind": "paragraph",
+      "content": "Zei sat down on a chair, in front of a console that looked remarkably similar to the consoles on which he had played all of his championship Minpentai games. The main difference that he could see was that this time, there were no anti-cheating detection drones buzzing around.",
+      "sha256": "de6bdf292c8247b5932b22b247b8d65e258428f07093fab90e17990896c336ad"
+    },
+    {
+      "idx": 80,
+      "kind": "paragraph",
+      "content": "He put on the earpiece and glasses, and spoke into the microphone.",
+      "sha256": "ee9a8f4221c15f83be230799821f34cb89c771efa1d8f412220914328f7d5ba9"
+    },
+    {
+      "idx": 81,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Can you hear me, Den?\"</span>",
+      "sha256": "1d6eb5dab95c79b656a2b483fea90209ab2d6d5c09929140efe0ecaeb0a1f15e"
+    },
+    {
+      "idx": 82,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Yep, loud and clear. I think I'm in the room right below you.\"</span>",
+      "sha256": "8b5e6f154c2c8aa7cb5e1f937e8720a36211be6cf77d2a43de2a232bbf16dd35"
+    },
+    {
+      "idx": 83,
+      "kind": "paragraph",
+      "content": "Zei playfully stomped his feet.",
+      "sha256": "485a368fdc5964b00e2be30aa5dbea7692b3acf4037e962de6549e7e22183b09"
+    },
+    {
+      "idx": 84,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Can you hear that?\"</span>",
+      "sha256": "52e3aa5e691957dcb94649059806d81dff5bf3d93331e777cf1d4ce806334f41"
+    },
+    {
+      "idx": 85,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"I'm only hearing your voice through the earpiece.\"</span>",
+      "sha256": "f30dc67c7926e4f61d88c03b98562a35ed4014a5ca606c5a9bd482d91460bf7a"
+    },
+    {
+      "idx": 86,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I guess your soundproofing is very good!\"</span>",
+      "sha256": "de0d2274934a6e46d5fcf79a7efa46c1a56bfa3483636bdb90abe6c4456c566e"
+    },
+    {
+      "idx": 87,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Okay, Zei, let's go through the whole operation again.\"</span>",
+      "sha256": "92a4eaf2a47d423ea2bf0d2918dfe5d37cfc362338a0e731d4f4481983e75818"
+    },
+    {
+      "idx": 88,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Location: Redshire, presidential residence. Goal: rescue our target - Tafindel, the president's son. Strategy: our man on the inside asks the target to step out onto the balcony. We fly in, drop down a rope for him to tie around his waist and hold on to, fly out before the Arctics can do anything.\"</span>",
+      "sha256": "15dc8121990a98bbbbc19b4e8a37e17c2e0acf8c8da9e8b60cda15b01e7f5215"
+    },
+    {
+      "idx": 89,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Exactly, that's the mainline plan. Now what are the contingency plans?\"</span>",
+      "sha256": "f93d78f659fd3c7e31351fa86d0fb7e3982c50bbb3f0f9612bf45a43e6cc0705"
+    },
+    {
+      "idx": 90,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"If Arctics appear - soldiers or drones - we shoot them. If he doesn't step out onto the balcony, no backup plan, we're screwed - our drones won't survive if they have to land directly on the building. If the drone with the rope gets shot down, we have a second drone, and potentially even the other combat drones could pick the target back up, though they're not as well-designed for it. The only dangerous window is if the drone gets shot down within a few ticks after it picks him up - too soon for the backup drones to swoop in and grab him before he hits the ground.\"</span>",
+      "sha256": "aa4409c1caae775cdd4c7552fc6af1bc0fb040efe1a78356e909dd9f69a58ce9"
+    },
+    {
+      "idx": 91,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"What's my responsibility?\"</span>",
+      "sha256": "fa19b76af3d388edeb823151c82bb8a3e9916e0860a93075d30cf8af3f33e952"
+    },
+    {
+      "idx": 92,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Supervising the mainline plan.\"</span>",
+      "sha256": "4bd550b2f9b09567009881c0f62d62e2ca7ae4e9b59e7b139c3b0978ec0469ce"
+    },
+    {
+      "idx": 93,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"What's yours?\"</span>",
+      "sha256": "711499b15b6adbdc824cc8b2eaf873c586f4862287174cf712ad8b0458096c3c"
+    },
+    {
+      "idx": 94,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Supervising the combat and the contingency plans.\"</span>",
+      "sha256": "8eba4da2e38dc153da9cd647872087b48fd38646bc6025c4701de5aae57b2b2f"
+    },
+    {
+      "idx": 95,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Mu, are you here?\"</span>",
+      "sha256": "aeab9cad36e8d60848939eac295578706a850f7271bbf791b3eb2af80dffa94b"
+    },
+    {
+      "idx": 96,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"I am indeed. I'm supervising the surveillance, I'll make sure we learn about anything unexpected as soon as possible.\"</span>",
+      "sha256": "cd328176039c85a7b96eb71fc53122e7f3e5893295838ef5064be7ce50b5c4b5"
+    },
+    {
+      "idx": 97,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Mu, how did you get here!?\"</span>",
+      "sha256": "ea99a8363c1d5a77dfdcb3af76305af41c7c153bbd616d6460390d1016f76891"
+    },
+    {
+      "idx": 98,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"I was on the same aeroplane as you yesterday, Zei. Just in a different cabin, and different car going into the city. Privacy precautions.\"</span>",
+      "sha256": "d90adfe768101b31de581d94636a5e7b71aa5ae5fd43fa14c81dc97553a8d4b2"
+    },
+    {
+      "idx": 99,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Well I'm happy to see you! Or, at least, hear you.\"</span>",
+      "sha256": "00470eeeaba57b55dfa485e9e16171b01daea3c246e4e2111b00e57ed33d799e"
+    },
+    {
+      "idx": 100,
+      "kind": "paragraph",
+      "content": "Zei checked the various numbers in the display that was being blasted into his eyes through the glasses he was wearing.",
+      "sha256": "3af69ad56e8f7bd915c3df18820a5a746c5f3d010e5155b3f9501c7022489e8a"
+    },
+    {
+      "idx": 101,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Fi le gei tau fa\"</span>, he exclaimed, mimicking the voice of the announcer that would count down to the beginning of each Minpentai game.",
+      "sha256": "133479cc6445ac8e38ce19fb334e000b15255d947ae65fbee409cf41598b60c2"
+    },
+    {
+      "idx": 102,
+      "kind": "paragraph",
+      "content": "He then consciously switched his mood to be entirely focused on the battle that was very soon to begin.",
+      "sha256": "a968f24df2ad218d5cafce6cc79e524fd823461a10035155cad69552d4b28f0a"
+    },
+    {
+      "idx": 103,
+      "kind": "figure",
+      "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<rect x=\"150\" y=\"50\" width=\"40\" height=\"14\" fill=\"#89c\"></rect>\n<polygon points=\"170,60 180,60 175,68\" fill=\"#550\"></polygon>\n<circle cx=\"20\" cy=\"100\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"27\" cy=\"120\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"34\" cy=\"140\" r=\"3\" fill=\"#cef\"></circle>\n<line x1=\"20\" y1=\"100\" x2=\"0\" y2=\"107\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<line x1=\"27\" y1=\"120\" x2=\"7\" y2=\"127\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<line x1=\"34\" y1=\"140\" x2=\"14\" y2=\"147\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n</svg></div>",
+      "sha256": "992a1548dbc5a7fd0fb39b67b56b91ee9ffbbe580dce9ef6a23e122e659bfe3d",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 78,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "glasses",
+        "device_evidence": {
+          "idx": 100,
+          "quote": "Zei checked the various numbers in the display that was being blasted into his eyes through the glasses he was wearing."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c26-b103.svg",
+            "viewBox": "0 0 200 200",
+            "width": "200",
+            "height": "200",
+            "labels": [],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 104,
+      "kind": "paragraph",
+      "content": "Zei stared intently at the screen as the drones came closer to the parliament building and more drones appeared onscreen.",
+      "sha256": "166e69336ed2d9cb2620266900e7bd4d3a7393df78cb21278cd32fd753145852"
+    },
+    {
+      "idx": 105,
+      "kind": "paragraph",
+      "content": "Twenty ticks later, the dark yellow triangle onscreen turned into a brighter yellow checkmark. Tafindel stepped out onto the balcony, exactly on schedule.",
+      "sha256": "266ad2987c373e54381dad714f574bbc4f0d951fb7d51826304c08cd83962d1f"
+    },
+    {
+      "idx": 106,
+      "kind": "paragraph",
+      "content": "Thirty more ticks passed.",
+      "sha256": "5f3d325649dbce361f3f62c57812321f4b2e5b169cc3dc7300689a13969cdecb"
+    },
+    {
+      "idx": 107,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"mu gu gei tau fa\"</span>, he said softly. Battle starts in fifty ticks. In some sense, the battle had started already, but the moment he was waiting for was the moment Tafindel would grab hold of the rope. That is when the real challenge would begin, he thought.",
+      "sha256": "e1dc6facff7a823fe351164340c2a316de29b7373815d1063aae7d07c39c75c5"
+    },
+    {
+      "idx": 108,
+      "kind": "paragraph",
+      "content": "Twenty more ticks passed.",
+      "sha256": "e6529d2a69a20341a8f4996397fcf4ae36c778e34c2154094bb02a23c23fefd5"
+    },
+    {
+      "idx": 109,
+      "kind": "paragraph",
+      "content": "Suddenly, the checkmark turned back into a dark yellow triangle.",
+      "sha256": "9f32d08e265f3cd0022227f9429fe1cd8d6d5885abdfccbdbe7a9858f24d8992"
+    },
+    {
+      "idx": 110,
+      "kind": "paragraph",
+      "content": "Zei zoomed in to the video feed. Someone had grabbed Tafindel, and pulled him back inside.",
+      "sha256": "a134635ce620080244534ac16fb2779fbdb8c5308e4d31cfbd3f7355d568ab50"
+    },
+    {
+      "idx": 111,
+      "kind": "paragraph",
+      "content": "And almost at that same moment, Arctic drones started shooting.",
+      "sha256": "c1ce8642229e40dc9c60c8be5fccfffa67653c868bcc93e65afcde338ee4cb5c"
+    },
+    {
+      "idx": 112,
+      "kind": "paragraph",
+      "content": "Zei could immediately hear Den's words blasting through his earpiece.",
+      "sha256": "c879d0da0ef7e8faf2108db3021eb71683b4431f79c0a001a991cfa58d1c5c21"
+    },
+    {
+      "idx": 113,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"I'll figure out what happened to the target. Zei, supervise the battle.\"</span>",
+      "sha256": "7bfa1d11fe1b79ca8310e0e35df857a9880d44bc411415255487fced9333c899"
+    },
+    {
+      "idx": 114,
+      "kind": "paragraph",
+      "content": "Zei subconsciously nodded. The headset automatically translated the nod into a checkmark icon, which flashed onto Den and Mu's displays.",
+      "sha256": "1f9df10b8119891323fc93ac898a6c02c531680f031569ab199beafe0c942408"
+    },
+    {
+      "idx": 115,
+      "kind": "figure",
+      "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<rect x=\"150\" y=\"50\" width=\"40\" height=\"14\" fill=\"#89c\"></rect>\n<polygon points=\"170,60 180,60 175,68\" fill=\"#550\"></polygon>\n<circle cx=\"100\" cy=\"72\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"107\" cy=\"92\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"114\" cy=\"112\" r=\"3\" fill=\"#cef\"></circle>\n<line x1=\"100\" y1=\"72\" x2=\"80\" y2=\"79\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<line x1=\"107\" y1=\"92\" x2=\"87\" y2=\"99\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<text x=\"107\" y=\"92\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<line x1=\"114\" y1=\"112\" x2=\"94\" y2=\"119\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<circle cx=\"57\" cy=\"76\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"64\" cy=\"96\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"71\" cy=\"116\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"78\" cy=\"136\" r=\"3\" fill=\"#cef\"></circle>\n<line x1=\"57\" y1=\"76\" x2=\"37\" y2=\"83\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<line x1=\"64\" y1=\"96\" x2=\"44\" y2=\"103\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<line x1=\"71\" y1=\"116\" x2=\"51\" y2=\"123\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<text x=\"71\" y=\"116\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<line x1=\"78\" y1=\"136\" x2=\"58\" y2=\"143\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<text x=\"78\" y=\"136\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n<circle cx=\"24\" cy=\"110\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"31\" cy=\"130\" r=\"3\" fill=\"#cef\"></circle>\n<line x1=\"24\" y1=\"110\" x2=\"4\" y2=\"117\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<line x1=\"31\" y1=\"130\" x2=\"11\" y2=\"137\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n</svg></div>",
+      "sha256": "c453106c54cf17db4bb87540732167640b6fcc73886a3352f9edc14772c23c98",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 78,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "headset",
+        "device_evidence": {
+          "idx": 114,
+          "quote": "The headset automatically translated the nod into a checkmark icon, which flashed onto Den and Mu's displays."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c26-b115.svg",
+            "viewBox": "0 0 200 200",
+            "width": "200",
+            "height": "200",
+            "labels": [
+              "x",
+              "x",
+              "x"
+            ],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 116,
+      "kind": "paragraph",
+      "content": "Zei groaned. Three of his drones had already been hit.",
+      "sha256": "c529f4a821aa45b2f02dc25dcfa3ee731c2e6e0b600fc1c477f10c066b9c4e7c"
+    },
+    {
+      "idx": 117,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Evasive action, return fire at hostiles. All damaged drones, if you are still functional, descend to ground and play dead.\"</span>",
+      "sha256": "b846638d018ed7ea4cbfa673c8ab1da18e97307bb1b7cb111b158feccf35784b"
+    },
+    {
+      "idx": 118,
+      "kind": "paragraph",
+      "content": "Arctic surveillance was more powerful than he had thought, he realized.",
+      "sha256": "4b9c70aacc5819e523a772f2e2505bf30f4838c1ae9cab741b66e22201154233"
+    },
+    {
+      "idx": 119,
+      "kind": "paragraph",
+      "content": "At that moment, an X appeared above a fourth one of his drones - the drone that had been intended to grab the target. A tick later, that drone disappeared completely from the display map. Zei checked the raw visual feed. It had been directly hit, and exploded in midair.",
+      "sha256": "b0987ea99bacf7d100591c8451d2d525041d698ce7170edab2a8562c533868f2"
+    },
+    {
+      "idx": 120,
+      "kind": "paragraph",
+      "content": "Zei screamed with despair. The evasion tricks that they had learned from their previous missions were not helping. It looked like the mission was going to fail - and perhaps with it, the Kungaupei's credibility.",
+      "sha256": "a0924ae53a4b968416e11c3e81ddba8f6ea8a29aaef11ee11b8bd1c40a3b2885"
+    },
+    {
+      "idx": 121,
+      "kind": "paragraph",
+      "content": "The next moment, through his earpiece, he heard Mu speaking intensely.",
+      "sha256": "e4c0016f882d59a252f5f74967b966b12b9c8d4649d6edd0d01a732e8dbdd221"
+    },
+    {
+      "idx": 122,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"New plan. Everyone fly low, under the buildings and trees. Fly through the streets. That's where their firing ability is weakest. Then I have a trick up my sleeve.\"</span>",
+      "sha256": "d917ebc05070cc4ac697385ec62d931c91135ca5f048ecf28926ced035aa9414"
+    },
+    {
+      "idx": 123,
+      "kind": "paragraph",
+      "content": "Zei nodded, and passed along the instruction to all drones. Within ten ticks, the four surviving and fully functional drones were all near ground level. An additional damaged drone, which Zei had instructed to play dead, was already at ground level - it had been there for over half a minute.",
+      "sha256": "125a524c184caac25fcea772f62d50f01bb363b59d2e487ef645bbe00ba00386"
+    },
+    {
+      "idx": 124,
+      "kind": "paragraph",
+      "content": "Suddenly, Zei could see in his visual feed the streetlights and the lights inside the buildings all blinking chaotically. Arctic drones started firing in all directions, confused about where their adversaries were.",
+      "sha256": "d07510457c8ebb385045e767d58f0842a53b48d5f48bb54b797ba264040db7be"
+    },
+    {
+      "idx": 125,
+      "kind": "paragraph",
+      "content": "His drones kept flying forward. As soon as one got within a hundred meters of the presidential residence, Den spoke up.",
+      "sha256": "5ba3e383803e2c4d926730cf25d79602d43e1863cf603e171bd72dd87c95821a"
+    },
+    {
+      "idx": 126,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"I need a crash at these coordinates.\"</span>",
+      "sha256": "f72d99080f9a999cdfb5c5fa86bf969ffe889b4cc9a30fdaf1d12792d5dffc1a"
+    },
+    {
+      "idx": 127,
+      "kind": "paragraph",
+      "content": "A new yellow triangle appeared on the side of the building. Zei immediately directed his drone to crash there at full speed. Four ticks later, it did, and there was a large explosion and smoke.",
+      "sha256": "5574c18529fd60447d2992039bd2be4bb23107e553e66f590e458972f764142b"
+    },
+    {
+      "idx": 128,
+      "kind": "paragraph",
+      "content": "Ten ticks after that, the yellow triangle turned into two bright yellow checkmarks.",
+      "sha256": "07942640084e6cf77fc83f48771e3b8c4d5f1098e246220eadfaef5705b126ec"
+    },
+    {
+      "idx": 129,
+      "kind": "figure",
+      "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<rect x=\"150\" y=\"50\" width=\"40\" height=\"14\" fill=\"#89c\"></rect>\n<circle cx=\"120\" cy=\"67\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"130\" cy=\"72\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"140\" cy=\"80\" r=\"3\" fill=\"#cef\"></circle>\n<line x1=\"120\" y1=\"67\" x2=\"110\" y2=\"77\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<line x1=\"130\" y1=\"72\" x2=\"120\" y2=\"82\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<line x1=\"140\" y1=\"80\" x2=\"133\" y2=\"92\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<text x=\"140\" y=\"52\" fill=\"#cf0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">✓</text>\n<text x=\"147\" y=\"56\" fill=\"#cf0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">✓</text>\n<circle cx=\"79\" cy=\"75\" r=\"3\" fill=\"#cef\"></circle>\n<text x=\"79\" y=\"75\" fill=\"#f04\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">x</text>\n</svg></div>",
+      "sha256": "7ccd7e63743a8cb0003259543d833d21efd486c379771d0be40cd4f0ed116b2b",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 78,
+          "quote": "Meldan, Veridia"
+        },
+        "device": null,
+        "device_evidence": null,
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c26-b129.svg",
+            "viewBox": "0 0 200 200",
+            "width": "200",
+            "height": "200",
+            "labels": [
+              "✓",
+              "✓",
+              "x"
+            ],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 130,
+      "kind": "paragraph",
+      "content": "Zei was confused, but immediately did the only thing that made sense. The drones were too low for the rope to work. Instead, he directed two of the three remaining drones to slow to a stop, right in front of the presidential residence.",
+      "sha256": "11502842887fd120de262052d123114f887c66a03245ecab4356d06bf89fd428"
+    },
+    {
+      "idx": 131,
+      "kind": "paragraph",
+      "content": "Both checkmarks turned green. The drones accelerated again, and sped ahead. Zei directed the third drone to hold back, and fire on all Arctic drones that it could detect.",
+      "sha256": "13081428cde585cbe337e274afa49a116e5537cee82765e6efe185dceb3018bd"
+    },
+    {
+      "idx": 132,
+      "kind": "paragraph",
+      "content": "He checked the visual. On each of the two drones that were flying off, someone was holding on tightly to their backs. One was Tafindel, and the other was their man on the inside - his assistant. They were both wearing thermal cloaks. Good job Den, Zei thought.",
+      "sha256": "07702c208acf68dce5c3aaaa0ad4317d9a32bd56393a7e24bcc20d37e0b4a547"
+    },
+    {
+      "idx": 133,
+      "kind": "paragraph",
+      "content": "Zei continued to watch the screen intently. Somehow, against all odds, they seemed to have done it?",
+      "sha256": "276ca82f21b7a453ca1b00bf7551c8a9be3d38a935a3122a4b05d866a2ff2a01"
+    },
+    {
+      "idx": 134,
+      "kind": "paragraph",
+      "content": "Den cleared his throat and began to speak.",
+      "sha256": "0be22dafbb007f8af151df658a8c7929c38d7647e4f980f6587d4cdea544110c"
+    },
+    {
+      "idx": 135,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"This is not going to work\"</span>, he muttered. <span data-hue=\"53.33\">\"I see more Arctic drones coming in. They are faster, they will catch up.\"</span>",
+      "sha256": "f249abfc29c8d0c84b5b44b586a889112dc39cf408b57f9ba3c5d4755f37f4f1"
+    },
+    {
+      "idx": 136,
+      "kind": "paragraph",
+      "content": "Mu immediately responded.",
+      "sha256": "f2f9a17d34bbea9b43a811882b78895335e23259e4ac2ed8454666e683c4ed67"
+    },
+    {
+      "idx": 137,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Already on it. The targets will jump off the drones soon, the drones will keep going. The targets will be told to run two hundred meters to a road - NOT the road closest to them. I have a car coming to pick them up. With luck, they will be tens of kilometers away before the Arctics know what's going on. Once they get to the shore, a sea drone will come and take them out of Redshire.\"</span>",
+      "sha256": "39026be6eb1366ddbb98cc762e3dab508dacd5fa2dec2e0ab83b7ddc4751586d"
+    },
+    {
+      "idx": 138,
+      "kind": "paragraph",
+      "content": "Zei sighed. <span data-hue=\"346.67\">\"I trust you, Mu.\"</span>",
+      "sha256": "1c1d5c85da567ac85534cd13579edf0b6685eeef0531e082bebb05e648d7dcd5"
+    },
+    {
+      "idx": 139,
+      "kind": "figure",
+      "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"200\" height=\"200\" viewBox=\"0 0 200 200\" style=\"margin-left:35px\">\n<rect width=\"200\" height=\"200\" fill=\"#348\"></rect>\n<circle cx=\"70\" cy=\"50\" r=\"3\" fill=\"#cef\"></circle>\n<circle cx=\"85\" cy=\"55\" r=\"3\" fill=\"#cef\"></circle>\n<line x1=\"70\" y1=\"50\" x2=\"75\" y2=\"75\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<line x1=\"85\" y1=\"55\" x2=\"90\" y2=\"80\" stroke=\"#cef\" stroke-dasharray=\"2\"></line>\n<text x=\"80\" y=\"100\" fill=\"#cf0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">✓</text>\n<text x=\"95\" y=\"105\" fill=\"#cf0\" font-family=\"sans-serif\" font-size=\"12\" text-anchor=\"middle\">✓</text>\n<line x1=\"150\" y1=\"0\" x2=\"150\" y2=\"200\" stroke=\"#cef\" width=\"2\"></line>\n<line x1=\"70\" y1=\"100\" x2=\"90\" y2=\"200\" stroke=\"#cef\" width=\"2\"></line>\n<line x1=\"0\" y1=\"100\" x2=\"70\" y2=\"100\" stroke=\"#cef\" width=\"2\"></line>\n</svg></div>",
+      "sha256": "6ea058c0744f860faffad71416967e1e1956bb561c8bd40286fc80ada8395477",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 78,
+          "quote": "Meldan, Veridia"
+        },
+        "device": null,
+        "device_evidence": null,
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c26-b139.svg",
+            "viewBox": "0 0 200 200",
+            "width": "200",
+            "height": "200",
+            "labels": [
+              "✓",
+              "✓"
+            ],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 140,
+      "kind": "paragraph",
+      "content": "Zei sat back down on his chair and sighed, feeling deep disappointment at himself. He closed his eyes.",
+      "sha256": "19357d68aab2ebd37090e5f2ad8f27b6d57e294865cc41173399038108b72fd9"
+    },
+    {
+      "idx": 141,
+      "kind": "paragraph",
+      "content": "A minute later, the first good news:",
+      "sha256": "8a711a3b924f754b27a7de8da4668bc4797b8ce08bcf7fcc0ae654607895ea3d"
+    },
+    {
+      "idx": 142,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Pickup successful.\"</span>",
+      "sha256": "e178a8865b149ecc7c75a8167684842594476873f2dd5758bdc3086725dc252c"
+    },
+    {
+      "idx": 143,
+      "kind": "paragraph",
+      "content": "Another ten minutes later:",
+      "sha256": "6a1f80dc2fe1ae961fb77218a24d587efbe51cd1fcdf2ca53f9e778b0c3cee95"
+    },
+    {
+      "idx": 144,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Our drones touched down at a large shopping complex in Dolinar. Arctics are closing in on them. Hopefully the manhunt will take as long as possible.\"</span>",
+      "sha256": "f07feb8db4cd972624e6619029bed7a602a21dcd04cb5f491ff37bc022f65b59"
+    },
+    {
+      "idx": 145,
+      "kind": "paragraph",
+      "content": "Another thirty minutes later:",
+      "sha256": "5f3c8a1a05b3dba62a9aca11b46051aef34870c717d2044c4df76f6e245ff5ce"
+    },
+    {
+      "idx": 146,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Our car reached the shore without incident. Targets now entering the seaborne drone.\"</span>",
+      "sha256": "d7256afc705152b72db29afe3c7aa8dd97a615fbff3f02edac8092f6916e4341"
+    },
+    {
+      "idx": 147,
+      "kind": "paragraph",
+      "content": "Ten more minutes after that:",
+      "sha256": "9fcb94455a397a9b0959f9095efa853f41990b66d8d45abe3626a2f7439b8e51"
+    },
+    {
+      "idx": 148,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"The Arctics realized that we tricked them. They are broadening their search.\"</span>",
+      "sha256": "6e46f30d17c005806910a902af5f717f9ede702227d0a8491631c3422275e5e4"
+    },
+    {
+      "idx": 149,
+      "kind": "paragraph",
+      "content": "Zei watched the screen, which was at this point showing the slow grinding progress of the seaborne drone making its way westward away from the Redshire coast.",
+      "sha256": "bfc8753ebfe73cb4b65aa654a5ae0ed270f3cf9b211128d69f80210da9507d99"
+    },
+    {
+      "idx": 150,
+      "kind": "paragraph",
+      "content": "Fifty minutes after that:",
+      "sha256": "b129b879ff11d0f8f401939f1fc6ebcb134779a8105846d60c864870b08dc341"
+    },
+    {
+      "idx": 151,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"The targets have successfully arrived on the coast of Arturia.\"</span>",
+      "sha256": "4b4922f111c1f05761d14051fdf601788b8572c6bc934c28c0b74a56a3b7dad8"
+    },
+    {
+      "idx": 152,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 153,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I'm so sorry guys\"</span>, Zei muttered softly. <span data-hue=\"346.67\">\"I failed completely, and if it weren't for Mu somehow saving us with a completely new plan, we would have failed, and probably everything else we're planning would have failed too.\"</span>",
+      "sha256": "479139c2bd651c2d07f9d26074ad303f44512a68a5a5553d0c55735784de2494"
+    },
+    {
+      "idx": 154,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Welcome to real life warfare, Zei\"</span>, Den replied. <span data-hue=\"53.33\">\"It's not like Minpentai. Sometimes the only way to win is to think completely outside the box. Not outside the box as in figuring out some clever way to encode an entire computer inside of a glider structure, but outside the box as in, jumping out of your console chair and running over and bashing the other player in the face.\"</span>",
+      "sha256": "01ff275223d48237dc82a832f1e3567f78f259f4f3a7659dfb1a09a71d45ad0a"
+    },
+    {
+      "idx": 155,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"So ... Mu, what did you do there?\"</span>",
+      "sha256": "f02a05ef2cb30b0880184cfe530b14b8bfb3020036f04811485f8e7662b39cee"
+    },
+    {
+      "idx": 156,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"This is not the Arctic Empire, this is Redshire. There are lots of people there who quietly support us, and a lot of the technical infrastructure has still not been shifted over to full Arctic control. So for the moment, it's still possible to break into some things. I have a bunch of admin passwords that people from Redshire gave me. I used them to first take control of the streetlights, and then to commandeer a few dozen automated cars. There were actually multiple decoys, the planes stopped and restarted in a few places. We should have done this plan all along, but - I underestimated the extent of Arctic surveillance as much as you did.\"</span>",
+      "sha256": "eeaaf823dc5bf3cd16a0dba44383b4b5f4bbb159f34a113a35d3a2f5f7fe9fa2"
+    },
+    {
+      "idx": 157,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"It was truly an amazing job, Mu.\"</span>",
+      "sha256": "f22f586d8f908c3e3837da2970891799543c6db6b4b7ad6de3e828925f4b82d3"
+    },
+    {
+      "idx": 158,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"But what matters is that we won. Tafindel is safe in Arturia. The Arctics have been humiliated. The whole world now knows that they can be defeated.\"</span>",
+      "sha256": "aec925401b16b720d41fb599d5d580590ffe25611d9a365abc954dd0602abcd1"
+    },
+    {
+      "idx": 159,
+      "kind": "paragraph",
+      "content": "Den paused, and then began to speak again.",
+      "sha256": "8965ecbd4f9753d82c843419709d95ce0c59378aa03dfe6e5ba8801ce0fa1754"
+    },
+    {
+      "idx": 160,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"For the moment, they think it's just Freetown's defense companies. But now it's time for the Kungaupei to stand up and take its share of the credit. And then see if the Veridians are up for giving Veridia the defense that it deserves.\"</span>",
+      "sha256": "1952e89a9e25d59b1480d654abf15caa2be02aa08b7c6ab6ea4a9e8dc6e836d4"
+    },
+    {
+      "idx": 161,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 162,
+      "kind": "paragraph",
+      "content": "Gladias slid open the door to the booth, and stepped in. Five judges that Mov and Seila had helped to identify - with significant help from surveillance cameras that had been backdoored by Dzego - were already sitting inside.",
+      "sha256": "e457609bdb11b1f4121e6af3c1f8b17fdcf1ac0f14fc39dddf736b2d854aa7a1"
+    },
+    {
+      "idx": 163,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"40\">\"So what is it that you wanted to talk about?\"</span>, the first judge asked.",
+      "sha256": "3ae09cffc8141584951a68f8e1190305ea4d5526f4ba004eb72128dbfc23c1bc"
+    },
+    {
+      "idx": 164,
+      "kind": "paragraph",
+      "content": "Gladias sat down, and slid the booth door behind him.",
+      "sha256": "d0647ae99b58b3d3e884d00c8433679c3e4b45248f782d0303a1d3c1595fdb25"
+    },
+    {
+      "idx": 165,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I am planning to open a case against the Veridian military leadership. Under the fourteenth Ground Law, the Veridian military is required to defend Veridia. As we have seen from what happened in Northglade, they have completely failed to do this. And so I am arguing that they have broken the law, and should be fired.\"</span>",
+      "sha256": "36383c3c7127b15da2468238501b4e4884a8ec454e0dc9977f9791c32701ee61"
+    },
+    {
+      "idx": 166,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"40\">\"That's crazy. Yes, we were caught by surprise in Northshore and lost pretty badly. But the Veridian military are doing the best job they can in a difficult time. We can't just come in from the outside and say we don't like how they're doing their job and replace them, when we don't even know what standard we're comparing them to-\"</span>",
+      "sha256": "d03abe470e236881d540fb544d1a741c309907783fcdc0ae3904388575176eeb"
+    },
+    {
+      "idx": 167,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Caeron\"</span>, Gladias interrupted. <span data-hue=\"93.33\">\"Did you see in the news what happened today?\"</span>",
+      "sha256": "4e60bc2c10f625c21364023474c85978fd4fe27596551c421ed76fba251d65cb"
+    },
+    {
+      "idx": 168,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"40\">\"I did not. Come on, Gladias, you know it's a rule that judges should not read the daily news. We're here to apply timeless principles, not get swayed in every direction by crowds of people getting angry in the moment.\"</span>",
+      "sha256": "75b9a66ba6a573cc30a407f6b5f8478e5a13d5a5eb7a366b2fd06ab77b2b9e18"
+    },
+    {
+      "idx": 169,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"A Dzegojan group flew into Redshire and successfully rescued the president's son.\"</span>",
+      "sha256": "298f4eca233c886529da8ab8318b4389c77146ae09fe8dfd8b88d95afe3a39e5"
+    },
+    {
+      "idx": 170,
+      "kind": "paragraph",
+      "content": "Almost immediately, another judge began to reply.",
+      "sha256": "6c67e1c48cdeb2f92890d09b40a8258b41cabc38d172cfb20c06ee1fe98e4df9"
+    },
+    {
+      "idx": 171,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"So you want us to replace the Veridian military leadership with some Dzegojan?\"</span>",
+      "sha256": "b64a71e754fb8d5572493aa02aaeccfd9686f5491b940c9793a6d0e3f49a439b"
+    },
+    {
+      "idx": 172,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Yes, exactly.\"</span>",
+      "sha256": "a1b48875e3419ded3efd89502a28abe77e579d91a842774fe9c1315631515007"
+    },
+    {
+      "idx": 173,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"I'm sorry, this is insane. That's not the court's job. Veridia is a democracy. The people in charge of the military, who can change the composition of the military, are the parliament. So if you want to try your crazy scheme, you should go talk to them.\"</span>",
+      "sha256": "8b8129094b5cb31b28f654f71a0ffd327d3f3796ebf349c18175b8ba176b015e"
+    },
+    {
+      "idx": 174,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Come on, Sewlert, you know as well as I do that the parliament is corrupt. They're either already inside an Arctic-engineered bubble of propaganda, or bribed, or have them or their families threatened thanks to the Arctics having broken into our surveillance systems.\"</span>",
+      "sha256": "e215e557b11ce855da05aac3c0d865cf247ada4513de6e3ba4b7e48b073b37dc"
+    },
+    {
+      "idx": 175,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"We're a court. We don't have the right to just go and decide the entire parliament is corrupt.\"</span>",
+      "sha256": "a787c053ffb2867cb2f46ba0cba0017c0bc03348b2217c42ab057f90765d3ff6"
+    },
+    {
+      "idx": 176,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Actually, you do. Twenty-first Ground Law. Veridian government officials are required to perform their duties honestly, in good faith and without undue influence, and report and resign if any undue influence befalls them.\"</span>",
+      "sha256": "2411203c0dd47bbe1ff90973ec934709c9b43798295de8263233fabbdb3d55d2"
+    },
+    {
+      "idx": 177,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"So you want us to fire the parliament too?\"</span>",
+      "sha256": "4574ec922cf3d0a4eb149a5d76e857c7427da8c1dcd2defc8a53aa1dad90d817"
+    },
+    {
+      "idx": 178,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"If necessary, yes.\"</span>",
+      "sha256": "5137a55e45cc9e2c2ff525e64e1db13296167b3ea9398a5f36cf1133e70ec447"
+    },
+    {
+      "idx": 179,
+      "kind": "paragraph",
+      "content": "Gladias could feel that he was not getting through. So he decided to try a different line.",
+      "sha256": "29e362339156c9387a0604d2c9b2e74bc11744ac2907e2d123058d42bc8d3332"
+    },
+    {
+      "idx": 180,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Do any of you have family in Northshore?\"</span>",
+      "sha256": "8c6a4673bd2f46c444bc340cb99119c09756153f874051003622bce0c2109ff8"
+    },
+    {
+      "idx": 181,
+      "kind": "paragraph",
+      "content": "A third judge spoke up.",
+      "sha256": "81e5e66a387d5d608f4f32acf32bdf2bf8628329e8a02f034fa5139140783485"
+    },
+    {
+      "idx": 182,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I do, a son. He's in the GPH, that's the one place that they are still blockading and not letting people leave from.\"</span>",
+      "sha256": "d9f298be0a76bb226381e03a2180ef098d561b6131e75342c71b0dad1bd98430"
+    },
+    {
+      "idx": 183,
+      "kind": "paragraph",
+      "content": "Caeron turned angrily toward him.",
+      "sha256": "b5114d9513d3c57065641145b6def1e65f1a872e298af9657a4403f792baf66a"
+    },
+    {
+      "idx": 184,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"40\">\"Why are you bringing this up? Gladias said it himself, we're required to perform our duties without undue influence.\"</span>",
+      "sha256": "663cc0dfaf301b19bd8232ee6a8fcef1898af45468031c2184e100eeb769cc98"
+    },
+    {
+      "idx": 185,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Six percent of the Veridian population is in Northshore. Each person has about ten close family members - parents, siblings, children, spouse, other close relations, co-parents. So among the five of you, that's fifty total, so statistically, there should be three of your family members total in Northshore. If you have none, then you're not feeling something that many other Veridians are feeling. So your interests are misaligned. You're misaligned toward compacency, but is that not also a form of undue influence?\"</span>",
+      "sha256": "08e120ed83a19bdbcb5d05ca2e1b0a6431f83056e88edcc5f17bb1d305af554e"
+    },
+    {
+      "idx": 186,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"40\">\"That's not how those laws work, there are precedents about it.\"</span>",
+      "sha256": "977bc9b2f5accab871690984b6815baa831e9e13d9945b288d032c73a6a2b804"
+    },
+    {
+      "idx": 187,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"40\">\"Do *you* have family in Northshore? If so, then *you* are the one with the undue influence.\"</span>",
+      "sha256": "9c3ec7781665fbd4ea693ffadc8698558f076b7c423cc8ddc9ed9d8afed8ca05"
+    },
+    {
+      "idx": 188,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Now you're getting the law wrong. Plaintiffs are allowed to have a stake in the outcome - in fact, they're required to. The legal term for that is *standing*.\"</span>",
+      "sha256": "df984477d91abe99866346fb14e179aa8e74e04492e25e3576d7f07755f27ced"
+    },
+    {
+      "idx": 189,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"And yes, I have three children there.\"</span>",
+      "sha256": "a93aa07061e7b9ec5f295f70385bcffa1a4d7c6851a61cd21a12aa15d0655506"
+    },
+    {
+      "idx": 190,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Look, Gladias. Again, Veridia is a democracy. We are not going to stomp our feet over our democracy just because a bunch of Dzego-man whiz kids rescued a prince and you think you're smarter and more morally pure than the entire parliament.\"</span>",
+      "sha256": "7a1eea7702cdddd2533e59d807909c86ae4e0b38e4001d858d3f67f5dfd9ccbf"
+    },
+    {
+      "idx": 191,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"And even if we did, just think about the procedure. A case takes a minimum of thirty days from start to finish, and that's if the judges don't decide that it needs to take longer. And then they can appeal, multiple times. Appeals can be shorter, but only from the third round. So it will take months for all this to resolve. And in the meantime, Veridia will be in chaos, and the Arctics will just swoop in and take over.\"</span>",
+      "sha256": "4196d009017648028dd08894b4b80b2ad0e9cf44488db9dda95fa6b4f83d887a"
+    },
+    {
+      "idx": 192,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"So we're not doing this.\"</span>",
+      "sha256": "823b13f77652913a5caad34af998b90706afa09a64a5d4acb4ec3319c134308d"
+    },
+    {
+      "idx": 193,
+      "kind": "paragraph",
+      "content": "Gladias looked around. Three of the other four judges were nodding along to what Selwert was saying. The remaining judge, Zevin, seemed much more sympathetic to Gladias - no doubt in no small part because he also had a son stuck in Northglade - but he did not seem to feel comfortable expressing his opinion.",
+      "sha256": "a6761756d318cc8282a39f522eb6262107f88fe215f8af341f8f7b4a8b35911e"
+    },
+    {
+      "idx": 194,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Understood\"</span>, Gladias said softly. If this sample of judges was that hostile to his pitch, the sample of judges that he would get if he launched a real case would almost certainly be quite hostile too. He needed a different strategy.",
+      "sha256": "77e35e410b0507a7220ab4361768ae806d19f0dd6aea260e5465a60ce49c5538"
+    },
+    {
+      "idx": 195,
+      "kind": "paragraph",
+      "content": "He slid open the door to the booth, and slowly exited.",
+      "sha256": "c13fbb329c9082f03d0fcf5a7aafb0bd4e5ef030bdcb61978fd117a586ca0ce9"
+    }
+  ]
+}

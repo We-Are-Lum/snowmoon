@@ -1,0 +1,970 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 11,
+  "source_url": "https://vitalik.eth.limo/snowmoon/html/chapter-11.html",
+  "source_sha256": "eab2a4536f387649c490c5e5e8089fdc01476a062481065ebf0c4aeafd77f727",
+  "fetched_at": "2026-10-02",
+  "license": "GPL-3.0",
+  "blocks": [
+    {
+      "idx": 0,
+      "kind": "heading",
+      "content": "# Chapter 11",
+      "sha256": "3bb1aad3d49ae3739e71222420b2df44805ed338d16497278110a74bef43d85a"
+    },
+    {
+      "idx": 1,
+      "kind": "dateline",
+      "content": "**Meldan, Veridia** · 3724 Bloomtime 15",
+      "sha256": "4769c63dceff904dbdcf2f67792e905f5f4ba092da843f99646848a3f00a5523"
+    },
+    {
+      "idx": 2,
+      "kind": "paragraph",
+      "content": "Seila, Daia and Vil were standing together in a large grass field, with many other families nearby.",
+      "sha256": "be28d43bd07a2a00ceaace6bb4fd9d92ddef9b0dfb56b03048b5a6d420cac647"
+    },
+    {
+      "idx": 3,
+      "kind": "paragraph",
+      "content": "From a distance, Daia caught sight of Gladias approaching. She waved at him. Gladias noticed, and with a smile on his face walked toward them more quickly.",
+      "sha256": "5d38f48a4b351838cdbcd7d0a522ca69e8e3248c1a912850519ad6d9e62611ee"
+    },
+    {
+      "idx": 4,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Happy to see you here!\"</span>, Daia exclaimed.",
+      "sha256": "89328071c76953d0a3f15c7b30450b1a95c14b7772e68df88c38fc51eb069bbf"
+    },
+    {
+      "idx": 5,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Well I can't miss my son's first real Helisport game\"</span>, Gladias answered.",
+      "sha256": "b4cf685764f4c528b9e648a6b0a9264b7ab2ee2fbffe8dce9aa8f875aa654e6f"
+    },
+    {
+      "idx": 6,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"So how have you been?\"</span>",
+      "sha256": "39c904a53de807831977623f9df88df4937824184741bd764b7515c395d2419f"
+    },
+    {
+      "idx": 7,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Well, lots of Order business. Can't talk about it publicly, you know. Going well though!\"</span>",
+      "sha256": "663831cfce5c499d45ab44a27f7028f441bbd14a549b0801847c62c3e55a2b63"
+    },
+    {
+      "idx": 8,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"How about you?\"</span>",
+      "sha256": "16c586dbc9ac1bc950563d9b2a89aa5b0fc91b674112752b3ecb3ee830e87464"
+    },
+    {
+      "idx": 9,
+      "kind": "paragraph",
+      "content": "Vil started to speak.",
+      "sha256": "6acf37ab142adafd4d238e6ba6b3407ecc3a9f2a54abaf71ffcb6fbb372e7731"
+    },
+    {
+      "idx": 10,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Well, lots of documents for the lawsuit against Divergent. It's been taking up a big part of my time for the last two months.\"</span>",
+      "sha256": "e791fd1be291451baebb7b363df21aec248ac5d3f5b8a24b55512e6e065ac70a"
+    },
+    {
+      "idx": 11,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Remind me, what happened there?\"</span>",
+      "sha256": "8ee48eccee8152026bcf14b170c0aad2f071bd2293c9e1cc297590ff12cf6783"
+    },
+    {
+      "idx": 12,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Ah sorry, I've been trying not to burden you guys with the details, I know you have so much on your plate already.\"</span>",
+      "sha256": "eeddecfb2b6ed0022e1fc779fa2b8294bf758290e4e2c31577fe6a2dfbd7aaa7"
+    },
+    {
+      "idx": 13,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Come on, Vil, your life is important to us.\"</span>",
+      "sha256": "cc4a76f65f6a10d5a4d57a1d42fa83fa5219f1a9c6519b7674f1a79b97f6db9c"
+    },
+    {
+      "idx": 14,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Well, remember about half a year ago I lost my job at Jump because they went bankrupt. A month later, another one of the employees reached out to me, and I learned from him what really happened. See, the official story had been-\"</span>",
+      "sha256": "a72e34c7af141f51191870ea4f60f54e8b60f8395825dbfc316ba1f01a6a6077"
+    },
+    {
+      "idx": 15,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I remember this in the news. Jump was struggling, and as a last-ditch effort to save themselves, they made a risky bet on the financial markets, buying a derivative on property prices in a region that they were about to announce they would start serving. But it didn't work - not enough people cared, then they got unlucky and prices went down, so the whole thing collapsed.\"</span>",
+      "sha256": "a97c07827ae4f5975f851e07804790e06548cd8175f8b516b351473bb8c4a7ee"
+    },
+    {
+      "idx": 16,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Exactly. But here's what I learned. The only reason why Jump was able to make such a large bet on a niche market without insane slippage is that a hedge fund - Divergent - had taken the other side of the bet. And the primary owners of Divergent had quietly bought a majority share in Jump for very cheap.\"</span>",
+      "sha256": "72effc7af8c4bd910a052f163150afb57d09b3ab26ac864baf4f4634010464d5"
+    },
+    {
+      "idx": 17,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"If housing prices in that region had gone up, Jump would have gained, Divergent would have lost, for them it would have been a net zero. And if housing prices went down - which they did - Jump loses, and Divergent gains, also a net zero. But here's the asymmetry: if Jump loses - which they did - then Jump declares bankruptcy, and so they get out of paying end-of-year bonuses plus a year of severance for their employees. So they gave themselves a free option on our backs.\"</span>",
+      "sha256": "afb813d1ff80fe99f68b2888d8fd4e0be92c2529968b8a0a18e6446cfc3449b2"
+    },
+    {
+      "idx": 18,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"When we found out about this, we sued - all the employees together sued, as a class action. It's been tough; Divergent even managed to intimidate some media sites into not covering it. But I feel like so far the judges are seeing through their tricks. So I'm optimistic.\"</span>",
+      "sha256": "8bd8e423cab308aaddbc207495a831031df447e86e32b440b45693851d505c74"
+    },
+    {
+      "idx": 19,
+      "kind": "paragraph",
+      "content": "They heard a loud whistle, and turned to face the direction that the sound came from.",
+      "sha256": "72b60df7c39e1a2ff9dc8acee3abe7822737a90ff07ac6e5835ce80e26653651"
+    },
+    {
+      "idx": 20,
+      "kind": "paragraph",
+      "content": "It was the instructor. A large truck had been moved into the center of the grass field.",
+      "sha256": "57032748f7b497437dc1222f46d4ef07198d36427e028279de57a353d1ca0dd9"
+    },
+    {
+      "idx": 21,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Helisport game starting in five minutes!\"</span>, the instructor yelled.",
+      "sha256": "33319898d88f515256936e868991a52f4e16d7574d7972bfbad5093d8f273a1c"
+    },
+    {
+      "idx": 22,
+      "kind": "paragraph",
+      "content": "The instructor pressed a button, and the back door of the truck began to open gently, tilting backward on its bottom hinge. After a few ticks, it had turned into a ramp.",
+      "sha256": "8e0e07392f24e6ccd0dcd28900918f1a94dfb67d395d327bb1095175652a3678"
+    },
+    {
+      "idx": 23,
+      "kind": "paragraph",
+      "content": "Some personal copters, simple chairs with rotor blades on top surrounded by shielding, automatically rolled out of the truck.",
+      "sha256": "223f5ed95ad0b5d4c78c423297e769b1cc2285340f5fb911fa32d4b62199a767"
+    },
+    {
+      "idx": 24,
+      "kind": "paragraph",
+      "content": "Some children, around ten to twelve years old, ran toward the truck, half wearing yellow shirts and the other half wearing purple shirts. Among those wearing yellow shirts was Zven. They grabbed their copters and began strapping into them.",
+      "sha256": "79b93b0654bcd42d327b65d06ee39ccac3447636bf6459b93103b80f623bbb34"
+    },
+    {
+      "idx": 25,
+      "kind": "paragraph",
+      "content": "The instructor walked into the truck, and soon came out with a much smaller box. He opened the box, and four bright red drones, shaped like balls a few centimeters wide with soft feather-like rotors on top, sprang out and flew into the sky.",
+      "sha256": "f39ed55d5bcc42a221c26cae6ba8eaa071b479968054d69f4354c895628054ec"
+    },
+    {
+      "idx": 26,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Welcome to today's Helisport game\"</span>, the instructor said. <span data-hue=\"120\">\"Today we're going to do a limited game, playing only with redballs. If you catch a redball, bring it back to me, and your team gets one point. First team to get to six points wins.\"</span>",
+      "sha256": "13dbbaaab8cdcecfe74290c55a3f8694247786933c9c4e87c0bbc4107a6bc2a3"
+    },
+    {
+      "idx": 27,
+      "kind": "paragraph",
+      "content": "By this point all ten children had strapped into their personal copters, and the rotor blades were beginning to spin - just enough to overcome about three quarters of the earth's gravity. The kids ran around excitedly, and some jumped, reaching about two meters off the ground before gently gliding back down.",
+      "sha256": "f4946141ae5724c9151f32de0f2f8cb8d7d0172f996932e4ad58ad830c97c587"
+    },
+    {
+      "idx": 28,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Everyone know what to do?\"</span>, the instructor asked.",
+      "sha256": "a17b752df95603971ef52cc0411356de337498250503fb76144665dd28d83f12"
+    },
+    {
+      "idx": 29,
+      "kind": "paragraph",
+      "content": "\"Yes!\", many kids shouted in unison.",
+      "sha256": "499482adf20b595438044a545e9c27220881187da18c0ac236a4866f02ba57bd"
+    },
+    {
+      "idx": 30,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Then we will begin the game in five ... four ... three ... two ... one ... blast off!\"</span>",
+      "sha256": "484082d2500ce5621ab7b53c70eaec07f7091161c99735cab4a3b38a6ae2f7f5"
+    },
+    {
+      "idx": 31,
+      "kind": "paragraph",
+      "content": "The personal copters flew into the air.",
+      "sha256": "bf974f6d93efbfa96f29314832021db0138dd30c7146dfd97a304a553c2bd205"
+    },
+    {
+      "idx": 32,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"You know, I'm surprised they still do this in schools\"</span>, Gladias said to Seila. <span data-hue=\"93.33\">\"If this were invented today, they would definitely say it's too dangerous.\"</span>",
+      "sha256": "4c1b4598a7be129dd9fba91cc0651ce3ca83479395c7ff4c8c77892e28be83ba"
+    },
+    {
+      "idx": 33,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"It was only invented less than ten years ago.\"</span>",
+      "sha256": "212d72527551af5420684f70d49d9479df6cbc28bd1a1db1e82cc529ef53e5f5"
+    },
+    {
+      "idx": 34,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"In Dzego.\"</span>",
+      "sha256": "9c234145cd57b15cd7bb0a3e308b55af17d7056ea36e052240d39ce4313dfc6c"
+    },
+    {
+      "idx": 35,
+      "kind": "paragraph",
+      "content": "Zven caught sight of a redball, and began flying toward it. A few moments after, two kids wearing purple shirts also saw the redball, and began to chase it right behind him.",
+      "sha256": "9b34c6ec04519d0201adda6b0f3da0446b5c2ffd2614c5c4d8281b0f274aff63"
+    },
+    {
+      "idx": 36,
+      "kind": "paragraph",
+      "content": "The redball suddenly shifted direction to the left.",
+      "sha256": "1be41e0bb2c1d408d015b56d2f77c64c42c198fdd8ddff524f0d16ebd6e46df2"
+    },
+    {
+      "idx": 37,
+      "kind": "paragraph",
+      "content": "Zven and the other kids also turned left. Zven's copter's rotor shield bumped into the rotor shield of one of the other kids' copters, and the two bounced harmlessly off each other.",
+      "sha256": "41d2d3e87091c9397e2b3b204a07830c7f1f3427933b14ed15e5815e4bdbfbd4"
+    },
+    {
+      "idx": 38,
+      "kind": "paragraph",
+      "content": "Zven aimed his copter to fly higher. He fell slightly behind the kid he had just bumped into, while the third kid flew forward, and was soon directly under him. The air sucked Zven down, and soon his feet bounced into the grid on top of the other copter's rotors.",
+      "sha256": "32e6a95b299c50d774921586903cbe33bdb2c022ccae967d3db963b68409f105"
+    },
+    {
+      "idx": 39,
+      "kind": "paragraph",
+      "content": "Zven jumped off quickly, and he and the other kid both tumbled down a few meters before they stabilized and flew off in separate directions.",
+      "sha256": "edee8684efe756c4a690363556b5672943fd327e60fdb96cdabb22c8c303d5c2"
+    },
+    {
+      "idx": 40,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"The AI on these things is getting really good now\"</span>, Gladias murmured.",
+      "sha256": "e5b87f17fda757662e671eefd4b6c33f35810e2822cf4570073918815d057404"
+    },
+    {
+      "idx": 41,
+      "kind": "paragraph",
+      "content": "The redball suddenly changed direction again, this time going upwards. Zven immediately set his rotor to full power and climbed upward. The kid he had just bumped into was still a few meters below him, and the other kid did not notice the redball's change of direction in time, and so Zven was ahead.",
+      "sha256": "6187ff49610d4fb0b617b0ecf4621d30b9a7a11fad14cd3f1c3c421502b45254"
+    },
+    {
+      "idx": 42,
+      "kind": "paragraph",
+      "content": "Zven saw the redball get closer, and then closer again. Now it was only one meter in front of him.",
+      "sha256": "31e477cf9f0c40378b816f39cce55a2c76b9a4e35d0e0b57b6e7186666e9a411"
+    },
+    {
+      "idx": 43,
+      "kind": "paragraph",
+      "content": "The redball suddenly turned off its rotors, and began to drop. Thinking quickly, Zven kicked the ball back up just as it dropped to the level of his feet, and moved his copter forward. He stretched out his hand, and caught the redball in his palm.",
+      "sha256": "d1fd413e356129148603bff80fac092aebc5bcc30120ea75eb78f813fd781d6e"
+    },
+    {
+      "idx": 44,
+      "kind": "paragraph",
+      "content": "He then aimed the copter to fly toward the instructor. The rotor slowed down - though it did not stop completely. It sped back up when Zven's altitude was decreasing at the safe maximum of five meters per tick - the speed that you would hit the ground after a fall from a height of slightly under two meters. The instructor watched Zven land, and stretched out his hand to receive the redball that Zven handed over.",
+      "sha256": "c74a0422fc7433b1c9f53497726e0ab244e4acfded70c2b41b709a9b9ea4d26c"
+    },
+    {
+      "idx": 45,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"First catch of the game by Zven, first point for team yellow!\"</span>",
+      "sha256": "3b46582ee764d73ec1dbdea10d810f1094e3a1e12c331af52f82b243aa961b02"
+    },
+    {
+      "idx": 46,
+      "kind": "paragraph",
+      "content": "He let the redball fly once again. It quickly shot forward, in the opposite direction from where Zven was standing.",
+      "sha256": "05f394895f9a4aa77c915f6a35c87d0c7abb655ddb6424a8ed9c1947ecda7d36"
+    },
+    {
+      "idx": 47,
+      "kind": "paragraph",
+      "content": "Zven flew back up, and continued his search for more redballs.",
+      "sha256": "05f0d95087fd831bda67665eada817e1b6e364f7cbf847275e58aabbfb1742b7"
+    },
+    {
+      "idx": 48,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"How are Hreda, Lily and Febric doing?\"</span>, Gladias asked Daia. Seila heard the question, and turned her head toward them slightly to hear the answer.",
+      "sha256": "e4728dc02fc69bf0236e00a70e17cc60f63373fc5aefd46909a6de971761cfa3"
+    },
+    {
+      "idx": 49,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Hreda is off in Northglade doing a math competition. We've been trying to get Lily more interested in art, though that hasn't been really successful so far.\"</span>",
+      "sha256": "4c06fa9e661c5e1b814b155403ae2eeb909553a557e5fbbe0e95eb37177054d4"
+    },
+    {
+      "idx": 50,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"I also talked to Zven for a bit and he showed me his homework. I was surprised. I saw the questions they were giving him for arithmetic, and they seemed just slightly ... less advanced than what Febric got at his age?\"</span>",
+      "sha256": "2c842d64041ec4910f409e7d4782780729234e1faef34cc76fe25644d5f2708b"
+    },
+    {
+      "idx": 51,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Nice catch by Dommus!\"</span>, the instructor shouted. <span data-hue=\"120\">\"And nice catch for Gale! Two points for team purple\"</span>",
+      "sha256": "1bb3770927f6929088e69272db1ae073e5b3493f8729b5d5cfaf2b6a83a220ab"
+    },
+    {
+      "idx": 52,
+      "kind": "paragraph",
+      "content": "Seila joined into the conversation.",
+      "sha256": "4e1ec51610f12a553977e36594aeb2ac178d05612fa328647ab0cce177534e7e"
+    },
+    {
+      "idx": 53,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Well, Glad, you're a -\"</span> she stopped herself, briefly remembering that it would be improper even to specify Keeper - <span data-hue=\"253.33\">\"an Order member now. Anything the Order can do to make Veridia's education better?\"</span>",
+      "sha256": "cd48093ac6f574331912bb7ee911455cb3809727f8bf4cde82825d1b2cc250f0"
+    },
+    {
+      "idx": 54,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"You know the schools aren't Order business, the public ones are run by the education committee, staffed by parliament. Though there have been people thinking about trying to support more private ones, support them out of Graph Funding, figure out some rubrics to give them the right incentives.\"</span>",
+      "sha256": "be8a2c327430999921bce405e8663d8711e624f059ade2197e7bbcca085fa457"
+    },
+    {
+      "idx": 55,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Maybe you should try pushing for that in your Keeper meetings?\"</span>, Seila replied, whispering into her watch as a substitute for a neck band. Better to just have this conversation privately than have to choose each word carefully to avoid giving out Gladias's position, she thought.",
+      "sha256": "0d056385097134303fc5193b616b7e926133a9f8dd7494130f0a199588696e9a"
+    },
+    {
+      "idx": 56,
+      "kind": "paragraph",
+      "content": "Delwart would be supportive, Gladias thought. Though he would be even more supportive of private schools with *no* rubric micro-nudging attached.",
+      "sha256": "095a7aaa1d5c369263e60cb4b3887edbd039b61312cf3f0814adfa53594af756"
+    },
+    {
+      "idx": 57,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Another nice catch by Zven! Second point for team yellow.\"</span>",
+      "sha256": "70dccc2e6637859cd1657a1fc35c188181820c3568bec7f2bba3c94d67c7b587"
+    },
+    {
+      "idx": 58,
+      "kind": "paragraph",
+      "content": "Gladias and Seila's attention went back to the game. There were three groups of three kids each in the sky, each group chasing what they assumed must be a different redball. Zven flew up alone, and did not try to join any of the groups. Instead, he seemed to simply wander the sky, his eyes constantly watching the horizon to try to find where the fourth redball might be.",
+      "sha256": "d872eec0aaaa9da3cedb0de93ea3c3236dac5ee41d153ae98591de5b85abfb4c"
+    },
+    {
+      "idx": 59,
+      "kind": "paragraph",
+      "content": "One of the kids tumbled out of the sky, though the rotor's AI automatically broke his fall. He hit the ground, and then a few ticks later stood back up and went back into the sky.",
+      "sha256": "37e191b510616406385cf0456011e92fec57941a3a8c6f1526d5894127a64ea0"
+    },
+    {
+      "idx": 60,
+      "kind": "paragraph",
+      "content": "A minute later, a kid landed beside the instructor, and handed him a redball.",
+      "sha256": "1ff4be3e7e5d67c86b01f241e574ffad83db1c5833b2c15a079d87d5942d6a3b"
+    },
+    {
+      "idx": 61,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Another nice catch by Gale! Third point for team purple.\"</span>",
+      "sha256": "b02fb3b863616fa097a5ee19c44aac2212fa0730280a42ac31ce52c2f28696d7"
+    },
+    {
+      "idx": 62,
+      "kind": "paragraph",
+      "content": "The redball flew back into the sky, and both Gale and the other two kids who were chasing the redball with him once again flew after it.",
+      "sha256": "fee5856e28498d0dfb47313704dd456f20b43eb716b66236a1c3ffe7c0b702f5"
+    },
+    {
+      "idx": 63,
+      "kind": "paragraph",
+      "content": "Two more minutes passed. Another kid landed beside the instructor.",
+      "sha256": "568a8dd5bf389a529562db96e8ddc8e136f8b3b415449daabdf2aef7a975f18d"
+    },
+    {
+      "idx": 64,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Nice catch by Dela! Third point for team yellow.\"</span>",
+      "sha256": "27b6ca5df3fd62838531f6e1a389e774ab84e3c343e0a136e59290e4a337efb4"
+    },
+    {
+      "idx": 65,
+      "kind": "paragraph",
+      "content": "One more minute later, two more kids landed at around the same time:",
+      "sha256": "78bff19acbb29e1d46c860067d7304fb6236723597fc5d6488ae1cc375fa468d"
+    },
+    {
+      "idx": 66,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Nice catch by Plat! Fourth point for team yellow.\"</span>",
+      "sha256": "7fbb151b3eb3e06459e212a9cdff35d8f8c58b3e978bf54b3b029dd4fdc56fb3"
+    },
+    {
+      "idx": 67,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"And a nice catch by Meny! Fourth point for team purple.\"</span>",
+      "sha256": "686bada91f675dae799f3806a16d2d9e35876337bffdd510dcdd1b13024a62d1"
+    },
+    {
+      "idx": 68,
+      "kind": "paragraph",
+      "content": "Zven continued his solitary quest to search for the fourth redball, which all the other kids seemed to have completely forgotten the existence of.",
+      "sha256": "9097add0d344ee4dedbb47aebc4458ff9168aa6b522e8644ba885e07c1e2eb55"
+    },
+    {
+      "idx": 69,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Nice catch by Egardo! Fifth point for team purple.\"</span>",
+      "sha256": "91e746cab5d8f5f44cf342c4c14550366c6899f80b85bf1d7a8cd2ca1dce980f"
+    },
+    {
+      "idx": 70,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"Another nice catch by Dela! Fifth point for team yellow.\"</span>",
+      "sha256": "c9b7a76809ed4da852a90a6196fc1dfa4ed5ce81f48d60ffc8655f24ccc4b6b3"
+    },
+    {
+      "idx": 71,
+      "kind": "paragraph",
+      "content": "He began to fly closer to the ground.",
+      "sha256": "da2ff43ed3854c1af786372f6ebb9eb3133a91ec4daada10b3af34dbc619a8b8"
+    },
+    {
+      "idx": 72,
+      "kind": "paragraph",
+      "content": "Gladias and Seila saw Gale shooting ahead of his two competitors, getting ready to catch the redball. It was only one meter in front of him.",
+      "sha256": "b56faa2cdd4b65aec55f27bc09e2e979a05c41416a7d77750952865ae814d77b"
+    },
+    {
+      "idx": 73,
+      "kind": "paragraph",
+      "content": "Gale's hand stretched out. He prepared to grab hold of it.",
+      "sha256": "25d4b9b98f743395787efa98564724c9a2e89f3699e30da260d1075c5e11dcd1"
+    },
+    {
+      "idx": 74,
+      "kind": "paragraph",
+      "content": "Then, suddenly, another kid bumped into him, and he veered several meters to the right. That kid attempted to grab the redball instead, but it quickly flipped direction and flew backwards, right in between the two of them. Gale and the other kid both attempted to grab it with their hands as it passed by, but both missed.",
+      "sha256": "727c84ee18986e5a6c9c9692f7c1d6d8b1a8ee0ac7248d9024558147ce0d8499"
+    },
+    {
+      "idx": 75,
+      "kind": "paragraph",
+      "content": "Gale regained sight of the redball first, and quickly flew towards it. His two competitors soon followed, though they were at least ten meters behind.",
+      "sha256": "09ebdce63fde697f639aab0a0926b4acad969bb10d0ff1a0f940cfba6f319453"
+    },
+    {
+      "idx": 76,
+      "kind": "paragraph",
+      "content": "Gale and the redball both gained altitude, and Gale began to get closer to the redball. Five meters. Four meters. Three meters.",
+      "sha256": "3024a3b74b31671c4b411e3a923d5338a732151fbe8dc002315498daead5e362"
+    },
+    {
+      "idx": 77,
+      "kind": "paragraph",
+      "content": "Meanwhile, out of nowhere, Zven seemed to fall to the ground, the fall broken as usual by the copter's AI.",
+      "sha256": "b522582ff1bf7425509b19f216d8b578cbb4d06cb544d8b179b4b2dc705e0984"
+    },
+    {
+      "idx": 78,
+      "kind": "paragraph",
+      "content": "High in the sky, far above the other players, Gale raised his hand triumphantly, holding the redball inside a clenched fist.",
+      "sha256": "0e8fd92b379c1b734dae847c4e25cfbf08713e60686ba90f1ca14e7e59628e93"
+    },
+    {
+      "idx": 79,
+      "kind": "paragraph",
+      "content": "Many in the audience cheered. Gale maneuvered around the other two students who were following him, and began to drop back down at the maximum speed of five meters per tick.",
+      "sha256": "4a5dabda3194d27e6ab9c3c740b55068d420bb5559e542cd9ed0ad795971717a"
+    },
+    {
+      "idx": 80,
+      "kind": "paragraph",
+      "content": "Suddenly, Gladias and Seila's eyes shifted toward Zven. He had gotten out of his copter, and was running toward the instructor.",
+      "sha256": "48a9a49d9add254dce1b52a39f583b9089cbe8d0b5db583c74e070e736c12ce7"
+    },
+    {
+      "idx": 81,
+      "kind": "paragraph",
+      "content": "When Gale was still about thirty meters in the air, Zven opened up his hand and gave the instructor the fourth redball, with broken rotors, that he had found on the ground.",
+      "sha256": "af6dcf3348ac92f823086b7d615ecd4a4557f627aba50b261f0fed1fb164172c"
+    },
+    {
+      "idx": 82,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"120\">\"And, nice catch by Zven. Sixth point for team yellow. Team yellow wins the game!\"</span>",
+      "sha256": "af50a43f82bc889eb38fa4eb1676b0f1c4c21ee97f07cfb068ab827fd0ac87ea"
+    },
+    {
+      "idx": 83,
+      "kind": "paragraph",
+      "content": "Gladias sighed with relief.",
+      "sha256": "5c3b8b881267be2ab8cae9bba6cef8ab25c521f21f47cbd90b86f7c171972d43"
+    },
+    {
+      "idx": 84,
+      "kind": "paragraph",
+      "content": "Seila beamed with pride for Zven.",
+      "sha256": "41d488232c41464b564707bd07739c9f77b39b48b4b3cd3b68a13bb76f12bb50"
+    },
+    {
+      "idx": 85,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"He took the path less traveled\"</span>, she quietly recited, quoting an old Veridian author, <span data-hue=\"253.33\">\"and that blazed a trail for all.\"</span>",
+      "sha256": "9cedbf78e0d114eedcd3e4266a7c247b43b4540e3d887ee2eea6022ecc5ee560"
+    },
+    {
+      "idx": 86,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 87,
+      "kind": "paragraph",
+      "content": "Gladias slid the barrier open, entered the booth, and slid the barrier shut again.",
+      "sha256": "19d8b98a0c569b60b7f627f32ce373de3278e3227e6eced8cfe775c44a1ae335"
+    },
+    {
+      "idx": 88,
+      "kind": "paragraph",
+      "content": "Three other Keepers were already there. The other three, Gladias thought, must still be on their way.",
+      "sha256": "375e8f91292ea2cb3dfc47fb8638a3bd381222d84e0abc1776dc7a3f6d54d013"
+    },
+    {
+      "idx": 89,
+      "kind": "paragraph",
+      "content": "This was the third circle of Keepers that Gladias was assigned to, and the topic was air quality. Here, his assigned number was two.",
+      "sha256": "41c0f6754575d7d31477bd2971118f59c11de382a12658937434b49af3343ccc"
+    },
+    {
+      "idx": 90,
+      "kind": "paragraph",
+      "content": "Gladias immediately took out his watch, and whispered into his neck band to check the air quality of the current room.",
+      "sha256": "e1d995b2b5600669de1c1f8bbb4888db1910d5efc218477c68a40021e1953562"
+    },
+    {
+      "idx": 91,
+      "kind": "screen",
+      "content": "<div class=\"device-view narrow-device-view\"><div style=\"font-size:150%\"></div>\n<table>\n    <tbody><tr>\n      <td style=\"font-size:150%\" colspan=\"2\">Air</td>\n    </tr>\n<tr>\n<td style=\"font-size:150%\">CO<sub>2</sub></td>\n<td style=\"font-size:150%; color: yellow\">906</td>\n</tr>\n<tr>\n<td style=\"font-size:150%\">PM2.5</td>\n<td style=\"font-size:150%; color: #8f8\">4.4</td>\n</tr>\n</tbody></table>\n<table>\n<tbody><tr>\n<td style=\"font-size:150%\" colspan=\"2\">Devices</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #8f8\">Attested ✓</td>\n<td style=\"font-size:150%; color: #8f8\">16</td>\n</tr>\n<tr>\n<td style=\"font-size:150%; color: #fc8\">Unknown ?</td>\n<td style=\"font-size:150%; color: #8f8\">0</td>\n</tr>\n</tbody></table></div>",
+      "sha256": "e2042b724798e67ff585fc05d9fa17ed7e9684aa5c14c9afd438f8e69ba92a32",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Meldan, Veridia"
+        },
+        "device": "watch",
+        "device_evidence": {
+          "idx": 90,
+          "quote": "Gladias immediately took out his watch, and whispered into his neck band to check the air quality of the current room."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "narrow",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "table",
+            "header": [],
+            "rows": [
+              [
+                "Air"
+              ],
+              [
+                "CO2",
+                "906"
+              ],
+              [
+                "PM2.5",
+                "4.4"
+              ]
+            ]
+          },
+          {
+            "type": "table",
+            "header": [],
+            "rows": [
+              [
+                "Devices"
+              ],
+              [
+                "Attested ✓",
+                "16"
+              ],
+              [
+                "Unknown ?",
+                "0"
+              ]
+            ]
+          }
+        ]
+      }
+    },
+    {
+      "idx": 92,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"How are we already at 906 with just four people here?\"</span>, he asked. <span data-hue=\"93.33\">\"Filters are working great, but I guess they haven't yet figured out how to give these secure booths any ventilation?\"</span>",
+      "sha256": "edb13f599cbadfa57aa8287cd9edf1020e62b91e3670674d0ed420d1869c0e61"
+    },
+    {
+      "idx": 93,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"266.67\">\"Yeah, pretty much everyone is really behind standards. We've been saying that we really have to increase the taxes on this bracket across the board.\"</span>",
+      "sha256": "a77fb1c17dc48b47a7022c81414ae0346af6a3afa71432d276fab709165c2cd5"
+    },
+    {
+      "idx": 94,
+      "kind": "paragraph",
+      "content": "The CO<sub>2</sub> reading on Gladias's watch refreshed. It now showed 918.",
+      "sha256": "f0c591040a564d934f78f3b478502c374b6dd8eaec17866aef92f2d73cdff7f4"
+    },
+    {
+      "idx": 95,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"200\">\"I think people will figure this out on their own\"</span>, another Keeper replied. <span data-hue=\"200\">\"It's just a matter of the technology being open and deployable enough. We've been making these filters twice as cheap every two years for the past decade.\"</span>",
+      "sha256": "07e37980e9431ff71c084be369cae6b7ff4dc35e5f3cf5aefa63587d304d1b55"
+    },
+    {
+      "idx": 96,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Well I feel like we have to push harder\"</span>, Gladias replied.",
+      "sha256": "a0075d63302622a02585c801edca71299492899e2430df2181f9282a865fced4"
+    },
+    {
+      "idx": 97,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"What do the indoor air quality tax rubrics say now?\"</span>",
+      "sha256": "9b23fe51af0f03da3370351a358def7aa68a7566aaa219b44f12c646ec5e2d0a"
+    },
+    {
+      "idx": 98,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"266.67\">\"It's a land tax component. Zero if your air quality is perfect, an extra third of a percent per year if the average occupied room reads worse than a thousand. The limits get adjusted up if you have filters or UVC.\"</span>",
+      "sha256": "d62dc43d433c67a75c6b25dc4b55abaaf80ade7a4fa34464ec55eaa409ae2111"
+    },
+    {
+      "idx": 99,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Only a third of a percent? For the difference between theoretically perfect and abysmally bad?\"</span>",
+      "sha256": "b7a8cbdad798f5326361a3f613d581721f0789249c3f1af6ef591349b5b5bd72"
+    },
+    {
+      "idx": 100,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"200\">\"A third of a percent of the land value, per year. For many businesses, that's like a sixth of their revenue.\"</span>",
+      "sha256": "20bcfd9b7fd9a6842327b512a75558a0caf20b3425cc1acf6a530d42a8858c81"
+    },
+    {
+      "idx": 101,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"200\">\"There's so many things that go into land tax. Public aesthetics. Accessibility - both the kind that's about being friendly to disabled people, *and* the kind that's about letting people walk across your land freely and not fencing it off. What percent of the lot you're building on. Ground-floor active use, though that one is controversial and some people think it should just be folded into aesthetics. Emergency preparedness. Fire safety. There's just not enough space for everything.\"</span>",
+      "sha256": "d330f73df32b7fdfc3bf2e526f6e226769225f6da9230c0c713ae67fde1c56c4"
+    },
+    {
+      "idx": 102,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"200\">\"And come on, Veridians are not that sick. If you look at the broad listen report we ran a month ago, indoor airborne disease resistance is just not one of Veridians' top ten concerns.\"</span>",
+      "sha256": "131134b4056b1cbba544e64ba4123accb67bb07de6aee60738c155a8b0cdf71a"
+    },
+    {
+      "idx": 103,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"266.67\">\"The ground-floor active use isn't just about aesthetics, it also contributes to walkability, reduces congestion-\"</span>",
+      "sha256": "987a5f2b4aa600e1c1ecd5467401975c2dfefd403595a1169dfd9b0145509d86"
+    },
+    {
+      "idx": 104,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"200\">\"Fine, though I think we should just target those things directly.\"</span>",
+      "sha256": "59822282ba2069df18e86e8a8c773193251219df3badbfa6dc5abf935b014af6"
+    },
+    {
+      "idx": 105,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"266.67\">\"Anyway, that's not our rubric to decide. Air quality is. You're missing the tail risk.\"</span>",
+      "sha256": "073b2a857eb3f4cf8c4558f8993c70f91d5e0975202bea9ff748fef7c08396b4"
+    },
+    {
+      "idx": 106,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"What tail risk?\"</span>, Gladias interjected.",
+      "sha256": "b66f534d3e1f6730312717fb76c66c6ad524b26c9eec22923a84736abb385bf9"
+    },
+    {
+      "idx": 107,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"266.67\">\"Super-pandemics. Like, deliberately released by the Arctics.\"</span>",
+      "sha256": "3fd6aa3ca455e581a6b573e69220ef9fcc25876775283bd953c12618ec33750e"
+    },
+    {
+      "idx": 108,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"200\">\"Is there any evidence of them working on anything like that?\"</span>",
+      "sha256": "9617e55cd96dbee43305da7ececff9b12d2917f89ac265fae98f75f836f6a83e"
+    },
+    {
+      "idx": 109,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"266.67\">\"They're a super opaque society, the only evidence we have that the Arctics even know Veridia exists is that we have to listen to Lord Ephelion giving his sermons all the time.\"</span>",
+      "sha256": "192804810b5b35a35c7328bac808bde5dae556ae3f448ddeac6dbfa721426648"
+    },
+    {
+      "idx": 110,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"So what are the possible plans on the table?\"</span>",
+      "sha256": "043571f27b2ecfc9fbac2556f1140d4dc3991f0adc72bb4ae7b94dfd65cbe73e"
+    },
+    {
+      "idx": 111,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"266.67\">\"Increase the maximum to two thirds of a percent. And then make the case to the funding organs - Graph Funding, Quadratic Funding, parliament allocations - that they should support more open-\"</span>",
+      "sha256": "ffabadfe98a8a030125aafcb677dfcf8c077e668cb5803b5a295044f3b5daa17"
+    },
+    {
+      "idx": 112,
+      "kind": "paragraph",
+      "content": "Another Keeper interjected:",
+      "sha256": "bd35de0be732b8ba1157b52d235b62ae75d79c373f2b1f42a1c6464982611a56"
+    },
+    {
+      "idx": 113,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"Quadratic funding? That round is a mess right now. Someone released a program you can download onto your device and prove that you donated to a particular project researching social media polarization - actually not a very good one - and get a reward. You donate ten zipcoins and get back twenty, they get a hundred including the bounded matching. Lots of people participated. And then yesterday some insider at Bluewhale blew the whistle, apparently that was all their doing.\"</span>",
+      "sha256": "8914c526e2c91dcb70b400b2174a25b9cb1b3859cfa1ad871b56671a6854bc2f"
+    },
+    {
+      "idx": 114,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"266.67\">\"Bluewhale? But why would they do that? They don't even control the project that was getting that funding.\"</span>",
+      "sha256": "377a961fb77ce257ed7dd36ec8c19b85e3fdd5527a99a8f4e8c65785161daad2"
+    },
+    {
+      "idx": 115,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"66.67\">\"It doesn't matter where it goes, if it was hiring people from Iptak to come dig holes and then fill them back up again they would still have done it. Their goal is to drain funding from anything that interfaces with open platforms. Starve the open ecosystem, the closed one wins by default.\"</span>",
+      "sha256": "4e2a7fd2e3941960f141694c4c9a364c584595563f30c478544cb393727c8539"
+    },
+    {
+      "idx": 116,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"266.67\">\"Fine, we'll stick to Graph Funding. Go through our channels to suggest to the Graph Funding people that they support more open source tech for air filtering, cleaning, wastewater scanning, all of it.\"</span>",
+      "sha256": "645c352b81a66dfef58179b521fe53081674195b4ac119f12e06a1d819a7c415"
+    },
+    {
+      "idx": 117,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"200\">\"Wastewater scanning too? You want to break everyone's privacy even more? What if the Arctics hack in and take all that data, and then they'll find out who lives where even if they move homes, and when each person is healthy or sick?\"</span>",
+      "sha256": "c11e2a64490b6077a8d31a69a2856f005b3c8d2c3a00a6a832cac20a4e8add2f"
+    },
+    {
+      "idx": 118,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"266.67\">\"I thought you were the one who keeps saying there's no evidence the Arctics are actually doing those kinds of crazy things?\"</span>",
+      "sha256": "9727f4cb9c753142e73d44b940ee1c3d57a08cfa05bd8a8bae318f5eb9ee970a"
+    },
+    {
+      "idx": 119,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Isn't there some cryptographic way to get the data we want out of the scans, without ever collecting the data itself in cleartext in any one place?\"</span>",
+      "sha256": "4aae1435e60e7e9a815d192189b564b1649589a50b13834314ef41086ab51c91"
+    },
+    {
+      "idx": 120,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"200\">\"Well, if you can find a genius who can figure out something like that, let us know.\"</span>",
+      "sha256": "66119b03cf23b28c06bffa22f96ca743f001fb8343920e370c8fa065f44e384d"
+    },
+    {
+      "idx": 121,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 122,
+      "kind": "paragraph",
+      "content": "Gladias got off the autobus, and pulled on the strap on his privacy robe's front face covering. His face was still covered, but the belt between the areas above and below his nose was now no longer tight. Less virus protection - outside the unusually crowded indoor space that was the autobus, he no longer needed it - but more comfortable and easier to breathe. He began to walk back home.",
+      "sha256": "c9791af55929414e374e178f909cd8f4c69dda6a6131a1038ec92939eeab4e7d"
+    },
+    {
+      "idx": 123,
+      "kind": "paragraph",
+      "content": "He passed by the same restaurant where he had bumped into Febric months earlier. On the restaurant's outer wall, he saw an advertisement. On the left side of the advertisement, there was a Hydrafill mascot, clothed in Hydrafill's classic yellow and green colors, hugging a small child, and using his back to shield the child from a jet of sludge-like green-colored water. On the right side of the advertisement, there was the text:",
+      "sha256": "7d142ccc029e73dbeaeecc1ffecdadc2e892af11beefaef65c2cfab0186b112d"
+    },
+    {
+      "idx": 124,
+      "kind": "quote",
+      "content": "> Heavy water, with its atoms of hydrogen replaced by the neutron-bearing isotope deuterium, is known to be toxic in large doses.\n>\n> We studied our competitors' water, and found that on average, it contains 145 parts per million heavy water.\n>\n> Our water comes from fresh Veridian NORTHERN ICE, bravely extracted only thirty kilometers away from the Arctic border, and it contains 132 parts per million heavy water.\n>\n> Hence, our water is TEN PERCENT LESS TOXIC than our competitors. Only WE care about your health. Nobody else does. Hydrafill wants to heal and protect you. Our competitors think you deserve to drown in sludge and die.\n>\n> Trust Hydrafill. Buy Hydrafill today.",
+      "sha256": "dc74bc2b1a49bd044704664b663c6172509377713d8a5897dc45342a61332134"
+    },
+    {
+      "idx": 125,
+      "kind": "paragraph",
+      "content": "Gladias smiled. He kept walking.",
+      "sha256": "4cae146982ffc17f07edb7dc9210746bb7c5daaf6b559aa3e56eaef775f615c6"
+    },
+    {
+      "idx": 126,
+      "kind": "paragraph",
+      "content": "Suddenly, someone grabbed and hugged him from behind.",
+      "sha256": "cbc04dbba8194640c1191e37591c63bf83332b2b6ccd46e18f655c4c5746792e"
+    },
+    {
+      "idx": 127,
+      "kind": "paragraph",
+      "content": "Gladias turned around.",
+      "sha256": "ba80519b37b72e7c4ba1298c00b5be1630c0e9bebf32daa5e59a9a8976942191"
+    },
+    {
+      "idx": 128,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Seila!\"</span>",
+      "sha256": "f6914740392b70aa7edacd3143dd9d63a551f458d1779c5f450527785ea991e8"
+    },
+    {
+      "idx": 129,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Finally caught you on your way home.\"</span>",
+      "sha256": "53434d57c63908c9f6df466554874f1f9e9e7c06788f6bb0cfb673cfbbacbf47"
+    },
+    {
+      "idx": 130,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"How was the rest of your day?\"</span>",
+      "sha256": "254c0f868275084fafdb6d5ce016ce3739285c5559ba9a9338f4fc8777e99928"
+    },
+    {
+      "idx": 131,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Finished up my post on urban economics in Freetown. It's online, you should go see it.\"</span>",
+      "sha256": "9a5f8ed6459499334fd04e807fef6c1370bcbcfd8e25f15096eb5e2bf824ee7e"
+    },
+    {
+      "idx": 132,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Ooh, I'm excited.\"</span>",
+      "sha256": "f05ceec95791aadc949bd9778169ee0752eeb787b2a0e29f0e9d4cc02096f19e"
+    },
+    {
+      "idx": 133,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Jahn gave me some gossip recently, about how a lot of things are changing now that people there are getting more spooked about the Arctics.\"</span>",
+      "sha256": "13a77e0a1b22541ed31bf984cdf363d452d61d42261fdbaeda8346105782951c"
+    },
+    {
+      "idx": 134,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Do you have any theories about why people in Veridia seem so... nonchalant about the whole Arctic situation?\"</span>",
+      "sha256": "b9475392324f23211636d11b2a3d1a132a18b6a7bd7e2260eb66193300a38862"
+    },
+    {
+      "idx": 135,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"I guess the Arctics don't really affect people's lives here much? They just publish their stupid sermons from time to time and people watch and listen out of curiosity.\"</span>",
+      "sha256": "d28ff285b2ae82854133b059fc19e4f91511141e0c6a989c532d7284874b6b32"
+    },
+    {
+      "idx": 136,
+      "kind": "paragraph",
+      "content": "Gladias groaned.",
+      "sha256": "2a6c4d1034d18af6e2cbb35b02afd694d906eaf73970e5464807b2cd2bc68232"
+    },
+    {
+      "idx": 137,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Even inside the Keepers, the situation is so strange. The older ones seem to understand there's a problem. But the newer ones ... not all, but many of them think we should just not care?\"</span>",
+      "sha256": "152a51ff217a34746271eba07905b3bf804833baccc3b20bb8e10a26398bdd78"
+    },
+    {
+      "idx": 138,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"What's weird is that the corporates in Freetown seem more resistant to ... whatever is causing that stupidity. They're basically the only city taking the problem seriously - except for Redshire, and the cities partially run by Redshire's parliament through co-governance.\"</span>",
+      "sha256": "f5267926c224b4c9785be328541a1ee4e70ba4bea6fbe3042338dcf6154bedc0"
+    },
+    {
+      "idx": 139,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I guess more than anything, the newer Keepers seem suspicious of Steering and Quadratic Funding and Graph Funding and government being able to do much of anything in general.\"</span>",
+      "sha256": "7236d8133d35c6f80789171aecffea14612dfc48b8c3941e27fc123a7cef589b"
+    },
+    {
+      "idx": 140,
+      "kind": "paragraph",
+      "content": "Seila sighed.",
+      "sha256": "8825b99fe0c440a410efc83004089de836c61d6017dea981952265e534f8d9ee"
+    },
+    {
+      "idx": 141,
+      "kind": "paragraph",
+      "content": "They continued walking. After a few minutes, they arrived at the door to their house. Gladias put his watch against the circle, and the door opened. They walked in.",
+      "sha256": "4e1b4d2d5172ca4f4cf1128cd8aa00a4b202b435a387c4e34401159d126a7d6d"
+    },
+    {
+      "idx": 142,
+      "kind": "paragraph",
+      "content": "Seila opened up her hand device.",
+      "sha256": "b80d3d50857282c3e56664e0e3b3c962fa9c92f51f012980bbe005e1438fa1ce"
+    },
+    {
+      "idx": 143,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Dzego food truck in one minute. The usual I assume?\"</span>",
+      "sha256": "f19375dd4ec8411aa613a90f3e9658183ad949f38b3e0c12c67b048b9262183c"
+    },
+    {
+      "idx": 144,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Yep, how did you know?\"</span>",
+      "sha256": "464c83dd85848bec42546fd6b0fe2b65cbd002e9e9439e52198e442079822599"
+    },
+    {
+      "idx": 145,
+      "kind": "paragraph",
+      "content": "Seila laughed.",
+      "sha256": "c5c236b7e5b96f4054bf742703e989a927f9e1196ac06057c02099801a8f8410"
+    },
+    {
+      "idx": 146,
+      "kind": "paragraph",
+      "content": "Seila clicked a few buttons, and ordered.",
+      "sha256": "cf8605dcb9b10417e47edf56f1bdfc8c19be3d62569607bb6e11ded6aa602c3c"
+    },
+    {
+      "idx": 147,
+      "kind": "paragraph",
+      "content": "The door to the house was not yet closed, and Seila could already see the food truck coming towards them from a few hundred meters away. They both waited for the food truck to arrive.",
+      "sha256": "c1a47a6113879ea3e6fce77c660e47cdc096d5845517f921907768583c2c745a"
+    },
+    {
+      "idx": 148,
+      "kind": "paragraph",
+      "content": "Seila went out, and picked up the food directly from the food truck. She walked back into the house, and closed the door behind her.",
+      "sha256": "d62fd8e8ab16bd85147c50222f939bc3a423b303254e42a31f9d72216b6051cc"
+    },
+    {
+      "idx": 149,
+      "kind": "paragraph",
+      "content": "She put the food on the table, and immediately unpacked it.",
+      "sha256": "cca8984cc2d64558538e3302b33a8428268fdd083519a3f5e264025124733345"
+    },
+    {
+      "idx": 150,
+      "kind": "paragraph",
+      "content": "They both sat down, opened their food boxes, and began to eat.",
+      "sha256": "165281f68d90c23a8f2e45b7505dcd207e54586bbffc02865072b2e2f94a686b"
+    }
+  ]
+}

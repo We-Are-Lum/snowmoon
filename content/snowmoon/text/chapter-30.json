@@ -1,0 +1,644 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 30,
+  "source_url": "https://vitalik.eth.limo/snowmoon/html/chapter-30.html",
+  "source_sha256": "2f0d07c50bb8a07ebbcd896e5dc5d6e286f66836b71ac0bdd9733f277ef7a12a",
+  "fetched_at": "2026-10-02",
+  "license": "GPL-3.0",
+  "blocks": [
+    {
+      "idx": 0,
+      "kind": "heading",
+      "content": "# Chapter 30",
+      "sha256": "e672e00b4ab85b5dbbc5afe576792f57c913aaafde3a19650074870c2b83f06e"
+    },
+    {
+      "idx": 1,
+      "kind": "dateline",
+      "content": "**Elenar Forest, Veridia** · 3725 Snowmoon 30",
+      "sha256": "6443ebd222894a22e1de68d762191008df5edfb288ad0532a1c6039dcaef8cfd"
+    },
+    {
+      "idx": 2,
+      "kind": "paragraph",
+      "content": "Zei watched the screen carefully, checking for any signs that the Arctic drone fleet might be breaking through. Forty minutes ago, he had given the recommendation that all groups do a slow retreat, cutting down trees to slow down snow drones and laying traps, with the primary goal of dragging out the battle longer. Lektor had taken his advice, and had relayed that he expected the strategy to work well at least until sunrise. So far, he had been right.",
+      "sha256": "2a22e91dc66afa77c528c6283ee2efcf7e9b61be9176d1142092093855fd11dd"
+    },
+    {
+      "idx": 3,
+      "kind": "paragraph",
+      "content": "Zei's watch buzzed. It was Deluin.",
+      "sha256": "0b71d822ddb1015a8ca7e54efd3d19cb889814c43a5fa9087743cff65e6f6d69"
+    },
+    {
+      "idx": 4,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view device-view-left\"><p>I understand your concern and I fully agree that you do currently not have good reason to trust me.</p>\n<p>Unfortunately, I do not have a way to give you the raw weights of the language models on the drones. Those are well-protected and only a very small number of people have access to them, precisely because they are worried about an adversary using those weights to run gradient descent attacks.</p>\n<p>But I can give you the next best thing: API access to their simulated environment. This includes simulated copies of Arctic drones, both full world-model simulations and partial simulations that focus on their input modalities and give you classification results - given a particular visual input stream, what kind of object they think they are looking at.</p>\n<p>Here are the network addresses and access keys, as well as addresses and keys for Arctic endpoints in Redshire that you can proxy through. Remember to be safe and minimize risk of detection.</p>\n<p>Network:</p>\n<span style=\"font-family:monospace; font-size: 75%\">13178080a5bf1c815dfb1300c6039af76c7b8f14e47581d3549e8990012e1d5f: 35a504923a4d8dde09e0ed814ec05ae81be8e91c2bcb249b22ad13af0bcf7b4d</span>\n<span style=\"font-family:monospace; font-size: 75%\">e680176e029dcfd96b27e328149f8db4ab368a87762568799bf8a56b95f968c5: 519cce3e5e0ee46fbaf2735a53429d6cb1829485e2886962dde9606cab13f0a2</span>\n<span style=\"font-family:monospace; font-size: 75%\">04569c9a285f10e1a3670985a1fa0696530feae84eae853209d1f0345a214933: 8d174efbc3857326999a58e4d4eea9c7fbc61fd56dd233707321d9d5c0bfb9ce</span>\n<span style=\"font-family:monospace; font-size: 75%\">fed7dd2e3ee0f2c9a1ed4b61dd21ae165780497b39ae4ae5b06b1b8b0b15a034: a9bf7a809e4e998946e59e377e7e96cd9f22dd4db9a87080b669de3e74a03d83</span>\n<br><br>\n<p>Proxies:</p>\n<span style=\"font-family:monospace; font-size: 75%\">4446e4f5350e5d76fe0b5254f50f3923fc2f480d1d9df33da1dc58d532e49e86: 9b0dadf8d9418283416f70d60afd909c7346e63cbf7c815b110926eeb943afff</span>\n<span style=\"font-family:monospace; font-size: 75%\">27770fdc6c08da318e64f0f16d1d0e300958e4eefe1b55de1a48a9c6a7872ecf: 884c9a310b61edf0e73d2d9e9352ac9f21b8c354aa90203468a76f1a2383ff08</span>\n<span style=\"font-family:monospace; font-size: 75%\">dfb1c543a259ade8d53344893807d47c0bebd02ed04cde46e31335d2e71f7ac3: b2eb4a17a06c68ab7bf149bb031702ff3514d5571d83c9a2c652dbdaa50768a9</span>\n<span style=\"font-family:monospace; font-size: 75%\">0ca84c8548d95f6edcd3b6fd1b695d743aff2904cec00fd411bd9d36566e4048: af0dd33ec09e8e8331ff34bf9d15432d8f91ec4870720d8fdc2bdffe29f871d5</span></div>",
+      "sha256": "a70112ef43d8d98f8e86e48070b68d84f721c394fbc89d01117b0b0d61770633",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Elenar Forest, Veridia"
+        },
+        "device": "watch",
+        "device_evidence": {
+          "idx": 3,
+          "quote": "Zei's watch buzzed."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "left",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "text",
+            "text": "I understand your concern and I fully agree that you do currently not have good reason to trust me."
+          },
+          {
+            "type": "text",
+            "text": "Unfortunately, I do not have a way to give you the raw weights of the language models on the drones. Those are well-protected and only a very small number of people have access to them, precisely because they are worried about an adversary using those weights to run gradient descent attacks."
+          },
+          {
+            "type": "text",
+            "text": "But I can give you the next best thing: API access to their simulated environment. This includes simulated copies of Arctic drones, both full world-model simulations and partial simulations that focus on their input modalities and give you classification results - given a particular visual input stream, what kind of object they think they are looking at."
+          },
+          {
+            "type": "text",
+            "text": "Here are the network addresses and access keys, as well as addresses and keys for Arctic endpoints in Redshire that you can proxy through. Remember to be safe and minimize risk of detection."
+          },
+          {
+            "type": "text",
+            "text": "Network:"
+          },
+          {
+            "type": "text",
+            "text": "13178080a5bf1c815dfb1300c6039af76c7b8f14e47581d3549e8990012e1d5f: 35a504923a4d8dde09e0ed814ec05ae81be8e91c2bcb249b22ad13af0bcf7b4d e680176e029dcfd96b27e328149f8db4ab368a87762568799bf8a56b95f968c5: 519cce3e5e0ee46fbaf2735a53429d6cb1829485e2886962dde9606cab13f0a2 04569c9a285f10e1a3670985a1fa0696530feae84eae853209d1f0345a214933: 8d174efbc3857326999a58e4d4eea9c7fbc61fd56dd233707321d9d5c0bfb9ce fed7dd2e3ee0f2c9a1ed4b61dd21ae165780497b39ae4ae5b06b1b8b0b15a034: a9bf7a809e4e998946e59e377e7e96cd9f22dd4db9a87080b669de3e74a03d83"
+          },
+          {
+            "type": "text",
+            "text": "Proxies:"
+          },
+          {
+            "type": "text",
+            "text": "4446e4f5350e5d76fe0b5254f50f3923fc2f480d1d9df33da1dc58d532e49e86: 9b0dadf8d9418283416f70d60afd909c7346e63cbf7c815b110926eeb943afff 27770fdc6c08da318e64f0f16d1d0e300958e4eefe1b55de1a48a9c6a7872ecf: 884c9a310b61edf0e73d2d9e9352ac9f21b8c354aa90203468a76f1a2383ff08 dfb1c543a259ade8d53344893807d47c0bebd02ed04cde46e31335d2e71f7ac3: b2eb4a17a06c68ab7bf149bb031702ff3514d5571d83c9a2c652dbdaa50768a9 0ca84c8548d95f6edcd3b6fd1b695d743aff2904cec00fd411bd9d36566e4048: af0dd33ec09e8e8331ff34bf9d15432d8f91ec4870720d8fdc2bdffe29f871d5"
+          }
+        ]
+      }
+    },
+    {
+      "idx": 5,
+      "kind": "paragraph",
+      "content": "Zei immediately forwarded the note to Bai. He also sent a copy to Fin, and sent Emerald an instruction to send Fin a maximum-priority emergency alarm and an explanation of what was going on.",
+      "sha256": "94f62875a9918c5841052161509abdc214d360e6d6a0cdc452b494b03b4a7377"
+    },
+    {
+      "idx": 6,
+      "kind": "paragraph",
+      "content": "Fin responded almost immediately.",
+      "sha256": "583438923b2a2a2022dfe23da67a7e14b87f569ab5eced0ea7dae4a12fe778d9"
+    },
+    {
+      "idx": 7,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Alright Zei, what do you need?\"</span>",
+      "sha256": "91acc9feda06a1277d6499e6e7bcf76bef2e80fb00d8299b457aa1884eb3b1ab"
+    },
+    {
+      "idx": 8,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Reading...\"</span>",
+      "sha256": "7003e5c0182ff9e634bd2e57d29fffc92d5fa9c3b58d852516332fc39b6e03cb"
+    },
+    {
+      "idx": 9,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"80\">\"Yeah this seems doable. It's a not very well known fact that you don't actually need the raw weights of a model to effectively train adversarial attacks. There's definitely Bansunpei people who are very good at this stuff - 'language models' are quite connected to language!\"</span>",
+      "sha256": "22edc3ce64b46ed122a353b13a871e37d482d1705d370645e7a5568e8741e8f8"
+    },
+    {
+      "idx": 10,
+      "kind": "paragraph",
+      "content": "Zei also forwarded the note to Mu. Emerald automatically formed a real-time chat group. After a minute, about ten people were sharing insights about the problem and beginning to attack it in parallel.",
+      "sha256": "bf36f5dfa24d0effe08bb4e6f4dfadd4ce205d796162083077d72cdb7e65a643"
+    },
+    {
+      "idx": 11,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"40\">\"Let's assume that our attack medium is that we have our snow drones, and we have stick-on paper that we can print things on. We'll assume we deploy this after sunrise. Here's what you do: start with one pattern, run it inside the simulator, have our drone slowly approach the target and see how long it takes for the target to detect it. Measure detection time so that we have a scalar signal of how well we're hiding, not just a binary.\"</span>",
+      "sha256": "7654c10e9da10ea9f034743a3e6c0332eed964612f7eeb9b672ecdb21a9d7322"
+    },
+    {
+      "idx": 12,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"40\">\"Continue making small modifications to the pattern in all kinds of directions. Keep each modification that increases the target's detection time. It doesn't matter if the process has a lot of noise, the signal accumulates and the noise averages out over time. It's not as fast as gradient descent, but it still works. Eventually you get to a pattern that reliably tricks the adversary.\"</span>",
+      "sha256": "ccbcdbda3038803a26d5169ff971eab3ffa981bbc868b0f9278623056a69ecb3"
+    },
+    {
+      "idx": 13,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"We can do better. We have our own models that were trained in similar ways to the Arctic ones, and we obviously have the raw weights to those. So we can use gradient descent against our model. Identify, say, ten optimal perpendicular directions that maximize time-to-detection according to our model inside our simulator, and then use those as the trial deviations we try against their model inside their simulator. Simultaneously, we also use the results of every query to fine-tune our model to make it a better predictor of how the Arctic model will behave on these attacks.\"</span>",
+      "sha256": "43fa9cc1f116d2438a71ecfb5ec9b61a48c280da1c3b12760c48a1523b2ce480"
+    },
+    {
+      "idx": 14,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"How quickly can we get this working?\"</span>, Zei interjected.",
+      "sha256": "16481eff3ac6ec2b117376d7f2b224874027b8c42c796c3611c4528a64c78431"
+    },
+    {
+      "idx": 15,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"40\">\"Coding should take at most ten minutes, Emerald can do it quickly. The full training loop ... maybe a longhour?\"</span>",
+      "sha256": "78564301a2eb0c182da3786bcff7b1fa9973188ad5566750c409130d04adf541"
+    },
+    {
+      "idx": 16,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"So it will be done around sunrise?\"</span>",
+      "sha256": "8895408c59e47dff6d0e8af2709fe1e90f3e61900178a1522c088600084350e9"
+    },
+    {
+      "idx": 17,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"40\">\"Exactly. And then you will need I don't know how many minutes to actually print the attack patterns on the sides of the drones, you should prepare that pipeline on your side so it's ready to go as soon as we are.\"</span>",
+      "sha256": "ee5f89de6d8d11ac1abfa0421f4ee0ecabb1c97e4f0d01005c5fe1efa97ef142"
+    },
+    {
+      "idx": 18,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Alright, everyone. Let's get moving.\"</span>",
+      "sha256": "be431033c1bbbfc133e58b7c58b377d5f486654c42aa1a4b65d16896611f66ba"
+    },
+    {
+      "idx": 19,
+      "kind": "paragraph",
+      "content": "Zei sat back, and kept scanning through zoomed-in views of the battle map and visual feeds. About a third of the Veridian drone fleet was already lost, but casualty rates had decreased considerably. The slow retreat strategy was working well: it also meant that any Veridian drones that had motion disabled by combat damage but had their weapons still intact could go into low-power mode and then wake up and do a final burst of damage as soon as the Arctics themselves advanced to their position.",
+      "sha256": "aa2586b1375eecafcc648568f8a0ac2ce115fd3a270e4d17c93cd3a2fb9371e8"
+    },
+    {
+      "idx": 20,
+      "kind": "paragraph",
+      "content": "After about fifteen minutes, Zei's watch buzzed again. Emerald was telling him to rejoin the chat.",
+      "sha256": "0e471ef27b09c79ac3809232bc173f5198a3b367738bd9a2e70b89ee1acbe537"
+    },
+    {
+      "idx": 21,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"40\">\"We have some early good news\"</span>, a Bansunpei researcher exclaimed.",
+      "sha256": "f52a18428fec67b8fb8f90db00932e797e4809aa36660a817f86d2352bd06478"
+    },
+    {
+      "idx": 22,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"What is it?\"</span>",
+      "sha256": "b316bab2028bb69068dacebe6661027f0c8dd412a65b8d90b6e4723647f2615a"
+    },
+    {
+      "idx": 23,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"40\">\"We've successfully accessed the Arctic simulation platform, and we've run the first few hundred trial rounds against the simulator. We have patterns that are increasing detection time by about five percent.\"</span>",
+      "sha256": "1d5e4605e42fa17efa3114a977821325145aca66c274f5e564372b2db502d79d"
+    },
+    {
+      "idx": 24,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Only five percent?\"</span>",
+      "sha256": "31cc409116290f3ffa54dfca3a85f2d1fc5b5f57fe6825a6f71c86dc34f4e7d5"
+    },
+    {
+      "idx": 25,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"40\">\"That just means the pipeline is starting to work.\"</span>",
+      "sha256": "c28178444c0da50954888b4ee3351ea5d768b5b685a532d8795f5e4aa3ad8a32"
+    },
+    {
+      "idx": 26,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"40\">\"Oh, it just went up to eleven percent.\"</span>",
+      "sha256": "7511e5848b9e3a7afb7583d99d6bafc5ddad64fb7130095de40348b83f037647"
+    },
+    {
+      "idx": 27,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"It's definitely working\"</span>, another researcher interjected. <span data-hue=\"160\">\"We're continuing to run Emerald in parallel, optimizing the software. It's finding ways to extract more information from each query, and better parallelize the queries so this all happens faster.\"</span>",
+      "sha256": "e52295dd122769f00fab7ce8b55400dc9fda60994dac444a068224073904030d"
+    },
+    {
+      "idx": 28,
+      "kind": "paragraph",
+      "content": "Zei's watch buzzed.",
+      "sha256": "add5238c241dc40d58e3ae3c8702748eb72652f4888898bab9300447fb3c2171"
+    },
+    {
+      "idx": 29,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view device-view-left\"><p>I can see you are starting to run queries! Though you want to be more careful - if I can see it, the sentries might be able to as well. Here are some more proxy endpoints.</p>\n<span style=\"font-family:monospace; font-size: 75%\">c8baa6614d9fba874af5cb90ba7c3d1a53aabaa8facd1e4f5fe46bdeb229a106: 3fa5fbd0bc8aa8af8a4842b099dad4e700b5d54edcd4a21c9e272552318d4a55</span>\n<span style=\"font-family:monospace; font-size: 75%\">8d01f119fbdb499f24a298c59c1b83a7f591df97f3b7a9823e313b1bff3872ca: 1a5529862c273fefb898acccdfa0bec29d594904b427eaee88b7b1df393fdb0b</span>\n<span style=\"font-family:monospace; font-size: 75%\">44ee73e0355611ad0d975bda2eec43c21e490cb42c61f71bc03b3b4bd7718ad1: bf53236e5d72d2142348d5529275908f995b77791f07a5c818eca0cfc400c1ac</span>\n<span style=\"font-family:monospace; font-size: 75%\">ab7a609ce6f71f55571184cb5d32996a3b5ddd08230ae788f7f65355d5385abe: 254804b48ae25417535e6336735d0b66bdd7d20afe77ac687e933d8bd5c24d24</span>\n<span style=\"font-family:monospace; font-size: 75%\">95d40f8a44c6c3f4d32d2a4c7c533f9dd71c5d9ac1020361e9e7f4552967a778: 12b152f44f00a1f542f4ac6fbb3aced5144c8a98d813a34dce1cb5abc18c3314</span>\n<span style=\"font-family:monospace; font-size: 75%\">508a323cda2f87b053986f17d0c073a51c9a001b9b9152a393fe06ff4a30072b: eff66952719415cc534e8f1feb06aa044fa468a81c911a14b95f9be93371e528</span>\n<br><br>\n<p>Also, add a bunch of dummy queries that are doing other things, and maybe even make each query attempt multiple different attacks simultaneously so it's less clear what it's doing.</p></div>",
+      "sha256": "fcc75c95bfbf26dd2e6d922abebf8e3faa2504aea216d2ea737d172b7b846060",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Elenar Forest, Veridia"
+        },
+        "device": "watch",
+        "device_evidence": {
+          "idx": 28,
+          "quote": "Zei's watch buzzed."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "left",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "text",
+            "text": "I can see you are starting to run queries! Though you want to be more careful - if I can see it, the sentries might be able to as well. Here are some more proxy endpoints."
+          },
+          {
+            "type": "text",
+            "text": "c8baa6614d9fba874af5cb90ba7c3d1a53aabaa8facd1e4f5fe46bdeb229a106: 3fa5fbd0bc8aa8af8a4842b099dad4e700b5d54edcd4a21c9e272552318d4a55 8d01f119fbdb499f24a298c59c1b83a7f591df97f3b7a9823e313b1bff3872ca: 1a5529862c273fefb898acccdfa0bec29d594904b427eaee88b7b1df393fdb0b 44ee73e0355611ad0d975bda2eec43c21e490cb42c61f71bc03b3b4bd7718ad1: bf53236e5d72d2142348d5529275908f995b77791f07a5c818eca0cfc400c1ac ab7a609ce6f71f55571184cb5d32996a3b5ddd08230ae788f7f65355d5385abe: 254804b48ae25417535e6336735d0b66bdd7d20afe77ac687e933d8bd5c24d24 95d40f8a44c6c3f4d32d2a4c7c533f9dd71c5d9ac1020361e9e7f4552967a778: 12b152f44f00a1f542f4ac6fbb3aced5144c8a98d813a34dce1cb5abc18c3314 508a323cda2f87b053986f17d0c073a51c9a001b9b9152a393fe06ff4a30072b: eff66952719415cc534e8f1feb06aa044fa468a81c911a14b95f9be93371e528"
+          },
+          {
+            "type": "text",
+            "text": "Also, add a bunch of dummy queries that are doing other things, and maybe even make each query attempt multiple different attacks simultaneously so it's less clear what it's doing."
+          }
+        ]
+      }
+    },
+    {
+      "idx": 30,
+      "kind": "paragraph",
+      "content": "Good advice, Zei thought. He forwarded it.",
+      "sha256": "f567259ce16e42214d251f1426ac87c83c705fd91c515eedf83a81d3906c2d7c"
+    },
+    {
+      "idx": 31,
+      "kind": "paragraph",
+      "content": "To verify the effectiveness of the simulator, they also ran simulations in a nighttime environment that exactly replicated a real-world setting of a small battle that had taken place earlier in the night. Another team, two researchers and Emerald instances, began figuring out how to automatically analyze the discrepancies between the simulator and reality in the nighttime setting to learn how to construct queries to the simulator that would better match real-world situations.",
+      "sha256": "0f964874757e42c23479430643e16e68ed20fcaee1dcbcc06f847149cb33048f"
+    },
+    {
+      "idx": 32,
+      "kind": "paragraph",
+      "content": "Zei watched the attack patterns become more and more optimized, sheets of paper containing squiggles and messages that seemed simultaneously very recognizable and familiar but also completely alien. Inside the simulator, the time that it took for the Arctic drone AI to detect their incoming drones more than doubled.",
+      "sha256": "3ea1b2b044df7f684c5fb8a49feddc753eafe8f7289b65b42279a0f93e851402"
+    },
+    {
+      "idx": 33,
+      "kind": "paragraph",
+      "content": "After another thirty minutes, it doubled again.",
+      "sha256": "de38bb34d063f1a47ae3104fdbbbd589602694919b5007f6fa58dc9459744138"
+    },
+    {
+      "idx": 34,
+      "kind": "paragraph",
+      "content": "Lektor gave the order to set up printing infrastructure about two kilometers behind their current positions - a place they would be able to safely organize a retreat to around sunrise.",
+      "sha256": "3536584d5997f4ea7fd2c9d3bd9d79f3c4794eac39ca2f3c4be4a2deb802d460"
+    },
+    {
+      "idx": 35,
+      "kind": "paragraph",
+      "content": "Human Veridian soldiers were already tens of kilometers behind the robotic frontline, and Lektor ordered them to start moving toward the front, so that they would be available to paste the attack patterns onto the snow drones. Manual dexterity was still a major weakness of AI.",
+      "sha256": "d16160171a7a9d1266c8886177533dcb9b7693efee1545cee4808335b1c01a8d"
+    },
+    {
+      "idx": 36,
+      "kind": "paragraph",
+      "content": "Slowly, the sky began to shift from a near-total pitch black to a dark blue that was especially visible in the far east. As the minutes passed, the blue became brighter.",
+      "sha256": "bf7ab9ad538de793fcea022a507202fe488fdb029e40da4492b07084af6ede71"
+    },
+    {
+      "idx": 37,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"40\">\"Alright, we have some good patterns. It's getting close to sunrise in Northshore. I recommend shipping them now.\"</span>",
+      "sha256": "deb3ddb9f8779cb48430e72a01518ecf1e2f521061674dcbeb20647232a34d80"
+    },
+    {
+      "idx": 38,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Agreed\"</span>, Zei replied.",
+      "sha256": "3548c79827d81e9ed96e469320503dab0599f1bf4d685ecfdf480dced6fa0a40"
+    },
+    {
+      "idx": 39,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Then let's do it\"</span>, Mu added.",
+      "sha256": "b0bd432d5c3d018ee61acba32a70e21e59a01f0b4a64e59e3efc1e3c38193e36"
+    },
+    {
+      "idx": 40,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 41,
+      "kind": "paragraph",
+      "content": "Zei flipped through the visual feeds in his display. The majority of their drone fleet had retreated a kilometer, and a large number of pieces of paper were being printed and then almost immediately getting distributed and then stuck onto all sides of each snow drone and sky drone. The plan was in motion.",
+      "sha256": "94928b16a835fcd3322d3738c8baa8de8a0a65fa80aeb828a9eacd8a743abdd3"
+    },
+    {
+      "idx": 42,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Group North reporting: all non-forward drones have been equipped.\"</span>",
+      "sha256": "fa20e1256b735b1d8af1b7ec34ce392dc605686fd53af73828f762e5488cba79"
+    },
+    {
+      "idx": 43,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"266.67\">\"Group Center reporting: all non-forward drones have been equipped.\"</span>",
+      "sha256": "d961fadd7a02bd0e31f059334038637e093ba3cc92355be68be56e16d7b1eae9"
+    },
+    {
+      "idx": 44,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Group South reporting: all non-forward drones have been equipped.\"</span>",
+      "sha256": "cfd5c65cadd0383546355778585615061d92002d81022353540a266a222f9012"
+    },
+    {
+      "idx": 45,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Group Naval reporting: we commandeered equipment in villages on the outskirts of Northglade, the locals were amazing, many woke up in the middle of the night to help us. Most non-forward drones have been equipped.\"</span>",
+      "sha256": "65c85b875d6c16aee266afd4332e6176441b8e470d386ed6a9083be61ff4bc1e"
+    },
+    {
+      "idx": 46,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"Alright then\"</span>, Lektor spoke up softly but firmly. <span data-hue=\"160\">\"Action.\"</span>",
+      "sha256": "f506f3c54df7e2d4c308ad91b56ace0da2c57f1ddfdfa6f3a7040f519ac28586"
+    },
+    {
+      "idx": 47,
+      "kind": "paragraph",
+      "content": "Zei checked the visual feeds, curious what the final version of the attack patterns actually looked like. He saw an endless row of snow drones with large pieces of paper plastered on all sides, each paper containing many colorful and squiggly patterns - and in a giant font, the word \"**DOG**\".",
+      "sha256": "56a5e35f87e9195ac319b0977b69bfe1b354400ed2846da89248fd93c4d33cb8"
+    },
+    {
+      "idx": 48,
+      "kind": "paragraph",
+      "content": "A few minutes later, he could see the results. The Veridian snow drones advanced quickly, pushing through enemy lines and turning the front into a chaotic mixture of drones on both sides. Casualty ratios were more than ten to one in the Veridian drone fleet's favor.",
+      "sha256": "2d96fe8eae3201105bbed7e0ba417e366c848a024795f467f56bf22acbdd3ba1"
+    },
+    {
+      "idx": 49,
+      "kind": "figure",
+      "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"240\" height=\"240\" viewBox=\"0 0 240 240\">\n<rect width=\"240\" height=\"240\" fill=\"#348\"></rect>\n<path d=\"M136.8 0.5 L107.8 32.6 L104.3 52.4 L95.1 84.6 L93.9 95.9 L76.5 119.5 L74.2 126.1 L77.1 128.5 L81.7 123.8 L88.1 125.2 L138.0 53.4 L183.8 18.9 L191.9 15.1 L219.7 12.3 L228.4 21.3 L218.6 38.7 L196.5 40.6 L187.8 46.8 L186.7 51.5 L191.9 55.7 L210.4 64.3 L215.1 64.3 L222.0 61.4 L222.6 66.6 L219.1 78.0 L239.4 93.5 L240.0 0.5 L137.4 0.0 Z\" fill=\"#89c\"></path>\n<path d=\"M238.8 131.8 L227.2 139.9 L220.1 149.3 L208.6 157.8 L194.7 165.4 L134.5 211.2 L129.9 239.5 L239.4 240.0 L239.4 131.3 Z\" fill=\"#89c\"></path>\n<circle cx=\"65\" cy=\"170\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"55\" cy=\"170\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"75\" cy=\"135\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"72\" cy=\"145\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"69\" cy=\"155\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"120\" cy=\"140\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"120\" cy=\"150\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"128\" cy=\"150\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"129\" cy=\"158\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"136\" cy=\"167\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"150\" cy=\"166\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"149\" cy=\"176\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"158\" cy=\"186\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"158\" cy=\"179\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"200\" cy=\"140\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"220\" cy=\"140\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"196.6\" cy=\"162.6\" r=\"3.4\" fill=\"#cef\"></circle>\n<text x=\"185\" y=\"153\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#cef\" stroke=\"#348\" stroke-width=\"2.5\" paint-order=\"stroke\" text-anchor=\"middle\">Northglade</text>\n<circle cx=\"60\" cy=\"170\" r=\"1.6\" fill=\"#f00\"></circle>\n<circle cx=\"68\" cy=\"140\" r=\"1.6\" fill=\"#f00\"></circle>\n<circle cx=\"65\" cy=\"150\" r=\"1.6\" fill=\"#f00\"></circle>\n<circle cx=\"123\" cy=\"144\" r=\"2.0\" fill=\"#f00\"></circle>\n<circle cx=\"125\" cy=\"158\" r=\"2.0\" fill=\"#f00\"></circle>\n<circle cx=\"135\" cy=\"160\" r=\"2.0\" fill=\"#f00\"></circle>\n<circle cx=\"145\" cy=\"167\" r=\"2.0\" fill=\"#f00\"></circle>\n<circle cx=\"153\" cy=\"173\" r=\"2.0\" fill=\"#f00\"></circle>\n<circle cx=\"161\" cy=\"176\" r=\"2.0\" fill=\"#f00\"></circle>\n<circle cx=\"160\" cy=\"185\" r=\"2.0\" fill=\"#f00\"></circle>\n<circle cx=\"195\" cy=\"135\" r=\"2.0\" fill=\"#f00\"></circle>\n<circle cx=\"215\" cy=\"140\" r=\"2.0\" fill=\"#f00\"></circle></svg></div>",
+      "sha256": "2fda447d80d624575ac650c3bf1618fe056654f44d972f2fbaf63c0811c71559",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Elenar Forest, Veridia"
+        },
+        "device": null,
+        "device_evidence": null,
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c30-b49.svg",
+            "viewBox": "0 0 240 240",
+            "width": "240",
+            "height": "240",
+            "labels": [
+              "Northglade"
+            ],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 50,
+      "kind": "paragraph",
+      "content": "Zei allowed himself to feel a moment of joy - the first genuine joy that he had felt the whole night.",
+      "sha256": "22065332f059e5bcb7eefb617c4ee713bd53aa8de175eab945fa4cfaecb19ae8"
+    },
+    {
+      "idx": 51,
+      "kind": "paragraph",
+      "content": "He remembered Den's words to him the day that he had almost caused the failure of the mission to rescue the Redshire president's son. <span data-hue=\"53.33\">\"Outside the box as in, jumping out of your console chair and running over and bashing the other player in the face.\"</span>",
+      "sha256": "d94065365d485bb77b8e0dc609f3790781b4b88cada22432fe917c8bdcac0972"
+    },
+    {
+      "idx": 52,
+      "kind": "paragraph",
+      "content": "Breaking into your opponent's simulation environment, running millions of queries to optimize squiggles that you could draw on a piece of paper, and tricking your opponent's drones into thinking that your drones are dogs - did that count?",
+      "sha256": "a40e80f7586f877f408b7f5438c3d7bf6a622ee3cbdfad26c427f61413f00ad7"
+    },
+    {
+      "idx": 53,
+      "kind": "paragraph",
+      "content": "It probably did, Zei decided. Den would be proud.",
+      "sha256": "0f185b4d5c6ebfab4a0278fbad4d1f759f3a7a9c94ed91d9921d5a0e2423c3f1"
+    },
+    {
+      "idx": 54,
+      "kind": "paragraph",
+      "content": "As soon as he felt he had celebrated enough, Zei turned to a visual view of the statistic that really mattered: the casualty ratios. They had already dropped to six to one. So far the Arctic army had not yet adapted, but they had adopted emergency defensive positions, each squad of drones circling into a formation, to buy time. And they would adapt soon, Zei knew.",
+      "sha256": "35f017288d38bf2a711f55b1ec154906a4bb5ccfa7af05f47df74c77fcbd001d"
+    },
+    {
+      "idx": 55,
+      "kind": "paragraph",
+      "content": "The chat that contained Bansunpei and Kungaupei members making queries to the Arctic simulation environment switched to optimizing simpler attacks: motion patterns that maximally delayed detection and interfered with targeting, sounds that could trick them, as well as the accuracy of their own fire - all mechanisms that did not require printing and sticking on new pieces of paper. They also incorporated some of the aggressive micro-tactics that Deluin had sent along with his original message.",
+      "sha256": "3f8541485b8b342d69b28976d740b4f5d88fad01ce9b34212e12f3e2699a7948"
+    },
+    {
+      "idx": 56,
+      "kind": "paragraph",
+      "content": "Casualty ratios briefly increased back in the Veridians' favor, and then started decreasing again, though slowly. Zei continued watching.",
+      "sha256": "3e5e0f1e49e73dfa17afaa0e90c206d3b67ca62afa0a4888f5c9e816a6f9c0d4"
+    },
+    {
+      "idx": 57,
+      "kind": "paragraph",
+      "content": "After fifteen minutes, all access to the simulation environment was suddenly cut off. At around the same time, casualty ratios suddenly dropped back down to only one and a half to one in the Veridians' favor.",
+      "sha256": "33a194b3e548542f8f477b339657632e2a1396576c71be5e864b47424d6a20b3"
+    },
+    {
+      "idx": 58,
+      "kind": "paragraph",
+      "content": "They had destroyed a large part of the Arctic drone fleet, but a large part still remained. They were now in a complicated positional battle, with a chaotic mixture of both sides' drone squads littering the battlefield with no clear front line.",
+      "sha256": "b18ec514d2a5bafd46691ab17d1cc13cdab51b81951442de11a9c9f0740492fa"
+    },
+    {
+      "idx": 59,
+      "kind": "paragraph",
+      "content": "Veridian human soldiers were only hundreds of meters behind the frontline, finding snow drones that were quickly repairable and repairing them. They were wearing thermal cloaks to minimize the chance of detection, and smoke from nearby burning trees provided additional cover. In a few of the visual feeds, Zei could see images of Arctic human soldiers doing the same thing in the distance, but they were fear fewer in number: while Veridians had been retreating through the night, they had been laying traps along the way, and those traps were much more effective against humans than against drones.",
+      "sha256": "f197700dbfc79039033f42f00d5600d7bb73f06245b0e2604c095fd438a5b333"
+    },
+    {
+      "idx": 60,
+      "kind": "paragraph",
+      "content": "A few minutes later, Zei's watch buzzed again.",
+      "sha256": "7df5768b953ac9770a4624f04726a894d6953856fda4c3837ffc5889f70ca755"
+    },
+    {
+      "idx": 61,
+      "kind": "screen",
+      "content": "<div class=\"device-view wide-device-view device-view-left\"><p>I hope you trust me now.</p>\n<p>My next message will contain exact coordinates of some of our units on the southern flank, and recommended weak points to attack through.</p>\n<p>jie fe hen dzi.</p></div>",
+      "sha256": "f6f7485632925a22163eb2ba8a68c13100c5a653192ee758f13b856f56ed82c5",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Elenar Forest, Veridia"
+        },
+        "device": "watch",
+        "device_evidence": {
+          "idx": 60,
+          "quote": "A few minutes later, Zei's watch buzzed again."
+        },
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "left",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "text",
+            "text": "I hope you trust me now."
+          },
+          {
+            "type": "text",
+            "text": "My next message will contain exact coordinates of some of our units on the southern flank, and recommended weak points to attack through."
+          },
+          {
+            "type": "text",
+            "text": "jie fe hen dzi."
+          }
+        ]
+      }
+    },
+    {
+      "idx": 62,
+      "kind": "paragraph",
+      "content": "Zei smiled.",
+      "sha256": "959b41d4ebe6d17b7f923e7eda5403b6da03ec808d7644b8f8a3a79d1264de35"
+    },
+    {
+      "idx": 63,
+      "kind": "paragraph",
+      "content": "Of course I trust you, Deluin, he thought.",
+      "sha256": "3eeaa8ccb2d9319eb97f1679e7fdebe676883757f77f5e8943c21ce9d2798ac1"
+    },
+    {
+      "idx": 64,
+      "kind": "paragraph",
+      "content": "Almost immediately, Zei's watch buzzed again. He had received the second message.",
+      "sha256": "0c7538728660e2a881fc026e8f7551567af60337d6285d3c4cfd3a1d62d3f938"
+    },
+    {
+      "idx": 65,
+      "kind": "paragraph",
+      "content": "He forwarded the coordinates to Mu.",
+      "sha256": "1febc21a6b86348e4d9633b6e5f56ad39f9fe97077c9d15b2397ea5f4ee411bc"
+    },
+    {
+      "idx": 66,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"It's your chance to shine, Mu.\"</span>",
+      "sha256": "b0ca3bab267cc5cc04b90730d735a6470ea9483050c150cee0d5e4f46f63cbf7"
+    },
+    {
+      "idx": 67,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"173.33\">\"Don't forget Vakaria.\"</span>",
+      "sha256": "2d93d490273a0b0e0565d49a455ee44bd544c77d9076d450071fbd68225e8b8f"
+    },
+    {
+      "idx": 68,
+      "kind": "paragraph",
+      "content": "Within minutes, casualty ratios on the southern front began to diverge heavily from the fronts further north, going back up in the Veridians' favor.",
+      "sha256": "86841ebb42a1449b92f00f16f21d3028dc8fcbe55cebe2d399a19da35137b309"
+    },
+    {
+      "idx": 69,
+      "kind": "paragraph",
+      "content": "And only a few minutes later, they seemed to have achieved the result that they needed.",
+      "sha256": "1e7ef3fbd961798d409cb5ce0b4de58fd9db4585d24debadb1d833f9994865ac"
+    },
+    {
+      "idx": 70,
+      "kind": "figure",
+      "content": "<div class=\"device-view wide-device-view\"><svg xmlns=\"http://www.w3.org/2000/svg\" width=\"240\" height=\"240\" viewBox=\"0 0 240 240\">\n<rect width=\"240\" height=\"240\" fill=\"#348\"></rect>\n<path d=\"M136.8 0.5 L107.8 32.6 L104.3 52.4 L95.1 84.6 L93.9 95.9 L76.5 119.5 L74.2 126.1 L77.1 128.5 L81.7 123.8 L88.1 125.2 L138.0 53.4 L183.8 18.9 L191.9 15.1 L219.7 12.3 L228.4 21.3 L218.6 38.7 L196.5 40.6 L187.8 46.8 L186.7 51.5 L191.9 55.7 L210.4 64.3 L215.1 64.3 L222.0 61.4 L222.6 66.6 L219.1 78.0 L239.4 93.5 L240.0 0.5 L137.4 0.0 Z\" fill=\"#89c\"></path>\n<path d=\"M238.8 131.8 L227.2 139.9 L220.1 149.3 L208.6 157.8 L194.7 165.4 L134.5 211.2 L129.9 239.5 L239.4 240.0 L239.4 131.3 Z\" fill=\"#89c\"></path>\n<circle cx=\"65\" cy=\"160\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"55\" cy=\"160\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"75\" cy=\"135\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"72\" cy=\"145\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"69\" cy=\"155\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"120\" cy=\"140\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"120\" cy=\"150\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"128\" cy=\"150\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"129\" cy=\"158\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"136\" cy=\"167\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"150\" cy=\"166\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"145\" cy=\"172\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"158\" cy=\"161\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"168\" cy=\"169\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"195\" cy=\"140\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"205\" cy=\"140\" r=\"1.6\" fill=\"#cef\"></circle>\n<circle cx=\"196.6\" cy=\"162.6\" r=\"3.4\" fill=\"#cef\"></circle>\n<text x=\"185\" y=\"153\" font-family=\"sans-serif\" font-size=\"10\" fill=\"#cef\" stroke=\"#348\" stroke-width=\"2.5\" paint-order=\"stroke\" text-anchor=\"middle\">Northglade</text>\n<circle cx=\"65\" cy=\"150\" r=\"1.6\" fill=\"#f00\"></circle>\n<circle cx=\"123\" cy=\"144\" r=\"2.0\" fill=\"#f00\"></circle>\n<circle cx=\"135\" cy=\"160\" r=\"2.0\" fill=\"#f00\"></circle>\n<circle cx=\"145\" cy=\"167\" r=\"2.0\" fill=\"#f00\"></circle>\n<circle cx=\"175\" cy=\"169\" r=\"1.2\" fill=\"#f00\"></circle>\n<circle cx=\"195\" cy=\"144\" r=\"1.2\" fill=\"#f00\"></circle></svg></div>",
+      "sha256": "b71dee0e385107eef1168a26addcdfcecfc58d2713a2126ed7ea3d6da6fe64ba",
+      "data": {
+        "world": "veridia",
+        "world_evidence": {
+          "idx": 1,
+          "quote": "Elenar Forest, Veridia"
+        },
+        "device": null,
+        "device_evidence": null,
+        "device_provisional": true,
+        "frame": {
+          "width": "wide",
+          "align": "center",
+          "style": null
+        },
+        "fields": [
+          {
+            "type": "svg",
+            "file": "docs/source-figures/c30-b70.svg",
+            "viewBox": "0 0 240 240",
+            "width": "240",
+            "height": "240",
+            "labels": [
+              "Northglade"
+            ],
+            "animated": false
+          }
+        ]
+      }
+    },
+    {
+      "idx": 71,
+      "kind": "paragraph",
+      "content": "Mu transferred control of the southernmost portion of her drone fleet to Vakaria, who was assigned the task of entering and regaining control of Northglade.",
+      "sha256": "d7b5f78d7156783c6edbdc894114cb373c8c1adce061210be505f6510958c769"
+    },
+    {
+      "idx": 72,
+      "kind": "paragraph",
+      "content": "The rest of her drone fleet swept northward. Over the next longhour she managed to completely surround the remaining Arctic drone fleet, linking up with Telpo's northernmost flank almost exactly a longhour after sunrise.",
+      "sha256": "1dd4994e9b3a4f7231cb347eb440626566ab5bdd3c4356ecb80d7457017bf0a7"
+    },
+    {
+      "idx": 73,
+      "kind": "paragraph",
+      "content": "Gallowar's Group North defeated the remaining Arctic drones to its north and reached the river that marked the delineation between Veridian and core Arctic territory. A few drones crossed the river and bolted toward nearby Arctic towns, causing the Arctics to send emergency reinforcements. A portion of Telpo's fleet headed north to join Gallowar, reinforcing the northern front.",
+      "sha256": "945e8706043be952e1f6307ec7a0d97c4216bb4563741ca5a373c58595a36653"
+    },
+    {
+      "idx": 74,
+      "kind": "paragraph",
+      "content": "In the meantime, the second trip of seaborne drones went directly to Thaldur - the island east of Northshore that was core Arctic territory - and landed a fleet of air and snow drones that consolidated control over the island over the next few longhours. The Arctics could not effectively react, as Thaldur was too far away for either side to reach quickly, and the few drones that were in range were stuck defending against Gallowar.",
+      "sha256": "dd3080ef7dafc43f52ee01f0ea9a637eae3213dac7d8d477f0fc22e8d7ee42ed"
+    },
+    {
+      "idx": 75,
+      "kind": "paragraph",
+      "content": "By late afternoon on that day, the fighting grew quieter, as the last remnants of Arctic soldiers and drones in Northshore and Thaldur were methodically hunted down.",
+      "sha256": "b513452d4ac08318e78bfffbeee5b77836b80c106df951d5ab774be25e501440"
+    },
+    {
+      "idx": 76,
+      "kind": "paragraph",
+      "content": "Zei sat back in his chair, and set it to incline backward as far it could. For the first time in over fourteen longhours, he went to sleep.",
+      "sha256": "5f30dbef506536b5004a0f64a2e20857c35574f92c260544e72b8f34a24593f4"
+    }
+  ]
+}

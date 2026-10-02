@@ -1,0 +1,652 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 21,
+  "source_url": "https://vitalik.eth.limo/snowmoon/html/chapter-21.html",
+  "source_sha256": "c2b27b19329c84cd06bed6b578be236858244472d9816feb23c7cd359090978d",
+  "fetched_at": "2026-10-02",
+  "license": "GPL-3.0",
+  "blocks": [
+    {
+      "idx": 0,
+      "kind": "heading",
+      "content": "# Chapter 21",
+      "sha256": "2fbbff17b54a674ce67e3970ebee1887a0c74ef08ce0dfbe30c5a291dfd780b6"
+    },
+    {
+      "idx": 1,
+      "kind": "dateline",
+      "content": "**Meldan, Veridia** · 3724 Mistime 20",
+      "sha256": "33846c341f5c8d5a21dfc8a430535f3aa2a5923e9a360a1cb0bd4e20c789dbe2"
+    },
+    {
+      "idx": 2,
+      "kind": "paragraph",
+      "content": "Seila, Vil, Daia, Lily and Zven were all seated around the table in Seila's house, waiting for dinner to arrive.",
+      "sha256": "5f45ebe5915d013d52c4de063aa2a7e74ec0fe8e5c67915ef94b573569ea89bf"
+    },
+    {
+      "idx": 3,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Thank you guys for coming and keeping us company\"</span>, Seila said softly. <span data-hue=\"253.33\">\"It really means a lot to me.\"</span>",
+      "sha256": "11be9b3294771ac0ae82ec7a7af42d447054612d86483aa43d4938a7a7034234"
+    },
+    {
+      "idx": 4,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Any more news from Febric and Hreda?\"</span>",
+      "sha256": "ce33f1c39403882cb7f5febfba264e6e7ed27c02c116ba377802b80d4c81cad9"
+    },
+    {
+      "idx": 5,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"I just sent them some more zipcoins for their personal expenses a few days ago. They're just living the life they can inside Greater Plum Harbor. The schools are full, but one of the other refugees was a math teacher, and we're hiring her to informally give them and a few other kids some lessons.\"</span>",
+      "sha256": "aaa10e0654b0bbe3df4468ebc67b8b179001059ea8e12abc24105a046bf9ffbd"
+    },
+    {
+      "idx": 6,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"No word on when there will be any way for them to get back here?\"</span>",
+      "sha256": "c925e2dc3b6a73cde8f882965d44d2eba85eacf085c30cb1002982cc81a4980f"
+    },
+    {
+      "idx": 7,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Still none. At this point I'm starting to suspect that the Arctics' plan to reunify everyone is to just invade the rest of Veridia too.\"</span>",
+      "sha256": "3975747943d5bc30bbd7eb339aa6aa6cdf863b007287f09a07b765a1cb2e32a2"
+    },
+    {
+      "idx": 8,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Well at least they're safe.\"</span>",
+      "sha256": "f4a44bb9b325e63b8575d1a4aed502ad624b7be6f2b7b568f41ea6050548ac3c"
+    },
+    {
+      "idx": 9,
+      "kind": "paragraph",
+      "content": "Seila sighed.",
+      "sha256": "8825b99fe0c440a410efc83004089de836c61d6017dea981952265e534f8d9ee"
+    },
+    {
+      "idx": 10,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"How is your lawsuit against Divergent going?\"</span>",
+      "sha256": "ef4e9bb331f012a5912d7601a850965ffbc806979aeccd2ae0f6d390f9358fcd"
+    },
+    {
+      "idx": 11,
+      "kind": "paragraph",
+      "content": "This time Vil sighed.",
+      "sha256": "e34a13d3a87d65f477477946e6cefb80afff06143310240e14c33d353c6ab850"
+    },
+    {
+      "idx": 12,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"We won in the original trial a few months ago. But then they appealed. So a whole different group of judges got selected to hear the case, and a month ago they ruled in our favor too. But only a few days ago, we learned that they're appealing a second time.\"</span>",
+      "sha256": "fdee1c4a228713881f67ed8db9d1e7784b053de509f86274e17154f25a47499b"
+    },
+    {
+      "idx": 13,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Can they just keep on doing that forever? Do another appeal, another five judges get sortitioned in, you have to convince them all over again, and keep doing that until you're too tired to keep going and then you give up and settle for like a quarter of the money?\"</span>",
+      "sha256": "2e339259ff5f23309e6cdfe7092e766cd8bd2d19ef177e967b34c08222b78b60"
+    },
+    {
+      "idx": 14,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Fortunately no, there are Veridian common law rules where judges can rule a case to be in bad faith, and require the submitter to give the other side a bunch of extra money as a penalty. That often happens to frivolous appeals.\"</span>",
+      "sha256": "8fc88fe085a0d62fdfebdc74867f3312bc8ec53dc4ae2adbea962113fedeed80"
+    },
+    {
+      "idx": 15,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Here, their latest appeal document has some new footage from Jump's internal monitoring systems. Of course it was all encrypted, but some former employee had access and handed it over. They found some video and messages that make some of us look bad. So they're arguing it's a genuine appeal because of that. But really the video says nothing that's actually relevant to the case. I'm hoping these judges can see through what Divergent is doing more quickly than the previous round's judges did. We're accusing them of making a bad-faith appeal in our defense statement, with luck that should close things quickly.\"</span>",
+      "sha256": "74607965f59c9f519f4a446c51e7203c063c3fe1f8e0923ee3ef91f9e9214bc8"
+    },
+    {
+      "idx": 16,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"These hedge funds really are mean, aren't they.\"</span>",
+      "sha256": "94d6adfd58c390b782d8b960240b8fdaa00208f68d6c9f10e1a23bf30356e984"
+    },
+    {
+      "idx": 17,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"If judging wasn't anonymized, randomly selected and split into two and a half groups each round, I'm sure they would find a way to threaten or bribe the judges too.\"</span>",
+      "sha256": "94546079385d78e035c0344a9738dacca67710c35fdbf0bc00b01caed1d49168"
+    },
+    {
+      "idx": 18,
+      "kind": "paragraph",
+      "content": "At that point, Lily rushed into the room.",
+      "sha256": "ac66bf0eacc3a907b5c9476be61e3060d446d13740c487d011ebb0b65086c360"
+    },
+    {
+      "idx": 19,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"160\">\"Uncle Vil, Aunt Daia, Mom! I got eighty one percent on my latest civics test!\"</span>",
+      "sha256": "72d8d99a03fed46f7f86dab8030fc30fc63b1962113d6ea31c91a2238364bb86"
+    },
+    {
+      "idx": 20,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Congratulations, Lily!\"</span>, Daia replied.",
+      "sha256": "f5ba07cbeec53a02e8d2395a6fc33ad6c5565739cfb8268fb93ba77b9a5b32b0"
+    },
+    {
+      "idx": 21,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Normally I would say, now you've earned your trip to Northglade.\"</span>, Vil added. <span data-hue=\"293.33\">\"But, well...\"</span>",
+      "sha256": "99c45b3463965baac74594986886445c0599d723cdb39bcc6f59d46649192487"
+    },
+    {
+      "idx": 22,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"If it's safe in a few months and Gladias doesn't need me, I'll take you somewhere in the United Cities instead. Maybe Mabuli\"</span>, Seila offered.",
+      "sha256": "840ce8f1a35e5b181570f7cf126fbe2f6cb2426d0687c5c3ed19675d2ae2507e"
+    },
+    {
+      "idx": 23,
+      "kind": "paragraph",
+      "content": "The doorbell rang. Before anyone else could react, Zven ran to the door to get the food.",
+      "sha256": "ff242e19e906f08b2f085724fe33412b7cbb555379b374a20d583d94cabe4db5"
+    },
+    {
+      "idx": 24,
+      "kind": "paragraph",
+      "content": "Zven opened the door, picked up two bags from a robot, and closed the door. Zven brought the food back to the table, and immediately began unpacking. He, Seila, Daia, Vil and Lily each found the boxes with their own meals, and the five of them began eating.",
+      "sha256": "204a8d97e044bafa1e4be9a9746aefcd664d9ed9016ebd4b1941ca6719ebb9cb"
+    },
+    {
+      "idx": 25,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"How was your time in school been, Zven?\"</span>, Daia asked.",
+      "sha256": "f89dd3c37eb803ece5cb8558b3ced873f718978878c82b17c096f69b3897879f"
+    },
+    {
+      "idx": 26,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"My team won another Helisport game yesterday!\"</span>, Zven replied excitedly.",
+      "sha256": "978f75b8dad2228cec1b67de877994eb42d031049e77e16c89f92f8dcf5a1e97"
+    },
+    {
+      "idx": 27,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I also got ninety five on a physics exam a month ago. My teacher is really impressed.\"</span>",
+      "sha256": "a822d7d4f0db46d6d0f8a92bc8ccfe905bdbc7261703bfb8c95614fbdf531b81"
+    },
+    {
+      "idx": 28,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"That's amazing\"</span>, Seila replied.",
+      "sha256": "77717130cc89a504577586abfeb8860195d888fc900ae547ac7ed393b396eef7"
+    },
+    {
+      "idx": 29,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"So a few days ago he took me out privately to a garage, and showed me a mini rocket. He let me take a look inside, and then press the button to let it blast off. It was so fun!\"</span>",
+      "sha256": "469147db85c5b903d9f481b9076439f06c54e98285c958ee7ae6c806bd548f94"
+    },
+    {
+      "idx": 30,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I want to build a rocket when I grow up! And then I want to fly in it. Maybe I'll even be able to go to the moon one day!\"</span>",
+      "sha256": "105f020774152b495ea38f4fc235b25e0d3b1b451c7291e165391a26b5cbfa8e"
+    },
+    {
+      "idx": 31,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Sounds like you won't need me to take you on any adventures!\"</span>, Vil added.",
+      "sha256": "ce053f471e49cbf0ca5e22e31493072ea30146778296e4784cae636884c7ac08"
+    },
+    {
+      "idx": 32,
+      "kind": "paragraph",
+      "content": "Daia continued asking the family table for status updates.",
+      "sha256": "cba60fd31652f87b0fcfd185a43ff3525a27e1f588bf8a20528b7e71767f5fe2"
+    },
+    {
+      "idx": 33,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"So what else is new for you, Seila?\"</span>",
+      "sha256": "ece128b891313f36775c94aadf828dcacf585d01d615384f84ecf04c26471839"
+    },
+    {
+      "idx": 34,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Well aside from Febric and Hreda, I've basically been thinking nonstop about those meetings with the other Order members I had recently.\"</span>",
+      "sha256": "e32e4ef80316c36b24b97f6325e2b957d9b675c535ec31457d6015df144f3122"
+    },
+    {
+      "idx": 35,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"53.33\">\"Are you able to say more?\"</span>",
+      "sha256": "9927d022e51e03f44506e854473cd8c53c7eec3e8c5028b9d564ac226741d42a"
+    },
+    {
+      "idx": 36,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Not the specifics. But in general, it feels like there's a really coordinated effort to try to manipulate the Order, they're saying different things to different people to manipulate each person based on their exact position, they have amazing spying powers, and their objectives don't even seem to be anything commercial.\"</span>",
+      "sha256": "5b84fc1fa12c4d45b892c2e9547bf0f0149c21e0ce8d5f209e036c0562292517"
+    },
+    {
+      "idx": 37,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Is it the Arctics?\"</span>, Zven blurted out, with the excitement of a hero in a detective novel solving a mystery.",
+      "sha256": "a68b53fde01eeb1f81fc7637542ff7a029d0a20eb7536c9be9cbc5d3b893b0b0"
+    },
+    {
+      "idx": 38,
+      "kind": "paragraph",
+      "content": "The table went silent.",
+      "sha256": "133e176e92729c1c3644f8deb738bc11255518d22ea7bdb6a851f8983c9a1b2d"
+    },
+    {
+      "idx": 39,
+      "kind": "break",
+      "content": "---",
+      "sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b"
+    },
+    {
+      "idx": 40,
+      "kind": "paragraph",
+      "content": "Seila was sitting in the chair in her basement, and was staring at her hand device.",
+      "sha256": "9bce562132260ea58c6a0166a729ae139492880d17afe0f3615f2460608e7440"
+    },
+    {
+      "idx": 41,
+      "kind": "paragraph",
+      "content": "Come on, she thought. Gladias should be awake any minute now.",
+      "sha256": "08c58e28f58acca51789e6460d6b2145951b1781026cc68b0dfc8a0f2fc1f578"
+    },
+    {
+      "idx": 42,
+      "kind": "paragraph",
+      "content": "She hit her palm against her face for a fifth time, ashamed at how blind she had been. Gladias had been having these secret meetings for half a year, and she had not asked anything, assuming that he had things under control - and that anything Gladias could not figure out himself, his shadowy friend Mov could.",
+      "sha256": "cc6e552ebe16f91b14b8f36e41ac99d76f52f2545665a62ffaaa1ef9f6d8c475"
+    },
+    {
+      "idx": 43,
+      "kind": "paragraph",
+      "content": "But as it turned out, Gladias and Mov had been successfully hoodwinked by this man the whole time. And when his original pretense - that he was just a kindly man who cared about peace and freedom - fell through, they then got hoodwinked *again* by his mask, his pretense that he was from Silverchat.",
+      "sha256": "883355a74490f4286ee23f828dab3e058885fa37392ab7598327a4ec2892905e"
+    },
+    {
+      "idx": 44,
+      "kind": "paragraph",
+      "content": "Seila herself had seen through the Silverchat ruse within a day - really, she had felt doubts within minutes. But she had not gone further quickly enough. She had entertained the thought that it might be the Arctics, but she had dismissed it - none of Delwart's lines seemed anything like anything she had ever heard from Lord Ephelion. Why would an Arctic say anything nice about peace and freedom? But now the picture had all come together. When you have eliminated the impossible, whatever remains, how improbable, must be the truth.",
+      "sha256": "62e15231bd2b4a82eb8b3f3b487fca10221a1bb078b5cfdd8fd9cc715f0fb651"
+    },
+    {
+      "idx": 45,
+      "kind": "paragraph",
+      "content": "Her watch buzzed. It was Gladias.",
+      "sha256": "278c801a42f88ecbaee8ce02af3265a7d86dc3a4abc0cabdf83b6a6987d1dfb5"
+    },
+    {
+      "idx": 46,
+      "kind": "paragraph",
+      "content": "She immediately called.",
+      "sha256": "07592b96d41371e117a5a228280634703c3e6e763d51c96e62229f7ca51811f8"
+    },
+    {
+      "idx": 47,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Seila! I miss you so much. How are you?\"</span>",
+      "sha256": "34475eb2546548079061d633addf3fb48b9bc7316c7159ae62f2ca15fb62985f"
+    },
+    {
+      "idx": 48,
+      "kind": "paragraph",
+      "content": "At first, she wanted to scream.",
+      "sha256": "b322dff14f673956a6cb50cf147e8028701c6e25784b849673e661491a4c2773"
+    },
+    {
+      "idx": 49,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Gladias, you idiot! Do you know what you've done?!!!!\"</span>",
+      "sha256": "ecaa66908fd6cc17580f81bdb552290684a26d15969bbba16fff954be082b6f0"
+    },
+    {
+      "idx": 50,
+      "kind": "paragraph",
+      "content": "At first, silence.",
+      "sha256": "ea834de65f6121116604bd39ea94fbcec7153c6373a5fb915daa7ff1b0356fb3"
+    },
+    {
+      "idx": 51,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"What's wrong, Seila?\"</span>",
+      "sha256": "5ec26c06a4c30857bc2edc9dab096e09b67446cdd5b95c8bc944b4ad792cd2d9"
+    },
+    {
+      "idx": 52,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Delwart.\"</span>",
+      "sha256": "1674cb27ba20ee195c71dd3ed0de2deca2f33a705cff014b2752ee27c6a90561"
+    },
+    {
+      "idx": 53,
+      "kind": "paragraph",
+      "content": "Silence again.",
+      "sha256": "ea797f6e75e73087fce5675f17330f75f268e4e3abf3f3f1057bb7023a568ada"
+    },
+    {
+      "idx": 54,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I see. Did Mov catch you up?\"</span>",
+      "sha256": "8659b2429b9eb2c6258c71098381a46cc505761efb37df355723d55b89da4431"
+    },
+    {
+      "idx": 55,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Mov was an idiot too. And you're a double idiot for trusting him. Yes, he did catch me up, Gladias. But I saw through Delwart's lies almost immediately, and I dragged Mov out to do some sleuthing myself.\"</span>",
+      "sha256": "b4788320a419665c6a2d59eca5be3d33d0a7207262eed0f3e845c2327f94e633"
+    },
+    {
+      "idx": 56,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"What did you find?\"</span>",
+      "sha256": "f72d56b45b0772899e11c96704aa8288853a8c72e0b415921ea49a054f88192e"
+    },
+    {
+      "idx": 57,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"He's not working for Silverchat, you incredibly naive idiot!\"</span>",
+      "sha256": "a7a2b759210d7b1287e4106f57edeaf1a99d0bf2a916b025720ef3ec1c31275e"
+    },
+    {
+      "idx": 58,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"What?\"</span>",
+      "sha256": "c4d43a8ffd5daf19cd65114cc66e0ce6b834dc7b6b6ee53cb82a0caf61fd0bd3"
+    },
+    {
+      "idx": 59,
+      "kind": "paragraph",
+      "content": "Silence again, this time from Seila's side, as she figured out the next thing she would say.",
+      "sha256": "dae46f6468de6071a724ab07c0c6c18e426c526c277beb47f2a864006561c6cd"
+    },
+    {
+      "idx": 60,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"What do you know?\"</span>",
+      "sha256": "76a04bf27f8f619487ff24de9dbdb16b439c51513296ba33da01cd592f56def3"
+    },
+    {
+      "idx": 61,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"We tracked down two of the other Keepers that Delwart talked to. One of them was on a rubric for data retention in environmental sensors. Delwart tracked him down, the same way he tracked you down. And he was telling him to not bother pushing for more privacy preservation in any of the security or environmental the data collection.\"</span>",
+      "sha256": "6d08dcceaad83e7cef19a0522654206419d59a235292babbef250a982ac89f6b"
+    },
+    {
+      "idx": 62,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"We then tracked down another. She was on a rubric for education. Delwart was telling *her* to remove the incentives for private schools to have proper Veridian civics education.\"</span>",
+      "sha256": "0575ff2002559b45edd49e2b97d41db5baf6cc6c98639e26e36b42143d00c971"
+    },
+    {
+      "idx": 63,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"And then finally, just to confirm, we found a Keeper who was on the rubric that Silverchat should care the most about - social media openness and interoperability - and neither Delwart nor anyone else had tracked down any of them at all.\"</span>",
+      "sha256": "4cf8583049b233acbb8f10cfd6161fa0aa89199fbceee74032e8e96141cad257"
+    },
+    {
+      "idx": 64,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"But ... Mov overheard Delwart talking to a Silverchat person, how did that happen? Is this someone else trying to corrupt Silverchat too? Convince them to up-boost some content favoring whatever their position is?\"</span>",
+      "sha256": "69a106393843871365357d9bc63737e581c9908ab1ec7081c2755ea1ca74b467"
+    },
+    {
+      "idx": 65,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"No, you idiot. Delwart faked that. Come on, his spying ability is much better than Mov's, at some point he must have caught on to the fact that Mov was following him, and one day he planted that seed on purpose, to make his cover story more believable.\"</span>",
+      "sha256": "38915c0e1817dcd68583f254a203d6531d7190e9d1d326c8b52deec363e8c093"
+    },
+    {
+      "idx": 66,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"So...\"</span>",
+      "sha256": "3aff145a370c4dcaad0a1a80c57bb0cdffadc82ec6d3caf4b2d499b669390429"
+    },
+    {
+      "idx": 67,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Think about what we now know about Delwart's goals. You thought he cares about freedom - but not when he's pushing for unrestricted surveillance. You thought he is anti-war, but he never mentioned that to the second Keeper at all. And then eventually you thought he cares about Silverchat - but he never found his way at all into the Keeper group that was working on the rubric that Silverchat would care about the most!\"</span>",
+      "sha256": "fb87f34bf3508c3b243308f4036e4d137f00ee712ca1ce41eee45b38d1797565"
+    },
+    {
+      "idx": 68,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"There's three Keeper groups, they don't talk to each other. He could always have gotten into the other two.\"</span>",
+      "sha256": "154b53ff60334a0b24567579c71327b812fb3ad3791d25f21ca29c5f59fc8985"
+    },
+    {
+      "idx": 69,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"IT'S ABOUT THE PREPONDERANCE OF EVIDENCE\"</span>, Seila snapped. <span data-hue=\"253.33\">\"Remember the probability update formula, Hreda has shouted it at us many times. Each individual unit of evidence might only shift the odds ratio by a factor of two or three. But when there's three independent factors that all point in the same direction, that multiplies up to shifting the odds ratio a factor of eight to twenty seven.\"</span>",
+      "sha256": "2c7261a0f9d770fa41122b96080b89e29d9d81b1a0e7545383f1b1d2109612ce"
+    },
+    {
+      "idx": 70,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Okay, so what do you think Delwart's real motives are?\"</span>",
+      "sha256": "f780a3eeed37e86f5b676c793df7a6933fcdb1a418b39b5e893e2fe306ae3e6f"
+    },
+    {
+      "idx": 71,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"He's an Arctic.\"</span>",
+      "sha256": "1628b0dec079b347a4dbdafbb3d521c2385f07a861162c073177fff1218da530"
+    },
+    {
+      "idx": 72,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"WHAT?\"</span>",
+      "sha256": "20f4cc6d63961e63ab6472329824d39db0c2d0441bd473ade77497df6b82861b"
+    },
+    {
+      "idx": 73,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"That's really hard to believe. Nothing he has ever said to me sounds anything like Lord Ephelion.\"</span>",
+      "sha256": "28791660eb86c48da8180846e18f5316c836fc114e62dbcb5ccbb87740125739"
+    },
+    {
+      "idx": 74,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Gladias... how can you be so naive?\"</span>",
+      "sha256": "1a03623dfe6a6c3d4562784e1720a46a1416c1cf413572cc3230cb89123aca4d"
+    },
+    {
+      "idx": 75,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Ephelion and Delwart are not intellectuals, they are propagandists. Their goal is not to seek and share what they think is the truth. Their goal is to adjust the discourse environment, either of one person or of a whole country, so suit their interests. To turn bystanders into friends, and enemies into bystanders.\"</span>",
+      "sha256": "9cc45f41d36e0f47dc9dbad83700e39bf4882910dc78bdbbea0ffc900abc14c3"
+    },
+    {
+      "idx": 76,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Ephelion's goal is to inspire people inside Veridia to join the Arctic cause. So he's openly saying a version of the Arctic cause that some smart, but sick and twisted, people in Veridia will find appealing.\"</span>",
+      "sha256": "919593e9ceab7996a4d2dce85640f61feaaa96c1f79057f6e3b7af6f6ed42d45"
+    },
+    {
+      "idx": 77,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Delwart's goal is to break down the Order. He knows he can't make the Order pro-Arctic, but what he *can* do is make it ineffective. And so it's a better message for him to be sometimes pro-freedom, sometimes pro-peace, sometimes whatever else, depending on the rubric and the person he's talking to.\"</span>",
+      "sha256": "038de7d1059bc7dd718319dcc1a81af5e586817ea9639abc689ea590a5cfd566"
+    },
+    {
+      "idx": 78,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Why are you so certain?\"</span>",
+      "sha256": "377a9e382c93241ca5863630a0ed1f38a29a39c6007861b8500a774c45db88a2"
+    },
+    {
+      "idx": 79,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"PREPONDERANCE OF EVIDENCE. Let's list it all.\"</span>",
+      "sha256": "b30b15adef3b5c4bc5accc0b146653700f5b75ccbdcf24059e66ee2ba04c8d0b"
+    },
+    {
+      "idx": 80,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"What are Delwart's goals? Not the goals he says he has, but the goals that are visible from his actions?\"</span>",
+      "sha256": "e27bdebdc67496a7380ee4ba9efc569468a3d72a31392804b38d5ed3d2ef64ad"
+    },
+    {
+      "idx": 81,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"One: reduce support for open source defense hardware. One point for freedom, one point for peace, one point for Arctics, zero points for Silverchat.\"</span>",
+      "sha256": "9b684edd1e5013b50bf1abe381372f3fd08adecd4e285b3885b33783cff2cd26"
+    },
+    {
+      "idx": 82,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Two: push for unrestricted surveillance. One point against freedom, zero points for peace, one point for Arctics, zero points for Silverchat.\"</span>",
+      "sha256": "5d07073f61f588fc231844bd4e326089c2e38db76014e9b29383df9a61370d3c"
+    },
+    {
+      "idx": 83,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Three: push for Veridian schools to not teach people Veridian civics. Delwart specifically said: 'people should learn to love Veridia by seeing how great it is on their own'. One point for freedom, zero points for peace, one point for Arctics, zero points for Silverchat.\"</span>",
+      "sha256": "f658f4d7c65701d0055397e322c4008fcd72f33012d9f8ef5b76574422450776"
+    },
+    {
+      "idx": 84,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Four: not participate in the social media openness and interoperability rubric. Fine, there's three Keeper groups, we can multiply this one by half. Zero points for freedom, zero points for peace, zero points for Arctics, minus half a point for Silverchat.\"</span>",
+      "sha256": "8f23347adba426475f5e8227c2c9f7e3cd8bf39315adaaea36bcc7b040448a97"
+    },
+    {
+      "idx": 85,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Five: once he blew his cover, he sent you off to Dzego. You might say, that's a good suggestion, Veridia should learn from Dzego more. But that's not the only interpretation. The other interpretation is that he wanted you out of the way, halfway across the world so that once you got suspicious, you would not interfere with any of his plans! Both are possible. So one point for every possibility.\"</span>",
+      "sha256": "e073b92a0959d40b4a0df43f1343917b384b01ecbbb2cb0cdb97fa28d17cbfaa"
+    },
+    {
+      "idx": 86,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Six: his spying capabilities, beyond any corporation, far beyond some nonprofit group of idealists. Minus one point for an idealistic freedom lover or a peace lover, zero points for Silverchat, one point for Arctics.\"</span>",
+      "sha256": "d4c2ad4f0d82f5daad30f32fb23a5b56fc13adf6436e78cbfff9023885e49f9c"
+    },
+    {
+      "idx": 87,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Sum it up. Arctics five, freedom two, peace two, Silverchat one half. And if you say it's a Silverchat person who also cares about freedom, then, well, we're at plus one half. I'd even multiply the last point, about spying capabilities by two, then you get six points for Arctics and zero or a half for any of the other explanations.\"</span>",
+      "sha256": "b4c0509a99101e7220ef22175a38b0c9e47d3552e85a2980ee935c721d139b32"
+    },
+    {
+      "idx": 88,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"And notice what it took, Gladias. He got to you, and through you he got to one third of one discussion group. The military, the parliament, media platforms - he and his friends walked straight through all of them. The only doors that he couldn't break were the ones whose keys he couldn't find: the Order, the Courts, the graph funding. Privacy isn't a luxury, it's why we're still here.\"</span>",
+      "sha256": "305d7a6ac78110f27e690b9b65832628e420fb4adf4621b52fe95a2181ef5f9d"
+    },
+    {
+      "idx": 89,
+      "kind": "paragraph",
+      "content": "Seila stopped talking. For a few moments, Gladias stayed silent.",
+      "sha256": "bced3d5d71588e23d4cfb5d0b3df95467bb9e8cd5351bb2e12d35b206f877186"
+    },
+    {
+      "idx": 90,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I'm sorry, Seila.\"</span>",
+      "sha256": "3862be9dc221eb47afcf55020adbf78bdc6fd771163a3d88f66ad0fa4edafb5d"
+    },
+    {
+      "idx": 91,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I'm sorry I didn't trust you enough to involve you in this. I love you. I should have trusted and respected not just your heart, but also your mind.\"</span>",
+      "sha256": "fca49a4cb6fd066d86535599181b5760e7952662cb1a64a2374b11b72477d272"
+    },
+    {
+      "idx": 92,
+      "kind": "paragraph",
+      "content": "Silence again.",
+      "sha256": "ea797f6e75e73087fce5675f17330f75f268e4e3abf3f3f1057bb7023a568ada"
+    },
+    {
+      "idx": 93,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"So what do we do?\"</span>",
+      "sha256": "a9e088ba2ac02ccf931012ffcc62770bca9a210873efe38c967dcebc55b29450"
+    },
+    {
+      "idx": 94,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"I hope that Delwart was wrong that you would be useless in Dzego, and you have something amazing to show from all the adventures you've been having there while I've been crying because our kids are stuck in an enclave surrounded by Arctics and trying to clean up your mess.\"</span>",
+      "sha256": "a26776bbb1ef263b79c8f960d01a3486bf5f7603d758be2279ee2472c4a84814"
+    },
+    {
+      "idx": 95,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I think I understand their military well now. Or rather, their shadow military. The official Dzego military is as compromised as ours, and the same situation for the rest of the government. But they've basically built up their Minpentai championship as a sort of secret army training ground, making the bet this whole time that the war that will matter will be a drone war - more similar to Minpentai than to anything like Helisport.\"</span>",
+      "sha256": "6b903440ae25c4df32e71ee00d0566198bd44a41827d43918378714fea1b96ee"
+    },
+    {
+      "idx": 96,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I've been doing my best to convince them that the next battle will be in Veridia, not Dzego - we're ahead on technology and industry that might be a threat to them, but behind on thinking at all about defense - and that if they want to save themselves, they need to come help us over here first.\"</span>",
+      "sha256": "44b0fb997b0fec6ddc3908018230f27880299595e3684550721a9d5120220684"
+    },
+    {
+      "idx": 97,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Good. I hope for the kids' sake, and for Veridia's, and for yours, that you're actually going to have a plan to make that happen.\"</span>",
+      "sha256": "f734fc005d7104547e8413630a4d4dd230d2234f34a15ab1cf18923468fa0f4e"
+    },
+    {
+      "idx": 98,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Convincing the Dzegojan is only half the battle. We also have to convince the Veridians to accept them. And not the Keepers, the parliament. The same parliament whose subcommittee just barely accepted you as a Keeper, eleven to ten, despite having no valid reason to think anything negatively of you - unless they had some magic foresight about how naive you are, which I doubt.\"</span>",
+      "sha256": "7cff88ce93575bd28a6bcc15384b8c8cb744c21b9d9a8eb8ebb2d6376ea8e2fa"
+    },
+    {
+      "idx": 99,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I know.\"</span>",
+      "sha256": "54607f8e5fe5cd12ae549f348ad25cf0df3cd293b0ae5647244e3a68d5c8a922"
+    },
+    {
+      "idx": 100,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Do you have any idea how we can do that?\"</span>",
+      "sha256": "acea1994aa17fd4ce1e28cf03d0c06a255660c63073d807403f27de063434cca"
+    },
+    {
+      "idx": 101,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I do not.\"</span>",
+      "sha256": "62aed38de9236d679710ea11a5a95e65f6cff7bdca54a92820eac64285e3b1ad"
+    },
+    {
+      "idx": 102,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"I can try to figure this out. But you will have to trust me.\"</span>",
+      "sha256": "db4c8d6db90d225129f5e2ed1e005ff9258b567aa59819c0db08dfd167f1c8b4"
+    },
+    {
+      "idx": 103,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I will, I promise.\"</span>",
+      "sha256": "7fab8ff1110b57d3e8515741e91f5424ae86aac9a6b4cc109f9d2c742f9369f2"
+    },
+    {
+      "idx": 104,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"No more secrets, okay?\"</span>",
+      "sha256": "f48ce9a217a964308d2ccb135a8d867b88df5a5803b2409d3f6ff5d06e8a5214"
+    },
+    {
+      "idx": 105,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Okay.\"</span>",
+      "sha256": "e1c20490c0e64c17e531d83bd419d9c313ce9e6fa556a43c312bc988bc87e7ed"
+    },
+    {
+      "idx": 106,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I promise.\"</span>",
+      "sha256": "caae548db7dfde1a968a8a1544a8ede0a874542038237dd3e189e6c46135b167"
+    }
+  ]
+}

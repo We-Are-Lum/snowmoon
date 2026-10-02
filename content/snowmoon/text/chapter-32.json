@@ -1,0 +1,682 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 32,
+  "source_url": "https://vitalik.eth.limo/snowmoon/html/chapter-32.html",
+  "source_sha256": "347ecfb72e52a7ca802f516590c0d9aebefe1383ebbe8160808e30a4d90701b5",
+  "fetched_at": "2026-10-02",
+  "license": "GPL-3.0",
+  "blocks": [
+    {
+      "idx": 0,
+      "kind": "heading",
+      "content": "# Chapter 32",
+      "sha256": "868338b5275e392ebbad342adcee083eb5aef8a3b8472dc154d02fb70d57ce80"
+    },
+    {
+      "idx": 1,
+      "kind": "dateline",
+      "content": "**Meldan, Veridia** · 3725 Rainmoon 12",
+      "sha256": "e7855470da99059256a879c1ec2a7d3f3ed0de91d82041c9ef0c0b54293528d5"
+    },
+    {
+      "idx": 2,
+      "kind": "paragraph",
+      "content": "Gladias and Seila walked together along the same path through Kalimar that they had by this point taken hundreds of times. The path was covered with trees and surrounded by stone houses on both sides.",
+      "sha256": "08c98d17e05625eeeda3f589e572b297ceb877d82279e60a8f92d1c8a6292529"
+    },
+    {
+      "idx": 3,
+      "kind": "paragraph",
+      "content": "To their left, they saw a man climbing a tall ladder leaning against a tree. Once he reached the top of the ladder, he began unscrewing a security camera that was located there. Once he finished, he unceremoniously threw the camera into a box that was several meters below him on the ground. The throw landed perfectly. Gladias and Seila heard a loud clang as the camera crashed against the dozens of other cameras that were already in the box. The man immediately proceeded to climb down the ladder.",
+      "sha256": "089dfa65032c8dd40fb61ea941ee8f8e20e6ef473e996e1d12764578ef07b4fc"
+    },
+    {
+      "idx": 4,
+      "kind": "paragraph",
+      "content": "They continued walking. They passed by a store, one that Gladias had remembered seeing hastily replace much of its inventory with emergency preserved food rations only months earlier. This time, the inventory item that took up the front shelves was a particular type of red flower that was native to Northglade, that residents were buying to celebrate the province's liberation.",
+      "sha256": "9ffc65802a57b1166319d64740b6b4d3533a0d5643da8b63ec12d3ff1f702eb5"
+    },
+    {
+      "idx": 5,
+      "kind": "paragraph",
+      "content": "Taped to the side of the store, there was an advertisement:",
+      "sha256": "5fb5aab7f6697e7f5c482b33dd3a7a4f3004542be5e782c50197dc2e624f1c58"
+    },
+    {
+      "idx": 6,
+      "kind": "quote",
+      "content": "> We are now offering the freshest of fresh water SEIZED from the CORE TERRITORY of the ARCTIC EMPIRE.\n>\n> Get the latest Hydrafill water, bottled at the springs of Thaldur, today!\n>\n> Enjoy the spoils of victory. Buy Hydrafill.",
+      "sha256": "2a766f30d3b549622fe50352da74b1800dde4880d7393c88b4dfb35cba39adc5"
+    },
+    {
+      "idx": 7,
+      "kind": "paragraph",
+      "content": "The road transitioned to dense shrubbery, and then to a sky bridge overlooking a busy highway. To the left, they could see a mountain covered with trees. A few apartment buildings about fifteen storeys tall, decorated and shaped like oversized medieval castle towers though with far more windows on the sides, poked up high above the trees.",
+      "sha256": "dedc2b741def5cd94133b2a6c37f98afe57e1cb52a235e91ae3b7908581bd47e"
+    },
+    {
+      "idx": 8,
+      "kind": "paragraph",
+      "content": "After crossing the sky bridge, the road transitioned into a tunnel, and Gladias and Seila arrived at a Y-shaped intersection. They turned left, walked forward until the path came back up above ground, and then turned right. Gladias checked his watch for directions. He had never actually *walked* all the way to parliament before.",
+      "sha256": "3e4001abb62bd1162c5a195d09fa95ad08ea131ca489943b5c38da7a9b58ead4"
+    },
+    {
+      "idx": 9,
+      "kind": "paragraph",
+      "content": "Twenty minutes later, they arrived at the large circular building. Gladias tapped his watch against the green circle, and the doors opened. Inside the building, he remembered the directions well. Forward, then right turn, then forward, then third door on the left.",
+      "sha256": "d1c68041e4fa9d791d3c3ce621b44bfd20e027dc2b1008a357f87b2d9958df6a"
+    },
+    {
+      "idx": 10,
+      "kind": "paragraph",
+      "content": "He tapped his watch again, and the door opened.",
+      "sha256": "e31263a4354707dfc82028b871474dcbdac6bf9ad25d8d248aa3dc2f62ea967b"
+    },
+    {
+      "idx": 11,
+      "kind": "paragraph",
+      "content": "Verdow and Zei were both sitting inside the office. They both turned their heads toward Gladias and Seila.",
+      "sha256": "a065433e76f5a8196a288806af7270737b6316843f43eba2bc970a8e41de49d5"
+    },
+    {
+      "idx": 12,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Gladias, Seila, welcome back!\"</span>, Verdow exclaimed with a warm friendly tone.",
+      "sha256": "f9da4b7dd1d90945e7d4d45281923be1e843f5cb44d0d693b90c7c83dc5a91d3"
+    },
+    {
+      "idx": 13,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Verdow, good to see you again!\"</span>",
+      "sha256": "d4feb41f2ba235a524c87934ac6dc5e4faf65d56504c3e1e74b517eda7ef6bc2"
+    },
+    {
+      "idx": 14,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Please, please sit down.\"</span>",
+      "sha256": "4abb34f58235858efe2c982afdf8bc25245e5069e0b5e0b10e84a9bc3c50a2d5"
+    },
+    {
+      "idx": 15,
+      "kind": "paragraph",
+      "content": "A robot slid into the room.",
+      "sha256": "c98048a2e18fc50e6b0df7e9685c983ebeb53afa9dcd342d2cf5fe707e997763"
+    },
+    {
+      "idx": 16,
+      "kind": "paragraph",
+      "content": "Gladias briefly turned to face the robot. <span data-hue=\"93.33\">\"dia jie fe kai ja cu dze kai lin pan\"</span>, he told the robot in a deliberately clear tone.",
+      "sha256": "b0800485f136920a238f2eca7cd1c54be5e9768fa402b68e409f21359241ac18"
+    },
+    {
+      "idx": 17,
+      "kind": "paragraph",
+      "content": "The robot buzzed, and left the room.",
+      "sha256": "cc3d081529175d2acf3721e677a7b8a507a6f5bb16e5bb6b6d5cdd3a975f1ffd"
+    },
+    {
+      "idx": 18,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Impressive, Gladias. Even I would not have been able to do that.\"</span>",
+      "sha256": "eb5b84fa735322a7f5df591c91e0b3e292c00bc23282c1b2ef30094b6ca207a2"
+    },
+    {
+      "idx": 19,
+      "kind": "paragraph",
+      "content": "Verdow briefly went silent, and then spoke up again.",
+      "sha256": "e7db58a918cfd80133ca709f9d6748e0a00d92ad9058e90e560860b612c7fb26"
+    },
+    {
+      "idx": 20,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Okay, I'm embarrassed. What is dze kai lin pan?\"</span>",
+      "sha256": "33c843fb648647b6cbbf1dc0669d4789c41a8a3ea3ca9f3833c923421505df91"
+    },
+    {
+      "idx": 21,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Vegetable and rice.\"</span>",
+      "sha256": "b88a9211b6b91ad486fa8478e80c612f8464aec58217f6e09f20c4bf10250c48"
+    },
+    {
+      "idx": 22,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Ah right, green plant line bread.\"</span>",
+      "sha256": "0c5cf572a1e22cb3e7658dc1d9dee0dd5c4f8056024067cae1f36550e318de65"
+    },
+    {
+      "idx": 23,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"By the way Zei, when are we going to start switching over from meters to lightfeet?\"</span>",
+      "sha256": "80ce531f0985f6f9597585b6e2159f4399925c7edb272a9d201df755bc91bfa8"
+    },
+    {
+      "idx": 24,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Fin tells me the Bansunpei is completely busy on getting Dzego's privacy and security habits fully up to the new standards. In about ten days he and some others are actually going to come here to Veridia, and see if they can help you guys get up to speed on those things too.\"</span>",
+      "sha256": "1a0d29351a13c4db8ef2516195a76603c1cdd8aebd2b97ee61822905ffd108c0"
+    },
+    {
+      "idx": 25,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"But I guess we don't have to wait for them, if you like lightfeet you can just start using lightfeet today.\"</span>",
+      "sha256": "ab0e4e18c4f2419b53df73d2f3bea77788b7e12366d329b30b4530f798d87ade"
+    },
+    {
+      "idx": 26,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"I guess they're right. Switching over to lightfeet isn't the highest priority right now.\"</span>",
+      "sha256": "abd0b4137dfb2b7e58a14cc8b94c09fbaf30451b4d6fefe221f06a0511925619"
+    },
+    {
+      "idx": 27,
+      "kind": "paragraph",
+      "content": "Verdow's tone suddenly became more serious.",
+      "sha256": "aa40ed0484678d92936532a2cd61ac5cccc61d5a5089bfadbb8ebac8e86cce4c"
+    },
+    {
+      "idx": 28,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"A lot of people are celebrating this month. For the first time in a century, the Arctic Empire has been defeated. Northglade is free. And we already have many people in Thaldur taking up our offers and helping open up the Arctic technologies we captured so that we can properly benefit and learn from them.\"</span>",
+      "sha256": "c71d728202349fce12484731b64fa123da1ac16be5b9f0cbb89c9016cf175490"
+    },
+    {
+      "idx": 29,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"But we have to remember - this was only the first round. And even this round, we did not fully win.\"</span>",
+      "sha256": "a4f29691be0f40290730d7c6f9fe198d6194644724ad83dc397b47d0e25592f6"
+    },
+    {
+      "idx": 30,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"The Arctics lost Northshore and lost Thaldur, but they kept Redshire. They lost some of their lead in technology, but we've learned over the past few months that they are rapidly gaining in other kinds of technology.\"</span>",
+      "sha256": "d6af9274f8b936b34500845f9386ca170e0f362ade3100188ec51319a23f1d25"
+    },
+    {
+      "idx": 31,
+      "kind": "paragraph",
+      "content": "Verdow sighed, and then continued giving his cautionary note.",
+      "sha256": "275cafe16f382f81f53e92fca49ec1e242efbf059386004e667aef1951221566"
+    },
+    {
+      "idx": 32,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"The privacy that we thought we had, we do not actually have. In the digital world, we're okay - cybersecurity and cryptography are amazing now, though we have to remember that language models will always be attackable in ways that regular software is not. In the physical world, it's much harder. Information in physical reality is fundamentally much more leaky. There are dozens of ways even our keystrokes on our keyboards leak out into the world outside. We can make an effort to fight this - especially in our private spaces - but there's a limit to how much we can succeed.\"</span>",
+      "sha256": "65d2e11c799601a16a7f6a52770a034517cef9c71f6adeb653322df2f0c9af0c"
+    },
+    {
+      "idx": 33,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I hear there's already a batch of the new cameras from Dzego flying in, with built-in hard guarantees of what information they can and can't transmit. VNU is figuring out the process for inspecting them. They seem to want to just copy the way that Dzego has been doing it.\"</span>",
+      "sha256": "8c647cc2bf247bf76643ffb12d3b5d3b0f6988014e7a3c818c7fb7a5351899c5"
+    },
+    {
+      "idx": 34,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"Ooh, so that's what it was? We saw someone unscrewing a hundred cameras in Kalimar when we were walking to get here.\"</span>",
+      "sha256": "0d09fae44eeb29446384a7e6be3ecb1cb7c33d9dcd9629f202cdcc03472b061a"
+    },
+    {
+      "idx": 35,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Looks like it.\"</span>",
+      "sha256": "ae876b4e80c39176fa7b32c738ff4940484e69265023ba9995f7ec78ceaa951a"
+    },
+    {
+      "idx": 36,
+      "kind": "paragraph",
+      "content": "Gladias decided to change to a different topic.",
+      "sha256": "12c7527bff3b33bcdb9cd48c554534d9daaa1b6869b6adef6de55aaf45d3432e"
+    },
+    {
+      "idx": 37,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"What do you think about our government?\"</span>, he asked Verdow.",
+      "sha256": "c8009f1de41f80563763ace9b79a22dc2eef3ddd920ec92523d1f53af948dc7e"
+    },
+    {
+      "idx": 38,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"The Order of Steering worked, the Courts worked, Graph Funding has been fine. But everything more transparent has been broken. By default, I expect that everything the government does is going to become even more private going forward. More digital-first, more sealed anti-transmission rooms, more privacy robes.\"</span>",
+      "sha256": "ddf0d6d17dc2f0f31431b2c626a5657e5224cd898adc0ba80010103487c5779a"
+    },
+    {
+      "idx": 39,
+      "kind": "paragraph",
+      "content": "Verdow sighed, clearly at least somewhat unhappy with the state of affairs that he was predicting.",
+      "sha256": "ab59611c6c81a65f785852698be1e35c6124ca6993fa271baf486a08ef06815d"
+    },
+    {
+      "idx": 40,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"There's a fundamental tension here that our system of government has been grappling with since the day it was first created. In an interconnected world, how is it even possible for a government to be accountable to its own citizens, without also being 'accountable' to powerful financial interests on the inside and adversaries on the outside, both of which are trying to press at the weakest point, isolate it and pressure and twist it to serve their own ends?\"</span>",
+      "sha256": "7b0642b183c3ad8716db919863955b906ac25c4993538109c11889eac191a59a"
+    },
+    {
+      "idx": 41,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"We need to keep improving our theory of what transparency and accountability even mean. In this current iteration of our government, the answer has been the selection process from one end, and Heralds from the other end. In the next iteration, it might have to be something else. I think it will have to involve something like Silverchat polls, or maybe something even higher bandwidth, to understand people's goals, and something involving AI to figure out how to achieve those goals.\"</span>",
+      "sha256": "590ce5ed76712221be48b8a4017fa86e090e49998358dfd1d4e15dfd0f064e2a"
+    },
+    {
+      "idx": 42,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Zei, what do you think?\"</span>",
+      "sha256": "e33050f05d930f2906162dc8c0d3b49ec3b257306ae8f12f4a7dc9670d7b35d9"
+    },
+    {
+      "idx": 43,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"AI is the start of the conversation, not the answer. What kind of AI is it? How do we train it? Who trains it? What instructions do we give it? Who feeds the AI information, and who intervenes in the AI's thought process to assist it?\"</span>",
+      "sha256": "5544f37700123d0f4ddc3a03432782e8fd50b3d74718addde5968b4d50748310"
+    },
+    {
+      "idx": 44,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"How would you answer that?\"</span>",
+      "sha256": "e7aaaf25cc44f0e6bac5805ca56786541e0c5fed6c8275047d47c5f943adf438"
+    },
+    {
+      "idx": 45,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"I would first take a step back and ask what the problems are. And I think I have noticed one. Veridian institutions, as they exist today, don't really have a built-in concept of predicting the future. It's all about the present, and public opinion in the present.\"</span>",
+      "sha256": "71dbaa454c6788f833227da63f13a07f93a61b00da47ccbcd52b2b4a00639f2c"
+    },
+    {
+      "idx": 46,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"There's no position where you have to stand up and say - if we do X, then Y will happen - and you rise up if you're right, and fall if you're wrong. The closest is Acolytes, that have to predict the Sentinels. But even there, they're not predicting the real world. They're predicting Sentinels. So they're still just predicting other people's opinions. You've aligning people to each other, but you're not aligning people to reality.\"</span>",
+      "sha256": "993bdf19bef1dc0b4d4d2fb520b2322b9c8b477f7d5025d5b4c0b9cb56523bcb"
+    },
+    {
+      "idx": 47,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"That's where AI could do very well - it's where AI already *has* done very well for us. But I don't think we should pick one AI, we should have some kind of open competition of them. AI should be a player, not the game. Let different people choose different AIs and different ways of working with them, and hold them accountable to the goals.\"</span>",
+      "sha256": "d61f3d74d58002218523b743a0a1b6bcb9599d1ae116bb5c93262ec0aa542ebd"
+    },
+    {
+      "idx": 48,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Should a society have goals?\"</span>",
+      "sha256": "b250c6d9ff842411e318c78910d271344e1e1f8eadd31017839eeb9d60ffad09"
+    },
+    {
+      "idx": 49,
+      "kind": "paragraph",
+      "content": "Zei stared at Verdow.",
+      "sha256": "195e1bd2206d528cb104ac79e1de7062287dd43c2c80d4785853f2f9954c549a"
+    },
+    {
+      "idx": 50,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"What do you mean?\"</span>",
+      "sha256": "96cb1b55c5cfaea5df9cd5bba5ea3329e7f07ebbb7969ccdae9632f1c4052f75"
+    },
+    {
+      "idx": 51,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"The Arctics are better at having goals than any of our nations. They know exactly what they want, and are single-minded about achieving it. If you make a perfect goal-executing machine, the Arctics are what you get.\"</span>",
+      "sha256": "86b0adacaa4b8ed7563639b606f57414e7e02d1dd86e0e0cb7eba2ce07d8e97c"
+    },
+    {
+      "idx": 52,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"That's why you need the other piece - being able to gather together different people's goals and add them up, so you know that you're achieving the actual goals of the people, and not just one emperor.\"</span>",
+      "sha256": "f10d186b17655ce412c76e2eae5b9e8abe9bb91baf9404f780efc2184d85e70c"
+    },
+    {
+      "idx": 53,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"But what if any goal you come up with and write down on a piece of paper ends up looking like that?\"</span>",
+      "sha256": "4399417aa62e4b5d3acdcb286202e1c4c8ffbf61a0e6ba3ee949c97be5899238"
+    },
+    {
+      "idx": 54,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"What do you mean?\"</span>",
+      "sha256": "96cb1b55c5cfaea5df9cd5bba5ea3329e7f07ebbb7969ccdae9632f1c4052f75"
+    },
+    {
+      "idx": 55,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"What if part of the human condition is that we don't fully know what we want, and any attempt to crystallize it into one piece breaks down if you push it far enough? We see this with our rubrics: they work for some time, then eventually they get gamed, and then we adjust the rubrics, and repeat. What if that's unavoidable?\"</span>",
+      "sha256": "0981898137b11e7e65e8b92a6018476b7c8989b0555347b9f3b19d303b100d7b"
+    },
+    {
+      "idx": 56,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Then what's the alternative?\"</span>",
+      "sha256": "fa0e78086fa4c93a5993aa5b0527a5b668c274246b399ce576e26cb5ff25e79c"
+    },
+    {
+      "idx": 57,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Think of a lake, full of water. Every molecule of water in the lake acts independently. There is no master plan. There are only trillions of molecules dreaming trillions of dreams. The lake has a harmony and balance to it, we can all see that. But it's not because anyone forces that balance to happen, it's because if any one part of the lake's surface ends up lower than the other parts for even a brief moment, then gravity will attract water to flow in, and the height everywhere will be the same again.\"</span>",
+      "sha256": "60359c940ef651aa529071e73dd922f6cc206b6872d1acab67dfef8afdbb1716"
+    },
+    {
+      "idx": 58,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"But also, when winter comes, the molecules come together, into thick crystalline structures of impenetrable ice.\"</span>",
+      "sha256": "af30d186f5044032cb8c1bd49ba8c2f7e0f2c653d6c590eee43d6bc2ebdab03c"
+    },
+    {
+      "idx": 59,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"You understand physics well.\"</span>",
+      "sha256": "1f1c51ed583aa936c759cb2aaa49063ec9d04bf058e50f45ba344fe4e280a882"
+    },
+    {
+      "idx": 60,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"My daughter is starting to study chemistry, she has been telling me a lot about it. Her friends think she's over-working, but I've been encouraging her - I told her that if she studies hard, one day she can be just like you.\"</span>",
+      "sha256": "1f3b1206612c6833fcff455d527a32156acdfc8d627fae8fbba5c6f32cd543c0"
+    },
+    {
+      "idx": 61,
+      "kind": "paragraph",
+      "content": "Zei blushed.",
+      "sha256": "3753b06355259dbb14e5bb6dc0a03d0aea57578c69e632516c68dd63cfffd81a"
+    },
+    {
+      "idx": 62,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"So that's what I think the ideal is. A society that can do the good of ordinary life but not the evil of empire and conquest. One that can both resist the Arctic Empire, and avoid becoming one, and instead prosper peacefully one step at a time.\"</span>",
+      "sha256": "a8417f88b720c48ae1cbb3ddb5e5e0636d046cded774fc8c9d918c841fd7a03d"
+    },
+    {
+      "idx": 63,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"It's hard to agree on what we want, it's easier to agree on what we don't want. I think that's the asymmetry that we build everything on top of. In the winter, we all align in the same direction, and we can form the crystal, and defend and strike back. In the summer, we flow like water. Decentralized forces - markets, open intellectual discourse, open science, culture and law - passively make the trillion forces of our trillion dreams add more often than they subtract. We adjust their rules over time, but only carefully and slowly. The natural, gentle progress we make from decades upon decades of that is worth more than satisfying any goal.\"</span>",
+      "sha256": "b57cb93dd30851d2131f60f3663c748026b7f9bb8d4e36b0889efcb13444a48d"
+    },
+    {
+      "idx": 64,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"What if sometimes different parts of the lake have to be water and ice at the same time?\"</span>",
+      "sha256": "05b3c57c60245b979e765eb9dad01d1c3cc38e1a0f538e7db42e2b8e1388cdb2"
+    },
+    {
+      "idx": 65,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"That may be.\"</span>",
+      "sha256": "accfca3f15810c9638b1929a791ef4253ad61ed1776e8c20177baa1fff69734b"
+    },
+    {
+      "idx": 66,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"And what if a lake where every point is at the exact same height as every other point is also a kind of uniformity that we don't want, and sometimes it's better if we form snowballs and let them float?\"</span>",
+      "sha256": "24334d3cb18e3c1cb8b36fb1abacfbf6e2d748f748814c0451ff2e50cbd76e23"
+    },
+    {
+      "idx": 67,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"That too may be.\"</span>",
+      "sha256": "f6691a0498a929a9c834c4934d1b8e2d0b9d86fe8aea8e75e2d41e6b9b7a6326"
+    },
+    {
+      "idx": 68,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Seila, what do you think we should do more?\"</span>",
+      "sha256": "5680c640f0c23e7811dde8b05728f9879f4000a6656e7414fee843ed2ac576d4"
+    },
+    {
+      "idx": 69,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"The Arctics have competition - they care about who's better and who's worse, and they encourage people to challenge each other and strive and try to rise to the top - but they do not understand cooperation. They are ice without the water. Veridia has cooperation, but maybe we do not understand competition. We can be water, but we don't yet know how to be ice - and even our water does not always flow as well as we would like. Actually I think it's Dzego that's figured out how to have both, and make them serve each other. We should learn from them more.\"</span>",
+      "sha256": "6d40f5bd9110a7087ce0087db0196dc54f1ba59c4be13e0e87cbca68e749c461"
+    },
+    {
+      "idx": 70,
+      "kind": "paragraph",
+      "content": "She sighed deeply. After a few moments, Verdow replied again.",
+      "sha256": "0010b47950e71f2e944e65e11b5b5da86efb10c93f2bbb40030ff8b6b1c54b3f"
+    },
+    {
+      "idx": 71,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"These are all good thoughts.\"</span>",
+      "sha256": "49e7ddaa17cf183fd79e0f930e65a22f85cea6a66feb9fac11a847a11d67d9d6"
+    },
+    {
+      "idx": 72,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Zei, would you be interested in staying back and helping us figure out some of these issues?\"</span>",
+      "sha256": "7952aaae052a7d6e4318980c869af5e5d9ab8344bd6589d3cda088c2bb9b94e5"
+    },
+    {
+      "idx": 73,
+      "kind": "paragraph",
+      "content": "Zei thought for a moment.",
+      "sha256": "67a04eda5883a4f2309edd0591816fe70c38d656f1a4c0987df540890029fb00"
+    },
+    {
+      "idx": 74,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I'm sure Mu and Su can handle the Kungaupei well\"</span>, Gladias interjected.",
+      "sha256": "629e075ddd20c504ad552eed3ce9bad582ea6c5b0c3780d926d7b345c1af0221"
+    },
+    {
+      "idx": 75,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Of course! Though you might find Fin will be even more helpful than I am.\"</span>",
+      "sha256": "8d1593b38dbcefedfe11217b8efe860f3ab430056f32aacda62eb80a8cb5cf93"
+    },
+    {
+      "idx": 76,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Well I appreciate it. You know, Parliament realizes now that their current ways of thinking have hit their limits. Many senators have resigned. The ones who are still there - like me - we want new ideas. We're open to listening.\"</span>",
+      "sha256": "10372c4464c60334a80858f67b17e12b85468e36acf19ca63c37bc128c97509e"
+    },
+    {
+      "idx": 77,
+      "kind": "paragraph",
+      "content": "Verdow stood up, and walked over slowly to a map of the world that was printed on the side of the office wall.",
+      "sha256": "0fdc09f0ec3eb3b0998a6ae4ddc33c94f54b3e8e5835d9b532ee2df64af20a39"
+    },
+    {
+      "idx": 78,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"This is our world. Ninety million people. Gladias, Seila, Zei, have you ever wondered what things might be like if it was nine hundred million, or nine billion?\"</span>",
+      "sha256": "a442e6c8f88a6839b66898dead777d6978eb6d8376a3ded8541ff8f503845665"
+    },
+    {
+      "idx": 79,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I have not. Why do you ask?\"</span>",
+      "sha256": "d11e56655310b4441637a63573e344344e386f4107c1c71a2559ea302ff60bc8"
+    },
+    {
+      "idx": 80,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"The larger the population, the faster new technologies get invented. That's why the medieval era was so stagnant, and why things are moving so much faster today. But no matter how large the population, everyone still adapts to the technology at the same rate. Maybe we've done so well at adapting - eradicating computer viruses, adding so much privacy and verifiability to everything, optimizing our society to be so beautiful and healthy - only because we don't have nine billion people pushing technology forward even faster and increasing the complexity of the society that has to accept it.\"</span>",
+      "sha256": "ea1780a5b86e5e3d9788d46857c5b8838765f2a6336342b4ec2c69e81d493580"
+    },
+    {
+      "idx": 81,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"That's interesting. Do you think we will have nine billion people one day?\"</span>",
+      "sha256": "de574f83e82c853f8d6356d1cf5f892ca3bd0d4a27e948c8e32785aa1ed39597"
+    },
+    {
+      "idx": 82,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Not one day. Very soon. And not people. Bots. And not nine billion. Nine trillion.\"</span>",
+      "sha256": "ce765f5cd1c4ce6df611494d4b10e2131903edbe25c97af323818aec7858412e"
+    },
+    {
+      "idx": 83,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"That's what I worry about. AI is going to really change everything. So far, progress has been moderate, nobody has lost their jobs, it feels more like everyone has been promoted to being a manager - or sometimes a repairman. But at some point, once the AI can do almost everything that humans can do, even if at a few percent the efficiency, our human population won't be a constraint anymore.\"</span>",
+      "sha256": "26dfbdb1e0215b0acb18c63c80084c103277059453a40026dc399a42fabb1eaa"
+    },
+    {
+      "idx": 84,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"So what do we do?\"</span>",
+      "sha256": "a9e088ba2ac02ccf931012ffcc62770bca9a210873efe38c967dcebc55b29450"
+    },
+    {
+      "idx": 85,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Well, we don't really have much power to be the ones to answer that question if the Arctics continue to stay further ahead.\"</span>",
+      "sha256": "b6d9cb359c5ca5c9599747c74c9295192df13671b768c63629357ada39690331"
+    },
+    {
+      "idx": 86,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"If we want to get back into balance, we have to get better at penetrating *them*. Have more of a view into their society and their technology, make sure that for any advance they make, we learn about it. Privacy for the weak, transparency for the powerful. Having those people from Thaldur helping us is great, and hopefully Deluin is far from the only person from Redshire who pretended to join the Arctics but would be interested in passing more information to us.\"</span>",
+      "sha256": "a7105515489f5ae5514820461a087f9b1b9ab30a257614924a42854523f042d2"
+    },
+    {
+      "idx": 87,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"There's a known result from game theory\"</span>, Zei interjected. <span data-hue=\"346.67\">\"If two players are locked in a game that has some mixture of cooperation and competition, then you can unlock strictly higher levels of cooperation if those players can at least partially read each others' minds. Maybe that's the right outcome to hope for. As time passes, we'll learn more about each other, we'll learn from each other, and we'll come to actually understand each other better.\"</span>",
+      "sha256": "1a7ad5e2ef9df30e512da54ef5d26a1a2c19a6c577275b833c019b34932a8be5"
+    },
+    {
+      "idx": 88,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"I'm not so optimistic. The Arctic Emperor is upset. He can't do anything to us right now, but he's definitely scheming. There will be a next round. It could be five years from now, it could be twenty years from now. If we can at least keep pace on technology, we can survive.\"</span>",
+      "sha256": "0520b66b3a91389fb0ea5c2f84814b919f44abb5e0467fc3db2497dab67da420"
+    },
+    {
+      "idx": 89,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"Do you think we should try to slow *them* down?\"</span>",
+      "sha256": "a60d353be29a7dc40beb6772fd95ebdf76bda757af8bf92f921b83875d5386bf"
+    },
+    {
+      "idx": 90,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Do the same thing to them that they have been doing to Dzego for a century? It's not the worst idea.\"</span>",
+      "sha256": "1bdb7cf7614e4ddf303fe5ab95d084ea4389ec6849dfc508a0a0c11850d248d8"
+    },
+    {
+      "idx": 91,
+      "kind": "paragraph",
+      "content": "Zei sighed.",
+      "sha256": "14e7905e6af3d8563e2ecb2d74adbabf6e121ebee489fcdc4ff2e95a3080b04f"
+    },
+    {
+      "idx": 92,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"If we were able to keep advancing under their pressure, they'll definitely be able to keep advancing under any pressure we can bring to bear against them.\"</span>",
+      "sha256": "1893013f4d28ed931f5063f4aaffe47ebfe15e52f9c6b1ed6ee324afe387b2f4"
+    },
+    {
+      "idx": 93,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"You know, the later stages of all this are going to get crazy. At some point, eventually we'll have drones the size of worms and flies burrowing under the ground, flying through the air and swimming under the sea. We'll have new forms of genetically engineered life that we can't even imagine - both for peace and for war. Some of us might be uploaded and living inside computers. Not this year. Not the next few years. But definitely in the next hundred years.\"</span>",
+      "sha256": "46354b8c2b90009ecf9f00c8c2caf3a63cc8564615e13e51c8e02c0ed45731c6"
+    },
+    {
+      "idx": 94,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Maybe in two hundred years it will be stable. We'll have figured out exactly the ideal type of drone at every scale, the largest as large as aeroplanes or even hollowed-out asteroids floating in space, and the smallest so tiny that there's no more gap between them and viruses. Once we hit the ceiling, there would be nothing else even stronger that could defeat them. Just big distributed immune systems protecting our planets, our animals and our trees, and ourselves. We will be wiser, almost everyone will choose peace over war, and those who don't will have no path to impose their will. And everyone will just live the kind of life they want to live.\"</span>",
+      "sha256": "9bc5ce021143c1df8ac5e7a15238b8b5c40a2a866e1f4584256093f4429f32c7"
+    },
+    {
+      "idx": 95,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"253.33\">\"I just hope we have peace\"</span>, Seila added. <span data-hue=\"253.33\">\"All these questions: genetic engineering, uploading, going to the stars, I don't think we can get the right answers if we take every step in a rush because we're scared. I'm not sure I want to upload. But a year ago I was not sure if I wanted to live for more than a hundred years. These things should all be a choice we make carefully, and have respect for people who choose not to take the same choice as we do, not an urgent decision we make to survive in a war.\"</span>",
+      "sha256": "08f39334d6f73f475df15a6b927dd3d681255ce0e2fc58b64d75bad8e540d350"
+    },
+    {
+      "idx": 96,
+      "kind": "paragraph",
+      "content": "Verdow rejoined the conversation.",
+      "sha256": "1a09d874c86a8b467b4b00549c62463c91f1874a363566414bbaa30cbb98bf13"
+    },
+    {
+      "idx": 97,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"We might have that peace, we might not. We can hope for the best, but we have to be ready for all possibilities.\"</span>",
+      "sha256": "8b03cf4b81ffc50a8aebce27ae4dd2a807a02fca6600b9c635f8dde0a2e798e4"
+    },
+    {
+      "idx": 98,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"You know, a few days ago Bai mentioned to me that she was thinking of spending a year in Thaldur - precisely to better understand how the Arctics think, and see if she can find a path to that peace.\"</span>",
+      "sha256": "71a367d2db0f392f179abb77dbb843b923f8deeb04308a18ba48956d608139bc"
+    },
+    {
+      "idx": 99,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"That sounds a lot less scary than what Deluin did. I support her.\"</span>",
+      "sha256": "9b7a715bd4491d08e4093e3bcad52c43d5beb2a398531b0a989de175d29a67d4"
+    },
+    {
+      "idx": 100,
+      "kind": "paragraph",
+      "content": "The door opened. A robot slid up to Gladias, carrying his tea and rice and vegetable dish. Gladias picked up both with his hands. He thanked the robot, and the robot slid back out of the room.",
+      "sha256": "80ee0abad8aa5c6a437849575c0cbd969ff03d7cf0859c680945afe8c257a665"
+    },
+    {
+      "idx": 101,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Do you want to go upstairs and check out the roof?\"</span>, Verdow asked.",
+      "sha256": "dd4ae4997366240c98aac91247d9a276fbf509dfa63cbe011576a9db8008b16f"
+    },
+    {
+      "idx": 102,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"346.67\">\"Sure\"</span>, Zei answered.",
+      "sha256": "ca26bda863d176da0ca777ab9157f6807118180e96a2bb94070ca8019b059616"
+    },
+    {
+      "idx": 103,
+      "kind": "paragraph",
+      "content": "Gladias, Seila and Zei stood up. Verdow walked out of the room and began to walk through the corridor. The three of them followed, Gladias still holding his tea in one hand and his food in the other.",
+      "sha256": "2fcf607b53d28136e04945e69ea69568843234ddad975536c95cc97e09cf787b"
+    },
+    {
+      "idx": 104,
+      "kind": "paragraph",
+      "content": "Verdow led them up a staircase, and reached a door which opened automatically. They stepped out.",
+      "sha256": "27f9a4230c633f9f3ec1999174b0edb2c1d030f5ad80c58cd800ac24f03ab0f4"
+    },
+    {
+      "idx": 105,
+      "kind": "paragraph",
+      "content": "To their left, they could see the main commercial district of Meldan. There were buildings of various styles, some that were aesthetic imitations of something older and almost medieval, and others that were openly modern and futuristic. The building that looked like an aeroplane stood out from among the others, slightly spoiling the view. The trees are only good at covering it up when you're at ground level yourself, Gladias thought.",
+      "sha256": "38a1d11efca3483f7eb8949050ea07fda9d24e53a313d0ae95a45ba8fa005120"
+    },
+    {
+      "idx": 106,
+      "kind": "paragraph",
+      "content": "Further left of the commercial district, they could see the grey and purple Greater Plum Harbor. The whole thing was a square nearly a kilometer wide, and they could see many of its buildings clearly from where they were. And on the right edge of the commercial district, Gladias could make out the large concert venue.",
+      "sha256": "4280ac1aae9009f795cea56bb17e3e7ad81629b2190f4a154e2d74f10e8fdc51"
+    },
+    {
+      "idx": 107,
+      "kind": "paragraph",
+      "content": "In front of them, they could see the Kalimar district. From where they stood, it looked not too different from a forest. Tall trees covered up most of the area, with only a few buildings poking up just barely above them. After scanning the area quickly, Gladias spotted the headquarters of Silverchat.",
+      "sha256": "8bdd71a692e56908aeb00314494f73b35c9de4c33b5abb07c9bf3c9a36de4525"
+    },
+    {
+      "idx": 108,
+      "kind": "paragraph",
+      "content": "To their right, they could see the mountain covered with trees. They were already partway up the mountain, about forty meters higher than most of the rest of Meldan. But about two hundred meters to their right, the mountain began sloping upward properly. Only about half of the apartment buildings shaped like oversided medieval-style castle towers were visible from where they were. The mountain looked much larger and more imposing from close up, Gladias thought.",
+      "sha256": "ea6511d382065ff9603d23213fe105ea04ac2a67599fd799551bc3f0c9a63876"
+    },
+    {
+      "idx": 109,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"293.33\">\"Probably not as beautiful as the views in Northglade?\"</span>, Verdow asked.",
+      "sha256": "5af8307f53c35e634b8ae6cddf841239b8a4b4957e7a72857d27ede2a273e5b3"
+    },
+    {
+      "idx": 110,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"I like the green here. I don't think I could handle being up north and dealing with several months of no green and only snow.\"</span>",
+      "sha256": "18f1a04c5e14f7b6713c3e0e1489f1b9e7ede7c96a7d5e104df5936100946e16"
+    },
+    {
+      "idx": 111,
+      "kind": "paragraph",
+      "content": "<span data-hue=\"93.33\">\"And besides, Meldan is my home.\"</span>",
+      "sha256": "23f6f64aab089368e1bde5970b8269e66b187f96a17f2aab82ab9c10e9758c16"
+    }
+  ]
+}
