@@ -22,6 +22,7 @@ Everything used to make this edition is here and licensed GPL-3.0:
 | `docs/` | The build brief and chapter notes this was built from |
 | `docs/prompts/` | The prompts given to the coding agent that built this repo |
 | `docs/source-figures/` | Every SVG figure from the source, exported standalone (GPL v3, from the book) |
+| `content/snowmoon/recipes/` | The recipe for every generated audio block and image: model, revision, voice or seed, settings, the exact text or prompt sent, and the sha256 of each output |
 
 As later milestones land, prompts (`prompts/`), analysis output, read-aloud
 overrides, pronunciation tables, and rendered-screen templates are committed

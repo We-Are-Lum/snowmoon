@@ -2,7 +2,9 @@
 
 Reads the committed chapter JSON and writes one WAV per readable block, one
 stitched file for the whole chapter, and a manifest. Nothing is sent to a
-hosted API and nothing is written to the database.
+hosted API and nothing is written to the database. Each chapter's recipe (model,
+revision, voice, settings, the exact text sent for every block, durations and
+sha256 of every file) is also written to content/snowmoon/recipes/narration/.
 
   screen/figure  spoken from content/snowmoon/read-aloud/chapter-N.json; a block
   and dz-cards   with no override (or whose sha256 changed) is skipped, never
@@ -384,7 +386,12 @@ def narrate_chapter(n, chapter, ra_path, plan, pipeline, voice, recipe, args, de
         },
         "blocks": entries,
     }
-    (out / "manifest.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
+    text = json.dumps(manifest, indent=2, ensure_ascii=False) + "\n"
+    (out / "manifest.json").write_text(text)
+    # The recipe is also committed to the repo, so the record outlives the local audio.
+    recipes = CONTENT / "recipes" / "narration"
+    recipes.mkdir(parents=True, exist_ok=True)
+    (recipes / f"chapter-{n}.json").write_text(text)
     print(f"  {cursor_ms/60000:.1f} min of audio in {elapsed/60:.1f} min -> {m4a}")
 
 

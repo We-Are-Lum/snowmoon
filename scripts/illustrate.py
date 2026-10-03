@@ -3,7 +3,8 @@
 Reads a job file from content/snowmoon/illustrations/, composes each prompt from the
 style guide, any character profiles, and the scene, and writes PNGs plus a manifest
 (the recipe for every image) to a gitignored folder. Nothing is uploaded and nothing
-is written to the database.
+is written to the database. Every image's recipe (model, revision, composed
+prompt, seed, settings, output sha256) is also written to content/snowmoon/recipes/images/.
 
 A job with "reference" uses an earlier job's image (e.g. a character sheet) as a
 reference image, which is how a character profile keeps a character consistent.
@@ -27,6 +28,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 CONTENT = ROOT / "content" / "snowmoon"
+RECIPES = CONTENT / "recipes" / "images"
 
 MODEL_REPO = "black-forest-labs/FLUX.2-klein-4B"
 MODEL_REVISION = "e7b7dc27f91deacad38e78976d1f2b499d76a294"
@@ -120,7 +122,11 @@ def main():
             "model_load_seconds": round(load_s, 1),
             "images": list(done.values()),
         }
-        manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
+        text = json.dumps(manifest, indent=2, ensure_ascii=False) + "\n"
+        manifest_path.write_text(text)
+        # The recipe is also committed to the repo, so the record outlives the local images.
+        RECIPES.mkdir(parents=True, exist_ok=True)
+        (RECIPES / f"{job_file.stem}.json").write_text(text)
 
     for job in spec["jobs"]:
         if args.only and job["id"] not in args.only:

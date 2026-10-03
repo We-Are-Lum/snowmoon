@@ -98,3 +98,11 @@ Ignore my last thing
 ```text
 Great. Continue
 ```
+
+```text
+Would be cool to allow people to choose which model (of ones that work for the rights) they want to use to generate images
+```
+
+```text
+Of course. All this works needs to be tracking prompts and models used. To be shared publicly later
+```

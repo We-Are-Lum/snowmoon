@@ -1,0 +1,99 @@
+{
+  "job_file": "content/snowmoon/illustrations/test-chapter-1.json",
+  "generated_at": "2026-10-03T20:24:05+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.0,
+  "images": [
+    {
+      "id": "gladias-sheet",
+      "chapter": 1,
+      "idx": null,
+      "file": "gladias-sheet.png",
+      "sha256": "7a1ac4dc2ff44b555f66d36ce40718a233a0fa9449f922f491b23760f828464c",
+      "prompt": "Character reference sheet of Gladias on a plain warm off-white background: three full-body views side by side, front view, three-quarter view, and side view, same man, same clothes, neutral standing pose, even lighting. Gladias: a fictional man in his early forties, medium build, short dark wavy hair, neatly trimmed short beard, olive skin, thoughtful dark eyes, a calm and slightly amused expression. At home he wears a plain sage-green linen shirt and dark trousers. Storybook illustration, fine ink linework with soft watercolor washes, gentle natural light, muted greens, stone greys and warm earth tones, calm and clean, slightly stylized proportions, no text, no lettering, no logos.",
+      "seed": 3724,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 194
+    },
+    {
+      "id": "c1-b002-footpath",
+      "chapter": 1,
+      "idx": 2,
+      "file": "c1-b002-footpath.png",
+      "sha256": "9e152f3b90fa13731926747f5e1ef71c797495b6c7880d0bc6c5590bca19e225",
+      "prompt": "A lone figure in the robe walks along a foot path between tall trees. Behind the trees, houses of large stone bricks in a medieval style, clean and well kept, a few small signs for clothing, flowers and food. Scattered leaves and plants blend into the houses. Morning light. A Veridian Privacy Robe: a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, with a fabric face cover over the lower face, and shoes of the same dark purple color. The wearer's face, hair and body shape are hidden. Storybook illustration, fine ink linework with soft watercolor washes, gentle natural light, muted greens, stone greys and warm earth tones, calm and clean, slightly stylized proportions, no text, no lettering, no logos.",
+      "seed": 1002,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 190
+    },
+    {
+      "id": "c1-b013-sky-bridge",
+      "chapter": 1,
+      "idx": 13,
+      "file": "c1-b013-sky-bridge.png",
+      "sha256": "05ff4a8ef0f0ef669979f0c463f2822f79b88df75669ce2c7e2e5b72729ddab0",
+      "prompt": "View from the middle of a pedestrian sky bridge over a busy road that runs about two kilometers then turns right. Beyond, a mountain covered with trees, and a few fifteen-storey apartment buildings shaped like oversized medieval castle towers with many windows, rising above the trees on the lower slope. Cars, small autonomous buses and delivery vehicles on the road below. Storybook illustration, fine ink linework with soft watercolor washes, gentle natural light, muted greens, stone greys and warm earth tones, calm and clean, slightly stylized proportions, no text, no lettering, no logos.",
+      "seed": 1013,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 168
+    },
+    {
+      "id": "c1-b132-door",
+      "chapter": 1,
+      "idx": 132,
+      "file": "c1-b132-door.png",
+      "sha256": "4b38eb212ef6651bec1cc46056b2a9402fb5a2a66832fd33f813dccd0e9a5f15",
+      "prompt": "Gladias, the man from the reference sheet, same face, hair, beard and clothes, stands at the open front door of a cozy family home in the evening, holding a paper bag full of numbered food boxes from a delivery. Gladias: a fictional man in his early forties, medium build, short dark wavy hair, neatly trimmed short beard, olive skin, thoughtful dark eyes, a calm and slightly amused expression. At home he wears a plain sage-green linen shirt and dark trousers. Storybook illustration, fine ink linework with soft watercolor washes, gentle natural light, muted greens, stone greys and warm earth tones, calm and clean, slightly stylized proportions, no text, no lettering, no logos.",
+      "seed": 1132,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "7a1ac4dc2ff44b555f66d36ce40718a233a0fa9449f922f491b23760f828464c"
+        }
+      ],
+      "generation_seconds": 191
+    },
+    {
+      "id": "c1-b136-dinner",
+      "chapter": 1,
+      "idx": 136,
+      "file": "c1-b136-dinner.png",
+      "sha256": "1bd363afa2399e53849ca853cb25a57fe8a2111e2aae326b85324b70d6b3b810",
+      "prompt": "Gladias, the man from the reference sheet, same face, hair, beard and clothes, sits at a family dinner table eating from a numbered food box, seen from across the table. Warm lamp light, a few other food boxes on the table, a quiet evening at home. Gladias: a fictional man in his early forties, medium build, short dark wavy hair, neatly trimmed short beard, olive skin, thoughtful dark eyes, a calm and slightly amused expression. At home he wears a plain sage-green linen shirt and dark trousers. Storybook illustration, fine ink linework with soft watercolor washes, gentle natural light, muted greens, stone greys and warm earth tones, calm and clean, slightly stylized proportions, no text, no lettering, no logos.",
+      "seed": 1136,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "7a1ac4dc2ff44b555f66d36ce40718a233a0fa9449f922f491b23760f828464c"
+        }
+      ],
+      "generation_seconds": 232
+    }
+  ]
+}
