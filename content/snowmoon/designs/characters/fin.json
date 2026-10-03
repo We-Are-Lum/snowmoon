@@ -1,0 +1,43 @@
+{
+  "kind": "character",
+  "name": "Fin",
+  "slug": "fin",
+  "status": "starting point",
+  "about": "Fin is Zei's best friend from Pafogai Du, who joins the Bansunpei language body. The book does not describe his appearance, so this look is invented and contributors are welcome to replace it.",
+  "setting": "dzego",
+  "facts": [
+    {
+      "chapter": 2,
+      "idx": 2,
+      "quote": "Fin and Zei got off the autobus",
+      "fact": "Zei's friend and fellow student."
+    },
+    {
+      "chapter": 2,
+      "idx": 107,
+      "quote": "It was Fin - to Zei's relief, completely uninjured.",
+      "fact": "Uninjured in the chapter 2 bombing; helps Zei up."
+    },
+    {
+      "chapter": 4,
+      "idx": 27,
+      "quote": "Fin took a small paper booklet out of his backpack.",
+      "fact": "Carries a backpack; male."
+    },
+    {
+      "chapter": 7,
+      "idx": 11,
+      "quote": "Looks like the Bansunpei think I'm actually a good fit for them.",
+      "fact": "Trains with the Bansunpei."
+    },
+    {
+      "chapter": 2,
+      "idx": 20,
+      "quote": "Fin laughed.",
+      "fact": "Easygoing, laughs."
+    }
+  ],
+  "descriptor": "a young man of about eighteen, stocky and shorter than average, pale freckled skin, a shaggy mop of copper-red hair and a wide friendly face, wearing a cherry-red hooded windbreaker over a white t-shirt, tan cargo trousers, yellow sneakers and a well-worn backpack",
+  "wears_privacy_robe_in_public": false,
+  "sheet_prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a young man of about eighteen, stocky and shorter than average, pale freckled skin, a shaggy mop of copper-red hair and a wide friendly face, wearing a cherry-red hooded windbreaker over a white t-shirt, tan cargo trousers, yellow sneakers and a well-worn backpack."
+}

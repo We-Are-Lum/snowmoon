@@ -1,0 +1,91 @@
+{
+  "about": "Key moments for chapter 10, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c10-b023-institute-lunch",
+      "chapter": 10,
+      "idx": 23,
+      "setting": "united-cities",
+      "characters": [
+        "designs/characters/jahn.json"
+      ],
+      "references": [
+        "cast/jahn-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot of a busy, modern restaurant inside a research institute, tall glass windows looking out on a mix of old and new city towers. Most tables are full. The man from reference image 1 sits at a table across from a young woman student who is talking earnestly. A sleek serving robot has just slid up beside him carrying a plate of fish and vegetables and a glass of water; he takes a sip of water, listening with a concerned expression. Cool daylight.",
+      "width": 1024,
+      "height": 576,
+      "seed": 10023
+    },
+    {
+      "id": "c10-b050-booth-courtyard",
+      "chapter": 10,
+      "idx": 50,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "Wide shot of a quiet stone courtyard surrounded by trees, with a row of heavy, boxy soundproof booths along one side, each with a thick sliding door. A figure in a privacy robe strains to slide open the rightmost booth's door, revealing its thick cross-section: a layer of crinkled silver foil on the inside, followed by layers of dense padding. Inside, a long table stretches to the back wall with a bench on each side. Soft overcast daylight, muted greens and greys.",
+      "width": 1024,
+      "height": 576,
+      "seed": 10050
+    },
+    {
+      "id": "c10-b114-needle-bug",
+      "chapter": 10,
+      "idx": 114,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "Medium shot inside a small, windowless soundproof booth with a long table and benches. A figure in a privacy robe stands at the far end of the table, triumphantly holding up a tiny needle-like device with a small bulb at its tip between two fingers. A small quadcopter drone hovers above the middle of the table. Two other figures in privacy robes stand near the open doorway, watching. A hand device in the standing figure's other hand shows soft abstract colored shapes. Dim, even interior light.",
+      "width": 1024,
+      "height": 576,
+      "seed": 10114
+    },
+    {
+      "id": "c10-b160-practice-game",
+      "chapter": 10,
+      "idx": 160,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/zei.json",
+        "designs/characters/bai.json"
+      ],
+      "references": [
+        "cast/zei-sheet",
+        "cast/bai-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot at an outdoor courtyard table in a dense low-rise neighborhood, glowing shop fronts and playful cartoon animal murals behind. The boy from reference image 1 and the girl from reference image 2 sit side by side, each staring at a hand device whose screen shows a glowing grid of tiny abstract shapes bursting apart. The boy recoils with a shocked, dismayed expression; the girl smiles slyly without looking up. Two cups of tea on the table, warm afternoon light.",
+      "width": 1024,
+      "height": 576,
+      "seed": 10160
+    },
+    {
+      "id": "c10-b191-the-reveal",
+      "chapter": 10,
+      "idx": 191,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/mu.json",
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/mu-sheet",
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot in a long, narrow stone room deep inside a mountain, lit by dim warm lamps. At a large table, the woman from reference image 1 leans forward across the table with an intense, serious look. Facing her, the boy from reference image 2 sits very still, staring back, his cheerful expression turned fearful and astonished. Beside the woman, a man in a dark hooded priestly cloak sits in shadow, his face hidden, watching quietly. Rough stone walls, deep shadows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 10191
+    }
+  ]
+}

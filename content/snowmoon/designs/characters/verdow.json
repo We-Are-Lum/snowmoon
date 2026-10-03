@@ -1,0 +1,43 @@
+{
+  "kind": "character",
+  "name": "Senator Verdow",
+  "slug": "verdow",
+  "status": "starting point",
+  "about": "Senator Verdow is a member of Veridia's parliament who becomes Gladias's ally. The book does not describe his appearance beyond a parliament robe, so this look is invented and contributors are welcome to replace it.",
+  "setting": "veridia",
+  "facts": [
+    {
+      "chapter": 8,
+      "idx": 50,
+      "quote": "Senator Verdow, you may ask your question.",
+      "fact": "A Veridian senator."
+    },
+    {
+      "chapter": 17,
+      "idx": 9,
+      "quote": "Inside, he saw a man wearing a Veridian parliament robe.",
+      "fact": "Wears a Veridian parliament robe (not the privacy robe) at parliament."
+    },
+    {
+      "chapter": 17,
+      "idx": 16,
+      "quote": "Verdow laughed.",
+      "fact": "Laughs easily."
+    },
+    {
+      "chapter": 26,
+      "idx": 51,
+      "quote": "with a facial expression and tone warmer than Gladias had ever heard him",
+      "fact": "Warm manner."
+    },
+    {
+      "chapter": 32,
+      "idx": 77,
+      "quote": "Verdow stood up, and walked over slowly to a map of the world",
+      "fact": "Moves slowly and deliberately."
+    }
+  ],
+  "descriptor": "a man in his late fifties, tall and lean, medium brown skin, close-cropped white hair and a short white beard, warm deep-set eyes, wearing a long deep-green ceremonial robe with a high collar and a simple bronze clasp over a cream shirt, dark trousers and brown shoes",
+  "wears_privacy_robe_in_public": false,
+  "sheet_prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a man in his late fifties, tall and lean, medium brown skin, close-cropped white hair and a short white beard, warm deep-set eyes, wearing a long deep-green ceremonial robe with a high collar and a simple bronze clasp over a cream shirt, dark trousers and brown shoes."
+}

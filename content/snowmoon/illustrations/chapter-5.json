@@ -1,0 +1,82 @@
+{
+  "about": "Key moments for chapter 5, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c5-b012-taxi-view",
+      "chapter": 5,
+      "idx": 12,
+      "setting": "united-cities",
+      "characters": [
+        "designs/characters/zei.json",
+        "designs/characters/min.json"
+      ],
+      "references": [
+        "cast/zei-sheet",
+        "cast/min-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot from inside a taxi driving along a highway into a sprawling city. The young man from reference image 1 and the middle-aged woman from reference image 2 sit by the window, gazing out with curiosity. Outside is a jumble of buildings of every shape and size: short and tall, stone, concrete, glass and steel, some beautiful, some ugly, a few half-built and abandoned, and small parks with neatly arranged trees. Several small passenger and cargo copters buzz across the sky. Bright daytime light.",
+      "width": 1024,
+      "height": 576,
+      "seed": 5012
+    },
+    {
+      "id": "c5-b043-spiral-ramp",
+      "chapter": 5,
+      "idx": 43,
+      "setting": "united-cities",
+      "characters": [
+        "designs/characters/zei.json",
+        "designs/characters/bai.json"
+      ],
+      "references": [
+        "cast/zei-sheet",
+        "cast/bai-sheet"
+      ],
+      "props": [],
+      "prompt": "Wide interior view of a large institute building whose floor is a single gently sloping spiral ramp, looping around several times beneath a high ceiling, with elevators and staircases in the open center. The young man from reference image 1 and the young woman from reference image 2 stroll leisurely along the outer wall, looking around with interest. Further along the ramp is a small restaurant with tables, and a large wall screen showing soft abstract colored shapes. Clean modern materials, cool natural light.",
+      "width": 1024,
+      "height": 576,
+      "seed": 5043
+    },
+    {
+      "id": "c5-b073-lunch-table",
+      "chapter": 5,
+      "idx": 73,
+      "setting": "united-cities",
+      "characters": [
+        "designs/characters/seila.json",
+        "designs/characters/jahn.json"
+      ],
+      "references": [
+        "cast/seila-sheet",
+        "cast/jahn-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot at a restaurant table on the spiral ramp of a modern institute building. The woman from reference image 1 and the man from reference image 2 sit with cups of tea and plates of rice and vegetables, both frozen in surprise, staring across the table. Opposite them, seen from behind, sit a teenage boy who is talking nonchalantly and a teenage girl leaning toward him. A small service robot waits at the side of the table. Soft daylight, a modern interior of glass and concrete.",
+      "width": 1024,
+      "height": 576,
+      "seed": 5073
+    },
+    {
+      "id": "c5-b091-watch-call",
+      "chapter": 5,
+      "idx": 91,
+      "setting": "united-cities",
+      "characters": [
+        "designs/characters/seila.json",
+        "designs/characters/gladias.json"
+      ],
+      "references": [
+        "cast/seila-sheet",
+        "cast/gladias-sheet"
+      ],
+      "props": [],
+      "prompt": "Close-medium shot of the woman from reference image 1 sitting alone at a cafe table in a modern building, a half-finished cup of tea and an empty plate in front of her. She holds up her wrist and smiles warmly at her watch, where a small glowing video image shows the face of the man from reference image 2. Behind her curves the gently sloping ramp of the building, with a few distant diners. Afternoon light through tall windows, glass and concrete surroundings.",
+      "width": 1024,
+      "height": 576,
+      "seed": 5091
+    }
+  ]
+}

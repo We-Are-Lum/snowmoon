@@ -1,0 +1,43 @@
+{
+  "kind": "character",
+  "name": "Lord Ephelion",
+  "slug": "ephelion",
+  "status": "starting point",
+  "about": "Lord Ephelion is the Arctic Empire's ambassador to Veridia and its public voice, seen mostly on screens and posters. The book never describes his appearance, so this look is invented and contributors are welcome to replace it.",
+  "setting": "arctic",
+  "facts": [
+    {
+      "chapter": 8,
+      "idx": 17,
+      "quote": "Lord Ephelion, Arctic ambassador to Veridia",
+      "fact": "Arctic ambassador to Veridia; titled Lord."
+    },
+    {
+      "chapter": 8,
+      "idx": 37,
+      "quote": "A gifted demagogue, he concluded.",
+      "fact": "A persuasive speaker; male."
+    },
+    {
+      "chapter": 13,
+      "idx": 63,
+      "quote": "An image of Lord Ephelion appeared on the left side of the screen",
+      "fact": "Appears as an image on screens beside his messages."
+    },
+    {
+      "chapter": 11,
+      "idx": 109,
+      "quote": "we have to listen to Lord Ephelion giving his sermons all the time",
+      "fact": "Gives frequent public sermons."
+    },
+    {
+      "chapter": 21,
+      "idx": 75,
+      "quote": "Ephelion and Delwart are not intellectuals, they are propagandists.",
+      "fact": "A propagandist."
+    }
+  ],
+  "descriptor": "a tall, imposing man in his fifties, pale skin with a cool undertone, a sharply chiseled face, long platinum-white hair swept back to the shoulders and piercing pale-blue eyes, wearing a long fitted ice-blue high-collared coat with silver trim over white clothing and white gloves",
+  "wears_privacy_robe_in_public": false,
+  "sheet_prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a tall, imposing man in his fifties, pale skin with a cool undertone, a sharply chiseled face, long platinum-white hair swept back to the shoulders and piercing pale-blue eyes, wearing a long fitted ice-blue high-collared coat with silver trim over white clothing and white gloves."
+}

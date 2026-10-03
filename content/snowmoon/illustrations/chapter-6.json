@@ -1,0 +1,80 @@
+{
+  "about": "Key moments for chapter 6, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c6-b004-foil-basement",
+      "chapter": 6,
+      "idx": 4,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/gladias.json"
+      ],
+      "references": [
+        "cast/gladias-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot of a sealed basement room in the evening, its walls and door covered with silver anti-transmission foil. The man from reference image 1 reclines in a large soft chair tilted back at forty-five degrees, a thin cloth band around his neck, eyes half closed as he listens to a call through an earpiece. A rain-wet dark purple hooded robe is draped over the back of another chair to dry, beside a table holding a plain food box. Gentle warm lamp light, a cozy hidden refuge from the rain.",
+      "width": 1024,
+      "height": 576,
+      "seed": 6004
+    },
+    {
+      "id": "c6-b100-assembly",
+      "chapter": 6,
+      "idx": 100,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/gladias.json",
+        "designs/characters/mov.json"
+      ],
+      "references": [
+        "cast/gladias-sheet",
+        "cast/mov-sheet"
+      ],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "Medium-wide shot of a community center meeting room with five tables of ten chairs and a podium at the front. Ceiling fans spin faster and faint violet disinfection lights glow brighter overhead. Around the room, about half the people calmly put on cloth masks or respirators while the others simply watch. At one table, the man from reference image 1, wearing a privacy robe with the hood and face cover lowered, glances at his buzzing watch, next to the man from reference image 2, who looks up at the lights. Soft daylight.",
+      "width": 1024,
+      "height": 576,
+      "seed": 6100
+    },
+    {
+      "id": "c6-b116-febric-hug",
+      "chapter": 6,
+      "idx": 116,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/gladias.json",
+        "designs/characters/febric.json"
+      ],
+      "references": [
+        "cast/gladias-sheet",
+        "cast/febric-sheet"
+      ],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "Medium shot inside a small, bright restaurant with large windows onto a green tree-lined street. The man from reference image 1, wearing a privacy robe with the hood and face cover lowered, has risen from his table to warmly hug the teenage boy from reference image 2, who carries a school backpack and is beaming. A glass of water on the table. In the background, a few diners sit by the windows: a man wearing earbuds and a neck collar, and two women in their thirties chatting. A small service robot glides past.",
+      "width": 1024,
+      "height": 576,
+      "seed": 6116
+    },
+    {
+      "id": "c6-b147-tower-top",
+      "chapter": 6,
+      "idx": 147,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "Wide shot of the open top floor of a stone tower under a pale, cold sky. Ten figures in privacy robes sit on seats spaced around the circular edge, still and solemn, faces hidden. In the center stands one more figure in a privacy robe, just arrived after a long climb, beside a large circle on the floor glowing bright green. Small green lights glow along the stone walls. Wooded slopes stretch away beyond the parapet. Quiet, ceremonial and mysterious.",
+      "width": 1024,
+      "height": 576,
+      "seed": 6147
+    }
+  ]
+}

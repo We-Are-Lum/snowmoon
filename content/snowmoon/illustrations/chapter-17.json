@@ -1,0 +1,76 @@
+{
+  "about": "Key moments for chapter 17, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c17-b002-parliament-path",
+      "chapter": 17,
+      "idx": 2,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [],
+      "prompt": "Wide establishing shot on a calm morning. A man in plain clothes, seen from behind, walks along a straight footpath lined on both sides by tall leafy trees whose branches meet overhead. At the end of the path rises a large circular parliament building of pale grey stone, round and low with many tall windows and a shallow dome, half framed by greenery. Dappled sunlight falls across the path, moss and fallen leaves line its edges, and a small round green-glowing panel sits beside a side door of the building in the distance.",
+      "width": 1024,
+      "height": 576,
+      "seed": 17002
+    },
+    {
+      "id": "c17-b013-serving-robot",
+      "chapter": 17,
+      "idx": 13,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/verdow.json",
+        "designs/characters/gladias.json"
+      ],
+      "references": [
+        "cast/verdow-sheet",
+        "cast/gladias-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium-wide interior of a small, warm side office with wood paneling, a stone wall, a low table and two chairs, and a tall window onto green trees. The man from reference image 1, in a long formal parliament robe, sits laughing warmly. Opposite him, the man from reference image 2 sits staring in surprise. A small sleek serving robot on wheels has just glided into the room between them, its little screen showing soft abstract colored shapes. Soft afternoon daylight.",
+      "width": 1024,
+      "height": 576,
+      "seed": 17013
+    },
+    {
+      "id": "c17-b053-graph-diagram",
+      "chapter": 17,
+      "idx": 53,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/gladias.json"
+      ],
+      "references": [
+        "cast/gladias-sheet"
+      ],
+      "props": [
+        "designs/props/privacy-robe-open.json"
+      ],
+      "prompt": "Medium shot in a wood-paneled office with a tall window onto green trees. A friendly middle-aged visitor wearing a loose dark purple robe with its hood pushed back and his face uncovered holds out a hand device toward the man from reference image 1, who leans forward with curious attention. The device's screen glows with a simple branching diagram of colored circles joined by thin lines, like a tree of nodes, with no labels at all. Warm afternoon daylight.",
+      "width": 1024,
+      "height": 576,
+      "seed": 17053
+    },
+    {
+      "id": "c17-b099-exchange-news",
+      "chapter": 17,
+      "idx": 99,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/hreda.json",
+        "designs/characters/febric.json"
+      ],
+      "references": [
+        "cast/hreda-sheet",
+        "cast/febric-sheet"
+      ],
+      "props": [],
+      "prompt": "Warm evening interior of a cozy stone family home with wooden beams and a big window onto dark trees. A family sits around a dinner table with open food boxes and plates. In the center, the person from reference image 1 sits up proudly, beaming while announcing exciting news, one hand raised mid-gesture. Beside them, the young man from reference image 2 smiles quietly. Other family members around the table are seen from behind or in soft shadow, listening. One chair sits empty. Soft lamplight.",
+      "width": 1024,
+      "height": 576,
+      "seed": 17099
+    }
+  ]
+}

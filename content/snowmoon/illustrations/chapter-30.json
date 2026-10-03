@@ -1,0 +1,62 @@
+{
+  "about": "Key moments for chapter 30, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c30-b036-blue-before-dawn",
+      "chapter": 30,
+      "idx": 36,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [],
+      "prompt": "Wide view of a snowy pine forest in the last hour before dawn. The sky shifts from near black overhead to a deep glowing blue along the eastern horizon. Columns of soldiers in pale hooded thermal cloaks trudge forward through the deep snow between the trees toward the front, faces hidden in their hoods. In the distance, faint smoke and dim flashes among the trees. Cold, hushed atmosphere, deep blues and icy whites.",
+      "width": 1024,
+      "height": 576,
+      "seed": 30036
+    },
+    {
+      "id": "c30-b041-sticking-patterns",
+      "chapter": 30,
+      "idx": 41,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [],
+      "prompt": "Dawn in a snowy forest clearing. Soldiers in pale hooded thermal cloaks hurry along a long row of snowmobile-like drones, pressing large freshly printed sheets of paper onto every side of each drone. The sheets are covered in bright, colorful abstract squiggly patterns with no writing. Nearby, small printers on folding tables push out more sheets. Smoke drifts between the pine trees, and pale early light breaks through. Busy, urgent mood, icy whites and pale blues with pops of color.",
+      "width": 1024,
+      "height": 576,
+      "seed": 30041
+    },
+    {
+      "id": "c30-b048-drones-surge",
+      "chapter": 30,
+      "idx": 48,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [],
+      "prompt": "Dynamic wide shot of a snowy pine forest at sunrise. A line of snow drones plastered with colorful abstract squiggly patterns surges forward through the trees, kicking up sprays of snow, pushing past darker, sleek enemy drones that sit motionless or turn aside in confusion. Bright low sunlight cuts through drifting smoke between the trunks. No people visible. Icy whites and steel greys with bright patches of color on the advancing drones.",
+      "width": 1024,
+      "height": 576,
+      "seed": 30048
+    },
+    {
+      "id": "c30-b076-zei-sleeps",
+      "chapter": 30,
+      "idx": 76,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Quiet medium shot inside a small bunker command room in late afternoon light from a high window. The young man from reference image 1 lies back in a chair reclined as far as it can go, fast asleep, mouth slightly open, glasses pushed up on his head, an earpiece dangling on his shoulder, a white-and-grey jacket draped over him. The console screen beside him glows dimly with soft abstract shapes. A peaceful, exhausted calm. Muted blues and warm afternoon gold.",
+      "width": 1024,
+      "height": 576,
+      "seed": 30076
+    }
+  ]
+}

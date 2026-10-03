@@ -1,0 +1,93 @@
+{
+  "about": "Key moments for chapter 12, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c12-b013-priests-on-platform",
+      "chapter": 12,
+      "idx": 13,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Wide shot of a train station platform in a dense city, a sleek train behind. The boy from reference image 1, a bag over his shoulder, steps out of the train door and stops in surprise. Waiting for him in a neat row are six people in long ceremonial priest robes, their faces visible, led by a kind older woman who greets him with a small welcoming gesture. The last few passengers walk away down the platform. Bright daylight through a glass roof.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12013
+    },
+    {
+      "id": "c12-b030-pyramids-from-car",
+      "chapter": 12,
+      "idx": 30,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "View from inside a sealed black car through its slightly dimmed side window. The boy from reference image 1 sits in profile in the foreground, gazing out with wonder. Outside, the row of low-rise shops and tea houses briefly gives way to a green park, and beyond the park rise several mountain-sized stepped pyramids, their slopes covered in trees and stone. Warm afternoon light, a small river glinting ahead.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12030
+    },
+    {
+      "id": "c12-b070-orientation",
+      "chapter": 12,
+      "idx": 70,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/zei.json",
+        "designs/characters/deluin.json"
+      ],
+      "references": [
+        "cast/zei-sheet",
+        "cast/deluin-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot inside a grand hall carved into a mountain, with arched stone-brick walls and rows of about fifty chairs facing a small stage where several priests in ceremonial robes stand. Teenage contestants are taking their seats. In the foreground, the boy from reference image 1 sits as the older teenage boy from reference image 2 sits down beside him and turns to introduce himself with a friendly, open smile. Warm lamplight on stone.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12070
+    },
+    {
+      "id": "c12-b139-drone-scan",
+      "chapter": 12,
+      "idx": 139,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Wide shot inside a giant dark arena carved into a mountain, with thousands of spectators in shadowy tiers rising all around. A lit path leads across the floor to a large console with a single chair. The boy from reference image 1 sits in the chair, eyes nervous, as a swarm of small drones of many shapes and sizes buzz around him, scanning him with soft beams of light. Far across the floor, the silhouette of another player sits at a matching console.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12139
+    },
+    {
+      "id": "c12-b173-snowflake-field",
+      "chapter": 12,
+      "idx": 173,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Close shot of the boy from reference image 1 at a large glowing console in a dark arena, sweat on his brow, his fingers hammering a row of buttons in rapid sequence, tired but intensely focused. Before him the display shows a vast hexagonal grid like a field of snowflakes, with small glowing clusters of cells drifting across it. Cool blue light from the display falls on his face; the dim crowd is blurred behind him.",
+      "width": 1024,
+      "height": 576,
+      "seed": 12173
+    }
+  ]
+}

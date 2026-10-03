@@ -1,0 +1,49 @@
+{
+  "kind": "character",
+  "name": "Mu",
+  "slug": "mu",
+  "status": "starting point",
+  "about": "Mu is Zei's mentor in Dzego and a commander in the Kungaupei defense society. The book calls her an older woman but gives no other detail, so this look is invented and contributors are welcome to replace it.",
+  "setting": "dzego",
+  "facts": [
+    {
+      "chapter": 4,
+      "idx": 62,
+      "quote": "An older woman noticed him and turned to him.",
+      "fact": "An older woman."
+    },
+    {
+      "chapter": 12,
+      "idx": 14,
+      "quote": "an older woman about the same age as Mu",
+      "fact": "Confirms Mu is an older woman."
+    },
+    {
+      "chapter": 7,
+      "idx": 49,
+      "quote": "Mu raised the glass. \"To our future,\" she said.",
+      "fact": "She/her; mentor to Zei and Bai."
+    },
+    {
+      "chapter": 29,
+      "idx": 2,
+      "quote": "jackets covered in a mixture of white and grey",
+      "fact": "Wears a white-and-grey jacket in the snow."
+    },
+    {
+      "chapter": 29,
+      "idx": 48,
+      "quote": "Mu gently whispered, patting the robot on its head and taking her tea",
+      "fact": "Gentle with the robots; drinks tea."
+    },
+    {
+      "chapter": 29,
+      "idx": 110,
+      "quote": "Mu had immediately taken over as the commander of Group South.",
+      "fact": "A field commander."
+    }
+  ],
+  "descriptor": "a woman in her early sixties, small and wiry, medium brown skin, short silver hair in a sharp asymmetric cut, keen eyes behind thin red-framed glasses, wearing a tailored charcoal tech vest with bright yellow piping over a long-sleeved cobalt-blue top, slim black trousers and soft grey shoes",
+  "wears_privacy_robe_in_public": false,
+  "sheet_prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a woman in her early sixties, small and wiry, medium brown skin, short silver hair in a sharp asymmetric cut, keen eyes behind thin red-framed glasses, wearing a tailored charcoal tech vest with bright yellow piping over a long-sleeved cobalt-blue top, slim black trousers and soft grey shoes."
+}

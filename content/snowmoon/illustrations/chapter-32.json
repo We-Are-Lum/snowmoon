@@ -1,0 +1,74 @@
+{
+  "about": "Key moments for chapter 32, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c32-b003-camera-removal",
+      "chapter": 32,
+      "idx": 3,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "Wide view of a footpath through a wooded district lined with old stone houses and tall trees. To the left, a workman on a tall ladder leaning against a tree tosses a security camera down into a box on the ground already full of dozens of discarded cameras, mid-throw. Two figures in privacy robes walk along the path past him. Farther along, a small shop front displays rows of bright red flowers. Soft daylight, muted greens, stone greys.",
+      "width": 1024,
+      "height": 576,
+      "seed": 32003
+    },
+    {
+      "id": "c32-b007-sky-bridge-view",
+      "chapter": 32,
+      "idx": 7,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "View from a pedestrian sky bridge over a busy highway with small autonomous buses and cars below. Two figures in privacy robes stand at the railing looking out. To the left rises a mountain covered with trees, and above the treetops on its slope stand a few fifteen-storey apartment buildings shaped like oversized medieval castle towers, with many windows. Dense shrubbery at the end of the bridge. Bright daylight, muted greens and stone greys.",
+      "width": 1024,
+      "height": 576,
+      "seed": 32007
+    },
+    {
+      "id": "c32-b077-world-map",
+      "chapter": 32,
+      "idx": 77,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/verdow.json",
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/verdow-sheet",
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot in a quiet government office with wood paneling and stone walls. The man from reference image 1 stands before a large map of an unfamiliar world painted on the wall, continents and seas only, with no labels, gesturing toward it thoughtfully. The young man from reference image 2 sits in a chair and listens intently. Another man and a woman sit nearby, seen from behind. Soft daylight from a window, muted greens and warm wood.",
+      "width": 1024,
+      "height": 576,
+      "seed": 32077
+    },
+    {
+      "id": "c32-b111-roof-home",
+      "chapter": 32,
+      "idx": 111,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/gladias.json",
+        "designs/characters/seila.json"
+      ],
+      "references": [
+        "cast/gladias-sheet",
+        "cast/seila-sheet"
+      ],
+      "props": [],
+      "prompt": "Wide view from a rooftop partway up a forested mountain over a green city. The man from reference image 1 stands at the edge holding a cup of tea in one hand and a dish of rice and vegetables in the other, gazing out with a contented smile; the woman from reference image 2 stands beside him. Below spreads a commercial district of old-style and modern buildings, one shaped like an aeroplane, a grey-and-purple walled square, and a forest-like district of tall trees. Castle-tower apartments rise on the slope to the right. Warm daylight.",
+      "width": 1024,
+      "height": 576,
+      "seed": 32111
+    }
+  ]
+}

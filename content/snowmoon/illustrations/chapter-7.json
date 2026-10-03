@@ -1,0 +1,78 @@
+{
+  "about": "Key moments for chapter 7, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c7-b035-smoke",
+      "chapter": 7,
+      "idx": 35,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/zei.json",
+        "designs/characters/bai.json"
+      ],
+      "references": [
+        "cast/zei-sheet",
+        "cast/bai-sheet"
+      ],
+      "props": [],
+      "prompt": "Wide shot from a tree-lined path a third of the way up a stone-clad pyramid mountain. The young man from reference image 1 holds up a hand device pointed toward the distance, frowning, and the young woman from reference image 2 stands beside him, staring. A third teenage boy, seen from behind, looks out too. Below them sprawls a dense low-rise city laid out in a regular grid with trees and glowing shop lights, and on its outskirts a dark cloud of smoke rises from a large factory. Daytime, a tense and sobering mood.",
+      "width": 1024,
+      "height": 576,
+      "seed": 7035
+    },
+    {
+      "id": "c7-b049-toast",
+      "chapter": 7,
+      "idx": 49,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/mu.json",
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/mu-sheet",
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot in a polished stone waiting room inside a mountain, elevator doors in the wall behind. The older woman from reference image 1 raises a glass of water in a solemn toast. The young man from reference image 2 raises his glass in reply, looking slightly puzzled, and a young woman beside him, partly turned away, raises hers too. A small service robot that brought the glasses glides away. Warm lamp light, a quiet moment of resolve before a big match.",
+      "width": 1024,
+      "height": 576,
+      "seed": 7049
+    },
+    {
+      "id": "c7-b100-audience",
+      "chapter": 7,
+      "idx": 100,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/fin.json"
+      ],
+      "references": [
+        "cast/fin-sheet"
+      ],
+      "props": [],
+      "prompt": "Wide shot of a vast dark underground hall packed with spectators, all faces lit by an enormous glowing display of abstract dotted patterns, swirling shapes and colliding streams of light. In the plainer public seating at the side, the teenage boy from reference image 1 sits on the edge of his seat, gripping the bench, gazing up at the display with fear. Far away on the floor, a lone player sits at a large game console, a long cable trailing from his glasses. Neon pinks, cyans and yellows glowing in the darkness.",
+      "width": 1024,
+      "height": 576,
+      "seed": 7100
+    },
+    {
+      "id": "c7-b141-purple-letter",
+      "chapter": 7,
+      "idx": 141,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Close-medium shot in a stone-walled waiting room. The young man from reference image 1 sits with an open gift bag on his lap, a plaque, a cup and a small pen inside, a half-scratched card and his hand device beside him. He has stopped what he was doing and stares curiously at a sealed dark purple envelope in his hand, its front turned away from view. In the background, a young woman sits examining her own gift items, and an older woman leaves through the doorway. Warm, intimate light.",
+      "width": 1024,
+      "height": 576,
+      "seed": 7141
+    }
+  ]
+}

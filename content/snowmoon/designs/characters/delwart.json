@@ -1,0 +1,61 @@
+{
+  "kind": "character",
+  "name": "Delwart",
+  "slug": "delwart",
+  "status": "starting point",
+  "about": "Delwart is the mysterious contact who tracks Gladias down and meets him in private booths in Meldan. He is only ever seen in a privacy robe or with its hood down, and the book never describes his face, so this look is invented and contributors are welcome to replace it.",
+  "setting": "veridia",
+  "facts": [
+    {
+      "chapter": 3,
+      "idx": 83,
+      "quote": "another man wearing a privacy robe stepped in",
+      "fact": "A man; arrives in a privacy robe."
+    },
+    {
+      "chapter": 3,
+      "idx": 92,
+      "quote": "Both took off the face covers and hoods from their privacy robes.",
+      "fact": "Shows his face in private booths."
+    },
+    {
+      "chapter": 3,
+      "idx": 92,
+      "quote": "his own tea, and some kind of rectangular nutrition bar",
+      "fact": "Orders tea and a nutrition bar."
+    },
+    {
+      "chapter": 6,
+      "idx": 30,
+      "quote": "He always wears a new privacy robe every day, he re-randomizes his insoles to change his gait and his height",
+      "fact": "New robe daily; height and gait disguised."
+    },
+    {
+      "chapter": 6,
+      "idx": 32,
+      "quote": "He looks around much less than the average person, he feels really focused on where he's going.",
+      "fact": "Walks with fixed, focused attention and does not turn his head."
+    },
+    {
+      "chapter": 6,
+      "idx": 19,
+      "quote": "The mysterious gentleman, Delwart?",
+      "fact": "Called 'the mysterious gentleman'."
+    },
+    {
+      "chapter": 16,
+      "idx": 4,
+      "quote": "with a sorry expression on his face",
+      "fact": "Can put on a contrite expression."
+    },
+    {
+      "chapter": 21,
+      "idx": 43,
+      "quote": "that he was just a kindly man who cared about peace and freedom",
+      "fact": "Presents himself as a kindly man."
+    }
+  ],
+  "descriptor": "a man of indeterminate middle age, of average height and lean, pale skin, a long calm face with neatly combed straight grey hair parted at the side, clean-shaven, a fixed forward gaze, wearing a plain beige knit polo shirt, pressed grey slacks and plain grey shoes",
+  "wears_privacy_robe_in_public": true,
+  "sheet_prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a man of indeterminate middle age, of average height and lean, pale skin, a long calm face with neatly combed straight grey hair parted at the side, clean-shaven, a fixed forward gaze, wearing a plain beige knit polo shirt, pressed grey slacks and plain grey shoes."
+}

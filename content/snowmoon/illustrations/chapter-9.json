@@ -1,0 +1,99 @@
+{
+  "about": "Key moments for chapter 9, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c9-b002-courtyard-tears",
+      "chapter": 9,
+      "idx": 2,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/bai.json",
+        "designs/characters/fin.json"
+      ],
+      "references": [
+        "cast/bai-sheet",
+        "cast/fin-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot of a small open-air courtyard cafe between dense low-rise buildings in the late afternoon, shop lights already glowing and a cute cartoon animal mural on a wall behind. The girl from reference image 1 sits at a small table with tears running down her cheeks, a cup of tea and a half-eaten meal in front of her. Across from her, the boy from reference image 2 leans forward with a worried, uncertain expression, his hands resting near his own teacup. A few other diners blurred in the background.",
+      "width": 1024,
+      "height": 576,
+      "seed": 9002
+    },
+    {
+      "id": "c9-b052-long-room",
+      "chapter": 9,
+      "idx": 52,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/zei.json",
+        "designs/characters/den.json"
+      ],
+      "references": [
+        "cast/zei-sheet",
+        "cast/den-sheet"
+      ],
+      "props": [],
+      "prompt": "Wide shot down a narrow, long stone room deep inside a mountain, lit by a few dim warm lamps. In the foreground, the boy from reference image 1 has just stepped through a heavy sealed door, looking ahead with cautious curiosity. At the far end of the room sits the man from reference image 2 behind a large table, wearing a dark, shadowy priestly cloak with the hood pushed back enough to show his calm face. Rough stone walls, long shadows, a hushed, secretive atmosphere.",
+      "width": 1024,
+      "height": 576,
+      "seed": 9052
+    },
+    {
+      "id": "c9-b105-sealed-car",
+      "chapter": 9,
+      "idx": 105,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/zei.json",
+        "designs/characters/den.json"
+      ],
+      "references": [
+        "cast/zei-sheet",
+        "cast/den-sheet"
+      ],
+      "props": [],
+      "prompt": "Interior of a large rectangular black car, seen from the back seat. The inside walls are lined with crinkled silver anti-transmission foil. The side windows show only a dim, darkened view of the street outside. The boy from reference image 1 sits by a window, looking around at the foil with wide eyes, realizing how sealed off he is. Beside him the man from reference image 2, in a dark priestly cloak, sits calmly with his hands folded. Low cool light as the car enters a tunnel.",
+      "width": 1024,
+      "height": 576,
+      "seed": 9105
+    },
+    {
+      "id": "c9-b110-box-mixnet",
+      "chapter": 9,
+      "idx": 110,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/zei.json",
+        "designs/characters/den.json"
+      ],
+      "references": [
+        "cast/zei-sheet",
+        "cast/den-sheet"
+      ],
+      "props": [],
+      "prompt": "Wide shot of a large underground factory room with a low ceiling and bright, even light. Thousands of identical plain white sealed boxes are stacked in neat rows. A conveyor belt comes in through an opening in the wall, and a mechanical arm places small computer chips into boxes as they pass. In the foreground the boy from reference image 1 stares at the scene in amazement, while the man from reference image 2, in a dark priestly cloak, holds up a hand device whose screen shows soft abstract colored dots and lines.",
+      "width": 1024,
+      "height": 576,
+      "seed": 9110
+    },
+    {
+      "id": "c9-b139-microscope",
+      "chapter": 9,
+      "idx": 139,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot inside a quiet, spotless inspection room with pale walls. A large, complex scanning microscope dominates the center, with lenses, metal arms and cables, a tiny chip held on its stage under a soft glow. The boy from reference image 1 stands directly in front of it, gazing at it absent-mindedly, his thoughts drifting elsewhere, a thoughtful, slightly troubled expression on his face. In the background a man in a dark hooded priestly cloak walks away toward a doorway, seen from behind.",
+      "width": 1024,
+      "height": 576,
+      "seed": 9139
+    }
+  ]
+}

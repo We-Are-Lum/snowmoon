@@ -1,0 +1,85 @@
+{
+  "kind": "character",
+  "name": "Gladias",
+  "slug": "gladias",
+  "status": "starting point",
+  "about": "Gladias is a Veridian acolyte, then Keeper, in the anonymous Order of Steering, and one of the book's three leads. The book gives his age and almost nothing about his looks, so the appearance below is invented and contributors are welcome to replace it.",
+  "setting": "veridia",
+  "facts": [
+    {
+      "chapter": 8,
+      "idx": 52,
+      "quote": "I was born thirty-nine years ago.",
+      "fact": "He is 39."
+    },
+    {
+      "chapter": 1,
+      "idx": 125,
+      "quote": "Zven and Lily were theirs",
+      "fact": "Father of Zven and Lily, husband of Seila."
+    },
+    {
+      "chapter": 3,
+      "idx": 89,
+      "quote": "And your wife is Seila",
+      "fact": "Seila is his wife."
+    },
+    {
+      "chapter": 1,
+      "idx": 68,
+      "quote": "he would get in and become a Sentinel - or, if he changed his mind, a Keeper",
+      "fact": "An Acolyte in the Order of Steering at the start, aiming to become a Sentinel or Keeper."
+    },
+    {
+      "chapter": 1,
+      "idx": 45,
+      "quote": "the same signature Veridian Privacy Robe that he was wearing",
+      "fact": "Wears the Veridian Privacy Robe in public."
+    },
+    {
+      "chapter": 1,
+      "idx": 49,
+      "quote": "He pulled on a strap on his privacy robe's front face cover",
+      "fact": "Adjusts the face-cover strap of his robe in crowds."
+    },
+    {
+      "chapter": 1,
+      "idx": 86,
+      "quote": "his shoes, which had high heels to raise his height to the same level as other robe wearers",
+      "fact": "Robe shoes hide his real height, so his height is unknown."
+    },
+    {
+      "chapter": 6,
+      "idx": 48,
+      "quote": "wearing a privacy robe without putting on the face cover or hood",
+      "fact": "Sometimes wears the robe open-faced with the hood down near home."
+    },
+    {
+      "chapter": 6,
+      "idx": 4,
+      "quote": "Gladias took off his privacy robe, though keeping his neck band on",
+      "fact": "Wears a neck band; takes the robe off at home."
+    },
+    {
+      "chapter": 1,
+      "idx": 135,
+      "quote": "I'm going to go on some long walks in the forest",
+      "fact": "Likes long walks in the forest."
+    },
+    {
+      "chapter": 3,
+      "idx": 24,
+      "quote": "he had learned programming by writing an alternative client",
+      "fact": "Learned programming when younger."
+    },
+    {
+      "chapter": 24,
+      "idx": 20,
+      "quote": "as a de-facto Kungaupei advisor, Gladias certainly qualified",
+      "fact": "Later lives in Dzego as an adviser to the Kungaupei."
+    }
+  ],
+  "descriptor": "a man of about forty, medium height and slim, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short brown beard and thoughtful hazel eyes, wearing a moss-green linen overshirt over a cream crewneck, charcoal trousers, brown leather walking shoes, a slim grey neck band and a plain wristwatch",
+  "wears_privacy_robe_in_public": true,
+  "sheet_prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a man of about forty, medium height and slim, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short brown beard and thoughtful hazel eyes, wearing a moss-green linen overshirt over a cream crewneck, charcoal trousers, brown leather walking shoes, a slim grey neck band and a plain wristwatch."
+}

@@ -1,0 +1,91 @@
+{
+  "about": "Key moments for chapter 20, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c20-b002-red-alert",
+      "chapter": 20,
+      "idx": 2,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/seila.json"
+      ],
+      "references": [
+        "cast/seila-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium close shot in a quiet bedroom at early dawn, cool grey-blue light coming through a window onto trees. The woman from reference image 1 sits bolt upright in bed, hair tousled, staring in alarm at her wrist, where her watch flashes bright red, throwing red light on her face and the blanket. A hand device lies on the bedside table. Stone walls, simple wooden furniture, an empty pillow beside her.",
+      "width": 1024,
+      "height": 576,
+      "seed": 20002
+    },
+    {
+      "id": "c20-b013-door-screen",
+      "chapter": 20,
+      "idx": 13,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/seila.json"
+      ],
+      "references": [
+        "cast/seila-sheet"
+      ],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "Interior of a stone house entryway in late morning. The woman from reference image 1 stands at the closed front door, tense and wary, her eyes red from crying, looking at a small screen beside the door. The screen shows a figure in a privacy robe standing outside on the doorstep. A round green-glowing panel is set beside the door frame. Soft daylight through a narrow window, coats on hooks, a quiet house.",
+      "width": 1024,
+      "height": 576,
+      "seed": 20013
+    },
+    {
+      "id": "c20-b050-taxi",
+      "chapter": 20,
+      "idx": 50,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "Medium-wide outdoor shot of a quiet tree-lined street in front of a stone house, bright day. Two figures in privacy robes hurry toward a waiting small autonomous taxi. The shorter one, in front, reaches the taxi first and taps her wrist against a round green-glowing panel beside its door; the taller one follows close behind. Green trees, stone garden walls, leaves blowing across the pavement. A sense of urgency.",
+      "width": 1024,
+      "height": 576,
+      "seed": 20050
+    },
+    {
+      "id": "c20-b087-underground-house",
+      "chapter": 20,
+      "idx": 87,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "Wide view of a forested path among tall trees, a cool breeze stirring the leaves. Two figures in privacy robes have stepped off the path toward a stone house built almost entirely underground: only a low stone roof, about a meter high, rises above the mossy ground, nearly invisible among ferns and shrubs, with a stone staircase leading down to its door. Overcast afternoon light, leaves swirling in the air.",
+      "width": 1024,
+      "height": 576,
+      "seed": 20087
+    },
+    {
+      "id": "c20-b174-standing-up",
+      "chapter": 20,
+      "idx": 174,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/seila.json"
+      ],
+      "references": [
+        "cast/seila-sheet"
+      ],
+      "props": [
+        "designs/props/privacy-robe-open.json"
+      ],
+      "prompt": "Medium interior shot of a modest stone family living room. The woman from reference image 1, wearing a loose dark purple robe with its hood pushed back so her face is uncovered, rises from her chair with sudden resolve, picking up her hand device, her expression sharp and certain. Across a low table with two teacups, a weary middle-aged man looks up at her, startled. Late afternoon light through a window onto trees.",
+      "width": 1024,
+      "height": 576,
+      "seed": 20174
+    }
+  ]
+}

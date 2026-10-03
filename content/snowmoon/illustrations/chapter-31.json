@@ -1,0 +1,76 @@
+{
+  "about": "Key moments for chapter 31, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c31-b002-mountain-stair",
+      "chapter": 31,
+      "idx": 2,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [],
+      "prompt": "Wide view of a long staircase with handrails climbing the side of a snow-covered mountain. Bright sunlight glares off the deep snow on both sides; only the tops of pine trees and the handrails stick up above it. About thirty meters up the stairs, a small boxy drone plows and salts the steps. Three figures in winter jackets climb slowly, seen from behind, leaning into a strong cold wind. Icy whites, pale blue sky, dark green pines.",
+      "width": 1024,
+      "height": 576,
+      "seed": 31002
+    },
+    {
+      "id": "c31-b009-reunion-hug",
+      "chapter": 31,
+      "idx": 9,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/deluin.json",
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/deluin-sheet",
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot on a circular snowy platform at the top of a mountain. The young man from reference image 1, dressed only in a sweater and a light hood, throws himself into the arms of the young man from reference image 2, who staggers back, nearly knocked off balance, both grinning with joy. Two women in winter jackets watch nearby, seen from behind. Behind them, snowy hills and a small town far below. Bright cold sunlight, icy whites and pale blues.",
+      "width": 1024,
+      "height": 576,
+      "seed": 31009
+    },
+    {
+      "id": "c31-b066-broken-gates",
+      "chapter": 31,
+      "idx": 66,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/gladias.json",
+        "designs/characters/seila.json"
+      ],
+      "references": [
+        "cast/gladias-sheet",
+        "cast/seila-sheet"
+      ],
+      "props": [],
+      "prompt": "Wide shot of a large stone gateway into a walled district under a light snowfall. The man from reference image 1 and the woman from reference image 2 walk through the gate side by side, looking around with quiet emotion. Metal turnstiles lie smashed and thrown to the ground. Crowds of people move freely in and out. Two security guards in purple and grey uniforms stand to one side, watching calmly. Soft grey winter light, stone and snow.",
+      "width": 1024,
+      "height": 576,
+      "seed": 31066
+    },
+    {
+      "id": "c31-b077-lily-hugs-dad",
+      "chapter": 31,
+      "idx": 77,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/lily.json",
+        "designs/characters/gladias.json"
+      ],
+      "references": [
+        "cast/lily-sheet",
+        "cast/gladias-sheet"
+      ],
+      "props": [],
+      "prompt": "Warm medium shot at the open door of an apartment at the top of a staircase. The girl from reference image 1 runs out and throws her arms around the man from reference image 2, who hugs her tightly, eyes closed in relief. Behind him stands a woman in a winter coat, seen from behind, and deeper in the apartment two more young people hurry out of another room, small and softly blurred. Soft warm indoor light against the cool stairwell.",
+      "width": 1024,
+      "height": 576,
+      "seed": 31077
+    }
+  ]
+}

@@ -1,0 +1,74 @@
+{
+  "about": "Key moments for chapter 13, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c13-b017-curtained-booth",
+      "chapter": 13,
+      "idx": 17,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/gladias.json",
+        "designs/characters/delwart.json"
+      ],
+      "references": [
+        "cast/gladias-sheet",
+        "cast/delwart-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot inside a small booth closed off by a cloth curtain: a wooden table with a decorated lamp and two flowers at the far end, and a boxy air filter pressed into a corner on the floor. The man from reference image 1 sits across from the man from reference image 2, both unhooded, talking quietly. A small serving robot rolls up with a glass of water and a salad for the first man, and a cup of tea with a rectangular nutrition bar for the second. Warm lamplight.",
+      "width": 1024,
+      "height": 576,
+      "seed": 13017
+    },
+    {
+      "id": "c13-b024-commercial-district",
+      "chapter": 13,
+      "idx": 24,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "Wide shot of a figure in a privacy robe emerging from a tunnel exit onto a raised pathway above ground level. Behind it stand tall entrance doors set into a massive, castle-like old stone wall, with a turnstile just inside. Ahead spreads a commercial district mixing lush greenery, trees and vines with glass and steel buildings. A few other pedestrians, some of them also robed. Bright late-afternoon sun.",
+      "width": 1024,
+      "height": 576,
+      "seed": 13024
+    },
+    {
+      "id": "c13-b065-hijacked-screen",
+      "chapter": 13,
+      "idx": 65,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/seila.json",
+        "designs/characters/lily.json"
+      ],
+      "references": [
+        "cast/seila-sheet",
+        "cast/lily-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium-wide shot of a family table in a restaurant in the evening. The woman from reference image 1 has jumped up from her chair and reaches behind a large wall screen, hunting for the plug to switch it off. The screen shows a stern, regal man's face on the left and a block of soft abstract colored shapes on the right. At the table, the girl from reference image 2 sits very still, staring up at the screen, expressionless. An older boy and an older girl keep eating; a younger boy looks on curiously.",
+      "width": 1024,
+      "height": 576,
+      "seed": 13065
+    },
+    {
+      "id": "c13-b092-keeper-proposal",
+      "chapter": 13,
+      "idx": 92,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "Medium shot inside a windowless soundproof booth with foil-lined walls and a long table between two benches. Seven figures in privacy robes sit facing each other, nearly impossible to tell apart. All of them have turned their hooded heads toward one figure on the near bench, who has raised a hand slightly as if offering an idea. One figure across the table leans back, arms crossed in quiet disapproval. Dim, even light and a hushed atmosphere.",
+      "width": 1024,
+      "height": 576,
+      "seed": 13092
+    }
+  ]
+}

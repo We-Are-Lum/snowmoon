@@ -1,0 +1,49 @@
+{
+  "kind": "character",
+  "name": "Deluin",
+  "slug": "deluin",
+  "status": "starting point",
+  "about": "Deluin is Zei's friend and fellow Minpentai finalist from Redshire in the United Cities. The book calls him an older teenager and later a young man in a sweater, and the rest of this look is invented, so contributors are welcome to replace it.",
+  "setting": "united-cities",
+  "facts": [
+    {
+      "chapter": 12,
+      "idx": 70,
+      "quote": "An older teenage boy sat down beside Zei.",
+      "fact": "An older teenage boy when introduced."
+    },
+    {
+      "chapter": 12,
+      "idx": 75,
+      "quote": "Ah, I'm from Redshire.",
+      "fact": "From Redshire."
+    },
+    {
+      "chapter": 12,
+      "idx": 72,
+      "quote": "That's not a very Dzegojan name",
+      "fact": "A foreigner in Dzego."
+    },
+    {
+      "chapter": 14,
+      "idx": 118,
+      "quote": "Deluin replied in a lecturing tone",
+      "fact": "Can be earnest and lecturing."
+    },
+    {
+      "chapter": 14,
+      "idx": 120,
+      "quote": "I have to fly back for my mom and dad's birthdays",
+      "fact": "Has both parents in Redshire."
+    },
+    {
+      "chapter": 31,
+      "idx": 5,
+      "quote": "a young man wearing only a sweater and a light hood climbing up",
+      "fact": "Later seen as a young man in only a sweater and a light hood in the snow."
+    }
+  ],
+  "descriptor": "a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater with a light grey hood, dark green trousers and sturdy brown boots",
+  "wears_privacy_robe_in_public": false,
+  "sheet_prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater with a light grey hood, dark green trousers and sturdy brown boots."
+}

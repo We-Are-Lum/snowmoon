@@ -1,0 +1,70 @@
+{
+  "about": "Key moments for chapter 22, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c22-b003-projector",
+      "chapter": 22,
+      "idx": 3,
+      "setting": "united-cities",
+      "characters": [
+        "designs/characters/jahn.json"
+      ],
+      "references": [
+        "cast/jahn-sheet"
+      ],
+      "props": [],
+      "prompt": "View from the back seat of a taxi, the man from reference image 1 in profile at the side window, looking out thoughtfully. Outside, just past a highway underpass with piles of uncollected garbage, a small park; across the road, a tall industrial building whose blank wall shows a large projected film scene of soft blurred figures in warm color. A small projector glows hidden under a park bench, its beam crossing the road. Overcast daylight.",
+      "width": 1024,
+      "height": 576,
+      "seed": 22003
+    },
+    {
+      "id": "c22-b009-shelter-roads",
+      "chapter": 22,
+      "idx": 9,
+      "setting": "united-cities",
+      "characters": [],
+      "references": [],
+      "props": [],
+      "prompt": "Wide establishing view of the northern edge of a big modern city: a chaotic mix of glass-and-steel towers, concrete blocks and old stone buildings, tall and short, beautiful and ugly side by side. In the foreground, fresh road construction cuts through, with machines laying new pavement; low concrete entrances to new underground shelters stand beside the new roads. A lone taxi drives out from under a highway overpass. Sidewalks quieter than usual. Cool hazy daylight.",
+      "width": 1024,
+      "height": 576,
+      "seed": 22009
+    },
+    {
+      "id": "c22-b032-university-restaurant",
+      "chapter": 22,
+      "idx": 32,
+      "setting": "united-cities",
+      "characters": [
+        "designs/characters/jahn.json"
+      ],
+      "references": [
+        "cast/jahn-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot inside a bright university restaurant with tall glass windows, concrete columns and long tables. The man from reference image 1, carrying a bag, has just arrived and smiles in pleased surprise at a young woman student seated at a table with a tray and a cup, who looks up and smiles back. Other diners in the background, city towers visible through the windows. Cool midday light.",
+      "width": 1024,
+      "height": 576,
+      "seed": 22032
+    },
+    {
+      "id": "c22-b084-tactical-map",
+      "chapter": 22,
+      "idx": 84,
+      "setting": "united-cities",
+      "characters": [
+        "designs/characters/jahn.json"
+      ],
+      "references": [
+        "cast/jahn-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium close shot inside a small glass-walled calling booth. The man from reference image 1 sits hunched forward over an open laptop computer, a glass of water beside it, his face tense and absorbed. On the screen, a simple dark tactical map: seven small blue circles arranged in a hexagon around one red square, with two blue triangles nearby, no labels or writing. The blue and red glow lights his face. Outside the glass, the restaurant is a soft blur. Late afternoon.",
+      "width": 1024,
+      "height": 576,
+      "seed": 22084
+    }
+  ]
+}

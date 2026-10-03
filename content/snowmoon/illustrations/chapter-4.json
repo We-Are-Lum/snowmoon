@@ -1,0 +1,93 @@
+{
+  "about": "Key moments for chapter 4, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c4-b003-camera-ladder",
+      "chapter": 4,
+      "idx": 3,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/fin.json",
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/fin-sheet",
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Wide view from an outdoor courtyard cafe with a few tables of teenagers and older couples. In the foreground, the boy from reference image 1 sits at a table, gazing out through the courtyard entrance, while the boy from reference image 2 taps the table and holds up a hand device whose screen shows soft abstract glowing patterns. Across the street, visible through the entrance, a teenager stands at the top of a wooden ladder leaned against a lamp post, unscrewing a security camera and dropping it into a black pouch. Low-rise buildings with neon accents, warm daylight.",
+      "width": 1024,
+      "height": 576,
+      "seed": 4003
+    },
+    {
+      "id": "c4-b048-pyramid",
+      "chapter": 4,
+      "idx": 48,
+      "setting": "dzego",
+      "characters": [],
+      "references": [],
+      "props": [],
+      "prompt": "Wide establishing shot of a half-kilometer-tall pyramid rising at the edge of a low-rise city: a refurbished mountain clad in smooth stone with a square base, like the monument of an ancient civilization. Two rows of trees line a straight path running up its face to the halfway point, and another row of trees circles the pyramid horizontally at exactly half its height. In the foreground a lone young man, seen from behind, crosses the last street and starts up the sloping path toward it. Late afternoon light, glowing shop lights in the city behind.",
+      "width": 1024,
+      "height": 576,
+      "seed": 4048
+    },
+    {
+      "id": "c4-b073-rival",
+      "chapter": 4,
+      "idx": 73,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/bai.json",
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/bai-sheet",
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot in a stone-walled room deep inside a mountain, entered through an arch of stone bricks. The young woman from reference image 1 stands close, resting a hand on the shoulder of the young man from reference image 2, wearing a teasing, confident smirk. He has turned half away from her, frowning, his fists clenched at his sides. In the background an older woman watches from a distance, her face in shadow. Polished stone walls with a rounded ceiling, warm indoor lighting, a tense rivalry.",
+      "width": 1024,
+      "height": 576,
+      "seed": 4073
+    },
+    {
+      "id": "c4-b081-arena",
+      "chapter": 4,
+      "idx": 81,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Wide shot of a vast, dark underground hall with over a thousand spectators in tiered seats, faces lit faintly by a giant glowing display of abstract dotted patterns. A lit path on the floor leads to a large game console with a single chair. The young man from reference image 1 sits in the chair, tense and focused, while several drones the size of a hand device hover and circle around him, scanning him with thin beams of light. A tray beside him offers glasses attached to a long cable. Neon pink and cyan glow in the darkness.",
+      "width": 1024,
+      "height": 576,
+      "seed": 4081
+    },
+    {
+      "id": "c4-b149-new-rule",
+      "chapter": 4,
+      "idx": 149,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/mu.json",
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/mu-sheet",
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot in a waiting room carved from polished stone, with elevator pod doors set into the wall behind. The older woman from reference image 1 stands calmly, hands folded, wearing a knowing half-smile as she explains something. The young man from reference image 2 faces her, his eyes wide open in astonishment. Off to one side, a young woman stands with her back partly turned. Warm indoor lighting, a quiet, charged moment just after a hard-won victory.",
+      "width": 1024,
+      "height": 576,
+      "seed": 4149
+    }
+  ]
+}

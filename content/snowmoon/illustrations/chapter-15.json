@@ -1,0 +1,93 @@
+{
+  "about": "Key moments for chapter 15, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c15-b005-special-broadcast",
+      "chapter": 15,
+      "idx": 5,
+      "setting": "united-cities",
+      "characters": [
+        "designs/characters/jahn.json"
+      ],
+      "references": [
+        "cast/jahn-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot of a modern institute restaurant in the early morning, cool light through tall windows onto glass and concrete. The man from reference image 1 stops just inside the entrance, frozen in horror, staring at a large wall screen. The screen shows an aerial view of swarms of dark drones and aircraft descending over red hills and a castle town. About ten people sit at tables, all turned toward the screen in shock, among them a young woman with her hand over her mouth.",
+      "width": 1024,
+      "height": 576,
+      "seed": 15005
+    },
+    {
+      "id": "c15-b018-sunrise-news",
+      "chapter": 15,
+      "idx": 18,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/gladias.json",
+        "designs/characters/seila.json"
+      ],
+      "references": [
+        "cast/gladias-sheet",
+        "cast/seila-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot of a family living room at sunrise. Clean golden light comes through a large window, and the trees on the footpath outside throw long morning shadows across the floor. The man from reference image 1 and the woman from reference image 2, still rumpled from sleep, stand close together staring at a screen with stunned, grave faces; its glow shows only blurred dark shapes. Beside them, an older boy and an older girl, seen from behind, also watch. Muted greens and warm stone tones.",
+      "width": 1024,
+      "height": 576,
+      "seed": 15018
+    },
+    {
+      "id": "c15-b051-untouched-meal",
+      "chapter": 15,
+      "idx": 51,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot of a nearly empty hotel lobby restaurant. The boy from reference image 1 sits alone at a table, tears on his cheeks, anxiously tapping at a hand device whose screen shows soft abstract colored shapes. In front of him sits an untouched plate of rice and vegetables, and a small serving robot is refilling his cup of tea yet again. Dim warm lamps, quiet empty tables around him, a neon glow from the street beyond the windows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 15051
+    },
+    {
+      "id": "c15-b075-hand-on-shoulder",
+      "chapter": 15,
+      "idx": 75,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium close shot in a hotel lobby restaurant, now empty. The boy from reference image 1, eyes red from crying, turns around in his chair as an older woman in long ceremonial priest robes gently places her hands on his shoulder, her face full of sympathy. On the table, a half-eaten plate of rice and vegetables, a cup of tea, and a hand device lying face down. Soft warm lamplight, empty tables behind them.",
+      "width": 1024,
+      "height": 576,
+      "seed": 15075
+    },
+    {
+      "id": "c15-b090-pyramid-side-door",
+      "chapter": 15,
+      "idx": 90,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Wide shot at dusk at the base of a huge tree-covered mountain pyramid, far from the city lights. A row of doors is set into its stone side near ground level. A large rectangular black car has pulled up flush against one of them, so that the car door and the pyramid door line up perfectly and slide open at the same time. Through the opening, the boy from reference image 1 steps from the car into a dim stone hallway, his expression solemn.",
+      "width": 1024,
+      "height": 576,
+      "seed": 15090
+    }
+  ]
+}

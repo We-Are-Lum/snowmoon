@@ -1,0 +1,43 @@
+{
+  "kind": "character",
+  "name": "Den",
+  "slug": "den",
+  "status": "starting point",
+  "about": "Den is a High Council member of the Kungaupei, Dzego's secret defense society, who recruits Zei. The book shows him only in a priest's shadowy cloak, so his face and build are invented and contributors are welcome to replace them.",
+  "setting": "dzego",
+  "facts": [
+    {
+      "chapter": 9,
+      "idx": 52,
+      "quote": "a man was sitting wearing a shadowy cloak - not a Veridian privacy robe, but the dress of the Minpentai priests",
+      "fact": "A man who wears the shadowy cloak of the Minpentai priests."
+    },
+    {
+      "chapter": 9,
+      "idx": 56,
+      "quote": "I'm Den. High Council member of the Kungaupei.",
+      "fact": "Kungaupei High Council member."
+    },
+    {
+      "chapter": 24,
+      "idx": 65,
+      "quote": "At the table, a man was sitting wearing a shadowy cloak.",
+      "fact": "Still wears the cloak later."
+    },
+    {
+      "chapter": 24,
+      "idx": 77,
+      "quote": "His face almost immediately smoothed",
+      "fact": "Keeps an unreadable, composed expression."
+    },
+    {
+      "chapter": 9,
+      "idx": 111,
+      "quote": "Den opened up his hand device, and showed a diagram to Zei.",
+      "fact": "Uses a hand device."
+    }
+  ],
+  "descriptor": "a composed man in his fifties, tall and gaunt, light beige skin, long black hair streaked with grey tied in a low knot, high cheekbones and a still, unreadable expression, wearing a long hooded shadow-grey cloak with faint geometric patterns along the hem over a black high-necked tunic",
+  "wears_privacy_robe_in_public": false,
+  "sheet_prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a composed man in his fifties, tall and gaunt, light beige skin, long black hair streaked with grey tied in a low knot, high cheekbones and a still, unreadable expression, wearing a long hooded shadow-grey cloak with faint geometric patterns along the hem over a black high-necked tunic."
+}

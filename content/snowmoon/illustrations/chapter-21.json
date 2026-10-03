@@ -1,0 +1,78 @@
+{
+  "about": "Key moments for chapter 21, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c21-b019-civics-score",
+      "chapter": 21,
+      "idx": 19,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/lily.json",
+        "designs/characters/seila.json"
+      ],
+      "references": [
+        "cast/lily-sheet",
+        "cast/seila-sheet"
+      ],
+      "props": [],
+      "prompt": "Warm evening interior of a cozy stone family home. A dinner table is set with empty plates and three adults are seated around it. The girl from reference image 1 rushes in through a doorway, beaming with pride, holding up her hand device with its screen turned away from the viewer. At the table, the woman from reference image 2 turns toward her with a tired, surprised smile; the other two adults are seen from behind. Lamplight, wooden beams, a big window onto dark trees.",
+      "width": 1024,
+      "height": 576,
+      "seed": 21019
+    },
+    {
+      "id": "c21-b024-delivery-robot",
+      "chapter": 21,
+      "idx": 24,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/zven.json"
+      ],
+      "references": [
+        "cast/zven-sheet"
+      ],
+      "props": [],
+      "prompt": "Evening at the open front door of a stone family house. The boy from reference image 1 stands on the threshold, eagerly taking two paper bags of food from a small wheeled delivery robot waiting on the doorstep. Warm light spills from the house behind him onto the stone steps; outside, trees and a softly lit path fade into blue dusk.",
+      "width": 1024,
+      "height": 576,
+      "seed": 21024
+    },
+    {
+      "id": "c21-b038-silent-table",
+      "chapter": 21,
+      "idx": 38,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/zven.json",
+        "designs/characters/seila.json"
+      ],
+      "references": [
+        "cast/zven-sheet",
+        "cast/seila-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot of a family dinner table in lamplight, open meal boxes and bowls in front of everyone. The boy from reference image 1 leans forward eagerly, eyes wide with excitement, as if he has just solved a mystery. Across from him, the woman from reference image 2 has frozen, fork halfway down, her face gone pale and grave. Two other adults at the table, seen from behind, sit motionless. The room is hushed, a dark window behind them.",
+      "width": 1024,
+      "height": 576,
+      "seed": 21038
+    },
+    {
+      "id": "c21-b040-basement-call",
+      "chapter": 21,
+      "idx": 40,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/seila.json"
+      ],
+      "references": [
+        "cast/seila-sheet"
+      ],
+      "props": [],
+      "prompt": "A small windowless basement room with stone walls and a single warm lamp. The woman from reference image 1 sits alone in a chair, leaning forward, staring intently at a hand device held in both hands, its screen turned away from the viewer and lighting her face from below. Her jaw is set, one hand pressed to her forehead in frustration. Shelves and boxes sit in the shadows behind her. Late at night.",
+      "width": 1024,
+      "height": 576,
+      "seed": 21040
+    }
+  ]
+}

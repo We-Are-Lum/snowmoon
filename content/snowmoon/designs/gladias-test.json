@@ -1,9 +1,0 @@
-{
-  "kind": "character",
-  "name": "Gladias",
-  "status": "test",
-  "about": "A trial character profile used to test consistency. The book says almost nothing about how Gladias looks, so this appearance is invented and is not canon. Robe details come from chapter 1, block 45.",
-  "prompt": "Gladias: a fictional man in his early forties, medium build, short dark wavy hair, neatly trimmed short beard, olive skin, thoughtful dark eyes, a calm and slightly amused expression. At home he wears a plain sage-green linen shirt and dark trousers.",
-  "robe_prompt": "A Veridian Privacy Robe: a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, with a fabric face cover over the lower face, and shoes of the same dark purple color. The wearer's face, hair and body shape are hidden.",
-  "reference_sheet": null
-}

@@ -86,3 +86,15 @@ How can we get better images? Can people add hand drawn image released with same
 ```text
 Yeah, commit. And push to main. start seeding some casting profiles. And then seeding chapters with some key images
 ```
+
+```text
+Or could we do a detailed one layer of the Farcaster arch?
+```
+
+```text
+Ignore my last thing
+```
+
+```text
+Great. Continue
+```

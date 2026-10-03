@@ -1,0 +1,78 @@
+{
+  "about": "Key moments for chapter 14, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c14-b027-lobby-breakfast",
+      "chapter": 14,
+      "idx": 27,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/zei.json",
+        "designs/characters/bai.json"
+      ],
+      "references": [
+        "cast/zei-sheet",
+        "cast/bai-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot of a cozy hotel lobby restaurant in the morning, warm wood, soft lamps and a playful cartoon animal mural on the wall. A small serving robot has just arrived at a table carrying a bowl of rice and vegetables and a cup of tea. The boy from reference image 1 sips tea, watching the girl from reference image 2 beside him eagerly start eating while she gives him advice with a knowing, slightly teasing look. Morning light through the lobby windows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 14027
+    },
+    {
+      "id": "c14-b030-semifinal-arena",
+      "chapter": 14,
+      "idx": 30,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Very wide shot of an enormous dark arena inside a mountain pyramid, thousands of spectators in tiers fading into shadow, beams of light crossing the air. On the vast floor, two large glowing consoles face each other from far apart. At the nearer console, the boy from reference image 1 sits upright, alert and composed, looking up as the announcer's voice booms through the hall. Across the floor, the other player is a small silhouette. Small drones rest along the edges.",
+      "width": 1024,
+      "height": 576,
+      "seed": 14030
+    },
+    {
+      "id": "c14-b085-walled-ship",
+      "chapter": 14,
+      "idx": 85,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Close three-quarter view of the boy from reference image 1 at a glowing console in a dark arena, his face tense and stubborn, jaw set, hands busy on the controls. On the large display before him, a board crowded with chaotic scattered debris and streams of tiny glowing shapes; near one edge a single small bright structure sits inside four rings of crumbling walls, holding out against the storm. Cool light on his face, the crowd a dark blur behind.",
+      "width": 1024,
+      "height": 576,
+      "seed": 14085
+    },
+    {
+      "id": "c14-b124-redshire-photos",
+      "chapter": 14,
+      "idx": 124,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/deluin.json",
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/deluin-sheet",
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot at a small courtyard cafe table in the evening, neon pink and cyan shop lights glowing nearby, two cups of tea on the table. The older teenage boy from reference image 1 holds out his hand device, smiling proudly, and the boy from reference image 2 leans in, amazed. The device's screen shows a tiny painted landscape: castles, a pine forest, red mountains with snow-covered peaks and a giant frozen waterfall. A small serving robot waits beside the table.",
+      "width": 1024,
+      "height": 576,
+      "seed": 14124
+    }
+  ]
+}

@@ -1,0 +1,89 @@
+{
+  "about": "Key moments for chapter 18, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c18-b003-black-car",
+      "chapter": 18,
+      "idx": 3,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/zei.json",
+        "designs/characters/bai.json"
+      ],
+      "references": [
+        "cast/zei-sheet",
+        "cast/bai-sheet"
+      ],
+      "props": [],
+      "prompt": "Interior of a sealed black car with plush seats facing each other, softly lit. The young man from reference image 1 sits on a backward-facing seat, and the young woman from reference image 2 sits opposite him on a forward-facing seat; both smile in welcome as a traveler with a bag, seen from behind, ducks in through the open door straight from a bright terminal passage. The side windows are glowing display panels showing a slightly too-vivid view of low-rise shops with neon trim. Cool interior light.",
+      "width": 1024,
+      "height": 576,
+      "seed": 18003
+    },
+    {
+      "id": "c18-b061-box-trays",
+      "chapter": 18,
+      "idx": 61,
+      "setting": "dzego",
+      "characters": [],
+      "references": [],
+      "props": [],
+      "prompt": "Medium-wide street scene in a dense low-rise city by day. A sleek black car has stopped at the curb. Its driver, a woman, sets a tray holding a neat row of about thirty small plain white sealed boxes onto the steps of a shop stoop, while a shopkeeper holds a hand device over the tray to scan them all at once. Two large identical crates stand open on the pavement. A traveler, seen from behind, watches from a few meters away. One- and two-storey shops with neon trim, cute cartoon animal murals, stairways leading underground.",
+      "width": 1024,
+      "height": 576,
+      "seed": 18061
+    },
+    {
+      "id": "c18-b070-robe-shop-street",
+      "chapter": 18,
+      "idx": 70,
+      "setting": "dzego",
+      "characters": [],
+      "references": [],
+      "props": [],
+      "prompt": "Eye-level view along a tree-lined shopping street of one- and two-storey buildings, with hand-made neon light frames in pink, cyan and yellow around the windows. In the foreground, a clothing shop window: a few jackets hang on one side, while racks of dark purple hooded robes crowd the other half. A little further on, a busy flower shop. Beyond it, an open staircase leads down to a basement, decorated with a mural of cute cartoon animals playing with gadgets and chemistry flasks under green trees and blue sky; two teenage boys and a girl are climbing down. Late afternoon.",
+      "width": 1024,
+      "height": 576,
+      "seed": 18070
+    },
+    {
+      "id": "c18-b079-pyramid-view",
+      "chapter": 18,
+      "idx": 79,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/gladias.json"
+      ],
+      "references": [
+        "cast/gladias-sheet"
+      ],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "Wide high view from the tree-lined slope of a huge mountain carved into a stepped pyramid. In the foreground, the man from reference image 1 sits on a large rock, seen in profile, resting and gazing out. Below him stretches a dense low-rise city of flat concrete roofs mixed with many green trees, a grid of streets fading into haze, a belt of trees around the city's edge. In the middle distance, people, many of them figures in privacy robes, walk up and down an inclined walkway. Soft late-afternoon light.",
+      "width": 1024,
+      "height": 576,
+      "seed": 18079
+    },
+    {
+      "id": "c18-b123-coordination-speech",
+      "chapter": 18,
+      "idx": 123,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/fin.json",
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/fin-sheet",
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot at a table in a modest hotel lobby restaurant with warm lamps and a glowing neon accent strip along the wall. The young man from reference image 1 leans forward over the table, eyes bright, gesturing passionately with both hands as he speaks. Beside him, the young man from reference image 2 listens with his mouth slightly open in surprise. Across the table, two other listeners are seen from behind. Teacups and a dark hand device lie on the table. Evening.",
+      "width": 1024,
+      "height": 576,
+      "seed": 18123
+    }
+  ]
+}

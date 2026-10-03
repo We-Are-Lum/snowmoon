@@ -1,0 +1,72 @@
+{
+  "about": "Key moments for chapter 3, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c3-b029-fresh-robe",
+      "chapter": 3,
+      "idx": 29,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "Medium shot in a dim pedestrian tunnel at a Y-shaped fork, lit just enough to see. Two figures in privacy robes stand close together, faces hidden. One has opened the front of his robe and pulls a large folded package of dark purple fabric from an inside pocket, offering it to the other. On the tunnel wall behind them, a single sheet of paper is taped up at its four corners, seen at a steep angle so nothing on it can be read. Hushed, conspiratorial mood, cool stone greys.",
+      "width": 1024,
+      "height": 576,
+      "seed": 3029
+    },
+    {
+      "id": "c3-b054-enclave-wall",
+      "chapter": 3,
+      "idx": 54,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "Wide view of a long castle-like wall in grey and purple running beside a city street. In front of it stand two rows of trees with a sidewalk between them. A large picture panel on the wall shows child-friendly cartoon robots picking up litter, with no words. On a bench under the trees, two ordinary men sit drinking tea, sharing a hand device and chatting. A figure in a privacy robe has paused nearby, facing the wall as if studying the picture, quietly listening. Glass and steel office towers peek through the trees in the distance. Daylight.",
+      "width": 1024,
+      "height": 576,
+      "seed": 3054
+    },
+    {
+      "id": "c3-b072-enclave-street",
+      "chapter": 3,
+      "idx": 72,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "Wide establishing shot inside a walled corporate enclave that feels like a different country. Uniform futuristic buildings five to ten meters tall, rounded and rectangular, in white, grey and purple glass and steel with sharp edges. Identical trees planted at exactly equal spacing along spotless sidewalks. Small shops and restaurants all match, marked only by small simple emblems. A lone figure in a privacy robe walks through the entrance gate into this orderly street, where people stroll calmly. Clean, cool, precise daylight.",
+      "width": 1024,
+      "height": 576,
+      "seed": 3072
+    },
+    {
+      "id": "c3-b092-booth",
+      "chapter": 3,
+      "idx": 92,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/gladias.json",
+        "designs/characters/delwart.json"
+      ],
+      "references": [
+        "cast/gladias-sheet",
+        "cast/delwart-sheet"
+      ],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "Medium shot inside a small booth in a hidden courtyard, closed off by a cloth curtain. Two men sit facing each other across a table, both wearing privacy robes with the hoods and face covers pulled down, faces visible. The man from reference image 1, on the left, eats a salad with a glass of water, watching warily. The man from reference image 2, on the right, sips tea beside a rectangular nutrition bar and a fork, calm and composed. A decorated lamp between two large flowers on the table, a white air filter box in the corner. Soft warm light.",
+      "width": 1024,
+      "height": 576,
+      "seed": 3092
+    }
+  ]
+}

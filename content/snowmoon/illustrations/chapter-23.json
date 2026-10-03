@@ -1,0 +1,93 @@
+{
+  "about": "Key moments for chapter 23, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c23-b004-green-cafeteria",
+      "chapter": 23,
+      "idx": 4,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/gladias.json",
+        "designs/characters/fin.json"
+      ],
+      "references": [
+        "cast/gladias-sheet",
+        "cast/fin-sheet"
+      ],
+      "props": [],
+      "prompt": "Wide interior of an underground cafeteria deep inside a mountain. Green trees stand in pots between the tables, two walls are covered in hanging vines, and the other two are huge mirrors that repeat the room endlessly. Thick shrubs screen a single corner entrance. A few freshly added boxy air filters stand awkwardly on the floor; downward-pointing fans and violet lights hang from the ceiling. In a private nook behind shrubs, the man from reference image 1 and the young man from reference image 2 sit at a table with a young woman seen from behind. Soft green light.",
+      "width": 1024,
+      "height": 576,
+      "seed": 23004
+    },
+    {
+      "id": "c23-b006-drained",
+      "chapter": 23,
+      "idx": 6,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/zei.json",
+        "designs/characters/bai.json"
+      ],
+      "references": [
+        "cast/zei-sheet",
+        "cast/bai-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot in a leafy underground cafeteria nook screened by shrubs and potted trees, violet ceiling lights glowing faintly. The young man from reference image 1 drops into a chair at the table, visibly exhausted, shoulders slumped, dark circles under his eyes. Beside him, the young woman from reference image 2 turns toward him with concern. Two other diners at the table are partly hidden by leaves. A mirrored wall behind them reflects the greenery.",
+      "width": 1024,
+      "height": 576,
+      "seed": 23006
+    },
+    {
+      "id": "c23-b020-reading-test",
+      "chapter": 23,
+      "idx": 20,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/gladias.json",
+        "designs/characters/fin.json"
+      ],
+      "references": [
+        "cast/gladias-sheet",
+        "cast/fin-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium close shot at a cafeteria table among potted trees and vines, empty plates and teacups pushed aside. The man from reference image 1 holds an open book, its pages facing away from the viewer, brow furrowed in concentration as he tries to read aloud. Beside him, the young man from reference image 2 leans in with an encouraging, teasing grin, as if quizzing him. Soft green and violet light.",
+      "width": 1024,
+      "height": 576,
+      "seed": 23020
+    },
+    {
+      "id": "c23-b071-watch-race",
+      "chapter": 23,
+      "idx": 71,
+      "setting": "dzego",
+      "characters": [],
+      "references": [],
+      "props": [],
+      "prompt": "Playful close-up over the corner of a cafeteria table: three wrists wearing watches converge on a small round green-glowing panel set into the tabletop. Two of the wrists bump and push each other aside, while a third hand slaps its watch firmly onto the green circle. Teacups and leaves in the soft-focus background, warm green light, a sense of comic chaos.",
+      "width": 1024,
+      "height": 576,
+      "seed": 23071
+    },
+    {
+      "id": "c23-b078-red-call",
+      "chapter": 23,
+      "idx": 78,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/gladias.json"
+      ],
+      "references": [
+        "cast/gladias-sheet"
+      ],
+      "props": [],
+      "prompt": "Night interior of a small windowless bedroom carved into rock, with a simple bed and a single dim lamp. The man from reference image 1, in sleep clothes, sits up in bed with his face tense with alarm, lit by the deep red glow of the watch on his wrist as he raises it to answer a call. Shadows fill the corners of the room.",
+      "width": 1024,
+      "height": 576,
+      "seed": 23078
+    }
+  ]
+}

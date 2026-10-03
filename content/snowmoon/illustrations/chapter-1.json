@@ -1,0 +1,85 @@
+{
+  "about": "Key moments for chapter 1, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c1-b005-toy-drone",
+      "chapter": 1,
+      "idx": 5,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "Wide shot on a quiet morning footpath under tall trees. A figure in a privacy robe walks along the path, seen from the side. Medieval-style houses of large clean stone bricks sit behind the trees, melting into leaves and plants. On a sidewalk branching off to the left, a young boy leaps up and grabs a small ball-shaped toy drone with feather-like rotors out of the air, while two smaller children ride tricycles nearby and their parents watch. Soft green light filtering through the leaves.",
+      "width": 1024,
+      "height": 576,
+      "seed": 1005
+    },
+    {
+      "id": "c1-b013-sky-bridge",
+      "chapter": 1,
+      "idx": 13,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "Wide view from the middle of a pedestrian sky bridge on a chilly, clear day. In the foreground a figure in a privacy robe stands at the railing, looking out. Below, a busy road runs straight for about two kilometers and then bends right, full of cars, small autonomous buses and little delivery vehicles. Beyond rises a mountain covered with trees, with a few fifteen-storey apartment buildings shaped like oversized medieval castle towers with many windows poking above the trees on its lower slope. Crisp light, a breeze stirring the leaves.",
+      "width": 1024,
+      "height": 576,
+      "seed": 1013
+    },
+    {
+      "id": "c1-b082-snatch",
+      "chapter": 1,
+      "idx": 82,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "Medium shot inside a crowded open-air concert field enclosed by a high soundproof wall behind tall trees, a metal band playing on a distant stage. In the foreground a figure in a privacy robe snatches a hand device from the grip of a large burly man in a plain shirt, who is looking away to the side in confusion. Behind them, concert-goers in band shirts turn and point their hand devices at another robed figure sprinting toward a fire exit. Energetic and chaotic, bright afternoon light mixed with stage lights.",
+      "width": 1024,
+      "height": 576,
+      "seed": 1082
+    },
+    {
+      "id": "c1-b089-autobus",
+      "chapter": 1,
+      "idx": 89,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "Interior of a nearly empty, clean autonomous city bus, seen from the middle of the aisle. On the left sit two figures in privacy robes, faces hidden, impossible to tell apart. On the right sits a teenager in ordinary clothes with a backpack, heading home from school. Along the inside walls hang two advertisement posters made only of pictures without words: one of a child, a middle-aged woman and an old man reading together in a classroom, the other of a cheerful yellow and green drink bottle. Wooded streets slide past the windows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 1089
+    },
+    {
+      "id": "c1-b132-food-boxes",
+      "chapter": 1,
+      "idx": 132,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/gladias.json",
+        "designs/characters/zven.json"
+      ],
+      "references": [
+        "cast/gladias-sheet",
+        "cast/zven-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot of a cozy family dining room, warm lamp light. The man from reference image 1 sets a paper bag full of plain unmarked takeout food boxes on the wooden table and hands a box to the boy from reference image 2, who reaches for it eagerly with a big grin. A woman and a teenage boy sit at the table, seen from behind. On a couch in the background, a girl sits curled up alone with her face turned away, absorbed in her hand device. Stone walls, plants by the window.",
+      "width": 1024,
+      "height": 576,
+      "seed": 1132
+    }
+  ]
+}

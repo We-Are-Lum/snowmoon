@@ -1,0 +1,95 @@
+{
+  "about": "Key moments for chapter 26, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c26-b002-plane-cabin",
+      "chapter": 26,
+      "idx": 2,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/gladias.json",
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/gladias-sheet",
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Inside a small enclosed private cabin on an aeroplane, four seats facing each other across a little table. The man from reference image 1 sits facing backward and the young man from reference image 2 sits facing forward, both gazing silently out the large window, calm and a little dreamy. Two other travelers sit with them, seen from behind. Through the window, a mostly flat green landscape stretches away, a row of small mountains, and a distant city among trees. Bright daylight.",
+      "width": 1024,
+      "height": 576,
+      "seed": 26002
+    },
+    {
+      "id": "c26-b075-seila-runs",
+      "chapter": 26,
+      "idx": 75,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/seila.json",
+        "designs/characters/gladias.json"
+      ],
+      "references": [
+        "cast/seila-sheet",
+        "cast/gladias-sheet"
+      ],
+      "props": [],
+      "prompt": "Wide shot of the quiet lobby of a calm, stone-walled government hotel with wooden furniture and potted plants. The woman from reference image 1 runs across the room from the far corner with her arms outstretched, her face lit with joy and relief. In the foreground the man from reference image 2 has just stepped out of a black car whose doors open straight into the room, turning toward her in surprise. Evening lamp light, muted greens and warm stone.",
+      "width": 1024,
+      "height": 576,
+      "seed": 26075
+    },
+    {
+      "id": "c26-b120-console-despair",
+      "chapter": 26,
+      "idx": 120,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot of the young man from reference image 1 sitting at a gaming-style console in a small dim room, wearing an earpiece and glasses that glow faintly with projected light. He clutches the edge of the console and cries out in despair, eyes wide. On the console screen, soft abstract colored shapes and a scattering of small drone silhouettes, one bursting into a small puff of light. Cool screen glow on his face, the rest of the room in shadow.",
+      "width": 1024,
+      "height": 576,
+      "seed": 26120
+    },
+    {
+      "id": "c26-b132-drone-escape",
+      "chapter": 26,
+      "idx": 132,
+      "setting": null,
+      "characters": [
+        "designs/characters/tafindel.json"
+      ],
+      "references": [
+        "cast/tafindel-sheet"
+      ],
+      "props": [],
+      "prompt": "Dramatic wide shot of a city street at dusk where every streetlight and window flickers chaotically. Two large flying drones speed low between the buildings, just above the street. On the back of each drone a person in a hooded silver thermal cloak clings on tightly. The nearer one is the man from reference image 1, his face tense and determined, the wind tugging at his hood. Behind them, smoke rises from the side of a grand residence. Cool blues and greys with flickering warm lights.",
+      "width": 1024,
+      "height": 576,
+      "seed": 26132
+    },
+    {
+      "id": "c26-b162-judges-booth",
+      "chapter": 26,
+      "idx": 162,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/gladias.json"
+      ],
+      "references": [
+        "cast/gladias-sheet"
+      ],
+      "props": [],
+      "prompt": "Interior of a small soundproof booth with padded walls and soft overhead light. The man from reference image 1 slides open the booth door and steps in. Five judges in plain dark formal clothing already sit around a small table, looking up at him with guarded, skeptical expressions; one older judge folds his arms. A tense, private meeting. Muted greens and stone greys, quiet warm light.",
+      "width": 1024,
+      "height": 576,
+      "seed": 26162
+    }
+  ]
+}

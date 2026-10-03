@@ -1,0 +1,13 @@
+{
+  "kind": "style",
+  "name": "Ink and watercolor",
+  "status": "starting point",
+  "about": "The project's starting style guide for seeded images. Contributors' style guides can replace it. Setting notes follow the book's world notes: Veridia is green, wooded, stone-built and calm; Dzego is low-rise, dense and electronic with playful cartoon aesthetics.",
+  "prompt": "Storybook illustration, fine ink linework with soft watercolor washes, gentle natural light, slightly stylized proportions, no text, no lettering, no writing, no logos, no numbers.",
+  "settings": {
+    "veridia": "Palette of muted greens, stone greys and warm earth tones; calm, clean, wooded, stone buildings blended with trees.",
+    "dzego": "Palette of warm night colors with pops of neon pink, cyan and yellow; dense low-rise streets, glowing shop lights, cute cartoon animal murals, a lively electronic feel.",
+    "united-cities": "Palette of cool blues, glass and concrete greys; a busy modern city of mixed old and new towers.",
+    "arctic": "Palette of icy whites, pale blues and steel; severe, orderly, crystalline architecture."
+  }
+}

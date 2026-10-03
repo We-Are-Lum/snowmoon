@@ -1,0 +1,80 @@
+{
+  "about": "Key moments for chapter 2, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c2-b003-electronics-street",
+      "chapter": 2,
+      "idx": 3,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/zei.json",
+        "designs/characters/fin.json"
+      ],
+      "references": [
+        "cast/zei-sheet",
+        "cast/fin-sheet"
+      ],
+      "props": [],
+      "prompt": "Wide street scene in a dense low-rise city on a warm day. The teenage boy from reference image 1 and the teenage boy from reference image 2 walk side by side along a sidewalk shaded by trees, chatting. On both sides, one- and two-storey shops glow with colored blinking lights, selling hand devices, watches, batteries and sensors, and small open workshops build gadgets inside. Several stairways lead down underground from the sidewalk. A small security drone flies overhead. Cute cartoon animal murals on the walls, shop lights shown only as glowing colored shapes.",
+      "width": 1024,
+      "height": 576,
+      "seed": 2003
+    },
+    {
+      "id": "c2-b038-foil-classroom",
+      "chapter": 2,
+      "idx": 38,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/zei.json",
+        "designs/characters/fin.json"
+      ],
+      "references": [
+        "cast/zei-sheet",
+        "cast/fin-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium-wide view of an underground classroom with rows of chairs full of teenage students. The walls are covered with a thick, hastily applied layer of crinkled silver foil, painted over with cute cartoon animals playing with gadgets and chemistry glassware against green trees and blue sky. At the front stand two large inflatable cartoon figures, a pig holding a calculator and a hamster holding a vial of green liquid, together holding up a plain blank banner. In a row of chairs the boy from reference image 1 sits beside the boy from reference image 2, both looking forward attentively.",
+      "width": 1024,
+      "height": 576,
+      "seed": 2038
+    },
+    {
+      "id": "c2-b099-blast",
+      "chapter": 2,
+      "idx": 99,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Dramatic medium shot of an underground classroom at the instant of an explosion in a neighboring room. Part of a foil-covered wall and the floor crumble inward in a burst of dust and stone fragments; chairs tip over and students duck and throw up their arms. In the center the boy from reference image 1 is knocked sideways off his chair, eyes wide in shock, clutching his left arm. Cartoon animal paintings on the foil are cracked and torn. Grey smoke rolls across the warm indoor light.",
+      "width": 1024,
+      "height": 576,
+      "seed": 2099
+    },
+    {
+      "id": "c2-b122-sweeping",
+      "chapter": 2,
+      "idx": 122,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/fin.json",
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/fin-sheet",
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Quiet aftermath in a damaged underground classroom, the last haze of smoke clearing. The boy from reference image 1 sweeps broken stone and debris into a pile against the wall with a broom. The boy from reference image 2 sits on a chair nearby, holding his left arm close to his body, tired but managing a small smile. A middle-aged instructor stands near the door, solemn. Torn silver foil and cracked cartoon animal paintings on the walls, empty chairs scattered around under warm indoor light.",
+      "width": 1024,
+      "height": 576,
+      "seed": 2122
+    }
+  ]
+}

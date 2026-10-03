@@ -1,0 +1,82 @@
+{
+  "about": "Key moments for chapter 25, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c25-b002-circle-game",
+      "chapter": 25,
+      "idx": 2,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/gladias.json",
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/gladias-sheet",
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Wide shot of a small enclosed room with no windows, lit by the soft glow of a table whose whole top is a screen. The man from reference image 1 and the young man from reference image 2 sit across from each other at the table. On the glowing tabletop, four rounded boxes each hold a small triangular pile of blue circles. The young man waits calmly with his hands folded; the man leans forward, studying the piles with a puzzled frown. Warm night colors, faint pink and cyan reflections on the walls.",
+      "width": 1024,
+      "height": 576,
+      "seed": 25002
+    },
+    {
+      "id": "c25-b017-tapping-circles",
+      "chapter": 25,
+      "idx": 17,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/gladias.json",
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/gladias-sheet",
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Close shot over a glowing tabletop screen in a dim enclosed room. Only a few blue circles remain in the rounded boxes on the table. The man from reference image 1 reaches out and taps a circle with one finger, hesitant, while across the table the young man from reference image 2 answers instantly, his finger already touching another circle, a faint knowing smile on his face. Soft light from the table glows up onto their faces.",
+      "width": 1024,
+      "height": 576,
+      "seed": 25017
+    },
+    {
+      "id": "c25-b075-next-question",
+      "chapter": 25,
+      "idx": 75,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/zei.json",
+        "designs/characters/gladias.json"
+      ],
+      "references": [
+        "cast/zei-sheet",
+        "cast/gladias-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot in a small enclosed room lit by a glowing tabletop. The young man from reference image 1 has shifted his posture, sitting upright and leaning in with a serious, searching look, the friendly game over. Across from him the man from reference image 2 sits back in his chair, his eyes wide with surprise at the sudden turn of the conversation. A hand device lies on the table beside them, its screen showing only soft abstract colored shapes. Warm night tones with touches of cyan.",
+      "width": 1024,
+      "height": 576,
+      "seed": 25075
+    },
+    {
+      "id": "c25-b096-call-on-watch",
+      "chapter": 25,
+      "idx": 96,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/gladias.json",
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/gladias-sheet",
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot in a small enclosed room with a softly glowing table. The man from reference image 1 lifts his wrist and taps the watch on it, about to place a call, his expression hopeful and determined. Beside him the young man from reference image 2 leans over a hand device, quickly sending a message, its screen showing only soft abstract colored shapes. Quiet, conspiratorial mood, warm amber light with faint pink and cyan accents.",
+      "width": 1024,
+      "height": 576,
+      "seed": 25096
+    }
+  ]
+}

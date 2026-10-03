@@ -1,0 +1,80 @@
+{
+  "about": "Key moments for chapter 28, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c28-b013-general-arrives",
+      "chapter": 28,
+      "idx": 13,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/lektor.json",
+        "designs/characters/den.json"
+      ],
+      "references": [
+        "cast/lektor-sheet",
+        "cast/den-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium wide shot of a plain conference room with a table and chairs. A middle-aged man, the man from reference image 1, steps in through the door wearing a crisp shirt styled like traditional military attire but comfortable for everyday wear, with a direct, wary expression. At the table, the man from reference image 2 rises slightly to greet him, calm and measured, while three younger people sit watching, seen from behind. Soft daylight through a window, muted greens and stone greys.",
+      "width": 1024,
+      "height": 576,
+      "seed": 28013
+    },
+    {
+      "id": "c28-b057-zven-sofa",
+      "chapter": 28,
+      "idx": 57,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/zven.json",
+        "designs/characters/seila.json"
+      ],
+      "references": [
+        "cast/zven-sheet",
+        "cast/seila-sheet"
+      ],
+      "props": [],
+      "prompt": "Lively medium shot of a hotel room with a sofa and warm lamps. The boy from reference image 1 bursts in and leaps onto the sofa, bouncing, holding a hand device whose screen shows only soft abstract colored shapes, his face bright with excitement. The woman from reference image 2 turns from the open door behind him, smiling with surprised delight. A man sits in an armchair in the background, seen from behind. Warm evening light, muted greens and earth tones.",
+      "width": 1024,
+      "height": 576,
+      "seed": 28057
+    },
+    {
+      "id": "c28-b064-lily-stands-up",
+      "chapter": 28,
+      "idx": 64,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/lily.json"
+      ],
+      "references": [
+        "cast/lily-sheet"
+      ],
+      "props": [],
+      "prompt": "A severe, orderly classroom with rows of identical pale desks and cold white light. The girl from reference image 1 stands up from her desk, chin raised, confidently explaining something with one hand gesturing, a thin band around her neck. At the front of the room a stern instructor in a stiff grey uniform scowls at her with crossed arms. Other students in matching outfits turn to stare. Icy whites, pale blues and steel greys.",
+      "width": 1024,
+      "height": 576,
+      "seed": 28064
+    },
+    {
+      "id": "c28-b091-tea-news",
+      "chapter": 28,
+      "idx": 91,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/gladias.json",
+        "designs/characters/seila.json"
+      ],
+      "references": [
+        "cast/gladias-sheet",
+        "cast/seila-sheet"
+      ],
+      "props": [],
+      "prompt": "Quiet medium shot of a hotel room by a window overlooking green treetops. The woman from reference image 1 pours herself a cup of tea from a pot at a small table, glancing up with curiosity. The man from reference image 2 stands nearby, lowering his wrist from a watch, with a calm, satisfied half smile as he shares good news. Soft morning light, muted greens, warm stone and wood.",
+      "width": 1024,
+      "height": 576,
+      "seed": 28091
+    }
+  ]
+}

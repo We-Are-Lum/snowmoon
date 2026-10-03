@@ -1,0 +1,49 @@
+{
+  "kind": "character",
+  "name": "Mov",
+  "slug": "mov",
+  "status": "starting point",
+  "about": "Mov is Gladias's friend in the Order of Steering, who shadows his meetings and tails suspects. The book does not describe his appearance, so this look is invented and contributors are welcome to replace it.",
+  "setting": "veridia",
+  "facts": [
+    {
+      "chapter": 3,
+      "idx": 32,
+      "quote": "you're not just someone about to join me as a Sentinel, you're a friend",
+      "fact": "A Sentinel in the Order and Gladias's friend."
+    },
+    {
+      "chapter": 3,
+      "idx": 29,
+      "quote": "Mov then opened up his privacy robe, and took out a large package from an inside pocket.",
+      "fact": "Wears a privacy robe with inside pockets."
+    },
+    {
+      "chapter": 20,
+      "idx": 50,
+      "quote": "Mov, who was already wearing his privacy robe",
+      "fact": "Wears the privacy robe in public."
+    },
+    {
+      "chapter": 20,
+      "idx": 60,
+      "quote": "Mov removed the hood on his privacy robe, a gesture to appear less threatening.",
+      "fact": "Lowers his hood to seem less threatening."
+    },
+    {
+      "chapter": 21,
+      "idx": 42,
+      "quote": "his shadowy friend Mov",
+      "fact": "Seila calls him Gladias's shadowy friend."
+    },
+    {
+      "chapter": 6,
+      "idx": 30,
+      "quote": "So I threw my surveillance bat into an innocuous spot",
+      "fact": "Uses small surveillance gadgets."
+    }
+  ],
+  "descriptor": "a man in his early forties, short and stocky, deep umber skin, a shaved head and a neat salt-and-pepper goatee, a wry half-smile, wearing a dark olive field jacket with many pockets over a slate-grey henley, khaki trousers and black boots",
+  "wears_privacy_robe_in_public": true,
+  "sheet_prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a man in his early forties, short and stocky, deep umber skin, a shaved head and a neat salt-and-pepper goatee, a wry half-smile, wearing a dark olive field jacket with many pockets over a slate-grey henley, khaki trousers and black boots."
+}

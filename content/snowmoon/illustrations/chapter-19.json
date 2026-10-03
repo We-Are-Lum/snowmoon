@@ -1,0 +1,93 @@
+{
+  "about": "Key moments for chapter 19, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c19-b026-security-drone",
+      "chapter": 19,
+      "idx": 26,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/gladias.json",
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/gladias-sheet",
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot in an underground cafeteria deep inside a mountain, where two large wall screens pose as windows showing a sunlit view over low city roofs and trees. The man from reference image 1 sits at a table, glancing sideways in mild alarm at a small palm-sized security drone hovering half a meter from his right ear. Across from him, the young man from reference image 2 looks on, relaxed and amused, with a few more small drones in the air behind him. Cool artificial light mixed with the screens' false daylight.",
+      "width": 1024,
+      "height": 576,
+      "seed": 19026
+    },
+    {
+      "id": "c19-b077-library-door",
+      "chapter": 19,
+      "idx": 77,
+      "setting": "dzego",
+      "characters": [],
+      "references": [],
+      "props": [],
+      "prompt": "Wide view down a carved stone tunnel to a large ornamented wooden door. To the left of the door, a painted mural of a hippopotamus reading a book in a marsh with green trees and a blue sky; to the right, a painted mural of a hamster sitting at a computer. Both murals balance playful cartoon charm with an air of mystery. A man and a young man, seen from behind, approach the door. Warm lamplight on rough rock walls.",
+      "width": 1024,
+      "height": 576,
+      "seed": 19077
+    },
+    {
+      "id": "c19-b098-download-cable",
+      "chapter": 19,
+      "idx": 98,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium-wide interior of a grand underground library. On one side, a towering two-level wall of paper books, with a walkway along the upper level and narrow book-lined openings leading into a maze. On the other side, open tables and a row of computer terminals. A woman librarian in a simple long robe plugs a data cable into a terminal and hands the other end to the young man from reference image 1, who holds out his hand device with eager curiosity. A man stands just behind him, seen from behind. Warm amber lamplight.",
+      "width": 1024,
+      "height": 576,
+      "seed": 19098
+    },
+    {
+      "id": "c19-b110-sealed-tea",
+      "chapter": 19,
+      "idx": 110,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/gladias.json",
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/gladias-sheet",
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot beside a tall wall of paper books in a warm underground library. The man from reference image 1 stands holding an open book of drawings of underground rooms, looking down in surprise as a small wheeled serving robot hands him tea in a fully sealed cup with a straw. In the background, far from the shelves, the young man from reference image 2 sits at a table with an open teacup. Warm amber lamplight, dust floating in the air.",
+      "width": 1024,
+      "height": 576,
+      "seed": 19110
+    },
+    {
+      "id": "c19-b115-waiting",
+      "chapter": 19,
+      "idx": 115,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/gladias.json",
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/gladias-sheet",
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium close shot at a library table. The man from reference image 1 and the young man from reference image 2 sit side by side sipping tea, both staring intently at a hand device propped on the table, its screen turned away from the viewer and casting a soft glow on their faces. A data cable runs from the device to a terminal. Two meters behind them, a curious woman librarian in a long robe hovers quietly, hands clasped. Tall bookshelves blur in the warm background.",
+      "width": 1024,
+      "height": 576,
+      "seed": 19115
+    }
+  ]
+}

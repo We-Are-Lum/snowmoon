@@ -1,0 +1,95 @@
+{
+  "about": "Key moments for chapter 27, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c27-b006-hotel-hug",
+      "chapter": 27,
+      "idx": 6,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/seila.json",
+        "designs/characters/gladias.json"
+      ],
+      "references": [
+        "cast/seila-sheet",
+        "cast/gladias-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot in a simple, tidy hotel room with stone walls and a window onto green trees. The woman from reference image 1 hugs the man from reference image 2, who stands with slumped shoulders and a sad, defeated expression, his eyes closed. Her face shows quiet comfort and a hint of determination, as if she is about to share an idea. Soft morning light, muted greens and warm earth tones.",
+      "width": 1024,
+      "height": 576,
+      "seed": 27006
+    },
+    {
+      "id": "c27-b031-forest-path",
+      "chapter": 27,
+      "idx": 31,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "Wide view of a narrow footpath in a cold wooded district. Three figures in privacy robes walk away from the viewer, leaning forward as a cold breeze pushes at their backs. On the near stretch of path, old stone houses stand on both sides; farther along, the houses give way to deep forest, and at the end of the path rises a small, natural-looking wooded hill. Bare branches and evergreens, cool overcast daylight, muted greens and stone greys.",
+      "width": 1024,
+      "height": 576,
+      "seed": 27031
+    },
+    {
+      "id": "c27-b040-roof-closing",
+      "chapter": 27,
+      "idx": 40,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [
+        "designs/props/privacy-robe-open.json"
+      ],
+      "prompt": "Inside a circular room at the very top of a hill, a curved bench running around its edge and a safety railing around a staircase opening in the middle. Overhead, the open sky is being covered as a round roof slowly slides closed, leaving a narrowing slice of pale sky. A man in a privacy robe with its hood down and face cover off stands by a button on the wall, smiling politely. Three figures in privacy robes look up at the closing roof. Cool daylight fading to warm interior light.",
+      "width": 1024,
+      "height": 576,
+      "seed": 27040
+    },
+    {
+      "id": "c27-b071-tea-robot",
+      "chapter": 27,
+      "idx": 71,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/gladias.json",
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/gladias-sheet",
+        "cast/zei-sheet"
+      ],
+      "props": [
+        "designs/props/privacy-robe-open.json"
+      ],
+      "prompt": "Inside a round room atop a hill, with a curved bench along the wall. The man from reference image 1 and the young man from reference image 2 sit on the bench in loose dark purple robes, hoods pushed back and face covers removed, turning in surprise toward the staircase opening. A small robot climbs up the last steps with a lifting and sliding motion, carrying a tray of four cups of steaming tea. A woman and their host sit nearby, seen from behind. Warm, calm interior light.",
+      "width": 1024,
+      "height": 576,
+      "seed": 27071
+    },
+    {
+      "id": "c27-b114-countdown-chant",
+      "chapter": 27,
+      "idx": 114,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/zei.json",
+        "designs/characters/bai.json"
+      ],
+      "references": [
+        "cast/zei-sheet",
+        "cast/bai-sheet"
+      ],
+      "props": [],
+      "prompt": "Wide shot of a hotel meeting room where seven people sit around a long table facing a wall lit by a projection of soft glowing abstract colored shapes. In the foreground the young man from reference image 1 and the young woman from reference image 2 lean forward, laughing and chanting together with fists raised; the others at the table, seen from behind and in soft focus, join in. Cups of tea on the table. Excited, playful energy, warm indoor light with muted greens.",
+      "width": 1024,
+      "height": 576,
+      "seed": 27114
+    }
+  ]
+}

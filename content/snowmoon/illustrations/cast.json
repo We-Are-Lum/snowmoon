@@ -1,0 +1,248 @@
+{
+  "about": "Reference sheets for the starting cast. Each profile's sheet is used as a reference image whenever that character appears.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "gladias-sheet",
+      "chapter": null,
+      "idx": null,
+      "characters": [],
+      "setting": "veridia",
+      "prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a man of about forty, medium height and slim, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short brown beard and thoughtful hazel eyes, wearing a moss-green linen overshirt over a cream crewneck, charcoal trousers, brown leather walking shoes, a slim grey neck band and a plain wristwatch.",
+      "width": 1024,
+      "height": 576,
+      "seed": 5001
+    },
+    {
+      "id": "seila-sheet",
+      "chapter": null,
+      "idx": null,
+      "characters": [],
+      "setting": "veridia",
+      "prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a rust-orange wrap cardigan over an oatmeal linen blouse, olive wide-leg trousers and tan ankle boots.",
+      "width": 1024,
+      "height": 576,
+      "seed": 5002
+    },
+    {
+      "id": "zven-sheet",
+      "chapter": null,
+      "idx": null,
+      "characters": [],
+      "setting": "veridia",
+      "prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a boy of about eleven, small and wiry, warm light-brown skin, a mop of curly dark-brown hair, a sprinkle of freckles and a wide gap-toothed grin, wearing a sunny mustard-yellow cotton t-shirt, green knee-length shorts, striped socks and scuffed white sneakers.",
+      "width": 1024,
+      "height": 576,
+      "seed": 5003
+    },
+    {
+      "id": "lily-sheet",
+      "chapter": null,
+      "idx": null,
+      "characters": [],
+      "setting": "veridia",
+      "prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a girl of about thirteen, slight and a little hunched, warm brown skin, long dark-brown hair in a low side ponytail with a heavy fringe falling over her eyes, wearing an oversized heather-grey hooded sweater with the sleeves pulled over her hands, dark navy leggings and white canvas sneakers.",
+      "width": 1024,
+      "height": 576,
+      "seed": 5004
+    },
+    {
+      "id": "febric-sheet",
+      "chapter": null,
+      "idx": null,
+      "characters": [],
+      "setting": "veridia",
+      "prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a lanky young man of about seventeen, tall and narrow-shouldered, pale skin with rosy cheeks, straight ash-blond hair falling over his ears and rectangular black-framed glasses, wearing a faded teal hoodie, rust-brown corduroy trousers and grey sneakers, holding a small handheld screen linked by a cable to a compact grey box.",
+      "width": 1024,
+      "height": 576,
+      "seed": 5005
+    },
+    {
+      "id": "hreda-sheet",
+      "chapter": null,
+      "idx": null,
+      "characters": [],
+      "setting": "veridia",
+      "prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a girl of about fifteen, average height and sturdy, fair skin with freckles, ash-blond hair cut in a short practical bob held back with a clip, bright grey eyes, wearing a brick-red knitted vest over a white collared shirt, a brown checked skirt over dark tights and sturdy lace-up boots.",
+      "width": 1024,
+      "height": 576,
+      "seed": 5006
+    },
+    {
+      "id": "vil-sheet",
+      "chapter": null,
+      "idx": null,
+      "characters": [],
+      "setting": "veridia",
+      "prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a broad-shouldered man in his mid-forties, tall and heavyset, fair ruddy skin, close-cropped thinning ash-blond hair and a full sandy beard with laugh lines around the eyes, wearing a chunky oatmeal knitted sweater, brown canvas work trousers and sturdy hiking boots.",
+      "width": 1024,
+      "height": 576,
+      "seed": 5007
+    },
+    {
+      "id": "daia-sheet",
+      "chapter": null,
+      "idx": null,
+      "characters": [],
+      "setting": "veridia",
+      "prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a woman in her mid-forties, short and round-faced, light tan skin, thick black hair streaked with silver piled in a high bun, a warm crinkled smile, wearing a sage-green linen tunic dress over cream leggings, a terracotta knitted shawl and brown clogs.",
+      "width": 1024,
+      "height": 576,
+      "seed": 5008
+    },
+    {
+      "id": "mov-sheet",
+      "chapter": null,
+      "idx": null,
+      "characters": [],
+      "setting": "veridia",
+      "prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a man in his early forties, short and stocky, deep umber skin, a shaved head and a neat salt-and-pepper goatee, a wry half-smile, wearing a dark olive field jacket with many pockets over a slate-grey henley, khaki trousers and black boots.",
+      "width": 1024,
+      "height": 576,
+      "seed": 5009
+    },
+    {
+      "id": "delwart-sheet",
+      "chapter": null,
+      "idx": null,
+      "characters": [],
+      "setting": "veridia",
+      "prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a man of indeterminate middle age, of average height and lean, pale skin, a long calm face with neatly combed straight grey hair parted at the side, clean-shaven, a fixed forward gaze, wearing a plain beige knit polo shirt, pressed grey slacks and plain grey shoes.",
+      "width": 1024,
+      "height": 576,
+      "seed": 5010
+    },
+    {
+      "id": "ephelion-sheet",
+      "chapter": null,
+      "idx": null,
+      "characters": [],
+      "setting": "arctic",
+      "prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a tall, imposing man in his fifties, pale skin with a cool undertone, a sharply chiseled face, long platinum-white hair swept back to the shoulders and piercing pale-blue eyes, wearing a long fitted ice-blue high-collared coat with silver trim over white clothing and white gloves.",
+      "width": 1024,
+      "height": 576,
+      "seed": 5011
+    },
+    {
+      "id": "verdow-sheet",
+      "chapter": null,
+      "idx": null,
+      "characters": [],
+      "setting": "veridia",
+      "prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a man in his late fifties, tall and lean, medium brown skin, close-cropped white hair and a short white beard, warm deep-set eyes, wearing a long deep-green ceremonial robe with a high collar and a simple bronze clasp over a cream shirt, dark trousers and brown shoes.",
+      "width": 1024,
+      "height": 576,
+      "seed": 5012
+    },
+    {
+      "id": "lektor-sheet",
+      "chapter": null,
+      "idx": null,
+      "characters": [],
+      "setting": "veridia",
+      "prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a middle-aged man of about fifty, tall and solidly built, light olive skin, short iron-grey hair in a crew cut, a square clean-shaven jaw and an upright bearing, wearing a structured khaki-brown shirt with epaulettes and buttoned chest pockets, dark brown trousers and polished brown boots.",
+      "width": 1024,
+      "height": 576,
+      "seed": 5013
+    },
+    {
+      "id": "zei-sheet",
+      "chapter": null,
+      "idx": null,
+      "characters": [],
+      "setting": "dzego",
+      "prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one bright electric-blue streak, quick dark eyes, wearing an orange zip-up tech jacket with reflective trim over a black t-shirt, grey cargo pants with many pockets, chunky white sneakers and a slim neck band.",
+      "width": 1024,
+      "height": 576,
+      "seed": 5014
+    },
+    {
+      "id": "bai-sheet",
+      "chapter": null,
+      "idx": null,
+      "characters": [],
+      "setting": "dzego",
+      "prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a young woman of about eighteen, tall and athletic, dark brown skin, hair pulled into a high puffy ponytail dyed magenta at the ends, a confident sly grin, wearing a cropped lime-green utility jacket over a white tank top, black jogger trousers, chunky black boots and a hip pouch.",
+      "width": 1024,
+      "height": 576,
+      "seed": 5015
+    },
+    {
+      "id": "fin-sheet",
+      "chapter": null,
+      "idx": null,
+      "characters": [],
+      "setting": "dzego",
+      "prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a young man of about eighteen, stocky and shorter than average, pale freckled skin, a shaggy mop of copper-red hair and a wide friendly face, wearing a cherry-red hooded windbreaker over a white t-shirt, tan cargo trousers, yellow sneakers and a well-worn backpack.",
+      "width": 1024,
+      "height": 576,
+      "seed": 5016
+    },
+    {
+      "id": "mu-sheet",
+      "chapter": null,
+      "idx": null,
+      "characters": [],
+      "setting": "dzego",
+      "prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a woman in her early sixties, small and wiry, medium brown skin, short silver hair in a sharp asymmetric cut, keen eyes behind thin red-framed glasses, wearing a tailored charcoal tech vest with bright yellow piping over a long-sleeved cobalt-blue top, slim black trousers and soft grey shoes.",
+      "width": 1024,
+      "height": 576,
+      "seed": 5017
+    },
+    {
+      "id": "den-sheet",
+      "chapter": null,
+      "idx": null,
+      "characters": [],
+      "setting": "dzego",
+      "prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a composed man in his fifties, tall and gaunt, light beige skin, long black hair streaked with grey tied in a low knot, high cheekbones and a still, unreadable expression, wearing a long hooded shadow-grey cloak with faint geometric patterns along the hem over a black high-necked tunic.",
+      "width": 1024,
+      "height": 576,
+      "seed": 5018
+    },
+    {
+      "id": "min-sheet",
+      "chapter": null,
+      "idx": null,
+      "characters": [],
+      "setting": "dzego",
+      "prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a cheerful woman in her mid-forties, short and plump, light golden-tan skin, chin-length black hair with a few grey strands held back by a bright red headband, a round face with smile lines, wearing a coral-pink quilted jacket over a patterned yellow blouse, navy trousers and white sneakers.",
+      "width": 1024,
+      "height": 576,
+      "seed": 5019
+    },
+    {
+      "id": "deluin-sheet",
+      "chapter": null,
+      "idx": null,
+      "characters": [],
+      "setting": "united-cities",
+      "prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater with a light grey hood, dark green trousers and sturdy brown boots.",
+      "width": 1024,
+      "height": 576,
+      "seed": 5020
+    },
+    {
+      "id": "jahn-sheet",
+      "chapter": null,
+      "idx": null,
+      "characters": [],
+      "setting": "united-cities",
+      "prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a man in his late thirties, tall and lanky, light brown skin, short curly black hair, a thin moustache and an easy smile, wearing a camel-brown corduroy blazer over a sky-blue button-up shirt, dark jeans and brown loafers, with a slim laptop tucked under one arm.",
+      "width": 1024,
+      "height": 576,
+      "seed": 5021
+    },
+    {
+      "id": "tafindel-sheet",
+      "chapter": null,
+      "idx": null,
+      "characters": [],
+      "setting": "united-cities",
+      "prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a young man in his early twenties, of medium build, deep brown skin, short black hair in tight coils with a neat side part, clean-shaven and composed, wearing a dark navy tailored jacket with a mandarin collar over a crisp white shirt, grey trousers and black shoes.",
+      "width": 1024,
+      "height": 576,
+      "seed": 5022
+    }
+  ]
+}

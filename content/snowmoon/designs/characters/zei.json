@@ -1,0 +1,67 @@
+{
+  "kind": "character",
+  "name": "Zei Leimin",
+  "slug": "zei",
+  "status": "starting point",
+  "about": "Zei Leimin is an eighteen-year-old Minpentai game champion from Pafogai Du in Dzego, and one of the book's three leads. The book gives his age and a healed arm injury but no looks, so this appearance is invented and contributors are welcome to replace it.",
+  "setting": "dzego",
+  "facts": [
+    {
+      "chapter": 19,
+      "idx": 61,
+      "quote": "the recipient 'is successful' and is 18 years old",
+      "fact": "18 years old (a message aimed at him)."
+    },
+    {
+      "chapter": 4,
+      "idx": 79,
+      "quote": "a high-school programming game",
+      "fact": "Plays Minpentai, a high-school programming game."
+    },
+    {
+      "chapter": 5,
+      "idx": 3,
+      "quote": "\"Come on, Mom!\", he shouted.",
+      "fact": "Lives with his mother, Min."
+    },
+    {
+      "chapter": 2,
+      "idx": 106,
+      "quote": "trying to figure out if his arm was injured enough to be worth complaining",
+      "fact": "Injured his arm in a bombing in chapter 2."
+    },
+    {
+      "chapter": 9,
+      "idx": 75,
+      "quote": "That arm had been broken and taken a month to heal",
+      "fact": "His left arm was broken and healed after a month."
+    },
+    {
+      "chapter": 4,
+      "idx": 82,
+      "quote": "offering glasses attached to a long cable",
+      "fact": "Wears cabled display glasses only at game consoles."
+    },
+    {
+      "chapter": 4,
+      "idx": 67,
+      "quote": "You're a math guy, not a diplomat.",
+      "fact": "A math guy."
+    },
+    {
+      "chapter": 29,
+      "idx": 2,
+      "quote": "jackets covered in a mixture of white and grey",
+      "fact": "Wears a white-and-grey jacket in the snow."
+    },
+    {
+      "chapter": 29,
+      "idx": 113,
+      "quote": "Zei whispered into his neck band",
+      "fact": "Uses a neck band and watch."
+    }
+  ],
+  "descriptor": "a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one bright electric-blue streak, quick dark eyes, wearing an orange zip-up tech jacket with reflective trim over a black t-shirt, grey cargo pants with many pockets, chunky white sneakers and a slim neck band",
+  "wears_privacy_robe_in_public": false,
+  "sheet_prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one bright electric-blue streak, quick dark eyes, wearing an orange zip-up tech jacket with reflective trim over a black t-shirt, grey cargo pants with many pockets, chunky white sneakers and a slim neck band."
+}

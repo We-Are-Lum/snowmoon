@@ -1,0 +1,82 @@
+{
+  "about": "Key moments for chapter 16, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c16-b004-delwart-confronted",
+      "chapter": 16,
+      "idx": 4,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/gladias.json",
+        "designs/characters/delwart.json"
+      ],
+      "references": [
+        "cast/gladias-sheet",
+        "cast/delwart-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot inside a small, windowless soundproof booth with foil-lined walls, a narrow table and two benches. The man from reference image 1 sits on one bench, leaning forward angrily, hands pressed flat on the table, glaring. Across from him, the man from reference image 2 looks down at the table with a sorry, guilty expression, shoulders hunched. Neither wears a hood or face cover. Dim, even light, a tense and silent moment.",
+      "width": 1024,
+      "height": 576,
+      "seed": 16004
+    },
+    {
+      "id": "c16-b032-survival-food",
+      "chapter": 16,
+      "idx": 32,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "Wide shot of a footpath through a wooded neighborhood on an unusually hot day, tall trees overhead and stone houses on both sides, harsh sunlight breaking through the leaves. A figure in a privacy robe walks slowly in the heat. It passes a stone house that sells traditional food, where a plain blank paper sheet has been hastily taped at an angle over a painted poster, beside stacked sealed packages of preserved food in the window. Dappled light, muted greens and warm stone.",
+      "width": 1024,
+      "height": 576,
+      "seed": 16032
+    },
+    {
+      "id": "c16-b060-helisport-broadcast",
+      "chapter": 16,
+      "idx": 60,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/gladias.json",
+        "designs/characters/febric.json"
+      ],
+      "references": [
+        "cast/gladias-sheet",
+        "cast/febric-sheet"
+      ],
+      "props": [
+        "designs/props/privacy-robe-open.json"
+      ],
+      "prompt": "Medium shot inside a neighborhood restaurant at midday. The man from reference image 1, in a loose dark purple robe with the hood down, the face cover off and the front partly unzipped, sits beside the young man from reference image 2; both watch a wall screen with delight. On the screen, players in purple and yellow shirts fly in caged personal copters, and a blue ball lands on a circular board mounted high on a pole, knocking down several of ten yellow pins. Plates of food on the table.",
+      "width": 1024,
+      "height": 576,
+      "seed": 16060
+    },
+    {
+      "id": "c16-b110-trip-news",
+      "chapter": 16,
+      "idx": 110,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/seila.json",
+        "designs/characters/gladias.json"
+      ],
+      "references": [
+        "cast/seila-sheet",
+        "cast/gladias-sheet"
+      ],
+      "props": [
+        "designs/props/privacy-robe-open.json"
+      ],
+      "prompt": "Medium shot inside a warm, cozy stone family home in the evening, lamps lit, plants by the window, a wooden table. The woman from reference image 1 has turned from across the room and stares in surprise and doubt, her arms folding. Near the door, the man from reference image 2, just home and still in a loose dark purple robe with the hood pushed back, stands with a hopeful, slightly sheepish look. Soft amber lamplight, trees darkening outside the window.",
+      "width": 1024,
+      "height": 576,
+      "seed": 16110
+    }
+  ]
+}

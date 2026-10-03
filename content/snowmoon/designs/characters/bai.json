@@ -1,0 +1,55 @@
+{
+  "kind": "character",
+  "name": "Bai Jahen",
+  "slug": "bai",
+  "status": "starting point",
+  "about": "Bai Jahen is Zei's Minpentai rival from Pafogai Du, then his closest ally. The book says she is about Zei's age but does not describe her looks, so this appearance is invented and contributors are welcome to replace it.",
+  "setting": "dzego",
+  "facts": [
+    {
+      "chapter": 4,
+      "idx": 70,
+      "quote": "Another woman walked in, about the same age as Zei.",
+      "fact": "A young woman about Zei's age (18)."
+    },
+    {
+      "chapter": 4,
+      "idx": 73,
+      "quote": "put her hand on Zei's shoulder",
+      "fact": "She/her; confident and teasing."
+    },
+    {
+      "chapter": 9,
+      "idx": 13,
+      "quote": "My mom is DEAD! My dad too.",
+      "fact": "Orphaned."
+    },
+    {
+      "chapter": 9,
+      "idx": 17,
+      "quote": "Do side jobs even while I was in high school.",
+      "fact": "Self-made; worked side jobs in high school."
+    },
+    {
+      "chapter": 5,
+      "idx": 4,
+      "quote": "Bai followed along behind, carrying a shopping bag.",
+      "fact": "Seen carrying a shopping bag on the Freetown trip."
+    },
+    {
+      "chapter": 7,
+      "idx": 30,
+      "quote": "Bai's grin faltered for a moment, then returned.",
+      "fact": "Often grinning."
+    },
+    {
+      "chapter": 24,
+      "idx": 48,
+      "quote": "I got second place in the Pafogai Du Minpe",
+      "fact": "Second place in the Pafogai Du Minpentai championship."
+    }
+  ],
+  "descriptor": "a young woman of about eighteen, tall and athletic, dark brown skin, hair pulled into a high puffy ponytail dyed magenta at the ends, a confident sly grin, wearing a cropped lime-green utility jacket over a white tank top, black jogger trousers, chunky black boots and a hip pouch",
+  "wears_privacy_robe_in_public": false,
+  "sheet_prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a young woman of about eighteen, tall and athletic, dark brown skin, hair pulled into a high puffy ponytail dyed magenta at the ends, a confident sly grin, wearing a cropped lime-green utility jacket over a white tank top, black jogger trousers, chunky black boots and a hip pouch."
+}

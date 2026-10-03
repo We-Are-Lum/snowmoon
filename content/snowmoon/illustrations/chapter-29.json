@@ -1,0 +1,87 @@
+{
+  "about": "Key moments for chapter 29, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c29-b002-snowy-hill-sunrise",
+      "chapter": 29,
+      "idx": 2,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/zei.json",
+        "designs/characters/mu.json"
+      ],
+      "references": [
+        "cast/zei-sheet",
+        "cast/mu-sheet"
+      ],
+      "props": [],
+      "prompt": "Wide shot of a snowy hilltop at sunrise. The young man from reference image 1 and the woman from reference image 2 stand side by side in thick white-and-grey patterned winter jackets, cold wind blowing snow into their faces. Below and around them, a pine forest heavy with thick white snow stretches to the horizon. The sun has just risen above the distant trees, casting long pale golden light across the snow. Calm, serious expressions. Icy whites, pale blues, deep pine green.",
+      "width": 1024,
+      "height": 576,
+      "seed": 29002
+    },
+    {
+      "id": "c29-b021-briefing-room",
+      "chapter": 29,
+      "idx": 21,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/lektor.json",
+        "designs/characters/den.json"
+      ],
+      "references": [
+        "cast/lektor-sheet",
+        "cast/den-sheet"
+      ],
+      "props": [],
+      "prompt": "A cramped briefing room in a makeshift bunker, packed with several dozen commanders in winter jackets and military shirts sitting shoulder to shoulder on benches. At the front, the middle-aged man from reference image 1 stands beside a large wall screen showing a map of forest and coastline with four broad colored arrows, no labels. The man from reference image 2 sits in the front row, answering him with a confident nod. Harsh overhead light, serious faces.",
+      "width": 1024,
+      "height": 576,
+      "seed": 29021
+    },
+    {
+      "id": "c29-b038-drones-at-sundown",
+      "chapter": 29,
+      "idx": 38,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [],
+      "prompt": "Epic wide view from a snowy hilltop at sunset. Three small figures in white-and-grey winter jackets stand in the foreground, seen from behind. Below them, thousands of snowmobile-like armed drones wait in long rows at the edge of a snow-laden pine forest. Thin silver fiber optic cables trail from the rear of the largest drones, glinting in the low orange sun and stretching back as far as the eye can see. One drone carries a stack of boxed printers. Icy whites, long blue shadows.",
+      "width": 1024,
+      "height": 576,
+      "seed": 29038
+    },
+    {
+      "id": "c29-b070-copters-launch",
+      "chapter": 29,
+      "idx": 70,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [],
+      "prompt": "Night battle scene over a snowy pine forest, seen from above the treetops. Large boxes on the backs of heavy snow drones have opened, and a swarm of small sport copters and delivery copters rises out of them into the dark sky, their lights streaking. Below, rows of snow drones advance between the trees, distant flashes of light on the horizon and drifting smoke. No people visible. Deep blues, cold white snow, bright small points of light.",
+      "width": 1024,
+      "height": 576,
+      "seed": 29070
+    },
+    {
+      "id": "c29-b109-zei-weeps",
+      "chapter": 29,
+      "idx": 109,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/zei.json"
+      ],
+      "references": [
+        "cast/zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Close medium shot of the young man from reference image 1 alone at a console in a dim underground bunker room, wearing glasses that glow faintly, an earpiece and a white-and-grey jacket. Tears run down his face and his shoulders are hunched in grief. Beside him on the table sits a half-finished can of energy drink. The console screen glows with soft abstract colored shapes. Cold blue screen light, deep shadows, a heavy, quiet mood.",
+      "width": 1024,
+      "height": 576,
+      "seed": 29109
+    }
+  ]
+}

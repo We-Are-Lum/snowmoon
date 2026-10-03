@@ -1,0 +1,43 @@
+{
+  "kind": "character",
+  "name": "Min",
+  "slug": "min",
+  "status": "starting point",
+  "about": "Min is Zei's mother in Pafogai Du, who travels abroad for the first time with him. The book does not describe her appearance, so this look is invented and contributors are welcome to replace it.",
+  "setting": "dzego",
+  "facts": [
+    {
+      "chapter": 5,
+      "idx": 4,
+      "quote": "Zei's mother, Min, hurried forward",
+      "fact": "Zei's mother."
+    },
+    {
+      "chapter": 5,
+      "idx": 7,
+      "quote": "Actually my first time abroad.",
+      "fact": "Has not travelled abroad before."
+    },
+    {
+      "chapter": 5,
+      "idx": 26,
+      "quote": "Mom said she needs to sleep",
+      "fact": "Tired after travel."
+    },
+    {
+      "chapter": 7,
+      "idx": 138,
+      "quote": "He had been hoping to be able to buy his mom a new compute box",
+      "fact": "Zei wants to buy her a compute box."
+    },
+    {
+      "chapter": 9,
+      "idx": 140,
+      "quote": "his mom had already watched him heal from one bomb",
+      "fact": "Watched Zei recover from his injury."
+    }
+  ],
+  "descriptor": "a cheerful woman in her mid-forties, short and plump, light golden-tan skin, chin-length black hair with a few grey strands held back by a bright red headband, a round face with smile lines, wearing a coral-pink quilted jacket over a patterned yellow blouse, navy trousers and white sneakers",
+  "wears_privacy_robe_in_public": false,
+  "sheet_prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a cheerful woman in her mid-forties, short and plump, light golden-tan skin, chin-length black hair with a few grey strands held back by a bright red headband, a round face with smile lines, wearing a coral-pink quilted jacket over a patterned yellow blouse, navy trousers and white sneakers."
+}

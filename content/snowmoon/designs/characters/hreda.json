@@ -1,0 +1,55 @@
+{
+  "kind": "character",
+  "name": "Hreda",
+  "slug": "hreda",
+  "status": "starting point",
+  "about": "Hreda is the daughter of Vil and Daia, the co-family who share child-raising with Gladias and Seila, and a gifted young mathematician. The book does not describe her appearance, so this look is invented and contributors are welcome to replace it.",
+  "setting": "veridia",
+  "facts": [
+    {
+      "chapter": 1,
+      "idx": 125,
+      "quote": "Febric and Hreda were from their co-family, Uncle Vil and Aunt Daia",
+      "fact": "Child of Vil and Daia; Febric's sibling."
+    },
+    {
+      "chapter": 1,
+      "idx": 116,
+      "quote": "Hreda will be back from after-school number theory in a longhour",
+      "fact": "School-age; attends after-school number theory."
+    },
+    {
+      "chapter": 13,
+      "idx": 55,
+      "quote": "\"Ninety-six percent\", Hreda replied.",
+      "fact": "Strong exam results in math."
+    },
+    {
+      "chapter": 17,
+      "idx": 103,
+      "quote": "I'm in the top five percent in math in my class",
+      "fact": "Still in school; top of her math class."
+    },
+    {
+      "chapter": 8,
+      "idx": 117,
+      "quote": "when she was recovering from that accident years ago",
+      "fact": "Had an accident years ago and recovered; no lasting injury mentioned."
+    },
+    {
+      "chapter": 17,
+      "idx": 101,
+      "quote": "we'll get to ski off mountains wearing a copter",
+      "fact": "Outdoorsy and enthusiastic."
+    },
+    {
+      "chapter": 31,
+      "idx": 85,
+      "quote": "I'm so excited to see Mom!",
+      "fact": "Has a mother (Daia)."
+    }
+  ],
+  "descriptor": "a girl of about fifteen, average height and sturdy, fair skin with freckles, ash-blond hair cut in a short practical bob held back with a clip, bright grey eyes, wearing a brick-red knitted vest over a white collared shirt, a brown checked skirt over dark tights and sturdy lace-up boots",
+  "wears_privacy_robe_in_public": false,
+  "sheet_prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a girl of about fifteen, average height and sturdy, fair skin with freckles, ash-blond hair cut in a short practical bob held back with a clip, bright grey eyes, wearing a brick-red knitted vest over a white collared shirt, a brown checked skirt over dark tights and sturdy lace-up boots."
+}

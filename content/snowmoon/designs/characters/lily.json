@@ -1,0 +1,67 @@
+{
+  "kind": "character",
+  "name": "Lily",
+  "slug": "lily",
+  "status": "starting point",
+  "about": "Lily is Gladias and Seila's daughter, who struggles at school and keeps to herself. The book does not describe her appearance, so this look is invented and contributors are welcome to replace it.",
+  "setting": "veridia",
+  "facts": [
+    {
+      "chapter": 24,
+      "idx": 6,
+      "quote": "his daughter's safety",
+      "fact": "Gladias's daughter."
+    },
+    {
+      "chapter": 1,
+      "idx": 125,
+      "quote": "Zven and Lily were theirs",
+      "fact": "Child of Gladias and Seila."
+    },
+    {
+      "chapter": 24,
+      "idx": 13,
+      "quote": "Anything for my sister.",
+      "fact": "Zven's sister."
+    },
+    {
+      "chapter": 1,
+      "idx": 117,
+      "quote": "Lily slowly walked out, her eyes looking to the ground.",
+      "fact": "Withdrawn body language, eyes down."
+    },
+    {
+      "chapter": 1,
+      "idx": 119,
+      "quote": "Sixty percent on the history exam.",
+      "fact": "School-age; struggles with exams."
+    },
+    {
+      "chapter": 1,
+      "idx": 124,
+      "quote": "Lily took out her hand device, and began intently watching and quickly tapping on the screen",
+      "fact": "Habitually absorbed in a game on her hand device."
+    },
+    {
+      "chapter": 17,
+      "idx": 108,
+      "quote": "She prefers summer, she doesn't like the cold as much.",
+      "fact": "Dislikes the cold."
+    },
+    {
+      "chapter": 28,
+      "idx": 78,
+      "quote": "unrestricted camera surveillance of our whole country's teenagers to bring our loved ones home",
+      "fact": "Implied to be a teenager."
+    },
+    {
+      "chapter": 28,
+      "idx": 84,
+      "quote": "she is in a boarding school",
+      "fact": "Later attends a boarding school (age-consistent with a young teen)."
+    }
+  ],
+  "descriptor": "a girl of about thirteen, slight and a little hunched, warm brown skin, long dark-brown hair in a low side ponytail with a heavy fringe falling over her eyes, wearing an oversized heather-grey hooded sweater with the sleeves pulled over her hands, dark navy leggings and white canvas sneakers",
+  "wears_privacy_robe_in_public": false,
+  "sheet_prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a girl of about thirteen, slight and a little hunched, warm brown skin, long dark-brown hair in a low side ponytail with a heavy fringe falling over her eyes, wearing an oversized heather-grey hooded sweater with the sleeves pulled over her hands, dark navy leggings and white canvas sneakers."
+}

@@ -1,0 +1,37 @@
+{
+  "kind": "character",
+  "name": "Tafindel",
+  "slug": "tafindel",
+  "status": "starting point",
+  "about": "Tafindel is the son of Redshire's president, held by the Arctics after Redshire is annexed. The book gives no age or appearance, so this look is invented and contributors are welcome to replace it.",
+  "setting": "united-cities",
+  "facts": [
+    {
+      "chapter": 15,
+      "idx": 10,
+      "quote": "The president's son, Tafindel, is believed to be in Arctic captivity.",
+      "fact": "Son of Redshire's president."
+    },
+    {
+      "chapter": 26,
+      "idx": 88,
+      "quote": "drop down a rope for him to tie around his waist and hold on to",
+      "fact": "Male; physically able to hold on to a rope during a rescue."
+    },
+    {
+      "chapter": 26,
+      "idx": 132,
+      "quote": "They were both wearing thermal cloaks.",
+      "fact": "Wears a thermal cloak during the rescue."
+    },
+    {
+      "chapter": 31,
+      "idx": 60,
+      "quote": "Tafindel is recommending that we play a little bit of hardball.",
+      "fact": "Later gives political recommendations, which suggests an adult."
+    }
+  ],
+  "descriptor": "a young man in his early twenties, of medium build, deep brown skin, short black hair in tight coils with a neat side part, clean-shaven and composed, wearing a dark navy tailored jacket with a mandarin collar over a crisp white shirt, grey trousers and black shoes",
+  "wears_privacy_robe_in_public": false,
+  "sheet_prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a young man in his early twenties, of medium build, deep brown skin, short black hair in tight coils with a neat side part, clean-shaven and composed, wearing a dark navy tailored jacket with a mandarin collar over a crisp white shirt, grey trousers and black shoes."
+}

@@ -38,13 +38,33 @@ def sha256_file(path):
     return hashlib.sha256(Path(path).read_bytes()).hexdigest()
 
 
+def load(rel):
+    return json.loads((CONTENT / rel).read_text())
+
+
+def reference_paths(job, out):
+    """References are earlier renders: "cast/zei-sheet" is images-out/cast/zei-sheet.png.
+    A bare id refers to the same batch."""
+    refs = job.get("references") or ([job["reference"]] if job.get("reference") else [])
+    return [str((ROOT / "images-out" / r) if "/" in r else (out / r)).removesuffix(".png") + ".png" for r in refs]
+
+
 def compose_prompt(job, style):
+    """Scene first, then who the references show, then props, then style.
+
+    Characters are described, never named: a name in the prompt tends to get
+    painted onto the picture as lettering.
+    """
     parts = [job["prompt"]]
-    for c in job.get("characters", []):
-        parts.append(json.loads((CONTENT / c).read_text())["prompt"])
-    if job.get("robe"):
-        parts.append(json.loads((CONTENT / "designs" / "gladias-test.json").read_text())["robe_prompt"])
+    for i, c in enumerate(job.get("characters", []), start=1):
+        profile = load(c)
+        parts.append(f"Reference image {i} shows {profile['descriptor']}; keep the same face, hair, build and clothing.")
+    for prop in job.get("props", []):
+        parts.append(load(prop)["prompt"])
     parts.append(style["prompt"])
+    setting = job.get("setting")
+    if setting and setting in style.get("settings", {}):
+        parts.append(style["settings"][setting])
     return " ".join(parts)
 
 
@@ -53,6 +73,7 @@ def main():
     ap.add_argument("jobs")
     ap.add_argument("--quantize", type=int, default=4, help="bits; 4 fits an 8 GB Mac")
     ap.add_argument("--only", nargs="*", help="job ids to render")
+    ap.add_argument("--force", action="store_true", help="re-render images that already exist")
     args = ap.parse_args()
 
     from huggingface_hub import snapshot_download
@@ -87,11 +108,27 @@ def main():
             load_s += time.time() - t0
         return loaded["model"]
 
+    def write_manifest():
+        manifest = {
+            "job_file": str(job_file.relative_to(ROOT)),
+            "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+            "model": {"repo": MODEL_REPO, "revision": MODEL_REVISION, "license": "apache-2.0",
+                      "runtime": "mflux", "mflux_version": version("mflux"), "quantize_bits": args.quantize},
+            "settings": {"steps": STEPS, "guidance": GUIDANCE},
+            "cost_usd": 0,
+            "host": {"platform": platform.platform(), "machine": platform.machine()},
+            "model_load_seconds": round(load_s, 1),
+            "images": list(done.values()),
+        }
+        manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
+
     for job in spec["jobs"]:
         if args.only and job["id"] not in args.only:
             continue
+        if not args.force and job["id"] in done and (out / done[job["id"]]["file"]).exists():
+            continue
         prompt = compose_prompt(job, style)
-        refs = [str(out / f"{job['reference']}.png")] if job.get("reference") else None
+        refs = reference_paths(job, out) or None
         t = time.time()
         kwargs = dict(seed=job["seed"], prompt=prompt, num_inference_steps=STEPS,
                       width=job["width"], height=job["height"], guidance=GUIDANCE)
@@ -115,20 +152,10 @@ def main():
             "references": [{"file": Path(r).name, "sha256": sha256_file(r)} for r in refs or []],
             "generation_seconds": round(secs, 1),
         }
-        print(f"  {job['id']}: {secs:.0f}s")
+        print(f"  {job['id']}: {secs:.0f}s", flush=True)
+        write_manifest()
 
-    manifest = {
-        "job_file": str(job_file.relative_to(ROOT)),
-        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
-        "model": {"repo": MODEL_REPO, "revision": MODEL_REVISION, "license": "apache-2.0",
-                  "runtime": "mflux", "mflux_version": version("mflux"), "quantize_bits": args.quantize},
-        "settings": {"steps": STEPS, "guidance": GUIDANCE},
-        "cost_usd": 0,
-        "host": {"platform": platform.platform(), "machine": platform.machine()},
-        "model_load_seconds": round(load_s, 1),
-        "images": list(done.values()),
-    }
-    manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
+    write_manifest()
 
 
 if __name__ == "__main__":

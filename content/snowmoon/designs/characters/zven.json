@@ -1,0 +1,61 @@
+{
+  "kind": "character",
+  "name": "Zven",
+  "slug": "zven",
+  "status": "starting point",
+  "about": "Zven is Gladias and Seila's son, an eager Helisport player who becomes the family's line to his sister. The book does not describe his appearance, so this look is invented and contributors are welcome to replace it.",
+  "setting": "veridia",
+  "facts": [
+    {
+      "chapter": 1,
+      "idx": 110,
+      "quote": "the younger boy, Zven",
+      "fact": "A boy, younger than Febric."
+    },
+    {
+      "chapter": 1,
+      "idx": 110,
+      "quote": "Zven jumped down the stairs three steps at a time",
+      "fact": "Energetic, bounds around."
+    },
+    {
+      "chapter": 11,
+      "idx": 5,
+      "quote": "I can't miss my son's first real Helisport game",
+      "fact": "Gladias's son."
+    },
+    {
+      "chapter": 11,
+      "idx": 24,
+      "quote": "Some children, around ten to twelve years old",
+      "fact": "Plays Helisport with children aged about ten to twelve."
+    },
+    {
+      "chapter": 11,
+      "idx": 24,
+      "quote": "Among those wearing yellow shirts was Zven.",
+      "fact": "Wears a yellow team shirt at Helisport."
+    },
+    {
+      "chapter": 11,
+      "idx": 50,
+      "quote": "less advanced than what Febric got at his age",
+      "fact": "Younger than Febric; in school."
+    },
+    {
+      "chapter": 24,
+      "idx": 13,
+      "quote": "Anything for my sister.",
+      "fact": "Lily is his sister."
+    },
+    {
+      "chapter": 28,
+      "idx": 57,
+      "quote": "excitedly jumped onto a sofa with his hand device",
+      "fact": "Carries a hand device; excitable."
+    }
+  ],
+  "descriptor": "a boy of about eleven, small and wiry, warm light-brown skin, a mop of curly dark-brown hair, a sprinkle of freckles and a wide gap-toothed grin, wearing a sunny mustard-yellow cotton t-shirt, green knee-length shorts, striped socks and scuffed white sneakers",
+  "wears_privacy_robe_in_public": false,
+  "sheet_prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a boy of about eleven, small and wiry, warm light-brown skin, a mop of curly dark-brown hair, a sprinkle of freckles and a wide gap-toothed grin, wearing a sunny mustard-yellow cotton t-shirt, green knee-length shorts, striped socks and scuffed white sneakers."
+}

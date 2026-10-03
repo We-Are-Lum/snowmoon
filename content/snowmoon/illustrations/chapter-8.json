@@ -1,0 +1,74 @@
+{
+  "about": "Key moments for chapter 8, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c8-b016-bus-debate",
+      "chapter": 8,
+      "idx": 16,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/gladias.json"
+      ],
+      "references": [
+        "cast/gladias-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot inside a moving autonomous city bus. More passengers than usual are absorbed in their hand devices, watching intently. The man from reference image 1 leans forward slightly, curiously glancing over the shoulder of a seated passenger whose hand device shows a live debate as soft abstract colored shapes with two tiny silhouetted speakers at podiums. A few other passengers look up, eyes alert. Through the windows, tree-lined streets pass by in daylight.",
+      "width": 1024,
+      "height": 576,
+      "seed": 8016
+    },
+    {
+      "id": "c8-b038-parliament",
+      "chapter": 8,
+      "idx": 38,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [],
+      "prompt": "Wide establishing shot of a large circular parliament building standing at ground level, its architecture mixing medieval stone and modern glass, with multiple entrances on all sides. A straight path lined with trees on both sides leads toward it. A lone man in ordinary clothes, seen from behind, walks along the path toward the entrance. Calm daylight, an open and approachable civic building surrounded by greenery.",
+      "width": 1024,
+      "height": 576,
+      "seed": 8038
+    },
+    {
+      "id": "c8-b050-hearing",
+      "chapter": 8,
+      "idx": 50,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/gladias.json",
+        "designs/characters/verdow.json"
+      ],
+      "references": [
+        "cast/gladias-sheet",
+        "cast/verdow-sheet"
+      ],
+      "props": [],
+      "prompt": "Wide shot of a circular hearing chamber. Twenty senators sit in large chairs spaced around the curved wall, small air filters between some of them, bright yellow lights and faint violet lights shining down from above. In the center, the man from reference image 1 sits alone in a chair with a cup of water in its holder, nervous but composed. Across the room, the man from reference image 2 leans forward in his large chair to ask a question, the edge of his seat glowing with green light. A formal, slightly intimidating atmosphere.",
+      "width": 1024,
+      "height": 576,
+      "seed": 8050
+    },
+    {
+      "id": "c8-b111-lily-couch",
+      "chapter": 8,
+      "idx": 111,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/gladias.json",
+        "designs/characters/lily.json"
+      ],
+      "references": [
+        "cast/gladias-sheet",
+        "cast/lily-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot of a warm, lived-in living room in soft daylight. The man from reference image 1 sits on a couch with his arm around the girl from reference image 2, who is crying and turning her face away, unhappy. He leans in, speaking gently and kindly. In the background, another man sits in an armchair watching quietly, his face in soft shadow. A low table, cushions, house plants and wooden floors.",
+      "width": 1024,
+      "height": 576,
+      "seed": 8111
+    }
+  ]
+}

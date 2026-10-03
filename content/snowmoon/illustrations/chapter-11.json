@@ -1,0 +1,91 @@
+{
+  "about": "Key moments for chapter 11, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c11-b023-copter-truck",
+      "chapter": 11,
+      "idx": 23,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/zven.json"
+      ],
+      "references": [
+        "cast/zven-sheet"
+      ],
+      "props": [],
+      "prompt": "Wide shot of a large grass school field on a bright spring day, wooded hills and stone buildings in the distance, families standing at the edge. A truck in the middle of the field has its back door lowered into a ramp, and simple personal copters roll out on their own: chairs with rotor blades on top, surrounded by round cage-like shielding. Ten children of about ten to twelve, half in yellow shirts and half in purple shirts, run toward them. The boy from reference image 1, in a yellow shirt, runs eagerly in front.",
+      "width": 1024,
+      "height": 576,
+      "seed": 11023
+    },
+    {
+      "id": "c11-b043-redball-catch",
+      "chapter": 11,
+      "idx": 43,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/zven.json"
+      ],
+      "references": [
+        "cast/zven-sheet"
+      ],
+      "props": [],
+      "prompt": "Dynamic medium shot high in a clear spring sky above a grass field. The boy from reference image 1, in a yellow shirt, sits strapped into a personal copter, a small chair with spinning rotors on top inside a round protective cage. Leaning forward, he has just kicked a small bright red ball-shaped drone with soft feather-like rotors back upward and stretches out his hand to catch it in his palm, face full of concentration. Far below, other children in yellow and purple shirts fly in copters; trees on the horizon.",
+      "width": 1024,
+      "height": 576,
+      "seed": 11043
+    },
+    {
+      "id": "c11-b081-broken-redball",
+      "chapter": 11,
+      "idx": 81,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/zven.json"
+      ],
+      "references": [
+        "cast/zven-sheet"
+      ],
+      "props": [],
+      "prompt": "Wide shot of the grass field from ground level on a bright spring afternoon. The boy from reference image 1, in a yellow shirt, has climbed out of his copter and stands beside the instructor, a grown man, opening his hand to give him a small red ball drone with broken rotors. High in the sky behind them, another boy in a purple shirt descends in his caged copter, fist raised in triumph around a red ball. Families watch from the edge of the field, some cheering.",
+      "width": 1024,
+      "height": 576,
+      "seed": 11081
+    },
+    {
+      "id": "c11-b123-heavy-water-ad",
+      "chapter": 11,
+      "idx": 123,
+      "setting": "veridia",
+      "characters": [],
+      "references": [],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "Medium shot on a calm, tree-lined street in the late afternoon. A figure in a privacy robe walks past the stone outer wall of a small neighborhood restaurant. On the wall is a large painted advertisement picture with no writing: a cheerful mascot dressed in bright yellow and green hugs a small child and turns its back to shield the child from a jet of murky green sludge-like water. Leaves and plants blend into the stone buildings; a small autonomous bus pulls away in the background.",
+      "width": 1024,
+      "height": 576,
+      "seed": 11123
+    },
+    {
+      "id": "c11-b126-hug-from-behind",
+      "chapter": 11,
+      "idx": 126,
+      "setting": "veridia",
+      "characters": [
+        "designs/characters/seila.json"
+      ],
+      "references": [
+        "cast/seila-sheet"
+      ],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "Medium shot on a wooded footpath between stone houses in warm early evening light. The woman from reference image 1 has caught up with a figure in a privacy robe and hugs it from behind, laughing, her arms wrapped around its waist. The robed figure is turning its hooded head in surprise. Tall trees, scattered leaves on the path, a few softly lit windows in the old stone houses, plants climbing their walls.",
+      "width": 1024,
+      "height": 576,
+      "seed": 11126
+    }
+  ]
+}

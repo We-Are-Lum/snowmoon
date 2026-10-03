@@ -1,0 +1,55 @@
+{
+  "kind": "character",
+  "name": "Febric",
+  "slug": "febric",
+  "status": "starting point",
+  "about": "Febric is the older son of Vil and Daia, the co-family who share child-raising with Gladias and Seila, and a keen young programmer. The book barely describes him beyond his age and his gadgets, so this look is invented and contributors are welcome to replace it.",
+  "setting": "veridia",
+  "facts": [
+    {
+      "chapter": 1,
+      "idx": 111,
+      "quote": "The older teenage boy, Febric",
+      "fact": "An older teenage boy."
+    },
+    {
+      "chapter": 1,
+      "idx": 111,
+      "quote": "carrying his hand device in one hand, attached by a cable to a larger compute box in the other",
+      "fact": "Carries a hand device cabled to a compute box."
+    },
+    {
+      "chapter": 6,
+      "idx": 113,
+      "quote": "a teenage boy, not quite an adult",
+      "fact": "Not quite an adult."
+    },
+    {
+      "chapter": 1,
+      "idx": 130,
+      "quote": "For me Vil is *Dad*!",
+      "fact": "Vil is his father; calls Gladias and Seila uncle and aunt."
+    },
+    {
+      "chapter": 6,
+      "idx": 120,
+      "quote": "I coded two different kinds of bounded-depth trees from scratch",
+      "fact": "Programs for school."
+    },
+    {
+      "chapter": 6,
+      "idx": 123,
+      "quote": "A waiter handed Febric a tea in a cup with a sealed lid.",
+      "fact": "Drinks tea on the go."
+    },
+    {
+      "chapter": 17,
+      "idx": 104,
+      "quote": "Though I'm in computer science.",
+      "fact": "Studies computer science."
+    }
+  ],
+  "descriptor": "a lanky young man of about seventeen, tall and narrow-shouldered, pale skin with rosy cheeks, straight ash-blond hair falling over his ears and rectangular black-framed glasses, wearing a faded teal hoodie, rust-brown corduroy trousers and grey sneakers, holding a small handheld screen linked by a cable to a compact grey box",
+  "wears_privacy_robe_in_public": false,
+  "sheet_prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a lanky young man of about seventeen, tall and narrow-shouldered, pale skin with rosy cheeks, straight ash-blond hair falling over his ears and rectangular black-framed glasses, wearing a faded teal hoodie, rust-brown corduroy trousers and grey sneakers, holding a small handheld screen linked by a cable to a compact grey box."
+}

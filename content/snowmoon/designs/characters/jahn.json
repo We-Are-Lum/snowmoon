@@ -1,0 +1,43 @@
+{
+  "kind": "character",
+  "name": "Jahn",
+  "slug": "jahn",
+  "status": "starting point",
+  "about": "Jahn is Seila's friend in Freetown, an economist at the Freetown Economics Institute. The book does not describe his appearance, so this look is invented and contributors are welcome to replace it.",
+  "setting": "united-cities",
+  "facts": [
+    {
+      "chapter": 5,
+      "idx": 58,
+      "quote": "this is my ... friend, Jahn",
+      "fact": "Seila's friend."
+    },
+    {
+      "chapter": 5,
+      "idx": 62,
+      "quote": "And I'm actually a local",
+      "fact": "A Freetown local."
+    },
+    {
+      "chapter": 10,
+      "idx": 2,
+      "quote": "the Freetown Economics Institute, where he worked as a researcher",
+      "fact": "Researcher at the Freetown Economics Institute; male."
+    },
+    {
+      "chapter": 22,
+      "idx": 67,
+      "quote": "He took out a computer, and made a table",
+      "fact": "Works on a computer."
+    },
+    {
+      "chapter": 31,
+      "idx": 71,
+      "quote": "a picture of Jahn himself taking a selfie",
+      "fact": "Takes selfies."
+    }
+  ],
+  "descriptor": "a man in his late thirties, tall and lanky, light brown skin, short curly black hair, a thin moustache and an easy smile, wearing a camel-brown corduroy blazer over a sky-blue button-up shirt, dark jeans and brown loafers, with a slim laptop tucked under one arm",
+  "wears_privacy_robe_in_public": false,
+  "sheet_prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a man in his late thirties, tall and lanky, light brown skin, short curly black hair, a thin moustache and an easy smile, wearing a camel-brown corduroy blazer over a sky-blue button-up shirt, dark jeans and brown loafers, with a slim laptop tucked under one arm."
+}

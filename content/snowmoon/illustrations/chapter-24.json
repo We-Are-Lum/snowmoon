@@ -1,0 +1,76 @@
+{
+  "about": "Key moments for chapter 24, seeded by the project as a starting point.",
+  "style": "designs/styles/watercolor.json",
+  "jobs": [
+    {
+      "id": "c24-b006-sleepless-call",
+      "chapter": 24,
+      "idx": 6,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/gladias.json"
+      ],
+      "references": [
+        "cast/gladias-sheet"
+      ],
+      "props": [],
+      "prompt": "Early morning in a small windowless room carved into rock, a rumpled bed, a single lamp. The man from reference image 1, hollow-eyed after a sleepless night, sits on the edge of the bed hunched forward, holding a hand device to his ear and speaking quietly and urgently. His watch glows faintly on his wrist. A cup of cold tea sits on the floor beside him.",
+      "width": 1024,
+      "height": 576,
+      "seed": 24006
+    },
+    {
+      "id": "c24-b024-industry-tunnel",
+      "chapter": 24,
+      "idx": 24,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/gladias.json"
+      ],
+      "references": [
+        "cast/gladias-sheet"
+      ],
+      "props": [],
+      "prompt": "Wide view down a long tunnel carved through rock inside a mountain, lit by soft ceiling lights. Along the walls, open doorways reveal busy side rooms: clean workshops with chip-making machines, laboratory benches with workers in white coats, robotic arms assembling car parts. Boxy air filters and violet ultraviolet lamps are scattered along the way. In the foreground, the man from reference image 1 walks slowly, pausing to stare blankly at the wall, shoulders heavy with exhaustion.",
+      "width": 1024,
+      "height": 576,
+      "seed": 24024
+    },
+    {
+      "id": "c24-b039-hug",
+      "chapter": 24,
+      "idx": 39,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/bai.json",
+        "designs/characters/gladias.json"
+      ],
+      "references": [
+        "cast/bai-sheet",
+        "cast/gladias-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot inside a warm underground library, with towering two-level shelves of paper books on one side and computer terminals on the other. The young woman from reference image 1 gently hugs the man from reference image 2, who stands stiff and exhausted, eyes downcast, arms hanging at his sides. Her expression is calm and kind. Soft amber lamplight, quiet empty tables in the background.",
+      "width": 1024,
+      "height": 576,
+      "seed": 24039
+    },
+    {
+      "id": "c24-b065-long-room",
+      "chapter": 24,
+      "idx": 65,
+      "setting": "dzego",
+      "characters": [
+        "designs/characters/den.json"
+      ],
+      "references": [
+        "cast/den-sheet"
+      ],
+      "props": [],
+      "prompt": "Wide view through a slowly opening sealed door into a long, dim underground room with rock walls. At the far end stands a large table under a pool of warm light, and behind it sits the man from reference image 1, wearing a shadowy dark cloak, hands folded, his gaze composed and watchful. In the foreground, a man and a young man, seen from behind, step through the doorway. Deep shadows along the walls.",
+      "width": 1024,
+      "height": 576,
+      "seed": 24065
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "kind": "character",
+  "name": "Seila",
+  "slug": "seila",
+  "status": "starting point",
+  "about": "Seila is Gladias's wife, a Veridian blogger who writes on economics and culture, and one of the book's three leads. The book describes nothing of her appearance, so this look is invented and contributors are welcome to replace it.",
+  "setting": "veridia",
+  "facts": [
+    {
+      "chapter": 3,
+      "idx": 89,
+      "quote": "And your wife is Seila",
+      "fact": "Gladias's wife."
+    },
+    {
+      "chapter": 1,
+      "idx": 125,
+      "quote": "Zven and Lily were theirs",
+      "fact": "Mother of Zven and Lily."
+    },
+    {
+      "chapter": 8,
+      "idx": 8,
+      "quote": "I'm looking forward to your blog",
+      "fact": "Writes a blog."
+    },
+    {
+      "chapter": 1,
+      "idx": 134,
+      "quote": "maybe figure out some blog post to write on the United Cities",
+      "fact": "Travels to Freetown to write about the United Cities."
+    },
+    {
+      "chapter": 5,
+      "idx": 58,
+      "quote": "\"I'm Seila\", the woman replied.",
+      "fact": "Seen by Zei and Bai as a woman tourist in Freetown, in ordinary clothes."
+    },
+    {
+      "chapter": 20,
+      "idx": 50,
+      "quote": "Seila put on one of Gladias's privacy robes.",
+      "fact": "Not an Order member; borrows Gladias's privacy robe for secret errands."
+    },
+    {
+      "chapter": 27,
+      "idx": 28,
+      "quote": "Hopefully the privacy robes will suffice, Gladias thought.",
+      "fact": "Wears a privacy robe for a security-sensitive walk later in the book."
+    },
+    {
+      "chapter": 27,
+      "idx": 30,
+      "quote": "she had become almost as accustomed to having all of her conversations through neck bands as Gladias had been",
+      "fact": "Uses a neck band later in the book."
+    },
+    {
+      "chapter": 28,
+      "idx": 91,
+      "quote": "as she was pouring herself a tea",
+      "fact": "Drinks tea."
+    }
+  ],
+  "descriptor": "a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a rust-orange wrap cardigan over an oatmeal linen blouse, olive wide-leg trousers and tan ankle boots",
+  "wears_privacy_robe_in_public": false,
+  "sheet_prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a rust-orange wrap cardigan over an oatmeal linen blouse, olive wide-leg trousers and tan ankle boots."
+}

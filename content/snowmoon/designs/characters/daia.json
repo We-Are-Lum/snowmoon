@@ -1,0 +1,43 @@
+{
+  "kind": "character",
+  "name": "Daia",
+  "slug": "daia",
+  "status": "starting point",
+  "about": "Daia is Febric and Hreda's mother and part of the co-family that shares child-raising with Gladias and Seila. The book does not describe her appearance, so this look is invented and contributors are welcome to replace it.",
+  "setting": "veridia",
+  "facts": [
+    {
+      "chapter": 1,
+      "idx": 125,
+      "quote": "their co-family, Uncle Vil and Aunt Daia",
+      "fact": "Co-family with Gladias and Seila; called Aunt Daia."
+    },
+    {
+      "chapter": 31,
+      "idx": 85,
+      "quote": "I'm so excited to see Mom!",
+      "fact": "Hreda's mother."
+    },
+    {
+      "chapter": 11,
+      "idx": 3,
+      "quote": "Daia caught sight of Gladias approaching. She waved at him.",
+      "fact": "Warm and welcoming."
+    },
+    {
+      "chapter": 6,
+      "idx": 122,
+      "quote": "They cook really good food for us every day.",
+      "fact": "She and Vil cook for the children."
+    },
+    {
+      "chapter": 21,
+      "idx": 25,
+      "quote": "\"How was your time in school been, Zven?\", Daia asked.",
+      "fact": "Attentive to the children."
+    }
+  ],
+  "descriptor": "a woman in her mid-forties, short and round-faced, light tan skin, thick black hair streaked with silver piled in a high bun, a warm crinkled smile, wearing a sage-green linen tunic dress over cream leggings, a terracotta knitted shawl and brown clogs",
+  "wears_privacy_robe_in_public": false,
+  "sheet_prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a woman in her mid-forties, short and round-faced, light tan skin, thick black hair streaked with silver piled in a high bun, a warm crinkled smile, wearing a sage-green linen tunic dress over cream leggings, a terracotta knitted shawl and brown clogs."
+}

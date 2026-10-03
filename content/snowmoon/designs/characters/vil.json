@@ -1,0 +1,49 @@
+{
+  "kind": "character",
+  "name": "Vil",
+  "slug": "vil",
+  "status": "starting point",
+  "about": "Vil is Febric and Hreda's father and part of the co-family that shares child-raising with Gladias and Seila. The book does not describe his appearance, so this look is invented and contributors are welcome to replace it.",
+  "setting": "veridia",
+  "facts": [
+    {
+      "chapter": 1,
+      "idx": 125,
+      "quote": "their co-family, Uncle Vil and Aunt Daia",
+      "fact": "Co-family with Gladias and Seila; called Uncle Vil."
+    },
+    {
+      "chapter": 1,
+      "idx": 130,
+      "quote": "For me Vil is *Dad*!",
+      "fact": "Febric's father."
+    },
+    {
+      "chapter": 23,
+      "idx": 64,
+      "quote": "My co-father, Vil",
+      "fact": "Gladias calls him his co-father."
+    },
+    {
+      "chapter": 11,
+      "idx": 14,
+      "quote": "I lost my job at Jump because they went bankrupt",
+      "fact": "Lost his job and pursues a lawsuit against his former employer."
+    },
+    {
+      "chapter": 8,
+      "idx": 120,
+      "quote": "I'll take you on my next trip up to Northglade",
+      "fact": "Takes trips up to Northglade."
+    },
+    {
+      "chapter": 8,
+      "idx": 110,
+      "quote": "Vil opened the door for him, and then sat back down in his chair.",
+      "fact": "Seen at home in his chair."
+    }
+  ],
+  "descriptor": "a broad-shouldered man in his mid-forties, tall and heavyset, fair ruddy skin, close-cropped thinning ash-blond hair and a full sandy beard with laugh lines around the eyes, wearing a chunky oatmeal knitted sweater, brown canvas work trousers and sturdy hiking boots",
+  "wears_privacy_robe_in_public": false,
+  "sheet_prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a broad-shouldered man in his mid-forties, tall and heavyset, fair ruddy skin, close-cropped thinning ash-blond hair and a full sandy beard with laugh lines around the eyes, wearing a chunky oatmeal knitted sweater, brown canvas work trousers and sturdy hiking boots."
+}
