@@ -12,3 +12,10 @@ next-env.d.ts
 
 # local-only working notes (never published)
 private/
+
+# narration (local speech model env and generated audio)
+.venv/
+narration-out/
+.venv-image/
+images-out/
+__pycache__/

@@ -1,0 +1,91 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 19,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 7,
+      "kind": "screen",
+      "block_sha256": "ae87740265055bc3c4f1564e13499abd846b1288abb3a425fe3edfd28b74dd91",
+      "read_aloud": "His watch shows the air: carbon dioxide at nine hundred ninety-four, and PM two point five at thirty point one, both in yellow. Under Devices, twenty-one attested, and in red, four unknown, marked increased risk.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 12,
+      "kind": "screen",
+      "block_sha256": "13cb86ad9fb1cdf565db4a148952d7dc6a50196c5ca1f8f6c49ba55445d2820b",
+      "read_aloud": "Zei's watch reads, in Dzegoban, {ten min}. In green, {cau tie zen}, twenty-five. Below it, {sen hu}, with a question mark, zero.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 14,
+      "kind": "screen",
+      "block_sha256": "aa2437e37bcfefb3aa35226d555c49f5b47230765f0bf953a8e4746bd27df342",
+      "read_aloud": "Under the heading {gi dai}, four green rows: {fen jan ten lai}, sixteen; {mo fan min jan}, one; {mo fan lai}, four; and {kun gau min jan}, four.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 32,
+      "kind": "figure",
+      "block_sha256": "2825effe624a5d8d602013d8280606a0b8dc903da7c42fe7d278a1d559eba559",
+      "read_aloud": "An envelope icon, and beneath it: {fe cau tie dai li shu}.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 37,
+      "kind": "screen",
+      "block_sha256": "b46dc96cc89310118a01e004e6cb423c5207e9a6d62f33c605ee5019ab8a0eb4",
+      "read_aloud": "His watch again: carbon dioxide now at one thousand and fifteen, shown in red, and PM two point five at thirty-one point two. Under Devices, twenty-five attested, and no unknowns.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 59,
+      "kind": "screen",
+      "block_sha256": "8d0eabee7683e467e001a177bd53fa301ddac6171d5e0fa8ac082bfdf2bfd1e9",
+      "read_aloud": "Two columns, headed {zan} and {tie}. On the left: {sa dzu du de len su} twenty-four fifteen {de bun kai mo fan}. An arrow points right, to: {ci sen hu jan pu zau fe} four hundred {lin man}, {ci cau be fe ti tie}, {ci tan jan pu ciu cu shan jin fe pa bi}, {ci sen hu fe bu}.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 79,
+      "kind": "quote",
+      "block_sha256": "f0dc23c61b2eb32ff128b3b7dbdaffb71ea6ed41a5b9bc2b0d8d8533cbca4ef6",
+      "read_aloud": "{mu fu bau hai ka sha liu li dzai hen ji cin jan fe jan}. {ci mu fu bau fei ka zen die jia cu can hu fe lo kin liu}.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 101,
+      "kind": "figure",
+      "block_sha256": "c710e59154fe970a4f7e053e8aff67bc1460f0fb63db4143bd667c209433ae13",
+      "read_aloud": "Eight progress bars, each labeled with a file hash, every one barely started, between about one and three percent. At the bottom: {sho hei dai}, eight twenty-seven {gei zen}.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 117,
+      "kind": "screen",
+      "block_sha256": "2c4d4884c2a435bf1b7f19dec557ee9a93544b837a2ff889488ccff049ed18d5",
+      "read_aloud": "A prompt appears: What did you do on Firemoon tenth? Explain the day in detail. Below it, an empty text box with a blinking cursor.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 126,
+      "kind": "screen",
+      "block_sha256": "37d233ceca8d54d73d914b8ae54332cfb7d5587cae9f04cb3cfd5fa46a1c5216",
+      "read_aloud": "The address: {sa dzu du de}, {len su} twenty-four fifteen {de}, {bun kai mo fan}.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 142,
+      "kind": "screen",
+      "block_sha256": "f2b50881c9b2192fb5ce664c14a36390ad6faabd136a7f2189345d8f08bbf520",
+      "read_aloud": "The screen reads: Thinking, estimated remaining time four hundred forty.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 153,
+      "kind": "screen",
+      "block_sha256": "4f9220a4bdba9d6463aeb7bfec030ca06f370834fd9bf0e8b66de3f3d49bd3a5",
+      "read_aloud": "The message reads: Hello Zei. You may be wondering why I have not communicated any further with you within the past month. I greatly apologize for this, and my goal in sending you this letter is that you are the only friend I have who is outside of Arctic control, and you deserve my explanation about what has been happening. The Arctics did a full sweep of Redshire almost a month ago, to confiscate all electronic devices, and give us back only devices that were backdoored and surveilled by them. This is why I lost contact with you. I had no way to reach you, and so I had to encrypt my message to you by wrapping it in this obfuscated language model that asked you to describe our shared experience to verify your identity. I have only been able to construct and send this message through a series of rounds of stealing devices from others, including two watches containing two Arctics' health data, doing the needed work inside of a non-transmitting room, copying the outputs to an inert storage medium, and then chemically destroying the circuits and storage on those devices. Physical surveillance of Redshire is, fortunately, much less total than the Arctic itself, though the window on that is closing fast. But there was also another window that was closing fast for me. You see, my parents were always on the side of being more sympathetic to the Arctics. And so after the annexation happened, they decided to cooperate with them. They told me that this was the best way to get any chance of autonomy for themselves and for Redshire in the future: to win trust by becoming a helpful part of the Arctic Empire. And so by the time you read this, most likely we will already be on an aeroplane going into the Arctic Empire core territory. I do not share their sympathies. But I have decided that the way that I can maximize my chance of being useful, is to play along, and win their trust too. The Arctic Empire respects strength, I have proven my strength by winning the Minpentai semifinals in Dzego, and my parents may be proof enough of my alignment. Hopefully, there will come a moment where I will be able to do something helpful to you. But I do not know. And so for this reason, this may well be the last message that you hear from me. I hope that this will not be true, but I cannot guarantee anything. I am sorry for everything. {dze go ba fau gie}. Your dear friend Deluin.",
+      "status": "unreviewed"
+    }
+  ]
+}

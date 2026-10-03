@@ -1,0 +1,56 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 8,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 3,
+      "kind": "screen",
+      "block_sha256": "4f27a4396a7ae1c1b991217e19a33642d14186dc42ef92b341160b8251f47488",
+      "read_aloud": "A message from Seila: five images.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 12,
+      "kind": "screen",
+      "block_sha256": "6556c44a84893dd7484e9132200125e38e1effc694129d3f9ce5aff56563daaa",
+      "read_aloud": "A message from Mov: Remember that your trial in today is not just about knowledge. It's also about making sure the senators like you.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 96,
+      "kind": "figure",
+      "block_sha256": "ee84b5f52d354e23079dc21ca96e2b2bab30cc3b6fa872269f7e8a26eb67d846",
+      "read_aloud": "The screen reads: Acceptance vote: Gladias. Below it, a ring of twenty dots, one for each senator, each lit green or red.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 100,
+      "kind": "figure",
+      "block_sha256": "f144c72e8b85083cd2f0e628a4ee39ffb510c07f98b0173b0a0322274eb4dbb3",
+      "read_aloud": "The same ring of green and red dots, now with one more green dot in the center.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 104,
+      "kind": "screen",
+      "block_sha256": "ba71f309a576691fc2d7cc5b094ef7ac5721a826050f6a54916b3f9b09944ae0",
+      "read_aloud": "A message from Vil: Sorry to bother you, but it's about Lily. She just failed a test in civics class. I think she would benefit from seeing you and Seila.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 108,
+      "kind": "screen",
+      "block_sha256": "8bac0e86771889cab16c6e935eaa1a511d0d1a4647c54413bb704d85549cae99",
+      "read_aloud": "Vil replies: Did you at least get accepted?",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 127,
+      "kind": "screen",
+      "block_sha256": "14de7a1e8115800d0eaa25c03fe7f3ad4978886299f93d59133bcf14b818eb8c",
+      "read_aloud": "Mov is requesting a call.",
+      "status": "unreviewed"
+    }
+  ]
+}

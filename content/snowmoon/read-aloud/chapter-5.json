@@ -1,0 +1,28 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 5,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 22,
+      "kind": "screen",
+      "block_sha256": "ed352337dbd1652f8d1a6e12af14560eeda5a3f6ccbad90c45434d8ec27675e4",
+      "read_aloud": "The pole's screen shows two checks: reputation score of at least one hundred, verified, and payment successful. Then: Checked in. Your room numbers are seven fourteen, seven fifteen, and seven sixteen.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 46,
+      "kind": "figure",
+      "block_sha256": "3a04f47f9f20bbd9e80a307c21912a2942764e6fdd0531327f505c63bac96830",
+      "read_aloud": "On the screen, a network map of fifteen cities, linked by two-way arrows, each marked five, ten or fifteen percent. Freetown sits near the bottom middle, linked to Mabuli at fifteen, Deplexi at ten, and Devanvil and Ondak at five each. Around it are Silverbeach, Inglewore, Hapton, Imber and Arturia to the west and north, Redshire and Petersvil in the northeast, and Iptak, Mantak and Belpaki clustered in the southeast.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 89,
+      "kind": "screen",
+      "block_sha256": "602afb1a2e1105e3bee54e0ee9dde96117d87fe9fb5cf91f9444cf53a083928b",
+      "read_aloud": "An incoming call from Gladias.",
+      "status": "unreviewed"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 4,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 5,
+      "kind": "figure",
+      "block_sha256": "d189b9e7c7e1898c6d07fe86c31cc769b6f4145fc8d6178b16ed2df2de358991",
+      "read_aloud": "The animation plays on a grid of black and white squares. Small gliders fly in from the right toward a dotted vertical wall. Near the bottom the wall holds, but near the top it breaks open, and scattered debris spills through into the territory on the left. A turn counter ticks up in the corner.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 21,
+      "kind": "figure",
+      "block_sha256": "1bf9027ab9253079aff10cc0ae6474d5c4e95b944d063010f4ffbf35f7bb0a51",
+      "read_aloud": "The robot's screen shows four picture buttons: a cup labelled {ja}, a leaf labelled {kai}, a horned animal's face labelled {bau}, and a fish labelled {lui}.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 23,
+      "kind": "figure",
+      "block_sha256": "4d170f08de73af4ee1e5e3c3de144284b825ef56307e65a04db3cf058216ae28",
+      "read_aloud": "The next screen shows a salad bowl in the middle, labelled {kai can}, with arrows pointing into it from five ingredients: lettuce, labelled {dze liu}; a bottle of olive oil, {lei kai fun}; a handful of nuts, {gai lie}; a tomato, {jau jin lie}; and an avocado, {jia dzu lie}.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 56,
+      "kind": "screen",
+      "block_sha256": "fa3c2e48633915d6a8db35ab4ea1163885ac961ee81d4b74a5416059f97431a1",
+      "read_aloud": "A message from Fin: {jie fe hen dzi}.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 115,
+      "kind": "figure",
+      "block_sha256": "121e757eefc5ea927ce3622f2922eb226d204497f9cd9d866066fd99ebc11d88",
+      "read_aloud": "The summary map shows four kinds of marks. Dza's plus signs cluster in the northeast corner. Zei's circles run up the eastern side from his base in the bottom right, with one reaching right into the northeast corner. Pan's triangles are spread across the north, west and center, and Bai's squares are gathered in the bottom left.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 137,
+      "kind": "figure",
+      "block_sha256": "d40ab5561fdf2b434e6eb336ae410286772bc23a486624613c5f899fa3ecead1",
+      "read_aloud": "The map once more: the plus signs are gone. Zei's circles hold the bottom right and a cluster in the northeast. Pan's triangles fill much of the north, west and center. Bai's squares remain in the bottom left, with a single square now up in the northwest.",
+      "status": "unreviewed"
+    }
+  ]
+}

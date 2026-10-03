@@ -1,0 +1,49 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 6,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 40,
+      "kind": "figure",
+      "block_sha256": "e3ff000a5b78f24f7877ac94732891b8f1eac062d3919d5472c08d6bfb623e93",
+      "read_aloud": "The diagram starts with a large grid of dots labelled All Keepers. An arrow marked Random selection leads to a ring of twenty-one dots, the Current Keepers for this rubric, in three colors: those added this year, last year, and the year before. From the ring, three more random selections lead to Discussion Groups one, two and three, each mixing Keepers of all three colors.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 43,
+      "kind": "screen",
+      "block_sha256": "80e2edc2f4aa2c495d09632dafa155e1f0d3183a6d1c530b2a062db13ee35030",
+      "read_aloud": "Three entries on the list. Number five, Emergency preparedness in physical spaces: lower taxes for secure shelters, emergency supplies and grid independence, higher for unsafe or fragile buildings. Number six, Openness in hardware: lower taxes for respecting the right to repair, publishing designs and following open standards, higher for deliberate incompatibility and anti-competitive practices. Number seven, Clean indoor air: a tax bracket tied to average carbon dioxide, P M two point five and other measures, weighted toward busy times, for spaces that host more than twenty people.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 130,
+      "kind": "screen",
+      "block_sha256": "e18a26ae00fac1edc94608fda9c22b240d57b59fd232a21ab7eb36f15d4e48dc",
+      "read_aloud": "Payment declined. Not enough funds.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 133,
+      "kind": "screen",
+      "block_sha256": "d7d7b30a82825f326a4b90e3371b2aaea7b1121181afa515c65555ae112d8d0a",
+      "read_aloud": "The watch shows a reputation-backed loan request. Work history: teaching assistant, with a positive review from the professor and five students. A nullifier code. Requested loan: two thousand seven hundred seventy-three zipcoins. And a Submit button.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 137,
+      "kind": "screen",
+      "block_sha256": "7dcfbed591a4d9a035ef87dca223ec086d3d5b53c4d7d2ddef281bfb03f3b297",
+      "read_aloud": "Payment succeeded. Base, ten point five zipcoins; tax, one point one; total, eleven point six.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 162,
+      "kind": "screen",
+      "block_sha256": "13d1f3442fb7c877319e42638bad9b0754e8bb6394a622011912f2c722750c12",
+      "read_aloud": "Request confirmed.",
+      "status": "unreviewed"
+    }
+  ]
+}

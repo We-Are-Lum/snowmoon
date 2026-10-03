@@ -1,0 +1,126 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 15,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 21,
+      "kind": "screen",
+      "block_sha256": "8b62753ecee3c750006b22535437e48aff672cf8c7ce002962cbc8a7b65b9ff3",
+      "read_aloud": "Seila types a message to Jahn: Please tell me you're in Freetown and you're okay.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 24,
+      "kind": "screen",
+      "block_sha256": "e8d460d93361eb4fff7eb7dcbb20e1795de14617f0e2846bf76b516864d77718",
+      "read_aloud": "From Jahn: Don't worry, I am in Freetown.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 25,
+      "kind": "screen",
+      "block_sha256": "47da67c8f637b5daaa3c74443e92a64865958ead5b4327851ffabbbf21eca2d5",
+      "read_aloud": "And then, from Jahn: We've somehow been taking defense seriously here, and Freetown is about as far from Redshire as you can get in the United Cities, except for Silverbeach and Mabuli.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 50,
+      "kind": "screen",
+      "block_sha256": "275e1375c331d1f096787294e2966486ccecaa19dbf55ffdbf33575b0dc43f69",
+      "read_aloud": "His message to Deluin: Are you okay? Please tell me where you are.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 53,
+      "kind": "screen",
+      "block_sha256": "52461aace5b625d07831006ab86aeb389fe9c9f9757f80f15304b46fc1605349",
+      "read_aloud": "A message from Deluin: Don't worry, I am alive. Though it looks like I'm not going to be getting back to Dzego anytime soon.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 55,
+      "kind": "screen",
+      "block_sha256": "a6ed579eb105bc0d1149363afa60df37ed84dd630944f45aedff11d0d8406f50",
+      "read_aloud": "Deluin again: I found a way to send messages out. Some Arctic soldier and his friend, or his AI, or something, coded up a way to embed hidden text messages inside real-time health data that he is sending back home to command. And someone else in command is relaying that signal into a weather feed, which is then going up to the satellites. He's making a whole bunch of zipcoins anonymously rebroadcasting messages for people.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 57,
+      "kind": "screen",
+      "block_sha256": "d44862a66540ca625f967638d5f3e4586b6271d6b01d3d5b7c34da2df5de99f5",
+      "read_aloud": "Zei writes back: Wow. Are you ... in touch with this soldier?",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 58,
+      "kind": "screen",
+      "block_sha256": "14786a512b112227c52ac37525ba939a8ede44b2f94c5b5966407cfdbee6aeb2",
+      "read_aloud": "From Deluin: I have an anonymous link.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 59,
+      "kind": "screen",
+      "block_sha256": "fb960bce86e9d149765fb1debec10710ea0f7d4040901a5ff70848a76621d9cb",
+      "read_aloud": "Zei replies: Ask him how he's encoding the messages that he's putting into his health data.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 61,
+      "kind": "screen",
+      "block_sha256": "5ab9e0e594023241631af779a67502b2d57e96f9d05a5742aa7706438b78ff6a",
+      "read_aloud": "Zei's message to Deluin: Or actually, on second thought, he won't answer. But tell him that randomly flipping the least-significant bits, the strategy that everyone always reaches for when they encounter this problem for the first time, is not the ideal solution. Sometimes higher-order bits are totally fine to flip, and sometimes flipping even a least-significant bit is dangerous. What you want to do is: first, train a language model on the actual distribution, so that conditional on what all the other bits are, it can give you probabilities for whether a given bit should be zero or one. Then, split the data up into buckets, using the decryption key itself to choose the buckets randomly, and require the bits in the i-th bucket to XOR to the i-th bit in the ciphertext. Within each bucket, use the model to determine which bit's probabilities are closest to fifty-fifty, meaning both values are natural for that bit to have in that context, and flip that bit to make the bucket XOR correct. So you're letting the L L M decide which bits are least significant and okay to flip, instead of just always taking the lowest-order binary digit in each number.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 64,
+      "kind": "screen",
+      "block_sha256": "e3b4de22ea07e7621432ea7b76a5e66821aa5fda151d6b1a57fdf5fd9db190b1",
+      "read_aloud": "Another long message from Zei. If you want to go even further, it says, you can make the buckets partially overlap: the first bucket covering positions zero to one hundred ninety-nine, the second twenty to two hundred nineteen, the third forty to two hundred thirty-nine, and so on, in a pseudorandom order, with only a random half of each bucket's positions going into the XOR. Normally you flip one bit in each new stretch to make each bucket come out right in turn. But if a stretch gives you twenty bits in a row where none of them are reasonable to flip, think, a very clear picture of a night sky, then you walk back and try to find a combination of earlier bits that makes the last two buckets XOR correctly, and if that fails, walk back further, and so on.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 66,
+      "kind": "screen",
+      "block_sha256": "38b403e9641cf10514493213f90bddd3a6c1030ba334d9e513c85218e293180d",
+      "read_aloud": "He adds: I learned that from Den's cryptography textbooks.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 67,
+      "kind": "screen",
+      "block_sha256": "d4a11fc1f783de722430fc8deb919bc9f082d109232917ee62dc8fbf4089cd3d",
+      "read_aloud": "From Deluin: I'll forward that to him. But I suspect that for him, first priority is going to be finding higher-bandwidth channels to hide data inside. Optimizing which bits to flip is really smart but it's maybe a two-times gain, finding a better data stream might be a thousand-times gain. Always take the dumb thousand-times gain before the super-clever two-times gain.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 68,
+      "kind": "screen",
+      "block_sha256": "7beb3a273a9e4c2f0c444d6fb70dcc31a29a5832ab7373c4bc3bc3c51ac5ef0f",
+      "read_aloud": "And then: I learned that in business school.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 70,
+      "kind": "screen",
+      "block_sha256": "67caff9034fa5b07c9659521c591f9c762cf8e146530ae04a3e50700b18f2d39",
+      "read_aloud": "Zei writes: Alright, well stay safe. And let me know if there's anything that I can do, or that smart people in my network could do, to help you get out of there safely.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 72,
+      "kind": "screen",
+      "block_sha256": "fe600c73df640bb80b99bbf4448320651f7f0394952e0ebb05615554b76e7aa0",
+      "read_aloud": "From Deluin: Will do. Thank you for caring about me.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 114,
+      "kind": "screen",
+      "block_sha256": "2d6a9a272de2d9f6971b1ab2b35aa9c412cf22f18b433fab7f4945b6c31ea9b5",
+      "read_aloud": "A message from Deluin: Arctic soldier says thanks, it helped a lot.",
+      "status": "unreviewed"
+    }
+  ]
+}

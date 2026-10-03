@@ -21,3 +21,4 @@ a different thing and live in `/prompts`, starting with Milestone 2.
 | `005-studio-schema.md` | First push; brief v4b: `studio` schema, `studio_writer`, `setting` |
 | `006-design-direction.md` | Brief v4c: version anchors, take display, house narration, reader restyle |
 | `007-last-0001-edit.md` | Brief v4d: `replace` widened, 0001 frozen, `veridia/vote` template |
+| `008-narration-and-images.md` | Kokoro narration of all 32 chapters, pronunciation table, read-aloud drafts, first FLUX.2 klein image tests |

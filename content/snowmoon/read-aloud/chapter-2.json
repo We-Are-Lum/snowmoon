@@ -1,0 +1,42 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 2,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 6,
+      "kind": "quote",
+      "block_sha256": "8cb60145426ecec53ae0f0b47f50b260af555e1909f20520984c3ac29d6701f9",
+      "read_aloud": "The sign reads: {zui fia kun zun}.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 24,
+      "kind": "screen",
+      "block_sha256": "90af757d8f3e5b6377589aac084c0b2854734321552490971349285a9b70b3fb",
+      "read_aloud": "Zei's watch shows: {mun gui} eighteen forty-two, {tei} seventy thousand, and a large checkmark.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 39,
+      "kind": "quote",
+      "block_sha256": "9ee8597c77e5c84320e123901490cfd1692c5bd51e01bb1be3ad8692096fdf95",
+      "read_aloud": "The poster reads: {pa jan li sun zo}, {zai gau fe pa jan}. {go li sun zo}, {bai gau fe go}.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 55,
+      "kind": "figure",
+      "block_sha256": "aabd1821ac15da4fee3017cb3fcaa8a1d77559f0a3fa2f0ec273a03dc799d283",
+      "read_aloud": "The slide shows two jars of gas, each holding a few molecules drawn as dots, with arrows for their velocities: long arrows in the left jar, short ones in the right. Under each jar is a dot, times ten to the sixth. The left jar's range is zero to nine hundred ninety-nine thousand, nine hundred ninety-nine; the right jar's is zero to ninety-nine.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 71,
+      "kind": "figure",
+      "block_sha256": "e03198901f88f11b5df40bc0f0085b67d633c2f69d86cc56968cf7c2fb2e0773",
+      "read_aloud": "The two jars are now joined into one, and every molecule has a medium-length arrow. The label reads: a dot, times two times ten to the sixth, ranging from zero to four hundred ninety-nine thousand, nine hundred ninety-nine.",
+      "status": "unreviewed"
+    }
+  ]
+}

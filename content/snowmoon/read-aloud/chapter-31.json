@@ -1,0 +1,14 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 31,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 68,
+      "kind": "screen",
+      "block_sha256": "0e52aef39266a1eca4df1c0e5f91950b7f94f06854465a88ff8d606a69d2c600",
+      "read_aloud": "A message from Jahn: five images.",
+      "status": "unreviewed"
+    }
+  ]
+}

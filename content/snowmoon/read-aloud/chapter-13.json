@@ -1,0 +1,21 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 13,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 27,
+      "kind": "screen",
+      "block_sha256": "3b145da94de72c7d0ff1cf4b1bb242b1ee391aecea9d0d644938f6b398abdf2d",
+      "read_aloud": "A message from Mov: I've been following Delwart more, we should talk.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 64,
+      "kind": "screen",
+      "block_sha256": "705d4d6382c265e8a38d83a5c0972ed4050bbee38d951aba459f17d5ff144c78",
+      "read_aloud": "The message is titled: The Dead Hand of Egalitarianism, and the Path of Strength. It says that Veridia's schools, posters and songs all teach that humans are equal, except Dreadknot, which is exactly why its taxes went up to tier four, and that denying anyone can be better than another also denies that anyone can improve on their former self. It tells the reader to stop looking to Veridia's institutions to make life fair: Life is not fair, and should not be fair. Grow so strong, that you later look upon your former self with shame. Seek out those who give love when you win and a cold shoulder when you lose, because you are not good because you are human, you are good because you can win. It is signed Lord Ephelion, Arctic Empire consul to Veridia.",
+      "status": "unreviewed"
+    }
+  ]
+}

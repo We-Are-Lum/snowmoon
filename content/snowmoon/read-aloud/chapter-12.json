@@ -1,0 +1,49 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 12,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 5,
+      "kind": "quote",
+      "block_sha256": "7f5937fae76a96364c5b68ddc3c2fad91066e853168e25f026f99b7076c4b69c",
+      "read_aloud": "The sign reads: {sa dzu du}.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 26,
+      "kind": "quote",
+      "block_sha256": "4bb7592ba457e3fb15da262dc8aac8ba1e2301d2065c8e9950a802d1e02f1539",
+      "read_aloud": "The sign reads: {ti ka dia shu fe cen su jui hui}.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 36,
+      "kind": "screen",
+      "block_sha256": "bce6e9f5344800d429c5d1eee45a7cf174145085f28406a5261231618bb62b21",
+      "read_aloud": "His watch shows two boxes, each with a green check mark: {sen hen zi li die fe} one hundred fifty {zo lia kin}, and {man dun li jie hu}. Below them: {cau tie zen ci fan zi li} three oh four.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 50,
+      "kind": "figure",
+      "block_sha256": "7f3285f5635eb945e449f6042fce00f9bb0fe5525435c3dc00a4a7d7a1a91c00",
+      "read_aloud": "The diagram is titled {tun bia zi sin de sia}. A row of twelve input dots at the top is wired, with crisscrossing lines, through three layers of boxes, three boxes each, all labeled {fai hie}, the wires shuffling between every layer. Only six outputs come out at the bottom. Along the left side, an orange line carries part of the original input down past the boxes, where it is added in to the first output.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 97,
+      "kind": "screen",
+      "block_sha256": "a88761fc6745bea13d1663b0d09beeffb4c7af853211e52cf4c34dfab7fa70fc",
+      "read_aloud": "On his watch, a call request from Bai: {dia lau shau}.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 191,
+      "kind": "figure",
+      "block_sha256": "0a0a4aeeaf837bb524b582590b348a7ddcac23fbbf0b74a1b85ca2e5799440ab",
+      "read_aloud": "A view of the hexagonal board: a cluster of five light blue dots near the top, and eight small purple squares scattered across the lower half, with open space between them.",
+      "status": "unreviewed"
+    }
+  ]
+}

@@ -1,0 +1,41 @@
+{
+  "about": "Five test images for chapter 1, to judge quality, speed, and character consistency on a local Mac. Each job is anchored to the block it illustrates.",
+  "style": "designs/style-test-watercolor.json",
+  "jobs": [
+    {
+      "id": "gladias-sheet",
+      "chapter": 1, "idx": null,
+      "characters": ["designs/gladias-test.json"],
+      "prompt": "Character reference sheet of Gladias on a plain warm off-white background: three full-body views side by side, front view, three-quarter view, and side view, same man, same clothes, neutral standing pose, even lighting.",
+      "width": 1024, "height": 576, "seed": 3724
+    },
+    {
+      "id": "c1-b002-footpath",
+      "chapter": 1, "idx": 2,
+      "characters": [], "robe": true,
+      "prompt": "A lone figure in the robe walks along a foot path between tall trees. Behind the trees, houses of large stone bricks in a medieval style, clean and well kept, a few small signs for clothing, flowers and food. Scattered leaves and plants blend into the houses. Morning light.",
+      "width": 1024, "height": 576, "seed": 1002
+    },
+    {
+      "id": "c1-b013-sky-bridge",
+      "chapter": 1, "idx": 13,
+      "characters": [],
+      "prompt": "View from the middle of a pedestrian sky bridge over a busy road that runs about two kilometers then turns right. Beyond, a mountain covered with trees, and a few fifteen-storey apartment buildings shaped like oversized medieval castle towers with many windows, rising above the trees on the lower slope. Cars, small autonomous buses and delivery vehicles on the road below.",
+      "width": 1024, "height": 576, "seed": 1013
+    },
+    {
+      "id": "c1-b132-door",
+      "chapter": 1, "idx": 132,
+      "characters": ["designs/gladias-test.json"], "reference": "gladias-sheet",
+      "prompt": "Gladias, the man from the reference sheet, same face, hair, beard and clothes, stands at the open front door of a cozy family home in the evening, holding a paper bag full of numbered food boxes from a delivery.",
+      "width": 1024, "height": 576, "seed": 1132
+    },
+    {
+      "id": "c1-b136-dinner",
+      "chapter": 1, "idx": 136,
+      "characters": ["designs/gladias-test.json"], "reference": "gladias-sheet",
+      "prompt": "Gladias, the man from the reference sheet, same face, hair, beard and clothes, sits at a family dinner table eating from a numbered food box, seen from across the table. Warm lamp light, a few other food boxes on the table, a quiet evening at home.",
+      "width": 1024, "height": 576, "seed": 1136
+    }
+  ]
+}

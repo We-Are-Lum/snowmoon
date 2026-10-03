@@ -1,0 +1,35 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 17,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 5,
+      "kind": "screen",
+      "block_sha256": "6f7b0c8d12538466fd1695080f2fe8753a575840bef554553d35945e0ff94adb",
+      "read_aloud": "The circle shows: Veridian Parliament. Proof of invitation verified.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 54,
+      "kind": "figure",
+      "block_sha256": "33d50543ec8a3687cfdb1caa5256a5b0d2f6a6bd04ba44620ed5b9e88dfbd508",
+      "read_aloud": "The diagram centers on airborne disease resistance, with a dashed line leading up to the rest of the portfolio. It splits into five branches: air quality at twenty-four percent, early detection at twenty-two, treatment at twenty-one, prophylactics at twenty, and individual non-pharmaceutical prevention at eight. Each branch splits again: air quality mostly into ventilation and filtration, with fourteen percent to ultraviolet light; early detection into wastewater scanning, airborne environment scanning, individual testing and social media open-source analysis; treatment mostly into antivirals; prophylactics mostly into vaccines; and prevention mostly into masks, with smaller shares for nose sprays and saline nasal rinsing. From every one of those, more lines run off past the edge of the screen.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 73,
+      "kind": "figure",
+      "block_sha256": "e4a0c6c92477c0f464b6ada0486605316ee438ac867ca220d12d5e3c484525b9",
+      "read_aloud": "Zoomed in on ultraviolet light, which gets fourteen percent of the air quality portfolio. Forty-five percent of that goes to improving the efficiency of two hundred twenty-two nanometer lamps, thirty percent to safety testing of those lamps, and fifteen percent to upper-room deployment. Below those sit named projects and labs: Dalias and colleagues, Poppe and Mawart, and Vidrik under krypton chloride lamps; Bonne under alternative lamp designs; Kudlin and Melana, studying effects on household chemicals; and Pov and Imerry, and the V N U Aeronautics Lab, under deployment. The V N U Materials Science Lab is funded from two branches at once: alternative lamp designs, and safety testing.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 111,
+      "kind": "screen",
+      "block_sha256": "ceaa6934d229a54687c2ac2ae92bc63ce49e414c1298db49daae37794ab56812",
+      "read_aloud": "The ballot is titled Rubric: openness in hardware, and lists three motions, each with Yes and No buttons. The first adds a line to tiers one and two: Products in military, surveillance and counter-surveillance applications are not eligible for this tier. The second raises the tax brackets from zero, six, twelve, eighteen and twenty-four, to zero, ten, twenty, twenty-six and thirty-two. The third changes a line in tiers four and five from use of hardware means to prevent third-party repair, to use of hardware or software means to prevent third-party repair.",
+      "status": "unreviewed"
+    }
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 26,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 103,
+      "kind": "figure",
+      "block_sha256": "992a1548dbc5a7fd0fb39b67b56b91ee9ffbbe580dce9ef6a23e122e659bfe3d",
+      "read_aloud": "On the display, a dark blue map. In the upper right is the building, marked with a dark yellow triangle, and three of his drones, small pale dots trailing dashed lines, are closing in from the lower left.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 115,
+      "kind": "figure",
+      "block_sha256": "c453106c54cf17db4bb87540732167640b6fcc73886a3352f9edc14772c23c98",
+      "read_aloud": "The map now shows nine of his drones spread across the middle of the screen, still heading toward the building and its yellow triangle. Three of them are marked with red X's.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 129,
+      "kind": "figure",
+      "block_sha256": "7ccd7e63743a8cb0003259543d833d21efd486c379771d0be40cd4f0ed116b2b",
+      "read_aloud": "On the map, three drones have reached the building, and two bright yellow checkmarks sit just beside it where the triangle had been. Further back, one more drone is marked with a red X.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 139,
+      "kind": "figure",
+      "block_sha256": "6ea058c0744f860faffad71416967e1e1956bb561c8bd40286fc80ada8395477",
+      "read_aloud": "The map has changed to show a few roads. The two drones are flying off toward the top of the screen, while the two yellow checkmarks stay behind below them, near a junction of roads.",
+      "status": "unreviewed"
+    }
+  ]
+}

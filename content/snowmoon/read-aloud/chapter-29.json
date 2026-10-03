@@ -1,0 +1,63 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 29,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 34,
+      "kind": "figure",
+      "block_sha256": "8167373db7c0dcdc1a67cbdcc89b758ea54664a081a211770399daa4c1bf9243",
+      "read_aloud": "On the screen, a map of the region. Group North, Group Center and Group South start together in the southwest, each with a dashed arrow: North's runs up to the northern coast, Center's heads northeast, and South's runs east toward the outskirts of Northglade. Group Naval waits at sea to the southeast, its arrow pointing up onto the coast east of Northglade.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 59,
+      "kind": "figure",
+      "block_sha256": "22baa5d55752859326042ddc5d0527520521c209f14991f82bc6111ba36449dd",
+      "read_aloud": "The three land groups have moved partway along their arrows. Just north of Group North, two red dots have appeared: Arctic forces.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 68,
+      "kind": "figure",
+      "block_sha256": "28262fee98b64bf2ca30765dba5e017b0bc8934b6e13fa4c6c0a6df1f1147f8b",
+      "read_aloud": "A close-up tactical map: a diagonal line of six Veridian dots faces two red Arctic groups, three dots to the northwest and four to the east. Three more Veridian dots are coming up from the far south.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 74,
+      "kind": "figure",
+      "block_sha256": "6a047b155db785b69f9b61de38ac2ab12d48e07b1d4add331d0cfdbd9b839868",
+      "read_aloud": "On the tactical map, Veridian dots have pushed into the gap between the two red groups, and the dots from the south have swung up beside and behind the eastern red group, nearly closing around it.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 78,
+      "kind": "figure",
+      "block_sha256": "9bc8afd5984dddb36d98c56720e74b9faf3cf129351a301060c6114c652178b9",
+      "read_aloud": "Back on the big map, all four groups have moved further along their routes toward Northglade. Far behind in the west, a small Veridian dot holds its ground near a single red dot.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 81,
+      "kind": "figure",
+      "block_sha256": "1fe2730fb9d27a26c2994dfb62423d8152f70dadbda8deb3f6eb151dd09559fa",
+      "read_aloud": "On the map, a chain of red Arctic dots now stretches across the paths of Group Center and Group South, just west of Northglade. In the far west, the small Veridian dot still faces its lone red dot.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 108,
+      "kind": "screen",
+      "block_sha256": "5c252a685960480a9ed51362b7c98ce43a577b88cb3451db8f70ef73a7cab449",
+      "read_aloud": "The message reads: Rear base number three appears to have been completely destroyed by highly accurate hits from Arctic missiles. Most likely cause: internal traitors revealed the location of the base. Current expectation is that almost all personnel in the base did not survive. Probability that Den, commander of Group South, survived is estimated at under ten percent.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 114,
+      "kind": "screen",
+      "block_sha256": "e93e6bd45f942e9837775e4190495fbfe826ed97d448da10ff95a1f7947850ff",
+      "read_aloud": "The message reads: This is Deluin. Over these past months, I have been executing on my plan. I have earned the Arctics' trust; with the combination of my successful Minpentai background and my parents' status, this proved to be easy. As a result, I am now one of the commanders on the Arctic side. We are being heavily surveilled, and there are great limits to what I can do to the Arctic drone fleet without blowing my cover. However, I have managed to set up an exploitable weakness for you. This file contains descriptions of tactics that should be effective specifically against the southern flank, which I control. If you apply them, you should be able to break through about twenty kilometers north of the shore, and then proceed north and south to expand the rupture into a complete victory on the southern front. From there, it will be up to you to surround the remaining forces from the south, and recover Northglade.",
+      "status": "unreviewed"
+    }
+  ]
+}

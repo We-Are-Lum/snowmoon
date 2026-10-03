@@ -1,0 +1,42 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 30,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 4,
+      "kind": "screen",
+      "block_sha256": "a70112ef43d8d98f8e86e48070b68d84f721c394fbc89d01117b0b0d61770633",
+      "read_aloud": "He writes: I understand your concern and I fully agree that you do currently not have good reason to trust me. Unfortunately, I do not have a way to give you the raw weights of the language models on the drones. Those are well-protected and only a very small number of people have access to them, precisely because they are worried about an adversary using those weights to run gradient descent attacks. But I can give you the next best thing: API access to their simulated environment. This includes simulated copies of Arctic drones, both full world-model simulations and partial simulations that focus on their input modalities and give you classification results, given a particular visual input stream, what kind of object they think they are looking at. Here are the network addresses and access keys, as well as addresses and keys for Arctic endpoints in Redshire that you can proxy through. Remember to be safe and minimize risk of detection. Below that come two lists, Network and Proxies, each with four long strings of letters and numbers.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 29,
+      "kind": "screen",
+      "block_sha256": "fcc75c95bfbf26dd2e6d922abebf8e3faa2504aea216d2ea737d172b7b846060",
+      "read_aloud": "Another message from Deluin: I can see you are starting to run queries! Though you want to be more careful, if I can see it, the sentries might be able to as well. Here are some more proxy endpoints. Six more long strings of letters and numbers follow, and then: Also, add a bunch of dummy queries that are doing other things, and maybe even make each query attempt multiple different attacks simultaneously so it's less clear what it's doing.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 49,
+      "kind": "figure",
+      "block_sha256": "2fda447d80d624575ac650c3bf1618fe056654f44d972f2fbaf63c0811c71559",
+      "read_aloud": "On the big map, the front has dissolved into a scatter of small dots, Veridian and Arctic mixed together from the western forest all the way to Northglade, with the Veridian dots outnumbering the red.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 61,
+      "kind": "screen",
+      "block_sha256": "f6f7485632925a22163eb2ba8a68c13100c5a653192ee758f13b856f56ed82c5",
+      "read_aloud": "From Deluin: I hope you trust me now. My next message will contain exact coordinates of some of our units on the southern flank, and recommended weak points to attack through. And it ends: {jie fe hen dzi}, wish you luck.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 70,
+      "kind": "figure",
+      "block_sha256": "b71dee0e385107eef1168a26addcdfcecfc58d2713a2126ed7ea3d6da6fe64ba",
+      "read_aloud": "On the map, only a handful of red Arctic dots remain. On the southern front, Veridian dots have broken through and pushed right up to the edge of Northglade.",
+      "status": "unreviewed"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 7,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 6,
+      "kind": "screen",
+      "block_sha256": "7ecf01342ff125ec5d7e76916ae90b5f449e031f6637df3bfef7148310b519e2",
+      "read_aloud": "The robot's screen shows the question, {mo da cu ja li hen ma}, above a slider that runs from a doubled frown on the left, through a neutral face, to a doubled smile on the right, and a Select button.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 87,
+      "kind": "figure",
+      "block_sha256": "9114b8d89d84afd29d0100f565380f1eeda52dfa89dcd6771c5f07598cb5c737",
+      "read_aloud": "The big screen shows a map of the two players' symbols. Bai's are spread across the northern half of the field. Zei's fill the southern half, clustered around his bases in the southwest and the southeast.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 97,
+      "kind": "figure",
+      "block_sha256": "53585781212d21a3844c7250461e8ee7954ee5837522449a519b049572716ee7",
+      "read_aloud": "The map now: Bai's symbols have pushed down into the middle and the west of the field, while Zei's have thinned out, mostly along the south.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 112,
+      "kind": "figure",
+      "block_sha256": "4d7e066a9de4e9fe7c336b692f64162663feebafbc5f47127d3874ad41d1a3e4",
+      "read_aloud": "The map has changed: Zei's symbols now stand in the middle of the field, up toward the north, and along the east behind Bai's lines. Bai's are fewer, scattered across the north and the west.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 118,
+      "kind": "figure",
+      "block_sha256": "3953ef3c9f6bef7b949000d5bf7f07c4f9a4d1211112f9ab6626c470b8136aa5",
+      "read_aloud": "The final map: Zei's symbols hold the center, the north and the east, and his southwestern corner is empty. Only a handful of Bai's remain, mostly in the west and the north.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 142,
+      "kind": "quote",
+      "block_sha256": "8b0cf78380affba35ff87c62b253531e233ecadcc71d4b706cb23f7488ad373c",
+      "read_aloud": "On the front, the inscription reads: {dun fe tin di zei de kin kie}.",
+      "status": "unreviewed"
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 3,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 5,
+      "kind": "screen",
+      "block_sha256": "669317455602e3de83f70e1cf6bcf986f3d2a4b0d0a30261ae6701f610ac56ef",
+      "read_aloud": "The poster is headed: From a comfortable Veridia to a strong Veridia. It asks when Veridia last went to space, twenty years ago, and when it built its tallest building, forty years ago, and blames the Steering system, Graph Funding and Veridian culture for caring only about comfort in the present. Meanwhile, it says, the Arctic Empire builds housing, transportation and industry the fastest, and its scientists work to make people live longer. Veridia's vision of nature is a plant, beautiful but never rising; ours is a lion. It calls on the next generation of Veridian leaders to take charge, don't mind the mob, and build the future, and is signed Lord Ephelion, Arctic Empire consul to Veridia.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 37,
+      "kind": "screen",
+      "block_sha256": "d67e52e655fbdfccd9ad7221f93286ff1478ff69a937ed0aa339ec5922432aee",
+      "read_aloud": "A message from Seila: four images.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 53,
+      "kind": "screen",
+      "block_sha256": "75f2cccad6871dca990e8d4e4a709f147fa214ee069b8447404feb2f894b3e74",
+      "read_aloud": "The page is titled Greater Plum Harbor Public Activities. It lists work in four areas: the environment, such as cleanup and pollution monitoring; health and medicine research; education, including curricula for ages four to eighteen and youth math and programming competitions; and art, including public museums and movies and shows, three of them in the Veridian Top Twenty last year. At the bottom: All research outputs and tooling done by G P H are open source! Partially funded by Veridian Quadratic Funding.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 75,
+      "kind": "screen",
+      "block_sha256": "33bc9670c2744f1d0c15eedac321d2dc337120f86ea1e0b5e32b98b3191563a2",
+      "read_aloud": "His watch shows the air: carbon dioxide at nine hundred sixty-five and P M two point five at twenty-two point one, both in yellow. Below that, nearby devices: fifty-five attested, six unknown.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 129,
+      "kind": "figure",
+      "block_sha256": "891ca53318d30e11ac23881ad9a78194aa755bee0c4ff675495be9be6d5ef217",
+      "read_aloud": "A small map on his watch: an open space, with a narrow passage leading out of it at the top. A dot labelled Gladias sits in the lower corner of the open space. Another dot, labelled Mov, is at the mouth of the passage, with an arrow pointing up into it.",
+      "status": "unreviewed"
+    }
+  ]
+}

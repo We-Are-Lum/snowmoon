@@ -1,0 +1,14 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 24,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 29,
+      "kind": "quote",
+      "block_sha256": "b27e8e293ef2c47fcf6a2e23ad829d9b27dfc2b2b96da2dab9c3e156ef614340",
+      "read_aloud": "The new slogan, in two lines: {sun jan li shai fe to dzan dzie ka jie dau fe sei sui ji cen hai zun}. {ci sun gau jan li gei shai fe to dzan dzie de mia ka ti dzie ka pu she}.",
+      "status": "unreviewed"
+    }
+  ]
+}

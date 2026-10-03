@@ -1,0 +1,4782 @@
+{
+  "work_id": "snowmoon",
+  "about": "Pronunciation of invented words and names, applied before text is sent to the speech model. Phonemes use misaki's American English set (the G2P behind Kokoro): A = 'ay' as in day, O = 'oh' as in go, I = 'eye', W = 'ow' as in now, T = flapped t, ˈ = primary stress. Entries with override: true are forced with misaki's [word](/phonemes/) syntax; the rest are listed with what the default G2P already produces, so a future model change can be checked against them. Nothing here comes from the author; every entry is unreviewed until someone signs off.",
+  "g2p": "misaki 0.9.4, lang_code a (en-us)",
+  "entries": [
+    {
+      "word": "autobus",
+      "kind": "coinage",
+      "chapters": [
+        1,
+        2,
+        8,
+        11,
+        13,
+        20,
+        23
+      ],
+      "respelling": "AW-toh-bus",
+      "phonemes": "ˌɔTObˈʌs",
+      "override": false,
+      "reviewed": false,
+      "note": "Plural autobuses follows."
+    },
+    {
+      "word": "Badra",
+      "kind": "place",
+      "chapters": [
+        1,
+        8
+      ],
+      "respelling": "BAD-ruh",
+      "phonemes": "bˈædɹə",
+      "override": false,
+      "reviewed": false,
+      "note": "Street name. 'Badra St #1103' is read as 'Badra Street number eleven oh three'."
+    },
+    {
+      "word": "Clearhill",
+      "kind": "place",
+      "chapters": [
+        1
+      ],
+      "respelling": "CLEER-hill",
+      "phonemes": "klˈɪɹhɪl",
+      "override": false,
+      "reviewed": false,
+      "note": "Avenue name. 'Ave' is expanded to 'Avenue'."
+    },
+    {
+      "word": "Daia",
+      "kind": "name",
+      "chapters": [
+        1,
+        6,
+        8,
+        11,
+        16,
+        20,
+        21,
+        23,
+        31
+      ],
+      "respelling": "DAY-uh",
+      "phonemes": "dˈAə",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Dreadknot",
+      "kind": "name",
+      "chapters": [
+        1,
+        3,
+        10,
+        13,
+        15,
+        16,
+        20
+      ],
+      "respelling": "DRED-not",
+      "phonemes": "dɹˈɛdnɑt",
+      "override": false,
+      "reviewed": false,
+      "note": "Band name; silent k."
+    },
+    {
+      "word": "Dzego",
+      "kind": "place",
+      "chapters": [
+        1,
+        2,
+        3,
+        4,
+        5,
+        6,
+        7,
+        8,
+        9,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        29,
+        31,
+        32
+      ],
+      "respelling": "DZEH-go",
+      "phonemes": "ˈdzɛɡO",
+      "override": true,
+      "reviewed": false,
+      "note": "Spelled by the Dzegoban rule (see dzegoban_rule). Default G2P spelled out 'D-Z'.",
+      "rule": "dzegoban"
+    },
+    {
+      "word": "Febric",
+      "kind": "name",
+      "chapters": [
+        1,
+        6,
+        11,
+        13,
+        15,
+        16,
+        17,
+        20,
+        21,
+        23,
+        24,
+        26,
+        27,
+        28,
+        31
+      ],
+      "respelling": "FEB-rick",
+      "phonemes": "fˈɛbɹɪk",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Freetown",
+      "kind": "place",
+      "chapters": [
+        1,
+        2,
+        3,
+        5,
+        7,
+        9,
+        10,
+        11,
+        13,
+        15,
+        17,
+        18,
+        22,
+        23,
+        24,
+        26,
+        28,
+        29,
+        31
+      ],
+      "respelling": "FREE-town",
+      "phonemes": "fɹˈitˌWn",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Gladias",
+      "kind": "name",
+      "chapters": [
+        1,
+        3,
+        5,
+        6,
+        8,
+        10,
+        11,
+        13,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        31,
+        32
+      ],
+      "respelling": "GLAD-ee-us",
+      "phonemes": "ɡlˈædiəz",
+      "override": false,
+      "reviewed": false,
+      "note": "Family calls him 'Uncle Glad' (block 130), which supports GLAD."
+    },
+    {
+      "word": "Hreda",
+      "kind": "name",
+      "chapters": [
+        1,
+        8,
+        11,
+        13,
+        15,
+        17,
+        20,
+        21,
+        23,
+        24,
+        26,
+        27,
+        31
+      ],
+      "respelling": "HRED-uh",
+      "phonemes": "hɹˈɛdə",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Hydrafill",
+      "kind": "brand",
+      "chapters": [
+        1,
+        3,
+        8,
+        11,
+        16,
+        27,
+        32
+      ],
+      "respelling": "HY-druh-fill",
+      "phonemes": "hˈIdɹəfˌɪl",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Jahn",
+      "kind": "name",
+      "chapters": [
+        1,
+        5,
+        10,
+        11,
+        15,
+        22,
+        31
+      ],
+      "respelling": "JAHN",
+      "phonemes": "ʤˈɑn",
+      "override": false,
+      "reviewed": false,
+      "note": "Could be 'Yahn'; the book does not say."
+    },
+    {
+      "word": "Kalimar",
+      "kind": "place",
+      "chapters": [
+        1,
+        6,
+        16,
+        20,
+        26,
+        27,
+        32
+      ],
+      "respelling": "KAL-ih-mar",
+      "phonemes": "kˈælɪməɹ",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "longhour",
+      "kind": "time",
+      "chapters": [
+        1,
+        6,
+        7,
+        8,
+        9,
+        12,
+        15,
+        17,
+        18,
+        19,
+        20,
+        22,
+        23,
+        24,
+        27,
+        30
+      ],
+      "respelling": "LONG-our",
+      "phonemes": "lˈɔŋWəɹ",
+      "override": false,
+      "reviewed": false,
+      "note": "Unit of the decimal clock."
+    },
+    {
+      "word": "medieval",
+      "kind": "common-word",
+      "chapters": [
+        1
+      ],
+      "respelling": "med-ee-EE-vul",
+      "phonemes": "mˌɛdiˈivᵊl",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "note": "Default G2P said 'mee-dee-EE-vul'; Nate flagged it after listening to chapter 1. Replacement not yet reviewed."
+    },
+    {
+      "word": "Meldan",
+      "kind": "place",
+      "chapters": [
+        1,
+        3,
+        6,
+        8,
+        10,
+        11,
+        13,
+        15,
+        16,
+        17,
+        20,
+        21,
+        26,
+        27,
+        28,
+        32
+      ],
+      "respelling": "MEL-dun",
+      "phonemes": "mˈɛldən",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Seila",
+      "kind": "name",
+      "chapters": [
+        1,
+        3,
+        5,
+        6,
+        8,
+        10,
+        11,
+        13,
+        15,
+        16,
+        17,
+        18,
+        20,
+        21,
+        23,
+        24,
+        26,
+        27,
+        28,
+        31,
+        32
+      ],
+      "respelling": "SAY-luh",
+      "phonemes": "sˈAlə",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Snowmoon",
+      "kind": "time",
+      "chapters": [
+        1,
+        2,
+        3,
+        4,
+        29,
+        30
+      ],
+      "respelling": "SNOW-moon",
+      "phonemes": "snˈOmun",
+      "override": false,
+      "reviewed": false,
+      "note": "A month in the dateline '3724 Snowmoon 3'."
+    },
+    {
+      "word": "Veridia",
+      "kind": "place",
+      "chapters": [
+        1,
+        3,
+        4,
+        5,
+        6,
+        8,
+        10,
+        11,
+        13,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "respelling": "veh-RID-ee-uh",
+      "phonemes": "vɛɹˈɪdiə",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Veridian",
+      "kind": "adjective",
+      "chapters": [
+        1,
+        3,
+        4,
+        7,
+        8,
+        9,
+        10,
+        11,
+        16,
+        17,
+        18,
+        19,
+        20,
+        21,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        32
+      ],
+      "respelling": "veh-RID-ee-un",
+      "phonemes": "vɛɹˈɪdiən",
+      "override": false,
+      "reviewed": false,
+      "note": "Plural Veridians follows."
+    },
+    {
+      "word": "Vil",
+      "kind": "name",
+      "chapters": [
+        1,
+        6,
+        8,
+        11,
+        16,
+        17,
+        20,
+        21,
+        23,
+        31
+      ],
+      "respelling": "VILL",
+      "phonemes": "vˈɪl",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Zven",
+      "kind": "name",
+      "chapters": [
+        1,
+        11,
+        13,
+        15,
+        16,
+        17,
+        21,
+        24,
+        26,
+        28,
+        31
+      ],
+      "respelling": "ZVEN",
+      "phonemes": "zvˈɛn",
+      "override": true,
+      "reviewed": false,
+      "note": "Default G2P spelled it as 'Zee-ven'."
+    },
+    {
+      "word": "bai gau fe go",
+      "kind": "dzegoban",
+      "chapters": [
+        2,
+        18
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈbI ˈɡW ˈfɛ ˈɡO",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "with the previous line: A nation learning will make the nation great"
+    },
+    {
+      "word": "Devanvil",
+      "kind": "place",
+      "chapters": [
+        2,
+        3,
+        5,
+        10,
+        15
+      ],
+      "phonemes": "dˈɛvənvˌɪl",
+      "override": true,
+      "reviewed": false,
+      "note": "Default G2P misread it; forced."
+    },
+    {
+      "word": "DU",
+      "kind": "name",
+      "chapters": [
+        2,
+        4,
+        5,
+        19
+      ],
+      "phonemes": "dˌijˈu",
+      "override": false,
+      "reviewed": false,
+      "meaning": "Decentralized University"
+    },
+    {
+      "word": "Dze go ba fau gie",
+      "kind": "dzegoban",
+      "chapters": [
+        2,
+        5,
+        7,
+        10,
+        12,
+        29
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈdzɛ ˈɡO ˈbɑ ˈfW ˈɡjɛ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Dzego will rise again"
+    },
+    {
+      "word": "Dzegoban",
+      "kind": "dzegoban",
+      "chapters": [
+        2,
+        4,
+        5,
+        8,
+        9,
+        14,
+        17,
+        18,
+        19,
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈdzɛɡObɑn",
+      "override": true,
+      "match_case": true,
+      "reviewed": false,
+      "meaning": "the language of Dzego"
+    },
+    {
+      "word": "Dzegojan",
+      "kind": "dzegoban",
+      "chapters": [
+        2,
+        8,
+        9,
+        10,
+        12,
+        15,
+        18,
+        21,
+        24,
+        26,
+        27
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈdzɛɡOʤɑn",
+      "override": true,
+      "match_case": true,
+      "reviewed": false,
+      "meaning": "of Dzego"
+    },
+    {
+      "word": "dzu hu sun du",
+      "kind": "dzegoban",
+      "chapters": [
+        2
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈdzu ˈhu ˈsun ˈdu",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Decentralized University"
+    },
+    {
+      "word": "Fin",
+      "kind": "dzegoban",
+      "chapters": [
+        2,
+        4,
+        7,
+        9,
+        10,
+        12,
+        15,
+        18,
+        19,
+        23,
+        30,
+        32
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈfɪn",
+      "override": true,
+      "match_case": true,
+      "reviewed": false
+    },
+    {
+      "word": "gie fe kiu kai ci bin hu",
+      "kind": "dzegoban",
+      "chapters": [
+        2,
+        7,
+        18
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈɡjɛ ˈfɛ ˈkju ˈkI ˈtsi ˈbɪn ˈhu",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Grow roots, no head"
+    },
+    {
+      "word": "go li sun zo",
+      "kind": "dzegoban",
+      "chapters": [
+        2,
+        18
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈɡO ˈli ˈsun ˈzO",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "with the next line: A nation learning will make the nation great"
+    },
+    {
+      "word": "Hun Min",
+      "kind": "dzegoban",
+      "chapters": [
+        2
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈhun ˈmɪn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "milli-ticks",
+      "kind": "time",
+      "chapters": [
+        2
+      ],
+      "phonemes": "mˈɪlɪtˈɪks",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Minpentai",
+      "kind": "dzegoban",
+      "chapters": [
+        2,
+        4,
+        5,
+        7,
+        9,
+        10,
+        12,
+        15,
+        16,
+        17,
+        19,
+        21,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        31
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈmɪnpɛntI",
+      "override": true,
+      "match_case": true,
+      "reviewed": false
+    },
+    {
+      "word": "Mun Gui",
+      "kind": "dzegoban",
+      "chapters": [
+        2
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈmun ˈɡwi",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "pa jan li sun zo",
+      "kind": "dzegoban",
+      "chapters": [
+        2,
+        18
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈpɑ ˈʤɑn ˈli ˈsun ˈzO",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "with the next line: One man learning will set one man free"
+    },
+    {
+      "word": "Pafogai Du",
+      "kind": "dzegoban",
+      "chapters": [
+        2,
+        4,
+        7,
+        9,
+        10,
+        12,
+        14,
+        15,
+        18,
+        19,
+        23,
+        24,
+        25,
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈpɑfOɡI ˈdu",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "Redshire",
+      "kind": "place",
+      "chapters": [
+        2,
+        4,
+        5,
+        7,
+        10,
+        11,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        22,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "phonemes": "ɹˈɛdʃəɹ",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "TEI",
+      "kind": "dzegoban",
+      "chapters": [
+        2
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtA",
+      "override": true,
+      "match_case": true,
+      "reviewed": false
+    },
+    {
+      "word": "zai gau fe pa jan",
+      "kind": "dzegoban",
+      "chapters": [
+        2,
+        18
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈzI ˈɡW ˈfɛ ˈpɑ ˈʤɑn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "with the previous line: One man learning will set one man free"
+    },
+    {
+      "word": "Zei",
+      "kind": "dzegoban",
+      "chapters": [
+        2,
+        4,
+        5,
+        7,
+        9,
+        10,
+        12,
+        13,
+        14,
+        15,
+        16,
+        17,
+        18,
+        19,
+        20,
+        22,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈzA",
+      "override": true,
+      "match_case": true,
+      "reviewed": false
+    },
+    {
+      "word": "zui fia kun zun",
+      "kind": "dzegoban",
+      "chapters": [
+        2
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈzwi ˈfjɑ ˈkun ˈzun",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Underground safe place"
+    },
+    {
+      "word": "Bluewhale",
+      "kind": "brand",
+      "chapters": [
+        3,
+        6,
+        8,
+        10,
+        11,
+        16,
+        17,
+        18,
+        20
+      ],
+      "phonemes": "blˈuwAl",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Delwart",
+      "kind": "name",
+      "chapters": [
+        3,
+        6,
+        10,
+        11,
+        13,
+        15,
+        16,
+        17,
+        20,
+        21,
+        23,
+        25,
+        29
+      ],
+      "phonemes": "dˈɛlwɔɹt",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Ephelion",
+      "kind": "name",
+      "chapters": [
+        3,
+        6,
+        8,
+        11,
+        13,
+        16,
+        20,
+        21,
+        23,
+        24,
+        26,
+        27
+      ],
+      "phonemes": "ɛfˈɛliən",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "GPH",
+      "kind": "place",
+      "chapters": [
+        3,
+        6,
+        13,
+        26
+      ],
+      "phonemes": "ʤˌipˌiˈAʧ",
+      "override": false,
+      "reviewed": false,
+      "meaning": "Greater Plum Harbor"
+    },
+    {
+      "word": "Helisport",
+      "kind": "coinage",
+      "chapters": [
+        3,
+        6,
+        8,
+        11,
+        13,
+        16,
+        21,
+        28,
+        29
+      ],
+      "phonemes": "hˈɛlɪspˌɔɹt",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Inglewore",
+      "kind": "place",
+      "chapters": [
+        3,
+        5,
+        6,
+        9,
+        13
+      ],
+      "phonemes": "ˈɪŋɡəlwˌɔɹ",
+      "override": true,
+      "reviewed": false,
+      "note": "Default G2P misread it; forced."
+    },
+    {
+      "word": "Mov",
+      "kind": "name",
+      "chapters": [
+        3,
+        6,
+        8,
+        13,
+        15,
+        16,
+        17,
+        20,
+        21,
+        23,
+        26,
+        27,
+        29
+      ],
+      "phonemes": "mˈɑv",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Northglade",
+      "kind": "place",
+      "chapters": [
+        3,
+        8,
+        10,
+        11,
+        17,
+        20,
+        21,
+        22,
+        23,
+        24,
+        25,
+        26,
+        29,
+        30,
+        31,
+        32
+      ],
+      "phonemes": "nˈɔɹθɡlAd",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Silverchat",
+      "kind": "brand",
+      "chapters": [
+        3,
+        6,
+        8,
+        10,
+        15,
+        16,
+        17,
+        20,
+        21,
+        27,
+        28,
+        32
+      ],
+      "phonemes": "sˈɪlvəɹʧˌæt",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Bai",
+      "kind": "dzegoban",
+      "chapters": [
+        4,
+        5,
+        7,
+        9,
+        10,
+        12,
+        13,
+        14,
+        16,
+        17,
+        18,
+        19,
+        23,
+        24,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈbI",
+      "override": true,
+      "match_case": true,
+      "reviewed": false
+    },
+    {
+      "word": "Bai Jahen",
+      "kind": "dzegoban",
+      "chapters": [
+        4,
+        7
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈbI ˈʤɑhɛn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "Bansunpei",
+      "kind": "dzegoban",
+      "chapters": [
+        4,
+        7,
+        9,
+        10,
+        12,
+        18,
+        19,
+        24,
+        30,
+        32
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈbɑnsunpA",
+      "override": true,
+      "match_case": true,
+      "reviewed": false
+    },
+    {
+      "word": "bau",
+      "kind": "dzegoban",
+      "chapters": [
+        4
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈbW",
+      "override": false,
+      "match_case": true,
+      "reviewed": false,
+      "note": "Single lowercase word: applied only inside italics or braces, since many are also English spellings."
+    },
+    {
+      "word": "Dza Dzingo",
+      "kind": "dzegoban",
+      "chapters": [
+        4
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈdzɑ ˈdzɪnɡO",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "Dzai Gun",
+      "kind": "dzegoban",
+      "chapters": [
+        4,
+        18
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈdzI ˈɡun",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "dze liu",
+      "kind": "dzegoban",
+      "chapters": [
+        4
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈdzɛ ˈlju",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "gai lie",
+      "kind": "dzegoban",
+      "chapters": [
+        4
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈɡI ˈljɛ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ja",
+      "kind": "dzegoban",
+      "chapters": [
+        4,
+        14,
+        17
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈʤɑ",
+      "override": false,
+      "match_case": true,
+      "reviewed": false,
+      "note": "Single lowercase word: applied only inside italics or braces, since many are also English spellings.",
+      "meaning": "water"
+    },
+    {
+      "word": "Ja",
+      "kind": "dzegoban",
+      "chapters": [
+        4
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈʤɑ",
+      "override": true,
+      "match_case": true,
+      "reviewed": false
+    },
+    {
+      "word": "jau jin lie",
+      "kind": "dzegoban",
+      "chapters": [
+        4
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈʤW ˈʤɪn ˈljɛ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "jia dzu lie",
+      "kind": "dzegoban",
+      "chapters": [
+        4,
+        9
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈʤjɑ ˈdzu ˈljɛ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "black center fruit (avocado)"
+    },
+    {
+      "word": "jie fe hen dzi",
+      "kind": "dzegoban",
+      "chapters": [
+        4,
+        30
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈʤjɛ ˈfɛ ˈhɛn ˈdzi",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Wish you luck"
+    },
+    {
+      "word": "jie mo kai tu jie hei ja ma",
+      "kind": "dzegoban",
+      "chapters": [
+        4,
+        14,
+        17
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈʤjɛ ˈmO ˈkI ˈtu ˈʤjɛ ˈhA ˈʤɑ ˈmɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "the restaurant robots' ordering question"
+    },
+    {
+      "word": "kai",
+      "kind": "dzegoban",
+      "chapters": [
+        4,
+        14,
+        17
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈkI",
+      "override": false,
+      "match_case": true,
+      "reviewed": false,
+      "note": "Single lowercase word: applied only inside italics or braces, since many are also English spellings.",
+      "meaning": "shown by a leaf glyph on the menu"
+    },
+    {
+      "word": "kai can",
+      "kind": "dzegoban",
+      "chapters": [
+        4
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈkI ˈtsɑn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "LE MU GEI FA",
+      "kind": "dzegoban",
+      "chapters": [
+        4,
+        7,
+        12
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈlɛ ˈmu ˈɡA ˈfɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Starting in twenty-five ticks"
+    },
+    {
+      "word": "LE MU GEI TAU FA",
+      "kind": "dzegoban",
+      "chapters": [
+        4,
+        7
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈlɛ ˈmu ˈɡA ˈtW ˈfɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Twenty-five ticks (until the battle begins)"
+    },
+    {
+      "word": "lei kai fun",
+      "kind": "dzegoban",
+      "chapters": [
+        4
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈlA ˈkI ˈfun",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "lui",
+      "kind": "dzegoban",
+      "chapters": [
+        4
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈlwi",
+      "override": false,
+      "match_case": true,
+      "reviewed": false,
+      "note": "Single lowercase word: applied only inside italics or braces, since many are also English spellings."
+    },
+    {
+      "word": "Mu",
+      "kind": "dzegoban",
+      "chapters": [
+        4,
+        7,
+        10,
+        12,
+        15,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈmu",
+      "override": true,
+      "match_case": true,
+      "reviewed": false
+    },
+    {
+      "word": "MU GU GEI FA",
+      "kind": "dzegoban",
+      "chapters": [
+        4,
+        7,
+        12
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈmu ˈɡu ˈɡA ˈfɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Starting in fifty ticks"
+    },
+    {
+      "word": "MU GU GEI TAU FA",
+      "kind": "dzegoban",
+      "chapters": [
+        4,
+        7,
+        12,
+        14
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈmu ˈɡu ˈɡA ˈtW ˈfɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "The battle begins in fifty ticks"
+    },
+    {
+      "word": "PA GU GEI FA",
+      "kind": "dzegoban",
+      "chapters": [
+        4,
+        7,
+        12
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈpɑ ˈɡu ˈɡA ˈfɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "PA GU SO BI ZE HA MU FO SHI LE PA",
+      "kind": "dzegoban",
+      "chapters": [
+        4,
+        12
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈpɑ ˈɡu ˈsO ˈbi ˈzɛ ˈhɑ ˈmu ˈfO ˈʃi ˈlɛ ˈpɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "a final countdown"
+    },
+    {
+      "word": "Pan Munbau",
+      "kind": "dzegoban",
+      "chapters": [
+        4
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈpɑn ˈmunbW",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "po so dze go ban de sia",
+      "kind": "dzegoban",
+      "chapters": [
+        4,
+        9
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈpO ˈsO ˈdzɛ ˈɡO ˈbɑn ˈdɛ ˈsjɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "the conception of Dzegoban version nine"
+    },
+    {
+      "word": "TAU FA",
+      "kind": "dzegoban",
+      "chapters": [
+        4,
+        12,
+        14
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtW ˈfɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "tei",
+      "kind": "dzegoban",
+      "chapters": [
+        4,
+        12,
+        15
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtA",
+      "override": false,
+      "match_case": true,
+      "reviewed": false,
+      "note": "Single lowercase word: applied only inside italics or braces, since many are also English spellings."
+    },
+    {
+      "word": "tie",
+      "kind": "dzegoban",
+      "chapters": [
+        4,
+        12,
+        15,
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtjɛ",
+      "override": false,
+      "match_case": true,
+      "reviewed": false,
+      "note": "Single lowercase word: applied only inside italics or braces, since many are also English spellings."
+    },
+    {
+      "word": "zan",
+      "kind": "dzegoban",
+      "chapters": [
+        4,
+        12,
+        15,
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈzɑn",
+      "override": false,
+      "match_case": true,
+      "reviewed": false,
+      "note": "Single lowercase word: applied only inside italics or braces, since many are also English spellings."
+    },
+    {
+      "word": "Zau",
+      "kind": "dzegoban",
+      "chapters": [
+        4
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈzW",
+      "override": true,
+      "match_case": true,
+      "reviewed": false
+    },
+    {
+      "word": "Zei Leimin",
+      "kind": "dzegoban",
+      "chapters": [
+        4,
+        7
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈzA ˈlAmɪn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "Arturia",
+      "kind": "place",
+      "chapters": [
+        5,
+        22,
+        26
+      ],
+      "phonemes": "ɑɹtˈʊɹiə",
+      "override": true,
+      "reviewed": false,
+      "note": "Default G2P misread it; forced."
+    },
+    {
+      "word": "Belpaki",
+      "kind": "place",
+      "chapters": [
+        5,
+        8,
+        10,
+        22
+      ],
+      "phonemes": "bɛlpˈæki",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Deplexi",
+      "kind": "place",
+      "chapters": [
+        5,
+        10
+      ],
+      "phonemes": "dᵻplˈɛksi",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Hapton",
+      "kind": "place",
+      "chapters": [
+        5,
+        10
+      ],
+      "phonemes": "hˈæptən",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Imber",
+      "kind": "place",
+      "chapters": [
+        5,
+        10
+      ],
+      "phonemes": "ˈɪmbəɹ",
+      "override": true,
+      "reviewed": false,
+      "note": "Default G2P misread it; forced."
+    },
+    {
+      "word": "Iptak",
+      "kind": "place",
+      "chapters": [
+        5,
+        8,
+        11
+      ],
+      "phonemes": "ˈɪptæk",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Mabuli",
+      "kind": "place",
+      "chapters": [
+        5,
+        15,
+        21
+      ],
+      "phonemes": "mɑbˈuli",
+      "override": true,
+      "reviewed": false,
+      "note": "Default G2P misread it; forced."
+    },
+    {
+      "word": "Mantak",
+      "kind": "place",
+      "chapters": [
+        5,
+        8
+      ],
+      "phonemes": "mˈæntæk",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Min",
+      "kind": "dzegoban",
+      "chapters": [
+        5
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈmɪn",
+      "override": true,
+      "match_case": true,
+      "reviewed": false
+    },
+    {
+      "word": "Ondak",
+      "kind": "place",
+      "chapters": [
+        5,
+        8,
+        10
+      ],
+      "phonemes": "ˈɑndæk",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Petersvil",
+      "kind": "place",
+      "chapters": [
+        5
+      ],
+      "phonemes": "pˈiTəɹsvᵊl",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Rainmoon",
+      "kind": "time",
+      "chapters": [
+        5,
+        6,
+        7,
+        8,
+        9,
+        31,
+        32
+      ],
+      "phonemes": "ɹˈAnmun",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Silverbeach",
+      "kind": "place",
+      "chapters": [
+        5,
+        15
+      ],
+      "phonemes": "sˈɪlvəɹbˌiʧ",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Alagael",
+      "kind": "name",
+      "chapters": [
+        6
+      ],
+      "phonemes": "əlˈæɡAl",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Belpakian",
+      "kind": "place",
+      "chapters": [
+        6
+      ],
+      "phonemes": "bɛlpˈækiən",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Galanar",
+      "kind": "place",
+      "chapters": [
+        6
+      ],
+      "phonemes": "ɡˈælænəɹ",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Haragmir",
+      "kind": "place",
+      "chapters": [
+        6,
+        28
+      ],
+      "phonemes": "hˈæɹəɡmˌɪɹ",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Pelae",
+      "kind": "name",
+      "chapters": [
+        6
+      ],
+      "phonemes": "pˈɛlA",
+      "override": true,
+      "reviewed": false,
+      "note": "Default G2P misread it; forced."
+    },
+    {
+      "word": "Tapaia",
+      "kind": "place",
+      "chapters": [
+        6
+      ],
+      "phonemes": "təpˈIə",
+      "override": true,
+      "reviewed": false,
+      "note": "Default G2P misread it; forced."
+    },
+    {
+      "word": "zc",
+      "kind": "coinage",
+      "chapters": [
+        6
+      ],
+      "phonemes": "zˌisˈi",
+      "override": false,
+      "reviewed": false,
+      "meaning": "zipcoins"
+    },
+    {
+      "word": "zipcoins",
+      "kind": "coinage",
+      "chapters": [
+        6,
+        11,
+        15,
+        16,
+        19,
+        20,
+        21,
+        22,
+        27
+      ],
+      "phonemes": "zˈɪpkYnz",
+      "override": false,
+      "reviewed": false,
+      "meaning": "a unit of currency"
+    },
+    {
+      "word": "bin hu",
+      "kind": "dzegoban",
+      "chapters": [
+        7
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈbɪn ˈhu",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "No head"
+    },
+    {
+      "word": "dun fe tin di zei de kin kie",
+      "kind": "dzegoban",
+      "chapters": [
+        7
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈdun ˈfɛ ˈtɪn ˈdi ˈzA ˈdɛ ˈkɪn ˈkjɛ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "For Zei's eyes only"
+    },
+    {
+      "word": "mo da cu ja li hen ma",
+      "kind": "dzegoban",
+      "chapters": [
+        7
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈmO ˈdɑ ˈtsu ˈʤɑ ˈli ˈhɛn ˈmɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Is the food and drink good?"
+    },
+    {
+      "word": "MU FO",
+      "kind": "dzegoban",
+      "chapters": [
+        7
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈmu ˈfO",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "PA GU",
+      "kind": "dzegoban",
+      "chapters": [
+        7,
+        14
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈpɑ ˈɡu",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "Po so dze go ban",
+      "kind": "dzegoban",
+      "chapters": [
+        7
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈpO ˈsO ˈdzɛ ˈɡO ˈbɑn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "SHI LE PA TAU FA",
+      "kind": "dzegoban",
+      "chapters": [
+        7
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈʃi ˈlɛ ˈpɑ ˈtW ˈfɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "SO BI ZE HA",
+      "kind": "dzegoban",
+      "chapters": [
+        7
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈsO ˈbi ˈzɛ ˈhɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "Ancus",
+      "kind": "name",
+      "chapters": [
+        8
+      ],
+      "phonemes": "ˈæŋkəs",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Colorball",
+      "kind": "coinage",
+      "chapters": [
+        8
+      ],
+      "phonemes": "kˈʌləɹbˌɔl",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Papli",
+      "kind": "name",
+      "chapters": [
+        8
+      ],
+      "phonemes": "pˈæpli",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Sylka",
+      "kind": "name",
+      "chapters": [
+        8,
+        26,
+        27
+      ],
+      "phonemes": "sˈɪlkə",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "the aks",
+      "kind": "coinage",
+      "chapters": [
+        8
+      ],
+      "phonemes": "ði ˈæks",
+      "override": false,
+      "reviewed": false,
+      "meaning": "the cluster of Ondak, Iptak, Mantak and Belpaki"
+    },
+    {
+      "word": "Verdow",
+      "kind": "name",
+      "chapters": [
+        8,
+        17,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        32
+      ],
+      "phonemes": "vˈɜɹdO",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "VNU",
+      "kind": "name",
+      "chapters": [
+        8,
+        17,
+        32
+      ],
+      "phonemes": "vˌiˌɛnjˈu",
+      "override": false,
+      "reviewed": false,
+      "meaning": "Veridia National University"
+    },
+    {
+      "word": "Den",
+      "kind": "dzegoban",
+      "chapters": [
+        9,
+        10,
+        12,
+        15,
+        19,
+        23,
+        24,
+        25,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈdɛn",
+      "override": true,
+      "match_case": true,
+      "reviewed": false
+    },
+    {
+      "word": "fe",
+      "kind": "dzegoban",
+      "chapters": [
+        9
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈfɛ",
+      "override": false,
+      "match_case": true,
+      "reviewed": false,
+      "note": "Single lowercase word: applied only inside italics or braces, since many are also English spellings.",
+      "meaning": "separator between verb and object"
+    },
+    {
+      "word": "giu jan li mo fe jia dzu lie",
+      "kind": "dzegoban",
+      "chapters": [
+        9
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈɡju ˈʤɑn ˈli ˈmO ˈfɛ ˈʤjɑ ˈdzu ˈljɛ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "The man eats the avocado"
+    },
+    {
+      "word": "ji",
+      "kind": "dzegoban",
+      "chapters": [
+        9
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈʤi",
+      "override": false,
+      "match_case": true,
+      "reviewed": false,
+      "note": "Single lowercase word: applied only inside italics or braces, since many are also English spellings.",
+      "meaning": "separator (between modifiers)"
+    },
+    {
+      "word": "jia dzu ji lie",
+      "kind": "dzegoban",
+      "chapters": [
+        9
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈʤjɑ ˈdzu ˈʤi ˈljɛ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "Kungaupei",
+      "kind": "dzegoban",
+      "chapters": [
+        9,
+        10,
+        15,
+        19,
+        23,
+        24,
+        26,
+        27,
+        28,
+        29,
+        30,
+        32
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈkunɡWpA",
+      "override": true,
+      "match_case": true,
+      "reviewed": false
+    },
+    {
+      "word": "li",
+      "kind": "dzegoban",
+      "chapters": [
+        9
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈli",
+      "override": false,
+      "match_case": true,
+      "reviewed": false,
+      "note": "Single lowercase word: applied only inside italics or braces, since many are also English spellings.",
+      "meaning": "separator between subject and verb"
+    },
+    {
+      "word": "lightfeet",
+      "kind": "coinage",
+      "chapters": [
+        9,
+        32
+      ],
+      "phonemes": "lˈItfit",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "lightfoot",
+      "kind": "coinage",
+      "chapters": [
+        9
+      ],
+      "phonemes": "lˈItfʊt",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "lo",
+      "kind": "dzegoban",
+      "chapters": [
+        9
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈlO",
+      "override": false,
+      "match_case": true,
+      "reviewed": false,
+      "note": "Single lowercase word: applied only inside italics or braces, since many are also English spellings.",
+      "meaning": "opening bracket"
+    },
+    {
+      "word": "lo mo fe jia dzu lie zo hen jun",
+      "kind": "dzegoban",
+      "chapters": [
+        9
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈlO ˈmO ˈfɛ ˈʤjɑ ˈdzu ˈljɛ ˈzO ˈhɛn ˈʤun",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "It's healthy to eat an avocado"
+    },
+    {
+      "word": "zo",
+      "kind": "dzegoban",
+      "chapters": [
+        9
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈzO",
+      "override": false,
+      "match_case": true,
+      "reviewed": false,
+      "note": "Single lowercase word: applied only inside italics or braces, since many are also English spellings.",
+      "meaning": "closing bracket"
+    },
+    {
+      "word": "fau",
+      "kind": "dzegoban",
+      "chapters": [
+        10
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈfW",
+      "override": false,
+      "match_case": true,
+      "reviewed": false,
+      "note": "Single lowercase word: applied only inside italics or braces, since many are also English spellings.",
+      "meaning": "again"
+    },
+    {
+      "word": "gie",
+      "kind": "dzegoban",
+      "chapters": [
+        10
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈɡjɛ",
+      "override": false,
+      "match_case": true,
+      "reviewed": false,
+      "note": "Single lowercase word: applied only inside italics or braces, since many are also English spellings."
+    },
+    {
+      "word": "Mogna",
+      "kind": "brand",
+      "chapters": [
+        10
+      ],
+      "phonemes": "mˈɑɡnə",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Utaku",
+      "kind": "name",
+      "chapters": [
+        10,
+        15,
+        22
+      ],
+      "phonemes": "utˈɑku",
+      "override": true,
+      "reviewed": false,
+      "note": "Default G2P misread it; forced."
+    },
+    {
+      "word": "Veridia ba fun gie",
+      "kind": "dzegoban",
+      "chapters": [
+        10
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈvɛɹidjɑ ˈbɑ ˈfun ˈɡjɛ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Seila's joke; Gladias explains \"fau\" means \"again\", so the line is close to \"Veridia will be fun again\""
+    },
+    {
+      "word": "Windmoon",
+      "kind": "time",
+      "chapters": [
+        10
+      ],
+      "phonemes": "wˈɪndmun",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Bloomtime",
+      "kind": "time",
+      "chapters": [
+        11
+      ],
+      "phonemes": "blˈumtIm",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Dela",
+      "kind": "name",
+      "chapters": [
+        11
+      ],
+      "phonemes": "dˈɛlə",
+      "override": true,
+      "reviewed": false,
+      "note": "Default G2P misread it; forced."
+    },
+    {
+      "word": "Dommus",
+      "kind": "name",
+      "chapters": [
+        11
+      ],
+      "phonemes": "dˈɑməs",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Egardo",
+      "kind": "name",
+      "chapters": [
+        11
+      ],
+      "phonemes": "ɛɡˈɑɹdO",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Meny",
+      "kind": "name",
+      "chapters": [
+        11
+      ],
+      "phonemes": "mˈɛni",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Plat",
+      "kind": "name",
+      "chapters": [
+        11
+      ],
+      "phonemes": "plˈæt",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "redball",
+      "kind": "coinage",
+      "chapters": [
+        11,
+        16
+      ],
+      "phonemes": "ɹˈɛdbɔl",
+      "override": false,
+      "reviewed": false,
+      "meaning": "a small red ball-shaped drone the players try to catch"
+    },
+    {
+      "word": "Bo",
+      "kind": "dzegoban",
+      "chapters": [
+        12
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈbO",
+      "override": true,
+      "match_case": true,
+      "reviewed": false
+    },
+    {
+      "word": "cau tie zen ci fan zi li",
+      "kind": "dzegoban",
+      "chapters": [
+        12
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsW ˈtjɛ ˈzɛn ˈtsi ˈfɑn ˈzi ˈli",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Approved, room number is (304)"
+    },
+    {
+      "word": "De lu hin",
+      "kind": "dzegoban",
+      "chapters": [
+        12
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈdɛ ˈlu ˈhɪn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "A fork with the appearance of"
+    },
+    {
+      "word": "Deluin",
+      "kind": "name",
+      "chapters": [
+        12,
+        14,
+        15,
+        19,
+        29,
+        30,
+        31,
+        32
+      ],
+      "phonemes": "dˈɛluɪn",
+      "override": true,
+      "reviewed": false,
+      "note": "Default G2P misread it; forced."
+    },
+    {
+      "word": "dia lau shau",
+      "kind": "dzegoban",
+      "chapters": [
+        12
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈdjɑ ˈlW ˈʃW",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "a request to call (Bai was requesting to call)"
+    },
+    {
+      "word": "fai hie",
+      "kind": "dzegoban",
+      "chapters": [
+        12
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈfI ˈhjɛ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "FI LE GEI TAU FA",
+      "kind": "dzegoban",
+      "chapters": [
+        12,
+        14
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈfi ˈlɛ ˈɡA ˈtW ˈfɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "The battle begins in one hundred ticks (glossed in chapter 12)"
+    },
+    {
+      "word": "FI SHI GEI TAU FA",
+      "kind": "dzegoban",
+      "chapters": [
+        12
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈfi ˈʃi ˈɡA ˈtW ˈfɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "The battle begins in a thousand ticks"
+    },
+    {
+      "word": "Grasstime",
+      "kind": "time",
+      "chapters": [
+        12
+      ],
+      "phonemes": "ɡɹˈæstIm",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "hexgrid",
+      "kind": "coinage",
+      "chapters": [
+        12
+      ],
+      "phonemes": "hˈɛksɡɹɪd",
+      "override": false,
+      "reviewed": false,
+      "meaning": "hex grid"
+    },
+    {
+      "word": "Jin",
+      "kind": "dzegoban",
+      "chapters": [
+        12
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈʤɪn",
+      "override": true,
+      "match_case": true,
+      "reviewed": false
+    },
+    {
+      "word": "LE FI SHI GEI TAU FA",
+      "kind": "dzegoban",
+      "chapters": [
+        12
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈlɛ ˈfi ˈʃi ˈɡA ˈtW ˈfɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "The battle begins in two thousand ticks"
+    },
+    {
+      "word": "Leimin",
+      "kind": "dzegoban",
+      "chapters": [
+        12,
+        14
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈlAmɪn",
+      "override": true,
+      "match_case": true,
+      "reviewed": false
+    },
+    {
+      "word": "man dun li jie hu",
+      "kind": "dzegoban",
+      "chapters": [
+        12,
+        18
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈmɑn ˈdun ˈli ˈʤjɛ ˈhu",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Payment not needed"
+    },
+    {
+      "word": "MU FI LE GEI TAU FA",
+      "kind": "dzegoban",
+      "chapters": [
+        12
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈmu ˈfi ˈlɛ ˈɡA ˈtW ˈfɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "The battle begins in five hundred ticks"
+    },
+    {
+      "word": "PA MU GU GU GEI TAU FA",
+      "kind": "dzegoban",
+      "chapters": [
+        12
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈpɑ ˈmu ˈɡu ˈɡu ˈɡA ˈtW ˈfɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "The battle begins in fifteen hundred ticks"
+    },
+    {
+      "word": "sa dzu du",
+      "kind": "dzegoban",
+      "chapters": [
+        12
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈsɑ ˈdzu ˈdu",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Main city"
+    },
+    {
+      "word": "Sadzu Du",
+      "kind": "dzegoban",
+      "chapters": [
+        12,
+        14,
+        15,
+        19,
+        31
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈsɑdzu ˈdu",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "the capital city; the sign {sa dzu du} is glossed as \"Main city\""
+    },
+    {
+      "word": "sen hen zi li die fe",
+      "kind": "dzegoban",
+      "chapters": [
+        12,
+        18
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈsɛn ˈhɛn ˈzi ˈli ˈdjɛ ˈfɛ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Reputation above 150 verified (with the following words)"
+    },
+    {
+      "word": "Su",
+      "kind": "dzegoban",
+      "chapters": [
+        12,
+        15,
+        31,
+        32
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈsu",
+      "override": true,
+      "match_case": true,
+      "reviewed": false
+    },
+    {
+      "word": "ti ka dia shu fe cen su jui hui",
+      "kind": "dzegoban",
+      "chapters": [
+        12
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈti ˈkɑ ˈdjɑ ˈʃu ˈfɛ ˈtsɛn ˈsu ˈʤwi ˈhwi",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Get your longevity package here"
+    },
+    {
+      "word": "tun bia zi sin de sia",
+      "kind": "dzegoban",
+      "chapters": [
+        12
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtun ˈbjɑ ˈzi ˈsɪn ˈdɛ ˈsjɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Conception of a hash algorithm"
+    },
+    {
+      "word": "zo lia kin",
+      "kind": "dzegoban",
+      "chapters": [
+        12,
+        18
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈzO ˈljɑ ˈkɪn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "Zume",
+      "kind": "dzegoban",
+      "chapters": [
+        12
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈzumɛ",
+      "override": true,
+      "match_case": true,
+      "reviewed": false
+    },
+    {
+      "word": "Harvestmoon",
+      "kind": "time",
+      "chapters": [
+        13
+      ],
+      "phonemes": "hˈɑɹvɪstmˌun",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Caibai",
+      "kind": "dzegoban",
+      "chapters": [
+        14
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsIbI",
+      "override": true,
+      "match_case": true,
+      "reviewed": false
+    },
+    {
+      "word": "Dzundei",
+      "kind": "dzegoban",
+      "chapters": [
+        14
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈdzundA",
+      "override": true,
+      "match_case": true,
+      "reviewed": false
+    },
+    {
+      "word": "Firemoon",
+      "kind": "time",
+      "chapters": [
+        14,
+        15,
+        16,
+        19
+      ],
+      "phonemes": "fˈIəɹmun",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Geijaken",
+      "kind": "dzegoban",
+      "chapters": [
+        14
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈɡAʤɑkɛn",
+      "override": true,
+      "match_case": true,
+      "reviewed": false
+    },
+    {
+      "word": "Gun",
+      "kind": "dzegoban",
+      "chapters": [
+        14,
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈɡun",
+      "override": false,
+      "match_case": true,
+      "reviewed": false,
+      "note": "Dzego character. The rule would say 'goon'; kept as English 'gun' so listeners following the text recognize the name. Reviewer's call."
+    },
+    {
+      "word": "Kau",
+      "kind": "dzegoban",
+      "chapters": [
+        14
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈkW",
+      "override": true,
+      "match_case": true,
+      "reviewed": false
+    },
+    {
+      "word": "Seiza",
+      "kind": "dzegoban",
+      "chapters": [
+        14
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈsAzɑ",
+      "override": true,
+      "match_case": true,
+      "reviewed": false
+    },
+    {
+      "word": "SO BI ZE HA MU FO SHI LE PA",
+      "kind": "dzegoban",
+      "chapters": [
+        14
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈsO ˈbi ˈzɛ ˈhɑ ˈmu ˈfO ˈʃi ˈlɛ ˈpɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "a countdown"
+    },
+    {
+      "word": "Albor",
+      "kind": "name",
+      "chapters": [
+        15
+      ],
+      "phonemes": "ˈælbəɹ",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "be",
+      "kind": "dzegoban",
+      "chapters": [
+        15,
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈbɛ",
+      "override": false,
+      "match_case": true,
+      "reviewed": false,
+      "note": "Single lowercase word: applied only inside italics or braces, since many are also English spellings."
+    },
+    {
+      "word": "Celedil",
+      "kind": "name",
+      "chapters": [
+        15
+      ],
+      "phonemes": "sˈɛlɪdˌɪl",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "dun",
+      "kind": "dzegoban",
+      "chapters": [
+        15
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈdun",
+      "override": false,
+      "match_case": true,
+      "reviewed": false,
+      "note": "Single lowercase word: applied only inside italics or braces, since many are also English spellings."
+    },
+    {
+      "word": "KAG",
+      "kind": "coinage",
+      "chapters": [
+        15
+      ],
+      "phonemes": "kˌAˌAʤˈi",
+      "override": false,
+      "reviewed": false,
+      "meaning": "Key Allocation Group"
+    },
+    {
+      "word": "longhours",
+      "kind": "time",
+      "chapters": [
+        15,
+        29
+      ],
+      "phonemes": "lˈɔŋWəɹz",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Tafindel",
+      "kind": "name",
+      "chapters": [
+        15,
+        26,
+        27,
+        28,
+        31
+      ],
+      "phonemes": "təfˈɪndᵊl",
+      "override": true,
+      "reviewed": false,
+      "note": "Default G2P misread it; forced."
+    },
+    {
+      "word": "blueball",
+      "kind": "coinage",
+      "chapters": [
+        16
+      ],
+      "phonemes": "blˈubɔl",
+      "override": false,
+      "reviewed": false,
+      "meaning": "the ball thrown at the pins"
+    },
+    {
+      "word": "Greenball",
+      "kind": "coinage",
+      "chapters": [
+        16
+      ],
+      "phonemes": "ɡɹˈinbɔl",
+      "override": false,
+      "reviewed": false,
+      "meaning": "the paint ball thrown at players"
+    },
+    {
+      "word": "Pelow",
+      "kind": "name",
+      "chapters": [
+        16
+      ],
+      "phonemes": "pˈɛlO",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Belgor",
+      "kind": "name",
+      "chapters": [
+        17
+      ],
+      "phonemes": "bˈɛlɡəɹ",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Bonne",
+      "kind": "name",
+      "chapters": [
+        17
+      ],
+      "phonemes": "bˈɑn",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Dalias",
+      "kind": "name",
+      "chapters": [
+        17
+      ],
+      "phonemes": "dˈAliəz",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Fruitmoon",
+      "kind": "time",
+      "chapters": [
+        17,
+        18
+      ],
+      "phonemes": "fɹˈutmun",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Imerry",
+      "kind": "name",
+      "chapters": [
+        17
+      ],
+      "phonemes": "ɪmˈɜɹi",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "kai ja",
+      "kind": "dzegoban",
+      "chapters": [
+        17
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈkI ˈʤɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "tea; literally 'plant water'"
+    },
+    {
+      "word": "Kudlin",
+      "kind": "name",
+      "chapters": [
+        17
+      ],
+      "phonemes": "kˈʌdlɪn",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Mawart",
+      "kind": "name",
+      "chapters": [
+        17
+      ],
+      "phonemes": "mˈæwɔɹt",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Melana",
+      "kind": "name",
+      "chapters": [
+        17
+      ],
+      "phonemes": "mɛlˈɑnə",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Poppe",
+      "kind": "name",
+      "chapters": [
+        17
+      ],
+      "phonemes": "pˈɑpi",
+      "override": true,
+      "reviewed": false,
+      "note": "Default G2P misread it; forced."
+    },
+    {
+      "word": "Pov",
+      "kind": "name",
+      "chapters": [
+        17
+      ],
+      "phonemes": "pˈɑv",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Vidrik",
+      "kind": "name",
+      "chapters": [
+        17
+      ],
+      "phonemes": "vˈɪdɹɪk",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "cau tie zen",
+      "kind": "dzegoban",
+      "chapters": [
+        18,
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsW ˈtjɛ ˈzɛn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci fan zi li",
+      "kind": "dzegoban",
+      "chapters": [
+        18
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈfɑn ˈzi ˈli",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci fi mu jan li san sia",
+      "kind": "dzegoban",
+      "chapters": [
+        18
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈfi ˈmu ˈʤɑn ˈli ˈsɑn ˈsjɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci pa jan li san sia",
+      "kind": "dzegoban",
+      "chapters": [
+        18
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈpɑ ˈʤɑn ˈli ˈsɑn ˈsjɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "fe fi mu san sia",
+      "kind": "dzegoban",
+      "chapters": [
+        18
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈfɛ ˈfi ˈmu ˈsɑn ˈsjɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "GUI SAU",
+      "kind": "dzegoban",
+      "chapters": [
+        18
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈɡwi ˈsW",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "hun fe bin jin zo de jan li gi",
+      "kind": "dzegoban",
+      "chapters": [
+        18
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈhun ˈfɛ ˈbɪn ˈʤɪn ˈzO ˈdɛ ˈʤɑn ˈli ˈɡi",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "So many people wearing neck bands"
+    },
+    {
+      "word": "jan jo san sia",
+      "kind": "dzegoban",
+      "chapters": [
+        18
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈʤɑn ˈʤO ˈsɑn ˈsjɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "MIN KUI",
+      "kind": "dzegoban",
+      "chapters": [
+        18
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈmɪn ˈkwi",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "Tan Kai",
+      "kind": "dzegoban",
+      "chapters": [
+        18
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtɑn ˈkI",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "te bia pin hu fe lo shun",
+      "kind": "dzegoban",
+      "chapters": [
+        18
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtɛ ˈbjɑ ˈpɪn ˈhu ˈfɛ ˈlO ˈʃun",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "te shun zo bia pin fe jan",
+      "kind": "dzegoban",
+      "chapters": [
+        18
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtɛ ˈʃun ˈzO ˈbjɑ ˈpɪn ˈfɛ ˈʤɑn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "Zin Go",
+      "kind": "dzegoban",
+      "chapters": [
+        18
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈzɪn ˈɡO",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci cau be fe ti tie",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈtsW ˈbɛ ˈfɛ ˈti ˈtjɛ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci mu fu bau fei ka zen die jia cu can hu fe lo kin liu",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈmu ˈfu ˈbW ˈfA ˈkɑ ˈzɛn ˈdjɛ ˈʤjɑ ˈtsu ˈtsɑn ˈhu ˈfɛ ˈlO ˈkɪn ˈlju",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Inside of a dog, it's too dark to read"
+    },
+    {
+      "word": "ci sen hu fe bu",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈsɛn ˈhu ˈfɛ ˈbu",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci sen hu jan pu zau fe",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈsɛn ˈhu ˈʤɑn ˈpu ˈzW ˈfɛ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci tan jan pu ciu cu shan jin fe pa bi",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈtɑn ˈʤɑn ˈpu ˈtsju ˈtsu ˈʃɑn ˈʤɪn ˈfɛ ˈpɑ ˈbi",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "de bun kai mo fan",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈdɛ ˈbun ˈkI ˈmO ˈfɑn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "the Beautiful Plants food court"
+    },
+    {
+      "word": "dze go ba fau gie",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈdzɛ ˈɡO ˈbɑ ˈfW ˈɡjɛ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "fe cau tie dai li shu",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈfɛ ˈtsW ˈtjɛ ˈdI ˈli ˈʃu",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "fen jan ten lai",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈfɛn ˈʤɑn ˈtɛn ˈlI",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "gei zen",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈɡA ˈzɛn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "gi dai",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈɡi ˈdI",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "Grapetime",
+      "kind": "time",
+      "chapters": [
+        19,
+        29,
+        31
+      ],
+      "phonemes": "ɡɹˈAptIm",
+      "override": true,
+      "reviewed": false,
+      "note": "Default G2P misread it; forced."
+    },
+    {
+      "word": "jan",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈʤɑn",
+      "override": false,
+      "match_case": true,
+      "reviewed": false,
+      "note": "Single lowercase word: applied only inside italics or braces, since many are also English spellings.",
+      "meaning": "person"
+    },
+    {
+      "word": "jie hei ja ma",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈʤjɛ ˈhA ˈʤɑ ˈmɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "jo sun fe zin ten lai de cau tie dai",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈʤO ˈsun ˈfɛ ˈzɪn ˈtɛn ˈlI ˈdɛ ˈtsW ˈtjɛ ˈdI",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "kun gau",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈkun ˈɡW",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "security"
+    },
+    {
+      "word": "kun gau min jan",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈkun ˈɡW ˈmɪn ˈʤɑn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "Len Su",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈlɛn ˈsu",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "lin man",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈlɪn ˈmɑn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "min",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈmɪn",
+      "override": false,
+      "match_case": true,
+      "reviewed": false,
+      "note": "Single lowercase word: applied only inside italics or braces, since many are also English spellings.",
+      "meaning": "machine"
+    },
+    {
+      "word": "mo fan",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈmO ˈfɑn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "eating room"
+    },
+    {
+      "word": "mo fan lai",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈmO ˈfɑn ˈlI",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "mo fan min jan",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈmO ˈfɑn ˈmɪn ˈʤɑn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "mu fu bau hai ka sha liu li dzai hen ji cin jan fe jan",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈmu ˈfu ˈbW ˈhI ˈkɑ ˈʃɑ ˈlju ˈli ˈdzI ˈhɛn ˈʤi ˈtsɪn ˈʤɑn ˈfɛ ˈʤɑn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Outside of a dog, a book is man's best friend"
+    },
+    {
+      "word": "sa dzu du de len su",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈsɑ ˈdzu ˈdu ˈdɛ ˈlɛn ˈsu",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Len Su street, in Sadzu Du"
+    },
+    {
+      "word": "sen hu",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈsɛn ˈhu",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "sho hei dai",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈʃO ˈhA ˈdI",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ten min",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtɛn ˈmɪn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "zui fia pai dan",
+      "kind": "dzegoban",
+      "chapters": [
+        19
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈzwi ˈfjɑ ˈpI ˈdɑn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "Balme",
+      "kind": "name",
+      "chapters": [
+        20
+      ],
+      "phonemes": "bˈɑlm",
+      "override": true,
+      "reviewed": false,
+      "note": "Default G2P misread it; forced."
+    },
+    {
+      "word": "Lectoby",
+      "kind": "name",
+      "chapters": [
+        20
+      ],
+      "phonemes": "lˈɛktObi",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Mistime",
+      "kind": "time",
+      "chapters": [
+        20,
+        21,
+        22,
+        23,
+        24
+      ],
+      "phonemes": "mˈɪstIm",
+      "override": true,
+      "reviewed": false,
+      "note": "Default G2P misread it; forced."
+    },
+    {
+      "word": "Northshore",
+      "kind": "place",
+      "chapters": [
+        20,
+        26,
+        27,
+        28,
+        29,
+        30,
+        31,
+        32
+      ],
+      "phonemes": "nˈɔɹθʃɔɹ",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Telroy",
+      "kind": "name",
+      "chapters": [
+        20
+      ],
+      "phonemes": "tˈɛlɹY",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "aks",
+      "kind": "coinage",
+      "chapters": [
+        22
+      ],
+      "phonemes": "ˈæks",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci bui je shan jin ka fe bu sin hie li kin",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈbwi ˈʤɛ ˈʃɑn ˈʤɪn ˈkɑ ˈfɛ ˈbu ˈsɪn ˈhjɛ ˈli ˈkɪn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci dze fei dzen ji fo gu shan jin dzan ji dzo cei de bun sia de shia sin hie li bia sia",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈdzɛ ˈfA ˈdzɛn ˈʤi ˈfO ˈɡu ˈʃɑn ˈʤɪn ˈdzɑn ˈʤi ˈdzO ˈtsA ˈdɛ ˈbun ˈsjɑ ˈdɛ ˈʃjɑ ˈsɪn ˈhjɛ ˈli ˈbjɑ ˈsjɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci dzen fe sei gen hu ji sha liu",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈdzɛn ˈfɛ ˈsA ˈɡɛn ˈhu ˈʤi ˈʃɑ ˈlju",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci dzo jan li shau fe dzo jan zo cu lo sin sia ce hu ka jan pui su de sin sia ce hu dzei li dzo jan shau pen zo tu mia fe ti",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈdzO ˈʤɑn ˈli ˈʃW ˈfɛ ˈdzO ˈʤɑn ˈzO ˈtsu ˈlO ˈsɪn ˈsjɑ ˈtsɛ ˈhu ˈkɑ ˈʤɑn ˈpwi ˈsu ˈdɛ ˈsɪn ˈsjɑ ˈtsɛ ˈhu ˈdzA ˈli ˈdzO ˈʤɑn ˈʃW ˈpɛn ˈzO ˈtu ˈmjɑ ˈfɛ ˈti",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci dzo mi li su zo de gi pen li den fe ten cei",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈdzO ˈmi ˈli ˈsu ˈzO ˈdɛ ˈɡi ˈpɛn ˈli ˈdɛn ˈfɛ ˈtɛn ˈtsA",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci dzo mi sho kan fe lo bu bia sia li lia fa",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈdzO ˈmi ˈʃO ˈkɑn ˈfɛ ˈlO ˈbu ˈbjɑ ˈsjɑ ˈli ˈljɑ ˈfɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci dzo tei hu ka jan shau dai dzu li hen fe jan de sia kie hen su",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈdzO ˈtA ˈhu ˈkɑ ˈʤɑn ˈʃW ˈdI ˈdzu ˈli ˈhɛn ˈfɛ ˈʤɑn ˈdɛ ˈsjɑ ˈkjɛ ˈhɛn ˈsu",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci fe lo zun li dziu kin zo cu lo fe jan zu sin li sin fin zo cu dzo li bia pin",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈfɛ ˈlO ˈzun ˈli ˈdzju ˈkɪn ˈzO ˈtsu ˈlO ˈfɛ ˈʤɑn ˈzu ˈsɪn ˈli ˈsɪn ˈfɪn ˈzO ˈtsu ˈdzO ˈli ˈbjɑ ˈpɪn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci gi jan li sia kin fe lo lo ju fe gi da jui zo tin hu lin pin cu cie fan",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈɡi ˈʤɑn ˈli ˈsjɑ ˈkɪn ˈfɛ ˈlO ˈlO ˈʤu ˈfɛ ˈɡi ˈdɑ ˈʤwi ˈzO ˈtɪn ˈhu ˈlɪn ˈpɪn ˈtsu ˈtsjɛ ˈfɑn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci jan li bia pin fe hi dzia lin de gi pen",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈʤɑn ˈli ˈbjɑ ˈpɪn ˈfɛ ˈhi ˈdzjɑ ˈlɪn ˈdɛ ˈɡi ˈpɛn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci jan li sia kin fa fe lo lo hi dzia lin li lan pin zo miu sie fe lan pin kai",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈʤɑn ˈli ˈsjɑ ˈkɪn ˈfɑ ˈfɛ ˈlO ˈlO ˈhi ˈdzjɑ ˈlɪn ˈli ˈlɑn ˈpɪn ˈzO ˈmju ˈsjɛ ˈfɛ ˈlɑn ˈpɪn ˈkI",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci ju je ka cin pin ka su zo zai",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈʤu ˈʤɛ ˈkɑ ˈtsɪn ˈpɪn ˈkɑ ˈsu ˈzO ˈzI",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci kau min li jie hu gau fe hui pei min cu lau za min cu lau shau min cu pa no bu ji dzan ju min",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈkW ˈmɪn ˈli ˈʤjɛ ˈhu ˈɡW ˈfɛ ˈhwi ˈpA ˈmɪn ˈtsu ˈlW ˈzɑ ˈmɪn ˈtsu ˈlW ˈʃW ˈmɪn ˈtsu ˈpɑ ˈnO ˈbu ˈʤi ˈdzɑn ˈʤu ˈmɪn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci ki sau dan te ki sau pin",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈki ˈsW ˈdɑn ˈtɛ ˈki ˈsW ˈpɪn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "A complicated room implies a complicated heart"
+    },
+    {
+      "word": "ci miu ka min sia cu pui ten min de bin dai li sie gie zo ce gau fe hi dzia lin bia sia",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈmju ˈkɑ ˈmɪn ˈsjɑ ˈtsu ˈpwi ˈtɛn ˈmɪn ˈdɛ ˈbɪn ˈdI ˈli ˈsjɛ ˈɡjɛ ˈzO ˈtsɛ ˈɡW ˈfɛ ˈhi ˈdzjɑ ˈlɪn ˈbjɑ ˈsjɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci pui min ka ce ju fe dzo cei",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈpwi ˈmɪn ˈkɑ ˈtsɛ ˈʤu ˈfɛ ˈdzO ˈtsA",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci pui sen hu de shen sin de sia li sie hu cu kin sia je zo de go li ti die sie",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈpwi ˈsɛn ˈhu ˈdɛ ˈʃɛn ˈsɪn ˈdɛ ˈsjɑ ˈli ˈsjɛ ˈhu ˈtsu ˈkɪn ˈsjɑ ˈʤɛ ˈzO ˈdɛ ˈɡO ˈli ˈti ˈdjɛ ˈsjɛ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci pui sen hu li tin hu",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈpwi ˈsɛn ˈhu ˈli ˈtɪn ˈhu",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci pui ten min ka zu",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈpwi ˈtɛn ˈmɪn ˈkɑ ˈzu",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci ten cei li sie gie zo ce gau fe da cei bia sia",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈtɛn ˈtsA ˈli ˈsjɛ ˈɡjɛ ˈzO ˈtsɛ ˈɡW ˈfɛ ˈdɑ ˈtsA ˈbjɑ ˈsjɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci ten min cu hi dzia lin li lia fa",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈtɛn ˈmɪn ˈtsu ˈhi ˈdzjɑ ˈlɪn ˈli ˈljɑ ˈfɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Electric machines and the internet began to exist"
+    },
+    {
+      "word": "ci ti fo gu shan jin dzan ka dzei zo cai",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈti ˈfO ˈɡu ˈʃɑn ˈʤɪn ˈdzɑn ˈkɑ ˈdzA ˈzO ˈtsI",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci ti li hi dzia lin bia sia",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈti ˈli ˈhi ˈdzjɑ ˈlɪn ˈbjɑ ˈsjɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci tin hu lo fe gia dzan jan li bia pin zo mia fe lo jie sen pin fe pui sen hu",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈtɪn ˈhu ˈlO ˈfɛ ˈɡjɑ ˈdzɑn ˈʤɑn ˈli ˈbjɑ ˈpɪn ˈzO ˈmjɑ ˈfɛ ˈlO ˈʤjɛ ˈsɛn ˈpɪn ˈfɛ ˈpwi ˈsɛn ˈhu",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci zan fe da cei bia sia ci jei fe hi dzia lin ji bia sia",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈzɑn ˈfɛ ˈdɑ ˈtsA ˈbjɑ ˈsjɑ ˈtsi ˈʤA ˈfɛ ˈhi ˈdzjɑ ˈlɪn ˈʤi ˈbjɑ ˈsjɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "From material world small thinking, to internet small thinking"
+    },
+    {
+      "word": "ci zie hu",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈzjɛ ˈhu",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "te da cei de sau zo tia gei",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtɛ ˈdɑ ˈtsA ˈdɛ ˈsW ˈzO ˈtjɑ ˈɡA",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "te gi jan jei da jui li fa fe lo jie hu",
+      "kind": "dzegoban",
+      "chapters": [
+        23
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtɛ ˈɡi ˈʤɑn ˈʤA ˈdɑ ˈʤwi ˈli ˈfɑ ˈfɛ ˈlO ˈʤjɛ ˈhu",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "ci sun gau jan li gei shai fe to dzan dzie de mia ka ti dzie ka pu she",
+      "kind": "dzegoban",
+      "chapters": [
+        24
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈsun ˈɡW ˈʤɑn ˈli ˈɡA ˈʃI ˈfɛ ˈtO ˈdzɑn ˈdzjɛ ˈdɛ ˈmjɑ ˈkɑ ˈti ˈdzjɛ ˈkɑ ˈpu ˈʃɛ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "The teacher replies: for the sake of tomorrow, what have you done today?"
+    },
+    {
+      "word": "mi cin pin fe lo kin do",
+      "kind": "dzegoban",
+      "chapters": [
+        24
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈmi ˈtsɪn ˈpɪn ˈfɛ ˈlO ˈkɪn ˈdO",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "sun jan li shai fe to dzan dzie ka jie dau fe sei sui ji cen hai zun",
+      "kind": "dzegoban",
+      "chapters": [
+        24
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈsun ˈʤɑn ˈli ˈʃI ˈfɛ ˈtO ˈdzɑn ˈdzjɛ ˈkɑ ˈʤjɛ ˈdW ˈfɛ ˈsA ˈswi ˈʤi ˈtsɛn ˈhI ˈzun",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "The student says: tomorrow I want to go to a magical and far away place"
+    },
+    {
+      "word": "Frostime",
+      "kind": "time",
+      "chapters": [
+        25,
+        26,
+        27,
+        28
+      ],
+      "phonemes": "fɹˈɔstIm",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "autobuses",
+      "kind": "coinage",
+      "chapters": [
+        26
+      ],
+      "phonemes": "ˌɔTObˈʌsᵻz",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "biu ka di ge le bo gai dei li lia",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈbju ˈkɑ ˈdi ˈɡɛ ˈlɛ ˈbO ˈɡI ˈdA ˈli ˈljɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "On the right, there are the Gelebor mountains."
+    },
+    {
+      "word": "Caeron",
+      "kind": "name",
+      "chapters": [
+        26
+      ],
+      "phonemes": "kˈɛɹən",
+      "override": true,
+      "reviewed": false,
+      "note": "Default G2P misread it; forced."
+    },
+    {
+      "word": "cen hai ka ge le bo gai dei de dziu hai ka ce kin fe di mei dan du ci ti li sa dzu du fe fei go",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsɛn ˈhI ˈkɑ ˈɡɛ ˈlɛ ˈbO ˈɡI ˈdA ˈdɛ ˈdzju ˈhI ˈkɑ ˈtsɛ ˈkɪn ˈfɛ ˈdi ˈmA ˈdɑn ˈdu ˈtsi ˈti ˈli ˈsɑ ˈdzu ˈdu ˈfɛ ˈfA ˈɡO",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Far outside, continuing beyond the Gelebor mountains, you can see the Meldan city. This is the capital city of Veridia."
+    },
+    {
+      "word": "ci di mei dan du de jan zi li pa pi pa fi ha",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈdi ˈmA ˈdɑn ˈdu ˈdɛ ˈʤɑn ˈzi ˈli ˈpɑ ˈpi ˈpɑ ˈfi ˈhɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "The population of Meldan is 1.1 million."
+    },
+    {
+      "word": "ci di mei dan du fei ka ji gi shan jin tei ka jan ki su",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈdi ˈmA ˈdɑn ˈdu ˈfA ˈkɑ ˈʤi ˈɡi ˈʃɑn ˈʤɪn ˈtA ˈkɑ ˈʤɑn ˈki ˈsu",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Even if a person lives for years in Meldan, (first half; continues on the next line)"
+    },
+    {
+      "word": "ci dzen fe gi hie pen",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈdzɛn ˈfɛ ˈɡi ˈhjɛ ˈpɛn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "It has many different districts."
+    },
+    {
+      "word": "ci fia sai pen ka dan fe gi jan",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈfjɑ ˈsI ˈpɛn ˈkɑ ˈdɑn ˈfɛ ˈɡi ˈʤɑn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "In the lower half there are many people's homes."
+    },
+    {
+      "word": "ci jie fe lo cin pin fe di pa fo gai du",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈʤjɛ ˈfɛ ˈlO ˈtsɪn ˈpɪn ˈfɛ ˈdi ˈpɑ ˈfO ˈɡI ˈdu",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "I enjoyed Pafogai Du very much."
+    },
+    {
+      "word": "ci mui dau fe ti li cin pin cu bun",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈmwi ˈdW ˈfɛ ˈti ˈli ˈtsɪn ˈpɪn ˈtsu ˈbun",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Hiking up it is happy and beautiful."
+    },
+    {
+      "word": "ci pai hui pen fei ka fei go de gi bai pai hui li lia",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈpI ˈhwi ˈpɛn ˈfA ˈkɑ ˈfA ˈɡO ˈdɛ ˈɡi ˈbI ˈpI ˈhwi ˈli ˈljɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "In the business district there are many large companies."
+    },
+    {
+      "word": "ci sa dzu pai hui li dzen fe ten min de bin dai cu man jei cu su kun gau",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈsɑ ˈdzu ˈpI ˈhwi ˈli ˈdzɛn ˈfɛ ˈtɛn ˈmɪn ˈdɛ ˈbɪn ˈdI ˈtsu ˈmɑn ˈʤA ˈtsu ˈsu ˈkun ˈɡW",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "The main industries include computer software, finance and health protection."
+    },
+    {
+      "word": "ci sei sai pen ka jen bin pei de pen li pai",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈsA ˈsI ˈpɛn ˈkɑ ˈʤɛn ˈbɪn ˈpA ˈdɛ ˈpɛn ˈli ˈpI",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "In the upper half part of the government works."
+    },
+    {
+      "word": "ci ti ju fe gi kai de sai hui cu gi dau kin zun",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈti ˈʤu ˈfɛ ˈɡi ˈkI ˈdɛ ˈsI ˈhwi ˈtsu ˈɡi ˈdW ˈkɪn ˈzun",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "It has many categories of food and many go-and-see places (tourist attractions)."
+    },
+    {
+      "word": "ci ti pen li lu fe bai kai zun",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsi ˈti ˈpɛn ˈli ˈlu ˈfɛ ˈbI ˈkI ˈzun",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "This part looks like a forest,"
+    },
+    {
+      "word": "co ti ka gi jan li san cu sun cu mo",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtsO ˈti ˈkɑ ˈɡi ˈʤɑn ˈli ˈsɑn ˈtsu ˈsun ˈtsu ˈmO",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Many people sleep, learn and eat here."
+    },
+    {
+      "word": "di mei dan du",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈdi ˈmA ˈdɑn ˈdu",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Meldan (the city)"
+    },
+    {
+      "word": "di mei dan du li bai",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈdi ˈmA ˈdɑn ˈdu ˈli ˈbI",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Meldan is a large city."
+    },
+    {
+      "word": "Dolinar",
+      "kind": "place",
+      "chapters": [
+        26
+      ],
+      "phonemes": "dˈɑlɪnˌɑɹ",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Dzego-man",
+      "kind": "coinage",
+      "chapters": [
+        26
+      ],
+      "phonemes": "dˈizˈiɡOmˈæn",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "dzu ka kin ce fe bia gai dei",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈdzu ˈkɑ ˈkɪn ˈtsɛ ˈfɛ ˈbjɑ ˈɡI ˈdA",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "In the center there is a small mountain."
+    },
+    {
+      "word": "fe fei go",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈfɛ ˈfA ˈɡO",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Veridia"
+    },
+    {
+      "word": "Fi le gei tau fa",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈfi ˈlɛ ˈɡA ˈtW ˈfɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "the announcer's countdown: battle begins in one hundred ticks"
+    },
+    {
+      "word": "gai dei de zei biu ka pai hui pen li bia",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈɡI ˈdA ˈdɛ ˈzA ˈbju ˈkɑ ˈpI ˈhwi ˈpɛn ˈli ˈbjɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "East of the mountain, there is the business district."
+    },
+    {
+      "word": "gai dei de zei dzun ka gi dan pen li lia",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈɡI ˈdA ˈdɛ ˈzA ˈdzun ˈkɑ ˈɡi ˈdɑn ˈpɛn ˈli ˈljɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "West of the mountain, there is a large residential district."
+    },
+    {
+      "word": "gai dei de zei gei ka di ka lia mai pen li lia",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈɡI ˈdA ˈdɛ ˈzA ˈɡA ˈkɑ ˈdi ˈkɑ ˈljɑ ˈmI ˈpɛn ˈli ˈljɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "South of the mountain, there is Kalimar district."
+    },
+    {
+      "word": "ge le bo gai dei",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈɡɛ ˈlɛ ˈbO ˈɡI ˈdA",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Gelebor mountains"
+    },
+    {
+      "word": "Gelebor",
+      "kind": "place",
+      "chapters": [
+        26
+      ],
+      "phonemes": "ɡˈɛləbɔɹ",
+      "override": true,
+      "reviewed": false,
+      "note": "Default G2P misread it; forced."
+    },
+    {
+      "word": "hai ka sho kin ce fe fei go de bun ji dze kai zui liu",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈhI ˈkɑ ˈʃO ˈkɪn ˈtsɛ ˈfɛ ˈfA ˈɡO ˈdɛ ˈbun ˈʤi ˈdzɛ ˈkI ˈzwi ˈlju",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Outside right now, you can see Veridia's beautiful landscape of green plants."
+    },
+    {
+      "word": "jie fe lo cin pin fe lo di mei dan du cu fei go li bun",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈʤjɛ ˈfɛ ˈlO ˈtsɪn ˈpɪn ˈfɛ ˈlO ˈdi ˈmA ˈdɑn ˈdu ˈtsu ˈfA ˈɡO ˈli ˈbun",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "We hope you enjoy Meldan and the beauty of Veridia."
+    },
+    {
+      "word": "jo hen jei fe fei go de di mei dan du",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈʤO ˈhɛn ˈʤA ˈfɛ ˈfA ˈɡO ˈdɛ ˈdi ˈmA ˈdɑn ˈdu",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Everyone, welcome to Meldan, Veridia."
+    },
+    {
+      "word": "ko ti dzen fe gi pui gau ji dan",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈkO ˈti ˈdzɛn ˈfɛ ˈɡi ˈpwi ˈɡW ˈʤi ˈdɑn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "but it contains many hidden homes."
+    },
+    {
+      "word": "mu gu gei tau fa",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈmu ˈɡu ˈɡA ˈtW ˈfɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Battle starts in fifty ticks."
+    },
+    {
+      "word": "Pafogai",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈpɑfOɡI",
+      "override": true,
+      "match_case": true,
+      "reviewed": false,
+      "meaning": "fourteen stone"
+    },
+    {
+      "word": "Selwert",
+      "kind": "name",
+      "chapters": [
+        26
+      ],
+      "phonemes": "sˈɛlwəɹt",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Sewlert",
+      "kind": "name",
+      "chapters": [
+        26
+      ],
+      "phonemes": "sˈuləɹt",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "te zen hu ka ki kia sin fe ti du",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈtɛ ˈzɛn ˈhu ˈkɑ ˈki ˈkjɑ ˈsɪn ˈfɛ ˈti ˈdu",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "(second half) they will not know the city completely."
+    },
+    {
+      "word": "ti li tin bia pen fe di mei dan du de ce kin ji gi mui sun jui",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈti ˈli ˈtɪn ˈbjɑ ˈpɛn ˈfɛ ˈdi ˈmA ˈdɑn ˈdu ˈdɛ ˈtsɛ ˈkɪn ˈʤi ˈɡi ˈmwi ˈsun ˈʤwi",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "This was only a small part of the many interesting things in Meldan."
+    },
+    {
+      "word": "ti tei li dzai hen fe lo kin fe hai bun",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈti ˈtA ˈli ˈdzI ˈhɛn ˈfɛ ˈlO ˈkɪn ˈfɛ ˈhI ˈbun",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Now is a great time to look at the beauty outside."
+    },
+    {
+      "word": "ti zun no tei li ze fo fi shi ci cin ho li ze ci bia tei gei ka fiu den min ba fia zui",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈti ˈzun ˈnO ˈtA ˈli ˈzɛ ˈfO ˈfi ˈʃi ˈtsi ˈtsɪn ˈhO ˈli ˈzɛ ˈtsi ˈbjɑ ˈtA ˈɡA ˈkɑ ˈfju ˈdɛn ˈmɪn ˈbɑ ˈfjɑ ˈzwi",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "The local time is 74,000 and the temperature is seven degrees. After a short time, the flying machine will descend to the ground."
+    },
+    {
+      "word": "Veridia ba fau gie",
+      "kind": "dzegoban",
+      "chapters": [
+        26
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈvɛɹidjɑ ˈbɑ ˈfW ˈɡjɛ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Veridia will rise again (modeled on 'Dze go ba fau gie', Dzego will rise again)"
+    },
+    {
+      "word": "Zevin",
+      "kind": "name",
+      "chapters": [
+        26
+      ],
+      "phonemes": "zˈɛvɪn",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Arturian",
+      "kind": "place",
+      "chapters": [
+        27
+      ],
+      "phonemes": "ɑɹtˈʊɹiən",
+      "override": true,
+      "reviewed": false,
+      "note": "Default G2P misread it; forced."
+    },
+    {
+      "word": "Evelor",
+      "kind": "name",
+      "chapters": [
+        27
+      ],
+      "phonemes": "ˈɛvəlɔɹ",
+      "override": true,
+      "reviewed": false,
+      "note": "Default G2P misread it; forced."
+    },
+    {
+      "word": "LE MU GEI HUI ZIU FA",
+      "kind": "dzegoban",
+      "chapters": [
+        27
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈlɛ ˈmu ˈɡA ˈhwi ˈzju ˈfɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false
+    },
+    {
+      "word": "MU GU GEI HUI ZIU FA",
+      "kind": "dzegoban",
+      "chapters": [
+        27
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈmu ˈɡu ˈɡA ˈhwi ˈzju ˈfɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Starting in fifty ticks (Zei's imitation of the announcer)"
+    },
+    {
+      "word": "PA GU SO BI ZE HA MU FO SHI LE PA HUI ZIU FA",
+      "kind": "dzegoban",
+      "chapters": [
+        27
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈpɑ ˈɡu ˈsO ˈbi ˈzɛ ˈhɑ ˈmu ˈfO ˈʃi ˈlɛ ˈpɑ ˈhwi ˈzju ˈfɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "countdown chanted from ten down to the start"
+    },
+    {
+      "word": "Lektor",
+      "kind": "name",
+      "chapters": [
+        28,
+        29,
+        30
+      ],
+      "phonemes": "lˈɛktəɹ",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Messalia",
+      "kind": "place",
+      "chapters": [
+        28
+      ],
+      "phonemes": "mɛsˈAliə",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Eldil",
+      "kind": "place",
+      "chapters": [
+        29
+      ],
+      "phonemes": "ˈɛldɪl",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Elenar",
+      "kind": "place",
+      "chapters": [
+        29,
+        30,
+        31
+      ],
+      "phonemes": "ˈɛlənɑɹ",
+      "override": true,
+      "reviewed": false,
+      "note": "Default G2P misread it; forced."
+    },
+    {
+      "word": "Fi le gei fa",
+      "kind": "dzegoban",
+      "chapters": [
+        29
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈfi ˈlɛ ˈɡA ˈfɑ",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "one hundred ticks until it begins"
+    },
+    {
+      "word": "Gallowar",
+      "kind": "name",
+      "chapters": [
+        29,
+        30
+      ],
+      "phonemes": "ɡˈæləwɑɹ",
+      "override": true,
+      "reviewed": false,
+      "note": "Default G2P misread it; forced."
+    },
+    {
+      "word": "Telpo",
+      "kind": "name",
+      "chapters": [
+        29,
+        30
+      ],
+      "phonemes": "tˈɛlpO",
+      "override": true,
+      "reviewed": false,
+      "note": "Default G2P misread it; forced."
+    },
+    {
+      "word": "Telten",
+      "kind": "place",
+      "chapters": [
+        29
+      ],
+      "phonemes": "tˈɛltən",
+      "override": true,
+      "reviewed": false,
+      "note": "Default G2P misread it; forced."
+    },
+    {
+      "word": "Thaldur",
+      "kind": "place",
+      "chapters": [
+        29,
+        30,
+        31,
+        32
+      ],
+      "phonemes": "θˈældəɹ",
+      "override": true,
+      "reviewed": false,
+      "note": "Default G2P misread it; forced."
+    },
+    {
+      "word": "Vakaria",
+      "kind": "name",
+      "chapters": [
+        29,
+        30
+      ],
+      "phonemes": "vækˈɛɹiə",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Glasscrown",
+      "kind": "place",
+      "chapters": [
+        31
+      ],
+      "phonemes": "ɡlˈæskɹWn",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "Ichara",
+      "kind": "brand",
+      "chapters": [
+        31
+      ],
+      "phonemes": "ɪkˈɑɹə",
+      "override": true,
+      "reviewed": false,
+      "note": "Default G2P misread it; forced."
+    },
+    {
+      "word": "mi fu zo de tei ka ciu pin",
+      "kind": "dzegoban",
+      "chapters": [
+        31
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈmi ˈfu ˈzO ˈdɛ ˈtA ˈkɑ ˈtsju ˈpɪn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "when I am defeated, I feel like I won"
+    },
+    {
+      "word": "Northgladers",
+      "kind": "name",
+      "chapters": [
+        31
+      ],
+      "phonemes": "nˈɔɹθɡlAdəɹz",
+      "override": false,
+      "reviewed": false
+    },
+    {
+      "word": "dia jie fe kai ja cu dze kai lin pan",
+      "kind": "dzegoban",
+      "chapters": [
+        32
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈdjɑ ˈʤjɛ ˈfɛ ˈkI ˈʤɑ ˈtsu ˈdzɛ ˈkI ˈlɪn ˈpɑn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "Gladias's order to the robot; it later returns with his tea and a rice and vegetable dish"
+    },
+    {
+      "word": "dze kai lin pan",
+      "kind": "dzegoban",
+      "chapters": [
+        32
+      ],
+      "rule": "dzegoban",
+      "phonemes": "ˈdzɛ ˈkI ˈlɪn ˈpɑn",
+      "override": true,
+      "match_case": false,
+      "reviewed": false,
+      "meaning": "vegetable and rice (literally 'green plant line bread')"
+    }
+  ],
+  "dzegoban_rule": {
+    "about": "Dzegoban is romanized in short syllables (onset + vowel + optional final n). The book gives no pronunciation, so every Dzegoban word and name is spelled by this one rule, in scripts/narrate.py (dzegoban_phonemes). Stress falls on the first syllable of each word. Unreviewed house choice.",
+    "onsets": {
+      "dz": "dz as in 'adze'",
+      "sh": "sh",
+      "ch": "ch",
+      "zh": "zh as in 'measure'",
+      "j": "j as in 'jam'",
+      "c": "ts as in 'cats'",
+      "y": "y",
+      "r": "r",
+      "x": "sh",
+      "other consonants": "as in English"
+    },
+    "vowels": {
+      "a": "ah",
+      "e": "eh",
+      "i": "ee (before final n: ih)",
+      "o": "oh",
+      "u": "oo",
+      "ai": "eye",
+      "au": "ow",
+      "ei": "ay",
+      "ia": "yah",
+      "ie": "yeh",
+      "iu": "yoo",
+      "ui": "wee",
+      "ua": "wah",
+      "uo": "woh",
+      "ou": "oh"
+    },
+    "examples": {
+      "Dzego": "DZEH-go",
+      "Zei": "ZAY",
+      "Bai": "BYE",
+      "Sadzu Du": "SAH-dzoo DOO",
+      "Kungaupei": "KOON-gow-pay",
+      "zui fia kun zun": "zwee fyah koon zoon"
+    },
+    "reviewed": false
+  }
+}

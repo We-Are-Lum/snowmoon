@@ -1,0 +1,77 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 25,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 3,
+      "kind": "figure",
+      "block_sha256": "c15e4bf07d2058f854ef45c698b3d2ce4fda874dc7dc31c9831c76ba5cf17e8b",
+      "read_aloud": "Four boxes, each holding a triangular pile of blue circles: three in the top left, four in the top right, ten in the bottom left, and thirteen in the bottom right.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 9,
+      "kind": "figure",
+      "block_sha256": "95403795ddf9c85c98f0ef3009732ebbbc3a6dd7661ad0923d3b8d12a304e2a4",
+      "read_aloud": "The top left pile is down to two.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 11,
+      "kind": "figure",
+      "block_sha256": "e57370dfa430a8fd0b330b495920de084720e368bbb0d7a5c08391d154399b16",
+      "read_aloud": "The bottom right pile is down to twelve.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 13,
+      "kind": "figure",
+      "block_sha256": "572818da37ab2161f7e7f5735eed8f31e16e3eea30eeb185ebad1b133bc67813",
+      "read_aloud": "The bottom left pile is down to seven.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 15,
+      "kind": "figure",
+      "block_sha256": "3b9d1e2816e1309f4cb78e36d1ae7e880ff94614c8c12987e26702e066cb7a85",
+      "read_aloud": "The bottom right box now holds a single circle. The piles stand at two, four, seven and one.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 18,
+      "kind": "figure",
+      "block_sha256": "fd3ab985b365911ad02b50d280fd26278d66b63378a48ab55ce62fda98d20314",
+      "read_aloud": "Only two circles remain on the board: one in the top right box, and one in the bottom right.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 34,
+      "kind": "screen",
+      "block_sha256": "59d81e6b833df2d0ee78abd20b30a4f5d3ffc880edfb0f97610202d134c08399",
+      "read_aloud": "He writes the four numbers in binary, stacked in a grid: zero zero one one, zero one zero zero, one zero one zero, and one one zero one.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 40,
+      "kind": "screen",
+      "block_sha256": "63d89e00d000fcb8f6373e4f66bc7f8f936b3c47fa089202ad16a3f49a9ff196",
+      "read_aloud": "The grid again, with the first row now zero zero one zero.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 46,
+      "kind": "screen",
+      "block_sha256": "3e8ddafb7914cad794a75d0dbf52fc11ee142b45b1ffb29c39e6def410c9d89e",
+      "read_aloud": "The grid once more, now with the last row changed to one one zero zero.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 97,
+      "kind": "screen",
+      "block_sha256": "c2416ce45b225c21c09e270e0eac46e6f3c607c36e5d576b29e00429c2f632aa",
+      "read_aloud": "His watch shows a call request going out to Senator Verdow.",
+      "status": "unreviewed"
+    }
+  ]
+}

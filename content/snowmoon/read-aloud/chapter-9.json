@@ -1,0 +1,14 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 9,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 112,
+      "kind": "figure",
+      "block_sha256": "3a9d3b0900b64da0a284c76faee99cacc951db33eeb45a50f380cc0f32b7364b",
+      "read_aloud": "The diagram shows four computers along the top. From each, lines fan out to dots in a row of twelve below, and from there the lines crisscross down through two more rows of twelve dots each.",
+      "status": "unreviewed"
+    }
+  ]
+}

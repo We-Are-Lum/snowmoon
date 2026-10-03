@@ -1,0 +1,6 @@
+# Local narration (scripts/narrate.py). Python 3.12; also needs espeak-ng and ffmpeg.
+kokoro==0.9.4
+misaki==0.9.4
+transformers>=4.45
+soundfile==0.14.0
+en_core_web_sm @ https://github.com/explosion/spacy-models/releases/download/en_core_web_sm-3.8.0/en_core_web_sm-3.8.0-py3-none-any.whl

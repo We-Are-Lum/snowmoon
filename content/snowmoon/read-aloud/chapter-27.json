@@ -1,0 +1,35 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 27,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 118,
+      "kind": "figure",
+      "block_sha256": "ad83c105662631a65b90e2f35a155aaadb864582bc811aa85e5f4992b30b11e1",
+      "read_aloud": "The pie chart asks: How much confidence do you have in the Veridian military? Thirty-nine percent say none at all, and twenty-five percent a little. Fifteen percent say some, twelve percent a lot, and only nine percent total confidence.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 120,
+      "kind": "figure",
+      "block_sha256": "8ccc8391b9d5588daf3d9531d1e3f5465fe14be9bf33200154c7f5f41b163c37",
+      "read_aloud": "The next chart asks: Who would you prefer to run the Veridian military? The Kungaupei lead with thirty-eight percent, followed by a new leadership chosen by parliament at twenty-one, and the Arctics at sixteen. The current leadership gets thirteen percent, Silverchat ten, and Arturian military advisors two.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 125,
+      "kind": "figure",
+      "block_sha256": "8186ac04858efaeb648ab0e7037fe1c5d46fd5a7f328a511361de97eb63985db",
+      "read_aloud": "The same question, restricted to people with Northshore ties. Now the Kungaupei have fifty-two percent. Silverchat gets sixteen, the Arctics thirteen, a new leadership chosen by parliament eight, the current leadership six, and Arturian military advisors five.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 136,
+      "kind": "screen",
+      "block_sha256": "8d0828d6ba8378e579f2c091e839ff7ccd7c84dae0cb789d4eb3055d6df4e904",
+      "read_aloud": "The first bot's executive summary: under any ordinary scenario, the probability that Veridia holds the same or more of its territory after one year is twenty percent. Under a transfer to Kungaupei control, it rises to twenty-six percent, with the main risk being the usual cost of a chaotic change in leadership. The best chances, up to fifty percent, come from Kungaupei participation with as little disruption as possible. The odds of actually gaining territory are much lower in every case.",
+      "status": "unreviewed"
+    }
+  ]
+}

@@ -1,0 +1,63 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 1,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 18,
+      "kind": "screen",
+      "block_sha256": "5c955dba7ecebd6a676c4dd26bf505ecd3831ece2e5059b6f258a7ccebed1e82",
+      "read_aloud": "The screen reads: Vote on Badra Street number eleven oh three. Emerald AI summary: five-storey apartment building, blue-grey colored. Below that, a slider running from minus five to plus five, and a Select button.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 23,
+      "kind": "screen",
+      "block_sha256": "ee16bc66a0884ba43de1f0773d6b3231c221cdac5c00920986328c52c506a73e",
+      "read_aloud": "Badra Street eleven oh three pays a total land tax of one point five one percent, including an aesthetics tax of zero point one eight percent.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 28,
+      "kind": "screen",
+      "block_sha256": "e8e9c7c7896281332c208c4b55666665f59fac8ea4ab609c9fc4542c8756e51a",
+      "read_aloud": "Clearhill Avenue number nine eighty pays a total land tax of one point eight nine percent, including an aesthetics tax of zero point five nine percent.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 31,
+      "kind": "screen",
+      "block_sha256": "5c955dba7ecebd6a676c4dd26bf505ecd3831ece2e5059b6f258a7ccebed1e82",
+      "read_aloud": "The voting screen again: Badra Street eleven oh three, the slider from minus five to plus five, and the Select button.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 55,
+      "kind": "screen",
+      "block_sha256": "e875f67c38a7fef6cdaf915629960c666718e21d278c42cf9318663104ae0719",
+      "read_aloud": "The rubric sorts performances into five tiers. Content that promotes things like education, kindness, healthy families and civic duty falls in Tiers one and two, taxed at zero and ten percent. Content that does neither is Tier three, at twenty percent. Content that promotes things like violence, lawlessness, risky gambling or hatred falls in Tiers four and five, taxed at thirty and forty percent. Rates are two and a half times higher on proceeds from Veridian Quadratic Funding and Graph Funding. Below are two buttons: View relevant precedents, and Back.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 67,
+      "kind": "figure",
+      "block_sha256": "ca0ebf1927385642fbce911fa7bf3aa3325b386f0277db57dcca0fce8f359067",
+      "read_aloud": "A chart of his prediction score since the start of thirty-seven twenty-two. It began near eighty, climbed through that year, and crossed the dashed line at ninety early in thirty-seven twenty-three. Since then it has hovered just above ninety, dipping below the line twice. Today it reads ninety-two.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 138,
+      "kind": "screen",
+      "block_sha256": "e921c62e5f4b8f515d65f9e6c8b69ec5f2927d7a327f8ff18e5adb101ae0cc34",
+      "read_aloud": "A message from an anonymous sender, verified with a reputation score of at least two hundred: I saw you at the concert, I know that you are in the Order.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 140,
+      "kind": "screen",
+      "block_sha256": "198575f78c0cf1f939477c42fcae6995cd7cba0139113b7b9c38d32136d4e2c6",
+      "read_aloud": "From the same anonymous sender: Don't worry, I'm not intending to report you for the bounty. But I do have a request that I would like to make.",
+      "status": "unreviewed"
+    }
+  ]
+}

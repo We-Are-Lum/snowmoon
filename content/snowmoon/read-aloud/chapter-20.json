@@ -1,0 +1,28 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 20,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 10,
+      "kind": "screen",
+      "block_sha256": "e67b5006f6b84583062b53153d97f35e28986a91eb95be6937987c023a659c4e",
+      "read_aloud": "Five messages. From Febric: Hreda and I are both safely inside the Greater Plum Harbor. We will survive the best that we can. We love you. Then four from Hreda: Northglade was invaded this morning. It looked like there were barely any battles, as though our politicians and army are totally okay with this happening. Febric and I are safely inside the Greater Plum Harbor. The Arctics seem to be respecting it as some kind of neutral zone, at least for now. I'm scared. I hope everything will be okay. Love you.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 18,
+      "kind": "screen",
+      "block_sha256": "fd4bdb34aca02fa6198cd282fb04c28f479bc351ef6a75a6bea9efa00abd91c1",
+      "read_aloud": "Her watch shows a green check: Frequent contact of Gladias. Proof verified.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 132,
+      "kind": "screen",
+      "block_sha256": "e94ad7193a0f2f88acf1f4c8f877c555ce193640deebdcacbc7f54038214ebbf",
+      "read_aloud": "A notification, beside a small flame: Fifty zipcoins have just been burned.",
+      "status": "unreviewed"
+    }
+  ]
+}

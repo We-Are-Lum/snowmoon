@@ -1,0 +1,28 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 18,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 49,
+      "kind": "screen",
+      "block_sha256": "b1e8be35735e9bb9c868138d9157cbb35a4253f38363a4629238dfe23f40b2db",
+      "read_aloud": "The green circle's screen is all in Dzegoban: two boxes with green checkmarks, {sen hen zi li die fe} one hundred {zo lia kin}, and {man dun li jie hu}. Below them, in bold: {cau tie zen}, {ci fan zi li} four forty-eight.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 72,
+      "kind": "quote",
+      "block_sha256": "a1965e35fa0726acb9ca7d785a357679b52426116a7083b2a289c30f04ceb3bc",
+      "read_aloud": "The motto runs in two short verses: {pa jan li sun zo}, {zai gau fe pa jan}. {go li sun zo}, {bai gau fe go}.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 88,
+      "kind": "screen",
+      "block_sha256": "e8abc529546bae9bbaf4298c702e35674d69d8dae68afb5cbc8cccb45eb566ba",
+      "read_aloud": "On the screen, a line in English: He took the path less traveled, and that blazed a trail for all. Below it, a poem in Dzegoban: {jan jo san sia}, {ci pa jan li san sia}, {te bia pin hu fe lo shun}, {ci fi mu jan li san sia}, {fe fi mu san sia}, {te shun zo bia pin fe jan}.",
+      "status": "unreviewed"
+    }
+  ]
+}

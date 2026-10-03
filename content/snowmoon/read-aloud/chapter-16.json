@@ -1,0 +1,42 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 16,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 62,
+      "kind": "screen",
+      "block_sha256": "c5696237d139b6cc4c72bdcc69abc469e1cd60458fe12091021f0d5aa8f03e79",
+      "read_aloud": "The scoreboard, yellow against purple. Redball captures: six to eleven. Greenball player hits: nine to seven. Blueball pin knockdowns: thirty-one to twenty-three. Combined score: sixteen seventy-four to seventeen seventy-one.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 66,
+      "kind": "screen",
+      "block_sha256": "48b953f225498873ace6ff4195055490a2da7e713036ad6dc8b68d11407a7c28",
+      "read_aloud": "The scoreboard again: yellow's greenball player hits are up to ten, and its combined score jumps to eighteen sixty, against purple's seventeen seventy-one.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 93,
+      "kind": "screen",
+      "block_sha256": "e34ae35b3a9592c267f9943d403bf55930fbbe14142bb1632df46f8f8a9d9a5f",
+      "read_aloud": "On Febric's watch, from Gladias: a social recovery mode transaction request, for a wallet whose address begins oh ex eight F six two.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 99,
+      "kind": "screen",
+      "block_sha256": "413f7e070ccca759ac4ecfe72b3891029530fe8a79dc835668f0bad89e09b8a7",
+      "read_aloud": "A message from Seila: Security question: what was the most unusual thing I did on the evening the kids came back from Vil and Daia's?",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 101,
+      "kind": "screen",
+      "block_sha256": "933517504a162c20bd3605fff76cf67159c5c03b75d62d2e8b4a9b85881c10ca",
+      "read_aloud": "His reply to Seila: You unplugged the screen in the restaurant when it was showing Lord Ephelion's speech.",
+      "status": "unreviewed"
+    }
+  ]
+}

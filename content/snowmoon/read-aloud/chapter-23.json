@@ -1,0 +1,21 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 23,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 21,
+      "kind": "screen",
+      "block_sha256": "3be8492a35cc765f5a85e8b9173026c30169d6c2e44374b660954248babe3c84",
+      "read_aloud": "A page of the book, printed in Dzegoban: twenty-eight short lines, most of them beginning with {ci}. The first reads {ci zan fe da cei bia sia ci jei fe hi dzia lin ji bia sia}.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 75,
+      "kind": "screen",
+      "block_sha256": "11f36d7cabee6e49ad740c38b03d4ecd33faf5b8543bf0b8f41ae6943b49bfa4",
+      "read_aloud": "A message from Seila, in red: requesting call.",
+      "status": "unreviewed"
+    }
+  ]
+}

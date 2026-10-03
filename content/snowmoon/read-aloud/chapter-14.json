@@ -1,0 +1,42 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 14,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 52,
+      "kind": "figure",
+      "block_sha256": "60e8ac21c62b408b5334345db0e66f6eca2dd755d9eb15d2dcd925093af3ffcd",
+      "read_aloud": "The audience's view of the board. Five triangles mark the shrines, one at the center and one at the middle of each edge. Light blue dots are spread across the northwest and along the top edge, with two just below the center. Purple squares sit just above the center and at the east edge, and are scattered across the south, thickest in the southeast.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 60,
+      "kind": "figure",
+      "block_sha256": "6d5a90dbcf6c52a1d9a217f9fca28acdb4d37a686741480e81ab24534a3d069e",
+      "read_aloud": "The board at the fourth intervention turn. The five shrines are unchanged. Three light blue dots remain in the northwest, with one more in the southwest and one near the bottom edge. Only two purple squares are left, one in the northeast and one in the southeast.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 68,
+      "kind": "figure",
+      "block_sha256": "6f098a5d4f309aaa34b7e2b2b4dba314f0a56b402b80bff36597acb7fbae4fde",
+      "read_aloud": "The board again. Three light blue dots are left: one near the top, one on the east edge, and one in the southwest. A single purple square remains, in the northeast.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 80,
+      "kind": "figure",
+      "block_sha256": "d5ef02760b88742938ad1d617154bd4260cadd01fdabd742c851846d9503b41e",
+      "read_aloud": "The board is nearly empty around the five shrines: a single light blue dot near the bottom edge, and a single purple square at the top.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 108,
+      "kind": "figure",
+      "block_sha256": "deaf8229cdb9870bf04354c45b87f345e97895f3c373699964c1f9e8124896e6",
+      "read_aloud": "The menu is four picture tiles: a cup with a handle and three short diagonal lines beside it, a leaf with wavy veins, the face of a pig, and a fish with small marks above its back.",
+      "status": "unreviewed"
+    }
+  ]
+}

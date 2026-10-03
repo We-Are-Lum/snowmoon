@@ -1,0 +1,14 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 11,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 91,
+      "kind": "screen",
+      "block_sha256": "e2042b724798e67ff585fc05d9fa17ed7e9684aa5c14c9afd438f8e69ba92a32",
+      "read_aloud": "His watch shows the air reading: carbon dioxide at nine hundred and six, in yellow, and fine particles, P M two point five, at four point four. Below that, devices in the room: sixteen attested, none unknown.",
+      "status": "unreviewed"
+    }
+  ]
+}

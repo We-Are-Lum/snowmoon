@@ -1,0 +1,56 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 22,
+  "about": "Proposed text_blocks.read_aloud overrides for screen and figure blocks: a short spoken description used by narration instead of the block's HTML. Drafted with model help from text_blocks.data.fields and the surrounding prose. Each is pinned to the block's sha256; if the block changes, the override no longer applies. status 'unreviewed' means no person has signed off yet.",
+  "overrides": [
+    {
+      "idx": 11,
+      "kind": "screen",
+      "block_sha256": "d934c30acc3ca27d4e9b962313c1e386c6b9cf243c2d484f122c657ce2c21cc1",
+      "read_aloud": "The taxi fare comes to twelve fifty-two in total: a driver base fare of three sixty-nine, tolls for nine minutes and five point six five kilometers, a toll for acceleration and deceleration, and three separate road congestion tolls adding up to four seventy-five.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 81,
+      "kind": "figure",
+      "block_sha256": "de8371e1479626cf6a1324b7fcffac9847dd4b6e9818aca020e09716ce13f456",
+      "read_aloud": "On the screen, a dark blue square. Seven small pale dots are arranged in a hexagon, six around a seventh at the center. Near the bottom of the hexagon, a small red square, trailing a short dashed red line behind it.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 88,
+      "kind": "figure",
+      "block_sha256": "5b5cc578d1fc00248428171a3c83799dea943baa9dc1fe491d7340eef3f11334",
+      "read_aloud": "The next view: the same seven dots, and the red square has crept further inside, up and to the left, toward the center.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 92,
+      "kind": "figure",
+      "block_sha256": "0ed73462558ce1231e020c8b040496ce2bc186f4c9255a3e4ac6663cc49fb2b6",
+      "read_aloud": "Now each of the seven dots is ringed by a wide dashed circle, the rings overlapping across the whole hexagon. The red square, further in still, is marked with a red x. Two small blue triangles approach from the bottom edge.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 97,
+      "kind": "figure",
+      "block_sha256": "619150b358bfa70fa5dfab8361a6b27f031afe8feaf9a046d28aeb50fa4e63e9",
+      "read_aloud": "The red square has stopped just left of the center, and the two blue triangles hover just above it.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 108,
+      "kind": "figure",
+      "block_sha256": "acf8e5bfce9d14c5ea5e3b0626d39a3c6d37af03594efbe75e236372b9ff5eb0",
+      "read_aloud": "The red square sits left of center with one blue triangle beside it; the other triangle is gone. Three of the pale dots, on the right, in the center and at the lower right, are crossed out with red x's. And from the bottom right corner, three more red squares are moving in, each trailing a dashed line.",
+      "status": "unreviewed"
+    },
+    {
+      "idx": 126,
+      "kind": "figure",
+      "block_sha256": "4eac98b82238b7a2897b2fb567669cc1a6da5f11aa82dc2f68458466de8b9bf8",
+      "read_aloud": "The final view. Only four pale dots remain, all on the left side, and three of them are crossed out with red x's; only the far-left one is unmarked. Four red squares sit clustered among them, every one crossed out. The blue triangles are gone.",
+      "status": "unreviewed"
+    }
+  ]
+}
