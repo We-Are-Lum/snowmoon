@@ -150,3 +150,15 @@ Still working?
 ```text
 Great
 ```
+
+```text
+Can you reply with full v5 proposal text? You need me to approve that before proceeding right?
+```
+
+```text
+We don't need to make video. We can just have a player that plays the audio with images shown as it plays. Can also allow people to download audio. Would it be within our rights to put the audio on Spotify?
+```
+
+```text
+Run with RLS option added?
+```

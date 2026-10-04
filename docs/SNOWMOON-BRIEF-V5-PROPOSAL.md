@@ -13,7 +13,7 @@ until the owner approves it; approved parts move into
   uploaded to R2 and not yet in `narrations` / `narration_segments` /
   `house_narrations`. The player is not built. Milestone 3 is therefore
   generated but not shipped.
-- **Images.** A first set is being seeded by the project, rendered locally with
+- **Images.** A first set was seeded by the project, rendered locally with
   FLUX.2 [klein] 4B: a style guide (`designs/styles/techno-vistas.json`), 22
   character profiles, 26 location profiles, and 142 key moments across the
   book. All are marked "starting point", not canon (rule 3). Recipes are in
@@ -73,8 +73,6 @@ uploader's own voice, with consent recorded."**
   rated first), renders them with local models, uploads the output to R2, and
   writes the version and its recipe in one transaction (rule 1), with
   `provider: local` and `cost_usd: 0`.
-- Video proposals use the same queue but wait for rented GPU time; they are
-  rendered when funded (section 8).
 
 ## 4. Style guides, character profiles, location profiles, and "my picks"
 
@@ -141,11 +139,26 @@ uploader's own voice, with consent recorded."**
     GPL can't be recalled.
   - Only your own voice. Under 18 needs a guardian's consent.
 
-## 8. Video (later, proposals only)
+## 8. Listening: the player, downloads, and a podcast feed
 
-- `clip` is already an element type. Video requests can be proposed now and
-  are stored in the queue; none run until there is a funded GPU and a
-  license-checked open-weights video model on the allowlist.
+- **No video.** The player plays the audio and shows each image while its
+  passage is read; that is the brief's existing play view of the living
+  edition. Video is dropped from the plan.
+- **Downloads.** Each chapter's audio can be downloaded as a file, with the
+  license text and a link to the repository (the pipeline that made it) next to
+  the button and in the file's metadata.
+- **Podcast feed.** The house narration is also published as a free podcast:
+  an RSS feed with one episode per chapter, served from the app
+  (`scripts/podcast-feed.*` builds it from the narration recipes). Each episode
+  description carries the GPL-3.0 notice, the source link, and a statement that
+  the narration is synthetic. Podcast apps (Spotify, Apple Podcasts and others)
+  read the feed on non-exclusive terms, and the same files stay downloadable
+  without DRM, which is what GPL-3.0 requires.
+- **Not** an audiobook-store listing: those usually require warranting rights we
+  don't hold (the book is the author's) and add restrictions GPL-3.0 forbids.
+- Before the feed is submitted to any platform: check that platform's current
+  policy on AI narration and disclosure, and ask the author (a draft note is in
+  `docs/outreach/author-note-draft.md`).
 
 ## 9. Wallets, attestations, donations
 
@@ -182,7 +195,7 @@ alter table studio.recipes add column credit_address text;
 create table studio.generation_requests (
   id uuid primary key default gen_random_uuid(),
   work_id text not null references studio.works(id),
-  element_type text not null check (element_type in ('image','clip','narration')),
+  element_type text not null check (element_type in ('image','narration')),
   model_id text not null,
   request jsonb not null,           -- prompt, picks, anchor, settings
   status text not null default 'proposed'
@@ -249,4 +262,4 @@ No change is needed for location profiles: 0001's `entities.kind` already allows
 3. Milestone 4b: attestations and wallets.
 4. Notes, the voice lab and human recordings alongside Milestone 5.
 5. Donations with or before Milestone 7.
-6. Video when funded.
+6. The podcast feed once narration is hosted in R2, after the author note.
