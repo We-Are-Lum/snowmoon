@@ -1,0 +1,117 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-1.json",
+  "generated_at": "2026-10-04T08:58:02+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 1.0,
+  "images": [
+    {
+      "id": "c1-b005-toy-drone",
+      "chapter": 1,
+      "idx": 5,
+      "file": "c1-b005-toy-drone.png",
+      "sha256": "cbdd51857ea818f3eeb639f202d0fab6f21668cffe05c3358b85c6341780bed8",
+      "prompt": "Wide shot on a quiet morning footpath under tall trees. A figure in a privacy robe walks along the path, seen from the side. Medieval-style houses of large clean stone bricks sit behind the trees, melting into leaves and plants. On a sidewalk branching off to the left, a young boy leaps up and grabs a small ball-shaped toy drone with feather-like rotors out of the air, while two smaller children ride tricycles nearby and their parents watch. Soft green light filtering through the leaves. Reference image 1 shows the location, a car-free woodland footpath of pale smooth paving winding beneath towering old trees, flanked by spotless medieval-style houses of large clean stone blocks that melt into moss, ferns and climbing plants, some sunk half underground, small shop doorways with blank glowing panels, benches and branching sidewalks, toy drones with feathered rotors under the canopy, and slender grown towers glimpsed far beyond the treetops, in sage, moss, cream and warm stone; keep its architecture, layout and colors. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 1005,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "kalimar-footpaths-plate.png",
+          "sha256": "6c273d707770a7362992cd8963e71b7d687f3d6fe17d41070854ff2708fca9e7"
+        }
+      ],
+      "generation_seconds": 229.3
+    },
+    {
+      "id": "c1-b013-sky-bridge",
+      "chapter": 1,
+      "idx": 13,
+      "file": "c1-b013-sky-bridge.png",
+      "sha256": "a601c6c6116fffedfa6223bd6c01e6030fdece0c80c1cc0dc863d90db1f23fb4",
+      "prompt": "Wide view from the middle of a pedestrian sky bridge on a chilly, clear day. In the foreground a figure in a privacy robe stands at the railing, looking out. Below, a busy road runs straight for about two kilometers and then bends right, full of cars, small autonomous buses and little delivery vehicles. Beyond rises a mountain covered with trees, with a few fifteen-storey apartment buildings shaped like oversized medieval castle towers with many windows poking above the trees on its lower slope. Crisp light, a breeze stirring the leaves. Reference image 1 shows the location, a slender pedestrian sky bridge of pale sculpted stone with living planter rails, arching over a busy multi-lane road of small autonomous buses, cars and delivery pods that runs straight toward a tree-covered mountain, where fifteen-storey apartment towers shaped like oversized medieval castle keeps, studded with many windows, rise above the forest on the lower slopes, beneath a vast pastel sky with distant elegant megastructures; keep its architecture, layout and colors. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 1013,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "kalimar-sky-bridge-plate.png",
+          "sha256": "f0482489473e5a6a8a9bd5c94909ef68e0cc43944b6e7b9082f0e83ae4ba5500"
+        }
+      ],
+      "generation_seconds": 209.0
+    },
+    {
+      "id": "c1-b082-snatch",
+      "chapter": 1,
+      "idx": 82,
+      "file": "c1-b082-snatch.png",
+      "sha256": "8c5960293a3c680a811f81c2c7ec00655a23ce8ae8380bf06e5e391216e2301d",
+      "prompt": "Medium shot inside a crowded open-air concert field enclosed by a high soundproof wall behind tall trees, a metal band playing on a distant stage. In the foreground a figure in a dark purple privacy robe, hood up and face covered, snatches a hand device from the grip of a large burly man in a plain shirt, who is looking away to the side in confusion. Behind them, concert-goers in band shirts turn and point their hand devices at a second figure in an identical dark purple privacy robe sprinting toward a fire exit. Energetic and chaotic, bright afternoon light mixed with stage lights. Both robed figures wear the same dark purple robe; no white robes. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 1582,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 176.3
+    },
+    {
+      "id": "c1-b089-autobus",
+      "chapter": 1,
+      "idx": 89,
+      "file": "c1-b089-autobus.png",
+      "sha256": "63d71bd994cef3a31bdc935994b2c1876198777acee28768fb5e56fe11146c3b",
+      "prompt": "Interior of a nearly empty, clean autonomous city bus, seen from the middle of the aisle. On the left sit two figures in privacy robes, faces hidden, impossible to tell apart. On the right sits a teenager in ordinary clothes with a backpack, heading home from school. Along the inside walls hang two advertisement posters made only of pictures without words: one of a child, a middle-aged woman and an old man reading together in a classroom, the other of a cheerful yellow and green drink bottle. Wooded streets slide past the windows. Reference image 1 shows the location, a clean, quiet driverless city bus with no driver's cab, a long bright aisle between rows of soft sage-upholstered seats, wide curved windows onto passing trees and stone, slim brushed-brass grab rails, wordless picture posters and blank glowing panels along the inner walls, and a glowing green circle beside the sliding door, in cream, sage, pale wood and soft yellow; keep its architecture, layout and colors. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 1089,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "autobus-plate.png",
+          "sha256": "fbda174d92399af27af97ad0a4164c7f01c728bf4297896009ef6ee6236dec0e"
+        }
+      ],
+      "generation_seconds": 193.1
+    },
+    {
+      "id": "c1-b132-food-boxes",
+      "chapter": 1,
+      "idx": 132,
+      "file": "c1-b132-food-boxes.png",
+      "sha256": "db07774012d4b20453648ab2500dc19c5cd957e0613a75dc9561be3749ad4b97",
+      "prompt": "Medium shot of a cozy family dining room, warm lamp light. The man from reference image 1 sets a paper bag full of plain unmarked takeout food boxes on the wooden table and hands a box to the boy from reference image 2, who reaches for it eagerly with a big grin. A woman with long dark braids and a lanky teenage boy with straight ash-blond hair and a teal half-cape sit at the table, seen from behind; only one curly-haired boy is in the room. On a couch in the background, a girl sits curled up alone with her face turned away, absorbed in her hand device. Stone walls, plants by the window. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Reference image 2 shows a boy of about eleven, small and wiry, warm light-brown skin, a mop of curly dark-brown hair, a sprinkle of freckles and a wide gap-toothed grin, wearing a sunny mustard-yellow sleeveless team tunic with a rounded padded collar and a green stripe down one side, a green fitted undershirt, green knee-length gathered shorts, striped socks, soft white seamless shoes and a small hand device strapped to his wrist; keep the same face, hair, build and clothing. Reference image 3 shows the location, a cozy two-storey family house of large clean stone blocks with a small sheltering roof over the doorstep, a glowing green circle and a slim screen beside the door; inside, a warm open living and dining room with a long wooden table, a deep couch, a wooden staircase, plants, soft lamps and a large window onto trees and a footpath, in honey wood, cream, sage and stone; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 1632,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "zven-sheet.png",
+          "sha256": "e92b1d0a29e2668c714cba4301bfd59c4cf0622bbaa7b7db134d26e875ae7d38"
+        },
+        {
+          "file": "family-home-plate.png",
+          "sha256": "bb8f92dede3f3491667ff8cedc37365e56cd126873446eca9ad87ec6bc6506dc"
+        }
+      ],
+      "generation_seconds": 308.3
+    }
+  ]
+}

@@ -44,10 +44,10 @@
       "props": [
         "designs/props/privacy-robe.json"
       ],
-      "prompt": "Medium shot inside a crowded open-air concert field enclosed by a high soundproof wall behind tall trees, a metal band playing on a distant stage. In the foreground a figure in a privacy robe snatches a hand device from the grip of a large burly man in a plain shirt, who is looking away to the side in confusion. Behind them, concert-goers in band shirts turn and point their hand devices at another robed figure sprinting toward a fire exit. Energetic and chaotic, bright afternoon light mixed with stage lights.",
+      "prompt": "Medium shot inside a crowded open-air concert field enclosed by a high soundproof wall behind tall trees, a metal band playing on a distant stage. In the foreground a figure in a dark purple privacy robe, hood up and face covered, snatches a hand device from the grip of a large burly man in a plain shirt, who is looking away to the side in confusion. Behind them, concert-goers in band shirts turn and point their hand devices at a second figure in an identical dark purple privacy robe sprinting toward a fire exit. Energetic and chaotic, bright afternoon light mixed with stage lights. Both robed figures wear the same dark purple robe; no white robes.",
       "width": 1024,
       "height": 576,
-      "seed": 1082
+      "seed": 1582
     },
     {
       "id": "c1-b089-autobus",
@@ -80,10 +80,10 @@
         "cast/zven-sheet"
       ],
       "props": [],
-      "prompt": "Medium shot of a cozy family dining room, warm lamp light. The man from reference image 1 sets a paper bag full of plain unmarked takeout food boxes on the wooden table and hands a box to the boy from reference image 2, who reaches for it eagerly with a big grin. A woman and a teenage boy sit at the table, seen from behind. On a couch in the background, a girl sits curled up alone with her face turned away, absorbed in her hand device. Stone walls, plants by the window.",
+      "prompt": "Medium shot of a cozy family dining room, warm lamp light. The man from reference image 1 sets a paper bag full of plain unmarked takeout food boxes on the wooden table and hands a box to the boy from reference image 2, who reaches for it eagerly with a big grin. A woman with long dark braids and a lanky teenage boy with straight ash-blond hair and a teal half-cape sit at the table, seen from behind; only one curly-haired boy is in the room. On a couch in the background, a girl sits curled up alone with her face turned away, absorbed in her hand device. Stone walls, plants by the window.",
       "width": 1024,
       "height": 576,
-      "seed": 1132
+      "seed": 1632
     }
   ]
 }

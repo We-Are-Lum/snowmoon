@@ -142,13 +142,30 @@ def main():
             continue
         prompt = compose_prompt(job, load(job["style"]) if job.get("style") else style)
         refs = reference_paths(job, out) or None
+        missing = [r for r in refs or [] if not Path(r).exists()]
+        if missing:
+            print(f"  {job['id']}: skipped, missing reference {', '.join(Path(m).name for m in missing)}", flush=True)
+            continue
         t = time.time()
         kwargs = dict(seed=job["seed"], prompt=prompt, num_inference_steps=STEPS,
                       width=job["width"], height=job["height"], guidance=GUIDANCE)
-        if refs:
-            image = get_model("edit").generate_image(image_paths=refs, **kwargs)
-        else:
-            image = get_model("plain").generate_image(**kwargs)
+        image = None
+        for attempt in (1, 2):
+            try:
+                if refs:
+                    image = get_model("edit").generate_image(image_paths=refs, **kwargs)
+                else:
+                    image = get_model("plain").generate_image(**kwargs)
+                break
+            except RuntimeError as e:
+                # Metal GPU timeouts happen under memory pressure; free everything and try once more.
+                print(f"  {job['id']}: attempt {attempt} failed: {str(e)[:120]}", flush=True)
+                loaded["kind"], loaded["model"] = None, None
+                gc.collect()
+                mx.clear_cache()
+        if image is None:
+            print(f"  {job['id']}: skipped after two failures", flush=True)
+            continue
         path = out / f"{job['id']}.png"
         image.save(str(path))
         secs = time.time() - t

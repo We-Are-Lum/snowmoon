@@ -1,0 +1,142 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-4.json",
+  "generated_at": "2026-10-04T09:57:18+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.6,
+  "images": [
+    {
+      "id": "c4-b003-camera-ladder",
+      "chapter": 4,
+      "idx": 3,
+      "file": "c4-b003-camera-ladder.png",
+      "sha256": "697409fde036990ad63a2161ea54d5e8dc8e6e5d0ae973a0a092f7ed333a8572",
+      "prompt": "Wide view from an outdoor courtyard cafe with a few tables of teenagers and older couples. In the foreground, the boy from reference image 1 sits at a table, gazing out through the courtyard entrance, while the boy from reference image 2 taps the table and holds up a hand device whose screen shows soft abstract glowing patterns. Across the street, visible through the entrance, a teenager stands at the top of a wooden ladder leaned against a lamp post, unscrewing a security camera and dropping it into a black pouch. Low-rise buildings with neon accents, warm daylight. Reference image 1 shows a young man of about eighteen, stocky and shorter than average, pale freckled skin, a shaggy mop of copper-red hair and a wide friendly face, wearing a cherry-red hooded poncho-shell with a curved hem and glowing yellow seams, a white seamless crew-neck undersuit, tan segmented cargo trousers gathered at the ankles, chunky yellow glowing-soled sneakers and a well-worn rounded modular backpack; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 3 shows the location, a small open-air courtyard cafe enclosed by low, dense shop buildings, with scattered small tables and stools beneath a shade tree and strings of little lights, a playful cartoon animal mural on one wall, glowing blank shop panels in pink and cyan, a little wheeled serving robot with a screen face, and an open entrance onto a busy street with a lamp post; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 4003,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "fin-sheet.png",
+          "sha256": "c6e28903e5aee3aad551332c93cfef43570f1f3c195d3a511e4d5bd21490855f"
+        },
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "courtyard-cafe-plate.png",
+          "sha256": "70a618cf6fd00a45984296c75a01cc89951b285b78b0b8625bf10242c066ec3d"
+        }
+      ],
+      "generation_seconds": 312.7
+    },
+    {
+      "id": "c4-b048-pyramid",
+      "chapter": 4,
+      "idx": 48,
+      "file": "c4-b048-pyramid.png",
+      "sha256": "3e2d3a905618d63977419e9660e37a6a753e4b15144cffd88452c48bb1cba3a6",
+      "prompt": "Wide establishing shot of a half-kilometer-tall pyramid rising at the edge of a low-rise city: a refurbished mountain clad in smooth stone with a square base, like the monument of an ancient civilization. Two rows of trees line a straight path running up its face to the halfway point, and another row of trees circles the pyramid horizontally at exactly half its height. In the foreground a lone young man, seen from behind, crosses the last street and starts up the sloping path toward it. Late afternoon light, glowing shop lights in the city behind. Reference image 1 shows the location, a half-kilometer-tall mountain refurbished into a square-based pyramid clad in smooth pale stone like the monument of a lost civilization, a straight double row of trees climbing its face to a tree-lined terrace ringing it at half height, a grand main door and small side entrances, a row of car-docking doors near its base, and discreet vents and antennas, towering over a low-rise city; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 4048,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "mountain-pyramid-plate.png",
+          "sha256": "527b185dfd7d7bb9652e769348a07d687e62ee9f7f332a9841aa07af27f43bde"
+        }
+      ],
+      "generation_seconds": 202.0
+    },
+    {
+      "id": "c4-b073-rival",
+      "chapter": 4,
+      "idx": 73,
+      "file": "c4-b073-rival.png",
+      "sha256": "ddee8a2beacb6df2cc39e6b85e7b4504d31104e77de5218a5b1c5ec52e33431c",
+      "prompt": "Medium shot in a stone-walled room deep inside a mountain, entered through an arch of stone bricks. The young woman from reference image 1 stands close, resting a hand on the shoulder of the young man from reference image 2, wearing a teasing, confident smirk. He has turned half away from her, frowning, his fists clenched at his sides. In the background an older woman watches from a distance, her face in shadow. Polished stone walls with a rounded ceiling, warm indoor lighting, a tense rivalry. Reference image 1 shows a young woman of about eighteen, tall and athletic, dark brown skin, hair pulled into a high puffy ponytail dyed magenta at the ends, a confident sly grin, wearing a lime-green modular shell vest with a bulky angular collar and reflective piping, a white seamless sleeveless bodysuit with glowing magenta seams, black wide gathered trousers with segmented knees, chunky black boots with glowing soles and a hip pouch; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 3 shows the location, a windowless waiting room carved deep in a mountain, with polished pale stone walls and a vaulted round-topped ceiling, entered through an arch of stone bricks crowned by a carved emblem of two arms meeting with clashing fists, a row of sleek elevator pod doors set into one wall, low stone benches, a wall screen, a small serving robot, and warm indirect light; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 4073,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "bai-sheet.png",
+          "sha256": "21def33df4f734aa8979a2bb152d88b443d511b940eaae0c4a67347f900db73e"
+        },
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "players-waiting-room-plate.png",
+          "sha256": "b1c7ec5c9617fc32100b10f0b6d548200e9247b50f19f05431a74686d9e50794"
+        }
+      ],
+      "generation_seconds": 304.2
+    },
+    {
+      "id": "c4-b081-arena",
+      "chapter": 4,
+      "idx": 81,
+      "file": "c4-b081-arena.png",
+      "sha256": "1c553ab32d583000438c6d349e2e598c6193b3e91bc71374663531da0696628c",
+      "prompt": "Wide shot of a vast, dark underground hall with over a thousand spectators in tiered seats, faces lit faintly by a giant glowing display of abstract dotted patterns. A lit path on the floor leads to a large game console with a single chair. The young man from reference image 1 sits in the chair, tense and focused, while several drones the size of a hand device hover and circle around him, scanning him with thin beams of light. A tray beside him offers glasses attached to a long cable. Neon pink and cyan glow in the darkness. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 2 shows the location, a vast dark hall hollowed inside a mountain, steep shadowy tiers of seats rising all around, an enormous glowing display of abstract dotted patterns hung overhead, a lit path across the dark stone floor leading to a large glowing game console with a single chair and cabled glasses, hand-sized drones hovering, and thin beams of light crossing the air; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 4081,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "minpentai-arena-plate.png",
+          "sha256": "23bf25c6ed0c90be993dcbc3e8e592cdf5dc927636b42a9b2c7475f12bbf4f3d"
+        }
+      ],
+      "generation_seconds": 247.7
+    },
+    {
+      "id": "c4-b149-new-rule",
+      "chapter": 4,
+      "idx": 149,
+      "file": "c4-b149-new-rule.png",
+      "sha256": "e947ededcc46e5abd1aec1f29e9bbc28d84476d046a4b0134bb90d71eb94e327",
+      "prompt": "Medium shot in a waiting room carved from polished stone, with elevator pod doors set into the wall behind. The older woman from reference image 1 stands calmly, hands folded, wearing a knowing half-smile as she explains something. The young man from reference image 2 faces her, his eyes wide open in astonishment. Off to one side, a young woman stands with her back partly turned. Warm indoor lighting, a quiet, charged moment just after a hard-won victory. Reference image 1 shows a woman in her early sixties, small and wiry, medium brown skin, short silver hair in a sharp asymmetric cut, keen eyes behind thin red-framed glasses, wearing a charcoal asymmetric commander's tabard with one sculpted shoulder panel and bright yellow piping, over a cobalt-blue seamless long-sleeved bodysuit, slim black segmented trousers, soft grey seamless boots and a slim wrist device; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 3 shows the location, a windowless waiting room carved deep in a mountain, with polished pale stone walls and a vaulted round-topped ceiling, entered through an arch of stone bricks crowned by a carved emblem of two arms meeting with clashing fists, a row of sleek elevator pod doors set into one wall, low stone benches, a wall screen, a small serving robot, and warm indirect light; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 4149,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "mu-sheet.png",
+          "sha256": "e1854964c41862db245d46cc188ba84af6235fb95c38a79d55fe9281abf3aec7"
+        },
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "players-waiting-room-plate.png",
+          "sha256": "b1c7ec5c9617fc32100b10f0b6d548200e9247b50f19f05431a74686d9e50794"
+        }
+      ],
+      "generation_seconds": 312.2
+    }
+  ]
+}

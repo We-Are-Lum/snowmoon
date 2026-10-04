@@ -1,6 +1,6 @@
 {
   "job_file": "content/snowmoon/illustrations/cast.json",
-  "generated_at": "2026-10-04T06:47:40+00:00",
+  "generated_at": "2026-10-04T08:49:53+00:00",
   "model": {
     "repo": "black-forest-labs/FLUX.2-klein-4B",
     "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
@@ -18,7 +18,7 @@
     "platform": "macOS-26.5.1-arm64-arm-64bit",
     "machine": "arm64"
   },
-  "model_load_seconds": 0.5,
+  "model_load_seconds": 0.6,
   "images": [
     {
       "id": "gladias-sheet",
@@ -38,13 +38,13 @@
       "chapter": null,
       "idx": null,
       "file": "seila-sheet.png",
-      "sha256": "06d919aeec693cf5c6f7ee86b3f58f30a9d0e0fbe8f1e10e2291ebcd540df721",
-      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven wrap coat that crosses over to close at one hip, with a soft draped shawl collar, over an oatmeal seamless undertunic, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
+      "sha256": "62f2f7ce966c5cc0c425af17edf58640bf587fff0486f5a7bb62530abfb447c4",
+      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
       "seed": 5002,
       "width": 1024,
       "height": 576,
       "references": [],
-      "generation_seconds": 157.1
+      "generation_seconds": 173.4
     },
     {
       "id": "zven-sheet",
@@ -103,13 +103,13 @@
       "chapter": null,
       "idx": null,
       "file": "vil-sheet.png",
-      "sha256": "56e07e55b73367550a4bca49470d4944f853a70d36d5e8db9c3eaaa0f538ae7d",
-      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a broad-shouldered man in his mid-forties, tall and heavyset, fair ruddy skin, close-cropped thinning ash-blond hair and a full sandy beard with laugh lines around the eyes, wearing a chunky oatmeal knitted overtunic with a wide rolled funnel collar and a side-buttoned closure, a brown woven belt-sash, brown canvas segmented work trousers with padded knees and sturdy soft-soled wrap boots. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
+      "sha256": "3a5ab946baeb543fc66500a5e3497810363684a7289a30e448f841cb6e3f4b73",
+      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a broad-shouldered man in his mid-forties, tall and heavyset, fair ruddy skin, close-cropped thinning ash-blond hair and a full sandy beard with laugh lines around the eyes, wearing a sleeveless oatmeal knitted tabard with a huge rolled funnel collar and leather side straps, over a moss-brown long-sleeved ribbed bodysuit, a wide woven belt-sash with tool loops, brown segmented work trousers with padded knees and sturdy soft-soled wrap boots. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
       "seed": 5007,
       "width": 1024,
       "height": 576,
       "references": [],
-      "generation_seconds": 178.4
+      "generation_seconds": 178.6
     },
     {
       "id": "daia-sheet",
@@ -194,13 +194,13 @@
       "chapter": null,
       "idx": null,
       "file": "zei-sheet.png",
-      "sha256": "c02e3841dd0a5f216c6b1384675acb3137d36314cdd4c00e877da5be379db120",
+      "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867",
       "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
-      "seed": 5014,
+      "seed": 5114,
       "width": 1024,
       "height": 576,
       "references": [],
-      "generation_seconds": 188.3
+      "generation_seconds": 184.3
     },
     {
       "id": "bai-sheet",
@@ -259,13 +259,13 @@
       "chapter": null,
       "idx": null,
       "file": "min-sheet.png",
-      "sha256": "e4ecdff1e34375c209e5fbb47b971c457ec50b23da4d324136a9786e4bba41e7",
-      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a cheerful woman in her mid-forties, short and plump, light golden-tan skin, chin-length black hair with a few grey strands held back by a bright red headband, a round face with smile lines, wearing a coral-pink puffed and quilted cocoon jacket with a wide rounded collar, a patterned yellow wrap undertunic tied at the side, navy gathered trousers and soft white glowing-soled shoes. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
+      "sha256": "88716fccb8e608493490f54bca922ad413b904d9cfad238d87f9056bc732621b",
+      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a cheerful woman in her mid-forties, short and plump, light golden-tan skin, chin-length black hair with a few grey strands held back by a bright red headband, a round face with smile lines, wearing a sleeveless coral-pink rounded cocoon cape that falls in soft quilted panels to the hips, over a patterned yellow long-sleeved wrap undertunic tied at the side with a wide sash, navy gathered trousers, soft white glowing-soled shoes and a slim wrist device. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
       "seed": 5019,
       "width": 1024,
       "height": 576,
       "references": [],
-      "generation_seconds": 223.4
+      "generation_seconds": 178.0
     },
     {
       "id": "deluin-sheet",
@@ -285,26 +285,26 @@
       "chapter": null,
       "idx": null,
       "file": "jahn-sheet.png",
-      "sha256": "057fd357ae0b83b7bb18e0b657932a728b125cc8b0974a23c90888fd5e7753ac",
-      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a man in his late thirties, tall and lanky, light brown skin, short curly black hair, a thin moustache and an easy smile, wearing a sharply tailored camel-brown long coat with an asymmetric diagonal closure and a cut-away hem, over a sky-blue high-neck seamless shirt, slim dark trousers, brown seamless shoes, and a thin folding slate of a computer tucked under one arm. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
+      "sha256": "1f8074f8da16397ac0704036e9a10d075b89aa5d13105f9e3613597c7b4611ba",
+      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a man in his late thirties, tall and lanky, light brown skin, short curly black hair, a thin moustache and an easy smile, wearing a long sleeveless camel-brown duster tabard with a tall angled standing collar and a single diagonal row of small glowing clasps, over a fitted sky-blue long-sleeved bodysuit with seamless panels, a slate-grey harness strap across the chest, slim dark trousers gathered into soft ankle cuffs, brown seamless boots, and a thin folding slate of a computer tucked under one arm. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
       "seed": 5021,
       "width": 1024,
       "height": 576,
       "references": [],
-      "generation_seconds": 208.9
+      "generation_seconds": 181.2
     },
     {
       "id": "tafindel-sheet",
       "chapter": null,
       "idx": null,
       "file": "tafindel-sheet.png",
-      "sha256": "3fb5b1a22cc6c77db9ba4f5a32c4966745901f9410998de144caae4a400eec71",
-      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a young man in his early twenties, of medium build, deep brown skin, short black hair in tight coils with a neat side part, clean-shaven and composed, wearing a dark navy tailored tunic coat with a tall sculpted standing collar and a short half-cape over one shoulder, a crisp white seamless undershirt, grey slim trousers and black seamless boots. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
+      "sha256": "2d1fca997a5a2add5b9286e45c849686c07cf51636c2bbbe7893bb6fe1700a3b",
+      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a young man in his early twenties, of medium build, deep brown skin, short black hair in tight coils with a neat side part, clean-shaven and composed, wearing a dark navy sculpted tunic coat with a tall rigid standing collar that frames his jaw, angular shoulder panels and a long asymmetric half-cape sweeping from one shoulder to the knee, a crisp white high-neck bodysuit, a silver clasp at the collar, grey segmented trousers and black seamless boots. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
       "seed": 5022,
       "width": 1024,
       "height": 576,
       "references": [],
-      "generation_seconds": 190.5
+      "generation_seconds": 164.0
     }
   ]
 }

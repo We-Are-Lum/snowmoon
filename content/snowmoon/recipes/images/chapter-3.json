@@ -1,0 +1,99 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-3.json",
+  "generated_at": "2026-10-04T09:34:15+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 1.1,
+  "images": [
+    {
+      "id": "c3-b029-fresh-robe",
+      "chapter": 3,
+      "idx": 29,
+      "file": "c3-b029-fresh-robe.png",
+      "sha256": "8f45caad189d5db1596e01017287c4126e66343791d3c54fbcfe3d6400149ab2",
+      "prompt": "Medium shot in a dim pedestrian tunnel at a Y-shaped fork, lit just enough to see. Two figures in privacy robes stand close together, faces hidden. One has opened the front of his robe and pulls a large folded package of dark purple fabric from an inside pocket, offering it to the other. On the tunnel wall behind them, a single sheet of paper is taped up at its four corners, seen at a steep angle so nothing on it can be read. Hushed, conspiratorial mood, cool stone greys. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 3029,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 171.1
+    },
+    {
+      "id": "c3-b054-enclave-wall",
+      "chapter": 3,
+      "idx": 54,
+      "file": "c3-b054-enclave-wall.png",
+      "sha256": "6eb774f3bdda3f508b3abce4a785eb47911a0093318e71bd30b7efb0a705942a",
+      "prompt": "Wide view of a long castle-like wall in grey and purple running beside a city street. In front of it stand two rows of trees with a sidewalk between them. A large picture panel on the wall shows child-friendly cartoon robots picking up litter, with no words. On a bench under the trees, two ordinary men sit drinking tea, sharing a hand device and chatting. A figure in a privacy robe has paused nearby, facing the wall as if studying the picture, quietly listening. Glass and steel office towers peek through the trees in the distance. Daylight. Reference image 1 shows the location, a walled corporate enclave a kilometer square behind a long castle-like rampart of grey and purple stone with tall gates and turnstiles, two rows of trees along its outer sidewalk; inside, uniform rounded and rectangular buildings five to ten meters tall in white, grey and purple glass and steel with sharp edges, identical evenly spaced trees, small identical blank logo panels, and tunnel mouths leading down, all crisp and orderly; keep its architecture, layout and colors. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 3054,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "greater-plum-harbor-plate.png",
+          "sha256": "2f8b125e36f316de992b3523527191235ad6389c420ae640e06accafff623559"
+        }
+      ],
+      "generation_seconds": 206.9
+    },
+    {
+      "id": "c3-b072-enclave-street",
+      "chapter": 3,
+      "idx": 72,
+      "file": "c3-b072-enclave-street.png",
+      "sha256": "aac00b412fd80ed0da3f73c79caf7e6e46136796989db47db3114b800a9810c5",
+      "prompt": "Wide establishing shot inside a walled corporate enclave that feels like a different country. Uniform futuristic buildings five to ten meters tall, rounded and rectangular, in white, grey and purple glass and steel with sharp edges. Identical trees planted at exactly equal spacing along spotless sidewalks. Small shops and restaurants all match, marked only by small simple emblems. A lone figure in a privacy robe walks through the entrance gate into this orderly street, where people stroll calmly. Clean, cool, precise daylight. Reference image 1 shows the location, a walled corporate enclave a kilometer square behind a long castle-like rampart of grey and purple stone with tall gates and turnstiles, two rows of trees along its outer sidewalk; inside, uniform rounded and rectangular buildings five to ten meters tall in white, grey and purple glass and steel with sharp edges, identical evenly spaced trees, small identical blank logo panels, and tunnel mouths leading down, all crisp and orderly; keep its architecture, layout and colors. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 3072,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "greater-plum-harbor-plate.png",
+          "sha256": "2f8b125e36f316de992b3523527191235ad6389c420ae640e06accafff623559"
+        }
+      ],
+      "generation_seconds": 210.2
+    },
+    {
+      "id": "c3-b092-booth",
+      "chapter": 3,
+      "idx": 92,
+      "file": "c3-b092-booth.png",
+      "sha256": "f48c845fe25b6f0416519ef7e86771c2dd66cd3975dfe894464c396d9a00d997",
+      "prompt": "Medium shot inside a small booth in a hidden courtyard, closed off by a cloth curtain. Two men sit facing each other across a table, both wearing privacy robes with the hoods and face covers pulled down, faces visible. The man from reference image 1, on the left, eats a salad with a glass of water, watching warily. The man from reference image 2, on the right, sips tea beside a rectangular nutrition bar and a fork, calm and composed. A decorated lamp between two large flowers on the table, a white air filter box in the corner. Soft warm light. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Reference image 2 shows a man of indeterminate middle age, of average height and lean, pale skin, a long calm face with neatly combed straight grey hair parted at the side, clean-shaven, a fixed forward gaze, wearing a plain beige fitted tunic with a low stand collar and a hidden asymmetric closure, a long open grey sleeveless overvest falling to the knees, pressed grey straight trousers and plain grey seamless shoes; keep the same face, hair, build and clothing. Reference image 3 shows the location, a small private booth in a hidden courtyard tea shop, closed by a heavy cloth curtain, with a narrow table between cushioned benches, a decorated lamp flanked by two large flowers at the far end, a white boxy air filter in a floor corner, a glowing green circle inset in the tabletop, thin smooth walls of white, grey and purple, and a small serving robot with a smiling screen face; keep its architecture, layout and colors. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 3092,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "delwart-sheet.png",
+          "sha256": "9384155b4b41386618d2dacd18c02ebfe235b95cda20c77ab2c31c7fa1cc351d"
+        },
+        {
+          "file": "plum-harbor-tea-booth-plate.png",
+          "sha256": "d12ada428a41577ec768229e23d0af014eefb339ef7f30642f0bdf5d89a09966"
+        }
+      ],
+      "generation_seconds": 320.9
+    }
+  ]
+}

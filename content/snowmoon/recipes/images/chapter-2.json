@@ -1,0 +1,124 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-2.json",
+  "generated_at": "2026-10-04T09:19:01+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.6,
+  "images": [
+    {
+      "id": "c2-b003-electronics-street",
+      "chapter": 2,
+      "idx": 3,
+      "file": "c2-b003-electronics-street.png",
+      "sha256": "fe6f5b5104a15dfb42877d4cd22e75281b22816dad8a3b1d9f6be299a2941ff5",
+      "prompt": "Wide street scene in a dense low-rise city on a warm day. The teenage boy from reference image 1 and the teenage boy from reference image 2 walk side by side along a sidewalk shaded by trees, chatting. On both sides, one- and two-storey shops glow with colored blinking lights, selling hand devices, watches, batteries and sensors, and small open workshops build gadgets inside. Several stairways lead down underground from the sidewalk. A small security drone flies overhead. Cute cartoon animal murals on the walls, shop lights shown only as glowing colored shapes. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 2 shows a young man of about eighteen, stocky and shorter than average, pale freckled skin, a shaggy mop of copper-red hair and a wide friendly face, wearing a cherry-red hooded poncho-shell with a curved hem and glowing yellow seams, a white seamless crew-neck undersuit, tan segmented cargo trousers gathered at the ankles, chunky yellow glowing-soled sneakers and a well-worn rounded modular backpack; keep the same face, hair, build and clothing. Reference image 3 shows the location, a dense, shady street of one- and two-storey shops and tiny glowing workshops beneath street trees, blank glowing sign panels and hand-bent neon frames in pink, cyan and yellow, stairways leading down to basements, cute cartoon animal murals, tangled cables and antennas, small drones overhead, sleek identical black cars at the curb, and a huge stone pyramid rising at the end of the street; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 2003,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "fin-sheet.png",
+          "sha256": "c6e28903e5aee3aad551332c93cfef43570f1f3c195d3a511e4d5bd21490855f"
+        },
+        {
+          "file": "pafogai-shop-streets-plate.png",
+          "sha256": "2a52dfc678e0de54e4357dabd0becdbd187174f5273af6c164f8c23e978a9ca0"
+        }
+      ],
+      "generation_seconds": 321.6
+    },
+    {
+      "id": "c2-b038-foil-classroom",
+      "chapter": 2,
+      "idx": 38,
+      "file": "c2-b038-foil-classroom.png",
+      "sha256": "bd733c887f2dc7ce4f24c7824d40e193688e98bedf754a019a7d827fccb65c7e",
+      "prompt": "Medium-wide view of an underground classroom with rows of chairs full of teenage students. The walls are covered with a thick, hastily applied layer of crinkled silver foil, painted over with cute cartoon animals playing with gadgets and chemistry glassware against green trees and blue sky. At the front stand two large inflatable cartoon figures, a pig holding a calculator and a hamster holding a vial of green liquid, together holding up a plain blank banner. In a row of chairs the boy from reference image 1 sits beside the boy from reference image 2, both looking forward attentively. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 2 shows a young man of about eighteen, stocky and shorter than average, pale freckled skin, a shaggy mop of copper-red hair and a wide friendly face, wearing a cherry-red hooded poncho-shell with a curved hem and glowing yellow seams, a white seamless crew-neck undersuit, tan segmented cargo trousers gathered at the ankles, chunky yellow glowing-soled sneakers and a well-worn rounded modular backpack; keep the same face, hair, build and clothing. Reference image 3 shows the location, a large windowless basement classroom with rows of simple chairs, its walls thickly and hastily covered in crinkled silver anti-transmission foil painted over with cute cartoon animals playing with gadgets and lab glassware against green trees and blue skies, a projected slide of simple diagrams glowing on the front wall, and two big inflatable cartoon animals, a pig and a hamster, flanking it; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 2038,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "fin-sheet.png",
+          "sha256": "c6e28903e5aee3aad551332c93cfef43570f1f3c195d3a511e4d5bd21490855f"
+        },
+        {
+          "file": "foil-classroom-plate.png",
+          "sha256": "16f77fba7e73796d9df8b34827df0995698122822521cc21f4200a8c351bebfa"
+        }
+      ],
+      "generation_seconds": 328.5
+    },
+    {
+      "id": "c2-b099-blast",
+      "chapter": 2,
+      "idx": 99,
+      "file": "c2-b099-blast.png",
+      "sha256": "feeae89b5c58da123a481e986c04a2145219f61ff9304caddb12d377f53e4cac",
+      "prompt": "Dramatic medium shot of an underground classroom at the instant of an explosion in a neighboring room. Part of a foil-covered wall and the floor crumble inward in a burst of dust and stone fragments; chairs tip over and students duck and throw up their arms. In the center the boy from reference image 1 is knocked sideways off his chair, eyes wide in shock, clutching his left arm. Cartoon animal paintings on the foil are cracked and torn. Grey smoke rolls across the warm indoor light. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 2 shows the location, a large windowless basement classroom with rows of simple chairs, its walls thickly and hastily covered in crinkled silver anti-transmission foil painted over with cute cartoon animals playing with gadgets and lab glassware against green trees and blue skies, a projected slide of simple diagrams glowing on the front wall, and two big inflatable cartoon animals, a pig and a hamster, flanking it; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 2099,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "foil-classroom-plate.png",
+          "sha256": "16f77fba7e73796d9df8b34827df0995698122822521cc21f4200a8c351bebfa"
+        }
+      ],
+      "generation_seconds": 267.5
+    },
+    {
+      "id": "c2-b122-sweeping",
+      "chapter": 2,
+      "idx": 122,
+      "file": "c2-b122-sweeping.png",
+      "sha256": "f7514c2d26250a4068107f464622fd1e3367348a390ded4fffdcadc69ddc9896",
+      "prompt": "Quiet aftermath in a damaged underground classroom, the last haze of smoke clearing. The boy from reference image 1 sweeps broken stone and debris into a pile against the wall with a broom. The boy from reference image 2 sits on a chair nearby, holding his left arm close to his body, tired but managing a small smile. A middle-aged instructor stands near the door, solemn. Torn silver foil and cracked cartoon animal paintings on the walls, empty chairs scattered around under warm indoor light. Reference image 1 shows a young man of about eighteen, stocky and shorter than average, pale freckled skin, a shaggy mop of copper-red hair and a wide friendly face, wearing a cherry-red hooded poncho-shell with a curved hem and glowing yellow seams, a white seamless crew-neck undersuit, tan segmented cargo trousers gathered at the ankles, chunky yellow glowing-soled sneakers and a well-worn rounded modular backpack; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 3 shows the location, a large windowless basement classroom with rows of simple chairs, its walls thickly and hastily covered in crinkled silver anti-transmission foil painted over with cute cartoon animals playing with gadgets and lab glassware against green trees and blue skies, a projected slide of simple diagrams glowing on the front wall, and two big inflatable cartoon animals, a pig and a hamster, flanking it; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 2122,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "fin-sheet.png",
+          "sha256": "c6e28903e5aee3aad551332c93cfef43570f1f3c195d3a511e4d5bd21490855f"
+        },
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "foil-classroom-plate.png",
+          "sha256": "16f77fba7e73796d9df8b34827df0995698122822521cc21f4200a8c351bebfa"
+        }
+      ],
+      "generation_seconds": 337.1
+    }
+  ]
+}
