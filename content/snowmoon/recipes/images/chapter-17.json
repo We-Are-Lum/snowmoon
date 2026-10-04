@@ -1,0 +1,116 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-17.json",
+  "generated_at": "2026-10-04T19:03:40+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.0,
+  "images": [
+    {
+      "id": "c17-b002-parliament-path",
+      "chapter": 17,
+      "idx": 2,
+      "file": "c17-b002-parliament-path.png",
+      "sha256": "567588a001b7fd46168fa3cceeefb96037b6b63de9a727c69b8143026b3cc876",
+      "prompt": "Wide establishing shot on a calm morning. A man in plain clothes, seen from behind, walks along a straight footpath lined on both sides by tall leafy trees whose branches meet overhead. At the end of the path rises a large circular parliament building of pale grey stone, round and low with many tall windows and a shallow dome, half framed by greenery. Dappled sunlight falls across the path, moss and fallen leaves line its edges, and a small round green-glowing panel sits beside a side door of the building in the distance. Reference image 1 shows the location, a large circular parliament hall at ground level on a low mountain shoulder, a ring of medieval-style pale stone arches and buttresses wrapped in curving bands of modern glass, with many entrances all around, a planted roof terrace, faint green lights by its doors, and a long straight footpath leading to it under tall leafy trees, in pale stone, sage, cream and gold; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 17002,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "parliament-plate.png",
+          "sha256": "5bc17cbce07f8bd5eca32c52bf9ba0d8f6fbcdb66a4486a5091b2609f26e17a4"
+        }
+      ],
+      "generation_seconds": 205.4
+    },
+    {
+      "id": "c17-b013-serving-robot",
+      "chapter": 17,
+      "idx": 13,
+      "file": "c17-b013-serving-robot.png",
+      "sha256": "9c9418eb16600afaf8ff4a47f0ee65db89b0015c25664ad6dcbf76f2853424f0",
+      "prompt": "Medium-wide interior of a small, warm side office with wood paneling, a stone wall, a low table and two chairs, and a tall window onto green trees. The man from reference image 1, in a long formal parliament robe, sits laughing warmly. Opposite him, the man from reference image 2 sits staring in surprise. A small sleek serving robot on wheels has just glided into the room between them, its little screen showing soft abstract colored shapes. Soft afternoon daylight. Reference image 1 shows a man in his late fifties, tall and lean, medium brown skin, close-cropped white hair and a short white beard, warm deep-set eyes, wearing a long deep-green woven parliament robe with wide draped sleeves and a sculpted high collar fastened by a simple bronze clasp, over a cream seamless undertunic, a broad bronze-colored cloth sash, dark loose trousers and soft brown seamless shoes; keep the same face, hair, build and clothing. Reference image 2 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a small, warm senator's office inside a round stone parliament hall, with honey wood paneling against a curved pale stone wall, a low table between deep armchairs, a tall window onto green trees, a large wordless map of unfamiliar continents and seas printed across one wall, and a slim serving robot with a screen face waiting at the door; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 17013,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "verdow-sheet.png",
+          "sha256": "1eb638a0bc891b79c41f7a3aefd000cc06fa2634fd4f5ec50b41c7781a6f7872"
+        },
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "senator-office-plate.png",
+          "sha256": "f2a4921c5ad7b910c7f4f38f84302f221c535d4f269134694b2ed531e3a7d6ed"
+        }
+      ],
+      "generation_seconds": 306.1
+    },
+    {
+      "id": "c17-b053-graph-diagram",
+      "chapter": 17,
+      "idx": 53,
+      "file": "c17-b053-graph-diagram.png",
+      "sha256": "f0b5dc5a133859bb14acd299c0d2de0da5075526b8e1c47e803648cec51e55be",
+      "prompt": "Medium shot in a wood-paneled office with a tall window onto green trees. A friendly middle-aged visitor wearing a loose dark purple robe with its hood pushed back and his face uncovered holds out a hand device toward the man from reference image 1, who leans forward with curious attention. The device's screen glows with a simple branching diagram of colored circles joined by thin lines, like a tree of nodes, with no labels at all. Warm afternoon daylight. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 2 shows the location, a small, warm senator's office inside a round stone parliament hall, with honey wood paneling against a curved pale stone wall, a low table between deep armchairs, a tall window onto green trees, a large wordless map of unfamiliar continents and seas printed across one wall, and a slim serving robot with a screen face waiting at the door; keep its architecture, layout and colors. The dark purple Veridian Privacy Robe is worn open at the face: a loose-fitting dark purple garment down to the ankles, its hood pushed back onto the shoulders and its fabric face cover lowered, so the wearer's face and hair are fully visible. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 17053,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "senator-office-plate.png",
+          "sha256": "f2a4921c5ad7b910c7f4f38f84302f221c535d4f269134694b2ed531e3a7d6ed"
+        }
+      ],
+      "generation_seconds": 253.1
+    },
+    {
+      "id": "c17-b099-exchange-news",
+      "chapter": 17,
+      "idx": 99,
+      "file": "c17-b099-exchange-news.png",
+      "sha256": "e06d65ca042179e1252f3f3f2c9e133f9d04456d7b5029d1c7ae048972d54737",
+      "prompt": "Warm evening interior of a cozy stone family home with wooden beams and a big window onto dark trees. A family sits around a dinner table with open food boxes and plates. In the center, the person from reference image 1 sits up proudly, beaming while announcing exciting news, one hand raised mid-gesture. Beside them, the young man from reference image 2 smiles quietly. Other family members around the table are seen from behind or in soft shadow, listening. One chair sits empty. Soft lamplight. Reference image 1 shows a girl of about fifteen, average height and sturdy, fair skin with freckles, ash-blond hair cut in a short practical bob held back with a clip, bright grey eyes, wearing a brick-red quilted sleeveless overtunic with a high rounded collar and toggles down one side, a white long-sleeved seamless undershirt, a brown knee-length pleated wrap skirt over dark leggings and soft sturdy wrap boots; keep the same face, hair, build and clothing. Reference image 2 shows a lanky young man of about seventeen, tall and narrow-shouldered, pale skin with rosy cheeks, straight ash-blond hair falling over his ears and rectangular black-framed glasses, wearing a faded teal hooded half-cape over one shoulder above a fitted grey undertunic, rust-brown ribbed trousers gathered at the ankle, soft grey seamless shoes, and a cross-body harness holding a compact grey box cabled to the small handheld screen in his hand; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a cozy two-storey family house of large clean stone blocks with a small sheltering roof over the doorstep, a glowing green circle and a slim screen beside the door; inside, a warm open living and dining room with a long wooden table, a deep couch, a wooden staircase, plants, soft lamps and a large window onto trees and a footpath, in honey wood, cream, sage and stone; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 17099,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "hreda-sheet.png",
+          "sha256": "a74b44fc2a1cb295497918a00e5a4701aff8d339c9088188b2c530b0ab5551bb"
+        },
+        {
+          "file": "febric-sheet.png",
+          "sha256": "9de92b9be83ee3ddd9f806c905dc88e00acf013f0ed7b3b9526c660c12f03f81"
+        },
+        {
+          "file": "family-home-plate.png",
+          "sha256": "bb8f92dede3f3491667ff8cedc37365e56cd126873446eca9ad87ec6bc6506dc"
+        }
+      ],
+      "generation_seconds": 304.3
+    }
+  ]
+}

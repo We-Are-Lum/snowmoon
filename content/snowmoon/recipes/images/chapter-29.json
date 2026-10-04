@@ -1,0 +1,134 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-29.json",
+  "generated_at": "2026-10-04T19:27:46+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.0,
+  "images": [
+    {
+      "id": "c29-b002-snowy-hill-sunrise",
+      "chapter": 29,
+      "idx": 2,
+      "file": "c29-b002-snowy-hill-sunrise.png",
+      "sha256": "dd1f5421818d262c19277dec97003a174526f916bd80fe7ef8e3e0ea81f305a2",
+      "prompt": "Wide shot of a snowy hilltop at sunrise. The young man from reference image 1 and the woman from reference image 2 stand side by side in thick white-and-grey patterned winter jackets, cold wind blowing snow into their faces. Below and around them, a pine forest heavy with thick white snow stretches to the horizon. The sun has just risen above the distant trees, casting long pale golden light across the snow. Calm, serious expressions. Icy whites, pale blues, deep pine green. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 2 shows a woman in her early sixties, small and wiry, medium brown skin, short silver hair in a sharp asymmetric cut, keen eyes behind thin red-framed glasses, wearing a charcoal asymmetric commander's tabard with one sculpted shoulder panel and bright yellow piping, over a cobalt-blue seamless long-sleeved bodysuit, slim black segmented trousers, soft grey seamless boots and a slim wrist device; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a vast forest of snow-laden green pines rolling over low hills to the horizon, a bare windswept snowy hilltop lookout with a low half-buried bunker door at its foot, wide white clearings along the forest edge, deep untouched drifts, faint silver threads of cable trailing over the snow, and pale slender towers far off on the northern horizon, in white, pine green, steel blue and pale gold; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 29002,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "mu-sheet.png",
+          "sha256": "e1854964c41862db245d46cc188ba84af6235fb95c38a79d55fe9281abf3aec7"
+        },
+        {
+          "file": "elenar-forest-front-plate.png",
+          "sha256": "f3ae91ba81743125c14fa43662849073f69296c80f783c8168488449956bd7cb"
+        }
+      ],
+      "generation_seconds": 342.2
+    },
+    {
+      "id": "c29-b021-briefing-room",
+      "chapter": 29,
+      "idx": 21,
+      "file": "c29-b021-briefing-room.png",
+      "sha256": "5a1a6bcd15353f69672b0e9b43e1a2a01cc985d34a48b43f12cebb45e408f095",
+      "prompt": "A cramped briefing room in a makeshift bunker, packed with several dozen commanders in winter jackets and military shirts sitting shoulder to shoulder on benches. At the front, the middle-aged man from reference image 1 stands beside a large wall screen showing a map of forest and coastline with four broad colored arrows, no labels. The man from reference image 2 sits in the front row, answering him with a confident nod. Harsh overhead light, serious faces. Reference image 1 shows a middle-aged man of about fifty, tall and solidly built, light olive skin, short iron-grey hair in a crew cut, a square clean-shaven jaw and an upright bearing, wearing a structured khaki-brown military-style tunic shirt with a diagonal side closure, sculpted shoulder plates and a stiff standing collar, a dark brown belt-harness across the chest, dark brown segmented trousers and polished seamless brown boots; keep the same face, hair, build and clothing. Reference image 2 shows a composed man in his fifties, tall and gaunt, light beige skin, long black hair streaked with grey tied in a low knot, high cheekbones and a still, unreadable expression, wearing the long hooded shadow-grey cloak of a priest, its hem traced with faint glowing geometric patterns, over a black high-necked seamless tunic with a sculpted collar, and holding a slim dark hand device; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a makeshift bunker dug into the foot of a snowy hill, with low curved ceilings of poured pale stone braced by timber beams, a cramped briefing room of packed benches facing a large wall screen, and small adjacent command rooms each holding a reclining console chair before glowing map displays, bundled cables along the walls, snowshoes by the heavy door, and a narrow high window of daylight; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 29021,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "lektor-sheet.png",
+          "sha256": "543da1cf2ed9b556ea66752a12ad5cee04bfabf7b56833e710fa8c4e822b5832"
+        },
+        {
+          "file": "den-sheet.png",
+          "sha256": "379cde7d30301abcdfb8cdad2ce0813c8030f0d95a9a9f76b15690cec5ae8fef"
+        },
+        {
+          "file": "bunker-command-post-plate.png",
+          "sha256": "760d76ed7834741e549a09effe6dd02d88994b6c8c94609a50adcf04acfc9789"
+        }
+      ],
+      "generation_seconds": 331.1
+    },
+    {
+      "id": "c29-b038-drones-at-sundown",
+      "chapter": 29,
+      "idx": 38,
+      "file": "c29-b038-drones-at-sundown.png",
+      "sha256": "e8b03112100172492e8f0ace6e0e5165a5d2f31a0fb245564e1f8d57c5d9ce60",
+      "prompt": "Epic wide view from a snowy hilltop at sunset. Three small figures in white-and-grey winter jackets stand in the foreground, seen from behind. Below them, thousands of snowmobile-like armed drones wait in long rows at the edge of a snow-laden pine forest. Thin silver fiber optic cables trail from the rear of the largest drones, glinting in the low orange sun and stretching back as far as the eye can see. One drone carries a stack of boxed printers. Icy whites, long blue shadows. Reference image 1 shows the location, a vast forest of snow-laden green pines rolling over low hills to the horizon, a bare windswept snowy hilltop lookout with a low half-buried bunker door at its foot, wide white clearings along the forest edge, deep untouched drifts, faint silver threads of cable trailing over the snow, and pale slender towers far off on the northern horizon, in white, pine green, steel blue and pale gold; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 29038,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "elenar-forest-front-plate.png",
+          "sha256": "f3ae91ba81743125c14fa43662849073f69296c80f783c8168488449956bd7cb"
+        }
+      ],
+      "generation_seconds": 190.5
+    },
+    {
+      "id": "c29-b070-copters-launch",
+      "chapter": 29,
+      "idx": 70,
+      "file": "c29-b070-copters-launch.png",
+      "sha256": "ef450a5ea9b76d6e5f34aa34e01efef1030cbc69f9ec44e9b969c07e1864b10a",
+      "prompt": "Night battle scene over a snowy pine forest, seen from above the treetops. Large boxes on the backs of heavy snow drones have opened, and a swarm of small sport copters and delivery copters rises out of them into the dark sky, their lights streaking. Below, rows of snow drones advance between the trees, distant flashes of light on the horizon and drifting smoke. No people visible. Deep blues, cold white snow, bright small points of light. Reference image 1 shows the location, a vast forest of snow-laden green pines rolling over low hills to the horizon, a bare windswept snowy hilltop lookout with a low half-buried bunker door at its foot, wide white clearings along the forest edge, deep untouched drifts, faint silver threads of cable trailing over the snow, and pale slender towers far off on the northern horizon, in white, pine green, steel blue and pale gold; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 29070,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "elenar-forest-front-plate.png",
+          "sha256": "f3ae91ba81743125c14fa43662849073f69296c80f783c8168488449956bd7cb"
+        }
+      ],
+      "generation_seconds": 209.4
+    },
+    {
+      "id": "c29-b109-zei-weeps",
+      "chapter": 29,
+      "idx": 109,
+      "file": "c29-b109-zei-weeps.png",
+      "sha256": "b3bdeed01d1a2af5d02baaa361e6a154016b6d39f8fbf567c906940b3c48472d",
+      "prompt": "Close medium shot of the young man from reference image 1 alone at a console in a dim underground bunker room, wearing glasses that glow faintly, an earpiece and a white-and-grey jacket. Tears run down his face and his shoulders are hunched in grief. Beside him on the table sits a half-finished can of energy drink. The console screen glows with soft abstract colored shapes. Cold blue screen light, deep shadows, a heavy, quiet mood. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 2 shows the location, a makeshift bunker dug into the foot of a snowy hill, with low curved ceilings of poured pale stone braced by timber beams, a cramped briefing room of packed benches facing a large wall screen, and small adjacent command rooms each holding a reclining console chair before glowing map displays, bundled cables along the walls, snowshoes by the heavy door, and a narrow high window of daylight; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 29109,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "bunker-command-post-plate.png",
+          "sha256": "760d76ed7834741e549a09effe6dd02d88994b6c8c94609a50adcf04acfc9789"
+        }
+      ],
+      "generation_seconds": 255.5
+    }
+  ]
+}

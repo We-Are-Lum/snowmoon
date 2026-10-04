@@ -1,0 +1,138 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-23.json",
+  "generated_at": "2026-10-04T19:18:43+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.6,
+  "images": [
+    {
+      "id": "c23-b004-green-cafeteria",
+      "chapter": 23,
+      "idx": 4,
+      "file": "c23-b004-green-cafeteria.png",
+      "sha256": "6fcbdba66b4f8412f34ec8317960ab6257c7f313d6841bed6cdaa76562d11f12",
+      "prompt": "Wide interior of an underground cafeteria deep inside a mountain. Green trees stand in pots between the tables, two walls are covered in hanging vines, and the other two are huge mirrors that repeat the room endlessly. Thick shrubs screen a single corner entrance. A few freshly added boxy air filters stand awkwardly on the floor; downward-pointing fans and violet lights hang from the ceiling. In a private nook behind shrubs, the man from reference image 1 and the young man from reference image 2 sit at a table with a young woman seen from behind. Soft green light. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Reference image 2 shows a young man of about eighteen, stocky and shorter than average, pale freckled skin, a shaggy mop of copper-red hair and a wide friendly face, wearing a cherry-red hooded poncho-shell with a curved hem and glowing yellow seams, a white seamless crew-neck undersuit, tan segmented cargo trousers gathered at the ankles, chunky yellow glowing-soled sneakers and a well-worn rounded modular backpack; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, an underground cafeteria thirty meters inside a mountain, its tables screened into private nooks by two-meter trees in clay pots and thick shrubs, two walls hung with vines and the other two of huge mirrors repeating the room endlessly, wall screens posing as sunny windows over low roofs and trees, ceiling fans with faint violet lamps, and freestanding air filters; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 23504,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "fin-sheet.png",
+          "sha256": "c6e28903e5aee3aad551332c93cfef43570f1f3c195d3a511e4d5bd21490855f"
+        },
+        {
+          "file": "pyramid-cafeteria-plate.png",
+          "sha256": "7ce4ef18a691bf8da44b4522d874909e5065da9298d628a4e36b810ccf6e078a"
+        }
+      ],
+      "generation_seconds": 313.3
+    },
+    {
+      "id": "c23-b006-drained",
+      "chapter": 23,
+      "idx": 6,
+      "file": "c23-b006-drained.png",
+      "sha256": "d4eac695d08ae57ea029043c2cf1380ea6f91c015261720303b3ff3228ac3d96",
+      "prompt": "Medium shot in a leafy underground cafeteria nook screened by shrubs and potted trees, violet ceiling lights glowing faintly. The young man from reference image 1 drops into a chair at the table, visibly exhausted, shoulders slumped, dark circles under his eyes. Beside him, the young woman from reference image 2 turns toward him with concern. Two other diners at the table are partly hidden by leaves. A mirrored wall behind them reflects the greenery. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 2 shows a young woman of about eighteen, tall and athletic, dark brown skin, hair pulled into a high puffy ponytail dyed magenta at the ends, a confident sly grin, wearing a lime-green modular shell vest with a bulky angular collar and reflective piping, a white seamless sleeveless bodysuit with glowing magenta seams, black wide gathered trousers with segmented knees, chunky black boots with glowing soles and a hip pouch; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, an underground cafeteria thirty meters inside a mountain, its tables screened into private nooks by two-meter trees in clay pots and thick shrubs, two walls hung with vines and the other two of huge mirrors repeating the room endlessly, wall screens posing as sunny windows over low roofs and trees, ceiling fans with faint violet lamps, and freestanding air filters; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 23006,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "bai-sheet.png",
+          "sha256": "21def33df4f734aa8979a2bb152d88b443d511b940eaae0c4a67347f900db73e"
+        },
+        {
+          "file": "pyramid-cafeteria-plate.png",
+          "sha256": "7ce4ef18a691bf8da44b4522d874909e5065da9298d628a4e36b810ccf6e078a"
+        }
+      ],
+      "generation_seconds": 309.6
+    },
+    {
+      "id": "c23-b020-reading-test",
+      "chapter": 23,
+      "idx": 20,
+      "file": "c23-b020-reading-test.png",
+      "sha256": "dda9a2d20936dbd5c622707120c0ec10712b2ee30847510ffafa1d1e07db4e53",
+      "prompt": "Medium close shot at a cafeteria table among potted trees and vines, empty plates and teacups pushed aside. The man from reference image 1 holds an open book, its pages facing away from the viewer, brow furrowed in concentration as he tries to read aloud. Beside him, the young man from reference image 2 leans in with an encouraging, teasing grin, as if quizzing him. Soft green and violet light. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Reference image 2 shows a young man of about eighteen, stocky and shorter than average, pale freckled skin, a shaggy mop of copper-red hair and a wide friendly face, wearing a cherry-red hooded poncho-shell with a curved hem and glowing yellow seams, a white seamless crew-neck undersuit, tan segmented cargo trousers gathered at the ankles, chunky yellow glowing-soled sneakers and a well-worn rounded modular backpack; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, an underground cafeteria thirty meters inside a mountain, its tables screened into private nooks by two-meter trees in clay pots and thick shrubs, two walls hung with vines and the other two of huge mirrors repeating the room endlessly, wall screens posing as sunny windows over low roofs and trees, ceiling fans with faint violet lamps, and freestanding air filters; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 23020,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "fin-sheet.png",
+          "sha256": "c6e28903e5aee3aad551332c93cfef43570f1f3c195d3a511e4d5bd21490855f"
+        },
+        {
+          "file": "pyramid-cafeteria-plate.png",
+          "sha256": "7ce4ef18a691bf8da44b4522d874909e5065da9298d628a4e36b810ccf6e078a"
+        }
+      ],
+      "generation_seconds": 316.2
+    },
+    {
+      "id": "c23-b071-watch-race",
+      "chapter": 23,
+      "idx": 71,
+      "file": "c23-b071-watch-race.png",
+      "sha256": "d6431017a6470479ba8c955e74a90e116cea46e9469ed360f7a92d232c05f171",
+      "prompt": "Playful close-up over the corner of a cafeteria table: three wrists wearing watches converge on a small round green-glowing panel set into the tabletop. Two of the wrists bump and push each other aside, while a third hand slaps its watch firmly onto the green circle. Teacups and leaves in the soft-focus background, warm green light, a sense of comic chaos. Reference image 1 shows the location, an underground cafeteria thirty meters inside a mountain, its tables screened into private nooks by two-meter trees in clay pots and thick shrubs, two walls hung with vines and the other two of huge mirrors repeating the room endlessly, wall screens posing as sunny windows over low roofs and trees, ceiling fans with faint violet lamps, and freestanding air filters; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 23071,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "pyramid-cafeteria-plate.png",
+          "sha256": "7ce4ef18a691bf8da44b4522d874909e5065da9298d628a4e36b810ccf6e078a"
+        }
+      ],
+      "generation_seconds": 193.2
+    },
+    {
+      "id": "c23-b078-red-call",
+      "chapter": 23,
+      "idx": 78,
+      "file": "c23-b078-red-call.png",
+      "sha256": "a9d850e25754379608e445e2c992bb441fbe7823e84b0fd4d688c5eafa13a3c6",
+      "prompt": "Night interior of a small windowless bedroom carved into rock, with a simple bed and a single dim lamp. The man from reference image 1, in sleep clothes, sits up in bed with his face tense with alarm, lit by the deep red glow of the watch on his wrist as he raises it to answer a call. Shadows fill the corners of the room. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 23078,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        }
+      ],
+      "generation_seconds": 189.5
+    }
+  ]
+}

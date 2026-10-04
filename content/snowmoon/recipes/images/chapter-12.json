@@ -1,6 +1,6 @@
 {
   "job_file": "content/snowmoon/illustrations/chapter-12.json",
-  "generated_at": "2026-10-04T12:29:30+00:00",
+  "generated_at": "2026-10-04T19:03:31+00:00",
   "model": {
     "repo": "black-forest-labs/FLUX.2-klein-4B",
     "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
@@ -43,9 +43,9 @@
       "chapter": 12,
       "idx": 30,
       "file": "c12-b030-pyramids-from-car.png",
-      "sha256": "bc1855eee3f137b32959a3adf1fa210d24a514faa8d2d28576979d3e33ade868",
+      "sha256": "06a43379259f2c821c8417a2661b245e4d5b040b5041809af1909354c9e76769",
       "prompt": "View from inside a sealed black car through its slightly dimmed side window. The boy from reference image 1 sits in profile in the foreground, gazing out with wonder. Outside, the row of low-rise shops and tea houses briefly gives way to a green park, and beyond the park rise several mountain-sized stepped pyramids, their slopes covered in trees and stone. Warm afternoon light, a small river glinting ahead. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 2 shows the location, a sealed passenger cabin of a large rectangular glossy black autonomous car, its inner walls lined with crinkled silver anti-transmission foil behind soft dark panels, plush seats facing each other across the cabin, camera-fed simulated windows showing a slightly dimmed view of a tree-lined street, and a broad side door shaped to seal flush against building doorways; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
-      "seed": 12030,
+      "seed": 12530,
       "width": 1024,
       "height": 576,
       "references": [
@@ -58,7 +58,7 @@
           "sha256": "979edefb842ec8d1a8287ec1b413bf1f7576798ea03b874662089f15fcb68a5d"
         }
       ],
-      "generation_seconds": 243.5
+      "generation_seconds": 249.5
     },
     {
       "id": "c12-b070-orientation",

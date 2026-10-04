@@ -1,0 +1,142 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-19.json",
+  "generated_at": "2026-10-04T19:09:10+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.0,
+  "images": [
+    {
+      "id": "c19-b026-security-drone",
+      "chapter": 19,
+      "idx": 26,
+      "file": "c19-b026-security-drone.png",
+      "sha256": "ce6d361ebd3c0ef77e7b7dfbb4b9b7062caeaed4b99d0d3364e280f25e43a86b",
+      "prompt": "Medium shot in an underground cafeteria deep inside a mountain, where two large wall screens pose as windows showing a sunlit view over low city roofs and trees. The man from reference image 1 sits at a table, glancing sideways in mild alarm at a small palm-sized security drone hovering half a meter from his right ear. Across from him, the young man from reference image 2 looks on, relaxed and amused, with a few more small drones in the air behind him. Cool artificial light mixed with the screens' false daylight. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, an underground cafeteria thirty meters inside a mountain, its tables screened into private nooks by two-meter trees in clay pots and thick shrubs, two walls hung with vines and the other two of huge mirrors repeating the room endlessly, wall screens posing as sunny windows over low roofs and trees, ceiling fans with faint violet lamps, and freestanding air filters; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 19026,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "pyramid-cafeteria-plate.png",
+          "sha256": "7ce4ef18a691bf8da44b4522d874909e5065da9298d628a4e36b810ccf6e078a"
+        }
+      ],
+      "generation_seconds": 319.8
+    },
+    {
+      "id": "c19-b077-library-door",
+      "chapter": 19,
+      "idx": 77,
+      "file": "c19-b077-library-door.png",
+      "sha256": "6009f4d47f4f84101776e6d03a8e63fb3b95bbcac323d25287275c20113020a9",
+      "prompt": "Wide view down a carved stone tunnel to a large ornamented wooden door. To the left of the door, a painted mural of a hippopotamus reading a book in a marsh with green trees and a blue sky; to the right, a painted mural of a hamster sitting at a computer. Both murals balance playful cartoon charm with an air of mystery. A man and a young man, seen from behind, approach the door. Warm lamplight on rough rock walls. Reference image 1 shows the location, a grand underground library behind a large ornamented wooden door flanked by murals of a hippo reading in a marsh and a hamster at a computer; inside, a towering two-level wall of paper books with a walkway along the set-back upper tier and book-lined openings into a maze, and across the hall open tables and a row of glowing computer terminals, warm lamplight on carved stone; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 19077,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "grand-library-plate.png",
+          "sha256": "4d67aa9c82f3d53ecc969ccc0c9d0a902b480c926a9967a3147c5557dd83c921"
+        }
+      ],
+      "generation_seconds": 195.8
+    },
+    {
+      "id": "c19-b098-download-cable",
+      "chapter": 19,
+      "idx": 98,
+      "file": "c19-b098-download-cable.png",
+      "sha256": "be2732a41ddf665898cfad627e7c7d01cec05338bc269a41aaa410911cbbc86b",
+      "prompt": "Medium-wide interior of a grand underground library. On one side, a towering two-level wall of paper books, with a walkway along the upper level and narrow book-lined openings leading into a maze. On the other side, open tables and a row of computer terminals. A woman librarian in a simple long robe plugs a data cable into a terminal and hands the other end to the young man from reference image 1, who holds out his hand device with eager curiosity. A man stands just behind him, seen from behind. Warm amber lamplight. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 2 shows the location, a grand underground library behind a large ornamented wooden door flanked by murals of a hippo reading in a marsh and a hamster at a computer; inside, a towering two-level wall of paper books with a walkway along the set-back upper tier and book-lined openings into a maze, and across the hall open tables and a row of glowing computer terminals, warm lamplight on carved stone; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 19098,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "grand-library-plate.png",
+          "sha256": "4d67aa9c82f3d53ecc969ccc0c9d0a902b480c926a9967a3147c5557dd83c921"
+        }
+      ],
+      "generation_seconds": 252.5
+    },
+    {
+      "id": "c19-b110-sealed-tea",
+      "chapter": 19,
+      "idx": 110,
+      "file": "c19-b110-sealed-tea.png",
+      "sha256": "c8bf3b0addcb1baafd13d26070a6aadf49b5285d0da858a3ceaf1a5eb8a73f71",
+      "prompt": "Medium shot beside a tall wall of paper books in a warm underground library. The man from reference image 1 stands holding an open book of drawings of underground rooms, looking down in surprise as a small wheeled serving robot hands him tea in a fully sealed cup with a straw. In the background, far from the shelves, the young man from reference image 2 sits at a table with an open teacup. Warm amber lamplight, dust floating in the air. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a grand underground library behind a large ornamented wooden door flanked by murals of a hippo reading in a marsh and a hamster at a computer; inside, a towering two-level wall of paper books with a walkway along the set-back upper tier and book-lined openings into a maze, and across the hall open tables and a row of glowing computer terminals, warm lamplight on carved stone; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 19110,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "grand-library-plate.png",
+          "sha256": "4d67aa9c82f3d53ecc969ccc0c9d0a902b480c926a9967a3147c5557dd83c921"
+        }
+      ],
+      "generation_seconds": 308.4
+    },
+    {
+      "id": "c19-b115-waiting",
+      "chapter": 19,
+      "idx": 115,
+      "file": "c19-b115-waiting.png",
+      "sha256": "6d37788c7b793c69e0f5ace72a7da9acf6d4409e08b3b47483c64c8b41c2b190",
+      "prompt": "Medium close shot at a library table. The man from reference image 1 and the young man from reference image 2 sit side by side sipping tea, both staring intently at a hand device propped on the table, its screen turned away from the viewer and casting a soft glow on their faces. A data cable runs from the device to a terminal. Two meters behind them, a curious woman librarian in a long robe hovers quietly, hands clasped. Tall bookshelves blur in the warm background. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a grand underground library behind a large ornamented wooden door flanked by murals of a hippo reading in a marsh and a hamster at a computer; inside, a towering two-level wall of paper books with a walkway along the set-back upper tier and book-lined openings into a maze, and across the hall open tables and a row of glowing computer terminals, warm lamplight on carved stone; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 19115,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "grand-library-plate.png",
+          "sha256": "4d67aa9c82f3d53ecc969ccc0c9d0a902b480c926a9967a3147c5557dd83c921"
+        }
+      ],
+      "generation_seconds": 319.4
+    }
+  ]
+}

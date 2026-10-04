@@ -1,6 +1,6 @@
 {
   "job_file": "content/snowmoon/illustrations/chapter-10.json",
-  "generated_at": "2026-10-04T11:51:47+00:00",
+  "generated_at": "2026-10-04T18:59:16+00:00",
   "model": {
     "repo": "black-forest-labs/FLUX.2-klein-4B",
     "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
@@ -47,9 +47,9 @@
       "chapter": 10,
       "idx": 50,
       "file": "c10-b050-booth-courtyard.png",
-      "sha256": "314f30ba5d3a9bbf4d3883a33a0072f76f1d3902d4cf1d876e9f0c2afaf4fd02",
-      "prompt": "Wide shot of a quiet stone courtyard surrounded by trees, with a row of heavy, boxy soundproof booths along one side, each with a thick sliding door. A figure in a privacy robe strains to slide open the rightmost booth's door, revealing its thick cross-section: a layer of crinkled silver foil on the inside, followed by layers of dense padding. Inside, a long table stretches to the back wall with a bench on each side. Soft overcast daylight, muted greens and greys. Reference image 1 shows the location, a row of heavy boxy soundproof booths along one side of a quiet stone courtyard ringed by trees, each sealed by a thick sliding door whose cut edge shows layers of foil and padding; inside, a windowless chamber lined with crinkled silver foil behind soft padding, a long table from door to back wall between two long benches, small humming air filters and soft even light; keep its architecture, layout and colors. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
-      "seed": 10050,
+      "sha256": "e362f143e3fa2f44f1b6c51a1b9eb90223631a11084960561eeae686f1ee20ef",
+      "prompt": "Wide shot of a quiet stone courtyard surrounded by trees, with a row of heavy, boxy soundproof booths along one side, each with a thick sliding door. A figure in a privacy robe strains to slide open the rightmost booth's door, revealing its thick cross-section: a layer of crinkled silver foil on the inside, followed by layers of dense padding. Inside, a long table stretches to the back wall with a bench on each side. Soft overcast daylight, muted greens and greys. A single continuous picture, not split into panels. Reference image 1 shows the location, a row of heavy boxy soundproof booths along one side of a quiet stone courtyard ringed by trees, each sealed by a thick sliding door whose cut edge shows layers of foil and padding; inside, a windowless chamber lined with crinkled silver foil behind soft padding, a long table from door to back wall between two long benches, small humming air filters and soft even light; keep its architecture, layout and colors. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 10550,
       "width": 1024,
       "height": 576,
       "references": [
@@ -58,7 +58,7 @@
           "sha256": "9126d472899dc20d5452a71f18acda7bf1c1719c54cf5b954a6225c3117bb211"
         }
       ],
-      "generation_seconds": 208.8
+      "generation_seconds": 206.2
     },
     {
       "id": "c10-b114-needle-bug",

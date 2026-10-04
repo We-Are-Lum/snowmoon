@@ -1,0 +1,112 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-25.json",
+  "generated_at": "2026-10-04T19:18:49+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.0,
+  "images": [
+    {
+      "id": "c25-b002-circle-game",
+      "chapter": 25,
+      "idx": 2,
+      "file": "c25-b002-circle-game.png",
+      "sha256": "c9aee5883c3efd2a6ec7ab106e659e88ffd3220084dba05c4c3180b2586d5e2c",
+      "prompt": "Wide shot of a small enclosed room with no windows, lit by the soft glow of a table whose whole top is a screen. The man from reference image 1 and the young man from reference image 2 sit across from each other at the table. On the glowing tabletop, four rounded boxes each hold a small triangular pile of blue circles. The young man waits calmly with his hands folded; the man leans forward, studying the piles with a puzzled frown. Warm night colors, faint pink and cyan reflections on the walls. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 25002,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        }
+      ],
+      "generation_seconds": 250.8
+    },
+    {
+      "id": "c25-b017-tapping-circles",
+      "chapter": 25,
+      "idx": 17,
+      "file": "c25-b017-tapping-circles.png",
+      "sha256": "e04195892192ac1cd0e0c097a3c0bc4ba870ccf6f777dd0fdde2fe462f85873f",
+      "prompt": "Close shot over a glowing tabletop screen in a dim enclosed room. Only a few blue circles remain in the rounded boxes on the table. The man from reference image 1 reaches out and taps a circle with one finger, hesitant, while across the table the young man from reference image 2 answers instantly, his finger already touching another circle, a faint knowing smile on his face. Soft light from the table glows up onto their faces. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 25017,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        }
+      ],
+      "generation_seconds": 254.3
+    },
+    {
+      "id": "c25-b075-next-question",
+      "chapter": 25,
+      "idx": 75,
+      "file": "c25-b075-next-question.png",
+      "sha256": "fbd5cd00d3eb822f54d604cbe1148b983451cd539c6b6e59e0a2624334ef9b6d",
+      "prompt": "Medium shot in a small enclosed room lit by a glowing tabletop. The young man from reference image 1 has shifted his posture, sitting upright and leaning in with a serious, searching look, the friendly game over. Across from him the man from reference image 2 sits back in his chair, his eyes wide with surprise at the sudden turn of the conversation. A hand device lies on the table beside them, its screen showing only soft abstract colored shapes. Warm night tones with touches of cyan. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 2 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 25075,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        }
+      ],
+      "generation_seconds": 262.4
+    },
+    {
+      "id": "c25-b096-call-on-watch",
+      "chapter": 25,
+      "idx": 96,
+      "file": "c25-b096-call-on-watch.png",
+      "sha256": "487f005320b636617a8f01a4499e41b51e4ab5958cc61aa2b0c9fa9103d13eaa",
+      "prompt": "Medium shot in a small enclosed room with a softly glowing table. The man from reference image 1 lifts his wrist and taps the watch on it, about to place a call, his expression hopeful and determined. Beside him the young man from reference image 2 leans over a hand device, quickly sending a message, its screen showing only soft abstract colored shapes. Quiet, conspiratorial mood, warm amber light with faint pink and cyan accents. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 25096,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        }
+      ],
+      "generation_seconds": 251.7
+    }
+  ]
+}

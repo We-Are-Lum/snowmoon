@@ -1,0 +1,107 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-31.json",
+  "generated_at": "2026-10-04T19:27:49+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.0,
+  "images": [
+    {
+      "id": "c31-b002-mountain-stair",
+      "chapter": 31,
+      "idx": 2,
+      "file": "c31-b002-mountain-stair.png",
+      "sha256": "8c087bf82196f64c19e085ac7cb9740bf9829a352681121deecccf68f92b3b71",
+      "prompt": "Wide view of a long staircase with handrails climbing the side of a snow-covered mountain. Bright sunlight glares off the deep snow on both sides; only the tops of pine trees and the handrails stick up above it. About thirty meters up the stairs, a small boxy drone plows and salts the steps. Three figures in winter jackets climb slowly, seen from behind, leaning into a strong cold wind. Icy whites, pale blue sky, dark green pines. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 31002,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 163.4
+    },
+    {
+      "id": "c31-b009-reunion-hug",
+      "chapter": 31,
+      "idx": 9,
+      "file": "c31-b009-reunion-hug.png",
+      "sha256": "849bc053337a2e13e4ab6b46d924b957cbf58f5e1e9dcb3669a1a231004d6c29",
+      "prompt": "Medium shot on a circular snowy platform at the top of a mountain. The young man from reference image 1, dressed only in a sweater and a light hood, throws himself into the arms of the young man from reference image 2, who staggers back, nearly knocked off balance, both grinning with joy. Two women in winter jackets watch nearby, seen from behind. Behind them, snowy hills and a small town far below. Bright cold sunlight, icy whites and pale blues. Reference image 1 shows a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 31009,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin-sheet.png",
+          "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+        },
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        }
+      ],
+      "generation_seconds": 243.4
+    },
+    {
+      "id": "c31-b066-broken-gates",
+      "chapter": 31,
+      "idx": 66,
+      "file": "c31-b066-broken-gates.png",
+      "sha256": "3b5068b17f57c495e43b367fdce593ec8ec0e530e8b78f6c5f9bf0da7b8f3a49",
+      "prompt": "Wide shot of a large stone gateway into a walled district under a light snowfall. The man from reference image 1 and the woman from reference image 2 walk through the gate side by side, looking around with quiet emotion. Metal turnstiles lie smashed and thrown to the ground. Crowds of people move freely in and out. Two security guards in purple and grey uniforms stand to one side, watching calmly. Soft grey winter light, stone and snow. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Reference image 2 shows a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a walled corporate enclave a kilometer square behind a long castle-like rampart of grey and purple stone with tall gates and turnstiles, two rows of trees along its outer sidewalk; inside, uniform rounded and rectangular buildings five to ten meters tall in white, grey and purple glass and steel with sharp edges, identical evenly spaced trees, small identical blank logo panels, and tunnel mouths leading down, all crisp and orderly; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 31066,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "seila-sheet.png",
+          "sha256": "62f2f7ce966c5cc0c425af17edf58640bf587fff0486f5a7bb62530abfb447c4"
+        },
+        {
+          "file": "greater-plum-harbor-plate.png",
+          "sha256": "2f8b125e36f316de992b3523527191235ad6389c420ae640e06accafff623559"
+        }
+      ],
+      "generation_seconds": 320.1
+    },
+    {
+      "id": "c31-b077-lily-hugs-dad",
+      "chapter": 31,
+      "idx": 77,
+      "file": "c31-b077-lily-hugs-dad.png",
+      "sha256": "5ee652eb646cdc114c04082ca1ca1e942d316db292b923f8d5507df8bd0d8b04",
+      "prompt": "Warm medium shot at the open door of an apartment at the top of a staircase. The girl from reference image 1 runs out and throws her arms around the man from reference image 2, who hugs her tightly, eyes closed in relief. Behind him stands a woman in a winter coat, seen from behind, and deeper in the apartment two more young people hurry out of another room, small and softly blurred. Soft warm indoor light against the cool stairwell. Reference image 1 shows a girl of about thirteen, slight and a little hunched, warm brown skin, long dark-brown hair in a low side ponytail with a heavy fringe falling over her eyes, wearing an oversized heather-grey wrapped poncho-cape with a deep cowl collar and long sleeve cuffs pulled over her hands, dark navy seamless leggings, soft white wrap-around shoes and a glowing hand device held close; keep the same face, hair, build and clothing. Reference image 2 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 31077,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "lily-sheet.png",
+          "sha256": "1d9c8744cd1a01d6eda1cdee14e3472fd4f68fc62252891ecd2e9a1ca17b83b0"
+        },
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        }
+      ],
+      "generation_seconds": 266.2
+    }
+  ]
+}

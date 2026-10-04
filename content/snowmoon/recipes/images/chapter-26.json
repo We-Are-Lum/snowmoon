@@ -1,0 +1,130 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-26.json",
+  "generated_at": "2026-10-04T19:22:12+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.5,
+  "images": [
+    {
+      "id": "c26-b002-plane-cabin",
+      "chapter": 26,
+      "idx": 2,
+      "file": "c26-b002-plane-cabin.png",
+      "sha256": "7b1fe2626e75bb91465659f65d32ec719637777824dc1cb79dff0ee0ae3a7da4",
+      "prompt": "Inside a small enclosed private cabin on an aeroplane, four seats facing each other across a little table. The man from reference image 1 sits facing backward and the young man from reference image 2 sits facing forward, both gazing silently out the large window, calm and a little dreamy. Two other travelers sit with them, seen from behind. Through the window, a mostly flat green landscape stretches away, a row of small mountains, and a distant city among trees. Bright daylight. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 26002,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        }
+      ],
+      "generation_seconds": 253.5
+    },
+    {
+      "id": "c26-b075-seila-runs",
+      "chapter": 26,
+      "idx": 75,
+      "file": "c26-b075-seila-runs.png",
+      "sha256": "4bbd2548e7610ba4e4fb8ab559275ef51a769698b1e6a825c0dbf4aa5f8e281b",
+      "prompt": "Wide shot of the quiet lobby of a calm, stone-walled government hotel with wooden furniture and potted plants. The woman from reference image 1 runs across the room from the far corner with her arms outstretched, her face lit with joy and relief. In the foreground the man from reference image 2 has just stepped out of a black car whose doors open straight into the room, turning toward her in surprise. Evening lamp light, muted greens and warm stone. Reference image 1 shows a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat; keep the same face, hair, build and clothing. Reference image 2 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a calm government-run hotel built of large pale stone blocks, with a quiet lobby where a sealed car bay opens straight inside, warm wooden furniture, deep sofas, potted trees and plants and soft lamps, guest rooms with tall windows over green treetops, and meeting rooms with a long table facing a bare pale wall for projections, in stone, honey wood, sage and cream; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 26075,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "seila-sheet.png",
+          "sha256": "62f2f7ce966c5cc0c425af17edf58640bf587fff0486f5a7bb62530abfb447c4"
+        },
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "government-hotel-plate.png",
+          "sha256": "5c1c39287bc5302884a34299e4bab58675c8654e46db7ee5107ecb5fdc6b5b00"
+        }
+      ],
+      "generation_seconds": 325.0
+    },
+    {
+      "id": "c26-b120-console-despair",
+      "chapter": 26,
+      "idx": 120,
+      "file": "c26-b120-console-despair.png",
+      "sha256": "153a79e30a833ea5cf2ae2d72d5d0327ef7fa7548f51996cad0ee6cec0f52c30",
+      "prompt": "Medium shot of the young man from reference image 1 sitting at a gaming-style console in a small dim room, wearing an earpiece and glasses that glow faintly with projected light. He clutches the edge of the console and cries out in despair, eyes wide. On the console screen, soft abstract colored shapes and a scattering of small drone silhouettes, one bursting into a small puff of light. Cool screen glow on his face, the rest of the room in shadow. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 26120,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        }
+      ],
+      "generation_seconds": 228.1
+    },
+    {
+      "id": "c26-b132-drone-escape",
+      "chapter": 26,
+      "idx": 132,
+      "file": "c26-b132-drone-escape.png",
+      "sha256": "c4a4239e88998d2c71447a1f90c3a1f11eb32a5976e9dc85520eec8b3d4e3806",
+      "prompt": "Dramatic wide shot of a city street at dusk where every streetlight and window flickers chaotically. Two large flying drones speed low between the buildings, just above the street. On the back of each drone a person in a hooded silver thermal cloak clings on tightly. The nearer one is the man from reference image 1, his face tense and determined, the wind tugging at his hood. Behind them, smoke rises from the side of a grand residence. Cool blues and greys with flickering warm lights. Reference image 1 shows a young man in his early twenties, of medium build, deep brown skin, short black hair in tight coils with a neat side part, clean-shaven and composed, wearing a dark navy sculpted tunic coat with a tall rigid standing collar that frames his jaw, angular shoulder panels and a long asymmetric half-cape sweeping from one shoulder to the knee, a crisp white high-neck bodysuit, a silver clasp at the collar, grey segmented trousers and black seamless boots; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
+      "seed": 26632,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "tafindel-sheet.png",
+          "sha256": "2d1fca997a5a2add5b9286e45c849686c07cf51636c2bbbe7893bb6fe1700a3b"
+        }
+      ],
+      "generation_seconds": 201.8
+    },
+    {
+      "id": "c26-b162-judges-booth",
+      "chapter": 26,
+      "idx": 162,
+      "file": "c26-b162-judges-booth.png",
+      "sha256": "e230e9b590516c645a70b88da7e7f642ce265ccc679d2a0de24cab5501b92051",
+      "prompt": "Interior of a small soundproof booth with padded walls and soft overhead light. The man from reference image 1 slides open the booth door and steps in. Five judges in plain dark formal clothing already sit around a small table, looking up at him with guarded, skeptical expressions; one older judge folds his arms. A tense, private meeting. Muted greens and stone greys, quiet warm light. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 2 shows the location, a row of heavy boxy soundproof booths along one side of a quiet stone courtyard ringed by trees, each sealed by a thick sliding door whose cut edge shows layers of foil and padding; inside, a windowless chamber lined with crinkled silver foil behind soft padding, a long table from door to back wall between two long benches, small humming air filters and soft even light; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 26162,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "order-booths-plate.png",
+          "sha256": "9126d472899dc20d5452a71f18acda7bf1c1719c54cf5b954a6225c3117bb211"
+        }
+      ],
+      "generation_seconds": 261.2
+    }
+  ]
+}

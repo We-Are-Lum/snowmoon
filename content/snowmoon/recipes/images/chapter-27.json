@@ -1,0 +1,138 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-27.json",
+  "generated_at": "2026-10-04T19:27:41+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.6,
+  "images": [
+    {
+      "id": "c27-b006-hotel-hug",
+      "chapter": 27,
+      "idx": 6,
+      "file": "c27-b006-hotel-hug.png",
+      "sha256": "53cc0ed1f6181379317bd07448e23aeb47c0ee403b645dc3fa8a4e1092342948",
+      "prompt": "Medium shot in a simple, tidy hotel room with stone walls and a window onto green trees. The woman from reference image 1 hugs the man from reference image 2, who stands with slumped shoulders and a sad, defeated expression, his eyes closed. Her face shows quiet comfort and a hint of determination, as if she is about to share an idea. Soft morning light, muted greens and warm earth tones. Reference image 1 shows a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat; keep the same face, hair, build and clothing. Reference image 2 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a calm government-run hotel built of large pale stone blocks, with a quiet lobby where a sealed car bay opens straight inside, warm wooden furniture, deep sofas, potted trees and plants and soft lamps, guest rooms with tall windows over green treetops, and meeting rooms with a long table facing a bare pale wall for projections, in stone, honey wood, sage and cream; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 27006,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "seila-sheet.png",
+          "sha256": "62f2f7ce966c5cc0c425af17edf58640bf587fff0486f5a7bb62530abfb447c4"
+        },
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "government-hotel-plate.png",
+          "sha256": "5c1c39287bc5302884a34299e4bab58675c8654e46db7ee5107ecb5fdc6b5b00"
+        }
+      ],
+      "generation_seconds": 323.8
+    },
+    {
+      "id": "c27-b031-forest-path",
+      "chapter": 27,
+      "idx": 31,
+      "file": "c27-b031-forest-path.png",
+      "sha256": "002caa71fabc167ca58b829bfed1234f604fc453e61d8e6ad34ba288ae8dd644",
+      "prompt": "Wide view of a narrow footpath in a cold wooded district. Three figures in privacy robes walk away from the viewer, leaning forward as a cold breeze pushes at their backs. On the near stretch of path, old stone houses stand on both sides; farther along, the houses give way to deep forest, and at the end of the path rises a small, natural-looking wooded hill. Bare branches and evergreens, cool overcast daylight, muted greens and stone greys. Reference image 1 shows the location, a car-free woodland footpath of pale smooth paving winding beneath towering old trees, flanked by spotless medieval-style houses of large clean stone blocks that melt into moss, ferns and climbing plants, some sunk half underground, small shop doorways with blank glowing panels, benches and branching sidewalks, toy drones with feathered rotors under the canopy, and slender grown towers glimpsed far beyond the treetops, in sage, moss, cream and warm stone; keep its architecture, layout and colors. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 27031,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "kalimar-footpaths-plate.png",
+          "sha256": "6c273d707770a7362992cd8963e71b7d687f3d6fe17d41070854ff2708fca9e7"
+        }
+      ],
+      "generation_seconds": 212.5
+    },
+    {
+      "id": "c27-b040-roof-closing",
+      "chapter": 27,
+      "idx": 40,
+      "file": "c27-b040-roof-closing.png",
+      "sha256": "32c2c13286b0f3c45a7faf75798116ea5a4af84d2d143e1abfb6aea5590f6bfc",
+      "prompt": "Inside a circular room at the very top of a hill, a curved bench running around its edge and a safety railing around a staircase opening in the middle. Overhead, the open sky is being covered as a round roof slowly slides closed, leaving a narrowing slice of pale sky. A man in a privacy robe with its hood down and face cover off stands by a button on the wall, smiling politely. Three figures in privacy robes look up at the closing roof. Cool daylight fading to warm interior light. Reference image 1 shows the location, a circular room at the summit of an artificial hill so thickly grown with trees and moss that it reads as untouched forest, open to the sky beneath a round roof of sliding petal-shaped segments, a curved bench running all around its smooth stone wall, a safety railing ringing the staircase opening in the center, and soft hidden lights in the rim; keep its architecture, layout and colors. The dark purple Veridian Privacy Robe is worn open at the face: a loose-fitting dark purple garment down to the ankles, its hood pushed back onto the shoulders and its fabric face cover lowered, so the wearer's face and hair are fully visible. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 27040,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "hilltop-round-room-plate.png",
+          "sha256": "92d181d38ad7b7371d2ddaa3983c2031fe190c4a20c5076ca1283d4858f24b67"
+        }
+      ],
+      "generation_seconds": 206.5
+    },
+    {
+      "id": "c27-b071-tea-robot",
+      "chapter": 27,
+      "idx": 71,
+      "file": "c27-b071-tea-robot.png",
+      "sha256": "60399962853b9068651511c699bc2e9734a093d2e849ab4fa875cbe2149432b8",
+      "prompt": "Inside a round room atop a hill, with a curved bench along the wall. The man from reference image 1 and the young man from reference image 2 sit on the bench in loose dark purple robes, hoods pushed back and face covers removed, turning in surprise toward the staircase opening. A small robot climbs up the last steps with a lifting and sliding motion, carrying a tray of four cups of steaming tea. A woman and their host sit nearby, seen from behind. Warm, calm interior light. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a circular room at the summit of an artificial hill so thickly grown with trees and moss that it reads as untouched forest, open to the sky beneath a round roof of sliding petal-shaped segments, a curved bench running all around its smooth stone wall, a safety railing ringing the staircase opening in the center, and soft hidden lights in the rim; keep its architecture, layout and colors. The dark purple Veridian Privacy Robe is worn open at the face: a loose-fitting dark purple garment down to the ankles, its hood pushed back onto the shoulders and its fabric face cover lowered, so the wearer's face and hair are fully visible. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 27571,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "hilltop-round-room-plate.png",
+          "sha256": "92d181d38ad7b7371d2ddaa3983c2031fe190c4a20c5076ca1283d4858f24b67"
+        }
+      ],
+      "generation_seconds": 324.5
+    },
+    {
+      "id": "c27-b114-countdown-chant",
+      "chapter": 27,
+      "idx": 114,
+      "file": "c27-b114-countdown-chant.png",
+      "sha256": "6ef2f814522e4a0c2674ea46d9d82e048cf126d8e34c821df0220f56c07e279f",
+      "prompt": "Wide shot of a hotel meeting room where seven people sit around a long table facing a wall lit by a projection of soft glowing abstract colored shapes. In the foreground the young man from reference image 1 and the young woman from reference image 2 lean forward, laughing and chanting together with fists raised; the others at the table, seen from behind and in soft focus, join in. Cups of tea on the table. Excited, playful energy, warm indoor light with muted greens. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 2 shows a young woman of about eighteen, tall and athletic, dark brown skin, hair pulled into a high puffy ponytail dyed magenta at the ends, a confident sly grin, wearing a lime-green modular shell vest with a bulky angular collar and reflective piping, a white seamless sleeveless bodysuit with glowing magenta seams, black wide gathered trousers with segmented knees, chunky black boots with glowing soles and a hip pouch; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a calm government-run hotel built of large pale stone blocks, with a quiet lobby where a sealed car bay opens straight inside, warm wooden furniture, deep sofas, potted trees and plants and soft lamps, guest rooms with tall windows over green treetops, and meeting rooms with a long table facing a bare pale wall for projections, in stone, honey wood, sage and cream; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 27114,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "bai-sheet.png",
+          "sha256": "21def33df4f734aa8979a2bb152d88b443d511b940eaae0c4a67347f900db73e"
+        },
+        {
+          "file": "government-hotel-plate.png",
+          "sha256": "5c1c39287bc5302884a34299e4bab58675c8654e46db7ee5107ecb5fdc6b5b00"
+        }
+      ],
+      "generation_seconds": 325.3
+    }
+  ]
+}

@@ -1,0 +1,134 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-18.json",
+  "generated_at": "2026-10-04T19:09:06+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.6,
+  "images": [
+    {
+      "id": "c18-b003-black-car",
+      "chapter": 18,
+      "idx": 3,
+      "file": "c18-b003-black-car.png",
+      "sha256": "f7c855f1433f6639632b103d8c7239f8478ce4dfeb2b8deab7af221c047f2645",
+      "prompt": "Interior of a sealed black car with plush seats facing each other, softly lit. The young man from reference image 1 sits on a backward-facing seat, and the young woman from reference image 2 sits opposite him on a forward-facing seat; both smile in welcome as a traveler with a bag, seen from behind, ducks in through the open door straight from a bright terminal passage. The side windows are glowing display panels showing a slightly too-vivid view of low-rise shops with neon trim. Cool interior light. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 2 shows a young woman of about eighteen, tall and athletic, dark brown skin, hair pulled into a high puffy ponytail dyed magenta at the ends, a confident sly grin, wearing a lime-green modular shell vest with a bulky angular collar and reflective piping, a white seamless sleeveless bodysuit with glowing magenta seams, black wide gathered trousers with segmented knees, chunky black boots with glowing soles and a hip pouch; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a sealed passenger cabin of a large rectangular glossy black autonomous car, its inner walls lined with crinkled silver anti-transmission foil behind soft dark panels, plush seats facing each other across the cabin, camera-fed simulated windows showing a slightly dimmed view of a tree-lined street, and a broad side door shaped to seal flush against building doorways; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 18003,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "bai-sheet.png",
+          "sha256": "21def33df4f734aa8979a2bb152d88b443d511b940eaae0c4a67347f900db73e"
+        },
+        {
+          "file": "sealed-black-car-plate.png",
+          "sha256": "979edefb842ec8d1a8287ec1b413bf1f7576798ea03b874662089f15fcb68a5d"
+        }
+      ],
+      "generation_seconds": 299.3
+    },
+    {
+      "id": "c18-b061-box-trays",
+      "chapter": 18,
+      "idx": 61,
+      "file": "c18-b061-box-trays.png",
+      "sha256": "c8c090d0076c9da80d4ba9a37862350e18c5b6a8522ba87b57e2bf5ffef8ba34",
+      "prompt": "Medium-wide street scene in a dense low-rise city by day. A sleek black car has stopped at the curb. Its driver, a woman, sets a tray holding a neat row of about thirty small plain white sealed boxes onto the steps of a shop stoop, while a shopkeeper holds a hand device over the tray to scan them all at once. Two large identical crates stand open on the pavement. A traveler, seen from behind, watches from a few meters away. One- and two-storey shops with neon trim, cute cartoon animal murals, stairways leading underground. Reference image 1 shows the location, a dense, shady street of one- and two-storey shops and tiny glowing workshops beneath street trees, blank glowing sign panels and hand-bent neon frames in pink, cyan and yellow, stairways leading down to basements, cute cartoon animal murals, tangled cables and antennas, small drones overhead, sleek identical black cars at the curb, and a huge stone pyramid rising at the end of the street; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 18061,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "pafogai-shop-streets-plate.png",
+          "sha256": "2a52dfc678e0de54e4357dabd0becdbd187174f5273af6c164f8c23e978a9ca0"
+        }
+      ],
+      "generation_seconds": 217.6
+    },
+    {
+      "id": "c18-b070-robe-shop-street",
+      "chapter": 18,
+      "idx": 70,
+      "file": "c18-b070-robe-shop-street.png",
+      "sha256": "3a0e043dfdd7d716bda8f9f5b424323a7c8846bfd30eb4e5a81188b4bdd3e2f0",
+      "prompt": "Eye-level view along a tree-lined shopping street of one- and two-storey buildings, with hand-made neon light frames in pink, cyan and yellow around the windows. In the foreground, a clothing shop window: a few jackets hang on one side, while racks of dark purple hooded robes crowd the other half. A little further on, a busy flower shop. Beyond it, an open staircase leads down to a basement, decorated with a mural of cute cartoon animals playing with gadgets and chemistry flasks under green trees and blue sky; two teenage boys and a girl are climbing down. Late afternoon. Reference image 1 shows the location, a dense, shady street of one- and two-storey shops and tiny glowing workshops beneath street trees, blank glowing sign panels and hand-bent neon frames in pink, cyan and yellow, stairways leading down to basements, cute cartoon animal murals, tangled cables and antennas, small drones overhead, sleek identical black cars at the curb, and a huge stone pyramid rising at the end of the street; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 18070,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "pafogai-shop-streets-plate.png",
+          "sha256": "2a52dfc678e0de54e4357dabd0becdbd187174f5273af6c164f8c23e978a9ca0"
+        }
+      ],
+      "generation_seconds": 185.4
+    },
+    {
+      "id": "c18-b079-pyramid-view",
+      "chapter": 18,
+      "idx": 79,
+      "file": "c18-b079-pyramid-view.png",
+      "sha256": "66cc4d1a24d99089c4a8951db88a680398542bc2124d0f3ee3e136224ffa96a6",
+      "prompt": "Wide high view from the tree-lined slope of a huge mountain carved into a stepped pyramid. In the foreground, the man from reference image 1 sits on a large rock, seen in profile, resting and gazing out. Below him stretches a dense low-rise city of flat concrete roofs mixed with many green trees, a grid of streets fading into haze, a belt of trees around the city's edge. In the middle distance, people, many of them figures in privacy robes, walk up and down an inclined walkway. Soft late-afternoon light. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 2 shows the location, a half-kilometer-tall mountain refurbished into a square-based pyramid clad in smooth pale stone like the monument of a lost civilization, a straight double row of trees climbing its face to a tree-lined terrace ringing it at half height, a grand main door and small side entrances, a row of car-docking doors near its base, and discreet vents and antennas, towering over a low-rise city; keep its architecture, layout and colors. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 18079,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "mountain-pyramid-plate.png",
+          "sha256": "527b185dfd7d7bb9652e769348a07d687e62ee9f7f332a9841aa07af27f43bde"
+        }
+      ],
+      "generation_seconds": 238.1
+    },
+    {
+      "id": "c18-b123-coordination-speech",
+      "chapter": 18,
+      "idx": 123,
+      "file": "c18-b123-coordination-speech.png",
+      "sha256": "4096b553cb8611925c269ff061a1dfa404a2b061bee78df856c06bf0c8ae479b",
+      "prompt": "Medium shot at a table in a modest hotel lobby restaurant with warm lamps and a glowing neon accent strip along the wall. The young man from reference image 1 leans forward over the table, eyes bright, gesturing passionately with both hands as he speaks. Beside him, the young man from reference image 2 listens with his mouth slightly open in surprise. Across the table, two other listeners are seen from behind. Teacups and a dark hand device lie on the table. Evening. Reference image 1 shows a young man of about eighteen, stocky and shorter than average, pale freckled skin, a shaggy mop of copper-red hair and a wide friendly face, wearing a cherry-red hooded poncho-shell with a curved hem and glowing yellow seams, a white seamless crew-neck undersuit, tan segmented cargo trousers gathered at the ankles, chunky yellow glowing-soled sneakers and a well-worn rounded modular backpack; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a modest, cozy hotel lobby restaurant with warm wooden tables and chairs, soft lamps, a glowing neon accent strip along one wall, a playful cartoon animal mural, little wheeled serving robots carrying tea and rice bowls, and a sealed car-docking door at the edge of the lobby, in honey wood and cream with soft pink and cyan glow; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 18623,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "fin-sheet.png",
+          "sha256": "c6e28903e5aee3aad551332c93cfef43570f1f3c195d3a511e4d5bd21490855f"
+        },
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "hotel-lobby-restaurant-plate.png",
+          "sha256": "ea9673378232f4cc49ce8ebc9ea7e4ee4697ffb7b6a6995c95c9fc26ffd68798"
+        }
+      ],
+      "generation_seconds": 323.9
+    }
+  ]
+}

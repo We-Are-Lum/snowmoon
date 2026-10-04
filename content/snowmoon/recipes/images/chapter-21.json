@@ -1,0 +1,116 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-21.json",
+  "generated_at": "2026-10-04T19:13:25+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.7,
+  "images": [
+    {
+      "id": "c21-b019-civics-score",
+      "chapter": 21,
+      "idx": 19,
+      "file": "c21-b019-civics-score.png",
+      "sha256": "61d9280029dec438686850910678e2390ae17b85c4493895a94b3e0cf17f5d08",
+      "prompt": "Warm evening interior of a cozy stone family home. A dinner table is set with empty plates and three adults are seated around it. The girl from reference image 1 rushes in through a doorway, beaming with pride, holding up her hand device with its screen turned away from the viewer. At the table, the woman from reference image 2 turns toward her with a tired, surprised smile; the other two adults are seen from behind. Lamplight, wooden beams, a big window onto dark trees. Reference image 1 shows a girl of about thirteen, slight and a little hunched, warm brown skin, long dark-brown hair in a low side ponytail with a heavy fringe falling over her eyes, wearing an oversized heather-grey wrapped poncho-cape with a deep cowl collar and long sleeve cuffs pulled over her hands, dark navy seamless leggings, soft white wrap-around shoes and a glowing hand device held close; keep the same face, hair, build and clothing. Reference image 2 shows a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a cozy two-storey family house of large clean stone blocks with a small sheltering roof over the doorstep, a glowing green circle and a slim screen beside the door; inside, a warm open living and dining room with a long wooden table, a deep couch, a wooden staircase, plants, soft lamps and a large window onto trees and a footpath, in honey wood, cream, sage and stone; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 21019,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "lily-sheet.png",
+          "sha256": "1d9c8744cd1a01d6eda1cdee14e3472fd4f68fc62252891ecd2e9a1ca17b83b0"
+        },
+        {
+          "file": "seila-sheet.png",
+          "sha256": "62f2f7ce966c5cc0c425af17edf58640bf587fff0486f5a7bb62530abfb447c4"
+        },
+        {
+          "file": "family-home-plate.png",
+          "sha256": "bb8f92dede3f3491667ff8cedc37365e56cd126873446eca9ad87ec6bc6506dc"
+        }
+      ],
+      "generation_seconds": 313.2
+    },
+    {
+      "id": "c21-b024-delivery-robot",
+      "chapter": 21,
+      "idx": 24,
+      "file": "c21-b024-delivery-robot.png",
+      "sha256": "41be4c7c6c59b395c45c5772d301eb215ca8a25fad9198d58870ead17ce76177",
+      "prompt": "Evening at the open front door of a stone family house. The boy from reference image 1 stands on the threshold, eagerly taking two paper bags of food from a small wheeled delivery robot waiting on the doorstep. Warm light spills from the house behind him onto the stone steps; outside, trees and a softly lit path fade into blue dusk. Reference image 1 shows a boy of about eleven, small and wiry, warm light-brown skin, a mop of curly dark-brown hair, a sprinkle of freckles and a wide gap-toothed grin, wearing a sunny mustard-yellow sleeveless team tunic with a rounded padded collar and a green stripe down one side, a green fitted undershirt, green knee-length gathered shorts, striped socks, soft white seamless shoes and a small hand device strapped to his wrist; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 2 shows the location, a cozy two-storey family house of large clean stone blocks with a small sheltering roof over the doorstep, a glowing green circle and a slim screen beside the door; inside, a warm open living and dining room with a long wooden table, a deep couch, a wooden staircase, plants, soft lamps and a large window onto trees and a footpath, in honey wood, cream, sage and stone; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 21524,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zven-sheet.png",
+          "sha256": "e92b1d0a29e2668c714cba4301bfd59c4cf0622bbaa7b7db134d26e875ae7d38"
+        },
+        {
+          "file": "family-home-plate.png",
+          "sha256": "bb8f92dede3f3491667ff8cedc37365e56cd126873446eca9ad87ec6bc6506dc"
+        }
+      ],
+      "generation_seconds": 251.4
+    },
+    {
+      "id": "c21-b038-silent-table",
+      "chapter": 21,
+      "idx": 38,
+      "file": "c21-b038-silent-table.png",
+      "sha256": "f657105332fd0671ef9a30fb983ce927017da001bd0aafa720ee3c5621e3fb38",
+      "prompt": "Medium shot of a family dinner table in lamplight, open meal boxes and bowls in front of everyone. The boy from reference image 1 leans forward eagerly, eyes wide with excitement, as if he has just solved a mystery. Across from him, the woman from reference image 2 has frozen, fork halfway down, her face gone pale and grave. Two other adults at the table, seen from behind, sit motionless. The room is hushed, a dark window behind them. Reference image 1 shows a boy of about eleven, small and wiry, warm light-brown skin, a mop of curly dark-brown hair, a sprinkle of freckles and a wide gap-toothed grin, wearing a sunny mustard-yellow sleeveless team tunic with a rounded padded collar and a green stripe down one side, a green fitted undershirt, green knee-length gathered shorts, striped socks, soft white seamless shoes and a small hand device strapped to his wrist; keep the same face, hair, build and clothing. Reference image 2 shows a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a cozy two-storey family house of large clean stone blocks with a small sheltering roof over the doorstep, a glowing green circle and a slim screen beside the door; inside, a warm open living and dining room with a long wooden table, a deep couch, a wooden staircase, plants, soft lamps and a large window onto trees and a footpath, in honey wood, cream, sage and stone; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 21038,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zven-sheet.png",
+          "sha256": "e92b1d0a29e2668c714cba4301bfd59c4cf0622bbaa7b7db134d26e875ae7d38"
+        },
+        {
+          "file": "seila-sheet.png",
+          "sha256": "62f2f7ce966c5cc0c425af17edf58640bf587fff0486f5a7bb62530abfb447c4"
+        },
+        {
+          "file": "family-home-plate.png",
+          "sha256": "bb8f92dede3f3491667ff8cedc37365e56cd126873446eca9ad87ec6bc6506dc"
+        }
+      ],
+      "generation_seconds": 305.9
+    },
+    {
+      "id": "c21-b040-basement-call",
+      "chapter": 21,
+      "idx": 40,
+      "file": "c21-b040-basement-call.png",
+      "sha256": "f48b11e0c471fa7ebb46f96e63077e221fed9bd52b4e179c341011ed82b577f8",
+      "prompt": "A small windowless basement room with stone walls and a single warm lamp. The woman from reference image 1 sits alone in a chair, leaning forward, staring intently at a hand device held in both hands, its screen turned away from the viewer and lighting her face from below. Her jaw is set, one hand pressed to her forehead in frustration. Shelves and boxes sit in the shadows behind her. Late at night. Reference image 1 shows a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 21040,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "seila-sheet.png",
+          "sha256": "62f2f7ce966c5cc0c425af17edf58640bf587fff0486f5a7bb62530abfb447c4"
+        }
+      ],
+      "generation_seconds": 207.1
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 {
   "job_file": "content/snowmoon/illustrations/chapter-14.json",
-  "generated_at": "2026-10-04T13:03:46+00:00",
+  "generated_at": "2026-10-04T19:03:36+00:00",
   "model": {
     "repo": "black-forest-labs/FLUX.2-klein-4B",
     "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
@@ -18,7 +18,7 @@
     "platform": "macOS-26.5.1-arm64-arm-64bit",
     "machine": "arm64"
   },
-  "model_load_seconds": 0.6,
+  "model_load_seconds": 0.0,
   "images": [
     {
       "id": "c14-b027-lobby-breakfast",

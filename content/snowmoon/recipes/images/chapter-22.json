@@ -1,0 +1,99 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-22.json",
+  "generated_at": "2026-10-04T19:13:29+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.0,
+  "images": [
+    {
+      "id": "c22-b003-projector",
+      "chapter": 22,
+      "idx": 3,
+      "file": "c22-b003-projector.png",
+      "sha256": "80f3e90d319a149b613d12fc8ce7c7784b66428ccfca301de3e6b14d25fd140c",
+      "prompt": "View from the back seat of a taxi, the man from reference image 1 in profile at the side window, looking out thoughtfully. Outside, just past a highway underpass with piles of uncollected garbage, a small park; across the road, a tall industrial building whose blank wall shows a large projected film scene of soft blurred figures in warm color. A small projector glows hidden under a park bench, its beam crossing the road. Overcast daylight. Reference image 1 shows a man in his late thirties, tall and lanky, light brown skin, short curly black hair, a thin moustache and an easy smile, wearing a long sleeveless camel-brown duster tabard with a tall angled standing collar and a single diagonal row of small glowing clasps, over a fitted sky-blue long-sleeved bodysuit with seamless panels, a slate-grey harness strap across the chest, slim dark trousers gathered into soft ankle cuffs, brown seamless boots, and a thin folding slate of a computer tucked under one arm; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Layered megacity of mixed old stone and tall glass towers, flying traffic lanes, steel blue and amber.",
+      "seed": 22003,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "jahn-sheet.png",
+          "sha256": "1f8074f8da16397ac0704036e9a10d075b89aa5d13105f9e3613597c7b4611ba"
+        }
+      ],
+      "generation_seconds": 195.1
+    },
+    {
+      "id": "c22-b009-shelter-roads",
+      "chapter": 22,
+      "idx": 9,
+      "file": "c22-b009-shelter-roads.png",
+      "sha256": "25093bbf40d88a42f307e2d3ecd456d2eabde407f649d2e3d73f9aefe43c00b2",
+      "prompt": "Wide establishing view of the northern edge of a big modern city: a chaotic mix of glass-and-steel towers, concrete blocks and old stone buildings, tall and short, beautiful and ugly side by side. In the foreground, fresh road construction cuts through, with machines laying new pavement; low concrete entrances to new underground shelters stand beside the new roads. A lone taxi drives out from under a highway overpass. Sidewalks quieter than usual. Cool hazy daylight. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Layered megacity of mixed old stone and tall glass towers, flying traffic lanes, steel blue and amber.",
+      "seed": 22009,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 172.6
+    },
+    {
+      "id": "c22-b032-university-restaurant",
+      "chapter": 22,
+      "idx": 32,
+      "file": "c22-b032-university-restaurant.png",
+      "sha256": "10c33320c34b6614c7969ee0d74c77acbb8de8e817745f037d2697f5b850ee6b",
+      "prompt": "Medium shot inside a bright university restaurant with tall glass windows, concrete columns and long tables. The man from reference image 1, carrying a bag, has just arrived and smiles in pleased surprise at a young woman student seated at a table with a tray and a cup, who looks up and smiles back. Other diners in the background, city towers visible through the windows. Cool midday light. Reference image 1 shows a man in his late thirties, tall and lanky, light brown skin, short curly black hair, a thin moustache and an easy smile, wearing a long sleeveless camel-brown duster tabard with a tall angled standing collar and a single diagonal row of small glowing clasps, over a fitted sky-blue long-sleeved bodysuit with seamless panels, a slate-grey harness strap across the chest, slim dark trousers gathered into soft ankle cuffs, brown seamless boots, and a thin folding slate of a computer tucked under one arm; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 2 shows the location, a large modern institute building whose interior is one vast, gently sloping spiral ramp looping several times beneath a high ceiling, with open elevators and staircases at its center, glass and concrete columns, a bright restaurant section of long tables and glass calling booths along the ramp, a large lecture screen, entry turnstiles, and tall windows onto a skyline of old stone and glass towers; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Layered megacity of mixed old stone and tall glass towers, flying traffic lanes, steel blue and amber.",
+      "seed": 22032,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "jahn-sheet.png",
+          "sha256": "1f8074f8da16397ac0704036e9a10d075b89aa5d13105f9e3613597c7b4611ba"
+        },
+        {
+          "file": "economics-institute-plate.png",
+          "sha256": "6d9aae6897bddcc3cdb5a5621f7380e427fdc32b97b00b8014fa9f35b0cf247c"
+        }
+      ],
+      "generation_seconds": 242.6
+    },
+    {
+      "id": "c22-b084-tactical-map",
+      "chapter": 22,
+      "idx": 84,
+      "file": "c22-b084-tactical-map.png",
+      "sha256": "09dd76eb12be99740cb990ddcad2838ae161942d17157812ae373aae1cd8f86b",
+      "prompt": "Medium close shot inside a small glass-walled calling booth. The man from reference image 1 sits hunched forward over an open laptop computer, a glass of water beside it, his face tense and absorbed. On the screen, a simple dark tactical map: seven small blue circles arranged in a hexagon around one red square, with two blue triangles nearby, no labels or writing. The blue and red glow lights his face. Outside the glass, the restaurant is a soft blur. Late afternoon. Reference image 1 shows a man in his late thirties, tall and lanky, light brown skin, short curly black hair, a thin moustache and an easy smile, wearing a long sleeveless camel-brown duster tabard with a tall angled standing collar and a single diagonal row of small glowing clasps, over a fitted sky-blue long-sleeved bodysuit with seamless panels, a slate-grey harness strap across the chest, slim dark trousers gathered into soft ankle cuffs, brown seamless boots, and a thin folding slate of a computer tucked under one arm; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 2 shows the location, a large modern institute building whose interior is one vast, gently sloping spiral ramp looping several times beneath a high ceiling, with open elevators and staircases at its center, glass and concrete columns, a bright restaurant section of long tables and glass calling booths along the ramp, a large lecture screen, entry turnstiles, and tall windows onto a skyline of old stone and glass towers; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Layered megacity of mixed old stone and tall glass towers, flying traffic lanes, steel blue and amber.",
+      "seed": 22084,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "jahn-sheet.png",
+          "sha256": "1f8074f8da16397ac0704036e9a10d075b89aa5d13105f9e3613597c7b4611ba"
+        },
+        {
+          "file": "economics-institute-plate.png",
+          "sha256": "6d9aae6897bddcc3cdb5a5621f7380e427fdc32b97b00b8014fa9f35b0cf247c"
+        }
+      ],
+      "generation_seconds": 249.6
+    }
+  ]
+}

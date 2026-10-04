@@ -1,0 +1,108 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-32.json",
+  "generated_at": "2026-10-04T19:27:50+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.0,
+  "images": [
+    {
+      "id": "c32-b003-camera-removal",
+      "chapter": 32,
+      "idx": 3,
+      "file": "c32-b003-camera-removal.png",
+      "sha256": "3c2c57f35458fc0ea9f20997bcae51d287770da90520816a3054951733529637",
+      "prompt": "Wide view of a footpath through a wooded district lined with old stone houses and tall trees. To the left, a workman on a tall ladder leaning against a tree tosses a security camera down into a box on the ground already full of dozens of discarded cameras, mid-throw. Two figures in privacy robes walk along the path past him. Farther along, a small shop front displays rows of bright red flowers. Soft daylight, muted greens, stone greys. Reference image 1 shows the location, a car-free woodland footpath of pale smooth paving winding beneath towering old trees, flanked by spotless medieval-style houses of large clean stone blocks that melt into moss, ferns and climbing plants, some sunk half underground, small shop doorways with blank glowing panels, benches and branching sidewalks, toy drones with feathered rotors under the canopy, and slender grown towers glimpsed far beyond the treetops, in sage, moss, cream and warm stone; keep its architecture, layout and colors. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 32003,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "kalimar-footpaths-plate.png",
+          "sha256": "6c273d707770a7362992cd8963e71b7d687f3d6fe17d41070854ff2708fca9e7"
+        }
+      ],
+      "generation_seconds": 210.1
+    },
+    {
+      "id": "c32-b007-sky-bridge-view",
+      "chapter": 32,
+      "idx": 7,
+      "file": "c32-b007-sky-bridge-view.png",
+      "sha256": "d3ebcfbcc392edfcedac139621fa53a3bafba8b47203be0a0858835d90e2e1e2",
+      "prompt": "View from a pedestrian sky bridge over a busy highway with small autonomous buses and cars below. Two figures in privacy robes stand at the railing looking out. To the left rises a mountain covered with trees, and above the treetops on its slope stand a few fifteen-storey apartment buildings shaped like oversized medieval castle towers, with many windows. Dense shrubbery at the end of the bridge. Bright daylight, muted greens and stone greys. Reference image 1 shows the location, a slender pedestrian sky bridge of pale sculpted stone with living planter rails, arching over a busy multi-lane road of small autonomous buses, cars and delivery pods that runs straight toward a tree-covered mountain, where fifteen-storey apartment towers shaped like oversized medieval castle keeps, studded with many windows, rise above the forest on the lower slopes, beneath a vast pastel sky with distant elegant megastructures; keep its architecture, layout and colors. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 32007,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "kalimar-sky-bridge-plate.png",
+          "sha256": "f0482489473e5a6a8a9bd5c94909ef68e0cc43944b6e7b9082f0e83ae4ba5500"
+        }
+      ],
+      "generation_seconds": 204.5
+    },
+    {
+      "id": "c32-b077-world-map",
+      "chapter": 32,
+      "idx": 77,
+      "file": "c32-b077-world-map.png",
+      "sha256": "3bea95d5d82bdc0fc987a2715e1b1b504d9293f14c85cdb5a065292d35ad5694",
+      "prompt": "Medium shot in a quiet government office with wood paneling and stone walls. The man from reference image 1 stands before a large map of an unfamiliar world painted on the wall, continents and seas only, with no labels, gesturing toward it thoughtfully. The young man from reference image 2 sits in a chair and listens intently. Another man and a woman sit nearby, seen from behind. Soft daylight from a window, muted greens and warm wood. Reference image 1 shows a man in his late fifties, tall and lean, medium brown skin, close-cropped white hair and a short white beard, warm deep-set eyes, wearing a long deep-green woven parliament robe with wide draped sleeves and a sculpted high collar fastened by a simple bronze clasp, over a cream seamless undertunic, a broad bronze-colored cloth sash, dark loose trousers and soft brown seamless shoes; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a small, warm senator's office inside a round stone parliament hall, with honey wood paneling against a curved pale stone wall, a low table between deep armchairs, a tall window onto green trees, a large wordless map of unfamiliar continents and seas printed across one wall, and a slim serving robot with a screen face waiting at the door; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 32077,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "verdow-sheet.png",
+          "sha256": "1eb638a0bc891b79c41f7a3aefd000cc06fa2634fd4f5ec50b41c7781a6f7872"
+        },
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "senator-office-plate.png",
+          "sha256": "f2a4921c5ad7b910c7f4f38f84302f221c535d4f269134694b2ed531e3a7d6ed"
+        }
+      ],
+      "generation_seconds": 317.9
+    },
+    {
+      "id": "c32-b111-roof-home",
+      "chapter": 32,
+      "idx": 111,
+      "file": "c32-b111-roof-home.png",
+      "sha256": "eb99560902dbb18bd488c2b996b2972d1f086a6792129a30bfc1c02ec7303803",
+      "prompt": "Wide view from a rooftop partway up a forested mountain over a green city. The man from reference image 1 stands at the edge holding a cup of tea in one hand and a dish of rice and vegetables in the other, gazing out with a contented smile; the woman from reference image 2 stands beside him. Below spreads a commercial district of old-style and modern buildings, one shaped like an aeroplane, a grey-and-purple walled square, and a forest-like district of tall trees. Castle-tower apartments rise on the slope to the right. Warm daylight. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Reference image 2 shows a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 32111,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "seila-sheet.png",
+          "sha256": "62f2f7ce966c5cc0c425af17edf58640bf587fff0486f5a7bb62530abfb447c4"
+        }
+      ],
+      "generation_seconds": 250.3
+    }
+  ]
+}

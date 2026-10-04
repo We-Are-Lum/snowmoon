@@ -1,0 +1,120 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-28.json",
+  "generated_at": "2026-10-04T19:27:45+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.0,
+  "images": [
+    {
+      "id": "c28-b013-general-arrives",
+      "chapter": 28,
+      "idx": 13,
+      "file": "c28-b013-general-arrives.png",
+      "sha256": "239f148a7a0e61f776db4cb98049fea07bf2686f35201c101f77ef472e4710d0",
+      "prompt": "Medium wide shot of a plain conference room with a table and chairs. A middle-aged man, the man from reference image 1, steps in through the door wearing a crisp shirt styled like traditional military attire but comfortable for everyday wear, with a direct, wary expression. At the table, the man from reference image 2 rises slightly to greet him, calm and measured, while three younger people sit watching, seen from behind. Soft daylight through a window, muted greens and stone greys. Reference image 1 shows a middle-aged man of about fifty, tall and solidly built, light olive skin, short iron-grey hair in a crew cut, a square clean-shaven jaw and an upright bearing, wearing a structured khaki-brown military-style tunic shirt with a diagonal side closure, sculpted shoulder plates and a stiff standing collar, a dark brown belt-harness across the chest, dark brown segmented trousers and polished seamless brown boots; keep the same face, hair, build and clothing. Reference image 2 shows a composed man in his fifties, tall and gaunt, light beige skin, long black hair streaked with grey tied in a low knot, high cheekbones and a still, unreadable expression, wearing the long hooded shadow-grey cloak of a priest, its hem traced with faint glowing geometric patterns, over a black high-necked seamless tunic with a sculpted collar, and holding a slim dark hand device; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a calm government-run hotel built of large pale stone blocks, with a quiet lobby where a sealed car bay opens straight inside, warm wooden furniture, deep sofas, potted trees and plants and soft lamps, guest rooms with tall windows over green treetops, and meeting rooms with a long table facing a bare pale wall for projections, in stone, honey wood, sage and cream; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 28013,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "lektor-sheet.png",
+          "sha256": "543da1cf2ed9b556ea66752a12ad5cee04bfabf7b56833e710fa8c4e822b5832"
+        },
+        {
+          "file": "den-sheet.png",
+          "sha256": "379cde7d30301abcdfb8cdad2ce0813c8030f0d95a9a9f76b15690cec5ae8fef"
+        },
+        {
+          "file": "government-hotel-plate.png",
+          "sha256": "5c1c39287bc5302884a34299e4bab58675c8654e46db7ee5107ecb5fdc6b5b00"
+        }
+      ],
+      "generation_seconds": 316.3
+    },
+    {
+      "id": "c28-b057-zven-sofa",
+      "chapter": 28,
+      "idx": 57,
+      "file": "c28-b057-zven-sofa.png",
+      "sha256": "69506a65a2c38e8034445457ed79adfc7aab19b4bc22b48c7ded13b5e3efb3f1",
+      "prompt": "Lively medium shot of a hotel room with a sofa and warm lamps. The boy from reference image 1 bursts in and leaps onto the sofa, bouncing, holding a hand device whose screen shows only soft abstract colored shapes, his face bright with excitement. The woman from reference image 2 turns from the open door behind him, smiling with surprised delight. A man sits in an armchair in the background, seen from behind. Warm evening light, muted greens and earth tones. Reference image 1 shows a boy of about eleven, small and wiry, warm light-brown skin, a mop of curly dark-brown hair, a sprinkle of freckles and a wide gap-toothed grin, wearing a sunny mustard-yellow sleeveless team tunic with a rounded padded collar and a green stripe down one side, a green fitted undershirt, green knee-length gathered shorts, striped socks, soft white seamless shoes and a small hand device strapped to his wrist; keep the same face, hair, build and clothing. Reference image 2 shows a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a calm government-run hotel built of large pale stone blocks, with a quiet lobby where a sealed car bay opens straight inside, warm wooden furniture, deep sofas, potted trees and plants and soft lamps, guest rooms with tall windows over green treetops, and meeting rooms with a long table facing a bare pale wall for projections, in stone, honey wood, sage and cream; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 28057,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zven-sheet.png",
+          "sha256": "e92b1d0a29e2668c714cba4301bfd59c4cf0622bbaa7b7db134d26e875ae7d38"
+        },
+        {
+          "file": "seila-sheet.png",
+          "sha256": "62f2f7ce966c5cc0c425af17edf58640bf587fff0486f5a7bb62530abfb447c4"
+        },
+        {
+          "file": "government-hotel-plate.png",
+          "sha256": "5c1c39287bc5302884a34299e4bab58675c8654e46db7ee5107ecb5fdc6b5b00"
+        }
+      ],
+      "generation_seconds": 319.1
+    },
+    {
+      "id": "c28-b064-lily-stands-up",
+      "chapter": 28,
+      "idx": 64,
+      "file": "c28-b064-lily-stands-up.png",
+      "sha256": "a9f2f7576e26f9b987dd73ff7408960f625674c96195504e913e834493b113db",
+      "prompt": "A severe, orderly classroom with rows of identical pale desks and cold white light. The girl from reference image 1 stands up from her desk, chin raised, confidently explaining something with one hand gesturing, a thin band around her neck. At the front of the room a stern instructor in a stiff grey uniform scowls at her with crossed arms. Other students in matching outfits turn to stare. Icy whites, pale blues and steel greys. Reference image 1 shows a girl of about thirteen, slight and a little hunched, warm brown skin, long dark-brown hair in a low side ponytail with a heavy fringe falling over her eyes, wearing an oversized heather-grey wrapped poncho-cape with a deep cowl collar and long sleeve cuffs pulled over her hands, dark navy seamless leggings, soft white wrap-around shoes and a glowing hand device held close; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 28064,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "lily-sheet.png",
+          "sha256": "1d9c8744cd1a01d6eda1cdee14e3472fd4f68fc62252891ecd2e9a1ca17b83b0"
+        }
+      ],
+      "generation_seconds": 196.7
+    },
+    {
+      "id": "c28-b091-tea-news",
+      "chapter": 28,
+      "idx": 91,
+      "file": "c28-b091-tea-news.png",
+      "sha256": "6b2312166a1cdb04dc7e9130720fc1ffb01211daba9d490119db1d3051d343e9",
+      "prompt": "Quiet medium shot of a hotel room by a window overlooking green treetops. The woman from reference image 1 pours herself a cup of tea from a pot at a small table, glancing up with curiosity. The man from reference image 2 stands nearby, lowering his wrist from a watch, with a calm, satisfied half smile as he shares good news. Soft morning light, muted greens, warm stone and wood. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Reference image 2 shows a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a calm government-run hotel built of large pale stone blocks, with a quiet lobby where a sealed car bay opens straight inside, warm wooden furniture, deep sofas, potted trees and plants and soft lamps, guest rooms with tall windows over green treetops, and meeting rooms with a long table facing a bare pale wall for projections, in stone, honey wood, sage and cream; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 28091,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "seila-sheet.png",
+          "sha256": "62f2f7ce966c5cc0c425af17edf58640bf587fff0486f5a7bb62530abfb447c4"
+        },
+        {
+          "file": "government-hotel-plate.png",
+          "sha256": "5c1c39287bc5302884a34299e4bab58675c8654e46db7ee5107ecb5fdc6b5b00"
+        }
+      ],
+      "generation_seconds": 323.3
+    }
+  ]
+}

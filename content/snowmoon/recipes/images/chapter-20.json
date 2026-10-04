@@ -1,0 +1,117 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-20.json",
+  "generated_at": "2026-10-04T19:09:11+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.0,
+  "images": [
+    {
+      "id": "c20-b002-red-alert",
+      "chapter": 20,
+      "idx": 2,
+      "file": "c20-b002-red-alert.png",
+      "sha256": "bbe3fcf0ad059eace0e858ac26890509ca23261d07eb8a9b3bb49d560e6edfc2",
+      "prompt": "Medium close shot in a quiet bedroom at early dawn, cool grey-blue light coming through a window onto trees. The woman from reference image 1 sits bolt upright in bed, hair tousled, staring in alarm at her wrist, where her watch flashes bright red, throwing red light on her face and the blanket. A hand device lies on the bedside table. Stone walls, simple wooden furniture, an empty pillow beside her. Reference image 1 shows a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 2 shows the location, a cozy two-storey family house of large clean stone blocks with a small sheltering roof over the doorstep, a glowing green circle and a slim screen beside the door; inside, a warm open living and dining room with a long wooden table, a deep couch, a wooden staircase, plants, soft lamps and a large window onto trees and a footpath, in honey wood, cream, sage and stone; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 20002,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "seila-sheet.png",
+          "sha256": "62f2f7ce966c5cc0c425af17edf58640bf587fff0486f5a7bb62530abfb447c4"
+        },
+        {
+          "file": "family-home-plate.png",
+          "sha256": "bb8f92dede3f3491667ff8cedc37365e56cd126873446eca9ad87ec6bc6506dc"
+        }
+      ],
+      "generation_seconds": 253.6
+    },
+    {
+      "id": "c20-b013-door-screen",
+      "chapter": 20,
+      "idx": 13,
+      "file": "c20-b013-door-screen.png",
+      "sha256": "346254b77ba127fddea7f7e48e967120ca1910946a6ed9eb781aadd2fe8f5826",
+      "prompt": "Interior of a stone house entryway in late morning. The woman from reference image 1 stands at the closed front door, tense and wary, her eyes red from crying, looking at a small screen beside the door. The screen shows a figure in a privacy robe standing outside on the doorstep. A round green-glowing panel is set beside the door frame. Soft daylight through a narrow window, coats on hooks, a quiet house. Reference image 1 shows a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 2 shows the location, a cozy two-storey family house of large clean stone blocks with a small sheltering roof over the doorstep, a glowing green circle and a slim screen beside the door; inside, a warm open living and dining room with a long wooden table, a deep couch, a wooden staircase, plants, soft lamps and a large window onto trees and a footpath, in honey wood, cream, sage and stone; keep its architecture, layout and colors. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 20013,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "seila-sheet.png",
+          "sha256": "62f2f7ce966c5cc0c425af17edf58640bf587fff0486f5a7bb62530abfb447c4"
+        },
+        {
+          "file": "family-home-plate.png",
+          "sha256": "bb8f92dede3f3491667ff8cedc37365e56cd126873446eca9ad87ec6bc6506dc"
+        }
+      ],
+      "generation_seconds": 248.8
+    },
+    {
+      "id": "c20-b050-taxi",
+      "chapter": 20,
+      "idx": 50,
+      "file": "c20-b050-taxi.png",
+      "sha256": "322b8b720d963bc3e0cb152abe5393844eaa64649953b471070f4450b839cea5",
+      "prompt": "Medium-wide outdoor shot of a quiet tree-lined street in front of a stone house, bright day. Two figures in privacy robes hurry toward a waiting small autonomous taxi. The shorter one, in front, reaches the taxi first and taps her wrist against a round green-glowing panel beside its door; the taller one follows close behind. Green trees, stone garden walls, leaves blowing across the pavement. A sense of urgency. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 20050,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 158.3
+    },
+    {
+      "id": "c20-b087-underground-house",
+      "chapter": 20,
+      "idx": 87,
+      "file": "c20-b087-underground-house.png",
+      "sha256": "5efe6d4de19a02eaf9c42dd46c97b314d4aedb036c60f65302ad63fe10422b81",
+      "prompt": "Wide view of a forested path among tall trees, a cool breeze stirring the leaves. Two figures in privacy robes have stepped off the path toward a stone house built almost entirely underground: only a low stone roof, about a meter high, rises above the mossy ground, nearly invisible among ferns and shrubs, with a stone staircase leading down to its door. Overcast afternoon light, leaves swirling in the air. Reference image 1 shows the location, a car-free woodland footpath of pale smooth paving winding beneath towering old trees, flanked by spotless medieval-style houses of large clean stone blocks that melt into moss, ferns and climbing plants, some sunk half underground, small shop doorways with blank glowing panels, benches and branching sidewalks, toy drones with feathered rotors under the canopy, and slender grown towers glimpsed far beyond the treetops, in sage, moss, cream and warm stone; keep its architecture, layout and colors. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 20087,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "kalimar-footpaths-plate.png",
+          "sha256": "6c273d707770a7362992cd8963e71b7d687f3d6fe17d41070854ff2708fca9e7"
+        }
+      ],
+      "generation_seconds": 187.2
+    },
+    {
+      "id": "c20-b174-standing-up",
+      "chapter": 20,
+      "idx": 174,
+      "file": "c20-b174-standing-up.png",
+      "sha256": "f095bce078d5351577bcc500906e18c60e24bff655e9632f433b6210b22c3996",
+      "prompt": "Medium interior shot of a modest stone family living room. The woman from reference image 1, wearing a loose dark purple robe with its hood pushed back so her face is uncovered, rises from her chair with sudden resolve, picking up her hand device, her expression sharp and certain. Across a low table with two teacups, a weary middle-aged man looks up at her, startled. Late afternoon light through a window onto trees. Reference image 1 shows a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. The dark purple Veridian Privacy Robe is worn open at the face: a loose-fitting dark purple garment down to the ankles, its hood pushed back onto the shoulders and its fabric face cover lowered, so the wearer's face and hair are fully visible. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 20174,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "seila-sheet.png",
+          "sha256": "62f2f7ce966c5cc0c425af17edf58640bf587fff0486f5a7bb62530abfb447c4"
+        }
+      ],
+      "generation_seconds": 195.9
+    }
+  ]
+}

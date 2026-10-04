@@ -1,6 +1,6 @@
 {
   "job_file": "content/snowmoon/illustrations/chapter-7.json",
-  "generated_at": "2026-10-04T10:51:46+00:00",
+  "generated_at": "2026-10-04T18:51:21+00:00",
   "model": {
     "repo": "black-forest-labs/FLUX.2-klein-4B",
     "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
@@ -18,7 +18,7 @@
     "platform": "macOS-26.5.1-arm64-arm-64bit",
     "machine": "arm64"
   },
-  "model_load_seconds": 0.6,
+  "model_load_seconds": 0.8,
   "images": [
     {
       "id": "c7-b035-smoke",
@@ -51,9 +51,9 @@
       "chapter": 7,
       "idx": 49,
       "file": "c7-b049-toast.png",
-      "sha256": "812f6a4e15009d3cf53fb373aa43c0698e0a92d71c3a48f1f22eefa24d0de682",
-      "prompt": "Medium shot in a polished stone waiting room inside a mountain, elevator doors in the wall behind. The older woman from reference image 1 raises a glass of water in a solemn toast. The young man from reference image 2 raises his glass in reply, looking slightly puzzled, and a young woman beside him, partly turned away, raises hers too. A small service robot that brought the glasses glides away. Warm lamp light, a quiet moment of resolve before a big match. Reference image 1 shows a woman in her early sixties, small and wiry, medium brown skin, short silver hair in a sharp asymmetric cut, keen eyes behind thin red-framed glasses, wearing a charcoal asymmetric commander's tabard with one sculpted shoulder panel and bright yellow piping, over a cobalt-blue seamless long-sleeved bodysuit, slim black segmented trousers, soft grey seamless boots and a slim wrist device; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 3 shows the location, a windowless waiting room carved deep in a mountain, with polished pale stone walls and a vaulted round-topped ceiling, entered through an arch of stone bricks crowned by a carved emblem of two arms meeting with clashing fists, a row of sleek elevator pod doors set into one wall, low stone benches, a wall screen, a small serving robot, and warm indirect light; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
-      "seed": 7049,
+      "sha256": "88d038445637a57cda25f3f66e0216d726ee689e7f43e838107bcf98244d458e",
+      "prompt": "Medium shot in a polished stone waiting room inside a mountain, elevator doors in the wall behind. The older woman from reference image 1 raises a glass of water in a solemn toast. The young man from reference image 2 raises his glass in reply, looking slightly puzzled, and a young woman beside him, partly turned away, raises hers too. A small service robot that brought the glasses glides away. Warm lamp light, a quiet moment of resolve before a big match. Reference image 1 shows a woman in her early sixties, small and wiry, medium brown skin, short silver hair in a sharp asymmetric cut, keen eyes behind thin red-framed glasses, wearing a charcoal asymmetric commander's tabard with one sculpted shoulder panel and bright yellow piping, over a cobalt-blue seamless long-sleeved bodysuit, slim black segmented trousers, soft grey seamless boots and a slim wrist device; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a windowless waiting room carved deep in a mountain, with polished pale stone walls and a vaulted round-topped ceiling, entered through an arch of stone bricks crowned by a carved emblem of two arms meeting with clashing fists, a row of sleek elevator pod doors set into one wall, low stone benches, a wall screen, a small serving robot, and warm indirect light; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 7549,
       "width": 1024,
       "height": 576,
       "references": [
@@ -70,7 +70,7 @@
           "sha256": "b1c7ec5c9617fc32100b10f0b6d548200e9247b50f19f05431a74686d9e50794"
         }
       ],
-      "generation_seconds": 313.7
+      "generation_seconds": 324.9
     },
     {
       "id": "c7-b100-audience",

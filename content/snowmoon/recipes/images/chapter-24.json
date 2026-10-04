@@ -1,0 +1,108 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-24.json",
+  "generated_at": "2026-10-04T19:18:48+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.0,
+  "images": [
+    {
+      "id": "c24-b006-sleepless-call",
+      "chapter": 24,
+      "idx": 6,
+      "file": "c24-b006-sleepless-call.png",
+      "sha256": "6e79f83639e047a71b1225b6e733e08bc026c74fbb461106be36edf60c79bf3e",
+      "prompt": "Early morning in a small windowless room carved into rock, a rumpled bed, a single lamp. The man from reference image 1, hollow-eyed after a sleepless night, sits on the edge of the bed hunched forward, holding a hand device to his ear and speaking quietly and urgently. His watch glows faintly on his wrist. A cup of cold tea sits on the floor beside him. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 24006,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        }
+      ],
+      "generation_seconds": 191.1
+    },
+    {
+      "id": "c24-b024-industry-tunnel",
+      "chapter": 24,
+      "idx": 24,
+      "file": "c24-b024-industry-tunnel.png",
+      "sha256": "e4697f34c4ed938c49c9d8f8fe70da5ffa475ec280b183e793329070f1bd84f0",
+      "prompt": "Wide view down a long tunnel carved through rock inside a mountain, lit by soft ceiling lights. Along the walls, open doorways reveal busy side rooms: clean workshops with chip-making machines, laboratory benches with workers in white coats, robotic arms assembling car parts. Boxy air filters and violet ultraviolet lamps are scattered along the way. In the foreground, the man from reference image 1 walks slowly, pausing to stare blankly at the wall, shoulders heavy with exhaustion. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 24024,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        }
+      ],
+      "generation_seconds": 203.2
+    },
+    {
+      "id": "c24-b039-hug",
+      "chapter": 24,
+      "idx": 39,
+      "file": "c24-b039-hug.png",
+      "sha256": "590a0319cbf6fa2bbd6cbdf4ecb1d43ef932cef63cc851a7be25915e5ae859df",
+      "prompt": "Medium shot inside a warm underground library, with towering two-level shelves of paper books on one side and computer terminals on the other. The young woman from reference image 1 gently hugs the man from reference image 2, who stands stiff and exhausted, eyes downcast, arms hanging at his sides. Her expression is calm and kind. Soft amber lamplight, quiet empty tables in the background. Reference image 1 shows a young woman of about eighteen, tall and athletic, dark brown skin, hair pulled into a high puffy ponytail dyed magenta at the ends, a confident sly grin, wearing a lime-green modular shell vest with a bulky angular collar and reflective piping, a white seamless sleeveless bodysuit with glowing magenta seams, black wide gathered trousers with segmented knees, chunky black boots with glowing soles and a hip pouch; keep the same face, hair, build and clothing. Reference image 2 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a grand underground library behind a large ornamented wooden door flanked by murals of a hippo reading in a marsh and a hamster at a computer; inside, a towering two-level wall of paper books with a walkway along the set-back upper tier and book-lined openings into a maze, and across the hall open tables and a row of glowing computer terminals, warm lamplight on carved stone; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 24039,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "bai-sheet.png",
+          "sha256": "21def33df4f734aa8979a2bb152d88b443d511b940eaae0c4a67347f900db73e"
+        },
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "grand-library-plate.png",
+          "sha256": "4d67aa9c82f3d53ecc969ccc0c9d0a902b480c926a9967a3147c5557dd83c921"
+        }
+      ],
+      "generation_seconds": 305.9
+    },
+    {
+      "id": "c24-b065-long-room",
+      "chapter": 24,
+      "idx": 65,
+      "file": "c24-b065-long-room.png",
+      "sha256": "fa58d9c24af40c70895b108e09a3ac7c87bf5a31fea6237a4b2f382e551a8ee5",
+      "prompt": "Wide view through a slowly opening sealed door into a long, dim underground room with rock walls. At the far end stands a large table under a pool of warm light, and behind it sits the man from reference image 1, wearing a shadowy dark cloak, hands folded, his gaze composed and watchful. In the foreground, a man and a young man, seen from behind, step through the doorway. Deep shadows along the walls. Reference image 1 shows a composed man in his fifties, tall and gaunt, light beige skin, long black hair streaked with grey tied in a low knot, high cheekbones and a still, unreadable expression, wearing the long hooded shadow-grey cloak of a priest, its hem traced with faint glowing geometric patterns, over a black high-necked seamless tunic with a sculpted collar, and holding a slim dark hand device; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 2 shows the location, a narrow, very long windowless room hewn deep inside a mountain, rough-cut rock walls above a floor of polished stone, a heavy sealed door with a glowing green circle beside it at one end, and at the far end a single large dark table under a pool of warm lamplight, the rest falling away into dim shadow; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 24065,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "den-sheet.png",
+          "sha256": "379cde7d30301abcdfb8cdad2ce0813c8030f0d95a9a9f76b15690cec5ae8fef"
+        },
+        {
+          "file": "den-long-room-plate.png",
+          "sha256": "e1c68f494c72428b00e4f7fc7697a2d55c8b7e6304422722d656d1942b603299"
+        }
+      ],
+      "generation_seconds": 246.3
+    }
+  ]
+}
