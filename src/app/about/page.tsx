@@ -28,8 +28,7 @@ export default function About() {
       <p>There is no token. There is no revenue share. Nothing here is an investment.</p>
       <h2>No canon</h2>
       <p>
-        Nothing in this edition is official. Every design, image, and take can be replaced by a better one, and what
-        you see by default is decided by ratings and by how often others build on it, never by a person.
+        Nothing in this edition is official. Every design, image, and take can be replaced by a better one.
       </p>
     </div>
   );

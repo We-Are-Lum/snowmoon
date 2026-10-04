@@ -174,3 +174,39 @@ V5 looks good. Sql with RLS?
 ```text
 Sql error: Error: Failed to run sql query: ERROR: 3F000: schema "studio" does not exist
 ```
+
+```text
+Can you give me 001 sql to copy and paste in a block. Followed by 2?
+```
+
+```text
+Ran both
+```
+
+```text
+For now can we login with Farcaster as a miniapp?
+```
+
+[The owner pasted the verification query result: 23 tables in `studio`, all with RLS on.]
+
+```text
+I already had created the vercel
+```
+
+```text
+And I have snowmoon.party as the url
+```
+
+[The owner pasted the signed account association for snowmoon.party (public by design: it is served in the manifest).]
+
+```text
+Can you make the environmental variables easily copy and paste into vercel
+```
+
+```text
+Added them and redeploying now
+```
+
+```text
+Looks good on miniapp! Let's remove this from about: and what you see by default is decided by ratings and by how often others build on it, never by a person.
+```
