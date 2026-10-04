@@ -162,3 +162,15 @@ We don't need to make video. We can just have a player that plays the audio with
 ```text
 Run with RLS option added?
 ```
+
+```text
+Ah yes. RSS podcast makes sense
+```
+
+```text
+V5 looks good. Sql with RLS?
+```
+
+```text
+Sql error: Error: Failed to run sql query: ERROR: 3F000: schema "studio" does not exist
+```

@@ -1,6 +1,6 @@
 # Brief v5: proposal
 
-**Status: proposal, not adopted.** Written Oct 4, 2026 from the owner's requests
+**Status: adopted Oct 4, 2026 as brief section 4e; schema in `supabase/migrations/0002_v5.sql`.** Written Oct 4, 2026 from the owner's requests
 in `docs/prompts/008-narration-and-images.md`. Nothing here changes the brief
 until the owner approves it; approved parts move into
 `SNOWMOON-BUILD-BRIEF.md` as section 4e and into migration `0002`.

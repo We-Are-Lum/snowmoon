@@ -112,6 +112,9 @@ Server writes connect as `studio_writer`, which can read and write `studio`
 rows and nothing else. The service role is not used. Brief §4b explains why
 and what this costs.
 
+Apply `0002_v5.sql` after `0001_core.sql`, the same way (dry run first). It
+adds proposals, picks, consents, donations and attestations (brief §4e).
+
 `npm run seed:text` loads the text blocks as `studio_writer`. It is safe to
 re-run; use `-- --dry-run` to preview without credentials. `npm run test:db`
 runs the migration and permission tests in an in-memory Postgres.
