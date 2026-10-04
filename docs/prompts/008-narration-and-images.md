@@ -138,3 +138,11 @@ People could actually record themselves reading the whole book. As long as they 
 ```text
 Pretty cool. Like this the best. Mainly because of the background buildings. Maybe we need to also do some basic renderings of the different cities and spaces, that people agree to and is loaded as context depending on part of the story they are generating images for
 ```
+
+```text
+Still working?
+```
+
+```text
+1 first. Going to sleep now so try to do a lot in the next 7 hours without stopping
+```

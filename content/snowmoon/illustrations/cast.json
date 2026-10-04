@@ -19,7 +19,7 @@
       "idx": null,
       "characters": [],
       "setting": null,
-      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven wrap coat that crosses over to close at one hip, with a soft draped shawl collar, over an oatmeal seamless undertunic, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat.",
+      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat.",
       "width": 1024,
       "height": 576,
       "seed": 5002
@@ -74,7 +74,7 @@
       "idx": null,
       "characters": [],
       "setting": null,
-      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a broad-shouldered man in his mid-forties, tall and heavyset, fair ruddy skin, close-cropped thinning ash-blond hair and a full sandy beard with laugh lines around the eyes, wearing a chunky oatmeal knitted overtunic with a wide rolled funnel collar and a side-buttoned closure, a brown woven belt-sash, brown canvas segmented work trousers with padded knees and sturdy soft-soled wrap boots.",
+      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a broad-shouldered man in his mid-forties, tall and heavyset, fair ruddy skin, close-cropped thinning ash-blond hair and a full sandy beard with laugh lines around the eyes, wearing a sleeveless oatmeal knitted tabard with a huge rolled funnel collar and leather side straps, over a moss-brown long-sleeved ribbed bodysuit, a wide woven belt-sash with tool loops, brown segmented work trousers with padded knees and sturdy soft-soled wrap boots.",
       "width": 1024,
       "height": 576,
       "seed": 5007
@@ -154,7 +154,7 @@
       "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head.",
       "width": 1024,
       "height": 576,
-      "seed": 5014
+      "seed": 5114
     },
     {
       "id": "bai-sheet",
@@ -206,7 +206,7 @@
       "idx": null,
       "characters": [],
       "setting": null,
-      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a cheerful woman in her mid-forties, short and plump, light golden-tan skin, chin-length black hair with a few grey strands held back by a bright red headband, a round face with smile lines, wearing a coral-pink puffed and quilted cocoon jacket with a wide rounded collar, a patterned yellow wrap undertunic tied at the side, navy gathered trousers and soft white glowing-soled shoes.",
+      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a cheerful woman in her mid-forties, short and plump, light golden-tan skin, chin-length black hair with a few grey strands held back by a bright red headband, a round face with smile lines, wearing a sleeveless coral-pink rounded cocoon cape that falls in soft quilted panels to the hips, over a patterned yellow long-sleeved wrap undertunic tied at the side with a wide sash, navy gathered trousers, soft white glowing-soled shoes and a slim wrist device.",
       "width": 1024,
       "height": 576,
       "seed": 5019
@@ -228,7 +228,7 @@
       "idx": null,
       "characters": [],
       "setting": null,
-      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a man in his late thirties, tall and lanky, light brown skin, short curly black hair, a thin moustache and an easy smile, wearing a sharply tailored camel-brown long coat with an asymmetric diagonal closure and a cut-away hem, over a sky-blue high-neck seamless shirt, slim dark trousers, brown seamless shoes, and a thin folding slate of a computer tucked under one arm.",
+      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a man in his late thirties, tall and lanky, light brown skin, short curly black hair, a thin moustache and an easy smile, wearing a long sleeveless camel-brown duster tabard with a tall angled standing collar and a single diagonal row of small glowing clasps, over a fitted sky-blue long-sleeved bodysuit with seamless panels, a slate-grey harness strap across the chest, slim dark trousers gathered into soft ankle cuffs, brown seamless boots, and a thin folding slate of a computer tucked under one arm.",
       "width": 1024,
       "height": 576,
       "seed": 5021
@@ -239,7 +239,7 @@
       "idx": null,
       "characters": [],
       "setting": null,
-      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a young man in his early twenties, of medium build, deep brown skin, short black hair in tight coils with a neat side part, clean-shaven and composed, wearing a dark navy tailored tunic coat with a tall sculpted standing collar and a short half-cape over one shoulder, a crisp white seamless undershirt, grey slim trousers and black seamless boots.",
+      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a young man in his early twenties, of medium build, deep brown skin, short black hair in tight coils with a neat side part, clean-shaven and composed, wearing a dark navy sculpted tunic coat with a tall rigid standing collar that frames his jaw, angular shoulder panels and a long asymmetric half-cape sweeping from one shoulder to the knee, a crisp white high-neck bodysuit, a silver clasp at the collar, grey segmented trousers and black seamless boots.",
       "width": 1024,
       "height": 576,
       "seed": 5022
