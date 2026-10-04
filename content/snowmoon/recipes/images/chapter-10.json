@@ -1,0 +1,134 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-10.json",
+  "generated_at": "2026-10-04T11:51:47+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.6,
+  "images": [
+    {
+      "id": "c10-b023-institute-lunch",
+      "chapter": 10,
+      "idx": 23,
+      "file": "c10-b023-institute-lunch.png",
+      "sha256": "842f8f29f133e7964e93040bd404d35e91e9c91d9f66e36410dbac1d38bd4693",
+      "prompt": "Medium shot of a busy, modern restaurant inside a research institute, tall glass windows looking out on a mix of old and new city towers. Most tables are full. The man from reference image 1 sits at a table across from a young woman student who is talking earnestly. A sleek serving robot has just slid up beside him carrying a plate of fish and vegetables and a glass of water; he takes a sip of water, listening with a concerned expression. Cool daylight. Reference image 1 shows a man in his late thirties, tall and lanky, light brown skin, short curly black hair, a thin moustache and an easy smile, wearing a long sleeveless camel-brown duster tabard with a tall angled standing collar and a single diagonal row of small glowing clasps, over a fitted sky-blue long-sleeved bodysuit with seamless panels, a slate-grey harness strap across the chest, slim dark trousers gathered into soft ankle cuffs, brown seamless boots, and a thin folding slate of a computer tucked under one arm; keep the same face, hair, build and clothing. Reference image 2 shows the location, a large modern institute building whose interior is one vast, gently sloping spiral ramp looping several times beneath a high ceiling, with open elevators and staircases at its center, glass and concrete columns, a bright restaurant section of long tables and glass calling booths along the ramp, a large lecture screen, entry turnstiles, and tall windows onto a skyline of old stone and glass towers; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Layered megacity of mixed old stone and tall glass towers, flying traffic lanes, steel blue and amber.",
+      "seed": 10023,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "jahn-sheet.png",
+          "sha256": "1f8074f8da16397ac0704036e9a10d075b89aa5d13105f9e3613597c7b4611ba"
+        },
+        {
+          "file": "economics-institute-plate.png",
+          "sha256": "6d9aae6897bddcc3cdb5a5621f7380e427fdc32b97b00b8014fa9f35b0cf247c"
+        }
+      ],
+      "generation_seconds": 252.2
+    },
+    {
+      "id": "c10-b050-booth-courtyard",
+      "chapter": 10,
+      "idx": 50,
+      "file": "c10-b050-booth-courtyard.png",
+      "sha256": "314f30ba5d3a9bbf4d3883a33a0072f76f1d3902d4cf1d876e9f0c2afaf4fd02",
+      "prompt": "Wide shot of a quiet stone courtyard surrounded by trees, with a row of heavy, boxy soundproof booths along one side, each with a thick sliding door. A figure in a privacy robe strains to slide open the rightmost booth's door, revealing its thick cross-section: a layer of crinkled silver foil on the inside, followed by layers of dense padding. Inside, a long table stretches to the back wall with a bench on each side. Soft overcast daylight, muted greens and greys. Reference image 1 shows the location, a row of heavy boxy soundproof booths along one side of a quiet stone courtyard ringed by trees, each sealed by a thick sliding door whose cut edge shows layers of foil and padding; inside, a windowless chamber lined with crinkled silver foil behind soft padding, a long table from door to back wall between two long benches, small humming air filters and soft even light; keep its architecture, layout and colors. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 10050,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "order-booths-plate.png",
+          "sha256": "9126d472899dc20d5452a71f18acda7bf1c1719c54cf5b954a6225c3117bb211"
+        }
+      ],
+      "generation_seconds": 208.8
+    },
+    {
+      "id": "c10-b114-needle-bug",
+      "chapter": 10,
+      "idx": 114,
+      "file": "c10-b114-needle-bug.png",
+      "sha256": "2a2fd351ee7cbd55c53804b75a398ba5cbe5c158904fcd4d3f3cce6a703eaab3",
+      "prompt": "Medium shot inside a small, windowless soundproof booth with a long table and benches. A figure in a privacy robe stands at the far end of the table, triumphantly holding up a tiny needle-like device with a small bulb at its tip between two fingers. A small quadcopter drone hovers above the middle of the table. Two other figures in privacy robes stand near the open doorway, watching. A hand device in the standing figure's other hand shows soft abstract colored shapes. Dim, even interior light. Reference image 1 shows the location, a row of heavy boxy soundproof booths along one side of a quiet stone courtyard ringed by trees, each sealed by a thick sliding door whose cut edge shows layers of foil and padding; inside, a windowless chamber lined with crinkled silver foil behind soft padding, a long table from door to back wall between two long benches, small humming air filters and soft even light; keep its architecture, layout and colors. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 10114,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "order-booths-plate.png",
+          "sha256": "9126d472899dc20d5452a71f18acda7bf1c1719c54cf5b954a6225c3117bb211"
+        }
+      ],
+      "generation_seconds": 190.4
+    },
+    {
+      "id": "c10-b160-practice-game",
+      "chapter": 10,
+      "idx": 160,
+      "file": "c10-b160-practice-game.png",
+      "sha256": "874451eb1407c50db4f05688766276f0af16fe2b76ea35defe2dda82c182d1db",
+      "prompt": "Medium shot at an outdoor courtyard table in a dense low-rise neighborhood, glowing shop fronts and playful cartoon animal murals behind. The boy from reference image 1 and the girl from reference image 2 sit side by side, each staring at a hand device whose screen shows a glowing grid of tiny abstract shapes bursting apart. The boy recoils with a shocked, dismayed expression; the girl smiles slyly without looking up. Two cups of tea on the table, warm afternoon light. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 2 shows a young woman of about eighteen, tall and athletic, dark brown skin, hair pulled into a high puffy ponytail dyed magenta at the ends, a confident sly grin, wearing a lime-green modular shell vest with a bulky angular collar and reflective piping, a white seamless sleeveless bodysuit with glowing magenta seams, black wide gathered trousers with segmented knees, chunky black boots with glowing soles and a hip pouch; keep the same face, hair, build and clothing. Reference image 3 shows the location, a small open-air courtyard cafe enclosed by low, dense shop buildings, with scattered small tables and stools beneath a shade tree and strings of little lights, a playful cartoon animal mural on one wall, glowing blank shop panels in pink and cyan, a little wheeled serving robot with a screen face, and an open entrance onto a busy street with a lamp post; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 10160,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "bai-sheet.png",
+          "sha256": "21def33df4f734aa8979a2bb152d88b443d511b940eaae0c4a67347f900db73e"
+        },
+        {
+          "file": "courtyard-cafe-plate.png",
+          "sha256": "70a618cf6fd00a45984296c75a01cc89951b285b78b0b8625bf10242c066ec3d"
+        }
+      ],
+      "generation_seconds": 310.2
+    },
+    {
+      "id": "c10-b191-the-reveal",
+      "chapter": 10,
+      "idx": 191,
+      "file": "c10-b191-the-reveal.png",
+      "sha256": "202caacbd05d32d598933ed59a726861b900f894281aec3a758f4b8ac4db0125",
+      "prompt": "Medium shot in a long, narrow stone room deep inside a mountain, lit by dim warm lamps. At a large table, the woman from reference image 1 leans forward across the table with an intense, serious look. Facing her, the boy from reference image 2 sits very still, staring back, his cheerful expression turned fearful and astonished. Beside the woman, a man in a dark hooded priestly cloak sits in shadow, his face hidden, watching quietly. Rough stone walls, deep shadows. Reference image 1 shows a woman in her early sixties, small and wiry, medium brown skin, short silver hair in a sharp asymmetric cut, keen eyes behind thin red-framed glasses, wearing a charcoal asymmetric commander's tabard with one sculpted shoulder panel and bright yellow piping, over a cobalt-blue seamless long-sleeved bodysuit, slim black segmented trousers, soft grey seamless boots and a slim wrist device; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 3 shows the location, a narrow, very long windowless room hewn deep inside a mountain, rough-cut rock walls above a floor of polished stone, a heavy sealed door with a glowing green circle beside it at one end, and at the far end a single large dark table under a pool of warm lamplight, the rest falling away into dim shadow; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 10191,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "mu-sheet.png",
+          "sha256": "e1854964c41862db245d46cc188ba84af6235fb95c38a79d55fe9281abf3aec7"
+        },
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "den-long-room-plate.png",
+          "sha256": "e1c68f494c72428b00e4f7fc7697a2d55c8b7e6304422722d656d1942b603299"
+        }
+      ],
+      "generation_seconds": 317.4
+    }
+  ]
+}

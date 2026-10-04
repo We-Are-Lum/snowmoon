@@ -1,0 +1,142 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-9.json",
+  "generated_at": "2026-10-04T11:30:23+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.6,
+  "images": [
+    {
+      "id": "c9-b002-courtyard-tears",
+      "chapter": 9,
+      "idx": 2,
+      "file": "c9-b002-courtyard-tears.png",
+      "sha256": "965972a569157bb5ff076e337d04a0fb598206dddac797639bd9ad441a0e99a1",
+      "prompt": "Medium shot of a small open-air courtyard cafe between dense low-rise buildings in the late afternoon, shop lights already glowing and a cute cartoon animal mural on a wall behind. The girl from reference image 1 sits at a small table with tears running down her cheeks, a cup of tea and a half-eaten meal in front of her. Across from her, the boy from reference image 2 leans forward with a worried, uncertain expression, his hands resting near his own teacup. A few other diners blurred in the background. Reference image 1 shows a young woman of about eighteen, tall and athletic, dark brown skin, hair pulled into a high puffy ponytail dyed magenta at the ends, a confident sly grin, wearing a lime-green modular shell vest with a bulky angular collar and reflective piping, a white seamless sleeveless bodysuit with glowing magenta seams, black wide gathered trousers with segmented knees, chunky black boots with glowing soles and a hip pouch; keep the same face, hair, build and clothing. Reference image 2 shows a young man of about eighteen, stocky and shorter than average, pale freckled skin, a shaggy mop of copper-red hair and a wide friendly face, wearing a cherry-red hooded poncho-shell with a curved hem and glowing yellow seams, a white seamless crew-neck undersuit, tan segmented cargo trousers gathered at the ankles, chunky yellow glowing-soled sneakers and a well-worn rounded modular backpack; keep the same face, hair, build and clothing. Reference image 3 shows the location, a small open-air courtyard cafe enclosed by low, dense shop buildings, with scattered small tables and stools beneath a shade tree and strings of little lights, a playful cartoon animal mural on one wall, glowing blank shop panels in pink and cyan, a little wheeled serving robot with a screen face, and an open entrance onto a busy street with a lamp post; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 9002,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "bai-sheet.png",
+          "sha256": "21def33df4f734aa8979a2bb152d88b443d511b940eaae0c4a67347f900db73e"
+        },
+        {
+          "file": "fin-sheet.png",
+          "sha256": "c6e28903e5aee3aad551332c93cfef43570f1f3c195d3a511e4d5bd21490855f"
+        },
+        {
+          "file": "courtyard-cafe-plate.png",
+          "sha256": "70a618cf6fd00a45984296c75a01cc89951b285b78b0b8625bf10242c066ec3d"
+        }
+      ],
+      "generation_seconds": 315.3
+    },
+    {
+      "id": "c9-b052-long-room",
+      "chapter": 9,
+      "idx": 52,
+      "file": "c9-b052-long-room.png",
+      "sha256": "113d9c11c8f00aa50304fdc5547a4af3346cd1078fd819ee8b77d85b8122d756",
+      "prompt": "Wide shot down a narrow, long stone room deep inside a mountain, lit by a few dim warm lamps. In the foreground, the boy from reference image 1 has just stepped through a heavy sealed door, looking ahead with cautious curiosity. At the far end of the room sits the man from reference image 2 behind a large table, wearing a dark, shadowy priestly cloak with the hood pushed back enough to show his calm face. Rough stone walls, long shadows, a hushed, secretive atmosphere. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 2 shows a composed man in his fifties, tall and gaunt, light beige skin, long black hair streaked with grey tied in a low knot, high cheekbones and a still, unreadable expression, wearing the long hooded shadow-grey cloak of a priest, its hem traced with faint glowing geometric patterns, over a black high-necked seamless tunic with a sculpted collar, and holding a slim dark hand device; keep the same face, hair, build and clothing. Reference image 3 shows the location, a narrow, very long windowless room hewn deep inside a mountain, rough-cut rock walls above a floor of polished stone, a heavy sealed door with a glowing green circle beside it at one end, and at the far end a single large dark table under a pool of warm lamplight, the rest falling away into dim shadow; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 9052,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "den-sheet.png",
+          "sha256": "379cde7d30301abcdfb8cdad2ce0813c8030f0d95a9a9f76b15690cec5ae8fef"
+        },
+        {
+          "file": "den-long-room-plate.png",
+          "sha256": "e1c68f494c72428b00e4f7fc7697a2d55c8b7e6304422722d656d1942b603299"
+        }
+      ],
+      "generation_seconds": 305.1
+    },
+    {
+      "id": "c9-b105-sealed-car",
+      "chapter": 9,
+      "idx": 105,
+      "file": "c9-b105-sealed-car.png",
+      "sha256": "5d442ecb629ea71969c3b4c05e380658729a97d2deeadab8f18fe5262c45ee8a",
+      "prompt": "Interior of a large rectangular black car, seen from the back seat. The inside walls are lined with crinkled silver anti-transmission foil. The side windows show only a dim, darkened view of the street outside. The boy from reference image 1 sits by a window, looking around at the foil with wide eyes, realizing how sealed off he is. Beside him the man from reference image 2, in a dark priestly cloak, sits calmly with his hands folded. Low cool light as the car enters a tunnel. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 2 shows a composed man in his fifties, tall and gaunt, light beige skin, long black hair streaked with grey tied in a low knot, high cheekbones and a still, unreadable expression, wearing the long hooded shadow-grey cloak of a priest, its hem traced with faint glowing geometric patterns, over a black high-necked seamless tunic with a sculpted collar, and holding a slim dark hand device; keep the same face, hair, build and clothing. Reference image 3 shows the location, a sealed passenger cabin of a large rectangular glossy black autonomous car, its inner walls lined with crinkled silver anti-transmission foil behind soft dark panels, plush seats facing each other across the cabin, camera-fed simulated windows showing a slightly dimmed view of a tree-lined street, and a broad side door shaped to seal flush against building doorways; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 9105,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "den-sheet.png",
+          "sha256": "379cde7d30301abcdfb8cdad2ce0813c8030f0d95a9a9f76b15690cec5ae8fef"
+        },
+        {
+          "file": "sealed-black-car-plate.png",
+          "sha256": "979edefb842ec8d1a8287ec1b413bf1f7576798ea03b874662089f15fcb68a5d"
+        }
+      ],
+      "generation_seconds": 309.1
+    },
+    {
+      "id": "c9-b110-box-mixnet",
+      "chapter": 9,
+      "idx": 110,
+      "file": "c9-b110-box-mixnet.png",
+      "sha256": "aed0fda91c71e60e8a4be8b1250dd1551a5145dfcff015ae0ddda2a94a42b067",
+      "prompt": "Wide shot of a large underground factory room with a low ceiling and bright, even light. Thousands of identical plain white sealed boxes are stacked in neat rows. A conveyor belt comes in through an opening in the wall, and a mechanical arm places small computer chips into boxes as they pass. In the foreground the boy from reference image 1 stares at the scene in amazement, while the man from reference image 2, in a dark priestly cloak, holds up a hand device whose screen shows soft abstract colored dots and lines. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 2 shows a composed man in his fifties, tall and gaunt, light beige skin, long black hair streaked with grey tied in a low knot, high cheekbones and a still, unreadable expression, wearing the long hooded shadow-grey cloak of a priest, its hem traced with faint glowing geometric patterns, over a black high-necked seamless tunic with a sculpted collar, and holding a slim dark hand device; keep the same face, hair, build and clothing. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 9110,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "den-sheet.png",
+          "sha256": "379cde7d30301abcdfb8cdad2ce0813c8030f0d95a9a9f76b15690cec5ae8fef"
+        }
+      ],
+      "generation_seconds": 254.5
+    },
+    {
+      "id": "c9-b139-microscope",
+      "chapter": 9,
+      "idx": 139,
+      "file": "c9-b139-microscope.png",
+      "sha256": "2897ab203807306dfaea0b4fe19abcf8d0a9a4e21e9d6582d3689d316a68793a",
+      "prompt": "Medium shot inside a quiet, spotless inspection room with pale walls. A large, complex scanning microscope dominates the center, with lenses, metal arms and cables, a tiny chip held on its stage under a soft glow. The boy from reference image 1 stands directly in front of it, gazing at it absent-mindedly, his thoughts drifting elsewhere, a thoughtful, slightly troubled expression on his face. In the background a man in a dark hooded priestly cloak walks away toward a doorway, seen from behind. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 9139,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        }
+      ],
+      "generation_seconds": 185.3
+    }
+  ]
+}

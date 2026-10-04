@@ -64,6 +64,9 @@ def compose_prompt(job, style):
     for i, c in enumerate(job.get("characters", []), start=1):
         profile = load(c)
         parts.append(f"Reference image {i} shows {profile['descriptor']}; keep the same face, hair, build and clothing.")
+    if job.get("characters"):
+        # The model tends to fill crowds with copies of the reference person.
+        parts.append("Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels.")
     if job.get("location"):
         place = load(job["location"])
         n = len(job.get("characters", [])) + 1

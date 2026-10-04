@@ -1,0 +1,124 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-5.json",
+  "generated_at": "2026-10-04T10:17:12+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.6,
+  "images": [
+    {
+      "id": "c5-b012-taxi-view",
+      "chapter": 5,
+      "idx": 12,
+      "file": "c5-b012-taxi-view.png",
+      "sha256": "de1f6908ababf28070c7b8fe3339d92c5e978ebf30091d9df9203324ac79f174",
+      "prompt": "Medium shot from inside a taxi driving along a highway into a sprawling city. The young man from reference image 1 and the middle-aged woman from reference image 2 sit by the window, gazing out with curiosity. Outside is a jumble of buildings of every shape and size: short and tall, stone, concrete, glass and steel, some beautiful, some ugly, a few half-built and abandoned, and small parks with neatly arranged trees. Several small passenger and cargo copters buzz across the sky. Bright daytime light. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 2 shows a cheerful woman in her mid-forties, short and plump, light golden-tan skin, chin-length black hair with a few grey strands held back by a bright red headband, a round face with smile lines, wearing a sleeveless coral-pink rounded cocoon cape that falls in soft quilted panels to the hips, over a patterned yellow long-sleeved wrap undertunic tied at the side with a wide sash, navy gathered trousers, soft white glowing-soled shoes and a slim wrist device; keep the same face, hair, build and clothing. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Layered megacity of mixed old stone and tall glass towers, flying traffic lanes, steel blue and amber.",
+      "seed": 5012,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "min-sheet.png",
+          "sha256": "88716fccb8e608493490f54bca922ad413b904d9cfad238d87f9056bc732621b"
+        }
+      ],
+      "generation_seconds": 255.3
+    },
+    {
+      "id": "c5-b043-spiral-ramp",
+      "chapter": 5,
+      "idx": 43,
+      "file": "c5-b043-spiral-ramp.png",
+      "sha256": "13e364f35007026429f577cd86522e30876ba45bb400d44a23746e3abe7b4467",
+      "prompt": "Wide interior view of a large institute building whose floor is a single gently sloping spiral ramp, looping around several times beneath a high ceiling, with elevators and staircases in the open center. The young man from reference image 1 and the young woman from reference image 2 stroll leisurely along the outer wall, looking around with interest. Further along the ramp is a small restaurant with tables, and a large wall screen showing soft abstract colored shapes. Clean modern materials, cool natural light. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 2 shows a young woman of about eighteen, tall and athletic, dark brown skin, hair pulled into a high puffy ponytail dyed magenta at the ends, a confident sly grin, wearing a lime-green modular shell vest with a bulky angular collar and reflective piping, a white seamless sleeveless bodysuit with glowing magenta seams, black wide gathered trousers with segmented knees, chunky black boots with glowing soles and a hip pouch; keep the same face, hair, build and clothing. Reference image 3 shows the location, a large modern institute building whose interior is one vast, gently sloping spiral ramp looping several times beneath a high ceiling, with open elevators and staircases at its center, glass and concrete columns, a bright restaurant section of long tables and glass calling booths along the ramp, a large lecture screen, entry turnstiles, and tall windows onto a skyline of old stone and glass towers; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Layered megacity of mixed old stone and tall glass towers, flying traffic lanes, steel blue and amber.",
+      "seed": 5043,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "bai-sheet.png",
+          "sha256": "21def33df4f734aa8979a2bb152d88b443d511b940eaae0c4a67347f900db73e"
+        },
+        {
+          "file": "economics-institute-plate.png",
+          "sha256": "6d9aae6897bddcc3cdb5a5621f7380e427fdc32b97b00b8014fa9f35b0cf247c"
+        }
+      ],
+      "generation_seconds": 310.5
+    },
+    {
+      "id": "c5-b073-lunch-table",
+      "chapter": 5,
+      "idx": 73,
+      "file": "c5-b073-lunch-table.png",
+      "sha256": "51e39a9966e2846729a0cdfa728edf880036a3ba33bf1b39395657b1d4e8a005",
+      "prompt": "Medium shot at a restaurant table on the spiral ramp of a modern institute building. The woman from reference image 1 and the man from reference image 2 sit with cups of tea and plates of rice and vegetables, both frozen in surprise, staring across the table. Opposite them, seen from behind, sit a teenage boy who is talking nonchalantly and a teenage girl leaning toward him. A small service robot waits at the side of the table. Soft daylight, a modern interior of glass and concrete. Reference image 1 shows a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat; keep the same face, hair, build and clothing. Reference image 2 shows a man in his late thirties, tall and lanky, light brown skin, short curly black hair, a thin moustache and an easy smile, wearing a long sleeveless camel-brown duster tabard with a tall angled standing collar and a single diagonal row of small glowing clasps, over a fitted sky-blue long-sleeved bodysuit with seamless panels, a slate-grey harness strap across the chest, slim dark trousers gathered into soft ankle cuffs, brown seamless boots, and a thin folding slate of a computer tucked under one arm; keep the same face, hair, build and clothing. Reference image 3 shows the location, a large modern institute building whose interior is one vast, gently sloping spiral ramp looping several times beneath a high ceiling, with open elevators and staircases at its center, glass and concrete columns, a bright restaurant section of long tables and glass calling booths along the ramp, a large lecture screen, entry turnstiles, and tall windows onto a skyline of old stone and glass towers; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Layered megacity of mixed old stone and tall glass towers, flying traffic lanes, steel blue and amber.",
+      "seed": 5073,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "seila-sheet.png",
+          "sha256": "62f2f7ce966c5cc0c425af17edf58640bf587fff0486f5a7bb62530abfb447c4"
+        },
+        {
+          "file": "jahn-sheet.png",
+          "sha256": "1f8074f8da16397ac0704036e9a10d075b89aa5d13105f9e3613597c7b4611ba"
+        },
+        {
+          "file": "economics-institute-plate.png",
+          "sha256": "6d9aae6897bddcc3cdb5a5621f7380e427fdc32b97b00b8014fa9f35b0cf247c"
+        }
+      ],
+      "generation_seconds": 316.0
+    },
+    {
+      "id": "c5-b091-watch-call",
+      "chapter": 5,
+      "idx": 91,
+      "file": "c5-b091-watch-call.png",
+      "sha256": "71a1d72d4fde87aca346550ade8bad208ddc30ea70c2f6b5ff9c245b85de99ca",
+      "prompt": "Close-medium shot of the woman from reference image 1 sitting alone at a cafe table in a modern building, a half-finished cup of tea and an empty plate in front of her. She holds up her wrist and smiles warmly at her watch, where a small glowing video image shows the face of the man from reference image 2. Behind her curves the gently sloping ramp of the building, with a few distant diners. Afternoon light through tall windows, glass and concrete surroundings. Reference image 1 shows a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat; keep the same face, hair, build and clothing. Reference image 2 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Reference image 3 shows the location, a large modern institute building whose interior is one vast, gently sloping spiral ramp looping several times beneath a high ceiling, with open elevators and staircases at its center, glass and concrete columns, a bright restaurant section of long tables and glass calling booths along the ramp, a large lecture screen, entry turnstiles, and tall windows onto a skyline of old stone and glass towers; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Layered megacity of mixed old stone and tall glass towers, flying traffic lanes, steel blue and amber.",
+      "seed": 5091,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "seila-sheet.png",
+          "sha256": "62f2f7ce966c5cc0c425af17edf58640bf587fff0486f5a7bb62530abfb447c4"
+        },
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "economics-institute-plate.png",
+          "sha256": "6d9aae6897bddcc3cdb5a5621f7380e427fdc32b97b00b8014fa9f35b0cf247c"
+        }
+      ],
+      "generation_seconds": 307.5
+    }
+  ]
+}

@@ -1,0 +1,120 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-16.json",
+  "generated_at": "2026-10-04T13:44:07+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.6,
+  "images": [
+    {
+      "id": "c16-b004-delwart-confronted",
+      "chapter": 16,
+      "idx": 4,
+      "file": "c16-b004-delwart-confronted.png",
+      "sha256": "54c78a5f5fa23967afae4d8a13c723de996de00c9f6aac3cd15a5473b9a6603f",
+      "prompt": "Medium shot inside a small, windowless soundproof booth with foil-lined walls, a narrow table and two benches. The man from reference image 1 sits on one bench, leaning forward angrily, hands pressed flat on the table, glaring. Across from him, the man from reference image 2 looks down at the table with a sorry, guilty expression, shoulders hunched. Neither wears a hood or face cover. Dim, even light, a tense and silent moment. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Reference image 2 shows a man of indeterminate middle age, of average height and lean, pale skin, a long calm face with neatly combed straight grey hair parted at the side, clean-shaven, a fixed forward gaze, wearing a plain beige fitted tunic with a low stand collar and a hidden asymmetric closure, a long open grey sleeveless overvest falling to the knees, pressed grey straight trousers and plain grey seamless shoes; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a row of heavy boxy soundproof booths along one side of a quiet stone courtyard ringed by trees, each sealed by a thick sliding door whose cut edge shows layers of foil and padding; inside, a windowless chamber lined with crinkled silver foil behind soft padding, a long table from door to back wall between two long benches, small humming air filters and soft even light; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 16004,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "delwart-sheet.png",
+          "sha256": "9384155b4b41386618d2dacd18c02ebfe235b95cda20c77ab2c31c7fa1cc351d"
+        },
+        {
+          "file": "order-booths-plate.png",
+          "sha256": "9126d472899dc20d5452a71f18acda7bf1c1719c54cf5b954a6225c3117bb211"
+        }
+      ],
+      "generation_seconds": 305.4
+    },
+    {
+      "id": "c16-b032-survival-food",
+      "chapter": 16,
+      "idx": 32,
+      "file": "c16-b032-survival-food.png",
+      "sha256": "e4dea9a39bbd082deccb60ceab66cd8f6482268b6630b734c07eece126d45a68",
+      "prompt": "Wide shot of a footpath through a wooded neighborhood on an unusually hot day, tall trees overhead and stone houses on both sides, harsh sunlight breaking through the leaves. A figure in a privacy robe walks slowly in the heat. It passes a stone house that sells traditional food, where a plain blank paper sheet has been hastily taped at an angle over a painted poster, beside stacked sealed packages of preserved food in the window. Dappled light, muted greens and warm stone. Reference image 1 shows the location, a car-free woodland footpath of pale smooth paving winding beneath towering old trees, flanked by spotless medieval-style houses of large clean stone blocks that melt into moss, ferns and climbing plants, some sunk half underground, small shop doorways with blank glowing panels, benches and branching sidewalks, toy drones with feathered rotors under the canopy, and slender grown towers glimpsed far beyond the treetops, in sage, moss, cream and warm stone; keep its architecture, layout and colors. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 16032,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "kalimar-footpaths-plate.png",
+          "sha256": "6c273d707770a7362992cd8963e71b7d687f3d6fe17d41070854ff2708fca9e7"
+        }
+      ],
+      "generation_seconds": 190.8
+    },
+    {
+      "id": "c16-b060-helisport-broadcast",
+      "chapter": 16,
+      "idx": 60,
+      "file": "c16-b060-helisport-broadcast.png",
+      "sha256": "f30ea2d6e150acf4683afc9224887fa9285fc0ef4936fea82dab3393579b1f36",
+      "prompt": "Medium shot inside a neighborhood restaurant at midday. The man from reference image 1, in a loose dark purple robe with the hood down, the face cover off and the front partly unzipped, sits beside the young man from reference image 2; both watch a wall screen with delight. On the screen, players in purple and yellow shirts fly in caged personal copters, and a blue ball lands on a circular board mounted high on a pole, knocking down several of ten yellow pins. Plates of food on the table. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Reference image 2 shows a lanky young man of about seventeen, tall and narrow-shouldered, pale skin with rosy cheeks, straight ash-blond hair falling over his ears and rectangular black-framed glasses, wearing a faded teal hooded half-cape over one shoulder above a fitted grey undertunic, rust-brown ribbed trousers gathered at the ankle, soft grey seamless shoes, and a cross-body harness holding a compact grey box cabled to the small handheld screen in his hand; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a small, bright neighborhood restaurant in a stone building on a tree-lined street, with large windows onto the greenery, window-side tables of pale wood, a large wall screen, potted plants, a small counter, and slim serving robots gliding between tables; its stone outer wall carries a big wordless painted picture advertisement, in sage, cream, warm wood and soft yellow; keep its architecture, layout and colors. The dark purple Veridian Privacy Robe is worn open at the face: a loose-fitting dark purple garment down to the ankles, its hood pushed back onto the shoulders and its fabric face cover lowered, so the wearer's face and hair are fully visible. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 16060,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "febric-sheet.png",
+          "sha256": "9de92b9be83ee3ddd9f806c905dc88e00acf013f0ed7b3b9526c660c12f03f81"
+        },
+        {
+          "file": "neighborhood-restaurant-plate.png",
+          "sha256": "4ab6e1da72d2d73febd3968e8bcff050964c487d7b560d3f5fc25b32bed4fc16"
+        }
+      ],
+      "generation_seconds": 304.3
+    },
+    {
+      "id": "c16-b110-trip-news",
+      "chapter": 16,
+      "idx": 110,
+      "file": "c16-b110-trip-news.png",
+      "sha256": "2bb6f0a6aa9e00b1812cab912041006df76fe89b9ee9485843529b337f23910e",
+      "prompt": "Medium shot inside a warm, cozy stone family home in the evening, lamps lit, plants by the window, a wooden table. The woman from reference image 1 has turned from across the room and stares in surprise and doubt, her arms folding. Near the door, the man from reference image 2, just home and still in a loose dark purple robe with the hood pushed back, stands with a hopeful, slightly sheepish look. Soft amber lamplight, trees darkening outside the window. Reference image 1 shows a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat; keep the same face, hair, build and clothing. Reference image 2 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a cozy two-storey family house of large clean stone blocks with a small sheltering roof over the doorstep, a glowing green circle and a slim screen beside the door; inside, a warm open living and dining room with a long wooden table, a deep couch, a wooden staircase, plants, soft lamps and a large window onto trees and a footpath, in honey wood, cream, sage and stone; keep its architecture, layout and colors. The dark purple Veridian Privacy Robe is worn open at the face: a loose-fitting dark purple garment down to the ankles, its hood pushed back onto the shoulders and its fabric face cover lowered, so the wearer's face and hair are fully visible. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 16110,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "seila-sheet.png",
+          "sha256": "62f2f7ce966c5cc0c425af17edf58640bf587fff0486f5a7bb62530abfb447c4"
+        },
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "family-home-plate.png",
+          "sha256": "bb8f92dede3f3491667ff8cedc37365e56cd126873446eca9ad87ec6bc6506dc"
+        }
+      ],
+      "generation_seconds": 310.2
+    }
+  ]
+}

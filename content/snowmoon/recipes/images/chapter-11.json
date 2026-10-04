@@ -1,0 +1,118 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-11.json",
+  "generated_at": "2026-10-04T12:09:34+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.6,
+  "images": [
+    {
+      "id": "c11-b023-copter-truck",
+      "chapter": 11,
+      "idx": 23,
+      "file": "c11-b023-copter-truck.png",
+      "sha256": "6e7d3f177e281bea8d0c434386ec19b36ebb316024bd965fa8c692e2c5f35a4e",
+      "prompt": "Wide shot of a large grass school field on a bright spring day, wooded hills and stone buildings in the distance, families standing at the edge. A truck in the middle of the field has its back door lowered into a ramp, and simple personal copters roll out on their own: chairs with rotor blades on top, surrounded by round cage-like shielding. Ten children of about ten to twelve, half in yellow shirts and half in purple shirts, run toward them. The boy from reference image 1, in a yellow shirt, runs eagerly in front. Reference image 1 shows a boy of about eleven, small and wiry, warm light-brown skin, a mop of curly dark-brown hair, a sprinkle of freckles and a wide gap-toothed grin, wearing a sunny mustard-yellow sleeveless team tunic with a rounded padded collar and a green stripe down one side, a green fitted undershirt, green knee-length gathered shorts, striped socks, soft white seamless shoes and a small hand device strapped to his wrist; keep the same face, hair, build and clothing. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 11023,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zven-sheet.png",
+          "sha256": "e92b1d0a29e2668c714cba4301bfd59c4cf0622bbaa7b7db134d26e875ae7d38"
+        }
+      ],
+      "generation_seconds": 205.1
+    },
+    {
+      "id": "c11-b043-redball-catch",
+      "chapter": 11,
+      "idx": 43,
+      "file": "c11-b043-redball-catch.png",
+      "sha256": "40490d2d0fc6838aef5f1ce9458ad379fd0da6535c762393609a3a67f1a8399e",
+      "prompt": "Dynamic medium shot high in a clear spring sky above a grass field. The boy from reference image 1, in a yellow shirt, sits strapped into a personal copter, a small chair with spinning rotors on top inside a round protective cage. Leaning forward, he has just kicked a small bright red ball-shaped drone with soft feather-like rotors back upward and stretches out his hand to catch it in his palm, face full of concentration. Far below, other children in yellow and purple shirts fly in copters; trees on the horizon. Reference image 1 shows a boy of about eleven, small and wiry, warm light-brown skin, a mop of curly dark-brown hair, a sprinkle of freckles and a wide gap-toothed grin, wearing a sunny mustard-yellow sleeveless team tunic with a rounded padded collar and a green stripe down one side, a green fitted undershirt, green knee-length gathered shorts, striped socks, soft white seamless shoes and a small hand device strapped to his wrist; keep the same face, hair, build and clothing. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 11043,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zven-sheet.png",
+          "sha256": "e92b1d0a29e2668c714cba4301bfd59c4cf0622bbaa7b7db134d26e875ae7d38"
+        }
+      ],
+      "generation_seconds": 193.1
+    },
+    {
+      "id": "c11-b081-broken-redball",
+      "chapter": 11,
+      "idx": 81,
+      "file": "c11-b081-broken-redball.png",
+      "sha256": "298eb12f5cfbe343ab3326e4555eb7421eb05e815e2921f89bd0431d56e529eb",
+      "prompt": "Wide shot of the grass field from ground level on a bright spring afternoon. The boy from reference image 1, in a yellow shirt, has climbed out of his copter and stands beside the instructor, a grown man, opening his hand to give him a small red ball drone with broken rotors. High in the sky behind them, another boy in a purple shirt descends in his caged copter, fist raised in triumph around a red ball. Families watch from the edge of the field, some cheering. Reference image 1 shows a boy of about eleven, small and wiry, warm light-brown skin, a mop of curly dark-brown hair, a sprinkle of freckles and a wide gap-toothed grin, wearing a sunny mustard-yellow sleeveless team tunic with a rounded padded collar and a green stripe down one side, a green fitted undershirt, green knee-length gathered shorts, striped socks, soft white seamless shoes and a small hand device strapped to his wrist; keep the same face, hair, build and clothing. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 11081,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zven-sheet.png",
+          "sha256": "e92b1d0a29e2668c714cba4301bfd59c4cf0622bbaa7b7db134d26e875ae7d38"
+        }
+      ],
+      "generation_seconds": 205.9
+    },
+    {
+      "id": "c11-b123-heavy-water-ad",
+      "chapter": 11,
+      "idx": 123,
+      "file": "c11-b123-heavy-water-ad.png",
+      "sha256": "a1b79b607561cc518b65961f9c1c039e969f1d496defa61f664bbc2c50748a28",
+      "prompt": "Medium shot on a calm, tree-lined street in the late afternoon. A figure in a privacy robe walks past the stone outer wall of a small neighborhood restaurant. On the wall is a large painted advertisement picture with no writing: a cheerful mascot dressed in bright yellow and green hugs a small child and turns its back to shield the child from a jet of murky green sludge-like water. Leaves and plants blend into the stone buildings; a small autonomous bus pulls away in the background. Reference image 1 shows the location, a small, bright neighborhood restaurant in a stone building on a tree-lined street, with large windows onto the greenery, window-side tables of pale wood, a large wall screen, potted plants, a small counter, and slim serving robots gliding between tables; its stone outer wall carries a big wordless painted picture advertisement, in sage, cream, warm wood and soft yellow; keep its architecture, layout and colors. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 11123,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "neighborhood-restaurant-plate.png",
+          "sha256": "4ab6e1da72d2d73febd3968e8bcff050964c487d7b560d3f5fc25b32bed4fc16"
+        }
+      ],
+      "generation_seconds": 199.3
+    },
+    {
+      "id": "c11-b126-hug-from-behind",
+      "chapter": 11,
+      "idx": 126,
+      "file": "c11-b126-hug-from-behind.png",
+      "sha256": "fe72c1a3e918b6e7567eab331253e02fefe0442885c211670e1bb14805878d66",
+      "prompt": "Medium shot on a wooded footpath between stone houses in warm early evening light. The woman from reference image 1 has caught up with a figure in a privacy robe and hugs it from behind, laughing, her arms wrapped around its waist. The robed figure is turning its hooded head in surprise. Tall trees, scattered leaves on the path, a few softly lit windows in the old stone houses, plants climbing their walls. Reference image 1 shows a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat; keep the same face, hair, build and clothing. Reference image 2 shows the location, a car-free woodland footpath of pale smooth paving winding beneath towering old trees, flanked by spotless medieval-style houses of large clean stone blocks that melt into moss, ferns and climbing plants, some sunk half underground, small shop doorways with blank glowing panels, benches and branching sidewalks, toy drones with feathered rotors under the canopy, and slender grown towers glimpsed far beyond the treetops, in sage, moss, cream and warm stone; keep its architecture, layout and colors. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 11126,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "seila-sheet.png",
+          "sha256": "62f2f7ce966c5cc0c425af17edf58640bf587fff0486f5a7bb62530abfb447c4"
+        },
+        {
+          "file": "kalimar-footpaths-plate.png",
+          "sha256": "6c273d707770a7362992cd8963e71b7d687f3d6fe17d41070854ff2708fca9e7"
+        }
+      ],
+      "generation_seconds": 259.2
+    }
+  ]
+}

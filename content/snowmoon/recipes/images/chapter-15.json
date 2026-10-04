@@ -1,0 +1,138 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-15.json",
+  "generated_at": "2026-10-04T13:25:32+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.6,
+  "images": [
+    {
+      "id": "c15-b005-special-broadcast",
+      "chapter": 15,
+      "idx": 5,
+      "file": "c15-b005-special-broadcast.png",
+      "sha256": "31a02158f9774ddf5f0387e5acb75cd53d66edce8c30336b2335d7910aa3f966",
+      "prompt": "Medium shot of a modern institute restaurant in the early morning, cool light through tall windows onto glass and concrete. The man from reference image 1 stops just inside the entrance, frozen in horror, staring at a large wall screen. The screen shows an aerial view of swarms of dark drones and aircraft descending over red hills and a castle town. About ten people sit at tables, all turned toward the screen in shock, among them a young woman with her hand over her mouth. Reference image 1 shows a man in his late thirties, tall and lanky, light brown skin, short curly black hair, a thin moustache and an easy smile, wearing a long sleeveless camel-brown duster tabard with a tall angled standing collar and a single diagonal row of small glowing clasps, over a fitted sky-blue long-sleeved bodysuit with seamless panels, a slate-grey harness strap across the chest, slim dark trousers gathered into soft ankle cuffs, brown seamless boots, and a thin folding slate of a computer tucked under one arm; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 2 shows the location, a large modern institute building whose interior is one vast, gently sloping spiral ramp looping several times beneath a high ceiling, with open elevators and staircases at its center, glass and concrete columns, a bright restaurant section of long tables and glass calling booths along the ramp, a large lecture screen, entry turnstiles, and tall windows onto a skyline of old stone and glass towers; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Layered megacity of mixed old stone and tall glass towers, flying traffic lanes, steel blue and amber.",
+      "seed": 15005,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "jahn-sheet.png",
+          "sha256": "1f8074f8da16397ac0704036e9a10d075b89aa5d13105f9e3613597c7b4611ba"
+        },
+        {
+          "file": "economics-institute-plate.png",
+          "sha256": "6d9aae6897bddcc3cdb5a5621f7380e427fdc32b97b00b8014fa9f35b0cf247c"
+        }
+      ],
+      "generation_seconds": 245.3
+    },
+    {
+      "id": "c15-b018-sunrise-news",
+      "chapter": 15,
+      "idx": 18,
+      "file": "c15-b018-sunrise-news.png",
+      "sha256": "28883748df918e3a1aa9325d9704442c7b333cd620938564e49121393b64ac01",
+      "prompt": "Medium shot of a family living room at sunrise. Clean golden light comes through a large window, and the trees on the footpath outside throw long morning shadows across the floor. The man from reference image 1 and the woman from reference image 2, still rumpled from sleep, stand close together staring at a screen with stunned, grave faces; its glow shows only blurred dark shapes. Beside them, an older boy and an older girl, seen from behind, also watch. Muted greens and warm stone tones. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Reference image 2 shows a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a cozy two-storey family house of large clean stone blocks with a small sheltering roof over the doorstep, a glowing green circle and a slim screen beside the door; inside, a warm open living and dining room with a long wooden table, a deep couch, a wooden staircase, plants, soft lamps and a large window onto trees and a footpath, in honey wood, cream, sage and stone; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 15018,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "seila-sheet.png",
+          "sha256": "62f2f7ce966c5cc0c425af17edf58640bf587fff0486f5a7bb62530abfb447c4"
+        },
+        {
+          "file": "family-home-plate.png",
+          "sha256": "bb8f92dede3f3491667ff8cedc37365e56cd126873446eca9ad87ec6bc6506dc"
+        }
+      ],
+      "generation_seconds": 316.0
+    },
+    {
+      "id": "c15-b051-untouched-meal",
+      "chapter": 15,
+      "idx": 51,
+      "file": "c15-b051-untouched-meal.png",
+      "sha256": "6ea20daa60caf3550720d1a61308e8501b2cca6c693a5b688abbf0af6e04cf04",
+      "prompt": "Medium shot of a nearly empty hotel lobby restaurant. The boy from reference image 1 sits alone at a table, tears on his cheeks, anxiously tapping at a hand device whose screen shows soft abstract colored shapes. In front of him sits an untouched plate of rice and vegetables, and a small serving robot is refilling his cup of tea yet again. Dim warm lamps, quiet empty tables around him, a neon glow from the street beyond the windows. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 2 shows the location, a modest, cozy hotel lobby restaurant with warm wooden tables and chairs, soft lamps, a glowing neon accent strip along one wall, a playful cartoon animal mural, little wheeled serving robots carrying tea and rice bowls, and a sealed car-docking door at the edge of the lobby, in honey wood and cream with soft pink and cyan glow; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 15051,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "hotel-lobby-restaurant-plate.png",
+          "sha256": "ea9673378232f4cc49ce8ebc9ea7e4ee4697ffb7b6a6995c95c9fc26ffd68798"
+        }
+      ],
+      "generation_seconds": 239.8
+    },
+    {
+      "id": "c15-b075-hand-on-shoulder",
+      "chapter": 15,
+      "idx": 75,
+      "file": "c15-b075-hand-on-shoulder.png",
+      "sha256": "116ee7b924566388382c18c952893c4c4ec2bba4623e0e23aa254d73d538ba8a",
+      "prompt": "Medium close shot in a hotel lobby restaurant, now empty. The boy from reference image 1, eyes red from crying, turns around in his chair as an older woman in long ceremonial priest robes gently places her hands on his shoulder, her face full of sympathy. On the table, a half-eaten plate of rice and vegetables, a cup of tea, and a hand device lying face down. Soft warm lamplight, empty tables behind them. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 2 shows the location, a modest, cozy hotel lobby restaurant with warm wooden tables and chairs, soft lamps, a glowing neon accent strip along one wall, a playful cartoon animal mural, little wheeled serving robots carrying tea and rice bowls, and a sealed car-docking door at the edge of the lobby, in honey wood and cream with soft pink and cyan glow; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 15075,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "hotel-lobby-restaurant-plate.png",
+          "sha256": "ea9673378232f4cc49ce8ebc9ea7e4ee4697ffb7b6a6995c95c9fc26ffd68798"
+        }
+      ],
+      "generation_seconds": 253.8
+    },
+    {
+      "id": "c15-b090-pyramid-side-door",
+      "chapter": 15,
+      "idx": 90,
+      "file": "c15-b090-pyramid-side-door.png",
+      "sha256": "21592068b22ebe7a3d1c69ba364521214d65c005d746e8ab468012e2aec46e26",
+      "prompt": "Wide shot at dusk at the base of a huge tree-covered mountain pyramid, far from the city lights. A row of doors is set into its stone side near ground level. A large rectangular black car has pulled up flush against one of them, so that the car door and the pyramid door line up perfectly and slide open at the same time. Through the opening, the boy from reference image 1 steps from the car into a dim stone hallway, his expression solemn. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 2 shows the location, a half-kilometer-tall mountain refurbished into a square-based pyramid clad in smooth pale stone like the monument of a lost civilization, a straight double row of trees climbing its face to a tree-lined terrace ringing it at half height, a grand main door and small side entrances, a row of car-docking doors near its base, and discreet vents and antennas, towering over a low-rise city; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 15090,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "mountain-pyramid-plate.png",
+          "sha256": "527b185dfd7d7bb9652e769348a07d687e62ee9f7f332a9841aa07af27f43bde"
+        }
+      ],
+      "generation_seconds": 246.1
+    }
+  ]
+}

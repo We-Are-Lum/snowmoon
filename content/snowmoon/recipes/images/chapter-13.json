@@ -1,0 +1,108 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-13.json",
+  "generated_at": "2026-10-04T12:45:39+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.6,
+  "images": [
+    {
+      "id": "c13-b017-curtained-booth",
+      "chapter": 13,
+      "idx": 17,
+      "file": "c13-b017-curtained-booth.png",
+      "sha256": "a2a30b66f7bb75915bcb596949371fdafefd062c19c4c53823b8e50a41b446f9",
+      "prompt": "Medium shot inside a small booth closed off by a cloth curtain: a wooden table with a decorated lamp and two flowers at the far end, and a boxy air filter pressed into a corner on the floor. The man from reference image 1 sits across from the man from reference image 2, both unhooded, talking quietly. A small serving robot rolls up with a glass of water and a salad for the first man, and a cup of tea with a rectangular nutrition bar for the second. Warm lamplight. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Reference image 2 shows a man of indeterminate middle age, of average height and lean, pale skin, a long calm face with neatly combed straight grey hair parted at the side, clean-shaven, a fixed forward gaze, wearing a plain beige fitted tunic with a low stand collar and a hidden asymmetric closure, a long open grey sleeveless overvest falling to the knees, pressed grey straight trousers and plain grey seamless shoes; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a small private booth in a hidden courtyard tea shop, closed by a heavy cloth curtain, with a narrow table between cushioned benches, a decorated lamp flanked by two large flowers at the far end, a white boxy air filter in a floor corner, a glowing green circle inset in the tabletop, thin smooth walls of white, grey and purple, and a small serving robot with a smiling screen face; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 13017,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "delwart-sheet.png",
+          "sha256": "9384155b4b41386618d2dacd18c02ebfe235b95cda20c77ab2c31c7fa1cc351d"
+        },
+        {
+          "file": "plum-harbor-tea-booth-plate.png",
+          "sha256": "d12ada428a41577ec768229e23d0af014eefb339ef7f30642f0bdf5d89a09966"
+        }
+      ],
+      "generation_seconds": 310.2
+    },
+    {
+      "id": "c13-b024-commercial-district",
+      "chapter": 13,
+      "idx": 24,
+      "file": "c13-b024-commercial-district.png",
+      "sha256": "fcf2db982197ba7085d96595786a40d430bbcdc91a0e65b571e12f108fa78e27",
+      "prompt": "Wide shot of a figure in a privacy robe emerging from a tunnel exit onto a raised pathway above ground level. Behind it stand tall entrance doors set into a massive, castle-like old stone wall, with a turnstile just inside. Ahead spreads a commercial district mixing lush greenery, trees and vines with glass and steel buildings. A few other pedestrians, some of them also robed. Bright late-afternoon sun. Reference image 1 shows the location, a walled corporate enclave a kilometer square behind a long castle-like rampart of grey and purple stone with tall gates and turnstiles, two rows of trees along its outer sidewalk; inside, uniform rounded and rectangular buildings five to ten meters tall in white, grey and purple glass and steel with sharp edges, identical evenly spaced trees, small identical blank logo panels, and tunnel mouths leading down, all crisp and orderly; keep its architecture, layout and colors. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 13024,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "greater-plum-harbor-plate.png",
+          "sha256": "2f8b125e36f316de992b3523527191235ad6389c420ae640e06accafff623559"
+        }
+      ],
+      "generation_seconds": 211.5
+    },
+    {
+      "id": "c13-b065-hijacked-screen",
+      "chapter": 13,
+      "idx": 65,
+      "file": "c13-b065-hijacked-screen.png",
+      "sha256": "2fdd63e70bc4eec943f809ff4bbc0d27ebe1b15d3db16f972a514df2a47e820c",
+      "prompt": "Medium-wide shot of a family table in a restaurant in the evening. The woman from reference image 1 has jumped up from her chair and reaches behind a large wall screen, hunting for the plug to switch it off. The screen shows a stern, regal man's face on the left and a block of soft abstract colored shapes on the right. At the table, the girl from reference image 2 sits very still, staring up at the screen, expressionless. An older boy and an older girl keep eating; a younger boy looks on curiously. Reference image 1 shows a woman in her late thirties, tall and slender, deep brown skin, black hair in shoulder-length braids gathered loosely back, alert dark eyes behind small round gold-rimmed glasses, wearing a long rust-orange woven coat-dress with a sculpted high funnel collar, an asymmetric closure of three bronze clasps running from shoulder to hip and a split hem, over an oatmeal seamless bodysuit, olive gathered trousers, soft tan seamless ankle boots and a thin band around her throat; keep the same face, hair, build and clothing. Reference image 2 shows a girl of about thirteen, slight and a little hunched, warm brown skin, long dark-brown hair in a low side ponytail with a heavy fringe falling over her eyes, wearing an oversized heather-grey wrapped poncho-cape with a deep cowl collar and long sleeve cuffs pulled over her hands, dark navy seamless leggings, soft white wrap-around shoes and a glowing hand device held close; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 13065,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "seila-sheet.png",
+          "sha256": "62f2f7ce966c5cc0c425af17edf58640bf587fff0486f5a7bb62530abfb447c4"
+        },
+        {
+          "file": "lily-sheet.png",
+          "sha256": "1d9c8744cd1a01d6eda1cdee14e3472fd4f68fc62252891ecd2e9a1ca17b83b0"
+        }
+      ],
+      "generation_seconds": 252.6
+    },
+    {
+      "id": "c13-b092-keeper-proposal",
+      "chapter": 13,
+      "idx": 92,
+      "file": "c13-b092-keeper-proposal.png",
+      "sha256": "dcacaa7490d84e9ae04767d4200a31b3d0005519cd63e9cbd519ee46ac60efbe",
+      "prompt": "Medium shot inside a windowless soundproof booth with foil-lined walls and a long table between two benches. Seven figures in privacy robes sit facing each other, nearly impossible to tell apart. All of them have turned their hooded heads toward one figure on the near bench, who has raised a hand slightly as if offering an idea. One figure across the table leans back, arms crossed in quiet disapproval. Dim, even light and a hushed atmosphere. Reference image 1 shows the location, a row of heavy boxy soundproof booths along one side of a quiet stone courtyard ringed by trees, each sealed by a thick sliding door whose cut edge shows layers of foil and padding; inside, a windowless chamber lined with crinkled silver foil behind soft padding, a long table from door to back wall between two long benches, small humming air filters and soft even light; keep its architecture, layout and colors. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 13092,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "order-booths-plate.png",
+          "sha256": "9126d472899dc20d5452a71f18acda7bf1c1719c54cf5b954a6225c3117bb211"
+        }
+      ],
+      "generation_seconds": 190.7
+    }
+  ]
+}

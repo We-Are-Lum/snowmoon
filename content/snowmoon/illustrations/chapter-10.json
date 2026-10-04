@@ -31,10 +31,10 @@
       "props": [
         "designs/props/privacy-robe.json"
       ],
-      "prompt": "Wide shot of a quiet stone courtyard surrounded by trees, with a row of heavy, boxy soundproof booths along one side, each with a thick sliding door. A figure in a privacy robe strains to slide open the rightmost booth's door, revealing its thick cross-section: a layer of crinkled silver foil on the inside, followed by layers of dense padding. Inside, a long table stretches to the back wall with a bench on each side. Soft overcast daylight, muted greens and greys.",
+      "prompt": "Wide shot of a quiet stone courtyard surrounded by trees, with a row of heavy, boxy soundproof booths along one side, each with a thick sliding door. A figure in a privacy robe strains to slide open the rightmost booth's door, revealing its thick cross-section: a layer of crinkled silver foil on the inside, followed by layers of dense padding. Inside, a long table stretches to the back wall with a bench on each side. Soft overcast daylight, muted greens and greys. A single continuous picture, not split into panels.",
       "width": 1024,
       "height": 576,
-      "seed": 10050
+      "seed": 10550
     },
     {
       "id": "c10-b114-needle-bug",

@@ -1,0 +1,108 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-8.json",
+  "generated_at": "2026-10-04T11:07:29+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.6,
+  "images": [
+    {
+      "id": "c8-b016-bus-debate",
+      "chapter": 8,
+      "idx": 16,
+      "file": "c8-b016-bus-debate.png",
+      "sha256": "782c892f9b8fb0834e58aff7f5732e569dd5ab9b97e9fd0937824ddd8e3e256e",
+      "prompt": "Medium shot inside a moving autonomous city bus. More passengers than usual are absorbed in their hand devices, watching intently. The man from reference image 1 leans forward slightly, curiously glancing over the shoulder of a seated passenger whose hand device shows a live debate as soft abstract colored shapes with two tiny silhouetted speakers at podiums. A few other passengers look up, eyes alert. Through the windows, tree-lined streets pass by in daylight. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Reference image 2 shows the location, a clean, quiet driverless city bus with no driver's cab, a long bright aisle between rows of soft sage-upholstered seats, wide curved windows onto passing trees and stone, slim brushed-brass grab rails, wordless picture posters and blank glowing panels along the inner walls, and a glowing green circle beside the sliding door, in cream, sage, pale wood and soft yellow; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 8016,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "autobus-plate.png",
+          "sha256": "fbda174d92399af27af97ad0a4164c7f01c728bf4297896009ef6ee6236dec0e"
+        }
+      ],
+      "generation_seconds": 248.3
+    },
+    {
+      "id": "c8-b038-parliament",
+      "chapter": 8,
+      "idx": 38,
+      "file": "c8-b038-parliament.png",
+      "sha256": "c2f794fcdf70ddcac2d03ec4508ed87488fc0409848958e78090b469ac32714d",
+      "prompt": "Wide establishing shot of a large circular parliament building standing at ground level, its architecture mixing medieval stone and modern glass, with multiple entrances on all sides. A straight path lined with trees on both sides leads toward it. A lone man in ordinary clothes, seen from behind, walks along the path toward the entrance. Calm daylight, an open and approachable civic building surrounded by greenery. Reference image 1 shows the location, a large circular parliament hall at ground level on a low mountain shoulder, a ring of medieval-style pale stone arches and buttresses wrapped in curving bands of modern glass, with many entrances all around, a planted roof terrace, faint green lights by its doors, and a long straight footpath leading to it under tall leafy trees, in pale stone, sage, cream and gold; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 8038,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "parliament-plate.png",
+          "sha256": "5bc17cbce07f8bd5eca32c52bf9ba0d8f6fbcdb66a4486a5091b2609f26e17a4"
+        }
+      ],
+      "generation_seconds": 190.2
+    },
+    {
+      "id": "c8-b050-hearing",
+      "chapter": 8,
+      "idx": 50,
+      "file": "c8-b050-hearing.png",
+      "sha256": "755fb0c1ee4e0f2b78c2fe654e0f5c8cbda189019009ca20014b6ad906d2d3db",
+      "prompt": "Wide shot of a circular hearing chamber. Twenty senators sit in large chairs spaced around the curved wall, small air filters between some of them, bright yellow lights and faint violet lights shining down from above. In the center, the man from reference image 1 sits alone in a chair with a cup of water in its holder, nervous but composed. Across the room, the man from reference image 2 leans forward in his large chair to ask a question, the edge of his seat glowing with green light. A formal, slightly intimidating atmosphere. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Reference image 2 shows a man in his late fifties, tall and lean, medium brown skin, close-cropped white hair and a short white beard, warm deep-set eyes, wearing a long deep-green woven parliament robe with wide draped sleeves and a sculpted high collar fastened by a simple bronze clasp, over a cream seamless undertunic, a broad bronze-colored cloth sash, dark loose trousers and soft brown seamless shoes; keep the same face, hair, build and clothing. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 8050,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "verdow-sheet.png",
+          "sha256": "1eb638a0bc891b79c41f7a3aefd000cc06fa2634fd4f5ec50b41c7781a6f7872"
+        }
+      ],
+      "generation_seconds": 248.7
+    },
+    {
+      "id": "c8-b111-lily-couch",
+      "chapter": 8,
+      "idx": 111,
+      "file": "c8-b111-lily-couch.png",
+      "sha256": "c17a142649a56b83875cb988fb02358171c62a6cdf4f52566500fd54c674b479",
+      "prompt": "Medium shot of a warm, lived-in living room in soft daylight. The man from reference image 1 sits on a couch with his arm around the girl from reference image 2, who is crying and turning her face away, unhappy. He leans in, speaking gently and kindly. In the background, another man sits in an armchair watching quietly, his face in soft shadow. A low table, cushions, house plants and wooden floors. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Reference image 2 shows a girl of about thirteen, slight and a little hunched, warm brown skin, long dark-brown hair in a low side ponytail with a heavy fringe falling over her eyes, wearing an oversized heather-grey wrapped poncho-cape with a deep cowl collar and long sleeve cuffs pulled over her hands, dark navy seamless leggings, soft white wrap-around shoes and a glowing hand device held close; keep the same face, hair, build and clothing. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 8111,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "gladias-sheet.png",
+          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
+        },
+        {
+          "file": "lily-sheet.png",
+          "sha256": "1d9c8744cd1a01d6eda1cdee14e3472fd4f68fc62252891ecd2e9a1ca17b83b0"
+        }
+      ],
+      "generation_seconds": 251.2
+    }
+  ]
+}

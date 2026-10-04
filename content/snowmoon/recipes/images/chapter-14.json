@@ -1,0 +1,120 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-14.json",
+  "generated_at": "2026-10-04T13:03:46+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.6,
+  "images": [
+    {
+      "id": "c14-b027-lobby-breakfast",
+      "chapter": 14,
+      "idx": 27,
+      "file": "c14-b027-lobby-breakfast.png",
+      "sha256": "20603dab2a4b56fa8d91f44c196d520dc3b7acc7b4d194c0d1a7e15792111344",
+      "prompt": "Medium shot of a cozy hotel lobby restaurant in the morning, warm wood, soft lamps and a playful cartoon animal mural on the wall. A small serving robot has just arrived at a table carrying a bowl of rice and vegetables and a cup of tea. The boy from reference image 1 sips tea, watching the girl from reference image 2 beside him eagerly start eating while she gives him advice with a knowing, slightly teasing look. Morning light through the lobby windows. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 2 shows a young woman of about eighteen, tall and athletic, dark brown skin, hair pulled into a high puffy ponytail dyed magenta at the ends, a confident sly grin, wearing a lime-green modular shell vest with a bulky angular collar and reflective piping, a white seamless sleeveless bodysuit with glowing magenta seams, black wide gathered trousers with segmented knees, chunky black boots with glowing soles and a hip pouch; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a modest, cozy hotel lobby restaurant with warm wooden tables and chairs, soft lamps, a glowing neon accent strip along one wall, a playful cartoon animal mural, little wheeled serving robots carrying tea and rice bowls, and a sealed car-docking door at the edge of the lobby, in honey wood and cream with soft pink and cyan glow; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 14027,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "bai-sheet.png",
+          "sha256": "21def33df4f734aa8979a2bb152d88b443d511b940eaae0c4a67347f900db73e"
+        },
+        {
+          "file": "hotel-lobby-restaurant-plate.png",
+          "sha256": "ea9673378232f4cc49ce8ebc9ea7e4ee4697ffb7b6a6995c95c9fc26ffd68798"
+        }
+      ],
+      "generation_seconds": 297.9
+    },
+    {
+      "id": "c14-b030-semifinal-arena",
+      "chapter": 14,
+      "idx": 30,
+      "file": "c14-b030-semifinal-arena.png",
+      "sha256": "5e8945fe6990c172ebe59096e8ff7bb1d48eebead19c1e0241f20b57174facde",
+      "prompt": "Very wide shot of an enormous dark arena inside a mountain pyramid, thousands of spectators in tiers fading into shadow, beams of light crossing the air. On the vast floor, two large glowing consoles face each other from far apart. At the nearer console, the boy from reference image 1 sits upright, alert and composed, looking up as the announcer's voice booms through the hall. Across the floor, the other player is a small silhouette. Small drones rest along the edges. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 2 shows the location, a vast dark hall hollowed inside a mountain, steep shadowy tiers of seats rising all around, an enormous glowing display of abstract dotted patterns hung overhead, a lit path across the dark stone floor leading to a large glowing game console with a single chair and cabled glasses, hand-sized drones hovering, and thin beams of light crossing the air; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 14030,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "minpentai-arena-plate.png",
+          "sha256": "23bf25c6ed0c90be993dcbc3e8e592cdf5dc927636b42a9b2c7475f12bbf4f3d"
+        }
+      ],
+      "generation_seconds": 243.2
+    },
+    {
+      "id": "c14-b085-walled-ship",
+      "chapter": 14,
+      "idx": 85,
+      "file": "c14-b085-walled-ship.png",
+      "sha256": "f22ed7f2e33f0ff9f364d6ddf3845e74d3d9ed20a91c82f702f1bc13a7e0ca44",
+      "prompt": "Close three-quarter view of the boy from reference image 1 at a glowing console in a dark arena, his face tense and stubborn, jaw set, hands busy on the controls. On the large display before him, a board crowded with chaotic scattered debris and streams of tiny glowing shapes; near one edge a single small bright structure sits inside four rings of crumbling walls, holding out against the storm. Cool light on his face, the crowd a dark blur behind. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 2 shows the location, a vast dark hall hollowed inside a mountain, steep shadowy tiers of seats rising all around, an enormous glowing display of abstract dotted patterns hung overhead, a lit path across the dark stone floor leading to a large glowing game console with a single chair and cabled glasses, hand-sized drones hovering, and thin beams of light crossing the air; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 14085,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "minpentai-arena-plate.png",
+          "sha256": "23bf25c6ed0c90be993dcbc3e8e592cdf5dc927636b42a9b2c7475f12bbf4f3d"
+        }
+      ],
+      "generation_seconds": 242.5
+    },
+    {
+      "id": "c14-b124-redshire-photos",
+      "chapter": 14,
+      "idx": 124,
+      "file": "c14-b124-redshire-photos.png",
+      "sha256": "3a548738421241257f7fb957556421824df1b8fcf622779bc64a6ccf8cec41c1",
+      "prompt": "Medium shot at a small courtyard cafe table in the evening, neon pink and cyan shop lights glowing nearby, two cups of tea on the table. The older teenage boy from reference image 1 holds out his hand device, smiling proudly, and the boy from reference image 2 leans in, amazed. The device's screen shows a tiny painted landscape: castles, a pine forest, red mountains with snow-covered peaks and a giant frozen waterfall. A small serving robot waits beside the table. Reference image 1 shows a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a small open-air courtyard cafe enclosed by low, dense shop buildings, with scattered small tables and stools beneath a shade tree and strings of little lights, a playful cartoon animal mural on one wall, glowing blank shop panels in pink and cyan, a little wheeled serving robot with a screen face, and an open entrance onto a busy street with a lamp post; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 14124,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin-sheet.png",
+          "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+        },
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "courtyard-cafe-plate.png",
+          "sha256": "70a618cf6fd00a45984296c75a01cc89951b285b78b0b8625bf10242c066ec3d"
+        }
+      ],
+      "generation_seconds": 299.1
+    }
+  ]
+}

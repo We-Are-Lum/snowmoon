@@ -1,0 +1,130 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-12.json",
+  "generated_at": "2026-10-04T12:29:30+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.6,
+  "images": [
+    {
+      "id": "c12-b013-priests-on-platform",
+      "chapter": 12,
+      "idx": 13,
+      "file": "c12-b013-priests-on-platform.png",
+      "sha256": "4e6f62325c2b9daa3fbb48ed834d28a057abe835e6825b551b23c233ed3b6678",
+      "prompt": "Wide shot of a train station platform in a dense city, a sleek train behind. The boy from reference image 1, a bag over his shoulder, steps out of the train door and stops in surprise. Waiting for him in a neat row are six people in long ceremonial priest robes, their faces visible, led by a kind older woman who greets him with a small welcoming gesture. The last few passengers walk away down the platform. Bright daylight through a glass roof. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 12013,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        }
+      ],
+      "generation_seconds": 193.6
+    },
+    {
+      "id": "c12-b030-pyramids-from-car",
+      "chapter": 12,
+      "idx": 30,
+      "file": "c12-b030-pyramids-from-car.png",
+      "sha256": "bc1855eee3f137b32959a3adf1fa210d24a514faa8d2d28576979d3e33ade868",
+      "prompt": "View from inside a sealed black car through its slightly dimmed side window. The boy from reference image 1 sits in profile in the foreground, gazing out with wonder. Outside, the row of low-rise shops and tea houses briefly gives way to a green park, and beyond the park rise several mountain-sized stepped pyramids, their slopes covered in trees and stone. Warm afternoon light, a small river glinting ahead. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 2 shows the location, a sealed passenger cabin of a large rectangular glossy black autonomous car, its inner walls lined with crinkled silver anti-transmission foil behind soft dark panels, plush seats facing each other across the cabin, camera-fed simulated windows showing a slightly dimmed view of a tree-lined street, and a broad side door shaped to seal flush against building doorways; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 12030,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "sealed-black-car-plate.png",
+          "sha256": "979edefb842ec8d1a8287ec1b413bf1f7576798ea03b874662089f15fcb68a5d"
+        }
+      ],
+      "generation_seconds": 243.5
+    },
+    {
+      "id": "c12-b070-orientation",
+      "chapter": 12,
+      "idx": 70,
+      "file": "c12-b070-orientation.png",
+      "sha256": "91789aad9791c7af3b777486d4ba55121c3e6bd9c9d5c42562ce5a8eefb10f0c",
+      "prompt": "Medium shot inside a grand hall carved into a mountain, with arched stone-brick walls and rows of about fifty chairs facing a small stage where several priests in ceremonial robes stand. Teenage contestants are taking their seats. In the foreground, the boy from reference image 1 sits as the older teenage boy from reference image 2 sits down beside him and turns to introduce himself with a friendly, open smile. Warm lamplight on stone. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 2 shows a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 12070,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "deluin-sheet.png",
+          "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+        }
+      ],
+      "generation_seconds": 249.6
+    },
+    {
+      "id": "c12-b139-drone-scan",
+      "chapter": 12,
+      "idx": 139,
+      "file": "c12-b139-drone-scan.png",
+      "sha256": "f92e8f393f20e326c8b58e717f2822664efd5b1e178de1836ae5b82b6cf766b8",
+      "prompt": "Wide shot inside a giant dark arena carved into a mountain, with thousands of spectators in shadowy tiers rising all around. A lit path leads across the floor to a large console with a single chair. The boy from reference image 1 sits in the chair, eyes nervous, as a swarm of small drones of many shapes and sizes buzz around him, scanning him with soft beams of light. Far across the floor, the silhouette of another player sits at a matching console. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 2 shows the location, a vast dark hall hollowed inside a mountain, steep shadowy tiers of seats rising all around, an enormous glowing display of abstract dotted patterns hung overhead, a lit path across the dark stone floor leading to a large glowing game console with a single chair and cabled glasses, hand-sized drones hovering, and thin beams of light crossing the air; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 12139,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "minpentai-arena-plate.png",
+          "sha256": "23bf25c6ed0c90be993dcbc3e8e592cdf5dc927636b42a9b2c7475f12bbf4f3d"
+        }
+      ],
+      "generation_seconds": 248.5
+    },
+    {
+      "id": "c12-b173-snowflake-field",
+      "chapter": 12,
+      "idx": 173,
+      "file": "c12-b173-snowflake-field.png",
+      "sha256": "ef9f5c9f82591f5ae842dbe136323a522ec8fa590a98d3a1e85f999036522d0e",
+      "prompt": "Close shot of the boy from reference image 1 at a large glowing console in a dark arena, sweat on his brow, his fingers hammering a row of buttons in rapid sequence, tired but intensely focused. Before him the display shows a vast hexagonal grid like a field of snowflakes, with small glowing clusters of cells drifting across it. Cool blue light from the display falls on his face; the dim crowd is blurred behind him. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 2 shows the location, a vast dark hall hollowed inside a mountain, steep shadowy tiers of seats rising all around, an enormous glowing display of abstract dotted patterns hung overhead, a lit path across the dark stone floor leading to a large glowing game console with a single chair and cabled glasses, hand-sized drones hovering, and thin beams of light crossing the air; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+      "seed": 12173,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "minpentai-arena-plate.png",
+          "sha256": "23bf25c6ed0c90be993dcbc3e8e592cdf5dc927636b42a9b2c7475f12bbf4f3d"
+        }
+      ],
+      "generation_seconds": 255.7
+    }
+  ]
+}
