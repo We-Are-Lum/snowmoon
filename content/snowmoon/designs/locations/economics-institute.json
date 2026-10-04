@@ -1,0 +1,61 @@
+{
+  "kind": "location",
+  "name": "the Freetown Economics Institute",
+  "slug": "economics-institute",
+  "status": "starting point",
+  "setting": "united-cities",
+  "about": "The Freetown institute with a single spiral floor and a busy restaurant, where Seila, Jahn and Utaku meet (chapters 5, 10, 15 and 22). The book gives only the details listed below; the rest of the design is invented, and contributors are welcome to replace it.",
+  "facts": [
+    {
+      "chapter": 5,
+      "idx": 38,
+      "quote": "a building that looked noticeably larger and nicer than its surroundings",
+      "fact": "Larger and nicer than its surroundings."
+    },
+    {
+      "chapter": 5,
+      "idx": 43,
+      "quote": "The inside of the building was a single spiral-shaped sloped floor that looped around several times.",
+      "fact": "One spiral sloped floor looping several times."
+    },
+    {
+      "chapter": 5,
+      "idx": 43,
+      "quote": "a circumference of perhaps three hundred meters that one could walk around to climb four meters",
+      "fact": "A gentle slope: about four meters per 300-meter loop."
+    },
+    {
+      "chapter": 5,
+      "idx": 44,
+      "quote": "In the middle, there were elevators and staircases",
+      "fact": "Elevators and stairs in the middle."
+    },
+    {
+      "chapter": 5,
+      "idx": 45,
+      "quote": "There was a large screen, at that moment playing a lecture",
+      "fact": "A large screen plays lectures in the restaurant."
+    },
+    {
+      "chapter": 10,
+      "idx": 2,
+      "quote": "tapped his hand device to pay to get through the turnstile",
+      "fact": "Entry through paid turnstiles."
+    },
+    {
+      "chapter": 10,
+      "idx": 4,
+      "quote": "He walked to the restaurant section, and saw most tables full.",
+      "fact": "A busy restaurant section."
+    },
+    {
+      "chapter": 22,
+      "idx": 69,
+      "quote": "moved over to a nearby calling booth",
+      "fact": "Calling booths near the restaurant."
+    }
+  ],
+  "descriptor": "a large modern institute building whose interior is one vast, gently sloping spiral ramp looping several times beneath a high ceiling, with open elevators and staircases at its center, glass and concrete columns, a bright restaurant section of long tables and glass calling booths along the ramp, a large lecture screen, entry turnstiles, and tall windows onto a skyline of old stone and glass towers",
+  "plate": "locations/economics-institute-plate",
+  "plate_prompt": "Establishing view of large modern institute building whose interior is one vast, gently sloping spiral ramp looping several times beneath a high ceiling, with open elevators and staircases at its center, glass and concrete columns, a bright restaurant section of long tables and glass calling booths along the ramp, a large lecture screen, entry turnstiles, and tall windows onto a skyline of old stone and glass towers. Seen from the outer edge of the ramp looking across the open center in clear morning light. No people in the foreground."
+}

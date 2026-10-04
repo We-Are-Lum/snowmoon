@@ -37,7 +37,8 @@
       "fact": "Moves slowly and deliberately."
     }
   ],
-  "descriptor": "a man in his late fifties, tall and lean, medium brown skin, close-cropped white hair and a short white beard, warm deep-set eyes, wearing a long deep-green ceremonial robe with a high collar and a simple bronze clasp over a cream shirt, dark trousers and brown shoes",
+  "descriptor": "a man in his late fifties, tall and lean, medium brown skin, close-cropped white hair and a short white beard, warm deep-set eyes, wearing a long deep-green woven parliament robe with wide draped sleeves and a sculpted high collar fastened by a simple bronze clasp, over a cream seamless undertunic, a broad bronze-colored cloth sash, dark loose trousers and soft brown seamless shoes",
   "wears_privacy_robe_in_public": false,
-  "sheet_prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a man in his late fifties, tall and lean, medium brown skin, close-cropped white hair and a short white beard, warm deep-set eyes, wearing a long deep-green ceremonial robe with a high collar and a simple bronze clasp over a cream shirt, dark trousers and brown shoes."
+  "sheet_prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a man in his late fifties, tall and lean, medium brown skin, close-cropped white hair and a short white beard, warm deep-set eyes, wearing a long deep-green woven parliament robe with wide draped sleeves and a sculpted high collar fastened by a simple bronze clasp, over a cream seamless undertunic, a broad bronze-colored cloth sash, dark loose trousers and soft brown seamless shoes.",
+  "costume_notes": "Keeps the Veridian parliament robe from the book, now with draped sleeves, a sculpted collar and bronze sash in natural woven fibers."
 }

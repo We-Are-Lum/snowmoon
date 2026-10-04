@@ -6,8 +6,9 @@ style guide, any character profiles, and the scene, and writes PNGs plus a manif
 is written to the database. Every image's recipe (model, revision, composed
 prompt, seed, settings, output sha256) is also written to content/snowmoon/recipes/images/.
 
-A job with "reference" uses an earlier job's image (e.g. a character sheet) as a
-reference image, which is how a character profile keeps a character consistent.
+A job's "references" are earlier renders (character sheets) used as reference
+images, which is how a character profile keeps a character consistent. A job's
+"location" adds that location profile's plate as one more reference image.
 
 Setup (once):
   uv venv --python 3.12 .venv-image
@@ -47,7 +48,9 @@ def load(rel):
 def reference_paths(job, out):
     """References are earlier renders: "cast/zei-sheet" is images-out/cast/zei-sheet.png.
     A bare id refers to the same batch."""
-    refs = job.get("references") or ([job["reference"]] if job.get("reference") else [])
+    refs = list(job.get("references") or ([job["reference"]] if job.get("reference") else []))
+    if job.get("location"):
+        refs.append(load(job["location"])["plate"])  # the location plate comes after the characters
     return [str((ROOT / "images-out" / r) if "/" in r else (out / r)).removesuffix(".png") + ".png" for r in refs]
 
 
@@ -61,6 +64,10 @@ def compose_prompt(job, style):
     for i, c in enumerate(job.get("characters", []), start=1):
         profile = load(c)
         parts.append(f"Reference image {i} shows {profile['descriptor']}; keep the same face, hair, build and clothing.")
+    if job.get("location"):
+        place = load(job["location"])
+        n = len(job.get("characters", [])) + 1
+        parts.append(f"Reference image {n} shows the location, {place['descriptor']}; keep its architecture, layout and colors.")
     for prop in job.get("props", []):
         parts.append(load(prop)["prompt"])
     parts.append(style["prompt"])
@@ -133,7 +140,7 @@ def main():
             continue
         if not args.force and job["id"] in done and (out / done[job["id"]]["file"]).exists():
             continue
-        prompt = compose_prompt(job, style)
+        prompt = compose_prompt(job, load(job["style"]) if job.get("style") else style)
         refs = reference_paths(job, out) or None
         t = time.time()
         kwargs = dict(seed=job["seed"], prompt=prompt, num_inference_steps=STEPS,

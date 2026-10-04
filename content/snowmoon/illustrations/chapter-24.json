@@ -1,6 +1,6 @@
 {
   "about": "Key moments for chapter 24, seeded by the project as a starting point.",
-  "style": "designs/styles/watercolor.json",
+  "style": "designs/styles/techno-vistas.json",
   "jobs": [
     {
       "id": "c24-b006-sleepless-call",
@@ -41,6 +41,7 @@
       "chapter": 24,
       "idx": 39,
       "setting": "dzego",
+      "location": "designs/locations/grand-library.json",
       "characters": [
         "designs/characters/bai.json",
         "designs/characters/gladias.json"
@@ -60,6 +61,7 @@
       "chapter": 24,
       "idx": 65,
       "setting": "dzego",
+      "location": "designs/locations/den-long-room.json",
       "characters": [
         "designs/characters/den.json"
       ],

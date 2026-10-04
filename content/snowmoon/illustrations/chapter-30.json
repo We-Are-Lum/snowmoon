@@ -1,12 +1,13 @@
 {
   "about": "Key moments for chapter 30, seeded by the project as a starting point.",
-  "style": "designs/styles/watercolor.json",
+  "style": "designs/styles/techno-vistas.json",
   "jobs": [
     {
       "id": "c30-b036-blue-before-dawn",
       "chapter": 30,
       "idx": 36,
       "setting": "veridia",
+      "location": "designs/locations/elenar-forest-front.json",
       "characters": [],
       "references": [],
       "props": [],
@@ -20,6 +21,7 @@
       "chapter": 30,
       "idx": 41,
       "setting": "veridia",
+      "location": "designs/locations/elenar-forest-front.json",
       "characters": [],
       "references": [],
       "props": [],
@@ -33,6 +35,7 @@
       "chapter": 30,
       "idx": 48,
       "setting": "veridia",
+      "location": "designs/locations/elenar-forest-front.json",
       "characters": [],
       "references": [],
       "props": [],
@@ -46,6 +49,7 @@
       "chapter": 30,
       "idx": 76,
       "setting": "veridia",
+      "location": "designs/locations/bunker-command-post.json",
       "characters": [
         "designs/characters/zei.json"
       ],

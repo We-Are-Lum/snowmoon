@@ -1,0 +1,43 @@
+{
+  "kind": "location",
+  "name": "Den's long room deep in the pyramid",
+  "slug": "den-long-room",
+  "status": "starting point",
+  "setting": "dzego",
+  "about": "The narrow, long room behind a sealed door deep in the pyramid where Den receives Zei and Gladias (chapters 9, 10 and 24). The book gives only the details listed below; the rest of the design is invented, and contributors are welcome to replace it.",
+  "facts": [
+    {
+      "chapter": 9,
+      "idx": 50,
+      "quote": "He had never been this deep into the depths of the mountain pyramid before.",
+      "fact": "Very deep inside the pyramid."
+    },
+    {
+      "chapter": 9,
+      "idx": 51,
+      "quote": "he got to a sealed door with a green circle beside it",
+      "fact": "A sealed door with a green circle."
+    },
+    {
+      "chapter": 9,
+      "idx": 51,
+      "quote": "The door slowly opened.",
+      "fact": "The door opens slowly."
+    },
+    {
+      "chapter": 9,
+      "idx": 52,
+      "quote": "Behind the door, there was a narrow and long room, and at the end of the room there was a large table.",
+      "fact": "A narrow, long room with a large table at the far end."
+    },
+    {
+      "chapter": 24,
+      "idx": 64,
+      "quote": "Gladias and Zei walked down the tunnel, and down the stairs.",
+      "fact": "Reached down tunnels and stairs."
+    }
+  ],
+  "descriptor": "a narrow, very long windowless room hewn deep inside a mountain, rough-cut rock walls above a floor of polished stone, a heavy sealed door with a glowing green circle beside it at one end, and at the far end a single large dark table under a pool of warm lamplight, the rest falling away into dim shadow",
+  "plate": "locations/den-long-room-plate",
+  "plate_prompt": "Establishing view of narrow, very long windowless room hewn deep inside a mountain, rough-cut rock walls above a floor of polished stone, a heavy sealed door with a glowing green circle beside it at one end, and at the far end a single large dark table under a pool of warm lamplight, the rest falling away into dim shadow. Seen from the open sealed door looking down the length of the room toward the lit table. No people in the foreground."
+}

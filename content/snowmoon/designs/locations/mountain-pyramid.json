@@ -1,0 +1,73 @@
+{
+  "kind": "location",
+  "name": "the mountain pyramid at the southern edge of Pafogai Du",
+  "slug": "mountain-pyramid",
+  "status": "starting point",
+  "setting": "dzego",
+  "about": "The half-kilometer mountain refurbished as a stone pyramid that holds the arena, the library and the Kungaupei; the capital's smaller pyramids share its look. The book gives only the details listed below; the rest of the design is invented, and contributors are welcome to replace it.",
+  "facts": [
+    {
+      "chapter": 4,
+      "idx": 48,
+      "quote": "the half-kilometer-tall pyramid - the most visible landmark at the southern edge of Pafogai Du",
+      "fact": "Half a kilometer tall, at the city's southern edge."
+    },
+    {
+      "chapter": 4,
+      "idx": 48,
+      "quote": "a smooth clad stone pyramid with a square base, like something that had been built by a great civilization a thousand years ago",
+      "fact": "Smooth stone cladding, square base, ancient-monument look."
+    },
+    {
+      "chapter": 4,
+      "idx": 48,
+      "quote": "another row of trees going horizontally around the pyramid at exactly the halfway height",
+      "fact": "Two rows of trees climb a path to halfway, and a row of trees rings it at half height."
+    },
+    {
+      "chapter": 4,
+      "idx": 49,
+      "quote": "This was a pre-existing mountain with pre-existing caves, which was refurbished to look like a pyramid",
+      "fact": "A real mountain with caves, refurbished."
+    },
+    {
+      "chapter": 4,
+      "idx": 52,
+      "quote": "The street curved up with about a ten percent slope",
+      "fact": "The approach climbs at about ten percent."
+    },
+    {
+      "chapter": 4,
+      "idx": 58,
+      "quote": "walked about thirty meters along the horizontal path covered with trees, and entered the mountain pyramid through a smaller side entrance",
+      "fact": "A main door and smaller side entrances."
+    },
+    {
+      "chapter": 15,
+      "idx": 90,
+      "quote": "a series of doors on the side of the mountain pyramid, much nearer to ground level than the usual entrance",
+      "fact": "A row of car-docking doors near ground level."
+    },
+    {
+      "chapter": 18,
+      "idx": 78,
+      "quote": "the city was a mix of concrete roofs and green trees",
+      "fact": "From the slope the city is concrete roofs and trees."
+    },
+    {
+      "chapter": 24,
+      "idx": 21,
+      "quote": "along the trees around the perimeter halfway up the mountain pyramid",
+      "fact": "A walk along the trees at half height."
+    },
+    {
+      "chapter": 12,
+      "idx": 30,
+      "quote": "several mountain pyramids, each about half as tall as the mountain pyramid south of Pafogai Du",
+      "fact": "The capital has several smaller pyramids."
+    }
+  ],
+  "descriptor": "a half-kilometer-tall mountain refurbished into a square-based pyramid clad in smooth pale stone like the monument of a lost civilization, a straight double row of trees climbing its face to a tree-lined terrace ringing it at half height, a grand main door and small side entrances, a row of car-docking doors near its base, and discreet vents and antennas, towering over a low-rise city",
+  "plate": "locations/mountain-pyramid-plate",
+  "plate_prompt": "Establishing view of half-kilometer-tall mountain refurbished into a square-based pyramid clad in smooth pale stone like the monument of a lost civilization, a straight double row of trees climbing its face to a tree-lined terrace ringing it at half height, a grand main door and small side entrances, a row of car-docking doors near its base, and discreet vents and antennas, towering over a low-rise city. Seen from the city edge at the foot of the approach path on a warm, clear afternoon, the pyramid filling the frame against a vast pastel sky. No people in the foreground."
+}

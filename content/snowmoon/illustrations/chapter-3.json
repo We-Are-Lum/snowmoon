@@ -1,6 +1,6 @@
 {
   "about": "Key moments for chapter 3, seeded by the project as a starting point.",
-  "style": "designs/styles/watercolor.json",
+  "style": "designs/styles/techno-vistas.json",
   "jobs": [
     {
       "id": "c3-b029-fresh-robe",
@@ -22,6 +22,7 @@
       "chapter": 3,
       "idx": 54,
       "setting": "veridia",
+      "location": "designs/locations/greater-plum-harbor.json",
       "characters": [],
       "references": [],
       "props": [
@@ -37,6 +38,7 @@
       "chapter": 3,
       "idx": 72,
       "setting": "veridia",
+      "location": "designs/locations/greater-plum-harbor.json",
       "characters": [],
       "references": [],
       "props": [
@@ -52,6 +54,7 @@
       "chapter": 3,
       "idx": 92,
       "setting": "veridia",
+      "location": "designs/locations/plum-harbor-tea-booth.json",
       "characters": [
         "designs/characters/gladias.json",
         "designs/characters/delwart.json"

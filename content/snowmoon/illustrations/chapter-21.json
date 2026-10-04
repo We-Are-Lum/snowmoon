@@ -1,12 +1,13 @@
 {
   "about": "Key moments for chapter 21, seeded by the project as a starting point.",
-  "style": "designs/styles/watercolor.json",
+  "style": "designs/styles/techno-vistas.json",
   "jobs": [
     {
       "id": "c21-b019-civics-score",
       "chapter": 21,
       "idx": 19,
       "setting": "veridia",
+      "location": "designs/locations/family-home.json",
       "characters": [
         "designs/characters/lily.json",
         "designs/characters/seila.json"
@@ -26,6 +27,7 @@
       "chapter": 21,
       "idx": 24,
       "setting": "veridia",
+      "location": "designs/locations/family-home.json",
       "characters": [
         "designs/characters/zven.json"
       ],
@@ -43,6 +45,7 @@
       "chapter": 21,
       "idx": 38,
       "setting": "veridia",
+      "location": "designs/locations/family-home.json",
       "characters": [
         "designs/characters/zven.json",
         "designs/characters/seila.json"

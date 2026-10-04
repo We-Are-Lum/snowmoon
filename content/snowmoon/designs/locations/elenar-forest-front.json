@@ -1,0 +1,61 @@
+{
+  "kind": "location",
+  "name": "the snowy hill and pine forest of the battle for Northshore",
+  "slug": "elenar-forest-front",
+  "status": "starting point",
+  "setting": "veridia",
+  "about": "The snowy hilltop and the pine forest of the Elenar Forest front, where the battle of chapters 29 and 30 is staged and fought. The book gives only the details listed below; the rest of the design is invented, and contributors are welcome to replace it.",
+  "facts": [
+    {
+      "chapter": 29,
+      "idx": 2,
+      "quote": "Zei and Mu were standing on top of a snowy hill.",
+      "fact": "A snowy hilltop lookout."
+    },
+    {
+      "chapter": 29,
+      "idx": 2,
+      "quote": "Green pine trees covered with thick white snow lined the surroundings as far as their eyes could see.",
+      "fact": "Snow-laden pines as far as the eye can see."
+    },
+    {
+      "chapter": 29,
+      "idx": 2,
+      "quote": "Just above the trees in the distance was the sun that had just risen in the east.",
+      "fact": "Sunrise over the trees."
+    },
+    {
+      "chapter": 29,
+      "idx": 19,
+      "quote": "walk back down toward their makeshift bunker",
+      "fact": "A makeshift bunker below the hill."
+    },
+    {
+      "chapter": 29,
+      "idx": 38,
+      "quote": "There were thousands of snowmobile-like contraptions sitting at the edge of the forest.",
+      "fact": "Thousands of snow drones gather at the forest edge."
+    },
+    {
+      "chapter": 29,
+      "idx": 38,
+      "quote": "a large number of thin silver lines glimmering in the sunlight",
+      "fact": "Fiber optic cables glint across the snow."
+    },
+    {
+      "chapter": 30,
+      "idx": 36,
+      "quote": "the sky began to shift from a near-total pitch black to a dark blue that was especially visible in the far east",
+      "fact": "Pre-dawn sky turning deep blue in the east."
+    },
+    {
+      "chapter": 30,
+      "idx": 47,
+      "quote": "an endless row of snow drones with large pieces of paper plastered on all sides",
+      "fact": "At dawn the drones are plastered with printed patterns."
+    }
+  ],
+  "descriptor": "a vast forest of snow-laden green pines rolling over low hills to the horizon, a bare windswept snowy hilltop lookout with a low half-buried bunker door at its foot, wide white clearings along the forest edge, deep untouched drifts, faint silver threads of cable trailing over the snow, and pale slender towers far off on the northern horizon, in white, pine green, steel blue and pale gold",
+  "plate": "locations/elenar-forest-front-plate",
+  "plate_prompt": "Establishing view of vast forest of snow-laden green pines rolling over low hills to the horizon, a bare windswept snowy hilltop lookout with a low half-buried bunker door at its foot, wide white clearings along the forest edge, deep untouched drifts, faint silver threads of cable trailing over the snow, and pale slender towers far off on the northern horizon, in white, pine green, steel blue and pale gold. Seen from the hilltop at sunrise, the low golden sun just above the trees and long blue shadows across the snow. No people in the foreground."
+}

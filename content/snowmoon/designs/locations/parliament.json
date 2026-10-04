@@ -1,0 +1,61 @@
+{
+  "kind": "location",
+  "name": "the Parliament",
+  "slug": "parliament",
+  "status": "starting point",
+  "setting": "veridia",
+  "about": "Veridia's large circular parliament building in Meldan, reached by a tree-lined path (chapters 8, 17 and 32). The book gives only the details listed below; the rest of the design is invented, and contributors are welcome to replace it.",
+  "facts": [
+    {
+      "chapter": 8,
+      "idx": 38,
+      "quote": "Gladias started walking forward along a path covered with trees on both sides.",
+      "fact": "Approached along a path covered by trees."
+    },
+    {
+      "chapter": 8,
+      "idx": 38,
+      "quote": "he saw a large circular building ahead. This was the parliament.",
+      "fact": "A large circular building."
+    },
+    {
+      "chapter": 8,
+      "idx": 38,
+      "quote": "it was on ground level, the construction mixing medieval and modern aesthetics, with multiple entrances on all sides",
+      "fact": "At ground level, mixing medieval and modern styles, with entrances on all sides."
+    },
+    {
+      "chapter": 17,
+      "idx": 3,
+      "quote": "When he arrived at a side door of the building, he tapped his watch on the green circle.",
+      "fact": "Side doors open with a green circle."
+    },
+    {
+      "chapter": 8,
+      "idx": 47,
+      "quote": "Twenty senators were sitting on large chairs arranged along the whole edge of the circular-shaped room",
+      "fact": "Inside, a circular hearing room ringed by senators' chairs."
+    },
+    {
+      "chapter": 8,
+      "idx": 47,
+      "quote": "some bright yellow lights to light up the room, and a few faint violet-looking lights to keep the air clean",
+      "fact": "Bright yellow lights and faint violet air-cleaning lights."
+    },
+    {
+      "chapter": 32,
+      "idx": 101,
+      "quote": "Do you want to go upstairs and check out the roof?",
+      "fact": "It has an accessible roof."
+    },
+    {
+      "chapter": 32,
+      "idx": 108,
+      "quote": "They were already partway up the mountain, about forty meters higher than most of the rest of Meldan.",
+      "fact": "It sits partway up the mountain, above most of the city."
+    }
+  ],
+  "descriptor": "a large circular parliament hall at ground level on a low mountain shoulder, a ring of medieval-style pale stone arches and buttresses wrapped in curving bands of modern glass, with many entrances all around, a planted roof terrace, faint green lights by its doors, and a long straight footpath leading to it under tall leafy trees, in pale stone, sage, cream and gold",
+  "plate": "locations/parliament-plate",
+  "plate_prompt": "Establishing view of large circular parliament hall at ground level on a low mountain shoulder, a ring of medieval-style pale stone arches and buttresses wrapped in curving bands of modern glass, with many entrances all around, a planted roof terrace, faint green lights by its doors, and a long straight footpath leading to it under tall leafy trees, in pale stone, sage, cream and gold. Seen from the footpath on a calm sunny morning, the building framed at the end of the trees, the forested mountain rising behind under a pastel sky. No people in the foreground."
+}

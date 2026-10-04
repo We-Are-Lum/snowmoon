@@ -1,0 +1,55 @@
+{
+  "kind": "location",
+  "name": "the autobus",
+  "slug": "autobus",
+  "status": "starting point",
+  "setting": "veridia",
+  "about": "Meldan's autonomous city buses, ridden by Gladias in chapters 1, 8, 11 and 13. The book gives only the details listed below; the rest of the design is invented, and contributors are welcome to replace it.",
+  "facts": [
+    {
+      "chapter": 1,
+      "idx": 89,
+      "quote": "The autobus was nearly empty.",
+      "fact": "Often nearly empty."
+    },
+    {
+      "chapter": 1,
+      "idx": 90,
+      "quote": "the advertisements on the inside walls of the autobus",
+      "fact": "Advertisements hang on the inside walls."
+    },
+    {
+      "chapter": 1,
+      "idx": 91,
+      "quote": "a poster reminding Veridians of the importance of lifelong learning",
+      "fact": "One is a picture poster about lifelong learning."
+    },
+    {
+      "chapter": 1,
+      "idx": 94,
+      "quote": "the classic yellow and green colored Hydrafill bottle",
+      "fact": "Another shows a yellow and green drink bottle."
+    },
+    {
+      "chapter": 8,
+      "idx": 10,
+      "quote": "a sign listing the autobuses that stopped at that point",
+      "fact": "Stops have signs listing the routes."
+    },
+    {
+      "chapter": 8,
+      "idx": 15,
+      "quote": "He quickly got on, and the door closed behind him.",
+      "fact": "Automatic doors."
+    },
+    {
+      "chapter": 11,
+      "idx": 122,
+      "quote": "the unusually crowded indoor space that was the autobus",
+      "fact": "It can also be crowded."
+    }
+  ],
+  "descriptor": "a clean, quiet driverless city bus with no driver's cab, a long bright aisle between rows of soft sage-upholstered seats, wide curved windows onto passing trees and stone, slim brushed-brass grab rails, wordless picture posters and blank glowing panels along the inner walls, and a glowing green circle beside the sliding door, in cream, sage, pale wood and soft yellow",
+  "plate": "locations/autobus-plate",
+  "plate_prompt": "Establishing view of clean, quiet driverless city bus with no driver's cab, a long bright aisle between rows of soft sage-upholstered seats, wide curved windows onto passing trees and stone, slim brushed-brass grab rails, wordless picture posters and blank glowing panels along the inner walls, and a glowing green circle beside the sliding door, in cream, sage, pale wood and soft yellow. Seen from the middle of the aisle looking forward on a bright afternoon, green leaves streaming past the windows. No people in the foreground."
+}

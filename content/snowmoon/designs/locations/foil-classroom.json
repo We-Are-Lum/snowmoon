@@ -1,0 +1,67 @@
+{
+  "kind": "location",
+  "name": "the underground classroom of the Decentralized University",
+  "slug": "foil-classroom",
+  "status": "starting point",
+  "setting": "dzego",
+  "about": "The foil-lined basement room where Zei's secret physics class meets, and is bombed, in chapter 2. The book gives only the details listed below; the rest of the design is invented, and contributors are welcome to replace it.",
+  "facts": [
+    {
+      "chapter": 2,
+      "idx": 34,
+      "quote": "Fin and Zei were led down two flights of somewhat dusty stairs.",
+      "fact": "Reached down dusty stairs."
+    },
+    {
+      "chapter": 2,
+      "idx": 37,
+      "quote": "entered a large room, and sat down beside each other on one of the rows of chairs",
+      "fact": "A large room with rows of chairs."
+    },
+    {
+      "chapter": 2,
+      "idx": 38,
+      "quote": "The walls were covered with a thick, hastily organized layer of anti-transmission foil.",
+      "fact": "Walls thickly and hastily covered in foil."
+    },
+    {
+      "chapter": 2,
+      "idx": 38,
+      "quote": "pictures of cute cartoon animals playing with electronic gadgets and chemistry lab equipment, with a backdrop of green trees and blue skies",
+      "fact": "Cartoon animal pictures painted on the foil."
+    },
+    {
+      "chapter": 2,
+      "idx": 38,
+      "quote": "an inflated cartoon-style pig on the left and a hamster on the right",
+      "fact": "An inflated cartoon pig and hamster at the front."
+    },
+    {
+      "chapter": 2,
+      "idx": 38,
+      "quote": "The pig, in its left hand, was holding a calculator.",
+      "fact": "The pig holds a calculator."
+    },
+    {
+      "chapter": 2,
+      "idx": 38,
+      "quote": "The hamster, in its right hand, was holding a vial of some green liquid.",
+      "fact": "The hamster holds a vial of green liquid."
+    },
+    {
+      "chapter": 2,
+      "idx": 54,
+      "quote": "a slide showed up on the front wall",
+      "fact": "Slides show on the front wall."
+    },
+    {
+      "chapter": 2,
+      "idx": 99,
+      "quote": "part of the wall and the floor came crashing down",
+      "fact": "The blast breaks the wall and floor."
+    }
+  ],
+  "descriptor": "a large windowless basement classroom with rows of simple chairs, its walls thickly and hastily covered in crinkled silver anti-transmission foil painted over with cute cartoon animals playing with gadgets and lab glassware against green trees and blue skies, a projected slide of simple diagrams glowing on the front wall, and two big inflatable cartoon animals, a pig and a hamster, flanking it",
+  "plate": "locations/foil-classroom-plate",
+  "plate_prompt": "Establishing view of large windowless basement classroom with rows of simple chairs, its walls thickly and hastily covered in crinkled silver anti-transmission foil painted over with cute cartoon animals playing with gadgets and lab glassware against green trees and blue skies, a projected slide of simple diagrams glowing on the front wall, and two big inflatable cartoon animals, a pig and a hamster, flanking it. Seen from the back row in even, cool light, the foil glinting. No people in the foreground."
+}

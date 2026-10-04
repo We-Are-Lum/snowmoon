@@ -1,12 +1,13 @@
 {
   "about": "Key moments for chapter 29, seeded by the project as a starting point.",
-  "style": "designs/styles/watercolor.json",
+  "style": "designs/styles/techno-vistas.json",
   "jobs": [
     {
       "id": "c29-b002-snowy-hill-sunrise",
       "chapter": 29,
       "idx": 2,
       "setting": "veridia",
+      "location": "designs/locations/elenar-forest-front.json",
       "characters": [
         "designs/characters/zei.json",
         "designs/characters/mu.json"
@@ -26,6 +27,7 @@
       "chapter": 29,
       "idx": 21,
       "setting": "veridia",
+      "location": "designs/locations/bunker-command-post.json",
       "characters": [
         "designs/characters/lektor.json",
         "designs/characters/den.json"
@@ -45,6 +47,7 @@
       "chapter": 29,
       "idx": 38,
       "setting": "veridia",
+      "location": "designs/locations/elenar-forest-front.json",
       "characters": [],
       "references": [],
       "props": [],
@@ -58,6 +61,7 @@
       "chapter": 29,
       "idx": 70,
       "setting": "veridia",
+      "location": "designs/locations/elenar-forest-front.json",
       "characters": [],
       "references": [],
       "props": [],
@@ -71,6 +75,7 @@
       "chapter": 29,
       "idx": 109,
       "setting": "veridia",
+      "location": "designs/locations/bunker-command-post.json",
       "characters": [
         "designs/characters/zei.json"
       ],

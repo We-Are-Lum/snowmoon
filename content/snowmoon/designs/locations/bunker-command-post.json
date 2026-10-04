@@ -1,0 +1,49 @@
+{
+  "kind": "location",
+  "name": "the makeshift bunker command post",
+  "slug": "bunker-command-post",
+  "status": "starting point",
+  "setting": "veridia",
+  "about": "The makeshift bunker at the foot of the hill, with its cramped briefing room and console rooms, from which the battle of chapters 29 and 30 is run. The book gives only the details listed below; the rest of the design is invented, and contributors are welcome to replace it.",
+  "facts": [
+    {
+      "chapter": 29,
+      "idx": 21,
+      "quote": "sitting inside of a cramped room, where Lektor was standing at the front presenting",
+      "fact": "A cramped briefing room with a presenter at the front."
+    },
+    {
+      "chapter": 29,
+      "idx": 46,
+      "quote": "their bunker at the bottom of the hill",
+      "fact": "The bunker is at the bottom of the hill."
+    },
+    {
+      "chapter": 29,
+      "idx": 46,
+      "quote": "took off their snowshoes and closed the door",
+      "fact": "Snowshoes come off at the door."
+    },
+    {
+      "chapter": 29,
+      "idx": 55,
+      "quote": "sitting on their chairs in adjacent but separate rooms. They could each see the same command screen.",
+      "fact": "Adjacent small rooms share the same command screen."
+    },
+    {
+      "chapter": 29,
+      "idx": 106,
+      "quote": "A robot entered the room, and quietly slid up to Zei with an energy drink.",
+      "fact": "A serving robot brings drinks."
+    },
+    {
+      "chapter": 30,
+      "idx": 76,
+      "quote": "set it to incline backward as far it could",
+      "fact": "The console chairs recline."
+    }
+  ],
+  "descriptor": "a makeshift bunker dug into the foot of a snowy hill, with low curved ceilings of poured pale stone braced by timber beams, a cramped briefing room of packed benches facing a large wall screen, and small adjacent command rooms each holding a reclining console chair before glowing map displays, bundled cables along the walls, snowshoes by the heavy door, and a narrow high window of daylight",
+  "plate": "locations/bunker-command-post-plate",
+  "plate_prompt": "Establishing view of makeshift bunker dug into the foot of a snowy hill, with low curved ceilings of poured pale stone braced by timber beams, a cramped briefing room of packed benches facing a large wall screen, and small adjacent command rooms each holding a reclining console chair before glowing map displays, bundled cables along the walls, snowshoes by the heavy door, and a narrow high window of daylight. Seen from the doorway of a command room in cool late-afternoon light from the high window, screens glowing softly. No people in the foreground."
+}

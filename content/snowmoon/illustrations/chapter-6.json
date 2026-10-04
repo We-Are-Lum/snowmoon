@@ -1,6 +1,6 @@
 {
   "about": "Key moments for chapter 6, seeded by the project as a starting point.",
-  "style": "designs/styles/watercolor.json",
+  "style": "designs/styles/techno-vistas.json",
   "jobs": [
     {
       "id": "c6-b004-foil-basement",
@@ -45,6 +45,7 @@
       "chapter": 6,
       "idx": 116,
       "setting": "veridia",
+      "location": "designs/locations/neighborhood-restaurant.json",
       "characters": [
         "designs/characters/gladias.json",
         "designs/characters/febric.json"

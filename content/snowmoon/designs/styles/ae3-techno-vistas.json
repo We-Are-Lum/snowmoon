@@ -1,0 +1,13 @@
+{
+  "kind": "style",
+  "name": "Techno vistas",
+  "status": "test",
+  "about": "Style iteration AE3: E's mechanical detail, opened up with A's airy compositions and vast skies. Described by its traits; no artist is named in the prompt.",
+  "prompt": "Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
+  "settings": {
+    "veridia": "Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+    "dzego": "Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+    "united-cities": "Layered megacity of mixed old stone and tall glass towers, flying traffic lanes, steel blue and amber.",
+    "arctic": "Severe faceted crystalline megastructures, icy whites, pale blues and steel."
+  }
+}

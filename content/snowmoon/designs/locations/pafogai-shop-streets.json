@@ -1,0 +1,91 @@
+{
+  "kind": "location",
+  "name": "the shop streets of Pafogai Du, such as Hun Min street",
+  "slug": "pafogai-shop-streets",
+  "status": "starting point",
+  "setting": "dzego",
+  "about": "The dense low-rise commercial streets of Pafogai Du, full of electronics shops and tiny factories (chapters 2 and 18). The book gives only the details listed below; the rest of the design is invented, and contributors are welcome to replace it.",
+  "facts": [
+    {
+      "chapter": 2,
+      "idx": 3,
+      "quote": "signs with colored blinking lights advertising all kinds of electronics",
+      "fact": "Shop signs with colored blinking lights."
+    },
+    {
+      "chapter": 2,
+      "idx": 3,
+      "quote": "Among the stores were miniature factories",
+      "fact": "Tiny factories among the shops."
+    },
+    {
+      "chapter": 2,
+      "idx": 3,
+      "quote": "The buildings were all one or two storeys tall, and many signs were on top of stairways leading underground.",
+      "fact": "One- and two-storey buildings, stairways leading underground."
+    },
+    {
+      "chapter": 2,
+      "idx": 9,
+      "quote": "enjoying the shade under the trees between the road and the sidewalk",
+      "fact": "Trees shade the sidewalks."
+    },
+    {
+      "chapter": 2,
+      "idx": 10,
+      "quote": "A drone buzzed as it flew overhead.",
+      "fact": "Security drones overhead."
+    },
+    {
+      "chapter": 4,
+      "idx": 3,
+      "quote": "a wooden ladder that had been put up hastily against a public lamp post",
+      "fact": "Security cameras on lamp posts."
+    },
+    {
+      "chapter": 4,
+      "idx": 53,
+      "quote": "a sprawling series of low-rise buildings interspersed with trees",
+      "fact": "Low-rise city mixed with trees."
+    },
+    {
+      "chapter": 4,
+      "idx": 53,
+      "quote": "all inside a perfectly regular grid of streets",
+      "fact": "A regular street grid."
+    },
+    {
+      "chapter": 18,
+      "idx": 28,
+      "quote": "a large number of identical black cars on the roads",
+      "fact": "Identical black cars on the roads."
+    },
+    {
+      "chapter": 18,
+      "idx": 70,
+      "quote": "about half the time polished and professional and the other half the time improvised and hand-made from neon lights",
+      "fact": "Signs are polished or hand-made neon."
+    },
+    {
+      "chapter": 18,
+      "idx": 71,
+      "quote": "pictures of cute cartoon animals playing with electronic gadgets and chemistry lab equipment",
+      "fact": "Cartoon animal murals by basement entrances."
+    },
+    {
+      "chapter": 18,
+      "idx": 75,
+      "quote": "decorated in a style that reminded Gladias of depictions he had seen as a child of Dzego's medieval era",
+      "fact": "Some entrances are decorated in a traditional style."
+    },
+    {
+      "chapter": 18,
+      "idx": 76,
+      "quote": "he could see the pyramid once again",
+      "fact": "The mountain pyramid looms at the end of the streets."
+    }
+  ],
+  "descriptor": "a dense, shady street of one- and two-storey shops and tiny glowing workshops beneath street trees, blank glowing sign panels and hand-bent neon frames in pink, cyan and yellow, stairways leading down to basements, cute cartoon animal murals, tangled cables and antennas, small drones overhead, sleek identical black cars at the curb, and a huge stone pyramid rising at the end of the street",
+  "plate": "locations/pafogai-shop-streets-plate",
+  "plate_prompt": "Establishing view of dense, shady street of one- and two-storey shops and tiny glowing workshops beneath street trees, blank glowing sign panels and hand-bent neon frames in pink, cyan and yellow, stairways leading down to basements, cute cartoon animal murals, tangled cables and antennas, small drones overhead, sleek identical black cars at the curb, and a huge stone pyramid rising at the end of the street. Seen at eye level along the sidewalk at warm dusk, the shop glow bright against a deep blue sky. No people in the foreground."
+}

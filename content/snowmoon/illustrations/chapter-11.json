@@ -1,6 +1,6 @@
 {
   "about": "Key moments for chapter 11, seeded by the project as a starting point.",
-  "style": "designs/styles/watercolor.json",
+  "style": "designs/styles/techno-vistas.json",
   "jobs": [
     {
       "id": "c11-b023-copter-truck",
@@ -58,6 +58,7 @@
       "chapter": 11,
       "idx": 123,
       "setting": "veridia",
+      "location": "designs/locations/neighborhood-restaurant.json",
       "characters": [],
       "references": [],
       "props": [
@@ -73,6 +74,7 @@
       "chapter": 11,
       "idx": 126,
       "setting": "veridia",
+      "location": "designs/locations/kalimar-footpaths.json",
       "characters": [
         "designs/characters/seila.json"
       ],

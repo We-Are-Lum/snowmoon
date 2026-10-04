@@ -120,3 +120,66 @@ Validate: every file parses (python3 -m json.tool), every idx exists and is a pa
 
 After the agents finished, the coding agent changed six jobs to use the
 hood-down robe prop and removed the United Cities palette from c26-b132.
+
+## Futuristic costume redesign
+
+Sent once, after two rounds of style tests.
+
+```text
+You are redesigning the costumes of the starting cast for the Snowmoon illustrated audiobook, in the repo at [the repository root] (a GPL-3.0 adaptation of Vitalik Buterin's novel). Do NOT run any image model, do NOT touch the database, do NOT git commit, and ONLY edit the files named below.
+
+Problem: the 22 profiles in content/snowmoon/designs/characters/<slug>.json describe present-day clothes (hoodies, cardigans, jeans, blazers), so the cast looks modern, not futuristic. The project owner wants a stronger science-fiction aesthetic. Style tests showed the image model only produces futuristic clothing when the SILHOUETTE is unmistakably non-contemporary.
+
+Two approved examples (use these EXACT descriptors for gladias and zei):
+- gladias: copy "descriptor" from content/snowmoon/designs/style-tests/gladias-future-2.json
+- zei: copy "descriptor" from content/snowmoon/designs/style-tests/zei-future-2.json
+Study how they differ from the old profiles: same face, hair, build and signature colors, but garments with distinct future shapes (sleeveless tabard with sculpted standing collar, wide cloth sash, seamless bodysuit; cropped asymmetric shell jacket with one long and one short sleeve, glowing seams, gathered trousers, visor glasses), and worn tech (thin band around the throat, earpiece, wrist device) that the book mentions (neck band for silent speech, hand device, watch, earpiece).
+
+For each of the other 20 profiles, rewrite ONLY these fields:
+- "descriptor": keep the person exactly (age, build, skin tone, hair, face, eyes, any book facts like Febric's hand device cabled to a compute box, Fin's backpack, Den's priest cloak, Verdow's parliament robe, Lektor's military-style shirt, Deluin's sweater and light hood, Zei's mother's warmth) and keep each character's signature colors so they stay recognizable, but replace the clothing with garments whose shapes can't be read as present-day: e.g. tabards, layered wraps, sculpted or standing collars, asymmetric closures, capes and half-capes, seamless bodysuits or undertunics, segmented or gathered trousers, sashes and harnesses, soft seamless boots, panels with thin glowing seams. Each person needs a different silhouette from the others. Worlds: Veridia = natural woven fibers, calm greens and earth tones, organic drapes, discreet tech; Dzego = modular bright techwear, reflective piping, glowing seams, playful; United Cities (Freetown, Redshire) = sharper tailored city wear, cool tones; Arctic = faceted, high-collared, crystalline, icy whites and blues. Children dress age-appropriately (simpler, playful future clothes). 40 to 70 words, a single noun phrase starting with "a", no names of anyone, no text or logos.
+- "sheet_prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is <descriptor without its leading 'a '>."
+- add "costume_notes": one sentence on the design idea and which book facts it keeps.
+Keep every other field (facts, about, setting, robe flag, slug, name) unchanged. Note: characters who wear the privacy robe in public are drawn unrobed on their sheet; the robe is a separate prop.
+
+Then update content/snowmoon/illustrations/cast.json: set "style" to "designs/styles/techno-vistas.json", and set each job's "prompt" to that character's new sheet_prompt and "setting" to null (so no scenery is added). Keep ids and seeds.
+
+Validate: all files parse (python3 -m json.tool); gladias and zei descriptors match the approved files exactly; no descriptor contains any cast name (gladias, seila, zven, lily, febric, hreda, vil, daia, mov, delwart, ephelion, verdow, lektor, zei, bai, fin, mu, den, min, deluin, jahn, tafindel, plus Glad, Leimin, Jahen) as a whole word, case-insensitive; descriptors are 40–70 words. Reply with a table: slug and the new descriptor's clothing part in a few words.
+```
+
+## Location profiles and plates
+
+Sent once.
+
+```text
+You are building location profiles for the Snowmoon illustrated audiobook, in the repo at [the repository root] (a GPL-3.0 adaptation of Vitalik Buterin's novel). Do NOT run any image model, do NOT touch the database, do NOT git commit, and ONLY create or edit the files named below.
+
+Why: images of the same place must look consistent across chapters. Each location gets a profile and a rendered "plate" (an establishing image) that is passed as a reference image whenever a scene is set there.
+
+Inputs: content/snowmoon/text/chapter-1.json … chapter-32.json ({blocks:[{idx, kind, content}]}, Markdown with <span> tags; datelines give city and setting), docs/SNOWMOON-CHAPTER-NOTES.md (world notes; not quote-verified), docs/design/README.md (Veridia "green, stone, quiet"; Dzego "low shops under trees"; Arctic "cold, ranked, faceted"), the style content/snowmoon/designs/styles/techno-vistas.json (big pastel skies with elegant megastructures on the horizon, rich technology in the middle distance, bright and hopeful), and the 142 image jobs in content/snowmoon/illustrations/chapter-1.json … chapter-32.json (each has id, chapter, idx, setting, characters, references, props, prompt).
+
+TASK 1 — Decide the recurring locations, roughly 15 to 25, by reading the jobs and the text. Prefer places that appear in more than one job or chapter, plus each chapter's main establishing location. Examples to consider (verify in the text): the Kalimar district footpaths in Meldan; the sky bridge and the road with the castle-tower apartments; the family home interior; the concert field; the autobus interior; the Order's tunnels and booths; the walled Greater Plum Harbor enclave; the round parliament building and hearing chamber; the Keepers' tower top; the Dzego electronics street in Pafogai Du; the half-kilometer pyramid exterior; pyramid interiors (long stone room, cafeteria, library, rock-cut rooms); the Minpentai arena; the foil-lined underground classroom; the sealed black car; the capital with its smaller pyramids; Freetown's skyline and institute; Redshire; Northglade; the snowy forest and hill front of the final battle; the hilltop round room. Merge near-duplicates; skip one-off places with a single job.
+
+For each, write content/snowmoon/designs/locations/<slug>.json:
+{
+  "kind": "location",
+  "name": "<name as the book gives it, or a plain description if unnamed>",
+  "slug": "<kebab-case>",
+  "status": "starting point",
+  "setting": "veridia|dzego|united-cities|arctic",
+  "about": "One or two sentences: what this place is, and that the design is invented where the book is silent, so contributors can replace it.",
+  "facts": [{"chapter": N, "idx": N, "quote": "<short verbatim quote>", "fact": "..."}],
+  "descriptor": "...",
+  "plate": "locations/<slug>-plate",
+  "plate_prompt": "..."
+}
+- facts: every visual detail the book gives (materials, size, layout, light, plants, tech, crowd), each with a verbatim quote — check quotes appear in the cited block (tags stripped). Don't invent facts.
+- descriptor: a noun phrase starting with "a"/"an", 35 to 70 words, describing the place's invented but fact-consistent design: architecture, materials, layout, signature details, palette. It must feel futuristic in the techno-vistas way (where the book says "medieval in style", keep that, and add the future around it: clean, grown or sculpted forms, discreet tech, drones, distant megastructures). NO proper nouns at all (no place, brand or person names, no Dzegoban words). No readable text: signs are blank glowing panels.
+- plate_prompt: "Establishing view of <descriptor without its leading article>. <one or two sentences of framing, time of day and light>. No people in the foreground." 60 to 110 words, no proper nouns.
+
+TASK 2 — Write content/snowmoon/illustrations/locations.json:
+{"about": "Establishing plates for the starting locations. A location's plate is used as a reference image whenever a scene is set there.", "style": "designs/styles/techno-vistas.json", "jobs": [{"id": "<slug>-plate", "chapter": null, "idx": null, "setting": "<setting>", "characters": [], "props": [], "prompt": "<plate_prompt>", "width": 1024, "height": 576, "seed": <7000 + position>}, ...]}
+
+TASK 3 — Edit every content/snowmoon/illustrations/chapter-N.json: set the file's "style" to "designs/styles/techno-vistas.json", and for each job whose scene is set in one of your locations add "location": "designs/locations/<slug>.json" (put the key right after "setting"). Leave jobs set elsewhere without a location. Change nothing else in the jobs (do not edit prompts, characters, references, props, ids or seeds). A location plate becomes reference image number (number of characters + 1), so a job may now have up to 3 reference images; that's intended.
+
+Validate with a script: all files parse; every location file referenced by a job exists; every plate id in locations.json matches a profile's plate; no descriptor or plate_prompt contains a capitalized proper noun from the book or any character name (gladias, seila, zven, lily, febric, hreda, vil, daia, mov, delwart, ephelion, verdow, lektor, zei, bai, fin, mu, den, min, deluin, jahn, tafindel); quotes verified. Reply with a table: slug, name, setting, number of jobs tagged, and a few words of its design; then how many of the 142 jobs got a location and anything you were unsure about.
+```

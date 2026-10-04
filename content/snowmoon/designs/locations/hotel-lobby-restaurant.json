@@ -1,0 +1,43 @@
+{
+  "kind": "location",
+  "name": "the hotel lobby restaurants",
+  "slug": "hotel-lobby-restaurant",
+  "status": "starting point",
+  "setting": "dzego",
+  "about": "The lobby restaurants of the hotels where Zei stays in the capital (chapters 14 and 15) and Gladias in Pafogai Du (chapter 18). The book gives only the details listed below; the rest of the design is invented, and contributors are welcome to replace it.",
+  "facts": [
+    {
+      "chapter": 14,
+      "idx": 6,
+      "quote": "he could see someone in the lobby restaurant waving at him",
+      "fact": "A restaurant open to the lobby."
+    },
+    {
+      "chapter": 15,
+      "idx": 51,
+      "quote": "the robot had already refilled it four times",
+      "fact": "Robots refill the tea."
+    },
+    {
+      "chapter": 12,
+      "idx": 47,
+      "quote": "stepped through the hotel door and car door that were already open and pressed tightly against each other",
+      "fact": "Black cars dock directly against the hotel door."
+    },
+    {
+      "chapter": 18,
+      "idx": 43,
+      "quote": "The car door opened, directly into the hotel.",
+      "fact": "The same in Pafogai Du."
+    },
+    {
+      "chapter": 18,
+      "idx": 84,
+      "quote": "immediately turned left to enter the lobby restaurant",
+      "fact": "The restaurant opens off the lobby."
+    }
+  ],
+  "descriptor": "a modest, cozy hotel lobby restaurant with warm wooden tables and chairs, soft lamps, a glowing neon accent strip along one wall, a playful cartoon animal mural, little wheeled serving robots carrying tea and rice bowls, and a sealed car-docking door at the edge of the lobby, in honey wood and cream with soft pink and cyan glow",
+  "plate": "locations/hotel-lobby-restaurant-plate",
+  "plate_prompt": "Establishing view of modest, cozy hotel lobby restaurant with warm wooden tables and chairs, soft lamps, a glowing neon accent strip along one wall, a playful cartoon animal mural, little wheeled serving robots carrying tea and rice bowls, and a sealed car-docking door at the edge of the lobby, in honey wood and cream with soft pink and cyan glow. Seen from a corner table on a quiet morning, warm lamps and soft daylight from the lobby. No people in the foreground."
+}

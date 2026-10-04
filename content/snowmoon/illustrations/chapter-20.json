@@ -1,12 +1,13 @@
 {
   "about": "Key moments for chapter 20, seeded by the project as a starting point.",
-  "style": "designs/styles/watercolor.json",
+  "style": "designs/styles/techno-vistas.json",
   "jobs": [
     {
       "id": "c20-b002-red-alert",
       "chapter": 20,
       "idx": 2,
       "setting": "veridia",
+      "location": "designs/locations/family-home.json",
       "characters": [
         "designs/characters/seila.json"
       ],
@@ -24,6 +25,7 @@
       "chapter": 20,
       "idx": 13,
       "setting": "veridia",
+      "location": "designs/locations/family-home.json",
       "characters": [
         "designs/characters/seila.json"
       ],
@@ -58,6 +60,7 @@
       "chapter": 20,
       "idx": 87,
       "setting": "veridia",
+      "location": "designs/locations/kalimar-footpaths.json",
       "characters": [],
       "references": [],
       "props": [

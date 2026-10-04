@@ -43,7 +43,8 @@
       "fact": "Uses small surveillance gadgets."
     }
   ],
-  "descriptor": "a man in his early forties, short and stocky, deep umber skin, a shaved head and a neat salt-and-pepper goatee, a wry half-smile, wearing a dark olive field jacket with many pockets over a slate-grey henley, khaki trousers and black boots",
+  "descriptor": "a man in his early forties, short and stocky, deep umber skin, a shaved head and a neat salt-and-pepper goatee, a wry half-smile, wearing a dark olive sleeveless utility tabard covered in flat sealed pockets, cinched by a crossing chest harness, over a slate-grey seamless high-neck bodysuit, khaki segmented trousers, black soft-soled boots, a thin band around his throat and a tiny lens clipped at his collar",
   "wears_privacy_robe_in_public": true,
-  "sheet_prompt": "Character reference sheet on a plain warm off-white background: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a man in his early forties, short and stocky, deep umber skin, a shaved head and a neat salt-and-pepper goatee, a wry half-smile, wearing a dark olive field jacket with many pockets over a slate-grey henley, khaki trousers and black boots."
+  "sheet_prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a man in his early forties, short and stocky, deep umber skin, a shaved head and a neat salt-and-pepper goatee, a wry half-smile, wearing a dark olive sleeveless utility tabard covered in flat sealed pockets, cinched by a crossing chest harness, over a slate-grey seamless high-neck bodysuit, khaki segmented trousers, black soft-soled boots, a thin band around his throat and a tiny lens clipped at his collar.",
+  "costume_notes": "A pocketed utility tabard and chest harness echo his many-pocketed robe and the small surveillance gadgets a Sentinel uses; drawn unrobed, the privacy robe being a separate prop."
 }

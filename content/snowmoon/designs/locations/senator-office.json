@@ -1,0 +1,37 @@
+{
+  "kind": "location",
+  "name": "Senator Verdow's office in the Parliament",
+  "slug": "senator-office",
+  "status": "starting point",
+  "setting": "veridia",
+  "about": "The small office inside the Parliament where Verdow receives Gladias in chapter 17 and the team in chapter 32. The book gives only the details listed below; the rest of the design is invented, and contributors are welcome to replace it.",
+  "facts": [
+    {
+      "chapter": 17,
+      "idx": 6,
+      "quote": "Forward, then right turn, then forward, then third door on the left.",
+      "fact": "The same office in chapters 17 and 32, by the same directions."
+    },
+    {
+      "chapter": 17,
+      "idx": 13,
+      "quote": "A robot slid into the room.",
+      "fact": "A serving robot takes orders."
+    },
+    {
+      "chapter": 17,
+      "idx": 18,
+      "quote": "Verdow tapped a few buttons on the robot's screen",
+      "fact": "The robot has a screen."
+    },
+    {
+      "chapter": 32,
+      "idx": 77,
+      "quote": "a map of the world that was printed on the side of the office wall",
+      "fact": "A world map is printed on the office wall."
+    }
+  ],
+  "descriptor": "a small, warm senator's office inside a round stone parliament hall, with honey wood paneling against a curved pale stone wall, a low table between deep armchairs, a tall window onto green trees, a large wordless map of unfamiliar continents and seas printed across one wall, and a slim serving robot with a screen face waiting at the door",
+  "plate": "locations/senator-office-plate",
+  "plate_prompt": "Establishing view of small, warm senator's office inside a round stone parliament hall, with honey wood paneling against a curved pale stone wall, a low table between deep armchairs, a tall window onto green trees, a large wordless map of unfamiliar continents and seas printed across one wall, and a slim serving robot with a screen face waiting at the door. Seen from the doorway in soft late-morning light from the tall window. No people in the foreground."
+}

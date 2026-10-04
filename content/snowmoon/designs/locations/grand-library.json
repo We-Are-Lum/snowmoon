@@ -1,0 +1,67 @@
+{
+  "kind": "location",
+  "name": "the Pafogai Du grand library",
+  "slug": "grand-library",
+  "status": "starting point",
+  "setting": "dzego",
+  "about": "The grand library inside the pyramid, a maze of paper books with computer terminals (chapters 19 and 24). The book gives only the details listed below; the rest of the design is invented, and contributors are welcome to replace it.",
+  "facts": [
+    {
+      "chapter": 19,
+      "idx": 76,
+      "quote": "they arrived at a large ornamented door",
+      "fact": "A large ornamented door."
+    },
+    {
+      "chapter": 19,
+      "idx": 77,
+      "quote": "a drawing of a river horse reading a book, with a backdrop of a marsh with green trees and a blue sky",
+      "fact": "Left of the door: a river horse reading in a marsh."
+    },
+    {
+      "chapter": 19,
+      "idx": 77,
+      "quote": "a drawing of a hamster sitting at a computer",
+      "fact": "Right of the door: a hamster at a computer."
+    },
+    {
+      "chapter": 19,
+      "idx": 82,
+      "quote": "the entire wall was a large shelf, about five meters tall, filled with physical paper books",
+      "fact": "A five-meter wall of paper books."
+    },
+    {
+      "chapter": 19,
+      "idx": 82,
+      "quote": "allowing the roof of the lower half to serve as a walkway",
+      "fact": "The upper half is set back behind a walkway."
+    },
+    {
+      "chapter": 19,
+      "idx": 83,
+      "quote": "leading to two miniature tunnels lined with more books",
+      "fact": "Book-lined openings lead into tunnels."
+    },
+    {
+      "chapter": 19,
+      "idx": 84,
+      "quote": "the book section was deliberately constructed to be a maze",
+      "fact": "The book section is a maze."
+    },
+    {
+      "chapter": 19,
+      "idx": 98,
+      "quote": "They arrived at a computer terminal.",
+      "fact": "Computer terminals."
+    },
+    {
+      "chapter": 19,
+      "idx": 110,
+      "quote": "sitting at a table far away from any books",
+      "fact": "Tables away from the books."
+    }
+  ],
+  "descriptor": "a grand underground library behind a large ornamented wooden door flanked by murals of a hippo reading in a marsh and a hamster at a computer; inside, a towering two-level wall of paper books with a walkway along the set-back upper tier and book-lined openings into a maze, and across the hall open tables and a row of glowing computer terminals, warm lamplight on carved stone",
+  "plate": "locations/grand-library-plate",
+  "plate_prompt": "Establishing view of grand underground library behind a large ornamented wooden door flanked by murals of a hippo reading in a marsh and a hamster at a computer; inside, a towering two-level wall of paper books with a walkway along the set-back upper tier and book-lined openings into a maze, and across the hall open tables and a row of glowing computer terminals, warm lamplight on carved stone. Seen from just inside the door in warm lamplight, the book wall to the left and the terminals to the right. No people in the foreground."
+}

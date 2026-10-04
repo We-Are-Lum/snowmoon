@@ -1,12 +1,13 @@
 {
   "about": "Key moments for chapter 15, seeded by the project as a starting point.",
-  "style": "designs/styles/watercolor.json",
+  "style": "designs/styles/techno-vistas.json",
   "jobs": [
     {
       "id": "c15-b005-special-broadcast",
       "chapter": 15,
       "idx": 5,
       "setting": "united-cities",
+      "location": "designs/locations/economics-institute.json",
       "characters": [
         "designs/characters/jahn.json"
       ],
@@ -24,6 +25,7 @@
       "chapter": 15,
       "idx": 18,
       "setting": "veridia",
+      "location": "designs/locations/family-home.json",
       "characters": [
         "designs/characters/gladias.json",
         "designs/characters/seila.json"
@@ -43,6 +45,7 @@
       "chapter": 15,
       "idx": 51,
       "setting": "dzego",
+      "location": "designs/locations/hotel-lobby-restaurant.json",
       "characters": [
         "designs/characters/zei.json"
       ],
@@ -60,6 +63,7 @@
       "chapter": 15,
       "idx": 75,
       "setting": "dzego",
+      "location": "designs/locations/hotel-lobby-restaurant.json",
       "characters": [
         "designs/characters/zei.json"
       ],
@@ -77,6 +81,7 @@
       "chapter": 15,
       "idx": 90,
       "setting": "dzego",
+      "location": "designs/locations/mountain-pyramid.json",
       "characters": [
         "designs/characters/zei.json"
       ],

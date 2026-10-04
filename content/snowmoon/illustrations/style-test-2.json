@@ -1,0 +1,183 @@
+{
+  "about": "Style test round 2: three hybrids between A (clear-line) and E (dense techno), with bolder costumes, a distinct outfit for the friend, future cues in Veridia and blank shop signs.",
+  "style": "designs/styles/ae1-clear-line-techno.json",
+  "jobs": [
+    {
+      "id": "ae1-clear-line-techno-gladias-sheet",
+      "style": "designs/styles/ae1-clear-line-techno.json",
+      "chapter": null,
+      "idx": null,
+      "setting": null,
+      "characters": [],
+      "props": [],
+      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device.",
+      "width": 1024,
+      "height": 576,
+      "seed": 6101
+    },
+    {
+      "id": "ae1-clear-line-techno-zei-sheet",
+      "style": "designs/styles/ae1-clear-line-techno.json",
+      "chapter": null,
+      "idx": null,
+      "setting": null,
+      "characters": [],
+      "props": [],
+      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head.",
+      "width": 1024,
+      "height": 576,
+      "seed": 6102
+    },
+    {
+      "id": "ae1-clear-line-techno-c1-b005-toy-drone",
+      "style": "designs/styles/ae1-clear-line-techno.json",
+      "chapter": 1,
+      "idx": 5,
+      "setting": "veridia",
+      "characters": [],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "Wide shot on a quiet morning footpath under tall trees. A figure in a privacy robe walks along the path, seen from the side. Old-style houses of large clean stone bricks sit behind the trees, melting into leaves and plants. On a sidewalk branching off to the left, a young boy leaps up and grabs a small ball-shaped toy drone with feather-like rotors out of the air, while two smaller children ride tricycles nearby and their parents watch. Far beyond the treetops rise slender pale towers shaped like castle towers with many windows, and a sky bridge crosses in the distance. Soft green light filtering through the leaves.",
+      "width": 1024,
+      "height": 576,
+      "seed": 1005
+    },
+    {
+      "id": "ae2-clear-line-techno-vivid-gladias-sheet",
+      "style": "designs/styles/ae2-clear-line-techno-vivid.json",
+      "chapter": null,
+      "idx": null,
+      "setting": null,
+      "characters": [],
+      "props": [],
+      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device.",
+      "width": 1024,
+      "height": 576,
+      "seed": 6101
+    },
+    {
+      "id": "ae2-clear-line-techno-vivid-zei-sheet",
+      "style": "designs/styles/ae2-clear-line-techno-vivid.json",
+      "chapter": null,
+      "idx": null,
+      "setting": null,
+      "characters": [],
+      "props": [],
+      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head.",
+      "width": 1024,
+      "height": 576,
+      "seed": 6102
+    },
+    {
+      "id": "ae2-clear-line-techno-vivid-c1-b005-toy-drone",
+      "style": "designs/styles/ae2-clear-line-techno-vivid.json",
+      "chapter": 1,
+      "idx": 5,
+      "setting": "veridia",
+      "characters": [],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "Wide shot on a quiet morning footpath under tall trees. A figure in a privacy robe walks along the path, seen from the side. Old-style houses of large clean stone bricks sit behind the trees, melting into leaves and plants. On a sidewalk branching off to the left, a young boy leaps up and grabs a small ball-shaped toy drone with feather-like rotors out of the air, while two smaller children ride tricycles nearby and their parents watch. Far beyond the treetops rise slender pale towers shaped like castle towers with many windows, and a sky bridge crosses in the distance. Soft green light filtering through the leaves.",
+      "width": 1024,
+      "height": 576,
+      "seed": 1005
+    },
+    {
+      "id": "ae3-techno-vistas-gladias-sheet",
+      "style": "designs/styles/ae3-techno-vistas.json",
+      "chapter": null,
+      "idx": null,
+      "setting": null,
+      "characters": [],
+      "props": [],
+      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device.",
+      "width": 1024,
+      "height": 576,
+      "seed": 6101
+    },
+    {
+      "id": "ae3-techno-vistas-zei-sheet",
+      "style": "designs/styles/ae3-techno-vistas.json",
+      "chapter": null,
+      "idx": null,
+      "setting": null,
+      "characters": [],
+      "props": [],
+      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head.",
+      "width": 1024,
+      "height": 576,
+      "seed": 6102
+    },
+    {
+      "id": "ae3-techno-vistas-c1-b005-toy-drone",
+      "style": "designs/styles/ae3-techno-vistas.json",
+      "chapter": 1,
+      "idx": 5,
+      "setting": "veridia",
+      "characters": [],
+      "props": [
+        "designs/props/privacy-robe.json"
+      ],
+      "prompt": "Wide shot on a quiet morning footpath under tall trees. A figure in a privacy robe walks along the path, seen from the side. Old-style houses of large clean stone bricks sit behind the trees, melting into leaves and plants. On a sidewalk branching off to the left, a young boy leaps up and grabs a small ball-shaped toy drone with feather-like rotors out of the air, while two smaller children ride tricycles nearby and their parents watch. Far beyond the treetops rise slender pale towers shaped like castle towers with many windows, and a sky bridge crosses in the distance. Soft green light filtering through the leaves.",
+      "width": 1024,
+      "height": 576,
+      "seed": 1005
+    },
+    {
+      "id": "ae1-clear-line-techno-c2-b003-street",
+      "style": "designs/styles/ae1-clear-line-techno.json",
+      "chapter": 2,
+      "idx": 3,
+      "setting": "dzego",
+      "characters": [
+        "designs/style-tests/zei-future-2.json"
+      ],
+      "references": [
+        "ae1-clear-line-techno-zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Wide street scene in a dense low-rise city on a warm evening. The young man from reference image 1 walks along a sidewalk shaded by trees beside a stocky friend with copper-red hair who wears a long cherry-red hooded poncho and a rolled backpack, both chatting. On both sides, one- and two-storey shops glow with colored blinking lights, selling hand devices, watches, batteries and sensors, and small open workshops build gadgets inside. Several stairways lead down underground from the sidewalk. A small security drone flies overhead. Cute cartoon animal murals on the walls. Shop signs are blank glowing panels with no letters.",
+      "width": 1024,
+      "height": 576,
+      "seed": 2003
+    },
+    {
+      "id": "ae2-clear-line-techno-vivid-c2-b003-street",
+      "style": "designs/styles/ae2-clear-line-techno-vivid.json",
+      "chapter": 2,
+      "idx": 3,
+      "setting": "dzego",
+      "characters": [
+        "designs/style-tests/zei-future-2.json"
+      ],
+      "references": [
+        "ae2-clear-line-techno-vivid-zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Wide street scene in a dense low-rise city on a warm evening. The young man from reference image 1 walks along a sidewalk shaded by trees beside a stocky friend with copper-red hair who wears a long cherry-red hooded poncho and a rolled backpack, both chatting. On both sides, one- and two-storey shops glow with colored blinking lights, selling hand devices, watches, batteries and sensors, and small open workshops build gadgets inside. Several stairways lead down underground from the sidewalk. A small security drone flies overhead. Cute cartoon animal murals on the walls. Shop signs are blank glowing panels with no letters.",
+      "width": 1024,
+      "height": 576,
+      "seed": 2003
+    },
+    {
+      "id": "ae3-techno-vistas-c2-b003-street",
+      "style": "designs/styles/ae3-techno-vistas.json",
+      "chapter": 2,
+      "idx": 3,
+      "setting": "dzego",
+      "characters": [
+        "designs/style-tests/zei-future-2.json"
+      ],
+      "references": [
+        "ae3-techno-vistas-zei-sheet"
+      ],
+      "props": [],
+      "prompt": "Wide street scene in a dense low-rise city on a warm evening. The young man from reference image 1 walks along a sidewalk shaded by trees beside a stocky friend with copper-red hair who wears a long cherry-red hooded poncho and a rolled backpack, both chatting. On both sides, one- and two-storey shops glow with colored blinking lights, selling hand devices, watches, batteries and sensors, and small open workshops build gadgets inside. Several stairways lead down underground from the sidewalk. A small security drone flies overhead. Cute cartoon animal murals on the walls. Shop signs are blank glowing panels with no letters.",
+      "width": 1024,
+      "height": 576,
+      "seed": 2003
+    }
+  ]
+}

@@ -1,0 +1,67 @@
+{
+  "kind": "location",
+  "name": "the soundproof booths where the Keepers meet",
+  "slug": "order-booths",
+  "status": "starting point",
+  "setting": "veridia",
+  "about": "The courtyard of heavy soundproof booths used by Keeper groups (chapters 10, 11, 13, 16) and for Gladias's meeting with the judges (chapter 26). The book gives only the details listed below; the rest of the design is invented, and contributors are welcome to replace it.",
+  "facts": [
+    {
+      "chapter": 10,
+      "idx": 49,
+      "quote": "Gladias walked down a hallway, and entered a courtyard. He found a series of booths with thick sliding doors.",
+      "fact": "A row of booths with thick sliding doors in a courtyard."
+    },
+    {
+      "chapter": 10,
+      "idx": 50,
+      "quote": "It took a significant effort for him to do so.",
+      "fact": "The doors are heavy."
+    },
+    {
+      "chapter": 10,
+      "idx": 50,
+      "quote": "a layer of anti-transmission foil on the inside, followed by layers of soundproofing",
+      "fact": "The walls are layered foil and soundproofing."
+    },
+    {
+      "chapter": 10,
+      "idx": 51,
+      "quote": "a constant humming sound that was being emitted from the outside of the booth on all sides",
+      "fact": "White noise hums around the outside."
+    },
+    {
+      "chapter": 10,
+      "idx": 52,
+      "quote": "There was a table stretching from near the entrance to the opposite wall, and a long bench on each side.",
+      "fact": "A long table with a bench on each side."
+    },
+    {
+      "chapter": 10,
+      "idx": 110,
+      "quote": "The drone began flying around the room near the edges",
+      "fact": "Keepers sweep the booth with a drone."
+    },
+    {
+      "chapter": 11,
+      "idx": 92,
+      "quote": "I guess they haven't yet figured out how to give these secure booths any ventilation",
+      "fact": "Poor ventilation; air filters instead."
+    },
+    {
+      "chapter": 13,
+      "idx": 72,
+      "quote": "Gladias slid the barrier open, and walked into the booth.",
+      "fact": "The door is a sliding barrier."
+    },
+    {
+      "chapter": 26,
+      "idx": 162,
+      "quote": "Gladias slid open the door to the booth",
+      "fact": "The same kind of booth hosts the judges."
+    }
+  ],
+  "descriptor": "a row of heavy boxy soundproof booths along one side of a quiet stone courtyard ringed by trees, each sealed by a thick sliding door whose cut edge shows layers of foil and padding; inside, a windowless chamber lined with crinkled silver foil behind soft padding, a long table from door to back wall between two long benches, small humming air filters and soft even light",
+  "plate": "locations/order-booths-plate",
+  "plate_prompt": "Establishing view of row of heavy boxy soundproof booths along one side of a quiet stone courtyard ringed by trees, each sealed by a thick sliding door whose cut edge shows layers of foil and padding; inside, a windowless chamber lined with crinkled silver foil behind soft padding, a long table from door to back wall between two long benches, small humming air filters and soft even light. Seen from the courtyard on a calm overcast morning, the rightmost booth's door slid open to reveal its table and benches. No people in the foreground."
+}

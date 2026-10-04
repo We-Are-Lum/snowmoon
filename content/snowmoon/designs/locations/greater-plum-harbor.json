@@ -1,0 +1,103 @@
+{
+  "kind": "location",
+  "name": "Greater Plum Harbor",
+  "slug": "greater-plum-harbor",
+  "status": "starting point",
+  "setting": "veridia",
+  "about": "The walled corporate enclave in Meldan's commercial district (chapters 3, 13 and 32); its node in Northglade (chapter 31) shares the same look. The book gives only the details listed below; the rest of the design is invented, and contributors are welcome to replace it.",
+  "facts": [
+    {
+      "chapter": 3,
+      "idx": 48,
+      "quote": "the long castle-like wall, mixing grey and purple colors",
+      "fact": "A long castle-like wall in grey and purple."
+    },
+    {
+      "chapter": 3,
+      "idx": 49,
+      "quote": "In front of the wall, there were two rows of trees, with a sidewalk in between them.",
+      "fact": "Two rows of trees with a sidewalk between them line the wall."
+    },
+    {
+      "chapter": 3,
+      "idx": 52,
+      "quote": "robots picking up garbage, drawn in a child-friendly cartoon aesthetic",
+      "fact": "A large poster on the wall shows cartoon robots picking up garbage."
+    },
+    {
+      "chapter": 3,
+      "idx": 68,
+      "quote": "the green circle on the entrance gate",
+      "fact": "Entry through a gate with a green circle."
+    },
+    {
+      "chapter": 3,
+      "idx": 72,
+      "quote": "all with similar circular and rectangular shapes, a mixture of white, grey and purple colors, and roughly five to ten meters in height",
+      "fact": "Uniform circular and rectangular buildings in white, grey and purple, five to ten meters tall."
+    },
+    {
+      "chapter": 3,
+      "idx": 72,
+      "quote": "The trees were all of a few types, and carefully planted an equal distance apart on the sidewalk.",
+      "fact": "Few tree types, evenly spaced."
+    },
+    {
+      "chapter": 3,
+      "idx": 72,
+      "quote": "Beyond having distinct names and distinct quarter-meter-wide logos",
+      "fact": "Stores differ only by small logos."
+    },
+    {
+      "chapter": 3,
+      "idx": 72,
+      "quote": "The buildings were noticeably more futuristic, more glass-and-steel, and with more sharp edges than the usual structures in Veridia.",
+      "fact": "More futuristic, glass and steel, with sharp edges."
+    },
+    {
+      "chapter": 3,
+      "idx": 79,
+      "quote": "After taking several more turns through the maze",
+      "fact": "Underground tunnels form a maze."
+    },
+    {
+      "chapter": 13,
+      "idx": 24,
+      "quote": "The Greater Plum Harbor's tall entrance doors were directly in front. Gladias passed through the turnstile",
+      "fact": "Tall entrance doors and turnstiles."
+    },
+    {
+      "chapter": 13,
+      "idx": 24,
+      "quote": "emerged into a pathway above ground level",
+      "fact": "A raised pathway leads out of the exit."
+    },
+    {
+      "chapter": 32,
+      "idx": 106,
+      "quote": "The whole thing was a square nearly a kilometer wide",
+      "fact": "The enclave is a square nearly a kilometer wide."
+    },
+    {
+      "chapter": 31,
+      "idx": 66,
+      "quote": "the large stone gates at the entrance to the Greater Plum Harbor in Northglade",
+      "fact": "The Northglade enclave has large stone gates."
+    },
+    {
+      "chapter": 31,
+      "idx": 66,
+      "quote": "Two Greater Plum Harbor security guards, wearing purple and grey attire",
+      "fact": "Guards wear purple and grey."
+    },
+    {
+      "chapter": 5,
+      "idx": 13,
+      "quote": "surrounded by a high grey and purple colored wall",
+      "fact": "The Freetown enclave too has a high grey and purple wall."
+    }
+  ],
+  "descriptor": "a walled corporate enclave a kilometer square behind a long castle-like rampart of grey and purple stone with tall gates and turnstiles, two rows of trees along its outer sidewalk; inside, uniform rounded and rectangular buildings five to ten meters tall in white, grey and purple glass and steel with sharp edges, identical evenly spaced trees, small identical blank logo panels, and tunnel mouths leading down, all crisp and orderly",
+  "plate": "locations/greater-plum-harbor-plate",
+  "plate_prompt": "Establishing view of walled corporate enclave a kilometer square behind a long castle-like rampart of grey and purple stone with tall gates and turnstiles, two rows of trees along its outer sidewalk; inside, uniform rounded and rectangular buildings five to ten meters tall in white, grey and purple glass and steel with sharp edges, identical evenly spaced trees, small identical blank logo panels, and tunnel mouths leading down, all crisp and orderly. Seen just inside the gate on a clear, bright day, a straight street of uniform buildings receding toward distant elegant towers. No people in the foreground."
+}

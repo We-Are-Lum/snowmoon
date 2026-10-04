@@ -1,12 +1,13 @@
 {
   "about": "Key moments for chapter 27, seeded by the project as a starting point.",
-  "style": "designs/styles/watercolor.json",
+  "style": "designs/styles/techno-vistas.json",
   "jobs": [
     {
       "id": "c27-b006-hotel-hug",
       "chapter": 27,
       "idx": 6,
       "setting": "veridia",
+      "location": "designs/locations/government-hotel.json",
       "characters": [
         "designs/characters/seila.json",
         "designs/characters/gladias.json"
@@ -26,6 +27,7 @@
       "chapter": 27,
       "idx": 31,
       "setting": "veridia",
+      "location": "designs/locations/kalimar-footpaths.json",
       "characters": [],
       "references": [],
       "props": [
@@ -41,6 +43,7 @@
       "chapter": 27,
       "idx": 40,
       "setting": "veridia",
+      "location": "designs/locations/hilltop-round-room.json",
       "characters": [],
       "references": [],
       "props": [
@@ -56,6 +59,7 @@
       "chapter": 27,
       "idx": 71,
       "setting": "veridia",
+      "location": "designs/locations/hilltop-round-room.json",
       "characters": [
         "designs/characters/gladias.json",
         "designs/characters/zei.json"
@@ -77,6 +81,7 @@
       "chapter": 27,
       "idx": 114,
       "setting": "veridia",
+      "location": "designs/locations/government-hotel.json",
       "characters": [
         "designs/characters/zei.json",
         "designs/characters/bai.json"

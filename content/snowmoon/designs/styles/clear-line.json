@@ -1,0 +1,13 @@
+{
+  "kind": "style",
+  "name": "Clear-line future",
+  "status": "test",
+  "about": "Style test A. The clear-line tradition of European science-fiction comics: even outlines, flat color, vast believable architecture and strange elegant machines. Described by its traits; no artist is named in the prompt.",
+  "prompt": "Clear-line science fiction comic art: clean, even, unbroken ink outlines of uniform weight, no hatching and no cross-hatching, flat areas of color with only subtle watercolor washes, precise architectural detail, vast airy compositions with deep space and distant megastructures, elegant strange machines and vehicles, calm pastel skies, a European comic album look, no text, no lettering, no writing, no logos, no numbers.",
+  "settings": {
+    "veridia": "Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges, a palette of sage, ochre, cream and stone.",
+    "dzego": "Dense low-rise streets stacked with small glowing shops, tangled cables, little drones and cute cartoon animal murals, a warm dusk palette with soft pink and cyan glow.",
+    "united-cities": "Layered megacity of mixed old stone and tall glass towers, flying traffic lanes, a cool blue and grey palette.",
+    "arctic": "Severe faceted crystalline architecture, icy whites, pale blues and steel."
+  }
+}

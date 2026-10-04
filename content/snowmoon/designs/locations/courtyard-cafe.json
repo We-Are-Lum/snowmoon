@@ -1,0 +1,55 @@
+{
+  "kind": "location",
+  "name": "the outdoor courtyard cafes",
+  "slug": "courtyard-cafe",
+  "status": "starting point",
+  "setting": "dzego",
+  "about": "The open-air courtyard cafes where Zei, Fin and Bai meet, play and talk (chapters 4, 7, 9, 10 and, in the capital, 14). The book gives only the details listed below; the rest of the design is invented, and contributors are welcome to replace it.",
+  "facts": [
+    {
+      "chapter": 4,
+      "idx": 2,
+      "quote": "sitting at a table in an outdoor courtyard",
+      "fact": "An outdoor courtyard with tables."
+    },
+    {
+      "chapter": 4,
+      "idx": 2,
+      "quote": "a few groups of teenagers and a few older couples sitting and eating",
+      "fact": "Teenagers and older couples eat there."
+    },
+    {
+      "chapter": 4,
+      "idx": 3,
+      "quote": "Through the opening at the entrance, Fin could see across the street",
+      "fact": "An entrance opening onto the street."
+    },
+    {
+      "chapter": 7,
+      "idx": 2,
+      "quote": "drinking a tea and eating a rice and vegetable dish",
+      "fact": "Tea and rice-and-vegetable dishes."
+    },
+    {
+      "chapter": 7,
+      "idx": 3,
+      "quote": "A robot slid up to him.",
+      "fact": "Serving robots."
+    },
+    {
+      "chapter": 7,
+      "idx": 5,
+      "quote": "The screen on the robot turned into a voting view.",
+      "fact": "The robots have screens."
+    },
+    {
+      "chapter": 9,
+      "idx": 2,
+      "quote": "sitting together in a courtyard, eating and drinking",
+      "fact": "Another courtyard meal."
+    }
+  ],
+  "descriptor": "a small open-air courtyard cafe enclosed by low, dense shop buildings, with scattered small tables and stools beneath a shade tree and strings of little lights, a playful cartoon animal mural on one wall, glowing blank shop panels in pink and cyan, a little wheeled serving robot with a screen face, and an open entrance onto a busy street with a lamp post",
+  "plate": "locations/courtyard-cafe-plate",
+  "plate_prompt": "Establishing view of small open-air courtyard cafe enclosed by low, dense shop buildings, with scattered small tables and stools beneath a shade tree and strings of little lights, a playful cartoon animal mural on one wall, glowing blank shop panels in pink and cyan, a little wheeled serving robot with a screen face, and an open entrance onto a busy street with a lamp post. Seen from a corner table in late afternoon, warm light with the first shop glows coming on. No people in the foreground."
+}

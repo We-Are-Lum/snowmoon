@@ -1,0 +1,67 @@
+{
+  "kind": "location",
+  "name": "Gladias and Seila's house",
+  "slug": "family-home",
+  "status": "starting point",
+  "setting": "veridia",
+  "about": "The family home in Meldan where Gladias, Seila and the children eat, argue and get bad news. The book gives only the details listed below; the rest of the design is invented, and contributors are welcome to replace it.",
+  "facts": [
+    {
+      "chapter": 1,
+      "idx": 109,
+      "quote": "They heard loud footsteps coming down the stairs.",
+      "fact": "The house has an upper floor reached by stairs."
+    },
+    {
+      "chapter": 1,
+      "idx": 121,
+      "quote": "She ran forward, and sat down on the couch.",
+      "fact": "A couch in the main room."
+    },
+    {
+      "chapter": 1,
+      "idx": 123,
+      "quote": "Gladias, Seila, Zven and Febric sat at the table and waited.",
+      "fact": "A family dining table."
+    },
+    {
+      "chapter": 6,
+      "idx": 2,
+      "quote": "A small roof covered the area right in front of the doorstep.",
+      "fact": "A small roof shelters the doorstep."
+    },
+    {
+      "chapter": 6,
+      "idx": 2,
+      "quote": "He then tapped his watch against a glowing green circle beside the door.",
+      "fact": "A glowing green circle beside the front door."
+    },
+    {
+      "chapter": 6,
+      "idx": 3,
+      "quote": "He went down a set of stairs to the basement",
+      "fact": "A basement room below."
+    },
+    {
+      "chapter": 15,
+      "idx": 18,
+      "quote": "light coming in clean through the window, the trees on the footpath outside already throwing long morning shadows",
+      "fact": "A window onto trees and a footpath."
+    },
+    {
+      "chapter": 20,
+      "idx": 13,
+      "quote": "saw through a screen that there was a man wearing a privacy robe outside",
+      "fact": "A screen by the door shows who is outside."
+    },
+    {
+      "chapter": 21,
+      "idx": 24,
+      "quote": "picked up two bags from a robot",
+      "fact": "Food is delivered to the door by a robot."
+    }
+  ],
+  "descriptor": "a cozy two-storey family house of large clean stone blocks with a small sheltering roof over the doorstep, a glowing green circle and a slim screen beside the door; inside, a warm open living and dining room with a long wooden table, a deep couch, a wooden staircase, plants, soft lamps and a large window onto trees and a footpath, in honey wood, cream, sage and stone",
+  "plate": "locations/family-home-plate",
+  "plate_prompt": "Establishing view of cozy two-storey family house of large clean stone blocks with a small sheltering roof over the doorstep, a glowing green circle and a slim screen beside the door; inside, a warm open living and dining room with a long wooden table, a deep couch, a wooden staircase, plants, soft lamps and a large window onto trees and a footpath, in honey wood, cream, sage and stone. Interior view from a corner of the room in warm early-evening lamplight, green trees showing through the window. No people in the foreground."
+}

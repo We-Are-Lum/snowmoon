@@ -1,0 +1,309 @@
+{
+  "job_file": "content/snowmoon/illustrations/style-test.json",
+  "generated_at": "2026-10-03T23:04:48+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 1.0,
+  "images": [
+    {
+      "id": "a-clear-line-gladias-sheet",
+      "chapter": null,
+      "idx": null,
+      "file": "a-clear-line-gladias-sheet.png",
+      "sha256": "455b84bb47180e2bc60052f465981e3fc235405c9140f031d647adba2156cf46",
+      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long moss-green woven coat with an asymmetric wrap front and a high soft collar, a fitted cream undertunic, slim charcoal trousers tucked into soft grey boots, a thin silver band around his throat, a small earpiece and a slim wrist device. Clear-line science fiction comic art: clean, even, unbroken ink outlines of uniform weight, no hatching and no cross-hatching, flat areas of color with only subtle watercolor washes, precise architectural detail, vast airy compositions with deep space and distant megastructures, elegant strange machines and vehicles, calm pastel skies, a European comic album look, no text, no lettering, no writing, no logos, no numbers.",
+      "seed": 6001,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 169.9
+    },
+    {
+      "id": "a-clear-line-zei-sheet",
+      "chapter": null,
+      "idx": null,
+      "file": "a-clear-line-zei-sheet.png",
+      "sha256": "0db9fac1e4c430eced58dfac25917b386a40d1952a2df42ad7f45d75dc610d08",
+      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing modular techwear: a cropped orange shell jacket with reflective piping and magnetic clasps, a black high-neck base layer, segmented grey cargo trousers with strap pockets, chunky white sneakers with glowing soles, a thin band around his throat and clear smart glasses pushed up on his head. Clear-line science fiction comic art: clean, even, unbroken ink outlines of uniform weight, no hatching and no cross-hatching, flat areas of color with only subtle watercolor washes, precise architectural detail, vast airy compositions with deep space and distant megastructures, elegant strange machines and vehicles, calm pastel skies, a European comic album look, no text, no lettering, no writing, no logos, no numbers.",
+      "seed": 6002,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 194.1
+    },
+    {
+      "id": "a-clear-line-c1-b005-toy-drone",
+      "chapter": 1,
+      "idx": 5,
+      "file": "a-clear-line-c1-b005-toy-drone.png",
+      "sha256": "08432d4fc6452a85f379a212e660e47ba0e722ca5afa1b132a0ce5900b158b4c",
+      "prompt": "Wide shot on a quiet morning footpath under tall trees. A figure in a privacy robe walks along the path, seen from the side. Medieval-style houses of large clean stone bricks sit behind the trees, melting into leaves and plants. On a sidewalk branching off to the left, a young boy leaps up and grabs a small ball-shaped toy drone with feather-like rotors out of the air, while two smaller children ride tricycles nearby and their parents watch. Soft green light filtering through the leaves. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Clear-line science fiction comic art: clean, even, unbroken ink outlines of uniform weight, no hatching and no cross-hatching, flat areas of color with only subtle watercolor washes, precise architectural detail, vast airy compositions with deep space and distant megastructures, elegant strange machines and vehicles, calm pastel skies, a European comic album look, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges, a palette of sage, ochre, cream and stone.",
+      "seed": 1005,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 184.4
+    },
+    {
+      "id": "b-dayglo-noir-gladias-sheet",
+      "chapter": null,
+      "idx": null,
+      "file": "b-dayglo-noir-gladias-sheet.png",
+      "sha256": "f2f706a49ac47a294046b83f77de6e4a6161139eff1cd8b8a7862fd7872ea54d",
+      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long moss-green woven coat with an asymmetric wrap front and a high soft collar, a fitted cream undertunic, slim charcoal trousers tucked into soft grey boots, a thin silver band around his throat, a small earpiece and a slim wrist device. Bold graphic comic art: confident clean black linework, flat pure saturated color with no gradients, a vivid palette of pure cyan, magenta and bright yellow against deep violet shadows, strong graphic shapes and silhouettes, dramatic noir camera angles but bright day-glo color, hoods, masks and disguises as a visual motif, no text, no lettering, no writing, no logos, no numbers.",
+      "seed": 6001,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 195.1
+    },
+    {
+      "id": "b-dayglo-noir-zei-sheet",
+      "chapter": null,
+      "idx": null,
+      "file": "b-dayglo-noir-zei-sheet.png",
+      "sha256": "9626827812f28c4482e5da6cd92debdfbc350fa3c49e36177d9186d665029244",
+      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing modular techwear: a cropped orange shell jacket with reflective piping and magnetic clasps, a black high-neck base layer, segmented grey cargo trousers with strap pockets, chunky white sneakers with glowing soles, a thin band around his throat and clear smart glasses pushed up on his head. Bold graphic comic art: confident clean black linework, flat pure saturated color with no gradients, a vivid palette of pure cyan, magenta and bright yellow against deep violet shadows, strong graphic shapes and silhouettes, dramatic noir camera angles but bright day-glo color, hoods, masks and disguises as a visual motif, no text, no lettering, no writing, no logos, no numbers.",
+      "seed": 6002,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 181.8
+    },
+    {
+      "id": "b-dayglo-noir-c1-b005-toy-drone",
+      "chapter": 1,
+      "idx": 5,
+      "file": "b-dayglo-noir-c1-b005-toy-drone.png",
+      "sha256": "6969f82d0e600cf43e027b968de246412ea31bc64e24dacef90020b2b4b2a51c",
+      "prompt": "Wide shot on a quiet morning footpath under tall trees. A figure in a privacy robe walks along the path, seen from the side. Medieval-style houses of large clean stone bricks sit behind the trees, melting into leaves and plants. On a sidewalk branching off to the left, a young boy leaps up and grabs a small ball-shaped toy drone with feather-like rotors out of the air, while two smaller children ride tricycles nearby and their parents watch. Soft green light filtering through the leaves. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Bold graphic comic art: confident clean black linework, flat pure saturated color with no gradients, a vivid palette of pure cyan, magenta and bright yellow against deep violet shadows, strong graphic shapes and silhouettes, dramatic noir camera angles but bright day-glo color, hoods, masks and disguises as a visual motif, no text, no lettering, no writing, no logos, no numbers. Day-glo greens and teal for the trees and stone, the violet of privacy robes standing out strongly.",
+      "seed": 1005,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 182.9
+    },
+    {
+      "id": "c-ink-wash-gladias-sheet",
+      "chapter": null,
+      "idx": null,
+      "file": "c-ink-wash-gladias-sheet.png",
+      "sha256": "0dd92b7ec403288c747a29b1037137829a32e6878b61857ae79bb7a606837e9b",
+      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long moss-green woven coat with an asymmetric wrap front and a high soft collar, a fitted cream undertunic, slim charcoal trousers tucked into soft grey boots, a thin silver band around his throat, a small earpiece and a slim wrist device. Painted science fiction graphic novel art: loose expressive brush-ink lines, layered translucent watercolor washes, dramatic directional light and atmospheric haze, dense intricate futuristic technology and architecture rendered in fine detail, cinematic composition, luminous glows, no text, no lettering, no writing, no logos, no numbers.",
+      "seed": 6001,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 181.2
+    },
+    {
+      "id": "c-ink-wash-zei-sheet",
+      "chapter": null,
+      "idx": null,
+      "file": "c-ink-wash-zei-sheet.png",
+      "sha256": "a0e467ed16817512f237290a2cae11b4a73bae872ed7685b5f2bed71a2b9e760",
+      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing modular techwear: a cropped orange shell jacket with reflective piping and magnetic clasps, a black high-neck base layer, segmented grey cargo trousers with strap pockets, chunky white sneakers with glowing soles, a thin band around his throat and clear smart glasses pushed up on his head. Painted science fiction graphic novel art: loose expressive brush-ink lines, layered translucent watercolor washes, dramatic directional light and atmospheric haze, dense intricate futuristic technology and architecture rendered in fine detail, cinematic composition, luminous glows, no text, no lettering, no writing, no logos, no numbers.",
+      "seed": 6002,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 166.2
+    },
+    {
+      "id": "c-ink-wash-c1-b005-toy-drone",
+      "chapter": 1,
+      "idx": 5,
+      "file": "c-ink-wash-c1-b005-toy-drone.png",
+      "sha256": "5be49c11bac4e1255145b13a2d482ce36934786f105accf872d74ba12c13cb3e",
+      "prompt": "Wide shot on a quiet morning footpath under tall trees. A figure in a privacy robe walks along the path, seen from the side. Medieval-style houses of large clean stone bricks sit behind the trees, melting into leaves and plants. On a sidewalk branching off to the left, a young boy leaps up and grabs a small ball-shaped toy drone with feather-like rotors out of the air, while two smaller children ride tricycles nearby and their parents watch. Soft green light filtering through the leaves. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Painted science fiction graphic novel art: loose expressive brush-ink lines, layered translucent watercolor washes, dramatic directional light and atmospheric haze, dense intricate futuristic technology and architecture rendered in fine detail, cinematic composition, luminous glows, no text, no lettering, no writing, no logos, no numbers. Misty greens, warm stone and soft gold light through leaves.",
+      "seed": 1005,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 188.8
+    },
+    {
+      "id": "d-solarpunk-nouveau-gladias-sheet",
+      "chapter": null,
+      "idx": null,
+      "file": "d-solarpunk-nouveau-gladias-sheet.png",
+      "sha256": "faeb72930060ffb66e87173131bb3929f9f7de79df6037d2c5af6968af7d9700",
+      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long moss-green woven coat with an asymmetric wrap front and a high soft collar, a fitted cream undertunic, slim charcoal trousers tucked into soft grey boots, a thin silver band around his throat, a small earpiece and a slim wrist device. Art Nouveau solarpunk illustration: flowing whiplash curves and botanical ornament, decorative framing of vines and leaves, poster-like flat color with fine elegant line, warm sunlit golden palette with greens and turquoise, harmonious high-tech organic architecture with solar glass, living walls and vertical gardens, elegant flowing garments, no text, no lettering, no writing, no logos, no numbers.",
+      "seed": 6001,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 169.8
+    },
+    {
+      "id": "d-solarpunk-nouveau-zei-sheet",
+      "chapter": null,
+      "idx": null,
+      "file": "d-solarpunk-nouveau-zei-sheet.png",
+      "sha256": "60759d6b25252d31d8f9ef0c581ab126c92d7abe111532cdfa680a7a0605124b",
+      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing modular techwear: a cropped orange shell jacket with reflective piping and magnetic clasps, a black high-neck base layer, segmented grey cargo trousers with strap pockets, chunky white sneakers with glowing soles, a thin band around his throat and clear smart glasses pushed up on his head. Art Nouveau solarpunk illustration: flowing whiplash curves and botanical ornament, decorative framing of vines and leaves, poster-like flat color with fine elegant line, warm sunlit golden palette with greens and turquoise, harmonious high-tech organic architecture with solar glass, living walls and vertical gardens, elegant flowing garments, no text, no lettering, no writing, no logos, no numbers.",
+      "seed": 6002,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 180.4
+    },
+    {
+      "id": "d-solarpunk-nouveau-c1-b005-toy-drone",
+      "chapter": 1,
+      "idx": 5,
+      "file": "d-solarpunk-nouveau-c1-b005-toy-drone.png",
+      "sha256": "ee7ff3379a7a7e2f8ff593a64a84277d84c0457bd43b8b728bbea8fb7bb7dd63",
+      "prompt": "Wide shot on a quiet morning footpath under tall trees. A figure in a privacy robe walks along the path, seen from the side. Medieval-style houses of large clean stone bricks sit behind the trees, melting into leaves and plants. On a sidewalk branching off to the left, a young boy leaps up and grabs a small ball-shaped toy drone with feather-like rotors out of the air, while two smaller children ride tricycles nearby and their parents watch. Soft green light filtering through the leaves. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Art Nouveau solarpunk illustration: flowing whiplash curves and botanical ornament, decorative framing of vines and leaves, poster-like flat color with fine elegant line, warm sunlit golden palette with greens and turquoise, harmonious high-tech organic architecture with solar glass, living walls and vertical gardens, elegant flowing garments, no text, no lettering, no writing, no logos, no numbers. Stone and living wood, sage, gold and cream, sunlight through leaves.",
+      "seed": 1005,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 174.0
+    },
+    {
+      "id": "e-dense-techno-gladias-sheet",
+      "chapter": null,
+      "idx": null,
+      "file": "e-dense-techno-gladias-sheet.png",
+      "sha256": "b50366667cc778c470fc5ba3051524f507517d99f6e347c668afba959c4d54b5",
+      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long moss-green woven coat with an asymmetric wrap front and a high soft collar, a fitted cream undertunic, slim charcoal trousers tucked into soft grey boots, a thin silver band around his throat, a small earpiece and a slim wrist device. Hyper-detailed science fiction comic art: precise fine linework, obsessive mechanical and architectural detail with cables, vents, panels and small machines, dense layered cityscapes, cel-shaded flat color with hard-edged shadows, cinematic wide-angle perspective, clean and bright rather than grim, no text, no lettering, no writing, no logos, no numbers.",
+      "seed": 6001,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 179.4
+    },
+    {
+      "id": "e-dense-techno-zei-sheet",
+      "chapter": null,
+      "idx": null,
+      "file": "e-dense-techno-zei-sheet.png",
+      "sha256": "0f593092885a873abb156563e7f5586e9a7d9d37de3124257716245d26193686",
+      "prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing modular techwear: a cropped orange shell jacket with reflective piping and magnetic clasps, a black high-neck base layer, segmented grey cargo trousers with strap pockets, chunky white sneakers with glowing soles, a thin band around his throat and clear smart glasses pushed up on his head. Hyper-detailed science fiction comic art: precise fine linework, obsessive mechanical and architectural detail with cables, vents, panels and small machines, dense layered cityscapes, cel-shaded flat color with hard-edged shadows, cinematic wide-angle perspective, clean and bright rather than grim, no text, no lettering, no writing, no logos, no numbers.",
+      "seed": 6002,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 169.0
+    },
+    {
+      "id": "e-dense-techno-c1-b005-toy-drone",
+      "chapter": 1,
+      "idx": 5,
+      "file": "e-dense-techno-c1-b005-toy-drone.png",
+      "sha256": "7da2869d9c0940734a94b4a1ce38d6f4a875b48e47eb25287fc4d1ad1a5e83fa",
+      "prompt": "Wide shot on a quiet morning footpath under tall trees. A figure in a privacy robe walks along the path, seen from the side. Medieval-style houses of large clean stone bricks sit behind the trees, melting into leaves and plants. On a sidewalk branching off to the left, a young boy leaps up and grabs a small ball-shaped toy drone with feather-like rotors out of the air, while two smaller children ride tricycles nearby and their parents watch. Soft green light filtering through the leaves. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Hyper-detailed science fiction comic art: precise fine linework, obsessive mechanical and architectural detail with cables, vents, panels and small machines, dense layered cityscapes, cel-shaded flat color with hard-edged shadows, cinematic wide-angle perspective, clean and bright rather than grim, no text, no lettering, no writing, no logos, no numbers. Clean stone and greenery woven through the machinery, cool greens and greys.",
+      "seed": 1005,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 178.9
+    },
+    {
+      "id": "a-clear-line-c2-b003-street",
+      "chapter": 2,
+      "idx": 3,
+      "file": "a-clear-line-c2-b003-street.png",
+      "sha256": "5d73b28e996383a8f2e8c032ee41cb5f5ef57d3bf6871ee2444519cad1f67223",
+      "prompt": "Wide street scene in a dense low-rise city on a warm evening. The young man from reference image 1 walks along a sidewalk shaded by trees beside a stocky friend with copper-red hair and a backpack, both chatting. On both sides, one- and two-storey shops glow with colored blinking lights, selling hand devices, watches, batteries and sensors, and small open workshops build gadgets inside. Several stairways lead down underground from the sidewalk. A small security drone flies overhead. Cute cartoon animal murals on the walls, shop lights shown only as glowing colored shapes. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing modular techwear: a cropped orange shell jacket with reflective piping and magnetic clasps, a black high-neck base layer, segmented grey cargo trousers with strap pockets, chunky white sneakers with glowing soles, a thin band around his throat and clear smart glasses pushed up on his head; keep the same face, hair, build and clothing. Clear-line science fiction comic art: clean, even, unbroken ink outlines of uniform weight, no hatching and no cross-hatching, flat areas of color with only subtle watercolor washes, precise architectural detail, vast airy compositions with deep space and distant megastructures, elegant strange machines and vehicles, calm pastel skies, a European comic album look, no text, no lettering, no writing, no logos, no numbers. Dense low-rise streets stacked with small glowing shops, tangled cables, little drones and cute cartoon animal murals, a warm dusk palette with soft pink and cyan glow.",
+      "seed": 2003,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "a-clear-line-zei-sheet.png",
+          "sha256": "0db9fac1e4c430eced58dfac25917b386a40d1952a2df42ad7f45d75dc610d08"
+        }
+      ],
+      "generation_seconds": 213.2
+    },
+    {
+      "id": "b-dayglo-noir-c2-b003-street",
+      "chapter": 2,
+      "idx": 3,
+      "file": "b-dayglo-noir-c2-b003-street.png",
+      "sha256": "ddf657b08b0b27d28290810e65604ac73cc80a893fd27dec00e94c1d3000b82a",
+      "prompt": "Wide street scene in a dense low-rise city on a warm evening. The young man from reference image 1 walks along a sidewalk shaded by trees beside a stocky friend with copper-red hair and a backpack, both chatting. On both sides, one- and two-storey shops glow with colored blinking lights, selling hand devices, watches, batteries and sensors, and small open workshops build gadgets inside. Several stairways lead down underground from the sidewalk. A small security drone flies overhead. Cute cartoon animal murals on the walls, shop lights shown only as glowing colored shapes. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing modular techwear: a cropped orange shell jacket with reflective piping and magnetic clasps, a black high-neck base layer, segmented grey cargo trousers with strap pockets, chunky white sneakers with glowing soles, a thin band around his throat and clear smart glasses pushed up on his head; keep the same face, hair, build and clothing. Bold graphic comic art: confident clean black linework, flat pure saturated color with no gradients, a vivid palette of pure cyan, magenta and bright yellow against deep violet shadows, strong graphic shapes and silhouettes, dramatic noir camera angles but bright day-glo color, hoods, masks and disguises as a visual motif, no text, no lettering, no writing, no logos, no numbers. Electric magenta and cyan shop glow, yellow highlights, deep violet night shadows.",
+      "seed": 2003,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "b-dayglo-noir-zei-sheet.png",
+          "sha256": "9626827812f28c4482e5da6cd92debdfbc350fa3c49e36177d9186d665029244"
+        }
+      ],
+      "generation_seconds": 222.3
+    },
+    {
+      "id": "c-ink-wash-c2-b003-street",
+      "chapter": 2,
+      "idx": 3,
+      "file": "c-ink-wash-c2-b003-street.png",
+      "sha256": "d4f9d59fc6a808c1a28e4607b00f8911eef02fc091b70ef205cd1d8662402303",
+      "prompt": "Wide street scene in a dense low-rise city on a warm evening. The young man from reference image 1 walks along a sidewalk shaded by trees beside a stocky friend with copper-red hair and a backpack, both chatting. On both sides, one- and two-storey shops glow with colored blinking lights, selling hand devices, watches, batteries and sensors, and small open workshops build gadgets inside. Several stairways lead down underground from the sidewalk. A small security drone flies overhead. Cute cartoon animal murals on the walls, shop lights shown only as glowing colored shapes. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing modular techwear: a cropped orange shell jacket with reflective piping and magnetic clasps, a black high-neck base layer, segmented grey cargo trousers with strap pockets, chunky white sneakers with glowing soles, a thin band around his throat and clear smart glasses pushed up on his head; keep the same face, hair, build and clothing. Painted science fiction graphic novel art: loose expressive brush-ink lines, layered translucent watercolor washes, dramatic directional light and atmospheric haze, dense intricate futuristic technology and architecture rendered in fine detail, cinematic composition, luminous glows, no text, no lettering, no writing, no logos, no numbers. Warm night washes with neon pink, cyan and amber glows bleeding into the paper.",
+      "seed": 2003,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "c-ink-wash-zei-sheet.png",
+          "sha256": "a0e467ed16817512f237290a2cae11b4a73bae872ed7685b5f2bed71a2b9e760"
+        }
+      ],
+      "generation_seconds": 251.2
+    },
+    {
+      "id": "d-solarpunk-nouveau-c2-b003-street",
+      "chapter": 2,
+      "idx": 3,
+      "file": "d-solarpunk-nouveau-c2-b003-street.png",
+      "sha256": "89d81c531a9f5e1b6fb5266160a7d32e433c77276d29440a278c6a8225ea14e4",
+      "prompt": "Wide street scene in a dense low-rise city on a warm evening. The young man from reference image 1 walks along a sidewalk shaded by trees beside a stocky friend with copper-red hair and a backpack, both chatting. On both sides, one- and two-storey shops glow with colored blinking lights, selling hand devices, watches, batteries and sensors, and small open workshops build gadgets inside. Several stairways lead down underground from the sidewalk. A small security drone flies overhead. Cute cartoon animal murals on the walls, shop lights shown only as glowing colored shapes. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing modular techwear: a cropped orange shell jacket with reflective piping and magnetic clasps, a black high-neck base layer, segmented grey cargo trousers with strap pockets, chunky white sneakers with glowing soles, a thin band around his throat and clear smart glasses pushed up on his head; keep the same face, hair, build and clothing. Art Nouveau solarpunk illustration: flowing whiplash curves and botanical ornament, decorative framing of vines and leaves, poster-like flat color with fine elegant line, warm sunlit golden palette with greens and turquoise, harmonious high-tech organic architecture with solar glass, living walls and vertical gardens, elegant flowing garments, no text, no lettering, no writing, no logos, no numbers. Night version: glowing botanical shop fronts in pink, turquoise and amber, playful animal motifs in the ornament.",
+      "seed": 2003,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "d-solarpunk-nouveau-zei-sheet.png",
+          "sha256": "60759d6b25252d31d8f9ef0c581ab126c92d7abe111532cdfa680a7a0605124b"
+        }
+      ],
+      "generation_seconds": 255.2
+    },
+    {
+      "id": "e-dense-techno-c2-b003-street",
+      "chapter": 2,
+      "idx": 3,
+      "file": "e-dense-techno-c2-b003-street.png",
+      "sha256": "dde45277457f6d7a7b0c8dff9d45ec7bba4983cb8e5e0d60d560138b87ec5947",
+      "prompt": "Wide street scene in a dense low-rise city on a warm evening. The young man from reference image 1 walks along a sidewalk shaded by trees beside a stocky friend with copper-red hair and a backpack, both chatting. On both sides, one- and two-storey shops glow with colored blinking lights, selling hand devices, watches, batteries and sensors, and small open workshops build gadgets inside. Several stairways lead down underground from the sidewalk. A small security drone flies overhead. Cute cartoon animal murals on the walls, shop lights shown only as glowing colored shapes. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing modular techwear: a cropped orange shell jacket with reflective piping and magnetic clasps, a black high-neck base layer, segmented grey cargo trousers with strap pockets, chunky white sneakers with glowing soles, a thin band around his throat and clear smart glasses pushed up on his head; keep the same face, hair, build and clothing. Hyper-detailed science fiction comic art: precise fine linework, obsessive mechanical and architectural detail with cables, vents, panels and small machines, dense layered cityscapes, cel-shaded flat color with hard-edged shadows, cinematic wide-angle perspective, clean and bright rather than grim, no text, no lettering, no writing, no logos, no numbers. Packed electronic streets, neon pink, cyan and yellow accents against dark blue.",
+      "seed": 2003,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "e-dense-techno-zei-sheet.png",
+          "sha256": "0f593092885a873abb156563e7f5586e9a7d9d37de3124257716245d26193686"
+        }
+      ],
+      "generation_seconds": 249.2
+    }
+  ]
+}

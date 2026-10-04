@@ -1,0 +1,63 @@
+{
+  "job_file": "content/snowmoon/illustrations/chapter-1.json",
+  "generated_at": "2026-10-03T21:52:47+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.6,
+  "images": [
+    {
+      "id": "c1-b005-toy-drone",
+      "chapter": 1,
+      "idx": 5,
+      "file": "c1-b005-toy-drone.png",
+      "sha256": "1533a02bc5fbad71c48ceb479c147a005f6ec474ab0ad95c1704cdff04642ed2",
+      "prompt": "Wide shot on a quiet morning footpath under tall trees. A figure in a privacy robe walks along the path, seen from the side. Medieval-style houses of large clean stone bricks sit behind the trees, melting into leaves and plants. On a sidewalk branching off to the left, a young boy leaps up and grabs a small ball-shaped toy drone with feather-like rotors out of the air, while two smaller children ride tricycles nearby and their parents watch. Soft green light filtering through the leaves. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Storybook illustration, fine ink linework with soft watercolor washes, gentle natural light, slightly stylized proportions, no text, no lettering, no writing, no logos, no numbers. Palette of muted greens, stone greys and warm earth tones; calm, clean, wooded, stone buildings blended with trees.",
+      "seed": 1005,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 178.9
+    },
+    {
+      "id": "c1-b013-sky-bridge",
+      "chapter": 1,
+      "idx": 13,
+      "file": "c1-b013-sky-bridge.png",
+      "sha256": "655163ed407d76c60f42831cff293f657daa565cf01cd5f1de01b0606b9946a8",
+      "prompt": "Wide view from the middle of a pedestrian sky bridge on a chilly, clear day. In the foreground a figure in a privacy robe stands at the railing, looking out. Below, a busy road runs straight for about two kilometers and then bends right, full of cars, small autonomous buses and little delivery vehicles. Beyond rises a mountain covered with trees, with a few fifteen-storey apartment buildings shaped like oversized medieval castle towers with many windows poking above the trees on its lower slope. Crisp light, a breeze stirring the leaves. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Storybook illustration, fine ink linework with soft watercolor washes, gentle natural light, slightly stylized proportions, no text, no lettering, no writing, no logos, no numbers. Palette of muted greens, stone greys and warm earth tones; calm, clean, wooded, stone buildings blended with trees.",
+      "seed": 1013,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 176.0
+    },
+    {
+      "id": "c1-b082-snatch",
+      "chapter": 1,
+      "idx": 82,
+      "file": "c1-b082-snatch.png",
+      "sha256": "1f331e43f5a35ba4093034ccb68f4ecf6fc29ad7ef3280a4a70fae1a960a826d",
+      "prompt": "Medium shot inside a crowded open-air concert field enclosed by a high soundproof wall behind tall trees, a metal band playing on a distant stage. In the foreground a figure in a privacy robe snatches a hand device from the grip of a large burly man in a plain shirt, who is looking away to the side in confusion. Behind them, concert-goers in band shirts turn and point their hand devices at another robed figure sprinting toward a fire exit. Energetic and chaotic, bright afternoon light mixed with stage lights. Anyone in a Veridian Privacy Robe wears a loose-fitting dark purple garment covering the whole body from a hood over the head down to the ankles, a dark purple fabric face cover over the face below the eyes, and matching dark purple shoes; the wearer's face, hair, body shape and clothing underneath are completely hidden. Storybook illustration, fine ink linework with soft watercolor washes, gentle natural light, slightly stylized proportions, no text, no lettering, no writing, no logos, no numbers. Palette of muted greens, stone greys and warm earth tones; calm, clean, wooded, stone buildings blended with trees.",
+      "seed": 1082,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 217.1
+    }
+  ]
+}

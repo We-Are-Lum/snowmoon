@@ -1,6 +1,6 @@
 {
   "about": "Key moments for chapter 31, seeded by the project as a starting point.",
-  "style": "designs/styles/watercolor.json",
+  "style": "designs/styles/techno-vistas.json",
   "jobs": [
     {
       "id": "c31-b002-mountain-stair",
@@ -39,6 +39,7 @@
       "chapter": 31,
       "idx": 66,
       "setting": "veridia",
+      "location": "designs/locations/greater-plum-harbor.json",
       "characters": [
         "designs/characters/gladias.json",
         "designs/characters/seila.json"

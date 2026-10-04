@@ -1,0 +1,61 @@
+{
+  "kind": "location",
+  "name": "the government-run hotel in Meldan",
+  "slug": "government-hotel",
+  "status": "starting point",
+  "setting": "veridia",
+  "about": "The government-run hotel where the Dzego team and the family stay in chapters 26 to 28: lobby, guest rooms and meeting rooms. The book gives only the details listed below; the rest of the design is invented, and contributors are welcome to replace it.",
+  "facts": [
+    {
+      "chapter": 26,
+      "idx": 73,
+      "quote": "the doors opened, leading straight into the inside of what looked to be a government-run hotel",
+      "fact": "The car doors open straight into the hotel."
+    },
+    {
+      "chapter": 26,
+      "idx": 75,
+      "quote": "a woman waiting in the far corner of the room",
+      "fact": "A lobby large enough to run across."
+    },
+    {
+      "chapter": 27,
+      "idx": 2,
+      "quote": "he heard a buzzing sound, and the door opened",
+      "fact": "Room doors buzz and open automatically."
+    },
+    {
+      "chapter": 27,
+      "idx": 99,
+      "quote": "sitting around a table inside a meeting room in the government-run hotel",
+      "fact": "A meeting room with a table."
+    },
+    {
+      "chapter": 27,
+      "idx": 99,
+      "quote": "Projected on a wall in front of them was a timer",
+      "fact": "Images are projected onto a wall."
+    },
+    {
+      "chapter": 28,
+      "idx": 2,
+      "quote": "sitting around a table inside a conference room",
+      "fact": "A conference room."
+    },
+    {
+      "chapter": 28,
+      "idx": 57,
+      "quote": "jumped onto a sofa",
+      "fact": "Guest rooms have a sofa."
+    },
+    {
+      "chapter": 28,
+      "idx": 91,
+      "quote": "as she was pouring herself a tea in their hotel room",
+      "fact": "Tea is made in the room."
+    }
+  ],
+  "descriptor": "a calm government-run hotel built of large pale stone blocks, with a quiet lobby where a sealed car bay opens straight inside, warm wooden furniture, deep sofas, potted trees and plants and soft lamps, guest rooms with tall windows over green treetops, and meeting rooms with a long table facing a bare pale wall for projections, in stone, honey wood, sage and cream",
+  "plate": "locations/government-hotel-plate",
+  "plate_prompt": "Establishing view of calm government-run hotel built of large pale stone blocks, with a quiet lobby where a sealed car bay opens straight inside, warm wooden furniture, deep sofas, potted trees and plants and soft lamps, guest rooms with tall windows over green treetops, and meeting rooms with a long table facing a bare pale wall for projections, in stone, honey wood, sage and cream. Seen across the lobby from the car bay doors in soft afternoon light, the far corner open and inviting. No people in the foreground."
+}

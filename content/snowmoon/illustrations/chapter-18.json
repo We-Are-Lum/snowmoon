@@ -1,12 +1,13 @@
 {
   "about": "Key moments for chapter 18, seeded by the project as a starting point.",
-  "style": "designs/styles/watercolor.json",
+  "style": "designs/styles/techno-vistas.json",
   "jobs": [
     {
       "id": "c18-b003-black-car",
       "chapter": 18,
       "idx": 3,
       "setting": "dzego",
+      "location": "designs/locations/sealed-black-car.json",
       "characters": [
         "designs/characters/zei.json",
         "designs/characters/bai.json"
@@ -26,6 +27,7 @@
       "chapter": 18,
       "idx": 61,
       "setting": "dzego",
+      "location": "designs/locations/pafogai-shop-streets.json",
       "characters": [],
       "references": [],
       "props": [],
@@ -39,6 +41,7 @@
       "chapter": 18,
       "idx": 70,
       "setting": "dzego",
+      "location": "designs/locations/pafogai-shop-streets.json",
       "characters": [],
       "references": [],
       "props": [],
@@ -52,6 +55,7 @@
       "chapter": 18,
       "idx": 79,
       "setting": "dzego",
+      "location": "designs/locations/mountain-pyramid.json",
       "characters": [
         "designs/characters/gladias.json"
       ],
@@ -71,6 +75,7 @@
       "chapter": 18,
       "idx": 123,
       "setting": "dzego",
+      "location": "designs/locations/hotel-lobby-restaurant.json",
       "characters": [
         "designs/characters/fin.json",
         "designs/characters/zei.json"

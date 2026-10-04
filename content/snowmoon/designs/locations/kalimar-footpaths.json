@@ -1,0 +1,109 @@
+{
+  "kind": "location",
+  "name": "the footpaths of the Kalimar district",
+  "slug": "kalimar-footpaths",
+  "status": "starting point",
+  "setting": "veridia",
+  "about": "The wooded, car-free footpaths of Meldan's Kalimar district, lined with stone houses, that open the book in chapter 1 and close it in chapter 32. The book gives only the details listed below; the rest of the design is invented, and contributors are welcome to replace it.",
+  "facts": [
+    {
+      "chapter": 1,
+      "idx": 2,
+      "quote": "Gladias was walking along a foot path, with tall trees towering on both sides.",
+      "fact": "The path runs between tall trees."
+    },
+    {
+      "chapter": 1,
+      "idx": 2,
+      "quote": "A series of houses made out of large stone bricks lay behind the trees on both sides, medieval in style",
+      "fact": "Houses of large stone bricks, medieval in style, stand behind the trees."
+    },
+    {
+      "chapter": 1,
+      "idx": 2,
+      "quote": "without any of the junk, dust on the ground, or other imperfections that a real medieval structure would have had",
+      "fact": "Everything is clean and perfect, unlike a real medieval street."
+    },
+    {
+      "chapter": 1,
+      "idx": 2,
+      "quote": "A few of the houses featured small signs advertising clothing, flowers or food available for sale.",
+      "fact": "Some houses are small shops with small signs."
+    },
+    {
+      "chapter": 1,
+      "idx": 2,
+      "quote": "Each house seemed to meld seamlessly into the scattered leaves, plants and trees that surrounded it.",
+      "fact": "The houses blend into the greenery."
+    },
+    {
+      "chapter": 1,
+      "idx": 3,
+      "quote": "dense enough and quiet enough that he almost forgot that he was in the middle of the Kalimar district",
+      "fact": "Dense, quiet nature in the middle of the capital."
+    },
+    {
+      "chapter": 1,
+      "idx": 5,
+      "quote": "continued above a sidewalk branching off to the left",
+      "fact": "Sidewalks branch off the main path; toy drones fly over them."
+    },
+    {
+      "chapter": 1,
+      "idx": 8,
+      "quote": "As they approached a bench and seemed to stop",
+      "fact": "There are benches along the paths."
+    },
+    {
+      "chapter": 6,
+      "idx": 141,
+      "quote": "After passing by a few houses, the path melted seamlessly into a forest.",
+      "fact": "Stretches of the path run through forest."
+    },
+    {
+      "chapter": 16,
+      "idx": 32,
+      "quote": "one of the houses that he remembered for selling traditional Veridian food products",
+      "fact": "A house along the path is a food shop with a poster."
+    },
+    {
+      "chapter": 20,
+      "idx": 87,
+      "quote": "a stone house that was mostly underground, with the above-ground part sticking up only a meter above ground",
+      "fact": "Some houses are almost entirely underground."
+    },
+    {
+      "chapter": 26,
+      "idx": 26,
+      "quote": "This part looks like a forest, but it contains many hidden homes.",
+      "fact": "From the air the district looks like forest hiding many homes."
+    },
+    {
+      "chapter": 27,
+      "idx": 28,
+      "quote": "cars could only go up to the border of the car-free zone",
+      "fact": "The district is car-free."
+    },
+    {
+      "chapter": 27,
+      "idx": 32,
+      "quote": "putting complex structures into a forest in such a way that the same patch of forest would seem untouched from only a hundred meters away",
+      "fact": "Buildings are hidden so the forest seems untouched."
+    },
+    {
+      "chapter": 32,
+      "idx": 3,
+      "quote": "a man climbing a tall ladder leaning against a tree",
+      "fact": "Security cameras were mounted in the trees (removed in chapter 32)."
+    },
+    {
+      "chapter": 32,
+      "idx": 107,
+      "quote": "Tall trees covered up most of the area, with only a few buildings poking up just barely above them.",
+      "fact": "Seen from above, only a few buildings rise past the trees."
+    }
+  ],
+  "descriptor": "a car-free woodland footpath of pale smooth paving winding beneath towering old trees, flanked by spotless medieval-style houses of large clean stone blocks that melt into moss, ferns and climbing plants, some sunk half underground, small shop doorways with blank glowing panels, benches and branching sidewalks, toy drones with feathered rotors under the canopy, and slender grown towers glimpsed far beyond the treetops, in sage, moss, cream and warm stone",
+  "plate": "locations/kalimar-footpaths-plate",
+  "plate_prompt": "Establishing view of car-free woodland footpath of pale smooth paving winding beneath towering old trees, flanked by spotless medieval-style houses of large clean stone blocks that melt into moss, ferns and climbing plants, some sunk half underground, small shop doorways with blank glowing panels, benches and branching sidewalks, toy drones with feathered rotors under the canopy, and slender grown towers glimpsed far beyond the treetops, in sage, moss, cream and warm stone. Eye-level view down the path on a calm spring morning, soft green light filtering through the leaves and a pastel sky showing between the treetops. No people in the foreground."
+}

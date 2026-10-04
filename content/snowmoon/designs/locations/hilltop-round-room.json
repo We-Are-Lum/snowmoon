@@ -1,0 +1,61 @@
+{
+  "kind": "location",
+  "name": "the round room on top of the hidden hill building",
+  "slug": "hilltop-round-room",
+  "status": "starting point",
+  "setting": "veridia",
+  "about": "The circular rooftop room of a building disguised as a forested hill in Kalimar, where the team meets Evelor in chapter 27. The book gives only the details listed below; the rest of the design is invented, and contributors are welcome to replace it.",
+  "facts": [
+    {
+      "chapter": 27,
+      "idx": 31,
+      "quote": "the houses gave way to what seemed like a deep forest",
+      "fact": "Reached through a stretch of deep forest."
+    },
+    {
+      "chapter": 27,
+      "idx": 32,
+      "quote": "The path sloped downwards, and led to an entrance door to what seemed to be the inside of the hill.",
+      "fact": "The entrance is a door into the hill."
+    },
+    {
+      "chapter": 27,
+      "idx": 33,
+      "quote": "they made what was quite possibly an entirely manmade hill look like nature",
+      "fact": "The hill is probably entirely artificial but looks natural."
+    },
+    {
+      "chapter": 27,
+      "idx": 35,
+      "quote": "led them up a staircase into the middle of a circular area from where they could see the open sky",
+      "fact": "A staircase rises into the middle of a circular room open to the sky."
+    },
+    {
+      "chapter": 27,
+      "idx": 40,
+      "quote": "a roof started to close above them",
+      "fact": "A roof slides closed over it."
+    },
+    {
+      "chapter": 27,
+      "idx": 46,
+      "quote": "a bench pressed against the safety railing behind the opening that the staircase emerged from",
+      "fact": "A safety railing surrounds the stair opening."
+    },
+    {
+      "chapter": 27,
+      "idx": 46,
+      "quote": "the circular bench that was all along the circumference of the room",
+      "fact": "A circular bench runs all around the room."
+    },
+    {
+      "chapter": 27,
+      "idx": 71,
+      "quote": "slowly climbing up the staircase with a raising motion and then a sliding motion at each step",
+      "fact": "A serving robot climbs the stairs with tea."
+    }
+  ],
+  "descriptor": "a circular room at the summit of an artificial hill so thickly grown with trees and moss that it reads as untouched forest, open to the sky beneath a round roof of sliding petal-shaped segments, a curved bench running all around its smooth stone wall, a safety railing ringing the staircase opening in the center, and soft hidden lights in the rim",
+  "plate": "locations/hilltop-round-room-plate",
+  "plate_prompt": "Establishing view of circular room at the summit of an artificial hill so thickly grown with trees and moss that it reads as untouched forest, open to the sky beneath a round roof of sliding petal-shaped segments, a curved bench running all around its smooth stone wall, a safety railing ringing the staircase opening in the center, and soft hidden lights in the rim. Seen from the bench at midday with the roof fully open, a pastel sky and distant elegant towers visible above the rim. No people in the foreground."
+}

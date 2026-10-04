@@ -1,12 +1,13 @@
 {
   "about": "Key moments for chapter 4, seeded by the project as a starting point.",
-  "style": "designs/styles/watercolor.json",
+  "style": "designs/styles/techno-vistas.json",
   "jobs": [
     {
       "id": "c4-b003-camera-ladder",
       "chapter": 4,
       "idx": 3,
       "setting": "dzego",
+      "location": "designs/locations/courtyard-cafe.json",
       "characters": [
         "designs/characters/fin.json",
         "designs/characters/zei.json"
@@ -26,6 +27,7 @@
       "chapter": 4,
       "idx": 48,
       "setting": "dzego",
+      "location": "designs/locations/mountain-pyramid.json",
       "characters": [],
       "references": [],
       "props": [],
@@ -39,6 +41,7 @@
       "chapter": 4,
       "idx": 73,
       "setting": "dzego",
+      "location": "designs/locations/players-waiting-room.json",
       "characters": [
         "designs/characters/bai.json",
         "designs/characters/zei.json"
@@ -58,6 +61,7 @@
       "chapter": 4,
       "idx": 81,
       "setting": "dzego",
+      "location": "designs/locations/minpentai-arena.json",
       "characters": [
         "designs/characters/zei.json"
       ],
@@ -75,6 +79,7 @@
       "chapter": 4,
       "idx": 149,
       "setting": "dzego",
+      "location": "designs/locations/players-waiting-room.json",
       "characters": [
         "designs/characters/mu.json",
         "designs/characters/zei.json"

@@ -1,6 +1,6 @@
 {
   "about": "Key moments for chapter 5, seeded by the project as a starting point.",
-  "style": "designs/styles/watercolor.json",
+  "style": "designs/styles/techno-vistas.json",
   "jobs": [
     {
       "id": "c5-b012-taxi-view",
@@ -26,6 +26,7 @@
       "chapter": 5,
       "idx": 43,
       "setting": "united-cities",
+      "location": "designs/locations/economics-institute.json",
       "characters": [
         "designs/characters/zei.json",
         "designs/characters/bai.json"
@@ -45,6 +46,7 @@
       "chapter": 5,
       "idx": 73,
       "setting": "united-cities",
+      "location": "designs/locations/economics-institute.json",
       "characters": [
         "designs/characters/seila.json",
         "designs/characters/jahn.json"
@@ -64,6 +66,7 @@
       "chapter": 5,
       "idx": 91,
       "setting": "united-cities",
+      "location": "designs/locations/economics-institute.json",
       "characters": [
         "designs/characters/seila.json",
         "designs/characters/gladias.json"

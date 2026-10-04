@@ -1,12 +1,13 @@
 {
   "about": "Key moments for chapter 14, seeded by the project as a starting point.",
-  "style": "designs/styles/watercolor.json",
+  "style": "designs/styles/techno-vistas.json",
   "jobs": [
     {
       "id": "c14-b027-lobby-breakfast",
       "chapter": 14,
       "idx": 27,
       "setting": "dzego",
+      "location": "designs/locations/hotel-lobby-restaurant.json",
       "characters": [
         "designs/characters/zei.json",
         "designs/characters/bai.json"
@@ -26,6 +27,7 @@
       "chapter": 14,
       "idx": 30,
       "setting": "dzego",
+      "location": "designs/locations/minpentai-arena.json",
       "characters": [
         "designs/characters/zei.json"
       ],
@@ -43,6 +45,7 @@
       "chapter": 14,
       "idx": 85,
       "setting": "dzego",
+      "location": "designs/locations/minpentai-arena.json",
       "characters": [
         "designs/characters/zei.json"
       ],
@@ -60,6 +63,7 @@
       "chapter": 14,
       "idx": 124,
       "setting": "dzego",
+      "location": "designs/locations/courtyard-cafe.json",
       "characters": [
         "designs/characters/deluin.json",
         "designs/characters/zei.json"

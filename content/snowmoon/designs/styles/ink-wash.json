@@ -1,0 +1,13 @@
+{
+  "kind": "style",
+  "name": "Ink-wash painterly",
+  "status": "test",
+  "about": "Style test C. Painted science-fiction graphic novel: loose ink with layered watercolor, dramatic light, dense technology. The smallest change from the first test style. Described by its traits; no artist is named in the prompt.",
+  "prompt": "Painted science fiction graphic novel art: loose expressive brush-ink lines, layered translucent watercolor washes, dramatic directional light and atmospheric haze, dense intricate futuristic technology and architecture rendered in fine detail, cinematic composition, luminous glows, no text, no lettering, no writing, no logos, no numbers.",
+  "settings": {
+    "veridia": "Misty greens, warm stone and soft gold light through leaves.",
+    "dzego": "Warm night washes with neon pink, cyan and amber glows bleeding into the paper.",
+    "united-cities": "Blue-grey washes, glass and haze.",
+    "arctic": "Cold white and blue washes, hard pale light."
+  }
+}

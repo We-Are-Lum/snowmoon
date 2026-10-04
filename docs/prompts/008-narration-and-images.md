@@ -106,3 +106,35 @@ Would be cool to allow people to choose which model (of ones that work for the r
 ```text
 Of course. All this works needs to be tracking prompts and models used. To be shared publicly later
 ```
+
+```text
+This cast doesn't feel very futuristic. Feels kind of modern
+Needs a stronger aesthetic sense. More in the train of successfully cypherpunk style comics or graphic novels
+Can you research what image and graphic styles have been successful in similar kinds of stories?
+```
+
+```text
+Yes, test many of these directions
+```
+
+```text
+Great
+```
+
+```text
+A and e are my favorites. Iterate around there
+```
+
+```text
+We could let people leave text notes connected to the audiobook. We can also have a section of the app to explore creating a different audiobook voice
+```
+
+```text
+People could actually record themselves reading the whole book. As long as they allow it to be used anywhere right?
+```
+
+[An image of the AE3 "techno vistas" test renders was attached.]
+
+```text
+Pretty cool. Like this the best. Mainly because of the background buildings. Maybe we need to also do some basic renderings of the different cities and spaces, that people agree to and is loaded as context depending on part of the story they are generating images for
+```

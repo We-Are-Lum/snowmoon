@@ -1,0 +1,67 @@
+{
+  "kind": "location",
+  "name": "the curtained booths in a hidden Greater Plum Harbor courtyard",
+  "slug": "plum-harbor-tea-booth",
+  "status": "starting point",
+  "setting": "veridia",
+  "about": "The cloth-curtained tea-shop booth deep in the enclave where Gladias meets Delwart in chapters 3 and 13. The book gives only the details listed below; the rest of the design is invented, and contributors are welcome to replace it.",
+  "facts": [
+    {
+      "chapter": 3,
+      "idx": 79,
+      "quote": "in the middle of a hidden courtyard. There were several tables and chairs, with people eating and drinking water.",
+      "fact": "The booths open off a hidden courtyard with tables."
+    },
+    {
+      "chapter": 3,
+      "idx": 79,
+      "quote": "a booth that had a cloth curtain protecting it",
+      "fact": "The booth is closed by a cloth curtain."
+    },
+    {
+      "chapter": 3,
+      "idx": 80,
+      "quote": "There was a decorated lamp in the middle of the far end of the table, with one large flower on each side.",
+      "fact": "A decorated lamp flanked by two flowers at the end of the table."
+    },
+    {
+      "chapter": 3,
+      "idx": 80,
+      "quote": "pressed against the corner of the booth, Gladias noticed a white box",
+      "fact": "A white air filter box in a floor corner."
+    },
+    {
+      "chapter": 3,
+      "idx": 81,
+      "quote": "a green circle in the middle of a table",
+      "fact": "A green circle in the tabletop for ordering and paying."
+    },
+    {
+      "chapter": 3,
+      "idx": 82,
+      "quote": "a robot with a smiley face slid up to the table",
+      "fact": "A serving robot with a smiley face."
+    },
+    {
+      "chapter": 6,
+      "idx": 28,
+      "quote": "some totally different tea shop in GPH",
+      "fact": "The booths belong to tea shops in the enclave."
+    },
+    {
+      "chapter": 13,
+      "idx": 2,
+      "quote": "a table, a decorated lamp and two flowers at the end, and an air filter pressed against a corner on the floor",
+      "fact": "Every booth has the same layout."
+    },
+    {
+      "chapter": 13,
+      "idx": 30,
+      "quote": "I could listen through the vibrations on the wall",
+      "fact": "The walls are thin enough to eavesdrop through."
+    }
+  ],
+  "descriptor": "a small private booth in a hidden courtyard tea shop, closed by a heavy cloth curtain, with a narrow table between cushioned benches, a decorated lamp flanked by two large flowers at the far end, a white boxy air filter in a floor corner, a glowing green circle inset in the tabletop, thin smooth walls of white, grey and purple, and a small serving robot with a smiling screen face",
+  "plate": "locations/plum-harbor-tea-booth-plate",
+  "plate_prompt": "Establishing view of small private booth in a hidden courtyard tea shop, closed by a heavy cloth curtain, with a narrow table between cushioned benches, a decorated lamp flanked by two large flowers at the far end, a white boxy air filter in a floor corner, a glowing green circle inset in the tabletop, thin smooth walls of white, grey and purple, and a small serving robot with a smiling screen face. Seen from the entrance with the curtain drawn half open, warm lamplight inside against cool daylight from the courtyard. No people in the foreground."
+}

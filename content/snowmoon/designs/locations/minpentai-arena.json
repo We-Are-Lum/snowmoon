@@ -1,0 +1,67 @@
+{
+  "kind": "location",
+  "name": "the Minpentai arenas inside the mountain pyramids",
+  "slug": "minpentai-arena",
+  "status": "starting point",
+  "setting": "dzego",
+  "about": "The dark game halls inside the mountain pyramids where Minpentai matches are played: Pafogai Du's (chapters 4 and 7) and the much larger one in the capital (chapters 12 and 14). The book gives only the details listed below; the rest of the design is invented, and contributors are welcome to replace it.",
+  "facts": [
+    {
+      "chapter": 4,
+      "idx": 78,
+      "quote": "exposing a giant room with over a thousand people watching",
+      "fact": "A giant room with over a thousand spectators."
+    },
+    {
+      "chapter": 4,
+      "idx": 78,
+      "quote": "A path lit up, showing the way to a giant game console with a chair.",
+      "fact": "A lit path leads to a giant console with one chair."
+    },
+    {
+      "chapter": 4,
+      "idx": 80,
+      "quote": "it was too dark to see who they were",
+      "fact": "The hall is dark."
+    },
+    {
+      "chapter": 4,
+      "idx": 81,
+      "quote": "Drones about the size of a hand device buzzed as they flew around Zei",
+      "fact": "Hand-sized anti-cheat drones."
+    },
+    {
+      "chapter": 4,
+      "idx": 82,
+      "quote": "A tray slid out from under the game console, offering glasses attached to a long cable.",
+      "fact": "Cabled glasses at the console."
+    },
+    {
+      "chapter": 4,
+      "idx": 114,
+      "quote": "The audience was able to see a large detailed map of everything that was happening onscreen.",
+      "fact": "A big screen shows the board to the audience."
+    },
+    {
+      "chapter": 7,
+      "idx": 100,
+      "quote": "in less comfortable public seating",
+      "fact": "Plainer public seating at the side."
+    },
+    {
+      "chapter": 12,
+      "idx": 137,
+      "quote": "a giant room much larger than the room in Pafogai Du. About five to ten thousand people seemed to be watching.",
+      "fact": "The capital's arena holds five to ten thousand."
+    },
+    {
+      "chapter": 12,
+      "idx": 139,
+      "quote": "about three times more drones than there were in Pafogai Du, and with even more shapes and sizes",
+      "fact": "More drones in the capital."
+    }
+  ],
+  "descriptor": "a vast dark hall hollowed inside a mountain, steep shadowy tiers of seats rising all around, an enormous glowing display of abstract dotted patterns hung overhead, a lit path across the dark stone floor leading to a large glowing game console with a single chair and cabled glasses, hand-sized drones hovering, and thin beams of light crossing the air",
+  "plate": "locations/minpentai-arena-plate",
+  "plate_prompt": "Establishing view of vast dark hall hollowed inside a mountain, steep shadowy tiers of seats rising all around, an enormous glowing display of abstract dotted patterns hung overhead, a lit path across the dark stone floor leading to a large glowing game console with a single chair and cabled glasses, hand-sized drones hovering, and thin beams of light crossing the air. Seen from high in the tiers looking down across the floor, display glow washing over the dark stone. No people in the foreground."
+}

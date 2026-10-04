@@ -1,12 +1,13 @@
 {
   "about": "Key moments for chapter 13, seeded by the project as a starting point.",
-  "style": "designs/styles/watercolor.json",
+  "style": "designs/styles/techno-vistas.json",
   "jobs": [
     {
       "id": "c13-b017-curtained-booth",
       "chapter": 13,
       "idx": 17,
       "setting": "veridia",
+      "location": "designs/locations/plum-harbor-tea-booth.json",
       "characters": [
         "designs/characters/gladias.json",
         "designs/characters/delwart.json"
@@ -26,6 +27,7 @@
       "chapter": 13,
       "idx": 24,
       "setting": "veridia",
+      "location": "designs/locations/greater-plum-harbor.json",
       "characters": [],
       "references": [],
       "props": [
@@ -60,6 +62,7 @@
       "chapter": 13,
       "idx": 92,
       "setting": "veridia",
+      "location": "designs/locations/order-booths.json",
       "characters": [],
       "references": [],
       "props": [

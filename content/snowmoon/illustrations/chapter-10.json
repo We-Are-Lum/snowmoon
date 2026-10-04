@@ -1,12 +1,13 @@
 {
   "about": "Key moments for chapter 10, seeded by the project as a starting point.",
-  "style": "designs/styles/watercolor.json",
+  "style": "designs/styles/techno-vistas.json",
   "jobs": [
     {
       "id": "c10-b023-institute-lunch",
       "chapter": 10,
       "idx": 23,
       "setting": "united-cities",
+      "location": "designs/locations/economics-institute.json",
       "characters": [
         "designs/characters/jahn.json"
       ],
@@ -24,6 +25,7 @@
       "chapter": 10,
       "idx": 50,
       "setting": "veridia",
+      "location": "designs/locations/order-booths.json",
       "characters": [],
       "references": [],
       "props": [
@@ -39,6 +41,7 @@
       "chapter": 10,
       "idx": 114,
       "setting": "veridia",
+      "location": "designs/locations/order-booths.json",
       "characters": [],
       "references": [],
       "props": [
@@ -54,6 +57,7 @@
       "chapter": 10,
       "idx": 160,
       "setting": "dzego",
+      "location": "designs/locations/courtyard-cafe.json",
       "characters": [
         "designs/characters/zei.json",
         "designs/characters/bai.json"
@@ -73,6 +77,7 @@
       "chapter": 10,
       "idx": 191,
       "setting": "dzego",
+      "location": "designs/locations/den-long-room.json",
       "characters": [
         "designs/characters/mu.json",
         "designs/characters/zei.json"

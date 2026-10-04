@@ -1,12 +1,13 @@
 {
   "about": "Key moments for chapter 28, seeded by the project as a starting point.",
-  "style": "designs/styles/watercolor.json",
+  "style": "designs/styles/techno-vistas.json",
   "jobs": [
     {
       "id": "c28-b013-general-arrives",
       "chapter": 28,
       "idx": 13,
       "setting": "veridia",
+      "location": "designs/locations/government-hotel.json",
       "characters": [
         "designs/characters/lektor.json",
         "designs/characters/den.json"
@@ -26,6 +27,7 @@
       "chapter": 28,
       "idx": 57,
       "setting": "veridia",
+      "location": "designs/locations/government-hotel.json",
       "characters": [
         "designs/characters/zven.json",
         "designs/characters/seila.json"
@@ -62,6 +64,7 @@
       "chapter": 28,
       "idx": 91,
       "setting": "veridia",
+      "location": "designs/locations/government-hotel.json",
       "characters": [
         "designs/characters/gladias.json",
         "designs/characters/seila.json"

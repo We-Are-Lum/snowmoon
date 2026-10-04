@@ -1,0 +1,13 @@
+{
+  "kind": "style",
+  "name": "Day-glo privacy noir",
+  "status": "test",
+  "about": "Style test B. Bright graphic comic art for a world of masks and disguises: noir framing with flat pure cyan and magenta instead of noir darkness. Described by its traits; no artist is named in the prompt.",
+  "prompt": "Bold graphic comic art: confident clean black linework, flat pure saturated color with no gradients, a vivid palette of pure cyan, magenta and bright yellow against deep violet shadows, strong graphic shapes and silhouettes, dramatic noir camera angles but bright day-glo color, hoods, masks and disguises as a visual motif, no text, no lettering, no writing, no logos, no numbers.",
+  "settings": {
+    "veridia": "Day-glo greens and teal for the trees and stone, the violet of privacy robes standing out strongly.",
+    "dzego": "Electric magenta and cyan shop glow, yellow highlights, deep violet night shadows.",
+    "united-cities": "Cool cyan towers with magenta accents.",
+    "arctic": "Icy white and cyan with hard black shadows."
+  }
+}

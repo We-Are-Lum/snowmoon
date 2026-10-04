@@ -1,12 +1,13 @@
 {
   "about": "Key moments for chapter 2, seeded by the project as a starting point.",
-  "style": "designs/styles/watercolor.json",
+  "style": "designs/styles/techno-vistas.json",
   "jobs": [
     {
       "id": "c2-b003-electronics-street",
       "chapter": 2,
       "idx": 3,
       "setting": "dzego",
+      "location": "designs/locations/pafogai-shop-streets.json",
       "characters": [
         "designs/characters/zei.json",
         "designs/characters/fin.json"
@@ -26,6 +27,7 @@
       "chapter": 2,
       "idx": 38,
       "setting": "dzego",
+      "location": "designs/locations/foil-classroom.json",
       "characters": [
         "designs/characters/zei.json",
         "designs/characters/fin.json"
@@ -45,6 +47,7 @@
       "chapter": 2,
       "idx": 99,
       "setting": "dzego",
+      "location": "designs/locations/foil-classroom.json",
       "characters": [
         "designs/characters/zei.json"
       ],
@@ -62,6 +65,7 @@
       "chapter": 2,
       "idx": 122,
       "setting": "dzego",
+      "location": "designs/locations/foil-classroom.json",
       "characters": [
         "designs/characters/fin.json",
         "designs/characters/zei.json"

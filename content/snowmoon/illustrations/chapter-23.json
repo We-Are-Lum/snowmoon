@@ -1,12 +1,13 @@
 {
   "about": "Key moments for chapter 23, seeded by the project as a starting point.",
-  "style": "designs/styles/watercolor.json",
+  "style": "designs/styles/techno-vistas.json",
   "jobs": [
     {
       "id": "c23-b004-green-cafeteria",
       "chapter": 23,
       "idx": 4,
       "setting": "dzego",
+      "location": "designs/locations/pyramid-cafeteria.json",
       "characters": [
         "designs/characters/gladias.json",
         "designs/characters/fin.json"
@@ -26,6 +27,7 @@
       "chapter": 23,
       "idx": 6,
       "setting": "dzego",
+      "location": "designs/locations/pyramid-cafeteria.json",
       "characters": [
         "designs/characters/zei.json",
         "designs/characters/bai.json"
@@ -45,6 +47,7 @@
       "chapter": 23,
       "idx": 20,
       "setting": "dzego",
+      "location": "designs/locations/pyramid-cafeteria.json",
       "characters": [
         "designs/characters/gladias.json",
         "designs/characters/fin.json"
@@ -64,6 +67,7 @@
       "chapter": 23,
       "idx": 71,
       "setting": "dzego",
+      "location": "designs/locations/pyramid-cafeteria.json",
       "characters": [],
       "references": [],
       "props": [],

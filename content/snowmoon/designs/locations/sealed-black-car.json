@@ -1,0 +1,61 @@
+{
+  "kind": "location",
+  "name": "the sealed black cars",
+  "slug": "sealed-black-car",
+  "status": "starting point",
+  "setting": "dzego",
+  "about": "Dzego's identical black cars, which dock flush against doorways and have foil-lined cabins and camera-fed windows (chapters 9, 12 and 18). The book gives only the details listed below; the rest of the design is invented, and contributors are welcome to replace it.",
+  "facts": [
+    {
+      "chapter": 9,
+      "idx": 103,
+      "quote": "The exit led directly into the interior of a large rectangular-shaped black car.",
+      "fact": "A large rectangular black car."
+    },
+    {
+      "chapter": 9,
+      "idx": 103,
+      "quote": "The pyramid door and the car door were exactly the same shape, and were pressed tightly against each other.",
+      "fact": "Its door seals flush against building doors."
+    },
+    {
+      "chapter": 9,
+      "idx": 105,
+      "quote": "Zei noticed anti-transmission foil lining the sides of the car",
+      "fact": "Foil lines the cabin."
+    },
+    {
+      "chapter": 9,
+      "idx": 105,
+      "quote": "they seemed to show a dimmed version of the world outside",
+      "fact": "Dimmed windows."
+    },
+    {
+      "chapter": 18,
+      "idx": 3,
+      "quote": "Zei on a backward-facing seat and Bai facing him on a forward-facing seat",
+      "fact": "Seats face each other."
+    },
+    {
+      "chapter": 18,
+      "idx": 14,
+      "quote": "So it's a simulated window now, picking up the view with cameras.",
+      "fact": "Later the windows are camera-fed screens."
+    },
+    {
+      "chapter": 18,
+      "idx": 32,
+      "quote": "the car shifting in all directions: up, sideways and then down",
+      "fact": "Cabins are shuffled between cars in tunnels."
+    },
+    {
+      "chapter": 18,
+      "idx": 28,
+      "quote": "a large number of identical black cars on the roads",
+      "fact": "All the cars look identical."
+    }
+  ],
+  "descriptor": "a sealed passenger cabin of a large rectangular glossy black autonomous car, its inner walls lined with crinkled silver anti-transmission foil behind soft dark panels, plush seats facing each other across the cabin, camera-fed simulated windows showing a slightly dimmed view of a tree-lined street, and a broad side door shaped to seal flush against building doorways",
+  "plate": "locations/sealed-black-car-plate",
+  "plate_prompt": "Establishing view of sealed passenger cabin of a large rectangular glossy black autonomous car, its inner walls lined with crinkled silver anti-transmission foil behind soft dark panels, plush seats facing each other across the cabin, camera-fed simulated windows showing a slightly dimmed view of a tree-lined street, and a broad side door shaped to seal flush against building doorways. Seen from the backward-facing seat toward the side window on a bright day, soft cool cabin light. No people in the foreground."
+}

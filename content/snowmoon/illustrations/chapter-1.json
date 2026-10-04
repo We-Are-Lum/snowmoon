@@ -1,12 +1,13 @@
 {
   "about": "Key moments for chapter 1, seeded by the project as a starting point.",
-  "style": "designs/styles/watercolor.json",
+  "style": "designs/styles/techno-vistas.json",
   "jobs": [
     {
       "id": "c1-b005-toy-drone",
       "chapter": 1,
       "idx": 5,
       "setting": "veridia",
+      "location": "designs/locations/kalimar-footpaths.json",
       "characters": [],
       "references": [],
       "props": [
@@ -22,6 +23,7 @@
       "chapter": 1,
       "idx": 13,
       "setting": "veridia",
+      "location": "designs/locations/kalimar-sky-bridge.json",
       "characters": [],
       "references": [],
       "props": [
@@ -52,6 +54,7 @@
       "chapter": 1,
       "idx": 89,
       "setting": "veridia",
+      "location": "designs/locations/autobus.json",
       "characters": [],
       "references": [],
       "props": [
@@ -67,6 +70,7 @@
       "chapter": 1,
       "idx": 132,
       "setting": "veridia",
+      "location": "designs/locations/family-home.json",
       "characters": [
         "designs/characters/gladias.json",
         "designs/characters/zven.json"

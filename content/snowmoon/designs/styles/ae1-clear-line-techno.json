@@ -1,0 +1,13 @@
+{
+  "kind": "style",
+  "name": "Clear-line techno",
+  "status": "test",
+  "about": "Style iteration AE1, between A (clear-line) and E (dense techno): clear-line outlines and flat color, with dense technology designed into the world. Described by its traits; no artist is named in the prompt.",
+  "prompt": "Clear-line science fiction comic art: clean, even, unbroken ink outlines of uniform weight, no hatching and no cross-hatching, flat areas of color with only subtle washes, dense intricate technology designed into the architecture and objects (cables, vents, panels, antennas, small machines) all drawn with the same clean even line, precise architectural detail, deep space and distant megastructures, calm pastel skies, a European comic album look, no text, no lettering, no writing, no logos, no numbers.",
+  "settings": {
+    "veridia": "Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+    "dzego": "Dense low-rise streets stacked with small glowing shops, tangled cables, antennas, little drones and cute cartoon animal murals; shop signs are blank glowing panels with no letters; warm dusk palette with pink, cyan and yellow glow against deep blue.",
+    "united-cities": "Layered megacity of mixed old stone and tall glass towers, flying traffic lanes, steel blue and amber.",
+    "arctic": "Severe faceted crystalline megastructures, icy whites, pale blues and steel."
+  }
+}

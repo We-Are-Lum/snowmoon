@@ -1,0 +1,61 @@
+{
+  "kind": "location",
+  "name": "the players' waiting room inside the pyramid",
+  "slug": "players-waiting-room",
+  "status": "starting point",
+  "setting": "dzego",
+  "about": "The stone waiting room behind the arched Minpentai door, with elevator pods down to the arena (chapters 4 and 7). The book gives only the details listed below; the rest of the design is invented, and contributors are welcome to replace it.",
+  "facts": [
+    {
+      "chapter": 4,
+      "idx": 59,
+      "quote": "Each corridor was about two meters wide, and three meters tall; the lower two meters were a rectangle, and the upper meter a semicircle.",
+      "fact": "Corridors with round-topped profiles."
+    },
+    {
+      "chapter": 4,
+      "idx": 59,
+      "quote": "The stone was polished clean",
+      "fact": "Polished stone."
+    },
+    {
+      "chapter": 4,
+      "idx": 61,
+      "quote": "a series of stone bricks, curving near the top into an arch",
+      "fact": "An arched door of stone bricks."
+    },
+    {
+      "chapter": 4,
+      "idx": 61,
+      "quote": "two horizontal arms, meeting in the middle with clashing fists",
+      "fact": "An emblem of two arms with clashing fists above the door."
+    },
+    {
+      "chapter": 4,
+      "idx": 77,
+      "quote": "Zei walked into one of the elevator pods on the wall.",
+      "fact": "Elevator pods set into the wall."
+    },
+    {
+      "chapter": 4,
+      "idx": 144,
+      "quote": "Two elevators opened up in the waiting room",
+      "fact": "The elevators open into the waiting room."
+    },
+    {
+      "chapter": 7,
+      "idx": 48,
+      "quote": "A robot slid toward them, and gave them three glasses of water.",
+      "fact": "A serving robot."
+    },
+    {
+      "chapter": 12,
+      "idx": 134,
+      "quote": "You can watch last year's matches on that screen over there.",
+      "fact": "A screen for watching matches (capital waiting room)."
+    }
+  ],
+  "descriptor": "a windowless waiting room carved deep in a mountain, with polished pale stone walls and a vaulted round-topped ceiling, entered through an arch of stone bricks crowned by a carved emblem of two arms meeting with clashing fists, a row of sleek elevator pod doors set into one wall, low stone benches, a wall screen, a small serving robot, and warm indirect light",
+  "plate": "locations/players-waiting-room-plate",
+  "plate_prompt": "Establishing view of windowless waiting room carved deep in a mountain, with polished pale stone walls and a vaulted round-topped ceiling, entered through an arch of stone bricks crowned by a carved emblem of two arms meeting with clashing fists, a row of sleek elevator pod doors set into one wall, low stone benches, a wall screen, a small serving robot, and warm indirect light. Seen from just inside the arched doorway in calm, warm light. No people in the foreground."
+}

@@ -1,12 +1,13 @@
 {
   "about": "Key moments for chapter 16, seeded by the project as a starting point.",
-  "style": "designs/styles/watercolor.json",
+  "style": "designs/styles/techno-vistas.json",
   "jobs": [
     {
       "id": "c16-b004-delwart-confronted",
       "chapter": 16,
       "idx": 4,
       "setting": "veridia",
+      "location": "designs/locations/order-booths.json",
       "characters": [
         "designs/characters/gladias.json",
         "designs/characters/delwart.json"
@@ -26,6 +27,7 @@
       "chapter": 16,
       "idx": 32,
       "setting": "veridia",
+      "location": "designs/locations/kalimar-footpaths.json",
       "characters": [],
       "references": [],
       "props": [
@@ -41,6 +43,7 @@
       "chapter": 16,
       "idx": 60,
       "setting": "veridia",
+      "location": "designs/locations/neighborhood-restaurant.json",
       "characters": [
         "designs/characters/gladias.json",
         "designs/characters/febric.json"
@@ -62,6 +65,7 @@
       "chapter": 16,
       "idx": 110,
       "setting": "veridia",
+      "location": "designs/locations/family-home.json",
       "characters": [
         "designs/characters/seila.json",
         "designs/characters/gladias.json"

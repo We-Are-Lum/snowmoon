@@ -1,0 +1,67 @@
+{
+  "kind": "location",
+  "name": "the sky bridge over the busy road, with the castle-tower apartments on the mountain",
+  "slug": "kalimar-sky-bridge",
+  "status": "starting point",
+  "setting": "veridia",
+  "about": "The pedestrian sky bridge where the Kalimar path crosses a busy road, with its view of the tree-covered mountain and the castle-tower apartments; seen in chapters 1 and 32. The book gives only the details listed below; the rest of the design is invented, and contributors are welcome to replace it.",
+  "facts": [
+    {
+      "chapter": 1,
+      "idx": 11,
+      "quote": "the houses soon gave way to thick green shrubbery",
+      "fact": "Thick shrubbery leads up to the bridge."
+    },
+    {
+      "chapter": 1,
+      "idx": 11,
+      "quote": "the path transitioned into a sky bridge above a busy road, with many cars and autobuses and a few autonomous delivery vehicles passing beneath him",
+      "fact": "The bridge crosses a busy road of cars, autobuses and autonomous delivery vehicles."
+    },
+    {
+      "chapter": 1,
+      "idx": 13,
+      "quote": "The busy road beneath him continued for about two kilometers, and then turned rightward.",
+      "fact": "The road runs straight about two kilometers, then bends right."
+    },
+    {
+      "chapter": 1,
+      "idx": 13,
+      "quote": "Beyond that point, he could see a mountain covered with trees.",
+      "fact": "A tree-covered mountain rises beyond."
+    },
+    {
+      "chapter": 1,
+      "idx": 13,
+      "quote": "A few apartment buildings about fifteen storeys tall, decorated and shaped like over-sized medieval castle towers though with far more windows on the sides",
+      "fact": "Fifteen-storey apartment towers shaped like oversized medieval castle towers, with many windows."
+    },
+    {
+      "chapter": 1,
+      "idx": 13,
+      "quote": "poked up high above the trees in several places on the lower half of the mountain slope",
+      "fact": "The towers rise above the trees on the lower half of the slope."
+    },
+    {
+      "chapter": 1,
+      "idx": 14,
+      "quote": "the road continued past the sky bridge with a much higher density of buildings",
+      "fact": "On the other side the road is lined with denser buildings."
+    },
+    {
+      "chapter": 32,
+      "idx": 7,
+      "quote": "a sky bridge overlooking a busy highway",
+      "fact": "The road is a busy highway."
+    },
+    {
+      "chapter": 32,
+      "idx": 8,
+      "quote": "After crossing the sky bridge, the road transitioned into a tunnel",
+      "fact": "Past the bridge the path enters a tunnel."
+    }
+  ],
+  "descriptor": "a slender pedestrian sky bridge of pale sculpted stone with living planter rails, arching over a busy multi-lane road of small autonomous buses, cars and delivery pods that runs straight toward a tree-covered mountain, where fifteen-storey apartment towers shaped like oversized medieval castle keeps, studded with many windows, rise above the forest on the lower slopes, beneath a vast pastel sky with distant elegant megastructures",
+  "plate": "locations/kalimar-sky-bridge-plate",
+  "plate_prompt": "Establishing view of slender pedestrian sky bridge of pale sculpted stone with living planter rails, arching over a busy multi-lane road of small autonomous buses, cars and delivery pods that runs straight toward a tree-covered mountain, where fifteen-storey apartment towers shaped like oversized medieval castle keeps, studded with many windows, rise above the forest on the lower slopes, beneath a vast pastel sky with distant elegant megastructures. Seen from the middle of the bridge on a chilly, clear morning, crisp light, the road bending right in the far distance. No people in the foreground."
+}

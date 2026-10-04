@@ -1,6 +1,6 @@
 {
   "about": "Key moments for chapter 12, seeded by the project as a starting point.",
-  "style": "designs/styles/watercolor.json",
+  "style": "designs/styles/techno-vistas.json",
   "jobs": [
     {
       "id": "c12-b013-priests-on-platform",
@@ -24,6 +24,7 @@
       "chapter": 12,
       "idx": 30,
       "setting": "dzego",
+      "location": "designs/locations/sealed-black-car.json",
       "characters": [
         "designs/characters/zei.json"
       ],
@@ -60,6 +61,7 @@
       "chapter": 12,
       "idx": 139,
       "setting": "dzego",
+      "location": "designs/locations/minpentai-arena.json",
       "characters": [
         "designs/characters/zei.json"
       ],
@@ -77,6 +79,7 @@
       "chapter": 12,
       "idx": 173,
       "setting": "dzego",
+      "location": "designs/locations/minpentai-arena.json",
       "characters": [
         "designs/characters/zei.json"
       ],

@@ -1,0 +1,13 @@
+{
+  "kind": "style",
+  "name": "Dense techno",
+  "status": "test",
+  "about": "Style test E. Hyper-detailed city and machinery with hard cel shading, from the dense tech-city comic tradition, kept bright rather than dystopian. Described by its traits; no artist is named in the prompt.",
+  "prompt": "Hyper-detailed science fiction comic art: precise fine linework, obsessive mechanical and architectural detail with cables, vents, panels and small machines, dense layered cityscapes, cel-shaded flat color with hard-edged shadows, cinematic wide-angle perspective, clean and bright rather than grim, no text, no lettering, no writing, no logos, no numbers.",
+  "settings": {
+    "veridia": "Clean stone and greenery woven through the machinery, cool greens and greys.",
+    "dzego": "Packed electronic streets, neon pink, cyan and yellow accents against dark blue.",
+    "united-cities": "Towering layered blocks, steel blue and amber.",
+    "arctic": "Faceted white megastructures, cold cyan."
+  }
+}

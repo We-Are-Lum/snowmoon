@@ -1,0 +1,13 @@
+{
+  "kind": "style",
+  "name": "Solarpunk Art Nouveau",
+  "status": "test",
+  "about": "Style test D. Optimistic future with Art Nouveau curves and botanical ornament, suited to Veridia's green, stone, quiet world. Described by its traits; no artist is named in the prompt.",
+  "prompt": "Art Nouveau solarpunk illustration: flowing whiplash curves and botanical ornament, decorative framing of vines and leaves, poster-like flat color with fine elegant line, warm sunlit golden palette with greens and turquoise, harmonious high-tech organic architecture with solar glass, living walls and vertical gardens, elegant flowing garments, no text, no lettering, no writing, no logos, no numbers.",
+  "settings": {
+    "veridia": "Stone and living wood, sage, gold and cream, sunlight through leaves.",
+    "dzego": "Night version: glowing botanical shop fronts in pink, turquoise and amber, playful animal motifs in the ornament.",
+    "united-cities": "Glass and brass towers with green terraces.",
+    "arctic": "Frost-crystal ornament in white, silver and pale blue."
+  }
+}

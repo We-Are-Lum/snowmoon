@@ -1,0 +1,67 @@
+{
+  "kind": "location",
+  "name": "the cafeteria deep inside the pyramid",
+  "slug": "pyramid-cafeteria",
+  "status": "starting point",
+  "setting": "dzego",
+  "about": "The underground cafeteria in the Pafogai Du pyramid where Gladias eats with Zei, Bai and Fin (chapters 19 and 23). The book gives only the details listed below; the rest of the design is invented, and contributors are welcome to replace it.",
+  "facts": [
+    {
+      "chapter": 19,
+      "idx": 2,
+      "quote": "two large screens, doing the best job that they could to pretend to be windows",
+      "fact": "Two wall screens pose as windows."
+    },
+    {
+      "chapter": 19,
+      "idx": 2,
+      "quote": "rather than thirty meters below ground",
+      "fact": "Thirty meters below ground."
+    },
+    {
+      "chapter": 23,
+      "idx": 3,
+      "quote": "Between the tables and the wall of the cafeteria, there were green trees on all sides.",
+      "fact": "Green trees on all sides."
+    },
+    {
+      "chapter": 23,
+      "idx": 3,
+      "quote": "Two of the walls were covered with vines. The other two walls were covered with large mirrors",
+      "fact": "Two vine walls and two mirror walls."
+    },
+    {
+      "chapter": 23,
+      "idx": 3,
+      "quote": "There was a single entrance, with two thick shrubs on both sides blocking the view to the entrance tunnel",
+      "fact": "A single shrub-screened entrance in a corner."
+    },
+    {
+      "chapter": 23,
+      "idx": 4,
+      "quote": "a few air filters stood on the ground",
+      "fact": "Freestanding air filters."
+    },
+    {
+      "chapter": 23,
+      "idx": 4,
+      "quote": "Downward-pointed fans and violet lights hung on the ceiling.",
+      "fact": "Ceiling fans and violet lights."
+    },
+    {
+      "chapter": 23,
+      "idx": 5,
+      "quote": "Two speakers were simulating the sound of cicadas buzzing in a forest",
+      "fact": "Speakers play forest sounds."
+    },
+    {
+      "chapter": 24,
+      "idx": 26,
+      "quote": "Trees about two meters tall growing inside clay pots",
+      "fact": "Two-meter trees in clay pots."
+    }
+  ],
+  "descriptor": "an underground cafeteria thirty meters inside a mountain, its tables screened into private nooks by two-meter trees in clay pots and thick shrubs, two walls hung with vines and the other two of huge mirrors repeating the room endlessly, wall screens posing as sunny windows over low roofs and trees, ceiling fans with faint violet lamps, and freestanding air filters",
+  "plate": "locations/pyramid-cafeteria-plate",
+  "plate_prompt": "Establishing view of underground cafeteria thirty meters inside a mountain, its tables screened into private nooks by two-meter trees in clay pots and thick shrubs, two walls hung with vines and the other two of huge mirrors repeating the room endlessly, wall screens posing as sunny windows over low roofs and trees, ceiling fans with faint violet lamps, and freestanding air filters. Seen from a shrub-screened corner nook in warm, even light. No people in the foreground."
+}

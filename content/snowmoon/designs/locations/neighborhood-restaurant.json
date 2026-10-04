@@ -1,0 +1,55 @@
+{
+  "kind": "location",
+  "name": "the restaurant near Gladias's home",
+  "slug": "neighborhood-restaurant",
+  "status": "starting point",
+  "setting": "veridia",
+  "about": "The neighborhood restaurant where Gladias runs into Febric in chapters 6 and 16 and passes its painted outer wall in chapter 11. The book gives only the details listed below; the rest of the design is invented, and contributors are welcome to replace it.",
+  "facts": [
+    {
+      "chapter": 6,
+      "idx": 110,
+      "quote": "A robot slid up to him, and showed him a menu.",
+      "fact": "Robots take orders at the table."
+    },
+    {
+      "chapter": 6,
+      "idx": 111,
+      "quote": "Four others were sitting down, all beside the window to enjoy the view",
+      "fact": "Window tables with a view."
+    },
+    {
+      "chapter": 6,
+      "idx": 123,
+      "quote": "A waiter handed Febric a tea in a cup with a sealed lid.",
+      "fact": "There is also a human waiter."
+    },
+    {
+      "chapter": 11,
+      "idx": 123,
+      "quote": "He passed by the same restaurant where he had bumped into Febric months earlier. On the restaurant's outer wall, he saw an advertisement.",
+      "fact": "Its outer wall carries a large painted advertisement."
+    },
+    {
+      "chapter": 16,
+      "idx": 48,
+      "quote": "the restaurant near his home where he would often stop for food and drinks",
+      "fact": "It is near Gladias's home."
+    },
+    {
+      "chapter": 16,
+      "idx": 48,
+      "quote": "Through the window, he could see Febric eating.",
+      "fact": "Large windows onto the street."
+    },
+    {
+      "chapter": 16,
+      "idx": 54,
+      "quote": "A game of Helisport was actively broadcasting.",
+      "fact": "A screen shows broadcasts."
+    }
+  ],
+  "descriptor": "a small, bright neighborhood restaurant in a stone building on a tree-lined street, with large windows onto the greenery, window-side tables of pale wood, a large wall screen, potted plants, a small counter, and slim serving robots gliding between tables; its stone outer wall carries a big wordless painted picture advertisement, in sage, cream, warm wood and soft yellow",
+  "plate": "locations/neighborhood-restaurant-plate",
+  "plate_prompt": "Establishing view of small, bright neighborhood restaurant in a stone building on a tree-lined street, with large windows onto the greenery, window-side tables of pale wood, a large wall screen, potted plants, a small counter, and slim serving robots gliding between tables; its stone outer wall carries a big wordless painted picture advertisement, in sage, cream, warm wood and soft yellow. Seen from inside near the back at sunny midday, light pouring through the large windows onto the tables, the leafy street visible outside. No people in the foreground."
+}

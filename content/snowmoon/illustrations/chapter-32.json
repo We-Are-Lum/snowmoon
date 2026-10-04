@@ -1,12 +1,13 @@
 {
   "about": "Key moments for chapter 32, seeded by the project as a starting point.",
-  "style": "designs/styles/watercolor.json",
+  "style": "designs/styles/techno-vistas.json",
   "jobs": [
     {
       "id": "c32-b003-camera-removal",
       "chapter": 32,
       "idx": 3,
       "setting": "veridia",
+      "location": "designs/locations/kalimar-footpaths.json",
       "characters": [],
       "references": [],
       "props": [
@@ -22,6 +23,7 @@
       "chapter": 32,
       "idx": 7,
       "setting": "veridia",
+      "location": "designs/locations/kalimar-sky-bridge.json",
       "characters": [],
       "references": [],
       "props": [
@@ -37,6 +39,7 @@
       "chapter": 32,
       "idx": 77,
       "setting": "veridia",
+      "location": "designs/locations/senator-office.json",
       "characters": [
         "designs/characters/verdow.json",
         "designs/characters/zei.json"
