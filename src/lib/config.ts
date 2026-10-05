@@ -23,6 +23,9 @@ export const REPO_URL = 'https://github.com/We-Are-Lum/snowmoon';
  */
 export const SYSTEM_FID = 6786;
 
+/** Saved quote cards per FID per day (spam limit; saving costs nothing). */
+export const CARD_SAVES_PER_DAY = 50;
+
 /** Moderation only: these FIDs may hide content. They never promote or rank anything. */
 export const MODERATOR_FIDS: readonly number[] = [];
 

@@ -9,6 +9,21 @@ export interface DesignBody {
 
 export interface TextBody {
   text: string;
+  /** Set when the text element is a saved quote card (brief §4f). */
+  card?: QuoteCardSpec;
+}
+
+/** Everything needed to redraw a quote card; the quote is checked against the book. */
+export interface QuoteCardSpec {
+  kind: 'quote_card';
+  chapter: number;
+  /** Block idx range the quote comes from. */
+  from: number;
+  to: number;
+  /** The exact quoted words, or null for the whole range. */
+  q: string | null;
+  /** Seeded image id (content/snowmoon/illustrations/published.json), or null. */
+  img: string | null;
 }
 
 export interface LetteringItem {

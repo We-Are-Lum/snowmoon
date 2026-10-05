@@ -481,3 +481,44 @@ figure.figure .device-view svg { min-width: var(--fig-min, 0); }
 .share .share-quote { margin: 0 0 20px; padding-left: 16px; border-left: 3px solid var(--accent); font-style: italic; }
 .share .share-actions { display: flex; flex-direction: column; gap: 4px; margin-bottom: 24px; font-family: var(--label); font-size: 15px; }
 .share .share-actions a { display: flex; align-items: center; min-height: var(--tap); }
+.share-buttons .share-saved {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap);
+  border: 1px solid var(--accent);
+  border-radius: 8px;
+  font-size: 15px;
+  text-decoration: none;
+}
+.share-note { margin: 10px 0 0; color: var(--muted); font-size: 12px; }
+
+/* Saved cards */
+.cards h1 { font-size: 36px; font-weight: 500; margin: 8px 0; }
+.cards-intro { margin: 0 0 12px; }
+.cards-sort { display: flex; gap: 16px; font-family: var(--label); font-size: 14px; margin-bottom: 16px; }
+.cards-sort a { display: inline-flex; align-items: center; min-height: var(--tap); }
+.cards-sort a[aria-current='page'] { color: var(--ink); text-decoration: none; border-bottom: 2px solid var(--accent); }
+.cards-empty { color: var(--muted); }
+.card-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 28px; }
+.card-link img { display: block; width: 100%; height: auto; border-radius: 6px; background: var(--quote-bg); }
+.card-meta { display: flex; align-items: center; gap: 12px; margin-top: 8px; font-family: var(--label); font-size: 13px; flex-wrap: wrap; }
+.card-meta > a { display: inline-flex; align-items: center; min-height: var(--tap); }
+.like { display: inline-flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.like-button,
+.cast-card {
+  min-width: var(--tap);
+  min-height: var(--tap);
+  padding: 0 14px;
+  border: 1px solid var(--rule);
+  border-radius: 22px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--label);
+  font-size: 15px;
+  cursor: pointer;
+}
+.like-button.is-liked { border-color: var(--accent); color: var(--accent); }
+.cast-card { border-color: var(--accent); color: var(--accent); }
+.like-note { color: var(--muted); font-size: 12px; }

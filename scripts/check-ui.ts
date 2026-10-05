@@ -105,6 +105,8 @@ try {
 
     await open(page, '/about');
     await checkFloors(page, '/about', scheme);
+    await open(page, '/cards');
+    await checkFloors(page, '/cards', scheme);
 
     for (let n = 1; n <= 32; n++) {
       await open(page, `/chapter/${n}`);
@@ -134,4 +136,4 @@ if (failures.length) {
   console.error(`\nUI CHECK FAILED (${failures.length}):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`ui check passed: ${BASE}, 34 pages × light and dark`);
+console.log(`ui check passed: ${BASE}, 35 pages × light and dark`);

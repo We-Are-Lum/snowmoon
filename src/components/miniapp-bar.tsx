@@ -39,6 +39,7 @@ export function MiniappBar() {
         Snowmoon
       </Link>
       <nav className="bar-links">
+        <Link href="/cards">Cards</Link>
         <Link href="/about">About</Link>
         <span className="bar-auth" aria-live="polite">
           {status === 'loading' && '…'}

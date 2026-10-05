@@ -77,6 +77,15 @@ await check('quote cards draw from the book and refuse anything else', async () 
   return share.status === 200 && share.body.includes('fc:miniapp') && share.body.includes('/api/card/1/4') ? null : 'share page lacks its card embed';
 });
 
+await check('saved cards: gallery renders and writes need sign-in', async () => {
+  const page = await get('/cards');
+  if (page.status !== 200 || !page.body.includes('Quote cards')) return `/cards HTTP ${page.status}`;
+  const save = await fetch(base + '/api/cards', { method: 'POST', headers: { 'content-type': 'application/json' }, body: '{"chapter":1,"range":"4"}' });
+  if (save.status !== 401) return `save without sign-in: expected 401, got ${save.status}`;
+  const like = await fetch(base + '/api/cards/00000000-0000-0000-0000-000000000000/like', { method: 'POST', body: '{"like":true}' });
+  return like.status === 401 ? null : `like without sign-in: expected 401, got ${like.status}`;
+});
+
 await check('about page carries attribution and no-token statement', async () => {
   const r = await get('/about');
   if (r.status !== 200) return `HTTP ${r.status}`;

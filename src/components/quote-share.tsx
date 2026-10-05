@@ -40,6 +40,9 @@ export function QuoteShare({ chapter, images }: Props) {
   const [img, setImg] = useState<string | null>(null);
   const [inMiniApp, setInMiniApp] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [saved, setSaved] = useState<string | null>(null);
+  const [saving, setSaving] = useState(false);
+  const [note, setNote] = useState<string | null>(null);
 
   useEffect(() => {
     sdk.isInMiniApp().then(setInMiniApp).catch(() => setInMiniApp(false));
@@ -71,6 +74,8 @@ export function QuoteShare({ chapter, images }: Props) {
       for (const im of images) if (im.idx <= p.from) near = im;
       setImg(near?.id ?? null);
       setCopied(false);
+      setSaved(null);
+      setNote(null);
       setOpen(p);
     },
     [images],
@@ -94,8 +99,40 @@ export function QuoteShare({ chapter, images }: Props) {
     if (open.q) p.set('q', open.q);
     if (img) p.set('img', img);
     const qs = p.toString() ? `?${p}` : '';
-    return { card: `/api/card/${chapter}/${range}${qs}`, share: `${window.location.origin}/share/${chapter}/${range}${qs}` };
-  }, [open, img, chapter]);
+    return {
+      range,
+      card: `/api/card/${chapter}/${range}${qs}`,
+      // Once saved, share the saved card so casts and likes point at the same card.
+      share: saved ? `${window.location.origin}${saved}` : `${window.location.origin}/share/${chapter}/${range}${qs}`,
+    };
+  }, [open, img, chapter, saved]);
+
+  const pickImage = (id: string | null) => {
+    setImg(id);
+    setSaved(null);
+    setCopied(false);
+  };
+
+  const save = async () => {
+    if (!open || !links) return;
+    if (!inMiniApp) return setNote('Open Snowmoon in Farcaster to save cards');
+    setSaving(true);
+    setNote(null);
+    try {
+      const res = await sdk.quickAuth.fetch('/api/cards', {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ chapter, range: links.range, q: open.q, img }),
+      });
+      const out = (await res.json()) as { path?: string; error?: string };
+      if (res.ok && out.path) setSaved(out.path);
+      else setNote(out.error ?? 'Could not save the card');
+    } catch {
+      setNote('Could not save the card');
+    } finally {
+      setSaving(false);
+    }
+  };
 
   const cast = async () => {
     if (!links) return;
@@ -136,17 +173,26 @@ export function QuoteShare({ chapter, images }: Props) {
             <img className="share-preview" src={links.card} alt="Quote card preview" width={1200} height={800} />
             <p className="label">Image</p>
             <div className="share-images">
-              <button type="button" className={img === null ? 'is-picked' : ''} onClick={() => setImg(null)}>
+              <button type="button" className={img === null ? 'is-picked' : ''} onClick={() => pickImage(null)}>
                 None
               </button>
               {images.map((im) => (
-                <button key={im.id} type="button" className={img === im.id ? 'is-picked' : ''} onClick={() => setImg(im.id)} aria-label={im.alt}>
+                <button key={im.id} type="button" className={img === im.id ? 'is-picked' : ''} onClick={() => pickImage(im.id)} aria-label={im.alt}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={im.url} alt="" width={96} height={54} />
                 </button>
               ))}
             </div>
             <div className="share-buttons">
+              {saved ? (
+                <a className="share-saved" href={saved}>
+                  Saved · view
+                </a>
+              ) : (
+                <button type="button" onClick={save} disabled={saving}>
+                  {saving ? 'Saving…' : 'Save'}
+                </button>
+              )}
               <button type="button" className="share-cast" onClick={cast}>
                 {inMiniApp ? 'Cast' : 'Cast on Farcaster'}
               </button>
@@ -157,6 +203,7 @@ export function QuoteShare({ chapter, images }: Props) {
                 Close
               </button>
             </div>
+            <p className="share-note">{note ?? 'Saved cards are public, can be liked, and are published under GPL-3.0.'}</p>
           </div>
         </div>
       )}
