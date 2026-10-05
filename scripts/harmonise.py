@@ -9,9 +9,11 @@ outside stays exactly as it was.
 Then the check: an OCR read of each sheet (scripts/ocr.swift) must be exactly
 its lettering text. A pass that fails is rejected and recorded, never used.
 
-  "harmonise": {"strengths": [0.75, 0.85], "seed": 70701, "grow": 6, "feather": 3}
+  "harmonise": {"runs": [{"steps": 4, "strengths": [0.75, 0.85]}, {"steps": 12, "strengths": [0.92]}],
+                "seed": 70701, "grow": 6, "feather": 3}
 
-Each strength is tried in order; the first that passes is kept as
+More steps with a higher strength start later, at less noise: a lighter
+repaint. Each (steps, strength) is tried in order; the first that passes is kept as
 <id>.harmonised.png. The record, content/snowmoon/recipes/images/<stem>.harmonise.json,
 holds the model and revision, the prompt, seed, steps, each strength tried with
 its output sha256 and OCR result, the mask, and the input's sha256.
@@ -82,14 +84,16 @@ def main() -> None:
         mask = mask.filter(ImageFilter.MaxFilter(2 * h.get("grow", 6) + 1)).filter(ImageFilter.GaussianBlur(h.get("feather", 3)))
         m = np.asarray(mask, dtype=float)[:, :, None] / 255.0
         tries, kept = [], None
-        for s in h["strengths"]:
-            raw = src.with_name(f"{job['id']}.harmonise-raw-{s}.png")
-            img = model.generate_image(seed=h["seed"], prompt=job["prompt"], num_inference_steps=STEPS, width=W, height=H,
+        runs = h.get("runs") or [{"steps": STEPS, "strengths": h["strengths"]}]
+        for steps, s in [(r["steps"], s) for r in runs for s in r["strengths"]]:
+            tag = f"{steps}x{s}"
+            raw = src.with_name(f"{job['id']}.harmonise-raw-{tag}.png")
+            img = model.generate_image(seed=h["seed"], prompt=job["prompt"], num_inference_steps=steps, width=W, height=H,
                                        guidance=GUIDANCE, image_path=str(src), image_strength=s)
             img.save(str(raw))
             rep = np.asarray(Image.open(raw).convert("RGB"), dtype=float)
             out_arr = np.asarray(base, dtype=float) * (1 - m) + rep * m
-            out = src.with_name(f"{job['id']}.harmonised-{s}.png")
+            out = src.with_name(f"{job['id']}.harmonised-{tag}.png")
             Image.fromarray(np.clip(out_arr + 0.5, 0, 255).astype(np.uint8)).save(out)
             checks = []
             for sh in job["sheets"]:
@@ -97,10 +101,10 @@ def main() -> None:
                 read = ocr_crop(out, (min(xs), min(ys), max(xs), max(ys)))
                 checks.append({"text": sh["text"], "ocr": read, "exact": [re.sub(r"\s+", "", r) for r in read] == [sh["text"]]})
             ok = all(c["exact"] for c in checks)
-            tries.append({"image_strength": s, "raw": {"file": f"images-out/{folder}/{raw.name}", "sha256": sha256(raw)},
+            tries.append({"steps": steps, "image_strength": s, "raw": {"file": f"images-out/{folder}/{raw.name}", "sha256": sha256(raw)},
                           "output": {"file": f"images-out/{folder}/{out.name}", "sha256": sha256(out)},
                           "ocr_checks": checks, "accepted": ok and kept is None})
-            print(f"{job['id']}: strength {s}: OCR {[c['ocr'] for c in checks]} -> {'accepted' if ok else 'rejected'}")
+            print(f"{job['id']}: {steps} steps, strength {s}: OCR {[c['ocr'] for c in checks]} -> {'accepted' if ok else 'rejected'}")
             if ok and kept is None:
                 kept = out
         if kept:
@@ -123,7 +127,7 @@ def main() -> None:
         "script_uncommitted_changes": bool(git("status", "--porcelain", "--", str(script))),
         "model": {"repo": MODEL_REPO, "revision": MODEL_REVISION, "license": "apache-2.0", "runtime": "mflux",
                   "mflux_version": version("mflux"), "quantize_bits": 4},
-        "settings": {"steps": STEPS, "guidance": GUIDANCE, "image_strength_meaning": "share of the input kept (mflux); higher is a lighter repaint"},
+        "settings": {"guidance": GUIDANCE, "image_strength_meaning": "share of the input kept (mflux); higher is a lighter repaint"},
         "cost_usd": 0,
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "images": records,
