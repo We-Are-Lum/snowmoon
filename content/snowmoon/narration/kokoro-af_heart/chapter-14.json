@@ -4,6 +4,14 @@
   "voice": "kokoro-af_heart",
   "label": "Synthetic narration · Kokoro-82M, stock voice af_heart",
   "license": "GPL-3.0",
+  "published_by": {
+    "fid": 6786,
+    "role": "maintainer",
+    "action": "published via script",
+    "script": "scripts/publish-narration.ts",
+    "date": "2026-10-05",
+    "evidence": "docs/prompts/008-narration-and-images.md"
+  },
   "recipe": "content/snowmoon/recipes/narration/chapter-14.json",
   "model": {
     "name": "Kokoro-82M",
@@ -36,7 +44,21 @@
     },
     "break_ms": 1800,
     "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
-    "read_aloud_sha256": "73aacbc60c2baafba5d694955ee212f88422493d95adcca9a5d08cac4c5c3d95"
+    "read_aloud_sha256": "73aacbc60c2baafba5d694955ee212f88422493d95adcca9a5d08cac4c5c3d95",
+    "description_tone": {
+      "notes_hz": [
+        660,
+        990
+      ],
+      "notes_ms": [
+        110,
+        140
+      ],
+      "between_ms": 40,
+      "after_ms": 220,
+      "amplitude": 0.12,
+      "made_by": "code (numpy sine, linear fades)"
+    }
   },
   "block_encoding": {
     "codec": "aac",
@@ -46,10 +68,10 @@
     "tool": "ffmpeg"
   },
   "chapter_file": {
-    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-14-413d0f18ae88.m4a",
-    "sha256": "413d0f18ae881af87db3cb8fc90d79264e8bbcb48bd620a80d282cc85ff8cb95",
-    "bytes": 15108316,
-    "duration_ms": 1278925
+    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-14-d6685dc36df8.m4a",
+    "sha256": "d6685dc36df819d703714d94584d5a9f17572743f9e24025bdfb9ff2dcf4e5d3",
+    "bytes": 15133775,
+    "duration_ms": 1281475
   },
   "breaks": [
     {
@@ -59,12 +81,12 @@
     },
     {
       "idx": 89,
-      "start_ms": 924250,
+      "start_ms": 926290,
       "silence_ms": 1800
     },
     {
       "idx": 101,
-      "start_ms": 1023700,
+      "start_ms": 1025740,
       "silence_ms": 1800
     }
   ],
@@ -690,6 +712,7 @@
       "bytes": 188688,
       "duration_ms": 21100,
       "start_ms": 435350,
+      "tone_ms": 510,
       "source_wav_sha256": "2d6e780faadb05717de860f0ce40073acb3dcac81be2a9ae1e1e45703fc30fdb",
       "text": "The audience's view of the board. Five triangles mark the shrines, one at the center and one at the middle of each edge. Light blue dots are spread across the northwest and along the top edge, with two just below the center. Purple squares sit just above the center and at the east edge, and are scattered across the south, thickest in the southeast.",
       "read_aloud_status": "unreviewed"
@@ -702,7 +725,7 @@
       "sha256": "5f0067ab4efc8e79ccc25553bb79de067ef338e41b2b83f7104be1d1f7daf8e2",
       "bytes": 160510,
       "duration_ms": 17700,
-      "start_ms": 457050,
+      "start_ms": 457560,
       "source_wav_sha256": "da556112457a28867b673baedc9ed69a63f96cb213fe469566397257f23f5e63",
       "text": "A few hundred turns later, [Zei](/ˈzA/) realized that Gun's attack had been more effective. He had not only created eternal glider factories between the center and south shrines, and the center and west, but he had also unleashed a glider attack that destroyed [Zei](/ˈzA/)'s symbol-carrying spaceship."
     },
@@ -714,7 +737,7 @@
       "sha256": "862f33ed49b9ab3076b6debbd1a3b2e700c05305ea6bd13b0324ea2531e3e320",
       "bytes": 99392,
       "duration_ms": 11075,
-      "start_ms": 475200,
+      "start_ms": 475710,
       "source_wav_sha256": "218843344feb5b04b31bca052e179889bbd07f736b4c5dbc4ba18a976ff0f07f",
       "text": "Meanwhile, Gun's two symbol-carrying spaceships were moving south, one of them on a collision course with [Zei](/ˈzA/)'s own — a collision that would happen before the next intervention turn."
     },
@@ -726,7 +749,7 @@
       "sha256": "fc4997b83c200f50836b920170fb20bd71a96ee46b534d49c12d8769ec6ba260",
       "bytes": 45285,
       "duration_ms": 4925,
-      "start_ms": 486725,
+      "start_ms": 487235,
       "source_wav_sha256": "c8509e897f4963b255d808a4869644bf04b43e357b91ea99f0a589da0159ddbc",
       "text": "[Zei](/ˈzA/) would only have one symbol-carrying spaceship left, the one in the east."
     },
@@ -738,7 +761,7 @@
       "sha256": "c460c46b56f932a1c1682e6678e1c151e216abb529d19970befcbb8544e35666",
       "bytes": 307624,
       "duration_ms": 34375,
-      "start_ms": 492100,
+      "start_ms": 492610,
       "source_wav_sha256": "b20fe72ddf7154252e3b70ef2a761bf662da5290879f23cd002e04c19d357f89",
       "text": "[Zei](/ˈzA/) sighed. He realized that his last symbol-carrying spaceship was the last mobile structure he had that Gun knew nothing about. His best advantage might be keeping it that way. On his next intervention turn, he steered that spaceship to temporarily stop, just outside of visual range of Gun's northeastern base. He set the spaceship to fire off gliders to destroy the symbols that were undoubtedly in Gun's northeastern base. To avoid giving up his location, they would not fly north directly — instead, they would reflect off of the northern rock shrine."
     },
@@ -750,7 +773,7 @@
       "sha256": "3fd6220a300cc03cf461a82d115e2ccc172cff16f2803910a6933a3111b7b95f",
       "bytes": 127205,
       "duration_ms": 14300,
-      "start_ms": 526925,
+      "start_ms": 527435,
       "source_wav_sha256": "c2b4cd0a2f42976a070949ad459d5b4a268ffa1626b3b82f73e43a0733d647e8",
       "text": "Meanwhile, in the southeast, [Zei](/ˈzA/)'s own symbols began to disappear one by one — first, from Gun's eternal glider factories, then from new gliders fired by his symbol-carrying spaceship now moving eastward from the south."
     },
@@ -762,7 +785,7 @@
       "sha256": "e953700ca8101f8cde92f3c0848aa2fd8c408c4600cb8dc155b4a9d23afc2e52",
       "bytes": 100480,
       "duration_ms": 11325,
-      "start_ms": 541675,
+      "start_ms": 542185,
       "source_wav_sha256": "01170b4967755bc287cdc72b962b9f48524f091fc532207d242f9ea9aeb950e6",
       "text": "And just before the next intervention turn, [Zei](/ˈzA/) briefly saw Gun's symbol-carrying spaceship come into view near his southwest base — just before it sent out gliders that destroyed it."
     },
@@ -774,7 +797,7 @@
       "sha256": "17d64dc5fa656b861a61885bd0c5530ecf18bb9e0a85a0ff62001de4f51a7bdc",
       "bytes": 24806,
       "duration_ms": 2675,
-      "start_ms": 553450,
+      "start_ms": 553960,
       "source_wav_sha256": "3e8bd446ed5092c96b7904bffaf97a9d2961c4ff787f97086eacd0a4e372700a",
       "text": "Then the fourth intervention turn came."
     },
@@ -786,7 +809,8 @@
       "sha256": "94a8b7b40b1b1d1124aafea7820d4fee7c0fdd1426be555b6af4d2496978d497",
       "bytes": 144327,
       "duration_ms": 16225,
-      "start_ms": 556575,
+      "start_ms": 557085,
+      "tone_ms": 510,
       "source_wav_sha256": "004df95c8fbdf56f2c1fcce35afcbc3a218932b75b295326c60ff028a2e47a7a",
       "text": "The board at the fourth intervention turn. The five shrines are unchanged. Three light blue dots remain in the northwest, with one more in the southwest and one near the bottom edge. Only two purple squares are left, one in the northeast and one in the southeast.",
       "read_aloud_status": "unreviewed"
@@ -799,7 +823,7 @@
       "sha256": "e7cfc123ed6850b70714620f20038aa2db6daad1de23fbeccfa8cd0f18486944",
       "bytes": 147785,
       "duration_ms": 16450,
-      "start_ms": 573400,
+      "start_ms": 574420,
       "source_wav_sha256": "0ef208d37ce78c8dd536224f9a91ccffa800e6eb6389c82c56efd60b33d56a9b",
       "text": "Gun had a large advantage in material, [Zei](/ˈzA/) knew. [Zei](/ˈzA/)'s only advantage was staying hidden. There were also gliders flying all over from the eternal glider factories, and the spot just south of the northeast corner was one of the more comfortable spots to be."
     },
@@ -811,7 +835,7 @@
       "sha256": "80fe7f773fd16c8328cff1e08c74bcc7a6e6d2f03f4ad64de22bcfe0f7f16255",
       "bytes": 89956,
       "duration_ms": 9975,
-      "start_ms": 590300,
+      "start_ms": 591320,
       "source_wav_sha256": "8c5bfdaa50e35101b03305c79196927d6e61251ef37d1f80713657045bd8f765",
       "text": "[Zei](/ˈzA/) decided he would continue to lay low. He stopped his symbol-carrying spaceship, and started on a five-intervention-turn-long quest to build another one."
     },
@@ -823,7 +847,7 @@
       "sha256": "6716a76cf9c37887c5ffdd39e1e14fdfe7ab68789469542d96da628f2009031e",
       "bytes": 172698,
       "duration_ms": 19300,
-      "start_ms": 600725,
+      "start_ms": 601745,
       "source_wav_sha256": "5dc2d4b49ebf6122ecb4372b0c72b52bd286d2d9ab06f3daf1782f120969cd60",
       "text": "Meanwhile, he remembered what he saw of the rock formations near the center just before his symbol-carrying spaceship there was destroyed, replicated the pattern in his sandbox, and figured out a strategy that would spawn an eternal glider factory between the center and north shrines to wreak havoc on Gun's northwest."
     },
@@ -835,7 +859,7 @@
       "sha256": "01dc6bdf526a7a2ca00d3aaac3539bd27dcc0e8217a55074f1666eaf42bbab5a",
       "bytes": 124647,
       "duration_ms": 14225,
-      "start_ms": 620475,
+      "start_ms": 621495,
       "source_wav_sha256": "f0426197b5622f3439f3988c44ff28e09ebc4830f9d1e224506ea6c538e81936",
       "text": "By the fifth intervention turn, his attack succeeded in heavily damaging Gun's bases in the northwest — though [Zei](/ˈzA/) had no way to know how much damage was done. [Zei](/ˈzA/) continued his quest to build another symbol-carrying ship."
     },
@@ -847,7 +871,7 @@
       "sha256": "d96b338097fed0962e469ca6b3ae12a8b3a32e78bc0e7fae2b9129ef86203991",
       "bytes": 111970,
       "duration_ms": 12525,
-      "start_ms": 635150,
+      "start_ms": 636170,
       "source_wav_sha256": "c157123cb4d99259a94f99aa0e7f3261b098881084c44c8a3a041ee82a89bdf2",
       "text": "Shortly after that, [Zei](/ˈzA/)'s last symbol in the southeast got destroyed by a storm of gliders. The last thing he could see in the southeast was Gun's symbol-carrying spaceship starting to move northwards."
     },
@@ -859,7 +883,7 @@
       "sha256": "8a0ecd6d95a85eeaf755049b0b7176f67c0bf08f262ba47190863782d672f95f",
       "bytes": 73199,
       "duration_ms": 7850,
-      "start_ms": 648125,
+      "start_ms": 649145,
       "source_wav_sha256": "8c473785d213c65714454e14b4849c9337ea9b53b5183e6e025be6ee584845d8",
       "text": "[Zei](/ˈzA/) sent gliders to create another eternal glider factory, this time flooding the space along the center of the west."
     },
@@ -871,7 +895,7 @@
       "sha256": "318fa36da714bf7f3794efdee6e69a9b6460bb65ff4f7de17ed1428e15fd1cf0",
       "bytes": 75609,
       "duration_ms": 8575,
-      "start_ms": 656425,
+      "start_ms": 657445,
       "source_wav_sha256": "b84d416f20f2d1af64a70dcb26cf022d8584a12667c268c057c2442a363e6229",
       "text": "He did not move his own spaceship. He could not: for the next three thousand turns he was a sitting duck, as he was building his new spaceship."
     },
@@ -883,7 +907,8 @@
       "sha256": "202bfdce2d58a8f100a10b687c871ab7a9242e4621cbd01d18429b7770694605",
       "bytes": 90961,
       "duration_ms": 10275,
-      "start_ms": 665450,
+      "start_ms": 666470,
+      "tone_ms": 510,
       "source_wav_sha256": "94c3d5eb800c94597f49dfbadf7f76c78ea01aabb3893498906d7c18b421963c",
       "text": "The board again. Three light blue dots are left: one near the top, one on the east edge, and one in the southwest. A single purple square remains, in the northeast.",
       "read_aloud_status": "unreviewed"
@@ -896,7 +921,7 @@
       "sha256": "cd0c8a5b2412911ab21a305084ac56efbd90b932d58ce5787f94261a1b9ee6d8",
       "bytes": 120122,
       "duration_ms": 13425,
-      "start_ms": 676325,
+      "start_ms": 677855,
       "source_wav_sha256": "77e0389845904acdc817fa19641277ea56fed2ae70dca60fe485987ccf1c84a9",
       "text": "The sixth intervention turn came, right when Gun's symbol-carrying ship was getting hit by a barrage of gliders. This gave Gun a lucky chance to protect it from gliders, allowing it to survive a little bit longer."
     },
@@ -908,7 +933,7 @@
       "sha256": "7caaf3c32823ad3b2a91269151451004761d11fd067d7e0f87b4c5bfd15f40c0",
       "bytes": 57226,
       "duration_ms": 6525,
-      "start_ms": 690200,
+      "start_ms": 691730,
       "source_wav_sha256": "65953faed37b56aea8d77f2ff4a2e694d50c72dd45ea3fb1907ac7984883a9c0",
       "text": "The spaceship finally did get destroyed, but only after it had gotten within visual range of [Zei](/ˈzA/)'s own."
     },
@@ -920,7 +945,7 @@
       "sha256": "0709ec8ab726f6490556119550968c6461ba62cc3a7b9c294646403697f3349e",
       "bytes": 55705,
       "duration_ms": 6175,
-      "start_ms": 697175,
+      "start_ms": 698705,
       "source_wav_sha256": "b860bdca7ec29c8d3913dd8d282edfe05905ca93844c4cf5bb53743980c3aad9",
       "text": "[Zei](/ˈzA/) calculated: Gun had been able to see [Zei](/ˈzA/)'s ship, but not the new ship that [Zei](/ˈzA/) was building."
     },
@@ -932,7 +957,7 @@
       "sha256": "552a0f9196dd73cf18f12b41e4b0eee2aa2e28d546a93ea050c78be7660c9232",
       "bytes": 149999,
       "duration_ms": 16400,
-      "start_ms": 703800,
+      "start_ms": 705330,
       "source_wav_sha256": "b191cbf1ff7de3e7f8998f8bbacb2138c90434d4a2bf62127cc82ce9257be628",
       "text": "[Zei](/ˈzA/) decided to do the only thing that he could do: he kept building, while putting up extra walls along the west and the diagonal. He judiciously ignored his south: the existing glider storm, and the debris from Gun's ship, would itself be enough protection."
     },
@@ -944,7 +969,7 @@
       "sha256": "92e8f4a6b653413a785de17a92315a7f85e708b879344845a36d8c62515b4066",
       "bytes": 109620,
       "duration_ms": 12150,
-      "start_ms": 720650,
+      "start_ms": 722180,
       "source_wav_sha256": "22b095233f4a782780d8bc9fb841d878d8d8ef0b7b6014524c215e6b869e573b",
       "text": "The seventh intervention turn came. [Zei](/ˈzA/) put all resources into building the new ship. Almost finished. The next turn would be just enough to finish it, and to give a steering instruction to both."
     },
@@ -956,7 +981,7 @@
       "sha256": "10e70a9c2cdd696fa3e0c10111d0eaf9a35932a5e458406b3153f4d0d17ee3e0",
       "bytes": 40030,
       "duration_ms": 4250,
-      "start_ms": 733250,
+      "start_ms": 734780,
       "source_wav_sha256": "0216afc449edf71550d8cc5e4523728c0db12f61e42285f11329e518c35ae6bd",
       "text": "Then, a glider storm came toward [Zei](/ˈzA/)'s ship from all directions."
     },
@@ -968,7 +993,7 @@
       "sha256": "66be0584ef876eefbd8bf9a731f5eff396d95fefe50763e4949cbceaa6a21d78",
       "bytes": 62586,
       "duration_ms": 6825,
-      "start_ms": 737950,
+      "start_ms": 739480,
       "source_wav_sha256": "1f2306e7baf10472688abe55f47c1bdea2a427c201bf87264217fed854a77e7d",
       "text": "At first, the walls handled it. But then, the gliders kept coming, and soon they began to breach the walls."
     },
@@ -980,7 +1005,7 @@
       "sha256": "29f06df2013034784ebe592d8291c91080127bd849a0f8bfeb7b047ffa42e467",
       "bytes": 115971,
       "duration_ms": 12875,
-      "start_ms": 745225,
+      "start_ms": 746755,
       "source_wav_sha256": "d888d2bd193e9d3415dcf4ab4e128694c3639c640c1b233a65ade6bc8573653b",
       "text": "The eighth intervention turn came just in time. [Zei](/ˈzA/)'s last ship was not quite yet destroyed, but it was almost there. He could now finish his new ship, and give his existing ship one last instruction."
     },
@@ -992,7 +1017,7 @@
       "sha256": "9200aef8b2e65de05e2a8d9d515547af9ffe843877da313c87131ecd8d778714",
       "bytes": 219977,
       "duration_ms": 24425,
-      "start_ms": 758550,
+      "start_ms": 760080,
       "source_wav_sha256": "29ffb31542d47e87aa4faeea21f0f5e70a7033b79080810dc600a3fb858f1ad6",
       "text": "[Zei](/ˈzA/) programmed both to head west. He figured that the existing ship's symbol would get destroyed within a hundred turns, but the wreck could still coast west, and crash into the northern shrine and release a large glider storm southward. Meanwhile, the new ship would also head west, but stop just north of the northern shrine. This would give it some protection from the glider storms that were getting more and more intense."
     },
@@ -1004,7 +1029,7 @@
       "sha256": "91053fff81e141c59eda0257cb5d1ab0f1b009ba3548c1f8cc74c3d7df6841ec",
       "bytes": 247983,
       "duration_ms": 27850,
-      "start_ms": 783425,
+      "start_ms": 784955,
       "source_wav_sha256": "ce466ae081b646336fda5864e33a892a78c590eff71c880236a5aa0f6146a69a",
       "text": "When the ninth intervention turn came, [Zei](/ˈzA/) used a nearby rock formation, which was almost destroyed by the gliders, to bounce a glider that would then head southward and re-adjust the eternal glider factories that were attacking to the south. He did not have time to calculate what the adjustment would look like, and he did not have any way to know what its exact consequences would be, but he hoped that it would make previously safe territory unsafe. He also launched one more glider attack westward."
     },
@@ -1016,7 +1041,7 @@
       "sha256": "5f9eb664ca8e696987f5b750f9ea2b24af5c072fa0829e69305203b6a8a6de91",
       "bytes": 55890,
       "duration_ms": 6250,
-      "start_ms": 811725,
+      "start_ms": 813255,
       "source_wav_sha256": "2f74acdb0c0822d6d7327a009e4c25703be9ae3d1397f767aa00313aba9a267f",
       "text": "The tenth intervention turn came. Nothing seemed to happen, except debris. More and more debris."
     },
@@ -1028,7 +1053,8 @@
       "sha256": "492f68a1cd872e12d0e9ff7d4c73b06703adc7920f8f91e94dc0f5ed28d6ab05",
       "bytes": 75813,
       "duration_ms": 8300,
-      "start_ms": 818425,
+      "start_ms": 819955,
+      "tone_ms": 510,
       "source_wav_sha256": "70be0d0f3599bbd8b3fdd7504aae53b9919729457a9da4be7ca4b8bd814b0736",
       "text": "The board is nearly empty around the five shrines: a single light blue dot near the bottom edge, and a single purple square at the top.",
       "read_aloud_status": "unreviewed"
@@ -1041,7 +1067,7 @@
       "sha256": "1b553baa60425776696fa395714dece2c29ff0102b89e9ab4eb3f6ea117bad05",
       "bytes": 53097,
       "duration_ms": 5975,
-      "start_ms": 827325,
+      "start_ms": 829365,
       "source_wav_sha256": "3f117746bbadbebdce4d48e701013cf6e5d178c06893a4ac5912372f13621f6c",
       "text": "[Zei](/ˈzA/) reinforced the eastern and western walls beside his last symbol-carrying spaceship."
     },
@@ -1053,7 +1079,7 @@
       "sha256": "7313b8fc28d970201c9c18f999bedc5eda38b9394f346ff8c163dfbc1181c793",
       "bytes": 125503,
       "duration_ms": 13900,
-      "start_ms": 833750,
+      "start_ms": 835790,
       "source_wav_sha256": "92f911923e9a8654bbf4e8ce7e9ccde9ecf3d6e87bac12cb6d4167ecd88ce7e6",
       "text": "He launched a few gliders to try to create more eternal glider factories, that would hopefully create more chaos southward. One of the gliders was destroyed, hit by another stray glider before it even left [Zei](/ˈzA/)'s visual field."
     },
@@ -1065,7 +1091,7 @@
       "sha256": "e372a5169ec85afe7609a8857ebc447498f7a34a12fc3b3840bfb7d2b397d39d",
       "bytes": 356661,
       "duration_ms": 40100,
-      "start_ms": 848100,
+      "start_ms": 850140,
       "source_wav_sha256": "403ae2507fc7ba2cabda7c314d04a28b64acc4d127db79a70107599e5de3952a",
       "text": "The eleventh intervention turn came. [Zei](/ˈzA/) figured out one last trick. He figured out how to bounce a glider southward off of one of his own walls so that it would hug the edge of the shrine. From his simulations in the sandbox, he saw that if it hit the corner of the middle shrine, it would bounce off back north. The glider would bounce back and forth between the center and the north. Each time it hit the center, it would simultaneously release another glider that would go west. And when that glider hit the western shrine, it would bounce off and go southeast, hopefully causing damage to whatever was in the south. He did this, and simultaneously set up a mirror image of the same strategy toward the east."
     },
@@ -1077,7 +1103,7 @@
       "sha256": "b6c4dbc3480a2fabadeb0755db6627e4efdc201d122fe2509221c15556f86879",
       "bytes": 125392,
       "duration_ms": 14050,
-      "start_ms": 888650,
+      "start_ms": 890690,
       "source_wav_sha256": "57ce9a38eb355d53dd8b99ee3094214b664bede2d88df496a68205fc436ed7fe",
       "text": "The twelfth intervention turn came. By this point, the debris and stray gliders in the game field were so intense that offense was impossible. [Zei](/ˈzA/) simply kept building walls. Hunker down, play defense, outlast."
     },
@@ -1089,7 +1115,7 @@
       "sha256": "227b2bdf80cdf42f1f48c83e191c69a9a19fb845fcbe5e0a4d16f2a376db48d9",
       "bytes": 95603,
       "duration_ms": 10550,
-      "start_ms": 903150,
+      "start_ms": 905190,
       "source_wav_sha256": "f3a5f3341a73d0e10c010a9142977321f598217d4e59d689ddc1151eec271956",
       "text": "The thirteenth intervention turn came. [Zei](/ˈzA/) had built four layers of walls around this ship, and finally the walls were beginning to crumble faster than he could create new ones."
     },
@@ -1101,7 +1127,7 @@
       "sha256": "be72032912ecdb225a627e62ea88e43310706e6c355a0d70d3c40669d374262e",
       "bytes": 34882,
       "duration_ms": 4000,
-      "start_ms": 914150,
+      "start_ms": 916190,
       "source_wav_sha256": "36bc20670d30b03ad36e88045ea4f9861c512d3a531642729f70deb47ffd3745",
       "text": "Finally, a few hundred turns after that, an alarm buzzed."
     },
@@ -1113,7 +1139,7 @@
       "sha256": "95d764d816293ac72e56a5ac7ab2eda49d5280aaf77c07c2d9c2ff17b9f64d71",
       "bytes": 22866,
       "duration_ms": 2500,
-      "start_ms": 918600,
+      "start_ms": 920640,
       "source_wav_sha256": "b1f052340c089af7f94e6adf42e459285ed11799ee832099b795cc393140bc9f",
       "text": "\"And ... [Zei](/ˈzA/) [Leimin](/ˈlAmɪn/) is the winner!\""
     },
@@ -1125,7 +1151,7 @@
       "sha256": "5fac235831df8e324a9bdd8ace5bf708898330c92aa6ebd63aa29eae962b9809",
       "bytes": 20405,
       "duration_ms": 2250,
-      "start_ms": 921550,
+      "start_ms": 923590,
       "source_wav_sha256": "4b163811f941cccb870106fe711772fbf9c30201aae73b84b87d6839d9a784f2",
       "text": "[Zei](/ˈzA/) let out a sigh of relief."
     },
@@ -1137,7 +1163,7 @@
       "sha256": "6683e939e4e7673c33fa1cda226f99fa2ea0edb9a1e15e18094c3de10a435907",
       "bytes": 207995,
       "duration_ms": 23625,
-      "start_ms": 926050,
+      "start_ms": 928090,
       "source_wav_sha256": "b71966d31f17b27c8c98aeb613c543949abd816a87abf8fd5df7d17f1a8a0cab",
       "text": "[Zei](/ˈzA/) sat in the waiting room, watching the game between [Deluin](/dˈɛluɪn/) and [Kau](/ˈkW/). From the beginning, [Zei](/ˈzA/) was surprised, and impressed, by [Deluin](/dˈɛluɪn/)'s strategy. [Deluin](/dˈɛluɪn/) spent all his attention early on to use the resources in the rock formations near his north and northeast to build walls. Simultaneously, he sent out gliders to try to create eternal glider factories pointing southward."
     },
@@ -1149,7 +1175,7 @@
       "sha256": "04e4e92b789346e22756b3c3d11a7cbb3451bb0a7b11948346493b9b834f3ccb",
       "bytes": 181858,
       "duration_ms": 20450,
-      "start_ms": 950125,
+      "start_ms": 952165,
       "source_wav_sha256": "913234dd13f2b1da92a375af3867783362802f1f49d08533673cb4a9143d5b98",
       "text": "[Deluin](/dˈɛluɪn/) did not build any mobile symbol-carrying spaceships. Instead, he simply fortified. [Kau](/ˈkW/)'s eternal glider factories proved to be of limited use: though the gliders would keep coming forever, they would only have any effect for a short period of time. As soon as a storm of gliders came, [Deluin](/dˈɛluɪn/) would figure out how to reflect it."
     },
@@ -1161,7 +1187,7 @@
       "sha256": "2de721a849691561e969c8ab5bd8c5b8b44340213488422ec1c7feff58e36c9b",
       "bytes": 61706,
       "duration_ms": 6750,
-      "start_ms": 971025,
+      "start_ms": 973065,
       "source_wav_sha256": "67f16c2221991f2bbcd819bbf62912f59240e3107529471cd691fae558e0c36e",
       "text": "[Zei](/ˈzA/) was impressed. Looks like [Deluin](/dˈɛluɪn/) had also managed to figure out that he needed to be more patient."
     },
@@ -1173,7 +1199,7 @@
       "sha256": "a5e2794f8ddf4e939b42fae6b3ee3cd7547bf14179288f45dd6e1c13808c4ec2",
       "bytes": 145664,
       "duration_ms": 16000,
-      "start_ms": 978225,
+      "start_ms": 980265,
       "source_wav_sha256": "fa79f95f623c62a3db925055fe222e20249fdedbee6032cea4b2256bf3a9de51",
       "text": "Seven thousand turns later, [Kau](/ˈkW/) was reduced to hiding behind the southern shrine. But [Kau](/ˈkW/) barely survived three thousand turns more: the number of stray gliders and debris kept increasing, and [Deluin](/dˈɛluɪn/)'s walls made him far more protected than [Kau](/ˈkW/) was."
     },
@@ -1185,7 +1211,7 @@
       "sha256": "efdc5ff24314f8466769698548480954152cc3b73498b4a9dbdbe720795a58e8",
       "bytes": 43329,
       "duration_ms": 4800,
-      "start_ms": 994675,
+      "start_ms": 996715,
       "source_wav_sha256": "6a1af59d5447a9d607a34d4db4aa562d10808ad9136a666fd5a05a6ea2bea126",
       "text": "Ten thousand two hundred turns into the game, [Deluin](/dˈɛluɪn/) was announced the winner."
     },
@@ -1197,7 +1223,7 @@
       "sha256": "86ca4e1ff6bbaf962bc5a5f5a95bb91539745f8661e9bc3a35cc0de9365353af",
       "bytes": 24058,
       "duration_ms": 2600,
-      "start_ms": 999925,
+      "start_ms": 1001965,
       "source_wav_sha256": "ec106f135461f9f26de62c72db4b9ccb582581af3d53bd7239401916803088c3",
       "text": "[Deluin](/dˈɛluɪn/) stepped out from the elevator."
     },
@@ -1209,7 +1235,7 @@
       "sha256": "b88c0421cdc450ef566adb66d0c7e2681d00843ba83ce878d704060181cbeecc",
       "bytes": 25240,
       "duration_ms": 2850,
-      "start_ms": 1002975,
+      "start_ms": 1005015,
       "source_wav_sha256": "d1cba70307d1704f51f45e55fd600e620df5458d116a38fbd58abddbec1fcccc",
       "text": "\"That was a really impressive job, [Deluin](/dˈɛluɪn/).\""
     },
@@ -1221,7 +1247,7 @@
       "sha256": "aacec72da65f59428e04539ea049eec08ede79c4198cb5d1532c9125755b2651",
       "bytes": 58915,
       "duration_ms": 6550,
-      "start_ms": 1006275,
+      "start_ms": 1008315,
       "source_wav_sha256": "5b69375e83a7ba9a7044dcabbffae37b97b397a6a406442293085be9bda07346",
       "text": "\"Thanks! I was impressed that the walls held out so well. Now I'm excited to see how you handled your game.\""
     },
@@ -1233,7 +1259,7 @@
       "sha256": "c8acccc491c7113da748b06a217a0f7cf3cfc78e1ab4c7c291d6b45c4b6ef16a",
       "bytes": 52865,
       "duration_ms": 5750,
-      "start_ms": 1013275,
+      "start_ms": 1015315,
       "source_wav_sha256": "4c8d2a9ab7a979327bce57a68ac3be33453a55946fb3a165445389b7f56723c0",
       "text": "\"Oh — my style was much uglier than yours. Though I also basically won by playing defense.\""
     },
@@ -1245,7 +1271,7 @@
       "sha256": "58092d9c3c2100b3addd82a53729ecb6f063475e986f31592da0b40b6b9d4d85",
       "bytes": 17857,
       "duration_ms": 1975,
-      "start_ms": 1019475,
+      "start_ms": 1021515,
       "source_wav_sha256": "088bd16d937eb506434a01d0fb01ca72ade447bf8473917be46c066c8590078c",
       "text": "\"Do you want to get tea later?\""
     },
@@ -1257,7 +1283,7 @@
       "sha256": "97c1dc11c89c23b96538701811dd6cb86187759bbd4339872cf16d6f9672bdc8",
       "bytes": 12067,
       "duration_ms": 1350,
-      "start_ms": 1021900,
+      "start_ms": 1023940,
       "source_wav_sha256": "ce854561d2ddda414b89ab87a48c3619610d7546403c736ba09135a9a7ca4e1f",
       "text": "\"Sure!\""
     },
@@ -1269,7 +1295,7 @@
       "sha256": "b9044be115ed68416fce2902788b030fb68c174cbd22162c3d2eb76973d82812",
       "bytes": 58818,
       "duration_ms": 6775,
-      "start_ms": 1025500,
+      "start_ms": 1027540,
       "source_wav_sha256": "7130b14bd57b987c64b3b68161dd43c3533c6751cbedff934953b6fb6965b9e2",
       "text": "[Deluin](/dˈɛluɪn/) was sitting in the courtyard drinking a tea. As soon as [Zei](/ˈzA/) saw him, he started running to greet him."
     },
@@ -1281,7 +1307,7 @@
       "sha256": "aad03ad41cb57424e7b0de039d3909042855b25d83f5ee80c1e60122d1fde740",
       "bytes": 19379,
       "duration_ms": 2125,
-      "start_ms": 1032725,
+      "start_ms": 1034765,
       "source_wav_sha256": "9a1ea243b4f940e38a0598b39bef84cd0db630da3a6a2887a9137035a4d4de4b",
       "text": "\"[Deluin](/dˈɛluɪn/), good to see you!\""
     },
@@ -1293,7 +1319,7 @@
       "sha256": "127c582b02bfc7e862177f8036d0a26e97357684cd6b8596e40e34f2fd59a71f",
       "bytes": 46566,
       "duration_ms": 5075,
-      "start_ms": 1035300,
+      "start_ms": 1037340,
       "source_wav_sha256": "3181811fe9ba979d5980fa45b842ee0384083deba19e456a2add6bc8dbf8ca52",
       "text": "[Deluin](/dˈɛluɪn/) waved back. [Zei](/ˈzA/) ran the rest of the way to his table and sat down."
     },
@@ -1305,7 +1331,7 @@
       "sha256": "9908c640abdbbd1272d8f2ea81172229433a279d600c675221e67052ac345a0a",
       "bytes": 27694,
       "duration_ms": 3050,
-      "start_ms": 1040825,
+      "start_ms": 1042865,
       "source_wav_sha256": "245ee6b8e0dece0d17360ccaa2e823838ccdfe8b9b323183a215c0bf092be48c",
       "text": "A robot immediately slid up to their table."
     },
@@ -1317,7 +1343,7 @@
       "sha256": "992bed6ca850ae9dd336996043b476b755d8b51dd14df7950f3cfa0e0cfd53f5",
       "bytes": 22656,
       "duration_ms": 2550,
-      "start_ms": 1044325,
+      "start_ms": 1046365,
       "source_wav_sha256": "dfc0f9b7f7a3f16ce0249c4e6b643246fe885e92ae426e3a9c6d658be06cd523",
       "text": "\"[jie](/ˈʤjɛ/) [mo](/ˈmO/) [kai](/ˈkI/) [tu](/ˈtu/) [jie](/ˈʤjɛ/) [hei](/ˈhA/) [ja](/ˈʤɑ/) [ma](/ˈmɑ/)?\""
     },
@@ -1329,7 +1355,7 @@
       "sha256": "f780beae7345cbccbf7355b062246213cea168bcf5e01704bf9dc2bfde85aca5",
       "bytes": 16896,
       "duration_ms": 1825,
-      "start_ms": 1047325,
+      "start_ms": 1049365,
       "source_wav_sha256": "fe3f0575429c7a0817cb89d4c3d4d9123dee9bf76263dd07a48f94e4763c7f43",
       "text": "A menu appeared."
     },
@@ -1341,7 +1367,8 @@
       "sha256": "74d8edf124b54e0adbebd7a69cc525c852cc8e9ed0e86d6903bb4d185e27c8a3",
       "bytes": 106688,
       "duration_ms": 11900,
-      "start_ms": 1049600,
+      "start_ms": 1051640,
+      "tone_ms": 510,
       "source_wav_sha256": "ff38d78c4ec5c4a90ee23d64f2f6915b45da3695ef418f6cd706e6ca8300f2c6",
       "text": "The menu is four picture tiles: a cup with a handle and three short diagonal lines beside it, a leaf with wavy veins, the face of a pig, and a fish with small marks above its back.",
       "read_aloud_status": "unreviewed"
@@ -1354,7 +1381,7 @@
       "sha256": "cc157e6114babf0f377b7de61b9b3e39feb00bb0ca57805af19721c9d9d9f327",
       "bytes": 17039,
       "duration_ms": 1950,
-      "start_ms": 1062100,
+      "start_ms": 1064650,
       "source_wav_sha256": "520dd4669bb005cd72446fede5052c25cabc158ee3d57d3986aace3d8d02de4b",
       "text": "\"Whoa\", [Zei](/ˈzA/) gasped."
     },
@@ -1366,7 +1393,7 @@
       "sha256": "117bee98ebc26a6848c9199279a28b4d6ba2121beb3183b60ff9e1683dc9355d",
       "bytes": 21374,
       "duration_ms": 2375,
-      "start_ms": 1064500,
+      "start_ms": 1067050,
       "source_wav_sha256": "c2654c5c06605325fb1ecf8d16894064494ae4afb45174c6b2b26ff8cdbe9df8",
       "text": "\"What is it?\", [Deluin](/dˈɛluɪn/) asked."
     },
@@ -1378,7 +1405,7 @@
       "sha256": "abf1436353330a33e04525a8e366416d72a6e65ca0c09f0a3b5bd128ba85f810",
       "bytes": 50327,
       "duration_ms": 5525,
-      "start_ms": 1067325,
+      "start_ms": 1069875,
       "source_wav_sha256": "aee75aebb469f5df7a2a8949654a65ee841ba2288660f707fabcf4b6e72120da",
       "text": "\"I think these are some of the new symbols they're A/B testing for [Dzegoban](/ˈdzɛɡObɑn/) version nine.\""
     },
@@ -1390,7 +1417,7 @@
       "sha256": "cb03001dfc9125c209e3dea9e916f2d8ca46002ce905d62378c273933fb8b4f5",
       "bytes": 36402,
       "duration_ms": 4250,
-      "start_ms": 1073300,
+      "start_ms": 1075850,
       "source_wav_sha256": "ed87d539596b75c445c27024c0c8a0206088495a2e3e370b94ae02e3143253b0",
       "text": "He immediately realized he was talking to a foreigner, and followed up:"
     },
@@ -1402,7 +1429,7 @@
       "sha256": "dbd0292f16e5417c857304665e1aec1bb1f7f57a012af9a82ed74f71a232bfde",
       "bytes": 24335,
       "duration_ms": 2700,
-      "start_ms": 1078000,
+      "start_ms": 1080550,
       "source_wav_sha256": "9153094800b9d960fcfc3a97ee50c628917b7d9b761f1035ead453e2b8f1ce77",
       "text": "\"Have you heard of [Dzegoban](/ˈdzɛɡObɑn/) version nine?\""
     },
@@ -1414,7 +1441,7 @@
       "sha256": "1f06e690adc56f6ae81eec8f5e966cdd617aeba40af1d174e833206ebee51827",
       "bytes": 140215,
       "duration_ms": 15325,
-      "start_ms": 1081150,
+      "start_ms": 1083700,
       "source_wav_sha256": "b600f359f824f13b85cc47f8442a0ca6f096e6d09757613a6e5501ae4f6bc09a",
       "text": "\"Oh yeah I had a couple people mention it to me. Making the language visual. Bringing back hieroglyphs for the individual roots, but pronunciation perfectly readable from the glyph. And also another layer where they're trying to make the grammar look more like math.\""
     },
@@ -1426,7 +1453,7 @@
       "sha256": "84862ffbf05ea4e82edb34c72291dcc65d76657a68b7ac19a8171fb4c7c50339",
       "bytes": 151138,
       "duration_ms": 16800,
-      "start_ms": 1096925,
+      "start_ms": 1099475,
       "source_wav_sha256": "78c28fe89791c6a8e5f2f7dd3c6dac2a45a5c9bbd90cc8897d06a45398b0766a",
       "text": "\"Yeah, so I'm trying to parse this. The cup is water — '[ja](/ˈʤɑ/)'. I see two unusual things about the cup. More straight horizontal lines than usual, and the three diagonal lines on the right. Maybe those are the pronunciation markers? One for the consonant, one for the vowel?\""
     },
@@ -1438,7 +1465,7 @@
       "sha256": "77f625b467dc5aebf73f804a0c15839fec476be7209e836ba8e748c9d72310e4",
       "bytes": 160979,
       "duration_ms": 17575,
-      "start_ms": 1114175,
+      "start_ms": 1116725,
       "source_wav_sha256": "8cd9aeccd4e8309ab84d745a64d304d321c8fe4b7a1e34509abc865eacbf0474",
       "text": "\"Top right is '[kai](/ˈkI/)'. The unusual things I see are ... the extra vertical vein on the left, and then the transition to veins being more and more squiggly on the right? Although ... I'm not sure if I would make the images so detailed, when they often have different meanings depending on context.\""
     },
@@ -1450,7 +1477,7 @@
       "sha256": "0da91d9c8acc58915f0396b2136aa8e138693396493dae5b00f182024d5047b6",
       "bytes": 18372,
       "duration_ms": 2175,
-      "start_ms": 1132200,
+      "start_ms": 1134750,
       "source_wav_sha256": "964fdb911ca7611f9dfcbf1816280d0cb1b6eab5383ba26a8e0ee7b4c2b3e2b9",
       "text": "\"Wait, you know [Dzegoban](/ˈdzɛɡObɑn/)?\""
     },
@@ -1462,7 +1489,7 @@
       "sha256": "58d1586e80c63227df32b2e1bdf72683d55d18682bf3b0c3229511f60c2f5552",
       "bytes": 126858,
       "duration_ms": 14025,
-      "start_ms": 1134825,
+      "start_ms": 1137375,
       "source_wav_sha256": "10ba0405c6d74baf289ff31f4c89370c51515b94c1a5ab1a96c1aca12a293927",
       "text": "\"[Zei](/ˈzA/), the whole point of [Dzegoban](/ˈdzɛɡObɑn/) is that there's only 256 roots, you can learn it in less than a month, and you don't get all the nuances but you can make your way around just fine.\", [Deluin](/dˈɛluɪn/) replied in a lecturing tone."
     },
@@ -1474,7 +1501,7 @@
       "sha256": "35444f1e9172a71475dd3c7a430a79ba68ccf8f10b3408fdf0879d5d81b19b0d",
       "bytes": 26705,
       "duration_ms": 2975,
-      "start_ms": 1149300,
+      "start_ms": 1151850,
       "source_wav_sha256": "191ab2ea15818cbd2ca815d5c5a04f81696c7a50e74622fcbb84da64ad3c2a47",
       "text": "\"I'm impressed, you're almost a local already.\""
     },
@@ -1486,7 +1513,7 @@
       "sha256": "d9127364836808f3c7ff7039b91aa325bd149074d4a60a95f859dc9019aa6f5e",
       "bytes": 149608,
       "duration_ms": 16775,
-      "start_ms": 1152725,
+      "start_ms": 1155275,
       "source_wav_sha256": "bc80bd92a4e20e9565d68ea9212d23f2962973adf9fff3e7247d6ea51b1aab9b",
       "text": "\"Well, wanna come to Redshire with me tomorrow? I have to fly back for my mom and dad's birthdays, they're only a few days apart, and get some last-minute tutoring from our top players. And if you come, I can tell them that it's okay to skip the tutoring if you're doing the same!\""
     },
@@ -1498,7 +1525,7 @@
       "sha256": "7184ae37c1ba17ddbd64ead81172ea3e65ee18cea3554c15b397ce6efb6b3615",
       "bytes": 59563,
       "duration_ms": 6575,
-      "start_ms": 1169950,
+      "start_ms": 1172500,
       "source_wav_sha256": "9dd1571415f6ad2fd5c9855c358549c896de20d48202a676bdd194ffb3c3dec7",
       "text": "\"I'd love to see Redshire, though unfortunately I just don't have the money for that. Maybe in a few years.\""
     },
@@ -1510,7 +1537,7 @@
       "sha256": "c26c6f8ff8bc40f7dd775e0642b997e5d1a7ef366030f8bd09d52d40820a161a",
       "bytes": 40229,
       "duration_ms": 4450,
-      "start_ms": 1176975,
+      "start_ms": 1179525,
       "source_wav_sha256": "d26a3b0aeaa6b1106d75e6279f55acfc37b3068919c6b3de1f107e9d749e8391",
       "text": "\"But I'm super curious to see what Redshire is like! Send me pictures.\""
     },
@@ -1522,7 +1549,7 @@
       "sha256": "3ea6ec9c1454b9433297529f58f3ca3486640094ad39586d9e824c81efd2df8f",
       "bytes": 18113,
       "duration_ms": 2050,
-      "start_ms": 1181875,
+      "start_ms": 1184425,
       "source_wav_sha256": "6e86caee22e14afc529629ef2a2c446a276702be2f4deea64f454b8eea3927e8",
       "text": "\"Oh I can show you a few now.\""
     },
@@ -1534,7 +1561,7 @@
       "sha256": "d5050b282c5b2b3079347b93ff233e8b60b101772402371e75fb37fb028f66d8",
       "bytes": 129332,
       "duration_ms": 14525,
-      "start_ms": 1184375,
+      "start_ms": 1186925,
       "source_wav_sha256": "63fd81ad51ae413ed59606160a6f922c82e71073714283ad91dbc5ed7d114de4",
       "text": "[Deluin](/dˈɛluɪn/) took out his hand device, and showed [Zei](/ˈzA/) some pictures of Redshire. He saw castles, pine forests, large pristine grasslands, red-colored mountains with their tops covered in snow, and one giant icy waterfall."
     },
@@ -1546,7 +1573,7 @@
       "sha256": "8964908255a3a05f0049d002d70300b6baeb6b4e037d9fce52ba0dbbb8214356",
       "bytes": 16482,
       "duration_ms": 1900,
-      "start_ms": 1199350,
+      "start_ms": 1201900,
       "source_wav_sha256": "cb46b6b5fb2ff3bfad546cf7390681429efcbd24dc0ffeba5e07286a26b14442",
       "text": "\"Wow, that's beautiful.\""
     },
@@ -1558,7 +1585,7 @@
       "sha256": "a6d43c3fe54002834cda1d767acbe9c243f553e187dd5f1d82a67af09881f808",
       "bytes": 225835,
       "duration_ms": 25300,
-      "start_ms": 1201700,
+      "start_ms": 1204250,
       "source_wav_sha256": "83262237a09e7ef0784b9320c71d6e57b14300fc85684d015e68a7bdd2f3a662",
       "text": "\"You know, when I was younger I thought it was a back-handed compliment, almost an insult, to praise someone's country by saying that the nature is beautiful. At the time I thought, if the nicest thing you can say about a country is something that the people did not even make themselves, rather something that the forces of orbital dynamics and biology and tectonics randomly handed them down for free, then that's actually pretty harsh on the people.\""
     },
@@ -1570,7 +1597,7 @@
       "sha256": "eb51b1162382e1362ce4e3694cc056bb33e5dfca5edd7757cc7635ede99a7c73",
       "bytes": 338828,
       "duration_ms": 37875,
-      "start_ms": 1227450,
+      "start_ms": 1230000,
       "source_wav_sha256": "4c9f5bf258deeb946705346d0d7095124e8199fd07c86809109c697f0963970d",
       "text": "\"But as I grew up I've come to realize, that's not true at all. Even beautiful nature takes so much human work to maintain. Human work to build the paths and roads so people can walk or drive there. Human work to maintain a political system that stops people from polluting it, cutting down the forests, putting their houses on the mountainsides and making them ugly, strip-mining the mountains — while still allowing housing to be built where people can enjoy the views, keeping that housing affordable, and maintaining industry. Human work to restore any damage that was done before we got wise enough, or maybe rich enough, to care about these things.\""
     },
@@ -1582,7 +1609,7 @@
       "sha256": "aff5fc7ce6e98371ede854bae496aeeeb8fc9dede2aff4cd77d35fcdf9d8e34c",
       "bytes": 24747,
       "duration_ms": 2825,
-      "start_ms": 1265775,
+      "start_ms": 1268325,
       "source_wav_sha256": "a8026630292c030d279bbea75ca0074321602ed71fca2751857f1e706c482b78",
       "text": "\"I'll let you know as soon as I can afford to go.\""
     },
@@ -1594,7 +1621,7 @@
       "sha256": "c057e27358eba14f81b27c6b27d42575fb6e28025cce98a96f2e7d59e2d0857d",
       "bytes": 29107,
       "duration_ms": 3325,
-      "start_ms": 1269050,
+      "start_ms": 1271600,
       "source_wav_sha256": "e926d8d12a26972b1b0ab611bb05735373b4129556f5c8c2ce1471c963fbc434",
       "text": "\"Hopefully that will be in fifteen days\", he joked."
     },
@@ -1606,7 +1633,7 @@
       "sha256": "a7cea8949b602e27253df3aee8029403ff0b857e0db84a556afe0e7b6be09e83",
       "bytes": 50571,
       "duration_ms": 5650,
-      "start_ms": 1272825,
+      "start_ms": 1275375,
       "source_wav_sha256": "fda6625f21e1845c05e875af96ab8e603944b7fe9098e50e5f1f2839d6fb9bf6",
       "text": "\"Because I use my championship winnings to pay for you to go\", [Deluin](/dˈɛluɪn/) playfully snapped back."
     }

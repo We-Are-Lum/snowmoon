@@ -314,3 +314,56 @@ From now on, end every task report with a "Principles" section:
 which ones the work touched, pass or concern, and any new tension.
 Raise a conflict before you resolve it.
 ```
+
+```text
+Decisions on the principles audit:
+
+1. P2b: label generated images "AI-generated" in captions and on
+   quote cards.
+2. P3a: add open_weights and license to config/models.json.
+3. P4b: record the seeded images and narration as published by the
+   maintainer via script, with date and the prompt log as evidence.
+   Add that as an allowed, recorded path in principle 4.
+4. P6b and likes: write 0004 making individual ratings and
+   individual likes unreadable by the public, with a public totals
+   view for each. Do not apply it. Stop and tell me when it is
+   ready, as with 0003.
+5. Spoken screen descriptions: a short tone before each, and a
+   visible "description, not the author's words" label.
+6. Fill recipes.assist wherever a model drafted an input, including
+   your own drafting.
+7. An adaptation page shows script.md only when the file is marked
+   approved, with who approved it and when.
+```
+
+```text
+Change of approach. Models build structure and images. People write
+every published word.
+[The full text is in adaptations/dog-dawn/prompts/001-request.md.]
+```
+
+```text
+Order of work.
+
+A. Finish and commit the seven-decision work on main first, with
+these rulings:
+- Principle 2 wording: "The words of a piece (narration, dialogue,
+  and any description spoken or shown as part of it) are the
+  author's or a signed-in person's. Model-drafted working notes
+  and accessibility text may be shown only when labelled as
+  model-drafted, and never inside the piece itself."
+- Conflicts 1 and 2: keep the 148 spoken descriptions, with the
+  tone and label, as a recorded exception. List them in a file.
+  The check fails if the list grows. An entry is removed when a
+  person rewrites it in 25 words or fewer.
+- Conflict 3: an approved adaptation page shows the piece first
+  (book lines, people's lines, images). Structure notes go under a
+  collapsed "How this was built" section, labelled model-drafted.
+- Conflict 4: alt text stays, prefixed "AI-generated image:".
+Then hand me 0004 the way you handed me 0003.
+
+B. Then the comic. The structure is approved with two merges:
+beats 2 and 3 become one, and beats 7 and 8 become one. Nine beats.
+Rebase on main, generate the nine images (at most three attempts
+each), show them to me, and stop. I will write the lines.
+```

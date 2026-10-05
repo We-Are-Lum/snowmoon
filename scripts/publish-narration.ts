@@ -19,6 +19,7 @@
 import { mkdir, readFile, stat, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { pool, r2, sha256File } from './lib/r2';
+import { publishedBy } from './lib/published-by';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const RECIPES = path.join(ROOT, 'content/snowmoon/recipes/narration');
@@ -42,12 +43,14 @@ interface RecipeBlock {
   silence_ms?: number;
   text?: string;
   read_aloud_status?: string;
+  tone_ms?: number;
 }
 
 async function main() {
   const only = arg('chapter');
   const chapters = only ? [Number(only)] : Array.from({ length: 32 }, (_, i) => i + 1);
   const store = dryRun ? null : r2();
+  const by = dryRun ? null : publishedBy(ROOT, 'scripts/publish-narration.ts');
   await mkdir(OUT, { recursive: true });
   let uploaded = 0;
   let skipped = 0;
@@ -79,6 +82,8 @@ async function main() {
           bytes: (await stat(file)).size,
           duration_ms: b.duration_ms!,
           start_ms: b.start_ms!,
+          // A spoken description is preceded by a tone in the stitched file (narrate.py DESCRIPTION_TONE).
+          ...(b.tone_ms ? { tone_ms: b.tone_ms } : {}),
           source_wav_sha256: b.sha256!,
           text: b.text!,
           ...(b.read_aloud_status ? { read_aloud_status: b.read_aloud_status } : {}),
@@ -103,6 +108,7 @@ async function main() {
       voice: VOICE,
       label: 'Synthetic narration · Kokoro-82M, stock voice af_heart',
       license: 'GPL-3.0',
+      published_by: by,
       recipe: `content/snowmoon/recipes/narration/chapter-${n}.json`,
       model: recipe.model,
       voice_detail: recipe.voice,

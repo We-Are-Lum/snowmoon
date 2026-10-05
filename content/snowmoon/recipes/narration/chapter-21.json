@@ -36,7 +36,21 @@
     },
     "break_ms": 1800,
     "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
-    "read_aloud_sha256": "e8f02dda9e69ba40ce0550caf497f0e2129237d8faedeab0d873262c68a38aa9"
+    "read_aloud_sha256": "e8f02dda9e69ba40ce0550caf497f0e2129237d8faedeab0d873262c68a38aa9",
+    "description_tone": {
+      "notes_hz": [
+        660,
+        990
+      ],
+      "notes_ms": [
+        110,
+        140
+      ],
+      "between_ms": 40,
+      "after_ms": 220,
+      "amplitude": 0.12,
+      "made_by": "code (numpy sine, linear fades)"
+    }
   },
   "host": {
     "platform": "macOS-26.5.1-arm64-arm-64bit",
@@ -48,7 +62,7 @@
     "wav_sha256": "b6d2bd172a6200943a59f570ba841b7233d34373072ee452c9e85851090f2c85",
     "m4a": "chapter-21.m4a",
     "m4a_sha256": "0b1af66f8a8b411ff582fc1e23e7768f837576b16e09fd2fc919fe070729866f",
-    "note": "start_ms is the block's offset in the stitched file, gaps included"
+    "note": "start_ms is the block's offset in the stitched file, gaps included; a description starts with its tone (tone_ms)"
   },
   "blocks": [
     {
@@ -1226,5 +1240,18 @@
       "text": "\"I promise.\"",
       "generation_s": 0.22
     }
-  ]
+  ],
+  "restitched_at": "2026-10-05T18:51:09+00:00",
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent and its helper agents",
+    "drafted": [
+      "spoken descriptions of screens, figures and lyric cards (blocks none)",
+      "pronunciation entries (content/snowmoon/pronunciation.json)"
+    ],
+    "instructions": [
+      "docs/prompts/008a-agent-prompts.md#read-aloud-descriptions-and-invented-word-lists"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
 }

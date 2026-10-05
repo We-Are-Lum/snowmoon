@@ -71,7 +71,9 @@ export async function GET(request: Request, { params }: { params: Promise<{ n: s
   const muted = withImage ? '#A39F96' : '#6A675F';
   const rule = withImage ? accent.dark : accent.light;
   const size = quoteSize(text.length, withImage);
-  const label = `SNOWMOON · CHAPTER ${quote.chapter} · ${quote.label}`;
+  const label = `SNOWMOON · CHAPTER ${quote.chapter} · ${quote.label} · GPL-3.0`;
+  // Whose is what: the words are the author's; an image is AI-generated (principle 2).
+  const credit = withImage ? 'WORDS: VITALIK BUTERIN · IMAGE: AI-GENERATED' : 'WORDS: VITALIK BUTERIN';
 
   const words = (
     <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center' }}>
@@ -81,7 +83,7 @@ export async function GET(request: Request, { params }: { params: Promise<{ n: s
       </div>
       <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: withImage ? 22 : 34, fontFamily: 'DM Mono', fontSize: withImage ? 19 : 22, color: muted, letterSpacing: 1 }}>
         <div style={{ display: 'flex' }}>{label}</div>
-        <div style={{ display: 'flex' }}>VITALIK BUTERIN · GPL-3.0</div>
+        <div style={{ display: 'flex' }}>{credit}</div>
       </div>
     </div>
   );

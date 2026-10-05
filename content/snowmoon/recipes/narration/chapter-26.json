@@ -4,7 +4,7 @@
   "source_sha256": "3abdc8434b3767909d23019f1a9ebd78ff6b2ac294317611b0e9955e2a887298",
   "generated_at": "2026-10-03T18:04:54+00:00",
   "generation_seconds": 253.6,
-  "total_duration_ms": 1651950,
+  "total_duration_ms": 1653990,
   "model": {
     "name": "Kokoro-82M",
     "repo": "hexgrad/Kokoro-82M",
@@ -36,7 +36,21 @@
     },
     "break_ms": 1800,
     "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
-    "read_aloud_sha256": "b122dee0a3d4a8823321694f1829ab097f8e366a8500c1572110498824773fa9"
+    "read_aloud_sha256": "b122dee0a3d4a8823321694f1829ab097f8e366a8500c1572110498824773fa9",
+    "description_tone": {
+      "notes_hz": [
+        660,
+        990
+      ],
+      "notes_ms": [
+        110,
+        140
+      ],
+      "between_ms": 40,
+      "after_ms": 220,
+      "amplitude": 0.12,
+      "made_by": "code (numpy sine, linear fades)"
+    }
   },
   "host": {
     "platform": "macOS-26.5.1-arm64-arm-64bit",
@@ -45,10 +59,10 @@
   },
   "stitched": {
     "wav": "chapter-26.wav",
-    "wav_sha256": "36d38cd6bdebafd1983fbc367469c050f12bcd199e95c2e37d5811be2725e641",
+    "wav_sha256": "20211c187875fd089cfde9f951f43fdc1c40437e922296a6e477ff83dee9a708",
     "m4a": "chapter-26.m4a",
-    "m4a_sha256": "9f85e9d70c86b553c479488332d3b68c73c5c6e5e4901f07655ad0281d586471",
-    "note": "start_ms is the block's offset in the stitched file, gaps included"
+    "m4a_sha256": "ac766a3cdf48c860b194e03c7b25a0f35b7ab0d9c03401295c3d8bba8cca7430",
+    "note": "start_ms is the block's offset in the stitched file, gaps included; a description starts with its tone (tone_ms)"
   },
   "blocks": [
     {
@@ -1190,7 +1204,8 @@
       "start_ms": 818675,
       "text": "On the display, a dark blue map. In the upper right is the building, marked with a dark yellow triangle, and three of his drones, small pale dots trailing dashed lines, are closing in from the lower left.",
       "generation_s": 2.12,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 104,
@@ -1199,7 +1214,7 @@
       "file": "blocks/c26-b104.wav",
       "sha256": "f461d8c5395730fd099ac6b590878508e9e3bfce50e684e28f5c7165f8a78292",
       "duration_ms": 7800,
-      "start_ms": 832125,
+      "start_ms": 832635,
       "text": "[Zei](/ˈzA/) stared intently at the screen as the drones came closer to the parliament building and more drones appeared onscreen.",
       "generation_s": 1.11
     },
@@ -1210,7 +1225,7 @@
       "file": "blocks/c26-b105.wav",
       "sha256": "1a77f8f5efb3d494e0277e057fe063f9505c6448877bb96b43dff9eebbc470a4",
       "duration_ms": 10175,
-      "start_ms": 840375,
+      "start_ms": 840885,
       "text": "Twenty ticks later, the dark yellow triangle onscreen turned into a brighter yellow checkmark. [Tafindel](/təfˈɪndᵊl/) stepped out onto the balcony, exactly on schedule.",
       "generation_s": 1.47
     },
@@ -1221,7 +1236,7 @@
       "file": "blocks/c26-b106.wav",
       "sha256": "ab2058c34e0d93ee390c5d29c7cb4e8210a789717d5ca6bde9cb712406ee97aa",
       "duration_ms": 2050,
-      "start_ms": 851000,
+      "start_ms": 851510,
       "text": "Thirty more ticks passed.",
       "generation_s": 0.31
     },
@@ -1232,7 +1247,7 @@
       "file": "blocks/c26-b107.wav",
       "sha256": "06c24d508d328c21f9d07ae7e2fb6e4240cd4b52206fbd0f8ed4e67b886a6380",
       "duration_ms": 16575,
-      "start_ms": 853500,
+      "start_ms": 854010,
       "text": "\"[mu](/ˈmu/) [gu](/ˈɡu/) [gei](/ˈɡA/) [tau](/ˈtW/) [fa](/ˈfɑ/)\", he said softly. Battle starts in fifty ticks. In some sense, the battle had started already, but the moment he was waiting for was the moment [Tafindel](/təfˈɪndᵊl/) would grab hold of the rope. That is when the real challenge would begin, he thought.",
       "generation_s": 2.96
     },
@@ -1243,7 +1258,7 @@
       "file": "blocks/c26-b108.wav",
       "sha256": "a3709d99b49f0a271c1944fd32550dfad8651209db9810e33f528c20679d8af8",
       "duration_ms": 2100,
-      "start_ms": 870525,
+      "start_ms": 871035,
       "text": "Twenty more ticks passed.",
       "generation_s": 0.5
     },
@@ -1254,7 +1269,7 @@
       "file": "blocks/c26-b109.wav",
       "sha256": "9d81482e0ad1e8ce4fda29890d91471af7cbefd81ac8f58a0e3b551a9e799e2a",
       "duration_ms": 4175,
-      "start_ms": 873075,
+      "start_ms": 873585,
       "text": "Suddenly, the checkmark turned back into a dark yellow triangle.",
       "generation_s": 0.77
     },
@@ -1265,7 +1280,7 @@
       "file": "blocks/c26-b110.wav",
       "sha256": "be6020519789425c89b0c2f3f096e983389f7ad488464e77e68ca05b1e50df4e",
       "duration_ms": 6150,
-      "start_ms": 877700,
+      "start_ms": 878210,
       "text": "[Zei](/ˈzA/) zoomed in to the video feed. Someone had grabbed [Tafindel](/təfˈɪndᵊl/), and pulled him back inside.",
       "generation_s": 0.96
     },
@@ -1276,7 +1291,7 @@
       "file": "blocks/c26-b111.wav",
       "sha256": "d586773941b24e0b669ea05a73a88745f8ded2b12df09178ee5ed010017c0b96",
       "duration_ms": 4100,
-      "start_ms": 884300,
+      "start_ms": 884810,
       "text": "And almost at that same moment, Arctic drones started shooting.",
       "generation_s": 0.59
     },
@@ -1287,7 +1302,7 @@
       "file": "blocks/c26-b112.wav",
       "sha256": "a88d79a38c1189bef4c44c8d5c9caea3cd0543a7aea19b86a689f0ece1be2a07",
       "duration_ms": 4400,
-      "start_ms": 888850,
+      "start_ms": 889360,
       "text": "[Zei](/ˈzA/) could immediately hear [Den](/ˈdɛn/)'s words blasting through his earpiece.",
       "generation_s": 0.61
     },
@@ -1298,7 +1313,7 @@
       "file": "blocks/c26-b113.wav",
       "sha256": "1c3abb4a8d37f59fa498eb3bff7fb85654e5f077c82d4a529425843b1c1ca6a2",
       "duration_ms": 4650,
-      "start_ms": 893700,
+      "start_ms": 894210,
       "text": "\"I'll figure out what happened to the target. [Zei](/ˈzA/), supervise the battle.\"",
       "generation_s": 0.66
     },
@@ -1309,7 +1324,7 @@
       "file": "blocks/c26-b114.wav",
       "sha256": "ff4903ea83937851a6c74f7f58c5fd25e8643218114d37b8281b7b1cb73429db",
       "duration_ms": 9675,
-      "start_ms": 898800,
+      "start_ms": 899310,
       "text": "[Zei](/ˈzA/) subconsciously nodded. The headset automatically translated the nod into a checkmark icon, which flashed onto [Den](/ˈdɛn/) and [Mu](/ˈmu/)'s displays.",
       "generation_s": 1.37
     },
@@ -1320,10 +1335,11 @@
       "file": "blocks/c26-b115.wav",
       "sha256": "106017a6e88c95dab16748bdffedcc769b5bd1b0148aed6f9abebdc97a8fb7d7",
       "duration_ms": 10375,
-      "start_ms": 908925,
+      "start_ms": 909435,
       "text": "The map now shows nine of his drones spread across the middle of the screen, still heading toward the building and its yellow triangle. Three of them are marked with red X's.",
       "generation_s": 1.68,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 116,
@@ -1332,7 +1348,7 @@
       "file": "blocks/c26-b116.wav",
       "sha256": "39a370c7cc511da1eaca7c87033497ad48a1b486dd8afc9c7aef148ea2c5dc69",
       "duration_ms": 3575,
-      "start_ms": 919900,
+      "start_ms": 920920,
       "text": "[Zei](/ˈzA/) groaned. Three of his drones had already been hit.",
       "generation_s": 0.57
     },
@@ -1343,7 +1359,7 @@
       "file": "blocks/c26-b117.wav",
       "sha256": "c4964cb7489427220d674c5d2c8e7ab07463417b35804c5184139947df53cdaf",
       "duration_ms": 8375,
-      "start_ms": 923925,
+      "start_ms": 924945,
       "text": "\"Evasive action, return fire at hostiles. All damaged drones, if you are still functional, descend to ground and play dead.\"",
       "generation_s": 1.18
     },
@@ -1354,7 +1370,7 @@
       "file": "blocks/c26-b118.wav",
       "sha256": "fabbe3c27a40822eb152b1c5b0bbd7b3064920f49fde8b8a5fde7618d7d5dad4",
       "duration_ms": 4350,
-      "start_ms": 932750,
+      "start_ms": 933770,
       "text": "Arctic surveillance was more powerful than he had thought, he realized.",
       "generation_s": 0.62
     },
@@ -1365,7 +1381,7 @@
       "file": "blocks/c26-b119.wav",
       "sha256": "0c80edf16673c47b8d64b2cd7d328e66b292d17066218fac4166b71be2a34cc8",
       "duration_ms": 16900,
-      "start_ms": 937550,
+      "start_ms": 938570,
       "text": "At that moment, an X appeared above a fourth one of his drones — the drone that had been intended to grab the target. A tick later, that drone disappeared completely from the display map. [Zei](/ˈzA/) checked the raw visual feed. It had been directly hit, and exploded in midair.",
       "generation_s": 2.83
     },
@@ -1376,7 +1392,7 @@
       "file": "blocks/c26-b120.wav",
       "sha256": "4db7c26db97b278168693243edd951ec233de807e8f330a28015c31556479fee",
       "duration_ms": 12525,
-      "start_ms": 954900,
+      "start_ms": 955920,
       "text": "[Zei](/ˈzA/) screamed with despair. The evasion tricks that they had learned from their previous missions were not helping. It looked like the mission was going to fail — and perhaps with it, the [Kungaupei](/ˈkunɡWpA/)'s credibility.",
       "generation_s": 1.89
     },
@@ -1387,7 +1403,7 @@
       "file": "blocks/c26-b121.wav",
       "sha256": "42a3560873cb523208b8c329d7635d1e93fce74dbeefe2e6ac97b565be956a9d",
       "duration_ms": 4425,
-      "start_ms": 967875,
+      "start_ms": 968895,
       "text": "The next moment, through his earpiece, he heard [Mu](/ˈmu/) speaking intensely.",
       "generation_s": 0.71
     },
@@ -1398,7 +1414,7 @@
       "file": "blocks/c26-b122.wav",
       "sha256": "a62b314eca3ef385075598f1a95c2ab67be522f38f68238c26e6fa62409b4b79",
       "duration_ms": 10350,
-      "start_ms": 972750,
+      "start_ms": 973770,
       "text": "\"New plan. Everyone fly low, under the buildings and trees. Fly through the streets. That's where their firing ability is weakest. Then I have a trick up my sleeve.\"",
       "generation_s": 1.52
     },
@@ -1409,7 +1425,7 @@
       "file": "blocks/c26-b123.wav",
       "sha256": "74693482f453e91ce9a086f4c47261aac7e7ef17ea1f16ccabb2f55d46be7622",
       "duration_ms": 17950,
-      "start_ms": 983550,
+      "start_ms": 984570,
       "text": "[Zei](/ˈzA/) nodded, and passed along the instruction to all drones. Within ten ticks, the four surviving and fully functional drones were all near ground level. An additional damaged drone, which [Zei](/ˈzA/) had instructed to play dead, was already at ground level — it had been there for over half a minute.",
       "generation_s": 3.12
     },
@@ -1420,7 +1436,7 @@
       "file": "blocks/c26-b124.wav",
       "sha256": "36f18f1ace69865ced7dd427651a41e162c9992a6a675c3556509e4d10792ca8",
       "duration_ms": 13275,
-      "start_ms": 1001950,
+      "start_ms": 1002970,
       "text": "Suddenly, [Zei](/ˈzA/) could see in his visual feed the streetlights and the lights inside the buildings all blinking chaotically. Arctic drones started firing in all directions, confused about where their adversaries were.",
       "generation_s": 2.09
     },
@@ -1431,7 +1447,7 @@
       "file": "blocks/c26-b125.wav",
       "sha256": "a582e262e2953de04145cc2de1425889ac5d7917ef52c9bd0d612266c2d129bd",
       "duration_ms": 7675,
-      "start_ms": 1015675,
+      "start_ms": 1016695,
       "text": "His drones kept flying forward. As soon as one got within a hundred meters of the presidential residence, [Den](/ˈdɛn/) spoke up.",
       "generation_s": 1.23
     },
@@ -1442,7 +1458,7 @@
       "file": "blocks/c26-b126.wav",
       "sha256": "1d0201ded38c7da44a26bed5544f11b71e7143a76d6613fa47442ac1db7ad6d0",
       "duration_ms": 2425,
-      "start_ms": 1023800,
+      "start_ms": 1024820,
       "text": "\"I need a crash at these coordinates.\"",
       "generation_s": 0.51
     },
@@ -1453,7 +1469,7 @@
       "file": "blocks/c26-b127.wav",
       "sha256": "748a3cb97734989573526947d49029fafdabdbaf6f7c0eb6c8126a3d3e9be41a",
       "duration_ms": 12425,
-      "start_ms": 1026675,
+      "start_ms": 1027695,
       "text": "A new yellow triangle appeared on the side of the building. [Zei](/ˈzA/) immediately directed his drone to crash there at full speed. Four ticks later, it did, and there was a large explosion and smoke.",
       "generation_s": 1.92
     },
@@ -1464,7 +1480,7 @@
       "file": "blocks/c26-b128.wav",
       "sha256": "69a6d377f2738776c6d599f6a460537b08bd56e0fc2e19a8cac24151e98cbc9f",
       "duration_ms": 5275,
-      "start_ms": 1039550,
+      "start_ms": 1040570,
       "text": "Ten ticks after that, the yellow triangle turned into two bright yellow checkmarks.",
       "generation_s": 1.0
     },
@@ -1475,10 +1491,11 @@
       "file": "blocks/c26-b129.wav",
       "sha256": "4d621d7070b00cb70af7ab49bb01cda3aba9b94f8498fff5f0baeb7467874847",
       "duration_ms": 11050,
-      "start_ms": 1045275,
+      "start_ms": 1046295,
       "text": "On the map, three drones have reached the building, and two bright yellow checkmarks sit just beside it where the triangle had been. Further back, one more drone is marked with a red X.",
       "generation_s": 1.88,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 130,
@@ -1487,7 +1504,7 @@
       "file": "blocks/c26-b130.wav",
       "sha256": "8b582b9970927516d8be9e65745ad0f2e3a7e45aa4537e8b1f5c42803cae7c8d",
       "duration_ms": 14825,
-      "start_ms": 1056925,
+      "start_ms": 1058455,
       "text": "[Zei](/ˈzA/) was confused, but immediately did the only thing that made sense. The drones were too low for the rope to work. Instead, he directed two of the three remaining drones to slow to a stop, right in front of the presidential residence.",
       "generation_s": 2.58
     },
@@ -1498,7 +1515,7 @@
       "file": "blocks/c26-b131.wav",
       "sha256": "8c30c7628da8769b40e5c12ea5576833c0cefadb56d4a2a9c4cfb02b17a9acc9",
       "duration_ms": 11525,
-      "start_ms": 1072200,
+      "start_ms": 1073730,
       "text": "Both checkmarks turned green. The drones accelerated again, and sped ahead. [Zei](/ˈzA/) directed the third drone to hold back, and fire on all Arctic drones that it could detect.",
       "generation_s": 1.88
     },
@@ -1509,7 +1526,7 @@
       "file": "blocks/c26-b132.wav",
       "sha256": "ea420b375415f19b56887b246652f136d24603ec536c597d006a73f1c56a9b9c",
       "duration_ms": 16125,
-      "start_ms": 1084175,
+      "start_ms": 1085705,
       "text": "He checked the visual. On each of the two drones that were flying off, someone was holding on tightly to their backs. One was [Tafindel](/təfˈɪndᵊl/), and the other was their man on the inside — his assistant. They were both wearing thermal cloaks. Good job [Den](/ˈdɛn/), [Zei](/ˈzA/) thought.",
       "generation_s": 2.8
     },
@@ -1520,7 +1537,7 @@
       "file": "blocks/c26-b133.wav",
       "sha256": "225e33e3268ecc007c6e58ffdd0056b65e4d5f40c3c4b2b3fbe8be417a35cc82",
       "duration_ms": 6425,
-      "start_ms": 1100750,
+      "start_ms": 1102280,
       "text": "[Zei](/ˈzA/) continued to watch the screen intently. Somehow, against all odds, they seemed to have done it?",
       "generation_s": 1.1
     },
@@ -1531,7 +1548,7 @@
       "file": "blocks/c26-b134.wav",
       "sha256": "8e69fcdc61bc81701e8cf49ce970dbc6fba3cb13a076f692e63713af438c02ad",
       "duration_ms": 2775,
-      "start_ms": 1107625,
+      "start_ms": 1109155,
       "text": "[Den](/ˈdɛn/) cleared his throat and began to speak.",
       "generation_s": 0.53
     },
@@ -1542,7 +1559,7 @@
       "file": "blocks/c26-b135.wav",
       "sha256": "0ceb560e3b8ef29ffd457f104b3c5b65507eab6acf1e7b21fa6b346d318bb473",
       "duration_ms": 6900,
-      "start_ms": 1110850,
+      "start_ms": 1112380,
       "text": "\"This is not going to work\", he muttered. \"I see more Arctic drones coming in. They are faster, they will catch up.\"",
       "generation_s": 1.34
     },
@@ -1553,7 +1570,7 @@
       "file": "blocks/c26-b136.wav",
       "sha256": "f4d28c6a021b3aaa3828c96c943d62517f0485e81448d6cb129d7059fbc1baff",
       "duration_ms": 2275,
-      "start_ms": 1118200,
+      "start_ms": 1119730,
       "text": "[Mu](/ˈmu/) immediately responded.",
       "generation_s": 0.57
     },
@@ -1564,7 +1581,7 @@
       "file": "blocks/c26-b137.wav",
       "sha256": "a1a6354e985034dc00f0d82f3eef786aaf9d117af6634034614b8000f2674f89",
       "duration_ms": 22425,
-      "start_ms": 1120925,
+      "start_ms": 1122455,
       "text": "\"Already on it. The targets will jump off the drones soon, the drones will keep going. The targets will be told to run two hundred meters to a road — NOT the road closest to them. I have a car coming to pick them up. With luck, they will be tens of kilometers away before the Arctics know what's going on. Once they get to the shore, a sea drone will come and take them out of Redshire.\"",
       "generation_s": 3.6
     },
@@ -1575,7 +1592,7 @@
       "file": "blocks/c26-b138.wav",
       "sha256": "f78548109e6a1ede22777646a91cfb516cdfe72cb57e77063c10bb0018336078",
       "duration_ms": 2500,
-      "start_ms": 1143800,
+      "start_ms": 1145330,
       "text": "[Zei](/ˈzA/) sighed. \"I trust you, [Mu](/ˈmu/).\"",
       "generation_s": 0.45
     },
@@ -1586,10 +1603,11 @@
       "file": "blocks/c26-b139.wav",
       "sha256": "8f58ce62898bcbe0faaac4e26a7c85adcf6c5c8bd021e98299d21dac75aa766b",
       "duration_ms": 11300,
-      "start_ms": 1146750,
+      "start_ms": 1148280,
       "text": "The map has changed to show a few roads. The two drones are flying off toward the top of the screen, while the two yellow checkmarks stay behind below them, near a junction of roads.",
       "generation_s": 1.63,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 140,
@@ -1598,7 +1616,7 @@
       "file": "blocks/c26-b140.wav",
       "sha256": "2a2a9671669a56672301257de1686ef6e101458b88ce8ba54223df03fcb25f41",
       "duration_ms": 6425,
-      "start_ms": 1158650,
+      "start_ms": 1160690,
       "text": "[Zei](/ˈzA/) sat back down on his chair and sighed, feeling deep disappointment at himself. He closed his eyes.",
       "generation_s": 0.94
     },
@@ -1609,7 +1627,7 @@
       "file": "blocks/c26-b141.wav",
       "sha256": "501198a2f156c270b262518235189ce27bb3752e90ae3b9bbfa342b6c886cbfe",
       "duration_ms": 2725,
-      "start_ms": 1165525,
+      "start_ms": 1167565,
       "text": "A minute later, the first good news:",
       "generation_s": 0.39
     },
@@ -1620,7 +1638,7 @@
       "file": "blocks/c26-b142.wav",
       "sha256": "a22713dd5b5f36e1da622ba34cd5ed7d68e55df9b72a5b0c399f869492828a34",
       "duration_ms": 1825,
-      "start_ms": 1168700,
+      "start_ms": 1170740,
       "text": "\"Pickup successful.\"",
       "generation_s": 0.27
     },
@@ -1631,7 +1649,7 @@
       "file": "blocks/c26-b143.wav",
       "sha256": "47c6681b27cd74d9e4e1d4fa956e00511b00cc3fc78a9656b2f603523a939712",
       "duration_ms": 2075,
-      "start_ms": 1170975,
+      "start_ms": 1173015,
       "text": "Another ten minutes later:",
       "generation_s": 0.3
     },
@@ -1642,7 +1660,7 @@
       "file": "blocks/c26-b144.wav",
       "sha256": "e2c16ffee2e75ee7fb0378569d943dfe5590b350703e61d0bc93f1a9999b78b5",
       "duration_ms": 9300,
-      "start_ms": 1173500,
+      "start_ms": 1175540,
       "text": "\"Our drones touched down at a large shopping complex in Dolinar. Arctics are closing in on them. Hopefully the manhunt will take as long as possible.\"",
       "generation_s": 1.68
     },
@@ -1653,7 +1671,7 @@
       "file": "blocks/c26-b145.wav",
       "sha256": "f34b070c1b92c132a720c606d8b419353c29cabe57c27a038a1c01e429396831",
       "duration_ms": 2225,
-      "start_ms": 1183250,
+      "start_ms": 1185290,
       "text": "Another thirty minutes later:",
       "generation_s": 0.39
     },
@@ -1664,7 +1682,7 @@
       "file": "blocks/c26-b146.wav",
       "sha256": "908687cab3201f25f496af7a418b568885ee39235e4b55faa9a80897b5b6e0e4",
       "duration_ms": 5225,
-      "start_ms": 1185925,
+      "start_ms": 1187965,
       "text": "\"Our car reached the shore without incident. Targets now entering the seaborne drone.\"",
       "generation_s": 0.72
     },
@@ -1675,7 +1693,7 @@
       "file": "blocks/c26-b147.wav",
       "sha256": "378f0ab8e773c3105a3bb5a36215c4049afac18b1e32a7aabd9b315ed9944e5c",
       "duration_ms": 2100,
-      "start_ms": 1191600,
+      "start_ms": 1193640,
       "text": "Ten more minutes after that:",
       "generation_s": 0.32
     },
@@ -1686,7 +1704,7 @@
       "file": "blocks/c26-b148.wav",
       "sha256": "09788976ef45772a9d12ca6dd594a2b06cd8afcf221725b0b5eac772dc4883bf",
       "duration_ms": 4275,
-      "start_ms": 1194150,
+      "start_ms": 1196190,
       "text": "\"The Arctics realized that we tricked them. They are broadening their search.\"",
       "generation_s": 0.6
     },
@@ -1697,7 +1715,7 @@
       "file": "blocks/c26-b149.wav",
       "sha256": "309f2898662892889454dd241048268e4158c0ec0894b2f2fac4572cb200a2f6",
       "duration_ms": 9700,
-      "start_ms": 1198875,
+      "start_ms": 1200915,
       "text": "[Zei](/ˈzA/) watched the screen, which was at this point showing the slow grinding progress of the seaborne drone making its way westward away from the Redshire coast.",
       "generation_s": 1.63
     },
@@ -1708,7 +1726,7 @@
       "file": "blocks/c26-b150.wav",
       "sha256": "294102b87013d5c9e919f3f7dc782524e2679fe80962a8a68a59db47583b0b76",
       "duration_ms": 2000,
-      "start_ms": 1209025,
+      "start_ms": 1211065,
       "text": "Fifty minutes after that:",
       "generation_s": 0.31
     },
@@ -1719,7 +1737,7 @@
       "file": "blocks/c26-b151.wav",
       "sha256": "4543f105a3fefb6dc4399849c7cd9e4b2c860b7cf78d2ab7452809819a30d6d8",
       "duration_ms": 3950,
-      "start_ms": 1211475,
+      "start_ms": 1213515,
       "text": "\"The targets have successfully arrived on the coast of [Arturia](/ɑɹtˈʊɹiə/).\"",
       "generation_s": 0.56
     },
@@ -1729,7 +1747,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 1215875,
+      "start_ms": 1217915,
       "duration_ms": 1800
     },
     {
@@ -1739,7 +1757,7 @@
       "file": "blocks/c26-b153.wav",
       "sha256": "4b23efc9900607858fdbcf450102ef6e4a6b188ea9ae741a457e250a3fa52e6e",
       "duration_ms": 13550,
-      "start_ms": 1217675,
+      "start_ms": 1219715,
       "text": "\"I'm so sorry guys\", [Zei](/ˈzA/) muttered softly. \"I failed completely, and if it weren't for [Mu](/ˈmu/) somehow saving us with a completely new plan, we would have failed, and probably everything else we're planning would have failed too.\"",
       "generation_s": 1.89
     },
@@ -1750,7 +1768,7 @@
       "file": "blocks/c26-b154.wav",
       "sha256": "92cb9cb515a3c0f95e361e97c5afee46698c39f161408c99e3c8d8ddc0107f55",
       "duration_ms": 23325,
-      "start_ms": 1231675,
+      "start_ms": 1233715,
       "text": "\"Welcome to real life warfare, [Zei](/ˈzA/)\", [Den](/ˈdɛn/) replied. \"It's not like [Minpentai](/ˈmɪnpɛntI/). Sometimes the only way to win is to think completely outside the box. Not outside the box as in figuring out some clever way to encode an entire computer inside of a glider structure, but outside the box as in, jumping out of your console chair and running over and bashing the other player in the face.\"",
       "generation_s": 3.99
     },
@@ -1761,7 +1779,7 @@
       "file": "blocks/c26-b155.wav",
       "sha256": "1c0ad868dc8480ecdc8d57db0414ae0cc8355b20c10c8b854b1c3111878cb144",
       "duration_ms": 2525,
-      "start_ms": 1255450,
+      "start_ms": 1257490,
       "text": "\"So ... [Mu](/ˈmu/), what did you do there?\"",
       "generation_s": 0.47
     },
@@ -1772,7 +1790,7 @@
       "file": "blocks/c26-b156.wav",
       "sha256": "6c75f55a37bf8bfe845d9156fc98a96a4bbff5cb3c970fc8279ae7a5e7862b8e",
       "duration_ms": 38250,
-      "start_ms": 1258425,
+      "start_ms": 1260465,
       "text": "\"This is not the Arctic Empire, this is Redshire. There are lots of people there who quietly support us, and a lot of the technical infrastructure has still not been shifted over to full Arctic control. So for the moment, it's still possible to break into some things. I have a bunch of admin passwords that people from Redshire gave me. I used them to first take control of the streetlights, and then to commandeer a few dozen automated cars. There were actually multiple decoys, the planes stopped and restarted in a few places. We should have done this plan all along, but — I underestimated the extent of Arctic surveillance as much as you did.\"",
       "generation_s": 5.81
     },
@@ -1783,7 +1801,7 @@
       "file": "blocks/c26-b157.wav",
       "sha256": "e002b385ae963b187548a11c61c1306d0c271b02ddfc745f90b3b9d60d2b0fea",
       "duration_ms": 2675,
-      "start_ms": 1297125,
+      "start_ms": 1299165,
       "text": "\"It was truly an amazing job, [Mu](/ˈmu/).\"",
       "generation_s": 0.39
     },
@@ -1794,7 +1812,7 @@
       "file": "blocks/c26-b158.wav",
       "sha256": "b4d206ee676654cb885cf897c2f9bb2ca23bdd40913ed04dc6e16f2895f7b4e9",
       "duration_ms": 9425,
-      "start_ms": 1300250,
+      "start_ms": 1302290,
       "text": "\"But what matters is that we won. [Tafindel](/təfˈɪndᵊl/) is safe in [Arturia](/ɑɹtˈʊɹiə/). The Arctics have been humiliated. The whole world now knows that they can be defeated.\"",
       "generation_s": 1.31
     },
@@ -1805,7 +1823,7 @@
       "file": "blocks/c26-b159.wav",
       "sha256": "be3fce13509623aba8651ce94c7e44ff51df6bd1ecca6b74b8b3ba59fe5fc393",
       "duration_ms": 3125,
-      "start_ms": 1310125,
+      "start_ms": 1312165,
       "text": "[Den](/ˈdɛn/) paused, and then began to speak again.",
       "generation_s": 0.45
     },
@@ -1816,7 +1834,7 @@
       "file": "blocks/c26-b160.wav",
       "sha256": "94b7d1d9c5a1a42befb63b41e3271de62a3fa180bedde72e57fec18c6c7424e1",
       "duration_ms": 13675,
-      "start_ms": 1313700,
+      "start_ms": 1315740,
       "text": "\"For the moment, they think it's just Freetown's defense companies. But now it's time for the [Kungaupei](/ˈkunɡWpA/) to stand up and take its share of the credit. And then see if the Veridians are up for giving Veridia the defense that it deserves.\"",
       "generation_s": 1.86
     },
@@ -1826,7 +1844,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 1327825,
+      "start_ms": 1329865,
       "duration_ms": 1800
     },
     {
@@ -1836,7 +1854,7 @@
       "file": "blocks/c26-b162.wav",
       "sha256": "7d237449b43d10c96247372fdd472ff5700350b62d9433b518ffa2ac10d1c2a8",
       "duration_ms": 13875,
-      "start_ms": 1329625,
+      "start_ms": 1331665,
       "text": "Gladias slid open the door to the booth, and stepped in. Five judges that Mov and Seila had helped to identify — with significant help from surveillance cameras that had been backdoored by [Dzego](/ˈdzɛɡO/) — were already sitting inside.",
       "generation_s": 2.22
     },
@@ -1847,7 +1865,7 @@
       "file": "blocks/c26-b163.wav",
       "sha256": "3ade639679494d50d8c3c9183e2490515b2fec16f7d4bdfcab6a6a1eb2a0ff20",
       "duration_ms": 4225,
-      "start_ms": 1343950,
+      "start_ms": 1345990,
       "text": "\"So what is it that you wanted to talk about?\", the first judge asked.",
       "generation_s": 0.82
     },
@@ -1858,7 +1876,7 @@
       "file": "blocks/c26-b164.wav",
       "sha256": "907202fee14bfa87eaa210f47de78907c09c07f7d3d6992d6c8412217d3079cf",
       "duration_ms": 3625,
-      "start_ms": 1348625,
+      "start_ms": 1350665,
       "text": "Gladias sat down, and slid the booth door behind him.",
       "generation_s": 0.55
     },
@@ -1869,7 +1887,7 @@
       "file": "blocks/c26-b165.wav",
       "sha256": "ee37a506d1b789ad25f0d618d8edd83cbc26dfdd4dfb4dc1e41d6f60427c0ad2",
       "duration_ms": 19225,
-      "start_ms": 1352700,
+      "start_ms": 1354740,
       "text": "\"I am planning to open a case against the Veridian military leadership. Under the fourteenth Ground Law, the Veridian military is required to defend Veridia. As we have seen from what happened in Northglade, they have completely failed to do this. And so I am arguing that they have broken the law, and should be fired.\"",
       "generation_s": 3.23
     },
@@ -1880,7 +1898,7 @@
       "file": "blocks/c26-b166.wav",
       "sha256": "cf355447e535d75c07ba41123d0a14d8079a5e3e993676749ab1f52fbccd2f6c",
       "duration_ms": 18925,
-      "start_ms": 1372375,
+      "start_ms": 1374415,
       "text": "\"That's crazy. Yes, we were caught by surprise in Northshore and lost pretty badly. But the Veridian military are doing the best job they can in a difficult time. We can't just come in from the outside and say we don't like how they're doing their job and replace them, when we don't even know what standard we're comparing them to-\"",
       "generation_s": 2.69
     },
@@ -1891,7 +1909,7 @@
       "file": "blocks/c26-b167.wav",
       "sha256": "1a3f4076b49fef80a64e52b3c4a0d490e13d98695659976d6a6282c0048de5ca",
       "duration_ms": 4825,
-      "start_ms": 1391750,
+      "start_ms": 1393790,
       "text": "\"[Caeron](/kˈɛɹən/)\", Gladias interrupted. \"Did you see in the news what happened today?\"",
       "generation_s": 0.7
     },
@@ -1902,7 +1920,7 @@
       "file": "blocks/c26-b168.wav",
       "sha256": "08204562714ad30a0d4ba96d4c22f5b6bbab0ba41d7aba088e82b98d7aa4f6a6",
       "duration_ms": 13475,
-      "start_ms": 1397025,
+      "start_ms": 1399065,
       "text": "\"I did not. Come on, Gladias, you know it's a rule that judges should not read the daily news. We're here to apply timeless principles, not get swayed in every direction by crowds of people getting angry in the moment.\"",
       "generation_s": 2.42
     },
@@ -1913,7 +1931,7 @@
       "file": "blocks/c26-b169.wav",
       "sha256": "b2facd7099449ddbaa2f126e522f0ec6d29c2f102df2d534b8d71cf087365ef0",
       "duration_ms": 5375,
-      "start_ms": 1410950,
+      "start_ms": 1412990,
       "text": "\"A [Dzegojan](/ˈdzɛɡOʤɑn/) group flew into Redshire and successfully rescued the president's son.\"",
       "generation_s": 1.05
     },
@@ -1924,7 +1942,7 @@
       "file": "blocks/c26-b170.wav",
       "sha256": "dba5ed60dc8f6cc06720eeea775e790ba6d185fc90a305403911a1c4f0d84256",
       "duration_ms": 3800,
-      "start_ms": 1416775,
+      "start_ms": 1418815,
       "text": "Almost immediately, another judge began to reply.",
       "generation_s": 0.61
     },
@@ -1935,7 +1953,7 @@
       "file": "blocks/c26-b171.wav",
       "sha256": "98c2f8b6b66ba1153c1d74a5423e3ac700a9a5a6d73a6ca08bc261ed24c36012",
       "duration_ms": 5150,
-      "start_ms": 1421025,
+      "start_ms": 1423065,
       "text": "\"So you want us to replace the Veridian military leadership with some [Dzegojan](/ˈdzɛɡOʤɑn/)?\"",
       "generation_s": 0.78
     },
@@ -1946,7 +1964,7 @@
       "file": "blocks/c26-b172.wav",
       "sha256": "1c4f45dc66010a5306153b0d249ad945f4e706c15b100a461a5cde38028c3324",
       "duration_ms": 1925,
-      "start_ms": 1426625,
+      "start_ms": 1428665,
       "text": "\"Yes, exactly.\"",
       "generation_s": 0.29
     },
@@ -1957,7 +1975,7 @@
       "file": "blocks/c26-b173.wav",
       "sha256": "31ed11b0ef8b9de23a761dbb5acc59e1dc2b6c543daf6edbe171129d0a72fa8e",
       "duration_ms": 15400,
-      "start_ms": 1429000,
+      "start_ms": 1431040,
       "text": "\"I'm sorry, this is insane. That's not the court's job. Veridia is a democracy. The people in charge of the military, who can change the composition of the military, are the parliament. So if you want to try your crazy scheme, you should go talk to them.\"",
       "generation_s": 2.53
     },
@@ -1968,7 +1986,7 @@
       "file": "blocks/c26-b174.wav",
       "sha256": "eb425d453d245683fe2db15e8d1fb014de6a9baa8fcf2f7828378dd7b800bdce",
       "duration_ms": 15800,
-      "start_ms": 1444850,
+      "start_ms": 1446890,
       "text": "\"Come on, Sewlert, you know as well as I do that the parliament is corrupt. They're either already inside an Arctic-engineered bubble of propaganda, or bribed, or have them or their families threatened thanks to the Arctics having broken into our surveillance systems.\"",
       "generation_s": 2.88
     },
@@ -1979,7 +1997,7 @@
       "file": "blocks/c26-b175.wav",
       "sha256": "39889b8771a9ce27cbeec7a82e9359f9802a9c441f27cc9817f2c549af0daf45",
       "duration_ms": 5750,
-      "start_ms": 1461100,
+      "start_ms": 1463140,
       "text": "\"We're a court. We don't have the right to just go and decide the entire parliament is corrupt.\"",
       "generation_s": 0.93
     },
@@ -1990,7 +2008,7 @@
       "file": "blocks/c26-b176.wav",
       "sha256": "d851262fda86709253a477bdeba9a618439d610f3bd7c261b5c156be88c3dacf",
       "duration_ms": 14375,
-      "start_ms": 1467300,
+      "start_ms": 1469340,
       "text": "\"Actually, you do. Twenty-first Ground Law. Veridian government officials are required to perform their duties honestly, in good faith and without undue influence, and report and resign if any undue influence befalls them.\"",
       "generation_s": 2.56
     },
@@ -2001,7 +2019,7 @@
       "file": "blocks/c26-b177.wav",
       "sha256": "9c4a119d2d6b12374489601121818e6c34367f8cd41148d3eb128cb937e5630a",
       "duration_ms": 2725,
-      "start_ms": 1482125,
+      "start_ms": 1484165,
       "text": "\"So you want us to fire the parliament too?\"",
       "generation_s": 0.71
     },
@@ -2012,7 +2030,7 @@
       "file": "blocks/c26-b178.wav",
       "sha256": "c05cbefa2d86cd833c5178d8676864f1f1aabc531ebcbe6ade59ea41681a7d1b",
       "duration_ms": 2025,
-      "start_ms": 1485300,
+      "start_ms": 1487340,
       "text": "\"If necessary, yes.\"",
       "generation_s": 0.38
     },
@@ -2023,7 +2041,7 @@
       "file": "blocks/c26-b179.wav",
       "sha256": "e4bd75a9947fe8f3bb17571d4e57b6633d4799611350b61cf4134414d5c849c4",
       "duration_ms": 5525,
-      "start_ms": 1487775,
+      "start_ms": 1489815,
       "text": "Gladias could feel that he was not getting through. So he decided to try a different line.",
       "generation_s": 0.9
     },
@@ -2034,7 +2052,7 @@
       "file": "blocks/c26-b180.wav",
       "sha256": "6d1b18187e3e8bbcba495494347f2a80e3c72f61bf233208045380f26dbf6c2b",
       "duration_ms": 2550,
-      "start_ms": 1493750,
+      "start_ms": 1495790,
       "text": "\"Do any of you have family in Northshore?\"",
       "generation_s": 0.42
     },
@@ -2045,7 +2063,7 @@
       "file": "blocks/c26-b181.wav",
       "sha256": "21e8b614f15d7762865b02fd23ce511072d9ab6c6451b8460c001f524605a0aa",
       "duration_ms": 1975,
-      "start_ms": 1496750,
+      "start_ms": 1498790,
       "text": "A third judge spoke up.",
       "generation_s": 0.35
     },
@@ -2056,7 +2074,7 @@
       "file": "blocks/c26-b182.wav",
       "sha256": "c83add365d5616eb9a889f02148668f3fefd710f0a9de5e11d563666881f0632",
       "duration_ms": 7375,
-      "start_ms": 1499175,
+      "start_ms": 1501215,
       "text": "\"I do, a son. He's in the GPH, that's the one place that they are still blockading and not letting people leave from.\"",
       "generation_s": 1.28
     },
@@ -2067,7 +2085,7 @@
       "file": "blocks/c26-b183.wav",
       "sha256": "076b22907c5180786db3c169080ed859025024e4047c4f63d079ea6a04510e29",
       "duration_ms": 2425,
-      "start_ms": 1507000,
+      "start_ms": 1509040,
       "text": "[Caeron](/kˈɛɹən/) turned angrily toward him.",
       "generation_s": 0.53
     },
@@ -2078,7 +2096,7 @@
       "file": "blocks/c26-b184.wav",
       "sha256": "c6e6b85661f95868fc03874008356d919bd306e2751022a984626a71bb25de49",
       "duration_ms": 6900,
-      "start_ms": 1509875,
+      "start_ms": 1511915,
       "text": "\"Why are you bringing this up? Gladias said it himself, we're required to perform our duties without undue influence.\"",
       "generation_s": 1.08
     },
@@ -2089,7 +2107,7 @@
       "file": "blocks/c26-b185.wav",
       "sha256": "dcc93d217d5e500b047319eaaa2260f14a97dca897d6caeadb1bbfc52a871ad8",
       "duration_ms": 30625,
-      "start_ms": 1517225,
+      "start_ms": 1519265,
       "text": "\"Six percent of the Veridian population is in Northshore. Each person has about ten close family members — parents, siblings, children, spouse, other close relations, co-parents. So among the five of you, that's fifty total, so statistically, there should be three of your family members total in Northshore. If you have none, then you're not feeling something that many other Veridians are feeling. So your interests are misaligned. You're misaligned toward compacency, but is that not also a form of undue influence?\"",
       "generation_s": 6.71
     },
@@ -2100,7 +2118,7 @@
       "file": "blocks/c26-b186.wav",
       "sha256": "1041678877057dc4763da1b2e1a4f5093cd5174af703566eb10a8e2d27b5e916",
       "duration_ms": 3750,
-      "start_ms": 1548300,
+      "start_ms": 1550340,
       "text": "\"That's not how those laws work, there are precedents about it.\"",
       "generation_s": 0.63
     },
@@ -2111,7 +2129,7 @@
       "file": "blocks/c26-b187.wav",
       "sha256": "307ccc789393b72fa8bf4a2baf3a3bc5ad26f89dfeb74f569159b6a241b3c841",
       "duration_ms": 5275,
-      "start_ms": 1552500,
+      "start_ms": 1554540,
       "text": "\"Do you have family in Northshore? If so, then you are the one with the undue influence.\"",
       "generation_s": 0.87
     },
@@ -2122,7 +2140,7 @@
       "file": "blocks/c26-b188.wav",
       "sha256": "dcbc75155b7672058183471999702cc53ebd297ab23cf6e6c212ef5f055a803d",
       "duration_ms": 9125,
-      "start_ms": 1558225,
+      "start_ms": 1560265,
       "text": "\"Now you're getting the law wrong. Plaintiffs are allowed to have a stake in the outcome — in fact, they're required to. The legal term for that is standing.\"",
       "generation_s": 2.9
     },
@@ -2133,7 +2151,7 @@
       "file": "blocks/c26-b189.wav",
       "sha256": "cc1b727b2696f2ff07a9307626074c9a3a02bc6dd739e463646696f74ee6df0e",
       "duration_ms": 2700,
-      "start_ms": 1567800,
+      "start_ms": 1569840,
       "text": "\"And yes, I have three children there.\"",
       "generation_s": 0.6
     },
@@ -2144,7 +2162,7 @@
       "file": "blocks/c26-b190.wav",
       "sha256": "0333800a672a05081c01dd4a9b6ad9494a1525e591ac62fa7640a892df7b52f8",
       "duration_ms": 15350,
-      "start_ms": 1570950,
+      "start_ms": 1572990,
       "text": "\"Look, Gladias. Again, Veridia is a democracy. We are not going to stomp our feet over our democracy just because a bunch of [Dzego](/ˈdzɛɡO/)-man whiz kids rescued a prince and you think you're smarter and more morally pure than the entire parliament.\"",
       "generation_s": 3.59
     },
@@ -2155,7 +2173,7 @@
       "file": "blocks/c26-b191.wav",
       "sha256": "f42b2c48a04bcc844657164fa1093c9262094e28818211e0e8a54d359edcdf37",
       "duration_ms": 24350,
-      "start_ms": 1586750,
+      "start_ms": 1588790,
       "text": "\"And even if we did, just think about the procedure. A case takes a minimum of thirty days from start to finish, and that's if the judges don't decide that it needs to take longer. And then they can appeal, multiple times. Appeals can be shorter, but only from the third round. So it will take months for all this to resolve. And in the meantime, Veridia will be in chaos, and the Arctics will just swoop in and take over.\"",
       "generation_s": 4.93
     },
@@ -2166,7 +2184,7 @@
       "file": "blocks/c26-b192.wav",
       "sha256": "8af9cfb855d29c5496fea32c99b75a6aa3dee9b5be14c6b71fc32dd50f0c08d3",
       "duration_ms": 1850,
-      "start_ms": 1611550,
+      "start_ms": 1613590,
       "text": "\"So we're not doing this.\"",
       "generation_s": 0.42
     },
@@ -2177,7 +2195,7 @@
       "file": "blocks/c26-b193.wav",
       "sha256": "4e4468aa69ecb0837ce4ae88ed6ee86caa2c969e3795430cbd83afa50f9fbf8d",
       "duration_ms": 18900,
-      "start_ms": 1613850,
+      "start_ms": 1615890,
       "text": "Gladias looked around. Three of the other four judges were nodding along to what Selwert was saying. The remaining judge, Zevin, seemed much more sympathetic to Gladias — no doubt in no small part because he also had a son stuck in Northglade — but he did not seem to feel comfortable expressing his opinion.",
       "generation_s": 2.89
     },
@@ -2188,7 +2206,7 @@
       "file": "blocks/c26-b194.wav",
       "sha256": "ae02e517d6f5cfbe663925281b10f1185368d2aeabb84b7326547b41a037361b",
       "duration_ms": 14175,
-      "start_ms": 1633200,
+      "start_ms": 1635240,
       "text": "\"Understood\", Gladias said softly. If this sample of judges was that hostile to his pitch, the sample of judges that he would get if he launched a real case would almost certainly be quite hostile too. He needed a different strategy.",
       "generation_s": 2.61
     },
@@ -2199,9 +2217,22 @@
       "file": "blocks/c26-b195.wav",
       "sha256": "f95ec86be1f7059b755dbc64b97b2f94a435794e2065aee558542f426da2d5b5",
       "duration_ms": 3675,
-      "start_ms": 1647825,
+      "start_ms": 1649865,
       "text": "He slid open the door to the booth, and slowly exited.",
       "generation_s": 0.64
     }
-  ]
+  ],
+  "restitched_at": "2026-10-05T18:52:15+00:00",
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent and its helper agents",
+    "drafted": [
+      "spoken descriptions of screens, figures and lyric cards (blocks 103, 115, 129, 139)",
+      "pronunciation entries (content/snowmoon/pronunciation.json)"
+    ],
+    "instructions": [
+      "docs/prompts/008a-agent-prompts.md#read-aloud-descriptions-and-invented-word-lists"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
 }

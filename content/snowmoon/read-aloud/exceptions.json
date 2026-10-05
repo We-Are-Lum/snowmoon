@@ -1,0 +1,1043 @@
+{
+ "about": "Recorded exception to principle 2 (owner ruling, Oct 5, 2026). These spoken descriptions of screens, figures and lyric cards were drafted by a model (docs/prompts/008a-agent-prompts.md) and are kept in the house narration, each preceded by a tone and shown with the label 'Model-drafted description, not the author's words'. The list may only shrink: npm run check:principles (P2d) fails if it grows or if a spoken description is neither listed here nor written by a person. An entry is removed when a person rewrites that description in 25 words or fewer and records it in the read-aloud file as written_by { fid, date }.",
+ "ruling": "2026-10-05",
+ "max_entries": 148,
+ "entries": [
+  {
+   "chapter": 1,
+   "idx": 18,
+   "kind": "screen",
+   "read_aloud_sha256": "c0ea49b0beec6ef0093f822bb31e12cb73987c6650922a3101794fde795a4ad4",
+   "words": 34
+  },
+  {
+   "chapter": 1,
+   "idx": 23,
+   "kind": "screen",
+   "read_aloud_sha256": "20ae440bc6e5413cbd45e4d4107e757b544de06aae2607452be7a9a600a188ad",
+   "words": 26
+  },
+  {
+   "chapter": 1,
+   "idx": 28,
+   "kind": "screen",
+   "read_aloud_sha256": "653dac30333e9af43bd60248d72b2f96a73a0045c4774b02ebb866d96fbdadc0",
+   "words": 26
+  },
+  {
+   "chapter": 1,
+   "idx": 31,
+   "kind": "screen",
+   "read_aloud_sha256": "9cb81a0101a8bab94a868ce5518cb6101dc953b7cf0c326429a374725626eed7",
+   "words": 21
+  },
+  {
+   "chapter": 1,
+   "idx": 55,
+   "kind": "screen",
+   "read_aloud_sha256": "9a816f789f0c60c5b13eeaa382067b381c6ac4e9f8aa99bdc12fb6f81e706f68",
+   "words": 90
+  },
+  {
+   "chapter": 1,
+   "idx": 67,
+   "kind": "figure",
+   "read_aloud_sha256": "991980f11622695e44d6d4a26ad1f078e34feab4184906a79973a8084134cab9",
+   "words": 48
+  },
+  {
+   "chapter": 1,
+   "idx": 138,
+   "kind": "screen",
+   "read_aloud_sha256": "e8c5e701b8ab1aac587f9dd5848b1cace4f89497b9d0902db5ff38a492233bbb",
+   "words": 30
+  },
+  {
+   "chapter": 1,
+   "idx": 140,
+   "kind": "screen",
+   "read_aloud_sha256": "e253ef2044f074ecad3e2f89ed59f04bb3d4ff1b27672c8a1f5e8ec32431c86b",
+   "words": 28
+  },
+  {
+   "chapter": 2,
+   "idx": 6,
+   "kind": "quote",
+   "read_aloud_sha256": "647b18fc1c533b752ffc57f9f44259cd07f59a0cd8f9c78494934e40a5e03d8b",
+   "words": 7
+  },
+  {
+   "chapter": 2,
+   "idx": 24,
+   "kind": "screen",
+   "read_aloud_sha256": "6f0efe4309528434d63e5d488e33acb2f2e2839ac73d9ba6f29d210055843a1c",
+   "words": 14
+  },
+  {
+   "chapter": 2,
+   "idx": 39,
+   "kind": "quote",
+   "read_aloud_sha256": "36794ec22336c40ee8740720ef9f78855719e637627c19d64201204d0f9e867d",
+   "words": 21
+  },
+  {
+   "chapter": 2,
+   "idx": 55,
+   "kind": "figure",
+   "read_aloud_sha256": "c894d15efd07f2aa31cedb6ef5d56d738c6c3e46daf8411f7dc30df831ba816a",
+   "words": 63
+  },
+  {
+   "chapter": 2,
+   "idx": 71,
+   "kind": "figure",
+   "read_aloud_sha256": "778f264c25b176476d4764d28d2b2763401f98bc43666accf05f3f0128c85829",
+   "words": 38
+  },
+  {
+   "chapter": 3,
+   "idx": 5,
+   "kind": "screen",
+   "read_aloud_sha256": "9f42cd2b42e1d19b719c9b93411d8bf8a49e26e53fe525240409a52cd55847f8",
+   "words": 118
+  },
+  {
+   "chapter": 3,
+   "idx": 37,
+   "kind": "screen",
+   "read_aloud_sha256": "2ca58cd0af5951c8bc4d22e1ef902050173e4483c21d86c2c2d2a855f7f57d89",
+   "words": 6
+  },
+  {
+   "chapter": 3,
+   "idx": 53,
+   "kind": "screen",
+   "read_aloud_sha256": "70c0008aabcb37ade7fc24f08060dc5c3cf887b3317f571240018befc0767bb8",
+   "words": 82
+  },
+  {
+   "chapter": 3,
+   "idx": 75,
+   "kind": "screen",
+   "read_aloud_sha256": "5a24fc0b513fcce1702384f89f9a3537a63b3b5c3a7bde547e31c52d65bc9be5",
+   "words": 32
+  },
+  {
+   "chapter": 3,
+   "idx": 129,
+   "kind": "figure",
+   "read_aloud_sha256": "b7921c53ac79f8c1703bb36a0e494bdc96ea6c4be42651bcf13766c1acf01fcc",
+   "words": 51
+  },
+  {
+   "chapter": 4,
+   "idx": 5,
+   "kind": "figure",
+   "read_aloud_sha256": "bdefab79d9d3b5a2acfca71e95bf0a95eb9231ba4bbca5ca2f7b2616657f92d8",
+   "words": 55
+  },
+  {
+   "chapter": 4,
+   "idx": 21,
+   "kind": "figure",
+   "read_aloud_sha256": "104cbab905e4b53749a63bd5419b78ddf7d0a099bbf1ba44ad7a1cab6b342346",
+   "words": 26
+  },
+  {
+   "chapter": 4,
+   "idx": 23,
+   "kind": "figure",
+   "read_aloud_sha256": "f81def486911245d7e089b1004559924daafd80ab6e82e507c39087a68601151",
+   "words": 50
+  },
+  {
+   "chapter": 4,
+   "idx": 56,
+   "kind": "screen",
+   "read_aloud_sha256": "337be27c36889eb08335f615e26f5f4ef62389031be1f0506a1083961e0ed6c3",
+   "words": 8
+  },
+  {
+   "chapter": 4,
+   "idx": 115,
+   "kind": "figure",
+   "read_aloud_sha256": "5bc1e4c9cab0d191760a542631687b015905311a1a364816f8de453a22e4f822",
+   "words": 57
+  },
+  {
+   "chapter": 4,
+   "idx": 137,
+   "kind": "figure",
+   "read_aloud_sha256": "efe7cd6963f2f556988fe8cad0e30b9f8a0868290614022eb12de573c88cb260",
+   "words": 47
+  },
+  {
+   "chapter": 5,
+   "idx": 22,
+   "kind": "screen",
+   "read_aloud_sha256": "a5fe8ec4eb2ac0f3866655579512819658acac4880b7c0b00aaabdd75d58c5cf",
+   "words": 31
+  },
+  {
+   "chapter": 5,
+   "idx": 46,
+   "kind": "figure",
+   "read_aloud_sha256": "5f0276851f859a2570d7008b609773d7728c1423d00d2a47d73d5c0a2d5c5e7b",
+   "words": 70
+  },
+  {
+   "chapter": 5,
+   "idx": 89,
+   "kind": "screen",
+   "read_aloud_sha256": "e212b48286bb18b77e81c32d9da1072b4fd5af30087ac06ec231a12d145fdd9a",
+   "words": 5
+  },
+  {
+   "chapter": 6,
+   "idx": 40,
+   "kind": "figure",
+   "read_aloud_sha256": "bbe1a2e6cc648e0bf1375dfa379a4808379b583ff1f5578b9203035986fe2195",
+   "words": 65
+  },
+  {
+   "chapter": 6,
+   "idx": 43,
+   "kind": "screen",
+   "read_aloud_sha256": "0e8f3b56ed527b517041b84af8d8ba7574f7b22e76d8008c1e94b377b3ab3440",
+   "words": 87
+  },
+  {
+   "chapter": 6,
+   "idx": 130,
+   "kind": "screen",
+   "read_aloud_sha256": "56c762bf2769549dc88d6e5feda4eb9cc2e76d362f8b5090bdc2cf0caa82a4d5",
+   "words": 5
+  },
+  {
+   "chapter": 6,
+   "idx": 133,
+   "kind": "screen",
+   "read_aloud_sha256": "4dcf9d3f6b1a42f74107dd2e4efba6eae21f9f672f69867a8a170fb45b278e17",
+   "words": 36
+  },
+  {
+   "chapter": 6,
+   "idx": 137,
+   "kind": "screen",
+   "read_aloud_sha256": "c6b28e6a0b5be9b9d33620e6fc98bc81fad228681fec2973af1f99dee718e354",
+   "words": 15
+  },
+  {
+   "chapter": 6,
+   "idx": 162,
+   "kind": "screen",
+   "read_aloud_sha256": "bc3af49de0b70acbc04f100b5eca5ed9c9256a04e89da683e53587404d8f6e06",
+   "words": 2
+  },
+  {
+   "chapter": 7,
+   "idx": 6,
+   "kind": "screen",
+   "read_aloud_sha256": "65176cdb33becb9a323740bddd802476d8ce95d9faae3c1cb3377aee3dcf6eb4",
+   "words": 40
+  },
+  {
+   "chapter": 7,
+   "idx": 87,
+   "kind": "figure",
+   "read_aloud_sha256": "a194f60617532e0464df73572700d0175fefa5e69e5df63e6e73766c3087e690",
+   "words": 36
+  },
+  {
+   "chapter": 7,
+   "idx": 97,
+   "kind": "figure",
+   "read_aloud_sha256": "75f93784262a47adcc52d3d17a93499107251d35dc2b1516d0a8a08fa65489ab",
+   "words": 26
+  },
+  {
+   "chapter": 7,
+   "idx": 112,
+   "kind": "figure",
+   "read_aloud_sha256": "ee450b406c5613d098a1c898d635e9cd3c91dbf02271a3293823b5f08cf15037",
+   "words": 35
+  },
+  {
+   "chapter": 7,
+   "idx": 118,
+   "kind": "figure",
+   "read_aloud_sha256": "b210d2ebbc70fbf6d1829214eff153b624c1785b7dea8a1b404ad81f81399306",
+   "words": 32
+  },
+  {
+   "chapter": 7,
+   "idx": 142,
+   "kind": "quote",
+   "read_aloud_sha256": "fbf47c65216600562563aacfbf501b7705e1fb04e7a6fe3b283978cbfd964f69",
+   "words": 14
+  },
+  {
+   "chapter": 8,
+   "idx": 3,
+   "kind": "screen",
+   "read_aloud_sha256": "a683d24fb3e34485b12c0202bc61c80b22c5431f556658b3a2d7436a5a39a201",
+   "words": 6
+  },
+  {
+   "chapter": 8,
+   "idx": 12,
+   "kind": "screen",
+   "read_aloud_sha256": "b7fba8f95602486d2139ced8b2ae0e97164beefd65430e3284e76a246ac362de",
+   "words": 24
+  },
+  {
+   "chapter": 8,
+   "idx": 96,
+   "kind": "figure",
+   "read_aloud_sha256": "bbad4e90fe3fa153e0ac5bd25d74c18597cbdd69cbf76d909e1204f37fec08e0",
+   "words": 22
+  },
+  {
+   "chapter": 8,
+   "idx": 100,
+   "kind": "figure",
+   "read_aloud_sha256": "466da9a64a5c4eaf3c310fc5b3216f268db7242f6bafb2a5a7a509132983588e",
+   "words": 17
+  },
+  {
+   "chapter": 8,
+   "idx": 104,
+   "kind": "screen",
+   "read_aloud_sha256": "e2743265a1c30c129919591b0c9448cc5a0d26b81cda51fbe3f9d37d5e25c81c",
+   "words": 30
+  },
+  {
+   "chapter": 8,
+   "idx": 108,
+   "kind": "screen",
+   "read_aloud_sha256": "9ab724084fb95615dd613aa9bd2ea9ad9c4deb2c07ed5e3da162493349cb4ac2",
+   "words": 8
+  },
+  {
+   "chapter": 8,
+   "idx": 127,
+   "kind": "screen",
+   "read_aloud_sha256": "5e559ce49d2faabfa2f4c5f7f476d28527ce305e992541ee56b6082f1c9edb5d",
+   "words": 5
+  },
+  {
+   "chapter": 9,
+   "idx": 112,
+   "kind": "figure",
+   "read_aloud_sha256": "b2759b87833fe0e3b46e4abb88a2537b2a6bd9f0d9df032c95c630a1907cd1eb",
+   "words": 36
+  },
+  {
+   "chapter": 10,
+   "idx": 97,
+   "kind": "screen",
+   "read_aloud_sha256": "33bc8538746bf1f3bc6edd019f3c5c375c05e2197ef3bcbcdd354e0f6d206785",
+   "words": 12
+  },
+  {
+   "chapter": 11,
+   "idx": 91,
+   "kind": "screen",
+   "read_aloud_sha256": "1b0119e2411cbb5f2d727aa61f5dd97197fc5d30fd1bd411afb3cf5332d9d317",
+   "words": 37
+  },
+  {
+   "chapter": 12,
+   "idx": 5,
+   "kind": "quote",
+   "read_aloud_sha256": "4432adec0e8a0e1c9bbaebc47890551eeac320baf93859f81d11dddf5d18515a",
+   "words": 6
+  },
+  {
+   "chapter": 12,
+   "idx": 26,
+   "kind": "quote",
+   "read_aloud_sha256": "71a9ed96b10cc88223d2564d978103300d104c83d63f852c0eec9568b3363a62",
+   "words": 12
+  },
+  {
+   "chapter": 12,
+   "idx": 36,
+   "kind": "screen",
+   "read_aloud_sha256": "706ddd9b5a5da0d00ffba329f62f4f903824a4dd234869e7a9f7f6b4ace5b351",
+   "words": 41
+  },
+  {
+   "chapter": 12,
+   "idx": 50,
+   "kind": "figure",
+   "read_aloud_sha256": "0e014e3246d0bffa160d7365be454254b2d8403e55182f6166d506ed8a65301d",
+   "words": 76
+  },
+  {
+   "chapter": 12,
+   "idx": 97,
+   "kind": "screen",
+   "read_aloud_sha256": "14929446b82f52522925b520dc6c48093575bc3f28c29a2be061ca97a3cbe8bf",
+   "words": 11
+  },
+  {
+   "chapter": 12,
+   "idx": 191,
+   "kind": "figure",
+   "read_aloud_sha256": "bcaa2f66af6bdf53cef9bd9abe5f1b81b84670844647b83f8a18f478df1b82e7",
+   "words": 31
+  },
+  {
+   "chapter": 13,
+   "idx": 27,
+   "kind": "screen",
+   "read_aloud_sha256": "4e879d657d3bb2e7fd47e116eee4ce7c5ee2d45605289131ccddb3e2a432f4b3",
+   "words": 12
+  },
+  {
+   "chapter": 13,
+   "idx": 64,
+   "kind": "screen",
+   "read_aloud_sha256": "b5e75a126b977ba159ce980c7705082598bca7797b8fc9175b09de42f57398e5",
+   "words": 138
+  },
+  {
+   "chapter": 14,
+   "idx": 52,
+   "kind": "figure",
+   "read_aloud_sha256": "c975097e1a2260638d3fb2ad54a061b121c91bdac0276b7babd731424934f35f",
+   "words": 64
+  },
+  {
+   "chapter": 14,
+   "idx": 60,
+   "kind": "figure",
+   "read_aloud_sha256": "4dcac96d5d978939de5a9a2148de19953378cf7385437a7c027ec70c2012b308",
+   "words": 47
+  },
+  {
+   "chapter": 14,
+   "idx": 68,
+   "kind": "figure",
+   "read_aloud_sha256": "23c0647a7e80487c5bacf4f5b81b948435d431cfe81a8501b1562b2a15014833",
+   "words": 31
+  },
+  {
+   "chapter": 14,
+   "idx": 80,
+   "kind": "figure",
+   "read_aloud_sha256": "d2f03fcc6c4f7131426e013ae01f08ccdfe881419d45f212d2b943a095b2f71e",
+   "words": 26
+  },
+  {
+   "chapter": 14,
+   "idx": 108,
+   "kind": "figure",
+   "read_aloud_sha256": "4c139296eb1ec700aa22fe8243b8fdddb70950c5d4d26fafe173f8b29e63bd6f",
+   "words": 37
+  },
+  {
+   "chapter": 15,
+   "idx": 21,
+   "kind": "screen",
+   "read_aloud_sha256": "a2ba7606c533bcea3a862a67d30222e8a55cabb836c6e9bb7c5e1138a042c9fe",
+   "words": 15
+  },
+  {
+   "chapter": 15,
+   "idx": 24,
+   "kind": "screen",
+   "read_aloud_sha256": "02ee0bc7f232a9433701254f14e3401d0eaa9f975850b3bb32b0d3cb05cc95dc",
+   "words": 8
+  },
+  {
+   "chapter": 15,
+   "idx": 25,
+   "kind": "screen",
+   "read_aloud_sha256": "c2c9f54173f92b6b557a257169f5388a27ff4a4c02779b0e2b9d47598800f4a9",
+   "words": 32
+  },
+  {
+   "chapter": 15,
+   "idx": 50,
+   "kind": "screen",
+   "read_aloud_sha256": "36604155c6a67e34aaa37232ca82f6c41efa56cb3982ae721bccbfc4985043e8",
+   "words": 13
+  },
+  {
+   "chapter": 15,
+   "idx": 53,
+   "kind": "screen",
+   "read_aloud_sha256": "35e34c64ac81f1271eb4a4815034fc147bda09b370b8cc9b8f6d39d2cabf59c4",
+   "words": 24
+  },
+  {
+   "chapter": 15,
+   "idx": 55,
+   "kind": "screen",
+   "read_aloud_sha256": "27757810cbab1655afb688809a7c95faffc223a59ab77d801bcb0900e5ee25e4",
+   "words": 75
+  },
+  {
+   "chapter": 15,
+   "idx": 57,
+   "kind": "screen",
+   "read_aloud_sha256": "8c1c12498faa6dc088e4686b9628e694b2107ecb7ea11e43bb8cc8e53d868bbf",
+   "words": 12
+  },
+  {
+   "chapter": 15,
+   "idx": 58,
+   "kind": "screen",
+   "read_aloud_sha256": "d4e45c73baa38cf3deb264c0cfbfd510b287c4fc11356206da93222151e7af69",
+   "words": 7
+  },
+  {
+   "chapter": 15,
+   "idx": 59,
+   "kind": "screen",
+   "read_aloud_sha256": "20e35506dd556563fe33246e03aee8c2c9b4607e28286e844ee5fa48d5bff430",
+   "words": 16
+  },
+  {
+   "chapter": 15,
+   "idx": 61,
+   "kind": "screen",
+   "read_aloud_sha256": "18cadec0a6ce02957dc2b5df6c3bdf72fc2df7baf141c8657c7396ee0b88fcee",
+   "words": 200
+  },
+  {
+   "chapter": 15,
+   "idx": 64,
+   "kind": "screen",
+   "read_aloud_sha256": "9725fb55879542c91d828308bb5a1c65379b096b70feb0c67bbfc11d93a5bbe3",
+   "words": 142
+  },
+  {
+   "chapter": 15,
+   "idx": 66,
+   "kind": "screen",
+   "read_aloud_sha256": "f2ba8df00bd06ef7b074cd83663c0fe384ad1b8d318f0d4de21decb56ba16178",
+   "words": 9
+  },
+  {
+   "chapter": 15,
+   "idx": 67,
+   "kind": "screen",
+   "read_aloud_sha256": "bbdfc3a4f6b5a918b066126e53edbdc84f14c15bb32c411eae756ed55c9cef7f",
+   "words": 61
+  },
+  {
+   "chapter": 15,
+   "idx": 68,
+   "kind": "screen",
+   "read_aloud_sha256": "6a877c0f562b12c084d9ab752958654fc0265d08f4839cdbff018945da5a9133",
+   "words": 8
+  },
+  {
+   "chapter": 15,
+   "idx": 70,
+   "kind": "screen",
+   "read_aloud_sha256": "26252783e978a621e9594bbf2afda85f45aec6467aa14e8896a915611f607eed",
+   "words": 34
+  },
+  {
+   "chapter": 15,
+   "idx": 72,
+   "kind": "screen",
+   "read_aloud_sha256": "762eeb7b19cfbdd5e90434426a7de2c1353964fa7f2e2b71fe28cd5bc26e08c8",
+   "words": 10
+  },
+  {
+   "chapter": 15,
+   "idx": 114,
+   "kind": "screen",
+   "read_aloud_sha256": "6f94ff8bb08b97358fc521b526999eb1e9c7e4e8e0608b46f765544bba19fb0d",
+   "words": 12
+  },
+  {
+   "chapter": 16,
+   "idx": 62,
+   "kind": "screen",
+   "read_aloud_sha256": "bc33dc29889635bb9896dd131ba25a1e15bb4c146f2ed41396074881d5efc29b",
+   "words": 29
+  },
+  {
+   "chapter": 16,
+   "idx": 66,
+   "kind": "screen",
+   "read_aloud_sha256": "2fb86f789c279cdebaa0a34dc076377b41900b9804a145069a721d417cb455b5",
+   "words": 23
+  },
+  {
+   "chapter": 16,
+   "idx": 93,
+   "kind": "screen",
+   "read_aloud_sha256": "6af25eb8fe32119260740a1f29271280e38b0edf13f962329a05ce29c20aedc3",
+   "words": 23
+  },
+  {
+   "chapter": 16,
+   "idx": 99,
+   "kind": "screen",
+   "read_aloud_sha256": "932e493133f110c804f8cd8c6539abcc53092a123a5afb773526abded5453004",
+   "words": 25
+  },
+  {
+   "chapter": 16,
+   "idx": 101,
+   "kind": "screen",
+   "read_aloud_sha256": "5f0686058f80c05149770afc1afe88655a9102b667c739cac2a7d531c85af6a6",
+   "words": 18
+  },
+  {
+   "chapter": 17,
+   "idx": 5,
+   "kind": "screen",
+   "read_aloud_sha256": "102f4ef71580744a75382817baf9365e2593b21ce38123038b2eccddb8888304",
+   "words": 9
+  },
+  {
+   "chapter": 17,
+   "idx": 54,
+   "kind": "figure",
+   "read_aloud_sha256": "afe6d794f1a2f20e3b9d17abf1a3a54371dbe085ab602da6d283a0c5d7a311d0",
+   "words": 115
+  },
+  {
+   "chapter": 17,
+   "idx": 73,
+   "kind": "figure",
+   "read_aloud_sha256": "c99cd5f863b74c686c556c03fcc39f1f20928620cbd58c15736043386a0a12f0",
+   "words": 108
+  },
+  {
+   "chapter": 17,
+   "idx": 111,
+   "kind": "screen",
+   "read_aloud_sha256": "bb0061c90f9884ec396046c94a30a8760e22a8a272928be14eb3b7d5084f1149",
+   "words": 91
+  },
+  {
+   "chapter": 18,
+   "idx": 49,
+   "kind": "screen",
+   "read_aloud_sha256": "c9019972d4a6c3101bb5bbc82be0dcd4f5f5ab3e4880312511e49daf348b7fc8",
+   "words": 43
+  },
+  {
+   "chapter": 18,
+   "idx": 72,
+   "kind": "quote",
+   "read_aloud_sha256": "12c6cda3f9acce61874e358f347c81d23b73d2a58fd6a30342f6879aa584110c",
+   "words": 25
+  },
+  {
+   "chapter": 18,
+   "idx": 88,
+   "kind": "screen",
+   "read_aloud_sha256": "b533dce0d6d29b12529a83e8e1232ffcd8256057b6cecb39a223a5f600651062",
+   "words": 62
+  },
+  {
+   "chapter": 19,
+   "idx": 7,
+   "kind": "screen",
+   "read_aloud_sha256": "46bece78d982053fb424af7572a17f8632b19d376e145223e92fcd4af5cfd4d4",
+   "words": 35
+  },
+  {
+   "chapter": 19,
+   "idx": 12,
+   "kind": "screen",
+   "read_aloud_sha256": "53c3583d25276b23f23d0df730ab2f9def18456cbdf8cae42696858c83b16906",
+   "words": 22
+  },
+  {
+   "chapter": 19,
+   "idx": 14,
+   "kind": "screen",
+   "read_aloud_sha256": "df5d35f82a82b8efd3b9c2e907438b6df9287f08e8bf9f0ac928de2b49f1b889",
+   "words": 28
+  },
+  {
+   "chapter": 19,
+   "idx": 32,
+   "kind": "figure",
+   "read_aloud_sha256": "2ec98ef072c8c8502d25bf312c6674c01c48a172cb30d98d67d369eb281f80fe",
+   "words": 12
+  },
+  {
+   "chapter": 19,
+   "idx": 37,
+   "kind": "screen",
+   "read_aloud_sha256": "42a08bced9aeca47dd1ef4c18b7b0ed296e586d833fe79681a6947ab778ac26e",
+   "words": 30
+  },
+  {
+   "chapter": 19,
+   "idx": 59,
+   "kind": "screen",
+   "read_aloud_sha256": "b4cd58737dbd1766ad7eb262a18a50f927100b693767e751df1a610db47649cf",
+   "words": 60
+  },
+  {
+   "chapter": 19,
+   "idx": 79,
+   "kind": "quote",
+   "read_aloud_sha256": "c26d5b8c140660d90cdfe08bba6202d7c2d6870248b911576af0ade55359fa59",
+   "words": 31
+  },
+  {
+   "chapter": 19,
+   "idx": 101,
+   "kind": "figure",
+   "read_aloud_sha256": "0aaf2e66da868f47d8f9b7cef1b3b2fc581335fbf22085ad8922cb15f06e1a2d",
+   "words": 29
+  },
+  {
+   "chapter": 19,
+   "idx": 117,
+   "kind": "screen",
+   "read_aloud_sha256": "c40d4243ce00d9d7f14deb8253f005714d0337c2bda89f5c02c617193d5dd426",
+   "words": 25
+  },
+  {
+   "chapter": 19,
+   "idx": 126,
+   "kind": "screen",
+   "read_aloud_sha256": "cec1fa41cc236cc080de6e4ff2e01882bb2e0671bac325aa24febde2d0bd11e8",
+   "words": 15
+  },
+  {
+   "chapter": 19,
+   "idx": 142,
+   "kind": "screen",
+   "read_aloud_sha256": "faa44bec618809940cc50c50ab9f17a407ebf8835989e7120a4fa2f8e47ecc03",
+   "words": 10
+  },
+  {
+   "chapter": 19,
+   "idx": 153,
+   "kind": "screen",
+   "read_aloud_sha256": "c4cfc51e98bf4bd8c29fe353f9a3ee5ef7b27c098e31c441f1749bfb1c2b79c7",
+   "words": 436
+  },
+  {
+   "chapter": 20,
+   "idx": 10,
+   "kind": "screen",
+   "read_aloud_sha256": "336d1ef714efcd30208e704abcb3783b9f661b29008019ea28969de54193e0ef",
+   "words": 92
+  },
+  {
+   "chapter": 20,
+   "idx": 18,
+   "kind": "screen",
+   "read_aloud_sha256": "ddfef30de5b66d2aa47f875a790a7d86a5b147b7c3597f8a697bb02b54038a3f",
+   "words": 12
+  },
+  {
+   "chapter": 20,
+   "idx": 132,
+   "kind": "screen",
+   "read_aloud_sha256": "28434065d5ea50f06c16c56f028152887a71afcc20c6b39254f1bfc44d771f33",
+   "words": 12
+  },
+  {
+   "chapter": 22,
+   "idx": 11,
+   "kind": "screen",
+   "read_aloud_sha256": "0ca9e860e65a59f9e12be81fda8e07c39d62bf89eb6fb9f918f53270128e5bae",
+   "words": 43
+  },
+  {
+   "chapter": 22,
+   "idx": 81,
+   "kind": "figure",
+   "read_aloud_sha256": "9e6cc522023518cd8d73859f608f78053ee7a945e7d6b39fea23e33e8b6185f8",
+   "words": 41
+  },
+  {
+   "chapter": 22,
+   "idx": 88,
+   "kind": "figure",
+   "read_aloud_sha256": "592950fa83505185aad6a1e49e37aeb0b40dc2a888d0ee4d0cb6756486d816de",
+   "words": 23
+  },
+  {
+   "chapter": 22,
+   "idx": 92,
+   "kind": "figure",
+   "read_aloud_sha256": "97b5698b527b17ff88e618425a0d3efe1faf014c94ccd9eca9d2197a63e75b06",
+   "words": 41
+  },
+  {
+   "chapter": 22,
+   "idx": 97,
+   "kind": "figure",
+   "read_aloud_sha256": "cf8e789ad00d718f26f9a44f8375b5abd4ccb2906ebb252a3434bfaa8407dde7",
+   "words": 19
+  },
+  {
+   "chapter": 22,
+   "idx": 108,
+   "kind": "figure",
+   "read_aloud_sha256": "803f43c9d8f4d8c11a7054b74406bbb148ba33d8a49aa6f40a4a5eb41a6079e5",
+   "words": 58
+  },
+  {
+   "chapter": 22,
+   "idx": 126,
+   "kind": "figure",
+   "read_aloud_sha256": "45406fd623f60f5fdcd948a0842c6fbc158bb96d6b6252ea492f0fb35cb48fa3",
+   "words": 45
+  },
+  {
+   "chapter": 23,
+   "idx": 21,
+   "kind": "screen",
+   "read_aloud_sha256": "4abfbc91723c96fcb5ec7f4a414d613856d9e11ce0083d7fca797cfacd408c1d",
+   "words": 36
+  },
+  {
+   "chapter": 23,
+   "idx": 75,
+   "kind": "screen",
+   "read_aloud_sha256": "9a3a681d5dd75c5697df4a2d34831864eb922657266a0980050bead0745ed07d",
+   "words": 8
+  },
+  {
+   "chapter": 24,
+   "idx": 29,
+   "kind": "quote",
+   "read_aloud_sha256": "518cf07a24c1f497de2a8550c6a992a66f8acc9c117cd64e93588a98abce1e9f",
+   "words": 43
+  },
+  {
+   "chapter": 25,
+   "idx": 3,
+   "kind": "figure",
+   "read_aloud_sha256": "a6d9419c04e910ba62e4463ba35665a32e236011f906b15c07172374d6e0d296",
+   "words": 31
+  },
+  {
+   "chapter": 25,
+   "idx": 9,
+   "kind": "figure",
+   "read_aloud_sha256": "d6a3870e03bec9c38b0d4f54e7741118879bed816342aa65e391247987d97350",
+   "words": 8
+  },
+  {
+   "chapter": 25,
+   "idx": 11,
+   "kind": "figure",
+   "read_aloud_sha256": "0a9c2cfb83de7620944e53be7b2a34a005f53a0be0fb82b84c4494893ba974b4",
+   "words": 8
+  },
+  {
+   "chapter": 25,
+   "idx": 13,
+   "kind": "figure",
+   "read_aloud_sha256": "684aec127ef6b95c33885b0a52971431b37987264c6c5ad78758ad6cc616bec6",
+   "words": 8
+  },
+  {
+   "chapter": 25,
+   "idx": 15,
+   "kind": "figure",
+   "read_aloud_sha256": "9e10a0a645b1bff420e3ea4834eb099be3ef3670cad961171b21201c192a0d19",
+   "words": 18
+  },
+  {
+   "chapter": 25,
+   "idx": 18,
+   "kind": "figure",
+   "read_aloud_sha256": "be6c712dde1078fb58176129bf17ff405421c0ec37f9389b7285676adee91eab",
+   "words": 19
+  },
+  {
+   "chapter": 25,
+   "idx": 34,
+   "kind": "screen",
+   "read_aloud_sha256": "082af8f63725055b9732f244a9cf20eef8b88a1a9afe13360c47099a2354eeec",
+   "words": 28
+  },
+  {
+   "chapter": 25,
+   "idx": 40,
+   "kind": "screen",
+   "read_aloud_sha256": "b55329db1789bb55c96bd606cda3ee5f168895c46cb2ae9b79b939cbeb0943cc",
+   "words": 12
+  },
+  {
+   "chapter": 25,
+   "idx": 46,
+   "kind": "screen",
+   "read_aloud_sha256": "ecdb3a6268d10f6633996171f6fec6428128d1dcf8e8fd07684eac400030b476",
+   "words": 15
+  },
+  {
+   "chapter": 25,
+   "idx": 97,
+   "kind": "screen",
+   "read_aloud_sha256": "70387de6a78b71e72c15ebf6ef5cef2fa5e34755bc327b0fc609785f4927753c",
+   "words": 11
+  },
+  {
+   "chapter": 26,
+   "idx": 103,
+   "kind": "figure",
+   "read_aloud_sha256": "be3c41b10c0eeb101baa493bc8aad0f2e78f567c7a6cec84ef13aced649888be",
+   "words": 38
+  },
+  {
+   "chapter": 26,
+   "idx": 115,
+   "kind": "figure",
+   "read_aloud_sha256": "5dccb5568497feb89c3d0a2b6acd5779b3809d13d9ae76e343043cc78ba20f10",
+   "words": 32
+  },
+  {
+   "chapter": 26,
+   "idx": 129,
+   "kind": "figure",
+   "read_aloud_sha256": "187c56c47c03fa2b9b4a7e33b4dc03af34292d08467c4f7352a414dec3c1b41c",
+   "words": 34
+  },
+  {
+   "chapter": 26,
+   "idx": 139,
+   "kind": "figure",
+   "read_aloud_sha256": "0c42a457cf084337e1e0da016d279e9e4ec9dd71b864252a06b86f997ca243ae",
+   "words": 35
+  },
+  {
+   "chapter": 27,
+   "idx": 118,
+   "kind": "figure",
+   "read_aloud_sha256": "5730224ed23f0ec122201f94137739ed353121ce7b1d4e123cda372e46591804",
+   "words": 39
+  },
+  {
+   "chapter": 27,
+   "idx": 120,
+   "kind": "figure",
+   "read_aloud_sha256": "80a6974e71b57348e9f34c3cd8ac5032469121407eb36675e78415a65e374fe1",
+   "words": 47
+  },
+  {
+   "chapter": 27,
+   "idx": 125,
+   "kind": "figure",
+   "read_aloud_sha256": "c14152ab82cf28a673370709f607dc24be9fa6b4749e3eb20ee4a5f0f0c1533e",
+   "words": 37
+  },
+  {
+   "chapter": 27,
+   "idx": 136,
+   "kind": "screen",
+   "read_aloud_sha256": "c953e84b7070e06e6adb7076df74eaf86568d907e849dfad78296e6c13f82cf2",
+   "words": 81
+  },
+  {
+   "chapter": 29,
+   "idx": 34,
+   "kind": "figure",
+   "read_aloud_sha256": "2e5da861e65e6b51cead3f76fefc7669338f6f27ef2129c5905a377a16152011",
+   "words": 62
+  },
+  {
+   "chapter": 29,
+   "idx": 59,
+   "kind": "figure",
+   "read_aloud_sha256": "fdd43d0c2c3d60ca90c65e97fbd5ca85ffc0418fc3bda5ab913ceda3af671c1f",
+   "words": 22
+  },
+  {
+   "chapter": 29,
+   "idx": 68,
+   "kind": "figure",
+   "read_aloud_sha256": "4edd7b1246d8112488b1b77055196088eb3fc4dde1a58d1e7af28a9ef37fda0a",
+   "words": 37
+  },
+  {
+   "chapter": 29,
+   "idx": 74,
+   "kind": "figure",
+   "read_aloud_sha256": "0f8a7736f20f9268900618129feadc753be217904c6431dabcd0da542a32df90",
+   "words": 36
+  },
+  {
+   "chapter": 29,
+   "idx": 78,
+   "kind": "figure",
+   "read_aloud_sha256": "68dba886f98264e3d6c2190fa59da92441718baa5f51607029a609ace375cc7d",
+   "words": 33
+  },
+  {
+   "chapter": 29,
+   "idx": 81,
+   "kind": "figure",
+   "read_aloud_sha256": "6f10f4f24cb537cad77f9af05b10615d0d2c28e77596c2a67afe616f8055cb70",
+   "words": 38
+  },
+  {
+   "chapter": 29,
+   "idx": 108,
+   "kind": "screen",
+   "read_aloud_sha256": "1667521fcd772e0775b4a2d35a2ee856f3f6fc093780f478192b72ea78071970",
+   "words": 58
+  },
+  {
+   "chapter": 29,
+   "idx": 114,
+   "kind": "screen",
+   "read_aloud_sha256": "8cc670468ea15eeae3420e3d18ecaaf3f02701d5e0f0462d1410538405ed76ef",
+   "words": 163
+  },
+  {
+   "chapter": 30,
+   "idx": 4,
+   "kind": "screen",
+   "read_aloud_sha256": "bdd5baa2f6af1d381ccbdfe2d658c95d7ef505ad3baae95afbac794abb4c0c09",
+   "words": 178
+  },
+  {
+   "chapter": 30,
+   "idx": 29,
+   "kind": "screen",
+   "read_aloud_sha256": "94b5aec5cc40244d9184c80ad6258aaded7b2365812a7a7138a94f19d411dd56",
+   "words": 80
+  },
+  {
+   "chapter": 30,
+   "idx": 49,
+   "kind": "figure",
+   "read_aloud_sha256": "8cc32638a0d75a8e680d533d6c442e25e0bc844bc68435399858f581b89cea1b",
+   "words": 35
+  },
+  {
+   "chapter": 30,
+   "idx": 61,
+   "kind": "screen",
+   "read_aloud_sha256": "362fec54d8793a25b56efe2fa4c6aaf886c5be37bb1fdf1e9b9701ca00215196",
+   "words": 41
+  },
+  {
+   "chapter": 30,
+   "idx": 70,
+   "kind": "figure",
+   "read_aloud_sha256": "2d02097ad42516179a3b82e73ccfa4bf3a428cedd49cea7c52753741e161e0fd",
+   "words": 29
+  },
+  {
+   "chapter": 31,
+   "idx": 68,
+   "kind": "screen",
+   "read_aloud_sha256": "3cfd0e3faf0f0a30129d43f6f821ed24766852485cee36e941b2bf306a9d550e",
+   "words": 6
+  }
+ ]
+}

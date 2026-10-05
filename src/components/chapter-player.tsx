@@ -15,6 +15,7 @@ export interface PlayerCue {
   idx: number;
   start: number;
   end: number;
+  description?: string;
 }
 export interface PlayerImage {
   idx: number;
@@ -203,10 +204,17 @@ export function ChapterPlayer({ chapter, chapters, label, url, duration, cues, i
           localStorage.removeItem(storageKey);
         }}
       />
+      {started && cues[cue]?.description && (
+        <p className="player-description">
+          <span className="player-description-label">Model-drafted description, not the author&apos;s words</span>
+          {cues[cue].description}
+        </p>
+      )}
       {started && image && showImage && (
         <button type="button" className="player-image" onClick={() => setShowImage(false)} aria-label="Hide image">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={image.url} alt={image.alt} width={1024} height={576} />
+          <span className="player-image-label">AI-generated image</span>
         </button>
       )}
       <div className="player-controls">

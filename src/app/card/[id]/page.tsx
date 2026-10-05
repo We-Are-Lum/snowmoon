@@ -52,7 +52,7 @@ export default async function CardPage({ params }: Props) {
         <Link href={at}>Read it in context</Link>
         <Link href="/cards">More quote cards</Link>
       </nav>
-      <p className="provenance">Snowmoon by Vitalik Buterin, GPL v3. Saved cards are published under GPL-3.0.</p>
+      <p className="provenance">Snowmoon by Vitalik Buterin, GPL v3. The words are the author&apos;s; card images are AI-generated. Saved cards are published under GPL-3.0.</p>
     </article>
   );
 }

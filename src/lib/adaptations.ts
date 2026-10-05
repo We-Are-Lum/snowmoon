@@ -3,7 +3,8 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { marked } from 'marked';
 import { loadChapter } from './book';
-import { findCites, linkCites } from './adaptation-cites';
+import { citeHref, findCites, linkCites } from './adaptation-cites';
+import { BOOK_TAG, PERSON_TAG, parseBeats } from './script-beats';
 
 /** Shape of config/adaptations.json (checked by scripts/check-adaptations.ts). */
 export interface Seed {
@@ -47,23 +48,87 @@ function readOptional(file: string): string | null {
   return existsSync(file) ? readFileSync(file, 'utf8') : null;
 }
 
+export interface Approval {
+  fid: number;
+  on: string; // YYYY-MM-DD
+}
+
 export interface SeedDocs {
   brief: string;
+  /** Rendered only once approved (docs/adaptation-format.md). */
   script: string | null;
+  approval: Approval | null;
+  /** Shown only alongside an approved script. */
   shots: string | null;
+  /** The piece itself, once approved: images and the lines people chose or wrote. */
+  piece: PiecePanel[] | null;
+}
+
+/** A line of the piece: the book's words (with a link to the block) or a signed-in person's. */
+export type PieceLine =
+  | { text: string; from: 'book'; id: string; href: string }
+  | { text: string; from: 'person'; fid: number; on: string };
+
+export interface PiecePanel {
+  n: number;
+  /** From adaptations/<seed>/panels.json; alt text is model-drafted and says so. */
+  image: { url: string; width: number; height: number; alt: string; recipe: string } | null;
+  narration: PieceLine[];
+  dialogue: PieceLine[];
+}
+
+/**
+ * Only lines with a human author tag reach the piece (principle 2). Beat titles,
+ * candidates and the rest of the structure are working notes, shown elsewhere.
+ */
+function pieceLine(tag: string | null, text: string): PieceLine | null {
+  const book = tag?.match(BOOK_TAG);
+  if (book) {
+    const [, ch, idx] = book[1].match(/^c(\d+)-b(\d+)$/)!;
+    return { text, from: 'book', id: book[1], href: citeHref({ id: book[1], chapter: Number(ch), idx: Number(idx) }) };
+  }
+  const person = tag?.match(PERSON_TAG);
+  return person ? { text, from: 'person', fid: Number(person[1]), on: person[2] } : null;
+}
+
+function buildPiece(script: string, folder: string): PiecePanel[] {
+  const panels = JSON.parse(readOptional(path.join(folder, 'panels.json')) ?? '{"panels":[]}').panels as ({ beat: number } & NonNullable<PiecePanel['image']>)[];
+  return parseBeats(script).map((beat) => {
+    const p = panels.find((x) => x.beat === beat.n);
+    return {
+      n: beat.n,
+      image: p ? { url: p.url, width: p.width, height: p.height, alt: p.alt, recipe: p.recipe } : null,
+      narration: beat.narration.map((l) => pieceLine(l.tag, l.text)).filter((l): l is PieceLine => !!l),
+      dialogue: beat.dialogue.map((l) => pieceLine(l.tag, l.text)).filter((l): l is PieceLine => !!l),
+    };
+  });
+}
+
+/**
+ * A script is approved when its header carries the line
+ *   > **Approved** by FID <n> on <YYYY-MM-DD>.
+ * An AI-drafted or unapproved script is never shown, and its citations do not
+ * mark the reader (principle 4; owner decision, Oct 5, 2026).
+ */
+export function scriptApproval(markdown: string): Approval | null {
+  const m = markdown.match(/^>\s*\*\*Approved\*\*\s+by FID (\d+) on (\d{4}-\d{2}-\d{2})\b/m);
+  return m ? { fid: Number(m[1]), on: m[2] } : null;
 }
 
 /** The seed's brief, and its script and shot list when the folder has them, rendered. */
-export function seedDocs(slug: string): SeedDocs | null {
-  const folder = path.join(DIR, slug);
+export function seedDocs(slug: string, dir = DIR): SeedDocs | null {
+  const folder = path.join(dir, slug);
   const brief = readOptional(path.join(folder, 'brief.md'));
   if (brief === null) return null;
   const script = readOptional(path.join(folder, 'script.md'));
-  const shots = readOptional(path.join(folder, 'shots.md'));
+  const approval = script === null ? null : scriptApproval(script);
+  const shots = approval ? readOptional(path.join(folder, 'shots.md')) : null;
   return {
     brief: renderDoc(brief),
-    script: script === null ? null : renderDoc(script),
+    script: approval && script !== null ? renderDoc(script) : null,
+    approval,
     shots: shots === null ? null : renderDoc(shots),
+    piece: approval && script !== null ? buildPiece(script, folder) : null,
   };
 }
 
@@ -99,7 +164,10 @@ export function adaptationsCiting(chapter: number, idx: number): Seed[] {
       if (!existsSync(folder)) continue;
       const ids = new Set<string>();
       for (const f of readdirSync(folder).filter((f) => f.endsWith('.md'))) {
-        for (const c of findCites(readFileSync(path.join(folder, f), 'utf8'))) ids.add(c.id);
+        const text = readFileSync(path.join(folder, f), 'utf8');
+        // Unapproved scripts (and their shot lists) do not mark the reader.
+        if ((f === 'script.md' || f === 'shots.md') && !scriptApproval(readOptional(path.join(folder, 'script.md')) ?? '')) continue;
+        for (const c of findCites(text)) ids.add(c.id);
       }
       for (const id of ids) citeIndex.set(id, [...(citeIndex.get(id) ?? []), seed]);
     }

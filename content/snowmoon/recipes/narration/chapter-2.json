@@ -4,7 +4,7 @@
   "source_sha256": "7db744a86f443bf5a1d0726790d5cf378126ba873932e08cca77555f5d712f6d",
   "generated_at": "2026-10-03T16:48:31+00:00",
   "generation_seconds": 157.3,
-  "total_duration_ms": 1183275,
+  "total_duration_ms": 1185825,
   "model": {
     "name": "Kokoro-82M",
     "repo": "hexgrad/Kokoro-82M",
@@ -36,7 +36,21 @@
     },
     "break_ms": 1800,
     "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
-    "read_aloud_sha256": "f5f96453077ca8fedadf271ae538860f86ca515c8ba6efd4c647046648db69fe"
+    "read_aloud_sha256": "f5f96453077ca8fedadf271ae538860f86ca515c8ba6efd4c647046648db69fe",
+    "description_tone": {
+      "notes_hz": [
+        660,
+        990
+      ],
+      "notes_ms": [
+        110,
+        140
+      ],
+      "between_ms": 40,
+      "after_ms": 220,
+      "amplitude": 0.12,
+      "made_by": "code (numpy sine, linear fades)"
+    }
   },
   "host": {
     "platform": "macOS-26.5.1-arm64-arm-64bit",
@@ -45,10 +59,10 @@
   },
   "stitched": {
     "wav": "chapter-2.wav",
-    "wav_sha256": "4c0b8f47865f183de94c3ad2bb269422ebc2aa2114f8b2bc4818d2e6efcd3028",
+    "wav_sha256": "45cf8f55fa54b4c500415ca6aa4829ed022d5143423d4d79212c1ceb20ef5f73",
     "m4a": "chapter-2.m4a",
-    "m4a_sha256": "913d215b2a157979521d6da9918846469c27b793e0445ec8402dcb17b0c20f4c",
-    "note": "start_ms is the block's offset in the stitched file, gaps included"
+    "m4a_sha256": "626f5a90f335fb58046c0dd7da6288f57aa9072404c3b2e56f44df3f8e62e144",
+    "note": "start_ms is the block's offset in the stitched file, gaps included; a description starts with its tone (tone_ms)"
   },
   "blocks": [
     {
@@ -127,7 +141,8 @@
       "start_ms": 77025,
       "text": "The sign reads: [zui](/ˈzwi/) [fia](/ˈfjɑ/) [kun](/ˈkun/) [zun](/ˈzun/).",
       "generation_s": 0.38,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 7,
@@ -136,7 +151,7 @@
       "file": "blocks/c2-b007.wav",
       "sha256": "ce00d88dab4541d4c19e89df5967e62674ff88b85742c5798b591517aa9ee8da",
       "duration_ms": 2025,
-      "start_ms": 80675,
+      "start_ms": 81185,
       "text": "\"Underground safe place\".",
       "generation_s": 0.26
     },
@@ -147,7 +162,7 @@
       "file": "blocks/c2-b008.wav",
       "sha256": "a3e4e0a1d98399b815e8912e0d013ce62f7739889ad409e743042b9802c4a2c1",
       "duration_ms": 11525,
-      "start_ms": 83150,
+      "start_ms": 83660,
       "text": "\"[gie](/ˈɡjɛ/) [fe](/ˈfɛ/) [kiu](/ˈkju/) [kai](/ˈkI/) [ci](/ˈtsi/) [bin](/ˈbɪn/) [hu](/ˈhu/)\", [Zei](/ˈzA/) thought to himself. \"Grow roots, no head\". The strategy that [Dzego](/ˈdzɛɡO/) had been employing for half a century to grow and stay protected.",
       "generation_s": 1.53
     },
@@ -158,7 +173,7 @@
       "file": "blocks/c2-b009.wav",
       "sha256": "43de4023ef6ea25359c0686abdd478fd511f11e8caea4c8c5246abe0508b4e47",
       "duration_ms": 6400,
-      "start_ms": 95125,
+      "start_ms": 95635,
       "text": "[Fin](/ˈfɪn/) and [Zei](/ˈzA/) both kept walking, enjoying the shade under the trees between the road and the sidewalk.",
       "generation_s": 0.84
     },
@@ -169,7 +184,7 @@
       "file": "blocks/c2-b010.wav",
       "sha256": "728be2adbdf23be19ec093b8a78367a9fa3799033097f0b88c530ba1117c8026",
       "duration_ms": 27275,
-      "start_ms": 101975,
+      "start_ms": 102485,
       "text": "A drone buzzed as it flew overhead. A moment later, their watches buzzed softly once their software had run the authentication protocol and confirmed that it was a friendly security drone that came from a batch that had passed all inspections and was running friendly algorithms. The whole chain of events — the flyby, the authentication, the confirmation — finished within hundreds of milli-ticks, and [Fin](/ˈfɪn/) and [Zei](/ˈzA/) both barely noticed that any of it had even happened.",
       "generation_s": 3.67
     },
@@ -180,7 +195,7 @@
       "file": "blocks/c2-b011.wav",
       "sha256": "32b66ac084f910f03daceb072a49737223716ed19c3dc9485e09c657f337c4fd",
       "duration_ms": 3550,
-      "start_ms": 129700,
+      "start_ms": 130210,
       "text": "\"How was the [Minpentai](/ˈmɪnpɛntI/) game last night?\", [Fin](/ˈfɪn/) asked.",
       "generation_s": 0.56
     },
@@ -191,7 +206,7 @@
       "file": "blocks/c2-b012.wav",
       "sha256": "24a1787ae855d195d4c7fd9be53628254e9cf7d4d8e84ef5f6f355e07b85ace1",
       "duration_ms": 9100,
-      "start_ms": 133700,
+      "start_ms": 134210,
       "text": "\"I got third place! Finally figured out a wall structure that reflected their gliders right back at them, completely wreaked havoc on their territory.\"",
       "generation_s": 1.19
     },
@@ -202,7 +217,7 @@
       "file": "blocks/c2-b013.wav",
       "sha256": "004baae6d97ccb9c9f3566c2917f7329b366dd91b183fdbcec68ba709f1ee70b",
       "duration_ms": 1675,
-      "start_ms": 143250,
+      "start_ms": 143760,
       "text": "\"How about you?\"",
       "generation_s": 0.24
     },
@@ -213,7 +228,7 @@
       "file": "blocks/c2-b014.wav",
       "sha256": "73d05ad817e2156b424dddeaf2346bc6764924b7d70ee898d9c24bb40921ff76",
       "duration_ms": 3350,
-      "start_ms": 145375,
+      "start_ms": 145885,
       "text": "\"Studying for the geography exam in boring school.\"",
       "generation_s": 0.48
     },
@@ -224,7 +239,7 @@
       "file": "blocks/c2-b015.wav",
       "sha256": "5ecfd8f793b8ddd856698a35f9acfcf6a07a4e5c3fbb7a908b73d0a6dd35e195",
       "duration_ms": 1800,
-      "start_ms": 149175,
+      "start_ms": 149685,
       "text": "\"Boring, I take it?\"",
       "generation_s": 0.31
     },
@@ -235,7 +250,7 @@
       "file": "blocks/c2-b016.wav",
       "sha256": "8e296583609e6204acecb8a38c89576537abff611dbf25c0c9b17184fa45da60",
       "duration_ms": 13750,
-      "start_ms": 151425,
+      "start_ms": 151935,
       "text": "\"Yeah, we're covering the United Cities, and they're just making us memorize all the co-governance percentages. Freetown gets five percent votes in [Devanvil](/dˈɛvənvˌɪl/), [Devanvil](/dˈɛvənvˌɪl/) gets fifteen percent votes in Redshire, Redshire gets...\"",
       "generation_s": 1.72
     },
@@ -246,7 +261,7 @@
       "file": "blocks/c2-b017.wav",
       "sha256": "feb5b11dbed8c1aff19ba86b4453d8a876d676712bbc8bcc8fb4ea2e70a4a636",
       "duration_ms": 4250,
-      "start_ms": 165625,
+      "start_ms": 166135,
       "text": "\"Do you have any new opinions on how effective that whole system is?\"",
       "generation_s": 0.6
     },
@@ -257,7 +272,7 @@
       "file": "blocks/c2-b018.wav",
       "sha256": "62b424710f7fee5eede84fd25de97419c64d3ed12428bf8dcf08801eb2ac2c2e",
       "duration_ms": 4900,
-      "start_ms": 170325,
+      "start_ms": 170835,
       "text": "\"Oh no, critical governance studies only becomes a topic in university.\"",
       "generation_s": 0.63
     },
@@ -268,7 +283,7 @@
       "file": "blocks/c2-b019.wav",
       "sha256": "926737c25979ccfbe6a8bf72e24c27dde65b543568354eb1d5d9cf236ae93ef3",
       "duration_ms": 3425,
-      "start_ms": 175675,
+      "start_ms": 176185,
       "text": "\"The same way that chemistry is a topic in high school?\"",
       "generation_s": 0.42
     },
@@ -279,7 +294,7 @@
       "file": "blocks/c2-b020.wav",
       "sha256": "03527dfa5b97a1ec2e8488239fbc995f34bfffee0d83a51c9385f55e868a1a2c",
       "duration_ms": 7075,
-      "start_ms": 179550,
+      "start_ms": 180060,
       "text": "[Fin](/ˈfɪn/) laughed. \"Are they gonna cover an entire year of critical governance studies in ten days in DU now?\"",
       "generation_s": 0.9
     },
@@ -290,7 +305,7 @@
       "file": "blocks/c2-b021.wav",
       "sha256": "fa1205b1224c5b150d66bb7a768b2a755a5ef0b01f94dccd3206b54fc8934f65",
       "duration_ms": 11900,
-      "start_ms": 187075,
+      "start_ms": 187585,
       "text": "DU — \"Decentralized University\", or [dzu](/ˈdzu/) [hu](/ˈhu/) [sun](/ˈsun/) [du](/ˈdu/) in [Dzegoban](/ˈdzɛɡObɑn/) — the place they were going. [Zei](/ˈzA/) remembered that they needed to make sure they got there on time, and checked his watch.",
       "generation_s": 1.76
     },
@@ -301,7 +316,7 @@
       "file": "blocks/c2-b022.wav",
       "sha256": "53d9654c2d710704e05ac1ca3473e6cd84521cc6e4135a0f11216a9975285e9f",
       "duration_ms": 8675,
-      "start_ms": 199425,
+      "start_ms": 199935,
       "text": "\"Time just hit sixty-nine thousand. The exact location of the classroom should be getting decrypted and broadcasted any moment now.\"",
       "generation_s": 1.36
     },
@@ -312,7 +327,7 @@
       "file": "blocks/c2-b023.wav",
       "sha256": "06c5b75aed77f7677f17c79116f661c717ce4c9ba66d7bc2d9a36fa07cf3f862",
       "duration_ms": 3200,
-      "start_ms": 208550,
+      "start_ms": 209060,
       "text": "The watch buzzed. [Zei](/ˈzA/) got a notification.",
       "generation_s": 0.51
     },
@@ -323,10 +338,11 @@
       "file": "blocks/c2-b024.wav",
       "sha256": "923cf8edd9e7be7d9e0ce1ba94312d9ce06383d940fc10a459533251aa92a9b6",
       "duration_ms": 6200,
-      "start_ms": 212200,
+      "start_ms": 212710,
       "text": "[Zei](/ˈzA/)'s watch shows: [mun](/ˈmun/) [gui](/ˈɡwi/) eighteen forty-two, [tei](/ˈtA/) seventy thousand, and a large checkmark.",
       "generation_s": 1.09,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 25,
@@ -335,7 +351,7 @@
       "file": "blocks/c2-b025.wav",
       "sha256": "139e40fecb6331864ab90bbac8feb02f9dbccbbc077b0c382a8580baafc429f8",
       "duration_ms": 2850,
-      "start_ms": 219000,
+      "start_ms": 220020,
       "text": "[Zei](/ˈzA/) stopped, and showed his watch to [Fin](/ˈfɪn/).",
       "generation_s": 0.53
     },
@@ -346,7 +362,7 @@
       "file": "blocks/c2-b026.wav",
       "sha256": "f1372f74ec20b2cb612061e31cbe521e0efe10942479fd7a8416b13f632fd7e2",
       "duration_ms": 9275,
-      "start_ms": 222300,
+      "start_ms": 223320,
       "text": "\"Huh, yellow checkmark. Looks like they've upgraded to a new cryptographic proof system, gotta make sure we sync our codes when we get to the lesson today.\"",
       "generation_s": 1.16
     },
@@ -357,7 +373,7 @@
       "file": "blocks/c2-b027.wav",
       "sha256": "2bb6fa20249960a9017556d7312d34a262cf47947803e848f237529901b7dc04",
       "duration_ms": 1450,
-      "start_ms": 232025,
+      "start_ms": 233045,
       "text": "\"Again?\"",
       "generation_s": 0.22
     },
@@ -368,7 +384,7 @@
       "file": "blocks/c2-b028.wav",
       "sha256": "8ccfab820ca6a72e8d15b9928ed0920c6bf48f3119e18d639a102bf52959090c",
       "duration_ms": 5925,
-      "start_ms": 233925,
+      "start_ms": 234945,
       "text": "\"Guess so. I hear the Arctic Empire is getting more aggressive, so we're stepping up security.\"",
       "generation_s": 0.72
     },
@@ -379,7 +395,7 @@
       "file": "blocks/c2-b029.wav",
       "sha256": "432af6b31a0e23f31f858c621fdf84d5d3b98d629a9a946369720ee496a929b7",
       "duration_ms": 7750,
-      "start_ms": 240300,
+      "start_ms": 241320,
       "text": "\"Okay, anyway, it says [Mun](/ˈmun/) [Gui](/ˈɡwi/) 1842. We... just passed 1990 [Hun](/ˈhun/) [Min](/ˈmɪn/). So it's behind us.\"",
       "generation_s": 0.95
     },
@@ -390,7 +406,7 @@
       "file": "blocks/c2-b030.wav",
       "sha256": "df6ef8d5e4c2e1fa1decc05ca32b82e5684a0bfd987b05fc236a56be85ee2966",
       "duration_ms": 4725,
-      "start_ms": 248500,
+      "start_ms": 249520,
       "text": "\"Let's just turn left here on 20th, and then left again on [Mun](/ˈmun/) [Gui](/ˈɡwi/)?\"",
       "generation_s": 0.59
     },
@@ -401,7 +417,7 @@
       "file": "blocks/c2-b031.wav",
       "sha256": "e00e465f32fa06df6e611b9f29bf824caf87a1b75159ec1ee78455845ad4111a",
       "duration_ms": 32075,
-      "start_ms": 253675,
+      "start_ms": 254695,
       "text": "[Zei](/ˈzA/) checked over the math in his mind. Named streets were spaced two hundred meters apart, H to M was four streets. House numbers were just meters, so to get from 2000 to 1842 they had to walk one hundred fifty eight meters. Eight hundred and one hundred fifty eight together is ... nine hundred fifty eight meters to walk. The lesson starts at seventy thousand, so they had a little under a thousand ticks, or more colloquially, ten minutes. A slow walking pace is one meter per tick, and [Fin](/ˈfɪn/) and [Zei](/ˈzA/) were fast. So they were fine.",
       "generation_s": 4.43
     },
@@ -412,7 +428,7 @@
       "file": "blocks/c2-b032.wav",
       "sha256": "7fe985fbe2ad55a299e4e55ad8cfe5439b08695e361c69091f4166b3a75d999a",
       "duration_ms": 1625,
-      "start_ms": 286200,
+      "start_ms": 287220,
       "text": "\"Sounds good!\"",
       "generation_s": 0.26
     },
@@ -423,7 +439,7 @@
       "file": "blocks/c2-b033.wav",
       "sha256": "3c320ff2058228c1e879968b6d3e06834448a1378c4c626c2a39bc58521ccec6",
       "duration_ms": 4550,
-      "start_ms": 288275,
+      "start_ms": 289295,
       "text": "They began to walk briskly, to make sure they could get there with time to spare.",
       "generation_s": 0.69
     },
@@ -434,7 +450,7 @@
       "file": "blocks/c2-b034.wav",
       "sha256": "12b2efb2fe763b3b8fbcc9f6ee798f9c3f5e9a218846b393b1afdbbad9848c2a",
       "duration_ms": 9550,
-      "start_ms": 293275,
+      "start_ms": 294295,
       "text": "A few minutes later, they arrived. \"Oh [Fin](/ˈfɪn/), there you are!\", a young woman shouted. [Fin](/ˈfɪn/) and [Zei](/ˈzA/) were led down two flights of somewhat dusty stairs.",
       "generation_s": 1.34
     },
@@ -445,7 +461,7 @@
       "file": "blocks/c2-b035.wav",
       "sha256": "159a3d6a98131fc31b4789bcfeb879ad4e99d8dde1a01b2af74e3de979a7ecd1",
       "duration_ms": 8275,
-      "start_ms": 303275,
+      "start_ms": 304295,
       "text": "When they got to the bottom, another man was waiting, and stopped them. \"Change of plans, it's in the opposite room on floor -1 now.\"",
       "generation_s": 1.05
     },
@@ -456,7 +472,7 @@
       "file": "blocks/c2-b036.wav",
       "sha256": "8d5a694adb17221ffa0a5d2df182da834e9d50a21f9d2c05e5933bb96dd703f9",
       "duration_ms": 1575,
-      "start_ms": 312000,
+      "start_ms": 313020,
       "text": "[Zei](/ˈzA/) sighed.",
       "generation_s": 0.21
     },
@@ -467,7 +483,7 @@
       "file": "blocks/c2-b037.wav",
       "sha256": "2f66b979cae92ab3c7fbb4c1579a06c778fb498ef777871d50f894bdf044a12c",
       "duration_ms": 7900,
-      "start_ms": 314025,
+      "start_ms": 315045,
       "text": "The four of them walked back up a flight of stairs, entered a large room, and sat down beside each other on one of the rows of chairs.",
       "generation_s": 0.97
     },
@@ -478,7 +494,7 @@
       "file": "blocks/c2-b038.wav",
       "sha256": "eae75aeb63195a0b03e44c72ed5c3760567346fdaeb34c08f18a9df0d9f64680",
       "duration_ms": 36250,
-      "start_ms": 322375,
+      "start_ms": 323395,
       "text": "The walls were covered with a thick, hastily organized layer of anti-transmission foil. Coated on top of the foil was a classic aesthetic of [Dzego](/ˈdzɛɡO/): pictures of cute cartoon animals playing with electronic gadgets and chemistry lab equipment, with a backdrop of green trees and blue skies. At the front of the room, there was an inflated cartoon-style pig on the left and a hamster on the right. The pig, in its left hand, was holding a calculator. The hamster, in its right hand, was holding a vial of some green liquid. With their other two hands, the two together held up a poster with DU's motto:",
       "generation_s": 5.48
     },
@@ -489,10 +505,11 @@
       "file": "blocks/c2-b039.wav",
       "sha256": "fca8e32962e5dc570a42137c7ce2350f7e8388c21f803b0157d9ac440d94740a",
       "duration_ms": 7300,
-      "start_ms": 359075,
+      "start_ms": 360095,
       "text": "The poster reads: [pa](/ˈpɑ/) [jan](/ˈʤɑn/) [li](/ˈli/) [sun](/ˈsun/) [zo](/ˈzO/), [zai](/ˈzI/) [gau](/ˈɡW/) [fe](/ˈfɛ/) [pa](/ˈpɑ/) [jan](/ˈʤɑn/). [go](/ˈɡO/) [li](/ˈli/) [sun](/ˈsun/) [zo](/ˈzO/), [bai](/ˈbI/) [gau](/ˈɡW/) [fe](/ˈfɛ/) [go](/ˈɡO/).",
       "generation_s": 0.94,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 40,
@@ -501,7 +518,7 @@
       "file": "blocks/c2-b040.wav",
       "sha256": "9d7952f0c67ddb5d4c36838650436c0de971da9a9a8dd7f4413b21fa3fb2cf62",
       "duration_ms": 5400,
-      "start_ms": 366975,
+      "start_ms": 368505,
       "text": "\"One man learning will set one man free. A nation learning will make the nation great.\"",
       "generation_s": 0.83
     },
@@ -512,7 +529,7 @@
       "file": "blocks/c2-b041.wav",
       "sha256": "43dd672fc586b1bc2604794695f3eefc9a23b893b9703b1700d7067372d03c12",
       "duration_ms": 6725,
-      "start_ms": 372825,
+      "start_ms": 374355,
       "text": "Behind them, the instructor walked in, and closed the door. [Zei](/ˈzA/) checked his watch. 70,001.",
       "generation_s": 0.87
     },
@@ -522,7 +539,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 380000,
+      "start_ms": 381530,
       "duration_ms": 1800
     },
     {
@@ -532,7 +549,7 @@
       "file": "blocks/c2-b043.wav",
       "sha256": "fed93e3aada5c72fce2ab3f7cdd355dbfc141b1b3bb2601127c2e098daabd5d4",
       "duration_ms": 3400,
-      "start_ms": 381800,
+      "start_ms": 383330,
       "text": "\"Welcome to physics class\", the instructor said.",
       "generation_s": 0.43
     },
@@ -543,7 +560,7 @@
       "file": "blocks/c2-b044.wav",
       "sha256": "71d508163456d81dfb21f2b1aaca0502ccfbd5c7446d71b0386bf4f09dbc5deb",
       "duration_ms": 7875,
-      "start_ms": 385650,
+      "start_ms": 387180,
       "text": "\"Today, I'm going to try to introduce an important topic that I think almost everyone gets confused about: thermodynamics.\"",
       "generation_s": 1.0
     },
@@ -554,7 +571,7 @@
       "file": "blocks/c2-b045.wav",
       "sha256": "cd43a2bec655058c7185a1ec37c62142570bf26047c7e4d1fa6bf6cbcd3ddef0",
       "duration_ms": 10050,
-      "start_ms": 393975,
+      "start_ms": 395505,
       "text": "The more attentive students put away their hand devices, stopped talking, and got ready to listen. The others kept talking at first, but then quickly quieted down.",
       "generation_s": 1.26
     },
@@ -565,7 +582,7 @@
       "file": "blocks/c2-b046.wav",
       "sha256": "ba0a4aed9052ec46ccde26e79ae54e8dab122a91d8fead551368187976cdbbc0",
       "duration_ms": 17850,
-      "start_ms": 404475,
+      "start_ms": 406005,
       "text": "A girl beside [Zei](/ˈzA/) reached under the table edge and ran a finger along it without looking — a habit, not a serious search. Another student habitually waved her hand device around the room, trying to pick up on any unknown electronic devices. Nobody commented. Nobody ever did.",
       "generation_s": 2.83
     },
@@ -576,7 +593,7 @@
       "file": "blocks/c2-b047.wav",
       "sha256": "cfc3ef28206176dc56b3dade19108a992d781b27e35121f30d37a1ba4adbb1f4",
       "duration_ms": 6025,
-      "start_ms": 422775,
+      "start_ms": 424305,
       "text": "\"Who here has heard of the word 'entropy', in the context of information theory or cryptography?\"",
       "generation_s": 0.91
     },
@@ -587,7 +604,7 @@
       "file": "blocks/c2-b048.wav",
       "sha256": "9c8ceebfd5a02a57f5961724c3935d91fc3c2bc265f5c83bd4196d06ba65333e",
       "duration_ms": 3425,
-      "start_ms": 429250,
+      "start_ms": 430780,
       "text": "About three quarters of the students raised their hands.",
       "generation_s": 0.49
     },
@@ -598,7 +615,7 @@
       "file": "blocks/c2-b049.wav",
       "sha256": "3b7b67042bc41c452104df74bd1b03a4e0a716075fc91e6b098f486ed0af4899",
       "duration_ms": 12850,
-      "start_ms": 433125,
+      "start_ms": 434655,
       "text": "\"And who here has heard of the word 'entropy', in the context of the second law of thermodynamics — that it always goes up, and one way that happens is that heat always flows from hot to cold, never the reverse?\"",
       "generation_s": 1.75
     },
@@ -609,7 +626,7 @@
       "file": "blocks/c2-b050.wav",
       "sha256": "112b169a34f08f7d1a7e32319a12b439dc83bf10a90e8e8f34e70d18615f9500",
       "duration_ms": 5800,
-      "start_ms": 446425,
+      "start_ms": 447955,
       "text": "Almost every student raised their hands. Entropy was a favorite topic of science fiction.",
       "generation_s": 0.92
     },
@@ -620,7 +637,7 @@
       "file": "blocks/c2-b051.wav",
       "sha256": "81737b64ea8824920b97343d04a74cdd2bd7dceedcaf188e9bdb9b600c9702ce",
       "duration_ms": 3975,
-      "start_ms": 452675,
+      "start_ms": 454205,
       "text": "\"Now who here thinks they can explain the connection between the two?\"",
       "generation_s": 0.54
     },
@@ -631,7 +648,7 @@
       "file": "blocks/c2-b052.wav",
       "sha256": "2736801d72f6d5c58a0898b5f7663af415f05321454d5c3d82768b134fa3785b",
       "duration_ms": 2075,
-      "start_ms": 457100,
+      "start_ms": 458630,
       "text": "No one raised their hand.",
       "generation_s": 0.28
     },
@@ -642,7 +659,7 @@
       "file": "blocks/c2-b053.wav",
       "sha256": "2680879c560220caeb05eb7c47313a0a3773f325783079c13e6c8e64015b9917",
       "duration_ms": 1975,
-      "start_ms": 459625,
+      "start_ms": 461155,
       "text": "\"Alright. Let's begin.\"",
       "generation_s": 0.27
     },
@@ -653,7 +670,7 @@
       "file": "blocks/c2-b054.wav",
       "sha256": "9bb81d647c5e32aacdd0ec2c4c3df81d214e07800cb854dff70329da0ca1e835",
       "duration_ms": 5000,
-      "start_ms": 462050,
+      "start_ms": 463580,
       "text": "The instructor pressed a button on his watch, and a slide showed up on the front wall:",
       "generation_s": 0.61
     },
@@ -664,10 +681,11 @@
       "file": "blocks/c2-b055.wav",
       "sha256": "2dd8e211cfec00d0b704c856f6214b293f4467039d5f64234598bf31e2b5cd94",
       "duration_ms": 22300,
-      "start_ms": 467500,
+      "start_ms": 469030,
       "text": "The slide shows two jars of gas, each holding a few molecules drawn as dots, with arrows for their velocities: long arrows in the left jar, short ones in the right. Under each jar is a dot, times ten to the sixth. The left jar's range is zero to nine hundred ninety-nine thousand, nine hundred ninety-nine; the right jar's is zero to ninety-nine.",
       "generation_s": 3.04,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 56,
@@ -676,7 +694,7 @@
       "file": "blocks/c2-b056.wav",
       "sha256": "ddf26edb7f61b1d2e1050392db93e83ffd8d050fffbfb3d35d1aca9272c30f4d",
       "duration_ms": 25750,
-      "start_ms": 490400,
+      "start_ms": 492440,
       "text": "\"Imagine that we have two jars of gas. Each jar has a million molecules. But in the jar on the left, the molecules are moving much faster. Suppose, in the jar on the left, you can represent the velocities with six-digit numbers, from zero to 999,999. And in the jar on the right, the molecules are moving slowly, so you can represent the velocities with six-digit numbers, from zero to 99.\"",
       "generation_s": 4.03
     },
@@ -687,7 +705,7 @@
       "file": "blocks/c2-b057.wav",
       "sha256": "d7f2dca8a3733d29136b885c347082cd6edc453bef01337960c103ebdfcd1f9e",
       "duration_ms": 13425,
-      "start_ms": 516600,
+      "start_ms": 518640,
       "text": "\"Can someone tell me, how many digits do you need to fully represent everything going on in the jar on the left? Assume that they already know it's gas and there's a million molecules, the only free variable is the velocities.\"",
       "generation_s": 2.17
     },
@@ -698,7 +716,7 @@
       "file": "blocks/c2-b058.wav",
       "sha256": "392474154c2a49bf72e15d2c288047436965fc3283e1b18d53dd781f1b302eb7",
       "duration_ms": 3650,
-      "start_ms": 530475,
+      "start_ms": 532515,
       "text": "\"Six million!\", about ten students shouted in unison.",
       "generation_s": 0.54
     },
@@ -709,7 +727,7 @@
       "file": "blocks/c2-b059.wav",
       "sha256": "6e09846ec922fd30b0e40e07c7ca8b7bf75c1f56796eeaa99e62fbb7bbfec238",
       "duration_ms": 2875,
-      "start_ms": 534575,
+      "start_ms": 536615,
       "text": "\"Good. Now, what about the jar on the right?\"",
       "generation_s": 0.36
     },
@@ -720,7 +738,7 @@
       "file": "blocks/c2-b060.wav",
       "sha256": "7022e818e566a6ea54083e5e0e85856e934b53aa94d4259f825c3ef3d1709088",
       "duration_ms": 1600,
-      "start_ms": 537900,
+      "start_ms": 539940,
       "text": "\"Two million!\"",
       "generation_s": 0.21
     },
@@ -731,7 +749,7 @@
       "file": "blocks/c2-b061.wav",
       "sha256": "8297e4b4ce948acd1d100cd72f6909fe09741bfd6a9a1031ed5c0aa80c6bd570",
       "duration_ms": 18400,
-      "start_ms": 539950,
+      "start_ms": 541990,
       "text": "\"So let's recap. From your point of view, as the observer, you know that these are both jars of gas, you know what kind of gas, and that there are a million molecules. But you don't know the velocities of each individual molecule. So for the jar on the left, the amount of information that you do not know is...?\"",
       "generation_s": 2.38
     },
@@ -742,7 +760,7 @@
       "file": "blocks/c2-b062.wav",
       "sha256": "1d2ebcb7e83d670ff02e256ed4a9a7a2faff258a033aefa9f0ccce48f7916fd5",
       "duration_ms": 1875,
-      "start_ms": 558800,
+      "start_ms": 560840,
       "text": "\"Six million digits!\"",
       "generation_s": 0.5
     },
@@ -753,7 +771,7 @@
       "file": "blocks/c2-b063.wav",
       "sha256": "ae1c1c04b7af9a9328f868bc1c8cadaca5dfe11635805778c76e90414e1c7dad",
       "duration_ms": 1550,
-      "start_ms": 561125,
+      "start_ms": 563165,
       "text": "\"And for the right?\"",
       "generation_s": 0.23
     },
@@ -764,7 +782,7 @@
       "file": "blocks/c2-b064.wav",
       "sha256": "8416fa2204bc4e0b7d02f9dee1c2cbff65d5bacaa1442bf7ee740151be7a3956",
       "duration_ms": 1825,
-      "start_ms": 563125,
+      "start_ms": 565165,
       "text": "\"Two million digits!\"",
       "generation_s": 0.24
     },
@@ -775,7 +793,7 @@
       "file": "blocks/c2-b065.wav",
       "sha256": "7b5b271477d4218663663a1a5d33e5c0dc4c76e16be645a5da14fb386a1e2684",
       "duration_ms": 11550,
-      "start_ms": 565400,
+      "start_ms": 567440,
       "text": "\"So eight million digits in total, information that you do not know. Now, what happens if we put the two jars together and let the gas mix? What will we know about the velocities there?\"",
       "generation_s": 1.46
     },
@@ -786,7 +804,7 @@
       "file": "blocks/c2-b066.wav",
       "sha256": "e6d9ab9015debb9a4145d40c395e3b7b3a589fd297b15fccfc3910295a1b87fa",
       "duration_ms": 1950,
-      "start_ms": 577400,
+      "start_ms": 579440,
       "text": "[Zei](/ˈzA/) raised his hand.",
       "generation_s": 0.25
     },
@@ -797,7 +815,7 @@
       "file": "blocks/c2-b067.wav",
       "sha256": "c7a74a429248a1e80e1cb9122a27cb8dc521e8bd18a51823bb23ceef67df19ae",
       "duration_ms": 1725,
-      "start_ms": 579800,
+      "start_ms": 581840,
       "text": "\"Yes, you there?\"",
       "generation_s": 0.23
     },
@@ -808,7 +826,7 @@
       "file": "blocks/c2-b068.wav",
       "sha256": "ac2ce3dc6013ef2c316839c4a78bfcd9f07d235cb3105adf816cb243a519d37c",
       "duration_ms": 11950,
-      "start_ms": 581975,
+      "start_ms": 584015,
       "text": "\"The molecules will bounce off each other randomly. When they settle down, because of conservation of energy, the velocities end up somewhere in the middle, between zero and five hundred thousand.\"",
       "generation_s": 1.49
     },
@@ -819,7 +837,7 @@
       "file": "blocks/c2-b069.wav",
       "sha256": "00a8039972065a7b0a7d1f68cc902ee95df760bcf169b1c738fb4481d6121aec",
       "duration_ms": 17000,
-      "start_ms": 594375,
+      "start_ms": 596415,
       "text": "\"Yes, excellent! Now technically, energy is proportional to velocity squared, and we can argue about how these velocities are represented, and by the way we're also completely ignoring positions, but let's just keep it simple and say zero to five hundred thousand.\"",
       "generation_s": 2.46
     },
@@ -830,7 +848,7 @@
       "file": "blocks/c2-b070.wav",
       "sha256": "d7ab2365ec68e46f09f66c869547d95875ea5766b7d3697a73950d9c3d1fd8ab",
       "duration_ms": 3600,
-      "start_ms": 611825,
+      "start_ms": 613865,
       "text": "The instructor tapped his watch again. Next slide.",
       "generation_s": 0.52
     },
@@ -841,10 +859,11 @@
       "file": "blocks/c2-b071.wav",
       "sha256": "ca06d140b178e7c752625d3f23af310c332bd63988b38da16e177625290efd2f",
       "duration_ms": 14575,
-      "start_ms": 615875,
+      "start_ms": 617915,
       "text": "The two jars are now joined into one, and every molecule has a medium-length arrow. The label reads: a dot, times two times ten to the sixth, ranging from zero to four hundred ninety-nine thousand, nine hundred ninety-nine.",
       "generation_s": 1.96,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 72,
@@ -853,7 +872,7 @@
       "file": "blocks/c2-b072.wav",
       "sha256": "81b6af80e8e2d1120202d636aaa544b75565c015b42de321625ee7af3c7e58a1",
       "duration_ms": 6100,
-      "start_ms": 631050,
+      "start_ms": 633600,
       "text": "\"Now, how many digits do we need to represent the information we don't know about this new system?\"",
       "generation_s": 0.81
     },
@@ -864,7 +883,7 @@
       "file": "blocks/c2-b073.wav",
       "sha256": "e68ac832adecb181617eaee936f6271cf17b6dc8213f0c3c1aeffe2dc2f5d5aa",
       "duration_ms": 2400,
-      "start_ms": 637600,
+      "start_ms": 640150,
       "text": "Another student raised his hand.",
       "generation_s": 0.34
     },
@@ -875,7 +894,7 @@
       "file": "blocks/c2-b074.wav",
       "sha256": "5598e1b77f2ec08045c61c4c61d0fbde10697452dce7ed6856719831b88f6109",
       "duration_ms": 1550,
-      "start_ms": 640450,
+      "start_ms": 643000,
       "text": "\"Go ahead.\"",
       "generation_s": 0.23
     },
@@ -886,7 +905,7 @@
       "file": "blocks/c2-b075.wav",
       "sha256": "0b6721d6f2c8a83eea91d3434210be5ce52d996c64fee1851c6fe7cd57665fca",
       "duration_ms": 10400,
-      "start_ms": 642450,
+      "start_ms": 645000,
       "text": "\"From zero to five hundred thousand is more than five digits but not quite six digits, if we go by logarithm, it should be about five point seven for each molecule.\"",
       "generation_s": 1.44
     },
@@ -897,7 +916,7 @@
       "file": "blocks/c2-b076.wav",
       "sha256": "54e2d652a2c4cb47a78e8f522c0a8f13744147a6285302fcd29231c0b9f7e53d",
       "duration_ms": 1800,
-      "start_ms": 653300,
+      "start_ms": 655850,
       "text": "\"So what's the total?\"",
       "generation_s": 0.25
     },
@@ -908,7 +927,7 @@
       "file": "blocks/c2-b077.wav",
       "sha256": "bc08bcc42aaf5269f09d6116e7ea334e326550ce8af358dfa73f829819c32aee",
       "duration_ms": 2550,
-      "start_ms": 655550,
+      "start_ms": 658100,
       "text": "\"Eleven point four million digits.\"",
       "generation_s": 0.32
     },
@@ -919,7 +938,7 @@
       "file": "blocks/c2-b078.wav",
       "sha256": "232ff29369cdd6d0b95b92dac10d2cd6cd4ea688bb987933344d2f2ae23b37e3",
       "duration_ms": 13025,
-      "start_ms": 658550,
+      "start_ms": 661100,
       "text": "\"Very good! So the conclusion is: by mixing the two jars, we have lost knowledge. We know less about the gas than we did before. And we can quantify how much knowledge we lost: it's three point four million digits.\"",
       "generation_s": 1.63
     },
@@ -930,7 +949,7 @@
       "file": "blocks/c2-b079.wav",
       "sha256": "feeea414cc591c91fb09e17ec037b6851d398221d047814ca5c43489d76e545f",
       "duration_ms": 29775,
-      "start_ms": 672025,
+      "start_ms": 674575,
       "text": "\"This is what we mean, when we say that entropy goes up, when heat flows from hot to cold. For each tiny increment of heat, heating up a cold thing adds more unknown digits than cooling down a hot thing by that same increment takes away, and so the total unknown goes up. Every possible action that you can do to these bottles will, on average, make the total unknown either stay the same or go up — and if you're doing anything useful or making any mistakes, it will go up. This is the second law of thermodynamics.\"",
       "generation_s": 4.3
     },
@@ -941,7 +960,7 @@
       "file": "blocks/c2-b080.wav",
       "sha256": "fc8802f0ec54a6aaf2d6e0ff7afbd6fb1e4be6e5ac01fffe6816bc0d11625f45",
       "duration_ms": 2000,
-      "start_ms": 702250,
+      "start_ms": 704800,
       "text": "The instructor paused.",
       "generation_s": 0.26
     },
@@ -952,7 +971,7 @@
       "file": "blocks/c2-b081.wav",
       "sha256": "dac9d3df81022868f16ed2d9e8e9fc07aca39db6ecb721cf6a9578858fa8dd04",
       "duration_ms": 2050,
-      "start_ms": 704700,
+      "start_ms": 707250,
       "text": "\"Now, how do we prove this?\"",
       "generation_s": 0.26
     },
@@ -963,7 +982,7 @@
       "file": "blocks/c2-b082.wav",
       "sha256": "a8042c99677a63df65f9f4d9a0843e22e0ec8de2dfee2bc029d01c8fced85622",
       "duration_ms": 5225,
-      "start_ms": 707200,
+      "start_ms": 709750,
       "text": "None of the students answered, but many of them seemed to lean forward with curiosity.",
       "generation_s": 0.67
     },
@@ -974,7 +993,7 @@
       "file": "blocks/c2-b083.wav",
       "sha256": "836de7857ec82110d660315fa90aefaa3c012ca900639183e6f1e271bf629a46",
       "duration_ms": 14450,
-      "start_ms": 712875,
+      "start_ms": 715425,
       "text": "\"Let's prove by contradiction. Suppose we did have a magic procedure that could go in reverse: start with the merged jars with eleven point four million digits of unknown, and bring us to the separate jars with eight million digits of unknown.\"",
       "generation_s": 1.8
     },
@@ -985,7 +1004,7 @@
       "file": "blocks/c2-b084.wav",
       "sha256": "b212035f86369de9749a576e6fa0cccf870eda7d1e8b1d1496feade138f4448e",
       "duration_ms": 2625,
-      "start_ms": 727775,
+      "start_ms": 730325,
       "text": "[Zei](/ˈzA/) raised his hand once again.",
       "generation_s": 0.33
     },
@@ -996,7 +1015,7 @@
       "file": "blocks/c2-b085.wav",
       "sha256": "8557931924098841f38436a04e338b2a57fdedf6bc97e1369f9c78915ea9b539",
       "duration_ms": 1700,
-      "start_ms": 730850,
+      "start_ms": 733400,
       "text": "\"Can I try this?\"",
       "generation_s": 0.23
     },
@@ -1007,7 +1026,7 @@
       "file": "blocks/c2-b086.wav",
       "sha256": "5c5909c50142fa2186f4eb6299d9fde41f766d25c4ff2dd1aaf7ebf8ead94326",
       "duration_ms": 1550,
-      "start_ms": 733000,
+      "start_ms": 735550,
       "text": "\"Go ahead.\"",
       "generation_s": 0.21
     },
@@ -1018,7 +1037,7 @@
       "file": "blocks/c2-b087.wav",
       "sha256": "d9e91c5e98f8d478247b25571e61106456dbcf48bd8f07459ddb9f9b8451bdff",
       "duration_ms": 10575,
-      "start_ms": 735000,
+      "start_ms": 737550,
       "text": "\"I remember the laws of physics of our universe are fully time-reversible, right? So if you can do something in one direction, you can always run the same steps in reverse.\"",
       "generation_s": 1.32
     },
@@ -1029,7 +1048,7 @@
       "file": "blocks/c2-b088.wav",
       "sha256": "5d43097cdae7f69a6277f200412434e603c933043a73820985bdb0f5e2ecf520",
       "duration_ms": 11750,
-      "start_ms": 746025,
+      "start_ms": 748575,
       "text": "\"Exactly. Now why does that time reversibility, at that level of atom-by-atom physics, imply that temperature equalization is something you cannot reverse? Isn't that a paradox?\"",
       "generation_s": 1.95
     },
@@ -1040,7 +1059,7 @@
       "file": "blocks/c2-b089.wav",
       "sha256": "7359ca9bb5c8419aa4e058bd6c0917e25434e9680bf3955b8a71a1014a2cfd6d",
       "duration_ms": 7575,
-      "start_ms": 758225,
+      "start_ms": 760775,
       "text": "\"Well, if we could separate medium temperature into hot and cold, then we would be able to do unlimited data compression.\"",
       "generation_s": 1.02
     },
@@ -1051,7 +1070,7 @@
       "file": "blocks/c2-b090.wav",
       "sha256": "24a43cfb6aae4ae0dcd1b595d5111c0c9d0ba88db998bae896418d7d779accb5",
       "duration_ms": 21050,
-      "start_ms": 766250,
+      "start_ms": 768800,
       "text": "\"Like, imagine you had a file with eleven point four million digits of data. You would make a really perfect double-jar, and have a gun that shoots out the gas molecules with exactly the right velocities. Then, you would use your process to un-mix the gas, then split the jar, and measure the velocities at the end. You would get eight million digits out.\"",
       "generation_s": 2.85
     },
@@ -1062,7 +1081,7 @@
       "file": "blocks/c2-b091.wav",
       "sha256": "a295d62e73b2ed5198137442d292259cbfc578000c42aceb39f75ded188aaec5",
       "duration_ms": 44900,
-      "start_ms": 787750,
+      "start_ms": 790300,
       "text": "\"And because our universe's physics is time-reversible, you would be able to do the same thing in reverse: take those eight million digits, put them into the gun to shoot out gas molecules at the right velocities, apply the exact same un-mixing procedure backwards, measure it, and you would get out whatever your original eleven point four million digits were. The output of the time-reversed process has to equal the input of the original process. And so we get a fully general-purpose way to represent any eleven point four million digits inside of eight million digits. And if we could do that, we could do it again and again, and represent the whole planet in eight million digits, or even make it smaller and do it in eight digits. And that's impossible!\"",
       "generation_s": 6.74
     },
@@ -1073,7 +1092,7 @@
       "file": "blocks/c2-b092.wav",
       "sha256": "7ceb7f58d7e13963933c87205ad24c79f953c9bc8d8d041511f44afa5a84733b",
       "duration_ms": 15700,
-      "start_ms": 833100,
+      "start_ms": 835650,
       "text": "\"Exactly. Or in other words, you can't go from not knowing more things to not knowing fewer things in a universe with time-reversible physics. In a universe with time-irreversible physics, you could, because you can just destroy all the things you don't know.\"",
       "generation_s": 2.2
     },
@@ -1084,7 +1103,7 @@
       "file": "blocks/c2-b093.wav",
       "sha256": "170b38c68992b6e3e0bd44a0b2124177c2eda0ea9ab4107eef18d107a60dcbcc",
       "duration_ms": 21475,
-      "start_ms": 849250,
+      "start_ms": 851800,
       "text": "\"Just like the Arctic Emperor!\", [Zei](/ˈzA/) wanted to shout. But he kept quiet. It's bad form to openly explain a joke that is so obvious, that half the students probably already have on their minds. The instructor and the students briefly paused to appreciate the joke and smirk and enjoy a few moments of mental communion. The instructor then moved on.",
       "generation_s": 2.88
     },
@@ -1095,7 +1114,7 @@
       "file": "blocks/c2-b094.wav",
       "sha256": "a757392e5b0d1485ccba691d8e121290d2bce2b1e71991a2964f3bcffa20e0c6",
       "duration_ms": 25175,
-      "start_ms": 871175,
+      "start_ms": 873725,
       "text": "\"But in a universe with time-reversible physics, there's always things you don't know, and that lack of knowledge can only be shuffled around, and inevitably increased. The best we can do, is go from not knowing things we care about, to not knowing things we don't care about. Like going from not understanding thermodynamics, to not knowing the velocities of the molecules that are coming out of the projector showing these slides as waste heat.\"",
       "generation_s": 3.87
     },
@@ -1106,7 +1125,7 @@
       "file": "blocks/c2-b095.wav",
       "sha256": "66c79929c3a3f5a2ea87f9fb7c966f657914cf96d65aae61fc2f777aa3622945",
       "duration_ms": 3325,
-      "start_ms": 896800,
+      "start_ms": 899350,
       "text": "\"That was an amazing job, kid. What was your name?\"",
       "generation_s": 0.68
     },
@@ -1117,7 +1136,7 @@
       "file": "blocks/c2-b096.wav",
       "sha256": "f12dac4042c0be8c3fc65ac1027fc84cb883770cdfec7aeea4ece3beefd86e14",
       "duration_ms": 1375,
-      "start_ms": 900575,
+      "start_ms": 903125,
       "text": "\"[Zei](/ˈzA/).\"",
       "generation_s": 0.36
     },
@@ -1128,7 +1147,7 @@
       "file": "blocks/c2-b097.wav",
       "sha256": "592364b9205e50b7291a74a50738b90534a4e85797044bd132801427d6199e35",
       "duration_ms": 2100,
-      "start_ms": 902400,
+      "start_ms": 904950,
       "text": "\"Well, [Zei](/ˈzA/), you got it per-\"",
       "generation_s": 0.45
     },
@@ -1139,7 +1158,7 @@
       "file": "blocks/c2-b098.wav",
       "sha256": "466ed01fa9091923d4e6c93b3fa08c634bf46b4a78bebae7566b658f72c320b9",
       "duration_ms": 4175,
-      "start_ms": 904950,
+      "start_ms": 907500,
       "text": "A loud noise erupted from a nearby room. The whole room shook.",
       "generation_s": 0.76
     },
@@ -1150,7 +1169,7 @@
       "file": "blocks/c2-b099.wav",
       "sha256": "7ecfc7551efc3fa64e8895a66b3de93640fd6661972f8cf596cb64f6bbcb5b28",
       "duration_ms": 4875,
-      "start_ms": 909575,
+      "start_ms": 912125,
       "text": "A fraction of a tick later, part of the wall and the floor came crashing down.",
       "generation_s": 0.63
     },
@@ -1161,7 +1180,7 @@
       "file": "blocks/c2-b100.wav",
       "sha256": "76aa553f4a3d8729dc665e98641a28f93a405214a5325cc92ce3186ba2b68c6b",
       "duration_ms": 4050,
-      "start_ms": 914900,
+      "start_ms": 917450,
       "text": "The next thing [Zei](/ˈzA/) knew, a fragment of stone hit him in the arm.",
       "generation_s": 0.51
     },
@@ -1171,7 +1190,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 919400,
+      "start_ms": 921950,
       "duration_ms": 1800
     },
     {
@@ -1181,7 +1200,7 @@
       "file": "blocks/c2-b102.wav",
       "sha256": "e0c568dcdb6d29e73e7eb52b994a483312b5fc8c22e8432ddc5029a0a82d76ae",
       "duration_ms": 4350,
-      "start_ms": 921200,
+      "start_ms": 923750,
       "text": "[Zei](/ˈzA/) found himself on the ground, his knocked-over chair beside him.",
       "generation_s": 0.54
     },
@@ -1192,7 +1211,7 @@
       "file": "blocks/c2-b103.wav",
       "sha256": "5bdc992491250c9d5171e4a5fdcfa9a30164a4aa18f3ad236f6146c3cbda250f",
       "duration_ms": 8375,
-      "start_ms": 926000,
+      "start_ms": 928550,
       "text": "His mind flashed back to the man who had redirected them last minute to a different room, one floor above where they had been supposed to go.",
       "generation_s": 1.07
     },
@@ -1203,7 +1222,7 @@
       "file": "blocks/c2-b104.wav",
       "sha256": "1087a71b5646acb34c47f65f0a46ee86a81a5939b6b2a5c739d141d72c06c4ae",
       "duration_ms": 18000,
-      "start_ms": 934825,
+      "start_ms": 937375,
       "text": "He understood immediately. All of the extra precautions that DU had been taking — the cryptography, the sudden changes in location, the anti-transmission foil — they were not just a game. And the Arctic Empire was not just a unit in geography class. This stuff was real.",
       "generation_s": 2.45
     },
@@ -1214,7 +1233,7 @@
       "file": "blocks/c2-b105.wav",
       "sha256": "78237e3225bc22dcd5b0a28ce22bd61663b79efb21e1c2d46835e2fd8f0742d5",
       "duration_ms": 4075,
-      "start_ms": 953275,
+      "start_ms": 955825,
       "text": "\"Is everyone okay? Anyone injured?\", the instructor yelled.",
       "generation_s": 0.67
     },
@@ -1225,7 +1244,7 @@
       "file": "blocks/c2-b106.wav",
       "sha256": "c90b04ee6e3c0cdac0eb65d077b4e61322407de72d8da3989f4dfcd32a803209",
       "duration_ms": 9825,
-      "start_ms": 957800,
+      "start_ms": 960350,
       "text": "[Zei](/ˈzA/) thought for a moment, trying to figure out if his arm was injured enough to be worth complaining. He tried raising and lowering his arm. It did not respond.",
       "generation_s": 1.24
     },
@@ -1236,7 +1255,7 @@
       "file": "blocks/c2-b107.wav",
       "sha256": "9f56d34739ccbd0e43935f027fff50c187c4da571edbd08fce261054e139385d",
       "duration_ms": 11750,
-      "start_ms": 968075,
+      "start_ms": 970625,
       "text": "The next thing he felt was two arms grabbing on to him, and pulling him up off the ground and onto a chair. [Zei](/ˈzA/) turned his head. It was [Fin](/ˈfɪn/) — to [Zei](/ˈzA/)'s relief, completely uninjured.",
       "generation_s": 1.82
     },
@@ -1247,7 +1266,7 @@
       "file": "blocks/c2-b108.wav",
       "sha256": "a684e121dd95bdf7075d80f2d01386da44eee86ea08737cb0a87df53af6d587d",
       "duration_ms": 19925,
-      "start_ms": 980275,
+      "start_ms": 982825,
       "text": "Smoke filled the room. Every student's watch, among its many features including an air quality monitor, started beeping loudly. The students tapped their watches, and soon the beeping died down. Slowly, the students helped each other get back up, as the instructor walked around to check if there was anyone who seriously needed help.",
       "generation_s": 2.56
     },
@@ -1258,7 +1277,7 @@
       "file": "blocks/c2-b109.wav",
       "sha256": "2db8b78391fed4df7807f7cc6c5fcf690e9391cf8281d2216fafd94b80c0dc74",
       "duration_ms": 11525,
-      "start_ms": 1000650,
+      "start_ms": 1003200,
       "text": "The instructor got to [Zei](/ˈzA/), and [Zei](/ˈzA/) silently pointed to his left arm. The instructor took out his hand device, and scanned it. AI-generated output filled the bottom of the screen.",
       "generation_s": 1.43
     },
@@ -1269,7 +1288,7 @@
       "file": "blocks/c2-b110.wav",
       "sha256": "9c4128cfffcd0b23b14ef22000f8b2084853e5bb05a0d147ef3871000ac83486",
       "duration_ms": 2825,
-      "start_ms": 1012625,
+      "start_ms": 1015175,
       "text": "\"Are you in pain?\", the instructor asked.",
       "generation_s": 0.37
     },
@@ -1280,7 +1299,7 @@
       "file": "blocks/c2-b111.wav",
       "sha256": "d74c4ad7f3f64d0fe9786f3b2a79239da2127ce430476a8087f6bbb868b2f9f2",
       "duration_ms": 2175,
-      "start_ms": 1015900,
+      "start_ms": 1018450,
       "text": "\"Some, but I can handle it.\"",
       "generation_s": 0.29
     },
@@ -1291,7 +1310,7 @@
       "file": "blocks/c2-b112.wav",
       "sha256": "485e2dc2581282858f8db84dd0014e262a041208aa6a54c7ffed83c77af9306b",
       "duration_ms": 7150,
-      "start_ms": 1018525,
+      "start_ms": 1021075,
       "text": "\"It looks like a broken bone. Get it checked out at the hospital today. The sooner you go, the sooner you will get better.\"",
       "generation_s": 0.87
     },
@@ -1302,7 +1321,7 @@
       "file": "blocks/c2-b113.wav",
       "sha256": "a1af183dfc4c5ef3b8b6f089695489ba8a6ef8dba6b8af4f938285f2d7d803ab",
       "duration_ms": 5350,
-      "start_ms": 1026125,
+      "start_ms": 1028675,
       "text": "\"I'll take you\", [Fin](/ˈfɪn/) added. \"Gotta be sure you'll be good for your game at the end of the month.\"",
       "generation_s": 0.68
     },
@@ -1313,7 +1332,7 @@
       "file": "blocks/c2-b114.wav",
       "sha256": "0f86403201969da51d463bd42f65f392d1c4a5c96a80c552b0feb788cb877abc",
       "duration_ms": 14100,
-      "start_ms": 1031925,
+      "start_ms": 1034475,
       "text": "The instructor kept walking. The room was filled with smoke. The air quality alarms were still blaring, but [Fin](/ˈfɪn/) and [Zei](/ˈzA/) could make out the instructor asking different students \"are you okay?\" and a student responding \"I'm fine\".",
       "generation_s": 1.76
     },
@@ -1324,7 +1343,7 @@
       "file": "blocks/c2-b115.wav",
       "sha256": "8875e403ddde5fa6420aa6d848fa1ffbacf52f1ac409737f0f38f488011a8690",
       "duration_ms": 11425,
-      "start_ms": 1046475,
+      "start_ms": 1049025,
       "text": "The air filters activated to full power, and soon the smoke cleared. [Fin](/ˈfɪn/) and [Zei](/ˈzA/) looked at each other. For a few moments, the students and the instructor sat in an awkward silence.",
       "generation_s": 1.44
     },
@@ -1335,7 +1354,7 @@
       "file": "blocks/c2-b116.wav",
       "sha256": "9b286407087da1e35da8c601b1b079cc4a44e6f5bee8e8149d3f550ec420c6f4",
       "duration_ms": 8650,
-      "start_ms": 1058350,
+      "start_ms": 1060900,
       "text": "[Zei](/ˈzA/) pushed off the table with his uninjured arm, and stood up. \"I think we know much less about this wall than we knew two minutes ago\", he joked.",
       "generation_s": 1.16
     },
@@ -1346,7 +1365,7 @@
       "file": "blocks/c2-b117.wav",
       "sha256": "2dc9cf203cda53e7adb0bbf079b0c2ef9ff9387bacf79e1ddd754988e4342bce",
       "duration_ms": 5375,
-      "start_ms": 1067450,
+      "start_ms": 1070000,
       "text": "A few students smiled or gently laughed. He had judged the audience's mood well.",
       "generation_s": 0.76
     },
@@ -1357,7 +1376,7 @@
       "file": "blocks/c2-b118.wav",
       "sha256": "96ba299a427260a83a0abc0d52d4ae304c9fbee0b90e59ca373595a9de866560",
       "duration_ms": 2325,
-      "start_ms": 1073275,
+      "start_ms": 1075825,
       "text": "\"No one else hurt, are you all sure?\"",
       "generation_s": 0.33
     },
@@ -1368,7 +1387,7 @@
       "file": "blocks/c2-b119.wav",
       "sha256": "15d6ccba394aaba30efc6d16828062bb0893d4d7df24169de1a73ca01b78e354",
       "duration_ms": 2900,
-      "start_ms": 1076050,
+      "start_ms": 1078600,
       "text": "\"I'm fine\", about ten people replied.",
       "generation_s": 0.38
     },
@@ -1379,7 +1398,7 @@
       "file": "blocks/c2-b120.wav",
       "sha256": "95a623ed2e0d6a29afe9a99765ee1595a673d76b7b993215a4101c98e19e7961",
       "duration_ms": 4300,
-      "start_ms": 1079400,
+      "start_ms": 1081950,
       "text": "\"Alright, I think we've had enough entropy for one day. Let's go home.\"",
       "generation_s": 0.55
     },
@@ -1389,7 +1408,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 1084150,
+      "start_ms": 1086700,
       "duration_ms": 1800
     },
     {
@@ -1399,7 +1418,7 @@
       "file": "blocks/c2-b122.wav",
       "sha256": "ef1f313a6e8d3fe992bd2c94475d1b1dbc80caab5194e4fc5585ee49d4cde5fa",
       "duration_ms": 12725,
-      "start_ms": 1085950,
+      "start_ms": 1088500,
       "text": "[Fin](/ˈfɪn/) and [Zei](/ˈzA/) stayed in the classroom longer than the others. [Zei](/ˈzA/) sat back down on his chair. [Fin](/ˈfɪn/) grabbed a broom, and pushed all the debris to one side. Soon, only they and the instructor were left.",
       "generation_s": 1.71
     },
@@ -1410,7 +1429,7 @@
       "file": "blocks/c2-b123.wav",
       "sha256": "aef4821872678b3e595299f3ca4aedf8bed8453ef4ff14fb5b879381fe94b9cd",
       "duration_ms": 5475,
-      "start_ms": 1099125,
+      "start_ms": 1101675,
       "text": "\"Wow, the Arctics are getting aggressive. They didn't use to go after physics education.\"",
       "generation_s": 0.77
     },
@@ -1421,7 +1440,7 @@
       "file": "blocks/c2-b124.wav",
       "sha256": "d3cd505fa7aa607cacaee1f18ee4b36ecb31f4fb114ba27c541eee3e1fb46151",
       "duration_ms": 4800,
-      "start_ms": 1105050,
+      "start_ms": 1107600,
       "text": "\"Whoever moved our room last-minute was a genius. Just saved our lives there.\"",
       "generation_s": 0.63
     },
@@ -1432,7 +1451,7 @@
       "file": "blocks/c2-b125.wav",
       "sha256": "9cab1103c0350cc2dbce66ce48969ad280f28e012cdb17128bee0347c2f56a06",
       "duration_ms": 3925,
-      "start_ms": 1110300,
+      "start_ms": 1112850,
       "text": "\"Unfortunately I expect it will only get worse from here.\"",
       "generation_s": 0.5
     },
@@ -1443,7 +1462,7 @@
       "file": "blocks/c2-b126.wav",
       "sha256": "82e8a084f268a6777445d05ef4ba69e4a3593c1f6688134e9fc2365ec8272b02",
       "duration_ms": 3225,
-      "start_ms": 1114675,
+      "start_ms": 1117225,
       "text": "[Fin](/ˈfɪn/) and [Zei](/ˈzA/) looked at the instructor in shock.",
       "generation_s": 0.41
     },
@@ -1454,7 +1473,7 @@
       "file": "blocks/c2-b127.wav",
       "sha256": "2881095b93889b760c2f01e04647151513a8c0b01e4fdbbf6b5270d55e8bdd3f",
       "duration_ms": 11175,
-      "start_ms": 1118350,
+      "start_ms": 1120900,
       "text": "\"Remember, their game is to permanently keep down our level of heavy industry and technology. Let us live, but only at the level of civilization where we can never be a threat.\"",
       "generation_s": 1.45
     },
@@ -1465,7 +1484,7 @@
       "file": "blocks/c2-b128.wav",
       "sha256": "d7c7703ef0853bb7bb6433ac5107cd5fe8c95e898b72a6ef944f57696f85d32b",
       "duration_ms": 30525,
-      "start_ms": 1129975,
+      "start_ms": 1132525,
       "text": "\"And our counter-game is '[gie](/ˈɡjɛ/) [fe](/ˈfɛ/) [kiu](/ˈkju/) [kai](/ˈkI/) [ci](/ˈtsi/) [bin](/ˈbɪn/) [hu](/ˈhu/)': grow roots, no head. Use distributed manufacturing to build all our tools. Let the official government keep going, slow and corrupt just like it was when we lost the war a hundred years ago, but use cryptography to coordinate the decisions that matter anonymously, without needing any exposed individual leaders at the helm. All of DU already runs this way. Soon big parts of our power generation, agriculture and medicine will.\"",
       "generation_s": 4.66
     },
@@ -1476,7 +1495,7 @@
       "file": "blocks/c2-b129.wav",
       "sha256": "8f9f2793332fa9a023c5b4bc46dbf0a777ec81838135ecc0e047cc38f99aa8d5",
       "duration_ms": 13400,
-      "start_ms": 1160950,
+      "start_ms": 1163500,
       "text": "\"It's been effective. After the last few years, we're finally almost at the level where we can stand up for ourselves without needing any centralized heavy industry at all. The problem is, it looks like they're catching on.\"",
       "generation_s": 2.01
     },
@@ -1487,7 +1506,7 @@
       "file": "blocks/c2-b130.wav",
       "sha256": "3d48771d599f8366300fe63a7a5cf3ecb7fe3fd43edc7f06ecd2060ed88d46a4",
       "duration_ms": 5475,
-      "start_ms": 1174800,
+      "start_ms": 1177350,
       "text": "\"[Dze](/ˈdzɛ/) [go](/ˈɡO/) [ba](/ˈbɑ/) [fau](/ˈfW/) [gie](/ˈɡjɛ/)\", [Fin](/ˈfɪn/) and [Zei](/ˈzA/) said in unison, calmly but defiantly.",
       "generation_s": 0.75
     },
@@ -1498,9 +1517,22 @@
       "file": "blocks/c2-b131.wav",
       "sha256": "995c749a75d6fb6916222326d2a7a45ea8d7b504c33a54862a30f4b04f78fc55",
       "duration_ms": 2100,
-      "start_ms": 1180725,
+      "start_ms": 1183275,
       "text": "\"[Dzego](/ˈdzɛɡO/) will rise again.\"",
       "generation_s": 0.28
     }
-  ]
+  ],
+  "restitched_at": "2026-10-05T18:46:31+00:00",
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent and its helper agents",
+    "drafted": [
+      "spoken descriptions of screens, figures and lyric cards (blocks 6, 24, 39, 55, 71)",
+      "pronunciation entries (content/snowmoon/pronunciation.json)"
+    ],
+    "instructions": [
+      "docs/prompts/008a-agent-prompts.md#read-aloud-descriptions-and-invented-word-lists"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
 }

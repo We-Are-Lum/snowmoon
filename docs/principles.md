@@ -11,7 +11,8 @@ app, and how it is checked. Automated checks run with
 proven to fail on a planted violation each time it runs. Review questions are
 for a person to answer when the matching code or content changes.
 
-Status is as of Oct 5, 2026 (commit after `570d699`).
+Status is as of Oct 5, 2026, after the owner's rulings on the first audit
+(the seven decisions and the rulings that followed).
 
 ---
 
@@ -37,11 +38,18 @@ coding agent and its helpers are in `docs/prompts/`.
 - Review: does any new output path publish a file without writing its recipe
   first?
 
-**Status.** Pass. One gap to note under 3: the recipes record the generation
-model, but not that a closed model drafted some of the text and prompts that
-went into it (`recipes.assist` is unused).
+**Status.** Pass. Every committed recipe now records `assist`: which inputs a
+model drafted (see 3). Open gap: the 4,237 narration recipes already in
+`studio.recipes` have no `assist`, and that table is append-only; the scripts
+write it for new rows.
 
-## 2. AI use is declared on every element. The book's text is never altered, and nothing generated is presented as the author's.
+## 2. AI use is declared on every element. The book's text is never altered, and nothing generated is presented as the author's. The words of a piece are the author's or a signed-in person's.
+
+> The words of a piece (narration, dialogue, and any description spoken or
+> shown as part of it) are the author's or a signed-in person's.
+> Model-drafted working notes and accessibility text may be shown only when
+> labelled as model-drafted, and never inside the piece itself.
+> *(Owner's wording, Oct 5, 2026.)*
 
 **Source.** The book's own "AI usage declaration": "All words were written
 directly by me", with AI assistance listed separately.
@@ -52,6 +60,23 @@ there, not only on an About page. The book's text is shown exactly as fetched.
 Generated material never sits where a reader could take it for the author's
 words.
 
+Models build structure and images; people write every published word. In an
+adaptation script (`docs/adaptation-format.md`), a model may draft the
+structure (who, wants, cost, context, image descriptions) and collect verbatim
+candidate lines from the book; narration and dialogue stay empty until a
+person writes them, and each line records its author: `book c<ch>-b<idx>` or
+`by FID <n> on <date>`. An adaptation page shows the piece first (book lines,
+people's lines, images) and puts the structure under a collapsed "How this was
+built", labelled model-drafted. Image alt text is model-drafted accessibility
+text and begins "AI-generated image:".
+
+**Recorded exception.** The house narration keeps 148 model-drafted spoken
+descriptions of screens, figures and lyric cards. Each is preceded by a tone
+and shown with the label "Model-drafted description, not the author's words".
+They are listed in `content/snowmoon/read-aloud/exceptions.json`. The list
+may only shrink: an entry is removed when a person rewrites that description
+in 25 words or fewer and records `written_by { fid, date }`.
+
 **Checked by.**
 - `P2a`: every text block's sha256 is the hash of its content (the committed
   text is unaltered). `npm run check:ingest` additionally re-parses the fetched
@@ -59,14 +84,18 @@ words.
 - `P2b`: on chapter pages, every seeded image's caption says "AI-generated";
   the player says the narration is synthetic; quote cards with an image label
   it as AI-generated.
+- `P2c`: every narration and dialogue line in an adaptation script carries a
+  human author tag. `npm run check:adaptations` also checks every book line
+  verbatim against its block and narration at 25 words or fewer per beat.
+- `P2d`: every spoken description is either written by a person (with FID and
+  date, 25 words or fewer) or on the exception list, and the list has not
+  grown past 148.
 - Review: is anything generated (a caption, a summary, a spoken description of
   a screen) placed where it could be taken for the book's words?
 
-**Status. Fails `P2b`.** Image captions say "seeded image, a starting point"
-without saying AI-generated, and image quote cards do not label the image at
-all. Concern for review: the narration speaks the AI-drafted descriptions of
-screens and figures (`content/snowmoon/read-aloud/`) in the same voice as the
-book's text, with nothing marking them as not the author's.
+**Status.** Pass, with the recorded exception above. Image captions say
+"AI-generated image, a starting point"; image quote cards credit "IMAGE:
+AI-GENERATED"; the player shows "AI-generated image" on its image.
 
 ## 3. The model allowlist records each model's license and whether its weights are open. Open-weight models are preferred. Report any closed model in use.
 
@@ -95,8 +124,12 @@ used anywhere in the pipeline is reported here if its weights are closed.
 - Review: was any closed model used to make or shape published content, and is
   that reported below?
 
-**Status. Fails `P3a`.** Neither entry records `open_weights` (both are in
-fact open: Kokoro-82M and FLUX.2 [klein] 4B publish their weights).
+- `P3c`: every committed recipe file has an `assist` field: the drafting
+  model and what it drafted, or null.
+
+**Status.** Pass. Both generation models record `open_weights: true`, their
+license and their weights. The closed drafting model is listed under
+`drafting` in `config/models.json`.
 
 **Closed models in use, reported.** The coding agent that built this repo and
 its helper agents run on a closed model (Claude, by Anthropic). Besides code,
@@ -117,19 +150,25 @@ publishes anything a model made. Server routes that write require a verified
 Quick Auth FID. Anything published outside the app records whose action
 published it.
 
+**Allowed, recorded path: the maintainer via script.** Seeded images and
+narration may be published by the maintainer (FID 6786) running a publish
+script. The published index then records `published_by` with the FID, role
+`maintainer`, the action, the script, the date, and an evidence file in the
+repo (the prompt log of the request that asked for it).
+
 **Checked by.**
 - `P4a`: every API route that writes (POST, PUT, PATCH, DELETE) calls `getFid`
   and refuses without it (401). `npm run check:shipped` also confirms on the
   live site that save and like refuse anonymous requests.
 - `P4b`: the published image index and every narration index record
-  `published_by` with an FID and the action.
+  `published_by` with an FID and the action; for the maintainer path, also
+  the script, the date, and an evidence file that exists.
 - Review: does any script or job publish model output without a recorded human
   action?
 
-**Status. Fails `P4b`.** The seeded images and the narration were published by
-scripts run on the owner's instruction in a coding session, not by an in-app
-action, and the indexes do not record who published them. Saved cards pass:
-they need a signed-in FID.
+**Status.** Pass. The image and narration indexes record the maintainer path,
+dated Oct 5, 2026, with `docs/prompts/008-narration-and-images.md` as
+evidence. Saved cards need a signed-in FID.
 
 ## 5. Nothing is marked canon, official, or featured. Moderators can hide and nothing else.
 
@@ -153,7 +192,7 @@ project's own rule from the same idea.
 
 **Status.** Pass. (No moderation feature exists yet.)
 
-## 6. Production pages make no third-party requests. Individual ratings are not publicly readable. Only totals are.
+## 6. Production pages make no third-party requests. Individual ratings and likes are not publicly readable. Only totals are.
 
 **Source.** "Why I support privacy": "Privacy is an important guarantor of
 decentralization: whoever has the information has the power"
@@ -165,24 +204,26 @@ drone was not a threat - and nothing else"
 
 **In this app.** Pages load only from this site and its media subdomain
 (`*.snowmoon.party`): fonts are self-hosted, there is no analytics, no third
-party script. Who rated what is private; the public sees totals only.
+party script. Who rated or liked what is private; the public sees totals
+only, through `studio.rating_totals`, `studio.like_totals` and
+`studio.take_like_totals` (migration 0004).
 
 **Checked by.**
 - `P6a`: a real browser loads eight production pages (including a chapter,
   the cards gallery, an adaptation and a share page) and fails on any request
   outside the site's own domain.
-- `P6b`: with the migrations applied to an in-memory database, the public
-  roles cannot read individual rows of `ratings`, `picks` or
-  `contributor_consents`.
+- `P6b`: in the committed migrations, no public read policy remains on
+  `ratings`, `likes`, `take_likes`, `picks` or `contributor_consents`
+  (`npm run test:db` proves it on an in-memory database, totals views
+  included).
+- `P6c`: on the live database, through the public API with the public key,
+  the individual tables refuse to answer and the totals views answer.
 - Review: does a new page, embed or script reach another domain? Does a new
   table expose who did what?
 
-**Status. Fails `P6b`.** Migration 0001 gives `studio.ratings` a public read
-policy (`using (true)`), so anyone can read each person's rating. Totals
-alone would need a view or function. Tension, not a failure of the statement
-as written: `studio.likes` (0003) is also publicly readable row by row, so who
-liked what is public. Likes are not ratings under rule 4, but the privacy
-reasoning arguably applies to them too.
+**Status. Fails `P6c` until 0004 is applied.** Migration 0004 is written and
+tested but not yet applied; until it is, the live database still lets anyone
+read individual ratings and likes.
 
 ## 7. Payments never enter scoring or ordering. No token. The "not affiliated" line stays on the first screen.
 
@@ -239,11 +280,8 @@ quoted as written. Minpentai boards and maps come from the source's own SVGs.
 
 | Check | Principle | What fails |
 |---|---|---|
-| `P2b` | 2 | Image captions and image quote cards do not say "AI-generated" |
-| `P3a` | 3 | `config/models.json` does not record `open_weights` |
-| `P4b` | 4 | Seeded images and narration do not record whose action published them |
-| `P6b` | 6 | Individual ratings are publicly readable (0001 policy) |
+| `P6c` | 6 | Individual ratings and likes are publicly readable on the live database until 0004 is applied |
 
-Concerns from review: AI-drafted screen descriptions spoken in the narration
-unmarked (2); closed-model drafting not recorded in recipes (1, 3); likes
-readable row by row (6).
+Recorded exception: 148 model-drafted spoken descriptions (2), labelled, list
+may only shrink. Open gap: `assist` on narration recipes already in the
+database (1, 3).

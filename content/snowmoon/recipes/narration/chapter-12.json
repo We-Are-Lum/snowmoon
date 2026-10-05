@@ -4,7 +4,7 @@
   "source_sha256": "c4b9566694b702a38d7c345d63cb0109086dfde52f5f0d64b6502670c55f082e",
   "generated_at": "2026-10-03T17:23:16+00:00",
   "generation_seconds": 214.5,
-  "total_duration_ms": 1581175,
+  "total_duration_ms": 1584235,
   "model": {
     "name": "Kokoro-82M",
     "repo": "hexgrad/Kokoro-82M",
@@ -36,7 +36,21 @@
     },
     "break_ms": 1800,
     "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
-    "read_aloud_sha256": "bdaecc3f77e228329acc0d49f48ee32859eb5999c5a36f9d300fd3e6e5953451"
+    "read_aloud_sha256": "bdaecc3f77e228329acc0d49f48ee32859eb5999c5a36f9d300fd3e6e5953451",
+    "description_tone": {
+      "notes_hz": [
+        660,
+        990
+      ],
+      "notes_ms": [
+        110,
+        140
+      ],
+      "between_ms": 40,
+      "after_ms": 220,
+      "amplitude": 0.12,
+      "made_by": "code (numpy sine, linear fades)"
+    }
   },
   "host": {
     "platform": "macOS-26.5.1-arm64-arm-64bit",
@@ -45,10 +59,10 @@
   },
   "stitched": {
     "wav": "chapter-12.wav",
-    "wav_sha256": "d2a54efce913662723760202c0c1c8ba1b7a322ffedaf0efe1fe24e0dedabdfe",
+    "wav_sha256": "bf12c4a32e92c9922cc3da11860c8a1ee495743dc6719dd1ed89b8fd8e916a19",
     "m4a": "chapter-12.m4a",
-    "m4a_sha256": "5deab9d3b1fa43f45c6c6e08f7ac5a64e25cb123541af2b201d80f7b7cf75fd4",
-    "note": "start_ms is the block's offset in the stitched file, gaps included"
+    "m4a_sha256": "2a1cb297fc1ce787019784aeb408347e7849978740b91ee9974ac7d2ac72a57c",
+    "note": "start_ms is the block's offset in the stitched file, gaps included; a description starts with its tone (tone_ms)"
   },
   "blocks": [
     {
@@ -116,7 +130,8 @@
       "start_ms": 26575,
       "text": "The sign reads: [sa](/ˈsɑ/) [dzu](/ˈdzu/) [du](/ˈdu/).",
       "generation_s": 0.33,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 6,
@@ -125,7 +140,7 @@
       "file": "blocks/c12-b006.wav",
       "sha256": "7a59a6a2c3a9a2d28f6a832449cf8c86c3bdcf356313da0230dd9c569178eb69",
       "duration_ms": 3800,
-      "start_ms": 29875,
+      "start_ms": 30385,
       "text": "\"Main city\", [Dzego](/ˈdzɛɡO/)'s helpfully-named capital city.",
       "generation_s": 0.45
     },
@@ -136,7 +151,7 @@
       "file": "blocks/c12-b007.wav",
       "sha256": "cba1d205cf924d90db735f1bbc3f212ef54881b92eb0ee4f9d35d55738937f68",
       "duration_ms": 7875,
-      "start_ms": 34125,
+      "start_ms": 34635,
       "text": "The train came to a stop, and [Zei](/ˈzA/) could hear the doors open. The other passengers stood up, and started to gather their belongings.",
       "generation_s": 0.91
     },
@@ -147,7 +162,7 @@
       "file": "blocks/c12-b008.wav",
       "sha256": "f02a47f674ce6c5a1d4c688482ce2b0d700612eddfd3080a1f6900e45afc104c",
       "duration_ms": 10850,
-      "start_ms": 42450,
+      "start_ms": 42960,
       "text": "[Zei](/ˈzA/) decided he was not in a rush to leave first, and would maximize the quality of his time instead. For about two minutes, he finished his game of [Minpentai](/ˈmɪnpɛntI/) against a bot.",
       "generation_s": 1.26
     },
@@ -158,7 +173,7 @@
       "file": "blocks/c12-b009.wav",
       "sha256": "ff8392d9e43cda2c014fbd09d724553cea999cb0a2288970a2ee13efb833904a",
       "duration_ms": 9950,
-      "start_ms": 53750,
+      "start_ms": 54260,
       "text": "[Fin](/ˈfɪn/) had never gotten around to writing the harness to fine-tune the AI to play well on custom rulesets, and so [Zei](/ˈzA/) was still playing against the stock AI.",
       "generation_s": 1.14
     },
@@ -169,7 +184,7 @@
       "file": "blocks/c12-b010.wav",
       "sha256": "c2bbcb25aa08a96491feb534145ba496b6356da5683a511cca6cf01669823b6a",
       "duration_ms": 27850,
-      "start_ms": 64150,
+      "start_ms": 64660,
       "text": "At that moment, the other AIs resigned. [Zei](/ˈzA/) had beaten them one-on-three. To compensate for their lack of skill, he had adjusted the game to only give him one corner and three other AIs the other three corners, and put them all on the same team against him. Even despite this, [Zei](/ˈzA/) had won. He realized that the three-on-one did not even help the AIs that much — playing in that style was not in their training data, so they made basic mistakes and cannibalized each other's negentropy.",
       "generation_s": 3.57
     },
@@ -180,7 +195,7 @@
       "file": "blocks/c12-b011.wav",
       "sha256": "0ba752b6aa85e62bd280c6ab6efdf13f09d24dc81f7e3d6358a01e38bbc269e7",
       "duration_ms": 2775,
-      "start_ms": 92450,
+      "start_ms": 92960,
       "text": "[Zei](/ˈzA/) put away his hand device and sighed.",
       "generation_s": 0.48
     },
@@ -191,7 +206,7 @@
       "file": "blocks/c12-b012.wav",
       "sha256": "5481ef1076083bd52efa34e85cf4ed885b243aa2bd683c37dfc28ce7ca540e1c",
       "duration_ms": 8775,
-      "start_ms": 95675,
+      "start_ms": 96185,
       "text": "By this point, the other passengers were almost all off the train. [Zei](/ˈzA/) grabbed his bag, and stood up and began to walk out of the train as well.",
       "generation_s": 1.08
     },
@@ -202,7 +217,7 @@
       "file": "blocks/c12-b013.wav",
       "sha256": "4d863f91ba1a4ec1b806219c189ca0c781dd6c73bee0ae9d6cecf5a454f3c1e3",
       "duration_ms": 5300,
-      "start_ms": 104900,
+      "start_ms": 105410,
       "text": "When he stepped out, there were six people wearing [Minpentai](/ˈmɪnpɛntI/) priest robes waiting for him.",
       "generation_s": 0.65
     },
@@ -213,7 +228,7 @@
       "file": "blocks/c12-b014.wav",
       "sha256": "9605c6f1f27b584b9c7806f59cf715d461c8a2b79caac2e91d0ac748cab8f236",
       "duration_ms": 6700,
-      "start_ms": 110650,
+      "start_ms": 111160,
       "text": "\"Welcome to [Sadzu](/ˈsɑdzu/) [Du](/ˈdu/), [Zei](/ˈzA/)\", the lead priest, an older woman about the same age as [Mu](/ˈmu/), said to him.",
       "generation_s": 0.8
     },
@@ -224,7 +239,7 @@
       "file": "blocks/c12-b015.wav",
       "sha256": "751efa768c9eec98fefa6e78e808814106591b149c86e637dee55d4dec48f44b",
       "duration_ms": 5525,
-      "start_ms": 117800,
+      "start_ms": 118310,
       "text": "\"Excited to be here\", [Zei](/ˈzA/) quickly replied. \"Only my second time to the capital.\"",
       "generation_s": 0.67
     },
@@ -235,7 +250,7 @@
       "file": "blocks/c12-b016.wav",
       "sha256": "481636deb08b8ca0b50efe8373fdee6a72fe1343c47cf67d1119635d3e182042",
       "duration_ms": 4225,
-      "start_ms": 123775,
+      "start_ms": 124285,
       "text": "\"I'm [Su](/ˈsu/) by the way. I'm one of the organizers of the nationals.\"",
       "generation_s": 0.51
     },
@@ -246,7 +261,7 @@
       "file": "blocks/c12-b017.wav",
       "sha256": "73d237a87b3a730853888de1756bfb16309848a308008b63b29f14f31a741cd0",
       "duration_ms": 2175,
-      "start_ms": 128450,
+      "start_ms": 128960,
       "text": "\"Well nice to meet you, [Su](/ˈsu/).\"",
       "generation_s": 0.27
     },
@@ -257,7 +272,7 @@
       "file": "blocks/c12-b018.wav",
       "sha256": "117ed8389412df0c9d151f4b768ed6e51811d867336085d3baf7f2019d47c53b",
       "duration_ms": 3275,
-      "start_ms": 131075,
+      "start_ms": 131585,
       "text": "\"So what's on my itinerary these next few days?\"",
       "generation_s": 0.4
     },
@@ -268,7 +283,7 @@
       "file": "blocks/c12-b019.wav",
       "sha256": "337c4ee340752cd7049a55aebcbcd9823ff6401bd5c3f05ce7e0199428c37a8c",
       "duration_ms": 10775,
-      "start_ms": 134800,
+      "start_ms": 135310,
       "text": "\"Check in to the hotel, then orientation tomorrow morning. Thirty-two contestants, the brightest young minds in [Minpentai](/ˈmɪnpɛntI/) across all of [Dzego](/ˈdzɛɡO/). You'll get to meet them all.\"",
       "generation_s": 1.31
     },
@@ -279,7 +294,7 @@
       "file": "blocks/c12-b020.wav",
       "sha256": "45d21294d1f498b4b694eacc833c4dee194ecf31ec1ec5db82eb34194be4f860",
       "duration_ms": 14700,
-      "start_ms": 146025,
+      "start_ms": 146535,
       "text": "[Su](/ˈsu/) led [Zei](/ˈzA/) to a room that contained many doors. One of the doors slid open, and on the other side [Zei](/ˈzA/) could see the inside of a black car, identical to the one that [Den](/ˈdɛn/) had used to take him to the chip fab a few months earlier.",
       "generation_s": 1.8
     },
@@ -290,7 +305,7 @@
       "file": "blocks/c12-b021.wav",
       "sha256": "1e3a105dcbf682b31d682f58403be1caa79fa39b8e93ff3442f885621875258c",
       "duration_ms": 9650,
-      "start_ms": 161175,
+      "start_ms": 161685,
       "text": "\"Unfortunately, I'll have to leave you here, [Zei](/ˈzA/). There's another contestant arriving here on a train in half a longhour. But have a good ride and have a good rest.\"",
       "generation_s": 1.17
     },
@@ -301,7 +316,7 @@
       "file": "blocks/c12-b022.wav",
       "sha256": "c0558d001e4a70115aa857f72f7c2032019f50e8dab839da5bd8603750cdc296",
       "duration_ms": 1775,
-      "start_ms": 171275,
+      "start_ms": 171785,
       "text": "\"Thank you so much.\"",
       "generation_s": 0.23
     },
@@ -312,7 +327,7 @@
       "file": "blocks/c12-b023.wav",
       "sha256": "532414c9f08d861b8c60c4cd0fb26d83b9bcd05b0999c290177f335b7628eb67",
       "duration_ms": 4400,
-      "start_ms": 173500,
+      "start_ms": 174010,
       "text": "[Zei](/ˈzA/) got into the car, and the door closed. The car started moving.",
       "generation_s": 0.52
     },
@@ -323,7 +338,7 @@
       "file": "blocks/c12-b024.wav",
       "sha256": "48e2be563edbe78804c5bbb55a66ac0a3266211d09b43e60f27a790b381ba450",
       "duration_ms": 16200,
-      "start_ms": 178350,
+      "start_ms": 178860,
       "text": "[Zei](/ˈzA/) stared outside the window of the car, marveling at the buildings and trees in the city. Parts of it looked not too different from [Pafogai](/ˈpɑfOɡI/) [Du](/ˈdu/), though here there were fewer electronics stores, and instead a wider variety of venues. Some medicine stores.",
       "generation_s": 1.92
     },
@@ -334,7 +349,7 @@
       "file": "blocks/c12-b025.wav",
       "sha256": "a4f9dbc26cc71e418e08d906941944cfd134c64080499fc70e80100db5f41727",
       "duration_ms": 3350,
-      "start_ms": 195000,
+      "start_ms": 195510,
       "text": "On the window of one of the stores, [Zei](/ˈzA/) saw a sign:",
       "generation_s": 0.41
     },
@@ -345,10 +360,11 @@
       "file": "blocks/c12-b026.wav",
       "sha256": "45d1ef2163e2bf2257543dd6528c9c78d7e3e6348628057ab077f829fb99c4cd",
       "duration_ms": 4100,
-      "start_ms": 198800,
+      "start_ms": 199310,
       "text": "The sign reads: [ti](/ˈti/) [ka](/ˈkɑ/) [dia](/ˈdjɑ/) [shu](/ˈʃu/) [fe](/ˈfɛ/) [cen](/ˈtsɛn/) [su](/ˈsu/) [jui](/ˈʤwi/) [hui](/ˈhwi/).",
       "generation_s": 0.49,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 27,
@@ -357,7 +373,7 @@
       "file": "blocks/c12-b027.wav",
       "sha256": "e1eddc109dcafd53ab51c8d947c789b347005b3acecf1a3c5efaf5eea10ec4cb",
       "duration_ms": 2325,
-      "start_ms": 203500,
+      "start_ms": 204520,
       "text": "\"Get your longevity package here\"",
       "generation_s": 0.29
     },
@@ -368,7 +384,7 @@
       "file": "blocks/c12-b028.wav",
       "sha256": "b463d6dcf502fe06e6f52d903da40c1b724dbb53426eef964eb03414915f2a2b",
       "duration_ms": 6350,
-      "start_ms": 206275,
+      "start_ms": 207295,
       "text": "Soon the health stores gave way to some stores selling artistic furniture and other household items.",
       "generation_s": 0.79
     },
@@ -379,7 +395,7 @@
       "file": "blocks/c12-b029.wav",
       "sha256": "06490dfd2cc5d0bc4e1a82aacd7ac57171e322754a6d2dbf74884848e3b7664e",
       "duration_ms": 7875,
-      "start_ms": 213075,
+      "start_ms": 214095,
       "text": "And after that a few traditional-looking restaurants and tea houses, in a style mimicking [Dzego](/ˈdzɛɡO/)'s own [medieval](/mˌɛdiˈivᵊl/) era.",
       "generation_s": 0.98
     },
@@ -390,7 +406,7 @@
       "file": "blocks/c12-b030.wav",
       "sha256": "cd5b31d3185235c8e8d96f100c530800c946a037ed9046f4724f894deb61ffe2",
       "duration_ms": 13575,
-      "start_ms": 221400,
+      "start_ms": 222420,
       "text": "For a moment, the buildings on the right side stopped completely, and [Zei](/ˈzA/) could see a park. Behind the park, [Zei](/ˈzA/) could see several mountain pyramids, each about half as tall as the mountain pyramid south of [Pafogai](/ˈpɑfOɡI/) [Du](/ˈdu/).",
       "generation_s": 2.01
     },
@@ -401,7 +417,7 @@
       "file": "blocks/c12-b031.wav",
       "sha256": "f92aa35142dce2f2c630979b55fbc84ebec40da8dfdec39273f0cbf9a26887a4",
       "duration_ms": 8500,
-      "start_ms": 235425,
+      "start_ms": 236445,
       "text": "A minute later, the park ended, and the car crossed a bridge across a small river. [Zei](/ˈzA/) could see the buildings get denser further ahead.",
       "generation_s": 1.05
     },
@@ -412,7 +428,7 @@
       "file": "blocks/c12-b032.wav",
       "sha256": "8db0adf40fe9c2ea2b62b3dfad13d25b7164083f4e986a66e77a74fd628018e2",
       "duration_ms": 4225,
-      "start_ms": 244375,
+      "start_ms": 245395,
       "text": "The road slowly descended underground, and turned into a tunnel.",
       "generation_s": 0.51
     },
@@ -423,7 +439,7 @@
       "file": "blocks/c12-b033.wav",
       "sha256": "0dea7150e7ca3c88bbeb5a11c244f74182f3ddc5734ef1f9ed225628694d355f",
       "duration_ms": 13350,
-      "start_ms": 249050,
+      "start_ms": 250070,
       "text": "A few minutes and a few turns later, the car stopped. When the car's door opened, it was pressed tightly against another door, completely shielding [Zei](/ˈzA/) from being visible from outside the car and the building he was entering.",
       "generation_s": 1.58
     },
@@ -434,7 +450,7 @@
       "file": "blocks/c12-b034.wav",
       "sha256": "2dcb43c35235cc98c4bf6a0461fede7ab0d5d8023aab3dfc4a14c2c2e21dd7c4",
       "duration_ms": 2650,
-      "start_ms": 262850,
+      "start_ms": 263870,
       "text": "[Zei](/ˈzA/) stepped out. He was in a hotel.",
       "generation_s": 0.32
     },
@@ -445,7 +461,7 @@
       "file": "blocks/c12-b035.wav",
       "sha256": "5874218278ea718714fb7c0ffa634a3fba2084861a3a63ee66f7f0801f5920f6",
       "duration_ms": 4725,
-      "start_ms": 265950,
+      "start_ms": 266970,
       "text": "He walked over to the nearest green circle, and tapped his watch against it.",
       "generation_s": 0.56
     },
@@ -456,10 +472,11 @@
       "file": "blocks/c12-b036.wav",
       "sha256": "fa81977b93cd08a475c5e780868854175c0c0a631912d31b914da7315263b74d",
       "duration_ms": 13700,
-      "start_ms": 271125,
+      "start_ms": 272145,
       "text": "His watch shows two boxes, each with a green check mark: [sen](/ˈsɛn/) [hen](/ˈhɛn/) [zi](/ˈzi/) [li](/ˈli/) [die](/ˈdjɛ/) [fe](/ˈfɛ/) one hundred fifty [zo](/ˈzO/) [lia](/ˈljɑ/) [kin](/ˈkɪn/), and [man](/ˈmɑn/) [dun](/ˈdun/) [li](/ˈli/) [jie](/ˈʤjɛ/) [hu](/ˈhu/). Below them: [cau](/ˈtsW/) [tie](/ˈtjɛ/) [zen](/ˈzɛn/) [ci](/ˈtsi/) [fan](/ˈfɑn/) [zi](/ˈzi/) [li](/ˈli/) three oh four.",
       "generation_s": 1.64,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 37,
@@ -468,7 +485,7 @@
       "file": "blocks/c12-b037.wav",
       "sha256": "cd7a737e88b8f62a54f17f26d9d5c45a6e4153406e7af0a161e8e6917875df98",
       "duration_ms": 7575,
-      "start_ms": 285425,
+      "start_ms": 286955,
       "text": "Reputation above 150 verified. Payment not needed. Approved, room number is 304.",
       "generation_s": 0.93
     },
@@ -479,7 +496,7 @@
       "file": "blocks/c12-b038.wav",
       "sha256": "923eaae15399a0220c4fb2b019fbf88655bcf1144cd03a0c2358272ea54c2236",
       "duration_ms": 3100,
-      "start_ms": 293450,
+      "start_ms": 294980,
       "text": "[Zei](/ˈzA/)'s watch buzzed, confirming his room key.",
       "generation_s": 0.4
     },
@@ -490,7 +507,7 @@
       "file": "blocks/c12-b039.wav",
       "sha256": "6a20186374719ebcb4e9afb59779c9dce6f58c382256b8305d5e7df2e4383a84",
       "duration_ms": 2750,
-      "start_ms": 297000,
+      "start_ms": 298530,
       "text": "[Zei](/ˈzA/) entered his room, and took a shower.",
       "generation_s": 0.36
     },
@@ -501,7 +518,7 @@
       "file": "blocks/c12-b040.wav",
       "sha256": "6db6bf141396f5812b5770e652508dcb1599b02fb618f5f326505feb6a467a05",
       "duration_ms": 2025,
-      "start_ms": 300200,
+      "start_ms": 301730,
       "text": "He promptly went to sleep.",
       "generation_s": 0.28
     },
@@ -511,7 +528,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 302675,
+      "start_ms": 304205,
       "duration_ms": 1800
     },
     {
@@ -521,7 +538,7 @@
       "file": "blocks/c12-b042.wav",
       "sha256": "19d16af9bd93883a53dd7a82d38f78e19553f15ed0535fc6f36ca4acfb7028e5",
       "duration_ms": 1725,
-      "start_ms": 304475,
+      "start_ms": 306005,
       "text": "An alarm buzzed.",
       "generation_s": 0.24
     },
@@ -532,7 +549,7 @@
       "file": "blocks/c12-b043.wav",
       "sha256": "70134ec029c7c1a5b1cd626b7a39a84e5ac13dc899c5a26ef1990c04f829c0a4",
       "duration_ms": 14375,
-      "start_ms": 306650,
+      "start_ms": 308180,
       "text": "[Zei](/ˈzA/) tapped on his watch to check what time it was. 30,003, the watch said. Only half a longhour before the commencement ceremony. He tapped a few buttons on the room service menu, and ordered a fruit and vegetable juice.",
       "generation_s": 1.92
     },
@@ -543,7 +560,7 @@
       "file": "blocks/c12-b044.wav",
       "sha256": "c19c0773c9902c5ca54b96953edd0c6c3b51e20714a1850cd18337b78159d364",
       "duration_ms": 1775,
-      "start_ms": 321475,
+      "start_ms": 323005,
       "text": "He put on his clothes.",
       "generation_s": 0.3
     },
@@ -554,7 +571,7 @@
       "file": "blocks/c12-b045.wav",
       "sha256": "93f0012babc8b21af04984ab323cef7ea2f95e7c5c6d858635078816bc5e913c",
       "duration_ms": 10200,
-      "start_ms": 323700,
+      "start_ms": 325230,
       "text": "Three minutes later, the juice arrived, and [Zei](/ˈzA/) quickly drank it. He immediately felt energized — or at least, energized enough to take the trip to the venue.",
       "generation_s": 1.59
     },
@@ -565,7 +582,7 @@
       "file": "blocks/c12-b046.wav",
       "sha256": "b110e0fddce75c45d392affc9a7fc14dbbd2bbc952d628d2ab6fb499c1669c1f",
       "duration_ms": 4625,
-      "start_ms": 334350,
+      "start_ms": 335880,
       "text": "Without wasting any more time, he opened the door, and went downstairs.",
       "generation_s": 0.73
     },
@@ -576,7 +593,7 @@
       "file": "blocks/c12-b047.wav",
       "sha256": "91d451c55fad812dcadee643e85c71cd84ed2e56abb5246385ffafa86e2c0f8d",
       "duration_ms": 12300,
-      "start_ms": 339425,
+      "start_ms": 340955,
       "text": "A black car was already waiting for him. [Zei](/ˈzA/) walked through the lobby, and immediately stepped through the hotel door and car door that were already open and pressed tightly against each other. The door closed.",
       "generation_s": 1.66
     },
@@ -587,7 +604,7 @@
       "file": "blocks/c12-b048.wav",
       "sha256": "e939ddb04dd63c5faa8d2addf8248720399094fc6512765aa59c0e35db3a135e",
       "duration_ms": 10350,
-      "start_ms": 352175,
+      "start_ms": 353705,
       "text": "As the car began to move, [Zei](/ˈzA/) took out the cryptography textbook that [Den](/ˈdɛn/) had recommended to him in one of their meetings, and continued reading it where he had left off.",
       "generation_s": 1.61
     },
@@ -598,7 +615,7 @@
       "file": "blocks/c12-b049.wav",
       "sha256": "88bc20c8bdbfd81a1625199c3fdad44b7b50702b0fda0e6a0785cafbbb421389",
       "duration_ms": 5500,
-      "start_ms": 362975,
+      "start_ms": 364505,
       "text": "The section was on hash functions. In the middle of the page, there was a large diagram.",
       "generation_s": 0.81
     },
@@ -609,10 +626,11 @@
       "file": "blocks/c12-b050.wav",
       "sha256": "52586e1386e30fbd8867eba64a652a3f65d15d0c8d557a862b93647ee3d43afb",
       "duration_ms": 26025,
-      "start_ms": 368925,
+      "start_ms": 370455,
       "text": "The diagram is titled [tun](/ˈtun/) [bia](/ˈbjɑ/) [zi](/ˈzi/) [sin](/ˈsɪn/) [de](/ˈdɛ/) [sia](/ˈsjɑ/). A row of twelve input dots at the top is wired, with crisscrossing lines, through three layers of boxes, three boxes each, all labeled [fai](/ˈfI/) [hie](/ˈhjɛ/), the wires shuffling between every layer. Only six outputs come out at the bottom. Along the left side, an orange line carries part of the original input down past the boxes, where it is added in to the first output.",
       "generation_s": 3.66,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 51,
@@ -621,7 +639,7 @@
       "file": "blocks/c12-b051.wav",
       "sha256": "34e4cdf6ad5cc77c357616f1bcc51003690fae919a55e702ce968366d1f2b69f",
       "duration_ms": 2525,
-      "start_ms": 395550,
+      "start_ms": 397590,
       "text": "\"Conception of a hash algorithm\".",
       "generation_s": 0.41
     },
@@ -632,7 +650,7 @@
       "file": "blocks/c12-b052.wav",
       "sha256": "99bfd8a1fb12927e8d88b316bc985608b82bf8481c4b426d0dc03aaea4977f71",
       "duration_ms": 2525,
-      "start_ms": 398525,
+      "start_ms": 400565,
       "text": "[Zei](/ˈzA/) read the accompanying text.",
       "generation_s": 0.35
     },
@@ -643,7 +661,7 @@
       "file": "blocks/c12-b053.wav",
       "sha256": "37b5c76cb5a4c405713ae43fa99361ec51ffbeb4381aab46a43eec2f107d8390",
       "duration_ms": 15850,
-      "start_ms": 401500,
+      "start_ms": 403540,
       "text": "Hash algorithms, it said, were there to create a shrunken fingerprint of a large piece of information, that still uniquely identifies the original. The goal is for it to be infeasibly hard to find two different pieces of data that have the same hash.",
       "generation_s": 2.14
     },
@@ -654,7 +672,7 @@
       "file": "blocks/c12-b054.wav",
       "sha256": "b46ee5fe9b085650a64e0025af9d0d5c5699fe5a236f18f6aca4f3be7b82d005",
       "duration_ms": 18550,
-      "start_ms": 417800,
+      "start_ms": 419840,
       "text": "Hashes inherently destroy information — representing a larger thing with a smaller thing is their entire goal. But there is a paradox: in the internal workings of all the best hash functions that we build, the largest component is an entropy-preserving transformation: a permutation.",
       "generation_s": 2.56
     },
@@ -665,7 +683,7 @@
       "file": "blocks/c12-b055.wav",
       "sha256": "520f706f19ae7d5ddc2dd2490303667285aebb3ac9dd86e4e0db8ca495909a53",
       "duration_ms": 17675,
-      "start_ms": 436800,
+      "start_ms": 438840,
       "text": "The core building block maps inputs to outputs one-to-one. And not only that, it can be efficiently run both forwards and backwards. The shrinking, and the irreversibility, comes from a simple layer on top: a deletion, and an xor of part of the original input, added to the end.",
       "generation_s": 2.48
     },
@@ -676,7 +694,7 @@
       "file": "blocks/c12-b056.wav",
       "sha256": "e9c70bd4940613c7ec77f2112773977bd8dc1f3e033c9c1a9d488384577d7649",
       "duration_ms": 33075,
-      "start_ms": 454925,
+      "start_ms": 456965,
       "text": "Why do this? Why build irreversibility on top of reversibility? The reason is subtle. If you build irreversibility directly, then you cannot control when entropy is destroyed. If you apply an irreversible round function enough times, then about half the entropy collapses, bringing the protocol's security down along with it. And so even when destroying information is your final goal, it's best to cleanly separate out the piece that's going that — destroy information in one precise spot in the algorithm, on your own terms.",
       "generation_s": 4.8
     },
@@ -687,7 +705,7 @@
       "file": "blocks/c12-b057.wav",
       "sha256": "230508a66fb05a76066c99302e290774cad7928a34051c5cbe6600a8bff9d61b",
       "duration_ms": 3275,
-      "start_ms": 488450,
+      "start_ms": 490490,
       "text": "[Zei](/ˈzA/) put away his hand device, and leaned back.",
       "generation_s": 0.52
     },
@@ -698,7 +716,7 @@
       "file": "blocks/c12-b058.wav",
       "sha256": "376d14e2742984d1216c88874305999c5aa6de1a7a1d3e88aec92cbced964a18",
       "duration_ms": 3250,
-      "start_ms": 492175,
+      "start_ms": 494215,
       "text": "It's all entropy, isn't it, he thought to himself.",
       "generation_s": 0.47
     },
@@ -709,7 +727,7 @@
       "file": "blocks/c12-b059.wav",
       "sha256": "b6fcb381698d3ca5ce3d5da78e15539d6853f7d86a2f0bd11123a010baaf40d6",
       "duration_ms": 10925,
-      "start_ms": 495875,
+      "start_ms": 497915,
       "text": "A minute later, the car suddenly slowed down, and turned left. To his right, [Zei](/ˈzA/) could see an area blocked off by safety tape with various large vehicles further inside.",
       "generation_s": 1.89
     },
@@ -720,7 +738,7 @@
       "file": "blocks/c12-b060.wav",
       "sha256": "6d480a64f58e667d1aeea6f06352bb58b4f44327b229e9f8455d854ba99c600c",
       "duration_ms": 8025,
-      "start_ms": 507250,
+      "start_ms": 509290,
       "text": "\"What happened?\", [Zei](/ˈzA/) asked in a voice loud enough that the driver would unambiguously recognize that the question was meant for him.",
       "generation_s": 1.21
     },
@@ -731,7 +749,7 @@
       "file": "blocks/c12-b061.wav",
       "sha256": "b9335abbb1e6c1ab476920d2077f2ecb6c0a9d478a74342e320306c31773d217",
       "duration_ms": 9325,
-      "start_ms": 515725,
+      "start_ms": 517765,
       "text": "\"Explosion in an advanced biology research lab. Probably the Arctics, as usual. They're going to spend days cleaning up to make sure everything is safe.\"",
       "generation_s": 1.3
     },
@@ -742,7 +760,7 @@
       "file": "blocks/c12-b062.wav",
       "sha256": "ce86589ced240d911be521a8fce71072be36949f3f8ebf17039ab9dffa099875",
       "duration_ms": 7025,
-      "start_ms": 525500,
+      "start_ms": 527540,
       "text": "A few minutes after that, the car slowed down and came to a stop. The door opened, leading straight into a hallway.",
       "generation_s": 0.96
     },
@@ -752,7 +770,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 532975,
+      "start_ms": 535015,
       "duration_ms": 1800
     },
     {
@@ -762,7 +780,7 @@
       "file": "blocks/c12-b064.wav",
       "sha256": "45c9b97c4ed9986466595aa94641493aa4ddbd98305f3ee25cbefe7d68568e88",
       "duration_ms": 3050,
-      "start_ms": 534775,
+      "start_ms": 536815,
       "text": "[Zei](/ˈzA/) walked through the tunnel, and down the stairs.",
       "generation_s": 0.43
     },
@@ -773,7 +791,7 @@
       "file": "blocks/c12-b065.wav",
       "sha256": "69f9b7fca0c08ca0de8ab13c4e50a8966dca99960a664f13c8c6ad24ad28c777",
       "duration_ms": 17050,
-      "start_ms": 538275,
+      "start_ms": 540315,
       "text": "He saw a door in front of him. The door looked similar to the door to the [Minpentai](/ˈmɪnpɛntI/) room inside the mountain pyramid in [Pafogai](/ˈpɑfOɡI/) [Du](/ˈdu/): a series of stone bricks, curving near the top into an arch, and the symbol at the top: two horizontal arms, meeting in the middle with clashing fists.",
       "generation_s": 2.45
     },
@@ -784,7 +802,7 @@
       "file": "blocks/c12-b066.wav",
       "sha256": "21f28cd62fcb6bc88ceb1874006df438892711d15df87ba6535b5e68ba4c3b54",
       "duration_ms": 6175,
-      "start_ms": 555775,
+      "start_ms": 557815,
       "text": "However, this door was noticeably larger, more well-maintained, and the decorations more grand.",
       "generation_s": 0.94
     },
@@ -795,7 +813,7 @@
       "file": "blocks/c12-b067.wav",
       "sha256": "4286e09042559fe37e60aa5be5980db5faecfb1baa6a8fbbc559544081845017",
       "duration_ms": 5225,
-      "start_ms": 562400,
+      "start_ms": 564440,
       "text": "[Zei](/ˈzA/) tapped his watch against the green circle, and the door opened. He walked through.",
       "generation_s": 0.74
     },
@@ -806,7 +824,7 @@
       "file": "blocks/c12-b068.wav",
       "sha256": "b755320062d7b8813248d0eed2e64e701ef118817f52730eb8e85c3e6cf0ad41",
       "duration_ms": 10700,
-      "start_ms": 568075,
+      "start_ms": 570115,
       "text": "He entered a room with about fifty chairs, with about twenty contestants already sitting down. On the stage, he recognized [Su](/ˈsu/). Beside her, there were three other priests.",
       "generation_s": 1.58
     },
@@ -817,7 +835,7 @@
       "file": "blocks/c12-b069.wav",
       "sha256": "601c81ecf6458b8e5afd754a7105e915794c5454f0361930ce13404099408dbc",
       "duration_ms": 5975,
-      "start_ms": 579225,
+      "start_ms": 581265,
       "text": "[Zei](/ˈzA/) sat down. Over the next fifteen minutes, other contestants sat down in their own chairs.",
       "generation_s": 1.04
     },
@@ -828,7 +846,7 @@
       "file": "blocks/c12-b070.wav",
       "sha256": "c5cc2505840224e3cd6845115c7d22ae5298edfffdfed2b94b31d696e1df81f7",
       "duration_ms": 3275,
-      "start_ms": 585650,
+      "start_ms": 587690,
       "text": "An older teenage boy sat down beside [Zei](/ˈzA/).",
       "generation_s": 0.49
     },
@@ -839,7 +857,7 @@
       "file": "blocks/c12-b071.wav",
       "sha256": "28e4182cee164b29478dbaa5a241d6896da4cb88b4661c371f773d0eb6803127",
       "duration_ms": 2050,
-      "start_ms": 589375,
+      "start_ms": 591415,
       "text": "\"Hi, I'm [Deluin](/dˈɛluɪn/)\", he said.",
       "generation_s": 0.3
     },
@@ -850,7 +868,7 @@
       "file": "blocks/c12-b072.wav",
       "sha256": "33f65ae00c718ae4bf887acd454af37bd7d3c3a1ac99c11a721653e214cf7bc2",
       "duration_ms": 3275,
-      "start_ms": 591875,
+      "start_ms": 593915,
       "text": "That's not a very [Dzegojan](/ˈdzɛɡOʤɑn/) name, [Zei](/ˈzA/) thought.",
       "generation_s": 0.46
     },
@@ -861,7 +879,7 @@
       "file": "blocks/c12-b073.wav",
       "sha256": "07f3c0077568863ea5f4808c47a6eb23cebe04acf2f36423f38df6a1a9d7ecb3",
       "duration_ms": 1575,
-      "start_ms": 595600,
+      "start_ms": 597640,
       "text": "\"I'm [Zei](/ˈzA/).\"",
       "generation_s": 0.23
     },
@@ -872,7 +890,7 @@
       "file": "blocks/c12-b074.wav",
       "sha256": "f4f4cf95b7ece8428c36b2dee70715cc54ca6d14665111ffb740cd584651ee62",
       "duration_ms": 1650,
-      "start_ms": 597625,
+      "start_ms": 599665,
       "text": "\"Where are you from?\"",
       "generation_s": 0.23
     },
@@ -883,7 +901,7 @@
       "file": "blocks/c12-b075.wav",
       "sha256": "b8270dc4ceef3d1aff4638b58b2be405b9bf659e44db926b6a346dd2cbf7304b",
       "duration_ms": 3675,
-      "start_ms": 599725,
+      "start_ms": 601765,
       "text": "\"Ah, I'm from Redshire. My name gave me away, didn't it?\"",
       "generation_s": 0.49
     },
@@ -894,7 +912,7 @@
       "file": "blocks/c12-b076.wav",
       "sha256": "87895504c54b34e4a5d91cf80a3098ff700486d5944fb6b8d9691a119cce2e52",
       "duration_ms": 3575,
-      "start_ms": 603850,
+      "start_ms": 605890,
       "text": "[Zei](/ˈzA/) laughed. \"Do you get that reaction from everyone?\"",
       "generation_s": 0.49
     },
@@ -905,7 +923,7 @@
       "file": "blocks/c12-b077.wav",
       "sha256": "0a6499d1cc372e81a83cd2e516c33e1efab7f5da187ae2ea91840b03cbb9eb26",
       "duration_ms": 2300,
-      "start_ms": 607875,
+      "start_ms": 609915,
       "text": "[Deluin](/dˈɛluɪn/) laughed along with [Zei](/ˈzA/).",
       "generation_s": 0.31
     },
@@ -916,7 +934,7 @@
       "file": "blocks/c12-b078.wav",
       "sha256": "1847614ca8d741af44ce120d72fbe59784285a6792f2c69d4e41f4a5db75f6a0",
       "duration_ms": 5675,
-      "start_ms": 610625,
+      "start_ms": 612665,
       "text": "\"[De](/ˈdɛ/) [lu](/ˈlu/) [hin](/ˈhɪn/), they call me here. 'A fork with the appearance of'. Lovely name, don't you think?\"",
       "generation_s": 0.77
     },
@@ -927,7 +945,7 @@
       "file": "blocks/c12-b079.wav",
       "sha256": "189250110c28cd5c2817cecd473a3c192cd6015e1de7c996e67799f4f7dafc2b",
       "duration_ms": 3150,
-      "start_ms": 616750,
+      "start_ms": 618790,
       "text": "\"Are you studying here? Did your parents immigrate?\"",
       "generation_s": 0.45
     },
@@ -938,7 +956,7 @@
       "file": "blocks/c12-b080.wav",
       "sha256": "f75f7f40bb4189b5613cdc2adf753f10500bb97db000e71fcd44d09479b0ee65",
       "duration_ms": 6800,
-      "start_ms": 620350,
+      "start_ms": 622390,
       "text": "\"Ah, I'm a foreign contestant. They brought in four foreign contestants this time, to make things more fun.\"",
       "generation_s": 0.92
     },
@@ -949,7 +967,7 @@
       "file": "blocks/c12-b081.wav",
       "sha256": "2dc7ba5cecc3f2b6bbdd1b7ec86a75457f6edd84713fb8b71af40bf3144457bc",
       "duration_ms": 1675,
-      "start_ms": 627600,
+      "start_ms": 629640,
       "text": "\"Are you excited?\"",
       "generation_s": 0.25
     },
@@ -960,7 +978,7 @@
       "file": "blocks/c12-b082.wav",
       "sha256": "4ae983777d822cde585f4b78ccec2b8372b3b7e6d71028ce61561534edcf8e58",
       "duration_ms": 4675,
-      "start_ms": 629725,
+      "start_ms": 631765,
       "text": "\"Absolutely. Actually my first time in [Dzego](/ˈdzɛɡO/), super cool place.\"",
       "generation_s": 0.66
     },
@@ -971,7 +989,7 @@
       "file": "blocks/c12-b083.wav",
       "sha256": "ff8dfc92cb3efa409508316c45a3e5b808e20d136cea6fc190716103bcaf3e07",
       "duration_ms": 3700,
-      "start_ms": 634850,
+      "start_ms": 636890,
       "text": "A bell rang, and the contestants quickly quieted down.",
       "generation_s": 0.51
     },
@@ -982,7 +1000,7 @@
       "file": "blocks/c12-b084.wav",
       "sha256": "e91b63bd846b7e067d4f570d2050dc86467d4576aa5aac7b4619a1056b7dcaf0",
       "duration_ms": 12050,
-      "start_ms": 639000,
+      "start_ms": 641040,
       "text": "\"Welcome to the national [Minpentai](/ˈmɪnpɛntI/) championship\", [Su](/ˈsu/) began. \"I am honored to see so many brilliant contestants this year, and I hope that everyone arriving had a good evening and a good morning.\"",
       "generation_s": 1.64
     },
@@ -993,7 +1011,7 @@
       "file": "blocks/c12-b085.wav",
       "sha256": "f0e2ee40afaad6880abbc4c516e863a2c9521f158a41896c5990fdfb177734ad",
       "duration_ms": 4625,
-      "start_ms": 651500,
+      "start_ms": 653540,
       "text": "\"I am pleased to introduce our lead organizer, Taskmaster [Jin](/ˈʤɪn/).\"",
       "generation_s": 0.65
     },
@@ -1004,7 +1022,7 @@
       "file": "blocks/c12-b086.wav",
       "sha256": "0834e66a76d78f0bed005ce8d0f910b2ba76b32179f479c04a4db30857a233b4",
       "duration_ms": 3675,
-      "start_ms": 656575,
+      "start_ms": 658615,
       "text": "One of the other priests stepped forward, and began speaking.",
       "generation_s": 0.58
     },
@@ -1015,7 +1033,7 @@
       "file": "blocks/c12-b087.wav",
       "sha256": "6af949588d8493fb3fae54a1f407cae358428146fcc1e105f0773f5d76f318a9",
       "duration_ms": 15800,
-      "start_ms": 660700,
+      "start_ms": 662740,
       "text": "\"This is a special moment for all of us in [Dzego](/ˈdzɛɡO/), not just for us and for you, but for millions of [Dzegojan](/ˈdzɛɡOʤɑn/) who watch the games from across the country, as they will get to watch the brightest minds from [Dzego](/ˈdzɛɡO/)'s new generation face off against each other.\"",
       "generation_s": 2.64
     },
@@ -1026,7 +1044,7 @@
       "file": "blocks/c12-b088.wav",
       "sha256": "3ca078e4aa8d4a8f285c766eb860926fd062b22dc5f8d963f20dcac6957d3941",
       "duration_ms": 6725,
-      "start_ms": 676950,
+      "start_ms": 678990,
       "text": "\"I'm also honored to announce that this year, we have four distinguished foreign guests participating along with us.\"",
       "generation_s": 1.05
     },
@@ -1037,7 +1055,7 @@
       "file": "blocks/c12-b089.wav",
       "sha256": "f6fa3ab48472f998ce3f99caded757180ae58ecf03b4bd79e64ac912349a3cf1",
       "duration_ms": 16850,
-      "start_ms": 684125,
+      "start_ms": 686165,
       "text": "\"Today, we will have a walk through the [Minpentai](/ˈmɪnpɛntI/) museum, right here inside this mountain pyramid. Tomorrow, we will have some tourist excursions around [Sadzu](/ˈsɑdzu/) [Du](/ˈdu/), and in the evening you will get a chance to rest. Two days after, the first championship games will begin.\"",
       "generation_s": 2.88
     },
@@ -1048,7 +1066,7 @@
       "file": "blocks/c12-b090.wav",
       "sha256": "4e7917b580f1aa48eb2a952cc640994e9339d0e7d0c47e0f1288bbbab0f7f8c7",
       "duration_ms": 5700,
-      "start_ms": 701425,
+      "start_ms": 703465,
       "text": "\"There will be six rounds of qualifying games, with an eight-day-long break in between each game.\"",
       "generation_s": 0.98
     },
@@ -1059,7 +1077,7 @@
       "file": "blocks/c12-b091.wav",
       "sha256": "31b685544c73d889e148259963570ea894db89567723aa0e8edb0e33c3818966",
       "duration_ms": 31725,
-      "start_ms": 707575,
+      "start_ms": 709615,
       "text": "\"Out of the thirty-two of you, the four players who win the most games will advance to the semifinals. If there is no win threshold that exactly four players pass, we will break ties by the geometric average of the number of turns that you survived before losing your losing games and the inverse of the number of turns that you needed to win your winning games, counted up to a maximum of eight thousand turns. Thus, there is no incentive to resign before eight thousand turns. If there are still ties, we will insert an additional qualifying round.\"",
       "generation_s": 5.71
     },
@@ -1070,7 +1088,7 @@
       "file": "blocks/c12-b092.wav",
       "sha256": "62a80e6194ba6a170f0dcbfc61ec0a703f017e9f2ad7a9603b5cf136ce227c31",
       "duration_ms": 20725,
-      "start_ms": 739750,
+      "start_ms": 741790,
       "text": "\"I hope you can enjoy the games, enjoy everything that [Sadzu](/ˈsɑdzu/) [Du](/ˈdu/) has to offer, but also, just as importantly, enjoy each other. Here you are not enemies, you are temporary competitors. Off the arena, you should consider each other friends, and remember that we are all part of a shared project together. [Dze](/ˈdzɛ/) [go](/ˈɡO/) [ba](/ˈbɑ/) [fau](/ˈfW/) [gie](/ˈɡjɛ/).\"",
       "generation_s": 3.44
     },
@@ -1081,7 +1099,7 @@
       "file": "blocks/c12-b093.wav",
       "sha256": "32bf8a27c49108851e0d520935b3fe23772732a5e8ce9771b9777ee12aa5595a",
       "duration_ms": 4750,
-      "start_ms": 760925,
+      "start_ms": 762965,
       "text": "\"[Dze](/ˈdzɛ/) [go](/ˈɡO/) [ba](/ˈbɑ/) [fau](/ˈfW/) [gie](/ˈɡjɛ/)\", all the contestants replied in unison.",
       "generation_s": 0.97
     },
@@ -1092,7 +1110,7 @@
       "file": "blocks/c12-b094.wav",
       "sha256": "de6dbca62ccada9aa87e91f71e32edac81d009f3c040391ede1f63482969fce0",
       "duration_ms": 4375,
-      "start_ms": 766125,
+      "start_ms": 768165,
       "text": "\"Now, please follow [Su](/ˈsu/). She will lead the excursion through the museum.\"",
       "generation_s": 0.64
     },
@@ -1102,7 +1120,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 770950,
+      "start_ms": 772990,
       "duration_ms": 1800
     },
     {
@@ -1112,7 +1130,7 @@
       "file": "blocks/c12-b096.wav",
       "sha256": "9fab2b08a79fb434359b80c487885072171ec4d33bd38bc1d360660748ea084f",
       "duration_ms": 3525,
-      "start_ms": 772750,
+      "start_ms": 774790,
       "text": "3724, Grasstime 25.",
       "generation_s": 0.52
     },
@@ -1123,10 +1141,11 @@
       "file": "blocks/c12-b097.wav",
       "sha256": "077e7699a72e0c64f37dac10e38e4d42a7df79ea81e95717f3a7cf13556e2127",
       "duration_ms": 3775,
-      "start_ms": 777175,
+      "start_ms": 779215,
       "text": "On his watch, a call request from [Bai](/ˈbI/): [dia](/ˈdjɑ/) [lau](/ˈlW/) [shau](/ˈʃW/).",
       "generation_s": 0.56,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 98,
@@ -1135,7 +1154,7 @@
       "file": "blocks/c12-b098.wav",
       "sha256": "25610f7f577db3690779c4d16edaf02388ca3ca973c9187e94612fd816588ad4",
       "duration_ms": 3275,
-      "start_ms": 781550,
+      "start_ms": 784100,
       "text": "[Zei](/ˈzA/) woke up. [Bai](/ˈbI/) was requesting to call.",
       "generation_s": 0.49
     },
@@ -1146,7 +1165,7 @@
       "file": "blocks/c12-b099.wav",
       "sha256": "439bbdd85fa8cb4ebc5590e3056ac7d5426396d4c610f766e11cb3a48cf41d80",
       "duration_ms": 1850,
-      "start_ms": 785275,
+      "start_ms": 787825,
       "text": "[Zei](/ˈzA/) tapped the watch.",
       "generation_s": 0.28
     },
@@ -1157,7 +1176,7 @@
       "file": "blocks/c12-b100.wav",
       "sha256": "9089271d474a719254de8a406fb755b1f0e4ef2c09a02c141b1016992498169b",
       "duration_ms": 2850,
-      "start_ms": 787575,
+      "start_ms": 790125,
       "text": "\"How are things going over there?\", [Bai](/ˈbI/) asked.",
       "generation_s": 0.41
     },
@@ -1168,7 +1187,7 @@
       "file": "blocks/c12-b101.wav",
       "sha256": "86315ff41bb47f0516456cfa7089195af2fb8d1fcffb899feb893b8957543617",
       "duration_ms": 6825,
-      "start_ms": 790875,
+      "start_ms": 793425,
       "text": "\"This is a bit early for a call, isn't it? It's still 19 minutes before my alarm was supposed to wake me up.\"",
       "generation_s": 1.0
     },
@@ -1179,7 +1198,7 @@
       "file": "blocks/c12-b102.wav",
       "sha256": "d10771c5091b474ab913c16319b10c976d519d082bfdb170510383ab2a0fae87",
       "duration_ms": 4175,
-      "start_ms": 798150,
+      "start_ms": 800700,
       "text": "[Zei](/ˈzA/) paused for a moment, and decided to answer [Bai](/ˈbI/)'s question.",
       "generation_s": 0.64
     },
@@ -1190,7 +1209,7 @@
       "file": "blocks/c12-b103.wav",
       "sha256": "41b2ac03bbca95d6c1f46baf0df45cc8d6736ef177e2b661b0924d646b45d540",
       "duration_ms": 10400,
-      "start_ms": 802775,
+      "start_ms": 805325,
       "text": "\"Things have been well. Very fascinating exhibition at the museum three days ago, and got to see a bunch of [Sadzu](/ˈsɑdzu/) [Du](/ˈdu/) the next day. Met someone from Redshire too.\"",
       "generation_s": 1.48
     },
@@ -1201,7 +1220,7 @@
       "file": "blocks/c12-b104.wav",
       "sha256": "6a30b15ee5d9b6df055ebe948fc9e10b6cad65721a83da304f217b17f78e22d6",
       "duration_ms": 1725,
-      "start_ms": 813625,
+      "start_ms": 816175,
       "text": "\"A contestant?\"",
       "generation_s": 0.27
     },
@@ -1212,7 +1231,7 @@
       "file": "blocks/c12-b105.wav",
       "sha256": "82db3ea76d3f8979213da07c984d47b02613fed0ec95c785ab69bf18298e6977",
       "duration_ms": 3775,
-      "start_ms": 815800,
+      "start_ms": 818350,
       "text": "\"Yep, they've decided to internationalize it a bit this year.\"",
       "generation_s": 0.54
     },
@@ -1223,7 +1242,7 @@
       "file": "blocks/c12-b106.wav",
       "sha256": "da175e7d89c47f9f2a6cfd20795c2905a32f56818ffdf0283eaf75fd4f3b19e5",
       "duration_ms": 1925,
-      "start_ms": 820025,
+      "start_ms": 822575,
       "text": "\"So how's [Pafogai](/ˈpɑfOɡI/)?\"",
       "generation_s": 0.29
     },
@@ -1234,7 +1253,7 @@
       "file": "blocks/c12-b107.wav",
       "sha256": "9e851d59e9e2fd56c4431d46096500b778ab4ad05cfbd9bb4ba5a42aa73e5e57",
       "duration_ms": 7725,
-      "start_ms": 822400,
+      "start_ms": 824950,
       "text": "\"Ask me something I can answer. I've been staring at the mountain pyramid you'll be playing in from across the river for the last longhour.\"",
       "generation_s": 1.24
     },
@@ -1245,7 +1264,7 @@
       "file": "blocks/c12-b108.wav",
       "sha256": "6959fb88fd42f5e9104aa2eeb9598e5676c25a7ef485cde001a13a3cbc3f45b4",
       "duration_ms": 1650,
-      "start_ms": 830575,
+      "start_ms": 833125,
       "text": "[Zei](/ˈzA/) sat up.",
       "generation_s": 0.25
     },
@@ -1256,7 +1275,7 @@
       "file": "blocks/c12-b109.wav",
       "sha256": "298ebdfe38fd2fa84a041bcca9a4444ed89db80ecc56cf11d8911be36479c21d",
       "duration_ms": 1450,
-      "start_ms": 832675,
+      "start_ms": 835225,
       "text": "\"You're Here?\"",
       "generation_s": 0.22
     },
@@ -1267,7 +1286,7 @@
       "file": "blocks/c12-b110.wav",
       "sha256": "cfff326f82c9b2438e53387af1429371c035a61a17851352819b0cee3780f36e",
       "duration_ms": 6325,
-      "start_ms": 834575,
+      "start_ms": 837125,
       "text": "\"[Den](/ˈdɛn/)'s people got hold of me and told me to come and take notes on all the contestants' strategies.\"",
       "generation_s": 0.88
     },
@@ -1278,7 +1297,7 @@
       "file": "blocks/c12-b111.wav",
       "sha256": "af3ca142f31939dc6b5df620b7de070a35618b09f6242224c9492881454e67e5",
       "duration_ms": 2300,
-      "start_ms": 841350,
+      "start_ms": 843900,
       "text": "\"Your first game is today, right?\"",
       "generation_s": 0.34
     },
@@ -1289,7 +1308,7 @@
       "file": "blocks/c12-b112.wav",
       "sha256": "df94ffdbd6456ecd712877ae737a69de88415867cbc339024577ba908d43c1f0",
       "duration_ms": 1675,
-      "start_ms": 844100,
+      "start_ms": 846650,
       "text": "\"It is indeed.\"",
       "generation_s": 0.26
     },
@@ -1300,7 +1319,7 @@
       "file": "blocks/c12-b113.wav",
       "sha256": "48b072935cb6b3c1385531d5eae82296debc92055feb10e8b1fb77a08176a1fb",
       "duration_ms": 3425,
-      "start_ms": 846225,
+      "start_ms": 848775,
       "text": "\"Want me to come over and help you out, or at least watch?\"",
       "generation_s": 0.5
     },
@@ -1311,7 +1330,7 @@
       "file": "blocks/c12-b114.wav",
       "sha256": "e27c9495b64a829b3736864343d788b3d219aa93b0dae59e3b470b2de7254d4c",
       "duration_ms": 4700,
-      "start_ms": 850100,
+      "start_ms": 852650,
       "text": "\"I... think I'm fine. And I doubt you can get a ticket to the live stadium.\"",
       "generation_s": 0.67
     },
@@ -1322,7 +1341,7 @@
       "file": "blocks/c12-b115.wav",
       "sha256": "643a00b7990ea3c2b8e829f756206e32de3ae97f5188967670d203d1abfe48cf",
       "duration_ms": 1800,
-      "start_ms": 855250,
+      "start_ms": 857800,
       "text": "\"Not if you let me in.\"",
       "generation_s": 0.27
     },
@@ -1333,7 +1352,7 @@
       "file": "blocks/c12-b116.wav",
       "sha256": "3a5d354fb54c0a34d683cd53f138bfe7688ff36c64b5fb8e552e69987f20b0c4",
       "duration_ms": 1625,
-      "start_ms": 857500,
+      "start_ms": 860050,
       "text": "[Zei](/ˈzA/) groaned.",
       "generation_s": 0.25
     },
@@ -1344,7 +1363,7 @@
       "file": "blocks/c12-b117.wav",
       "sha256": "3ba0f60706b14664654b065e5c2f14e295e3bf0b176d8b5e3f06355f6087c19d",
       "duration_ms": 3325,
-      "start_ms": 859575,
+      "start_ms": 862125,
       "text": "\"I'll watch from afar then. We're all rooting for you!\"",
       "generation_s": 0.48
     },
@@ -1355,7 +1374,7 @@
       "file": "blocks/c12-b118.wav",
       "sha256": "39f0c31357511a2cbbecfd9050b4d0a615e57958a7af41862083588a1e55fb3e",
       "duration_ms": 3425,
-      "start_ms": 863350,
+      "start_ms": 865900,
       "text": "\"How is [Fin](/ˈfɪn/)? I haven't heard from him in days now.\"",
       "generation_s": 0.48
     },
@@ -1366,7 +1385,7 @@
       "file": "blocks/c12-b119.wav",
       "sha256": "bbdd036dcc42026166c8c65ff8183574644e036f2ad39ce7db37c6a385dd30df",
       "duration_ms": 5175,
-      "start_ms": 867225,
+      "start_ms": 869775,
       "text": "\"Busy with [Bansunpei](/ˈbɑnsunpA/) stuff I guess. He hasn't said anything to me in days either.\"",
       "generation_s": 0.72
     },
@@ -1377,7 +1396,7 @@
       "file": "blocks/c12-b120.wav",
       "sha256": "62a24c706f47b10684378955b6bcd8b1e91808771d8657f9cf969f4b9008e729",
       "duration_ms": 4775,
-      "start_ms": 872850,
+      "start_ms": 875400,
       "text": "\"Alright then. Well, I gotta start preparing. I hope you enjoy your day!\"",
       "generation_s": 0.66
     },
@@ -1388,7 +1407,7 @@
       "file": "blocks/c12-b121.wav",
       "sha256": "73f26c323b286784c3af005150e7a346d21bd8d64a3d61c2d0f3b53d4ca8f926",
       "duration_ms": 2625,
-      "start_ms": 878075,
+      "start_ms": 880625,
       "text": "\"Best of luck to you in yours, you'll need it!\"",
       "generation_s": 0.38
     },
@@ -1399,7 +1418,7 @@
       "file": "blocks/c12-b122.wav",
       "sha256": "50025a7e1cebb2f063f089f8d88dcc67c1f95a0c31d0bf949d19283711927afa",
       "duration_ms": 3125,
-      "start_ms": 881150,
+      "start_ms": 883700,
       "text": "\"Oh, and, let's play a practice game tomorrow.\"",
       "generation_s": 0.44
     },
@@ -1410,7 +1429,7 @@
       "file": "blocks/c12-b123.wav",
       "sha256": "9da2902fa6eb9a3073d0444b3ec03cd8e547bb56beb91aa8255867cbbceab715",
       "duration_ms": 13800,
-      "start_ms": 884725,
+      "start_ms": 887275,
       "text": "[Zei](/ˈzA/) once again ordered a fruit and vegetable juice, and put on his clothes. A few minutes later, the juice arrived, and [Zei](/ˈzA/) quickly drank it. He opened the door, went downstairs, and entered the car that was waiting for him.",
       "generation_s": 2.15
     },
@@ -1421,7 +1440,7 @@
       "file": "blocks/c12-b124.wav",
       "sha256": "5f9dcf2f1c92a7a8ce9a2a014df61db4c1a3855cb3f8fbef1aec19c1967ac709",
       "duration_ms": 4150,
-      "start_ms": 898975,
+      "start_ms": 901525,
       "text": "Twenty minutes later, the car arrived at an entrance to the pyramid.",
       "generation_s": 0.61
     },
@@ -1432,7 +1451,7 @@
       "file": "blocks/c12-b125.wav",
       "sha256": "29083237bc2be59fa08add83629aed625631ce8804f924833661f681b434df04",
       "duration_ms": 3400,
-      "start_ms": 903575,
+      "start_ms": 906125,
       "text": "[Zei](/ˈzA/) stepped out, and began walking through the tunnels.",
       "generation_s": 0.48
     },
@@ -1443,7 +1462,7 @@
       "file": "blocks/c12-b126.wav",
       "sha256": "0bb673bf0b57508501d9d0035adcd97240f39e019f6ec9e06f2ca914e8716ae2",
       "duration_ms": 17975,
-      "start_ms": 907425,
+      "start_ms": 909975,
       "text": "After a few hundred meters of walking, and a few turns, he once again arrived at the large stone brick door. He entered, and this time immediately turned right, into a hallway that he had not even noticed when he was first there three days ago. He followed the signs, and soon got to a waiting room.",
       "generation_s": 3.05
     },
@@ -1454,7 +1473,7 @@
       "file": "blocks/c12-b127.wav",
       "sha256": "234b8471edeb21a5b9bc73b99229ee60711411f82a72e2ea477dbd1a988a1ea7",
       "duration_ms": 2850,
-      "start_ms": 925850,
+      "start_ms": 928400,
       "text": "He saw [Su](/ˈsu/), and the other contestant.",
       "generation_s": 0.49
     },
@@ -1465,7 +1484,7 @@
       "file": "blocks/c12-b128.wav",
       "sha256": "4934152eccf869b11e980a1758096fb43e27b001a9dddd1e2b214fd11a7782c1",
       "duration_ms": 2175,
-      "start_ms": 929150,
+      "start_ms": 931700,
       "text": "\"Welcome [Zei](/ˈzA/)! Meet [Bo](/ˈbO/).\"",
       "generation_s": 0.34
     },
@@ -1476,7 +1495,7 @@
       "file": "blocks/c12-b129.wav",
       "sha256": "7558867d9d18737b4e784dc2137dc03d26ef0720b15e0caf6630f29c784f6639",
       "duration_ms": 1975,
-      "start_ms": 931775,
+      "start_ms": 934325,
       "text": "\"Nice to meet you, [Zei](/ˈzA/).\"",
       "generation_s": 0.34
     },
@@ -1487,7 +1506,7 @@
       "file": "blocks/c12-b130.wav",
       "sha256": "556170ab9a337d14913960143579b6f2d819a7eaa800bbf07a78944af97f8bc2",
       "duration_ms": 2125,
-      "start_ms": 934200,
+      "start_ms": 936750,
       "text": "\"Nice to meet you too, [Bo](/ˈbO/).\"",
       "generation_s": 0.31
     },
@@ -1498,7 +1517,7 @@
       "file": "blocks/c12-b131.wav",
       "sha256": "d43f1eed6aca85fb12e6c99fd7ec95e418a36aac5c022523f8283b0a653051a4",
       "duration_ms": 2950,
-      "start_ms": 936775,
+      "start_ms": 939325,
       "text": "\"It will be a fun game today, I'm sure of it.\"",
       "generation_s": 0.45
     },
@@ -1509,7 +1528,7 @@
       "file": "blocks/c12-b132.wav",
       "sha256": "fdd8ba390ebf20e5a89247de2a60f6b40e54175cc11c53eb18be148a96f63f3a",
       "duration_ms": 5250,
-      "start_ms": 940175,
+      "start_ms": 942725,
       "text": "A robot arrived, and gave all three of them a cup of tea. They each drank their cup.",
       "generation_s": 0.81
     },
@@ -1520,7 +1539,7 @@
       "file": "blocks/c12-b133.wav",
       "sha256": "8f01a838b302c43885d4aa4602a82d2c50efbb2dc74198ffaaba8102c026c432",
       "duration_ms": 7150,
-      "start_ms": 945875,
+      "start_ms": 948425,
       "text": "\"So what now? We sit here for a longhour without internet while the others play, so we don't learn the new rule ahead of time?\"",
       "generation_s": 1.03
     },
@@ -1531,7 +1550,7 @@
       "file": "blocks/c12-b134.wav",
       "sha256": "4d7f18479fb963f67147ed9e84963f2512119b40d86cc834d735ba80b63c5dff",
       "duration_ms": 10500,
-      "start_ms": 953475,
+      "start_ms": 956025,
       "text": "\"Exactly. And no hand devices or watches allowed either. The robot will be coming to pick them up in a minute. You can watch last year's matches on that screen over there.\"",
       "generation_s": 1.44
     },
@@ -1541,7 +1560,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 964425,
+      "start_ms": 966975,
       "duration_ms": 1800
     },
     {
@@ -1551,7 +1570,7 @@
       "file": "blocks/c12-b136.wav",
       "sha256": "dc4d0efb9f34f38c454d6f652cb062f5d7a407b9448ea1ddc2c80f67869acb8e",
       "duration_ms": 10075,
-      "start_ms": 966225,
+      "start_ms": 968775,
       "text": "A longhour later, the elevator doors opened, and [Zei](/ˈzA/) and [Bo](/ˈbO/) each stepped in to their respective elevators. [Su](/ˈsu/) waved them goodbye. The doors closed.",
       "generation_s": 1.41
     },
@@ -1562,7 +1581,7 @@
       "file": "blocks/c12-b137.wav",
       "sha256": "f610fda0236ba4063171255835f0b9b8c45f7e2f76c25690c3bff1aaf0ba1096",
       "duration_ms": 16300,
-      "start_ms": 976750,
+      "start_ms": 979300,
       "text": "A quarter minute after that, [Zei](/ˈzA/)'s elevator door opened once again, exposing a giant room much larger than the room in [Pafogai](/ˈpɑfOɡI/) [Du](/ˈdu/). About five to ten thousand people seemed to be watching. A path lit up, showing the way to a giant console with a chair.",
       "generation_s": 2.34
     },
@@ -1573,7 +1592,7 @@
       "file": "blocks/c12-b138.wav",
       "sha256": "a7174c93168bae2e39738f9f925cb1f9dda6a7b72648e54b1c71edb7f9ef64b8",
       "duration_ms": 7500,
-      "start_ms": 993500,
+      "start_ms": 996050,
       "text": "[Zei](/ˈzA/) walked forward. He could make out [Bo](/ˈbO/)'s silhouette walking forward in the distance. He got to the chair, and sat down.",
       "generation_s": 1.08
     },
@@ -1584,7 +1603,7 @@
       "file": "blocks/c12-b139.wav",
       "sha256": "8814fe944f87d2302a3ab9bd3833d5b31f6f83254c679f1f07281ea2aad99818",
       "duration_ms": 20200,
-      "start_ms": 1001450,
+      "start_ms": 1004000,
       "text": "Drones about the size of a hand device buzzed as they flew around [Zei](/ˈzA/), scanning for any kind of cheating equipment. This time, there were about three times more drones than there were in [Pafogai](/ˈpɑfOɡI/) [Du](/ˈdu/), and with even more shapes and sizes. The drones buzzed around for about twenty ticks, and then retreated back to their resting positions.",
       "generation_s": 3.33
     },
@@ -1595,7 +1614,7 @@
       "file": "blocks/c12-b140.wav",
       "sha256": "6fdfac90b50d2bf4681a7426ad4f1d511c0c021f604bce63aad233b469a84740",
       "duration_ms": 7675,
-      "start_ms": 1022100,
+      "start_ms": 1024650,
       "text": "A loud automated voice, this time sounding more female, announced: \"[MU](/ˈmu/) [GU](/ˈɡu/) [GEI](/ˈɡA/) [FA](/ˈfɑ/)\". Starting in fifty ticks.",
       "generation_s": 1.18
     },
@@ -1606,7 +1625,7 @@
       "file": "blocks/c12-b141.wav",
       "sha256": "b9ec04b16efdc84fcea5ac7b8ee4be1c32eb6464b09bcbcb7e6375794ca154e5",
       "duration_ms": 22000,
-      "start_ms": 1030225,
+      "start_ms": 1032775,
       "text": "[Zei](/ˈzA/) closed his eyes, and breathed in and out, trying his best to calm himself. This match was not decisive, he knew: if he lost, he could still make it up in the others. But in another way, that fact made him more scared: armed with the excuse that it's okay to lose, will his mind have the motivation needed to keep his full attention and mindpower on the game and win?",
       "generation_s": 3.38
     },
@@ -1617,7 +1636,7 @@
       "file": "blocks/c12-b142.wav",
       "sha256": "2c1399c8297a708f316cc86313681477c76efbc18f0ff30e3e61d7911d903c48",
       "duration_ms": 1875,
-      "start_ms": 1052675,
+      "start_ms": 1055225,
       "text": "\"[LE](/ˈlɛ/) [MU](/ˈmu/) [GEI](/ˈɡA/) [FA](/ˈfɑ/)\"",
       "generation_s": 0.29
     },
@@ -1628,7 +1647,7 @@
       "file": "blocks/c12-b143.wav",
       "sha256": "3ea31d64efc58c63c28dff1ccada200539198bf7e022ec01282e737449aef499",
       "duration_ms": 2275,
-      "start_ms": 1055000,
+      "start_ms": 1057550,
       "text": "[Zei](/ˈzA/) opened his eyes again.",
       "generation_s": 0.33
     },
@@ -1639,7 +1658,7 @@
       "file": "blocks/c12-b144.wav",
       "sha256": "26026930472d6df363c2efae3cd4bf340f62a2bd90aad4aca455cedada7707fc",
       "duration_ms": 1850,
-      "start_ms": 1057725,
+      "start_ms": 1060275,
       "text": "\"[PA](/ˈpɑ/) [GU](/ˈɡu/) [GEI](/ˈɡA/) [FA](/ˈfɑ/)\"",
       "generation_s": 0.26
     },
@@ -1650,7 +1669,7 @@
       "file": "blocks/c12-b145.wav",
       "sha256": "b655db4fdf54d669155c6984a0d068a99bb3bfaffd7939b76f7749b04464d80d",
       "duration_ms": 2000,
-      "start_ms": 1060025,
+      "start_ms": 1062575,
       "text": "[Zei](/ˈzA/) patiently waited.",
       "generation_s": 0.27
     },
@@ -1661,7 +1680,7 @@
       "file": "blocks/c12-b146.wav",
       "sha256": "908bd6deaa5f311b4595c8799957a4dc587291237530b29c51430fe043412514",
       "duration_ms": 12225,
-      "start_ms": 1062475,
+      "start_ms": 1065025,
       "text": "\"Welcome to the fourth qualifying match of the north stadium for today. Everyone, meet our players for this round: [Zei](/ˈzA/) [Leimin](/ˈlAmɪn/) from [Pafogai](/ˈpɑfOɡI/) [Du](/ˈdu/), and [Bo](/ˈbO/) [Zume](/ˈzumɛ/), from right here in [Sadzu](/ˈsɑdzu/) [Du](/ˈdu/).\"",
       "generation_s": 1.61
     },
@@ -1672,7 +1691,7 @@
       "file": "blocks/c12-b147.wav",
       "sha256": "94cb15dfb5fdf8d5824e44105bd61ce2ced0952c87f23a3188b0f4a160d474d5",
       "duration_ms": 11750,
-      "start_ms": 1075150,
+      "start_ms": 1077700,
       "text": "\"I am also pleased to announce — perhaps one time too many for the audience, but for the first time, for our contestants — today's rule change. Today, [Minpentai](/ˈmɪnpɛntI/) will be played on a hex grid.\"",
       "generation_s": 1.57
     },
@@ -1683,7 +1702,7 @@
       "file": "blocks/c12-b148.wav",
       "sha256": "8f55ac9f259c5498600be6300bf2dae9fc13bd87577231bdc8e32ea3b501d565",
       "duration_ms": 2350,
-      "start_ms": 1087350,
+      "start_ms": 1089900,
       "text": "[Zei](/ˈzA/) opened his mouth in shock.",
       "generation_s": 0.33
     },
@@ -1694,7 +1713,7 @@
       "file": "blocks/c12-b149.wav",
       "sha256": "fab81aec1d81cf264ae54a6f8b3549c0d556fb523733dc934df90d2115b925c0",
       "duration_ms": 11275,
-      "start_ms": 1090150,
+      "start_ms": 1092700,
       "text": "\"You will have twenty minutes to figure out your structures, any gliders, spaceships and walls, to the best of your ability. And then the serene battle over a field of snowflakes will begin.\"",
       "generation_s": 1.51
     },
@@ -1705,7 +1724,7 @@
       "file": "blocks/c12-b150.wav",
       "sha256": "17c74564e7f8cd27cca5f42e742387fa22859c558b9c69b13a52284c9a673af9",
       "duration_ms": 4950,
-      "start_ms": 1101875,
+      "start_ms": 1104425,
       "text": "[Zei](/ˈzA/)'s display turned on, and he could see the hexagonal grid in front of him.",
       "generation_s": 0.72
     },
@@ -1716,7 +1735,7 @@
       "file": "blocks/c12-b151.wav",
       "sha256": "05a07389e2a7116c160adb9c01667b5b97c65a282562873f61a4939e8976573c",
       "duration_ms": 7125,
-      "start_ms": 1107275,
+      "start_ms": 1109825,
       "text": "\"[LE](/ˈlɛ/) [FI](/ˈfi/) [SHI](/ˈʃi/) [GEI](/ˈɡA/) [TAU](/ˈtW/) [FA](/ˈfɑ/)\", the automated loud voice shouted. The battle begins in two thousand ticks.",
       "generation_s": 0.98
     },
@@ -1727,7 +1746,7 @@
       "file": "blocks/c12-b152.wav",
       "sha256": "3f8f362039ef328686641bae2aad967702ce073c7aed51f9cba293263e9ff159",
       "duration_ms": 18800,
-      "start_ms": 1114850,
+      "start_ms": 1117400,
       "text": "[Zei](/ˈzA/) began by quickly drawing random junk in his sandbox, seeing what stayed stable and what turned into a glider. Within one minute, he identified a few gliders and a few static structures that could be used for walls. To his surprise, the gliders that moved the fastest moved ... directly east.",
       "generation_s": 2.43
     },
@@ -1738,7 +1757,7 @@
       "file": "blocks/c12-b153.wav",
       "sha256": "f3f4cabfa2ee25ae034637886aa739212438839cd93181a04697e61dac09c793",
       "duration_ms": 6550,
-      "start_ms": 1134100,
+      "start_ms": 1136650,
       "text": "His next move was to deliberately draw different kinds of walls, fly gliders at them, and see what sticks.",
       "generation_s": 0.89
     },
@@ -1749,7 +1768,7 @@
       "file": "blocks/c12-b154.wav",
       "sha256": "0a1532864b088c93be93c6018d79184e9399b98b9a8752a26da4f237a8301dc3",
       "duration_ms": 11525,
-      "start_ms": 1141100,
+      "start_ms": 1143650,
       "text": "He watched the gliders carefully, to try to quickly get an intuition for what kinds of shapes can move while preserving their shape. He did several rounds of defining both the gliders and the walls.",
       "generation_s": 1.55
     },
@@ -1760,7 +1779,7 @@
       "file": "blocks/c12-b155.wav",
       "sha256": "5cda36447693ba85868df3f1276b1264cb3bafc652df37cbda2c9da21a60ba16",
       "duration_ms": 5150,
-      "start_ms": 1153075,
+      "start_ms": 1155625,
       "text": "\"[PA](/ˈpɑ/) [MU](/ˈmu/) [GU](/ˈɡu/) [GU](/ˈɡu/) [GEI](/ˈɡA/) [TAU](/ˈtW/) [FA](/ˈfɑ/).\" The battle begins in fifteen hundred ticks.",
       "generation_s": 0.71
     },
@@ -1771,7 +1790,7 @@
       "file": "blocks/c12-b156.wav",
       "sha256": "0d494d3a265914b87d8a4c32d9ce26ee7d8377c52eaefed7da2d2f1d42819bf9",
       "duration_ms": 18750,
-      "start_ms": 1158675,
+      "start_ms": 1161225,
       "text": "[Zei](/ˈzA/) began experimenting with shapes that were similar to his symbol, seeing if any of them could function as a glider. He needed to come up with something — otherwise he would be able to progress only very slowly, by repeatedly building a new symbol beside his existing symbol during each intervention turn.",
       "generation_s": 2.46
     },
@@ -1782,7 +1801,7 @@
       "file": "blocks/c12-b157.wav",
       "sha256": "afd536155fb2961e4dfba3ed44a1ec14fcf2e1d3fdeb770cb3705a03d9cf26f4",
       "duration_ms": 15625,
-      "start_ms": 1177875,
+      "start_ms": 1180425,
       "text": "He realized that to make actual headway, he would need to interact with the rock formations. He made a couple of guesses about what shape the rock formations in the hexgrid version of [Minpentai](/ˈmɪnpɛntI/) might look like, and examined the behavior of gliders as they crashed into them.",
       "generation_s": 2.47
     },
@@ -1793,7 +1812,7 @@
       "file": "blocks/c12-b158.wav",
       "sha256": "90e9eb9561df0a330f1967651f27632bfcecd6ffdb9e81d3b03cb38a3d8c1f07",
       "duration_ms": 4550,
-      "start_ms": 1193950,
+      "start_ms": 1196500,
       "text": "\"[FI](/ˈfi/) [SHI](/ˈʃi/) [GEI](/ˈɡA/) [TAU](/ˈtW/) [FA](/ˈfɑ/).\" The battle begins in a thousand ticks.",
       "generation_s": 0.74
     },
@@ -1804,7 +1823,7 @@
       "file": "blocks/c12-b159.wav",
       "sha256": "56bd6e7410b04f864dc2e409cd7b77db2fb31608a3e957e49e6e7271694a99e0",
       "duration_ms": 10225,
-      "start_ms": 1198950,
+      "start_ms": 1201500,
       "text": "[Zei](/ˈzA/) began to sweat. So far, no luck. No combination of a glider, a plausible rock shape and an offset that he tried led to a copy of his symbol.",
       "generation_s": 1.7
     },
@@ -1815,7 +1834,7 @@
       "file": "blocks/c12-b160.wav",
       "sha256": "1e0aa00033388286eb29d6261cbc660d81e6d0542a0845f8f67a771454ba975e",
       "duration_ms": 3100,
-      "start_ms": 1209625,
+      "start_ms": 1212175,
       "text": "He thought more about the exact shape of his symbol.",
       "generation_s": 0.48
     },
@@ -1826,7 +1845,7 @@
       "file": "blocks/c12-b161.wav",
       "sha256": "31754608b9663ee42a666e861ab1f3d8222c76ae46e791e7866f6f482fc61989",
       "duration_ms": 8850,
-      "start_ms": 1213175,
+      "start_ms": 1215725,
       "text": "After another two minutes of fruitless exploration, [Zei](/ˈzA/)'s mind flashed back to the textbook he had been reading less than two longhours before.",
       "generation_s": 1.37
     },
@@ -1837,7 +1856,7 @@
       "file": "blocks/c12-b162.wav",
       "sha256": "6ce686673c0e1c925dd25b6b9527284144b9bb6c89ddb71a58691ac80b557421",
       "duration_ms": 8350,
-      "start_ms": 1222475,
+      "start_ms": 1225025,
       "text": "The core building block maps inputs to outputs one-to-one. And not only that, it can be efficiently run both forwards and backwards..",
       "generation_s": 1.29
     },
@@ -1848,7 +1867,7 @@
       "file": "blocks/c12-b163.wav",
       "sha256": "7b7dbf542f580331c96de2c9905dfd8e31beed3cd5b86c7fe6b4ad87dd895d2a",
       "duration_ms": 12500,
-      "start_ms": 1231425,
+      "start_ms": 1233975,
       "text": "But unlike the hash function, here there was no truncate-and-xor wrapper at the end. And so if he knew his desired end state ... he just had to put that end state into the sandbox, and play it backwards.",
       "generation_s": 1.79
     },
@@ -1859,7 +1878,7 @@
       "file": "blocks/c12-b164.wav",
       "sha256": "7b2cbe39333391d049ce3fa6a58154f547ff27bc8de07858fb3473a5af74fd49",
       "duration_ms": 2175,
-      "start_ms": 1244375,
+      "start_ms": 1246925,
       "text": "But ... how do you play it backwards?",
       "generation_s": 0.33
     },
@@ -1870,7 +1889,7 @@
       "file": "blocks/c12-b165.wav",
       "sha256": "94368bc02ad9fb30c02c60cb37fb85b971e5eea72bc3a8d606ab4c724dc9d0bc",
       "duration_ms": 8450,
-      "start_ms": 1247000,
+      "start_ms": 1249550,
       "text": "In the internal permutation of a hash function, you walk backwards from the last layer to the first layer, and invert each step as you go.",
       "generation_s": 1.18
     },
@@ -1881,7 +1900,7 @@
       "file": "blocks/c12-b166.wav",
       "sha256": "2ce3ecc0d3e0937e704c7c553a72acd18705d2dd0e44bebae041e1599004b712",
       "duration_ms": 6550,
-      "start_ms": 1255900,
+      "start_ms": 1258450,
       "text": "Here ... what was the inverse of the hexgrid rules that [Zei](/ˈzA/) was interacting with for the first time in his life?",
       "generation_s": 0.95
     },
@@ -1892,7 +1911,7 @@
       "file": "blocks/c12-b167.wav",
       "sha256": "253bb0eff3acf27210cdfdc7352f44c7a94da52d81a35e6fadb9593d5bd47403",
       "duration_ms": 10775,
-      "start_ms": 1262900,
+      "start_ms": 1265450,
       "text": "[Zei](/ˈzA/) took the gliders he saw, and tried the most basic transformations: flipping them, rotating them 60 degrees, launching them one timestep later. None worked.",
       "generation_s": 1.65
     },
@@ -1903,7 +1922,7 @@
       "file": "blocks/c12-b168.wav",
       "sha256": "898c8fa93eab09e0fb9c4fbfe8e42e18bb34507e338d7be90fb9c16be7001992",
       "duration_ms": 4950,
-      "start_ms": 1274125,
+      "start_ms": 1276675,
       "text": "\"[MU](/ˈmu/) [FI](/ˈfi/) [LE](/ˈlɛ/) [GEI](/ˈɡA/) [TAU](/ˈtW/) [FA](/ˈfɑ/).\" The battle begins in five hundred ticks.",
       "generation_s": 0.72
     },
@@ -1914,7 +1933,7 @@
       "file": "blocks/c12-b169.wav",
       "sha256": "36ca464f2ffcdd719bd7c1996b916b6c1f756c13ea1c3628c51c95c678e144e7",
       "duration_ms": 16075,
-      "start_ms": 1279525,
+      "start_ms": 1282075,
       "text": "[Zei](/ˈzA/) stepped through each step more slowly. And then he saw it. During each step, the game board split up into triangles, and the hexagons rotated inside each triangle — clockwise if it had one hex filled, counterclockwise if it had two hexes filled.",
       "generation_s": 2.16
     },
@@ -1925,7 +1944,7 @@
       "file": "blocks/c12-b170.wav",
       "sha256": "016521847aa5ba58b1f84f586624ddd9fdc5df6899bced07842160e13b4d22dd",
       "duration_ms": 44350,
-      "start_ms": 1296050,
+      "start_ms": 1298600,
       "text": "And so in order to time reverse, he just had to ... let each time step happen twice. The opposite of a 120-degree rotation is, after all, two 120-degree rotations. But there was a problem: after each time step, the split into triangles shifted. So to play a time step backward, he had to... play one step forward, then shift time back one step so that he could play the next step forward under the same tiling, then play a second step forward to bring the total rotation under that tiling to 240 degrees within each triangle, then shift time back two steps so that the game would shift to the previous tiling. Invert each step, and play the steps in reverse order, just like inverting a permutation in a hash.",
       "generation_s": 7.31
     },
@@ -1936,7 +1955,7 @@
       "file": "blocks/c12-b171.wav",
       "sha256": "5127426abcb0009abbe7dd2e4af062630595058d3f01649c5441bfbd905d0ed3",
       "duration_ms": 15250,
-      "start_ms": 1340850,
+      "start_ms": 1343400,
       "text": "He confirmed: there was a button to play one step forward, and two buttons to shift time — either forward or backward. So that's what he would have to do. A, b, a, b, b. Like some kind of video game cheat code. Which, in some sense, here it literally was.",
       "generation_s": 2.74
     },
@@ -1947,7 +1966,7 @@
       "file": "blocks/c12-b172.wav",
       "sha256": "dc652c088377a9cc65755c01b8ff5554060db05ec6aa6b343ff24e9c9c49e329",
       "duration_ms": 1700,
-      "start_ms": 1356550,
+      "start_ms": 1359100,
       "text": "Fine, he thought.",
       "generation_s": 0.31
     },
@@ -1958,7 +1977,7 @@
       "file": "blocks/c12-b173.wav",
       "sha256": "4b4e58bc0621b44813e937009cb63826081a0de721fd1f0e6c9d2238a1ee0334",
       "duration_ms": 9325,
-      "start_ms": 1358700,
+      "start_ms": 1361250,
       "text": "He put a glider into the sandbox, and tried it. It was an arduous process, and his fingers quickly tired. But it worked. The glider moved backwards.",
       "generation_s": 1.32
     },
@@ -1969,7 +1988,7 @@
       "file": "blocks/c12-b174.wav",
       "sha256": "9173f4cb79e0468bccc62c14829af7283178c89a8085ccd18b7fb496c822eb45",
       "duration_ms": 1975,
-      "start_ms": 1368475,
+      "start_ms": 1371025,
       "text": "Basic test passed.",
       "generation_s": 0.31
     },
@@ -1980,7 +1999,7 @@
       "file": "blocks/c12-b175.wav",
       "sha256": "a0bb2c1b98e2f406fc70c9abf77e12b33b65c70a219a9a4aa58f261d0b2620b4",
       "duration_ms": 8675,
-      "start_ms": 1370900,
+      "start_ms": 1373450,
       "text": "[Zei](/ˈzA/) tried the real test: using the same technique, starting with a symbol forming beside a rock formation and a glider flying out.",
       "generation_s": 1.24
     },
@@ -1991,7 +2010,7 @@
       "file": "blocks/c12-b176.wav",
       "sha256": "bb0684a3ce1c0d6c322e414284e159e182e40fe2be8f4499bb555c4c0cbb2d29",
       "duration_ms": 16950,
-      "start_ms": 1380025,
+      "start_ms": 1382575,
       "text": "The first time, it failed: as time went backwards, the glider and the symbol crashed, but then the same symbol re-formed a few steps away, and the glider flew away. So in that particular history that [Zei](/ˈzA/) had just sampled, before the crash, the symbol had been there all along.",
       "generation_s": 2.63
     },
@@ -2002,7 +2021,7 @@
       "file": "blocks/c12-b177.wav",
       "sha256": "7e4939d02d8274e6a523f0e5ddbe7144088b1ad2e81c1994c21b84be8057bf7f",
       "duration_ms": 13550,
-      "start_ms": 1397425,
+      "start_ms": 1399975,
       "text": "He tried again, with a different glider. This time, it succeeded. As time moved backwards, past the moment of the crash, the rock-formation-plus-symbol turned into a bare rock formation, and two gliders flew back out.",
       "generation_s": 1.93
     },
@@ -2013,7 +2032,7 @@
       "file": "blocks/c12-b178.wav",
       "sha256": "2f51f98a521cd395209a0e54dc84c172657f2fb834ddc7e88e76559fb2f2ed96",
       "duration_ms": 4625,
-      "start_ms": 1411425,
+      "start_ms": 1413975,
       "text": "\"[FI](/ˈfi/) [LE](/ˈlɛ/) [GEI](/ˈɡA/) [TAU](/ˈtW/) [FA](/ˈfɑ/).\" The battle begins in one hundred ticks.",
       "generation_s": 0.75
     },
@@ -2024,7 +2043,7 @@
       "file": "blocks/c12-b179.wav",
       "sha256": "3ba5ca23b1f96475a5eca1ae802b35280f3fa19669f5020a84496e842aab9422",
       "duration_ms": 13550,
-      "start_ms": 1416500,
+      "start_ms": 1419050,
       "text": "[Zei](/ˈzA/) quickly repeated the same experiment with other candidates for a rock formation. He paid no attention to the voice announcing the countdown, and kept trying until he found one for the two other most natural options.",
       "generation_s": 2.03
     },
@@ -2035,7 +2054,7 @@
       "file": "blocks/c12-b180.wav",
       "sha256": "e96f42a9ba2effc7da7c360847589a45c9f8bcd4c9fe328a484d963c9e55ae02",
       "duration_ms": 1950,
-      "start_ms": 1430500,
+      "start_ms": 1433050,
       "text": "\"[MU](/ˈmu/) [GU](/ˈɡu/) [GEI](/ˈɡA/) [TAU](/ˈtW/) [FA](/ˈfɑ/).\"",
       "generation_s": 0.31
     },
@@ -2046,7 +2065,7 @@
       "file": "blocks/c12-b181.wav",
       "sha256": "ee095e4608a327f8a0a926f16157e1ab9f36bf5d7e617e20c7f49f590235165e",
       "duration_ms": 7750,
-      "start_ms": 1432900,
+      "start_ms": 1435450,
       "text": "[Zei](/ˈzA/) quickly put up symbols, walls, and gliders that would create symbols if they crashed into favorable rock formations.",
       "generation_s": 1.09
     },
@@ -2057,7 +2076,7 @@
       "file": "blocks/c12-b182.wav",
       "sha256": "186d9e94ad58b7196a9b162b765518c35ad6841f7d051c8e81e7e3b434c578bc",
       "duration_ms": 15750,
-      "start_ms": 1441100,
+      "start_ms": 1443650,
       "text": "He was surprised at his own speed doing this, given how much longer everything else had taken. But almost immediately he realized in the back of his mind that this made sense: figuring out what to deploy is the hard part, deployment is just copy and paste.",
       "generation_s": 2.15
     },
@@ -2068,7 +2087,7 @@
       "file": "blocks/c12-b183.wav",
       "sha256": "b152b8696279bf788ca704850062c89aeea9fc4a6a975d3ef1a06a47da8d517a",
       "duration_ms": 10925,
-      "start_ms": 1457300,
+      "start_ms": 1459850,
       "text": "After making a basic setup on the board, he breathed out. Just as he breathed back in and started doing a final pass refining his structures, a final countdown began.",
       "generation_s": 1.66
     },
@@ -2079,7 +2098,7 @@
       "file": "blocks/c12-b184.wav",
       "sha256": "328c9ca960ba81708926539f8cb96d2e31326962d1c28209f16898a7d9a6d6dd",
       "duration_ms": 3175,
-      "start_ms": 1468675,
+      "start_ms": 1471225,
       "text": "\"[PA](/ˈpɑ/) [GU](/ˈɡu/) [SO](/ˈsO/) [BI](/ˈbi/) [ZE](/ˈzɛ/) [HA](/ˈhɑ/) [MU](/ˈmu/) [FO](/ˈfO/) [SHI](/ˈʃi/) [LE](/ˈlɛ/) [PA](/ˈpɑ/) ...\"",
       "generation_s": 0.52
     },
@@ -2090,7 +2109,7 @@
       "file": "blocks/c12-b185.wav",
       "sha256": "2330e6f3e269d949c931ac628bdbbeea8da10a5449e3186ecba1fdfa49337f38",
       "duration_ms": 1650,
-      "start_ms": 1472300,
+      "start_ms": 1474850,
       "text": "\"[TAU](/ˈtW/) [FA](/ˈfɑ/).\"",
       "generation_s": 0.27
     },
@@ -2101,7 +2120,7 @@
       "file": "blocks/c12-b186.wav",
       "sha256": "7913dd90f007647ce85ab12c2d2e231f3d4f0136ea0a3aa7818e52fc7a918150",
       "duration_ms": 3975,
-      "start_ms": 1474400,
+      "start_ms": 1476950,
       "text": "Gliders started flying out. At first, nothing happened.",
       "generation_s": 0.56
     },
@@ -2112,7 +2131,7 @@
       "file": "blocks/c12-b187.wav",
       "sha256": "c3275007c00032832cf2f76b18b4000a80265c4ae2505f5bf84148a455f7e738",
       "duration_ms": 11550,
-      "start_ms": 1478825,
+      "start_ms": 1481375,
       "text": "Five hundred turns later, a part of the board came into view. One of his gliders had successfully created a symbol, and revealed a part of the board that showed what the rock formations look like.",
       "generation_s": 1.65
     },
@@ -2123,7 +2142,7 @@
       "file": "blocks/c12-b188.wav",
       "sha256": "e1104f513f613dbcd21d465d95352005812c12479e9a7ff18e9c791274a2c90f",
       "duration_ms": 5700,
-      "start_ms": 1490825,
+      "start_ms": 1493375,
       "text": "Immediately, [Zei](/ˈzA/) switched to the next task: figuring out how to build glider factories.",
       "generation_s": 0.88
     },
@@ -2134,7 +2153,7 @@
       "file": "blocks/c12-b189.wav",
       "sha256": "9b22b74eefcf6a8c7d0de0141d9ee638b2fb27dd46fefc7ba843a87ced406b23",
       "duration_ms": 19200,
-      "start_ms": 1496975,
+      "start_ms": 1499525,
       "text": "When the first intervention turn hit, [Zei](/ˈzA/) had not yet figured this out. However, he did send out several more gliders that flew from his home base, ready to create more copies of his symbol if they collided into a rock formation in the right place. He also sent gliders from nearby his new symbol, rapidly heading east.",
       "generation_s": 3.04
     },
@@ -2145,7 +2164,7 @@
       "file": "blocks/c12-b190.wav",
       "sha256": "705eac9a8cb87cc9a9f7c973b912cad227424b07748b206290476d41b101f718",
       "duration_ms": 8950,
-      "start_ms": 1516625,
+      "start_ms": 1519175,
       "text": "The audience watched intently. From across the river, [Bai](/ˈbI/) was also watching intently. And from afar, so were [Fin](/ˈfɪn/), [Mu](/ˈmu/) and [Den](/ˈdɛn/).",
       "generation_s": 1.25
     },
@@ -2156,10 +2175,11 @@
       "file": "blocks/c12-b191.wav",
       "sha256": "212c45994252ea344871abbc53c864c98f4a4dab31fda75622ab9684f7d451f3",
       "duration_ms": 10875,
-      "start_ms": 1526025,
+      "start_ms": 1528575,
       "text": "A view of the hexagonal board: a cluster of five light blue dots near the top, and eight small purple squares scattered across the lower half, with open space between them.",
       "generation_s": 1.47,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 192,
@@ -2168,7 +2188,7 @@
       "file": "blocks/c12-b192.wav",
       "sha256": "0359451c37d0984f030f97066adb78ac9f0a9d9214581ed2f55425173f7603b5",
       "duration_ms": 7175,
-      "start_ms": 1537500,
+      "start_ms": 1540560,
       "text": "The audience was surprised. Neither player had managed to figure out any gliders that move vertically, they realized.",
       "generation_s": 1.0
     },
@@ -2179,7 +2199,7 @@
       "file": "blocks/c12-b193.wav",
       "sha256": "6b2b618b6c7d50e76482ac549cbe5d161a3d21b35651de9215623d48cc88e661",
       "duration_ms": 7225,
-      "start_ms": 1545125,
+      "start_ms": 1548185,
       "text": "On the second intervention turn, [Zei](/ˈzA/) launched gliders from the sides of the board, aiming straight toward [Bo](/ˈbO/)'s home base.",
       "generation_s": 0.98
     },
@@ -2190,7 +2210,7 @@
       "file": "blocks/c12-b194.wav",
       "sha256": "401eb5ea18410c040a96792c4cb51591cc0d115e72c37b8974dca81dd81fa264",
       "duration_ms": 10375,
-      "start_ms": 1552800,
+      "start_ms": 1555860,
       "text": "And just before the third intervention turn, one of [Zei](/ˈzA/)'s gliders hit a rock formation right beside [Bo](/ˈbO/)'s home base, allowing [Zei](/ˈzA/) to see all of [Bo](/ˈbO/)'s symbols.",
       "generation_s": 1.37
     },
@@ -2201,7 +2221,7 @@
       "file": "blocks/c12-b195.wav",
       "sha256": "6b544085d477b580556ab7a5aec68e0dfbabafbecfb456639077b17614004d74",
       "duration_ms": 10500,
-      "start_ms": 1563625,
+      "start_ms": 1566685,
       "text": "[Zei](/ˈzA/) used that intervention turn to send gliders directly toward the three of [Bo](/ˈbO/)'s symbols that he could see, and more toward some locations nearby just in case.",
       "generation_s": 1.4
     },
@@ -2212,9 +2232,22 @@
       "file": "blocks/c12-b196.wav",
       "sha256": "66309535c9c0a4d2e196a5ae51dd01a1b0cd0c1f90be3f62bea703db8eceac0b",
       "duration_ms": 6150,
-      "start_ms": 1574575,
+      "start_ms": 1577635,
       "text": "Within three hundred turns, all of [Bo](/ˈbO/)'s symbols were destroyed, and [Zei](/ˈzA/) was announced the winner.",
       "generation_s": 0.84
     }
-  ]
+  ],
+  "restitched_at": "2026-10-05T18:49:12+00:00",
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent and its helper agents",
+    "drafted": [
+      "spoken descriptions of screens, figures and lyric cards (blocks 5, 26, 36, 50, 97, 191)",
+      "pronunciation entries (content/snowmoon/pronunciation.json)"
+    ],
+    "instructions": [
+      "docs/prompts/008a-agent-prompts.md#read-aloud-descriptions-and-invented-word-lists"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
 }

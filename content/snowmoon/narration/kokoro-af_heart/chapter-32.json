@@ -4,6 +4,14 @@
   "voice": "kokoro-af_heart",
   "label": "Synthetic narration · Kokoro-82M, stock voice af_heart",
   "license": "GPL-3.0",
+  "published_by": {
+    "fid": 6786,
+    "role": "maintainer",
+    "action": "published via script",
+    "script": "scripts/publish-narration.ts",
+    "date": "2026-10-05",
+    "evidence": "docs/prompts/008-narration-and-images.md"
+  },
   "recipe": "content/snowmoon/recipes/narration/chapter-32.json",
   "model": {
     "name": "Kokoro-82M",
@@ -36,7 +44,21 @@
     },
     "break_ms": 1800,
     "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
-    "read_aloud_sha256": "b584448ba82ec62dc0736a10f7764062a519d2947dae04f4e6c819ce2af5e02c"
+    "read_aloud_sha256": "b584448ba82ec62dc0736a10f7764062a519d2947dae04f4e6c819ce2af5e02c",
+    "description_tone": {
+      "notes_hz": [
+        660,
+        990
+      ],
+      "notes_ms": [
+        110,
+        140
+      ],
+      "between_ms": 40,
+      "after_ms": 220,
+      "amplitude": 0.12,
+      "made_by": "code (numpy sine, linear fades)"
+    }
   },
   "block_encoding": {
     "codec": "aac",

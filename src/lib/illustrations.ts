@@ -19,8 +19,16 @@ export interface Illustration {
   alt: string;
 }
 
-/** A short description from the image's scene prompt, without the model-facing reference wording. */
+/**
+ * A short description from the image's scene prompt, without the model-facing
+ * reference wording. The prompt was model-drafted, so the alt text says the
+ * image is AI-generated (principle 2: accessibility text is labelled).
+ */
 function altFor(chapter: number, id: string): string {
+  return `AI-generated image: ${describe(chapter, id)}`;
+}
+
+function describe(chapter: number, id: string): string {
   const file = path.join(process.cwd(), 'content', WORK.id, 'illustrations', `chapter-${chapter}.json`);
   const job = JSON.parse(readFileSync(file, 'utf8')).jobs.find((j: { id: string }) => j.id === id);
   // Words drawn over the image (lettering) belong in its description too.

@@ -4,7 +4,7 @@
   "source_sha256": "bfc1768b912085d1cfce1ff68e5fe5f5af847e1faa8d1ec24ff6dbb5f552dd70",
   "generated_at": "2026-10-03T18:09:31+00:00",
   "generation_seconds": 257.7,
-  "total_duration_ms": 1539350,
+  "total_duration_ms": 1541390,
   "model": {
     "name": "Kokoro-82M",
     "repo": "hexgrad/Kokoro-82M",
@@ -36,7 +36,21 @@
     },
     "break_ms": 1800,
     "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
-    "read_aloud_sha256": "15d0fae3b55a56af8d420395285b0447ce87d1af56ee4345de99a4806f4ddfa3"
+    "read_aloud_sha256": "15d0fae3b55a56af8d420395285b0447ce87d1af56ee4345de99a4806f4ddfa3",
+    "description_tone": {
+      "notes_hz": [
+        660,
+        990
+      ],
+      "notes_ms": [
+        110,
+        140
+      ],
+      "between_ms": 40,
+      "after_ms": 220,
+      "amplitude": 0.12,
+      "made_by": "code (numpy sine, linear fades)"
+    }
   },
   "host": {
     "platform": "macOS-26.5.1-arm64-arm-64bit",
@@ -45,10 +59,10 @@
   },
   "stitched": {
     "wav": "chapter-27.wav",
-    "wav_sha256": "e1047cfed6c809b76bfa3464fa1b691cc1072a78e42cc91c1c5d64b226455477",
+    "wav_sha256": "df3bf22dcbc9619d28123f3be4399553d9aeee03415854fc43505fee0804384d",
     "m4a": "chapter-27.m4a",
-    "m4a_sha256": "4c9bfaea13d010968cfbe5bccebe529a4b6f36cec0058dfc4026280480372188",
-    "note": "start_ms is the block's offset in the stitched file, gaps included"
+    "m4a_sha256": "5a9ae939293535a49768f5bef20b93ea0989f487dcef9087d2e2f24bfacf7c84",
+    "note": "start_ms is the block's offset in the stitched file, gaps included; a description starts with its tone (tone_ms)"
   },
   "blocks": [
     {
@@ -1355,7 +1369,8 @@
       "start_ms": 1309775,
       "text": "The pie chart asks: How much confidence do you have in the Veridian military? Thirty-nine percent say none at all, and twenty-five percent a little. Fifteen percent say some, twelve percent a lot, and only nine percent total confidence.",
       "generation_s": 2.26,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 119,
@@ -1364,7 +1379,7 @@
       "file": "blocks/c27-b119.wav",
       "sha256": "fbfc312c91392b3f6b3d6d461173981c38141ad6cbf8d1679671a7e791bb9b45",
       "duration_ms": 4675,
-      "start_ms": 1325450,
+      "start_ms": 1325960,
       "text": "\"As I expected. Now let's see how people think we should solve this problem.\"",
       "generation_s": 0.82
     },
@@ -1375,10 +1390,11 @@
       "file": "blocks/c27-b120.wav",
       "sha256": "1f51433fc3e209f62480ff88eed232811540dc2494fb0cf87442bc58e5b9330a",
       "duration_ms": 19200,
-      "start_ms": 1330575,
+      "start_ms": 1331085,
       "text": "The next chart asks: Who would you prefer to run the Veridian military? The [Kungaupei](/ˈkunɡWpA/) lead with thirty-eight percent, followed by a new leadership chosen by parliament at twenty-one, and the Arctics at sixteen. The current leadership gets thirteen percent, Silverchat ten, and [Arturian](/ɑɹtˈʊɹiən/) military advisors two.",
       "generation_s": 3.24,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 121,
@@ -1387,7 +1403,7 @@
       "file": "blocks/c27-b121.wav",
       "sha256": "62925421b2b996585650e97926e0d8409e81dd90f4bb75c2d6f08a46476851b8",
       "duration_ms": 2800,
-      "start_ms": 1350375,
+      "start_ms": 1351395,
       "text": "\"Restrict to people who are from Northshore.\"",
       "generation_s": 0.47
     },
@@ -1398,7 +1414,7 @@
       "file": "blocks/c27-b122.wav",
       "sha256": "bd8a0f8dd86e1463212da655a69b0df590248cbc4a905fe0cd5490fd9986479e",
       "duration_ms": 7800,
-      "start_ms": 1353625,
+      "start_ms": 1354645,
       "text": "\"Wait, did we set it up to provide that level of granularity? Votes are anonymous, we have no way to tell who sent each one.\"",
       "generation_s": 1.13
     },
@@ -1409,7 +1425,7 @@
       "file": "blocks/c27-b123.wav",
       "sha256": "f50bc50ac7d93f5a11f4209081b653afe961e0ba5d61280679bea0c07fc91bfe",
       "duration_ms": 10325,
-      "start_ms": 1361875,
+      "start_ms": 1362895,
       "text": "\"We did break it down by age, self-declared most recent senator votes, province, and a couple of personality type axes inferred by a large language model.\"",
       "generation_s": 1.52
     },
@@ -1420,7 +1436,7 @@
       "file": "blocks/c27-b124.wav",
       "sha256": "04f61db7f1e154ea15207e4921caf513b90c435af51c1c37763cdb1f8ab2ebd2",
       "duration_ms": 1600,
-      "start_ms": 1372650,
+      "start_ms": 1373670,
       "text": "\"Ah, found it.\"",
       "generation_s": 0.26
     },
@@ -1431,10 +1447,11 @@
       "file": "blocks/c27-b125.wav",
       "sha256": "24433230d424e72b3bb05c691ec9fe0d1dca73f59d58001cc553ccf6562f5342",
       "duration_ms": 16675,
-      "start_ms": 1374700,
+      "start_ms": 1375720,
       "text": "The same question, restricted to people with Northshore ties. Now the [Kungaupei](/ˈkunɡWpA/) have fifty-two percent. Silverchat gets sixteen, the Arctics thirteen, a new leadership chosen by parliament eight, the current leadership six, and [Arturian](/ɑɹtˈʊɹiən/) military advisors five.",
       "generation_s": 2.48,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 126,
@@ -1443,7 +1460,7 @@
       "file": "blocks/c27-b126.wav",
       "sha256": "fb115fc70cd31e2ab68b0f367115ab03af071a725ff7d900893c3073380b15c9",
       "duration_ms": 7025,
-      "start_ms": 1391975,
+      "start_ms": 1393505,
       "text": "\"Congrats, [Evelor](/ˈɛvəlɔɹ/)\", Verdow said wryly. \"Seems like you are more fit to run Northshore than the actual parliament.\"",
       "generation_s": 1.11
     },
@@ -1454,7 +1471,7 @@
       "file": "blocks/c27-b127.wav",
       "sha256": "ba9d67d80524a2350fffc1a8ca6d26d8f0ace29c2f5a4691ea1b88d98ed5ece9",
       "duration_ms": 6825,
-      "start_ms": 1399450,
+      "start_ms": 1400980,
       "text": "\"I'm a bit scared of these results now\", Seila interjected. \"Haven't we just given the game away to the Arctics?\"",
       "generation_s": 1.01
     },
@@ -1465,7 +1482,7 @@
       "file": "blocks/c27-b128.wav",
       "sha256": "2787af8037a73977142ff39e23ccf1c47e6701190946e1d7219f293ce5a3c2e4",
       "duration_ms": 16850,
-      "start_ms": 1406725,
+      "start_ms": 1408255,
       "text": "\"I think it's okay\", [Mu](/ˈmu/) replied. \"We asked many different questions in the poll. One of them literally has twenty percent saying that we should fund recovering Northshore by legally transferring all of its government-owned territory to Hydrafill and letting them figure it out.\"",
       "generation_s": 2.72
     },
@@ -1476,7 +1493,7 @@
       "file": "blocks/c27-b129.wav",
       "sha256": "acd0bb711ec465577e718ec36c0f24b46740ea036846c67f9338bb1adf06dafa",
       "duration_ms": 20225,
-      "start_ms": 1424025,
+      "start_ms": 1425555,
       "text": "\"The lawsuit is something that the Arctics will notice and watch, of course. We should delay it by a few days to make it not look too coordinated. But regardless of what we do, we will have made it clear to everyone — including the Arctics — that Veridians recognize that there is a big problem. It's the details of the solution that we need to hide.\"",
       "generation_s": 3.58
     },
@@ -1487,7 +1504,7 @@
       "file": "blocks/c27-b130.wav",
       "sha256": "7661d2843f9558cfa841aaadb052e5793127d2b3f28f46a1f85feb8e3ad3ac5a",
       "duration_ms": 3550,
-      "start_ms": 1444700,
+      "start_ms": 1446230,
       "text": "They paused briefly, and stared at the progress bars.",
       "generation_s": 0.65
     },
@@ -1498,7 +1515,7 @@
       "file": "blocks/c27-b131.wav",
       "sha256": "88c480ac25dc28f93520372835536a10741308cd2b473117d263a5b0369ad3b7",
       "duration_ms": 4125,
-      "start_ms": 1448700,
+      "start_ms": 1450230,
       "text": "\"Okay, that will take a while. Let's look at some more pie charts.\"",
       "generation_s": 0.64
     },
@@ -1509,7 +1526,7 @@
       "file": "blocks/c27-b132.wav",
       "sha256": "a013238c2c4ac21b5fbec1452a88327cb137b7ffff731510935f6646661d934b",
       "duration_ms": 4675,
-      "start_ms": 1453275,
+      "start_ms": 1454805,
       "text": "A robot entered the room, bringing each of the participants a cup of tea.",
       "generation_s": 0.74
     },
@@ -1519,7 +1536,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 1458400,
+      "start_ms": 1459930,
       "duration_ms": 1800
     },
     {
@@ -1529,7 +1546,7 @@
       "file": "blocks/c27-b134.wav",
       "sha256": "4769aaed9293abb069f405b46e3b4f946ea1be1d59c864b9ec19807c23ca4d77",
       "duration_ms": 3050,
-      "start_ms": 1460200,
+      "start_ms": 1461730,
       "text": "\"And ... done\", [Zei](/ˈzA/) exclaimed triumphantly.",
       "generation_s": 0.57
     },
@@ -1540,7 +1557,7 @@
       "file": "blocks/c27-b135.wav",
       "sha256": "d7daa253571b9698125fef36c3099d7fc5eb55a3ce2523af1c57349f72b21d4d",
       "duration_ms": 7225,
-      "start_ms": 1463700,
+      "start_ms": 1465230,
       "text": "Five icons representing the responses from five bots appeared onscreen. [Zei](/ˈzA/) clicked on the first one.",
       "generation_s": 1.19
     },
@@ -1551,10 +1568,11 @@
       "file": "blocks/c27-b136.wav",
       "sha256": "f5fda05f7136654942e74e2bf957c3cfe814635c38ef2fed7f3fdbd0f9132a1a",
       "duration_ms": 31475,
-      "start_ms": 1471375,
+      "start_ms": 1472905,
       "text": "The first bot's executive summary: under any ordinary scenario, the probability that Veridia holds the same or more of its territory after one year is twenty percent. Under a transfer to [Kungaupei](/ˈkunɡWpA/) control, it rises to twenty-six percent, with the main risk being the usual cost of a chaotic change in leadership. The best chances, up to fifty percent, come from [Kungaupei](/ˈkunɡWpA/) participation with as little disruption as possible. The odds of actually gaining territory are much lower in every case.",
       "generation_s": 5.37,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 137,
@@ -1563,7 +1581,7 @@
       "file": "blocks/c27-b137.wav",
       "sha256": "e5ab62c3c2d6ec406fb0db2285183eb185d81297ced595c9c7af3fd8d914d552",
       "duration_ms": 1975,
-      "start_ms": 1503450,
+      "start_ms": 1505490,
       "text": "\"Hmm\", Verdow muttered.",
       "generation_s": 0.32
     },
@@ -1574,7 +1592,7 @@
       "file": "blocks/c27-b138.wav",
       "sha256": "78ba617f411f057f0a9962863e1153b6a048da563b6b3b00b428cf67bd67b295",
       "duration_ms": 3175,
-      "start_ms": 1505875,
+      "start_ms": 1507915,
       "text": "\"Do you think it's reasonable?\", Gladias asked.",
       "generation_s": 0.49
     },
@@ -1585,7 +1603,7 @@
       "file": "blocks/c27-b139.wav",
       "sha256": "647aa936e7da7c9ac477a81809936b0892407937859b9f527eb09a2944eb14a5",
       "duration_ms": 4900,
-      "start_ms": 1509500,
+      "start_ms": 1511540,
       "text": "\"The bots definitely have a more conservative temperament than I do, but it's fair.\"",
       "generation_s": 0.72
     },
@@ -1596,7 +1614,7 @@
       "file": "blocks/c27-b140.wav",
       "sha256": "bddd7e8b421d1a0949263f8f179cfe66745846c2df33bb35afc4159f320298f6",
       "duration_ms": 9750,
-      "start_ms": 1514850,
+      "start_ms": 1516890,
       "text": "\"The other four are saying vaguely similar things. The most pessimistic one says the chances are the same in the status quo and [Kungaupei](/ˈkunɡWpA/) scenarios.\"",
       "generation_s": 1.77
     },
@@ -1607,7 +1625,7 @@
       "file": "blocks/c27-b141.wav",
       "sha256": "10532cefa2396bf2aaa15ace39e6ac996a17c7eb236abf399257944071d97792",
       "duration_ms": 7875,
-      "start_ms": 1525050,
+      "start_ms": 1527090,
       "text": "\"Also we have much more data coming in from the votes. It's roughly the same as the results we first saw right when the poll began.\"",
       "generation_s": 1.14
     },
@@ -1618,9 +1636,22 @@
       "file": "blocks/c27-b142.wav",
       "sha256": "b2191ccd29d62f84779fe8a518e2cbf1f5cabaf719203f1e4f95bdb942a99cc8",
       "duration_ms": 5525,
-      "start_ms": 1533375,
+      "start_ms": 1535415,
       "text": "\"I guess we have all the data we will get. Let's get ready to file the case in a few days.\"",
       "generation_s": 0.81
     }
-  ]
+  ],
+  "restitched_at": "2026-10-05T18:52:32+00:00",
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent and its helper agents",
+    "drafted": [
+      "spoken descriptions of screens, figures and lyric cards (blocks 118, 120, 125, 136)",
+      "pronunciation entries (content/snowmoon/pronunciation.json)"
+    ],
+    "instructions": [
+      "docs/prompts/008a-agent-prompts.md#read-aloud-descriptions-and-invented-word-lists"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
 }

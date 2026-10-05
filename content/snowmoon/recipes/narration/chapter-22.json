@@ -4,7 +4,7 @@
   "source_sha256": "43cc856f38b7215f4d40b6ec8730064622eeeafa73e70cf1e99564fb8963fc3f",
   "generated_at": "2026-10-03T17:53:35+00:00",
   "generation_seconds": 181.4,
-  "total_duration_ms": 1280075,
+  "total_duration_ms": 1283645,
   "model": {
     "name": "Kokoro-82M",
     "repo": "hexgrad/Kokoro-82M",
@@ -36,7 +36,21 @@
     },
     "break_ms": 1800,
     "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
-    "read_aloud_sha256": "847073b96351029ea96c4b776c0083245948ba7098c3aca72e94ec352e50a85b"
+    "read_aloud_sha256": "847073b96351029ea96c4b776c0083245948ba7098c3aca72e94ec352e50a85b",
+    "description_tone": {
+      "notes_hz": [
+        660,
+        990
+      ],
+      "notes_ms": [
+        110,
+        140
+      ],
+      "between_ms": 40,
+      "after_ms": 220,
+      "amplitude": 0.12,
+      "made_by": "code (numpy sine, linear fades)"
+    }
   },
   "host": {
     "platform": "macOS-26.5.1-arm64-arm-64bit",
@@ -45,10 +59,10 @@
   },
   "stitched": {
     "wav": "chapter-22.wav",
-    "wav_sha256": "33f74d9b01c28ba10550c47da249b9ccdad5ec531c2d54519d5956ef8d615437",
+    "wav_sha256": "09fc81f1990ba8831a4620fd4dd4c475aa4a3a0dd7270ec5b81a43022136c1a8",
     "m4a": "chapter-22.m4a",
-    "m4a_sha256": "5def3e5721ed1818f022f1161f1e56672e2f05e22ffcf2a6c2c54269d13a80ef",
-    "note": "start_ms is the block's offset in the stitched file, gaps included"
+    "m4a_sha256": "463156cf59b998013a405e00d9965a7f3160562eb9a9f3ebc42fe8a9056ca440",
+    "note": "start_ms is the block's offset in the stitched file, gaps included; a description starts with its tone (tone_ms)"
   },
   "blocks": [
     {
@@ -182,7 +196,8 @@
       "start_ms": 130125,
       "text": "The taxi fare comes to twelve fifty-two in total: a driver base fare of three sixty-nine, tolls for nine minutes and five point six five kilometers, a toll for acceleration and deceleration, and three separate road congestion tolls adding up to four seventy-five.",
       "generation_s": 2.7,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 12,
@@ -191,7 +206,7 @@
       "file": "blocks/c22-b012.wav",
       "sha256": "dfdc96f205db677965894a20630ce9d5b84c2632481aa7204a61412bbed98c1b",
       "duration_ms": 2725,
-      "start_ms": 148450,
+      "start_ms": 148960,
       "text": "\"Hey, Chief?\", Jahn asked the driver.",
       "generation_s": 0.43
     },
@@ -202,7 +217,7 @@
       "file": "blocks/c22-b013.wav",
       "sha256": "f45aa8d5eb4e6ac2c192a7d882125b17db82559fd95ac8436468455b8d97116e",
       "duration_ms": 2525,
-      "start_ms": 151625,
+      "start_ms": 152135,
       "text": "\"What is it?\", the driver replied.",
       "generation_s": 0.34
     },
@@ -213,7 +228,7 @@
       "file": "blocks/c22-b014.wav",
       "sha256": "62d53327c2a7182440dd8a5a7012fdec8550ffdfe1205c2f79c1cfc271c14c05",
       "duration_ms": 9150,
-      "start_ms": 154600,
+      "start_ms": 155110,
       "text": "\"Do you know why there's so many congestion charges this time? The road seems quite a bit less congested than usual, why would the tolls be going that high?\"",
       "generation_s": 1.26
     },
@@ -224,7 +239,7 @@
       "file": "blocks/c22-b015.wav",
       "sha256": "a3e59b700020076980aeecab75335b3d5aff2a6e46fa64990ad7eb90bc74f74f",
       "duration_ms": 5275,
-      "start_ms": 164200,
+      "start_ms": 164710,
       "text": "\"Ah yeah, they're bumping up every tax and toll they can. Funding defense, they say.\"",
       "generation_s": 0.74
     },
@@ -235,7 +250,7 @@
       "file": "blocks/c22-b016.wav",
       "sha256": "f0fa1d97a0e9663e2451e209490923155f3bc2aefa743f5b3f80f1382e0dc3ac",
       "duration_ms": 1700,
-      "start_ms": 169925,
+      "start_ms": 170435,
       "text": "\"Huh, the roads too?\"",
       "generation_s": 0.25
     },
@@ -246,7 +261,7 @@
       "file": "blocks/c22-b017.wav",
       "sha256": "ddd451b3b8fe954f3fa610edecf0b4bc92a20d40b104d170c4e9d341d8921de6",
       "duration_ms": 3850,
-      "start_ms": 172075,
+      "start_ms": 172585,
       "text": "\"Are they bumping up any other fees on you?\", the driver asked.",
       "generation_s": 0.53
     },
@@ -257,7 +272,7 @@
       "file": "blocks/c22-b018.wav",
       "sha256": "c04a224f50a2977fe8b92a16569e0e5b835a2a7772c077dd26b7d204a153bf88",
       "duration_ms": 8075,
-      "start_ms": 176375,
+      "start_ms": 176885,
       "text": "\"Actually not the government\", Jahn replied. \"At least, not directly. But, the shelters. I heard some interesting gossip there.\"",
       "generation_s": 1.08
     },
@@ -268,7 +283,7 @@
       "file": "blocks/c22-b019.wav",
       "sha256": "d998c87433e6c2d4ecc7ea0319b6a55c14532ec9ca88c0dbc339b174d4ae5361",
       "duration_ms": 1650,
-      "start_ms": 184900,
+      "start_ms": 185410,
       "text": "\"And what is that?\"",
       "generation_s": 0.24
     },
@@ -279,7 +294,7 @@
       "file": "blocks/c22-b020.wav",
       "sha256": "5f1300b5b76293f11aba45235ee301531dfa89b2b051299913ca27594c14fce5",
       "duration_ms": 15300,
-      "start_ms": 187000,
+      "start_ms": 187510,
       "text": "\"The best shelters were originally owned by a few defense companies. Soon after Redshire got annexed, they got together and formed a cartel. Sold off a lot of the shelter space for money, and used that to modernize their armor and weapons a bunch.\"",
       "generation_s": 2.0
     },
@@ -290,7 +305,7 @@
       "file": "blocks/c22-b021.wav",
       "sha256": "746e88b701f9c9272df3722b05e3ca9aec8fff84522c9d3c488d1db7bc31d3cd",
       "duration_ms": 20450,
-      "start_ms": 202750,
+      "start_ms": 203260,
       "text": "\"Huh, all private companies? I guess that's their property, their rules. Less shelter space left for us poor folks than if they just rationed it, but hey, they are trying. And if they use that money to defend us well, less chance we'll end up needing any shelters in the first place. And with fewer cars on the road, I'm enjoying the roads more too.\"",
       "generation_s": 3.25
     },
@@ -301,7 +316,7 @@
       "file": "blocks/c22-b022.wav",
       "sha256": "75f6018613e2b341679a75b257d2ab358680b19ad43cbed73ffcc49b963b52f9",
       "duration_ms": 42550,
-      "start_ms": 223650,
+      "start_ms": 224160,
       "text": "\"Well, yes that's the polite story. Freetown's economic philosophy at its finest. But I'm getting the feeling it's not quite that clean. The government seems to be making a special effort to build roads in exactly those places that make it easier to get to and from the shelters. There's no evidence of any collusion between them and the companies — that would get knocked down hard by the courts — but my theory is that it's a sort of retroactive reward. Create the expectation that if you use your private property for the public good, then the government will twist the public work that it does in order to make life easier for you. It's a trick to work around the maximum budget rule — pay people without actually directly paying them.\"",
       "generation_s": 7.32
     },
@@ -312,7 +327,7 @@
       "file": "blocks/c22-b023.wav",
       "sha256": "bb8d6788d44729ce2f30b2998dd0f8e0a2a602fa0a258f81baeeed95afff6452",
       "duration_ms": 13375,
-      "start_ms": 266650,
+      "start_ms": 267160,
       "text": "\"And if you refuse to use your private property in public-spirited ways, well... if things get really bad the next step might be that they'll start closing some roads for 'maintenance'. Though I guess people can always fly.\"",
       "generation_s": 2.11
     },
@@ -323,7 +338,7 @@
       "file": "blocks/c22-b024.wav",
       "sha256": "06a74291e523ff12e78c6438f8e56a9d0fafd0ffff0341a7bf722f29e8f86cbf",
       "duration_ms": 14325,
-      "start_ms": 280475,
+      "start_ms": 280985,
       "text": "\"The Greater Plum Harbor has been refusing to fund anything that could be seen as going against the Arctics, they're scared that their node in Northglade might get shut down. I guess that's where we'll find out how good Freetown is at staying 'free'.\"",
       "generation_s": 1.95
     },
@@ -334,7 +349,7 @@
       "file": "blocks/c22-b025.wav",
       "sha256": "e4e463784e7dd5483d8fe8a124bf6737c652dd4509bc3a43f76febd7cc60c296",
       "duration_ms": 2025,
-      "start_ms": 295250,
+      "start_ms": 295760,
       "text": "\"And at defending itself.\"",
       "generation_s": 0.34
     },
@@ -345,7 +360,7 @@
       "file": "blocks/c22-b026.wav",
       "sha256": "e0dd3a885c4cafc6e2253b9ffcfe4664afafc6b58e6fafd52a2469ba74238ea7",
       "duration_ms": 10925,
-      "start_ms": 297725,
+      "start_ms": 298235,
       "text": "The driver and Jahn stayed silent for a minute. Soon, the taxi slowed to a halt. Jahn looked outside the window. He had arrived at the Freetown Economics Institute.",
       "generation_s": 1.59
     },
@@ -356,7 +371,7 @@
       "file": "blocks/c22-b027.wav",
       "sha256": "c90dfac767766ca6524c0323d690ab81c2e9a77777fd44322a493ae07297a88a",
       "duration_ms": 2475,
-      "start_ms": 309100,
+      "start_ms": 309610,
       "text": "\"Thank you Chief, and have a good day!\"",
       "generation_s": 0.48
     },
@@ -367,7 +382,7 @@
       "file": "blocks/c22-b028.wav",
       "sha256": "ad44893c360847de22a590341180e5a36fc92d72fb08e6d9f350ec74acaa92e5",
       "duration_ms": 2750,
-      "start_ms": 312025,
+      "start_ms": 312535,
       "text": "\"You too, boss\", the driver replied.",
       "generation_s": 0.41
     },
@@ -378,7 +393,7 @@
       "file": "blocks/c22-b029.wav",
       "sha256": "69c5fff625b407956e7a6456dce04ef3b49a76315c6b28951621083a1b198c6c",
       "duration_ms": 3175,
-      "start_ms": 315225,
+      "start_ms": 315735,
       "text": "Jahn opened the door, and got out of the taxi.",
       "generation_s": 0.52
     },
@@ -388,7 +403,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 318850,
+      "start_ms": 319360,
       "duration_ms": 1800
     },
     {
@@ -398,7 +413,7 @@
       "file": "blocks/c22-b031.wav",
       "sha256": "34123b758350d1deba204cf8bb897750fe4b1986d8593d32770825cb21c34bd4",
       "duration_ms": 6025,
-      "start_ms": 320650,
+      "start_ms": 321160,
       "text": "Jahn passed through the turnstile in the Freetown Economics Institute, and walked toward the restaurant.",
       "generation_s": 0.85
     },
@@ -409,7 +424,7 @@
       "file": "blocks/c22-b032.wav",
       "sha256": "e5fd1f9e818cec0e27d3a725435c35714e72e3a36c908efef3f9c0f276cdfdf1",
       "duration_ms": 5000,
-      "start_ms": 327125,
+      "start_ms": 327635,
       "text": "After a minute of walking, he arrived. He saw a familiar face: [Utaku](/utˈɑku/).",
       "generation_s": 0.74
     },
@@ -420,7 +435,7 @@
       "file": "blocks/c22-b033.wav",
       "sha256": "104be94ce0308bca62a4d0117b54d75281a321a75b3f9d766087ca3a8f1b9b7a",
       "duration_ms": 2900,
-      "start_ms": 332575,
+      "start_ms": 333085,
       "text": "\"[Utaku](/utˈɑku/)! Surprised to see you still here.\"",
       "generation_s": 0.48
     },
@@ -431,7 +446,7 @@
       "file": "blocks/c22-b034.wav",
       "sha256": "514b74c5555b65b978ce03a4c23224a2c35ff0032cd72a281ac590ef341f7b5d",
       "duration_ms": 9200,
-      "start_ms": 335925,
+      "start_ms": 336435,
       "text": "\"My parents told me to come back. They think Freetown is taking defense more seriously than the other United Cities, so it's safer than Belpaki here.\"",
       "generation_s": 1.36
     },
@@ -442,7 +457,7 @@
       "file": "blocks/c22-b035.wav",
       "sha256": "786362ca34f5fa28e65f66bf69c26b7c9f219563b4392a703dc70c2a6b091e4c",
       "duration_ms": 1650,
-      "start_ms": 345575,
+      "start_ms": 346085,
       "text": "\"Do you think that?\"",
       "generation_s": 0.27
     },
@@ -453,7 +468,7 @@
       "file": "blocks/c22-b036.wav",
       "sha256": "5998dee383a9c19c2d03098e2995132779bd4dff7e3daf07fcd23a84b43127c2",
       "duration_ms": 12350,
-      "start_ms": 347675,
+      "start_ms": 348185,
       "text": "\"There have been some moves recently to create a unified defense grid between the aks. I'll be more optimistic if that goes through. But even then, I worry it's more theater than anything substantive.\"",
       "generation_s": 1.78
     },
@@ -464,7 +479,7 @@
       "file": "blocks/c22-b037.wav",
       "sha256": "a272b69f12a8f2a8876458ef62c565cfd40ebc76e2061f896c8ab048b1b23528",
       "duration_ms": 3050,
-      "start_ms": 360475,
+      "start_ms": 360985,
       "text": "\"Has Freetown been doing anything substantive?\"",
       "generation_s": 0.46
     },
@@ -475,7 +490,7 @@
       "file": "blocks/c22-b038.wav",
       "sha256": "6bdc1c57abb5eae02a1a15dc1f9e67bb55f4018210bcb279d877c72426720ff2",
       "duration_ms": 14900,
-      "start_ms": 363975,
+      "start_ms": 364485,
       "text": "\"Well the big corps are paying insurance on all their property, the rates tripled when Redshire was annexed, and doubled again after Northglade. And then apparently the rates dropped back down by a quarter when the corps announced their recent defense packages.\"",
       "generation_s": 2.08
     },
@@ -486,7 +501,7 @@
       "file": "blocks/c22-b039.wav",
       "sha256": "93ce50b678e35018f1b79c8f9a2455b6c750483ede0e5e7a8d73e51841056241",
       "duration_ms": 3575,
-      "start_ms": 379325,
+      "start_ms": 379835,
       "text": "\"So ... somehow the market incentives seem to be working.\"",
       "generation_s": 0.76
     },
@@ -497,7 +512,7 @@
       "file": "blocks/c22-b040.wav",
       "sha256": "8c12fed6c3588c400611b209f5873084d3a8b4db4a858a5786a18fd5e885ef39",
       "duration_ms": 23575,
-      "start_ms": 383350,
+      "start_ms": 383860,
       "text": "\"You know, I've been talking to [Zei](/ˈzA/) from [Dzego](/ˈdzɛɡO/) lately, and learning how quickly they've gotten everyone to start caring about privacy, now about bio safety, average indoor CO2 levels dropped by over a hundred points within a month. All coordinated by machinery that they originally created, supposedly, to upgrade their language — and to give us a much more sensible distance and time system.\"",
       "generation_s": 3.49
     },
@@ -508,7 +523,7 @@
       "file": "blocks/c22-b041.wav",
       "sha256": "2cdecf16f0b5fde2d43644b97658fd2cd43385d8fd10fad21e3d29a40d798b6d",
       "duration_ms": 6700,
-      "start_ms": 407375,
+      "start_ms": 407885,
       "text": "\"I've been getting this feeling that maybe almost any system can work well if people accept it and believe in it.\"",
       "generation_s": 1.06
     },
@@ -519,7 +534,7 @@
       "file": "blocks/c22-b042.wav",
       "sha256": "e58c83de8d33dfefed1a587e87ebc9512682507b4836a62d1f8367a6f5332f42",
       "duration_ms": 9550,
-      "start_ms": 414525,
+      "start_ms": 415035,
       "text": "\"Do people in Freetown believe strongly in economic freedom? Everyone in the Economics Institute does, obviously, but what about regular people?\"",
       "generation_s": 1.77
     },
@@ -530,7 +545,7 @@
       "file": "blocks/c22-b043.wav",
       "sha256": "24823d6d77477cbbb718dd9ab4a60f968259cca3abd2df9f9556a19ef8bba855",
       "duration_ms": 5175,
-      "start_ms": 424525,
+      "start_ms": 425035,
       "text": "\"Are you familiar with the early history of the United Cities, a hundred years ago?\"",
       "generation_s": 0.74
     },
@@ -541,7 +556,7 @@
       "file": "blocks/c22-b044.wav",
       "sha256": "04fa45b52a2605a5b1be4ac6fc6273fc44ab4e9ade0abbc608bafc5db1a866e6",
       "duration_ms": 5500,
-      "start_ms": 430150,
+      "start_ms": 430660,
       "text": "\"Vaguely. I know there were some wars, both between some of the cities and against the Arctics.\"",
       "generation_s": 0.84
     },
@@ -552,7 +567,7 @@
       "file": "blocks/c22-b045.wav",
       "sha256": "fcf3d5a023bf8eb2b3cc82bb358547a9515069e5247b1d51ec9c17da195f620a",
       "duration_ms": 2825,
-      "start_ms": 436100,
+      "start_ms": 436610,
       "text": "\"But do you know how those wars got resolved?\"",
       "generation_s": 0.42
     },
@@ -563,7 +578,7 @@
       "file": "blocks/c22-b046.wav",
       "sha256": "b68a60daafddfcf240a530e1a8cc2d6b620986351fb9c036cf05b7fff9fa8a07",
       "duration_ms": 10375,
-      "start_ms": 439375,
+      "start_ms": 439885,
       "text": "\"Eventually the armies of this continent came together and cooperated more, and that was a big part of why the Arctic offensive against [Dzego](/ˈdzɛɡO/) was finally stopped.\"",
       "generation_s": 1.43
     },
@@ -574,7 +589,7 @@
       "file": "blocks/c22-b047.wav",
       "sha256": "2efc622f4a513807e72e47ded714a5c8779d5df60d5ac9eab8d84fd86eac5fd5",
       "duration_ms": 17850,
-      "start_ms": 450200,
+      "start_ms": 450710,
       "text": "\"Coming together in a crisis is easy. What's hard is keeping that spirit together through the easy times, the boring times, the times when the founding generation dies out and the kids and the grandkids need someone to fight against and have a hard time resisting the urge to start turning on each other.\"",
       "generation_s": 3.14
     },
@@ -585,7 +600,7 @@
       "file": "blocks/c22-b048.wav",
       "sha256": "b877476eb929da5fbd65f2ac9f154fd51068de0c2d371b2cf6229f0ea13f74c8",
       "duration_ms": 3550,
-      "start_ms": 468500,
+      "start_ms": 469010,
       "text": "\"So what happened? The co-governance system, I'm guessing?\"",
       "generation_s": 0.57
     },
@@ -596,7 +611,7 @@
       "file": "blocks/c22-b049.wav",
       "sha256": "a8dc6e2ba1172dd92943cc1f4660bbaefa42f6b8850310cad3d39b8884a1e868",
       "duration_ms": 16525,
-      "start_ms": 472500,
+      "start_ms": 473010,
       "text": "\"That's one part of it. Each city gave a percent of the votes in its parliament to its neighbors — not enough to threaten the cities' independence and their unique cultures, but enough that future politicians would not have an incentive to ignore their surrounding continent completely.\"",
       "generation_s": 2.26
     },
@@ -607,7 +622,7 @@
       "file": "blocks/c22-b050.wav",
       "sha256": "9160ca7b7e9d64488baf985397852bc4adb31035d7d0e76ceb208bea6e4d652f",
       "duration_ms": 15550,
-      "start_ms": 489475,
+      "start_ms": 489985,
       "text": "\"But also, they did another thing to preserve unique cultures. They had a period during which they subsidized people swapping homes and citizenships. People who felt more at home in another city were able to move easily and change their allegiance to their new home.\"",
       "generation_s": 2.16
     },
@@ -618,7 +633,7 @@
       "file": "blocks/c22-b051.wav",
       "sha256": "55dbb424096e4ab08fdda89b947a7f9e8acfd337fe22d2f9cadcdbb2892f966c",
       "duration_ms": 30525,
-      "start_ms": 505475,
+      "start_ms": 505985,
       "text": "\"The government of Freetown made a decision. They passed a new constitution, the one we still have today, which limited the government's power to regulate and tax anything down to a bare minimum. And then they said: this is what we are about. If you are scared of it, go to another city, but if you like it, no matter which city you're from, we welcome you. They even did a personality test without telling people what it's for, and then gave bigger subsidies to people who got what the government thought was a compatible result.\"",
       "generation_s": 4.91
     },
@@ -629,7 +644,7 @@
       "file": "blocks/c22-b052.wav",
       "sha256": "3ffc9f087b9e7d73729d007e66ccc9f4274a0fced85293773a7106196f6758f9",
       "duration_ms": 2025,
-      "start_ms": 536450,
+      "start_ms": 536960,
       "text": "\"Wow, I did not know that.\"",
       "generation_s": 0.34
     },
@@ -640,7 +655,7 @@
       "file": "blocks/c22-b053.wav",
       "sha256": "2ee521056ecc1b4609244eb44044e9901b832f8c91be4e1b0c6e9804d3fd385c",
       "duration_ms": 31275,
-      "start_ms": 538925,
+      "start_ms": 539435,
       "text": "\"Actually [Arturia](/ɑɹtˈʊɹiə/) did a similar thing, in a somewhat opposite direction. They described their values as being about peace and quiet, research and learning, and they filtered by conscientiousness and test scores. Today, their whole society is sort of like a big university. If you go against the system too much, you get pushed harder and harder to leave and go to Freetown. But if you're fine with the system, you can learn a lot and have a lot of fun inside it. They actually do quite a lot of good science and have reliable infrastructure.\"",
       "generation_s": 4.94
     },
@@ -651,7 +666,7 @@
       "file": "blocks/c22-b054.wav",
       "sha256": "c524be3cfc2f7174c421076bbba310ba9d1adb6fc2a87db77f231dd7039e92d7",
       "duration_ms": 11100,
-      "start_ms": 570650,
+      "start_ms": 571160,
       "text": "\"The strongest legitimacy comes from people buying in to an idea voluntarily — signing the form, knowing exactly what they are getting themselves into and what they are giving up.\"",
       "generation_s": 1.53
     },
@@ -662,7 +677,7 @@
       "file": "blocks/c22-b055.wav",
       "sha256": "2eefa8f764916e4026a5941b2bb0c80a6a57b77170eb9474d0dc4ec600c88b0a",
       "duration_ms": 10950,
-      "start_ms": 582200,
+      "start_ms": 582710,
       "text": "\"That sounds like selection matters too. Different styles work for different people. Maybe a Freetown made out of people from [Arturia](/ɑɹtˈʊɹiə/) would be a disaster, and same with the reverse.\"",
       "generation_s": 1.5
     },
@@ -673,7 +688,7 @@
       "file": "blocks/c22-b056.wav",
       "sha256": "2c66d51b582ce47e2871f52633daecbadbd2e9c14e363160c8b2cb6e8e6681f9",
       "duration_ms": 8925,
-      "start_ms": 593600,
+      "start_ms": 594110,
       "text": "\"Of course, now we're several generations into people being just born here, like people get born anywhere else. But for now, Freetown has held.\"",
       "generation_s": 1.23
     },
@@ -684,7 +699,7 @@
       "file": "blocks/c22-b057.wav",
       "sha256": "4a1a3d462896d8e85101158b0e7d173d4d5bca0c8964e48a6c650985d05f5082",
       "duration_ms": 9300,
-      "start_ms": 602975,
+      "start_ms": 603485,
       "text": "\"Do you think some people are ... genetically more freedom-loving than others? And Freetown got a lot of those people back then, and those genes got passed down?\"",
       "generation_s": 1.27
     },
@@ -695,7 +710,7 @@
       "file": "blocks/c22-b058.wav",
       "sha256": "4575cc9043f1bd0e4514a12675501b516826e6e7e5b50682b688ac658b776ed6",
       "duration_ms": 41475,
-      "start_ms": 612725,
+      "start_ms": 613235,
       "text": "\"People here bring that idea up from time to time. To me it feels unlikely. All the congestion tolls that I paid to get here, all the turnstiles, I somehow doubt that there can exist a gene that would register all that as being \"free\". You need to have a pretty deep education to understand how it's free — how it's all part of a market, each person and institution allocating their private property as they see fit, and how all these payments give people the ability to honestly self-report whether or not they truly value something more than the resources that it costs to make it available for them, and how that's better and more civilized than the government just deciding what things it thinks are wasteful and banning them.\"",
       "generation_s": 6.35
     },
@@ -706,7 +721,7 @@
       "file": "blocks/c22-b059.wav",
       "sha256": "cd0366015cbf51e98623d3587754c2c4a74e37281df80f1c49c09459f03f0338",
       "duration_ms": 22425,
-      "start_ms": 654650,
+      "start_ms": 655160,
       "text": "\"I think there might be a core that even someone from the [medieval](/mˌɛdiˈivᵊl/) era would understand. I don't bother you, you don't bother me. We're all each just trying to live our own lives, if we can help each other that's great, but not at the expense of leaving each other space to be in peace. You don't get the forager freedom of the great outdoors, especially not in the city, but within your own box you are the master.\"",
       "generation_s": 3.19
     },
@@ -717,7 +732,7 @@
       "file": "blocks/c22-b060.wav",
       "sha256": "25fdf8e1c2044210b6bc0dd5142b79a43f98f8f58cac7c748c83443a05642deb",
       "duration_ms": 3500,
-      "start_ms": 677525,
+      "start_ms": 678035,
       "text": "\"At least, that's what Freetown always feels like to me.\"",
       "generation_s": 0.51
     },
@@ -728,7 +743,7 @@
       "file": "blocks/c22-b061.wav",
       "sha256": "d3a74d0adb77dbf6fafde5457868292b4612846e1fcdafc095b1c43a493d66ee",
       "duration_ms": 16350,
-      "start_ms": 681475,
+      "start_ms": 681985,
       "text": "\"Although ... I do love the economists here. Well, the intellectual culture in general. I like that you can honestly bring up the genetics stuff, and even if people disagree, it's not like Belpaki where they just immediately think you must be an Arctic or something.\"",
       "generation_s": 2.22
     },
@@ -739,7 +754,7 @@
       "file": "blocks/c22-b062.wav",
       "sha256": "edb367acb3904ae63af0ede5fbc77dd110d553ada79abe945bf1a874de3668fa",
       "duration_ms": 17650,
-      "start_ms": 698275,
+      "start_ms": 698785,
       "text": "\"Changing the subject a bit, of course I know why they would never tell either of us, but I am curious what these defense companies are up to. What do they think the threat model is? Same type of invasion as Redshire and Northglade? But what happens if we resist harder? And how are they going to fight back?\"",
       "generation_s": 2.91
     },
@@ -750,7 +765,7 @@
       "file": "blocks/c22-b063.wav",
       "sha256": "d9033f61d4cf5fe535d1b59fd333ab4cbf3e372549b393e9309e73bb571e081e",
       "duration_ms": 7175,
-      "start_ms": 716375,
+      "start_ms": 716885,
       "text": "\"Well, funny you ask. I actually do know some gossip, although ... this is military, I don't think I'm allowed to tell you.\"",
       "generation_s": 1.1
     },
@@ -761,7 +776,7 @@
       "file": "blocks/c22-b064.wav",
       "sha256": "416124d5ad18611510313a0e8c66ffb3e3d94f59ae01eb6683fa3d9ba9eb3b61",
       "duration_ms": 8775,
-      "start_ms": 724000,
+      "start_ms": 724510,
       "text": "\"Huh, I'm surprised you got into those circles at all. Were they interested in your thoughts as an economist on how to raise more funding for defense?\"",
       "generation_s": 1.27
     },
@@ -772,7 +787,7 @@
       "file": "blocks/c22-b065.wav",
       "sha256": "ce757fb4f491300c483ec7030919b1ea63e32644a911b9c7842f0e84c9952032",
       "duration_ms": 8225,
-      "start_ms": 733225,
+      "start_ms": 733735,
       "text": "Jahn sighed. \"Unfortunately, I really can't tell you. Freedom of speech is great for many things, but ... not for military secrets.\"",
       "generation_s": 1.2
     },
@@ -782,7 +797,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 741900,
+      "start_ms": 742410,
       "duration_ms": 1800
     },
     {
@@ -792,7 +807,7 @@
       "file": "blocks/c22-b067.wav",
       "sha256": "1e7671efba8786b2b813eed8b479c0d09bc34701c3830141c7a4e0a3b5154d85",
       "duration_ms": 25675,
-      "start_ms": 743700,
+      "start_ms": 744210,
       "text": "Jahn ordered a dish with vegetables and a tea, and stayed in the restaurant area studying the internet to better understand exactly the question [Utaku](/utˈɑku/) had asked: what options Freetown still had to raise more funding for defense. He took out a computer, and made a table, scoring different options in three columns: how much money it could raise, how much economic collateral damage it would cause, and how much it risked making Freetown less ... free.",
       "generation_s": 3.81
     },
@@ -803,7 +818,7 @@
       "file": "blocks/c22-b068.wav",
       "sha256": "e60835e8d76c80664c7aee5c56aa81c4a29345b73fdb24b5d7c170e0496818e3",
       "duration_ms": 4800,
-      "start_ms": 769825,
+      "start_ms": 770335,
       "text": "A longhour later, Jahn's watch buzzed. It was [Zei](/ˈzA/), asking for a call.",
       "generation_s": 0.8
     },
@@ -814,7 +829,7 @@
       "file": "blocks/c22-b069.wav",
       "sha256": "e46bae8cf68ad0cd1883dfce236250a65b04090ab593c766c8f13422646071ca",
       "duration_ms": 5900,
-      "start_ms": 775075,
+      "start_ms": 775585,
       "text": "Jahn picked up his computer and his glass of water, and moved over to a nearby calling booth.",
       "generation_s": 0.84
     },
@@ -825,7 +840,7 @@
       "file": "blocks/c22-b070.wav",
       "sha256": "5dabd385a24ab0e1a8df7e62d2550c0fa10ae5161a53fbcdb7d12c9c74382c24",
       "duration_ms": 1575,
-      "start_ms": 781425,
+      "start_ms": 781935,
       "text": "\"What's up, [Zei](/ˈzA/)?\"",
       "generation_s": 0.24
     },
@@ -836,7 +851,7 @@
       "file": "blocks/c22-b071.wav",
       "sha256": "5928d0a26f761d3e5010cb3ba6ebe647a5b57c03e23017f681d21e3855159f54",
       "duration_ms": 7600,
-      "start_ms": 783450,
+      "start_ms": 783960,
       "text": "\"Thank you again for that connection you made with the defense companies last month. I actually have some interesting updates there!\"",
       "generation_s": 1.06
     },
@@ -847,7 +862,7 @@
       "file": "blocks/c22-b072.wav",
       "sha256": "a81f3764f14dde0661d347d37e936deaf4c1ef24c54d3cd2df221b86d951458e",
       "duration_ms": 7050,
-      "start_ms": 791500,
+      "start_ms": 792010,
       "text": "\"Hey, I only connected you to the Economics Institute director, the connection to the companies was his doing.\"",
       "generation_s": 0.98
     },
@@ -858,7 +873,7 @@
       "file": "blocks/c22-b073.wav",
       "sha256": "b6324a1a74558f46792bbd182369db6041bf7b62859b43a03bdeb233797479ee",
       "duration_ms": 1575,
-      "start_ms": 799000,
+      "start_ms": 799510,
       "text": "\"But what is it?\"",
       "generation_s": 0.24
     },
@@ -869,7 +884,7 @@
       "file": "blocks/c22-b074.wav",
       "sha256": "eef49d52c607b363f1cd748db3f4065494d42ba3b362384a072fbf79b240b562",
       "duration_ms": 7000,
-      "start_ms": 801025,
+      "start_ms": 801535,
       "text": "\"Well, first let me give you a status update. Do you know what the [Dzego](/ˈdzɛɡO/) folks have been doing with the defense companies' help?\"",
       "generation_s": 0.98
     },
@@ -880,7 +895,7 @@
       "file": "blocks/c22-b075.wav",
       "sha256": "a696304ed1cb22ecd64e2ac46d32e6c7ca9c967d9d93291dcdcf45f4d4242bfd",
       "duration_ms": 1500,
-      "start_ms": 808475,
+      "start_ms": 808985,
       "text": "\"I do not.\"",
       "generation_s": 0.23
     },
@@ -891,7 +906,7 @@
       "file": "blocks/c22-b076.wav",
       "sha256": "4511a96e881ac6a03caf73b470f687b9d85cb79215263fab47b381f26b4e7e84",
       "duration_ms": 3275,
-      "start_ms": 810425,
+      "start_ms": 810935,
       "text": "\"They've been hunting down Arctic drones in Redshire.\"",
       "generation_s": 0.5
     },
@@ -902,7 +917,7 @@
       "file": "blocks/c22-b077.wav",
       "sha256": "1a327b03e13a0973639830e0a11766f5dfdd45cf470305401cf9738c86765831",
       "duration_ms": 2450,
-      "start_ms": 814150,
+      "start_ms": 814660,
       "text": "\"If you're allowed to ... tell me more?\"",
       "generation_s": 0.36
     },
@@ -913,7 +928,7 @@
       "file": "blocks/c22-b078.wav",
       "sha256": "9e4133b10be37304077d8589096ef9350acfd9d3cf4a7f21881a71321cc9e5cd",
       "duration_ms": 1950,
-      "start_ms": 817050,
+      "start_ms": 817560,
       "text": "\"How about I show you more?\"",
       "generation_s": 0.28
     },
@@ -924,7 +939,7 @@
       "file": "blocks/c22-b079.wav",
       "sha256": "006c8df07f91da22aa951a6fc22dedd9d3f11cb8592d82d128103132b4c6ce8f",
       "duration_ms": 24450,
-      "start_ms": 819450,
+      "start_ms": 819960,
       "text": "Jahn's computer buzzed, and he saw a file download. It was a view-once file. If Jahn wanted, he could of course save it clandestinely through the operating system, or just take a picture of the screen with another device. But by default, once opened, the file would stay viewable for five minutes, cannot be copied, and would self-delete at the end. Politeness dictated not interfering with these defaults.",
       "generation_s": 3.39
     },
@@ -935,7 +950,7 @@
       "file": "blocks/c22-b080.wav",
       "sha256": "7783561fa749f5edd632fb55ab371eb5e5472871a54dad43846589fe59cce4ac",
       "duration_ms": 3175,
-      "start_ms": 844350,
+      "start_ms": 844860,
       "text": "Jahn clicked on the file, and a view opened up.",
       "generation_s": 0.47
     },
@@ -946,10 +961,11 @@
       "file": "blocks/c22-b081.wav",
       "sha256": "f7ee7810e756086455bbff4d44ceb0dfc8479e9b1fd35ca73320a2b9f09f6e35",
       "duration_ms": 14525,
-      "start_ms": 847975,
+      "start_ms": 848485,
       "text": "On the screen, a dark blue square. Seven small pale dots are arranged in a hexagon, six around a seventh at the center. Near the bottom of the hexagon, a small red square, trailing a short dashed red line behind it.",
       "generation_s": 2.09,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 82,
@@ -958,7 +974,7 @@
       "file": "blocks/c22-b082.wav",
       "sha256": "14e2fac2cc00ea49ac5d0f754b9ecfe957162bf425dfe67742ebd36ccbf535c3",
       "duration_ms": 1900,
-      "start_ms": 863100,
+      "start_ms": 864120,
       "text": "\"What am I looking at here?\"",
       "generation_s": 0.3
     },
@@ -969,7 +985,7 @@
       "file": "blocks/c22-b083.wav",
       "sha256": "cce0abd76d4e68c535aed059ccc3be35e376b91d4b34b9c3bc55c7f6fa40707e",
       "duration_ms": 7175,
-      "start_ms": 865450,
+      "start_ms": 866470,
       "text": "\"This is happening right now as we speak. It's our clandestine kill chain on an Arctic ground drone in Redshire.\"",
       "generation_s": 1.03
     },
@@ -980,7 +996,7 @@
       "file": "blocks/c22-b084.wav",
       "sha256": "4eb6c45aaafd8549928e2ca46a9ebee431814dd1f75848f3ddf09c8b1053560d",
       "duration_ms": 14425,
-      "start_ms": 873075,
+      "start_ms": 874095,
       "text": "\"The red square is the enemy. The blue circles are seven of our own drones, that we arranged in a hexagon. Their role is to jam communications. Right now, they are dormant, waiting for the Arctic drone to get fully inside.\"",
       "generation_s": 2.22
     },
@@ -991,7 +1007,7 @@
       "file": "blocks/c22-b085.wav",
       "sha256": "ecc3e56380cddb606b4a26c7011a448c61c6a3c3bbce2d1ed2d7542f50b57e4c",
       "duration_ms": 1975,
-      "start_ms": 887950,
+      "start_ms": 888970,
       "text": "\"So what happens next?\"",
       "generation_s": 0.37
     },
@@ -1002,7 +1018,7 @@
       "file": "blocks/c22-b086.wav",
       "sha256": "4895d646d0ebbbbb80eac08bde117212467c3b6eb5dce40dcc04ce726afd5c68",
       "duration_ms": 2575,
-      "start_ms": 890375,
+      "start_ms": 891395,
       "text": "\"Ah, well let's find out together.\"",
       "generation_s": 0.4
     },
@@ -1013,7 +1029,7 @@
       "file": "blocks/c22-b087.wav",
       "sha256": "7d2db1f2bb1d498e5d3a8dd259514584c38cd97dd29ac65b09166a85350c2578",
       "duration_ms": 4650,
-      "start_ms": 893400,
+      "start_ms": 894420,
       "text": "About ten ticks later, another view-once file appeared on Jahn's screen.",
       "generation_s": 0.67
     },
@@ -1024,10 +1040,11 @@
       "file": "blocks/c22-b088.wav",
       "sha256": "01a7caaaa6f7bb19c2f7bf79e5999b18ec07ee4e6e596d70a248a1044538090e",
       "duration_ms": 7450,
-      "start_ms": 898500,
+      "start_ms": 899520,
       "text": "The next view: the same seven dots, and the red square has crept further inside, up and to the left, toward the center.",
       "generation_s": 1.08,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 89,
@@ -1036,7 +1053,7 @@
       "file": "blocks/c22-b089.wav",
       "sha256": "4f3fe4ebcc585601e7217349201854ea6165906f643474804da00dd71c0e5390",
       "duration_ms": 2375,
-      "start_ms": 906550,
+      "start_ms": 908080,
       "text": "\"Just waiting a little bit longer.\"",
       "generation_s": 0.37
     },
@@ -1047,7 +1064,7 @@
       "file": "blocks/c22-b090.wav",
       "sha256": "475252c0a70b4731f71ba55d574c92d03e15eee7bc20a4d2fe037f46093fdce1",
       "duration_ms": 1575,
-      "start_ms": 909375,
+      "start_ms": 910905,
       "text": "\"I'm excited.\"",
       "generation_s": 0.24
     },
@@ -1058,7 +1075,7 @@
       "file": "blocks/c22-b091.wav",
       "sha256": "f5e9ac24b9c1228fc053def81b53644a7e676019ea2324ae1eab556ae0f878be",
       "duration_ms": 1750,
-      "start_ms": 911400,
+      "start_ms": 912930,
       "text": "\"And ... action.\"",
       "generation_s": 0.26
     },
@@ -1069,10 +1086,11 @@
       "file": "blocks/c22-b092.wav",
       "sha256": "fbb0582f5a2ba61385d903c01825d1b4071260d7f43e7b520c99703c79e26926",
       "duration_ms": 14850,
-      "start_ms": 913600,
+      "start_ms": 915130,
       "text": "Now each of the seven dots is ringed by a wide dashed circle, the rings overlapping across the whole hexagon. The red square, further in still, is marked with a red x. Two small blue triangles approach from the bottom edge.",
       "generation_s": 2.32,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 93,
@@ -1081,7 +1099,7 @@
       "file": "blocks/c22-b093.wav",
       "sha256": "1381f5c768d0a2c8261f0576f6647351873e8080ab189d44eee11b81b3b9c8f7",
       "duration_ms": 1525,
-      "start_ms": 929050,
+      "start_ms": 931090,
       "text": "\"Do you see it?\"",
       "generation_s": 0.33
     },
@@ -1092,7 +1110,7 @@
       "file": "blocks/c22-b094.wav",
       "sha256": "b8e74545dabec3ac9ebf5e70776d8b6af743aee53ed17d6f282ab08300853539",
       "duration_ms": 1275,
-      "start_ms": 931025,
+      "start_ms": 933065,
       "text": "\"Yep.\"",
       "generation_s": 0.24
     },
@@ -1103,7 +1121,7 @@
       "file": "blocks/c22-b095.wav",
       "sha256": "deed697659f1cec38356ce9e0cfd398c6abe18d6659973798d75fbb19cb04aee",
       "duration_ms": 16000,
-      "start_ms": 932750,
+      "start_ms": 934790,
       "text": "\"The jammer drones are jamming. The red X signifies that there was a hit on the target. It's supposed to be two hits: one on its main antenna, and the other on its legs, to prevent it from leaving the jamming area. And the blue triangles are our two attack drones.\"",
       "generation_s": 2.47
     },
@@ -1114,7 +1132,7 @@
       "file": "blocks/c22-b096.wav",
       "sha256": "28fe612b43e532da0afdb702d18f36e60705783762a3758b8366729efe4664ea",
       "duration_ms": 3150,
-      "start_ms": 949200,
+      "start_ms": 951240,
       "text": "The conversation paused for about twenty ticks.",
       "generation_s": 0.53
     },
@@ -1125,10 +1143,11 @@
       "file": "blocks/c22-b097.wav",
       "sha256": "f5c08455bfccfe3e6c38170a82b1d8ae4375b5599d4348b3b7ca743a9944580b",
       "duration_ms": 5900,
-      "start_ms": 952800,
+      "start_ms": 954840,
       "text": "The red square has stopped just left of the center, and the two blue triangles hover just above it.",
       "generation_s": 0.84,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 98,
@@ -1137,7 +1156,7 @@
       "file": "blocks/c22-b098.wav",
       "sha256": "3dbee4bda21c8840eda59c63152931a9c82a119e66d0187e83fc13b9b5d903d6",
       "duration_ms": 2900,
-      "start_ms": 959300,
+      "start_ms": 961850,
       "text": "\"Still not dead? What's taking so long?\"",
       "generation_s": 0.41
     },
@@ -1148,7 +1167,7 @@
       "file": "blocks/c22-b099.wav",
       "sha256": "8d002c8eb2dbe8b05959dc5a0c1da87fd79b2ce0ada8b23dc0ca4c2e7877f16b",
       "duration_ms": 8850,
-      "start_ms": 962650,
+      "start_ms": 965200,
       "text": "\"Our drones, the triangles, are not actually trying to make a kill — if we wanted to do that, we could have just done that with a bigger first strike.\"",
       "generation_s": 1.22
     },
@@ -1159,7 +1178,7 @@
       "file": "blocks/c22-b100.wav",
       "sha256": "1e587e6129d73dd69c95689c7babde7e08ceb523290cf22b19f89ba6dda1cf53",
       "duration_ms": 1800,
-      "start_ms": 971950,
+      "start_ms": 974500,
       "text": "\"So what are they doing?\"",
       "generation_s": 0.27
     },
@@ -1170,7 +1189,7 @@
       "file": "blocks/c22-b101.wav",
       "sha256": "5893f25b1a7bcf3d8616660bb3c7dcf656963fc4063119565660a6bce931c667",
       "duration_ms": 1700,
-      "start_ms": 974200,
+      "start_ms": 976750,
       "text": "\"They are dancing.\"",
       "generation_s": 0.25
     },
@@ -1181,7 +1200,7 @@
       "file": "blocks/c22-b102.wav",
       "sha256": "6c83ce659c75fb15184dbd0fc00d75babe9e7049482d27d2bf5a19ac995057b1",
       "duration_ms": 1525,
-      "start_ms": 976350,
+      "start_ms": 978900,
       "text": "\"Dancing?\"",
       "generation_s": 0.23
     },
@@ -1192,7 +1211,7 @@
       "file": "blocks/c22-b103.wav",
       "sha256": "0076bebabda7f0ce76d9b0719e160ddde38a3f0ebbd69489b6f0d857fe246719",
       "duration_ms": 14650,
-      "start_ms": 978325,
+      "start_ms": 980875,
       "text": "\"Their goal is to survive as long as possible, trying any kind of trick to avoid getting killed, ideally get mistaken for an Arctic drone or even an animal, and eventually only kill when the target is too close to escaping the trap.\"",
       "generation_s": 2.06
     },
@@ -1203,7 +1222,7 @@
       "file": "blocks/c22-b104.wav",
       "sha256": "841f618573e02ddea6fb7e174849e93194ccfebec4af0a06e7d0e8140df13b87",
       "duration_ms": 25300,
-      "start_ms": 993425,
+      "start_ms": 995975,
       "text": "\"That's our goal. Using Arctic drones as target practice to improve our ability to kill them is expensive. But using Arctic drones as practice to improve our ability to survive them, that we can do, for basically as long as either of the triangles is still alive. Then the seven drones in the hexagon can finish the kill, and make sure to fry the target's circuits so the Arctics don't get any training data themselves.\"",
       "generation_s": 3.66
     },
@@ -1214,7 +1233,7 @@
       "file": "blocks/c22-b105.wav",
       "sha256": "689f4dc45e67b2a51ab615d68cad6e2aa4785b012563aa6ef4abfae74f5e0555",
       "duration_ms": 1300,
-      "start_ms": 1019175,
+      "start_ms": 1021725,
       "text": "\"Wait ...\"",
       "generation_s": 0.24
     },
@@ -1225,7 +1244,7 @@
       "file": "blocks/c22-b106.wav",
       "sha256": "8d048528914b6f28ba5b62d82311f4864b4772387138f12198b7496749d58ce5",
       "duration_ms": 1625,
-      "start_ms": 1020925,
+      "start_ms": 1023475,
       "text": "\"What's the matter?\"",
       "generation_s": 0.26
     },
@@ -1236,7 +1255,7 @@
       "file": "blocks/c22-b107.wav",
       "sha256": "7b5365ae53b38cd3401153cbd210eee9d810b157893045fd401af2f15a17cbb5",
       "duration_ms": 1725,
-      "start_ms": 1023000,
+      "start_ms": 1025550,
       "text": "\"We have a problem.\"",
       "generation_s": 0.26
     },
@@ -1247,10 +1266,11 @@
       "file": "blocks/c22-b108.wav",
       "sha256": "a536327504384fd27fe8b79766f3f9a348d1c036f546edbadb3a12004b96a8a1",
       "duration_ms": 18675,
-      "start_ms": 1025175,
+      "start_ms": 1027725,
       "text": "The red square sits left of center with one blue triangle beside it; the other triangle is gone. Three of the pale dots, on the right, in the center and at the lower right, are crossed out with red x's. And from the bottom right corner, three more red squares are moving in, each trailing a dashed line.",
       "generation_s": 2.87,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 109,
@@ -1259,7 +1279,7 @@
       "file": "blocks/c22-b109.wav",
       "sha256": "2c415433fd06d3ddfdc855c132036b993a9f4acdbaaa556402455752d50fa07b",
       "duration_ms": 5400,
-      "start_ms": 1044450,
+      "start_ms": 1047510,
       "text": "\"Arctic reinforcements? Are you going to take over and pilot your drones to victory now?\"",
       "generation_s": 0.85
     },
@@ -1270,7 +1290,7 @@
       "file": "blocks/c22-b110.wav",
       "sha256": "f7cb470a358bad06865a9a94861285ce6bdd9e9eff09d692ad55e3ea5e9bb2b3",
       "duration_ms": 12100,
-      "start_ms": 1050300,
+      "start_ms": 1053360,
       "text": "\"Yep, that's exactly what I'm doing. Temporarily have the two damaged-but-alive jammers play dead, lure the attackers to center, jammers reactivate, reform a circle, and then make a kill.\"",
       "generation_s": 1.72
     },
@@ -1281,7 +1301,7 @@
       "file": "blocks/c22-b111.wav",
       "sha256": "13e5752e184fd4ac0f9ddc5ff58ee3d1f281557798fef681d87b04f2e3f5bebc",
       "duration_ms": 3200,
-      "start_ms": 1062850,
+      "start_ms": 1065910,
       "text": "\"Do your thing, no need to give me a play by play.\"",
       "generation_s": 0.46
     },
@@ -1292,7 +1312,7 @@
       "file": "blocks/c22-b112.wav",
       "sha256": "ca3dd96c60a76b3399c2035dd5c6a112b45c3c2eeb9095b7eb6f18ff6f94eb56",
       "duration_ms": 3175,
-      "start_ms": 1066500,
+      "start_ms": 1069560,
       "text": "\"I'm talking to the AI and letting you listen.\"",
       "generation_s": 0.45
     },
@@ -1303,7 +1323,7 @@
       "file": "blocks/c22-b113.wav",
       "sha256": "c35cb9f5ef242d2123121ba55976081178a5096492547270ba3a73ca5b0c652a",
       "duration_ms": 5225,
-      "start_ms": 1070125,
+      "start_ms": 1073185,
       "text": "\"Circles, finish the northwest square now. Goal: all comms and memory dead.\"",
       "generation_s": 0.85
     },
@@ -1314,7 +1334,7 @@
       "file": "blocks/c22-b114.wav",
       "sha256": "1dbe13a536a4e77d297de8a36be1357c03a392d1e992a839c0676b58ecccaa20",
       "duration_ms": 3650,
-      "start_ms": 1075800,
+      "start_ms": 1078860,
       "text": "\"Deactivate all jamming except left and top left.\"",
       "generation_s": 0.58
     },
@@ -1325,7 +1345,7 @@
       "file": "blocks/c22-b115.wav",
       "sha256": "789e801d0f1a5bd34046674f6f97240813105eedf122599caf77783b2c85568e",
       "duration_ms": 6025,
-      "start_ms": 1079900,
+      "start_ms": 1082960,
       "text": "\"When it makes sense, reform the circle, reactivate jamming and strike. Maximize surprise.\"",
       "generation_s": 0.84
     },
@@ -1336,7 +1356,7 @@
       "file": "blocks/c22-b116.wav",
       "sha256": "bf1d2e4576c1ad462bbc4e1f2a7aee422a51fcadf9719ac0ebd643cb8c3579bf",
       "duration_ms": 1275,
-      "start_ms": 1086375,
+      "start_ms": 1089435,
       "text": "\"No-\"",
       "generation_s": 0.21
     },
@@ -1347,7 +1367,7 @@
       "file": "blocks/c22-b117.wav",
       "sha256": "f7978c8413530acaef4333e244d0a5222051fbb78e35bab07d3751cc1beb2d10",
       "duration_ms": 1350,
-      "start_ms": 1088100,
+      "start_ms": 1091160,
       "text": "\"Wha-\"",
       "generation_s": 0.25
     },
@@ -1358,7 +1378,7 @@
       "file": "blocks/c22-b118.wav",
       "sha256": "7b8c307184a8bb4658bf8bfeb4e6e0313adc9139ff5f4ade51ceef9bd0e309f8",
       "duration_ms": 5000,
-      "start_ms": 1089900,
+      "start_ms": 1092960,
       "text": "Jahn stopped mid-word, remembering that he was not supposed to distract [Zei](/ˈzA/).",
       "generation_s": 1.2
     },
@@ -1369,7 +1389,7 @@
       "file": "blocks/c22-b119.wav",
       "sha256": "690d8db0d73e2111650e0d612c5c6767b06ad24af404d92dd79956f08e40c9e3",
       "duration_ms": 2975,
-      "start_ms": 1095350,
+      "start_ms": 1098410,
       "text": "\"They started jamming, I got disconnected.\"",
       "generation_s": 0.5
     },
@@ -1380,7 +1400,7 @@
       "file": "blocks/c22-b120.wav",
       "sha256": "94b4c0beb35976c3e0b9b5bea4a10c837b83e0962b204cd8a54e1e597412de58",
       "duration_ms": 8825,
-      "start_ms": 1098775,
+      "start_ms": 1101835,
       "text": "\"Nothing for me to do now. It's just our AI against the Arctics, AI plus human. And if our jamming works, our AI against theirs.\"",
       "generation_s": 1.3
     },
@@ -1391,7 +1411,7 @@
       "file": "blocks/c22-b121.wav",
       "sha256": "565d2c8d71ae16367f70f8cc33ed4795b570fd2d7ded601d25e341ecbf4040c8",
       "duration_ms": 2125,
-      "start_ms": 1108050,
+      "start_ms": 1111110,
       "text": "They both waited silently.",
       "generation_s": 0.32
     },
@@ -1402,7 +1422,7 @@
       "file": "blocks/c22-b122.wav",
       "sha256": "9c44151154ea46999117f89c5c4a1b63f3024ffb108ea5edbc07f98dbf8003cb",
       "duration_ms": 1525,
-      "start_ms": 1110625,
+      "start_ms": 1113685,
       "text": "Ten ticks.",
       "generation_s": 0.23
     },
@@ -1413,7 +1433,7 @@
       "file": "blocks/c22-b123.wav",
       "sha256": "8914b3f0e20de3b328c33edd9e1848eca08d4e8315d1c517ed833e58f02f8936",
       "duration_ms": 1550,
-      "start_ms": 1112600,
+      "start_ms": 1115660,
       "text": "Twenty ticks.",
       "generation_s": 0.24
     },
@@ -1424,7 +1444,7 @@
       "file": "blocks/c22-b124.wav",
       "sha256": "406a6a1cac153e1b3d24c50d4b7120f673ff99d079753d8021cc7a2758f1bad7",
       "duration_ms": 1625,
-      "start_ms": 1114600,
+      "start_ms": 1117660,
       "text": "Thirty ticks.",
       "generation_s": 0.23
     },
@@ -1435,7 +1455,7 @@
       "file": "blocks/c22-b125.wav",
       "sha256": "90916205fcc1c3570e95ce1c6888c94fbf0f2eba0b8aaf5284697ec76a6e8255",
       "duration_ms": 4350,
-      "start_ms": 1116675,
+      "start_ms": 1119735,
       "text": "Finally, the download icon turned on again on Jahn's computer.",
       "generation_s": 0.6
     },
@@ -1446,10 +1466,11 @@
       "file": "blocks/c22-b126.wav",
       "sha256": "f694b26d933ed7da109db1f074bd855a9cd0fae7bf3159ac3dc0c23b050fd268",
       "duration_ms": 16100,
-      "start_ms": 1121475,
+      "start_ms": 1124535,
       "text": "The final view. Only four pale dots remain, all on the left side, and three of them are crossed out with red x's; only the far-left one is unmarked. Four red squares sit clustered among them, every one crossed out. The blue triangles are gone.",
       "generation_s": 2.5,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 127,
@@ -1458,7 +1479,7 @@
       "file": "blocks/c22-b127.wav",
       "sha256": "bbd8ef98b62dcb11ab949516ec997a7376291f453cd7caae005471c583d20646",
       "duration_ms": 1825,
-      "start_ms": 1138175,
+      "start_ms": 1141745,
       "text": "\"That was really close.\"",
       "generation_s": 0.45
     },
@@ -1469,7 +1490,7 @@
       "file": "blocks/c22-b128.wav",
       "sha256": "d317ab5af75473f4f04804c99d63dfae26b51ebd1a6fe48259cf5b71b395b3a3",
       "duration_ms": 1300,
-      "start_ms": 1140450,
+      "start_ms": 1144020,
       "text": "\"Wow.\"",
       "generation_s": 0.23
     },
@@ -1480,7 +1501,7 @@
       "file": "blocks/c22-b129.wav",
       "sha256": "0070243db4a70ce79d722c70bf78b3ea8dd80e3de75eac00209c84ed7cfe9810",
       "duration_ms": 14625,
-      "start_ms": 1142200,
+      "start_ms": 1145770,
       "text": "\"Only one undamaged drone on our side. Last step is that it will walk around and chip and memory-kill all the drones, first the Arctics and then the rest of our own just in case. It needs to do that before more Arctic drones come.\"",
       "generation_s": 2.12
     },
@@ -1491,7 +1512,7 @@
       "file": "blocks/c22-b130.wav",
       "sha256": "a2392619cc5c99489a5179e256b192ab983757856b9970c5fe67fc594445b49f",
       "duration_ms": 1975,
-      "start_ms": 1157275,
+      "start_ms": 1160845,
       "text": "\"Can the damaged ones help?\"",
       "generation_s": 0.49
     },
@@ -1502,7 +1523,7 @@
       "file": "blocks/c22-b131.wav",
       "sha256": "5e83c3b97c508a4aab8da38d2b5b836bd6104eebc63d793b1dbcff7986ad729e",
       "duration_ms": 7150,
-      "start_ms": 1159700,
+      "start_ms": 1163270,
       "text": "\"They can't move. They can still attack, but proper chip and memory-killing is best done from ten centimeters away.\"",
       "generation_s": 1.03
     },
@@ -1513,7 +1534,7 @@
       "file": "blocks/c22-b132.wav",
       "sha256": "0f330b433ab8d99c569bf63160d923b1ba64821971aea6c980a83d1405eda3b8",
       "duration_ms": 7525,
-      "start_ms": 1167300,
+      "start_ms": 1170870,
       "text": "\"Even then we can't actually be certain that the Arctics won't be able to salvage training data. We can just hope for the best.\"",
       "generation_s": 1.06
     },
@@ -1524,7 +1545,7 @@
       "file": "blocks/c22-b133.wav",
       "sha256": "f6eb22eb32865db21867043510aa1e340b2e198b24a671077469e6772c18e034",
       "duration_ms": 3925,
-      "start_ms": 1175275,
+      "start_ms": 1178845,
       "text": "\"Okay... I gave it the instructions, now I'm just watching.\"",
       "generation_s": 0.56
     },
@@ -1535,7 +1556,7 @@
       "file": "blocks/c22-b134.wav",
       "sha256": "fb50328c509112baa51ccbd17ff7584c6d1c15836b62d1d8d02e130b9cda5a95",
       "duration_ms": 4000,
-      "start_ms": 1179650,
+      "start_ms": 1183220,
       "text": "\"I am curious. How does your internet link into Redshire work?\"",
       "generation_s": 0.57
     },
@@ -1546,7 +1567,7 @@
       "file": "blocks/c22-b135.wav",
       "sha256": "b99da5cb0cd941d1587bfa267305cf845d3b979e3b87763062d00ac5a69f8e4c",
       "duration_ms": 20925,
-      "start_ms": 1184100,
+      "start_ms": 1187670,
       "text": "\"Ah, that's one of our other big projects. The problem now is that the Arctics have confiscated all the un-backdoored electronics. There's still many watches, hand devices and compute boxes left hidden in various places, but the Arctics will be able to tell if any device tries to transmit things. So what we do is steganography.\"",
       "generation_s": 3.24
     },
@@ -1557,7 +1578,7 @@
       "file": "blocks/c22-b136.wav",
       "sha256": "17c7881611d14a49c70edcd5c44b674caa781a36caa330484ada64402a74311b",
       "duration_ms": 27250,
-      "start_ms": 1205475,
+      "start_ms": 1209045,
       "text": "\"Two people pretend to have a voice or video call. While the call is happening, the un-backdoored device is sitting nearby, and it's softly playing audio. That audio stream sounds random — it's representing encrypted data wrapped in an erasure code that's highly noise-tolerant — but we use the same tricks I told you before with the health data to maximize how much data we can hide, so that it appears to anyone or any bot spying on the call that there's nothing abnormal.\"",
       "generation_s": 4.27
     },
@@ -1568,7 +1589,7 @@
       "file": "blocks/c22-b137.wav",
       "sha256": "68c0a64b149d1d72b4204466e3e958261c682e8ad44207eb221ee8dd774f6dab",
       "duration_ms": 2650,
-      "start_ms": 1233175,
+      "start_ms": 1236745,
       "text": "\"One of ... do you have more big projects?\"",
       "generation_s": 0.41
     },
@@ -1579,7 +1600,7 @@
       "file": "blocks/c22-b138.wav",
       "sha256": "587eecb54f06434f6a72ba86c0aa164c6d9dc59f397f916a019265547da12e88",
       "duration_ms": 7300,
-      "start_ms": 1236275,
+      "start_ms": 1239845,
       "text": "\"Well, the next step is that we want to actually kidnap an Arctic drone and bring it back to [Dzego](/ˈdzɛɡO/) for analysis.\"",
       "generation_s": 1.02
     },
@@ -1590,7 +1611,7 @@
       "file": "blocks/c22-b139.wav",
       "sha256": "954d335534427c888eedfe210d95eec9ae14ed3234a5b3e3da2306da43f98ec0",
       "duration_ms": 1300,
-      "start_ms": 1244025,
+      "start_ms": 1247595,
       "text": "\"Wow.\"",
       "generation_s": 0.2
     },
@@ -1601,7 +1622,7 @@
       "file": "blocks/c22-b140.wav",
       "sha256": "c4baac27ed113993461022028a59558c13ec1a49988e353f8128960b272f1ed5",
       "duration_ms": 3825,
-      "start_ms": 1245775,
+      "start_ms": 1249345,
       "text": "\"Actually, that's what I'll ask for your help one more time for.\"",
       "generation_s": 0.54
     },
@@ -1612,7 +1633,7 @@
       "file": "blocks/c22-b141.wav",
       "sha256": "d03106da1d48eff8bc9bbee193e5dc75f5bb300c5b28b858a6bf829599633571",
       "duration_ms": 1700,
-      "start_ms": 1250050,
+      "start_ms": 1253620,
       "text": "\"So what do you need?\"",
       "generation_s": 0.25
     },
@@ -1623,7 +1644,7 @@
       "file": "blocks/c22-b142.wav",
       "sha256": "d59468090eaad23d2cc221095c334f4e6ee11db5588989590609006b4664f73f",
       "duration_ms": 7225,
-      "start_ms": 1252200,
+      "start_ms": 1255770,
       "text": "\"I want you to introduce me to another defense corp. Preferably not through the Institute director, find a different path.\"",
       "generation_s": 0.97
     },
@@ -1634,7 +1655,7 @@
       "file": "blocks/c22-b143.wav",
       "sha256": "b9577d4aa360a2bf2bc2fb5b55f92868e92f5a53d3449a18f52976c615db8718",
       "duration_ms": 1250,
-      "start_ms": 1259875,
+      "start_ms": 1263445,
       "text": "\"Why?\"",
       "generation_s": 0.19
     },
@@ -1645,7 +1666,7 @@
       "file": "blocks/c22-b144.wav",
       "sha256": "3ff244f7d689b04cfbaade09feba32f273abfa71588b94ac4399d28e0dc9fe56",
       "duration_ms": 7650,
-      "start_ms": 1261575,
+      "start_ms": 1265145,
       "text": "\"The company the Institute director introduced does seaborne well, I want to find one of the others, that are better at airborne.\"",
       "generation_s": 1.04
     },
@@ -1656,9 +1677,22 @@
       "file": "blocks/c22-b145.wav",
       "sha256": "c1704043ac28ab62a2f181057db927f9f68a97d5fc4750f9d14a8b429f14e067",
       "duration_ms": 9950,
-      "start_ms": 1269675,
+      "start_ms": 1273245,
       "text": "\"Also, come on, it's Freetown, this is a market. You gotta talk to multiple people and compare them against each other, to make sure they're not screwing you over.\"",
       "generation_s": 1.96
     }
-  ]
+  ],
+  "restitched_at": "2026-10-05T18:51:24+00:00",
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent and its helper agents",
+    "drafted": [
+      "spoken descriptions of screens, figures and lyric cards (blocks 11, 81, 88, 92, 97, 108, 126)",
+      "pronunciation entries (content/snowmoon/pronunciation.json)"
+    ],
+    "instructions": [
+      "docs/prompts/008a-agent-prompts.md#read-aloud-descriptions-and-invented-word-lists"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
 }

@@ -53,6 +53,7 @@ async function main() {
         continue;
       }
       const narrationId = randomUUID();
+      const recipeAssist = JSON.parse(await readFile(path.join(ROOT, index.recipe), 'utf8')).assist ?? null;
       const recipes = segs.map((s) => ({
         id: randomUUID(),
         source: 'in_app',
@@ -71,6 +72,8 @@ async function main() {
           ...(s.read_aloud_status ? { read_aloud_status: s.read_aloud_status } : {}),
         }),
         cost_usd: 0,
+        // Which inputs a model drafted (principle 3), from the committed recipe.
+        assist: recipeAssist ? sql.json(recipeAssist) : null,
         created_by_fid: SYSTEM_FID,
       }));
       await sql.begin(async (tx) => {

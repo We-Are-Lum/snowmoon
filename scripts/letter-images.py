@@ -108,6 +108,13 @@ def main() -> None:
         "fonts": {lang: {"file": str(path.relative_to(ROOT)), "sha256": sha256(path)} for lang, path in FACES.items()},
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "images": records,
+        "assist": {
+            "model": "claude-coding-agent",
+            "by": "the coding agent",
+            "drafted": ["lettering placement, size and colour (the words are the book's)"],
+            "instructions": ["scripts/letter-images.py"],
+            "see": "config/models.json drafting; principle 3",
+        },
     }
     out_file = ROOT / "content/snowmoon/recipes/images/lettering.json"
     out_file.write_text(json.dumps(record, indent=2, ensure_ascii=False) + "\n")

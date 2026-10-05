@@ -532,3 +532,39 @@ figure.figure .device-view svg { min-width: var(--fig-min, 0); }
 }
 .chapter .cited-by a { display: inline-flex; align-items: center; min-height: var(--tap); }
 .chapter .cite-mark { color: var(--accent); font-size: 0.6em; text-decoration: none; vertical-align: 0.25em; padding: 0 2px; }
+.chapter-player .player-image { position: relative; }
+.chapter-player .player-image-label {
+  position: absolute;
+  right: 6px;
+  bottom: 6px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(22, 22, 20, 0.72);
+  color: #F4F2ED;
+  font-family: var(--label);
+  font-size: 12px;
+}
+
+/* Spoken descriptions (screens, figures, lyric cards): not the author's words. */
+.chapter .described-note { margin: -0.6em 0 1em; }
+.chapter-player .player-description {
+  max-width: var(--measure);
+  margin: 0 auto 8px;
+  padding: 8px 10px;
+  border-left: 3px solid var(--muted);
+  background: var(--quote-bg);
+  font-family: var(--label);
+  font-size: 12px;
+  line-height: 1.45;
+  color: var(--ink);
+  max-height: 22vh;
+  overflow-y: auto;
+}
+.chapter-player .player-description-label { display: block; margin-bottom: 4px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+
+/* Adaptation pages: the piece first, working notes collapsed under it. */
+.adaptations .piece-panel { margin: 0 0 2em; }
+.adaptations .piece-panel img { width: 100%; height: auto; display: block; }
+.adaptations .piece-line { margin: 0.5em 0; }
+.adaptations .piece-line .label { margin-left: 0.4em; }
+.adaptations .how-built { margin-top: 1.5em; }

@@ -4,6 +4,14 @@
   "voice": "kokoro-af_heart",
   "label": "Synthetic narration · Kokoro-82M, stock voice af_heart",
   "license": "GPL-3.0",
+  "published_by": {
+    "fid": 6786,
+    "role": "maintainer",
+    "action": "published via script",
+    "script": "scripts/publish-narration.ts",
+    "date": "2026-10-05",
+    "evidence": "docs/prompts/008-narration-and-images.md"
+  },
   "recipe": "content/snowmoon/recipes/narration/chapter-16.json",
   "model": {
     "name": "Kokoro-82M",
@@ -36,7 +44,21 @@
     },
     "break_ms": 1800,
     "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
-    "read_aloud_sha256": "6fe073260c161993027859757cc25f87533833790540b5a0333b58841782cc91"
+    "read_aloud_sha256": "6fe073260c161993027859757cc25f87533833790540b5a0333b58841782cc91",
+    "description_tone": {
+      "notes_hz": [
+        660,
+        990
+      ],
+      "notes_ms": [
+        110,
+        140
+      ],
+      "between_ms": 40,
+      "after_ms": 220,
+      "amplitude": 0.12,
+      "made_by": "code (numpy sine, linear fades)"
+    }
   },
   "block_encoding": {
     "codec": "aac",
@@ -46,10 +68,10 @@
     "tool": "ffmpeg"
   },
   "chapter_file": {
-    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-16-9c256c8c4a6a.m4a",
-    "sha256": "9c256c8c4a6af63c8ccca41062145934868bd88d25191056254baa350b7f0607",
-    "bytes": 10312634,
-    "duration_ms": 888625
+    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-16-a7cf447bfd17.m4a",
+    "sha256": "a7cf447bfd17dfe7c528d7d7016dfc4c487ce6150e1c9109c1e080abe756403a",
+    "bytes": 10328608,
+    "duration_ms": 891175
   },
   "breaks": [
     {
@@ -64,7 +86,7 @@
     },
     {
       "idx": 104,
-      "start_ms": 807800,
+      "start_ms": 810350,
       "silence_ms": 1800
     }
   ],
@@ -798,6 +820,7 @@
       "bytes": 140758,
       "duration_ms": 15700,
       "start_ms": 462950,
+      "tone_ms": 510,
       "source_wav_sha256": "a7d918594f52148eac32c8fd80b49d9abbc94d6246bec54c5b7d438cf1d87075",
       "text": "The scoreboard, yellow against purple. Redball captures: six to eleven. Greenball player hits: nine to seven. Blueball pin knockdowns: thirty-one to twenty-three. Combined score: sixteen seventy-four to seventeen seventy-one.",
       "read_aloud_status": "unreviewed"
@@ -810,7 +833,7 @@
       "sha256": "3c48d2c505f8a992816c559796f4a429530856aa5288e52e903460c933591981",
       "bytes": 99221,
       "duration_ms": 11025,
-      "start_ms": 479250,
+      "start_ms": 479760,
       "source_wav_sha256": "31293db4dfcd9e2053ae3d6495c69a5b74bddf2f41ea9355091973f1805bdcb9",
       "text": "Purple's blueball score had just increased from 20 to 23, and their combined score from 1540 to 1771 — enough to push them ahead of their opponents."
     },
@@ -822,7 +845,7 @@
       "sha256": "5421dc56eb980d7cda9e0524ff44c9a9aa480d36b2fe5a910cc3d1658d658fbe",
       "bytes": 75201,
       "duration_ms": 8175,
-      "start_ms": 490725,
+      "start_ms": 491235,
       "source_wav_sha256": "f15e66abe5cfcb32388426ef6980debd90e4beef42ecb6d822cd4eb81ede92d9",
       "text": "Suddenly, while the player who had just taken down those pins was celebrating, a greenball hit him in the back and splatted its paint over him."
     },
@@ -834,7 +857,7 @@
       "sha256": "647a1da5a35abeb67402cc23022c7b57da5b4a52939601949844d8538512ca2f",
       "bytes": 18211,
       "duration_ms": 2050,
-      "start_ms": 499350,
+      "start_ms": 499860,
       "source_wav_sha256": "3a1115e0083d8d5cc1954d1ebf6ecbfa9baae37901b571d1133ab0bd98ef4611",
       "text": "The score adjusted again."
     },
@@ -846,7 +869,8 @@
       "sha256": "633308c01a6a91c8d9fb28e4558860c75b88c2aadcc4ecc84441a4c982ce6c41",
       "bytes": 93266,
       "duration_ms": 10300,
-      "start_ms": 501850,
+      "start_ms": 502360,
+      "tone_ms": 510,
       "source_wav_sha256": "897c777d78b9b1656cc771e7cea44098054eea97e647c22fd62cf0f88a4bd275",
       "text": "The scoreboard again: yellow's greenball player hits are up to ten, and its combined score jumps to eighteen sixty, against purple's seventeen seventy-one.",
       "read_aloud_status": "unreviewed"
@@ -859,7 +883,7 @@
       "sha256": "5521069f7ea0a7f43d0216cc03b1b82a33a67edbb8792e3df21692faf1426c0d",
       "bytes": 44989,
       "duration_ms": 5025,
-      "start_ms": 512750,
+      "start_ms": 513770,
       "source_wav_sha256": "c631f95dc34d5198aafafc423a128c55d9b67bc5660bd2689955f99585a27abf",
       "text": "\"You have to admit, the scoring system is really good now\", Febric exclaimed."
     },
@@ -871,7 +895,7 @@
       "sha256": "80950b4ff046cbb5ab68a738b7e91637098d9871b1836c9295ab671cee15463c",
       "bytes": 139767,
       "duration_ms": 15625,
-      "start_ms": 518225,
+      "start_ms": 519245,
       "source_wav_sha256": "be7e708cf238d2d5d39e7b355d53680568457c0bc536d5240515f31bfab1f6a1",
       "text": "\"I remember when I was much younger, they kept adjusting the ratios between what a redball gives you, versus a pin knockdown or a player hit. And they just couldn't get out of having a situation where the rational thing is to just focus all your attention on one.\""
     },
@@ -883,7 +907,7 @@
       "sha256": "2413895848ae47e21502717fdf8ba7473449f73d9b474e69fd8738f3e3d582db",
       "bytes": 56458,
       "duration_ms": 6175,
-      "start_ms": 534300,
+      "start_ms": 535320,
       "source_wav_sha256": "f6673ee06e9058b26985d9fd60467ab32fce12eddfed3f6933dfc551e361c3dc",
       "text": "\"Even when they got it right, within a year the strategies adjusted, and it became lopsided again.\""
     },
@@ -895,7 +919,7 @@
       "sha256": "9a3262f1f242efe213556bb4f7d0b65d5dc301353236ffdf76d6639573531700",
       "bytes": 70619,
       "duration_ms": 7700,
-      "start_ms": 540925,
+      "start_ms": 541945,
       "source_wav_sha256": "090fbcf2cd8c76bd30d68e6385a8c97f6b5d6245e197581ed69f3c888b49dbcc",
       "text": "\"I think making the score multiplicative was the only way out. That way you pretty much have to care about all three of the point types.\""
     },
@@ -907,7 +931,7 @@
       "sha256": "b3cc40ee68d86935b9e0b2a8fa585c3e402957963e4109f962a82b28fe24c2ef",
       "bytes": 53692,
       "duration_ms": 5900,
-      "start_ms": 549075,
+      "start_ms": 550095,
       "source_wav_sha256": "be1b3def5f4b294dd3ed39543d2efc708b16836ebe3e7388daaf3d26bdbb4eb5",
       "text": "\"Or try really hard to make sure your opponent can't get any of one type\", Gladias interjected."
     },
@@ -919,7 +943,7 @@
       "sha256": "8a46a82e8eb90b90aa5b399ace3b5cc35820e55d08bd9d04640129bbd36d3a39",
       "bytes": 213802,
       "duration_ms": 24050,
-      "start_ms": 555425,
+      "start_ms": 556445,
       "source_wav_sha256": "8f7451a1d327c64d6e72c9623a1367644ddaa7836182335d935ed47cc1c4eada",
       "text": "\"Ah yeah that was the first thing a few people tried\", Febric replied. \"Holding onto redballs for more than thirty ticks had already been banned for ages, that had been a good cheat for whichever side was worse at redballs even back when the scores were additive. But what one team did try, is knock down a bunch of pins very early in the game, and then use most of their players to protect their pins for the rest of the game.\""
     },
@@ -931,7 +955,7 @@
       "sha256": "94904024c9586305d09b088bd935bc375d11bc326b6caaa1e6af76ccbbcd46c6",
       "bytes": 150671,
       "duration_ms": 16650,
-      "start_ms": 579925,
+      "start_ms": 580945,
       "source_wav_sha256": "d68749499cde44c2f2b8453f08f698e86356ac7a8db2c240614174da273b7d51",
       "text": "\"Turns out it doesn't actually work. People on copters can only pack together so tightly, no matter what you do, the other team always manages to sneak a few blueballs through. And then if you do pack tightly in one place around the pins, you're a sitting duck for the greenballs.\""
     },
@@ -943,7 +967,7 @@
       "sha256": "3b750bca894c7ee079190c4c64543f17baf1de437eb3a16e42da6d2b15582438",
       "bytes": 26773,
       "duration_ms": 3000,
-      "start_ms": 597025,
+      "start_ms": 598045,
       "source_wav_sha256": "f520302e06219264fa1f6567ec0acfc8b6e1488deca4df2ab08406cfa81006fb",
       "text": "\"Are you thinking of playing?\", Gladias asked."
     },
@@ -955,7 +979,7 @@
       "sha256": "39839a397e0deae9561ccb18d6ff6b4c7d3d522420ef9d1b565ae14d4019416e",
       "bytes": 66507,
       "duration_ms": 7425,
-      "start_ms": 600475,
+      "start_ms": 601495,
       "source_wav_sha256": "f65e686873158f87753e0161013a6cf795c24dc7ad2d72cb5cfa9a2547968e54",
       "text": "\"No, but I just had a bunch of conversations with [Zven](/zvˈɛn/) about this. The math is almost as fun as the actual game!\""
     },
@@ -967,7 +991,7 @@
       "sha256": "9d088c0ed53be29a7521ca8bc6a7020aaa8ab791fc03fb78922b8e79729ef92f",
       "bytes": 34684,
       "duration_ms": 3850,
-      "start_ms": 608350,
+      "start_ms": 609370,
       "source_wav_sha256": "9899cacd3ac74b36766c5abdff3f09af79e06617719d6db9ac816762dafd675e",
       "text": "Gladias and Febric both turned their attention to the food."
     },
@@ -979,7 +1003,7 @@
       "sha256": "15d96b186ca2dc398723fa2821f28832d2b1bc98fc7f5133fcbdd2ca7f66c2f0",
       "bytes": 29112,
       "duration_ms": 3325,
-      "start_ms": 612650,
+      "start_ms": 613670,
       "source_wav_sha256": "776dcaa3c0fa86baec577b7516ce858bcbc0994619b2d0c53968bfff49c4cb25",
       "text": "\"How's Lily doing by the way?\", Gladias asked."
     },
@@ -991,7 +1015,7 @@
       "sha256": "38977f986eb1578597ec7f818932979a32fb60f66a0cc7408846946f245ca2e7",
       "bytes": 130510,
       "duration_ms": 14300,
-      "start_ms": 616425,
+      "start_ms": 617445,
       "source_wav_sha256": "ef8b79c7b2b568e9e37ece6ef862f25b9c53f6ec32dd6a4d5b045580bac9c689",
       "text": "\"She actually started getting a little better over the last couple of months. She mentioned to me a few days ago that she got seventy on her latest civics test. She seems happier. And she's even more engaged playing that game on her hand device.\""
     },
@@ -1003,7 +1027,7 @@
       "sha256": "b3b4186f89448de08d6ef18cac5aec6b6e071dec483d677d3e899ba422ae15a0",
       "bytes": 23655,
       "duration_ms": 2725,
-      "start_ms": 631175,
+      "start_ms": 632195,
       "source_wav_sha256": "0f7ddfe4e185b53976c79b31937624422688e9c75daadef44fcb6854bf28b8d2",
       "text": "\"Do you know what game?\", Gladias asked."
     },
@@ -1015,7 +1039,7 @@
       "sha256": "8eaa605e90d9bc077427f077600eeb82e6b5ae620e3202df51b41f7d4ddeed1c",
       "bytes": 16586,
       "duration_ms": 1875,
-      "start_ms": 634350,
+      "start_ms": 635370,
       "source_wav_sha256": "82488e19bbb57fedd9b2ca948723d18adbffb4e3f3643981a184a2234741050f",
       "text": "\"She doesn't show me either.\""
     },
@@ -1027,7 +1051,7 @@
       "sha256": "108887f401ec2ffe3f3214af8940efc063a09472bf55aaadc420f4b47fdf884c",
       "bytes": 52061,
       "duration_ms": 5650,
-      "start_ms": 636675,
+      "start_ms": 637695,
       "source_wav_sha256": "e61f16ae2ddb3c99d352cd5b177d2c0190fd0c3b4aecae36bbf4896ff975dcd2",
       "text": "Gladias and Febric both returned to eating. A few minutes later, they were both finished."
     },
@@ -1039,7 +1063,7 @@
       "sha256": "60250aa29e4d56b884ea7f540762226cba6440da5674fb2451b49650087b45cc",
       "bytes": 42329,
       "duration_ms": 4750,
-      "start_ms": 642775,
+      "start_ms": 643795,
       "source_wav_sha256": "cea2a04d926b9b83d3bf042ff74052e6f6fc708f9f7986ca4208a1b6ae79fde4",
       "text": "\"Did you remember to take out your zipcoins this time?\", Febric asked playfully."
     },
@@ -1051,7 +1075,7 @@
       "sha256": "48c54d901f343efd44c73f8136a6f4f94b2cdbd5a4633e4b32a4fabf770759fa",
       "bytes": 55008,
       "duration_ms": 6100,
-      "start_ms": 647975,
+      "start_ms": 648995,
       "source_wav_sha256": "1b02703af8748da65cf2c429f197e1b6a18c7ce407a92eb1e84c9e169d1a7a27",
       "text": "\"Hey, I may make lots of mistakes, but I don't make the same mistake twice\", Gladias snapped back."
     },
@@ -1063,7 +1087,7 @@
       "sha256": "4147e5003693e3e89c18f18565ccfd369b59a1ea2ce76b8aad8a9422fd61c928",
       "bytes": 76967,
       "duration_ms": 8550,
-      "start_ms": 654525,
+      "start_ms": 655545,
       "source_wav_sha256": "bbecb01ba55e0846c9748d67e9d93470a2bc6d00ce73e26dfc4eb9bc8a83d70a",
       "text": "\"By the way, Febric, thanks for reminding me — I need to test my recovery procedure for my coins\", he whispered through his neck band."
     },
@@ -1075,7 +1099,7 @@
       "sha256": "84ace4e92570485ed377c30f18f0f63865f28615358975d5222bcfeebb2ff800",
       "bytes": 24691,
       "duration_ms": 2725,
-      "start_ms": 663525,
+      "start_ms": 664545,
       "source_wav_sha256": "6f3e4d21ca50fded43941f552a3118d7a227ac2d1f0e301610516e96c19dbf10",
       "text": "\"Want me to help you sign a test operation?\""
     },
@@ -1087,7 +1111,7 @@
       "sha256": "e06c15e7bfccc1ea37c7ecc8e7a717817c2633cd5ebedec923408303c79a4fb8",
       "bytes": 21092,
       "duration_ms": 2475,
-      "start_ms": 666700,
+      "start_ms": 667720,
       "source_wav_sha256": "32adebe6e1dc9c81767abbcddcadacf355ef67787a437467bb0b286aefe8f2e5",
       "text": "\"Sure! What do you want the test to be?\""
     },
@@ -1099,7 +1123,7 @@
       "sha256": "777a6793421ce0d9cdf3de051b12ffad9425c50516eb7721a2718832219c4e03",
       "bytes": 24983,
       "duration_ms": 2725,
-      "start_ms": 669625,
+      "start_ms": 670645,
       "source_wav_sha256": "391863aeabacf4e880da6442bda5b4ee8436b0da6fbc7876ce569b109a35e35a",
       "text": "\"I dunno, buy a Hydrafill bottle?\""
     },
@@ -1111,7 +1135,7 @@
       "sha256": "d6829af320e41cedb9a752f0ebba4aaa8fc9437ea48bc8f175f8f77f03cb7bd0",
       "bytes": 86076,
       "duration_ms": 9675,
-      "start_ms": 672800,
+      "start_ms": 673820,
       "source_wav_sha256": "49d4cdcd6c034098c48ab598a4add103f9d033808bdbcf687311bb0c360f10bc",
       "text": "\"Buy a Hydrafill bottle? Straight out of a life savings wallet?\", Gladias asked incredulously. \"Those ads really have been getting to you too, haven't they?\""
     },
@@ -1123,7 +1147,7 @@
       "sha256": "38bb486c7f232729ed158606c9f8196bae2a1e0a8db43f31d02e41ff2c7a9275",
       "bytes": 19728,
       "duration_ms": 2175,
-      "start_ms": 682925,
+      "start_ms": 683945,
       "source_wav_sha256": "77f1799056a92c458029f1f39a65d16066d886acdfaf95627f28660b6115e776",
       "text": "\"Hey, you're the one who asked me!\""
     },
@@ -1135,7 +1159,7 @@
       "sha256": "e841204985c5e263124eb3f9d5b4949f3c712d42ea275587498419e420058797",
       "bytes": 26638,
       "duration_ms": 3025,
-      "start_ms": 685550,
+      "start_ms": 686570,
       "source_wav_sha256": "4cb37269dfbc45e424de14626d3928cdb2d4bd8f4a12b54c468d416cf390212f",
       "text": "\"Okay fine ... let me start the operation.\""
     },
@@ -1147,7 +1171,7 @@
       "sha256": "d7e772d654ed5a2572734f787741b157a758d49018b01c995f246960c36a2995",
       "bytes": 79548,
       "duration_ms": 9000,
-      "start_ms": 689025,
+      "start_ms": 690045,
       "source_wav_sha256": "a8c049ffdbdb4be2a8d92fb311987137fc4216331250925a98f11adecc085ae7",
       "text": "Gladias began whispering into his neck band. Out of the corner of his eye, he saw Febric run off somewhere, though he was too busy to wonder where."
     },
@@ -1159,7 +1183,7 @@
       "sha256": "5cedb0edba7bb822c75b21dd7e61fabf38117dd6f2e9158947e967d2bbe30249",
       "bytes": 27303,
       "duration_ms": 3000,
-      "start_ms": 698475,
+      "start_ms": 699495,
       "source_wav_sha256": "6f448ac5746516e1d57c98c8b2c6ddb11fc70d700aa4ccde1370ca56f6f10d9c",
       "text": "A few ticks later, Febric's watch buzzed."
     },
@@ -1171,7 +1195,8 @@
       "sha256": "bef13b8c3da1461aa7e9ab52d86df5a1a26a8e47338fd728826d689adaa0e0e6",
       "bytes": 87885,
       "duration_ms": 9500,
-      "start_ms": 701925,
+      "start_ms": 702945,
+      "tone_ms": 510,
       "source_wav_sha256": "5f9ef3442a7d4669c6bc1b3bd14a39b84ef10b160daede102b99838022b5e690",
       "text": "On Febric's watch, from Gladias: a social recovery mode transaction request, for a wallet whose address begins oh ex eight F six two.",
       "read_aloud_status": "unreviewed"
@@ -1184,7 +1209,7 @@
       "sha256": "2ea25f6f111d7c5ef6490b0eda5cc2d593f46855273a9824a64500418e19862f",
       "bytes": 318669,
       "duration_ms": 35300,
-      "start_ms": 712025,
+      "start_ms": 713555,
       "source_wav_sha256": "c6232590edd7d9120616d7f866773317fecfcc723fa393711cda1666d3f92c9a",
       "text": "Febric opened up his hand device, and a more detailed view of the transaction appeared. He asked Emerald to search for the receiving address online. A few ticks later, Emerald replied with a confirmation that it was, in fact, the Hydrafill purchase address. He then checked the amount — 5.5 zipcoins. It seemed reasonable for a water bottle plus shipping, though the bulk of the cost was definitely the shipping. He checked the transaction data field. Yep, looked like an encoding of Gladias's home address, in the correct format according to the standard online shopping protocol."
     },
@@ -1196,7 +1221,7 @@
       "sha256": "00a464427e915d68a2bbe88ffbc72a44a903dada7e08ed413ee56852cf170863",
       "bytes": 63986,
       "duration_ms": 6850,
-      "start_ms": 747775,
+      "start_ms": 749305,
       "source_wav_sha256": "8673bcabe3c782e1ce4ee3647fe46e23a24709de90fe82f6ff3c4c39c6f40673",
       "text": "In the cryptographic network that processed these transactions, all of this data was, of course, encrypted."
     },
@@ -1208,7 +1233,7 @@
       "sha256": "847a58b56110210a3714cd63683536b1f7bc424eb045552d4f6c71626cad8752",
       "bytes": 18517,
       "duration_ms": 2125,
-      "start_ms": 755075,
+      "start_ms": 756605,
       "source_wav_sha256": "f45b00cb5f7be8aff338a42af86aa094cdeabb0cc800c0463476f6591b2b2628",
       "text": "Febric clicked \"Confirm\"."
     },
@@ -1220,7 +1245,7 @@
       "sha256": "6b692372b6f1630240407a152d7ca8a1424ad611d8261858d6b47b4683b14f21",
       "bytes": 24479,
       "duration_ms": 2625,
-      "start_ms": 757650,
+      "start_ms": 759180,
       "source_wav_sha256": "dfafc4c68bab2d7d01835010139f601bbf92669b95bb7500b8cf1ed6a70aeaa4",
       "text": "Gladias's watch immediately buzzed."
     },
@@ -1232,7 +1257,7 @@
       "sha256": "44d6ae5cc516d02ec91448a4d5585c8a95ee01b0045de62b020a1314527b77a9",
       "bytes": 34422,
       "duration_ms": 3800,
-      "start_ms": 760725,
+      "start_ms": 762255,
       "source_wav_sha256": "98308693584cb12fc429983afb712334015fa1cd8a310feaece0769d144427b9",
       "text": "Less than a minute later, Gladias's watch buzzed again."
     },
@@ -1244,7 +1269,8 @@
       "sha256": "03daca2a8496719c7391fbfec39706baa89bcc83ba74c4110db3283e995171bc",
       "bytes": 77399,
       "duration_ms": 8625,
-      "start_ms": 764975,
+      "start_ms": 766505,
+      "tone_ms": 510,
       "source_wav_sha256": "fe051536ea47cf836700997f2d72d355894ae58bb94637cf96b8781c274a2db5",
       "text": "A message from Seila: Security question: what was the most unusual thing I did on the evening the kids came back from Vil and Daia's?",
       "read_aloud_status": "unreviewed"
@@ -1257,7 +1283,7 @@
       "sha256": "b5018c80b4276d7689713c96d7e6c2370b0d3ec359cb8fca76b3a0f2540097e7",
       "bytes": 37554,
       "duration_ms": 4075,
-      "start_ms": 774200,
+      "start_ms": 776240,
       "source_wav_sha256": "10c0c6f2f288700c56516a04256892d11e44de1d3a33e1286b182c394efdc9b1",
       "text": "Gladias immediately whispered into his neck band a reply."
     },
@@ -1269,7 +1295,8 @@
       "sha256": "cb9576c174c1eb016e78995b1168c0c450186fcf9cc6796b91d41e4c9e2dd1c4",
       "bytes": 57752,
       "duration_ms": 6325,
-      "start_ms": 778725,
+      "start_ms": 780765,
+      "tone_ms": 510,
       "source_wav_sha256": "f07f43a9f89b92a7e3a0842852d30fc4eb326f35126426a8f246678bc039d1fe",
       "text": "His reply to Seila: You unplugged the screen in the restaurant when it was showing Lord Ephelion's speech.",
       "read_aloud_status": "unreviewed"
@@ -1282,7 +1309,7 @@
       "sha256": "695861727fd281a1055cab1c91ff68cfda97103eea1ee8ab2d1a5b43230849bd",
       "bytes": 127924,
       "duration_ms": 14375,
-      "start_ms": 785650,
+      "start_ms": 788200,
       "source_wav_sha256": "e8394b056240709dbc36eecec745601fab055039f8305095a3a99e4241138395",
       "text": "A few moments later, Gladias's watch buzzed again. Three signatures done, including his own. One to go. Either Mov or Pelow — or, of course, if he really had to, himself running to the vault and picking up his second key."
     },
@@ -1294,7 +1321,7 @@
       "sha256": "86165255b0b7eb1637257f8ae99465e3a52f68827d5b38e1d20306620ba9d519",
       "bytes": 61976,
       "duration_ms": 6875,
-      "start_ms": 800475,
+      "start_ms": 803025,
       "source_wav_sha256": "70203484036c0ff49699f8ce0fbafd4b6803168c51cdc935c2716cb74139732b",
       "text": "\"I'm obviously not gonna ask who that was, or who else you need to confirm it\", Febric added. \"But good luck!\""
     },
@@ -1306,7 +1333,7 @@
       "sha256": "a00ea2cca71e0a5095696d988f0bfba4892e0147088f49613de78925930fdc99",
       "bytes": 15445,
       "duration_ms": 1725,
-      "start_ms": 809600,
+      "start_ms": 812150,
       "source_wav_sha256": "92bace2f39baa5bc1d6f332d204f19a9c1bea0dc73b7a3dea9d3858eb5102356",
       "text": "\"Seila, I'm home!\""
     },
@@ -1318,7 +1345,7 @@
       "sha256": "aadb43f985fc2acc15bd97fbea281785f47941a153344c19b81ffe25f9ccd2d2",
       "bytes": 12090,
       "duration_ms": 1400,
-      "start_ms": 811775,
+      "start_ms": 814325,
       "source_wav_sha256": "a5506ff0ec5f7b7bb51c707ceca466d57d9397fdfb913ab91cef6dc3c59a4a86",
       "text": "\"Glad!\""
     },
@@ -1330,7 +1357,7 @@
       "sha256": "0129c93d65f881f2cffa5264fffe1e0ae91a37320ddb255a26c9ffb01b90411a",
       "bytes": 19121,
       "duration_ms": 2150,
-      "start_ms": 813625,
+      "start_ms": 816175,
       "source_wav_sha256": "15ed45e88dbb80024233fab8477f28c01fb23be4b050f796c9d46d4e13c81457",
       "text": "\"So I have interesting news.\""
     },
@@ -1342,7 +1369,7 @@
       "sha256": "b040d74f1b8ff41ae1dc55d9a98331168f87308f1cdde6fc574416222ef0700a",
       "bytes": 13312,
       "duration_ms": 1475,
-      "start_ms": 816225,
+      "start_ms": 818775,
       "source_wav_sha256": "5545ced65cf75f318ccb5d30195caeaf4cc6e6e96d815f1f2b6cac9e3d850cf8",
       "text": "\"What is it?\""
     },
@@ -1354,7 +1381,7 @@
       "sha256": "a8aad51358ad28521d3247609576dae9f4df5bc1fe68bea206579a50da16af37",
       "bytes": 30304,
       "duration_ms": 3250,
-      "start_ms": 818150,
+      "start_ms": 820700,
       "source_wav_sha256": "385c5b011975e3d2b4878719321c31476aabd22385e18dc5ae0508687fc13b2e",
       "text": "\"There's some chance I'll be going to [Dzego](/ˈdzɛɡO/) soon.\""
     },
@@ -1366,7 +1393,7 @@
       "sha256": "56e54ef73915fd9e34d5376bc37276a289ed6b032e63feeca9972ebb437c09a4",
       "bytes": 14884,
       "duration_ms": 1650,
-      "start_ms": 821850,
+      "start_ms": 824400,
       "source_wav_sha256": "0025cabc1bf11b19d46715465a6b72c977d82cec6d9cfaeebaaeb233da0f356a",
       "text": "Seila stared."
     },
@@ -1378,7 +1405,7 @@
       "sha256": "6b464e9f9f5565a36427bc53fba3384481c03715c05acb7386aa4e9dbbbccb95",
       "bytes": 10986,
       "duration_ms": 1250,
-      "start_ms": 823950,
+      "start_ms": 826500,
       "source_wav_sha256": "a52f2f864fb4e7650abe45b8d6c216db4b40974cc4600bfdef8c542d76b252a3",
       "text": "\"Why?\""
     },
@@ -1390,7 +1417,7 @@
       "sha256": "597ba12a33e19e81336c37eff8d384a6714533f702664c7ffb898ae45b2dc690",
       "bytes": 92463,
       "duration_ms": 10200,
-      "start_ms": 825650,
+      "start_ms": 828200,
       "source_wav_sha256": "f98678d189f12b382b84eaf6d13c15b2e4d55e68b0dd1884173696e9c22db490",
       "text": "\"I talked to Mov about this. He thinks that Veridians, especially Keepers, the Order, the institutions generally, have a lot to learn from what's going on over there.\""
     },
@@ -1402,7 +1429,7 @@
       "sha256": "1f517f7d443f769cac93377b10e2f09c411fe3571d4c775f3b6d2aa41095543d",
       "bytes": 111999,
       "duration_ms": 12500,
-      "start_ms": 836300,
+      "start_ms": 838850,
       "source_wav_sha256": "d616c7cfdc7ddb3b9829d065f14d507390c69a61cf006dac8263b37a3cdde01d",
       "text": "\"I'm not sure about this ... it's a difficult time. You're not really the best person to make good use of a [Dzego](/ˈdzɛɡO/) trip. And the Keepers would benefit from having a strong hand guide them these next few months.\""
     },
@@ -1414,7 +1441,7 @@
       "sha256": "6553eb3a0dfebd44cd6517f8413113df2d5ebee19201b2d190424363da336f92",
       "bytes": 96875,
       "duration_ms": 10750,
-      "start_ms": 849250,
+      "start_ms": 851800,
       "source_wav_sha256": "3b441fcffc73c6072c3937c71635f5b3ee09b8a9efb231e1f350029a64e578bc",
       "text": "\"Arctic stuff is really much more of a military and parliament responsibility, maybe Graph Funding too. And ... maybe I can make good use of a trip if you introduce me to [Zei](/ˈzA/)?\""
     },
@@ -1426,7 +1453,7 @@
       "sha256": "8f279967b6dc99b8fdb26e4daddadbceb01c6a7a7ccfd89a0d9c41842987c706",
       "bytes": 28213,
       "duration_ms": 3125,
-      "start_ms": 860450,
+      "start_ms": 863000,
       "source_wav_sha256": "92335dc028db9fd46d79e1f83aa88277607421742daa16ad40be9d4a916e4f1e",
       "text": "Seila retreated into her thoughts for a few moments."
     },
@@ -1438,7 +1465,7 @@
       "sha256": "5b52114b4469d89e018d4403b2e0eec9b80620ffd1d31fc83d62535cb5061005",
       "bytes": 142260,
       "duration_ms": 16125,
-      "start_ms": 864025,
+      "start_ms": 866575,
       "source_wav_sha256": "9de020db0124425ea406c1776eac4d7cc1867a9e110df8ed9c8817d56aa8e706",
       "text": "\"If Mov thinks it's a good idea, then fine. But please do your homework first. Find someone, anyone, in Graph Funding or in parliament to talk to, so you get some idea of whether this trip will be useful, and if you do go, how to make it as useful as possible.\""
     },
@@ -1450,7 +1477,7 @@
       "sha256": "932aa273ca67b7ba2124751d80532d295bfb20b8897b54a1185e022108a47b05",
       "bytes": 22427,
       "duration_ms": 2450,
-      "start_ms": 880600,
+      "start_ms": 883150,
       "source_wav_sha256": "da73bdd70079808c252240e5d0a70d1dddc37afcaaec28e835d081cbce31044c",
       "text": "\"But really, think hard about this.\""
     },
@@ -1462,7 +1489,7 @@
       "sha256": "c6cfd90b6990ed1f3a7e9e24d5fd114be9a79851a7d864e066ea4d71b2c3dc7f",
       "bytes": 43024,
       "duration_ms": 4675,
-      "start_ms": 883500,
+      "start_ms": 886050,
       "source_wav_sha256": "75bf961ac7facec1000ee41fa52e6d95930b8c83b9873fd823f221b0a19a0bf3",
       "text": "\"If you go, then yes, of course I'll introduce you to [Zei](/ˈzA/). And [Bai](/ˈbI/) too.\""
     }

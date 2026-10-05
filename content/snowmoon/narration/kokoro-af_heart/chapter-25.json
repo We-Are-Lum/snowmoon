@@ -4,6 +4,14 @@
   "voice": "kokoro-af_heart",
   "label": "Synthetic narration · Kokoro-82M, stock voice af_heart",
   "license": "GPL-3.0",
+  "published_by": {
+    "fid": 6786,
+    "role": "maintainer",
+    "action": "published via script",
+    "script": "scripts/publish-narration.ts",
+    "date": "2026-10-05",
+    "evidence": "docs/prompts/008-narration-and-images.md"
+  },
   "recipe": "content/snowmoon/recipes/narration/chapter-25.json",
   "model": {
     "name": "Kokoro-82M",
@@ -36,7 +44,21 @@
     },
     "break_ms": 1800,
     "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
-    "read_aloud_sha256": "701d22a12c420e6774f9cc0439f069a628429be188de20ea92da44e6f588ea59"
+    "read_aloud_sha256": "701d22a12c420e6774f9cc0439f069a628429be188de20ea92da44e6f588ea59",
+    "description_tone": {
+      "notes_hz": [
+        660,
+        990
+      ],
+      "notes_ms": [
+        110,
+        140
+      ],
+      "between_ms": 40,
+      "after_ms": 220,
+      "amplitude": 0.12,
+      "made_by": "code (numpy sine, linear fades)"
+    }
   },
   "block_encoding": {
     "codec": "aac",
@@ -46,15 +68,15 @@
     "tool": "ffmpeg"
   },
   "chapter_file": {
-    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-25-8d0718ef271a.m4a",
-    "sha256": "8d0718ef271a076f8366772b6cdcb9a9ed330c90d182ec7f019e06d21e323bef",
-    "bytes": 10709037,
-    "duration_ms": 919425
+    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-25-7f04def66d8b.m4a",
+    "sha256": "7f04def66d8b684b8fff77c4ccb93a5c5edb73533512f02bbe70f8ff606bdaff",
+    "bytes": 10743263,
+    "duration_ms": 924525
   },
   "breaks": [
     {
       "idx": 95,
-      "start_ms": 642675,
+      "start_ms": 647265,
       "silence_ms": 1800
     }
   ],
@@ -104,6 +126,7 @@
       "bytes": 92351,
       "duration_ms": 10325,
       "start_ms": 18325,
+      "tone_ms": 510,
       "source_wav_sha256": "6b35f9c466f886cf72e44afce1eeea3be2d5b03857f00a43c07893b35471575f",
       "text": "Four boxes, each holding a triangular pile of blue circles: three in the top left, four in the top right, ten in the bottom left, and thirteen in the bottom right.",
       "read_aloud_status": "unreviewed"
@@ -116,7 +139,7 @@
       "sha256": "b4d77be4fcfceaceeb81c05f2e53461b65afcf15353a5d82aa6c30b317511a53",
       "bytes": 20448,
       "duration_ms": 2325,
-      "start_ms": 29250,
+      "start_ms": 29760,
       "source_wav_sha256": "3569c3bee12103b7c38c46b31cf7959b26ac3db76be645051555f365e1264349",
       "text": "\"Okay, so what do I do here?\""
     },
@@ -128,7 +151,7 @@
       "sha256": "7eac0826694e1381c173af6982a59d0b4d1b22f28a3999b08e9229953ddd9d55",
       "bytes": 92199,
       "duration_ms": 10300,
-      "start_ms": 32025,
+      "start_ms": 32535,
       "source_wav_sha256": "43883c7068e4299125103e6cbec01d2bfed7a5dd3df003d4d1ba21e32344d2e2",
       "text": "\"It's your turn first, so you pick one pile, and take at least one circle from the pile. You can take more, but you have to take at least one, and you can only take from one pile.\""
     },
@@ -140,7 +163,7 @@
       "sha256": "518a91bc305bf2a03775da7ad2cd456effcc742e39749773fd0707684c392cdf",
       "bytes": 23133,
       "duration_ms": 2600,
-      "start_ms": 42775,
+      "start_ms": 43285,
       "source_wav_sha256": "151550cbeae21da13e910598674d5231ad6cc55342e3579b5cf0afbdf7030a7c",
       "text": "\"Whoever picks up the last circle wins.\""
     },
@@ -152,7 +175,7 @@
       "sha256": "7376051fc64f3e54f263b2100374973aa17920a9addc822e1f65c521f97d0fd2",
       "bytes": 62521,
       "duration_ms": 6950,
-      "start_ms": 45825,
+      "start_ms": 46335,
       "source_wav_sha256": "58b02be8d3e449b5a225a0be73d62a770ef8104c560599822e3ae8c3ba292655",
       "text": "Gladias did not feel like he had any strategic insight about the game, and so he decided he would learn by playing."
     },
@@ -164,7 +187,7 @@
       "sha256": "cb7d0767b9464e385969be466649f3d720e597090753f6f388fd3a023d8b0847",
       "bytes": 34745,
       "duration_ms": 3775,
-      "start_ms": 53225,
+      "start_ms": 53735,
       "source_wav_sha256": "dab53c8ab2bea20a140718ba016e318e529b4bf082ab761ab3b688885151e1bf",
       "text": "He tapped one circle in the top left box with his finger."
     },
@@ -176,7 +199,8 @@
       "sha256": "0f84ea0caf28af9a3cd0fadf6a90be6b7cce03a7ff0ea31e710daef3f293e917",
       "bytes": 22409,
       "duration_ms": 2425,
-      "start_ms": 57450,
+      "start_ms": 57960,
+      "tone_ms": 510,
       "source_wav_sha256": "f995ae00d086a00822528d59ff40dfa8c60f4f2b8fb024e2e7cc8db98507d9fb",
       "text": "The top left pile is down to two.",
       "read_aloud_status": "unreviewed"
@@ -189,7 +213,7 @@
       "sha256": "30245e8cbda76aae46a1c503912532938c4168aacdb64dae3307f7acbd43d574",
       "bytes": 50224,
       "duration_ms": 5450,
-      "start_ms": 60475,
+      "start_ms": 61495,
       "source_wav_sha256": "a75462c7fc001f071d6208f7ced582917b249f76f5468d82ec106fe27739d081",
       "text": "[Zei](/ˈzA/) immediately responded by tapping the circle at the top of the bottom right box."
     },
@@ -201,7 +225,8 @@
       "sha256": "1f24a435bd6b99f9f1a2e732ff7437a13f668e7a6959a88c0e4c261a117f91e3",
       "bytes": 24608,
       "duration_ms": 2700,
-      "start_ms": 66375,
+      "start_ms": 67395,
+      "tone_ms": 510,
       "source_wav_sha256": "e6425990d04ac9e08be9b0fca965c5404506bb37c8c244c5908de5082c2d2cd7",
       "text": "The bottom right pile is down to twelve.",
       "read_aloud_status": "unreviewed"
@@ -214,7 +239,7 @@
       "sha256": "2d4f85992d212df198fc6a065cffb11ae51f1abcc30e3d5ffb25d402304b9406",
       "bytes": 53603,
       "duration_ms": 5925,
-      "start_ms": 69675,
+      "start_ms": 71205,
       "source_wav_sha256": "5f970fa07bc4c46986ce5181575664c5c7d67306ac9cec1b3198c81c3d6d535d",
       "text": "Gladias decided he would try something different. He tapped three circles in the bottom left box."
     },
@@ -226,7 +251,8 @@
       "sha256": "ddf243172d933a9ce617c05beccbca8561f5d39f9a1c1c0ea7e5c201ae72a4d9",
       "bytes": 23556,
       "duration_ms": 2700,
-      "start_ms": 76050,
+      "start_ms": 77580,
+      "tone_ms": 510,
       "source_wav_sha256": "efae073a0a397f0e17f3439feddd43f4866b54f6ad7a79ceae996da7e6f99e2e",
       "text": "The bottom left pile is down to seven.",
       "read_aloud_status": "unreviewed"
@@ -239,7 +265,7 @@
       "sha256": "242f016675512b7056f0bdb3d31308525afd03896fb6736a49e2c631f4ce0b4c",
       "bytes": 49438,
       "duration_ms": 5375,
-      "start_ms": 79350,
+      "start_ms": 81390,
       "source_wav_sha256": "05a0ca3ecc5c7337dd52aef640989ef24857bee7f1591fe93389605a3090757c",
       "text": "[Zei](/ˈzA/) responded by tapping every circle in the bottom right box, except for one."
     },
@@ -251,7 +277,8 @@
       "sha256": "8e66a5f949d47db1c350ab60aed23b02b0b7298a2e474f9a2cb73cdf47c54e29",
       "bytes": 55849,
       "duration_ms": 6375,
-      "start_ms": 85175,
+      "start_ms": 87215,
+      "tone_ms": 510,
       "source_wav_sha256": "f77e544f8f23ecf41ac423aa3edf79082c0e2c14ac16431b59d056485139f93e",
       "text": "The bottom right box now holds a single circle. The piles stand at two, four, seven and one.",
       "read_aloud_status": "unreviewed"
@@ -264,7 +291,7 @@
       "sha256": "ff467ab6e38de7eb6c8356fc90da7e918b51f76fac75800aeef484d3c9514085",
       "bytes": 82256,
       "duration_ms": 9150,
-      "start_ms": 92150,
+      "start_ms": 94700,
       "source_wav_sha256": "a86142e6ae200f8b8c557433dd2bbe1a7221828bfbd94e6d14280b43855e91d3",
       "text": "Gladias tapped on all the remaining circles in the bottom left box. [Zei](/ˈzA/) responded by simply tapping on one of the circles in the top right box."
     },
@@ -276,7 +303,7 @@
       "sha256": "72bb1e123e3ee2755d46c8e17935971b6eff92c3fc363b4f9b431cf55c993032",
       "bytes": 77471,
       "duration_ms": 8475,
-      "start_ms": 101750,
+      "start_ms": 104300,
       "source_wav_sha256": "d8882bfe577cb88616a968df678bd0fe4dfed246779a84cb533cf4ac1e1f7953",
       "text": "Gladias tapped on all the remaining circles in the top left box. [Zei](/ˈzA/) tapped on two of the three remaining circles in the top right box."
     },
@@ -288,7 +315,8 @@
       "sha256": "ae69e9e90f94f75c52de9c39d8c3fb9124e29d247a7e2a53129b05c855d72c18",
       "bytes": 52132,
       "duration_ms": 5750,
-      "start_ms": 110675,
+      "start_ms": 113225,
+      "tone_ms": 510,
       "source_wav_sha256": "1987b609adc79e4a28afd7c2c78156dcc5f406028766035d2834abd9e11bc9ff",
       "text": "Only two circles remain on the board: one in the top right box, and one in the bottom right.",
       "read_aloud_status": "unreviewed"
@@ -301,7 +329,7 @@
       "sha256": "e3ac457383f917f2e875bee727d76a850b7fc2691b6dd1edba81ffddf89226ac",
       "bytes": 29636,
       "duration_ms": 3200,
-      "start_ms": 117025,
+      "start_ms": 120085,
       "source_wav_sha256": "0a8b0517bc027280d88b637eaf81056fe613fb5e7acf2622b09e6945ad61700e",
       "text": "\"Okay fine, I lost\", Gladias admitted."
     },
@@ -313,7 +341,7 @@
       "sha256": "219cfae9cfb6c1cdb8668f5dfee23a53383be65133ee1d4870c72deeec6d603e",
       "bytes": 89187,
       "duration_ms": 9900,
-      "start_ms": 120675,
+      "start_ms": 123735,
       "source_wav_sha256": "43416b0123dadbb1f47e12b95c810fd019b67e87950f5578a9cde4782dcc045f",
       "text": "The only next move he could make would be to remove the last circle from one of the two boxes. This would leave one circle on the board, which [Zei](/ˈzA/) could take and win."
     },
@@ -325,7 +353,7 @@
       "sha256": "e960e1a0a28f2663b8b2e883054aa9213452e19d1902a1c7add2470ca11629ab",
       "bytes": 16064,
       "duration_ms": 1800,
-      "start_ms": 131025,
+      "start_ms": 134085,
       "source_wav_sha256": "ed522e024446f3c7b888cf0aa73697ecb0b416588d63bc1a53d447e6646f5507",
       "text": "\"That was impressive.\""
     },
@@ -337,7 +365,7 @@
       "sha256": "b604cf43c1de40fc07d61c4f6e01ca076b401d3a58ad25cff802dc39df8386dc",
       "bytes": 61175,
       "duration_ms": 7000,
-      "start_ms": 133275,
+      "start_ms": 136335,
       "source_wav_sha256": "ff9fbd962d7d7d689c67710e9446deed04117bd705847b7842b9b70ab27de889",
       "text": "\"It's a game that we would play often as children, especially before more modern things like [Minpentai](/ˈmɪnpɛntI/) came along.\""
     },
@@ -349,7 +377,7 @@
       "sha256": "d11a8d9ce8627882e47ed53c83c208bfb87e27159b342d7157f5a79a23c7752f",
       "bytes": 31214,
       "duration_ms": 3350,
-      "start_ms": 140725,
+      "start_ms": 143785,
       "source_wav_sha256": "a628b1511fc7e20c903dcbdbfdbbc790ae9991f91e92c2b3fb1500aa42114af3",
       "text": "\"So is this the part where you tell me your secret sauce?\""
     },
@@ -361,7 +389,7 @@
       "sha256": "4343d264ed7e0d651459599e76723658e3de64596d1ce7d362b13aace89e8d1e",
       "bytes": 134729,
       "duration_ms": 15050,
-      "start_ms": 144525,
+      "start_ms": 147585,
       "source_wav_sha256": "8167a075dab2cacf1612cf206c4ebccef396c7e7a97604cd240f5859fa69b5f2",
       "text": "\"You know me well. There is indeed a secret sauce. It's a simple algorithm. It requires mental math, but once you learn it, and if you can do the math without mistakes, then as long as you get to choose if you're going first or second, you will always win.\""
     },
@@ -373,7 +401,7 @@
       "sha256": "653cc7dab55c2d417b80c442ac43a718946b73aa822a03c56259b738444d98ef",
       "bytes": 13954,
       "duration_ms": 1550,
-      "start_ms": 160025,
+      "start_ms": 163085,
       "source_wav_sha256": "ac037cb290d8ae2340f9ee496de6783212e5491424494087ade462df3fe6acaa",
       "text": "\"So tell me.\""
     },
@@ -385,7 +413,7 @@
       "sha256": "e253d69cc27c84067b0e4ff5afbccfa7cbbf2d79c0246919043393f9cc1389aa",
       "bytes": 177071,
       "duration_ms": 19825,
-      "start_ms": 162025,
+      "start_ms": 165085,
       "source_wav_sha256": "36fe8be18784b9bc088b0ba81d8a4f98b0dbab72ea0477e166934bee8f267c86",
       "text": "\"Take the XOR of the circle counts of each box. So, write each count as a number in base 2. For each position, count up how many ones there are in that position. If there is an odd number of ones, in our new number we will put a 1 in that position. Otherwise, we put a 0. We'll call this the XOR sum of the board.\""
     },
@@ -397,7 +425,7 @@
       "sha256": "2c9ced9d3bf2711f9399d22526645f171595466b89f1b11a69c7e68355804ce2",
       "bytes": 24484,
       "duration_ms": 2775,
-      "start_ms": 182300,
+      "start_ms": 185360,
       "source_wav_sha256": "c61b748eb086b4b88d7f17669c0368759c92951dea89977892914d80823e5312",
       "text": "\"Wait, slow down, give me an example.\""
     },
@@ -409,7 +437,7 @@
       "sha256": "2cbd1084dab0c38bfb49746d9a11b7bc39554aa5f35e54ddd3f62a4a80b2fb6e",
       "bytes": 43822,
       "duration_ms": 4800,
-      "start_ms": 185525,
+      "start_ms": 188585,
       "source_wav_sha256": "3c73b1c05869859bf177a7f70d39f97f3a419c7edc32a6489771f110508045c1",
       "text": "\"Let's take the board we started with. The counts are 3, 4, 10, 13.\""
     },
@@ -421,7 +449,7 @@
       "sha256": "c42f21bc707d082700c0851a5f241a94034a1abe377a53cdd0722260bc019133",
       "bytes": 13107,
       "duration_ms": 1475,
-      "start_ms": 190775,
+      "start_ms": 193835,
       "source_wav_sha256": "5d9c0a83d102bb1e112d9ae6728f99e275fd945ea3f5dd479a86b8a41895332f",
       "text": "\"Okay.\""
     },
@@ -433,7 +461,7 @@
       "sha256": "8180ebfbc743624b7d71f261d4c98d19a97226ceb550721c049ee6115f484e57",
       "bytes": 18425,
       "duration_ms": 2025,
-      "start_ms": 192700,
+      "start_ms": 195760,
       "source_wav_sha256": "5428a8706b5dff3d8c90d1d4f09bcc1385a601e69a3d6f9901983fcb951be590",
       "text": "\"What is that in binary?\""
     },
@@ -445,7 +473,7 @@
       "sha256": "7c92217128298f75e3751e674fa33a7a729d458845db61e846702ed98165d546",
       "bytes": 36511,
       "duration_ms": 4125,
-      "start_ms": 195175,
+      "start_ms": 198235,
       "source_wav_sha256": "0bebd90d728eff1bdc568e7bef767425211622b2b7c31e7718cdc3eeb82fdcc0",
       "text": "\"11, 100, 1010 and ... hold on, 1101?\""
     },
@@ -457,7 +485,7 @@
       "sha256": "daa8dae70d1c1b87159b05292d6cba8c476f92dbef8315e73cba1c1c8b8562e3",
       "bytes": 41927,
       "duration_ms": 4575,
-      "start_ms": 199750,
+      "start_ms": 202810,
       "source_wav_sha256": "2465524af85423afde673401e7178f5c954ac164eac36f9fbf7874ce63ecac80",
       "text": "\"Yep! Though let's add some zeroes to make them the same length and write it down.\""
     },
@@ -469,7 +497,7 @@
       "sha256": "4b89d17fb53a038a619bb19a0b7efadd5ca160a3b314a5598a6e716145ab3d0a",
       "bytes": 42529,
       "duration_ms": 4775,
-      "start_ms": 204775,
+      "start_ms": 207835,
       "source_wav_sha256": "33be63829177547e4cab741b45909d7e5915294229d1e59589cec80ba1bbfa46",
       "text": "He opened up his hand device, and wrote down the four numbers in a grid shape."
     },
@@ -481,7 +509,8 @@
       "sha256": "1d6f46b6ee2f4b96b42b3c8d24c578480b94340d38a30c5ce0e11743bee84519",
       "bytes": 84764,
       "duration_ms": 9675,
-      "start_ms": 210000,
+      "start_ms": 213060,
+      "tone_ms": 510,
       "source_wav_sha256": "bd7b5bc121aeb778a13514f08c39972505de61de9804f2aaa27242df5f20c90f",
       "text": "He writes the four numbers in binary, stacked in a grid: zero zero one one, zero one zero zero, one zero one zero, and one one zero one.",
       "read_aloud_status": "unreviewed"
@@ -494,7 +523,7 @@
       "sha256": "dfc16156e23f2d1be78f2d4e9d8574f737b5742f10f7618d992cae40145c7e3e",
       "bytes": 21310,
       "duration_ms": 2375,
-      "start_ms": 220275,
+      "start_ms": 223845,
       "source_wav_sha256": "87fcc329dfbebb0a52127a3c62f631f54ed10e52db56248278a5622420546d04",
       "text": "\"Now, count up along the columns.\""
     },
@@ -506,7 +535,7 @@
       "sha256": "72324e5d326030ac01faec77e08afd6e74a12078e6b5ed1b8827723b79f623fe",
       "bytes": 54905,
       "duration_ms": 6150,
-      "start_ms": 223100,
+      "start_ms": 226670,
       "source_wav_sha256": "f8665f6d5b22c2287783e3806c34046d2f9b9dd77ed13bebe44d6a4b713b2507",
       "text": "\"They all have two ones. That's even. So the XOR sum is ... zero everywhere, so it's zero?\""
     },
@@ -518,7 +547,7 @@
       "sha256": "fbff870e9d34d442320e8a8e5922830282aaf669ad6db4c95003e3d0200f0044",
       "bytes": 29878,
       "duration_ms": 3425,
-      "start_ms": 229700,
+      "start_ms": 233270,
       "source_wav_sha256": "56e6e38f58d1c3f3149d10740504861f0e4937e77c08345e0c652e239eeebd1e",
       "text": "\"Exactly. Now, remember what your first move was?\""
     },
@@ -530,7 +559,7 @@
       "sha256": "d07db6f5062067b42f66f0128b37a4e88197704812eb40ba89c251ace9e40fc5",
       "bytes": 24681,
       "duration_ms": 2775,
-      "start_ms": 233575,
+      "start_ms": 237145,
       "source_wav_sha256": "3c34c7ad31c980062ef53d5ea7e10d2f112f286613441c02e754a5f2d90c5e34",
       "text": "\"I decreased the first count from three to two.\""
     },
@@ -542,7 +571,7 @@
       "sha256": "d49158d49175434b657f9c46f6e1b9b4f3f2bc98ffbe8340032531c4746c2b92",
       "bytes": 12384,
       "duration_ms": 1375,
-      "start_ms": 236800,
+      "start_ms": 240370,
       "source_wav_sha256": "d7013091d2f0deec16d3eb7e6691711992e45f2c89e532e3d83d3bf8200c74ee",
       "text": "\"Correct.\""
     },
@@ -554,7 +583,8 @@
       "sha256": "2ddfd5b8c771f473f28461aa55333a5c46129150fcf7e93d5b70519417bcf7db",
       "bytes": 33517,
       "duration_ms": 3775,
-      "start_ms": 238625,
+      "start_ms": 242195,
+      "tone_ms": 510,
       "source_wav_sha256": "8a23e95cd8c1b6f67decd1ce8d8c14908ba47ff09c93883f26905840a874bad3",
       "text": "The grid again, with the first row now zero zero one zero.",
       "read_aloud_status": "unreviewed"
@@ -567,7 +597,7 @@
       "sha256": "370ec050bbcf20484b73fe06a0a685263ffd19b5b8f1df48bb2fc5e3386dd598",
       "bytes": 18394,
       "duration_ms": 2175,
-      "start_ms": 243000,
+      "start_ms": 247080,
       "source_wav_sha256": "177ad519f65a825a335da5675a58a2bb4931ab2ccd770d917375e13e8856e3d5",
       "text": "\"What's the XOR sum now?\""
     },
@@ -579,7 +609,7 @@
       "sha256": "e7ea27d5dc3b0db039e3dabf9c22eb597129fe87362183bc4707074bca1ca6ce",
       "bytes": 42783,
       "duration_ms": 4800,
-      "start_ms": 245625,
+      "start_ms": 249705,
       "source_wav_sha256": "f494f1a8f5c24c81ed7e6120b69b6bb0155aade8e3b9372308327fec39b358bc",
       "text": "\"Lowest-order digit has a single one now, so it became odd, so it's 1?\""
     },
@@ -591,7 +621,7 @@
       "sha256": "9d5604550fe0f668b049797695000845293605e67bae9515f813aa171b363f31",
       "bytes": 25555,
       "duration_ms": 2850,
-      "start_ms": 250875,
+      "start_ms": 254955,
       "source_wav_sha256": "ff7520dbef90935ad00b90d35a9377a0bf0c1c3277b3052e2d75e5336e5adf17",
       "text": "\"Exactly. Now, remember what I did?\""
     },
@@ -603,7 +633,7 @@
       "sha256": "5bd5f59ff0ff39cb24e25e65af53072a782e6bf7d6ad3bbfd3254ba38d240b39",
       "bytes": 16345,
       "duration_ms": 1750,
-      "start_ms": 254175,
+      "start_ms": 258255,
       "source_wav_sha256": "ec8ffa530dd54d8f43d14dd2cea028822f992ed492bdfb2b86cbd9037aaa77d9",
       "text": "\"Sorry, I forget.\""
     },
@@ -615,7 +645,7 @@
       "sha256": "3b7734371df468a73196d67825d4eddfd95454c40e6617e8e589495210c2ff09",
       "bytes": 39806,
       "duration_ms": 4325,
-      "start_ms": 256375,
+      "start_ms": 260455,
       "source_wav_sha256": "69c9d40c38d74a33c6de29c0196b41db4f696c6e26abbaf3bdacc3c5ee2470d7",
       "text": "\"I took one off of the last count, decreased it from thirteen to twelve.\""
     },
@@ -627,7 +657,8 @@
       "sha256": "9f725d4aabc2fdec64990f6dd443306c63b38037423751f29bb2d37ca7305758",
       "bytes": 41693,
       "duration_ms": 4675,
-      "start_ms": 261150,
+      "start_ms": 265230,
+      "tone_ms": 510,
       "source_wav_sha256": "0d333ebbf8876523cf02bbba723cf991d39f673b4ca48293e29724110289ebfd",
       "text": "The grid once more, now with the last row changed to one one zero zero.",
       "read_aloud_status": "unreviewed"
@@ -640,7 +671,7 @@
       "sha256": "1acd8c2e0e065587d0a7a8d1b92be338a325aaa4f376c633869fa345ee0c07d9",
       "bytes": 32550,
       "duration_ms": 3650,
-      "start_ms": 266425,
+      "start_ms": 271015,
       "source_wav_sha256": "0f9b3e8511c87735b634dcfadec25fddd92a8b48cc8bed139baa7d23f25a3f13",
       "text": "\"Oh I see! And the XOR sum is back to zero!\""
     },
@@ -652,7 +683,7 @@
       "sha256": "4d255882b7c3e176c045be040ba95a71926a44b7b02ec1ad9dffe4c2e6327f39",
       "bytes": 116207,
       "duration_ms": 13025,
-      "start_ms": 270525,
+      "start_ms": 275115,
       "source_wav_sha256": "e56159988d031a0c47c850439cfbe6c4a21b1966271dfa4467c3d949c610f162",
       "text": "\"Exactly. So whenever you move, the XOR sum started off zero, and any move you make can only make it nonzero. But if it's nonzero, then I always have some move that can set it back to zero again.\""
     },
@@ -664,7 +695,7 @@
       "sha256": "c635623cb570e940d7a6d15536e0f78be8d30824422773a63976cde0429fbaa5",
       "bytes": 15508,
       "duration_ms": 1825,
-      "start_ms": 284000,
+      "start_ms": 288590,
       "source_wav_sha256": "266f249d6597a4474f8d20fad5b3f829945f97b1b1082d69bdb87b39fe49dd77",
       "text": "\"Wait, is that true?\""
     },
@@ -676,7 +707,7 @@
       "sha256": "3304eb8da10b18354f43760ba7ee4ad3f968b81a77ec5b91840206be1e8f2601",
       "bytes": 200858,
       "duration_ms": 22825,
-      "start_ms": 286275,
+      "start_ms": 290865,
       "source_wav_sha256": "4dc8811808c1d28152236eba9807f8396957223948c616bd5a824b5f49e720d1",
       "text": "\"Take the highest-order digit of the XOR sum that's a 1. There have to be an odd number of circle counts whose digit at that position is a 1, meaning there has to be at least one. In that box, change its count from N to N XORed with the XOR sum. That's always a decrease, because one digit flips from 1 to 0 and all other digits that change are lower-order.\""
     },
@@ -688,7 +719,7 @@
       "sha256": "4af6e306192f9ed16b3563197d1275fa594e44629b84005122c5961f0598de75",
       "bytes": 16267,
       "duration_ms": 1775,
-      "start_ms": 309550,
+      "start_ms": 314140,
       "source_wav_sha256": "1636bb6dc99ada441dac5d11debde9a78f6e2ec32e9f8c33b141a4407597a919",
       "text": "\"I ... maybe get it?\""
     },
@@ -700,7 +731,7 @@
       "sha256": "fbe248d82f58ef269678d3c4fc996ebc20a70af25a91b22eb2f450cba2fcdd2a",
       "bytes": 146289,
       "duration_ms": 16250,
-      "start_ms": 311775,
+      "start_ms": 316365,
       "source_wav_sha256": "51368db88fead15b3ac37908cb266c683069d1162e70957ca66956c06569be5e",
       "text": "\"And so whenever you move, you can only change the XOR sum from zero to nonzero. When I move, I set it back to zero. And the final move, the move that clears the board, sets the XOR sum to zero. So that means the winning move is always mine to make.\""
     },
@@ -712,7 +743,7 @@
       "sha256": "0f5a1e976537fe458186c829126c97f4aa67c72c30c4d9324b396e848534c7dd",
       "bytes": 107367,
       "duration_ms": 11900,
-      "start_ms": 328475,
+      "start_ms": 333065,
       "source_wav_sha256": "000f164e9f13a504a2622d042fc12eb482d0509ac7640f5e5a5b081f27c97d4b",
       "text": "\"Now, if the board started with an XOR sum that's not zero, then I would win if I go first. But if the board starts with an XOR sum of zero, then as second player I'm guaranteed to win.\""
     },
@@ -724,7 +755,7 @@
       "sha256": "05963ae36a7764469e2ef9434cfb679a1619c2cc52e2168bd774297fe881ff5e",
       "bytes": 13551,
       "duration_ms": 1575,
-      "start_ms": 340825,
+      "start_ms": 345415,
       "source_wav_sha256": "33a0fba9b80f13df72497a38155ae9dd463a36ae7a756dbd68ba3c54fe061ee3",
       "text": "\"Interesting!\""
     },
@@ -736,7 +767,7 @@
       "sha256": "02124beb554e675aadda791373cdad782b02500299b086892db3e45f12e0f3b9",
       "bytes": 26691,
       "duration_ms": 2925,
-      "start_ms": 342850,
+      "start_ms": 347440,
       "source_wav_sha256": "5f4e41f05ae41dad47889d25410ee16d58dcbff67c4c58b85da1d93bd48e7b50",
       "text": "Gladias sat back and thought for a few moments."
     },
@@ -748,7 +779,7 @@
       "sha256": "18db00aa3afe4969b7e8730aa82c4eed0e3dc5824c0a0cf2d970b5fc8c0aa70a",
       "bytes": 35022,
       "duration_ms": 3950,
-      "start_ms": 346225,
+      "start_ms": 350815,
       "source_wav_sha256": "6d401a8c747ca5c776b8db8216852ae9a439aceec75c3f3268fcc94a1ed783df",
       "text": "\"I've never seen a game that favors the second player before.\""
     },
@@ -760,7 +791,7 @@
       "sha256": "c1d674f34674f0259486ca5636ce266f17a27c9350be3a03212027bb52c76775",
       "bytes": 101489,
       "duration_ms": 11500,
-      "start_ms": 350625,
+      "start_ms": 355215,
       "source_wav_sha256": "b5180a8a67f8d8cdea644aa2bb3193652985643ecd26f940f1f2956a42440f0e",
       "text": "\"It doesn't necessarily! It only favors the second player if the initial board has an XOR sum of zero. But games that favor the second player are more common than you might think.\""
     },
@@ -772,7 +803,7 @@
       "sha256": "78c458118aa7921ba6b3c0963f35e18c506d38cf17b50bcefca70a9f3c5c7cfc",
       "bytes": 72875,
       "duration_ms": 8125,
-      "start_ms": 362575,
+      "start_ms": 367165,
       "source_wav_sha256": "e43863c621bef87a96379ca23d18d15d7a61ebdee4e7610b6e82d339b2de26ef",
       "text": "\"Normally there's some position, some territory that's valuable, and the first player has an advantage because they can get to it first.\""
     },
@@ -784,7 +815,7 @@
       "sha256": "929acb5d90adc600194dfff9c3e72e34abb891295f0654adcf4f868fb6c5bd30",
       "bytes": 48151,
       "duration_ms": 5375,
-      "start_ms": 371150,
+      "start_ms": 375740,
       "source_wav_sha256": "f7e58ad17c7e0e328ed0d4a6129f06330b15a262299ee35dfcfa58015d54e163",
       "text": "\"Can you think of what kind of underlying reason might make a game second-player favoring?\""
     },
@@ -796,7 +827,7 @@
       "sha256": "6b0628b553b9058d59c6fd9228f09281e0f2f1a77b200b9c0c6ac496809af97e",
       "bytes": 13119,
       "duration_ms": 1475,
-      "start_ms": 376975,
+      "start_ms": 381565,
       "source_wav_sha256": "ccf2172ca63ab6c49cb93d54596fe9d153468c8d5e1fe5bc1e94f5e165969e52",
       "text": "\"What do you mean?\""
     },
@@ -808,7 +839,7 @@
       "sha256": "bae7d7722554dd0eac8f25aa6dbb0255beab47ad902e4cd56b04fe4375f2ca25",
       "bytes": 34049,
       "duration_ms": 3775,
-      "start_ms": 378900,
+      "start_ms": 383490,
       "source_wav_sha256": "955f7076e1e03e441e6a2109632f4204cc7d023e4d0f01e38021799d7edb599f",
       "text": "\"What fundamental advantage does the second player have?\""
     },
@@ -820,7 +851,7 @@
       "sha256": "0b73f2195bf45983fba3e6907c165dc1455010d199872c6c98e358dc2b3abb2b",
       "bytes": 21121,
       "duration_ms": 2325,
-      "start_ms": 383125,
+      "start_ms": 387715,
       "source_wav_sha256": "ff384f046c0fdcedc89de8e3cdfdd84f306bc6b638e484e84ca248c8773909ce",
       "text": "Gladias paused to think again."
     },
@@ -832,7 +863,7 @@
       "sha256": "c736f4b56b2a9efebd69268878546aa413e81d71eeaf020f82b621e8080b875e",
       "bytes": 23988,
       "duration_ms": 2625,
-      "start_ms": 385900,
+      "start_ms": 390490,
       "source_wav_sha256": "eece2eb6b00ca77c860207ff1aa7fff82a670a132a65e53dfb2b232ee26abb60",
       "text": "\"They know more when they get to make their move.\""
     },
@@ -844,7 +875,7 @@
       "sha256": "365a1637f784e28c20e52754ace73e18d8d0190cca827bed50680b2fff676d2c",
       "bytes": 12526,
       "duration_ms": 1375,
-      "start_ms": 388975,
+      "start_ms": 393565,
       "source_wav_sha256": "51a7f27edc32de6f44aeaf41e4f7765654a677aa2418a05fa890f521ce1f30e3",
       "text": "\"Correct.\""
     },
@@ -856,7 +887,7 @@
       "sha256": "f27cbb6a46794c6e17dd169916b4e87fc3a198dcbf0ff86b1606f76a4c2a7dad",
       "bytes": 93373,
       "duration_ms": 10400,
-      "start_ms": 390800,
+      "start_ms": 395390,
       "source_wav_sha256": "4b17a87706f731cd73058211ab6db43377c243c58038097ce7cf6a7a2c945160",
       "text": "\"Here, I would make my move, and you would be in a position to make your counter-move based on my move, and so you always know the exact move that will bring things back into balance.\""
     },
@@ -868,7 +899,7 @@
       "sha256": "fe0942bcd1a1984b53ac6619f74b5b1ce7af8bf01a584f9234e1a0c244e12fb5",
       "bytes": 14372,
       "duration_ms": 1625,
-      "start_ms": 401650,
+      "start_ms": 406240,
       "source_wav_sha256": "156210e4f57377162a1262b88d6c03fc072a7e3ffd38b0b3a5b0b9f333ec6393",
       "text": "\"Exactly.\""
     },
@@ -880,7 +911,7 @@
       "sha256": "1e9c86fdff4f436d7f780c34730fc14d74bac9497bec32d1cfd2cca6ca3586d4",
       "bytes": 40989,
       "duration_ms": 4600,
-      "start_ms": 403725,
+      "start_ms": 408315,
       "source_wav_sha256": "b32d1012177bc918d444683caec1d0e91a81f0f84ad864f8e0726f869565f3e8",
       "text": "This time, [Zei](/ˈzA/) paused. After a few moments, Gladias spoke again."
     },
@@ -892,7 +923,7 @@
       "sha256": "efd0f9c4011766dbf6ee783de407f597ff2f1a56828d4dfbeb2ba47e76c3d1e4",
       "bytes": 37070,
       "duration_ms": 4150,
-      "start_ms": 408775,
+      "start_ms": 413365,
       "source_wav_sha256": "f53555aea8aa62230d8fa823d7c524601081539858d8114d0cd74fb5cd2c65fa",
       "text": "\"You know, if you were the first player, you would have probably won too.\""
     },
@@ -904,7 +935,7 @@
       "sha256": "8ef3fb4153f252d61f3e84b763ccf3c2441917d40043ca810f75007787690147",
       "bytes": 15777,
       "duration_ms": 1725,
-      "start_ms": 413375,
+      "start_ms": 417965,
       "source_wav_sha256": "1d855b38d415855cbb70caa033cf2b7a36c668e3e5dac7594a922d3138aa2f30",
       "text": "\"And why is that?\""
     },
@@ -916,7 +947,7 @@
       "sha256": "3483a0cfa748c5cd76c1f14b607b20dcd6258b154a225b63eda62c9cd52d0172",
       "bytes": 136389,
       "duration_ms": 15150,
-      "start_ms": 415550,
+      "start_ms": 420140,
       "source_wav_sha256": "80be8739c7a0f5cfbd5326c02aa0681974542d7444e4f1c6262cc21b4ff25b01",
       "text": "\"Because I didn't know the trick. To you, there was a mathematical structure that has one desirable state — the state where the XOR sum is zero every time I move. And once you reach it, you're locked in forever. To me, it was just chaos.\""
     },
@@ -928,7 +959,7 @@
       "sha256": "973ae373cb6245d36ed1c37d900eaa5b3b48f32430bfbf008060224aad750ce3",
       "bytes": 33251,
       "duration_ms": 3625,
-      "start_ms": 431150,
+      "start_ms": 435740,
       "source_wav_sha256": "7c3467686cdfecaaa9aee60b2eef18e4b9ad3472b881f6d5d5b48f75e1d0b86c",
       "text": "\"Indeed. Entropy is always in the eye of the beholder.\""
     },
@@ -940,7 +971,7 @@
       "sha256": "b5fdadcfc3374434e581edfbdacbd3c627cc0faa2501b1050fc3ffe336f55eb5",
       "bytes": 283899,
       "duration_ms": 31275,
-      "start_ms": 435225,
+      "start_ms": 439815,
       "source_wav_sha256": "5d7b6061bbf8d3b8bce285bf58b73f0233609c3a52200938d609dcce21f9b85e",
       "text": "\"The game is a tower of different kinds of rules\", [Zei](/ˈzA/) continued. \"At the bottom, the game is irreversible: you always have to take at least one circle away in each move. At a level higher than that, there's the XOR sum, and that is reversible. Whatever change you make, I can always set it back. But at a level even higher than that, the fact that it's your turn when the XOR sum is in balance is the irreversible thing. Once you let the game slip into that state, if the other player knows the trick, there is no way to get back out.\""
     },
@@ -952,7 +983,7 @@
       "sha256": "894647289352820302dbb3dfb106b729bf644667bb7099765e1193b4d2c80599",
       "bytes": 88685,
       "duration_ms": 9925,
-      "start_ms": 466950,
+      "start_ms": 471540,
       "source_wav_sha256": "1e808ad5201343098f41318402d6dbb6260273b89180348d0e42264af914d796",
       "text": "[Zei](/ˈzA/) went silent again. After a few moments, he changed his posture, signaling that the warmup was over and the real line of questioning was about to begin."
     },
@@ -964,7 +995,7 @@
       "sha256": "3c4ae5e1c487342ecdad92556b7ab079dff6f8c385a33a4fa9e74e72f841c6eb",
       "bytes": 68828,
       "duration_ms": 7875,
-      "start_ms": 477325,
+      "start_ms": 481915,
       "source_wav_sha256": "8676e1e10cf3b421fdbd54490aad91d32b77e32e84b3877a9db7ae0ac86d33f0",
       "text": "\"Now, here's your next question, Gladias. Is the fight for Veridia a first-player-favoring or a second-player-favoring game?\""
     },
@@ -976,7 +1007,7 @@
       "sha256": "1d5bbb2c38b3e742cbda34dc42a205d747ed7c9255e173b45352d3b7273bbf75",
       "bytes": 58325,
       "duration_ms": 6525,
-      "start_ms": 485650,
+      "start_ms": 490240,
       "source_wav_sha256": "e884b8f684f36a587d9306f61128564ba10f145568d02a0b5704a1988299936a",
       "text": "Gladias's eyes opened wide, visibly surprised at the new direction the conversation was going."
     },
@@ -988,7 +1019,7 @@
       "sha256": "4588bc4bd5c93dc613857c9a1447257fab79bdccf775624e3880d201d740ed3d",
       "bytes": 13239,
       "duration_ms": 1475,
-      "start_ms": 492625,
+      "start_ms": 497215,
       "source_wav_sha256": "9653914a28fd5efa3d91d998b45607a24529a8132323e7c9a718228b9f5a8cc2",
       "text": "\"What do you mean?\""
     },
@@ -1000,7 +1031,7 @@
       "sha256": "3769215d98ae54379fba83e91c91e0c33316cf888c9e558c6bdce20054973886",
       "bytes": 241942,
       "duration_ms": 27175,
-      "start_ms": 494550,
+      "start_ms": 499140,
       "source_wav_sha256": "51a40988a78eaefed9096cc9d58621df38b9985b7bd9bad8d63d9c15e5c6b14d",
       "text": "\"The Arctics moved first. They set up or took over spying infrastructure. They pressured, bribed or threatened Veridian officials. They made a highly coordinated campaign to try to take over even the Order of Steering, and get it to do their bidding and nudge Veridian society to not bother resisting. And finally they attacked Redshire and then Northglade. Do they win because they already captured the important positions, or do we win because we have a counter-strategy?\""
     },
@@ -1012,7 +1043,7 @@
       "sha256": "43f87699b60775097a47291818c0e3c99093febdfbcb9f4b27f38d581292c904",
       "bytes": 13083,
       "duration_ms": 1525,
-      "start_ms": 522175,
+      "start_ms": 526765,
       "source_wav_sha256": "f7f57646a761f212f6a793927417c05cb7446e8c64413f8059b33b0b6399d994",
       "text": "\"I see...\""
     },
@@ -1024,7 +1055,7 @@
       "sha256": "48a4a93b8ec85099c07447878706a39d139bb84c5eedd58ebab4274fb42b00be",
       "bytes": 182240,
       "duration_ms": 20475,
-      "start_ms": 524150,
+      "start_ms": 528740,
       "source_wav_sha256": "f7b0470ceb06e2dd5b8a7c58a04db6c16a8b047537ecde5c51af747fff68ae26",
       "text": "\"On the field of battle, right now they have the advantage, and not even for any first-player reasons — their technology is just better. But in the battle for the institutions, we have a counter-strategy. We can play the same game they do, but we have the advantage because we're seeking goals that most of the people we would be manipulating actually want.\""
     },
@@ -1036,7 +1067,7 @@
       "sha256": "da316313c09e83798419636c7b407d9d44e944242bdc17998486decc90cd3319",
       "bytes": 70129,
       "duration_ms": 7525,
-      "start_ms": 545075,
+      "start_ms": 549665,
       "source_wav_sha256": "49b4dd8c5b71c0efcab574b9172bed35970b70b820e972f8f1d98f81dd62ed4d",
       "text": "\"What's the word for manipulating someone to do something that's actually in their interest, by just showing them how it's in their interest?\""
     },
@@ -1048,7 +1079,7 @@
       "sha256": "a5fb916ffd127b156ffbf4c081561cda15b74e6864406394a6e9b045581213c9",
       "bytes": 28672,
       "duration_ms": 3200,
-      "start_ms": 553050,
+      "start_ms": 557640,
       "source_wav_sha256": "628a98eda015c71ac63763465916b92162e1925daa360cb0a13fa2680d1df1e7",
       "text": "\"This sounds like it has a really simple answer.\""
     },
@@ -1060,7 +1091,7 @@
       "sha256": "60375ac67705754f8f81a82324b61fdafdc878417e08d2d8ff2b30f593af0f92",
       "bytes": 14468,
       "duration_ms": 1600,
-      "start_ms": 556700,
+      "start_ms": 561290,
       "source_wav_sha256": "f803135c64202e127a6ef50e9949f469457af286af397fa7938c8fee91313078",
       "text": "\"Convincing.\""
     },
@@ -1072,7 +1103,7 @@
       "sha256": "d334cb47b9aef2aaf892cf2f70e459a9867df039b2441cceeb6cc68ed21f3067",
       "bytes": 25457,
       "duration_ms": 2775,
-      "start_ms": 558750,
+      "start_ms": 563340,
       "source_wav_sha256": "3ab705740234cdd9b0d64755b795f89dcf9af0f4c0eedb01083044db29697224",
       "text": "\"So whom do we convince, and to do what?\""
     },
@@ -1084,7 +1115,7 @@
       "sha256": "06ffbfd686e31f21826c62dc8947b6ad709eb780dc941e126d819edca4bf5e9f",
       "bytes": 14046,
       "duration_ms": 1575,
-      "start_ms": 561975,
+      "start_ms": 566565,
       "source_wav_sha256": "e20614287760fd6331146672c0b8ad53d690bb957d43992c1abe20a827337413",
       "text": "\"You tell me.\""
     },
@@ -1096,7 +1127,7 @@
       "sha256": "1e621e34085100f640c53914e5ef41fa5ef7be93d8fcf18a33407aa5ae355b06",
       "bytes": 29486,
       "duration_ms": 3250,
-      "start_ms": 564000,
+      "start_ms": 568590,
       "source_wav_sha256": "77aa8abc46522cc797420e98d0400780f6a433f9c730e6f5ac906370c9d34030",
       "text": "Gladias again paused. Finally, he spoke."
     },
@@ -1108,7 +1139,7 @@
       "sha256": "b6f3992235b7cfdc4cc69a1dd32ad6a41fedc75631eff7d3a483fb56dbe6b7c0",
       "bytes": 15648,
       "duration_ms": 1675,
-      "start_ms": 567700,
+      "start_ms": 572290,
       "source_wav_sha256": "0f6db22114e6a45d1641901da7417837c08719c4fcf337603b6cfff802935e83",
       "text": "\"What about the Courts?\""
     },
@@ -1120,7 +1151,7 @@
       "sha256": "895a64a7b5091dd6cfbcde898cde98fd2f97b7f73f930cdf7c8e0e16d3d54686",
       "bytes": 12433,
       "duration_ms": 1450,
-      "start_ms": 569825,
+      "start_ms": 574415,
       "source_wav_sha256": "42c4fe7e10871290abee67be34734b1ec0c1f45721ed4aeefb2c8d8861c45162",
       "text": "\"Go on.\""
     },
@@ -1132,7 +1163,7 @@
       "sha256": "10a79bbf7d6a20afecfe5df57a5abfebc9540de8fcf4434027c3411535aaf8d2",
       "bytes": 95857,
       "duration_ms": 10700,
-      "start_ms": 571725,
+      "start_ms": 576315,
       "source_wav_sha256": "e1bf90d6c8494fe63c2ca54f07be8329dc686cb8b3bc7c84208e10434453f52a",
       "text": "\"We run the same kind of influence campaign on the Courts that Delwart and whoever else did on the Order. And we convince them to do ... something that fixes this whole situation.\""
     },
@@ -1144,7 +1175,7 @@
       "sha256": "fabb7ac3959bdff9cf8c4479a5aadf945ee508352eb3728d9af00f2ec074a8bf",
       "bytes": 18689,
       "duration_ms": 2225,
-      "start_ms": 582875,
+      "start_ms": 587465,
       "source_wav_sha256": "bc7fdc356d2a8de9805c470a558c4333aca9eb99fc626d95e1c2ddd963644b16",
       "text": "\"You learn quickly, Gladias.\""
     },
@@ -1156,7 +1187,7 @@
       "sha256": "4dce35cf4e1e70200240523fb4072fdbe2b6d347d3d370920da153eeead8a75d",
       "bytes": 24663,
       "duration_ms": 2625,
-      "start_ms": 585550,
+      "start_ms": 590140,
       "source_wav_sha256": "729a7e2d15380e66d8037445c9413fb2883b03a351b3f2405de05036bff5afc9",
       "text": "\"Now, why do we have the advantage here?\""
     },
@@ -1168,7 +1199,7 @@
       "sha256": "f0b7488f9bfa24338c8a436c4d8b681f204bff2528b065487562ec000c07f321",
       "bytes": 361957,
       "duration_ms": 40250,
-      "start_ms": 588625,
+      "start_ms": 593215,
       "source_wav_sha256": "e6626e4061cc6f97c08a5b76254404a84ae3a7d6717a688ea65ade2c64ef52e1",
       "text": "\"Because what we're doing is actually good for Veridia. For Delwart to convince the Order members to go against Veridia's interests, he had to make different arguments for each person, tailor-made to their values and their weaknesses, and on top of that threaten them either implicitly or directly. We don't have to do that. We just have to have a clear thing that we're asking for, and tell the story directly, as it is. When you lie, it's easy to get tripped up: a lie is essentially a simulated virtual universe, and it's very hard to make a virtual universe that's consistent without actually simulating the whole thing. But the truth gives you self-consistency for free. So we tell the truth.\""
     },
@@ -1180,7 +1211,7 @@
       "sha256": "43c49d61f627af01400bf75261a4555eb59a360e11e41d47e72ba1dceeb77fd0",
       "bytes": 33959,
       "duration_ms": 3775,
-      "start_ms": 629325,
+      "start_ms": 633915,
       "source_wav_sha256": "357437070e91879205d6f69fc101f65189981e7ec8cee5ac05e247b57929f21d",
       "text": "\"So now, the next question. What is our ask for the Courts?\""
     },
@@ -1192,7 +1223,7 @@
       "sha256": "124ebe76c524c711b3ba6d381e52b7b376b4a34116e8d75edb9152b975dacf37",
       "bytes": 18275,
       "duration_ms": 1900,
-      "start_ms": 633550,
+      "start_ms": 638140,
       "source_wav_sha256": "21792b6f11d0ca888e32bc9f2b6db84df5abeecea7a7c8181161bdda85483ad2",
       "text": "\"Let's talk to Verdow.\""
     },
@@ -1204,7 +1235,7 @@
       "sha256": "ac9f0bada6d347506c3b7581fff16825952aaf18655825748611836a07d2c111",
       "bytes": 56416,
       "duration_ms": 6325,
-      "start_ms": 635900,
+      "start_ms": 640490,
       "source_wav_sha256": "6ac9211ea66109cf9e3c852abecd61dc13929fd8fae99edbe01e270ef620dd6e",
       "text": "\"You set up that call. I'll quickly ping [Den](/ˈdɛn/) and get the latest on how our spying in Veridia is going.\""
     },
@@ -1216,7 +1247,7 @@
       "sha256": "3a5f8496aeda4e24c060fb59d5ef2afb8421f135952b450bd7712d8e97b36695",
       "bytes": 20379,
       "duration_ms": 2275,
-      "start_ms": 644475,
+      "start_ms": 649065,
       "source_wav_sha256": "452184141abe8c0747352dd5f53fc43c2b14fcc9f3f24f86dc7573ab13b0b909",
       "text": "Gladias tapped on his watch."
     },
@@ -1228,7 +1259,8 @@
       "sha256": "36007864547720d0989f063f04992eade7dbd079469bddf2fb8a2238144bee73",
       "bytes": 35278,
       "duration_ms": 3950,
-      "start_ms": 647200,
+      "start_ms": 651790,
+      "tone_ms": 510,
       "source_wav_sha256": "19b82030eb042f4272615e6084a9bf3e6647d925afa3c328925fbae5959c454f",
       "text": "His watch shows a call request going out to Senator Verdow.",
       "read_aloud_status": "unreviewed"
@@ -1241,7 +1273,7 @@
       "sha256": "7f123478bfc8d4b901242264538584fa6bd6a503cd137461b46ebf84ef06a35d",
       "bytes": 24382,
       "duration_ms": 2700,
-      "start_ms": 651750,
+      "start_ms": 656850,
       "source_wav_sha256": "222ba1a8383f245e1a8624c2badd851090bb67a2abc1a339c5c2a0da4bbf8250",
       "text": "After a few moments, Verdow answered."
     },
@@ -1253,7 +1285,7 @@
       "sha256": "c92a1f7c0be5d8fa983d5aa828eb61a35c6c1e2438b70478db855fe85af6ba7b",
       "bytes": 16137,
       "duration_ms": 1875,
-      "start_ms": 654900,
+      "start_ms": 660000,
       "source_wav_sha256": "978cad9d96972bcc72a574f05aaf0893c5b5f07a874786788252a3e8b07df299",
       "text": "\"How are you, Gladias!\""
     },
@@ -1265,7 +1297,7 @@
       "sha256": "eda25d37ea68fa2c6d747436805d7416f17a4d2a7a9ecec8ab94d2dc008b44a8",
       "bytes": 20647,
       "duration_ms": 2325,
-      "start_ms": 657225,
+      "start_ms": 662325,
       "source_wav_sha256": "76e9540925d9e8751e9b1996f5ff15b1f988aea18a819456ef9c92ab9bca658d",
       "text": "\"Senator, we have a new idea.\""
     },
@@ -1277,7 +1309,7 @@
       "sha256": "9d09199ba5581854d7d47ea3cc52d980e7fcc43c6cdb5ddae8ec8e771a0c9547",
       "bytes": 15049,
       "duration_ms": 1650,
-      "start_ms": 660000,
+      "start_ms": 665100,
       "source_wav_sha256": "a0b0bb5f3d268f484481f5571b07b073c2f5f4544e0a03f3954f2a5efbed8ea2",
       "text": "\"And what is that?\""
     },
@@ -1289,7 +1321,7 @@
       "sha256": "97a3807dc024a2d35d0105cd6c72adba3d467678dcf6a86b49ad79ed7631ea3a",
       "bytes": 103598,
       "duration_ms": 11575,
-      "start_ms": 662100,
+      "start_ms": 667200,
       "source_wav_sha256": "06eac267fa30c9deefc0d5a0f5c43b82ec9b71f6942ebbc7e0aa862e1af146e7",
       "text": "\"We want to do the same thing to the Courts that the Arctics tried to do to the Order. Seek out enough of their judges, convince them to do something that will let us fight back against the Arctics properly.\""
     },
@@ -1301,7 +1333,7 @@
       "sha256": "139815b9a6bc2118eb373d5001bc05908956e3779129b9efa87b8c2d679bf0b8",
       "bytes": 34536,
       "duration_ms": 3750,
-      "start_ms": 674125,
+      "start_ms": 679225,
       "source_wav_sha256": "8ac6e4bae1d3c809dd79308c58ad8aeb3e8afefd832e90d85e15056078916be0",
       "text": "[Zei](/ˈzA/) saw the opportunity to join the conversation."
     },
@@ -1313,7 +1345,7 @@
       "sha256": "26d882bfb7559926497a1c2de28917c2ff22a947a8f7d0f593e734cb02744a51",
       "bytes": 311557,
       "duration_ms": 34175,
-      "start_ms": 678325,
+      "start_ms": 683425,
       "source_wav_sha256": "6f735138fafbf98f70c06cc970ad624639efb913ce83eafcc2c9b0944ef9563f",
       "text": "\"Most of the admins running the cameras just installed our update. It also called home to report each camera's existing state; it turns out a bunch of them had been taken over by the Arctics already. So now we have lots of backdoors, we've already identified over a dozen judges, and we've killed some of their backdoors as a bonus — though that does mean we have to be more careful now about not breaking our cover any further. So we can play the game just as well as the Arctics can — probably even better, because our goals are goals that the Veridian judges should actually want.\""
     },
@@ -1325,7 +1357,7 @@
       "sha256": "8ef46f79a249dd169b56c2cd4474d5fd335a4bfa11341772231acbbf62ba8ec8",
       "bytes": 49841,
       "duration_ms": 5400,
-      "start_ms": 712950,
+      "start_ms": 718050,
       "source_wav_sha256": "f5206b4ba199b888ae78c186b2e1ab478250561c23db2fd45d4cb697f0be708d",
       "text": "\"And so we need to figure out what the thing we want to convince them to do actually is.\""
     },
@@ -1337,7 +1369,7 @@
       "sha256": "2901880aa0c284fb81598c900d800a2d0eec5fefb43b5ea22442c0eeb2720ece",
       "bytes": 35885,
       "duration_ms": 4125,
-      "start_ms": 718800,
+      "start_ms": 723900,
       "source_wav_sha256": "163682c22e49fcc7a911d543d853236750950018a77008d9c3dc3688cb9a5d6a",
       "text": "Verdow seemed to laugh, more with admiration than anything else."
     },
@@ -1349,7 +1381,7 @@
       "sha256": "b0d6753d97ab677a215f98a956a19bc48aa4e01061b5687f6577a8a4b9fb7666",
       "bytes": 24735,
       "duration_ms": 2750,
-      "start_ms": 723375,
+      "start_ms": 728475,
       "source_wav_sha256": "3058fe97008638df514c68b6ddc61c06b884d9b07fc0dcdf6c4dd916107feb9e",
       "text": "\"I knew you guys could pull something together.\""
     },
@@ -1361,7 +1393,7 @@
       "sha256": "7ae447b43c57a11d320810a5564b52c78a4bb54e0a12095f01973d667dff7c17",
       "bytes": 17625,
       "duration_ms": 1900,
-      "start_ms": 726575,
+      "start_ms": 731675,
       "source_wav_sha256": "30fe6e309e50a20ce8659c415af32c34e8416c576399b98b0324d908894bc085",
       "text": "\"Let me think about this...\""
     },
@@ -1373,7 +1405,7 @@
       "sha256": "4849b5ff9710e2aa35d0c9d88db9e9205a111251a6f1e46ec385726ba3594c7f",
       "bytes": 39652,
       "duration_ms": 4525,
-      "start_ms": 728925,
+      "start_ms": 734025,
       "source_wav_sha256": "819f90a51153580ad4a9dff87166ae7b6fc9cf92464541b1fc9a6ac56e540636",
       "text": "For a few moments, silence. Then, Verdow slowly began to speak."
     },
@@ -1385,7 +1417,7 @@
       "sha256": "5f96283453bf18af72a216a054bcc35d392958afd052631854f827a23c607e62",
       "bytes": 23808,
       "duration_ms": 2700,
-      "start_ms": 733900,
+      "start_ms": 739000,
       "source_wav_sha256": "9ca915e22a2a427fa813fda4c7291226e61ef1e7108bdaeefa2e91d583669ea4",
       "text": "\"Okay, I have one crazy idea.\""
     },
@@ -1397,7 +1429,7 @@
       "sha256": "4f48fa7e60b308b93e8077a733e83d0cd9812480e8b0def3a4c4d8cde56432ef",
       "bytes": 164260,
       "duration_ms": 18250,
-      "start_ms": 737050,
+      "start_ms": 742150,
       "source_wav_sha256": "89a3c92275e1dc0b3ef3510ce8cfbac98d8696341f0dbba5804afc178d52555d",
       "text": "\"In Veridia, one of the most basic laws is that the military is required to defend the country. It's the fourteenth Ground Law, it's written right there in the documents. In Northglade, they completely failed to defend the country, and they are barely even trying to make any serious reforms in response.\""
     },
@@ -1409,7 +1441,7 @@
       "sha256": "c69c6a6a21dbd9790ef0a698561b6b766972a519796b74b96a80c392feea5c13",
       "bytes": 131741,
       "duration_ms": 14400,
-      "start_ms": 755750,
+      "start_ms": 760850,
       "source_wav_sha256": "911bb218d948fd966832dd4d9b18e4f3f6631aa8fe58543cc9c019dc35f21460",
       "text": "\"Therefore, the Veridian military are lawbreakers. Therefore, the Courts can fire them. And if the parliament tries to stop that, then, well, the parliament is legally the collective head of the military, so the Courts can fire them too.\""
     },
@@ -1421,7 +1453,7 @@
       "sha256": "cb594587fb3e76e9ebca5abd388d721b13756f9399f9da9a1dedd63ea3a77525",
       "bytes": 20493,
       "duration_ms": 2375,
-      "start_ms": 770600,
+      "start_ms": 775700,
       "source_wav_sha256": "90ef6a4106f0f4fb8a73b42b7392a0317f708d492e7d27d7bfe8cc06be3554cb",
       "text": "\"The Courts ... have that much power?\""
     },
@@ -1433,7 +1465,7 @@
       "sha256": "519bf5bfefc3a7e63094304d11d9f54e7e680188e79d7b7fc66bd4f93d4f6e7f",
       "bytes": 26760,
       "duration_ms": 2950,
-      "start_ms": 773425,
+      "start_ms": 778525,
       "source_wav_sha256": "28d5bbc13c6ddb5b55e798760e7c80b7e58075699d37ef513ce9ccd2ffaf8255",
       "text": "\"In principle the courts can do many things.\""
     },
@@ -1445,7 +1477,7 @@
       "sha256": "06b18298f8f51f5d0d1fa5a325c902d3d3298345df2cca2dd22750fcb3ce84b5",
       "bytes": 41417,
       "duration_ms": 4600,
-      "start_ms": 776825,
+      "start_ms": 781925,
       "source_wav_sha256": "fb86e210fedac606a9606f5c85f7a30a4c58ab6edf71e22491f438b9db9576e0",
       "text": "Verdow paused, and then decided to enter a philosophical tangent."
     },
@@ -1457,7 +1489,7 @@
       "sha256": "0914d13fc826433dacc8bf9978a0d2671195ebc5aacb4f1b2ccd6db55a05df6c",
       "bytes": 225687,
       "duration_ms": 24875,
-      "start_ms": 781875,
+      "start_ms": 786975,
       "source_wav_sha256": "dc17438eefe5b688ebf8d3cdc211e6ef6b034eead541cdee81311696056ab765",
       "text": "\"You see, Gladias, law is not like a computer program sitting inside a cryptographic network. The goal of law is not to try to eliminate the subjective nature of interpreting what's right and wrong in the world. Gather, the goal is to structure it — put it into channels that make it more predictable, and more focused, so that each case doesn't re-litigate the fundamental questions of what is good or bad for humanity.\""
     },
@@ -1469,7 +1501,7 @@
       "sha256": "83d1a444f914d1e744d9ec85d5b90ee48b4af5ca442f16c4e6cb6b49b118a3bc",
       "bytes": 224148,
       "duration_ms": 24875,
-      "start_ms": 807200,
+      "start_ms": 812300,
       "source_wav_sha256": "09e052ff8e99e6a6ecdb713807c235a901a010cf77fda99126278fc4a1bddb90",
       "text": "\"In a normal case, it often does approach being quite programmatic, and that is the point. A business dispute in court not about who is a good person, it's about whether or not one party committed the legally-defined act of fraud. But in any exceptional case, a lot of flexibility remains — and indeed, any situation that is settled case law today was unknown and flexible at some point in the past.\""
     },
@@ -1481,7 +1513,7 @@
       "sha256": "8d79d2ab2b20a086d5c4aa36bdeafab0e01a94fb426ef956d1516bce8c3a06c7",
       "bytes": 246306,
       "duration_ms": 27400,
-      "start_ms": 832525,
+      "start_ms": 837625,
       "source_wav_sha256": "347c2c49a2676f8ef36a66b8c1c9130448df3b9ce1bf55189292b4303314dee5",
       "text": "\"And this latent flexibility is key to giving courts space to make good decisions. Man was not made for categories. Categories were made for man. Declaring the entire military in violation of its sacred duty is crazy. It's something so crazy that I don't think anything remotely like it has been attempted in Veridian history. But Veridia is also in a crazy time. And so at this moment, a crazy judgement like that is exactly what Veridia needs.\""
     },
@@ -1493,7 +1525,7 @@
       "sha256": "ca68f1622ff25298a34f591e287d6eceb89772ca5d36ee8a44221427385408e8",
       "bytes": 356036,
       "duration_ms": 39600,
-      "start_ms": 860375,
+      "start_ms": 865475,
       "source_wav_sha256": "20c698f0e31a843760a1ed084441b5b8bfde06cf610e3f305dd3d7145fd0ac51",
       "text": "\"Winning here is not just a matter of blasting out into the public the argument that I just made, where the judges will see that of course it's correct and immediately act on it. You have to convince them. You have to sit with them. Explain to them why this is not just a valid legal argument, but also good for Veridia. Explain to them why replacing the entire military leadership, and if needed the parliament, is something that will rescue Veridia, rather than throwing it into further chaos. And convince them that enough other judges will go along too, and that when they make their decision, the public will go along too. And do all that first quietly than suddenly, so that the Arctics can't react.\""
     },
@@ -1505,7 +1537,7 @@
       "sha256": "637fc2c507accb481630a1eb77f4b2fdb031ad016156bf017748dda3455de629",
       "bytes": 40790,
       "duration_ms": 4500,
-      "start_ms": 900425,
+      "start_ms": 905525,
       "source_wav_sha256": "841201d66eaf7a529ef75a1179951970d94029b004c5fa8ca57b43ca5f035f16",
       "text": "\"I like how we don't even need to convince you that the plan is worth trying.\""
     },
@@ -1517,7 +1549,7 @@
       "sha256": "7cfada187877965c4f45606fd5026fc77da97e5ebd2faa6e8cda6d23be4169fb",
       "bytes": 124107,
       "duration_ms": 13600,
-      "start_ms": 905375,
+      "start_ms": 910475,
       "source_wav_sha256": "da6e129e84a28a0520062016a8630d13257aefae81e50025194407fdf83d7ca3",
       "text": "\"The only other plans I've heard in my parliament meetings are to keep doing what we've been doing all along but 'try harder', and outright surrender. I judge those two as having an even lower success probability than this.\""
     }

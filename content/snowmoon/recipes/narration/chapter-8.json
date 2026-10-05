@@ -4,7 +4,7 @@
   "source_sha256": "503183f34771459568f0ef04f746048a81c53342b0551b1d405bfc230d90de8d",
   "generated_at": "2026-10-03T17:08:42+00:00",
   "generation_seconds": 180.7,
-  "total_duration_ms": 1293225,
+  "total_duration_ms": 1296795,
   "model": {
     "name": "Kokoro-82M",
     "repo": "hexgrad/Kokoro-82M",
@@ -36,7 +36,21 @@
     },
     "break_ms": 1800,
     "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
-    "read_aloud_sha256": "679f2d605df5ce722ff6e216ba019c52253f9246f065eaf875df4993237df4db"
+    "read_aloud_sha256": "679f2d605df5ce722ff6e216ba019c52253f9246f065eaf875df4993237df4db",
+    "description_tone": {
+      "notes_hz": [
+        660,
+        990
+      ],
+      "notes_ms": [
+        110,
+        140
+      ],
+      "between_ms": 40,
+      "after_ms": 220,
+      "amplitude": 0.12,
+      "made_by": "code (numpy sine, linear fades)"
+    }
   },
   "host": {
     "platform": "macOS-26.5.1-arm64-arm-64bit",
@@ -45,10 +59,10 @@
   },
   "stitched": {
     "wav": "chapter-8.wav",
-    "wav_sha256": "99b3d41fc7dcdd33c7e1d1b29c436db58cf1a768bac1b441def8fc664fc88167",
+    "wav_sha256": "f146350ce477ebca4fe607b6a77c22d11c56958efbe2890b5db99425567b211d",
     "m4a": "chapter-8.m4a",
-    "m4a_sha256": "68cc8c7f031678a4bf29948d4aa8b7f247ae803acafdac8e3aae042afd995f91",
-    "note": "start_ms is the block's offset in the stitched file, gaps included"
+    "m4a_sha256": "17c430f909c829c748d47702438ce4919afad1dc4706d26bf85b8c03b086d721",
+    "note": "start_ms is the block's offset in the stitched file, gaps included; a description starts with its tone (tone_ms)"
   },
   "blocks": [
     {
@@ -94,7 +108,8 @@
       "start_ms": 12325,
       "text": "A message from Seila: five images.",
       "generation_s": 0.37,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 4,
@@ -103,7 +118,7 @@
       "file": "blocks/c8-b004.wav",
       "sha256": "acf2ea1d2321a86e8ad7b646921a31782a67bab5456cd65b302f3c2b7935bef1",
       "duration_ms": 4100,
-      "start_ms": 15875,
+      "start_ms": 16385,
       "text": "He opened up his hand device to see the images more clearly.",
       "generation_s": 0.49
     },
@@ -114,7 +129,7 @@
       "file": "blocks/c8-b005.wav",
       "sha256": "22e094984a2bff3a7a39ce7c61ad6d0217c8226e2b8dd8e02fb89184cc6f7449",
       "duration_ms": 28200,
-      "start_ms": 20425,
+      "start_ms": 20935,
       "text": "Seila was sending photos from Iptak. Gladias was immediately curious. Neither he nor Seila had ever before been to \"the aks\", as the Veridians liked to call the cluster of Ondak, Iptak, Mantak and Belpaki. The architecture was visibly different, more brick and wood, the colors more red and brown than what he was used to seeing not just in Veridia, but even in pictures of [Dzego](/ˈdzɛɡO/), or for that matter any of the United Cities that Gladias had been to or seen pictures of.",
       "generation_s": 3.87
     },
@@ -125,7 +140,7 @@
       "file": "blocks/c8-b006.wav",
       "sha256": "4e2fd30208a221fcc38c6b7cdece457a23a459a8b0c10c3546a33cc05b51a0c9",
       "duration_ms": 11275,
-      "start_ms": 49075,
+      "start_ms": 49585,
       "text": "The signs were in a language that was half alphabet, half pictorial — the sort of thing that [Dzegoban](/ˈdzɛɡObɑn/) had been not too far from before they stripped that out in order to streamline the language.",
       "generation_s": 1.9
     },
@@ -136,7 +151,7 @@
       "file": "blocks/c8-b007.wav",
       "sha256": "5e98ae8835cae89f0034c8da6b48c5b8a6528c4c0e1af6ff6f8ea6dfb7b60503",
       "duration_ms": 3800,
-      "start_ms": 60800,
+      "start_ms": 61310,
       "text": "He pressed a button, responding to Seila with a heart symbol.",
       "generation_s": 0.57
     },
@@ -147,7 +162,7 @@
       "file": "blocks/c8-b008.wav",
       "sha256": "a2795aab915a4060baa2fd5d96f74fc11727a54d8e46f6e778ad72a0f45c4b1b",
       "duration_ms": 8100,
-      "start_ms": 65050,
+      "start_ms": 65560,
       "text": "\"I'm looking forward to your blog\", Gladias whispered through his neck band, letting Emerald automatically route that message to Seila.",
       "generation_s": 1.05
     },
@@ -158,7 +173,7 @@
       "file": "blocks/c8-b009.wav",
       "sha256": "692403676ede5b945fccae64960072f10ddd98f61a1c3d630dfe876b664e5aa6",
       "duration_ms": 3175,
-      "start_ms": 73600,
+      "start_ms": 74110,
       "text": "\"I'll be back in a few days!\", Seila replied.",
       "generation_s": 0.39
     },
@@ -169,7 +184,7 @@
       "file": "blocks/c8-b010.wav",
       "sha256": "28d18f58bbd295927226d3b93020a146950274be442a790df65ef6a128c37b09",
       "duration_ms": 17250,
-      "start_ms": 77225,
+      "start_ms": 77735,
       "text": "At that point, Gladias arrived at the end of the path, at an intersection with the sidewalk along a street. Right in front, there was a sign listing the autobuses that stopped at that point. Gladias saw the number of the autobus that he was meant to take. He stood and began to wait.",
       "generation_s": 2.26
     },
@@ -180,7 +195,7 @@
       "file": "blocks/c8-b011.wav",
       "sha256": "093b7b5138b51dca73e5d512c8fd8d5beceab203237dcb2fa660122e6508f173",
       "duration_ms": 4375,
-      "start_ms": 94925,
+      "start_ms": 95435,
       "text": "Gladias's watch buzzed, and a notification appeared onscreen.",
       "generation_s": 0.59
     },
@@ -191,10 +206,11 @@
       "file": "blocks/c8-b012.wav",
       "sha256": "f830784ec4d4671ad828ed4f16335aae7e11e007d4109ca5c3eec5923395edf4",
       "duration_ms": 8525,
-      "start_ms": 99750,
+      "start_ms": 100260,
       "text": "A message from Mov: Remember that your trial in today is not just about knowledge. It's also about making sure the senators like you.",
       "generation_s": 1.06,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 13,
@@ -203,7 +219,7 @@
       "file": "blocks/c8-b013.wav",
       "sha256": "fd09c66c9cb1c68153175c246239973990835cdf6d38821812a0c9538dd4de5a",
       "duration_ms": 6025,
-      "start_ms": 108875,
+      "start_ms": 109895,
       "text": "Gladias sighed, and let his arm drop back down to beside his waist. He continued to wait.",
       "generation_s": 0.72
     },
@@ -213,7 +229,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 115350,
+      "start_ms": 116370,
       "duration_ms": 1800
     },
     {
@@ -223,7 +239,7 @@
       "file": "blocks/c8-b015.wav",
       "sha256": "0a6458d229623d80b397cb1c6697e9e7e198bbfcda4f182072701d813bd191fc",
       "duration_ms": 10875,
-      "start_ms": 117150,
+      "start_ms": 118170,
       "text": "A few minutes later, the next autobus arrived. Gladias checked the number. It was exactly the autobus that he needed. He quickly got on, and the door closed behind him.",
       "generation_s": 1.38
     },
@@ -234,7 +250,7 @@
       "file": "blocks/c8-b016.wav",
       "sha256": "6e04bd681a3cad8b17f28f0fba26b1f6ece17db58b371426f124c4212fa2d420",
       "duration_ms": 12400,
-      "start_ms": 128475,
+      "start_ms": 129495,
       "text": "Out of the corner of his eye, he saw more people than usual looking intently at their hand devices at that moment. Curious, he stepped forward and quietly looked at what one of the other passengers was looking at.",
       "generation_s": 1.88
     },
@@ -245,7 +261,7 @@
       "file": "blocks/c8-b017.wav",
       "sha256": "e4e14ec990345e6c00427140b54ee1fbc8026edbaff18a84e4765446792bc772",
       "duration_ms": 13925,
-      "start_ms": 141325,
+      "start_ms": 142345,
       "text": "\"Veridia National University\", the header at the top of the view on the passenger's hand device said. \"Live debate between Professor Sylka, president of VNU, and Lord Ephelion, Arctic ambassador to Veridia\".",
       "generation_s": 1.77
     },
@@ -256,7 +272,7 @@
       "file": "blocks/c8-b018.wav",
       "sha256": "878e67f5a39a6986f5d101c58023df553ac2c4ed5d25691bc5208db4692486bd",
       "duration_ms": 4100,
-      "start_ms": 155700,
+      "start_ms": 156720,
       "text": "Sylka was speaking, and Gladias could make out the subtitles.",
       "generation_s": 0.5
     },
@@ -267,7 +283,7 @@
       "file": "blocks/c8-b019.wav",
       "sha256": "9e46aa68d61d497c177c8056dac7f08fd16b90ba93eaa33937dae440be7134a2",
       "duration_ms": 14625,
-      "start_ms": 160250,
+      "start_ms": 161270,
       "text": "\"Gross economic output alone measures one part of human progress\", she said — though Gladias could only see and not hear. \"But it becomes a very limiting and impoverished perspective if you start viewing it as the entire goal.\"",
       "generation_s": 2.22
     },
@@ -278,7 +294,7 @@
       "file": "blocks/c8-b020.wav",
       "sha256": "bfb86325e2ae21c849735b2e9ab3dc0cb927849ffb1d3d40bb4e80e80467d00a",
       "duration_ms": 7400,
-      "start_ms": 175325,
+      "start_ms": 176345,
       "text": "Gladias was curious enough that he whispered to Emerald through his neck band to put up an audio livestream of the debate.",
       "generation_s": 0.92
     },
@@ -289,7 +305,7 @@
       "file": "blocks/c8-b021.wav",
       "sha256": "a48bf6b65e988c848ae53bfd8c106f7b6d84faa73e79342ad2f9eb792616a130",
       "duration_ms": 8375,
-      "start_ms": 183175,
+      "start_ms": 184195,
       "text": "\"There is so much more that matters. There is the citizens' health, their emotional well-being, and how healthy the bonds in the society are.\"",
       "generation_s": 1.03
     },
@@ -300,7 +316,7 @@
       "file": "blocks/c8-b022.wav",
       "sha256": "0761bcb09fb0cf831e623ce7146de169cafa376d6ed109326a1093492149dabb",
       "duration_ms": 17525,
-      "start_ms": 192000,
+      "start_ms": 193020,
       "text": "As Sylka finished speaking, the audio livestream connected. Gladias stepped back from the passenger, somewhat embarrassed that he had momentarily violated the passenger's privacy by looking at his screen, and relieved that he was now receiving the feed in a completely ethical way.",
       "generation_s": 2.66
     },
@@ -311,7 +327,7 @@
       "file": "blocks/c8-b023.wav",
       "sha256": "b6950e51534c1fc3d02f493b4e5afc78323006883162628922639d092dd0abcc",
       "duration_ms": 11850,
-      "start_ms": 209975,
+      "start_ms": 210995,
       "text": "\"What good is a large car if people feel unhappy because they have no purpose in life? What good is a large house if people feel alienated in their society, and don't have friends to invite to it?\"",
       "generation_s": 1.56
     },
@@ -322,7 +338,7 @@
       "file": "blocks/c8-b024.wav",
       "sha256": "24bfdd870e09ba108fb1468a09c9a10dc8713a933ca7620091bd3665f915a6a6",
       "duration_ms": 15125,
-      "start_ms": 222275,
+      "start_ms": 223295,
       "text": "\"What good are the latest electronics, if the people at the bottom use them to hack and steal, the people at the top use them to invade people's privacy and surveil, and everyone all the time uses them to get outraged on social media platforms?\"",
       "generation_s": 2.2
     },
@@ -333,7 +349,7 @@
       "file": "blocks/c8-b025.wav",
       "sha256": "5986225126cb254ef801547b90c7ed00f0a38b604f922214e48f9316852ac571",
       "duration_ms": 5500,
-      "start_ms": 237850,
+      "start_ms": 238870,
       "text": "\"Such questions are the entire reason why Veridia has mechanisms like Steering.\"",
       "generation_s": 0.81
     },
@@ -344,7 +360,7 @@
       "file": "blocks/c8-b026.wav",
       "sha256": "079cf449764971d5ea4f23a7cc89fbcd5cf1aa0b81dedb836b81514416b13155",
       "duration_ms": 3525,
-      "start_ms": 243800,
+      "start_ms": 244820,
       "text": "Sylka paused. Lord Ephelion started speaking.",
       "generation_s": 0.47
     },
@@ -355,7 +371,7 @@
       "file": "blocks/c8-b027.wav",
       "sha256": "10aae3d7ab1d1e12b6c3a2307dd19c89c5a3722a637ccad2a3730f026665b703",
       "duration_ms": 17025,
-      "start_ms": 247775,
+      "start_ms": 248795,
       "text": "\"There has now been a century-long tradition of people trying to make better metrics than gross economic output. But what we have seen is that especially over the long term, the countries that perform best on any of those metrics are precisely the ones whose economic output is highest.\"",
       "generation_s": 2.27
     },
@@ -366,7 +382,7 @@
       "file": "blocks/c8-b028.wav",
       "sha256": "d3f015b6b4adde1ebec5c0015233cdc7f785f6831843d69c0e8ce05a5dd8d0bf",
       "duration_ms": 23225,
-      "start_ms": 265250,
+      "start_ms": 266270,
       "text": "\"And there is a deep reason for this. Historians have long understood that many phenomena in society move in cycles. The ancients talked about a cycle: flourishing, pride, arrogance, downfall, suffering, rebirth, and then flourishing once again. They said the same thing about governance, and how it inevitably cycles between technocratic, democratic, chaotic and strongman.\"",
       "generation_s": 3.81
     },
@@ -377,7 +393,7 @@
       "file": "blocks/c8-b029.wav",
       "sha256": "8e70f37108850261e4c3fd6876b996aa17d4412aca0d9b88a674ea2bdf0cdba3",
       "duration_ms": 21900,
-      "start_ms": 288925,
+      "start_ms": 289945,
       "text": "\"Whenever we talk about the inevitability of rises and falls, it is precisely these 'softer' traits like 'societal cohesion', 'freedom' and 'well-being' that move in this fashion. On those dimensions, the dominant transformation is a rotation: good creates the generator of the bad, which creates the bad, which creates the generator of the good once more.\"",
       "generation_s": 2.8
     },
@@ -388,7 +404,7 @@
       "file": "blocks/c8-b030.wav",
       "sha256": "159ab0a1d7fc4beaa06ae713325b77bff2c6ef4a8d9495a2eaf6a6fb048deff8",
       "duration_ms": 12925,
-      "start_ms": 311275,
+      "start_ms": 312295,
       "text": "\"And let us be real: these 'softer' traits that people are targeting, they're chosen by committees of priests — selected not for competence, but for echoing whatever ideology strikes people's fancy at the time.\"",
       "generation_s": 1.61
     },
@@ -399,7 +415,7 @@
       "file": "blocks/c8-b031.wav",
       "sha256": "0caffbc32dbc71a1a29d81715b6eaec6cccc6844a4f4ed016a7c7708b87de6ae",
       "duration_ms": 24375,
-      "start_ms": 324650,
+      "start_ms": 325670,
       "text": "\"There is only one thing that stands out from this pattern and offers a truly lasting improvement: the relentless march of economic growth, enabled by the unceasing progress of science, technology, and capital accumulation. While the emotional vibrations in a society cycle between the pride of success, and the desperation of collapse and defeat, with every cycle, people are smarter and richer than before.\"",
       "generation_s": 3.63
     },
@@ -410,7 +426,7 @@
       "file": "blocks/c8-b032.wav",
       "sha256": "673926a8fda9f6babaafbbed55abb2e6e8b7c824d295b21fd59be586b2e77206",
       "duration_ms": 5250,
-      "start_ms": 349475,
+      "start_ms": 350495,
       "text": "Gladias could see the eyes of a few of the people on the autobus watching perking up.",
       "generation_s": 0.8
     },
@@ -421,7 +437,7 @@
       "file": "blocks/c8-b033.wav",
       "sha256": "f93aac96ad341db8631ecbb7203278ac6728f0f757971ba793d2990e028a98a0",
       "duration_ms": 3525,
-      "start_ms": 355175,
+      "start_ms": 356195,
       "text": "\"The Order members are chosen by a sophisticated-\"",
       "generation_s": 0.45
     },
@@ -432,7 +448,7 @@
       "file": "blocks/c8-b034.wav",
       "sha256": "e16e419d23e569f07e1920cd94df02728ae67dcc44dee382fde78df2627e702e",
       "duration_ms": 4675,
-      "start_ms": 359150,
+      "start_ms": 360170,
       "text": "\"Order, please. Ephelion has the floor.\", the moderator interjected.",
       "generation_s": 0.6
     },
@@ -443,7 +459,7 @@
       "file": "blocks/c8-b035.wav",
       "sha256": "5964e36f210f6ede4ccec409a0bfef34e7bb44df9008d13eef134fa9595bf4c6",
       "duration_ms": 27475,
-      "start_ms": 364275,
+      "start_ms": 365295,
       "text": "\"And so if you want to truly improve a society, in a way that provides lasting value for the long term, you do not focus on the thing that moves in cycles. You do not focus on accelerating the rotation. Instead, you focus on increasing the largest eigenvector. You focus on affecting the thing that has a thousand-year record of compounding on itself, the vector on which good reliably leads to more good. And you let the rest follow the natural laws as it may.\"",
       "generation_s": 3.93
     },
@@ -454,7 +470,7 @@
       "file": "blocks/c8-b036.wav",
       "sha256": "b57d6f6540a36c4776662babda543cd1e7e4b847c52724454504d5d9d03835d7",
       "duration_ms": 16875,
-      "start_ms": 392200,
+      "start_ms": 393220,
       "text": "Ephelion stopped, and Sylka cleared her throat, preparing to speak. At that point, Gladias realized that the autobus door was open, and it was already at his destination. He quickly ran out, and Emerald automatically paused the livestream to help him concentrate.",
       "generation_s": 2.22
     },
@@ -465,7 +481,7 @@
       "file": "blocks/c8-b037.wav",
       "sha256": "a9867660b5d43e75b95f40ce06601685a6f39fcbf46948e350f8f69744fb08a7",
       "duration_ms": 17475,
-      "start_ms": 409525,
+      "start_ms": 410545,
       "text": "His mind lingered on the debate for a moment longer, and he noticed with faint irritation how easily Ephelion's sentences arranged themselves into an argument that seemed to make sense on its own terms. A gifted demagogue, he concluded. He then refocused on what lay ahead.",
       "generation_s": 2.39
     },
@@ -476,7 +492,7 @@
       "file": "blocks/c8-b038.wav",
       "sha256": "bc0a3e86328504f6d3a3a24b1fc6eb2383c8a3dd21ec46826e9fd13fa3184342",
       "duration_ms": 24725,
-      "start_ms": 427450,
+      "start_ms": 428470,
       "text": "Gladias started walking forward along a path covered with trees on both sides. After a few minutes, he saw a large circular building ahead. This was the parliament. The structure was notably different from the intentionally distant and mysterious headquarters of the Order of Steering: it was on ground level, the construction mixing [medieval](/mˌɛdiˈivᵊl/) and modern aesthetics, with multiple entrances on all sides.",
       "generation_s": 3.62
     },
@@ -487,7 +503,7 @@
       "file": "blocks/c8-b039.wav",
       "sha256": "92f08a7a116827529bbb08238c39f64516b30bfc3393764d427db4d2dd3eabbe",
       "duration_ms": 3800,
-      "start_ms": 452625,
+      "start_ms": 453645,
       "text": "He kept walking forward, and soon arrived at the entrance.",
       "generation_s": 0.55
     },
@@ -497,7 +513,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 456875,
+      "start_ms": 457895,
       "duration_ms": 1800
     },
     {
@@ -507,7 +523,7 @@
       "file": "blocks/c8-b041.wav",
       "sha256": "d0e2fe54ad59ad319f89093a4c78b8a4984638169419d79eabceb7bb68b12efa",
       "duration_ms": 3150,
-      "start_ms": 458675,
+      "start_ms": 459695,
       "text": "\"Welcome, Gladias, to your selection hearing.\"",
       "generation_s": 0.46
     },
@@ -518,7 +534,7 @@
       "file": "blocks/c8-b042.wav",
       "sha256": "5d5c25f5a880a5a8605cda8a280771c3dc8454cfcc4aa7203922e2e84d4e013c",
       "duration_ms": 17600,
-      "start_ms": 462275,
+      "start_ms": 463295,
       "text": "\"You have been an Acolyte for four years, and you have reached the ninety-fourth percentile in your prediction score. You have applied to join the Order of Steering in full standing — though whether you're applying to be a Sentinel or a Keeper, that's something that only you and perhaps your most trusted advisors will ever know.\"",
       "generation_s": 2.43
     },
@@ -529,7 +545,7 @@
       "file": "blocks/c8-b043.wav",
       "sha256": "7a705a3294da41c4e2be038b9307a84ec60094b46714db20afe66efa2d070b29",
       "duration_ms": 8150,
-      "start_ms": 480325,
+      "start_ms": 481345,
       "text": "\"Today, we will administer the second part of the admissions test: the approval of the Parliament committee. Are you ready to begin the hearing?\"",
       "generation_s": 1.19
     },
@@ -540,7 +556,7 @@
       "file": "blocks/c8-b044.wav",
       "sha256": "5e2c23dd455736def632a875205003766158f9fb7655ee195310947e0f1140c5",
       "duration_ms": 10825,
-      "start_ms": 488925,
+      "start_ms": 489945,
       "text": "A robot slid up to the chair in the middle of the room where Gladias was sitting, carrying a cup of water. Gladias took the cup, and moved it to the cup holder on the side of the chair.",
       "generation_s": 1.57
     },
@@ -551,7 +567,7 @@
       "file": "blocks/c8-b045.wav",
       "sha256": "0d223a3f52e75c230c5e9cf9f5b7bf73916838b5a5938246730b146f961346b3",
       "duration_ms": 1600,
-      "start_ms": 500200,
+      "start_ms": 501220,
       "text": "\"I am ready.\"",
       "generation_s": 0.35
     },
@@ -562,7 +578,7 @@
       "file": "blocks/c8-b046.wav",
       "sha256": "88ea3ebd2952996537f96c32c41c756bde98d17ff6af1c13019f7f42b78df281",
       "duration_ms": 2225,
-      "start_ms": 502250,
+      "start_ms": 503270,
       "text": "\"Then let the questions begin.\"",
       "generation_s": 0.3
     },
@@ -573,7 +589,7 @@
       "file": "blocks/c8-b047.wav",
       "sha256": "5b8e3ff17e6f9d43424ac8d4ec154f0a6b946670caafe64b7a93004cbd0abd1a",
       "duration_ms": 20525,
-      "start_ms": 504925,
+      "start_ms": 505945,
       "text": "Twenty senators were sitting on large chairs arranged along the whole edge of the circular-shaped room, spread about two meters apart from each other. In between some of the chairs, there were air filters. Above them, there were bright lights aimed downward, some bright yellow lights to light up the room, and a few faint violet-looking lights to keep the air clean.",
       "generation_s": 2.6
     },
@@ -584,7 +600,7 @@
       "file": "blocks/c8-b048.wav",
       "sha256": "20bdea2f5353273266f03c9ff0b14d1065c819c007b8e7c8d890a2777d653e5d",
       "duration_ms": 9325,
-      "start_ms": 525900,
+      "start_ms": 526920,
       "text": "In a particularly distinguished seat was the Chairman of the committee. About five senators pressed down on the buttons on their table, requesting to speak.",
       "generation_s": 1.15
     },
@@ -595,7 +611,7 @@
       "file": "blocks/c8-b049.wav",
       "sha256": "dd3802d362e6c9fcb5b8e8fc4259a4418c49bb6a48e1db06c29fc69390159ed0",
       "duration_ms": 5650,
-      "start_ms": 535675,
+      "start_ms": 536695,
       "text": "The system automatically selected one, and lighting around the edge of his seat turned green.",
       "generation_s": 0.69
     },
@@ -606,7 +622,7 @@
       "file": "blocks/c8-b050.wav",
       "sha256": "b1a21e7c9019956a3ecb4d4b19faf65937840145e0a54820e49d39ae0e77f11d",
       "duration_ms": 2850,
-      "start_ms": 541775,
+      "start_ms": 542795,
       "text": "\"Senator Verdow, you may ask your question.\"",
       "generation_s": 0.35
     },
@@ -617,7 +633,7 @@
       "file": "blocks/c8-b051.wav",
       "sha256": "d3ba28947b005618d3ba0302171efe8a37a76348ecef190abe9f65d6dda72383",
       "duration_ms": 2800,
-      "start_ms": 545075,
+      "start_ms": 546095,
       "text": "\"Gladias, tell us about your background.\"",
       "generation_s": 0.35
     },
@@ -628,7 +644,7 @@
       "file": "blocks/c8-b052.wav",
       "sha256": "fe2e86ca40b6263e382584298c7fca29250e6aa5165f055fa6feb355eb212f08",
       "duration_ms": 12600,
-      "start_ms": 548325,
+      "start_ms": 549345,
       "text": "\"Well\", Gladias stammered. \"I was born thirty-nine years ago. Fairly middle class family, nothing too fancy. I went to a normal school, got good grades, but never got top of the class or anything.\"",
       "generation_s": 1.56
     },
@@ -639,7 +655,7 @@
       "file": "blocks/c8-b053.wav",
       "sha256": "6fc1965331c18e37061e21e9d0cae1ae7ecbfb27e513f3c9f760f29faeba29ec",
       "duration_ms": 1475,
-      "start_ms": 561375,
+      "start_ms": 562395,
       "text": "\"Why not?\"",
       "generation_s": 0.22
     },
@@ -650,7 +666,7 @@
       "file": "blocks/c8-b054.wav",
       "sha256": "c87d2b2819deafe179fa3a3f0ac4ba5597771ffb532a8b7c6c8fc5e607f60822",
       "duration_ms": 34025,
-      "start_ms": 563300,
+      "start_ms": 564320,
       "text": "\"I think I was just not motivated to. I tried very hard for one year, got an average of ninety-seven percent. But then I realized that the main emotion I was feeling, was the fear that if I screwed up even once, my beautiful record would be gone. I even avoided taking the harder classes. At the end of that year, I just felt like that was a game not worth playing. So I put in less effort, and started programming, and then studying law, in my spare time, because those things interested me, and I ended up doing decently well in the programming competitions.\"",
       "generation_s": 4.79
     },
@@ -661,7 +677,7 @@
       "file": "blocks/c8-b055.wav",
       "sha256": "2e410889dd6bfb77b85e31533fcf7ceb5dc1c900a91150564aa6e162c254d2da",
       "duration_ms": 2675,
-      "start_ms": 597775,
+      "start_ms": 598795,
       "text": "\"Why did you choose to become an Acolyte?\"",
       "generation_s": 0.35
     },
@@ -672,7 +688,7 @@
       "file": "blocks/c8-b056.wav",
       "sha256": "502a596deace44042d5801cd521dd01146aeac9f4a0dcf224785643fdbc74003",
       "duration_ms": 37850,
-      "start_ms": 600900,
+      "start_ms": 601920,
       "text": "\"The first hobby project I gave myself when I seriously got into programming as an adult was writing an alternative client for Silverchat. After I finished, I tried to do the same for Bluewhale. And it was so much harder, because they were more closed and proprietary in many ways. That was when I realized just how much value Silverchat's openness was bringing to me that Silverchat itself would never capture. And I had been studying rubrics only a few days before, and it clicked — this, the aspects of a good society that the market alone misses, is exactly why Steering is so important. And so I felt motiv-\"",
       "generation_s": 5.17
     },
@@ -683,7 +699,7 @@
       "file": "blocks/c8-b057.wav",
       "sha256": "9e421c86c9bfa51d97564c827b3185aeb251515e9256517d94cd42743ce9479a",
       "duration_ms": 1700,
-      "start_ms": 639200,
+      "start_ms": 640220,
       "text": "A timer buzzed.",
       "generation_s": 0.25
     },
@@ -694,7 +710,7 @@
       "file": "blocks/c8-b058.wav",
       "sha256": "cda8048abcd8e892ac6c845bb5d411bebc3a6e6908e5e3a17542eeb7620addf2",
       "duration_ms": 2075,
-      "start_ms": 641350,
+      "start_ms": 642370,
       "text": "\"Next question! Papli.\"",
       "generation_s": 0.28
     },
@@ -705,7 +721,7 @@
       "file": "blocks/c8-b059.wav",
       "sha256": "4e0e275e7c51e7693f2356864b230d7404c31634be5f006d7527245f691ad52a",
       "duration_ms": 1900,
-      "start_ms": 643875,
+      "start_ms": 644895,
       "text": "\"What's your favorite band?\"",
       "generation_s": 0.25
     },
@@ -716,7 +732,7 @@
       "file": "blocks/c8-b060.wav",
       "sha256": "b2de683fdf08807879cccc09858aa7e0385e5284f1c080e5391fe3954b830da2",
       "duration_ms": 2250,
-      "start_ms": 646225,
+      "start_ms": 647245,
       "text": "\"Err... I don't really have one.\"",
       "generation_s": 0.3
     },
@@ -727,7 +743,7 @@
       "file": "blocks/c8-b061.wav",
       "sha256": "2d637b6811b81d13e160ab9fbd25792888a973db6d57a0d71cbb2a5241643017",
       "duration_ms": 1600,
-      "start_ms": 648925,
+      "start_ms": 649945,
       "text": "\"Favorite game?\"",
       "generation_s": 0.21
     },
@@ -738,7 +754,7 @@
       "file": "blocks/c8-b062.wav",
       "sha256": "5f2bc40d42521a008bd6e8dcbe79b8276c1564ab07afccb27949c08c58e6509d",
       "duration_ms": 1725,
-      "start_ms": 650975,
+      "start_ms": 651995,
       "text": "\"Don't have one either.\"",
       "generation_s": 0.23
     },
@@ -749,7 +765,7 @@
       "file": "blocks/c8-b063.wav",
       "sha256": "9f6831e91d3170ae537aca134e60c50164d55d9868f5d6495afa18a341e454b6",
       "duration_ms": 1700,
-      "start_ms": 653150,
+      "start_ms": 654170,
       "text": "\"Favorite sport?\"",
       "generation_s": 0.22
     },
@@ -760,7 +776,7 @@
       "file": "blocks/c8-b064.wav",
       "sha256": "b519c837f43c496ff8a253563920e7bcc64efd992440ac40815c865463f6bac2",
       "duration_ms": 7175,
-      "start_ms": 655300,
+      "start_ms": 656320,
       "text": "\"I remember enjoying playing Colorball when I was a kid? The school game that Helisport ended up being based on.\"",
       "generation_s": 0.89
     },
@@ -771,7 +787,7 @@
       "file": "blocks/c8-b065.wav",
       "sha256": "f086daa93176fa05040c2663e252f444a6e7b30132d5041cfe6990096cea0782",
       "duration_ms": 8525,
-      "start_ms": 662925,
+      "start_ms": 663945,
       "text": "\"How can we possibly trust you to judge on our society's behalf, when you're so out of touch with so much of regular Veridian people's lives?\"",
       "generation_s": 1.08
     },
@@ -782,7 +798,7 @@
       "file": "blocks/c8-b066.wav",
       "sha256": "1450728680e3e7a9dd05eeb9bf3e7b907c0c17d3d1ea81a3e418bbe8ab36d5e9",
       "duration_ms": 18275,
-      "start_ms": 671900,
+      "start_ms": 672920,
       "text": "\"Isn't this why citizens' assemblies and broad listen reports exist, and why a Keeper group has months to listen to both before it makes its decision on a rubric? And isn't this why Keepers and Sentinels are allowed to specialize? I probably won't be deciding on anything that has to do with sports.\"",
       "generation_s": 2.67
     },
@@ -793,7 +809,7 @@
       "file": "blocks/c8-b067.wav",
       "sha256": "c4023656a60ce62363aa870c9c8f9cc29da9f3754102e2376e5f152e6b1e6838",
       "duration_ms": 1975,
-      "start_ms": 690625,
+      "start_ms": 691645,
       "text": "\"What do you think of [Dzego](/ˈdzɛɡO/)?\"",
       "generation_s": 0.46
     },
@@ -804,7 +820,7 @@
       "file": "blocks/c8-b068.wav",
       "sha256": "e0fdf98d142aae8c4353ba700c8d4e8ef955d3cf57a5f83ac215d8699537c5d1",
       "duration_ms": 13850,
-      "start_ms": 693050,
+      "start_ms": 694070,
       "text": "\"I like their food. I only started learning more about their history recently. My wife met a couple of [Dzegojan](/ˈdzɛɡOʤɑn/) kids and they seemed nice. In general, I feel for their plight, I hope we could find a way to support them more.\"",
       "generation_s": 2.16
     },
@@ -815,7 +831,7 @@
       "file": "blocks/c8-b069.wav",
       "sha256": "b93cfb67b7a7229b84b89d23d428efb1f1b6b15cc01ce81de7159364121d937d",
       "duration_ms": 16125,
-      "start_ms": 707350,
+      "start_ms": 708370,
       "text": "\"Aha, so you want us to support [Dzego](/ˈdzɛɡO/), and you want us to make our social networks more open so that some super smart kids can play with them more easily. But I haven't seen you talk once about something that a regular Veridian would care about, that affects their lives.\"",
       "generation_s": 2.63
     },
@@ -826,7 +842,7 @@
       "file": "blocks/c8-b070.wav",
       "sha256": "b828a2032db2bd0d01cafa913f385c5d7de61e48b2f41856cc9b8264f0bc2a98",
       "duration_ms": 7300,
-      "start_ms": 723925,
+      "start_ms": 724945,
       "text": "\"You don't think increasing hardware openness allows more mechanics to join the market, which makes owning things cheaper-\"",
       "generation_s": 1.22
     },
@@ -837,7 +853,7 @@
       "file": "blocks/c8-b071.wav",
       "sha256": "67e0682f068af4100770662ac8d26d460007dfd268f65c1acb4e8f618ca3f44e",
       "duration_ms": 3425,
-      "start_ms": 731675,
+      "start_ms": 732695,
       "text": "\"Well what about the salaries of the mechanics themselves!\"",
       "generation_s": 0.53
     },
@@ -848,7 +864,7 @@
       "file": "blocks/c8-b072.wav",
       "sha256": "7eb40eda863bb780cccc3b480878a047990b33a1094e8029a5fe215c96f4f11d",
       "duration_ms": 11800,
-      "start_ms": 735550,
+      "start_ms": 736570,
       "text": "Gladias started formulating a response in his head. Economics was a basic part of the curriculum for anyone training to be an Acolyte, and so he could immediately recognize the fallacy.",
       "generation_s": 2.1
     },
@@ -859,7 +875,7 @@
       "file": "blocks/c8-b073.wav",
       "sha256": "acc52300ce81c1ca86d4a90d97abb26f43397fa5f5def29f7b5af90cf96eb8a8",
       "duration_ms": 32875,
-      "start_ms": 747800,
+      "start_ms": 748820,
       "text": "On the one hand, every dollar of price increase in repair was a dollar taken from a customer but given to a mechanic, so from that view the good and the bad balanced out. But on the other hand there were second order effects: reducing the cost of ownership of goods means that people can use the money they saved to buy other things, which means more jobs get created somewhere else. Ignoring this was the fallacy of all naive economic interventionism done in the name of politics: favoring the seen at the expense of unseen.",
       "generation_s": 5.28
     },
@@ -870,7 +886,7 @@
       "file": "blocks/c8-b074.wav",
       "sha256": "2f1f7f2add2ab76c54a458e9d49f6e25f742553f8183ff7ab01bdfa9c03e56f5",
       "duration_ms": 15325,
-      "start_ms": 781125,
+      "start_ms": 782145,
       "text": "It took him about three ticks to formulate the structure of this argument in his head. But then he realized that it would take him about twenty ticks to speak it — when the timer on the clock had only four ticks left. Gladias gave up, and simply did not respond.",
       "generation_s": 2.64
     },
@@ -881,7 +897,7 @@
       "file": "blocks/c8-b075.wav",
       "sha256": "f02fdc1a5ffd7895e49550e7f1575a95ff81f47a1225a4f55607fd17f0ac100c",
       "duration_ms": 1725,
-      "start_ms": 796900,
+      "start_ms": 797920,
       "text": "The timer buzzed.",
       "generation_s": 0.35
     },
@@ -892,7 +908,7 @@
       "file": "blocks/c8-b076.wav",
       "sha256": "cf7829dc322dfc62247439f606b410e529d8cd073c1f8ed485cf75d587484acd",
       "duration_ms": 2650,
-      "start_ms": 799075,
+      "start_ms": 800095,
       "text": "Gladias began to sweat nervously.",
       "generation_s": 0.45
     },
@@ -903,7 +919,7 @@
       "file": "blocks/c8-b077.wav",
       "sha256": "030472f8b3918ac4a25c030b4792d0907f1e45f0f6a57ed37c006b6db8780294",
       "duration_ms": 1850,
-      "start_ms": 802175,
+      "start_ms": 803195,
       "text": "\"Senator Ancus?\"",
       "generation_s": 0.31
     },
@@ -914,7 +930,7 @@
       "file": "blocks/c8-b078.wav",
       "sha256": "ae8ca930db06f023d8a4d8d41e388d50af6e5c4e6a836fe07a22a99e8179167c",
       "duration_ms": 3575,
-      "start_ms": 804475,
+      "start_ms": 805495,
       "text": "\"What was the last thing you voted on for the aesthetics tax?\"",
       "generation_s": 0.56
     },
@@ -925,7 +941,7 @@
       "file": "blocks/c8-b079.wav",
       "sha256": "5c30c73330d53261f502174d41693be65fc8d8b6a781df2d1f073f89d03e9068",
       "duration_ms": 23975,
-      "start_ms": 808500,
+      "start_ms": 809520,
       "text": "\"A blue and grey building on Badra street. It was hard to decide, it was just average, nothing out of character in a bad way, but also nothing exceptional. Whenever I pass by it, there were always families coming in and out, people even sitting on the benches outside. Children occasionally selling food they make. But that's normal for Meldan these days. So I just gave it a very tiny vote of approval.\"",
       "generation_s": 3.93
     },
@@ -936,7 +952,7 @@
       "file": "blocks/c8-b080.wav",
       "sha256": "0b322f767a3a2cd2fe1f3d127a981b670da1addb62fb50d9cb589fad0c89dc2d",
       "duration_ms": 3200,
-      "start_ms": 832925,
+      "start_ms": 833945,
       "text": "\"What was the last thing you wished you could have voted on?\"",
       "generation_s": 0.69
     },
@@ -947,7 +963,7 @@
       "file": "blocks/c8-b081.wav",
       "sha256": "4a65eb8fb4269f125cbccd7b0bf9513dd6a375ca1c456c58c6aa7ee5073f716b",
       "duration_ms": 8600,
-      "start_ms": 836575,
+      "start_ms": 837595,
       "text": "\"A Hydrafill billboard. The one that talked about their drinks being free of over 2,000 poisons and anti-recommended substances.\"",
       "generation_s": 1.5
     },
@@ -958,7 +974,7 @@
       "file": "blocks/c8-b082.wav",
       "sha256": "3ade34977dbc26982d55d84038e598f1f04bf9d4469e7aa2c2b1cd03269ff53d",
       "duration_ms": 1250,
-      "start_ms": 845625,
+      "start_ms": 846645,
       "text": "\"Why?\"",
       "generation_s": 0.24
     },
@@ -969,7 +985,7 @@
       "file": "blocks/c8-b083.wav",
       "sha256": "6cee58014959a7a02fdea66722e00aacc9096995a431cad644ad0c3c3860c633",
       "duration_ms": 26225,
-      "start_ms": 847325,
+      "start_ms": 848345,
       "text": "\"The ad was fun. I still remember when I was young, and all the ads were boring or just painful to look at. They were just trying to get inside your head, that's all they cared about. It's especially bad when they do that on public transit; if the public transit experience is bad then even more people switch over to cars and we get more pollution and congestion and that's bad for everyone. I was glad that Hydrafill tries so hard to be better than that.\"",
       "generation_s": 4.23
     },
@@ -980,7 +996,7 @@
       "file": "blocks/c8-b084.wav",
       "sha256": "0ba7e9d1c183b40d4ef3fd4bb008394c315df73b9a5b7546dae505772b34aa1c",
       "duration_ms": 12600,
-      "start_ms": 874000,
+      "start_ms": 875020,
       "text": "\"Papli\", Ancus shouted, whipping his head toward Papli. \"Don't you think families enjoying the outdoor environment, good public transit, and fun are all things that regular Veridians value a lot?\"",
       "generation_s": 2.59
     },
@@ -991,7 +1007,7 @@
       "file": "blocks/c8-b085.wav",
       "sha256": "7ab58871bdeb0faa9d8bf4904c91598ad296fa2d4c7184d290e368ff34ace048",
       "duration_ms": 1950,
-      "start_ms": 887050,
+      "start_ms": 888070,
       "text": "Papli did not answer.",
       "generation_s": 0.42
     },
@@ -1002,7 +1018,7 @@
       "file": "blocks/c8-b086.wav",
       "sha256": "ba78c45530f189617dd7d3594806a8665adf18733495b4841046b9798e76d838",
       "duration_ms": 5575,
-      "start_ms": 889450,
+      "start_ms": 890470,
       "text": "\"Keep the conversation between the asking Senator and the applicant\", the Chairman interjected.",
       "generation_s": 0.96
     },
@@ -1013,7 +1029,7 @@
       "file": "blocks/c8-b087.wav",
       "sha256": "14d472952b8dc44b90cf6b5a88712aa0aec2b6c3fbc7442998e17412554800d9",
       "duration_ms": 7675,
-      "start_ms": 895475,
+      "start_ms": 896495,
       "text": "\"I think so. Maybe Papli would say Hydrafill's style of humor is pretentious smart people humor or something like that.\"",
       "generation_s": 1.21
     },
@@ -1024,7 +1040,7 @@
       "file": "blocks/c8-b088.wav",
       "sha256": "d6ac07fdbd9ac939e88b8fd36b9be2392b4696cadf53d5184d82b9fde15a0f42",
       "duration_ms": 14400,
-      "start_ms": 903600,
+      "start_ms": 904620,
       "text": "\"But I think he underestimates Veridians, and just how smart many of them are. I was on the autobus coming here, when Sylka was debating Ephelion on how to measure social progress, and people seemed really engaged when she was speaking.\"",
       "generation_s": 2.47
     },
@@ -1035,7 +1051,7 @@
       "file": "blocks/c8-b089.wav",
       "sha256": "52f487c37c94cd1df4d770b58759dbcf842a5c002376be73d5e2a1cb0f5fa6fa",
       "duration_ms": 21125,
-      "start_ms": 918450,
+      "start_ms": 919470,
       "text": "\"That's just the smug smart people's version of enjoying watching people fight. Helisport is actually more peaceful\", Papli interjected. \"At least the Quadratic Funding funds Helisport games. We should get rid of you guys and just make a negative version of Quadratic Funding and use that to calculate the taxes on all the big businesses.\"",
       "generation_s": 4.29
     },
@@ -1046,7 +1062,7 @@
       "file": "blocks/c8-b090.wav",
       "sha256": "06ce395238326d9e91574d8658256148b212757aeb26d73f5c85e613bf545cd9",
       "duration_ms": 3325,
-      "start_ms": 940025,
+      "start_ms": 941045,
       "text": "\"Order!\", the Chairman shouted. \"Next question.\"",
       "generation_s": 0.66
     },
@@ -1057,7 +1073,7 @@
       "file": "blocks/c8-b091.wav",
       "sha256": "000a21b3fac70791e7a9dfca6fd2d381c7bcdd33b82c0a3fa5894620170567eb",
       "duration_ms": 5350,
-      "start_ms": 943800,
+      "start_ms": 944820,
       "text": "The questioning continued for another half longhour, as each Senator got a chance to ask.",
       "generation_s": 0.81
     },
@@ -1068,7 +1084,7 @@
       "file": "blocks/c8-b092.wav",
       "sha256": "d5dbf31a42b387f186095398effa5431c8b42413597ec025881585df3cb55824",
       "duration_ms": 5925,
-      "start_ms": 949600,
+      "start_ms": 950620,
       "text": "After the last Senator asked Gladias his question, and the timer buzzed, the Chairman stood up.",
       "generation_s": 0.93
     },
@@ -1079,7 +1095,7 @@
       "file": "blocks/c8-b093.wav",
       "sha256": "25b8c02345b6fbd54c809472cbc11bd5b2b943a8d84ae3ccbd1598b97e33b29e",
       "duration_ms": 1675,
-      "start_ms": 955975,
+      "start_ms": 956995,
       "text": "\"Time for the vote!\"",
       "generation_s": 0.27
     },
@@ -1090,7 +1106,7 @@
       "file": "blocks/c8-b094.wav",
       "sha256": "6bd7f2b5d96bb50d1086c539199390fa958b6abc7237dbf82fc33679739dc9ec",
       "duration_ms": 8525,
-      "start_ms": 958100,
+      "start_ms": 959120,
       "text": "The YES and NO voting buttons were clearly visible on the table, so Gladias could make out any Senator's vote just by looking at them.",
       "generation_s": 1.27
     },
@@ -1101,7 +1117,7 @@
       "file": "blocks/c8-b095.wav",
       "sha256": "3f2edfb6dff81d73f1c3090a46b852f803ee8993431ba997f3b87dfe71f3a3d2",
       "duration_ms": 12325,
-      "start_ms": 967075,
+      "start_ms": 968095,
       "text": "The Senators started pressing down on their buttons. A different noise buzzed every time a vote was made. Within ticks, every vote had been cast. Gladias looked toward the screen near the top of the room.",
       "generation_s": 1.84
     },
@@ -1112,10 +1128,11 @@
       "file": "blocks/c8-b096.wav",
       "sha256": "5b0e11c692e8b2941cd48c7f13ba00ed73d8b6627002647269aab4a6968e3873",
       "duration_ms": 8525,
-      "start_ms": 979850,
+      "start_ms": 980870,
       "text": "The screen reads: Acceptance vote: Gladias. Below it, a ring of twenty dots, one for each senator, each lit green or red.",
       "generation_s": 1.26,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 97,
@@ -1124,7 +1141,7 @@
       "file": "blocks/c8-b097.wav",
       "sha256": "d4b06a3548fd068313332764b80dd9166dc4b54a5a59142cc15bb1d3064645dc",
       "duration_ms": 8925,
-      "start_ms": 988975,
+      "start_ms": 990505,
       "text": "\"Wow\", the Chairman exclaimed. \"Ten to ten, exactly. By the rules of Acceptance voting, I am the deciding vote. And so I vote...\"",
       "generation_s": 1.29
     },
@@ -1135,7 +1152,7 @@
       "file": "blocks/c8-b098.wav",
       "sha256": "2a5bb94913e5fee4b38391fa0a031eb3e1b08e047e39fbbac47e25df8675f087",
       "duration_ms": 3350,
-      "start_ms": 998350,
+      "start_ms": 999880,
       "text": "He pressed down on one of the two buttons on his desk.",
       "generation_s": 0.53
     },
@@ -1146,7 +1163,7 @@
       "file": "blocks/c8-b099.wav",
       "sha256": "a6baffbbb456f239e163c7450f333aba4ed20baffb9198a206a024ceae8369ec",
       "duration_ms": 1400,
-      "start_ms": 1002150,
+      "start_ms": 1003680,
       "text": "\"Yes.\"",
       "generation_s": 0.23
     },
@@ -1157,10 +1174,11 @@
       "file": "blocks/c8-b100.wav",
       "sha256": "6986c85dd588078a1a960dcebd866481b905fdb2da4fb45a41284df1a478a818",
       "duration_ms": 5275,
-      "start_ms": 1004000,
+      "start_ms": 1005530,
       "text": "The same ring of green and red dots, now with one more green dot in the center.",
       "generation_s": 0.82,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 101,
@@ -1169,7 +1187,7 @@
       "file": "blocks/c8-b101.wav",
       "sha256": "3ba452bd255e08e8f61b40c75824468ebdf14d45bd017733f2d9ddaa9ac1c040",
       "duration_ms": 2450,
-      "start_ms": 1009875,
+      "start_ms": 1011915,
       "text": "\"Welcome to the Order, Gladias.\"",
       "generation_s": 0.41
     },
@@ -1179,7 +1197,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 1012775,
+      "start_ms": 1014815,
       "duration_ms": 1800
     },
     {
@@ -1189,7 +1207,7 @@
       "file": "blocks/c8-b103.wav",
       "sha256": "83cc52fa6d3c88752c832af90b8069e992222314b31ec0455da705ca2223ee95",
       "duration_ms": 9050,
-      "start_ms": 1014575,
+      "start_ms": 1016615,
       "text": "Once Gladias left the building, he checked his watch. There had been loud buzzing while the acceptance session was in progress, and he had been ignoring it.",
       "generation_s": 1.33
     },
@@ -1200,10 +1218,11 @@
       "file": "blocks/c8-b104.wav",
       "sha256": "02df23e0c609455492500dde9686d3858bfba15bf88565949b7c2f97ad913814",
       "duration_ms": 9500,
-      "start_ms": 1024075,
+      "start_ms": 1026115,
       "text": "A message from Vil: Sorry to bother you, but it's about Lily. She just failed a test in civics class. I think she would benefit from seeing you and Seila.",
       "generation_s": 1.69,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 105,
@@ -1212,7 +1231,7 @@
       "file": "blocks/c8-b105.wav",
       "sha256": "8c541bfcd05b5fb5a6f7dced39d322d6d9d380a27e3a1a301a83409dd8db55ef",
       "duration_ms": 4450,
-      "start_ms": 1034175,
+      "start_ms": 1036725,
       "text": "Seila's still in Iptak, Gladias thought. He would have to go himself.",
       "generation_s": 0.76
     },
@@ -1223,7 +1242,7 @@
       "file": "blocks/c8-b106.wav",
       "sha256": "5314670858d382a63b309dd9bddb591bddfbe2e03c39c233ae1312ed51465f00",
       "duration_ms": 23350,
-      "start_ms": 1039075,
+      "start_ms": 1041625,
       "text": "Gladias did not bother asking Emerald for a route to Vil's house. He knew it himself, it was not too far. He started walking, his mind filled mostly with concern for Lily's wellbeing, and slightly — perhaps more than he was willing to admit — frustration that his triumph was so quickly replaced by dread, a feeling that he was faced with a problem he had no idea how to solve.",
       "generation_s": 3.41
     },
@@ -1234,7 +1253,7 @@
       "file": "blocks/c8-b107.wav",
       "sha256": "eac6fb80421dad546b3669c91a8ac3562d38a862bac4f23c66b154194ee2f288",
       "duration_ms": 18175,
-      "start_ms": 1062875,
+      "start_ms": 1065425,
       "text": "\"I'm coming\", Gladias whispered into his neck band — once again, not out of any strong desire to conceal his privacy at that moment, but because by that point he was simply accustomed to whispering. \"Get me the usual food I get. I just got out of my acceptance hearing so I'll be hungry.\"",
       "generation_s": 2.8
     },
@@ -1245,10 +1264,11 @@
       "file": "blocks/c8-b108.wav",
       "sha256": "4dbca8b6df1ecca593921cfa7820333d585f0a557d46ae153e1dd9a747863ace",
       "duration_ms": 3175,
-      "start_ms": 1081500,
+      "start_ms": 1084050,
       "text": "Vil replies: Did you at least get accepted?",
       "generation_s": 0.51,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 109,
@@ -1257,7 +1277,7 @@
       "file": "blocks/c8-b109.wav",
       "sha256": "ea52a18bc4324ddf8efbb9fc2e6a884ab00f96eef29c457846505792b9a91f27",
       "duration_ms": 2200,
-      "start_ms": 1085275,
+      "start_ms": 1088335,
       "text": "\"I did. Just barely though.\"",
       "generation_s": 0.32
     },
@@ -1268,7 +1288,7 @@
       "file": "blocks/c8-b110.wav",
       "sha256": "44efac4754700435ff1069362465586d7ff3abf01cef14f0922515bd7645311f",
       "duration_ms": 10575,
-      "start_ms": 1087925,
+      "start_ms": 1090985,
       "text": "After twenty minutes of walking, Gladias arrived at Vil's house. Vil opened the door for him, and then sat back down in his chair. Lily was sitting on the couch, crying.",
       "generation_s": 1.53
     },
@@ -1279,7 +1299,7 @@
       "file": "blocks/c8-b111.wav",
       "sha256": "0bd8ab2e467c65137c495a43a08605e3e7234db2ec725d63b73dde38e33dfd5d",
       "duration_ms": 3850,
-      "start_ms": 1098950,
+      "start_ms": 1102010,
       "text": "Gladias sat down on the couch beside Lily, and hugged her.",
       "generation_s": 0.66
     },
@@ -1290,7 +1310,7 @@
       "file": "blocks/c8-b112.wav",
       "sha256": "c178809ffcce977533ca437e6dc8ff19b20cb92b30ade9d47951660ce512469e",
       "duration_ms": 3625,
-      "start_ms": 1103250,
+      "start_ms": 1106310,
       "text": "Gladias waited for a few moments, and began to speak.",
       "generation_s": 0.64
     },
@@ -1301,7 +1321,7 @@
       "file": "blocks/c8-b113.wav",
       "sha256": "1a5b203f4d1f87520fdf59569024090ad642482eca0cd2b90afdbb046931c293",
       "duration_ms": 9250,
-      "start_ms": 1107325,
+      "start_ms": 1110385,
       "text": "\"It's all right\", he whispered. \"Scores aren't everything. Vil, Daia, Seila and I all know the beautiful person that you are inside, and we love you.\"",
       "generation_s": 1.52
     },
@@ -1312,7 +1332,7 @@
       "file": "blocks/c8-b114.wav",
       "sha256": "6fb562d85efe8e69514356c2d3ebce3ec37a5745880526354272102b1a1460a8",
       "duration_ms": 2850,
-      "start_ms": 1117025,
+      "start_ms": 1120085,
       "text": "Lily turned her face away, unhappy.",
       "generation_s": 0.46
     },
@@ -1323,7 +1343,7 @@
       "file": "blocks/c8-b115.wav",
       "sha256": "35c92913ce822e66904230760dee1487b4ec6ae73bef486911dcf556ed74b1d2",
       "duration_ms": 5800,
-      "start_ms": 1120325,
+      "start_ms": 1123385,
       "text": "\"We can help you. We just have to find some way to engage with the material that you can relate to.\"",
       "generation_s": 0.8
     },
@@ -1334,7 +1354,7 @@
       "file": "blocks/c8-b116.wav",
       "sha256": "ace838c8810760c0750cd10074c0ebc04a3cdae27a70e93ab985423ddce011e9",
       "duration_ms": 8950,
-      "start_ms": 1126575,
+      "start_ms": 1129635,
       "text": "\"You've already tried\", Lily replied softly, sobbing. \"I got fifty-nine percent on this test. Fifty-nine percent. Third-worst in the class.\"",
       "generation_s": 1.24
     },
@@ -1345,7 +1365,7 @@
       "file": "blocks/c8-b117.wav",
       "sha256": "d2541dcf7351f9072febeb9354976cc11cbb5ca44f9033523e6201aa6fb67c1e",
       "duration_ms": 13975,
-      "start_ms": 1135975,
+      "start_ms": 1139035,
       "text": "\"Well, do you think the smartest kid in your class can bake a birthday cake for Seila the way you did six months ago? Would he bring food to Hreda every day for a month the way you did when she was recovering from that accident years ago?\"",
       "generation_s": 1.98
     },
@@ -1356,7 +1376,7 @@
       "file": "blocks/c8-b118.wav",
       "sha256": "dfa7cb41185bc4e501020bb291e6b54b8ee2222c43f68998ea13639ccff31a07",
       "duration_ms": 9050,
-      "start_ms": 1150400,
+      "start_ms": 1153460,
       "text": "\"You need to realize that you're a beautiful person already. That's where self-confidence comes from, and that's where you can get your motivation to improve.\"",
       "generation_s": 1.25
     },
@@ -1367,7 +1387,7 @@
       "file": "blocks/c8-b119.wav",
       "sha256": "12e75a9a58c41dd71148bea6e2e27fc402f20878d6a07d6b826f38a5369a1700",
       "duration_ms": 18450,
-      "start_ms": 1159900,
+      "start_ms": 1162960,
       "text": "\"These schools really need to get better at connecting these topics like civics to topics that matter in your life. I only went down my path to become an Acolyte because I saw how the Steering incentives were helping to open up the online world so I could participate and write code for it. You will have your moment too.\"",
       "generation_s": 2.89
     },
@@ -1378,7 +1398,7 @@
       "file": "blocks/c8-b120.wav",
       "sha256": "a11d0f5abcf57f954f411ad95be124da7468e1fff445dcd4854ada2b2d37ab05",
       "duration_ms": 6900,
-      "start_ms": 1178800,
+      "start_ms": 1181860,
       "text": "\"If you get above seventy-five on your next civics test\", Vil said, \"I'll take you on my next trip up to Northglade.\"",
       "generation_s": 1.11
     },
@@ -1389,7 +1409,7 @@
       "file": "blocks/c8-b121.wav",
       "sha256": "793e43d84cb8873f1d0ee3501af0d9da2c9ed3f855c10c80d565690b3d860073",
       "duration_ms": 7600,
-      "start_ms": 1186150,
+      "start_ms": 1189210,
       "text": "Gladias winced slightly at the crudeness of the incentive — though he figured in the back of his mind that it was worth a try.",
       "generation_s": 1.09
     },
@@ -1400,7 +1420,7 @@
       "file": "blocks/c8-b122.wav",
       "sha256": "16cf0b94fed0c11e741359f011ce1a3692dd12ccb53698fc6575b443085c92b9",
       "duration_ms": 6375,
-      "start_ms": 1194200,
+      "start_ms": 1197260,
       "text": "At that moment, the doorbell buzzed. Vil stood up and walked toward the door, and opened it. It was the food.",
       "generation_s": 0.91
     },
@@ -1411,7 +1431,7 @@
       "file": "blocks/c8-b123.wav",
       "sha256": "8fe2fd257f32b97a4e861f85c8a04a1df27844fe2e76482001522bbceca91aec",
       "duration_ms": 6325,
-      "start_ms": 1201025,
+      "start_ms": 1204085,
       "text": "Vil picked up the food, and put it down on the table. Vil and Gladias together began to open it.",
       "generation_s": 0.9
     },
@@ -1422,7 +1442,7 @@
       "file": "blocks/c8-b124.wav",
       "sha256": "f6d142581ef808cec372a0adf4ff327bb76eca622c156b9a2ca35fba8520f78f",
       "duration_ms": 5225,
-      "start_ms": 1207800,
+      "start_ms": 1210860,
       "text": "Lily slowly stood up, and also joined the table. The three of them began to eat.",
       "generation_s": 0.75
     },
@@ -1432,7 +1452,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 1213475,
+      "start_ms": 1216535,
       "duration_ms": 1800
     },
     {
@@ -1442,7 +1462,7 @@
       "file": "blocks/c8-b126.wav",
       "sha256": "338b5d45da13d5df07f28e483052bf00b4e5108e6c598fec9f73be5accc03d97",
       "duration_ms": 2100,
-      "start_ms": 1215275,
+      "start_ms": 1218335,
       "text": "Gladias's watch buzzed.",
       "generation_s": 0.31
     },
@@ -1453,10 +1473,11 @@
       "file": "blocks/c8-b127.wav",
       "sha256": "55cc79065d34e8ad57a4ed5a2d90e90ba117ff61153cfae9e42b6926e718a47b",
       "duration_ms": 2200,
-      "start_ms": 1217825,
+      "start_ms": 1220885,
       "text": "Mov is requesting a call.",
       "generation_s": 0.31,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 128,
@@ -1465,7 +1486,7 @@
       "file": "blocks/c8-b128.wav",
       "sha256": "a924e50c1e0c972a5fd93818a42fbf54ffa1a02ba43b332fd267e56ef46db356",
       "duration_ms": 1525,
-      "start_ms": 1220625,
+      "start_ms": 1224195,
       "text": "He picked up.",
       "generation_s": 0.21
     },
@@ -1476,7 +1497,7 @@
       "file": "blocks/c8-b129.wav",
       "sha256": "030de6031bd7aba0e4bcaea3c6800c51fe69a03687d1cff6d972b9fb746324c3",
       "duration_ms": 1750,
-      "start_ms": 1222600,
+      "start_ms": 1226170,
       "text": "\"Mov, how are you?\"",
       "generation_s": 0.24
     },
@@ -1487,7 +1508,7 @@
       "file": "blocks/c8-b130.wav",
       "sha256": "044ea892090bbdc9a064a3c76fcbbbed4150a201d9822b5c25488e591bee1d2b",
       "duration_ms": 4500,
-      "start_ms": 1224800,
+      "start_ms": 1228370,
       "text": "\"I have some interesting news to share. But first of all, you got in, right?\"",
       "generation_s": 0.58
     },
@@ -1498,7 +1519,7 @@
       "file": "blocks/c8-b131.wav",
       "sha256": "c0cbd2203a307e14dfab244f47d7af6b973f8318e8b000a47f58099f9719f968",
       "duration_ms": 1700,
-      "start_ms": 1229750,
+      "start_ms": 1233320,
       "text": "\"Just barely.\"",
       "generation_s": 0.25
     },
@@ -1509,7 +1530,7 @@
       "file": "blocks/c8-b132.wav",
       "sha256": "7f10752b384d419f858807de8f7abeb1d3b6102d33f282188202f4c930275cc6",
       "duration_ms": 1575,
-      "start_ms": 1231900,
+      "start_ms": 1235470,
       "text": "\"In is in.\"",
       "generation_s": 0.24
     },
@@ -1520,7 +1541,7 @@
       "file": "blocks/c8-b133.wav",
       "sha256": "1fdad25920e058b91a32b1aa7a07e30f4eec007dde108e08520cb6fda50051f8",
       "duration_ms": 1825,
-      "start_ms": 1233925,
+      "start_ms": 1237495,
       "text": "\"So what's your update?\"",
       "generation_s": 0.31
     },
@@ -1531,7 +1552,7 @@
       "file": "blocks/c8-b134.wav",
       "sha256": "6ef5c49e6ec40ca525465b4f8f03c24519151cb587b7aeca7fa5f0e6bfb85378",
       "duration_ms": 8100,
-      "start_ms": 1236200,
+      "start_ms": 1239770,
       "text": "\"Looks like we're not going to be Keepers after all. The cryptographic random gods selected me to become a Herald starting next term.\"",
       "generation_s": 1.18
     },
@@ -1542,7 +1563,7 @@
       "file": "blocks/c8-b135.wav",
       "sha256": "96c5ff024c73cf1fbe85648eae048e943cb251c11ca6180a0c80c4c4d511f06f",
       "duration_ms": 1300,
-      "start_ms": 1244750,
+      "start_ms": 1248320,
       "text": "\"Wow.\"",
       "generation_s": 0.21
     },
@@ -1553,7 +1574,7 @@
       "file": "blocks/c8-b136.wav",
       "sha256": "17e34d4da6a40feac0e5bc7bd6bf82e342cccec586d7c8926a51eb27947be2f9",
       "duration_ms": 3775,
-      "start_ms": 1246500,
+      "start_ms": 1250070,
       "text": "\"Yep. So as of today, I have no more formal power.\"",
       "generation_s": 0.5
     },
@@ -1564,7 +1585,7 @@
       "file": "blocks/c8-b137.wav",
       "sha256": "66f7b8fd2be43620082fa4efdcbf7768952aef3ca2dad25cc51ec3479eee2b80",
       "duration_ms": 11825,
-      "start_ms": 1250725,
+      "start_ms": 1254295,
       "text": "\"What do you expect you will do as a Herald? I can't imagine you actually running those assemblies or giving speeches or anything like that. Are you just going to go moderate a sub-forum on Silverchat?\"",
       "generation_s": 1.59
     },
@@ -1575,7 +1596,7 @@
       "file": "blocks/c8-b138.wav",
       "sha256": "8928cf46f89a892ad0a4ca3350a99e9f2a58e68d67bbc84d05ef396784328fd6",
       "duration_ms": 4125,
-      "start_ms": 1263000,
+      "start_ms": 1266570,
       "text": "\"You know me too well. But also, I'll have more time to help you.\"",
       "generation_s": 0.62
     },
@@ -1585,7 +1606,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 1267575,
+      "start_ms": 1271145,
       "duration_ms": 1800
     },
     {
@@ -1595,7 +1616,7 @@
       "file": "blocks/c8-b140.wav",
       "sha256": "972c6b27339e9d877ac3e1fecee930ba9e1d34badb140dbc89bd5e08432ba7da",
       "duration_ms": 2725,
-      "start_ms": 1269375,
+      "start_ms": 1272945,
       "text": "That evening, Gladias called Seila.",
       "generation_s": 0.38
     },
@@ -1606,7 +1627,7 @@
       "file": "blocks/c8-b141.wav",
       "sha256": "d6695d9f60b548f9457b08689f895a3605c09a125c4b68a9504c246187d02482",
       "duration_ms": 2600,
-      "start_ms": 1272550,
+      "start_ms": 1276120,
       "text": "\"I got in!\", he said excitedly.",
       "generation_s": 0.39
     },
@@ -1617,7 +1638,7 @@
       "file": "blocks/c8-b142.wav",
       "sha256": "857c5452fea4db4af6e6187a82bb5e72e381f927bc4a2742764fb9a355c94ccd",
       "duration_ms": 1650,
-      "start_ms": 1275600,
+      "start_ms": 1279170,
       "text": "\"I knew you would!\"",
       "generation_s": 0.24
     },
@@ -1628,7 +1649,7 @@
       "file": "blocks/c8-b143.wav",
       "sha256": "1eb74393ff5b2e06fd0173f372050d278e9fc7f8dd06ad322a623c9d5e301b02",
       "duration_ms": 4200,
-      "start_ms": 1277700,
+      "start_ms": 1281270,
       "text": "\"It came quite close. Ten to ten, the Chairman broke the tie.\"",
       "generation_s": 0.58
     },
@@ -1639,7 +1660,7 @@
       "file": "blocks/c8-b144.wav",
       "sha256": "2433045a9719c88d5861a6e889d076d2133ef8156d894a1ab0bd6a3002ab4c32",
       "duration_ms": 8225,
-      "start_ms": 1282350,
+      "start_ms": 1285920,
       "text": "\"A win is a win. Ever since you told me you were going to go Keeper, I've been so excited about all the good you can do from that role.\"",
       "generation_s": 1.16
     },
@@ -1650,9 +1671,22 @@
       "file": "blocks/c8-b145.wav",
       "sha256": "b7bfdf97ad604251e44467b6a7c5ea28afa61ca4f6a24eec64ac00648fa4c0e4",
       "duration_ms": 1750,
-      "start_ms": 1291025,
+      "start_ms": 1294595,
       "text": "\"I'll try my best!\"",
       "generation_s": 0.27
     }
-  ]
+  ],
+  "restitched_at": "2026-10-05T18:48:04+00:00",
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent and its helper agents",
+    "drafted": [
+      "spoken descriptions of screens, figures and lyric cards (blocks 3, 12, 96, 100, 104, 108, 127)",
+      "pronunciation entries (content/snowmoon/pronunciation.json)"
+    ],
+    "instructions": [
+      "docs/prompts/008a-agent-prompts.md#read-aloud-descriptions-and-invented-word-lists"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
 }

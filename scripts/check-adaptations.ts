@@ -8,12 +8,16 @@
  *   committed text (content/snowmoon/text/).
  * - Every seed in config/adaptations.json has a folder with brief.md, and every
  *   folder with a brief.md is listed as a seed.
+ * - In every script.md, each candidate book line and each `book` line in
+ *   narration or dialogue is verbatim from its block (`…` marks a cut), and no
+ *   beat's narration is over 25 words.
  * - The open-threads file the config names exists, and the bounty has a URL and
  *   a valid closing date.
  */
 import { existsSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { findCites } from '../src/lib/adaptation-cites';
+import { BOOK_TAG, NARRATION_MAX_WORDS, isVerbatim, parseBeats, plainBlock, words } from '../src/lib/script-beats';
 
 const ROOT = process.cwd();
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
@@ -23,11 +27,15 @@ const TEXT_DIR = path.join(ROOT, 'content', 'snowmoon', 'text');
 const failures: string[] = [];
 const fail = (msg: string) => failures.push(msg);
 
-// Every block that exists, as "c{chapter}-b{idx}".
+// Every block that exists, as "c{chapter}-b{idx}", with its plain text.
 const blocks = new Set<string>();
+const plain = new Map<string, string>();
 for (const f of readdirSync(TEXT_DIR).filter((f) => /^chapter-\d+\.json$/.test(f))) {
-  const ch = JSON.parse(readFileSync(path.join(TEXT_DIR, f), 'utf8')) as { chapter: number; blocks: { idx: number }[] };
-  for (const b of ch.blocks) blocks.add(`c${ch.chapter}-b${b.idx}`);
+  const ch = JSON.parse(readFileSync(path.join(TEXT_DIR, f), 'utf8')) as { chapter: number; blocks: { idx: number; content: string }[] };
+  for (const b of ch.blocks) {
+    blocks.add(`c${ch.chapter}-b${b.idx}`);
+    plain.set(`c${ch.chapter}-b${b.idx}`, plainBlock(b.content));
+  }
 }
 
 function markdownFiles(dir: string): string[] {
@@ -52,6 +60,28 @@ if (!existsSync(DIR)) {
     });
   }
   console.log(`${total} citations checked in ${path.relative(ROOT, DIR) || DIR}`);
+
+  // Book lines in scripts are verbatim; narration stays within its length.
+  let verbatim = 0;
+  for (const file of markdownFiles(DIR).filter((f) => path.basename(f) === 'script.md')) {
+    const rel = path.relative(ROOT, file);
+    for (const beat of parseBeats(readFileSync(file, 'utf8'))) {
+      const book = [
+        ...beat.bookLines.map((l) => ({ ...l, id: l.tag, speaker: false })),
+        ...beat.narration.map((l) => ({ ...l, id: l.tag?.match(BOOK_TAG)?.[1] ?? null, speaker: false })).filter((l) => l.id),
+        ...beat.dialogue.map((l) => ({ ...l, id: l.tag?.match(BOOK_TAG)?.[1] ?? null, speaker: true })).filter((l) => l.id),
+      ];
+      for (const l of book) {
+        verbatim++;
+        const text = l.speaker ? l.text.replace(/^[^:]+:\s*/, '') : l.text;
+        if (!l.id || !plain.has(l.id)) fail(`${rel}:${l.line}: book line needs a block ID tag, got ${l.tag ?? 'none'}`);
+        else if (!isVerbatim(text, plain.get(l.id)!)) fail(`${rel}:${l.line}: not verbatim in ${l.id}: ${text.slice(0, 70)}`);
+      }
+      const n = beat.narration.reduce((sum, l) => sum + words(l.text), 0);
+      if (n > NARRATION_MAX_WORDS) fail(`${rel}: beat ${beat.n} narration is ${n} words (max ${NARRATION_MAX_WORDS})`);
+    }
+  }
+  console.log(`${verbatim} book lines checked verbatim`);
 }
 
 // Config and folders agree. Skipped with --dir, which checks citations only.

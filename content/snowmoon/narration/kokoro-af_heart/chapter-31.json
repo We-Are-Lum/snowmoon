@@ -4,6 +4,14 @@
   "voice": "kokoro-af_heart",
   "label": "Synthetic narration · Kokoro-82M, stock voice af_heart",
   "license": "GPL-3.0",
+  "published_by": {
+    "fid": 6786,
+    "role": "maintainer",
+    "action": "published via script",
+    "script": "scripts/publish-narration.ts",
+    "date": "2026-10-05",
+    "evidence": "docs/prompts/008-narration-and-images.md"
+  },
   "recipe": "content/snowmoon/recipes/narration/chapter-31.json",
   "model": {
     "name": "Kokoro-82M",
@@ -36,7 +44,21 @@
     },
     "break_ms": 1800,
     "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
-    "read_aloud_sha256": "e6f1fa46a61a94972794d3c8ef4385a9deeef6408bd9830ed9cd26caf9f16547"
+    "read_aloud_sha256": "e6f1fa46a61a94972794d3c8ef4385a9deeef6408bd9830ed9cd26caf9f16547",
+    "description_tone": {
+      "notes_hz": [
+        660,
+        990
+      ],
+      "notes_ms": [
+        110,
+        140
+      ],
+      "between_ms": 40,
+      "after_ms": 220,
+      "amplitude": 0.12,
+      "made_by": "code (numpy sine, linear fades)"
+    }
   },
   "block_encoding": {
     "codec": "aac",
@@ -46,10 +68,10 @@
     "tool": "ffmpeg"
   },
   "chapter_file": {
-    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-31-d145a573b5bb.m4a",
-    "sha256": "d145a573b5bb97f43dae5371f0137d9b5cb8183cb3f5de53d3dbcf798fff9e1d",
-    "bytes": 10157280,
-    "duration_ms": 859475
+    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-31-824fe91d9b96.m4a",
+    "sha256": "824fe91d9b96a96b8c003245ee14c0f39ddedae75234a64479b8721788281877",
+    "bytes": 10169483,
+    "duration_ms": 859985
   },
   "breaks": [
     {
@@ -872,6 +894,7 @@
       "bytes": 26122,
       "duration_ms": 2875,
       "start_ms": 656225,
+      "tone_ms": 510,
       "source_wav_sha256": "c46190dc72dc454657b4707e3e81d1f164b4e622ddd1e8c6df7c7ff15b934cf7",
       "text": "A message from Jahn: five images.",
       "read_aloud_status": "unreviewed"
@@ -884,7 +907,7 @@
       "sha256": "1951f4ed5c0cb716817c62bc5da109e78dc947ea26120e29753ae3f63348ae60",
       "bytes": 69850,
       "duration_ms": 7675,
-      "start_ms": 659700,
+      "start_ms": 660210,
       "source_wav_sha256": "98735d6c32bf520bcaa1c4a78d10bf2085aa3ecb0ce9af2bd1c3a857ab177205",
       "text": "She clicked, and took a look at the pictures. The first three were pictures of people in Freetown in its streets and parks celebrating."
     },
@@ -896,7 +919,7 @@
       "sha256": "56766afe09b98ac3897dd6a5ae11e0020329e32f4fa87ad10ca4036c1b2e913f",
       "bytes": 136974,
       "duration_ms": 15175,
-      "start_ms": 667825,
+      "start_ms": 668335,
       "source_wav_sha256": "714081a434e0546c88e5bc509167825de19c79aaecff8cf18acc0265f426a925",
       "text": "The fourth appeared to be an open public concert hosted in a parking lot. In the background was a giant factory building, on the side of which there was a prominently displayed logo of [Ichara](/ɪkˈɑɹə/) — one of the now famous Freetown defense companies."
     },
@@ -908,7 +931,7 @@
       "sha256": "2f7edca3eba840d860f09e4593d853192016f3fd3ea82f1a5bbe666ff77e2d47",
       "bytes": 72095,
       "duration_ms": 7900,
-      "start_ms": 683450,
+      "start_ms": 683960,
       "source_wav_sha256": "5f47837fc058bafb3b1b5232a1673a29b680602dcc43e1f8214d8d124dc54b06",
       "text": "The last was a picture of Jahn himself taking a selfie with what appeared to be one of the managers who worked at the defense company."
     },
@@ -920,7 +943,7 @@
       "sha256": "e78eb6bc789536b5c3bc28308b9aa21e5d04f55a9acfe9e88ed388275842f29b",
       "bytes": 24193,
       "duration_ms": 2700,
-      "start_ms": 691800,
+      "start_ms": 692310,
       "source_wav_sha256": "243a7aa8ef8eb7211c8bc6f49903fef39708b69c8aec3aaf34032fe9cca33425",
       "text": "\"Are you going to go to Freetown and see Jahn?\""
     },
@@ -932,7 +955,7 @@
       "sha256": "b43d1be098c346a3ddc110797b6c956737b1d4a11756ebe6d72cf740373ef070",
       "bytes": 81121,
       "duration_ms": 9025,
-      "start_ms": 694950,
+      "start_ms": 695460,
       "source_wav_sha256": "494ea7064b42bb56b2d065cdaefa3b1952129370a51923d3a5816f360da28daf",
       "text": "\"Actually I was thinking to stay in Northglade another five days or so after you leave, and let him come here. He's always wanted to come see Veridia.\""
     },
@@ -944,7 +967,7 @@
       "sha256": "78434dfefeba77c5164a9015f00bafcee1320900380a052d1df16075391cd11b",
       "bytes": 26086,
       "duration_ms": 2875,
-      "start_ms": 704425,
+      "start_ms": 704935,
       "source_wav_sha256": "771e7fcf6beeddc56b6ab9d9481cb83cd9fe0bdf01ed68d5d2951d1d7c99f8af",
       "text": "\"You should\", Gladias replied gently."
     },
@@ -956,7 +979,7 @@
       "sha256": "1b68204f6335ac6b5b6d99c6d0c0157fdd28f81dc6612fa120c5c4e5d4d71918",
       "bytes": 120769,
       "duration_ms": 13300,
-      "start_ms": 707750,
+      "start_ms": 708260,
       "source_wav_sha256": "02d6c0987a077d804952951f52a98ed821cb6d019b9bcd247cafdac170705061",
       "text": "They walked forward along the street for about a hundred meters, and then descended down into a tunnel. About two hundred meters later, they turned right and walked up a staircase. At the end of the staircase, there was a door."
     },
@@ -968,7 +991,7 @@
       "sha256": "b5304e16e1096114e914abc5181801954532bbe81aeab9cf62d87229dc73a5e6",
       "bytes": 74536,
       "duration_ms": 8300,
-      "start_ms": 721500,
+      "start_ms": 722010,
       "source_wav_sha256": "f70e248018db92c2b2db0c6384b2c21978dc225440617e2c7d3db571fc24d0f6",
       "text": "Gladias prepared to tap his watch against the green circle on the side of the door, but before he could do so, the door opened on its own."
     },
@@ -980,7 +1003,7 @@
       "sha256": "be41f6fdbdb620c75d9d5eb74a2e7e5946b3716cae2e2ff950214cf7631e33a8",
       "bytes": 35144,
       "duration_ms": 3950,
-      "start_ms": 730250,
+      "start_ms": 730760,
       "source_wav_sha256": "1b2c91db5e358d3e17015de39ac4c94d5b0264ce2cbc21a23f79831e76f227e9",
       "text": "\"Dad!\", Lily yelled as she ran up to Gladias and hugged him."
     },
@@ -992,7 +1015,7 @@
       "sha256": "4d1e6056347b629e3f3314eac527a8e9dc76b2da5037261ec728a25fcdb69de6",
       "bytes": 20877,
       "duration_ms": 2400,
-      "start_ms": 734650,
+      "start_ms": 735160,
       "source_wav_sha256": "8fbd3abc395142e03b6c5046875073394825c0862562422a657f49225927f461",
       "text": "\"Lily! I'm so happy you're safe.\""
     },
@@ -1004,7 +1027,7 @@
       "sha256": "312b849fd149136606ad56534e72fb5701cd17081856230f7517599061d94c9b",
       "bytes": 49252,
       "duration_ms": 5550,
-      "start_ms": 737500,
+      "start_ms": 738010,
       "source_wav_sha256": "6204c2b64b2bec8522c09d530536080c2ad8001b5631aecf10a377de3331f11f",
       "text": "Febric and Hreda emerged from another room, and rushed to embrace Gladias and Seila."
     },
@@ -1016,7 +1039,7 @@
       "sha256": "827f594d1ed461386c5344846f07b56a82b65708f0ddf838cbc50ce234bfb661",
       "bytes": 23914,
       "duration_ms": 2750,
-      "start_ms": 743500,
+      "start_ms": 744010,
       "source_wav_sha256": "831e282dcfcc14cb9a391cc2fdff102ab74496ae290735122f49194524dae610",
       "text": "\"I'm so glad that you are all here together.\""
     },
@@ -1028,7 +1051,7 @@
       "sha256": "a3da53b4f7f836069b08e3d00836953385fb75dee22e144c9aa1377085e07fa8",
       "bytes": 14789,
       "duration_ms": 1750,
-      "start_ms": 746700,
+      "start_ms": 747210,
       "source_wav_sha256": "656ffc997514160dcfbb3668b14725cf1de0b39a41ba8146930274387c594f52",
       "text": "\"I'm sorry, Mom.\""
     },
@@ -1040,7 +1063,7 @@
       "sha256": "10d2dbe99ffbc16c93b26d126809ed8f94622675816b9d92bef8c96ab2cd44fd",
       "bytes": 76241,
       "duration_ms": 8700,
-      "start_ms": 748900,
+      "start_ms": 749410,
       "source_wav_sha256": "c599606db42303c049b3637be8d9d9d61eec14cc20bf46f0c14ad9eb7b869734",
       "text": "\"Don't be. We all made lots of mistakes this past year. We've gotten through it now, and if we need to, we can get through even more. We're a family.\""
     },
@@ -1052,7 +1075,7 @@
       "sha256": "5091b4a9ac06fcfc698bcb1588413ce1e0d702282536c4953321a6d77cc8a1d7",
       "bytes": 14433,
       "duration_ms": 1675,
-      "start_ms": 758050,
+      "start_ms": 758560,
       "source_wav_sha256": "758ebde699669bdb6684eb73919eec503654f1ec7b44a309d209b576e2bb366b",
       "text": "\"Is [Zven](/zvˈɛn/) here?\""
     },
@@ -1064,7 +1087,7 @@
       "sha256": "eabe16588744ad7c4be609bef2d4f538221ef08ddb0db6054b64ee3491eb3c12",
       "bytes": 31128,
       "duration_ms": 3525,
-      "start_ms": 760175,
+      "start_ms": 760685,
       "source_wav_sha256": "32a2f755f7251c9bec00a9db75ff709cb9bafd885d0f637b81b100f84066fba7",
       "text": "\"Oh, [Zven](/zvˈɛn/), Vil and Daia are coming tomorrow morning!\""
     },
@@ -1076,7 +1099,7 @@
       "sha256": "c4021df5d19b9c0fc50b35c60d084c306146ffb7d973cc30d96dec4dd69dc492",
       "bytes": 38059,
       "duration_ms": 4225,
-      "start_ms": 764150,
+      "start_ms": 764660,
       "source_wav_sha256": "d4195cbe3fe57ae699938bf86056b22487161e0c25c8d580f6dc3ba910590a88",
       "text": "\"Amazing! I'm so excited to see Mom!\", Hreda exclaimed."
     },
@@ -1088,7 +1111,7 @@
       "sha256": "3a3ede32e491c9d8f526bd4b952f0cce1b11ba0adc1d79a05e8dbf849a7428e2",
       "bytes": 41771,
       "duration_ms": 4600,
-      "start_ms": 768825,
+      "start_ms": 769335,
       "source_wav_sha256": "3e2e059a1a78083bf8b046036004145b2dad61cf3c295f9e8c27108d3ee4db8d",
       "text": "\"So how has the Greater Plum Harbor been treating you?\", Gladias asked."
     },
@@ -1100,7 +1123,7 @@
       "sha256": "efa4fc0768e2cd7c707315110b85879affc1f64b92587dfa3e4f8bb1a4dfe58f",
       "bytes": 165903,
       "duration_ms": 18925,
-      "start_ms": 773875,
+      "start_ms": 774385,
       "source_wav_sha256": "276cf8c9283b57fc8830f938c4e50eabc2d8e479206f9f820337adcf717cca04",
       "text": "\"It's been actually quite fun.\", Hreda replied. \"They did a very good job of organizing education, entertainment, public activities, all kinds of things to keep people happy. They convinced the Arctics to allow food to get droned in, so aside from being a small enclosed space it's been fine.\""
     },
@@ -1112,7 +1135,7 @@
       "sha256": "8feff77a5d6f7588905e3708003bfa8030940fb734f5f60f30f2ced4bfdb1cd6",
       "bytes": 178862,
       "duration_ms": 20275,
-      "start_ms": 793250,
+      "start_ms": 793760,
       "source_wav_sha256": "a0116e768c3985edc59706c4e92691539435111483fdef05bd33daae20a99c5c",
       "text": "\"We had Arctic food out of curiosity a few times here\", Febric added. \"They've figured out like a dozen substances that taste like sugar but don't have any calories. They also have protein contraptions that taste like fish and meat. It's not bad! Whatever taste you want with whatever nutrition profile you need, the slogan goes.\""
     },
@@ -1124,7 +1147,7 @@
       "sha256": "04d88154478b02183070fb429f84e7e7afadcf1478af2f84b25468eff4a86936",
       "bytes": 103978,
       "duration_ms": 11775,
-      "start_ms": 813975,
+      "start_ms": 814485,
       "source_wav_sha256": "afabe37731b2ec5df1b7a2a85823d407c1388fd6e32bcbfff58c9c79d4b7bff2",
       "text": "Seila lowered her face quietly. She was still not entirely used to having to admit that the Arctic ways of doing things sometimes did actually have upsides and they could learn from them."
     },
@@ -1136,7 +1159,7 @@
       "sha256": "a454222a735d335220786723e8d1f59c4cd48e7a27b09011d2c7208f344fe134",
       "bytes": 76216,
       "duration_ms": 8525,
-      "start_ms": 826200,
+      "start_ms": 826710,
       "source_wav_sha256": "c85dbc9cb1a3d32795c7c0e7fa48268750cef29a653df2398142db9d7a4df745",
       "text": "\"How about I invite some of our new friends\", Gladias interjected, \"and they can show us what actual properly cooked [Dzego](/ˈdzɛɡO/) food is like?\""
     },
@@ -1148,7 +1171,7 @@
       "sha256": "28f268a7e5ce5aad23877dd06fb421096eb23a763833820175ce9085b2bb085b",
       "bytes": 18805,
       "duration_ms": 2050,
-      "start_ms": 835175,
+      "start_ms": 835685,
       "source_wav_sha256": "e161d9bf4eb8980b866d006e6569bf879104d011dbb81b6f31e3ed99c1b1940e",
       "text": "\"Yay!\", Lily shouted."
     },
@@ -1160,7 +1183,7 @@
       "sha256": "6cdd7bae6ccf6780205c6831390c0681b27ff660445de269be5a0bf67d681216",
       "bytes": 27719,
       "duration_ms": 3050,
-      "start_ms": 837675,
+      "start_ms": 838185,
       "source_wav_sha256": "bcc6478c537e564f64b030693722ac5b1e25ed2b7f9c36e8f42ab1104015c39e",
       "text": "Febric and Hreda also nodded eagerly."
     },
@@ -1172,7 +1195,7 @@
       "sha256": "e34d195a10d0195c3268cd3c366b7a310190cabc992e75a9933586af70cc38b1",
       "bytes": 122423,
       "duration_ms": 13475,
-      "start_ms": 841175,
+      "start_ms": 841685,
       "source_wav_sha256": "d2a8fc0c388b7a057dc96dce7a35bf17bf518c60fa117f91cb7ae168a8b5b43f",
       "text": "\"Then I'll ask them to come tonight. I have to go out again this afternoon. There's a military funeral for [Den](/ˈdɛn/) and our fallen soldiers at the top of the mountain. Then we can come back down together and enjoy a nice meal.\""
     },
@@ -1184,7 +1207,7 @@
       "sha256": "fd4d96adc879c535316168510c29fcfeb9cd6d944dd33343139de1faa412cbbc",
       "bytes": 34114,
       "duration_ms": 3925,
-      "start_ms": 855100,
+      "start_ms": 855610,
       "source_wav_sha256": "6f694151b9f33744e0ec59b53c4b95817b80872b27cda96332ec790ddc4d4d0f",
       "text": "Lily, Febric and Hreda nodded their heads with excitement."
     }

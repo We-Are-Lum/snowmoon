@@ -4,7 +4,7 @@
   "source_sha256": "e203b791465f3a2b6af9834364706734904a4c160bef69efc6ab6a5c1d876f87",
   "generated_at": "2026-10-03T17:55:39+00:00",
   "generation_seconds": 113.9,
-  "total_duration_ms": 821400,
+  "total_duration_ms": 822420,
   "model": {
     "name": "Kokoro-82M",
     "repo": "hexgrad/Kokoro-82M",
@@ -36,7 +36,21 @@
     },
     "break_ms": 1800,
     "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
-    "read_aloud_sha256": "e2fedd0b9e36836d49c8316782e61b78c21c2e1d6d7e1a718e24bf76b3cc6809"
+    "read_aloud_sha256": "e2fedd0b9e36836d49c8316782e61b78c21c2e1d6d7e1a718e24bf76b3cc6809",
+    "description_tone": {
+      "notes_hz": [
+        660,
+        990
+      ],
+      "notes_ms": [
+        110,
+        140
+      ],
+      "between_ms": 40,
+      "after_ms": 220,
+      "amplitude": 0.12,
+      "made_by": "code (numpy sine, linear fades)"
+    }
   },
   "host": {
     "platform": "macOS-26.5.1-arm64-arm-64bit",
@@ -45,10 +59,10 @@
   },
   "stitched": {
     "wav": "chapter-23.wav",
-    "wav_sha256": "e57cf219711a90832ebcefb890761c42ca65ea463fe0746356cb0a05a7f802f1",
+    "wav_sha256": "be9d4c713d7d4cf074aef43ea4f4f700f6e79643ea9d31982d2d0904077b3203",
     "m4a": "chapter-23.m4a",
-    "m4a_sha256": "48566b69003836b7d230c6338ae1819b70612b4e28282c47888774a651517b4d",
-    "note": "start_ms is the block's offset in the stitched file, gaps included"
+    "m4a_sha256": "8607778500d8352e4ad19cd7ed74c5bc31273d3f0fc713996d07b0d2780b230c",
+    "note": "start_ms is the block's offset in the stitched file, gaps included; a description starts with its tone (tone_ms)"
   },
   "blocks": [
     {
@@ -292,7 +306,8 @@
       "start_ms": 192325,
       "text": "A page of the book, printed in [Dzegoban](/ˈdzɛɡObɑn/): twenty-eight short lines, most of them beginning with [ci](/ˈtsi/). The first reads [ci](/ˈtsi/) [zan](/ˈzɑn/) [fe](/ˈfɛ/) [da](/ˈdɑ/) [cei](/ˈtsA/) [bia](/ˈbjɑ/) [sia](/ˈsjɑ/) [ci](/ˈtsi/) [jei](/ˈʤA/) [fe](/ˈfɛ/) [hi](/ˈhi/) [dzia](/ˈdzjɑ/) [lin](/ˈlɪn/) [ji](/ˈʤi/) [bia](/ˈbjɑ/) [sia](/ˈsjɑ/).",
       "generation_s": 1.93,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 22,
@@ -301,7 +316,7 @@
       "file": "blocks/c23-b022.wav",
       "sha256": "0db91b82a4be9a880eb46be1c6ee98abedc973ecda6fdcad24ef43b16972c300",
       "duration_ms": 3900,
-      "start_ms": 206025,
+      "start_ms": 206535,
       "text": "\"You think I can do this?\", Gladias asked incredulously.",
       "generation_s": 0.62
     },
@@ -312,7 +327,7 @@
       "file": "blocks/c23-b023.wav",
       "sha256": "502eddc9d81ab4759428070e2b059e45fbeff9e5f0a44e499ebc292b3c8bce88",
       "duration_ms": 1625,
-      "start_ms": 210375,
+      "start_ms": 210885,
       "text": "\"Come on, try.\"",
       "generation_s": 0.25
     },
@@ -323,7 +338,7 @@
       "file": "blocks/c23-b024.wav",
       "sha256": "5d48936590c417200d12e33debb414bf8cbdaea8a564e1f122fb96132ffbc594",
       "duration_ms": 1900,
-      "start_ms": 212450,
+      "start_ms": 212960,
       "text": "\"Okay, here goes...\"",
       "generation_s": 0.28
     },
@@ -334,7 +349,7 @@
       "file": "blocks/c23-b025.wav",
       "sha256": "db517adb003b8ee40adffcdebd2be4645c162d07b575a8920c895de6803dc1d4",
       "duration_ms": 4075,
-      "start_ms": 214800,
+      "start_ms": 215310,
       "text": "\"From material world small thinking, to internet small thinking.\"",
       "generation_s": 0.58
     },
@@ -345,7 +360,7 @@
       "file": "blocks/c23-b026.wav",
       "sha256": "a9a60f630ac17590eb2878bc688323346c0403ff343b1babc60ae11c70f4814b",
       "duration_ms": 2375,
-      "start_ms": 219325,
+      "start_ms": 219835,
       "text": "\"Small thinking is minimalism.\"",
       "generation_s": 0.42
     },
@@ -356,7 +371,7 @@
       "file": "blocks/c23-b027.wav",
       "sha256": "a155550baebc5fd277519be11068d9d327236e680b26eb228c4bc6c515f84176",
       "duration_ms": 6275,
-      "start_ms": 222150,
+      "start_ms": 222660,
       "text": "\"Ah, I see, this is one of those cases where knowing the roots on its own really doesn't get you there.\"",
       "generation_s": 1.06
     },
@@ -367,7 +382,7 @@
       "file": "blocks/c23-b028.wav",
       "sha256": "cb4420c1c64387561fe4083abb1f8b91ea16129afe60011a0eae8bfa2fb027b8",
       "duration_ms": 7250,
-      "start_ms": 228875,
+      "start_ms": 229385,
       "text": "\"Indeed. And the whole project of shrinking the roots down only succeeded once we accepted that that's inevitable.\"",
       "generation_s": 1.03
     },
@@ -378,7 +393,7 @@
       "file": "blocks/c23-b029.wav",
       "sha256": "6be2b01ec8b6c20c151081429adfb18ad69802336033f60a55d7e429fbb18252",
       "duration_ms": 7900,
-      "start_ms": 236575,
+      "start_ms": 237085,
       "text": "\"Containing inside the green, forty years ago, a big pattern change in beautiful thinking in the whole world was minimalism.\"",
       "generation_s": 1.24
     },
@@ -389,7 +404,7 @@
       "file": "blocks/c23-b030.wav",
       "sha256": "ea7ac0459ed118c3232bbd413a44de73b448ad1a7736cf75b16154fed9303c5a",
       "duration_ms": 6925,
-      "start_ms": 244925,
+      "start_ms": 245435,
       "text": "\"That first bit is a set phrase, it means 'including [Dzego](/ˈdzɛɡO/) and Veridia'. Beautiful thinking is aesthetics.\"",
       "generation_s": 1.07
     },
@@ -400,7 +415,7 @@
       "file": "blocks/c23-b031.wav",
       "sha256": "7767d2003cbd512f17caec07c88fc7de1e07553f2390a8338307c26274432558",
       "duration_ms": 7175,
-      "start_ms": 252300,
+      "start_ms": 252810,
       "text": "\"Many people recognized that having many physical things is not only line-heartedness but also a locked room.\"",
       "generation_s": 1.0
     },
@@ -411,7 +426,7 @@
       "file": "blocks/c23-b032.wav",
       "sha256": "f7b3786f746644a5b8a777b23db57cb88608cd0afe0bbb65f31789ae94f6db72",
       "duration_ms": 7400,
-      "start_ms": 259925,
+      "start_ms": 260435,
       "text": "\"Line-heartedness is a feeling of simplicity, or convenience, a locked room in this context is more like a prison.\"",
       "generation_s": 1.02
     },
@@ -422,7 +437,7 @@
       "file": "blocks/c23-b033.wav",
       "sha256": "d2c5282e208d35ab2508140c1483b2a3c7875995561392dd2d8da2447a879fda",
       "duration_ms": 3600,
-      "start_ms": 267775,
+      "start_ms": 268285,
       "text": "\"A complicated room implies a complicated heart.\"",
       "generation_s": 0.5
     },
@@ -433,7 +448,7 @@
       "file": "blocks/c23-b034.wav",
       "sha256": "e1286d5ca7d0e2ec4b8ebf1bcdf16b6d30347f0807eef336d58f0e40f17f8f1a",
       "duration_ms": 1350,
-      "start_ms": 271825,
+      "start_ms": 272335,
       "text": "\"Good!\"",
       "generation_s": 0.21
     },
@@ -444,7 +459,7 @@
       "file": "blocks/c23-b035.wav",
       "sha256": "68419f391e8ab6f95475b1ef33111ac1c9111ffea96805c68e9d079f18798ae5",
       "duration_ms": 4900,
-      "start_ms": 273625,
+      "start_ms": 274135,
       "text": "\"Living with the warm-heartedness — happiness? — of having few things is freedom.\"",
       "generation_s": 0.67
     },
@@ -455,7 +470,7 @@
       "file": "blocks/c23-b036.wav",
       "sha256": "80d7b26ed81c1be87745d15644055797d14d8d56a2d24c1a109489f7ce75e9f7",
       "duration_ms": 1400,
-      "start_ms": 278975,
+      "start_ms": 279485,
       "text": "\"Great!\"",
       "generation_s": 0.21
     },
@@ -466,7 +481,7 @@
       "file": "blocks/c23-b037.wav",
       "sha256": "408fd7634ce672256618f9813c13e0cb63f328a02fe59ffb5166a8f98800fadf",
       "duration_ms": 3850,
-      "start_ms": 280825,
+      "start_ms": 281335,
       "text": "\"That this happened forty years ago has a logic — a reason?\"",
       "generation_s": 0.51
     },
@@ -477,7 +492,7 @@
       "file": "blocks/c23-b038.wav",
       "sha256": "f012d58f0034f9c8e9cad14d2ec805a27d4ac0fe802e893c6fa6f00f2b96d31b",
       "duration_ms": 1275,
-      "start_ms": 285125,
+      "start_ms": 285635,
       "text": "\"Yep.\"",
       "generation_s": 0.19
     },
@@ -488,7 +503,7 @@
       "file": "blocks/c23-b039.wav",
       "sha256": "243c5569cfbd846f3f126f05de99bd58022edf2d2aef47dc29b0ec6c180b3dbc",
       "duration_ms": 3725,
-      "start_ms": 286850,
+      "start_ms": 287360,
       "text": "\"Electric machines and the internet began to exist.\"",
       "generation_s": 0.49
     },
@@ -499,7 +514,7 @@
       "file": "blocks/c23-b040.wav",
       "sha256": "58e1e49bd1a4c3e472f10e958a7b01ce1e9fb2c29aefc0afcad8d61b03dc2a35",
       "duration_ms": 8175,
-      "start_ms": 291025,
+      "start_ms": 291535,
       "text": "\"This implied that many people gathered physical things ... wait, physical things gathered by many people, began to be unwanted.\"",
       "generation_s": 1.2
     },
@@ -510,7 +525,7 @@
       "file": "blocks/c23-b041.wav",
       "sha256": "6f5e8a390278349f8dc9db57b339baff4106d3d7b1ab8454ca8500a3748dab69",
       "duration_ms": 2375,
-      "start_ms": 299650,
+      "start_ms": 300160,
       "text": "\"I would say unnecessary here.\"",
       "generation_s": 0.45
     },
@@ -521,7 +536,7 @@
       "file": "blocks/c23-b042.wav",
       "sha256": "6ddba43096fc78167e5c8bae863edd927bc1c7bf145003b210cea80b7d2aa3eb",
       "duration_ms": 11375,
-      "start_ms": 302475,
+      "start_ms": 302985,
       "text": "\"Hand devices caused to be unnecessary aggregate-and-group devices, music devices, sound conversation devices and ten other devices that one would previously have.\"",
       "generation_s": 1.96
     },
@@ -532,7 +547,7 @@
       "file": "blocks/c23-b043.wav",
       "sha256": "7d98ca9f8c92389a7e0fa8b0774caecca08ed586da2980f8893609698c72d495",
       "duration_ms": 8125,
-      "start_ms": 314300,
+      "start_ms": 314810,
       "text": "\"Aggregate-and-group devices should be add and multiply devices — calculators. Sound conversation devices are phones.\"",
       "generation_s": 1.2
     },
@@ -543,7 +558,7 @@
       "file": "blocks/c23-b044.wav",
       "sha256": "7b195b8234ac83a03f88a95e4c40e6f3052a21318ec365803aa2e2aed60d2e24",
       "duration_ms": 2950,
-      "start_ms": 322875,
+      "start_ms": 323385,
       "text": "\"It can contain books without an upper lid.\"",
       "generation_s": 0.43
     },
@@ -554,7 +569,7 @@
       "file": "blocks/c23-b045.wav",
       "sha256": "f9e590797971f4fae8d0933adcb93656c79392c790e1f81d4270bb82a487ff7a",
       "duration_ms": 1575,
-      "start_ms": 326275,
+      "start_ms": 326785,
       "text": "\"Unlimited.\"",
       "generation_s": 0.24
     },
@@ -565,7 +580,7 @@
       "file": "blocks/c23-b046.wav",
       "sha256": "6fcfed49f5e82d6039fabfd29593141df47ae0922d72b4f19245542355f7b55e",
       "duration_ms": 4275,
-      "start_ms": 328300,
+      "start_ms": 328810,
       "text": "\"Many parts of that we all live are moving to the electric world.\"",
       "generation_s": 0.6
     },
@@ -576,7 +591,7 @@
       "file": "blocks/c23-b047.wav",
       "sha256": "d534cf0bf412f06aa60eedec7df6e7a2fb89011941f7b4e2bc0b898948533a24",
       "duration_ms": 2175,
-      "start_ms": 333025,
+      "start_ms": 333535,
       "text": "\"Many parts of all our lives.\"",
       "generation_s": 0.32
     },
@@ -587,7 +602,7 @@
       "file": "blocks/c23-b048.wav",
       "sha256": "969d78fece435369376ce6c4443933e16f613c02138ac08b3ccf8ac76f1b1ba8",
       "duration_ms": 4350,
-      "start_ms": 335650,
+      "start_ms": 336160,
       "text": "\"As a result, the complexity of the physical world stopped behind.\"",
       "generation_s": 0.59
     },
@@ -598,7 +613,7 @@
       "file": "blocks/c23-b049.wav",
       "sha256": "665f11a42193f0dc5541a09d6fcb9e5a1183da736d028ba5aa2a7598cb87df12",
       "duration_ms": 1825,
-      "start_ms": 340450,
+      "start_ms": 340960,
       "text": "\"Was left behind.\"",
       "generation_s": 0.26
     },
@@ -609,7 +624,7 @@
       "file": "blocks/c23-b050.wav",
       "sha256": "f4d54de5de84ffa2248fe50b6a49a33c715ad8b04bd92cb3321730bfcac6af25",
       "duration_ms": 4175,
-      "start_ms": 342725,
+      "start_ms": 343235,
       "text": "\"In the nearby few years, we are seeking a different change in pattern.\"",
       "generation_s": 0.56
     },
@@ -620,7 +635,7 @@
       "file": "blocks/c23-b051.wav",
       "sha256": "e9df852879fda4c36bc31aff1daa246d1815673e8145ba8b94876f96645a7a49",
       "duration_ms": 2450,
-      "start_ms": 347350,
+      "start_ms": 347860,
       "text": "Gladias paused for a few moments.",
       "generation_s": 0.34
     },
@@ -631,7 +646,7 @@
       "file": "blocks/c23-b052.wav",
       "sha256": "32e258f9f6b2e8944b932802451d2fd2da7af934f875150924d94ee7dc6cf45b",
       "duration_ms": 5025,
-      "start_ms": 350250,
+      "start_ms": 350760,
       "text": "\"Okay, I'm tired. But I am curious. Can you just tell me what the rest means?\"",
       "generation_s": 0.73
     },
@@ -642,7 +657,7 @@
       "file": "blocks/c23-b053.wav",
       "sha256": "04a1990ea9c7080eb1d3e343ad4a0a0dcf61873f9127aa1f10a455951d4dc3ef",
       "duration_ms": 1875,
-      "start_ms": 355725,
+      "start_ms": 356235,
       "text": "[Zei](/ˈzA/) picked up the book.",
       "generation_s": 0.28
     },
@@ -653,7 +668,7 @@
       "file": "blocks/c23-b054.wav",
       "sha256": "61fa77b21d364cb001bc698802033be3269877fe7357bf267b52ef97fdd0548a",
       "duration_ms": 19100,
-      "start_ms": 358050,
+      "start_ms": 358560,
       "text": "\"Social media is not always good for people's mental health. Much of the interest in privacy is driven not just by fear of the Arctics, but rather the sheer volume of everyone talking about everyone else, and the unpredictability with which random events from people's private lives become public discourse.\"",
       "generation_s": 2.54
     },
@@ -664,7 +679,7 @@
       "file": "blocks/c23-b055.wav",
       "sha256": "5d341da5b987fb36799578da298c708c01546150511d67d11f24b814364c2685",
       "duration_ms": 18150,
-      "start_ms": 377600,
+      "start_ms": 378110,
       "text": "\"People are afraid of many parts of the internet, especially in other countries where privacy technology is not as strong and well-understood. Location tracking, behavior profiling, all of it. And it's not just privacy — people are recognizing that the internet can be as addictive as drugs.\"",
       "generation_s": 2.47
     },
@@ -675,7 +690,7 @@
       "file": "blocks/c23-b056.wav",
       "sha256": "d97c469822b538512fea9a183f99c8ad705070e569eba2f7ac4ab2a05e3b2b07",
       "duration_ms": 23200,
-      "start_ms": 396200,
+      "start_ms": 396710,
       "text": "\"And so now we're slowly seeing the emergence of a different kind of minimalism: internet minimalism. Disconnect. Do things on your own device. And like physical minimalism was made possible by the growing capabilities of the digital world, internet minimalism is made possible by the growing capabilities of AI and local software — you can have your whole world on your own device.\"",
       "generation_s": 3.81
     },
@@ -686,7 +701,7 @@
       "file": "blocks/c23-b057.wav",
       "sha256": "164a72351deaeffb642721bc77eca9075e34208ce423c889281378d814feb509",
       "duration_ms": 1625,
-      "start_ms": 419850,
+      "start_ms": 420360,
       "text": "\"Fascinating.\"",
       "generation_s": 0.34
     },
@@ -697,7 +712,7 @@
       "file": "blocks/c23-b058.wav",
       "sha256": "67ddeae8ecc1846cc14b4a3592164b724bfcac7eafe78504c6958d7b54995320",
       "duration_ms": 2500,
-      "start_ms": 421925,
+      "start_ms": 422435,
       "text": "\"Gladias, you're doing very well.\"",
       "generation_s": 0.39
     },
@@ -708,7 +723,7 @@
       "file": "blocks/c23-b059.wav",
       "sha256": "62d7263447258622a6af6f69f1b201522e42dd1f15884a9932236dfeda2b66c5",
       "duration_ms": 5700,
-      "start_ms": 424875,
+      "start_ms": 425385,
       "text": "\"Thank you. Now your turn. How well do you understand the Order of Steering's governance rules?\"",
       "generation_s": 0.82
     },
@@ -719,7 +734,7 @@
       "file": "blocks/c23-b060.wav",
       "sha256": "ce62f4a4adb985716b7e40752cfdc29423ca673d114d261dbbf80c4eff91d12f",
       "duration_ms": 38650,
-      "start_ms": 431025,
+      "start_ms": 431535,
       "text": "\"There is a collection of tax rubrics. For each rubric, twenty one Keepers are randomly chosen — seven added in each year, for a three year term. The job of the group is to propose and vote on changes to the rubric. The twenty one are split into three sub-groups of seven, all mixing first, second and third years. Any Keeper can make a proposal for a change to the rubric. Each sub-group discusses every proposal independently, they don't know who the other sub-groups are. After a few rounds of discussion, all twenty one Keepers vote on each of the proposals, and the ones that pass, with at least thirteen out of twenty one votes approving them, get accepted.\"",
       "generation_s": 6.08
     },
@@ -730,7 +745,7 @@
       "file": "blocks/c23-b061.wav",
       "sha256": "e1983062ed848f432348ce394e1cbad7376cac047def72ae101981b94bae5b53",
       "duration_ms": 36800,
-      "start_ms": 470125,
+      "start_ms": 470635,
       "text": "\"There is a separate mechanism, the Sentinels, who are randomly selected and put into groups that audit individual businesses. There, it's three groups of three. They have a very specific task: determine what tier on each rubric a business gets. And then smaller businesses have audits done by Acolytes, Order members in training. For an Acolyte to get accepted, they have to both pass Senate committee approval, and be in the top ten percent by prediction score — by how well their votes on the small portion of their audits that get randomly sampled and re-done by Sentinels agree with the Sentinels' results.\"",
       "generation_s": 5.34
     },
@@ -741,7 +756,7 @@
       "file": "blocks/c23-b062.wav",
       "sha256": "8ada24d8bbe5239cc5673b9b9944180679f26d913c5cf0a199c6367dc8ae92b7",
       "duration_ms": 1950,
-      "start_ms": 507375,
+      "start_ms": 507885,
       "text": "\"Now, what about the Courts?\"",
       "generation_s": 0.33
     },
@@ -752,7 +767,7 @@
       "file": "blocks/c23-b063.wav",
       "sha256": "53853cc031e7fd0f5885325fb39a3d85fdbfe25b7e4b06d9cc403e55a41168b0",
       "duration_ms": 32225,
-      "start_ms": 509775,
+      "start_ms": 510285,
       "text": "\"Same mechanism as the Sentinels, though with five judges instead of nine. Also, in civil cases either side, in criminal cases only the defense, can appeal a ruling. There's no hierarchy, it just selects another random sample. There's a common law rule that if you submit a case — either an appeal, or even a first-time lawsuit — that has no merit to the point of being bad-faith, then that case can end not just with you losing, but even with a penalty judgement against you. That's the protection against what we call denial of service attacks.\"",
       "generation_s": 5.22
     },
@@ -763,7 +778,7 @@
       "file": "blocks/c23-b064.wav",
       "sha256": "8c3a2c01d3b04ad1b5cf26e06b574bf7c6ddca3e9454c03ffe3a802b3e3e0a4b",
       "duration_ms": 26125,
-      "start_ms": 542450,
+      "start_ms": 542960,
       "text": "\"Actually, good that you mention that last part. My co-father, Vil, was in a long lawsuit against, well, basically his former employer, for doing some financial trickery to fire him and get away without paying the pre-agreed severance. He won the first round. The company appealed and lost. Then they appealed again. And just yesterday, the court struck down their second appeal, declared it bad faith, and tripled the amount that they have to pay Vil and the other workers.\"",
       "generation_s": 3.67
     },
@@ -774,7 +789,7 @@
       "file": "blocks/c23-b065.wav",
       "sha256": "f6733c7a0aea8b80d00f0211a2dd073695b683f72e8d16aee9e04653af510bb6",
       "duration_ms": 2200,
-      "start_ms": 569025,
+      "start_ms": 569535,
       "text": "\"Glad to hear the system works!\"",
       "generation_s": 0.34
     },
@@ -785,7 +800,7 @@
       "file": "blocks/c23-b066.wav",
       "sha256": "5e5bd1f41756ff5296dd71315b368a566611db509fba722d64ed62801bdb6396",
       "duration_ms": 12750,
-      "start_ms": 571675,
+      "start_ms": 572185,
       "text": "\"That's always the most important question: whether or not it actually works. The Parliament hearings approving new Keepers and Sentinels, for example, barely work at all at this point — at least in my view.\"",
       "generation_s": 2.26
     },
@@ -796,7 +811,7 @@
       "file": "blocks/c23-b067.wav",
       "sha256": "3cc8b602f7b0765e56010a6b64100427ed7bb9b90edd5354c5bd8121f3abbd93",
       "duration_ms": 1625,
-      "start_ms": 584875,
+      "start_ms": 585385,
       "text": "[Bai](/ˈbI/) spoke up.",
       "generation_s": 0.49
     },
@@ -807,7 +822,7 @@
       "file": "blocks/c23-b068.wav",
       "sha256": "cc916850cd77387f6465081f6955c22bf1a8461bec86b1cf23f25962403086ae",
       "duration_ms": 14375,
-      "start_ms": 586950,
+      "start_ms": 587460,
       "text": "\"This is all really good info, Gladias, and thank you [Zei](/ˈzA/) for getting up to speed on it so quickly. If we want to affect Veridia, understanding how these institutions all work today is just as important as the military side.\"",
       "generation_s": 2.15
     },
@@ -818,7 +833,7 @@
       "file": "blocks/c23-b069.wav",
       "sha256": "febe19b6689936212a8cf2e6cea3dc9a67c378f97d3b0eb0d2ccf1472566f8ad",
       "duration_ms": 6175,
-      "start_ms": 601775,
+      "start_ms": 602285,
       "text": "\"Anyway, I think [Den](/ˈdɛn/) is waiting for me and [Zei](/ˈzA/) in his private room. We should start heading over.\"",
       "generation_s": 0.93
     },
@@ -829,7 +844,7 @@
       "file": "blocks/c23-b070.wav",
       "sha256": "faf56b6b78b2a0a2e3ef6a8836704413c35823a6ce6792ce34b2f44734fd5e8b",
       "duration_ms": 2300,
-      "start_ms": 608400,
+      "start_ms": 608910,
       "text": "\"Sounds good\", [Zei](/ˈzA/) replied.",
       "generation_s": 0.34
     },
@@ -840,7 +855,7 @@
       "file": "blocks/c23-b071.wav",
       "sha256": "143777ed2cbdd1da0480e7904fc9e0a64e79cb2b2b79f343932cffa1818d3203",
       "duration_ms": 18150,
-      "start_ms": 611150,
+      "start_ms": 611660,
       "text": "[Zei](/ˈzA/) and Gladias simultaneously raced to put their watches against the small green circle on the corner of the table. They ended up both pushing each other's wrists too far away to make the connection. [Fin](/ˈfɪn/) joined in, and slapped his watch against the circle. A moment later, his watch buzzed.",
       "generation_s": 3.11
     },
@@ -851,7 +866,7 @@
       "file": "blocks/c23-b072.wav",
       "sha256": "aab7478bef855e0afe42fff9d1d2bdf8f55c8fdb241659e0a5101bde62019b04",
       "duration_ms": 4675,
-      "start_ms": 629750,
+      "start_ms": 630260,
       "text": "The four of them all stood up, and began to walk to leave the cafeteria.",
       "generation_s": 0.82
     },
@@ -861,7 +876,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 634875,
+      "start_ms": 635385,
       "duration_ms": 1800
     },
     {
@@ -871,7 +886,7 @@
       "file": "blocks/c23-b074.wav",
       "sha256": "36503e8cf16f405a9fbb45ccc1b566a7fcdd51761deeedc00928227cf2cef9b2",
       "duration_ms": 5325,
-      "start_ms": 636675,
+      "start_ms": 637185,
       "text": "Gladias was in bed, getting ready to go to sleep. Suddenly, his watch buzzed.",
       "generation_s": 1.03
     },
@@ -882,10 +897,11 @@
       "file": "blocks/c23-b075.wav",
       "sha256": "8b3dadcfc0f6bc2f9b8f83f42f90bc4093494467b2443f3f1241b8357f9e4a9f",
       "duration_ms": 3575,
-      "start_ms": 642450,
+      "start_ms": 642960,
       "text": "A message from Seila, in red: requesting call.",
       "generation_s": 0.78,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 76,
@@ -894,7 +910,7 @@
       "file": "blocks/c23-b076.wav",
       "sha256": "3a9ef3a83c42432e760e859690f78daee7cc1aad4dec94bbc4532f7467533abd",
       "duration_ms": 9975,
-      "start_ms": 646625,
+      "start_ms": 647645,
       "text": "He had only seen messages in this shade of red twice before: once when Seila had messaged him when Northglade was attacked, and once when she had called him about Delwart.",
       "generation_s": 1.64
     },
@@ -905,7 +921,7 @@
       "file": "blocks/c23-b077.wav",
       "sha256": "9c4425849fe20be598b923672eacce881007e6f88d2ed5c61887110d90fb49c4",
       "duration_ms": 8700,
-      "start_ms": 657050,
+      "start_ms": 658070,
       "text": "Emerald was letting Gladias know the level of importance and Seila's mood and, Gladias knew, this was already a large part of the message.",
       "generation_s": 1.24
     },
@@ -916,7 +932,7 @@
       "file": "blocks/c23-b078.wav",
       "sha256": "62ff193f5566d23dee100d68b7852095ab9eb8b635b6d15aaafe300d90226f53",
       "duration_ms": 3250,
-      "start_ms": 666200,
+      "start_ms": 667220,
       "text": "Gladias's heart raced, as he answered the call.",
       "generation_s": 0.49
     },
@@ -927,7 +943,7 @@
       "file": "blocks/c23-b079.wav",
       "sha256": "cab43eb1592cd46b4a47f8c3efaa99816f6379e71144033077e8ab817edfd2de",
       "duration_ms": 3175,
-      "start_ms": 669900,
+      "start_ms": 670920,
       "text": "\"Do you know what happened to Lily?\", Seila screamed.",
       "generation_s": 0.48
     },
@@ -938,7 +954,7 @@
       "file": "blocks/c23-b080.wav",
       "sha256": "0fa5516aa83e1962838b217d345ca954677bd702d7668f427b831c7aef30ece9",
       "duration_ms": 6500,
-      "start_ms": 673525,
+      "start_ms": 674545,
       "text": "\"I ... do not. I just remember hearing that she got eighty-one percent on her latest exam. What happened?!\"",
       "generation_s": 0.93
     },
@@ -949,7 +965,7 @@
       "file": "blocks/c23-b081.wav",
       "sha256": "b1acffdacdcefe7a31bbe6e65438ebd7a4a7f0da267d3128ca96952b077f49e3",
       "duration_ms": 7500,
-      "start_ms": 680475,
+      "start_ms": 681495,
       "text": "\"I entered her room. She was talking, typing on her hand device. And I could see what she was reading and saying in the mirror.\"",
       "generation_s": 1.08
     },
@@ -960,7 +976,7 @@
       "file": "blocks/c23-b082.wav",
       "sha256": "8ebb7c77d654ca3dd2df1fa5f3fbf98aaa5f3f87755262efb6fe9fb00a94b526",
       "duration_ms": 3375,
-      "start_ms": 688425,
+      "start_ms": 689445,
       "text": "\"For a few minutes, I just stared. I could not believe it.\"",
       "generation_s": 0.5
     },
@@ -971,7 +987,7 @@
       "file": "blocks/c23-b083.wav",
       "sha256": "454436d3d8e32efc5e93ba91d2f24efa7637b1029f9c64d34032f5b15b1d7ef9",
       "duration_ms": 1450,
-      "start_ms": 692250,
+      "start_ms": 693270,
       "text": "\"What was it?\"",
       "generation_s": 0.22
     },
@@ -982,7 +998,7 @@
       "file": "blocks/c23-b084.wav",
       "sha256": "0d7cc5decfada4bb2a75d2d4198d6f368e67b753456c55b69a71c840f88999e5",
       "duration_ms": 10825,
-      "start_ms": 694150,
+      "start_ms": 695170,
       "text": "\"She was in some kind of chat group, and they were sharing Arctic propaganda. Cheering on Lord Ephelion's messages. Hoping that the Arctics would come to the rest of Veridia soon.\"",
       "generation_s": 1.49
     },
@@ -993,7 +1009,7 @@
       "file": "blocks/c23-b085.wav",
       "sha256": "933f49eec195f92aae49ab7d9819bf5cd9fcd6bb286660dc70a1adc1e7f4c3fa",
       "duration_ms": 1325,
-      "start_ms": 705425,
+      "start_ms": 706445,
       "text": "\"What?\"",
       "generation_s": 0.21
     },
@@ -1004,7 +1020,7 @@
       "file": "blocks/c23-b086.wav",
       "sha256": "06c958e796836132cec3239d0028d2a340e3d84e981613d3aca4bdaacf9253b4",
       "duration_ms": 10350,
-      "start_ms": 707200,
+      "start_ms": 708220,
       "text": "\"I snapped. I called her out on it, and asked how she could possibly be betraying us like this, when Febric and Hreda were stuck a thousand kilometers away because of them.\"",
       "generation_s": 1.49
     },
@@ -1015,7 +1031,7 @@
       "file": "blocks/c23-b087.wav",
       "sha256": "f1d86872d5b0e90a623e15ed57d82819f73cb1307e5df3afbc86f594e0d8154c",
       "duration_ms": 1750,
-      "start_ms": 718000,
+      "start_ms": 719020,
       "text": "\"What did she reply?\"",
       "generation_s": 0.27
     },
@@ -1026,7 +1042,7 @@
       "file": "blocks/c23-b088.wav",
       "sha256": "c6f2d0b9ae0975c53640e65a74e0b69616bcbf486d7e55156cbc69149ba93203",
       "duration_ms": 31300,
-      "start_ms": 720200,
+      "start_ms": 721220,
       "text": "\"That the Arctics were right. Their philosophy, their idea that some people are worse and other people are better, and that the better people should rule everyone else, and the most important thing in life is to strive to be one of the better people, was the thing that had motivated her, and given her a reason to study and work hard. That our unconditional love was poison. That the Arctics' philosophy — appreciation and love only as reward for success — actually brought her out of her hole, when nothing we did helped even a little bit.\"",
       "generation_s": 5.01
     },
@@ -1037,7 +1053,7 @@
       "file": "blocks/c23-b089.wav",
       "sha256": "dbe33bbd7667c598688ad0ac181e1234905971945159ab4fbbdd1b0871786c20",
       "duration_ms": 1750,
-      "start_ms": 751950,
+      "start_ms": 752970,
       "text": "\"That's ... horrible.\"",
       "generation_s": 0.27
     },
@@ -1048,7 +1064,7 @@
       "file": "blocks/c23-b090.wav",
       "sha256": "05249084ad893ac45b4f27af1e75c02a66d51df82ba5fad93f30de4ff9386b1c",
       "duration_ms": 3100,
-      "start_ms": 754150,
+      "start_ms": 755170,
       "text": "\"I screamed at her for ten minutes, and shut the door.\"",
       "generation_s": 0.5
     },
@@ -1059,7 +1075,7 @@
       "file": "blocks/c23-b091.wav",
       "sha256": "4663cc33b302471ba1d68e5bce08a65c9c1c2c8cbdcd2c63d81e4c63ecaf8023",
       "duration_ms": 6250,
-      "start_ms": 757700,
+      "start_ms": 758720,
       "text": "\"I cried for a longhour. And then, when I opened the door again, the window was open, and she was gone.\"",
       "generation_s": 0.99
     },
@@ -1070,7 +1086,7 @@
       "file": "blocks/c23-b092.wav",
       "sha256": "b466436ceac4659e852c82f8137941a5ff0962aad21020886ab6dc77fe3b4605",
       "duration_ms": 2725,
-      "start_ms": 764400,
+      "start_ms": 765420,
       "text": "\"Can you ... track her? Through her watch?\"",
       "generation_s": 0.4
     },
@@ -1081,7 +1097,7 @@
       "file": "blocks/c23-b093.wav",
       "sha256": "acfa3f98a668617052c6081bfc6894ca0687dd388cd395c91b555ea67ecb5246",
       "duration_ms": 6475,
-      "start_ms": 767575,
+      "start_ms": 768595,
       "text": "\"Already got Mov to do that. It was a waste of time, she threw her watch onto some random autobus.\"",
       "generation_s": 0.91
     },
@@ -1092,7 +1108,7 @@
       "file": "blocks/c23-b094.wav",
       "sha256": "e1ac4a33624a3c48ada6864b79fd44eceb3ecd3a357d49f4c7d16c8a4b26772a",
       "duration_ms": 6475,
-      "start_ms": 774500,
+      "start_ms": 775520,
       "text": "\"Wow. Now I feel so bad. We really haven't been doing anything to actually motivate or encourage her.\"",
       "generation_s": 0.9
     },
@@ -1103,7 +1119,7 @@
       "file": "blocks/c23-b095.wav",
       "sha256": "2fd66d2f2f03106dee883983130782814ce7342577d370d33dc7553d030dc159",
       "duration_ms": 7075,
-      "start_ms": 781425,
+      "start_ms": 782445,
       "text": "\"Gladias, she got brainwashed by the Arctics. don't you dare get in your philosopher mood and tell me they have a point.\"",
       "generation_s": 1.04
     },
@@ -1114,7 +1130,7 @@
       "file": "blocks/c23-b096.wav",
       "sha256": "773a54c5815d1d8999795fe8fad07e1fcdd945542096df7a40a2aa0a82fafc24",
       "duration_ms": 2325,
-      "start_ms": 788950,
+      "start_ms": 789970,
       "text": "\"How could you have been so negligent?\"",
       "generation_s": 0.82
     },
@@ -1125,7 +1141,7 @@
       "file": "blocks/c23-b097.wav",
       "sha256": "d8253ff444719c0b8538232334034a411050136ff65c49c2de20a0854d2c594b",
       "duration_ms": 24250,
-      "start_ms": 791725,
+      "start_ms": 792745,
       "text": "\"Okay, hold on. Not seeing through Delwart, that one is on me. I was dumb. Mov was dumb. I admit it. This, this is on both of us. You're Lily's mom. You saw her many times — before she went to Vil and Daia's, when we visited them during her time with them, and after she came back. You had many chances to make things better, just like I did. And you didn't succeed, just like I didn't succeed. So let's solve this problem together.\"",
       "generation_s": 4.12
     },
@@ -1136,7 +1152,7 @@
       "file": "blocks/c23-b098.wav",
       "sha256": "73c1c8cfb1a2f9d0283a1884527354b12acf98360abc8bd671ba1e97a7a93e03",
       "duration_ms": 2225,
-      "start_ms": 816425,
+      "start_ms": 817445,
       "text": "\"You don't understand at all, do you?\"",
       "generation_s": 0.41
     },
@@ -1147,9 +1163,22 @@
       "file": "blocks/c23-b099.wav",
       "sha256": "a01f0b0b4a6cb7adf86ecf6528f453ae9156474a9f197414d12059720bb1470b",
       "duration_ms": 1850,
-      "start_ms": 819100,
+      "start_ms": 820120,
       "text": "Seila hung up the call.",
       "generation_s": 0.29
     }
-  ]
+  ],
+  "restitched_at": "2026-10-05T18:51:34+00:00",
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent and its helper agents",
+    "drafted": [
+      "spoken descriptions of screens, figures and lyric cards (blocks 21, 75)",
+      "pronunciation entries (content/snowmoon/pronunciation.json)"
+    ],
+    "instructions": [
+      "docs/prompts/008a-agent-prompts.md#read-aloud-descriptions-and-invented-word-lists"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
 }

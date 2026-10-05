@@ -52,6 +52,10 @@ SAMPLE_RATE = 24000
 # Silence, in ms, placed after a block of each kind in the stitched file.
 GAP_AFTER = {"heading": 900, "dateline": 900, "paragraph": 450, "quote": 600, "screen": 600, "figure": 600}
 BREAK_MS = 1800
+# Before every spoken description (a screen, figure or lyric card read from
+# content/snowmoon/read-aloud/), the stitched chapter plays a short tone made in
+# code, so a listener can tell the description is not the author's words.
+DESCRIPTION_TONE = {"notes_hz": [660, 990], "notes_ms": [110, 140], "between_ms": 40, "after_ms": 220, "amplitude": 0.12, "made_by": "code (numpy sine, linear fades)"}
 ACRONYMS = {"AI", "XOR", "GPH", "DU", "API", "UVC", "VNU", "KAG", "PM", "AM", "LLM", "TV", "ID", "OK", "I", "A"}
 
 
@@ -203,6 +207,129 @@ def apply_pronunciation(text, entries):
     return "".join(out)
 
 
+def description_tone():
+    """Two soft notes, rising, then a short pause before the description."""
+    t = DESCRIPTION_TONE
+
+    def note(hz, ms):
+        x = np.arange(int(SAMPLE_RATE * ms / 1000)) / SAMPLE_RATE
+        env = np.minimum(1.0, np.minimum(x / 0.012, (ms / 1000 - x) / 0.04))
+        return (t["amplitude"] * np.sin(2 * np.pi * hz * x) * np.clip(env, 0, 1)).astype(np.float32)
+
+    silence = lambda ms: np.zeros(int(SAMPLE_RATE * ms / 1000), dtype=np.float32)
+    a, b = t["notes_hz"]
+    ma, mb = t["notes_ms"]
+    return np.concatenate([note(a, ma), silence(t["between_ms"]), note(b, mb), silence(t["after_ms"])])
+
+
+def stitch(entries, audio_for):
+    """Lay out a chapter: block audio, gaps, break silences, and a tone before each
+    description. Sets start_ms (and tone_ms) on each entry; returns (samples, total_ms)."""
+    tone = description_tone()
+    tone_ms = round(len(tone) * 1000 / SAMPLE_RATE)
+    parts, cursor = [], 0
+    for e in entries:
+        if e["kind"] == "break":
+            e.update(start_ms=cursor, duration_ms=BREAK_MS, silence_ms=BREAK_MS)
+            parts.append(np.zeros(int(SAMPLE_RATE * BREAK_MS / 1000), dtype=np.float32))
+            cursor += BREAK_MS
+            continue
+        if not e.get("file"):
+            continue
+        audio = audio_for(e)
+        e["start_ms"] = cursor
+        if e.get("read_aloud_status"):
+            e["tone_ms"] = tone_ms
+            parts.append(tone)
+            cursor += tone_ms
+        else:
+            e.pop("tone_ms", None)
+        gap = GAP_AFTER[e["kind"]]
+        parts += [audio, np.zeros(int(SAMPLE_RATE * gap / 1000), dtype=np.float32)]
+        cursor += e["duration_ms"] + gap
+    return np.concatenate(parts), cursor
+
+
+def write_stitched(out, n, samples):
+    wav = out / f"chapter-{n}.wav"
+    sf.write(wav, samples, SAMPLE_RATE, subtype="PCM_16")
+    m4a = out / f"chapter-{n}.m4a"
+    subprocess.run(
+        ["ffmpeg", "-y", "-loglevel", "error", "-i", str(wav), "-c:a", "aac", "-b:a", "96k",
+         "-metadata", f"title=Snowmoon, Chapter {n}",
+         "-metadata", "artist=Vitalik Buterin (text); synthetic narration, Kokoro",
+         "-metadata", f"track={n}",
+         "-metadata", "comment=GPL-3.0. https://github.com/We-Are-Lum/snowmoon", str(m4a)],
+        check=True,
+    )
+    return {
+        "wav": wav.name,
+        "wav_sha256": sha256_file(wav),
+        "m4a": m4a.name,
+        "m4a_sha256": sha256_file(m4a),
+        "note": "start_ms is the block's offset in the stitched file, gaps included; a description starts with its tone (tone_ms)",
+    }
+
+
+AGENT_PROMPTS = "docs/prompts/008a-agent-prompts.md"
+
+
+def narration_assist(n):
+    """Which inputs a model drafted (studio.recipes.assist; principle 3)."""
+    p = CONTENT / "read-aloud" / "exceptions.json"
+    entries = json.loads(p.read_text())["entries"] if p.exists() else []
+    blocks = [e["idx"] for e in entries if e["chapter"] == n]
+    return {
+        "model": "claude-coding-agent",
+        "by": "the coding agent and its helper agents",
+        "drafted": [
+            "spoken descriptions of screens, figures and lyric cards (blocks %s)" % (", ".join(map(str, blocks)) or "none"),
+            "pronunciation entries (content/snowmoon/pronunciation.json)",
+        ],
+        "instructions": [AGENT_PROMPTS + "#read-aloud-descriptions-and-invented-word-lists"],
+        "see": "config/models.json drafting; principle 3",
+    }
+
+
+def write_recipe(out, n, manifest):
+    manifest["assist"] = narration_assist(n)
+    text = json.dumps(manifest, indent=2, ensure_ascii=False) + "\n"
+    (out / "manifest.json").write_text(text)
+    # The recipe is also committed to the repo, so the record outlives the local audio.
+    recipes = CONTENT / "recipes" / "narration"
+    recipes.mkdir(parents=True, exist_ok=True)
+    (recipes / f"chapter-{n}.json").write_text(text)
+
+
+def restitch(n, out_root):
+    """Rebuild a chapter's stitched file from its existing block audio (no speech model)."""
+    out = Path(out_root) / f"chapter-{n}"
+    manifest = json.loads((out / "manifest.json").read_text())
+    samples, total = stitch(manifest["blocks"], lambda e: sf.read(out / e["file"], dtype="float32")[0])
+    manifest["stitched"] = write_stitched(out, n, samples)
+    manifest["total_duration_ms"] = total
+    manifest["settings"]["description_tone"] = DESCRIPTION_TONE
+    manifest["restitched_at"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+    write_recipe(out, n, manifest)
+    print(f"chapter {n}: {sum(1 for b in manifest['blocks'] if b.get('tone_ms'))} descriptions with a tone, {total/60000:.1f} min")
+
+
+def sha256_text(s):
+    return hashlib.sha256(s.encode()).hexdigest()
+
+
+_EXCEPTIONS = None
+
+
+def model_drafted_exceptions():
+    global _EXCEPTIONS
+    if _EXCEPTIONS is None:
+        p = CONTENT / "read-aloud" / "exceptions.json"
+        entries = json.loads(p.read_text())["entries"] if p.exists() else []
+        _EXCEPTIONS = {(e["chapter"], e["idx"], e["read_aloud_sha256"]) for e in entries}
+    return _EXCEPTIONS
+
+
 def load_chapter(n):
     chapter = json.loads((CONTENT / "text" / f"chapter-{n}.json").read_text())
     ra_path = CONTENT / "read-aloud" / f"chapter-{n}.json"
@@ -228,6 +355,11 @@ def plan_chapter(n, pron):
                 problems.append(f"chapter {n} b{idx}: {kind} has no read_aloud override for this version")
                 continue
             spoken, status = o["read_aloud"], o["status"]
+            # Principle 2: a spoken description is a person's (written_by) or a
+            # listed model-drafted exception (read-aloud/exceptions.json).
+            if not o.get("written_by") and (n, idx, sha256_text(spoken)) not in model_drafted_exceptions():
+                problems.append(f"chapter {n} b{idx}: description is model-drafted and not in read-aloud/exceptions.json")
+                continue
         else:
             spoken = normalize(block)
         try:
@@ -249,10 +381,15 @@ def main():
     ap.add_argument("--speed", type=float, default=1.0)
     ap.add_argument("--out", default=str(ROOT / "narration-out"))
     ap.add_argument("--check", action="store_true", help="only build and validate the spoken text")
+    ap.add_argument("--stitch-only", action="store_true", help="rebuild stitched chapter files from existing block audio")
     args = ap.parse_args()
 
     lo, _, hi = args.chapter.partition("-")
     chapters = range(int(lo), int(hi or lo) + 1)
+    if args.stitch_only:
+        for n in chapters:
+            restitch(n, args.out)
+        return
     pron = json.loads((CONTENT / "pronunciation.json").read_text())["entries"]
 
     # Validate every chapter before spending any time on audio.
@@ -309,15 +446,12 @@ def narrate_chapter(n, chapter, ra_path, plan, pipeline, voice, recipe, args, de
     print(f"Chapter {n}")
 
     started = time.time()
-    entries, stitched, cursor_ms = [], [], 0
+    entries, audio_by_idx = [], {}
     for block, sent, status in plan:
         idx, kind = block["idx"], block["kind"]
         entry = {"idx": idx, "kind": kind, "block_sha256": block["sha256"]}
-
         if kind == "break":
-            entry.update(file=None, silence_ms=BREAK_MS, start_ms=cursor_ms, duration_ms=BREAK_MS)
-            stitched.append(np.zeros(int(SAMPLE_RATE * BREAK_MS / 1000), dtype=np.float32))
-            cursor_ms += BREAK_MS
+            entry.update(file=None)
             entries.append(entry)
             continue
 
@@ -333,30 +467,18 @@ def narrate_chapter(n, chapter, ra_path, plan, pipeline, voice, recipe, args, de
             file=str(path.relative_to(out)),
             sha256=sha256_file(path),
             duration_ms=duration_ms,
-            start_ms=cursor_ms,
             text=sent,
             generation_s=round(gen_s, 2),
         )
         if status:
             entry.update(read_aloud_status=status)
         entries.append(entry)
-        gap = GAP_AFTER[kind]
-        stitched += [audio, np.zeros(int(SAMPLE_RATE * gap / 1000), dtype=np.float32)]
-        cursor_ms += duration_ms + gap
+        audio_by_idx[idx] = audio
         print(f"  b{idx:03d} {kind:9s} {duration_ms/1000:6.1f}s audio in {gen_s:5.1f}s")
 
     elapsed = time.time() - started
-    wav = out / f"chapter-{n}.wav"
-    sf.write(wav, np.concatenate(stitched), SAMPLE_RATE, subtype="PCM_16")
-    m4a = out / f"chapter-{n}.m4a"
-    subprocess.run(
-        ["ffmpeg", "-y", "-loglevel", "error", "-i", str(wav), "-c:a", "aac", "-b:a", "96k",
-         "-metadata", f"title=Snowmoon, Chapter {n}",
-         "-metadata", "artist=Vitalik Buterin (text); synthetic narration, Kokoro",
-         "-metadata", f"track={n}",
-         "-metadata", "comment=GPL-3.0. https://github.com/We-Are-Lum/snowmoon", str(m4a)],
-        check=True,
-    )
+    samples, cursor_ms = stitch(entries, lambda e: audio_by_idx[e["idx"]])
+    stitched = write_stitched(out, n, samples)
 
     manifest = {
         "work_id": WORK,
@@ -373,26 +495,16 @@ def narrate_chapter(n, chapter, ra_path, plan, pipeline, voice, recipe, args, de
             "device": device,
             "gap_after_ms": GAP_AFTER,
             "break_ms": BREAK_MS,
+            "description_tone": DESCRIPTION_TONE,
             "pronunciation_sha256": sha256_file(CONTENT / "pronunciation.json"),
             "read_aloud_sha256": sha256_file(ra_path) if ra_path.exists() else None,
         },
         "host": {"platform": platform.platform(), "machine": platform.machine(), "python": platform.python_version()},
-        "stitched": {
-            "wav": wav.name,
-            "wav_sha256": sha256_file(wav),
-            "m4a": m4a.name,
-            "m4a_sha256": sha256_file(m4a),
-            "note": "start_ms is the block's offset in the stitched file, gaps included",
-        },
+        "stitched": stitched,
         "blocks": entries,
     }
-    text = json.dumps(manifest, indent=2, ensure_ascii=False) + "\n"
-    (out / "manifest.json").write_text(text)
-    # The recipe is also committed to the repo, so the record outlives the local audio.
-    recipes = CONTENT / "recipes" / "narration"
-    recipes.mkdir(parents=True, exist_ok=True)
-    (recipes / f"chapter-{n}.json").write_text(text)
-    print(f"  {cursor_ms/60000:.1f} min of audio in {elapsed/60:.1f} min -> {m4a}")
+    write_recipe(out, n, manifest)
+    print(f"  {cursor_ms/60000:.1f} min of audio in {elapsed/60:.1f} min -> {out / stitched['m4a']}")
 
 
 if __name__ == "__main__":

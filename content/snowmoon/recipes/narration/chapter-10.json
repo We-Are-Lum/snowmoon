@@ -4,7 +4,7 @@
   "source_sha256": "c0f93bbd9e94a20265fd7c1b559c5a5eec6a81d9cbd69d92652ca1a9a6c23dc4",
   "generated_at": "2026-10-03T17:15:57+00:00",
   "generation_seconds": 219.4,
-  "total_duration_ms": 1606175,
+  "total_duration_ms": 1606685,
   "model": {
     "name": "Kokoro-82M",
     "repo": "hexgrad/Kokoro-82M",
@@ -36,7 +36,21 @@
     },
     "break_ms": 1800,
     "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
-    "read_aloud_sha256": "42e8ba000c892761f1ee7e76227f8c8b3497adcd131a9087900dd18af392bc0b"
+    "read_aloud_sha256": "42e8ba000c892761f1ee7e76227f8c8b3497adcd131a9087900dd18af392bc0b",
+    "description_tone": {
+      "notes_hz": [
+        660,
+        990
+      ],
+      "notes_ms": [
+        110,
+        140
+      ],
+      "between_ms": 40,
+      "after_ms": 220,
+      "amplitude": 0.12,
+      "made_by": "code (numpy sine, linear fades)"
+    }
   },
   "host": {
     "platform": "macOS-26.5.1-arm64-arm-64bit",
@@ -45,10 +59,10 @@
   },
   "stitched": {
     "wav": "chapter-10.wav",
-    "wav_sha256": "6d71117357fac832ad92083350deed27dbeaf2bf969cd8e9d376fdd8263675f1",
+    "wav_sha256": "671262524c3b8b31c430eab1881a3d506f689908fcc5122db5c72c5ef0c05aac",
     "m4a": "chapter-10.m4a",
-    "m4a_sha256": "dfa036acdcd1164ae5cc242cae3e9abd2e4867b7fbfc159295e03eef9a492411",
-    "note": "start_ms is the block's offset in the stitched file, gaps included"
+    "m4a_sha256": "0f8fd75beab5f55f926848b986f1eb557641a84284a1a34cbdb49dd72f88d75a",
+    "note": "start_ms is the block's offset in the stitched file, gaps included; a description starts with its tone (tone_ms)"
   },
   "blocks": [
     {
@@ -1122,7 +1136,8 @@
       "start_ms": 763525,
       "text": "A reminder on his watch: Next Keeper meeting starts in five minutes.",
       "generation_s": 0.78,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 98,
@@ -1131,7 +1146,7 @@
       "file": "blocks/c10-b098.wav",
       "sha256": "345020aa5f39ce86b14ba7b25575b673ae9d4d9b2efc912f659482a9e7b3d74b",
       "duration_ms": 1825,
-      "start_ms": 768625,
+      "start_ms": 769135,
       "text": "It was time to go.",
       "generation_s": 0.35
     },
@@ -1142,7 +1157,7 @@
       "file": "blocks/c10-b099.wav",
       "sha256": "c84f9865f6d769f685b03036da069cf1009df17d8026e9ec1f159ebca70ce361",
       "duration_ms": 4325,
-      "start_ms": 770900,
+      "start_ms": 771410,
       "text": "Gladias turned the corner and walked the last few steps toward the booth.",
       "generation_s": 0.73
     },
@@ -1153,7 +1168,7 @@
       "file": "blocks/c10-b100.wav",
       "sha256": "f955f0e1417f0e9dca81235df74a1160ac01fcf2c6bb4b61813e3f02bf38809a",
       "duration_ms": 3100,
-      "start_ms": 775675,
+      "start_ms": 776185,
       "text": "He soon arrived, and slid the barrier open.",
       "generation_s": 0.5
     },
@@ -1164,7 +1179,7 @@
       "file": "blocks/c10-b101.wav",
       "sha256": "f90ccb612e64ebecff0a5be18578825ea308b72b8cd157849a7cd16d7185a59c",
       "duration_ms": 9250,
-      "start_ms": 779225,
+      "start_ms": 779735,
       "text": "There were two other Keepers already sitting inside, one on each side. Both were wearing privacy robes, with their hoods and face coverings still on.",
       "generation_s": 1.56
     },
@@ -1175,7 +1190,7 @@
       "file": "blocks/c10-b102.wav",
       "sha256": "e401a168feee8be1d93798f35874806cdf17d5c2aabe8284d0307ed050530ed2",
       "duration_ms": 1750,
-      "start_ms": 788925,
+      "start_ms": 789435,
       "text": "\"Hello to you both!\"",
       "generation_s": 0.36
     },
@@ -1186,7 +1201,7 @@
       "file": "blocks/c10-b103.wav",
       "sha256": "cf6133f40ad4cd5d6b51c2a52e8752d17b4f579b1fce8044371bc247f67f8cce",
       "duration_ms": 2825,
-      "start_ms": 791125,
+      "start_ms": 791635,
       "text": "\"Hello! I'm Eighteen. Which number are you?\"",
       "generation_s": 0.48
     },
@@ -1197,7 +1212,7 @@
       "file": "blocks/c10-b104.wav",
       "sha256": "a6a57f7a94d9bc453a3955967ee84225febf999e115067149de2b0a4f4c65a2e",
       "duration_ms": 1500,
-      "start_ms": 794400,
+      "start_ms": 794910,
       "text": "\"I'm Six.\"",
       "generation_s": 0.25
     },
@@ -1208,7 +1223,7 @@
       "file": "blocks/c10-b105.wav",
       "sha256": "e7cf3f996942850decfc3a0c21f8d2a7a24b9442a3f441344ac915afdf125787",
       "duration_ms": 1575,
-      "start_ms": 796350,
+      "start_ms": 796860,
       "text": "\"And I'm Nine.\"",
       "generation_s": 0.29
     },
@@ -1219,7 +1234,7 @@
       "file": "blocks/c10-b106.wav",
       "sha256": "42bfbcf5e2eff9ec5f1ac8e54b256e946dbc802263327d40fe8451787ef7e1a7",
       "duration_ms": 3175,
-      "start_ms": 798375,
+      "start_ms": 798885,
       "text": "Eighteen thought for a few moments, and then stood up.",
       "generation_s": 0.52
     },
@@ -1230,7 +1245,7 @@
       "file": "blocks/c10-b107.wav",
       "sha256": "835c1796141328ef94b4efd7b90a65abe807fc1eefbf59d486771e022b2c7430",
       "duration_ms": 4650,
-      "start_ms": 802000,
+      "start_ms": 802510,
       "text": "\"Wait, before anyone else comes here, would you all mind standing up again?\"",
       "generation_s": 0.79
     },
@@ -1241,7 +1256,7 @@
       "file": "blocks/c10-b108.wav",
       "sha256": "07f3bc68e993eab7a0bd832395b2be379acf85402249e56bbd0fdb8cb879225c",
       "duration_ms": 6875,
-      "start_ms": 807100,
+      "start_ms": 807610,
       "text": "Gladias and Nine both stood up, and briefly exited the booth and looked in from the outside, with the door open.",
       "generation_s": 1.12
     },
@@ -1252,7 +1267,7 @@
       "file": "blocks/c10-b109.wav",
       "sha256": "fdac418088bc9e74d8555df43f170570a5e38bfef8fcf3837bbfb45650113f3d",
       "duration_ms": 1925,
-      "start_ms": 814425,
+      "start_ms": 814935,
       "text": "\"Alright, let's take a look.\"",
       "generation_s": 0.33
     },
@@ -1263,7 +1278,7 @@
       "file": "blocks/c10-b110.wav",
       "sha256": "1432cbc7f27850809697e2ed5dca5fead6fd838e45b1c903a5751a1c4c80d230",
       "duration_ms": 15300,
-      "start_ms": 816800,
+      "start_ms": 817310,
       "text": "Eighteen switched his hand device to a different mode, and began waving it around the room. He also took out a drone, and pressed a few buttons on his hand device. The drone began flying around the room near the edges, both above and below the table.",
       "generation_s": 2.41
     },
@@ -1274,7 +1289,7 @@
       "file": "blocks/c10-b111.wav",
       "sha256": "685a9fa5e03bd3ede9861f02f6a7717f5d8fa2112389b05088470ea52feaddda",
       "duration_ms": 7100,
-      "start_ms": 832550,
+      "start_ms": 833060,
       "text": "Eighteen and Nine watched silently as Eighteen did his scan, and two more Keepers arrived and quietly joined them.",
       "generation_s": 1.16
     },
@@ -1285,7 +1300,7 @@
       "file": "blocks/c10-b112.wav",
       "sha256": "8d98ee8e91879a6f5a3222307a97e936ca2f90e282a8bf690e56853eb42572db",
       "duration_ms": 5525,
-      "start_ms": 840100,
+      "start_ms": 840610,
       "text": "\"Hmm, nothing transmitting, not picking up any powered electronics with thermal either.\"",
       "generation_s": 0.91
     },
@@ -1296,7 +1311,7 @@
       "file": "blocks/c10-b113.wav",
       "sha256": "e9ba1f22ea4ab2c134fc04b68124a39934d0a8e1c02a8068c81e249f98b5916c",
       "duration_ms": 5975,
-      "start_ms": 846075,
+      "start_ms": 846585,
       "text": "A minute later, the drone beeped unexpectedly just above the middle of the table at the far end.",
       "generation_s": 0.98
     },
@@ -1307,7 +1322,7 @@
       "file": "blocks/c10-b114.wav",
       "sha256": "5ef26aca2a2a6e84630ca15b42b17d438bdc30e5551e7c67b99d68296328ebe2",
       "duration_ms": 15000,
-      "start_ms": 852500,
+      "start_ms": 853010,
       "text": "Eighteen jumped to that position with his hand device, and started looking and poking at the table intensely. A few moments later, he stood up triumphantly holding up in his hand a needle-like device, with a bulb a few millimeters wide at its tip.",
       "generation_s": 2.26
     },
@@ -1318,7 +1333,7 @@
       "file": "blocks/c10-b115.wav",
       "sha256": "9c91d4fa510266af9db076cd78a911333a250282aafaa85c413b5d1483053bb5",
       "duration_ms": 2475,
-      "start_ms": 867950,
+      "start_ms": 868460,
       "text": "\"What is that?\", Gladias asked.",
       "generation_s": 0.41
     },
@@ -1329,7 +1344,7 @@
       "file": "blocks/c10-b116.wav",
       "sha256": "f839e28da8865d294eadeb407095c16acbac4629d5794a8e5d20b3e2f54fd9e8",
       "duration_ms": 11950,
-      "start_ms": 870875,
+      "start_ms": 871385,
       "text": "\"Spying device. There was a small bump on the table, and this was under it. Definitely takes some skill to insert one of these and then fix up the table this well afterward.\", Eighteen replied.",
       "generation_s": 1.84
     },
@@ -1340,7 +1355,7 @@
       "file": "blocks/c10-b117.wav",
       "sha256": "e2c0038528e1a48a2d7fff7f3fb399a8fe1e5c891aa8f94649f599a897609e5d",
       "duration_ms": 1300,
-      "start_ms": 883275,
+      "start_ms": 883785,
       "text": "\"Wow.\"",
       "generation_s": 0.23
     },
@@ -1351,7 +1366,7 @@
       "file": "blocks/c10-b118.wav",
       "sha256": "a1c8b66c668b4f88dd30c33708931f73bbf950f35d28d5a246779cfa2c9c2b4a",
       "duration_ms": 3550,
-      "start_ms": 885025,
+      "start_ms": 885535,
       "text": "Nine stepped forward and looked at the device briefly.",
       "generation_s": 0.58
     },
@@ -1362,7 +1377,7 @@
       "file": "blocks/c10-b119.wav",
       "sha256": "311e267b9d8de220864451e91d80e348699f992721b668e74c29f55601fe67e8",
       "duration_ms": 29150,
-      "start_ms": 889025,
+      "start_ms": 889535,
       "text": "\"I doubt it was meant against us\", he said. \"Normally, the goal of people who do this is to get information about upcoming business decisions, and trade based on that in the financial markets. Usually, smaller businesses who are less careful. The Order is quite safe against this. Our Keeper group is only one of three discussion groups, so even if you do overhear us all you're only getting one third of the perspective. And we're all speaking through our neck bands so the sound is going between us digitally.\"",
       "generation_s": 4.48
     },
@@ -1373,7 +1388,7 @@
       "file": "blocks/c10-b120.wav",
       "sha256": "a69cbee4cf03b1259674e4163d81c4547805c6bc70d3ad67becf9c2a4a52bb75",
       "duration_ms": 9625,
-      "start_ms": 918625,
+      "start_ms": 919135,
       "text": "\"Actually this one had a camera. It can read your lips and your neck, so there might still be enough information to pick up some words, especially if you're a beginner.\"",
       "generation_s": 1.67
     },
@@ -1384,7 +1399,7 @@
       "file": "blocks/c10-b121.wav",
       "sha256": "107f8d14032bc5a0ebde7d11281b07af5bcb955dd9705b64a2f31001c354c86f",
       "duration_ms": 1475,
-      "start_ms": 928700,
+      "start_ms": 929210,
       "text": "\"How do you know?\"",
       "generation_s": 0.26
     },
@@ -1395,7 +1410,7 @@
       "file": "blocks/c10-b122.wav",
       "sha256": "78b113c19a514ea5e35e678fc2b96c9664e2086dded6df982f4a52ae5a2c217d",
       "duration_ms": 13025,
-      "start_ms": 930625,
+      "start_ms": 931135,
       "text": "\"That's how the drone detected it, infrared light reflected off the camera lens. My hand device caught it too with the nonlinear junction detector, but I may well have missed it if the drone did not tell me where to look.\"",
       "generation_s": 2.45
     },
@@ -1406,7 +1421,7 @@
       "file": "blocks/c10-b123.wav",
       "sha256": "3f22fa1c64da98b6c860818acd96aea6efd7126077f73458ec6dd56c3ceee974",
       "duration_ms": 2275,
-      "start_ms": 944100,
+      "start_ms": 944610,
       "text": "The last two Keepers arrived.",
       "generation_s": 0.48
     },
@@ -1417,7 +1432,7 @@
       "file": "blocks/c10-b124.wav",
       "sha256": "cd3320122680c0687d25d6d60032de5f3c3514cafe7f819b911ef744a8f99d77",
       "duration_ms": 12975,
-      "start_ms": 946825,
+      "start_ms": 947335,
       "text": "Eighteen stepped out, explained the situation, and the group looked at the listening device together. A few Keepers scanned it with their hand devices. When they were done, Eighteen snapped the listening device in half.",
       "generation_s": 2.01
     },
@@ -1428,7 +1443,7 @@
       "file": "blocks/c10-b125.wav",
       "sha256": "86dcc034625968f3d752bf581e879e64a701df318e28c9053d586f97b9f31a95",
       "duration_ms": 5775,
-      "start_ms": 960250,
+      "start_ms": 960760,
       "text": "Eighteen led the group to another open booth a few meters away, and slid the booth door open.",
       "generation_s": 1.02
     },
@@ -1439,7 +1454,7 @@
       "file": "blocks/c10-b126.wav",
       "sha256": "6b6b8504e9d96e72c8d8a5aa67f49af645a22c376a005b40043c1e3fc4936eeb",
       "duration_ms": 13075,
-      "start_ms": 966475,
+      "start_ms": 966985,
       "text": "He spent two minutes checking the new booth for bugs, again using both his own hand device and his drone. Once he was done, he motioned with his hand, and all seven Keepers entered and sat down on the benches.",
       "generation_s": 2.34
     },
@@ -1450,7 +1465,7 @@
       "file": "blocks/c10-b127.wav",
       "sha256": "4063761a69a9894d5d0c81bedcad9d8538ee39eb93045316cd95255948395bae",
       "duration_ms": 4775,
-      "start_ms": 980000,
+      "start_ms": 980510,
       "text": "One of the newly-arrived Keepers cleared his throat, as though preparing to speak.",
       "generation_s": 0.77
     },
@@ -1461,7 +1476,7 @@
       "file": "blocks/c10-b128.wav",
       "sha256": "026e88f98e8d1cc47f5677fceb247045e5dcfbc3508a7fd85f64525fa618a7da",
       "duration_ms": 3250,
-      "start_ms": 985225,
+      "start_ms": 985735,
       "text": "\"Maybe let's get to business?\", the Keeper asked.",
       "generation_s": 0.5
     },
@@ -1472,7 +1487,7 @@
       "file": "blocks/c10-b129.wav",
       "sha256": "51764970dc169905376eb76f6a78000c0ae3b531d3dcb9507ecf95ec772ef043",
       "duration_ms": 2400,
-      "start_ms": 988925,
+      "start_ms": 989435,
       "text": "\"Sure!\", Gladias replied.",
       "generation_s": 0.37
     },
@@ -1483,7 +1498,7 @@
       "file": "blocks/c10-b130.wav",
       "sha256": "11cd497cc11bc6abb646ba30609951b79722096f8883646fa70d028667b44dc0",
       "duration_ms": 6200,
-      "start_ms": 991775,
+      "start_ms": 992285,
       "text": "\"So we're supposed to be talking about the openness rubric, and how to adjust it for military hardware.\"",
       "generation_s": 1.08
     },
@@ -1494,7 +1509,7 @@
       "file": "blocks/c10-b131.wav",
       "sha256": "e1bab86f9e8f3a4a71a2403df59f6aa22d240dd178c1eaf8fa1159e5c887eafa",
       "duration_ms": 1875,
-      "start_ms": 998425,
+      "start_ms": 998935,
       "text": "\"Yep, I read the docs.\"",
       "generation_s": 0.33
     },
@@ -1505,7 +1520,7 @@
       "file": "blocks/c10-b132.wav",
       "sha256": "71aa870793ab52b324de28e39015a43a6143f21f1a27202bb3ac0f29f56f767d",
       "duration_ms": 9525,
-      "start_ms": 1000750,
+      "start_ms": 1001260,
       "text": "\"And I've had some conversations with Zero over there. His argument is that we should just exempt military hardware completely. I'll let him explain why.\"",
       "generation_s": 1.44
     },
@@ -1516,7 +1531,7 @@
       "file": "blocks/c10-b133.wav",
       "sha256": "00b4ac3d15158cc7788fd2a33791f5dd24083ce6349932a5f36240185a509509",
       "duration_ms": 3475,
-      "start_ms": 1010725,
+      "start_ms": 1011235,
       "text": "Zero heard his number, and quickly raised his head.",
       "generation_s": 0.52
     },
@@ -1527,7 +1542,7 @@
       "file": "blocks/c10-b134.wav",
       "sha256": "ce08ab786c3256c1b9c492ce64dfde97b732934858e3f2c7472384af9cb0d9d0",
       "duration_ms": 6600,
-      "start_ms": 1014650,
+      "start_ms": 1015160,
       "text": "\"So normally, open hardware is good, because other people can build on it, and everyone benefits, right?\"",
       "generation_s": 0.93
     },
@@ -1538,7 +1553,7 @@
       "file": "blocks/c10-b135.wav",
       "sha256": "8c399de5f14e7455f615ef3f99539882d359cc45bbcaac4de847b7d85ca04ba7",
       "duration_ms": 1325,
-      "start_ms": 1021700,
+      "start_ms": 1022210,
       "text": "\"Right.\"",
       "generation_s": 0.22
     },
@@ -1549,7 +1564,7 @@
       "file": "blocks/c10-b136.wav",
       "sha256": "202a6b9e71940de3d07f5a020cec52410912f9d21d944b5f70a7370cbba78843",
       "duration_ms": 13475,
-      "start_ms": 1023475,
+      "start_ms": 1023985,
       "text": "\"But think about what happens with anything military. There isn't actually a net benefit to the world from everyone having better weapons. If everyone has twice as good swords and twice as good shields, the two cancel out.\"",
       "generation_s": 2.04
     },
@@ -1560,7 +1575,7 @@
       "file": "blocks/c10-b137.wav",
       "sha256": "af4b3353454552ac304e80c37637cd12c6b755bc763cc1083c32bd7fc0cb3292",
       "duration_ms": 9650,
-      "start_ms": 1037400,
+      "start_ms": 1037910,
       "text": "\"If everyone has twice as good swords but shields stay the same, then the benefits to the two sides in any war still cancel out, but more people get hurt.\"",
       "generation_s": 1.53
     },
@@ -1571,7 +1586,7 @@
       "file": "blocks/c10-b138.wav",
       "sha256": "e9a77d85dba76a9d50a8adb594e3e237ae70faa0daa97230483f5b9bfdc1de46",
       "duration_ms": 5450,
-      "start_ms": 1047500,
+      "start_ms": 1048010,
       "text": "\"But if everyone has twice as good shields but swords stay the same, isn't that good?\"",
       "generation_s": 0.9
     },
@@ -1582,7 +1597,7 @@
       "file": "blocks/c10-b139.wav",
       "sha256": "237bc2f03d67d510b4518bfe4b9ca4bb277183061c873582688f2d7c3d7f5e95",
       "duration_ms": 17300,
-      "start_ms": 1053400,
+      "start_ms": 1053910,
       "text": "\"Well, maybe\", Nine interjected. \"But actually it's even more complicated than that. What if it's a war of attrition, so if everyone has more defense, the same number of people get hurt, it just takes longer? Or what if increasing defense reduces deterrence, so more wars happen?\"",
       "generation_s": 3.19
     },
@@ -1593,7 +1608,7 @@
       "file": "blocks/c10-b140.wav",
       "sha256": "183e2110852a15c93c2fceb9fb3e4d3d7c570b014ce5a0faa763ef36af6fb3d1",
       "duration_ms": 7200,
-      "start_ms": 1071150,
+      "start_ms": 1071660,
       "text": "Gladias was surprised: the argument was eerily similar to an argument that Delwart had expressed to him recently.",
       "generation_s": 1.18
     },
@@ -1604,7 +1619,7 @@
       "file": "blocks/c10-b141.wav",
       "sha256": "354ce297f5c13e60a3b4f0c982fcd862ecc050c759e70f5d9ec4a8fab7791c21",
       "duration_ms": 17475,
-      "start_ms": 1078800,
+      "start_ms": 1079310,
       "text": "\"Basically, the game tree is just so chaotic that we can't reliably be sure of anything at all. So I think we should just stay out. And instead just increase Steering taxes on all military hardware, open or not, push people to make more useful and pro-human and fun things instead.\"",
       "generation_s": 2.5
     },
@@ -1615,7 +1630,7 @@
       "file": "blocks/c10-b142.wav",
       "sha256": "50a7f4a90d58d7723a70399647e183dd52ae9144814948d238a622858daececb",
       "duration_ms": 2125,
-      "start_ms": 1096725,
+      "start_ms": 1097235,
       "text": "A third-year interjected:",
       "generation_s": 0.32
     },
@@ -1626,7 +1641,7 @@
       "file": "blocks/c10-b143.wav",
       "sha256": "7cde249a0091d4413d43007e52b267cfd50f69b2cf1cfb24dece9f8833cf22e5",
       "duration_ms": 29025,
-      "start_ms": 1099300,
+      "start_ms": 1099810,
       "text": "\"I don't think it's true that we can't be sure of anything. Look at the United Cities. I think it's pretty clear that a big reason they all managed to stay independent from each other for centuries, and figured out things like co-governance to nudge each other to cooperate better without just turning into one big blob, is that they have so many mountains and peninsulas on their continent. So if everyone has more defense, more people can keep their freedom and sovereignty. I think we can be quite confident of that.\"",
       "generation_s": 4.88
     },
@@ -1637,7 +1652,7 @@
       "file": "blocks/c10-b144.wav",
       "sha256": "202707a7750f6f555ac24126b71f481cc46c4c403c574eab6ea6713cd53567d5",
       "duration_ms": 5175,
-      "start_ms": 1128775,
+      "start_ms": 1129285,
       "text": "Eighteen raised his hand again. The others turned to him, and he began to speak.",
       "generation_s": 0.75
     },
@@ -1648,7 +1663,7 @@
       "file": "blocks/c10-b145.wav",
       "sha256": "16b2c91f493ae8116882c60efebd81efd1932034e87e6c9c10ee6cea5e6976c3",
       "duration_ms": 15250,
-      "start_ms": 1134400,
+      "start_ms": 1134910,
       "text": "\"I don't think we can look at the situation like it's a black box like that. Let's look at where we are now. The Arctic Empire's technology is the most advanced. Ours is second. On military tech, [Dzego](/ˈdzɛɡO/) and the United Cities are furthest behind.\"",
       "generation_s": 2.1
     },
@@ -1659,7 +1674,7 @@
       "file": "blocks/c10-b146.wav",
       "sha256": "2ee84b14f54a6a0d558a6f7a112d86202a987b69c12c2d5100bf23074f9ced29",
       "duration_ms": 10725,
-      "start_ms": 1150100,
+      "start_ms": 1150610,
       "text": "\"And so when we release open-source military-relevant anything, it doesn't benefit the Arctics at all, and it's marginally good for us because it makes it easier for us to make more.\"",
       "generation_s": 1.56
     },
@@ -1670,7 +1685,7 @@
       "file": "blocks/c10-b147.wav",
       "sha256": "a69b0a70157574001c2a078e5ffe78379fd575f92a8e1d4100ea3cceec6c6f8f",
       "duration_ms": 31425,
-      "start_ms": 1161275,
+      "start_ms": 1161785,
       "text": "\"But for [Dzego](/ˈdzɛɡO/), it's a lifeline. They're not set up to invent their own proprietary stuff at the top end, but they're really good at building and adapting from open-source plans. Twenty years ago, when we got our programming languages and formal verification to the point where our devices basically stopped having critical errors in their code that could let someone take it over from the outside, the fact that it was open allowed the [Dzegojan](/ˈdzɛɡOʤɑn/) to adopt those techniques, and protect themselves much better from Arctic sabotage.\"",
       "generation_s": 5.14
     },
@@ -1681,7 +1696,7 @@
       "file": "blocks/c10-b148.wav",
       "sha256": "c5927e5da5919eb89146b4c76d8c281cd70bdd7410ea10dbf1566b19118c903f",
       "duration_ms": 17575,
-      "start_ms": 1193150,
+      "start_ms": 1193660,
       "text": "\"But do we really want to play this game\", Zero continued, \"being so confident in our view of who's good and who's bad? Computer security was defensive, fine. But the next technology we invent might be offensive. Won't we just accelerate the arms race even more for everyone?\"",
       "generation_s": 2.65
     },
@@ -1692,7 +1707,7 @@
       "file": "blocks/c10-b149.wav",
       "sha256": "0eba019939aa79b1ffdf4cb076fdcd6e6e080b81b9ed4444b50c9a57a5f13596",
       "duration_ms": 16450,
-      "start_ms": 1211175,
+      "start_ms": 1211685,
       "text": "\"I'm not even that convinced the Arctics are that big a threat. Sure, they're waving more drones around the northern United Cities now, but I don't think the intention is to attack, I think they're just trying to impress us with their power so we become attracted to their ideology.\"",
       "generation_s": 2.4
     },
@@ -1703,7 +1718,7 @@
       "file": "blocks/c10-b150.wav",
       "sha256": "11277ecaf441d288acffff814dc0acbd4493be0ef1f0733d5f0cca01e920db74",
       "duration_ms": 3550,
-      "start_ms": 1228075,
+      "start_ms": 1228585,
       "text": "\"Do you think we should be more receptive to their ideology?\"",
       "generation_s": 0.55
     },
@@ -1714,7 +1729,7 @@
       "file": "blocks/c10-b151.wav",
       "sha256": "0de122c9a5980b79c9c15fd34f86f1e73d08887c9b63f88407ff3bd702cd0851",
       "duration_ms": 7125,
-      "start_ms": 1232075,
+      "start_ms": 1232585,
       "text": "\"I think we should keep an open mind. Just remember, the [Dzegojan](/ˈdzɛɡOʤɑn/) are definitely trying to manipulate us too.\"",
       "generation_s": 1.05
     },
@@ -1725,7 +1740,7 @@
       "file": "blocks/c10-b152.wav",
       "sha256": "de3458dcd7452171b1813ace05c1e404e0a70ed5f91aef3a4d689f1e9bfaab3f",
       "duration_ms": 9900,
-      "start_ms": 1239650,
+      "start_ms": 1240160,
       "text": "For a few moments, the discussion went quiet. Gladias let it rest. He was still trying to understand how everyone else was thinking before forming his own views.",
       "generation_s": 1.44
     },
@@ -1736,7 +1751,7 @@
       "file": "blocks/c10-b153.wav",
       "sha256": "2e6aaaacdd43a69a1a85c0beb1d33d0c1e679dd54ccd0752a1c14eb86a5ab2b7",
       "duration_ms": 11475,
-      "start_ms": 1250000,
+      "start_ms": 1250510,
       "text": "\"Let's all think about this more on our own. We'll keep talking about this, we still have a few more discussions, the last one is in four months. And then the actual vote is only in six months.\"",
       "generation_s": 1.64
     },
@@ -1746,7 +1761,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 1261925,
+      "start_ms": 1262435,
       "duration_ms": 1800
     },
     {
@@ -1756,7 +1771,7 @@
       "file": "blocks/c10-b155.wav",
       "sha256": "523f6cf006a080d3173228ee94fdcf1b390a3cd3d19e4c3db3aa28d45267bf2a",
       "duration_ms": 2200,
-      "start_ms": 1263725,
+      "start_ms": 1264235,
       "text": "[Pafogai](/ˈpɑfOɡI/) [Du](/ˈdu/), [Dzego](/ˈdzɛɡO/).",
       "generation_s": 0.4
     },
@@ -1767,7 +1782,7 @@
       "file": "blocks/c10-b156.wav",
       "sha256": "4d9c3346b0436a4ef3b8ca82c91e71377ec6bb9e43e454faedd546add72aeb33",
       "duration_ms": 5725,
-      "start_ms": 1266825,
+      "start_ms": 1267335,
       "text": "[Bai](/ˈbI/) and [Zei](/ˈzA/) sat together at a courtyard table, both staring at their hand devices.",
       "generation_s": 0.86
     },
@@ -1778,7 +1793,7 @@
       "file": "blocks/c10-b157.wav",
       "sha256": "d63078fe99694cfb3939e0f6a5915f39276bbb9dadf6ba2ce4cebc3f8bef2263",
       "duration_ms": 3175,
-      "start_ms": 1273000,
+      "start_ms": 1273510,
       "text": "\"[Fin](/ˈfɪn/) not joining us this time?\", [Bai](/ˈbI/) asked.",
       "generation_s": 0.45
     },
@@ -1789,7 +1804,7 @@
       "file": "blocks/c10-b158.wav",
       "sha256": "854866ca3f0a550a24187283b7d6d3844994fe46acfbd3b92c0b1b10c8dae74a",
       "duration_ms": 5925,
-      "start_ms": 1276625,
+      "start_ms": 1277135,
       "text": "\"No\", [Zei](/ˈzA/) replied with a strong hint of disappointment. \"He's busy with the [Bansunpei](/ˈbɑnsunpA/).\"",
       "generation_s": 0.82
     },
@@ -1800,7 +1815,7 @@
       "file": "blocks/c10-b159.wav",
       "sha256": "d6812193574134f5a799c893f14ad20c8000d8c30044186e6390518d37a0f5d2",
       "duration_ms": 9575,
-      "start_ms": 1283000,
+      "start_ms": 1283510,
       "text": "The hand devices buzzed. It was their intervention turn. [Zei](/ˈzA/) arranged a few gliders and symbol-carrying spaceships. A few hundred turns passed.",
       "generation_s": 1.34
     },
@@ -1811,7 +1826,7 @@
       "file": "blocks/c10-b160.wav",
       "sha256": "ec4c2bc94855529b3af71261bc821cfaa1d310c270150881ca8af80e637d4923",
       "duration_ms": 10050,
-      "start_ms": 1293025,
+      "start_ms": 1293535,
       "text": "Suddenly, as the spaceship hit a rock formation and was in the process of reflecting, gliders from [Bai](/ˈbI/) hit it. The spaceship exploded into a storm of gliders.",
       "generation_s": 1.36
     },
@@ -1822,7 +1837,7 @@
       "file": "blocks/c10-b161.wav",
       "sha256": "50b1ccf4c0751cf110ca241dadac5dfed173215ccf858f0e141c00807832a312",
       "duration_ms": 1975,
-      "start_ms": 1303525,
+      "start_ms": 1304035,
       "text": "\"What?\", [Zei](/ˈzA/) shouted.",
       "generation_s": 0.29
     },
@@ -1833,7 +1848,7 @@
       "file": "blocks/c10-b162.wav",
       "sha256": "85348ac07c14c8ba7538ca4be41de54cdca7862bd37a7a79283b142b583b27ea",
       "duration_ms": 8100,
-      "start_ms": 1305950,
+      "start_ms": 1306460,
       "text": "\"Caught you, I had a symbol along the path, right in the position where you could not see it. So I could see the edge of your spaceship coming.\"",
       "generation_s": 1.08
     },
@@ -1844,7 +1859,7 @@
       "file": "blocks/c10-b163.wav",
       "sha256": "dbccb05293aeacd8e064cec2615ac0781925aecde5356137fd1592e752183cc9",
       "duration_ms": 10950,
-      "start_ms": 1314500,
+      "start_ms": 1315010,
       "text": "[Zei](/ˈzA/) groaned. That had been his last-ditch attempt to rescue the game. More gliders from [Bai](/ˈbI/) came in, and shredded through both of his remaining symbols in the southwest corner.",
       "generation_s": 1.5
     },
@@ -1855,7 +1870,7 @@
       "file": "blocks/c10-b164.wav",
       "sha256": "70c20d1567dd3252da94f4f57685610288bbc797821df8be22ada838e4812760",
       "duration_ms": 2400,
-      "start_ms": 1325900,
+      "start_ms": 1326410,
       "text": "[Zei](/ˈzA/) clicked a button to resign.",
       "generation_s": 0.35
     },
@@ -1866,7 +1881,7 @@
       "file": "blocks/c10-b165.wav",
       "sha256": "94cd2e22bd7b74ebd1effa581c3efba461291fc344ac37f0023dcf3b17c176e8",
       "duration_ms": 8650,
-      "start_ms": 1328750,
+      "start_ms": 1329260,
       "text": "\"Good game\", [Zei](/ˈzA/) said, not yet with total sincerity, but with more sincerity than he had in any game where he had lost to [Bai](/ˈbI/) before.",
       "generation_s": 1.19
     },
@@ -1877,7 +1892,7 @@
       "file": "blocks/c10-b166.wav",
       "sha256": "58012aa0006f3a4e3028c0c5371b3126d09f74968ee495016abd5d6b74bbd81e",
       "duration_ms": 3275,
-      "start_ms": 1337850,
+      "start_ms": 1338360,
       "text": "\"You know, I am going to need your help in the nationals.\"",
       "generation_s": 0.47
     },
@@ -1888,7 +1903,7 @@
       "file": "blocks/c10-b167.wav",
       "sha256": "887ea8725b95ab1a5f998053e0efb726be8c20bf7793ef5e78f1017e5803d40a",
       "duration_ms": 2250,
-      "start_ms": 1341575,
+      "start_ms": 1342085,
       "text": "\"Happy to. As long as...\"",
       "generation_s": 0.31
     },
@@ -1899,7 +1914,7 @@
       "file": "blocks/c10-b168.wav",
       "sha256": "c0c828592b3dc2f58c4b0c2916d2a37f6022e5f1a4390863295942df3f4868b7",
       "duration_ms": 3275,
-      "start_ms": 1344275,
+      "start_ms": 1344785,
       "text": "\"Yes, I know, you want to visit Veridia now.\"",
       "generation_s": 0.42
     },
@@ -1910,7 +1925,7 @@
       "file": "blocks/c10-b169.wav",
       "sha256": "7a3ff32aeb8c39d037792848b31b56eb4689c10e38e2bf2ce1651f2bc124a2a3",
       "duration_ms": 5875,
-      "start_ms": 1348000,
+      "start_ms": 1348510,
       "text": "\"Anyway, thanks for explaining your thought process in that championship game. Really made me think.\"",
       "generation_s": 0.77
     },
@@ -1921,7 +1936,7 @@
       "file": "blocks/c10-b170.wav",
       "sha256": "6de7a67f5af6ace39bde97b9591b7fcb6295cf9cee3d68c14019db3717697e3f",
       "duration_ms": 1525,
-      "start_ms": 1354325,
+      "start_ms": 1354835,
       "text": "\"Of course.\"",
       "generation_s": 0.22
     },
@@ -1932,7 +1947,7 @@
       "file": "blocks/c10-b171.wav",
       "sha256": "03d03646400ffcd96bdc75afa03cd1fd158d2ebc7e3e74e62d45947325964298",
       "duration_ms": 6150,
-      "start_ms": 1356300,
+      "start_ms": 1356810,
       "text": "\"Of course you enjoy reliving the moment you defeated me, just like I enjoyed beating you right now.\"",
       "generation_s": 0.8
     },
@@ -1943,7 +1958,7 @@
       "file": "blocks/c10-b172.wav",
       "sha256": "c2f4456e9cab6fd0a29d101d5460708bda58e63ba12595e18c8b956328889d38",
       "duration_ms": 1575,
-      "start_ms": 1362900,
+      "start_ms": 1363410,
       "text": "[Zei](/ˈzA/) sighed.",
       "generation_s": 0.23
     },
@@ -1954,7 +1969,7 @@
       "file": "blocks/c10-b173.wav",
       "sha256": "902f8cc936bd02d56d8be8852120fdd3dce1ba158fcbebd012ac64af0f1eb8f5",
       "duration_ms": 5575,
-      "start_ms": 1364925,
+      "start_ms": 1365435,
       "text": "\"Anyway, I have to go. The [Kungaupei](/ˈkunɡWpA/) councilor, [Den](/ˈdɛn/), is asking to see me again.\"",
       "generation_s": 0.72
     },
@@ -1964,7 +1979,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 1370950,
+      "start_ms": 1371460,
       "duration_ms": 1800
     },
     {
@@ -1974,7 +1989,7 @@
       "file": "blocks/c10-b175.wav",
       "sha256": "607b7ff436476b0907a84a586b9ab33cbc314b5ee9ebc44b7936813207630d87",
       "duration_ms": 5475,
-      "start_ms": 1372750,
+      "start_ms": 1373260,
       "text": "[Zei](/ˈzA/) entered the long room, and immediately saw [Den](/ˈdɛn/) and [Mu](/ˈmu/) sitting on the other side.",
       "generation_s": 0.73
     },
@@ -1985,7 +2000,7 @@
       "file": "blocks/c10-b176.wav",
       "sha256": "befe42503b7797937223002fa5f5a6619da883e1208eb0e4f5c167ba54651a4a",
       "duration_ms": 1775,
-      "start_ms": 1378675,
+      "start_ms": 1379185,
       "text": "\"Thank you for coming.\"",
       "generation_s": 0.25
     },
@@ -1996,7 +2011,7 @@
       "file": "blocks/c10-b177.wav",
       "sha256": "b6ec65efa808bb90e4f7a1649f22f7cb820d94d57e3f9e55e1bbf632f9afdb57",
       "duration_ms": 9775,
-      "start_ms": 1380900,
+      "start_ms": 1381410,
       "text": "\"Of course. I went through the hash-based signatures you recommended. It's a really fun set of constructions, especially the stateless tree-of-tree-based ones.\"",
       "generation_s": 1.31
     },
@@ -2007,7 +2022,7 @@
       "file": "blocks/c10-b178.wav",
       "sha256": "1c885e40192ded0179904daeb0eac33576dafbc7ce5e86789e5e659d36c7b761",
       "duration_ms": 5350,
-      "start_ms": 1391125,
+      "start_ms": 1391635,
       "text": "\"Do you see why, when I looked at your style of [Minpentai](/ˈmɪnpɛntI/), I knew that you would do well in this?\"",
       "generation_s": 0.74
     },
@@ -2018,7 +2033,7 @@
       "file": "blocks/c10-b179.wav",
       "sha256": "03e81ba8157966ef710a38c7c0fc4bae269289f7e02baae320a1ef3c92903441",
       "duration_ms": 1575,
-      "start_ms": 1396925,
+      "start_ms": 1397435,
       "text": "\"I think so!\"",
       "generation_s": 0.24
     },
@@ -2029,7 +2044,7 @@
       "file": "blocks/c10-b180.wav",
       "sha256": "11b48b49f3ed233d5af5ee6de3f0e70dc7081f96b4636ccbf51f215ce1852a70",
       "duration_ms": 11775,
-      "start_ms": 1398950,
+      "start_ms": 1399460,
       "text": "\"You are truly amazing. You've rushed through a third of the cryptography lectures in less than a month, and got a perfect score on both of the first two tests. I can't think of anyone who did better.\"",
       "generation_s": 1.56
     },
@@ -2040,7 +2055,7 @@
       "file": "blocks/c10-b181.wav",
       "sha256": "6737270bb9835890f2193346d581f5226351ffc4fca4f5b96ef539aba82bf46d",
       "duration_ms": 4400,
-      "start_ms": 1411175,
+      "start_ms": 1411685,
       "text": "[Zei](/ˈzA/)'s eyes gleamed with satisfaction at receiving the compliment.",
       "generation_s": 0.61
     },
@@ -2051,7 +2066,7 @@
       "file": "blocks/c10-b182.wav",
       "sha256": "d01f5045242a974f3f93c18b5e2e4cea5c60de4726cfa7d976cd8be0b50c0f47",
       "duration_ms": 2400,
-      "start_ms": 1416025,
+      "start_ms": 1416535,
       "text": "\"[Zei](/ˈzA/), do you know why I called you in?\"",
       "generation_s": 0.33
     },
@@ -2062,7 +2077,7 @@
       "file": "blocks/c10-b183.wav",
       "sha256": "323ab99f15d65bcfb8c68f1ceb2f6ec874a0d1f460b41fc7e4fc00301042e1b4",
       "duration_ms": 9350,
-      "start_ms": 1418875,
+      "start_ms": 1419385,
       "text": "At this point, [Zei](/ˈzA/) realized one possible implication of [Den](/ˈdɛn/)'s words, and his cheerful facial expression suddenly dropped into a fearful one.",
       "generation_s": 1.23
     },
@@ -2073,7 +2088,7 @@
       "file": "blocks/c10-b184.wav",
       "sha256": "12e4e591372df58d7a59b6014703cc644e8aadfa3a00a7dbfc4d4ebf9dea0329",
       "duration_ms": 5900,
-      "start_ms": 1428675,
+      "start_ms": 1429185,
       "text": "\"Are you going to convince me to go into this full-time? Like, abandon the [Minpentai](/ˈmɪnpɛntI/) nationals?\"",
       "generation_s": 0.82
     },
@@ -2084,7 +2099,7 @@
       "file": "blocks/c10-b185.wav",
       "sha256": "0205c8ce799f84e92b1681396cef34b578a3c530ff185368fdc013d27ade54ae",
       "duration_ms": 4700,
-      "start_ms": 1435025,
+      "start_ms": 1435535,
       "text": "[Mu](/ˈmu/) laughed. \"So I guess my hunch was wrong — this part, you still don't get.\"",
       "generation_s": 0.66
     },
@@ -2095,7 +2110,7 @@
       "file": "blocks/c10-b186.wav",
       "sha256": "6ad33a8741e2929b13fb345d8bef4deff1f8e42963310c36331e2e2715b23699",
       "duration_ms": 1325,
-      "start_ms": 1440175,
+      "start_ms": 1440685,
       "text": "\"Huh?\"",
       "generation_s": 0.2
     },
@@ -2106,7 +2121,7 @@
       "file": "blocks/c10-b187.wav",
       "sha256": "e3b37c2272c2d6aaf64563c54bddf8f7933443c8aa003ad2e991fe283773d725",
       "duration_ms": 9375,
-      "start_ms": 1441950,
+      "start_ms": 1442460,
       "text": "\"Have you ever thought about why the [Minpentai](/ˈmɪnpɛntI/) game is so serious, so much ceremony, the priests going into the dungeon for days, and so well-funded?\"",
       "generation_s": 1.21
     },
@@ -2117,7 +2132,7 @@
       "file": "blocks/c10-b188.wav",
       "sha256": "c0514f904bf7a2d425fb9cff71c5ff9f1b3c4f4246fe42c1c9159dcbebf0e8b1",
       "duration_ms": 5175,
-      "start_ms": 1451775,
+      "start_ms": 1452285,
       "text": "\"It's a sport. Sports are taken seriously and well-funded in many countries.\"",
       "generation_s": 0.71
     },
@@ -2128,7 +2143,7 @@
       "file": "blocks/c10-b189.wav",
       "sha256": "4639455099caeba39b5fa2a1cdd70db507add74f76d80f325bfa6f8ca091eb02",
       "duration_ms": 9050,
-      "start_ms": 1457400,
+      "start_ms": 1457910,
       "text": "\"Not sports of the mind. Their audience isn't large enough to fund it just based on advertising and national prestige and all those other reasons.\"",
       "generation_s": 1.21
     },
@@ -2139,7 +2154,7 @@
       "file": "blocks/c10-b190.wav",
       "sha256": "2f79de4ff3c3caed7ecc2e3525f9a1a9d91a844225bee42632cd2ca609fcdf91",
       "duration_ms": 1650,
-      "start_ms": 1466900,
+      "start_ms": 1467410,
       "text": "\"So why then?\"",
       "generation_s": 0.26
     },
@@ -2150,7 +2165,7 @@
       "file": "blocks/c10-b191.wav",
       "sha256": "82a2d141266b2b40460549d8b8650bafa6e42a1c52b29d81aa717a4f6ee6822e",
       "duration_ms": 1800,
-      "start_ms": 1469000,
+      "start_ms": 1469510,
       "text": "[Mu](/ˈmu/) leaned forward.",
       "generation_s": 0.44
     },
@@ -2161,7 +2176,7 @@
       "file": "blocks/c10-b192.wav",
       "sha256": "21d8adc2c054b6c697cfbb8ae4faccca4bbfc7298524d6c2beb34fec14ccf866",
       "duration_ms": 2975,
-      "start_ms": 1471250,
+      "start_ms": 1471760,
       "text": "\"It's because [Minpentai](/ˈmɪnpɛntI/) isn't just a sport.\"",
       "generation_s": 0.48
     },
@@ -2172,7 +2187,7 @@
       "file": "blocks/c10-b193.wav",
       "sha256": "6c62cf55c0281fe40b6a062d8a713d0ccef55e8a7c1068cd8d3cd82ca0117bb8",
       "duration_ms": 1600,
-      "start_ms": 1474675,
+      "start_ms": 1475185,
       "text": "[Zei](/ˈzA/) stared.",
       "generation_s": 0.22
     },
@@ -2183,7 +2198,7 @@
       "file": "blocks/c10-b194.wav",
       "sha256": "2d9cf6da666c0da64ad3f95a0a8f0e34bf420cc30424453fdac006ec2b3b1180",
       "duration_ms": 1975,
-      "start_ms": 1476725,
+      "start_ms": 1477235,
       "text": "\"It's military training.\"",
       "generation_s": 0.27
     },
@@ -2194,7 +2209,7 @@
       "file": "blocks/c10-b195.wav",
       "sha256": "01d718a9d8574e3877ee367514682f8f44dc65aa775b43fe356aa656f8e595cc",
       "duration_ms": 6675,
-      "start_ms": 1479150,
+      "start_ms": 1479660,
       "text": "\"The whole point of the sport, and why we support it so much, is to raise the next generation of defenders.\"",
       "generation_s": 0.92
     },
@@ -2205,7 +2220,7 @@
       "file": "blocks/c10-b196.wav",
       "sha256": "08ade61d9cab4cc87b767e8e51b67ba2511853ebdf0883797958e852d333d9ef",
       "duration_ms": 4525,
-      "start_ms": 1486275,
+      "start_ms": 1486785,
       "text": "\"We need people who can think quickly, and think strategically under pressure.\"",
       "generation_s": 0.64
     },
@@ -2216,7 +2231,7 @@
       "file": "blocks/c10-b197.wav",
       "sha256": "a3f219293168213e8fcc00ffd61b3cfb0462d14c5abd955bf01042b2d68eae6b",
       "duration_ms": 8075,
-      "start_ms": 1491250,
+      "start_ms": 1491760,
       "text": "\"People who can compete with their foes, but also cooperate with their allies, even allies that they do not personally get along with.\"",
       "generation_s": 1.09
     },
@@ -2227,7 +2242,7 @@
       "file": "blocks/c10-b198.wav",
       "sha256": "d14f41498211f24779a29fcb239fe33b55003ead6fb88751c837d0a756d06d5b",
       "duration_ms": 14750,
-      "start_ms": 1499775,
+      "start_ms": 1500285,
       "text": "\"People who can understand a battlefield, including the battle itself, all the way up to grand strategy and resources and logistics, and all the way down to the level of surveillance and secrecy and trickery, and ultimately entropy itself.\"",
       "generation_s": 2.81
     },
@@ -2238,7 +2253,7 @@
       "file": "blocks/c10-b199.wav",
       "sha256": "c9b73fe9a8775c50c36c896622c98dfcf95e1a8d4d918286af28dbce63333947",
       "duration_ms": 3100,
-      "start_ms": 1514975,
+      "start_ms": 1515485,
       "text": "\"People who can deal with suddenly changing rules.\"",
       "generation_s": 0.66
     },
@@ -2249,7 +2264,7 @@
       "file": "blocks/c10-b200.wav",
       "sha256": "60ae040cefa111d2ecb8aa557686d6c622c28bfdd7e49ac87fc2d37a7284d753",
       "duration_ms": 6700,
-      "start_ms": 1518525,
+      "start_ms": 1519035,
       "text": "\"People who are able to micromanage, but are also able to set a plan in motion and watch it unfold.\"",
       "generation_s": 0.9
     },
@@ -2260,7 +2275,7 @@
       "file": "blocks/c10-b201.wav",
       "sha256": "1397a0d9818b2091bfa310a02e4e48f452a332c5d741935fb1750409cb4a3fa2",
       "duration_ms": 7650,
-      "start_ms": 1525675,
+      "start_ms": 1526185,
       "text": "\"And people who can work with the latest technology — including AI — but also understand and work around its limits.\"",
       "generation_s": 1.06
     },
@@ -2271,7 +2286,7 @@
       "file": "blocks/c10-b202.wav",
       "sha256": "76d7b6e63463f3e6441abfebe60f0248c10e4ca3d419e3b41c1ffee15fdbb2d3",
       "duration_ms": 25550,
-      "start_ms": 1533775,
+      "start_ms": 1534285,
       "text": "The realizations hit [Zei](/ˈzA/) all at once. At first, he had wanted to ask a basic question: why pretend it's a game, why not just have a regular military with regular recruitment? But as soon as he put together the question, he already knew the answer: the Arctics would put all their energy into targeting anything like that. [Minpentai](/ˈmɪnpɛntI/) was only safe because it pretended to be just a game. But even then, [Zei](/ˈzA/) knew, the ruse could not be safe forever.",
       "generation_s": 3.78
     },
@@ -2282,7 +2297,7 @@
       "file": "blocks/c10-b203.wav",
       "sha256": "ad7df149ae56dd6ef53887a19c11b6c6ee4ecdcb2dda67a8284f3f237cd8717a",
       "duration_ms": 2100,
-      "start_ms": 1559775,
+      "start_ms": 1560285,
       "text": "\"Why are you telling me this now?\"",
       "generation_s": 0.38
     },
@@ -2293,7 +2308,7 @@
       "file": "blocks/c10-b204.wav",
       "sha256": "b87b6d94ab7d710285ad4c4f739baf926e3d19d5c545e2149db902e97526a9c1",
       "duration_ms": 18050,
-      "start_ms": 1562325,
+      "start_ms": 1562835,
       "text": "\"Because we have to give you some reason why we're now telling you to work hard on cryptography and continue to the nationals. If we didn't tell you, you might get suspicious, eventually figure it out for yourself, and then do something stupid, like excitedly blurting out your discovery to a dozen other people.\"",
       "generation_s": 2.4
     },
@@ -2304,7 +2319,7 @@
       "file": "blocks/c10-b205.wav",
       "sha256": "1b392365d1f1e356cbcb1e1ee8f2d423c2e4bfb19a2227903e06b7766bdeaea6",
       "duration_ms": 1675,
-      "start_ms": 1580825,
+      "start_ms": 1581335,
       "text": "[Zei](/ˈzA/) nodded.",
       "generation_s": 0.26
     },
@@ -2315,7 +2330,7 @@
       "file": "blocks/c10-b206.wav",
       "sha256": "9467d2861697c04e9ecf0de3964d3585504050aa9d7e181c79c94dd1ee81f226",
       "duration_ms": 2725,
-      "start_ms": 1582950,
+      "start_ms": 1583460,
       "text": "\"I won't tell anyone. Not even [Fin](/ˈfɪn/).\"",
       "generation_s": 0.38
     },
@@ -2326,7 +2341,7 @@
       "file": "blocks/c10-b207.wav",
       "sha256": "fc4fd35b96ae614bae4828d131040275fa9d0d105ab18a198cc9bdbc0bd2b005",
       "duration_ms": 1925,
-      "start_ms": 1586125,
+      "start_ms": 1586635,
       "text": "[Den](/ˈdɛn/) and [Mu](/ˈmu/) nodded.",
       "generation_s": 0.26
     },
@@ -2337,7 +2352,7 @@
       "file": "blocks/c10-b208.wav",
       "sha256": "e69677447ea2a1d96a7a51ad93c4b953d42166e58051c3aedc47e3a07074caaf",
       "duration_ms": 4675,
-      "start_ms": 1588500,
+      "start_ms": 1589010,
       "text": "\"And when the nationals come, you'll want a sparring partner who knows your style.\"",
       "generation_s": 0.59
     },
@@ -2348,7 +2363,7 @@
       "file": "blocks/c10-b209.wav",
       "sha256": "c41ddafff6b829e859fca2b641dee77caa8bfde6e434bf1b5bbeca6acb2bba09",
       "duration_ms": 2825,
-      "start_ms": 1593625,
+      "start_ms": 1594135,
       "text": "No one said a name. No one had to.",
       "generation_s": 0.36
     },
@@ -2359,7 +2374,7 @@
       "file": "blocks/c10-b210.wav",
       "sha256": "e0d1c1dd1fe49ff99e68e16c19d2268b6fbafbb524095e8d3247bc30308c5176",
       "duration_ms": 3075,
-      "start_ms": 1596900,
+      "start_ms": 1597410,
       "text": "\"We appreciate your support\", [Den](/ˈdɛn/) replied.",
       "generation_s": 0.39
     },
@@ -2370,7 +2385,7 @@
       "file": "blocks/c10-b211.wav",
       "sha256": "00e1397cd04c6ef5cddd18fecd842ff9610eccb1ce9b7f20aafcdfe90a68f119",
       "duration_ms": 2700,
-      "start_ms": 1600425,
+      "start_ms": 1600935,
       "text": "\"[Dze](/ˈdzɛ/) [go](/ˈɡO/) [ba](/ˈbɑ/) [fau](/ˈfW/) [gie](/ˈɡjɛ/)\", [Mu](/ˈmu/) added.",
       "generation_s": 0.35
     },
@@ -2381,9 +2396,22 @@
       "file": "blocks/c10-b212.wav",
       "sha256": "75d7f63b2efc4d44af3d5a077ae0903fc404fc95e061329a6218be030f51a9ed",
       "duration_ms": 2150,
-      "start_ms": 1603575,
+      "start_ms": 1604085,
       "text": "\"[Dze](/ˈdzɛ/) [go](/ˈɡO/) [ba](/ˈbɑ/) [fau](/ˈfW/) [gie](/ˈɡjɛ/).\"",
       "generation_s": 0.29
     }
-  ]
+  ],
+  "restitched_at": "2026-10-05T18:48:38+00:00",
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent and its helper agents",
+    "drafted": [
+      "spoken descriptions of screens, figures and lyric cards (blocks 97)",
+      "pronunciation entries (content/snowmoon/pronunciation.json)"
+    ],
+    "instructions": [
+      "docs/prompts/008a-agent-prompts.md#read-aloud-descriptions-and-invented-word-lists"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
 }

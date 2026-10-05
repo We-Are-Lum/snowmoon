@@ -4,6 +4,14 @@
   "voice": "kokoro-af_heart",
   "label": "Synthetic narration · Kokoro-82M, stock voice af_heart",
   "license": "GPL-3.0",
+  "published_by": {
+    "fid": 6786,
+    "role": "maintainer",
+    "action": "published via script",
+    "script": "scripts/publish-narration.ts",
+    "date": "2026-10-05",
+    "evidence": "docs/prompts/008-narration-and-images.md"
+  },
   "recipe": "content/snowmoon/recipes/narration/chapter-9.json",
   "model": {
     "name": "Kokoro-82M",
@@ -36,7 +44,21 @@
     },
     "break_ms": 1800,
     "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
-    "read_aloud_sha256": "993ad736ebdac9596c9c8c1d25b666221ac16dfd0da642a31b241516c57c0035"
+    "read_aloud_sha256": "993ad736ebdac9596c9c8c1d25b666221ac16dfd0da642a31b241516c57c0035",
+    "description_tone": {
+      "notes_hz": [
+        660,
+        990
+      ],
+      "notes_ms": [
+        110,
+        140
+      ],
+      "between_ms": 40,
+      "after_ms": 220,
+      "amplitude": 0.12,
+      "made_by": "code (numpy sine, linear fades)"
+    }
   },
   "block_encoding": {
     "codec": "aac",
@@ -46,10 +68,10 @@
     "tool": "ffmpeg"
   },
   "chapter_file": {
-    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-9-4d5a4761c2d3.m4a",
-    "sha256": "4d5a4761c2d3a4dedd1821e43ebd78451381eceadbcf2d0908d85837ee66be8e",
-    "bytes": 15226256,
-    "duration_ms": 1288400
+    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-9-dcfb6c61d8e1.m4a",
+    "sha256": "dcfb6c61d8e1f9bd1c6690a9197b6ddd14b7ebf2c23d452fa3a2cee0106a019b",
+    "bytes": 15229124,
+    "duration_ms": 1288910
   },
   "breaks": [
     {
@@ -1393,6 +1415,7 @@
       "bytes": 107211,
       "duration_ms": 12125,
       "start_ms": 1019825,
+      "tone_ms": 510,
       "source_wav_sha256": "84bca2d8b657479fd70eef71f8369362fd009d9f9761905ffab4f3192d88c6e7",
       "text": "The diagram shows four computers along the top. From each, lines fan out to dots in a row of twelve below, and from there the lines crisscross down through two more rows of twelve dots each.",
       "read_aloud_status": "unreviewed"
@@ -1405,7 +1428,7 @@
       "sha256": "25b938ee7b9bee9cb81e2fefacd4599c5739ddb8211474bdd2e9c3e7efa28508",
       "bytes": 28629,
       "duration_ms": 3050,
-      "start_ms": 1032550,
+      "start_ms": 1033060,
       "source_wav_sha256": "04c5915a9e9894d0cc9f9fb9bade2bc5b3cdf796edd14641f6831268ab53a2aa",
       "text": "\"You ever seen this before?\", [Den](/ˈdɛn/) asked."
     },
@@ -1417,7 +1440,7 @@
       "sha256": "00817e0165400d8d5425a149af6f6c9306b945b1e24b639a254a74e4bad66b7a",
       "bytes": 24125,
       "duration_ms": 2600,
-      "start_ms": 1036050,
+      "start_ms": 1036560,
       "source_wav_sha256": "1e6bedd64861f84ef961c3091871d9eb3622a60c1ea8fef5d7aabb7d3c974888",
       "text": "\"Some kind of diagram of the internet?\""
     },
@@ -1429,7 +1452,7 @@
       "sha256": "d9d2e7c5687988188fbb7b79b6cccf02e1ba8923bc640fcb489c84ad8ecb1cb2",
       "bytes": 66836,
       "duration_ms": 7350,
-      "start_ms": 1039100,
+      "start_ms": 1039610,
       "source_wav_sha256": "4cf05dba65c67b455f90d8190a44e77faaf9d779802977fbb4c82f3af099a713",
       "text": "\"It's a mixnet. It's how transactions get onto the cryptographic network without people being able to see who sent them.\""
     },
@@ -1441,7 +1464,7 @@
       "sha256": "a49ef7083f660242fe92cfa56adc89317d00b42e90c1fb8453f31871c0748380",
       "bytes": 78999,
       "duration_ms": 8675,
-      "start_ms": 1046900,
+      "start_ms": 1047410,
       "source_wav_sha256": "114bd7f8dac05c9ce27c7ca64c359713eb02e2829e9811270cd84a34e824eb0f",
       "text": "\"Each message from each sender gets wrapped with three layers of encryption. That top-level message gets sent to a node on the first layer.\""
     },
@@ -1453,7 +1476,7 @@
       "sha256": "21719a044fb1d8f689ab8b01c8631477adbd9203548d0d72ccbb3d7abe1f2e7d",
       "bytes": 102557,
       "duration_ms": 11625,
-      "start_ms": 1056025,
+      "start_ms": 1056535,
       "source_wav_sha256": "46582ed1cc0074eb58a48f4b799959f7d8ffbc28e96e36ba33188751aaad9c62",
       "text": "\"The node on the first layer unwraps the top layer of encryption, and sees another encrypted message, along with the address of which node in the second layer they are supposed to send it to.\""
     },
@@ -1465,7 +1488,7 @@
       "sha256": "3feaf4db67640545452d4c93f72cf4ab8b7e5e21a947700e12104b5106e72a2e",
       "bytes": 101071,
       "duration_ms": 11375,
-      "start_ms": 1068100,
+      "start_ms": 1068610,
       "source_wav_sha256": "d117cd1354afa439d7930a4efc83344925aafdadb07922799ae55fc5640fbb41",
       "text": "\"The node on the second layer unwraps the next layer of encryption, and sees another encrypted message, along with the address of which node in the third layer they are supposed to send it to.\""
     },
@@ -1477,7 +1500,7 @@
       "sha256": "d073e96cc084781575826268e6918c094fafd144cddfb24c42aa1fd3edaff051",
       "bytes": 113330,
       "duration_ms": 12700,
-      "start_ms": 1079925,
+      "start_ms": 1080435,
       "source_wav_sha256": "137ae8b217d74446afe9b6d3332dfa81e7b115901e6f50cb6add60cfe355fd7f",
       "text": "\"Finally each node on the third layer unwraps that layer of encryption, and gets the address of the destination, plus the actual payload. And of course, usually, the payload itself is encrypted.\""
     },
@@ -1489,7 +1512,7 @@
       "sha256": "dc393ad7c18bda77c19a96850da5d29dbedcd205e7940f9d512164d0c2286c9d",
       "bytes": 63590,
       "duration_ms": 7025,
-      "start_ms": 1093075,
+      "start_ms": 1093585,
       "source_wav_sha256": "96558e18de70453d18889da40e72b453691b54d3dcb6a2ed2048b3fed54e6eea",
       "text": "\"Wow, I didn't realize that's how it works. So you need three nodes to collude to unmask the sender of a message.\""
     },
@@ -1501,7 +1524,7 @@
       "sha256": "232486a3dc751725cf141d103b3e8c8b3e124a4ef68f033ce8be456a99a46107",
       "bytes": 117144,
       "duration_ms": 13025,
-      "start_ms": 1100550,
+      "start_ms": 1101060,
       "source_wav_sha256": "bb981fe1badcb9d6581111f0036c077da5ab60c1b1be30cca4769e84d46a84d1",
       "text": "\"Not just three nodes — three randomly selected nodes. And if you're paranoid, you can make the inner payload be yet another envelope, requesting to send the message right back through the system in the next round.\""
     },
@@ -1513,7 +1536,7 @@
       "sha256": "d78556920f9ed1ee2e81b88335116c210be52ebbea29cb2bb563dabd4e7983e6",
       "bytes": 120050,
       "duration_ms": 13225,
-      "start_ms": 1114025,
+      "start_ms": 1114535,
       "source_wav_sha256": "3291565c1e1bb71f923c439f817099c52674d1d48c197562d0df28d796e79268",
       "text": "\"So this is what the packaging step is doing. Those boxes are highly opaque and tamper-proof sealed, and the two-dimensional barcode is the encrypted payload. It's a mixnet, but for delivery of physical goods.\""
     },
@@ -1525,7 +1548,7 @@
       "sha256": "4d018c4152d4b78f8c12a43378974352a18201577ec8ae277c74d5dc0e7a62cd",
       "bytes": 132360,
       "duration_ms": 14675,
-      "start_ms": 1127700,
+      "start_ms": 1128210,
       "source_wav_sha256": "fb923e812d1b750dccb5c4a61ee48098afbeba525e900ffa8ca2191f9a88d09f",
       "text": "\"If you buy a product through this system, only the last of the three nodes knows your address, and they don't know who the sender was or what they're delivering. And if you're double paranoid, you can set your address to a public drop-off point and pick it up yourself.\""
     },
@@ -1537,7 +1560,7 @@
       "sha256": "d8208bba4d2533bffb534bde3c4858c67b28f00703e5493c7e7928dc489ab745",
       "bytes": 220676,
       "duration_ms": 24325,
-      "start_ms": 1142825,
+      "start_ms": 1143335,
       "source_wav_sha256": "d07f1eb6e993527393a1bca1763526f8ac0f8cab4bb53cb9ceb0cfcee3217c9c",
       "text": "\"Inspectors buy through the mixnet. And so as a consumer, if you buy through the mixnet yourself, you're getting your chip from the same pool that the inspectors are buying from — the manufacturer has no way to give an honest chip that passes inspection to the inspectors, without almost certainly giving one to you too. They can't tell which chips — or whatever other physical goods are passing through this thing — are going to whom.\""
     },
@@ -1549,7 +1572,7 @@
       "sha256": "21e1d39f62f09e48b7096e4e4f369623e3963a01c5b55387729c0d328dc8e8c5",
       "bytes": 32549,
       "duration_ms": 3750,
-      "start_ms": 1167600,
+      "start_ms": 1168110,
       "source_wav_sha256": "1d0df35b99def310bd3ca15bc3ceb8d28f2e03cf7990af7047f0df756577d762",
       "text": "[Den](/ˈdɛn/) then walked forward toward a door. [Zei](/ˈzA/) followed him."
     },
@@ -1561,7 +1584,7 @@
       "sha256": "a0908f19f4ce94758b199a72bff7a6552fb71a59029cf48161feba3d9b541b83",
       "bytes": 47681,
       "duration_ms": 5200,
-      "start_ms": 1171800,
+      "start_ms": 1172310,
       "source_wav_sha256": "b1588e5f75d2dfb2fb69e12b23288155402d259dd9782a8d7929a43689b14fbf",
       "text": "[Den](/ˈdɛn/) put his watch against a circle with a glowing green outline. The door opened."
     },
@@ -1573,7 +1596,7 @@
       "sha256": "1fb82eb4d1a07aa0dbecaa2bbc6a356913f1778036e17d683fd32acee090887a",
       "bytes": 67858,
       "duration_ms": 7625,
-      "start_ms": 1177450,
+      "start_ms": 1177960,
       "source_wav_sha256": "50d1cd9839c005c677206b461ab9d4b43b9976d262255918c9b4fc21959916db",
       "text": "They walked through a hallway, took a few turns, and then went through another door. They entered a room with a large microscope."
     },
@@ -1585,7 +1608,7 @@
       "sha256": "03400a3795eea991505e4b671258ddc9369742052da24654b1f0786571278425",
       "bytes": 61437,
       "duration_ms": 7025,
-      "start_ms": 1185525,
+      "start_ms": 1186035,
       "source_wav_sha256": "3b754386af5502a6e1f35506990ab6e5927e82d3242b86301022c2baaad376df",
       "text": "\"This is the inspection facility of this fab. They inspect both their own chips, and those produced by others.\""
     },
@@ -1597,7 +1620,7 @@
       "sha256": "ca4dca539d92661947b4d07ec7067d9c3b0fb11afca353458d3360efe20a7e3b",
       "bytes": 84100,
       "duration_ms": 9175,
-      "start_ms": 1193000,
+      "start_ms": 1193510,
       "source_wav_sha256": "7006b07651c5d18cf097da636419b5be0b35030886e0b19863aac03abc80770b",
       "text": "\"They do multiple types of three-dimensional scanning, at different wavelengths, to make sure that the physical chip exactly matches the specification.\""
     },
@@ -1609,7 +1632,7 @@
       "sha256": "0c132e631e6a90c670ba09b9c63745732b342b30a76a2b88a07807e5deb03df8",
       "bytes": 42417,
       "duration_ms": 4675,
-      "start_ms": 1202625,
+      "start_ms": 1203135,
       "source_wav_sha256": "ab3d208d66c6f54e2beca69570cf4872e054eeb0858a911e4d2908e05daf77bc",
       "text": "\"I'm impressed. Say thank you to whoever gave you permission to give us a tour.\""
     },
@@ -1621,7 +1644,7 @@
       "sha256": "d50f198e0578c9c4bc1270a34d04720fb8bc070886a58cf0ab397fa213d0ac16",
       "bytes": 33926,
       "duration_ms": 3725,
-      "start_ms": 1207750,
+      "start_ms": 1208260,
       "source_wav_sha256": "6ac8a3d235155441d20e90213659c409f448a911f0b71e24433851ffe8b0b548",
       "text": "\"I will. So [Zei](/ˈzA/), I remember you had another question.\""
     },
@@ -1633,7 +1656,7 @@
       "sha256": "ce20d8048c9f46c35583b2d10edcad55ff5eb3b9767dbaa4d58c723e305a1c6a",
       "bytes": 34702,
       "duration_ms": 3775,
-      "start_ms": 1211925,
+      "start_ms": 1212435,
       "source_wav_sha256": "8aaf9a7867397e223ea3aa5421d74c0691e02d6f645fee1c9232c0d56791da2c",
       "text": "\"Yeah I remember. Though it wasn't about manufacturing.\""
     },
@@ -1645,7 +1668,7 @@
       "sha256": "60c43dbbfd7e4447a9f8926e2d2fcab2ccac3c42194732ffb1e1f38161ce961d",
       "bytes": 254449,
       "duration_ms": 28350,
-      "start_ms": 1216150,
+      "start_ms": 1216660,
       "source_wav_sha256": "41df493039e11be171b75f8570c315eeef54259c2d8a1e7ee53a66cfca01f8ae",
       "text": "\"Indeed — it was about how someone verifying could know that responses are not being forwarded from a different device. I can tell you the answer for that too. My hand device has a protocol by which it repeatedly contacts each device a million times, and expects the whole protocol to finish within a tenth of a tick. And so wherever the signature comes from, it has to be within fifty lightfeet away — almost thirteen meters — actually, even closer, because of the latency of the chips themselves.\""
     },
@@ -1657,7 +1680,7 @@
       "sha256": "aa49ed6e23c5796ab1943e32ae834c7ba0a2bcc0b76a70d75b2b5b284f40e969",
       "bytes": 18687,
       "duration_ms": 2050,
-      "start_ms": 1244950,
+      "start_ms": 1245460,
       "source_wav_sha256": "d5366ec757f2b52669e1b7901d9dae02125de0428e8279f23b422a9fb2879152",
       "text": "\"So [Zei](/ˈzA/), what do you think?\""
     },
@@ -1669,7 +1692,7 @@
       "sha256": "c514553cddd6cf97bc3aca72f334436f839e833b889d7bb24337003c4d57bc29",
       "bytes": 25085,
       "duration_ms": 2875,
-      "start_ms": 1247450,
+      "start_ms": 1247960,
       "source_wav_sha256": "fe594e153660f600cc1d43ecb7056d879f45823fc6627372d020d37376231a82",
       "text": "\"You said I can still do the nationals, right?\""
     },
@@ -1681,7 +1704,7 @@
       "sha256": "e35ebb68704dc4f217fe16114a74ab3f6f28fa840ccef5454cb397a14a9c0602",
       "bytes": 18844,
       "duration_ms": 2125,
-      "start_ms": 1250775,
+      "start_ms": 1251285,
       "source_wav_sha256": "e034e71b2ba92df142dd78457d41ddc63f9d5e7cb6ed26bb33c5b4121932354f",
       "text": "\"I want you to do the nationals.\""
     },
@@ -1693,7 +1716,7 @@
       "sha256": "f2e3ebe9f64c2058d9e9b1d3bd802c42c243ef1445e8bc55f7a50a752ac8954e",
       "bytes": 67484,
       "duration_ms": 7500,
-      "start_ms": 1253350,
+      "start_ms": 1253860,
       "source_wav_sha256": "3223664ac19afc678ea044756ed17ebad2626d45027af64b82d6c1d958a5d6d3",
       "text": "\"Okay yes, I'll join — or at least, I'll commit as far as switching my studies to cryptography and see how that goes.\""
     },
@@ -1705,7 +1728,7 @@
       "sha256": "86695f79828b3ed7c6dd3b4c388d52b94ed98833a26def13081e430dab144814",
       "bytes": 14820,
       "duration_ms": 1650,
-      "start_ms": 1261300,
+      "start_ms": 1261810,
       "source_wav_sha256": "4358579f0bfebdf25f0ef6d30e7289c7b8896f92136731ccd83b78084cb9b3a3",
       "text": "[Den](/ˈdɛn/) nodded."
     },
@@ -1717,7 +1740,7 @@
       "sha256": "c42a1772d2dcea9379ea9f7fb9451707adb3b505b1f78345282c2e2cc0eb9289",
       "bytes": 81748,
       "duration_ms": 9050,
-      "start_ms": 1263400,
+      "start_ms": 1263910,
       "source_wav_sha256": "d26524f73b064df7e12e12d30f219da9039fa9032a6708dbfc6f6d613a293339",
       "text": "When [Den](/ˈdɛn/) kept walking forward, [Zei](/ˈzA/)'s mind wandered — first, to the large microscope that was directly in front of him, and then to other matters."
     },
@@ -1729,7 +1752,7 @@
       "sha256": "2164a907e678bdd3c34ec08e392d1b5cc5eecadd44d02854f83d1ae4487f2a1a",
       "bytes": 137188,
       "duration_ms": 15050,
-      "start_ms": 1272900,
+      "start_ms": 1273410,
       "source_wav_sha256": "e81014f552c9e608c5064500851887b86711fb52ca43fb7dc02f4e7ca58e3f05",
       "text": "He started thinking about what he would tell his mom that afternoon. He could talk about [Fin](/ˈfɪn/) being busy, about himself going for a walk. But he could not tell the full truth. The [Kungaupei](/ˈkunɡWpA/) forbade it — and his mom had already watched him heal from one bomb."
     }

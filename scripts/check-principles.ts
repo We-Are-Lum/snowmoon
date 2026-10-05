@@ -19,6 +19,7 @@ import { PGlite } from '@electric-sql/pglite';
 import postgres from 'postgres';
 import { chromium } from 'playwright-core';
 import { DEFAULT_TEMPLATES } from '../src/templates';
+import { BOOK_TAG, NARRATION_MAX_WORDS, PERSON_TAG, parseBeats } from '../src/lib/script-beats';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
@@ -181,6 +182,79 @@ add({
   },
 });
 
+add({
+  id: 'P2c',
+  principle: 2,
+  name: 'every narration and dialogue line in an adaptation script has a human author recorded',
+  load: async () => ({
+    scripts: walk('adaptations', /(^|\/)script\.md$/).map((f) => ({ file: f, text: read(f) })),
+  }),
+  run: ({ scripts }) => {
+    const problems: string[] = [];
+    for (const { file, text } of scripts) {
+      for (const beat of parseBeats(text)) {
+        for (const l of beat.inline) problems.push(`${file}:${l.line}: beat ${beat.n} ${l.field} written on the field line, with no author tag`);
+        for (const l of [...beat.narration, ...beat.dialogue]) {
+          const t = l.tag ?? '';
+          if (!BOOK_TAG.test(t) && !PERSON_TAG.test(t))
+            problems.push(`${file}:${l.line}: beat ${beat.n} line has no human author (\`book c<ch>-b<idx>\` or \`by FID <n> on <date>\`): ${l.text.slice(0, 60)}`);
+        }
+      }
+    }
+    return problems;
+  },
+  plant: (c) => {
+    c.scripts.push({
+      file: 'adaptations/planted/script.md',
+      text: '## Beat 1 · Planted\n\n- **narration:**\n  - `new` A line a model wrote.\n- **dialogue:**\n  - Zei: An untagged line.\n',
+    });
+  },
+});
+
+// The recorded exception (owner ruling, Oct 5, 2026): 148 model-drafted spoken
+// descriptions stay in the house narration, labelled. The list may only shrink.
+const DESCRIPTION_EXCEPTIONS_MAX = 148;
+const plainSpoken = (t: string) => t.replace(/\[([^\]]+)\]\(\/[^)]*\/\)/g, '$1');
+add({
+  id: 'P2d',
+  principle: 2,
+  name: 'spoken descriptions are written by a person or on the shrinking exception list',
+  load: async () => ({
+    exceptions: json('content/snowmoon/read-aloud/exceptions.json'),
+    chapters: Array.from({ length: 32 }, (_, i) => json(`content/snowmoon/read-aloud/chapter-${i + 1}.json`)),
+  }),
+  run: ({ exceptions, chapters }) => {
+    type Entry = { chapter: number; idx: number; read_aloud_sha256: string };
+    type Override = { idx: number; read_aloud: string; written_by?: { fid?: unknown; date?: string } };
+    const problems: string[] = [];
+    const entries = exceptions.entries as Entry[];
+    if (entries.length > DESCRIPTION_EXCEPTIONS_MAX)
+      problems.push(`exceptions.json has ${entries.length} entries; the list may only shrink (max ${DESCRIPTION_EXCEPTIONS_MAX})`);
+    const listed = new Map(entries.map((e) => [`${e.chapter}-${e.idx}`, e.read_aloud_sha256]));
+    const used = new Set<string>();
+    chapters.forEach((ch: { overrides: Override[] }, i: number) => {
+      for (const o of ch.overrides) {
+        const key = `${i + 1}-${o.idx}`;
+        const by = o.written_by;
+        if (by) {
+          if (typeof by.fid !== 'number' || !/^\d{4}-\d{2}-\d{2}$/.test(by.date ?? '')) problems.push(`c${key}: written_by needs { fid, date }`);
+          const n = plainSpoken(o.read_aloud).split(/\s+/).filter(Boolean).length;
+          if (n > NARRATION_MAX_WORDS) problems.push(`c${key}: person-written description is ${n} words (max ${NARRATION_MAX_WORDS})`);
+          if (listed.has(key)) problems.push(`c${key}: written by a person; remove it from exceptions.json`);
+        } else if (listed.get(key) !== sha256(o.read_aloud)) {
+          problems.push(`c${key}: model-drafted description is not on the exception list (or its text changed)`);
+        } else used.add(key);
+      }
+    });
+    for (const key of listed.keys()) if (!used.has(key) && !problems.some((p) => p.startsWith(`c${key}:`))) problems.push(`exceptions.json lists c${key}, which no longer has a description; remove it`);
+    return problems;
+  },
+  plant: (c) => {
+    c.chapters[0].overrides.push({ idx: 9999, read_aloud: 'A new description a model drafted.' });
+    c.exceptions.entries.push({ chapter: 1, idx: 9999, read_aloud_sha256: sha256('A new description a model drafted.') });
+  },
+});
+
 // ---------------------------------------------------------------------------
 // P3. The allowlist records each model's license and whether its weights are
 //     open; every model in use is on it; closed models in use are reported.
@@ -226,6 +300,28 @@ add({
   },
 });
 
+add({
+  id: 'P3c',
+  principle: 3,
+  name: 'every committed recipe file declares assist: which inputs a model drafted (null if none)',
+  load: async () => ({
+    models: json('config/models.json'),
+    recipes: walk('content/snowmoon/recipes', /\.json$/).map((f) => ({ file: f, data: json(f) })),
+  }),
+  run: ({ models, recipes }) => {
+    const drafting = new Set(((models.drafting ?? []) as { id: string }[]).map((m) => m.id));
+    const problems: string[] = [];
+    for (const { file, data } of recipes) {
+      if (!('assist' in data)) problems.push(`${file}: no assist field`);
+      else if (data.assist !== null && !drafting.has(data.assist.model)) problems.push(`${file}: assist.model ${data.assist.model} is not in config/models.json drafting`);
+    }
+    return problems;
+  },
+  plant: (c) => {
+    delete c.recipes[0].data.assist;
+  },
+});
+
 // ---------------------------------------------------------------------------
 // P4. No model output is published without a signed-in person's action.
 // ---------------------------------------------------------------------------
@@ -252,15 +348,24 @@ add({
     narration: Array.from({ length: 32 }, (_, i) => json(`content/snowmoon/narration/kokoro-af_heart/chapter-${i + 1}.json`)),
   }),
   run: ({ images, narration }) => {
-    const ok = (p: unknown) => !!p && typeof (p as { fid?: unknown }).fid === 'number' && !!(p as { action?: string }).action;
+    // Allowed paths: an in-app action by a signed-in FID, or the maintainer
+    // publishing via a script, with the date and an evidence file in the repo.
+    type By = { fid?: unknown; action?: string; role?: string; script?: string; date?: string; evidence?: string };
+    const ok = (p: By | undefined) => {
+      if (!p || typeof p.fid !== 'number' || !p.action) return false;
+      if (p.role !== 'maintainer') return true;
+      return !!p.script && existsSync(p.script) && /^\d{4}-\d{2}-\d{2}$/.test(p.date ?? '') && !!p.evidence && existsSync(p.evidence);
+    };
     const problems: string[] = [];
-    if (!ok(images.published_by)) problems.push('illustrations/published.json: no published_by { fid, action }');
-    const missing = narration.filter((x: { published_by?: unknown }) => !ok(x.published_by)).length;
-    if (missing) problems.push(`narration: ${missing} of 32 chapter indexes have no published_by { fid, action }`);
+    const want = '{ fid, action } (maintainer: + script, date, evidence file)';
+    if (!ok(images.published_by)) problems.push(`illustrations/published.json: no valid published_by ${want}`);
+    const missing = narration.filter((x: { published_by?: By }) => !ok(x.published_by)).length;
+    if (missing) problems.push(`narration: ${missing} of 32 chapter indexes have no valid published_by ${want}`);
     return problems;
   },
   plant: (c) => {
     delete c.images.published_by;
+    c.narration[0].published_by = { ...c.narration[0].published_by, evidence: 'docs/prompts/does-not-exist.md' };
   },
 });
 
@@ -348,11 +453,11 @@ add({
     seen.push({ page: '/chapter/1', host: 'fonts.googleapis.com' });
   },
 });
-const PRIVATE_FID_TABLES = ['ratings', 'picks', 'contributor_consents'];
+const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents'];
 add({
   id: 'P6b',
   principle: 6,
-  name: 'individual ratings (and other per-person rows) are not publicly readable',
+  name: 'migrations: individual ratings, likes and other per-person rows are not publicly readable',
   load: async () => ({ extra: '' }),
   run: async ({ extra }) => {
     const db = await pglite(extra);
@@ -363,6 +468,9 @@ add({
         ('00000000-0000-0000-0000-0000000000b1','snowmoon','design',1,'00000000-0000-0000-0000-00000000e001');
       insert into studio.element_versions (id, element_id, version_no) values ('00000000-0000-0000-0000-0000000000f1','00000000-0000-0000-0000-0000000000b1',1);
       insert into studio.ratings (version_id, fid, value) values ('00000000-0000-0000-0000-0000000000f1', 42, 3);
+      insert into studio.likes (version_id, fid) values ('00000000-0000-0000-0000-0000000000f1', 42);
+      insert into studio.takes (id, work_id, chapter, title, created_by_fid) values ('00000000-0000-0000-0000-00000000aa01','snowmoon',1,'t',1);
+      insert into studio.take_likes (take_id, fid) values ('00000000-0000-0000-0000-00000000aa01', 42);
       insert into studio.picks (fid, entity_id, version_id) values (42,'00000000-0000-0000-0000-00000000e001','00000000-0000-0000-0000-0000000000f1');
       insert into studio.contributor_consents (fid, kind, consent_text_sha256) values (42,'handmade_upload','${'a'.repeat(64)}');`);
     const problems: string[] = [];
@@ -383,6 +491,39 @@ add({
   },
   plant: (c) => {
     c.extra = `grant select on studio.picks to anon; create policy planted on studio.picks for select using (true);`;
+  },
+});
+
+add({
+  id: 'P6c',
+  principle: 6,
+  name: 'live database: the public API refuses individual ratings and likes, and serves totals',
+  load: async () => {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!url || !key) return { skipped: true, results: [] as { table: string; status: number; body: string }[] };
+    const results = [];
+    for (const table of ['ratings', 'likes', 'take_likes', 'rating_totals', 'like_totals', 'take_like_totals']) {
+      const r = await fetch(`${url}/rest/v1/${table}?select=*&limit=1`, {
+        headers: { apikey: key, Authorization: `Bearer ${key}`, 'Accept-Profile': 'studio' },
+      });
+      results.push({ table, status: r.status, body: (await r.text()).slice(0, 200) });
+    }
+    return { skipped: false, results };
+  },
+  run: ({ skipped, results }) => {
+    if (skipped) return ['skipped: NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY not set'];
+    const problems: string[] = [];
+    for (const r of results as { table: string; status: number; body: string }[]) {
+      const isTotal = r.table.endsWith('_totals');
+      if (isTotal && r.status !== 200) problems.push(`${r.table}: public cannot read totals (HTTP ${r.status})`);
+      if (!isTotal && r.status === 200) problems.push(`${r.table}: public can read individual rows`);
+    }
+    return problems;
+  },
+  plant: (c) => {
+    c.skipped = false;
+    c.results = [{ table: 'likes', status: 200, body: '[]' }];
   },
 });
 

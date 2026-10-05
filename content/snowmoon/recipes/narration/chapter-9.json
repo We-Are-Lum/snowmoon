@@ -4,7 +4,7 @@
   "source_sha256": "62095a51e65952fc6071ee4a2814d3dd7832e1f691cb760ef519c69ee425dc64",
   "generated_at": "2026-10-03T17:11:58+00:00",
   "generation_seconds": 181.3,
-  "total_duration_ms": 1288400,
+  "total_duration_ms": 1288910,
   "model": {
     "name": "Kokoro-82M",
     "repo": "hexgrad/Kokoro-82M",
@@ -36,7 +36,21 @@
     },
     "break_ms": 1800,
     "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
-    "read_aloud_sha256": "993ad736ebdac9596c9c8c1d25b666221ac16dfd0da642a31b241516c57c0035"
+    "read_aloud_sha256": "993ad736ebdac9596c9c8c1d25b666221ac16dfd0da642a31b241516c57c0035",
+    "description_tone": {
+      "notes_hz": [
+        660,
+        990
+      ],
+      "notes_ms": [
+        110,
+        140
+      ],
+      "between_ms": 40,
+      "after_ms": 220,
+      "amplitude": 0.12,
+      "made_by": "code (numpy sine, linear fades)"
+    }
   },
   "host": {
     "platform": "macOS-26.5.1-arm64-arm-64bit",
@@ -45,10 +59,10 @@
   },
   "stitched": {
     "wav": "chapter-9.wav",
-    "wav_sha256": "fc9cc9364e03d0b832b0092333968fdf6ccaee9eb007062debf06303ac47fb1b",
+    "wav_sha256": "b47f99afa734c3ec3c3e6342c486a0530fc2b6ab51d0e67abba2691ca89b68f1",
     "m4a": "chapter-9.m4a",
-    "m4a_sha256": "4d5a4761c2d3a4dedd1821e43ebd78451381eceadbcf2d0908d85837ee66be8e",
-    "note": "start_ms is the block's offset in the stitched file, gaps included"
+    "m4a_sha256": "dcfb6c61d8e1f9bd1c6690a9197b6ddd14b7ebf2c23d452fa3a2cee0106a019b",
+    "note": "start_ms is the block's offset in the stitched file, gaps included; a description starts with its tone (tone_ms)"
   },
   "blocks": [
     {
@@ -1289,7 +1303,8 @@
       "start_ms": 1019825,
       "text": "The diagram shows four computers along the top. From each, lines fan out to dots in a row of twelve below, and from there the lines crisscross down through two more rows of twelve dots each.",
       "generation_s": 1.71,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 113,
@@ -1298,7 +1313,7 @@
       "file": "blocks/c9-b113.wav",
       "sha256": "04c5915a9e9894d0cc9f9fb9bade2bc5b3cdf796edd14641f6831268ab53a2aa",
       "duration_ms": 3050,
-      "start_ms": 1032550,
+      "start_ms": 1033060,
       "text": "\"You ever seen this before?\", [Den](/ˈdɛn/) asked.",
       "generation_s": 0.47
     },
@@ -1309,7 +1324,7 @@
       "file": "blocks/c9-b114.wav",
       "sha256": "1e6bedd64861f84ef961c3091871d9eb3622a60c1ea8fef5d7aabb7d3c974888",
       "duration_ms": 2600,
-      "start_ms": 1036050,
+      "start_ms": 1036560,
       "text": "\"Some kind of diagram of the internet?\"",
       "generation_s": 0.38
     },
@@ -1320,7 +1335,7 @@
       "file": "blocks/c9-b115.wav",
       "sha256": "4cf05dba65c67b455f90d8190a44e77faaf9d779802977fbb4c82f3af099a713",
       "duration_ms": 7350,
-      "start_ms": 1039100,
+      "start_ms": 1039610,
       "text": "\"It's a mixnet. It's how transactions get onto the cryptographic network without people being able to see who sent them.\"",
       "generation_s": 1.08
     },
@@ -1331,7 +1346,7 @@
       "file": "blocks/c9-b116.wav",
       "sha256": "114bd7f8dac05c9ce27c7ca64c359713eb02e2829e9811270cd84a34e824eb0f",
       "duration_ms": 8675,
-      "start_ms": 1046900,
+      "start_ms": 1047410,
       "text": "\"Each message from each sender gets wrapped with three layers of encryption. That top-level message gets sent to a node on the first layer.\"",
       "generation_s": 1.26
     },
@@ -1342,7 +1357,7 @@
       "file": "blocks/c9-b117.wav",
       "sha256": "46582ed1cc0074eb58a48f4b799959f7d8ffbc28e96e36ba33188751aaad9c62",
       "duration_ms": 11625,
-      "start_ms": 1056025,
+      "start_ms": 1056535,
       "text": "\"The node on the first layer unwraps the top layer of encryption, and sees another encrypted message, along with the address of which node in the second layer they are supposed to send it to.\"",
       "generation_s": 1.62
     },
@@ -1353,7 +1368,7 @@
       "file": "blocks/c9-b118.wav",
       "sha256": "d117cd1354afa439d7930a4efc83344925aafdadb07922799ae55fc5640fbb41",
       "duration_ms": 11375,
-      "start_ms": 1068100,
+      "start_ms": 1068610,
       "text": "\"The node on the second layer unwraps the next layer of encryption, and sees another encrypted message, along with the address of which node in the third layer they are supposed to send it to.\"",
       "generation_s": 1.58
     },
@@ -1364,7 +1379,7 @@
       "file": "blocks/c9-b119.wav",
       "sha256": "137ae8b217d74446afe9b6d3332dfa81e7b115901e6f50cb6add60cfe355fd7f",
       "duration_ms": 12700,
-      "start_ms": 1079925,
+      "start_ms": 1080435,
       "text": "\"Finally each node on the third layer unwraps that layer of encryption, and gets the address of the destination, plus the actual payload. And of course, usually, the payload itself is encrypted.\"",
       "generation_s": 1.77
     },
@@ -1375,7 +1390,7 @@
       "file": "blocks/c9-b120.wav",
       "sha256": "96558e18de70453d18889da40e72b453691b54d3dcb6a2ed2048b3fed54e6eea",
       "duration_ms": 7025,
-      "start_ms": 1093075,
+      "start_ms": 1093585,
       "text": "\"Wow, I didn't realize that's how it works. So you need three nodes to collude to unmask the sender of a message.\"",
       "generation_s": 1.0
     },
@@ -1386,7 +1401,7 @@
       "file": "blocks/c9-b121.wav",
       "sha256": "bb981fe1badcb9d6581111f0036c077da5ab60c1b1be30cca4769e84d46a84d1",
       "duration_ms": 13025,
-      "start_ms": 1100550,
+      "start_ms": 1101060,
       "text": "\"Not just three nodes — three randomly selected nodes. And if you're paranoid, you can make the inner payload be yet another envelope, requesting to send the message right back through the system in the next round.\"",
       "generation_s": 1.82
     },
@@ -1397,7 +1412,7 @@
       "file": "blocks/c9-b122.wav",
       "sha256": "3291565c1e1bb71f923c439f817099c52674d1d48c197562d0df28d796e79268",
       "duration_ms": 13225,
-      "start_ms": 1114025,
+      "start_ms": 1114535,
       "text": "\"So this is what the packaging step is doing. Those boxes are highly opaque and tamper-proof sealed, and the two-dimensional barcode is the encrypted payload. It's a mixnet, but for delivery of physical goods.\"",
       "generation_s": 2.07
     },
@@ -1408,7 +1423,7 @@
       "file": "blocks/c9-b123.wav",
       "sha256": "fb923e812d1b750dccb5c4a61ee48098afbeba525e900ffa8ca2191f9a88d09f",
       "duration_ms": 14675,
-      "start_ms": 1127700,
+      "start_ms": 1128210,
       "text": "\"If you buy a product through this system, only the last of the three nodes knows your address, and they don't know who the sender was or what they're delivering. And if you're double paranoid, you can set your address to a public drop-off point and pick it up yourself.\"",
       "generation_s": 2.16
     },
@@ -1419,7 +1434,7 @@
       "file": "blocks/c9-b124.wav",
       "sha256": "d07f1eb6e993527393a1bca1763526f8ac0f8cab4bb53cb9ceb0cfcee3217c9c",
       "duration_ms": 24325,
-      "start_ms": 1142825,
+      "start_ms": 1143335,
       "text": "\"Inspectors buy through the mixnet. And so as a consumer, if you buy through the mixnet yourself, you're getting your chip from the same pool that the inspectors are buying from — the manufacturer has no way to give an honest chip that passes inspection to the inspectors, without almost certainly giving one to you too. They can't tell which chips — or whatever other physical goods are passing through this thing — are going to whom.\"",
       "generation_s": 4.08
     },
@@ -1430,7 +1445,7 @@
       "file": "blocks/c9-b125.wav",
       "sha256": "1d0df35b99def310bd3ca15bc3ceb8d28f2e03cf7990af7047f0df756577d762",
       "duration_ms": 3750,
-      "start_ms": 1167600,
+      "start_ms": 1168110,
       "text": "[Den](/ˈdɛn/) then walked forward toward a door. [Zei](/ˈzA/) followed him.",
       "generation_s": 0.63
     },
@@ -1441,7 +1456,7 @@
       "file": "blocks/c9-b126.wav",
       "sha256": "b1588e5f75d2dfb2fb69e12b23288155402d259dd9782a8d7929a43689b14fbf",
       "duration_ms": 5200,
-      "start_ms": 1171800,
+      "start_ms": 1172310,
       "text": "[Den](/ˈdɛn/) put his watch against a circle with a glowing green outline. The door opened.",
       "generation_s": 0.74
     },
@@ -1452,7 +1467,7 @@
       "file": "blocks/c9-b127.wav",
       "sha256": "50d1cd9839c005c677206b461ab9d4b43b9976d262255918c9b4fc21959916db",
       "duration_ms": 7625,
-      "start_ms": 1177450,
+      "start_ms": 1177960,
       "text": "They walked through a hallway, took a few turns, and then went through another door. They entered a room with a large microscope.",
       "generation_s": 1.04
     },
@@ -1463,7 +1478,7 @@
       "file": "blocks/c9-b128.wav",
       "sha256": "3b754386af5502a6e1f35506990ab6e5927e82d3242b86301022c2baaad376df",
       "duration_ms": 7025,
-      "start_ms": 1185525,
+      "start_ms": 1186035,
       "text": "\"This is the inspection facility of this fab. They inspect both their own chips, and those produced by others.\"",
       "generation_s": 0.95
     },
@@ -1474,7 +1489,7 @@
       "file": "blocks/c9-b129.wav",
       "sha256": "7006b07651c5d18cf097da636419b5be0b35030886e0b19863aac03abc80770b",
       "duration_ms": 9175,
-      "start_ms": 1193000,
+      "start_ms": 1193510,
       "text": "\"They do multiple types of three-dimensional scanning, at different wavelengths, to make sure that the physical chip exactly matches the specification.\"",
       "generation_s": 1.23
     },
@@ -1485,7 +1500,7 @@
       "file": "blocks/c9-b130.wav",
       "sha256": "ab3d208d66c6f54e2beca69570cf4872e054eeb0858a911e4d2908e05daf77bc",
       "duration_ms": 4675,
-      "start_ms": 1202625,
+      "start_ms": 1203135,
       "text": "\"I'm impressed. Say thank you to whoever gave you permission to give us a tour.\"",
       "generation_s": 0.65
     },
@@ -1496,7 +1511,7 @@
       "file": "blocks/c9-b131.wav",
       "sha256": "6ac8a3d235155441d20e90213659c409f448a911f0b71e24433851ffe8b0b548",
       "duration_ms": 3725,
-      "start_ms": 1207750,
+      "start_ms": 1208260,
       "text": "\"I will. So [Zei](/ˈzA/), I remember you had another question.\"",
       "generation_s": 0.53
     },
@@ -1507,7 +1522,7 @@
       "file": "blocks/c9-b132.wav",
       "sha256": "8aaf9a7867397e223ea3aa5421d74c0691e02d6f645fee1c9232c0d56791da2c",
       "duration_ms": 3775,
-      "start_ms": 1211925,
+      "start_ms": 1212435,
       "text": "\"Yeah I remember. Though it wasn't about manufacturing.\"",
       "generation_s": 0.49
     },
@@ -1518,7 +1533,7 @@
       "file": "blocks/c9-b133.wav",
       "sha256": "41df493039e11be171b75f8570c315eeef54259c2d8a1e7ee53a66cfca01f8ae",
       "duration_ms": 28350,
-      "start_ms": 1216150,
+      "start_ms": 1216660,
       "text": "\"Indeed — it was about how someone verifying could know that responses are not being forwarded from a different device. I can tell you the answer for that too. My hand device has a protocol by which it repeatedly contacts each device a million times, and expects the whole protocol to finish within a tenth of a tick. And so wherever the signature comes from, it has to be within fifty lightfeet away — almost thirteen meters — actually, even closer, because of the latency of the chips themselves.\"",
       "generation_s": 4.28
     },
@@ -1529,7 +1544,7 @@
       "file": "blocks/c9-b134.wav",
       "sha256": "d5366ec757f2b52669e1b7901d9dae02125de0428e8279f23b422a9fb2879152",
       "duration_ms": 2050,
-      "start_ms": 1244950,
+      "start_ms": 1245460,
       "text": "\"So [Zei](/ˈzA/), what do you think?\"",
       "generation_s": 0.35
     },
@@ -1540,7 +1555,7 @@
       "file": "blocks/c9-b135.wav",
       "sha256": "fe594e153660f600cc1d43ecb7056d879f45823fc6627372d020d37376231a82",
       "duration_ms": 2875,
-      "start_ms": 1247450,
+      "start_ms": 1247960,
       "text": "\"You said I can still do the nationals, right?\"",
       "generation_s": 0.38
     },
@@ -1551,7 +1566,7 @@
       "file": "blocks/c9-b136.wav",
       "sha256": "e034e71b2ba92df142dd78457d41ddc63f9d5e7cb6ed26bb33c5b4121932354f",
       "duration_ms": 2125,
-      "start_ms": 1250775,
+      "start_ms": 1251285,
       "text": "\"I want you to do the nationals.\"",
       "generation_s": 0.29
     },
@@ -1562,7 +1577,7 @@
       "file": "blocks/c9-b137.wav",
       "sha256": "3223664ac19afc678ea044756ed17ebad2626d45027af64b82d6c1d958a5d6d3",
       "duration_ms": 7500,
-      "start_ms": 1253350,
+      "start_ms": 1253860,
       "text": "\"Okay yes, I'll join — or at least, I'll commit as far as switching my studies to cryptography and see how that goes.\"",
       "generation_s": 1.0
     },
@@ -1573,7 +1588,7 @@
       "file": "blocks/c9-b138.wav",
       "sha256": "4358579f0bfebdf25f0ef6d30e7289c7b8896f92136731ccd83b78084cb9b3a3",
       "duration_ms": 1650,
-      "start_ms": 1261300,
+      "start_ms": 1261810,
       "text": "[Den](/ˈdɛn/) nodded.",
       "generation_s": 0.25
     },
@@ -1584,7 +1599,7 @@
       "file": "blocks/c9-b139.wav",
       "sha256": "d26524f73b064df7e12e12d30f219da9039fa9032a6708dbfc6f6d613a293339",
       "duration_ms": 9050,
-      "start_ms": 1263400,
+      "start_ms": 1263910,
       "text": "When [Den](/ˈdɛn/) kept walking forward, [Zei](/ˈzA/)'s mind wandered — first, to the large microscope that was directly in front of him, and then to other matters.",
       "generation_s": 1.28
     },
@@ -1595,9 +1610,22 @@
       "file": "blocks/c9-b140.wav",
       "sha256": "e81014f552c9e608c5064500851887b86711fb52ca43fb7dc02f4e7ca58e3f05",
       "duration_ms": 15050,
-      "start_ms": 1272900,
+      "start_ms": 1273410,
       "text": "He started thinking about what he would tell his mom that afternoon. He could talk about [Fin](/ˈfɪn/) being busy, about himself going for a walk. But he could not tell the full truth. The [Kungaupei](/ˈkunɡWpA/) forbade it — and his mom had already watched him heal from one bomb.",
       "generation_s": 2.27
     }
-  ]
+  ],
+  "restitched_at": "2026-10-05T18:48:19+00:00",
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent and its helper agents",
+    "drafted": [
+      "spoken descriptions of screens, figures and lyric cards (blocks 112)",
+      "pronunciation entries (content/snowmoon/pronunciation.json)"
+    ],
+    "instructions": [
+      "docs/prompts/008a-agent-prompts.md#read-aloud-descriptions-and-invented-word-lists"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
 }

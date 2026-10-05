@@ -4,7 +4,7 @@
   "source_sha256": "f8a9d74d4b9d4a8ce6fe56a4999e8ec031e965f296773879e1877cac59005d1b",
   "generated_at": "2026-10-03T17:35:29+00:00",
   "generation_seconds": 136.9,
-  "total_duration_ms": 888625,
+  "total_duration_ms": 891175,
   "model": {
     "name": "Kokoro-82M",
     "repo": "hexgrad/Kokoro-82M",
@@ -36,7 +36,21 @@
     },
     "break_ms": 1800,
     "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
-    "read_aloud_sha256": "6fe073260c161993027859757cc25f87533833790540b5a0333b58841782cc91"
+    "read_aloud_sha256": "6fe073260c161993027859757cc25f87533833790540b5a0333b58841782cc91",
+    "description_tone": {
+      "notes_hz": [
+        660,
+        990
+      ],
+      "notes_ms": [
+        110,
+        140
+      ],
+      "between_ms": 40,
+      "after_ms": 220,
+      "amplitude": 0.12,
+      "made_by": "code (numpy sine, linear fades)"
+    }
   },
   "host": {
     "platform": "macOS-26.5.1-arm64-arm-64bit",
@@ -45,10 +59,10 @@
   },
   "stitched": {
     "wav": "chapter-16.wav",
-    "wav_sha256": "c6238391b59606ef7a00bb1309a8eb06654c1ffa4b3fb634beeb10d4db1f5d64",
+    "wav_sha256": "346200be6c27b58d7ec2ea61840558d2e872d12aa5fe24ab82ef4d8f1e834bbe",
     "m4a": "chapter-16.m4a",
-    "m4a_sha256": "9c256c8c4a6af63c8ccca41062145934868bd88d25191056254baa350b7f0607",
-    "note": "start_ms is the block's offset in the stitched file, gaps included"
+    "m4a_sha256": "a7cf447bfd17dfe7c528d7d7016dfc4c487ce6150e1c9109c1e080abe756403a",
+    "note": "start_ms is the block's offset in the stitched file, gaps included; a description starts with its tone (tone_ms)"
   },
   "blocks": [
     {
@@ -739,7 +753,8 @@
       "start_ms": 462950,
       "text": "The scoreboard, yellow against purple. Redball captures: six to eleven. Greenball player hits: nine to seven. Blueball pin knockdowns: thirty-one to twenty-three. Combined score: sixteen seventy-four to seventeen seventy-one.",
       "generation_s": 2.18,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 63,
@@ -748,7 +763,7 @@
       "file": "blocks/c16-b063.wav",
       "sha256": "31293db4dfcd9e2053ae3d6495c69a5b74bddf2f41ea9355091973f1805bdcb9",
       "duration_ms": 11025,
-      "start_ms": 479250,
+      "start_ms": 479760,
       "text": "Purple's blueball score had just increased from 20 to 23, and their combined score from 1540 to 1771 — enough to push them ahead of their opponents.",
       "generation_s": 1.55
     },
@@ -759,7 +774,7 @@
       "file": "blocks/c16-b064.wav",
       "sha256": "f15e66abe5cfcb32388426ef6980debd90e4beef42ecb6d822cd4eb81ede92d9",
       "duration_ms": 8175,
-      "start_ms": 490725,
+      "start_ms": 491235,
       "text": "Suddenly, while the player who had just taken down those pins was celebrating, a greenball hit him in the back and splatted its paint over him.",
       "generation_s": 1.23
     },
@@ -770,7 +785,7 @@
       "file": "blocks/c16-b065.wav",
       "sha256": "3a1115e0083d8d5cc1954d1ebf6ecbfa9baae37901b571d1133ab0bd98ef4611",
       "duration_ms": 2050,
-      "start_ms": 499350,
+      "start_ms": 499860,
       "text": "The score adjusted again.",
       "generation_s": 0.35
     },
@@ -781,10 +796,11 @@
       "file": "blocks/c16-b066.wav",
       "sha256": "897c777d78b9b1656cc771e7cea44098054eea97e647c22fd62cf0f88a4bd275",
       "duration_ms": 10300,
-      "start_ms": 501850,
+      "start_ms": 502360,
       "text": "The scoreboard again: yellow's greenball player hits are up to ten, and its combined score jumps to eighteen sixty, against purple's seventeen seventy-one.",
       "generation_s": 1.68,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 67,
@@ -793,7 +809,7 @@
       "file": "blocks/c16-b067.wav",
       "sha256": "c631f95dc34d5198aafafc423a128c55d9b67bc5660bd2689955f99585a27abf",
       "duration_ms": 5025,
-      "start_ms": 512750,
+      "start_ms": 513770,
       "text": "\"You have to admit, the scoring system is really good now\", Febric exclaimed.",
       "generation_s": 0.91
     },
@@ -804,7 +820,7 @@
       "file": "blocks/c16-b068.wav",
       "sha256": "be7e708cf238d2d5d39e7b355d53680568457c0bc536d5240515f31bfab1f6a1",
       "duration_ms": 15625,
-      "start_ms": 518225,
+      "start_ms": 519245,
       "text": "\"I remember when I was much younger, they kept adjusting the ratios between what a redball gives you, versus a pin knockdown or a player hit. And they just couldn't get out of having a situation where the rational thing is to just focus all your attention on one.\"",
       "generation_s": 2.82
     },
@@ -815,7 +831,7 @@
       "file": "blocks/c16-b069.wav",
       "sha256": "f6673ee06e9058b26985d9fd60467ab32fce12eddfed3f6933dfc551e361c3dc",
       "duration_ms": 6175,
-      "start_ms": 534300,
+      "start_ms": 535320,
       "text": "\"Even when they got it right, within a year the strategies adjusted, and it became lopsided again.\"",
       "generation_s": 1.02
     },
@@ -826,7 +842,7 @@
       "file": "blocks/c16-b070.wav",
       "sha256": "090fbcf2cd8c76bd30d68e6385a8c97f6b5d6245e197581ed69f3c888b49dbcc",
       "duration_ms": 7700,
-      "start_ms": 540925,
+      "start_ms": 541945,
       "text": "\"I think making the score multiplicative was the only way out. That way you pretty much have to care about all three of the point types.\"",
       "generation_s": 1.19
     },
@@ -837,7 +853,7 @@
       "file": "blocks/c16-b071.wav",
       "sha256": "be1b3def5f4b294dd3ed39543d2efc708b16836ebe3e7388daaf3d26bdbb4eb5",
       "duration_ms": 5900,
-      "start_ms": 549075,
+      "start_ms": 550095,
       "text": "\"Or try really hard to make sure your opponent can't get any of one type\", Gladias interjected.",
       "generation_s": 0.91
     },
@@ -848,7 +864,7 @@
       "file": "blocks/c16-b072.wav",
       "sha256": "8f7451a1d327c64d6e72c9623a1367644ddaa7836182335d935ed47cc1c4eada",
       "duration_ms": 24050,
-      "start_ms": 555425,
+      "start_ms": 556445,
       "text": "\"Ah yeah that was the first thing a few people tried\", Febric replied. \"Holding onto redballs for more than thirty ticks had already been banned for ages, that had been a good cheat for whichever side was worse at redballs even back when the scores were additive. But what one team did try, is knock down a bunch of pins very early in the game, and then use most of their players to protect their pins for the rest of the game.\"",
       "generation_s": 3.9
     },
@@ -859,7 +875,7 @@
       "file": "blocks/c16-b073.wav",
       "sha256": "d68749499cde44c2f2b8453f08f698e86356ac7a8db2c240614174da273b7d51",
       "duration_ms": 16650,
-      "start_ms": 579925,
+      "start_ms": 580945,
       "text": "\"Turns out it doesn't actually work. People on copters can only pack together so tightly, no matter what you do, the other team always manages to sneak a few blueballs through. And then if you do pack tightly in one place around the pins, you're a sitting duck for the greenballs.\"",
       "generation_s": 2.93
     },
@@ -870,7 +886,7 @@
       "file": "blocks/c16-b074.wav",
       "sha256": "f520302e06219264fa1f6567ec0acfc8b6e1488deca4df2ab08406cfa81006fb",
       "duration_ms": 3000,
-      "start_ms": 597025,
+      "start_ms": 598045,
       "text": "\"Are you thinking of playing?\", Gladias asked.",
       "generation_s": 0.68
     },
@@ -881,7 +897,7 @@
       "file": "blocks/c16-b075.wav",
       "sha256": "f65e686873158f87753e0161013a6cf795c24dc7ad2d72cb5cfa9a2547968e54",
       "duration_ms": 7425,
-      "start_ms": 600475,
+      "start_ms": 601495,
       "text": "\"No, but I just had a bunch of conversations with [Zven](/zvˈɛn/) about this. The math is almost as fun as the actual game!\"",
       "generation_s": 1.2
     },
@@ -892,7 +908,7 @@
       "file": "blocks/c16-b076.wav",
       "sha256": "9899cacd3ac74b36766c5abdff3f09af79e06617719d6db9ac816762dafd675e",
       "duration_ms": 3850,
-      "start_ms": 608350,
+      "start_ms": 609370,
       "text": "Gladias and Febric both turned their attention to the food.",
       "generation_s": 0.55
     },
@@ -903,7 +919,7 @@
       "file": "blocks/c16-b077.wav",
       "sha256": "776dcaa3c0fa86baec577b7516ce858bcbc0994619b2d0c53968bfff49c4cb25",
       "duration_ms": 3325,
-      "start_ms": 612650,
+      "start_ms": 613670,
       "text": "\"How's Lily doing by the way?\", Gladias asked.",
       "generation_s": 0.62
     },
@@ -914,7 +930,7 @@
       "file": "blocks/c16-b078.wav",
       "sha256": "ef8b79c7b2b568e9e37ece6ef862f25b9c53f6ec32dd6a4d5b045580bac9c689",
       "duration_ms": 14300,
-      "start_ms": 616425,
+      "start_ms": 617445,
       "text": "\"She actually started getting a little better over the last couple of months. She mentioned to me a few days ago that she got seventy on her latest civics test. She seems happier. And she's even more engaged playing that game on her hand device.\"",
       "generation_s": 2.13
     },
@@ -925,7 +941,7 @@
       "file": "blocks/c16-b079.wav",
       "sha256": "0f7ddfe4e185b53976c79b31937624422688e9c75daadef44fcb6854bf28b8d2",
       "duration_ms": 2725,
-      "start_ms": 631175,
+      "start_ms": 632195,
       "text": "\"Do you know what game?\", Gladias asked.",
       "generation_s": 0.41
     },
@@ -936,7 +952,7 @@
       "file": "blocks/c16-b080.wav",
       "sha256": "82488e19bbb57fedd9b2ca948723d18adbffb4e3f3643981a184a2234741050f",
       "duration_ms": 1875,
-      "start_ms": 634350,
+      "start_ms": 635370,
       "text": "\"She doesn't show me either.\"",
       "generation_s": 0.29
     },
@@ -947,7 +963,7 @@
       "file": "blocks/c16-b081.wav",
       "sha256": "e61f16ae2ddb3c99d352cd5b177d2c0190fd0c3b4aecae36bbf4896ff975dcd2",
       "duration_ms": 5650,
-      "start_ms": 636675,
+      "start_ms": 637695,
       "text": "Gladias and Febric both returned to eating. A few minutes later, they were both finished.",
       "generation_s": 0.87
     },
@@ -958,7 +974,7 @@
       "file": "blocks/c16-b082.wav",
       "sha256": "cea2a04d926b9b83d3bf042ff74052e6f6fc708f9f7986ca4208a1b6ae79fde4",
       "duration_ms": 4750,
-      "start_ms": 642775,
+      "start_ms": 643795,
       "text": "\"Did you remember to take out your zipcoins this time?\", Febric asked playfully.",
       "generation_s": 0.86
     },
@@ -969,7 +985,7 @@
       "file": "blocks/c16-b083.wav",
       "sha256": "1b02703af8748da65cf2c429f197e1b6a18c7ce407a92eb1e84c9e169d1a7a27",
       "duration_ms": 6100,
-      "start_ms": 647975,
+      "start_ms": 648995,
       "text": "\"Hey, I may make lots of mistakes, but I don't make the same mistake twice\", Gladias snapped back.",
       "generation_s": 1.03
     },
@@ -980,7 +996,7 @@
       "file": "blocks/c16-b084.wav",
       "sha256": "bbecb01ba55e0846c9748d67e9d93470a2bc6d00ce73e26dfc4eb9bc8a83d70a",
       "duration_ms": 8550,
-      "start_ms": 654525,
+      "start_ms": 655545,
       "text": "\"By the way, Febric, thanks for reminding me — I need to test my recovery procedure for my coins\", he whispered through his neck band.",
       "generation_s": 1.44
     },
@@ -991,7 +1007,7 @@
       "file": "blocks/c16-b085.wav",
       "sha256": "6f3e4d21ca50fded43941f552a3118d7a227ac2d1f0e301610516e96c19dbf10",
       "duration_ms": 2725,
-      "start_ms": 663525,
+      "start_ms": 664545,
       "text": "\"Want me to help you sign a test operation?\"",
       "generation_s": 0.56
     },
@@ -1002,7 +1018,7 @@
       "file": "blocks/c16-b086.wav",
       "sha256": "32adebe6e1dc9c81767abbcddcadacf355ef67787a437467bb0b286aefe8f2e5",
       "duration_ms": 2475,
-      "start_ms": 666700,
+      "start_ms": 667720,
       "text": "\"Sure! What do you want the test to be?\"",
       "generation_s": 0.44
     },
@@ -1013,7 +1029,7 @@
       "file": "blocks/c16-b087.wav",
       "sha256": "391863aeabacf4e880da6442bda5b4ee8436b0da6fbc7876ce569b109a35e35a",
       "duration_ms": 2725,
-      "start_ms": 669625,
+      "start_ms": 670645,
       "text": "\"I dunno, buy a Hydrafill bottle?\"",
       "generation_s": 0.45
     },
@@ -1024,7 +1040,7 @@
       "file": "blocks/c16-b088.wav",
       "sha256": "49d4cdcd6c034098c48ab598a4add103f9d033808bdbcf687311bb0c360f10bc",
       "duration_ms": 9675,
-      "start_ms": 672800,
+      "start_ms": 673820,
       "text": "\"Buy a Hydrafill bottle? Straight out of a life savings wallet?\", Gladias asked incredulously. \"Those ads really have been getting to you too, haven't they?\"",
       "generation_s": 1.59
     },
@@ -1035,7 +1051,7 @@
       "file": "blocks/c16-b089.wav",
       "sha256": "77f1799056a92c458029f1f39a65d16066d886acdfaf95627f28660b6115e776",
       "duration_ms": 2175,
-      "start_ms": 682925,
+      "start_ms": 683945,
       "text": "\"Hey, you're the one who asked me!\"",
       "generation_s": 0.46
     },
@@ -1046,7 +1062,7 @@
       "file": "blocks/c16-b090.wav",
       "sha256": "4cb37269dfbc45e424de14626d3928cdb2d4bd8f4a12b54c468d416cf390212f",
       "duration_ms": 3025,
-      "start_ms": 685550,
+      "start_ms": 686570,
       "text": "\"Okay fine ... let me start the operation.\"",
       "generation_s": 0.53
     },
@@ -1057,7 +1073,7 @@
       "file": "blocks/c16-b091.wav",
       "sha256": "a8c049ffdbdb4be2a8d92fb311987137fc4216331250925a98f11adecc085ae7",
       "duration_ms": 9000,
-      "start_ms": 689025,
+      "start_ms": 690045,
       "text": "Gladias began whispering into his neck band. Out of the corner of his eye, he saw Febric run off somewhere, though he was too busy to wonder where.",
       "generation_s": 1.44
     },
@@ -1068,7 +1084,7 @@
       "file": "blocks/c16-b092.wav",
       "sha256": "6f448ac5746516e1d57c98c8b2c6ddb11fc70d700aa4ccde1370ca56f6f10d9c",
       "duration_ms": 3000,
-      "start_ms": 698475,
+      "start_ms": 699495,
       "text": "A few ticks later, Febric's watch buzzed.",
       "generation_s": 0.46
     },
@@ -1079,10 +1095,11 @@
       "file": "blocks/c16-b093.wav",
       "sha256": "5f9ef3442a7d4669c6bc1b3bd14a39b84ef10b160daede102b99838022b5e690",
       "duration_ms": 9500,
-      "start_ms": 701925,
+      "start_ms": 702945,
       "text": "On Febric's watch, from Gladias: a social recovery mode transaction request, for a wallet whose address begins oh ex eight F six two.",
       "generation_s": 1.35,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 94,
@@ -1091,7 +1108,7 @@
       "file": "blocks/c16-b094.wav",
       "sha256": "c6232590edd7d9120616d7f866773317fecfcc723fa393711cda1666d3f92c9a",
       "duration_ms": 35300,
-      "start_ms": 712025,
+      "start_ms": 713555,
       "text": "Febric opened up his hand device, and a more detailed view of the transaction appeared. He asked Emerald to search for the receiving address online. A few ticks later, Emerald replied with a confirmation that it was, in fact, the Hydrafill purchase address. He then checked the amount — 5.5 zipcoins. It seemed reasonable for a water bottle plus shipping, though the bulk of the cost was definitely the shipping. He checked the transaction data field. Yep, looked like an encoding of Gladias's home address, in the correct format according to the standard online shopping protocol.",
       "generation_s": 6.12
     },
@@ -1102,7 +1119,7 @@
       "file": "blocks/c16-b095.wav",
       "sha256": "8673bcabe3c782e1ce4ee3647fe46e23a24709de90fe82f6ff3c4c39c6f40673",
       "duration_ms": 6850,
-      "start_ms": 747775,
+      "start_ms": 749305,
       "text": "In the cryptographic network that processed these transactions, all of this data was, of course, encrypted.",
       "generation_s": 1.33
     },
@@ -1113,7 +1130,7 @@
       "file": "blocks/c16-b096.wav",
       "sha256": "f45b00cb5f7be8aff338a42af86aa094cdeabb0cc800c0463476f6591b2b2628",
       "duration_ms": 2125,
-      "start_ms": 755075,
+      "start_ms": 756605,
       "text": "Febric clicked \"Confirm\".",
       "generation_s": 0.32
     },
@@ -1124,7 +1141,7 @@
       "file": "blocks/c16-b097.wav",
       "sha256": "dfafc4c68bab2d7d01835010139f601bbf92669b95bb7500b8cf1ed6a70aeaa4",
       "duration_ms": 2625,
-      "start_ms": 757650,
+      "start_ms": 759180,
       "text": "Gladias's watch immediately buzzed.",
       "generation_s": 0.39
     },
@@ -1135,7 +1152,7 @@
       "file": "blocks/c16-b098.wav",
       "sha256": "98308693584cb12fc429983afb712334015fa1cd8a310feaece0769d144427b9",
       "duration_ms": 3800,
-      "start_ms": 760725,
+      "start_ms": 762255,
       "text": "Less than a minute later, Gladias's watch buzzed again.",
       "generation_s": 0.55
     },
@@ -1146,10 +1163,11 @@
       "file": "blocks/c16-b099.wav",
       "sha256": "fe051536ea47cf836700997f2d72d355894ae58bb94637cf96b8781c274a2db5",
       "duration_ms": 8625,
-      "start_ms": 764975,
+      "start_ms": 766505,
       "text": "A message from Seila: Security question: what was the most unusual thing I did on the evening the kids came back from Vil and Daia's?",
       "generation_s": 1.21,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 100,
@@ -1158,7 +1176,7 @@
       "file": "blocks/c16-b100.wav",
       "sha256": "10c0c6f2f288700c56516a04256892d11e44de1d3a33e1286b182c394efdc9b1",
       "duration_ms": 4075,
-      "start_ms": 774200,
+      "start_ms": 776240,
       "text": "Gladias immediately whispered into his neck band a reply.",
       "generation_s": 0.57
     },
@@ -1169,10 +1187,11 @@
       "file": "blocks/c16-b101.wav",
       "sha256": "f07f43a9f89b92a7e3a0842852d30fc4eb326f35126426a8f246678bc039d1fe",
       "duration_ms": 6325,
-      "start_ms": 778725,
+      "start_ms": 780765,
       "text": "His reply to Seila: You unplugged the screen in the restaurant when it was showing Lord Ephelion's speech.",
       "generation_s": 0.88,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 102,
@@ -1181,7 +1200,7 @@
       "file": "blocks/c16-b102.wav",
       "sha256": "e8394b056240709dbc36eecec745601fab055039f8305095a3a99e4241138395",
       "duration_ms": 14375,
-      "start_ms": 785650,
+      "start_ms": 788200,
       "text": "A few moments later, Gladias's watch buzzed again. Three signatures done, including his own. One to go. Either Mov or Pelow — or, of course, if he really had to, himself running to the vault and picking up his second key.",
       "generation_s": 2.18
     },
@@ -1192,7 +1211,7 @@
       "file": "blocks/c16-b103.wav",
       "sha256": "70203484036c0ff49699f8ce0fbafd4b6803168c51cdc935c2716cb74139732b",
       "duration_ms": 6875,
-      "start_ms": 800475,
+      "start_ms": 803025,
       "text": "\"I'm obviously not gonna ask who that was, or who else you need to confirm it\", Febric added. \"But good luck!\"",
       "generation_s": 1.0
     },
@@ -1202,7 +1221,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 807800,
+      "start_ms": 810350,
       "duration_ms": 1800
     },
     {
@@ -1212,7 +1231,7 @@
       "file": "blocks/c16-b105.wav",
       "sha256": "92bace2f39baa5bc1d6f332d204f19a9c1bea0dc73b7a3dea9d3858eb5102356",
       "duration_ms": 1725,
-      "start_ms": 809600,
+      "start_ms": 812150,
       "text": "\"Seila, I'm home!\"",
       "generation_s": 0.26
     },
@@ -1223,7 +1242,7 @@
       "file": "blocks/c16-b106.wav",
       "sha256": "a5506ff0ec5f7b7bb51c707ceca466d57d9397fdfb913ab91cef6dc3c59a4a86",
       "duration_ms": 1400,
-      "start_ms": 811775,
+      "start_ms": 814325,
       "text": "\"Glad!\"",
       "generation_s": 0.22
     },
@@ -1234,7 +1253,7 @@
       "file": "blocks/c16-b107.wav",
       "sha256": "15ed45e88dbb80024233fab8477f28c01fb23be4b050f796c9d46d4e13c81457",
       "duration_ms": 2150,
-      "start_ms": 813625,
+      "start_ms": 816175,
       "text": "\"So I have interesting news.\"",
       "generation_s": 0.31
     },
@@ -1245,7 +1264,7 @@
       "file": "blocks/c16-b108.wav",
       "sha256": "5545ced65cf75f318ccb5d30195caeaf4cc6e6e96d815f1f2b6cac9e3d850cf8",
       "duration_ms": 1475,
-      "start_ms": 816225,
+      "start_ms": 818775,
       "text": "\"What is it?\"",
       "generation_s": 0.21
     },
@@ -1256,7 +1275,7 @@
       "file": "blocks/c16-b109.wav",
       "sha256": "385c5b011975e3d2b4878719321c31476aabd22385e18dc5ae0508687fc13b2e",
       "duration_ms": 3250,
-      "start_ms": 818150,
+      "start_ms": 820700,
       "text": "\"There's some chance I'll be going to [Dzego](/ˈdzɛɡO/) soon.\"",
       "generation_s": 0.48
     },
@@ -1267,7 +1286,7 @@
       "file": "blocks/c16-b110.wav",
       "sha256": "0025cabc1bf11b19d46715465a6b72c977d82cec6d9cfaeebaaeb233da0f356a",
       "duration_ms": 1650,
-      "start_ms": 821850,
+      "start_ms": 824400,
       "text": "Seila stared.",
       "generation_s": 0.26
     },
@@ -1278,7 +1297,7 @@
       "file": "blocks/c16-b111.wav",
       "sha256": "a52f2f864fb4e7650abe45b8d6c216db4b40974cc4600bfdef8c542d76b252a3",
       "duration_ms": 1250,
-      "start_ms": 823950,
+      "start_ms": 826500,
       "text": "\"Why?\"",
       "generation_s": 0.19
     },
@@ -1289,7 +1308,7 @@
       "file": "blocks/c16-b112.wav",
       "sha256": "f98678d189f12b382b84eaf6d13c15b2e4d55e68b0dd1884173696e9c22db490",
       "duration_ms": 10200,
-      "start_ms": 825650,
+      "start_ms": 828200,
       "text": "\"I talked to Mov about this. He thinks that Veridians, especially Keepers, the Order, the institutions generally, have a lot to learn from what's going on over there.\"",
       "generation_s": 1.4
     },
@@ -1300,7 +1319,7 @@
       "file": "blocks/c16-b113.wav",
       "sha256": "d616c7cfdc7ddb3b9829d065f14d507390c69a61cf006dac8263b37a3cdde01d",
       "duration_ms": 12500,
-      "start_ms": 836300,
+      "start_ms": 838850,
       "text": "\"I'm not sure about this ... it's a difficult time. You're not really the best person to make good use of a [Dzego](/ˈdzɛɡO/) trip. And the Keepers would benefit from having a strong hand guide them these next few months.\"",
       "generation_s": 1.72
     },
@@ -1311,7 +1330,7 @@
       "file": "blocks/c16-b114.wav",
       "sha256": "3b441fcffc73c6072c3937c71635f5b3ee09b8a9efb231e1f350029a64e578bc",
       "duration_ms": 10750,
-      "start_ms": 849250,
+      "start_ms": 851800,
       "text": "\"Arctic stuff is really much more of a military and parliament responsibility, maybe Graph Funding too. And ... maybe I can make good use of a trip if you introduce me to [Zei](/ˈzA/)?\"",
       "generation_s": 1.47
     },
@@ -1322,7 +1341,7 @@
       "file": "blocks/c16-b115.wav",
       "sha256": "92335dc028db9fd46d79e1f83aa88277607421742daa16ad40be9d4a916e4f1e",
       "duration_ms": 3125,
-      "start_ms": 860450,
+      "start_ms": 863000,
       "text": "Seila retreated into her thoughts for a few moments.",
       "generation_s": 0.45
     },
@@ -1333,7 +1352,7 @@
       "file": "blocks/c16-b116.wav",
       "sha256": "9de020db0124425ea406c1776eac4d7cc1867a9e110df8ed9c8817d56aa8e706",
       "duration_ms": 16125,
-      "start_ms": 864025,
+      "start_ms": 866575,
       "text": "\"If Mov thinks it's a good idea, then fine. But please do your homework first. Find someone, anyone, in Graph Funding or in parliament to talk to, so you get some idea of whether this trip will be useful, and if you do go, how to make it as useful as possible.\"",
       "generation_s": 2.74
     },
@@ -1344,7 +1363,7 @@
       "file": "blocks/c16-b117.wav",
       "sha256": "da73bdd70079808c252240e5d0a70d1dddc37afcaaec28e835d081cbce31044c",
       "duration_ms": 2450,
-      "start_ms": 880600,
+      "start_ms": 883150,
       "text": "\"But really, think hard about this.\"",
       "generation_s": 0.44
     },
@@ -1355,9 +1374,22 @@
       "file": "blocks/c16-b118.wav",
       "sha256": "75bf961ac7facec1000ee41fa52e6d95930b8c83b9873fd823f221b0a19a0bf3",
       "duration_ms": 4675,
-      "start_ms": 883500,
+      "start_ms": 886050,
       "text": "\"If you go, then yes, of course I'll introduce you to [Zei](/ˈzA/). And [Bai](/ˈbI/) too.\"",
       "generation_s": 0.69
     }
-  ]
+  ],
+  "restitched_at": "2026-10-05T18:50:00+00:00",
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent and its helper agents",
+    "drafted": [
+      "spoken descriptions of screens, figures and lyric cards (blocks 62, 66, 93, 99, 101)",
+      "pronunciation entries (content/snowmoon/pronunciation.json)"
+    ],
+    "instructions": [
+      "docs/prompts/008a-agent-prompts.md#read-aloud-descriptions-and-invented-word-lists"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
 }

@@ -4,7 +4,7 @@
   "source_sha256": "2af0254952016da6f8370845fa19adb9825479e8a6586c7bbc04c0f640bc3640",
   "generated_at": "2026-10-03T17:38:00+00:00",
   "generation_seconds": 139.4,
-  "total_duration_ms": 998050,
+  "total_duration_ms": 1000090,
   "model": {
     "name": "Kokoro-82M",
     "repo": "hexgrad/Kokoro-82M",
@@ -36,7 +36,21 @@
     },
     "break_ms": 1800,
     "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
-    "read_aloud_sha256": "61147d0b3f62359728bbb5191914f0613acde8d04c005ac4b08f8fb0b12cc201"
+    "read_aloud_sha256": "61147d0b3f62359728bbb5191914f0613acde8d04c005ac4b08f8fb0b12cc201",
+    "description_tone": {
+      "notes_hz": [
+        660,
+        990
+      ],
+      "notes_ms": [
+        110,
+        140
+      ],
+      "between_ms": 40,
+      "after_ms": 220,
+      "amplitude": 0.12,
+      "made_by": "code (numpy sine, linear fades)"
+    }
   },
   "host": {
     "platform": "macOS-26.5.1-arm64-arm-64bit",
@@ -45,10 +59,10 @@
   },
   "stitched": {
     "wav": "chapter-17.wav",
-    "wav_sha256": "2f30ad777415959b28f1f1bab6e05f82b5fd47df37dd2de3ad05ac0adbd153fe",
+    "wav_sha256": "e803491196d9580876190b3c4b34c1042cd1a02bf52ba0206759151a73ecd531",
     "m4a": "chapter-17.m4a",
-    "m4a_sha256": "34e1a4b5266d7bee619bc1242b7b0294c91a39b1b8902c4abe216ab5cf55b099",
-    "note": "start_ms is the block's offset in the stitched file, gaps included"
+    "m4a_sha256": "e49e09d9d3e0d9c2b75858948effc439a746b96030d2765eca8e38a8be66eefa",
+    "note": "start_ms is the block's offset in the stitched file, gaps included; a description starts with its tone (tone_ms)"
   },
   "blocks": [
     {
@@ -116,7 +130,8 @@
       "start_ms": 24125,
       "text": "The circle shows: Veridian Parliament. Proof of invitation verified.",
       "generation_s": 0.58,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 6,
@@ -125,7 +140,7 @@
       "file": "blocks/c17-b006.wav",
       "sha256": "0d068d7dfeb2b5f3be0da4e7778346f56fa8123c51f33ef19b01db89c74ed49d",
       "duration_ms": 11050,
-      "start_ms": 29725,
+      "start_ms": 30235,
       "text": "The door opened. Gladias walked in, and followed the instructions that were being relayed by his watch. Forward, then right turn, then forward, then third door on the left.",
       "generation_s": 1.29
     },
@@ -136,7 +151,7 @@
       "file": "blocks/c17-b007.wav",
       "sha256": "679705039f999e8bd2075afc6f1dd9e6fd29f9d21e1c91889eaa196d58f60110",
       "duration_ms": 3425,
-      "start_ms": 41225,
+      "start_ms": 41735,
       "text": "Gladias got to the door, and tapped his watch again.",
       "generation_s": 0.42
     },
@@ -147,7 +162,7 @@
       "file": "blocks/c17-b008.wav",
       "sha256": "5a8144bfc8fe63a8c2cb174836134a20352d36fd381b3b6ffcfd198f4106d0ae",
       "duration_ms": 1625,
-      "start_ms": 45100,
+      "start_ms": 45610,
       "text": "The door opened.",
       "generation_s": 0.21
     },
@@ -158,7 +173,7 @@
       "file": "blocks/c17-b009.wav",
       "sha256": "a0f686cc40d225efa2ccc07416354c0967c2cb36744b9587927ac669fbd65dc7",
       "duration_ms": 3975,
-      "start_ms": 47175,
+      "start_ms": 47685,
       "text": "Inside, he saw a man wearing a Veridian parliament robe.",
       "generation_s": 0.47
     },
@@ -169,7 +184,7 @@
       "file": "blocks/c17-b010.wav",
       "sha256": "4f0e97f123b0a150692c82ec93acec39c2d445e573ae988a9b1e63862455693f",
       "duration_ms": 3675,
-      "start_ms": 51600,
+      "start_ms": 52110,
       "text": "\"Gladias, thank you for coming!\", the senator exclaimed.",
       "generation_s": 0.44
     },
@@ -180,7 +195,7 @@
       "file": "blocks/c17-b011.wav",
       "sha256": "a9cb5e48c6ac05f39413f95dbb63b8a26f420710093dc12dfb1079191770075f",
       "duration_ms": 3075,
-      "start_ms": 55725,
+      "start_ms": 56235,
       "text": "\"And thank you for seeing me, Senator Verdow!\"",
       "generation_s": 0.37
     },
@@ -191,7 +206,7 @@
       "file": "blocks/c17-b012.wav",
       "sha256": "df11ebd481cb079d34bba64313100ccac4ccc7b03528aab05c92d031969c0e2a",
       "duration_ms": 1750,
-      "start_ms": 59250,
+      "start_ms": 59760,
       "text": "\"Please sit down.\"",
       "generation_s": 0.23
     },
@@ -202,7 +217,7 @@
       "file": "blocks/c17-b013.wav",
       "sha256": "e036ac92127327716356a71ccff631321a0b8f6b9b083d55be1652d4030bec1c",
       "duration_ms": 2175,
-      "start_ms": 61450,
+      "start_ms": 61960,
       "text": "A robot slid into the room.",
       "generation_s": 0.28
     },
@@ -213,7 +228,7 @@
       "file": "blocks/c17-b014.wav",
       "sha256": "c7716c13cbb346cdba6bf4db83b9e8f10c054e03736addb3dd1eac32944d7f2d",
       "duration_ms": 3725,
-      "start_ms": 64075,
+      "start_ms": 64585,
       "text": "\"[jie](/ˈʤjɛ/) [mo](/ˈmO/) [kai](/ˈkI/) [tu](/ˈtu/) [jie](/ˈʤjɛ/) [hei](/ˈhA/) [ja](/ˈʤɑ/) [ma](/ˈmɑ/)?\", the robot asked.",
       "generation_s": 0.45
     },
@@ -224,7 +239,7 @@
       "file": "blocks/c17-b015.wav",
       "sha256": "9c521614e92cb801cf37d47f798e26c72513940709a59bcfdbb64a5600ebe417",
       "duration_ms": 2675,
-      "start_ms": 68250,
+      "start_ms": 68760,
       "text": "Gladias briefly stared in surprise.",
       "generation_s": 0.32
     },
@@ -235,7 +250,7 @@
       "file": "blocks/c17-b016.wav",
       "sha256": "43af99abdbd2b5fe93be0956204402d30a98913b4501d8caa54449ba80f6f91d",
       "duration_ms": 1675,
-      "start_ms": 71375,
+      "start_ms": 71885,
       "text": "Verdow laughed.",
       "generation_s": 0.22
     },
@@ -246,7 +261,7 @@
       "file": "blocks/c17-b017.wav",
       "sha256": "bc9853eec863a2fea92dcfe25fb3187c187a32ac894423c2f224a4eae13ac0b9",
       "duration_ms": 8650,
-      "start_ms": 73500,
+      "start_ms": 74010,
       "text": "\"I adjusted the settings to make it do that a few months ago. Just a little something as a reminder that other countries exist and that they matter.\"",
       "generation_s": 1.18
     },
@@ -257,7 +272,7 @@
       "file": "blocks/c17-b018.wav",
       "sha256": "559884f24ed668ca3149169b9cb610c8eb05b4fd735b8799d493995dd84d04a1",
       "duration_ms": 5225,
-      "start_ms": 82600,
+      "start_ms": 83110,
       "text": "Verdow tapped a few buttons on the robot's screen, and turned the screen toward Gladias.",
       "generation_s": 0.77
     },
@@ -268,7 +283,7 @@
       "file": "blocks/c17-b019.wav",
       "sha256": "1bbc62d1fb5b143edb0e2789354cde70c698e314b7ef524ccc9d543265f9f3aa",
       "duration_ms": 5200,
-      "start_ms": 88275,
+      "start_ms": 88785,
       "text": "The screen was in [Dzegoban](/ˈdzɛɡObɑn/). Gladias's eyes wandered around with confusion.",
       "generation_s": 0.75
     },
@@ -279,7 +294,7 @@
       "file": "blocks/c17-b020.wav",
       "sha256": "7d8b381f1099d2f2391c4cb6b65392b9c9a04d3a852f6de3acc37f416eef1e61",
       "duration_ms": 6300,
-      "start_ms": 93925,
+      "start_ms": 94435,
       "text": "\"Oh, if you want water, that's '[ja](/ˈʤɑ/)'. And if you want tea, that's '[kai](/ˈkI/) [ja](/ˈʤɑ/)'. Literally 'plant water'.\"",
       "generation_s": 0.9
     },
@@ -290,7 +305,7 @@
       "file": "blocks/c17-b021.wav",
       "sha256": "5772294bf673866585b37f112e9d930c9b35d0ce8a96607b1b8161f9d7ebbdab",
       "duration_ms": 20125,
-      "start_ms": 100675,
+      "start_ms": 101185,
       "text": "Gladias clicked on '[kai](/ˈkI/) [ja](/ˈʤɑ/)'. If he's going to be in [Dzego](/ˈdzɛɡO/) for a few months, might as well get acclimated and start drinking some tea — and knowing the local word for it. The robot beeped, signaling acceptance of the order, and began to quietly glide away from them. The room door briefly opened, and the robot exited the room.",
       "generation_s": 3.03
     },
@@ -301,7 +316,7 @@
       "file": "blocks/c17-b022.wav",
       "sha256": "a25a4fe945d75e67dfffd8c75c9ee3a699741b5cb8570442f2cec0e02fc8b34c",
       "duration_ms": 2525,
-      "start_ms": 121250,
+      "start_ms": 121760,
       "text": "\"So you think I should go to [Dzego](/ˈdzɛɡO/)?\"",
       "generation_s": 0.48
     },
@@ -312,7 +327,7 @@
       "file": "blocks/c17-b023.wav",
       "sha256": "9c68902b14ce05c2db85a18ba91396d9c093630a89b5f2b2c076f321ee4eb26b",
       "duration_ms": 26825,
-      "start_ms": 124225,
+      "start_ms": 124735,
       "text": "\"You're obviously smart. Of course I have no idea what you say in your secret meetings, but judging from everything you said in the hearing, and from your original application to the Order years ago, I think you're a good and smart person. We need people like you to be more active in serving our country. Being a Keeper is nice, but come on, you're only one of over a thousand. I think getting and bringing back some first-hand experience from [Dzego](/ˈdzɛɡO/) could be even more meaningful.\"",
       "generation_s": 4.31
     },
@@ -323,7 +338,7 @@
       "file": "blocks/c17-b024.wav",
       "sha256": "7c934d7e0937ec874c967f6cd30f8259e50c4394bbffd4fa92e1d0ac36458c1a",
       "duration_ms": 6600,
-      "start_ms": 151500,
+      "start_ms": 152010,
       "text": "\"If you think it's a good idea, I'm happy to. But who should I talk to there? That's what I wanted to get your input on.\"",
       "generation_s": 1.0
     },
@@ -334,7 +349,7 @@
       "file": "blocks/c17-b025.wav",
       "sha256": "36e5a485662e17733b0173749cf555c5946f015afe9d51bf3eaea2b7829341c0",
       "duration_ms": 11500,
-      "start_ms": 158550,
+      "start_ms": 159060,
       "text": "Gladias intentionally omitted any mention of [Zei](/ˈzA/) — not out of any desire to hide that indirect connection, but because he wanted to get a fully independent answer from Verdow first.",
       "generation_s": 1.77
     },
@@ -345,7 +360,7 @@
       "file": "blocks/c17-b026.wav",
       "sha256": "9ac30fe8ba255e07b432a93bc7cb1ef36d5f658146af6264d909891d3620c36d",
       "duration_ms": 18225,
-      "start_ms": 170500,
+      "start_ms": 171010,
       "text": "\"Well my strongest connections are with some of their authors and musicians\", he said, gently laughing. \"Though I also know a few people in the government there, especially the security and health ministry. I'll send you their contacts, and give them a heads up. I wouldn't stop with them, but I think they can help get you started.\"",
       "generation_s": 2.93
     },
@@ -356,7 +371,7 @@
       "file": "blocks/c17-b027.wav",
       "sha256": "16570902e2cdfb26415a1cb3ba110d381d8e4b78cbf1804144d7672516c5f757",
       "duration_ms": 2150,
-      "start_ms": 189175,
+      "start_ms": 189685,
       "text": "\"Thanks, that would help a lot!\"",
       "generation_s": 0.36
     },
@@ -367,7 +382,7 @@
       "file": "blocks/c17-b028.wav",
       "sha256": "709c24f6a6700ac64044de0b09e7d6085289d963a771a346b97aefa1f9f447bb",
       "duration_ms": 10225,
-      "start_ms": 191775,
+      "start_ms": 192285,
       "text": "\"I only know two people from there, indirectly; my wife met them at a chance meeting in the Economics Institute in Freetown. [Zei](/ˈzA/) and [Bai](/ˈbI/), they were in [Minpentai](/ˈmɪnpɛntI/).\"",
       "generation_s": 1.56
     },
@@ -378,7 +393,7 @@
       "file": "blocks/c17-b029.wav",
       "sha256": "5d5140ae1e6bbaf0ceddd70689266fe1bfa0c4f90f8eaafd2bc658b91e95d3f1",
       "duration_ms": 18225,
-      "start_ms": 202450,
+      "start_ms": 202960,
       "text": "Verdow's eyes opened. \"Honestly, you might have a better lead than I do. When you see the [Minpentai](/ˈmɪnpɛntI/) games in [Dzego](/ˈdzɛɡO/), the players and the people who train them are clearly top-notch. If I had to find someone to defend me against the Arctics, I'd almost trust them over the actual [Dzego](/ˈdzɛɡO/) army.\"",
       "generation_s": 2.48
     },
@@ -389,7 +404,7 @@
       "file": "blocks/c17-b030.wav",
       "sha256": "85570e0b0d5244267ee770d286281294670a9d0bd47395998536d34518dc231d",
       "duration_ms": 4675,
-      "start_ms": 221125,
+      "start_ms": 221635,
       "text": "\"How advanced are [Zei](/ˈzA/) and [Bai](/ˈbI/)? Did they get into any of the championships?\"",
       "generation_s": 0.65
     },
@@ -400,7 +415,7 @@
       "file": "blocks/c17-b031.wav",
       "sha256": "2d80de8b80d6f44e4e896dc328d938d81128417960ad686410e0b18950d92e9e",
       "duration_ms": 7075,
-      "start_ms": 226250,
+      "start_ms": 226760,
       "text": "\"Last thing Seila told me, [Zei](/ˈzA/) won the semi-finals, and then they cancelled the finals when Redshire was invaded.\"",
       "generation_s": 1.19
     },
@@ -411,7 +426,7 @@
       "file": "blocks/c17-b032.wav",
       "sha256": "6428660e97219e3aab8304a09532b9cfa622fe1046a45e35dbdc60638b03090a",
       "duration_ms": 2975,
-      "start_ms": 233775,
+      "start_ms": 234285,
       "text": "\"The semi-finals, like municipal level?\"",
       "generation_s": 0.51
     },
@@ -422,7 +437,7 @@
       "file": "blocks/c17-b033.wav",
       "sha256": "7a2a24a6ffab5878f5456546544b0f818e046d3e5d48b32e451fb3be8b42b46c",
       "duration_ms": 1525,
-      "start_ms": 237200,
+      "start_ms": 237710,
       "text": "\"National.\"",
       "generation_s": 0.22
     },
@@ -433,7 +448,7 @@
       "file": "blocks/c17-b034.wav",
       "sha256": "1c779d581ec9db88027ea900db45ed07b00014211c0ead8a2ee7829e657e601c",
       "duration_ms": 2925,
-      "start_ms": 239175,
+      "start_ms": 239685,
       "text": "Verdow stared with a mix of surprise and joy.",
       "generation_s": 0.43
     },
@@ -444,7 +459,7 @@
       "file": "blocks/c17-b035.wav",
       "sha256": "7322ef55aba871e1d785d55199efa594f9fac1b8deb5f5ab58355a5d7ef95d33",
       "duration_ms": 6700,
-      "start_ms": 242550,
+      "start_ms": 243060,
       "text": "\"Your connections are definitely better than mine then. When you come back, you'll have to tell me more about [Dzego](/ˈdzɛɡO/)!\"",
       "generation_s": 0.94
     },
@@ -455,7 +470,7 @@
       "file": "blocks/c17-b036.wav",
       "sha256": "6f347a453027552984a623156491570bb1a2e129df2539f3a958423e23f10947",
       "duration_ms": 8450,
-      "start_ms": 249700,
+      "start_ms": 250210,
       "text": "\"Anyway, I'll introduce you to the other folks I mentioned so you can see them when you come. It's always good to get more than one perspective.\"",
       "generation_s": 1.44
     },
@@ -466,7 +481,7 @@
       "file": "blocks/c17-b037.wav",
       "sha256": "60534639c65728edd950fc7190436768b32b03f5b72bddd4564e4c373cf7b9af",
       "duration_ms": 2525,
-      "start_ms": 258600,
+      "start_ms": 259110,
       "text": "Gladias nodded appreciatively.",
       "generation_s": 0.43
     },
@@ -477,7 +492,7 @@
       "file": "blocks/c17-b038.wav",
       "sha256": "6d537bb3465a0b6f8e7be26d3253ede5ae897c0ac7d15d9caf30079f22415285",
       "duration_ms": 8650,
-      "start_ms": 261575,
+      "start_ms": 262085,
       "text": "\"Oh, by the way, speaking of getting more perspectives, one of the Graph Funding stewards is here about to visit me. You want to talk to him too?\"",
       "generation_s": 1.19
     },
@@ -488,7 +503,7 @@
       "file": "blocks/c17-b039.wav",
       "sha256": "b033e509f0b7bf3ce9697e946ef76a93f464dc10a20cfc6a16c01f676bf3429f",
       "duration_ms": 1500,
-      "start_ms": 270675,
+      "start_ms": 271185,
       "text": "\"About what?\"",
       "generation_s": 0.22
     },
@@ -499,7 +514,7 @@
       "file": "blocks/c17-b040.wav",
       "sha256": "6a456fa5351863c9729b4566572425e19648c8fe3e63ed061e7bb3908f181181",
       "duration_ms": 4575,
-      "start_ms": 272625,
+      "start_ms": 273135,
       "text": "\"Oh, his work, how he's feeling about Graph Funding, and of course [Dzego](/ˈdzɛɡO/).\"",
       "generation_s": 0.64
     },
@@ -510,7 +525,7 @@
       "file": "blocks/c17-b041.wav",
       "sha256": "4678b2220dab886154c047686bb90106d57ab1db9dc5c820a623a422384c4037",
       "duration_ms": 1600,
-      "start_ms": 277650,
+      "start_ms": 278160,
       "text": "\"Sure, why not?\"",
       "generation_s": 0.24
     },
@@ -520,7 +535,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 279700,
+      "start_ms": 280210,
       "duration_ms": 1800
     },
     {
@@ -530,7 +545,7 @@
       "file": "blocks/c17-b043.wav",
       "sha256": "1733a57eacd79eff8bcdbaffb3ba3b7e2d686bd7d4970736744bbe0ddb05c05a",
       "duration_ms": 8225,
-      "start_ms": 281500,
+      "start_ms": 282010,
       "text": "A few minutes later, the door opened, and another man, wearing a Veridian privacy robe but without the face cover and hood, walked in.",
       "generation_s": 1.1
     },
@@ -541,7 +556,7 @@
       "file": "blocks/c17-b044.wav",
       "sha256": "8b426862a05900a54c47dd9f08031ed7fb77cdb16fa7ef1a31efca6284d77410",
       "duration_ms": 2350,
-      "start_ms": 290175,
+      "start_ms": 290685,
       "text": "\"Belgor, good to see you again!\"",
       "generation_s": 0.34
     },
@@ -552,7 +567,7 @@
       "file": "blocks/c17-b045.wav",
       "sha256": "62cdccbe6628a8fd36c67661d269cf0ea55da549d9b6665e11ccfc9ec6ea5807",
       "duration_ms": 2125,
-      "start_ms": 292975,
+      "start_ms": 293485,
       "text": "\"Good to see you too, Verdow!\"",
       "generation_s": 0.31
     },
@@ -563,7 +578,7 @@
       "file": "blocks/c17-b046.wav",
       "sha256": "4635240be81b3cab501f7464a74e9533a0dcb974b61a8e4b0a612dff17077280",
       "duration_ms": 2475,
-      "start_ms": 295550,
+      "start_ms": 296060,
       "text": "\"And meet Gladias, he's a Keeper.\"",
       "generation_s": 0.35
     },
@@ -574,7 +589,7 @@
       "file": "blocks/c17-b047.wav",
       "sha256": "ec45b6b561a0d69d25bb3d2e4e61d017a393f6bae2d309096bc0b9b124b5431b",
       "duration_ms": 2025,
-      "start_ms": 298475,
+      "start_ms": 298985,
       "text": "\"Nice to meet you, Belgor.\"",
       "generation_s": 0.36
     },
@@ -585,7 +600,7 @@
       "file": "blocks/c17-b048.wav",
       "sha256": "e667ec0284ba5730cb22ccc303e8b87b854120f59e6682c05b0ce46ace9d9b50",
       "duration_ms": 2350,
-      "start_ms": 300950,
+      "start_ms": 301460,
       "text": "\"And nice to meet you, Gladias!\"",
       "generation_s": 0.34
     },
@@ -596,7 +611,7 @@
       "file": "blocks/c17-b049.wav",
       "sha256": "19e265b1c10611429c68d749056c7dc64e151d5d0e94ecff27e0969d8270323d",
       "duration_ms": 10175,
-      "start_ms": 303750,
+      "start_ms": 304260,
       "text": "\"So Gladias is thinking of going to [Dzego](/ˈdzɛɡO/) soon. We thought that maybe you should tell him more about Graph Funding, and any advice on what he should do or learn in [Dzego](/ˈdzɛɡO/).\"",
       "generation_s": 1.74
     },
@@ -607,7 +622,7 @@
       "file": "blocks/c17-b050.wav",
       "sha256": "94016cbf629e35c44caa650459226de9c56ff353cd138c8009b978eafef52b01",
       "duration_ms": 4400,
-      "start_ms": 314375,
+      "start_ms": 314885,
       "text": "\"Sure, happy to. How familiar are you with how Graph Funding works?\"",
       "generation_s": 0.74
     },
@@ -618,7 +633,7 @@
       "file": "blocks/c17-b051.wav",
       "sha256": "82394fcd097878914ac487a20e27903fd01c898eb86bc2153bb8157713721dd3",
       "duration_ms": 2025,
-      "start_ms": 319225,
+      "start_ms": 319735,
       "text": "\"Honestly, not very.\"",
       "generation_s": 0.3
     },
@@ -629,7 +644,7 @@
       "file": "blocks/c17-b052.wav",
       "sha256": "d6aebc122a441c76824c4284f25083c44ce09432be808937a686791d7e5fc319",
       "duration_ms": 1375,
-      "start_ms": 321700,
+      "start_ms": 322210,
       "text": "\"Great.\"",
       "generation_s": 0.24
     },
@@ -640,7 +655,7 @@
       "file": "blocks/c17-b053.wav",
       "sha256": "5006b24c40c7af9859e9c107ce09da196628e4f418cbb35d77bf95c0adf58824",
       "duration_ms": 7350,
-      "start_ms": 323525,
+      "start_ms": 324035,
       "text": "He took out his hand device, and pressed some buttons. A diagram opened up on the screen, and he showed it to Gladias.",
       "generation_s": 1.08
     },
@@ -651,10 +666,11 @@
       "file": "blocks/c17-b054.wav",
       "sha256": "1d06b3d1ee141115b927f589382fd43af144a34f9a790d00be0fb9512924f119",
       "duration_ms": 50875,
-      "start_ms": 331325,
+      "start_ms": 331835,
       "text": "The diagram centers on airborne disease resistance, with a dashed line leading up to the rest of the portfolio. It splits into five branches: air quality at twenty-four percent, early detection at twenty-two, treatment at twenty-one, prophylactics at twenty, and individual non-pharmaceutical prevention at eight. Each branch splits again: air quality mostly into ventilation and filtration, with fourteen percent to ultraviolet light; early detection into wastewater scanning, airborne environment scanning, individual testing and social media open-source analysis; treatment mostly into antivirals; prophylactics mostly into vaccines; and prevention mostly into masks, with smaller shares for nose sprays and saline nasal rinsing. From every one of those, more lines run off past the edge of the screen.",
       "generation_s": 8.54,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 55,
@@ -663,7 +679,7 @@
       "file": "blocks/c17-b055.wav",
       "sha256": "b261eb3098d4f6d7cf06067809355508f3eb98b15e04c63d241d3e09f6bb8d89",
       "duration_ms": 12825,
-      "start_ms": 382800,
+      "start_ms": 383820,
       "text": "\"This is the subgraph for airborne disease resistance. For each node on the graph, the cryptographic network randomly selects a committee, that makes the decision of what weights the edges right below that node get.\"",
       "generation_s": 2.24
     },
@@ -674,7 +690,7 @@
       "file": "blocks/c17-b056.wav",
       "sha256": "49c55020955e1c3d4116df6008c4adbdaa586967bd4caeccfbbc8424a6d14968",
       "duration_ms": 20275,
-      "start_ms": 396075,
+      "start_ms": 397095,
       "text": "\"So it's secure in the same way the Courts and the Order of Steering are. Having something like that for funding is especially important now, given that the Arctics just did the same attack on Quadratic Funding that Bluewhale did but at ten times the scale — and of course any more traditional style of allocation, they would try to interfere with as well.\"",
       "generation_s": 2.85
     },
@@ -685,7 +701,7 @@
       "file": "blocks/c17-b057.wav",
       "sha256": "5a213e6aa2a010fa5acd414c3512a943b3222277ac6412ee0ea4132bf2dca7d8",
       "duration_ms": 10475,
-      "start_ms": 416800,
+      "start_ms": 417820,
       "text": "\"Oh you're definitely right. Even the Keepers are getting attacked lately, though with all the secrecy and internal communication barriers, at least for now the system is holding.\"",
       "generation_s": 1.44
     },
@@ -696,7 +712,7 @@
       "file": "blocks/c17-b058.wav",
       "sha256": "2fef6fc8c8aa8e8aad5e441b6682d07e584ddfad5d86bd221d211dea498f97cc",
       "duration_ms": 14875,
-      "start_ms": 427725,
+      "start_ms": 428745,
       "text": "\"Oh is that so? Good to hear. Though I am sad that we don't have a good way to make both of these things more democratic. Listening to citizens' assemblies is good and Heralds are good, but they're not a substitute for actual public accountability.\"",
       "generation_s": 2.0
     },
@@ -707,7 +723,7 @@
       "file": "blocks/c17-b059.wav",
       "sha256": "da22650b80a31418e66fbf98ff6326c13386c5846abdf3b8cf6a7aaf6bde2713",
       "duration_ms": 13250,
-      "start_ms": 443050,
+      "start_ms": 444070,
       "text": "\"Anyway, one difference between the Graph Funding design and how the Courts and the Order work is that Graph Funding allows even more specialization. After all, funding allocation is a pretty technical task.\"",
       "generation_s": 2.1
     },
@@ -718,7 +734,7 @@
       "file": "blocks/c17-b060.wav",
       "sha256": "b082d3a177ad6148a79317a94dbb56b189ff88c3ad81c194826437ec10450826",
       "duration_ms": 18925,
-      "start_ms": 456750,
+      "start_ms": 457770,
       "text": "\"The goal is to try to split up each decision of funding allocation into more manageable pieces. Don't ask 'what percent of all Veridian public funding should go to this study on UVC lamps'. Ask, what percent should go to health, then within health, what percent should go to airborne diseases, and so on.\"",
       "generation_s": 2.75
     },
@@ -729,7 +745,7 @@
       "file": "blocks/c17-b061.wav",
       "sha256": "235368ae5ad65d4e92b4eec9fc503a87b03c74897c62e50e88c525d081324003",
       "duration_ms": 18400,
-      "start_ms": 476125,
+      "start_ms": 477145,
       "text": "\"And if one project benefits two areas: say, some lamp that's somehow useful both for UVC lamps and for defense, then the graph stops being a tree, it becomes a proper directed acyclic graph. One node can have multiple parents, and the funding you get along all paths adds up.\"",
       "generation_s": 2.43
     },
@@ -740,7 +756,7 @@
       "file": "blocks/c17-b062.wav",
       "sha256": "60f61ef8c5bec0c33a78234f3219d179c1ee70423b0164093f3c780f0f485ab1",
       "duration_ms": 6525,
-      "start_ms": 494975,
+      "start_ms": 495995,
       "text": "\"So a committee is responsible for allocating the funding going to each node among its direct children?\"",
       "generation_s": 0.9
     },
@@ -751,7 +767,7 @@
       "file": "blocks/c17-b063.wav",
       "sha256": "a14fb6aea7b7b8465a3d39dfa5fae7d6ae72299432de0a4ffbe36f80331ff800",
       "duration_ms": 1400,
-      "start_ms": 501950,
+      "start_ms": 502970,
       "text": "\"Yes.\"",
       "generation_s": 0.22
     },
@@ -762,7 +778,7 @@
       "file": "blocks/c17-b064.wav",
       "sha256": "7b4af4eb7be4df4355fd9197e9687f482d850c37157c60b0e64fa2760ce1c730",
       "duration_ms": 2750,
-      "start_ms": 503800,
+      "start_ms": 504820,
       "text": "\"Can they remove children or make new ones?\"",
       "generation_s": 0.4
     },
@@ -773,7 +789,7 @@
       "file": "blocks/c17-b065.wav",
       "sha256": "4263962f4ed6c6c66c3b1204b8185b16c25b24719b6a69227370d09d36baae7d",
       "duration_ms": 3975,
-      "start_ms": 507000,
+      "start_ms": 508020,
       "text": "\"Yes, of course. That's how the graph gets made in the first place.\"",
       "generation_s": 0.55
     },
@@ -784,7 +800,7 @@
       "file": "blocks/c17-b066.wav",
       "sha256": "d54d2dbdd22df14552be2f0f60a9f7c34a934980bc66c1f286ec49c5d1a1d84f",
       "duration_ms": 1950,
-      "start_ms": 511425,
+      "start_ms": 512445,
       "text": "\"This is fascinating.\"",
       "generation_s": 0.28
     },
@@ -795,7 +811,7 @@
       "file": "blocks/c17-b067.wav",
       "sha256": "51df7bd3f846e0906abee1ab44a578879a0341f659cd5d658106354b35959b2e",
       "duration_ms": 15825,
-      "start_ms": 513825,
+      "start_ms": 514845,
       "text": "\"I mean, this all hinges completely on how effective these committees are, right? The more you can specialize, the more it might get captured by special interests, and the more you randomize, the more you get decisions made by people who know nothing about what they're deciding?\"",
       "generation_s": 2.12
     },
@@ -806,7 +822,7 @@
       "file": "blocks/c17-b068.wav",
       "sha256": "0a8e16d8bc6c077dd44e785d4f267bcfba5d5f9dbcfaafc0278304fe6562dfcd",
       "duration_ms": 2675,
-      "start_ms": 530100,
+      "start_ms": 531120,
       "text": "\"Of course, that's always the tradeoff.\"",
       "generation_s": 0.39
     },
@@ -817,7 +833,7 @@
       "file": "blocks/c17-b069.wav",
       "sha256": "f15b51ecf38876f67216e0af53fe42635bcdd953175f59d31c2ad5646cfc094b",
       "duration_ms": 24900,
-      "start_ms": 533225,
+      "start_ms": 534245,
       "text": "\"There's also another tradeoff. It turns out that it's fairly easy to get committees up to the point where they can tell bad projects from good ones, but very hard for them to tell good projects from great ones. So for the lower levels of the graph, there's been a movement lately to just randomize at the top end. If the committee says you're in the top ten percent, you have the same chance of getting in, no matter if you're at ninety one or ninety nine.\"",
       "generation_s": 3.96
     },
@@ -828,7 +844,7 @@
       "file": "blocks/c17-b070.wav",
       "sha256": "52e4fec8dab0b95e36e008ee23744ed90e73f0c8aaee3507260fad5ee192d0f0",
       "duration_ms": 9125,
-      "start_ms": 558575,
+      "start_ms": 559595,
       "text": "\"So the further someone is above ninety, the more they basically don't have to worry about optimizing for the committee at all, they can just do what feels right.\"",
       "generation_s": 1.36
     },
@@ -839,7 +855,7 @@
       "file": "blocks/c17-b071.wav",
       "sha256": "57c7bd74f78e3f1698b372e428c7a40b550f4b6f6f58e8a4173f78b891b2dfc0",
       "duration_ms": 23875,
-      "start_ms": 568150,
+      "start_ms": 569170,
       "text": "\"Exactly. Sometimes you don't actually want accountability, you want to give space for people's intrinsic motivation. The people at the very top may even be smarter than the committee. That's what randomize-above-cutoff does: accountability for those who won't succeed without it, and freedom from incentives for the best — they can convince the committee that their work is good enough with barely any effort at all.\"",
       "generation_s": 3.21
     },
@@ -850,7 +866,7 @@
       "file": "blocks/c17-b072.wav",
       "sha256": "364638d831d54b031b647008b2d8f7b15d32846a38355569a4a93e08724c9691",
       "duration_ms": 4975,
-      "start_ms": 592475,
+      "start_ms": 593495,
       "text": "\"Anyway, here's what it looks like zoomed in at the level of individual projects.\"",
       "generation_s": 0.71
     },
@@ -861,10 +877,11 @@
       "file": "blocks/c17-b073.wav",
       "sha256": "d447c57e10edb8d61c32e20d94446d3b032ada9f15490850a620e54c1d8264c0",
       "duration_ms": 43425,
-      "start_ms": 597900,
+      "start_ms": 598920,
       "text": "Zoomed in on ultraviolet light, which gets fourteen percent of the air quality portfolio. Forty-five percent of that goes to improving the efficiency of two hundred twenty-two nanometer lamps, thirty percent to safety testing of those lamps, and fifteen percent to upper-room deployment. Below those sit named projects and labs: Dalias and colleagues, [Poppe](/pˈɑpi/) and Mawart, and Vidrik under krypton chloride lamps; Bonne under alternative lamp designs; Kudlin and Melana, studying effects on household chemicals; and Pov and Imerry, and the V N U Aeronautics Lab, under deployment. The V N U Materials Science Lab is funded from two branches at once: alternative lamp designs, and safety testing.",
       "generation_s": 6.48,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 74,
@@ -873,7 +890,7 @@
       "file": "blocks/c17-b074.wav",
       "sha256": "88e28c162e2809729271bff3416bf5b324bb4981dac2fb03c55cd5415862b744",
       "duration_ms": 7400,
-      "start_ms": 641925,
+      "start_ms": 643455,
       "text": "\"Is it wise to have these randomly-selected Graph Funding committees making decisions at that level of granularity?\"",
       "generation_s": 1.11
     },
@@ -884,7 +901,7 @@
       "file": "blocks/c17-b075.wav",
       "sha256": "5ab5f3844df3282c2ecf67dce5e1a562e78dca5424fe6ebc09b2621446be0052",
       "duration_ms": 23050,
-      "start_ms": 649775,
+      "start_ms": 651305,
       "text": "\"I'm not sure myself. The nice thing about this design is that it can always evolve without changing the structure. Committees could just decide to give the VNU Materials Science Lab 'ownership' of an entire category, and let them allocate internally. Actually, for the open source social media analysis, we basically did just that, eighty percent is just going to Silverchat.\"",
       "generation_s": 3.07
     },
@@ -895,7 +912,7 @@
       "file": "blocks/c17-b076.wav",
       "sha256": "af92e530f75a20d5e1e3b732cdb3b54895b73b05121567ab915ee130ba092cd9",
       "duration_ms": 6050,
-      "start_ms": 673275,
+      "start_ms": 674805,
       "text": "\"Bluewhale is unhappy, but, hey, their choice to be so closed and proprietary with everything.\"",
       "generation_s": 0.84
     },
@@ -906,7 +923,7 @@
       "file": "blocks/c17-b077.wav",
       "sha256": "71c6033fe1165cdb86433d1f3fa230c678c2d5733da0166346b00c1f00cab709",
       "duration_ms": 2750,
-      "start_ms": 679775,
+      "start_ms": 681305,
       "text": "\"So how does this all connect to [Dzego](/ˈdzɛɡO/)?\"",
       "generation_s": 0.39
     },
@@ -917,7 +934,7 @@
       "file": "blocks/c17-b078.wav",
       "sha256": "5ae6a15f7066e6ef31f98c7f9f577ac8601bd3b0a383ec33c801252cd9113f3a",
       "duration_ms": 16275,
-      "start_ms": 682975,
+      "start_ms": 684505,
       "text": "\"Ah, well a lot of this tech does actually make its way over to [Dzego](/ˈdzɛɡO/), they're starting to take the air filters and ultraviolet lights more seriously — a few of them are getting paranoid that the Arctics might hit them with a deliberately-released pandemic at some point.\"",
       "generation_s": 2.41
     },
@@ -928,7 +945,7 @@
       "file": "blocks/c17-b079.wav",
       "sha256": "8226d736e3e260160a6025f9cb8476785d2b08a62732a9110250881ae8d8317c",
       "duration_ms": 6550,
-      "start_ms": 699700,
+      "start_ms": 701230,
       "text": "\"Is there any chance that the Arctics could hit them with a pandemic that won't eventually bounce right back to them?\"",
       "generation_s": 1.02
     },
@@ -939,7 +956,7 @@
       "file": "blocks/c17-b080.wav",
       "sha256": "a4f727f664ad73ec1a104134aa5da7e06c4e0f46a7e24c758171244eb007f27a",
       "duration_ms": 25650,
-      "start_ms": 706700,
+      "start_ms": 708230,
       "text": "\"Well, if Arctic anti-pandemic technology shoots far enough ahead of the rest of the world, then yeah, they could release a pandemic that only they can effectively protect only their own people from. That's a big part of why it's so valuable to open-source all this stuff — at least the defensive things. Put the whole world on a more level playing field, so no one is in a position to light a fire and be the only ones with fireproof suits.\"",
       "generation_s": 3.73
     },
@@ -950,7 +967,7 @@
       "file": "blocks/c17-b081.wav",
       "sha256": "3b021191b3b91be07caefd86d36bec066ed550c23428abc33622f5f3a589778d",
       "duration_ms": 7425,
-      "start_ms": 732800,
+      "start_ms": 734330,
       "text": "\"Anyway, if you end up going to [Dzego](/ˈdzɛɡO/), do tell me what you learn about their public health when you get back — I am curious!\"",
       "generation_s": 1.12
     },
@@ -960,7 +977,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 740675,
+      "start_ms": 742205,
       "duration_ms": 1800
     },
     {
@@ -970,7 +987,7 @@
       "file": "blocks/c17-b083.wav",
       "sha256": "afa30dbf92f58ca8b8512ce0d8d7cd6678d7dc4fb45ffbdc4b29262fd7e13476",
       "duration_ms": 3325,
-      "start_ms": 742475,
+      "start_ms": 744005,
       "text": "Gladias opened the door to his house, and entered.",
       "generation_s": 0.48
     },
@@ -981,7 +998,7 @@
       "file": "blocks/c17-b084.wav",
       "sha256": "325d358a4e910ae7c90c2e36eba2f272cb4af267601fcddede22dae0ae0344c5",
       "duration_ms": 3025,
-      "start_ms": 746250,
+      "start_ms": 747780,
       "text": "Seila and the kids were already eating dinner.",
       "generation_s": 0.43
     },
@@ -992,7 +1009,7 @@
       "file": "blocks/c17-b085.wav",
       "sha256": "98cf0dc5c6c2162547fd54e21a407d673cf6f192f649615c56eea8a20e3d16df",
       "duration_ms": 3350,
-      "start_ms": 749725,
+      "start_ms": 751255,
       "text": "\"Today is your first vote, isn't it?\", Seila asked.",
       "generation_s": 0.47
     },
@@ -1003,7 +1020,7 @@
       "file": "blocks/c17-b086.wav",
       "sha256": "f172f38250ca886532ec4508ca168fdcce3655fafc68d82b03d24ba2ea62f80c",
       "duration_ms": 2375,
-      "start_ms": 753525,
+      "start_ms": 755055,
       "text": "\"It is, glad you remembered!\"",
       "generation_s": 0.32
     },
@@ -1014,7 +1031,7 @@
       "file": "blocks/c17-b087.wav",
       "sha256": "46ab610116c13061f40f14c4927d585a5d4b6e92c1316d42141628b3542a0e66",
       "duration_ms": 3400,
-      "start_ms": 756350,
+      "start_ms": 757880,
       "text": "\"So are you leaving again this evening?\", [Zven](/zvˈɛn/) asked.",
       "generation_s": 0.45
     },
@@ -1025,7 +1042,7 @@
       "file": "blocks/c17-b088.wav",
       "sha256": "fbf41a80bd904e5edd121341f808e73fe9ed85c44972136694d1cbf99398d957",
       "duration_ms": 8500,
-      "start_ms": 760200,
+      "start_ms": 761730,
       "text": "\"Oh no, the in-person part was the discussions months ago, and the key registration, I did that right after my meetings at the Parliament.\"",
       "generation_s": 1.12
     },
@@ -1036,7 +1053,7 @@
       "file": "blocks/c17-b089.wav",
       "sha256": "e6a75338736b7fd13b9989c03708cfcf89d175b4202d3112a1721a366ba89a47",
       "duration_ms": 14275,
-      "start_ms": 769150,
+      "start_ms": 770680,
       "text": "\"There were also some discussions happening more recently in our Keeper discussion group online, though that chat automatically cut off seven days before the vote — have a quiet period to make more space for independent thought, the argument goes.\"",
       "generation_s": 2.25
     },
@@ -1047,7 +1064,7 @@
       "file": "blocks/c17-b090.wav",
       "sha256": "e7084bbc22b6c776d16219431bb2d72ceb4a9bcddeaa6af930d4f1ededa633be",
       "duration_ms": 4575,
-      "start_ms": 783875,
+      "start_ms": 785405,
       "text": "\"Oof, so the cutoff was after Redshire got annexed. What was that like?\"",
       "generation_s": 0.7
     },
@@ -1058,7 +1075,7 @@
       "file": "blocks/c17-b091.wav",
       "sha256": "504bb0f2612702ba403e2f8ec05ed5d24c2922ca5fb03bcee9f7e256c375d008",
       "duration_ms": 16100,
-      "start_ms": 788900,
+      "start_ms": 790430,
       "text": "\"I think everyone who said we should cut military hardware out of the best tiers in the rubric went quiet. Eighteen then proposed a new amendment that increases the tax brackets, pushing up the incentives to open things up even more. I'll probably vote for that.\"",
       "generation_s": 2.74
     },
@@ -1069,7 +1086,7 @@
       "file": "blocks/c17-b092.wav",
       "sha256": "fff25ce65b906d374e0a459d0ab893b2654216e861a1e2cc856c2717ea9af1b0",
       "duration_ms": 1625,
-      "start_ms": 805450,
+      "start_ms": 806980,
       "text": "\"Glad to hear.\"",
       "generation_s": 0.3
     },
@@ -1080,7 +1097,7 @@
       "file": "blocks/c17-b093.wav",
       "sha256": "e58106a592d859b8bac47b40da1eb64ae575c1052e5c91339daf786672061b98",
       "duration_ms": 2350,
-      "start_ms": 807525,
+      "start_ms": 809055,
       "text": "\"How did your Parliament meetings go?\"",
       "generation_s": 0.34
     },
@@ -1091,7 +1108,7 @@
       "file": "blocks/c17-b094.wav",
       "sha256": "76aea635154a896ef7c356399d51863f1ff3d7bd67a69d3a35096169873db05f",
       "duration_ms": 11825,
-      "start_ms": 810325,
+      "start_ms": 811855,
       "text": "\"Very well. The Senator and the Graph Funding person both seemed quite supportive of me going. Though they said that [Zei](/ˈzA/) might be an even better contact to help me with my visit than anyone they knew!\"",
       "generation_s": 1.65
     },
@@ -1102,7 +1119,7 @@
       "file": "blocks/c17-b095.wav",
       "sha256": "718575523173f060b39b821123c9834dde7f5d9a9fb6dcfa8654186f6ffd93e8",
       "duration_ms": 7925,
-      "start_ms": 822600,
+      "start_ms": 824130,
       "text": "\"That actually makes sense, everyone knows the official [Dzego](/ˈdzɛɡO/) government is not where any of the interesting action is happening.\"",
       "generation_s": 1.36
     },
@@ -1113,7 +1130,7 @@
       "file": "blocks/c17-b096.wav",
       "sha256": "8bf58737df6d7b7505d4833c068ce64a55aa24c26ff4d53929e884c907ab752c",
       "duration_ms": 3275,
-      "start_ms": 830975,
+      "start_ms": 832505,
       "text": "\"I guess I'll talk to [Zei](/ˈzA/) and put you two in touch then!\"",
       "generation_s": 0.61
     },
@@ -1124,7 +1141,7 @@
       "file": "blocks/c17-b097.wav",
       "sha256": "7420424388e694258445c5d5ab439faf67298fb51dbf1e74ff1b3fcde731c10e",
       "duration_ms": 6625,
-      "start_ms": 834700,
+      "start_ms": 836230,
       "text": "Gladias, Seila and the kids took a few bites of their food. Soon, the dinner conversation resumed.",
       "generation_s": 0.98
     },
@@ -1135,7 +1152,7 @@
       "file": "blocks/c17-b098.wav",
       "sha256": "c27c597fa9d2db3b0ba49429cf0ea127675963cac072ed8ec47ee6a805c86a20",
       "duration_ms": 2650,
-      "start_ms": 841775,
+      "start_ms": 843305,
       "text": "\"Febric, Hreda, want to share your news?\"",
       "generation_s": 0.39
     },
@@ -1146,7 +1163,7 @@
       "file": "blocks/c17-b099.wav",
       "sha256": "86d3a1711b91d3a0884464d337590ddb1ff84ba33683e28ffcd7fc513cb8ece1",
       "duration_ms": 5625,
-      "start_ms": 844875,
+      "start_ms": 846405,
       "text": "\"We're going on an exchange trip to Northglade for the winter term!\", Hreda exclaimed proudly.",
       "generation_s": 0.8
     },
@@ -1157,7 +1174,7 @@
       "file": "blocks/c17-b100.wav",
       "sha256": "488a987c82284811fb2b5d0cce73836cd70bf2c6a5aadaefaeb3c12337133c2a",
       "duration_ms": 5425,
-      "start_ms": 850950,
+      "start_ms": 852480,
       "text": "\"Ooh, that's pretty far northeast, almost at the Arctic border\", Gladias replied.",
       "generation_s": 0.77
     },
@@ -1168,7 +1185,7 @@
       "file": "blocks/c17-b101.wav",
       "sha256": "19558e93119d53203f3ba294cc2582cef67633d94e0ef2d8dbdbfc247521b6aa",
       "duration_ms": 13575,
-      "start_ms": 856825,
+      "start_ms": 858355,
       "text": "\"It's fun, we'll get to ski off mountains wearing a copter and then glide back down!\", Hreda exclaimed. \"And it's not like it's right at the border, Northglade is over two hundred kilometers inland. It will be my first time there!\"",
       "generation_s": 1.88
     },
@@ -1179,7 +1196,7 @@
       "file": "blocks/c17-b102.wav",
       "sha256": "11264a7f85db08178a8da06dff0e1174a44c9b2e20446b99468739028270be8d",
       "duration_ms": 3300,
-      "start_ms": 870850,
+      "start_ms": 872380,
       "text": "\"So what are you guys doing there?\", Gladias asked.",
       "generation_s": 0.47
     },
@@ -1190,7 +1207,7 @@
       "file": "blocks/c17-b103.wav",
       "sha256": "6f2711cd9d8204595761b6b0160c619711c9efac5d1405148c2738d28eef7c2f",
       "duration_ms": 10550,
-      "start_ms": 874600,
+      "start_ms": 876130,
       "text": "\"Veridia's best math university is there,\" Hreda replied. \"I'm in the top five percent in math in my class, so I got accepted to attend some special education there.\"",
       "generation_s": 1.5
     },
@@ -1201,7 +1218,7 @@
       "file": "blocks/c17-b104.wav",
       "sha256": "3fcbe6028255547a44cae2d6ed3efd7009437976a7749c4193aea0531b15cca6",
       "duration_ms": 4050,
-      "start_ms": 885600,
+      "start_ms": 887130,
       "text": "\"Same for me,\" Febric added. \"Though I'm in computer science.\"",
       "generation_s": 0.56
     },
@@ -1212,7 +1229,7 @@
       "file": "blocks/c17-b105.wav",
       "sha256": "a8d3b2a104f56e9563969794d721801e72ccdc5cdf04bbbbcf7af8e767bb19f0",
       "duration_ms": 2975,
-      "start_ms": 890100,
+      "start_ms": 891630,
       "text": "\"Didn't Lily also want to go to Northglade?\"",
       "generation_s": 0.42
     },
@@ -1223,7 +1240,7 @@
       "file": "blocks/c17-b106.wav",
       "sha256": "21ab335e1b8dfb2e0b797652adbb23167662c53f1931b4f26fac8dbe06b6e10d",
       "duration_ms": 3375,
-      "start_ms": 893525,
+      "start_ms": 895055,
       "text": "Lily was in the washroom, so she could not answer.",
       "generation_s": 0.47
     },
@@ -1234,7 +1251,7 @@
       "file": "blocks/c17-b107.wav",
       "sha256": "de1bc513975017599d5c67cb6e520e92abf6f30b2c67e1c1992169bd23193538",
       "duration_ms": 5750,
-      "start_ms": 897350,
+      "start_ms": 898880,
       "text": "\"Vil said that he will take her in the summer if she gets to seventy-five percent in her exams.\"",
       "generation_s": 0.78
     },
@@ -1245,7 +1262,7 @@
       "file": "blocks/c17-b108.wav",
       "sha256": "ef150aa06874c223cb5f8eb990bad863989e7afde9bb54e0357e4c719fc14c7e",
       "duration_ms": 3450,
-      "start_ms": 903550,
+      "start_ms": 905080,
       "text": "\"She prefers summer, she doesn't like the cold as much.\"",
       "generation_s": 0.48
     },
@@ -1256,7 +1273,7 @@
       "file": "blocks/c17-b109.wav",
       "sha256": "5b9d9eb6b8b12d01bcf9c839719e328a8644fa2908dd1573e741a81106505adf",
       "duration_ms": 2475,
-      "start_ms": 907450,
+      "start_ms": 908980,
       "text": "Gladias's hand device buzzed.",
       "generation_s": 0.35
     },
@@ -1267,7 +1284,7 @@
       "file": "blocks/c17-b110.wav",
       "sha256": "02f516ae0beab1330a324c423fc3555f722239710feefef11fd69095be39f2af",
       "duration_ms": 3750,
-      "start_ms": 910375,
+      "start_ms": 911905,
       "text": "\"Well, voting on the hardware openness rubric started.\"",
       "generation_s": 0.52
     },
@@ -1278,10 +1295,11 @@
       "file": "blocks/c17-b111.wav",
       "sha256": "a3c544b59881bef13160cc28b420c079b1ca72826607c9162437ea15118c2666",
       "duration_ms": 35600,
-      "start_ms": 914575,
+      "start_ms": 916105,
       "text": "The ballot is titled Rubric: openness in hardware, and lists three motions, each with Yes and No buttons. The first adds a line to tiers one and two: Products in military, surveillance and counter-surveillance applications are not eligible for this tier. The second raises the tax brackets from zero, six, twelve, eighteen and twenty-four, to zero, ten, twenty, twenty-six and thirty-two. The third changes a line in tiers four and five from use of hardware means to prevent third-party repair, to use of hardware or software means to prevent third-party repair.",
       "generation_s": 5.41,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 112,
@@ -1290,7 +1308,7 @@
       "file": "blocks/c17-b112.wav",
       "sha256": "a5e45d1dbe629888211661013b657ff1630799631d0cda415c12a01ce0c510a6",
       "duration_ms": 12650,
-      "start_ms": 950775,
+      "start_ms": 952815,
       "text": "This felt anti-climactic, Gladias thought. So much ceremony, in-person meetings, debate and work in the months leading up to the vote. And then the vote itself was just ... tapping buttons on a screen.",
       "generation_s": 1.82
     },
@@ -1301,7 +1319,7 @@
       "file": "blocks/c17-b113.wav",
       "sha256": "1f3fd00b4ecdfa869963995c1107481dda88b77cb2f6afd86e74e244683889b8",
       "duration_ms": 27475,
-      "start_ms": 963875,
+      "start_ms": 965915,
       "text": "It was reasonable, Gladias supposed. The way that the cryptography worked, as long as key registration was secure, this part could just be done on his own hardware at home. And even if Delwart did come knocking and demand to stare at him from behind his shoulder for the entire fifteen-longhour voting window, he had no way to prove to him that the key on his device even was the one registered — as opposed to being a distraction while the real voting was done by Mov, Seila or even [Zven](/zvˈɛn/).",
       "generation_s": 4.31
     },
@@ -1312,9 +1330,22 @@
       "file": "blocks/c17-b114.wav",
       "sha256": "138bfc1415c900f0eb0cbb2638ba45b1a99c3bf3f49ac9cbab3d124034a6d109",
       "duration_ms": 5800,
-      "start_ms": 991800,
+      "start_ms": 993840,
       "text": "Gladias took one last look at the screen, and nonchalantly pressed: No, Yes, Yes.",
       "generation_s": 0.85
     }
-  ]
+  ],
+  "restitched_at": "2026-10-05T18:50:11+00:00",
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent and its helper agents",
+    "drafted": [
+      "spoken descriptions of screens, figures and lyric cards (blocks 5, 54, 73, 111)",
+      "pronunciation entries (content/snowmoon/pronunciation.json)"
+    ],
+    "instructions": [
+      "docs/prompts/008a-agent-prompts.md#read-aloud-descriptions-and-invented-word-lists"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
 }

@@ -4,7 +4,7 @@
   "source_sha256": "64723d2dab98aaf119cd46815076404b7b94e6b7c20b2a4ac77f4beb462de0b8",
   "generated_at": "2026-10-03T17:33:02+00:00",
   "generation_seconds": 193.8,
-  "total_duration_ms": 1129525,
+  "total_duration_ms": 1138195,
   "model": {
     "name": "Kokoro-82M",
     "repo": "hexgrad/Kokoro-82M",
@@ -36,7 +36,21 @@
     },
     "break_ms": 1800,
     "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
-    "read_aloud_sha256": "de9e30c3a8a39ef2b559fc7c44b950c497e12d7fd9bbf1246e8c5067733f31f4"
+    "read_aloud_sha256": "de9e30c3a8a39ef2b559fc7c44b950c497e12d7fd9bbf1246e8c5067733f31f4",
+    "description_tone": {
+      "notes_hz": [
+        660,
+        990
+      ],
+      "notes_ms": [
+        110,
+        140
+      ],
+      "between_ms": 40,
+      "after_ms": 220,
+      "amplitude": 0.12,
+      "made_by": "code (numpy sine, linear fades)"
+    }
   },
   "host": {
     "platform": "macOS-26.5.1-arm64-arm-64bit",
@@ -45,10 +59,10 @@
   },
   "stitched": {
     "wav": "chapter-15.wav",
-    "wav_sha256": "20d38da085acf48bc1ba92533db05226ab86fbaa562387284124837bdc04b896",
+    "wav_sha256": "3e2fa01547bd755e61ca61d95c19d5675664c5eebcc204fffa8558a700a3b26b",
     "m4a": "chapter-15.m4a",
-    "m4a_sha256": "664983867c94e4a04751be8a319797a6c996d00eeeff3797e6dc029808a0dce9",
-    "note": "start_ms is the block's offset in the stitched file, gaps included"
+    "m4a_sha256": "69bc75beba0d8998cb0b6f23b9c2fd7f915f3ca9a1d5fdf4d2d756492b7cbc27",
+    "note": "start_ms is the block's offset in the stitched file, gaps included; a description starts with its tone (tone_ms)"
   },
   "blocks": [
     {
@@ -290,7 +304,8 @@
       "start_ms": 187700,
       "text": "Seila types a message to Jahn: Please tell me you're in Freetown and you're okay.",
       "generation_s": 0.81,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 22,
@@ -299,7 +314,7 @@
       "file": "blocks/c15-b022.wav",
       "sha256": "da9aa7f94f20e2e38dcaccef03420793d5806ede50d29e4d9780174f26351232",
       "duration_ms": 1650,
-      "start_ms": 193050,
+      "start_ms": 193560,
       "text": "She clicked send.",
       "generation_s": 0.31
     },
@@ -310,7 +325,7 @@
       "file": "blocks/c15-b023.wav",
       "sha256": "0f2e4f7904bd0d04a684410e4410d188adfda66221ae655569b1c7529f29c3b4",
       "duration_ms": 1800,
-      "start_ms": 195150,
+      "start_ms": 195660,
       "text": "A few ticks later:",
       "generation_s": 0.32
     },
@@ -321,10 +336,11 @@
       "file": "blocks/c15-b024.wav",
       "sha256": "6036ce3babf55a690e8277241dc61f287c5baf6d9b61c2b70f4721391e10a82c",
       "duration_ms": 3050,
-      "start_ms": 197400,
+      "start_ms": 197910,
       "text": "From Jahn: Don't worry, I am in Freetown.",
       "generation_s": 0.52,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 25,
@@ -333,10 +349,11 @@
       "file": "blocks/c15-b025.wav",
       "sha256": "568d7742b7039560816a4bc17b9331672eba796be720ddf66abe2dcb208853ab",
       "duration_ms": 11650,
-      "start_ms": 201050,
+      "start_ms": 202070,
       "text": "And then, from Jahn: We've somehow been taking defense seriously here, and Freetown is about as far from Redshire as you can get in the United Cities, except for Silverbeach and [Mabuli](/mɑbˈuli/).",
       "generation_s": 2.16,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 26,
@@ -345,7 +362,7 @@
       "file": "blocks/c15-b026.wav",
       "sha256": "306d17203bf021200760fe7f16d5a18faabc6ab2862a3b0634da2b2e8f0c072c",
       "duration_ms": 2000,
-      "start_ms": 213300,
+      "start_ms": 214830,
       "text": "Seila sighed with relief.",
       "generation_s": 0.43
     },
@@ -356,7 +373,7 @@
       "file": "blocks/c15-b027.wav",
       "sha256": "65a0d802bae2894383a502c96a152d50df63febfb83cb0f3e10a95edaac617fc",
       "duration_ms": 7150,
-      "start_ms": 215750,
+      "start_ms": 217280,
       "text": "Gladias saw Seila messaging Jahn, and put his hand on her shoulder to comfort her. He did not respond further.",
       "generation_s": 1.33
     },
@@ -367,7 +384,7 @@
       "file": "blocks/c15-b028.wav",
       "sha256": "6952377a14d920268e5c72beea0f71fa8b22596d60994c6964b0037042751e1b",
       "duration_ms": 10975,
-      "start_ms": 223350,
+      "start_ms": 224880,
       "text": "His mind soon shifted to the rubrics. Now we're definitely not adjusting the hardware openness rubric next month, he thought. Maybe we'll even be increasing the tax brackets.",
       "generation_s": 1.87
     },
@@ -378,7 +395,7 @@
       "file": "blocks/c15-b029.wav",
       "sha256": "5dc6cfd14044cfc2db5916947641218dd4fd20ce3dbed5c9c6ae60ceeba2860f",
       "duration_ms": 3850,
-      "start_ms": 234775,
+      "start_ms": 236305,
       "text": "A moment after that, he flashed with anger toward Delwart.",
       "generation_s": 0.67
     },
@@ -389,7 +406,7 @@
       "file": "blocks/c15-b030.wav",
       "sha256": "75327bb52d8578eb14f5bf8a1746313379fa160f36146cf65922441a215e8182",
       "duration_ms": 9825,
-      "start_ms": 239075,
+      "start_ms": 240605,
       "text": "Seila left the room to wake up [Zven](/zvˈɛn/) and get Lily. Within twenty minutes, the four of them were on their way to school, and Gladias and Seila were alone in the house.",
       "generation_s": 1.65
     },
@@ -400,7 +417,7 @@
       "file": "blocks/c15-b031.wav",
       "sha256": "d2ea02706db7493c5366610700b6b14ef03a1c17525236d2fa275eb04e5d6a0a",
       "duration_ms": 3575,
-      "start_ms": 249350,
+      "start_ms": 250880,
       "text": "Gladias went down to the basement and closed the door.",
       "generation_s": 0.62
     },
@@ -411,7 +428,7 @@
       "file": "blocks/c15-b032.wav",
       "sha256": "1ebd78d4a41428a5eeac2b3ce2da3e80c0840a39d565008d6750e521813190e0",
       "duration_ms": 3775,
-      "start_ms": 253375,
+      "start_ms": 254905,
       "text": "\"What do we do now, Mov?\", he whispered through his neck band.",
       "generation_s": 0.65
     },
@@ -422,7 +439,7 @@
       "file": "blocks/c15-b033.wav",
       "sha256": "49288cf05ffb420431aea8a6d86a6cf0f4ea439cbff122c1caf9e71588efbe8e",
       "duration_ms": 10200,
-      "start_ms": 257600,
+      "start_ms": 259130,
       "text": "\"Well clearly Delwart was wrong about a lot of things. And next time we talk to him, we really have a lot of questions to ask. We need a straight answer, not excuses.\"",
       "generation_s": 1.6
     },
@@ -433,7 +450,7 @@
       "file": "blocks/c15-b034.wav",
       "sha256": "9c2530c7c581b913f4054ab84d54c42c348bd32f3911d89763809ada2339febd",
       "duration_ms": 11075,
-      "start_ms": 268250,
+      "start_ms": 269780,
       "text": "\"Remember, it's not just him turning out to be so wrong on the politics. It's about what I learned a month and a half ago — the sheer level of organization of whatever it is that he's doing.\"",
       "generation_s": 1.76
     },
@@ -444,7 +461,7 @@
       "file": "blocks/c15-b035.wav",
       "sha256": "a6dc8db2f0d38874493f255215be912e437e3feff2827caa17aee8b9d0c62dc4",
       "duration_ms": 3625,
-      "start_ms": 279775,
+      "start_ms": 281305,
       "text": "\"Did you manage to track him down any more after that time?\"",
       "generation_s": 0.59
     },
@@ -455,7 +472,7 @@
       "file": "blocks/c15-b036.wav",
       "sha256": "a2285d45d3307f48a944bfe247c1a0249f2eb3c7d166f5362ae8e25159a4a626",
       "duration_ms": 19900,
-      "start_ms": 283850,
+      "start_ms": 285380,
       "text": "\"Only two more times after that. First was a meeting with someone in a privacy robe, not sure who, and they were talking a bunch about Silverchat. Second was a meeting with a Keeper, I made out some conversation about Dreadknot. Nothing more since about a month ago, he either changed his location or he got much better at hiding.\"",
       "generation_s": 3.39
     },
@@ -466,7 +483,7 @@
       "file": "blocks/c15-b037.wav",
       "sha256": "5eef895a23901d4628a42c15fcd81ac4c452401dfd86d82ac03cefee8de9d427",
       "duration_ms": 1850,
-      "start_ms": 304200,
+      "start_ms": 305730,
       "text": "\"So when is the vote?\"",
       "generation_s": 0.39
     },
@@ -477,7 +494,7 @@
       "file": "blocks/c15-b038.wav",
       "sha256": "0a8d6da33a3ff349b0f69c1394e125f86adeeedeab3a5361e826a39813f445fe",
       "duration_ms": 2525,
-      "start_ms": 306500,
+      "start_ms": 308030,
       "text": "\"First one is in about twenty days.\"",
       "generation_s": 0.43
     },
@@ -488,7 +505,7 @@
       "file": "blocks/c15-b039.wav",
       "sha256": "ad6f9f7cc0359248d832649ba2f2e689c7c818fcfb2e7776d7872d5ca80fc485",
       "duration_ms": 9575,
-      "start_ms": 309475,
+      "start_ms": 311005,
       "text": "\"Delwart might make a move to try to 'verify' that you voted in the correct way. So remember the machinery that the Order set up to make sure he can't do that.\"",
       "generation_s": 1.52
     },
@@ -499,7 +516,7 @@
       "file": "blocks/c15-b040.wav",
       "sha256": "3b05d518cc98a8b629060de9e9c89ab613bbe2f55c92a840bde45cf288be4abf",
       "duration_ms": 22875,
-      "start_ms": 319500,
+      "start_ms": 321030,
       "text": "\"Only votes signed with a valid key count\", Gladias recited. \"You generate your voting key by meeting at least 3 of 5 people from your Key Allocation Group and registering each blinded share of the voting key with them. Once that's done, the information of which keys are and are not valid is only decryptable by the obfuscated circuit under the conditions that it specifies.\"",
       "generation_s": 4.2
     },
@@ -510,7 +527,7 @@
       "file": "blocks/c15-b041.wav",
       "sha256": "630cdd6c0cde054db04eb4513301cb956140821296c3d0ef0ae07148b04ab7a6",
       "duration_ms": 35125,
-      "start_ms": 342825,
+      "start_ms": 344355,
       "text": "\"So neither Delwart nor anyone else — technically, not even I — will know which key, how many keys or if any key actually got successfully registered. Only the result of the vote gets decrypted. So Delwart can't tell which votes I submit are real or fake. I don't have the ability to prove that to him, even if I wanted to. For Delwart to be able to take over my votes, he would have to take over my identity, which means going to the KAG and pretending to be me in person — difficult because the whole point of the KAG is that it includes people I've met in person.\"",
       "generation_s": 5.93
     },
@@ -521,7 +538,7 @@
       "file": "blocks/c15-b042.wav",
       "sha256": "9d9e42058e6b7f25ba59372cd32864269b1b960a4de09c833e1f94b7f0c19c4e",
       "duration_ms": 3025,
-      "start_ms": 378400,
+      "start_ms": 379930,
       "text": "\"Humans — the ultimate trusted hardware.\"",
       "generation_s": 0.54
     },
@@ -532,7 +549,7 @@
       "file": "blocks/c15-b043.wav",
       "sha256": "816c53e94223ecd10d26cfe54263ba257a9acd3f9d2ca0e02aa26d0599981eca",
       "duration_ms": 1850,
-      "start_ms": 381875,
+      "start_ms": 383405,
       "text": "\"You've studied well.\"",
       "generation_s": 0.33
     },
@@ -543,7 +560,7 @@
       "file": "blocks/c15-b044.wav",
       "sha256": "5fed0a63fc357f02c0bcce8b22bfe8c6549337300603abc992a40ab41931610e",
       "duration_ms": 6950,
-      "start_ms": 384175,
+      "start_ms": 385705,
       "text": "\"But I hope that this all won't be necessary, and Delwart is going to give me some sensible explanation for all this.\"",
       "generation_s": 1.2
     },
@@ -554,7 +571,7 @@
       "file": "blocks/c15-b045.wav",
       "sha256": "2d5b53e9dcfe9ea01782fbbfbe1ead4767536932020bf5f3a320d8069b39cd14",
       "duration_ms": 2100,
-      "start_ms": 391575,
+      "start_ms": 393105,
       "text": "\"Hope is not a strategy.\"",
       "generation_s": 0.44
     },
@@ -565,7 +582,7 @@
       "file": "blocks/c15-b046.wav",
       "sha256": "92c9c86aac5bfa5334ceae9df04c70a2002279093507fa09fff53be8e90d00a3",
       "duration_ms": 1775,
-      "start_ms": 394125,
+      "start_ms": 395655,
       "text": "\"Indeed it's not.\"",
       "generation_s": 0.32
     },
@@ -575,7 +592,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 396350,
+      "start_ms": 397880,
       "duration_ms": 1800
     },
     {
@@ -585,7 +602,7 @@
       "file": "blocks/c15-b048.wav",
       "sha256": "322d34b0f62529749b8aac430845e0908c27ed3bf14f7539f3d291ec87beab7c",
       "duration_ms": 2200,
-      "start_ms": 398150,
+      "start_ms": 399680,
       "text": "[Pafogai](/ˈpɑfOɡI/) [Du](/ˈdu/), [Dzego](/ˈdzɛɡO/).",
       "generation_s": 0.38
     },
@@ -596,7 +613,7 @@
       "file": "blocks/c15-b049.wav",
       "sha256": "65560cf5f0fcece0d9ea08a759bab2d5f13af7129b39d8958af121cec4882877",
       "duration_ms": 5525,
-      "start_ms": 401250,
+      "start_ms": 402780,
       "text": "[Zei](/ˈzA/) anxiously tapped buttons on his hand device, and sent off a message for a fifth time.",
       "generation_s": 0.88
     },
@@ -607,10 +624,11 @@
       "file": "blocks/c15-b050.wav",
       "sha256": "4c9c52776bccfe593130bc9fd16af1351f1ec76c8c9b169501f2ccd7db33a4f6",
       "duration_ms": 4275,
-      "start_ms": 407225,
+      "start_ms": 408755,
       "text": "His message to [Deluin](/dˈɛluɪn/): Are you okay? Please tell me where you are.",
       "generation_s": 0.71,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 51,
@@ -619,7 +637,7 @@
       "file": "blocks/c15-b051.wav",
       "sha256": "da9a9e25a3f1f2154bf1baa15f6de80631e7b1653ffa71152b00f66b2f5fdf2b",
       "duration_ms": 16575,
-      "start_ms": 412100,
+      "start_ms": 414140,
       "text": "He sat crying at a table in the lobby restaurant of his hotel. There was a tea and a rice and vegetable dish on the table in front of him. He had drunk the tea quickly; the robot had already refilled it four times. The rice and vegetables were uneaten for almost a longhour.",
       "generation_s": 3.08
     },
@@ -630,7 +648,7 @@
       "file": "blocks/c15-b052.wav",
       "sha256": "c3c066e19e311d85a4ad38d1a0713dfec95d8cf370e3b127d1f9fc482a574fc1",
       "duration_ms": 2725,
-      "start_ms": 429125,
+      "start_ms": 431165,
       "text": "Finally, he got a message in response.",
       "generation_s": 0.68
     },
@@ -641,10 +659,11 @@
       "file": "blocks/c15-b053.wav",
       "sha256": "4ef4ff5bb9884a83da2f4601caba5414e722ddc227dc812bf7dbfb4714089be8",
       "duration_ms": 7825,
-      "start_ms": 432300,
+      "start_ms": 434340,
       "text": "A message from [Deluin](/dˈɛluɪn/): Don't worry, I am alive. Though it looks like I'm not going to be getting back to [Dzego](/ˈdzɛɡO/) anytime soon.",
       "generation_s": 1.46,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 54,
@@ -653,7 +672,7 @@
       "file": "blocks/c15-b054.wav",
       "sha256": "d320b3e6a33d830b697b6c1041f81d05a8da936d1d84f605103e78030ddcf30e",
       "duration_ms": 7100,
-      "start_ms": 440725,
+      "start_ms": 443275,
       "text": "It was not the outcome [Zei](/ˈzA/) wanted, but still much better than the outcome he feared. He breathed a sigh of relief.",
       "generation_s": 1.24
     },
@@ -664,10 +683,11 @@
       "file": "blocks/c15-b055.wav",
       "sha256": "22ad3250c6b2ec69f0585629e37bb74639dae1874c1091f8c22fddd1f6d5620a",
       "duration_ms": 26750,
-      "start_ms": 448275,
+      "start_ms": 450825,
       "text": "[Deluin](/dˈɛluɪn/) again: I found a way to send messages out. Some Arctic soldier and his friend, or his AI, or something, coded up a way to embed hidden text messages inside real-time health data that he is sending back home to command. And someone else in command is relaying that signal into a weather feed, which is then going up to the satellites. He's making a whole bunch of zipcoins anonymously rebroadcasting messages for people.",
       "generation_s": 5.0,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 56,
@@ -676,7 +696,7 @@
       "file": "blocks/c15-b056.wav",
       "sha256": "62d7116eb6e1e91a0059ef8524fa8351ad41a095fbc12f4333234d8e3d517897",
       "duration_ms": 3700,
-      "start_ms": 475625,
+      "start_ms": 478685,
       "text": "[Zei](/ˈzA/) wiped off his tears, and started typing intently.",
       "generation_s": 0.71
     },
@@ -687,10 +707,11 @@
       "file": "blocks/c15-b057.wav",
       "sha256": "67baf9ad37b2552f8ca315dd48cfedba10ed3a6a1be6d736d452497afa78250c",
       "duration_ms": 3650,
-      "start_ms": 479775,
+      "start_ms": 482835,
       "text": "[Zei](/ˈzA/) writes back: Wow. Are you ... in touch with this soldier?",
       "generation_s": 0.75,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 58,
@@ -699,10 +720,11 @@
       "file": "blocks/c15-b058.wav",
       "sha256": "301e9c830b6cb767d3db9a760340fce0b74ed7335765e4978266144ed59f1bce",
       "duration_ms": 2875,
-      "start_ms": 484025,
+      "start_ms": 487595,
       "text": "From [Deluin](/dˈɛluɪn/): I have an anonymous link.",
       "generation_s": 0.61,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 59,
@@ -711,10 +733,11 @@
       "file": "blocks/c15-b059.wav",
       "sha256": "885df9f543fe8afb52354381ac540531fff5ddfcc6b2940ff8aca9b9b02530e2",
       "duration_ms": 5925,
-      "start_ms": 487500,
+      "start_ms": 491580,
       "text": "[Zei](/ˈzA/) replies: Ask him how he's encoding the messages that he's putting into his health data.",
       "generation_s": 1.06,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 60,
@@ -723,7 +746,7 @@
       "file": "blocks/c15-b060.wav",
       "sha256": "8f7ec6f7c2293dd156f3d3d7e04f508457157444eb855ea1760dc09966d3a601",
       "duration_ms": 9925,
-      "start_ms": 494025,
+      "start_ms": 498615,
       "text": "[Zei](/ˈzA/) thought for a moment, and realized that perhaps the time had arrived for him to become the instructor. He took out a keyboard and started typing furiously.",
       "generation_s": 1.87
     },
@@ -734,10 +757,11 @@
       "file": "blocks/c15-b061.wav",
       "sha256": "d10ace5627acf747c698e273a033a7fdd293c9031c465dd1902d1bb20155675a",
       "duration_ms": 70900,
-      "start_ms": 504400,
+      "start_ms": 508990,
       "text": "[Zei](/ˈzA/)'s message to [Deluin](/dˈɛluɪn/): Or actually, on second thought, he won't answer. But tell him that randomly flipping the least-significant bits, the strategy that everyone always reaches for when they encounter this problem for the first time, is not the ideal solution. Sometimes higher-order bits are totally fine to flip, and sometimes flipping even a least-significant bit is dangerous. What you want to do is: first, train a language model on the actual distribution, so that conditional on what all the other bits are, it can give you probabilities for whether a given bit should be zero or one. Then, split the data up into buckets, using the decryption key itself to choose the buckets randomly, and require the bits in the i-th bucket to XOR to the i-th bit in the ciphertext. Within each bucket, use the model to determine which bit's probabilities are closest to fifty-fifty, meaning both values are natural for that bit to have in that context, and flip that bit to make the bucket XOR correct. So you're letting the L L M decide which bits are least significant and okay to flip, instead of just always taking the lowest-order binary digit in each number.",
       "generation_s": 12.27,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 62,
@@ -746,7 +770,7 @@
       "file": "blocks/c15-b062.wav",
       "sha256": "0b17e5a8e4664c3117bdb4a60441988f9458378bce1a05c3d866a42d7ba0e01d",
       "duration_ms": 12200,
-      "start_ms": 575900,
+      "start_ms": 581000,
       "text": "[Zei](/ˈzA/) sat back briefly, proud that he had managed to understand and explain not just a complicated concept, but the exact complicated concept that was needed for this exact job.",
       "generation_s": 2.34
     },
@@ -757,7 +781,7 @@
       "file": "blocks/c15-b063.wav",
       "sha256": "e0853b32d26c12b5cc687acf3027a472045a59fc002b077a7f0b92ee78efdbd9",
       "duration_ms": 12225,
-      "start_ms": 588550,
+      "start_ms": 593650,
       "text": "He decided to keep going, out of a feeling of personal pride in his understanding as much as out of a desire to let more people in Redshire sneak information past the Arctic censors.",
       "generation_s": 2.11
     },
@@ -768,10 +792,11 @@
       "file": "blocks/c15-b064.wav",
       "sha256": "9a7b016532096fdbff02dbdd48941b7fe851343980c7eca62341786582b66f56",
       "duration_ms": 45050,
-      "start_ms": 601225,
+      "start_ms": 606325,
       "text": "Another long message from [Zei](/ˈzA/). If you want to go even further, it says, you can make the buckets partially overlap: the first bucket covering positions zero to one hundred ninety-nine, the second twenty to two hundred nineteen, the third forty to two hundred thirty-nine, and so on, in a pseudorandom order, with only a random half of each bucket's positions going into the XOR. Normally you flip one bit in each new stretch to make each bucket come out right in turn. But if a stretch gives you twenty bits in a row where none of them are reasonable to flip, think, a very clear picture of a night sky, then you walk back and try to find a combination of earlier bits that makes the last two buckets XOR correctly, and if that fails, walk back further, and so on.",
       "generation_s": 9.01,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 65,
@@ -780,7 +805,7 @@
       "file": "blocks/c15-b065.wav",
       "sha256": "7cb1ec653ac504256b8290e4e1c57211c817f99e9460915407d76dc11b24621a",
       "duration_ms": 7075,
-      "start_ms": 646875,
+      "start_ms": 652485,
       "text": "He then realized that his last message might have come off too much as him trying to be a hotshot, so he sent a followup.",
       "generation_s": 1.74
     },
@@ -791,10 +816,11 @@
       "file": "blocks/c15-b066.wav",
       "sha256": "f430fcbe11a1d0cf6c7cb0049539164751cc0c8c42aa744b6b6f8752267a5335",
       "duration_ms": 3950,
-      "start_ms": 654400,
+      "start_ms": 660010,
       "text": "He adds: I learned that from [Den](/ˈdɛn/)'s cryptography textbooks.",
       "generation_s": 0.71,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 67,
@@ -803,10 +829,11 @@
       "file": "blocks/c15-b067.wav",
       "sha256": "767ed912a79a087cac6f7329437190b0165e4902fddda3dcddb13eca09a13627",
       "duration_ms": 23325,
-      "start_ms": 658950,
+      "start_ms": 665070,
       "text": "From [Deluin](/dˈɛluɪn/): I'll forward that to him. But I suspect that for him, first priority is going to be finding higher-bandwidth channels to hide data inside. Optimizing which bits to flip is really smart but it's maybe a two-times gain, finding a better data stream might be a thousand-times gain. Always take the dumb thousand-times gain before the super-clever two-times gain.",
       "generation_s": 4.42,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 68,
@@ -815,10 +842,11 @@
       "file": "blocks/c15-b068.wav",
       "sha256": "28bdce0fb43876e560784811119361911bb33aaf8cbca8a171a1dd2cadfbd807",
       "duration_ms": 2800,
-      "start_ms": 682875,
+      "start_ms": 689505,
       "text": "And then: I learned that in business school.",
       "generation_s": 0.57,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 69,
@@ -827,7 +855,7 @@
       "file": "blocks/c15-b069.wav",
       "sha256": "fd2115a6892a9622eca5204bf284460fcc2d37ae7378511e29c1d5434c93dd4b",
       "duration_ms": 9250,
-      "start_ms": 686275,
+      "start_ms": 693415,
       "text": "[Zei](/ˈzA/) felt more optimistic about how much of an improvement a better steganographic encoding would be, but decided not to press the point further.",
       "generation_s": 1.64
     },
@@ -838,10 +866,11 @@
       "file": "blocks/c15-b070.wav",
       "sha256": "d6ad24a08db7fefc4b6e5b9d790404711380671b45ce35835324e365cbf7f872",
       "duration_ms": 10400,
-      "start_ms": 695975,
+      "start_ms": 703115,
       "text": "[Zei](/ˈzA/) writes: Alright, well stay safe. And let me know if there's anything that I can do, or that smart people in my network could do, to help you get out of there safely.",
       "generation_s": 2.15,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 71,
@@ -850,7 +879,7 @@
       "file": "blocks/c15-b071.wav",
       "sha256": "02eccd96a4ba8fea73c9b8e921675647dbac2bbec7af934b6b6e9f59555693e5",
       "duration_ms": 27400,
-      "start_ms": 706975,
+      "start_ms": 714625,
       "text": "[Zei](/ˈzA/) thought about saying \"or that the [Kungaupei](/ˈkunɡWpA/) could do\", or even \"or that advanced [Dzegojan](/ˈdzɛɡOʤɑn/) secret societies could do\", instead. But he realized that first, it would be a breach of confidentiality to let an outsider, especially an outsider now in hostile occupied territory, know about the existence of those things, and second, he couldn't fully trust the connection — he hadn't even asked [Deluin](/dˈɛluɪn/) a security question yet. And so \"smart people in my network\" it was.",
       "generation_s": 4.45
     },
@@ -861,10 +890,11 @@
       "file": "blocks/c15-b072.wav",
       "sha256": "e92004fda850ddd5d3effb7c8f3ff517b2fb27126b34ec30fe7813a261f0e63d",
       "duration_ms": 3575,
-      "start_ms": 734825,
+      "start_ms": 742475,
       "text": "From [Deluin](/dˈɛluɪn/): Will do. Thank you for caring about me.",
       "generation_s": 0.78,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 73,
@@ -873,7 +903,7 @@
       "file": "blocks/c15-b073.wav",
       "sha256": "f577d8026622b2e3114dff3190f967bd9786e9aecff6ef8aa759d82e68ba5c45",
       "duration_ms": 12900,
-      "start_ms": 739000,
+      "start_ms": 747160,
       "text": "[Zei](/ˈzA/) put down his hand device, and breathed out. His eyes briefly wandered around the restaurant, and he saw that by this point there was no one else there. He finally began eating his rice and vegetable dish.",
       "generation_s": 2.31
     },
@@ -883,7 +913,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 752350,
+      "start_ms": 760510,
       "duration_ms": 1800
     },
     {
@@ -893,7 +923,7 @@
       "file": "blocks/c15-b075.wav",
       "sha256": "ffe14183ce7dfd03dca016b7908bdbf40a59cae1bd9f86d26145c38dbd3c19ac",
       "duration_ms": 3025,
-      "start_ms": 754150,
+      "start_ms": 762310,
       "text": "[Zei](/ˈzA/) felt someone put their hands on his shoulder.",
       "generation_s": 0.53
     },
@@ -904,7 +934,7 @@
       "file": "blocks/c15-b076.wav",
       "sha256": "dec39d6bb77f0da886b4815a6f9277ede5b851e7e1e20213aec254335412d91e",
       "duration_ms": 2525,
-      "start_ms": 757625,
+      "start_ms": 765785,
       "text": "[Zei](/ˈzA/) turned around. It was [Su](/ˈsu/).",
       "generation_s": 0.46
     },
@@ -915,7 +945,7 @@
       "file": "blocks/c15-b077.wav",
       "sha256": "06196370cc28e28800b2c971502c629e7e640e199309b82d3a6e4b5e1d4bdf10",
       "duration_ms": 2350,
-      "start_ms": 760600,
+      "start_ms": 768760,
       "text": "\"So sorry to hear about [Deluin](/dˈɛluɪn/).\"",
       "generation_s": 0.42
     },
@@ -926,7 +956,7 @@
       "file": "blocks/c15-b078.wav",
       "sha256": "0a334b67e5556a288283e5d1471b8ba371060555ea1f17eb27a3fc035598f116",
       "duration_ms": 3500,
-      "start_ms": 763400,
+      "start_ms": 771560,
       "text": "\"I assume the [Kungaupei](/ˈkunɡWpA/) are figuring out how to get him out?\"",
       "generation_s": 0.58
     },
@@ -937,7 +967,7 @@
       "file": "blocks/c15-b079.wav",
       "sha256": "e3bf1227f9e780f09a21c413695e17ee94d1df3a19d32262a43092037e4de58c",
       "duration_ms": 11925,
-      "start_ms": 767350,
+      "start_ms": 775510,
       "text": "[Zei](/ˈzA/) realized that technically he had just committed an error: he had not actually confirmed that [Su](/ˈsu/) knew or was supposed to know about the [Kungaupei](/ˈkunɡWpA/) — so far that was just [Den](/ˈdɛn/) and [Mu](/ˈmu/).",
       "generation_s": 1.83
     },
@@ -948,7 +978,7 @@
       "file": "blocks/c15-b080.wav",
       "sha256": "bb4727957b416e3bbe3ca959365a99b5bb8f390d425ea3beb059330bb54dd064",
       "duration_ms": 19025,
-      "start_ms": 779725,
+      "start_ms": 787885,
       "text": "\"That was the first thing I asked [Den](/ˈdɛn/)\", [Su](/ˈsu/) began to reply. [Zei](/ˈzA/) gave out a barely audible sigh of relief. \"So far they've acquired a bunch of internet links into Redshire, and they got a message from [Deluin](/dˈɛluɪn/) a minute ago, so at least he's safe for now. We'll let you know if there's any kind of rescue plan possible.\"",
       "generation_s": 3.58
     },
@@ -959,7 +989,7 @@
       "file": "blocks/c15-b081.wav",
       "sha256": "5d5db3f80b9f727ad33a607f7fb04835941a12add5614c2aa5cc698f0ce75d07",
       "duration_ms": 2100,
-      "start_ms": 799200,
+      "start_ms": 807360,
       "text": "[Zei](/ˈzA/) nodded silently.",
       "generation_s": 0.43
     },
@@ -970,7 +1000,7 @@
       "file": "blocks/c15-b082.wav",
       "sha256": "a9ab805948e4178a5559d345128f3545392e6916fdeb87d19cb818679c3861f4",
       "duration_ms": 2775,
-      "start_ms": 801750,
+      "start_ms": 809910,
       "text": "\"The finals are cancelled\", [Su](/ˈsu/) added.",
       "generation_s": 0.46
     },
@@ -981,7 +1011,7 @@
       "file": "blocks/c15-b083.wav",
       "sha256": "f827146ef348cf030abe3f6dca3bd91b0a640249eac56be9941fe50016690731",
       "duration_ms": 3875,
-      "start_ms": 804975,
+      "start_ms": 813135,
       "text": "\"Cancelled? Not postponed? What if he comes back tomorrow?\"",
       "generation_s": 0.67
     },
@@ -992,7 +1022,7 @@
       "file": "blocks/c15-b084.wav",
       "sha256": "12446fa59f779042573db9a2fe7bf78174fd0070601eabab008d6e4de70835ec",
       "duration_ms": 9050,
-      "start_ms": 809300,
+      "start_ms": 817460,
       "text": "\"Even if he does, at this point it's just not right to have more games. Also we don't want to give the audience false hope, and we don't want to distract people.\"",
       "generation_s": 1.49
     },
@@ -1003,7 +1033,7 @@
       "file": "blocks/c15-b085.wav",
       "sha256": "7b7627c8ee1b67beb1d4f29577b5122ef8a46aa8d7208d81bfee7ca2a3bf8226",
       "duration_ms": 7875,
-      "start_ms": 818800,
+      "start_ms": 826960,
       "text": "\"You're the champion this year. And if [Deluin](/dˈɛluɪn/) does come back, we'll give him the same trophy and the same prize money that we're giving you.\"",
       "generation_s": 1.27
     },
@@ -1014,7 +1044,7 @@
       "file": "blocks/c15-b086.wav",
       "sha256": "480dcacdf6d7bf6b9076f39e266188e8fc51471ff28edb5aea5be27a8fa22000",
       "duration_ms": 3550,
-      "start_ms": 827125,
+      "start_ms": 835285,
       "text": "\"No...\", [Zei](/ˈzA/) pleaded. \"I don't want to win like this.\"",
       "generation_s": 0.56
     },
@@ -1025,7 +1055,7 @@
       "file": "blocks/c15-b087.wav",
       "sha256": "8b1aa084ed12f762337804fe7f9fa649fd5048e25e206c8bb0df638c74fdd42d",
       "duration_ms": 11850,
-      "start_ms": 831125,
+      "start_ms": 839285,
       "text": "\"I know it's already late today, but you should go talk to [Den](/ˈdɛn/). He's in [Sadzu](/ˈsɑdzu/) [Du](/ˈdu/), in the southern mountain pyramid right now. He might want you here, or maybe in [Pafogai](/ˈpɑfOɡI/). He will know better than me.\"",
       "generation_s": 1.96
     },
@@ -1036,7 +1066,7 @@
       "file": "blocks/c15-b088.wav",
       "sha256": "2b39e0e865b1f30ee43dbf9d30e8d467e8a304dfe3a6838d4e540eebdc7ba8ae",
       "duration_ms": 10575,
-      "start_ms": 843425,
+      "start_ms": 851585,
       "text": "[Zei](/ˈzA/) nodded. Of course this was all more important than the game, he understood. He hoped that [Den](/ˈdɛn/) would put him in [Pafogai](/ˈpɑfOɡI/), so that he could see [Fin](/ˈfɪn/) and his mom again.",
       "generation_s": 1.73
     },
@@ -1046,7 +1076,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 854450,
+      "start_ms": 862610,
       "duration_ms": 1800
     },
     {
@@ -1056,7 +1086,7 @@
       "file": "blocks/c15-b090.wav",
       "sha256": "8be734ae75eead7863c16b716b655f7aa09765a129316056516cee07da970200",
       "duration_ms": 23325,
-      "start_ms": 856250,
+      "start_ms": 864410,
       "text": "[Zei](/ˈzA/)'s car arrived at an entrance to the mountain pyramid that he had not been at before. This was a series of doors on the side of the mountain pyramid, much nearer to ground level than the usual entrance, though further from the city. The car stopped, its door lined up perfectly with one of the mountain pyramid doors. The car door and the mountain pyramid door slid open simultaneously.",
       "generation_s": 4.42
     },
@@ -1067,7 +1097,7 @@
       "file": "blocks/c15-b091.wav",
       "sha256": "9069d26bd36d5180f02bdb50c5b9a945b7a7bce5c447ce499e0d6f7c5db75e55",
       "duration_ms": 2875,
-      "start_ms": 880025,
+      "start_ms": 888185,
       "text": "[Zei](/ˈzA/) stepped out, and walked down the hallway.",
       "generation_s": 0.69
     },
@@ -1078,7 +1108,7 @@
       "file": "blocks/c15-b092.wav",
       "sha256": "2c3722cd84b752962e6578f6a03ce6c4062b7dcb2498dc2402356fab5b9d3231",
       "duration_ms": 4500,
-      "start_ms": 883350,
+      "start_ms": 891510,
       "text": "A hundred meters and a left and right turn later, he arrived at a door.",
       "generation_s": 0.86
     },
@@ -1089,7 +1119,7 @@
       "file": "blocks/c15-b093.wav",
       "sha256": "e8a6d284e1978df9fdcc375fee2e581d1cc8ca2c9a365d8583fdb4260f528426",
       "duration_ms": 3775,
-      "start_ms": 888300,
+      "start_ms": 896460,
       "text": "He put his watch against a green circle. The door opened.",
       "generation_s": 0.69
     },
@@ -1100,7 +1130,7 @@
       "file": "blocks/c15-b094.wav",
       "sha256": "01674adf90670c4c8d83db86f46e0c51934cf5844c69ba304b250acb7ebda4ea",
       "duration_ms": 5800,
-      "start_ms": 892525,
+      "start_ms": 900685,
       "text": "[Zei](/ˈzA/) saw a long room, with a table at the end. [Den](/ˈdɛn/) was sitting on the other side, alone.",
       "generation_s": 0.97
     },
@@ -1111,7 +1141,7 @@
       "file": "blocks/c15-b095.wav",
       "sha256": "499d4c3fffb50a6e08ecb9f91caee6c74b4b471076d11fb69a9430a5b41861f6",
       "duration_ms": 1725,
-      "start_ms": 898775,
+      "start_ms": 906935,
       "text": "[Zei](/ˈzA/) sat down.",
       "generation_s": 0.32
     },
@@ -1122,7 +1152,7 @@
       "file": "blocks/c15-b096.wav",
       "sha256": "1ae02a09601cec849b190d16a2020e7cf53b250b589b0396e0a27e45896c0f9d",
       "duration_ms": 2025,
-      "start_ms": 900950,
+      "start_ms": 909110,
       "text": "\"Thank you for coming, [Zei](/ˈzA/).\"",
       "generation_s": 0.35
     },
@@ -1133,7 +1163,7 @@
       "file": "blocks/c15-b097.wav",
       "sha256": "3b941ce44df8dc173d945e5cc671a532023891c4a63bf0a44dc5d985a4b8d973",
       "duration_ms": 2100,
-      "start_ms": 903425,
+      "start_ms": 911585,
       "text": "[Zei](/ˈzA/) nodded silently.",
       "generation_s": 0.37
     },
@@ -1144,7 +1174,7 @@
       "file": "blocks/c15-b098.wav",
       "sha256": "d1ec1249665d137bc3cc119da3501ae1fe79eb115ed921a933abcce3d5e56a29",
       "duration_ms": 6300,
-      "start_ms": 905975,
+      "start_ms": 914135,
       "text": "\"I think you're one of the very few people who is in a position to help [Dzego](/ˈdzɛɡO/) get through this next year.\"",
       "generation_s": 1.07
     },
@@ -1155,7 +1185,7 @@
       "file": "blocks/c15-b099.wav",
       "sha256": "54a607d7484244541d3967f3dcba21aa4b212ef8e84b7110540ba341d803f7bd",
       "duration_ms": 14150,
-      "start_ms": 912725,
+      "start_ms": 920885,
       "text": "[Zei](/ˈzA/)'s eyes opened wide. He was now the national [Minpentai](/ˈmɪnpɛntI/) champion, and he was getting far in his studies from [Den](/ˈdɛn/)'s cryptography books, yes, but ... he still did not know how that made him valuable at this exact moment.",
       "generation_s": 2.67
     },
@@ -1166,7 +1196,7 @@
       "file": "blocks/c15-b100.wav",
       "sha256": "4fca2e0ff7f51f936ea96d725501a84ec840d26a71c62f81d8cd33147cc524d8",
       "duration_ms": 6325,
-      "start_ms": 927325,
+      "start_ms": 935485,
       "text": "\"In your last [Minpentai](/ˈmɪnpɛntI/) game, you did two things that were crucial to winning. Do you remember what they are?\"",
       "generation_s": 1.13
     },
@@ -1177,7 +1207,7 @@
       "file": "blocks/c15-b101.wav",
       "sha256": "e1666315fcd67d4c66c376c7232bb33c570b037b2b49e38ad6474ecffa81175c",
       "duration_ms": 5000,
-      "start_ms": 934100,
+      "start_ms": 942260,
       "text": "\"I can think of a few answers, but I'm not sure if any of them are what you had in mind.\"",
       "generation_s": 0.82
     },
@@ -1188,7 +1218,7 @@
       "file": "blocks/c15-b102.wav",
       "sha256": "d1f05dba6344690b1d22f6c360005bf00cbe15c654f8a69f757344d9ad9f1e33",
       "duration_ms": 4650,
-      "start_ms": 939550,
+      "start_ms": 947710,
       "text": "\"First, you hunkered down and played defense, and outlasted your opponent.\"",
       "generation_s": 0.79
     },
@@ -1199,7 +1229,7 @@
       "file": "blocks/c15-b103.wav",
       "sha256": "b18fa0633d9fa614850dad2ab32272481e07bb54e1ff14e99b9955034cc1bc98",
       "duration_ms": 15725,
-      "start_ms": 944650,
+      "start_ms": 952810,
       "text": "\"Second, you made the most out of a very limited-bandwidth information channel, by pre-publishing most of the data — the symbol-carrying spaceship — and then using only a few bits of manipulation at the end to deploy the most important parts of your strategy.\"",
       "generation_s": 2.98
     },
@@ -1210,7 +1240,7 @@
       "file": "blocks/c15-b104.wav",
       "sha256": "a7716e2345aa4a65b20254b8e978335873e94ef4b93526498faad6fa671a4536",
       "duration_ms": 14875,
-      "start_ms": 960825,
+      "start_ms": 968985,
       "text": "\"Actually a very similar tactic to what you used in your other game months earlier, when you sent out a spaceship that encoded basically every possible glider attack strategy, and then another glider to choose which specific one you wanted to use.\"",
       "generation_s": 2.65
     },
@@ -1221,7 +1251,7 @@
       "file": "blocks/c15-b105.wav",
       "sha256": "132fb057e2c0585938def744dfcdcf6617d7cf27363148064ad56a39c9caf604",
       "duration_ms": 1950,
-      "start_ms": 976150,
+      "start_ms": 984310,
       "text": "\"How is this related?\"",
       "generation_s": 0.38
     },
@@ -1232,7 +1262,7 @@
       "file": "blocks/c15-b106.wav",
       "sha256": "7cb400ae3ac586e12434b7e9d5dcc5c7702fe60014a194441f467688428472b6",
       "duration_ms": 4150,
-      "start_ms": 978550,
+      "start_ms": 986710,
       "text": "\"We have contact with [Deluin](/dˈɛluɪn/). Do you know how we accomplished that?\"",
       "generation_s": 0.75
     },
@@ -1243,7 +1273,7 @@
       "file": "blocks/c15-b107.wav",
       "sha256": "cea9095462be094e9efd139853fa123da77dc55dbbe9cb2b2d4a0af806384bb1",
       "duration_ms": 8775,
-      "start_ms": 983150,
+      "start_ms": 991310,
       "text": "\"Actually, he got in touch with me and he told me. Some Arctic soldier is charging people zipcoins to hide their messages in his health data.\"",
       "generation_s": 1.59
     },
@@ -1254,7 +1284,7 @@
       "file": "blocks/c15-b108.wav",
       "sha256": "9e7f1d2e508f5eb0aaf51800db4fe72aa9a69e6bef73ed6cef938b763af3e85a",
       "duration_ms": 14900,
-      "start_ms": 992375,
+      "start_ms": 1000535,
       "text": "\"Correct. And so everyone is dropping down to the most efficient, lowest-bandwidth form of communication they can use — raw text — and pushing all that through him. One soldier's health data, communications for thousands of people.\"",
       "generation_s": 2.72
     },
@@ -1265,7 +1295,7 @@
       "file": "blocks/c15-b109.wav",
       "sha256": "f8c7d500b7b509188e33e69831ba022f87b294038003c6485883d5093374732e",
       "duration_ms": 15100,
-      "start_ms": 1007725,
+      "start_ms": 1015885,
       "text": "\"A quarter longhour ago the rates he was charging suddenly dropped by two thirds — we suspect he found some more efficient way to encode data. Interestingly enough neither he nor anyone else has found any better channel than health data so far.\"",
       "generation_s": 2.94
     },
@@ -1276,7 +1306,7 @@
       "file": "blocks/c15-b110.wav",
       "sha256": "dcc0d693d1e48403ac21661a7dab3dec891b03c60877df114fc06ee02ef8a884",
       "duration_ms": 27500,
-      "start_ms": 1023275,
+      "start_ms": 1031435,
       "text": "\"Okay, now I wonder if that was me. I told [Deluin](/dˈɛluɪn/) to tell the soldier to train an LLM on his own health data and then modify the health data that he is sending out in-flight by flipping the bits that the LLM says are safest to flip, and using XOR over buckets to encode the message so he has a lot of freedom in choosing which bit to flip. Much better for reducing the 'suspiciousness' per bit of hidden data encoded, so he could afford to hide more data inside the same cover traffic.\"",
       "generation_s": 5.63
     },
@@ -1287,7 +1317,7 @@
       "file": "blocks/c15-b111.wav",
       "sha256": "d1d1c57dac305464714d74f77aa2474c93d7654a5ea3335aa9905bc1a17d283a",
       "duration_ms": 2000,
-      "start_ms": 1051225,
+      "start_ms": 1059385,
       "text": "[Den](/ˈdɛn/)'s eyes opened up.",
       "generation_s": 0.49
     },
@@ -1298,7 +1328,7 @@
       "file": "blocks/c15-b112.wav",
       "sha256": "2c564946c7e45325c6e71f332201c5d2aedc9c8313322cf2b64e225f343f3c8c",
       "duration_ms": 3700,
-      "start_ms": 1053675,
+      "start_ms": 1061835,
       "text": "\"Well we have no way to know if he used that specific trick-\"",
       "generation_s": 0.73
     },
@@ -1309,7 +1339,7 @@
       "file": "blocks/c15-b113.wav",
       "sha256": "37d0e43959ee79fe0cf401380bde69238d80ab2a980ca87d8bba1ee3c1540364",
       "duration_ms": 2600,
-      "start_ms": 1057825,
+      "start_ms": 1065985,
       "text": "[Zei](/ˈzA/) remembered to check his watch.",
       "generation_s": 0.52
     },
@@ -1320,10 +1350,11 @@
       "file": "blocks/c15-b114.wav",
       "sha256": "6b87191acf4927f0c3f84dfdc2fcc4692dd512da4d7796be3a0983b97c0d2c9f",
       "duration_ms": 4475,
-      "start_ms": 1060875,
+      "start_ms": 1069035,
       "text": "A message from [Deluin](/dˈɛluɪn/): Arctic soldier says thanks, it helped a lot.",
       "generation_s": 0.81,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 115,
@@ -1332,7 +1363,7 @@
       "file": "blocks/c15-b115.wav",
       "sha256": "fe88d28c7040de914699d1bf69b7a40bd0e03066e8bcc5f2df652e2f682dd56e",
       "duration_ms": 1800,
-      "start_ms": 1065950,
+      "start_ms": 1074620,
       "text": "\"Looks like he did.\"",
       "generation_s": 0.33
     },
@@ -1343,7 +1374,7 @@
       "file": "blocks/c15-b116.wav",
       "sha256": "42a32ca6403ac9ca7692f04b1b87313a6f0aabef591787726cf8c1a67fa194a0",
       "duration_ms": 3650,
-      "start_ms": 1068200,
+      "start_ms": 1076870,
       "text": "\"See, you've helped the anti-Arctic resistance already.\"",
       "generation_s": 0.61
     },
@@ -1354,7 +1385,7 @@
       "file": "blocks/c15-b117.wav",
       "sha256": "3fbd5e7ab6211a911063582ce94c7caf8adb8e4df0f629e16c54ef786a74afec",
       "duration_ms": 10850,
-      "start_ms": 1072300,
+      "start_ms": 1080970,
       "text": "\"Look, [Zei](/ˈzA/). What's happening now is, our hand has been forced. We can't just keep improving our capabilities secretly anymore. [Dzegojan](/ˈdzɛɡOʤɑn/) society has to come out of hiding.\"",
       "generation_s": 1.96
     },
@@ -1365,7 +1396,7 @@
       "file": "blocks/c15-b118.wav",
       "sha256": "5bf2639da91dc69d1e60d6b6315b34fb2e68a9b366f9e5d054e3609578c0811a",
       "duration_ms": 13650,
-      "start_ms": 1083600,
+      "start_ms": 1092270,
       "text": "\"The shadow society has to become the society. The shadow government has to become the government. We have to sprint to deploy everything that we have figured out across all of [Dzego](/ˈdzɛɡO/) — before the Arctics can make any moves on us.\"",
       "generation_s": 2.49
     },
@@ -1376,7 +1407,7 @@
       "file": "blocks/c15-b119.wav",
       "sha256": "13918eb808abae1e168f43e2e5c5c690546dd21e19d8e8cf53af8a3d54cc6056",
       "duration_ms": 20475,
-      "start_ms": 1097700,
+      "start_ms": 1106370,
       "text": "\"The part of this most relevant to you — the cryptographic infrastructure we need so that our coordination can keep functioning and we what needs to be secret can stay secret — is run out of [Pafogai](/ˈpɑfOɡI/) [Du](/ˈdu/). So I want you to take the train back — [Su](/ˈsu/) can reschedule your ticket for tomorrow — and I'll message you about whom you should reach out to next.\"",
       "generation_s": 3.78
     },
@@ -1387,9 +1418,22 @@
       "file": "blocks/c15-b120.wav",
       "sha256": "ff255f7b1746149d1db53b4e3e12c8893ba5c1090aa4ef31fb0e139fc3506406",
       "duration_ms": 10450,
-      "start_ms": 1118625,
+      "start_ms": 1127295,
       "text": "\"For now, maybe see if you can come up with any more ideas for that soldier to sell more packets. That seems to be even better cryptography training for you than my textbooks.\"",
       "generation_s": 1.78
     }
-  ]
+  ],
+  "restitched_at": "2026-10-05T18:49:49+00:00",
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent and its helper agents",
+    "drafted": [
+      "spoken descriptions of screens, figures and lyric cards (blocks 21, 24, 25, 50, 53, 55, 57, 58, 59, 61, 64, 66, 67, 68, 70, 72, 114)",
+      "pronunciation entries (content/snowmoon/pronunciation.json)"
+    ],
+    "instructions": [
+      "docs/prompts/008a-agent-prompts.md#read-aloud-descriptions-and-invented-word-lists"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
 }

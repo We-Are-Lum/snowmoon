@@ -4,6 +4,14 @@
   "voice": "kokoro-af_heart",
   "label": "Synthetic narration · Kokoro-82M, stock voice af_heart",
   "license": "GPL-3.0",
+  "published_by": {
+    "fid": 6786,
+    "role": "maintainer",
+    "action": "published via script",
+    "script": "scripts/publish-narration.ts",
+    "date": "2026-10-05",
+    "evidence": "docs/prompts/008-narration-and-images.md"
+  },
   "recipe": "content/snowmoon/recipes/narration/chapter-5.json",
   "model": {
     "name": "Kokoro-82M",
@@ -36,7 +44,21 @@
     },
     "break_ms": 1800,
     "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
-    "read_aloud_sha256": "2a8998f8cf139566f8c685dec286b8e157f158a25d8859f5921b1156cda1dbb0"
+    "read_aloud_sha256": "2a8998f8cf139566f8c685dec286b8e157f158a25d8859f5921b1156cda1dbb0",
+    "description_tone": {
+      "notes_hz": [
+        660,
+        990
+      ],
+      "notes_ms": [
+        110,
+        140
+      ],
+      "between_ms": 40,
+      "after_ms": 220,
+      "amplitude": 0.12,
+      "made_by": "code (numpy sine, linear fades)"
+    }
   },
   "block_encoding": {
     "codec": "aac",
@@ -46,25 +68,25 @@
     "tool": "ffmpeg"
   },
   "chapter_file": {
-    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-5-4e830d7acb85.m4a",
-    "sha256": "4e830d7acb859820f39ff05fe0b496f5008e4784586035e6452805cf74b516ee",
-    "bytes": 10167971,
-    "duration_ms": 872775
+    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-5-70b93430cc9d.m4a",
+    "sha256": "70b93430cc9d4de75383d42e75e79304c960f7b415e7664fb79634ccf63ff572",
+    "bytes": 10162064,
+    "duration_ms": 874305
   },
   "breaks": [
     {
       "idx": 24,
-      "start_ms": 210500,
+      "start_ms": 211010,
       "silence_ms": 1800
     },
     {
       "idx": 37,
-      "start_ms": 301700,
+      "start_ms": 302210,
       "silence_ms": 1800
     },
     {
       "idx": 88,
-      "start_ms": 747525,
+      "start_ms": 748545,
       "silence_ms": 1800
     }
   ],
@@ -342,6 +364,7 @@
       "bytes": 119471,
       "duration_ms": 13525,
       "start_ms": 190750,
+      "tone_ms": 510,
       "source_wav_sha256": "dd3967237ad85c69dcaff9ccf6bcf2396a14b2560fe0ed704638aadf4f4e826c",
       "text": "The pole's screen shows two checks: reputation score of at least one hundred, verified, and payment successful. Then: Checked in. Your room numbers are seven fourteen, seven fifteen, and seven sixteen.",
       "read_aloud_status": "unreviewed"
@@ -354,7 +377,7 @@
       "sha256": "a430696c1d65d800b4582ca0fb1877ac51727ffcea298cbd687c0a8d353a362d",
       "bytes": 47031,
       "duration_ms": 5175,
-      "start_ms": 204875,
+      "start_ms": 205385,
       "source_wav_sha256": "3f4211f5070069f8208cda46ceddb0cb9347d5a43f628833b7c9d7164432a74d",
       "text": "[Zei](/ˈzA/), [Bai](/ˈbI/) and [Min](/ˈmɪn/)'s watches all buzzed in unison, confirming their room keys."
     },
@@ -366,7 +389,7 @@
       "sha256": "e508caf0eab1d36a5dcfe27c22d28630e57e62f42807187ff17164ae4adf9127",
       "bytes": 99468,
       "duration_ms": 11000,
-      "start_ms": 212300,
+      "start_ms": 212810,
       "source_wav_sha256": "61bc080dd04281fb9ff05be380d268dbbb70b797a9397add69caf5d8ba96b6b9",
       "text": "Having put his luggage into his room and taken a shower, [Zei](/ˈzA/) stepped out of the elevator and once again entered the hotel lobby. [Bai](/ˈbI/) was already there, looking outside a window."
     },
@@ -378,7 +401,7 @@
       "sha256": "cc76e1c55e005fd06ee559536e990d783e69bfd61e7b5a437885b7fe9aabef9d",
       "bytes": 41088,
       "duration_ms": 4425,
-      "start_ms": 223750,
+      "start_ms": 224260,
       "source_wav_sha256": "fa52c3c3c3be7040c6b3a5e0469dd09a61b9c70d1f7719dbc4e6871ad42b56d0",
       "text": "\"Mom said she needs to sleep, we should go explore\", [Zei](/ˈzA/) suggested."
     },
@@ -390,7 +413,7 @@
       "sha256": "00eed3034f135ff473f9e18a35a9be960a7683f6e1850a903820e6e2a2d518f7",
       "bytes": 48171,
       "duration_ms": 5250,
-      "start_ms": 228625,
+      "start_ms": 229135,
       "source_wav_sha256": "2814144d732cd35b5dbfef5a73c00afbecad6a7daa257efa1e3c45c49c112901",
       "text": "[Bai](/ˈbI/) nodded. The two exited the hotel, and entered Freetown's great outdoors."
     },
@@ -402,7 +425,7 @@
       "sha256": "eda6e12f33cd90aad095b0d169f85ef34f4610b785b62ee6fe8cc44a09f6e170",
       "bytes": 32985,
       "duration_ms": 3575,
-      "start_ms": 234325,
+      "start_ms": 234835,
       "source_wav_sha256": "211e2ca5e6e4bad2655ec92a5c475e506a3146d6a032a1db3a96e3ff52061d91",
       "text": "\"So why did you agree to come with me anyway?\", [Bai](/ˈbI/) asked."
     },
@@ -414,7 +437,7 @@
       "sha256": "c0c5158b314a3407c9574fee55c6b736b22e16bbeb8c16833ebc643c40ca8b31",
       "bytes": 62757,
       "duration_ms": 7075,
-      "start_ms": 238350,
+      "start_ms": 238860,
       "source_wav_sha256": "c5c1f210c06b20df80019e749d8976ebf7a570d86eab9d1dbc601e6354c6719d",
       "text": "\"Well it was obviously the lowest-cost opportunity I would have to go abroad for a long time\", [Zei](/ˈzA/) replied."
     },
@@ -426,7 +449,7 @@
       "sha256": "c5e441c467a89ffa0e0b4a360a71ed2d530c52b0954ae9afeaf95226d5a8e2e5",
       "bytes": 113861,
       "duration_ms": 13000,
-      "start_ms": 245875,
+      "start_ms": 246385,
       "source_wav_sha256": "4595b4ff32df0f54b4f6e3f851c4a2d2b89c64a95bd5959a4b6e89346c57964b",
       "text": "\"We both won our games in the semi-finals easily — my opponent was just not prepared for the sudden rule change four thousand turns in — and I saw you won even faster. So the finals are between me and you.\""
     },
@@ -438,7 +461,7 @@
       "sha256": "7e2740bf84d839e223d5be2db1fc1c49fe0417d5ad65761518232ec240e4f37a",
       "bytes": 188968,
       "duration_ms": 21125,
-      "start_ms": 259325,
+      "start_ms": 259835,
       "source_wav_sha256": "c3e9c1d6a02149454245c105db468b40e578200264d570d4f9924dfe3ce800a0",
       "text": "\"And so it's a unique situation. Normally, there's a prisoner's dilemma: neither of us can take a break and enjoy anything, because if either of us does, the other will cram harder right before the big game and gain an advantage. But this time, that's not true — because we can both take a break together, so we're sure that neither of us is doing anything else.\""
     },
@@ -450,7 +473,7 @@
       "sha256": "655798d6f1967c7cb2a3d5eac031b07d50c95cd867e6e7b121b9289a3f3d3529",
       "bytes": 49327,
       "duration_ms": 5575,
-      "start_ms": 280900,
+      "start_ms": 281410,
       "source_wav_sha256": "524f1d608adbc9a109d0ee9c8455c9dcb80b90d93b204d7adc5a8ce2b551cb1c",
       "text": "\"And the surplus is high — both Mom and I get to go abroad for the first time in our lives.\""
     },
@@ -462,7 +485,7 @@
       "sha256": "37bc754a244b12035b119c0923e38f5fa1b4357ce272f6d70643b26b8fc64c3f",
       "bytes": 21490,
       "duration_ms": 2350,
-      "start_ms": 286925,
+      "start_ms": 287435,
       "source_wav_sha256": "7686dbd6e35e95ab890a48214fd8c535704262c26e6cd4f4b90e491d801d8f47",
       "text": "\"Now why did you agree to take me?\""
     },
@@ -474,7 +497,7 @@
       "sha256": "2d8afba24a162f2ba7eb769d3b412179c08cf0cb5b68c809aa4e217946a97719",
       "bytes": 45421,
       "duration_ms": 5125,
-      "start_ms": 289725,
+      "start_ms": 290235,
       "source_wav_sha256": "537714a904758fef76db855ecbfeab74be770c3bad7bff1fdeeae66be56d0182",
       "text": "\"Pretty much the same, now that I think about it. Just without the game theory math.\""
     },
@@ -486,7 +509,7 @@
       "sha256": "f9407d9b91530fbab436961d725c8f5a299f8db094c0f3d4ef4790db2074e91f",
       "bytes": 34781,
       "duration_ms": 3875,
-      "start_ms": 295300,
+      "start_ms": 295810,
       "source_wav_sha256": "3fec3db2b53eae59d8a09533f4d097c55ceed9ea7151cabf415f0451635b361f",
       "text": "\"Though for me what you call the surplus is spending time with you.\""
     },
@@ -498,7 +521,7 @@
       "sha256": "64d9048354d4a34aadd15a3b34300865b4f757ef4bba46433c8f9c0d2200f771",
       "bytes": 14165,
       "duration_ms": 1625,
-      "start_ms": 299625,
+      "start_ms": 300135,
       "source_wav_sha256": "45a8d998b2465f2e6829b0f0c5b52cf55bd0ecf8425e8b5c055361279c8587df",
       "text": "[Zei](/ˈzA/) groaned."
     },
@@ -510,7 +533,7 @@
       "sha256": "afdb5c0064617ce3ca8c646ca705472692c3d79255fd8b193e262df94430f3d1",
       "bytes": 56563,
       "duration_ms": 6250,
-      "start_ms": 303500,
+      "start_ms": 304010,
       "source_wav_sha256": "12ff3113dfa6eeea5ee17b8c3427374d1aa43836204ddd331bc6e2dab8c1a92a",
       "text": "[Zei](/ˈzA/) and [Bai](/ˈbI/) arrived at a building that looked noticeably larger and nicer than its surroundings."
     },
@@ -522,7 +545,7 @@
       "sha256": "c4600f4c6d7f6f1465f422bb9d58b86c5771606206429765eba6ed3a7eded86c",
       "bytes": 30273,
       "duration_ms": 3375,
-      "start_ms": 310200,
+      "start_ms": 310710,
       "source_wav_sha256": "31e2e75b8654b4589b14f77a292cc3400057a4e13bf0ce1fda709b5cc79261f6",
       "text": "\"Freetown Economics Institute\", a sign read."
     },
@@ -534,7 +557,7 @@
       "sha256": "7f7830a0c841317d4b9476f6155ed1b8791ea951c5a0eaa9ef2e1c8abdc2a8af",
       "bytes": 158194,
       "duration_ms": 17575,
-      "start_ms": 314025,
+      "start_ms": 314535,
       "source_wav_sha256": "2b365fbbf5d8f929f13043fe17220ea0630c97da848c21a54963cf65d10dcabf",
       "text": "Right below the name of the institute, the sign listed a schedule of admission fees, featuring a formula that was a function of two variables: increasing with the square root of how much time you spend inside, and decreasing the higher your academic or intellectual reputation score rises."
     },
@@ -546,7 +569,7 @@
       "sha256": "a568ef7fa3594c16135f3a5639b347170b274bc2ab33acb066861ad5d7115a43",
       "bytes": 208973,
       "duration_ms": 23025,
-      "start_ms": 332050,
+      "start_ms": 332560,
       "source_wav_sha256": "88959e0faf80a48e248c8601773433cf73a39523479a9d5e5a359285423f8c99",
       "text": "Academic and intellectual reputation score was difficult to get. The kind of reputation you could zero-knowledge-collateralize to get loans or check into hotels, that was easy to get; it was only hard if you had failed to pay back loans or trashed hotel rooms multiple times. Academic and intellectual reputation, on the other hand, required doing serious work."
     },
@@ -558,7 +581,7 @@
       "sha256": "99cc6c1538e8a4dc0453b5e456de8f21af36478215ad645a8f4552ea35643737",
       "bytes": 70390,
       "duration_ms": 7825,
-      "start_ms": 355525,
+      "start_ms": 356035,
       "source_wav_sha256": "269e9a3f0e99c642c27453e833c6b0c02e53910948f5f991324ca932e6f9e006",
       "text": "There was an entrance gate with turnstiles and glowing green circles. [Zei](/ˈzA/) and [Bai](/ˈbI/) tapped their hand devices, and walked through."
     },
@@ -570,7 +593,7 @@
       "sha256": "b8acb3d4d9eca87491eeb2bc5a599b29de45c76bc28c5b8af2159c1fd222ab90",
       "bytes": 148037,
       "duration_ms": 16425,
-      "start_ms": 363800,
+      "start_ms": 364310,
       "source_wav_sha256": "e97402544e748e02ca2a6707654876d61be31b131af26bb19819bdbf0614547d",
       "text": "The inside of the building was a single spiral-shaped sloped floor that looped around several times. If one walked along the outside wall, the slope was barely noticeable — a circumference of perhaps three hundred meters that one could walk around to climb four meters."
     },
@@ -582,7 +605,7 @@
       "sha256": "f3b1fc7da95ea0490b6c21d499b41e95b52c2ed7ed2dc11640d60fb42ebd220c",
       "bytes": 52364,
       "duration_ms": 5800,
-      "start_ms": 380675,
+      "start_ms": 381185,
       "source_wav_sha256": "1ae795909a86ba74148d5c7a62ac6a6be48c24c4e29fb3dbfc53320a501d5c25",
       "text": "In the middle, there were elevators and staircases, for those who wanted to go up or down faster."
     },
@@ -594,7 +617,7 @@
       "sha256": "b537dbd92556c3712cdf763dbef425c2d008c198a46a446530a26ea815cd9393",
       "bytes": 157340,
       "duration_ms": 17500,
-      "start_ms": 386925,
+      "start_ms": 387435,
       "source_wav_sha256": "65b95cde357b4829f4874fa80dbd8eca10f0cb08faedd3c16c6b3f8f26f6b252",
       "text": "[Zei](/ˈzA/) and [Bai](/ˈbI/) leisurely walked along the floor, and soon saw a restaurant. Two people, a woman and a man, were sitting, drinking tea and eating a dish with vegetables and rice. There was a large screen, at that moment playing a lecture explaining the United Cities' co-governance system."
     },
@@ -606,7 +629,8 @@
       "sha256": "413d9451341e9afe33c520184c716fb2d734c1457994109b9b64ce11d0ad5abb",
       "bytes": 225662,
       "duration_ms": 25025,
-      "start_ms": 404875,
+      "start_ms": 405385,
+      "tone_ms": 510,
       "source_wav_sha256": "e8e28f28fef70567d5c3f4d59f7081f69891363ee4c448f80c1afac392f554e4",
       "text": "On the screen, a network map of fifteen cities, linked by two-way arrows, each marked five, ten or fifteen percent. Freetown sits near the bottom middle, linked to [Mabuli](/mɑbˈuli/) at fifteen, Deplexi at ten, and [Devanvil](/dˈɛvənvˌɪl/) and Ondak at five each. Around it are Silverbeach, [Inglewore](/ˈɪŋɡəlwˌɔɹ/), Hapton, [Imber](/ˈɪmbəɹ/) and [Arturia](/ɑɹtˈʊɹiə/) to the west and north, Redshire and Petersvil in the northeast, and Iptak, Mantak and Belpaki clustered in the southeast.",
       "read_aloud_status": "unreviewed"
@@ -619,7 +643,7 @@
       "sha256": "04a8a32180f585d8a5661235ae5f9d22cb7dd96a4b04c87879e2d5ebafca806e",
       "bytes": 58870,
       "duration_ms": 6450,
-      "start_ms": 430500,
+      "start_ms": 431520,
       "source_wav_sha256": "74db3637eb7d1bf3007203d71693a591c682049f96c355c70ce740af0f2b4431",
       "text": "\"When two cities are in a co-governance relationship, they each elect a percentage of the other's parliament.\""
     },
@@ -631,7 +655,7 @@
       "sha256": "869c44ef1639147695bc2db5445a2c0538e4fb532cd96b8cf13d488829116ee1",
       "bytes": 208534,
       "duration_ms": 22725,
-      "start_ms": 437400,
+      "start_ms": 438420,
       "source_wav_sha256": "bf1bc4d5668925489177ccf67b4b7afca9ada7509a29edc4ae3ceab17df69741",
       "text": "\"The percentage is based on a pre-agreed number. Whichever city is larger, as computed by a geometric average of population and GDP, elects that pre-agreed share of the smaller city's parliament. Whichever city is smaller elects a share of the larger city's parliament equal to the pre-agreed share, divided by the square root of the ratio in the two cities' sizes.\""
     },
@@ -643,7 +667,7 @@
       "sha256": "95624552e75916e502b0a5ed9d756d9b0cf2547d56fa40b557376798ad8ba635",
       "bytes": 106675,
       "duration_ms": 12000,
-      "start_ms": 460575,
+      "start_ms": 461595,
       "source_wav_sha256": "b7194f0a1d6c48a0e0f8f7ba93974515a0d7463fdf0175ba3009a3f7dda86cf7",
       "text": "\"You might ask, why square root? Well, it turns out that the utility of a large share of governance, held by a larger participant, is superlinearly larger than the utility of a smaller share-\""
     },
@@ -655,7 +679,7 @@
       "sha256": "7f3518f7bf4d1a1673cdb9950f73afbb579c8a8839b77275ab64b266e7fa882e",
       "bytes": 56040,
       "duration_ms": 6100,
-      "start_ms": 473025,
+      "start_ms": 474045,
       "source_wav_sha256": "3933a0450a3c62341bb13c0e93d6724d2ba48e3c42836f185fa429df5210e6b4",
       "text": "[Zei](/ˈzA/) stopped listening, and let his mind ponder, trying to work out the math from first principles."
     },
@@ -667,7 +691,7 @@
       "sha256": "90c997d3d83c58614802d6976a507656a07cc0459c3ce37531e0d0e44a62db05",
       "bytes": 36532,
       "duration_ms": 4075,
-      "start_ms": 479575,
+      "start_ms": 480595,
       "source_wav_sha256": "830cf6f2afbfb484a598c9f83eb363f031a059f3964923ba97379f17bf79fac1",
       "text": "[Bai](/ˈbI/) started walking toward the two people sitting at the table."
     },
@@ -679,7 +703,7 @@
       "sha256": "d0d148b659918dd52dd4a3f89d77ef25d287ae6e37e23314aaed760c4841774f",
       "bytes": 63672,
       "duration_ms": 7150,
-      "start_ms": 484100,
+      "start_ms": 485120,
       "source_wav_sha256": "9449ff710aebbc28702320007f8b4dc9a616a100bbff2270bcccc19dddfcc8fb",
       "text": "[Zei](/ˈzA/), still thinking about the math, followed [Bai](/ˈbI/). They kept walking until they were almost standing over the eaters."
     },
@@ -691,7 +715,7 @@
       "sha256": "8d33b80c167db1a7f1b6830c202cb8180d97647f09e5811b4f2fe36de6f528d7",
       "bytes": 31210,
       "duration_ms": 3500,
-      "start_ms": 491700,
+      "start_ms": 492720,
       "source_wav_sha256": "637ba3ed4ccaf6ac8ab3e91befb801329a44d4aedf0562771318e4f24cbcde5f",
       "text": "\"Hi, are you guys busy?\", he blurted out awkwardly."
     },
@@ -703,7 +727,7 @@
       "sha256": "3cfeeb6f0640a910ba4f0384e8415b3f82997593c60ce3898ecfab3770cd58bc",
       "bytes": 24715,
       "duration_ms": 2700,
-      "start_ms": 495650,
+      "start_ms": 496670,
       "source_wav_sha256": "dae4d9722f752985d1b6b9b77e2262982fa4848bf8637e4bdee3cc0b83fab7cd",
       "text": "\"Ah no, not at all\", the woman answered."
     },
@@ -715,7 +739,7 @@
       "sha256": "d490aaedb27436cb27863aac86e7139cefc3a607eae2eb608a045d016c4669e9",
       "bytes": 58930,
       "duration_ms": 6550,
-      "start_ms": 498800,
+      "start_ms": 499820,
       "source_wav_sha256": "10d0b1ad48cb40428f5bb234cb0cd784fdbfecc277b0768497bf8306af1768d9",
       "text": "\"Please come sit down with us, I'm a tourist, always happy to meet locals and understand this place better.\""
     },
@@ -727,7 +751,7 @@
       "sha256": "3a0ac67eef65d1793dca0e563683a24330a9f8df715775ea4195cb71fa6c29c8",
       "bytes": 40631,
       "duration_ms": 4575,
-      "start_ms": 505800,
+      "start_ms": 506820,
       "source_wav_sha256": "854271d4c5ff71f3927f1fd86c498b29d082b81115ffc967f05b4cca7fe636a3",
       "text": "\"Ah, we're also tourists. From [Dzego](/ˈdzɛɡO/)\", [Zei](/ˈzA/) replied. \"I'm [Zei](/ˈzA/).\""
     },
@@ -739,7 +763,7 @@
       "sha256": "61dd0796496d6484fa64613d285bb58e074a9b28dec14a9e4159aca065c250a8",
       "bytes": 13959,
       "duration_ms": 1575,
-      "start_ms": 510825,
+      "start_ms": 511845,
       "source_wav_sha256": "e951305eb4214ff9436ca85478db1e34722915691e0befa6fb248394b330ab11",
       "text": "\"And I'm [Bai](/ˈbI/).\""
     },
@@ -751,7 +775,7 @@
       "sha256": "faf9d60e8e4336e1d749785d583cf73ac939a4c709d8a9ffc4e0220fe2c95f07",
       "bytes": 38560,
       "duration_ms": 4425,
-      "start_ms": 512850,
+      "start_ms": 513870,
       "source_wav_sha256": "55004ecc9faf7f729943ab78055544fdd67c18d75c90828b94bd7fe56c2faa5c",
       "text": "\"I'm Seila\", the woman replied. \"And this is my ... friend, Jahn.\""
     },
@@ -763,7 +787,7 @@
       "sha256": "cc986a6bfb78828b96fedddaf04ec3b50914865b9283153530c093ddc33c52c8",
       "bytes": 18677,
       "duration_ms": 2075,
-      "start_ms": 517725,
+      "start_ms": 518745,
       "source_wav_sha256": "23228f3869ec8782074bc4d5f86cb5aee0603eb869c7386aff3f86474d7b8bf8",
       "text": "[Zei](/ˈzA/) and [Bai](/ˈbI/) sat down."
     },
@@ -775,7 +799,7 @@
       "sha256": "d7d5138377443da0736f8918e9a4cb8fb45238ecd1b3a3bd7dd76a188835b160",
       "bytes": 26692,
       "duration_ms": 2900,
-      "start_ms": 520250,
+      "start_ms": 521270,
       "source_wav_sha256": "06fb4ed8fbf566ec0dbfdf2199897a665dfaa63818e59dbd2fabe60e9dec82fd",
       "text": "\"So where are you from?\", [Bai](/ˈbI/) turned to ask."
     },
@@ -787,7 +811,7 @@
       "sha256": "4e4f682a844a386f13fdde42a243ff962616876105ec5f4ade67c66b1a9509cd",
       "bytes": 23457,
       "duration_ms": 2550,
-      "start_ms": 523600,
+      "start_ms": 524620,
       "source_wav_sha256": "e2f192a36242f2e421aeed1f0f07f516890b9668413f743e6003b5d8568696c7",
       "text": "\"Veridia\", Seila responded."
     },
@@ -799,7 +823,7 @@
       "sha256": "72a684f030b78d4f6c9dfabfee400d7abe3cfd4219f158a2ee23aa33f64402d6",
       "bytes": 25492,
       "duration_ms": 2850,
-      "start_ms": 526600,
+      "start_ms": 527620,
       "source_wav_sha256": "e5e3d613bb51da722953827f8ed657d5cda8fd5f925c1faa2e38be88f1e2847b",
       "text": "\"And I'm actually a local\", Jahn added."
     },
@@ -811,7 +835,7 @@
       "sha256": "9587fdf678350ab54a20d3660bfb8656720258095d431220d1dcf43d83d39fdd",
       "bytes": 16662,
       "duration_ms": 1925,
-      "start_ms": 529900,
+      "start_ms": 530920,
       "source_wav_sha256": "80e9512408db588212c06ad19dee2ef3c3384514612d8a864860955e4fee775e",
       "text": "\"So what brings you here?\""
     },
@@ -823,7 +847,7 @@
       "sha256": "7b7aaa06b54feb0debe82d80f84ae760eef9249748406e0f0dbb93f0f4251393",
       "bytes": 104188,
       "duration_ms": 11325,
-      "start_ms": 532275,
+      "start_ms": 533295,
       "source_wav_sha256": "5c3f14220d7984d60363c21cc2f99995fe9b112a21d5ffd92bb8316787b9bc84",
       "text": "\"Well, I'm a blogger, I focus on economics and culture. My husband's and my turn to take care of our children just finished, they're with our co-parents now, so we're both taking a break -\""
     },
@@ -835,7 +859,7 @@
       "sha256": "ace8d178f4df693ffae3a18fa3cc98f5a70e41ca81365e9296c051255059b375",
       "bytes": 39821,
       "duration_ms": 4475,
-      "start_ms": 544050,
+      "start_ms": 545070,
       "source_wav_sha256": "50fa5476a5c1865af102b3e175528b1ea3b84f6d371c56f6c7828f0466c8c52a",
       "text": "\"Well, not really a break, still working. But traveling and exploring.\""
     },
@@ -847,7 +871,7 @@
       "sha256": "8d623a1059785c3c96d7aa4115ec076e5f76af72ccc623e74db24aa2cb0809b4",
       "bytes": 21772,
       "duration_ms": 2525,
-      "start_ms": 548975,
+      "start_ms": 549995,
       "source_wav_sha256": "7d7f82f01e2d10176a20bc0348f4ff09cba7c28409339473b4f7318f9aeb1392",
       "text": "\"So how has Freetown been so far?\""
     },
@@ -859,7 +883,7 @@
       "sha256": "fef1466186377140eda7b8d8464df1a54e4fec992fdf84a0dcddecad8b3c1896",
       "bytes": 29210,
       "duration_ms": 3300,
-      "start_ms": 551950,
+      "start_ms": 552970,
       "source_wav_sha256": "8a35f7ae348f26abcecd96aa3fe2d409c926445bf5a9c2121bdc48b164b42794",
       "text": "\"Well, free in some ways. Not always in others.\""
     },
@@ -871,7 +895,7 @@
       "sha256": "3d0998d2cb5f06badcb555a3a33f37cd7c3c3ea5087cfba791b1f94b0577e99c",
       "bytes": 102980,
       "duration_ms": 11825,
-      "start_ms": 555700,
+      "start_ms": 556720,
       "source_wav_sha256": "5f7c9057eaa7a47ee16bc541d0f59833631a7247fda80c264be96e49291371b8",
       "text": "\"You don't see as many privacy robes here as in Veridia or [Dzego](/ˈdzɛɡO/), but that's because people just go around in cars, all the interesting stuff tends to happen in these enclosed compounds.\""
     },
@@ -883,7 +907,7 @@
       "sha256": "5bf11e60154338cec30df1cf5bdc383e1b78c158cebcf25839ca44d1ee39dc9a",
       "bytes": 15804,
       "duration_ms": 1775,
-      "start_ms": 567975,
+      "start_ms": 568995,
       "source_wav_sha256": "d9c1bee138ccd23ccc1f0b0c0d91bae4303b8487ed555ebfcc0bc7a9944d1519",
       "text": "\"How is [Dzego](/ˈdzɛɡO/)?\""
     },
@@ -895,7 +919,7 @@
       "sha256": "531432de2d3556e8fc2b27eeca97702de0d9bed3892cab1f1875e9e7f92dc423",
       "bytes": 66585,
       "duration_ms": 7250,
-      "start_ms": 570200,
+      "start_ms": 571220,
       "source_wav_sha256": "d1697ce3b51b1b0fd59e632a938074b8475d017f4d54027dbd8e51cd9b38fcc3",
       "text": "\"Same old. Studying, playing [Minpentai](/ˈmɪnpɛntI/). I'm trying to figure out if I'm going into physics or cryptography.\""
     },
@@ -907,7 +931,7 @@
       "sha256": "9a3122754373160fa9d08ce733126458b10219d49829fd25bd8237c759766d26",
       "bytes": 51567,
       "duration_ms": 5675,
-      "start_ms": 577900,
+      "start_ms": 578920,
       "source_wav_sha256": "50cec4fd2520210b0a298d97be3bbe8c38b51c86fe446ba3cff14136c6ece1a3",
       "text": "\"Tell him about your arm\", [Bai](/ˈbI/) whispered, loudly enough that all three of the others could hear."
     },
@@ -919,7 +943,7 @@
       "sha256": "25336f0577c62d634e51070fbc03940fb25315154a7ba22c9bb7d5a23a3bd48b",
       "bytes": 36667,
       "duration_ms": 4150,
-      "start_ms": 584025,
+      "start_ms": 585045,
       "source_wav_sha256": "b8e1cc8058051bd1bb302ba236bc1d9b780bebef08419d323c0e75d82694b258",
       "text": "\"Oh yeah, my arm broke when our classroom got bombed a while back.\""
     },
@@ -931,7 +955,7 @@
       "sha256": "67f8393a59d358ccef8ef5592ed0e3c8867bd0a202d020ebe3934d0bc04e88cd",
       "bytes": 75930,
       "duration_ms": 8700,
-      "start_ms": 588625,
+      "start_ms": 589645,
       "source_wav_sha256": "93970e53bfbfced348732d0e51c24a70634bfb8236453f1c69aab26f91ad26a5",
       "text": "Seila and Jahn froze in surprise — first at the revelation, and then once again at [Zei](/ˈzA/)'s total nonchalance in relating the news."
     },
@@ -943,7 +967,7 @@
       "sha256": "0a48dcd475d74a4405ef73b29a55d24955d530faeabed4bbf2663414709735da",
       "bytes": 19072,
       "duration_ms": 2125,
-      "start_ms": 597775,
+      "start_ms": 598795,
       "source_wav_sha256": "69e2e2cb8a4fab8ea0b83a398fd2e413f51a39e9ebcd5e81a0517bcbf6c2d3f1",
       "text": "\"Are the attacks getting worse?\""
     },
@@ -955,7 +979,7 @@
       "sha256": "faf47abcdc15df6b0e83ce83f4736fb4c8fcc8dccf5c846d4f969261ea0a4dd7",
       "bytes": 63888,
       "duration_ms": 7250,
-      "start_ms": 600350,
+      "start_ms": 601370,
       "source_wav_sha256": "25f4d54bd5e38196d267a1bcc08b80adeb231a1404a182095a8a3180c8421811",
       "text": "\"They're starting to go after classrooms more. Have also been hearing about more and more surveillance drones getting snuck in.\""
     },
@@ -967,7 +991,7 @@
       "sha256": "5051a05b049da72859930f022edc216c9a848d297e7ec0191055f48235c09250",
       "bytes": 48970,
       "duration_ms": 5225,
-      "start_ms": 608050,
+      "start_ms": 609070,
       "source_wav_sha256": "c923e3f9570d6d29c2b99e120d8bf7c7311f8bab13e32829b10d18af1b959779",
       "text": "\"So is [Dzego](/ˈdzɛɡO/) going to, like, add its own counter-surveillance network to keep up?\""
     },
@@ -979,7 +1003,7 @@
       "sha256": "2e690eac1fbe090474732cc7844d6e1243dea744cb85dfc7f892e1faed8bded7",
       "bytes": 90811,
       "duration_ms": 10050,
-      "start_ms": 613725,
+      "start_ms": 614745,
       "source_wav_sha256": "8c662629375c3f86e407b8b3cc8cb85101c7961ff539100e2958c402e2dda094",
       "text": "\"Well, the problem is, the Arctics got spies inside all the agencies, so if the counter-surveillance network can see too much, then it becomes their own weapon.\""
     },
@@ -991,7 +1015,7 @@
       "sha256": "eba7de57e8f87af907c91a9c48871ce9774d43db71b2902f2810b48a0bae1f67",
       "bytes": 222651,
       "duration_ms": 25200,
-      "start_ms": 624225,
+      "start_ms": 625245,
       "source_wav_sha256": "5271f4a70b94a4e081bd8999f0501190e8c281c8465f113ecb160d510ba5669a",
       "text": "\"That's why we've been trying to figure out the cryptography. Each surveillance camera running an algorithm, revealing data only in those cases where it's suspicious, posting a hash to a cryptographic network every time it reveals so we can track how often it's happening, and then a whole system of hardware attestations and randomized infrared scanning to make sure that the cameras are actually running the code that they say they are.\""
     },
@@ -1003,7 +1027,7 @@
       "sha256": "cbbf4a40371d3f7c1bd0d4fc4b4c921faf27a79e2a1d488e0332507dac8c976b",
       "bytes": 168143,
       "duration_ms": 18150,
-      "start_ms": 649875,
+      "start_ms": 650895,
       "source_wav_sha256": "9317fe6a6c6717fe73aa3c557cacc69a6db620966c488d6a71ccc1d804bddb5b",
       "text": "\"There's even a rule that anyone can go and unscrew any camera in public and inspect it themselves. There's entire clubs that do it and publish their reports online. It's pretty advanced stuff. I wish I could understand how all the math behind these encryptions and proofs and attestations works.\""
     },
@@ -1015,7 +1039,7 @@
       "sha256": "715130b32edfe95085c37bf0b2bf861b5e9d0aa29df236c8690933f43f487734",
       "bytes": 99207,
       "duration_ms": 11025,
-      "start_ms": 668475,
+      "start_ms": 669495,
       "source_wav_sha256": "5687146f40f64bb616096c30bd7592c4f117705bff03344cb1e9f9a2aff24302",
       "text": "\"Come on, our whole DU chapter knows you're a hotshot at understanding thermodynamics, even better than the teacher. You can totally re-spec to cryptography and figure this all out.\""
     },
@@ -1027,7 +1051,7 @@
       "sha256": "b99d5db1f04368651f6c999a7780a9c7d761347969dbf0109710e61164db8f45",
       "bytes": 37677,
       "duration_ms": 4225,
-      "start_ms": 679950,
+      "start_ms": 680970,
       "source_wav_sha256": "2c77a9d21b23e8b1fdac3c07814591c9f2e0084df026c940a64cca50c4255855",
       "text": "\"Are you trying to distract me from focusing on the [Minpentai](/ˈmɪnpɛntI/) finals?\""
     },
@@ -1039,7 +1063,7 @@
       "sha256": "78d0cefc773f9ba0902cf2e39d61a57bed1de510fd55979cd37f074a53385d62",
       "bytes": 31548,
       "duration_ms": 3550,
-      "start_ms": 684625,
+      "start_ms": 685645,
       "source_wav_sha256": "cc57c6c4eac8fce5b034819b9a53895c40331678e6ab7b17d45d00657c53bc75",
       "text": "A robot slid up to them, with a menu on its screen."
     },
@@ -1051,7 +1075,7 @@
       "sha256": "f362602f3ddd4c6d124f7234a43c278225433a0e1754807b76f15bec88ad076e",
       "bytes": 89216,
       "duration_ms": 10100,
-      "start_ms": 688625,
+      "start_ms": 689645,
       "source_wav_sha256": "68b708bd63b9742b81248e39287cd00272edd0e626be547f838da303ea9d4bac",
       "text": "[Bai](/ˈbI/) and [Zei](/ˈzA/) started looking, and clicked buttons in turn to order some tea, as well as a similar rice and vegetables dish to what Seila and Jahn were eating."
     },
@@ -1063,7 +1087,7 @@
       "sha256": "59a458f9f50dba35ce9ecbb2c1e543db20a48f2e6e9f9bb7f1af25af55996078",
       "bytes": 39966,
       "duration_ms": 4400,
-      "start_ms": 699175,
+      "start_ms": 700195,
       "source_wav_sha256": "77380f62f53d06a04761c9ac3d8fe32f5c80af84ce3a51b312e91e97385e9dc9",
       "text": "\"How much of your time is this whole arms race taking up?\", Jahn asked."
     },
@@ -1075,7 +1099,7 @@
       "sha256": "69516456f1867714cd6c0e7d2e965b71b70a18360d8bfb3cfcbda48e53914e5c",
       "bytes": 117312,
       "duration_ms": 12900,
-      "start_ms": 704025,
+      "start_ms": 705045,
       "source_wav_sha256": "7ea6929d4d2d296ef34cca22e009ad13eb7094bbb427c96d1b77eb7ceb059e88",
       "text": "\"Of our time? Well, a few percent of us are full-time on it, for the rest, it's not supposed to be our job, beyond keeping up with how to stay safe. Of our happiness, our spirits, our souls? That's a different question.\""
     },
@@ -1087,7 +1111,7 @@
       "sha256": "0bdf63b718723db0151046e53394ac6a52d2de91fc344e89a8113f4a3ea9f5c7",
       "bytes": 16730,
       "duration_ms": 1875,
-      "start_ms": 717375,
+      "start_ms": 718395,
       "source_wav_sha256": "1b93022efa584093b32051c188e47d0119a12ec91ee759c9cd84a104f4c598b7",
       "text": "Jahn and Seila sighed."
     },
@@ -1099,7 +1123,7 @@
       "sha256": "ce04e33904579ab30fb8b670c8a8959ebfeea2cc42033df60a8611150ffe7805",
       "bytes": 246473,
       "duration_ms": 27375,
-      "start_ms": 719700,
+      "start_ms": 720720,
       "source_wav_sha256": "ae41da566b588d92adbab1dd9569ede55d24634881095a600f0cf3e9a7db35c6",
       "text": "A few minutes later, the robot came back with their drinks, and a few minutes after that the robot came back again with their food. They ate, at times engaging in light conversation learning more nuances of [Dzego](/ˈdzɛɡO/) culture — [Minpentai](/ˈmɪnpɛntI/), the [Dzegoban](/ˈdzɛɡObɑn/) language, the people's strong will to see the nation rise — and at times silently. The screen, continuing to explain co-governance and show various diagrams and mathematical formulas, now went entirely unnoticed."
     },
@@ -1111,7 +1135,8 @@
       "sha256": "5275a9b67dd08c4b0381f9413a289b5329b931f056fabb05b234c2248ac5b574",
       "bytes": 21920,
       "duration_ms": 2475,
-      "start_ms": 749325,
+      "start_ms": 750345,
+      "tone_ms": 510,
       "source_wav_sha256": "8ffd89d2240573d28645025b0edfd4bf41c201dcfdd4cbd6a602d50d52ae9ebc",
       "text": "An incoming call from Gladias.",
       "read_aloud_status": "unreviewed"
@@ -1124,7 +1149,7 @@
       "sha256": "251b4185a1f2e846d61f0bc5539d9a6c4eb4decb813af116c18822fc78d9801f",
       "bytes": 18763,
       "duration_ms": 2025,
-      "start_ms": 752400,
+      "start_ms": 753930,
       "source_wav_sha256": "bbf9819704047776759a82a20682d1cd5114894f19556afc8bfe1d2c7940b945",
       "text": "Seila tapped on the watch."
     },
@@ -1136,7 +1161,7 @@
       "sha256": "59c871eac545cebc56f443fc25ba6f8ba1b0d75f43cfbf9ba0167365a6c28bda",
       "bytes": 20946,
       "duration_ms": 2375,
-      "start_ms": 754875,
+      "start_ms": 756405,
       "source_wav_sha256": "4e5591111ab39cf5d182cd210303ddd150d4440b5a8ce27021035fdfc0432e76",
       "text": "She could make out Gladias's face."
     },
@@ -1148,7 +1173,7 @@
       "sha256": "90ccd207a0e7d76cc05582a354cd6668e64d879caef93e2fcd5a2aa3b1ada0d0",
       "bytes": 29214,
       "duration_ms": 3300,
-      "start_ms": 757700,
+      "start_ms": 759230,
       "source_wav_sha256": "9851fb6d0f12ccd7e971b55d550efb40812e3190919572abef37f99109af14c1",
       "text": "\"How is your time in Freetown?\", Gladias asked."
     },
@@ -1160,7 +1185,7 @@
       "sha256": "7a74d7282e09cc919b778254c3c775fa4bbe583e21896100412d52c2d9828879",
       "bytes": 43637,
       "duration_ms": 4750,
-      "start_ms": 761450,
+      "start_ms": 762980,
       "source_wav_sha256": "dde3e5180005f0c81a03adfe616fc5dd616556110e86cd00ae57dca97e21ea01",
       "text": "\"Just had lunch with Jahn, and then these lovely kids from [Dzego](/ˈdzɛɡO/) came by.\""
     },
@@ -1172,7 +1197,7 @@
       "sha256": "0e9d08c15e37f5539b5b7e6ec86bc2d4dd31812d1cbf4108a91bea0d7263f286",
       "bytes": 13726,
       "duration_ms": 1600,
-      "start_ms": 766650,
+      "start_ms": 768180,
       "source_wav_sha256": "4e7db2796775dd1dad0ac2c8c2d39a272ab28583d0109afbe4c9d5035d72dc72",
       "text": "\"How were they?\""
     },
@@ -1184,7 +1209,7 @@
       "sha256": "a024dc0cea01fc396b22d67bbcbdef78ca2d6872209e979bc8cb88dcdf073219",
       "bytes": 61333,
       "duration_ms": 6900,
-      "start_ms": 768700,
+      "start_ms": 770230,
       "source_wav_sha256": "8c3960951a6dfaf85e749c6810840c31888e0e3d8b1bd72c2c79fb82ce508220",
       "text": "\"They were wonderful. Though it's so sad what the Arctics are doing to them — one of the two got his arm injured recently.\""
     },
@@ -1196,7 +1221,7 @@
       "sha256": "04cbd93b14f1ec4aa55525f90ffb5654b59ebae447983e89d8629660359cf968",
       "bytes": 23660,
       "duration_ms": 2650,
-      "start_ms": 776050,
+      "start_ms": 777580,
       "source_wav_sha256": "00c1bc16fc6bd40053e87854335047677eba04d183799517a6308522e972560c",
       "text": "Seila decided to change the subject."
     },
@@ -1208,7 +1233,7 @@
       "sha256": "a4178d6ce079ca83617e4aa827616c6f522166c01c0bbc62a03fb9d9207282d2",
       "bytes": 15508,
       "duration_ms": 1625,
-      "start_ms": 779150,
+      "start_ms": 780680,
       "source_wav_sha256": "d63dc12aef4e6554e79711ce37277056e20a858da9cfcf32c81fe72d38400e43",
       "text": "\"How have you been?\""
     },
@@ -1220,7 +1245,7 @@
       "sha256": "b9b216d919743d0e399575cd65cf13a92caf2112519f050629a97400da437df8",
       "bytes": 11922,
       "duration_ms": 1350,
-      "start_ms": 781225,
+      "start_ms": 782755,
       "source_wav_sha256": "2d77d73171f013931a19c1985e348fb51661e77e014eff035b0685ba7c3b7d9d",
       "text": "\"Good.\""
     },
@@ -1232,7 +1257,7 @@
       "sha256": "4c3c626517fe09f9766a40b4d5ea64d206f69ff022753c34f20743545c5acea7",
       "bytes": 13147,
       "duration_ms": 1525,
-      "start_ms": 783025,
+      "start_ms": 784555,
       "source_wav_sha256": "db299cf2640eb43711cdcb284a3948b8935485ebd388c4f1eaa82872312e4c7c",
       "text": "He paused."
     },
@@ -1244,7 +1269,7 @@
       "sha256": "ce543ab6ab5bc9994b8673c6cc72d2ff41a063dee3b3317a30bdaa8ef45662e4",
       "bytes": 18410,
       "duration_ms": 2000,
-      "start_ms": 785000,
+      "start_ms": 786530,
       "source_wav_sha256": "6d4a63dac7af99a5da38fa36fac72ebca6448ca2f61a51d34af437dfba909c2c",
       "text": "\"I'm pondering something.\""
     },
@@ -1256,7 +1281,7 @@
       "sha256": "813084c31bd24286e916b20439630d22fbbb5d533f7e3b8c277369b5a9d24bb4",
       "bytes": 13244,
       "duration_ms": 1475,
-      "start_ms": 787450,
+      "start_ms": 788980,
       "source_wav_sha256": "935e4d79ab74eb05730758888d12524ffde6bd88f8a6697e458ea97f12c19038",
       "text": "\"What is it?\""
     },
@@ -1268,7 +1293,7 @@
       "sha256": "275ff973f5b09fc0a584c391fa43f80505112d73b774c672c35349f6e4d40254",
       "bytes": 60147,
       "duration_ms": 6750,
-      "start_ms": 789375,
+      "start_ms": 790905,
       "source_wav_sha256": "913589dcc291ab9b853bd40777d67dd9f29fe8ae84d478731f82c8f8f124f521",
       "text": "\"Someone suggested to me recently — that instead of going for being a Sentinel, I should be a Keeper instead.\""
     },
@@ -1280,7 +1305,7 @@
       "sha256": "91e10039c4fb52e46f751d7dc4284ef8343de75fad816f29ec461b67be942f7d",
       "bytes": 11452,
       "duration_ms": 1300,
-      "start_ms": 796575,
+      "start_ms": 798105,
       "source_wav_sha256": "805f1d715742792ab2c389d7cc329b6627a0ac9eca930aed972b2bc8d685c236",
       "text": "\"Huh!\""
     },
@@ -1292,7 +1317,7 @@
       "sha256": "27d8479a79ce3976f64132270714cf545bd5b24c74e83e9eef9b5c7bb857bc79",
       "bytes": 16948,
       "duration_ms": 1925,
-      "start_ms": 798325,
+      "start_ms": 799855,
       "source_wav_sha256": "90a89a489dd3e3fbda9f67ba20fe922a393b9142d84c29042d5063b587761056",
       "text": "\"What do you think about that?\""
     },
@@ -1304,7 +1329,7 @@
       "sha256": "d4a4dff019bda29ef9e4be5ef64fb61fb49f961c1831e828d63b4fcd689761ee",
       "bytes": 38327,
       "duration_ms": 4300,
-      "start_ms": 800700,
+      "start_ms": 802230,
       "source_wav_sha256": "09bb7e82b59f27ba648fdcd1c42d05650d062f0fc5f203aa495a59180b508ba1",
       "text": "Gladias visibly paused for a few moments, to ponder his answer."
     },
@@ -1316,7 +1341,7 @@
       "sha256": "9d532b5968006422d5968595c7da8fffbb1215c63c5da6bbe4e54a53e6a1f96f",
       "bytes": 79712,
       "duration_ms": 8800,
-      "start_ms": 805450,
+      "start_ms": 806980,
       "source_wav_sha256": "be82f99579f0261f1deb483b37a0edace3b7862c3b091f3da9b0e6c4fd11618e",
       "text": "\"It's the more important thing for Veridia, to really make sure that the rubrics themselves are set right. And I feel like the work will be more interesting.\""
     },
@@ -1328,7 +1353,7 @@
       "sha256": "917e9f88e1975b2d24679d767e0721e74b1d4a8637e85dee019cc89c91c8621e",
       "bytes": 38258,
       "duration_ms": 4250,
-      "start_ms": 814700,
+      "start_ms": 816230,
       "source_wav_sha256": "9728fb177fcff017fa36ded6ae3210cf966aabad509b9a6ed86d6d517906dd71",
       "text": "\"Well my first instinct is that I actually support the decision.\""
     },
@@ -1340,7 +1365,7 @@
       "sha256": "7a3dd7de3f24fbe78e86df6f201851f4a338162fed2105b549253bd0733ac16f",
       "bytes": 78512,
       "duration_ms": 8725,
-      "start_ms": 819400,
+      "start_ms": 820930,
       "source_wav_sha256": "4666b7b36018c1931225ea251cbad7980cd8bcf0eef8cb2a87f42397ff3fc36f",
       "text": "\"You know, I've been thinking about [Dzego](/ˈdzɛɡO/) for these past fifty minutes or so after those kids left, and then Jahn had to go for a meeting soon after.\""
     },
@@ -1352,7 +1377,7 @@
       "sha256": "c6872347a27ca04b6a4f77864bafefce74baef32c6aadea91fd6a82aca1d8175",
       "bytes": 28222,
       "duration_ms": 3125,
-      "start_ms": 828575,
+      "start_ms": 830105,
       "source_wav_sha256": "8ea12d93cd8df53c7e762e230dbfe6ec71f0c1ededdfd740f46ac1db083551af",
       "text": "\"They benefit a lot from our Graph Funding, right?\""
     },
@@ -1364,7 +1389,7 @@
       "sha256": "6b4bcfb19f7f8edaf349bc8b6f4ef5bdaf39d9a1b2fffda46228f5a0bdc19fef",
       "bytes": 16546,
       "duration_ms": 1775,
-      "start_ms": 832150,
+      "start_ms": 833680,
       "source_wav_sha256": "34b1728ecd7f366f9ab916b2b37891a943527fcd9b7b491bf2b96bfa1c097530",
       "text": "\"Indeed they do.\""
     },
@@ -1376,7 +1401,7 @@
       "sha256": "61e576df577009ac2908b37f9fcec5a603f3f317cff09d49d2f048c5de2799b9",
       "bytes": 68467,
       "duration_ms": 7550,
-      "start_ms": 834375,
+      "start_ms": 835905,
       "source_wav_sha256": "5cf5e40115e5bc88a76dc39fae0221240639d0a083c4a2570853d42ff91f4dc4",
       "text": "\"What about the rubrics though? Do the rubrics encourage companies to make any of their products more helpful to [Dzego](/ˈdzɛɡO/) in any way?\""
     },
@@ -1388,7 +1413,7 @@
       "sha256": "8fd95745554d05adc35287a1247281b3f5a6b2dd8195f5f139a843f36a0b3e4f",
       "bytes": 46249,
       "duration_ms": 5175,
-      "start_ms": 842375,
+      "start_ms": 843905,
       "source_wav_sha256": "3047dd2fbf4171955564402a416bdca239d610e615a91b715e5b9b7e61c935ae",
       "text": "Gladias thought for a few moments. \"Not really, at least I can't think of anything.\""
     },
@@ -1400,7 +1425,7 @@
       "sha256": "a4663c0623cb0e9ad2a69940f46722efa1d760b00bc0f5d25546af337d0fe1bb",
       "bytes": 79389,
       "duration_ms": 8850,
-      "start_ms": 848000,
+      "start_ms": 849530,
       "source_wav_sha256": "7c655a75a31b068c03ecc10945b55a4caee3e330b919f3e2631782efc917b16e",
       "text": "\"Well maybe you should become a Keeper. And this could be one of your projects! Figure out how to make or adjust the rubrics to support [Dzego](/ˈdzɛɡO/) better.\""
     },
@@ -1412,7 +1437,7 @@
       "sha256": "0d4b292683ab7b128a7a8e8c93300d7ab244be99af605ad5fdca4370f700175c",
       "bytes": 17406,
       "duration_ms": 2000,
-      "start_ms": 857300,
+      "start_ms": 858830,
       "source_wav_sha256": "2d637ae117a6674906231a5aaaed8f8fbdc405b909a0a793614dcdbe5a513815",
       "text": "Seila paused for a moment."
     },
@@ -1424,7 +1449,7 @@
       "sha256": "76477081680332f4d0e65e6fc9ffdc8a082d9d0773ea87c4daf7c0fbef769b37",
       "bytes": 33247,
       "duration_ms": 3675,
-      "start_ms": 859750,
+      "start_ms": 861280,
       "source_wav_sha256": "5ddf4ab28387cefd87627bfd73fb61290df37aab3db36e2c60a93ba234cbb2b1",
       "text": "Gladias stared in response, his eyes wide open."
     },
@@ -1436,7 +1461,7 @@
       "sha256": "91ded2492f774c7456aebaca1a1e062b1330c56261a081c56c2327aac2967c72",
       "bytes": 37104,
       "duration_ms": 4175,
-      "start_ms": 863875,
+      "start_ms": 865405,
       "source_wav_sha256": "09600c47c37cd47036de7d1e6f1dee5be510b987e64f9b925e583d484691ba9e",
       "text": "\"Yeah become a Keeper definitely. It's exactly the right choice.\""
     },
@@ -1448,7 +1473,7 @@
       "sha256": "1081fad7bc0965bd9758e078fb988801eb2dbffeea73618a5e32acfc5f215ad8",
       "bytes": 34471,
       "duration_ms": 3825,
-      "start_ms": 868500,
+      "start_ms": 870030,
       "source_wav_sha256": "b3bf04031dbaa1e6901ce2edd575d2818212170911c7c6b78c44b9d78719340c",
       "text": "\"It'll be fun. As they say, [Dze](/ˈdzɛ/) [go](/ˈɡO/) [ba](/ˈbɑ/) [fau](/ˈfW/) [gie](/ˈɡjɛ/)!\""
     }

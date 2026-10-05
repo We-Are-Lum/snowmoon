@@ -165,5 +165,16 @@
         "sha256": "229d20a57353a9275be290f668cb7d5935e7ab7dfff5bfb647aacd0e3fceb22f"
       }
     }
-  ]
+  ],
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent",
+    "drafted": [
+      "lettering placement, size and colour (the words are the book's)"
+    ],
+    "instructions": [
+      "scripts/letter-images.py"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
 }

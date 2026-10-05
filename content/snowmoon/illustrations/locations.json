@@ -314,5 +314,17 @@
       "height": 576,
       "seed": 7026
     }
-  ]
+  ],
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent and its helper agents",
+    "drafted": [
+      "location profiles",
+      "image prompts"
+    ],
+    "instructions": [
+      "docs/prompts/008a-agent-prompts.md#location-profiles-and-plates"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
 }

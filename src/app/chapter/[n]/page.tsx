@@ -58,6 +58,9 @@ export default async function ChapterPage({ params }: Props) {
   const narration = loadNarration(n);
   const images = loadIllustrations(n);
   const imageAt = new Map(images.map((im) => [im.idx, im]));
+  // Blocks the narration speaks as a description rather than the book's words.
+  const described = new Set((narration?.cues ?? []).filter((c) => c.description).map((c) => c.idx));
+  const DESCRIBED = 'narrated as a model-drafted description, not the author’s words';
 
   return (
     <article className="page chapter" data-chapter={n} data-setting={facts.find((f) => f.setting)?.setting ?? undefined}>
@@ -81,6 +84,7 @@ export default async function ChapterPage({ params }: Props) {
               <div dangerouslySetInnerHTML={{ __html: html }} />
               <figcaption className="block-caption">
                 ¶ {f.label} · {source.from === 'template' ? `template ${source.templateId}` : 'as drawn in the book'}
+                {described.has(b.idx) && ` · ${DESCRIBED}`}
               </figcaption>
             </figure>
           );
@@ -94,6 +98,14 @@ export default async function ChapterPage({ params }: Props) {
                   .join('')
               : '';
           el = <Tag {...common} className={`block ${b.kind}`} dangerouslySetInnerHTML={{ __html: renderMarkdown(b) + marks }} />;
+          if (described.has(b.idx)) {
+            el = (
+              <>
+                {el}
+                <p className="block-caption described-note">¶ {f.label} · {DESCRIBED}</p>
+              </>
+            );
+          }
         }
         const scene = scenes.get(b.idx);
         const image = imageAt.get(b.idx);
@@ -118,7 +130,7 @@ export default async function ChapterPage({ params }: Props) {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={image.url} alt={image.alt} width={image.width} height={image.height} loading="lazy" />
                 <figcaption className="block-caption">
-                  ¶ {f.label} · seeded image, a starting point ·{' '}
+                  ¶ {f.label} · AI-generated image, a starting point ·{' '}
                   <a href={`${REPO_URL}/blob/main/${image.recipe}`}>recipe</a>
                 </figcaption>
               </figure>

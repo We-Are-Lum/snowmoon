@@ -22,6 +22,7 @@ import argparse
 import hashlib
 import json
 import platform
+import sys
 import time
 from datetime import datetime, timezone
 from importlib.metadata import version
@@ -96,6 +97,10 @@ def main():
 
     job_file = Path(args.jobs).resolve()
     spec = json.loads(job_file.read_text())
+    # Principle 3: a job file says which of its inputs a model drafted
+    # ("assist": null when a person wrote them all). Copied into the recipe.
+    if "assist" not in spec:
+        sys.exit(f"{job_file.name}: add an \"assist\" field (null if no model drafted the prompts)")
     style = json.loads((CONTENT / spec["style"]).read_text())
     out = ROOT / "images-out" / job_file.stem
     out.mkdir(parents=True, exist_ok=True)
@@ -131,6 +136,7 @@ def main():
             "host": {"platform": platform.platform(), "machine": platform.machine()},
             "model_load_seconds": round(load_s, 1),
             "images": list(done.values()),
+            "assist": spec["assist"],
         }
         text = json.dumps(manifest, indent=2, ensure_ascii=False) + "\n"
         manifest_path.write_text(text)

@@ -64,7 +64,7 @@ export default async function SharePage(props: Props) {
         <Link href={`/chapter/${quote.chapter}`}>Make your own card</Link>
       </nav>
       <p className="provenance">
-        Snowmoon by Vitalik Buterin, GPL v3. Quote cards are drawn from the book&apos;s own text; images are seeded starting points.
+        Snowmoon by Vitalik Buterin, GPL v3. Quote cards are drawn from the book&apos;s own text. Images are AI-generated, seeded as starting points.
       </p>
     </article>
   );

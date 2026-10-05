@@ -276,6 +276,7 @@ await denied('anon cannot set the house narration', 'anon', `update studio.house
 
 // --- Later migrations, in order -------------------------------------------------
 const LATER = ['supabase/migrations/0002_v5.sql', 'supabase/migrations/0003_likes.sql'];
+const PRIVATE = 'supabase/migrations/0004_private_ratings_and_likes.sql';
 for (const file of LATER) {
   try {
     await db.exec(await readFile(path.join(ROOT, file), 'utf8'));
@@ -318,6 +319,33 @@ await denied('a like needs a real version', W,
   `insert into studio.likes (version_id, fid) values ('00000000-0000-0000-0000-00000000dead', 7)`, /foreign key/);
 await denied('service_role cannot read likes', 'service_role', `select * from studio.likes`, PERM);
 
+// --- 0004: individual ratings and likes private, totals public -----------------
+try {
+  await db.exec(await readFile(path.join(ROOT, PRIVATE), 'utf8'));
+  passed++;
+} catch (e) {
+  failures.push(`${PRIVATE} failed to apply: ${(e as Error).message}`);
+}
+await ok('fixture: ratings, and a like on a take', 'postgres', `
+  insert into studio.ratings (version_id, fid, value) values ('${F1}', 7, 4), ('${F1}', 8, -2), ('${F9}', 7, 5);
+  insert into studio.take_likes (take_id, fid) values ('00000000-0000-0000-0000-00000000aa01', 7);`);
+for (const role of ['anon', 'authenticated']) {
+  await denied(`${role} cannot read individual ratings`, role, `select fid, value from studio.ratings`, PERM);
+  await denied(`${role} cannot read individual likes`, role, `select fid from studio.likes`, PERM);
+  await denied(`${role} cannot read individual take likes`, role, `select fid from studio.take_likes`, PERM);
+  await equal(`${role} reads rating totals`, role, `select raters || '/' || total as v from studio.rating_totals where version_id = '${F1}'`, '2/2');
+  await equal(`${role} reads like totals`, role, `select likes as v from studio.like_totals where version_id = '${F1}'`, 1);
+  await equal(`${role} reads take like totals`, role, `select likes as v from studio.take_like_totals`, 1);
+  await equal(`${role} gets no totals for a hidden element`, role,
+    `select ((select count(*) from studio.rating_totals where version_id = '${F9}') + (select count(*) from studio.like_totals where version_id = '${F9}'))::int as v`, 0);
+  await equal(`${role}: totals carry no FID`, role,
+    `select count(*)::int as v from information_schema.columns where table_schema = 'studio' and table_name in ('rating_totals','like_totals','take_like_totals') and column_name = 'fid'`, 0);
+}
+await equal('writer still reads individual ratings', W, `select count(*)::int as v from studio.ratings`, 3);
+await ok('writer still records and removes a like', W, `
+  insert into studio.likes (version_id, fid) values ('${F1}', 9);
+  delete from studio.likes where version_id = '${F1}' and fid = 9;`);
+
 // --- The real seed script, as studio_writer, over the wire --------------------
 await db.exec(`delete from studio.text_blocks`);
 await db.exec(`set role studio_writer`);
@@ -351,4 +379,4 @@ if (failures.length) {
   console.error(`\nDB TESTS FAILED (${failures.length}, ${passed} passed):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`db tests passed: ${passed} checks against ${path.relative(ROOT, MIGRATION)}, then ${LATER.map((f) => path.basename(f)).join(', ')}`);
+console.log(`db tests passed: ${passed} checks against ${path.relative(ROOT, MIGRATION)}, then ${[...LATER, PRIVATE].map((f) => path.basename(f)).join(', ')}`);

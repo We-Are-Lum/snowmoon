@@ -4,6 +4,14 @@
   "voice": "kokoro-af_heart",
   "label": "Synthetic narration · Kokoro-82M, stock voice af_heart",
   "license": "GPL-3.0",
+  "published_by": {
+    "fid": 6786,
+    "role": "maintainer",
+    "action": "published via script",
+    "script": "scripts/publish-narration.ts",
+    "date": "2026-10-05",
+    "evidence": "docs/prompts/008-narration-and-images.md"
+  },
   "recipe": "content/snowmoon/recipes/narration/chapter-11.json",
   "model": {
     "name": "Kokoro-82M",
@@ -36,7 +44,21 @@
     },
     "break_ms": 1800,
     "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
-    "read_aloud_sha256": "65122f85d50a78a327288dad800288ea8293bffaaefe716cd5748392634c3284"
+    "read_aloud_sha256": "65122f85d50a78a327288dad800288ea8293bffaaefe716cd5748392634c3284",
+    "description_tone": {
+      "notes_hz": [
+        660,
+        990
+      ],
+      "notes_ms": [
+        110,
+        140
+      ],
+      "between_ms": 40,
+      "after_ms": 220,
+      "amplitude": 0.12,
+      "made_by": "code (numpy sine, linear fades)"
+    }
   },
   "block_encoding": {
     "codec": "aac",
@@ -46,10 +68,10 @@
     "tool": "ffmpeg"
   },
   "chapter_file": {
-    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-11-beebaa1374cf.m4a",
-    "sha256": "beebaa1374cfd6ecef6f546d41155614ac51132dbf7740f5cefc6c77f41953dc",
-    "bytes": 15616926,
-    "duration_ms": 1323325
+    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-11-1f945ef33ae6.m4a",
+    "sha256": "1f945ef33ae6cb6f10c4bda20e9f0bfd34715967f8ce099aad7b437c71afcac0",
+    "bytes": 15608251,
+    "duration_ms": 1323835
   },
   "breaks": [
     {
@@ -59,7 +81,7 @@
     },
     {
       "idx": 121,
-      "start_ms": 1079025,
+      "start_ms": 1079535,
       "silence_ms": 1800
     }
   ],
@@ -1153,6 +1175,7 @@
       "bytes": 128055,
       "duration_ms": 14275,
       "start_ms": 784775,
+      "tone_ms": 510,
       "source_wav_sha256": "37b2a3f6f5d6e51be0459e44081f8e300506efef805a04d5729a022999f8d4a2",
       "text": "His watch shows the air reading: carbon dioxide at nine hundred and six, in yellow, and fine particles, P M two point five, at four point four. Below that, devices in the room: sixteen attested, none unknown.",
       "read_aloud_status": "unreviewed"
@@ -1165,7 +1188,7 @@
       "sha256": "c1eee4bb78db4dbbc563e7adfea41919f537715645d9c26f30a5e60d8bfd9246",
       "bytes": 101477,
       "duration_ms": 11450,
-      "start_ms": 799650,
+      "start_ms": 800160,
       "source_wav_sha256": "3132423b9f1577be276a3fcf8c68d6707ba23a2eae6283deced7b5903cfb0bf3",
       "text": "\"How are we already at 906 with just four people here?\", he asked. \"Filters are working great, but I guess they haven't yet figured out how to give these secure booths any ventilation?\""
     },
@@ -1177,7 +1200,7 @@
       "sha256": "c0ca72a1fa2d3c705c0a4519fdbe4f40d5fbe2773a97cb1594e24ea32c0d15f2",
       "bytes": 82847,
       "duration_ms": 9100,
-      "start_ms": 811550,
+      "start_ms": 812060,
       "source_wav_sha256": "5104f56d186f1701bd2bc060d516d276a62021149d442fb6b90415196ce2eb34",
       "text": "\"Yeah, pretty much everyone is really behind standards. We've been saying that we really have to increase the taxes on this bracket across the board.\""
     },
@@ -1189,7 +1212,7 @@
       "sha256": "4fb5b9dd8bb2b01600228a35f9bb5f8c99de78a2cb95ec9f8560f6b13beac6b5",
       "bytes": 52713,
       "duration_ms": 5825,
-      "start_ms": 821100,
+      "start_ms": 821610,
       "source_wav_sha256": "3be2c66f00f2c33568e4c609b3c352771519d382c4c713ca335fc986c7d121f5",
       "text": "The c o two reading on Gladias's watch refreshed. It now showed 918."
     },
@@ -1201,7 +1224,7 @@
       "sha256": "38690ab707a040b44a347110c06a9d937e670f2e9545c42f39b1ed4a4f247f35",
       "bytes": 127739,
       "duration_ms": 13800,
-      "start_ms": 827375,
+      "start_ms": 827885,
       "source_wav_sha256": "fbb943d3ffd94b672d96324d8d09e84673ba699c36c05fd4c450e8a55b37a280",
       "text": "\"I think people will figure this out on their own\", another Keeper replied. \"It's just a matter of the technology being open and deployable enough. We've been making these filters twice as cheap every two years for the past decade.\""
     },
@@ -1213,7 +1236,7 @@
       "sha256": "e457d0ef3f63dbf9c0d2faa1d14b3410889fae02da1d2a707349d5c0a35f9fbb",
       "bytes": 35915,
       "duration_ms": 3900,
-      "start_ms": 841625,
+      "start_ms": 842135,
       "source_wav_sha256": "bef78cee7e60e309d758ba9dd1106a73ce1e9cc8bce93af222a7cef301213484",
       "text": "\"Well I feel like we have to push harder\", Gladias replied."
     },
@@ -1225,7 +1248,7 @@
       "sha256": "30fb8dc5220de771de63f7d590faf2c557d319b4b041804e08d240fce7c4205c",
       "bytes": 31471,
       "duration_ms": 3425,
-      "start_ms": 845975,
+      "start_ms": 846485,
       "source_wav_sha256": "ea0f87cc71373f20e03011ee3c506155eaf230df74f2039f304a13a77f85b1b3",
       "text": "\"What do the indoor air quality tax rubrics say now?\""
     },
@@ -1237,7 +1260,7 @@
       "sha256": "a0a5728e5bf4a8992b4af0938b38c63425e7c87d41bb83ca2b9eb2e56f49bafe",
       "bytes": 134133,
       "duration_ms": 14650,
-      "start_ms": 849850,
+      "start_ms": 850360,
       "source_wav_sha256": "75cce986504575b78ce9a3f1a5c743d8397c5301d47db191fc15bf59e3262b4c",
       "text": "\"It's a land tax component. Zero if your air quality is perfect, an extra third of a percent per year if the average occupied room reads worse than a thousand. The limits get adjusted up if you have filters or UVC.\""
     },
@@ -1249,7 +1272,7 @@
       "sha256": "d407b2a41f5d852d490cb8ce546cd44f2eb2eaf9c3bbdb6ebf893b183b4e8ff1",
       "bytes": 54397,
       "duration_ms": 6050,
-      "start_ms": 864950,
+      "start_ms": 865460,
       "source_wav_sha256": "9effabba9dcff6f3d32fda5a7a494cae9f5b9f680a1d6319fde9fa7e99d6f6d1",
       "text": "\"Only a third of a percent? For the difference between theoretically perfect and abysmally bad?\""
     },
@@ -1261,7 +1284,7 @@
       "sha256": "4e44f81e5e29825a78e2a23149688f8ac0e666869b1ace0392462b6ff4cb690e",
       "bytes": 57596,
       "duration_ms": 6475,
-      "start_ms": 871450,
+      "start_ms": 871960,
       "source_wav_sha256": "ed12db789c696c0ac5c2715ecf00a9dc86f9917f1f71c74505953ca33d43d146",
       "text": "\"A third of a percent of the land value, per year. For many businesses, that's like a sixth of their revenue.\""
     },
@@ -1273,7 +1296,7 @@
       "sha256": "755f974e479b516cbfd0599803c904115b4a2555046beaca111737fab6be395e",
       "bytes": 238160,
       "duration_ms": 26450,
-      "start_ms": 878375,
+      "start_ms": 878885,
       "source_wav_sha256": "06253c6f49484233e5f845c63abcd682e120dbd6f7392aec7f935f9a3c1148e8",
       "text": "\"There's so many things that go into land tax. Public aesthetics. Accessibility — both the kind that's about being friendly to disabled people, and the kind that's about letting people walk across your land freely and not fencing it off. What percent of the lot you're building on. Ground-floor active use, though that one is controversial and some people think it should just be folded into aesthetics. Emergency preparedness. Fire safety. There's just not enough space for everything.\""
     },
@@ -1285,7 +1308,7 @@
       "sha256": "8bbb4bd326857a29580cbb9454bbf663b67b022b4c29dcc93de0f783aa95b1e8",
       "bytes": 105770,
       "duration_ms": 11900,
-      "start_ms": 905275,
+      "start_ms": 905785,
       "source_wav_sha256": "01bc554e058d58c8f8027efbe42ecdb9462f7fa081cc17fb75e880e44ae9d2b8",
       "text": "\"And come on, Veridians are not that sick. If you look at the broad listen report we ran a month ago, indoor airborne disease resistance is just not one of Veridians' top ten concerns.\""
     },
@@ -1297,7 +1320,7 @@
       "sha256": "861cffdb7b4a9c9414d721306ff9f6d52eecd443b6fb6a9cb558417e26149d8c",
       "bytes": 67424,
       "duration_ms": 7525,
-      "start_ms": 917625,
+      "start_ms": 918135,
       "source_wav_sha256": "b7dd154ce11487c4c1a1f97311b5833e9fdeaef774f50855fbf2157253116180",
       "text": "\"The ground-floor active use isn't just about aesthetics, it also contributes to walkability, reduces congestion-\""
     },
@@ -1309,7 +1332,7 @@
       "sha256": "28f6aa623f7d0ac20478f8a228c262fe4bfd467b70bbc1b5640522c8b7a74cca",
       "bytes": 34768,
       "duration_ms": 3800,
-      "start_ms": 925600,
+      "start_ms": 926110,
       "source_wav_sha256": "ae3ec6686dd46fa33563c94037fbc2afcc833a586e4994174dd4c9f77f8f39d0",
       "text": "\"Fine, though I think we should just target those things directly.\""
     },
@@ -1321,7 +1344,7 @@
       "sha256": "508c65ba8f04768a5a5255aa2893daff88ea774651417411e910c0ccd17ce37d",
       "bytes": 51068,
       "duration_ms": 5600,
-      "start_ms": 929850,
+      "start_ms": 930360,
       "source_wav_sha256": "a16e3ff7dcd9ade0b1e2a74a54eca72c2178419910e71a9583ef01a82318f69f",
       "text": "\"Anyway, that's not our rubric to decide. Air quality is. You're missing the tail risk.\""
     },
@@ -1333,7 +1356,7 @@
       "sha256": "63939beda61b38ab57ddcc80666431468162fe53051c1964a16287171bc565b3",
       "bytes": 28436,
       "duration_ms": 3150,
-      "start_ms": 935900,
+      "start_ms": 936410,
       "source_wav_sha256": "7749444e4a9f0cd0379f3e502332deb781e45ff1adc8db2341681f1754c7174a",
       "text": "\"What tail risk?\", Gladias interjected."
     },
@@ -1345,7 +1368,7 @@
       "sha256": "08047c597a9bda77136426238b427e611f47ede1885f7ee6b35fb7d34718710a",
       "bytes": 38191,
       "duration_ms": 4100,
-      "start_ms": 939500,
+      "start_ms": 940010,
       "source_wav_sha256": "350db743688416f1f5bd5b9ef3ea40f3948a974efccc071841da7dc51e8dccf7",
       "text": "\"Super-pandemics. Like, deliberately released by the Arctics.\""
     },
@@ -1357,7 +1380,7 @@
       "sha256": "ff1fd6b70b69e0bfb37cbd2aaa842b8e5a376eca59116bb66feeacf57ca2a059",
       "bytes": 33960,
       "duration_ms": 3800,
-      "start_ms": 944050,
+      "start_ms": 944560,
       "source_wav_sha256": "ac26fb18e3c743b3012d165db6e59c568b40cf8ceda47a4b6cfe18a566178528",
       "text": "\"Is there any evidence of them working on anything like that?\""
     },
@@ -1369,7 +1392,7 @@
       "sha256": "cb2738d13df49e562b320f802d1ba12002dd8e9b3a75f15975e090bf05be65bd",
       "bytes": 99597,
       "duration_ms": 10950,
-      "start_ms": 948300,
+      "start_ms": 948810,
       "source_wav_sha256": "e7e072a816a02d2103d58c9102f98bbd3b6d2edc4620045b9b7acece5de12edd",
       "text": "\"They're a super opaque society, the only evidence we have that the Arctics even know Veridia exists is that we have to listen to Lord Ephelion giving his sermons all the time.\""
     },
@@ -1381,7 +1404,7 @@
       "sha256": "27f6bb01646c2009c1160f3bcd9b77bf8cc581d2d0825144c25581281da66530",
       "bytes": 26168,
       "duration_ms": 2875,
-      "start_ms": 959700,
+      "start_ms": 960210,
       "source_wav_sha256": "f00bde07ac6ebfca1b0b86fefb30960156556c414889f470cd5cbd1ebc0f5228",
       "text": "\"So what are the possible plans on the table?\""
     },
@@ -1393,7 +1416,7 @@
       "sha256": "7cb05e2fb80cf732ebbb89673815eb44a0dd17db1bfeb9783c1f30f5468d029d",
       "bytes": 104291,
       "duration_ms": 12000,
-      "start_ms": 963025,
+      "start_ms": 963535,
       "source_wav_sha256": "e04599c1f3477c6c1d2240b786653023029f56f8d0eb306470f68dd3cb57639f",
       "text": "\"Increase the maximum to two thirds of a percent. And then make the case to the funding organs — Graph Funding, Quadratic Funding, parliament allocations — that they should support more open-\""
     },
@@ -1405,7 +1428,7 @@
       "sha256": "e44960643e040720d0faabb6e2105e50ba130c721c8e9f669c35085d0d6d50d6",
       "bytes": 21739,
       "duration_ms": 2250,
-      "start_ms": 975475,
+      "start_ms": 975985,
       "source_wav_sha256": "8b6c9b7fa5998f4eea37e4667b06967613fbf512280d00c6c23d7e3e4e1597c9",
       "text": "Another Keeper interjected:"
     },
@@ -1417,7 +1440,7 @@
       "sha256": "c247892cf9563dd283b19760f146887a9a9a3c6fc78dc05827e13a4b20664853",
       "bytes": 242783,
       "duration_ms": 26950,
-      "start_ms": 978175,
+      "start_ms": 978685,
       "source_wav_sha256": "62d5d5587f7dec8abc10b9f6cbabb2364acfe35c933ee6b0bec18adf8de673cc",
       "text": "\"Quadratic funding? That round is a mess right now. Someone released a program you can download onto your device and prove that you donated to a particular project researching social media polarization — actually not a very good one — and get a reward. You donate ten zipcoins and get back twenty, they get a hundred including the bounded matching. Lots of people participated. And then yesterday some insider at Bluewhale blew the whistle, apparently that was all their doing.\""
     },
@@ -1429,7 +1452,7 @@
       "sha256": "6dd5be94ea07446fe57bb1ce614c5f3e353ad4ed67cdeaa483870e681709d37c",
       "bytes": 50583,
       "duration_ms": 5675,
-      "start_ms": 1005575,
+      "start_ms": 1006085,
       "source_wav_sha256": "4731b6221d399090c8069f8c4fbe7720e66e79374edeb528687be7f057c66d80",
       "text": "\"Bluewhale? But why would they do that? They don't even control the project that was getting that funding.\""
     },
@@ -1441,7 +1464,7 @@
       "sha256": "1a17d552eb8c46fe6e19552351831c015aa051648a414503304e03968541b62a",
       "bytes": 162116,
       "duration_ms": 17950,
-      "start_ms": 1011700,
+      "start_ms": 1012210,
       "source_wav_sha256": "8bf81570786432abb80e189877a9fe3a03e836b68dc2986d8cd59ecce2412d95",
       "text": "\"It doesn't matter where it goes, if it was hiring people from Iptak to come dig holes and then fill them back up again they would still have done it. Their goal is to drain funding from anything that interfaces with open platforms. Starve the open ecosystem, the closed one wins by default.\""
     },
@@ -1453,7 +1476,7 @@
       "sha256": "53f66bbeea02ddf6e4058be71f79a2bcc43baeecd51d85f62551408830f0361f",
       "bytes": 104192,
       "duration_ms": 11800,
-      "start_ms": 1030100,
+      "start_ms": 1030610,
       "source_wav_sha256": "1cebc7f784358f43a2e397a3e9e162eb3ce01d7a5ea461cbf845656c6ce3e065",
       "text": "\"Fine, we'll stick to Graph Funding. Go through our channels to suggest to the Graph Funding people that they support more open source tech for air filtering, cleaning, wastewater scanning, all of it.\""
     },
@@ -1465,7 +1488,7 @@
       "sha256": "8105cabbdc9f59d9591f619837ad84f6b592d8bcee1cb0bf5338e51d98ddc978",
       "bytes": 122406,
       "duration_ms": 13725,
-      "start_ms": 1042350,
+      "start_ms": 1042860,
       "source_wav_sha256": "190212f18b20ec6b1f359a95dd19ce9f4019165b7cbccb94893e6f2344c35efa",
       "text": "\"Wastewater scanning too? You want to break everyone's privacy even more? What if the Arctics hack in and take all that data, and then they'll find out who lives where even if they move homes, and when each person is healthy or sick?\""
     },
@@ -1477,7 +1500,7 @@
       "sha256": "1927944d0e583e0b6fb41f8fa0145ba8a9d086d1be07bd0e7fba6f6507aa3b6a",
       "bytes": 64146,
       "duration_ms": 7075,
-      "start_ms": 1056525,
+      "start_ms": 1057035,
       "source_wav_sha256": "a937adb8638adc52968be23171e5c640752d7dff0a7035ac01f5eb18329eab3f",
       "text": "\"I thought you were the one who keeps saying there's no evidence the Arctics are actually doing those kinds of crazy things?\""
     },
@@ -1489,7 +1512,7 @@
       "sha256": "d14fb77e45eede0f50ee7445ff991ac0e46f2ef203152fb5d7ee500a5fb181b1",
       "bytes": 81303,
       "duration_ms": 9050,
-      "start_ms": 1064050,
+      "start_ms": 1064560,
       "source_wav_sha256": "6f69675bc99cfa449cf0e9583e32d14268f7cf4ea97a8079ffce39bb425afa7d",
       "text": "\"Isn't there some cryptographic way to get the data we want out of the scans, without ever collecting the data itself in cleartext in any one place?\""
     },
@@ -1501,7 +1524,7 @@
       "sha256": "3cff1541a86bd33d7da6d1951b6aa60ad227f06d56a97ec53d9f440e560f50fd",
       "bytes": 44479,
       "duration_ms": 5025,
-      "start_ms": 1073550,
+      "start_ms": 1074060,
       "source_wav_sha256": "694a205df8c28b5e8cfcc5cbc82d6c8c551e8d147399ffa7d8b3cfa5c084454f",
       "text": "\"Well, if you can find a genius who can figure out something like that, let us know.\""
     },
@@ -1513,7 +1536,7 @@
       "sha256": "e58c11a30b78d49a42e8885d82928ae6922f5c25366f3980034001c74f5d04e5",
       "bytes": 215090,
       "duration_ms": 24125,
-      "start_ms": 1080825,
+      "start_ms": 1081335,
       "source_wav_sha256": "bce832d20f96583e4f094066b4832c7c0f713e1d995a35e61574d94acce63f0e",
       "text": "Gladias got off the autobus, and pulled on the strap on his privacy robe's front face covering. His face was still covered, but the belt between the areas above and below his nose was now no longer tight. Less virus protection — outside the unusually crowded indoor space that was the autobus, he no longer needed it — but more comfortable and easier to breathe. He began to walk back home."
     },
@@ -1525,7 +1548,7 @@
       "sha256": "4944c3f2b89c588dd8301c399d71949ad17bb4039d896b511c74ce9bded495fb",
       "bytes": 220801,
       "duration_ms": 25000,
-      "start_ms": 1105400,
+      "start_ms": 1105910,
       "source_wav_sha256": "81ed2f00385d94c0118454ace8e75ac115e10ec95e7703296e2910c1888c291f",
       "text": "He passed by the same restaurant where he had bumped into Febric months earlier. On the restaurant's outer wall, he saw an advertisement. On the left side of the advertisement, there was a Hydrafill mascot, clothed in Hydrafill's classic yellow and green colors, hugging a small child, and using his back to shield the child from a jet of sludge-like green-colored water. On the right side of the advertisement, there was the text:"
     },
@@ -1537,7 +1560,7 @@
       "sha256": "574171a17d73bb3754b6716192b214362a3486c1dcaf35903de5d9adc792b392",
       "bytes": 390404,
       "duration_ms": 43725,
-      "start_ms": 1130850,
+      "start_ms": 1131360,
       "source_wav_sha256": "ab9aa00381d110748dfc124b29ecbb2dc04149fe1eb35cadaf4b4091cfe6b31c",
       "text": "Heavy water, with its atoms of hydrogen replaced by the neutron-bearing isotope deuterium, is known to be toxic in large doses. We studied our competitors' water, and found that on average, it contains 145 parts per million heavy water. Our water comes from fresh Veridian northern ice, bravely extracted only thirty kilometers away from the Arctic border, and it contains 132 parts per million heavy water. Hence, our water is ten percent less toxic than our competitors. Only WE care about your health. Nobody else does. Hydrafill wants to heal and protect you. Our competitors think you deserve to drown in sludge and die. Trust Hydrafill. Buy Hydrafill today."
     },
@@ -1549,7 +1572,7 @@
       "sha256": "1cf0e69573ab4e14caf52f313a896554d500aaabcf405c6d73f9f48b527f6519",
       "bytes": 24370,
       "duration_ms": 2775,
-      "start_ms": 1175175,
+      "start_ms": 1175685,
       "source_wav_sha256": "54827672428d828080a84c6b02a50f1b62781e37b9741c5e3190e37c34d5ea24",
       "text": "Gladias smiled. He kept walking."
     },
@@ -1561,7 +1584,7 @@
       "sha256": "6aa84698b46ecb87566bbcd7a5bfe46e3225039c551901db3fd6a24dda598f56",
       "bytes": 30359,
       "duration_ms": 3300,
-      "start_ms": 1178400,
+      "start_ms": 1178910,
       "source_wav_sha256": "8a1a5705b27237fe34a81d7e46e50aeb377e264cff64c56f31216615979373c4",
       "text": "Suddenly, someone grabbed and hugged him from behind."
     },
@@ -1573,7 +1596,7 @@
       "sha256": "0531032486267d5d052b3e2f0ae3dc135d80686492e1b76265f6a1cf5a2acea3",
       "bytes": 17516,
       "duration_ms": 1950,
-      "start_ms": 1182150,
+      "start_ms": 1182660,
       "source_wav_sha256": "6c2418e8dd4d3177b8f01c0f91035ebf211cfa73580b9b844da7c3e0f2978b6b",
       "text": "Gladias turned around."
     },
@@ -1585,7 +1608,7 @@
       "sha256": "c1520405b3b21a7477b4cd2c53b8a7a7f6848497b40dbf28418d4e911fd169c5",
       "bytes": 12774,
       "duration_ms": 1425,
-      "start_ms": 1184550,
+      "start_ms": 1185060,
       "source_wav_sha256": "4bbeb024831ca0000409557f9af11857262dfdc1a25bdac95eee472a71f1e37d",
       "text": "\"Seila!\""
     },
@@ -1597,7 +1620,7 @@
       "sha256": "0451a304fcf74159ae917d7a4ba1c9fd2bfb22d8b57ad1449fdb262278506243",
       "bytes": 20970,
       "duration_ms": 2425,
-      "start_ms": 1186425,
+      "start_ms": 1186935,
       "source_wav_sha256": "60c1801a7855a79728952103585d0c7b49fcc2ce23aacf99903e2e71b79785df",
       "text": "\"Finally caught you on your way home.\""
     },
@@ -1609,7 +1632,7 @@
       "sha256": "6d1fd1895cfc1303bfa709b24da806048d8e99588143104ada841d45cbecebf7",
       "bytes": 17968,
       "duration_ms": 2050,
-      "start_ms": 1189300,
+      "start_ms": 1189810,
       "source_wav_sha256": "75085b56a709a713a74cfb53e13947549afc4df15b77182e22f8156954b9659a",
       "text": "\"How was the rest of your day?\""
     },
@@ -1621,7 +1644,7 @@
       "sha256": "3e096c5c8ef91612f17e392694553b25553e29a44221219a2c8b32e3b06f90e4",
       "bytes": 53206,
       "duration_ms": 5875,
-      "start_ms": 1191800,
+      "start_ms": 1192310,
       "source_wav_sha256": "48bc6950bdaf816dfdc7cc863b087a355a4c8880c2710506c0bdf807edfd246f",
       "text": "\"Finished up my post on urban economics in Freetown. It's online, you should go see it.\""
     },
@@ -1633,7 +1656,7 @@
       "sha256": "9b4692a01ce9dd02f17af9982423b623e3871560e3f5935850b80093814002a7",
       "bytes": 15924,
       "duration_ms": 1800,
-      "start_ms": 1198125,
+      "start_ms": 1198635,
       "source_wav_sha256": "c6ee10362990ba37ff9e1f6788f2356ad59297fb7f2a2657e9aca10cfb0206fd",
       "text": "\"Ooh, I'm excited.\""
     },
@@ -1645,7 +1668,7 @@
       "sha256": "6497e8f9540f8a622dbc772f109397063706d7c47fc7528f0318c8e309da733f",
       "bytes": 72514,
       "duration_ms": 7875,
-      "start_ms": 1200375,
+      "start_ms": 1200885,
       "source_wav_sha256": "7076f8b3916580f0be6995841eba8a132637055a5deb29bcdb9f70b7883fa45c",
       "text": "\"Jahn gave me some gossip recently, about how a lot of things are changing now that people there are getting more spooked about the Arctics.\""
     },
@@ -1657,7 +1680,7 @@
       "sha256": "9fcdb426e2526a444098062afef69ac3ce8209d7d9c6be0301ba89f135cbc08c",
       "bytes": 61972,
       "duration_ms": 6925,
-      "start_ms": 1208700,
+      "start_ms": 1209210,
       "source_wav_sha256": "326096a5afa7d3c483715f0a5f8c66f93229b1de865aebbac986ac29533dde49",
       "text": "\"Do you have any theories about why people in Veridia seem so... nonchalant about the whole Arctic situation?\""
     },
@@ -1669,7 +1692,7 @@
       "sha256": "393d75c8f847107febc60cd2237a14c62055f994339c810a4fb32d1d60d66010",
       "bytes": 93126,
       "duration_ms": 10275,
-      "start_ms": 1216075,
+      "start_ms": 1216585,
       "source_wav_sha256": "223af9840ee8d86ef9af2fd9fafeb20c607113bea5566b3244e431f1043b87ed",
       "text": "\"I guess the Arctics don't really affect people's lives here much? They just publish their stupid sermons from time to time and people watch and listen out of curiosity.\""
     },
@@ -1681,7 +1704,7 @@
       "sha256": "3b5cd7a492074647775523a7376277fc89448f1731b89ed79df88064dd5c3815",
       "bytes": 16130,
       "duration_ms": 1775,
-      "start_ms": 1226800,
+      "start_ms": 1227310,
       "source_wav_sha256": "91c7dac75bf3b03d91cc363445e54c963537b4c741857bf5fabaa2f2ad893f1a",
       "text": "Gladias groaned."
     },
@@ -1693,7 +1716,7 @@
       "sha256": "5b814e7663dff09d39da7f4e015202613b5126778b4555b83cabfc289bf4625b",
       "bytes": 103007,
       "duration_ms": 11400,
-      "start_ms": 1229025,
+      "start_ms": 1229535,
       "source_wav_sha256": "ce40d256c62fff09e31fdeaa2c3fc207095b453a897a5e66bf81167fde2e391c",
       "text": "\"Even inside the Keepers, the situation is so strange. The older ones seem to understand there's a problem. But the newer ones ... not all, but many of them think we should just not care?\""
     },
@@ -1705,7 +1728,7 @@
       "sha256": "204254602df80da7ab516af312f0296d95261b368209150ee39302767f506b35",
       "bytes": 145481,
       "duration_ms": 16175,
-      "start_ms": 1240875,
+      "start_ms": 1241385,
       "source_wav_sha256": "872fb7b7021b3b52364006efe5d4e781beaf7f3dcceea271e12c8afb47411409",
       "text": "\"What's weird is that the corporates in Freetown seem more resistant to ... whatever is causing that stupidity. They're basically the only city taking the problem seriously — except for Redshire, and the cities partially run by Redshire's parliament through co-governance.\""
     },
@@ -1717,7 +1740,7 @@
       "sha256": "5b44995ee9a297c4ac2b9eab16d5890e6372ee655cf6f8b2429e3ca76c5c0649",
       "bytes": 95375,
       "duration_ms": 10725,
-      "start_ms": 1257500,
+      "start_ms": 1258010,
       "source_wav_sha256": "d523e2866f256b7d9364cefd070c719886e13e878bfc97c3faa1ac79d430d918",
       "text": "\"I guess more than anything, the newer Keepers seem suspicious of Steering and Quadratic Funding and Graph Funding and government being able to do much of anything in general.\""
     },
@@ -1729,7 +1752,7 @@
       "sha256": "a691c798e3541bf154bf9948c4031a8e9d8ad1c2d98965e6585d87f5ea9827ee",
       "bytes": 14512,
       "duration_ms": 1650,
-      "start_ms": 1268675,
+      "start_ms": 1269185,
       "source_wav_sha256": "50824915c31ae5b228ff8541cde146a6d3402a19f427f997e4722b9e8056d470",
       "text": "Seila sighed."
     },
@@ -1741,7 +1764,7 @@
       "sha256": "b96bd0154032cfb03dc59e99af24c2e878b160b4b7ed18783fc646716913f9b6",
       "bytes": 85325,
       "duration_ms": 9550,
-      "start_ms": 1270775,
+      "start_ms": 1271285,
       "source_wav_sha256": "429e3701f066312620388bbee34e900b552de4efaeb870accbb9d69ca2798cce",
       "text": "They continued walking. After a few minutes, they arrived at the door to their house. Gladias put his watch against the circle, and the door opened. They walked in."
     },
@@ -1753,7 +1776,7 @@
       "sha256": "338ce5b05b565bcde457fc3a2c05b73363510aadbf7ca0da5d79455d10798ced",
       "bytes": 21951,
       "duration_ms": 2425,
-      "start_ms": 1280775,
+      "start_ms": 1281285,
       "source_wav_sha256": "802bb8563a5ddce4b0e54f5361f1136eaa1dca46457306cc0111a446104573e4",
       "text": "Seila opened up her hand device."
     },
@@ -1765,7 +1788,7 @@
       "sha256": "ccf956a958397afeb55059d8872fef17db46a507c18a6d4c20de9a118b6aa97f",
       "bytes": 34325,
       "duration_ms": 3750,
-      "start_ms": 1283650,
+      "start_ms": 1284160,
       "source_wav_sha256": "b40abbc87760450975b734b8c8eaf765855c592d2f79b3a026c2bdb7873ba950",
       "text": "\"[Dzego](/ˈdzɛɡO/) food truck in one minute. The usual I assume?\""
     },
@@ -1777,7 +1800,7 @@
       "sha256": "df62d6d8e9f1a52eba5ca94532d3a689b9fc8a1799365c2ff943c7350362e38d",
       "bytes": 16302,
       "duration_ms": 1775,
-      "start_ms": 1287850,
+      "start_ms": 1288360,
       "source_wav_sha256": "d904bcbccf12910304d71875c5008f7fda53f40055bf1190e2c5705749fce18c",
       "text": "\"Yep, how did you know?\""
     },
@@ -1789,7 +1812,7 @@
       "sha256": "a5f3d7fb6656d0635d35cb733b0b8d4c11cd84dd33ac2c3905034546639de014",
       "bytes": 14360,
       "duration_ms": 1625,
-      "start_ms": 1290075,
+      "start_ms": 1290585,
       "source_wav_sha256": "c7e41b1fa36f099a13fcacc44d2c06634b222f1fb81f18f70aeff445edcf161b",
       "text": "Seila laughed."
     },
@@ -1801,7 +1824,7 @@
       "sha256": "3cea894106896a078d666de0b6ee9ec5621f5cf01b294791cb634bf27f86078b",
       "bytes": 24401,
       "duration_ms": 2775,
-      "start_ms": 1292150,
+      "start_ms": 1292660,
       "source_wav_sha256": "7e1dcc3388b885876e7b2e485787b0d5907e55c6766f8c3320436b7894d2166b",
       "text": "Seila clicked a few buttons, and ordered."
     },
@@ -1813,7 +1836,7 @@
       "sha256": "d2eff6be57cfa561e57ba64003823197a67d101f72216f473f6ca30b12db2110",
       "bytes": 93214,
       "duration_ms": 10625,
-      "start_ms": 1295375,
+      "start_ms": 1295885,
       "source_wav_sha256": "b2c14d830457c66b0d42d5cd2d92c8284363f53682247555dfa33516ca93856e",
       "text": "The door to the house was not yet closed, and Seila could already see the food truck coming towards them from a few hundred meters away. They both waited for the food truck to arrive."
     },
@@ -1825,7 +1848,7 @@
       "sha256": "1315e4083e2a66f3eeb7a85573081144f5aa7bc5b08cc40db0872eb9bdab4b41",
       "bytes": 68926,
       "duration_ms": 7675,
-      "start_ms": 1306450,
+      "start_ms": 1306960,
       "source_wav_sha256": "53aafc54950f7bcf140c37ddd84fe3d9b15dee7f805527b1aad381428768b372",
       "text": "Seila went out, and picked up the food directly from the food truck. She walked back into the house, and closed the door behind her."
     },
@@ -1837,7 +1860,7 @@
       "sha256": "a69808a6eea0d4b3d642e43534a2d7c7ca4a80f13de0554aade9b8676d32325a",
       "bytes": 34059,
       "duration_ms": 3625,
-      "start_ms": 1314575,
+      "start_ms": 1315085,
       "source_wav_sha256": "1242c5d0d73c8f7419e8b7fb7e623c48d5e350d18c1211951688f81a6f2665f0",
       "text": "She put the food on the table, and immediately unpacked it."
     },
@@ -1849,7 +1872,7 @@
       "sha256": "ea7f7f18d7a10cde18b63b1ca17957a6fede77a5d894c999fce6ec56298fc4cc",
       "bytes": 38885,
       "duration_ms": 4225,
-      "start_ms": 1318650,
+      "start_ms": 1319160,
       "source_wav_sha256": "c17ee5e7ccdaec057cbb49b65972c35ae821ef499444832540204ceaaadd26a7",
       "text": "They both sat down, opened their food boxes, and began to eat."
     }

@@ -1,6 +1,14 @@
 {
   "about": "Key-moment images seeded by the project as a starting point, not canon. Rendered locally with FLUX.2 [klein] 4B; each entry links to its recipe. Shown by the player until Milestone 4 stores images as elements.",
   "license": "GPL-3.0",
+  "published_by": {
+    "fid": 6786,
+    "role": "maintainer",
+    "action": "published via script",
+    "script": "scripts/publish-images.ts",
+    "date": "2026-10-05",
+    "evidence": "docs/prompts/008-narration-and-images.md"
+  },
   "excluded": {
     "c26-b132-drone-escape": "the same man appears twice, even after a rewrite with one rider",
     "c27-b071-tea-robot": "the robot takes on the reference man's face and clothes"

@@ -21,6 +21,7 @@ import { mkdir, readFile, writeFile } from 'node:fs/promises';
 import path from 'node:path';
 import { promisify } from 'node:util';
 import { pool, r2, sha256File } from './lib/r2';
+import { publishedBy } from './lib/published-by';
 
 const run = promisify(execFile);
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -32,6 +33,7 @@ const EXCLUDED = new Map([
 
 async function main() {
   const store = dryRun ? null : r2();
+  const by = dryRun ? null : publishedBy(ROOT, 'scripts/publish-images.ts');
   const webDir = path.join(ROOT, 'images-out', 'web');
   await mkdir(webDir, { recursive: true });
   const jobs: {
@@ -121,6 +123,7 @@ async function main() {
     about:
       'Key-moment images seeded by the project as a starting point, not canon. Rendered locally with FLUX.2 [klein] 4B; each entry links to its recipe. Shown by the player until Milestone 4 stores images as elements.',
     license: 'GPL-3.0',
+    published_by: by,
     excluded: Object.fromEntries(EXCLUDED),
     images: entries.sort((a, b) => a.chapter - b.chapter || a.idx - b.idx),
   };

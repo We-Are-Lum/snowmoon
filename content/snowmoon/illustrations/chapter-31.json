@@ -73,5 +73,19 @@
       "height": 576,
       "seed": 31077
     }
-  ]
+  ],
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent and its helper agents",
+    "drafted": [
+      "moment choices",
+      "image prompts",
+      "reference choices"
+    ],
+    "instructions": [
+      "docs/prompts/008a-agent-prompts.md#key-moments-per-chapter",
+      "docs/prompts/008a-agent-prompts.md#character-profiles"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
 }

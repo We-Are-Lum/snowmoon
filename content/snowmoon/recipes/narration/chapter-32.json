@@ -36,7 +36,21 @@
     },
     "break_ms": 1800,
     "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
-    "read_aloud_sha256": "b584448ba82ec62dc0736a10f7764062a519d2947dae04f4e6c819ce2af5e02c"
+    "read_aloud_sha256": "b584448ba82ec62dc0736a10f7764062a519d2947dae04f4e6c819ce2af5e02c",
+    "description_tone": {
+      "notes_hz": [
+        660,
+        990
+      ],
+      "notes_ms": [
+        110,
+        140
+      ],
+      "between_ms": 40,
+      "after_ms": 220,
+      "amplitude": 0.12,
+      "made_by": "code (numpy sine, linear fades)"
+    }
   },
   "host": {
     "platform": "macOS-26.5.1-arm64-arm-64bit",
@@ -48,7 +62,7 @@
     "wav_sha256": "4305397b10f5732681126165efe5d08b9cd9be08667c3a8f7ebea31b24b3cd8f",
     "m4a": "chapter-32.m4a",
     "m4a_sha256": "83a943fe30ec3684df92073ebb9ef9ab9591940952da24bb90ff059a5cd83b9c",
-    "note": "start_ms is the block's offset in the stitched file, gaps included"
+    "note": "start_ms is the block's offset in the stitched file, gaps included; a description starts with its tone (tone_ms)"
   },
   "blocks": [
     {
@@ -1283,5 +1297,18 @@
       "text": "\"And besides, Meldan is my home.\"",
       "generation_s": 0.53
     }
-  ]
+  ],
+  "restitched_at": "2026-10-05T18:53:35+00:00",
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent and its helper agents",
+    "drafted": [
+      "spoken descriptions of screens, figures and lyric cards (blocks none)",
+      "pronunciation entries (content/snowmoon/pronunciation.json)"
+    ],
+    "instructions": [
+      "docs/prompts/008a-agent-prompts.md#read-aloud-descriptions-and-invented-word-lists"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
 }

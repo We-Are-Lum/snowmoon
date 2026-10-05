@@ -297,5 +297,17 @@
       "height": 576,
       "seed": 2003
     }
-  ]
+  ],
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent",
+    "drafted": [
+      "style descriptions",
+      "image prompts"
+    ],
+    "instructions": [
+      "docs/prompts/008-narration-and-images.md"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
 }

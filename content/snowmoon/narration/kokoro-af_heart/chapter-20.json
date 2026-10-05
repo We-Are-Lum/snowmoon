@@ -4,6 +4,14 @@
   "voice": "kokoro-af_heart",
   "label": "Synthetic narration · Kokoro-82M, stock voice af_heart",
   "license": "GPL-3.0",
+  "published_by": {
+    "fid": 6786,
+    "role": "maintainer",
+    "action": "published via script",
+    "script": "scripts/publish-narration.ts",
+    "date": "2026-10-05",
+    "evidence": "docs/prompts/008-narration-and-images.md"
+  },
   "recipe": "content/snowmoon/recipes/narration/chapter-20.json",
   "model": {
     "name": "Kokoro-82M",
@@ -36,7 +44,21 @@
     },
     "break_ms": 1800,
     "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
-    "read_aloud_sha256": "d4819cc9d1dd822ce9b9a8348ed7292f99b6f873fd4e3c297cd2083f5997a988"
+    "read_aloud_sha256": "d4819cc9d1dd822ce9b9a8348ed7292f99b6f873fd4e3c297cd2083f5997a988",
+    "description_tone": {
+      "notes_hz": [
+        660,
+        990
+      ],
+      "notes_ms": [
+        110,
+        140
+      ],
+      "between_ms": 40,
+      "after_ms": 220,
+      "amplitude": 0.12,
+      "made_by": "code (numpy sine, linear fades)"
+    }
   },
   "block_encoding": {
     "codec": "aac",
@@ -46,30 +68,30 @@
     "tool": "ffmpeg"
   },
   "chapter_file": {
-    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-20-cac9b85ed339.m4a",
-    "sha256": "cac9b85ed3393e4334b3e24550ea385b0b3107dfcb51b87b8f93e0e4c5690dcb",
-    "bytes": 17192386,
-    "duration_ms": 1470575
+    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-20-261a8581a0fb.m4a",
+    "sha256": "261a8581a0fb6e555bb7a6393f4a8469274acac6259c61cd67066f997d0f6fc0",
+    "bytes": 17189845,
+    "duration_ms": 1472105
   },
   "breaks": [
     {
       "idx": 12,
-      "start_ms": 168825,
+      "start_ms": 169335,
       "silence_ms": 1800
     },
     {
       "idx": 52,
-      "start_ms": 517900,
+      "start_ms": 518920,
       "silence_ms": 1800
     },
     {
       "idx": 86,
-      "start_ms": 813750,
+      "start_ms": 814770,
       "silence_ms": 1800
     },
     {
       "idx": 124,
-      "start_ms": 1158850,
+      "start_ms": 1159870,
       "silence_ms": 1800
     }
   ],
@@ -203,6 +225,7 @@
       "bytes": 261397,
       "duration_ms": 29500,
       "start_ms": 125075,
+      "tone_ms": 510,
       "source_wav_sha256": "5670cfa161be46b76d00479bd2fbb447c2d3172c6232f00561c3e9d5bf762ebb",
       "text": "Five messages. From Febric: Hreda and I are both safely inside the Greater Plum Harbor. We will survive the best that we can. We love you. Then four from Hreda: Northglade was invaded this morning. It looked like there were barely any battles, as though our politicians and army are totally okay with this happening. Febric and I are safely inside the Greater Plum Harbor. The Arctics seem to be respecting it as some kind of neutral zone, at least for now. I'm scared. I hope everything will be okay. Love you.",
       "read_aloud_status": "unreviewed"
@@ -215,7 +238,7 @@
       "sha256": "e2aca323a1e014813da58287ab3c1652e7cde011352c49e65be88aa0e2a8d0ba",
       "bytes": 118421,
       "duration_ms": 13200,
-      "start_ms": 155175,
+      "start_ms": 155685,
       "source_wav_sha256": "85ccf233d603278634daa4fffacf657053df298bd97962d519dd6c750cf2d0db",
       "text": "Seila started typing back a message, confirming to Febric and Hreda that she received their message and she and Vil and Daia would do everything she could to bring them home. Before she finished typing, she began to cry."
     },
@@ -227,7 +250,7 @@
       "sha256": "7a3a10350a7d12976703475426bc8c35ac98c46be27e5f807a99253a5480d7a9",
       "bytes": 80601,
       "duration_ms": 9200,
-      "start_ms": 170625,
+      "start_ms": 171135,
       "source_wav_sha256": "3ab84405858adc49b40c15738b78991fe11f67b01d7484936b89088c92de096a",
       "text": "A longhour later, she heard a knock on her door. She walked up to the door, and saw through a screen that there was a man wearing a privacy robe outside."
     },
@@ -239,7 +262,7 @@
       "sha256": "4b5129fb34fd0461f4dc06de34c7faed7f240d81dabca63c1c806d9c848e724b",
       "bytes": 18169,
       "duration_ms": 2150,
-      "start_ms": 180275,
+      "start_ms": 180785,
       "source_wav_sha256": "3ddbe129beea540894266eca4f69fc222d8efc186b0c62e962603e7ba682880c",
       "text": "\"Who are you?\", she asked."
     },
@@ -251,7 +274,7 @@
       "sha256": "4bce1eca8c1c04db94bc2f73026717d64790033e2f0bd655215c6d99cc73d3fe",
       "bytes": 23559,
       "duration_ms": 2675,
-      "start_ms": 182875,
+      "start_ms": 183385,
       "source_wav_sha256": "2ec92d8dfb54a0020d91bcf8dfbd3b60548c436d8d772ba368749f257589910e",
       "text": "\"I'm Mov. Gladias knows me well.\""
     },
@@ -263,7 +286,7 @@
       "sha256": "5ae1fc4d531878d269ab3aa6eea1a6b852b1502fc3ab9c2fb0938c16629f939c",
       "bytes": 16085,
       "duration_ms": 1875,
-      "start_ms": 186000,
+      "start_ms": 186510,
       "source_wav_sha256": "1bfd6e11a220e3d77e6ef0788acf9edd7255ed4129547b9f617793dd43300dbe",
       "text": "\"Why should I believe you?\""
     },
@@ -275,7 +298,7 @@
       "sha256": "e72b165018b1f0cfac7bc0410a366666c2665fbd76b6e189ec67d62c50920ae0",
       "bytes": 85571,
       "duration_ms": 9325,
-      "start_ms": 188325,
+      "start_ms": 188835,
       "source_wav_sha256": "b6da796e47e19ad923312a331e2f4b7263f6ee4f428433825c37ec9f69ada4fc",
       "text": "The man whispered a few words into his neck band, and put up his hand device against the green circle beside the door of the house. Seila's watch buzzed."
     },
@@ -287,7 +310,8 @@
       "sha256": "acd034d07c7cda5669c866bb82ed0bc83f572f0278b6d7c596272199cdb92a17",
       "bytes": 47316,
       "duration_ms": 5325,
-      "start_ms": 198100,
+      "start_ms": 198610,
+      "tone_ms": 510,
       "source_wav_sha256": "57da6ca4aab7292af01936b4b1fd472f00fa25b1580c069f5a19bf0df1b47d1f",
       "text": "Her watch shows a green check: Frequent contact of Gladias. Proof verified.",
       "read_aloud_status": "unreviewed"
@@ -300,7 +324,7 @@
       "sha256": "7c3842d1608296640af8586aa1418bb8a3d39c244f807fd42a53bcb46fb28627",
       "bytes": 31215,
       "duration_ms": 3475,
-      "start_ms": 204025,
+      "start_ms": 205045,
       "source_wav_sha256": "27316dfeac4b3c9f23d5a6fefb1ff4446e076ddd9d4e9f9f7b735d6a4af0aa7f",
       "text": "Seila cautiously opened the door, and let the man in."
     },
@@ -312,7 +336,7 @@
       "sha256": "c6e40427348cfdb1e0ad79c0d9fe13cc5a06f92fea52cd85cd04ac379e5ad14c",
       "bytes": 82792,
       "duration_ms": 9150,
-      "start_ms": 207950,
+      "start_ms": 208970,
       "source_wav_sha256": "2d67706e5e0775a504545be3e79fdfdccaa732539d984abc6a2dfac0c76d8716",
       "text": "Mov took off his shoes, and immediately proceeded to the basement room, knowing exactly where within the house it was located. Seila followed him."
     },
@@ -324,7 +348,7 @@
       "sha256": "297c712687e637b1f230fa10a6dc7310b3b745d8bf0155e6da485c39a1571404",
       "bytes": 17084,
       "duration_ms": 1900,
-      "start_ms": 217550,
+      "start_ms": 218570,
       "source_wav_sha256": "f86915c68da521a798577310d8f1364316ddadaf0361849dd26aca0183deb003",
       "text": "They both sat down."
     },
@@ -336,7 +360,7 @@
       "sha256": "6b295ac89b92c251c9c48f212cf0869c04d1e92c05358b25886ca6de87cf6137",
       "bytes": 36047,
       "duration_ms": 3925,
-      "start_ms": 219900,
+      "start_ms": 220920,
       "source_wav_sha256": "1490bb9ca394d27db187ee02e9938c3b426d084e5f67f199722d4e910c625eb5",
       "text": "\"I'm getting really concerned about what's happening to Veridia.\""
     },
@@ -348,7 +372,7 @@
       "sha256": "18797dd6c45a912442b59d6526004df59c8702395dac2d87205e4fabdf8dca19",
       "bytes": 66258,
       "duration_ms": 7325,
-      "start_ms": 224275,
+      "start_ms": 225295,
       "source_wav_sha256": "43ff8a9f453c2cc3b4314d58af9e5d1b4af76cf6b8bb855d480696333dd6d1ee",
       "text": "Seila looked at him with a blank stare, suprised that it was even possible to say something so uselessly obvious."
     },
@@ -360,7 +384,7 @@
       "sha256": "4b88524ed8cdbd0a177946cdadd6063334ef72128a81e752c901292be65e1a23",
       "bytes": 75419,
       "duration_ms": 8750,
-      "start_ms": 232050,
+      "start_ms": 233070,
       "source_wav_sha256": "ac4ab1b3c085bd15b8675d38145042f630a21e238226337b4ca01db5e758f05b",
       "text": "\"I don't mean the invasion of Northglade. That was really shocking, it's terrible. And I'm really sorry Febric and Hreda are there. I hope they're safe.\""
     },
@@ -372,7 +396,7 @@
       "sha256": "4af05ada9f731c502f5b411c29fbb47892ebe10b87ac025724730c7dbcb10afc",
       "bytes": 70410,
       "duration_ms": 7775,
-      "start_ms": 241250,
+      "start_ms": 242270,
       "source_wav_sha256": "ebf9c866dc0f81e24a276a3bcd2f16b0038031d5a210c0e2d1fb1d499eef50ac",
       "text": "\"They are. The Arctics are leaving the Greater Plum Harbor there alone somehow, and Febric and Hreda managed to get there in time.\""
     },
@@ -384,7 +408,7 @@
       "sha256": "01df02c26b6a08edbe806fbff529a899b76b0f6a70a75af72fdcee75044c9bfb",
       "bytes": 14626,
       "duration_ms": 1675,
-      "start_ms": 249475,
+      "start_ms": 250495,
       "source_wav_sha256": "df5f360f4d537c0141141d77748a7901661cd88629522c914b23fc9770a6e2a4",
       "text": "\"So what do you mean?\""
     },
@@ -396,7 +420,7 @@
       "sha256": "3a8e6054829e33738acf71378781842cc1eec81f20b1caa07e4d3b3f1664a5a3",
       "bytes": 83033,
       "duration_ms": 9325,
-      "start_ms": 251600,
+      "start_ms": 252620,
       "source_wav_sha256": "01a68d056651919041e304df3dc819ab9337d4877d27c963950f23f6c7da0088",
       "text": "\"I mean the things that made that invasion possible, and succeed with so little resistance. All of those factors are true in the rest of Veridia too.\""
     },
@@ -408,7 +432,7 @@
       "sha256": "db429a2aca60e273828e9814ce4394f43f9a3157046a7ab428aa2abe05c4ba03",
       "bytes": 128875,
       "duration_ms": 14275,
-      "start_ms": 261375,
+      "start_ms": 262395,
       "source_wav_sha256": "c9e90331fadca52a902989f17af230f4019babb49db817c295e3962f578afee9",
       "text": "\"Gladias would be the person I would normally speak about this with, but he has been very busy in meetings with some [Dzego](/ˈdzɛɡO/) secret government people the past few days, and he's been asleep the past few longhours. So I wanted to talk to you.\""
     },
@@ -420,7 +444,7 @@
       "sha256": "0bfe8fac1e9a1df35fe56bdd5b97488314b559671bb39bb9a934fa0f342125f6",
       "bytes": 112037,
       "duration_ms": 12350,
-      "start_ms": 276100,
+      "start_ms": 277120,
       "source_wav_sha256": "437dbf287d69860308f3dc1279fe1a797a446628f417ee40ef4cf521cf3798e0",
       "text": "\"What do you think I know? Our politicians are clearly bought out, or blackmailed, or apathetic, or some of all of those things. Gladias doesn't talk to me much about the Order, after all he's not supposed to.\""
     },
@@ -432,7 +456,7 @@
       "sha256": "9f217d0e364bd1dcea2f1204806e274d5ab585dcd0165fdf902f8791230035d6",
       "bytes": 138330,
       "duration_ms": 15475,
-      "start_ms": 288900,
+      "start_ms": 289920,
       "source_wav_sha256": "36abebad4ec59324908a0a2880348022506b1d5c97496a38d869b764f22139fe",
       "text": "\"Maybe I'll tell you what I know. I was following Delwart, the mysterious gentleman who has been having meetings with Gladias for the past months. He was not just talking to Gladias, he was talking to various other Keepers, he seemed to have a pretty wide network.\""
     },
@@ -444,7 +468,7 @@
       "sha256": "de6f0bdc7330d2a53824b372bd5bc94669aa4eca24db5de5665229a77b114597",
       "bytes": 120325,
       "duration_ms": 13325,
-      "start_ms": 304825,
+      "start_ms": 305845,
       "source_wav_sha256": "be786085fcae0a0b5bb90b6f657ef7ce1712c1897a26fb8c3bed98f9c21ccfc4",
       "text": "\"At one point, before I lost track of him, I caught him in a meeting with someone from Silverchat. And then Gladias told me that he confronted Delwart, and Delwart admitted that he had been working for Silverchat the whole time.\""
     },
@@ -456,7 +480,7 @@
       "sha256": "efebadb777a68bd506ecc7840b737a2e4c4ac538f490bc6c363f305ab251834b",
       "bytes": 119245,
       "duration_ms": 13225,
-      "start_ms": 318600,
+      "start_ms": 319620,
       "source_wav_sha256": "3bebfd539bbb33e0f3f95862f374d5e6a43c1f02ab8dbaf9e1573507384f3037",
       "text": "\"Silverchat? They're doing some kind of big operation to corrupt the Order? But why? I would have expected Bluewhale to do things like that, but Silverchat were always the good ones! And what does this have to do with the Arctics?\""
     },
@@ -468,7 +492,7 @@
       "sha256": "f3b8fdad371b317d035d82f8d4e5375ffba9cb4bd19ef031eb53dd2208f3e094",
       "bytes": 170526,
       "duration_ms": 19175,
-      "start_ms": 332275,
+      "start_ms": 333295,
       "source_wav_sha256": "4f733d03222def3c4a5678af7b968faf3b55d54f0a693c8ac1d2857ebcbd7a1b",
       "text": "\"I think our society has just gotten really complacent. Everyone is focused on maintaining their happy life, getting some advantage that they can, and people don't value actually maintaining the things that keep Veridia running. Even Silverchat. And what's worse, the Keepers just don't seem to be watching out for this.\""
     },
@@ -480,7 +504,7 @@
       "sha256": "f89c59072cd623580f153ddb2d392937235cfb8ca77509e3bcf91d937b33649f",
       "bytes": 197693,
       "duration_ms": 21950,
-      "start_ms": 351900,
+      "start_ms": 352920,
       "source_wav_sha256": "129af55527d90ed848f5c1a11654d407a80862fbb239fec5b3faab18c7c0121f",
       "text": "\"The Order seems to be performing better than any other part of our institutions. The military has failed completely at setting up defenses for Northshore. From what I can tell, the Keepers have done what they could, the tax rubric even changed to be even more supportive of open-sourcing defense hardware, Gladias told me that much. He was really proud of it, as was I.\""
     },
@@ -492,7 +516,7 @@
       "sha256": "d8330fe6b5d2744f953ce34e9c3525eefa619a3a58ed2c7b686c3ce318524c71",
       "bytes": 95639,
       "duration_ms": 10675,
-      "start_ms": 374300,
+      "start_ms": 375320,
       "source_wav_sha256": "092fd836507946729f87a5f45326ad43866581d047adafd20597554eaa6780bd",
       "text": "\"Indeed, though that was a close call. Whoever split up the Keepers into three groups that could not talk to each other was a genius — otherwise Delwart might have gotten to all of them.\""
     },
@@ -504,7 +528,7 @@
       "sha256": "3ba42338fee546b47a3a1264514fc53d024d39f630d03785929e7c04125fee11",
       "bytes": 55826,
       "duration_ms": 6125,
-      "start_ms": 385425,
+      "start_ms": 386445,
       "source_wav_sha256": "e7c35d1cf90cca28586dfa388d2bfff8362506caa85f4ef289026679d2d22865",
       "text": "\"Something about this doesn't sit right. Silverchat... they just don't seem like the people who would do this.\""
     },
@@ -516,7 +540,7 @@
       "sha256": "4091089dce6d90d78a9a40bf7f3ee94608c6dca8427a0bd9f1a57b483b0af55b",
       "bytes": 155687,
       "duration_ms": 17175,
-      "start_ms": 392000,
+      "start_ms": 393020,
       "source_wav_sha256": "882d61b09fdfb06b2f2bc3702dbefa599cb4697e72eaa07d23ee855872513d63",
       "text": "\"I know you've loved them since you were a child, for the same reasons Gladias did. And I did too. But sometimes ... your heroes turn out not to be heroes. Or maybe Silverchat doesn't care about that particular rubric, and that was just Delwart himself being an extreme peace dove.\""
     },
@@ -528,7 +552,7 @@
       "sha256": "fd683946c54321332d50c78f692a784664e918c90d7606ac8f28f9e1b523e33e",
       "bytes": 45587,
       "duration_ms": 5100,
-      "start_ms": 409625,
+      "start_ms": 410645,
       "source_wav_sha256": "bf23e6f3ccee12698c363faf2c9a289117d7ab49c9258e8296da2c2026325474",
       "text": "\"Do you know any of the other Keepers that Delwart talked to. Can we talk to any of them?\""
     },
@@ -540,7 +564,7 @@
       "sha256": "e8047fa8eee63bd29ebf732a003496617d741c541a5481053724f8c351050023",
       "bytes": 103376,
       "duration_ms": 11225,
-      "start_ms": 415175,
+      "start_ms": 416195,
       "source_wav_sha256": "fd96d129e4348f49bfeb062a5a08cd94b66b7938bb1a5b443d6f8f4f5e21c906",
       "text": "\"I did put trackers on two of them. I could have totally ratted them out to the cryptographic network and gotten a big bounty, but ... I thought it would be better to keep the option to track them more.\""
     },
@@ -552,7 +576,7 @@
       "sha256": "b322b92090b15ed8b950628b2bc3a21fe08e117d0d1f379424f1f2c3eb1eead2",
       "bytes": 16123,
       "duration_ms": 1700,
-      "start_ms": 426850,
+      "start_ms": 427870,
       "source_wav_sha256": "becc1db638ec1b4c2711b5c53eeb0abc0e6485c8dbc0192e30dd3c222383d292",
       "text": "\"Can we talk to them?\""
     },
@@ -564,7 +588,7 @@
       "sha256": "9cb63ae65e96baea76028ac4583701d1e2213cdb9aacd76a8ed18fbc18ac5663",
       "bytes": 14453,
       "duration_ms": 1625,
-      "start_ms": 429000,
+      "start_ms": 430020,
       "source_wav_sha256": "52952ecc940ae0a76e90966a322b5808195ed5cbc8b79d87a5fc72db8728ca6e",
       "text": "\"I suppose.\""
     },
@@ -576,7 +600,7 @@
       "sha256": "bd6218ba705446b99344eaf7e77f659eca582406ab2784c05cdb5b93501d3ea6",
       "bytes": 22972,
       "duration_ms": 2700,
-      "start_ms": 431075,
+      "start_ms": 432095,
       "source_wav_sha256": "0272ba9517eb8fd5530d70d01a5fb199edbdb9abfe61af56df41af20cbc94445",
       "text": "\"Let's go visit them. Like, right now.\""
     },
@@ -588,7 +612,7 @@
       "sha256": "85b1c0f454b897f66beb778b8b01c743fb9f291eb2f7a9e801eb7f1dee9193c5",
       "bytes": 42056,
       "duration_ms": 4500,
-      "start_ms": 434225,
+      "start_ms": 435245,
       "source_wav_sha256": "a3f1167fc789a657275775c043b8ca56cec21b199cd407c98819255884f0c6c1",
       "text": "\"You don't want to focus on seeing what you can do for Febric and Hreda today?\""
     },
@@ -600,7 +624,7 @@
       "sha256": "0fc2e475e7bbfcb18c5e81cefbcf7d3f92e0714391851e6b284aef921fdd9be0",
       "bytes": 232960,
       "duration_ms": 25900,
-      "start_ms": 439175,
+      "start_ms": 440195,
       "source_wav_sha256": "f5d3ba2e7f653937fdfbe32031d9b390e7e733c7f0735ad9b0b4d25e44c58141",
       "text": "\"I may be a worried mom — or, well, aunt — but I know there's not much I can do. I had a call with them already, they're sitting tight, I'm sitting tight, I don't think we and they are any better at pulling off some kind of grand escape from Northglade than any of the hundred people trying to fly in to the Greater Plum Harbor who got shot down. So, sit and tight is the plan, nothing more to do today. But figuring out what on earth is going on with the Order, that's something I can do today.\""
     },
@@ -612,7 +636,7 @@
       "sha256": "4aadf42f6aad2285bccbe48eaafec17b4991a97d010f334c81162042472807ee",
       "bytes": 14071,
       "duration_ms": 1550,
-      "start_ms": 465525,
+      "start_ms": 466545,
       "source_wav_sha256": "a7f4cba68b3c10edd346ca0263cb1cc167c3971eb3921fe9da6f5ce53a51ed5a",
       "text": "She sighed."
     },
@@ -624,7 +648,7 @@
       "sha256": "b86c8a6f44cfdc40f97e606dab56c199ed1432efa2de825892e136f7ff363cae",
       "bytes": 44644,
       "duration_ms": 5025,
-      "start_ms": 467525,
+      "start_ms": 468545,
       "source_wav_sha256": "9f7421e984378087061d67f156668cbd1285f289f3f7657df670dd5e574adf32",
       "text": "\"I guess I feel like I have to be doing something, and this is something that I can do.\""
     },
@@ -636,7 +660,7 @@
       "sha256": "b8b5283f4b7be88d45201da740d7240139078de78b3472a3a5144d53c35b4fb7",
       "bytes": 14593,
       "duration_ms": 1650,
-      "start_ms": 473000,
+      "start_ms": 474020,
       "source_wav_sha256": "60273fcec90f601f605342fc20deca5ec26778c8b309837c8a28cd52737a5a17",
       "text": "Mov nodded."
     },
@@ -648,7 +672,7 @@
       "sha256": "04d971eda45846a1bbcc01b5a29e8559712c984fec9898998e91acf66f76a166",
       "bytes": 85952,
       "duration_ms": 9525,
-      "start_ms": 475100,
+      "start_ms": 476120,
       "source_wav_sha256": "96c9463fb0223e758cf070ed713273e05dfde26e8ac36b221d5e0c5b3831c9f3",
       "text": "\"Just don't take a copter. You might think it's faster and this time the crazy high noise taxes are worth it, but you would just be inviting attention to yourself.\""
     },
@@ -660,7 +684,7 @@
       "sha256": "88667f02fd001076ee2fc86ef603b33a9f37434f7c04fafc7d53d1edde177b8b",
       "bytes": 23612,
       "duration_ms": 2600,
-      "start_ms": 485075,
+      "start_ms": 486095,
       "source_wav_sha256": "97a13feb43691a92a15d16aa7fddeeb7e924b27e2c28489e0149eac8a47d7b31",
       "text": "\"Don't worry, I wasn't planning to.\""
     },
@@ -672,7 +696,7 @@
       "sha256": "91a8805cbfc551c9aa794d9ae9522405817516af360228a2f035f624b860d29c",
       "bytes": 187475,
       "duration_ms": 21175,
-      "start_ms": 488125,
+      "start_ms": 489145,
       "source_wav_sha256": "e07ddf12a4993f65ee1801f83995015ec50248549b8909c09e7c70cd9fa8fa93",
       "text": "A taxi arrived. Seila put on one of Gladias's privacy robes. She and Mov, who was already wearing his privacy robe, rushed toward the taxi. Seila reached the door first, and she tapped her watch against a green circle beside the taxi door, simultaneously opening the door and cryptographically approving the payment. They got in the taxi."
     },
@@ -684,7 +708,7 @@
       "sha256": "b9bfa2ec63eb18d5902348a1ae81ead57bd0976c4a759f8a5d4de6f118ec39cc",
       "bytes": 68483,
       "duration_ms": 7700,
-      "start_ms": 509750,
+      "start_ms": 510770,
       "source_wav_sha256": "e0825de5f47b72794939f066d61443c3305f49b5e8bccef1dc9cb01a0a038159",
       "text": "The taxi began moving, headed to a location a short autobus ride away from the home of one of the other Keepers."
     },
@@ -696,7 +720,7 @@
       "sha256": "3b004913b252bee79eff3f3555385181b39bfb4690c1f34c61183fa8556016b3",
       "bytes": 196270,
       "duration_ms": 21825,
-      "start_ms": 519700,
+      "start_ms": 520720,
       "source_wav_sha256": "782c85c48642882df726b81ad4cd5ce9f9d33acff08a1dfeabab1501fe016d66",
       "text": "Twenty minutes later, they arrived at an apartment building. It was a new construction. The outer wall was wrapped with some kind of imitation stone material. On the ground floor, they could see restaurants and shops selling various kinds of goods. On the higher floors, from the outside all they could see were regularly-spaced but well-decorated windows of people's apartments."
     },
@@ -708,7 +732,7 @@
       "sha256": "562f7f42f6d440df7d59af4798f4212512e48ea07c951ed46169d6894a349814",
       "bytes": 92604,
       "duration_ms": 10450,
-      "start_ms": 541975,
+      "start_ms": 542995,
       "source_wav_sha256": "8f1303c6c9e5b8e2ccf9d3218d3184937b866d99b1608f7db1093cf21e7e8617",
       "text": "They saw another man walking towards the door, about to enter. They immediately slowed down their walk so that they would appear to naturally reach the door right after the man."
     },
@@ -720,7 +744,7 @@
       "sha256": "a19206dc56244b5a5ff73a377e49bde95b4955b85bed7e5fbdc4c19d6b1cd184",
       "bytes": 91626,
       "duration_ms": 10200,
-      "start_ms": 552875,
+      "start_ms": 553895,
       "source_wav_sha256": "099c3fcda64fc0c9a73dbe5949c9d826f5656760f7c7a93bc8851abdedcfe290",
       "text": "The man walked to the door, put his watch against the green circle beside the door, and the door opened. He walked through. Before the door closed, Seila and Mov walked in too."
     },
@@ -732,7 +756,7 @@
       "sha256": "538687ce3d2fb614050287574f7f0e58d27d5c3b6b0c3d0845cc53d590fb5ea7",
       "bytes": 42539,
       "duration_ms": 4975,
-      "start_ms": 563525,
+      "start_ms": 564545,
       "source_wav_sha256": "2dc8aece410ec2fae2fbc001c5a74490d67ded3340e788cfac95f41ab85c1349",
       "text": "\"He's in room 515\", Mov said. \"Let's just go up the stairs.\""
     },
@@ -744,7 +768,7 @@
       "sha256": "fbedabb26c34345f39fcf89779eaa862b867464c94048faece215cb3e7688a9c",
       "bytes": 14727,
       "duration_ms": 1600,
-      "start_ms": 568950,
+      "start_ms": 569970,
       "source_wav_sha256": "1e75d51a7196387294590e0902051abadfc2bf963dbd6c753b9b28fb36a38077",
       "text": "\"How do you know that?\""
     },
@@ -756,7 +780,7 @@
       "sha256": "8e1b8820d3d876e4bba8225dadfefee278908b52503e966072f18726bdb9ebe5",
       "bytes": 17676,
       "duration_ms": 2050,
-      "start_ms": 571000,
+      "start_ms": 572020,
       "source_wav_sha256": "9d05ae4d590cb43aad87017e0e8eac5ff461cb47cd5af3e4248b468f0cbe5608",
       "text": "\"The tracker I put on him.\""
     },
@@ -768,7 +792,7 @@
       "sha256": "1f2767a52a07629e0b40eb5e8ea5d97906cc21b06654d0bcf10c578b2d90f0c1",
       "bytes": 54280,
       "duration_ms": 5950,
-      "start_ms": 573500,
+      "start_ms": 574520,
       "source_wav_sha256": "ce53a24b8342befb2914eda4091c904047aac7a9162e94105a1434b168a559df",
       "text": "They walked up the stairs, and eventually got to the door of room 515. They knocked."
     },
@@ -780,7 +804,7 @@
       "sha256": "74448ec9ffd4d7549f9eaba866ad5345b1f188e87e33fe4025d8f2ff91b4156f",
       "bytes": 166883,
       "duration_ms": 18475,
-      "start_ms": 579900,
+      "start_ms": 580920,
       "source_wav_sha256": "e6e6cfc4d9e9341f77d00ec8cedcb07644db0bd6efda0df4f9852091aab58989",
       "text": "On the inside, they heard footsteps. Mov removed the hood on his privacy robe, a gesture to appear less threatening. He was not supposed to know this man, so he had no way to prove that he was someone to talk to — except perhaps for burning a hundred zipcoins at his doorstep. Seila removed her hood too."
     },
@@ -792,7 +816,7 @@
       "sha256": "d7cfe229500d9934f2f144fa5251e98b9b825725e95a9ba9bf4095d4b525cdd0",
       "bytes": 21588,
       "duration_ms": 2300,
-      "start_ms": 598825,
+      "start_ms": 599845,
       "source_wav_sha256": "e739c9a3e31fd763c025cadb026326e836c4f52f45351db039c66fd8d1637118",
       "text": "The man simply opened the door."
     },
@@ -804,7 +828,7 @@
       "sha256": "c93511796d2f5d065bd649b2141dd61c52ed6c78b043decdec0bd62f2eeb7a48",
       "bytes": 12121,
       "duration_ms": 1400,
-      "start_ms": 601575,
+      "start_ms": 602595,
       "source_wav_sha256": "702552ee61c24a646a3dfa25802245f2d701f82dda363d1604c43682c66338d9",
       "text": "\"Hello?\""
     },
@@ -816,7 +840,7 @@
       "sha256": "4c941078b6439496da5353942f46538f053d894dacef3dbca793fa094debae6c",
       "bytes": 51507,
       "duration_ms": 5650,
-      "start_ms": 603425,
+      "start_ms": 604445,
       "source_wav_sha256": "a061a6cddfa8a336b29bc5eec2d7ccab9bb72ffe8bc747c065cccaa67445790f",
       "text": "\"Hi, I'm Seila. I know this is awkward, but we wanted to talk about the Order and Delwart.\""
     },
@@ -828,7 +852,7 @@
       "sha256": "09a54862fad7ae8e0c1b99b7791d322bbbcada1ad56f8e11c30368281c14f328",
       "bytes": 19275,
       "duration_ms": 2225,
-      "start_ms": 609525,
+      "start_ms": 610545,
       "source_wav_sha256": "079a475ec9aa95e0790a92be077188a519ed86b38a5467bb245a08893d8d1d60",
       "text": "The man's eyes opened wide."
     },
@@ -840,7 +864,7 @@
       "sha256": "0f962e5e5535310de86565f203e044b271a9961afbde3af3a5c7e54ed8a401c4",
       "bytes": 17870,
       "duration_ms": 2000,
-      "start_ms": 612200,
+      "start_ms": 613220,
       "source_wav_sha256": "19d0b8996a9dafd0415f5b44808ee52df19bcfd626edd505a78798fc4f1894f9",
       "text": "\"Nice to meet you Seila.\""
     },
@@ -852,7 +876,7 @@
       "sha256": "0241a8726555f5a4a52347780836cbdee657c404a40fbfcd4c93f0724b719378",
       "bytes": 13734,
       "duration_ms": 1600,
-      "start_ms": 614650,
+      "start_ms": 615670,
       "source_wav_sha256": "7018b2ee8ef317e333d18cd67557009d9571395c7481f5a8c802be06a5cbda83",
       "text": "\"And I'm Mov.\""
     },
@@ -864,7 +888,7 @@
       "sha256": "893d08577b5ec77cadb6ff6b43e518b5690082fc80cfcf8787f5c04e3eded3bf",
       "bytes": 55758,
       "duration_ms": 6300,
-      "start_ms": 616700,
+      "start_ms": 617720,
       "source_wav_sha256": "000b307ccb95b5ddbc2e4871e33e7bd18277b6d15e7b41a7be91572d417033b3",
       "text": "\"I'm Telroy. Though ... if you know I'm in the Order and you know about Delwart, maybe you already know that too.\""
     },
@@ -876,7 +900,7 @@
       "sha256": "5f72aa8be0546a6ab62b78f5c8bf6b601bcb221d82e9109ac453898303c659ed",
       "bytes": 155288,
       "duration_ms": 17150,
-      "start_ms": 623450,
+      "start_ms": 624470,
       "source_wav_sha256": "586e144b14a449f3e5ecd0f6c3383afd90bb7b56737c550f083e14965525ce47",
       "text": "At that moment, Mov realized that in a certain sense, he already had burned much more than a hundred zipcoins at Telroy's doorstep — by clearly having enough information to claim a large bounty by ratting out his role to the Order's cryptographic network, and choosing not to do that."
     },
@@ -888,7 +912,7 @@
       "sha256": "ba2f8945b95efe12ab76a1e0394aa56a2f53086fb41c33301281f3de4fa4b605",
       "bytes": 68092,
       "duration_ms": 7675,
-      "start_ms": 641050,
+      "start_ms": 642070,
       "source_wav_sha256": "a0e1618de7dd3e113d7e40f4a6308c6b77994f1103ac22ee984e3d4a2f64b4d4",
       "text": "Mov and Seila walked in. Telroy directed them to sit down on the couch, and he began preparing tea for the three of them."
     },
@@ -900,7 +924,7 @@
       "sha256": "dc709ed68349f63994599243f70c68066dab5324632bf07a75684e1a9ff35d2d",
       "bytes": 22853,
       "duration_ms": 2550,
-      "start_ms": 649175,
+      "start_ms": 650195,
       "source_wav_sha256": "3f1ce2d9ac9d04746c8f992185266144390565152c1818ad4a6f900fac5cf329",
       "text": "\"So what do you know about me and Delwart?\""
     },
@@ -912,7 +936,7 @@
       "sha256": "66ebef6b25f1dd8e0a1eb6dcc39ca663f05c0d4dc4b0ba4c6d7db27d6cc8d2c2",
       "bytes": 136147,
       "duration_ms": 15075,
-      "start_ms": 652175,
+      "start_ms": 653195,
       "source_wav_sha256": "421d30ada296506f59f2de075f61833b7cb56d50bc77a1685543d1eafe28cd1f",
       "text": "\"You're a Keeper, you're in the rubric group on cybersecurity. One of the rubrics being debated has to do with data retention in environmental sensors. You met Delwart at least once, though I was not able to hear the content of your conversation.\""
     },
@@ -924,7 +948,7 @@
       "sha256": "42b2f1fe7cec7ebfca456af4f3627cd13677a6a02ef21a9dbbb83b9fd6f31a1a",
       "bytes": 209460,
       "duration_ms": 23750,
-      "start_ms": 667700,
+      "start_ms": 668720,
       "source_wav_sha256": "fe371a0f47864f064543ebb189679087d5aafee35233e383abe7409b8ab3d5ba",
       "text": "\"Okay, you do know a lot. Delwart has been insistent during our conversations that the recent push for trying to minimize data collection did not actually make sense, it was some kind of paranoid threat against an enemy that was not really present — though maybe now, he will have changed his tune. He argued to me that the more important information threat is protecting against insider trading.\""
     },
@@ -936,7 +960,7 @@
       "sha256": "dbc8801de7195054b1773848807b656961b6879efe279f80767e20e04ad11861",
       "bytes": 193932,
       "duration_ms": 21625,
-      "start_ms": 691900,
+      "start_ms": 692920,
       "source_wav_sha256": "ff15407f4f6a25a737dac8f9b17487fa469f703c0e4e0bd173985c660a9b9af9",
       "text": "\"He also said that the local environmental and public safety agencies need broad access to be able to adapt to changing circumstances quickly without asking for permission every time — and that the main privacy defense we really need is delaying their access to non-disease-related data by five or ten days so that they can't trade with it.\""
     },
@@ -948,7 +972,7 @@
       "sha256": "f276a2f100182587846c99d9df3d271bb7d65bb005b07ab3cbbc12cac4bbb8df",
       "bytes": 39845,
       "duration_ms": 4350,
-      "start_ms": 713975,
+      "start_ms": 714995,
       "source_wav_sha256": "56df688c4ac1f20165c0951fef35ad68513b4f544de0b391a462ffa282e644b8",
       "text": "\"That ... does not sound at all like the Delwart that Gladias told me about.\""
     },
@@ -960,7 +984,7 @@
       "sha256": "7b9b6064fb3d819bb86d7df9b6d8080fc7598898d0dcd065dd7e9ae255edb719",
       "bytes": 17179,
       "duration_ms": 1950,
-      "start_ms": 718775,
+      "start_ms": 719795,
       "source_wav_sha256": "4e5c56bf7d018cee3bd019636baa94d43fc918c88ce274840ea260faf5061c10",
       "text": "\"Did he say anything else?\""
     },
@@ -972,7 +996,7 @@
       "sha256": "41a2b993b37ce38e1a2a7df33bf009a112bebd0ba2a760ea992a4eb7b3362071",
       "bytes": 138469,
       "duration_ms": 15500,
-      "start_ms": 721175,
+      "start_ms": 722195,
       "source_wav_sha256": "cbd59990cb3ab4e00e00072fbffccf2cfd02094f18780baa0a6a3876e77cf089",
       "text": "\"He was generally anti-war, as I mentioned — that's how he described himself. Otherwise not too much — his main opinion was that he thought people were getting overcomplicated trying to throw in all the cryptography, and we should just trust people more.\""
     },
@@ -984,7 +1008,7 @@
       "sha256": "36376a9577b867b03eb1def438100a64e9c40dabac23d9c8b5711efbfcf1959b",
       "bytes": 33015,
       "duration_ms": 3700,
-      "start_ms": 737125,
+      "start_ms": 738145,
       "source_wav_sha256": "7307c4f541cbcc0002d17fda551557aafa063d7f52023aad023f7112fb14a53a",
       "text": "\"Okay, now I'm curious — what is the Delwart you know?\""
     },
@@ -996,7 +1020,7 @@
       "sha256": "f4ac29db823c759023194e10162f622e12d67c0349a11a8a4d7f5511cca1a4f0",
       "bytes": 127235,
       "duration_ms": 14200,
-      "start_ms": 741275,
+      "start_ms": 742295,
       "source_wav_sha256": "aa5dfa30d29b97390a63acdd3278eeb9156cdf8cd4f78013289707d59fca748d",
       "text": "\"He was anti-war. He valued people's freedom to live their own lives, he wanted the Order to do much less — even the tax nudges were too much for him. In particular, though, he was really against this change to a tax rubric -\""
     },
@@ -1008,7 +1032,7 @@
       "sha256": "e40e3570b308c1792373c6eec32e4151045b725ae40319e3617b988c6eb7058b",
       "bytes": 136205,
       "duration_ms": 15300,
-      "start_ms": 755925,
+      "start_ms": 756945,
       "source_wav_sha256": "9ac53eebb5cdb9e6895ac3e2fb32f4e7e01e277efaf3e620ed42f7df47822ee7",
       "text": "Mov paused. He realized that Seila had already volunteered Gladias's name, and if he continued, he might be giving Telroy information through which Telroy might be able to figure out Gladias's rubric, and collect the bounty by ratting him out."
     },
@@ -1020,7 +1044,7 @@
       "sha256": "63553b93c580448d344b60233da7f54a88969894827e88f09b69b0982faca759",
       "bytes": 68560,
       "duration_ms": 7625,
-      "start_ms": 771675,
+      "start_ms": 772695,
       "source_wav_sha256": "dc7d5b21a3b2be65c9b327b6eff45b9d555bf1c827050c3f1c4a0dd956765dfb",
       "text": "But then he thought — Telroy was trusting him and Seila, the least they could do was reciprocate back with some trust of their own."
     },
@@ -1032,7 +1056,7 @@
       "sha256": "d4180784eca9c67b9f0ce563db88cf004736acee2cc3069265e650170b77d2fb",
       "bytes": 123823,
       "duration_ms": 13675,
-      "start_ms": 779750,
+      "start_ms": 780770,
       "source_wav_sha256": "fdce3b531a419707fc3bd51bea6bd646d124d5e3b3e49fca3b51843e892b0334",
       "text": "\"The rubric for open source hardware. He believed that anything military-relevant should be exempt from tax breaks, because military is a zero-sum game, we're not doing anything good for the world by participating in that.\""
     },
@@ -1044,7 +1068,7 @@
       "sha256": "3626bddebed8acecef8519a84d428fcc7dc8a91752cde195941a388b5fac7103",
       "bytes": 35716,
       "duration_ms": 3825,
-      "start_ms": 793875,
+      "start_ms": 794895,
       "source_wav_sha256": "4b1a1d100c161ca1c173a724554b1d89ff2308e3c6f883b22f9d132feba38204",
       "text": "Telroy nodded. \"I guess he really is anti-war then.\""
     },
@@ -1056,7 +1080,7 @@
       "sha256": "22b0a41b10ae16a938262d163a6a622d12049139d852ea58e863bccc9a6ff342",
       "bytes": 79630,
       "duration_ms": 9000,
-      "start_ms": 798150,
+      "start_ms": 799170,
       "source_wav_sha256": "a52a9a5db3a73c28680fc20eb901fc84e89e24c40e7e2166883df814b9b2c132",
       "text": "\"But then I followed him around more, and Gladias confronted him after Redshire was invaded, and ... it turns out he has been working for Silverchat.\""
     },
@@ -1068,7 +1092,7 @@
       "sha256": "573dbe2df4f9c9af1421bd2d6249fd55dbf0f84f72c5c1de9ccb71aabbe77d30",
       "bytes": 27646,
       "duration_ms": 3125,
-      "start_ms": 807600,
+      "start_ms": 808620,
       "source_wav_sha256": "bf80d5e820d58997225dee9ad4a55e9b0826e862e298c6f0d81d6b1895e460a7",
       "text": "Telroy stared in surprise. \"Silverchat?\""
     },
@@ -1080,7 +1104,7 @@
       "sha256": "b0aa60ecb74e7117e9d299ca9af1f3f4f6059fbf263b7d3c65d6cdc8bdf3cea9",
       "bytes": 19229,
       "duration_ms": 2125,
-      "start_ms": 811175,
+      "start_ms": 812195,
       "source_wav_sha256": "d0c5f192f0389f288005fd8e824912a15d1e934e0dab9c53fb90eb8c97a84dda",
       "text": "\"That is ... surprising.\""
     },
@@ -1092,7 +1116,7 @@
       "sha256": "8f7a5630e727db1a7de3541307a51a3a7727cf15b47a71a180222e6a462e4f09",
       "bytes": 239254,
       "duration_ms": 26875,
-      "start_ms": 815550,
+      "start_ms": 816570,
       "source_wav_sha256": "e158bc3928d0d328196cc21a652728180d24f9757daea63ea2721b967bc9746e",
       "text": "Seila and Mov got out of the taxi, and walked along the forested path through Kalimar. A gentle cool breeze blew against their backs, subconsciously driving them to walk faster. A few hundred meters later, they walked off the path and turned right. Thirty meters after that, they saw a stone house that was mostly underground, with the above-ground part sticking up only a meter above ground. The whole structure was barely visible from beyond a few meters away."
     },
@@ -1104,7 +1128,7 @@
       "sha256": "8e9cff0bf08f89e3e213648d5cb67298cfadddbecd9ce454950b8e2e7565ecf1",
       "bytes": 102805,
       "duration_ms": 11675,
-      "start_ms": 842875,
+      "start_ms": 843895,
       "source_wav_sha256": "986dfedfa89c8411a6812fc2ef7a977a685c4ed24f449b42d4492ba77d598696",
       "text": "That was one way to score high on aesthetics, public access and emergency shelter functionality at the same time, she thought. That house was probably paying close to no land taxes."
     },
@@ -1116,7 +1140,7 @@
       "sha256": "60f8c0b15ca7cc0c83ee3b0310ce3967a4ad00b8b583165c28782d5d5fc0d598",
       "bytes": 59706,
       "duration_ms": 6600,
-      "start_ms": 855000,
+      "start_ms": 856020,
       "source_wav_sha256": "6d088e4a05416490e7756be340630f133ca335312c797d56d8cbf5ddbaead267",
       "text": "Seila and Mov walked down a staircase, and knocked on the door. They took off the hoods of their privacy robes."
     },
@@ -1128,7 +1152,7 @@
       "sha256": "6ecc16278a6148ceb1936039a295fc7972dccce2e2f702430c9599efd97ecd1b",
       "bytes": 16483,
       "duration_ms": 1775,
-      "start_ms": 862050,
+      "start_ms": 863070,
       "source_wav_sha256": "e8c770c77d0efb6d66fa6e9ec70eba5253441920302e00a013868e13884e20d1",
       "text": "They heard footsteps."
     },
@@ -1140,7 +1164,7 @@
       "sha256": "ee2354b020723d1a067009013f86679599409daba78621a26cee97be4396042f",
       "bytes": 25511,
       "duration_ms": 2975,
-      "start_ms": 864275,
+      "start_ms": 865295,
       "source_wav_sha256": "49133c30c6120a46df8fd2e327bb1bce288952c9e6f271ec78a02d787aba26b5",
       "text": "\"Who is this?\", they heard a female voice ask."
     },
@@ -1152,7 +1176,7 @@
       "sha256": "cea0bc8f792900d2d71a8d31ee5590a42835b7f521d9056cfdebdbd47efde033",
       "bytes": 60991,
       "duration_ms": 6725,
-      "start_ms": 867700,
+      "start_ms": 868720,
       "source_wav_sha256": "0b80d9f73f79d4c8cb3e4f5ebef9ed80ac697c7b0931fa24ab7780a22c9abc28",
       "text": "Seila quietly stepped on Mov's toe, urging him to stay silent. Mov picked up the cue, and stepped back."
     },
@@ -1164,7 +1188,7 @@
       "sha256": "f70210c7e54f486030cf3d0bbf7d0d1145173743bc3980c6004f5bf552e78ca6",
       "bytes": 51103,
       "duration_ms": 5650,
-      "start_ms": 874875,
+      "start_ms": 875895,
       "source_wav_sha256": "180711a7408acb8abf660be78153e92e22e61d5c84127eaf3110bbfd86be8a20",
       "text": "\"Hi, I'm Seila. I know this is awkward, but we wanted to talk about the Order and Delwart.\""
     },
@@ -1176,7 +1200,7 @@
       "sha256": "4f0474ac4463c9194b12b81ca00cea4a02e32f23b67085be399954a1803b3f20",
       "bytes": 19441,
       "duration_ms": 2150,
-      "start_ms": 880975,
+      "start_ms": 881995,
       "source_wav_sha256": "2c3973780e59f4d8d7b6c08e7862ac46b03c2685824ebf3ca038bbc184bd1f02",
       "text": "The door immediately opened."
     },
@@ -1188,7 +1212,7 @@
       "sha256": "af0a5622f9b4c1b8f125567e056dbf62790d79772633eceb5f8a6a22339a0d82",
       "bytes": 20976,
       "duration_ms": 2400,
-      "start_ms": 883575,
+      "start_ms": 884595,
       "source_wav_sha256": "113c2ef7be9675282ef9f2bc37e824e79b9bd28ad41ec8a871d8033a73113a66",
       "text": "\"Hi, I'm [Balme](/bˈɑlm/). Please, come in.\""
     },
@@ -1200,7 +1224,7 @@
       "sha256": "b7f2eef9244479b75b5aacbe98caff8ef334031f7704cc01ab1d16bc4cb88c28",
       "bytes": 27160,
       "duration_ms": 3075,
-      "start_ms": 886425,
+      "start_ms": 887445,
       "source_wav_sha256": "96a95b8dccd7f6c37a6a399d9ef55e8682be637eed5c0360a21d0246805f7774",
       "text": "\"Is it okay if my friend Mov comes in too?\""
     },
@@ -1212,7 +1236,7 @@
       "sha256": "21f5ba4cfaf373bad5b47865ceeb1d667e66c2b7f7859f81ef998135cd18590d",
       "bytes": 132191,
       "duration_ms": 14625,
-      "start_ms": 889950,
+      "start_ms": 890970,
       "source_wav_sha256": "2dea79ac1007d24434555baf397e8a0248795d2caae76602764f48490ba046ce",
       "text": "Seila felt slight discomfort from [Balme](/bˈɑlm/) — the interaction was now two on one, and Mov had a larger and more imposing physique — but at that point she had already opened the door, and it would have been very awkward at best to shut it on them."
     },
@@ -1224,7 +1248,7 @@
       "sha256": "a60077c0a934358d436aff4c5ffe1107813b49590da60592a1e18b01cf1f85e2",
       "bytes": 18883,
       "duration_ms": 2250,
-      "start_ms": 905025,
+      "start_ms": 906045,
       "source_wav_sha256": "850622c3035007aadb11e166df31489fa04d2dc48623486df678a224768ff5e7",
       "text": "\"Sure\", she replied softly."
     },
@@ -1236,7 +1260,7 @@
       "sha256": "52c69f9d7e473e9308d0bf3f247dad2a9a9cae5419e93c6c7dcb61128fa6bf3a",
       "bytes": 21496,
       "duration_ms": 2300,
-      "start_ms": 907725,
+      "start_ms": 908745,
       "source_wav_sha256": "ebea44cce77d06922c723570c360de0d9316e58f007fc6f481dc7df484da3f12",
       "text": "Seila and Mov both entered."
     },
@@ -1248,7 +1272,7 @@
       "sha256": "cca7780dae64eb363c8aacb64242a183e07833b9ec17797a1e77b55735893e10",
       "bytes": 96063,
       "duration_ms": 10725,
-      "start_ms": 910475,
+      "start_ms": 911495,
       "source_wav_sha256": "274ca467da5b24a6d2e833470e9b4160bf6f8e6f570d6b32dcb309aee2f41a71",
       "text": "\"I apologize for intruding so rudely, and for spying on you to know where to come. But I hope you'll forgive me; our country is in a pretty dire situation as you can tell.\""
     },
@@ -1260,7 +1284,7 @@
       "sha256": "75f55ab845fa6e41e843ebce3ed014c3e1b83d6a22d93511250c9d4024f1dcaa",
       "bytes": 13726,
       "duration_ms": 1600,
-      "start_ms": 921650,
+      "start_ms": 922670,
       "source_wav_sha256": "119cf6701ccd441bed3f147655b264fa7c60e1207379e014f4110cc3495bd15c",
       "text": "[Balme](/bˈɑlm/) nodded."
     },
@@ -1272,7 +1296,7 @@
       "sha256": "9d78318e5e55f58d40f45a6cf353737a17dda3b533f355d591569554f119a75c",
       "bytes": 17504,
       "duration_ms": 2000,
-      "start_ms": 923700,
+      "start_ms": 924720,
       "source_wav_sha256": "d2d11be914b6df7d0becddd6993f0be100b888b3496e35d890ffc487dd2aafbd",
       "text": "\"What do you know about Delwart?\""
     },
@@ -1284,7 +1308,7 @@
       "sha256": "5260ba26fe6c9d211bdfa62e390f5b5cd490fd58e927664be3e6405a956dc962",
       "bytes": 326480,
       "duration_ms": 36675,
-      "start_ms": 926150,
+      "start_ms": 927170,
       "source_wav_sha256": "12560b55321629fbdbf8a6150b2164c4132b7056fe732a847e4ea6f1d243ea14",
       "text": "\"I met him a few times. The first time we talked was when he sent me an anonymous message about a longhour after a Keeper meeting. Somehow he had been able to track me down. I'm in a rubric group for private schools. He talked a lot about his own views about education, and how he thought we should not be putting our thumbs on the scale, using the tax rubrics to encourage what he considered biased civics education talking about how beautiful Veridia is and encouraging the students to cherish and love it — he thought that schools should just teach people knowledge, and they should learn to love Veridia by seeing how great it is on their own.\""
     },
@@ -1296,7 +1320,7 @@
       "sha256": "59b4009719c4526d90517e542c5eb6af76972d3d60644a0a3a8ed1ed0b4960a4",
       "bytes": 20952,
       "duration_ms": 2250,
-      "start_ms": 963275,
+      "start_ms": 964295,
       "source_wav_sha256": "b318548d320f46b18284686124e7d280403d264f021d9a5cc79ccbb199cad587",
       "text": "\"Did he have any other perspectives?\""
     },
@@ -1308,7 +1332,7 @@
       "sha256": "8fcf26839768806b69eaaf7bc93511a72aff6bdaa85510220db33395c2dbbed0",
       "bytes": 125231,
       "duration_ms": 13750,
-      "start_ms": 965975,
+      "start_ms": 966995,
       "source_wav_sha256": "29de56ccf2245feb6af5619c47585da2f0712a587d61f3c9b01808c69d377757",
       "text": "\"He seemed generally pro-freedom, he believed that people should be left to evolve on their own, generally things work out best when they happen spontaneously and naturally, the Order should not be putting its thumb on the scale so much.\""
     },
@@ -1320,7 +1344,7 @@
       "sha256": "c27c386a14f486a956e26efb97773d4e070ea8614bfd66abb9438b79c7377054",
       "bytes": 25274,
       "duration_ms": 2725,
-      "start_ms": 980175,
+      "start_ms": 981195,
       "source_wav_sha256": "16c2b3b75a9b43e29b52fa5c6b8c13b020e2786b3ab36da57ce51156d7676eab",
       "text": "\"Anything about international politics?\""
     },
@@ -1332,7 +1356,7 @@
       "sha256": "16c0d8b98bc8013bc72ecd3e6dddd8fd28ad4bd00e5d6a87af5c8e4687b43d45",
       "bytes": 35780,
       "duration_ms": 3900,
-      "start_ms": 983350,
+      "start_ms": 984370,
       "source_wav_sha256": "7e1713b7da8138936065af1946cd99412e559712b4483dc8965211a9d0fb50c5",
       "text": "\"Not really, he never brought that up. He seemed not to care.\""
     },
@@ -1344,7 +1368,7 @@
       "sha256": "bd648daf5ea19d0a5ae95b49f7baf3ea95a038f9de001bd57d49e77f8dbdbd19",
       "bytes": 75976,
       "duration_ms": 8300,
-      "start_ms": 987700,
+      "start_ms": 988720,
       "source_wav_sha256": "ae407816f420b19e28c2c91c8d995630605905d84966f363b93adbc40a011b72",
       "text": "\"He did once ask me what I thought about Dreadknot. I responded that I did not like them much. He didn't answer, and changed the subject.\""
     },
@@ -1356,7 +1380,7 @@
       "sha256": "f57d516a6f89be5d5aae9c83bf24c245f0c9fdb1153c35fe89baef083523094d",
       "bytes": 14289,
       "duration_ms": 1650,
-      "start_ms": 996450,
+      "start_ms": 997470,
       "source_wav_sha256": "438fce34c0d6693f75f2b4f1cb9babdffc609595df37040dd4f69fa75f6cd627",
       "text": "Seila nodded."
     },
@@ -1368,7 +1392,7 @@
       "sha256": "9e5cce97266dc29cde73dfb9048a6599ec7549a9881e0477b554eee867790e95",
       "bytes": 178617,
       "duration_ms": 20125,
-      "start_ms": 998550,
+      "start_ms": 999570,
       "source_wav_sha256": "72ee1a6160ce38b0d94747c8c6c5ae060ec9dd8f586b24718632b2ad15c2539b",
       "text": "\"The Delwart that I know is also concerned about freedom, also thinks the Order should do much less. But... he also does have strong opinions on international politics. He basically thinks anything military is a zero-sum game, you can't know what will lead to a good or bad outcome, and Veridia should stay out entirely.\""
     },
@@ -1380,7 +1404,7 @@
       "sha256": "b890833aa1009c63add43cb1c92c3220167364499d3a0fb83048a211397da23e",
       "bytes": 143337,
       "duration_ms": 15925,
-      "start_ms": 1019125,
+      "start_ms": 1020145,
       "source_wav_sha256": "4d29580620b05647c8820b33080479891df6dbe0941a3ed6746c14733fa100ee",
       "text": "\"Although ... he's apparently more mixed on the freedom thing. He seems okay with the public security agencies collecting more information, and not using cryptography to try to limit the data collection and get guarantees about what purpose the data is being used for.\""
     },
@@ -1392,7 +1416,7 @@
       "sha256": "4617cedf0753ecf4adb9fdc4ddffe76354ea74cab6126f2ffe984b5680c61005",
       "bytes": 25707,
       "duration_ms": 2800,
-      "start_ms": 1035500,
+      "start_ms": 1036520,
       "source_wav_sha256": "a9d78b472de486e3e418914220bfa9814830e4bcc6b99214616270158b9e3c4c",
       "text": "[Balme](/bˈɑlm/)'s eyes opened wider in surprise."
     },
@@ -1404,7 +1428,7 @@
       "sha256": "dddc0ed95fd581c157ce359e9d4b00d65cbdc562fb11116eb6f89c1269f35ad4",
       "bytes": 33127,
       "duration_ms": 3800,
-      "start_ms": 1038750,
+      "start_ms": 1039770,
       "source_wav_sha256": "5570a0dfa04710b39181f82fe4e46654a508196ff8a640050675f5c9f25d1c01",
       "text": "\"Wait, I'm curious, how could you use cryptography for that?\""
     },
@@ -1416,7 +1440,7 @@
       "sha256": "0bf77bc739674ba4ac25588d5be53c240099cc74005ac65e2efb1e7839c568e7",
       "bytes": 209149,
       "duration_ms": 23350,
-      "start_ms": 1043000,
+      "start_ms": 1044020,
       "source_wav_sha256": "b771cb8eadc6d0a8b35a9fb24989eb7598f66453fedc0cb3b3fc83539753aca2",
       "text": "\"I have a friend from [Dzego](/ˈdzɛɡO/), [Zei](/ˈzA/), who told me about it once. Basically you have a language model inside the camera, that detects whether or not, say, an act of violence is going on. And only if that's happening, it passes the information along. Every time it does, it also uploads a hash onto a cryptographic network, so we get a public trace of how many times the check was triggered.\""
     },
@@ -1428,7 +1452,7 @@
       "sha256": "da9529db649832e70d1c7eb7ce30fbe29726661e677dd4a020b4effa255b3552",
       "bytes": 245667,
       "duration_ms": 27400,
-      "start_ms": 1066800,
+      "start_ms": 1067820,
       "source_wav_sha256": "4531f9f3bd23c98636d2ffbb1553817fd396e55ece456b49e733e0823995aa8d",
       "text": "\"And then they have a whole infrastructure to verify that the hardware is actually running that code. Signatures from keys that were randomly generated inside the chip by chemical imperfections in the manufacturing process at the time the chip was created. There's apparently a rule that anyone has a right to randomly take down a camera and micro-inspect it, and many people are doing that as a hobby, so no manufacturer can get away with making cameras that cheat the rules.\""
     },
@@ -1440,7 +1464,7 @@
       "sha256": "536896a3a908a449e42140596bf05e72485bccbe08557bf2e559c94867757390",
       "bytes": 141802,
       "duration_ms": 15725,
-      "start_ms": 1094650,
+      "start_ms": 1095670,
       "source_wav_sha256": "30cbede07291e361da3302f7a06eae99c83122c69e67a1a58d89ecec22573ed6",
       "text": "\"That ... sounds amazing. Cryptography is not my area at all, but ... cameras that you can actually trust, that makes total sense! Wait, but Delwart was so pro-freedom, how could he not already know about that kind of thing and be enthusiastic about it?\""
     },
@@ -1452,7 +1476,7 @@
       "sha256": "5bdfeb11b69eac07d1a862fd60fd2fb96734b0fb47a547bdb47fa1de1efa7864",
       "bytes": 17003,
       "duration_ms": 1900,
-      "start_ms": 1110825,
+      "start_ms": 1111845,
       "source_wav_sha256": "72cd69bcbdd9cfc1862586b173be68b083d58c71c35f464c0e983873d6da3d3c",
       "text": "\"I'm confused too.\""
     },
@@ -1464,7 +1488,7 @@
       "sha256": "014dfe9e0ab83cbe40d9c5295ea9343fec078b853803a37a017e591b832fa799",
       "bytes": 20437,
       "duration_ms": 2300,
-      "start_ms": 1113175,
+      "start_ms": 1114195,
       "source_wav_sha256": "fd4e27ffeae95cdda2db591b1f4a287e65c68326beacac567671f5de5778a0c0",
       "text": "Seila paused for a few moments."
     },
@@ -1476,7 +1500,7 @@
       "sha256": "e7bc36d1fae74aa728a1e0ad6f0cdb7ea678e6bbc6356fffc25172c2402f1568",
       "bytes": 70269,
       "duration_ms": 7800,
-      "start_ms": 1115925,
+      "start_ms": 1116945,
       "source_wav_sha256": "7aeb730eeb1bff4f6b6862b8e4c50f8c2665cf993ab1f2735ce3ce88cd3f2a3a",
       "text": "\"Okay, I know this is a random question, but — do you know any Keepers who are in any rubric groups related to social media?\""
     },
@@ -1488,7 +1512,7 @@
       "sha256": "8b4ae71127f7ea0828692e397986aeef604be2bd0c72e3a994456ab1c1c74a7e",
       "bytes": 120685,
       "duration_ms": 13200,
-      "start_ms": 1124175,
+      "start_ms": 1125195,
       "source_wav_sha256": "f9475378c7d3592b1592069a3fae0eee3c55a6acef78b4f38b523d83aecd4a1c",
       "text": "\"I know a few Keepers as friends, but I don't dare ask them what they're working on. It's our tradition, you only talk openly about things you did when you already finished your three years and moved on to a different rubric group.\""
     },
@@ -1500,7 +1524,7 @@
       "sha256": "8cc007ad9840c91e4361cfe9018d1519e9a5d05b59c14bce86da43f4d4977222",
       "bytes": 64957,
       "duration_ms": 7300,
-      "start_ms": 1137825,
+      "start_ms": 1138845,
       "source_wav_sha256": "c1f62b0f9822e2adf1c3f12489779b804ed468891351691f6e84cbbe4c3f38bb",
       "text": "\"Could you ... forward a message to them from me? I'll write it up for you right now. And tell them that it's worth responding to.\""
     },
@@ -1512,7 +1536,7 @@
       "sha256": "dd61801e17f8fe8a7ad4e73c110bd786d40803f07a73766ad8d5797b81388998",
       "bytes": 98414,
       "duration_ms": 10850,
-      "start_ms": 1145575,
+      "start_ms": 1146595,
       "source_wav_sha256": "eff1d24ee410fc1bd27942c5ee8ace394b2b86012e229b20317cd535f9383076",
       "text": "[Balme](/bˈɑlm/) thought for a moment, checking with herself whether or not she thought Seila, and her friend who had so far said nothing at all, could be trusted. An instinct told her that they can."
     },
@@ -1524,7 +1548,7 @@
       "sha256": "c4b678e40c76b604dc4e1bffba5577dd84eb03387b4b64b759e67e919a5edfa8",
       "bytes": 13675,
       "duration_ms": 1525,
-      "start_ms": 1156875,
+      "start_ms": 1157895,
       "source_wav_sha256": "24dc4ef8eae8d1136c846ca20a0bdef761005041d6d106f17a90a8b54a389272",
       "text": "\"Of course.\""
     },
@@ -1536,7 +1560,7 @@
       "sha256": "a06a07f1b50d289620025a2f2728c6769cdd296d4999a9b3bae72f07f1379c95",
       "bytes": 165609,
       "duration_ms": 18800,
-      "start_ms": 1160650,
+      "start_ms": 1161670,
       "source_wav_sha256": "3dadd501c0cbd5a4cf1a99bc7437eda3cc3dc59bf55761d02b397891a4e31c54",
       "text": "Seila walked up to the door of a house, similar to the one that she and Gladias lived in. This time, Mov stayed back entirely. Seila seemed more effective at winning trust alone, he thought, so he might as well let her do the questioning on her own. If he needed to, he could suggest questions by earpiece."
     },
@@ -1548,7 +1572,7 @@
       "sha256": "8b861de9fdb090aed697b12685689a42537f6808a9e87c146061325ad877b524",
       "bytes": 17159,
       "duration_ms": 2000,
-      "start_ms": 1179900,
+      "start_ms": 1180920,
       "source_wav_sha256": "ca9dc7512f55f3379c5b24aecbe57fff112eda19b410a1afca4fd27a45b96206",
       "text": "Seila knocked on the door."
     },
@@ -1560,7 +1584,7 @@
       "sha256": "382c68b5449e613ea01d810407b66d64373998df687896d4eee9d536ab836a33",
       "bytes": 15879,
       "duration_ms": 1750,
-      "start_ms": 1182350,
+      "start_ms": 1183370,
       "source_wav_sha256": "4790e18da3877c5f92d42f45c26ad726836cf06a61dc5f265ab8de130bb3760c",
       "text": "No response."
     },
@@ -1572,7 +1596,7 @@
       "sha256": "37e14c8212874df9810ac067d22fc714a24e1d8a6486471f188a18d82e5cb237",
       "bytes": 21376,
       "duration_ms": 2425,
-      "start_ms": 1184550,
+      "start_ms": 1185570,
       "source_wav_sha256": "bbd06fa2ed27a9fd7cee1f0fc6b6f7a56677ccd68fa36a46c6cd98e9a49d065a",
       "text": "A minute later, she knocked again."
     },
@@ -1584,7 +1608,7 @@
       "sha256": "a825136116cf013015f10194864d5c5b472d19e60abdf664abef6678a4f8cd02",
       "bytes": 15739,
       "duration_ms": 1800,
-      "start_ms": 1187425,
+      "start_ms": 1188445,
       "source_wav_sha256": "0e3a5ddaa7925fd1fa64309437fd9f15b7e52e38285db0d9752c34d332731d5f",
       "text": "Still no response."
     },
@@ -1596,7 +1620,7 @@
       "sha256": "09397d300cd84fdd472ae7c523f42e6c19465e89a0feca0456224aeeab6f3a05",
       "bytes": 47171,
       "duration_ms": 5100,
-      "start_ms": 1189675,
+      "start_ms": 1190695,
       "source_wav_sha256": "f47cd89864ff776af516da4820d8ceeae823ab82a71933c588663c522d26f663",
       "text": "She heard footsteps inside, but they did not seem to be getting closer to the door."
     },
@@ -1608,7 +1632,7 @@
       "sha256": "5f3c1c65133cb7742494e8a72118ef07f4ad9251ac49ff182036ba2bbb1a3b05",
       "bytes": 27724,
       "duration_ms": 3100,
-      "start_ms": 1195225,
+      "start_ms": 1196245,
       "source_wav_sha256": "650a7df65bc0fbc6ae6dd8d41c76c3665fb909991ec7eeb71aadc10753c9b895",
       "text": "Her watch buzzed. She got a notification:"
     },
@@ -1620,7 +1644,8 @@
       "sha256": "b49742a30ec4db2f6d019ffcd5ee68bf4bef2c2b30d2ece4abcda8101a7fcf62",
       "bytes": 47107,
       "duration_ms": 5225,
-      "start_ms": 1198775,
+      "start_ms": 1199795,
+      "tone_ms": 510,
       "source_wav_sha256": "612cddd5cfa3ae52388ce17316cfd0dccf2873bbb71ba9211252cec41341aebc",
       "text": "A notification, beside a small flame: Fifty zipcoins have just been burned.",
       "read_aloud_status": "unreviewed"
@@ -1633,7 +1658,7 @@
       "sha256": "de1ba75ad5bf8a295bca42c94a887dbdff9ea97b8f860dd32fa2e4aede5caa84",
       "bytes": 58471,
       "duration_ms": 6550,
-      "start_ms": 1204600,
+      "start_ms": 1206130,
       "source_wav_sha256": "68cfa7895ab693ca7b80c6b33068abc4c1a827a0ddb385352f9f9b2e9f7160bd",
       "text": "Mov ... she thought. She knew that whoever was in the house would see the same message, and know that she was serious."
     },
@@ -1645,7 +1670,7 @@
       "sha256": "783d9dc3c0956b2799856ba92de2bf44e624f87067cc9a5929c42b70ae42e908",
       "bytes": 24399,
       "duration_ms": 2725,
-      "start_ms": 1211600,
+      "start_ms": 1213130,
       "source_wav_sha256": "a7a4a91575b765324907ce72e59b13ba545ce07702529296534dd3f186ca3f8d",
       "text": "Seila knocked on the door for a third time."
     },
@@ -1657,7 +1682,7 @@
       "sha256": "7790feda54dd47b9eb2fac18f39c34c7425a3d90daeb92f17d60550b5e8bdb6e",
       "bytes": 34347,
       "duration_ms": 3775,
-      "start_ms": 1214775,
+      "start_ms": 1216305,
       "source_wav_sha256": "5534a2df213c5ecc2aa499a1969b4dc85354eaf4fb011404f4f765fd4202ae3c",
       "text": "She heard footsteps again, this time coming toward the door."
     },
@@ -1669,7 +1694,7 @@
       "sha256": "637b33ccd78701d900ec64557de7a0e012fb1e0968deda47a72ebbad40e47e3d",
       "bytes": 13169,
       "duration_ms": 1475,
-      "start_ms": 1219000,
+      "start_ms": 1220530,
       "source_wav_sha256": "7802e02ee87dd0b7acd6d0f966ee34623d03924ad3d1c46104ec6c321a61a3a0",
       "text": "\"What do you want?\""
     },
@@ -1681,7 +1706,7 @@
       "sha256": "17cafba9041d8d5a665df3a8e9f6096280b820e41bc4286c9acaf3832303027a",
       "bytes": 68985,
       "duration_ms": 7850,
-      "start_ms": 1220925,
+      "start_ms": 1222455,
       "source_wav_sha256": "3f38d8218c1fc5a7fa38fc361b93a8034de69a8c157fb66e2a11cff2e0d9104c",
       "text": "\"Hi, I'm Seila. I'm the one that asked [Balme](/bˈɑlm/) and Telroy to send the message about the social media rubrics. I want to talk.\""
     },
@@ -1693,7 +1718,7 @@
       "sha256": "edf6d773e91f1270d16b17cfd9ee8277e35a10bab1c89ee7308984ea151c8998",
       "bytes": 18611,
       "duration_ms": 1950,
-      "start_ms": 1229225,
+      "start_ms": 1230755,
       "source_wav_sha256": "10f1df090bee4af948d5a90873314653ffdcceb07e406bea8ba9fbe0795f1e4b",
       "text": "The man opened the door."
     },
@@ -1705,7 +1730,7 @@
       "sha256": "1c057776499f0cc12149bd0e7fdffdb4dc5a11a4cb8b503e7111f93e70c792ba",
       "bytes": 34241,
       "duration_ms": 3850,
-      "start_ms": 1231625,
+      "start_ms": 1233155,
       "source_wav_sha256": "53ae05c61635d381758555e99e50d2b94618b8cebbc3f46b49cd5ba86f22c9d1",
       "text": "\"I'm Lectoby. I'm in the social media openness rubric.\""
     },
@@ -1717,7 +1742,7 @@
       "sha256": "ba39f3101d4a723be7d73a38dd31460236211e6f8bd5d1134040b3e924f155b0",
       "bytes": 71579,
       "duration_ms": 7950,
-      "start_ms": 1235925,
+      "start_ms": 1237455,
       "source_wav_sha256": "c8e9e3b7ef542fc9ef449d724581a8f74eca033457f6b226be7aca925128bbf8",
       "text": "\"I'm sorry I didn't open the door. My wife is stuck in Northglade. I've been really upset today, I just don't want to talk to people.\""
     },
@@ -1729,7 +1754,7 @@
       "sha256": "820732564c334adfd33b47aa1f8d0b1c0c2e06539d4da8a825ddce9a3000ed34",
       "bytes": 14176,
       "duration_ms": 1650,
-      "start_ms": 1244325,
+      "start_ms": 1245855,
       "source_wav_sha256": "6f18c5b5ded98de44d172a5543c5d5ce2f5fd047b3f51115b47b415e4561d1b7",
       "text": "Seila nodded."
     },
@@ -1741,7 +1766,7 @@
       "sha256": "571781420f8c78f6a9a13af09d571e9ef61ab557903276f02dc713f834d1f67d",
       "bytes": 40062,
       "duration_ms": 4375,
-      "start_ms": 1246425,
+      "start_ms": 1247955,
       "source_wav_sha256": "efaa7f93592a1cefc3983524d4c598fc463d94785ec19f58466df2bde607ef73",
       "text": "\"I'm Seila. I understand. My kids are stuck in Northglade too.\""
     },
@@ -1753,7 +1778,7 @@
       "sha256": "a434a41437868002ee6d4da1a8b54ee2c5e7cc1670ae16a96fe0d7a3651a438e",
       "bytes": 46396,
       "duration_ms": 4975,
-      "start_ms": 1251250,
+      "start_ms": 1252780,
       "source_wav_sha256": "3d75f1b6c38d042f99ba0ac2acc9b8b2b464e80a9ab6e2974970ea472c7bf88b",
       "text": "\"Why did you burn those zipcoins? You could have just asked [Balme](/bˈɑlm/) to tell me you're coming.\""
     },
@@ -1765,7 +1790,7 @@
       "sha256": "8986921d2f2d984e8067a6d1c7ec9bf3db91761a7c6a4019fe9b6e8a4397ba1a",
       "bytes": 46266,
       "duration_ms": 5150,
-      "start_ms": 1256675,
+      "start_ms": 1258205,
       "source_wav_sha256": "c82ed4945d4ac406a1883ba9cfd5818793891cd6cf338300c56b2ab4ff635d8d",
       "text": "Mov ... Seila thought to herself furiously. Why did he have to be so impatient?"
     },
@@ -1777,7 +1802,7 @@
       "sha256": "afa0599426b1b64e9dd65f9d15e730f300a52dad784fcf36410de1f9558e7972",
       "bytes": 23976,
       "duration_ms": 2675,
-      "start_ms": 1262275,
+      "start_ms": 1263805,
       "source_wav_sha256": "633c86cd69338b450584b6c9c2b4a917056104be9e72ca14c8f651e0b4229c7d",
       "text": "\"I'm sorry, I'm just really desperate.\""
     },
@@ -1789,7 +1814,7 @@
       "sha256": "49a3666aa69236e968c47900c0f60c17658ebf52e31add6316d228ae24751284",
       "bytes": 45797,
       "duration_ms": 4975,
-      "start_ms": 1265400,
+      "start_ms": 1266930,
       "source_wav_sha256": "4a3bd05bab8e23c79d5fb6f17547a192c63e6e22c0f4730ed2bbc2c21899a928",
       "text": "Lectoby motioned for Seila to come in, and she followed. They both sat down."
     },
@@ -1801,7 +1826,7 @@
       "sha256": "f80ecd04b56412cf342ba896919960c5726b7ad93b10110267425ad3699d5b54",
       "bytes": 17627,
       "duration_ms": 1900,
-      "start_ms": 1270825,
+      "start_ms": 1272355,
       "source_wav_sha256": "312a986efb25e68ffafc4f8ab6afe1fd43bb12b04eb8c5012e813ce94f89d3e4",
       "text": "\"So what is this about?\""
     },
@@ -1813,7 +1838,7 @@
       "sha256": "a039aeee05dd9f7f7f69ec5f6554ff781cecd05e03ae74395562560593bfc242",
       "bytes": 70652,
       "duration_ms": 7925,
-      "start_ms": 1273175,
+      "start_ms": 1274705,
       "source_wav_sha256": "3c913cd9081bd901a576c3f6a3813342979f1478a9383da791f51e9bbcff1559",
       "text": "\"Has there been any strange man who attempted to contact you, or anyone else you know in your rubric group? In the past year or so.\""
     },
@@ -1825,7 +1850,7 @@
       "sha256": "ac54e079b2f2b7fedb394728c4dc4391dc2c85a458b97686d0fece49e8268df3",
       "bytes": 25316,
       "duration_ms": 2875,
-      "start_ms": 1281550,
+      "start_ms": 1283080,
       "source_wav_sha256": "6b10823c756195e42123ef6b7a21ac6c8dfb69419c667f4efe935152832a8e61",
       "text": "\"Huh ... nope, never heard of that happening.\""
     },
@@ -1837,7 +1862,7 @@
       "sha256": "7a3b199fed64b1801af1e2f039ce60bb401cf76cc4b1905dbdf09cb045ae7be4",
       "bytes": 44455,
       "duration_ms": 4850,
-      "start_ms": 1284875,
+      "start_ms": 1286405,
       "source_wav_sha256": "488b363d42e8cc2e8042f25a9389aa058a86bf7b1594fd925e4405657b445019",
       "text": "\"Could you maybe ... directly ask in your rubric group chat? I want to confirm.\""
     },
@@ -1849,7 +1874,7 @@
       "sha256": "96345c4123fc5725cdaa20112bfcf7414a219ecb7b6b3be26b5902f484ea64f3",
       "bytes": 16393,
       "duration_ms": 1875,
-      "start_ms": 1290175,
+      "start_ms": 1291705,
       "source_wav_sha256": "353de588513066c081d895330f04987e49d52238c79d329b10b8abe6f99c47c4",
       "text": "\"Have you had that happen?\""
     },
@@ -1861,7 +1886,7 @@
       "sha256": "ea5bf208363f570c589bd4de66c9735a7b341f69f2563660166f897d416d786a",
       "bytes": 147948,
       "duration_ms": 16325,
-      "start_ms": 1292500,
+      "start_ms": 1294030,
       "source_wav_sha256": "770d26d3d0d10884e301e39b0a5202837c316a6cb40092134b52f6e13ac91360",
       "text": "\"My husband has. [Balme](/bˈɑlm/) too. Quite a few others. He has strong opinions that seem to differ depending on whom he talks to. Sometimes he's anti-war, sometimes he isn't. Sometimes he's against the Order intervening in anything, sometimes he isn't.\""
     },
@@ -1873,7 +1898,7 @@
       "sha256": "0f304cbb6a6275dfe89f4b1acf950e6c598b57c3439550b3ca9e1b5118508207",
       "bytes": 34905,
       "duration_ms": 3750,
-      "start_ms": 1309275,
+      "start_ms": 1310805,
       "source_wav_sha256": "5c0e7a8f59b7558f8c37cdd299afcfe4e800e89a3e072b9123a08428400bf046",
       "text": "Lectoby whispered a few sentences through his neck band."
     },
@@ -1885,7 +1910,7 @@
       "sha256": "2ae66b6673b5f9fc6a1f7f5c660be5ea0dad7140b33491d1d97bc735210690e5",
       "bytes": 29628,
       "duration_ms": 3250,
-      "start_ms": 1313475,
+      "start_ms": 1315005,
       "source_wav_sha256": "ecce288a40ad9086ead6526bb9c0edafa9d8523807eb83da4f65dc8a0e6acb70",
       "text": "\"Let's wait for my Keeper group to see what they say.\""
     },
@@ -1897,7 +1922,7 @@
       "sha256": "d9ab2612b60346c3bea151bd9719dfacbb4bf67f147b72a4788c98f370aedea8",
       "bytes": 12876,
       "duration_ms": 1475,
-      "start_ms": 1317175,
+      "start_ms": 1318705,
       "source_wav_sha256": "c636c400e76bc2e1eea6cfc4eb36d73569c6fcbc84c3c94a06d80a2c391257b5",
       "text": "He stood up."
     },
@@ -1909,7 +1934,7 @@
       "sha256": "bf52be63490cc2932c1cea021c028ee3814a116023604566216fc48a7afa9f15",
       "bytes": 16840,
       "duration_ms": 1850,
-      "start_ms": 1319100,
+      "start_ms": 1320630,
       "source_wav_sha256": "ca9a8e0e2329e19fb266a116728060f327ca9c6e8e022f996d1b87b8eaf93ad0",
       "text": "\"Would you like some tea?\""
     },
@@ -1921,7 +1946,7 @@
       "sha256": "43919dd9cd5c4eb6801ed65ff94e86b1e09cd402a827c1a977ee4c59ae46b580",
       "bytes": 11779,
       "duration_ms": 1350,
-      "start_ms": 1321400,
+      "start_ms": 1322930,
       "source_wav_sha256": "e6e69e149fea4364f8a4b3e9c5d5d75332e48704dae3b20fb51d93b58f139cbc",
       "text": "\"Sure.\""
     },
@@ -1933,7 +1958,7 @@
       "sha256": "eb3df885b3b33a8c7b865f99d61a0af8e7d7230cac9a1b5333c9554e9b0c1db3",
       "bytes": 50363,
       "duration_ms": 5575,
-      "start_ms": 1323200,
+      "start_ms": 1324730,
       "source_wav_sha256": "53e466e52438b8a5f013392adeee63425617ccd1fbeeebb5c3d6babd0fc9db03",
       "text": "Lectoby walked over to the kitchen, and started to boil water for himself and for Seila."
     },
@@ -1945,7 +1970,7 @@
       "sha256": "17caddab13745396c8a6c1aab01b5ea5f68ef2d9aae7afbb12803ba21fb6e6df",
       "bytes": 114247,
       "duration_ms": 12650,
-      "start_ms": 1329225,
+      "start_ms": 1330755,
       "source_wav_sha256": "2b2f533f244a6065400a4be4eabe444175232b694bcf359db8b4093ddfab856b",
       "text": "\"I'm sorry about your kids. This whole Arctic thing is just ... so crazy. Redshire, now this. It feels like they're shifting gears, and within a year or two they'll just launch a big war to take over the whole world.\""
     },
@@ -1957,7 +1982,7 @@
       "sha256": "a2d841020b9435f9dc7857353e5cbe4a7b54ab657fff88c4d39ab70b03587597",
       "bytes": 124747,
       "duration_ms": 14050,
-      "start_ms": 1342325,
+      "start_ms": 1343855,
       "source_wav_sha256": "66e024d42c314215ac3cb11378e2cd2c361355a3939ca7f0e8c3d0d393c9aab6",
       "text": "\"Or worse, less than a year. They took Northglade, seems like no one is lifting a finger again. I checked the senate hearing on my way here, a lot of performative outrage, no action, no introspection about how we got here.\""
     },
@@ -1969,7 +1994,7 @@
       "sha256": "6fd82d123680993a67aa2b97f5473fb91cba3c9827f77db4424a5d390035c1b5",
       "bytes": 16645,
       "duration_ms": 1800,
-      "start_ms": 1356825,
+      "start_ms": 1358355,
       "source_wav_sha256": "84a4e473a1de5aa8951957921b8c65f66fe12fcca5145dc72c19ea42e1afc5b2",
       "text": "Lectoby sighed."
     },
@@ -1981,7 +2006,7 @@
       "sha256": "0bca7eee27698650559873551be590ff5d5b996c4c2157fa34e61be9fd366e81",
       "bytes": 54665,
       "duration_ms": 5975,
-      "start_ms": 1359075,
+      "start_ms": 1360605,
       "source_wav_sha256": "c6442f99ef22dea1f2eaa97230b031ee33373756e5f903392efea95eb2ec6f2e",
       "text": "He brought a cup of tea for himself, and a cup for Seila, and they sat down. They drank it silently."
     },
@@ -1993,7 +2018,7 @@
       "sha256": "db0fe2cc09461f557726498997732b1df863c0e5c1f84bbb0b020017134711c7",
       "bytes": 47189,
       "duration_ms": 5225,
-      "start_ms": 1365500,
+      "start_ms": 1367030,
       "source_wav_sha256": "1c68c4ca732f7b34dd91d320e5c87310ba226478338c33d638ff6a6b4f28d075",
       "text": "Twenty minutes later, Lectoby leaned forward, and Seila's attention turned to him."
     },
@@ -2005,7 +2030,7 @@
       "sha256": "c6bbc798823deeea2412ce4664c2082a6077edd27b7dff6b48436d547e7df972",
       "bytes": 19803,
       "duration_ms": 2200,
-      "start_ms": 1371175,
+      "start_ms": 1372705,
       "source_wav_sha256": "5a04b4f996de66d307351ea32552defc943ef48b632c963ec3e7535c601c37da",
       "text": "\"They all replied\", he said."
     },
@@ -2017,7 +2042,7 @@
       "sha256": "b6276b1af88e96cd4245248643ccb3593c125d36ce7ab27634191aa4d39a02ad",
       "bytes": 11702,
       "duration_ms": 1325,
-      "start_ms": 1373825,
+      "start_ms": 1375355,
       "source_wav_sha256": "f88f4a4f3480dc074af685e64d81f7e1c9352f35513307a3d48f27a250d98d68",
       "text": "\"And?\""
     },
@@ -2029,7 +2054,7 @@
       "sha256": "bf4f05ec3dd11893356c5652923c9ab17550b756febd8bf916a1b78d1af46209",
       "bytes": 78392,
       "duration_ms": 8575,
-      "start_ms": 1375600,
+      "start_ms": 1377130,
       "source_wav_sha256": "44f5a768d87e3356d4c60ad916f1251c982ddddcec806711038a3bdf75858c02",
       "text": "\"None of them had that happen. One did reply that a friend in a different rubric group had that happen to him. But none in this rubric group.\""
     },
@@ -2041,7 +2066,7 @@
       "sha256": "e039634e9825f29b6575662f368418f95e28ca497ecfe7cbd83d84f1e2001ce2",
       "bytes": 18730,
       "duration_ms": 2150,
-      "start_ms": 1384625,
+      "start_ms": 1386155,
       "source_wav_sha256": "72613d8154a8b2eaa44126d728e83f3064a3753b32d2761a4c9a147e315e561f",
       "text": "\"That is ... so strange.\""
     },
@@ -2053,7 +2078,7 @@
       "sha256": "029b461d1f3b8114ff3841db14f42fe14b3a45855d61df356ffef322ebbce116",
       "bytes": 20565,
       "duration_ms": 2350,
-      "start_ms": 1387225,
+      "start_ms": 1388755,
       "source_wav_sha256": "c43288ad64f3e040291cef2538f973a985a44b7095090ac71af85db2e644ec31",
       "text": "\"It could be a coincidence, but...\""
     },
@@ -2065,7 +2090,7 @@
       "sha256": "e58da744e1af00ba7d31e647ced7ee77cdee3973188cf39bffdc44d3b971487e",
       "bytes": 14733,
       "duration_ms": 1625,
-      "start_ms": 1390025,
+      "start_ms": 1391555,
       "source_wav_sha256": "1e7a04bb638f7c9378304280fbaec53b90b79c8e91e866ff30fa2e04827d5503",
       "text": "\"What's the matter?\""
     },
@@ -2077,7 +2102,7 @@
       "sha256": "e18ca935c1e46cb1bf18a9a646287e6230763ee8cdfc32568675d58e05286239",
       "bytes": 47034,
       "duration_ms": 5225,
-      "start_ms": 1392100,
+      "start_ms": 1393630,
       "source_wav_sha256": "e832dce61c9632abc844387c031c49acd2dc65166f79d68c40cebd77a9eaccb8",
       "text": "\"Your rubric group is on social media openness and interoperability, right?\""
     },
@@ -2089,7 +2114,7 @@
       "sha256": "f74b74207b18e9e4bbb996ec9c3fe06dc7d00fd45c177f244b366625ee372e5b",
       "bytes": 13003,
       "duration_ms": 1475,
-      "start_ms": 1397775,
+      "start_ms": 1399305,
       "source_wav_sha256": "2b0444ae1f479d1050085dc99e818c0e8bdce90448aed367cb945fe55ed2bdc9",
       "text": "\"It is.\""
     },
@@ -2101,7 +2126,7 @@
       "sha256": "226039abe48a634aa9eca780ea173d62c664697dafe2f0348a486f19f6fa674f",
       "bytes": 89721,
       "duration_ms": 9675,
-      "start_ms": 1399700,
+      "start_ms": 1401230,
       "source_wav_sha256": "e6908900a12e5fbc6fd6178b50ae4b68ac4f0e1fdef9b34315f070902b912b8f",
       "text": "\"Delwart was supposed to be from Silverchat. But this is the one topic that Silverchat should care about the most, and ... zero inroads into this rubric?\""
     },
@@ -2113,7 +2138,7 @@
       "sha256": "79b315e54f95c65a66e09cf985234523d9805a24c32b98579a6ed1504debc97e",
       "bytes": 26858,
       "duration_ms": 2875,
-      "start_ms": 1409825,
+      "start_ms": 1411355,
       "source_wav_sha256": "507760cf0d8e81e18f03bca89e8dd9f18174217147da845609af6f872b780e26",
       "text": "\"Again, this could be a coincidence, but...\""
     },
@@ -2125,7 +2150,7 @@
       "sha256": "07dd6f88caea5b16ea39244fe3c2f42a921818c7365032742dee383f55f209a1",
       "bytes": 14035,
       "duration_ms": 1550,
-      "start_ms": 1413150,
+      "start_ms": 1414680,
       "source_wav_sha256": "d189888405217181ae1a879ca89c8d28741ac4282defd2cf20df6d8427ec8aa3",
       "text": "She stood up."
     },
@@ -2137,7 +2162,7 @@
       "sha256": "5e3d4896ce75e879ab7ce6be74ccbd7b2d300562e2d418e0f7ce18b925da4db7",
       "bytes": 17472,
       "duration_ms": 1900,
-      "start_ms": 1415150,
+      "start_ms": 1416680,
       "source_wav_sha256": "f2c7553728098c11920ca22fe3e0b0d8523ccc67230e80f9e0838476e7b7727d",
       "text": "\"Wait, what's going on?\""
     },
@@ -2149,7 +2174,7 @@
       "sha256": "a8f5c17c4a30ba0a6a310aa58a31a36299738be7f0fcfe7e1aa703924ed848a9",
       "bytes": 77813,
       "duration_ms": 8725,
-      "start_ms": 1417500,
+      "start_ms": 1419030,
       "source_wav_sha256": "66c8e9718789e9cf21b661a5bc8e51ef91f11315a62ad7b3c9c528a38ab846be",
       "text": "She knew Mov would want her to leave, so she could sync up with Mov privately. But Lectoby had trusted her, and she thought it was fair to trust him too."
     },
@@ -2161,7 +2186,7 @@
       "sha256": "1b57a7fb8330e9424bed37c6737892a3cde75ab35550ed3416d9595a5f325a3f",
       "bytes": 232599,
       "duration_ms": 25675,
-      "start_ms": 1426675,
+      "start_ms": 1428205,
       "source_wav_sha256": "d051b8de53efa594ac99e45a0bd96befc9dcbd271488b43549b0c5bbfa76e0e6",
       "text": "\"Why would someone from Silverchat care about whether or not Veridian schools are teaching people civics well? Why would someone from Silverchat be so anti-war? How could someone from Silverchat be so effective at tracking down keepers? And ... why would someone from Silverchat, in that position, not make any effort at all on the rubric that Silverchat cared the most about, getting properly rewarded for being so effective at openness and interoperability?\""
     },
@@ -2173,7 +2198,7 @@
       "sha256": "4a60cb46b247a1ff55ce0f3585e8e44fe6f64eeb7627aca737bd3a87bf25f9c3",
       "bytes": 127816,
       "duration_ms": 14425,
-      "start_ms": 1452800,
+      "start_ms": 1454330,
       "source_wav_sha256": "da36f8a291e7b55254339f2edd960946fd2083e831d4577e5b74da44f7ca7408",
       "text": "But by this point Seila had long since known the answer, and this was simply a final confirmatory straw. She figured there was no harm in blurting out her conclusion, as she stood up, and picked up her hand device, getting ready to leave."
     },
@@ -2185,7 +2210,7 @@
       "sha256": "1f0b3a1262898b0d94a3f4e29b1d11d91eaedc781dbc3a557a36c5fc4500ec41",
       "bytes": 23004,
       "duration_ms": 2450,
-      "start_ms": 1467675,
+      "start_ms": 1469205,
       "source_wav_sha256": "5a048ee393c3247f2d23f08206db1cd22451ebeb7f97cf3ec3769a7e9b3789d2",
       "text": "\"Delwart is not from Silverchat.\""
     }

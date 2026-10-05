@@ -4,7 +4,7 @@
   "source_sha256": "36d5c43071282ed77d62cec5cc49c48be2ae68dd0526c9d3142f4a1e2e177a85",
   "generated_at": "2026-10-03T18:15:59+00:00",
   "generation_seconds": 223.3,
-  "total_duration_ms": 1402375,
+  "total_duration_ms": 1406455,
   "model": {
     "name": "Kokoro-82M",
     "repo": "hexgrad/Kokoro-82M",
@@ -36,7 +36,21 @@
     },
     "break_ms": 1800,
     "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
-    "read_aloud_sha256": "a75a864b5f6060929576093fb5606cf3a6c0d1afd2375bfd179b025e9ff07ed3"
+    "read_aloud_sha256": "a75a864b5f6060929576093fb5606cf3a6c0d1afd2375bfd179b025e9ff07ed3",
+    "description_tone": {
+      "notes_hz": [
+        660,
+        990
+      ],
+      "notes_ms": [
+        110,
+        140
+      ],
+      "between_ms": 40,
+      "after_ms": 220,
+      "amplitude": 0.12,
+      "made_by": "code (numpy sine, linear fades)"
+    }
   },
   "host": {
     "platform": "macOS-26.5.1-arm64-arm-64bit",
@@ -45,10 +59,10 @@
   },
   "stitched": {
     "wav": "chapter-29.wav",
-    "wav_sha256": "e09fb15c9663e2eddb68c6549c1180a6e34c18276339746c1077c6f41c1b9c17",
+    "wav_sha256": "51f91ae95cf600ab4b93d1b9ac8caf9a289953594128fc643c483eee1078492e",
     "m4a": "chapter-29.m4a",
-    "m4a_sha256": "8b4509cdd1218f1381e1087aa7e6d12272239b317776cfa8402420058afc20fb",
-    "note": "start_ms is the block's offset in the stitched file, gaps included"
+    "m4a_sha256": "ad1f676d71bfe76b8837b42939e793437531bdbaaf08a79ba3f0d76bc55bb1ad",
+    "note": "start_ms is the block's offset in the stitched file, gaps included; a description starts with its tone (tone_ms)"
   },
   "blocks": [
     {
@@ -433,7 +447,8 @@
       "start_ms": 256225,
       "text": "On the screen, a map of the region. Group North, Group Center and Group South start together in the southwest, each with a dashed arrow: North's runs up to the northern coast, Center's heads northeast, and South's runs east toward the outskirts of Northglade. Group Naval waits at sea to the southeast, its arrow pointing up onto the coast east of Northglade.",
       "generation_s": 3.61,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 35,
@@ -442,7 +457,7 @@
       "file": "blocks/c29-b035.wav",
       "sha256": "9bd68b348b78fb9c8b21e49103ae1361dcb4e7487e9ffdfd073589ca40f23180",
       "duration_ms": 5000,
-      "start_ms": 278150,
+      "start_ms": 278660,
       "text": "Everything that the group leaders had said seemed to match the plan that was on the map.",
       "generation_s": 0.88
     },
@@ -453,7 +468,7 @@
       "file": "blocks/c29-b036.wav",
       "sha256": "325c871296a5a4017589f4ed5d31a9a2088d44c12a518f2d2d7ffe23aefeb354",
       "duration_ms": 10450,
-      "start_ms": 283600,
+      "start_ms": 284110,
       "text": "\"Alright, very good. Sounds like we all know what we need to do. Everyone, dismissed. You all have three longhours to make your final preparations. We launch at sundown.\"",
       "generation_s": 1.75
     },
@@ -463,7 +478,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 294500,
+      "start_ms": 295010,
       "duration_ms": 1800
     },
     {
@@ -473,7 +488,7 @@
       "file": "blocks/c29-b038.wav",
       "sha256": "d1e8f1a57c8edbbbdc35d85d7571f61ad0879ad6e80da3fa21bb245a8797a634",
       "duration_ms": 44675,
-      "start_ms": 296300,
+      "start_ms": 296810,
       "text": "[Zei](/ˈzA/), [Bai](/ˈbI/) and [Mu](/ˈmu/) were standing once again at the top of the hill. The sun was by this point just barely above the horizon behind them, minutes away from setting. The pine trees were snowy as before. But the landscape had radically changed. There were thousands of snowmobile-like contraptions sitting at the edge of the forest. Many were visibly equipped with weapons. [Zei](/ˈzA/) could make out a large number of thin silver lines glimmering in the sunlight, starting from the rear of many of the largest snow drones and stretching back as far as he could see. Fiber optic cables, he realized. They would stretch for hundreds of kilometers tonight — and they are what would allow [Zei](/ˈzA/) to reliably stay in contact with the drones as the front advanced.",
       "generation_s": 6.38
     },
@@ -484,7 +499,7 @@
       "file": "blocks/c29-b039.wav",
       "sha256": "5f241eca5c4b382183a9f5bcc063102a2ad500acbf8c046e011183a9fe80934c",
       "duration_ms": 5200,
-      "start_ms": 341425,
+      "start_ms": 341935,
       "text": "\"Wait, is that a box of printers on top of one of the drones?\", [Bai](/ˈbI/) suddenly asked.",
       "generation_s": 0.75
     },
@@ -495,7 +510,7 @@
       "file": "blocks/c29-b040.wav",
       "sha256": "34c15f7f10b6d7d6c36d968ca1c3b5f96c9b282059144c709857722139443934",
       "duration_ms": 12200,
-      "start_ms": 347075,
+      "start_ms": 347585,
       "text": "\"Yep. There's also other drones that are carrying stick-on paper and shirts. A lot of classroom equipment. Just in case we need to rapidly apply visual attacks on the Arctic drones' algorithms.\"",
       "generation_s": 2.1
     },
@@ -506,7 +521,7 @@
       "file": "blocks/c29-b041.wav",
       "sha256": "bac04e76aeb08d2d3a13fb316985e42fb9722ee358629740d3630eb48f39a93e",
       "duration_ms": 1525,
-      "start_ms": 359725,
+      "start_ms": 360235,
       "text": "\"I see...\"",
       "generation_s": 0.43
     },
@@ -517,7 +532,7 @@
       "file": "blocks/c29-b042.wav",
       "sha256": "9b38b3290937d58c74e45375b9176ba91b85dcf19ee0ce8d9710761fbca0f6ae",
       "duration_ms": 24325,
-      "start_ms": 361700,
+      "start_ms": 362210,
       "text": "[Zei](/ˈzA/)'s watch buzzed. He turned around, and saw that the bottom of the sun had already begun receding below the horizon. \"[Fi](/ˈfi/) [le](/ˈlɛ/) [gei](/ˈɡA/) [fa](/ˈfɑ/)\", he thought — one hundred ticks until it begins. He reminisced about all of the [Minpentai](/ˈmɪnpɛntI/) games, from practice to championship, that he had played over the past decade. Without realizing it, all that time he had been training for the one game that really mattered: tonight.",
       "generation_s": 4.0
     },
@@ -528,7 +543,7 @@
       "file": "blocks/c29-b043.wav",
       "sha256": "710d03391f359ab6bca0d6aed756ab8c30baafe2e24a09f38d8e6aec283e3e88",
       "duration_ms": 3750,
-      "start_ms": 386475,
+      "start_ms": 386985,
       "text": "\"Time to get back to our command post\", [Mu](/ˈmu/) said softly.",
       "generation_s": 0.78
     },
@@ -539,7 +554,7 @@
       "file": "blocks/c29-b044.wav",
       "sha256": "239206bfb8dbee17611e098fae8b3447c984976db8a0a3ca92f6792279a1cfb2",
       "duration_ms": 4625,
-      "start_ms": 390675,
+      "start_ms": 391185,
       "text": "[Zei](/ˈzA/) turned around. The sun was already halfway below the horizon.",
       "generation_s": 0.69
     },
@@ -550,7 +565,7 @@
       "file": "blocks/c29-b045.wav",
       "sha256": "f1159f04c656066ff44a9a1008c06026beb23b724637a523476e9da9a1a31385",
       "duration_ms": 1775,
-      "start_ms": 395750,
+      "start_ms": 396260,
       "text": "\"Indeed, we should.\"",
       "generation_s": 0.29
     },
@@ -561,7 +576,7 @@
       "file": "blocks/c29-b046.wav",
       "sha256": "967d1332b316167d9fa126eee6d4cd89442b273daf4a2f97de25fd5a5a6dd62e",
       "duration_ms": 8900,
-      "start_ms": 397975,
+      "start_ms": 398485,
       "text": "The three of them walked back slowly to their bunker at the bottom of the hill. They opened the door, walked in, took off their snowshoes and closed the door.",
       "generation_s": 1.56
     },
@@ -572,7 +587,7 @@
       "file": "blocks/c29-b047.wav",
       "sha256": "1b587b0e98f1e0031a512f8884ce4061ef81629e9b0e74eb47f571056fc0ceab",
       "duration_ms": 4325,
-      "start_ms": 407325,
+      "start_ms": 407835,
       "text": "As soon as they were inside, a robot slid up to them, bringing tea.",
       "generation_s": 0.7
     },
@@ -583,7 +598,7 @@
       "file": "blocks/c29-b048.wav",
       "sha256": "1caf846c8611e8471f4d880c9e02c41e8b06909592181a1ad7eb41545aef1e07",
       "duration_ms": 6950,
-      "start_ms": 412100,
+      "start_ms": 412610,
       "text": "\"Thank you\", [Mu](/ˈmu/) gently whispered, patting the robot on its head and taking her tea. The robot beeped softly.",
       "generation_s": 1.12
     },
@@ -594,7 +609,7 @@
       "file": "blocks/c29-b049.wav",
       "sha256": "a09f937dad2bbfa680f7aa71b96bf2a4c7b5091313f84de19b9f12a82195c7c5",
       "duration_ms": 2900,
-      "start_ms": 419500,
+      "start_ms": 420010,
       "text": "[Zei](/ˈzA/) and [Bai](/ˈbI/) also picked up their teas.",
       "generation_s": 0.49
     },
@@ -605,7 +620,7 @@
       "file": "blocks/c29-b050.wav",
       "sha256": "aefdeb808a272d1ff16a2efd03fb94e07885d11d54f8982ec07e69bd0790fc12",
       "duration_ms": 1850,
-      "start_ms": 422850,
+      "start_ms": 423360,
       "text": "[Zei](/ˈzA/)'s watch buzzed.",
       "generation_s": 0.31
     },
@@ -616,7 +631,7 @@
       "file": "blocks/c29-b051.wav",
       "sha256": "adf0df48c8f6232c22c1f760ecd6aad3b4aba35cc13dd8595a9f300f3c8d73dc",
       "duration_ms": 3850,
-      "start_ms": 425150,
+      "start_ms": 425660,
       "text": "He heard noises of snow drones accelerating outside.",
       "generation_s": 0.57
     },
@@ -627,7 +642,7 @@
       "file": "blocks/c29-b052.wav",
       "sha256": "cac181e4a741c6f336cf70fd92899d95b29e4e1bda23222d12fc96b8e7eb1fa3",
       "duration_ms": 1825,
-      "start_ms": 429450,
+      "start_ms": 429960,
       "text": "The mission had begun.",
       "generation_s": 0.29
     },
@@ -637,7 +652,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 431725,
+      "start_ms": 432235,
       "duration_ms": 1800
     },
     {
@@ -647,7 +662,7 @@
       "file": "blocks/c29-b054.wav",
       "sha256": "ba02a3a60439fd6a5a3c17afbccf630486576c5a9b88646c2b7bbab0b70344d4",
       "duration_ms": 3075,
-      "start_ms": 433525,
+      "start_ms": 434035,
       "text": "3725, Snowmoon 30.",
       "generation_s": 0.52
     },
@@ -658,7 +673,7 @@
       "file": "blocks/c29-b055.wav",
       "sha256": "477a79dc7de6fc4a632af8bddd3d40ffb8f39f325813c43e4fffcb56355fa21b",
       "duration_ms": 11650,
-      "start_ms": 437500,
+      "start_ms": 438010,
       "text": "[Zei](/ˈzA/) and [Mu](/ˈmu/) were sitting on their chairs in adjacent but separate rooms. They could each see the same command screen. On the top left, the clock was showing the time. It had just struck midnight.",
       "generation_s": 2.04
     },
@@ -669,7 +684,7 @@
       "file": "blocks/c29-b056.wav",
       "sha256": "0160eb37709c7d4271881adf50f0d8783e7f9d17622e9953cd3fc9f5db28b660",
       "duration_ms": 19325,
-      "start_ms": 449600,
+      "start_ms": 450110,
       "text": "All three land army groups were advancing forward quickly. The launch of the Naval group was delayed, so that its assault would come shortly after the beginning of the main battle. So far, the three main army groups had easily defeated a few small Arctic sentry units, and were continuing to proceed at full speed.",
       "generation_s": 3.72
     },
@@ -680,7 +695,7 @@
       "file": "blocks/c29-b057.wav",
       "sha256": "17c1664f10262498c966359ccb864d41bc2e794c3ee375d7ab4c53fb63eb49fc",
       "duration_ms": 1750,
-      "start_ms": 469375,
+      "start_ms": 469885,
       "text": "An alarm blared.",
       "generation_s": 0.43
     },
@@ -691,7 +706,7 @@
       "file": "blocks/c29-b058.wav",
       "sha256": "4cf00abbb044c95c5ac08a66f165321d9dbda6ea0dae878582fff98119eede91",
       "duration_ms": 2850,
-      "start_ms": 471575,
+      "start_ms": 472085,
       "text": "[Zei](/ˈzA/) immediately saw the cause on the map.",
       "generation_s": 0.52
     },
@@ -702,10 +717,11 @@
       "file": "blocks/c29-b059.wav",
       "sha256": "f4e714487c07f85a93323764f01a5a05d4a9b8ddfc499d69a7f8df11247ffed5",
       "duration_ms": 8325,
-      "start_ms": 474875,
+      "start_ms": 475385,
       "text": "The three land groups have moved partway along their arrows. Just north of Group North, two red dots have appeared: Arctic forces.",
       "generation_s": 1.41,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 60,
@@ -714,7 +730,7 @@
       "file": "blocks/c29-b060.wav",
       "sha256": "86057d839c2c5aa6eb102b824eb944a6d0fdfa5737de01a6797f427cdf487ebc",
       "duration_ms": 4025,
-      "start_ms": 483800,
+      "start_ms": 484820,
       "text": "[Zei](/ˈzA/) could hear [Gallowar](/ɡˈæləwɑɹ/) and [Telpo](/tˈɛlpO/) coordinating in the chat.",
       "generation_s": 0.7
     },
@@ -725,7 +741,7 @@
       "file": "blocks/c29-b061.wav",
       "sha256": "b5d3d216995b94a9c6fc5232bd01619a9fc454b4f22809daf361d520a32b76fe",
       "duration_ms": 5875,
-      "start_ms": 488275,
+      "start_ms": 489295,
       "text": "\"Adopting defensive positions, spreading out to prevent encirclement\", [Gallowar](/ɡˈæləwɑɹ/) shouted.",
       "generation_s": 1.09
     },
@@ -736,7 +752,7 @@
       "file": "blocks/c29-b062.wav",
       "sha256": "e403acd5b5551d71cfb225081099c1cba65428eca6d5a21994fc3a4f005aa9a7",
       "duration_ms": 5125,
-      "start_ms": 494600,
+      "start_ms": 495620,
       "text": "\"Sending part of Group Center northward to attack from behind\", [Telpo](/tˈɛlpO/) replied.",
       "generation_s": 0.92
     },
@@ -747,7 +763,7 @@
       "file": "blocks/c29-b063.wav",
       "sha256": "27707175a23ba4ac5ef875f5e3b58d1fd1e992750c86ddacac92dbfd03262371",
       "duration_ms": 22125,
-      "start_ms": 500175,
+      "start_ms": 501195,
       "text": "[Zei](/ˈzA/) zoomed in. The Veridian and Arctic drone army groups were quickly closing in on each other. They were firing a few long-range weapons, and ten drones from Group North had already been disabled — on top of the few dozen that had already been lost to stationary Arctic traps scattered throughout the forest — but so far the main hostilities had not yet begun.",
       "generation_s": 3.72
     },
@@ -758,7 +774,7 @@
       "file": "blocks/c29-b064.wav",
       "sha256": "b2232f90482d8eb42e1f5b6cffec477306953994d35e614251b80a6c49bc36a7",
       "duration_ms": 16650,
-      "start_ms": 522750,
+      "start_ms": 523770,
       "text": "Over the past month and a half, he had played simulations of forest snow drone combat hundreds of times, and he knew what the best strategies were for detection, hiding, attacking and taking cover. The strategies had already been loaded into the drones' AI models.",
       "generation_s": 3.04
     },
@@ -769,7 +785,7 @@
       "file": "blocks/c29-b065.wav",
       "sha256": "6be8f23a1ea46d1dec745d6fc8d279f7fe56f26a7fea476c03a431e3d858e702",
       "duration_ms": 41350,
-      "start_ms": 539850,
+      "start_ms": 540870,
       "text": "A visual image appeared onscreen. It was the exact design of the Arctic snow drone. It was slightly different from the images he had seen before — faster and more agile, better protected against stationary traps, and with better defenses on the sides and back. The Arctics had been anticipating another rapid offensive campaign, he realized. These improvements came at the expense of effectiveness in traditional fixed face-to-face combat. The Veridian snow drone fleet had made some similar modifications, but to a significantly lesser extent. Hence the battle style that was most to their advantage seemed to be ... direct face-to-face combat with fixed battle lines.",
       "generation_s": 7.24
     },
@@ -780,7 +796,7 @@
       "file": "blocks/c29-b066.wav",
       "sha256": "952668e258bb180a1240b994fd88e3d6fba54e314c491688d4ff307f13ea042b",
       "duration_ms": 7075,
-      "start_ms": 581650,
+      "start_ms": 582670,
       "text": "Not good, [Zei](/ˈzA/) thought — the Arctic drone fleet was larger. They would have to make up for it with better micro-tactics.",
       "generation_s": 1.08
     },
@@ -791,7 +807,7 @@
       "file": "blocks/c29-b067.wav",
       "sha256": "72e126ad7dd4565c69d722d4613ac6f594325d56416edc183e43cf40f0004dba",
       "duration_ms": 23000,
-      "start_ms": 589175,
+      "start_ms": 590195,
       "text": "A few minutes later, the drone fleets came close enough to clash. The Veridian drone fleet pre-emptively cut down a large number of trees to prevent encirclement, particularly on its north flank. [Gallowar](/ɡˈæləwɑɹ/)'s strategy was simple: delay in the north, fight in the east. In about twenty minutes, [Telpo](/tˈɛlpO/)'s fleet would attack the eastern Arctic group from the south, and hopefully surround and defeat it.",
       "generation_s": 3.5
     },
@@ -802,10 +818,11 @@
       "file": "blocks/c29-b068.wav",
       "sha256": "4d52c9b76cc09ad9cf7c916844aedb086c8e96b39e14c860f70a03d391ac169a",
       "duration_ms": 13550,
-      "start_ms": 612625,
+      "start_ms": 613645,
       "text": "A close-up tactical map: a diagonal line of six Veridian dots faces two red Arctic groups, three dots to the northwest and four to the east. Three more Veridian dots are coming up from the far south.",
       "generation_s": 2.58,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 69,
@@ -814,7 +831,7 @@
       "file": "blocks/c29-b069.wav",
       "sha256": "e6edc27d43674832c9f7f84a961d05534fcb385edbd2989fdb06499b5a3dcf02",
       "duration_ms": 10850,
-      "start_ms": 626775,
+      "start_ms": 628305,
       "text": "[Zei](/ˈzA/) watched carefully. Drone casualty counts were starting to increase rapidly on both sides. Soon, both the Veridian and Arctic losses spiked above a hundred.",
       "generation_s": 1.65
     },
@@ -825,7 +842,7 @@
       "file": "blocks/c29-b070.wav",
       "sha256": "177d6511b4ef228b72a7b576c9c44aeef8b76d8ee3c9b87d0e879a2bd7f01552",
       "duration_ms": 23900,
-      "start_ms": 638075,
+      "start_ms": 639605,
       "text": "[Zei](/ˈzA/) continued scrolling through all of the visual feeds. He saw some large boxes on top of [Gallowar](/ɡˈæləwɑɹ/)'s largest snow drones open up. A large fleet of Helisport copters and delivery copters, seemingly modified to carry more dangerous payloads, flew out. Ah right — the Arctic snow drones were also vulnerable from the top. Good job converting civilian infrastructure, [Zei](/ˈzA/) thought.",
       "generation_s": 4.01
     },
@@ -836,7 +853,7 @@
       "file": "blocks/c29-b071.wav",
       "sha256": "07a64400e83e25e8dd652b07f2c1faea196b138f406fcf75e8899eced3271e19",
       "duration_ms": 20975,
-      "start_ms": 662425,
+      "start_ms": 663955,
       "text": "Embedded in each of the army groups, sitting in the command centers safely far behind the front, were a large number of [Dzego](/ˈdzɛɡO/)'s best [Minpentai](/ˈmɪnpɛntI/) players, which had been quietly flown in by the [Kungaupei](/ˈkunɡWpA/), as well as some of Veridia's best Helisport players — the two groups with the best hands-on experience understanding airborne duels.",
       "generation_s": 3.05
     },
@@ -847,7 +864,7 @@
       "file": "blocks/c29-b072.wav",
       "sha256": "a49207b1e135da9f4848b26b3d7054685137941fa344f1d518e36d3798795c75",
       "duration_ms": 24275,
-      "start_ms": 683850,
+      "start_ms": 685380,
       "text": "[Zei](/ˈzA/) continued watching. For the moment, [Gallowar](/ɡˈæləwɑɹ/)'s strategy seemed to be going well. His army group was successfully slowly retreating on the northern flank while cutting down trees and leaving traps, and the battle on the eastern flank was progressing smoothly. Exact casualty ratios were difficult to determine, but from the numbers that appeared onscreen, it was significantly in the Veridians' favor.",
       "generation_s": 4.34
     },
@@ -858,7 +875,7 @@
       "file": "blocks/c29-b073.wav",
       "sha256": "1114b7b6313714927de96169b4f77677fc0a2d30d73615bf99709102339676c3",
       "duration_ms": 12800,
-      "start_ms": 708575,
+      "start_ms": 710105,
       "text": "Forty minutes later, he saw the good news that mattered: [Gallowar](/ɡˈæləwɑɹ/)'s forces had broken through between the Arctic north and east flanks, and [Telpo](/tˈɛlpO/)'s fleet had begun engaging the Arctic east flank from the south.",
       "generation_s": 2.31
     },
@@ -869,10 +886,11 @@
       "file": "blocks/c29-b074.wav",
       "sha256": "97088f79672bf20dcfc2a8f257fafabc6ec4383ba4b2e426dbcd0cf09f026ff8",
       "duration_ms": 11875,
-      "start_ms": 721825,
+      "start_ms": 723355,
       "text": "On the tactical map, Veridian dots have pushed into the gap between the two red groups, and the dots from the south have swung up beside and behind the eastern red group, nearly closing around it.",
       "generation_s": 2.47,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 75,
@@ -881,7 +899,7 @@
       "file": "blocks/c29-b075.wav",
       "sha256": "1d69ae265357f95c0da85c6a5d4fd1e27b1c69c05d5e02f412c4d40d6511c8a1",
       "duration_ms": 22575,
-      "start_ms": 734300,
+      "start_ms": 736340,
       "text": "Soon, Arctic snow drones in the east began to get rapidly disabled, while [Gallowar](/ɡˈæləwɑɹ/)'s western flank continued its slow retreat to slow the Arctic northern flank down. The Arctic drones attempted to replicate the slow retreat strategy, but without success: by that point, [Telpo](/tˈɛlpO/) had succeeded at almost completely surrounding them, and they had nowhere to go.",
       "generation_s": 3.46
     },
@@ -892,7 +910,7 @@
       "file": "blocks/c29-b076.wav",
       "sha256": "6d15200002a0e367db428a69ac6de00da54cba340e0b571905a84cffb6f46c5f",
       "duration_ms": 16875,
-      "start_ms": 757325,
+      "start_ms": 759365,
       "text": "A few minutes later, [Gallowar](/ɡˈæləwɑɹ/) declared the Arctic drone fleet sufficiently defeated. He ordered his eastern flank to go around them to avoid any risk that partially disabled remnants or their traps would cause damage, and then continue northeastward full speed ahead.",
       "generation_s": 2.43
     },
@@ -903,7 +921,7 @@
       "file": "blocks/c29-b077.wav",
       "sha256": "f7f9deb1909dacd06f3c0d71be5995b9085735c2d156a2384a0e45b25969acce",
       "duration_ms": 3675,
-      "start_ms": 774650,
+      "start_ms": 776690,
       "text": "[Zei](/ˈzA/) zoomed out, and looked at the big-picture view again.",
       "generation_s": 0.56
     },
@@ -914,10 +932,11 @@
       "file": "blocks/c29-b078.wav",
       "sha256": "070b8a70ab6d3873cfe1831c04f7948174e1515f8ab3f1c2045df1225fb0e50e",
       "duration_ms": 11175,
-      "start_ms": 778775,
+      "start_ms": 780815,
       "text": "Back on the big map, all four groups have moved further along their routes toward Northglade. Far behind in the west, a small Veridian dot holds its ground near a single red dot.",
       "generation_s": 1.79,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 79,
@@ -926,7 +945,7 @@
       "file": "blocks/c29-b079.wav",
       "sha256": "bec5633e189bc2ce07e1f4f29459d3af4d3747b37af2273ae063d903d7880bf8",
       "duration_ms": 13575,
-      "start_ms": 790550,
+      "start_ms": 793100,
       "text": "Another one and a half longhours passed, and all four Veridian drone fleets continued advancing — except for the small offshoot that [Gallowar](/ɡˈæləwɑɹ/) had left behind to delay the contingent of Arctic drones to its north.",
       "generation_s": 2.09
     },
@@ -937,7 +956,7 @@
       "file": "blocks/c29-b080.wav",
       "sha256": "1c9c015c9487c53f3a67c0abcf9d83ae87f3956e9ce5f5adc5f7711ecf8a0da1",
       "duration_ms": 6175,
-      "start_ms": 804575,
+      "start_ms": 807125,
       "text": "An alarm blared again. This time, it was Group Center and Group South that were both under threat.",
       "generation_s": 0.96
     },
@@ -948,10 +967,11 @@
       "file": "blocks/c29-b081.wav",
       "sha256": "ef6fac80e1870eb334e12739ec48a125a47547b421d3499775444bebea577ea8",
       "duration_ms": 12975,
-      "start_ms": 811200,
+      "start_ms": 813750,
       "text": "On the map, a chain of red Arctic dots now stretches across the paths of Group Center and Group South, just west of Northglade. In the far west, the small Veridian dot still faces its lone red dot.",
       "generation_s": 1.87,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 82,
@@ -960,7 +980,7 @@
       "file": "blocks/c29-b082.wav",
       "sha256": "fd2eb8bc8109b50b5fc35eae77e35e89f73c1caee0d37c3180de68acc2d14de9",
       "duration_ms": 4075,
-      "start_ms": 824775,
+      "start_ms": 827835,
       "text": "\"Alright everyone\", Lektor shouted. \"This is the real deal.\"",
       "generation_s": 0.75
     },
@@ -971,7 +991,7 @@
       "file": "blocks/c29-b083.wav",
       "sha256": "e69a90cae41682b3569ccc9fa63d8447132570cf455e7488a457961bce993e72",
       "duration_ms": 11275,
-      "start_ms": 829300,
+      "start_ms": 832360,
       "text": "\"Defensive positions, slow retreat in the center and attempt flanking on the sides. Be careful, minimize our losses and maximize theirs. Do not let them break our positions.\"",
       "generation_s": 1.78
     },
@@ -982,7 +1002,7 @@
       "file": "blocks/c29-b084.wav",
       "sha256": "f2ea217dd14776aed516f1ad38c725acc963739e4fd837586eddb0b37cc36bfa",
       "duration_ms": 2400,
-      "start_ms": 841025,
+      "start_ms": 844085,
       "text": "A few moments later, he added:",
       "generation_s": 0.4
     },
@@ -993,7 +1013,7 @@
       "file": "blocks/c29-b085.wav",
       "sha256": "eb97125f8dab7e377b3b27e811da34e34e91da2c1ad7c2f9f8710ef038a69e53",
       "duration_ms": 1625,
-      "start_ms": 843875,
+      "start_ms": 846935,
       "text": "\"For Veridia!\"",
       "generation_s": 0.26
     },
@@ -1004,7 +1024,7 @@
       "file": "blocks/c29-b086.wav",
       "sha256": "23784cffbb6ccd6c33fa056690f126192254b5cb55f04c5c1a65d3b706718eb5",
       "duration_ms": 4250,
-      "start_ms": 845950,
+      "start_ms": 849010,
       "text": "\"[Dze](/ˈdzɛ/) [go](/ˈɡO/) [ba](/ˈbɑ/) [fau](/ˈfW/) [gie](/ˈɡjɛ/)\", [Den](/ˈdɛn/) shouted immediately after.",
       "generation_s": 0.64
     },
@@ -1015,7 +1035,7 @@
       "file": "blocks/c29-b087.wav",
       "sha256": "bae56b60ebed35b4b248bf8bf87db48ac2d49c9503431b47b84bbb888f9606b6",
       "duration_ms": 15325,
-      "start_ms": 850650,
+      "start_ms": 853710,
       "text": "[Zei](/ˈzA/) directed the drones to begin using all their tactics, including the ones that he had learned from the clandestine battles in Redshire months earlier. They would only work for a short time before the Arctics adapted, he knew, but it was now or never.",
       "generation_s": 2.33
     },
@@ -1026,7 +1046,7 @@
       "file": "blocks/c29-b088.wav",
       "sha256": "7339b177348a35f84a6d42232249b22867b581974fa94428c409eeae6be05caa",
       "duration_ms": 14950,
-      "start_ms": 866425,
+      "start_ms": 869485,
       "text": "Both sides' drone fleets spread out and created defensive lines. On the fully zoomed-out map, [Zei](/ˈzA/) could see the lines slowly come closer. A few minutes later, the clash began. Losses quickly pushed into the hundreds on both sides.",
       "generation_s": 2.13
     },
@@ -1037,7 +1057,7 @@
       "file": "blocks/c29-b089.wav",
       "sha256": "ab5f2214b3683da71e6d73951ff8c34f80c5829d958290117a64d51088585394",
       "duration_ms": 6625,
-      "start_ms": 881825,
+      "start_ms": 884885,
       "text": "[Gallowar](/ɡˈæləwɑɹ/)'s northern group suddenly switched from retreat to advance and began using the same tactics.",
       "generation_s": 1.01
     },
@@ -1048,7 +1068,7 @@
       "file": "blocks/c29-b090.wav",
       "sha256": "edacaa37a2480ba5aa5711ccf0a22bb139571c450b756007003ae352f0689cec",
       "duration_ms": 7625,
-      "start_ms": 888900,
+      "start_ms": 891960,
       "text": "[Zei](/ˈzA/) watched carefully, holding his breath. He scrolled through small-scale tactical maps and real-time visual feeds.",
       "generation_s": 1.24
     },
@@ -1059,7 +1079,7 @@
       "file": "blocks/c29-b091.wav",
       "sha256": "3e8abf6e478e7b47c6b074f2168df1bbbac704add51a476b5f15a5bdd0ea1567",
       "duration_ms": 2425,
-      "start_ms": 896975,
+      "start_ms": 900035,
       "text": "Something was wrong, he realized.",
       "generation_s": 0.39
     },
@@ -1070,7 +1090,7 @@
       "file": "blocks/c29-b092.wav",
       "sha256": "05c24fe5215c3278c3b02260be399aa657c62fde681dafeb45393e004c41ebf5",
       "duration_ms": 6375,
-      "start_ms": 899850,
+      "start_ms": 902910,
       "text": "\"Emerald, analyze all micro-tactical and visual fields, determine which tactics are effective.\"",
       "generation_s": 0.93
     },
@@ -1081,7 +1101,7 @@
       "file": "blocks/c29-b093.wav",
       "sha256": "04ac31bcc8f0b4f02abd455bdb24e5b080be096c51ff699d8472148c9addab93",
       "duration_ms": 1675,
-      "start_ms": 906675,
+      "start_ms": 909735,
       "text": "\"Analyzing...\"",
       "generation_s": 0.27
     },
@@ -1092,7 +1112,7 @@
       "file": "blocks/c29-b094.wav",
       "sha256": "e13fe3c5a0d9ca4d7817e5efd3dd2339ab732f74af89422df8493d8f7e999663",
       "duration_ms": 3250,
-      "start_ms": 908800,
+      "start_ms": 911860,
       "text": "About twenty ticks later, Emerald responded.",
       "generation_s": 0.5
     },
@@ -1103,7 +1123,7 @@
       "file": "blocks/c29-b095.wav",
       "sha256": "85f4e4f3096e76e574dccf76f20b981710b2e7696c5ce2f14dd98b58b4c8fd38",
       "duration_ms": 10525,
-      "start_ms": 912500,
+      "start_ms": 915560,
       "text": "\"Tactics one and five working with medium effectiveness. Tactics two, three, four, six have zero or slightly negative effect, Arctics appear fully adapted.\"",
       "generation_s": 1.56
     },
@@ -1114,7 +1134,7 @@
       "file": "blocks/c29-b096.wav",
       "sha256": "c3c17a2fde8d51a84eafadbb71e1756b7d4e3d6acc7e80adab367c11d7fa8b63",
       "duration_ms": 12775,
-      "start_ms": 923475,
+      "start_ms": 926535,
       "text": "[Zei](/ˈzA/) groaned. Despite his best efforts, he knew, the Arctics must have successfully recovered at least some of the visual feeds from the drones in Redshire that he and the Freetown defense companies had trained on.",
       "generation_s": 2.32
     },
@@ -1125,7 +1145,7 @@
       "file": "blocks/c29-b097.wav",
       "sha256": "15db78fcf36513e0d99c4a6019323e02bc1c719753d92285cd0eca2dae8472e1",
       "duration_ms": 11175,
-      "start_ms": 936700,
+      "start_ms": 939760,
       "text": "\"All units, cease using tactics two, three, four and six. Use tactics one and five. Units with IDs ending in 0 or 5, explore random modifications.\"",
       "generation_s": 1.64
     },
@@ -1136,7 +1156,7 @@
       "file": "blocks/c29-b098.wav",
       "sha256": "956a49a0d3d2e7cf0fa799d817a7f7cd9f92fcc1775a3dc5ef3fef152b74c7ed",
       "duration_ms": 10550,
-      "start_ms": 948325,
+      "start_ms": 951385,
       "text": "For a few minutes, the casualty ratios moved in favor of the Veridian armies again. Then, slowly but surely, the Arctics again started to gain the upper hand.",
       "generation_s": 1.53
     },
@@ -1147,7 +1167,7 @@
       "file": "blocks/c29-b099.wav",
       "sha256": "88831353621a0fd182946394b9e2bf4e3b8b98283cdd6cc075db309b088d120b",
       "duration_ms": 3900,
-      "start_ms": 959325,
+      "start_ms": 962385,
       "text": "\"Emerald, which modifications are successful?\", he asked.",
       "generation_s": 0.58
     },
@@ -1158,7 +1178,7 @@
       "file": "blocks/c29-b100.wav",
       "sha256": "efd481c7f47dfc496e5b0ded6946d40801e246136a2e432fcf89c2da5f6de3cb",
       "duration_ms": 10575,
-      "start_ms": 963675,
+      "start_ms": 966735,
       "text": "\"Eight were attempted. Only number seven was successful, and has already been introduced as the mainline version of tactic five. Recommend retiring tactic one.\"",
       "generation_s": 1.51
     },
@@ -1169,7 +1189,7 @@
       "file": "blocks/c29-b101.wav",
       "sha256": "410b1c9c001a12806382047ae9a11c51d37131238b60a7c6aaded6029c17c146",
       "duration_ms": 1400,
-      "start_ms": 974700,
+      "start_ms": 977760,
       "text": "\"Do it.\"",
       "generation_s": 0.22
     },
@@ -1180,7 +1200,7 @@
       "file": "blocks/c29-b102.wav",
       "sha256": "9dadcb2bd07e1d959109db35fb51a09e7d8e593c859e7f8fbc22458dff95dca1",
       "duration_ms": 8175,
-      "start_ms": 976550,
+      "start_ms": 979610,
       "text": "[Zei](/ˈzA/) began to sweat with consternation. He had not anticipated the Arctics being able to resist their tactics so effectively.",
       "generation_s": 1.17
     },
@@ -1191,7 +1211,7 @@
       "file": "blocks/c29-b103.wav",
       "sha256": "ca146646d8f22697ca57b54b8915b1b7f8c91fd055ae0181bba2b14216e78f05",
       "duration_ms": 2675,
-      "start_ms": 985175,
+      "start_ms": 988235,
       "text": "Come on, [Zei](/ˈzA/) thought. Think of something.",
       "generation_s": 0.4
     },
@@ -1202,7 +1222,7 @@
       "file": "blocks/c29-b104.wav",
       "sha256": "3e773d4a65bebb7ade9c612008bc0d26d0b9f45aed005923f66ac70c257b2fed",
       "duration_ms": 20250,
-      "start_ms": 988300,
+      "start_ms": 991360,
       "text": "The seaborne drones appeared to have been successful, at least in the early stages of their assault. They had landed ground craft, both east of Northglade and in Arctic core territory in [Telten](/tˈɛltən/) hundreds of kilometers further east. The seaborne drones had already begun returning to base, to receive their second round of payloads.",
       "generation_s": 3.99
     },
@@ -1213,7 +1233,7 @@
       "file": "blocks/c29-b105.wav",
       "sha256": "14a3a2cdb4c0ab5cc4f3a930796211fca3b5a9e56dc367c4e4214553eac29489",
       "duration_ms": 4100,
-      "start_ms": 1009000,
+      "start_ms": 1012060,
       "text": "For a moment, [Zei](/ˈzA/) was pleased. But it was still far from enough.",
       "generation_s": 0.86
     },
@@ -1224,7 +1244,7 @@
       "file": "blocks/c29-b106.wav",
       "sha256": "faa241a54eebcea56cb9b47ba9d93ff1bb847e9f67fe877c89d5eea3d27bf580",
       "duration_ms": 16025,
-      "start_ms": 1013550,
+      "start_ms": 1016610,
       "text": "A robot entered the room, and quietly slid up to [Zei](/ˈzA/) with an energy drink. [Zei](/ˈzA/) picked it up, gulped about half of it, and set the rest down on the table. Within moments, it took effect — but the only effect seemed to be to make [Zei](/ˈzA/) despair even harder.",
       "generation_s": 2.68
     },
@@ -1235,7 +1255,7 @@
       "file": "blocks/c29-b107.wav",
       "sha256": "b45da01387671fa1f754959acc85268574c7fc6632faa1450de74df5a01a8403",
       "duration_ms": 6625,
-      "start_ms": 1030025,
+      "start_ms": 1033085,
       "text": "And a moment later, a message appeared onscreen that drained away all of the remaining light in [Zei](/ˈzA/)'s eyes.",
       "generation_s": 0.96
     },
@@ -1246,10 +1266,11 @@
       "file": "blocks/c29-b108.wav",
       "sha256": "5ec410364176ea0f7cdae08cb7d85ba0d351234b4b25e442e7df5f3f614172ef",
       "duration_ms": 23025,
-      "start_ms": 1037100,
+      "start_ms": 1040160,
       "text": "The message reads: Rear base number three appears to have been completely destroyed by highly accurate hits from Arctic missiles. Most likely cause: internal traitors revealed the location of the base. Current expectation is that almost all personnel in the base did not survive. Probability that [Den](/ˈdɛn/), commander of Group South, survived is estimated at under ten percent.",
       "generation_s": 4.12,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 109,
@@ -1258,7 +1279,7 @@
       "file": "blocks/c29-b109.wav",
       "sha256": "9116452a0e3e7f11ce65db3b9a7e082f832290016a67e59af2899015303d6b11",
       "duration_ms": 2000,
-      "start_ms": 1060725,
+      "start_ms": 1064295,
       "text": "[Zei](/ˈzA/) began to cry.",
       "generation_s": 0.42
     },
@@ -1269,7 +1290,7 @@
       "file": "blocks/c29-b110.wav",
       "sha256": "c2d5ad20791eadc5060aed25cb2e9a2122c36e66ca3a236df78fa96313d5f704",
       "duration_ms": 18700,
-      "start_ms": 1063175,
+      "start_ms": 1066745,
       "text": "For the next few minutes, he half-heartedly whispered into his microphone, proposing minor adjustments to drone tactics, trying to optimize positional advantage and casualty ratios. [Mu](/ˈmu/) had immediately taken over as the commander of Group South. But in his heart, he knew that the battle was lost.",
       "generation_s": 3.39
     },
@@ -1280,7 +1301,7 @@
       "file": "blocks/c29-b111.wav",
       "sha256": "f60c9685c272da5f45177cff514186252eda059b8546e304c3b101502c586111",
       "duration_ms": 2775,
-      "start_ms": 1082325,
+      "start_ms": 1085895,
       "text": "And at that moment, [Zei](/ˈzA/)'s watch buzzed.",
       "generation_s": 0.77
     },
@@ -1291,7 +1312,7 @@
       "file": "blocks/c29-b112.wav",
       "sha256": "d16a1947520bd19d4cd07476476c766a02b68d16f2fa9221d151de769fd3969a",
       "duration_ms": 10350,
-      "start_ms": 1085550,
+      "start_ms": 1089120,
       "text": "This was not a standard military communication channel. And this was something that Emerald deemed important enough to override his strict \"do not disturb\" instruction.",
       "generation_s": 1.87
     },
@@ -1302,7 +1323,7 @@
       "file": "blocks/c29-b113.wav",
       "sha256": "48ac68d39b56d6b504c6a68a28bb223541e59ed9d39c0c07b95f58b5555d3a3b",
       "duration_ms": 7550,
-      "start_ms": 1096350,
+      "start_ms": 1099920,
       "text": "[Zei](/ˈzA/) whispered into his neck band to connect the watch to the display in his glasses. A message appeared onscreen.",
       "generation_s": 1.33
     },
@@ -1313,10 +1334,11 @@
       "file": "blocks/c29-b114.wav",
       "sha256": "8c607e4d02fe54d32a248bd3449d103f6863c33f9fd62464ec4ecd2ff4f3cc93",
       "duration_ms": 51275,
-      "start_ms": 1104350,
+      "start_ms": 1107920,
       "text": "The message reads: This is [Deluin](/dˈɛluɪn/). Over these past months, I have been executing on my plan. I have earned the Arctics' trust; with the combination of my successful [Minpentai](/ˈmɪnpɛntI/) background and my parents' status, this proved to be easy. As a result, I am now one of the commanders on the Arctic side. We are being heavily surveilled, and there are great limits to what I can do to the Arctic drone fleet without blowing my cover. However, I have managed to set up an exploitable weakness for you. This file contains descriptions of tactics that should be effective specifically against the southern flank, which I control. If you apply them, you should be able to break through about twenty kilometers north of the shore, and then proceed north and south to expand the rupture into a complete victory on the southern front. From there, it will be up to you to surround the remaining forces from the south, and recover Northglade.",
       "generation_s": 8.73,
-      "read_aloud_status": "unreviewed"
+      "read_aloud_status": "unreviewed",
+      "tone_ms": 510
     },
     {
       "idx": 115,
@@ -1325,7 +1347,7 @@
       "file": "blocks/c29-b115.wav",
       "sha256": "80c638ecba74ab6713b0f32b8ab0e5b8fcfe62c2c0e0188d6cb5eebc5771b215",
       "duration_ms": 7550,
-      "start_ms": 1156225,
+      "start_ms": 1160305,
       "text": "Almost immediately, a burst of energy returned to [Zei](/ˈzA/)'s mind. He would have to mourn the loss of [Den](/ˈdɛn/) another day.",
       "generation_s": 1.35
     },
@@ -1336,7 +1358,7 @@
       "file": "blocks/c29-b116.wav",
       "sha256": "47f445f4922ccab27e1fc380bc6354a33b21286f8c1e33842be4a594ca55a4f4",
       "duration_ms": 3575,
-      "start_ms": 1164225,
+      "start_ms": 1168305,
       "text": "\"Emerald, confirm the authenticity of this message.\"",
       "generation_s": 0.61
     },
@@ -1347,7 +1369,7 @@
       "file": "blocks/c29-b117.wav",
       "sha256": "0251b497b4efc5c8321e58d86f489e0680e6f0be8d2a4c9da3f99268cabf88c2",
       "duration_ms": 7950,
-      "start_ms": 1168250,
+      "start_ms": 1172330,
       "text": "\"Message was signed by the same key that was embedded in [Deluin](/dˈɛluɪn/)'s original message that you received on [Grapetime](/ɡɹˈAptIm/) 15.\"",
       "generation_s": 1.36
     },
@@ -1358,7 +1380,7 @@
       "file": "blocks/c29-b118.wav",
       "sha256": "17ddf1333a3ea5886f3361c82a47fe65b1be7168459955f85106b0eef035ad7c",
       "duration_ms": 3150,
-      "start_ms": 1176650,
+      "start_ms": 1180730,
       "text": "\"Analyze the tactics, do they seem plausible?\"",
       "generation_s": 0.5
     },
@@ -1369,7 +1391,7 @@
       "file": "blocks/c29-b119.wav",
       "sha256": "7d7608ac847a20e9aa7302fe6c49ffab52e2abb1c6d4452d7634d346a73b89fc",
       "duration_ms": 14625,
-      "start_ms": 1180250,
+      "start_ms": 1184330,
       "text": "\"Tactics are highly aggressive. They seem unorthodox, but plausible. They will be very effective against an opponent that is vulnerable to them, but will lead to much faster defeat against an opponent that is not. Running a simulation.\"",
       "generation_s": 2.11
     },
@@ -1380,7 +1402,7 @@
       "file": "blocks/c29-b120.wav",
       "sha256": "8a130878bf4fd69200f5f54debd037e075a20ac8234b35e5a0fec0b180f4f090",
       "duration_ms": 3325,
-      "start_ms": 1195325,
+      "start_ms": 1199405,
       "text": "About twenty ticks later, Emerald spoke again.",
       "generation_s": 0.5
     },
@@ -1391,7 +1413,7 @@
       "file": "blocks/c29-b121.wav",
       "sha256": "b355305dfcf0fb4763867f6fffbc2bc2394afce37c5142c999a448ee3cecd515",
       "duration_ms": 17150,
-      "start_ms": 1199100,
+      "start_ms": 1203180,
       "text": "\"Tactics would lead to faster defeat if used against Veridian, [Kungaupei](/ˈkunɡWpA/) or Freetown AI. Their effectiveness hinges entirely on [Deluin](/dˈɛluɪn/) being correct that the Arctic AI has the particular weakness that he is positing, which could be either discovered or planted.\"",
       "generation_s": 2.4
     },
@@ -1402,7 +1424,7 @@
       "file": "blocks/c29-b122.wav",
       "sha256": "3fbbd98ae66e34272ebdb17e817e04b3d7a3512d95e9bea441507d5508eb361f",
       "duration_ms": 4200,
-      "start_ms": 1216700,
+      "start_ms": 1220780,
       "text": "[Zei](/ˈzA/) thought for a moment, and then decided to ask for human help.",
       "generation_s": 0.64
     },
@@ -1413,7 +1435,7 @@
       "file": "blocks/c29-b123.wav",
       "sha256": "c568d86fa779d303e3dfcae0a2cb95009a960877f1c9f268fe4b92c744d03ea8",
       "duration_ms": 4825,
-      "start_ms": 1221350,
+      "start_ms": 1225430,
       "text": "\"[Bai](/ˈbI/), I'm sending you a message from [Deluin](/dˈɛluɪn/). Please tell me what you think of it.\"",
       "generation_s": 0.7
     },
@@ -1424,7 +1446,7 @@
       "file": "blocks/c29-b124.wav",
       "sha256": "50beb9531d10b6426cd45930bedcb5e9c1e723d3c07c798d88766b799816e209",
       "duration_ms": 2700,
-      "start_ms": 1226625,
+      "start_ms": 1230705,
       "text": "[Bai](/ˈbI/) responded almost immediately.",
       "generation_s": 0.39
     },
@@ -1435,7 +1457,7 @@
       "file": "blocks/c29-b125.wav",
       "sha256": "4695633e1d77e384f7b52505f93cc2abfcc6397548fef7fe2c3069d75410e4e8",
       "duration_ms": 1600,
-      "start_ms": 1229775,
+      "start_ms": 1233855,
       "text": "\"Reading now.\"",
       "generation_s": 0.25
     },
@@ -1446,7 +1468,7 @@
       "file": "blocks/c29-b126.wav",
       "sha256": "e46193e0cee90caa70334a2b4d3f9d143c6935055409a8d8c682e8e6a2bc1d37",
       "duration_ms": 3325,
-      "start_ms": 1231825,
+      "start_ms": 1235905,
       "text": "About thirty ticks later, she responded again.",
       "generation_s": 0.48
     },
@@ -1457,7 +1479,7 @@
       "file": "blocks/c29-b127.wav",
       "sha256": "a205f7dcac36a9f9bd52b4f7b52e93a09a622311b6ecb2197fe968fa6b4af504",
       "duration_ms": 16125,
-      "start_ms": 1235600,
+      "start_ms": 1239680,
       "text": "\"I don't know if we can trust [Deluin](/dˈɛluɪn/). All that we have to go on is his word. Even his message to you back in [Grapetime](/ɡɹˈAptIm/) could have been planted. The Arctics are fully capable of these kinds of strategies, Delwart had planted evidence for months against Gladias and Mov.\"",
       "generation_s": 2.24
     },
@@ -1468,7 +1490,7 @@
       "file": "blocks/c29-b128.wav",
       "sha256": "fd34f5f08eb12674fb13ba6a62aaccd7874b824d4f8cd78766c67d8739fcca6b",
       "duration_ms": 2175,
-      "start_ms": 1252175,
+      "start_ms": 1256255,
       "text": "\"But I have a different idea.\"",
       "generation_s": 0.37
     },
@@ -1479,7 +1501,7 @@
       "file": "blocks/c29-b129.wav",
       "sha256": "10969b46e8a145cbaf552780745cddd64426b108fafb50db231f1e39f4fc7112",
       "duration_ms": 1600,
-      "start_ms": 1254800,
+      "start_ms": 1258880,
       "text": "\"I'm listening.\"",
       "generation_s": 0.27
     },
@@ -1490,7 +1512,7 @@
       "file": "blocks/c29-b130.wav",
       "sha256": "b3096539bdde533d0d0a5b9156ca907aa02ad9c20d9fc58a531dd023e8633084",
       "duration_ms": 10675,
-      "start_ms": 1256850,
+      "start_ms": 1260930,
       "text": "\"We have no good reason to trust [Deluin](/dˈɛluɪn/). But [Deluin](/dˈɛluɪn/) has every reason to trust us. So we flip it around on him. It's his responsibility to take the first leap of faith.\"",
       "generation_s": 1.57
     },
@@ -1501,7 +1523,7 @@
       "file": "blocks/c29-b131.wav",
       "sha256": "bcac054f470864de2f53035c3e301b35696e190a1be2829373d0a607e2327d1a",
       "duration_ms": 1925,
-      "start_ms": 1267975,
+      "start_ms": 1272055,
       "text": "\"And what do you want him to do?\"",
       "generation_s": 0.31
     },
@@ -1512,7 +1534,7 @@
       "file": "blocks/c29-b132.wav",
       "sha256": "77373b39b43c4b20cf34979c22503566b656fbf5de2e7e78bea2d19fd77d2263",
       "duration_ms": 3800,
-      "start_ms": 1270350,
+      "start_ms": 1274430,
       "text": "\"Send us the raw weights from the Arctic drones' AI model.\"",
       "generation_s": 0.55
     },
@@ -1523,7 +1545,7 @@
       "file": "blocks/c29-b133.wav",
       "sha256": "41c1424bc826367a173462ea4271d46425ce2b1b3c94b563b8be425623956902",
       "duration_ms": 2800,
-      "start_ms": 1274600,
+      "start_ms": 1278680,
       "text": "[Bai](/ˈbI/) paused for a moment, and continued.",
       "generation_s": 0.41
     },
@@ -1534,7 +1556,7 @@
       "file": "blocks/c29-b134.wav",
       "sha256": "231e05b762c3cc6ea104df35d3ac9078631983f126a6a869705479badd68acc0",
       "duration_ms": 22150,
-      "start_ms": 1277850,
+      "start_ms": 1281930,
       "text": "\"AI models are not like regular software, where you can analyze the whole thing and identify safety properties and mathematically prove them secure. They're unpredictable beasts — they are grown, not forged. They don't have walls, they have immune systems. And so if we have the raw weights, we can run simulations in parallel and optimize attacks that will trick them.\"",
       "generation_s": 3.78
     },
@@ -1545,7 +1567,7 @@
       "file": "blocks/c29-b135.wav",
       "sha256": "6f0324e758983b168d5361fbebc7309240a2406b7a3abad533effa4e157f1374",
       "duration_ms": 2825,
-      "start_ms": 1300450,
+      "start_ms": 1304530,
       "text": "[Zei](/ˈzA/)'s mood once again became brighter.",
       "generation_s": 0.98
     },
@@ -1556,7 +1578,7 @@
       "file": "blocks/c29-b136.wav",
       "sha256": "72b0894ce73b9f294f5d139e6785c689c5512fe11c564bfc16d29bcec8104da3",
       "duration_ms": 34200,
-      "start_ms": 1303725,
+      "start_ms": 1307805,
       "text": "\"It's actually much easier than running simulations in parallel. You use gradient descent. You can take the derivative of the outcome of the model in the simulator against all of the variables that we can change in the field — drawings that we stick on the side of the drone, the way the drone acts. You automatically identify the small change that will maximize the increase in the probability that their model fails to notice our drone. Even a small step that increases the chance they don't notice one of our drones from one in a million to two in a million can immediately be found.\"",
       "generation_s": 7.49
     },
@@ -1567,7 +1589,7 @@
       "file": "blocks/c29-b137.wav",
       "sha256": "b58eb74e9a55e3cb95c2b8801742624478d535fced88241bc9f0ce2a5f181e4a",
       "duration_ms": 34900,
-      "start_ms": 1338375,
+      "start_ms": 1342455,
       "text": "\"You keep finding adjustments that maximize the likelihood of success. Try different simulators with different parameters — remember, the final attack would appear in the real world, not inside a simulator, so the best we can do is filter for changes that are robust across different simulators. And after a million rounds, hopefully we will have something that works quite well, and in real life. To us humans, it will probably be a bunch of squiggles that look incomprehensible and weird. To the AI that we're optimizing this attack for, it's like a magical snake with a deadly stare looking at you right in your face.\"",
       "generation_s": 8.3
     },
@@ -1578,7 +1600,7 @@
       "file": "blocks/c29-b138.wav",
       "sha256": "4e70795b825b2131d1326aa8d5f60186a1c741b6e6803e6a692ae46108d524c6",
       "duration_ms": 12075,
-      "start_ms": 1373725,
+      "start_ms": 1377805,
       "text": "\"We probably can't convince their drones to turn against their masters or shut down, but we can get them to not notice our drones, maybe even shoot their own feet and overheat and become disabled.\"",
       "generation_s": 2.25
     },
@@ -1589,7 +1611,7 @@
       "file": "blocks/c29-b139.wav",
       "sha256": "45e2bb06f8653984fc41dfe82edab3d440d2dcb4fd42a7d8fe4fa5b2b5324275",
       "duration_ms": 4425,
-      "start_ms": 1386250,
+      "start_ms": 1390330,
       "text": "\"Wow. Alright then, let's send back a message to [Deluin](/dˈɛluɪn/) and ask.\"",
       "generation_s": 0.83
     },
@@ -1600,9 +1622,22 @@
       "file": "blocks/c29-b140.wav",
       "sha256": "46068bc049dddc6b47f90291fd65dee0088b719750c4c7f8aab9273629447b30",
       "duration_ms": 10800,
-      "start_ms": 1391125,
+      "start_ms": 1395205,
       "text": "\"Emerald, draft a message to [Deluin](/dˈɛluɪn/) expressing what [Bai](/ˈbI/) just said. And send it back through the same steganographic channel that he used. Hopefully, [Deluin](/dˈɛluɪn/) will understand.\"",
       "generation_s": 1.86
     }
-  ]
+  ],
+  "restitched_at": "2026-10-05T18:52:59+00:00",
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent and its helper agents",
+    "drafted": [
+      "spoken descriptions of screens, figures and lyric cards (blocks 34, 59, 68, 74, 78, 81, 108, 114)",
+      "pronunciation entries (content/snowmoon/pronunciation.json)"
+    ],
+    "instructions": [
+      "docs/prompts/008a-agent-prompts.md#read-aloud-descriptions-and-invented-word-lists"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
 }

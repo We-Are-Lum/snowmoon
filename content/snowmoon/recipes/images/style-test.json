@@ -305,5 +305,17 @@
       ],
       "generation_seconds": 249.2
     }
-  ]
+  ],
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent",
+    "drafted": [
+      "style descriptions",
+      "image prompts"
+    ],
+    "instructions": [
+      "docs/prompts/008-narration-and-images.md"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
 }
