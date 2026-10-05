@@ -90,6 +90,9 @@ def main() -> None:
                 continue
             folder = single.stem if single else f"chapter-{job['chapter']}"
             src = ROOT / "images-out" / folder / f"{job['id']}.png"
+            if job.get("grade"):
+                # Graded in code first (scripts/grade-images.py): letter the graded file.
+                src = src.with_name(f"{job['id']}.graded.png")
             out = src.with_name(f"{job['id']}.lettered.png")
             base = Image.open(src).convert("RGBA")
             for item in job["lettering"]:
@@ -103,7 +106,7 @@ def main() -> None:
                 "job_file": job_rel,
                 "job_file_commit": git("log", "-1", "--format=%H", "--", job_rel),
                 "lettering": job["lettering"],
-                "input": {"file": f"images-out/{folder}/{src.name}", "sha256": sha256(src), "role": "clean render, the starting point for a remix"},
+                "input": {"file": f"images-out/{folder}/{src.name}", "sha256": sha256(src), "role": "graded render (grade record: <stem>.grade.json)" if job.get("grade") else "clean render, the starting point for a remix"},
                 "output": {"file": f"images-out/{folder}/{out.name}", "sha256": sha256(out)},
             })
             print(f"{job['id']}: {len(job['lettering'])} items -> {out.name} ({sha256(out)[:12]})")
