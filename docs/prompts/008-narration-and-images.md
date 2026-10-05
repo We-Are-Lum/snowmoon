@@ -392,3 +392,16 @@ Prompts must be public, and users must know their words will be.
 Fit this into part A of the current work, before 0004 is handed
 over.
 ```
+
+```text
+0004 is applied.
+
+1. Verify on the real database, inside a rolled-back transaction:
+   as studio_writer add one like to a published version, then as
+   anon confirm like_totals shows it and studio.likes shows
+   nothing. Re-run P6c.
+2. Take likes private: yes.
+3. The assist gap: use the side table. Put it in 0005.
+4. The comic's style stays as is for this piece. No night variant
+   yet.
+```

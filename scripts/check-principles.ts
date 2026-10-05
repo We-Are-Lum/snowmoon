@@ -440,6 +440,39 @@ add({
   },
 });
 
+add({
+  id: 'P3d',
+  principle: 3,
+  name: 'live database: house narration recipes declare assist (recipes.assist or recipe_assist)',
+  load: async () => {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    const empty = { skipped: '', ids: [] as string[], withColumn: [] as string[], withSide: [] as string[] };
+    if (!url || !key) return { ...empty, skipped: 'NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY not set' };
+    const headers = { apikey: key, Authorization: `Bearer ${key}`, 'Accept-Profile': 'studio' };
+    const get = async (q: string) => fetch(`${url}/rest/v1/${q}`, { headers });
+    const side = await get('recipe_assist?select=recipe_id&limit=1');
+    if (side.status === 404) return { ...empty, skipped: 'studio.recipe_assist does not exist yet (migration 0005 not applied)' };
+    const [house] = await (await get('house_narrations?select=narration_id&work_id=eq.snowmoon&chapter=eq.1')).json();
+    const segs = (await (await get(`narration_segments?select=recipe_id&narration_id=eq.${house.narration_id}`)).json()) as { recipe_id: string }[];
+    const ids = segs.map((x) => x.recipe_id);
+    const inList = `(${ids.join(',')})`;
+    const recipes = (await (await get(`recipes?select=id,assist&id=in.${inList}`)).json()) as { id: string; assist: unknown }[];
+    const sides = (await (await get(`recipe_assist?select=recipe_id&recipe_id=in.${inList}`)).json()) as { recipe_id: string }[];
+    return { skipped: '', ids, withColumn: recipes.filter((r) => r.assist).map((r) => r.id), withSide: sides.map((r) => r.recipe_id) };
+  },
+  run: ({ skipped, ids, withColumn, withSide }) => {
+    if (skipped) return [`skipped: ${skipped}`];
+    const have = new Set([...withColumn, ...withSide]);
+    const missing = ids.filter((id) => !have.has(id)).length;
+    return missing ? [`${missing} of ${ids.length} chapter 1 narration recipes have no assist record (run scripts/backfill-recipe-assist.ts)`] : [];
+  },
+  plant: (c) => {
+    c.skipped = '';
+    c.ids = [...c.ids, '00000000-0000-0000-0000-00000000dead'];
+  },
+});
+
 // ---------------------------------------------------------------------------
 // P4. No model output is published without a signed-in person's action.
 // ---------------------------------------------------------------------------

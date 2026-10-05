@@ -20,6 +20,11 @@
 --                          contribution of one's own words, to the wording in
 --                          config/consent.json (recorded by its sha256). The
 --                          table stays private (0002).
+--   recipe_assist          new, append-only: which inputs a model drafted, for
+--                          recipes written before assist was filled in
+--                          (recipes are append-only, so their assist column
+--                          cannot be set afterwards). One row per recipe; public
+--                          exactly when its recipe is. Owner decision, Oct 5.
 
 begin;
 
@@ -46,5 +51,34 @@ alter table studio.contributor_consents add constraint contributor_consents_kind
   check (kind in ('handmade_upload','voice_recording','own_words'));
 comment on column studio.contributor_consents.kind is
   'own_words: agreed, before a first contribution of their own words, that they are public, permanent, GPL-3.0 and shown with their Farcaster name (config/consent.json)';
+
+-- ---------------------------------------------------------------------------
+-- recipe_assist: the assist record for recipes that predate it
+-- ---------------------------------------------------------------------------
+
+create table studio.recipe_assist (
+  recipe_id uuid primary key references studio.recipes(id),
+  assist jsonb not null,
+  source text not null,              -- the committed recipe file it was taken from
+  recorded_by_fid bigint not null,
+  created_at timestamptz not null default now()
+);
+comment on table studio.recipe_assist is
+  'Which inputs a model drafted, for recipes written before recipes.assist was filled in. Append-only; read it together with recipes.assist (principle 3).';
+
+create trigger recipe_assist_append_only
+  before update or delete on studio.recipe_assist
+  for each row execute function studio.reject_mutation();
+create trigger recipe_assist_no_truncate
+  before truncate on studio.recipe_assist
+  for each statement execute function studio.reject_mutation();
+
+alter table studio.recipe_assist enable row level security;
+-- Public exactly when the recipe is: the subquery runs under the reader's own
+-- recipe policy above.
+create policy public_read on studio.recipe_assist for select using (
+  exists (select 1 from studio.recipes r where r.id = recipe_id)
+);
+create policy writer_all on studio.recipe_assist for all to studio_writer using (true) with check (true);
 
 commit;

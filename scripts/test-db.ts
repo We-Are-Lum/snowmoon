@@ -394,6 +394,27 @@ for (const role of ['anon', 'authenticated']) {
   await denied(`${role} cannot record a consent`, role, `insert into studio.contributor_consents (fid, kind, consent_text_sha256) values (9, 'own_words', '${SHA}')`, PERM);
 }
 
+await equal('RLS on every studio table after 0005', 'postgres',
+  `select count(*)::int as v from pg_tables where schemaname = 'studio' and not rowsecurity`, 0);
+// 0005: recipe_assist, the assist record for recipes that predate it.
+const ASSIST = `'{"model": "claude-coding-agent", "drafted": ["spoken descriptions"]}'`;
+await ok('writer records assist for a published recipe and a draft one', W, `
+  insert into studio.recipe_assist (recipe_id, assist, source, recorded_by_fid) values
+    ('00000000-0000-0000-0000-00000000b0a1', ${ASSIST}, 'content/snowmoon/recipes/narration/chapter-1.json', 6786),
+    ('00000000-0000-0000-0000-00000000b0a2', ${ASSIST}, 'content/snowmoon/recipes/narration/chapter-1.json', 6786)`);
+await denied('recipe_assist is append-only (update)', W, `update studio.recipe_assist set assist = '{}'`, /append-only/);
+await denied('recipe_assist is append-only (delete)', W, `delete from studio.recipe_assist`, /append-only/);
+await denied('one assist record per recipe', W,
+  `insert into studio.recipe_assist (recipe_id, assist, source, recorded_by_fid) values ('00000000-0000-0000-0000-00000000b0a1', ${ASSIST}, 'x', 6786)`, /recipe_assist_pkey/);
+for (const role of ['anon', 'authenticated']) {
+  await equal(`${role} reads assist for a published recipe`, role,
+    `select count(*)::int as v from studio.recipe_assist where recipe_id = '00000000-0000-0000-0000-00000000b0a1'`, 1);
+  await equal(`${role} cannot read assist for a draft's recipe`, role,
+    `select count(*)::int as v from studio.recipe_assist where recipe_id = '00000000-0000-0000-0000-00000000b0a2'`, 0);
+  await denied(`${role} cannot record assist`, role,
+    `insert into studio.recipe_assist (recipe_id, assist, source, recorded_by_fid) values ('00000000-0000-0000-0000-00000000b0a4', ${ASSIST}, 'x', 1)`, PERM);
+}
+
 // --- The real seed script, as studio_writer, over the wire --------------------
 await db.exec(`delete from studio.text_blocks`);
 await db.exec(`set role studio_writer`);

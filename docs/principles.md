@@ -76,9 +76,12 @@ person's own words yet, so the consent screen and the preview are built but
 not yet used.
 
 Every committed recipe now records `assist`: which inputs a
-model drafted (see 3). Open gap: the 4,237 narration recipes already in
-`studio.recipes` have no `assist`, and that table is append-only; the scripts
-write it for new rows.
+model drafted (see 3). The 4,237 narration recipes already in
+`studio.recipes` predate `assist`, and that table is append-only, so 0005 adds
+an append-only side table, `studio.recipe_assist`, public exactly when its
+recipe is; `scripts/backfill-recipe-assist.ts` copies each record from the
+committed recipe file (all 4,237 are covered). New rows carry `assist`
+directly.
 
 ## 2. AI use is declared on every element. The book's text is never altered, and nothing generated is presented as the author's. The words of a piece are the author's or a signed-in person's.
 
@@ -163,6 +166,9 @@ used anywhere in the pipeline is reported here if its weights are closed.
 
 - `P3c`: every committed recipe file has an `assist` field: the drafting
   model and what it drafted, or null.
+- `P3d`: on the live database, every recipe of the house narration (chapter 1
+  sampled) has `assist` in the column or in `studio.recipe_assist`. Skipped
+  until 0005 creates the table; fails after that until the backfill runs.
 
 **Status.** Pass. Both generation models record `open_weights: true`, their
 license and their weights. The closed drafting model is listed under
@@ -318,6 +324,7 @@ None on the automated checks once this change is deployed (`P1d` fails on
 production until then).
 
 Pending: migration 0005 (recipes of drafts and abandoned attempts private;
-consent kind `own_words`) is written and tested, not applied. Recorded
-exception: 148 model-drafted spoken descriptions (2), labelled, list may only
-shrink. Open gap: `assist` on narration recipes already in the database (1, 3).
+consent kind `own_words`; `studio.recipe_assist`) is written and tested, not
+applied; after it, `scripts/backfill-recipe-assist.ts --write` closes the
+`assist` gap and `P3d` stops skipping. Recorded exception: 148 model-drafted
+spoken descriptions (2), labelled, list may only shrink.
