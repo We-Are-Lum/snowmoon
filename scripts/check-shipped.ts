@@ -68,6 +68,15 @@ await check('chapter 1 has the narration player and its audio and images load', 
   return i.status === 200 ? null : `image HTTP ${i.status}`;
 });
 
+await check('quote cards draw from the book and refuse anything else', async () => {
+  const real = await fetch(base + '/api/card/1/4?q=' + encodeURIComponent('His watch had learned that the drone was not a threat'));
+  if (real.status !== 200 || real.headers.get('content-type') !== 'image/jpeg') return `real quote: HTTP ${real.status} ${real.headers.get('content-type')}`;
+  const fake = await fetch(base + '/api/card/1/4?q=' + encodeURIComponent('Gladias loved the Arctic Emperor'));
+  if (fake.status !== 404) return `invented quote: expected 404, got ${fake.status}`;
+  const share = await get('/share/1/4?img=c1-b005-toy-drone');
+  return share.status === 200 && share.body.includes('fc:miniapp') && share.body.includes('/api/card/1/4') ? null : 'share page lacks its card embed';
+});
+
 await check('about page carries attribution and no-token statement', async () => {
   const r = await get('/about');
   if (r.status !== 200) return `HTTP ${r.status}`;

@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
+import { SHARE_BLOCK_EVENT } from './quote-share';
 
 /**
  * Play view (brief Milestone 3 and §4e): plays the chapter's house narration,
@@ -234,6 +235,13 @@ export function ChapterPlayer({ chapter, chapters, label, url, duration, cues, i
               aria-label={`Speed ${rate} times`}
             >
               {rate}×
+            </button>
+            <button
+              type="button"
+              onClick={() => window.dispatchEvent(new CustomEvent(SHARE_BLOCK_EVENT, { detail: { idx: cues[cue]?.idx } }))}
+              aria-label="Share this paragraph as a quote card"
+            >
+              ↗
             </button>
             {images.length > 0 && !showImage && (
               <button type="button" onClick={() => setShowImage(true)} aria-label="Show images">

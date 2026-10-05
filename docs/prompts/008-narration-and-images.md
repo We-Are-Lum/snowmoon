@@ -216,3 +216,11 @@ Ok. Yes. Going to sleep soon. So try to do as much as you can progressing forwar
 ```
 
 Answers: narration records credited to FID 6786; the player goes live if all checks pass, otherwise stays on a preview; show the seeded images except the three that still clone characters.
+
+```text
+I think a key thing is to get to the point when people can create something very shareable: like an image with a quote, then getting to short comics, that includes summaries and rewriting, that can be shared, and can receive likes and expression of approval
+```
+
+```text
+Ok.
+```

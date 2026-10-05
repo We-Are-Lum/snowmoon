@@ -10,6 +10,7 @@ import { REPO_URL, WORK } from '~/lib/config';
 import { loadNarration } from '~/lib/narration';
 import { loadIllustrations } from '~/lib/illustrations';
 import { ChapterPlayer } from '~/components/chapter-player';
+import { QuoteShare } from '~/components/quote-share';
 import type { Block } from '~/lib/book';
 
 type Props = { params: Promise<{ n: string }> };
@@ -113,6 +114,7 @@ export default async function ChapterPage({ params }: Props) {
       <a className="provenance" href={chapter.source_url}>
         Text from the source edition, fetched {chapter.fetched_at} · GPL v3
       </a>
+      <QuoteShare chapter={n} images={images.map(({ id, idx, url, alt }) => ({ id, idx, url, alt }))} />
       {narration && (
         <ChapterPlayer
           chapter={n}

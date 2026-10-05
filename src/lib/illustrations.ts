@@ -23,11 +23,17 @@ export interface Illustration {
 function altFor(chapter: number, id: string): string {
   const file = path.join(process.cwd(), 'content', WORK.id, 'illustrations', `chapter-${chapter}.json`);
   const job = JSON.parse(readFileSync(file, 'utf8')).jobs.find((j: { id: string }) => j.id === id);
-  const first = String(job?.prompt ?? '').split(/(?<=\.)\s/).slice(0, 2).join(' ');
+  const first = String(job?.prompt ?? '')
+    .split(/(?<=\.)\s/)
+    .slice(0, 2)
+    .join(' ')
+    // Drop camera directions ("Medium shot inside", "Wide establishing view of") meant for the model.
+    .replace(/^(?:very |dramatic |slightly )?(?:wide|medium|close|tight|low|high|overhead)?[- ]?(?:angle )?(?:establishing )?(?:shot|view|close-up)(?: of| inside| on| from| at| in)?\s*/i, '')
+    .replace(/^./, (c) => c.toUpperCase());
   return first.replace(/\b(the )?(man|woman|boy|girl|young man|young woman|teenage boy|teenage girl|person) from reference image \d/gi, (m) => {
     const who = m.replace(/^the /i, '').replace(/ from reference image \d/i, '');
     return `a ${who}`;
-  });
+  }).replace(/(^|[.!?]\s+)([a-z])/g, (_, lead: string, c: string) => lead + c.toUpperCase());
 }
 
 type Entry = Illustration & { chapter: number };

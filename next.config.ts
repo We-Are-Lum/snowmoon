@@ -16,8 +16,16 @@ const nextConfig: NextConfig = {
     APP_COMMIT: buildCommit(),
     APP_BUILT_AT: new Date().toISOString(),
   },
-  // Chapter JSON is read from disk at build time; make sure it ships with any server output too.
-  outputFileTracingIncludes: { '/**': ['./content/snowmoon/text/**'] },
+  // Files read from disk at runtime (share pages and quote cards are rendered on demand).
+  outputFileTracingIncludes: {
+    '/**': [
+      './content/snowmoon/text/**',
+      './content/snowmoon/illustrations/**',
+      './node_modules/@fontsource/crimson-pro/files/crimson-pro-latin-*-normal.woff',
+      './node_modules/@fontsource/crimson-pro/files/crimson-pro-latin-*-italic.woff',
+      './node_modules/@fontsource/dm-mono/files/dm-mono-latin-*-normal.woff',
+    ],
+  },
 };
 
 export default nextConfig;

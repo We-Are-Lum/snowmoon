@@ -22,13 +22,16 @@
   "dependencies": {
     "@farcaster/miniapp-sdk": "^0.3.0",
     "@farcaster/quick-auth": "^0.0.8",
+    "@fontsource/crimson-pro": "^5.3.0",
+    "@fontsource/dm-mono": "^5.3.0",
     "@supabase/supabase-js": "^2.117.2",
     "marked": "^18.0.14",
     "next": "^15.5.27",
     "postgres": "^3.4.9",
     "react": "^19.3.0",
     "react-dom": "^19.3.0",
-    "server-only": "^0.0.1"
+    "server-only": "^0.0.1",
+    "sharp": "^0.35.5"
   },
   "devDependencies": {
     "@aws-sdk/client-s3": "^3.1146.0",

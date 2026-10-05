@@ -625,6 +625,16 @@ No change is needed for location profiles: 0001's `entities.kind` already allows
 
 ---
 
+## 4f. The shareable path (Oct 5, 2026)
+
+The owner's priority: get to things people share, then let them approve of what others made. Order, approved:
+
+1. **Quote cards (shipped Oct 5, stateless).** Select a passage (up to four paragraphs) or share the paragraph being read; pick one of the chapter's images or none; cast it or copy the link. `/share/<chapter>/<from>[-<to>]?q=…&img=…` names everything; `src/lib/quote.ts` checks the quote is in the book before anything is drawn, so a card can never misquote it. `/api/card/…` draws a 1200×800 JPEG with lettering in code (Crimson Pro and DM Mono, OFL), cached for a year. Share pages carry `fc:miniapp` so the card is the cast's preview and the button opens the paragraph. Nothing is stored.
+2. **Saved cards, likes and approval.** A saved card is a `text` element anchored to its passage with a `uses` link to its image. A like is a +1 on the existing −5…5 `ratings` scale, so it feeds the same scoring. Farcaster likes and recasts on shared casts count once Milestone 6 reads reactions.
+3. **Short comics.** A take over a short run of paragraphs, three to six panels, each an image with lettering drawn in code. Summaries and rewrites go in captions, labelled as adaptations with the original one tap away. A comic gets its own share card from its panels. Help writing captions needs a language model, which joins `config/models.json` like any other model.
+
+---
+
 ## 5. Data model
 
 ### Core (migration 0001)
