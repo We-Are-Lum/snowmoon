@@ -316,6 +316,10 @@ Raise a conflict before you resolve it.
 ```
 
 ```text
+[Owner prompt: build one narrated comic for seed dog-dawn in three steps (script, generation, assembly), the script format, and docs/adaptation-format.md. Recorded in full in adaptations/dog-dawn/prompts/000-request.md.]
+```
+
+```text
 Decisions on the principles audit:
 
 1. P2b: label generated images "AI-generated" in captions and on
