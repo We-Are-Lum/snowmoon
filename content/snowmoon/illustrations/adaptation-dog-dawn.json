@@ -1,5 +1,5 @@
 {
-  "about": "Panels for the adaptation dog-dawn (adaptations/dog-dawn/script.md, approved by FID 6786 on 2026-10-05): one clean render per beat, at most three attempts each; every attempt is a job here, so every attempt has a recipe. Lettering is drawn in code afterwards. Not published until the owner has watched the piece.",
+  "about": "Panels for the adaptation dog-dawn (adaptations/dog-dawn/script.md, approved by FID 6786 on 2026-10-05): one clean render per beat (beat 7 is drawn in code, under \"drawn\"), at most three attempts each; every attempt is a job here, so every attempt has a recipe. Lettering is drawn in code afterwards. Not published until the owner has watched the piece.",
   "style": "designs/styles/techno-vistas.json",
   "jobs": [
     {
@@ -213,6 +213,26 @@
       ]
     },
     {
+      "id": "dd-05-a3",
+      "beat": 5,
+      "attempt": 3,
+      "chapter": 30,
+      "idx": 29,
+      "setting": "arctic",
+      "characters": [
+        "designs/characters/deluin.json"
+      ],
+      "references": [
+        "cast/deluin-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot inside the command room at night, seen from in front of the console. The young man from reference image 1 sits facing the viewer behind the console, his body and face turned toward us, lit cold blue from below by the screen; his eyes are cut sideways, wary, toward the frosted glass wall behind him. He is the only person in the room. Behind him, outside the room, beyond the frosted glass, stands the dark faceless silhouette of a guard, blurred by the glass. The room is dark, lit only by the screen. Cold blue light, tense mood.",
+      "width": 1024,
+      "height": 576,
+      "seed": 50053,
+      "location": "designs/locations/arctic-command-post.json"
+    },
+    {
       "id": "dd-06-a1",
       "beat": 6,
       "attempt": 1,
@@ -227,32 +247,6 @@
       "width": 1024,
       "height": 576,
       "seed": 50061,
-      "lettering": [
-        {
-          "kind": "sign",
-          "text": "DOG",
-          "lang": "en",
-          "gloss": null,
-          "speaker_entity_id": null,
-          "x": 0.335,
-          "y": 0.7,
-          "w": 0.07,
-          "size": 0.028,
-          "rotate": -14
-        },
-        {
-          "kind": "sign",
-          "text": "DOG",
-          "lang": "en",
-          "gloss": null,
-          "speaker_entity_id": null,
-          "x": 0.47,
-          "y": 0.63,
-          "w": 0.05,
-          "size": 0.02,
-          "rotate": -10
-        }
-      ],
       "grade": [
         {
           "op": "predawn"
@@ -261,7 +255,7 @@
     },
     {
       "id": "dd-07-a1",
-      "beat": 7,
+      "beat": 8,
       "attempt": 1,
       "chapter": 30,
       "idx": 48,
@@ -303,7 +297,7 @@
     },
     {
       "id": "dd-07-a2",
-      "beat": 7,
+      "beat": 8,
       "attempt": 2,
       "chapter": 30,
       "idx": 48,
@@ -313,118 +307,11 @@
       "prompt": "Dynamic low wide shot in a snowy pine forest at sunrise; only trees, hills and snow, no buildings and no city. A line of heavy snowmobile-like drones on skis, covered in sheets of bright, colorful abstract squiggly patterns, each sheet with a wide blank white band across its middle, ploughs forward through deep snow between the trees, skis on the ground, throwing up great sprays and wakes of snow. Darker sleek enemy drones sit motionless in the snow or turn aside in confusion. Low sunlight cuts through drifting smoke. No people visible.",
       "width": 1024,
       "height": 576,
-      "seed": 50072,
-      "sheets": [
-        {
-          "quad": [
-            [
-              281,
-              362
-            ],
-            [
-              342,
-              360
-            ],
-            [
-              342,
-              406
-            ],
-            [
-              281,
-              410
-            ]
-          ],
-          "text": "DOG",
-          "lang": "en",
-          "seed": 7,
-          "band": [
-            0.3,
-            0.7
-          ],
-          "shade": 0.8,
-          "light_blur": 12,
-          "lines": 0.8,
-          "feather": 1.0,
-          "clip_to_paint": false
-        },
-        {
-          "quad": [
-            [
-              492,
-              336
-            ],
-            [
-              612,
-              330
-            ],
-            [
-              616,
-              396
-            ],
-            [
-              484,
-              402
-            ]
-          ],
-          "text": "DOG",
-          "lang": "en",
-          "seed": 8,
-          "band": [
-            0.34,
-            0.66
-          ],
-          "shade": 0.8,
-          "light_blur": 18,
-          "lines": 0.8,
-          "feather": 1.0,
-          "clip_to_paint": true
-        }
-      ],
-      "lettering": [
-        {
-          "kind": "sign",
-          "text": "DOG",
-          "lang": "en",
-          "gloss": null,
-          "speaker_entity_id": null,
-          "drawn_by": "scripts/texture-sheets.py",
-          "sheet": 0
-        },
-        {
-          "kind": "sign",
-          "text": "DOG",
-          "lang": "en",
-          "gloss": null,
-          "speaker_entity_id": null,
-          "drawn_by": "scripts/texture-sheets.py",
-          "sheet": 1
-        }
-      ],
-      "harmonise": {
-        "runs": [
-          {
-            "steps": 4,
-            "strengths": [
-              0.75,
-              0.85
-            ]
-          },
-          {
-            "steps": 12,
-            "strengths": [
-              0.92,
-              0.96
-            ]
-          }
-        ],
-        "seed": 70701,
-        "grow": 6,
-        "feather": 3
-      }
+      "seed": 50072
     },
     {
       "id": "dd-08-a1",
-      "beat": 8,
+      "beat": 9,
       "attempt": 1,
       "chapter": 30,
       "idx": 61,
@@ -572,7 +459,7 @@
     },
     {
       "id": "dd-09-a1",
-      "beat": 9,
+      "beat": 10,
       "attempt": 1,
       "chapter": 31,
       "idx": 9,
@@ -604,5 +491,41 @@
       "adaptations/dog-dawn/prompts/001-request.md"
     ],
     "see": "config/models.json drafting; principle 3"
-  }
+  },
+  "drawn": [
+    {
+      "id": "dd-sheet-dog",
+      "beat": 7,
+      "kind": "sheet",
+      "text": "DOG",
+      "lang": "en",
+      "seed": 30047,
+      "width": 1024,
+      "height": 576,
+      "band": [
+        0.3,
+        0.7
+      ]
+    },
+    {
+      "id": "dd-07-a2-overlay",
+      "beat": 8,
+      "kind": "overlay",
+      "base": "dd-07-a2",
+      "frame": [
+        462,
+        318,
+        662,
+        474
+      ],
+      "label": "DOG",
+      "lang": "en",
+      "label_size": 30,
+      "color": [
+        255,
+        214,
+        64
+      ]
+    }
+  ]
 }

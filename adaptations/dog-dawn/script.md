@@ -6,6 +6,11 @@
 > the owner's two edits: beats 2 and 3 merged, and beats 7 and 8 merged (nine
 > beats). Lines are still to be written by the owner.
 >
+> Changed on the owner's picture notes (round 3, Oct 5, 2026): the word DOG
+> moves off the angled sheets of beat 6 into a new beat 7, one sheet face-on
+> drawn in code; beat 8 gains an overlay version with the Arctic drone's
+> label (ten beats).
+>
 > **Structure drafted by the coding agent (Claude, a closed model).** Drafted from `brief.md` on Oct 5, 2026, and reworked the same day
 > into the beat format of `docs/adaptation-format.md`. The agent wrote no
 > narration and no dialogue: those fields are empty until a person writes
@@ -15,17 +20,18 @@
 
 **Stage:** narrated comic (stage 1). **Narrator:** one voice, not yet chosen.
 **Point of view:** Deluin (brief §5, question 1); the writer may change it.
-**Length:** 9 beats. Narration written so far: 0 words (at most 25 per beat).
+**Length:** 10 beats. Narration written so far: 0 words (at most 25 per beat).
 
 **What is invented** (brief §2, §5):
 - Where Deluin sits during the battle, his room, and the sentries in it
-  (beats 1, 3, 5, 8).
+  (beats 1, 3, 5, 9).
 - That he sees the launch and the base burn (beat 2).
-- How he sends each message (beats 3, 4, 8).
+- How he sends each message (beats 3, 4, 9).
 - What his choices cost him personally, and what he feels about the units he
-  gives away (beats 1, 2, 3, 4, 5, 7, 8). The book has him say nothing about
+  gives away (beats 1, 2, 3, 4, 5, 8, 9). The book has him say nothing about
   it.
-- How he gets from the Arctic side to the mountain (beat 9).
+- What the Arctic drones' display looks like (beat 8, overlay version).
+- How he gets from the Arctic side to the mountain (beat 10).
 
 ---
 
@@ -184,46 +190,64 @@
 - **narration:** *(empty until a person writes it)*
 - **dialogue:** *(empty until a person writes it)*
 
-## Beat 6 · Blue, and DOG
+## Beat 6 · Blue
 
 - **who:** Veridian human soldiers; Lektor, giving orders; Zei, watching the
-  feeds; the snow drones
+  feeds
 - **wants:** The Veridians want the patterns on every drone before sunrise.
-  Zei wants to see what the final patterns look like (c30-b47).
 - **in the way:** The clock, and the hands: "Manual dexterity was still a
   major weakness of AI" (c30-b35), so people must paste the sheets.
 - **cost:** Human soldiers are brought up toward the front (c30-b35), and the
-  fleet gives up a kilometer to make room (c30-b41). And it is a one-time
-  trick: it works only until the Arctics adapt, and Zei knows they "would
-  adapt soon" (c30-b54).
-- **what changes:** Every drone carries squiggles and the word "DOG", and
-  Lektor gives the order (c30-b46).
+  fleet gives up a kilometer to make room (c30-b41).
+- **what changes:** Every drone is covered in sheets, and Lektor gives the
+  order (c30-b46).
 - **context:**
-  - c30-b32: the squiggles, "very recognizable and familiar but also
-    completely alien".
   - c30-b34–c30-b35: printing set up two kilometers back; soldiers move up.
   - c30-b36: the sky turns blue.
   - c30-b37: the patterns are ready.
   - c30-b41: sheets printed and stuck on every drone.
   - c30-b46: "Action."
-  - c30-b47: the final patterns.
 - **book lines:**
   - `c30-b36` Slowly, the sky began to shift from a near-total pitch black to a dark blue that was especially visible in the far east.
   - `c30-b36` As the minutes passed, the blue became brighter.
   - `c30-b35` Manual dexterity was still a major weakness of AI.
   - `c30-b41` The plan was in motion.
   - `c30-b46` Action. *(Lektor)*
-  - `c30-b47` He saw an endless row of snow drones with large pieces of paper plastered on all sides, each paper containing many colorful and squiggly patterns - and in a giant font, the word "DOG".
-  - `c30-b32` … squiggles and messages that seemed simultaneously very recognizable and familiar but also completely alien.
 - **image:** Pre-dawn blue over a snowy forest. Soldiers in pale thermal
   cloaks press large printed sheets of bright, colorful squiggly patterns onto
   the flank of a snow drone; behind them, an endless row of snow drones
   covered in the same sheets.
-- **lettering:** `sign, en` DOG, in a giant font on each sheet (c30-b47)
+- **lettering:** none. The sheets show pattern only: code-drawn text reads
+  only on flat surfaces facing the viewer, so the word is shown in beat 7.
 - **narration:** *(empty until a person writes it)*
 - **dialogue:** *(empty until a person writes it)*
 
-## Beat 7 · Ten to one
+## Beat 7 · DOG
+
+- **who:** Zei, looking through the visual feeds (c30-b47); the sheet itself
+- **wants:** Zei wants to see what the final attack patterns look like
+  (c30-b47).
+- **in the way:** Nothing yet; the Arctic drones have not seen them.
+- **cost:** It is a one-time trick. It works only until the Arctics adapt,
+  and Zei knows they "would adapt soon" (c30-b54).
+- **what changes:** We see what the Arctic drones will see: squiggles, and the
+  word "DOG".
+- **context:**
+  - c30-b32: the squiggles, "very recognizable and familiar but also
+    completely alien".
+  - c30-b47: the final patterns.
+  - c30-b54: the Arctics will adapt.
+- **book lines:**
+  - `c30-b47` He saw an endless row of snow drones with large pieces of paper plastered on all sides, each paper containing many colorful and squiggly patterns - and in a giant font, the word "DOG".
+  - `c30-b32` … squiggles and messages that seemed simultaneously very recognizable and familiar but also completely alien.
+- **image:** One printed sheet, face-on, filling the frame: paper texture,
+  many colourful squiggles, and on a white band, in a giant font, the word
+  DOG. Drawn entirely in code (`scripts/draw-panels.py`); no image model.
+- **lettering:** `sign, en` DOG, in a giant font across the sheet (c30-b47)
+- **narration:** *(empty until a person writes it)*
+- **dialogue:** *(empty until a person writes it)*
+
+## Beat 8 · Ten to one
 
 - **who:** both drone fleets; Zei; Deluin *(Invented: on the Arctic side when
   the access is cut)*
@@ -245,13 +269,17 @@
   - `c30-b52` … tricking your opponent's drones into thinking that your drones are dogs …
   - `c30-b54` They had already dropped to six to one.
   - `c30-b57` After fifteen minutes, all access to the simulation environment was suddenly cut off.
-- **image:** Sunrise. The patterned Veridian drones surge through the trees
-  past dark Arctic drones that sit still or turn aside.
-- **lettering:** `sign, en` DOG, on the nearest drones (c30-b47)
+- **image:** Sunrise. The patterned Veridian drones plough through the snow
+  between the trees past dark Arctic drones that sit still or turn aside. Two
+  versions: plain, and as an Arctic drone sees it, with a targeting frame on
+  the nearest drone. *(Invented: what the Arctic drones' display looks like.)*
+- **lettering:** plain version: none. Overlay version: `label, en` DOG, the
+  Arctic drone's classification, drawn in code as a flat label on the
+  targeting frame (c30-b52: the drones read as dogs)
 - **narration:** *(empty until a person writes it)*
 - **dialogue:** *(empty until a person writes it)*
 
-## Beat 8 · Trust
+## Beat 9 · Trust
 
 - **who:** Deluin; Zei (c30-b63)
 - **wants:** Deluin wants to be trusted, and to finish the battle.
@@ -282,7 +310,7 @@
 - **narration:** *(empty until a person writes it)*
 - **dialogue:** *(empty until a person writes it)*
 
-## Beat 9 · The mountain
+## Beat 10 · The mountain
 
 - **who:** Deluin, Zei, Bai, Mu
 - **wants:** Deluin wants to see Zei alive.

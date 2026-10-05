@@ -1,6 +1,6 @@
 {
   "job_file": "content/snowmoon/illustrations/adaptation-dog-dawn.json",
-  "generated_at": "2026-10-05T21:56:43+00:00",
+  "generated_at": "2026-10-05T23:03:48+00:00",
   "model": {
     "repo": "black-forest-labs/FLUX.2-klein-4B",
     "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
@@ -18,7 +18,7 @@
     "platform": "macOS-26.5.1-arm64-arm-64bit",
     "machine": "arm64"
   },
-  "model_load_seconds": 1.3,
+  "model_load_seconds": 0.9,
   "images": [
     {
       "id": "dd-01-a1",
@@ -272,6 +272,28 @@
       "height": 576,
       "references": [],
       "generation_seconds": 200.7
+    },
+    {
+      "id": "dd-05-a3",
+      "chapter": 30,
+      "idx": 29,
+      "file": "dd-05-a3.png",
+      "sha256": "003124396bdac251644eb5c9ca11e6e4193956bad1240cf996a42e179c5c1241",
+      "prompt": "Medium shot inside the command room at night, seen from in front of the console. The young man from reference image 1 sits facing the viewer behind the console, his body and face turned toward us, lit cold blue from below by the screen; his eyes are cut sideways, wary, toward the frosted glass wall behind him. He is the only person in the room. Behind him, outside the room, beyond the frosted glass, stands the dark faceless silhouette of a guard, blurred by the glass. The room is dark, lit only by the screen. Cold blue light, tense mood. Reference image 1 shows a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 2 shows the location, a narrow Arctic command room walled in pale faceted crystalline panels, a single sleek console with a glowing screen and one chair, and across the back of the room a wall of frosted glass with a dim corridor beyond it; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Severe faceted crystalline megastructures, icy whites, pale blues and steel.",
+      "seed": 50053,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin-sheet.png",
+          "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+        },
+        {
+          "file": "arctic-command-post-plate.png",
+          "sha256": "3fe26335e781f7eeb61da4d93b3dd9e5d38c29c27beab0a1f8492a79313f8454"
+        }
+      ],
+      "generation_seconds": 282.2
     }
   ],
   "assist": {
