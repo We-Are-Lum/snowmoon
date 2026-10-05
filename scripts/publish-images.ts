@@ -23,9 +23,8 @@ const run = promisify(execFile);
 const ROOT = path.resolve(import.meta.dirname, '..');
 const dryRun = process.argv.includes('--dry-run');
 const EXCLUDED = new Map([
-  ['c8-b050-hearing', 'the same man appears many times'],
-  ['c26-b132-drone-escape', 'the same man appears twice'],
-  ['c27-b071-tea-robot', 'the same man appears twice'],
+  ['c26-b132-drone-escape', 'the same man appears twice, even after a rewrite with one rider'],
+  ['c27-b071-tea-robot', 'the robot takes on the reference man\'s face and clothes'],
 ]);
 
 async function main() {

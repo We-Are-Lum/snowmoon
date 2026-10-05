@@ -61,20 +61,18 @@
       "setting": "veridia",
       "location": "designs/locations/hilltop-round-room.json",
       "characters": [
-        "designs/characters/gladias.json",
-        "designs/characters/zei.json"
+        "designs/characters/gladias.json"
       ],
       "references": [
-        "cast/gladias-sheet",
-        "cast/zei-sheet"
+        "cast/gladias-sheet"
       ],
       "props": [
         "designs/props/privacy-robe-open.json"
       ],
-      "prompt": "Inside a round room atop a hill, with a curved bench along the wall. The man from reference image 1 and the young man from reference image 2 sit on the bench in loose dark purple robes, hoods pushed back and face covers removed, turning in surprise toward the staircase opening. A small robot climbs up the last steps with a lifting and sliding motion, carrying a tray of four cups of steaming tea. A woman and their host sit nearby, seen from behind. Warm, calm interior light.",
+      "prompt": "Inside a round room atop a hill, with a curved bench along the wall. The man from reference image 1 sits alone on the bench in a loose dark purple robe with its hood pushed back and face cover removed, looking with mild surprise toward the staircase opening. A small robot reaches the top of the stairs with a lifting and sliding motion and holds out a tray with four cups of steaming tea toward him. No other people are in view. Warm, calm interior light.",
       "width": 1024,
       "height": 576,
-      "seed": 27571
+      "seed": 28571
     },
     {
       "id": "c27-b114-countdown-chant",

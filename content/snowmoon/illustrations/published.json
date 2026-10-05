@@ -2,9 +2,8 @@
   "about": "Key-moment images seeded by the project as a starting point, not canon. Rendered locally with FLUX.2 [klein] 4B; each entry links to its recipe. Shown by the player until Milestone 4 stores images as elements.",
   "license": "GPL-3.0",
   "excluded": {
-    "c8-b050-hearing": "the same man appears many times",
-    "c26-b132-drone-escape": "the same man appears twice",
-    "c27-b071-tea-robot": "the same man appears twice"
+    "c26-b132-drone-escape": "the same man appears twice, even after a rewrite with one rider",
+    "c27-b071-tea-robot": "the robot takes on the reference man's face and clothes"
   },
   "images": [
     {
@@ -511,6 +510,22 @@
       "url": "https://media.snowmoon.party/images/seed/c8/c8-b038-parliament-3014f7c99c46.jpg",
       "sha256": "3014f7c99c46ab2746400c7a71ab334290e68e47eadb4e307a78641be7855c1e",
       "png_sha256": "c2f794fcdf70ddcac2d03ec4508ed87488fc0409848958e78090b469ac32714d",
+      "width": 1024,
+      "height": 576,
+      "recipe": "content/snowmoon/recipes/images/chapter-8.json"
+    },
+    {
+      "chapter": 8,
+      "idx": 50,
+      "id": "c8-b050-hearing",
+      "setting": "veridia",
+      "location": null,
+      "characters": [
+        "verdow"
+      ],
+      "url": "https://media.snowmoon.party/images/seed/c8/c8-b050-hearing-e5d2f9ac8622.jpg",
+      "sha256": "e5d2f9ac862257134bc5f0b346f880e296037bfc439e6ff564bd4cf955f81bbc",
+      "png_sha256": "757ef2e999d54f47a5db4f608e783c4dcd33bbd4ec88401656dce9d1d4ff5fd4",
       "width": 1024,
       "height": 576,
       "recipe": "content/snowmoon/recipes/images/chapter-8.json"

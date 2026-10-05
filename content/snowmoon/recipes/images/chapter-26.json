@@ -1,6 +1,6 @@
 {
   "job_file": "content/snowmoon/illustrations/chapter-26.json",
-  "generated_at": "2026-10-04T19:22:12+00:00",
+  "generated_at": "2026-10-05T06:21:13+00:00",
   "model": {
     "repo": "black-forest-labs/FLUX.2-klein-4B",
     "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
@@ -18,7 +18,7 @@
     "platform": "macOS-26.5.1-arm64-arm-64bit",
     "machine": "arm64"
   },
-  "model_load_seconds": 0.5,
+  "model_load_seconds": 0.6,
   "images": [
     {
       "id": "c26-b002-plane-cabin",
@@ -91,9 +91,9 @@
       "chapter": 26,
       "idx": 132,
       "file": "c26-b132-drone-escape.png",
-      "sha256": "c4a4239e88998d2c71447a1f90c3a1f11eb32a5976e9dc85520eec8b3d4e3806",
-      "prompt": "Dramatic wide shot of a city street at dusk where every streetlight and window flickers chaotically. Two large flying drones speed low between the buildings, just above the street. On the back of each drone a person in a hooded silver thermal cloak clings on tightly. The nearer one is the man from reference image 1, his face tense and determined, the wind tugging at his hood. Behind them, smoke rises from the side of a grand residence. Cool blues and greys with flickering warm lights. Reference image 1 shows a young man in his early twenties, of medium build, deep brown skin, short black hair in tight coils with a neat side part, clean-shaven and composed, wearing a dark navy sculpted tunic coat with a tall rigid standing collar that frames his jaw, angular shoulder panels and a long asymmetric half-cape sweeping from one shoulder to the knee, a crisp white high-neck bodysuit, a silver clasp at the collar, grey segmented trousers and black seamless boots; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
-      "seed": 26632,
+      "sha256": "b0bbfa6c912601b13e3cf203c491f0045d72f4e946976e624b9a19cae0a9c092",
+      "prompt": "Dramatic shot of a city street at dusk where every streetlight and window flickers chaotically. One large flying drone speeds low between the buildings toward the viewer, and the man from reference image 1, in a hooded silver thermal cloak, clings tightly to its back, his face tense and determined, the wind tugging at his hood. Far behind him, a second drone is only a small dark shape against rising smoke from a grand residence. Cool blues and greys with flickering warm lights. Reference image 1 shows a young man in his early twenties, of medium build, deep brown skin, short black hair in tight coils with a neat side part, clean-shaven and composed, wearing a dark navy sculpted tunic coat with a tall rigid standing collar that frames his jaw, angular shoulder panels and a long asymmetric half-cape sweeping from one shoulder to the knee, a crisp white high-neck bodysuit, a silver clasp at the collar, grey segmented trousers and black seamless boots; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
+      "seed": 27632,
       "width": 1024,
       "height": 576,
       "references": [
@@ -102,7 +102,7 @@
           "sha256": "2d1fca997a5a2add5b9286e45c849686c07cf51636c2bbbe7893bb6fe1700a3b"
         }
       ],
-      "generation_seconds": 201.8
+      "generation_seconds": 168.2
     },
     {
       "id": "c26-b162-judges-booth",

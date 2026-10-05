@@ -40,18 +40,16 @@
       "idx": 50,
       "setting": "veridia",
       "characters": [
-        "designs/characters/gladias.json",
         "designs/characters/verdow.json"
       ],
       "references": [
-        "cast/gladias-sheet",
         "cast/verdow-sheet"
       ],
       "props": [],
-      "prompt": "Wide shot of a circular hearing chamber. Twenty senators sit in large chairs spaced around the curved wall, small air filters between some of them, bright yellow lights and faint violet lights shining down from above. In the center, the man from reference image 1 sits alone in a chair with a cup of water in its holder, nervous but composed. Across the room, the man from reference image 2 leans forward in his large chair to ask a question, the edge of his seat glowing with green light. A formal, slightly intimidating atmosphere.",
+      "prompt": "Medium shot inside a circular hearing chamber. The man from reference image 1 leans forward in his large carved chair to ask a question, the edge of his seat glowing with soft green light, his expression attentive and kind. In the blurred foreground, the back of a seated man's head and shoulders faces him. Far behind, other senators are small figures in dark formal clothing with varied faces, seated around the curved wall under bright yellow and faint violet lights. A formal, slightly intimidating atmosphere.",
       "width": 1024,
       "height": 576,
-      "seed": 8550
+      "seed": 9550
     },
     {
       "id": "c8-b111-lily-couch",

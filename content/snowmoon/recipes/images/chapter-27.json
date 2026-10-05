@@ -1,6 +1,6 @@
 {
   "job_file": "content/snowmoon/illustrations/chapter-27.json",
-  "generated_at": "2026-10-04T19:27:41+00:00",
+  "generated_at": "2026-10-05T06:24:58+00:00",
   "model": {
     "repo": "black-forest-labs/FLUX.2-klein-4B",
     "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
@@ -87,9 +87,9 @@
       "chapter": 27,
       "idx": 71,
       "file": "c27-b071-tea-robot.png",
-      "sha256": "60399962853b9068651511c699bc2e9734a093d2e849ab4fa875cbe2149432b8",
-      "prompt": "Inside a round room atop a hill, with a curved bench along the wall. The man from reference image 1 and the young man from reference image 2 sit on the bench in loose dark purple robes, hoods pushed back and face covers removed, turning in surprise toward the staircase opening. A small robot climbs up the last steps with a lifting and sliding motion, carrying a tray of four cups of steaming tea. A woman and their host sit nearby, seen from behind. Warm, calm interior light. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 3 shows the location, a circular room at the summit of an artificial hill so thickly grown with trees and moss that it reads as untouched forest, open to the sky beneath a round roof of sliding petal-shaped segments, a curved bench running all around its smooth stone wall, a safety railing ringing the staircase opening in the center, and soft hidden lights in the rim; keep its architecture, layout and colors. The dark purple Veridian Privacy Robe is worn open at the face: a loose-fitting dark purple garment down to the ankles, its hood pushed back onto the shoulders and its fabric face cover lowered, so the wearer's face and hair are fully visible. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
-      "seed": 27571,
+      "sha256": "9a15e0a83fc7418ee5cd6b6e060f03cc2546d76bfcdbeab183cbb521354fd347",
+      "prompt": "Inside a round room atop a hill, with a curved bench along the wall. The man from reference image 1 sits alone on the bench in a loose dark purple robe with its hood pushed back and face cover removed, looking with mild surprise toward the staircase opening. A small robot reaches the top of the stairs with a lifting and sliding motion and holds out a tray with four cups of steaming tea toward him. No other people are in view. Warm, calm interior light. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 2 shows the location, a circular room at the summit of an artificial hill so thickly grown with trees and moss that it reads as untouched forest, open to the sky beneath a round roof of sliding petal-shaped segments, a curved bench running all around its smooth stone wall, a safety railing ringing the staircase opening in the center, and soft hidden lights in the rim; keep its architecture, layout and colors. The dark purple Veridian Privacy Robe is worn open at the face: a loose-fitting dark purple garment down to the ankles, its hood pushed back onto the shoulders and its fabric face cover lowered, so the wearer's face and hair are fully visible. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 28571,
       "width": 1024,
       "height": 576,
       "references": [
@@ -98,15 +98,11 @@
           "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
         },
         {
-          "file": "zei-sheet.png",
-          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
-        },
-        {
           "file": "hilltop-round-room-plate.png",
           "sha256": "92d181d38ad7b7371d2ddaa3983c2031fe190c4a20c5076ca1283d4858f24b67"
         }
       ],
-      "generation_seconds": 324.5
+      "generation_seconds": 220.9
     },
     {
       "id": "c27-b114-countdown-chant",

@@ -1,0 +1,45 @@
+{
+  "about": "Models allowed in this project (brief §4e). A model is added only by a reviewed change that quotes the license line from the model's own card, and only if that license clearly allows publishing outputs under GPL-3.0. The composer offers only these; every recipe records the exact model and revision.",
+  "models": [
+    {
+      "id": "kokoro-82m",
+      "kind": "speech",
+      "repo": "hexgrad/Kokoro-82M",
+      "revision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+      "license_line": "license: apache-2.0",
+      "license_checked": {
+        "by": "coding agent, approved by the owner",
+        "on": "2026-10-03",
+        "source": "https://huggingface.co/hexgrad/Kokoro-82M"
+      },
+      "notes": "No separate license per voice; the repository-wide Apache-2.0 covers the voice files. Voice provenance is undocumented (ATTRIBUTION.md).",
+      "voices": ["af_heart"],
+      "runs_on": "local-queue",
+      "cost_usd_per_unit": 0
+    },
+    {
+      "id": "flux2-klein-4b",
+      "kind": "image",
+      "repo": "black-forest-labs/FLUX.2-klein-4B",
+      "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+      "license_line": "license: apache-2.0",
+      "license_checked": {
+        "by": "coding agent",
+        "on": "2026-10-03",
+        "source": "https://huggingface.co/black-forest-labs/FLUX.2-klein-4B"
+      },
+      "notes": "Runs through mflux (MIT) at 4-bit on Apple Silicon. The model card encourages input and output filters; a public composer should add them.",
+      "capabilities": { "max_references": 4, "edit": true },
+      "runs_on": "local-queue",
+      "cost_usd_per_unit": 0
+    }
+  ],
+  "candidates": [
+    { "repo": "Qwen/Qwen-Image-Edit-2511", "card_license": "apache-2.0", "status": "license line seen on the card's metadata; not yet quoted and reviewed; needs 32 GB+ or a rented GPU" },
+    { "repo": "Qwen Image 2.1 (via mflux)", "status": "license not yet checked" }
+  ],
+  "excluded": [
+    { "repo": "black-forest-labs/FLUX.2-dev", "reason": "flux-non-commercial-license does not clearly allow publishing outputs under GPL-3.0" },
+    { "repo": "black-forest-labs/FLUX.2-klein-9B", "reason": "flux-non-commercial-license" }
+  ]
+}

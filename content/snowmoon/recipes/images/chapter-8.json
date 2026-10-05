@@ -1,6 +1,6 @@
 {
   "job_file": "content/snowmoon/illustrations/chapter-8.json",
-  "generated_at": "2026-10-04T18:55:45+00:00",
+  "generated_at": "2026-10-05T06:18:21+00:00",
   "model": {
     "repo": "black-forest-labs/FLUX.2-klein-4B",
     "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
@@ -18,7 +18,7 @@
     "platform": "macOS-26.5.1-arm64-arm-64bit",
     "machine": "arm64"
   },
-  "model_load_seconds": 0.6,
+  "model_load_seconds": 0.5,
   "images": [
     {
       "id": "c8-b016-bus-debate",
@@ -65,22 +65,18 @@
       "chapter": 8,
       "idx": 50,
       "file": "c8-b050-hearing.png",
-      "sha256": "3e974bb3c16b25f312b3397574d57500383f45223689fe5c616fbbaaebcd35e0",
-      "prompt": "Wide shot of a circular hearing chamber. Twenty senators sit in large chairs spaced around the curved wall, small air filters between some of them, bright yellow lights and faint violet lights shining down from above. In the center, the man from reference image 1 sits alone in a chair with a cup of water in its holder, nervous but composed. Across the room, the man from reference image 2 leans forward in his large chair to ask a question, the edge of his seat glowing with green light. A formal, slightly intimidating atmosphere. Reference image 1 shows a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device; keep the same face, hair, build and clothing. Reference image 2 shows a man in his late fifties, tall and lean, medium brown skin, close-cropped white hair and a short white beard, warm deep-set eyes, wearing a long deep-green woven parliament robe with wide draped sleeves and a sculpted high collar fastened by a simple bronze clasp, over a cream seamless undertunic, a broad bronze-colored cloth sash, dark loose trousers and soft brown seamless shoes; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
-      "seed": 8550,
+      "sha256": "757ef2e999d54f47a5db4f608e783c4dcd33bbd4ec88401656dce9d1d4ff5fd4",
+      "prompt": "Medium shot inside a circular hearing chamber. The man from reference image 1 leans forward in his large carved chair to ask a question, the edge of his seat glowing with soft green light, his expression attentive and kind. In the blurred foreground, the back of a seated man's head and shoulders faces him. Far behind, other senators are small figures in dark formal clothing with varied faces, seated around the curved wall under bright yellow and faint violet lights. A formal, slightly intimidating atmosphere. Reference image 1 shows a man in his late fifties, tall and lean, medium brown skin, close-cropped white hair and a short white beard, warm deep-set eyes, wearing a long deep-green woven parliament robe with wide draped sleeves and a sculpted high collar fastened by a simple bronze clasp, over a cream seamless undertunic, a broad bronze-colored cloth sash, dark loose trousers and soft brown seamless shoes; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Organic future architecture: pale stone buildings with curving, grown forms threaded through with tall trees and hanging gardens, slender sky bridges and distant elegant towers, small drones in the sky, a palette of sage, ochre, cream and stone.",
+      "seed": 9550,
       "width": 1024,
       "height": 576,
       "references": [
-        {
-          "file": "gladias-sheet.png",
-          "sha256": "5b0c9d56c09f120d12be9657721f93eec56ec71c6f7c721312dc54a1a10e8d57"
-        },
         {
           "file": "verdow-sheet.png",
           "sha256": "1eb638a0bc891b79c41f7a3aefd000cc06fa2634fd4f5ec50b41c7781a6f7872"
         }
       ],
-      "generation_seconds": 259.8
+      "generation_seconds": 180.4
     },
     {
       "id": "c8-b111-lily-couch",
