@@ -27,3 +27,14 @@ costs, and images in the mockups are sample data too.
 - Flags 1–4 and 6–9 and 11 are resolved in the schema or the renderer (brief §4c).
 - The board's Veridian vote card is the `veridia/vote` template (brief §4d). The
   slider sits at the centre, as in the source, not where the mockup put it.
+
+## Notes
+
+- **The Minpentai board's "Sandbox · one glider, four turns" panel uses the wrong
+  rule.** Its code steps Conway's Game of Life (a cell is born with three
+  neighbours and survives with two or three). The book's rule, recovered from
+  figure c4-b5 (`../minpentai-rules.md`, section 3.1), is a block rule on 2×2
+  blocks whose partition alternates each turn, and its glider is a different
+  shape. The sandbox at `/minpentai` follows the board's look (field, grid,
+  inset live cells, grey rocks, full-bleed symbol cells with a dashed frame) but
+  not that panel.

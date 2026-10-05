@@ -1,0 +1,87 @@
+/* /minpentai only. Board colours from the approved board (docs/design/direction-boards,
+   section 1c); chrome follows the reader: Crimson Pro and DM Mono, text 12px or more,
+   tap targets 44px or more. */
+
+.minpentai h2 { font-size: 24px; font-weight: 500; margin: 28px 0 8px; }
+.mp-provenance {
+  margin: 0 0 8px;
+  padding: 10px 14px;
+  border-left: 3px solid var(--ink);
+  background: var(--quote-bg);
+  font-size: 16px;
+  line-height: 1.45;
+}
+.mp-note { font-size: 16px; color: var(--muted); }
+.mp-note code { font-family: var(--label); font-size: 13px; }
+
+.mp-board { background: #060608; color: #8B8A92; border-radius: 2px; overflow: hidden; }
+.mp-strip {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 4px 12px;
+  padding: 8px 10px;
+  background: #0E0F13;
+  font-family: var(--label);
+  font-size: 12px;
+  letter-spacing: 0.08em;
+  color: #C9CAD2;
+}
+.mp-canvas-wrap { width: 100%; }
+.mp-canvas { display: block; touch-action: auto; }
+.mp-canvas.mp-editing { touch-action: none; cursor: crosshair; }
+.mp-hint { margin: 0; padding: 6px 10px 8px; font-family: var(--label); font-size: 12px; line-height: 1.5; color: #A4A5AE; }
+
+.mp-inv { font-style: italic; font-family: var(--reading); font-size: 14px; letter-spacing: 0; color: inherit; opacity: 0.85; }
+.mp-strip .mp-inv { font-size: 13px; }
+
+.mp-controls { display: flex; gap: 8px; margin-top: 12px; }
+.mp-controls button, .mp-link {
+  flex: 1;
+  min-height: var(--tap);
+  padding: 6px 8px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--label);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.mp-controls button[aria-pressed='true'] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.mp-controls .mp-primary { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.mp-controls button .mp-inv { text-transform: none; }
+.mp-pan button { font-size: 18px; }
+
+.mp-speed { display: block; margin-top: 12px; font-family: var(--label); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; }
+.mp-speed input { display: block; width: 100%; min-height: var(--tap); accent-color: var(--ink); }
+
+.mp-presets { display: grid; gap: 8px; }
+.mp-presets button {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: var(--tap);
+  padding: 10px 12px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--ink);
+  text-align: left;
+  font-family: var(--reading);
+  cursor: pointer;
+}
+.mp-preset-title { font-size: 18px; font-weight: 500; }
+.mp-preset-line { font-size: 16px; line-height: 1.4; color: var(--muted); }
+.mp-link { width: 100%; margin-top: 12px; }
+
+.mp-legend p { font-size: 16px; line-height: 1.45; }
+.mp-legend-grid { display: flex; flex-wrap: wrap; gap: 10px; padding: 12px; background: #060608; border-radius: 2px; }
+.mp-state { margin: 0; display: flex; flex-direction: column; align-items: center; gap: 4px; }
+.mp-mini { display: grid; gap: 2px; width: 40px; }
+.mp-state-main .mp-mini { width: 54px; outline: 2px dashed #46D7E8; outline-offset: 5px; margin: 6px; }
+.mp-mini span { background: #0E0F13; aspect-ratio: 1; }
+.mp-mini span.on { background: #46D7E8; }
+.mp-state figcaption { font-family: var(--label); font-size: 12px; color: #A4A5AE; }
