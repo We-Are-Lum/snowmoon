@@ -1,7 +1,12 @@
 # DOG at dawn: script
 
-> **Structure drafted by the coding agent (Claude, a closed model). Not
-> approved.** Drafted from `brief.md` on Oct 5, 2026, and reworked the same day
+> **Approved** by FID 6786 on 2026-10-05.
+>
+> Recorded by the coding agent from the owner's message of that date, with
+> the owner's two edits: beats 2 and 3 merged, and beats 7 and 8 merged (nine
+> beats). Lines are still to be written by the owner.
+>
+> **Structure drafted by the coding agent (Claude, a closed model).** Drafted from `brief.md` on Oct 5, 2026, and reworked the same day
 > into the beat format of `docs/adaptation-format.md`. The agent wrote no
 > narration and no dialogue: those fields are empty until a person writes
 > them. The book lines are candidates, verbatim from the cited blocks.
@@ -10,16 +15,17 @@
 
 **Stage:** narrated comic (stage 1). **Narrator:** one voice, not yet chosen.
 **Point of view:** Deluin (brief §5, question 1); the writer may change it.
-**Length:** 11 beats. Narration written so far: 0 words (at most 25 per beat).
+**Length:** 9 beats. Narration written so far: 0 words (at most 25 per beat).
 
 **What is invented** (brief §2, §5):
 - Where Deluin sits during the battle, his room, and the sentries in it
-  (beats 1, 4, 6, 10).
-- That he sees the base burn and the launch (beats 2, 3).
-- How he sends each message (beats 4, 5, 10).
+  (beats 1, 3, 5, 8).
+- That he sees the launch and the base burn (beat 2).
+- How he sends each message (beats 3, 4, 8).
 - What his choices cost him personally, and what he feels about the units he
-  gives away (beats 1, 4, 5, 6, 9, 10). The book has him say nothing about it.
-- How he gets from the Arctic side to the mountain (beat 11).
+  gives away (beats 1, 2, 3, 4, 5, 7, 8). The book has him say nothing about
+  it.
+- How he gets from the Arctic side to the mountain (beat 9).
 
 ---
 
@@ -51,63 +57,51 @@
 - **narration:** *(empty until a person writes it)*
 - **dialogue:** *(empty until a person writes it)*
 
-## Beat 2 · Sundown
+## Beat 2 · Sundown to midnight
 
-- **who:** the Veridian drone fleet; Zei, Bai and Mu on the hill; Deluin
-  *(Invented: watching from the Arctic side)*
+- **who:** the Veridian drone fleet; Zei, Bai and Mu on the hill, then Zei and
+  Mu at the command screen; Den *(unseen)*; Deluin *(Invented: watching from
+  the Arctic side)*
 - **wants:** The Veridians want to break the Arctic line and recover
-  Northglade (c29-b21–c29-b36).
+  Northglade (c29-b21–c29-b36). When it goes wrong, Zei wants to hold the
+  line.
 - **in the way:** Arctic traps in the forest and an Arctic fleet that adapts
-  (c29-b63, c29-b91–c29-b102).
-- **cost:** Drones lost before the main fighting begins (c29-b63).
+  (c29-b63, c29-b91–c29-b102); then Arctic missiles, guided by "internal
+  traitors" who "revealed the location of the base" (c29-b108).
+- **cost:** Drones lost before the main fighting begins (c29-b63). Rear base
+  #3 and almost everyone in it; Den's survival is put under 10% (c29-b108).
   *(Invented: for Deluin, watching an attack on his own side that he has not
-  yet chosen to help.)*
-- **what changes:** The battle has begun.
+  yet chosen to help, and whether he knows Den was there; brief §2.)*
+- **what changes:** The battle begins, and by midnight Zei believes it is lost.
+  Mu takes over Group South (c29-b110).
 - **context:**
   - c29-b36: the order to launch at sundown.
   - c29-b38: the hill, snowy pines, thousands of snow drones, fiber optic
     cables.
   - c29-b50–c29-b52: the launch.
   - c29-b63: early losses to traps.
-  - *(Invented: the view from the Arctic side.)*
+  - c29-b55: midnight, Zei and Mu at the command screen.
+  - c29-b107–c29-b108: the report.
+  - c29-b109–c29-b110: Zei cries; Mu takes Group South.
+  - *(Invented: the view from the Arctic side; that Deluin sees the fire.)*
 - **book lines:**
   - `c29-b36` We launch at sundown. *(Lektor)*
   - `c29-b38` The pine trees were snowy as before.
   - `c29-b51` He heard noises of snow drones accelerating outside.
   - `c29-b52` The mission had begun.
-- **image:** Seen from the Arctic side: a line of Veridian snow drones crossing
-  forested hills under a low orange sun, smoke between the pines.
-- **lettering:** none
-- **narration:** *(empty until a person writes it)*
-- **dialogue:** *(empty until a person writes it)*
-
-## Beat 3 · The base burns
-
-- **who:** Zei, Mu; Den *(unseen)*; Deluin *(Invented: as a witness)*
-- **wants:** Zei wants to hold the line.
-- **in the way:** Arctic missiles, guided by "internal traitors" who
-  "revealed the location of the base" (c29-b108).
-- **cost:** Rear base #3 and almost everyone in it; Den's survival is put
-  under 10% (c29-b108). Zei believes the battle is lost (c29-b110).
-  *(Invented: whether Deluin knows Den was there; brief §2.)*
-- **what changes:** Mu takes over Group South (c29-b110).
-- **context:**
-  - c29-b55: midnight, Zei and Mu at the command screen.
-  - c29-b107–c29-b108: the report.
-  - c29-b109–c29-b110: Zei cries; Mu takes Group South.
-  - *(Invented: that Deluin sees the fire.)*
-- **book lines:**
   - `c29-b55` It had just struck midnight.
   - `c29-b108` Rear base #3 appears to have been completely destroyed by highly accurate hits from Arctic missiles. *(screen)*
   - `c29-b109` Zei began to cry.
   - `c29-b110` But in his heart, he knew that the battle was lost.
-- **image:** A distant orange glow among dark pines, reflected in the window
-  beside Deluin's console. *(Invented: that he sees it.)*
+- **image:** Night, seen through the frosted window of an Arctic console room:
+  the lights of a long line of snow drones crossing snowy forested hills, and
+  far off a large orange fire glowing among dark pines.
+  *(Invented: that Deluin sees it.)*
 - **lettering:** none
 - **narration:** *(empty until a person writes it)*
 - **dialogue:** *(empty until a person writes it)*
 
-## Beat 4 · My flank
+## Beat 3 · My flank
 
 - **who:** Deluin; Zei, receiving (c29-b111–c29-b113)
 - **wants:** Deluin wants to give Zei a way to win.
@@ -134,7 +128,7 @@
 - **narration:** *(empty until a person writes it)*
 - **dialogue:** *(empty until a person writes it)*
 
-## Beat 5 · The next best thing
+## Beat 4 · The next best thing
 
 - **who:** Deluin; Zei, Bai and Emerald on the other end (c29-b122–c29-b140)
 - **wants:** Deluin wants to be trusted. Bai wants the raw weights of the
@@ -164,7 +158,7 @@
 - **narration:** *(empty until a person writes it)*
 - **dialogue:** *(empty until a person writes it)*
 
-## Beat 6 · The queries
+## Beat 5 · The queries
 
 - **who:** Deluin; the Arctic sentries *(named in c30-b29, never shown)*; Zei
 - **wants:** Deluin wants the attack to run without the sentries noticing.
@@ -190,58 +184,46 @@
 - **narration:** *(empty until a person writes it)*
 - **dialogue:** *(empty until a person writes it)*
 
-## Beat 7 · Blue
+## Beat 6 · Blue, and DOG
 
 - **who:** Veridian human soldiers; Lektor, giving orders; Zei, watching the
-  feeds
+  feeds; the snow drones
 - **wants:** The Veridians want the patterns on every drone before sunrise.
+  Zei wants to see what the final patterns look like (c30-b47).
 - **in the way:** The clock, and the hands: "Manual dexterity was still a
   major weakness of AI" (c30-b35), so people must paste the sheets.
 - **cost:** Human soldiers are brought up toward the front (c30-b35), and the
-  fleet gives up a kilometer to make room (c30-b41).
-- **what changes:** The fleet is equipped, and Lektor gives the order
-  (c30-b46).
+  fleet gives up a kilometer to make room (c30-b41). And it is a one-time
+  trick: it works only until the Arctics adapt, and Zei knows they "would
+  adapt soon" (c30-b54).
+- **what changes:** Every drone carries squiggles and the word "DOG", and
+  Lektor gives the order (c30-b46).
 - **context:**
+  - c30-b32: the squiggles, "very recognizable and familiar but also
+    completely alien".
   - c30-b34–c30-b35: printing set up two kilometers back; soldiers move up.
   - c30-b36: the sky turns blue.
   - c30-b37: the patterns are ready.
   - c30-b41: sheets printed and stuck on every drone.
   - c30-b46: "Action."
+  - c30-b47: the final patterns.
 - **book lines:**
   - `c30-b36` Slowly, the sky began to shift from a near-total pitch black to a dark blue that was especially visible in the far east.
   - `c30-b36` As the minutes passed, the blue became brighter.
   - `c30-b35` Manual dexterity was still a major weakness of AI.
   - `c30-b41` The plan was in motion.
   - `c30-b46` Action. *(Lektor)*
-- **image:** Pre-dawn blue over the snowy forest. Soldiers in pale thermal
-  cloaks press freshly printed sheets onto every side of the snow drones;
-  small printers on folding tables.
-- **lettering:** `sign, en` DOG, on each sheet (c30-b47)
-- **narration:** *(empty until a person writes it)*
-- **dialogue:** *(empty until a person writes it)*
-
-## Beat 8 · DOG
-
-- **who:** Zei; the snow drones
-- **wants:** Zei wants to see what the final patterns look like (c30-b47).
-- **in the way:** Nothing yet; the Arctic drones have not seen them.
-- **cost:** It is a one-time trick. It works only until the Arctics adapt,
-  and Zei knows they "would adapt soon" (c30-b54).
-- **what changes:** Every drone carries squiggles and the word "DOG".
-- **context:**
-  - c30-b32: the squiggles, "very recognizable and familiar but also
-    completely alien".
-  - c30-b47: the final patterns.
-- **book lines:**
   - `c30-b47` He saw an endless row of snow drones with large pieces of paper plastered on all sides, each paper containing many colorful and squiggly patterns - and in a giant font, the word "DOG".
   - `c30-b32` … squiggles and messages that seemed simultaneously very recognizable and familiar but also completely alien.
-- **image:** Close on one sheet plastered across a drone's flank: bright
-  squiggles, frost at the edges.
-- **lettering:** `sign, en` DOG, in a giant font across the sheet (c30-b47)
+- **image:** Pre-dawn blue over a snowy forest. Soldiers in pale thermal
+  cloaks press large printed sheets of bright, colorful squiggly patterns onto
+  the flank of a snow drone; behind them, an endless row of snow drones
+  covered in the same sheets.
+- **lettering:** `sign, en` DOG, in a giant font on each sheet (c30-b47)
 - **narration:** *(empty until a person writes it)*
 - **dialogue:** *(empty until a person writes it)*
 
-## Beat 9 · Ten to one
+## Beat 7 · Ten to one
 
 - **who:** both drone fleets; Zei; Deluin *(Invented: on the Arctic side when
   the access is cut)*
@@ -269,7 +251,7 @@
 - **narration:** *(empty until a person writes it)*
 - **dialogue:** *(empty until a person writes it)*
 
-## Beat 10 · Trust
+## Beat 8 · Trust
 
 - **who:** Deluin; Zei (c30-b63)
 - **wants:** Deluin wants to be trusted, and to finish the battle.
@@ -300,7 +282,7 @@
 - **narration:** *(empty until a person writes it)*
 - **dialogue:** *(empty until a person writes it)*
 
-## Beat 11 · The mountain
+## Beat 9 · The mountain
 
 - **who:** Deluin, Zei, Bai, Mu
 - **wants:** Deluin wants to see Zei alive.

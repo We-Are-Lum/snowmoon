@@ -1,0 +1,145 @@
+{
+  "about": "Lettering drawn in code over clean renders. Each entry names the clean input and the lettered output by sha256; both are published (content/snowmoon/illustrations/published.json).",
+  "script": "scripts/letter-images.py",
+  "script_commit": "d4669c45b88553eeac582a15239a49350269dd50",
+  "script_uncommitted_changes": false,
+  "pillow_version": "12.3.0",
+  "fonts": {
+    "en": {
+      "file": "node_modules/@fontsource/dm-mono/files/dm-mono-latin-500-normal.woff",
+      "sha256": "f9fbeef336ab52ff50c455d34ba361b686d4dc5f32b17e4ac5181606ff132e6b"
+    },
+    "dz": {
+      "file": "node_modules/@fontsource/crimson-pro/files/crimson-pro-latin-500-italic.woff",
+      "sha256": "6a41b0afa97f9066d50319bea3e693794d8decf09c416a91925771705ba0a5e0"
+    }
+  },
+  "generated_at": "2026-10-05T20:09:18+00:00",
+  "images": [
+    {
+      "id": "dd-06-a1",
+      "chapter": 30,
+      "idx": 41,
+      "job_file": "content/snowmoon/illustrations/adaptation-dog-dawn.json",
+      "job_file_commit": "",
+      "lettering": [
+        {
+          "kind": "sign",
+          "text": "DOG",
+          "lang": "en",
+          "gloss": null,
+          "speaker_entity_id": null,
+          "x": 0.335,
+          "y": 0.7,
+          "w": 0.07,
+          "size": 0.028,
+          "rotate": -14
+        },
+        {
+          "kind": "sign",
+          "text": "DOG",
+          "lang": "en",
+          "gloss": null,
+          "speaker_entity_id": null,
+          "x": 0.47,
+          "y": 0.63,
+          "w": 0.05,
+          "size": 0.02,
+          "rotate": -10
+        }
+      ],
+      "input": {
+        "file": "images-out/adaptation-dog-dawn/dd-06-a1.png",
+        "sha256": "ed1852d227cd8205a82f079c517f000040d8cfdc6629716129daae7945cf381f",
+        "role": "clean render, the starting point for a remix"
+      },
+      "output": {
+        "file": "images-out/adaptation-dog-dawn/dd-06-a1.lettered.png",
+        "sha256": "ecef4b4f5c1859ac59fa58869b1bdc528c9e00b7330857aab6d8c4a5f2f3f818"
+      }
+    },
+    {
+      "id": "dd-07-a1",
+      "chapter": 30,
+      "idx": 48,
+      "job_file": "content/snowmoon/illustrations/adaptation-dog-dawn.json",
+      "job_file_commit": "",
+      "lettering": [
+        {
+          "kind": "sign",
+          "text": "DOG",
+          "lang": "en",
+          "gloss": null,
+          "speaker_entity_id": null,
+          "x": 0.165,
+          "y": 0.575,
+          "w": 0.1,
+          "size": 0.038,
+          "rotate": 12
+        },
+        {
+          "kind": "sign",
+          "text": "DOG",
+          "lang": "en",
+          "gloss": null,
+          "speaker_entity_id": null,
+          "x": 0.385,
+          "y": 0.54,
+          "w": 0.05,
+          "size": 0.02,
+          "rotate": 10
+        }
+      ],
+      "input": {
+        "file": "images-out/adaptation-dog-dawn/dd-07-a1.png",
+        "sha256": "eb4c88c1d23d04da9c39239ff42be8c5c5da1429cf8a7ede2e9839c6e8f304c7",
+        "role": "clean render, the starting point for a remix"
+      },
+      "output": {
+        "file": "images-out/adaptation-dog-dawn/dd-07-a1.lettered.png",
+        "sha256": "fec96b0feaa863c88a5a52ddc09eb0295849d8e192cf8547bee55e18be1e7fc3"
+      }
+    },
+    {
+      "id": "dd-08-a1",
+      "chapter": 30,
+      "idx": 61,
+      "job_file": "content/snowmoon/illustrations/adaptation-dog-dawn.json",
+      "job_file_commit": "",
+      "lettering": [
+        {
+          "kind": "sign",
+          "text": "jie fe\nhen dzi",
+          "lang": "dz",
+          "gloss": "Wish you luck",
+          "speaker_entity_id": null,
+          "x": 0.675,
+          "y": 0.2,
+          "w": 0.14,
+          "size": 0.032,
+          "rotate": 0
+        }
+      ],
+      "input": {
+        "file": "images-out/adaptation-dog-dawn/dd-08-a1.png",
+        "sha256": "ed75695093fd0cbbd675ea2e103a7220710465ad64b1ec96121fe91ce2cc325b",
+        "role": "clean render, the starting point for a remix"
+      },
+      "output": {
+        "file": "images-out/adaptation-dog-dawn/dd-08-a1.lettered.png",
+        "sha256": "c5465ba102832e13768472e73ec85d8c13ebbf530ec1ebe1f48bb4790b8fe218"
+      }
+    }
+  ],
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent",
+    "drafted": [
+      "lettering placement, size and colour (the words are the book's)"
+    ],
+    "instructions": [
+      "scripts/letter-images.py"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
+}
