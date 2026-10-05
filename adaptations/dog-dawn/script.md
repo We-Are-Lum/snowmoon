@@ -11,6 +11,11 @@
 > drawn in code; beat 8 gains an overlay version with the Arctic drone's
 > label (ten beats).
 >
+> Decisions on v3 (Oct 5, 2026): beat 7 approved. Beat 8 shows both images in
+> sequence, the plain render first and then the Arctic drone's view: one after
+> the other on the page, a cut mid-beat in the video. Beat 5 keeps attempt 3's
+> pose and framing and must be night.
+>
 > **Structure drafted by the coding agent (Claude, a closed model).** Drafted from `brief.md` on Oct 5, 2026, and reworked the same day
 > into the beat format of `docs/adaptation-format.md`. The agent wrote no
 > narration and no dialogue: those fields are empty until a person writes
@@ -269,10 +274,12 @@
   - `c30-b52` … tricking your opponent's drones into thinking that your drones are dogs …
   - `c30-b54` They had already dropped to six to one.
   - `c30-b57` After fifteen minutes, all access to the simulation environment was suddenly cut off.
-- **image:** Sunrise. The patterned Veridian drones plough through the snow
-  between the trees past dark Arctic drones that sit still or turn aside. Two
-  versions: plain, and as an Arctic drone sees it, with a targeting frame on
-  the nearest drone. *(Invented: what the Arctic drones' display looks like.)*
+- **image:** Two images in sequence. First, sunrise: the patterned Veridian
+  drones plough through the snow between the trees past dark Arctic drones that
+  sit still or turn aside. Then the same moment as an Arctic drone sees it,
+  with a targeting frame on the nearest drone. On the page, one after the
+  other; in the video, a cut mid-beat. *(Invented: what the Arctic drones'
+  display looks like.)*
 - **lettering:** plain version: none. Overlay version: `label, en` DOG, the
   Arctic drone's classification, drawn in code as a flat label on the
   targeting frame (c30-b52: the drones read as dogs)
