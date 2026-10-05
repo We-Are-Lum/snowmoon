@@ -1,6 +1,8 @@
 /**
  * Database tests: apply the migrations to an in-memory Postgres (PGlite) set up
  * like a shared studio database, then check isolation, permissions, and rules.
+ * 0001 is applied and checked first; then 0002 and 0003 are applied in order
+ * and the likes table (0003) is checked.
  * Fails (exit 1) on any problem.
  *
  *   npm run test:db
@@ -272,6 +274,50 @@ await denied('narration segments are append-only', W, `update studio.narration_s
 await equal('anon reads the house narration', 'anon', `select narration_id::text as v from studio.house_narrations where chapter = 1`, '00000000-0000-0000-0000-0000000000aa');
 await denied('anon cannot set the house narration', 'anon', `update studio.house_narrations set narration_id = narration_id`, PERM);
 
+// --- Later migrations, in order -------------------------------------------------
+const LATER = ['supabase/migrations/0002_v5.sql', 'supabase/migrations/0003_likes.sql'];
+for (const file of LATER) {
+  try {
+    await db.exec(await readFile(path.join(ROOT, file), 'utf8'));
+    passed++;
+  } catch (e) {
+    failures.push(`${file} failed to apply: ${(e as Error).message}`);
+  }
+}
+await equal('24 tables in studio after 0003', 'postgres', `select count(*)::int as v from pg_tables where schemaname = 'studio'`, 24);
+await equal('RLS on every studio table after 0003', 'postgres',
+  `select count(*)::int as v from pg_tables where schemaname = 'studio' and not rowsecurity`, 0);
+await equal('the likes read policy names likes.version_id', 'postgres',
+  `select (qual like '%likes.version_id%') as v from pg_policies where schemaname = 'studio' and tablename = 'likes' and policyname = 'public_read'`, true);
+
+// --- Likes (0003): separate from ratings -----------------------------------------
+// f1 and f7 are versions of a published image; f9 is a version of a hidden one.
+const F1 = '00000000-0000-0000-0000-0000000000f1';
+const F9 = '00000000-0000-0000-0000-0000000000f9';
+const likeCount = (v: string) => `select count(*)::int as v from studio.likes where version_id = '${v}'`;
+await ok('writer records a like', W, `insert into studio.likes (version_id, fid) values ('${F1}', 7)`);
+await equal('one like', W, likeCount(F1), 1);
+await denied('liking twice is one row (primary key)', W, `insert into studio.likes (version_id, fid) values ('${F1}', 7)`, /likes_pkey/);
+await ok('liking twice through the upsert is a no-op', W,
+  `insert into studio.likes (version_id, fid) values ('${F1}', 7) on conflict (version_id, fid) do nothing`);
+await equal('still one like', W, likeCount(F1), 1);
+await ok('a second person likes it', W, `insert into studio.likes (version_id, fid) values ('${F1}', 8)`);
+await equal('distinct likers counted', W, likeCount(F1), 2);
+await ok('unlike deletes the row', W, `delete from studio.likes where version_id = '${F1}' and fid = 7`);
+await equal('one like after unliking', W, likeCount(F1), 1);
+await equal('a like is not a rating', W, `select count(*)::int as v from studio.ratings`, 0);
+await ok('writer likes a version of a hidden element', W, `insert into studio.likes (version_id, fid) values ('${F9}', 7)`);
+await equal('writer sees likes on hidden elements', W, likeCount(F9), 1);
+for (const role of ['anon', 'authenticated']) {
+  await equal(`${role} reads likes on a published element`, role, likeCount(F1), 1);
+  await equal(`${role} cannot read likes on a hidden element`, role, likeCount(F9), 0);
+  await denied(`${role} cannot like`, role, `insert into studio.likes (version_id, fid) values ('${F1}', 99)`, PERM);
+  await denied(`${role} cannot unlike`, role, `delete from studio.likes where fid = 8`, PERM);
+}
+await denied('a like needs a real version', W,
+  `insert into studio.likes (version_id, fid) values ('00000000-0000-0000-0000-00000000dead', 7)`, /foreign key/);
+await denied('service_role cannot read likes', 'service_role', `select * from studio.likes`, PERM);
+
 // --- The real seed script, as studio_writer, over the wire --------------------
 await db.exec(`delete from studio.text_blocks`);
 await db.exec(`set role studio_writer`);
@@ -305,4 +351,4 @@ if (failures.length) {
   console.error(`\nDB TESTS FAILED (${failures.length}, ${passed} passed):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`db tests passed: ${passed} checks against ${path.relative(ROOT, MIGRATION)}`);
+console.log(`db tests passed: ${passed} checks against ${path.relative(ROOT, MIGRATION)}, then ${LATER.map((f) => path.basename(f)).join(', ')}`);

@@ -257,3 +257,22 @@ Push when all checks pass.
 3. Do not start comics.
 4. Leave the story-diagnostic worktree in place.
 ```
+
+```text
+Option A, with these changes:
+
+1. In the read policy, write likes.version_id, not bare version_id.
+2. Likes are a sort order only. No LIKE_WEIGHT and no likes term in
+   the score. Brief rule 4 gets: "Likes are not ratings. A like
+   never enters rating normalization or the score. 'Most liked'
+   sorts by distinct likers. Where nothing in a list is ranked by
+   ratings, order by likes."
+3. Move setLike and the like counts to the new table and remove the
+   +1 rating path. Extend test:db to cover: like, unlike, liking
+   twice, and likes on a hidden element not readable by the public.
+4. Write 0003_likes.sql with a header saying it must run as
+   postgres. Do not apply it.
+5. Stop after the migration file and tests are committed. Do not
+   deploy code that reads the new table until I tell you 0003 is
+   applied.
+```
