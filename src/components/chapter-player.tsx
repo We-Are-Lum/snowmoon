@@ -26,6 +26,8 @@ interface Props {
   chapter: number;
   chapters: number;
   label: string;
+  /** Public URL of the narration's recipe, with every spoken text. */
+  recipeUrl: string;
   url: string;
   duration: number;
   cues: PlayerCue[];
@@ -55,7 +57,7 @@ function cueAt(cues: PlayerCue[], t: number): number {
   return Math.max(0, found);
 }
 
-export function ChapterPlayer({ chapter, chapters, label, url, duration, cues, images }: Props) {
+export function ChapterPlayer({ chapter, chapters, label, recipeUrl, url, duration, cues, images }: Props) {
   const audio = useRef<HTMLAudioElement | null>(null);
   const [started, setStarted] = useState(false);
   const [playing, setPlaying] = useState(false);
@@ -267,7 +269,9 @@ export function ChapterPlayer({ chapter, chapters, label, url, duration, cues, i
           Next: Chapter {chapter + 1} →
         </Link>
       )}
-      <p className="player-label">{label} · GPL-3.0</p>
+      <p className="player-label">
+        {label} · GPL-3.0 · <a href={recipeUrl}>recipe</a>
+      </p>
     </div>
   );
 }

@@ -277,6 +277,7 @@ await denied('anon cannot set the house narration', 'anon', `update studio.house
 // --- Later migrations, in order -------------------------------------------------
 const LATER = ['supabase/migrations/0002_v5.sql', 'supabase/migrations/0003_likes.sql'];
 const PRIVATE = 'supabase/migrations/0004_private_ratings_and_likes.sql';
+const PROMPTS = 'supabase/migrations/0005_public_prompts_and_consent.sql';
 for (const file of LATER) {
   try {
     await db.exec(await readFile(path.join(ROOT, file), 'utf8'));
@@ -346,6 +347,53 @@ await ok('writer still records and removes a like', W, `
   insert into studio.likes (version_id, fid) values ('${F1}', 9);
   delete from studio.likes where version_id = '${F1}' and fid = 9;`);
 
+// --- 0005: only prompts for published work are public; consent to publish -----
+try {
+  await db.exec(await readFile(path.join(ROOT, PROMPTS), 'utf8'));
+  passed++;
+} catch (e) {
+  failures.push(`${PROMPTS} failed to apply: ${(e as Error).message}`);
+}
+
+await ok('fixture: recipes for published, draft, abandoned and narration work', 'postgres', `
+  insert into studio.recipes (id, source, prompt, created_by_fid) values
+    ('00000000-0000-0000-0000-00000000b0a1', 'in_app', 'published prompt', 7),
+    ('00000000-0000-0000-0000-00000000b0a2', 'in_app', 'draft prompt', 7),
+    ('00000000-0000-0000-0000-00000000b0a3', 'in_app', 'abandoned prompt', 7),
+    ('00000000-0000-0000-0000-00000000b0a4', 'in_app', 'narration text', 7),
+    ('00000000-0000-0000-0000-00000000b0a5', 'in_app', 'hidden narration text', 7);
+  insert into studio.elements (id, work_id, element_type, created_by_fid, status) values
+    ('00000000-0000-0000-0000-00000000b0e1', 'snowmoon', 'text', 7, 'published'),
+    ('00000000-0000-0000-0000-00000000b0e2', 'snowmoon', 'text', 7, 'draft');
+  insert into studio.element_versions (element_id, version_no, recipe_id) values
+    ('00000000-0000-0000-0000-00000000b0e1', 1, '00000000-0000-0000-0000-00000000b0a1'),
+    ('00000000-0000-0000-0000-00000000b0e2', 1, '00000000-0000-0000-0000-00000000b0a2');
+  insert into studio.narrations (id, work_id, chapter, label, created_by_fid, hidden) values
+    ('00000000-0000-0000-0000-00000000b0c1', 'snowmoon', 1, 'alternate', 7, false),
+    ('00000000-0000-0000-0000-00000000b0c2', 'snowmoon', 1, 'withdrawn', 7, true);
+  insert into studio.narration_segments (narration_id, idx, asset_url, asset_sha256, duration_ms, recipe_id) values
+    ('00000000-0000-0000-0000-00000000b0c1', 1, 'https://x/1.wav', 'aa', 10, '00000000-0000-0000-0000-00000000b0a4'),
+    ('00000000-0000-0000-0000-00000000b0c2', 1, 'https://x/2.wav', 'bb', 10, '00000000-0000-0000-0000-00000000b0a5');`);
+const promptVisible = (p: string) => `select count(*)::int as v from studio.recipes where prompt = '${p}'`;
+for (const role of ['anon', 'authenticated']) {
+  await equal(`${role} reads the prompt of a published element`, role, promptVisible('published prompt'), 1);
+  await equal(`${role} reads the text of a public narration`, role, promptVisible('narration text'), 1);
+  await equal(`${role} cannot read a draft's prompt`, role, promptVisible('draft prompt'), 0);
+  await equal(`${role} cannot read an abandoned attempt's prompt`, role, promptVisible('abandoned prompt'), 0);
+  await equal(`${role} cannot read a hidden narration's text`, role, promptVisible('hidden narration text'), 0);
+}
+await equal('writer reads every recipe', W, `select count(*)::int as v from studio.recipes where id::text like '00000000-0000-0000-0000-00000000b0a%'`, 5);
+
+// 0005: consent to publish one's own words.
+const SHA = 'a'.repeat(64);
+await ok('writer records an own_words consent', W, `insert into studio.contributor_consents (fid, kind, consent_text_sha256) values (7, 'own_words', '${SHA}')`);
+await denied('an unknown consent kind is refused', W,
+  `insert into studio.contributor_consents (fid, kind, consent_text_sha256) values (7, 'anything', '${SHA}')`, /contributor_consents_kind_check/);
+for (const role of ['anon', 'authenticated']) {
+  await denied(`${role} cannot read consents`, role, `select fid from studio.contributor_consents`, PERM);
+  await denied(`${role} cannot record a consent`, role, `insert into studio.contributor_consents (fid, kind, consent_text_sha256) values (9, 'own_words', '${SHA}')`, PERM);
+}
+
 // --- The real seed script, as studio_writer, over the wire --------------------
 await db.exec(`delete from studio.text_blocks`);
 await db.exec(`set role studio_writer`);
@@ -379,4 +427,4 @@ if (failures.length) {
   console.error(`\nDB TESTS FAILED (${failures.length}, ${passed} passed):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`db tests passed: ${passed} checks against ${path.relative(ROOT, MIGRATION)}, then ${[...LATER, PRIVATE].map((f) => path.basename(f)).join(', ')}`);
+console.log(`db tests passed: ${passed} checks against ${path.relative(ROOT, MIGRATION)}, then ${[...LATER, PRIVATE, PROMPTS].map((f) => path.basename(f)).join(', ')}`);

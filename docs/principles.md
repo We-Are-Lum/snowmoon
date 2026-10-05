@@ -16,7 +16,7 @@ Status is as of Oct 5, 2026, after the owner's rulings on the first audit
 
 ---
 
-## 1. Every published generated asset has a public recipe.
+## 1. Every published generated asset has a public recipe, including its exact prompt. People know their words will be public before they write them.
 
 **Source.** The book's index page: anyone adapting it is "required to
 open-source the pipeline (AI prompts, scripts, task-specific harness, etc)".
@@ -35,10 +35,47 @@ coding agent and its helpers are in `docs/prompts/`.
   its committed narration recipe.
 - `P1c`: in the database, every version of a published element has a recipe
   (reads the live database when `STUDIO_DATABASE_URL` is set).
+- `P1d`: a signed-out visitor reaches the exact prompt of every published
+  image and narration: the chapter page links the recipe (and the lettering
+  record for lettered images), and the file at that link, fetched anonymously
+  from the public repository, holds the prompt or spoken text for that very
+  output.
+- `P1e`: through the public database API, with only the public key, the
+  spoken text of the house narration is readable.
+- `P1f`: every text box whose contents may be published is a
+  `PublishedTextField`, which shows the publication line under it.
+- `npm run test:db`: after 0005, a recipe is public only if it made a
+  published element version or a segment of a narration that is not hidden;
+  drafts, hidden work and abandoned attempts stay private.
 - Review: does any new output path publish a file without writing its recipe
-  first?
+  first? Does any new way of storing a person's own words skip the consent
+  screen or the preview?
 
-**Status.** Pass. Every committed recipe now records `assist`: which inputs a
+**Prompts are public; drafts are not.** Only prompts for published elements
+are public. The prompts of drafts and abandoned attempts stay private
+(owner decision, Oct 5, 2026).
+
+**People know their words will be public.** Before a person's first
+contribution that stores their own words (a prompt or a line), a blocking
+screen says: "Public, permanent, GPL-3.0, shown with your Farcaster name."
+Their agreement is recorded in `studio.contributor_consents` (kind
+`own_words`) with who, when, and the sha256 of the exact wording
+(`config/consent.json`). The same line appears under every text box whose
+contents will be published, and a preview is shown before publishing
+(`src/components/publish-words.tsx`). Hiding and erasure are proposed in
+`docs/removal.md`.
+
+**Status.** `P1d` fails on production until this change is deployed: the
+narration had no recipe link on the page, and lettered images did not link
+their lettering record. Every prompt itself was already in the public
+repository. Found while testing 0004: under 0001's recipe policy, a draft's
+prompt was public, because the policy checked for versions as the public
+role, which cannot see draft versions; 0005 replaces it (written, not yet
+applied). No screen stores a
+person's own words yet, so the consent screen and the preview are built but
+not yet used.
+
+Every committed recipe now records `assist`: which inputs a
 model drafted (see 3). Open gap: the 4,237 narration recipes already in
 `studio.recipes` have no `assist`, and that table is append-only; the scripts
 write it for new rows.
@@ -221,9 +258,8 @@ only, through `studio.rating_totals`, `studio.like_totals` and
 - Review: does a new page, embed or script reach another domain? Does a new
   table expose who did what?
 
-**Status. Fails `P6c` until 0004 is applied.** Migration 0004 is written and
-tested but not yet applied; until it is, the live database still lets anyone
-read individual ratings and likes.
+**Status.** Pass. 0004 is applied: the live database refuses individual
+ratings and likes and serves the totals.
 
 ## 7. Payments never enter scoring or ordering. No token. The "not affiliated" line stays on the first screen.
 
@@ -278,10 +314,10 @@ quoted as written. Minpentai boards and maps come from the source's own SVGs.
 
 ## Summary of current failures
 
-| Check | Principle | What fails |
-|---|---|---|
-| `P6c` | 6 | Individual ratings and likes are publicly readable on the live database until 0004 is applied |
+None on the automated checks once this change is deployed (`P1d` fails on
+production until then).
 
-Recorded exception: 148 model-drafted spoken descriptions (2), labelled, list
-may only shrink. Open gap: `assist` on narration recipes already in the
-database (1, 3).
+Pending: migration 0005 (recipes of drafts and abandoned attempts private;
+consent kind `own_words`) is written and tested, not applied. Recorded
+exception: 148 model-drafted spoken descriptions (2), labelled, list may only
+shrink. Open gap: `assist` on narration recipes already in the database (1, 3).

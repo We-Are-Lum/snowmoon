@@ -28,6 +28,8 @@ const plain = (t: string) => t.replace(/\[([^\]]+)\]\(\/[^)]*\/\)/g, '$1');
 
 export interface ChapterNarration {
   label: string;
+  /** Repo path of the recipe: every spoken text, exactly as sent to the model (principle 1). */
+  recipe: string;
   url: string;
   bytes: number;
   duration: number;
@@ -48,6 +50,7 @@ export function loadNarration(n: number): ChapterNarration | null {
   );
   return {
     label: index.label,
+    recipe: index.recipe,
     url: index.chapter_file.url,
     bytes: index.chapter_file.bytes,
     duration: index.chapter_file.duration_ms / 1000,

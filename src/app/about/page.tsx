@@ -1,4 +1,7 @@
 import { REPO_URL, WORK } from '~/lib/config';
+import consent from '../../../config/consent.json';
+
+const wording = consent.versions[consent.current as keyof typeof consent.versions];
 
 export const metadata = { title: 'About' };
 
@@ -23,6 +26,18 @@ export default function About() {
         pipeline they used to make it: AI prompts, scripts, task-specific harness, and other non-commodity materials.
         That is his own stated reading, and it has not been tested. This project follows it because publishing how
         everything was made is the point, not because it is settled law.
+      </p>
+      <h2>Your words are public</h2>
+      <p>
+        <strong>{wording.line}</strong> Before your first contribution of your own words, you are asked to agree to
+        this, and the app records who agreed, when, and to which wording:
+      </p>
+      {wording.text.map((t, i) => (
+        <p key={i}>{t}</p>
+      ))}
+      <p>
+        Every published image and voice links to its recipe, including the exact prompt, readable without signing in.
+        The prompts of your drafts and abandoned attempts are not published.
       </p>
       <h2>No token</h2>
       <p>There is no token. There is no revenue share. Nothing here is an investment.</p>

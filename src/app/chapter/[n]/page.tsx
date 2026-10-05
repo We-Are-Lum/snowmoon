@@ -132,6 +132,12 @@ export default async function ChapterPage({ params }: Props) {
                 <figcaption className="block-caption">
                   ¶ {f.label} · AI-generated image, a starting point ·{' '}
                   <a href={`${REPO_URL}/blob/main/${image.recipe}`}>recipe</a>
+                  {image.lettering && (
+                    <>
+                      {' · '}
+                      <a href={`${REPO_URL}/blob/main/${image.lettering}`}>lettering</a>
+                    </>
+                  )}
                 </figcaption>
               </figure>
             )}
@@ -153,6 +159,7 @@ export default async function ChapterPage({ params }: Props) {
           chapter={n}
           chapters={WORK.chapters}
           label={narration.label}
+          recipeUrl={`${REPO_URL}/blob/main/${narration.recipe}`}
           url={narration.url}
           duration={narration.duration}
           cues={narration.cues}

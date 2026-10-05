@@ -1,0 +1,17 @@
+{
+  "about": "The wording a person agrees to before their first contribution that stores their own words (a prompt or a line). The agreement is recorded in studio.contributor_consents with kind 'own_words' and the sha256 of this version's line and text (src/lib/consent.ts). A new wording gets a new version; earlier versions stay here so every recorded hash can be read back.",
+  "current": "own-words-v1",
+  "versions": {
+    "own-words-v1": {
+      "line": "Public, permanent, GPL-3.0, shown with your Farcaster name.",
+      "title": "Your words will be public",
+      "text": [
+        "What you write here (a prompt, a line, a description) is published with what it makes.",
+        "It is public: anyone can read it, signed in or not, including the prompt that made an image or a voice.",
+        "It is permanent: it stays in the project's records. You can ask the maintainer to hide it from view. Copies others have already made may remain.",
+        "It is licensed GPL-3.0, like everything in this edition, so others may copy and adapt it under the same license.",
+        "It is shown with your Farcaster name."
+      ]
+    }
+  }
+}

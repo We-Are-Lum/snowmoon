@@ -16,6 +16,8 @@ export interface Illustration {
   width: number;
   height: number;
   recipe: string;
+  /** Repo path of the lettering record, for images lettered in code. */
+  lettering?: string;
   alt: string;
 }
 
@@ -52,7 +54,7 @@ function describe(chapter: number, id: string): string {
   }).replace(/(^|[.!?]\s+)([a-z])/g, (_, lead: string, c: string) => lead + c.toUpperCase()) + lettered;
 }
 
-type Entry = Illustration & { chapter: number };
+type Entry = Illustration & { chapter: number; lettered?: { record?: string } };
 let cache: Entry[] | null = null;
 
 function all(): Entry[] {
@@ -66,5 +68,14 @@ function all(): Entry[] {
 export function loadIllustrations(n: number): Illustration[] {
   return all()
     .filter((i) => i.chapter === n)
-    .map(({ id, idx, url, width, height, recipe }) => ({ id, idx, url, width, height, recipe, alt: altFor(n, id) }));
+    .map(({ id, idx, url, width, height, recipe, lettered }) => ({
+      id,
+      idx,
+      url,
+      width,
+      height,
+      recipe,
+      ...(lettered?.record ? { lettering: lettered.record } : {}),
+      alt: altFor(n, id),
+    }));
 }

@@ -19,6 +19,7 @@ import { PGlite } from '@electric-sql/pglite';
 import postgres from 'postgres';
 import { chromium } from 'playwright-core';
 import { DEFAULT_TEMPLATES } from '../src/templates';
+import { REPO_URL } from '../src/lib/config';
 import { BOOK_TAG, NARRATION_MAX_WORDS, PERSON_TAG, parseBeats } from '../src/lib/script-beats';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -141,6 +142,123 @@ add({
   plant: (c) => {
     c.skipped = false;
     c.rows.push({ id: 'planted', recipe_id: null });
+  },
+});
+
+// P1d-f: prompts are public, and people know their words will be (owner
+// decision, Oct 5, 2026). A signed-out visitor must reach the exact prompt of
+// every published generated asset: the page links the recipe, and the file at
+// that link (fetched anonymously from the public repo) holds the prompt.
+const RAW = REPO_URL.replace('https://github.com/', 'https://raw.githubusercontent.com/') + '/main/';
+const rawCache = new Map<string, any>(); // eslint-disable-line @typescript-eslint/no-explicit-any
+async function rawJson(rel: string) {
+  if (!rawCache.has(rel)) {
+    const r = await fetch(RAW + rel);
+    rawCache.set(rel, r.ok ? await r.json() : { http: r.status });
+  }
+  return rawCache.get(rel);
+}
+const PAGE_CHAPTERS = [1, 30];
+add({
+  id: 'P1d',
+  principle: 1,
+  name: 'a signed-out visitor reaches the exact prompt of every published image and narration',
+  load: async () => {
+    const images = json('content/snowmoon/illustrations/published.json').images as {
+      id: string; chapter: number; recipe: string; png_sha256?: string; clean?: { png_sha256: string }; lettered?: { record: string };
+    }[];
+    const narration = Array.from({ length: 32 }, (_, i) => json(`content/snowmoon/narration/kokoro-af_heart/chapter-${i + 1}.json`)) as {
+      chapter: number; recipe: string; segments: { idx: number; text: string }[];
+    }[];
+    const files: Record<string, any> = {}; // eslint-disable-line @typescript-eslint/no-explicit-any
+    for (const rel of new Set([...images.flatMap((i) => [i.recipe, i.lettered?.record].filter(Boolean) as string[]), ...narration.map((n) => n.recipe)])) {
+      files[rel] = clone(await rawJson(rel));
+    }
+    const pages: Record<number, string> = {};
+    for (const n of PAGE_CHAPTERS) pages[n] = await page(`/chapter/${n}`);
+    return { images, narration, files, pages };
+  },
+  run: ({ images, narration, files, pages }) => {
+    const problems: string[] = [];
+    const href = (rel: string) => `${REPO_URL}/blob/main/${rel}`;
+    for (const im of images) {
+      const f = files[im.recipe];
+      if (!f || f.http) { problems.push(`${im.id}: recipe ${im.recipe} not public (HTTP ${f?.http})`); continue; }
+      const want = im.clean?.png_sha256 ?? im.png_sha256;
+      const entry = (f.images ?? []).find((e: { id: string; sha256: string }) => e.id === im.id && (!want || e.sha256 === want));
+      if (!entry || !String(entry.prompt ?? '').trim()) problems.push(`${im.id}: no prompt for this render in the public recipe`);
+      if (im.lettered) {
+        const l = files[im.lettered.record];
+        if (!l || l.http || !(l.images ?? []).some((e: { id: string }) => e.id === im.id)) problems.push(`${im.id}: lettering record not public`);
+      }
+      if (PAGE_CHAPTERS.includes(im.chapter)) {
+        if (!pages[im.chapter].includes(href(im.recipe))) problems.push(`${im.id}: chapter ${im.chapter} page does not link its recipe`);
+        if (im.lettered && !pages[im.chapter].includes(href(im.lettered.record))) problems.push(`${im.id}: chapter ${im.chapter} page does not link its lettering record`);
+      }
+    }
+    for (const n of narration) {
+      const f = files[n.recipe];
+      if (!f || f.http) { problems.push(`narration ${n.chapter}: recipe not public (HTTP ${f?.http})`); continue; }
+      const spoken = new Map((f.blocks ?? []).map((b: { idx: number; text: string }) => [b.idx, b.text]));
+      const missing = n.segments.filter((s) => !String(spoken.get(s.idx) ?? '').trim() || spoken.get(s.idx) !== s.text);
+      if (missing.length) problems.push(`narration ${n.chapter}: ${missing.length} segments have no matching spoken text in the public recipe`);
+      if (PAGE_CHAPTERS.includes(n.chapter) && !pages[n.chapter].includes(href(n.recipe))) problems.push(`narration ${n.chapter}: the page does not link its recipe`);
+    }
+    return problems;
+  },
+  plant: (c) => {
+    const first = c.images[0];
+    c.files[first.recipe].images.find((e: { id: string }) => e.id === first.id).prompt = '';
+    c.pages[1] = c.pages[1].split(`${REPO_URL}/blob/main/${c.narration[0].recipe}`).join('');
+  },
+});
+add({
+  id: 'P1e',
+  principle: 1,
+  name: 'live database: the public API serves the spoken text of the house narration',
+  load: async () => {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    if (!url || !key) return { skipped: true, segments: 0, prompts: [] as (string | null)[] };
+    const get = async (q: string) =>
+      (await fetch(`${url}/rest/v1/${q}`, { headers: { apikey: key, Authorization: `Bearer ${key}`, 'Accept-Profile': 'studio' } })).json();
+    const [house] = await get('house_narrations?select=narration_id&work_id=eq.snowmoon&chapter=eq.1');
+    const segs = house ? await get(`narration_segments?select=recipe_id&narration_id=eq.${house.narration_id}&order=idx&limit=10`) : [];
+    const ids = (segs as { recipe_id: string }[]).map((s) => s.recipe_id);
+    const recipes = ids.length ? await get(`recipes?select=id,prompt&id=in.(${ids.join(',')})`) : [];
+    return { skipped: false, segments: ids.length, prompts: ids.map((id) => (recipes as { id: string; prompt: string | null }[]).find((r) => r.id === id)?.prompt ?? null) };
+  },
+  run: ({ skipped, segments, prompts }) => {
+    if (skipped) return ['skipped: NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY not set'];
+    if (!segments) return ['chapter 1 house narration segments are not publicly readable'];
+    const hidden = prompts.filter((p) => !p?.trim()).length;
+    return hidden ? [`${hidden} of ${segments} chapter 1 narration recipes are missing or private`] : [];
+  },
+  plant: (c) => {
+    c.skipped = false;
+    c.segments = Math.max(1, c.segments);
+    c.prompts = [null];
+  },
+});
+add({
+  id: 'P1f',
+  principle: 1,
+  name: 'every text box whose contents may be published shows the publication line (PublishedTextField)',
+  load: async () => walk('src', /\.tsx$/).map((f) => ({ file: f, text: read(f) })),
+  run: (files) => {
+    const problems: string[] = [];
+    const line = json('config/consent.json');
+    if (!line.versions?.[line.current]?.line) problems.push('config/consent.json: no current publication line');
+    for (const { file, text } of files) {
+      if (file.endsWith('components/publish-words.tsx')) continue;
+      for (const m of text.matchAll(/<textarea\b|<input\b(?![^>]*type=["'](?:hidden|checkbox|radio|range|submit|button|file)["'])[^>]*>/g)) {
+        problems.push(`${file}: a bare text box; use PublishedTextField so the publication line shows (${m[0].slice(0, 40)})`);
+      }
+    }
+    return problems;
+  },
+  plant: (c) => {
+    c.push({ file: 'src/app/planted/page.tsx', text: '<textarea name="prompt" />' });
   },
 });
 

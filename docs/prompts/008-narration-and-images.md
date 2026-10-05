@@ -367,3 +367,28 @@ beats 2 and 3 become one, and beats 7 and 8 become one. Nine beats.
 Rebase on main, generate the nine images (at most three attempts
 each), show them to me, and stop. I will write the lines.
 ```
+
+```text
+Prompts must be public, and users must know their words will be.
+
+1. Audit: for every published generated asset, is the exact prompt
+   reachable by a signed-out visitor? List any that are not, and
+   make principle 1's check fail on a missing or private prompt.
+2. Consent: before a person's first contribution that stores their
+   own words (a prompt or a line), show a blocking screen: public,
+   permanent, GPL-3.0, shown with your Farcaster name. Record who
+   agreed, when, and to which wording. If 0004 is still unapplied,
+   add the table there.
+3. Under every text box whose contents will be published, show that
+   same line, and show a preview before publishing.
+4. Only prompts for published elements are public. Drafts and
+   abandoned attempts stay private.
+5. Write docs/removal.md: hide on request at once, plus a logged
+   maintainer procedure for true erasure. Propose it and build
+   nothing yet.
+6. Propose, without building, an option to publish without one's
+   name while recording the author internally.
+
+Fit this into part A of the current work, before 0004 is handed
+over.
+```
