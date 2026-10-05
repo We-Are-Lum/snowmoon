@@ -132,10 +132,13 @@ runs the migration and permission tests in an in-memory Postgres.
 | `npm run check:shipped` | Verify a live deployment runs the expected commit, serves the reader, and its narration and images load |
 | `npm run publish:narration` | Upload the narration (per-block and per-chapter audio) to R2 and write `content/snowmoon/narration/` |
 | `npm run seed:narration` | Write narrations, segments, recipes and house narrations from that index (skips chapters already done) |
+| `npm run check:adaptations` | Every block ID cited under `adaptations/` exists; seeds and folders match |
 | `npm run publish:images` | Upload the seeded key-moment images to R2 and write `content/snowmoon/illustrations/published.json` |
 
 Local generation (Python, not npm): `scripts/narrate.py` (speech, Kokoro),
-`scripts/illustrate.py` (images, FLUX.2 [klein] via mflux), and
+`scripts/illustrate.py` (images, FLUX.2 [klein] via mflux),
+`scripts/letter-images.py` (draws a job's `lettering` over its image, since
+prompts keep images free of writing), and
 `scripts/podcast-feed.py` (RSS feed). Their setup is at the top of each file.
 
 ## Media

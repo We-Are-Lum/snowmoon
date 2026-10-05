@@ -11,6 +11,7 @@ import { loadNarration } from '~/lib/narration';
 import { loadIllustrations } from '~/lib/illustrations';
 import { ChapterPlayer } from '~/components/chapter-player';
 import { QuoteShare } from '~/components/quote-share';
+import { adaptationsCiting } from '~/lib/adaptations';
 import type { Block } from '~/lib/book';
 
 type Props = { params: Promise<{ n: string }> };
@@ -85,13 +86,33 @@ export default async function ChapterPage({ params }: Props) {
           );
         } else {
           const Tag = b.kind === 'paragraph' ? 'p' : 'div';
-          el = <Tag {...common} className={`block ${b.kind}`} dangerouslySetInnerHTML={{ __html: renderMarkdown(b) }} />;
+          // A paragraph an adaptation cites ends with a small mark linking to it.
+          const marks =
+            b.kind === 'paragraph'
+              ? adaptationsCiting(n, b.idx)
+                  .map((s) => ` <a class="cite-mark" href="/adaptations/${s.slug}" title="Cited in ${s.title}" aria-label="Cited in ${s.title}">◆</a>`)
+                  .join('')
+              : '';
+          el = <Tag {...common} className={`block ${b.kind}`} dangerouslySetInnerHTML={{ __html: renderMarkdown(b) + marks }} />;
         }
         const scene = scenes.get(b.idx);
         const image = imageAt.get(b.idx);
+        // Blocks that can't carry an inline mark (quotes, screens, figures) get a line instead.
+        const citedBy = b.kind === 'paragraph' ? [] : adaptationsCiting(n, b.idx);
         return (
           <Fragment key={id}>
             {el}
+            {citedBy.length > 0 && (
+              <p className="cited-by">
+                ↳ cited in{' '}
+                {citedBy.map((seed, i) => (
+                  <Fragment key={seed.slug}>
+                    {i > 0 && ', '}
+                    <Link href={`/adaptations/${seed.slug}`}>{seed.title}</Link>
+                  </Fragment>
+                ))}
+              </p>
+            )}
             {image && (
               <figure className="seed-image" data-for={id}>
                 {/* eslint-disable-next-line @next/next/no-img-element */}

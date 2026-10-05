@@ -21,6 +21,8 @@ const nextConfig: NextConfig = {
     '/**': [
       './content/snowmoon/text/**',
       './content/snowmoon/illustrations/**',
+      './config/**',
+      './adaptations/**',
       './node_modules/@fontsource/crimson-pro/files/crimson-pro-latin-*-normal.woff',
       './node_modules/@fontsource/crimson-pro/files/crimson-pro-latin-*-italic.woff',
       './node_modules/@fontsource/dm-mono/files/dm-mono-latin-*-normal.woff',

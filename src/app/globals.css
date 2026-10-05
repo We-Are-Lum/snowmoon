@@ -522,3 +522,13 @@ figure.figure .device-view svg { min-width: var(--fig-min, 0); }
 .like-button.is-liked { border-color: var(--accent); color: var(--accent); }
 .cast-card { border-color: var(--accent); color: var(--accent); }
 .like-note { color: var(--muted); font-size: 12px; }
+
+/* A block an adaptation cites: a small marker linking to it. */
+.chapter .cited-by {
+  margin: -0.7em 0 0.9em;
+  font-family: var(--label);
+  font-size: 12px;
+  color: var(--muted);
+}
+.chapter .cited-by a { display: inline-flex; align-items: center; min-height: var(--tap); }
+.chapter .cite-mark { color: var(--accent); font-size: 0.6em; text-decoration: none; vertical-align: 0.25em; padding: 0 2px; }

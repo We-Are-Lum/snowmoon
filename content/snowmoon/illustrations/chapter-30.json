@@ -28,7 +28,70 @@
       "prompt": "Dawn in a snowy forest clearing. Soldiers in pale hooded thermal cloaks hurry along a long row of snowmobile-like drones, pressing large freshly printed sheets of paper onto every side of each drone. The sheets are covered in bright, colorful abstract squiggly patterns with no writing. Nearby, small printers on folding tables push out more sheets. Smoke drifts between the pine trees, and pale early light breaks through. Busy, urgent mood, icy whites and pale blues with pops of color.",
       "width": 1024,
       "height": 576,
-      "seed": 30041
+      "seed": 30041,
+      "lettering": [
+        {
+          "kind": "sign",
+          "text": "DOG",
+          "lang": "en",
+          "gloss": null,
+          "speaker_entity_id": null,
+          "x": 0.178,
+          "y": 0.662,
+          "w": 0.105,
+          "size": 0.038,
+          "rotate": -12
+        },
+        {
+          "kind": "sign",
+          "text": "DOG",
+          "lang": "en",
+          "gloss": null,
+          "speaker_entity_id": null,
+          "x": 0.322,
+          "y": 0.612,
+          "w": 0.066,
+          "size": 0.024,
+          "rotate": -10
+        },
+        {
+          "kind": "sign",
+          "text": "DOG",
+          "lang": "en",
+          "gloss": null,
+          "speaker_entity_id": null,
+          "x": 0.452,
+          "y": 0.592,
+          "w": 0.048,
+          "size": 0.017,
+          "rotate": 10
+        },
+        {
+          "kind": "sign",
+          "text": "DOG",
+          "lang": "en",
+          "gloss": null,
+          "speaker_entity_id": null,
+          "x": 0.551,
+          "y": 0.584,
+          "w": 0.05,
+          "size": 0.017,
+          "rotate": 14
+        },
+        {
+          "kind": "sign",
+          "text": "DOG",
+          "lang": "en",
+          "gloss": null,
+          "speaker_entity_id": null,
+          "x": 0.645,
+          "y": 0.606,
+          "w": 0.052,
+          "size": 0.017,
+          "rotate": 12
+        }
+      ],
+      "lettering_note": "The book's sheets carry the word DOG in a giant font (chapter 30, block 47). The prompt keeps the image free of writing, because image models garble text; the word is drawn in code over the image from `lettering` (brief Milestone 5)."
     },
     {
       "id": "c30-b048-drones-surge",
@@ -42,7 +105,34 @@
       "prompt": "Dynamic wide shot of a snowy pine forest at sunrise. A line of snow drones plastered with colorful abstract squiggly patterns surges forward through the trees, kicking up sprays of snow, pushing past darker, sleek enemy drones that sit motionless or turn aside in confusion. Bright low sunlight cuts through drifting smoke between the trunks. No people visible. Icy whites and steel greys with bright patches of color on the advancing drones.",
       "width": 1024,
       "height": 576,
-      "seed": 30048
+      "seed": 30048,
+      "lettering": [
+        {
+          "kind": "sign",
+          "text": "DOG",
+          "lang": "en",
+          "gloss": null,
+          "speaker_entity_id": null,
+          "x": 0.15,
+          "y": 0.515,
+          "w": 0.09,
+          "size": 0.034,
+          "rotate": 6
+        },
+        {
+          "kind": "sign",
+          "text": "DOG",
+          "lang": "en",
+          "gloss": null,
+          "speaker_entity_id": null,
+          "x": 0.356,
+          "y": 0.538,
+          "w": 0.05,
+          "size": 0.018,
+          "rotate": 4
+        }
+      ],
+      "lettering_note": "The sheets plastered on the drones carry the word DOG in a giant font (chapter 30, block 47). Here the patterns sit on the drone bodies; the prompt keeps the image free of writing, because image models garble text; the word is drawn in code over the image from `lettering` (brief Milestone 5)."
     },
     {
       "id": "c30-b076-zei-sleeps",

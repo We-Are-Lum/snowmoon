@@ -27,7 +27,8 @@ export interface QuoteCardSpec {
 }
 
 export interface LetteringItem {
-  kind: 'caption' | 'speech' | 'thought' | 'sfx';
+  /** sign: writing on an object in the scene (a sheet, a banner, a poster). */
+  kind: 'caption' | 'speech' | 'thought' | 'sfx' | 'sign';
   /** The line as shown, in its own language. */
   text: string;
   /** Language of `text`: 'en' for English, 'dz' for Dzegoban. */
@@ -35,10 +36,14 @@ export interface LetteringItem {
   /** Translation shown with a non-English line (e.g. a Dzegoban line's English), or null. */
   gloss: string | null;
   speaker_entity_id: string | null;
-  /** Position and width as fractions of the image, 0 to 1. */
+  /** Top-left corner and width of the text box, as fractions of the image, 0 to 1. */
   x: number;
   y: number;
   w: number;
+  /** Font size as a fraction of the image width. Optional; otherwise fitted to w. */
+  size?: number;
+  /** Rotation in degrees, clockwise, for text on tilted objects. Optional. */
+  rotate?: number;
 }
 
 export interface ImageBody {

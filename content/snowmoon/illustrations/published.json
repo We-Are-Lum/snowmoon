@@ -13,6 +13,7 @@
       "setting": "veridia",
       "location": "designs/locations/kalimar-footpaths.json",
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c1/c1-b005-toy-drone-ea7f59a8c05f.jpg",
       "sha256": "ea7f59a8c05f2caf1774cbc08fa48d27d631e290687a367a4b985ba9a207e684",
       "png_sha256": "cbdd51857ea818f3eeb639f202d0fab6f21668cffe05c3358b85c6341780bed8",
@@ -27,6 +28,7 @@
       "setting": "veridia",
       "location": "designs/locations/kalimar-sky-bridge.json",
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c1/c1-b013-sky-bridge-64be33275e53.jpg",
       "sha256": "64be33275e53b00a3d4b71465b6e1fd9899c780f114550b97f89c827a134cb87",
       "png_sha256": "a601c6c6116fffedfa6223bd6c01e6030fdece0c80c1cc0dc863d90db1f23fb4",
@@ -41,6 +43,7 @@
       "setting": "veridia",
       "location": null,
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c1/c1-b082-snatch-bc33ac7552e0.jpg",
       "sha256": "bc33ac7552e0e27ef9e8dca43d170766479e901a025c5d06b5bc4d8618c12d4b",
       "png_sha256": "8c5960293a3c680a811f81c2c7ec00655a23ce8ae8380bf06e5e391216e2301d",
@@ -55,6 +58,7 @@
       "setting": "veridia",
       "location": "designs/locations/autobus.json",
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c1/c1-b089-autobus-04c210589e1c.jpg",
       "sha256": "04c210589e1cf13cee8ae3e8e7bf2385f86d4a20bb6e0d2063a0c72c07df0926",
       "png_sha256": "63d71bd994cef3a31bdc935994b2c1876198777acee28768fb5e56fe11146c3b",
@@ -72,6 +76,7 @@
         "gladias",
         "zven"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c1/c1-b132-food-boxes-b0ae0549f409.jpg",
       "sha256": "b0ae0549f409b140a8bcd9d83ae362b021c39e6d18e786f6dbec340e3765fd4a",
       "png_sha256": "db07774012d4b20453648ab2500dc19c5cd957e0613a75dc9561be3749ad4b97",
@@ -89,6 +94,7 @@
         "zei",
         "fin"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c2/c2-b003-electronics-street-59b08371573a.jpg",
       "sha256": "59b08371573a84d9edd66fb283bb34722554e888d56bfe633858facd9217ea69",
       "png_sha256": "fe6f5b5104a15dfb42877d4cd22e75281b22816dad8a3b1d9f6be299a2941ff5",
@@ -106,9 +112,23 @@
         "zei",
         "fin"
       ],
-      "url": "https://media.snowmoon.party/images/seed/c2/c2-b038-foil-classroom-8d4a2147d5ed.jpg",
-      "sha256": "8d4a2147d5edb915116afe6d57b53e257a1b310f5ccf1fb0b0bf861224a640e6",
+      "lettering": [
+        {
+          "kind": "sign",
+          "text": "pa jan li sun zo\nzai gau fe pa jan\n\ngo li sun zo\nbai gau fe go",
+          "lang": "dz",
+          "gloss": "One man learning will set one man free. A nation learning will make the nation great.",
+          "speaker_entity_id": null,
+          "x": 0.43,
+          "y": 0.468,
+          "w": 0.15,
+          "size": 0.0125
+        }
+      ],
+      "url": "https://media.snowmoon.party/images/seed/c2/c2-b038-foil-classroom-e64ee3cb8466.jpg",
+      "sha256": "e64ee3cb8466edb09c2287be8ee146cf886ab10ee6988a77cf2f81ea66f6f7d3",
       "png_sha256": "bd733c887f2dc7ce4f24c7824d40e193688e98bedf754a019a7d827fccb65c7e",
+      "lettered_png_sha256": "20b07d88b075a57e55700116a64bf9c11da001e079803c6ad371377634dcfb2e",
       "width": 1024,
       "height": 576,
       "recipe": "content/snowmoon/recipes/images/chapter-2.json"
@@ -122,6 +142,7 @@
       "characters": [
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c2/c2-b099-blast-26aa0d952d37.jpg",
       "sha256": "26aa0d952d37d60277cdecb6bb04ed476c118722b0ddc01d085ad76ff0dbe8b6",
       "png_sha256": "feeae89b5c58da123a481e986c04a2145219f61ff9304caddb12d377f53e4cac",
@@ -139,6 +160,7 @@
         "fin",
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c2/c2-b122-sweeping-ea6b5b382222.jpg",
       "sha256": "ea6b5b3822225b5ba7f5e9b1bbf49ac9c5d7daa015d9b1993f3cb57193306f71",
       "png_sha256": "f7514c2d26250a4068107f464622fd1e3367348a390ded4fffdcadc69ddc9896",
@@ -153,6 +175,7 @@
       "setting": "veridia",
       "location": null,
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c3/c3-b029-fresh-robe-781ec69c6797.jpg",
       "sha256": "781ec69c679731d6470f1cca6823a2e2b683e0cb076d8eefc7d2682c98f4b5a3",
       "png_sha256": "8f45caad189d5db1596e01017287c4126e66343791d3c54fbcfe3d6400149ab2",
@@ -167,6 +190,7 @@
       "setting": "veridia",
       "location": "designs/locations/greater-plum-harbor.json",
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c3/c3-b054-enclave-wall-8a7bdfb5ea3a.jpg",
       "sha256": "8a7bdfb5ea3a3e8e95a3e4a85d6362f310cd16d9389102cb72ca3f0de381cd52",
       "png_sha256": "6eb774f3bdda3f508b3abce4a785eb47911a0093318e71bd30b7efb0a705942a",
@@ -181,6 +205,7 @@
       "setting": "veridia",
       "location": "designs/locations/greater-plum-harbor.json",
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c3/c3-b072-enclave-street-88dbc26d6fc4.jpg",
       "sha256": "88dbc26d6fc42424e306a9c6cdbf568800485681749cbdb9a63d84088cc58103",
       "png_sha256": "aac00b412fd80ed0da3f73c79caf7e6e46136796989db47db3114b800a9810c5",
@@ -198,6 +223,7 @@
         "gladias",
         "delwart"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c3/c3-b092-booth-25e4dd98d8f5.jpg",
       "sha256": "25e4dd98d8f5ff5b529cc367f240d689e4037354734396bc0918d6e8cfe16cf1",
       "png_sha256": "f48c845fe25b6f0416519ef7e86771c2dd66cd3975dfe894464c396d9a00d997",
@@ -215,6 +241,7 @@
         "fin",
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c4/c4-b003-camera-ladder-79f929de3358.jpg",
       "sha256": "79f929de33582825a66f63487cf38fd892c6a5881f9a30eee9dd05fbe737f6ed",
       "png_sha256": "697409fde036990ad63a2161ea54d5e8dc8e6e5d0ae973a0a092f7ed333a8572",
@@ -229,6 +256,7 @@
       "setting": "dzego",
       "location": "designs/locations/mountain-pyramid.json",
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c4/c4-b048-pyramid-29e3a771abf3.jpg",
       "sha256": "29e3a771abf32ca8dd71e373b83add87563a18c106b433375267bd75f9e13a06",
       "png_sha256": "3e2d3a905618d63977419e9660e37a6a753e4b15144cffd88452c48bb1cba3a6",
@@ -246,6 +274,7 @@
         "bai",
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c4/c4-b073-rival-9d48ce3f97da.jpg",
       "sha256": "9d48ce3f97daea1adb6ce96e55aab115c9bf24d83275751734066fe9dcb4b8f5",
       "png_sha256": "ddee8a2beacb6df2cc39e6b85e7b4504d31104e77de5218a5b1c5ec52e33431c",
@@ -262,6 +291,7 @@
       "characters": [
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c4/c4-b081-arena-1c361732cf3f.jpg",
       "sha256": "1c361732cf3f759a2aa2d512aca54cf7f4edb1c885e260e8717f26dc0d4b633e",
       "png_sha256": "1c553ab32d583000438c6d349e2e598c6193b3e91bc71374663531da0696628c",
@@ -279,6 +309,7 @@
         "mu",
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c4/c4-b149-new-rule-65e8e38b1d4e.jpg",
       "sha256": "65e8e38b1d4ee656e74db63f0c1f634672838fdd820090144e276561cadd15a3",
       "png_sha256": "e947ededcc46e5abd1aec1f29e9bbc28d84476d046a4b0134bb90d71eb94e327",
@@ -296,6 +327,7 @@
         "zei",
         "min"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c5/c5-b012-taxi-view-00c611e0d182.jpg",
       "sha256": "00c611e0d1823f68ea95a342693b1f841304e3942edf24f0d6e5e1b5b9006923",
       "png_sha256": "de1f6908ababf28070c7b8fe3339d92c5e978ebf30091d9df9203324ac79f174",
@@ -313,6 +345,7 @@
         "zei",
         "bai"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c5/c5-b043-spiral-ramp-b8d3547cfeef.jpg",
       "sha256": "b8d3547cfeef4bdc10ea66fdc53ada5538c18d556ac46e90e6832553ec7017ef",
       "png_sha256": "13e364f35007026429f577cd86522e30876ba45bb400d44a23746e3abe7b4467",
@@ -330,6 +363,7 @@
         "seila",
         "jahn"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c5/c5-b073-lunch-table-41995fde281c.jpg",
       "sha256": "41995fde281c9b02d0f551987d74edd6ec5f747efaa3d0f07721bcb381335e64",
       "png_sha256": "51e39a9966e2846729a0cdfa728edf880036a3ba33bf1b39395657b1d4e8a005",
@@ -347,6 +381,7 @@
         "seila",
         "gladias"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c5/c5-b091-watch-call-1d085761f92c.jpg",
       "sha256": "1d085761f92c287c92533aedd1faaff6c1accf922aee8dd76f6dd4a805a2209e",
       "png_sha256": "71a1d72d4fde87aca346550ade8bad208ddc30ea70c2f6b5ff9c245b85de99ca",
@@ -363,6 +398,7 @@
       "characters": [
         "gladias"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c6/c6-b004-foil-basement-385c384cc5e1.jpg",
       "sha256": "385c384cc5e1136c3e2b31cbe04044b9f274a5b2219a781eca105ddb7486fc35",
       "png_sha256": "b9a20b114533ebb39f4e7277289c6f7386ab6c75fcb042201602b46f0f98e1cb",
@@ -380,6 +416,7 @@
         "gladias",
         "mov"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c6/c6-b100-assembly-ec29a317db6e.jpg",
       "sha256": "ec29a317db6e917ec956aa5cbf35caaa27c238058fd19caa38f1b26bb1603abf",
       "png_sha256": "a83d006c6dd907c346e7c023179ba8a58f5d3642ebdb359e59a447bd387e5452",
@@ -397,6 +434,7 @@
         "gladias",
         "febric"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c6/c6-b116-febric-hug-1ceb7686d5a0.jpg",
       "sha256": "1ceb7686d5a0abe593903ec20029e08a9e90eaceeb9f460f697946a7f77ab51b",
       "png_sha256": "757cb4127f9d58922d134f3e9beb5dfb6b20d810cd3f893101235068fd2affc6",
@@ -411,6 +449,7 @@
       "setting": "veridia",
       "location": null,
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c6/c6-b147-tower-top-77b5c8016cd3.jpg",
       "sha256": "77b5c8016cd3a934cce5980b874c9417a10acfa49ede8a12ec713ebdec7ab85f",
       "png_sha256": "6ef8bf70529913ea0f93094b09ec4b54da1c2decb3b3430f8a86e73353ffe962",
@@ -428,6 +467,7 @@
         "zei",
         "bai"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c7/c7-b035-smoke-d8c5a6c7b490.jpg",
       "sha256": "d8c5a6c7b4907d42cc94718182ad4fc01d200bb189d8e5fb6fd3619ce13f78d1",
       "png_sha256": "be27d81166c202b29174c8c220e0828da7cd7e35e392db0fd1b956d87f58eecf",
@@ -445,6 +485,7 @@
         "mu",
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c7/c7-b049-toast-38a7b3ceb082.jpg",
       "sha256": "38a7b3ceb082df659c44d674987372e11ff3009b1a21676d36f262bbbabd624d",
       "png_sha256": "88d038445637a57cda25f3f66e0216d726ee689e7f43e838107bcf98244d458e",
@@ -461,6 +502,7 @@
       "characters": [
         "fin"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c7/c7-b100-audience-55db9c71ac0b.jpg",
       "sha256": "55db9c71ac0b7ba8b31314698a4d770cce925938df882fe8b5813f59e10064ae",
       "png_sha256": "b5eca4a5f0c1b8dd94a4535453f7fa99fe6b4bbca894aa4a54cf11639c669e6c",
@@ -477,6 +519,7 @@
       "characters": [
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c7/c7-b141-purple-letter-9a2e1871d6aa.jpg",
       "sha256": "9a2e1871d6aa905883e4e0794a5cab36ee88f4ea5f11b34e8f43ec16673fc7c3",
       "png_sha256": "8b428ad19cd529fec8434655230b68b4a8b8f4ba243eae2b899a1e97d29248ab",
@@ -493,6 +536,7 @@
       "characters": [
         "gladias"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c8/c8-b016-bus-debate-141b3ef461a4.jpg",
       "sha256": "141b3ef461a47345be6233b671ee9e5ddc231b9c3d0ecf8403440d72b7713091",
       "png_sha256": "782c892f9b8fb0834e58aff7f5732e569dd5ab9b97e9fd0937824ddd8e3e256e",
@@ -507,6 +551,7 @@
       "setting": "veridia",
       "location": "designs/locations/parliament.json",
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c8/c8-b038-parliament-3014f7c99c46.jpg",
       "sha256": "3014f7c99c46ab2746400c7a71ab334290e68e47eadb4e307a78641be7855c1e",
       "png_sha256": "c2f794fcdf70ddcac2d03ec4508ed87488fc0409848958e78090b469ac32714d",
@@ -523,6 +568,7 @@
       "characters": [
         "verdow"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c8/c8-b050-hearing-e5d2f9ac8622.jpg",
       "sha256": "e5d2f9ac862257134bc5f0b346f880e296037bfc439e6ff564bd4cf955f81bbc",
       "png_sha256": "757ef2e999d54f47a5db4f608e783c4dcd33bbd4ec88401656dce9d1d4ff5fd4",
@@ -540,6 +586,7 @@
         "gladias",
         "lily"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c8/c8-b111-lily-couch-84dfa85a5d43.jpg",
       "sha256": "84dfa85a5d432822cc34efc77d172246732f73ca3ec045fca137513470255be5",
       "png_sha256": "c17a142649a56b83875cb988fb02358171c62a6cdf4f52566500fd54c674b479",
@@ -557,6 +604,7 @@
         "bai",
         "fin"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c9/c9-b002-courtyard-tears-37c5b395362a.jpg",
       "sha256": "37c5b395362a7813fd668d87afad726c86f2af587be25ee25f255eeba220daaa",
       "png_sha256": "965972a569157bb5ff076e337d04a0fb598206dddac797639bd9ad441a0e99a1",
@@ -574,6 +622,7 @@
         "zei",
         "den"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c9/c9-b052-long-room-eb1c41e89777.jpg",
       "sha256": "eb1c41e897771fce2fa7fb282abd6cd2e982054a981dee03a771f4e97e421e80",
       "png_sha256": "113d9c11c8f00aa50304fdc5547a4af3346cd1078fd819ee8b77d85b8122d756",
@@ -591,6 +640,7 @@
         "zei",
         "den"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c9/c9-b105-sealed-car-3fd0ad3a6f5c.jpg",
       "sha256": "3fd0ad3a6f5cf68715ed5370998b682bd24ef7d9fe4419a3778be8179ddc204b",
       "png_sha256": "5d442ecb629ea71969c3b4c05e380658729a97d2deeadab8f18fe5262c45ee8a",
@@ -608,6 +658,7 @@
         "zei",
         "den"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c9/c9-b110-box-mixnet-f11270978727.jpg",
       "sha256": "f11270978727c7a25fdfda328ce38b960796d2bd5d2262abbf43f97c6e1e1975",
       "png_sha256": "aed0fda91c71e60e8a4be8b1250dd1551a5145dfcff015ae0ddda2a94a42b067",
@@ -624,6 +675,7 @@
       "characters": [
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c9/c9-b139-microscope-602e941baf94.jpg",
       "sha256": "602e941baf9498b5de4e295f0fe4a5b36ada07d7496472a23864ce756fbce2f5",
       "png_sha256": "2897ab203807306dfaea0b4fe19abcf8d0a9a4e21e9d6582d3689d316a68793a",
@@ -640,6 +692,7 @@
       "characters": [
         "jahn"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c10/c10-b023-institute-lunch-ab30fc20f2e0.jpg",
       "sha256": "ab30fc20f2e011598b6b67e4f6ef20ce3cde12318320e09a705aae725364a8f9",
       "png_sha256": "842f8f29f133e7964e93040bd404d35e91e9c91d9f66e36410dbac1d38bd4693",
@@ -654,6 +707,7 @@
       "setting": "veridia",
       "location": "designs/locations/order-booths.json",
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c10/c10-b050-booth-courtyard-f313a325495a.jpg",
       "sha256": "f313a325495ab9b6150526968e8fedb37b3c59510b19ab3a572413343f2fa1b2",
       "png_sha256": "e362f143e3fa2f44f1b6c51a1b9eb90223631a11084960561eeae686f1ee20ef",
@@ -668,6 +722,7 @@
       "setting": "veridia",
       "location": "designs/locations/order-booths.json",
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c10/c10-b114-needle-bug-65039b43d69f.jpg",
       "sha256": "65039b43d69fa132cfc1e8f34bbd1516e4124205ead59dc0721480fd9fad18d0",
       "png_sha256": "2a2fd351ee7cbd55c53804b75a398ba5cbe5c158904fcd4d3f3cce6a703eaab3",
@@ -685,6 +740,7 @@
         "zei",
         "bai"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c10/c10-b160-practice-game-6be9298a8396.jpg",
       "sha256": "6be9298a8396fdd3e0d5b199b40ff020544be0ab05836cb21718285806a13a69",
       "png_sha256": "874451eb1407c50db4f05688766276f0af16fe2b76ea35defe2dda82c182d1db",
@@ -702,6 +758,7 @@
         "mu",
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c10/c10-b191-the-reveal-01b7d4c5bcef.jpg",
       "sha256": "01b7d4c5bcef50ebdd6860ca868d2863921633cc12451332e2e294e174ad826f",
       "png_sha256": "202caacbd05d32d598933ed59a726861b900f894281aec3a758f4b8ac4db0125",
@@ -718,6 +775,7 @@
       "characters": [
         "zven"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c11/c11-b023-copter-truck-145dca1b7ece.jpg",
       "sha256": "145dca1b7eceab40034134423b81efe5e619740d2d7ac9a26830055fffee0d2f",
       "png_sha256": "6e7d3f177e281bea8d0c434386ec19b36ebb316024bd965fa8c692e2c5f35a4e",
@@ -734,6 +792,7 @@
       "characters": [
         "zven"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c11/c11-b043-redball-catch-82f7d55852fc.jpg",
       "sha256": "82f7d55852fc9a6215a3d57ac2d63007a0bb83dac9369a861aaedd30ec7b425a",
       "png_sha256": "40490d2d0fc6838aef5f1ce9458ad379fd0da6535c762393609a3a67f1a8399e",
@@ -750,6 +809,7 @@
       "characters": [
         "zven"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c11/c11-b081-broken-redball-4eab49e8f24b.jpg",
       "sha256": "4eab49e8f24b463fb917f41ce57b7cd44bb31e9cbbe6f2a69f72312cc30349ef",
       "png_sha256": "298eb12f5cfbe343ab3326e4555eb7421eb05e815e2921f89bd0431d56e529eb",
@@ -764,6 +824,7 @@
       "setting": "veridia",
       "location": "designs/locations/neighborhood-restaurant.json",
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c11/c11-b123-heavy-water-ad-89d6f4b2d1f2.jpg",
       "sha256": "89d6f4b2d1f21f14c697c083acb1be29007b1affd283f8d04d560f20887ef27a",
       "png_sha256": "a1b79b607561cc518b65961f9c1c039e969f1d496defa61f664bbc2c50748a28",
@@ -780,6 +841,7 @@
       "characters": [
         "seila"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c11/c11-b126-hug-from-behind-624b4d3688d1.jpg",
       "sha256": "624b4d3688d1d12b32e7c17eb2b1777d5da2454e02ef6c2057bacbca14c3d50d",
       "png_sha256": "fe72c1a3e918b6e7567eab331253e02fefe0442885c211670e1bb14805878d66",
@@ -796,6 +858,7 @@
       "characters": [
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c12/c12-b013-priests-on-platform-386c5edbbf77.jpg",
       "sha256": "386c5edbbf779376ffc9b65143274ec9424f2d197b8401933e3b639f8e8253e6",
       "png_sha256": "4e6f62325c2b9daa3fbb48ed834d28a057abe835e6825b551b23c233ed3b6678",
@@ -812,6 +875,7 @@
       "characters": [
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c12/c12-b030-pyramids-from-car-a72022dc5b67.jpg",
       "sha256": "a72022dc5b67eaf3a92e11ed0721a397af247e21b8d193ce645c3b26167e12be",
       "png_sha256": "06a43379259f2c821c8417a2661b245e4d5b040b5041809af1909354c9e76769",
@@ -829,6 +893,7 @@
         "zei",
         "deluin"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c12/c12-b070-orientation-972a4c7e9e43.jpg",
       "sha256": "972a4c7e9e435a3f7b26d71297a510aa8261215c0fb4e812fbf31d0798c12697",
       "png_sha256": "91789aad9791c7af3b777486d4ba55121c3e6bd9c9d5c42562ce5a8eefb10f0c",
@@ -845,6 +910,7 @@
       "characters": [
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c12/c12-b139-drone-scan-0d17e0d87a63.jpg",
       "sha256": "0d17e0d87a63b4b4b217f057bf4e8724d527cbe532f9261027132e18d7d2dd3d",
       "png_sha256": "f92e8f393f20e326c8b58e717f2822664efd5b1e178de1836ae5b82b6cf766b8",
@@ -861,6 +927,7 @@
       "characters": [
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c12/c12-b173-snowflake-field-e529d84e5c21.jpg",
       "sha256": "e529d84e5c21cece19077e6e3df6c2011804d2a69ba68061d768ff45569f2e54",
       "png_sha256": "ef9f5c9f82591f5ae842dbe136323a522ec8fa590a98d3a1e85f999036522d0e",
@@ -878,6 +945,7 @@
         "gladias",
         "delwart"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c13/c13-b017-curtained-booth-9a13e34de0eb.jpg",
       "sha256": "9a13e34de0ebe895f73e2df3433c8beaf88505f26f1f73e3b5abd1c43d9b983d",
       "png_sha256": "a2a30b66f7bb75915bcb596949371fdafefd062c19c4c53823b8e50a41b446f9",
@@ -892,6 +960,7 @@
       "setting": "veridia",
       "location": "designs/locations/greater-plum-harbor.json",
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c13/c13-b024-commercial-district-6d6cbf9481d4.jpg",
       "sha256": "6d6cbf9481d47d36e321d2e03f1e6c7f9fda658f3c7e94f9cbef7f966611eca7",
       "png_sha256": "fcf2db982197ba7085d96595786a40d430bbcdc91a0e65b571e12f108fa78e27",
@@ -909,6 +978,7 @@
         "seila",
         "lily"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c13/c13-b065-hijacked-screen-242c4bf5e5f7.jpg",
       "sha256": "242c4bf5e5f70a6d81a270c44cb4bb24e42bdfb9fcd3d54acb2732c2caf0313d",
       "png_sha256": "2fdd63e70bc4eec943f809ff4bbc0d27ebe1b15d3db16f972a514df2a47e820c",
@@ -923,6 +993,7 @@
       "setting": "veridia",
       "location": "designs/locations/order-booths.json",
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c13/c13-b092-keeper-proposal-bf3f194af8ef.jpg",
       "sha256": "bf3f194af8ef13d0806c05c24485a13ecbaadbc4767a9c5a3c12351b346a79cb",
       "png_sha256": "dcacaa7490d84e9ae04767d4200a31b3d0005519cd63e9cbd519ee46ac60efbe",
@@ -940,6 +1011,7 @@
         "zei",
         "bai"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c14/c14-b027-lobby-breakfast-5ccd90418a03.jpg",
       "sha256": "5ccd90418a0329f8e48ff832bcb3352670c0c6f5d7d065d65dee8f09fc52d5f8",
       "png_sha256": "20603dab2a4b56fa8d91f44c196d520dc3b7acc7b4d194c0d1a7e15792111344",
@@ -956,6 +1028,7 @@
       "characters": [
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c14/c14-b030-semifinal-arena-8b75a4d6d6b7.jpg",
       "sha256": "8b75a4d6d6b7b3a2876a62e0141aab5ae1bf2bdba22a7d050e204aa2c44b550f",
       "png_sha256": "5e8945fe6990c172ebe59096e8ff7bb1d48eebead19c1e0241f20b57174facde",
@@ -972,6 +1045,7 @@
       "characters": [
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c14/c14-b085-walled-ship-de7c060af3f8.jpg",
       "sha256": "de7c060af3f8efa7ff72597696bdb5878f244546a435fa7f5eb0efc4adcff73e",
       "png_sha256": "f22ed7f2e33f0ff9f364d6ddf3845e74d3d9ed20a91c82f702f1bc13a7e0ca44",
@@ -989,6 +1063,7 @@
         "deluin",
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c14/c14-b124-redshire-photos-7839e99ea462.jpg",
       "sha256": "7839e99ea4621de6ab72e034e223c36b54e2cea23b57c6c3453d6dd5542f158f",
       "png_sha256": "3a548738421241257f7fb957556421824df1b8fcf622779bc64a6ccf8cec41c1",
@@ -1005,6 +1080,7 @@
       "characters": [
         "jahn"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c15/c15-b005-special-broadcast-bf1067115c7b.jpg",
       "sha256": "bf1067115c7b8a168cf06b8197bdc91c93e1606ed1c560d8c1dcf719c3d83369",
       "png_sha256": "31a02158f9774ddf5f0387e5acb75cd53d66edce8c30336b2335d7910aa3f966",
@@ -1022,6 +1098,7 @@
         "gladias",
         "seila"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c15/c15-b018-sunrise-news-5c36ba15ca19.jpg",
       "sha256": "5c36ba15ca19001269076cb49fed3d00ba1ee8f938e587358129c37cec769ba6",
       "png_sha256": "28883748df918e3a1aa9325d9704442c7b333cd620938564e49121393b64ac01",
@@ -1038,6 +1115,7 @@
       "characters": [
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c15/c15-b051-untouched-meal-622e77766000.jpg",
       "sha256": "622e777660004d43fad1fb98382272eb500c0e54d9e971d9616b6f4e74229612",
       "png_sha256": "6ea20daa60caf3550720d1a61308e8501b2cca6c693a5b688abbf0af6e04cf04",
@@ -1054,6 +1132,7 @@
       "characters": [
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c15/c15-b075-hand-on-shoulder-ec43fba31497.jpg",
       "sha256": "ec43fba31497fa9f95fad46a98b76c6a1e45f7d3542db470817b12e0bcee7d89",
       "png_sha256": "116ee7b924566388382c18c952893c4c4ec2bba4623e0e23aa254d73d538ba8a",
@@ -1070,6 +1149,7 @@
       "characters": [
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c15/c15-b090-pyramid-side-door-5a69c148aab3.jpg",
       "sha256": "5a69c148aab39fd676861fadd95ac79c013294666b9bcbabb06ea5e20a18cdf5",
       "png_sha256": "21592068b22ebe7a3d1c69ba364521214d65c005d746e8ab468012e2aec46e26",
@@ -1087,6 +1167,7 @@
         "gladias",
         "delwart"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c16/c16-b004-delwart-confronted-59add8160407.jpg",
       "sha256": "59add8160407b45e76479468b36c6fc220d38061c1aff9d7dc4afb00e5a09771",
       "png_sha256": "54c78a5f5fa23967afae4d8a13c723de996de00c9f6aac3cd15a5473b9a6603f",
@@ -1101,6 +1182,7 @@
       "setting": "veridia",
       "location": "designs/locations/kalimar-footpaths.json",
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c16/c16-b032-survival-food-ca69c41b0617.jpg",
       "sha256": "ca69c41b06177f8620bad3405055230df7532d853ad327404166fe4c18daebc1",
       "png_sha256": "e4dea9a39bbd082deccb60ceab66cd8f6482268b6630b734c07eece126d45a68",
@@ -1118,6 +1200,7 @@
         "gladias",
         "febric"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c16/c16-b060-helisport-broadcast-4a40e707f432.jpg",
       "sha256": "4a40e707f432ec0828990d928838d2f210b061900362a98d747f25032d9f945c",
       "png_sha256": "f30ea2d6e150acf4683afc9224887fa9285fc0ef4936fea82dab3393579b1f36",
@@ -1135,6 +1218,7 @@
         "seila",
         "gladias"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c16/c16-b110-trip-news-39128f276857.jpg",
       "sha256": "39128f276857fadfcef0b191854c84177a84b6929a01484ada7a1f7926486611",
       "png_sha256": "2bb6f0a6aa9e00b1812cab912041006df76fe89b9ee9485843529b337f23910e",
@@ -1149,6 +1233,7 @@
       "setting": "veridia",
       "location": "designs/locations/parliament.json",
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c17/c17-b002-parliament-path-71226397576e.jpg",
       "sha256": "71226397576edb64fd63e7816dd7b8626dccc09a5d708a75a7bd335add767840",
       "png_sha256": "567588a001b7fd46168fa3cceeefb96037b6b63de9a727c69b8143026b3cc876",
@@ -1166,6 +1251,7 @@
         "verdow",
         "gladias"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c17/c17-b013-serving-robot-575abec070f0.jpg",
       "sha256": "575abec070f0021b382e014985690935bbd07c9ef3ba4e814e4a8537b99f7952",
       "png_sha256": "9c9418eb16600afaf8ff4a47f0ee65db89b0015c25664ad6dcbf76f2853424f0",
@@ -1182,6 +1268,7 @@
       "characters": [
         "gladias"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c17/c17-b053-graph-diagram-46b34ebbcb0f.jpg",
       "sha256": "46b34ebbcb0fa08b9579accb8fe06dfe8f0e2d13fce7a84e1a14ca5441ccd4db",
       "png_sha256": "f0b5dc5a133859bb14acd299c0d2de0da5075526b8e1c47e803648cec51e55be",
@@ -1199,6 +1286,7 @@
         "hreda",
         "febric"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c17/c17-b099-exchange-news-66bf59a51d2d.jpg",
       "sha256": "66bf59a51d2d896e6967c800a06d15528cd77d569387276b19aa4bc5d316daea",
       "png_sha256": "e06d65ca042179e1252f3f3f2c9e133f9d04456d7b5029d1c7ae048972d54737",
@@ -1216,6 +1304,7 @@
         "zei",
         "bai"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c18/c18-b003-black-car-62994198af84.jpg",
       "sha256": "62994198af84947d5206ae036b6a63ebc9a8bd166b4cfbf93b856534c1bf3200",
       "png_sha256": "f7c855f1433f6639632b103d8c7239f8478ce4dfeb2b8deab7af221c047f2645",
@@ -1230,6 +1319,7 @@
       "setting": "dzego",
       "location": "designs/locations/pafogai-shop-streets.json",
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c18/c18-b061-box-trays-fdfa25998cd1.jpg",
       "sha256": "fdfa25998cd192115c791977c89755b8ebff24a0e009abe99a7aaf9e37511364",
       "png_sha256": "c8c090d0076c9da80d4ba9a37862350e18c5b6a8522ba87b57e2bf5ffef8ba34",
@@ -1244,6 +1334,7 @@
       "setting": "dzego",
       "location": "designs/locations/pafogai-shop-streets.json",
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c18/c18-b070-robe-shop-street-47187c0fd99f.jpg",
       "sha256": "47187c0fd99f90ed2a0054936e40e81917f3de76843fc3be9db1838c19183b82",
       "png_sha256": "3a0e043dfdd7d716bda8f9f5b424323a7c8846bfd30eb4e5a81188b4bdd3e2f0",
@@ -1260,6 +1351,7 @@
       "characters": [
         "gladias"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c18/c18-b079-pyramid-view-4dada016cd2f.jpg",
       "sha256": "4dada016cd2f6a0857774db28e6330ab285692d6671408dbcae43a822133c69d",
       "png_sha256": "66cc4d1a24d99089c4a8951db88a680398542bc2124d0f3ee3e136224ffa96a6",
@@ -1277,6 +1369,7 @@
         "fin",
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c18/c18-b123-coordination-speech-7de661ab6809.jpg",
       "sha256": "7de661ab68097e5e31ed3fa6b3872b06f787868f5abc3ffcb88b91c2ad1f09c4",
       "png_sha256": "4096b553cb8611925c269ff061a1dfa404a2b061bee78df856c06bf0c8ae479b",
@@ -1294,6 +1387,7 @@
         "gladias",
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c19/c19-b026-security-drone-b8e7d6026b64.jpg",
       "sha256": "b8e7d6026b64eff306a3be1459f91ad9782296e13f1f916d2ea318e1b4362fd1",
       "png_sha256": "ce6d361ebd3c0ef77e7b7dfbb4b9b7062caeaed4b99d0d3364e280f25e43a86b",
@@ -1308,6 +1402,7 @@
       "setting": "dzego",
       "location": "designs/locations/grand-library.json",
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c19/c19-b077-library-door-503c8665e2f2.jpg",
       "sha256": "503c8665e2f26f6489c1a74c0c2116b16411163505a518587f4923403120feae",
       "png_sha256": "6009f4d47f4f84101776e6d03a8e63fb3b95bbcac323d25287275c20113020a9",
@@ -1324,6 +1419,7 @@
       "characters": [
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c19/c19-b098-download-cable-dc9d05434b3e.jpg",
       "sha256": "dc9d05434b3e46269616b241123185461a11dda8b7fe4909c8fea624f0fe61ac",
       "png_sha256": "be2732a41ddf665898cfad627e7c7d01cec05338bc269a41aaa410911cbbc86b",
@@ -1341,6 +1437,7 @@
         "gladias",
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c19/c19-b110-sealed-tea-e5768c853917.jpg",
       "sha256": "e5768c853917973bd96890581809327621d5d97c3f9968a3f074f30eb4b8079a",
       "png_sha256": "c8bf3b0addcb1baafd13d26070a6aadf49b5285d0da858a3ceaf1a5eb8a73f71",
@@ -1358,6 +1455,7 @@
         "gladias",
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c19/c19-b115-waiting-1aa172e62483.jpg",
       "sha256": "1aa172e62483007a90886ca6241d44c2c97f4a07be99a25fe9d6c48e9ae6c837",
       "png_sha256": "6d37788c7b793c69e0f5ace72a7da9acf6d4409e08b3b47483c64c8b41c2b190",
@@ -1374,6 +1472,7 @@
       "characters": [
         "seila"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c20/c20-b002-red-alert-5517ec1fca6e.jpg",
       "sha256": "5517ec1fca6ef3a13777bd365e6427f57a32e75f756e8ea17c20bc8a48f2fbc1",
       "png_sha256": "bbe3fcf0ad059eace0e858ac26890509ca23261d07eb8a9b3bb49d560e6edfc2",
@@ -1390,6 +1489,7 @@
       "characters": [
         "seila"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c20/c20-b013-door-screen-9e365280b74a.jpg",
       "sha256": "9e365280b74a76d5c2f58708404ff0772f3d064794ca7db7ef2080215a65281c",
       "png_sha256": "346254b77ba127fddea7f7e48e967120ca1910946a6ed9eb781aadd2fe8f5826",
@@ -1404,6 +1504,7 @@
       "setting": "veridia",
       "location": null,
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c20/c20-b050-taxi-9f542916be41.jpg",
       "sha256": "9f542916be4160f81259e17b16b7c1fbfbcd34476e7231882ca24df52c7277a8",
       "png_sha256": "322b8b720d963bc3e0cb152abe5393844eaa64649953b471070f4450b839cea5",
@@ -1418,6 +1519,7 @@
       "setting": "veridia",
       "location": "designs/locations/kalimar-footpaths.json",
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c20/c20-b087-underground-house-c9102b25455e.jpg",
       "sha256": "c9102b25455eb8a9966913badfcd958f8c7815c83040cbe964ee723e49c65a40",
       "png_sha256": "5efe6d4de19a02eaf9c42dd46c97b314d4aedb036c60f65302ad63fe10422b81",
@@ -1434,6 +1536,7 @@
       "characters": [
         "seila"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c20/c20-b174-standing-up-eb4e7e1930b5.jpg",
       "sha256": "eb4e7e1930b5a04a7d5a469290a73a1ee64625d701ce5a5250250ff843d1a9aa",
       "png_sha256": "f095bce078d5351577bcc500906e18c60e24bff655e9632f433b6210b22c3996",
@@ -1451,6 +1554,7 @@
         "lily",
         "seila"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c21/c21-b019-civics-score-9fa1a218947b.jpg",
       "sha256": "9fa1a218947b2f2984507900dfcd21ba03a38c1b2b0c6ebdf5de1a12e0984992",
       "png_sha256": "61d9280029dec438686850910678e2390ae17b85c4493895a94b3e0cf17f5d08",
@@ -1467,6 +1571,7 @@
       "characters": [
         "zven"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c21/c21-b024-delivery-robot-635db666d588.jpg",
       "sha256": "635db666d5886c06cf2111b7778be080ea234975eeddc9e93d7f86c48789fc86",
       "png_sha256": "41be4c7c6c59b395c45c5772d301eb215ca8a25fad9198d58870ead17ce76177",
@@ -1484,6 +1589,7 @@
         "zven",
         "seila"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c21/c21-b038-silent-table-b0651256ea8e.jpg",
       "sha256": "b0651256ea8e9a6751ce85130c21a7b3f06f200082180c83d5767a9a8650996b",
       "png_sha256": "f657105332fd0671ef9a30fb983ce927017da001bd0aafa720ee3c5621e3fb38",
@@ -1500,6 +1606,7 @@
       "characters": [
         "seila"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c21/c21-b040-basement-call-f540b76d4bd2.jpg",
       "sha256": "f540b76d4bd2b336254eeabf1861a110e34bd316005420ed23f189907887bb37",
       "png_sha256": "f48b11e0c471fa7ebb46f96e63077e221fed9bd52b4e179c341011ed82b577f8",
@@ -1516,6 +1623,7 @@
       "characters": [
         "jahn"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c22/c22-b003-projector-a1e7fe4041a6.jpg",
       "sha256": "a1e7fe4041a6eeaac6f198e29841e3521cfb04d723ff2eb8285b038d06ea7c78",
       "png_sha256": "80f3e90d319a149b613d12fc8ce7c7784b66428ccfca301de3e6b14d25fd140c",
@@ -1530,6 +1638,7 @@
       "setting": "united-cities",
       "location": null,
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c22/c22-b009-shelter-roads-109fb3a8f49d.jpg",
       "sha256": "109fb3a8f49d1ad03a073eb41b51e6dc94d672a5d0185e85be4d6384436d75ad",
       "png_sha256": "25093bbf40d88a42f307e2d3ecd456d2eabde407f649d2e3d73f9aefe43c00b2",
@@ -1546,6 +1655,7 @@
       "characters": [
         "jahn"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c22/c22-b032-university-restaurant-9bf9f0890ebb.jpg",
       "sha256": "9bf9f0890ebb54d066677f03909865d6e3d207c929fa8906a58b9bf21c455468",
       "png_sha256": "10c33320c34b6614c7969ee0d74c77acbb8de8e817745f037d2697f5b850ee6b",
@@ -1562,6 +1672,7 @@
       "characters": [
         "jahn"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c22/c22-b084-tactical-map-0cc77c78a7da.jpg",
       "sha256": "0cc77c78a7da32f658e723b3e12a0e5db16df5f3b93c1604a45b106944726a3d",
       "png_sha256": "09dd76eb12be99740cb990ddcad2838ae161942d17157812ae373aae1cd8f86b",
@@ -1579,6 +1690,7 @@
         "gladias",
         "fin"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c23/c23-b004-green-cafeteria-efb0cbabdc6f.jpg",
       "sha256": "efb0cbabdc6fe045ed63904e641cbbfcecfc5dffaf150016245dbecff5963040",
       "png_sha256": "6fcbdba66b4f8412f34ec8317960ab6257c7f313d6841bed6cdaa76562d11f12",
@@ -1596,6 +1708,7 @@
         "zei",
         "bai"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c23/c23-b006-drained-e8f7eb8b16e0.jpg",
       "sha256": "e8f7eb8b16e0237030cdecd3a2bd74d0a472b8a5c4cb8aee4e4254acd821a71b",
       "png_sha256": "d4eac695d08ae57ea029043c2cf1380ea6f91c015261720303b3ff3228ac3d96",
@@ -1613,6 +1726,7 @@
         "gladias",
         "fin"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c23/c23-b020-reading-test-c329f209be65.jpg",
       "sha256": "c329f209be653dc9813d9c6e4326089baad2ae412681ed062c601b71a6b52807",
       "png_sha256": "dda9a2d20936dbd5c622707120c0ec10712b2ee30847510ffafa1d1e07db4e53",
@@ -1627,6 +1741,7 @@
       "setting": "dzego",
       "location": "designs/locations/pyramid-cafeteria.json",
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c23/c23-b071-watch-race-0fe9e2d1e8aa.jpg",
       "sha256": "0fe9e2d1e8aa83c21e51be9ccccf7350d9303006fe92520373e6a40ddcc46caa",
       "png_sha256": "d6431017a6470479ba8c955e74a90e116cea46e9469ed360f7a92d232c05f171",
@@ -1643,6 +1758,7 @@
       "characters": [
         "gladias"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c23/c23-b078-red-call-9683e26b67c7.jpg",
       "sha256": "9683e26b67c7a5a5f95e759acbdc40ba97ccd19d472242f9f06764e29809a861",
       "png_sha256": "a9d850e25754379608e445e2c992bb441fbe7823e84b0fd4d688c5eafa13a3c6",
@@ -1659,6 +1775,7 @@
       "characters": [
         "gladias"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c24/c24-b006-sleepless-call-5e1a657a88ee.jpg",
       "sha256": "5e1a657a88eec2d9a4047919033670f52ca86938fb40603fe0b73e8b1b63f7cd",
       "png_sha256": "6e79f83639e047a71b1225b6e733e08bc026c74fbb461106be36edf60c79bf3e",
@@ -1675,6 +1792,7 @@
       "characters": [
         "gladias"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c24/c24-b024-industry-tunnel-6c5dd841253a.jpg",
       "sha256": "6c5dd841253a922f24431037e537fd1802c6bf2e5fa059720c93d454e62bee76",
       "png_sha256": "e4697f34c4ed938c49c9d8f8fe70da5ffa475ec280b183e793329070f1bd84f0",
@@ -1692,6 +1810,7 @@
         "bai",
         "gladias"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c24/c24-b039-hug-bd4cfad2d299.jpg",
       "sha256": "bd4cfad2d2991015b48f06ff3ed920a3e7c15987b6dc01b99be36c78d7d58f5a",
       "png_sha256": "590a0319cbf6fa2bbd6cbdf4ecb1d43ef932cef63cc851a7be25915e5ae859df",
@@ -1708,6 +1827,7 @@
       "characters": [
         "den"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c24/c24-b065-long-room-d4d90b611f14.jpg",
       "sha256": "d4d90b611f140bca6fdaab383fdd759c41f90c27499e0e9e3507935c25633870",
       "png_sha256": "fa58d9c24af40c70895b108e09a3ac7c87bf5a31fea6237a4b2f382e551a8ee5",
@@ -1725,6 +1845,7 @@
         "gladias",
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c25/c25-b002-circle-game-c7a9f774baa8.jpg",
       "sha256": "c7a9f774baa891472fc8b1ded11ff6dc7a45f34bb9c30f9ab5f0a12fefa8cfd4",
       "png_sha256": "c9aee5883c3efd2a6ec7ab106e659e88ffd3220084dba05c4c3180b2586d5e2c",
@@ -1742,6 +1863,7 @@
         "gladias",
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c25/c25-b017-tapping-circles-7738df3c6921.jpg",
       "sha256": "7738df3c6921cf7515a35a9dfee1dd44cd343718313ae611a88ae167d14eaa17",
       "png_sha256": "e04195892192ac1cd0e0c097a3c0bc4ba870ccf6f777dd0fdde2fe462f85873f",
@@ -1759,6 +1881,7 @@
         "zei",
         "gladias"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c25/c25-b075-next-question-cf4a5fbc5bf0.jpg",
       "sha256": "cf4a5fbc5bf0708e7fee8fe35b9e9674b3fae140b5222ae7d67c890c2565f974",
       "png_sha256": "fbd5cd00d3eb822f54d604cbe1148b983451cd539c6b6e59e0a2624334ef9b6d",
@@ -1776,6 +1899,7 @@
         "gladias",
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c25/c25-b096-call-on-watch-0f3b9432bcd8.jpg",
       "sha256": "0f3b9432bcd8eb148928e735ca322b18816958157c46478d9c2e5eb0dc859269",
       "png_sha256": "487f005320b636617a8f01a4499e41b51e4ab5958cc61aa2b0c9fa9103d13eaa",
@@ -1793,6 +1917,7 @@
         "gladias",
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c26/c26-b002-plane-cabin-c02ac4160dce.jpg",
       "sha256": "c02ac4160dce2f0d5069e1c8595f64f66baa1cbecad8b4fabd85e524df5eba62",
       "png_sha256": "7b1fe2626e75bb91465659f65d32ec719637777824dc1cb79dff0ee0ae3a7da4",
@@ -1810,6 +1935,7 @@
         "seila",
         "gladias"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c26/c26-b075-seila-runs-6f52c2656c60.jpg",
       "sha256": "6f52c2656c607aaf598837159ce3b6dbe8cda8b5811b2eaea7572b4041b3652f",
       "png_sha256": "4bbd2548e7610ba4e4fb8ab559275ef51a769698b1e6a825c0dbf4aa5f8e281b",
@@ -1826,6 +1952,7 @@
       "characters": [
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c26/c26-b120-console-despair-105ced6878b5.jpg",
       "sha256": "105ced6878b59f5d62b2300aca1a23269f0cae605d240c403e926ec58ed0f094",
       "png_sha256": "153a79e30a833ea5cf2ae2d72d5d0327ef7fa7548f51996cad0ee6cec0f52c30",
@@ -1842,6 +1969,7 @@
       "characters": [
         "gladias"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c26/c26-b162-judges-booth-41bcc59880f9.jpg",
       "sha256": "41bcc59880f91ac3fabbcd41b98a5974dba147f260cd07c3764016716c54385d",
       "png_sha256": "e230e9b590516c645a70b88da7e7f642ce265ccc679d2a0de24cab5501b92051",
@@ -1859,6 +1987,7 @@
         "seila",
         "gladias"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c27/c27-b006-hotel-hug-c641102b0b86.jpg",
       "sha256": "c641102b0b8605a09ff67c3a0d7921b24989bbbaed41b261e554dfac71d7b6d5",
       "png_sha256": "53cc0ed1f6181379317bd07448e23aeb47c0ee403b645dc3fa8a4e1092342948",
@@ -1873,6 +2002,7 @@
       "setting": "veridia",
       "location": "designs/locations/kalimar-footpaths.json",
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c27/c27-b031-forest-path-b1607227c1ce.jpg",
       "sha256": "b1607227c1ce1f6e124ca2a09f207a4fb5d10fbdeaa49a88f9cd30ae0ba877e1",
       "png_sha256": "002caa71fabc167ca58b829bfed1234f604fc453e61d8e6ad34ba288ae8dd644",
@@ -1887,6 +2017,7 @@
       "setting": "veridia",
       "location": "designs/locations/hilltop-round-room.json",
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c27/c27-b040-roof-closing-b7ac6fdf6e07.jpg",
       "sha256": "b7ac6fdf6e070cde963f0fb29e2032b3233d6fe7b9da52b1b63e8b066c0bb5a4",
       "png_sha256": "32c2c13286b0f3c45a7faf75798116ea5a4af84d2d143e1abfb6aea5590f6bfc",
@@ -1904,6 +2035,7 @@
         "zei",
         "bai"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c27/c27-b114-countdown-chant-5fa436bfd264.jpg",
       "sha256": "5fa436bfd264ca9e3a97698a387a12dd4beba390ee903537978a78d641aed52e",
       "png_sha256": "6ef2f814522e4a0c2674ea46d9d82e048cf126d8e34c821df0220f56c07e279f",
@@ -1921,6 +2053,7 @@
         "lektor",
         "den"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c28/c28-b013-general-arrives-c9e7a003a3d9.jpg",
       "sha256": "c9e7a003a3d919a6bf5734ba4462322dca896a3d4fe378439b9c61ebc3eefc9e",
       "png_sha256": "239f148a7a0e61f776db4cb98049fea07bf2686f35201c101f77ef472e4710d0",
@@ -1938,6 +2071,7 @@
         "zven",
         "seila"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c28/c28-b057-zven-sofa-4c703448451b.jpg",
       "sha256": "4c703448451bf66530e9f480bb3251195edf44143948604655dcf532784a6835",
       "png_sha256": "69506a65a2c38e8034445457ed79adfc7aab19b4bc22b48c7ded13b5e3efb3f1",
@@ -1954,6 +2088,7 @@
       "characters": [
         "lily"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c28/c28-b064-lily-stands-up-a85b1ac4c8b4.jpg",
       "sha256": "a85b1ac4c8b4cfe2d074941ab044669cde36138a0a541cdd77fbab6a6c3e7756",
       "png_sha256": "a9f2f7576e26f9b987dd73ff7408960f625674c96195504e913e834493b113db",
@@ -1971,6 +2106,7 @@
         "gladias",
         "seila"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c28/c28-b091-tea-news-f47d5cb081c7.jpg",
       "sha256": "f47d5cb081c7e6dd88de3dffe2d9e28c2a3fd1f70f6d5f81a2f13cec04842d9f",
       "png_sha256": "6b2312166a1cdb04dc7e9130720fc1ffb01211daba9d490119db1d3051d343e9",
@@ -1988,6 +2124,7 @@
         "zei",
         "mu"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c29/c29-b002-snowy-hill-sunrise-3256909a6244.jpg",
       "sha256": "3256909a6244b919fb7cd82d071b60d3ec1db2384c9cda67e4a6b2ac90e6e289",
       "png_sha256": "dd1f5421818d262c19277dec97003a174526f916bd80fe7ef8e3e0ea81f305a2",
@@ -2005,6 +2142,7 @@
         "lektor",
         "den"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c29/c29-b021-briefing-room-7d1933f1a9dd.jpg",
       "sha256": "7d1933f1a9dda8dd5c88737c025a26baa9d28e199909508514a640a70704c76c",
       "png_sha256": "5a1a6bcd15353f69672b0e9b43e1a2a01cc985d34a48b43f12cebb45e408f095",
@@ -2019,6 +2157,7 @@
       "setting": "veridia",
       "location": "designs/locations/elenar-forest-front.json",
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c29/c29-b038-drones-at-sundown-11f1ac45d2fb.jpg",
       "sha256": "11f1ac45d2fb1e88910a5df73cb15b476555663e8186c1ca1b57de6efc04aaad",
       "png_sha256": "e8b03112100172492e8f0ace6e0e5165a5d2f31a0fb245564e1f8d57c5d9ce60",
@@ -2033,6 +2172,7 @@
       "setting": "veridia",
       "location": "designs/locations/elenar-forest-front.json",
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c29/c29-b070-copters-launch-6e5fe3fd943f.jpg",
       "sha256": "6e5fe3fd943ff11d732ff762d6093a51760ae2b4154aec4546b868045302771a",
       "png_sha256": "ef450a5ea9b76d6e5f34aa34e01efef1030cbc69f9ec44e9b969c07e1864b10a",
@@ -2049,6 +2189,7 @@
       "characters": [
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c29/c29-b109-zei-weeps-6d2ee9dc85c8.jpg",
       "sha256": "6d2ee9dc85c87f0077ce37f5b5094d9dc7ae7c1e7524a04927c15dd98c4744f6",
       "png_sha256": "b3bdeed01d1a2af5d02baaa361e6a154016b6d39f8fbf567c906940b3c48472d",
@@ -2063,6 +2204,7 @@
       "setting": "veridia",
       "location": "designs/locations/elenar-forest-front.json",
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c30/c30-b036-blue-before-dawn-f8078e62eb15.jpg",
       "sha256": "f8078e62eb15a0c5eb781803d75c3e6f8cb350a34d6b529945a6290177af9337",
       "png_sha256": "226333f888e3697131ecfed76ff5bc01f8fb1a1365be043fbf73d2f34cd35bfe",
@@ -2077,9 +2219,72 @@
       "setting": "veridia",
       "location": "designs/locations/elenar-forest-front.json",
       "characters": [],
-      "url": "https://media.snowmoon.party/images/seed/c30/c30-b041-sticking-patterns-0f64ce2724bf.jpg",
-      "sha256": "0f64ce2724bf16615e7a5c071167375641508e55e91a1f296e9544e0c305946c",
+      "lettering": [
+        {
+          "kind": "sign",
+          "text": "DOG",
+          "lang": "en",
+          "gloss": null,
+          "speaker_entity_id": null,
+          "x": 0.178,
+          "y": 0.662,
+          "w": 0.105,
+          "size": 0.038,
+          "rotate": -12
+        },
+        {
+          "kind": "sign",
+          "text": "DOG",
+          "lang": "en",
+          "gloss": null,
+          "speaker_entity_id": null,
+          "x": 0.322,
+          "y": 0.612,
+          "w": 0.066,
+          "size": 0.024,
+          "rotate": -10
+        },
+        {
+          "kind": "sign",
+          "text": "DOG",
+          "lang": "en",
+          "gloss": null,
+          "speaker_entity_id": null,
+          "x": 0.452,
+          "y": 0.592,
+          "w": 0.048,
+          "size": 0.017,
+          "rotate": 10
+        },
+        {
+          "kind": "sign",
+          "text": "DOG",
+          "lang": "en",
+          "gloss": null,
+          "speaker_entity_id": null,
+          "x": 0.551,
+          "y": 0.584,
+          "w": 0.05,
+          "size": 0.017,
+          "rotate": 14
+        },
+        {
+          "kind": "sign",
+          "text": "DOG",
+          "lang": "en",
+          "gloss": null,
+          "speaker_entity_id": null,
+          "x": 0.645,
+          "y": 0.606,
+          "w": 0.052,
+          "size": 0.017,
+          "rotate": 12
+        }
+      ],
+      "url": "https://media.snowmoon.party/images/seed/c30/c30-b041-sticking-patterns-bfee552606ac.jpg",
+      "sha256": "bfee552606ac7df3c546b1f0e665c4cc366ed426b3a20127928bef273f5dd091",
       "png_sha256": "12405141e6b740578dd10c14327797371f3a627b1f4649030c18ebebf00d54ba",
+      "lettered_png_sha256": "7826057c861ab086bedf8688aa0fe472252c175b5abe5142195d4356333fd5ba",
       "width": 1024,
       "height": 576,
       "recipe": "content/snowmoon/recipes/images/chapter-30.json"
@@ -2091,9 +2296,36 @@
       "setting": "veridia",
       "location": "designs/locations/elenar-forest-front.json",
       "characters": [],
-      "url": "https://media.snowmoon.party/images/seed/c30/c30-b048-drones-surge-68a2b8101eb3.jpg",
-      "sha256": "68a2b8101eb31face261c4041f79e8feb9b8ee3374c9ad7d6e6ded7f450e2ca2",
+      "lettering": [
+        {
+          "kind": "sign",
+          "text": "DOG",
+          "lang": "en",
+          "gloss": null,
+          "speaker_entity_id": null,
+          "x": 0.15,
+          "y": 0.515,
+          "w": 0.09,
+          "size": 0.034,
+          "rotate": 6
+        },
+        {
+          "kind": "sign",
+          "text": "DOG",
+          "lang": "en",
+          "gloss": null,
+          "speaker_entity_id": null,
+          "x": 0.356,
+          "y": 0.538,
+          "w": 0.05,
+          "size": 0.018,
+          "rotate": 4
+        }
+      ],
+      "url": "https://media.snowmoon.party/images/seed/c30/c30-b048-drones-surge-ab1c0049d9b4.jpg",
+      "sha256": "ab1c0049d9b4087b7f098dd28d58846a859892c5f50059a6b273bc4ea551f5bf",
       "png_sha256": "00790615175c3ba55f6737060721b60686055cf01996349ccd25ba1accc7904c",
+      "lettered_png_sha256": "229d20a57353a9275be290f668cb7d5935e7ab7dfff5bfb647aacd0e3fceb22f",
       "width": 1024,
       "height": 576,
       "recipe": "content/snowmoon/recipes/images/chapter-30.json"
@@ -2107,6 +2339,7 @@
       "characters": [
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c30/c30-b076-zei-sleeps-8355d60ee664.jpg",
       "sha256": "8355d60ee66470f0cbc14f256c2fb5ae151d065e0b9befee0d55c8b57e9440f1",
       "png_sha256": "e15328e3f9603ab855e69da4261402507e64c86752f85ac15963f4f943decfa7",
@@ -2121,6 +2354,7 @@
       "setting": "veridia",
       "location": null,
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c31/c31-b002-mountain-stair-082514bf0598.jpg",
       "sha256": "082514bf05988b963433cf4224166f60833c8e81467a2ea7bcd889f119757797",
       "png_sha256": "8c087bf82196f64c19e085ac7cb9740bf9829a352681121deecccf68f92b3b71",
@@ -2138,6 +2372,7 @@
         "deluin",
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c31/c31-b009-reunion-hug-18740453fdb8.jpg",
       "sha256": "18740453fdb8f400df000b5d13469d3a071f4c926133ae222ade657d20ba3d96",
       "png_sha256": "849bc053337a2e13e4ab6b46d924b957cbf58f5e1e9dcb3669a1a231004d6c29",
@@ -2155,6 +2390,7 @@
         "gladias",
         "seila"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c31/c31-b066-broken-gates-04a0f04f0164.jpg",
       "sha256": "04a0f04f0164c2172b160fced2653f258c725ff9879bd95ea60772f7410383b1",
       "png_sha256": "3b5068b17f57c495e43b367fdce593ec8ec0e530e8b78f6c5f9bf0da7b8f3a49",
@@ -2172,6 +2408,7 @@
         "lily",
         "gladias"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c31/c31-b077-lily-hugs-dad-951e8642e496.jpg",
       "sha256": "951e8642e496f31d5f0f1a83e7aec457ceb68056018c8b847e98d04000f4d321",
       "png_sha256": "5ee652eb646cdc114c04082ca1ca1e942d316db292b923f8d5507df8bd0d8b04",
@@ -2186,6 +2423,7 @@
       "setting": "veridia",
       "location": "designs/locations/kalimar-footpaths.json",
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c32/c32-b003-camera-removal-b60f99b1d832.jpg",
       "sha256": "b60f99b1d8320ef042a2cc0e5c52a440bca340ec2c9295b963a89ce01d3933b1",
       "png_sha256": "3c2c57f35458fc0ea9f20997bcae51d287770da90520816a3054951733529637",
@@ -2200,6 +2438,7 @@
       "setting": "veridia",
       "location": "designs/locations/kalimar-sky-bridge.json",
       "characters": [],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c32/c32-b007-sky-bridge-view-e5f650c4ab9f.jpg",
       "sha256": "e5f650c4ab9f6b0948b1a01b4cb56ebc7edbbd2763d468ded93454643e1667f2",
       "png_sha256": "d3ebcfbcc392edfcedac139621fa53a3bafba8b47203be0a0858835d90e2e1e2",
@@ -2217,6 +2456,7 @@
         "verdow",
         "zei"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c32/c32-b077-world-map-0bac1b5bd188.jpg",
       "sha256": "0bac1b5bd188988da395839b4f879c544d365bd2a01ea90382d0cf7d6fb75c46",
       "png_sha256": "3bea95d5d82bdc0fc987a2715e1b1b504d9293f14c85cdb5a065292d35ad5694",
@@ -2234,6 +2474,7 @@
         "gladias",
         "seila"
       ],
+      "lettering": null,
       "url": "https://media.snowmoon.party/images/seed/c32/c32-b111-roof-home-9fe8999d7215.jpg",
       "sha256": "9fe8999d7215a09851cbf38dbe6361c1a644b9d14280365cb7b5c55daa6fff76",
       "png_sha256": "eb99560902dbb18bd488c2b996b2972d1f086a6792129a30bfc1c02ec7303803",

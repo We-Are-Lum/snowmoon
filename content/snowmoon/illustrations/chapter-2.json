@@ -40,7 +40,21 @@
       "prompt": "Medium-wide view of an underground classroom with rows of chairs full of teenage students. The walls are covered with a thick, hastily applied layer of crinkled silver foil, painted over with cute cartoon animals playing with gadgets and chemistry glassware against green trees and blue sky. At the front stand two large inflatable cartoon figures, a pig holding a calculator and a hamster holding a vial of green liquid, together holding up a plain blank banner. In a row of chairs the boy from reference image 1 sits beside the boy from reference image 2, both looking forward attentively.",
       "width": 1024,
       "height": 576,
-      "seed": 2038
+      "seed": 2038,
+      "lettering": [
+        {
+          "kind": "sign",
+          "text": "pa jan li sun zo\nzai gau fe pa jan\n\ngo li sun zo\nbai gau fe go",
+          "lang": "dz",
+          "gloss": "One man learning will set one man free. A nation learning will make the nation great.",
+          "speaker_entity_id": null,
+          "x": 0.43,
+          "y": 0.468,
+          "w": 0.15,
+          "size": 0.0125
+        }
+      ],
+      "lettering_note": "The banner carries DU's motto (chapter 2, blocks 38 to 40). The prompt keeps the banner blank, because image models garble text; the motto is drawn in code over the image from `lettering`, in Dzegoban as the book shows it, with the book's translation as its gloss."
     },
     {
       "id": "c2-b099-blast",

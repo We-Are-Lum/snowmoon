@@ -228,3 +228,17 @@ Ok.
 ```text
 Ok
 ```
+
+```text
+Merge the story-diagnostic branch into main and resolve any
+conflicts. Then:
+
+1. In the reader, a block cited by an adaptation shows a small
+   marker linking to it.
+2. Illustration jobs c30-b041, c30-b048 and c2-b038: keep the
+   prompts free of writing, and add the text in code over the
+   image (DOG on the sheets, the motto on the banner). Note this
+   in each job.
+
+Push when all checks pass.
+```

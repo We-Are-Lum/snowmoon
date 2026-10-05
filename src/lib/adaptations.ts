@@ -1,9 +1,9 @@
 import 'server-only';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { marked } from 'marked';
 import { loadChapter } from './book';
-import { linkCites } from './adaptation-cites';
+import { findCites, linkCites } from './adaptation-cites';
 
 /** Shape of config/adaptations.json (checked by scripts/check-adaptations.ts). */
 export interface Seed {
@@ -83,3 +83,26 @@ export function bountyOpen(closes: string, now = new Date()): boolean {
 
 /** A direct video file can play inline; anything else is shown as a link. */
 export const isVideoFile = (url: string) => /\.(mp4|webm|mov)(\?|#|$)/i.test(url);
+
+/**
+ * Which adaptations cite which blocks of a chapter, from every .md file in each
+ * seed's folder (brief, script, shot list). The reader marks those blocks with a
+ * link to the adaptation. Titles are spoiler-free by rule (config about), and the
+ * adaptation pages keep their own spoiler warning.
+ */
+let citeIndex: Map<string, Seed[]> | null = null;
+export function adaptationsCiting(chapter: number, idx: number): Seed[] {
+  if (!citeIndex) {
+    citeIndex = new Map();
+    for (const seed of adaptationsConfig().seeds) {
+      const folder = path.join(DIR, seed.slug);
+      if (!existsSync(folder)) continue;
+      const ids = new Set<string>();
+      for (const f of readdirSync(folder).filter((f) => f.endsWith('.md'))) {
+        for (const c of findCites(readFileSync(path.join(folder, f), 'utf8'))) ids.add(c.id);
+      }
+      for (const id of ids) citeIndex.set(id, [...(citeIndex.get(id) ?? []), seed]);
+    }
+  }
+  return citeIndex.get(`c${chapter}-b${idx}`) ?? [];
+}

@@ -9,6 +9,9 @@
  * web, and uploads it under a key carrying its sha256. Images listed in
  * EXCLUDED are left out (review found them still showing cloned characters).
  *
+ * A job with `lettering` is published from images-out/chapter-N/<id>.lettered.png,
+ * which scripts/letter-images.py draws in code from the job's lettering items.
+ *
  * Output: content/snowmoon/illustrations/published.json, committed. Until
  * Milestone 4 puts images in the database as elements, the player reads this
  * index; each entry points back to its recipe in content/snowmoon/recipes/images/.
@@ -31,7 +34,15 @@ async function main() {
   const store = dryRun ? null : r2();
   const webDir = path.join(ROOT, 'images-out', 'web');
   await mkdir(webDir, { recursive: true });
-  const jobs: { chapter: number; idx: number; id: string; setting: string | null; location: string | null; characters: string[] }[] = [];
+  const jobs: {
+    chapter: number;
+    idx: number;
+    id: string;
+    setting: string | null;
+    location: string | null;
+    characters: string[];
+    lettering: unknown[] | null;
+  }[] = [];
   for (let n = 1; n <= 32; n++) {
     const spec = JSON.parse(await readFile(path.join(ROOT, `content/snowmoon/illustrations/chapter-${n}.json`), 'utf8'));
     for (const j of spec.jobs) {
@@ -43,13 +54,15 @@ async function main() {
         setting: j.setting ?? null,
         location: j.location ?? null,
         characters: (j.characters ?? []).map((c: string) => path.basename(c, '.json')),
+        lettering: j.lettering ?? null,
       });
     }
   }
 
   let uploaded = 0;
   const entries = await pool(jobs, 6, async (j) => {
-    const png = path.join(ROOT, 'images-out', `chapter-${j.chapter}`, `${j.id}.png`);
+    const bare = path.join(ROOT, 'images-out', `chapter-${j.chapter}`, `${j.id}.png`);
+    const png = j.lettering ? bare.replace(/\.png$/, '.lettered.png') : bare;
     const jpg = path.join(webDir, `${j.id}.jpg`);
     await run('ffmpeg', ['-loglevel', 'error', '-y', '-i', png, '-q:v', '3', jpg]);
     const sha = await sha256File(jpg);
@@ -64,7 +77,8 @@ async function main() {
       ...j,
       url,
       sha256: sha,
-      png_sha256: await sha256File(png),
+      png_sha256: await sha256File(bare),
+      ...(j.lettering ? { lettered_png_sha256: await sha256File(png), lettering: j.lettering } : {}),
       width: 1024,
       height: 576,
       recipe: `content/snowmoon/recipes/images/chapter-${j.chapter}.json`,
