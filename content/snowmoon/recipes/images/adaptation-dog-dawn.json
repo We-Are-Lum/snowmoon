@@ -1,6 +1,6 @@
 {
   "job_file": "content/snowmoon/illustrations/adaptation-dog-dawn.json",
-  "generated_at": "2026-10-05T20:09:03+00:00",
+  "generated_at": "2026-10-05T21:56:43+00:00",
   "model": {
     "repo": "black-forest-labs/FLUX.2-klein-4B",
     "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
@@ -18,7 +18,7 @@
     "platform": "macOS-26.5.1-arm64-arm-64bit",
     "machine": "arm64"
   },
-  "model_load_seconds": 0.5,
+  "model_load_seconds": 1.3,
   "images": [
     {
       "id": "dd-01-a1",
@@ -219,6 +219,59 @@
         }
       ],
       "generation_seconds": 209.7
+    },
+    {
+      "id": "dd-03-a2",
+      "chapter": 29,
+      "idx": 114,
+      "file": "dd-03-a2.png",
+      "sha256": "b874adf428251264131c9822048c05cba503a9beb9c8ebb29362f1d1b2718825",
+      "prompt": "Close-up of a young man's hand resting on a sleek pale console in a dark room, lit cold blue; his wrist and forearm are in the thick cream cable-knit sweater sleeve of the young man from reference image 1, and only his hand and sleeve are in the picture. Across the console's display flows a soft stream of pale green abstract waveforms, like heartbeat lines, with no letters or numbers; one thin bright thread of light slips out of the stream and away into the dark. Cold blues, one thread of warm light. Reference image 1 shows a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Severe faceted crystalline megastructures, icy whites, pale blues and steel.",
+      "seed": 50032,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin-sheet.png",
+          "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+        }
+      ],
+      "generation_seconds": 196.8
+    },
+    {
+      "id": "dd-05-a2",
+      "chapter": 30,
+      "idx": 29,
+      "file": "dd-05-a2.png",
+      "sha256": "2af39159182e5440d792531aee55b0dada453b145c669d70631f0808d9a40465",
+      "prompt": "Medium shot inside the command room. The young man from reference image 1 sits at the console and glances back over his shoulder, wary. He is the only person in the room. Behind the frosted glass wall at the back of the room, outside the room in the corridor, stands the dark faceless silhouette of a guard, blurred by the glass. On his screen, faint flickering threads of light with no letters. Cold blue light, tense mood. Reference image 1 shows a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Reference image 2 shows the location, a narrow Arctic command room walled in pale faceted crystalline panels, a single sleek console with a glowing screen and one chair, and across the back of the room a wall of frosted glass with a dim corridor beyond it; keep its architecture, layout and colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers. Severe faceted crystalline megastructures, icy whites, pale blues and steel.",
+      "seed": 50052,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin-sheet.png",
+          "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+        },
+        {
+          "file": "arctic-command-post-plate.png",
+          "sha256": "3fe26335e781f7eeb61da4d93b3dd9e5d38c29c27beab0a1f8492a79313f8454"
+        }
+      ],
+      "generation_seconds": 282.1
+    },
+    {
+      "id": "dd-07-a2",
+      "chapter": 30,
+      "idx": 48,
+      "file": "dd-07-a2.png",
+      "sha256": "ae06c2ac8e0db1b2c3fc6874e072454fbcba148c959ec452f869b845a4a21a41",
+      "prompt": "Dynamic low wide shot in a snowy pine forest at sunrise; only trees, hills and snow, no buildings and no city. A line of heavy snowmobile-like drones on skis, covered in sheets of bright, colorful abstract squiggly patterns, each sheet with a wide blank white band across its middle, ploughs forward through deep snow between the trees, skis on the ground, throwing up great sprays and wakes of snow. Darker sleek enemy drones sit motionless in the snow or turn aside in confusion. Low sunlight cuts through drifting smoke. No people visible. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
+      "seed": 50072,
+      "width": 1024,
+      "height": 576,
+      "references": [],
+      "generation_seconds": 200.7
     }
   ],
   "assist": {

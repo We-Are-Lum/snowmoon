@@ -313,6 +313,18 @@
       "width": 1024,
       "height": 576,
       "seed": 7026
+    },
+    {
+      "id": "arctic-command-post-plate",
+      "chapter": null,
+      "idx": null,
+      "setting": "arctic",
+      "characters": [],
+      "props": [],
+      "prompt": "Establishing view of a narrow Arctic command room walled in pale faceted crystalline panels, a single sleek console with a glowing screen and one chair, and across the back of the room a wall of frosted glass with a dim corridor beyond it. Seen from just inside the doorway at night, lit only by the cold blue glow of the screen; a tall side window shows a black starry sky. No people.",
+      "width": 1024,
+      "height": 576,
+      "seed": 7031
     }
   ],
   "assist": {

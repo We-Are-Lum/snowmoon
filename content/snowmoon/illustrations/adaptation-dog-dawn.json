@@ -72,7 +72,13 @@
       "prompt": "View from inside a dark room of pale faceted panels, looking out through a large frosted window at night. Far across snowy forested hills, a long line of small moving lights threads through the pines, and on the horizon a large orange fire glows among the dark trees, smoke rising into the sky. Cold blue interior, warm orange glow in the distance.",
       "width": 1024,
       "height": 576,
-      "seed": 50021
+      "seed": 50021,
+      "grade": [
+        {
+          "op": "night",
+          "warm_below": 0.52
+        }
+      ]
     },
     {
       "id": "dd-02-a2",
@@ -105,6 +111,32 @@
       "seed": 50031
     },
     {
+      "id": "dd-03-a2",
+      "beat": 3,
+      "attempt": 2,
+      "chapter": 29,
+      "idx": 114,
+      "setting": "arctic",
+      "characters": [
+        "designs/characters/deluin.json"
+      ],
+      "references": [
+        "cast/deluin-sheet"
+      ],
+      "props": [],
+      "prompt": "Close-up of a young man's hand resting on a sleek pale console in a dark room, lit cold blue; his wrist and forearm are in the thick cream cable-knit sweater sleeve of the young man from reference image 1, and only his hand and sleeve are in the picture. Across the console's display flows a soft stream of pale green abstract waveforms, like heartbeat lines, with no letters or numbers; one thin bright thread of light slips out of the stream and away into the dark. Cold blues, one thread of warm light.",
+      "width": 1024,
+      "height": 576,
+      "seed": 50032,
+      "grade": [
+        {
+          "op": "night",
+          "dark": 0.8,
+          "sky": 0.0
+        }
+      ]
+    },
+    {
       "id": "dd-04-a1",
       "beat": 4,
       "attempt": 1,
@@ -116,7 +148,24 @@
       "prompt": "Inside a vast dark digital space: rows of translucent glowing wireframe copies of sleek angular snowmobile-like drones stand on an endless grid of light lines. One small bright probe of a different, warm color drifts among them, leaving a faint trail. Deep blacks, cyan lines, one point of warm orange.",
       "width": 1024,
       "height": 576,
-      "seed": 50041
+      "seed": 50041,
+      "grade": [
+        {
+          "op": "fill_above",
+          "y": 0.345,
+          "feather": 0.012,
+          "top": [
+            3,
+            6,
+            16
+          ],
+          "bottom": [
+            6,
+            14,
+            26
+          ]
+        }
+      ]
     },
     {
       "id": "dd-05-a1",
@@ -136,6 +185,32 @@
       "width": 1024,
       "height": 576,
       "seed": 50051
+    },
+    {
+      "id": "dd-05-a2",
+      "beat": 5,
+      "attempt": 2,
+      "chapter": 30,
+      "idx": 29,
+      "setting": "arctic",
+      "characters": [
+        "designs/characters/deluin.json"
+      ],
+      "references": [
+        "cast/deluin-sheet"
+      ],
+      "props": [],
+      "prompt": "Medium shot inside the command room. The young man from reference image 1 sits at the console and glances back over his shoulder, wary. He is the only person in the room. Behind the frosted glass wall at the back of the room, outside the room in the corridor, stands the dark faceless silhouette of a guard, blurred by the glass. On his screen, faint flickering threads of light with no letters. Cold blue light, tense mood.",
+      "width": 1024,
+      "height": 576,
+      "seed": 50052,
+      "location": "designs/locations/arctic-command-post.json",
+      "grade": [
+        {
+          "op": "night",
+          "warm_below": 1.0
+        }
+      ]
     },
     {
       "id": "dd-06-a1",
@@ -176,6 +251,11 @@
           "w": 0.05,
           "size": 0.02,
           "rotate": -10
+        }
+      ],
+      "grade": [
+        {
+          "op": "predawn"
         }
       ]
     },
@@ -222,6 +302,127 @@
       ]
     },
     {
+      "id": "dd-07-a2",
+      "beat": 7,
+      "attempt": 2,
+      "chapter": 30,
+      "idx": 48,
+      "characters": [],
+      "references": [],
+      "props": [],
+      "prompt": "Dynamic low wide shot in a snowy pine forest at sunrise; only trees, hills and snow, no buildings and no city. A line of heavy snowmobile-like drones on skis, covered in sheets of bright, colorful abstract squiggly patterns, each sheet with a wide blank white band across its middle, ploughs forward through deep snow between the trees, skis on the ground, throwing up great sprays and wakes of snow. Darker sleek enemy drones sit motionless in the snow or turn aside in confusion. Low sunlight cuts through drifting smoke. No people visible.",
+      "width": 1024,
+      "height": 576,
+      "seed": 50072,
+      "sheets": [
+        {
+          "quad": [
+            [
+              281,
+              362
+            ],
+            [
+              342,
+              360
+            ],
+            [
+              342,
+              406
+            ],
+            [
+              281,
+              410
+            ]
+          ],
+          "text": "DOG",
+          "lang": "en",
+          "seed": 7,
+          "band": [
+            0.3,
+            0.7
+          ],
+          "shade": 0.8,
+          "light_blur": 12,
+          "lines": 0.8,
+          "feather": 1.0,
+          "clip_to_paint": false
+        },
+        {
+          "quad": [
+            [
+              492,
+              336
+            ],
+            [
+              612,
+              330
+            ],
+            [
+              616,
+              396
+            ],
+            [
+              484,
+              402
+            ]
+          ],
+          "text": "DOG",
+          "lang": "en",
+          "seed": 8,
+          "band": [
+            0.34,
+            0.66
+          ],
+          "shade": 0.8,
+          "light_blur": 18,
+          "lines": 0.8,
+          "feather": 1.0,
+          "clip_to_paint": true
+        }
+      ],
+      "lettering": [
+        {
+          "kind": "sign",
+          "text": "DOG",
+          "lang": "en",
+          "gloss": null,
+          "speaker_entity_id": null,
+          "drawn_by": "scripts/texture-sheets.py",
+          "sheet": 0
+        },
+        {
+          "kind": "sign",
+          "text": "DOG",
+          "lang": "en",
+          "gloss": null,
+          "speaker_entity_id": null,
+          "drawn_by": "scripts/texture-sheets.py",
+          "sheet": 1
+        }
+      ],
+      "harmonise": {
+        "runs": [
+          {
+            "steps": 4,
+            "strengths": [
+              0.75,
+              0.85
+            ]
+          },
+          {
+            "steps": 12,
+            "strengths": [
+              0.92,
+              0.96
+            ]
+          }
+        ],
+        "seed": 70701,
+        "grow": 6,
+        "feather": 3
+      }
+    },
+    {
       "id": "dd-08-a1",
       "beat": 8,
       "attempt": 1,
@@ -239,18 +440,133 @@
       "width": 1024,
       "height": 576,
       "seed": 50081,
-      "lettering": [
+      "screen": [
         {
-          "kind": "sign",
-          "text": "jie fe\nhen dzi",
-          "lang": "dz",
-          "gloss": "Wish you luck",
-          "speaker_entity_id": null,
-          "x": 0.675,
-          "y": 0.2,
-          "w": 0.14,
-          "size": 0.032,
-          "rotate": 0
+          "block": "c30-b61",
+          "capture": "images-out/adaptation-dog-dawn/screen-c30-b61.png",
+          "capture_record": {
+            "block": "c30-b61",
+            "url": "https://snowmoon.party/chapter/30",
+            "site_commit": "db87d2356aeba5b619850dbf2ce9cc6fbd3dd02d",
+            "theme": "dark",
+            "viewport_width": 250,
+            "device_scale": 3,
+            "file": "images-out/adaptation-dog-dawn/screen-c30-b61.png",
+            "sha256": "b5cbe0242ea9ae2a0b53ae1f26decd8cbbc6dbeeebb177aaa54fc8230232d863"
+          },
+          "device": [
+            [
+              660,
+              105
+            ],
+            [
+              842,
+              -71
+            ],
+            [
+              842,
+              348
+            ],
+            [
+              658,
+              322
+            ]
+          ],
+          "content": [
+            0.03,
+            0.22,
+            0.97,
+            0.97
+          ],
+          "base": [
+            11,
+            15,
+            41
+          ],
+          "glow": {
+            "radius": 14,
+            "strength": 0.9
+          },
+          "spill": {
+            "center": [
+              385,
+              140
+            ],
+            "radius": 210,
+            "color": [
+              90,
+              130,
+              255
+            ],
+            "strength": 0.7
+          },
+          "variant": "full"
+        },
+        {
+          "block": "c30-b61",
+          "capture": "images-out/adaptation-dog-dawn/screen-c30-b61-cut.png",
+          "capture_record": {
+            "block": "c30-b61",
+            "url": "https://snowmoon.party/chapter/30",
+            "site_commit": "db87d2356aeba5b619850dbf2ce9cc6fbd3dd02d",
+            "theme": "dark",
+            "viewport_width": 190,
+            "kept_paragraphs": [
+              0,
+              2
+            ],
+            "text_shown": "I hope you trust me now. … jie fe hen dzi.",
+            "device_scale": 3,
+            "file": "images-out/adaptation-dog-dawn/screen-c30-b61-cut.png",
+            "sha256": "9f0a660bf4b196dc4f0a821a3630380b6e6f4f4ef6e21a024a40c0e1dac5efd7"
+          },
+          "device": [
+            [
+              660,
+              105
+            ],
+            [
+              842,
+              -71
+            ],
+            [
+              842,
+              348
+            ],
+            [
+              658,
+              322
+            ]
+          ],
+          "content": [
+            0.22,
+            0.18,
+            0.98,
+            0.8
+          ],
+          "base": [
+            11,
+            15,
+            41
+          ],
+          "glow": {
+            "radius": 14,
+            "strength": 0.9
+          },
+          "spill": {
+            "center": [
+              385,
+              140
+            ],
+            "radius": 210,
+            "color": [
+              90,
+              130,
+              255
+            ],
+            "strength": 0.7
+          },
+          "variant": "cut"
         }
       ]
     },
