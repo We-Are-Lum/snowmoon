@@ -1,7 +1,6 @@
 # Proposal: publish without one's name
 
-> **Proposal. Nothing here is built.** Written Oct 5, 2026 at the owner's
-> request.
+> **Proposal on file. Not now** (owner, Oct 5, 2026). Nothing here is built.
 
 ## What it would offer
 

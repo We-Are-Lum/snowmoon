@@ -77,7 +77,7 @@ alter table studio.recipe_assist enable row level security;
 -- Public exactly when the recipe is: the subquery runs under the reader's own
 -- recipe policy above.
 create policy public_read on studio.recipe_assist for select using (
-  exists (select 1 from studio.recipes r where r.id = recipe_id)
+  exists (select 1 from studio.recipes r where r.id = studio.recipe_assist.recipe_id)
 );
 create policy writer_all on studio.recipe_assist for all to studio_writer using (true) with check (true);
 

@@ -427,6 +427,9 @@ uploader's own voice, with consent recorded."**
 - A proposal is a generation request that hasn't run yet: prompt, chosen model,
   style guide, character and location profiles, anchor. It costs nothing to
   make, so its allowance can be large.
+- Proposals are public. Submitting one is publishing it, so it goes through
+  the own_words consent screen and a preview, like any text a person
+  publishes (owner decision, Oct 5, 2026; `docs/principles.md`, principle 1).
 - The owner's Mac (or any trusted machine) runs `scripts/render-queue.*`: it
   takes queued requests in an order the owner chooses (for example highest
   rated first), renders them with local models, uploads the output to R2, and

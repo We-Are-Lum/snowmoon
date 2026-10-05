@@ -1,5 +1,5 @@
 {
-  "about": "The wording a person agrees to before their first contribution that stores their own words (a prompt or a line). The agreement is recorded in studio.contributor_consents with kind 'own_words' and the sha256 of this version's line and text (src/lib/consent.ts). A new wording gets a new version; earlier versions stay here so every recorded hash can be read back.",
+  "about": "The wording a person agrees to before their first contribution that stores their own words (a prompt or a line). The agreement is recorded in studio.contributor_consents with kind 'own_words' and the sha256 of this version's line and text (src/lib/consent.ts). A new wording gets a new version; earlier versions stay here so every recorded hash can be read back. own-words-v1 does not promise immediate hiding, because \"Hide this\" is not built yet; own-words-v2, written when it ships with the first form that stores a person's words, promises it (docs/removal.md).",
   "current": "own-words-v1",
   "versions": {
     "own-words-v1": {

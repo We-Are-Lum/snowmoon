@@ -405,3 +405,20 @@ over.
 4. The comic's style stays as is for this piece. No night variant
    yet.
 ```
+
+```text
+1. 0005: in recipe_assist's public_read policy, write
+   studio.recipe_assist.recipe_id, not bare recipe_id. Re-run
+   test:db, push, and tell me when the file is final.
+2. "Drafts stay private" applies to people's contributions in the
+   app. The maintainer's own pipeline, including rejected
+   attempts, stays fully public. Keep the dog-dawn branch unpushed
+   anyway until I have written the lines and watched it.
+3. Proposals in the render queue stay public. Submitting one is
+   publishing it, so it goes through the own_words consent screen
+   and preview.
+4. docs/removal.md is approved as policy. Build "Hide this" with
+   the first form that stores a person's words, and change the
+   consent wording to promise it only then.
+5. Publish-without-name: not now. Keep the proposal on file.
+```

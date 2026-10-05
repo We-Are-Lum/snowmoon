@@ -1,7 +1,11 @@
 # Removal: hiding at once, erasure by procedure
 
-> **Proposal. Nothing here is built yet.** Written Oct 5, 2026 at the owner's
-> request; it becomes policy only when the owner approves it.
+> **Policy, approved by the owner on Oct 5, 2026. Not built yet.** "Hide
+> this" is built together with the first form that stores a person's own
+> words. Until then the consent wording does not promise immediate hiding; it
+> says the maintainer can be asked to hide. When "Hide this" ships, a new
+> wording version (`own-words-v2` in `config/consent.json`) promises it, and
+> everyone is asked again.
 
 People are told before their first contribution that their words are public,
 permanent, GPL-3.0 and shown with their Farcaster name (`config/consent.json`).

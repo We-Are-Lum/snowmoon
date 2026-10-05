@@ -51,9 +51,12 @@ coding agent and its helpers are in `docs/prompts/`.
   first? Does any new way of storing a person's own words skip the consent
   screen or the preview?
 
-**Prompts are public; drafts are not.** Only prompts for published elements
-are public. The prompts of drafts and abandoned attempts stay private
-(owner decision, Oct 5, 2026).
+**Prompts are public; people's drafts are not.** Only prompts for published
+elements are public. The prompts of people's drafts and abandoned attempts in
+the app stay private. The maintainer's own pipeline, including rejected
+attempts, stays fully public in the repository. A proposal for the render
+queue is public: submitting one is publishing it, so it goes through the
+consent screen and the preview. (Owner decisions, Oct 5, 2026.)
 
 **People know their words will be public.** Before a person's first
 contribution that stores their own words (a prompt or a line), a blocking
@@ -62,8 +65,10 @@ Their agreement is recorded in `studio.contributor_consents` (kind
 `own_words`) with who, when, and the sha256 of the exact wording
 (`config/consent.json`). The same line appears under every text box whose
 contents will be published, and a preview is shown before publishing
-(`src/components/publish-words.tsx`). Hiding and erasure are proposed in
-`docs/removal.md`.
+(`src/components/publish-words.tsx`). Hiding and erasure follow
+`docs/removal.md` (approved as policy); "Hide this" is built with the first
+form that stores a person's words, and only then does the consent wording
+promise it.
 
 **Status.** `P1d` fails on production until this change is deployed: the
 narration had no recipe link on the page, and lettered images did not link

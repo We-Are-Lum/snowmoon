@@ -397,6 +397,11 @@ for (const role of ['anon', 'authenticated']) {
 await equal('RLS on every studio table after 0005', 'postgres',
   `select count(*)::int as v from pg_tables where schemaname = 'studio' and not rowsecurity`, 0);
 // 0005: recipe_assist, the assist record for recipes that predate it.
+{
+  const text = await readFile(path.join(ROOT, PROMPTS), 'utf8');
+  if (/where r\.id = studio\.recipe_assist\.recipe_id\)/.test(text)) passed++;
+  else failures.push('0005: recipe_assist public_read must name studio.recipe_assist.recipe_id, not a bare recipe_id');
+}
 const ASSIST = `'{"model": "claude-coding-agent", "drafted": ["spoken descriptions"]}'`;
 await ok('writer records assist for a published recipe and a draft one', W, `
   insert into studio.recipe_assist (recipe_id, assist, source, recorded_by_fid) values
