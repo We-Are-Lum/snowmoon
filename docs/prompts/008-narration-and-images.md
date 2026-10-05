@@ -242,3 +242,18 @@ conflicts. Then:
 
 Push when all checks pass.
 ```
+
+```text
+1. Lettered images: confirm that for each of the three jobs the
+   original unlettered file is kept, both files have recorded
+   hashes, and the record names the lettering script and commit.
+   A remix must be able to start from the clean image. Fix it if
+   any of that is missing.
+2. Likes are stored as +1 ratings, but the brief's scoring counts a
+   rater whose ratings are all equal as zero. A person who only
+   likes would count for nothing. Propose a fix while the tables
+   are empty (a separate likes table in 0002, or a stated rule for
+   like-only raters) and wait for my answer.
+3. Do not start comics.
+4. Leave the story-diagnostic worktree in place.
+```

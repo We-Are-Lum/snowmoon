@@ -1,0 +1,169 @@
+{
+  "about": "Lettering drawn in code over clean renders. Each entry names the clean input and the lettered output by sha256; both are published (content/snowmoon/illustrations/published.json).",
+  "script": "scripts/letter-images.py",
+  "script_commit": "60ba33b31702006a7527df6ec7c0c00226796b1e",
+  "script_uncommitted_changes": false,
+  "pillow_version": "12.3.0",
+  "fonts": {
+    "en": {
+      "file": "node_modules/@fontsource/dm-mono/files/dm-mono-latin-500-normal.woff",
+      "sha256": "f9fbeef336ab52ff50c455d34ba361b686d4dc5f32b17e4ac5181606ff132e6b"
+    },
+    "dz": {
+      "file": "node_modules/@fontsource/crimson-pro/files/crimson-pro-latin-500-italic.woff",
+      "sha256": "6a41b0afa97f9066d50319bea3e693794d8decf09c416a91925771705ba0a5e0"
+    }
+  },
+  "generated_at": "2026-10-05T14:22:18+00:00",
+  "images": [
+    {
+      "id": "c2-b038-foil-classroom",
+      "chapter": 2,
+      "idx": 38,
+      "job_file": "content/snowmoon/illustrations/chapter-2.json",
+      "job_file_commit": "b41dd8473333b7521decb16b706866409560a931",
+      "lettering": [
+        {
+          "kind": "sign",
+          "text": "pa jan li sun zo\nzai gau fe pa jan\n\ngo li sun zo\nbai gau fe go",
+          "lang": "dz",
+          "gloss": "One man learning will set one man free. A nation learning will make the nation great.",
+          "speaker_entity_id": null,
+          "x": 0.43,
+          "y": 0.468,
+          "w": 0.15,
+          "size": 0.0125
+        }
+      ],
+      "input": {
+        "file": "images-out/chapter-2/c2-b038-foil-classroom.png",
+        "sha256": "bd733c887f2dc7ce4f24c7824d40e193688e98bedf754a019a7d827fccb65c7e",
+        "role": "clean render, the starting point for a remix"
+      },
+      "output": {
+        "file": "images-out/chapter-2/c2-b038-foil-classroom.lettered.png",
+        "sha256": "20b07d88b075a57e55700116a64bf9c11da001e079803c6ad371377634dcfb2e"
+      }
+    },
+    {
+      "id": "c30-b041-sticking-patterns",
+      "chapter": 30,
+      "idx": 41,
+      "job_file": "content/snowmoon/illustrations/chapter-30.json",
+      "job_file_commit": "b41dd8473333b7521decb16b706866409560a931",
+      "lettering": [
+        {
+          "kind": "sign",
+          "text": "DOG",
+          "lang": "en",
+          "gloss": null,
+          "speaker_entity_id": null,
+          "x": 0.178,
+          "y": 0.662,
+          "w": 0.105,
+          "size": 0.038,
+          "rotate": -12
+        },
+        {
+          "kind": "sign",
+          "text": "DOG",
+          "lang": "en",
+          "gloss": null,
+          "speaker_entity_id": null,
+          "x": 0.322,
+          "y": 0.612,
+          "w": 0.066,
+          "size": 0.024,
+          "rotate": -10
+        },
+        {
+          "kind": "sign",
+          "text": "DOG",
+          "lang": "en",
+          "gloss": null,
+          "speaker_entity_id": null,
+          "x": 0.452,
+          "y": 0.592,
+          "w": 0.048,
+          "size": 0.017,
+          "rotate": 10
+        },
+        {
+          "kind": "sign",
+          "text": "DOG",
+          "lang": "en",
+          "gloss": null,
+          "speaker_entity_id": null,
+          "x": 0.551,
+          "y": 0.584,
+          "w": 0.05,
+          "size": 0.017,
+          "rotate": 14
+        },
+        {
+          "kind": "sign",
+          "text": "DOG",
+          "lang": "en",
+          "gloss": null,
+          "speaker_entity_id": null,
+          "x": 0.645,
+          "y": 0.606,
+          "w": 0.052,
+          "size": 0.017,
+          "rotate": 12
+        }
+      ],
+      "input": {
+        "file": "images-out/chapter-30/c30-b041-sticking-patterns.png",
+        "sha256": "12405141e6b740578dd10c14327797371f3a627b1f4649030c18ebebf00d54ba",
+        "role": "clean render, the starting point for a remix"
+      },
+      "output": {
+        "file": "images-out/chapter-30/c30-b041-sticking-patterns.lettered.png",
+        "sha256": "7826057c861ab086bedf8688aa0fe472252c175b5abe5142195d4356333fd5ba"
+      }
+    },
+    {
+      "id": "c30-b048-drones-surge",
+      "chapter": 30,
+      "idx": 48,
+      "job_file": "content/snowmoon/illustrations/chapter-30.json",
+      "job_file_commit": "b41dd8473333b7521decb16b706866409560a931",
+      "lettering": [
+        {
+          "kind": "sign",
+          "text": "DOG",
+          "lang": "en",
+          "gloss": null,
+          "speaker_entity_id": null,
+          "x": 0.15,
+          "y": 0.515,
+          "w": 0.09,
+          "size": 0.034,
+          "rotate": 6
+        },
+        {
+          "kind": "sign",
+          "text": "DOG",
+          "lang": "en",
+          "gloss": null,
+          "speaker_entity_id": null,
+          "x": 0.356,
+          "y": 0.538,
+          "w": 0.05,
+          "size": 0.018,
+          "rotate": 4
+        }
+      ],
+      "input": {
+        "file": "images-out/chapter-30/c30-b048-drones-surge.png",
+        "sha256": "00790615175c3ba55f6737060721b60686055cf01996349ccd25ba1accc7904c",
+        "role": "clean render, the starting point for a remix"
+      },
+      "output": {
+        "file": "images-out/chapter-30/c30-b048-drones-surge.lettered.png",
+        "sha256": "229d20a57353a9275be290f668cb7d5935e7ab7dfff5bfb647aacd0e3fceb22f"
+      }
+    }
+  ]
+}
