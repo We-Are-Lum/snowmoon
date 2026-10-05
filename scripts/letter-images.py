@@ -5,8 +5,14 @@ Image models garble text, so prompts keep images free of writing (brief Mileston
 banner) is listed in the job as lettering items: text, kind, language, gloss,
 and position (x, y, w as fractions of the image; optional size as a fraction of
 the width, optional rotation in degrees). This script draws them with the
-reader's fonts and writes images-out/chapter-N/<id>.lettered.png, which
-scripts/publish-images.ts publishes in place of the bare render.
+reader's fonts and writes images-out/chapter-N/<id>.lettered.png next to the
+untouched render, which stays the clean starting point for a remix.
+
+It also writes content/snowmoon/recipes/images/lettering.json: for each
+lettered image, the clean input and lettered output with their sha256, the
+lettering items, this script's path and the commit it ran from (flagged if the
+script had uncommitted changes), the fonts with their sha256, and the Pillow
+version. scripts/publish-images.ts publishes both files and links this record.
 
 Run (image environment):
   .venv-image/bin/python scripts/letter-images.py
@@ -15,8 +21,11 @@ Run (image environment):
 import glob
 import hashlib
 import json
+import subprocess
+from datetime import datetime, timezone
 from pathlib import Path
 
+import PIL
 from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parent.parent
@@ -52,7 +61,19 @@ def draw_item(base: Image.Image, item: dict) -> None:
     base.alpha_composite(layer, (round(item["x"] * W), round(item["y"] * H)))
 
 
+def sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def git(*args: str) -> str:
+    return subprocess.run(["git", *args], cwd=ROOT, capture_output=True, text=True, check=True).stdout.strip()
+
+
 def main() -> None:
+    script = Path(__file__).resolve().relative_to(ROOT)
+    script_commit = git("log", "-1", "--format=%H", "--", str(script))
+    script_dirty = bool(git("status", "--porcelain", "--", str(script)))
+    records = []
     done = 0
     for job_file in sorted(glob.glob(str(ROOT / "content/snowmoon/illustrations/chapter-*.json"))):
         spec = json.loads(Path(job_file).read_text())
@@ -65,9 +86,34 @@ def main() -> None:
             for item in job["lettering"]:
                 draw_item(base, item)
             base.convert("RGB").save(out)
-            print(f"{job['id']}: {len(job['lettering'])} items -> {out.name} ({hashlib.sha256(out.read_bytes()).hexdigest()[:12]})")
+            job_rel = str(Path(job_file).relative_to(ROOT))
+            records.append({
+                "id": job["id"],
+                "chapter": job["chapter"],
+                "idx": job["idx"],
+                "job_file": job_rel,
+                "job_file_commit": git("log", "-1", "--format=%H", "--", job_rel),
+                "lettering": job["lettering"],
+                "input": {"file": f"images-out/chapter-{job['chapter']}/{src.name}", "sha256": sha256(src), "role": "clean render, the starting point for a remix"},
+                "output": {"file": f"images-out/chapter-{job['chapter']}/{out.name}", "sha256": sha256(out)},
+            })
+            print(f"{job['id']}: {len(job['lettering'])} items -> {out.name} ({sha256(out)[:12]})")
             done += 1
-    print(f"{done} lettered images")
+    record = {
+        "about": "Lettering drawn in code over clean renders. Each entry names the clean input and the lettered output by sha256; both are published (content/snowmoon/illustrations/published.json).",
+        "script": str(script),
+        "script_commit": script_commit,
+        "script_uncommitted_changes": script_dirty,
+        "pillow_version": PIL.__version__,
+        "fonts": {lang: {"file": str(path.relative_to(ROOT)), "sha256": sha256(path)} for lang, path in FACES.items()},
+        "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
+        "images": records,
+    }
+    out_file = ROOT / "content/snowmoon/recipes/images/lettering.json"
+    out_file.write_text(json.dumps(record, indent=2, ensure_ascii=False) + "\n")
+    if script_dirty:
+        print("warning: the script has uncommitted changes; commit it and re-run so the record names the code that ran")
+    print(f"{done} lettered images; record -> {out_file.relative_to(ROOT)} (script commit {script_commit[:7]})")
 
 
 if __name__ == "__main__":
