@@ -1,0 +1,32 @@
+{
+  "about": "Adaptation seeds shown at /adaptations. Each slug is a folder under adaptations/ holding brief.md and, once someone makes one, script.md and shots.md. The title and line are shown before the spoiler warning, so they stay free of later-chapter reveals. spoilers_through is the last chapter the brief draws on. video_url is a finished adaptation's video, when there is one. Checked by scripts/check-adaptations.ts.",
+  "bounty": {
+    "url": "https://poidh.xyz/mainnet/bounty/34",
+    "closes": "2026-10-18",
+    "label": "Open bounty on poidh"
+  },
+  "open_threads": "adaptations/open-threads.md",
+  "seeds": [
+    {
+      "slug": "room-change",
+      "title": "The room change",
+      "line": "The chapter 2 bombing, told from the side of whoever moved the class at the last minute.",
+      "spoilers_through": 10,
+      "video_url": null
+    },
+    {
+      "slug": "lily-classroom",
+      "title": "Lily's civics class",
+      "line": "A classroom scene the book only reports secondhand, built from three earlier moments in Lily's story.",
+      "spoilers_through": 31,
+      "video_url": null
+    },
+    {
+      "slug": "dog-dawn",
+      "title": "DOG at dawn",
+      "line": "The dawn attack of chapter 30, told through one character's letters and messages.",
+      "spoilers_through": 31,
+      "video_url": null
+    }
+  ]
+}

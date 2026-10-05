@@ -1,0 +1,61 @@
+/* /adaptations only. Uses the reader's variables and floors (text 12px, tap
+   targets 44px, Crimson Pro and DM Mono only). */
+
+.adaptations .crumb { margin: 0; }
+.adaptations .crumb a { display: inline-flex; align-items: center; min-height: var(--tap); text-transform: uppercase; }
+
+.seed-list { list-style: none; padding: 0; margin: 0; }
+.seed-list li { border-top: 1px solid var(--rule); }
+.seed-list li:last-child { border-bottom: 1px solid var(--rule); }
+.seed-list a {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-height: var(--tap);
+  padding: 12px 2px;
+  color: var(--ink);
+  text-decoration: none;
+}
+.seed-title { font-weight: 500; }
+.seed-line { font-size: 18px; line-height: 1.45; }
+.seed-meta {
+  font-family: var(--label);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.spoiler-gate > summary {
+  display: flex;
+  align-items: center;
+  min-height: var(--tap);
+  cursor: pointer;
+  font-family: var(--label);
+  font-size: 12px;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.seed-video { display: block; width: 100%; height: auto; background: var(--quote-bg); }
+
+/* Rendered markdown from adaptations/. */
+.doc { font-size: 18px; line-height: 1.5; }
+.doc h1 { font-size: 30px; }
+.doc h2, .doc-part { font-size: 24px; font-weight: 500; margin-top: 32px; }
+.doc h3 { font-size: 20px; font-weight: 500; margin-top: 24px; }
+.doc h4 { font-size: 18px; font-weight: 600; margin-top: 20px; }
+.doc blockquote { margin: 16px 0; padding: 8px 16px; border-left: 3px solid var(--ink); background: var(--quote-bg); }
+.doc blockquote p { margin: 0; }
+.doc code { font-family: var(--label); font-size: 14px; overflow-wrap: anywhere; }
+.doc table {
+  display: block;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin: 16px 0;
+  font-size: 16px;
+  line-height: 1.4;
+}
+.doc th, .doc td { padding: 6px 8px; border-top: 1px solid var(--rule); text-align: left; vertical-align: top; min-width: 8rem; }
+.doc th { font-weight: 600; border-top: 0; border-bottom: 2px solid var(--rule); }
+.doc a.cite { white-space: nowrap; }
