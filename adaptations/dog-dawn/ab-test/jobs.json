@@ -1,0 +1,103 @@
+{
+  "about": "A/B test, Oct 5, 2026 (owner's request): panels 3 and 5, and panel 2 as a night reference, on two Apache-2.0 open-weight models served by fal.ai, prompted as true night scenes with no grade step. Text-to-image only: no reference images, so Deluin is described in words. Test output only; nothing here is published, and the pipeline's model is unchanged. The style prompt is techno-vistas with its two daytime clauses ('big pastel skies and enormous elegant megastructures on the horizon', 'clean and bright and hopeful') left out for night. Prompt expansion is off, so the prompt recorded is the prompt used. Hard cap: $1 for the whole test.",
+  "cap_usd": 1.0,
+  "models": {
+    "z": {
+      "name": "Z-Image Turbo",
+      "endpoint": "fal-ai/z-image/turbo",
+      "weights": "https://huggingface.co/Tongyi-MAI/Z-Image-Turbo",
+      "license": "Apache-2.0",
+      "price_usd_per_megapixel": 0.005,
+      "price_seen": "https://fal.ai/models/fal-ai/z-image/turbo, 2026-10-05",
+      "steps": 8
+    },
+    "e": {
+      "name": "ERNIE-Image Turbo",
+      "endpoint": "fal-ai/ernie-image/turbo",
+      "weights": "https://huggingface.co/baidu/ERNIE-Image-Turbo",
+      "license": "Apache-2.0",
+      "price_usd_per_megapixel": 0.01,
+      "price_seen": "https://fal.ai/models/fal-ai/ernie-image/turbo, 2026-10-05",
+      "steps": 8
+    }
+  },
+  "jobs": [
+    {
+      "id": "ab-z-02-a1",
+      "model": "z",
+      "beat": 2,
+      "compare_with": "dd-02",
+      "attempt": 1,
+      "prompt": "Night, seen from inside a dark Arctic room of pale faceted crystalline wall panels, looking out through a large frosted window. Far across snowy forested hills a long line of small moving lights threads through black pine trees, and on the horizon a large orange fire blazes among the trees, smoke rising into a starry night sky. The fire is the brightest thing in the picture; the room is lit only by its distant glow. It is the middle of the night: a black sky, no daylight, no sunset, no pastel colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, cel-shaded flat color with soft hard-edged shadows, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
+      "seed": 60021,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "ab-z-03-a1",
+      "model": "z",
+      "beat": 3,
+      "compare_with": "dd-03",
+      "attempt": 1,
+      "prompt": "Close-up at night of one right hand, five fingers, resting flat on top of the glass of a sleek pale console in a dark room. The wrist and forearm are in the sleeve of a thick cream cable-knit sweater. Only this one hand and sleeve are in the picture; the fingers rest on the surface and do not pass through it. Across the console's display flows a soft stream of pale green abstract waveforms like heartbeat lines, with no letters or numbers, and one thin bright thread of warm light slips out of the stream into the dark. The room is dark, lit only by the display. It is the middle of the night: a black sky, no daylight, no sunset, no pastel colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, cel-shaded flat color with soft hard-edged shadows, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
+      "seed": 60031,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "ab-z-05-a1",
+      "model": "z",
+      "beat": 5,
+      "compare_with": "dd-05",
+      "attempt": 1,
+      "prompt": "Medium shot at night inside a narrow Arctic command room walled in pale faceted crystalline panels. On the right, a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots, sits in profile at a single sleek console, facing the console, his head and body turned the same way, his face lit cold blue from below by its screen. He is the only person in the room. Across the back of the room is a wall of frosted glass; beyond it, in a dim corridor outside the room, stands the dark faceless silhouette of a guard, blurred by the glass. A tall side window shows a black starry sky. The room is dark, lit only by the screens. It is the middle of the night: a black sky, no daylight, no sunset, no pastel colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, cel-shaded flat color with soft hard-edged shadows, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
+      "seed": 60051,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "ab-e-02-a1",
+      "model": "e",
+      "beat": 2,
+      "compare_with": "dd-02",
+      "attempt": 1,
+      "prompt": "Night, seen from inside a dark Arctic room of pale faceted crystalline wall panels, looking out through a large frosted window. Far across snowy forested hills a long line of small moving lights threads through black pine trees, and on the horizon a large orange fire blazes among the trees, smoke rising into a starry night sky. The fire is the brightest thing in the picture; the room is lit only by its distant glow. It is the middle of the night: a black sky, no daylight, no sunset, no pastel colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, cel-shaded flat color with soft hard-edged shadows, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
+      "seed": 60021,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "ab-e-03-a1",
+      "model": "e",
+      "beat": 3,
+      "compare_with": "dd-03",
+      "attempt": 1,
+      "prompt": "Close-up at night of one right hand, five fingers, resting flat on top of the glass of a sleek pale console in a dark room. The wrist and forearm are in the sleeve of a thick cream cable-knit sweater. Only this one hand and sleeve are in the picture; the fingers rest on the surface and do not pass through it. Across the console's display flows a soft stream of pale green abstract waveforms like heartbeat lines, with no letters or numbers, and one thin bright thread of warm light slips out of the stream into the dark. The room is dark, lit only by the display. It is the middle of the night: a black sky, no daylight, no sunset, no pastel colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, cel-shaded flat color with soft hard-edged shadows, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
+      "seed": 60031,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "ab-e-05-a1",
+      "model": "e",
+      "beat": 5,
+      "compare_with": "dd-05",
+      "attempt": 1,
+      "prompt": "Medium shot at night inside a narrow Arctic command room walled in pale faceted crystalline panels. On the right, a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots, sits in profile at a single sleek console, facing the console, his head and body turned the same way, his face lit cold blue from below by its screen. He is the only person in the room. Across the back of the room is a wall of frosted glass; beyond it, in a dim corridor outside the room, stands the dark faceless silhouette of a guard, blurred by the glass. A tall side window shows a black starry sky. The room is dark, lit only by the screens. It is the middle of the night: a black sky, no daylight, no sunset, no pastel colors. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, cel-shaded flat color with soft hard-edged shadows, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
+      "seed": 60051,
+      "width": 1024,
+      "height": 576
+    }
+  ],
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent",
+    "drafted": [
+      "night prompts (from the approved script's image descriptions)"
+    ],
+    "instructions": [
+      "adaptations/dog-dawn/script.md"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
+}
