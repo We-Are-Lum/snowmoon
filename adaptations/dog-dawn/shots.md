@@ -7,6 +7,10 @@ open weights, Apache-2.0, run locally; cost $0). Lettering is drawn in code by
 `scripts/letter-images.py`; its record is
 `content/snowmoon/recipes/images/adaptation-dog-dawn.lettering.json`.
 
+Style: `designs/styles/techno-vistas.json` as is, for this piece (owner
+decision, Oct 5, 2026). No night variant yet: the style's bright pastel skies
+tend to turn night into dusk, which is why panel 1 took three attempts.
+
 Audio: none yet. Narration waits until the owner has written the lines.
 
 | Beat | Attempt | Seed | Render sha256 | Seconds | Lettering | Picked | Note |
