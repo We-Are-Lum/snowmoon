@@ -210,3 +210,9 @@ Added them and redeploying now
 ```text
 Looks good on miniapp! Let's remove this from about: and what you see by default is decided by ratings and by how often others build on it, never by a person.
 ```
+
+```text
+Ok. Yes. Going to sleep soon. So try to do as much as you can progressing forward without me. Let me know now if there will be any blockers you think might come up
+```
+
+Answers: narration records credited to FID 6786; the player goes live if all checks pass, otherwise stays on a preview; show the seeded images except the three that still clone characters.

@@ -1,0 +1,48 @@
+import 'server-only';
+import { existsSync, readFileSync } from 'node:fs';
+import path from 'node:path';
+import { WORK } from './config';
+
+/**
+ * The project's seeded key-moment images for a chapter, from
+ * content/snowmoon/illustrations/published.json (scripts/publish-images.ts).
+ * A starting point, not canon; Milestone 4 moves images into the database as
+ * elements, and this index goes away.
+ */
+export interface Illustration {
+  id: string;
+  idx: number; // the block it illustrates
+  url: string;
+  width: number;
+  height: number;
+  recipe: string;
+  alt: string;
+}
+
+/** A short description from the image's scene prompt, without the model-facing reference wording. */
+function altFor(chapter: number, id: string): string {
+  const file = path.join(process.cwd(), 'content', WORK.id, 'illustrations', `chapter-${chapter}.json`);
+  const job = JSON.parse(readFileSync(file, 'utf8')).jobs.find((j: { id: string }) => j.id === id);
+  const first = String(job?.prompt ?? '').split(/(?<=\.)\s/).slice(0, 2).join(' ');
+  return first.replace(/\b(the )?(man|woman|boy|girl|young man|young woman|teenage boy|teenage girl|person) from reference image \d/gi, (m) => {
+    const who = m.replace(/^the /i, '').replace(/ from reference image \d/i, '');
+    return `a ${who}`;
+  });
+}
+
+type Entry = Illustration & { chapter: number };
+let cache: Entry[] | null = null;
+
+function all(): Entry[] {
+  if (!cache) {
+    const file = path.join(process.cwd(), 'content', WORK.id, 'illustrations', 'published.json');
+    cache = existsSync(file) ? (JSON.parse(readFileSync(file, 'utf8')).images as Entry[]) : [];
+  }
+  return cache;
+}
+
+export function loadIllustrations(n: number): Illustration[] {
+  return all()
+    .filter((i) => i.chapter === n)
+    .map(({ id, idx, url, width, height, recipe }) => ({ id, idx, url, width, height, recipe, alt: altFor(n, id) }));
+}

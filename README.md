@@ -129,7 +129,27 @@ runs the migration and permission tests in an in-memory Postgres.
 | `npm run test:db` | Migration and permission tests (PGlite) |
 | `npm run test:render` | Rendering rules: ¶ labels, settings, default templates, figure sizing |
 | `npm run check:ui -- --url=…` | Reader floors in Chrome at 390px: 12px text, 44px targets, fonts, colours, first screen |
-| `npm run check:shipped` | Verify a live deployment runs the expected commit and serves the reader |
+| `npm run check:shipped` | Verify a live deployment runs the expected commit, serves the reader, and its narration and images load |
+| `npm run publish:narration` | Upload the narration (per-block and per-chapter audio) to R2 and write `content/snowmoon/narration/` |
+| `npm run seed:narration` | Write narrations, segments, recipes and house narrations from that index (skips chapters already done) |
+| `npm run publish:images` | Upload the seeded key-moment images to R2 and write `content/snowmoon/illustrations/published.json` |
+
+Local generation (Python, not npm): `scripts/narrate.py` (speech, Kokoro),
+`scripts/illustrate.py` (images, FLUX.2 [klein] via mflux), and
+`scripts/podcast-feed.py` (RSS feed). Their setup is at the top of each file.
+
+## Media
+
+Audio and images are served from Cloudflare R2 at `media.snowmoon.party`.
+Uploads run only from a trusted machine with a key scoped to the one bucket;
+the deployed app never holds R2 keys, only `R2_PUBLIC_URL`. Keys carry each
+file's sha256, so objects are immutable and cached forever, and re-running a
+publish script uploads only what is missing.
+
+`.env.local` needs `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`,
+`R2_BUCKET` and `R2_PUBLIC_URL`. With the Vercel CLI linked to the project,
+`vercel env pull .env.local --environment=development` fetches them; the R2
+keys are stored in Vercel for the Development environment only.
 
 ## Sign in
 

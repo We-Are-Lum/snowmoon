@@ -331,3 +331,76 @@ figure.figure .device-view svg { min-width: var(--fig-min, 0); }
   color: var(--muted);
   overflow-wrap: anywhere;
 }
+
+/* Seeded key-moment images, shown after the block they illustrate. */
+.chapter .seed-image { margin: 8px 0 1.4em; }
+.chapter .seed-image img { display: block; width: 100%; height: auto; border-radius: 4px; background: var(--quote-bg); }
+.chapter .seed-image figcaption { margin-top: 6px; }
+
+/* Play view: the block being read is marked like a linked block. */
+.chapter:has(.chapter-player) { padding-bottom: 160px; }
+.block.is-reading { box-shadow: -10px 0 0 var(--paper), -12px 0 0 var(--accent); }
+.block { transition: box-shadow 0.2s; }
+
+.chapter-player {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  background: var(--paper);
+  border-top: 1px solid var(--rule);
+  padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
+  font-family: var(--label);
+  font-size: 13px;
+}
+.chapter-player .player-image {
+  display: block;
+  margin: 0 auto 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  max-width: var(--measure);
+  width: 100%;
+  cursor: pointer;
+}
+.chapter-player .player-image img { display: block; width: 100%; max-height: 28vh; object-fit: cover; border-radius: 4px; }
+.chapter-player .player-controls {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  max-width: var(--measure);
+  margin: 0 auto;
+}
+.chapter-player button,
+.chapter-player .player-download {
+  min-width: var(--tap);
+  min-height: var(--tap);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: var(--paper);
+  color: var(--ink);
+  font: inherit;
+  font-size: 16px;
+  text-decoration: none;
+  cursor: pointer;
+}
+.chapter-player .player-listen { flex: 1; font-size: 15px; color: var(--accent); border-color: var(--accent); }
+.chapter-player .player-play { min-width: 56px; color: var(--accent); border-color: var(--accent); }
+.chapter-player .player-rate { font-size: 13px; }
+.chapter-player .player-time { flex: 1; text-align: center; color: var(--muted); font-size: 13px; white-space: nowrap; }
+.chapter-player .player-label { margin: 6px auto 0; max-width: var(--measure); text-align: center; color: var(--muted); font-size: 12px; }
+.chapter-player .player-next {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: var(--tap);
+  max-width: var(--measure);
+  margin: 6px auto 0;
+  font-size: 14px;
+}
+.chapter .seed-image figcaption a { display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 6px; }

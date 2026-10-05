@@ -55,6 +55,19 @@ await check('chapter 32 renders', async () => {
   return r.status === 200 && r.body.includes('id="c32-b0"') ? null : `HTTP ${r.status} or missing c32-b0`;
 });
 
+await check('chapter 1 has the narration player and its audio and images load', async () => {
+  const r = await get('/chapter/1');
+  if (!r.body.includes('chapter-player')) return 'no player on the page';
+  const audio = r.body.match(/https:\/\/[^"]+\/narration\/[^"]+chapter-1-[0-9a-f]+\.m4a/)?.[0];
+  if (!audio) return 'no chapter audio URL';
+  const a = await fetch(audio, { method: 'HEAD' });
+  if (a.status !== 200 || !a.headers.get('content-type')?.startsWith('audio/')) return `audio HTTP ${a.status} ${a.headers.get('content-type')}`;
+  const img = r.body.match(/https:\/\/[^"]+\/images\/seed\/c1\/[^"]+\.jpg/)?.[0];
+  if (!img) return 'no seeded image';
+  const i = await fetch(img, { method: 'HEAD' });
+  return i.status === 200 ? null : `image HTTP ${i.status}`;
+});
+
 await check('about page carries attribution and no-token statement', async () => {
   const r = await get('/about');
   if (r.status !== 200) return `HTTP ${r.status}`;

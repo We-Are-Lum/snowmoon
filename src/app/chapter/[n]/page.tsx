@@ -6,7 +6,10 @@ import { blockId, chapterNumbers, loadChapter } from '~/lib/book';
 import { blockFacts, labelRange, type BlockFacts } from '~/lib/reading';
 import { figureMinWidth, renderMarkdown, renderScreen, screenBasePx } from '~/lib/render';
 import { DEFAULT_TEMPLATES } from '~/templates';
-import { WORK } from '~/lib/config';
+import { REPO_URL, WORK } from '~/lib/config';
+import { loadNarration } from '~/lib/narration';
+import { loadIllustrations } from '~/lib/illustrations';
+import { ChapterPlayer } from '~/components/chapter-player';
 import type { Block } from '~/lib/book';
 
 type Props = { params: Promise<{ n: string }> };
@@ -50,6 +53,9 @@ export default async function ChapterPage({ params }: Props) {
   if (!chapter) notFound();
   const facts = blockFacts(chapter.blocks);
   const scenes = sceneLabels(chapter.blocks, facts);
+  const narration = loadNarration(n);
+  const images = loadIllustrations(n);
+  const imageAt = new Map(images.map((im) => [im.idx, im]));
 
   return (
     <article className="page chapter" data-chapter={n} data-setting={facts.find((f) => f.setting)?.setting ?? undefined}>
@@ -81,9 +87,20 @@ export default async function ChapterPage({ params }: Props) {
           el = <Tag {...common} className={`block ${b.kind}`} dangerouslySetInnerHTML={{ __html: renderMarkdown(b) }} />;
         }
         const scene = scenes.get(b.idx);
+        const image = imageAt.get(b.idx);
         return (
           <Fragment key={id}>
             {el}
+            {image && (
+              <figure className="seed-image" data-for={id}>
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={image.url} alt={image.alt} width={image.width} height={image.height} loading="lazy" />
+                <figcaption className="block-caption">
+                  ¶ {f.label} · seeded image, a starting point ·{' '}
+                  <a href={`${REPO_URL}/blob/main/${image.recipe}`}>recipe</a>
+                </figcaption>
+              </figure>
+            )}
             {scene && <p className="scene-label">{scene}</p>}
           </Fragment>
         );
@@ -96,6 +113,17 @@ export default async function ChapterPage({ params }: Props) {
       <a className="provenance" href={chapter.source_url}>
         Text from the source edition, fetched {chapter.fetched_at} · GPL v3
       </a>
+      {narration && (
+        <ChapterPlayer
+          chapter={n}
+          chapters={WORK.chapters}
+          label={narration.label}
+          url={narration.url}
+          duration={narration.duration}
+          cues={narration.cues}
+          images={images.map(({ idx, url, alt }) => ({ idx, url, alt }))}
+        />
+      )}
     </article>
   );
 }
