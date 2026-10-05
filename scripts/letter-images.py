@@ -86,7 +86,8 @@ def main() -> None:
     for job_file in job_files:
         spec = json.loads(Path(job_file).read_text())
         for job in spec["jobs"]:
-            if not job.get("lettering"):
+            # Items another step drew (texture-sheets, composite-screens) are only recorded here.
+            if not [i for i in job.get("lettering", []) if not i.get("drawn_by")]:
                 continue
             folder = single.stem if single else f"chapter-{job['chapter']}"
             src = ROOT / "images-out" / folder / f"{job['id']}.png"
@@ -95,7 +96,7 @@ def main() -> None:
                 src = src.with_name(f"{job['id']}.graded.png")
             out = src.with_name(f"{job['id']}.lettered.png")
             base = Image.open(src).convert("RGBA")
-            for item in job["lettering"]:
+            for item in [i for i in job["lettering"] if not i.get("drawn_by")]:
                 draw_item(base, item)
             base.convert("RGB").save(out)
             job_rel = str(Path(job_file).relative_to(ROOT))
