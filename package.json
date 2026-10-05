@@ -16,7 +16,8 @@
     "publish:narration": "tsx --env-file-if-exists=.env.local scripts/publish-narration.ts",
     "seed:narration": "tsx --env-file-if-exists=.env.local scripts/seed-narration.ts",
     "publish:images": "tsx --env-file-if-exists=.env.local scripts/publish-images.ts",
-    "check:adaptations": "tsx scripts/check-adaptations.ts"
+    "check:adaptations": "tsx scripts/check-adaptations.ts",
+    "check:principles": "tsx --env-file-if-exists=.env.local scripts/check-principles.ts"
   },
   "license": "GPL-3.0-only",
   "description": "",

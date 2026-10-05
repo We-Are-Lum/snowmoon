@@ -132,6 +132,7 @@ runs the migration and permission tests in an in-memory Postgres.
 | `npm run check:shipped` | Verify a live deployment runs the expected commit, serves the reader, and its narration and images load |
 | `npm run publish:narration` | Upload the narration (per-block and per-chapter audio) to R2 and write `content/snowmoon/narration/` |
 | `npm run seed:narration` | Write narrations, segments, recipes and house narrations from that index (skips chapters already done) |
+| `npm run check:principles` | The automated checks for `docs/principles.md`, each proven to fail on a planted violation (`--url=` to target another deployment) |
 | `npm run check:adaptations` | Every block ID cited under `adaptations/` exists; seeds and folders match |
 | `npm run publish:images` | Upload the seeded key-moment images to R2 and write `content/snowmoon/illustrations/published.json` |
 

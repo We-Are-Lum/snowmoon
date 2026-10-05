@@ -284,3 +284,33 @@ I need to run the sql? If so, put the full text in a block for me to copy below
 ```text
 0003 is applied. Go ahead.
 ```
+
+```text
+Create docs/principles.md. For each principle below: the statement,
+a source link, what it means in this app, and how it is checked
+(a named automated test, or a review question). Mark each as an
+inference from public writing, not an endorsement.
+
+1. Every published generated asset has a public recipe.
+2. AI use is declared on every element. The book's text is never
+   altered, and nothing generated is presented as the author's.
+3. The model allowlist records each model's license and whether its
+   weights are open. Open-weight models are preferred. Report any
+   closed model in use.
+4. No model output is published without a signed-in person's action.
+5. Nothing is marked canon, official, or featured. Moderators can
+   hide and nothing else.
+6. Production pages make no third-party requests. Individual
+   ratings are not publicly readable. Only totals are.
+7. Payments never enter scoring or ordering. No token. The
+   "not affiliated" line stays on the first screen.
+8. Dzegoban, Minpentai, and in-world screens match the source.
+
+Add `npm run check:principles` running every automated check, each
+proven to fail on a planted violation. Tell me which of these the
+current code fails.
+
+From now on, end every task report with a "Principles" section:
+which ones the work touched, pass or concern, and any new tension.
+Raise a conflict before you resolve it.
+```
