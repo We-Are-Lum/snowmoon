@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import { sdk } from '@farcaster/miniapp-sdk';
 
-/** Like a saved card (+1 on the ratings scale). Signing in happens inside Farcaster. */
+/** Like a saved card (studio.likes; never a rating). Signing in happens inside Farcaster. */
 export function LikeButton({ versionId, initial }: { versionId: string; initial: number }) {
   const [likes, setLikes] = useState(initial);
   const [liked, setLiked] = useState(false);

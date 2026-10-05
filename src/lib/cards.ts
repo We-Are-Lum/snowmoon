@@ -9,7 +9,9 @@ import { quoteQuery, resolveQuote, type Quote } from './quote';
  * Saved quote cards (brief §4f, step 2). A saved card is a `text` element:
  * version 1 holds the quoted words and the card spec, an anchor ties it to the
  * passage, and its recipe records how the card is drawn, all in one transaction
- * (brief rule 1). A like is a +1 in `ratings` on the brief's −5…5 scale.
+ * (brief rule 1). Likes live in `studio.likes` (migration 0003), never in
+ * `ratings`: a like never enters rating normalization or the score, and "most
+ * liked" sorts by distinct likers (brief §6 rule 4).
  * The seeded image is recorded by id in the spec; it becomes a `uses` link when
  * images are elements (Milestone 4).
  */
@@ -120,12 +122,16 @@ function toCard(r: Row): SavedCard | null {
 
 const CARD_ROWS = `
   select v.id as version_id, e.created_by_fid, v.created_at, v.body,
-    (select count(*)::int from studio.ratings r where r.version_id = v.id and r.value > 0) as likes
+    (select count(*)::int from studio.likes l where l.version_id = v.id) as likes
   from studio.element_versions v
   join studio.elements e on e.id = v.element_id
   where e.work_id = $1 and e.element_type = 'text' and e.status = 'published' and v.body ? 'card'`;
 
-/** Saved cards, most liked first (ties: newest) or newest first. */
+/**
+ * Saved cards, most liked first (ties: newest) or newest first. Cards have no
+ * ratings yet, so "most liked" is the order (rule 4: where nothing in a list is
+ * ranked by ratings, order by likes).
+ */
 export async function listCards(sort: 'top' | 'new', limit = 60): Promise<SavedCard[]> {
   const sql = db();
   if (!sql) return [];
@@ -141,16 +147,15 @@ export async function getCard(versionId: string): Promise<SavedCard | null> {
   return row ? toCard(row) : null;
 }
 
-/** Like (+1) or unlike a saved card. Returns the new count and the caller's state. */
+/** Like or unlike a saved card. Returns the new count and the caller's state. */
 export async function setLike(versionId: string, fid: number, like: boolean): Promise<{ likes: number; liked: boolean }> {
   const sql = db();
   if (!sql) throw new CardError('Likes are not available here', 503);
   if (!(await getCard(versionId))) throw new CardError('No such card', 404);
   if (like) {
-    await sql`insert into studio.ratings ${sql({ version_id: versionId, fid, value: 1 })}
-      on conflict (version_id, fid) do update set value = 1, created_at = now()`;
+    await sql`insert into studio.likes ${sql({ version_id: versionId, fid })} on conflict (version_id, fid) do nothing`;
   } else {
-    await sql`delete from studio.ratings where version_id = ${versionId} and fid = ${fid}`;
+    await sql`delete from studio.likes where version_id = ${versionId} and fid = ${fid}`;
   }
   return likeState(versionId, fid);
 }
@@ -158,8 +163,8 @@ export async function setLike(versionId: string, fid: number, like: boolean): Pr
 export async function likeState(versionId: string, fid: number | null): Promise<{ likes: number; liked: boolean }> {
   const sql = db();
   if (!sql) return { likes: 0, liked: false };
-  const [r] = await sql<{ likes: number; mine: number | null }[]>`
-    select (select count(*)::int from studio.ratings where version_id = ${versionId} and value > 0) as likes,
-           (select value from studio.ratings where version_id = ${versionId} and fid = ${fid ?? -1}) as mine`;
-  return { likes: r.likes, liked: (r.mine ?? 0) > 0 };
+  const [r] = await sql<{ likes: number; mine: boolean }[]>`
+    select (select count(*)::int from studio.likes where version_id = ${versionId}) as likes,
+           exists (select 1 from studio.likes where version_id = ${versionId} and fid = ${fid ?? -1}) as mine`;
+  return { likes: r.likes, liked: r.mine };
 }
