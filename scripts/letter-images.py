@@ -16,12 +16,18 @@ version. scripts/publish-images.ts publishes both files and links this record.
 
 Run (image environment):
   .venv-image/bin/python scripts/letter-images.py
+  .venv-image/bin/python scripts/letter-images.py content/snowmoon/illustrations/adaptation-dog-dawn.json
+
+With a job file that is not a chapter's (an adaptation's panels), it letters
+that file's jobs from images-out/<stem>/ and writes the record to
+content/snowmoon/recipes/images/<stem>.lettering.json instead.
 """
 
 import glob
 import hashlib
 import json
 import subprocess
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -75,12 +81,15 @@ def main() -> None:
     script_dirty = bool(git("status", "--porcelain", "--", str(script)))
     records = []
     done = 0
-    for job_file in sorted(glob.glob(str(ROOT / "content/snowmoon/illustrations/chapter-*.json"))):
+    single = Path(sys.argv[1]).resolve() if len(sys.argv) > 1 else None
+    job_files = [str(single)] if single else sorted(glob.glob(str(ROOT / "content/snowmoon/illustrations/chapter-*.json")))
+    for job_file in job_files:
         spec = json.loads(Path(job_file).read_text())
         for job in spec["jobs"]:
             if not job.get("lettering"):
                 continue
-            src = ROOT / "images-out" / f"chapter-{job['chapter']}" / f"{job['id']}.png"
+            folder = single.stem if single else f"chapter-{job['chapter']}"
+            src = ROOT / "images-out" / folder / f"{job['id']}.png"
             out = src.with_name(f"{job['id']}.lettered.png")
             base = Image.open(src).convert("RGBA")
             for item in job["lettering"]:
@@ -94,8 +103,8 @@ def main() -> None:
                 "job_file": job_rel,
                 "job_file_commit": git("log", "-1", "--format=%H", "--", job_rel),
                 "lettering": job["lettering"],
-                "input": {"file": f"images-out/chapter-{job['chapter']}/{src.name}", "sha256": sha256(src), "role": "clean render, the starting point for a remix"},
-                "output": {"file": f"images-out/chapter-{job['chapter']}/{out.name}", "sha256": sha256(out)},
+                "input": {"file": f"images-out/{folder}/{src.name}", "sha256": sha256(src), "role": "clean render, the starting point for a remix"},
+                "output": {"file": f"images-out/{folder}/{out.name}", "sha256": sha256(out)},
             })
             print(f"{job['id']}: {len(job['lettering'])} items -> {out.name} ({sha256(out)[:12]})")
             done += 1
@@ -116,7 +125,7 @@ def main() -> None:
             "see": "config/models.json drafting; principle 3",
         },
     }
-    out_file = ROOT / "content/snowmoon/recipes/images/lettering.json"
+    out_file = ROOT / "content/snowmoon/recipes/images" / (f"{single.stem}.lettering.json" if single else "lettering.json")
     out_file.write_text(json.dumps(record, indent=2, ensure_ascii=False) + "\n")
     if script_dirty:
         print("warning: the script has uncommitted changes; commit it and re-run so the record names the code that ran")
