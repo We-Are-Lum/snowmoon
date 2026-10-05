@@ -276,3 +276,11 @@ Option A, with these changes:
    deploy code that reads the new table until I tell you 0003 is
    applied.
 ```
+
+```text
+I need to run the sql? If so, put the full text in a block for me to copy below
+```
+
+```text
+0003 is applied. Go ahead.
+```
