@@ -5,7 +5,8 @@ import { emptyBoard, liveCount, step, stepBack, withCell, withRock, type Board }
 import { STATES, findSymbols } from '~/lib/minpentai/symbol';
 import { c4b5Preset, impactPreset } from '~/lib/minpentai/presets';
 import { decodeBoard, encodeBoard } from '~/lib/minpentai/url';
-import { LESSONS } from '~/lib/minpentai/tutorial';
+import { SCREENS } from '~/lib/minpentai/tutorial';
+import { ILLO_H, ILLO_W, MATCH_FRAMES, illoVisible } from '~/lib/minpentai/illustration';
 import { TUTORIAL_TEXT as T } from '~/lib/minpentai/tutorial-text';
 
 /* Colours from the approved board (docs/design/direction-boards, section 1c). */
@@ -52,7 +53,7 @@ export function Sandbox() {
   useEffect(() => {
     const q = new URLSearchParams(window.location.search);
     const lesson = Number(q.get('lesson'));
-    if (Number.isInteger(lesson) && lesson >= 1 && lesson <= LESSONS.length) setMode({ kind: 'tutorial', lesson: lesson - 1 });
+    if (Number.isInteger(lesson) && lesson >= 1 && lesson <= SCREENS.length) setMode({ kind: 'tutorial', lesson: lesson - 1 });
     else if (q.get('s') || q.get('mode') === 'free') setMode({ kind: 'free' });
     else if (window.localStorage.getItem(DONE_KEY)) setMode({ kind: 'free' });
   }, []);
@@ -66,7 +67,7 @@ export function Sandbox() {
   };
 
   return mode.kind === 'tutorial'
-    ? <Tutorial key={mode.lesson} index={mode.lesson} onLesson={goLesson} onFree={goFree} />
+    ? <Tutorial key={mode.lesson} index={mode.lesson} onScreen={goLesson} onFree={goFree} />
     : <FreePlay initial={handover} onTutorial={() => goLesson(0)} />;
 }
 
@@ -230,24 +231,68 @@ function TimeControls({ playing, setPlaying, setBoard, turn, minTurn }: {
 
 /* ---------------- tutorial ---------------- */
 
-function Tutorial({ index, onLesson, onFree }: { index: number; onLesson: (i: number) => void; onFree: (from?: Board) => void }) {
-  const lesson = LESSONS[index];
-  const text: { title: string; text: string; invented?: boolean } = T.lessons[lesson.id];
-  const start = useMemo(() => lesson.build(), [lesson]);
-  const p = usePlayer(() => start, lesson.autoplay);
-  const { setSpeed } = p;
-  useEffect(() => setSpeed(lesson.speed), [lesson.speed, setSpeed]);
-  const [done, setDone] = useState(false);
+/** Colours for the illustration: you are cyan, your rival amber (the approved board's owner colours). */
+const OWNER = ['#46D7E8', '#FFB43A'] as const;
+const OWNER_DARK = ['#1F5F68', '#6E4E1C'] as const;
+
+function Tutorial({ index, onScreen, onFree }: { index: number; onScreen: (i: number) => void; onFree: (from?: Board) => void }) {
+  const screen = SCREENS[index];
+  const text: { title: string; text: string; button: string; caption?: string; invented?: boolean } = T.screens[screen.id];
+  const start = useMemo(() => screen.build(), [screen]);
+  const p = usePlayer(() => start, screen.autoplay);
+  const { setSpeed, setBoard, setPlaying } = p;
+  useEffect(() => setSpeed(screen.speed), [screen.speed, setSpeed]);
+
+  // Goal: met by the visitor ("you did it") or by the demo ("like that").
+  const [met, setMet] = useState<null | 'you' | 'demo'>(null);
+  const demoRunning = useRef(false);
+  const demoTimers = useRef<number[]>([]);
+  const pendingActions = useRef<((b: Board) => Board)[]>([]);
+  useEffect(() => () => demoTimers.current.forEach((t) => window.clearTimeout(t)), []);
   useEffect(() => {
-    if (!done && lesson.goal && lesson.goal({ board: p.board, start, playing: p.playing })) setDone(true);
-  }, [p.board, p.playing, done, lesson, start]);
-  const last = lesson.kind === 'handover';
+    if (!met && screen.goal && screen.goal({ board: p.board, start, playing: p.playing })) setMet(demoRunning.current ? 'demo' : 'you');
+  }, [p.board, p.playing, met, screen, start]);
+
+  const runDemo = () => {
+    const d = screen.demo;
+    if (!d) return;
+    if (demoRunning.current) {
+      // A second tap finishes the demo at once.
+      demoTimers.current.forEach((t) => window.clearTimeout(t));
+      demoTimers.current = [];
+      if (d.kind === 'play') { setPlaying(() => false); let b = p.board; for (let i = 0; i < 200 && !screen.goal!({ board: b, start, playing: true }); i++) b = step(b); setBoard(() => b); }
+      else { let b = p.board; for (const a of pendingActions.current) b = a(b); pendingActions.current = []; setBoard(() => b); }
+      return;
+    }
+    demoRunning.current = true;
+    if (d.kind === 'play') { setPlaying(() => true); return; }
+    setPlaying(() => false);
+    const actions: ((b: Board) => Board)[] =
+      d.kind === 'step'
+        ? Array.from({ length: d.count }, () => (b: Board) => (d.dir === 1 ? step(b) : b.turn <= 0 ? b : stepBack(b)))
+        : d.cells.map(([x, y]) => (b: Board) => withCell(b, x, y, true));
+    pendingActions.current = [...actions];
+    actions.forEach((_, i) => {
+      demoTimers.current.push(window.setTimeout(() => {
+        const a = pendingActions.current.shift();
+        if (a) setBoard((b) => a(b));
+      }, (i + 1) * d.ms));
+    });
+  };
+  const last = screen.kind === 'handover';
+  const onPrimary = () => {
+    if (last) return onFree(p.board);
+    if (screen.kind === 'read' || met) return onScreen(index + 1);
+    runDemo();
+  };
+  const primaryLabel = last ? text.button : screen.kind === 'read' || met ? T.next : text.button;
+  const status = met === 'you' ? T.youDidIt : met === 'demo' ? T.shown : '';
 
   return (
     <section className="mp-tutorial" aria-label={T.heading}>
       <div className="mp-lesson">
         <p className="mp-lesson-meta">
-          {T.lessonOf(index + 1, LESSONS.length)}
+          {T.heading} · {T.stepOf(index + 1, SCREENS.length)}
           {T.modelDrafted && <span className="mp-draft"> · {T.draftNote}</span>}
         </p>
         <h2>
@@ -257,48 +302,132 @@ function Tutorial({ index, onLesson, onFree }: { index: number; onLesson: (i: nu
         <p className="mp-lesson-text">{text.text}</p>
       </div>
 
-      <BoardView
-        board={p.board}
-        setBoard={p.setBoard}
-        playing={p.playing}
-        zoom={lesson.zoom}
-        view={lesson.view}
-        editable={lesson.editable}
-        ghost={lesson.ghost}
-      />
-      <TimeControls playing={p.playing} setPlaying={p.setPlaying} setBoard={p.setBoard} turn={p.board.turn} minTurn={0} />
+      {screen.stage === 'board' ? (
+        <>
+          <BoardView
+            board={p.board}
+            setBoard={p.setBoard}
+            playing={p.playing}
+            zoom={screen.zoom}
+            view={screen.view}
+            editable={screen.editable}
+            ghost={screen.ghost}
+          />
+          {text.caption && <p className="mp-caption">{text.caption}</p>}
+          {screen.kind === 'do' && (
+            <TimeControls playing={p.playing} setPlaying={p.setPlaying} setBoard={p.setBoard} turn={p.board.turn} minTurn={0} />
+          )}
+        </>
+      ) : (
+        <MatchIllustration mode={screen.id === 'hard' ? 'hard' : 'match'} />
+      )}
 
-      <div className="mp-goal" aria-live="polite">
-        {last ? (
-          <button type="button" className="mp-next" onClick={() => onFree(p.board)}>{T.startFreePlay}</button>
-        ) : lesson.kind === 'read' ? (
-          <button type="button" className="mp-next" onClick={() => onLesson(index + 1)}>{index === 0 ? T.begin : T.next}</button>
-        ) : done ? (
-          <>
-            <span className="mp-done">{T.done}</span>
-            <button type="button" className="mp-next" onClick={() => onLesson(index + 1)}>{T.next}</button>
-          </>
-        ) : null}
-      </div>
+      <p className="mp-status" aria-live="polite">{status}</p>
 
-      <nav className="mp-dots" aria-label={T.heading}>
-        {LESSONS.map((_, i) => (
-          <a
-            key={i}
-            href={`?lesson=${i + 1}`}
-            aria-label={T.dotLabel(i + 1, T.lessons[LESSONS[i].id].title)}
-            aria-current={i === index ? 'step' : undefined}
-            onClick={(e) => { e.preventDefault(); onLesson(i); }}
-          >
-            <span className={i === index ? 'dot on' : i < index ? 'dot past' : 'dot'} />
-          </a>
-        ))}
-      </nav>
-      <div className="mp-controls">
-        {!last && <button type="button" onClick={() => onLesson(index + 1)}>{T.skip}</button>}
-        <button type="button" onClick={() => onFree()}>{T.freePlay}</button>
+      <div className="mp-dock">
+        <div className="mp-dots" aria-hidden="true">
+          {SCREENS.map((s, i) => <span key={s.id} className={i === index ? 'dot on' : i < index ? 'dot past' : 'dot'} />)}
+        </div>
+        <button type="button" className="mp-one" onClick={onPrimary}>{primaryLabel}</button>
+        <div className="mp-dock-row">
+          <label className="mp-jump">
+            <span className="mp-visually-hidden">{T.jumpTo}</span>
+            <select value={index} onChange={(e) => onScreen(Number(e.target.value))} aria-label={T.jumpTo}>
+              {SCREENS.map((s, i) => <option key={s.id} value={i}>{T.dotLabel(i + 1, T.screens[s.id].title)}</option>)}
+            </select>
+          </label>
+          {!last && <button type="button" className="mp-quiet" onClick={() => onFree()}>{T.freePlay}</button>}
+        </div>
       </div>
     </section>
+  );
+}
+
+/** The full-match illustration, frame by frame, or (for "hard") its fogged opening frame with the four reasons. */
+function MatchIllustration({ mode }: { mode: 'match' | 'hard' }) {
+  const [frame, setFrame] = useState(0);
+  const reduced = useRef(false);
+  useEffect(() => {
+    reduced.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (mode !== 'match' || reduced.current) return;
+    const id = window.setInterval(() => setFrame((f) => (f + 1) % MATCH_FRAMES.length), 2600);
+    return () => window.clearInterval(id);
+  }, [mode]);
+  const f = MATCH_FRAMES[mode === 'hard' ? 0 : frame];
+  const canvasRef = useRef<HTMLCanvasElement>(null);
+  const wrapRef = useRef<HTMLDivElement>(null);
+  const [px, setPx] = useState(358);
+  useEffect(() => {
+    const el = wrapRef.current;
+    if (!el) return;
+    const ro = new ResizeObserver(() => setPx(Math.floor(el.clientWidth)));
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+  useEffect(() => {
+    const c = canvasRef.current;
+    if (!c) return;
+    const cell = px / ILLO_W, h = cell * ILLO_H, dpr = window.devicePixelRatio || 1;
+    c.width = Math.round(px * dpr); c.height = Math.round(h * dpr);
+    const ctx = c.getContext('2d')!;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    ctx.fillStyle = FIELD; ctx.fillRect(0, 0, px, h);
+    const at = new Map(f.cells.map((k) => [`${k.x},${k.y}`, k]));
+    for (let y = 0; y < ILLO_H; y++) for (let x = 0; x < ILLO_W; x++) {
+      const X = x * cell, Y = y * cell;
+      if (!illoVisible(f, x, y)) {
+        // Fog: the approved board's dotted dark.
+        if ((x + y) % 2 === 0) { ctx.fillStyle = '#17181D'; ctx.fillRect(X + cell / 2 - 1, Y + cell / 2 - 1, 2, 2); }
+        continue;
+      }
+      ctx.fillStyle = CELL_BG; ctx.fillRect(X, Y, cell, cell);
+      if (cell >= 6) { ctx.fillStyle = GRID; ctx.fillRect(X, Y, cell, 1); ctx.fillRect(X, Y, 1, cell); }
+      const k = at.get(`${x},${y}`);
+      if (!k) continue;
+      if (k.kind === 'wall') { ctx.fillStyle = OWNER_DARK[k.owner]; ctx.fillRect(X, Y, cell, cell); }
+      else if (k.kind === 'sym') { ctx.fillStyle = OWNER[k.owner]; ctx.fillRect(X, Y, cell, cell); }
+      else if (k.kind === 'live') { ctx.fillStyle = OWNER[k.owner]; ctx.fillRect(X + cell / 6, Y + cell / 6, cell - cell / 3, cell - cell / 3); }
+      else { ctx.fillStyle = 'rgba(108,109,120,.7)'; const g = cell / 3; ctx.fillRect(X + g, Y + g, cell - 2 * g, cell - 2 * g); }
+    }
+    ctx.setLineDash([Math.max(3, cell / 2), Math.max(2, cell / 3)]);
+    ctx.lineWidth = Math.max(1.5, cell / 6);
+    for (const s of f.symbols) {
+      if (!illoVisible(f, s.x + 1, s.y + 1)) continue;
+      ctx.strokeStyle = OWNER[s.owner];
+      ctx.strokeRect((s.x - 1) * cell, (s.y - 1) * cell, 5 * cell, 5 * cell);
+    }
+    if (f.zone) {
+      ctx.strokeStyle = 'rgba(231,228,221,.7)';
+      ctx.lineWidth = Math.max(1, cell / 8);
+      ctx.strokeRect(f.zone.x * cell, f.zone.y * cell, f.zone.w * cell, f.zone.h * cell);
+    }
+    ctx.setLineDash([]);
+  }, [f, px]);
+
+  return (
+    <div className="mp-illo">
+      <div className="mp-board">
+        <div className="mp-strip">
+          <span>{T.illustrationTag}</span>
+          {mode === 'match' && <span>{frame + 1} / {MATCH_FRAMES.length}</span>}
+        </div>
+        <div ref={wrapRef} className="mp-canvas-wrap">
+          <canvas
+            ref={canvasRef}
+            className="mp-canvas"
+            style={{ width: px, height: Math.round((px / ILLO_W) * ILLO_H) }}
+            role="img"
+            aria-label={mode === 'match' ? T.matchFrames[f.caption] : T.hardReasons.join(' ')}
+            onClick={() => mode === 'match' && setFrame((x) => (x + 1) % MATCH_FRAMES.length)}
+          />
+        </div>
+      </div>
+      {mode === 'match' ? (
+        <p className="mp-caption mp-frame-caption" aria-live="polite">{T.matchFrames[f.caption]}</p>
+      ) : (
+        <ul className="mp-reasons">{T.hardReasons.map((r) => <li key={r}>{r}</li>)}</ul>
+      )}
+    </div>
   );
 }
 

@@ -82,24 +82,38 @@ Copies of the rule without the rotation clause, or with its phases swapped, fail
 
 ## Tutorial
 
-A first visit to `/minpentai` opens a ten-lesson tutorial. Free play is one tap away on every lesson, and the browser remembers once the tutorial is finished or skipped. `?lesson=N` links straight to lesson N, and `?mode=free` or a shared board (`?s=…`) opens free play. In the tutorial, stepping back stops at turn 0.
+A first visit to `/minpentai` opens an 11-screen tutorial, redesigned from `minpentai-tutorial-design-prompt.md`.
 
-- **Wording:** all of it is in `src/lib/minpentai/tutorial-text.ts`, keyed by lesson id. It is marked model-drafted, and the page shows "Draft wording" until `modelDrafted` is set to false. What it says about the game itself comes only from chapters 2–4, and the file cites the blocks.
-- **Lessons:** each lesson's preset, view and goal are in `src/lib/minpentai/tutorial.ts`.
+**One button.** A bar pinned to the bottom of the screen holds the progress dots, one main button, a jump menu, and a quiet "Skip to free play".
+- On reading screens the button says Next.
+- On hands-on screens it says what it will do ("Show me", "Play it", "Draw it for me", "Fire it"), then performs the screen's demo at a watchable pace. A second tap during a demo finishes it at once.
+- When the goal is met, by the visitor or the demo, the button says Next.
+- Tapping only that button takes a visitor from the first screen to free play in 17 taps, about 18 seconds.
 
-| # | Lesson | Kind | Goal |
+**Navigation.** The browser remembers once the tutorial is finished or skipped. `?lesson=N` opens screen N. `?mode=free` or a shared board (`?s=…`) opens free play. In the tutorial, stepping back stops at turn 0.
+
+**Wording.** All of it is in `src/lib/minpentai/tutorial-text.ts`, keyed by screen id, with the book blocks behind each claim. It is marked model-drafted, and the page shows "Draft wording" until `modelDrafted` is set to false. Nothing comes from beyond chapter 4.
+
+**Screens.** Defined in `src/lib/minpentai/tutorial.ts`. "Read" screens have no goal; the hands-on goals and demos are below.
+
+| # | Screen | What happens | Goal; demo |
 |---|---|---|---|
-| 1 | What is Minpentai? | read | None. The book's board plays on its own. |
-| 2 | One cell | do | Four turns forward |
-| 3 | Time runs backward | do | Back to turn 0; the lesson starts at turn 4 |
-| 4 | A glider | do | Sixteen turns on, with a glider still travelling |
-| 5 | Build one | do | A glider detected; the outline sits where the shape works at turn 0 |
-| 6 | A rock | do | The glider detected travelling back down, from turn 29 |
-| 7 | Your symbol | do | Paused or stepped onto a framed turn (22, 23, 26 or 27). The lesson starts at turn 14 and plays at two turns a second. |
-| 8 | How a match is played | read | None. Four framed symbols. |
-| 9 | How you win | do | No symbol left. A glider strikes a symbol, which is gone from turn 18 for good. |
-| 10 | The book's board | handover | None. It hands the c4-b5 board over to free play. |
+| 1 | A game a whole country watches | The stadium, the crowd, the priests' secret rule. The book's board plays. | None |
+| 2 | Your season | Last year of school tournaments; the nationals and prize money. Your symbol cycles. | None |
+| 3 | The board is alive | A lone cell hops and comes home | Four turns forward; four steps |
+| 4 | Time runs both ways | Every move can be undone, so no wall is invincible. Starts at turn 4. | Turn 0; four steps back |
+| 5 | The glider | Your main tool | Sixteen turns of travel; plays |
+| 6 | Build one | Tap four outlined cells | A glider detected; taps the outline |
+| 7 | Rocks (invented) | Gliders bounce off rocks | Glider travelling back down; plays |
+| 8 | Your symbol (invented) | Sight, protect and hunt; formed against a rock | Paused on a framed turn; steps to turn 22 |
+| 9 | A full match | Five-frame illustration in the board's style, labelled not playable: setup in the dark, spreading, an intervention turn, the clash, the rival out. Frames from `src/lib/minpentai/illustration.ts`. | None |
+| 10 | Why it is hard | Four reasons: sight, rare turns to act, changing rules, no invincible wall | None |
+| 11 | The book's own board | The c4-b5 board plays; "Start playing" hands it to free play | None |
 
 **Tests.**
-- `npx tsx scripts/test-minpentai-tutorial.ts` runs a scripted solution for every goal and checks that none fires early. That includes three of four cells, the outline shifted by one, and playing straight through lesson 7.
-- In a browser at 390px with touch, the whole tutorial was played by taps, in light and dark mode. Lesson 7 was caught with a 300ms reaction after the frame appeared.
+- `npx tsx scripts/test-minpentai-tutorial.ts` runs every screen's demo through the engine and checks that the goal is met on exactly the expected move and not before. It also checks near misses, the illustration's frames against their captions, and the text rules.
+- In a browser at 390px with touch, in light and dark mode:
+  - a one-button run reaches free play;
+  - a self-solved screen says "You did it", and a double tap finishes a demo;
+  - the main button is always in view, and nothing sticks out past the right edge;
+  - the illustration advances, and holds still under reduced motion.

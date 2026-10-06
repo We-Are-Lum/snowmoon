@@ -1,73 +1,75 @@
 /**
- * Tutorial lessons: a tiny preset, a view, and either a goal the engine detects
- * ("do"), nothing to do but read ("read"), or the hand-over to free play. Pure.
- * Wording lives in tutorial-text.ts, keyed by lesson id.
+ * Tutorial screens. Pure. Wording lives in tutorial-text.ts, keyed by screen id.
  * Tests: scripts/test-minpentai-tutorial.ts.
+ *
+ * One button moves the visitor through every screen. On "read" screens it goes to
+ * the next screen. On "do" screens it runs the screen's demo (the scripted
+ * solution) at a watchable pace if the visitor has not met the goal, and then goes
+ * on. On the last screen it starts free play.
  */
-import { emptyBoard, stamp, step, type Board } from './engine';
+import { emptyBoard, stamp, step, stepBack, type Board } from './engine';
 import { findGliders } from './glider';
 import { SYMBOL_ROWS, findSymbols } from './symbol';
 import { c4b5Preset, impactPreset } from './presets';
 
 export const GLIDER = ['.##.', '#..#'] as const;
-/** Where the build lesson's outline sits: a position where this shape is a working glider at turn 0. */
+/** Where the build screen's outline sits: a position where this shape is a working glider at turn 0. */
 export const BUILD_AT = [23, 15] as const;
 
 export interface GoalContext {
   board: Board;
-  /** The lesson's starting board. */
+  /** The screen's starting board. */
   start: Board;
   playing: boolean;
 }
 
-export type LessonId = 'what' | 'one-cell' | 'backward' | 'glider' | 'build' | 'rock' | 'symbol' | 'match' | 'win' | 'book';
+/** The scripted solution the one button runs on a "do" screen. */
+export type Demo =
+  | { kind: 'step'; dir: 1 | -1; count: number; ms: number }
+  | { kind: 'play' }
+  | { kind: 'tap'; cells: [number, number][]; ms: number };
 
-export interface Lesson {
-  id: LessonId;
-  /** read: nothing to do, Next is shown at once. do: Next appears when the goal is met. handover: ends the tutorial. */
+export type ScreenId = 'arena' | 'you' | 'alive' | 'backward' | 'glider' | 'build' | 'rock' | 'symbol' | 'match' | 'hard' | 'book';
+
+export interface Screen {
+  id: ScreenId;
+  /** read: Next at once. do: a goal, and a demo the button runs. handover: starts free play. */
   kind: 'read' | 'do' | 'handover';
+  /** What sits in the board slot: the live board, or the full-match illustration. */
+  stage: 'board' | 'illustration';
   build: () => Board;
   zoom: 1 | 2 | 3;
   /** Top-left cell of the view when zoomed. */
   view: { x: number; y: number };
   /** Turns per second while playing. */
   speed: number;
-  /** Start playing as soon as the lesson opens. */
   autoplay?: boolean;
   /** Faint outline of cells to tap. */
   ghost?: [number, number][];
-  /** Editing allowed while paused. */
   editable: boolean;
   goal?: (c: GoalContext) => boolean;
+  demo?: Demo;
 }
 
 const ghostOf = (rows: readonly string[], x: number, y: number) =>
   rows.flatMap((r, j) => [...r].flatMap((ch, i) => (ch === '#' ? [[x + i, y + j] as [number, number]] : [])));
+const buildGhost = ghostOf(GLIDER, BUILD_AT[0], BUILD_AT[1]);
 
-/** A symbol and a glider that strikes it head on: the symbol is gone from turn 18, for good. */
-export function destroyPreset(): Board {
-  return stamp(stamp(emptyBoard(), SYMBOL_ROWS, 24, 14), GLIDER, 23, 27);
-}
-
-/** Copies of the symbol, each framed: what a player starts a match with. */
-export function symbolsPreset(): Board {
-  let b = emptyBoard();
-  for (const [x, y] of [[8, 8], [36, 6], [20, 22], [40, 24]] as const) b = stamp(b, SYMBOL_ROWS, x, y);
-  return b;
-}
-
-export const LESSONS: Lesson[] = [
-  // What Minpentai is. The book's board plays while you read.
-  { id: 'what', kind: 'read', build: () => c4b5Preset(), zoom: 2, view: { x: 0, y: 0 }, speed: 6, autoplay: true, editable: false },
-  // One cell: step forward four times.
+export const SCREENS: Screen[] = [
+  // The hook: the book's board plays, as it would on the stadium screen.
+  { id: 'arena', kind: 'read', stage: 'board', build: () => c4b5Preset(), zoom: 2, view: { x: 0, y: 0 }, speed: 6, autoplay: true, editable: false },
+  // Your motive: your symbol alone, quietly cycling and staying framed.
+  { id: 'you', kind: 'read', stage: 'board', build: () => stamp(emptyBoard(), SYMBOL_ROWS, 23, 14), zoom: 3, view: { x: 16, y: 10 }, speed: 2, autoplay: true, editable: false },
+  // The board is alive: a lone cell hops and comes home in four turns.
   {
-    id: 'one-cell', kind: 'do', build: () => stamp(emptyBoard(), ['#'], 24, 16),
+    id: 'alive', kind: 'do', stage: 'board', build: () => stamp(emptyBoard(), ['#'], 24, 16),
     zoom: 3, view: { x: 16, y: 11 }, speed: 2, editable: false,
     goal: ({ board, start }) => board.turn - start.turn >= 4,
+    demo: { kind: 'step', dir: 1, count: 4, ms: 550 },
   },
-  // Time runs backward: step back to turn 0. Starts four turns in; the tutorial stops at turn 0.
+  // Time runs both ways: starts four turns in; back to turn 0 (stepping back stops there).
   {
-    id: 'backward', kind: 'do',
+    id: 'backward', kind: 'do', stage: 'board',
     build: () => {
       let b = stamp(emptyBoard(), ['#.#', '.##', '#..'], 22, 14);
       for (let i = 0; i < 4; i++) b = step(b);
@@ -75,31 +77,34 @@ export const LESSONS: Lesson[] = [
     },
     zoom: 3, view: { x: 16, y: 11 }, speed: 4, editable: false,
     goal: ({ board }) => board.turn === 0,
+    demo: { kind: 'step', dir: -1, count: 4, ms: 550 },
   },
-  // A glider: let it travel sixteen turns, which moves it eight cells.
+  // The glider: sixteen turns of travel.
   {
-    id: 'glider', kind: 'do', build: () => stamp(emptyBoard(), GLIDER, 23, 25),
+    id: 'glider', kind: 'do', stage: 'board', build: () => stamp(emptyBoard(), GLIDER, 23, 25),
     zoom: 1, view: { x: 0, y: 0 }, speed: 8, editable: false,
     goal: ({ board, start }) => board.turn - start.turn >= 16 && findGliders(board).length > 0,
+    demo: { kind: 'play' },
   },
-  // Build one: tap the outlined cells; done when a glider is detected.
+  // Build one: tap the outlined cells.
   {
-    id: 'build', kind: 'do', build: () => emptyBoard(),
+    id: 'build', kind: 'do', stage: 'board', build: () => emptyBoard(),
     zoom: 3, view: { x: BUILD_AT[0] + 2 - 8, y: BUILD_AT[1] + 1 - 5 }, speed: 8, editable: true,
-    ghost: ghostOf(GLIDER, BUILD_AT[0], BUILD_AT[1]),
+    ghost: buildGhost,
     goal: ({ board }) => findGliders(board).length > 0,
+    demo: { kind: 'tap', cells: buildGhost, ms: 380 },
   },
-  // A rock: fire the glider at it; done once it is travelling back the other way.
+  // Rocks (invented): done once the glider is travelling back down.
   {
-    id: 'rock', kind: 'do', build: () => stamp(stamp(emptyBoard(), ['#'], 24, 12, 'rock'), GLIDER, 23, 25),
+    id: 'rock', kind: 'do', stage: 'board', build: () => stamp(stamp(emptyBoard(), ['#'], 24, 12, 'rock'), GLIDER, 23, 25),
     zoom: 1, view: { x: 0, y: 0 }, speed: 8, editable: false,
     goal: ({ board }) => findGliders(board).some((g) => g.dy === 1),
+    demo: { kind: 'play' },
   },
-  // Your symbol: paused (or stepped) on a turn where the symbol is framed.
-  //   Starts at turn 14, eight turns before the symbol first forms (turns 22–23 and
-  //   26–27). Slowed to two turns a second so a thumb can catch it; stepping counts too.
+  // Your symbol (invented shape): paused or stepped onto a framed turn. Starts at
+  // turn 14; framed on 22–23 and 26–27; two turns a second; the demo steps to 22.
   {
-    id: 'symbol', kind: 'do',
+    id: 'symbol', kind: 'do', stage: 'board',
     build: () => {
       let b = impactPreset();
       for (let i = 0; i < 14; i++) b = step(b);
@@ -107,17 +112,27 @@ export const LESSONS: Lesson[] = [
     },
     zoom: 2, view: { x: 12, y: 13 }, speed: 2, editable: false,
     goal: ({ board, playing }) => !playing && findSymbols(board).length > 0,
+    demo: { kind: 'step', dir: 1, count: 8, ms: 350 },
   },
-  // How a match is played: copies of the symbol on the board.
-  { id: 'match', kind: 'read', build: () => symbolsPreset(), zoom: 1, view: { x: 0, y: 0 }, speed: 4, editable: false },
-  // How you win: send a glider into a symbol; done when no symbol is left.
-  {
-    id: 'win', kind: 'do', build: () => destroyPreset(),
-    zoom: 2, view: { x: 12, y: 12 }, speed: 6, editable: false,
-    goal: ({ board }) => findSymbols(board).length === 0,
-  },
-  // The book's board: hand over to free play.
-  { id: 'book', kind: 'handover', build: () => c4b5Preset(), zoom: 2, view: { x: 0, y: 0 }, speed: 8, editable: false },
+  // A full match, illustrated (not playable here).
+  { id: 'match', kind: 'read', stage: 'illustration', build: () => emptyBoard(), zoom: 1, view: { x: 0, y: 0 }, speed: 1, editable: false },
+  // Why it's hard: four short reasons over the fogged illustration.
+  { id: 'hard', kind: 'read', stage: 'illustration', build: () => emptyBoard(), zoom: 1, view: { x: 0, y: 0 }, speed: 1, editable: false },
+  // The book's own board, playing; then free play.
+  { id: 'book', kind: 'handover', stage: 'board', build: () => c4b5Preset(), zoom: 2, view: { x: 0, y: 0 }, speed: 8, autoplay: true, editable: false },
 ];
 
-export const lessonIndex = (id: LessonId) => LESSONS.findIndex((l) => l.id === id);
+export const screenIndex = (id: ScreenId) => SCREENS.findIndex((s) => s.id === id);
+
+/** Applies a demo to a board without timing: the list of boards after each action. For tests. */
+export function demoBoards(screen: Screen, from: Board): { board: Board; playing: boolean }[] {
+  const d = screen.demo!;
+  const out: { board: Board; playing: boolean }[] = [];
+  let b = from;
+  if (d.kind === 'step') for (let i = 0; i < d.count; i++) { b = d.dir === 1 ? step(b) : stepBackSafe(b); out.push({ board: b, playing: false }); }
+  if (d.kind === 'tap') for (const [x, y] of d.cells) { b = stamp(b, ['#'], x, y); out.push({ board: b, playing: false }); }
+  if (d.kind === 'play') for (let i = 0; i < 200; i++) { b = step(b); out.push({ board: b, playing: true }); }
+  return out;
+}
+
+const stepBackSafe = (b: Board) => (b.turn <= 0 ? b : stepBack(b));

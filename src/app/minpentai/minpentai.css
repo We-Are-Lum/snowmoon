@@ -113,3 +113,65 @@
 .mp-dots .dot.past { background: var(--muted); border-color: var(--muted); }
 .mp-dots .dot.on { background: var(--ink); }
 .mp-controls button:disabled { opacity: 0.4; cursor: default; }
+
+/* One-button tutorial: the dock stays at the bottom of the screen, in thumb reach. */
+.mp-tutorial { padding-bottom: 8px; }
+.mp-caption { margin: 6px 0 0; font-family: var(--label); font-size: 12px; letter-spacing: 0.06em; color: var(--muted); }
+.mp-frame-caption { font-family: var(--reading); font-size: 18px; letter-spacing: 0; line-height: 1.45; color: var(--ink); min-height: 4.4em; }
+.mp-status { margin: 8px 0 0; min-height: 1.5em; font-family: var(--label); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; }
+.mp-reasons { margin: 10px 0 0; padding: 0; list-style: none; display: grid; gap: 6px; }
+.mp-reasons li { padding: 8px 12px; border-left: 3px solid #46D7E8; background: var(--quote-bg); font-size: 18px; line-height: 1.4; }
+.mp-dock {
+  position: sticky;
+  bottom: 0;
+  z-index: 2;
+  margin: 12px -16px 0;
+  padding: 4px 16px max(10px, env(safe-area-inset-bottom));
+  background: var(--paper);
+  border-top: 1px solid var(--rule);
+  display: grid;
+  gap: 4px;
+}
+.mp-one {
+  min-height: 52px;
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--label);
+  font-size: 14px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.mp-quiet {
+  min-height: var(--tap);
+  border: 0;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--label);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+@media (prefers-reduced-motion: reduce) { .mp-one { transition: none; } }
+.mp-dock .mp-dots { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; padding: 6px 0 2px; }
+.mp-dock .mp-dots .dot { width: 8px; height: 8px; }
+.mp-dock-row { display: flex; gap: 8px; align-items: center; }
+.mp-jump { flex: 1; min-width: 0; }
+.mp-jump select {
+  width: 100%;
+  min-height: var(--tap);
+  padding: 0 8px;
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--label);
+  font-size: 12px;
+}
+.mp-dock-row .mp-quiet { flex: none; }
+.mp-visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
