@@ -692,11 +692,11 @@ add({
 // The app reaches the database only as studio_writer (STUDIO_DATABASE_URL).
 // Keys that bypass row-level security, or connect as the database owner, must
 // not sit on the Vercel project at all (owner decision, Oct 5, 2026).
-const FORBIDDEN_VARS = /^(SUPABASE_SERVICE_ROLE_KEY|SUPABASE_JWT_SECRET|POSTGRES_[A-Z0-9_]*)$/;
+const FORBIDDEN_VARS = /^(SUPABASE_SERVICE_ROLE_KEY|SUPABASE_SECRET_KEY|SUPABASE_JWT_SECRET|POSTGRES_[A-Z0-9_]*)$/;
 add({
   id: 'P6d',
   principle: 6,
-  name: 'the Vercel project holds no service-role key, JWT secret or POSTGRES_* variable (names only)',
+  name: 'the Vercel project holds no service-role or secret key, JWT secret or POSTGRES_* variable (names only)',
   load: async () => {
     // Names only: `vercel env ls` prints names and masks values; nothing else is read.
     try {
