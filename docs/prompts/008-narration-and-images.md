@@ -468,3 +468,26 @@ not from a dark room.
 
 Cap of $1. Show me the sheet and stop.
 ```
+
+```text
+Build a first-visit intro. Start once the comic work is at a clean
+commit.
+
+1. Content lives in one file: five cards, each with a title, one
+   sentence, an image reference, and a status of "live" or
+   "coming". Mark the text model-drafted until I edit it.
+2. Show it once, on the home page only. Skip on every card.
+   Remember it on the device with no cookies or account. A link
+   that opens a specific passage, card, or adaptation goes
+   straight there, with a small "What is this?" link instead.
+3. Render the same content as a section of /about.
+4. A check fails if a card marked "live" points at something that
+   does not exist. The independent and no-token line stays on
+   card 1.
+5. Build the structure and checks now, and style it when Design's
+   cards arrive.
+6. Also write docs/proposals/favourites.md: how a person's chosen
+   designs and styles would apply by default to what they create,
+   affecting nobody else, with nothing marked official. Propose
+   only.
+```

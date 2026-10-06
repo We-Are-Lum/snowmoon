@@ -14,6 +14,7 @@
  *   their setting: #2E5A3A Veridia, #B3306E Dzego, ink otherwise.
  * - The first screen says: independent adaptation, not affiliated with the author, no token.
  */
+import { readFileSync } from 'node:fs';
 import { chromium, type Page } from 'playwright-core';
 
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
@@ -82,6 +83,44 @@ async function checkFloors(page: Page, path: string, scheme: string) {
 
 const browser = await chromium.launch({ channel: 'chrome' });
 try {
+  // First-visit intro (config/intro.json): once, home page only, Skip on every
+  // card, remembered on the device without cookies; deep links go straight in.
+  {
+    const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+    const page = await ctx.newPage();
+    await page.goto(BASE + '/', { waitUntil: 'networkidle' });
+    const cards = (JSON.parse(readFileSync('config/intro.json', 'utf8')).cards as { id: string }[]).map((c) => c.id);
+    for (let i = 0; i < cards.length; i++) {
+      const card = page.locator('.intro-card');
+      if (!(await card.isVisible())) { fail(`intro: card ${i + 1} is not showing on a first visit to /`); break; }
+      if ((await card.getAttribute('data-card')) !== cards[i]) fail(`intro: card ${i + 1} is ${await card.getAttribute('data-card')}, not ${cards[i]}`);
+      if (!(await page.locator('.intro-skip').isVisible())) fail(`intro: card ${i + 1} has no Skip`);
+      if (i < cards.length - 1) await page.getByRole('button', { name: 'Next' }).click();
+    }
+    await page.locator('.intro-skip').click();
+    await page.reload({ waitUntil: 'networkidle' });
+    if (await page.locator('.intro-card').isVisible()) fail('intro: shown again after it was skipped');
+    const cookies = await ctx.cookies(BASE);
+    if (cookies.length) fail(`intro: the site set cookies: ${cookies.map((c) => c.name).join(', ')}`);
+    await page.goto(BASE + '/chapter/1', { waitUntil: 'networkidle' });
+    if (await page.locator('.what-is-this').isVisible()) fail('intro: "What is this?" still shown after the intro was seen');
+    await ctx.close();
+  }
+  {
+    const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+    const page = await ctx.newPage();
+    await page.goto(BASE + '/chapter/1', { waitUntil: 'networkidle' });
+    if (await page.locator('.intro-card').count()) fail('intro: shown on a deep link (/chapter/1)');
+    const link = page.locator('.what-is-this');
+    if (!(await link.isVisible())) fail('intro: a first visit to /chapter/1 has no "What is this?" link');
+    else if ((await link.getAttribute('href')) !== '/about#intro') fail('intro: "What is this?" does not point at /about#intro');
+    await page.goto(BASE + '/about', { waitUntil: 'networkidle' });
+    const n = await page.locator('#intro li[data-card]').count();
+    if (n !== 5) fail(`intro: /about shows ${n} intro cards, not 5`);
+    if (await page.locator('.intro-card').count()) fail('intro: shown on /about');
+    await ctx.close();
+  }
+
   for (const scheme of ['light', 'dark'] as const) {
     const page = await browser.newPage({ viewport: { width: 390, height: 844 }, colorScheme: scheme });
     // tsx keeps function names with a __name helper that the page does not have.

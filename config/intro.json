@@ -1,0 +1,50 @@
+{
+  "about": "The first-visit intro: five cards, shown once on the home page and as a section of /about. Each card has a title, one sentence, an image reference and a status: 'live' (it points at something that exists now) or 'coming'. Card 1 must keep the independence and no-token line (npm run check:intro). Images are references: 'published:<id>' is a seeded image in content/snowmoon/illustrations/published.json; Design's cards will replace them.",
+  "version": "v1",
+  "model_drafted": true,
+  "model_drafted_note": "Drafted by the coding agent (Claude, a closed model) on Oct 6, 2026. Shown labelled as model-drafted until the owner edits it; set model_drafted to false, with edited_by_fid and edited_on, when they do.",
+  "edited_by_fid": null,
+  "edited_on": null,
+  "cards": [
+    {
+      "id": "edition",
+      "title": "An open Snowmoon",
+      "sentence": "An independent, illustrated edition of Vitalik Buterin's novel, not affiliated with the author, and there is no token.",
+      "image": "published:c1-b005-toy-drone",
+      "status": "live",
+      "href": "/about"
+    },
+    {
+      "id": "read",
+      "title": "Read and listen",
+      "sentence": "Read every chapter as written, with a synthetic narration that follows along paragraph by paragraph.",
+      "image": "published:c3-b092-booth",
+      "status": "live",
+      "href": "/chapter/1"
+    },
+    {
+      "id": "share",
+      "title": "Share a passage",
+      "sentence": "Choose a passage and an image to make a quote card, then cast it or save it to the gallery.",
+      "image": "published:c14-b085-walled-ship",
+      "status": "live",
+      "href": "/cards"
+    },
+    {
+      "id": "adapt",
+      "title": "Adaptations",
+      "sentence": "Read briefs for retelling scenes from the book, with every detail cited to the passage it comes from.",
+      "image": "published:c30-b048-drones-surge",
+      "status": "live",
+      "href": "/adaptations"
+    },
+    {
+      "id": "make",
+      "title": "Make your own",
+      "sentence": "Soon you will be able to propose images and write lines of your own, published under GPL-3.0 with your name.",
+      "image": "published:c31-b002-mountain-stair",
+      "status": "coming",
+      "href": null
+    }
+  ]
+}
