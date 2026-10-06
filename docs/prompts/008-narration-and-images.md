@@ -491,3 +491,9 @@ commit.
    affecting nobody else, with nothing marked official. Propose
    only.
 ```
+
+```text
+Instead of the intro stuff at the top of the about section. I want a "replay intro screens" link at the top of the info page
+
+Also, I think a very key aspect of this intro section is that we are building upon Vitalik's novel and his license allows us to do that in a very specific way. The reason that we are having the read and listen and like the overlay over top is to help us build on top of it and to connect the text to expansions like adaptations or audiovisual expansions and this app makes it easy to build upon the book that Vitalik wanted us to build upon.
+```

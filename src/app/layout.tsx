@@ -2,7 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Crimson_Pro, DM_Mono, Instrument_Sans } from 'next/font/google';
 import { MiniappBar } from '~/components/miniapp-bar';
 import { WhatIsThis } from '~/components/first-visit';
-import { rawIntro } from '~/lib/intro';
+import { loadIntro } from '~/lib/intro';
 import { APP_NAME, appUrl } from '~/lib/config';
 import './globals.css';
 
@@ -46,7 +46,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${crimson.variable} ${dmMono.variable} ${instrument.variable}`}>
       <body>
         <MiniappBar />
-        <WhatIsThis version={rawIntro().version} />
+        <WhatIsThis intro={loadIntro()} />
         <main>{children}</main>
       </body>
     </html>

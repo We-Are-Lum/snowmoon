@@ -113,11 +113,31 @@ try {
     if (await page.locator('.intro-card').count()) fail('intro: shown on a deep link (/chapter/1)');
     const link = page.locator('.what-is-this');
     if (!(await link.isVisible())) fail('intro: a first visit to /chapter/1 has no "What is this?" link');
-    else if ((await link.getAttribute('href')) !== '/about#intro') fail('intro: "What is this?" does not point at /about#intro');
+    else {
+      await link.click();
+      if (!(await page.locator('.intro-card').isVisible())) fail('intro: "What is this?" does not open the intro screens');
+      else await page.locator('.intro-skip').click();
+    }
     await page.goto(BASE + '/about', { waitUntil: 'networkidle' });
-    const n = await page.locator('#intro li[data-card]').count();
-    if (n !== 5) fail(`intro: /about shows ${n} intro cards, not 5`);
-    if (await page.locator('.intro-card').count()) fail('intro: shown on /about');
+    if (await page.locator('.intro-card').count()) fail('intro: shown on /about without asking');
+    const replay = page.locator('.replay-intro');
+    const top = await replay.evaluate((e) => {
+      const first = document.querySelector('main')?.querySelector('*');
+      return first === e || !!first?.contains(e);
+    }).catch(() => false);
+    if (!(await replay.isVisible())) fail('intro: /about has no "Replay intro screens" link');
+    else {
+      if (!top) fail('intro: "Replay intro screens" is not at the top of /about');
+      await replay.click();
+      let n = 0;
+      while (await page.locator('.intro-card').isVisible()) {
+        n++;
+        const next = page.getByRole('button', { name: 'Next' });
+        if (await next.count()) await next.click();
+        else break;
+      }
+      if (n !== 5) fail(`intro: replay on /about showed ${n} cards, not 5`);
+    }
     await ctx.close();
   }
 

@@ -1,7 +1,6 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import type { Intro } from '~/lib/intro';
 
@@ -9,7 +8,8 @@ import type { Intro } from '~/lib/intro';
  * The first-visit intro (config/intro.json). Shown once, on the home page only.
  * "Seen" is remembered in localStorage on this device: no cookie, no account,
  * nothing sent anywhere. A link that opens a passage, card or adaptation goes
- * straight there; those pages show a small "What is this?" link instead.
+ * straight there; those pages show a small "What is this?" link instead,
+ * which opens the same screens. About has a "Replay intro screens" link.
  */
 const KEY = 'snowmoon.intro-seen';
 
@@ -29,22 +29,16 @@ function markSeen(version: string) {
   }
 }
 
-export function IntroOnce({ intro }: { intro: Intro }) {
-  const [open, setOpen] = useState(false);
+/** The screens themselves. Closing (Skip, Start reading, Escape) marks the intro seen. */
+function IntroScreens({ intro, onClose }: { intro: Intro; onClose: () => void }) {
   const [i, setI] = useState(0);
   const dialog = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
-    if (!seen(intro.version)) setOpen(true);
-  }, [intro.version]);
-  useEffect(() => {
-    if (open) dialog.current?.focus();
-  }, [open, i]);
-
-  if (!open) return null;
+    dialog.current?.focus();
+  }, [i]);
   const close = () => {
     markSeen(intro.version);
-    setOpen(false);
+    onClose();
   };
   const card = intro.cards[i];
   const last = i === intro.cards.length - 1;
@@ -90,17 +84,53 @@ export function IntroOnce({ intro }: { intro: Intro }) {
   );
 }
 
-/** On any page but home and About, before the intro has been seen: a small link to it. */
-export function WhatIsThis({ version }: { version: string }) {
+/** Home page, first visit only. */
+export function IntroOnce({ intro }: { intro: Intro }) {
+  const [open, setOpen] = useState(false);
+  useEffect(() => {
+    if (!seen(intro.version)) setOpen(true);
+  }, [intro.version]);
+  return open ? <IntroScreens intro={intro} onClose={() => setOpen(false)} /> : null;
+}
+
+/** About: replay the screens on request. */
+export function ReplayIntro({ intro }: { intro: Intro }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <>
+      <button type="button" className="replay-intro" onClick={() => setOpen(true)}>
+        Replay intro screens
+      </button>
+      {open && <IntroScreens intro={intro} onClose={() => setOpen(false)} />}
+    </>
+  );
+}
+
+/** On any page but home and About, before the intro has been seen: a small link that opens it. */
+export function WhatIsThis({ intro }: { intro: Intro }) {
   const path = usePathname();
   const [show, setShow] = useState(false);
+  const [open, setOpen] = useState(false);
   useEffect(() => {
-    setShow(path !== '/' && !path.startsWith('/about') && !seen(version));
-  }, [path, version]);
-  if (!show) return null;
+    setShow(path !== '/' && !path.startsWith('/about') && !seen(intro.version));
+  }, [path, intro.version]);
+  if (!show && !open) return null;
   return (
-    <Link href="/about#intro" className="what-is-this" onClick={() => markSeen(version)}>
-      What is this?
-    </Link>
+    <>
+      {show && (
+        <button type="button" className="what-is-this" onClick={() => setOpen(true)}>
+          What is this?
+        </button>
+      )}
+      {open && (
+        <IntroScreens
+          intro={intro}
+          onClose={() => {
+            setOpen(false);
+            setShow(false);
+          }}
+        />
+      )}
+    </>
   );
 }

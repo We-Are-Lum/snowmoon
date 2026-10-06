@@ -1,5 +1,6 @@
 import { REPO_URL, WORK } from '~/lib/config';
 import { loadIntro } from '~/lib/intro';
+import { ReplayIntro } from '~/components/first-visit';
 import consent from '../../../config/consent.json';
 
 const wording = consent.versions[consent.current as keyof typeof consent.versions];
@@ -9,6 +10,7 @@ export const metadata = { title: 'About' };
 export default function About() {
   return (
     <div className="page prose">
+      <ReplayIntro intro={loadIntro()} />
       <h1>About</h1>
       <p>
         <em>{WORK.title}</em> was written by {WORK.author} and released under the GNU General Public License v3. The
@@ -17,7 +19,6 @@ export default function About() {
       <p>
         This project is an independent adaptation. It is not affiliated with or endorsed by the author.
       </p>
-      <IntroSection />
       <h2>License</h2>
       <p>
         This app and everything used to make it are GPL-3.0: the code, the ingest and analysis scripts, the prompts,
@@ -51,28 +52,3 @@ export default function About() {
   );
 }
 
-/** The first-visit intro, in full, as a section of About (config/intro.json). */
-function IntroSection() {
-  const intro = loadIntro();
-  return (
-    <section id="intro" className="intro-section" aria-label="What this is">
-      <h2>What this is</h2>
-      {intro.modelDrafted && <p className="label">Model-drafted text</p>}
-      <ol className="intro-list">
-        {intro.cards.map((c) => (
-          <li key={c.id} data-card={c.id} data-status={c.status}>
-            {c.image && (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={c.image.url} alt={c.image.alt} width={c.image.width} height={c.image.height} loading="lazy" />
-            )}
-            <h3>
-              {c.href && c.status === 'live' ? <a href={c.href}>{c.title}</a> : c.title}
-              {c.status === 'coming' && <span className="label"> · coming</span>}
-            </h3>
-            <p>{c.sentence}</p>
-          </li>
-        ))}
-      </ol>
-    </section>
-  );
-}
