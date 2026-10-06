@@ -99,7 +99,10 @@ def main() -> None:
     script = Path(__file__).resolve().relative_to(ROOT)
     script_commit = git("log", "-1", "--format=%H", "--", str(script))
     script_dirty = bool(git("status", "--porcelain", "--", str(script)))
-    folder = job_file.stem
+    # A hosted trial folder (adaptations/<seed>/<name>/jobs.json) keeps its images in
+    # images-out/<name>/ and its records beside the job file.
+    hosted = job_file.name == "jobs.json"
+    folder = job_file.parent.name if hosted else job_file.stem
     records = []
     variants = [(job, v) for job in spec["jobs"] for v in (job.get("screen") if isinstance(job.get("screen"), list) else [job["screen"]] if job.get("screen") else [])]
     for job, s in variants:
@@ -174,7 +177,7 @@ def main() -> None:
             "see": "config/models.json drafting; principle 3",
         },
     }
-    out_file = ROOT / "content/snowmoon/recipes/images" / f"{job_file.stem}.screens.json"
+    out_file = job_file.parent / "screens.json" if hosted else ROOT / "content/snowmoon/recipes/images" / f"{job_file.stem}.screens.json"
     out_file.write_text(json.dumps(record, indent=2, ensure_ascii=False) + "\n")
     if script_dirty:
         print("warning: the script has uncommitted changes; commit it and re-run so the record names the code that ran")
