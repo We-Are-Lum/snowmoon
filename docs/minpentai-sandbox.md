@@ -82,21 +82,24 @@ Copies of the rule without the rotation clause, or with its phases swapped, fail
 
 ## Tutorial
 
-A first visit to `/minpentai` opens a seven-lesson tutorial. Free play is one tap away on every lesson, and the browser remembers once the tutorial is finished or skipped. `?lesson=N` links straight to lesson N, and `?mode=free` or a shared board (`?s=…`) opens free play.
+A first visit to `/minpentai` opens a ten-lesson tutorial. Free play is one tap away on every lesson, and the browser remembers once the tutorial is finished or skipped. `?lesson=N` links straight to lesson N, and `?mode=free` or a shared board (`?s=…`) opens free play. In the tutorial, stepping back stops at turn 0.
 
-- **Wording:** all of it is in `src/lib/minpentai/tutorial-text.ts`. It is marked model-drafted, and the page shows "Draft wording" until `modelDrafted` is set to false.
-- **Lessons:** each lesson's preset, view and goal are in `src/lib/minpentai/tutorial.ts`. Every goal is detected by the engine:
+- **Wording:** all of it is in `src/lib/minpentai/tutorial-text.ts`, keyed by lesson id. It is marked model-drafted, and the page shows "Draft wording" until `modelDrafted` is set to false. What it says about the game itself comes only from chapters 2–4, and the file cites the blocks.
+- **Lessons:** each lesson's preset, view and goal are in `src/lib/minpentai/tutorial.ts`.
 
-| # | Lesson | Goal |
-|---|---|---|
-| 1 | One cell | Four turns forward |
-| 2 | Time runs backward | Back to turn 0; the lesson starts at turn 8 |
-| 3 | A glider | Sixteen turns on, with a glider still travelling |
-| 4 | Build one | A glider detected; the outline sits where the shape works at turn 0 |
-| 5 | A rock | The glider detected travelling back down, from turn 29 |
-| 6 | Your symbol | Paused or stepped onto a framed turn (22, 23, 26 or 27). The lesson starts at turn 14 and plays at two turns a second, so each framed window lasts a full second. |
-| 7 | The book's board | None; it hands the c4-b5 board over to free play |
+| # | Lesson | Kind | Goal |
+|---|---|---|---|
+| 1 | What is Minpentai? | read | None. The book's board plays on its own. |
+| 2 | One cell | do | Four turns forward |
+| 3 | Time runs backward | do | Back to turn 0; the lesson starts at turn 4 |
+| 4 | A glider | do | Sixteen turns on, with a glider still travelling |
+| 5 | Build one | do | A glider detected; the outline sits where the shape works at turn 0 |
+| 6 | A rock | do | The glider detected travelling back down, from turn 29 |
+| 7 | Your symbol | do | Paused or stepped onto a framed turn (22, 23, 26 or 27). The lesson starts at turn 14 and plays at two turns a second. |
+| 8 | How a match is played | read | None. Four framed symbols. |
+| 9 | How you win | do | No symbol left. A glider strikes a symbol, which is gone from turn 18 for good. |
+| 10 | The book's board | handover | None. It hands the c4-b5 board over to free play. |
 
 **Tests.**
-- `npx tsx scripts/test-minpentai-tutorial.ts` runs a scripted solution for every lesson and checks that no goal fires early. That includes three of four cells, the outline shifted by one, and playing straight through lesson 6.
-- In a browser at 390px with touch, the whole tutorial was played by taps, in light and dark mode. Lesson 6 was caught with a 300ms reaction after the frame appeared.
+- `npx tsx scripts/test-minpentai-tutorial.ts` runs a scripted solution for every goal and checks that none fires early. That includes three of four cells, the outline shifted by one, and playing straight through lesson 7.
+- In a browser at 390px with touch, the whole tutorial was played by taps, in light and dark mode. Lesson 7 was caught with a 300ms reaction after the frame appeared.

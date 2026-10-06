@@ -32,9 +32,9 @@ function setQuery(params: Record<string, string | null>) {
 }
 
 /** The board, the play loop, and the speed, shared by both modes. */
-function usePlayer(initial: () => Board) {
+function usePlayer(initial: () => Board, autoplay = false) {
   const [board, setBoard] = useState<Board>(initial);
-  const [playing, setPlaying] = useState(false);
+  const [playing, setPlaying] = useState(autoplay);
   const [speed, setSpeed] = useState(8);
   useEffect(() => {
     if (!playing) return;
@@ -205,10 +205,23 @@ function BoardView(props: {
   );
 }
 
-function TimeControls({ playing, setPlaying, setBoard }: { playing: boolean; setPlaying: (f: (p: boolean) => boolean) => void; setBoard: (f: (b: Board) => Board) => void }) {
+function TimeControls({ playing, setPlaying, setBoard, turn, minTurn }: {
+  playing: boolean;
+  setPlaying: (f: (p: boolean) => boolean) => void;
+  setBoard: (f: (b: Board) => Board) => void;
+  turn: number;
+  /** Stepping back stops here (the tutorial stops at turn 0). */
+  minTurn?: number;
+}) {
+  const atFloor = minTurn !== undefined && turn <= minTurn;
   return (
     <div className="mp-controls" role="group" aria-label="Time">
-      <button type="button" onClick={() => { setPlaying(() => false); setBoard((b) => stepBack(b)); }} aria-label="Step backward">◀ Step</button>
+      <button
+        type="button"
+        disabled={atFloor}
+        onClick={() => { setPlaying(() => false); setBoard((b) => (minTurn !== undefined && b.turn <= minTurn ? b : stepBack(b))); }}
+        aria-label="Step backward"
+      >◀ Step</button>
       <button type="button" className="mp-primary" onClick={() => setPlaying((p) => !p)}>{playing ? 'Pause' : 'Play'}</button>
       <button type="button" onClick={() => { setPlaying(() => false); setBoard((b) => step(b)); }} aria-label="Step forward">Step ▶</button>
     </div>
@@ -219,16 +232,16 @@ function TimeControls({ playing, setPlaying, setBoard }: { playing: boolean; set
 
 function Tutorial({ index, onLesson, onFree }: { index: number; onLesson: (i: number) => void; onFree: (from?: Board) => void }) {
   const lesson = LESSONS[index];
-  const text = T.lessons[index];
+  const text: { title: string; text: string; invented?: boolean } = T.lessons[lesson.id];
   const start = useMemo(() => lesson.build(), [lesson]);
-  const p = usePlayer(() => start);
+  const p = usePlayer(() => start, lesson.autoplay);
   const { setSpeed } = p;
   useEffect(() => setSpeed(lesson.speed), [lesson.speed, setSpeed]);
   const [done, setDone] = useState(false);
   useEffect(() => {
     if (!done && lesson.goal && lesson.goal({ board: p.board, start, playing: p.playing })) setDone(true);
   }, [p.board, p.playing, done, lesson, start]);
-  const last = index === LESSONS.length - 1;
+  const last = lesson.kind === 'handover';
 
   return (
     <section className="mp-tutorial" aria-label={T.heading}>
@@ -239,7 +252,7 @@ function Tutorial({ index, onLesson, onFree }: { index: number; onLesson: (i: nu
         </p>
         <h2>
           {text.title}
-          {'invented' in text && text.invented && <em className="mp-inv"> {T.inventedTag}</em>}
+          {text.invented && <em className="mp-inv"> {T.inventedTag}</em>}
         </h2>
         <p className="mp-lesson-text">{text.text}</p>
       </div>
@@ -253,11 +266,13 @@ function Tutorial({ index, onLesson, onFree }: { index: number; onLesson: (i: nu
         editable={lesson.editable}
         ghost={lesson.ghost}
       />
-      <TimeControls playing={p.playing} setPlaying={p.setPlaying} setBoard={p.setBoard} />
+      <TimeControls playing={p.playing} setPlaying={p.setPlaying} setBoard={p.setBoard} turn={p.board.turn} minTurn={0} />
 
       <div className="mp-goal" aria-live="polite">
         {last ? (
           <button type="button" className="mp-next" onClick={() => onFree(p.board)}>{T.startFreePlay}</button>
+        ) : lesson.kind === 'read' ? (
+          <button type="button" className="mp-next" onClick={() => onLesson(index + 1)}>{index === 0 ? T.begin : T.next}</button>
         ) : done ? (
           <>
             <span className="mp-done">{T.done}</span>
@@ -271,7 +286,7 @@ function Tutorial({ index, onLesson, onFree }: { index: number; onLesson: (i: nu
           <a
             key={i}
             href={`?lesson=${i + 1}`}
-            aria-label={T.dotLabel(i + 1, T.lessons[i].title)}
+            aria-label={T.dotLabel(i + 1, T.lessons[LESSONS[i].id].title)}
             aria-current={i === index ? 'step' : undefined}
             onClick={(e) => { e.preventDefault(); onLesson(i); }}
           >
@@ -315,7 +330,7 @@ function FreePlay({ initial, onTutorial }: { initial: Board | null; onTutorial: 
   return (
     <div className="mp">
       <BoardView board={board} setBoard={setBoard} playing={playing} zoom={zoom} view={view} editable brush={brush} />
-      <TimeControls playing={playing} setPlaying={setPlaying} setBoard={setBoard} />
+      <TimeControls playing={playing} setPlaying={setPlaying} setBoard={setBoard} turn={board.turn} />
 
       <label className="mp-speed">
         <span>Speed · {speed} turns a second</span>

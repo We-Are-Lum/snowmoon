@@ -112,3 +112,4 @@
 .mp-dots .dot { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--ink); }
 .mp-dots .dot.past { background: var(--muted); border-color: var(--muted); }
 .mp-dots .dot.on { background: var(--ink); }
+.mp-controls button:disabled { opacity: 0.4; cursor: default; }
