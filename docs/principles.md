@@ -161,11 +161,14 @@ our choice, not his rule.
 published output, with its quoted license line and `open_weights`. A model
 used anywhere in the pipeline is reported here if its weights are closed.
 
+Hosted open-weight models may be listed too (`runs_on: hosted`): for a hosted render the recipe's model record is the endpoint, the date and the host's request id, because the host does not expose a weights revision. Local models stay preferred when they can do the job. (Owner decision, Oct 5, 2026: Z-Image Turbo and ERNIE-Image Turbo, Apache-2.0, on fal.ai.)
+
 **Checked by.**
 - `P3a`: every allowlisted model has `license_line` and a boolean
   `open_weights`.
-- `P3b`: every model named in a recipe is on the allowlist; closed ones are
-  printed as a note.
+- `P3b`: every model named in a recipe is on the allowlist, and every hosted
+  endpoint used in an adaptation's recipe belongs to an allowlisted model;
+  closed ones are printed as a note.
 - Review: was any closed model used to make or shape published content, and is
   that reported below?
 

@@ -403,10 +403,19 @@ add({
       const m = json(f).model;
       if (m?.repo) used.set(m.repo, f);
     }
-    return { models: json('config/models.json').models, used: [...used.entries()] };
+    // Hosted renders (adaptation trials and picks): every endpoint must belong to an allowlisted model.
+    const endpoints = new Map<string, string>();
+    for (const f of walk('adaptations', /(^|\/)recipe\.json$/)) {
+      for (const im of (json(f).images ?? []) as { endpoint?: string }[]) if (im.endpoint) endpoints.set(im.endpoint, f);
+    }
+    return { models: json('config/models.json').models, used: [...used.entries()], endpoints: [...endpoints.entries()] };
   },
-  run: ({ models, used }) => {
+  run: ({ models, used, endpoints }) => {
     const problems: string[] = [];
+    for (const [endpoint, file] of endpoints) {
+      const m = models.find((x: { hosted?: { endpoints?: Record<string, number> } }) => x.hosted?.endpoints && endpoint in x.hosted.endpoints);
+      if (!m) problems.push(`hosted endpoint ${endpoint} (used in ${file}) is not on the allowlist`);
+    }
     for (const [repo, file] of used) {
       const m = models.find((x: { repo: string }) => x.repo === repo);
       if (!m) problems.push(`${repo} (used in ${file}) is not on the allowlist`);
@@ -416,6 +425,7 @@ add({
   },
   plant: (c) => {
     c.used.push(['example/closed-model', 'planted']);
+    c.endpoints.push(['fal-ai/not-allowlisted', 'planted']);
   },
 });
 

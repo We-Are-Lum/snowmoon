@@ -437,3 +437,34 @@ snowmoon project by hand.
 
 Never print a variable's value.
 ```
+
+```text
+[Owner message, Oct 5, 2026: first version] Use Z-Image Turbo for the
+remaining dog-dawn fixes. 1. Add it to the model allowlist as a hosted
+option: Apache-2.0, open weights, hosted on fal.ai. For hosted renders, the
+model record is endpoint, date, and request id. Say so in the brief and
+principles. Local models stay preferred when they can do the job. 2-5.
+[Panel picks and a ten-beat contact sheet; cap of $1.]
+
+Revised after seeing the sheet. The Arctic post should look the way
+panel 1 does: pale faceted crystal walls, with night visible
+through the windows. Night comes from the windows and the fire,
+not from a dark room.
+
+1. Panel 2: take ERNIE's. Its room matches panel 1.
+2. Panel 3: take ERNIE's. The warm thread leaving the heartbeat
+   line reads clearly.
+3. Panel 5: make two candidates and I will choose.
+   a. ERNIE, re-prompted: he is working, hands on the console.
+      The figure behind the frosted glass is a faceless
+      silhouette with no eyes. Black starry sky in any window.
+   b. Z-Image ControlNet from attempt 3's pose and framing, with
+      panel 1's room look and a black starry sky in the windows.
+4. Add both models to the allowlist as hosted options: Apache-2.0,
+   open weights, hosted on fal.ai. For hosted renders the model
+   record is endpoint, date, and request id.
+5. Build a full ten-beat contact sheet, both images for beat 8,
+   and tell me whether the styles sit together.
+
+Cap of $1. Show me the sheet and stop.
+```
