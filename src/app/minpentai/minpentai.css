@@ -85,3 +85,30 @@
 .mp-mini span { background: #0E0F13; aspect-ratio: 1; }
 .mp-mini span.on { background: #46D7E8; }
 .mp-state figcaption { font-family: var(--label); font-size: 12px; color: #A4A5AE; }
+
+/* Tutorial */
+.mp-lesson { margin-bottom: 12px; }
+.mp-lesson h2 { margin: 2px 0 6px; }
+.mp-lesson-meta { margin: 0; font-family: var(--label); font-size: 12px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.mp-draft { text-transform: none; letter-spacing: 0; font-style: italic; }
+.mp-lesson-text { margin: 0; font-size: 20px; line-height: 1.45; min-height: 2.9em; }
+.mp-goal { display: flex; align-items: center; gap: 12px; min-height: 56px; margin-top: 12px; }
+.mp-done { font-family: var(--label); font-size: 14px; letter-spacing: 0.06em; text-transform: uppercase; }
+.mp-next {
+  flex: 1;
+  min-height: var(--tap);
+  border: 1px solid var(--ink);
+  border-radius: 2px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--label);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.mp-dots { display: flex; justify-content: center; gap: 0; margin-top: 4px; }
+.mp-dots a { display: inline-flex; align-items: center; justify-content: center; min-width: var(--tap); min-height: var(--tap); }
+.mp-dots .dot { width: 10px; height: 10px; border-radius: 50%; border: 1.5px solid var(--ink); }
+.mp-dots .dot.past { background: var(--muted); border-color: var(--muted); }
+.mp-dots .dot.on { background: var(--ink); }

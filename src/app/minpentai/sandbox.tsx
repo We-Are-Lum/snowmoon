@@ -5,6 +5,8 @@ import { emptyBoard, liveCount, step, stepBack, withCell, withRock, type Board }
 import { STATES, findSymbols } from '~/lib/minpentai/symbol';
 import { c4b5Preset, impactPreset } from '~/lib/minpentai/presets';
 import { decodeBoard, encodeBoard } from '~/lib/minpentai/url';
+import { LESSONS } from '~/lib/minpentai/tutorial';
+import { TUTORIAL_TEXT as T } from '~/lib/minpentai/tutorial-text';
 
 /* Colours from the approved board (docs/design/direction-boards, section 1c). */
 const FIELD = '#060608';
@@ -12,47 +14,80 @@ const CELL_BG = '#0E0F13';
 const GRID = '#16171C';
 const LIVE = '#46D7E8';
 const ROCK = '#4B4C55';
+const GHOST = 'rgba(70, 215, 232, 0.45)';
 
 type Brush = 'cell' | 'rock';
-const ZOOMS = [1, 2, 3] as const;
+type Zoom = 1 | 2 | 3;
+const ZOOMS: Zoom[] = [1, 2, 3];
+/** Set once the tutorial is finished or skipped; later bare visits open free play. */
+const DONE_KEY = 'minpentai-tutorial-done';
 
-function readUrl(): Board | null {
-  if (typeof window === 'undefined') return null;
-  const s = new URLSearchParams(window.location.search).get('s');
-  return s ? decodeBoard(s) : null;
-}
+type Mode = { kind: 'tutorial'; lesson: number } | { kind: 'free' };
 
-function writeUrl(b: Board) {
+function setQuery(params: Record<string, string | null>) {
   const url = new URL(window.location.href);
-  url.searchParams.set('s', encodeBoard(b));
+  url.search = '';
+  for (const [k, v] of Object.entries(params)) if (v !== null) url.searchParams.set(k, v);
   window.history.replaceState(null, '', url);
 }
 
-export function Sandbox() {
-  const [board, setBoard] = useState<Board>(() => c4b5Preset());
+/** The board, the play loop, and the speed, shared by both modes. */
+function usePlayer(initial: () => Board) {
+  const [board, setBoard] = useState<Board>(initial);
   const [playing, setPlaying] = useState(false);
   const [speed, setSpeed] = useState(8);
-  const [brush, setBrush] = useState<Brush>('cell');
-  const [zoom, setZoom] = useState<(typeof ZOOMS)[number]>(1);
-  const [view, setView] = useState({ x: 0, y: 0 });
-  const [copied, setCopied] = useState(false);
+  useEffect(() => {
+    if (!playing) return;
+    const id = window.setInterval(() => setBoard((b) => step(b)), 1000 / speed);
+    return () => window.clearInterval(id);
+  }, [playing, speed]);
+  return { board, setBoard, playing, setPlaying, speed, setSpeed };
+}
+
+export function Sandbox() {
+  const [mode, setMode] = useState<Mode>({ kind: 'tutorial', lesson: 0 });
+  const [handover, setHandover] = useState<Board | null>(null);
+
+  // Choose the mode on the client: a lesson link, a shared board, a returning visitor, or the tutorial.
+  useEffect(() => {
+    const q = new URLSearchParams(window.location.search);
+    const lesson = Number(q.get('lesson'));
+    if (Number.isInteger(lesson) && lesson >= 1 && lesson <= LESSONS.length) setMode({ kind: 'tutorial', lesson: lesson - 1 });
+    else if (q.get('s') || q.get('mode') === 'free') setMode({ kind: 'free' });
+    else if (window.localStorage.getItem(DONE_KEY)) setMode({ kind: 'free' });
+  }, []);
+
+  const goLesson = (i: number) => { setMode({ kind: 'tutorial', lesson: i }); setQuery({ lesson: String(i + 1) }); };
+  const goFree = (from?: Board) => {
+    window.localStorage.setItem(DONE_KEY, '1');
+    setHandover(from ?? null);
+    setMode({ kind: 'free' });
+    setQuery({ mode: 'free' });
+  };
+
+  return mode.kind === 'tutorial'
+    ? <Tutorial key={mode.lesson} index={mode.lesson} onLesson={goLesson} onFree={goFree} />
+    : <FreePlay initial={handover} onTutorial={() => goLesson(0)} />;
+}
+
+/* ---------------- board ---------------- */
+
+function BoardView(props: {
+  board: Board;
+  setBoard: (f: (b: Board) => Board) => void;
+  playing: boolean;
+  zoom: Zoom;
+  view: { x: number; y: number };
+  editable: boolean;
+  brush?: Brush;
+  ghost?: [number, number][];
+}) {
+  const { board, setBoard, playing, zoom, view, editable, brush = 'cell', ghost } = props;
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const wrapRef = useRef<HTMLDivElement>(null);
   const [px, setPx] = useState(358);
   const paint = useRef<{ value: boolean } | null>(null);
 
-  // Load state from the URL once, on the client.
-  useEffect(() => {
-    const fromUrl = readUrl();
-    if (fromUrl) setBoard(fromUrl);
-  }, []);
-
-  // Keep the URL in step with the board whenever play stops or the board is edited.
-  useEffect(() => {
-    if (!playing) writeUrl(board);
-  }, [board, playing]);
-
-  // Fit the canvas to the available width.
   useEffect(() => {
     const el = wrapRef.current;
     if (!el) return;
@@ -61,22 +96,12 @@ export function Sandbox() {
     return () => ro.disconnect();
   }, []);
 
-  // Play loop.
-  useEffect(() => {
-    if (!playing) return;
-    const id = window.setInterval(() => setBoard((b) => step(b)), 1000 / speed);
-    return () => window.clearInterval(id);
-  }, [playing, speed]);
-
   const symbols = useMemo(() => findSymbols(board), [board]);
   const live = useMemo(() => liveCount(board), [board]);
-
-  // Visible window: the whole board at 1×; a w/zoom × h/zoom window otherwise.
   const cols = board.w / zoom;
   const rows = Math.floor(board.h / zoom);
   const cell = px / cols;
 
-  // Draw.
   useEffect(() => {
     const c = canvasRef.current;
     if (!c) return;
@@ -88,44 +113,39 @@ export function Sandbox() {
     ctx.fillStyle = FIELD;
     ctx.fillRect(0, 0, px, cell * rows);
     const symbolCells = new Set<number>();
-    for (const s of symbols) {
-      const st = STATES[s.state];
-      for (const [dx, dy] of st.cells) symbolCells.add(((s.y + dy) % board.h) * board.w + ((s.x + dx) % board.w));
-    }
+    for (const s of symbols) for (const [dx, dy] of STATES[s.state].cells) symbolCells.add(((s.y + dy) % board.h) * board.w + ((s.x + dx) % board.w));
+    const ghostSet = new Set((ghost ?? []).map(([x, y]) => y * board.w + x));
     for (let j = 0; j < rows; j++) {
       for (let i = 0; i < cols; i++) {
         const x = (view.x + i) % board.w, y = (view.y + j) % board.h, k = y * board.w + x;
         const X = i * cell, Y = j * cell;
         ctx.fillStyle = CELL_BG;
         ctx.fillRect(X, Y, cell, cell);
-        if (cell >= 6) {
-          ctx.fillStyle = GRID;
-          ctx.fillRect(X, Y, cell, 1);
-          ctx.fillRect(X, Y, 1, cell);
-        }
-        if (board.rocks[k]) {
-          ctx.fillStyle = ROCK;
-          ctx.fillRect(X, Y, cell, cell);
-        } else if (board.cells[k]) {
+        if (cell >= 6) { ctx.fillStyle = GRID; ctx.fillRect(X, Y, cell, 1); ctx.fillRect(X, Y, 1, cell); }
+        if (board.rocks[k]) { ctx.fillStyle = ROCK; ctx.fillRect(X, Y, cell, cell); }
+        else if (board.cells[k]) {
           ctx.fillStyle = LIVE;
-          if (symbolCells.has(k)) ctx.fillRect(X, Y, cell, cell); // symbols: full-bleed cells
-          else ctx.fillRect(X + cell / 6, Y + cell / 6, cell - cell / 3, cell - cell / 3); // live: inset squares
+          if (symbolCells.has(k)) ctx.fillRect(X, Y, cell, cell);
+          else ctx.fillRect(X + cell / 6, Y + cell / 6, cell - cell / 3, cell - cell / 3);
+        } else if (ghostSet.has(k)) {
+          // Faint outline: where to tap.
+          ctx.strokeStyle = GHOST;
+          ctx.lineWidth = Math.max(1, cell / 12);
+          ctx.setLineDash([]);
+          ctx.strokeRect(X + cell / 6, Y + cell / 6, cell - cell / 3, cell - cell / 3);
         }
       }
     }
-    // Dashed frame around every recognised symbol, one cell out from its box.
     ctx.strokeStyle = LIVE;
     ctx.lineWidth = Math.max(1.5, cell / 6);
     ctx.setLineDash([Math.max(3, cell / 2), Math.max(2, cell / 3)]);
     for (const s of symbols) {
       const ox = (((s.x - 1 - view.x) % board.w) + board.w) % board.w;
       const oy = (((s.y - 1 - view.y) % board.h) + board.h) % board.h;
-      for (const sx of [ox, ox - board.w]) for (const sy of [oy, oy - board.h]) {
-        ctx.strokeRect(sx * cell, sy * cell, (s.w + 2) * cell, (s.h + 2) * cell);
-      }
+      for (const sx of [ox, ox - board.w]) for (const sy of [oy, oy - board.h]) ctx.strokeRect(sx * cell, sy * cell, (s.w + 2) * cell, (s.h + 2) * cell);
     }
     ctx.setLineDash([]);
-  }, [board, symbols, px, cell, cols, rows, view]);
+  }, [board, symbols, px, cell, cols, rows, view, ghost]);
 
   const cellAt = useCallback(
     (e: React.PointerEvent<HTMLCanvasElement>) => {
@@ -136,12 +156,10 @@ export function Sandbox() {
     },
     [cell, cols, rows, view, board.w, board.h],
   );
-
-  const apply = (x: number, y: number, value: boolean) =>
-    setBoard((b) => (brush === 'rock' ? withRock(b, x, y, value) : withCell(b, x, y, value)));
-
+  const canEdit = editable && !playing;
+  const apply = (x: number, y: number, value: boolean) => setBoard((b) => (brush === 'rock' ? withRock(b, x, y, value) : withCell(b, x, y, value)));
   const onDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
-    if (playing) return;
+    if (!canEdit) return;
     const at = cellAt(e);
     if (!at) return;
     e.currentTarget.setPointerCapture(e.pointerId);
@@ -151,53 +169,153 @@ export function Sandbox() {
     apply(at.x, at.y, value);
   };
   const onMove = (e: React.PointerEvent<HTMLCanvasElement>) => {
-    if (!paint.current || playing) return;
+    if (!paint.current || !canEdit) return;
     const at = cellAt(e);
     if (at) apply(at.x, at.y, paint.current.value);
   };
   const onUp = () => { paint.current = null; };
 
-  const load = (b: Board, z: (typeof ZOOMS)[number] = 1) => { setPlaying(false); setBoard(b); setZoom(z); setView({ x: 0, y: 0 }); };
-  const pan = (dx: number, dy: number) =>
-    setView((v) => ({ x: (v.x + dx + board.w) % board.w, y: (v.y + dy + board.h) % board.h }));
+  return (
+    <div className="mp-board">
+      <div className="mp-strip" aria-live="polite">
+        <span>TURN {board.turn}</span>
+        <span>LIVE {live}</span>
+        <span>SYMBOLS {symbols.length}<em className="mp-inv"> invented</em></span>
+      </div>
+      <div ref={wrapRef} className="mp-canvas-wrap">
+        <canvas
+          ref={canvasRef}
+          className={canEdit ? 'mp-canvas mp-editing' : 'mp-canvas'}
+          style={{ width: px, height: Math.round(cell * rows) }}
+          role="img"
+          aria-label={`Minpentai board, turn ${board.turn}, ${live} live cells, ${symbols.length} symbols`}
+          onPointerDown={onDown}
+          onPointerMove={onMove}
+          onPointerUp={onUp}
+          onPointerCancel={onUp}
+        />
+      </div>
+      {editable && (
+        <p className="mp-hint">
+          {playing ? 'Pause to place or remove cells.' : `Tap or drag to ${brush === 'rock' ? 'place or remove rocks' : 'place or remove cells'}.`}
+          {zoom > 1 && ` Showing ${cols} × ${rows} of 48 × 32.`}
+        </p>
+      )}
+    </div>
+  );
+}
 
+function TimeControls({ playing, setPlaying, setBoard }: { playing: boolean; setPlaying: (f: (p: boolean) => boolean) => void; setBoard: (f: (b: Board) => Board) => void }) {
+  return (
+    <div className="mp-controls" role="group" aria-label="Time">
+      <button type="button" onClick={() => { setPlaying(() => false); setBoard((b) => stepBack(b)); }} aria-label="Step backward">◀ Step</button>
+      <button type="button" className="mp-primary" onClick={() => setPlaying((p) => !p)}>{playing ? 'Pause' : 'Play'}</button>
+      <button type="button" onClick={() => { setPlaying(() => false); setBoard((b) => step(b)); }} aria-label="Step forward">Step ▶</button>
+    </div>
+  );
+}
+
+/* ---------------- tutorial ---------------- */
+
+function Tutorial({ index, onLesson, onFree }: { index: number; onLesson: (i: number) => void; onFree: (from?: Board) => void }) {
+  const lesson = LESSONS[index];
+  const text = T.lessons[index];
+  const start = useMemo(() => lesson.build(), [lesson]);
+  const p = usePlayer(() => start);
+  const { setSpeed } = p;
+  useEffect(() => setSpeed(lesson.speed), [lesson.speed, setSpeed]);
+  const [done, setDone] = useState(false);
+  useEffect(() => {
+    if (!done && lesson.goal && lesson.goal({ board: p.board, start, playing: p.playing })) setDone(true);
+  }, [p.board, p.playing, done, lesson, start]);
+  const last = index === LESSONS.length - 1;
+
+  return (
+    <section className="mp-tutorial" aria-label={T.heading}>
+      <div className="mp-lesson">
+        <p className="mp-lesson-meta">
+          {T.lessonOf(index + 1, LESSONS.length)}
+          {T.modelDrafted && <span className="mp-draft"> · {T.draftNote}</span>}
+        </p>
+        <h2>
+          {text.title}
+          {'invented' in text && text.invented && <em className="mp-inv"> {T.inventedTag}</em>}
+        </h2>
+        <p className="mp-lesson-text">{text.text}</p>
+      </div>
+
+      <BoardView
+        board={p.board}
+        setBoard={p.setBoard}
+        playing={p.playing}
+        zoom={lesson.zoom}
+        view={lesson.view}
+        editable={lesson.editable}
+        ghost={lesson.ghost}
+      />
+      <TimeControls playing={p.playing} setPlaying={p.setPlaying} setBoard={p.setBoard} />
+
+      <div className="mp-goal" aria-live="polite">
+        {last ? (
+          <button type="button" className="mp-next" onClick={() => onFree(p.board)}>{T.startFreePlay}</button>
+        ) : done ? (
+          <>
+            <span className="mp-done">{T.done}</span>
+            <button type="button" className="mp-next" onClick={() => onLesson(index + 1)}>{T.next}</button>
+          </>
+        ) : null}
+      </div>
+
+      <nav className="mp-dots" aria-label={T.heading}>
+        {LESSONS.map((_, i) => (
+          <a
+            key={i}
+            href={`?lesson=${i + 1}`}
+            aria-label={T.dotLabel(i + 1, T.lessons[i].title)}
+            aria-current={i === index ? 'step' : undefined}
+            onClick={(e) => { e.preventDefault(); onLesson(i); }}
+          >
+            <span className={i === index ? 'dot on' : i < index ? 'dot past' : 'dot'} />
+          </a>
+        ))}
+      </nav>
+      <div className="mp-controls">
+        {!last && <button type="button" onClick={() => onLesson(index + 1)}>{T.skip}</button>}
+        <button type="button" onClick={() => onFree()}>{T.freePlay}</button>
+      </div>
+    </section>
+  );
+}
+
+/* ---------------- free play ---------------- */
+
+function FreePlay({ initial, onTutorial }: { initial: Board | null; onTutorial: () => void }) {
+  const p = usePlayer(() => initial ?? c4b5Preset());
+  const { board, setBoard, playing, setPlaying, speed, setSpeed } = p;
+  const [brush, setBrush] = useState<Brush>('cell');
+  const [zoom, setZoom] = useState<Zoom>(initial ? 2 : 1);
+  const [view, setView] = useState({ x: 0, y: 0 });
+  const [copied, setCopied] = useState(false);
+
+  useEffect(() => {
+    const s = new URLSearchParams(window.location.search).get('s');
+    const fromUrl = s ? decodeBoard(s) : null;
+    if (fromUrl) { setBoard(() => fromUrl); setZoom(1); }
+  }, [setBoard]);
+  // Keep the URL in step with the board whenever play stops or the board is edited.
+  useEffect(() => { if (!playing) setQuery({ s: encodeBoard(board) }); }, [board, playing]);
+
+  const load = (b: Board, z: Zoom = 1) => { setPlaying(false); setBoard(() => b); setZoom(z); setView({ x: 0, y: 0 }); };
+  const pan = (dx: number, dy: number) => setView((v) => ({ x: (v.x + dx + board.w) % board.w, y: (v.y + dy + board.h) % board.h }));
   const copyLink = async () => {
-    writeUrl(board);
+    setQuery({ s: encodeBoard(board) });
     try { await navigator.clipboard.writeText(window.location.href); setCopied(true); setTimeout(() => setCopied(false), 1500); } catch { /* the URL bar still holds it */ }
   };
 
   return (
     <div className="mp">
-      <div className="mp-board">
-        <div className="mp-strip" aria-live="polite">
-          <span>TURN {board.turn}</span>
-          <span>LIVE {live}</span>
-          <span>SYMBOLS {symbols.length}<em className="mp-inv"> invented</em></span>
-        </div>
-        <div ref={wrapRef} className="mp-canvas-wrap">
-          <canvas
-            ref={canvasRef}
-            className={playing ? 'mp-canvas' : 'mp-canvas mp-editing'}
-            style={{ width: px, height: Math.round(cell * rows) }}
-            role="img"
-            aria-label={`Minpentai board, turn ${board.turn}, ${live} live cells, ${symbols.length} symbols`}
-            onPointerDown={onDown}
-            onPointerMove={onMove}
-            onPointerUp={onUp}
-            onPointerCancel={onUp}
-          />
-        </div>
-        <p className="mp-hint">
-          {playing ? 'Pause to place or remove cells.' : `Tap or drag to ${brush === 'rock' ? 'place or remove rocks' : 'place or remove cells'}.`}
-          {zoom > 1 && ` Showing ${cols} × ${rows} of 48 × 32.`}
-        </p>
-      </div>
-
-      <div className="mp-controls" role="group" aria-label="Time">
-        <button type="button" onClick={() => { setPlaying(false); setBoard((b) => stepBack(b)); }} aria-label="Step backward">◀ Step</button>
-        <button type="button" className="mp-primary" onClick={() => setPlaying((p) => !p)}>{playing ? 'Pause' : 'Play'}</button>
-        <button type="button" onClick={() => { setPlaying(false); setBoard((b) => step(b)); }} aria-label="Step forward">Step ▶</button>
-      </div>
+      <BoardView board={board} setBoard={setBoard} playing={playing} zoom={zoom} view={view} editable brush={brush} />
+      <TimeControls playing={playing} setPlaying={setPlaying} setBoard={setBoard} />
 
       <label className="mp-speed">
         <span>Speed · {speed} turns a second</span>
@@ -207,7 +325,7 @@ export function Sandbox() {
       <div className="mp-controls" role="group" aria-label="Brush">
         <button type="button" aria-pressed={brush === 'cell'} onClick={() => setBrush('cell')}>Cell</button>
         <button type="button" aria-pressed={brush === 'rock'} onClick={() => setBrush('rock')}>Rock <em className="mp-inv">invented</em></button>
-        <button type="button" onClick={() => load({ ...emptyBoard() })}>Clear</button>
+        <button type="button" onClick={() => load(emptyBoard())}>Clear</button>
       </div>
 
       <div className="mp-controls" role="group" aria-label="Zoom">
@@ -245,7 +363,10 @@ export function Sandbox() {
         </button>
       </div>
 
-      <button type="button" className="mp-link" onClick={copyLink}>{copied ? 'Link copied' : 'Copy a link to this board'}</button>
+      <div className="mp-controls">
+        <button type="button" onClick={copyLink}>{copied ? 'Link copied' : 'Copy a link to this board'}</button>
+        <button type="button" onClick={onTutorial}>{T.backToTutorial}</button>
+      </div>
 
       <h2>Symbol <em className="mp-inv">invented</em></h2>
       <SymbolLegend />
