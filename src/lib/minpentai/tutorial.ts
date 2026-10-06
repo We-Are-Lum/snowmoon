@@ -5,7 +5,7 @@
  * One button moves the visitor through every screen. On "read" screens it goes to
  * the next screen. On "do" screens it runs the screen's demo (the scripted
  * solution) at a watchable pace if the visitor has not met the goal, and then goes
- * on. On the last screen it starts free play.
+ * on. On the last screen it starts the practice match (matches.ts).
  */
 import { emptyBoard, stamp, step, stepBack, type Board } from './engine';
 import { findGliders } from './glider';
@@ -35,8 +35,8 @@ export interface Screen {
   id: ScreenId;
   /** read: Next at once. do: a goal, and a demo the button runs. handover: starts free play. */
   kind: 'read' | 'do' | 'handover';
-  /** What sits in the board slot: the live board, or the full-match illustration. */
-  stage: 'board' | 'illustration';
+  /** What sits in the board slot: the live board, or the recorded four-player match (as the crowd sees it, or as cyan does). */
+  stage: 'board' | 'watch' | 'watch-cyan';
   build: () => Board;
   zoom: 1 | 2 | 3;
   /** Top-left cell of the view when zoomed. */
@@ -114,11 +114,11 @@ export const SCREENS: Screen[] = [
     goal: ({ board, playing }) => !playing && findSymbols(board).length > 0,
     demo: { kind: 'step', dir: 1, count: 8, ms: 350 },
   },
-  // A full match, illustrated (not playable here).
-  { id: 'match', kind: 'read', stage: 'illustration', build: () => emptyBoard(), zoom: 1, view: { x: 0, y: 0 }, speed: 1, editable: false },
-  // Why it's hard: four short reasons over the fogged illustration.
-  { id: 'hard', kind: 'read', stage: 'illustration', build: () => emptyBoard(), zoom: 1, view: { x: 0, y: 0 }, speed: 1, editable: false },
-  // The book's own board, playing; then free play.
+  // A full match: the recorded four-player match (matches.ts), as the crowd sees it.
+  { id: 'match', kind: 'read', stage: 'watch', build: () => emptyBoard(), zoom: 1, view: { x: 0, y: 0 }, speed: 1, editable: false },
+  // Why it's hard: the same match as cyan sees it, and four short reasons.
+  { id: 'hard', kind: 'read', stage: 'watch-cyan', build: () => emptyBoard(), zoom: 1, view: { x: 0, y: 0 }, speed: 1, editable: false },
+  // The book's own board, playing; then the practice match.
   { id: 'book', kind: 'handover', stage: 'board', build: () => c4b5Preset(), zoom: 2, view: { x: 0, y: 0 }, speed: 8, autoplay: true, editable: false },
 ];
 

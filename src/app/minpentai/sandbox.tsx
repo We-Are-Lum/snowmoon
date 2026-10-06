@@ -6,7 +6,7 @@ import { STATES, findSymbols } from '~/lib/minpentai/symbol';
 import { c4b5Preset, impactPreset } from '~/lib/minpentai/presets';
 import { decodeBoard, encodeBoard } from '~/lib/minpentai/url';
 import { SCREENS } from '~/lib/minpentai/tutorial';
-import { ILLO_H, ILLO_W, MATCH_FRAMES, illoVisible } from '~/lib/minpentai/illustration';
+import { PlayComputer, PracticeMatch, WatchMatch } from './match-view';
 import { TUTORIAL_TEXT as T } from '~/lib/minpentai/tutorial-text';
 
 /* Colours from the approved board (docs/design/direction-boards, section 1c). */
@@ -23,7 +23,7 @@ const ZOOMS: Zoom[] = [1, 2, 3];
 /** Set once the tutorial is finished or skipped; later bare visits open free play. */
 const DONE_KEY = 'minpentai-tutorial-done';
 
-type Mode = { kind: 'tutorial'; lesson: number } | { kind: 'free' };
+type Mode = { kind: 'tutorial'; lesson: number } | { kind: 'practice' } | { kind: 'play' } | { kind: 'free' };
 
 function setQuery(params: Record<string, string | null>) {
   const url = new URL(window.location.href);
@@ -54,6 +54,8 @@ export function Sandbox() {
     const q = new URLSearchParams(window.location.search);
     const lesson = Number(q.get('lesson'));
     if (Number.isInteger(lesson) && lesson >= 1 && lesson <= SCREENS.length) setMode({ kind: 'tutorial', lesson: lesson - 1 });
+    else if (q.get('mode') === 'practice') setMode({ kind: 'practice' });
+    else if (q.get('mode') === 'play') setMode({ kind: 'play' });
     else if (q.get('s') || q.get('mode') === 'free') setMode({ kind: 'free' });
     else if (window.localStorage.getItem(DONE_KEY)) setMode({ kind: 'free' });
   }, []);
@@ -66,9 +68,27 @@ export function Sandbox() {
     setQuery({ mode: 'free' });
   };
 
-  return mode.kind === 'tutorial'
-    ? <Tutorial key={mode.lesson} index={mode.lesson} onScreen={goLesson} onFree={goFree} />
-    : <FreePlay initial={handover} onTutorial={() => goLesson(0)} />;
+  const goMatch = (kind: 'practice' | 'play') => { window.localStorage.setItem(DONE_KEY, '1'); setMode({ kind }); setQuery({ mode: kind }); };
+  const tabs: [Mode['kind'], string, () => void][] = [
+    ['tutorial', T.nav.learn, () => goLesson(0)],
+    ['practice', T.nav.practice, () => goMatch('practice')],
+    ['play', T.nav.play, () => goMatch('play')],
+    ['free', T.nav.sandbox, () => goFree()],
+  ];
+
+  return (
+    <>
+      <nav className="mp-nav" aria-label={T.nav.label}>
+        {tabs.map(([kind, label, go]) => (
+          <button key={kind} type="button" aria-current={mode.kind === kind ? 'page' : undefined} onClick={go}>{label}</button>
+        ))}
+      </nav>
+      {mode.kind === 'tutorial' && <Tutorial key={mode.lesson} index={mode.lesson} onScreen={goLesson} onFree={goFree} onPractice={() => goMatch('practice')} />}
+      {mode.kind === 'practice' && <PracticeMatch onDone={() => goMatch('play')} onSandbox={() => goFree()} />}
+      {mode.kind === 'play' && <PlayComputer onSandbox={() => goFree()} />}
+      {mode.kind === 'free' && <FreePlay initial={handover} onTutorial={() => goLesson(0)} />}
+    </>
+  );
 }
 
 /* ---------------- board ---------------- */
@@ -231,11 +251,7 @@ function TimeControls({ playing, setPlaying, setBoard, turn, minTurn }: {
 
 /* ---------------- tutorial ---------------- */
 
-/** Colours for the illustration: you are cyan, your rival amber (the approved board's owner colours). */
-const OWNER = ['#46D7E8', '#FFB43A'] as const;
-const OWNER_DARK = ['#1F5F68', '#6E4E1C'] as const;
-
-function Tutorial({ index, onScreen, onFree }: { index: number; onScreen: (i: number) => void; onFree: (from?: Board) => void }) {
+function Tutorial({ index, onScreen, onFree, onPractice }: { index: number; onScreen: (i: number) => void; onFree: (from?: Board) => void; onPractice: () => void }) {
   const screen = SCREENS[index];
   const text: { title: string; text: string; button: string; caption?: string; invented?: boolean } = T.screens[screen.id];
   const start = useMemo(() => screen.build(), [screen]);
@@ -281,7 +297,7 @@ function Tutorial({ index, onScreen, onFree }: { index: number; onScreen: (i: nu
   };
   const last = screen.kind === 'handover';
   const onPrimary = () => {
-    if (last) return onFree(p.board);
+    if (last) return onPractice();
     if (screen.kind === 'read' || met) return onScreen(index + 1);
     runDemo();
   };
@@ -319,7 +335,11 @@ function Tutorial({ index, onScreen, onFree }: { index: number; onScreen: (i: nu
           )}
         </>
       ) : (
-        <MatchIllustration mode={screen.id === 'hard' ? 'hard' : 'match'} />
+        <>
+          <WatchMatch viewer={screen.stage === 'watch' ? null : 0} />
+          {text.caption && <p className="mp-caption">{text.caption}</p>}
+          {screen.id === 'hard' && <ul className="mp-reasons">{T.hardReasons.map((r) => <li key={r}>{r}</li>)}</ul>}
+        </>
       )}
 
       <p className="mp-status" aria-live="polite">{status}</p>
@@ -336,98 +356,10 @@ function Tutorial({ index, onScreen, onFree }: { index: number; onScreen: (i: nu
               {SCREENS.map((s, i) => <option key={s.id} value={i}>{T.dotLabel(i + 1, T.screens[s.id].title)}</option>)}
             </select>
           </label>
-          {!last && <button type="button" className="mp-quiet" onClick={() => onFree()}>{T.freePlay}</button>}
+          <button type="button" className="mp-quiet" onClick={() => onFree()}>{T.freePlay}</button>
         </div>
       </div>
     </section>
-  );
-}
-
-/** The full-match illustration, frame by frame, or (for "hard") its fogged opening frame with the four reasons. */
-function MatchIllustration({ mode }: { mode: 'match' | 'hard' }) {
-  const [frame, setFrame] = useState(0);
-  const reduced = useRef(false);
-  useEffect(() => {
-    reduced.current = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    if (mode !== 'match' || reduced.current) return;
-    const id = window.setInterval(() => setFrame((f) => (f + 1) % MATCH_FRAMES.length), 2600);
-    return () => window.clearInterval(id);
-  }, [mode]);
-  const f = MATCH_FRAMES[mode === 'hard' ? 0 : frame];
-  const canvasRef = useRef<HTMLCanvasElement>(null);
-  const wrapRef = useRef<HTMLDivElement>(null);
-  const [px, setPx] = useState(358);
-  useEffect(() => {
-    const el = wrapRef.current;
-    if (!el) return;
-    const ro = new ResizeObserver(() => setPx(Math.floor(el.clientWidth)));
-    ro.observe(el);
-    return () => ro.disconnect();
-  }, []);
-  useEffect(() => {
-    const c = canvasRef.current;
-    if (!c) return;
-    const cell = px / ILLO_W, h = cell * ILLO_H, dpr = window.devicePixelRatio || 1;
-    c.width = Math.round(px * dpr); c.height = Math.round(h * dpr);
-    const ctx = c.getContext('2d')!;
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-    ctx.fillStyle = FIELD; ctx.fillRect(0, 0, px, h);
-    const at = new Map(f.cells.map((k) => [`${k.x},${k.y}`, k]));
-    for (let y = 0; y < ILLO_H; y++) for (let x = 0; x < ILLO_W; x++) {
-      const X = x * cell, Y = y * cell;
-      if (!illoVisible(f, x, y)) {
-        // Fog: the approved board's dotted dark.
-        if ((x + y) % 2 === 0) { ctx.fillStyle = '#17181D'; ctx.fillRect(X + cell / 2 - 1, Y + cell / 2 - 1, 2, 2); }
-        continue;
-      }
-      ctx.fillStyle = CELL_BG; ctx.fillRect(X, Y, cell, cell);
-      if (cell >= 6) { ctx.fillStyle = GRID; ctx.fillRect(X, Y, cell, 1); ctx.fillRect(X, Y, 1, cell); }
-      const k = at.get(`${x},${y}`);
-      if (!k) continue;
-      if (k.kind === 'wall') { ctx.fillStyle = OWNER_DARK[k.owner]; ctx.fillRect(X, Y, cell, cell); }
-      else if (k.kind === 'sym') { ctx.fillStyle = OWNER[k.owner]; ctx.fillRect(X, Y, cell, cell); }
-      else if (k.kind === 'live') { ctx.fillStyle = OWNER[k.owner]; ctx.fillRect(X + cell / 6, Y + cell / 6, cell - cell / 3, cell - cell / 3); }
-      else { ctx.fillStyle = 'rgba(108,109,120,.7)'; const g = cell / 3; ctx.fillRect(X + g, Y + g, cell - 2 * g, cell - 2 * g); }
-    }
-    ctx.setLineDash([Math.max(3, cell / 2), Math.max(2, cell / 3)]);
-    ctx.lineWidth = Math.max(1.5, cell / 6);
-    for (const s of f.symbols) {
-      if (!illoVisible(f, s.x + 1, s.y + 1)) continue;
-      ctx.strokeStyle = OWNER[s.owner];
-      ctx.strokeRect((s.x - 1) * cell, (s.y - 1) * cell, 5 * cell, 5 * cell);
-    }
-    if (f.zone) {
-      ctx.strokeStyle = 'rgba(231,228,221,.7)';
-      ctx.lineWidth = Math.max(1, cell / 8);
-      ctx.strokeRect(f.zone.x * cell, f.zone.y * cell, f.zone.w * cell, f.zone.h * cell);
-    }
-    ctx.setLineDash([]);
-  }, [f, px]);
-
-  return (
-    <div className="mp-illo">
-      <div className="mp-board">
-        <div className="mp-strip">
-          <span>{T.illustrationTag}</span>
-          {mode === 'match' && <span>{frame + 1} / {MATCH_FRAMES.length}</span>}
-        </div>
-        <div ref={wrapRef} className="mp-canvas-wrap">
-          <canvas
-            ref={canvasRef}
-            className="mp-canvas"
-            style={{ width: px, height: Math.round((px / ILLO_W) * ILLO_H) }}
-            role="img"
-            aria-label={mode === 'match' ? T.matchFrames[f.caption] : T.hardReasons.join(' ')}
-            onClick={() => mode === 'match' && setFrame((x) => (x + 1) % MATCH_FRAMES.length)}
-          />
-        </div>
-      </div>
-      {mode === 'match' ? (
-        <p className="mp-caption mp-frame-caption" aria-live="polite">{T.matchFrames[f.caption]}</p>
-      ) : (
-        <ul className="mp-reasons">{T.hardReasons.map((r) => <li key={r}>{r}</li>)}</ul>
-      )}
-    </div>
   );
 }
 

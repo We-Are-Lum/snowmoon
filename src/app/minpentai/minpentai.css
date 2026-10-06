@@ -175,3 +175,25 @@
 }
 .mp-dock-row .mp-quiet { flex: none; }
 .mp-visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* Matches */
+.mp-nav { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; margin: 0 0 14px; }
+.mp-nav button {
+  min-height: var(--tap);
+  border: 1px solid var(--rule);
+  border-radius: 2px;
+  background: transparent;
+  color: var(--ink);
+  font-family: var(--label);
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  cursor: pointer;
+}
+.mp-nav button[aria-current='page'] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.mp-counts { display: inline-flex; flex-wrap: wrap; gap: 4px 10px; }
+.mp-strip-full { flex-basis: 100%; }
+.mp-cost { display: block; font-size: 12px; letter-spacing: 0.04em; opacity: 0.7; text-transform: none; }
+.mp-watch .mp-frame-caption { min-height: 1.5em; }
+.mp-dock-row .mp-dots { flex: 1; }
+.mp-tutorial { scroll-margin-top: 8px; }

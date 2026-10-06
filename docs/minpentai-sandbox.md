@@ -88,9 +88,9 @@ A first visit to `/minpentai` opens an 11-screen tutorial, redesigned from `minp
 - On reading screens the button says Next.
 - On hands-on screens it says what it will do ("Show me", "Play it", "Draw it for me", "Fire it"), then performs the screen's demo at a watchable pace. A second tap during a demo finishes it at once.
 - When the goal is met, by the visitor or the demo, the button says Next.
-- Tapping only that button takes a visitor from the first screen to free play in 17 taps, about 18 seconds.
+- Tapping only that button takes a visitor through the tutorial and the practice match to the match against the computer in 25 taps, about 25 seconds.
 
-**Navigation.** The browser remembers once the tutorial is finished or skipped. `?lesson=N` opens screen N. `?mode=free` or a shared board (`?s=…`) opens free play. In the tutorial, stepping back stops at turn 0.
+**Navigation.** Four tabs at the top: Learn, Practice, Play, Sandbox. The browser remembers once the tutorial is finished or skipped. `?lesson=N` opens screen N; `?mode=practice` and `?mode=play` open the matches; `?mode=free` or a shared board (`?s=…`) opens free play. In the tutorial, stepping back stops at turn 0.
 
 **Wording.** All of it is in `src/lib/minpentai/tutorial-text.ts`, keyed by screen id, with the book blocks behind each claim. It is marked model-drafted, and the page shows "Draft wording" until `modelDrafted` is set to false. Nothing comes from beyond chapter 4.
 
@@ -106,9 +106,9 @@ A first visit to `/minpentai` opens an 11-screen tutorial, redesigned from `minp
 | 6 | Build one | Tap four outlined cells | A glider detected; taps the outline |
 | 7 | Rocks (invented) | Gliders bounce off rocks | Glider travelling back down; plays |
 | 8 | Your symbol (invented) | Sight, protect and hunt; formed against a rock | Paused on a framed turn; steps to turn 22 |
-| 9 | A full match | Five-frame illustration in the board's style, labelled not playable: setup in the dark, spreading, an intervention turn, the clash, the rival out. Frames from `src/lib/minpentai/illustration.ts`. | None |
-| 10 | Why it is hard | Four reasons: sight, rare turns to act, changing rules, no invincible wall | None |
-| 11 | The book's own board | The c4-b5 board plays; "Start playing" hands it to free play | None |
+| 9 | A full match (invented) | The recorded four-player match (below) as the crowd sees it, with a line for each turn to act, each player out, and the winner | None |
+| 10 | Why it is hard | The same match as cyan sees it, and four reasons: sight, rare turns to act, changing rules, no invincible wall | None |
+| 11 | The book's own board | The c4-b5 board plays; "Practice match" goes on to the practice match | None |
 
 **Tests.**
 - `npx tsx scripts/test-minpentai-tutorial.ts` runs every screen's demo through the engine and checks that the goal is met on exactly the expected move and not before. It also checks near misses, the illustration's frames against their captions, and the text rules.
@@ -117,3 +117,69 @@ A first visit to `/minpentai` opens an 11-screen tutorial, redesigned from `minp
   - a self-solved screen says "You did it", and a double tap finishes a demo;
   - the main button is always in view, and nothing sticks out past the right edge;
   - the illustration advances, and holds still under reduced motion.
+
+## Matches
+
+Everything in this section is **invented**. Chapters 2–4 describe how a match goes but give no numbers or exact procedure, so every number and procedure here is ours. The page labels each match screen "Match rules invented", and each match screen marks its wording as drafted.
+
+**What the book gives us.**
+- The board starts dark; a copy of your symbol lets you see around it (c4-b93).
+- Setup happens in a home corner (c4-b94).
+- The battle then runs on its own (c4-b106–b108).
+- Intervention turns let players "put down more squares near any copy of their symbols" (c4-b110).
+- A player whose symbols are all destroyed is out (c4-b136–b138).
+- The crowd sees the whole board (c4-b114).
+- Players test designs in a private sandbox first (c4-b96).
+- Walls reflect gliders (c2-b12).
+
+**The rules** (`src/lib/minpentai/match.ts`):
+
+| Rule | Value |
+|---|---|
+| Owners | Every live cell has an owner. Each turn applies the book's rule exactly, and owners travel with their cells by a fixed pairing inside each block. A test checks that the live cells always equal the plain rule's. |
+| Your symbol | A recognised symbol with at least 3 of its 4 cells yours. Where one has been seen is a *site*. A site lasts 8 turns after its symbol was last recognised, so a symbol that flickers as a glider passes is not lost at once. A symbol that forms out of your cells on impact gives you a site too (the book's foothold "for exactly one turn", c4-b113). |
+| Sight | 10 cells around each of your sites (the book: thirty squares on a far bigger board). Rocks are shown everywhere: the map is known. |
+| Turns to act | Every 24 turns (the book: about a thousand). |
+| Squares | Up to 8 per turn to act, each within 7 cells of one of your sites, on empty cells with an empty cell around the new shape. Three things to put down: a glider (4 squares, any of four directions, snapped to where it travels), a single square (1, which bounces gliders), or a new symbol (4). |
+| Out and winning | A player with no sites is out; the last player in wins. At turn 480, the most sites wins, and equal counts are a draw. |
+
+**Test.** During your turn to act, Test runs the next 48 turns on a private copy that holds only what you can see, plus your squares this turn. Nothing is placed.
+
+**Computer players** (`src/lib/minpentai/ai.ts`). They play fair: each knows the rocks and only the cells it can see. Results are the same for a given seed.
+- *Normal* tests its options on a private copy of what it sees:
+  - it blocks a glider that would destroy one of its symbols;
+  - it fires at symbols it can see, when a test shows the shot lands;
+  - it spreads new symbols toward the middle or the enemy.
+- *Easy* tests only that a shot will not hit its own symbols. It spreads slowly, fires roughly in your direction without checking its aim, and never defends.
+
+**Three matches** (`src/lib/minpentai/matches.ts`):
+- **Watched (tutorial screens 9 and 10).** Four normal computer players start in the corners of a 56 × 56 board. The page replays a recorded game rather than running four players on a phone.
+  - `scripts/record-minpentai-match.ts` plays seeds until a match ends with three players out, the first no earlier than turn 80 and the last by turn 400.
+  - It keeps seed 2: amber is out at 178, cyan at 267 and pink at 346, so violet wins.
+  - It writes the moves to `watch-moves.ts`.
+- **Practice (`?mode=practice`).** You against a practice rival with one symbol and a script: its only move is one glider, fired at your nearest symbol during setup. There are five steps, and the one button works the same way as in the tutorial ("Show me", then "Run"). The outline shows each step's move, and the right tool is already chosen.
+  1. You see only around your symbols.
+  2. Spread: a new symbol on the outline, which brings the rival into sight.
+  3. Block: one square in the glider's path. The goal is met when a full-information test shows every symbol of yours still standing 48 turns on.
+  4. Attack: a glider at the rival's symbol. The goal is met when the test shows it gone and yours safe.
+  5. You win. The rival is out at turn 58.
+- **Against the computer (`?mode=play`).** You (cyan, lower right) against easy (amber, upper left), on the tutorial's 48 × 32 board with six rocks. Run ends your turn; tapping again skips ahead. Play again starts a new seed.
+
+**How the computer players measure up** (engine runs, not people):
+- Normal beats easy in 7 of 8 seeds.
+- Easy beats a player who does nothing in 6 of 8 seeds, between turns 190 and 476.
+
+**Tests.**
+- `npx tsx scripts/test-minpentai-match.ts` checks:
+  - owners and the rule;
+  - each glider stamp's direction;
+  - reach, crowding, budget and turns to act;
+  - that the recorded match replays to its recorded result;
+  - the practice: doing nothing loses a symbol; each goal is unmet before its scripted move and met after it; near misses (off the outline, out of the path, a missed shot) do not count; the rival is out after the shot;
+  - that easy beats an idle player in most seeds.
+- In a browser at 390px with touch, in light and dark mode:
+  - one button alone gets through the tutorial and practice to the computer match;
+  - doing nothing against the computer ends the match;
+  - the practice works by hand, tapping each outline twice and using Test;
+  - text, tap-target size, fonts and fit to the screen all pass on every screen;
+  - the watched match plays, and holds still under reduced motion.

@@ -6,11 +6,10 @@
  * - Every "do" screen's demo (what the one button runs) reaches its goal, and the
  *   goal does not fire before: not at the start, not on any earlier move.
  * - The visitor's own solutions work too, and near misses never count.
- * - The full-match illustration's frames show what their captions say.
+ * - The practice match's wording follows the same rules.
  * - The tutorial text follows its rules.
  */
 import { step, withCell, type Board } from '../src/lib/minpentai/engine';
-import { MATCH_FRAMES, illoVisible } from '../src/lib/minpentai/illustration';
 import { SCREENS, demoBoards, screenIndex, type GoalContext, type ScreenId } from '../src/lib/minpentai/tutorial';
 import { TUTORIAL_TEXT } from '../src/lib/minpentai/tutorial-text';
 
@@ -69,13 +68,8 @@ expect('symbol', 'playing straight through', firstHit('symbol', moves('symbol', 
 // Stepping back never passes turn 0 in the demo.
 if (demoBoards(screenOf('backward'), screenOf('backward').build()).some((x) => x.board.turn < 0)) fail('backward: demo went below turn 0');
 
-// Illustration: fog in the first three frames, rival symbols gone in the last.
-const [setup, , , clash, out] = MATCH_FRAMES;
-if (!setup.fog || illoVisible(setup, 2, 2)) fail('illustration: setup should hide the far corner');
-if (!clash.symbols.some((s) => s.owner === 1)) fail('illustration: clash should show the rival');
-if (out.symbols.some((s) => s.owner === 1) || out.cells.some((c) => c.kind === 'sym' && c.owner === 1)) fail('illustration: rival symbols should be gone in the last frame');
-if (MATCH_FRAMES.some((f) => !(f.caption in TUTORIAL_TEXT.matchFrames))) fail('illustration: a frame has no caption');
-console.log(`illustration: ${MATCH_FRAMES.length} frames, fog and elimination as captioned`);
+// The match screens show the recorded match; the last screen hands over.
+if (screenOf('match').stage !== 'watch' || screenOf('hard').stage !== 'watch-cyan') fail('match screens should show the recorded match');
 
 // Text rules.
 const sentenceCount = (t: string) => t.split(/(?<=[.!?])\s+/).filter((s) => s.trim()).length;
@@ -86,6 +80,10 @@ for (const s of SCREENS) {
   if (!t.button) fail(`${s.id}: no button label`);
   for (const m of `${t.text} ${t.caption ?? ''}`.matchAll(/chapter (\d+)/gi)) if (Number(m[1]) > 4) fail(`${s.id}: mentions chapter ${m[1]}`);
 }
+for (const [id, t] of Object.entries(TUTORIAL_TEXT.practice.steps)) {
+  if (sentenceCount(t.text) > 2) fail(`practice ${id}: ${sentenceCount(t.text)} sentences, at most 2`);
+}
+if (sentenceCount(TUTORIAL_TEXT.play.intro) > 2) fail('play intro: more than 2 sentences');
 if (!('modelDrafted' in TUTORIAL_TEXT)) fail('tutorial text must say whether it is model-drafted');
 console.log(`text: ${SCREENS.length} screens, at most two sentences each, nothing past chapter 4`);
 
