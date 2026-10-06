@@ -101,7 +101,7 @@ A first visit to `/minpentai` opens an 11-screen tutorial, redesigned from `minp
 | 1 | A game a whole country watches | The stadium, the crowd, the priests' secret rule. The book's board plays. | None |
 | 2 | Your season | Last year of school tournaments; the nationals and prize money. Your symbol cycles. | None |
 | 3 | The board is alive | A lone cell hops and comes home | Four turns forward; four steps |
-| 4 | Time runs both ways | Every move can be undone, so no wall is invincible. Starts at turn 4. | Turn 0; four steps back |
+| 4 | Running the rules backward | The rules run in reverse, so the sandbox can step back to see where a pattern came from; in a match, time only moves forward. Starts at turn 4. Wording model-drafted (see `minpentai-backward.md`). | Turn 0; four steps back |
 | 5 | The glider | Your main tool | Sixteen turns of travel; plays |
 | 6 | Build one | Tap four outlined cells | A glider detected; taps the outline |
 | 7 | Rocks (invented) | Gliders bounce off rocks | Glider travelling back down; plays |

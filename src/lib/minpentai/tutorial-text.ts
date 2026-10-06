@@ -15,7 +15,11 @@
  *           the countdown "MU GU GEI FA", fifty ticks (c4-b83)
  *   you     last year to compete; winning means the nationals (c4-b15);
  *           prize money (c4-b73)
- *   backward  rules run backward, so no wall is invincible (c4-b9, c4-b13)
+ *   backward  the rules are time-reversible (c4-b9, c4-b13); stepping back in a
+ *           sandbox to see where a pattern came from (c12-b163–b177). No block
+ *           shows time reversed on a live match board; "in a match, time only
+ *           moves forward" is our reading of how matches are told
+ *           (docs/minpentai-backward.md)
  *   symbol  a copy of your symbol lets you see around it (c4-b93)
  *   match   dark board, setup in a corner (c4-b93–b94); the battle runs on its
  *           own (c4-b106–b108); intervention turns (c4-b110); a player is out
@@ -39,6 +43,8 @@ type ScreenText = {
   /** Small line under the board. */
   caption?: string;
   invented?: boolean;
+  /** This screen's wording is model-drafted, whatever `modelDrafted` says for the file. */
+  modelDrafted?: boolean;
 };
 
 export const TUTORIAL_TEXT = {
@@ -74,10 +80,12 @@ export const TUTORIAL_TEXT = {
       text: 'Once a match begins, cells move by themselves. Step forward four times and watch this one hop and come home.',
       button: 'Show me',
     },
+    // MODEL-DRAFTED, Oct 6, 2026: replaces "Time runs both ways", which overstated it.
     backward: {
-      title: 'Time runs both ways',
-      text: 'Every move can be undone, so no wall is ever invincible. Step back to turn 0.',
+      title: 'Running the rules backward',
+      text: 'The rules can be run in reverse, so the sandbox lets you step back to turn 0 and see where this pattern came from. In a match, time only moves forward.',
       button: 'Show me',
+      modelDrafted: true,
     },
     glider: {
       title: 'The glider',

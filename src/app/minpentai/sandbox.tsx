@@ -253,7 +253,7 @@ function TimeControls({ playing, setPlaying, setBoard, turn, minTurn }: {
 
 function Tutorial({ index, onScreen, onFree, onPractice }: { index: number; onScreen: (i: number) => void; onFree: (from?: Board) => void; onPractice: () => void }) {
   const screen = SCREENS[index];
-  const text: { title: string; text: string; button: string; caption?: string; invented?: boolean } = T.screens[screen.id];
+  const text: { title: string; text: string; button: string; caption?: string; invented?: boolean; modelDrafted?: boolean } = T.screens[screen.id];
   const start = useMemo(() => screen.build(), [screen]);
   const p = usePlayer(() => start, screen.autoplay);
   const { setSpeed, setBoard, setPlaying } = p;
@@ -309,7 +309,7 @@ function Tutorial({ index, onScreen, onFree, onPractice }: { index: number; onSc
       <div className="mp-lesson">
         <p className="mp-lesson-meta">
           {T.heading} · {T.stepOf(index + 1, SCREENS.length)}
-          {T.modelDrafted && <span className="mp-draft"> · {T.draftNote}</span>}
+          {(T.modelDrafted || text.modelDrafted) && <span className="mp-draft"> · {T.draftNote}</span>}
         </p>
         <h2>
           {text.title}

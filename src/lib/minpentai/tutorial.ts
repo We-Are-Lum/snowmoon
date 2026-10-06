@@ -67,7 +67,7 @@ export const SCREENS: Screen[] = [
     goal: ({ board, start }) => board.turn - start.turn >= 4,
     demo: { kind: 'step', dir: 1, count: 4, ms: 550 },
   },
-  // Time runs both ways: starts four turns in; back to turn 0 (stepping back stops there).
+  // Running the rules backward: starts four turns in; back to turn 0 (stepping back stops there).
   {
     id: 'backward', kind: 'do', stage: 'board',
     build: () => {
