@@ -422,3 +422,18 @@ over.
    consent wording to promise it only then.
 5. Publish-without-name: not now. Keep the proposal on file.
 ```
+
+```text
+The 13 Supabase and POSTGRES_ variables have been removed from the
+snowmoon project by hand.
+
+1. List the project's variable names and confirm none of them are
+   back.
+2. Redeploy production and run the shipped and principle checks.
+3. Add a check that fails if SUPABASE_SERVICE_ROLE_KEY,
+   SUPABASE_JWT_SECRET, or any POSTGRES_* variable is present on
+   the project.
+4. Then, if you have not already, pull FAL_KEY and run the A/B.
+
+Never print a variable's value.
+```

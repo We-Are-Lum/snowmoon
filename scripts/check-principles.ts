@@ -12,6 +12,7 @@
  * (read-only) when STUDIO_DATABASE_URL is set. Page checks fetch the deployed
  * site; the third-party request check drives the local Chrome.
  */
+import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
 import { existsSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
@@ -675,6 +676,34 @@ add({
   plant: (c) => {
     c.skipped = false;
     c.results = [{ table: 'likes', status: 200, body: '[]' }];
+  },
+});
+
+// The app reaches the database only as studio_writer (STUDIO_DATABASE_URL).
+// Keys that bypass row-level security, or connect as the database owner, must
+// not sit on the Vercel project at all (owner decision, Oct 5, 2026).
+const FORBIDDEN_VARS = /^(SUPABASE_SERVICE_ROLE_KEY|SUPABASE_JWT_SECRET|POSTGRES_[A-Z0-9_]*)$/;
+add({
+  id: 'P6d',
+  principle: 6,
+  name: 'the Vercel project holds no service-role key, JWT secret or POSTGRES_* variable (names only)',
+  load: async () => {
+    // Names only: `vercel env ls` prints names and masks values; nothing else is read.
+    try {
+      const out = execFileSync('npx', ['-y', 'vercel', 'env', 'ls'], { cwd: ROOT, encoding: 'utf8', stdio: ['ignore', 'pipe', 'pipe'], timeout: 120_000 });
+      const names = [...out.matchAll(/^ ([A-Z][A-Z0-9_]*)\s/gm)].map((m) => m[1]);
+      return { skipped: names.length ? '' : 'vercel env ls listed no variables (not linked or not signed in?)', names };
+    } catch (e) {
+      return { skipped: `vercel CLI unavailable: ${(e as Error).message.split('\n')[0]}`, names: [] as string[] };
+    }
+  },
+  run: ({ skipped, names }) => {
+    if (skipped) return [`skipped: ${skipped}`];
+    return names.filter((n) => FORBIDDEN_VARS.test(n)).map((n) => `${n} is set on the Vercel project; remove it (the app uses only STUDIO_DATABASE_URL)`);
+  },
+  plant: (c) => {
+    c.skipped = '';
+    c.names = [...c.names, 'POSTGRES_URL'];
   },
 });
 

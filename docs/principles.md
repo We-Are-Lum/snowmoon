@@ -265,6 +265,10 @@ only, through `studio.rating_totals`, `studio.like_totals` and
   included).
 - `P6c`: on the live database, through the public API with the public key,
   the individual tables refuse to answer and the totals views answer.
+- `P6d`: the Vercel project holds no `SUPABASE_SERVICE_ROLE_KEY`,
+  `SUPABASE_JWT_SECRET` or `POSTGRES_*` variable (read by name through the
+  signed-in Vercel CLI; values are never read). The app reaches the database
+  only as `studio_writer`.
 - Review: does a new page, embed or script reach another domain? Does a new
   table expose who did what?
 
