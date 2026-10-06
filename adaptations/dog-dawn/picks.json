@@ -1,0 +1,106 @@
+{
+  "about": "The locked pictures for dog-dawn (owner, Oct 5, 2026: 'Pictures are locked as in v6. No more renders unless I ask.'). One entry per image, in beat order; beat 8 has two, shown in sequence (a cut mid-beat in the video). Alt text is model-drafted accessibility text and says how the image was made. Files are local until publication; each is identified by sha256.",
+  "locked_on": "2026-10-05",
+  "locked_by_fid": 6786,
+  "images": [
+    {
+      "beat": 1,
+      "order": 1,
+      "file": "images-out/ab-test/ab-e-01-a2.png",
+      "sha256": "dc802d35825bdc10c68df80db8a20651d97379669b7a6fa66959f9a3ed9acb79",
+      "recipe": "adaptations/dog-dawn/ab-test/recipe.json",
+      "made_by": "ERNIE-Image Turbo (fal.ai)",
+      "alt": "AI-generated image: a young man in a long cream cable-knit tunic sits alone at a console in a room of pale ice-like crystal; behind frosted glass, two dark faceless figures stand; stars show in the windows."
+    },
+    {
+      "beat": 2,
+      "order": 1,
+      "file": "images-out/ab-test/ab-e-02-a1.png",
+      "sha256": "84b36d1102b516a7d604020b42d5c94503522d7abdeaa5a0c8fe3022bc2935df",
+      "recipe": "adaptations/dog-dawn/ab-test/recipe.json",
+      "made_by": "ERNIE-Image Turbo (fal.ai)",
+      "alt": "AI-generated image: through a frosted window of a crystal room, a fire burns among snowy pines at night, and a line of small lights crosses the hills."
+    },
+    {
+      "beat": 3,
+      "order": 1,
+      "file": "images-out/ab-test/ab-e-03-a2.png",
+      "sha256": "7ba0694b8fc184ec9f73ea60fd74b2df2719cd498fd4367d553cc8de3ca9a8dc",
+      "recipe": "adaptations/dog-dawn/ab-test/recipe.json",
+      "made_by": "ERNIE-Image Turbo (fal.ai)",
+      "alt": "AI-generated image: a hand in a cream knit sleeve rests on a glass console; a green heartbeat line runs across it and a thin warm thread of light slips away."
+    },
+    {
+      "beat": 4,
+      "order": 1,
+      "file": "images-out/adaptation-dog-dawn/dd-04-a1.graded.png",
+      "sha256": "df898783337657bdb33b67d85a7c7a7aaa0b9484c269e279d53912840f8344c6",
+      "recipe": "content/snowmoon/recipes/images/adaptation-dog-dawn.grade.json",
+      "made_by": "FLUX.2 klein 4B (local), sky filled in code",
+      "alt": "AI-generated image: rows of glowing wireframe drones stand on a grid of light in the dark; one small warm probe moves among them."
+    },
+    {
+      "beat": 5,
+      "order": 1,
+      "file": "images-out/ab-test/ab-e-05-a4.png",
+      "sha256": "f6bb7240f18c610174d9c71de471cc641ce9d3016c2495de095ec95db2630856",
+      "recipe": "adaptations/dog-dawn/ab-test/recipe.json",
+      "made_by": "ERNIE-Image Turbo (fal.ai)",
+      "alt": "AI-generated image: the young man works at a console in the crystal room; behind frosted glass in a corridor stands a dark faceless guard; stars show in the windows."
+    },
+    {
+      "beat": 6,
+      "order": 1,
+      "file": "images-out/adaptation-dog-dawn/dd-06-a1.graded.png",
+      "sha256": "e83c77eba588b5fd83dd9e8149c479a57480cd32bc4d2745e5255f78ef9555a7",
+      "recipe": "content/snowmoon/recipes/images/adaptation-dog-dawn.grade.json",
+      "made_by": "FLUX.2 klein 4B (local), pre-dawn grade in code",
+      "alt": "AI-generated image: before dawn, soldiers in pale hooded cloaks press colourful patterned sheets onto rows of snow drones at the edge of a forest."
+    },
+    {
+      "beat": 7,
+      "order": 1,
+      "file": "images-out/adaptation-dog-dawn/dd-sheet-dog.png",
+      "sha256": "1c9538dd4e0eec77eafb4a4ddb37ab49ea4c1fa4d2f74493d70a384849e1b037",
+      "recipe": "content/snowmoon/recipes/images/adaptation-dog-dawn.drawn.json",
+      "made_by": "drawn in code (no model)",
+      "alt": "Drawn in code: a printed sheet covered in colourful squiggles, with the word DOG in a giant font across a white band."
+    },
+    {
+      "beat": 8,
+      "order": 1,
+      "file": "images-out/adaptation-dog-dawn/dd-07-a2.png",
+      "sha256": "ae06c2ac8e0db1b2c3fc6874e072454fbcba148c959ec452f869b845a4a21a41",
+      "recipe": "content/snowmoon/recipes/images/adaptation-dog-dawn.json",
+      "made_by": "FLUX.2 klein 4B (local)",
+      "alt": "AI-generated image: at sunrise, drones covered in colourful patterns plough through the snow between pines, past dark drones that sit still."
+    },
+    {
+      "beat": 8,
+      "order": 2,
+      "file": "images-out/adaptation-dog-dawn/dd-07-a2-overlay.png",
+      "sha256": "57e8c859d3d4e2a3cb97cf4bf7de1f831ca26e2d89ceaa2d2dd7275e5bbe2b50",
+      "recipe": "content/snowmoon/recipes/images/adaptation-dog-dawn.drawn.json",
+      "made_by": "FLUX.2 klein 4B (local), overlay drawn in code",
+      "alt": "AI-generated image with a code-drawn overlay: the same moment through an Arctic drone's display, a targeting frame on the nearest drone, labelled DOG."
+    },
+    {
+      "beat": 9,
+      "order": 1,
+      "file": "images-out/ab-test/ab-e-09-a2.screen-cut.png",
+      "sha256": "ab8f1d38222184320f4919f127853ca7c14c933f9924cd60bf909b66a0366ed0",
+      "recipe": "adaptations/dog-dawn/ab-test/screens.json",
+      "made_by": "ERNIE-Image Turbo (fal.ai), screen composited in code",
+      "alt": "AI-generated image with a code-drawn screen: at dawn, the young man sits at a console; the screen reads \"I hope you trust me now. … jie fe hen dzi.\""
+    },
+    {
+      "beat": 10,
+      "order": 1,
+      "file": "images-out/adaptation-dog-dawn/dd-09-a1.png",
+      "sha256": "bc77355df9da057f32fe203759f86c3a663e7350ca64885c0701729e8dcc944e",
+      "recipe": "content/snowmoon/recipes/images/adaptation-dog-dawn.json",
+      "made_by": "FLUX.2 klein 4B (local)",
+      "alt": "AI-generated image: on a snowy summit stair, a young man in a cream tunic throws his arms around another young man while a woman in an orange jacket watches."
+    }
+  ]
+}

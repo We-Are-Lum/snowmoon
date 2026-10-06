@@ -16,6 +16,9 @@
 > the other on the page, a cut mid-beat in the video. Beat 5 keeps attempt 3's
 > pose and framing and must be night.
 >
+> Pictures locked as in v6 (owner, Oct 5, 2026): `picks.json` lists them. No
+> more renders unless the owner asks.
+>
 > **Structure drafted by the coding agent (Claude, a closed model).** Drafted from `brief.md` on Oct 5, 2026, and reworked the same day
 > into the beat format of `docs/adaptation-format.md`. The agent wrote no
 > narration and no dialogue: those fields are empty until a person writes
@@ -23,7 +26,7 @@
 >
 > **Full spoilers** for chapters 29–31.
 
-**Stage:** narrated comic (stage 1). **Narrator:** one voice, not yet chosen.
+**Stage:** narrated comic (stage 1). **Narrator:** Kokoro-82M stock voice `am_michael` (not the house voice; Apache-2.0, checked Oct 5, 2026).
 **Point of view:** Deluin (brief §5, question 1); the writer may change it.
 **Length:** 10 beats. Narration written so far: 0 words (at most 25 per beat).
 
