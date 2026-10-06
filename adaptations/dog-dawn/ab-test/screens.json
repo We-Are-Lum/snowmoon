@@ -5,7 +5,7 @@
   "script_uncommitted_changes": false,
   "numpy_version": "2.5.3",
   "pillow_version": "12.3.0",
-  "generated_at": "2026-10-06T02:52:26+00:00",
+  "generated_at": "2026-10-06T03:34:25+00:00",
   "images": [
     {
       "id": "ab-e-09-a1",
@@ -218,6 +218,110 @@
       "output": {
         "file": "images-out/ab-test/ab-e-09-a1.screen-full.png",
         "sha256": "c8af6b9eb359b80ad1f4803f99dfd21c61a6fdb286e6f636d9f350919d522d1b"
+      }
+    },
+    {
+      "id": "ab-e-09-a2",
+      "beat": 9,
+      "screen": {
+        "variant": "cut",
+        "block": "c30-b61",
+        "capture": "images-out/adaptation-dog-dawn/screen-c30-b61-cut-170.png",
+        "capture_record": {
+          "block": "c30-b61",
+          "url": "https://snowmoon.party/chapter/30",
+          "site_commit": "1a291bbd7eea6ade70a3310d9c215023ed9a1f08",
+          "theme": "dark",
+          "viewport_width": 170,
+          "kept_paragraphs": [
+            0,
+            2
+          ],
+          "text_shown": "I hope you trust me now. … jie fe hen dzi.",
+          "device_scale": 3,
+          "file": "images-out/adaptation-dog-dawn/screen-c30-b61-cut-170.png",
+          "sha256": "7c8fa1ffeba1b8b5caa5a5e9e10123bd8637b75f2fce9188c66a9882f6c4ecb7"
+        },
+        "device": [
+          [
+            640,
+            135
+          ],
+          [
+            917,
+            85
+          ],
+          [
+            915,
+            362
+          ],
+          [
+            642,
+            345
+          ]
+        ],
+        "content": [
+          0.08,
+          0.1,
+          0.95,
+          0.92
+        ],
+        "base": [
+          11,
+          15,
+          41
+        ],
+        "glow": {
+          "radius": 14,
+          "strength": 0.7
+        },
+        "spill": {
+          "center": [
+            590,
+            425
+          ],
+          "radius": 170,
+          "color": [
+            90,
+            130,
+            255
+          ],
+          "strength": 0.35
+        }
+      },
+      "capture_record": {
+        "block": "c30-b61",
+        "url": "https://snowmoon.party/chapter/30",
+        "site_commit": "1a291bbd7eea6ade70a3310d9c215023ed9a1f08",
+        "theme": "dark",
+        "viewport_width": 170,
+        "kept_paragraphs": [
+          0,
+          2
+        ],
+        "text_shown": "I hope you trust me now. … jie fe hen dzi.",
+        "device_scale": 3,
+        "file": "images-out/adaptation-dog-dawn/screen-c30-b61-cut-170.png",
+        "sha256": "7c8fa1ffeba1b8b5caa5a5e9e10123bd8637b75f2fce9188c66a9882f6c4ecb7"
+      },
+      "variant": "cut",
+      "text_shown": "I hope you trust me now. … jie fe hen dzi.",
+      "ocr": [
+        "I hope you",
+        "trust me",
+        "nOW.",
+        "jie fe hen",
+        "dzi."
+      ],
+      "ocr_missing_words": [],
+      "input": {
+        "file": "images-out/ab-test/ab-e-09-a2.png",
+        "sha256": "5f85c63ac7cbdb6f923c559e8ca8b5d41ec1472f7ed702b08aeb2c63b2d4300e",
+        "role": "clean render, the starting point for a remix"
+      },
+      "output": {
+        "file": "images-out/ab-test/ab-e-09-a2.screen-cut.png",
+        "sha256": "ab8f1d38222184320f4919f127853ca7c14c933f9924cd60bf909b66a0366ed0"
       }
     }
   ],

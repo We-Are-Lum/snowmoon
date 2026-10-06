@@ -64,7 +64,24 @@ hand-only close-up uses its sweater words. Previous versions are kept.
 
 Beat 10 also has Deluin and is still FLUX klein; it was not in this pass.
 
-Hosted spend so far: $0.1063 (A/B and both rounds), cap $1 per round.
+### Wording fix (owner's notes, Oct 5, 2026)
+
+Beat 3: `ab-e-03-a2` is taken. The fixed description now matches beat 10's
+outfit (a long cream cable-knit wool tunic to mid-thigh, plain leather belt,
+hood down; dark green wool trousers; brown leather boots; no zips,
+drawstrings, pockets or logos) and asks for warm, natural skin, with the
+screen's light only on the desk and his hands. Beats 1, 5 and 9 re-rendered
+with the same seeds, changing only those words (attempt limit waived by the
+owner). The old description is kept in `deluin.json`
+(`fixed_description_history`).
+
+| Beat | New | Previous (kept) |
+|---|---|---|
+| 1 | `ab-e-01-a2` | `ab-e-01-a1` |
+| 5 | `ab-e-05-a4` | `ab-e-05-a3` |
+| 9 | `ab-e-09-a2` + screen (cut; OCR exact at text width 170) | `ab-e-09-a1` + screen |
+
+Hosted spend so far: $0.1363 (A/B and all rounds), cap $1 per round.
 
 ## Steps in code after the render
 

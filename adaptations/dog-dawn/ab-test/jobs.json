@@ -302,6 +302,110 @@
       "width": 1024,
       "height": 576,
       "prompt": "Close-up at night of one right hand, five fingers, resting flat on top of the glass of a sleek pale console. The wrist and forearm are in the sleeve of a hooded cream cable-knit sweater. Only this one hand and sleeve are in the picture; the fingers rest on the surface and do not pass through it. Across the console's display flows a soft stream of pale green abstract waveforms like heartbeat lines, with no letters or numbers, and one thin bright thread of warm light slips out of the stream and away. Behind the console, a wall of pale faceted crystalline panels, cool and softly lit, icy whites and pale blues, like polished ice, and a window onto a black night sky full of stars. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, cel-shaded flat color with soft hard-edged shadows, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers."
+    },
+    {
+      "id": "ab-e-01-a2",
+      "model": "e",
+      "beat": 1,
+      "compare_with": "ab-e-01-a1",
+      "attempt": 2,
+      "pass": "wording fix (attempt limit waived by the owner)",
+      "seed": 60011,
+      "width": 1024,
+      "height": 576,
+      "prompt": "Medium-wide shot inside Deluin's Arctic command post at night. The room is walled in pale faceted crystalline panels, cool and softly lit, icy whites and pale blues, like polished ice. On the left, a young man of eighteen with fair skin in warm, natural tones, grey-green eyes and light brown shoulder-length hair, wearing a long cream cable-knit wool tunic reaching mid-thigh, belted at the waist with a plain leather belt, its soft hood worn down, dark green wool trousers and brown leather boots, with no zips, drawstrings, pockets or logos, sits alone in a chair beside a single sleek console on the right, calm and serious. His skin keeps warm, natural tones; the screen's cold light falls only on the desk and his hands, not on his face. He is the only person in the room. Behind him, a wall of frosted glass; beyond it, outside the room, two guards stand as dark faceless silhouettes, blurred by the glass, with no faces and no eyes. Outside it is the middle of the night: every window shows a black night sky full of stars; no sunset, no pastel sky. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, cel-shaded flat color with soft hard-edged shadows, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers."
+    },
+    {
+      "id": "ab-e-05-a4",
+      "model": "e",
+      "beat": 5,
+      "compare_with": "ab-e-05-a3",
+      "attempt": 4,
+      "pass": "wording fix (attempt limit waived by the owner)",
+      "seed": 60052,
+      "width": 1024,
+      "height": 576,
+      "prompt": "Medium shot inside Deluin's Arctic command post at night. The room is walled in pale faceted crystalline panels, cool and softly lit, icy whites and pale blues, like polished ice. On the right, a young man of eighteen with fair skin in warm, natural tones, grey-green eyes and light brown shoulder-length hair, wearing a long cream cable-knit wool tunic reaching mid-thigh, belted at the waist with a plain leather belt, its soft hood worn down, dark green wool trousers and brown leather boots, with no zips, drawstrings, pockets or logos, sits in profile at a single sleek console, working: both hands on the console's keys, his eyes on its screen. His skin keeps warm, natural tones; the screen's cold light falls only on the desk and his hands, not on his face. He is the only person in the room. Across the back of the room is a wall of frosted glass; beyond it, in a dim corridor outside the room, stands the dark silhouette of a guard, blurred by the glass: a plain featureless dark shape with no face and no eyes. Outside it is the middle of the night: every window shows a black night sky full of stars; no sunset, no pastel sky. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, cel-shaded flat color with soft hard-edged shadows, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers."
+    },
+    {
+      "id": "ab-e-09-a2",
+      "model": "e",
+      "beat": 9,
+      "compare_with": "ab-e-09-a1",
+      "attempt": 2,
+      "pass": "wording fix (attempt limit waived by the owner)",
+      "seed": 60091,
+      "width": 1024,
+      "height": 576,
+      "prompt": "Medium shot inside Deluin's Arctic command post at dawn. The room is walled in pale faceted crystalline panels, cool and softly lit, icy whites and pale blues, like polished ice. On the left, a young man of eighteen with fair skin in warm, natural tones, grey-green eyes and light brown shoulder-length hair, wearing a long cream cable-knit wool tunic reaching mid-thigh, belted at the waist with a plain leather belt, its soft hood worn down, dark green wool trousers and brown leather boots, with no zips, drawstrings, pockets or logos, sits in profile at a sleek console, facing right, his hand hovering just above a single glowing key. His skin keeps warm, natural tones; the screen's cold light falls only on the desk and his hands, not on his face. On the right, a large monitor faces the viewer squarely, its screen a plain blank dark navy rectangle with nothing on it, glowing softly. The first pale gold light of dawn comes through a frosted window and warms the ice-pale walls. Still, heavy mood. No text on any screen. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, cel-shaded flat color with soft hard-edged shadows, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
+      "screen": [
+        {
+          "variant": "cut",
+          "block": "c30-b61",
+          "capture": "images-out/adaptation-dog-dawn/screen-c30-b61-cut-170.png",
+          "capture_record": {
+            "block": "c30-b61",
+            "url": "https://snowmoon.party/chapter/30",
+            "site_commit": "1a291bbd7eea6ade70a3310d9c215023ed9a1f08",
+            "theme": "dark",
+            "viewport_width": 170,
+            "kept_paragraphs": [
+              0,
+              2
+            ],
+            "text_shown": "I hope you trust me now. … jie fe hen dzi.",
+            "device_scale": 3,
+            "file": "images-out/adaptation-dog-dawn/screen-c30-b61-cut-170.png",
+            "sha256": "7c8fa1ffeba1b8b5caa5a5e9e10123bd8637b75f2fce9188c66a9882f6c4ecb7"
+          },
+          "device": [
+            [
+              640,
+              135
+            ],
+            [
+              917,
+              85
+            ],
+            [
+              915,
+              362
+            ],
+            [
+              642,
+              345
+            ]
+          ],
+          "content": [
+            0.08,
+            0.1,
+            0.95,
+            0.92
+          ],
+          "base": [
+            11,
+            15,
+            41
+          ],
+          "glow": {
+            "radius": 14,
+            "strength": 0.7
+          },
+          "spill": {
+            "center": [
+              590,
+              425
+            ],
+            "radius": 170,
+            "color": [
+              90,
+              130,
+              255
+            ],
+            "strength": 0.35
+          }
+        }
+      ]
     }
   ],
   "assist": {
