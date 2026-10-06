@@ -49,7 +49,22 @@ crystal walls, night through the windows (owner's revision, Oct 5, 2026).
 | 3 | `ab-e-03-a1` | ERNIE-Image Turbo | One hand in the cream sleeve; the warm thread leaves the heartbeat line |
 | 5 | owner to choose: `ab-e-05-a2` (a) or `ab-zc-05-a2` (b) | ERNIE-Image Turbo, re-prompted / Z-Image Turbo ControlNet from attempt 3 | (a) working at the console, faceless silhouette behind frosted glass, starry windows; (b) attempt 3's layout, but the guard stands in a starry window rather than behind frosted glass |
 
-Hosted spend so far: $0.0663 (A/B and this round), cap $1 per round.
+### Final pass: one Deluin (owner, Oct 5, 2026)
+
+Every panel he is in uses the fixed description in
+`designs/characters/deluin.json` (`fixed_description`), word for word; the
+hand-only close-up uses its sweater words. Previous versions are kept.
+
+| Beat | New (candidate) | Old (kept) | Note |
+|---|---|---|---|
+| 1 | `ab-e-01-a1` | `dd-01-a3` (FLUX klein) | Alone at the post, two faceless guards behind frosted glass, starry night |
+| 3 | `ab-e-03-a2` | `ab-e-03-a1` | Same seed; hand and thread against pale crystal, starry window |
+| 5 | `ab-e-05-a3` | `ab-e-05-a2` (the owner's pick, (a)) | Same seed and composition; only the character wording changed |
+| 9 | `ab-e-09-a1` + screen (cut) | `dd-08-a1` + screen (cut) | Monitor faces the viewer; screen composited in code; OCR reads every word |
+
+Beat 10 also has Deluin and is still FLUX klein; it was not in this pass.
+
+Hosted spend so far: $0.1063 (A/B and both rounds), cap $1 per round.
 
 ## Steps in code after the render
 

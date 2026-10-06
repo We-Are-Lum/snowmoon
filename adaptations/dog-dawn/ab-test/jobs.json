@@ -1,5 +1,5 @@
 {
-  "about": "A/B test, Oct 5, 2026 (owner's request): panels 3 and 5, and panel 2 as a night reference, on two Apache-2.0 open-weight models served by fal.ai, prompted as true night scenes with no grade step. Text-to-image only: no reference images, so Deluin is described in words. Test output only; nothing here is published, and the pipeline's model is unchanged. The style prompt is techno-vistas with its two daytime clauses ('big pastel skies and enormous elegant megastructures on the horizon', 'clean and bright and hopeful') left out for night. Prompt expansion is off, so the prompt recorded is the prompt used. Hard cap: $1 for the whole test. Round 2 (owner's revision, Oct 5, 2026): the post looks like panel 1, pale faceted crystal walls with night through the windows; panel 5 gets two candidates, ERNIE re-prompted and Z-Image ControlNet from attempt 3.",
+  "about": "A/B test, Oct 5, 2026 (owner's request): panels 3 and 5, and panel 2 as a night reference, on two Apache-2.0 open-weight models served by fal.ai, prompted as true night scenes with no grade step. Text-to-image only: no reference images, so Deluin is described in words. Test output only; nothing here is published, and the pipeline's model is unchanged. The style prompt is techno-vistas with its two daytime clauses ('big pastel skies and enormous elegant megastructures on the horizon', 'clean and bright and hopeful') left out for night. Prompt expansion is off, so the prompt recorded is the prompt used. Hard cap: $1 for the whole test. Round 2 (owner's revision, Oct 5, 2026): the post looks like panel 1, pale faceted crystal walls with night through the windows; panel 5 gets two candidates, ERNIE re-prompted and Z-Image ControlNet from attempt 3. Final pass (owner, Oct 5, 2026): one Deluin, using the fixed description in designs/characters/deluin.json in every panel he is in; beats 1, 3, 5 and 9 on ERNIE-Image Turbo; up to three attempts per panel in this pass; $1 cap.",
   "cap_usd": 1.0,
   "models": {
     "z": {
@@ -125,6 +125,183 @@
         "control_end": 0.8
       },
       "prompt": "Medium shot inside Deluin's Arctic command post at night. The room is walled in pale faceted crystalline panels, cool and softly lit, icy whites and pale blues, like polished ice. a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots sits in profile at a sleek console on the right, working, his face lit cold blue by its screen. He is the only person in the room. Across the back of the room is a wall of frosted glass; beyond it, in a dim corridor outside the room, stands the dark silhouette of a guard, blurred by the glass: a plain featureless dark shape with no face and no eyes. Outside it is the middle of the night: every window shows a black night sky full of stars; no sunset, no pastel sky. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, cel-shaded flat color with soft hard-edged shadows, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers."
+    },
+    {
+      "id": "ab-e-05-a3",
+      "model": "e",
+      "beat": 5,
+      "compare_with": "ab-e-05-a2",
+      "attempt": 3,
+      "pass": "final",
+      "seed": 60052,
+      "width": 1024,
+      "height": 576,
+      "prompt": "Medium shot inside Deluin's Arctic command post at night. The room is walled in pale faceted crystalline panels, cool and softly lit, icy whites and pale blues, like polished ice. On the right, a young man of eighteen, pale skin, grey-green eyes, light brown shoulder-length hair, wearing a hooded cream cable-knit sweater with an open neckline and no turtleneck, green trousers and brown boots, sits in profile at a single sleek console, working: both hands on the console's keys, his eyes on its screen, his face lit cold blue by it. He is the only person in the room. Across the back of the room is a wall of frosted glass; beyond it, in a dim corridor outside the room, stands the dark silhouette of a guard, blurred by the glass: a plain featureless dark shape with no face and no eyes. Outside it is the middle of the night: every window shows a black night sky full of stars; no sunset, no pastel sky. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, cel-shaded flat color with soft hard-edged shadows, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers."
+    },
+    {
+      "id": "ab-e-01-a1",
+      "model": "e",
+      "beat": 1,
+      "compare_with": "dd-01-a3",
+      "attempt": 1,
+      "pass": "final",
+      "seed": 60011,
+      "width": 1024,
+      "height": 576,
+      "prompt": "Medium-wide shot inside Deluin's Arctic command post at night. The room is walled in pale faceted crystalline panels, cool and softly lit, icy whites and pale blues, like polished ice. On the left, a young man of eighteen, pale skin, grey-green eyes, light brown shoulder-length hair, wearing a hooded cream cable-knit sweater with an open neckline and no turtleneck, green trousers and brown boots, sits alone in a chair beside a single sleek console on the right, calm and serious, his face lit cold blue by its screen. He is the only person in the room. Behind him, a wall of frosted glass; beyond it, outside the room, two guards stand as dark faceless silhouettes, blurred by the glass, with no faces and no eyes. Outside it is the middle of the night: every window shows a black night sky full of stars; no sunset, no pastel sky. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, cel-shaded flat color with soft hard-edged shadows, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers."
+    },
+    {
+      "id": "ab-e-09-a1",
+      "model": "e",
+      "beat": 9,
+      "compare_with": "dd-08-a1",
+      "attempt": 1,
+      "pass": "final",
+      "seed": 60091,
+      "width": 1024,
+      "height": 576,
+      "prompt": "Medium shot inside Deluin's Arctic command post at dawn. The room is walled in pale faceted crystalline panels, cool and softly lit, icy whites and pale blues, like polished ice. On the left, a young man of eighteen, pale skin, grey-green eyes, light brown shoulder-length hair, wearing a hooded cream cable-knit sweater with an open neckline and no turtleneck, green trousers and brown boots, sits in profile at a sleek console, facing right, his hand hovering just above a single glowing key. On the right, a large monitor faces the viewer squarely, its screen a plain blank dark navy rectangle with nothing on it, glowing softly. The first pale gold light of dawn comes through a frosted window and warms the ice-pale walls. Still, heavy mood. No text on any screen. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, cel-shaded flat color with soft hard-edged shadows, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
+      "screen": [
+        {
+          "variant": "cut",
+          "block": "c30-b61",
+          "capture": "images-out/adaptation-dog-dawn/screen-c30-b61-cut.png",
+          "capture_record": {
+            "block": "c30-b61",
+            "url": "https://snowmoon.party/chapter/30",
+            "site_commit": "db87d2356aeba5b619850dbf2ce9cc6fbd3dd02d",
+            "theme": "dark",
+            "viewport_width": 190,
+            "kept_paragraphs": [
+              0,
+              2
+            ],
+            "text_shown": "I hope you trust me now. … jie fe hen dzi.",
+            "device_scale": 3,
+            "file": "images-out/adaptation-dog-dawn/screen-c30-b61-cut.png",
+            "sha256": "9f0a660bf4b196dc4f0a821a3630380b6e6f4f4ef6e21a024a40c0e1dac5efd7"
+          },
+          "device": [
+            [
+              615,
+              136
+            ],
+            [
+              915,
+              95
+            ],
+            [
+              915,
+              380
+            ],
+            [
+              615,
+              373
+            ]
+          ],
+          "content": [
+            0.06,
+            0.1,
+            0.94,
+            0.9
+          ],
+          "base": [
+            11,
+            15,
+            41
+          ],
+          "glow": {
+            "radius": 14,
+            "strength": 0.7
+          },
+          "spill": {
+            "center": [
+              600,
+              180
+            ],
+            "radius": 260,
+            "color": [
+              90,
+              130,
+              255
+            ],
+            "strength": 0.35
+          }
+        },
+        {
+          "block": "c30-b61",
+          "capture": "images-out/adaptation-dog-dawn/screen-c30-b61.png",
+          "capture_record": {
+            "block": "c30-b61",
+            "url": "https://snowmoon.party/chapter/30",
+            "site_commit": "db87d2356aeba5b619850dbf2ce9cc6fbd3dd02d",
+            "theme": "dark",
+            "viewport_width": 250,
+            "device_scale": 3,
+            "file": "images-out/adaptation-dog-dawn/screen-c30-b61.png",
+            "sha256": "b5cbe0242ea9ae2a0b53ae1f26decd8cbbc6dbeeebb177aaa54fc8230232d863"
+          },
+          "device": [
+            [
+              615,
+              136
+            ],
+            [
+              915,
+              95
+            ],
+            [
+              915,
+              380
+            ],
+            [
+              615,
+              373
+            ]
+          ],
+          "content": [
+            0.04,
+            0.05,
+            0.96,
+            0.95
+          ],
+          "base": [
+            11,
+            15,
+            41
+          ],
+          "glow": {
+            "radius": 14,
+            "strength": 0.9
+          },
+          "spill": {
+            "center": [
+              600,
+              180
+            ],
+            "radius": 260,
+            "color": [
+              90,
+              130,
+              255
+            ],
+            "strength": 0.35
+          },
+          "variant": "full"
+        }
+      ]
+    },
+    {
+      "id": "ab-e-03-a2",
+      "model": "e",
+      "beat": 3,
+      "compare_with": "ab-e-03-a1",
+      "attempt": 2,
+      "pass": "final",
+      "seed": 60031,
+      "width": 1024,
+      "height": 576,
+      "prompt": "Close-up at night of one right hand, five fingers, resting flat on top of the glass of a sleek pale console. The wrist and forearm are in the sleeve of a hooded cream cable-knit sweater. Only this one hand and sleeve are in the picture; the fingers rest on the surface and do not pass through it. Across the console's display flows a soft stream of pale green abstract waveforms like heartbeat lines, with no letters or numbers, and one thin bright thread of warm light slips out of the stream and away. Behind the console, a wall of pale faceted crystalline panels, cool and softly lit, icy whites and pale blues, like polished ice, and a window onto a black night sky full of stars. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, cel-shaded flat color with soft hard-edged shadows, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers."
     }
   ],
   "assist": {

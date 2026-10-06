@@ -1,0 +1,235 @@
+{
+  "about": "In-world screens composited in code onto panel devices: the book's own screen block as the reader draws it, mapped in perspective, with glow and light spill. Each entry names input and output by sha256 and records an OCR read of the result.",
+  "script": "scripts/composite-screens.py",
+  "script_commit": "36012e0ff683978d6b19616f9eec61459f0c73bf",
+  "script_uncommitted_changes": false,
+  "numpy_version": "2.5.3",
+  "pillow_version": "12.3.0",
+  "generated_at": "2026-10-06T02:52:26+00:00",
+  "images": [
+    {
+      "id": "ab-e-09-a1",
+      "beat": 9,
+      "screen": {
+        "variant": "cut",
+        "block": "c30-b61",
+        "capture": "images-out/adaptation-dog-dawn/screen-c30-b61-cut.png",
+        "capture_record": {
+          "block": "c30-b61",
+          "url": "https://snowmoon.party/chapter/30",
+          "site_commit": "db87d2356aeba5b619850dbf2ce9cc6fbd3dd02d",
+          "theme": "dark",
+          "viewport_width": 190,
+          "kept_paragraphs": [
+            0,
+            2
+          ],
+          "text_shown": "I hope you trust me now. … jie fe hen dzi.",
+          "device_scale": 3,
+          "file": "images-out/adaptation-dog-dawn/screen-c30-b61-cut.png",
+          "sha256": "9f0a660bf4b196dc4f0a821a3630380b6e6f4f4ef6e21a024a40c0e1dac5efd7"
+        },
+        "device": [
+          [
+            615,
+            136
+          ],
+          [
+            915,
+            95
+          ],
+          [
+            915,
+            380
+          ],
+          [
+            615,
+            373
+          ]
+        ],
+        "content": [
+          0.06,
+          0.1,
+          0.94,
+          0.9
+        ],
+        "base": [
+          11,
+          15,
+          41
+        ],
+        "glow": {
+          "radius": 14,
+          "strength": 0.7
+        },
+        "spill": {
+          "center": [
+            600,
+            180
+          ],
+          "radius": 260,
+          "color": [
+            90,
+            130,
+            255
+          ],
+          "strength": 0.35
+        }
+      },
+      "capture_record": {
+        "block": "c30-b61",
+        "url": "https://snowmoon.party/chapter/30",
+        "site_commit": "db87d2356aeba5b619850dbf2ce9cc6fbd3dd02d",
+        "theme": "dark",
+        "viewport_width": 190,
+        "kept_paragraphs": [
+          0,
+          2
+        ],
+        "text_shown": "I hope you trust me now. … jie fe hen dzi.",
+        "device_scale": 3,
+        "file": "images-out/adaptation-dog-dawn/screen-c30-b61-cut.png",
+        "sha256": "9f0a660bf4b196dc4f0a821a3630380b6e6f4f4ef6e21a024a40c0e1dac5efd7"
+      },
+      "variant": "cut",
+      "text_shown": "I hope you trust me now. … jie fe hen dzi.",
+      "ocr": [
+        "I hope you",
+        "trust me now.",
+        "jie fe hen",
+        "dzi."
+      ],
+      "ocr_missing_words": [],
+      "input": {
+        "file": "images-out/ab-test/ab-e-09-a1.png",
+        "sha256": "110c6f0d91bc13f39aa4c1d487dc18c210747e38b04871fee66abd9dcd14d213",
+        "role": "clean render, the starting point for a remix"
+      },
+      "output": {
+        "file": "images-out/ab-test/ab-e-09-a1.screen-cut.png",
+        "sha256": "107e3ae329861935f706e16c37ebd1304ca939f50a341e252125a4a3c8ac159d"
+      }
+    },
+    {
+      "id": "ab-e-09-a1",
+      "beat": 9,
+      "screen": {
+        "block": "c30-b61",
+        "capture": "images-out/adaptation-dog-dawn/screen-c30-b61.png",
+        "capture_record": {
+          "block": "c30-b61",
+          "url": "https://snowmoon.party/chapter/30",
+          "site_commit": "db87d2356aeba5b619850dbf2ce9cc6fbd3dd02d",
+          "theme": "dark",
+          "viewport_width": 250,
+          "device_scale": 3,
+          "file": "images-out/adaptation-dog-dawn/screen-c30-b61.png",
+          "sha256": "b5cbe0242ea9ae2a0b53ae1f26decd8cbbc6dbeeebb177aaa54fc8230232d863"
+        },
+        "device": [
+          [
+            615,
+            136
+          ],
+          [
+            915,
+            95
+          ],
+          [
+            915,
+            380
+          ],
+          [
+            615,
+            373
+          ]
+        ],
+        "content": [
+          0.04,
+          0.05,
+          0.96,
+          0.95
+        ],
+        "base": [
+          11,
+          15,
+          41
+        ],
+        "glow": {
+          "radius": 14,
+          "strength": 0.9
+        },
+        "spill": {
+          "center": [
+            600,
+            180
+          ],
+          "radius": 260,
+          "color": [
+            90,
+            130,
+            255
+          ],
+          "strength": 0.35
+        },
+        "variant": "full"
+      },
+      "capture_record": {
+        "block": "c30-b61",
+        "url": "https://snowmoon.party/chapter/30",
+        "site_commit": "db87d2356aeba5b619850dbf2ce9cc6fbd3dd02d",
+        "theme": "dark",
+        "viewport_width": 250,
+        "device_scale": 3,
+        "file": "images-out/adaptation-dog-dawn/screen-c30-b61.png",
+        "sha256": "b5cbe0242ea9ae2a0b53ae1f26decd8cbbc6dbeeebb177aaa54fc8230232d863"
+      },
+      "variant": "full",
+      "text_shown": "I hope you trust me now. My next message will contain exact coordinates of some of our units on the southern flank, and recommended weak points to attack through. jie fe hen dzi.",
+      "ocr": [
+        "I hope you tcuati me",
+        "nOW.",
+        "My next. meseage will",
+        "contain exact",
+        "coordinales of some of",
+        "ouc units on the",
+        "southecn flank, and",
+        "recommended weak",
+        "pointe to atlack",
+        "t.hrough.",
+        "jie te hen dzi."
+      ],
+      "ocr_missing_words": [
+        "trust",
+        "message",
+        "coordinates",
+        "our",
+        "southern",
+        "points",
+        "attack",
+        "through",
+        "fe"
+      ],
+      "input": {
+        "file": "images-out/ab-test/ab-e-09-a1.png",
+        "sha256": "110c6f0d91bc13f39aa4c1d487dc18c210747e38b04871fee66abd9dcd14d213",
+        "role": "clean render, the starting point for a remix"
+      },
+      "output": {
+        "file": "images-out/ab-test/ab-e-09-a1.screen-full.png",
+        "sha256": "c8af6b9eb359b80ad1f4803f99dfd21c61a6fdb286e6f636d9f350919d522d1b"
+      }
+    }
+  ],
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent",
+    "drafted": [
+      "screen placement, glow and spill settings (the words are the book's)"
+    ],
+    "instructions": [
+      "scripts/composite-screens.py"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
+}
