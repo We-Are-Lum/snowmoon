@@ -6,7 +6,8 @@ Reads a job file such as adaptations/dog-dawn/ab-test/jobs.json:
   "cap_usd": 1.0,
   "models": {"z": {"endpoint": "fal-ai/z-image/turbo", "weights": "...", "license": "Apache-2.0",
                    "price_usd_per_megapixel": 0.005, "price_seen": "...", "steps": 8}},
-  "jobs": [{"id": "...", "model": "z", "prompt": "...", "seed": 1, "width": 1024, "height": 576}]
+  "jobs": [{"id": "...", "model": "z", "prompt": "...", "seed": 1, "width": 1024, "height": 576,
+            "control": {"image": "images-out/...png", "preprocess": "canny", "control_scale": 0.7}}]   (control: ControlNet only)
 
 The key comes from FAL_KEY in the environment or in .env.local (gitignored).
 It is never printed, logged or written anywhere; it reaches curl on stdin, not
@@ -27,6 +28,7 @@ recipe says so.
   .venv-image/bin/python scripts/fal-render.py adaptations/dog-dawn/ab-test/jobs.json [--only id ...]
 """
 
+import base64
 import hashlib
 import json
 import os
@@ -56,10 +58,15 @@ def fal_key() -> str | None:
 def call(endpoint: str, body: dict, key: str) -> tuple[dict, dict]:
     # The key goes to curl through a config on stdin, so it never appears in a process list.
     cfg = f'header = "Authorization: Key {key}"\nheader = "Content-Type: application/json"\n'
-    r = subprocess.run(
-        ["curl", "-sS", "--fail-with-body", "-K", "-", "-D", "/dev/stderr", "-X", "POST", f"https://fal.run/{endpoint}", "--data-binary", json.dumps(body)],
-        input=cfg, capture_output=True, text=True, timeout=600,
-    )
+    # The body goes through a temporary file: a control image as a data URI is too long for a command line.
+    import tempfile
+    with tempfile.NamedTemporaryFile("w", suffix=".json", delete=True) as f:
+        json.dump(body, f)
+        f.flush()
+        r = subprocess.run(
+            ["curl", "-sS", "--fail-with-body", "-K", "-", "-D", "/dev/stderr", "-X", "POST", f"https://fal.run/{endpoint}", "--data-binary", f"@{f.name}"],
+            input=cfg, capture_output=True, text=True, timeout=600,
+        )
     headers = {}
     for line in r.stderr.splitlines():
         if ":" in line:
@@ -95,11 +102,24 @@ def main() -> None:
             continue
         body = {"prompt": job["prompt"], "image_size": {"width": job["width"], "height": job["height"]}, "seed": job["seed"],
                 "num_inference_steps": m["steps"], "num_images": 1, "enable_prompt_expansion": False, "output_format": "png"}
+        control = job.get("control")
+        if control:
+            # ControlNet: the control image travels as a data URI (nothing is uploaded to our own storage).
+            cpath = ROOT / control["image"]
+            body["image_url"] = "data:image/png;base64," + base64.b64encode(cpath.read_bytes()).decode()
+            body.update({k: control[k] for k in ("preprocess", "control_scale", "control_start", "control_end") if k in control})
         ledger["spent_usd"] = round(ledger["spent_usd"] + cost, 4)  # counted before the call, in case it bills and then fails
         ledger["calls"].append({"id": job["id"], "endpoint": m["endpoint"], "cost_usd": cost, "at": datetime.now(timezone.utc).isoformat(timespec="seconds")})
         ledger_path.write_text(json.dumps(ledger, indent=2) + "\n")
         res, headers = call(m["endpoint"], body, key)
         img = res["images"][0]
+        # Re-cost from the size the host actually returned (it may ignore the requested size).
+        real = round(max(img.get("width", job["width"]) * img.get("height", job["height"]) / 1e6, 1.0) * m["price_usd_per_megapixel"], 4)
+        if real != cost:
+            ledger["spent_usd"] = round(ledger["spent_usd"] - cost + real, 4)
+            ledger["calls"][-1].update(cost_usd=real, recosted_from=cost)
+            ledger_path.write_text(json.dumps(ledger, indent=2) + "\n")
+            cost = real
         ext = "png" if "png" in img.get("content_type", "png") else "jpg"
         path = out_dir / f"{job['id']}.{ext}"
         subprocess.run(["curl", "-sS", "--fail", "-o", str(path), img["url"]], check=True, timeout=300)
@@ -112,6 +132,8 @@ def main() -> None:
             "prompt": job["prompt"], "seed": res.get("seed", job["seed"]), "steps": m["steps"],
             "width": img.get("width"), "height": img.get("height"),
             "enable_prompt_expansion": False, "safety_checker": "host default (on)",
+            **({"control": {**{k: v for k, v in control.items() if k != "image"}, "image": control["image"],
+                            "image_sha256": sha256(ROOT / control["image"])}} if control else {}),
             "has_nsfw_concepts": res.get("has_nsfw_concepts"), "timings": res.get("timings"),
             "price_usd_per_megapixel": m["price_usd_per_megapixel"], "price_seen": m["price_seen"],
             "cost_usd": cost, "cost_basis": "the larger of real megapixels and 1 MP, times the listed price",

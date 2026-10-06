@@ -34,8 +34,22 @@ Audio: none yet. Narration waits until the owner has written the lines.
 
 Total render time: 56.6 minutes on the maintainer's Mac. Total cost: $0 (local, open-weight model).
 
-Beat 3 has no pick: both attempts are rejected, and its last attempt waits
-for the owner's choice of model. Beat 7 is not rendered (see below).
+Beat 7 is not rendered (see below). Beats 2, 3 and 5 now come from hosted
+open-weight models (below).
+
+## Hosted renders (fal.ai)
+
+Recipe: `adaptations/dog-dawn/ab-test/recipe.json` (endpoint, date, request id,
+exact prompt, seed, cost, sha256). The post looks like beat 1: pale faceted
+crystal walls, night through the windows (owner's revision, Oct 5, 2026).
+
+| Beat | Pick | Model | Note |
+|---|---|---|---|
+| 2 | `ab-e-02-a1` | ERNIE-Image Turbo | Night through the window, fire and drone lights; the room matches beat 1 |
+| 3 | `ab-e-03-a1` | ERNIE-Image Turbo | One hand in the cream sleeve; the warm thread leaves the heartbeat line |
+| 5 | owner to choose: `ab-e-05-a2` (a) or `ab-zc-05-a2` (b) | ERNIE-Image Turbo, re-prompted / Z-Image Turbo ControlNet from attempt 3 | (a) working at the console, faceless silhouette behind frosted glass, starry windows; (b) attempt 3's layout, but the guard stands in a starry window rather than behind frosted glass |
+
+Hosted spend so far: $0.0663 (A/B and this round), cap $1 per round.
 
 ## Steps in code after the render
 

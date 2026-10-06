@@ -1,5 +1,5 @@
 {
-  "about": "A/B test, Oct 5, 2026 (owner's request): panels 3 and 5, and panel 2 as a night reference, on two Apache-2.0 open-weight models served by fal.ai, prompted as true night scenes with no grade step. Text-to-image only: no reference images, so Deluin is described in words. Test output only; nothing here is published, and the pipeline's model is unchanged. The style prompt is techno-vistas with its two daytime clauses ('big pastel skies and enormous elegant megastructures on the horizon', 'clean and bright and hopeful') left out for night. Prompt expansion is off, so the prompt recorded is the prompt used. Hard cap: $1 for the whole test.",
+  "about": "A/B test, Oct 5, 2026 (owner's request): panels 3 and 5, and panel 2 as a night reference, on two Apache-2.0 open-weight models served by fal.ai, prompted as true night scenes with no grade step. Text-to-image only: no reference images, so Deluin is described in words. Test output only; nothing here is published, and the pipeline's model is unchanged. The style prompt is techno-vistas with its two daytime clauses ('big pastel skies and enormous elegant megastructures on the horizon', 'clean and bright and hopeful') left out for night. Prompt expansion is off, so the prompt recorded is the prompt used. Hard cap: $1 for the whole test. Round 2 (owner's revision, Oct 5, 2026): the post looks like panel 1, pale faceted crystal walls with night through the windows; panel 5 gets two candidates, ERNIE re-prompted and Z-Image ControlNet from attempt 3.",
   "cap_usd": 1.0,
   "models": {
     "z": {
@@ -18,6 +18,15 @@
       "license": "Apache-2.0",
       "price_usd_per_megapixel": 0.01,
       "price_seen": "https://fal.ai/models/fal-ai/ernie-image/turbo, 2026-10-05",
+      "steps": 8
+    },
+    "zc": {
+      "name": "Z-Image Turbo ControlNet",
+      "endpoint": "fal-ai/z-image/turbo/controlnet",
+      "weights": "https://huggingface.co/Tongyi-MAI/Z-Image-Turbo",
+      "license": "Apache-2.0",
+      "price_usd_per_megapixel": 0.0065,
+      "price_seen": "https://fal.ai/docs/model-api-reference/image-generation-api/z-image-turbo-controlnet, 2026-10-05",
       "steps": 8
     }
   },
@@ -87,6 +96,35 @@
       "seed": 60051,
       "width": 1024,
       "height": 576
+    },
+    {
+      "id": "ab-e-05-a2",
+      "model": "e",
+      "beat": 5,
+      "compare_with": "dd-05",
+      "attempt": 2,
+      "seed": 60052,
+      "width": 1024,
+      "height": 576,
+      "prompt": "Medium shot inside Deluin's Arctic command post at night. The room is walled in pale faceted crystalline panels, cool and softly lit, icy whites and pale blues, like polished ice. On the right, a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots, sits in profile at a single sleek console, working: both hands on the console's keys, his eyes on its screen, his face lit cold blue by it. He is the only person in the room. Across the back of the room is a wall of frosted glass; beyond it, in a dim corridor outside the room, stands the dark silhouette of a guard, blurred by the glass: a plain featureless dark shape with no face and no eyes. Outside it is the middle of the night: every window shows a black night sky full of stars; no sunset, no pastel sky. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, cel-shaded flat color with soft hard-edged shadows, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers."
+    },
+    {
+      "id": "ab-zc-05-a2",
+      "model": "zc",
+      "beat": 5,
+      "compare_with": "dd-05",
+      "attempt": 2,
+      "seed": 60053,
+      "width": 1024,
+      "height": 576,
+      "control": {
+        "image": "images-out/adaptation-dog-dawn/dd-05-a3.png",
+        "preprocess": "canny",
+        "control_scale": 0.7,
+        "control_start": 0.0,
+        "control_end": 0.8
+      },
+      "prompt": "Medium shot inside Deluin's Arctic command post at night. The room is walled in pale faceted crystalline panels, cool and softly lit, icy whites and pale blues, like polished ice. a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots sits in profile at a sleek console on the right, working, his face lit cold blue by its screen. He is the only person in the room. Across the back of the room is a wall of frosted glass; beyond it, in a dim corridor outside the room, stands the dark silhouette of a guard, blurred by the glass: a plain featureless dark shape with no face and no eyes. Outside it is the middle of the night: every window shows a black night sky full of stars; no sunset, no pastel sky. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, cel-shaded flat color with soft hard-edged shadows, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers."
     }
   ],
   "assist": {

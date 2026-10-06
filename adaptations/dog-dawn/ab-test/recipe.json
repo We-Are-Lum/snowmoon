@@ -215,8 +215,82 @@
       "cost_basis": "the larger of real megapixels and 1 MP, times the listed price",
       "file": "images-out/ab-test/ab-e-05-a1.png",
       "sha256": "f34755f455846bcc983fce57eb56aac8d1e95288f69b8578394bf24eeaef0d2e"
+    },
+    {
+      "id": "ab-e-05-a2",
+      "beat": 5,
+      "attempt": 2,
+      "compare_with": "dd-05",
+      "host": "fal.ai",
+      "endpoint": "fal-ai/ernie-image/turbo",
+      "model": "ERNIE-Image Turbo",
+      "weights": "https://huggingface.co/baidu/ERNIE-Image-Turbo",
+      "license": "Apache-2.0",
+      "weights_revision": "not exposed by the host; the endpoint as served on the date below",
+      "request_id": "01a10f0a-07d7-7b11-aee0-64cfd05e23bd",
+      "served_at": "2026-10-06T02:29:13+00:00",
+      "prompt": "Medium shot inside Deluin's Arctic command post at night. The room is walled in pale faceted crystalline panels, cool and softly lit, icy whites and pale blues, like polished ice. On the right, a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots, sits in profile at a single sleek console, working: both hands on the console's keys, his eyes on its screen, his face lit cold blue by it. He is the only person in the room. Across the back of the room is a wall of frosted glass; beyond it, in a dim corridor outside the room, stands the dark silhouette of a guard, blurred by the glass: a plain featureless dark shape with no face and no eyes. Outside it is the middle of the night: every window shows a black night sky full of stars; no sunset, no pastel sky. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, cel-shaded flat color with soft hard-edged shadows, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
+      "seed": 60052,
+      "steps": 8,
+      "width": 1024,
+      "height": 576,
+      "enable_prompt_expansion": false,
+      "safety_checker": "host default (on)",
+      "has_nsfw_concepts": null,
+      "timings": {
+        "inference": 1.23964473803062
+      },
+      "price_usd_per_megapixel": 0.01,
+      "price_seen": "https://fal.ai/models/fal-ai/ernie-image/turbo, 2026-10-05",
+      "cost_usd": 0.01,
+      "cost_basis": "the larger of real megapixels and 1 MP, times the listed price",
+      "file": "images-out/ab-test/ab-e-05-a2.png",
+      "sha256": "b6ba43bae0bf17292e5be330c85cf63522d20444faaa8bbdfeb3787f72fe7dab"
+    },
+    {
+      "id": "ab-zc-05-a2",
+      "beat": 5,
+      "attempt": 2,
+      "compare_with": "dd-05",
+      "host": "fal.ai",
+      "endpoint": "fal-ai/z-image/turbo/controlnet",
+      "model": "Z-Image Turbo ControlNet",
+      "weights": "https://huggingface.co/Tongyi-MAI/Z-Image-Turbo",
+      "license": "Apache-2.0",
+      "weights_revision": "not exposed by the host; the endpoint as served on the date below",
+      "request_id": "01a10f0b-312a-75d3-a48a-60f07c53a465",
+      "served_at": "2026-10-06T02:29:21+00:00",
+      "prompt": "Medium shot inside Deluin's Arctic command post at night. The room is walled in pale faceted crystalline panels, cool and softly lit, icy whites and pale blues, like polished ice. a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots sits in profile at a sleek console on the right, working, his face lit cold blue by its screen. He is the only person in the room. Across the back of the room is a wall of frosted glass; beyond it, in a dim corridor outside the room, stands the dark silhouette of a guard, blurred by the glass: a plain featureless dark shape with no face and no eyes. Outside it is the middle of the night: every window shows a black night sky full of stars; no sunset, no pastel sky. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, cel-shaded flat color with soft hard-edged shadows, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
+      "seed": 60053,
+      "steps": 8,
+      "width": 1760,
+      "height": 992,
+      "enable_prompt_expansion": false,
+      "safety_checker": "host default (on)",
+      "control": {
+        "preprocess": "canny",
+        "control_scale": 0.7,
+        "control_start": 0.0,
+        "control_end": 0.8,
+        "image": "images-out/adaptation-dog-dawn/dd-05-a3.png",
+        "image_sha256": "003124396bdac251644eb5c9ca11e6e4193956bad1240cf996a42e179c5c1241"
+      },
+      "has_nsfw_concepts": [
+        false
+      ],
+      "timings": {
+        "inference": 2.8988355130004493,
+        "safety_checker": 0.020007412000268232
+      },
+      "price_usd_per_megapixel": 0.0065,
+      "price_seen": "https://fal.ai/docs/model-api-reference/image-generation-api/z-image-turbo-controlnet, 2026-10-05",
+      "cost_usd": 0.0113,
+      "cost_basis": "the larger of real megapixels and 1 MP, times the listed price",
+      "file": "images-out/ab-test/ab-zc-05-a2.png",
+      "sha256": "cd339342733cf16213777c17e7344b4a72bd4307ba27efcbe805acceb9388218",
+      "cost_note": "recosted from $0.0065: the host returned 1760x992, not the requested 1024x576"
     }
   ],
-  "spent_usd": 0.045,
-  "generated_at": "2026-10-06T01:54:24+00:00"
+  "spent_usd": 0.0663,
+  "generated_at": "2026-10-06T02:29:21+00:00"
 }
