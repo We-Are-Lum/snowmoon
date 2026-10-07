@@ -3,6 +3,7 @@
  *
  *   npx tsx scripts/eval-chat.ts --retrieval            free: is the answering block sent to the model?
  *   VERCEL_OIDC_TOKEN=… npx tsx scripts/eval-chat.ts --full OUT.json   paid: answers, citations, guard
+ *   QUESTIONS=fresh-questions.json …                    the held-out set (nothing was tuned on it)
  *
  * Questions and their answering blocks: docs/proposals/chat-eval/questions.json (chapters 1–15,
  * written by the coding agent with the blocks checked by hand). Every question is asked with the
@@ -25,8 +26,11 @@ const ROOT = path.resolve(import.meta.dirname, '..');
 const mode = process.argv[2];
 const out = process.argv[3];
 const LIMIT = 15;
+/** DENSE=path: block ids ranked per question by an embedding model (made offline), fused with the word search. */
+const DENSE = process.env.DENSE ? (JSON.parse(await readFile(process.env.DENSE, 'utf8')) as { model: string; ranks: Record<string, string[]> }) : null;
 interface Q { id: string; chapter: number; question: string; gold: string[]; answer_fact: string; type: string }
-const questions = JSON.parse(await readFile(path.join(ROOT, 'docs/proposals/chat-eval/questions.json'), 'utf8')) as Q[];
+// QUESTIONS=fresh-questions.json for the held-out set (2026-10-07); the tuning set by default.
+const questions = JSON.parse(await readFile(path.join(ROOT, 'docs/proposals/chat-eval', process.env.QUESTIONS ?? 'questions.json'), 'utf8')) as Q[];
 
 const pg = new PGlite();
 await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
@@ -46,14 +50,14 @@ try {
   let first = 0;
   const misses: string[] = [];
   for (const q of questions) {
-    const r = await retrieve(sql, q.question, LIMIT);
+    const r = await retrieve(sql, q.question, LIMIT, [], DENSE ? { dense: DENSE.ranks[q.id] } : {});
     const sent = new Set(r.passages.map((p) => p.id));
     const hit = q.gold.some((g) => sent.has(g));
     any += hit ? 1 : 0;
     first += sent.has(q.gold[0]) ? 1 : 0;
     if (!hit) misses.push(`${q.id} ${q.gold.join(',')}  ${q.question}`);
   }
-  console.log(`retrieval: an answering block sent for ${any}/${questions.length}; the best one for ${first}/${questions.length}`);
+  console.log(`retrieval${DENSE ? ` + ${DENSE.model}` : ''}: an answering block sent for ${any}/${questions.length}; the best one for ${first}/${questions.length}`);
   console.log(`missed:\n  ${misses.join('\n  ')}`);
 
   if (mode === '--full') {
@@ -94,7 +98,10 @@ try {
     const reminder = await prompt('chat-reminder.md');
     const searchPrompt = await prompt('chat-search-terms.md');
     const supportPolicy = await prompt('chat-support.md');
-    const deps = (fid: number) => ({ sql, fid, complete, systemPrompt, guardPolicy, reminder, searchPrompt, supportPolicy });
+    const deps = (fid: number) => ({
+      sql, fid, complete, systemPrompt, guardPolicy, reminder, searchPrompt, supportPolicy,
+      ...(DENSE ? { dense: async () => DENSE.ranks[current] } : {}),
+    });
     const results = [];
     for (const [i, q] of questions.entries()) {
       current = q.id;
@@ -102,7 +109,7 @@ try {
       const result = await ask(deps(90000 + i), { question: q.question, limit: LIMIT });
       // What was searched and sent: the search words are the first call's text.
       const words = log.find((l) => l.q === q.id)?.text ?? '';
-      const passages = (await retrieve(sql, `${q.question} ${(words.match(/[\p{L}\p{N}][\p{L}\p{N}'-]*/gu) ?? []).slice(0, 20).join(' ')}`, LIMIT)).passages.map((p) => p.id);
+      const passages = (await retrieve(sql, `${q.question} ${(words.match(/[\p{L}\p{N}][\p{L}\p{N}'-]*/gu) ?? []).slice(0, 20).join(' ')}`, LIMIT, [], DENSE ? { dense: DENSE.ranks[q.id] } : {})).passages.map((p) => p.id);
       results.push({ ...q, passages, result, calls: log.filter((l) => l.q === q.id) });
       console.log(`${q.id} ${result.state}${result.state === 'answer' && result.regenerated ? ' (regenerated)' : ''}`);
       if (process.env.EVAL_SPEND_CAP && (await spent()) > Number(process.env.EVAL_SPEND_CAP)) { console.log('spend cap reached, stopping'); break; }

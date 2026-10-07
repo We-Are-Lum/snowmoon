@@ -87,6 +87,12 @@ export interface RetrieveOptions {
   before?: number;
   after?: number;
   scoring?: 'bm25' | 'rank';
+  /**
+   * Block ids ranked by an embedding search, best first, already within the limit. When
+   * given, they are fused with the word search by reciprocal rank (k = 60) before the top
+   * hits are taken. Evaluation only for now (docs/proposals/chat-eval/); the app passes none.
+   */
+  dense?: string[];
 }
 
 export async function retrieve(
@@ -96,13 +102,24 @@ export async function retrieve(
   attached: string[] = [],
   opts: RetrieveOptions = {},
 ): Promise<Retrieved> {
-  const { hits: nHits = CHAT.passages, before = CHAT.neighbours.before, after = CHAT.neighbours.after, scoring = 'bm25' } = opts;
+  const { hits: nHits = CHAT.passages, before = CHAT.neighbours.before, after = CHAT.neighbours.after, scoring = 'bm25', dense } = opts;
   if (!Number.isInteger(limit) || limit < 1) throw new Error('bad chapter limit');
   const question = expandAliases(rawQuestion);
   const base = scoring === 'bm25' ? SCORED : RANKED;
-  const hits = (await sql.unsafe(`${base} select chapter, idx, kind, content, score as rank from scored where chapter <= $3 order by score desc, chapter, idx limit $5`, [
-    question, WORK_ID, limit, SEARCH_KINDS, nHits,
+  const words = (await sql.unsafe(`${base} select chapter, idx, kind, content, score as rank from scored where chapter <= $3 order by score desc, chapter, idx limit $5`, [
+    question, WORK_ID, limit, SEARCH_KINDS, dense ? 50 : nHits,
   ])) as unknown as (Passage & { rank: number })[];
+  let hits: { chapter: number; idx: number; rank: number }[] = words;
+  if (dense) {
+    const fused = new Map<string, number>();
+    const add = (id: string, r: number) => fused.set(id, (fused.get(id) ?? 0) + 1 / (60 + r));
+    words.forEach((h, r) => add(`c${h.chapter}-b${h.idx}`, r));
+    dense.filter((id) => blockIdOk(id) && chapterOf(id)! <= limit).slice(0, 50).forEach(add);
+    hits = [...fused.entries()]
+      .sort((a, b) => b[1] - a[1])
+      .slice(0, nHits)
+      .map(([id]) => ({ chapter: chapterOf(id)!, idx: Number(id.split('-b')[1]), rank: words[0]?.rank ?? 0 }));
+  }
 
   // The same search past the limit: only its best score is used, never its text.
   const later = (await sql.unsafe(`${base} select max(score) as rank from scored where chapter > $3`, [question, WORK_ID, limit, SEARCH_KINDS])) as unknown as {

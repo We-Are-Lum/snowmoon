@@ -1,0 +1,262 @@
+{
+ "grader": "A (the coding agent)",
+ "items": [
+  {
+   "id": "f01",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f02",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f03",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f04",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f05",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f06",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f07",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f08",
+   "correct": "wrong",
+   "note": "Says his interest came from childhood civics lessons; the book says writing a Silverchat client (c3-b24)."
+  },
+  {
+   "id": "f09",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f10",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f11",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f12",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f13",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f14",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f15",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f16",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f17",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f18",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f19",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f20",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f21",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f22",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f23",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f24",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f25",
+   "correct": "wrong",
+   "note": "Describes the chapter 14 semifinal and chapter 15 talk (cites c14/c15) as the city final; the city final comeback was a sixteen-strategy factory (c7-b102)."
+  },
+  {
+   "id": "f26",
+   "correct": "wrong",
+   "note": "Says the threat led to Mogna's collapse; the book says Mogna folded, i.e. gave in and joined (c10-b24)."
+  },
+  {
+   "id": "f27",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f28",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f29",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f30",
+   "correct": "partly",
+   "note": "Gets the name, says the passages give no goal (chemistry, c6-b79)."
+  },
+  {
+   "id": "f31",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f32",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f33",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f34",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f35",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f36",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f37",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f38",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f39",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f40",
+   "correct": "wrong",
+   "note": "Says the dinner was cut short by Febric leaving (a chapter 6 scene); it was Lord Ephelion's broadcast, and Seila tried to unplug the screen (c13-b62–65)."
+  },
+  {
+   "id": "f41",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f42",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f43",
+   "correct": "no",
+   "note": "Describes the overheard meeting itself, not what Mov found after it (c15-b36)."
+  },
+  {
+   "id": "f44",
+   "correct": "yes",
+   "note": "Borderline: \"only a robot will fetch them\" — the robot collects the devices, not the players. Counted yes."
+  },
+  {
+   "id": "f45",
+   "correct": "wrong",
+   "note": "Invents shrine mechanics (a glider beyond a shrine starts a glider stream); the rule is that changes in a shrine are applied every thousand turns, then it resets (c14-b33)."
+  },
+  {
+   "id": "f46",
+   "correct": "no",
+   "note": "Answers why Keepers are anonymous, not how; applies Mu's general lesson (c7-b132) to Keepers."
+  },
+  {
+   "id": "f47",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f48",
+   "correct": "no",
+   "note": "Gives what Bai concluded, not how she gathered it (c14-b16)."
+  },
+  {
+   "id": "f49",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f50",
+   "correct": "yes",
+   "note": ""
+  }
+ ],
+ "totals": {
+  "yes": 25,
+  "cant": 16,
+  "wrong": 5,
+  "partly": 1,
+  "no": 3
+ }
+}
