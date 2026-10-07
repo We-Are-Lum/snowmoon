@@ -548,11 +548,124 @@ figure.figure .device-view svg { min-width: var(--fig-min, 0); }
 .consent-error { color: var(--warn); font-size: 13px; }
 .publish-preview { border: 1px solid var(--muted); padding: 12px; margin: 8px 0; }
 
-/* First-visit intro: structure only; styled when Design's cards arrive. */
-.intro-overlay { position: fixed; inset: 0; z-index: 90; background: var(--scrim); display: flex; align-items: center; justify-content: center; padding: 16px; }
-.intro-card { background: var(--paper); color: var(--ink); max-width: 30em; width: 100%; max-height: 92vh; overflow-y: auto; padding: 16px; border-radius: var(--radius); }
-.intro-card img { width: 100%; height: auto; display: block; }
-.intro-actions { display: flex; justify-content: space-between; gap: 8px; margin-top: 12px; }
+/* First-visit intro (docs/design/first-visit-intro.dc.html): full screen, five
+   cards, Skip in the header, progress marks, swipe or Back/Next. Labels keep
+   the 12px floor where the board drew 10–11px. */
+.intro-overlay { position: fixed; inset: 0; z-index: 90; background: var(--paper); color: var(--ink); }
+.intro-card { height: 100%; max-width: 30rem; margin: 0 auto; display: flex; flex-direction: column; outline: none; }
+.intro-head { flex: none; display: flex; align-items: center; justify-content: space-between; min-height: 52px; padding: 0 8px 0 var(--gutter); }
+.intro-brand { font-size: 20px; }
+.intro-skip,
+.intro-back {
+  min-height: var(--tap); min-width: var(--tap); padding: 0 14px;
+  font-family: var(--label); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase;
+  color: var(--ink); background: none; border: 0; cursor: pointer;
+}
+.intro-back { color: var(--muted); padding: 0 4px; font-size: var(--text-label); }
+.intro-dots { flex: none; display: flex; gap: var(--space-1); padding: 0 var(--gutter); }
+.intro-dots button {
+  flex: 1; height: var(--tap); padding: 0; border: 0; cursor: pointer;
+  background: linear-gradient(var(--rule), var(--rule)) center / 100% 3px no-repeat;
+}
+.intro-dots button.is-current { background-image: linear-gradient(var(--ink), var(--ink)); }
+.intro-viewport { flex: 1; min-height: 0; overflow: hidden; touch-action: pan-y; }
+.intro-track { display: flex; height: 100%; transition: transform 280ms cubic-bezier(0.2, 0.7, 0.2, 1); }
+.intro-track.is-dragging { transition: none; }
+@media (prefers-reduced-motion: reduce) { .intro-track { transition: none; } }
+.intro-slide {
+  flex: 0 0 100%; min-width: 0; height: 100%; overflow-y: auto;
+  padding: var(--space-4) var(--gutter) 0; display: flex; flex-direction: column; gap: 20px;
+}
+.intro-eyebrow { margin: 0; font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.intro-line { margin: 0; font-size: 27px; line-height: 1.22; font-weight: 400; text-wrap: pretty; }
+.intro-disclaimer { margin: 0; padding-top: 10px; border-top: 1px solid var(--rule); font-family: var(--label); font-size: var(--text-label); line-height: 1.6; }
+.intro-foot { flex: none; padding: var(--space-2) var(--gutter) calc(var(--space-5) + env(safe-area-inset-bottom)); }
+.intro-drafted { margin: 0 0 var(--space-1); font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
+.intro-actions { display: flex; align-items: center; gap: var(--space-3); }
+.intro-next {
+  margin-left: auto; min-width: 160px; height: 48px; padding: 0 18px; border: 0; border-radius: var(--radius);
+  background: var(--btn); color: var(--btn-ink); font-family: var(--label); font-size: 13px; letter-spacing: 0.06em;
+  text-transform: uppercase; cursor: pointer;
+}
+
+/* Card visuals. Fixed height on tall screens, shrinking on short ones. */
+.iv { flex: none; height: clamp(220px, 44vh, 380px); margin: 0; padding: 0; list-style: none; position: relative; }
+.iv-cover { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px; background: var(--soft); border-radius: var(--radius); }
+.iv-book {
+  width: 62%; max-width: 210px; aspect-ratio: 210 / 290; max-height: 72%;
+  display: flex; flex-direction: column; justify-content: space-between; padding: 22px 18px;
+  background: #2E4733; color: #F4F2ED; box-shadow: 0 1px 0 rgba(0, 0, 0, 0.25), 6px 6px 0 var(--rule);
+}
+.iv-kicker { font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.1em; text-transform: uppercase; }
+.iv-book-name { display: flex; flex-direction: column; gap: 6px; }
+.iv-book-title { font-size: 34px; line-height: 0.95; }
+.iv-book-author { font-size: 15px; font-style: italic; }
+.iv-chip { font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.06em; text-transform: uppercase; border: 1px solid var(--ink); padding: 4px 8px; border-radius: 2px; }
+.iv-recipe { display: flex; flex-direction: column; }
+.iv-recipe img { display: block; width: 100%; height: auto; max-height: 58%; object-fit: cover; border-radius: var(--radius) var(--radius) 0 0; background: var(--soft); }
+.iv-recipe-box {
+  flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 6px; padding: 12px 14px;
+  border: 1px solid var(--rule); border-top: 0; font-family: var(--label); font-size: var(--text-label); line-height: 1.45; color: var(--muted);
+}
+.iv-row { display: flex; justify-content: space-between; gap: 8px; }
+.iv-strong { color: var(--ink); text-transform: uppercase; }
+.iv-record { display: flex; flex-direction: column; justify-content: center; }
+.iv-step { position: relative; display: grid; grid-template-columns: 96px 1fr; gap: 14px; align-items: center; }
+.iv-step + .iv-step { margin-top: 30px; }
+.iv-step + .iv-step::before { content: ''; position: absolute; top: -30px; height: 30px; left: 47px; border-left: 1px solid var(--ink); }
+.iv-indent-1 { margin-left: 40px; }
+.iv-indent-1::before { left: 7px !important; }
+.iv-indent-2 { margin-left: 80px; }
+.iv-indent-2::before { left: 7px !important; }
+.iv-step-mark { display: block; width: 96px; height: 54px; object-fit: cover; border-radius: 2px; }
+.iv-step-text { background: repeating-linear-gradient(var(--paper) 0 7px, var(--rule) 7px 8px); border: 1px solid var(--rule); }
+.iv-step-recipe { background: repeating-linear-gradient(135deg, var(--soft) 0 8px, var(--rule) 8px 9px); border: 1px solid var(--rule); }
+.iv-step-body { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.iv-step-who { font-size: 19px; line-height: 1.2; }
+.iv-step-what { font-family: var(--label); font-size: var(--text-label); line-height: 1.4; color: var(--muted); overflow-wrap: anywhere; }
+.iv-foot { margin: 22px 0 0; padding-top: 10px; border-top: 1px solid var(--rule); font-family: var(--label); font-size: var(--text-label); color: var(--muted); text-transform: uppercase; }
+.iv-live { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-rows: 1fr; gap: 8px; }
+.iv-live li {
+  display: flex; flex-direction: column; justify-content: space-between; padding: 12px;
+  border: 1.5px solid var(--ink); border-radius: var(--radius); background: var(--paper);
+}
+.iv-dot-label { display: flex; align-items: center; gap: 6px; font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.08em; text-transform: uppercase; color: var(--veridia); }
+.iv-dot { display: inline-block; flex: none; width: 7px; height: 7px; border-radius: 50%; background: var(--veridia); }
+.iv-feature { font-size: 20px; line-height: 1.1; }
+.iv-planned ul { height: 100%; margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 8px; }
+.iv-planned li {
+  flex: 1; display: flex; flex-direction: column; justify-content: space-between; padding: 10px 12px;
+  border: 1.5px dashed var(--muted); border-radius: var(--radius);
+  background: repeating-linear-gradient(135deg, transparent 0 7px, color-mix(in srgb, var(--ink) 7%, transparent) 7px 8px);
+}
+.iv-planned-label { font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.iv-stamp {
+  position: absolute; right: 10px; top: -14px; transform: rotate(4deg); padding: 3px 10px;
+  border: 2px solid var(--ink); background: var(--paper); font-family: var(--label); font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
+}
+
 .what-is-this, .replay-intro { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; font-family: var(--label); font-size: 12px; color: var(--muted); background: none; border: 0; text-decoration: underline; cursor: pointer; }
 .replay-intro { padding-left: 0; }
-.intro-actions button { min-height: 44px; min-width: 44px; padding: 0 16px; font-family: var(--label); font-size: 14px; }
+
+/* About: the disclaimer at the top, the same five items at the bottom (board 1f). */
+.about-disclaimer { font-family: var(--label); font-size: var(--text-label); line-height: 1.6; padding-bottom: var(--space-4); border-bottom: 1px solid var(--rule); }
+.about-edition { margin-top: var(--space-7); }
+.about-edition ol { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--rule); }
+.about-edition > ol > li { display: grid; grid-template-columns: 28px 1fr; gap: 10px; padding: 18px 0; border-bottom: 1px solid var(--rule); }
+.ae-n { font-family: var(--label); font-size: var(--text-label); color: var(--muted); padding-top: 5px; }
+.ae-body { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.ae-head { font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.ae-line { margin: 0; font-size: var(--text-read); line-height: 1.4; }
+.ae-live, .ae-planned { list-style: none; margin: 0; padding: 0; display: flex; gap: 6px; }
+.ae-live { flex-wrap: wrap; }
+.ae-live a {
+  display: inline-flex; align-items: center; gap: 6px; min-height: var(--tap); padding: 0 10px;
+  border: 1.5px solid var(--ink); border-radius: var(--radius); color: var(--ink); text-decoration: none; font-size: 15px;
+}
+.ae-planned { flex-direction: column; }
+.ae-planned li {
+  display: flex; justify-content: space-between; gap: 8px; padding: 7px 9px; font-size: 15px;
+  border: 1.5px dashed var(--muted); border-radius: var(--radius);
+  background: repeating-linear-gradient(135deg, transparent 0 7px, color-mix(in srgb, var(--ink) 7%, transparent) 7px 8px);
+}
+.ae-planned-tag { font-family: var(--label); font-size: var(--text-label); color: var(--muted); padding-top: 3px; white-space: nowrap; text-transform: uppercase; }

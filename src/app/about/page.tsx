@@ -1,6 +1,6 @@
 import { REPO_URL, WORK } from '~/lib/config';
 import { loadIntro } from '~/lib/intro';
-import { ReplayIntro } from '~/components/first-visit';
+import { AboutEdition, ReplayIntro } from '~/components/first-visit';
 import consent from '../../../config/consent.json';
 
 const wording = consent.versions[consent.current as keyof typeof consent.versions];
@@ -8,10 +8,12 @@ const wording = consent.versions[consent.current as keyof typeof consent.version
 export const metadata = { title: 'About' };
 
 export default function About() {
+  const intro = loadIntro();
   return (
     <div className="page prose">
-      <ReplayIntro intro={loadIntro()} />
+      <ReplayIntro intro={intro} />
       <h1>About</h1>
+      <p className="about-disclaimer">{intro.disclaimer}</p>
       <p>
         <em>{WORK.title}</em> was written by {WORK.author} and released under the GNU General Public License v3. The
         original is at <a href={WORK.sourceUrl}>{WORK.sourceUrl}</a>.
@@ -48,6 +50,7 @@ export default function About() {
       <p>
         Nothing in this edition is official. Every design, image, and take can be replaced by a better one.
       </p>
+      <AboutEdition intro={intro} />
     </div>
   );
 }

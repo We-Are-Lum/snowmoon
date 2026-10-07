@@ -1,50 +1,66 @@
 {
-  "about": "The first-visit intro: five cards, shown once on the home page; replayed from the \"Replay intro screens\" link at the top of /about, and opened by \"What is this?\" on deep-linked pages. Each card has a title, one sentence, an image reference and a status: 'live' (it points at something that exists now) or 'coming'. Card 1 must keep the independence and no-token line (npm run check:intro). Images are references: 'published:<id>' is a seeded image in content/snowmoon/illustrations/published.json; Design's cards will replace them.",
-  "version": "v1",
+  "about": "The first-visit intro, built from docs/design/first-visit-intro.dc.html: five cards, shown once on the home page; replayed from the \"Replay intro screens\" link at the top of /about, and opened by \"What is this?\" on deep-linked pages. The same five items are listed at the bottom of /about. Each card has an eyebrow, one sentence (line), a visual and a status ('live' or 'coming'). Visuals: 'cover' (drawn in code), 'recipe' and 'record' (a published chapter 1 image with its real recipe), 'live' and 'planned' (drawn from the features list). Each feature has a status, 'live' or 'planned', which drives cards 4 and 5 and the About page; a feature goes live by changing one word here (npm run check:intro checks that a live feature links to a page that exists). The disclaimer is shown on card 1 and at the top of /about (principle 7).",
+  "version": "v2",
   "model_drafted": true,
-  "model_drafted_note": "Drafted by the coding agent (Claude, a closed model) on Oct 6, 2026, revised the same day on the owner's direction: the intro is about building on the novel under its license, and the reader connects the text to what is built on it. Shown labelled as model-drafted until the owner edits it; set model_drafted to false, with edited_by_fid and edited_on, when they do.",
+  "model_drafted_note": "Wording from the design board (Claude Design, model-drafted placeholder copy), adapted by the coding agent on Oct 7, 2026 so it says only what is true: the board's '[Author name]' and '[LICENCE NAME]' are filled in, and 'play the game' is moved to the planned list because the game is not on the main site yet. Earlier wording (v1) was drafted by the coding agent on Oct 6, 2026. Shown labelled as model-drafted until the owner edits it; set model_drafted to false, with edited_by_fid and edited_on, when they do.",
   "edited_by_fid": null,
   "edited_on": null,
+  "disclaimer": "Independent adaptation · Not affiliated with the author · No token",
   "cards": [
     {
-      "id": "edition",
-      "title": "Built on Snowmoon",
-      "sentence": "Vitalik Buterin released his novel Snowmoon under GPL-3.0, which lets anyone build on it; this is an independent edition, not affiliated with the author, and there is no token.",
-      "image": "published:c1-b005-toy-drone",
+      "id": "book",
+      "eyebrow": "The book",
+      "line": "Snowmoon is a novel its author released under an open licence, inviting anyone to adapt it.",
+      "visual": "cover",
+      "image": null,
       "status": "live",
       "href": "/about"
     },
     {
-      "id": "open",
-      "title": "Built in the open",
-      "sentence": "His reading of that license asks one thing of anyone who builds on the book, that they publish how they made it, so every prompt, script and recipe here is public.",
-      "image": "published:c3-b092-booth",
-      "status": "live",
-      "href": "/about"
-    },
-    {
-      "id": "read",
-      "title": "Read, listen, and follow the threads",
-      "sentence": "Read or listen to every chapter, with images, quote cards and adaptations linked to the passages they grew from.",
-      "image": "published:c14-b085-walled-ship",
+      "id": "deal",
+      "eyebrow": "The deal",
+      "line": "Build anything you like from it, as long as you show how you made it.",
+      "visual": "recipe",
+      "image": "published:c1-b013-sky-bridge",
       "status": "live",
       "href": "/chapter/1"
     },
     {
-      "id": "adapt",
-      "title": "Adaptations",
-      "sentence": "Briefs for retelling scenes from the book, every detail traced to the passage it comes from, as the start of comics, audio dramas and films.",
-      "image": "published:c30-b048-drones-surge",
+      "id": "record",
+      "eyebrow": "What this app does",
+      "line": "This app keeps that record for you, so working together is easy and your name stays on your work.",
+      "visual": "record",
+      "image": "published:c1-b005-toy-drone",
       "status": "live",
-      "href": "/adaptations"
+      "href": "/chapter/1"
     },
     {
-      "id": "make",
-      "title": "Build your own",
-      "sentence": "Soon you will be able to make images, lines and audiovisual expansions of your own here, published under GPL-3.0 with your name.",
-      "image": "published:c31-b002-mountain-stair",
+      "id": "now",
+      "eyebrow": "Available now",
+      "line": "Today you can read, listen, save a passage and browse adaptation seeds.",
+      "visual": "live",
+      "image": null,
+      "status": "live",
+      "href": "/chapter/1"
+    },
+    {
+      "id": "later",
+      "eyebrow": "Coming later",
+      "line": "Later you will be able to add characters, places and styles, pick favourites that carry into your work, and start adaptations.",
+      "visual": "planned",
+      "image": null,
       "status": "coming",
       "href": null
     }
+  ],
+  "features": [
+    { "label": "Read", "status": "live", "href": "/chapter/1" },
+    { "label": "Listen", "status": "live", "href": "/chapter/1" },
+    { "label": "Save a passage", "status": "live", "href": "/cards" },
+    { "label": "Browse adaptation seeds", "status": "live", "href": "/adaptations" },
+    { "label": "Play the game", "status": "planned", "href": null },
+    { "label": "Add characters, places and styles", "status": "planned", "href": null },
+    { "label": "Pick favourites that carry into your work", "status": "planned", "href": null },
+    { "label": "Start an adaptation", "status": "planned", "href": null }
   ]
 }
