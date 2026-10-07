@@ -236,15 +236,15 @@ function TimeControls({ playing, setPlaying, setBoard, turn, minTurn }: {
 }) {
   const atFloor = minTurn !== undefined && turn <= minTurn;
   return (
-    <div className="mp-controls" role="group" aria-label="Time">
+    <div className="mp-controls mp-transport" role="group" aria-label="Time">
       <button
         type="button"
         disabled={atFloor}
         onClick={() => { setPlaying(() => false); setBoard((b) => (minTurn !== undefined && b.turn <= minTurn ? b : stepBack(b))); }}
         aria-label="Step backward"
-      >◀ Step</button>
+      >◁|</button>
       <button type="button" className="mp-primary" onClick={() => setPlaying((p) => !p)}>{playing ? 'Pause' : 'Play'}</button>
-      <button type="button" onClick={() => { setPlaying(() => false); setBoard((b) => step(b)); }} aria-label="Step forward">Step ▶</button>
+      <button type="button" onClick={() => { setPlaying(() => false); setBoard((b) => step(b)); }} aria-label="Step forward">|▷</button>
     </div>
   );
 }
@@ -306,16 +306,16 @@ function Tutorial({ index, onScreen, onFree, onPractice }: { index: number; onSc
 
   return (
     <section className="mp-tutorial" aria-label={T.heading}>
-      <div className="mp-lesson">
-        <p className="mp-lesson-meta">
-          {T.heading} · {T.stepOf(index + 1, SCREENS.length)}
-          {(T.modelDrafted || text.modelDrafted) && <span className="mp-draft"> · {T.draftNote}</span>}
-        </p>
-        <h2>
-          {text.title}
-          {text.invented && <em className="mp-inv"> {T.inventedTag}</em>}
-        </h2>
-        <p className="mp-lesson-text">{text.text}</p>
+      {/* Board 1c / tutorial board: a bar with the name and the count, then one mark per screen. */}
+      <div className="mp-t-head">
+        <span className="mp-t-name">Minpentai</span>
+        <span className="mp-t-count">{T.stepOf(index + 1, SCREENS.length)}</span>
+      </div>
+      {/* One mark per screen, as on the board. Display only: eleven marks are too narrow to tap (44px floor); the menu below jumps. */}
+      <div className="mp-t-marks" aria-hidden="true">
+        {SCREENS.map((s, i) => (
+          <span key={s.id} className={i === index ? 'is-current' : i < index ? 'is-past' : undefined} />
+        ))}
       </div>
 
       {screen.stage === 'board' ? (
@@ -329,35 +329,44 @@ function Tutorial({ index, onScreen, onFree, onPractice }: { index: number; onSc
             editable={screen.editable}
             ghost={screen.ghost}
           />
-          {text.caption && <p className="mp-caption">{text.caption}</p>}
           {screen.kind === 'do' && (
             <TimeControls playing={p.playing} setPlaying={p.setPlaying} setBoard={p.setBoard} turn={p.board.turn} minTurn={0} />
           )}
         </>
       ) : (
-        <>
-          <WatchMatch viewer={screen.stage === 'watch' ? null : 0} />
-          {text.caption && <p className="mp-caption">{text.caption}</p>}
-          {screen.id === 'hard' && <ul className="mp-reasons">{T.hardReasons.map((r) => <li key={r}>{r}</li>)}</ul>}
-        </>
+        <WatchMatch viewer={screen.stage === 'watch' ? null : 0} />
       )}
 
-      <p className="mp-status" aria-live="polite">{status}</p>
+      <div className="mp-lesson">
+        <p className="mp-tags">
+          {text.invented ? <span className="mp-tag mp-tag-invented">{T.inventedTag}</span> : <span className="mp-tag">Book · ch 4</span>}
+          {(T.modelDrafted || text.modelDrafted) && <span className="mp-tag mp-tag-draft">{T.draftNote}</span>}
+        </p>
+        <h2>{text.title}</h2>
+        <p className="mp-lesson-text">{text.text}</p>
+        {screen.id === 'hard' && (
+          <ol className="mp-reasons">
+            {T.hardReasons.map((r, i) => (
+              <li key={r}>
+                <span className="mp-reason-n">{String(i + 1).padStart(2, '0')}</span>
+                <span>{r}</span>
+              </li>
+            ))}
+          </ol>
+        )}
+        {text.caption && <p className="mp-caption">{text.caption}</p>}
+        <p className="mp-status" aria-live="polite">{status}</p>
+        <label className="mp-jump">
+          <span className="mp-visually-hidden">{T.jumpTo}</span>
+          <select value={index} onChange={(e) => onScreen(Number(e.target.value))} aria-label={T.jumpTo}>
+            {SCREENS.map((s, i) => <option key={s.id} value={i}>{T.dotLabel(i + 1, T.screens[s.id].title)}</option>)}
+          </select>
+        </label>
+      </div>
 
       <div className="mp-dock">
-        <div className="mp-dots" aria-hidden="true">
-          {SCREENS.map((s, i) => <span key={s.id} className={i === index ? 'dot on' : i < index ? 'dot past' : 'dot'} />)}
-        </div>
+        <button type="button" className="mp-quiet" onClick={() => onFree()}>{T.freePlay}</button>
         <button type="button" className="mp-one" onClick={onPrimary}>{primaryLabel}</button>
-        <div className="mp-dock-row">
-          <label className="mp-jump">
-            <span className="mp-visually-hidden">{T.jumpTo}</span>
-            <select value={index} onChange={(e) => onScreen(Number(e.target.value))} aria-label={T.jumpTo}>
-              {SCREENS.map((s, i) => <option key={s.id} value={i}>{T.dotLabel(i + 1, T.screens[s.id].title)}</option>)}
-            </select>
-          </label>
-          <button type="button" className="mp-quiet" onClick={() => onFree()}>{T.freePlay}</button>
-        </div>
       </div>
     </section>
   );

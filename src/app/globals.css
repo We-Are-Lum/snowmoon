@@ -556,3 +556,6 @@ figure.figure .device-view svg { min-width: var(--fig-min, 0); }
 .what-is-this, .replay-intro { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; font-family: var(--label); font-size: 12px; color: var(--muted); background: none; border: 0; text-decoration: underline; cursor: pointer; }
 .replay-intro { padding-left: 0; }
 .intro-actions button { min-height: 44px; min-width: 44px; padding: 0 16px; font-family: var(--label); font-size: 14px; }
+
+/* A source figure the Minpentai sandbox can play (c4-b5). */
+.play-figure { display: inline-flex; align-items: center; min-height: var(--tap); font-family: var(--label); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; }

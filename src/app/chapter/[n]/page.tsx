@@ -61,6 +61,8 @@ export default async function ChapterPage({ params }: Props) {
   // Blocks the narration speaks as a description rather than the book's words.
   const described = new Set((narration?.cues ?? []).filter((c) => c.description).map((c) => c.idx));
   const DESCRIBED = 'narrated as a model-drafted description, not the author’s words';
+  // Figures the Minpentai sandbox can play. Its free mode opens on the c4-b5 board.
+  const PLAYABLE: Record<string, string> = { 'c4-b5': '/minpentai?mode=free' };
 
   return (
     <article className="page chapter" data-chapter={n} data-setting={facts.find((f) => f.setting)?.setting ?? undefined}>
@@ -86,6 +88,11 @@ export default async function ChapterPage({ params }: Props) {
                 ¶ {f.label} · {source.from === 'template' ? `template ${source.templateId}` : 'as drawn in the book'}
                 {described.has(b.idx) && ` · ${DESCRIBED}`}
               </figcaption>
+              {PLAYABLE[id] && (
+                <Link className="play-figure" href={PLAYABLE[id]}>
+                  Play this figure
+                </Link>
+              )}
             </figure>
           );
         } else {
