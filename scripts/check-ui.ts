@@ -13,6 +13,11 @@
  * - Paper is #F4F2ED in light mode in every chapter. Datelines take the accent of
  *   their setting: #2E5A3A Veridia, #B3306E Dzego, ink otherwise.
  * - The first screen says: independent adaptation, not affiliated with the author, no token.
+ * - The assistant (/assistant) meets the same floors signed out (9d), the reader's "Ask about this" (1a), its home (1d),
+ *   the first-time notice (2), a thread with an answer and quote cards (3), a held-back
+ *   question (9b) and the daily limit (9c). The API is replayed from results recorded
+ *   live (scripts/fixtures/chat-live-2026-10-07.json); quotes are checked against the
+ *   stored text by test:chat. --shots=DIR also saves a screenshot of each.
  */
 import { readFileSync } from 'node:fs';
 import { chromium, type Page } from 'playwright-core';
@@ -20,6 +25,7 @@ import { chromium, type Page } from 'playwright-core';
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
 const BASE = (arg('url') ?? 'http://localhost:3000').replace(/\/$/, '');
 const INJECT = arg('inject-css');
+const SHOTS = arg('shots');
 const MIN_TEXT = 12;
 const MIN_TAP = 44;
 const PAPER = 'rgb(244, 242, 237)';
@@ -36,6 +42,103 @@ async function open(page: Page, path: string) {
   await page.goto(BASE + path, { waitUntil: 'networkidle' });
   if (INJECT) await page.addStyleTag({ content: INJECT });
   await page.evaluate(() => document.fonts.ready);
+}
+
+const LIVE = JSON.parse(readFileSync(new URL('./fixtures/chat-live-2026-10-07.json', import.meta.url), 'utf8')) as {
+  results: { question: string; limit: number; result: { state: string; left?: number } }[];
+};
+
+async function shot(page: Page, name: string, scheme: string) {
+  if (SHOTS) await page.screenshot({ path: `${SHOTS}/${name}-${scheme}.png`, fullPage: false });
+}
+
+/** Screens 1a, 1b, 9d, 1d, 2, 3, 9b and 9c, with the chat API replayed from the live run. */
+async function checkAssistant(page: Page, scheme: string) {
+  // 1a: select a passage in the reader; "Ask about this" appears beside "Share quote".
+  await open(page, '/chapter/1');
+  await page.evaluate(() => {
+    const p = document.querySelector('#c1-b19')!;
+    p.scrollIntoView({ block: 'center' });
+    const r = document.createRange();
+    r.selectNodeContents(p);
+    getSelection()!.removeAllRanges();
+    getSelection()!.addRange(r);
+  });
+  const ask = await page.waitForSelector('.selection-actions a');
+  if ((await ask.getAttribute('href')) !== '/assistant?block=c1-b19') fail(`/chapter/1: "Ask about this" points to ${await ask.getAttribute('href')}`);
+  await checkFloors(page, '/chapter/1 (1a selection)', scheme);
+  await shot(page, '1a-selection', scheme);
+  await page.evaluate(() => getSelection()!.removeAllRanges());
+  // 1b: the chapter's own link.
+  await page.evaluate(() => document.querySelector('.ask-chapter')!.scrollIntoView({ block: 'center' }));
+  await shot(page, '1b-chapter-link', scheme);
+
+  await page.evaluate(() => localStorage.clear());
+  await open(page, '/assistant');
+  await page.waitForSelector('.as-signed-out');
+  await checkFloors(page, '/assistant (9d signed out)', scheme);
+  await shot(page, '9d-signed-out', scheme);
+
+  let left = 30;
+  const replies: { state: string; left?: number; heldBack?: boolean }[] = [
+    LIVE.results[0].result,
+    { state: 'unsupported', heldBack: false, left: 2 },
+    { state: 'held', heldBack: true, left: 1 },
+    { state: 'limit', left: 0 },
+  ];
+  await page.route('**/api/chat/status', (r) =>
+    r.fulfill({ json: { available: true, model: 'gpt-oss-120b', host: 'Vercel AI Gateway', provider: 'Groq', perDay: 30, left } }),
+  );
+  await page.route('**/api/chat/ask', (r) => {
+    const next = replies.shift()!;
+    left = typeof next.left === 'number' ? next.left : left;
+    return r.fulfill({ json: next });
+  });
+  await page.evaluate(() => localStorage.setItem('snowmoon.read-to', '3'));
+  await open(page, '/assistant');
+  await page.waitForSelector('.as-start');
+  await checkFloors(page, '/assistant (1d home)', scheme);
+  await shot(page, '1d-home', scheme);
+
+  await page.click('.as-start');
+  await page.fill('#as-q', LIVE.results[0].question);
+  await page.click('.as-send');
+  await page.waitForSelector('.as-sheet');
+  await checkFloors(page, '/assistant (2 notice)', scheme);
+  await shot(page, '2-notice', scheme);
+  await page.click('.as-check input');
+  await page.click('.as-primary');
+  await page.waitForSelector('.as-quote');
+  const host = await page.textContent('.as-foot');
+  if (!host?.includes('Vercel AI Gateway')) fail(`/assistant: the footer does not name the host (${host})`);
+  await checkFloors(page, '/assistant (3 thread)', scheme);
+  await shot(page, '3-thread', scheme);
+
+  if (!(await page.locator('.as-testing').isVisible())) fail('/assistant: no "Testing" label');
+  await page.fill('#as-q', LIVE.results[1].question);
+  await page.click('.as-send');
+  await page.waitForSelector('text=the passages don’t say');
+  await checkFloors(page, '/assistant (unsupported)', scheme);
+  await shot(page, '3b-unsupported', scheme);
+
+  await page.fill('#as-q', LIVE.results[4].question);
+  await page.click('.as-send');
+  await page.waitForSelector('.as-held');
+  await page.evaluate(() => document.querySelector('.as-held')?.scrollIntoView({ block: 'center' }));
+  await checkFloors(page, '/assistant (9b held back)', scheme);
+  await shot(page, '9b-held', scheme);
+  await page.fill('#as-q', LIVE.results[3].question);
+  await page.click('.as-send');
+  await page.waitForSelector('.as-stop');
+  await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
+  await checkFloors(page, '/assistant (9c limit)', scheme);
+  const zeroLeft = await page.locator('.as-label', { hasText: /left today/ }).count();
+  if (zeroLeft !== 1) fail(`/assistant (9c): "left today" shown ${zeroLeft} times, not once`);
+  await shot(page, '9c-limit', scheme);
+
+  await page.unroute('**/api/chat/status');
+  await page.unroute('**/api/chat/ask');
+  await page.evaluate(() => localStorage.clear());
 }
 
 async function checkFloors(page: Page, path: string, scheme: string) {
@@ -166,6 +269,7 @@ try {
 
     await open(page, '/about');
     await checkFloors(page, '/about', scheme);
+    await checkAssistant(page, scheme);
     await open(page, '/cards');
     await checkFloors(page, '/cards', scheme);
 
@@ -206,4 +310,4 @@ if (failures.length) {
   console.error(`\nUI CHECK FAILED (${failures.length}):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`ui check passed: ${BASE}, ${35 + MINPENTAI_LESSONS + 3} pages × light and dark`);
+console.log(`ui check passed: ${BASE}, ${36 + MINPENTAI_LESSONS + 3} pages and 7 assistant states × light and dark`);

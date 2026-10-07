@@ -251,7 +251,22 @@ add({
     const line = json('config/consent.json');
     if (!line.versions?.[line.current]?.line) problems.push('config/consent.json: no current publication line');
     for (const { file, text } of files) {
+      // The two components that may hold a text box: one shows the publication line, the
+      // other (questions kept on the device, never published) says it is never published.
       if (file.endsWith('components/publish-words.tsx')) continue;
+      if (file.endsWith('components/private-text-field.tsx')) {
+        // Owner (2026-10-07): saved only on this device, sent to Vercel and Groq to be answered, never published; labelled draft.
+        for (const [what, re] of [
+          ['saved only on this device', /Saved only on this device/],
+          ['sent to the model\'s two hosts to be answered', /Sent to \{CHAT\.host\} and \{CHAT\.providerName\} to be answered/],
+          ['never published', /Never published/],
+          ['labelled draft', /as-draft/],
+          ['described to screen readers', /aria-describedby/],
+        ] as const)
+          if (!re.test(text)) problems.push(`${file}: the private box must say it is ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the private box must not send its text anywhere itself`);
+        continue;
+      }
       for (const m of text.matchAll(/<textarea\b|<input\b(?![^>]*type=["'](?:hidden|checkbox|radio|range|submit|button|file)["'])[^>]*>/g)) {
         problems.push(`${file}: a bare text box; use PublishedTextField so the publication line shows (${m[0].slice(0, 40)})`);
       }

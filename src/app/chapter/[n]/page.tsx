@@ -11,6 +11,7 @@ import { loadNarration } from '~/lib/narration';
 import { loadIllustrations } from '~/lib/illustrations';
 import { ChapterPlayer } from '~/components/chapter-player';
 import { QuoteShare } from '~/components/quote-share';
+import { ReadingRecord } from '~/components/reading-record';
 import { adaptationsCiting } from '~/lib/adaptations';
 import type { Block } from '~/lib/book';
 
@@ -152,6 +153,11 @@ export default async function ChapterPage({ params }: Props) {
           </Fragment>
         );
       })}
+      <ReadingRecord chapter={n} />
+      {/* Board 1b (there is no chapter menu yet): a private thread about this chapter. */}
+      <Link className="ask-chapter" href={`/assistant?chapter=${n}`}>
+        Ask about this chapter
+      </Link>
       <nav className="chapter-nav" aria-label="Chapters">
         {n > 1 ? <Link href={`/chapter/${n - 1}`}>← Chapter {n - 1}</Link> : <span />}
         <Link href="/">Contents</Link>

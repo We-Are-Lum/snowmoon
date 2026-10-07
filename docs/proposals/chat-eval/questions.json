@@ -1,0 +1,533 @@
+[
+ {
+  "id": "q01",
+  "chapter": 1,
+  "question": "Why do builders in Veridia care so much whether ordinary people like the look of their buildings?",
+  "gold": [
+   "c1-b20"
+  ],
+  "answer_fact": "Public ratings set an aesthetics charge within each building's land tax, so pleasing designs pay less and are more profitable.",
+  "type": "why"
+ },
+ {
+  "id": "q02",
+  "chapter": 1,
+  "question": "At the concert, why did some other guy in a purple robe suddenly bolt for the exit when Gladias was called out?",
+  "gold": [
+   "c1-b77"
+  ],
+  "answer_fact": "A member of the public deliberately drew the crowd's attention onto himself so Gladias could get away.",
+  "type": "why"
+ },
+ {
+  "id": "q03",
+  "chapter": 2,
+  "question": "Why weren't Zei and Fin in the room that took the full force of the blast during their physics lesson?",
+  "gold": [
+   "c2-b103",
+   "c2-b35",
+   "c2-b124"
+  ],
+  "answer_fact": "A man moved the class at the last minute to a different room one floor up, which saved them.",
+  "type": "why"
+ },
+ {
+  "id": "q04",
+  "chapter": 3,
+  "question": "Why does Mov make Gladias change into a different robe before they go meet the stranger?",
+  "gold": [
+   "c3-b30"
+  ],
+  "answer_fact": "In case something on his old robe lets him be tracked; Arctic spy devices are increasingly slipping into Veridia.",
+  "type": "why"
+ },
+ {
+  "id": "q05",
+  "chapter": 5,
+  "question": "Why was Zei willing to take a trip abroad with his rival right before their final match?",
+  "gold": [
+   "c5-b31",
+   "c5-b29",
+   "c5-b32"
+  ],
+  "answer_fact": "Traveling together means neither can secretly study more, so both can rest; plus he and his mom get a cheap first trip abroad.",
+  "type": "why"
+ },
+ {
+  "id": "q06",
+  "chapter": 1,
+  "question": "How did Gladias get rid of the footage the big man at the concert had taken of his face?",
+  "gold": [
+   "c1-b82",
+   "c1-b83",
+   "c1-b84"
+  ],
+  "answer_fact": "He distracted the man, grabbed his device, ordered it to wipe recent media and restart, and it deleted four files including his face.",
+  "type": "what"
+ },
+ {
+  "id": "q07",
+  "chapter": 3,
+  "question": "What does Delwart actually ask Gladias to do?",
+  "gold": [
+   "c3-b112",
+   "c3-b125"
+  ],
+  "answer_fact": "Choose the Keeper track instead of Sentinel and vote to remove every rubric he encounters.",
+  "type": "what"
+ },
+ {
+  "id": "q08",
+  "chapter": 4,
+  "question": "What was the hidden twist in Zei's quarter-final game?",
+  "gold": [
+   "c4-b148",
+   "c4-b150"
+  ],
+  "answer_fact": "Teams were not chosen randomly; he was deliberately paired with Bai as a test of whether they would cooperate.",
+  "type": "what"
+ },
+ {
+  "id": "q09",
+  "chapter": 3,
+  "question": "What did Gladias see happen just as Delwart walked away from their table?",
+  "gold": [
+   "c3-b127"
+  ],
+  "answer_fact": "Someone else in a privacy robe left the neighboring booth and followed Delwart.",
+  "type": "what"
+ },
+ {
+  "id": "q10",
+  "chapter": 1,
+  "question": "When people rate buildings on that minus-five to five slider, why doesn't it help to just give everything extreme scores?",
+  "gold": [
+   "c1-b32"
+  ],
+  "answer_fact": "Each voter's ratings get normalized to average zero and fixed spread, so only honest relative strength matters.",
+  "type": "world"
+ },
+ {
+  "id": "q11",
+  "chapter": 1,
+  "question": "How does the system punish Order members who let slip what they're working on?",
+  "gold": [
+   "c1-b76"
+  ],
+  "answer_fact": "Anyone can submit a guess of a member's task with a deposit; if right, the member's pay is cut and the guesser gets half.",
+  "type": "world"
+ },
+ {
+  "id": "q12",
+  "chapter": 5,
+  "question": "How do the cities in the United Cities get a say in each other's governments?",
+  "gold": [
+   "c5-b48",
+   "c5-b47"
+  ],
+  "answer_fact": "Paired cities elect part of each other's parliament: larger city gets the agreed share; smaller gets it divided by square root of size ratio.",
+  "type": "world"
+ },
+ {
+  "id": "q13",
+  "chapter": 1,
+  "question": "Who are Febric and Hreda, and why are they living with Gladias and Seila?",
+  "gold": [
+   "c1-b125"
+  ],
+  "answer_fact": "They are Vil and Daia's kids; the two co-families take turns raising all four children for half a year each.",
+  "type": "character"
+ },
+ {
+  "id": "q14",
+  "chapter": 4,
+  "question": "What's the history between Zei and Bai before the tournament game?",
+  "gold": [
+   "c4-b72",
+   "c4-b73"
+  ],
+  "answer_fact": "Bai had beaten Zei all three times over past years and gloated about it, even taunting him about the prize money.",
+  "type": "character"
+ },
+ {
+  "id": "q15",
+  "chapter": 5,
+  "question": "Who is the man Seila is with when the Dzego kids meet her in Freetown?",
+  "gold": [
+   "c5-b58",
+   "c5-b62"
+  ],
+  "answer_fact": "Jahn, whom Seila introduces as her friend; he is a Freetown local.",
+  "type": "character"
+ },
+ {
+  "id": "q16",
+  "chapter": 1,
+  "question": "What was Gladias's score as a trainee at the concert, and what did he need to keep it above?",
+  "gold": [
+   "c1-b68"
+  ],
+  "answer_fact": "His score was 92; staying above 90 would let him become a Sentinel or Keeper.",
+  "type": "detail"
+ },
+ {
+  "id": "q17",
+  "chapter": 3,
+  "question": "Which social media company was cutting off outside apps, making the citizens' panel angry?",
+  "gold": [
+   "c3-b19"
+  ],
+  "answer_fact": "Bluewhale, which now only lets verified hardware connect, supposedly to stop spam.",
+  "type": "detail"
+ },
+ {
+  "id": "q18",
+  "chapter": 6,
+  "question": "Why did Gladias give up on becoming a Sentinel and go for the Keeper role instead?",
+  "gold": [
+   "c6-b18",
+   "c6-b19"
+  ],
+  "answer_fact": "He says Keepers hold the real power to change things because rubrics matter more; Mov suspects Delwart persuaded him.",
+  "type": "why"
+ },
+ {
+  "id": "q19",
+  "chapter": 6,
+  "question": "Why couldn't Gladias pay for his lunch the first time he tried?",
+  "gold": [
+   "c6-b131"
+  ],
+  "answer_fact": "He had forgotten to move money to himself; most of his funds were only reachable from home or via social recovery.",
+  "type": "why"
+ },
+ {
+  "id": "q20",
+  "chapter": 6,
+  "question": "Why is the little library at the square west of Galanar full of books nobody wants to read?",
+  "gold": [
+   "c6-b105"
+  ],
+  "answer_fact": "Mov says owners exploit a tax rubric by adding facilities that technically qualify but nobody uses, likely to keep kids away.",
+  "type": "why"
+ },
+ {
+  "id": "q21",
+  "chapter": 9,
+  "question": "Why do Dzego's language priests spend so much effort reworking their language instead of the economy or the army?",
+  "gold": [
+   "c9-b37"
+  ],
+  "answer_fact": "Progress in economy or military gets bombed by the Arctics, while language work is harmless and even impresses them.",
+  "type": "why"
+ },
+ {
+  "id": "q22",
+  "chapter": 10,
+  "question": "Why did Den and Mu decide to tell Zei the real purpose behind the strategy game?",
+  "gold": [
+   "c10-b204"
+  ],
+  "answer_fact": "They needed to explain why he should study cryptography and still compete, lest he guess on his own and tell others.",
+  "type": "why"
+ },
+ {
+  "id": "q23",
+  "chapter": 7,
+  "question": "How did Bai trick Zei early in the city final?",
+  "gold": [
+   "c7-b96"
+  ],
+  "answer_fact": "She had her AI ignore the diagonals as bait while building strong defenses there herself, so Zei's diagonal attack failed.",
+  "type": "what"
+ },
+ {
+  "id": "q24",
+  "chapter": 7,
+  "question": "What did Zei get in his prize bag after the final that Bai didn't?",
+  "gold": [
+   "c7-b141",
+   "c7-b143"
+  ],
+  "answer_fact": "A dark purple letter marked as meant only for Zei to read.",
+  "type": "what"
+ },
+ {
+  "id": "q25",
+  "chapter": 8,
+  "question": "How did the senators' vote on admitting Gladias to the Order turn out?",
+  "gold": [
+   "c8-b97",
+   "c8-b99",
+   "c8-b143"
+  ],
+  "answer_fact": "The senators split evenly ten to ten, and the Chairman cast the deciding vote in favor.",
+  "type": "what"
+ },
+ {
+  "id": "q26",
+  "chapter": 10,
+  "question": "What did Eighteen find when he swept the booth before Gladias's second Keeper meeting?",
+  "gold": [
+   "c10-b114",
+   "c10-b116"
+  ],
+  "answer_fact": "A tiny needle-shaped spy device hidden beneath a bump in the table.",
+  "type": "what"
+ },
+ {
+  "id": "q27",
+  "chapter": 6,
+  "question": "How big are the panels that Keepers work in, compared with Sentinel panels and court panels?",
+  "gold": [
+   "c6-b41"
+  ],
+  "answer_fact": "Keepers deliberate in three groups of seven, Sentinels in three groups of three, and courts use five judges.",
+  "type": "world"
+ },
+ {
+  "id": "q28",
+  "chapter": 9,
+  "question": "How can an ordinary buyer be sure their chip comes from the same supply the inspectors test?",
+  "gold": [
+   "c9-b124",
+   "c9-b122"
+  ],
+  "answer_fact": "Both buy through a physical mixnet of sealed, coded boxes, so the maker cannot tell which chips go to inspectors.",
+  "type": "world"
+ },
+ {
+  "id": "q29",
+  "chapter": 6,
+  "question": "How could Gladias borrow money at the restaurant without revealing who he was?",
+  "gold": [
+   "c6-b134",
+   "c6-b132"
+  ],
+  "answer_fact": "A zero-knowledge proof backed by his work reviews revealed only a one-time hash and the loan amount, never his name.",
+  "type": "world"
+ },
+ {
+  "id": "q30",
+  "chapter": 9,
+  "question": "Who is the robed man Zei meets in a sealed room deep inside the mountain pyramid?",
+  "gold": [
+   "c9-b56"
+  ],
+  "answer_fact": "He is Den, a High Council member of the Kungaupei.",
+  "type": "character"
+ },
+ {
+  "id": "q31",
+  "chapter": 9,
+  "question": "What happened to Bai's parents, and who brought her up?",
+  "gold": [
+   "c9-b14",
+   "c9-b13",
+   "c9-b16"
+  ],
+  "answer_fact": "Both died in a lab explosion when she was small; she lived with an aunt who largely neglected her.",
+  "type": "character"
+ },
+ {
+  "id": "q32",
+  "chapter": 8,
+  "question": "What changed for Mov after the random selection picked him?",
+  "gold": [
+   "c8-b134",
+   "c8-b136"
+  ],
+  "answer_fact": "He was chosen to become a Herald next term, so he no longer holds any formal power.",
+  "type": "character"
+ },
+ {
+  "id": "q33",
+  "chapter": 8,
+  "question": "How many years had Gladias been an Acolyte by the time of his hearing before the senators?",
+  "gold": [
+   "c8-b42"
+  ],
+  "answer_fact": "Four years, with a prediction score in the ninety-fourth percentile.",
+  "type": "detail"
+ },
+ {
+  "id": "q34",
+  "chapter": 7,
+  "question": "What was the symbol count when Bai gave up the city final?",
+  "gold": [
+   "c7-b119",
+   "c7-b120"
+  ],
+  "answer_fact": "Zei led twelve symbols to six when Bai resigned.",
+  "type": "detail"
+ },
+ {
+  "id": "q35",
+  "chapter": 14,
+  "question": "Why does Deluin invite Zei to Redshire?",
+  "gold": [
+   "c14-b120"
+  ],
+  "answer_fact": "He is flying home for his parents' birthdays and coaching; if Zei comes too, Deluin can justify skipping the coaching.",
+  "type": "why"
+ },
+ {
+  "id": "q36",
+  "chapter": 11,
+  "question": "Why did Vil and his old coworkers take that hedge fund to court?",
+  "gold": [
+   "c11-b17",
+   "c11-b16"
+  ],
+  "answer_fact": "Divergent's owners secretly owned Jump and bet against it, so its collapse let them avoid paying staff bonuses and severance.",
+  "type": "why"
+ },
+ {
+  "id": "q37",
+  "chapter": 13,
+  "question": "Why does Gladias suggest the Keepers hold off two months before deciding on the military tech change?",
+  "gold": [
+   "c13-b90",
+   "c13-b99"
+  ],
+  "answer_fact": "After Mov's report made him suspicious, he wanted no change; waiting lets an Arctic attack, or none, settle the question.",
+  "type": "why"
+ },
+ {
+  "id": "q38",
+  "chapter": 15,
+  "question": "Why did the organizers scrap the Minpentai final instead of just pushing it back?",
+  "gold": [
+   "c15-b84"
+  ],
+  "answer_fact": "Su says more games would be wrong now, and they don't want to give false hope or distract people.",
+  "type": "why"
+ },
+ {
+  "id": "q39",
+  "chapter": 15,
+  "question": "Why does Zei only offer Deluin help from 'smart people' he knows instead of naming the secret groups behind him?",
+  "gold": [
+   "c15-b71"
+  ],
+  "answer_fact": "Revealing them to an outsider in occupied land would break confidentiality, and he couldn't fully trust the connection yet.",
+  "type": "why"
+ },
+ {
+  "id": "q40",
+  "chapter": 11,
+  "question": "How does Veridia tax buildings with stuffy indoor air?",
+  "gold": [
+   "c11-b98"
+  ],
+  "answer_fact": "It's part of land tax: nothing for perfect air, up to a third of a percent yearly if rooms average over 1000; filters raise limits.",
+  "type": "world"
+ },
+ {
+  "id": "q41",
+  "chapter": 14,
+  "question": "How can a foreigner like Deluin pick up the Dzegojan language so fast?",
+  "gold": [
+   "c14-b118"
+  ],
+  "answer_fact": "Dzegoban has only 256 roots, so it can be learned in under a month well enough to get around.",
+  "type": "world"
+ },
+ {
+  "id": "q42",
+  "chapter": 15,
+  "question": "How does Gladias's voting setup stop Delwart from checking which way he voted?",
+  "gold": [
+   "c15-b41",
+   "c15-b40"
+  ],
+  "answer_fact": "No one, even Gladias, knows which keys are valid; only totals are decrypted, so he can't prove his votes.",
+  "type": "world"
+ },
+ {
+  "id": "q43",
+  "chapter": 11,
+  "question": "How did Zven score the winning point in his Helisport match?",
+  "gold": [
+   "c11-b81"
+  ],
+  "answer_fact": "He handed the instructor the forgotten fourth ball, which had broken rotors and lay on the ground.",
+  "type": "what"
+ },
+ {
+  "id": "q44",
+  "chapter": 15,
+  "question": "What happened when the Arctics took over Redshire?",
+  "gold": [
+   "c15-b8",
+   "c15-b10"
+  ],
+  "answer_fact": "Drones, aircraft and a land force from hidden tunnels overran Redshire within two longhours; the leaders' planes were shot down.",
+  "type": "what"
+ },
+ {
+  "id": "q45",
+  "chapter": 13,
+  "question": "What did Mov overhear when he secretly listened in on Delwart's next meeting?",
+  "gold": [
+   "c13-b37",
+   "c13-b35",
+   "c13-b38"
+  ],
+  "answer_fact": "Delwart and a hardware-openness Keeper plotted to sway that Keeper's group, giving Delwart contacts in two groups on one rubric.",
+  "type": "what"
+ },
+ {
+  "id": "q46",
+  "chapter": 12,
+  "question": "How did Zei work out his opening setup when the game was suddenly played on hexagons?",
+  "gold": [
+   "c12-b163",
+   "c12-b170"
+  ],
+  "answer_fact": "Inspired by his textbook, he ran the rules in reverse from the desired end state, undoing each step like a hash permutation.",
+  "type": "what"
+ },
+ {
+  "id": "q47",
+  "chapter": 12,
+  "question": "Where is Deluin from, and how did he end up in Dzego's championship?",
+  "gold": [
+   "c12-b75",
+   "c12-b80"
+  ],
+  "answer_fact": "He is from Redshire and is one of four foreign players brought in this year.",
+  "type": "character"
+ },
+ {
+  "id": "q48",
+  "chapter": 14,
+  "question": "What does Deluin now believe about complimenting a country on its scenery?",
+  "gold": [
+   "c14-b127",
+   "c14-b126"
+  ],
+  "answer_fact": "He once saw it as a backhanded insult but now thinks beautiful nature takes great human effort to maintain.",
+  "type": "character"
+ },
+ {
+  "id": "q49",
+  "chapter": 14,
+  "question": "How many qualifying games did Deluin win?",
+  "gold": [
+   "c14-b31"
+  ],
+  "answer_fact": "Deluin won all six of his six qualifying games.",
+  "type": "detail"
+ },
+ {
+  "id": "q50",
+  "chapter": 13,
+  "question": "What score did Hreda get on her math test?",
+  "gold": [
+   "c13-b55"
+  ],
+  "answer_fact": "She scored ninety-six percent.",
+  "type": "detail"
+ }
+]

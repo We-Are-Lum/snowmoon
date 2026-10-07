@@ -376,12 +376,20 @@ figure.figure .device-view svg { min-width: var(--fig-min, 0); }
 .chapter .seed-image figcaption a { display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 6px; }
 
 /* Quote cards */
-.share-selection {
+.selection-actions {
   position: fixed;
   left: 50%;
   bottom: calc(150px + env(safe-area-inset-bottom));
   transform: translateX(-50%);
   z-index: 30;
+  display: flex;
+  gap: 8px;
+}
+.share-selection {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  text-decoration: none;
   min-height: var(--tap);
   padding: 0 18px;
   border: 1px solid var(--accent);
@@ -671,3 +679,5 @@ figure.figure .device-view svg { min-width: var(--fig-min, 0); }
 .ae-planned-tag { font-family: var(--label); font-size: var(--text-label); color: var(--muted); padding-top: 3px; white-space: nowrap; text-transform: uppercase; }
 /* A source figure the Minpentai sandbox can play (c4-b5). */
 .play-figure { display: inline-flex; align-items: center; min-height: var(--tap); font-family: var(--label); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; }
+/* The assistant's way in from a chapter (board 1b). */
+.ask-chapter { display: inline-flex; align-items: center; min-height: var(--tap); margin-top: var(--space-6); font-family: var(--label); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; }
