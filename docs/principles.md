@@ -299,9 +299,10 @@ is no token.
 - `P7b`: the deployed first screen contains "not affiliated with the author"
   and "There is no token"; no token code (ERC-20/721, mint, airdrop) exists in
   the repo. `npm run check:ui` also checks the first screen at phone size.
-- `npm run check:intro`: card 1 of the first-visit intro (`config/intro.json`)
-  keeps "not affiliated with the author" and "no token", and every card marked
-  "live" points at a page that exists.
+- `npm run check:intro`: the first-visit intro's disclaimer (`config/intro.json`),
+  shown on card 1 and at the top of /about, keeps "not affiliated with the
+  author" and "no token"; every card and feature marked "live" points at a
+  page that exists.
 - Review: does any payment change what anyone sees first?
 
 **Status.** Pass.
