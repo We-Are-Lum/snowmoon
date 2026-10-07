@@ -1,4 +1,4 @@
-import { REPO_URL, WORK } from '~/lib/config';
+import { CHAT, REPO_URL, WORK } from '~/lib/config';
 import { loadIntro } from '~/lib/intro';
 import { AboutEdition, ReplayIntro } from '~/components/first-visit';
 import consent from '../../../config/consent.json';
@@ -44,6 +44,24 @@ export default function About() {
         Every published image and voice links to its recipe, including the exact prompt, readable without signing in.
         The prompts of your drafts and abandoned attempts are not published.
       </p>
+      <h2>The reading assistant</h2>
+      {/* Model-drafted wording (owner decision 2026-10-07: say which data centre is unverified). */}
+      <p>
+        The assistant answers questions about the book with {CHAT.modelName}, an open-weights model. Your questions are
+        saved only on your device and never published. To be answered, each one is sent to {CHAT.host}, then to{' '}
+        {CHAT.providerName}, with zero data retention required; this app keeps no copy, only a count and the cost.
+      </p>
+      <p>
+        {CHAT.providerName} keeps customer data in the United States and runs data centres in the US, Canada, Finland,
+        Saudi Arabia and Australia. Which of its data centres answers a given question is not known to this app; it is
+        unverified.
+      </p>
+      {CHAT.testing && (
+        <p>
+          The assistant is being tested: its answers can be wrong, so check the quotes it shows, which are the book’s
+          own words.
+        </p>
+      )}
       <h2>No token</h2>
       <p>There is no token. There is no revenue share. Nothing here is an investment.</p>
       <h2>No canon</h2>
