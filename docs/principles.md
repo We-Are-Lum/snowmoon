@@ -75,8 +75,8 @@ narration had no recipe link on the page, and lettered images did not link
 their lettering record. Every prompt itself was already in the public
 repository. Found while testing 0004: under 0001's recipe policy, a draft's
 prompt was public, because the policy checked for versions as the public
-role, which cannot see draft versions; 0005 replaces it (written, not yet
-applied). No screen stores a
+role, which cannot see draft versions; 0005 replaced it (applied Oct 5,
+2026). No screen stores a
 person's own words yet, so the consent screen and the preview are built but
 not yet used.
 
@@ -84,8 +84,8 @@ Every committed recipe now records `assist`: which inputs a
 model drafted (see 3). The 4,237 narration recipes already in
 `studio.recipes` predate `assist`, and that table is append-only, so 0005 adds
 an append-only side table, `studio.recipe_assist`, public exactly when its
-recipe is; `scripts/backfill-recipe-assist.ts` copies each record from the
-committed recipe file (all 4,237 are covered). New rows carry `assist`
+recipe is; `scripts/backfill-recipe-assist.ts` copied each record from the
+committed recipe file (all 4,237, written Oct 5, 2026). New rows carry `assist`
 directly.
 
 ## 2. AI use is declared on every element. The book's text is never altered, and nothing generated is presented as the author's. The words of a piece are the author's or a signed-in person's.
@@ -161,19 +161,21 @@ our choice, not his rule.
 published output, with its quoted license line and `open_weights`. A model
 used anywhere in the pipeline is reported here if its weights are closed.
 
+Hosted open-weight models may be listed too (`runs_on: hosted`): for a hosted render the recipe's model record is the endpoint, the date and the host's request id, because the host does not expose a weights revision. Local models stay preferred when they can do the job. (Owner decision, Oct 5, 2026: Z-Image Turbo and ERNIE-Image Turbo, Apache-2.0, on fal.ai.)
+
 **Checked by.**
 - `P3a`: every allowlisted model has `license_line` and a boolean
   `open_weights`.
-- `P3b`: every model named in a recipe is on the allowlist; closed ones are
-  printed as a note.
+- `P3b`: every model named in a recipe is on the allowlist, and every hosted
+  endpoint used in an adaptation's recipe belongs to an allowlisted model;
+  closed ones are printed as a note.
 - Review: was any closed model used to make or shape published content, and is
   that reported below?
 
 - `P3c`: every committed recipe file has an `assist` field: the drafting
   model and what it drafted, or null.
 - `P3d`: on the live database, every recipe of the house narration (chapter 1
-  sampled) has `assist` in the column or in `studio.recipe_assist`. Skipped
-  until 0005 creates the table; fails after that until the backfill runs.
+  sampled) has `assist` in the column or in `studio.recipe_assist`.
 
 **Status.** Pass. Both generation models record `open_weights: true`, their
 license and their weights. The closed drafting model is listed under
@@ -266,6 +268,10 @@ only, through `studio.rating_totals`, `studio.like_totals` and
   included).
 - `P6c`: on the live database, through the public API with the public key,
   the individual tables refuse to answer and the totals views answer.
+- `P6d`: the Vercel project holds no `SUPABASE_SERVICE_ROLE_KEY`,
+  `SUPABASE_SECRET_KEY`, `SUPABASE_JWT_SECRET` or `POSTGRES_*` variable (read by name through the
+  signed-in Vercel CLI; values are never read). The app reaches the database
+  only as `studio_writer`.
 - Review: does a new page, embed or script reach another domain? Does a new
   table expose who did what?
 
@@ -293,6 +299,9 @@ is no token.
 - `P7b`: the deployed first screen contains "not affiliated with the author"
   and "There is no token"; no token code (ERC-20/721, mint, airdrop) exists in
   the repo. `npm run check:ui` also checks the first screen at phone size.
+- `npm run check:intro`: card 1 of the first-visit intro (`config/intro.json`)
+  keeps "not affiliated with the author" and "no token", and every card marked
+  "live" points at a page that exists.
 - Review: does any payment change what anyone sees first?
 
 **Status.** Pass.
@@ -325,11 +334,9 @@ quoted as written. Minpentai boards and maps come from the source's own SVGs.
 
 ## Summary of current failures
 
-None on the automated checks once this change is deployed (`P1d` fails on
-production until then).
+None. All automated checks pass on production (Oct 5, 2026).
 
-Pending: migration 0005 (recipes of drafts and abandoned attempts private;
-consent kind `own_words`; `studio.recipe_assist`) is written and tested, not
-applied; after it, `scripts/backfill-recipe-assist.ts --write` closes the
-`assist` gap and `P3d` stops skipping. Recorded exception: 148 model-drafted
-spoken descriptions (2), labelled, list may only shrink.
+0005 is applied, and `scripts/backfill-recipe-assist.ts --write` recorded
+`assist` for all 4,237 narration recipes in the database (Oct 5, 2026);
+`P3d` passes. Recorded exception: 148 model-drafted spoken descriptions (2),
+labelled, list may only shrink.

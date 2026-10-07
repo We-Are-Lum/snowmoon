@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { Fragment } from 'react';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { adaptationsConfig, findSeed, isVideoFile, seedDocs } from '~/lib/adaptations';
@@ -54,14 +55,16 @@ export default async function AdaptationSeed({ params }: Props) {
           <section className="piece" aria-label="The adaptation">
             {docs.piece.map((panel) => (
               <figure key={panel.n} className="piece-panel">
-                {panel.image && (
-                  <>
-                    <img src={panel.image.url} alt={panel.image.alt} width={panel.image.width} height={panel.image.height} loading="lazy" />
+                {panel.images.map((image, i) => (
+                  <Fragment key={image.url}>
+                    <img src={image.url} alt={image.alt} width={image.width} height={image.height} loading="lazy" />
                     <figcaption className="block-caption">
-                      Panel {panel.n} · AI-generated image · <a href={panel.image.recipe}>recipe</a>
+                      Panel {panel.n}
+                      {panel.images.length > 1 ? ` (${i + 1} of ${panel.images.length})` : ''} · {image.alt.startsWith('AI-generated') ? 'AI-generated image' : 'drawn in code'} ·{' '}
+                      <a href={image.recipe}>recipe</a>
                     </figcaption>
-                  </>
-                )}
+                  </Fragment>
+                ))}
                 {[...panel.narration, ...panel.dialogue].map((l, i) => (
                   <p key={i} className="piece-line">
                     {l.text}{' '}

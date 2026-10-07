@@ -422,3 +422,78 @@ over.
    consent wording to promise it only then.
 5. Publish-without-name: not now. Keep the proposal on file.
 ```
+
+```text
+The 13 Supabase and POSTGRES_ variables have been removed from the
+snowmoon project by hand.
+
+1. List the project's variable names and confirm none of them are
+   back.
+2. Redeploy production and run the shipped and principle checks.
+3. Add a check that fails if SUPABASE_SERVICE_ROLE_KEY,
+   SUPABASE_JWT_SECRET, or any POSTGRES_* variable is present on
+   the project.
+4. Then, if you have not already, pull FAL_KEY and run the A/B.
+
+Never print a variable's value.
+```
+
+```text
+[Owner message, Oct 5, 2026: first version] Use Z-Image Turbo for the
+remaining dog-dawn fixes. 1. Add it to the model allowlist as a hosted
+option: Apache-2.0, open weights, hosted on fal.ai. For hosted renders, the
+model record is endpoint, date, and request id. Say so in the brief and
+principles. Local models stay preferred when they can do the job. 2-5.
+[Panel picks and a ten-beat contact sheet; cap of $1.]
+
+Revised after seeing the sheet. The Arctic post should look the way
+panel 1 does: pale faceted crystal walls, with night visible
+through the windows. Night comes from the windows and the fire,
+not from a dark room.
+
+1. Panel 2: take ERNIE's. Its room matches panel 1.
+2. Panel 3: take ERNIE's. The warm thread leaving the heartbeat
+   line reads clearly.
+3. Panel 5: make two candidates and I will choose.
+   a. ERNIE, re-prompted: he is working, hands on the console.
+      The figure behind the frosted glass is a faceless
+      silhouette with no eyes. Black starry sky in any window.
+   b. Z-Image ControlNet from attempt 3's pose and framing, with
+      panel 1's room look and a black starry sky in the windows.
+4. Add both models to the allowlist as hosted options: Apache-2.0,
+   open weights, hosted on fal.ai. For hosted renders the model
+   record is endpoint, date, and request id.
+5. Build a full ten-beat contact sheet, both images for beat 8,
+   and tell me whether the styles sit together.
+
+Cap of $1. Show me the sheet and stop.
+```
+
+```text
+Build a first-visit intro. Start once the comic work is at a clean
+commit.
+
+1. Content lives in one file: five cards, each with a title, one
+   sentence, an image reference, and a status of "live" or
+   "coming". Mark the text model-drafted until I edit it.
+2. Show it once, on the home page only. Skip on every card.
+   Remember it on the device with no cookies or account. A link
+   that opens a specific passage, card, or adaptation goes
+   straight there, with a small "What is this?" link instead.
+3. Render the same content as a section of /about.
+4. A check fails if a card marked "live" points at something that
+   does not exist. The independent and no-token line stays on
+   card 1.
+5. Build the structure and checks now, and style it when Design's
+   cards arrive.
+6. Also write docs/proposals/favourites.md: how a person's chosen
+   designs and styles would apply by default to what they create,
+   affecting nobody else, with nothing marked official. Propose
+   only.
+```
+
+```text
+Instead of the intro stuff at the top of the about section. I want a "replay intro screens" link at the top of the info page
+
+Also, I think a very key aspect of this intro section is that we are building upon Vitalik's novel and his license allows us to do that in a very specific way. The reason that we are having the read and listen and like the overlay over top is to help us build on top of it and to connect the text to expansions like adaptations or audiovisual expansions and this app makes it easy to build upon the book that Vitalik wanted us to build upon.
+```

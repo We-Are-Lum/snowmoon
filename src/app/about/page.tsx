@@ -1,4 +1,6 @@
 import { REPO_URL, WORK } from '~/lib/config';
+import { loadIntro } from '~/lib/intro';
+import { ReplayIntro } from '~/components/first-visit';
 import consent from '../../../config/consent.json';
 
 const wording = consent.versions[consent.current as keyof typeof consent.versions];
@@ -8,6 +10,7 @@ export const metadata = { title: 'About' };
 export default function About() {
   return (
     <div className="page prose">
+      <ReplayIntro intro={loadIntro()} />
       <h1>About</h1>
       <p>
         <em>{WORK.title}</em> was written by {WORK.author} and released under the GNU General Public License v3. The
@@ -48,3 +51,4 @@ export default function About() {
     </div>
   );
 }
+

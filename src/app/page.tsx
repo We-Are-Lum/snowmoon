@@ -2,6 +2,8 @@ import Link from 'next/link';
 import { chapterDateline, chapterNumbers, loadChapter } from '~/lib/book';
 import { blockFacts } from '~/lib/reading';
 import { WORK } from '~/lib/config';
+import { loadIntro } from '~/lib/intro';
+import { IntroOnce } from '~/components/first-visit';
 
 export default function ChapterList() {
   const chapters = chapterNumbers().map((n) => {
@@ -10,6 +12,8 @@ export default function ChapterList() {
   });
   return (
     <div className="page home">
+      {/* First visit only, home page only (config/intro.json). */}
+      <IntroOnce intro={loadIntro()} />
       <h1 className="book-title">{WORK.title}</h1>
       <p className="byline">by {WORK.author}</p>
       <section className="notice" aria-label="About this edition">

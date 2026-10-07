@@ -1,5 +1,5 @@
 {
-  "about": "Models allowed in this project (brief §4e, principle 3). Each records its license and whether its weights are open; open-weight models are preferred. A model is added only by a reviewed change that quotes the license line from the model's own card, and only if that license clearly allows publishing outputs under GPL-3.0. The composer offers only these; every recipe records the exact model and revision.",
+  "about": "Models allowed in this project (brief §4e, principle 3). Each records its license and whether its weights are open; open-weight models are preferred. A model is added only by a reviewed change that quotes the license line from the model's own card, and only if that license clearly allows publishing outputs under GPL-3.0. The composer offers only these; every recipe records the exact model and revision. Hosted models run on a third party's servers; for them the recipe's model record is the endpoint, the date and the host's request id. Local models stay preferred when they can do the job.",
   "models": [
     {
       "id": "kokoro-82m",
@@ -43,6 +43,62 @@
       "license": "Apache-2.0",
       "open_weights": true,
       "weights": "https://huggingface.co/black-forest-labs/FLUX.2-klein-4B"
+    },
+    {
+      "id": "z-image-turbo",
+      "kind": "image",
+      "repo": "Tongyi-MAI/Z-Image-Turbo",
+      "revision": null,
+      "license_line": "License: apache-2.0",
+      "license_checked": {
+        "by": "coding agent, approved by the owner",
+        "on": "2026-10-05",
+        "source": "https://huggingface.co/Tongyi-MAI/Z-Image-Turbo"
+      },
+      "notes": "6B. Hosted only for now (marginal on the 8 GB Mac). Text-to-image, image-to-image and ControlNet (canny, depth, pose); no multi-reference edit.",
+      "runs_on": "hosted",
+      "hosted": {
+        "host": "fal.ai",
+        "endpoints": {
+          "fal-ai/z-image/turbo": 0.005,
+          "fal-ai/z-image/turbo/image-to-image": 0.005,
+          "fal-ai/z-image/turbo/controlnet": 0.0065
+        },
+        "price_unit": "USD per megapixel",
+        "price_seen": "2026-10-05"
+      },
+      "model_record": "endpoint, date and request id (the host does not expose a weights revision)",
+      "cost_usd_per_unit": null,
+      "license": "Apache-2.0",
+      "open_weights": true,
+      "weights": "https://huggingface.co/Tongyi-MAI/Z-Image-Turbo"
+    },
+    {
+      "id": "ernie-image-turbo",
+      "kind": "image",
+      "repo": "baidu/ERNIE-Image-Turbo",
+      "revision": null,
+      "license_line": "Apache License Version 2.0, January 2004 ... Copyright (c) 2025 Baidu, Inc. All Rights Reserved.",
+      "license_checked": {
+        "by": "coding agent, approved by the owner",
+        "on": "2026-10-05",
+        "source": "https://huggingface.co/baidu/ERNIE-Image/raw/main/LICENSE"
+      },
+      "notes": "8B. Hosted only (needs more memory than the 8 GB Mac). Text-to-image only: no edit, image-to-image, reference or ControlNet. Prompt expansion must be off so the recorded prompt is the prompt used.",
+      "runs_on": "hosted",
+      "hosted": {
+        "host": "fal.ai",
+        "endpoints": {
+          "fal-ai/ernie-image/turbo": 0.01
+        },
+        "price_unit": "USD per megapixel",
+        "price_seen": "2026-10-05"
+      },
+      "model_record": "endpoint, date and request id (the host does not expose a weights revision)",
+      "cost_usd_per_unit": null,
+      "license": "Apache-2.0",
+      "open_weights": true,
+      "weights": "https://huggingface.co/baidu/ERNIE-Image-Turbo"
     }
   ],
   "candidates": [
@@ -50,10 +106,6 @@
       "repo": "Qwen/Qwen-Image-Edit-2511",
       "card_license": "apache-2.0",
       "status": "license line seen on the card's metadata; not yet quoted and reviewed; needs 32 GB+ or a rented GPU"
-    },
-    {
-      "repo": "Qwen Image 2.1 (via mflux)",
-      "status": "license not yet checked"
     }
   ],
   "excluded": [
@@ -64,6 +116,10 @@
     {
       "repo": "black-forest-labs/FLUX.2-klein-9B",
       "reason": "flux-non-commercial-license"
+    },
+    {
+      "repo": "Qwen/Qwen-Image-2.1",
+      "reason": "Qwen Research License: \"for non-commercial purposes only\" (https://huggingface.co/Qwen/Qwen-Image-2.1/raw/main/LICENSE, checked 2026-10-05)"
     }
   ],
   "drafting": [

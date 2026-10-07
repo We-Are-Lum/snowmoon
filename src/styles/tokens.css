@@ -1,0 +1,93 @@
+/* Shared design values: the one place for colour, type, spacing, radius, the app
+   bar and light/dark. Taken from the design boards in docs/design/ (the theme
+   objects of the chat and intro boards, the direction board's app-chrome swatches,
+   and the 390px phone mockups). JavaScript that needs a colour (theme colour,
+   splash) reads src/lib/tokens.ts; `npm run check:tokens` keeps the two equal.
+   In-world templates and source screens keep their own faces and colours. */
+
+:root {
+  /* Colour, light */
+  --paper: #F4F2ED;
+  --ink: #1D1D1B;
+  --body: #4A463F; /* secondary running text */
+  --muted: #6A675F; /* labels, captions */
+  --faint: #ABA79D; /* decoration only: below 4.5:1 on paper, never for text */
+  --rule: #DAD6CC;
+  --soft: #E6E2D9; /* quiet fills */
+  --card: #FBFAF6; /* raised surfaces: sheets, cards */
+  --quote-bg: #ECE9E2;
+  --warn: #8A2F2F;
+  --flag-bg: #EFD9D2;
+  --btn: var(--ink);
+  --btn-ink: var(--paper);
+  --scrim: rgba(29, 29, 27, 0.45);
+  --veridia: #2E5A3A;
+  --dzego: #B3306E;
+  --neutral-accent: var(--ink);
+  --accent: var(--neutral-accent);
+  --voice-l: 0.5; /* lightness for speaker colours */
+
+  /* Type: Crimson Pro for reading and headings, DM Mono for labels. */
+  --reading: var(--font-reading), Georgia, serif;
+  --label: var(--font-label), ui-monospace, monospace;
+  --text-read: 19px; /* book text at phone width (boards: 19/1.6) */
+  --lh-read: 1.6;
+  --text-small: 17px; /* notices, secondary prose */
+  --text-label: 12px; /* the floor: nothing smaller, ever */
+  --ls-label: 0.04em;
+  --text-h1: 42px; /* chapter heading at phone width */
+  --text-display: 44px; /* book title */
+  --text-h2: 24px;
+  --text-bar-title: 18px;
+
+  /* Space */
+  --gutter: 22px; /* side padding of a page at phone width */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --measure: 36rem;
+
+  /* Shape */
+  --radius: 3px;
+  --radius-sheet: 14px; /* bottom sheets, top corners only */
+  --tap: 44px; /* tap targets are at least this */
+
+  /* App bar */
+  --bar-h: 44px;
+  --bar-pad: 18px;
+
+  color-scheme: light;
+}
+
+@media (min-width: 600px) {
+  :root {
+    --text-read: 21px; /* direction board: book text 21/1.6 */
+    --text-small: 18px;
+    --gutter: 24px;
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #161614;
+    --ink: #E7E4DD;
+    --body: #B9B5AB;
+    --muted: #9C988E;
+    --faint: #5E5B55;
+    --rule: #33322E;
+    --soft: #24231F;
+    --card: #1E1D1A;
+    --quote-bg: #201F1C;
+    --warn: #D99A8C;
+    --flag-bg: #4A2A24;
+    --scrim: rgba(0, 0, 0, 0.6);
+    --veridia: #8DB58A;
+    --dzego: #F08DB8;
+    --voice-l: 0.78;
+    color-scheme: dark;
+  }
+}

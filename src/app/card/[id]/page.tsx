@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { APP_NAME, appUrl } from '~/lib/config';
 import { getCard } from '~/lib/cards';
 import { CastCardButton, LikeButton } from '~/components/card-actions';
+import { PAPER } from '~/lib/tokens';
 
 export const dynamic = 'force-dynamic';
 
@@ -18,7 +19,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     imageUrl: card.cardUrl,
     button: {
       title: 'Read in Snowmoon',
-      action: { type: 'launch_frame', name: APP_NAME, url: target, splashImageUrl: `${appUrl()}/splash.png`, splashBackgroundColor: '#F4F2ED' },
+      action: { type: 'launch_frame', name: APP_NAME, url: target, splashImageUrl: `${appUrl()}/splash.png`, splashBackgroundColor: PAPER },
     },
   });
   const title = `Snowmoon, Chapter ${card.spec.chapter} ${card.quote.label}`;

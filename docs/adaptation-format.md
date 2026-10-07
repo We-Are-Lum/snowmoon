@@ -106,7 +106,9 @@ audio and written to `shots.md`; nothing is timed by hand.
   beginning "AI-generated image:") and the lines people chose or wrote, each
   with its author. The structure, candidate lines and image descriptions sit
   under a collapsed "How this was built", labelled model-drafted. Panel images
-  are listed in `adaptations/<seed>/panels.json`.
+  are listed in `adaptations/<seed>/panels.json`. A beat may show more than
+  one image in sequence (each with an `order`): the page shows them one after
+  the other, and the video cuts from one to the next within the beat.
 - The page carries an AI use declaration: what was generated, with which
   models, and who wrote each line (the author or a signed-in person).
 - Published only after the owner has watched it, by a signed-in action

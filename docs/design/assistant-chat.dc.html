@@ -1,0 +1,625 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#D9D5CC;-webkit-font-smoothing:antialiased}a{color:#2E5A3A;text-decoration:none}a:hover{color:#1D1D1B;text-decoration:underline}</style>
+</helmet>
+<div style="padding:64px;display:flex;flex-direction:column;gap:72px;font-family:'Crimson Pro',serif;color:#1D1D1B">
+  <header style="display:flex;flex-direction:column;gap:8px;max-width:980px">
+    <div style="font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.08em;color:#5E5A52">SNOWMOON · ASSISTANT CHAT · SCREENS 1–9, FLOW, GUESSES</div>
+    <div style="font-size:44px;line-height:1.1">Reading help and planning threads</div>
+    <div style="font-size:18px;line-height:1.5;color:#4A463F;text-wrap:pretty">Mobile, inside the Farcaster miniapp, 390px wide, light and dark. All wording inside the phones is draft for Nate to rewrite. Book quotes are real chapter 1 lines; their ¶ numbers are guesses. ‹model› and ‹host› are placeholders. The two thread kinds: <b style="font-weight:600">○ private asking</b> has a dashed rule and no fill. <b style="font-weight:600">● planning</b> has a filled band and a solid rule, and every message you send is signed with your name.</div>
+  </header>
+
+  <!-- FLOW -->
+  <section id="flow" data-screen-label="Flow" style="display:flex;flex-direction:column;gap:20px">
+    <div style="font-family:'DM Mono',monospace;font-size:13px;color:#5E5A52">FLOW · HOW THE SCREENS CONNECT</div>
+    <div style="width:1560px;background:#F4F2ED;border-radius:4px;padding:40px;box-sizing:border-box;display:flex;flex-direction:column;gap:22px">
+      <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;border:1px solid #DAD6CC;border-radius:3px;padding:10px 14px">Signed out (<a href="#9d">9d</a>): every way in stops at sign-in first. Reading and listening still work without it.</div>
+      <div style="display:grid;grid-template-columns:200px 40px 190px 40px 230px 40px 250px 40px 210px 40px 210px;align-items:center;row-gap:0">
+        <div style="grid-column:1/12;display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em;color:#6A675F;padding:0 0 10px"><span>WAYS IN</span><span>FIRST TIME</span><span style="width:300px"></span><span style="width:300px"></span><span>READERS SEE</span></div>
+        <div style="grid-column:1/12;grid-row:2;align-self:stretch;border:1px dashed #ABA79D;border-radius:4px;margin:0 -14px"></div>
+        <div style="grid-column:1/12;grid-row:4;align-self:stretch;background:#E6E2D9;border-top:1px solid #1D1D1B;border-radius:0 0 4px 4px;margin:0 -14px"></div>
+        <div style="grid-column:1;grid-row:2;padding:18px 0;display:flex;flex-direction:column;gap:8px;z-index:1">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:#6A675F">○ PRIVATE LANE</div>
+          <a href="#1a" style="background:#FBFAF6;border:1px solid #DAD6CC;padding:8px 10px;font-size:16px;color:#1D1D1B"><b style="font-family:'DM Mono',monospace;font-size:11px;font-weight:500">1a</b> Ask about this block</a>
+          <a href="#1b" style="background:#FBFAF6;border:1px solid #DAD6CC;padding:8px 10px;font-size:16px;color:#1D1D1B"><b style="font-family:'DM Mono',monospace;font-size:11px;font-weight:500">1b</b> Ask about a chapter</a>
+          <a href="#1d" style="background:#FBFAF6;border:1px solid #DAD6CC;padding:8px 10px;font-size:16px;color:#1D1D1B"><b style="font-family:'DM Mono',monospace;font-size:11px;font-weight:500">1d</b> Assistant · Ask</a>
+        </div>
+        <div style="grid-column:2;grid-row:2;text-align:center;font-family:'DM Mono',monospace;z-index:1">→</div>
+        <div style="grid-column:3;grid-row:2/5;align-self:center;z-index:1;display:flex;flex-direction:column;gap:6px">
+          <a href="#2" style="background:#1D1D1B;color:#F4F2ED;padding:12px;font-size:17px;line-height:1.25"><b style="font-family:'DM Mono',monospace;font-size:11px;font-weight:500">2</b> First-time notice</a>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;line-height:1.5;color:#6A675F">Before the first message from any way in. Skipped once "don't show again" is ticked.</div>
+        </div>
+        <div style="grid-column:4;grid-row:2;text-align:center;font-family:'DM Mono',monospace;z-index:1">→</div>
+        <div style="grid-column:5;grid-row:2;padding:18px 0;display:flex;flex-direction:column;gap:6px;z-index:1">
+          <a href="#3" style="background:#FBFAF6;border:1px solid #DAD6CC;padding:10px;font-size:17px;color:#1D1D1B"><b style="font-family:'DM Mono',monospace;font-size:11px;font-weight:500">3</b> Book question and answer</a>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;line-height:1.6;color:#6A675F">can show <a href="#9a">9a</a> declined · <a href="#9b">9b</a> spoiler held · <a href="#9c">9c</a> limit</div>
+        </div>
+        <div style="grid-column:6;grid-row:2;text-align:center;font-family:'DM Mono',monospace;z-index:1">→</div>
+        <div style="grid-column:7;grid-row:2;padding:18px 0;display:flex;flex-direction:column;gap:6px;z-index:1">
+          <a href="#6a" style="background:#FBFAF6;border:1px solid #DAD6CC;padding:10px;font-size:17px;color:#1D1D1B"><b style="font-family:'DM Mono',monospace;font-size:11px;font-weight:500">6a</b> Question turns into making</a>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:#6A675F">the private thread stays private</div>
+        </div>
+        <div style="grid-column:7;grid-row:3;text-align:center;font-family:'DM Mono',monospace;font-size:12px;padding:8px 0;z-index:1">↓ <a href="#6b">6b</a> new planning thread</div>
+        <div style="grid-column:1;grid-row:4;padding:18px 0;display:flex;flex-direction:column;gap:8px;z-index:1">
+          <div style="font-family:'DM Mono',monospace;font-size:10px;color:#1D1D1B">● PLANNING LANE</div>
+          <a href="#1c" style="background:#FBFAF6;border:1px solid #DAD6CC;padding:8px 10px;font-size:16px;color:#1D1D1B"><b style="font-family:'DM Mono',monospace;font-size:11px;font-weight:500">1c</b> Plan an adaptation</a>
+          <a href="#1d" style="background:#FBFAF6;border:1px solid #DAD6CC;padding:8px 10px;font-size:16px;color:#1D1D1B"><b style="font-family:'DM Mono',monospace;font-size:11px;font-weight:500">1d</b> Assistant · Plan</a>
+        </div>
+        <div style="grid-column:2;grid-row:4;text-align:center;font-family:'DM Mono',monospace;z-index:1">→</div>
+        <div style="grid-column:4;grid-row:4;text-align:center;font-family:'DM Mono',monospace;z-index:1">→</div>
+        <div style="grid-column:5;grid-row:4;padding:18px 0;display:flex;flex-direction:column;gap:6px;z-index:1">
+          <a href="#4" style="background:#FBFAF6;border:1px solid #DAD6CC;padding:10px;font-size:17px;color:#1D1D1B"><b style="font-family:'DM Mono',monospace;font-size:11px;font-weight:500">4</b> Start writing / talk it through</a>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;line-height:1.6;color:#6A675F">"start writing" opens <a href="#5b">5b</a> with no thread</div>
+        </div>
+        <div style="grid-column:6;grid-row:4;text-align:center;font-family:'DM Mono',monospace;z-index:1">→</div>
+        <div style="grid-column:7;grid-row:4;padding:18px 0;display:flex;flex-direction:column;gap:6px;z-index:1">
+          <a href="#5a" style="background:#FBFAF6;border:1px solid #1D1D1B;padding:10px;font-size:17px;color:#1D1D1B"><b style="font-family:'DM Mono',monospace;font-size:11px;font-weight:500">5a / 5b</b> Planning thread ⇄ your piece</a>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;line-height:1.6;color:#6A675F">can show <a href="#9a">9a</a> · <a href="#9c">9c</a></div>
+        </div>
+        <div style="grid-column:8;grid-row:4;text-align:center;font-family:'DM Mono',monospace;z-index:1">→</div>
+        <div style="grid-column:9;grid-row:4;padding:18px 0;display:flex;flex-direction:column;gap:6px;z-index:1">
+          <a href="#7" style="background:#FBFAF6;border:1px solid #1D1D1B;padding:10px;font-size:17px;color:#1D1D1B"><b style="font-family:'DM Mono',monospace;font-size:11px;font-weight:500">7</b> Publish review</a>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;line-height:1.6;color:#6A675F">every time · back → 5 · discard → blank piece</div>
+        </div>
+        <div style="grid-column:10;grid-row:4;text-align:center;font-family:'DM Mono',monospace;z-index:1">→</div>
+        <div style="grid-column:11;grid-row:4;padding:18px 0;display:flex;flex-direction:column;gap:6px;z-index:1">
+          <a href="#8" style="background:#FBFAF6;border:1px solid #1D1D1B;padding:10px;font-size:17px;color:#1D1D1B"><b style="font-family:'DM Mono',monospace;font-size:11px;font-weight:500">8</b> How this was made</a>
+          <div style="font-family:'DM Mono',monospace;font-size:10px;line-height:1.6;color:#6A675F">reached from <a href="#1c">1c</a></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 1 -->
+  <section style="display:flex;flex-direction:column;gap:24px">
+    <div style="font-family:'DM Mono',monospace;font-size:13px;color:#5E5A52">SCREEN 1 · WAYS IN</div>
+    <div style="display:flex;flex-wrap:wrap;gap:64px;align-items:flex-start">
+
+      <div id="1a" data-screen-label="1a Ask about this block" style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:10px;align-items:center"><span style="font-family:'DM Mono',monospace;font-size:13px;background:#1D1D1B;color:#F4F2ED;padding:3px 9px;border-radius:3px">1a</span><span style="font-size:17px">From a block in the reader</span><span style="font-family:'DM Mono',monospace;font-size:10px;border:1px dashed #5E5A52;color:#5E5A52;padding:2px 6px">DRAFT WORDING</span></div>
+        <div style="display:flex;gap:40px"><sc-for list="{{ themes }}" as="th" hint-placeholder-count="2"><div style="display:flex;flex-direction:column;gap:8px"><div style="font-family:'DM Mono',monospace;font-size:11px;color:#5E5A52">{{ th.name }}</div>
+          <div style="width:390px;height:844px;flex:none;background:{{ th.paper }};color:{{ th.ink }};border-radius:36px;overflow:hidden;box-shadow:0 0 0 8px #1D1D1B;display:flex;flex-direction:column">
+            <div style="height:40px;flex:none;display:flex;align-items:center;padding:0 28px;font-family:'DM Mono',monospace;font-size:13px">9:41</div>
+            <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid {{ th.rule }}"><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">×</span><span style="font-size:18px">Snowmoon</span><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">···</span></div>
+            <div style="flex:none;display:flex;justify-content:space-between;align-items:center;padding:10px 16px;font-family:'DM Mono',monospace;font-size:12px"><span>CH 1 / 32 ▾</span><div style="display:flex;border:1px solid {{ th.rule }};border-radius:3px;overflow:hidden"><span style="padding:5px 10px;background:{{ th.btn }};color:{{ th.btnInk }}">READ</span><span style="padding:5px 10px;color:{{ th.muted }}">LISTEN</span></div></div>
+            <div style="flex:1;min-height:0;overflow:hidden;padding:16px 22px 0;display:flex;flex-direction:column;gap:16px;font-size:19px;line-height:1.6;text-wrap:pretty">
+              <div style="color:{{ th.faint }}">Shortly after he began walking beside the soundproof barrier, his hand device buzzed.</div>
+              <div style="color:{{ th.faint }}">Gladias immediately knew what he was being asked to do.</div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <div style="border-left:3px solid {{ th.accent }};margin-left:-14px;padding-left:11px">As a citizen of Veridia, he had been randomly selected by cryptographic sortition to vote on how much he liked the building.</div>
+                <div style="display:flex;flex-direction:column;gap:0;border:1px solid {{ th.ink }};border-radius:3px;background:{{ th.card }};font-family:'DM Mono',monospace;font-size:12px">
+                  <div style="padding:8px 12px;border-bottom:1px solid {{ th.rule }};font-size:10px;color:{{ th.muted }}">¶ 20 · SELECTED</div>
+                  <div style="display:grid;grid-template-columns:1fr 1fr 1fr">
+                    <span style="padding:12px;background:{{ th.btn }};color:{{ th.btnInk }}">ASK ABOUT THIS</span>
+                    <span style="padding:12px;border-left:1px solid {{ th.rule }}">ADD IMAGE</span>
+                    <span style="padding:12px;border-left:1px solid {{ th.rule }}">COPY LINK</span>
+                  </div>
+                </div>
+              </div>
+              <div style="color:{{ th.faint }}">This was hard, Gladias realized.</div>
+            </div>
+            <div style="flex:none;padding:12px 22px 26px;border-top:1px solid {{ th.rule }};font-family:'DM Mono',monospace;font-size:11px;line-height:1.5;color:{{ th.muted }}">Tap the ¶ number or long-press a block. The question opens a private thread with this block attached.</div>
+          </div>
+        </div></sc-for></div>
+      </div>
+
+      <div id="1b" data-screen-label="1b Ask about a chapter" style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:10px;align-items:center"><span style="font-family:'DM Mono',monospace;font-size:13px;background:#1D1D1B;color:#F4F2ED;padding:3px 9px;border-radius:3px">1b</span><span style="font-size:17px">From a chapter (chapter menu)</span><span style="font-family:'DM Mono',monospace;font-size:10px;border:1px dashed #5E5A52;color:#5E5A52;padding:2px 6px">DRAFT WORDING</span></div>
+        <div style="display:flex;gap:40px"><sc-for list="{{ themes }}" as="th" hint-placeholder-count="2"><div style="display:flex;flex-direction:column;gap:8px"><div style="font-family:'DM Mono',monospace;font-size:11px;color:#5E5A52">{{ th.name }}</div>
+          <div style="width:390px;height:844px;flex:none;background:{{ th.paper }};color:{{ th.ink }};border-radius:36px;overflow:hidden;box-shadow:0 0 0 8px #1D1D1B;display:flex;flex-direction:column">
+            <div style="height:40px;flex:none;display:flex;align-items:center;padding:0 28px;font-family:'DM Mono',monospace;font-size:13px">9:41</div>
+            <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid {{ th.rule }}"><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">×</span><span style="font-size:18px">Snowmoon</span><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">···</span></div>
+            <div style="flex:none;display:flex;justify-content:space-between;align-items:center;padding:10px 16px;font-family:'DM Mono',monospace;font-size:12px;border-bottom:1px solid {{ th.rule }}"><span style="border-bottom:1px solid {{ th.ink }}">CH 1 / 32 ▴</span><span style="color:{{ th.muted }}">YOU'VE READ TO CH 3</span></div>
+            <div style="flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column">
+              <div style="padding:16px 22px;border-bottom:1px solid {{ th.rule }};display:flex;flex-direction:column;gap:12px">
+                <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:24px">Chapter 1</span><span style="font-family:'DM Mono',monospace;font-size:11px;color:{{ th.muted }}">READ</span></div>
+                <div style="font-family:'DM Mono',monospace;font-size:11px;color:{{ th.muted }}">MELDAN, VERIDIA · 3724 SNOWMOON 3</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-family:'DM Mono',monospace;font-size:12px">
+                  <span style="border:1px solid {{ th.rule }};border-radius:3px;padding:11px;text-align:center">READ</span>
+                  <span style="border:1px solid {{ th.rule }};border-radius:3px;padding:11px;text-align:center">LISTEN</span>
+                  <span style="grid-column:1/3;background:{{ th.btn }};color:{{ th.btnInk }};border-radius:3px;padding:12px;text-align:center">○ ASK ABOUT THIS CHAPTER</span>
+                  <span style="grid-column:1/3;border:1px solid {{ th.ink }};border-radius:3px;padding:12px;text-align:center">● PLAN AN ADAPTATION OF IT</span>
+                </div>
+              </div>
+              <sc-for list="{{ chapters }}" as="c" hint-placeholder-count="6">
+                <div style="padding:14px 22px;border-bottom:1px solid {{ th.rule }};display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:19px;color:{{ c.col }}">{{ c.t }}</span><span style="font-family:'DM Mono',monospace;font-size:11px;color:{{ th.muted }}">{{ c.s }}</span></div>
+              </sc-for>
+            </div>
+          </div>
+        </div></sc-for></div>
+      </div>
+
+      <div id="1c" data-screen-label="1c Plan an adaptation" style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:10px;align-items:center"><span style="font-family:'DM Mono',monospace;font-size:13px;background:#1D1D1B;color:#F4F2ED;padding:3px 9px;border-radius:3px">1c</span><span style="font-size:17px">From the adaptations page</span><span style="font-family:'DM Mono',monospace;font-size:10px;border:1px dashed #5E5A52;color:#5E5A52;padding:2px 6px">DRAFT WORDING</span></div>
+        <div style="display:flex;gap:40px"><sc-for list="{{ themes }}" as="th" hint-placeholder-count="2"><div style="display:flex;flex-direction:column;gap:8px"><div style="font-family:'DM Mono',monospace;font-size:11px;color:#5E5A52">{{ th.name }}</div>
+          <div style="width:390px;height:844px;flex:none;background:{{ th.paper }};color:{{ th.ink }};border-radius:36px;overflow:hidden;box-shadow:0 0 0 8px #1D1D1B;display:flex;flex-direction:column">
+            <div style="height:40px;flex:none;display:flex;align-items:center;padding:0 28px;font-family:'DM Mono',monospace;font-size:13px">9:41</div>
+            <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid {{ th.rule }}"><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">←</span><span style="font-size:18px">Adaptations</span><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">···</span></div>
+            <div style="padding:26px 22px 18px;display:flex;flex-direction:column;gap:10px;border-bottom:1px solid {{ th.rule }}">
+              <div style="font-size:36px;line-height:1">Adaptations</div>
+              <div style="font-size:17px;line-height:1.45;color:{{ th.muted }};text-wrap:pretty">Pieces people have written from the book. None of them is official.</div>
+              <div style="display:flex;gap:8px;margin-top:6px;font-family:'DM Mono',monospace;font-size:12px">
+                <span style="flex:1;background:{{ th.btn }};color:{{ th.btnInk }};border-radius:3px;padding:13px;text-align:center">+ PLAN AN ADAPTATION</span>
+              </div>
+            </div>
+            <div style="flex:none;display:flex;gap:16px;padding:12px 22px;font-family:'DM Mono',monospace;font-size:11px;border-bottom:1px solid {{ th.rule }}"><span style="border-bottom:1px solid {{ th.ink }};padding-bottom:3px">NEW</span><span style="color:{{ th.muted }}">TOP RATED</span><span style="color:{{ th.muted }}">BY CHAPTER</span></div>
+            <sc-for list="{{ pieces }}" as="p" hint-placeholder-count="3">
+              <div style="padding:16px 22px;border-bottom:1px solid {{ th.rule }};display:flex;flex-direction:column;gap:6px">
+                <div style="font-size:21px;line-height:1.2">{{ p.t }}</div>
+                <div style="font-family:'DM Mono',monospace;font-size:11px;color:{{ th.muted }}">{{ p.by }}</div>
+                <div style="display:flex;gap:6px;font-family:'DM Mono',monospace;font-size:10px"><span style="border:1px solid {{ th.rule }};padding:2px 6px;border-radius:2px">{{ p.tag }}</span><span style="border:1px solid {{ th.rule }};padding:2px 6px;border-radius:2px;color:{{ th.accent }}">{{ p.made }}</span></div>
+              </div>
+            </sc-for>
+          </div>
+        </div></sc-for></div>
+      </div>
+
+      <div id="1d" data-screen-label="1d Assistant home" style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:10px;align-items:center"><span style="font-family:'DM Mono',monospace;font-size:13px;background:#1D1D1B;color:#F4F2ED;padding:3px 9px;border-radius:3px">1d</span><span style="font-size:17px">General entry · ··· menu → Assistant</span><span style="font-family:'DM Mono',monospace;font-size:10px;border:1px dashed #5E5A52;color:#5E5A52;padding:2px 6px">DRAFT WORDING</span></div>
+        <div style="display:flex;gap:40px"><sc-for list="{{ themes }}" as="th" hint-placeholder-count="2"><div style="display:flex;flex-direction:column;gap:8px"><div style="font-family:'DM Mono',monospace;font-size:11px;color:#5E5A52">{{ th.name }}</div>
+          <div style="width:390px;height:844px;flex:none;background:{{ th.paper }};color:{{ th.ink }};border-radius:36px;overflow:hidden;box-shadow:0 0 0 8px #1D1D1B;display:flex;flex-direction:column">
+            <div style="height:40px;flex:none;display:flex;align-items:center;padding:0 28px;font-family:'DM Mono',monospace;font-size:13px">9:41</div>
+            <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid {{ th.rule }}"><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">←</span><span style="font-size:18px">Assistant</span><span style="width:16px"></span></div>
+            <div style="padding:26px 22px 18px;display:flex;flex-direction:column;gap:14px">
+              <div style="font-size:17px;line-height:1.45;color:{{ th.muted }};text-wrap:pretty">Help with reading the book and planning your own pieces. It comments; it never writes for you.</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-family:'DM Mono',monospace;font-size:12px">
+                <div style="border:1px dashed {{ th.faint }};border-radius:3px;padding:14px 12px;display:flex;flex-direction:column;gap:6px"><span>○ ASK ABOUT THE BOOK</span><span style="font-size:10px;color:{{ th.muted }}">Private. Never published.</span></div>
+                <div style="background:{{ th.soft }};border-top:2px solid {{ th.ink }};border-radius:3px;padding:14px 12px;display:flex;flex-direction:column;gap:6px"><span>● PLAN A PIECE</span><span style="font-size:10px;color:{{ th.muted }}">Published with the piece.</span></div>
+              </div>
+            </div>
+            <div style="padding:14px 22px 8px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.06em;color:{{ th.muted }}">○ ASKING · PRIVATE</div>
+            <sc-for list="{{ privThreads }}" as="t" hint-placeholder-count="2">
+              <div style="margin:0 22px;padding:12px 0;border-top:1px dashed {{ th.faint }};display:flex;justify-content:space-between;gap:12px"><span style="font-size:17px;line-height:1.3">{{ t.t }}</span><span style="font-family:'DM Mono',monospace;font-size:10px;color:{{ th.muted }};flex:none">{{ t.m }}</span></div>
+            </sc-for>
+            <div style="padding:22px 22px 8px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.06em">● PLANNING · PUBLISHED WITH THE PIECE</div>
+            <sc-for list="{{ planThreads }}" as="t" hint-placeholder-count="1">
+              <div style="margin:0 22px;padding:12px;background:{{ th.soft }};border-top:1px solid {{ th.ink }};display:flex;justify-content:space-between;gap:12px"><span style="font-size:17px;line-height:1.3">{{ t.t }}</span><span style="font-family:'DM Mono',monospace;font-size:10px;color:{{ th.muted }};flex:none">{{ t.m }}</span></div>
+            </sc-for>
+            <div style="margin:26px 22px 0;padding:12px 0;border-top:1px solid {{ th.rule }};display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:11px;color:{{ th.faint }}"><span>PICTURES</span><span>COMING</span></div>
+          </div>
+        </div></sc-for></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 2 + 3 -->
+  <section style="display:flex;flex-direction:column;gap:24px">
+    <div style="font-family:'DM Mono',monospace;font-size:13px;color:#5E5A52">SCREENS 2 AND 3 · FIRST-TIME NOTICE · A BOOK QUESTION</div>
+    <div style="display:flex;flex-wrap:wrap;gap:64px;align-items:flex-start">
+
+      <div id="2" data-screen-label="2 First-time notice" style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:10px;align-items:center"><span style="font-family:'DM Mono',monospace;font-size:13px;background:#1D1D1B;color:#F4F2ED;padding:3px 9px;border-radius:3px">2</span><span style="font-size:17px">First-time notice</span><span style="font-family:'DM Mono',monospace;font-size:10px;border:1px dashed #5E5A52;color:#5E5A52;padding:2px 6px">DRAFT WORDING</span></div>
+        <div style="display:flex;gap:40px"><sc-for list="{{ themes }}" as="th" hint-placeholder-count="2"><div style="display:flex;flex-direction:column;gap:8px"><div style="font-family:'DM Mono',monospace;font-size:11px;color:#5E5A52">{{ th.name }}</div>
+          <div style="width:390px;height:844px;flex:none;background:{{ th.paper }};color:{{ th.ink }};border-radius:36px;overflow:hidden;box-shadow:0 0 0 8px #1D1D1B;display:flex;flex-direction:column;position:relative">
+            <div style="height:40px;flex:none;display:flex;align-items:center;padding:0 28px;font-family:'DM Mono',monospace;font-size:13px">9:41</div>
+            <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid {{ th.rule }}"><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">←</span><span style="font-size:18px">Assistant</span><span style="width:16px"></span></div>
+            <div style="position:absolute;inset:84px 0 0 0;background:{{ th.scrim }}"></div>
+            <div style="position:absolute;left:0;right:0;bottom:0;background:{{ th.paper }};border-radius:18px 18px 0 0;padding:26px 22px 30px;display:flex;flex-direction:column;gap:16px">
+              <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em;color:{{ th.muted }}">BEFORE YOU START</div>
+              <div style="font-size:30px;line-height:1.1">What the assistant does</div>
+              <sc-for list="{{ notice }}" as="n" hint-placeholder-count="4">
+                <div style="display:grid;grid-template-columns:24px 1fr;gap:8px;border-top:1px solid {{ th.rule }};padding-top:12px">
+                  <span style="font-family:'DM Mono',monospace;font-size:11px;color:{{ th.muted }};padding-top:4px">{{ n.n }}</span>
+                  <div style="display:flex;flex-direction:column;gap:3px"><span style="font-size:18px;font-weight:600;line-height:1.25">{{ n.h }}</span><span style="font-size:16px;line-height:1.4;color:{{ th.body }};text-wrap:pretty">{{ n.b }}</span></div>
+                </div>
+              </sc-for>
+              <div style="display:flex;align-items:center;gap:10px;padding:6px 0;font-family:'DM Mono',monospace;font-size:12px"><span style="width:18px;height:18px;border:1px solid {{ th.ink }};border-radius:2px;flex:none"></span>Don't show this again</div>
+              <div style="display:grid;grid-template-columns:1fr 2fr;gap:8px;font-family:'DM Mono',monospace;font-size:12px"><span style="border:1px solid {{ th.rule }};border-radius:3px;padding:13px;text-align:center">NOT NOW</span><span style="background:{{ th.btn }};color:{{ th.btnInk }};border-radius:3px;padding:13px;text-align:center">CONTINUE</span></div>
+            </div>
+          </div>
+        </div></sc-for></div>
+      </div>
+
+      <div id="3" data-screen-label="3 Book question" style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:10px;align-items:center"><span style="font-family:'DM Mono',monospace;font-size:13px;background:#1D1D1B;color:#F4F2ED;padding:3px 9px;border-radius:3px">3</span><span style="font-size:17px">○ A book question and its answer</span><span style="font-family:'DM Mono',monospace;font-size:10px;border:1px dashed #5E5A52;color:#5E5A52;padding:2px 6px">DRAFT WORDING</span></div>
+        <div style="display:flex;gap:40px"><sc-for list="{{ themes }}" as="th" hint-placeholder-count="2"><div style="display:flex;flex-direction:column;gap:8px"><div style="font-family:'DM Mono',monospace;font-size:11px;color:#5E5A52">{{ th.name }}</div>
+          <div style="width:390px;height:844px;flex:none;background:{{ th.paper }};color:{{ th.ink }};border-radius:36px;overflow:hidden;box-shadow:0 0 0 8px #1D1D1B;display:flex;flex-direction:column">
+            <div style="height:40px;flex:none;display:flex;align-items:center;padding:0 28px;font-family:'DM Mono',monospace;font-size:13px">9:41</div>
+            <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid {{ th.rule }}"><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">←</span><span style="font-size:18px">Asking</span><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">···</span></div>
+            <div style="flex:none;padding:9px 16px;border-bottom:1px dashed {{ th.faint }};font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.04em;color:{{ th.muted }}">○ ASKING · PRIVATE · NEVER PUBLISHED</div>
+            <div style="flex:none;padding:8px 16px;border-bottom:1px solid {{ th.rule }};display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:11px"><span style="color:{{ th.muted }}">Answering from ch 1–3, what you've read</span><span style="color:{{ th.accent }}">Include more ▾</span></div>
+            <div style="flex:1;min-height:0;overflow:hidden;padding:16px;display:flex;flex-direction:column;gap:16px">
+              <div style="align-self:flex-end;max-width:82%;background:{{ th.soft }};padding:10px 12px;border-radius:3px;font-size:17px;line-height:1.4">Why is Gladias asked to rate a building he has never been inside?</div>
+              <div style="display:flex;flex-direction:column;gap:10px;font-size:17px;line-height:1.45">
+                <div style="font-family:'DM Mono',monospace;font-size:10px;color:{{ th.muted }}">ASSISTANT · COMMENTARY</div>
+                <div style="text-wrap:pretty">He isn't chosen for knowing the building. The book says the choice is random:</div>
+                <div style="border:1px solid {{ th.rule }};border-radius:3px;background:{{ th.card }};padding:10px 12px;display:flex;flex-direction:column;gap:8px"><div style="font-size:16px;line-height:1.4;font-style:italic">"As a citizen of Veridia, he had been randomly selected by cryptographic sortition to vote on how much he liked the building."</div><div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:10px;color:{{ th.muted }}"><span>CH 1 · ¶ 20</span><span style="color:{{ th.accent }}">OPEN IN READER →</span></div></div>
+                <div style="text-wrap:pretty">The device gives him a one-line summary to go on, which is part of why he finds it difficult.</div>
+                <div style="border:1px solid {{ th.rule }};border-radius:3px;background:{{ th.card }};padding:10px 12px;display:flex;flex-direction:column;gap:8px"><div style="font-size:16px;line-height:1.4;font-style:italic">"This was hard, Gladias realized."</div><div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:10px;color:{{ th.muted }}"><span>CH 1 · ¶ 21</span><span style="color:{{ th.accent }}">OPEN IN READER →</span></div></div>
+              </div>
+            </div>
+            <div style="flex:none;border-top:1px solid {{ th.rule }};padding:10px 14px 24px;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;gap:8px;align-items:center"><div style="flex:1;border:1px dashed {{ th.faint }};border-radius:3px;padding:12px;font-family:'DM Mono',monospace;font-size:12px;color:{{ th.muted }}">Ask about the book</div><div style="width:44px;height:44px;background:{{ th.btn }};color:{{ th.btnInk }};border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace">↑</div></div>
+              <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:10px;color:{{ th.muted }}"><span>‹model› · open weights · via ‹host›</span><span>18 of 30 left today</span></div>
+            </div>
+          </div>
+        </div></sc-for></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 4 + 5 -->
+  <section style="display:flex;flex-direction:column;gap:24px">
+    <div style="font-family:'DM Mono',monospace;font-size:13px;color:#5E5A52">SCREENS 4 AND 5 · STARTING AN ADAPTATION · THE PLANNING THREAD</div>
+    <div style="display:flex;flex-wrap:wrap;gap:64px;align-items:flex-start">
+
+      <div id="4" data-screen-label="4 Start an adaptation" style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:10px;align-items:center"><span style="font-family:'DM Mono',monospace;font-size:13px;background:#1D1D1B;color:#F4F2ED;padding:3px 9px;border-radius:3px">4</span><span style="font-size:17px">Starting an adaptation</span><span style="font-family:'DM Mono',monospace;font-size:10px;border:1px dashed #5E5A52;color:#5E5A52;padding:2px 6px">DRAFT WORDING</span></div>
+        <div style="display:flex;gap:40px"><sc-for list="{{ themes }}" as="th" hint-placeholder-count="2"><div style="display:flex;flex-direction:column;gap:8px"><div style="font-family:'DM Mono',monospace;font-size:11px;color:#5E5A52">{{ th.name }}</div>
+          <div style="width:390px;height:844px;flex:none;background:{{ th.paper }};color:{{ th.ink }};border-radius:36px;overflow:hidden;box-shadow:0 0 0 8px #1D1D1B;display:flex;flex-direction:column">
+            <div style="height:40px;flex:none;display:flex;align-items:center;padding:0 28px;font-family:'DM Mono',monospace;font-size:13px">9:41</div>
+            <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid {{ th.rule }}"><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">×</span><span style="font-size:18px">New adaptation</span><span style="width:16px"></span></div>
+            <div style="padding:26px 22px;display:flex;flex-direction:column;gap:18px">
+              <div style="display:flex;flex-direction:column;gap:6px"><span style="font-family:'DM Mono',monospace;font-size:11px;color:{{ th.muted }}">FROM</span><span style="font-size:22px">Chapter 1 · Meldan, Veridia</span></div>
+              <div style="display:flex;flex-direction:column;gap:6px"><span style="font-family:'DM Mono',monospace;font-size:11px;color:{{ th.muted }}">WORKING TITLE · OPTIONAL</span><div style="border-bottom:1px solid {{ th.ink }};padding:6px 0;font-size:20px">Emerald, voting</div></div>
+              <div style="font-size:24px;line-height:1.2;padding-top:8px">How do you want to start?</div>
+              <div style="border:1px solid {{ th.rule }};border-radius:4px;padding:16px;display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:21px">Start writing</span><span style="font-family:'DM Mono',monospace;font-size:14px">→</span></div>
+                <div style="font-size:16px;line-height:1.4;color:{{ th.body }};text-wrap:pretty">Opens a blank piece. No assistant thread. You can open one later.</div>
+              </div>
+              <div style="background:{{ th.soft }};border-top:2px solid {{ th.ink }};border-radius:4px;padding:16px;display:flex;flex-direction:column;gap:8px">
+                <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:21px">Talk it through first</span><span style="font-family:'DM Mono',monospace;font-size:14px">→</span></div>
+                <div style="font-size:16px;line-height:1.4;color:{{ th.body }};text-wrap:pretty">Opens a planning thread next to a blank piece.</div>
+                <div style="font-family:'DM Mono',monospace;font-size:11px;line-height:1.5">● If you publish the piece, this thread is published with it, under your name.</div>
+              </div>
+              <div style="font-family:'DM Mono',monospace;font-size:11px;color:{{ th.muted }};line-height:1.5">Either way, you write every word of the piece.</div>
+            </div>
+          </div>
+        </div></sc-for></div>
+      </div>
+
+      <div id="5a" data-screen-label="5a Planning thread" style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:10px;align-items:center"><span style="font-family:'DM Mono',monospace;font-size:13px;background:#1D1D1B;color:#F4F2ED;padding:3px 9px;border-radius:3px">5a</span><span style="font-size:17px">● Planning thread</span><span style="font-family:'DM Mono',monospace;font-size:10px;border:1px dashed #5E5A52;color:#5E5A52;padding:2px 6px">DRAFT WORDING</span></div>
+        <div style="display:flex;gap:40px"><sc-for list="{{ themes }}" as="th" hint-placeholder-count="2"><div style="display:flex;flex-direction:column;gap:8px"><div style="font-family:'DM Mono',monospace;font-size:11px;color:#5E5A52">{{ th.name }}</div>
+          <div style="width:390px;height:844px;flex:none;background:{{ th.paper }};color:{{ th.ink }};border-radius:36px;overflow:hidden;box-shadow:0 0 0 8px #1D1D1B;display:flex;flex-direction:column">
+            <div style="height:40px;flex:none;display:flex;align-items:center;padding:0 28px;font-family:'DM Mono',monospace;font-size:13px">9:41</div>
+            <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid {{ th.rule }}"><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">←</span><span style="font-size:18px">Emerald, voting</span><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">···</span></div>
+            <div style="flex:none;padding:9px 16px;background:{{ th.soft }};border-bottom:1px solid {{ th.ink }};display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.04em"><span>● PUBLISHED WITH YOUR PIECE</span><span style="color:{{ th.muted }}">AS @NATE</span></div>
+            <div style="flex:none;display:grid;grid-template-columns:1fr 1fr;font-family:'DM Mono',monospace;font-size:12px;border-bottom:1px solid {{ th.rule }}"><span style="padding:11px;text-align:center;border-bottom:2px solid {{ th.ink }}">THREAD</span><span style="padding:11px;text-align:center;color:{{ th.muted }}">YOUR PIECE · 212 W</span></div>
+            <div style="flex:1;min-height:0;overflow:hidden;padding:16px;display:flex;flex-direction:column;gap:16px">
+              <div style="align-self:flex-end;max-width:82%;display:flex;flex-direction:column;gap:4px;align-items:flex-end"><span style="font-family:'DM Mono',monospace;font-size:10px;color:{{ th.muted }}">@NATE</span><div style="background:{{ th.soft }};padding:10px 12px;border-radius:3px;font-size:17px;line-height:1.4">I want a short piece from Emerald's side during the vote. Does the book give me enough?</div></div>
+              <div style="display:flex;flex-direction:column;gap:10px;font-size:17px;line-height:1.45">
+                <div style="font-family:'DM Mono',monospace;font-size:10px;color:{{ th.muted }}">ASSISTANT · COMMENTARY</div>
+                <div style="text-wrap:pretty">Very little. In chapter 1 Emerald summarises the building in one line and plays an audio program. Its inner life would be your invention, so it's worth labelling as invented.</div>
+                <div style="border:1px solid {{ th.rule }};border-radius:3px;background:{{ th.card }};padding:10px 12px;display:flex;flex-direction:column;gap:8px"><div style="font-size:16px;line-height:1.4;font-style:italic">"Emerald AI summary: Five-storey apartment building. Blue-grey colored."</div><div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:10px;color:{{ th.muted }}"><span>CH 1 · ¶ 18</span><span style="color:{{ th.accent }}">OPEN IN READER →</span></div></div>
+                <div style="text-wrap:pretty">Structurally, the vote is one small decision inside a walk. To check: how the book shows the result of a vote, if it does.</div>
+              </div>
+            </div>
+            <div style="flex:none;border-top:1px solid {{ th.ink }};padding:10px 14px 24px;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;gap:8px;align-items:center"><div style="flex:1;background:{{ th.soft }};border-radius:3px;padding:12px;font-family:'DM Mono',monospace;font-size:12px;color:{{ th.muted }}">Message · published with your piece</div><div style="width:44px;height:44px;background:{{ th.btn }};color:{{ th.btnInk }};border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace">↑</div></div>
+              <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:10px;color:{{ th.muted }}"><span>‹model› · open weights</span><span>16 of 30 left today</span></div>
+            </div>
+          </div>
+        </div></sc-for></div>
+      </div>
+
+      <div id="5b" data-screen-label="5b Your piece" style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:10px;align-items:center"><span style="font-family:'DM Mono',monospace;font-size:13px;background:#1D1D1B;color:#F4F2ED;padding:3px 9px;border-radius:3px">5b</span><span style="font-size:17px">● Your piece, kept apart from the chat</span><span style="font-family:'DM Mono',monospace;font-size:10px;border:1px dashed #5E5A52;color:#5E5A52;padding:2px 6px">DRAFT WORDING</span></div>
+        <div style="display:flex;gap:40px"><sc-for list="{{ themes }}" as="th" hint-placeholder-count="2"><div style="display:flex;flex-direction:column;gap:8px"><div style="font-family:'DM Mono',monospace;font-size:11px;color:#5E5A52">{{ th.name }}</div>
+          <div style="width:390px;height:844px;flex:none;background:{{ th.paper }};color:{{ th.ink }};border-radius:36px;overflow:hidden;box-shadow:0 0 0 8px #1D1D1B;display:flex;flex-direction:column">
+            <div style="height:40px;flex:none;display:flex;align-items:center;padding:0 28px;font-family:'DM Mono',monospace;font-size:13px">9:41</div>
+            <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid {{ th.rule }}"><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">←</span><span style="font-size:18px">Emerald, voting</span><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">···</span></div>
+            <div style="flex:none;padding:9px 16px;background:{{ th.soft }};border-bottom:1px solid {{ th.ink }};display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.04em"><span>● PUBLISHED WITH YOUR PIECE</span><span style="color:{{ th.muted }}">AS @NATE</span></div>
+            <div style="flex:none;display:grid;grid-template-columns:1fr 1fr;font-family:'DM Mono',monospace;font-size:12px;border-bottom:1px solid {{ th.rule }}"><span style="padding:11px;text-align:center;color:{{ th.muted }}">THREAD · 6</span><span style="padding:11px;text-align:center;border-bottom:2px solid {{ th.ink }}">YOUR PIECE · 212 W</span></div>
+            <div style="flex:1;min-height:0;overflow:hidden;padding:26px 24px;display:flex;flex-direction:column;gap:16px;font-size:19px;line-height:1.6">
+              <div style="font-size:28px;line-height:1.1">Emerald, voting</div>
+              <div style="color:{{ th.muted }};font-style:italic">[Nate's own opening paragraph goes here.]</div>
+              <div style="display:flex;flex-direction:column;gap:9px"><div style="height:9px;background:{{ th.rule }};width:100%"></div><div style="height:9px;background:{{ th.rule }};width:94%"></div><div style="height:9px;background:{{ th.rule }};width:97%"></div><div style="height:9px;background:{{ th.rule }};width:60%"></div></div>
+              <div style="display:flex;flex-direction:column;gap:9px"><div style="height:9px;background:{{ th.rule }};width:98%"></div><div style="height:9px;background:{{ th.rule }};width:91%"></div><div style="height:9px;background:{{ th.rule }};width:72%"></div></div>
+              <div style="display:flex;align-items:center;gap:2px"><div style="height:9px;background:{{ th.rule }};width:40%"></div><div style="width:2px;height:22px;background:{{ th.ink }}"></div></div>
+            </div>
+            <div style="flex:none;border-top:1px solid {{ th.rule }};padding:12px 16px 26px;display:flex;justify-content:space-between;align-items:center;font-family:'DM Mono',monospace;font-size:11px"><span style="color:{{ th.muted }}">Saved · only you can see it</span><span style="background:{{ th.btn }};color:{{ th.btnInk }};border-radius:3px;padding:11px 14px;font-size:12px">REVIEW AND PUBLISH</span></div>
+          </div>
+        </div></sc-for></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 6 -->
+  <section style="display:flex;flex-direction:column;gap:24px">
+    <div style="font-family:'DM Mono',monospace;font-size:13px;color:#5E5A52">SCREEN 6 · A PRIVATE QUESTION TURNS INTO MAKING</div>
+    <div style="display:flex;flex-wrap:wrap;gap:64px;align-items:flex-start">
+
+      <div id="6a" data-screen-label="6a Fork offered" style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:10px;align-items:center"><span style="font-family:'DM Mono',monospace;font-size:13px;background:#1D1D1B;color:#F4F2ED;padding:3px 9px;border-radius:3px">6a</span><span style="font-size:17px">○ In the private thread</span><span style="font-family:'DM Mono',monospace;font-size:10px;border:1px dashed #5E5A52;color:#5E5A52;padding:2px 6px">DRAFT WORDING</span></div>
+        <div style="display:flex;gap:40px"><sc-for list="{{ themes }}" as="th" hint-placeholder-count="2"><div style="display:flex;flex-direction:column;gap:8px"><div style="font-family:'DM Mono',monospace;font-size:11px;color:#5E5A52">{{ th.name }}</div>
+          <div style="width:390px;height:844px;flex:none;background:{{ th.paper }};color:{{ th.ink }};border-radius:36px;overflow:hidden;box-shadow:0 0 0 8px #1D1D1B;display:flex;flex-direction:column">
+            <div style="height:40px;flex:none;display:flex;align-items:center;padding:0 28px;font-family:'DM Mono',monospace;font-size:13px">9:41</div>
+            <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid {{ th.rule }}"><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">←</span><span style="font-size:18px">Asking</span><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">···</span></div>
+            <div style="flex:none;padding:9px 16px;border-bottom:1px dashed {{ th.faint }};font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.04em;color:{{ th.muted }}">○ ASKING · PRIVATE · NEVER PUBLISHED</div>
+            <div style="flex:1;min-height:0;overflow:hidden;padding:16px;display:flex;flex-direction:column;gap:16px;justify-content:flex-end">
+              <div style="display:flex;flex-direction:column;gap:6px;font-size:17px;line-height:1.45;color:{{ th.faint }}"><div style="font-family:'DM Mono',monospace;font-size:10px">ASSISTANT · COMMENTARY</div><div>…which is part of why he finds it difficult.</div></div>
+              <div style="align-self:flex-end;max-width:82%;background:{{ th.soft }};padding:10px 12px;border-radius:3px;font-size:17px;line-height:1.4">Could I tell the vote from Emerald's point of view instead?</div>
+              <div style="display:flex;flex-direction:column;gap:10px;font-size:17px;line-height:1.45">
+                <div style="font-family:'DM Mono',monospace;font-size:10px;color:{{ th.muted }}">ASSISTANT</div>
+                <div style="text-wrap:pretty">That sounds like planning a piece. Planning happens in its own thread, because it goes public if you publish.</div>
+              </div>
+              <div style="background:{{ th.soft }};border-top:2px solid {{ th.ink }};border-radius:3px;padding:16px;display:flex;flex-direction:column;gap:12px">
+                <div style="font-family:'DM Mono',monospace;font-size:11px">● START A PLANNING THREAD?</div>
+                <div style="font-size:16px;line-height:1.45;color:{{ th.body }};text-wrap:pretty">It opens as a new thread next to a blank piece. Everything you send there is published with the piece. This private thread stays private and isn't copied.</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-family:'DM Mono',monospace;font-size:12px"><span style="border:1px solid {{ th.rule }};border-radius:3px;padding:12px;text-align:center;background:{{ th.paper }}">KEEP ASKING</span><span style="background:{{ th.btn }};color:{{ th.btnInk }};border-radius:3px;padding:12px;text-align:center">START PLANNING</span></div>
+              </div>
+            </div>
+            <div style="flex:none;border-top:1px solid {{ th.rule }};padding:10px 14px 24px;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;gap:8px;align-items:center"><div style="flex:1;border:1px dashed {{ th.faint }};border-radius:3px;padding:12px;font-family:'DM Mono',monospace;font-size:12px;color:{{ th.muted }}">Ask about the book</div><div style="width:44px;height:44px;background:{{ th.btn }};color:{{ th.btnInk }};border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace">↑</div></div>
+              <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:10px;color:{{ th.muted }}"><span>‹model› · open weights</span><span>17 of 30 left today</span></div>
+            </div>
+          </div>
+        </div></sc-for></div>
+      </div>
+
+      <div id="6b" data-screen-label="6b New planning thread" style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:10px;align-items:center"><span style="font-family:'DM Mono',monospace;font-size:13px;background:#1D1D1B;color:#F4F2ED;padding:3px 9px;border-radius:3px">6b</span><span style="font-size:17px">● The new planning thread opens</span><span style="font-family:'DM Mono',monospace;font-size:10px;border:1px dashed #5E5A52;color:#5E5A52;padding:2px 6px">DRAFT WORDING</span></div>
+        <div style="display:flex;gap:40px"><sc-for list="{{ themes }}" as="th" hint-placeholder-count="2"><div style="display:flex;flex-direction:column;gap:8px"><div style="font-family:'DM Mono',monospace;font-size:11px;color:#5E5A52">{{ th.name }}</div>
+          <div style="width:390px;height:844px;flex:none;background:{{ th.paper }};color:{{ th.ink }};border-radius:36px;overflow:hidden;box-shadow:0 0 0 8px #1D1D1B;display:flex;flex-direction:column">
+            <div style="height:40px;flex:none;display:flex;align-items:center;padding:0 28px;font-family:'DM Mono',monospace;font-size:13px">9:41</div>
+            <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid {{ th.rule }}"><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">←</span><span style="font-size:18px">Untitled piece</span><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">···</span></div>
+            <div style="flex:none;padding:9px 16px;background:{{ th.soft }};border-bottom:1px solid {{ th.ink }};display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.04em"><span>● PUBLISHED WITH YOUR PIECE</span><span style="color:{{ th.muted }}">AS @NATE</span></div>
+            <div style="flex:none;display:grid;grid-template-columns:1fr 1fr;font-family:'DM Mono',monospace;font-size:12px;border-bottom:1px solid {{ th.rule }}"><span style="padding:11px;text-align:center;border-bottom:2px solid {{ th.ink }}">THREAD</span><span style="padding:11px;text-align:center;color:{{ th.muted }}">YOUR PIECE · EMPTY</span></div>
+            <div style="flex:1;min-height:0;overflow:hidden;padding:22px 16px;display:flex;flex-direction:column;gap:18px">
+              <div style="display:flex;flex-direction:column;align-items:center;gap:10px;text-align:center;padding:10px 8px 18px;border-bottom:1px solid {{ th.ink }}">
+                <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em">● NEW PLANNING THREAD</div>
+                <div style="font-size:26px;line-height:1.15">You've started making something</div>
+                <div style="font-size:16px;line-height:1.45;color:{{ th.body }};text-wrap:pretty">From here on, what you send is published with your piece if you publish it. Your earlier questions stayed in the private thread.</div>
+                <div style="font-family:'DM Mono',monospace;font-size:11px;color:{{ th.accent }}">○ Back to the private thread</div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:10px">
+                <div style="font-family:'DM Mono',monospace;font-size:10px;color:{{ th.muted }}">BRING YOUR QUESTION OVER? IT WILL BE PUBLIC.</div>
+                <div style="border:1px dashed {{ th.faint }};border-radius:3px;padding:10px 12px;font-size:17px;line-height:1.4">Could I tell the vote from Emerald's point of view instead?</div>
+                <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-family:'DM Mono',monospace;font-size:12px"><span style="border:1px solid {{ th.rule }};border-radius:3px;padding:12px;text-align:center">WRITE MY OWN</span><span style="background:{{ th.btn }};color:{{ th.btnInk }};border-radius:3px;padding:12px;text-align:center">SEND THIS</span></div>
+              </div>
+            </div>
+            <div style="flex:none;border-top:1px solid {{ th.ink }};padding:10px 14px 24px;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;gap:8px;align-items:center"><div style="flex:1;background:{{ th.soft }};border-radius:3px;padding:12px;font-family:'DM Mono',monospace;font-size:12px;color:{{ th.muted }}">Message · published with your piece</div><div style="width:44px;height:44px;background:{{ th.btn }};color:{{ th.btnInk }};border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace">↑</div></div>
+              <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:10px;color:{{ th.muted }}"><span>‹model› · open weights</span><span>17 of 30 left today</span></div>
+            </div>
+          </div>
+        </div></sc-for></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 7 + 8 -->
+  <section style="display:flex;flex-direction:column;gap:24px">
+    <div style="font-family:'DM Mono',monospace;font-size:13px;color:#5E5A52">SCREENS 7 AND 8 · PUBLISH REVIEW · HOW THIS WAS MADE</div>
+    <div style="display:flex;flex-wrap:wrap;gap:64px;align-items:flex-start">
+
+      <div id="7" data-screen-label="7 Publish review" style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:10px;align-items:center"><span style="font-family:'DM Mono',monospace;font-size:13px;background:#1D1D1B;color:#F4F2ED;padding:3px 9px;border-radius:3px">7</span><span style="font-size:17px">Publish review · always shown</span><span style="font-family:'DM Mono',monospace;font-size:10px;border:1px dashed #5E5A52;color:#5E5A52;padding:2px 6px">DRAFT WORDING</span></div>
+        <div style="display:flex;gap:40px"><sc-for list="{{ themes }}" as="th" hint-placeholder-count="2"><div style="display:flex;flex-direction:column;gap:8px"><div style="font-family:'DM Mono',monospace;font-size:11px;color:#5E5A52">{{ th.name }}</div>
+          <div style="width:390px;height:844px;flex:none;background:{{ th.paper }};color:{{ th.ink }};border-radius:36px;overflow:hidden;box-shadow:0 0 0 8px #1D1D1B;display:flex;flex-direction:column">
+            <div style="height:40px;flex:none;display:flex;align-items:center;padding:0 28px;font-family:'DM Mono',monospace;font-size:13px">9:41</div>
+            <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid {{ th.rule }}"><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">←</span><span style="font-size:18px">Publish</span><span style="width:16px"></span></div>
+            <div style="flex:none;padding:20px 22px 14px;display:flex;flex-direction:column;gap:12px;border-bottom:1px solid {{ th.rule }}">
+              <div style="font-size:28px;line-height:1.1">Publish "Emerald, voting"?</div>
+              <div style="display:grid;grid-template-columns:96px 1fr;row-gap:6px;font-family:'DM Mono',monospace;font-size:11px"><span style="color:{{ th.muted }}">UNDER</span><span>@nate · Nate</span><span style="color:{{ th.muted }}">PIECE</span><span>212 words, all yours</span><span style="color:{{ th.muted }}">THREAD</span><span>6 messages, in full</span></div>
+            </div>
+            <div style="flex:none;padding:9px 16px;background:{{ th.soft }};border-bottom:1px solid {{ th.ink }};font-family:'DM Mono',monospace;font-size:11px;line-height:1.5">● THIS WHOLE THREAD GOES PUBLIC. IT CAN'T BE TRIMMED OR EDITED.</div>
+            <div style="flex:1;min-height:0;overflow:hidden;padding:12px 16px;display:flex;flex-direction:column;gap:0;-webkit-mask-image:linear-gradient(#000 82%,transparent);mask-image:linear-gradient(#000 82%,transparent)">
+              <sc-for list="{{ transcript }}" as="m" hint-placeholder-count="6">
+                <div style="display:grid;grid-template-columns:62px 1fr;gap:8px;padding:9px 0;border-bottom:1px solid {{ th.rule }}"><span style="font-family:'DM Mono',monospace;font-size:10px;color:{{ th.muted }};padding-top:3px">{{ m.who }}</span><span style="font-size:15px;line-height:1.4">{{ m.t }}</span></div>
+              </sc-for>
+            </div>
+            <div style="flex:none;padding:12px 16px 26px;border-top:1px solid {{ th.rule }};display:flex;flex-direction:column;gap:8px;font-family:'DM Mono',monospace;font-size:12px">
+              <span style="background:{{ th.btn }};color:{{ th.btnInk }};border-radius:3px;padding:13px;text-align:center">PUBLISH WITH THE THREAD</span>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px"><span style="border:1px solid {{ th.rule }};border-radius:3px;padding:12px;text-align:center">GO BACK</span><span style="border:1px solid {{ th.warn }};color:{{ th.warn }};border-radius:3px;padding:12px 6px;text-align:center;font-size:11px">DISCARD, START CLEAN</span></div>
+              <span style="font-size:10px;line-height:1.5;color:{{ th.muted }}">Start clean deletes this thread and this draft. You get a blank piece with no thread.</span>
+            </div>
+          </div>
+        </div></sc-for></div>
+      </div>
+
+      <div id="8" data-screen-label="8 How this was made" style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:10px;align-items:center"><span style="font-family:'DM Mono',monospace;font-size:13px;background:#1D1D1B;color:#F4F2ED;padding:3px 9px;border-radius:3px">8</span><span style="font-size:17px">A reader's view · how this was made</span><span style="font-family:'DM Mono',monospace;font-size:10px;border:1px dashed #5E5A52;color:#5E5A52;padding:2px 6px">DRAFT WORDING</span></div>
+        <div style="display:flex;gap:40px"><sc-for list="{{ themes }}" as="th" hint-placeholder-count="2"><div style="display:flex;flex-direction:column;gap:8px"><div style="font-family:'DM Mono',monospace;font-size:11px;color:#5E5A52">{{ th.name }}</div>
+          <div style="width:390px;height:844px;flex:none;background:{{ th.paper }};color:{{ th.ink }};border-radius:36px;overflow:hidden;box-shadow:0 0 0 8px #1D1D1B;display:flex;flex-direction:column">
+            <div style="height:40px;flex:none;display:flex;align-items:center;padding:0 28px;font-family:'DM Mono',monospace;font-size:13px">9:41</div>
+            <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid {{ th.rule }}"><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">←</span><span style="font-size:18px">Adaptations</span><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">···</span></div>
+            <div style="flex:none;padding:18px 22px 12px;display:flex;flex-direction:column;gap:6px">
+              <div style="font-size:28px;line-height:1.1">Emerald, voting</div>
+              <div style="font-family:'DM Mono',monospace;font-size:11px;color:{{ th.muted }}">by @nate · from chapter 1 · one of 23 adaptations</div>
+            </div>
+            <div style="flex:none;display:grid;grid-template-columns:1fr 1fr;font-family:'DM Mono',monospace;font-size:12px;border-bottom:1px solid {{ th.rule }}"><span style="padding:11px;text-align:center;color:{{ th.muted }}">PIECE</span><span style="padding:11px;text-align:center;border-bottom:2px solid {{ th.ink }}">HOW THIS WAS MADE</span></div>
+            <div style="flex:none;padding:10px 16px;background:{{ th.soft }};font-family:'DM Mono',monospace;font-size:10px;line-height:1.6;color:{{ th.body }}">● Planning thread · 6 messages · ‹model› via ‹host›. The assistant gives commentary only. The words of the piece are @nate's. 1 overlap flagged.</div>
+            <div style="flex:1;min-height:0;overflow:hidden;padding:14px 16px;display:flex;flex-direction:column;gap:14px">
+              <div style="display:flex;flex-direction:column;gap:4px"><span style="font-family:'DM Mono',monospace;font-size:10px;color:{{ th.muted }}">@NATE</span><span style="font-size:16px;line-height:1.4">I want a short piece from Emerald's side during the vote. Does the book give me enough?</span></div>
+              <div style="display:flex;flex-direction:column;gap:4px;padding-left:12px;border-left:1px solid {{ th.rule }}"><span style="font-family:'DM Mono',monospace;font-size:10px;color:{{ th.muted }}">ASSISTANT</span><span style="font-size:16px;line-height:1.4;color:{{ th.body }}">Very little. In chapter 1 Emerald summarises the building in one line… <span style="font-family:'DM Mono',monospace;font-size:10px;color:{{ th.accent }}">+ 1 quote · ch 1 ¶ 18</span></span></div>
+              <div style="display:flex;flex-direction:column;gap:4px"><span style="font-family:'DM Mono',monospace;font-size:10px;color:{{ th.muted }}">@NATE</span><span style="font-size:16px;line-height:1.4">What does Gladias seem to feel about voting at this point?</span></div>
+              <div style="display:flex;flex-direction:column;gap:8px;padding-left:12px;border-left:1px solid {{ th.rule }}"><span style="font-family:'DM Mono',monospace;font-size:10px;color:{{ th.muted }}">ASSISTANT</span><span style="font-size:16px;line-height:1.4;color:{{ th.body }}">He treats it as <span style="background:{{ th.flagBg }};color:{{ th.ink }};text-decoration:underline;text-decoration-color:{{ th.warn }};text-underline-offset:3px">a small duty he takes seriously</span>, and the book shows him working at it rather than enjoying it.</span>
+                <div style="border:1px solid {{ th.warn }};border-radius:3px;padding:8px 10px;display:flex;flex-direction:column;gap:4px;font-family:'DM Mono',monospace;font-size:10px;line-height:1.5"><span style="color:{{ th.warn }}">OVERLAP · 6 WORDS</span><span style="color:{{ th.body }}">The published piece uses these words in ¶ 3.</span><span style="color:{{ th.accent }}">SEE IN PIECE →</span></div>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:4px;color:{{ th.faint }}"><span style="font-family:'DM Mono',monospace;font-size:10px">@NATE</span><span style="font-size:16px;line-height:1.4">Can you write his line when he picks a score?</span></div>
+            </div>
+          </div>
+        </div></sc-for></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SCREEN 9 -->
+  <section style="display:flex;flex-direction:column;gap:24px">
+    <div style="font-family:'DM Mono',monospace;font-size:13px;color:#5E5A52">SCREEN 9 · STATES</div>
+    <div style="display:flex;flex-wrap:wrap;gap:64px;align-items:flex-start">
+
+      <div id="9a" data-screen-label="9a Declines to write" style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:10px;align-items:center"><span style="font-family:'DM Mono',monospace;font-size:13px;background:#1D1D1B;color:#F4F2ED;padding:3px 9px;border-radius:3px">9a</span><span style="font-size:17px">Declines to write a line</span><span style="font-family:'DM Mono',monospace;font-size:10px;border:1px dashed #5E5A52;color:#5E5A52;padding:2px 6px">DRAFT WORDING</span></div>
+        <div style="display:flex;gap:40px"><sc-for list="{{ themes }}" as="th" hint-placeholder-count="2"><div style="display:flex;flex-direction:column;gap:8px"><div style="font-family:'DM Mono',monospace;font-size:11px;color:#5E5A52">{{ th.name }}</div>
+          <div style="width:390px;height:844px;flex:none;background:{{ th.paper }};color:{{ th.ink }};border-radius:36px;overflow:hidden;box-shadow:0 0 0 8px #1D1D1B;display:flex;flex-direction:column">
+            <div style="height:40px;flex:none;display:flex;align-items:center;padding:0 28px;font-family:'DM Mono',monospace;font-size:13px">9:41</div>
+            <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid {{ th.rule }}"><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">←</span><span style="font-size:18px">Emerald, voting</span><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">···</span></div>
+            <div style="flex:none;padding:9px 16px;background:{{ th.soft }};border-bottom:1px solid {{ th.ink }};display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.04em"><span>● PUBLISHED WITH YOUR PIECE</span><span style="color:{{ th.muted }}">AS @NATE</span></div>
+            <div style="flex:1;min-height:0;overflow:hidden;padding:16px;display:flex;flex-direction:column;gap:16px;justify-content:flex-end">
+              <div style="align-self:flex-end;max-width:82%;display:flex;flex-direction:column;gap:4px;align-items:flex-end"><span style="font-family:'DM Mono',monospace;font-size:10px;color:{{ th.muted }}">@NATE</span><div style="background:{{ th.soft }};padding:10px 12px;border-radius:3px;font-size:17px;line-height:1.4">Can you write his line when he picks a score?</div></div>
+              <div style="display:flex;flex-direction:column;gap:10px;font-size:17px;line-height:1.45">
+                <div style="font-family:'DM Mono',monospace;font-size:10px;color:{{ th.muted }}">ASSISTANT · WON'T WRITE THIS</div>
+                <div style="text-wrap:pretty">I don't write lines, narration or description for pieces. The words have to be yours. Here's what I can do instead:</div>
+                <sc-for list="{{ insteads }}" as="i" hint-placeholder-count="3">
+                  <div style="border:1px solid {{ th.rule }};border-radius:3px;padding:11px 12px;display:flex;justify-content:space-between;gap:10px;font-size:16px;line-height:1.35"><span>{{ i }}</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:{{ th.accent }}">→</span></div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="flex:none;border-top:1px solid {{ th.ink }};padding:10px 14px 24px;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;gap:8px;align-items:center"><div style="flex:1;background:{{ th.soft }};border-radius:3px;padding:12px;font-family:'DM Mono',monospace;font-size:12px;color:{{ th.muted }}">Message · published with your piece</div><div style="width:44px;height:44px;background:{{ th.btn }};color:{{ th.btnInk }};border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace">↑</div></div>
+              <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:10px;color:{{ th.muted }}"><span>‹model› · open weights</span><span>14 of 30 left today</span></div>
+            </div>
+          </div>
+        </div></sc-for></div>
+      </div>
+
+      <div id="9b" data-screen-label="9b Spoiler held back" style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:10px;align-items:center"><span style="font-family:'DM Mono',monospace;font-size:13px;background:#1D1D1B;color:#F4F2ED;padding:3px 9px;border-radius:3px">9b</span><span style="font-size:17px">Answer held back for spoilers</span><span style="font-family:'DM Mono',monospace;font-size:10px;border:1px dashed #5E5A52;color:#5E5A52;padding:2px 6px">DRAFT WORDING</span></div>
+        <div style="display:flex;gap:40px"><sc-for list="{{ themes }}" as="th" hint-placeholder-count="2"><div style="display:flex;flex-direction:column;gap:8px"><div style="font-family:'DM Mono',monospace;font-size:11px;color:#5E5A52">{{ th.name }}</div>
+          <div style="width:390px;height:844px;flex:none;background:{{ th.paper }};color:{{ th.ink }};border-radius:36px;overflow:hidden;box-shadow:0 0 0 8px #1D1D1B;display:flex;flex-direction:column">
+            <div style="height:40px;flex:none;display:flex;align-items:center;padding:0 28px;font-family:'DM Mono',monospace;font-size:13px">9:41</div>
+            <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid {{ th.rule }}"><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">←</span><span style="font-size:18px">Asking</span><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">···</span></div>
+            <div style="flex:none;padding:9px 16px;border-bottom:1px dashed {{ th.faint }};font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.04em;color:{{ th.muted }}">○ ASKING · PRIVATE · NEVER PUBLISHED</div>
+            <div style="flex:none;padding:8px 16px;border-bottom:1px solid {{ th.rule }};display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:11px"><span style="color:{{ th.muted }}">Answering from ch 1–3, what you've read</span><span style="color:{{ th.accent }}">Include more ▾</span></div>
+            <div style="flex:1;min-height:0;overflow:hidden;padding:16px;display:flex;flex-direction:column;gap:16px;justify-content:flex-end">
+              <div style="align-self:flex-end;max-width:82%;background:{{ th.soft }};padding:10px 12px;border-radius:3px;font-size:17px;line-height:1.4">Does Gladias's vote on the building ever matter later?</div>
+              <div style="display:flex;flex-direction:column;gap:10px;font-size:17px;line-height:1.45">
+                <div style="font-family:'DM Mono',monospace;font-size:10px;color:{{ th.muted }}">ASSISTANT</div>
+                <div style="border:1px dashed {{ th.faint }};border-radius:3px;padding:16px;display:flex;flex-direction:column;gap:12px">
+                  <div style="font-family:'DM Mono',monospace;font-size:11px;color:{{ th.muted }}">HELD BACK · NEEDS CHAPTERS AFTER 3</div>
+                  <div style="display:flex;flex-direction:column;gap:7px"><div style="height:8px;background:{{ th.rule }};width:100%"></div><div style="height:8px;background:{{ th.rule }};width:88%"></div><div style="height:8px;background:{{ th.rule }};width:64%"></div></div>
+                  <div style="font-size:16px;line-height:1.4;color:{{ th.body }};text-wrap:pretty">Up to chapter 3, the book doesn't say. A fuller answer uses later chapters.</div>
+                  <div style="display:flex;flex-direction:column;gap:6px;font-family:'DM Mono',monospace;font-size:12px"><span style="border:1px solid {{ th.ink }};border-radius:3px;padding:11px;text-align:center">SHOW IT · INCLUDE UP TO CH ▾</span><span style="padding:6px;text-align:center;color:{{ th.muted }}">Keep it hidden</span></div>
+                </div>
+              </div>
+            </div>
+            <div style="flex:none;border-top:1px solid {{ th.rule }};padding:10px 14px 24px;display:flex;flex-direction:column;gap:8px">
+              <div style="display:flex;gap:8px;align-items:center"><div style="flex:1;border:1px dashed {{ th.faint }};border-radius:3px;padding:12px;font-family:'DM Mono',monospace;font-size:12px;color:{{ th.muted }}">Ask about the book</div><div style="width:44px;height:44px;background:{{ th.btn }};color:{{ th.btnInk }};border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace">↑</div></div>
+              <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:10px;color:{{ th.muted }}"><span>‹model› · open weights</span><span>12 of 30 left today</span></div>
+            </div>
+          </div>
+        </div></sc-for></div>
+      </div>
+
+      <div id="9c" data-screen-label="9c Daily limit" style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:10px;align-items:center"><span style="font-family:'DM Mono',monospace;font-size:13px;background:#1D1D1B;color:#F4F2ED;padding:3px 9px;border-radius:3px">9c</span><span style="font-size:17px">Daily limit reached</span><span style="font-family:'DM Mono',monospace;font-size:10px;border:1px dashed #5E5A52;color:#5E5A52;padding:2px 6px">DRAFT WORDING</span></div>
+        <div style="display:flex;gap:40px"><sc-for list="{{ themes }}" as="th" hint-placeholder-count="2"><div style="display:flex;flex-direction:column;gap:8px"><div style="font-family:'DM Mono',monospace;font-size:11px;color:#5E5A52">{{ th.name }}</div>
+          <div style="width:390px;height:844px;flex:none;background:{{ th.paper }};color:{{ th.ink }};border-radius:36px;overflow:hidden;box-shadow:0 0 0 8px #1D1D1B;display:flex;flex-direction:column">
+            <div style="height:40px;flex:none;display:flex;align-items:center;padding:0 28px;font-family:'DM Mono',monospace;font-size:13px">9:41</div>
+            <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid {{ th.rule }}"><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">←</span><span style="font-size:18px">Emerald, voting</span><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">···</span></div>
+            <div style="flex:none;padding:9px 16px;background:{{ th.soft }};border-bottom:1px solid {{ th.ink }};display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.04em"><span>● PUBLISHED WITH YOUR PIECE</span><span style="color:{{ th.muted }}">AS @NATE</span></div>
+            <div style="flex:none;display:grid;grid-template-columns:1fr 1fr;font-family:'DM Mono',monospace;font-size:12px;border-bottom:1px solid {{ th.rule }}"><span style="padding:11px;text-align:center;border-bottom:2px solid {{ th.ink }}">THREAD</span><span style="padding:11px;text-align:center;color:{{ th.muted }}">YOUR PIECE · 212 W</span></div>
+            <div style="flex:1;min-height:0;overflow:hidden;padding:16px;display:flex;flex-direction:column;gap:16px;justify-content:flex-end;color:{{ th.faint }}">
+              <div style="display:flex;flex-direction:column;gap:6px;font-size:17px;line-height:1.45"><div style="font-family:'DM Mono',monospace;font-size:10px">ASSISTANT · COMMENTARY</div><div>…worth checking how the book shows a vote result, if it does.</div></div>
+            </div>
+            <div style="flex:none;border-top:1px solid {{ th.ink }};padding:18px 16px 26px;display:flex;flex-direction:column;gap:12px">
+              <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.04em">0 OF 30 LEFT TODAY</div>
+              <div style="font-size:18px;line-height:1.4;text-wrap:pretty">You've used today's messages. They come back at 00:00 UTC, in 6 hours 19 minutes.</div>
+              <div style="font-size:16px;line-height:1.4;color:{{ th.body }}">Your piece and your threads are still here. You can keep writing.</div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;font-family:'DM Mono',monospace;font-size:12px"><span style="border:1px solid {{ th.rule }};border-radius:3px;padding:12px;text-align:center">READ THE BOOK</span><span style="background:{{ th.btn }};color:{{ th.btnInk }};border-radius:3px;padding:12px;text-align:center">BACK TO WRITING</span></div>
+            </div>
+          </div>
+        </div></sc-for></div>
+      </div>
+
+      <div id="9d" data-screen-label="9d Signed out" style="display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;gap:10px;align-items:center"><span style="font-family:'DM Mono',monospace;font-size:13px;background:#1D1D1B;color:#F4F2ED;padding:3px 9px;border-radius:3px">9d</span><span style="font-size:17px">Signed out</span><span style="font-family:'DM Mono',monospace;font-size:10px;border:1px dashed #5E5A52;color:#5E5A52;padding:2px 6px">DRAFT WORDING</span></div>
+        <div style="display:flex;gap:40px"><sc-for list="{{ themes }}" as="th" hint-placeholder-count="2"><div style="display:flex;flex-direction:column;gap:8px"><div style="font-family:'DM Mono',monospace;font-size:11px;color:#5E5A52">{{ th.name }}</div>
+          <div style="width:390px;height:844px;flex:none;background:{{ th.paper }};color:{{ th.ink }};border-radius:36px;overflow:hidden;box-shadow:0 0 0 8px #1D1D1B;display:flex;flex-direction:column">
+            <div style="height:40px;flex:none;display:flex;align-items:center;padding:0 28px;font-family:'DM Mono',monospace;font-size:13px">9:41</div>
+            <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 18px;border-bottom:1px solid {{ th.rule }}"><span style="font-family:'DM Mono',monospace;font-size:16px;color:{{ th.muted }}">←</span><span style="font-size:18px">Assistant</span><span style="width:16px"></span></div>
+            <div style="flex:1;display:flex;flex-direction:column;justify-content:center;gap:16px;padding:0 30px">
+              <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em;color:{{ th.muted }}">SIGN IN TO USE THE ASSISTANT</div>
+              <div style="font-size:30px;line-height:1.15">Your threads need a name to sit under</div>
+              <div style="font-size:17px;line-height:1.45;color:{{ th.body }};text-wrap:pretty">Private questions are kept for you. Planning threads are published under your Farcaster name. The daily limit is counted per account.</div>
+              <span style="background:{{ th.btn }};color:{{ th.btnInk }};border-radius:3px;padding:14px;text-align:center;font-family:'DM Mono',monospace;font-size:12px;margin-top:6px">SIGN IN WITH FARCASTER</span>
+              <span style="text-align:center;font-family:'DM Mono',monospace;font-size:12px;color:{{ th.accent }}">Keep reading without it</span>
+            </div>
+          </div>
+        </div></sc-for></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- GUESSES -->
+  <section id="guesses" data-screen-label="Guesses" style="display:flex;flex-direction:column;gap:20px">
+    <div style="font-family:'DM Mono',monospace;font-size:13px;color:#5E5A52">DECISIONS I GUESSED AT</div>
+    <div style="width:1100px;background:#F4F2ED;border-radius:4px;padding:36px 40px;box-sizing:border-box;display:grid;grid-template-columns:1fr 1fr;column-gap:48px;row-gap:18px;font-size:16px;line-height:1.45;color:#2A2A26">
+      <sc-for list="{{ guesses }}" as="g" hint-placeholder-count="16">
+        <div style="display:grid;grid-template-columns:30px 1fr;gap:6px"><span style="font-family:'DM Mono',monospace;font-size:12px;color:#8A2F2F;padding-top:3px">{{ g.n }}</span><div style="display:flex;flex-direction:column;gap:3px"><b style="font-weight:600">{{ g.h }}</b><span style="color:#4A463F;text-wrap:pretty">{{ g.b }}</span></div></div>
+      </sc-for>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+class Component extends DCLogic {
+  renderVals() {
+    const light = { k: 'light', name: 'LIGHT', paper: '#F4F2ED', ink: '#1D1D1B', body: '#4A463F', muted: '#6A675F', faint: '#ABA79D', rule: '#DAD6CC', soft: '#E6E2D9', card: '#FBFAF6', accent: '#2E5A3A', warn: '#8A2F2F', flagBg: '#EFD9D2', btn: '#1D1D1B', btnInk: '#F4F2ED', scrim: 'rgba(29,29,27,.45)' };
+    const dark = { k: 'dark', name: 'DARK', paper: '#161614', ink: '#E7E4DD', body: '#B9B5AB', muted: '#9C988E', faint: '#5E5B55', rule: '#33322E', soft: '#24231F', card: '#1E1D1A', accent: '#8DB58A', warn: '#D99A8C', flagBg: '#4A2A24', btn: '#E7E4DD', btnInk: '#161614', scrim: 'rgba(0,0,0,.6)' };
+    return {
+      themes: [light, dark],
+      chapters: [
+        { t: 'Chapter 2', s: 'READ', col: 'inherit' },
+        { t: 'Chapter 3', s: 'READING', col: 'inherit' },
+        { t: 'Chapter 4', s: 'NOT YET', col: '#8A867D' },
+        { t: 'Chapter 5', s: 'NOT YET', col: '#8A867D' },
+        { t: 'Chapter 6', s: 'NOT YET', col: '#8A867D' },
+      ],
+      pieces: [
+        { t: 'The sky bridge, slowly', by: '@ilse · from ch 1 · 2 days ago', tag: 'CH 1', made: '● HOW THIS WAS MADE' },
+        { t: 'Five points', by: '@kaz · from ch 1 · 4 days ago', tag: 'CH 1', made: 'NO ASSISTANT USED' },
+        { t: 'Badra St #1103', by: '@mira · from ch 1 · 1 week ago', tag: 'CH 1', made: '● HOW THIS WAS MADE' },
+      ],
+      privThreads: [
+        { t: 'Why is Gladias asked to rate a building?', m: 'CH 1 · TODAY' },
+        { t: 'Who runs Emerald?', m: 'CH 1 · MON' },
+      ],
+      planThreads: [{ t: 'Emerald, voting · draft, 212 words', m: 'CH 1 · TODAY' }],
+      notice: [
+        { n: '1', h: 'It helps you read and plan', b: 'Ask about the book, or talk through a piece you want to make. Answers quote the book with chapter and block.' },
+        { n: '2', h: "It won't write for you", b: 'No dialogue, narration or description. It gives context and commentary. Every word you publish is your own.' },
+        { n: '3', h: 'Your messages go to ‹host›', b: 'An outside service that runs ‹model›, an open-weights model, for this app.' },
+        { n: '4', h: 'What you type may become public', b: 'Questions about the book stay private. If you publish a piece you planned here, the planning thread is published with it, under your name.' },
+      ],
+      transcript: [
+        { who: '@NATE', t: "I want a short piece from Emerald's side during the vote. Does the book give me enough?" },
+        { who: 'ASSIST.', t: 'Very little. In chapter 1 Emerald summarises the building in one line… + 1 quote' },
+        { who: '@NATE', t: 'What does Gladias seem to feel about voting at this point?' },
+        { who: 'ASSIST.', t: 'He treats it as a small duty he takes seriously…' },
+        { who: '@NATE', t: 'Can you write his line when he picks a score?' },
+        { who: 'ASSIST.', t: "I don't write lines for pieces. Here's what I can do instead…" },
+      ],
+      insteads: [
+        'Show what the book says he does at that moment',
+        'Talk through what he is weighing',
+        'Check your line against the book once you write it',
+      ],
+      guesses: [
+        { n: '1', h: '"Snowmoon Party" is the existing miniapp', b: 'I used the Snowmoon chrome from the living edition screens. The app bar still says Snowmoon.' },
+        { n: '2', h: 'Where the general entry lives', b: "There's no tab bar, so the Assistant sits in the ··· menu (1d) and holds the list of threads." },
+        { n: '3', h: 'An adaptations page', b: "The brief doesn't have one. 1c invents a simple list of pieces, each tagged with whether it has a thread." },
+        { n: '4', h: 'Model, host and limit', b: '‹model› and ‹host› are placeholders. 30 messages a day, reset at 00:00 UTC, counted across both thread kinds.' },
+        { n: '5', h: 'How the spoiler limit works', b: 'It follows the furthest chapter you have read. Opting in is per thread, by picking a chapter, and is shown in the thread header.' },
+        { n: '6', h: 'Private threads are kept', b: 'They are saved to your account and listed in 1d, and you can delete them. They are never published.' },
+        { n: '7', h: 'What carries over at the fork', b: 'Nothing is copied automatically. In 6b you can send the triggering question into the new thread, and it then becomes public.' },
+        { n: '8', h: 'Who notices the fork', b: 'The assistant offers it (6a). You can also start one yourself from 1b or 1d. It never switches threads without asking.' },
+        { n: '9', h: 'One thread per piece', b: 'A piece has at most one planning thread. "Start writing" makes a piece with no thread. Opening a thread later attaches it, and the piece then publishes with it.' },
+        { n: '10', h: 'What "start clean" deletes', b: 'The thread and the draft written beside it, so nothing written with help can be published without its thread. You may want it to keep the draft instead.' },
+        { n: '11', h: 'Overlap rule', b: 'A flag appears when 6 or more consecutive words in the piece match a reply. The flag links to the paragraph. Book quotes in replies are excluded.' },
+        { n: '12', h: 'Declined requests are published too', b: 'The whole thread is published, so 8 shows the request and the refusal.' },
+        { n: '13', h: 'Signed out', b: 'Reading works without signing in. The assistant needs sign-in for the limit and the name.' },
+        { n: '14', h: 'When the notice appears', b: 'Before the first message from any way in, until "don\'t show again" is ticked. Its content also belongs on the About page.' },
+        { n: '15', h: 'Block numbers in quote cards', b: 'The quotes are real chapter 1 lines. Their ¶ numbers are guesses and should come from block ids.' },
+        { n: '16', h: 'Publish review lists every message', b: 'Messages are shown shortened, and each can be tapped to read in full. Showing them all at full length might be required instead.' },
+      ],
+    };
+  }
+}
+</script>
+</body>
+</html>

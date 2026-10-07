@@ -128,7 +128,8 @@ runs the migration and permission tests in an in-memory Postgres.
 | `npm run seed:text` | Upsert `studio.works` and `studio.text_blocks` |
 | `npm run test:db` | Migration and permission tests (PGlite) |
 | `npm run test:render` | Rendering rules: ¶ labels, settings, default templates, figure sizing |
-| `npm run check:ui -- --url=…` | Reader floors in Chrome at 390px: 12px text, 44px targets, fonts, colours, first screen |
+| `npm run check:ui -- --url=…` | Reader floors in Chrome at 390px: 12px text, 44px targets, fonts, colours, first screen, first-visit intro and its replay |
+| `npm run check:intro -- [--url=…]` | First-visit intro (`config/intro.json`): five cards, live cards point at real pages, card 1 keeps the independence and no-token line |
 | `npm run check:shipped` | Verify a live deployment runs the expected commit, serves the reader, and its narration and images load |
 | `npm run publish:narration` | Upload the narration (per-block and per-chapter audio) to R2 and write `content/snowmoon/narration/` |
 | `npm run seed:narration` | Write narrations, segments, recipes and house narrations from that index (skips chapters already done) |

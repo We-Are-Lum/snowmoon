@@ -69,10 +69,22 @@ export type PieceLine =
   | { text: string; from: 'book'; id: string; href: string }
   | { text: string; from: 'person'; fid: number; on: string };
 
+export interface PieceImage {
+  url: string;
+  width: number;
+  height: number;
+  alt: string;
+  recipe: string;
+}
+
 export interface PiecePanel {
   n: number;
-  /** From adaptations/<seed>/panels.json; alt text is model-drafted and says so. */
-  image: { url: string; width: number; height: number; alt: string; recipe: string } | null;
+  /**
+   * From adaptations/<seed>/panels.json, in order: a beat may show more than one
+   * image in sequence (the page shows them one after the other; a video cuts
+   * between them within the beat). Alt text is model-drafted and says so.
+   */
+  images: PieceImage[];
   narration: PieceLine[];
   dialogue: PieceLine[];
 }
@@ -92,12 +104,15 @@ function pieceLine(tag: string | null, text: string): PieceLine | null {
 }
 
 function buildPiece(script: string, folder: string): PiecePanel[] {
-  const panels = JSON.parse(readOptional(path.join(folder, 'panels.json')) ?? '{"panels":[]}').panels as ({ beat: number } & NonNullable<PiecePanel['image']>)[];
+  const panels = JSON.parse(readOptional(path.join(folder, 'panels.json')) ?? '{"panels":[]}').panels as ({ beat: number; order?: number } & PieceImage)[];
   return parseBeats(script).map((beat) => {
-    const p = panels.find((x) => x.beat === beat.n);
+    const images = panels
+      .filter((x) => x.beat === beat.n)
+      .sort((a, b) => (a.order ?? 0) - (b.order ?? 0))
+      .map(({ url, width, height, alt, recipe }) => ({ url, width, height, alt, recipe }));
     return {
       n: beat.n,
-      image: p ? { url: p.url, width: p.width, height: p.height, alt: p.alt, recipe: p.recipe } : null,
+      images,
       narration: beat.narration.map((l) => pieceLine(l.tag, l.text)).filter((l): l is PieceLine => !!l),
       dialogue: beat.dialogue.map((l) => pieceLine(l.tag, l.text)).filter((l): l is PieceLine => !!l),
     };
