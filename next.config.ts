@@ -21,6 +21,8 @@ const nextConfig: NextConfig = {
     '/**': [
       './content/snowmoon/text/**',
       './content/snowmoon/illustrations/**',
+      // Recipes are read at request time too (the first-visit intro's recipe card, narration).
+      './content/snowmoon/recipes/**',
       './config/**',
       './adaptations/**',
       './node_modules/@fontsource/crimson-pro/files/crimson-pro-latin-*-normal.woff',
