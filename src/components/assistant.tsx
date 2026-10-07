@@ -106,6 +106,42 @@ function Notice({ host, provider, model, onClose }: { host: string; provider: st
   );
 }
 
+/**
+ * Questions to start an empty thread with (from the clickable prototype). Model-drafted
+ * wording. Each is answerable from what the thread may use: the attached passage, the
+ * chapter, or chapter 1 for a thread with neither.
+ */
+function starters(t: Thread): string[] {
+  if (t.attached.length) return ['What is happening in this passage?', 'Who is speaking here, and to whom?', 'Why might this moment matter?'];
+  if (t.chapter) return [`What happens in chapter ${t.chapter}?`, `Who are the main people in chapter ${t.chapter}?`, `Where and when is chapter ${t.chapter} set?`];
+  return ['Who is Gladias?', 'How does voting on buildings work in Veridia?', 'What is the Order of Steering?'];
+}
+
+/** The passage a thread was opened from, in the book's own words (GET /api/book/block). */
+function PassageCard({ id }: { id: string }) {
+  const [q, setQ] = useState<Quote | null>(null);
+  const [failed, setFailed] = useState(false);
+  useEffect(() => {
+    fetch(`/api/book/block?id=${encodeURIComponent(id)}`)
+      .then((r) => (r.ok ? (r.json() as Promise<Quote>) : Promise.reject()))
+      .then(setQ, () => setFailed(true));
+  }, [id]);
+  if (failed || !q) return <p className="as-attached">Asking about {id}</p>;
+  return (
+    <figure className="as-quote as-passage">
+      <p className="as-label">Asking about</p>
+      <blockquote dangerouslySetInnerHTML={{ __html: q.html }} />
+      <figcaption>
+        <span>
+          Ch {q.chapter}
+          {q.label !== null ? ` · ¶ ${q.label}` : ''}
+        </span>
+        <Link href={`/chapter/${q.chapter}#${q.id}`}>Open in reader →</Link>
+      </figcaption>
+    </figure>
+  );
+}
+
 /** A citation: the book's own words, rendered from the stored text by block id. */
 function QuoteCard({ q }: { q: Quote }) {
   return (
@@ -338,7 +374,9 @@ function ThreadView({ id, status, refresh }: { id: string; status: Extract<Statu
           label="Chapters this thread may use"
         />
       </div>
-      {t.attached.length > 0 && <p className="as-attached">Asking about {t.attached.join(', ')}</p>}
+      {t.attached.map((id) => (
+        <PassageCard key={id} id={id} />
+      ))}
       <div className="as-messages">
         {t.messages.map((m, i) =>
           m.role === 'user' ? (
@@ -348,6 +386,18 @@ function ThreadView({ id, status, refresh }: { id: string; status: Extract<Statu
           ) : (
             <Reply key={i} m={m} thread={t} onShow={(limit, question) => send(question, limit)} />
           ),
+        )}
+        {t.messages.length === 0 && !busy && !reachedLimit && (
+          <div className="as-starters">
+            <p className="as-label">
+              Try asking <DraftTag />
+            </p>
+            {starters(t).map((s) => (
+              <button key={s} type="button" className="as-starter" onClick={() => void send(s)}>
+                {s}
+              </button>
+            ))}
+          </div>
         )}
         {busy && <p className="as-label as-thinking">Reading the passages…</p>}
         <div ref={end} />
@@ -448,7 +498,7 @@ export function Assistant() {
     else if (block && /^c\d+-b\d+$/.test(block)) {
       const ch = Number(block.slice(1, block.indexOf('-')));
       go(newThread(Math.max(readTo(), ch), [block]).id);
-    } else if (Number.isInteger(chapter) && chapter >= 1 && chapter <= 32) go(newThread(Math.max(readTo(), chapter)).id);
+    } else if (Number.isInteger(chapter) && chapter >= 1 && chapter <= 32) go(newThread(Math.max(readTo(), chapter), [], chapter).id);
   }, [refresh]);
 
   const ready = status.kind === 'ready' ? status : null;

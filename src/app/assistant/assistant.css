@@ -49,6 +49,16 @@
   min-height: var(--tap); padding: 0 8px; border: 1px solid var(--rule); border-radius: var(--radius);
   background: var(--paper); color: var(--ink); font-family: var(--label); font-size: var(--text-label);
 }
+.as-passage { margin-top: var(--space-3); }
+.as-passage .as-label { margin-bottom: 4px; }
+.as-passage blockquote { font-style: italic; }
+.as-starters { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
+.as-starter {
+  min-height: var(--tap); padding: 8px 14px; text-align: left; cursor: pointer;
+  background: transparent; color: var(--ink); border: 1px solid var(--rule); border-radius: var(--radius);
+  font-family: var(--reading); font-size: 17px; line-height: 1.3;
+}
+.as-starter:hover { border-color: var(--ink); }
 .as-attached { margin: 8px 0 0; font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
 .as-messages { display: flex; flex-direction: column; gap: var(--space-5); padding: var(--space-5) 0; }
 .as-question { margin: 0; font-size: 21px; line-height: 1.35; }

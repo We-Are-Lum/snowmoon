@@ -2,7 +2,8 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { Fragment, type CSSProperties } from 'react';
-import { blockId, chapterNumbers, loadChapter } from '~/lib/book';
+import { blockId, chapterDateline, chapterNumbers, loadChapter } from '~/lib/book';
+import { ChapterSheet } from '~/components/chapter-sheet';
 import { blockFacts, labelRange, type BlockFacts } from '~/lib/reading';
 import { figureMinWidth, renderMarkdown, renderScreen, screenBasePx } from '~/lib/render';
 import { DEFAULT_TEMPLATES } from '~/templates';
@@ -67,6 +68,7 @@ export default async function ChapterPage({ params }: Props) {
 
   return (
     <article className="page chapter" data-chapter={n} data-setting={facts.find((f) => f.setting)?.setting ?? undefined}>
+      <ChapterSheet chapter={n} chapters={chapterNumbers().map((k) => ({ n: k, dateline: chapterDateline(loadChapter(k)!) }))} />
       {chapter.blocks.map((b, i) => {
         const id = blockId(n, b.idx);
         const f = facts[i];
