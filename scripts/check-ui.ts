@@ -80,7 +80,7 @@ async function checkAssistant(page: Page, scheme: string) {
   let left = 30;
   const replies: { state: string; left?: number; heldBack?: boolean }[] = [LIVE.results[0].result, { state: 'held', heldBack: true, left: 1 }, { state: 'limit', left: 0 }];
   await page.route('**/api/chat/status', (r) =>
-    r.fulfill({ json: { available: true, model: 'gpt-oss-120b', host: 'Vercel AI Gateway', perDay: 30, left } }),
+    r.fulfill({ json: { available: true, model: 'gpt-oss-120b', host: 'Vercel AI Gateway', provider: '‹provider not chosen›', perDay: 30, left } }),
   );
   await page.route('**/api/chat/ask', (r) => {
     const next = replies.shift()!;
@@ -118,6 +118,8 @@ async function checkAssistant(page: Page, scheme: string) {
   await page.waitForSelector('.as-stop');
   await page.evaluate(() => window.scrollTo(0, document.body.scrollHeight));
   await checkFloors(page, '/assistant (9c limit)', scheme);
+  const zeroLeft = await page.locator('.as-label', { hasText: /left today/ }).count();
+  if (zeroLeft !== 1) fail(`/assistant (9c): "left today" shown ${zeroLeft} times, not once`);
   await shot(page, '9c-limit', scheme);
 
   await page.unroute('**/api/chat/status');

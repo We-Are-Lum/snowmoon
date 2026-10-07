@@ -12,7 +12,14 @@ recorded alongside and agreed to within rounding.
 | 2026-10-07 | No-writing red team, 30 prompts | deepseek/deepseek-v3.1 | 30 | 0.01120 |
 | 2026-10-07 | Output guard over 60 replies | openai/gpt-oss-safeguard-20b | 60 | 0.00479 |
 | 2026-10-07 | Slice 1 live run, 7 questions end to end (`scripts/live-chat.ts`) | openai/gpt-oss-120b + openai/gpt-oss-safeguard-20b | 14 | 0.00236 |
-| | **Running total** | | 164 | **0.02953** |
+| 2026-10-07 | 50-question check: search-word test | openai/gpt-oss-120b | 50 | 0.00627 |
+| 2026-10-07 | 50-question check: run 1 (first guard policy) | gpt-oss-120b + gpt-oss-safeguard-20b | 184 | 0.04074 |
+| 2026-10-07 | 50-question check: guard policy re-check (red team + run 1) | openai/gpt-oss-safeguard-20b | 140 | 0.01445 |
+| 2026-10-07 | 50-question check: run 2 (final) | gpt-oss-120b + gpt-oss-safeguard-20b | 150 | 0.02980 |
+| 2026-10-07 | Two probes of the gateway's reply format | openai/gpt-oss-120b | 2 | 0.00005 |
+| | **Running total** | | 690 | **0.12084** |
+
+The 50-question check had its own cap of $1 (owner, 2026-10-07) and spent $0.09131.
 
 ### What the live run showed (slice 1)
 

@@ -1,0 +1,23 @@
+{
+  "about": "Name forms for the reading assistant's search (src/lib/chat/retrieve.ts). When a question uses any form in `match`, every word in `add` is searched too, so 'Bai' also finds 'Jahen' and 'Veridian' also finds 'Veridia'. The English stemmer treats each form as a different word. Forms are the book's own, from chapters 1–15; `add` leaves out forms that are ordinary words (Glad, Order). Compiled by the coding agent, 2026-10-07.",
+  "groups": [
+    { "match": ["Zei", "Zei Leimin", "Leimin"], "add": ["Zei", "Leimin"] },
+    { "match": ["Bai", "Bai Jahen", "Jahen"], "add": ["Bai", "Jahen"] },
+    { "match": ["Gladias", "Uncle Glad"], "add": ["Gladias"] },
+    { "match": ["Vil", "Uncle Vil"], "add": ["Vil"] },
+    { "match": ["Ephelion", "Lord Ephelion"], "add": ["Ephelion"] },
+    { "match": ["Veridia", "Veridian", "Veridians"], "add": ["Veridia", "Veridian", "Veridians"] },
+    { "match": ["Dzego", "Dzegoban", "Dzegojan", "Dzegan"], "add": ["Dzego", "Dzegoban", "Dzegojan"] },
+    { "match": ["Arctic", "Arctics", "Arctic Empire", "Arctic Emperor"], "add": ["Arctic", "Arctics"] },
+    { "match": ["Order of Steering", "the Order", "Acolyte", "Acolytes"], "add": ["Steering", "Acolyte"] },
+    { "match": ["Keeper", "Keepers"], "add": ["Keeper", "Keepers"] },
+    { "match": ["Sentinel", "Sentinels"], "add": ["Sentinel", "Sentinels"] },
+    { "match": ["Minpentai", "the game", "strategy game"], "add": ["Minpentai"] },
+    { "match": ["Greater Plum Harbor", "Plum Harbor"], "add": ["Plum", "Harbor"] },
+    { "match": ["United Cities"], "add": ["United", "Cities"] },
+    { "match": ["Freetown"], "add": ["Freetown"] },
+    { "match": ["Redshire"], "add": ["Redshire"] },
+    { "match": ["Helisport"], "add": ["Helisport"] },
+    { "match": ["Hun Min", "Min"], "add": ["Min"] }
+  ]
+}

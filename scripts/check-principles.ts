@@ -251,7 +251,14 @@ add({
     const line = json('config/consent.json');
     if (!line.versions?.[line.current]?.line) problems.push('config/consent.json: no current publication line');
     for (const { file, text } of files) {
+      // The two components that may hold a text box: one shows the publication line, the
+      // other (questions kept on the device, never published) says it is never published.
       if (file.endsWith('components/publish-words.tsx')) continue;
+      if (file.endsWith('components/private-text-field.tsx')) {
+        if (!/Never published/.test(text) || !/aria-describedby/.test(text)) problems.push(`${file}: the private box must say, and describe itself as, never published`);
+        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the private box must not send its text anywhere itself`);
+        continue;
+      }
       for (const m of text.matchAll(/<textarea\b|<input\b(?![^>]*type=["'](?:hidden|checkbox|radio|range|submit|button|file)["'])[^>]*>/g)) {
         problems.push(`${file}: a bare text box; use PublishedTextField so the publication line shows (${m[0].slice(0, 40)})`);
       }

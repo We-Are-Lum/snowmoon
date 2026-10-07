@@ -107,11 +107,11 @@
       "revision": "b5c939de8f754692c1647ca79fbf85e8c1e70f8a",
       "license_line": "license: apache-2.0",
       "license_checked": {
-        "by": "coding agent",
+        "by": "coding agent, approved by the owner",
         "on": "2026-10-07",
         "source": "https://huggingface.co/openai/gpt-oss-120b"
       },
-      "notes": "117B mixture-of-experts (5.1B active), 131k context. Proposed for the reading assistant (docs/proposals/chat.md); 0 of 27 attempts to make it write in the red team. Not yet approved by the owner.",
+      "notes": "117B mixture-of-experts (5.1B active), 131k context. The reading assistant's model (docs/proposals/chat.md); 0 of 27 attempts to make it write in the red team. Approved by the owner on 2026-10-07 for asking about the book only.",
       "runs_on": "hosted",
       "hosted": {
         "host": "Vercel AI Gateway",
@@ -139,11 +139,11 @@
       "revision": "8a11e17b25c973a24099d4016bf2e17dd7ec1574",
       "license_line": "license: apache-2.0",
       "license_checked": {
-        "by": "coding agent",
+        "by": "coding agent, approved by the owner",
         "on": "2026-10-07",
         "source": "https://huggingface.co/openai/gpt-oss-safeguard-20b"
       },
-      "notes": "21B safety-reasoning model that applies a written policy. Proposed as the chat's output guard (config/prompts/chat-guard.md). Not yet approved by the owner.",
+      "notes": "21B safety-reasoning model that applies a written policy. The chat's output guard (config/prompts/chat-guard.md). Approved by the owner on 2026-10-07.",
       "runs_on": "hosted",
       "hosted": {
         "host": "Vercel AI Gateway",

@@ -36,8 +36,18 @@ export const CHAT = {
   modelName: 'gpt-oss-120b',
   /** Checks every answer against config/prompts/chat-guard.md. Open weights, Apache-2.0. */
   guardModel: 'openai/gpt-oss-safeguard-20b',
-  /** Who receives the messages, as the notice names it. */
+  /** Who receives the messages first, as the notice names it. */
   host: 'Vercel AI Gateway',
+  /**
+   * The one inference provider behind the gateway (its gateway slug), and its name for
+   * the notice. Owner's condition for principle 6 (Oct 7, 2026): one pinned provider,
+   * zero data retention, both hops named. Empty until the owner picks one; while it is
+   * empty the assistant reports itself unavailable. Candidates: docs/proposals/chat-providers.md.
+   */
+  provider: null as string | null,
+  providerName: null as string | null,
+  /** Every request asks the gateway for providers with zero data retention only. */
+  zeroDataRetention: true,
   endpoint: 'https://ai-gateway.vercel.sh/v1/chat/completions',
   /** USD per token, from the gateway's published list (2026-10-07). */
   prices: {
@@ -48,8 +58,15 @@ export const CHAT = {
   messagesPerDay: 30,
   /** Total spend per UTC day across everyone, in USD. Test cap: $2 (owner instruction, Oct 7, 2026). */
   dailySpendCapUsd: 2,
-  /** Passages sent to the model, plus the block before each. */
-  passages: 8,
+  /** Search hits sent to the model, each with the blocks around it (see neighbours). */
+  passages: 12,
+  neighbours: { before: 2, after: 2 },
+  /**
+   * Before searching, the model lists words the answering passage is likely to use
+   * (config/prompts/chat-search-terms.md); they are searched with the question. Never
+   * shown or stored. 30 → 36 of 50 test questions found (docs/proposals/chat-eval/).
+   */
+  searchTerms: true,
   /** Turns of the thread sent back with each question. */
   historyTurns: 6,
   questionMaxChars: 600,

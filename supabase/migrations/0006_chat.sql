@@ -36,7 +36,7 @@ create table studio.chat_calls (
   -- 'answer': the model call that answered it, with its real cost.
   -- 'guard': the output check on that answer, with its real cost.
   -- The day's spend is the sum of cost_usd over all rows.
-  kind text not null check (kind in ('ask', 'answer', 'guard')),
+  kind text not null check (kind in ('ask', 'search', 'answer', 'guard')),
   model text not null,
   provider text,
   request_id text,

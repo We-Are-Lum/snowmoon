@@ -300,7 +300,29 @@ Built on `chat-slice-1` (2026-10-07). Differences, each deliberate unless marked
 - **Storage on the device is `localStorage`, not IndexedDB.** Threads are small text; one key (`snowmoon.ask.threads.v1`) is simpler. Move to IndexedDB if threads grow.
 - **The query ORs the question's stems** (`to_tsquery` over `tsvector_to_array`) instead of `websearch_to_tsquery`, which ANDs every word and found nothing for most natural questions. No alias expansion yet.
 - **`chat_calls.kind` has three values** (`ask`, `answer`, `guard`): the `ask` row is written before the model call, so the daily count and the spend reservation hold even if the call fails.
-- **Not yet pinned to one provider, and zero data retention is not yet required.** Which provider is Nate's decision (section 9, raised 3); the notice names Vercel AI Gateway only until then. *Gap.*
-- **On a guard flag the answer is declined straight away**; the "regenerate once with a reminder" step is not built. An empty guard verdict is retried once.
+- **Zero data retention is required on every call; no provider is pinned yet** (the owner chooses from `chat-providers.md`). Until one is pinned the assistant tells readers it is unavailable.
+- **On a guard flag the answer is regenerated once** with a reminder (`config/prompts/chat-reminder.md`), then declined if flagged again. An empty guard verdict is retried once.
+- **Retrieval** is BM25-style scoring in Postgres with name aliases (`config/aliases.json`), 12 hits with two blocks either side, after the model suggests search words (`chat-search-terms.md`). Measured in `chat-eval/`.
 - **Live run** (7 questions, $0.00236): two answers cited correctly; both writing requests were refused by the model; one spoiler question was marked held back; one question (why Deluin invites Zei) found nothing, because the passage doesn't use the word "invite"; one commentary answer was a guard false positive. Details in `chat-spend.md`.
 - **Migration `0006_chat.sql` is not applied.** Until the maintainer applies it and the preview has a database URL, the preview shows "not available on this deployment".
+
+## 11. The owner's decisions (2026-10-07)
+
+- **Principle 6:** accepted for "ask about the book" only, on these conditions: one pinned
+  provider, zero data retention required, both hops named in the notice, no message text
+  stored or logged. Built: ZDR on every call; the pin (`CHAT.provider`) and the assistant
+  stays unavailable until it is set; the notice reads "Your messages go to Vercel AI Gateway,
+  then ‹provider›"; the routes log only an error's type, never the error object (a database
+  error carries the question as a parameter); `test:chat` checks all four.
+- **Model** gpt-oss-120b, **guard** gpt-oss-safeguard-20b: both approved on the allowlist.
+- **Provider:** listed in `chat-providers.md` with a recommendation (Groq). Not pinned until
+  the owner answers.
+- **Guard:** kept. "Regenerate once with a reminder" built; its token limit is 1,500.
+- **Storage:** device only. Screen 9d says "kept on this device only". The doubled
+  "0 left today" on 9c is fixed (`check:ui` checks it appears once).
+- **Limits:** 30 a day per person, refusals count, $2 a day in total. No export. No
+  embeddings.
+- **Everything else in section 9:** as proposed, or deferred until planning threads exist.
+- **Migration 0006:** applied by the owner after a dry run. It changed once since slice 1:
+  `chat_calls.kind` also allows `'search'`.
+- **Before merging:** the 50-question check (`chat-eval/README.md`).

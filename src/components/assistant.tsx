@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { sdk } from '@farcaster/miniapp-sdk';
+import { PrivateTextField } from './private-text-field';
 import type { AskResult, Quote } from '~/lib/chat/ask';
 import type { Part } from '~/lib/chat/sanitize';
 import {
@@ -18,7 +19,7 @@ import {
 type Status =
   | { kind: 'loading' }
   | { kind: 'signed-out'; inApp: boolean }
-  | { kind: 'ready'; available: boolean; model: string; host: string; perDay: number; left: number };
+  | { kind: 'ready'; available: boolean; reason?: string; model: string; host: string; provider: string | null; perDay: number; left: number };
 
 async function authedFetch(url: string, init?: RequestInit): Promise<Response> {
   const inApp = await sdk.isInMiniApp().catch(() => false);
@@ -44,12 +45,12 @@ function DraftTag() {
 }
 
 /** Screen 2: before the first message, until "don't show this again" is ticked. */
-function Notice({ host, model, onClose }: { host: string; model: string; onClose: (go: boolean) => void }) {
+function Notice({ host, provider, model, onClose }: { host: string; provider: string | null; model: string; onClose: (go: boolean) => void }) {
   const [dontShow, setDontShow] = useState(false);
   const items = [
     ['It helps you read', 'Ask about the book. Answers point to the passages they rest on, with chapter and ¶, and show the book’s own words.'],
     ['It won’t write for you', 'No dialogue, narration or description. It gives context and commentary only.'],
-    [`Your messages go to ${host}`, `An outside service that runs ${model}, an open-weights model, for this app. It answers your question; this app keeps no copy.`],
+    [`Your messages go to ${host}, then ${provider}`, `Two outside services: ${host} passes each message to ${provider}, which runs ${model}, an open-weights model. Neither keeps your messages, and this app keeps no copy.`],
     ['Your questions stay on this device', 'Questions about the book are kept here only and never published. Another device won’t have them.'],
   ];
   return (
@@ -254,7 +255,10 @@ function ThreadView({ id, status, refresh }: { id: string; status: Extract<Statu
   useEffect(() => {
     end.current?.scrollIntoView({ block: 'end' });
   }, [t?.messages.length]);
+  const last = t?.messages[t.messages.length - 1];
   const reachedLimit = status.left <= 0;
+  // The limit reply already says it (9c); don't say it twice under it.
+  const limitShown = last?.role === 'assistant' && last.result.state === 'limit';
 
   const send = useCallback(
     async (question: string, limit?: number) => {
@@ -327,10 +331,12 @@ function ThreadView({ id, status, refresh }: { id: string; status: Extract<Statu
         <div ref={end} />
       </div>
       {reachedLimit ? (
-        <div className="as-reply as-stop">
-          <p className="as-label">0 of {status.perDay} left today</p>
-          <p>They come back at 00:00 UTC, in {untilUtcMidnight()}. Your threads are still here.</p>
-        </div>
+        !limitShown && (
+          <div className="as-reply as-stop">
+            <p className="as-label">0 of {status.perDay} left today</p>
+            <p>They come back at 00:00 UTC, in {untilUtcMidnight()}. Your threads are still here.</p>
+          </div>
+        )
       ) : (
         <form
           className="as-composer"
@@ -339,10 +345,7 @@ function ThreadView({ id, status, refresh }: { id: string; status: Extract<Statu
             void send(q);
           }}
         >
-          <label className="as-visually-hidden" htmlFor="as-q">
-            Ask about the book
-          </label>
-          <textarea id="as-q" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Ask about the book" rows={2} maxLength={600} disabled={busy} />
+          <PrivateTextField id="as-q" label="Ask about the book" value={q} onChange={setQ} placeholder="Ask about the book" rows={2} maxLength={600} disabled={busy} />
           <button type="submit" className="as-send" disabled={busy || !q.trim()} aria-label="Send">
             ↑
           </button>
@@ -350,13 +353,13 @@ function ThreadView({ id, status, refresh }: { id: string; status: Extract<Statu
       )}
       <p className="as-foot">
         <span>
-          {status.model} · open weights · via {status.host}
+          {status.model} · open weights · via {status.host}{status.provider ? ` → ${status.provider}` : ''}
         </span>
         <span>
           {status.left} of {status.perDay} left today
         </span>
       </p>
-      {notice && <Notice host={status.host} model={status.model} onClose={notice} />}
+      {notice && <Notice host={status.host} provider={status.provider} model={status.model} onClose={notice} />}
     </section>
   );
 }
@@ -401,7 +404,7 @@ export function Assistant() {
       const inApp = await sdk.isInMiniApp().catch(() => false);
       return setStatus({ kind: 'signed-out', inApp });
     }
-    const s = (await res.json()) as { available: boolean; model: string; host: string; perDay: number; left: number };
+    const s = (await res.json()) as { available: boolean; reason?: string; model: string; host: string; provider: string | null; perDay: number; left: number };
     setStatus({ kind: 'ready', ...s });
   }, []);
 

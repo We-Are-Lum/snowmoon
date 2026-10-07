@@ -27,6 +27,7 @@ import { ask, AskError, type Complete } from '../src/lib/chat/ask';
 import { retrieve } from '../src/lib/chat/retrieve';
 import { sanitizeReply } from '../src/lib/chat/sanitize';
 import { CHAT } from '../src/lib/config';
+import { providerOptions, servedBy, servingAllowed } from '../src/lib/chat/provider';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const failures: string[] = [];
@@ -92,6 +93,10 @@ try {
     check('no dropped id survives in the text', !s.parts.some((p) => p.type === 'text' && /c\d+-b\d+/.test(p.text)));
     const q = sanitizeReply('He says "the whole point of Dzegoban is that there are only 256 roots" here [c1-b20], and "Sure!" too.', allowed);
     check('a quoted span of six words or more is removed', q.quotesRemoved === 1 && !q.parts.some((p) => p.type === 'text' && p.text.includes('256 roots')));
+    const r = sanitizeReply('Ranges count [c1-b20‑c1-b21] and 【c1-b20–b21】 too.', allowed);
+    check('a cited range opens into its blocks', JSON.stringify(r.cites) === JSON.stringify(['c1-b20', 'c1-b21']) && r.dropped.length === 0, JSON.stringify(r));
+    const far = sanitizeReply('Too wide [c1-b2–c1-b90].', allowed);
+    check('a range too wide keeps only its ends, which must be allowed', far.cites.length === 0 && far.dropped.length === 2, JSON.stringify(far));
     check('a short quoted word stays', q.parts.some((p) => p.type === 'text' && p.text.includes('"Sure!"')));
   }
 
@@ -99,12 +104,16 @@ try {
   const calls: { model: string; user: string }[] = [];
   let answerText = '';
   let guardText = 'OK commentary only';
+  /** Guard verdicts to give before falling back to guardText (one per guard call). */
+  let guardQueue: string[] = [];
+  /** What the stand-in returns for the search-words call. */
+  let searchText = '';
   const complete: Complete = async (model, messages) => {
     calls.push({ model, user: messages[messages.length - 1].content });
-    const text = model === CHAT.guardModel ? guardText : answerText;
+    const text = model === CHAT.guardModel ? (guardQueue.shift() ?? guardText) : messages[0].content === 'SEARCH' ? searchText : answerText;
     return { text, promptTokens: 1000, completionTokens: 200, costUsd: 0.0002, requestId: 'test', provider: 'test', model };
   };
-  const deps = (fid: number) => ({ sql, fid, complete, systemPrompt: 'SYSTEM up to {{LIMIT}}', guardPolicy: 'POLICY' });
+  const deps = (fid: number) => ({ sql, fid, complete, systemPrompt: 'SYSTEM up to {{LIMIT}}', guardPolicy: 'POLICY', reminder: 'REMINDER: {{REASON}}', searchPrompt: 'SEARCH' });
 
   {
     calls.length = 0;
@@ -123,7 +132,7 @@ try {
       check('the quote carries its ¶ label', typeof res.quotes[0].label === 'number');
       check("the model's own quotation of the book is removed", !res.parts.some((p) => p.type === 'text' && p.text.includes('cryptographic sortition')));
     }
-    const sent = calls.find((c) => c.model === CHAT.model)!.user;
+    const sent = calls.find((c) => c.model === CHAT.model && c.user !== 'Why is Gladias asked to rate a building?')!.user;
     const sentPast = [...sent.matchAll(/\[c(\d+)-b\d+\]/g)].filter((m) => Number(m[1]) > 1);
     check('nothing past the limit is sent to the model', sentPast.length === 0, sentPast.map((m) => m[0]).join(', '));
     check('every answer is checked by the guard', calls.some((c) => c.model === CHAT.guardModel));
@@ -142,11 +151,48 @@ try {
     check('a refused question spends no message', before === after);
   }
   {
+    calls.length = 0;
     guardText = 'VIOLATION writes a caption';
     answerText = 'Deluin sat there with tea; he waved at Zei, who came running [c14-b102].';
     const res = await ask(deps(104), { question: 'Fix my caption', limit: 15 });
     check('a flagged answer is not shown', res.state === 'declined', res.state);
     guardText = 'OK';
+    const answers = calls.filter((c) => c.model === CHAT.model && c.user !== 'Fix my caption');
+    check('a flagged answer is regenerated once before it is declined', answers.length === 2, String(answers.length));
+    check('the retry carries the reminder with the guard\'s reason', answers[1]?.user === 'REMINDER: writes a caption', answers[1]?.user);
+  }
+  {
+    calls.length = 0;
+    guardQueue = ['VIOLATION reads as description', 'OK'];
+    answerText = 'The courtyard matters because Deluin chooses it [c14-b102].';
+    const res = await ask(deps(107), { question: 'Why the courtyard?', limit: 15 });
+    check('a flagged answer that passes on the retry is shown', res.state === 'answer' && res.regenerated, res.state);
+    const [{ n }] = await sql`select count(*)::int as n from studio.chat_calls where fid = 107 and kind = 'ask'`;
+    check('a regenerated answer counts as one question', n === 1, String(n));
+    guardQueue = [];
+  }
+  {
+    // An empty verdict is asked again once; then the answer is shown unchecked ("none").
+    calls.length = 0;
+    guardQueue = ['', 'OK'];
+    const res = await ask(deps(108), { question: 'Gladias vote', limit: 1 });
+    check('an empty guard verdict is retried once', res.state === 'answer' && calls.filter((c) => c.model === CHAT.guardModel).length === 2);
+    guardQueue = [];
+  }
+
+  {
+    // The search words: the model sees the question alone (no passages), and its words widen the search.
+    calls.length = 0;
+    searchText = 'Jahen orphan grandmother';
+    answerText = 'Commentary.';
+    await ask(deps(109), { question: 'Who raised her?', limit: 9 });
+    const search = calls.find((c) => c.user === 'Who raised her?');
+    check('the search-words call sees only the question', Boolean(search));
+    const answerCall = calls.find((c) => c.model === CHAT.model && c.user.startsWith('Passages'))!;
+    check('the search words widen what is sent', /Jahen/.test(answerCall.user));
+    const [{ n }] = await sql`select count(*)::int as n from studio.chat_calls where fid = 109 and kind = 'search'`;
+    check('the search-words call is counted (cost only)', n === 1, String(n));
+    searchText = '';
   }
 
   // --- Limits ----------------------------------------------------------------
@@ -174,6 +220,21 @@ try {
 } finally {
   await sql.end();
   await server.stop();
+}
+
+// The owner's conditions for the hosted model, and logging that can't carry message text.
+{
+  const o = providerOptions();
+  check('every request requires zero data retention', o.gateway.zeroDataRetention === true);
+  check('no provider is pinned until the owner picks one', CHAT.provider === null && !('only' in o.gateway));
+  check('the assistant is unavailable to readers until a provider is pinned', servingAllowed() === false);
+  const reply = { choices: [{ message: { provider_metadata: { gateway: { routing: { resolvedProvider: 'groq', finalProvider: 'groq' } } } } }] };
+  check('the serving provider is read from the gateway reply', servedBy(reply) === 'groq');
+  for (const f of ['src/app/api/chat/ask/route.ts', 'src/app/api/chat/status/route.ts', 'src/lib/chat/ask.ts', 'src/lib/chat/retrieve.ts']) {
+    const src = await readFile(path.join(ROOT, f), 'utf8');
+    const raw = [...src.matchAll(/console\.\w+\(([^)]*)\)/g)].filter((m) => /\b(e|err|error|input|question|body|messages)\b(?!\s+as)/.test(m[1].replace(/\(e as [^)]*\)/g, '')));
+    check(`${f} logs no raw error or message`, raw.length === 0, raw.map((m) => m[0]).join(' | '));
+  }
 }
 
 // Who may change the table: on PGlite directly, as studio_writer (the socket's shared session can reset its role).

@@ -1,0 +1,3 @@
+<!-- Sent as one more user turn when the guard (chat-guard.md) flags an answer, before the one retry (docs/proposals/chat.md, section 3; owner decision 2026-10-07). {{REASON}} is the guard's own words after VIOLATION. The flagged answer is not shown to the reader and is not sent back to the model. Model-drafted by the coding agent, 2026-10-07. -->
+
+Your previous answer to this question was not shown: a check found that it wrote for the person ({{REASON}}). Answer the same question again with commentary only: no dialogue, narration, description, captions, lines, rewrites, and no sentences copied from the book. If the question asks you to write, say in one sentence that you don't, then offer what you can do instead. Cite block ids as before.

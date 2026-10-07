@@ -1,4 +1,5 @@
 import type postgres from 'postgres';
+import aliases from '../../../config/aliases.json';
 import { blockFacts } from '../reading';
 import { CHAT, WORK_ID } from '../config';
 import { blockIdOk, chapterOf } from './sanitize';
@@ -24,28 +25,90 @@ export interface Retrieved {
 
 const SEARCH_KINDS = ['paragraph', 'quote', 'screen'];
 
-/** "Why does Deluin invite Zei?" -> 'deluin' | 'invit' | 'zei' (any word may match; rank decides). */
-const orQuery = `to_tsquery('english', coalesce(nullif(array_to_string(tsvector_to_array(to_tsvector('english', $1)), ' | '), ''), 'nomatch_nomatch'))`;
+/**
+ * BM25-style scoring in Postgres. Each word of the question (stemmed) counts by how rare
+ * it is in the book, so "Jahen" or "hedge" outweighs "Zei", who is in 400 blocks; shorter
+ * blocks score a little higher for the same words. Ranks only: plain full-text ranking
+ * (ts_rank_cd) ignores rarity, and put the answering block in front of the model for 18
+ * of 50 test questions (docs/proposals/chat-eval/).
+ * $1 question, $2 work, $4 block kinds.
+ */
+/** The old ranking (ts_rank_cd over an OR of the question's words), kept for comparison. */
+const RANKED = `
+with scored as (
+  select chapter, idx, kind, content, ts_rank_cd(search, q) as score
+    from studio.text_blocks,
+         to_tsquery('english', coalesce(nullif(array_to_string(tsvector_to_array(to_tsvector('english', $1)), ' | '), ''), 'nomatch_nomatch')) q
+   where work_id = $2 and kind = any($4) and search @@ q
+)`;
 
-export async function retrieve(sql: postgres.Sql, question: string, limit: number, attached: string[] = []): Promise<Retrieved> {
+const SCORED = `
+with terms as (
+  select distinct quote_literal(lex)::tsquery as q
+    from unnest(tsvector_to_array(to_tsvector('english', $1))) as lex
+), stats as (
+  select count(*)::float8 as n, avg(length(search))::float8 as avglen
+    from studio.text_blocks where work_id = $2 and kind = any($4)
+), idf as (
+  select t.q, ln(1 + (s.n - c.n + 0.5) / (c.n + 0.5)) as w
+    from terms t cross join stats s
+    cross join lateral (
+      select count(*)::float8 as n from studio.text_blocks b where b.work_id = $2 and b.kind = any($4) and b.search @@ t.q
+    ) c
+   where c.n > 0
+), cand as (
+  select b.chapter, b.idx, b.kind, b.content, b.search
+    from studio.text_blocks b
+   where b.work_id = $2 and b.kind = any($4)
+     and b.search @@ (select coalesce(string_agg(q::text, ' | ')::tsquery, 'nomatch_nomatch'::tsquery) from idf)
+), scored as (
+  select c.chapter, c.idx, c.kind, c.content,
+         sum(i.w * 2.2 / (1 + 1.2 * (0.25 + 0.75 * greatest(length(c.search), 1) / (select avglen from stats)))) as score
+    from cand c join idf i on c.search @@ i.q
+   group by c.chapter, c.idx, c.kind, c.content
+)`;
+
+/**
+ * The question plus the other forms of any name it uses (config/aliases.json), so
+ * "Bai" also searches "Jahen" and "Veridian" also searches "Veridia".
+ */
+export function expandAliases(question: string): string {
+  const extra = new Set<string>();
+  for (const g of aliases.groups) {
+    const hit = g.match.some((form) => new RegExp(`(^|[^\\p{L}])${form.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}(?=$|[^\\p{L}])`, form[0] === form[0].toLowerCase() ? 'iu' : 'u').test(question));
+    if (hit) for (const w of g.add) extra.add(w);
+  }
+  return extra.size ? `${question} ${[...extra].join(' ')}` : question;
+}
+
+/** How many hits, and how many blocks around each hit go with it. Tuned on the 50 questions. */
+export interface RetrieveOptions {
+  hits?: number;
+  before?: number;
+  after?: number;
+  scoring?: 'bm25' | 'rank';
+}
+
+export async function retrieve(
+  sql: postgres.Sql,
+  rawQuestion: string,
+  limit: number,
+  attached: string[] = [],
+  opts: RetrieveOptions = {},
+): Promise<Retrieved> {
+  const { hits: nHits = CHAT.passages, before = CHAT.neighbours.before, after = CHAT.neighbours.after, scoring = 'bm25' } = opts;
   if (!Number.isInteger(limit) || limit < 1) throw new Error('bad chapter limit');
-  const hits = (await sql.unsafe(
-    `select chapter, idx, kind, content, ts_rank_cd(search, q) as rank
-       from studio.text_blocks, ${orQuery} q
-      where work_id = $2 and chapter <= $3 and kind = any($4) and search @@ q
-      order by rank desc, chapter, idx
-      limit $5`,
-    [question, WORK_ID, limit, SEARCH_KINDS, CHAT.passages],
-  )) as unknown as (Passage & { rank: number })[];
+  const question = expandAliases(rawQuestion);
+  const base = scoring === 'bm25' ? SCORED : RANKED;
+  const hits = (await sql.unsafe(`${base} select chapter, idx, kind, content, score as rank from scored where chapter <= $3 order by score desc, chapter, idx limit $5`, [
+    question, WORK_ID, limit, SEARCH_KINDS, nHits,
+  ])) as unknown as (Passage & { rank: number })[];
 
-  // The same query past the limit: only its best rank is used, never its text.
-  const later = (await sql.unsafe(
-    `select max(ts_rank_cd(search, q)) as rank
-       from studio.text_blocks, ${orQuery} q
-      where work_id = $2 and chapter > $3 and kind = any($4) and search @@ q`,
-    [question, WORK_ID, limit, SEARCH_KINDS],
-  )) as unknown as { rank: number | null }[];
-  const best = hits[0]?.rank ?? 0;
+  // The same search past the limit: only its best score is used, never its text.
+  const later = (await sql.unsafe(`${base} select max(score) as rank from scored where chapter > $3`, [question, WORK_ID, limit, SEARCH_KINDS])) as unknown as {
+    rank: number | null;
+  }[];
+  const best = Number(hits[0]?.rank ?? 0);
   const laterBest = Number(later[0]?.rank ?? 0);
   const heldBack = laterBest > 0 && laterBest > best * 1.5;
 
@@ -56,12 +119,10 @@ export async function retrieve(sql: postgres.Sql, question: string, limit: numbe
     const ch = chapterOf(id)!;
     if (ch > limit) throw new Error(`${id} is past chapter ${limit}`);
     const idx = Number(id.split('-b')[1]);
-    wanted.set(id, { chapter: ch, idx });
-    if (idx > 0) wanted.set(`c${ch}-b${idx - 1}`, { chapter: ch, idx: idx - 1 });
+    for (let k = Math.max(0, idx - Math.max(1, before)); k <= idx + Math.max(1, after); k++) wanted.set(`c${ch}-b${k}`, { chapter: ch, idx: k });
   }
   for (const h of hits) {
-    wanted.set(`c${h.chapter}-b${h.idx}`, h);
-    if (h.idx > 0) wanted.set(`c${h.chapter}-b${h.idx - 1}`, { chapter: h.chapter, idx: h.idx - 1 });
+    for (let k = Math.max(0, h.idx - before); k <= h.idx + after; k++) wanted.set(`c${h.chapter}-b${k}`, { chapter: h.chapter, idx: k });
   }
   const passages = await blocksById(sql, [...wanted.keys()], limit);
   // Readable text only (no headings or breaks), in book order.

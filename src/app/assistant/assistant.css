@@ -84,9 +84,11 @@
 
 /* The composer and its footer */
 .as-composer {
-  position: sticky; bottom: 0; display: flex; align-items: flex-end; gap: 8px;
+  position: sticky; bottom: 0; display: flex; align-items: flex-start; gap: 8px;
   padding: 10px 0 8px; background: var(--paper); border-top: 1px dashed var(--rule);
 }
+.private-field { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+.private-line { margin: 0; font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
 .as-composer textarea {
   flex: 1; min-height: var(--tap); padding: 10px 12px; resize: none; border: 1px solid var(--rule); border-radius: var(--radius);
   background: var(--card); color: var(--ink); font: inherit; font-size: 18px; line-height: 1.35;
@@ -107,7 +109,7 @@
 .as-check { display: flex; align-items: center; gap: 10px; min-height: var(--tap); margin-top: var(--space-3); font-size: 17px; }
 /* A 44px target drawn as a 22px box: rings of box-shadow, so the tap area is the full square. */
 .as-check input {
-  appearance: none; flex: none; width: var(--tap); height: var(--tap); margin: -11px -4px -11px -11px; border: 0; border-radius: var(--radius);
+  appearance: none; flex: none; width: var(--tap); height: var(--tap); margin: -11px -4px -11px -11px; border: 0; border-radius: 0;
   background: transparent; cursor: pointer; box-shadow: inset 0 0 0 11px var(--card), inset 0 0 0 13px var(--ink);
 }
 .as-check input:checked { box-shadow: inset 0 0 0 11px var(--card), inset 0 0 0 13px var(--ink), inset 0 0 0 16px var(--card), inset 0 0 0 22px var(--ink); }

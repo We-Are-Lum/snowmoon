@@ -22,9 +22,22 @@ export interface Sanitized {
   quotesRemoved: number;
 }
 
-const CITE = /[[【(]\s*(c\d+-b\d+(?:\s*[,;]\s*c\d+-b\d+)*)\s*[\]】)]/g;
+/** One id, or a range within a chapter: c15-b84–c15-b85, c15-b84-b85, c15-b84–85 (any dash). */
+const ITEM = String.raw`c\d+-b\d+(?:\s*[-‐‑‒–—]\s*(?:c\d+-)?b?\d+)?`;
+const CITE = new RegExp(String.raw`[[【(]\s*(${ITEM}(?:\s*[,;]\s*${ITEM})*)\s*[\]】)]`, 'g');
+/** A range is opened into its blocks, up to this many. */
+const MAX_RANGE = 6;
 const QUOTED = /["“”]([^"“”\n]{1,600})["“”]/g;
 const MIN_QUOTE_WORDS = 6;
+
+/** "c15-b84–c15-b85" → ["c15-b84", "c15-b85"]; a single id stays as it is; a range across chapters or too long keeps only its ends. */
+function openRange(item: string): string[] {
+  const m = item.match(/^c(\d+)-b(\d+)\s*[-‐‑‒–—]\s*(?:c(\d+)-)?b?(\d+)$/);
+  if (!m) return [item.trim()];
+  const [ch, from, ch2, to] = [Number(m[1]), Number(m[2]), m[3] ? Number(m[3]) : Number(m[1]), Number(m[4])];
+  if (ch2 !== ch || to < from || to - from >= MAX_RANGE) return [`c${ch}-b${from}`, `c${ch2}-b${to}`];
+  return Array.from({ length: to - from + 1 }, (_, k) => `c${ch}-b${from + k}`);
+}
 
 export function blockIdOk(id: string): boolean {
   return /^c\d{1,2}-b\d{1,4}$/.test(id);
@@ -47,7 +60,7 @@ export function sanitizeReply(raw: string, allowed: ReadonlySet<string>): Saniti
   for (const m of text.matchAll(CITE)) {
     const before = text.slice(at, m.index);
     if (before) parts.push({ type: 'text', text: before });
-    for (const id of m[1].split(/\s*[,;]\s*/)) {
+    for (const id of m[1].split(/\s*[,;]\s*/).flatMap(openRange)) {
       if (allowed.has(id) && blockIdOk(id)) {
         parts.push({ type: 'cite', id });
         if (!cites.includes(id)) cites.push(id);

@@ -45,7 +45,7 @@ export async function reserve(sql: postgres.Sql, fid: number, worstUsd: number):
 
 export interface CallRecord {
   fid: number;
-  kind: 'answer' | 'guard';
+  kind: 'search' | 'answer' | 'guard';
   model: string;
   provider: string | null;
   requestId: string | null;

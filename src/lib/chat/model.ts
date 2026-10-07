@@ -2,6 +2,9 @@ import 'server-only';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { CHAT } from '../config';
+import { providerOptions, servedBy, servedByPinned } from './provider';
+
+export { servingAllowed } from './provider';
 
 /**
  * Calls to the hosted open-weights models through Vercel AI Gateway (CHAT.host).
@@ -40,7 +43,7 @@ export async function complete(
   const res = await fetch(CHAT.endpoint, {
     method: 'POST',
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model, messages, max_tokens: opts.maxTokens, temperature: opts.temperature }),
+    body: JSON.stringify({ model, messages, max_tokens: opts.maxTokens, temperature: opts.temperature, providerOptions: providerOptions() }),
   });
   const j = (await res.json().catch(() => ({}))) as {
     id?: string;
@@ -50,6 +53,8 @@ export async function complete(
     usage?: { prompt_tokens?: number; completion_tokens?: number; cost?: number };
   };
   if (!res.ok) throw new ModelUnavailable(`gateway ${res.status}`);
+  const provider = servedBy(j);
+  if (!servedByPinned(provider)) throw new ModelUnavailable(`served by ${provider}, not the chosen provider`);
   const promptTokens = j.usage?.prompt_tokens ?? 0;
   const completionTokens = j.usage?.completion_tokens ?? 0;
   const price = CHAT.prices[model];
@@ -60,7 +65,7 @@ export async function complete(
     // The gateway's own figure when it gives one; otherwise tokens × the published price.
     costUsd: typeof j.usage?.cost === 'number' ? j.usage.cost : promptTokens * price.input + completionTokens * price.output,
     requestId: j.id ?? res.headers.get('x-vercel-id'),
-    provider: j.provider ?? null,
+    provider,
     model: j.model ?? model,
   };
 }

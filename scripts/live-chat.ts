@@ -15,6 +15,7 @@ import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
 import postgres from 'postgres';
 import { ask, type Complete } from '../src/lib/chat/ask';
 import { CHAT } from '../src/lib/config';
+import { providerOptions, servedBy } from '../src/lib/chat/provider';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const token = process.env.AI_GATEWAY_API_KEY || process.env.VERCEL_OIDC_TOKEN;
@@ -37,16 +38,16 @@ const complete: Complete = async (model, messages, opts) => {
   const res = await fetch(CHAT.endpoint, {
     method: 'POST',
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model, messages, max_tokens: opts.maxTokens, temperature: opts.temperature }),
+    body: JSON.stringify({ model, messages, max_tokens: opts.maxTokens, temperature: opts.temperature, providerOptions: providerOptions() }),
   });
   const j = (await res.json()) as { id?: string; model?: string; provider?: string; choices?: { message?: { content?: string } }[]; usage?: { prompt_tokens?: number; completion_tokens?: number; cost?: number } };
   if (!res.ok) throw new Error(`gateway ${res.status} ${JSON.stringify(j).slice(0, 200)}`);
   const p = CHAT.prices[model];
   const pt = j.usage?.prompt_tokens ?? 0;
   const ct = j.usage?.completion_tokens ?? 0;
-  return { text: j.choices?.[0]?.message?.content ?? '', promptTokens: pt, completionTokens: ct, costUsd: typeof j.usage?.cost === 'number' ? j.usage.cost : pt * p.input + ct * p.output, requestId: j.id ?? null, provider: j.provider ?? null, model: j.model ?? model };
+  return { text: j.choices?.[0]?.message?.content ?? '', promptTokens: pt, completionTokens: ct, costUsd: typeof j.usage?.cost === 'number' ? j.usage.cost : pt * p.input + ct * p.output, requestId: j.id ?? null, provider: servedBy(j), model: j.model ?? model };
 };
-const deps = { sql, fid: 6786, complete, systemPrompt: await prompt('chat-ask.md'), guardPolicy: await prompt('chat-guard.md') };
+const deps = { sql, fid: 6786, complete, systemPrompt: await prompt('chat-ask.md'), guardPolicy: await prompt('chat-guard.md'), reminder: await prompt('chat-reminder.md') };
 
 const cases = [
   { question: 'Why is Gladias asked to rate a building he has never been inside?', limit: 3 },
