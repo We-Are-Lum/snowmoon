@@ -669,3 +669,5 @@ figure.figure .device-view svg { min-width: var(--fig-min, 0); }
   background: repeating-linear-gradient(135deg, transparent 0 7px, color-mix(in srgb, var(--ink) 7%, transparent) 7px 8px);
 }
 .ae-planned-tag { font-family: var(--label); font-size: var(--text-label); color: var(--muted); padding-top: 3px; white-space: nowrap; text-transform: uppercase; }
+/* A source figure the Minpentai sandbox can play (c4-b5). */
+.play-figure { display: inline-flex; align-items: center; min-height: var(--tap); font-family: var(--label); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; }

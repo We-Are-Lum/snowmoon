@@ -26,6 +26,8 @@ const PAPER = 'rgb(244, 242, 237)';
 const ACCENT: Record<string, string> = { veridia: 'rgb(46, 90, 58)', dzego: 'rgb(179, 48, 110)' };
 const INK = 'rgb(29, 29, 27)';
 const IN_WORLD = '.device-view, .dz-card, svg, [data-template]';
+/** Tutorial screens at /minpentai (src/lib/minpentai/tutorial.ts). */
+const MINPENTAI_LESSONS = 11;
 
 const failures: string[] = [];
 const fail = (msg: string) => failures.push(msg);
@@ -167,6 +169,15 @@ try {
     await open(page, '/cards');
     await checkFloors(page, '/cards', scheme);
 
+    // Minpentai: every tutorial screen and every mode, at phone width.
+    for (const q of [...Array.from({ length: MINPENTAI_LESSONS }, (_, i) => `lesson=${i + 1}`), 'mode=practice', 'mode=play', 'mode=free']) {
+      await open(page, `/minpentai?${q}`);
+      await page.waitForTimeout(150);
+      await checkFloors(page, `/minpentai?${q}`, scheme);
+      const wide = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1);
+      if (wide) fail(`/minpentai?${q} (${scheme}): the page scrolls sideways at 390px`);
+    }
+
     for (let n = 1; n <= 32; n++) {
       await open(page, `/chapter/${n}`);
       await checkFloors(page, `/chapter/${n}`, scheme);
@@ -195,4 +206,4 @@ if (failures.length) {
   console.error(`\nUI CHECK FAILED (${failures.length}):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`ui check passed: ${BASE}, 35 pages × light and dark`);
+console.log(`ui check passed: ${BASE}, ${35 + MINPENTAI_LESSONS + 3} pages × light and dark`);
