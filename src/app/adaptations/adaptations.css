@@ -17,10 +17,10 @@
   text-decoration: none;
 }
 .seed-title { font-weight: 500; }
-.seed-line { font-size: 18px; line-height: 1.45; }
+.seed-line { font-size: var(--text-small); line-height: 1.45; }
 .seed-meta {
   font-family: var(--label);
-  font-size: 12px;
+  font-size: var(--text-label);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   color: var(--muted);
@@ -32,7 +32,7 @@
   min-height: var(--tap);
   cursor: pointer;
   font-family: var(--label);
-  font-size: 12px;
+  font-size: var(--text-label);
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
@@ -40,9 +40,9 @@
 .seed-video { display: block; width: 100%; height: auto; background: var(--quote-bg); }
 
 /* Rendered markdown from adaptations/. */
-.doc { font-size: 18px; line-height: 1.5; }
+.doc { font-size: var(--text-small); line-height: 1.5; }
 .doc h1 { font-size: 30px; }
-.doc h2, .doc-part { font-size: 24px; font-weight: 500; margin-top: 32px; }
+.doc h2, .doc-part { font-size: var(--text-h2); font-weight: 500; margin-top: 32px; }
 .doc h3 { font-size: 20px; font-weight: 500; margin-top: 24px; }
 .doc h4 { font-size: 18px; font-weight: 600; margin-top: 20px; }
 .doc blockquote { margin: 16px 0; padding: 8px 16px; border-left: 3px solid var(--ink); background: var(--quote-bg); }

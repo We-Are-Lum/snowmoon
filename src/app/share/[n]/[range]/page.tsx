@@ -3,6 +3,7 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { APP_NAME, appUrl } from '~/lib/config';
 import { quoteQuery, resolveQuote } from '~/lib/quote';
+import { PAPER } from '~/lib/tokens';
 
 /**
  * The page a quote card links to. Its metadata makes the card the cast's
@@ -32,7 +33,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
     imageUrl: card,
     button: {
       title: 'Read in Snowmoon',
-      action: { type: 'launch_frame', name: APP_NAME, url: target, splashImageUrl: `${appUrl()}/splash.png`, splashBackgroundColor: '#F4F2ED' },
+      action: { type: 'launch_frame', name: APP_NAME, url: target, splashImageUrl: `${appUrl()}/splash.png`, splashBackgroundColor: PAPER },
     },
   });
   const title = `Snowmoon, Chapter ${quote.chapter} ${quote.label}`;
