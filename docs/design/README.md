@@ -1,18 +1,38 @@
 # Design direction
 
-Direction for the reader and the living edition, produced as two boards in a
-design tool. **Direction, not spec**: the build follows it where it fits the
-book and the data, and the brief (`../SNOWMOON-BUILD-BRIEF.md`, section 4c)
-records what was adopted.
+Direction for the reader, the living edition and the features around it,
+produced as boards in a design tool (Claude Design). **Direction, not spec**:
+the build follows it where it fits the book and the data, and the brief
+(`../SNOWMOON-BUILD-BRIEF.md`, section 4c) records what was adopted. What is
+built, partly built or not built is tracked in `gap-list.md`.
+
+**All wording in the boards is model-drafted.** Anything taken from them ships
+labelled as draft until Nate rewrites it.
+
+## The boards (committed 2026-10-07)
 
 | File | What |
 |------|------|
-| `direction-boards.png` | Veridia, Dzego, the Arctic Empire, and the Minpentai board; app type and colour tokens; data-model flags 1–5 |
-| `living-edition.png` | Chapter 1 as the living edition: scroll view (day one, partly and mostly illustrated, dark) and play view; flags 6–11 |
-| `*.dc.html` | The boards' source. They need the design tool's runtime (`support.js`), which is not part of this repo, so view the PNGs instead |
+| `direction-boards.dc.html` | Revision 2. Veridia, Dzego, the Arctic Empire and the Minpentai board (1a–1d); app type and colour tokens; data-model flags 1–5. PNG: `direction-boards.png`. |
+| `living-edition.dc.html` | Chapter 1 as the living edition: scroll view (day one, partly and mostly illustrated, dark) and play view (current block with and without an image); flags 6–11. Updated 2026-10-07 to the newer revision from the Snowmoon.zip export. PNG: `living-edition.png` (older revision). |
+| `first-visit-intro.dc.html` | The first-visit intro: five cards, then the book, with the same five items on the About page. Placeholder copy. |
+| `minpentai-tutorial.dc.html` | The Minpentai tutorial, 12 screens, a working prototype with a real engine. Its copy loads from `minpentai-tutorial-copy.json` (model-drafted). Lists open issues on the board. |
+| `assistant-chat.dc.html` | The assistant chat: ways in, first-time notice, private book questions, planning threads, publish review, "how this was made", states, a flow and the designer's guesses. All wording is draft. |
+| `minpentai-tutorial-copy.json` | The tutorial's wording, loaded by its board. Model-drafted. |
+| `support.js` | The design tool's runtime (generated from its `dc-runtime`), which the boards load. Committed so the boards open from this folder; it is the tool's code, not this project's. |
+
+To view a board, open it from this folder in a browser (the runtime loads
+beside it; the tutorial fetches its JSON, so it needs a local web server such as
+`npx serve docs/design`).
+
+One edit to the export: the living-edition board linked to
+`Direction%20Boards.dc.html`; the link now points to `direction-boards.dc.html`.
+The export's `uploads/` folder (copies of the build brief, the chapter notes
+and the Fifteen Days treatment) was not committed: the repo's own copies are
+the source of truth.
 
 The handles on the boards are invented placeholders, not real accounts. Ratings,
-costs, and images in the mockups are sample data too.
+costs and images in the mockups are sample data too.
 
 ## Adopted so far
 
