@@ -78,7 +78,7 @@ async function checkAssistant(page: Page, scheme: string) {
   await shot(page, '9d-signed-out', scheme);
 
   let left = 30;
-  const replies: { state: string; left?: number }[] = [LIVE.results[0].result, { state: 'held', heldBack: true, left: 1 }, { state: 'limit', left: 0 }];
+  const replies: { state: string; left?: number; heldBack?: boolean }[] = [LIVE.results[0].result, { state: 'held', heldBack: true, left: 1 }, { state: 'limit', left: 0 }];
   await page.route('**/api/chat/status', (r) =>
     r.fulfill({ json: { available: true, model: 'gpt-oss-120b', host: 'Vercel AI Gateway', perDay: 30, left } }),
   );
