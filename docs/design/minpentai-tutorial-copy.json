@@ -1,0 +1,704 @@
+{
+  "status": "model-drafted",
+  "scope": "Snowmoon chapters 2-4 only. No later reveals.",
+  "button": {
+    "running": "TAP TO SKIP",
+    "done": "NEXT"
+  },
+  "screens": [
+    {
+      "id": "hook",
+      "title": "Over a thousand people are watching",
+      "instruction": "Minpentai is a high-school programming game from Dzego. The biggest matches are played in a giant room inside a mountain shaped like a pyramid.",
+      "caption": "Players hand over their devices, pass a drone scan, and play at a console wearing display glasses.",
+      "strip": "STARTING IN 50 TICKS",
+      "lettering": {
+        "text": "MU GU GEI FA",
+        "gloss": "Starting in fifty ticks."
+      },
+      "imageNote": "Image · players at their consoles in display glasses, the crowd rising behind them",
+      "tags": [
+        {
+          "kind": "book",
+          "label": "BOOK · CH 4"
+        }
+      ],
+      "button": {
+        "idle": "BEGIN"
+      },
+      "claims": [
+        {
+          "text": "A high-school programming game, played across Dzego",
+          "src": "book",
+          "ids": [
+            "c4-b79"
+          ]
+        },
+        {
+          "text": "A giant room inside a pyramid-shaped mountain, over a thousand people",
+          "src": "book",
+          "ids": [
+            "c4-b78",
+            "c4-b79"
+          ]
+        },
+        {
+          "text": "Devices handed over; drone scan; console and display glasses",
+          "src": "book",
+          "ids": [
+            "c4-b77",
+            "c4-b81",
+            "c4-b82"
+          ]
+        },
+        {
+          "text": "Countdown: MU GU GEI FA, starting in fifty ticks",
+          "src": "book",
+          "ids": [
+            "c4-b83"
+          ]
+        }
+      ],
+      "spec": {
+        "board": "No board. Image slot for an illustrator reference, with the countdown lettered over it.",
+        "visitor": "Read.",
+        "idle": "Goes to screen 2.",
+        "detects": "Nothing.",
+        "pace": "The strip counts 50 to 0 ticks on arrival over 2 s. Decorative; never blocks the button."
+      }
+    },
+    {
+      "id": "motive",
+      "title": "Your last season",
+      "instruction": "You're a young player in Dzego, in your last year allowed to compete. Win the championship and you go to the nationals.",
+      "caption": "“This year is the last year I can participate, and if I win, go to the nationals.” Zei Leimin, a player in the book.",
+      "strip": "THIS SEASON",
+      "ladder": [
+        {
+          "label": "QUARTER-FINAL",
+          "here": true,
+          "note": "Lose here and you “have to find another career. Or try harder for next year!”"
+        },
+        {
+          "label": "CHAMPIONSHIP",
+          "note": "Prize money for the winner."
+        },
+        {
+          "label": "NATIONALS",
+          "note": "Where the champion goes next."
+        }
+      ],
+      "rival": "IN THE DRAW: A RIVAL WHO HAS BEATEN YOU 3 OF 3",
+      "tags": [
+        {
+          "kind": "book",
+          "label": "BOOK · CH 4"
+        }
+      ],
+      "button": {
+        "idle": "NEXT"
+      },
+      "claims": [
+        {
+          "text": "Last year to participate; winning leads to the nationals",
+          "src": "book",
+          "ids": [
+            "c4-b15"
+          ]
+        },
+        {
+          "text": "Prize money (for a compute box, in Zei's case)",
+          "src": "book",
+          "ids": [
+            "c4-b73"
+          ]
+        },
+        {
+          "text": "Losing a quarter-final: find another career, or try harder next year",
+          "src": "book",
+          "ids": [
+            "c4-b88"
+          ]
+        },
+        {
+          "text": "A rival who had beaten him three out of three times",
+          "src": "book",
+          "ids": [
+            "c4-b72"
+          ]
+        }
+      ],
+      "spec": {
+        "board": "No board. Season ladder drawn in the board slot.",
+        "visitor": "Read.",
+        "idle": "Goes to screen 3.",
+        "detects": "Nothing.",
+        "pace": "Ladder rows fade in top to bottom, 80 ms apart."
+      }
+    },
+    {
+      "id": "alive",
+      "title": "The board moves on its own",
+      "instruction": "Once a match starts, the cells move by themselves. Press play and watch.",
+      "caption": "The board updates in 2×2 blocks, and the blocks shift by one cell every turn.",
+      "strip": "TURN 0 · LIVE 14 · SYMBOLS 0",
+      "zoom": "1×",
+      "controls": "player",
+      "tags": [
+        {
+          "kind": "book",
+          "label": "BOOK · CH 4"
+        }
+      ],
+      "button": {
+        "idle": "PLAY IT",
+        "running": "TAP TO SKIP",
+        "done": "NEXT"
+      },
+      "claims": [
+        {
+          "text": "The battle unfolds by itself between intervention turns",
+          "src": "book",
+          "ids": [
+            "c4-b106–c4-b108",
+            "c4-b110"
+          ]
+        },
+        {
+          "text": "2×2 blocks on a grid that shifts each turn, recovered from the chapter 4 figure",
+          "src": "engine",
+          "ids": [
+            "c4-b5"
+          ]
+        }
+      ],
+      "spec": {
+        "board": "Scripted: 6 lone cells and 2 gliders on the 48 × 32 board, 1×. Fixed grid; only cells move.",
+        "visitor": "Play, pause, step either way.",
+        "idle": "Plays 16 turns, then the button reads NEXT.",
+        "detects": "Turn 16 reached, however it got there.",
+        "pace": "4 turns/s."
+      }
+    },
+    {
+      "id": "rule",
+      "title": "“Rotate one eighty if three”",
+      "instruction": "That is the book's name for the rule. Cells only move inside their 2×2 block, so none are ever created or destroyed.",
+      "caption": "Zoomed in on one cell: it hops to the opposite corner of its block every turn, and is back where it started after four turns.",
+      "strip": "TURN 0 · LIVE 1 · SYMBOLS 0",
+      "zoom": "3×",
+      "controls": "player",
+      "tags": [
+        {
+          "kind": "book",
+          "label": "BOOK · CH 4"
+        }
+      ],
+      "button": {
+        "idle": "SHOW ME",
+        "running": "TAP TO SKIP",
+        "done": "NEXT"
+      },
+      "claims": [
+        {
+          "text": "The rule's name",
+          "src": "book",
+          "ids": [
+            "c4-b7"
+          ]
+        },
+        {
+          "text": "Recovered exactly from the animated figure",
+          "src": "book",
+          "ids": [
+            "c4-b5"
+          ]
+        },
+        {
+          "text": "Live cells never created or destroyed; lone-cell hop",
+          "src": "engine",
+          "ids": []
+        }
+      ],
+      "spec": {
+        "board": "One lone cell, 3×, its current block outlined and the opposite corner marked.",
+        "visitor": "Step forward and back.",
+        "idle": "Steps 4 turns; the block outline follows the shifting grid.",
+        "detects": "4 turns stepped.",
+        "pace": "2 turns/s."
+      }
+    },
+    {
+      "id": "reverse",
+      "title": "Time runs both ways",
+      "instruction": "Step back and you get the true past, not a guess. That is why any wall that can be built can also be destroyed.",
+      "caption": "Outlines show where the glider was at turns 0 and 4.",
+      "strip": "TURN 8 · LIVE 4 · SYMBOLS 0",
+      "zoom": "2×",
+      "controls": "player",
+      "tags": [
+        {
+          "kind": "book",
+          "label": "BOOK · CH 4"
+        }
+      ],
+      "button": {
+        "idle": "SHOW ME",
+        "running": "TAP TO SKIP",
+        "done": "NEXT"
+      },
+      "claims": [
+        {
+          "text": "Any wall that can be created in some way can be destroyed in some way",
+          "src": "book",
+          "ids": [
+            "c4-b9",
+            "c4-b13"
+          ]
+        },
+        {
+          "text": "Every step can be undone exactly",
+          "src": "engine",
+          "ids": []
+        }
+      ],
+      "spec": {
+        "board": "One glider. Arrives at turn 8 with outlines at its turn-0 and turn-4 positions. 2×.",
+        "visitor": "Step back, step forward, scrub.",
+        "idle": "Steps back to turn 0, then forward to turn 8 again.",
+        "detects": "A step back taken by the visitor.",
+        "pace": "6 turns/s."
+      }
+    },
+    {
+      "id": "glider",
+      "title": "Build a glider",
+      "instruction": "Tap the four outlined squares. Your glider will travel two cells every four turns.",
+      "caption": "Placed one cell off, the same shape stays put. The outline marks a working position.",
+      "captionDone": "Glider found, heading up.",
+      "captionOff": "That shape is one cell off, so it stays put.",
+      "strip": "TURN 0 · LIVE 2 · SYMBOLS 0",
+      "zoom": "3×",
+      "controls": "player",
+      "tags": [
+        {
+          "kind": "book",
+          "label": "BOOK · CH 4"
+        }
+      ],
+      "button": {
+        "idle": "PLACE IT FOR ME",
+        "running": "TAP TO SKIP",
+        "done": "NEXT"
+      },
+      "claims": [
+        {
+          "text": "Gliders fly out and do the work",
+          "src": "book",
+          "ids": [
+            "c4-b106"
+          ]
+        },
+        {
+          "text": "The 4-cell shape, 2 cells per 4 turns, one cell off doesn't travel",
+          "src": "engine",
+          "ids": []
+        }
+      ],
+      "spec": {
+        "board": "Empty, 3×, four ghost squares at a working position.",
+        "visitor": "Tap to place or remove cells. A tap anywhere in the ghost area fills the nearest empty ghost square, because cells are 24 px at 3×.",
+        "idle": "Fills the remaining ghost squares 250 ms apart, then plays 8 turns.",
+        "detects": "Engine glider detection, with direction. Built off-position: caption shows captionOff and the ghost stays lit.",
+        "pace": "4 turns/s once placed."
+      }
+    },
+    {
+      "id": "rocks",
+      "title": "Rocks bounce gliders",
+      "instruction": "Grey rocks never move. A glider that hits one bounces off, like light off a mirror.",
+      "caption": "The book has rock formations, and walls that reflect gliders. These rocks are the sandbox's own.",
+      "strip": "TURN 0 · LIVE 4 · SYMBOLS 0",
+      "zoom": "2×",
+      "controls": "player",
+      "tags": [
+        {
+          "kind": "invented",
+          "label": "INVENTED · ROCKS"
+        }
+      ],
+      "button": {
+        "idle": "FIRE IT",
+        "running": "TAP TO SKIP",
+        "done": "NEXT"
+      },
+      "claims": [
+        {
+          "text": "Rock formations on the board",
+          "src": "book",
+          "ids": [
+            "c4-b106"
+          ]
+        },
+        {
+          "text": "Walls reflect gliders",
+          "src": "book",
+          "ids": [
+            "c2-b12"
+          ]
+        },
+        {
+          "text": "Fixed rock cells that bounce gliders like mirrors",
+          "src": "invented",
+          "ids": []
+        }
+      ],
+      "spec": {
+        "board": "Preset: a glider striking a rock. 2×.",
+        "visitor": "Play, step, add or remove rocks.",
+        "idle": "Plays until a bounce is detected, then 8 more turns.",
+        "detects": "Engine bounce detection.",
+        "pace": "6 turns/s, 400 ms hold on the bounce turn."
+      }
+    },
+    {
+      "id": "symbol",
+      "title": "Your symbol",
+      "instruction": "A copy of your symbol lets you see everything within thirty squares of it. Here a glider forms one by striking a pair of rocks at just the right angle.",
+      "caption": "Framed means recognised. It holds for one turn, then the glider's pieces fly apart.",
+      "strip": "TURN 12 · LIVE 4 · SYMBOLS 1",
+      "zoom": "2×",
+      "controls": "player",
+      "tags": [
+        {
+          "kind": "book",
+          "label": "BOOK · CH 4"
+        },
+        {
+          "kind": "invented",
+          "label": "INVENTED · SYMBOL"
+        }
+      ],
+      "button": {
+        "idle": "SHOW ME",
+        "running": "TAP TO SKIP",
+        "done": "NEXT"
+      },
+      "claims": [
+        {
+          "text": "A copy of your symbol lets you see everything within thirty squares",
+          "src": "book",
+          "ids": [
+            "c4-b93"
+          ]
+        },
+        {
+          "text": "Spaceships crash into rocks and leave copies of a symbol behind",
+          "src": "book",
+          "ids": [
+            "c4-b106–c4-b108"
+          ]
+        },
+        {
+          "text": "The 4-cell symbol shape, and forming it with one glider and two rocks",
+          "src": "invented",
+          "ids": []
+        }
+      ],
+      "spec": {
+        "board": "A glider and a rock arranged so the strike forms the symbol. 2×.",
+        "visitor": "Play, step back to the symbol turn.",
+        "idle": "Plays until a symbol is recognised, holds that turn for 1.5 s, then plays 6 more turns.",
+        "detects": "SYMBOLS goes from 0 to 1.",
+        "pace": "4 turns/s."
+      }
+    },
+    {
+      "id": "guard",
+      "title": "Lose them all and you're out",
+      "instruction": "A glider fired into a symbol destroys it for good. When every copy of a player's symbol is gone, that player is eliminated.",
+      "caption": "Drawn alone, a symbol stays in place but cycles through 12 arrangements. All of them are recognised.",
+      "strip": "TURN 0 · LIVE 8 · SYMBOLS 1",
+      "zoom": "2×",
+      "controls": "player",
+      "tags": [
+        {
+          "kind": "book",
+          "label": "BOOK · CH 4"
+        },
+        {
+          "kind": "invented",
+          "label": "INVENTED · DESTRUCTION"
+        }
+      ],
+      "button": {
+        "idle": "FIRE IT",
+        "running": "TAP TO SKIP",
+        "done": "NEXT"
+      },
+      "claims": [
+        {
+          "text": "Every one of a player's symbols destroyed: that player is out",
+          "src": "book",
+          "ids": [
+            "c4-b136–c4-b138"
+          ]
+        },
+        {
+          "text": "A glider destroys a symbol for good; 12 arrangements",
+          "src": "invented",
+          "ids": []
+        }
+      ],
+      "spec": {
+        "board": "A lone symbol, framed, with a glider lined up to hit it. 2×.",
+        "visitor": "Play, step, move the glider.",
+        "idle": "Plays until SYMBOLS reads 0, holds 600 ms.",
+        "detects": "Symbol count drops to 0.",
+        "pace": "6 turns/s."
+      }
+    },
+    {
+      "id": "match",
+      "title": "A real match",
+      "instruction": "This is an illustration of a full match. The sandbox can't play one yet.",
+      "strip": "ILLUSTRATION · 3 / 6 · INTERVENTION TURN",
+      "tags": [
+        {
+          "kind": "illustration",
+          "label": "ILLUSTRATION"
+        }
+      ],
+      "button": {
+        "idle": "PLAY THE MATCH",
+        "running": "TAP TO SKIP",
+        "done": "NEXT"
+      },
+      "claims": [
+        {
+          "text": "See the six frame captions",
+          "src": "book",
+          "ids": [
+            "c4-b93",
+            "c4-b94",
+            "c4-b96",
+            "c4-b106–c4-b114",
+            "c4-b136–c4-b140",
+            "c2-b12"
+          ]
+        }
+      ],
+      "spec": {
+        "board": "Scripted six-frame illustration on a 96 × 64 board in owner colours. Frames 1–5 show your team's view with fog; frame 6 is the audience view.",
+        "visitor": "Tap a frame number to jump to it.",
+        "idle": "Plays all six frames, then NEXT.",
+        "detects": "Frame 6 reached.",
+        "pace": "1.8 s per frame, 300 ms crossfade, fog edge eases outward."
+      }
+    },
+    {
+      "id": "hard",
+      "title": "Why it's hard",
+      "instruction": "Five things every player is up against.",
+      "strip": "ILLUSTRATION · A PLAYER'S VIEW",
+      "reasons": [
+        {
+          "text": "You see only what is near your symbols.",
+          "ids": [
+            "c4-b93"
+          ]
+        },
+        {
+          "text": "You act only in short intervention turns. In between, your plan runs without you.",
+          "ids": [
+            "c4-b110"
+          ]
+        },
+        {
+          "text": "Priests pick a new rule for every match, and you learn it only at the start.",
+          "ids": [
+            "c4-b84",
+            "c4-b102",
+            "c4-b148"
+          ]
+        },
+        {
+          "text": "The rules run backward exactly, so no wall is invincible.",
+          "ids": [
+            "c4-b9",
+            "c4-b13"
+          ]
+        },
+        {
+          "text": "Teams can be random, and your teammate might be your rival.",
+          "ids": [
+            "c4-b89–c4-b90",
+            "c4-b118",
+            "c4-b150"
+          ]
+        }
+      ],
+      "tags": [
+        {
+          "kind": "illustration",
+          "label": "ILLUSTRATION"
+        }
+      ],
+      "button": {
+        "idle": "NEXT"
+      },
+      "claims": [
+        {
+          "text": "Limited vision",
+          "src": "book",
+          "ids": [
+            "c4-b93"
+          ]
+        },
+        {
+          "text": "Intervention turns only",
+          "src": "book",
+          "ids": [
+            "c4-b110"
+          ]
+        },
+        {
+          "text": "A new rule every game, set by priests, learned at the start",
+          "src": "book",
+          "ids": [
+            "c4-b84",
+            "c4-b102",
+            "c4-b148"
+          ]
+        },
+        {
+          "text": "No invincible wall",
+          "src": "book",
+          "ids": [
+            "c4-b9",
+            "c4-b13"
+          ]
+        },
+        {
+          "text": "Random 2 v 2 teams; cooperating with a rival",
+          "src": "book",
+          "ids": [
+            "c4-b89–c4-b90",
+            "c4-b118",
+            "c4-b150"
+          ]
+        }
+      ],
+      "spec": {
+        "board": "Illustration: match frame 2 in a player's fogged view.",
+        "visitor": "Read.",
+        "idle": "Goes to screen 12.",
+        "detects": "Nothing.",
+        "pace": "Reasons fade in 120 ms apart."
+      }
+    },
+    {
+      "id": "book",
+      "title": "The book's own board",
+      "instruction": "This is the opening frame of the board shown in chapter 4. Play it, then make your own.",
+      "caption": "The book's figure is cropped. The right half was reconstructed so the visible half replays its 120 frames exactly.",
+      "strip": "TURN 0 / 120 · BOOK FIGURE",
+      "zoom": "1×",
+      "controls": "player",
+      "tags": [
+        {
+          "kind": "book",
+          "label": "BOOK · CH 4"
+        },
+        {
+          "kind": "invented",
+          "label": "INVENTED · RIGHT HALF"
+        }
+      ],
+      "button": {
+        "idle": "START PLAYING"
+      },
+      "claims": [
+        {
+          "text": "The animated board figure",
+          "src": "book",
+          "ids": [
+            "c4-b5"
+          ]
+        },
+        {
+          "text": "Right half reconstructed to match 120 frames",
+          "src": "invented",
+          "ids": []
+        }
+      ],
+      "spec": {
+        "board": "Preset: the book's board, 1×, playing on arrival.",
+        "visitor": "Everything in free play.",
+        "idle": "Enters free play with this board loaded and marks the tutorial as seen.",
+        "detects": "Nothing.",
+        "pace": "4 turns/s, loops at frame 120."
+      }
+    }
+  ],
+  "frames": [
+    {
+      "title": "Setup",
+      "strip": "ILLUSTRATION · 1 / 6 · YOUR TEAM'S VIEW",
+      "caption": "The board starts black. Each player tests designs in a private sandbox, then places symbols and first structures in their home corner.",
+      "ids": [
+        "c4-b93",
+        "c4-b94",
+        "c4-b96"
+      ]
+    },
+    {
+      "title": "Spreading",
+      "strip": "ILLUSTRATION · 2 / 6 · YOUR TEAM'S VIEW",
+      "caption": "Gliders fly out and hit rocks. Spaceships crash on purpose and leave copies of your symbol, so you see more of the board.",
+      "ids": [
+        "c4-b106–c4-b108"
+      ]
+    },
+    {
+      "title": "Intervention turn",
+      "strip": "ILLUSTRATION · 3 / 6 · INTERVENTION TURN",
+      "caption": "Every so often, everyone may put down new squares near any copy of their symbol. Then the plan runs without you.",
+      "ids": [
+        "c4-b110"
+      ]
+    },
+    {
+      "title": "Clash",
+      "strip": "ILLUSTRATION · 4 / 6 · YOUR TEAM'S VIEW",
+      "caption": "Stray gliders wreck factories and walls reflect them. A stream of gliders forms your symbol inside enemy ground for exactly one turn.",
+      "ids": [
+        "c4-b109",
+        "c2-b12",
+        "c4-b113"
+      ]
+    },
+    {
+      "title": "A player out",
+      "strip": "ILLUSTRATION · 5 / 6 · RIVAL OUT",
+      "caption": "Every copy of one rival's symbol has been destroyed, so that rival is out.",
+      "ids": [
+        "c4-b136–c4-b138"
+      ]
+    },
+    {
+      "title": "Endgame",
+      "strip": "ILLUSTRATION · 6 / 6 · AUDIENCE VIEW",
+      "caption": "Most of the field is now a high-entropy wasteland. The audience sees all of it; players never do.",
+      "ids": [
+        "c4-b140",
+        "c4-b114"
+      ]
+    }
+  ],
+  "engineEdits": [
+    "rule.caption: lone cell visits 4 positions in 4 turns, not a two-position hop",
+    "symbol.instruction/caption/claim: formation needs two rocks and holds for exactly one turn",
+    "guard.caption/claim: 12 arrangements, not 13"
+  ]
+}
