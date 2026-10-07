@@ -17,6 +17,11 @@ a decision for Nate.
 
 Compared by the coding agent on 2026-10-07.
 
+**Decision (Nate, 2026-10-07): the branch's facts win on F1–F7.** The board is used for
+look and layout only. Nothing in `tutorial-text.ts` changes; the board's copy stays in
+`docs/design/` as reference and is not a source for facts. The restyle already took
+layout only (last section below).
+
 ## Facts the two disagree on (not just wording)
 
 | # | Topic | Board's copy | Branch | What the book says |
