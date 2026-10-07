@@ -1,0 +1,525 @@
+[
+ {
+  "id": "f01",
+  "chapter": 1,
+  "question": "Why do the shoes that go with Gladias's robe slow him down when he has to run?",
+  "gold": [
+   "c1-b86"
+  ],
+  "answer_fact": "They have heels to match other robe wearers' height and uneven soles to randomize how he walks.",
+  "type": "why"
+ },
+ {
+  "id": "f02",
+  "chapter": 1,
+  "question": "Once the kids go off to Vil and Daia, what is Seila planning to do with her time?",
+  "gold": [
+   "c1-b134"
+  ],
+  "answer_fact": "She plans to spend a month or two in Freetown, visit Jahn, and gather material for a blog post on the United Cities.",
+  "type": "what"
+ },
+ {
+  "id": "f03",
+  "chapter": 1,
+  "question": "Which menu number does Gladias usually order from the Dzego food truck?",
+  "gold": [
+   "c1-b105"
+  ],
+  "answer_fact": "He orders number ten, the same as usual.",
+  "type": "detail"
+ },
+ {
+  "id": "f04",
+  "chapter": 2,
+  "question": "During the thermodynamics lesson, why did Zei keep his Arctic Emperor joke to himself?",
+  "gold": [
+   "c2-b93"
+  ],
+  "answer_fact": "Spelling out such an obvious joke is poor form, and most of the class was likely already thinking it.",
+  "type": "why"
+ },
+ {
+  "id": "f05",
+  "chapter": 2,
+  "question": "What did the instructor say was wrong with Zei's arm after the attack on the class?",
+  "gold": [
+   "c2-b112"
+  ],
+  "answer_fact": "His scan suggested a broken bone, and he told Zei to go to the hospital that same day.",
+  "type": "what"
+ },
+ {
+  "id": "f06",
+  "chapter": 2,
+  "question": "How did Zei place in the Minpentai game he played the night before the bombing?",
+  "gold": [
+   "c2-b12"
+  ],
+  "answer_fact": "He came third, using a wall that bounced the opponents' gliders back at them.",
+  "type": "detail"
+ },
+ {
+  "id": "f07",
+  "chapter": 3,
+  "question": "How did Mov manage to find Gladias when lots of people nearby were wearing identical robes?",
+  "gold": [
+   "c3-b13"
+  ],
+  "answer_fact": "Gladias had left Mov on his trust list, so his AI turned on location sharing with Mov for their planned meeting day.",
+  "type": "world"
+ },
+ {
+  "id": "f08",
+  "chapter": 3,
+  "question": "What first got Gladias interested in working on Steering?",
+  "gold": [
+   "c3-b24"
+  ],
+  "answer_fact": "Writing an alternative client for Silverchat, whose open API existed thanks to openness taxes, inspired him to give back.",
+  "type": "character"
+ },
+ {
+  "id": "f09",
+  "chapter": 3,
+  "question": "According to Mov, why does the tax system go to such lengths to keep Keepers anonymous?",
+  "gold": [
+   "c3-b23"
+  ],
+  "answer_fact": "A Keeper whose views became public saw her husband lose his job days later amid Bluewhale's campaign, showing the risk of exposure.",
+  "type": "why"
+ },
+ {
+  "id": "f10",
+  "chapter": 4,
+  "question": "What is the giant pyramid at the southern edge of Pafogai Du really, and what is it used for?",
+  "gold": [
+   "c4-b49"
+  ],
+  "answer_fact": "It's an existing mountain dressed up as a pyramid, its caves turned into offices and homes housing government departments and big businesses.",
+  "type": "world"
+ },
+ {
+  "id": "f11",
+  "chapter": 4,
+  "question": "Why does Zei say a shield that can never be destroyed can't exist?",
+  "gold": [
+   "c4-b13"
+  ],
+  "answer_fact": "Physics is time-reversible, so whatever can be built can be undone by reversing the steps; every shield must have a weakness.",
+  "type": "why"
+ },
+ {
+  "id": "f12",
+  "chapter": 4,
+  "question": "What does Mu caution Zei about just before the quarter-finals?",
+  "gold": [
+   "c4-b67",
+   "c4-b69"
+  ],
+  "answer_fact": "That he'll be on a team now and isn't a natural diplomat; live coordination with teammates will matter a lot.",
+  "type": "character"
+ },
+ {
+  "id": "f13",
+  "chapter": 4,
+  "question": "Watching the quarter-final from far away, what does Fin think Zei wants almost as much as winning?",
+  "gold": [
+   "c4-b119"
+  ],
+  "answer_fact": "Fin believes Zei wants to hear Bai plead with him for help.",
+  "type": "character"
+ },
+ {
+  "id": "f14",
+  "chapter": 4,
+  "question": "After the game, when Bai apologizes, what does Zei ask her for?",
+  "gold": [
+   "c4-b156",
+   "c4-b158"
+  ],
+  "answer_fact": "He asks to come along on her next Redshire vacation, then quickly adds his mom too.",
+  "type": "what"
+ },
+ {
+  "id": "f15",
+  "chapter": 5,
+  "question": "Why can't Dzego just build its own all-seeing camera network to counter the Arctic surveillance?",
+  "gold": [
+   "c5-b77",
+   "c5-b78"
+  ],
+  "answer_fact": "Arctic spies are inside Dzego's agencies, so an all-seeing network would become their weapon; cameras instead reveal only suspicious data.",
+  "type": "why"
+ },
+ {
+  "id": "f16",
+  "chapter": 5,
+  "question": "How is the entrance fee worked out at the economics institute Zei and Bai visit in Freetown?",
+  "gold": [
+   "c5-b40"
+  ],
+  "answer_fact": "It rises with the square root of time spent inside and falls as your academic or intellectual reputation score rises.",
+  "type": "world"
+ },
+ {
+  "id": "f17",
+  "chapter": 5,
+  "question": "What kind of project does Seila suggest Gladias could take on if he becomes a Keeper?",
+  "gold": [
+   "c5-b113",
+   "c5-b112"
+  ],
+  "answer_fact": "Changing or creating rubrics so companies' products help Dzego more, since current rubrics don't.",
+  "type": "what"
+ },
+ {
+  "id": "f18",
+  "chapter": 7,
+  "question": "Why did the priests let each player see what the other player's AI was thinking during the city final?",
+  "gold": [
+   "c7-b132",
+   "c7-b130",
+   "c7-b127"
+  ],
+  "answer_fact": "Mu says they wanted it closer to real life, where success depends on concealing your thinking, sometimes even from allies.",
+  "type": "why"
+ },
+ {
+  "id": "f19",
+  "chapter": 10,
+  "question": "Why didn't Nine believe the bug hidden in the booth table was planted to spy on the Keepers?",
+  "gold": [
+   "c10-b119"
+  ],
+  "answer_fact": "Such bugs usually target careless businesses for market tips; Keepers hear only one of three groups and talk digitally through neck bands.",
+  "type": "why"
+ },
+ {
+  "id": "f20",
+  "chapter": 10,
+  "question": "Why does Dzego disguise its training of future defenders as a game instead of just recruiting soldiers openly?",
+  "gold": [
+   "c10-b202"
+  ],
+  "answer_fact": "Any open military effort would be targeted by the Arctics; the game is safe only because it looks like mere sport.",
+  "type": "why"
+ },
+ {
+  "id": "f21",
+  "chapter": 8,
+  "question": "Why did Gladias stop chasing perfect marks at school?",
+  "gold": [
+   "c8-b54"
+  ],
+  "answer_fact": "After a year of near-perfect grades he felt mostly fear of ruining his record, so he decided it wasn't worth it.",
+  "type": "why"
+ },
+ {
+  "id": "f22",
+  "chapter": 10,
+  "question": "According to Eighteen, why does publishing military-relevant designs openly matter so much for Dzego?",
+  "gold": [
+   "c10-b147",
+   "c10-b146"
+  ],
+  "answer_fact": "Dzego can't invent top-end tech itself but excels at adapting open designs, as with secure software that protected it from Arctic sabotage.",
+  "type": "why"
+ },
+ {
+  "id": "f23",
+  "chapter": 7,
+  "question": "What did Zei, Fin and Bai see on their way up the mountain to the city final?",
+  "gold": [
+   "c7-b37",
+   "c7-b33"
+  ],
+  "answer_fact": "An explosion and smoke cloud at the city's biggest chip factory, which Zei suspected was Arctic sabotage.",
+  "type": "what"
+ },
+ {
+  "id": "f24",
+  "chapter": 8,
+  "question": "What did Vil offer Lily as a reward for doing better in civics?",
+  "gold": [
+   "c8-b120"
+  ],
+  "answer_fact": "If she scores over 75 on her next civics test, Vil will take her on his next trip to Northglade.",
+  "type": "what"
+ },
+ {
+  "id": "f25",
+  "chapter": 7,
+  "question": "After his attack fell apart, how did Zei manage to come back and win the city final?",
+  "gold": [
+   "c7-b102",
+   "c7-b109",
+   "c7-b105"
+  ],
+  "answer_fact": "He had his AI build a factory with sixteen possible plans, secretly triggered by his own gliders, launching a surprise attack from mid-north.",
+  "type": "what"
+ },
+ {
+  "id": "f26",
+  "chapter": 10,
+  "question": "What did the Freetown charging companies do to the carmaker that refused to chip in for defense?",
+  "gold": [
+   "c10-b24"
+  ],
+  "answer_fact": "They threatened to block Mogna's cars from about 90% of Freetown's chargers, and Mogna gave in the next day.",
+  "type": "what"
+ },
+ {
+  "id": "f27",
+  "chapter": 9,
+  "question": "How can Den's hand device tell that a gadget answering it is really nearby and not relaying answers from somewhere else?",
+  "gold": [
+   "c9-b133"
+  ],
+  "answer_fact": "It pings the device a million times and requires replies within a tenth of a tick, limiting distance to about thirteen meters.",
+  "type": "world"
+ },
+ {
+  "id": "f28",
+  "chapter": 9,
+  "question": "How does the network Den showed Zei hide who sent a message?",
+  "gold": [
+   "c9-b116",
+   "c9-b119",
+   "c9-b121"
+  ],
+  "answer_fact": "Messages are wrapped in three encryption layers peeled by randomly chosen nodes, so unmasking a sender needs three random nodes colluding.",
+  "type": "world"
+ },
+ {
+  "id": "f29",
+  "chapter": 6,
+  "question": "If payments in Veridia are private, how does the government make sure shops actually pay sales tax?",
+  "gold": [
+   "c6-b138"
+  ],
+  "answer_fact": "Tax is sent automatically in real time, and enforcement relies on random inspectors ordering and checking a taxed payment type is used.",
+  "type": "world"
+ },
+ {
+  "id": "f30",
+  "chapter": 6,
+  "question": "Who was the teenage girl sitting next to Gladias at the citizens' assembly, and what does she want to do?",
+  "gold": [
+   "c6-b79",
+   "c6-b62",
+   "c6-b81"
+  ],
+  "answer_fact": "Pelae, an older teen, who has decided to go into chemistry despite friends warning it will be hard.",
+  "type": "character"
+ },
+ {
+  "id": "f31",
+  "chapter": 8,
+  "question": "What kind things had Lily done for the family that Gladias reminded her of when she was upset?",
+  "gold": [
+   "c8-b117"
+  ],
+  "answer_fact": "She baked Seila a birthday cake and brought Hreda food daily for a month after Hreda's accident.",
+  "type": "character"
+ },
+ {
+  "id": "f32",
+  "chapter": 9,
+  "question": "How does Bai really feel about the way Zei beat her in the final?",
+  "gold": [
+   "c9-b21",
+   "c9-b22"
+  ],
+  "answer_fact": "She admires his tactics as beautiful, cleverer than her own trap, and wants to understand how he and Fin think.",
+  "type": "character"
+ },
+ {
+  "id": "f33",
+  "chapter": 6,
+  "question": "What was the name of the Herald who led the citizens' assembly on public spaces?",
+  "gold": [
+   "c6-b68"
+  ],
+  "answer_fact": "Alagael, who had been a Herald for seven years.",
+  "type": "detail"
+ },
+ {
+  "id": "f34",
+  "chapter": 8,
+  "question": "What score did Lily get on the civics test she failed?",
+  "gold": [
+   "c8-b116"
+  ],
+  "answer_fact": "59 percent, the third-worst result in her class.",
+  "type": "detail"
+ },
+ {
+  "id": "f35",
+  "chapter": 11,
+  "question": "Why would Bluewhale secretly pay people to donate to a project it didn't even own?",
+  "gold": [
+   "c11-b115"
+  ],
+  "answer_fact": "Its aim was to drain money from anything tied to open platforms, so the closed ecosystem would win by default.",
+  "type": "why"
+ },
+ {
+  "id": "f36",
+  "chapter": 14,
+  "question": "Before the semifinal, why does Bai tell Zei not to hurry?",
+  "gold": [
+   "c14-b22",
+   "c14-b23"
+  ],
+  "answer_fact": "She noticed every other player, especially Gun, is too eager to win fast, rushing even when the scoring no longer rewards it.",
+  "type": "why"
+ },
+ {
+  "id": "f37",
+  "chapter": 13,
+  "question": "Why does Gladias tell Delwart he doesn't expect the Arctics to escalate, when he isn't sure?",
+  "gold": [
+   "c13-b14"
+  ],
+  "answer_fact": "He feared it might happen, but admitting it would earn him a long lecture from Delwart about his biased sources.",
+  "type": "why"
+ },
+ {
+  "id": "f38",
+  "chapter": 12,
+  "question": "Why didn't teaming three bots up against Zei on the train help them much?",
+  "gold": [
+   "c12-b10"
+  ],
+  "answer_fact": "That style of play wasn't in their training data, so they made basic errors and ate into each other's negentropy.",
+  "type": "why"
+ },
+ {
+  "id": "f39",
+  "chapter": 15,
+  "question": "Why does Den send Zei back to Pafogai Du after the invasion?",
+  "gold": [
+   "c15-b119"
+  ],
+  "answer_fact": "The cryptographic infrastructure Dzego needs for secure coordination is run from Pafogai Du, and Den will tell him whom to contact.",
+  "type": "why"
+ },
+ {
+  "id": "f40",
+  "chapter": 13,
+  "question": "What interrupted the family dinner at the restaurant, and how did Seila react?",
+  "gold": [
+   "c13-b63",
+   "c13-b65",
+   "c13-b62"
+  ],
+  "answer_fact": "A message from Lord Ephelion took over the screen showing Helisport, and Seila got up to unplug the screen herself.",
+  "type": "what"
+ },
+ {
+  "id": "f41",
+  "chapter": 15,
+  "question": "What advice did Zei pass along for the Arctic soldier smuggling messages?",
+  "gold": [
+   "c15-b61",
+   "c15-b110"
+  ],
+  "answer_fact": "Train a model on the data, split bits into random buckets that must XOR to the message, and flip the most natural-looking bit.",
+  "type": "what"
+ },
+ {
+  "id": "f42",
+  "chapter": 14,
+  "question": "How did Deluin beat Kau in the other semifinal?",
+  "gold": [
+   "c14-b91",
+   "c14-b90",
+   "c14-b93"
+  ],
+  "answer_fact": "He built no mobile ships, just walled himself in using nearby rock resources and reflected Kau's glider storms until Kau was overwhelmed.",
+  "type": "what"
+ },
+ {
+  "id": "f43",
+  "chapter": 15,
+  "question": "What did Mov find out when he followed Delwart after the overheard meeting?",
+  "gold": [
+   "c15-b36"
+  ],
+  "answer_fact": "Two more meetings: one with a robed stranger about Silverchat, one with a Keeper about Dreadknot; then Delwart's trail went cold.",
+  "type": "what"
+ },
+ {
+  "id": "f44",
+  "chapter": 12,
+  "question": "How does the championship keep a player from finding out the day's rule change before their match?",
+  "gold": [
+   "c12-b134",
+   "c12-b133"
+  ],
+  "answer_fact": "Players wait about a longhour in a room with no internet, and their hand devices and watches are collected.",
+  "type": "world"
+ },
+ {
+  "id": "f45",
+  "chapter": 14,
+  "question": "How do the shrines work in the semifinal version of Minpentai?",
+  "gold": [
+   "c14-b33"
+  ],
+  "answer_fact": "Every thousand turns, changes inside a shrine are XORed onto areas near its corners, then the shrine resets to a default rock.",
+  "type": "world"
+ },
+ {
+  "id": "f46",
+  "chapter": 13,
+  "question": "How do Keepers in a meeting keep each other from knowing who they are?",
+  "gold": [
+   "c13-b76"
+  ],
+  "answer_fact": "They hide their faces and speak through neck bands that output a freshly randomized AI-generated voice.",
+  "type": "world"
+ },
+ {
+  "id": "f47",
+  "chapter": 12,
+  "question": "Who is the woman who greets Zei at the train station in the capital?",
+  "gold": [
+   "c12-b16",
+   "c12-b14"
+  ],
+  "answer_fact": "Su, an older Minpentai priest and one of the organizers of the national championship.",
+  "type": "character"
+ },
+ {
+  "id": "f48",
+  "chapter": 14,
+  "question": "How did Bai gather her information on the other championship players?",
+  "gold": [
+   "c14-b16"
+  ],
+  "answer_fact": "She watched every game, befriended some players, and joined their practice sessions; nothing illicit.",
+  "type": "character"
+ },
+ {
+  "id": "f49",
+  "chapter": 12,
+  "question": "What room was Zei given at his hotel in Sadzu Du?",
+  "gold": [
+   "c12-b37"
+  ],
+  "answer_fact": "Room 304; his reputation was over 150, so he didn't need to pay.",
+  "type": "detail"
+ },
+ {
+  "id": "f50",
+  "chapter": 11,
+  "question": "In the bottled water ad Gladias walks past, how much heavy water does the brand claim its water has?",
+  "gold": [
+   "c11-b124"
+  ],
+  "answer_fact": "Hydrafill claims 132 parts per million, versus 145 on average for competitors.",
+  "type": "detail"
+ }
+]

@@ -18,7 +18,11 @@ recorded alongside and agreed to within rounding.
 | 2026-10-07 | 50-question check: run 2 (final) | gpt-oss-120b + gpt-oss-safeguard-20b | 150 | 0.02980 |
 | 2026-10-07 | Two probes of the gateway's reply format | openai/gpt-oss-120b | 2 | 0.00005 |
 | 2026-10-07 | Tuning set through Groq with the support check (sanity run before the fresh round) | gpt-oss-120b + gpt-oss-safeguard-20b on Groq | ≈250 | 0.04851 |
-| | **Running total** | | ≈940 | **0.16935** |
+| 2026-10-07 | Fresh set, frozen setup (before embeddings) | gpt-oss-120b + gpt-oss-safeguard-20b on Groq | ≈250 | 0.04636 |
+| 2026-10-07 | Fresh set with bge-small fused retrieval (after embeddings) | gpt-oss-120b + gpt-oss-safeguard-20b on Groq | ≈250 | 0.04769 |
+| | **Running total** | | ≈1,440 | **0.26340** |
+
+The fresh round (cap $1, owner 2026-10-07) spent $0.14256: the tuning-set sanity run through Groq ($0.04851) and the two fresh runs. Embeddings were computed locally at no cost.
 
 The 50-question check had its own cap of $1 (owner, 2026-10-07) and spent $0.09131.
 

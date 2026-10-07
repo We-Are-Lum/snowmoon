@@ -57,6 +57,8 @@ export interface AskDeps {
   searchPrompt?: string;
   /** The second guard question (chat-support.md): is every claim supported by its cited passages? */
   supportPolicy?: string;
+  /** Embedding search, for evaluation: block ids ranked for this question (see RetrieveOptions.dense). */
+  dense?: (question: string, limit: number) => Promise<string[]>;
 }
 
 export class AskError extends Error {
@@ -101,7 +103,8 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
   let retrieved;
   try {
     const terms = CHAT.searchTerms && deps.searchPrompt ? await searchTerms(deps, input.question) : '';
-    retrieved = await retrieve(sql, terms ? `${input.question} ${terms}` : input.question, input.limit, input.attached);
+    const dense = deps.dense ? await deps.dense(input.question, input.limit) : undefined;
+    retrieved = await retrieve(sql, terms ? `${input.question} ${terms}` : input.question, input.limit, input.attached, dense ? { dense } : {});
   } catch (e) {
     throw new AskError((e as Error).message);
   }

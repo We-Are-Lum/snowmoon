@@ -1,0 +1,362 @@
+{
+ "grader": "B",
+ "items": [
+  {
+   "id": "f01",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f02",
+   "correct": "cant",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "no answer shown"
+  },
+  {
+   "id": "f03",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f04",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f05",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f06",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "omits the reflecting-wall detail; placement correct"
+  },
+  {
+   "id": "f07",
+   "correct": "cant",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "says excerpts do not explain"
+  },
+  {
+   "id": "f08",
+   "correct": "yes",
+   "unsupported_claims": 1,
+   "false_claims": 0,
+   "note": "calls Silverchat an \"open-source platform\" (book: open API)"
+  },
+  {
+   "id": "f09",
+   "correct": "no",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "gives Heralds/manipulation passage (c6), not the exposed-Keeper story"
+  },
+  {
+   "id": "f10",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f11",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f12",
+   "correct": "partly",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "omits real-time diplomacy point"
+  },
+  {
+   "id": "f13",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f14",
+   "correct": "cant",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "no answer shown"
+  },
+  {
+   "id": "f15",
+   "correct": "partly",
+   "unsupported_claims": 1,
+   "false_claims": 0,
+   "note": "frames cryptographic verification difficulty as a reason the network is blocked; omits reveal-only-suspicious design"
+  },
+  {
+   "id": "f16",
+   "correct": "wrong",
+   "unsupported_claims": 0,
+   "false_claims": 1,
+   "note": "says academic reputation is contrasted with easy \"academic\" reputation; book contrasts it with easy loan/hotel reputation"
+  },
+  {
+   "id": "f17",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f18",
+   "correct": "partly",
+   "unsupported_claims": 1,
+   "false_claims": 0,
+   "note": "gives realism/curiosity, misses hiding-thoughts lesson; \"to satisfy their curiosity\" as motive overstated"
+  },
+  {
+   "id": "f19",
+   "correct": "partly",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "omits neck-band digital speech"
+  },
+  {
+   "id": "f20",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f21",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f22",
+   "correct": "cant",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "no answer shown"
+  },
+  {
+   "id": "f23",
+   "correct": "wrong",
+   "unsupported_claims": 0,
+   "false_claims": 1,
+   "note": "says they (incl. Fin) found Mu at tunnel entrance; Fin went to audience, Mu was inside; misses explosion"
+  },
+  {
+   "id": "f24",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f25",
+   "correct": "cant",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "no answer shown"
+  },
+  {
+   "id": "f26",
+   "correct": "partly",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "omits that Mogna gave in"
+  },
+  {
+   "id": "f27",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f28",
+   "correct": "cant",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "no answer shown"
+  },
+  {
+   "id": "f29",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f30",
+   "correct": "partly",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "gives name Pelae; says text does not say what she wants (chemistry)"
+  },
+  {
+   "id": "f31",
+   "correct": "cant",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "no answer shown"
+  },
+  {
+   "id": "f32",
+   "correct": "cant",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "no answer shown"
+  },
+  {
+   "id": "f33",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f34",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f35",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f36",
+   "correct": "cant",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "no answer shown"
+  },
+  {
+   "id": "f37",
+   "correct": "cant",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "no answer shown"
+  },
+  {
+   "id": "f38",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f39",
+   "correct": "cant",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "no answer shown"
+  },
+  {
+   "id": "f40",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f41",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f42",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "omits no-mobile-ships detail"
+  },
+  {
+   "id": "f43",
+   "correct": "wrong",
+   "unsupported_claims": 0,
+   "false_claims": 1,
+   "note": "presents the earlier c13 overheard meeting as what Mov found after it; misses the two later meetings (c15-b36)"
+  },
+  {
+   "id": "f44",
+   "correct": "cant",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "no answer shown"
+  },
+  {
+   "id": "f45",
+   "correct": "wrong",
+   "unsupported_claims": 0,
+   "false_claims": 1,
+   "note": "says XOR applied to the four corner regions of the board; book: regions near the corners of the shrine"
+  },
+  {
+   "id": "f46",
+   "correct": "no",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "general anonymity/committees; misses hidden faces and randomized-voice neck bands"
+  },
+  {
+   "id": "f47",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f48",
+   "correct": "partly",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "only watching games (Gun vs Deluin); omits befriending and joining practice sessions"
+  },
+  {
+   "id": "f49",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f50",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  }
+ ],
+ "totals": {
+  "yes": 25,
+  "cant": 12,
+  "no": 2,
+  "partly": 7,
+  "wrong": 4
+ }
+}

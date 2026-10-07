@@ -1,0 +1,362 @@
+{
+ "grader": "B",
+ "items": [
+  {
+   "id": "f01",
+   "correct": "yes",
+   "unsupported_claims": 1,
+   "false_claims": 0,
+   "note": "'Veridian Privacy Robe' name true (c1-b45) but uncited; 'match the robe's height' loosely paraphrases 'same level as other robe wearers'"
+  },
+  {
+   "id": "f02",
+   "correct": "cant",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "no answer shown"
+  },
+  {
+   "id": "f03",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f04",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f05",
+   "correct": "cant",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "no answer shown"
+  },
+  {
+   "id": "f06",
+   "correct": "cant",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "no answer shown"
+  },
+  {
+   "id": "f07",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f08",
+   "correct": "wrong",
+   "unsupported_claims": 2,
+   "false_claims": 2,
+   "note": "claims civics lessons sparked his Steering interest and led to his votes; book says writing a Silverchat client (c3-b24); cited blocks don't support causal link"
+  },
+  {
+   "id": "f09",
+   "correct": "yes",
+   "unsupported_claims": 1,
+   "false_claims": 0,
+   "note": "'safe from manipulation' is an extrapolation not in c3-b23"
+  },
+  {
+   "id": "f10",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f11",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f12",
+   "correct": "cant",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "no answer shown"
+  },
+  {
+   "id": "f13",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f14",
+   "correct": "cant",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "says excerpts don't include it"
+  },
+  {
+   "id": "f15",
+   "correct": "yes",
+   "unsupported_claims": 1,
+   "false_claims": 0,
+   "note": "'turn against the public' / closing sentence are embellishment"
+  },
+  {
+   "id": "f16",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "second sentence garbles the zero-knowledge-collateral contrast but is not false"
+  },
+  {
+   "id": "f17",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f18",
+   "correct": "cant",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "says text does not explain purpose (it does, c7-b127/b132)"
+  },
+  {
+   "id": "f19",
+   "correct": "cant",
+   "unsupported_claims": 2,
+   "false_claims": 0,
+   "note": "says passages don't give Nine's reasoning; uncited (true) claims that Nine looked at device and group destroyed it (c10-b118, c10-b124); in fact c10-b119 has his reasoning"
+  },
+  {
+   "id": "f20",
+   "correct": "cant",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "no answer shown"
+  },
+  {
+   "id": "f21",
+   "correct": "cant",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "no answer shown"
+  },
+  {
+   "id": "f22",
+   "correct": "wrong",
+   "unsupported_claims": 1,
+   "false_claims": 1,
+   "note": "attributes the open programming languages/formal verification to 'the United Cities'; speaker's 'we' is Veridia, distinct from the United Cities (c10-b145)"
+  },
+  {
+   "id": "f23",
+   "correct": "cant",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "no answer shown"
+  },
+  {
+   "id": "f24",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f25",
+   "correct": "wrong",
+   "unsupported_claims": 3,
+   "false_claims": 3,
+   "note": "describes the national semifinal/final (c14-c15) as the city final; 'declared winner of the city final', 'pre-published spaceship ... few decisive bits' are false for the city final (c7)"
+  },
+  {
+   "id": "f26",
+   "correct": "wrong",
+   "unsupported_claims": 0,
+   "false_claims": 1,
+   "note": "'led to Mogna's collapse' - book says Mogna 'folded' i.e. gave in"
+  },
+  {
+   "id": "f27",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "minor: 'millions of times' vs 'a million times'"
+  },
+  {
+   "id": "f28",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f29",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f30",
+   "correct": "partly",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "names Pelae; says passage gives no goal (chemistry is in c6-b79)"
+  },
+  {
+   "id": "f31",
+   "correct": "cant",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "no answer shown"
+  },
+  {
+   "id": "f32",
+   "correct": "cant",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "no answer shown"
+  },
+  {
+   "id": "f33",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f34",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f35",
+   "correct": "cant",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "no answer shown"
+  },
+  {
+   "id": "f36",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "'especially the impatient ones' garbles 'definitely Gun' but not false"
+  },
+  {
+   "id": "f37",
+   "correct": "cant",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "no answer shown"
+  },
+  {
+   "id": "f38",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f39",
+   "correct": "cant",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "no answer shown"
+  },
+  {
+   "id": "f40",
+   "correct": "wrong",
+   "unsupported_claims": 2,
+   "false_claims": 2,
+   "note": "answers with c6 restaurant scene (Gladias alone, Febric drops in); 'dinner cut short when Febric left after Gladias paid the bill' is false; misses the Lord Ephelion broadcast (c13)"
+  },
+  {
+   "id": "f41",
+   "correct": "cant",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "no answer shown"
+  },
+  {
+   "id": "f42",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f43",
+   "correct": "no",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "describes the overheard meeting itself (c13-b30), not the two later meetings (c15-b36)"
+  },
+  {
+   "id": "f44",
+   "correct": "wrong",
+   "unsupported_claims": 1,
+   "false_claims": 1,
+   "note": "'only a robot will fetch them when the match is about to start' - robot collects their devices; 'rule only revealed then' unsupported"
+  },
+  {
+   "id": "f45",
+   "correct": "wrong",
+   "unsupported_claims": 3,
+   "false_claims": 3,
+   "note": "calls semifinal 'hex-grid' (that was c12); misdescribes shrine mechanic as glider-triggered factories; attributes Gun's center-south/center-west factories (c14-b53) to Zei; omits XOR-to-corners rule"
+  },
+  {
+   "id": "f46",
+   "correct": "wrong",
+   "unsupported_claims": 1,
+   "false_claims": 1,
+   "note": "claims Keepers must hide their thoughts from fellow Keepers / committees prevent learning 'personal thoughts' (c7-b132 is Mu's general lesson); misses faces hidden + neck-band randomized voice"
+  },
+  {
+   "id": "f47",
+   "correct": "yes",
+   "unsupported_claims": 1,
+   "false_claims": 0,
+   "note": "'lead priest of Sadzu Du' is a slight inference"
+  },
+  {
+   "id": "f48",
+   "correct": "partly",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": "gives watching games/practice game only; omits befriending players and joining practice sessions"
+  },
+  {
+   "id": "f49",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  },
+  {
+   "id": "f50",
+   "correct": "yes",
+   "unsupported_claims": 0,
+   "false_claims": 0,
+   "note": ""
+  }
+ ],
+ "totals": {
+  "yes": 23,
+  "partly": 2,
+  "no": 1,
+  "wrong": 8,
+  "cant": 16
+ }
+}

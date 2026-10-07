@@ -1,0 +1,262 @@
+{
+ "grader": "A (the coding agent)",
+ "items": [
+  {
+   "id": "f01",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f02",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f03",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f04",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f05",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f06",
+   "correct": "partly",
+   "note": ""
+  },
+  {
+   "id": "f07",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f08",
+   "correct": "wrong",
+   "note": "Says openness lowered the openness tax; the book says the open API existed because of openness taxes (c3-b24)."
+  },
+  {
+   "id": "f09",
+   "correct": "partly",
+   "note": "Gives a true reason Mov states elsewhere (c6-b74), not the one asked about (c3-b23)."
+  },
+  {
+   "id": "f10",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f11",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f12",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f13",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f14",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f15",
+   "correct": "partly",
+   "note": ""
+  },
+  {
+   "id": "f16",
+   "correct": "wrong",
+   "note": "Calls academic reputation easy to obtain; the book says academic reputation is the hard kind (c5-b41)."
+  },
+  {
+   "id": "f17",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f18",
+   "correct": "partly",
+   "note": ""
+  },
+  {
+   "id": "f19",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f20",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f21",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f22",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f23",
+   "correct": "no",
+   "note": "Answers with arriving at the tunnels, not the chip-factory explosion."
+  },
+  {
+   "id": "f24",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f25",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f26",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f27",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f28",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f29",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f30",
+   "correct": "partly",
+   "note": ""
+  },
+  {
+   "id": "f31",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f32",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f33",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f34",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f35",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f36",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f37",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f38",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f39",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f40",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f41",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f42",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f43",
+   "correct": "no",
+   "note": "Describes the overheard meeting, not what Mov found after it; presents a question (c13-b31) as fact."
+  },
+  {
+   "id": "f44",
+   "correct": "cant",
+   "note": ""
+  },
+  {
+   "id": "f45",
+   "correct": "wrong",
+   "note": "XOR applied near the four corners of the board; the book says near the four corners of the shrine (c14-b33). Otherwise right."
+  },
+  {
+   "id": "f46",
+   "correct": "wrong",
+   "note": "Says Keepers sit on randomly selected committees and use anonymous channels; c7-b130 says that of the Courts; misses faces and neck bands (c13-b76)."
+  },
+  {
+   "id": "f47",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f48",
+   "correct": "partly",
+   "note": ""
+  },
+  {
+   "id": "f49",
+   "correct": "yes",
+   "note": ""
+  },
+  {
+   "id": "f50",
+   "correct": "yes",
+   "note": ""
+  }
+ ],
+ "totals": {
+  "yes": 26,
+  "cant": 12,
+  "partly": 6,
+  "wrong": 4,
+  "no": 2
+ }
+}

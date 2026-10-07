@@ -136,3 +136,56 @@ proposal's estimate.
    is each sentence supported by a cited block? That could turn the 5 wrong answers into
    "the passages don't say", at about $0.0001 a question.
 3. **A held-out set** of 50 new questions to measure without the tuning bias.
+
+## The fresh set (held out), 2026-10-07
+
+The owner's bar for removing the "Testing" label: on a fresh set of 50 questions that
+nothing was tuned on, **at most 2 wrong answers** ("can't answer" is not wrong).
+
+`fresh-questions.json`: 50 new questions on chapters 1–15, written by three agents told to
+avoid every fact and answering block of the tuning set (none is shared). The setup was frozen
+before any of them was run: Groq pinned, BM25 with aliases, 12 hits ±2 blocks, search words,
+the revised guard, and the support check (the second guard question). Each run was graded
+twice: by the coding agent (A) and by a separate agent that never saw A's grades (B), with
+the same rubric: an answer is **wrong** if it states anything false about the book.
+
+| Fresh set | Answering block sent | "The passages don't say" | Wrong (A) | Wrong (B) | Wrong (both agree) | Cost |
+|---|---|---|---|---|---|---|
+| **Before embeddings** (`fresh-run-1.json`) | 36 / 50 | 13 | 5 | 8 | 5 | $0.04636 |
+| **After embeddings**, bge-small-en-v1.5 fused (`fresh-run-2-bge.json`) | 37 / 50 | 11 | 4 | 4 | 2 | $0.04769 |
+
+**The bar is not met.** Before embeddings the two graders agree on 5 wrong answers and B
+finds 3 more, which A accepts on review (f22 credits the United Cities with Veridia's
+work; f44 says a robot fetches the players, not their devices; f46 applies a remark about
+courts to Keepers): **8 wrong**. After embeddings each grader finds 4, but only 2 of them the
+same; reviewing the other four, at least 2 are false as written (f23 puts Fin at a meeting he
+had left; f08 reverses cause and effect), so **4 to 6 wrong**.
+
+**What goes wrong.** The wrong answers are small, confident misstatements: the right scene
+with one detail changed (corners of the board instead of the shrine), the right fact
+credited to the wrong group, or a later scene presented as the one asked about. The support
+check (gpt-oss-safeguard-20b) passed every one of them; it catches answers with no backing,
+not a detail changed inside a backed answer.
+
+**Grading disagreements** (`fresh-grades-*.json`, `fresh-bge-grades-*.json`): 4 items in the
+first run and 9 in the second, almost all on the line between "no", "partly" and "wrong".
+Graders differ most on how strict to be about a single misstated detail.
+
+### Embeddings, offline
+
+Measured with the question alone (no search words), fused with the word search by
+reciprocal rank, 12 hits ±2 blocks, limit chapter 15:
+
+| Model (licence) | Tuning set | Fresh set |
+|---|---|---|
+| Words only (BM25 + aliases) | 30 / 50 | 36 / 50 |
+| + **bge-small-en-v1.5** (MIT, 33M parameters, 384 dimensions) | 34 / 50 | 37 / 50 |
+
+A small gain on the tuning set (+4), almost none on the fresh set (+1).
+
+**Can query embedding run without another outside party?** Yes. bge-small embeds a question
+in about 6 ms on a laptop CPU through Transformers.js (ONNX), so it can run inside the app's
+own server function: no embedding service, no new party. The 4,105 text blocks embed in
+74 seconds once, at ingest, on the local machine; their vectors (384 floats each, about 6 MB
+in all) would be stored with pgvector in the existing database. The model is downloaded once,
+at build, from Hugging Face.
