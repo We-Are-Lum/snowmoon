@@ -349,3 +349,18 @@ Built on `chat-slice-1` (2026-10-07). Differences, each deliberate unless marked
 - **Merging:** foundations → first-visit-intro → minpentai-rules → chat-slice-1, then
   prototype-ideas if it applies cleanly; deployed once the owner has applied 0006 and removed
   SUPABASE_SECRET_KEY.
+
+## 13. The fresh-round result, and where chat stands (2026-10-07)
+
+On 50 held-out questions (chapters 1–15, nothing tuned on them), graded twice by different
+agents: **8 wrong answers** with the shipped setup; 4 to 6 with bge-small embeddings fused into
+retrieval. The owner's bar for removing the "Testing" label is at most 2, so **the assistant
+stays labelled "Testing"**. Details: `chat-eval/README.md`, "The fresh set".
+
+Owner decisions: **stop tuning** the assistant; **leave embeddings out** of the app for now (the
+offline measurement stays in `chat-eval/`; `retrieve()` keeps an optional ranking input used only
+by the evaluation script, and the app passes none). Chat merges to main and ships labelled
+"Testing", with Groq pinned and zero retention required.
+
+**Open item:** P6d fails while `SUPABASE_SECRET_KEY` remains on the Vercel project (owner's
+choice, 2026-10-07). The check is unchanged; every other check must pass.
