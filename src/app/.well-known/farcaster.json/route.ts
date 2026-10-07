@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { APP_NAME, appUrl } from '~/lib/config';
+import { PAPER } from '~/lib/tokens';
 
 /** Farcaster miniapp manifest, served locally per deployment. */
 export function GET() {
@@ -14,7 +15,7 @@ export function GET() {
         homeUrl: url,
         iconUrl: `${url}/icon.png`,
         splashImageUrl: `${url}/splash.png`,
-        splashBackgroundColor: '#F4F2ED',
+        splashBackgroundColor: PAPER,
         subtitle: 'An open illustrated Snowmoon',
         description:
           'Read Snowmoon by Vitalik Buterin and build an open illustrated and narrated edition together with every prompt in public',

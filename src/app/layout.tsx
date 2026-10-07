@@ -4,6 +4,8 @@ import { MiniappBar } from '~/components/miniapp-bar';
 import { WhatIsThis } from '~/components/first-visit';
 import { loadIntro } from '~/lib/intro';
 import { APP_NAME, appUrl } from '~/lib/config';
+import { PAPER, PAPER_DARK } from '~/lib/tokens';
+import '../styles/tokens.css';
 import './globals.css';
 
 const url = appUrl();
@@ -21,7 +23,7 @@ const miniappEmbed = JSON.stringify({
   button: {
     title: 'Read Snowmoon',
     // The spec lists launch_frame and view_token as the action types.
-    action: { type: 'launch_frame', name: APP_NAME, url, splashImageUrl: `${url}/splash.png`, splashBackgroundColor: '#F4F2ED' },
+    action: { type: 'launch_frame', name: APP_NAME, url, splashImageUrl: `${url}/splash.png`, splashBackgroundColor: PAPER },
   },
 });
 
@@ -36,8 +38,8 @@ export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
   themeColor: [
-    { media: '(prefers-color-scheme: light)', color: '#F4F2ED' },
-    { media: '(prefers-color-scheme: dark)', color: '#161614' },
+    { media: '(prefers-color-scheme: light)', color: PAPER },
+    { media: '(prefers-color-scheme: dark)', color: PAPER_DARK },
   ],
 };
 
