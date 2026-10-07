@@ -1,7 +1,8 @@
 # Chat: which provider to pin behind Vercel AI Gateway
 
-**Status:** for the owner to decide (2026-10-07). Not pinned: `CHAT.provider` is empty in
-`src/lib/config.ts`, and until it is set the assistant tells readers it is unavailable.
+**Status:** decided (owner, 2026-10-07): **Groq**, pinned for the model and the guard, zero
+data retention required (`CHAT.provider` in `src/lib/config.ts`). Which Groq data centre
+serves a request is unverified.
 Compiled by the coding agent from the gateway's public listings and each provider's own
 pages; anything not confirmed on the provider's page is marked unverified.
 

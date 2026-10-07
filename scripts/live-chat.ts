@@ -47,7 +47,7 @@ const complete: Complete = async (model, messages, opts) => {
   const ct = j.usage?.completion_tokens ?? 0;
   return { text: j.choices?.[0]?.message?.content ?? '', promptTokens: pt, completionTokens: ct, costUsd: typeof j.usage?.cost === 'number' ? j.usage.cost : pt * p.input + ct * p.output, requestId: j.id ?? null, provider: servedBy(j), model: j.model ?? model };
 };
-const deps = { sql, fid: 6786, complete, systemPrompt: await prompt('chat-ask.md'), guardPolicy: await prompt('chat-guard.md'), reminder: await prompt('chat-reminder.md') };
+const deps = { sql, fid: 6786, complete, systemPrompt: await prompt('chat-ask.md'), guardPolicy: await prompt('chat-guard.md'), reminder: await prompt('chat-reminder.md'), searchPrompt: await prompt('chat-search-terms.md'), supportPolicy: await prompt('chat-support.md') };
 
 const cases = [
   { question: 'Why is Gladias asked to rate a building he has never been inside?', limit: 3 },

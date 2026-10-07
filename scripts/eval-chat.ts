@@ -63,12 +63,21 @@ try {
     // Every call is kept here in full for grading (this script only; the app keeps no text).
     const log: { q: string; model: string; text: string; provider: string | null }[] = [];
     let current = '';
+    let busy = 0;
     const complete: Complete = async (model, messages, opts) => {
-      const res = await fetch(CHAT.endpoint, {
-        method: 'POST',
-        headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-        body: JSON.stringify({ model, messages, max_tokens: opts.maxTokens, temperature: opts.temperature, providerOptions: providerOptions() }),
-      });
+      const send = () =>
+        fetch(CHAT.endpoint, {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+          body: JSON.stringify({ model, messages, max_tokens: opts.maxTokens, temperature: opts.temperature, providerOptions: providerOptions() }),
+        });
+      let res = await send();
+      // The pinned provider may be busy; the app retries once, the check waits longer so a run isn't cut short.
+      for (let wait = 2000; [429, 498, 503].includes(res.status) && wait <= 32000; wait *= 2) {
+        busy++;
+        await new Promise((r) => setTimeout(r, wait));
+        res = await send();
+      }
       const j = (await res.json()) as { id?: string; model?: string; provider?: string; choices?: { message?: { content?: string } }[]; usage?: { prompt_tokens?: number; completion_tokens?: number; cost?: number }; provider_metadata?: { gateway?: { routing?: { finalProvider?: string } } } };
       if (!res.ok) throw new Error(`gateway ${res.status} ${JSON.stringify(j).slice(0, 300)}`);
       const p = CHAT.prices[model];
@@ -84,7 +93,8 @@ try {
     const guardPolicy = await prompt('chat-guard.md');
     const reminder = await prompt('chat-reminder.md');
     const searchPrompt = await prompt('chat-search-terms.md');
-    const deps = (fid: number) => ({ sql, fid, complete, systemPrompt, guardPolicy, reminder, searchPrompt });
+    const supportPolicy = await prompt('chat-support.md');
+    const deps = (fid: number) => ({ sql, fid, complete, systemPrompt, guardPolicy, reminder, searchPrompt, supportPolicy });
     const results = [];
     for (const [i, q] of questions.entries()) {
       current = q.id;
@@ -99,7 +109,7 @@ try {
     }
     const usd = await spent();
     const providers = [...new Set(log.map((l) => l.provider))];
-    console.log(`spend: $${usd.toFixed(5)}; providers seen: ${providers.join(', ')}`);
+    console.log(`spend: $${usd.toFixed(5)}; providers seen: ${providers.join(', ')}; busy retries: ${busy}`);
     if (out) await writeFile(out, JSON.stringify({ spend_usd: usd, providers, results }, null, 1));
   }
 } finally {

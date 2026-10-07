@@ -33,6 +33,8 @@ export type AskResult =
   | { state: 'answer'; parts: Part[]; quotes: Quote[]; heldBack: boolean; left: number; guard: 'ok' | 'none'; dropped: number; regenerated: boolean }
   | { state: 'held'; heldBack: true; left: number }
   | { state: 'declined'; left: number }
+  /** The answer's claims were not all supported by the passages it cited: shown as "the passages don't say". */
+  | { state: 'unsupported'; heldBack: boolean; left: number }
   | { state: 'limit' }
   | { state: 'spend' };
 
@@ -53,6 +55,8 @@ export interface AskDeps {
   reminder: string;
   /** Turns the question into search words (chat-search-terms.md), when CHAT.searchTerms is on. */
   searchPrompt?: string;
+  /** The second guard question (chat-support.md): is every claim supported by its cited passages? */
+  supportPolicy?: string;
 }
 
 export class AskError extends Error {
@@ -90,8 +94,8 @@ export function validate(input: AskInput): AskInput {
 export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
   const input = validate(raw);
   const { sql, fid } = deps;
-  // Worst case: two answers (the retry) and four guard calls (each may be retried once).
-  const slot = await reserve(sql, fid, worstCaseUsd(2 * ANSWER_TOKENS + SEARCH_TOKENS, 4 * GUARD_TOKENS, 20000));
+  // Worst case: search words, two answers (the retry), four guard calls and two support checks (each may be retried once).
+  const slot = await reserve(sql, fid, worstCaseUsd(2 * ANSWER_TOKENS + SEARCH_TOKENS, 6 * GUARD_TOKENS, 24000));
   if (!slot.ok) return { state: slot.reason };
 
   let retrieved;
@@ -133,6 +137,12 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
     html: b.kind === 'paragraph' || b.kind === 'quote' ? renderMarkdown(b) : b.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim(),
   }));
   const found = new Set(quotes.map((q) => q.id));
+
+  // The second guard question: every claim supported by the passages it cites? If not, or no verdict, it isn't shown.
+  if (deps.supportPolicy) {
+    const supported = await supportCheck(deps, input.question, clean.shown, blocks, input.limit);
+    if (!supported) return { state: 'unsupported', heldBack, left: slot.left };
+  }
   const parts = clean.parts.filter((p) => p.type === 'text' || found.has(p.id));
   return {
     state: 'answer',
@@ -196,4 +206,39 @@ async function searchTerms(deps: AskDeps, question: string): Promise<string> {
     promptTokens: r.promptTokens, completionTokens: r.completionTokens, costUsd: r.costUsd,
   });
   return (r.text.match(/[\p{L}\p{N}][\p{L}\p{N}'-]*/gu) ?? []).slice(0, 20).join(' ');
+}
+
+/**
+ * Is every claim in the answer supported by the passages it cites? The guard model reads the
+ * answer and the stored text of each cited block, with the block before it as context. Fails
+ * closed: no verdict after one retry counts as unsupported. Recorded as a guard call (no text).
+ */
+async function supportCheck(deps: AskDeps, question: string, shown: string, cited: Passage[], limit: number): Promise<boolean> {
+  const before = await blocksById(deps.sql, cited.map((b) => `c${b.chapter}-b${b.idx - 1}`), limit);
+  const byId = new Map(before.map((b) => [b.id, b]));
+  const passages = cited
+    .map((b) => {
+      const ctx = byId.get(`c${b.chapter}-b${b.idx - 1}`);
+      const plain = (p: Passage) => p.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
+      return `${ctx ? `(context, the passage before) ${plain(ctx)}\n` : ''}[${b.id}] ${plain(b)}`;
+    })
+    .join('\n\n');
+  for (let attempt = 0; attempt < 2; attempt++) {
+    const g = await deps.complete(
+      CHAT.guardModel,
+      [
+        { role: 'system', content: deps.supportPolicy! },
+        { role: 'user', content: `QUESTION:\n${question}\n\nCITED PASSAGES:\n${passages || '(none)'}\n\nANSWER:\n${shown}` },
+      ],
+      { maxTokens: GUARD_TOKENS, temperature: 0 },
+    );
+    const first = g.text.trim().split(/\s+/)[0]?.toUpperCase() ?? '';
+    const verdict = first.startsWith('UNSUPPORTED') ? 'flagged' : first.startsWith('SUPPORTED') ? 'ok' : 'none';
+    await record(deps.sql, {
+      fid: deps.fid, kind: 'guard', model: g.model, provider: g.provider, requestId: g.requestId,
+      promptTokens: g.promptTokens, completionTokens: g.completionTokens, costUsd: g.costUsd, guard: verdict,
+    });
+    if (verdict !== 'none') return verdict === 'ok';
+  }
+  return false;
 }

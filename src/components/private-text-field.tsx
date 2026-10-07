@@ -1,8 +1,11 @@
+import { CHAT } from '~/lib/config';
+
 /**
  * A text box whose contents are never published: the reading assistant's questions,
- * kept on this device only (docs/proposals/chat.md). It says so under the box, the way
- * PublishedTextField shows the publication line. These two components are the only
- * places a text box may appear (npm run check:principles P1f).
+ * saved only on this device and sent to the model's two hosts to be answered
+ * (docs/proposals/chat.md). It says so under the box, the way PublishedTextField shows
+ * the publication line. These two components are the only places a text box may appear
+ * (npm run check:principles P1f checks this wording).
  */
 export function PrivateTextField({
   id,
@@ -38,9 +41,9 @@ export function PrivateTextField({
         onChange={(e) => onChange(e.target.value)}
         aria-describedby={`${id}-line`}
       />
-      {/* Model-drafted wording, like the rest of the assistant. */}
       <p id={`${id}-line`} className="private-line">
-        Kept on this device only. Never published.
+        Saved only on this device. Sent to {CHAT.host} and {CHAT.providerName} to be answered. Never published.{' '}
+        <span className="as-draft">Draft wording</span>
       </p>
     </div>
   );

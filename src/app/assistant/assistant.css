@@ -12,6 +12,12 @@
   letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted);
 }
 .as-intro { color: var(--body); }
+/* "Testing": answers can be wrong (CHAT.testing). */
+.as-testing {
+  margin: 0 0 var(--space-3); padding: 8px 12px; border: 1.5px solid var(--warn); border-radius: var(--radius);
+  color: var(--ink); background: var(--flag-bg); font-size: 16px; line-height: 1.4;
+}
+.as-testing strong { margin-right: 6px; font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.08em; text-transform: uppercase; color: var(--warn); }
 .as-empty { color: var(--muted); }
 .as-visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 

@@ -40,11 +40,18 @@ export async function complete(
   messages: { role: 'system' | 'user' | 'assistant'; content: string }[],
   opts: { maxTokens: number; temperature: number },
 ): Promise<ModelReply> {
-  const res = await fetch(CHAT.endpoint, {
-    method: 'POST',
-    headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ model, messages, max_tokens: opts.maxTokens, temperature: opts.temperature, providerOptions: providerOptions() }),
-  });
+  const send = () =>
+    fetch(CHAT.endpoint, {
+      method: 'POST',
+      headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ model, messages, max_tokens: opts.maxTokens, temperature: opts.temperature, providerOptions: providerOptions() }),
+    });
+  let res = await send();
+  // The pinned provider has no fallback; when it is busy (429, 498 "at capacity", 503), wait a second and try once more.
+  if ([429, 498, 503].includes(res.status)) {
+    await new Promise((r) => setTimeout(r, 1000));
+    res = await send();
+  }
   const j = (await res.json().catch(() => ({}))) as {
     id?: string;
     model?: string;

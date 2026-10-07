@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { sdk } from '@farcaster/miniapp-sdk';
 import { PrivateTextField } from './private-text-field';
+import { CHAT } from '~/lib/config';
 import type { AskResult, Quote } from '~/lib/chat/ask';
 import type { Part } from '~/lib/chat/sanitize';
 import {
@@ -40,6 +41,16 @@ function answerText(m: AnsweredMessage): string {
   return r.parts.map((p) => (p.type === 'text' ? p.text : `[${p.id}]`)).join('');
 }
 
+/** Owner (2026-10-07): shown until a fresh 50-question check has at most 2 wrong answers. */
+function TestingLabel() {
+  if (!CHAT.testing) return null;
+  return (
+    <p className="as-testing" role="note">
+      <strong>Testing</strong> Answers can be wrong; check the quotes. <DraftTag />
+    </p>
+  );
+}
+
 function DraftTag() {
   return <span className="as-draft">Draft wording</span>;
 }
@@ -51,7 +62,10 @@ function Notice({ host, provider, model, onClose }: { host: string; provider: st
     ['It helps you read', 'Ask about the book. Answers point to the passages they rest on, with chapter and ¶, and show the book’s own words.'],
     ['It won’t write for you', 'No dialogue, narration or description. It gives context and commentary only.'],
     [`Your messages go to ${host}, then ${provider}`, `Two outside services: ${host} passes each message to ${provider}, which runs ${model}, an open-weights model. Neither keeps your messages, and this app keeps no copy.`],
-    ['Your questions stay on this device', 'Questions about the book are kept here only and never published. Another device won’t have them.'],
+    [
+      'Your questions are saved only on this device',
+      `They are sent to ${host} and ${provider} to be answered, and never published. Another device won’t have them.`,
+    ],
   ];
   return (
     <div className="as-overlay" role="dialog" aria-modal="true" aria-labelledby="as-notice-title">
@@ -209,6 +223,14 @@ function Reply({ m, thread, onShow }: { m: AnsweredMessage; thread: Thread; onSh
           <li>talk through what a character seems to be weighing</li>
           <li>check something you wrote against the book</li>
         </ul>
+      </div>
+    );
+  if (r.state === 'unsupported')
+    return (
+      <div className="as-reply">
+        <p className="as-label">Assistant · the passages don’t say</p>
+        <p>The passages found for this question don’t say. Try asking another way, or include more chapters.</p>
+        {r.heldBack && <p className="as-note">Later chapters may say more.</p>}
       </div>
     );
   if (r.state === 'limit')
@@ -371,7 +393,10 @@ function SignedOut({ inApp }: { inApp: boolean }) {
     <section className="as-signed-out">
       <p className="as-label">Sign in to use the assistant <DraftTag /></p>
       <h1>Your questions need a name to be counted under</h1>
-      <p>Questions about the book are kept on this device only. The daily limit is counted per Farcaster account.</p>
+      <p>
+        Questions about the book are saved only on this device, sent to {CHAT.host} and {CHAT.providerName} to be answered, and never published. The daily limit
+        is counted per Farcaster account.
+      </p>
       <button
         type="button"
         className="as-primary"
@@ -440,9 +465,16 @@ export function Assistant() {
   }, [status]);
 
   if (body) return <div className="as">{body}</div>;
-  if (open && ready) return <div className="as"><ThreadView id={open} status={ready} refresh={() => void refresh()} /></div>;
+  if (open && ready)
+    return (
+      <div className="as">
+        <TestingLabel />
+        <ThreadView id={open} status={ready} refresh={() => void refresh()} />
+      </div>
+    );
   return (
     <div className="as">
+      <TestingLabel />
       <h1>Assistant</h1>
       <p className="as-intro">
         Help with reading the book. It comments; it never writes for you. <DraftTag />
@@ -457,7 +489,7 @@ export function Assistant() {
         }}
       >
         <span className="as-start-title">○ Ask about the book</span>
-        <span className="as-start-line">Private. Kept on this device. Never published.</span>
+        <span className="as-start-line">Private. Saved only on this device. Never published.</span>
       </button>
       {list.length > 0 && (
         <section aria-label="Your private threads">

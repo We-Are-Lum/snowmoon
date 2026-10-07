@@ -78,9 +78,14 @@ async function checkAssistant(page: Page, scheme: string) {
   await shot(page, '9d-signed-out', scheme);
 
   let left = 30;
-  const replies: { state: string; left?: number; heldBack?: boolean }[] = [LIVE.results[0].result, { state: 'held', heldBack: true, left: 1 }, { state: 'limit', left: 0 }];
+  const replies: { state: string; left?: number; heldBack?: boolean }[] = [
+    LIVE.results[0].result,
+    { state: 'unsupported', heldBack: false, left: 2 },
+    { state: 'held', heldBack: true, left: 1 },
+    { state: 'limit', left: 0 },
+  ];
   await page.route('**/api/chat/status', (r) =>
-    r.fulfill({ json: { available: true, model: 'gpt-oss-120b', host: 'Vercel AI Gateway', provider: '‹provider not chosen›', perDay: 30, left } }),
+    r.fulfill({ json: { available: true, model: 'gpt-oss-120b', host: 'Vercel AI Gateway', provider: 'Groq', perDay: 30, left } }),
   );
   await page.route('**/api/chat/ask', (r) => {
     const next = replies.shift()!;
@@ -106,6 +111,13 @@ async function checkAssistant(page: Page, scheme: string) {
   if (!host?.includes('Vercel AI Gateway')) fail(`/assistant: the footer does not name the host (${host})`);
   await checkFloors(page, '/assistant (3 thread)', scheme);
   await shot(page, '3-thread', scheme);
+
+  if (!(await page.locator('.as-testing').isVisible())) fail('/assistant: no "Testing" label');
+  await page.fill('#as-q', LIVE.results[1].question);
+  await page.click('.as-send');
+  await page.waitForSelector('text=the passages don’t say');
+  await checkFloors(page, '/assistant (unsupported)', scheme);
+  await shot(page, '3b-unsupported', scheme);
 
   await page.fill('#as-q', LIVE.results[4].question);
   await page.click('.as-send');
@@ -287,4 +299,4 @@ if (failures.length) {
   console.error(`\nUI CHECK FAILED (${failures.length}):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`ui check passed: ${BASE}, 36 pages and 6 assistant states × light and dark`);
+console.log(`ui check passed: ${BASE}, 36 pages and 7 assistant states × light and dark`);

@@ -53,7 +53,7 @@ try {
     await page.route('https://auth.farcaster.xyz/**', (r) => r.fulfill({ json: new URL(r.request().url()).pathname.includes('nonce') ? { nonce: 'checknonce1' } : { token: TOKEN } }));
     const seen = (name: string, auth?: string) => (bearer[name] ??= []).push(auth ?? '');
     await page.route('**/api/auth/me', (r) => (seen('me', r.request().headers().authorization), r.fulfill({ json: { fid: 6786 } })));
-    await page.route('**/api/chat/status', (r) => (seen('status', r.request().headers().authorization), r.fulfill({ json: { available: true, model: 'gpt-oss-120b', host: 'Vercel AI Gateway', provider: '‹provider not chosen›', perDay: 30, left: 30 } })));
+    await page.route('**/api/chat/status', (r) => (seen('status', r.request().headers().authorization), r.fulfill({ json: { available: true, model: 'gpt-oss-120b', host: 'Vercel AI Gateway', provider: 'Groq', perDay: 30, left: 30 } })));
     await page.route('**/api/chat/ask', (r) => (seen('ask', r.request().headers().authorization), r.fulfill({ json: { state: 'answer', parts: [{ type: 'text', text: 'Commentary.' }], quotes: [], heldBack: false, left: 29, guard: 'ok', dropped: 0, regenerated: false } })));
     await page.goto(`${HOST}?url=${encodeURIComponent(BASE + path)}`);
     const frame = await new Promise<Frame>((resolve) => {
@@ -71,7 +71,8 @@ try {
       await frame.click('.as-send');
       await frame.waitForSelector('.as-sheet');
       const notice = (await frame.textContent('.as-sheet')) ?? '';
-      if (!/Vercel AI Gateway, then/.test(notice)) fail('/assistant: the notice does not name both hops');
+      if (!/Vercel AI Gateway, then Groq/.test(notice)) fail('/assistant: the notice does not name both hops');
+      if (!/saved only on this device/i.test(notice) || !/never published/i.test(notice)) fail('/assistant: the notice does not say questions are saved only on this device and never published');
       const box = await frame.locator('.as-sheet .as-primary').boundingBox();
       if (!box || box.y + box.height > 695) fail('/assistant: the notice\'s Continue button is outside the 695px frame');
       await frame.click('.as-sheet .as-primary');

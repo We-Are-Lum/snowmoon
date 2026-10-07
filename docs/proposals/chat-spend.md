@@ -17,7 +17,8 @@ recorded alongside and agreed to within rounding.
 | 2026-10-07 | 50-question check: guard policy re-check (red team + run 1) | openai/gpt-oss-safeguard-20b | 140 | 0.01445 |
 | 2026-10-07 | 50-question check: run 2 (final) | gpt-oss-120b + gpt-oss-safeguard-20b | 150 | 0.02980 |
 | 2026-10-07 | Two probes of the gateway's reply format | openai/gpt-oss-120b | 2 | 0.00005 |
-| | **Running total** | | 690 | **0.12084** |
+| 2026-10-07 | Tuning set through Groq with the support check (sanity run before the fresh round) | gpt-oss-120b + gpt-oss-safeguard-20b on Groq | ≈250 | 0.04851 |
+| | **Running total** | | ≈940 | **0.16935** |
 
 The 50-question check had its own cap of $1 (owner, 2026-10-07) and spent $0.09131.
 

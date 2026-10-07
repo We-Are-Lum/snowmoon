@@ -26,6 +26,7 @@ export async function POST(request: Request) {
         guardPolicy: promptFile('chat-guard.md'),
         reminder: promptFile('chat-reminder.md'),
         searchPrompt: promptFile('chat-search-terms.md'),
+        supportPolicy: promptFile('chat-support.md'),
       },
       input,
     );

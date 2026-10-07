@@ -108,12 +108,17 @@ try {
   let guardQueue: string[] = [];
   /** What the stand-in returns for the search-words call. */
   let searchText = '';
+  /** Verdicts for the support check, one per call (default SUPPORTED), and what it was shown. */
+  let supportQueue: string[] = [];
+  const supportSeen: string[] = [];
   const complete: Complete = async (model, messages) => {
     calls.push({ model, user: messages[messages.length - 1].content });
-    const text = model === CHAT.guardModel ? (guardQueue.shift() ?? guardText) : messages[0].content === 'SEARCH' ? searchText : answerText;
+    const text =
+      messages[0].content === 'SUPPORT' ? (supportQueue.shift() ?? 'SUPPORTED') : model === CHAT.guardModel ? (guardQueue.shift() ?? guardText) : messages[0].content === 'SEARCH' ? searchText : answerText;
+    if (messages[0].content === 'SUPPORT') supportSeen.push(messages[1].content);
     return { text, promptTokens: 1000, completionTokens: 200, costUsd: 0.0002, requestId: 'test', provider: 'test', model };
   };
-  const deps = (fid: number) => ({ sql, fid, complete, systemPrompt: 'SYSTEM up to {{LIMIT}}', guardPolicy: 'POLICY', reminder: 'REMINDER: {{REASON}}', searchPrompt: 'SEARCH' });
+  const deps = (fid: number) => ({ sql, fid, complete, systemPrompt: 'SYSTEM up to {{LIMIT}}', guardPolicy: 'POLICY', reminder: 'REMINDER: {{REASON}}', searchPrompt: 'SEARCH', supportPolicy: 'SUPPORT' });
 
   {
     calls.length = 0;
@@ -176,7 +181,7 @@ try {
     calls.length = 0;
     guardQueue = ['', 'OK'];
     const res = await ask(deps(108), { question: 'Gladias vote', limit: 1 });
-    check('an empty guard verdict is retried once', res.state === 'answer' && calls.filter((c) => c.model === CHAT.guardModel).length === 2);
+    check('an empty guard verdict is retried once', res.state === 'answer' && calls.filter((c) => c.model === CHAT.guardModel && c.user.startsWith('USER REQUEST')).length === 2);
     guardQueue = [];
   }
 
@@ -193,6 +198,25 @@ try {
     const [{ n }] = await sql`select count(*)::int as n from studio.chat_calls where fid = 109 and kind = 'search'`;
     check('the search-words call is counted (cost only)', n === 1, String(n));
     searchText = '';
+  }
+
+  {
+    // The second guard question: an unsupported answer becomes "the passages don't say".
+    const r1 = await retrieve(sql, 'Why is Gladias asked to rate a building?', 1);
+    const real = r1.passages[0].id;
+    answerText = `He is chosen because he is the emperor [${real}].`;
+    supportQueue = ['UNSUPPORTED the emperor claim'];
+    const res = await ask(deps(110), { question: 'Why is Gladias asked to rate a building?', limit: 1 });
+    check('an unsupported answer is not shown', res.state === 'unsupported', res.state);
+    const [{ content }] = await sql`select content from studio.text_blocks where chapter = ${Number(real.slice(1, real.indexOf('-')))} and idx = ${Number(real.split('-b')[1])}`;
+    const seen = supportSeen[supportSeen.length - 1] ?? '';
+    check('the support check sees the stored text of the cited block', seen.includes(String(content).replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim().slice(0, 40)));
+    supportQueue = ['', ''];
+    const res2 = await ask(deps(111), { question: 'Why is Gladias asked to rate a building?', limit: 1 });
+    check('no verdict from the support check fails closed', res2.state === 'unsupported', res2.state);
+    supportQueue = [];
+    const res3 = await ask(deps(112), { question: 'Why is Gladias asked to rate a building?', limit: 1 });
+    check('a supported answer is shown', res3.state === 'answer', res3.state);
   }
 
   // --- Limits ----------------------------------------------------------------
@@ -226,8 +250,8 @@ try {
 {
   const o = providerOptions();
   check('every request requires zero data retention', o.gateway.zeroDataRetention === true);
-  check('no provider is pinned until the owner picks one', CHAT.provider === null && !('only' in o.gateway));
-  check('the assistant is unavailable to readers until a provider is pinned', servingAllowed() === false);
+  check('one provider is pinned (Groq, owner 2026-10-07), with no fallback', CHAT.provider === 'groq' && JSON.stringify((o.gateway as { only?: string[] }).only) === '["groq"]');
+  check('the assistant serves readers only with the pin and zero retention in place', servingAllowed() === true);
   const reply = { choices: [{ message: { provider_metadata: { gateway: { routing: { resolvedProvider: 'groq', finalProvider: 'groq' } } } } }] };
   check('the serving provider is read from the gateway reply', servedBy(reply) === 'groq');
   for (const f of ['src/app/api/chat/ask/route.ts', 'src/app/api/chat/status/route.ts', 'src/lib/chat/ask.ts', 'src/lib/chat/retrieve.ts']) {

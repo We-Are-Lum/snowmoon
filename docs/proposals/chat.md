@@ -326,3 +326,26 @@ Built on `chat-slice-1` (2026-10-07). Differences, each deliberate unless marked
 - **Migration 0006:** applied by the owner after a dry run. It changed once since slice 1:
   `chat_calls.kind` also allows `'search'`.
 - **Before merging:** the 50-question check (`chat-eval/README.md`).
+
+## 12. The owner's decisions, second round (2026-10-07)
+
+- **Provider: Groq**, for the model and the guard, pinned (`only: ["groq"]`) with zero data
+  retention required. **Which Groq data centre serves a request is unverified**: Groq keeps
+  customer data in Google Cloud buckets in the United States and runs data centres in the
+  US, Canada, Finland, Saudi Arabia and Australia. The About page says the same.
+- **The second guard question** (`config/prompts/chat-support.md`): after the writing guard,
+  the guard model checks every claim against the stored text of the passages it cites (and
+  the passage before each, for who is speaking). Unsupported, or no verdict after one retry,
+  and the reader sees "the passages don't say". Recorded as a guard call; no new table value.
+- **Wording:** the question box, the notice's fourth item, the assistant's home and the
+  signed-out screen say questions are saved only on this device, sent to Vercel AI Gateway and
+  Groq to be answered, and never published. P1f requires the box's wording. Still draft.
+- **"Testing" label** on the assistant ("Answers can be wrong; check the quotes") until a
+  fresh set of 50 questions, tuned on nothing, has at most 2 wrong answers ("can't answer"
+  is not wrong). `CHAT.testing` in `src/lib/config.ts`.
+- **Busy provider:** Groq sometimes answers "at capacity" (HTTP 498); with one provider there is
+  no fallback, so the app waits a second and tries once more, then shows "try again". In the
+  tuning-set run through Groq, 13 calls of about 250 needed a wait.
+- **Merging:** foundations → first-visit-intro → minpentai-rules → chat-slice-1, then
+  prototype-ideas if it applies cleanly; deployed once the owner has applied 0006 and removed
+  SUPABASE_SECRET_KEY.

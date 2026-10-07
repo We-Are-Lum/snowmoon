@@ -44,15 +44,20 @@ export const CHAT = {
    * zero data retention, both hops named. Empty until the owner picks one; while it is
    * empty the assistant reports itself unavailable. Candidates: docs/proposals/chat-providers.md.
    */
-  provider: null as string | null,
-  providerName: null as string | null,
+  provider: 'groq' as string | null,
+  providerName: 'Groq' as string | null,
   /** Every request asks the gateway for providers with zero data retention only. */
   zeroDataRetention: true,
+  /**
+   * Shows the "Testing" label on the assistant (answers can be wrong; check the quotes).
+   * Owner (2026-10-07): it stays until a fresh 50-question check has at most 2 wrong answers.
+   */
+  testing: true,
   endpoint: 'https://ai-gateway.vercel.sh/v1/chat/completions',
-  /** USD per token, from the gateway's published list (2026-10-07). */
+  /** USD per token on Groq, from the gateway's published list (2026-10-07). The gateway's own per-request cost is used when it gives one. */
   prices: {
-    'openai/gpt-oss-120b': { input: 0.1e-6, output: 0.5e-6 },
-    'openai/gpt-oss-safeguard-20b': { input: 0.07e-6, output: 0.2e-6 },
+    'openai/gpt-oss-120b': { input: 0.15e-6, output: 0.6e-6 },
+    'openai/gpt-oss-safeguard-20b': { input: 0.075e-6, output: 0.3e-6 },
   } as Record<string, { input: number; output: number }>,
   /** Answers per FID per UTC day (refusals and held-back answers count). */
   messagesPerDay: 30,

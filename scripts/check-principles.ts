@@ -255,7 +255,15 @@ add({
       // other (questions kept on the device, never published) says it is never published.
       if (file.endsWith('components/publish-words.tsx')) continue;
       if (file.endsWith('components/private-text-field.tsx')) {
-        if (!/Never published/.test(text) || !/aria-describedby/.test(text)) problems.push(`${file}: the private box must say, and describe itself as, never published`);
+        // Owner (2026-10-07): saved only on this device, sent to Vercel and Groq to be answered, never published; labelled draft.
+        for (const [what, re] of [
+          ['saved only on this device', /Saved only on this device/],
+          ['sent to the model\'s two hosts to be answered', /Sent to \{CHAT\.host\} and \{CHAT\.providerName\} to be answered/],
+          ['never published', /Never published/],
+          ['labelled draft', /as-draft/],
+          ['described to screen readers', /aria-describedby/],
+        ] as const)
+          if (!re.test(text)) problems.push(`${file}: the private box must say it is ${what}`);
         if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the private box must not send its text anywhere itself`);
         continue;
       }
