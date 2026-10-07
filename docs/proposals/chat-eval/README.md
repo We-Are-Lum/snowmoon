@@ -133,6 +133,6 @@ proposal's estimate.
 
 1. **Embeddings** for retrieval (deferred). The misses are vocabulary, not ranking.
 2. **"If the passages don't state it, say so" enforced**, e.g. a second guard question:
-   is each sentence supported by a cited block? That would turn the 5 wrong answers into
+   is each sentence supported by a cited block? That could turn the 5 wrong answers into
    "the passages don't say", at about $0.0001 a question.
 3. **A held-out set** of 50 new questions to measure without the tuning bias.
