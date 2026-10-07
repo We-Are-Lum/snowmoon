@@ -27,6 +27,8 @@ export interface Thread {
   limit: number;
   /** Blocks attached when the thread was opened ("ask about this"). */
   attached: string[];
+  /** The chapter the thread was opened from ("ask about this chapter"), if any. */
+  chapter?: number;
   messages: Message[];
 }
 
@@ -70,9 +72,9 @@ export function saveThread(t: Thread) {
 export function deleteThread(id: string) {
   set(THREADS, threads().filter((x) => x.id !== id));
 }
-export function newThread(limit: number, attached: string[] = []): Thread {
+export function newThread(limit: number, attached: string[] = [], chapter?: number): Thread {
   const id = typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : String(Date.now());
-  const t: Thread = { id, createdAt: new Date().toISOString(), limit, attached, messages: [] };
+  const t: Thread = { id, createdAt: new Date().toISOString(), limit, attached, ...(chapter ? { chapter } : {}), messages: [] };
   saveThread(t);
   return t;
 }

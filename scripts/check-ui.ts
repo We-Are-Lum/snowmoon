@@ -47,7 +47,10 @@ const LIVE = JSON.parse(readFileSync(new URL('./fixtures/chat-live-2026-10-07.js
 };
 
 async function shot(page: Page, name: string, scheme: string) {
-  if (SHOTS) await page.screenshot({ path: `${SHOTS}/${name}-${scheme}.png`, fullPage: false });
+  if (!SHOTS) return;
+  // Let opening animations finish (not endless ones, like the "reading" pulse).
+  await page.evaluate(() => Promise.all(document.getAnimations().filter((a) => a.effect?.getTiming().iterations !== Infinity).map((a) => a.finished)));
+  await page.screenshot({ path: `${SHOTS}/${name}-${scheme}.png`, fullPage: false });
 }
 
 /** Screens 1a, 1b, 9d, 1d, 2, 3, 9b and 9c, with the chat API replayed from the live run. */
@@ -70,6 +73,17 @@ async function checkAssistant(page: Page, scheme: string) {
   // 1b: the chapter's own link.
   await page.evaluate(() => document.querySelector('.ask-chapter')!.scrollIntoView({ block: 'center' }));
   await shot(page, '1b-chapter-link', scheme);
+  // The chapter sheet: opens on the current chapter, closes on Escape, gives focus back.
+  await page.evaluate(() => window.scrollTo(0, 0));
+  await page.click('.chapter-bar-button');
+  await page.waitForSelector('.chapter-sheet');
+  const focused = await page.evaluate(() => document.activeElement?.getAttribute('aria-current'));
+  if (focused !== 'page') fail('/chapter/1: the chapter sheet does not open on the current chapter');
+  await checkFloors(page, '/chapter/1 (chapter sheet)', scheme);
+  await shot(page, '1b-chapter-sheet', scheme);
+  await page.keyboard.press('Escape');
+  if (await page.locator('.chapter-sheet').count()) fail('/chapter/1: Escape does not close the chapter sheet');
+  if (!(await page.evaluate(() => document.activeElement?.classList.contains('chapter-bar-button')))) fail('/chapter/1: focus does not return to the chapter button');
 
   await page.evaluate(() => localStorage.clear());
   await open(page, '/assistant');
@@ -92,6 +106,18 @@ async function checkAssistant(page: Page, scheme: string) {
   await page.waitForSelector('.as-start');
   await checkFloors(page, '/assistant (1d home)', scheme);
   await shot(page, '1d-home', scheme);
+
+  // 1a, in the assistant: the passage card (the stored text) and starter questions.
+  await open(page, '/assistant?block=c1-b19');
+  await page.waitForSelector('.as-passage blockquote');
+  const card = await page.textContent('.as-passage blockquote');
+  if (!card?.includes('cryptographic sortition')) fail(`/assistant?block=c1-b19: the passage card is not the stored text (${card?.slice(0, 60)})`);
+  if ((await page.locator('.as-starter').count()) !== 3) fail('/assistant?block=: no starter questions in an empty thread');
+  await checkFloors(page, '/assistant (1a thread)', scheme);
+  await shot(page, '1a-thread', scheme);
+  await page.evaluate(() => localStorage.removeItem('snowmoon.ask.threads.v1'));
+  await open(page, '/assistant');
+  await page.waitForSelector('.as-start');
 
   await page.click('.as-start');
   await page.fill('#as-q', LIVE.results[0].question);
@@ -287,4 +313,4 @@ if (failures.length) {
   console.error(`\nUI CHECK FAILED (${failures.length}):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`ui check passed: ${BASE}, 36 pages and 6 assistant states × light and dark`);
+console.log(`ui check passed: ${BASE}, 36 pages, the chapter sheet and 7 assistant states × light and dark`);
