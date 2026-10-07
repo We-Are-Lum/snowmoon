@@ -292,3 +292,15 @@ Raised by this proposal:
 25. **Whether asking threads can be exported** by their owner (they live only on
     one device).
 26. **Embeddings:** only if FTS fails the 50-question check; which model then.
+
+## 10. Slice 1 as built, where it differs from this proposal
+
+Built on `chat-slice-1` (2026-10-07). Differences, each deliberate unless marked:
+
+- **Storage on the device is `localStorage`, not IndexedDB.** Threads are small text; one key (`snowmoon.ask.threads.v1`) is simpler. Move to IndexedDB if threads grow.
+- **The query ORs the question's stems** (`to_tsquery` over `tsvector_to_array`) instead of `websearch_to_tsquery`, which ANDs every word and found nothing for most natural questions. No alias expansion yet.
+- **`chat_calls.kind` has three values** (`ask`, `answer`, `guard`): the `ask` row is written before the model call, so the daily count and the spend reservation hold even if the call fails.
+- **Not yet pinned to one provider, and zero data retention is not yet required.** Which provider is Nate's decision (section 9, raised 3); the notice names Vercel AI Gateway only until then. *Gap.*
+- **On a guard flag the answer is declined straight away**; the "regenerate once with a reminder" step is not built. An empty guard verdict is retried once.
+- **Live run** (7 questions, $0.00236): two answers cited correctly; both writing requests were refused by the model; one spoiler question was marked held back; one question (why Deluin invites Zei) found nothing, because the passage doesn't use the word "invite"; one commentary answer was a guard false positive. Details in `chat-spend.md`.
+- **Migration `0006_chat.sql` is not applied.** Until the maintainer applies it and the preview has a database URL, the preview shows "not available on this deployment".
