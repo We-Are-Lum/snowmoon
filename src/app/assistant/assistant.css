@@ -1,0 +1,119 @@
+/* The reading assistant (docs/design/assistant-chat.dc.html). Tokens from
+   src/styles/tokens.css; text 12px or more, tap targets 44px or more. A private
+   thread is marked by a dashed rule and no fill (○); planning threads, when they
+   exist, get a filled band (●). */
+
+.as h1 { font-size: 36px; font-weight: 500; margin: var(--space-2) 0; }
+.as h2 { font-size: var(--text-h2); font-weight: 500; margin: var(--space-2) 0 var(--space-3); }
+.as-label { margin: 0; font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.as-draft {
+  display: inline-block; margin-left: 6px; padding: 1px 6px; vertical-align: 1px;
+  border: 1px dashed var(--muted); border-radius: 2px; font-family: var(--label); font-size: var(--text-label);
+  letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted);
+}
+.as-intro { color: var(--body); }
+.as-empty { color: var(--muted); }
+.as-visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+
+/* 1d: the start button and the thread list */
+.as-start {
+  display: flex; flex-direction: column; gap: 2px; width: 100%; min-height: var(--tap); margin: var(--space-4) 0 var(--space-6);
+  padding: 12px 14px; text-align: left; cursor: pointer; color: var(--ink); background: transparent;
+  border: 1.5px dashed var(--ink); border-radius: var(--radius); font-family: var(--reading);
+}
+.as-start-title { font-family: var(--label); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; }
+.as-start-line { font-size: 16px; color: var(--muted); }
+.as-list { list-style: none; margin: var(--space-2) 0 0; padding: 0; border-top: 1px dashed var(--rule); }
+.as-list li { display: flex; border-bottom: 1px dashed var(--rule); }
+.as-list li > button:first-child {
+  flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-height: var(--tap);
+  padding: 10px 2px; background: none; border: 0; text-align: left; color: var(--ink); font: inherit; font-size: 18px; cursor: pointer;
+}
+.as-meta { font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
+.as-delete { flex: none; min-width: var(--tap); background: none; border: 0; color: var(--muted); font-size: 20px; cursor: pointer; }
+
+/* 3: a private thread */
+.as-kind {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px;
+  padding: 8px 0; border-bottom: 1.5px dashed var(--ink);
+  font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.06em; text-transform: uppercase;
+}
+.as-limit { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 10px; padding: 6px 0; font-size: 15px; color: var(--muted); border-bottom: 1px solid var(--rule); }
+.as-picker select {
+  min-height: var(--tap); padding: 0 8px; border: 1px solid var(--rule); border-radius: var(--radius);
+  background: var(--paper); color: var(--ink); font-family: var(--label); font-size: var(--text-label);
+}
+.as-attached { margin: 8px 0 0; font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
+.as-messages { display: flex; flex-direction: column; gap: var(--space-5); padding: var(--space-5) 0; }
+.as-question { margin: 0; font-size: 21px; line-height: 1.35; }
+.as-reply { display: flex; flex-direction: column; gap: var(--space-2); }
+.as-answer { display: flex; flex-direction: column; gap: var(--space-3); }
+.as-answer p { margin: 0; color: var(--ink); }
+.as-thinking { animation: as-pulse 1.4s ease-in-out infinite; }
+@keyframes as-pulse { 50% { opacity: 0.4; } }
+@media (prefers-reduced-motion: reduce) { .as-thinking { animation: none; } }
+
+/* A quote card: the book's own words, from the stored text */
+.as-quote { margin: 0; padding: 10px 14px 4px; background: var(--quote-bg); border-left: 3px solid var(--ink); }
+.as-quote blockquote { margin: 0; font-size: 17px; line-height: 1.5; }
+.as-quote blockquote p { margin: 0 0 6px; }
+.as-quote figcaption {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px;
+  font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted);
+}
+.as-quote figcaption a { display: inline-flex; align-items: center; min-height: var(--tap); color: var(--ink); }
+
+/* 9b, 9c, refusals */
+.as-held { padding: 12px 14px; border: 1.5px dashed var(--muted); border-radius: var(--radius); }
+.as-held p { margin: 0 0 6px; }
+.as-stop { padding: 12px 14px; border: 1px solid var(--rule); border-radius: var(--radius); }
+.as-stop p { margin: 0 0 6px; }
+.as-instead { margin: 0; padding-left: 1.1em; }
+.as-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 6px; }
+.as-ink, .as-primary {
+  display: inline-flex; align-items: center; justify-content: center; min-height: var(--tap); padding: 0 16px;
+  border: 0; border-radius: var(--radius); background: var(--btn); color: var(--btn-ink); text-decoration: none;
+  font-family: var(--label); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer;
+}
+.as-primary { min-width: 160px; height: 48px; }
+.as-quiet {
+  min-height: var(--tap); padding: 0 8px; background: none; border: 0; color: var(--muted);
+  font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer;
+}
+.as-quiet-link { display: inline-flex; align-items: center; min-height: var(--tap); margin-top: 6px; font-family: var(--label); font-size: var(--text-label); }
+
+/* The composer and its footer */
+.as-composer {
+  position: sticky; bottom: 0; display: flex; align-items: flex-end; gap: 8px;
+  padding: 10px 0 8px; background: var(--paper); border-top: 1px dashed var(--rule);
+}
+.as-composer textarea {
+  flex: 1; min-height: var(--tap); padding: 10px 12px; resize: none; border: 1px solid var(--rule); border-radius: var(--radius);
+  background: var(--card); color: var(--ink); font: inherit; font-size: 18px; line-height: 1.35;
+}
+.as-send { flex: none; width: var(--tap); height: var(--tap); border: 0; border-radius: var(--radius); background: var(--btn); color: var(--btn-ink); font-family: var(--label); font-size: 18px; cursor: pointer; }
+.as-send:disabled { opacity: 0.4; cursor: default; }
+.as-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; margin: 4px 0 0; font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
+
+/* 2: the first-time notice */
+.as-overlay { position: fixed; inset: 0; z-index: 95; display: flex; align-items: flex-end; justify-content: center; background: var(--scrim); }
+.as-sheet {
+  width: 100%; max-width: 34rem; max-height: 92vh; overflow-y: auto; background: var(--card); color: var(--ink);
+  border-radius: var(--radius-sheet) var(--radius-sheet) 0 0; padding: var(--space-5) var(--gutter) calc(var(--space-5) + env(safe-area-inset-bottom));
+}
+.as-notice { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-3); }
+.as-notice li { display: grid; grid-template-columns: 24px 1fr; gap: 8px; font-size: 17px; line-height: 1.4; }
+.as-n { font-family: var(--label); font-size: var(--text-label); color: var(--muted); padding-top: 3px; }
+.as-check { display: flex; align-items: center; gap: 10px; min-height: var(--tap); margin-top: var(--space-3); font-size: 17px; }
+/* A 44px target drawn as a 22px box: rings of box-shadow, so the tap area is the full square. */
+.as-check input {
+  appearance: none; flex: none; width: var(--tap); height: var(--tap); margin: -11px -4px -11px -11px; border: 0; border-radius: var(--radius);
+  background: transparent; cursor: pointer; box-shadow: inset 0 0 0 11px var(--card), inset 0 0 0 13px var(--ink);
+}
+.as-check input:checked { box-shadow: inset 0 0 0 11px var(--card), inset 0 0 0 13px var(--ink), inset 0 0 0 16px var(--card), inset 0 0 0 22px var(--ink); }
+.as-check input:focus-visible { outline: 2px solid var(--ink); outline-offset: -8px; }
+.as-sheet .as-actions { justify-content: space-between; margin-top: var(--space-3); }
+
+/* 9d */
+.as-signed-out h1 { font-size: 30px; line-height: 1.2; }
+.as-note { color: var(--muted); font-size: 16px; }

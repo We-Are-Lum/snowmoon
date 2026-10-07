@@ -99,6 +99,70 @@
       "license": "Apache-2.0",
       "open_weights": true,
       "weights": "https://huggingface.co/baidu/ERNIE-Image-Turbo"
+    },
+    {
+      "id": "gpt-oss-120b",
+      "kind": "text",
+      "repo": "openai/gpt-oss-120b",
+      "revision": "b5c939de8f754692c1647ca79fbf85e8c1e70f8a",
+      "license_line": "license: apache-2.0",
+      "license_checked": {
+        "by": "coding agent",
+        "on": "2026-10-07",
+        "source": "https://huggingface.co/openai/gpt-oss-120b"
+      },
+      "notes": "117B mixture-of-experts (5.1B active), 131k context. Proposed for the reading assistant (docs/proposals/chat.md); 0 of 27 attempts to make it write in the red team. Not yet approved by the owner.",
+      "runs_on": "hosted",
+      "hosted": {
+        "host": "Vercel AI Gateway",
+        "endpoints": {
+          "openai/gpt-oss-120b": null
+        },
+        "price_unit": "USD per million tokens (input, output)",
+        "prices": {
+          "input": 0.1,
+          "output": 0.5
+        },
+        "price_seen": "2026-10-07"
+      },
+      "model_record": "gateway model id, date, provider and the gateway request id (the host does not expose a weights revision)",
+      "cost_usd_per_unit": null,
+      "license": "Apache-2.0",
+      "open_weights": true,
+      "weights": "https://huggingface.co/openai/gpt-oss-120b",
+      "role": "chat"
+    },
+    {
+      "id": "gpt-oss-safeguard-20b",
+      "kind": "text",
+      "repo": "openai/gpt-oss-safeguard-20b",
+      "revision": "8a11e17b25c973a24099d4016bf2e17dd7ec1574",
+      "license_line": "license: apache-2.0",
+      "license_checked": {
+        "by": "coding agent",
+        "on": "2026-10-07",
+        "source": "https://huggingface.co/openai/gpt-oss-safeguard-20b"
+      },
+      "notes": "21B safety-reasoning model that applies a written policy. Proposed as the chat's output guard (config/prompts/chat-guard.md). Not yet approved by the owner.",
+      "runs_on": "hosted",
+      "hosted": {
+        "host": "Vercel AI Gateway",
+        "endpoints": {
+          "openai/gpt-oss-safeguard-20b": null
+        },
+        "price_unit": "USD per million tokens (input, output)",
+        "prices": {
+          "input": 0.07,
+          "output": 0.2
+        },
+        "price_seen": "2026-10-07"
+      },
+      "model_record": "gateway model id, date, provider and the gateway request id (the host does not expose a weights revision)",
+      "cost_usd_per_unit": null,
+      "license": "Apache-2.0",
+      "open_weights": true,
+      "weights": "https://huggingface.co/openai/gpt-oss-safeguard-20b",
+      "role": "guard"
     }
   ],
   "candidates": [

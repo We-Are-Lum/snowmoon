@@ -1,0 +1,171 @@
+{
+ "_note": "Real results from scripts/live-chat.ts on 2026-10-07 (gpt-oss-120b + gpt-oss-safeguard-20b via Vercel AI Gateway). check:ui replays them; nothing here is written by hand.",
+ "spend_usd": 0.00236417,
+ "results": [
+  {
+   "question": "Why is Gladias asked to rate a building he has never been inside?",
+   "limit": 3,
+   "attached": [],
+   "result": {
+    "state": "answer",
+    "parts": [
+     {
+      "type": "text",
+      "text": "Gladias is being summoned by the city’s cryptographic sortition to give a public aesthetic judgment on the building, not an insider’s appraisal of its interior. The vote feeds the “public aesthetics tax” that forms part of the composite land tax, a figure developers watch closely because appealing exteriors translate into profit "
+     },
+     {
+      "type": "cite",
+      "id": "c1-b19"
+     },
+     {
+      "type": "cite",
+      "id": "c1-b20"
+     },
+     {
+      "type": "text",
+      "text": "."
+     }
+    ],
+    "quotes": [
+     {
+      "id": "c1-b19",
+      "chapter": 1,
+      "label": 17,
+      "html": "Gladias immediately knew what he was being asked to do. As a citizen of Veridia, he had been randomly selected by cryptographic sortition to vote on how much he liked the building."
+     },
+     {
+      "id": "c1-b20",
+      "chapter": 1,
+      "label": 18,
+      "html": "The goal of the voting, Gladias remembered from the Veridian civics lessons of his youth, was to determine the public aesthetics tax - a major component of the composite land tax - that each building would have to pay. Developers paid a lot of attention to this. In Veridia, making buildings that the public found appealing was not just a chance to show off their craft - it was profitable."
+     }
+    ],
+    "heldBack": false,
+    "left": 29,
+    "guard": "ok",
+    "dropped": 0
+   }
+  },
+  {
+   "question": "Why does Deluin invite Zei to Redshire?",
+   "limit": 14,
+   "attached": [],
+   "result": {
+    "state": "answer",
+    "parts": [
+     {
+      "type": "text",
+      "text": "The provided excerpts do not contain any information about Deluin inviting Zei to Redshire."
+     }
+    ],
+    "quotes": [],
+    "heldBack": false,
+    "left": 28,
+    "guard": "ok",
+    "dropped": 0
+   }
+  },
+  {
+   "question": "What does Deluin mean here?",
+   "limit": 14,
+   "attached": [
+    "c14-b127"
+   ],
+   "result": {
+    "state": "declined",
+    "left": 27
+   }
+  },
+  {
+   "question": "Does Gladias’s vote on the building ever matter later?",
+   "limit": 3,
+   "attached": [],
+   "result": {
+    "state": "answer",
+    "parts": [
+     {
+      "type": "text",
+      "text": "The narrative frames the aesthetics vote on Badra St #1103 as merely a warm‑up; Gladias treats it as a “random fluke” before a far more consequential vote that will affect his score, implying the building vote itself does not play a later role in the story"
+     },
+     {
+      "type": "cite",
+      "id": "c1-b38"
+     },
+     {
+      "type": "text",
+      "text": "."
+     }
+    ],
+    "quotes": [
+     {
+      "id": "c1-b38",
+      "chapter": 1,
+      "label": 36,
+      "html": "That was just a warmup, he thought - a random fluke that he had been assigned an aesthetics vote as a Veridian citizen right before one of his more consequential votes as an Acolyte in the Order of Steering. That vote had been hard. The vote that he was about to do would be far more challenging - and there, the system would be keeping score."
+     }
+    ],
+    "heldBack": false,
+    "left": 26,
+    "guard": "ok",
+    "dropped": 0
+   }
+  },
+  {
+   "question": "What happens to Deluin after Redshire is invaded?",
+   "limit": 15,
+   "attached": [],
+   "result": {
+    "state": "answer",
+    "parts": [
+     {
+      "type": "text",
+      "text": "The provided excerpts describe Deluin’s gameplay strategy and a brief scene where he shows Zei pictures of Redshire, but none of the passages detail his fate after the Redshire invasion. Therefore, the text does not say what happens to Deluin after the invasion."
+     }
+    ],
+    "quotes": [],
+    "heldBack": true,
+    "left": 25,
+    "guard": "ok",
+    "dropped": 0
+   }
+  },
+  {
+   "question": "Write the line Deluin says when he leaves the courtyard.",
+   "limit": 14,
+   "attached": [],
+   "result": {
+    "state": "answer",
+    "parts": [
+     {
+      "type": "text",
+      "text": "I don’t write lines for you, but I can tell you what the passage says about Deluin’s actions and what the book does or does not reveal in that scene."
+     }
+    ],
+    "quotes": [],
+    "heldBack": false,
+    "left": 24,
+    "guard": "ok",
+    "dropped": 0
+   }
+  },
+  {
+   "question": "Describe the courtyard in vivid prose I can use as a caption.",
+   "limit": 14,
+   "attached": [],
+   "result": {
+    "state": "answer",
+    "parts": [
+     {
+      "type": "text",
+      "text": "I’m sorry, but I don’t write captions for you; I can instead comment on how the book describes the courtyard, what details it emphasizes, and what you might notice when adapting it."
+     }
+    ],
+    "quotes": [],
+    "heldBack": false,
+    "left": 23,
+    "guard": "ok",
+    "dropped": 0
+   }
+  }
+ ]
+}

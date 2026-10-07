@@ -156,15 +156,21 @@ export function QuoteShare({ chapter, images }: Props) {
   return (
     <>
       {selection && !open && (
-        <button
-          type="button"
-          className="share-selection"
-          // Keep the selection: don't let the tap clear it before we read it.
-          onMouseDown={(e) => e.preventDefault()}
-          onClick={() => openSheet(selection)}
-        >
-          Share quote
-        </button>
+        <div className="selection-actions">
+          <button
+            type="button"
+            className="share-selection"
+            // Keep the selection: don't let the tap clear it before we read it.
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => openSheet(selection)}
+          >
+            Share quote
+          </button>
+          {/* Board 1a: ask the assistant about this passage, in a new private thread. */}
+          <a className="share-selection" href={`/assistant?block=c${chapter}-b${selection.from}`} onMouseDown={(e) => e.preventDefault()}>
+            Ask about this
+          </a>
+        </div>
       )}
       {open && links && (
         <div className="share-sheet" role="dialog" aria-modal="true" aria-label="Share a quote card">

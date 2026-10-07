@@ -376,12 +376,20 @@ figure.figure .device-view svg { min-width: var(--fig-min, 0); }
 .chapter .seed-image figcaption a { display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 6px; }
 
 /* Quote cards */
-.share-selection {
+.selection-actions {
   position: fixed;
   left: 50%;
   bottom: calc(150px + env(safe-area-inset-bottom));
   transform: translateX(-50%);
   z-index: 30;
+  display: flex;
+  gap: 8px;
+}
+.share-selection {
+  display: inline-flex;
+  align-items: center;
+  white-space: nowrap;
+  text-decoration: none;
   min-height: var(--tap);
   padding: 0 18px;
   border: 1px solid var(--accent);
@@ -556,3 +564,6 @@ figure.figure .device-view svg { min-width: var(--fig-min, 0); }
 .what-is-this, .replay-intro { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; font-family: var(--label); font-size: 12px; color: var(--muted); background: none; border: 0; text-decoration: underline; cursor: pointer; }
 .replay-intro { padding-left: 0; }
 .intro-actions button { min-height: 44px; min-width: 44px; padding: 0 16px; font-family: var(--label); font-size: 14px; }
+
+/* The assistant's way in from a chapter (board 1b). */
+.ask-chapter { display: inline-flex; align-items: center; min-height: var(--tap); margin-top: var(--space-6); font-family: var(--label); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; }
