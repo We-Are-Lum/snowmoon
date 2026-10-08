@@ -116,7 +116,6 @@ export function feedXml(coverUrl: string | null): string {
     <language>${podcast.language}</language>
     <copyright>Text: Snowmoon by Vitalik Buterin, GPL-3.0. Audio: GPL-3.0, ${esc(podcast.publisher)}.</copyright>
     <itunes:author>${esc(podcast.publisher)}</itunes:author>
-    <itunes:owner><itunes:name>${esc(podcast.publisher)}</itunes:name></itunes:owner>
     <itunes:type>${podcast.type}</itunes:type>
     <itunes:category text="${esc(podcast.category[0])}"><itunes:category text="${esc(podcast.category[1])}"/></itunes:category>
     <itunes:explicit>${podcast.explicit ? 'true' : 'false'}</itunes:explicit>${coverUrl ? `\n    <itunes:image href="${esc(coverUrl)}"/>\n    <image><url>${esc(coverUrl)}</url><title>${esc(w.show_title)}</title><link>${SITE}</link></image>` : ''}
