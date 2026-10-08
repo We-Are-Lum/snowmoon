@@ -1,4 +1,5 @@
-node_modules/
+# Folders and the symlinks worktrees use in their place.
+node_modules
 .next/
 out/
 .vercel
