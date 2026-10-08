@@ -21,7 +21,7 @@ import postgres from 'postgres';
 import { chromium } from 'playwright-core';
 import { DEFAULT_TEMPLATES } from '../src/templates';
 import { CHAT, IMAGES, REPO_URL } from '../src/lib/config';
-import { NOTICE_REVIEW } from '../src/lib/chat/notice';
+import { NOTICE_REVIEW, currentNoticeItems, noticeKey } from '../src/lib/chat/notice';
 import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
 import { BOOK_TAG, NARRATION_MAX_WORDS, PERSON_TAG, parseBeats } from '../src/lib/script-beats';
 
@@ -868,6 +868,22 @@ add({
   },
   plant: (c) => {
     c.parts = [...c.parts.slice(0, -1), c.parts[c.parts.length - 1].replace('"gatewayFallback":true', '"gatewayFallback":false') + ' '];
+  },
+});
+
+add({
+  id: 'P6f',
+  principle: 6,
+  name: 'the assistant\'s notice shows words the owner (FID 6786) has reread',
+  load: async () => ({ words: noticeKey(currentNoticeItems()), ownerReread: NOTICE_REVIEW.ownerReread }),
+  run: ({ words, ownerReread }) => {
+    if (!ownerReread) return [`the owner has not reread the notice's current words (key ${words}); after the owner rereads them, set NOTICE_REVIEW.ownerReread to { words: '${words}', on: <date> }`];
+    if (ownerReread.words !== words)
+      return [`the notice's words changed since the owner reread them on ${ownerReread.on}; an agent's reread is not enough. After the owner rereads them, set ownerReread.words to '${words}'`];
+    return [];
+  },
+  plant: (c) => {
+    c.ownerReread = { words: 'not-these-words', on: '2026-01-01' };
   },
 });
 

@@ -276,8 +276,13 @@ only, through `studio.rating_totals`, `studio.like_totals` and
   `src/lib/chat/notice.ts`) was reread after the last change to how the chat
   works. The check fingerprints the chat code and routes, the `chat-*` prompts
   and the `CHAT` settings, and fails until the notice's `reviewedFor` matches.
+  The stamp records who reread it: the coding agent, or the owner. An
+  agent's reread is enough only when the words are unchanged.
   A reader who ticked "Don't show this again" sees the notice once more
   whenever its words change.
+- `P6f`: the notice's words, as readers see them now, are words the owner
+  (FID 6786) has reread (`NOTICE_REVIEW.ownerReread`). Any change to the
+  words fails until the owner rereads them; it is set only on the owner's word.
 - Review: does a new page, embed or script reach another domain? Does a new
   table expose who did what?
 

@@ -1,22 +1,37 @@
+import { CHAT } from '../config';
+
 /**
  * "What the assistant does": the notice shown before the first question.
  *
- * Whenever how the chat works changes (where messages go, what is kept, what it
- * will and won't do), reread these items and fix any that are no longer true.
- * check:principles P6e fails until `reviewedFor` equals the chat's current
- * fingerprint, which it prints. A reader who ticked "Don't show this again" sees
- * the notice once more whenever its words change (noticeKey).
+ * Two checks keep it true (check:principles):
+ * - P6e: whenever how the chat works changes (its code, routes, prompts or CHAT
+ *   settings), the notice must be reread and `reviewedFor` set to the fingerprint
+ *   the check prints. If the words are unchanged, the coding agent's reread is enough.
+ * - P6f: the words themselves must be ones the owner (FID 6786) has reread.
+ *   `ownerReread` is set only on the owner's word, never by an agent on its own.
+ *   A change to the words always needs the owner's reread.
+ * A reader who ticked "Don't show this again" sees the notice once more whenever
+ * its words change (noticeKey).
  */
-export const NOTICE_REVIEW = {
-  /** Fingerprint of the chat's code, prompts and settings when the items below were last reread. */
-  reviewedFor: 'b4b564ab68e756ce',
-  /** Who reread them, and when. */
-  by:
-    'model-drafted review, 2026-10-08, for the direct Groq route with the gateway as fallback. Items 1 and 2 match config/prompts/chat-ask.md. ' +
+export const NOTICE_REVIEW: {
+  reviewedFor: string;
+  by: 'agent' | 'owner (FID 6786)';
+  on: string;
+  note: string;
+  ownerReread: { words: string; on: string } | null;
+} = {
+  /** Fingerprint of the chat's code, prompts and settings when the notice was last reread. */
+  reviewedFor: 'ffc2f43aac6c30bf',
+  /** Who did that reread: the coding agent, or the owner. */
+  by: 'agent',
+  on: '2026-10-08',
+  note:
+    'For the direct Groq route with the gateway as fallback. Items 1 and 2 match config/prompts/chat-ask.md. ' +
     'Item 3\'s "Neither keeps your messages" holds for the gateway route (zero retention asked on every request); on the direct route it rests on ' +
     'the owner\'s Groq console setting, reported on but not yet confirmed (docs/principles.md §6). ' +
-    'Reread again (model-drafted, 2026-10-08, session snowmoon-ae) after src/lib/chat/device.ts began keeping the chapters opened and the last one ' +
-    '(on the device only, for the reader\'s rail and sheets): nothing about where messages go, what is kept, or what it will do changed; all four items still hold.',
+    'Reread again (agent, session snowmoon-ae) after device.ts began keeping the chapters opened, on the device only: all four items still held.',
+  /** The words (noticeKey of the items as shown now) the owner last reread, and when. Not yet: the words changed on 2026-10-08. */
+  ownerReread: null,
 };
 
 export function noticeItems({ host, provider, model }: { host: string | null; provider: string | null; model: string }): [string, string][] {
@@ -41,4 +56,9 @@ export function noticeKey(items: [string, string][]): string {
   let h = 5381;
   for (const ch of items.flat().join('\n')) h = ((h * 33) ^ ch.charCodeAt(0)) >>> 0;
   return h.toString(36);
+}
+
+/** The items as readers see them now: the same values /api/chat/status sends. */
+export function currentNoticeItems(): [string, string][] {
+  return noticeItems({ host: CHAT.gatewayFallback ? CHAT.host : null, provider: CHAT.providerName, model: CHAT.modelName });
 }
