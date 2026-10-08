@@ -7,7 +7,7 @@ import type { RecipeView } from '~/lib/recipe-view';
 /**
  * "Recipe": opens a sheet filled from the recipe file by a fixed template (GET /api/recipe;
  * src/lib/recipe-view.ts). No model writes or summarises anything here. Without JavaScript
- * the link goes straight to the file on GitHub. The sentences are model-drafted, labelled draft.
+ * the link goes straight to the file on GitHub. The sentences are the owner's (FID 6786, 2026-10-08).
  */
 export function RecipeLink({ file, item, children = 'Recipe' }: { file: string; item?: string; children?: React.ReactNode }) {
   const [open, setOpen] = useState(false);
@@ -66,7 +66,7 @@ function RecipeSheet({ file, item, onClose }: { file: string; item?: string; onC
 
   return (
     <div className="sheet-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
-      <div ref={sheet} className="recipe-sheet" role="dialog" aria-modal="true" aria-labelledby="recipe-title">
+      <div ref={sheet} className="recipe-sheet" data-wording="FID 6786" role="dialog" aria-modal="true" aria-labelledby="recipe-title">
         <div className="recipe-head">
           <p id="recipe-title" className="recipe-eyebrow">
             How this was made
@@ -108,7 +108,6 @@ function RecipeSheet({ file, item, onClose }: { file: string; item?: string; onC
         <a className="recipe-github" href={view?.github ?? (file.startsWith('http') ? file : `${REPO_URL}/blob/main/${file}`)} target="_blank" rel="noopener noreferrer">
           Full recipe on GitHub →
         </a>
-        <p className="as-draft">Draft wording</p>
       </div>
     </div>
   );

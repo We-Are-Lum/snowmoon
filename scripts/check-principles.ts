@@ -263,12 +263,14 @@ add({
       if (file.endsWith('components/publish-words.tsx')) continue;
       if (file.endsWith('components/private-text-field.tsx')) {
         // Owner (2026-10-07): saved only on this device, sent to Vercel and Groq to be answered, never published; labelled draft.
-        // 2026-10-08: Groq directly, the gateway only when Groq is busy; CHAT.route names every hop in use.
+        // 2026-10-08: Groq directly, the gateway only when Groq is busy, and both named while the fallback is on.
+        // 2026-10-08 (docs/prompts/011-wording-decisions.md, row 29): the owner's own words, so tagged as theirs, not draft.
         for (const [what, re] of [
           ['saved only on this device', /Saved only on this device/],
-          ['sent to the model\'s hosts (CHAT.route) to be answered', /Sent to \{CHAT\.route\} to be answered/],
+          ['sent to the provider (CHAT.providerName) to be answered', /Sent to \{CHAT\.providerName\} to be answered/],
+          ['naming the gateway while it is the fallback', /CHAT\.gatewayFallback \? ` \(through \$\{CHAT\.host\}/],
           ['never published', /Never published/],
-          ['labelled draft', /as-draft/],
+          ['labelled draft, or marked as the owner\'s words', /as-draft|The owner's words \(FID 6786/],
           ['described to screen readers', /aria-describedby/],
         ] as const)
           if (!re.test(text)) problems.push(`${file}: the private box must say it is ${what}`);

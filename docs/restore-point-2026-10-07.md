@@ -44,3 +44,11 @@ Type, spacing and weights measured against the clickable prototype; touch target
 the prototype's accent; a plain Listen progress bar with image marks. To undo it (back to `8491af9`):
 
     vercel rollback dpl_2tCMnup8RvLVVP7pKiNKg8hsXPX8 --scope nates-projects-d1780cff
+
+## 2026-10-08: the owner's wording (branch site-wording)
+
+The owner's words and approvals from the draft-wording doc (docs/prompts/011-wording-decisions.md):
+the assistant (all but the notice), sign-in, the recipe sheet, the pronunciation page and the intro
+now show the owner's wording, tagged FID 6786, with no draft line. To undo it (back to `afc272c`):
+
+    vercel rollback dpl_AN1A6jZANZkfqrRvpyt5Ls3vnjfv --scope nates-projects-d1780cff

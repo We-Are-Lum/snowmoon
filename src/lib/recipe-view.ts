@@ -135,7 +135,7 @@ export function recipeView(file: string, item?: string): RecipeView | null {
       const model = r.model as J;
       return {
         ...base,
-        what: 'The spoken opener at the start of every podcast episode. The words are the owner\'s; the voice is synthetic.',
+        what: 'The spoken opener at the start of every podcast episode. A person wrote the words; the voice is synthetic.',
         model: { name: `${str(model.name)}, stock voice ${str((r.voice as J)?.name)}`, licence: str(model.license), where: 'on the project\'s own computer, not a hosted service' },
         prompt: { label: 'The exact text spoken', text: str(r.spoken_text) },
         inputs: [{ label: 'Words by', value: str(r.text_by) }],

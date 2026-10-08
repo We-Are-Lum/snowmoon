@@ -15,13 +15,13 @@ export async function generateMetadata({ params }: Props) {
 
 /**
  * Each chapter's report page, linked from its podcast episode (docs/pronunciation-fixes.md).
- * All wording here is model-drafted, for the owner to rewrite.
+ * Wording: drafted by the coding agent, approved as written by the owner (FID 6786, 2026-10-08).
  */
 export default async function ReportPage({ params }: Props) {
   const n = Number((await params).n);
   if (!chapterNumbers().includes(n)) notFound();
   return (
-    <div className="page prose">
+    <div className="page prose" data-wording="FID 6786">
       <p className="label">
         Chapter {n} · narration
       </p>
@@ -43,7 +43,6 @@ export default async function ReportPage({ params }: Props) {
       <p>
         <Link href={`/chapter/${n}`}>Read Chapter {n}</Link>
       </p>
-      <p className="as-draft">Draft wording</p>
     </div>
   );
 }

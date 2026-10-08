@@ -11,7 +11,6 @@
 .as-label { margin: 0; font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
 /* One small "Draft wording" line per screen or panel (owner, 2026-10-08), not a tag per sentence. */
 .as-draft { margin: 18px 0 0; font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
-.private-line .as-draft { margin: 0; }
 .as-intro { margin: 0 0 14px; font-size: 17px; line-height: 1.45; color: var(--body); text-wrap: pretty; }
 /* "Testing": answers can be wrong (CHAT.testing). One quiet line. */
 .as-testing { margin: 0 0 14px; font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.04em; color: var(--muted); }

@@ -7,6 +7,7 @@ import { authFetch, inMiniApp } from '~/lib/client-auth';
 import { SignInButton } from './sign-in';
 import { PrivateTextField } from './private-text-field';
 import { CHAT } from '~/lib/config';
+import { OWNER_WORDING } from '~/lib/wording';
 import type { AskResult, Quote } from '~/lib/chat/ask';
 import { noticeItems, noticeKey } from '~/lib/chat/notice';
 import type { Part } from '~/lib/chat/sanitize';
@@ -17,8 +18,9 @@ import {
 
 /**
  * The reading assistant, slice 1: ask about the book (docs/design/assistant-chat.dc.html,
- * screens 1d, 2, 3, 9a–9d). Private: threads stay on this device. ALL WORDING HERE IS
- * MODEL-DRAFTED and labelled as draft until Nate rewrites it.
+ * screens 1d, 2, 3, 9a–9d). Private: threads stay on this device. Wording: the owner's
+ * (FID 6786, 2026-10-08; src/lib/wording.ts) on every screen but the first-time notice,
+ * which is model-drafted and labelled draft until the owner's reread is recorded.
  */
 type Status =
   | { kind: 'loading' }
@@ -51,7 +53,7 @@ function TestingLabel() {
   );
 }
 
-/** One small line per screen (owner, 2026-10-08): the wording on this screen is model-drafted. */
+/** One small line per screen (owner, 2026-10-08): the wording on this screen is model-drafted. Now only the notice. */
 function DraftLine() {
   return <p className="as-draft">Draft wording</p>;
 }
@@ -350,7 +352,7 @@ function ThreadView({ id, status, refresh }: { id: string; status: Extract<Statu
   if (!t) return <p className="as-empty">This thread isn’t on this device.</p>;
   const read = readTo();
   return (
-    <section className="as-thread" aria-label="Private thread">
+    <section className="as-thread" aria-label="Private thread" data-wording={OWNER_WORDING.by}>
       <div className="as-kind">
         <span>○ Asking · private · never published</span>
       </div>
@@ -401,9 +403,7 @@ function ThreadView({ id, status, refresh }: { id: string; status: Extract<Statu
           </div>
         )
       ) : null}
-      {reachedLimit ? (
-        <DraftLine />
-      ) : (
+      {reachedLimit ? null : (
         <form
           className="as-composer"
           onSubmit={(e) => {
@@ -434,20 +434,20 @@ function ThreadView({ id, status, refresh }: { id: string; status: Extract<Statu
 /** Screen 9d, as in the prototype: what the assistant does, then signing in. */
 function SignedOut({ inApp: _inApp }: { inApp: boolean }) {
   return (
-    <section className="as-signed-out">
-      <p className="as-label">Sign in to use the assistant</p>
+    <section className="as-signed-out" data-wording={OWNER_WORDING.by}>
+      <p className="as-label">Sign in to ask questions</p>
       <h1>Your questions need a name to be counted under</h1>
       <p className="as-body">Help with reading the book. It comments; it never writes for you.</p>
       <p className="as-body">
-        Questions about the book are saved only on this device, sent to {CHAT.route} to be answered, and never published. The daily limit
-        is counted per Farcaster account.
+        Your questions are saved only on this device. They are sent to {CHAT.providerName} to be answered
+        {CHAT.gatewayFallback ? ` (through ${CHAT.host} when ${CHAT.providerName} is busy)` : ''} and are never published. The daily limit is
+        counted per Farcaster account.
       </p>
       <SignInButton className="as-primary as-signin" />
       {/* The two outside services are named in the sign-in step itself and on About. */}
       <Link className="as-quiet-link" href="/chapter/1">
         Keep reading without it
       </Link>
-      <DraftLine />
     </section>
   );
 }
@@ -513,10 +513,9 @@ export function Assistant({ embedded = false }: { embedded?: boolean } = {}) {
     if (status.kind === 'signed-out') return <SignedOut inApp={status.inApp} />;
     if (!status.available)
       return (
-        <>
-          <p className="as-empty">The assistant isn’t available on this deployment yet.</p>
-          <DraftLine />
-        </>
+        <p className="as-empty" data-wording={OWNER_WORDING.by}>
+          The assistant isn’t available on this deployment yet.
+        </p>
       );
     return null;
   }, [status]);
@@ -535,7 +534,7 @@ export function Assistant({ embedded = false }: { embedded?: boolean } = {}) {
       </div>
     );
   return (
-    <div className="as">
+    <div className="as" data-wording={OWNER_WORDING.by}>
       <TestingLabel />
       {/* The panel's own title already says "Assistant". */}
       {!embedded && <h1>Assistant</h1>}
@@ -591,7 +590,6 @@ export function Assistant({ embedded = false }: { embedded?: boolean } = {}) {
           <span>{ready.left} of {ready.perDay} left today</span>
         </p>
       )}
-      <DraftLine />
     </div>
   );
 }

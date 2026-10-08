@@ -42,9 +42,9 @@ export function PrivateTextField({
         aria-describedby={`${id}-line`}
       />
       <p id={`${id}-line`} className="private-line">
-        Saved only on this device. Sent to {CHAT.route} to be answered. Never published.
-        {/* The thread screen's one draft line. */}
-        <span className="as-draft"> · Draft wording</span>
+        {/* The owner's words (FID 6786, 2026-10-08). */}
+        Saved only on this device. Sent to {CHAT.providerName} to be answered
+        {CHAT.gatewayFallback ? ` (through ${CHAT.host} when ${CHAT.providerName} is busy)` : ''}. Never published.
       </p>
     </div>
   );

@@ -38,7 +38,7 @@ const chapters = new Set(
   Array.from({ length: 40 }, (_, i) => i + 1).filter((n) => existsSync(path.join(ROOT, 'content/snowmoon/text', `chapter-${n}.json`))),
 );
 const seeds = new Set((json('config/adaptations.json').seeds as { slug: string }[]).map((s) => s.slug));
-const STATIC = new Set(['/', '/about', '/cards', '/adaptations']);
+const STATIC = new Set(['/', '/about', '/cards', '/adaptations', '/minpentai', '/assistant']);
 
 function routeExists(href: string): boolean {
   const p = href.split(/[?#]/)[0];
