@@ -328,6 +328,72 @@ try {
     }
     await page.close();
   }
+
+  // ---- Tablet and desktop (side-rail.tsx, assistant-column.tsx) ----
+  // 390 (above) and the Farcaster frame never show the rail; 1024 collapses it; 1440 opens it.
+  for (const width of [1024, 1440]) {
+    for (const scheme of ['light', 'dark'] as const) {
+      const page = await browser.newPage({ viewport: { width, height: 900 }, colorScheme: scheme });
+      await page.addInitScript('window.__name = (f) => f');
+      for (const path of ['/', '/chapter/1', '/about', '/cards', '/adaptations', '/minpentai', '/assistant']) {
+        await open(page, path);
+        await checkFloors(page, `${path} @${width}`, scheme);
+        const wide = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
+        if (wide > 1) fail(`${path} @${width} (${scheme}): scrolls sideways by ${wide}px`);
+        const measure = await page.evaluate(() => {
+          const el = document.querySelector('main .page, main article') as HTMLElement | null;
+          return el ? el.getBoundingClientRect().width : 0;
+        });
+        if (measure > 640) fail(`${path} @${width}: the reading column is ${Math.round(measure)}px wide`);
+        if (await page.locator('.assistant-column').count()) fail(`${path} @${width}: an assistant column shows while signed out`);
+      }
+      await open(page, '/chapter/1');
+      const panelShown = await page.locator('.rail-panel').isVisible();
+      const toggleShown = await page.locator('.rail-toggle').isVisible();
+      if (width === 1024) {
+        if (panelShown || !toggleShown) fail('@1024: the rail is not collapsed to its button');
+        await shot(page, `desktop-${width}-chapter`, scheme);
+        await page.click('.rail-toggle');
+        await page.waitForSelector('.rail-panel[role="dialog"]');
+        const inside = await page.evaluate(() => Boolean(document.activeElement?.closest('.rail-panel')));
+        if (!inside) fail('@1024: opening the rail does not move focus into it');
+        await checkFloors(page, '/chapter/1 @1024 (rail open)', scheme);
+        await shot(page, `desktop-${width}-rail-open`, scheme);
+        await page.keyboard.press('Escape');
+        if (await page.locator('.rail-panel').isVisible()) fail('@1024: Escape does not close the rail');
+        if (!(await page.evaluate(() => document.activeElement?.classList.contains('rail-toggle')))) fail('@1024: focus does not return to the rail button');
+      } else {
+        if (!panelShown || toggleShown) fail('@1440: the rail is not open');
+        const current = await page.locator('.rail-chapters a[aria-current="page"]').textContent();
+        if (!current?.includes('Chapter 1')) fail('@1440: the rail does not mark the current chapter');
+        await shot(page, `desktop-${width}-chapter`, scheme);
+        // Signed in (status mocked): the assistant column appears beside the page.
+        await page.route('**/api/chat/status', (r) =>
+          r.fulfill({ json: { available: true, model: 'gpt-oss-120b', host: 'Vercel AI Gateway', provider: 'Groq', perDay: 30, left: 30 } }),
+        );
+        await open(page, '/chapter/1');
+        await page.waitForSelector('.assistant-column .as-start');
+        await checkFloors(page, '/chapter/1 @1440 (signed in)', scheme);
+        await shot(page, `desktop-${width}-signed-in`, scheme);
+        await page.unroute('**/api/chat/status');
+      }
+      await page.close();
+    }
+  }
+  // Phone width: no rail at all.
+  for (const scheme of ['light', 'dark'] as const) {
+    const page = await browser.newPage({ viewport: { width: 390, height: 844 }, colorScheme: scheme });
+    await open(page, '/chapter/1');
+    if (await page.locator('.rail').isVisible()) fail('@390: the rail shows on a phone');
+    await shot(page, 'phone-390-chapter', scheme);
+    await page.close();
+  }
+  {
+    const frame = await browser.newPage({ viewport: { width: 424, height: 695 } });
+    await open(frame, '/chapter/1');
+    if (await frame.locator('.rail').isVisible()) fail('@424×695: the rail shows in the Farcaster frame');
+    await frame.close();
+  }
 } finally {
   await browser.close();
 }
@@ -336,4 +402,4 @@ if (failures.length) {
   console.error(`\nUI CHECK FAILED (${failures.length}):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`ui check passed: ${BASE}, ${36 + MINPENTAI_LESSONS + 3} pages, the chapter sheet and 8 assistant states × light and dark`);
+console.log(`ui check passed: ${BASE}, ${36 + MINPENTAI_LESSONS + 3} pages, the chapter sheet and 8 assistant states × light and dark; 7 pages at 1024 and 1440`);

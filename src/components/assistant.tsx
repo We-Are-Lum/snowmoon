@@ -468,7 +468,11 @@ function SignedOut({ inApp }: { inApp: boolean }) {
 }
 
 /** Screen 1d, and the router for ?t= (a thread), ?block= (1a) and ?chapter= (1b). */
-export function Assistant() {
+/**
+ * `embedded`: the desktop side column (src/components/assistant-column.tsx). It keeps its
+ * thread in its own state and leaves the page's URL alone; the /assistant page uses the URL.
+ */
+export function Assistant({ embedded = false }: { embedded?: boolean } = {}) {
   const [status, setStatus] = useState<Status>({ kind: 'loading' });
   const [list, setList] = useState<Thread[]>([]);
   const [open, setOpen] = useState<string | null>(null);
@@ -483,9 +487,19 @@ export function Assistant() {
     setStatus({ kind: 'ready', ...s });
   }, []);
 
+  // On the /assistant page the open thread lives in the URL; in the side column it doesn't.
+  const show = useCallback(
+    (id: string | null) => {
+      setOpen(id);
+      if (!embedded) window.history.replaceState(null, '', id ? `/assistant?t=${id}` : '/assistant');
+    },
+    [embedded],
+  );
+
   useEffect(() => {
     void refresh();
     setList(loadThreads());
+    if (embedded) return;
     const q = new URLSearchParams(window.location.search);
     const t = q.get('t');
     const block = q.get('block');
@@ -499,7 +513,7 @@ export function Assistant() {
       const ch = Number(block.slice(1, block.indexOf('-')));
       go(newThread(Math.max(readTo(), ch), [block]).id);
     } else if (Number.isInteger(chapter) && chapter >= 1 && chapter <= 32) go(newThread(Math.max(readTo(), chapter), [], chapter).id);
-  }, [refresh]);
+  }, [refresh, embedded]);
 
   const ready = status.kind === 'ready' ? status : null;
   const body = useMemo(() => {
@@ -519,13 +533,18 @@ export function Assistant() {
     return (
       <div className="as">
         <TestingLabel />
+        {embedded && (
+          <button type="button" className="as-quiet as-back" onClick={() => (show(null), setList(loadThreads()))}>
+            ← Threads
+          </button>
+        )}
         <ThreadView id={open} status={ready} refresh={() => void refresh()} />
       </div>
     );
   return (
     <div className="as">
       <TestingLabel />
-      <h1>Assistant</h1>
+      {embedded ? <h2>Assistant</h2> : <h1>Assistant</h1>}
       <p className="as-intro">
         Help with reading the book. It comments; it never writes for you. <DraftTag />
       </p>
@@ -533,9 +552,7 @@ export function Assistant() {
         type="button"
         className="as-start"
         onClick={() => {
-          const t = newThread(readTo());
-          setOpen(t.id);
-          window.history.replaceState(null, '', `/assistant?t=${t.id}`);
+          show(newThread(readTo()).id);
         }}
       >
         <span className="as-start-title">○ Ask about the book</span>
@@ -549,7 +566,7 @@ export function Assistant() {
               const first = t.messages.find((m) => m.role === 'user');
               return (
                 <li key={t.id}>
-                  <button type="button" onClick={() => { setOpen(t.id); window.history.replaceState(null, '', `/assistant?t=${t.id}`); }}>
+                  <button type="button" onClick={() => show(t.id)}>
                     <span>{first && first.role === 'user' ? first.text : 'New thread'}</span>
                     <span className="as-meta">ch 1–{t.limit} · {new Date(t.createdAt).toLocaleDateString()}</span>
                   </button>
@@ -564,7 +581,10 @@ export function Assistant() {
       )}
       {ready && (
         <p className="as-foot">
-          <span>{ready.model} · open weights · via {ready.host}</span>
+          <span>
+            {ready.model} · open weights · via {ready.host}
+            {ready.provider ? ` → ${ready.provider}` : ''}
+          </span>
           <span>{ready.left} of {ready.perDay} left today</span>
         </p>
       )}
