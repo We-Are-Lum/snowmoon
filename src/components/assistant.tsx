@@ -6,6 +6,7 @@ import { sdk } from '@farcaster/miniapp-sdk';
 import { PrivateTextField } from './private-text-field';
 import { CHAT } from '~/lib/config';
 import type { AskResult, Quote } from '~/lib/chat/ask';
+import { noticeItems, noticeKey } from '~/lib/chat/notice';
 import type { Part } from '~/lib/chat/sanitize';
 import {
   deleteThread, markNoticeSeen, newThread, noticeSeen, readTo, saveThread, thread as loadThread, threads as loadThreads,
@@ -55,23 +56,10 @@ function DraftTag() {
   return <span className="as-draft">Draft wording</span>;
 }
 
-/** Screen 2: before the first message, until "don't show this again" is ticked. */
+/** Screen 2: before the first message, until "don't show this again" is ticked for these exact words. */
 function Notice({ host, provider, model, onClose }: { host: string | null; provider: string | null; model: string; onClose: (go: boolean) => void }) {
   const [dontShow, setDontShow] = useState(false);
-  const items = [
-    ['It helps you read', 'Ask about the book. Answers point to the passages they rest on, with chapter and ¶, and show the book’s own words.'],
-    ['It won’t write for you', 'No dialogue, narration or description. It gives context and commentary only.'],
-    [
-      `Your messages go to ${provider}`,
-      host
-        ? `${provider} runs ${model}, an open-weights model. When ${provider} is busy, a message goes through ${host} to ${provider} instead. Neither keeps your messages, and this app keeps no copy.`
-        : `${provider} runs ${model}, an open-weights model, and keeps no messages. This app keeps no copy.`,
-    ],
-    [
-      'Your questions are saved only on this device',
-      `They are sent to ${provider}${host ? ` (or through ${host} when it is busy)` : ''} to be answered, and never published. Another device won’t have them.`,
-    ],
-  ];
+  const items = noticeItems({ host, provider, model });
   return (
     <div className="as-overlay" role="dialog" aria-modal="true" aria-labelledby="as-notice-title">
       <div className="as-sheet">
@@ -99,7 +87,7 @@ function Notice({ host, provider, model, onClose }: { host: string | null; provi
             type="button"
             className="as-primary"
             onClick={() => {
-              if (dontShow) markNoticeSeen();
+              if (dontShow) markNoticeSeen(noticeKey(items));
               onClose(true);
             }}
           >
@@ -326,7 +314,7 @@ function ThreadView({ id, status, refresh }: { id: string; status: Extract<Statu
   const send = useCallback(
     async (question: string, limit?: number) => {
       if (!t || !question.trim()) return;
-      const go = noticeSeen() ? true : await new Promise<boolean>((resolve) => setNotice(() => resolve));
+      const go = noticeSeen(noticeKey(noticeItems(status))) ? true : await new Promise<boolean>((resolve) => setNotice(() => resolve));
       setNotice(null);
       if (!go) return;
       const th: Thread = { ...t, limit: limit ?? t.limit };

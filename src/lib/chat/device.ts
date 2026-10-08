@@ -79,9 +79,10 @@ export function newThread(limit: number, attached: string[] = [], chapter?: numb
   return t;
 }
 
-export function noticeSeen(): boolean {
-  return get<boolean>(NOTICE, false);
+/** Dismissed for these exact words? (Older devices stored `true`, so they see the current words once.) */
+export function noticeSeen(key: string): boolean {
+  return get<string | boolean>(NOTICE, false) === key;
 }
-export function markNoticeSeen() {
-  set(NOTICE, true);
+export function markNoticeSeen(key: string) {
+  set(NOTICE, key);
 }

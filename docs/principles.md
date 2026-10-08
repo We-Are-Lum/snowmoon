@@ -272,6 +272,12 @@ only, through `studio.rating_totals`, `studio.like_totals` and
   `SUPABASE_SECRET_KEY`, `SUPABASE_JWT_SECRET` or `POSTGRES_*` variable (read by name through the
   signed-in Vercel CLI; values are never read). The app reaches the database
   only as `studio_writer`.
+- `P6e`: the reading assistant's notice ("What the assistant does",
+  `src/lib/chat/notice.ts`) was reread after the last change to how the chat
+  works. The check fingerprints the chat code and routes, the `chat-*` prompts
+  and the `CHAT` settings, and fails until the notice's `reviewedFor` matches.
+  A reader who ticked "Don't show this again" sees the notice once more
+  whenever its words change.
 - Review: does a new page, embed or script reach another domain? Does a new
   table expose who did what?
 

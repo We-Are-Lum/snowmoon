@@ -20,7 +20,8 @@ import { PGlite } from '@electric-sql/pglite';
 import postgres from 'postgres';
 import { chromium } from 'playwright-core';
 import { DEFAULT_TEMPLATES } from '../src/templates';
-import { REPO_URL } from '../src/lib/config';
+import { CHAT, REPO_URL } from '../src/lib/config';
+import { NOTICE_REVIEW } from '../src/lib/chat/notice';
 import { BOOK_TAG, NARRATION_MAX_WORDS, PERSON_TAG, parseBeats } from '../src/lib/script-beats';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -732,6 +733,36 @@ add({
   plant: (c) => {
     c.skipped = '';
     c.names = [...c.names, 'POSTGRES_URL'];
+  },
+});
+
+add({
+  id: 'P6e',
+  principle: 6,
+  name: 'the assistant\'s notice ("What the assistant does") was reread after the last change to how the chat works',
+  load: async () => {
+    // Everything that decides where a question goes, what is kept and what the
+    // assistant will do: the chat code and routes, its prompts, and its settings.
+    const files = [
+      ...readdirSync(path.join(ROOT, 'src/lib/chat')).filter((f) => f.endsWith('.ts') && f !== 'notice.ts').map((f) => `src/lib/chat/${f}`),
+      ...readdirSync(path.join(ROOT, 'src/app/api/chat'), { recursive: true, encoding: 'utf8' }).filter((f) => f.endsWith('.ts')).map((f) => `src/app/api/chat/${f}`),
+      ...readdirSync(path.join(ROOT, 'config/prompts')).filter((f) => f.startsWith('chat-')).map((f) => `config/prompts/${f}`),
+    ].sort();
+    const parts = files.map((f) => `${f}\n${readFileSync(path.join(ROOT, f), 'utf8')}`);
+    parts.push(`CHAT\n${JSON.stringify(CHAT)}`);
+    return { parts, reviewedFor: NOTICE_REVIEW.reviewedFor };
+  },
+  run: ({ parts, reviewedFor }) => {
+    const now = createHash('sha256').update(parts.join('\n\0\n')).digest('hex').slice(0, 16);
+    return now === reviewedFor
+      ? []
+      : [
+          `how the chat works changed since the notice was last reread. Reread noticeItems in src/lib/chat/notice.ts (and the chat lines on /about and in the private box), ` +
+            `fix anything no longer true, then set NOTICE_REVIEW.reviewedFor to '${now}' and record who reread it`,
+        ];
+  },
+  plant: (c) => {
+    c.parts = [...c.parts.slice(0, -1), c.parts[c.parts.length - 1].replace('"gatewayFallback":true', '"gatewayFallback":false') + ' '];
   },
 });
 
