@@ -437,6 +437,16 @@ try {
     await shot(page, 'phone-390-menu', scheme);
     await page.keyboard.press('Escape');
     if (await page.locator('.menu-sheet').count()) fail('@390: Escape does not close the menu');
+    // A link to another site opens in a new tab and leaves this one where it was (owner, 2026-10-08).
+    if (scheme === 'light') {
+      const [popup] = await Promise.all([page.waitForEvent('popup', { timeout: 10000 }).catch(() => null), page.locator('a.provenance').first().click()]);
+      if (!popup) fail('@390: the source-edition link (another site) does not open in a new tab');
+      else await popup.close();
+      if (!page.url().includes('/chapter/1')) {
+        fail('@390: following a link to another site left the chapter');
+        await open(page, '/chapter/1');
+      }
+    }
     await page.locator('.seed-image .recipe-link').first().click();
     await page.waitForSelector('.recipe-sheet dt');
     const model = await page.textContent('.recipe-sheet');

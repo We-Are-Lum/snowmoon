@@ -10,6 +10,7 @@ import { COMING, navItems } from '~/lib/nav';
 import type { Intro } from '~/lib/intro';
 import { Assistant } from './assistant';
 import { ReplayIntro } from './first-visit';
+import { ExternalLinks } from './external-links';
 import { SignInButton } from './sign-in';
 import { ThemeSwitch } from './theme-switch';
 import '../app/assistant/assistant.css';
@@ -191,6 +192,7 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
         )
       )}
 
+      <ExternalLinks />
       {menu && <MenuSheet items={items} path={path} current={current} auth={auth} intro={intro} onClose={() => setMenu(false)} />}
     </div>
   );

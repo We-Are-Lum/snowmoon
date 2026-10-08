@@ -63,3 +63,10 @@ QR code back. Also: itunes:owner with the owner's contact, and the committed nod
 removed. To undo (back to `dd32480`):
 
     vercel rollback dpl_81niopCmc1t8LecYdxFBePq2hPji --scope nates-projects-d1780cff
+
+## 2026-10-08: links to other sites open in a new tab (branch site-links)
+
+One listener for the app (src/components/external-links.tsx); inside a Farcaster app the host's
+openUrl. check:ui clicks the chapter's source-edition link and needs a new tab. To undo (back to `68e475d`):
+
+    vercel rollback dpl_EgcPUfj2h12pXQZibuYqahxDSmjt --scope nates-projects-d1780cff
