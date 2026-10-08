@@ -1,0 +1,44 @@
+{
+  "work_id": "snowmoon",
+  "what": "The podcast's spoken opener, played at the start of every episode.",
+  "text": "This is an independent reading of Snowmoon, by Vitalik Buterin. The voice is synthetic. A short tone marks a description that is not the book's own words.",
+  "text_by": "FID 6786, 2026-10-07 (config/podcast.json)",
+  "spoken_text": "This is an independent reading of Snowmoon, by Vitalik Buterin. The voice is synthetic. A short tone marks a description that is not the book's own words.",
+  "generated_at": "2026-10-08T07:00:38+00:00",
+  "model": {
+    "name": "Kokoro-82M",
+    "repo": "hexgrad/Kokoro-82M",
+    "revision": "f3ff3571791e39611d31c381e3a41a3af07b4987",
+    "weights_sha256": "496dba118d1a58f5f3db2efc88dbdc216e0483fc89fe6e47ee1f2c53f18ad1e4",
+    "license": "apache-2.0",
+    "kokoro_version": "0.9.4",
+    "misaki_version": "0.9.4"
+  },
+  "voice": {
+    "name": "af_heart",
+    "file_sha256": "0ab5709b8ffab19bfd849cd11d98f75b60af7733253ad0d67b12382a102cb4ff",
+    "stock": true
+  },
+  "settings": {
+    "lang_code": "a",
+    "speed": 1.0,
+    "sample_rate": 24000,
+    "device": "cpu"
+  },
+  "file": {
+    "name": "opener.wav",
+    "sha256": "c53bd3cba6b740ed109c751caa637c5e91b7843b3dd8e3cf5e51eb2649ea4d06",
+    "duration_ms": 10250
+  },
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent and its helper agents",
+    "drafted": [
+      "pronunciation entries (content/snowmoon/pronunciation.json) applied to the opener"
+    ],
+    "instructions": [
+      "docs/prompts/008a-agent-prompts.md#read-aloud-descriptions-and-invented-word-lists"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  }
+}

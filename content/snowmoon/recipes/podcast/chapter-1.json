@@ -1,0 +1,58 @@
+{
+  "work_id": "snowmoon",
+  "chapter": 1,
+  "what": "A podcast episode: the spoken opener, a short silence, then the chapter's house narration, encoded to MP3.",
+  "generated_at": "2026-10-08T07:00:44+00:00",
+  "inputs": {
+    "opener": {
+      "recipe": "content/snowmoon/recipes/podcast/opener.json",
+      "sha256": "c53bd3cba6b740ed109c751caa637c5e91b7843b3dd8e3cf5e51eb2649ea4d06"
+    },
+    "gap_ms": 900,
+    "chapter": {
+      "recipe": "content/snowmoon/recipes/narration/chapter-1.json",
+      "file": "chapter-1.wav",
+      "sha256": "19630f23d8d32e9c5ecef16bcaeff1e5c98adc0b4ad229cb4cd0743f82633fdf",
+      "model": "Kokoro-82M",
+      "voice": "af_heart"
+    }
+  },
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent and its helper agents",
+    "drafted": [
+      "spoken descriptions of screens, figures and lyric cards (blocks 18, 23, 28, 31, 55, 67, 138, 140)",
+      "pronunciation entries (content/snowmoon/pronunciation.json)"
+    ],
+    "instructions": [
+      "docs/prompts/008a-agent-prompts.md#read-aloud-descriptions-and-invented-word-lists"
+    ],
+    "see": "config/models.json drafting; principle 3",
+    "opener": "the owner's words (config/podcast.json); its pronunciation entries as in opener.json"
+  },
+  "encoder": {
+    "tool": "ffmpeg version 9.0.1",
+    "codec": "libmp3lame",
+    "bitrate": "128k",
+    "channels": 1,
+    "sample_rate": 44100,
+    "command": "ffmpeg -y -loglevel error -i /Users/nathan/snowmoon/narration-out/podcast/chapter-1.wav -ac 1 -ar 44100 -c:a libmp3lame -b:a 128k -id3v2_version 3 -write_xing 1 -metadata 'title=Chapter 1' -metadata 'album=Snowmoon Party: an independent reading of Snowmoon' -metadata 'artist=Snowmoon Party' -metadata track=1/32 -metadata genre=Audiobook -metadata 'copyright=GPL-3.0. Text: Snowmoon by Vitalik Buterin. Synthetic voice: Kokoro-82M, af_heart.' -metadata 'comment=Independent reading, not affiliated with the author. https://snowmoon.party' chapter-N.mp3"
+  },
+  "file": {
+    "name": "chapter-1.mp3",
+    "sha256": "454eef71b5dc97240babf0acdc08bd4e21d20daaac5bfc8a9663b8998c65373f",
+    "bytes": 26567953,
+    "duration_ms": 1660405,
+    "channels": 1,
+    "sample_rate": 44100,
+    "url": "https://media.snowmoon.party/podcast/chapter-1-454eef71b5dc.mp3"
+  },
+  "published_by": {
+    "fid": 6786,
+    "role": "maintainer",
+    "action": "published via script",
+    "script": "scripts/publish-podcast.ts",
+    "date": "2026-10-08",
+    "evidence": "docs/prompts/009-podcast.md"
+  }
+}

@@ -44,6 +44,11 @@ export default function About() {
         Every published image and voice links to its recipe, including the exact prompt, readable without signing in.
         The prompts of your drafts and abandoned attempts are not published.
       </p>
+      <p>
+        {/* The feed's own words are the owner's (config/podcast.json); this link is model-drafted. */}
+        <a href="/podcast.xml">Listen as a podcast</a>: the house narration, one chapter per episode, as a feed for
+        any podcast app.
+      </p>
       <h2>The reading assistant</h2>
       {/* Model-drafted wording (owner decision 2026-10-07: say which data centre is unverified). */}
       <p>

@@ -1,0 +1,19 @@
+{
+  "about": "The house narration as a podcast (owner instruction, 2026-10-07). The four texts under `words` are the owner's, used exactly as given; do not edit them here without the owner. {n}, {chapter link} and {recipe link} in the episode template are filled in by src/lib/podcast.ts. The feed is served at /podcast.xml; the MP3s and their recipes are made by scripts/podcast-audio.py and published by scripts/publish-podcast.ts.",
+  "words": {
+    "by": "FID 6786",
+    "date": "2026-10-07",
+    "show_title": "Snowmoon Party: an independent reading of Snowmoon",
+    "show_description": "Vitalik Buterin's open novel Snowmoon, read aloud one chapter per episode by a synthetic voice. An independent project, not affiliated with the author. No token. Text and audio are GPL v3; every step of how this was made is public at snowmoon.party.",
+    "episode_description_template": "Chapter {n} of Snowmoon by Vitalik Buterin, read by a synthetic voice (Kokoro-82M, stock voice af_heart). An independent reading, not affiliated with the author. Read along: {chapter link}. How this audio was made: {recipe link}. Text and audio: GPL v3.",
+    "spoken_opener": "This is an independent reading of Snowmoon, by Vitalik Buterin. The voice is synthetic. A short tone marks a description that is not the book's own words."
+  },
+  "language": "en",
+  "publisher": "Snowmoon Party",
+  "published": "2026-10-08T00:00:00Z",
+  "feed_url": "https://snowmoon.party/podcast.xml",
+  "type": "serial",
+  "category": ["Fiction", "Science Fiction"],
+  "explicit": false,
+  "audio": { "codec": "mp3", "bitrate": "128k", "channels": 1, "sample_rate": 44100, "opener_gap_ms": 900 }
+}
