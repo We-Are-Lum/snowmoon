@@ -12,7 +12,7 @@ import {
   sightMask, snap, stampCells, stepOwned, type Dir, type Match, type Placement, type StampKind,
 } from '~/lib/minpentai/match';
 import { knowledge, playTurn, rng } from '~/lib/minpentai/ai';
-import { PLAY_SETUP, PRACTICE, PRACTICE_SETUP, WATCH_SETUP, practiceMove, watchMovesAt } from '~/lib/minpentai/matches';
+import { PLAY_SETUP } from '~/lib/minpentai/matches';
 import { TUTORIAL_TEXT as T } from '~/lib/minpentai/tutorial-text';
 
 const FIELD = '#060608';
@@ -152,55 +152,6 @@ function Counts({ match, viewer }: { match: Match; viewer: number | null }) {
         );
       })}
     </span>
-  );
-}
-
-/* ---------------- watching the recorded match ---------------- */
-
-const withWatchMoves = (m: Match) => {
-  let x = m;
-  if (isIntervention(x)) for (const { player, p } of watchMovesAt(x.board.turn)) x = place(x, player, p);
-  return x;
-};
-
-/** The latest thing worth saying about the match. */
-function headline(m: Match): string {
-  const last = [...m.events].reverse().find((e) => e.kind === 'out' || e.kind === 'end');
-  if (m.winner !== undefined) return m.winner === null ? T.watch.draw : T.watch.wins(T.players[m.winner]);
-  if (last && last.kind === 'out' && m.board.turn - last.turn < 40) return T.watch.out(T.players[last.player]);
-  if (m.board.turn < 30) return T.watch.start;
-  if (m.board.turn % m.rules.interval < 6) return T.watch.intervention;
-  return '';
-}
-
-export function WatchMatch({ viewer }: { viewer: number | null }) {
-  const start = useMemo(() => withWatchMoves(newMatch(WATCH_SETUP)), []);
-  const [m, setM] = useState(start);
-  const [playing, setPlaying] = useState(false);
-  useEffect(() => setPlaying(!reducedMotion()), []);
-  useEffect(() => {
-    if (!playing) return;
-    const id = window.setInterval(() => setM((x) => (x.winner !== undefined ? x : withWatchMoves(advance(x)))), 1000 / 16);
-    return () => window.clearInterval(id);
-  }, [playing]);
-  const over = m.winner !== undefined;
-  const line = headline(m);
-  return (
-    <div className="mp-watch">
-      <div className="mp-board">
-        <div className="mp-strip">
-          <span>{T.match.turn(m.board.turn)}</span>
-          <Counts match={m} viewer={viewer} />
-        </div>
-        <MatchCanvas match={m} viewer={viewer} label={`${T.match.turn(m.board.turn)}. ${line}`} />
-      </div>
-      <p className="mp-caption mp-frame-caption" aria-live="polite">{line}</p>
-      <div className="mp-controls">
-        {over
-          ? <button type="button" onClick={() => { setM(start); setPlaying(true); }}>{T.watch.again}</button>
-          : <button type="button" onClick={() => setPlaying((p) => !p)}>{playing ? T.watch.pause : T.watch.play}</button>}
-      </div>
-    </div>
   );
 }
 
@@ -348,100 +299,6 @@ function Strip({ m, t, running }: { m: Match; t: ReturnType<typeof useYourTurn>;
         {t.test ? T.match.testing : m.winner !== undefined ? '' : t.yourTurn && !running ? T.match.yourTurn(m.left[0]) : T.match.actIn(toAct)}
       </span>
     </div>
-  );
-}
-
-/* ---------------- the practice match ---------------- */
-
-export function PracticeMatch({ onDone, onSandbox }: { onDone: () => void; onSandbox: () => void }) {
-  const [m, setM] = useState(() => newMatch(PRACTICE_SETUP));
-  const [stepIndex, setStepIndex] = useState(0);
-  const step = PRACTICE[stepIndex];
-  const text = T.practice.steps[step.id];
-  const t = useYourTurn(m, setM);
-  const [met, setMet] = useState<null | 'you' | 'demo'>(null);
-  const demo = useRef(false);
-  // The rival follows its script: nothing after its setup.
-  const r = useRunner(setM, (x) => x);
-  useEffect(() => r.check(m), [m]); // eslint-disable-line react-hooks/exhaustive-deps
-
-  // Hand the visitor the right tool for each step.
-  useEffect(() => {
-    if (step.move) { t.setTool(step.move.kind); if (step.move.dir) t.setDir(step.move.dir); }
-  }, [stepIndex]); // eslint-disable-line react-hooks/exhaustive-deps
-  useEffect(() => {
-    if (step.kind === 'do' && !met && m.board.turn === step.turn && step.goal!(m)) setMet(demo.current ? 'demo' : 'you');
-  }, [m, step, met]);
-  // When a run reaches the next step's turn, or the end, go on.
-  useEffect(() => {
-    if (r.running) return;
-    const next = PRACTICE[stepIndex + 1];
-    if (!next || !met) return;
-    if ((next.kind === 'end' && m.winner !== undefined) || (next.kind !== 'end' && m.board.turn === next.turn)) {
-      setStepIndex(stepIndex + 1); setMet(null); demo.current = false;
-    }
-  }, [m, r.running, stepIndex, met]);
-
-  // Each new step brings its text and board to the top of the screen.
-  const top = useRef<HTMLElement>(null);
-  const first = useRef(true);
-  useEffect(() => {
-    if (first.current) { first.current = false; return; }
-    top.current?.scrollIntoView({ block: 'start', behavior: reducedMotion() ? 'auto' : 'smooth' });
-  }, [stepIndex]);
-
-  const lastDo = stepIndex === PRACTICE.length - 2;
-  const onPrimary = () => {
-    if (step.kind === 'end') return onDone();
-    if (step.kind === 'read') { setStepIndex(stepIndex + 1); return; }
-    if (r.running) return r.start(m, lastDo ? 'end' : 'turn');
-    if (!met) {
-      demo.current = true;
-      // If the visitor's own squares are in the way, start the turn again first.
-      const base = placeProblem(m, 0, step.move!) && t.startOfTurn ? t.startOfTurn : m;
-      t.setHistory((h) => [...h, m]);
-      setM(() => practiceMove(base, step));
-      t.setPending(null);
-      return;
-    }
-    if (t.test) t.runTest();
-    r.start(m, lastDo ? 'end' : 'turn');
-  };
-  const label = step.kind === 'end' ? text.button : step.kind === 'read' ? T.next : r.running ? T.match.skip : met ? T.match.run : text.button;
-  const shown = t.test ? t.testFrame! : m;
-  const hint: Ghost[] = step.move && !met && !r.running && m.board.turn === step.turn ? [{ cells: stampCells(m.board, step.move), tone: 'hint' }] : [];
-
-  return (
-    <section ref={top} className="mp-tutorial" aria-label={T.practice.heading}>
-      <div className="mp-lesson">
-        <p className="mp-lesson-meta">
-          {T.practice.heading} · {T.stepOf(stepIndex + 1, PRACTICE.length)} · <em className="mp-inv">{T.inventedRules}</em>
-          {T.modelDrafted && <span className="mp-draft"> · {T.draftNote}</span>}
-        </p>
-        <h2>{text.title}</h2>
-        <p className="mp-lesson-text">{text.text}</p>
-      </div>
-      <div className="mp-board">
-        <Strip m={m} t={t} running={!!r.running} />
-        <MatchCanvas
-          match={shown}
-          viewer={0}
-          ghosts={t.test ? [] : [...hint, ...t.ghosts]}
-          reach={t.yourTurn && !r.running && !t.test && step.kind === 'do'}
-          onTap={step.kind === 'do' && !met ? t.onTap : undefined}
-          label={`${T.match.turn(m.board.turn)}. ${text.title}`}
-        />
-        {step.kind === 'do' && !met && <p className="mp-hint">{t.message}</p>}
-      </div>
-      {step.kind === 'do' && !met && !r.running && <Tools t={t} m={m} />}
-      <p className="mp-status" aria-live="polite">{met === 'you' ? T.youDidIt : met === 'demo' ? T.shown : ''}</p>
-      <Dock label={label} onPrimary={onPrimary}>
-        <span className="mp-dots" aria-hidden="true">
-          {PRACTICE.map((s, i) => <span key={s.id} className={i === stepIndex ? 'dot on' : i < stepIndex ? 'dot past' : 'dot'} />)}
-        </span>
-        <button type="button" className="mp-quiet" onClick={onSandbox}>{T.freePlay}</button>
-      </Dock>
-    </section>
   );
 }
 

@@ -339,6 +339,9 @@ quoted as written. Minpentai boards and maps come from the source's own SVGs.
   source screen.
 - `P8b`: Dzegoban lettering on images uses lines that appear in that chapter's
   source.
+- `P8c`: every book claim in the Minpentai Learn wording (`learn-text.ts`)
+  cites a block that exists, words it quotes are in that block, and the
+  broadcast's countdown is chapter 4's Dzegoban (c4-b97–b98).
 - `npm run check:ingest`: the committed text, screens and figures re-parse
   byte-identical from the fetched source. `npm run test:render`: template cases.
 - Review: do generated images that depict boards, maps or screens (for example

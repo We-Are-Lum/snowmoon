@@ -258,3 +258,162 @@
 .mp-nav button { border-radius: var(--radius); }
 .mp-provenance { font-size: var(--text-small); }
 .mp-controls button, .mp-link, .mp-presets button, .mp-jump select, .mp-legend-grid, .mp-board { border-radius: var(--radius); }
+
+/* ---------- Learn (docs/design/minpentai-study.md §2, §7): the phone frame, top to bottom ----------
+   App bar 44 + 1, stage 260 (3:2 at 390), controls, tags, a scrolling text area, the footer.
+   It fills the screen under the site's top bar; at desktop widths it is the page column. */
+.minpentai:has(.mp-learn) { padding: 0; }
+.mp-learn {
+  position: relative;
+  display: flex; flex-direction: column;
+  height: calc(100dvh - var(--topbar-h, 0px));
+  max-width: 640px; margin: 0 auto;
+  background: var(--paper);
+}
+@media (min-width: 768px) { .mp-learn { height: 100dvh; border-left: 1px solid var(--rule); border-right: 1px solid var(--rule); } }
+.mp-learn-bar {
+  flex: none; display: flex; align-items: center; justify-content: space-between;
+  height: 45px; padding: 0 6px 0 18px; border-bottom: 1px solid var(--rule);
+}
+.mp-learn-title { margin: 0; font-family: var(--reading); font-size: 18px; font-weight: 400; line-height: 1.2; }
+.mp-learn-skip {
+  min-height: var(--tap); padding: 0 12px; border: 0; background: transparent; color: var(--muted);
+  font-family: var(--label); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; cursor: pointer;
+}
+.mp-learn-stage { flex: none; position: relative; aspect-ratio: 3 / 2; max-height: 42dvh; background: #050507; overflow: hidden; }
+.mp-learn-stage > * { height: 100%; }
+.mp-learn-tags { flex: none; padding: 2px 0 0; }
+.mp-learn .mp-tag { padding: 3px 7px; border-radius: 2px; font-size: 12px; letter-spacing: 0.04em; color: var(--ink); border: 1px solid var(--ink); }
+.mp-learn .mp-tag-imag, .mp-learn .mp-tag-lens, .mp-learn .mp-tag-inv { border-style: dashed; border-color: var(--muted); color: var(--ink); }
+.mp-learn .mp-tag-draft { border-color: var(--soft); background: var(--soft); color: var(--ink); }
+.mp-learn-body {
+  flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; overflow-wrap: anywhere;
+  padding: 8px 18px 8px; display: flex; flex-direction: column; gap: 8px;
+}
+.mp-learn .mp-learn-h { margin: 0; font-family: var(--reading); font-size: 26px; font-weight: 400; line-height: 1.1; text-wrap: pretty; }
+.mp-learn-text { margin: 0; font-size: 18px; line-height: 1.42; text-wrap: pretty; }
+.mp-learn-caption { margin: 0; font-size: 16px; line-height: 1.4; color: var(--muted); text-wrap: pretty; }
+.mp-learn-status { margin: 0; font-family: var(--label); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--link); }
+.mp-sources-toggle, .mp-hood-link {
+  align-self: flex-start; min-height: var(--tap); padding: 0; border: 0; background: none; color: var(--link);
+  font-family: var(--label); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; cursor: pointer; text-align: left;
+}
+.mp-sources { margin: 0; padding: 0 0 8px; list-style: none; }
+.mp-sources li { display: flex; flex-direction: column; gap: 2px; padding: 7px 0; border-top: 1px solid var(--rule); font-size: 15px; line-height: 1.3; }
+.mp-source-ref { font-family: var(--label); font-size: 12px; color: var(--muted); }
+.mp-reasons2 { margin: 0; padding: 0; list-style: none; }
+.mp-reasons2 li { display: grid; grid-template-columns: 22px 1fr; gap: 6px; padding: 7px 0; border-top: 1px solid var(--rule); font-size: 16px; line-height: 1.35; }
+.mp-rulecard { margin: 0; }
+.mp-rulecard figcaption { font-family: var(--label); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); padding-bottom: 4px; }
+.mp-rulecard dl { margin: 0; }
+.mp-rulecard dl > div { display: grid; grid-template-columns: 88px 1fr; gap: 10px; padding: 8px 0; border-top: 1px solid var(--rule); }
+.mp-rulecard dt { font-family: var(--label); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+.mp-rulecard dd { margin: 0; font-size: 16px; line-height: 1.35; }
+.mp-learn-foot { flex: none; display: flex; flex-direction: column; gap: 8px; padding: 10px 18px max(14px, env(safe-area-inset-bottom)); border-top: 1px solid var(--rule); background: var(--paper); }
+.mp-learn-progress { display: flex; align-items: center; gap: 10px; }
+.mp-marks { flex: 1; display: flex; gap: 3px; }
+.mp-marks span { flex: 1; height: 3px; background: var(--rule); }
+.mp-marks span.is-past { background: var(--muted); }
+.mp-marks span.is-current { background: var(--ink); }
+.mp-learn-count { font-family: var(--label); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); white-space: nowrap; }
+.mp-learn-buttons { display: flex; gap: 8px; }
+.mp-learn-back {
+  flex: none; width: 76px; height: 48px; border: 1px solid var(--rule); border-radius: 3px; background: transparent; color: var(--ink);
+  font-family: var(--label); font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; cursor: pointer;
+}
+.mp-learn-back-none { visibility: hidden; }
+.mp-learn-primary {
+  flex: 1; height: 48px; border: 0; border-radius: 3px; background: var(--btn); color: var(--btn-ink);
+  font-family: var(--label); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer;
+}
+.mp-learn-primary:disabled { opacity: 0.55; cursor: default; }
+.mp-learn-toast {
+  position: absolute; left: 18px; right: 18px; bottom: 90px; z-index: 6; margin: 0;
+  padding: 10px 12px; border-radius: 3px; background: var(--btn); color: var(--btn-ink);
+  font-family: var(--label); font-size: 12px; line-height: 1.5;
+}
+.mp-learn button:focus-visible { outline: 2px solid #46D7E8; outline-offset: 2px; }
+
+/* Board controls, palette, arrows (§4.3). */
+.mp-transport4 { flex: none; display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; padding: 8px 18px 0; }
+.mp-palette { flex: none; display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; padding: 8px 18px 0; }
+.mp-dirs { flex: none; display: flex; gap: 4px; padding: 8px 18px 0; }
+.mp-dirs button { flex: 1; }
+.mp-transport4 button, .mp-palette button, .mp-dirs button {
+  height: 44px; padding: 0 4px; border: 1px solid var(--rule); border-radius: 3px; background: transparent; color: var(--ink);
+  font-family: var(--label); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; cursor: pointer;
+}
+.mp-palette button, .mp-dirs button { border-color: var(--ink); }
+.mp-dirs button { font-size: 16px; border-color: var(--rule); }
+.mp-palette button[aria-pressed='true'], .mp-dirs button[aria-pressed='true'] { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.mp-transport4 button:disabled, .mp-palette button:disabled { opacity: 0.4; cursor: default; }
+
+/* The lesson board (§4.2). */
+.mp-pboard { position: relative; width: 100%; height: 100%; background: #060608; overflow: hidden; }
+.mp-pcanvas { display: block; touch-action: manipulation; }
+.mp-pcanvas.mp-editing { cursor: pointer; }
+.mp-pcanvas:focus-visible { outline: 2px solid #46D7E8; outline-offset: -2px; }
+.mp-pstrip {
+  position: absolute; left: 8px; top: 8px; margin: 0; max-width: calc(100% - 92px);
+  padding: 5px 8px; border-radius: 3px; background: rgba(5, 5, 7, 0.8); color: #E7E4DD;
+  font-family: var(--label); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; pointer-events: none;
+}
+.mp-cells {
+  position: absolute; right: 8px; top: 8px; height: 44px; padding: 0 10px;
+  border: 1px solid #4A4843; border-radius: 3px; background: rgba(5, 5, 7, 0.8); color: #E7E4DD;
+  font-family: var(--label); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; cursor: pointer;
+}
+.mp-cells[aria-pressed='true'] { background: #E7E4DD; color: #050507; }
+.mp-minus {
+  position: absolute; left: 0; right: 0; top: 44px; margin: 0; text-align: center; pointer-events: none;
+  font-family: var(--label); font-size: 30px; font-weight: 500; text-shadow: 0 2px 14px #000;
+}
+
+/* ---------- The broadcast (§3.0, §6) ---------- */
+.bc { position: relative; height: 100%; background: #050507; color: #E7E4DD; overflow: hidden; }
+.bc-loading { background: #050507; }
+.bc-field { position: absolute; inset: 0; }
+.bc-with-cams .bc-field { bottom: auto; height: 114px; }
+.bc-gl { position: absolute; inset: 0; }
+.bc-gl canvas { display: block; width: 100%; height: 100%; }
+.bc-flat { display: block; height: 100%; margin: 0 auto; }
+.bc-hud { position: absolute; inset: 0; pointer-events: none; font-family: var(--label); font-size: 12px; letter-spacing: 0.04em; }
+.bc-box { position: absolute; top: 8px; padding: 6px 8px; border-radius: 3px; background: rgba(5, 5, 7, 0.78); display: flex; flex-direction: column; gap: 3px; }
+.bc-score { left: 8px; }
+.bc-live-line { display: flex; align-items: center; gap: 6px; }
+.bc-live { width: 7px; height: 7px; border-radius: 50%; background: #FF5C8A; }
+.bc-grid { display: grid; grid-template-columns: auto auto; column-gap: 10px; row-gap: 1px; }
+.bc-cam-label { right: 8px; color: #B4B3BA; }
+.bc-minus { position: absolute; left: 0; right: 0; top: 70px; text-align: center; font-size: 30px; font-weight: 500; text-shadow: 0 2px 14px #000; }
+.bc-countdown {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -30%);
+  display: flex; flex-direction: column; gap: 1px; padding: 8px 12px; background: #F4F2ED; color: #1D1D1B; letter-spacing: 0; white-space: nowrap;
+}
+.bc-dz { font-family: var(--reading); font-size: 22px; font-weight: 600; letter-spacing: 0.03em; }
+.bc-dz-en { font-family: var(--reading); font-size: 16px; font-style: italic; color: #4A463F; }
+.bc-banner {
+  position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+  padding: 9px 14px; border-top: 2px solid; background: rgba(5, 5, 7, 0.82); color: #F4F2ED; font-size: 16px; letter-spacing: 0.12em; white-space: nowrap;
+}
+.bc-react { position: absolute; left: 8px; bottom: 52px; display: flex; flex-direction: column; align-items: flex-start; }
+.bc-react .bc-face { width: 97px; height: 62px; transform: scale(1.2); transform-origin: bottom left; margin-top: 12px; }
+.bc-react-label { padding: 2px 6px; background: rgba(5, 5, 7, 0.82); }
+.bc-comment {
+  position: absolute; left: 8px; right: 60px; bottom: 8px; margin: 0; min-height: 36px;
+  padding: 6px 9px; border-left: 2px solid #E7E4DD; background: rgba(5, 5, 7, 0.82);
+  font-family: var(--label); font-size: 12px; line-height: 1.4; color: #E7E4DD;
+}
+.bc-pause {
+  position: absolute; right: 8px; bottom: 8px; width: 44px; height: 44px;
+  border: 1px solid #4A4843; border-radius: 3px; background: rgba(5, 5, 7, 0.82); color: #E7E4DD;
+  font-family: var(--label); font-size: 13px; cursor: pointer;
+}
+.bc-with-cams .bc-pause { top: 70px; bottom: auto; }
+.bc-cams { position: absolute; left: 0; right: 0; bottom: 0; top: 114px; display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid #2A2C34; }
+.bc-cam { margin: 0; display: flex; flex-direction: column; min-width: 0; border-left: 1px solid #2A2C34; }
+.bc-cam:first-child { border-left: 0; }
+.bc-cam figcaption { padding: 2px 6px; font-family: var(--label); font-size: 12px; letter-spacing: 0.04em; background: #0B0C10; }
+.bc-cam .bc-face { width: 100%; height: auto; aspect-ratio: 97 / 62; display: block; }
+.bc-cam canvas { width: 100%; flex: 1; min-height: 0; display: block; background: #000; }
+.bc-visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; padding: 0; min-height: 0; }

@@ -35,8 +35,8 @@ const PAPER = 'rgb(244, 242, 237)';
 const ACCENT: Record<string, string> = { veridia: 'rgb(46, 90, 58)', dzego: 'rgb(179, 48, 110)' };
 const INK = 'rgb(29, 29, 27)';
 const IN_WORLD = '.device-view, .dz-card, svg, [data-template]';
-/** Tutorial screens at /minpentai (src/lib/minpentai/tutorial.ts). */
-const MINPENTAI_LESSONS = 11;
+/** Learn screens at /minpentai (src/app/minpentai/learn.tsx: 8 watch, 7 lessons, under the hood, practice). */
+const MINPENTAI_LESSONS = 17;
 
 const failures: string[] = [];
 const fail = (msg: string) => failures.push(msg);

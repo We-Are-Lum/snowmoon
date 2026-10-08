@@ -1,0 +1,957 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<title>Minpentai intro v3 · the match, then the pieces</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>html,body{margin:0;background:#E9E6DF;-webkit-font-smoothing:antialiased}a{color:#2E5A3A}a:hover{color:#1D1D1B}button{font:inherit;color:inherit}button:focus-visible{outline:2px solid #46D7E8;outline-offset:2px}</style>
+</helmet>
+<section id="turn-1" style="padding:48px;display:flex;flex-direction:column;gap:28px;font-family:'Crimson Pro',serif;color:#1D1D1B">
+  <div style="display:flex;flex-direction:column;gap:6px;max-width:900px">
+    <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;color:#6A675F">MINPENTAI TUTORIAL · VERSION 3 · ALL WORDING IS DRAFT</div>
+    <div style="font-size:40px;line-height:1.05">The match first, then the pieces</div>
+    <div style="font-size:19px;line-height:1.45;color:#4A463F;text-wrap:pretty;max-width:760px">The visitor watches a whole match as the crowd sees it before learning any piece of it. The broadcast is imagined; the book's crowd sees a map. Facts from later chapters are used only where they give nothing away. Every scene in it stands for pieces on the board.</div>
+  </div>
+  <div style="display:flex;gap:48px;flex-wrap:wrap;align-items:flex-start">
+    <div id="1a" style="display:flex;flex-direction:column;gap:12px;flex:none">
+      <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;font-family:'DM Mono',monospace;font-size:12px">
+        <span style="background:#1D1D1B;color:#F4F2ED;padding:4px 8px;border-radius:3px">1a</span>
+        <span style="color:#6A675F">390 × 695, the Farcaster frame height</span>
+        <div role="group" aria-label="Mockup settings" style="display:flex;gap:6px;margin-left:auto">
+          <button type="button" onClick="{{ setLight }}" aria-pressed="{{ isLight }}" style="min-height:44px;padding:0 12px;border:1px solid #1D1D1B;border-radius:3px;background:{{ lightBg }};color:{{ lightFg }};font-family:'DM Mono',monospace;font-size:12px;cursor:pointer">LIGHT</button>
+          <button type="button" onClick="{{ setDark }}" aria-pressed="{{ isDark }}" style="min-height:44px;padding:0 12px;border:1px solid #1D1D1B;border-radius:3px;background:{{ darkBg }};color:{{ darkFg }};font-family:'DM Mono',monospace;font-size:12px;cursor:pointer">DARK</button>
+          <button type="button" onClick="{{ toggleReduced }}" aria-pressed="{{ reduced }}" style="min-height:44px;padding:0 12px;border:1px solid #1D1D1B;border-radius:3px;background:{{ redBg }};color:{{ redFg }};font-family:'DM Mono',monospace;font-size:12px;cursor:pointer">REDUCED MOTION</button>
+        </div>
+      </div>
+      <div style="width:390px;height:695px;background:{{ th.paper }};color:{{ th.ink }};border-radius:18px;overflow:hidden;box-shadow:0 0 0 1px #CFCAC0,0 24px 60px rgba(29,29,27,.18);display:flex;flex-direction:column;position:relative">
+        <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 6px 0 18px;border-bottom:1px solid {{ th.rule }}">
+          <span style="font-size:18px">Learn Minpentai</span>
+          <button type="button" onClick="{{ skip }}" style="min-height:44px;padding:0 12px;border:none;background:transparent;color:{{ th.muted }};font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;cursor:pointer">SKIP TO FREE PLAY</button>
+        </div>
+        <div role="img" aria-label="{{ stageLabel }}" style="position:relative;height:260px;flex:none;background:#050507;overflow:hidden">
+          <div ref="{{ stageRef }}" style="position:absolute;inset:0"></div>
+          <sc-if value="{{ isLearn }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;inset:0;z-index:5;background:#060608">
+              <canvas ref="{{ lessonRef }}" width="780" height="520" onPointerDown="{{ onBoardTap }}" style="width:390px;height:260px;display:block;cursor:{{ boardCursor }};touch-action:manipulation"></canvas>
+              <div style="position:absolute;left:8px;top:8px;max-width:calc(100% - 92px);overflow:hidden;text-overflow:ellipsis;background:rgba(5,5,7,.8);padding:5px 8px;border-radius:3px;font-family:'DM Mono',monospace;font-size:12px;color:#E7E4DD;white-space:nowrap">{{ lt.strip }}</div>
+              <sc-if value="{{ lt.hasMinus }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;left:50%;top:44px;transform:translateX(-50%);font-family:'DM Mono',monospace;font-size:30px;font-weight:500;color:{{ lt.minusC }};text-shadow:0 2px 14px #000;white-space:nowrap">{{ lt.minus }}</div></sc-if>
+              <sc-if value="{{ hasCellsBtn }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ toggleCells }}" aria-pressed="{{ cellsOn }}" style="position:absolute;right:8px;top:8px;height:44px;padding:0 10px;border:1px solid #4A4843;border-radius:3px;background:{{ cellsBg }};color:{{ cellsFg }};font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;cursor:pointer">CELLS</button></sc-if>
+            </div>
+          </sc-if>
+          <sc-if value="{{ noGL }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:24px;text-align:center;font-family:'DM Mono',monospace;font-size:12px;color:#B4B3BA">3D isn't available here. The build falls back to the flat match view.</div></sc-if>
+          <div style="position:absolute;left:8px;top:8px;display:flex;flex-direction:column;gap:3px;background:rgba(5,5,7,.78);padding:6px 8px;border-radius:3px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em">
+            <div style="display:flex;align-items:center;gap:6px;color:#E7E4DD;white-space:nowrap"><span style="width:7px;height:7px;border-radius:50%;background:#FF5C8A"></span>LIVE · {{ hud.turn }}</div>
+            <div style="display:grid;grid-template-columns:auto auto;column-gap:10px;row-gap:1px"><sc-for list="{{ hud.counts }}" as="c" hint-placeholder-count="4"><span style="color:{{ c.c }}">{{ c.t }}</span></sc-for></div>
+          </div>
+          <div style="position:absolute;right:8px;top:8px;background:rgba(5,5,7,.78);padding:6px 8px;border-radius:3px;font-family:'DM Mono',monospace;font-size:12px;color:#B4B3BA">{{ hud.cam }}</div>
+          <sc-if value="{{ hasMinus }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;left:50%;top:44px;transform:translateX(-50%);font-family:'DM Mono',monospace;font-size:30px;font-weight:500;color:{{ hud.minusC }};text-shadow:0 2px 14px #000;white-space:nowrap">{{ hud.minus }}</div></sc-if>
+          <sc-if value="{{ hud.countdown }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-30%);background:#F4F2ED;color:#1D1D1B;padding:8px 12px;display:flex;flex-direction:column;gap:1px;text-align:center"><span style="font-size:22px;font-weight:600;letter-spacing:.03em;white-space:nowrap">MU GU GEI TAU FA</span><span style="font-size:16px;font-style:italic;color:#4A463F;white-space:nowrap">The battle begins in fifty ticks.</span></div>
+          </sc-if>
+          <sc-if value="{{ hasBanner }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(5,5,7,.82);border-top:2px solid {{ hud.bannerC }};padding:9px 14px;font-family:'DM Mono',monospace;font-size:16px;letter-spacing:.12em;color:#F4F2ED;white-space:nowrap">{{ hud.banner }}</div>
+          </sc-if>
+          <sc-if value="{{ hasReact }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;left:8px;bottom:52px;display:flex;flex-direction:column;gap:3px">
+              <span style="font-family:'DM Mono',monospace;font-size:12px;color:{{ react.col }};background:rgba(5,5,7,.82);padding:2px 6px;align-self:flex-start">{{ react.label }}</span>
+              <div style="border:1px solid {{ react.col }};transform:scale(1.2);transform-origin:left bottom;margin-top:12px;align-self:flex-start;width:97px">
+                <div style="position:relative;width:97px;height:62px;background:#141519;overflow:hidden;opacity:{{ react.op }}">
+                  <div style="position:absolute;left:14px;top:50px;width:70px;height:22px;border-radius:20px 20px 0 0;background:#2A2C34"></div>
+                  <div style="position:absolute;left:28px;top:6px;width:42px;height:50px;border-radius:50%;background:#3A3B42"></div>
+                  <div style="position:absolute;left:73px;top:28px;width:1px;height:34px;background:#5A5C66"></div>
+                  <div style="position:absolute;left:22px;top:21px;width:54px;height:15px;border-radius:5px;border:1px solid {{ react.col }};background:{{ react.lens }};box-shadow:0 0 10px {{ react.lens }};box-sizing:border-box"></div>
+                  <div style="position:absolute;left:31px;top:24px;width:36px;height:9px;display:flex;justify-content:space-between;align-items:center">
+                    <div style="width:11px;height:{{ react.eh }}px;border-radius:50%;background:#E7E4DD;position:relative;overflow:hidden"><div style="position:absolute;left:3px;top:1px;width:5px;height:5px;border-radius:50%;background:#050507;transform:translate({{ react.ex }}px,{{ react.ey }}px)"></div></div>
+                    <div style="width:11px;height:{{ react.eh }}px;border-radius:50%;background:#E7E4DD;position:relative;overflow:hidden"><div style="position:absolute;left:3px;top:1px;width:5px;height:5px;border-radius:50%;background:#050507;transform:translate({{ react.ex }}px,{{ react.ey }}px)"></div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ showCams }}" hint-placeholder-val="{{ false }}">
+            <div style="position:absolute;left:0;right:0;bottom:0;display:grid;grid-template-columns:repeat(4,1fr);background:#050507;border-top:1px solid #2A2C34">
+              <sc-for list="{{ cams }}" as="c" hint-placeholder-count="4">
+                <div style="display:flex;flex-direction:column;border-right:1px solid #2A2C34">
+                  <span style="font-family:'DM Mono',monospace;font-size:12px;color:{{ c.col }};padding:2px 5px;white-space:nowrap">{{ c.label }}</span>
+                  <div style="position:relative;width:97px;height:62px;background:#141519;overflow:hidden;opacity:{{ c.op }}">
+                  <div style="position:absolute;left:14px;top:50px;width:70px;height:22px;border-radius:20px 20px 0 0;background:#2A2C34"></div>
+                  <div style="position:absolute;left:28px;top:6px;width:42px;height:50px;border-radius:50%;background:#3A3B42"></div>
+                  <div style="position:absolute;left:73px;top:28px;width:1px;height:34px;background:#5A5C66"></div>
+                  <div style="position:absolute;left:22px;top:21px;width:54px;height:15px;border-radius:5px;border:1px solid {{ c.col }};background:{{ c.lens }};box-shadow:0 0 10px {{ c.lens }};box-sizing:border-box"></div>
+                  <div style="position:absolute;left:31px;top:24px;width:36px;height:9px;display:flex;justify-content:space-between;align-items:center">
+                    <div style="width:11px;height:{{ c.eh }}px;border-radius:50%;background:#E7E4DD;position:relative;overflow:hidden"><div style="position:absolute;left:3px;top:1px;width:5px;height:5px;border-radius:50%;background:#050507;transform:translate({{ c.ex }}px,{{ c.ey }}px)"></div></div>
+                    <div style="width:11px;height:{{ c.eh }}px;border-radius:50%;background:#E7E4DD;position:relative;overflow:hidden"><div style="position:absolute;left:3px;top:1px;width:5px;height:5px;border-radius:50%;background:#050507;transform:translate({{ c.ex }}px,{{ c.ey }}px)"></div></div>
+                  </div>
+                </div>
+                  <canvas ref="{{ c.ref }}" width="192" height="128" style="width:97px;height:64px;display:block;border-top:1px solid #2A2C34"></canvas>
+                </div>
+              </sc-for>
+            </div>
+          </sc-if>
+          <div aria-live="polite" style="display:{{ commentDisp }};position:absolute;left:8px;right:60px;bottom:8px;min-height:36px;align-items:center;background:rgba(5,5,7,.82);border-left:2px solid #E7E4DD;padding:6px 9px;font-family:'DM Mono',monospace;font-size:12px;line-height:1.4;color:#E7E4DD;box-sizing:border-box">{{ hud.comment }}</div>
+          <button type="button" onClick="{{ togglePause }}" aria-label="{{ pauseAria }}" style="display:{{ commentDisp }};position:absolute;right:8px;bottom:8px;width:44px;height:44px;border:1px solid #4A4843;border-radius:3px;background:rgba(5,5,7,.82);color:#E7E4DD;font-family:'DM Mono',monospace;font-size:13px;cursor:pointer">{{ pauseGlyph }}</button>
+        </div>
+        <sc-if value="{{ hasTools }}" hint-placeholder-val="{{ false }}">
+          <div role="group" aria-label="Board controls" style="flex:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:8px 18px 0">
+            <button type="button" onClick="{{ tBack }}" aria-label="Step back one turn" style="height:44px;border:1px solid {{ th.rule }};border-radius:3px;background:transparent;color:{{ th.ink }};font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;cursor:pointer">◁ STEP</button>
+            <button type="button" onClick="{{ tPlay }}" aria-pressed="{{ lplaying }}" style="height:44px;border:1px solid {{ th.rule }};border-radius:3px;background:transparent;color:{{ th.ink }};font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;cursor:pointer">{{ playLabel }}</button>
+            <button type="button" onClick="{{ tStep }}" aria-label="Step forward one turn" style="height:44px;border:1px solid {{ th.rule }};border-radius:3px;background:transparent;color:{{ th.ink }};font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;cursor:pointer">STEP ▷</button>
+            <button type="button" onClick="{{ tReset }}" style="height:44px;border:1px solid {{ th.rule }};border-radius:3px;background:transparent;color:{{ th.ink }};font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;cursor:pointer">RESET</button>
+          </div>
+        </sc-if>
+        <sc-if value="{{ hasPalette }}" hint-placeholder-val="{{ false }}">
+          <div role="group" aria-label="Pieces to place" style="flex:none;display:flex;flex-direction:column;gap:4px;padding:8px 18px 0;min-width:0">
+            <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px">
+              <sc-for list="{{ palette }}" as="p" hint-placeholder-count="3"><button type="button" onClick="{{ p.go }}" aria-pressed="{{ p.on }}" style="height:44px;border:1px solid {{ th.ink }};border-radius:3px;background:{{ p.bg }};color:{{ p.fg }};font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;cursor:pointer">{{ p.t }}</button></sc-for>
+            </div>
+            <sc-if value="{{ hasDirs }}" hint-placeholder-val="{{ false }}"><div style="display:flex;gap:4px;min-width:0"><sc-for list="{{ dirs }}" as="r" hint-placeholder-count="4"><button type="button" onClick="{{ r.go }}" aria-label="{{ r.label }}" aria-pressed="{{ r.on }}" style="flex:1;min-width:0;height:44px;border:1px solid {{ th.rule }};border-radius:3px;background:{{ r.bg }};color:{{ r.fg }};font-family:'DM Mono',monospace;font-size:16px;cursor:pointer">{{ r.t }}</button></sc-for></div></sc-if>
+          </div>
+        </sc-if>
+        <div style="flex:none;display:flex;align-items:center;gap:6px;flex-wrap:wrap;padding:10px 18px 0">
+          <sc-for list="{{ tags }}" as="g" hint-placeholder-count="2"><span style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;padding:3px 7px;border-radius:2px;border:1px {{ g.bs }} {{ g.bd }};color:{{ g.fg }};background:{{ g.bg }}">{{ g.t }}</span></sc-for>
+        </div>
+        <div style="flex:1;min-height:0;min-width:0;overflow-y:auto;overflow-x:hidden;overflow-wrap:anywhere;padding:8px 18px 8px;display:flex;flex-direction:column;gap:8px">
+          <div style="font-size:26px;line-height:1.1;text-wrap:pretty">{{ scr.title }}</div>
+          <div style="font-size:18px;line-height:1.42;text-wrap:pretty">{{ scr.text }}</div>
+          <sc-if value="{{ hasCaption }}" hint-placeholder-val="{{ false }}"><div style="font-size:16px;line-height:1.4;color:{{ th.muted }};text-wrap:pretty">{{ scr.caption }}</div></sc-if>
+          <div aria-live="polite" style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;color:{{ th.link }}">{{ status }}</div>
+          <sc-if value="{{ hasReasons }}" hint-placeholder-val="{{ false }}">
+            <ol style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column">
+              <sc-for list="{{ reasons }}" as="r" hint-placeholder-count="4"><li style="display:grid;grid-template-columns:22px 1fr;gap:6px;padding:7px 0;border-top:1px solid {{ th.rule }}"><span style="font-family:'DM Mono',monospace;font-size:12px;color:{{ th.muted }};padding-top:3px">{{ r.n }}</span><span style="font-size:17px;line-height:1.35">{{ r.t }}</span></li></sc-for>
+            </ol>
+          </sc-if>
+          <sc-if value="{{ hasHood }}" hint-placeholder-val="{{ false }}"><button type="button" onClick="{{ toHood }}" style="align-self:flex-start;min-height:44px;padding:0;border:none;background:transparent;color:{{ th.link }};font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;cursor:pointer">UNDER THE HOOD, OPTIONAL →</button></sc-if>
+          <sc-if value="{{ hasRule }}" hint-placeholder-val="{{ false }}">
+            <button type="button" onClick="{{ toggleRule }}" aria-expanded="{{ ruleOpen }}" style="align-self:flex-start;min-height:44px;padding:0;border:none;background:transparent;color:{{ th.link }};font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;cursor:pointer">{{ ruleLabel }}</button>
+            <sc-if value="{{ ruleOpen }}" hint-placeholder-val="{{ false }}">
+              <div style="display:flex;flex-direction:column">
+                <sc-for list="{{ ruleRows }}" as="r" hint-placeholder-count="4">
+                  <div style="display:grid;grid-template-columns:88px 1fr;gap:10px;align-items:center;padding:8px 0;border-top:1px solid {{ th.rule }}">
+                    <div style="display:flex;align-items:center;gap:6px">
+                      <div style="display:grid;grid-template-columns:12px 12px;gap:2px;padding:3px;background:#0E0F13"><sc-for list="{{ r.a }}" as="q" hint-placeholder-count="4"><span style="width:12px;height:12px;background:{{ q }}"></span></sc-for></div>
+                      <span style="font-family:'DM Mono',monospace;font-size:12px;color:{{ th.muted }}">→</span>
+                      <div style="display:grid;grid-template-columns:12px 12px;gap:2px;padding:3px;background:#0E0F13"><sc-for list="{{ r.b }}" as="q" hint-placeholder-count="4"><span style="width:12px;height:12px;background:{{ q }}"></span></sc-for></div>
+                    </div>
+                    <div style="display:flex;flex-direction:column;gap:1px"><span style="font-family:'DM Mono',monospace;font-size:12px">{{ r.h }}</span><span style="font-size:15px;line-height:1.3;color:{{ th.body }}">{{ r.t }}</span></div>
+                  </div>
+                </sc-for>
+                <div style="font-size:15px;line-height:1.35;color:{{ th.body }};padding:8px 0;border-top:1px solid {{ th.rule }}">The blocks shift one cell diagonally every turn, so cells pass from block to block. Nothing is ever created or destroyed.</div>
+              </div>
+            </sc-if>
+          </sc-if>
+          <button type="button" onClick="{{ toggleSrc }}" aria-expanded="{{ src }}" style="align-self:flex-start;min-height:44px;padding:0;border:none;background:transparent;color:{{ th.link }};font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;cursor:pointer">{{ srcLabel }}</button>
+          <sc-if value="{{ src }}" hint-placeholder-val="{{ false }}">
+            <ul style="margin:0;padding:0 0 8px;list-style:none;display:flex;flex-direction:column">
+              <sc-for list="{{ scr.sources }}" as="s" hint-placeholder-count="2"><li style="display:flex;flex-direction:column;gap:2px;padding:7px 0;border-top:1px solid {{ th.rule }}"><span style="font-size:15px;line-height:1.3">{{ s.t }}</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:{{ th.muted }}">{{ s.id }}</span></li></sc-for>
+            </ul>
+          </sc-if>
+        </div>
+        <div style="flex:none;border-top:1px solid {{ th.rule }};padding:10px 18px 14px;display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;align-items:center;gap:8px">
+            <div aria-hidden="true" style="flex:1;display:flex;gap:3px"><sc-for list="{{ dots }}" as="d" hint-placeholder-count="9"><span style="flex:1;height:3px;background:{{ d.c }}"></span></sc-for></div>
+            <span style="font-family:'DM Mono',monospace;font-size:12px;color:{{ th.muted }}">{{ stepOf }}</span>
+          </div>
+          <div style="display:flex;gap:8px">
+            <button type="button" onClick="{{ back }}" aria-hidden="{{ backHidden }}" tabindex="{{ backTab }}" style="width:76px;height:48px;flex:none;border:1px solid {{ th.rule }};border-radius:3px;background:transparent;color:{{ th.ink }};font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.04em;cursor:pointer;visibility:{{ backVis }}">BACK</button>
+            <button type="button" onClick="{{ next }}" style="flex:1;height:48px;border:none;border-radius:3px;background:{{ th.btn }};color:{{ th.btnInk }};font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;cursor:pointer">{{ scr.button }}</button>
+          </div>
+        </div>
+        <sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}"><div role="status" style="position:absolute;left:18px;right:18px;bottom:90px;background:{{ th.btn }};color:{{ th.btnInk }};padding:10px 12px;border-radius:3px;font-family:'DM Mono',monospace;font-size:12px;line-height:1.5">{{ toast }}</div></sc-if>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;max-width:390px;line-height:1.6">Tap NEXT the whole way through, or pause and go back. Each screen replays its own part of the match.</div>
+    </div>
+
+    <div style="flex:1;min-width:320px;max-width:620px;display:flex;flex-direction:column;gap:26px;font-size:17px;line-height:1.5">
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;color:#6A675F">NEW ORDER</div>
+        <ol style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column">
+          <sc-for list="{{ order }}" as="o" hint-placeholder-count="9">
+            <li style="display:grid;grid-template-columns:30px 1fr auto;gap:10px;padding:8px 0;border-top:1px solid #DAD6CC;align-items:baseline"><span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">{{ o.n }}</span><span style="display:flex;flex-direction:column;gap:2px"><span>{{ o.t }}</span><span style="font-size:15px;color:#4A463F">{{ o.shot }}</span></span><span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;white-space:nowrap">{{ o.k }}</span></li>
+          </sc-for>
+          <li style="display:grid;grid-template-columns:30px 1fr auto;gap:10px;padding:8px 0;border-top:1px solid #DAD6CC;border-bottom:1px solid #DAD6CC"><span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">→</span><span>Then seven lessons and a practice match, with an optional lesson under the hood, below. The old "A full match" screen is dropped, because the match now opens the tutorial.</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">LEARN</span></li>
+        </ol>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;color:#6A675F">THE GAME, AS THE LESSONS TEACH IT</div>
+        <ol style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px">
+          <li>Goal: keep at least one tower and destroy everyone else's. Your score is towers left. The last player with towers wins. If time runs out (turn 480 in match.ts), most towers wins.</li>
+          <li>Glider: flies straight up, down, left or right, one square per step. It flies diagonally only when a match's new rule allows it. It destroys an enemy tower it reaches. Two enemy gliders that meet destroy each other.</li>
+          <li>Square: bounces a glider back and cracks. The second hit breaks it, and that glider too. Rocks never break and are on the board from the start.</li>
+          <li>Tower: your score, your sight, and where you may build.</li>
+          <li>Turn to act: every so often (24 turns in match.ts) each player spends 8 points near their towers. A glider costs 4, a square 1, a tower 4. Between turns the match runs itself.</li>
+          <li>Sight: you see only near your own towers.</li>
+          <li>New rule: every match changes one thing, announced at the start.</li>
+        </ol>
+        <div style="text-wrap:pretty">This is a pieces-level version of match.ts. One square per step stands for a real glider's two cells every four turns. CELLS on the board shows what each piece is made of, and the cell rule itself is the optional last lesson. Every lesson has the same board controls, and the big button does the lesson for you.</div>
+        <ol style="margin:0;padding:0;list-style:none;display:flex;flex-direction:column">
+          <sc-for list="{{ lessonNotes }}" as="o" hint-placeholder-count="8">
+            <li style="display:grid;grid-template-columns:30px 1fr;gap:10px;padding:8px 0;border-top:1px solid #DAD6CC"><span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">{{ o.n }}</span><span style="display:flex;flex-direction:column;gap:2px"><span>{{ o.t }}</span><span style="font-size:15px;color:#4A463F">{{ o.c }}</span></span></li>
+          </sc-for>
+        </ol>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px">
+        <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;color:#6A675F">WHAT EACH THING ON THE BOARD BECOMES IN THE BROADCAST</div>
+        <div style="display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.4fr);border-top:1px solid #1D1D1B">
+          <sc-for list="{{ mapping }}" as="m" hint-placeholder-count="7">
+            <div style="padding:8px 10px 8px 0;border-bottom:1px solid #DAD6CC;font-family:'DM Mono',monospace;font-size:12px;line-height:1.5">{{ m.a }}</div>
+            <div style="padding:8px 0;border-bottom:1px solid #DAD6CC">{{ m.b }}</div>
+          </sc-for>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;color:#6A675F">THE CAMERA</div>
+        <div style="text-wrap:pretty">There are six shots: crane, wide, follow (behind a glider or spaceship), low across the rocks, symbol close-up, and overhead. Cuts are hard cuts, as in a sports broadcast. Slow motion is used only for the half-second around an elimination. After each hit, resignation or win, a player cam shows the face of the player it happened to. With reduced motion, the camera holds still and cuts between fixed shots.</div>
+        <div style="text-wrap:pretty">The rules are deterministic, so in the build the director can run a copy of the match a few hundred turns ahead. That tells it where a symbol is about to fall, and it can cut there before the hit lands. Everything else in the mockup is scripted by hand.</div>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;color:#6A675F">FOR THE BUILD</div>
+        <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px">
+          <li>Render from the same Match state that the existing WatchMatch uses (match.ts, matches.ts). The mockup's battle is a stand-in, with towers and strikes timed by hand over simple drone physics.</li>
+          <li>three.js has to be self-hosted, because production pages make no third-party requests (principle 6). The mockup loads it from a public CDN.</li>
+          <li>The broadcast is a canvas with role="img". The commentary line is aria-live and carries the story, so nothing depends on seeing the 3D. Without WebGL, show the flat WatchMatch.</li>
+          <li>Screen 2's inset is the existing MatchCanvas with viewer set to the cyan player.</li>
+        </ul>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;color:#6A675F">TAKEN FROM THE CODE REVIEW OF MY LAST MOCKUP</div>
+        <ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px">
+          <li>Every control is a real button at least 44px tall. Progress dots are decoration, and "WATCH · n / 8" or "LEARN · n / 8" is the text.</li>
+          <li>Nothing is smaller than 12px. Faint grey is never used for text.</li>
+          <li>The phone is drawn at the Farcaster frame height (695), with no status bar. The app bar has no ×, because Farcaster draws its own close button.</li>
+          <li>There are no sample people. Players are named by colour, as the app already does.</li>
+          <li>Every claim about the book carries its block id, and everything invented carries a tag.</li>
+        </ul>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:8px">
+        <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;color:#6A675F">GUESSES TO CHECK</div>
+        <ol style="margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px">
+          <li>The book's crowd watches "a large detailed map" (c4-b114). The 3D battle goes beyond that, so under principle 8 it carries "Broadcast imagined" on every screen that shows it.</li>
+          <li>The lenses are clear so the eyes always show. The book gives glasses on a cable (c4-b82) and never says what they look like. The faces are simple stand-ins for illustrations.</li>
+          <li>I added people: crews walk out on intervention turns and set the squares. They picture the squares being placed and stand for no rule.</li>
+          <li>The match is four players, last one standing. The chapter 4 match is 2 v 2, but teams would be one more rule to explain before any rule is taught.</li>
+          <li>Symbols are called towers everywhere a player sees them. "Symbol" stays in the sources, and its cell shape appears only under CELLS and in Under the hood.</li>
+          <li>Rocks only bounce gliders, as built. In the book, gliders hitting rocks make more gliders (c4-b108). That would make matches far busier, so it waits.</li>
+          <li>A square breaks on its second hit. That is invented: the book says no wall is invincible (c4-b9, c4-b13) but not how walls fall.</li>
+          <li>Diagonal gliders appear only as a match's new rule. The glider the book's rule allows moves straight (docs/minpentai-sandbox.md).</li>
+          <li>Turns to act: the book says about every thousand turns (c4-b110), and match.ts uses 24. The tutorial says "every so often" until that is settled.</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const W = 48, H = 32, DT = 1 / 30;
+const COL = ['#46D7E8', '#FFB43A', '#FF5C8A', '#A98BFF'], NAME = ['Cyan', 'Amber', 'Pink', 'Violet'];
+const TOWERS = [[40, 26, 0, .6], [44, 22, 0, 1.4], [37, 29, 0, 2.2], [6, 26, 1, .9], [10, 29, 1, 1.7], [4, 22, 1, 2.5], [6, 6, 2, 1.1], [10, 3, 2, 1.9], [4, 10, 2, 2.7], [42, 6, 3, .7], [38, 3, 3, 1.5], [44, 10, 3, 2.3], [30, 20, 0, 30.5], [14, 18, 1, 31.2]];
+const STRIKES = [[1, 5, 8, 38], [0, 12, 7, 41], [3, 10, 5, 42.5], [0, 2, 6, 44.5], [3, 11, 12, 49], [0, 1, 11, 51], [1, 13, 10, 53], [0, 0, 9, 55.5], [0, 1, 13, 57]].map(([p, f, to, imp]) => {
+  const a = TOWERS[f], b = TOWERS[to], d = Math.hypot(a[0] - b[0], a[1] - b[1]);
+  return { p, f, to, imp, launch: imp - d / 6, d };
+});
+const OUT_AT = [99, 58.2, 44.5, 55.5];
+const REACT = [[26.5, 0], [38, 2], [41, 2], [42.5, 1], [44.5, 2], [49, 0], [51, 3], [53, 3], [55.5, 3], [57, 1], [58.2, 0]];
+const EVENTS = [
+  [0, 'Setup. Each player builds in their own corner.'],
+  [5, 'The battle begins.', 'BATTLE BEGINS', 0],
+  [9, 'The players see only near their own towers. The crowd sees all of it.'],
+  [16, 'Gliders fly straight and bounce off squares and rocks.'],
+  [26.5, 'Intervention turn. Everyone may put down a few squares.', 'INTERVENTION TURN', 0],
+  [31, 'Cyan and Amber each build a forward tower.'],
+  [38, 'Pink loses a tower. Two left.'],
+  [41, 'Pink loses another. One left.'],
+  [42.5, 'Violet hits back at Amber.'],
+  [44.5, 'Pink is out.', 'PINK IS OUT', 2],
+  [49, "Violet takes out Cyan's forward tower."],
+  [51, 'Cyan answers. Violet is down to two.'],
+  [53, 'Amber hits Violet too.'],
+  [55.5, 'Violet is out.', 'VIOLET IS OUT', 3],
+  [57, "Cyan strikes Amber's forward tower."],
+  [58.2, 'Amber resigns. Cyan wins.', 'CYAN WINS', 0],
+  [62, 'Most of the board is wreckage now.'],
+  [70, 'From above, the same match is a flat board.'],
+];
+const SEG = [[0, 8], [8, 16], [16, 26], [26, 34], [34, 46], [46, 62], [62, 70], [70, 78], [70, 78]];
+const SHOTS = [
+  [0, 5, 'crane', { R: 38, h: 22, a0: .9, sp: .07, look: [0, 0, 0] }, 'CAM 1 · CRANE'],
+  [5, 8, 'dolly', { a: [0, 9, 31], b: [0, 6.5, 23], la: [0, 0, 3], lb: [0, 0, 2] }, 'CAM 2 · WIDE'],
+  [8, 16, 'dolly', { a: [-34, 27, 30], b: [-28, 23, 24], la: [0, 0, 0], lb: [2, 0, 0] }, 'CAM 2 · WIDE'],
+  [16, 21, 'follow', { owner: 0 }, 'CAM 4 · FOLLOW'],
+  [21, 26, 'dolly', { a: [-12, 2.4, 9], b: [10, 2.4, 9], la: [-4, .6, 0], lb: [4, .6, 0] }, 'CAM 5 · LOW'],
+  [26, 30, 'dolly', { a: [27, 12, 22], b: [23, 9, 18], la: [13, 0, 7], lb: [12, 0, 6] }, 'CAM 3 · CYAN CORNER'],
+  [30, 34, 'dolly', { a: [-27, 7, 18], b: [-22, 5, 13], la: [-13, 0, 5], lb: [-12, 0, 4] }, 'CAM 6 · AMBER CORNER'],
+  [34, 36.8, 'dolly', { a: [-6, 30, 34], b: [-10, 26, 28], la: [-8, 0, -2], lb: [-10, 0, -3] }, 'CAM 2 · WIDE'],
+  [36.8, 39.5, 'tower', { id: 8 }, 'CAM 7 · SYMBOL'],
+  [39.5, 41, 'strike', { s: 1 }, 'CAM 4 · FOLLOW'],
+  [41, 42.2, 'tower', { id: 7 }, 'CAM 7 · SYMBOL'],
+  [42.2, 43.4, 'strike', { s: 3 }, 'CAM 4 · FOLLOW'],
+  [43.4, 46, 'tower', { id: 6 }, 'CAM 7 · SYMBOL'],
+  [46, 48.3, 'dolly', { a: [30, 28, 30], b: [26, 24, 24], la: [4, 0, -2], lb: [6, 0, -3] }, 'CAM 2 · WIDE'],
+  [48.3, 50, 'tower', { id: 12 }, 'CAM 7 · SYMBOL'],
+  [50, 51.8, 'tower', { id: 11 }, 'CAM 7 · SYMBOL'],
+  [51.8, 53.6, 'strike', { s: 6 }, 'CAM 4 · FOLLOW'],
+  [53.6, 56.8, 'tower', { id: 9 }, 'CAM 7 · SYMBOL'],
+  [56.8, 58.2, 'strike', { s: 8 }, 'CAM 4 · FOLLOW'],
+  [58.2, 62, 'crane', { R: 13, h: 7, a0: .2, sp: .16, look: [16, 0, 9] }, 'CAM 3 · CYAN CORNER'],
+  [62, 70, 'dolly', { a: [-22, 3, 14], b: [16, 3.6, -8], la: [-6, 0, 2], lb: [8, 0, -4] }, 'CAM 5 · LOW'],
+  [70, 99, 'top', {}, 'CAM 8 · OVERHEAD'],
+];
+const SCREENS = [
+  { title: 'A game a whole country watches', text: 'In Dzego, Minpentai fills a giant hall inside a mountain, with over a thousand people watching. Before every match, the priests secretly choose a new rule.', caption: 'Players learn the rule only when the match starts, then get a set time to build. In one match it is twenty minutes.', button: 'NEXT', tags: ['book', 'imag', 'draft'],
+    sources: [['A giant room inside the mountain, over a thousand watching', 'c4-b78–b79'], ['A new rule every game; the priests decide the rule sets', 'c4-b84 · c4-b148'], ['"MU GU GEI TAU FA" · The battle begins in fifty ticks.', 'c4-b97–b98'], ['Players are kept offline so they cannot learn the rule early', 'c12-b133–b134'], ['Twenty minutes to build before the battle', 'c12-b143']] },
+  { title: 'Every player plays alone', text: 'Each player sits at a console in glasses on a cable, and sees only the board near their own towers. The crowd sees the whole board, and the players\' faces.', caption: 'Under each face is what that player sees right now.', button: 'NEXT', tags: ['book', 'lens', 'imag', 'draft'],
+    sources: [['Devices handed over in the elevator', 'c4-b77'], ['A giant game console with a chair', 'c4-b79'], ['Glasses on a cable at the console', 'c4-b82'], ['The book never says whether the lenses are clear. Here they are, so the eyes show.', 'invented'], ['Teammates normally talk by voice chat', 'c4-b99'], ['"On the big screen, the audience watched."', 'c7'], ['A symbol lets its owner see within thirty squares', 'c4-b93'], ['The crowd sees a large detailed map', 'c4-b114']] },
+  { title: 'Then the battle runs itself', text: 'Once it starts, the players can only watch. Gliders fly out in straight lines. Squares and rocks bounce them back.', caption: 'In the broadcast, each glider is drawn as a drone.', button: 'NEXT', tags: ['book', 'imag', 'draft'],
+    sources: [['Gliders, walls, rocks', 'c4-b84'], ['In the book, gliders hitting rocks can make more gliders. Here rocks only bounce them.', 'c4-b108']] },
+  { title: 'A turn to act', text: 'Every so often, each player may put down a few pieces near their own towers. Then the match runs on without them.', caption: 'The crews stand for squares being placed.', button: 'NEXT', tags: ['book', 'imag', 'draft'],
+    sources: [['"All players were able to put down more squares near any copy of their symbols"', 'c4-b110']] },
+  { title: 'Lose every tower and you are out', text: 'Each player starts with a few towers. A glider that reaches an enemy tower destroys it. The scoreboard counts the towers each player has left.', caption: 'A white ring marks the tower about to be hit. The book calls towers symbols.', button: 'NEXT', tags: ['book', 'inv', 'imag', 'draft'],
+    sources: [['Symbols give sight around them', 'c4-b93'], ['A player with no symbols left is out', 'c4-b136–b138'], ['The symbol shape is invented; the book never draws one', 'docs/minpentai-rules.md §1.3']] },
+  { title: 'The last one standing wins', text: 'The last player with towers left wins. If time runs out, most towers wins. A player who sees the end coming can resign.', button: 'NEXT', tags: ['book', 'imag', 'draft'],
+    sources: [['A player resigns', 'c4-b141'], ['A player is out when every symbol is gone', 'c4-b136–b138']] },
+  { title: 'Your season', text: 'You are a young player in your last year of school tournaments. Win, and you go to the nationals, with prize money on the line.', caption: 'Practice against bots only goes so far. They play the standard rules well and adapt badly to a new one.', button: 'NEXT', tags: ['book', 'draft'],
+    sources: [['Last year to compete; winning means the nationals', 'c4-b15'], ['Prize money', 'c4-b73'], ['Bots are strong on stock Minpentai, weak on new rules', 'c7-b13'], ['"A high-entropy wasteland"', 'c4-b140']] },
+  { title: 'Now try it yourself', text: 'From above, the match is a flat board of towers, gliders and squares. Next, learn each piece on that board.', button: 'START THE LESSONS', tags: ['book', 'draft'],
+    sources: [["The rule was recovered from the book's animated board", 'c4-b5 · c4-b7']] },
+];
+const BW = 48, BH = 32, ph2 = t => ((t % 2) + 2) % 2;
+const bEmpty = () => ({ cells: new Uint8Array(BW * BH), rocks: new Uint8Array(BW * BH), turn: 0 });
+function bApply(b, ph) {
+  const out = new Uint8Array(b.cells);
+  for (let y0 = ph; y0 < BH + ph; y0 += 2) for (let x0 = ph; x0 < BW + ph; x0 += 2) {
+    const xa = x0 % BW, xb = (x0 + 1) % BW, ya = y0 % BH, yb = (y0 + 1) % BH, id = [ya * BW + xa, ya * BW + xb, yb * BW + xa, yb * BW + xb];
+    if (b.rocks[id[0]] || b.rocks[id[1]] || b.rocks[id[2]] || b.rocks[id[3]]) continue;
+    const c = id.map(k => b.cells[k]), n = c[0] + c[1] + c[2] + c[3];
+    let r = c; if (n === 2) r = c.map(v => 1 - v); else if ((ph === 0 && n === 3) || (ph === 1 && n === 1)) r = [c[3], c[2], c[1], c[0]];
+    for (let q = 0; q < 4; q++) out[id[q]] = r[q];
+  }
+  return out;
+}
+const bStep = b => ({ ...b, cells: bApply(b, ph2(b.turn)), turn: b.turn + 1 });
+const bBack = b => ({ ...b, cells: bApply(b, ph2(b.turn - 1)), turn: b.turn - 1 });
+function bStamp(b, rows, x, y) { const cells = new Uint8Array(b.cells); rows.forEach((r, j) => [...r].forEach((ch, i) => { if (ch === '#') cells[((y + j + BH) % BH) * BW + ((x + i + BW) % BW)] = 1; })); return { ...b, cells }; }
+const live = b => b.cells.reduce((a, v) => a + v, 0);
+const GL = ['.##.', '#..#'];
+const PW = 15, PH = 10, COST = { glider: 4, square: 1, tower: 4 };
+const P_ = (k, x, y, p, dx = 0, dy = 0) => ({ k, x, y, p, dx, dy });
+const T_ = (x, y, p) => P_('tower', x, y, p), G_ = (x, y, p, dx, dy) => P_('glider', x, y, p, dx, dy), Q_ = (x, y, p) => P_('square', x, y, p);
+const BASE = () => [T_(2, 3, 0), T_(2, 7, 0), T_(12, 3, 1), T_(12, 7, 1)];
+function pNew(list) { let id = 1; return { turn: 0, pieces: list.map(q => ({ ...q, id: id++, trail: [] })), nid: id, hits: [] }; }
+const pClone = s => ({ ...s, pieces: s.pieces.map(q => ({ ...q, trail: q.trail.slice() })), hits: [] });
+const towers = (s, p) => s.pieces.filter(q => q.k === 'tower' && q.p === p).length;
+const near = (s, x, y, r, p = 0) => s.pieces.some(q => q.k === 'tower' && q.p === p && Math.max(Math.abs(q.x - x), Math.abs(q.y - y)) <= r);
+function pStep(s0) {
+  const s = pClone(s0); s.turn++;
+  const at = (x, y) => s.pieces.find(q => !q.dead && q.k !== 'glider' && q.x === x && q.y === y);
+  for (const g of s.pieces) {
+    if (g.k !== 'glider' || g.dead) continue;
+    g.trail.unshift([g.x, g.y]); if (g.trail.length > 3) g.trail.length = 3;
+    const nx = g.x + g.dx, ny = g.y + g.dy;
+    const ox = nx < 0 || nx >= PW, oy = ny < 0 || ny >= PH;
+    if (ox || oy) { if (ox) g.dx = -g.dx; if (oy) g.dy = -g.dy; continue; }
+    const o = at(nx, ny);
+    if (o && o.k === 'tower' && o.p !== g.p) { o.dead = g.dead = true; s.hits.push({ x: nx, y: ny, p: o.p, k: 'tower' }); continue; }
+    if (o && o.k === 'square') { o.hp = (o.hp == null ? 2 : o.hp) - 1; if (o.hp <= 0) { o.dead = g.dead = true; s.hits.push({ x: nx, y: ny, p: o.p, k: 'break' }); continue; } }
+    if (o) { g.dx = -g.dx; g.dy = -g.dy; continue; }
+    g.x = nx; g.y = ny;
+  }
+  const gs = s.pieces.filter(q => q.k === 'glider' && !q.dead);
+  const swap = (a, b) => a.trail[0] && b.trail[0] && a.x === b.trail[0][0] && a.y === b.trail[0][1] && b.x === a.trail[0][0] && b.y === a.trail[0][1];
+  for (let i = 0; i < gs.length; i++) for (let j = i + 1; j < gs.length; j++) if (gs[i].p !== gs[j].p && ((gs[i].x === gs[j].x && gs[i].y === gs[j].y) || swap(gs[i], gs[j]))) { gs[i].dead = gs[j].dead = true; s.hits.push({ x: gs[i].x, y: gs[i].y, p: gs[i].p, k: 'crash' }); }
+  s.pieces = s.pieces.filter(q => !q.dead);
+  return s;
+}
+const DIRS = [[-1, 0, '←', 'left'], [0, -1, '↑', 'up'], [0, 1, '↓', 'down'], [1, 0, '→', 'right']], DIAG = [[-1, -1, '↖', 'up left'], [1, -1, '↗', 'up right'], [-1, 1, '↙', 'down left'], [1, 1, '↘', 'down right']];
+const RULES = [{ t: 'Gliders may also fly diagonally.', diag: true }, { t: 'Gliders cost 3 points.', cost: { glider: 3, square: 1, tower: 4 } }, { t: 'You see only 2 squares around your towers.', fog: 2 }, { t: 'Turns to act come every 8 steps.', every: 8 }];
+const LS = [
+  { id: 'goal', read: true, title: 'Keep your towers. Destroy theirs.', text: 'You are Cyan. Each player starts with a few towers, and your score is how many you have left. Lose them all and you are out. The last player with towers wins.', caption: 'If a match runs long, whoever has the most towers when time runs out wins.', button: 'NEXT', tags: ['book', 'model', 'draft'],
+    sources: [['A player with no symbols left is out', 'c4-b136–b138'], ['The book calls them symbols. Here they are drawn as towers.', 'invented'], ['Most towers when time runs out', 'src/lib/minpentai/match.ts']], build: () => pNew(BASE()) },
+  { id: 'glider', title: 'Gliders fly straight', text: 'A glider flies in a straight line, up, down, left or right, one square per step. It bounces off the edge. Press play.', caption: 'In the match, these were the drones.', button: 'PLAY IT', tags: ['book', 'model', 'draft'],
+    sources: [['Gliders', 'c4-b84'], ['One square per step stands for a real glider’s two cells every four turns', 'src/lib/minpentai/glider.ts']], build: () => pNew([...BASE(), G_(4, 5, 0, 1, 0)]), goal: s => s.turn >= 8, demo: 'play' },
+  { id: 'hit', title: 'A hit destroys a tower', text: 'When a glider reaches an enemy tower, the tower is gone. That is how you score. Press play and watch Amber’s score.', button: 'PLAY IT', tags: ['book', 'model', 'draft'],
+    sources: [['Symbols lost to attacks; out when none are left', 'c4-b136–b138']], build: () => pNew([...BASE(), G_(4, 3, 0, 1, 0)]), goal: s => towers(s, 1) < 2, demo: 'play', metText: 'AMBER −1.' },
+  { id: 'square', title: 'Squares bounce gliders', text: 'An Amber glider is coming for your tower. Tap one of the outlined spots to put a square in its way, then press play.', caption: 'A square survives one hit and cracks. The second hit breaks it, and the glider breaks with it.', button: 'BLOCK IT FOR ME', tags: ['book', 'model', 'draft'],
+    sources: [['Walls', 'c4-b84'], ['No wall is invincible', 'c4-b9 · c4-b13']], build: () => pNew([...BASE(), G_(10, 7, 1, -1, 0)]), place: 'square', hints: [[4, 7], [5, 7], [6, 7]],
+    goal: s => s.turn >= 10 && towers(s, 0) === 2, fail: s => towers(s, 0) < 2, failText: 'YOUR TOWER FELL. PRESS RESET AND TRY AGAIN.', demo: 'place', demoCells: [[5, 7]] },
+  { id: 'turn', title: 'Your turn to act', text: 'Every so often you get 8 points to spend near your own towers. A glider costs 4, a square 1 and a tower 4. Pick a glider’s direction with the arrows. Take out Amber’s last tower.', caption: 'Between turns to act, the match runs by itself. The lit area is where you may build.', button: 'DO IT FOR ME', tags: ['book', 'model', 'draft'],
+    sources: [['Players put down more squares near their symbols', 'c4-b110'], ['8 points; glider 4, square 1, tower 4', 'src/lib/minpentai/match.ts']],
+    build: () => pNew([T_(2, 3, 0), T_(2, 7, 0), T_(12, 5, 1), Q_(10, 2, 1), Q_(10, 3, 1), Q_(10, 7, 1), Q_(10, 8, 1)]), place: 'palette', zone: 3, budget: 8,
+    goal: s => towers(s, 1) === 0, fail: s => s.turn >= 24, failText: 'MISSED. PRESS RESET AND TRY ANOTHER ROW.', demo: 'place', demoCells: [[4, 5]], demoTool: 'glider' },
+  { id: 'sight', title: 'You only see near your towers', text: 'Beyond a few squares of your towers, the board is dark. Press play. Something is coming.', caption: 'Lose a tower and you see less. Build one and you see more.', button: 'PLAY IT', tags: ['book', 'model', 'draft'],
+    sources: [['A symbol lets its owner see around it', 'c4-b93']], build: () => pNew([T_(2, 2, 0), T_(3, 7, 0), T_(12, 4, 1), G_(13, 7, 1, -1, 0)]), fog: 3, goal: s => towers(s, 0) < 2, demo: 'play', metText: 'YOU LOST A TOWER, AND YOUR VIEW SHRANK.' },
+  { id: 'rule', read: true, hood: true, title: 'Every match, a new rule', text: 'Before each match, the priests pick a new rule, and players learn it only when the match begins. That is what makes Minpentai hard:', button: 'START A PRACTICE MATCH', tags: ['book', 'draft'],
+    sources: [['A new rule every game', 'c4-b84'], ['Players are kept offline so they cannot learn it early', 'c12-b133–b134']], build: () => pNew(BASE()), reasons: true },
+  { id: 'hood', ca: true, optional: true, rule: true, title: 'Under the hood', text: 'Every piece is a few cells, moved by one rule from the book. This is a glider, cell by cell. Press play.', caption: 'You never need this to play.', button: 'PLAY IT', tags: ['book', 'draft'],
+    sources: [['The rule, recovered from the book’s animated board', 'c4-b5 · c4-b7']], build: () => bStamp(bEmpty(), GL, 23, 25), zoom: 2, view: [12, 16], speed: 6, goal: (b, st) => b.turn - st.turn >= 16, demo: 'play' },
+  { id: 'practice', practice: true, optional: true, place: 'palette', zone: 3, budget: 8, fog: 3, title: 'Practice match', tags: ['model', 'draft'], button: 'END TURN',
+    sources: [['Players put down squares near their symbols on turns to act', 'c4-b110'], ['A new rule every game', 'c4-b84'], ['Sight near your symbols', 'c4-b93'], ['8 points; glider 4, square 1, tower 4', 'src/lib/minpentai/match.ts'], ['Amber is a simple bot. In the book, bots handle new rules badly.', 'c7-b13']],
+    build: () => pNew([T_(1, 2, 0), T_(1, 7, 0), T_(13, 2, 1), T_(13, 7, 1), P_('rock', 7, 4), P_('rock', 7, 5), P_('rock', 6, 0), P_('rock', 8, 9), P_('rock', 5, 6), P_('rock', 9, 3)]) },
+];
+const REASONS = ['You only see near your towers.', 'You can act only on your turns.', 'The rules change every match.', 'No square stops everything forever.'];
+const RC = v => v ? '#46D7E8' : '#23252C';
+const RULE = [['0 OR 4 LIVE', 'Nothing changes.', [0, 0, 0, 0], [0, 0, 0, 0]], ['1 LIVE', 'On odd turns it jumps to the opposite corner.', [1, 0, 0, 0], [0, 0, 0, 1]], ['2 LIVE', 'Every cell flips: live becomes empty, empty becomes live.', [1, 1, 0, 0], [0, 0, 1, 1]], ['3 LIVE', 'On even turns the block turns half a circle.', [1, 1, 1, 0], [0, 1, 1, 1]]];
+const TH = {
+  light: { paper: '#F4F2ED', ink: '#1D1D1B', body: '#4A463F', muted: '#6A675F', rule: '#DAD6CC', soft: '#E6E2D9', link: '#2E5A3A', btn: '#1D1D1B', btnInk: '#F4F2ED' },
+  dark: { paper: '#161614', ink: '#E7E4DD', body: '#B9B5AB', muted: '#9C988E', rule: '#33322E', soft: '#24231F', link: '#8DB58A', btn: '#E7E4DD', btnInk: '#161614' },
+};
+const SYM = [[0, 0], [1, 1], [2, 1], [1, 2]];
+const GLIDER = [[1, 0], [2, 0], [0, 1], [3, 1]];
+const SHIP = [[1, 0], [2, 0], [0, 1], [3, 1]];
+function rng(seed) { let s = seed >>> 0; return () => { s = (s + 0x6D2B79F5) >>> 0; let t = s; t = Math.imul(t ^ t >>> 15, t | 1); t ^= t + Math.imul(t ^ t >>> 7, t | 61); return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+const smooth = (a, b, t) => { const x = clamp((t - a) / (b - a), 0, 1); return x * x * (3 - 2 * x); };
+const lerp = (a, b, u) => a + (b - a) * u;
+const wx = x => x + .5 - W / 2, wz = z => z + .5 - H / 2;
+
+function makeWorld() {
+  const r = rng(7), rock = new Float32Array(W * H);
+  const centers = [[18, 10], [24, 16], [30, 23], [24, 8], [23, 25], [14, 15], [34, 15], [20, 20], [28, 12], [10, 15], [38, 18], [17, 5], [32, 28], [8, 19], [40, 13], [27, 18]];
+  for (const [cx, cz] of centers) { let x = cx, z = cz; const n = 4 + Math.floor(r() * 6); for (let k = 0; k < n; k++) { if (x >= 0 && x < W && z >= 0 && z < H) rock[z * W + x] = .5 + r() * 1.3; const d = Math.floor(r() * 4); if (d === 0) x++; else if (d === 1) x--; else if (d === 2) z++; else z--; } }
+  const clear = (x, z, rad) => { for (let dz = -rad; dz <= rad; dz++) for (let dx = -rad; dx <= rad; dx++) { const X = x + dx, Z = z + dz; if (X >= 0 && X < W && Z >= 0 && Z < H) rock[Z * W + X] = 0; } };
+  TOWERS.forEach(t => clear(t[0], t[1], 2));
+  const walls = [], rw = rng(11);
+  TOWERS.forEach((t, ti) => { if (ti >= 12) return; const [x, z, p] = t, dx = Math.sign(24 - x), dz = Math.sign(16 - z); [[x + dx * 3, z + dz * 2], [x + dx * 2, z + dz * 3]].forEach(c => walls.push({ x: c[0], z: c[1], p, born: 1 + rw() * 3.5, from: ti })); });
+  [0, 1, 2, 3].forEach(p => { const ti = p * 3, [x, z] = TOWERS[ti], dx = Math.sign(24 - x), dz = Math.sign(16 - z); for (let k = 0; k < 5; k++) walls.push({ x: x + dx * (5 + k), z: z + dz * (5 - k), p, born: 27.4 + p * .25 + k * .8, from: ti }); });
+  walls.forEach(w => { w.x = clamp(w.x, 0, W - 1); w.z = clamp(w.z, 0, H - 1); clear(w.x, w.z, 0); });
+  const crews = walls.map(w => ({ fx: TOWERS[w.from][0], fz: TOWERS[w.from][1], x: w.x, z: w.z, p: w.p, born: w.born }));
+  crews.push({ fx: 40, fz: 26, x: 30, z: 20, p: 0, born: 30.5 }, { fx: 37, fz: 29, x: 30, z: 20, p: 0, born: 30.3 }, { fx: 10, fz: 29, x: 14, z: 18, p: 1, born: 31.2 }, { fx: 6, fz: 26, x: 14, z: 18, p: 1, born: 31 });
+  return { rock, walls, crews };
+}
+const WORLD = makeWorld();
+
+function newSim() {
+  const wallAt = new Int16Array(W * H).fill(-1);
+  WORLD.walls.forEach((w, i) => { wallAt[w.z * W + w.x] = i; });
+  return { t: 0, r: rng(42), drones: [], nid: 1, debris: [], flashes: [], wallAlive: WORLD.walls.map(() => true), wallAt, towerDead: TOWERS.map(() => -1), emit: [5, 5.15, 5.3, 5.45], strikeDone: STRIKES.map(() => false) };
+}
+const towerUp = (S, i, t) => t >= TOWERS[i][3] && (S.towerDead[i] < 0 || t < S.towerDead[i]);
+function addDebris(S, x, y, z, vx, vy, vz, col) {
+  S.debris.push({ x, y, z, vx, vy, vz, ry: S.r() * 6.28, rx: S.r() * 6.28, settled: vy === 0 && y <= .12, col });
+  if (S.debris.length > 1400) { const k = S.debris.findIndex(d => d.settled); S.debris.splice(k < 0 ? 0 : k, 1); }
+}
+function stepSim(S) {
+  S.t += DT; const t = S.t, r = S.r;
+  for (let p = 0; p < 4; p++) {
+    if (t < 5 || t >= 58.2 || t >= OUT_AT[p] || t < S.emit[p]) continue;
+    S.emit[p] = t + 2.4 + r() * 1.4;
+    const mine = TOWERS.map((tw, i) => i).filter(i => TOWERS[i][2] === p && towerUp(S, i, t));
+    if (!mine.length) continue;
+    const tw = TOWERS[mine[Math.floor(r() * mine.length)]];
+    let dx = 0, dz = 0; if (r() < .5) dx = Math.sign(24 - tw[0]) || 1; else dz = Math.sign(16 - tw[1]) || 1;
+    S.drones.push({ id: S.nid++, x: tw[0] + .5 + dx * 1.6, z: tw[1] + .5 + dz * 1.6, dx, dz, p, life: 8 + r() * 6 });
+  }
+  const v = 4.2 * DT;
+  for (const d of S.drones) {
+    const nx = d.x + d.dx * v, nz = d.z + d.dz * v;
+    if (nx < .3 || nx > W - .3) { d.dx = -d.dx; continue; }
+    if (nz < .3 || nz > H - .3) { d.dz = -d.dz; continue; }
+    const k = Math.floor(nz) * W + Math.floor(nx);
+    if (WORLD.rock[k] > 0) {
+      const pdx = d.dx, pdz = d.dz;
+      if (r() < .5) { d.dx = -d.dx; d.dz = -d.dz; } else if (d.dx) { d.dz = r() < .5 ? 1 : -1; d.dx = 0; } else { d.dx = r() < .5 ? 1 : -1; d.dz = 0; }
+      continue;
+    }
+    const wi = S.wallAt[k];
+    if (wi >= 0 && S.wallAlive[wi] && WORLD.walls[wi].born <= t && WORLD.walls[wi].p !== d.p) {
+      d.dx = -d.dx; d.dz = -d.dz;
+      if (r() < .35) { S.wallAlive[wi] = false; for (let q = 0; q < 3; q++) addDebris(S, Math.floor(nx) + .5, .4, Math.floor(nz) + .5, (r() - .5) * 3, 2 + r() * 2, (r() - .5) * 3, COL[WORLD.walls[wi].p]); }
+      continue;
+    }
+    d.x = nx; d.z = nz; d.life -= DT;
+  }
+  const ds = S.drones;
+  for (let i = 0; i < ds.length; i++) { const a = ds[i]; if (a.life <= 0) continue; for (let j = i + 1; j < ds.length; j++) { const b = ds[j]; if (b.life <= 0 || a.p === b.p) continue; if (Math.abs(a.x - b.x) < .55 && Math.abs(a.z - b.z) < .55) { a.life = b.life = -1; for (let q = 0; q < 2; q++) { addDebris(S, a.x, .5, a.z, (r() - .5) * 4, 2 + r() * 2, (r() - .5) * 4, COL[a.p]); addDebris(S, b.x, .5, b.z, (r() - .5) * 4, 2 + r() * 2, (r() - .5) * 4, COL[b.p]); } break; } } }
+  S.drones = ds.filter(d => { if (d.life > 0) return true; if (d.life > -1) addDebris(S, d.x, .12, d.z, 0, 0, 0, COL[d.p]); return false; });
+  STRIKES.forEach((s, i) => {
+    if (S.strikeDone[i] || t < s.imp) return;
+    S.strikeDone[i] = true; S.towerDead[s.to] = s.imp;
+    const tw = TOWERS[s.to];
+    for (let q = 0; q < 34; q++) { const a = r() * 6.28, sp = 1 + r() * 6; addDebris(S, tw[0] + .5, 1.4 + r(), tw[1] + .5, Math.cos(a) * sp, 3 + r() * 7, Math.sin(a) * sp, q % 3 ? '#8A8C96' : COL[tw[2]]); }
+    S.flashes.push({ x: tw[0] + .5, z: tw[1] + .5, t0: t, c: COL[tw[2]] });
+  });
+  for (const d of S.debris) { if (d.settled) continue; d.vy -= 18 * DT; d.x += d.vx * DT; d.y += d.vy * DT; d.z += d.vz * DT; d.x = clamp(d.x, .2, W - .2); d.z = clamp(d.z, .2, H - .2); if (d.y <= .12) { d.y = .12; if (Math.abs(d.vy) < 2.5) { d.settled = true; } else { d.vy *= -.3; d.vx *= .5; d.vz *= .5; } } }
+  S.flashes = S.flashes.filter(f => t - f.t0 < 1);
+}
+const slowAt = t => (t > 44.1 && t < 45) || (t > 55.1 && t < 56) ? .3 : 1;
+function strikePos(s, t) {
+  const a = TOWERS[s.f], b = TOWERS[s.to], u = clamp((t - s.launch) / (s.imp - s.launch), 0, 1), apex = Math.min(6, s.d * .18);
+  return [lerp(wx(a[0]), wx(b[0]), u), 2.2 + Math.sin(Math.PI * u) * apex - u * .8, lerp(wz(a[1]), wz(b[1]), u), u];
+}
+
+class Component extends DCLogic {
+  state = { dir: '1,0', mode: 'watch', li: 0, lphase: 'act', lresult: null, cellsOn: false, pick: 'glider', spent: 0, lfail: false, lt: { strip: '', hasMinus: false, minus: '', minusC: '#fff' }, lplaying: false, lmet: null, ruleOpen: false, i: 0, paused: false, src: false, dark: false, reduced: false, noGL: false, toast: null, hud: { turn: 'TURN 0', cam: 'CAM 1 · CRANE', comment: '', banner: '', bannerC: '#E7E4DD', countdown: true, counts: [], eyes: [0, 1, 2, 3].map(() => ({ ex: 0, ey: 0, eh: 7, op: 1 })), react: -1 } };
+  stageRef = React.createRef(); lessonRef = React.createRef(); camRefs = [0, 1, 2, 3].map(() => React.createRef());
+  componentDidMount() {
+    if (this.props.dark) this.setState({ dark: true });
+    try { if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) this.setState({ reduced: true }); } catch (e) {}
+    this.S = newSim(); this.acc = 0; this.boot();
+  }
+  componentWillUnmount() { this.dead = true; cancelAnimationFrame(this.raf); clearInterval(this.dog); clearTimeout(this.tt); if (this.R) { this.R.renderer.dispose(); this.R.renderer.domElement.remove(); } }
+  async boot() {
+    try {
+      const THREE = await import('https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js');
+      if (this.dead) return; this.T = THREE; this.build(); this.last = performance.now(); this.loop(); this.dog = setInterval(() => { if (performance.now() - this.last > 180) this.tick(); }, 100);
+    } catch (e) { console.warn('three.js failed to load', e); this.setState({ noGL: true }); }
+  }
+  build() {
+    const T = this.T, el = this.stageRef.current, w = el.clientWidth || 390, h = el.clientHeight || 260;
+    const renderer = new T.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
+    renderer.setPixelRatio(Math.min(2, window.devicePixelRatio || 1)); renderer.setSize(w, h);
+    renderer.toneMapping = T.ACESFilmicToneMapping; renderer.outputColorSpace = T.SRGBColorSpace;
+    renderer.shadowMap.enabled = true; renderer.shadowMap.type = T.PCFSoftShadowMap;
+    el.appendChild(renderer.domElement); renderer.domElement.style.display = 'block';
+    const scene = new T.Scene(); scene.background = new T.Color('#050507'); scene.fog = new T.FogExp2('#050507', .016);
+    const camera = new T.PerspectiveCamera(50, w / h, .1, 400);
+    scene.add(new T.HemisphereLight(0x8899aa, 0x080808, .55));
+    const sun = new T.DirectionalLight(0xffffff, 1.5); sun.position.set(18, 40, 12); sun.castShadow = true;
+    Object.assign(sun.shadow.camera, { left: -32, right: 32, top: 24, bottom: -24, near: 1, far: 100 }); sun.shadow.mapSize.set(1024, 1024); scene.add(sun);
+    const floor = new T.Mesh(new T.PlaneGeometry(240, 240), new T.MeshStandardMaterial({ color: '#08080A', roughness: 1 })); floor.rotation.x = -Math.PI / 2; floor.position.y = -.02; floor.receiveShadow = true; scene.add(floor);
+    const field = new T.Mesh(new T.PlaneGeometry(W, H), new T.MeshStandardMaterial({ color: '#0E0F13', roughness: .95 })); field.rotation.x = -Math.PI / 2; field.receiveShadow = true; scene.add(field);
+    const gp = []; for (let x = 0; x <= W; x++) gp.push(x - W / 2, .01, -H / 2, x - W / 2, .01, H / 2); for (let z = 0; z <= H; z++) gp.push(-W / 2, .01, z - H / 2, W / 2, .01, z - H / 2);
+    const gg = new T.BufferGeometry(); gg.setAttribute('position', new T.Float32BufferAttribute(gp, 3));
+    const gridMat = new T.LineBasicMaterial({ color: '#1C1D24', transparent: true, opacity: .9 }); scene.add(new T.LineSegments(gg, gridMat));
+    const edge = new T.LineSegments(new T.EdgesGeometry(new T.BoxGeometry(W, .02, H)), new T.LineBasicMaterial({ color: '#4A4D5A' })); edge.position.y = .02; scene.add(edge);
+    const D = new T.Object3D(), box = new T.BoxGeometry(1, 1, 1);
+    const rockIdx = []; WORLD.rock.forEach((v, k) => { if (v > 0) rockIdx.push([k, v]); });
+    const rocks = new T.InstancedMesh(box, new T.MeshStandardMaterial({ color: '#4B4C55', roughness: .85 }), rockIdx.length); rocks.castShadow = rocks.receiveShadow = true; scene.add(rocks);
+    const walls = new T.InstancedMesh(box, new T.MeshStandardMaterial({ color: '#ffffff', roughness: .5, emissive: '#111111' }), WORLD.walls.length); walls.castShadow = true; scene.add(walls);
+    WORLD.walls.forEach((wl, i) => walls.setColorAt(i, new T.Color(COL[wl.p]).multiplyScalar(.55)));
+    const drones = new T.InstancedMesh(box, new T.MeshBasicMaterial({ color: '#ffffff' }), 900); drones.instanceMatrix.setUsage(T.DynamicDrawUsage); scene.add(drones);
+    for (let i = 0; i < 900; i++) drones.setColorAt(i, new T.Color('#ffffff'));
+    const debris = new T.InstancedMesh(box, new T.MeshStandardMaterial({ color: '#ffffff', roughness: .9 }), 1500); debris.instanceMatrix.setUsage(T.DynamicDrawUsage); debris.castShadow = true; scene.add(debris);
+    for (let i = 0; i < 1500; i++) debris.setColorAt(i, new T.Color('#5A5C66'));
+    const crews = new T.InstancedMesh(new T.CapsuleGeometry(.12, .26, 4, 8), new T.MeshStandardMaterial({ color: '#ffffff', roughness: .6 }), WORLD.crews.length); crews.castShadow = true; scene.add(crews);
+    WORLD.crews.forEach((c, i) => crews.setColorAt(i, new T.Color(COL[c.p])));
+    const gc = document.createElement('canvas'); gc.width = gc.height = 64; const gx = gc.getContext('2d'); const grd = gx.createRadialGradient(32, 32, 0, 32, 32, 32); grd.addColorStop(0, 'rgba(255,255,255,1)'); grd.addColorStop(.25, 'rgba(255,255,255,.45)'); grd.addColorStop(1, 'rgba(255,255,255,0)'); gx.fillStyle = grd; gx.fillRect(0, 0, 64, 64);
+    const glowTex = new T.CanvasTexture(gc);
+    const gpos = new Float32Array(260 * 3), gcol = new Float32Array(260 * 3), pg = new T.BufferGeometry();
+    pg.setAttribute('position', new T.BufferAttribute(gpos, 3)); pg.setAttribute('color', new T.BufferAttribute(gcol, 3));
+    const glow = new T.Points(pg, new T.PointsMaterial({ size: 1.5, map: glowTex, vertexColors: true, transparent: true, depthWrite: false, blending: T.AdditiveBlending, sizeAttenuation: true })); scene.add(glow);
+    const colorObj = COL.map(c => new T.Color(c));
+    const towers = TOWERS.map(([x, z, p]) => {
+      const g = new T.Group(); g.position.set(wx(x), 0, wz(z));
+      const col = new T.Mesh(new T.CylinderGeometry(.16, .3, 2.2, 10), new T.MeshStandardMaterial({ color: '#2A2C34', metalness: .6, roughness: .4 })); col.position.y = 1.1; col.castShadow = true; g.add(col);
+      const top = new T.Group(); top.position.y = 2.6; const mat = new T.MeshBasicMaterial({ color: COL[p] });
+      const cubes = SYM.map(([a, b]) => { const m = new T.Mesh(box, mat); top.add(m); return [m, a - 1, b - 1]; }); g.add(top);
+      const base = new T.Mesh(new T.RingGeometry(.5, .75, 28), new T.MeshBasicMaterial({ color: COL[p], side: T.DoubleSide })); base.rotation.x = -Math.PI / 2; base.position.y = .03; g.add(base);
+      const discMat = new T.MeshBasicMaterial({ color: COL[p], transparent: true, opacity: .05, depthWrite: false }); const disc = new T.Mesh(new T.CircleGeometry(7, 48), discMat); disc.rotation.x = -Math.PI / 2; disc.position.y = .02; g.add(disc);
+      const ringMat = new T.MeshBasicMaterial({ color: COL[p], transparent: true, opacity: .32, depthWrite: false, side: T.DoubleSide }); const ring = new T.Mesh(new T.RingGeometry(6.88, 7, 64), ringMat); ring.rotation.x = -Math.PI / 2; ring.position.y = .025; g.add(ring);
+      const sp = new T.Sprite(new T.SpriteMaterial({ map: glowTex, color: COL[p], transparent: true, depthWrite: false, blending: T.AdditiveBlending })); sp.scale.set(2.6, 2.6, 1); sp.position.y = 2.6; g.add(sp);
+      const warn = new T.Mesh(new T.RingGeometry(1.1, 1.35, 32), new T.MeshBasicMaterial({ color: '#FFFFFF', transparent: true, opacity: .8, depthWrite: false, side: T.DoubleSide })); warn.rotation.x = -Math.PI / 2; warn.position.y = .05; warn.visible = false; g.add(warn);
+      scene.add(g); return { g, col, top, cubes, discMat, ringMat, sp, warn };
+    });
+    const ships = STRIKES.map(s => {
+      const g = new T.Group(), mat = new T.MeshBasicMaterial({ color: COL[s.p] });
+      SHIP.forEach(([a, b]) => { const m = new T.Mesh(box, mat); m.scale.setScalar(.4); m.position.set((a - 1.5) * .44, 0, (b - 1) * .44); g.add(m); });
+      const sp = new T.Sprite(new T.SpriteMaterial({ map: glowTex, color: COL[s.p], transparent: true, depthWrite: false, blending: T.AdditiveBlending })); sp.scale.set(4, 4, 1); g.add(sp);
+      const tg = new T.BufferGeometry(); tg.setAttribute('position', new T.BufferAttribute(new Float32Array(30 * 3), 3));
+      const trail = new T.Line(tg, new T.LineBasicMaterial({ color: COL[s.p], transparent: true, opacity: .65 }));
+      g.visible = trail.visible = false; scene.add(g); scene.add(trail); return { g, trail };
+    });
+    const flashes = [0, 1, 2].map(() => { const s = new T.Sprite(new T.SpriteMaterial({ map: glowTex, transparent: true, depthWrite: false, blending: T.AdditiveBlending })); s.visible = false; scene.add(s); return s; });
+    this.R = { renderer, scene, camera, D, rocks, rockIdx, walls, drones, debris, crews, glow, gpos, gcol, colorObj, towers, ships, flashes, gridMat, lastF: -1, camPos: new T.Vector3(), camLook: new T.Vector3(), lastShot: -1, follow: 0, tmpC: new T.Color() };
+  }
+  seekTo(target) { if (target < this.S.t - 1e-6) this.S = newSim(); while (this.S.t < target) stepSim(this.S); this.R && (this.R.lastShot = -1); }
+  go(i) {
+    i = (i + SEGS_LEN) % SEGS_LEN; const [a] = SEG[i];
+    this.setState({ i, src: false }); this.acc = 0;
+    if (this.S.t < a || this.S.t > SEG[i][1] || i === 8) this.seekTo(a);
+  }
+  loop = () => {
+    if (this.dead) return; this.raf = requestAnimationFrame(this.loop); this.tick();
+  };
+  tick() {
+    const now = performance.now(), dt = Math.min(.05, (now - this.last) / 1000); this.last = now;
+    if (this.state.mode === 'learn') { this.lessonTick(dt, now); return; }
+    const i = this.state.i, [a, b] = SEG[i], hold = i >= 7;
+    if (!this.state.paused) {
+      this.acc += dt * (this.state.reduced ? 1 : slowAt(this.S.t));
+      let guard = 0;
+      while (this.acc >= DT && guard++ < 10) { this.acc -= DT; if (this.S.t >= b) { if (hold) { this.acc = 0; break; } this.seekTo(a); } stepSim(this.S); }
+    }
+    this.draw(dt); this.hudTick(now); if (i === 1) this.drawCams();
+  }
+  shot(t) {
+    let si = SHOTS.findIndex(s => t >= s[0] && t < s[1]); if (si < 0) si = SHOTS.length - 1;
+    const [s0, s1, type, o, label] = SHOTS[si], red = this.state.reduced, R = this.R;
+    const u = red ? 0 : clamp((t - s0) / (s1 - s0), 0, 1), e = u * u * (3 - 2 * u);
+    let pos, look, fov = 50;
+    if (type === 'crane') { const tt = red ? 0 : t - s0, ang = o.a0 + o.sp * tt; pos = [o.look[0] + Math.cos(ang) * o.R, o.h - (red ? 0 : tt * .4), o.look[2] + Math.sin(ang) * o.R]; look = o.look; }
+    else if (type === 'dolly') { pos = o.a.map((v, k) => lerp(v, o.b[k], e)); look = o.la.map((v, k) => lerp(v, o.lb[k], e)); }
+    else if (type === 'tower') {
+      const tw = TOWERS[o.id], X = wx(tw[0]), Z = wz(tw[1]); let dx = X, dz = Z; const L = Math.hypot(dx, dz) || 1; dx /= L; dz /= L;
+      const dist = lerp(7, 5, e); pos = [X + dx * dist - dz * 2.2, 1.3, Z + dz * dist + dx * 2.2]; look = [X, 1.7, Z]; fov = 46;
+    } else if (type === 'strike' && !red) {
+      const s = STRIKES[o.s], p = strikePos(s, t), q = strikePos(s, Math.min(s.imp, t + .15));
+      let dx = q[0] - p[0], dz = q[2] - p[2]; const L = Math.hypot(dx, dz) || 1; dx /= L; dz /= L;
+      pos = [p[0] - dx * 5, p[1] + 1.8, p[2] - dz * 5]; look = [p[0] + dx * 6, p[1] - .6, p[2] + dz * 6];
+    } else if (type === 'follow' && !red) {
+      let d = this.S.drones.find(x => x.id === R.follow);
+      if (!d) { const mine = this.S.drones.filter(x => x.p === o.owner); d = mine[mine.length - 1]; R.follow = d ? d.id : 0; }
+      if (d) { const X = d.x - W / 2, Z = d.z - H / 2; pos = [X - d.dx * 3.4, 1.3, Z - d.dz * 3.4]; look = [X + d.dx * 6, .4, Z + d.dz * 6]; }
+      else { pos = [0, 26, 28]; look = [0, 0, 0]; }
+    } else if (type === 'top') { const f = red ? 1 : smooth(70.3, 74.5, t); pos = [lerp(16, 0, f), lerp(3.6, 46, f), lerp(-8, .01, f)]; look = [lerp(8, 0, f), 0, lerp(-4, 0, f)]; fov = lerp(50, 38, f); }
+    else { pos = [0, 26, 28]; look = [0, 0, 0]; }
+    return { si, pos, look, fov, label };
+  }
+  draw(dt) {
+    const R = this.R; if (!R) return;
+    const S = this.S, t = S.t, D = R.D, f = smooth(70.5, 74.5, t), T = this.T;
+    if (Math.abs(R.lastF - f) > 1e-4) {
+      R.rockIdx.forEach(([k, h], n) => { const hh = lerp(h, .1, f); D.position.set(wx(k % W), hh / 2, wz((k / W) | 0)); D.rotation.set(0, 0, 0); D.scale.set(lerp(.98, .96, f), hh, lerp(.98, .96, f)); D.updateMatrix(); R.rocks.setMatrixAt(n, D.matrix); });
+      R.rocks.instanceMatrix.needsUpdate = true; R.lastF = f; R.gridMat.color.set(f > .5 ? '#2A2C34' : '#1C1D24');
+    }
+    WORLD.walls.forEach((wl, i) => {
+      const up = wl.born <= t && S.wallAlive[i], s = up ? clamp((t - wl.born) / .5, .01, 1) : .0001, hh = lerp(.7, .1, f) * s;
+      D.position.set(wx(wl.x), hh / 2, wz(wl.z)); D.rotation.set(0, 0, 0); D.scale.set(.9, Math.max(hh, .0001), .9); D.updateMatrix(); R.walls.setMatrixAt(i, D.matrix);
+    }); R.walls.instanceMatrix.needsUpdate = true;
+    let n = 0, gn = 0; const sp = lerp(.38, 1, f), sz = lerp(.32, .9, f);
+    for (const d of S.drones) {
+      if (n + 4 > 900) break;
+      let cx = d.x - W / 2, cz = d.z - H / 2; if (f > .5) { cx = Math.floor(d.x) + .5 - W / 2; cz = Math.floor(d.z) + .5 - H / 2; }
+      const y = lerp(.55 + Math.sin(t * 6 + d.id) * .07, .06, f), fx = d.dx, fz = d.dz, sx = -fz, sz2 = fx;
+      for (const [c, r] of GLIDER) { const a = (c - 1.5) * sp, b = (.5 - r) * sp; D.position.set(cx + sx * a + fx * b, y, cz + sz2 * a + fz * b); D.rotation.set(0, 0, 0); D.scale.set(sz, lerp(sz, .1, f), sz); D.updateMatrix(); R.drones.setMatrixAt(n, D.matrix); R.drones.setColorAt(n, R.colorObj[d.p]); n++; }
+      if (gn < 260) { R.gpos[gn * 3] = cx; R.gpos[gn * 3 + 1] = y; R.gpos[gn * 3 + 2] = cz; const c = R.colorObj[d.p]; R.gcol[gn * 3] = c.r * .7; R.gcol[gn * 3 + 1] = c.g * .7; R.gcol[gn * 3 + 2] = c.b * .7; gn++; }
+    }
+    R.drones.count = n; R.drones.instanceMatrix.needsUpdate = true; if (R.drones.instanceColor) R.drones.instanceColor.needsUpdate = true;
+    R.glow.geometry.setDrawRange(0, gn); R.glow.geometry.attributes.position.needsUpdate = true; R.glow.geometry.attributes.color.needsUpdate = true; R.glow.material.size = lerp(1.5, .6, f);
+    let m = 0;
+    for (const d of S.debris) { if (m >= 1500) break; D.position.set(d.x - W / 2, d.y, d.z - H / 2); D.rotation.set(d.settled ? 0 : d.rx + t * 4, d.ry, 0); const s = .22; D.scale.set(s, lerp(s, .08, f), s); D.updateMatrix(); R.debris.setMatrixAt(m, D.matrix); R.tmpC.set(d.col).lerp(new T.Color('#3E4049'), d.settled ? .78 : .2); R.debris.setColorAt(m, R.tmpC); m++; }
+    R.debris.count = m; R.debris.instanceMatrix.needsUpdate = true; if (R.debris.instanceColor) R.debris.instanceColor.needsUpdate = true;
+    WORLD.crews.forEach((c, i) => {
+      const a = c.born - 1.8, b = c.born + 1.4; let vis = t >= Math.max(0, a) && t <= b, X, Z;
+      if (vis) { const u = t < c.born ? smooth(a, c.born, t) : 1 - smooth(c.born, b, t); X = lerp(wx(c.fx), wx(c.x), u); Z = lerp(wz(c.fz), wz(c.z), u); }
+      if (!vis || f > 0) { D.scale.set(.0001, .0001, .0001); D.position.set(0, -5, 0); } else { D.scale.set(1, 1, 1); D.position.set(X, .26 + Math.abs(Math.sin(t * 12 + i)) * .06, Z); }
+      D.rotation.set(0, 0, 0); D.updateMatrix(); R.crews.setMatrixAt(i, D.matrix);
+    }); R.crews.instanceMatrix.needsUpdate = true;
+    R.towers.forEach((o, i) => {
+      const up = towerUp(S, i, t); o.g.visible = up; if (!up) return;
+      const s = clamp((t - TOWERS[i][3]) / .8, .01, 1); o.col.scale.set(1, Math.max(.0001, s * (1 - f)), 1); o.col.position.y = 1.1 * s * (1 - f);
+      o.top.position.y = lerp(2.6 * s, .06, f); o.top.rotation.y = (1 - f) * t * .8;
+      const cs = lerp(.34, .92, f), gap = lerp(.36, 1, f);
+      o.cubes.forEach(([mm, a, b]) => { mm.scale.set(cs, lerp(cs, .1, f), cs); mm.position.set(a * gap, lerp(b * -.36 + .36, 0, f), lerp(0, b * gap, f)); });
+      const inb = f < .5 && STRIKES.some(s => s.to === i && t >= s.launch - .6 && t < s.imp); o.warn.visible = inb; if (inb) { o.warn.material.opacity = .45 + .45 * Math.sin(t * 16); o.warn.scale.setScalar(1 + .15 * Math.sin(t * 8)); }
+      o.discMat.opacity = .05 * (1 - f); o.ringMat.opacity = .32 * (1 - f); o.sp.position.y = o.top.position.y; o.sp.material.opacity = 1 - f * .7;
+    });
+    STRIKES.forEach((s, i) => {
+      const o = R.ships[i], on = t >= s.launch && t < s.imp; o.g.visible = o.trail.visible = on; if (!on) return;
+      const p = strikePos(s, t), q = strikePos(s, Math.min(s.imp, t + .1)); o.g.position.set(p[0], p[1], p[2]); o.g.lookAt(q[0], q[1], q[2]);
+      const arr = o.trail.geometry.attributes.position.array; for (let k = 0; k < 30; k++) { const tt = lerp(Math.max(s.launch, t - 1.4), t, k / 29), pp = strikePos(s, tt); arr[k * 3] = pp[0]; arr[k * 3 + 1] = pp[1]; arr[k * 3 + 2] = pp[2]; }
+      o.trail.geometry.attributes.position.needsUpdate = true;
+    });
+    R.flashes.forEach((sp, k) => { const fl = S.flashes[k]; sp.visible = !!fl; if (!fl) return; const a = t - fl.t0; sp.position.set(fl.x - W / 2, 1.6, fl.z - H / 2); sp.scale.setScalar(2 + a * 14); sp.material.color.set(fl.c); sp.material.opacity = 1 - a; });
+    const sh = this.shot(t), cam = R.camera, k = 1 - Math.exp(-dt * 7);
+    const tp = new T.Vector3(...sh.pos), tl = new T.Vector3(...sh.look);
+    if (sh.si !== R.lastShot) { R.camPos.copy(tp); R.camLook.copy(tl); R.lastShot = sh.si; R.follow = 0; } else { R.camPos.lerp(tp, k); R.camLook.lerp(tl, k); }
+    cam.position.copy(R.camPos); cam.lookAt(R.camLook); if (Math.abs(cam.fov - sh.fov) > .01) { cam.fov = sh.fov; cam.updateProjectionMatrix(); }
+    this.camLabel = sh.label;
+    R.renderer.render(R.scene, cam);
+  }
+  drawCams() { for (let p = 0; p < 4; p++) this.drawView(p); }
+  drawView(p, cv) {
+    const c = cv || this.camRefs[p].current; if (!c) return; const g = c.getContext('2d'), S = this.S, t = S.t, k = c.width / W;
+    g.fillStyle = '#000'; g.fillRect(0, 0, c.width, c.height);
+    g.save(); g.beginPath();
+    TOWERS.forEach((tw, i) => { if (tw[2] === p && towerUp(S, i, t)) { g.moveTo((tw[0] + .5 + 7) * k, (tw[1] + .5) * k); g.arc((tw[0] + .5) * k, (tw[1] + .5) * k, 7 * k, 0, 6.283); } });
+    g.clip();
+    g.fillStyle = '#0E0F13'; g.fillRect(0, 0, c.width, c.height);
+    g.fillStyle = '#4B4C55'; WORLD.rock.forEach((v, j) => { if (v > 0) g.fillRect((j % W) * k, ((j / W) | 0) * k, k, k); });
+    WORLD.walls.forEach((wl, i) => { if (wl.born <= t && S.wallAlive[i]) { g.fillStyle = COL[wl.p]; g.globalAlpha = .6; g.fillRect(wl.x * k, wl.z * k, k, k); g.globalAlpha = 1; } });
+    for (const d of S.drones) { g.fillStyle = COL[d.p]; g.fillRect(d.x * k - k * .7, d.z * k - k * .7, k * 1.4, k * 1.4); }
+    TOWERS.forEach((tw, i) => { if (towerUp(S, i, t)) { g.fillStyle = COL[tw[2]]; SYM.forEach(([a, b]) => g.fillRect((tw[0] + a - 1) * k, (tw[1] + b - 1) * k, k, k)); } });
+    g.restore();
+  }
+  hudTick(now) {
+    if (now - (this.lastHud || 0) < 150) return; this.lastHud = now;
+    const S = this.S, t = S.t;
+    let ev = null; for (const e of EVENTS) if (e[0] <= t + 1e-6) ev = e;
+    let ban = null; for (const e of EVENTS) if (e[2] && t >= e[0] && t - e[0] < (e[2] === 'CYAN WINS' ? 3.8 : 2.4)) ban = e;
+    const counts = [0, 1, 2, 3].map(p => { const out = t >= OUT_AT[p], nn = TOWERS.filter((tw, i) => tw[2] === p && towerUp(S, i, t)).length; return { t: NAME[p].toUpperCase() + ' ' + (out ? 'OUT' : '●'.repeat(nn)), c: out ? '#7A7D88' : COL[p] }; });
+    const eyes = [0, 1, 2, 3].map(p => { const out = t >= OUT_AT[p], blink = ((t * .7 + p * .37) % 1) < .06; return { ex: out ? 0 : Math.round(Math.sin(t * 1.3 + p * 2) * 2 + Math.sin(t * 3.1 + p) * .8), ey: out ? 2 : Math.round(Math.cos(t * 1.7 + p)), eh: out || blink ? 1 : 7, op: out ? .45 : 1 }; });
+    let mn = null; for (const s of STRIKES) if (t >= s.imp && t - s.imp < 1.8) mn = s;
+    let rx = null; for (const e of REACT) if (t >= e[0] && t - e[0] < 2.4) rx = e;
+    const hud = { minus: mn ? '−1 ' + NAME[TOWERS[mn.to][2]].toUpperCase() : '', minusC: mn ? COL[TOWERS[mn.to][2]] : '#fff', eyes, react: rx ? rx[1] : -1, reactWin: !!(rx && rx[0] === 58.2), turn: 'TURN ' + Math.floor(t * 34).toLocaleString('en-US'), cam: this.camLabel || 'CAM 1 · CRANE', comment: ev ? ev[1] : '', banner: ban ? ban[2] : '', bannerC: ban ? COL[ban[3]] : '#E7E4DD', countdown: t < 4.8, counts };
+    const key = JSON.stringify(hud); if (key !== this.hudKey) { this.hudKey = key; this.setState({ hud }); }
+  }
+
+  startLesson(li) {
+    const d = LS[li], s = d.build();
+    this.L = { dir: [1, 0], s, start: s, hist: [], playing: false, acc: 0, demo: null, met: null, failed: false, def: d, tool: 'glider', spent: 0, flash: [] };
+    if (d.practice) { const r = RULES[Math.floor(Math.random() * RULES.length)]; Object.assign(this.L, { rule: r, cost: r.cost || COST, fogR: r.fog || d.fog, every: r.every || 12, limit: 96, phase: 'act' }); }
+    this.setState({ dir: '1,0', mode: 'learn', li, src: false, lmet: null, lfail: false, lplaying: false, ruleOpen: false, pick: 'glider', spent: 0, lphase: 'act', lresult: null });
+    this.lchange(true);
+  }
+  backToWatch() { this.L = null; this.setState({ mode: 'watch' }); this.go(7); }
+  ltoast(m) { this.setState({ toast: m }); clearTimeout(this.tt); this.tt = setTimeout(() => this.setState({ toast: null }), 2400); }
+  lstep(dir) {
+    const L = this.L, d = L.def;
+    if (d.ca) { if (dir < 0) { if (L.s.turn > L.start.turn) L.s = bBack(L.s); } else L.s = bStep(L.s); return; }
+    if (dir < 0) { if (L.hist.length) L.s = L.hist.pop(); return; }
+    L.hist.push(L.s); if (L.hist.length > 300) L.hist.shift();
+    L.s = pStep(L.s); const now = performance.now(); L.s.hits.forEach(h => L.flash.push({ ...h, t0: now }));
+  }
+  lchange(force) {
+    const L = this.L; if (!L) return; const d = L.def;
+    if (!L.met && d.goal && d.goal(L.s, L.start)) { L.met = L.demo ? 'demo' : 'you'; L.demo = null; this.setState({ lmet: L.met }); }
+    const fl = !L.met && d.fail ? d.fail(L.s) : false;
+    if (fl !== L.failed) { L.failed = fl; if (fl) L.playing = false; this.setState({ lfail: fl, lplaying: L.playing }); }
+    L.dirty = true; this.lhud(force);
+  }
+  lhud(force) {
+    const now = performance.now(); if (!force && now - (this.lastL || 0) < 120) return; this.lastL = now;
+    const L = this.L, s = L.s, d = L.def;
+    const pip = p => { const n = towers(s, p); return n ? '●'.repeat(n) : 'OUT'; };
+    const fl = d.ca ? null : L.flash.find(h => h.k === 'tower' && now - h.t0 < 1600);
+    const lt = d.ca ? { strip: 'TURN ' + s.turn + ' · LIVE CELLS ' + live(s), hasMinus: false, minus: '', minusC: '#fff' }
+      : { strip: (d.practice ? s.turn + '/' + L.limit : 'TURN ' + s.turn) + ' · CYAN ' + pip(0) + ' · AMBER ' + pip(1) + (d.place === 'palette' && (d.practice ? L.phase === 'act' : s.turn === 0) ? ' · ' + (d.budget - L.spent) + ' PTS' : ''), hasMinus: !!fl, minus: fl ? '−1 ' + NAME[fl.p].toUpperCase() : '', minusC: fl ? COL[fl.p] : '#fff' };
+    if (JSON.stringify(lt) !== JSON.stringify(this.state.lt)) this.setState({ lt });
+  }
+  lessonTick(dt, now) {
+    const L = this.L; if (!L) return; const d = L.def, dm = L.demo;
+    if (d.practice) {
+      if (L.playing && L.phase === 'run') { L.acc += dt * 4; let g = 0; while (L.acc >= 1 && g++ < 10) { L.acc -= 1; this.lstep(1); if (this.pCheck()) break; } L.dirty = true; }
+      if (L.flash.length) { L.flash = L.flash.filter(h => now - h.t0 < 1600); L.dirty = true; }
+      this.lhud(); if (L.dirty && this.drawBoard(now)) L.dirty = false; return;
+    }
+    if (dm && dm.k === 'place' && now >= dm.next) {
+      if (dm.cells.length) { const [x, y] = dm.cells.shift(); this.place(x, y); dm.next = now + 550; }
+      else { L.demo = { k: 'play' }; L.playing = true; this.setState({ lplaying: true }); }
+    }
+    if (L.playing) { L.acc += dt * (d.speed || 3); let g = 0; while (L.acc >= 1 && g++ < 10) { L.acc -= 1; this.lstep(1); this.lchange(); if (!L.playing) break; } }
+    if (L.flash.length) { L.flash = L.flash.filter(h => now - h.t0 < 1600); L.dirty = true; }
+    this.lhud();
+    if (L.dirty && this.drawBoard(now)) L.dirty = false;
+  }
+  pCheck() {
+    const L = this.L, s = L.s, a = towers(s, 0), b = towers(s, 1);
+    if (!a || !b || s.turn >= L.limit) { L.phase = 'over'; L.playing = false; L.result = !a && !b ? 'draw' : !a ? 'lose' : !b ? 'win' : a > b ? 'win' : b > a ? 'lose' : 'draw'; this.setState({ lphase: 'over', lresult: L.result, lplaying: false }); return true; }
+    if (s.turn % L.every === 0) { L.phase = 'act'; L.playing = false; L.spent = 0; this.setState({ lphase: 'act', spent: 0, lplaying: false }); return true; }
+    return false;
+  }
+  endTurn() {
+    const L = this.L; this.botTurn(); L.s.pieces.forEach(q => { q.mine = false; });
+    L.phase = 'run'; L.playing = true; L.acc = 0; this.setState({ lphase: 'run', lplaying: true }); L.dirty = true;
+  }
+  botTurn() {
+    const L = this.L, s = pClone(L.s), cost = L.cost; let pts = 8;
+    const occ = (x, y) => s.pieces.some(q => q.x === x && q.y === y), zoneB = (x, y) => near(s, x, y, 3, 1);
+    const add = q => s.pieces.push({ ...q, id: s.nid++, trail: [] });
+    for (const tw of s.pieces.filter(q => q.k === 'tower' && q.p === 1)) {
+      const threat = s.pieces.some(q => q.k === 'glider' && q.p === 0 && q.y === tw.y && q.dx === 1 && q.x < tw.x && !s.pieces.some(o => o.k !== 'glider' && o.y === tw.y && o.x > q.x && o.x < tw.x));
+      if (threat && pts >= cost.square) for (let x = tw.x - 1; x >= tw.x - 3; x--) if (!occ(x, tw.y) && zoneB(x, tw.y)) { add(Q_(x, tw.y, 1)); pts -= cost.square; break; }
+    }
+    const targets = s.pieces.filter(q => q.k === 'tower' && q.p === 0); let tries = 0;
+    while (targets.length && pts >= cost.glider && tries++ < 24) {
+      const tg = targets[Math.floor(Math.random() * targets.length)], y = tries < 6 ? tg.y : Math.floor(Math.random() * PH);
+      for (let x = 12; x >= 10; x--) if (!occ(x, y) && zoneB(x, y)) { add(G_(x, y, 1, -1, 0)); pts -= cost.glider; break; }
+    }
+    while (pts >= cost.square && tries++ < 40) { const x = 10 + Math.floor(Math.random() * 3), y = Math.floor(Math.random() * PH); if (!occ(x, y) && zoneB(x, y)) { add(Q_(x, y, 1)); pts -= cost.square; } }
+    L.s = s;
+  }
+  lreset() {
+    const L = this.L, d = L.def; L.s = d.build(); L.start = L.s; L.hist = []; L.playing = false; L.demo = null; L.spent = 0; L.flash = []; L.failed = false;
+    this.setState({ lplaying: false, spent: 0, lfail: false });
+  }
+  lessonPrimary() {
+    const L = this.L, d = L.def, li = this.state.li;
+    if (d.practice) { if (L.phase === 'act') this.endTurn(); else if (L.phase === 'run') { L.playing = !L.playing; this.setState({ lplaying: L.playing }); } else this.startLesson(li); return; }
+    if (d.read || L.met) {
+      if (d.id === 'rule' || d.id === 'hood') { this.startLesson(LS.findIndex(x => x.id === 'practice')); return; }
+      this.startLesson(li + 1); return;
+    }
+    if (L.demo) return;
+    this.lreset();
+    if (d.demo === 'play') { L.demo = { k: 'play' }; L.playing = true; this.setState({ lplaying: true }); }
+    else { L.tool = d.demoTool || 'glider'; this.setState({ pick: L.tool }); L.demo = { k: 'place', cells: d.demoCells.map(c => c.slice()), next: performance.now() + 300 }; }
+    this.lchange(true);
+  }
+  ltool(k) {
+    const L = this.L; if (!L) return;
+    if (k === 'play') { L.playing = !L.playing; L.demo = null; }
+    else { L.playing = false; L.demo = null; if (k === 'back') this.lstep(-1); if (k === 'step') this.lstep(1); if (k === 'reset') this.lreset(); }
+    this.setState({ lplaying: L.playing }); this.lchange(true);
+  }
+  place(x, y) {
+    const L = this.L, d = L.def, s = L.s;
+    if (!d.place) return 'no';
+    if (d.practice ? L.phase !== 'act' : s.turn !== 0) return 'locked';
+    const occ = s.pieces.find(q => q.x === x && q.y === y), ns = pClone(s);
+    if (d.place === 'square') {
+      if (!d.hints.some(([a, b]) => a === x && b === y)) return 'no';
+      if (occ && occ.k === 'square') ns.pieces = ns.pieces.filter(q => q.id !== occ.id); else if (!occ) ns.pieces.push({ ...Q_(x, y, 0), id: ns.nid++, trail: [] }); else return 'no';
+    } else {
+      if (occ) { if (!occ.mine) return 'no'; ns.pieces = ns.pieces.filter(q => q.id !== occ.id); L.spent -= (L.cost || COST)[occ.k]; }
+      else {
+        if (!near(s, x, y, d.zone)) return 'zone';
+        const k = L.tool, C = L.cost || COST; if (L.spent + C[k] > d.budget) return 'cost';
+        ns.pieces.push({ ...(k === 'glider' ? G_(x, y, 0, L.dir[0], L.dir[1]) : k === 'tower' ? T_(x, y, 0) : Q_(x, y, 0)), mine: true, id: ns.nid++, trail: [] }); L.spent += C[k];
+      }
+      this.setState({ spent: L.spent });
+    }
+    L.s = ns; L.start = ns; this.lchange(true); return 'ok';
+  }
+  boardTap(e) {
+    const L = this.L; if (!L || !L.def.place || L.demo) return;
+    const r = e.currentTarget.getBoundingClientRect(), x = Math.floor((e.clientX - r.left) / r.width * PW), y = Math.floor((e.clientY - r.top) / r.height * PH);
+    const res = this.place(x, y);
+    if (res === 'locked') this.ltoast('Your turn to act is over. Press reset to plan again.');
+    else if (res === 'zone') this.ltoast('Too far from your towers. Build in the lit area.');
+    else if (res === 'cost') this.ltoast('Not enough points left. Tap a piece you placed to take it back.');
+  }
+  drawBoard(now) {
+    const c = this.lessonRef.current; if (!c) return false;
+    const g = c.getContext('2d'), L = this.L, d = L.def;
+    g.fillStyle = '#060608'; g.fillRect(0, 0, c.width, c.height);
+    if (d.ca) {
+      const z = d.zoom, cols = BW / z, rows = BH / z, cq = c.width / cols, [vx, vy] = d.view, b = L.s;
+      for (let j = 0; j < rows; j++) for (let i = 0; i < cols; i++) { const k = ((vy + j) % BH) * BW + ((vx + i) % BW), X = i * cq, Y = j * cq; g.fillStyle = '#0E0F13'; g.fillRect(X + 1, Y + 1, cq - 2, cq - 2); if (b.cells[k]) { g.fillStyle = '#46D7E8'; g.fillRect(X + 3, Y + 3, cq - 6, cq - 6); } }
+      return true;
+    }
+    const s = L.s, cp = c.width / PW, cellsOn = this.state.cellsOn;
+    const fr = L.fogR || d.fog, seen = (x, y) => !fr || near(s, x, y, fr);
+    const zone = d.place === 'palette' && (d.practice ? L.phase === 'act' : s.turn === 0);
+    for (let y = 0; y < PH; y++) for (let x = 0; x < PW; x++) {
+      g.fillStyle = '#0E0F13'; g.fillRect(x * cp + 1, y * cp + 1, cp - 2, cp - 2);
+      if (zone && near(s, x, y, d.zone)) { g.fillStyle = 'rgba(70,215,232,.12)'; g.fillRect(x * cp + 1, y * cp + 1, cp - 2, cp - 2); }
+    }
+    if (d.hints && s.turn === 0) { g.setLineDash([7, 5]); g.strokeStyle = 'rgba(255,255,255,.75)'; g.lineWidth = 2.5; for (const [x, y] of d.hints) if (!s.pieces.some(q => q.x === x && q.y === y)) g.strokeRect(x * cp + 6, y * cp + 6, cp - 12, cp - 12); g.setLineDash([]); }
+    const sub = cp / 4.6, cell = (cx, cy, col) => { g.fillStyle = col; g.fillRect(cx - sub * .45, cy - sub * .45, sub * .9, sub * .9); };
+    for (const q of s.pieces) {
+      if (q.k !== 'rock' && q.p !== 0 && !seen(q.x, q.y) && !(d.practice && q.k === 'tower' && s.turn === 0)) continue;
+      if (q.k === 'rock') { g.fillStyle = '#4B4C55'; g.fillRect(q.x * cp + 4, q.y * cp + 4, cp - 8, cp - 8); continue; }
+      const cx = (q.x + .5) * cp, cy = (q.y + .5) * cp, col = COL[q.p];
+      if (q.k === 'glider') {
+        q.trail.forEach(([tx, ty], k) => { g.globalAlpha = .32 - k * .09; g.fillStyle = col; const w = cp * .22; g.fillRect((tx + .5) * cp - w / 2, (ty + .5) * cp - w / 2, w, w); });
+        g.globalAlpha = 1;
+        const nn = Math.hypot(q.dx, q.dy) || 1, fx = q.dx / nn, fy = q.dy / nn, sx = -fy, sy = fx;
+        if (cellsOn) { [[1, 0], [2, 0], [0, 1], [3, 1]].forEach(([a, r]) => { const A = (a - 1.5) * sub, B = (.5 - r) * sub; cell(cx + sx * A + fx * B, cy + sy * A + fy * B, col); }); }
+        else { g.fillStyle = col; g.beginPath(); g.moveTo(cx + fx * cp * .36, cy + fy * cp * .36); g.lineTo(cx - fx * cp * .26 + sx * cp * .28, cy - fy * cp * .26 + sy * cp * .28); g.lineTo(cx - fx * cp * .12, cy - fy * cp * .12); g.lineTo(cx - fx * cp * .26 - sx * cp * .28, cy - fy * cp * .26 - sy * cp * .28); g.closePath(); g.fill(); }
+      } else if (q.k === 'tower') {
+        if (cellsOn) { [[0, 0], [1, 1], [2, 1], [1, 2]].forEach(([a, b]) => cell(cx + (a - 1) * sub, cy + (b - 1) * sub, col)); }
+        else { g.fillStyle = col; g.beginPath(); g.arc(cx, cy, cp * .36, 0, 6.283); g.fill(); g.fillStyle = '#0E0F13'; g.beginPath(); g.arc(cx, cy, cp * .17, 0, 6.283); g.fill(); g.fillStyle = col; g.fillRect(cx - cp * .06, cy - cp * .06, cp * .12, cp * .12); }
+      } else if (q.k === 'square') {
+        if (cellsOn) { [[-.5, -.5], [.5, -.5], [-.5, .5], [.5, .5]].forEach(([a, b]) => cell(cx + a * sub, cy + b * sub, col)); }
+        else { g.globalAlpha = .45; g.fillStyle = col; g.fillRect(x0(q.x), x0(q.y), cp - 16, cp - 16); g.globalAlpha = 1; g.strokeStyle = col; g.lineWidth = 2.5; g.strokeRect(x0(q.x), x0(q.y), cp - 16, cp - 16); if (q.hp === 1) { g.strokeStyle = '#E7E4DD'; g.lineWidth = 2; g.beginPath(); g.moveTo(x0(q.x) + 6, x0(q.y) + 4); g.lineTo(x0(q.x) + 16, x0(q.y) + 16); g.lineTo(x0(q.x) + 11, x0(q.y) + 22); g.lineTo(x0(q.x) + cp - 22, x0(q.y) + cp - 18); g.stroke(); } }
+      }
+    }
+    function x0(v) { return v * cp + 8; }
+    if (fr) { const keep = (x, y) => s.pieces.some(q => q.x === x && q.y === y && (q.k === 'rock' || (d.practice && q.k === 'tower' && s.turn === 0))); g.fillStyle = 'rgba(4,4,6,.88)'; for (let y = 0; y < PH; y++) for (let x = 0; x < PW; x++) if (!seen(x, y) && !keep(x, y)) g.fillRect(x * cp, y * cp, cp, cp); }
+    for (const h of L.flash) { const a = (now - h.t0) / 1600; g.globalAlpha = Math.max(0, 1 - a); g.strokeStyle = h.k === 'tower' ? COL[h.p] : '#E7E4DD'; g.lineWidth = 4; g.beginPath(); g.arc((h.x + .5) * cp, (h.y + .5) * cp, cp * (.4 + a * 1.8), 0, 6.283); g.stroke(); }
+    g.globalAlpha = 1;
+    return true;
+  }
+  learnVals(th, tagDef) {
+    const S = this.state, li = S.li, d = LS[li], met = S.lmet, main = LS.filter(x => !x.optional);
+    const label = d.read ? d.button : met ? (d.id === 'hood' ? 'START A PRACTICE MATCH' : 'NEXT') : d.button;
+    return {
+      isLearn: true, scr: { title: d.title, text: d.text, caption: d.caption, button: label, sources: d.sources.map(([t, id]) => ({ t, id })) },
+      hasCaption: !!d.caption, tags: d.tags.map(k => tagDef[k]), srcLabel: (S.src ? 'HIDE SOURCES' : 'SOURCES') + ' (' + d.sources.length + ')',
+      hasTools: !d.read, lplaying: S.lplaying, playLabel: S.lplaying ? 'PAUSE' : 'PLAY',
+      tBack: () => this.ltool('back'), tPlay: () => this.ltool('play'), tStep: () => this.ltool('step'), tReset: () => this.ltool('reset'),
+      hasReasons: !!d.reasons, reasons: REASONS.map((t, k) => ({ n: String(k + 1), t })),
+      hasRule: !!d.rule, ruleOpen: S.ruleOpen, ruleLabel: S.ruleOpen ? 'HIDE HOW THE RULE WORKS' : 'HOW THE RULE WORKS', toggleRule: () => this.setState({ ruleOpen: !S.ruleOpen }),
+      ruleRows: RULE.map(([h, t, a, b]) => ({ h, t, a: a.map(RC), b: b.map(RC) })),
+      status: met ? (d.metText || (met === 'you' ? 'NICE. YOU DID IT.' : 'LIKE THAT.')) : S.lfail ? d.failText : '',
+      dots: main.map((_, k) => ({ c: d.optional || k < li ? th.muted : k === li ? th.ink : th.rule })), stepOf: d.optional ? 'LEARN · OPTIONAL' : 'LEARN · ' + (li + 1) + ' / ' + main.length,
+      back: () => li === 0 ? this.backToWatch() : this.startLesson(li - 1), backVis: 'visible', backHidden: 'false', backTab: '0',
+      next: () => this.lessonPrimary(),
+      hasCellsBtn: !d.ca, cellsOn: S.cellsOn, toggleCells: () => { this.setState({ cellsOn: !S.cellsOn }); if (this.L) this.L.dirty = true; }, cellsBg: S.cellsOn ? '#E7E4DD' : 'rgba(5,5,7,.8)', cellsFg: S.cellsOn ? '#050507' : '#E7E4DD',
+      hasPalette: d.place === 'palette', points: 'POINTS LEFT ' + ((d.budget || 0) - S.spent) + ' OF ' + (d.budget || 0),
+      palette: ['glider', 'square', 'tower'].map(k => ({ t: k.toUpperCase() + ' · ' + COST[k], on: S.pick === k, bg: S.pick === k ? th.btn : 'transparent', fg: S.pick === k ? th.btnInk : th.ink, go: () => { if (this.L) this.L.tool = k; this.setState({ pick: k }); } })),
+      hasDirs: S.pick === 'glider', dirs: [...DIRS, ...(false ? DIAG : [])].map(([dx, dy, t, lab]) => { const on = S.dir === dx + ',' + dy; return { t, label: 'Glider flies ' + lab, on, bg: on ? th.btn : 'transparent', fg: on ? th.btnInk : th.ink, go: () => { if (this.L) this.L.dir = [dx, dy]; this.setState({ dir: dx + ',' + dy }); } }; }),
+      hasHood: !!d.hood, toHood: () => this.startLesson(LS.findIndex(x => x.id === 'hood')),
+      showCams: false, hasReact: false, hasBanner: false, hasMinus: false, commentDisp: 'none', boardCursor: d.place ? 'pointer' : 'default',
+      stageLabel: 'Minpentai board. ' + S.lt.strip,
+      ...(d.practice ? this.practiceVals(th, d) : {}),
+    };
+  }
+  practiceVals(th, d) {
+    const L = this.L, S = this.state; if (!L || !L.rule) return {};
+    const ph = S.lphase, s = L.s, res = S.lresult, next = Math.min(L.limit, Math.ceil((s.turn + 1) / L.every) * L.every), C = L.cost;
+    return {
+      scr: { title: ph === 'over' ? (res === 'win' ? 'You win' : res === 'lose' ? 'Amber wins' : 'A draw') : 'Practice match',
+        text: ph === 'act' ? (s.turn === 0 ? 'Amber’s towers mirror yours on the far side. You see them only until this turn ends. Spend 8 points in the lit area, then end your turn.' : 'Your turn. Amber’s towers are where they started. Spend 8 points, then end your turn.') : ph === 'run' ? 'The match runs by itself until your next turn. Pause any time.' : res === 'win' ? 'Amber is out of towers, or had fewer when time ran out.' : res === 'lose' ? 'Amber outlasted you. Squares in your towers’ rows are your best defence.' : 'Same number of towers when time ran out.',
+        caption: 'New rule this match: ' + L.rule.t, button: ph === 'act' ? 'END TURN' : ph === 'run' ? (S.lplaying ? 'PAUSE' : 'RESUME') : 'PLAY AGAIN', sources: d.sources.map(([t, id]) => ({ t, id })) },
+      hasCaption: true, hasTools: false, hasPalette: ph === 'act', tags: [], boardCursor: ph === 'act' ? 'pointer' : 'default',
+      status: ph === 'act' ? 'YOUR TURN · STEP ' + s.turn : ph === 'run' ? 'NEXT TURN AT STEP ' + next : res === 'win' ? 'YOU WIN.' : res === 'lose' ? 'AMBER WINS.' : 'DRAW.',
+      stepOf: 'PRACTICE', back: () => this.startLesson(LS.findIndex(x => x.id === 'rule')),
+      hasDirs: S.pick === 'glider', dirs: [...DIRS, ...(!!L.rule.diag ? DIAG : [])].map(([dx, dy, t, lab]) => { const on = S.dir === dx + ',' + dy; return { t, label: 'Glider flies ' + lab, on, bg: on ? th.btn : 'transparent', fg: on ? th.btnInk : th.ink, go: () => { if (this.L) this.L.dir = [dx, dy]; this.setState({ dir: dx + ',' + dy }); } }; }),
+      palette: ['glider', 'square', 'tower'].map(k => ({ t: k.toUpperCase() + ' · ' + C[k], on: S.pick === k, bg: S.pick === k ? th.btn : 'transparent', fg: S.pick === k ? th.btnInk : th.ink, go: () => { if (this.L) this.L.tool = k; this.setState({ pick: k }); } })),
+    };
+  }
+  renderVals() {
+    const S = this.state, th = TH[S.dark ? 'dark' : 'light'], i = S.i, scr = SCREENS[i];
+    const tagDef = {
+      lens: { t: 'CLEAR LENSES INVENTED', bs: 'dashed', bd: th.muted, fg: th.ink, bg: 'transparent' },
+      model: { t: 'GAME SIMPLIFIED', bs: 'dashed', bd: th.muted, fg: th.ink, bg: 'transparent' },
+      rocks: { t: 'ROCKS INVENTED', bs: 'dashed', bd: th.muted, fg: th.ink, bg: 'transparent' },
+      recon: { t: 'RIGHT HALF RECONSTRUCTED', bs: 'dashed', bd: th.muted, fg: th.ink, bg: 'transparent' },
+      book: { t: 'FROM THE BOOK', bs: 'solid', bd: th.ink, fg: th.ink, bg: 'transparent' },
+      imag: { t: 'BROADCAST IMAGINED', bs: 'dashed', bd: th.muted, fg: th.ink, bg: 'transparent' },
+      inv: { t: 'SYMBOL SHAPE INVENTED', bs: 'dashed', bd: th.muted, fg: th.ink, bg: 'transparent' },
+      draft: { t: 'DRAFT WORDING', bs: 'solid', bd: th.soft, fg: th.ink, bg: th.soft },
+      note: { t: 'MOCKUP NOTE', bs: 'solid', bd: th.soft, fg: th.ink, bg: th.soft },
+    };
+    return {
+      th, scr: { ...scr, sources: scr.sources.map(([t, id]) => ({ t, id })) }, hasCaption: !!scr.caption, isHand: !!scr.hand,
+      tags: scr.tags.map(k => tagDef[k]), stageRef: this.stageRef, pipRef: this.pipRef, noGL: S.noGL,
+      stageLabel: 'Imagined broadcast of a Minpentai match. ' + (S.hud.comment || ''),
+      isLearn: false, hasTools: false, hasReasons: false, hasRule: false, status: '', hasPalette: false, hasDirs: false, dirs: [], hasHood: false, hasCellsBtn: false, palette: [], points: '', hasMinus: !!S.hud.minus, lessonRef: this.lessonRef, onBoardTap: e => this.boardTap(e), lt: S.lt, boardCursor: 'default', lplaying: false, playLabel: 'PLAY', hud: S.hud, hasBanner: !!S.hud.banner, showCams: i === 1, commentDisp: i === 1 ? 'none' : 'flex',
+      cams: [0, 1, 2, 3].map(p => ({ ref: this.camRefs[p], col: COL[p], lens: COL[p] + '2E', label: NAME[p].toUpperCase() + (S.hud.counts[p] && S.hud.counts[p].t.endsWith('OUT') ? ' · OUT' : ''), ...S.hud.eyes[p] })),
+      hasReact: S.hud.react >= 0 && i !== 1 && !S.hud.countdown, react: S.hud.react >= 0 ? { col: COL[S.hud.react], lens: COL[S.hud.react] + '2E', label: NAME[S.hud.react].toUpperCase() + ' · AT THE CONSOLE', ...S.hud.eyes[S.hud.react], ...(S.hud.reactWin ? { eh: 8 } : {}) } : { col: '#fff', lens: '#fff', label: '', ex: 0, ey: 0, eh: 7, op: 1 },
+      togglePause: () => this.setState({ paused: !S.paused }), pauseGlyph: S.paused ? '▶' : 'II', pauseAria: S.paused ? 'Play the match' : 'Pause the match',
+      src: S.src, toggleSrc: () => this.setState({ src: !S.src }), srcLabel: (S.src ? 'HIDE SOURCES' : 'SOURCES') + ' (' + scr.sources.length + ')',
+            dots: SCREENS.map((_, k) => ({ c: k === i ? th.ink : k < i ? th.muted : th.rule })), stepOf: 'WATCH · ' + (i + 1) + ' / ' + SCREENS.length,
+      back: () => this.go(i - 1), backVis: i ? 'visible' : 'hidden', backHidden: i ? 'false' : 'true', backTab: i ? '0' : '-1',
+      next: () => i >= SCREENS.length - 1 ? this.startLesson(0) : this.go(i + 1),
+      skip: () => { this.setState({ toast: 'Opens free play (the sandbox). Not part of this mockup.' }); clearTimeout(this.tt); this.tt = setTimeout(() => this.setState({ toast: null }), 2200); },
+      hasToast: !!S.toast, toast: S.toast,
+      isLight: !S.dark, isDark: S.dark, setLight: () => this.setState({ dark: false }), setDark: () => this.setState({ dark: true }),
+      lightBg: S.dark ? 'transparent' : '#1D1D1B', lightFg: S.dark ? '#1D1D1B' : '#F4F2ED', darkBg: S.dark ? '#1D1D1B' : 'transparent', darkFg: S.dark ? '#F4F2ED' : '#1D1D1B',
+      reduced: S.reduced, toggleReduced: () => { this.setState({ reduced: !S.reduced }); if (this.R) this.R.lastShot = -1; }, redBg: S.reduced ? '#1D1D1B' : 'transparent', redFg: S.reduced ? '#F4F2ED' : '#1D1D1B',
+      order: [
+        ['1', 'A game a whole country watches', 'Crane over the dark field as towers rise; the countdown in Dzegoban', 'BOOK'],
+        ['2', 'Every player plays alone', "Four player cams, each above that player's own view of the board", 'BOOK · INVENTED'],
+        ['3', 'Then the battle runs itself', 'Follow a glider, then low across the rocks', 'BOOK'],
+        ['4', 'A turn to act', 'Crews build in the cyan and amber corners', 'BOOK'],
+        ['5', 'Lose every tower and you are out', 'Strikes and symbol close-ups, ending with Pink out', 'BOOK · INVENTED'],
+        ['6', 'The last one standing wins', 'Violet out, Amber resigns, crane round Cyan', 'BOOK'],
+        ['7', 'Your season', 'Low drift over the wreckage', 'BOOK'],
+        ['8', 'Now try it yourself', 'The camera rises overhead and the battle flattens into the lesson board', 'BOOK'],
+      ].map(([n, t, shot, k]) => ({ n, t, shot, k })),
+      mapping: [
+        ['Glider (4 live cells)', 'A drone: four lit cubes in the glider shape, at the height of the walls'],
+        ['A glider about to hit a tower', 'Lifts into a short arc with a trail. A white ring pulses on the target, then −1 shows on the scoreboard.'],
+        ['Rock', 'A grey block. Gliders bounce off it.'],
+        ['Squares a player put down', "A block in the player's colour"],
+        ['A copy of a symbol', 'A tower with the pattern turning on top, and its circle of sight on the ground'],
+        ['Intervention turn', 'Crews walk out from the symbols and set the squares'],
+        ['Collision debris', 'Rubble that stays on the field'],
+        ["A player's sight", "The small board under each player cam. The broadcast always shows everything."],
+        ['A player at the console', 'A player cam: the face, with the board glowing in clear lenses. The broadcast cuts to it after each hit, resignation and win.'],
+      ].map(([a, b]) => ({ a, b })),
+      lessonNotes: [
+        ['Keep your towers. Destroy theirs.', 'The goal and the score first. Replaces "The board is alive".'],
+        ['Gliders fly straight', 'Pieces view. One arrow, one square per step.'],
+        ['A hit destroys a tower', 'The scoring play, with −1 on the scoreboard.'],
+        ['Squares bounce gliders', 'Tap to block an incoming glider. Failing shows why.'],
+        ['Your turn to act', 'Spend 8 points in the lit area to take out the last tower.'],
+        ['You only see near your towers', 'Fog. Losing a tower shrinks your view.'],
+        ['Every match, a new rule', 'The four reasons it is hard, then practice.'],
+        ['Practice match', 'Cyan against a simple Amber bot. Turns to act every 12 steps, 96 steps in all, fog of 3 squares and one random new rule per match.'],
+        ['Under the hood (optional)', 'The real cell rule on a glider, with the rule card. "Running backward", "Rocks" and "The book’s own board" can live here or in the sandbox.'],
+      ].map(([t, c], k) => ({ n: k === 7 ? '▶' : k === 8 ? '+' : String(k + 1), t, c })),
+      ...(S.mode === 'learn' ? this.learnVals(th, tagDef) : {}),
+    };
+  }
+}
+const SEGS_LEN = SCREENS.length;
+</script>
+</body>
+</html>

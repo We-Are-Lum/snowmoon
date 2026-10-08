@@ -5,8 +5,8 @@ import { emptyBoard, liveCount, step, stepBack, withCell, withRock, type Board }
 import { STATES, findSymbols } from '~/lib/minpentai/symbol';
 import { c4b5Preset, impactPreset } from '~/lib/minpentai/presets';
 import { decodeBoard, encodeBoard } from '~/lib/minpentai/url';
-import { SCREENS } from '~/lib/minpentai/tutorial';
-import { PlayComputer, PracticeMatch, WatchMatch } from './match-view';
+import { PlayComputer } from './match-view';
+import { Learn, LEARN_SCREENS, PracticeScreen } from './learn';
 import { TUTORIAL_TEXT as T } from '~/lib/minpentai/tutorial-text';
 
 /* Colours from the approved board (docs/design/direction-boards, section 1c). */
@@ -48,12 +48,13 @@ function usePlayer(initial: () => Board, autoplay = false) {
 export function Sandbox() {
   const [mode, setMode] = useState<Mode>({ kind: 'tutorial', lesson: 0 });
   const [handover, setHandover] = useState<Board | null>(null);
+  const noBody = useRef<HTMLDivElement>(null);
 
-  // Choose the mode on the client: a lesson link, a shared board, a returning visitor, or the tutorial.
+  // Choose the mode on the client: a lesson link, a shared board, a returning visitor, or Learn.
   useEffect(() => {
     const q = new URLSearchParams(window.location.search);
     const lesson = Number(q.get('lesson'));
-    if (Number.isInteger(lesson) && lesson >= 1 && lesson <= SCREENS.length) setMode({ kind: 'tutorial', lesson: lesson - 1 });
+    if (Number.isInteger(lesson) && lesson >= 1 && lesson <= LEARN_SCREENS) setMode({ kind: 'tutorial', lesson: lesson - 1 });
     else if (q.get('mode') === 'practice') setMode({ kind: 'practice' });
     else if (q.get('mode') === 'play') setMode({ kind: 'play' });
     else if (q.get('s') || q.get('mode') === 'free') setMode({ kind: 'free' });
@@ -62,13 +63,13 @@ export function Sandbox() {
 
   const goLesson = (i: number) => { setMode({ kind: 'tutorial', lesson: i }); setQuery({ lesson: String(i + 1) }); };
   const goFree = (from?: Board) => {
-    window.localStorage.setItem(DONE_KEY, '1');
+    try { window.localStorage.setItem(DONE_KEY, '1'); } catch { /* private mode: Learn opens again next time */ }
     setHandover(from ?? null);
     setMode({ kind: 'free' });
     setQuery({ mode: 'free' });
   };
 
-  const goMatch = (kind: 'practice' | 'play') => { window.localStorage.setItem(DONE_KEY, '1'); setMode({ kind }); setQuery({ mode: kind }); };
+  const goMatch = (kind: 'practice' | 'play') => { try { window.localStorage.setItem(DONE_KEY, '1'); } catch { /* as above */ } setMode({ kind }); setQuery({ mode: kind }); };
   const tabs: [Mode['kind'], string, () => void][] = [
     ['tutorial', T.nav.learn, () => goLesson(0)],
     ['practice', T.nav.practice, () => goMatch('practice')],
@@ -76,18 +77,32 @@ export function Sandbox() {
     ['free', T.nav.sandbox, () => goFree()],
   ];
 
+  // Learn and the practice match fill the screen in Design's phone frame; the other modes keep the page.
+  if (mode.kind === 'tutorial') return <Learn index={mode.lesson} onScreen={goLesson} onFree={() => goFree()} />;
+  if (mode.kind === 'practice') return <PracticeScreen back={() => goLesson(LEARN_SCREENS - 3)} onFree={() => goFree()} bodyRef={noBody} />;
   return (
-    <>
+    <div className="mp-page">
+      <p className="mp-provenance">
+        <strong>An unofficial reconstruction.</strong> The rule and the chapter 4 board come from the book; anything
+        marked <em>invented</em> does not.
+      </p>
+      <h1>Minpentai</h1>
       <nav className="mp-nav" aria-label={T.nav.label}>
         {tabs.map(([kind, label, go]) => (
           <button key={kind} type="button" aria-current={mode.kind === kind ? 'page' : undefined} onClick={go}>{label}</button>
         ))}
       </nav>
-      {mode.kind === 'tutorial' && <Tutorial key={mode.lesson} index={mode.lesson} onScreen={goLesson} onFree={goFree} onPractice={() => goMatch('practice')} />}
-      {mode.kind === 'practice' && <PracticeMatch onDone={() => goMatch('play')} onSandbox={() => goFree()} />}
       {mode.kind === 'play' && <PlayComputer onSandbox={() => goFree()} />}
       {mode.kind === 'free' && <FreePlay initial={handover} onTutorial={() => goLesson(0)} />}
-    </>
+      <p className="mp-note">
+        From the book: the rule, recovered from the animated board in chapter 4 (figure c4-b5, the &ldquo;rotate one
+        eighty if three&rdquo; rule), and that figure&rsquo;s opening frame. Invented: the 48 × 32 wrapping board,
+        rocks, the symbol and how it is counted, the hidden side of the figure preset, the glider-and-rock preset, and
+        every rule of the matches (owners, sight, turns to act, squares, elimination) and the computer players.
+        How the rule was recovered is written up in <code>docs/minpentai-rules.md</code>; the sandbox&rsquo;s own
+        choices are in <code>docs/minpentai-sandbox.md</code>.
+      </p>
+    </div>
   );
 }
 
@@ -246,129 +261,6 @@ function TimeControls({ playing, setPlaying, setBoard, turn, minTurn }: {
       <button type="button" className="mp-primary" onClick={() => setPlaying((p) => !p)}>{playing ? 'Pause' : 'Play'}</button>
       <button type="button" onClick={() => { setPlaying(() => false); setBoard((b) => step(b)); }} aria-label="Step forward">|▷</button>
     </div>
-  );
-}
-
-/* ---------------- tutorial ---------------- */
-
-function Tutorial({ index, onScreen, onFree, onPractice }: { index: number; onScreen: (i: number) => void; onFree: (from?: Board) => void; onPractice: () => void }) {
-  const screen = SCREENS[index];
-  const text: { title: string; text: string; button: string; caption?: string; invented?: boolean; modelDrafted?: boolean } = T.screens[screen.id];
-  const start = useMemo(() => screen.build(), [screen]);
-  const p = usePlayer(() => start, screen.autoplay);
-  const { setSpeed, setBoard, setPlaying } = p;
-  useEffect(() => setSpeed(screen.speed), [screen.speed, setSpeed]);
-
-  // Goal: met by the visitor ("you did it") or by the demo ("like that").
-  const [met, setMet] = useState<null | 'you' | 'demo'>(null);
-  const demoRunning = useRef(false);
-  const demoTimers = useRef<number[]>([]);
-  const pendingActions = useRef<((b: Board) => Board)[]>([]);
-  useEffect(() => () => demoTimers.current.forEach((t) => window.clearTimeout(t)), []);
-  useEffect(() => {
-    if (!met && screen.goal && screen.goal({ board: p.board, start, playing: p.playing })) setMet(demoRunning.current ? 'demo' : 'you');
-  }, [p.board, p.playing, met, screen, start]);
-
-  const runDemo = () => {
-    const d = screen.demo;
-    if (!d) return;
-    if (demoRunning.current) {
-      // A second tap finishes the demo at once.
-      demoTimers.current.forEach((t) => window.clearTimeout(t));
-      demoTimers.current = [];
-      if (d.kind === 'play') { setPlaying(() => false); let b = p.board; for (let i = 0; i < 200 && !screen.goal!({ board: b, start, playing: true }); i++) b = step(b); setBoard(() => b); }
-      else { let b = p.board; for (const a of pendingActions.current) b = a(b); pendingActions.current = []; setBoard(() => b); }
-      return;
-    }
-    demoRunning.current = true;
-    if (d.kind === 'play') { setPlaying(() => true); return; }
-    setPlaying(() => false);
-    const actions: ((b: Board) => Board)[] =
-      d.kind === 'step'
-        ? Array.from({ length: d.count }, () => (b: Board) => (d.dir === 1 ? step(b) : b.turn <= 0 ? b : stepBack(b)))
-        : d.cells.map(([x, y]) => (b: Board) => withCell(b, x, y, true));
-    pendingActions.current = [...actions];
-    actions.forEach((_, i) => {
-      demoTimers.current.push(window.setTimeout(() => {
-        const a = pendingActions.current.shift();
-        if (a) setBoard((b) => a(b));
-      }, (i + 1) * d.ms));
-    });
-  };
-  const last = screen.kind === 'handover';
-  const onPrimary = () => {
-    if (last) return onPractice();
-    if (screen.kind === 'read' || met) return onScreen(index + 1);
-    runDemo();
-  };
-  const primaryLabel = last ? text.button : screen.kind === 'read' || met ? T.next : text.button;
-  const status = met === 'you' ? T.youDidIt : met === 'demo' ? T.shown : '';
-
-  return (
-    <section className="mp-tutorial" aria-label={T.heading}>
-      {/* Board 1c / tutorial board: a bar with the name and the count, then one mark per screen. */}
-      <div className="mp-t-head">
-        <span className="mp-t-name">Minpentai</span>
-        <span className="mp-t-count">{T.stepOf(index + 1, SCREENS.length)}</span>
-      </div>
-      {/* One mark per screen, as on the board. Display only: eleven marks are too narrow to tap (44px floor); the menu below jumps. */}
-      <div className="mp-t-marks" aria-hidden="true">
-        {SCREENS.map((s, i) => (
-          <span key={s.id} className={i === index ? 'is-current' : i < index ? 'is-past' : undefined} />
-        ))}
-      </div>
-
-      {screen.stage === 'board' ? (
-        <>
-          <BoardView
-            board={p.board}
-            setBoard={p.setBoard}
-            playing={p.playing}
-            zoom={screen.zoom}
-            view={screen.view}
-            editable={screen.editable}
-            ghost={screen.ghost}
-          />
-          {screen.kind === 'do' && (
-            <TimeControls playing={p.playing} setPlaying={p.setPlaying} setBoard={p.setBoard} turn={p.board.turn} minTurn={0} />
-          )}
-        </>
-      ) : (
-        <WatchMatch viewer={screen.stage === 'watch' ? null : 0} />
-      )}
-
-      <div className="mp-lesson">
-        <p className="mp-tags">
-          {text.invented ? <span className="mp-tag mp-tag-invented">{T.inventedTag}</span> : <span className="mp-tag">Book · ch 4</span>}
-          {(T.modelDrafted || text.modelDrafted) && <span className="mp-tag mp-tag-draft">{T.draftNote}</span>}
-        </p>
-        <h2>{text.title}</h2>
-        <p className="mp-lesson-text">{text.text}</p>
-        {screen.id === 'hard' && (
-          <ol className="mp-reasons">
-            {T.hardReasons.map((r, i) => (
-              <li key={r}>
-                <span className="mp-reason-n">{String(i + 1).padStart(2, '0')}</span>
-                <span>{r}</span>
-              </li>
-            ))}
-          </ol>
-        )}
-        {text.caption && <p className="mp-caption">{text.caption}</p>}
-        <p className="mp-status" aria-live="polite">{status}</p>
-        <label className="mp-jump">
-          <span className="mp-visually-hidden">{T.jumpTo}</span>
-          <select value={index} onChange={(e) => onScreen(Number(e.target.value))} aria-label={T.jumpTo}>
-            {SCREENS.map((s, i) => <option key={s.id} value={i}>{T.dotLabel(i + 1, T.screens[s.id].title)}</option>)}
-          </select>
-        </label>
-      </div>
-
-      <div className="mp-dock">
-        <button type="button" className="mp-quiet" onClick={() => onFree()}>{T.freePlay}</button>
-        <button type="button" className="mp-one" onClick={onPrimary}>{primaryLabel}</button>
-      </div>
-    </section>
   );
 }
 

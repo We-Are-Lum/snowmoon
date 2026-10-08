@@ -22,6 +22,7 @@ import { chromium } from 'playwright-core';
 import { DEFAULT_TEMPLATES } from '../src/templates';
 import { CHAT, IMAGES, REPO_URL } from '../src/lib/config';
 import { NOTICE_REVIEW } from '../src/lib/chat/notice';
+import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
 import { BOOK_TAG, NARRATION_MAX_WORDS, PERSON_TAG, parseBeats } from '../src/lib/script-beats';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -978,6 +979,57 @@ add({
     ),
   plant: (c) => {
     c.items[0].text = c.items[0].text.replace('pa jan', 'pa jen');
+  },
+});
+
+add({
+  id: 'P8c',
+  principle: 8,
+  name: 'the Minpentai lessons cite a real block for every book claim, and their Dzegoban is the source\'s',
+  load: async () => {
+    const text: Record<number, Record<number, string>> = {};
+    const plain = (c: string) => c.replace(/<[^>]+>/g, ' ').replace(/&[a-z#0-9]+;/gi, ' ').replace(/\s+/g, ' ');
+    for (let n = 1; n <= 32; n++) {
+      text[n] = {};
+      for (const b of json(`content/snowmoon/text/chapter-${n}.json`).blocks) text[n][b.idx] = plain(b.content);
+    }
+    const screens = [...Object.values(LEARN_TEXT.watch), ...Object.values(LEARN_TEXT.lessons), LEARN_TEXT.hood, LEARN_TEXT.practice]
+      .map((s) => ({ title: s.title, tags: [...s.tags] as string[], sources: s.sources.map(([a, b]) => [a, b] as [string, string]) }));
+    const sources = screens.flatMap((s) => s.sources.map(([what, where]) => ({ screen: s.title, what, where })));
+    const broadcast = read('src/app/minpentai/broadcast.tsx');
+    return { text, sources, screens, broadcast };
+  },
+  run: ({ text, sources, screens, broadcast }) => {
+    const problems: string[] = [];
+    const norm = (s: string) => s.toLowerCase().replace(/[’']/g, "'").replace(/[^a-z0-9' ]+/g, ' ').replace(/\s+/g, ' ').trim();
+    for (const { screen, what, where } of sources) {
+      // A source is a block id (or a range or list of them), something marked invented, or a file of ours.
+      if (/^invented\b/.test(where) || /^src\//.test(where)) continue;
+      const ids = [...where.matchAll(/c(\d+)-b(\d+)(?:–b(\d+))?/g)];
+      if (!ids.length) { problems.push(`${screen}: "${what}" cites "${where}", which is not a block id and not marked invented`); continue; }
+      let body = '';
+      for (const [, ch, a, b] of ids) {
+        for (let i = Number(a); i <= Number(b ?? a); i++) {
+          if (text[Number(ch)]?.[i] === undefined) problems.push(`${screen}: c${ch}-b${i} does not exist`);
+          else body += ' ' + text[Number(ch)][i];
+        }
+      }
+      // Quoted words must be in the cited blocks.
+      for (const q of what.matchAll(/"([^"]+)"/g)) if (!norm(body).includes(norm(q[1]))) problems.push(`${screen}: "${q[1]}" is not in ${where}`);
+    }
+    // Every screen with a "From the book" tag lists at least one block.
+    for (const s of screens) if ((s.tags as string[]).includes('book') && !s.sources.some(([, w]: [string, string]) => /c\d+-b\d+/.test(w))) problems.push(`${s.title}: tagged From the book but cites no block`);
+    // The countdown in the broadcast is the book's Dzegoban, with its English.
+    for (const dz of broadcast.match(/[A-Z]{2,}(?: [A-Z]{2,}){3,}/g) ?? []) {
+      if (!Object.values(text[4]).some((t: string) => t.includes(dz))) problems.push(`broadcast: "${dz}" is not chapter 4's Dzegoban`);
+    }
+    if (!broadcast.includes('The battle begins in fifty ticks.') || !text[4][98].includes('The battle begins in fifty ticks.')) problems.push('broadcast: the countdown\'s English is not c4-b98');
+    if (!sources.length) problems.push('no Minpentai sources found');
+    return problems;
+  },
+  plant: (c) => {
+    c.sources[0].where = 'c4-b9999';
+    c.broadcast = c.broadcast.replace('MU GU GEI TAU FA', 'MU GU GEI TAO FA');
   },
 });
 
