@@ -24,6 +24,9 @@ export interface ModelReply {
 
 export class ModelUnavailable extends Error {}
 
+/** Waits between retries when the pinned provider is busy. */
+export const BUSY_RETRY_MS = [1000, 2000, 4000];
+
 export function gatewayToken(request?: Request): string | null {
   return process.env.AI_GATEWAY_API_KEY || request?.headers.get('x-vercel-oidc-token') || process.env.VERCEL_OIDC_TOKEN || null;
 }
@@ -47,9 +50,12 @@ export async function complete(
       body: JSON.stringify({ model, messages, max_tokens: opts.maxTokens, temperature: opts.temperature, providerOptions: providerOptions() }),
     });
   let res = await send();
-  // The pinned provider has no fallback; when it is busy (429, 498 "at capacity", 503), wait a second and try once more.
-  if ([429, 498, 503].includes(res.status)) {
-    await new Promise((r) => setTimeout(r, 1000));
+  // The pinned provider has no fallback (owner's condition, principle 6). When it is
+  // busy (429; 498, Groq's "flex capacity exceeded"; 503), wait and try again: 1, 2
+  // and 4 seconds, about 7 seconds in all, before reporting that the model did not answer.
+  for (const wait of BUSY_RETRY_MS) {
+    if (![429, 498, 503].includes(res.status)) break;
+    await new Promise((r) => setTimeout(r, wait));
     res = await send();
   }
   const j = (await res.json().catch(() => ({}))) as {
