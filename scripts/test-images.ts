@@ -135,21 +135,25 @@ check('the trial\'s total cap stops a Generate', !r3.ok && (r3.refusal === 'spen
 await sql`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') on conflict do nothing`;
 const [el] = await sql`insert into studio.elements (work_id, element_type, created_by_fid) values ('snowmoon', 'image', 6786) returning id`;
 await sql`insert into studio.removal_log ${sql({ element_id: el.id, step: 'reported', by_fid: 9, role: 'reader', reason: 'spam' })}`;
+await sql.end();
+// Append-only, checked on the database directly with the role set for each statement (over the
+// socket the role is per connection, and a reconnect would run as the superuser).
 for (const [what, q] of [
-  ['update image_asks', sql`update studio.image_asks set fid = 1`],
-  ['delete image_asks', sql`delete from studio.image_asks`],
-  ['update removal_log', sql`update studio.removal_log set note = 'x'`],
-  ['delete removal_log', sql`delete from studio.removal_log`],
-  ['delete image_costs', sql`delete from studio.image_costs`],
+  ['update image_asks', 'update studio.image_asks set fid = 1'],
+  ['delete image_asks', 'delete from studio.image_asks'],
+  ['update removal_log', "update studio.removal_log set note = 'x'"],
+  ['delete removal_log', 'delete from studio.removal_log'],
+  ['delete image_costs', 'delete from studio.image_costs'],
 ] as const) {
+  await db.exec('set role studio_writer');
   try {
-    await q;
+    await db.exec(q);
     failures.push(`studio_writer can ${what}`);
   } catch {
     passed++;
   }
+  await db.exec('reset role');
 }
-await sql.end();
 for (const role of ['anon', 'authenticated']) {
   for (const t of ['image_asks', 'image_costs', 'removal_log']) {
     await db.exec(`set role ${role}`);
