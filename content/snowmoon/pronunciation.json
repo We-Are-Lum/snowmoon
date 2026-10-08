@@ -4736,6 +4736,26 @@
       "match_case": false,
       "reviewed": false,
       "meaning": "vegetable and rice (literally 'green plant line bread')"
+    },
+    {
+      "word": "breathed",
+      "kind": "common-word",
+      "chapters": [
+        1,
+        4,
+        7,
+        12,
+        15,
+        19
+      ],
+      "respelling": "BREETHD",
+      "phonemes": "bɹˈiðd",
+      "override": true,
+      "match_case": false,
+      "reviewed": true,
+      "reviewed_by": "FID 6786",
+      "reviewed_on": "2026-10-08",
+      "note": "Default G2P said 'bɹˈɛθt' ('breath-t'). Reported and approved by the owner, 2026-10-08 (docs/prompts/010-pronunciation-reports.md); the first fix under docs/pronunciation-fixes.md. Re-spoken blocks: c1-b3, c4-b86, c7-b56, c7-b60, c12-b141, c12-b183, c15-b54, c15-b73, c19-b42."
     }
   ],
   "dzegoban_rule": {

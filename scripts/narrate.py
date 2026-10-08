@@ -382,8 +382,14 @@ def main():
     ap.add_argument("--out", default=str(ROOT / "narration-out"))
     ap.add_argument("--check", action="store_true", help="only build and validate the spoken text")
     ap.add_argument("--stitch-only", action="store_true", help="rebuild stitched chapter files from existing block audio")
+    ap.add_argument("--respeak", help="re-speak only these blocks (c1-b3,c4-b86,…) after a pronunciation fix, then restitch "
+                    "their chapters; --chapter is ignored (docs/pronunciation-fixes.md)")
+    ap.add_argument("--because", help="with --respeak: why, recorded on each re-spoken block")
     args = ap.parse_args()
 
+    if args.respeak:
+        respeak(args)
+        return
     lo, _, hi = args.chapter.partition("-")
     chapters = range(int(lo), int(hi or lo) + 1)
     if args.stitch_only:
@@ -505,6 +511,66 @@ def narrate_chapter(n, chapter, ra_path, plan, pipeline, voice, recipe, args, de
     }
     write_recipe(out, n, manifest)
     print(f"  {cursor_ms/60000:.1f} min of audio in {elapsed/60:.1f} min -> {out / stitched['m4a']}")
+
+
+# Per-block files for the web player (scripts/publish-narration.ts BLOCK_ENCODING).
+BLOCK_AAC = ["-c:a", "aac", "-b:a", "64k", "-ac", "1"]
+
+
+def respeak(args):
+    """Re-speak named blocks with the current pronunciation list, leave every other block's
+    audio as it is, then restitch each affected chapter (docs/pronunciation-fixes.md)."""
+    ids = [b.strip() for b in args.respeak.split(",") if b.strip()]
+    by_chapter = {}
+    for b in ids:
+        m = re.fullmatch(r"c(\d+)-b(\d+)", b)
+        if not m:
+            sys.exit(f"not a block id: {b}")
+        by_chapter.setdefault(int(m.group(1)), []).append(int(m.group(2)))
+    pron = json.loads((CONTENT / "pronunciation.json").read_text())["entries"]
+
+    from huggingface_hub import hf_hub_download
+    from kokoro import KModel, KPipeline
+    import torch
+
+    model_path = hf_hub_download(MODEL_REPO, "kokoro-v1_0.pth", revision=MODEL_REVISION)
+    config_path = hf_hub_download(MODEL_REPO, "config.json", revision=MODEL_REVISION)
+    voice_path = hf_hub_download(MODEL_REPO, f"voices/{args.voice}.pt", revision=MODEL_REVISION)
+    model = KModel(repo_id=MODEL_REPO, config=config_path, model=model_path).to("cpu").eval()
+    pipeline = KPipeline(lang_code=args.lang, repo_id=MODEL_REPO, model=model)
+    voice = torch.load(voice_path, weights_only=True)
+
+    for n, idxs in sorted(by_chapter.items()):
+        out = Path(args.out) / f"chapter-{n}"
+        manifest = json.loads((out / "manifest.json").read_text())
+        _, _, plan, problems = plan_chapter(n, pron)
+        if problems:
+            sys.exit(f"chapter {n}: {problems}")
+        spoken = {block["idx"]: sent for block, sent, _ in plan}
+        for idx in idxs:
+            entry = next((e for e in manifest["blocks"] if e["idx"] == idx), None)
+            if not entry or not entry.get("file"):
+                sys.exit(f"c{n}-b{idx}: no spoken block to replace")
+            sent = spoken[idx]
+            if sent == entry.get("text"):
+                sys.exit(f"c{n}-b{idx}: the spoken text did not change; is the pronunciation entry in place?")
+            chunks = [r.audio.numpy() for r in pipeline(sent, voice=voice, speed=args.speed) if r.audio is not None]
+            audio = np.concatenate(chunks).astype(np.float32)
+            wav = out / entry["file"]
+            sf.write(wav, audio, SAMPLE_RATE, subtype="PCM_16")
+            aac = out / "aac" / f"c{n}-b{idx:03d}.m4a"
+            subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-i", str(wav), *BLOCK_AAC, str(aac)], check=True)
+            entry.update(
+                text=sent,
+                sha256=sha256_file(wav),
+                duration_ms=round(len(audio) * 1000 / SAMPLE_RATE),
+                respoken_at=datetime.now(timezone.utc).isoformat(timespec="seconds"),
+                respoken_because=args.because or "pronunciation fix",
+            )
+            print(f"  c{n}-b{idx:03d} re-spoken: {sent[:80]}")
+        manifest["settings"]["pronunciation_sha256"] = sha256_file(CONTENT / "pronunciation.json")
+        (out / "manifest.json").write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n")
+        restitch(n, args.out)
 
 
 if __name__ == "__main__":

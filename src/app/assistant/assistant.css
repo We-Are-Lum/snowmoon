@@ -135,3 +135,15 @@
 /* 9d */
 .as-signed-out h1 { font-size: 30px; line-height: 1.2; }
 .as-note { color: var(--muted); font-size: 16px; }
+
+/* 1d as in the prototype: the two kinds side by side; planning and pictures shown as coming. */
+.as-kinds { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: var(--space-4) 0 var(--space-5); }
+.as-kinds .as-start { margin: 0; }
+.as-coming-card {
+  display: flex; flex-direction: column; gap: 2px; padding: 12px 14px; border: 1px solid var(--rule); border-top: 2px solid var(--muted);
+  border-radius: var(--radius); background: var(--soft); color: var(--muted);
+}
+.as-coming-card .as-start-title { color: var(--muted); }
+.as-section { padding-bottom: 6px; border-bottom: 1px dashed var(--rule); }
+.as-coming-row { display: flex; justify-content: space-between; margin-top: var(--space-5); }
+.as-empty-row { margin: 8px 0 0; font-family: var(--label); font-size: var(--text-label); color: var(--muted); }

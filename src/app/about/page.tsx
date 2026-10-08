@@ -1,4 +1,6 @@
 import { CHAT, REPO_URL, WORK } from '~/lib/config';
+import { SIGN_IN_SERVICES } from '~/lib/sign-in-text';
+import { ThemeSwitch } from '~/components/theme-switch';
 import { loadIntro } from '~/lib/intro';
 import { AboutEdition, ReplayIntro } from '~/components/first-visit';
 import consent from '../../../config/consent.json';
@@ -44,7 +46,7 @@ export default function About() {
         Every published image and voice links to its recipe, including the exact prompt, readable without signing in.
         The prompts of your drafts and abandoned attempts are not published.
       </p>
-      <p>
+      <p id="podcast">
         {/* The feed's own words are the owner's (config/podcast.json); this link is model-drafted. */}
         <a href="/podcast.xml">Listen as a podcast</a>: the house narration, one chapter per episode, as a feed for
         any podcast app.
@@ -67,6 +69,14 @@ export default function About() {
           own words.
         </p>
       )}
+      <h2>Signing in</h2>
+      {/* Model-drafted wording; the same sentence is shown at the sign-in step (src/components/sign-in.tsx). */}
+      <p>
+        Reading needs no account. Saving cards, liking them and asking the assistant need a Farcaster sign-in. Inside a
+        Farcaster app it happens by itself. On this website, {SIGN_IN_SERVICES.charAt(0).toLowerCase() + SIGN_IN_SERVICES.slice(1)}
+      </p>
+      <h2>Theme</h2>
+      <ThemeSwitch name="theme-about" />
       <h2>No token</h2>
       <p>There is no token. There is no revenue share. Nothing here is an investment.</p>
       <h2>No canon</h2>

@@ -20,7 +20,7 @@
  *   stored text by test:chat. --shots=DIR also saves a screenshot of each.
  */
 import { readFileSync } from 'node:fs';
-import { chromium, type Page } from 'playwright-core';
+import { chromium, type Browser, type Page } from 'playwright-core';
 
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
 const BASE = (arg('url') ?? 'http://localhost:3000').replace(/\/$/, '');
@@ -79,8 +79,9 @@ async function checkAssistant(page: Page, scheme: string) {
   await page.evaluate(() => window.scrollTo(0, 0));
   await page.click('.chapter-bar-button');
   await page.waitForSelector('.chapter-sheet');
-  const focused = await page.evaluate(() => document.activeElement?.getAttribute('aria-current'));
-  if (focused !== 'page') fail('/chapter/1: the chapter sheet does not open on the current chapter');
+  const focused = await page.evaluate(() => Boolean(document.activeElement?.closest('.chapter-sheet')));
+  if (!focused) fail('/chapter/1: opening the chapter sheet does not move focus into it');
+  if (!(await page.locator('.cs-current-name').textContent())?.includes('Chapter 1')) fail('/chapter/1: the chapter sheet does not lead with the current chapter');
   await checkFloors(page, '/chapter/1 (chapter sheet)', scheme);
   await shot(page, '1b-chapter-sheet', scheme);
   await page.keyboard.press('Escape');
@@ -212,6 +213,14 @@ async function checkFloors(page: Page, path: string, scheme: string) {
   if (r.overflow > 0) fail(`${where}: page scrolls sideways by ${r.overflow}px`);
 }
 
+/** A page in the given theme: Light is the default, so a dark run chooses Dark (src/lib/theme.ts). */
+async function newPage(opts: Parameters<Browser['newPage']>[0] = {}) {
+  const p = await browser.newPage(opts);
+  // tsx keeps function names with a __name helper that the page does not have.
+  await p.addInitScript('window.__name = (f) => f');
+  await p.addInitScript(`try{localStorage.setItem('snowmoon.theme','${opts?.colorScheme === 'dark' ? 'dark' : 'light'}')}catch(e){}`);
+  return p;
+}
 const browser = await chromium.launch({ channel: 'chrome' });
 try {
   // First-visit intro (config/intro.json): once, home page only, Skip on every
@@ -273,7 +282,7 @@ try {
   }
 
   for (const scheme of ['light', 'dark'] as const) {
-    const page = await browser.newPage({ viewport: { width: 390, height: 844 }, colorScheme: scheme });
+    const page = await newPage({ viewport: { width: 390, height: 844 }, colorScheme: scheme });
     // tsx keeps function names with a __name helper that the page does not have.
     await page.addInitScript('window.__name = (f) => f');
 
@@ -329,11 +338,11 @@ try {
     await page.close();
   }
 
-  // ---- Tablet and desktop (side-rail.tsx, assistant-column.tsx) ----
-  // 390 (above) and the Farcaster frame never show the rail; 1024 collapses it; 1440 opens it.
-  for (const width of [1024, 1440]) {
+  // ---- Tablet and desktop (src/components/app-shell.tsx, src/styles/shell.css) ----
+  // 390 and the Farcaster frame: top bar, no rail; 1024: the rail collapsed; 1440: rail open and the assistant beside the page.
+  for (const width of [1024, 1440, 2000]) {
     for (const scheme of ['light', 'dark'] as const) {
-      const page = await browser.newPage({ viewport: { width, height: 900 }, colorScheme: scheme });
+      const page = await newPage({ viewport: { width, height: 900 }, colorScheme: scheme });
       await page.addInitScript('window.__name = (f) => f');
       for (const path of ['/', '/chapter/1', '/about', '/cards', '/adaptations', '/minpentai', '/assistant']) {
         await open(page, path);
@@ -341,39 +350,54 @@ try {
         const wide = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
         if (wide > 1) fail(`${path} @${width} (${scheme}): scrolls sideways by ${wide}px`);
         const measure = await page.evaluate(() => {
-          const el = document.querySelector('main .page, main article') as HTMLElement | null;
+          const el = document.querySelector('main .page.chapter, main .page') as HTMLElement | null;
           return el ? el.getBoundingClientRect().width : 0;
         });
-        if (measure > 640) fail(`${path} @${width}: the reading column is ${Math.round(measure)}px wide`);
-        if (await page.locator('.assistant-column').count()) fail(`${path} @${width}: an assistant column shows while signed out`);
+        if (measure > 700) fail(`${path} @${width}: the reading column is ${Math.round(measure)}px wide`);
+        if (await page.locator('.topbar').isVisible()) fail(`${path} @${width}: the phone top bar shows`);
       }
       await open(page, '/chapter/1');
-      const panelShown = await page.locator('.rail-panel').isVisible();
-      const toggleShown = await page.locator('.rail-toggle').isVisible();
+      const bodyShown = await page.locator('.rail-body').isVisible();
       if (width === 1024) {
-        if (panelShown || !toggleShown) fail('@1024: the rail is not collapsed to its button');
+        if (bodyShown) fail('@1024: the rail is not collapsed');
+        if (await page.locator('.panel').isVisible()) fail('@1024: the assistant panel shows on a tablet');
         await shot(page, `desktop-${width}-chapter`, scheme);
-        await page.click('.rail-toggle');
-        await page.waitForSelector('.rail-panel[role="dialog"]');
-        const inside = await page.evaluate(() => Boolean(document.activeElement?.closest('.rail-panel')));
-        if (!inside) fail('@1024: opening the rail does not move focus into it');
+        await page.click('.rail-collapse');
+        await page.waitForSelector('.rail.is-open .rail-body a');
+        if (!(await page.evaluate(() => Boolean(document.activeElement?.closest('.rail'))))) fail('@1024: opening the rail does not move focus into it');
         await checkFloors(page, '/chapter/1 @1024 (rail open)', scheme);
         await shot(page, `desktop-${width}-rail-open`, scheme);
         await page.keyboard.press('Escape');
-        if (await page.locator('.rail-panel').isVisible()) fail('@1024: Escape does not close the rail');
-        if (!(await page.evaluate(() => document.activeElement?.classList.contains('rail-toggle')))) fail('@1024: focus does not return to the rail button');
+        if (await page.locator('.rail.is-open').count()) fail('@1024: Escape does not close the rail');
+        if (!(await page.evaluate(() => document.activeElement?.classList.contains('rail-collapse')))) fail('@1024: focus does not return to the rail control');
       } else {
-        if (!panelShown || toggleShown) fail('@1440: the rail is not open');
+        if (!bodyShown) fail(`@${width}: the rail is not open`);
         const current = await page.locator('.rail-chapters a[aria-current="page"]').textContent();
-        if (!current?.includes('Chapter 1')) fail('@1440: the rail does not mark the current chapter');
+        if (!current?.includes('Chapter 1')) fail(`@${width}: the rail does not mark the current chapter`);
+        // Signed out: the assistant panel is there, with what it does and a sign-in button.
+        await page.waitForSelector('.panel .as-signed-out button');
         await shot(page, `desktop-${width}-chapter`, scheme);
-        // Signed in (status mocked): the assistant column appears beside the page.
+        // Listen view.
+        await open(page, '/chapter/1?view=listen');
+        await page.waitForSelector('.listen-pane .listen-progress');
+        await checkFloors(page, `/chapter/1?view=listen @${width}`, scheme);
+        await page.focus('.listen-progress');
+        const before = await page.getAttribute('.listen-progress', 'aria-valuenow');
+        await page.keyboard.press('ArrowRight');
+        const after = await page.getAttribute('.listen-progress', 'aria-valuenow');
+        if (before === after) fail(`@${width}: the progress bar does not move with the keyboard`);
+        await shot(page, `desktop-${width}-listen`, scheme);
+        // Signed in (session and status mocked): the assistant home in the panel.
         await page.route('**/api/chat/status', (r) =>
           r.fulfill({ json: { available: true, model: 'gpt-oss-120b', host: 'Vercel AI Gateway', provider: 'Groq', perDay: 30, left: 30 } }),
         );
+        await page.addInitScript(() => {
+          const b64 = (o: object) => btoa(JSON.stringify(o)).replace(/=+$/, '');
+          localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `x.${b64({ sub: 1, exp: 4102444800 })}.y`, fid: 1, username: 'check', exp: 4102444800 }));
+        });
         await open(page, '/chapter/1');
-        await page.waitForSelector('.assistant-column .as-start');
-        await checkFloors(page, '/chapter/1 @1440 (signed in)', scheme);
+        await page.waitForSelector('.panel .as-start');
+        await checkFloors(page, `/chapter/1 @${width} (signed in)`, scheme);
         await shot(page, `desktop-${width}-signed-in`, scheme);
         await page.unroute('**/api/chat/status');
       }
@@ -382,14 +406,31 @@ try {
   }
   // Phone width: no rail at all.
   for (const scheme of ['light', 'dark'] as const) {
-    const page = await browser.newPage({ viewport: { width: 390, height: 844 }, colorScheme: scheme });
+    const page = await newPage({ viewport: { width: 390, height: 844 }, colorScheme: scheme });
     await open(page, '/chapter/1');
     if (await page.locator('.rail').isVisible()) fail('@390: the rail shows on a phone');
     await shot(page, 'phone-390-chapter', scheme);
+    await page.click('.topbar-icon[aria-label="Menu"]');
+    await page.waitForSelector('.menu-sheet');
+    await checkFloors(page, '/chapter/1 @390 (menu)', scheme);
+    await shot(page, 'phone-390-menu', scheme);
+    await page.keyboard.press('Escape');
+    if (await page.locator('.menu-sheet').count()) fail('@390: Escape does not close the menu');
+    await page.locator('.seed-image .recipe-link').first().click();
+    await page.waitForSelector('.recipe-sheet dt');
+    const model = await page.textContent('.recipe-sheet');
+    if (!/FLUX|Model/.test(model ?? '')) fail('@390: the recipe sheet does not show the model');
+    await checkFloors(page, '/chapter/1 @390 (recipe)', scheme);
+    await shot(page, 'phone-390-recipe', scheme);
+    await page.keyboard.press('Escape');
+    await open(page, '/chapter/1?view=listen');
+    await page.waitForSelector('.listen-pane');
+    await checkFloors(page, '/chapter/1?view=listen @390', scheme);
+    await shot(page, 'phone-390-listen', scheme);
     await page.close();
   }
   {
-    const frame = await browser.newPage({ viewport: { width: 424, height: 695 } });
+    const frame = await newPage({ viewport: { width: 424, height: 695 } });
     await open(frame, '/chapter/1');
     if (await frame.locator('.rail').isVisible()) fail('@424×695: the rail shows in the Farcaster frame');
     await frame.close();
@@ -402,4 +443,4 @@ if (failures.length) {
   console.error(`\nUI CHECK FAILED (${failures.length}):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`ui check passed: ${BASE}, ${36 + MINPENTAI_LESSONS + 3} pages, the chapter sheet and 8 assistant states × light and dark; 7 pages at 1024 and 1440`);
+console.log(`ui check passed: ${BASE}, ${36 + MINPENTAI_LESSONS + 3} pages, the chapter sheet and 8 assistant states × light and dark; 7 pages at 1024, 1440 and 2000`);

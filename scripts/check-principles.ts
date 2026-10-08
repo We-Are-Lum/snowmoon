@@ -3,7 +3,7 @@
  * planted violation: for every check, a copy of its inputs gets one violation
  * injected, and the check must report it.
  *
- *   npm run check:principles                       checks + proofs, against https://snowmoon.party
+ *   npm run check:principles   (exit 0: all ran and passed; 1: a failure; 2: none failed but some did not run)                       checks + proofs, against https://snowmoon.party
  *   npm run check:principles -- --url=http://localhost:3000
  *   npm run check:principles -- --only=P6          one principle
  *
@@ -151,12 +151,18 @@ add({
 // decision, Oct 5, 2026). A signed-out visitor must reach the exact prompt of
 // every published generated asset: the page links the recipe, and the file at
 // that link (fetched anonymously from the public repo) holds the prompt.
-const RAW = REPO_URL.replace('https://github.com/', 'https://raw.githubusercontent.com/') + '/main/';
+// Where "public" recipes are read from: GitHub main (the check of record, after a merge), or with
+// --ref=local this checkout's files, so a branch can be checked before it is merged (owner, 2026-10-08).
+const REF = arg('ref') ?? 'main';
+const RAW = REPO_URL.replace('https://github.com/', 'https://raw.githubusercontent.com/') + `/${REF}/`;
 const rawCache = new Map<string, any>(); // eslint-disable-line @typescript-eslint/no-explicit-any
 async function rawJson(rel: string) {
   if (!rawCache.has(rel)) {
-    const r = await fetch(RAW + rel);
-    rawCache.set(rel, r.ok ? await r.json() : { http: r.status });
+    if (REF === 'local') rawCache.set(rel, existsSync(path.join(ROOT, rel)) ? json(rel) : { http: 404 });
+    else {
+      const r = await fetch(RAW + rel);
+      rawCache.set(rel, r.ok ? await r.json() : { http: r.status });
+    }
   }
   return rawCache.get(rel);
 }
@@ -504,13 +510,17 @@ add({
 // ---------------------------------------------------------------------------
 // P4. No model output is published without a signed-in person's action.
 // ---------------------------------------------------------------------------
+const P4A_EXEMPT = new Set(['src/app/api/auth/web/start/route.ts']);
 add({
   id: 'P4a',
   principle: 4,
   name: 'every write API route requires a signed-in FID',
   load: async () => walk('src/app/api', /route\.tsx?$/).map((f) => ({ file: f, src: read(f) })),
+  // Named exemption (owner instruction, 2026-10-08: website sign-in): the route that starts a sign-in
+  // cannot require one. It writes nothing of ours; it opens a channel on Farcaster's relay.
   run: (routes) =>
     routes
+      .filter((r: { file: string }) => !P4A_EXEMPT.has(r.file))
       .filter((r: { src: string }) => /export async function (POST|PUT|PATCH|DELETE)\b/.test(r.src))
       .filter((r: { src: string }) => !(/getFid\(/.test(r.src) && /status: 401/.test(r.src)))
       .map((r: { file: string }) => `${r.file}: writes without requiring sign-in`),
@@ -882,6 +892,8 @@ add({
 const selected = checks.filter((c) => !ONLY || c.id.startsWith(ONLY));
 let failed = 0;
 let unproven = 0;
+/** Checks that could not run here (no database URL, no Vercel CLI…): never counted as passing. */
+const notRun: { id: string; why: string }[] = [];
 console.log(`principles: ${selected.length} automated checks against ${BASE}\n`);
 for (const c of selected) {
   let inputs: unknown;
@@ -894,7 +906,10 @@ for (const c of selected) {
   }
   const problems = await c.run(inputs);
   const skipped = problems.length === 1 && problems[0].startsWith('skipped');
-  if (skipped) console.log(`skip ${c.id} ${c.name}: ${problems[0]}`);
+  if (skipped) {
+    notRun.push({ id: c.id, why: problems[0].replace(/^skipped:\s*/, '') });
+    console.log(`NOT RUN ${c.id} ${c.name}: ${problems[0].replace(/^skipped:\s*/, '')}`);
+  }
   else if (problems.length) {
     failed++;
     console.log(`FAIL ${c.id} ${c.name}`);
@@ -910,5 +925,9 @@ for (const c of selected) {
     console.log(`  PROOF FAILED: a planted violation was not caught by ${c.id}`);
   }
 }
-console.log(`\n${selected.length - failed} of ${selected.length} pass; ${selected.length - unproven} of ${selected.length} proven to fail on a planted violation`);
-process.exit(failed || unproven ? 1 : 0);
+const passed = selected.length - failed - notRun.length;
+console.log(`\n${passed} pass, ${failed} fail, ${notRun.length} not run, of ${selected.length}; ${selected.length - unproven} of ${selected.length} proven to fail on a planted violation`);
+for (const n of notRun) console.log(`  not run: ${n.id} (${n.why})`);
+if (!failed && !unproven && notRun.length) console.log(`NOT A FULL PASS: ${notRun.length} check(s) did not run here.`);
+// 0 only when every check ran and passed; 1 on a failure; 2 when nothing failed but some did not run.
+process.exit(failed || unproven ? 1 : notRun.length ? 2 : 0);

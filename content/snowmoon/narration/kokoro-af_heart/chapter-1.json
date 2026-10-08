@@ -9,8 +9,8 @@
     "role": "maintainer",
     "action": "published via script",
     "script": "scripts/publish-narration.ts",
-    "date": "2026-10-05",
-    "evidence": "docs/prompts/008-narration-and-images.md"
+    "date": "2026-10-08",
+    "evidence": "docs/prompts/010-pronunciation-reports.md"
   },
   "recipe": "content/snowmoon/recipes/narration/chapter-1.json",
   "model": {
@@ -43,7 +43,7 @@
       "figure": 600
     },
     "break_ms": 1800,
-    "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
+    "pronunciation_sha256": "81a5c2fe59fda14824d8465b630ca3bf07b205c08518250999699b51eaff317d",
     "read_aloud_sha256": "6ca65b213f017a87282c5b4306f9d5d5efff24962510273b01d45ad96eae3925",
     "description_tone": {
       "notes_hz": [
@@ -68,9 +68,9 @@
     "tool": "ffmpeg"
   },
   "chapter_file": {
-    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-1-5a2564ea4e15.m4a",
-    "sha256": "5a2564ea4e15554e5c2c8f7c6583e323226f66878d13a3cafa3687441f934246",
-    "bytes": 19597835,
+    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-1-17e6392d460b.m4a",
+    "sha256": "17e6392d460bd2a6563fba3038956f6e22193022c94c6153fa78b2bd809347db",
+    "bytes": 19600070,
     "duration_ms": 1649255
   },
   "breaks": [
@@ -141,13 +141,13 @@
       "idx": 3,
       "kind": "paragraph",
       "block_sha256": "971635a695d9ea35c462a796e7907cfadd20ce5e3fa315d54a6484794bd864c6",
-      "url": "https://media.snowmoon.party/narration/kokoro-af_heart/c1/b003-5b6497b35196.m4a",
-      "sha256": "5b6497b3519648f3bb0c79f36ad60a7fbc54274a7912e1729d250b48330e9c2f",
-      "bytes": 115824,
+      "url": "https://media.snowmoon.party/narration/kokoro-af_heart/c1/b003-4917a6d30ab1.m4a",
+      "sha256": "4917a6d30ab1b53a260a352c2fc129cf704d7aff1a9a1950d9f5f178d357f4e2",
+      "bytes": 116788,
       "duration_ms": 12775,
       "start_ms": 40525,
-      "source_wav_sha256": "4187c5b714ab4f7133c07a257ae9cd9e94d9109b67bdaf237b8ddf0d8f65886a",
-      "text": "He looked around, breathed in and briefly stopped to enjoy the nature, dense enough and quiet enough that he almost forgot that he was in the middle of the Kalimar district of Meldan, the capital city of Veridia."
+      "source_wav_sha256": "86c327c0c5f0df3ad5751063775797ab40f546607812bebd4c4c4903508d84b5",
+      "text": "He looked around, [breathed](/bɹˈiðd/) in and briefly stopped to enjoy the nature, dense enough and quiet enough that he almost forgot that he was in the middle of the Kalimar district of Meldan, the capital city of Veridia."
     },
     {
       "idx": 4,

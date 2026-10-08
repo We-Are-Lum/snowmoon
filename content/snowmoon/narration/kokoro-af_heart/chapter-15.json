@@ -9,8 +9,8 @@
     "role": "maintainer",
     "action": "published via script",
     "script": "scripts/publish-narration.ts",
-    "date": "2026-10-05",
-    "evidence": "docs/prompts/008-narration-and-images.md"
+    "date": "2026-10-08",
+    "evidence": "docs/prompts/010-pronunciation-reports.md"
   },
   "recipe": "content/snowmoon/recipes/narration/chapter-15.json",
   "model": {
@@ -43,7 +43,7 @@
       "figure": 600
     },
     "break_ms": 1800,
-    "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
+    "pronunciation_sha256": "81a5c2fe59fda14824d8465b630ca3bf07b205c08518250999699b51eaff317d",
     "read_aloud_sha256": "de9e30c3a8a39ef2b559fc7c44b950c497e12d7fd9bbf1246e8c5067733f31f4",
     "description_tone": {
       "notes_hz": [
@@ -68,9 +68,9 @@
     "tool": "ffmpeg"
   },
   "chapter_file": {
-    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-15-69bc75beba0d.m4a",
-    "sha256": "69bc75beba0d8998cb0b6f23b9c2fd7f915f3ca9a1d5fdf4d2d756492b7cbc27",
-    "bytes": 13322667,
+    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-15-39bb7ebf3dfd.m4a",
+    "sha256": "39bb7ebf3dfda293e79adc52544d5401df7508e3d3f342ba301e7f7e43e87477",
+    "bytes": 13321438,
     "duration_ms": 1138195
   },
   "breaks": [
@@ -734,13 +734,13 @@
       "idx": 54,
       "kind": "paragraph",
       "block_sha256": "13b1894258c51299a7dfbe601445cb7c67dd5350ba3f54cc426f5926212befe2",
-      "url": "https://media.snowmoon.party/narration/kokoro-af_heart/c15/b054-54288501ea69.m4a",
-      "sha256": "54288501ea69b385dee55e06b64012af3cf08b1d46cbdd4e4a3a942db163a1cc",
-      "bytes": 63463,
+      "url": "https://media.snowmoon.party/narration/kokoro-af_heart/c15/b054-934ca138ea99.m4a",
+      "sha256": "934ca138ea9934f40dd143981aba0d2707e76c69b53b23e99a19bfb354d09817",
+      "bytes": 65413,
       "duration_ms": 7100,
       "start_ms": 443275,
-      "source_wav_sha256": "d320b3e6a33d830b697b6c1041f81d05a8da936d1d84f605103e78030ddcf30e",
-      "text": "It was not the outcome [Zei](/ˈzA/) wanted, but still much better than the outcome he feared. He breathed a sigh of relief."
+      "source_wav_sha256": "904a3e030c15db1b116c5c977bdac5442897057af7aca7668f0fcf751ec15fb2",
+      "text": "It was not the outcome [Zei](/ˈzA/) wanted, but still much better than the outcome he feared. He [breathed](/bɹˈiðd/) a sigh of relief."
     },
     {
       "idx": 55,
@@ -984,13 +984,13 @@
       "idx": 73,
       "kind": "paragraph",
       "block_sha256": "587d0f1de5769fd428c513d5516cc0a2c5d0fb0ad73c68e3333af318e699b5bf",
-      "url": "https://media.snowmoon.party/narration/kokoro-af_heart/c15/b073-76ddbba978a2.m4a",
-      "sha256": "76ddbba978a2503988de52e737a2d32ebc8cc7e0f6404133ea2d93a5d5917141",
-      "bytes": 116620,
+      "url": "https://media.snowmoon.party/narration/kokoro-af_heart/c15/b073-99c281815df2.m4a",
+      "sha256": "99c281815df2e320780f92a6efad9b1f89b1b78cdd51ea6706003074b90969af",
+      "bytes": 115589,
       "duration_ms": 12900,
       "start_ms": 747160,
-      "source_wav_sha256": "f577d8026622b2e3114dff3190f967bd9786e9aecff6ef8aa759d82e68ba5c45",
-      "text": "[Zei](/ˈzA/) put down his hand device, and breathed out. His eyes briefly wandered around the restaurant, and he saw that by this point there was no one else there. He finally began eating his rice and vegetable dish."
+      "source_wav_sha256": "68c37dcffa0facb33ca64cf3f86e91b61703d5cbcab07f9a7bc4f8337a07497b",
+      "text": "[Zei](/ˈzA/) put down his hand device, and [breathed](/bɹˈiðd/) out. His eyes briefly wandered around the restaurant, and he saw that by this point there was no one else there. He finally began eating his rice and vegetable dish."
     },
     {
       "idx": 75,

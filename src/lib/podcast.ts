@@ -83,6 +83,12 @@ function descriptionHtml(e: Episode): string {
   return `<![CDATA[<p>${linked}</p>]]>`;
 }
 
+/** The cover's published URL, from its recipe (scripts/publish-podcast-cover.ts); null until published. */
+export function coverUrl(): string | null {
+  const file = path.join(RECIPES, 'cover.json');
+  return existsSync(file) ? ((JSON.parse(readFileSync(file, 'utf8')) as { file: { url?: string } }).file.url ?? null) : null;
+}
+
 export function feedXml(coverUrl: string | null): string {
   const w = podcast.words;
   const feed = podcast.feed_url;
@@ -100,7 +106,7 @@ export function feedXml(coverUrl: string | null): string {
       <itunes:summary>${esc(e.description)}</itunes:summary>
       <enclosure url="${esc(e.url)}" length="${e.bytes}" type="audio/mpeg"/>
       <itunes:duration>${e.seconds}</itunes:duration>
-      <itunes:explicit>false</itunes:explicit>
+      <itunes:explicit>false</itunes:explicit>${coverUrl ? `\n      <itunes:image href="${esc(coverUrl)}"/>` : ''}
       <podcast:txt purpose="ai-content">true</podcast:txt>
     </item>`,
     )

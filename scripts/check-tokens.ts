@@ -16,8 +16,12 @@ const CSS = arg('css') ?? path.join(process.cwd(), 'src', 'styles', 'tokens.css'
 const failures: string[] = [];
 
 const css = readFileSync(CSS, 'utf8');
+const light = css.slice(0, css.indexOf(":root[data-theme='dark']"));
 const dark = css.slice(css.indexOf('prefers-color-scheme: dark'));
-const light = css.slice(0, css.indexOf('prefers-color-scheme: dark'));
+// The chosen-dark block and the system-dark block must say the same thing.
+const vars = (block: string) => [...block.matchAll(/--([\w-]+):\s*([^;]+);/g)].map((m) => `${m[1]}=${m[2].trim()}`).join('|');
+const chosen = css.slice(css.indexOf(":root[data-theme='dark']"), css.indexOf('prefers-color-scheme: dark'));
+if (vars(chosen) !== vars(dark)) failures.push('the data-theme="dark" block and the system dark block differ');
 const value = (block: string, name: string) => block.match(new RegExp(`--${name}:\\s*([^;]+);`))?.[1].trim();
 if (value(light, 'paper')?.toUpperCase() !== PAPER.toUpperCase()) failures.push(`light --paper ${value(light, 'paper')} ≠ tokens.ts ${PAPER}`);
 if (value(dark, 'paper')?.toUpperCase() !== PAPER_DARK.toUpperCase()) failures.push(`dark --paper ${value(dark, 'paper')} ≠ tokens.ts ${PAPER_DARK}`);

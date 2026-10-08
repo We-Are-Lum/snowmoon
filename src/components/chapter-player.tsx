@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
-import { SHARE_BLOCK_EVENT } from './quote-share';
+import { ReportPronunciation } from './report-pronunciation';
+import { RecipeLink } from './recipe-sheet';
 
 /**
  * Play view (brief Milestone 3 and §4e): plays the chapter's house narration,
@@ -21,6 +22,9 @@ export interface PlayerImage {
   idx: number;
   url: string;
   alt: string;
+  /** Its recipe (repo path) and its id in that recipe, for the recipe sheet. */
+  recipe?: string;
+  id?: string;
 }
 interface Props {
   chapter: number;
@@ -32,6 +36,11 @@ interface Props {
   duration: number;
   cues: PlayerCue[];
   images: PlayerImage[];
+  /** The ¶ number readers see, by block index (for reports). */
+  labels?: Record<number, number>;
+  /** Read: the book on the page, and a slim bar while audio plays. Listen: the full listening pane. */
+  view?: 'read' | 'listen';
+  onView?: (v: 'read' | 'listen') => void;
 }
 
 const RATES = [1, 1.25, 1.5, 2, 0.8];
@@ -57,7 +66,7 @@ function cueAt(cues: PlayerCue[], t: number): number {
   return Math.max(0, found);
 }
 
-export function ChapterPlayer({ chapter, chapters, label, recipeUrl, url, duration, cues, images }: Props) {
+export function ChapterPlayer({ chapter, chapters, label, recipeUrl, url, duration, cues, images, labels = {}, view = 'read', onView }: Props) {
   const audio = useRef<HTMLAudioElement | null>(null);
   const [started, setStarted] = useState(false);
   const [playing, setPlaying] = useState(false);
@@ -65,7 +74,6 @@ export function ChapterPlayer({ chapter, chapters, label, recipeUrl, url, durati
   const [rate, setRate] = useState(1);
   const [cue, setCue] = useState(0);
   const [ended, setEnded] = useState(false);
-  const [showImage, setShowImage] = useState(true);
   const lastUserScroll = useRef(0);
   const highlighted = useRef<Element | null>(null);
   const storageKey = `snowmoon:position:c${chapter}`;
@@ -88,12 +96,12 @@ export function ChapterPlayer({ chapter, chapters, label, recipeUrl, url, durati
     if (!el) return;
     el.classList.add('is-reading');
     highlighted.current = el;
-    if (Date.now() - lastUserScroll.current > USER_SCROLL_PAUSE_MS) {
+    if (view === 'read' && Date.now() - lastUserScroll.current > USER_SCROLL_PAUSE_MS) {
       const r = el.getBoundingClientRect();
       const bottomBar = 120;
       if (r.top < 60 || r.bottom > window.innerHeight - bottomBar) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
     }
-  }, [cue, cues, chapter, started]);
+  }, [cue, cues, chapter, started, view]);
 
   useEffect(() => {
     const onScroll = () => {
@@ -191,87 +199,157 @@ export function ChapterPlayer({ chapter, chapters, label, recipeUrl, url, durati
     if (Math.floor(a.currentTime) % 5 === 0) localStorage.setItem(storageKey, String(a.currentTime));
   };
 
-  return (
-    <div className={`chapter-player${started ? ' is-started' : ''}`} role="region" aria-label="Narration">
-      <audio
-        ref={audio}
-        src={url}
-        preload="none"
-        onPlay={() => setPlaying(true)}
-        onPause={() => setPlaying(false)}
-        onTimeUpdate={onTime}
-        onEnded={() => {
-          setPlaying(false);
-          setEnded(true);
-          localStorage.removeItem(storageKey);
-        }}
-      />
-      {started && cues[cue]?.description && (
-        <p className="player-description">
-          <span className="player-description-label">Model-drafted description, not the author&apos;s words</span>
-          {cues[cue].description}
-        </p>
+  const current = cues[cue];
+  const next = cues[cue + 1];
+  const imageIdx = useMemo(() => new Set(images.map((im) => im.idx)), [images]);
+  const blockHtml = (idx?: number) => (idx === undefined ? '' : (document.getElementById(`c${chapter}-b${idx}`)?.innerHTML ?? ''));
+  const [texts, setTexts] = useState<{ current: string; next: string }>({ current: '', next: '' });
+  useEffect(() => {
+    if (view !== 'listen') return;
+    setTexts({ current: current?.description ? '' : blockHtml(current?.idx), next: next?.description ? '' : blockHtml(next?.idx) });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [view, cue, chapter]);
+  const para = (c?: PlayerCue) => (c && labels[c.idx] ? `¶ ${labels[c.idx]}` : '');
+  const totalParas = Object.keys(labels).length;
+
+  const audioEl = (
+    <audio
+      ref={audio}
+      src={url}
+      preload="none"
+      onPlay={() => setPlaying(true)}
+      onPause={() => setPlaying(false)}
+      onTimeUpdate={onTime}
+      onEnded={() => {
+        setPlaying(false);
+        setEnded(true);
+        localStorage.removeItem(storageKey);
+      }}
+    />
+  );
+  const footer = (
+    <p className="player-label">
+      {label} · GPL-3.0 · <RecipeLink file={recipeUrl} item={current ? String(current.idx) : undefined}>Recipe</RecipeLink>
+      {started && current && (
+        <>
+          {' · '}
+          {/* Model-drafted wording (owner to rewrite). */}
+          <ReportPronunciation target={{ chapter, idx: current.idx, label: labels[current.idx] ?? null }} />
+        </>
       )}
-      {started && image && showImage && (
-        <button type="button" className="player-image" onClick={() => setShowImage(false)} aria-label="Hide image">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={image.url} alt={image.alt} width={1024} height={576} />
-          <span className="player-image-label">AI-generated image</span>
-        </button>
-      )}
-      <div className="player-controls">
-        {!started ? (
-          <button type="button" className="player-listen" onClick={start}>
-            ▶ Listen · {Math.round(duration / 60)} min
-          </button>
-        ) : (
-          <>
-            <button type="button" onClick={() => step(-1)} aria-label="Previous paragraph">
-              ⏮
-            </button>
+      {' · '}
+      <a href={url} download={`snowmoon-chapter-${chapter}.m4a`}>
+        Download
+      </a>
+    </p>
+  );
+
+  if (view === 'read')
+    return (
+      <div className={`chapter-player player-mini${started ? ' is-started' : ''}`} role="region" aria-label="Narration">
+        {audioEl}
+        {started && (
+          <div className="player-controls">
             <button type="button" className="player-play" onClick={toggle} aria-label={playing ? 'Pause' : 'Play'}>
               {playing ? '⏸' : '▶'}
             </button>
-            <button type="button" onClick={() => step(1)} aria-label="Next paragraph">
-              ⏭
-            </button>
             <span className="player-time">
-              {fmt(time)} / {fmt(duration)}
+              Listening · {para(current)} · {fmt(time)} / {fmt(duration)}
             </span>
-            <button
-              type="button"
-              className="player-rate"
-              onClick={() => setRate(RATES[(RATES.indexOf(rate) + 1) % RATES.length])}
-              aria-label={`Speed ${rate} times`}
-            >
-              {rate}×
-            </button>
-            <button
-              type="button"
-              onClick={() => window.dispatchEvent(new CustomEvent(SHARE_BLOCK_EVENT, { detail: { idx: cues[cue]?.idx } }))}
-              aria-label="Share this paragraph as a quote card"
-            >
-              ↗
-            </button>
-            {images.length > 0 && !showImage && (
-              <button type="button" onClick={() => setShowImage(true)} aria-label="Show images">
-                🖼
+            {onView && (
+              <button type="button" className="player-to-listen" onClick={() => onView('listen')}>
+                Listen view
               </button>
             )}
-          </>
+          </div>
         )}
-        <a className="player-download" href={url} download={`snowmoon-chapter-${chapter}.m4a`} aria-label="Download this chapter's audio">
-          ⤓
-        </a>
+      </div>
+    );
+
+  return (
+    <section className={`chapter-player listen-pane${started ? ' is-started' : ''}`} aria-label="Listen">
+      {audioEl}
+      {image ? (
+        <figure className="listen-image">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={image.url} alt={image.alt} width={1024} height={576} />
+          <figcaption className="block-caption">
+            {labels[image.idx] ? `¶ ${labels[image.idx]} · ` : ''}AI-generated image, a starting point
+            {image.recipe && (
+              <>
+                {' · '}
+                <RecipeLink file={image.recipe} item={image.id}>
+                  Recipe
+                </RecipeLink>
+              </>
+            )}
+          </figcaption>
+        </figure>
+      ) : (
+        <p className="listen-noimage">No image for this part of the chapter.</p>
+      )}
+      <div className="listen-text">
+        {current?.description ? (
+          <p className="listen-current listen-description">
+            <span className="player-description-label">Model-drafted description, not the author&apos;s words</span>
+            {current.description}
+          </p>
+        ) : (
+          <div className="listen-current" dangerouslySetInnerHTML={{ __html: texts.current }} />
+        )}
+        {next && (next.description ? <p className="listen-next">{next.description}</p> : <div className="listen-next" aria-hidden="true" dangerouslySetInnerHTML={{ __html: texts.next }} />)}
+      </div>
+      <div
+        className="listen-progress"
+        role="slider"
+        tabIndex={0}
+        aria-label="Position in the chapter, by paragraph"
+        aria-valuemin={1}
+        aria-valuemax={cues.length}
+        aria-valuenow={cue + 1}
+        aria-valuetext={`${para(current) || `Block ${cue + 1}`} of ${totalParas} paragraphs`}
+        onKeyDown={(e) => {
+          const go = { ArrowRight: cue + 1, ArrowLeft: cue - 1, ArrowUp: cue + 1, ArrowDown: cue - 1, Home: 0, End: cues.length - 1 }[e.key];
+          if (go === undefined) return;
+          e.preventDefault();
+          seek(go, playing);
+        }}
+        onClick={(e) => {
+          const r = e.currentTarget.getBoundingClientRect();
+          seek(Math.floor(((e.clientX - r.left) / r.width) * cues.length), playing);
+        }}
+      >
+        {cues.map((c, i) => (
+          <span key={c.idx} className={`tick${i < cue ? ' is-past' : ''}${i === cue ? ' is-now' : ''}${imageIdx.has(c.idx) ? ' has-image' : ''}`} />
+        ))}
+      </div>
+      <p className="listen-meta">
+        <span>
+          {para(current) || 'Start'} of {totalParas} · {fmt(time)}
+        </span>
+        <span>{fmt(duration)}</span>
+      </p>
+      <div className="listen-controls">
+        <button type="button" className="player-rate" onClick={() => setRate(RATES[(RATES.indexOf(rate) + 1) % RATES.length])} aria-label={`Speed ${rate} times`}>
+          {rate.toFixed(1)}×
+        </button>
+        <button type="button" onClick={() => step(-1)} aria-label="Previous paragraph">
+          ⏮
+        </button>
+        <button type="button" className="listen-play" onClick={toggle} aria-label={playing ? 'Pause' : 'Play'}>
+          {playing ? '⏸' : '▶'}
+        </button>
+        <button type="button" onClick={() => step(1)} aria-label="Next paragraph">
+          ⏭
+        </button>
+        <span className="listen-voice">house voice</span>
       </div>
       {ended && chapter < chapters && (
-        <Link className="player-next" href={`/chapter/${chapter + 1}`}>
+        <Link className="player-next" href={`/chapter/${chapter + 1}?view=listen`}>
           Next: Chapter {chapter + 1} →
         </Link>
       )}
-      <p className="player-label">
-        {label} · GPL-3.0 · <a href={recipeUrl}>recipe</a>
-      </p>
-    </div>
+      {footer}
+    </section>
   );
 }

@@ -2,6 +2,7 @@
 
 import { useState, type ReactNode } from 'react';
 import { sdk } from '@farcaster/miniapp-sdk';
+import { authFetch } from '~/lib/client-auth';
 import consent from '../../config/consent.json';
 
 /**
@@ -79,17 +80,24 @@ export function PublishFlow({ preview, onPublish, disabled }: { preview: ReactNo
 
   const start = async () => {
     setError(null);
-    if (!(await sdk.isInMiniApp().catch(() => false))) return setError('Open Snowmoon in Farcaster to publish');
-    const res = await sdk.quickAuth.fetch('/api/consent');
+    const res = await authFetch('/api/consent');
+    if (res.status === 401) return setError('Sign in with Farcaster to publish');
     if (!res.ok) return setError('Could not check your agreement');
     const s = (await res.json()) as { wording: Wording; agreed: boolean };
-    setName((await sdk.context.catch(() => null))?.user?.username ?? null);
+    // Not sdk.context.catch(…): the context is a bridge to the host, and a function can't cross it.
+    let ctx: Awaited<typeof sdk.context> | null = null;
+    try {
+      ctx = await sdk.context;
+    } catch {
+      ctx = null;
+    }
+    setName(ctx?.user?.username ?? null);
     setWording(s.wording);
     setStep(s.agreed ? 'preview' : 'consent');
   };
 
   const agree = async () => {
-    const res = await sdk.quickAuth.fetch('/api/consent', {
+    const res = await authFetch('/api/consent', {
       method: 'POST',
       headers: { 'content-type': 'application/json' },
       body: JSON.stringify({ sha256: wording?.sha256 }),

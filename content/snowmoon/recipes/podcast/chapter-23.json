@@ -2,7 +2,7 @@
   "work_id": "snowmoon",
   "chapter": 23,
   "what": "A podcast episode: the spoken opener, a short silence, then the chapter's house narration, encoded to MP3.",
-  "generated_at": "2026-10-08T07:02:21+00:00",
+  "generated_at": "2026-10-08T16:26:28+00:00",
   "inputs": {
     "opener": {
       "recipe": "content/snowmoon/recipes/podcast/opener.json",
@@ -30,22 +30,51 @@
     "see": "config/models.json drafting; principle 3",
     "opener": "the owner's words (config/podcast.json); its pronunciation entries as in opener.json"
   },
+  "loudness": {
+    "target": {
+      "integrated_lufs": -16,
+      "true_peak_db": -1,
+      "lra": 11
+    },
+    "method": "ffmpeg loudnorm, two passes; the second uses the first pass's measurements (linear=true)",
+    "before": {
+      "integrated_lufs": -25.55,
+      "true_peak_dbtp": -2.49,
+      "lra": 3.5
+    },
+    "first_pass": {
+      "input_i": "-25.55",
+      "input_tp": "-2.49",
+      "input_lra": "3.50",
+      "input_thresh": "-35.91",
+      "output_i": "-16.27",
+      "output_tp": "-1.00",
+      "output_lra": "3.50",
+      "output_thresh": "-26.65",
+      "normalization_type": "dynamic",
+      "target_offset": "0.27"
+    },
+    "after_mp3": {
+      "integrated_lufs": -16.5,
+      "true_peak_dbtp": -1.2
+    }
+  },
   "encoder": {
     "tool": "ffmpeg version 9.0.1",
     "codec": "libmp3lame",
     "bitrate": "128k",
     "channels": 1,
     "sample_rate": 44100,
-    "command": "ffmpeg -y -loglevel error -i /Users/nathan/snowmoon/narration-out/podcast/chapter-23.wav -ac 1 -ar 44100 -c:a libmp3lame -b:a 128k -id3v2_version 3 -write_xing 1 -metadata 'title=Chapter 23' -metadata 'album=Snowmoon Party: an independent reading of Snowmoon' -metadata 'artist=Snowmoon Party' -metadata track=23/32 -metadata genre=Audiobook -metadata 'copyright=GPL-3.0. Text: Snowmoon by Vitalik Buterin. Synthetic voice: Kokoro-82M, af_heart.' -metadata 'comment=Independent reading, not affiliated with the author. https://snowmoon.party' chapter-N.mp3"
+    "command": "ffmpeg -y -loglevel error -i /Users/nathan/snowmoon/narration-out/podcast/chapter-23.wav -af loudnorm=I=-16:TP=-1:LRA=11:measured_I=-25.55:measured_TP=-2.49:measured_LRA=3.50:measured_thresh=-35.91:offset=0.27:linear=true -ac 1 -ar 44100 -c:a libmp3lame -b:a 128k -id3v2_version 3 -write_xing 1 -metadata 'title=Chapter 23' -metadata 'album=Snowmoon Party: an independent reading of Snowmoon' -metadata 'artist=Snowmoon Party' -metadata track=23/32 -metadata genre=Audiobook -metadata 'copyright=GPL-3.0. Text: Snowmoon by Vitalik Buterin. Synthetic voice: Kokoro-82M, af_heart.' -metadata 'comment=Independent reading, not affiliated with the author. https://snowmoon.party' chapter-N.mp3"
   },
   "file": {
     "name": "chapter-23.mp3",
-    "sha256": "6e9d01ff40cd877db85dbd749d8db09cfa138553d0753e4d456f3616441d4c52",
+    "sha256": "a2eaf3481d543411a249aafcbd1e37514064cf7dbfaa0bbc5487c691c6e792c9",
     "bytes": 13338711,
     "duration_ms": 833570,
     "channels": 1,
     "sample_rate": 44100,
-    "url": "https://media.snowmoon.party/podcast/chapter-23-6e9d01ff40cd.mp3"
+    "url": "https://media.snowmoon.party/podcast/chapter-23-a2eaf3481d54.mp3"
   },
   "published_by": {
     "fid": 6786,
@@ -53,6 +82,6 @@
     "action": "published via script",
     "script": "scripts/publish-podcast.ts",
     "date": "2026-10-08",
-    "evidence": "docs/prompts/009-podcast.md"
+    "evidence": "docs/prompts/010-pronunciation-reports.md"
   }
 }

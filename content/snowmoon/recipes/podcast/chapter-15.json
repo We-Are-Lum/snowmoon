@@ -2,7 +2,7 @@
   "work_id": "snowmoon",
   "chapter": 15,
   "what": "A podcast episode: the spoken opener, a short silence, then the chapter's house narration, encoded to MP3.",
-  "generated_at": "2026-10-08T07:01:49+00:00",
+  "generated_at": "2026-10-08T16:42:33+00:00",
   "inputs": {
     "opener": {
       "recipe": "content/snowmoon/recipes/podcast/opener.json",
@@ -12,7 +12,7 @@
     "chapter": {
       "recipe": "content/snowmoon/recipes/narration/chapter-15.json",
       "file": "chapter-15.wav",
-      "sha256": "3e2fa01547bd755e61ca61d95c19d5675664c5eebcc204fffa8558a700a3b26b",
+      "sha256": "2f3fcbc33f88fd8c4adb5077573eb5cd6e1bbce5b8644c25d81a7b2ad924decc",
       "model": "Kokoro-82M",
       "voice": "af_heart"
     }
@@ -30,22 +30,51 @@
     "see": "config/models.json drafting; principle 3",
     "opener": "the owner's words (config/podcast.json); its pronunciation entries as in opener.json"
   },
+  "loudness": {
+    "target": {
+      "integrated_lufs": -16,
+      "true_peak_db": -1,
+      "lra": 11
+    },
+    "method": "ffmpeg loudnorm, two passes; the second uses the first pass's measurements (linear=true)",
+    "before": {
+      "integrated_lufs": -25.55,
+      "true_peak_dbtp": -2.1,
+      "lra": 3.5
+    },
+    "first_pass": {
+      "input_i": "-25.55",
+      "input_tp": "-2.10",
+      "input_lra": "3.50",
+      "input_thresh": "-35.93",
+      "output_i": "-16.24",
+      "output_tp": "-1.00",
+      "output_lra": "3.50",
+      "output_thresh": "-26.64",
+      "normalization_type": "dynamic",
+      "target_offset": "0.24"
+    },
+    "after_mp3": {
+      "integrated_lufs": -16.5,
+      "true_peak_dbtp": -0.9
+    }
+  },
   "encoder": {
     "tool": "ffmpeg version 9.0.1",
     "codec": "libmp3lame",
     "bitrate": "128k",
     "channels": 1,
     "sample_rate": 44100,
-    "command": "ffmpeg -y -loglevel error -i /Users/nathan/snowmoon/narration-out/podcast/chapter-15.wav -ac 1 -ar 44100 -c:a libmp3lame -b:a 128k -id3v2_version 3 -write_xing 1 -metadata 'title=Chapter 15' -metadata 'album=Snowmoon Party: an independent reading of Snowmoon' -metadata 'artist=Snowmoon Party' -metadata track=15/32 -metadata genre=Audiobook -metadata 'copyright=GPL-3.0. Text: Snowmoon by Vitalik Buterin. Synthetic voice: Kokoro-82M, af_heart.' -metadata 'comment=Independent reading, not affiliated with the author. https://snowmoon.party' chapter-N.mp3"
+    "command": "ffmpeg -y -loglevel error -i /Users/nathan/snowmoon/narration-out/podcast/chapter-15.wav -af loudnorm=I=-16:TP=-1:LRA=11:measured_I=-25.55:measured_TP=-2.10:measured_LRA=3.50:measured_thresh=-35.93:offset=0.24:linear=true -ac 1 -ar 44100 -c:a libmp3lame -b:a 128k -id3v2_version 3 -write_xing 1 -metadata 'title=Chapter 15' -metadata 'album=Snowmoon Party: an independent reading of Snowmoon' -metadata 'artist=Snowmoon Party' -metadata track=15/32 -metadata genre=Audiobook -metadata 'copyright=GPL-3.0. Text: Snowmoon by Vitalik Buterin. Synthetic voice: Kokoro-82M, af_heart.' -metadata 'comment=Independent reading, not affiliated with the author. https://snowmoon.party' chapter-N.mp3"
   },
   "file": {
     "name": "chapter-15.mp3",
-    "sha256": "4974c777cba1fcf2bca50a03e3feb420111e9ec1b7f27525ce1d7c0cdf440558",
+    "sha256": "30945747d78af22380d5e5a61efe92530762cb362a9af38f3cf3c1f68d801ced",
     "bytes": 18391002,
     "duration_ms": 1149345,
     "channels": 1,
     "sample_rate": 44100,
-    "url": "https://media.snowmoon.party/podcast/chapter-15-4974c777cba1.mp3"
+    "url": "https://media.snowmoon.party/podcast/chapter-15-30945747d78a.mp3"
   },
   "published_by": {
     "fid": 6786,
@@ -53,6 +82,6 @@
     "action": "published via script",
     "script": "scripts/publish-podcast.ts",
     "date": "2026-10-08",
-    "evidence": "docs/prompts/009-podcast.md"
+    "evidence": "docs/prompts/010-pronunciation-reports.md"
   }
 }

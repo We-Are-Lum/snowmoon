@@ -1,0 +1,43 @@
+{
+  "work_id": "snowmoon",
+  "what": "The podcast cover, 3000 × 3000, RGB, drawn in code (no image model).",
+  "made_by": {
+    "script": "scripts/make_channel_art.py",
+    "function": "podcast_cover_svg",
+    "supplied_by": "FID 6786, 2026-10-08 (the script and the PNG); in the repo only the script's paths changed",
+    "renderer": "Playwright Chromium screenshot of the SVG, device scale 1",
+    "fonts": [
+      {
+        "file": "node_modules/@fontsource/crimson-pro/files/crimson-pro-latin-500-normal.woff2",
+        "sha256": "7d264f53a589d61475041f980a2f35a88cde1ec7012a8f661419e99769492684"
+      },
+      {
+        "file": "node_modules/@fontsource/dm-mono/files/dm-mono-latin-400-normal.woff2",
+        "sha256": "e1896b13b2b1bb112fac2f9571bd6c40e118746e77a4511edbf43fbb41bf3e1e"
+      }
+    ],
+    "font_packages": {
+      "@fontsource/crimson-pro": "5.3.0",
+      "@fontsource/dm-mono": "5.3.0"
+    },
+    "seed": 3724
+  },
+  "checked": "Re-rendered with the committed script on 2026-10-08: pixel-identical to this file (no differing pixel); the PNG bytes differ only in encoding.",
+  "assist": null,
+  "file": {
+    "path": "content/snowmoon/podcast/cover.png",
+    "sha256": "40345fe4fb427406d7e96c8894e54b367930b7f1ff9e1b24cf6e21cce070c7ad",
+    "width": 3000,
+    "height": 3000,
+    "mode": "RGB",
+    "url": "https://media.snowmoon.party/podcast/cover-40345fe4fb42.png"
+  },
+  "published_by": {
+    "fid": 6786,
+    "role": "maintainer",
+    "action": "published via script",
+    "script": "scripts/publish-podcast-cover.ts",
+    "date": "2026-10-08",
+    "evidence": "docs/prompts/010-pronunciation-reports.md"
+  }
+}

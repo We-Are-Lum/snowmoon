@@ -56,8 +56,28 @@ export function readTo(): number {
   const n = get<number>(READ_TO, 1);
   return Number.isInteger(n) && n >= 1 && n <= 32 ? n : 1;
 }
+const OPENED = 'snowmoon.opened';
+const LAST = 'snowmoon.last-chapter';
+
 export function recordChapterOpened(n: number) {
   if (n > readTo()) set(READ_TO, n);
+  const opened = new Set(get<number[]>(OPENED, []));
+  opened.add(n);
+  set(OPENED, [...opened].sort((a, b) => a - b));
+  set(LAST, n);
+}
+
+/** Chapters opened on this device (recorded from 2026-10-08), plus the furthest one opened before that. */
+export function openedChapters(): Set<number> {
+  const s = new Set(get<number[]>(OPENED, []).filter((n) => Number.isInteger(n)));
+  s.add(readTo());
+  return s;
+}
+
+/** The chapter opened last on this device, for "Read · Ch n"; 1 if none. */
+export function lastChapter(): number {
+  const n = get<number>(LAST, 0);
+  return Number.isInteger(n) && n >= 1 && n <= 32 ? n : readTo();
 }
 
 export function threads(): Thread[] {

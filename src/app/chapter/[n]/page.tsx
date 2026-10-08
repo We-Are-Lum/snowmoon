@@ -3,15 +3,15 @@ import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { Fragment, type CSSProperties } from 'react';
 import { blockId, chapterDateline, chapterNumbers, loadChapter } from '~/lib/book';
-import { ChapterSheet } from '~/components/chapter-sheet';
 import { blockFacts, labelRange, type BlockFacts } from '~/lib/reading';
 import { figureMinWidth, renderMarkdown, renderScreen, screenBasePx } from '~/lib/render';
 import { DEFAULT_TEMPLATES } from '~/templates';
 import { REPO_URL, WORK } from '~/lib/config';
 import { loadNarration } from '~/lib/narration';
 import { loadIllustrations } from '~/lib/illustrations';
-import { ChapterPlayer } from '~/components/chapter-player';
 import { QuoteShare } from '~/components/quote-share';
+import { ChapterView } from '~/components/chapter-view';
+import { RecipeLink } from '~/components/recipe-sheet';
 import { ReadingRecord } from '~/components/reading-record';
 import { adaptationsCiting } from '~/lib/adaptations';
 import type { Block } from '~/lib/book';
@@ -67,8 +67,19 @@ export default async function ChapterPage({ params }: Props) {
   const PLAYABLE: Record<string, string> = { 'c4-b5': '/minpentai?mode=free' };
 
   return (
+    <ChapterView
+      chapter={n}
+      dateline={chapterDateline(chapter)}
+      chapters={chapterNumbers().map((k) => ({ n: k, dateline: chapterDateline(loadChapter(k)!) }))}
+      narration={
+        narration
+          ? { label: narration.label, recipe: narration.recipe, url: narration.url, duration: narration.duration, cues: narration.cues }
+          : null
+      }
+      images={images.map(({ id, idx, url, alt, recipe }) => ({ id, idx, url, alt, recipe }))}
+      labels={Object.fromEntries(chapter.blocks.map((b, i) => [b.idx, facts[i].label]).filter(([, l]) => l !== null))}
+    >
     <article className="page chapter" data-chapter={n} data-setting={facts.find((f) => f.setting)?.setting ?? undefined}>
-      <ChapterSheet chapter={n} chapters={chapterNumbers().map((k) => ({ n: k, dateline: chapterDateline(loadChapter(k)!) }))} />
       {chapter.blocks.map((b, i) => {
         const id = blockId(n, b.idx);
         const f = facts[i];
@@ -141,11 +152,15 @@ export default async function ChapterPage({ params }: Props) {
                 <img src={image.url} alt={image.alt} width={image.width} height={image.height} loading="lazy" />
                 <figcaption className="block-caption">
                   ¶ {f.label} · AI-generated image, a starting point ·{' '}
-                  <a href={`${REPO_URL}/blob/main/${image.recipe}`}>recipe</a>
+                  <RecipeLink file={image.recipe} item={image.id}>
+                    Recipe
+                  </RecipeLink>
                   {image.lettering && (
                     <>
                       {' · '}
-                      <a href={`${REPO_URL}/blob/main/${image.lettering}`}>lettering</a>
+                      <RecipeLink file={image.lettering} item={image.id}>
+                        Lettering
+                      </RecipeLink>
                     </>
                   )}
                 </figcaption>
@@ -169,18 +184,7 @@ export default async function ChapterPage({ params }: Props) {
         Text from the source edition, fetched {chapter.fetched_at} · GPL v3
       </a>
       <QuoteShare chapter={n} images={images.map(({ id, idx, url, alt }) => ({ id, idx, url, alt }))} />
-      {narration && (
-        <ChapterPlayer
-          chapter={n}
-          chapters={WORK.chapters}
-          label={narration.label}
-          recipeUrl={`${REPO_URL}/blob/main/${narration.recipe}`}
-          url={narration.url}
-          duration={narration.duration}
-          cues={narration.cues}
-          images={images.map(({ idx, url, alt }) => ({ idx, url, alt }))}
-        />
-      )}
     </article>
+    </ChapterView>
   );
 }

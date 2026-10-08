@@ -11,7 +11,7 @@ import { createClient } from '@farcaster/quick-auth';
  */
 const quickAuth = createClient();
 
-function domain(request: Request): string {
+export function domain(request: Request): string {
   if (process.env.NEXT_PUBLIC_URL) return new URL(process.env.NEXT_PUBLIC_URL).hostname;
   return (request.headers.get('host') ?? 'localhost').split(':')[0];
 }

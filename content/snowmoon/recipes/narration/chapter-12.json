@@ -4,7 +4,7 @@
   "source_sha256": "c4b9566694b702a38d7c345d63cb0109086dfde52f5f0d64b6502670c55f082e",
   "generated_at": "2026-10-03T17:23:16+00:00",
   "generation_seconds": 214.5,
-  "total_duration_ms": 1584235,
+  "total_duration_ms": 1584560,
   "model": {
     "name": "Kokoro-82M",
     "repo": "hexgrad/Kokoro-82M",
@@ -35,7 +35,7 @@
       "figure": 600
     },
     "break_ms": 1800,
-    "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
+    "pronunciation_sha256": "81a5c2fe59fda14824d8465b630ca3bf07b205c08518250999699b51eaff317d",
     "read_aloud_sha256": "bdaecc3f77e228329acc0d49f48ee32859eb5999c5a36f9d300fd3e6e5953451",
     "description_tone": {
       "notes_hz": [
@@ -59,9 +59,9 @@
   },
   "stitched": {
     "wav": "chapter-12.wav",
-    "wav_sha256": "bf12c4a32e92c9922cc3da11860c8a1ee495743dc6719dd1ed89b8fd8e916a19",
+    "wav_sha256": "b225da1797692d8e51996b620f868670a7fdc248cc9ce54fcd7d5b7ba8a32299",
     "m4a": "chapter-12.m4a",
-    "m4a_sha256": "2a1cb297fc1ce787019784aeb408347e7849978740b91ee9974ac7d2ac72a57c",
+    "m4a_sha256": "2cbd8d83f5db3014a2fa816176315a780d1a3bce7598a81bb0375772c6a03f17",
     "note": "start_ms is the block's offset in the stitched file, gaps included; a description starts with its tone (tone_ms)"
   },
   "blocks": [
@@ -1623,11 +1623,13 @@
       "kind": "paragraph",
       "block_sha256": "60c420a3bf1c0c609ad2d248a5c8a7f94857faf43c5883f69de41a2138d2db88",
       "file": "blocks/c12-b141.wav",
-      "sha256": "b9ec04b16efdc84fcea5ac7b8ee4be1c32eb6464b09bcbcb7e6375794ca154e5",
-      "duration_ms": 22000,
+      "sha256": "744c24fb783be02ea9df359bc5cc0e1f4ca3e02fee3c0f62de88f25d85fb5987",
+      "duration_ms": 22125,
       "start_ms": 1032775,
-      "text": "[Zei](/ˈzA/) closed his eyes, and breathed in and out, trying his best to calm himself. This match was not decisive, he knew: if he lost, he could still make it up in the others. But in another way, that fact made him more scared: armed with the excuse that it's okay to lose, will his mind have the motivation needed to keep his full attention and mindpower on the game and win?",
-      "generation_s": 3.38
+      "text": "[Zei](/ˈzA/) closed his eyes, and [breathed](/bɹˈiðd/) in and out, trying his best to calm himself. This match was not decisive, he knew: if he lost, he could still make it up in the others. But in another way, that fact made him more scared: armed with the excuse that it's okay to lose, will his mind have the motivation needed to keep his full attention and mindpower on the game and win?",
+      "generation_s": 3.38,
+      "respoken_at": "2026-10-08T16:34:21+00:00",
+      "respoken_because": "pronunciation: breathed (owner, 2026-10-08)"
     },
     {
       "idx": 142,
@@ -1636,7 +1638,7 @@
       "file": "blocks/c12-b142.wav",
       "sha256": "2c1399c8297a708f316cc86313681477c76efbc18f0ff30e3e61d7911d903c48",
       "duration_ms": 1875,
-      "start_ms": 1055225,
+      "start_ms": 1055350,
       "text": "\"[LE](/ˈlɛ/) [MU](/ˈmu/) [GEI](/ˈɡA/) [FA](/ˈfɑ/)\"",
       "generation_s": 0.29
     },
@@ -1647,7 +1649,7 @@
       "file": "blocks/c12-b143.wav",
       "sha256": "3ea31d64efc58c63c28dff1ccada200539198bf7e022ec01282e737449aef499",
       "duration_ms": 2275,
-      "start_ms": 1057550,
+      "start_ms": 1057675,
       "text": "[Zei](/ˈzA/) opened his eyes again.",
       "generation_s": 0.33
     },
@@ -1658,7 +1660,7 @@
       "file": "blocks/c12-b144.wav",
       "sha256": "26026930472d6df363c2efae3cd4bf340f62a2bd90aad4aca455cedada7707fc",
       "duration_ms": 1850,
-      "start_ms": 1060275,
+      "start_ms": 1060400,
       "text": "\"[PA](/ˈpɑ/) [GU](/ˈɡu/) [GEI](/ˈɡA/) [FA](/ˈfɑ/)\"",
       "generation_s": 0.26
     },
@@ -1669,7 +1671,7 @@
       "file": "blocks/c12-b145.wav",
       "sha256": "b655db4fdf54d669155c6984a0d068a99bb3bfaffd7939b76f7749b04464d80d",
       "duration_ms": 2000,
-      "start_ms": 1062575,
+      "start_ms": 1062700,
       "text": "[Zei](/ˈzA/) patiently waited.",
       "generation_s": 0.27
     },
@@ -1680,7 +1682,7 @@
       "file": "blocks/c12-b146.wav",
       "sha256": "908bd6deaa5f311b4595c8799957a4dc587291237530b29c51430fe043412514",
       "duration_ms": 12225,
-      "start_ms": 1065025,
+      "start_ms": 1065150,
       "text": "\"Welcome to the fourth qualifying match of the north stadium for today. Everyone, meet our players for this round: [Zei](/ˈzA/) [Leimin](/ˈlAmɪn/) from [Pafogai](/ˈpɑfOɡI/) [Du](/ˈdu/), and [Bo](/ˈbO/) [Zume](/ˈzumɛ/), from right here in [Sadzu](/ˈsɑdzu/) [Du](/ˈdu/).\"",
       "generation_s": 1.61
     },
@@ -1691,7 +1693,7 @@
       "file": "blocks/c12-b147.wav",
       "sha256": "94cb15dfb5fdf8d5824e44105bd61ce2ced0952c87f23a3188b0f4a160d474d5",
       "duration_ms": 11750,
-      "start_ms": 1077700,
+      "start_ms": 1077825,
       "text": "\"I am also pleased to announce — perhaps one time too many for the audience, but for the first time, for our contestants — today's rule change. Today, [Minpentai](/ˈmɪnpɛntI/) will be played on a hex grid.\"",
       "generation_s": 1.57
     },
@@ -1702,7 +1704,7 @@
       "file": "blocks/c12-b148.wav",
       "sha256": "8f55ac9f259c5498600be6300bf2dae9fc13bd87577231bdc8e32ea3b501d565",
       "duration_ms": 2350,
-      "start_ms": 1089900,
+      "start_ms": 1090025,
       "text": "[Zei](/ˈzA/) opened his mouth in shock.",
       "generation_s": 0.33
     },
@@ -1713,7 +1715,7 @@
       "file": "blocks/c12-b149.wav",
       "sha256": "fab81aec1d81cf264ae54a6f8b3549c0d556fb523733dc934df90d2115b925c0",
       "duration_ms": 11275,
-      "start_ms": 1092700,
+      "start_ms": 1092825,
       "text": "\"You will have twenty minutes to figure out your structures, any gliders, spaceships and walls, to the best of your ability. And then the serene battle over a field of snowflakes will begin.\"",
       "generation_s": 1.51
     },
@@ -1724,7 +1726,7 @@
       "file": "blocks/c12-b150.wav",
       "sha256": "17c74564e7f8cd27cca5f42e742387fa22859c558b9c69b13a52284c9a673af9",
       "duration_ms": 4950,
-      "start_ms": 1104425,
+      "start_ms": 1104550,
       "text": "[Zei](/ˈzA/)'s display turned on, and he could see the hexagonal grid in front of him.",
       "generation_s": 0.72
     },
@@ -1735,7 +1737,7 @@
       "file": "blocks/c12-b151.wav",
       "sha256": "05a07389e2a7116c160adb9c01667b5b97c65a282562873f61a4939e8976573c",
       "duration_ms": 7125,
-      "start_ms": 1109825,
+      "start_ms": 1109950,
       "text": "\"[LE](/ˈlɛ/) [FI](/ˈfi/) [SHI](/ˈʃi/) [GEI](/ˈɡA/) [TAU](/ˈtW/) [FA](/ˈfɑ/)\", the automated loud voice shouted. The battle begins in two thousand ticks.",
       "generation_s": 0.98
     },
@@ -1746,7 +1748,7 @@
       "file": "blocks/c12-b152.wav",
       "sha256": "3f8f362039ef328686641bae2aad967702ce073c7aed51f9cba293263e9ff159",
       "duration_ms": 18800,
-      "start_ms": 1117400,
+      "start_ms": 1117525,
       "text": "[Zei](/ˈzA/) began by quickly drawing random junk in his sandbox, seeing what stayed stable and what turned into a glider. Within one minute, he identified a few gliders and a few static structures that could be used for walls. To his surprise, the gliders that moved the fastest moved ... directly east.",
       "generation_s": 2.43
     },
@@ -1757,7 +1759,7 @@
       "file": "blocks/c12-b153.wav",
       "sha256": "f3f4cabfa2ee25ae034637886aa739212438839cd93181a04697e61dac09c793",
       "duration_ms": 6550,
-      "start_ms": 1136650,
+      "start_ms": 1136775,
       "text": "His next move was to deliberately draw different kinds of walls, fly gliders at them, and see what sticks.",
       "generation_s": 0.89
     },
@@ -1768,7 +1770,7 @@
       "file": "blocks/c12-b154.wav",
       "sha256": "0a1532864b088c93be93c6018d79184e9399b98b9a8752a26da4f237a8301dc3",
       "duration_ms": 11525,
-      "start_ms": 1143650,
+      "start_ms": 1143775,
       "text": "He watched the gliders carefully, to try to quickly get an intuition for what kinds of shapes can move while preserving their shape. He did several rounds of defining both the gliders and the walls.",
       "generation_s": 1.55
     },
@@ -1779,7 +1781,7 @@
       "file": "blocks/c12-b155.wav",
       "sha256": "5cda36447693ba85868df3f1276b1264cb3bafc652df37cbda2c9da21a60ba16",
       "duration_ms": 5150,
-      "start_ms": 1155625,
+      "start_ms": 1155750,
       "text": "\"[PA](/ˈpɑ/) [MU](/ˈmu/) [GU](/ˈɡu/) [GU](/ˈɡu/) [GEI](/ˈɡA/) [TAU](/ˈtW/) [FA](/ˈfɑ/).\" The battle begins in fifteen hundred ticks.",
       "generation_s": 0.71
     },
@@ -1790,7 +1792,7 @@
       "file": "blocks/c12-b156.wav",
       "sha256": "0d494d3a265914b87d8a4c32d9ce26ee7d8377c52eaefed7da2d2f1d42819bf9",
       "duration_ms": 18750,
-      "start_ms": 1161225,
+      "start_ms": 1161350,
       "text": "[Zei](/ˈzA/) began experimenting with shapes that were similar to his symbol, seeing if any of them could function as a glider. He needed to come up with something — otherwise he would be able to progress only very slowly, by repeatedly building a new symbol beside his existing symbol during each intervention turn.",
       "generation_s": 2.46
     },
@@ -1801,7 +1803,7 @@
       "file": "blocks/c12-b157.wav",
       "sha256": "afd536155fb2961e4dfba3ed44a1ec14fcf2e1d3fdeb770cb3705a03d9cf26f4",
       "duration_ms": 15625,
-      "start_ms": 1180425,
+      "start_ms": 1180550,
       "text": "He realized that to make actual headway, he would need to interact with the rock formations. He made a couple of guesses about what shape the rock formations in the hexgrid version of [Minpentai](/ˈmɪnpɛntI/) might look like, and examined the behavior of gliders as they crashed into them.",
       "generation_s": 2.47
     },
@@ -1812,7 +1814,7 @@
       "file": "blocks/c12-b158.wav",
       "sha256": "90e9eb9561df0a330f1967651f27632bfcecd6ffdb9e81d3b03cb38a3d8c1f07",
       "duration_ms": 4550,
-      "start_ms": 1196500,
+      "start_ms": 1196625,
       "text": "\"[FI](/ˈfi/) [SHI](/ˈʃi/) [GEI](/ˈɡA/) [TAU](/ˈtW/) [FA](/ˈfɑ/).\" The battle begins in a thousand ticks.",
       "generation_s": 0.74
     },
@@ -1823,7 +1825,7 @@
       "file": "blocks/c12-b159.wav",
       "sha256": "56bd6e7410b04f864dc2e409cd7b77db2fb31608a3e957e49e6e7271694a99e0",
       "duration_ms": 10225,
-      "start_ms": 1201500,
+      "start_ms": 1201625,
       "text": "[Zei](/ˈzA/) began to sweat. So far, no luck. No combination of a glider, a plausible rock shape and an offset that he tried led to a copy of his symbol.",
       "generation_s": 1.7
     },
@@ -1834,7 +1836,7 @@
       "file": "blocks/c12-b160.wav",
       "sha256": "1e0aa00033388286eb29d6261cbc660d81e6d0542a0845f8f67a771454ba975e",
       "duration_ms": 3100,
-      "start_ms": 1212175,
+      "start_ms": 1212300,
       "text": "He thought more about the exact shape of his symbol.",
       "generation_s": 0.48
     },
@@ -1845,7 +1847,7 @@
       "file": "blocks/c12-b161.wav",
       "sha256": "31754608b9663ee42a666e861ab1f3d8222c76ae46e791e7866f6f482fc61989",
       "duration_ms": 8850,
-      "start_ms": 1215725,
+      "start_ms": 1215850,
       "text": "After another two minutes of fruitless exploration, [Zei](/ˈzA/)'s mind flashed back to the textbook he had been reading less than two longhours before.",
       "generation_s": 1.37
     },
@@ -1856,7 +1858,7 @@
       "file": "blocks/c12-b162.wav",
       "sha256": "6ce686673c0e1c925dd25b6b9527284144b9bb6c89ddb71a58691ac80b557421",
       "duration_ms": 8350,
-      "start_ms": 1225025,
+      "start_ms": 1225150,
       "text": "The core building block maps inputs to outputs one-to-one. And not only that, it can be efficiently run both forwards and backwards..",
       "generation_s": 1.29
     },
@@ -1867,7 +1869,7 @@
       "file": "blocks/c12-b163.wav",
       "sha256": "7b7dbf542f580331c96de2c9905dfd8e31beed3cd5b86c7fe6b4ad87dd895d2a",
       "duration_ms": 12500,
-      "start_ms": 1233975,
+      "start_ms": 1234100,
       "text": "But unlike the hash function, here there was no truncate-and-xor wrapper at the end. And so if he knew his desired end state ... he just had to put that end state into the sandbox, and play it backwards.",
       "generation_s": 1.79
     },
@@ -1878,7 +1880,7 @@
       "file": "blocks/c12-b164.wav",
       "sha256": "7b2cbe39333391d049ce3fa6a58154f547ff27bc8de07858fb3473a5af74fd49",
       "duration_ms": 2175,
-      "start_ms": 1246925,
+      "start_ms": 1247050,
       "text": "But ... how do you play it backwards?",
       "generation_s": 0.33
     },
@@ -1889,7 +1891,7 @@
       "file": "blocks/c12-b165.wav",
       "sha256": "94368bc02ad9fb30c02c60cb37fb85b971e5eea72bc3a8d606ab4c724dc9d0bc",
       "duration_ms": 8450,
-      "start_ms": 1249550,
+      "start_ms": 1249675,
       "text": "In the internal permutation of a hash function, you walk backwards from the last layer to the first layer, and invert each step as you go.",
       "generation_s": 1.18
     },
@@ -1900,7 +1902,7 @@
       "file": "blocks/c12-b166.wav",
       "sha256": "2ce3ecc0d3e0937e704c7c553a72acd18705d2dd0e44bebae041e1599004b712",
       "duration_ms": 6550,
-      "start_ms": 1258450,
+      "start_ms": 1258575,
       "text": "Here ... what was the inverse of the hexgrid rules that [Zei](/ˈzA/) was interacting with for the first time in his life?",
       "generation_s": 0.95
     },
@@ -1911,7 +1913,7 @@
       "file": "blocks/c12-b167.wav",
       "sha256": "253bb0eff3acf27210cdfdc7352f44c7a94da52d81a35e6fadb9593d5bd47403",
       "duration_ms": 10775,
-      "start_ms": 1265450,
+      "start_ms": 1265575,
       "text": "[Zei](/ˈzA/) took the gliders he saw, and tried the most basic transformations: flipping them, rotating them 60 degrees, launching them one timestep later. None worked.",
       "generation_s": 1.65
     },
@@ -1922,7 +1924,7 @@
       "file": "blocks/c12-b168.wav",
       "sha256": "898c8fa93eab09e0fb9c4fbfe8e42e18bb34507e338d7be90fb9c16be7001992",
       "duration_ms": 4950,
-      "start_ms": 1276675,
+      "start_ms": 1276800,
       "text": "\"[MU](/ˈmu/) [FI](/ˈfi/) [LE](/ˈlɛ/) [GEI](/ˈɡA/) [TAU](/ˈtW/) [FA](/ˈfɑ/).\" The battle begins in five hundred ticks.",
       "generation_s": 0.72
     },
@@ -1933,7 +1935,7 @@
       "file": "blocks/c12-b169.wav",
       "sha256": "36ca464f2ffcdd719bd7c1996b916b6c1f756c13ea1c3628c51c95c678e144e7",
       "duration_ms": 16075,
-      "start_ms": 1282075,
+      "start_ms": 1282200,
       "text": "[Zei](/ˈzA/) stepped through each step more slowly. And then he saw it. During each step, the game board split up into triangles, and the hexagons rotated inside each triangle — clockwise if it had one hex filled, counterclockwise if it had two hexes filled.",
       "generation_s": 2.16
     },
@@ -1944,7 +1946,7 @@
       "file": "blocks/c12-b170.wav",
       "sha256": "016521847aa5ba58b1f84f586624ddd9fdc5df6899bced07842160e13b4d22dd",
       "duration_ms": 44350,
-      "start_ms": 1298600,
+      "start_ms": 1298725,
       "text": "And so in order to time reverse, he just had to ... let each time step happen twice. The opposite of a 120-degree rotation is, after all, two 120-degree rotations. But there was a problem: after each time step, the split into triangles shifted. So to play a time step backward, he had to... play one step forward, then shift time back one step so that he could play the next step forward under the same tiling, then play a second step forward to bring the total rotation under that tiling to 240 degrees within each triangle, then shift time back two steps so that the game would shift to the previous tiling. Invert each step, and play the steps in reverse order, just like inverting a permutation in a hash.",
       "generation_s": 7.31
     },
@@ -1955,7 +1957,7 @@
       "file": "blocks/c12-b171.wav",
       "sha256": "5127426abcb0009abbe7dd2e4af062630595058d3f01649c5441bfbd905d0ed3",
       "duration_ms": 15250,
-      "start_ms": 1343400,
+      "start_ms": 1343525,
       "text": "He confirmed: there was a button to play one step forward, and two buttons to shift time — either forward or backward. So that's what he would have to do. A, b, a, b, b. Like some kind of video game cheat code. Which, in some sense, here it literally was.",
       "generation_s": 2.74
     },
@@ -1966,7 +1968,7 @@
       "file": "blocks/c12-b172.wav",
       "sha256": "dc652c088377a9cc65755c01b8ff5554060db05ec6aa6b343ff24e9c9c49e329",
       "duration_ms": 1700,
-      "start_ms": 1359100,
+      "start_ms": 1359225,
       "text": "Fine, he thought.",
       "generation_s": 0.31
     },
@@ -1977,7 +1979,7 @@
       "file": "blocks/c12-b173.wav",
       "sha256": "4b4e58bc0621b44813e937009cb63826081a0de721fd1f0e6c9d2238a1ee0334",
       "duration_ms": 9325,
-      "start_ms": 1361250,
+      "start_ms": 1361375,
       "text": "He put a glider into the sandbox, and tried it. It was an arduous process, and his fingers quickly tired. But it worked. The glider moved backwards.",
       "generation_s": 1.32
     },
@@ -1988,7 +1990,7 @@
       "file": "blocks/c12-b174.wav",
       "sha256": "9173f4cb79e0468bccc62c14829af7283178c89a8085ccd18b7fb496c822eb45",
       "duration_ms": 1975,
-      "start_ms": 1371025,
+      "start_ms": 1371150,
       "text": "Basic test passed.",
       "generation_s": 0.31
     },
@@ -1999,7 +2001,7 @@
       "file": "blocks/c12-b175.wav",
       "sha256": "a0bb2c1b98e2f406fc70c9abf77e12b33b65c70a219a9a4aa58f261d0b2620b4",
       "duration_ms": 8675,
-      "start_ms": 1373450,
+      "start_ms": 1373575,
       "text": "[Zei](/ˈzA/) tried the real test: using the same technique, starting with a symbol forming beside a rock formation and a glider flying out.",
       "generation_s": 1.24
     },
@@ -2010,7 +2012,7 @@
       "file": "blocks/c12-b176.wav",
       "sha256": "bb0684a3ce1c0d6c322e414284e159e182e40fe2be8f4499bb555c4c0cbb2d29",
       "duration_ms": 16950,
-      "start_ms": 1382575,
+      "start_ms": 1382700,
       "text": "The first time, it failed: as time went backwards, the glider and the symbol crashed, but then the same symbol re-formed a few steps away, and the glider flew away. So in that particular history that [Zei](/ˈzA/) had just sampled, before the crash, the symbol had been there all along.",
       "generation_s": 2.63
     },
@@ -2021,7 +2023,7 @@
       "file": "blocks/c12-b177.wav",
       "sha256": "7e4939d02d8274e6a523f0e5ddbe7144088b1ad2e81c1994c21b84be8057bf7f",
       "duration_ms": 13550,
-      "start_ms": 1399975,
+      "start_ms": 1400100,
       "text": "He tried again, with a different glider. This time, it succeeded. As time moved backwards, past the moment of the crash, the rock-formation-plus-symbol turned into a bare rock formation, and two gliders flew back out.",
       "generation_s": 1.93
     },
@@ -2032,7 +2034,7 @@
       "file": "blocks/c12-b178.wav",
       "sha256": "2f51f98a521cd395209a0e54dc84c172657f2fb834ddc7e88e76559fb2f2ed96",
       "duration_ms": 4625,
-      "start_ms": 1413975,
+      "start_ms": 1414100,
       "text": "\"[FI](/ˈfi/) [LE](/ˈlɛ/) [GEI](/ˈɡA/) [TAU](/ˈtW/) [FA](/ˈfɑ/).\" The battle begins in one hundred ticks.",
       "generation_s": 0.75
     },
@@ -2043,7 +2045,7 @@
       "file": "blocks/c12-b179.wav",
       "sha256": "3ba5ca23b1f96475a5eca1ae802b35280f3fa19669f5020a84496e842aab9422",
       "duration_ms": 13550,
-      "start_ms": 1419050,
+      "start_ms": 1419175,
       "text": "[Zei](/ˈzA/) quickly repeated the same experiment with other candidates for a rock formation. He paid no attention to the voice announcing the countdown, and kept trying until he found one for the two other most natural options.",
       "generation_s": 2.03
     },
@@ -2054,7 +2056,7 @@
       "file": "blocks/c12-b180.wav",
       "sha256": "e96f42a9ba2effc7da7c360847589a45c9f8bcd4c9fe328a484d963c9e55ae02",
       "duration_ms": 1950,
-      "start_ms": 1433050,
+      "start_ms": 1433175,
       "text": "\"[MU](/ˈmu/) [GU](/ˈɡu/) [GEI](/ˈɡA/) [TAU](/ˈtW/) [FA](/ˈfɑ/).\"",
       "generation_s": 0.31
     },
@@ -2065,7 +2067,7 @@
       "file": "blocks/c12-b181.wav",
       "sha256": "ee095e4608a327f8a0a926f16157e1ab9f36bf5d7e617e20c7f49f590235165e",
       "duration_ms": 7750,
-      "start_ms": 1435450,
+      "start_ms": 1435575,
       "text": "[Zei](/ˈzA/) quickly put up symbols, walls, and gliders that would create symbols if they crashed into favorable rock formations.",
       "generation_s": 1.09
     },
@@ -2076,7 +2078,7 @@
       "file": "blocks/c12-b182.wav",
       "sha256": "186d9e94ad58b7196a9b162b765518c35ad6841f7d051c8e81e7e3b434c578bc",
       "duration_ms": 15750,
-      "start_ms": 1443650,
+      "start_ms": 1443775,
       "text": "He was surprised at his own speed doing this, given how much longer everything else had taken. But almost immediately he realized in the back of his mind that this made sense: figuring out what to deploy is the hard part, deployment is just copy and paste.",
       "generation_s": 2.15
     },
@@ -2085,11 +2087,13 @@
       "kind": "paragraph",
       "block_sha256": "b6fec6f904901d607efe932ab7605da0943c60d708a71eadb1620a7985bc0464",
       "file": "blocks/c12-b183.wav",
-      "sha256": "b152b8696279bf788ca704850062c89aeea9fc4a6a975d3ef1a06a47da8d517a",
-      "duration_ms": 10925,
-      "start_ms": 1459850,
-      "text": "After making a basic setup on the board, he breathed out. Just as he breathed back in and started doing a final pass refining his structures, a final countdown began.",
-      "generation_s": 1.66
+      "sha256": "2209e87ef76c6e5722b03d989407c1eec6bc8d4b51b9712d419930f8e93de9f4",
+      "duration_ms": 11125,
+      "start_ms": 1459975,
+      "text": "After making a basic setup on the board, he [breathed](/bɹˈiðd/) out. Just as he [breathed](/bɹˈiðd/) back in and started doing a final pass refining his structures, a final countdown began.",
+      "generation_s": 1.66,
+      "respoken_at": "2026-10-08T16:34:24+00:00",
+      "respoken_because": "pronunciation: breathed (owner, 2026-10-08)"
     },
     {
       "idx": 184,
@@ -2098,7 +2102,7 @@
       "file": "blocks/c12-b184.wav",
       "sha256": "328c9ca960ba81708926539f8cb96d2e31326962d1c28209f16898a7d9a6d6dd",
       "duration_ms": 3175,
-      "start_ms": 1471225,
+      "start_ms": 1471550,
       "text": "\"[PA](/ˈpɑ/) [GU](/ˈɡu/) [SO](/ˈsO/) [BI](/ˈbi/) [ZE](/ˈzɛ/) [HA](/ˈhɑ/) [MU](/ˈmu/) [FO](/ˈfO/) [SHI](/ˈʃi/) [LE](/ˈlɛ/) [PA](/ˈpɑ/) ...\"",
       "generation_s": 0.52
     },
@@ -2109,7 +2113,7 @@
       "file": "blocks/c12-b185.wav",
       "sha256": "2330e6f3e269d949c931ac628bdbbeea8da10a5449e3186ecba1fdfa49337f38",
       "duration_ms": 1650,
-      "start_ms": 1474850,
+      "start_ms": 1475175,
       "text": "\"[TAU](/ˈtW/) [FA](/ˈfɑ/).\"",
       "generation_s": 0.27
     },
@@ -2120,7 +2124,7 @@
       "file": "blocks/c12-b186.wav",
       "sha256": "7913dd90f007647ce85ab12c2d2e231f3d4f0136ea0a3aa7818e52fc7a918150",
       "duration_ms": 3975,
-      "start_ms": 1476950,
+      "start_ms": 1477275,
       "text": "Gliders started flying out. At first, nothing happened.",
       "generation_s": 0.56
     },
@@ -2131,7 +2135,7 @@
       "file": "blocks/c12-b187.wav",
       "sha256": "c3275007c00032832cf2f76b18b4000a80265c4ae2505f5bf84148a455f7e738",
       "duration_ms": 11550,
-      "start_ms": 1481375,
+      "start_ms": 1481700,
       "text": "Five hundred turns later, a part of the board came into view. One of his gliders had successfully created a symbol, and revealed a part of the board that showed what the rock formations look like.",
       "generation_s": 1.65
     },
@@ -2142,7 +2146,7 @@
       "file": "blocks/c12-b188.wav",
       "sha256": "e1104f513f613dbcd21d465d95352005812c12479e9a7ff18e9c791274a2c90f",
       "duration_ms": 5700,
-      "start_ms": 1493375,
+      "start_ms": 1493700,
       "text": "Immediately, [Zei](/ˈzA/) switched to the next task: figuring out how to build glider factories.",
       "generation_s": 0.88
     },
@@ -2153,7 +2157,7 @@
       "file": "blocks/c12-b189.wav",
       "sha256": "9b22b74eefcf6a8c7d0de0141d9ee638b2fb27dd46fefc7ba843a87ced406b23",
       "duration_ms": 19200,
-      "start_ms": 1499525,
+      "start_ms": 1499850,
       "text": "When the first intervention turn hit, [Zei](/ˈzA/) had not yet figured this out. However, he did send out several more gliders that flew from his home base, ready to create more copies of his symbol if they collided into a rock formation in the right place. He also sent gliders from nearby his new symbol, rapidly heading east.",
       "generation_s": 3.04
     },
@@ -2164,7 +2168,7 @@
       "file": "blocks/c12-b190.wav",
       "sha256": "705eac9a8cb87cc9a9f7c973b912cad227424b07748b206290476d41b101f718",
       "duration_ms": 8950,
-      "start_ms": 1519175,
+      "start_ms": 1519500,
       "text": "The audience watched intently. From across the river, [Bai](/ˈbI/) was also watching intently. And from afar, so were [Fin](/ˈfɪn/), [Mu](/ˈmu/) and [Den](/ˈdɛn/).",
       "generation_s": 1.25
     },
@@ -2175,7 +2179,7 @@
       "file": "blocks/c12-b191.wav",
       "sha256": "212c45994252ea344871abbc53c864c98f4a4dab31fda75622ab9684f7d451f3",
       "duration_ms": 10875,
-      "start_ms": 1528575,
+      "start_ms": 1528900,
       "text": "A view of the hexagonal board: a cluster of five light blue dots near the top, and eight small purple squares scattered across the lower half, with open space between them.",
       "generation_s": 1.47,
       "read_aloud_status": "unreviewed",
@@ -2188,7 +2192,7 @@
       "file": "blocks/c12-b192.wav",
       "sha256": "0359451c37d0984f030f97066adb78ac9f0a9d9214581ed2f55425173f7603b5",
       "duration_ms": 7175,
-      "start_ms": 1540560,
+      "start_ms": 1540885,
       "text": "The audience was surprised. Neither player had managed to figure out any gliders that move vertically, they realized.",
       "generation_s": 1.0
     },
@@ -2199,7 +2203,7 @@
       "file": "blocks/c12-b193.wav",
       "sha256": "6b2b618b6c7d50e76482ac549cbe5d161a3d21b35651de9215623d48cc88e661",
       "duration_ms": 7225,
-      "start_ms": 1548185,
+      "start_ms": 1548510,
       "text": "On the second intervention turn, [Zei](/ˈzA/) launched gliders from the sides of the board, aiming straight toward [Bo](/ˈbO/)'s home base.",
       "generation_s": 0.98
     },
@@ -2210,7 +2214,7 @@
       "file": "blocks/c12-b194.wav",
       "sha256": "401eb5ea18410c040a96792c4cb51591cc0d115e72c37b8974dca81dd81fa264",
       "duration_ms": 10375,
-      "start_ms": 1555860,
+      "start_ms": 1556185,
       "text": "And just before the third intervention turn, one of [Zei](/ˈzA/)'s gliders hit a rock formation right beside [Bo](/ˈbO/)'s home base, allowing [Zei](/ˈzA/) to see all of [Bo](/ˈbO/)'s symbols.",
       "generation_s": 1.37
     },
@@ -2221,7 +2225,7 @@
       "file": "blocks/c12-b195.wav",
       "sha256": "6b544085d477b580556ab7a5aec68e0dfbabafbecfb456639077b17614004d74",
       "duration_ms": 10500,
-      "start_ms": 1566685,
+      "start_ms": 1567010,
       "text": "[Zei](/ˈzA/) used that intervention turn to send gliders directly toward the three of [Bo](/ˈbO/)'s symbols that he could see, and more toward some locations nearby just in case.",
       "generation_s": 1.4
     },
@@ -2232,12 +2236,12 @@
       "file": "blocks/c12-b196.wav",
       "sha256": "66309535c9c0a4d2e196a5ae51dd01a1b0cd0c1f90be3f62bea703db8eceac0b",
       "duration_ms": 6150,
-      "start_ms": 1577635,
+      "start_ms": 1577960,
       "text": "Within three hundred turns, all of [Bo](/ˈbO/)'s symbols were destroyed, and [Zei](/ˈzA/) was announced the winner.",
       "generation_s": 0.84
     }
   ],
-  "restitched_at": "2026-10-05T18:49:12+00:00",
+  "restitched_at": "2026-10-08T16:34:45+00:00",
   "assist": {
     "model": "claude-coding-agent",
     "by": "the coding agent and its helper agents",

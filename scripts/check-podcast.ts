@@ -6,8 +6,8 @@
  * - The feed is well-formed XML, RSS 2.0, with the itunes and podcast namespaces,
  *   and has the channel tags Apple and Spotify require: title, link, description,
  *   language, itunes:author, itunes:category Fiction › Science Fiction,
- *   itunes:explicit, itunes:type serial. itunes:image is required by both
- *   platforms; while the cover art is missing it is reported, not failed.
+ *   itunes:explicit, itunes:type serial, and itunes:image (PNG or JPEG, sent with
+ *   Last-Modified), on the channel and on every episode.
  * - One episode per chapter, 1–32 in order, each with a unique guid, pubDate,
  *   title, description, itunes:duration, itunes:episode, and an enclosure
  *   (url, type audio/mpeg, length). Every enclosure answers a HEAD with that
@@ -39,6 +39,7 @@ let xml = await (await fetch(`${BASE}/podcast.xml`)).text();
 if (PLANT === 'enclosure') xml = xml.replace(/<enclosure [^>]*\/>/, '');
 if (PLANT === 'disclosure') xml = xml.replace('read by a synthetic voice (Kokoro-82M, stock voice af_heart)', 'read aloud');
 if (PLANT === 'invalid') xml = xml.replace('</channel>', '');
+if (PLANT === 'cover') xml = xml.replace(/<itunes:image [^>]*\/>/g, '');
 
 const valid = XMLValidator.validate(xml);
 if (valid !== true) {
@@ -57,7 +58,14 @@ if (valid !== true) {
   const cat = ch['itunes:category']?.[0];
   if (cat?.['@text'] !== 'Fiction' || cat?.['itunes:category']?.[0]?.['@text'] !== 'Science Fiction') fail('channel: category is not Fiction › Science Fiction');
   if (!/not affiliated with the author/.test(ch.description ?? '') || !/synthetic voice/.test(ch.description ?? '')) fail('channel: the description lacks the disclosure');
-  if (!ch['itunes:image']) notes.push('channel: no itunes:image (cover art), which Apple and Spotify require');
+  const cover = (ch['itunes:image'] as Record<string, string> | undefined)?.['@href'];
+  if (!cover) fail('channel: no itunes:image (cover art), which Apple and Spotify require');
+  else {
+    const head = await fetch(cover, { method: 'HEAD' });
+    if (!head.ok) fail(`cover art: HEAD ${head.status}`);
+    else if (!/^image\/(png|jpeg)$/.test(head.headers.get('content-type') ?? '')) fail(`cover art is ${head.headers.get('content-type')}, not PNG or JPEG`);
+    if (!head.headers.get('last-modified')) fail('cover art: the server sends no Last-Modified (Apple requires it)');
+  }
 
   const items: Record<string, unknown>[] = ch.item ?? [];
   if (items.length !== 32) fail(`${items.length} episodes, not 32`);
@@ -79,6 +87,7 @@ if (valid !== true) {
     const desc = text('description');
     const d = DISCLOSURE_RES.filter(([, re]) => !re.test(desc)).map(([what]) => what);
     if (d.length) fail(`${at}: the description lacks ${d.join(', ')}`);
+    if ((it['itunes:image'] as Record<string, string> | undefined)?.['@href'] !== cover) fail(`${at}: no itunes:image, or not the show's cover`);
     const enc = it.enclosure as Record<string, string> | undefined;
     if (!enc?.['@url'] || !enc['@length'] || enc['@type'] !== 'audio/mpeg') {
       fail(`${at}: enclosure missing or incomplete`);

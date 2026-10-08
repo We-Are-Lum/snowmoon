@@ -35,7 +35,7 @@
       "figure": 600
     },
     "break_ms": 1800,
-    "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
+    "pronunciation_sha256": "81a5c2fe59fda14824d8465b630ca3bf07b205c08518250999699b51eaff317d",
     "read_aloud_sha256": "6ca65b213f017a87282c5b4306f9d5d5efff24962510273b01d45ad96eae3925",
     "description_tone": {
       "notes_hz": [
@@ -59,9 +59,9 @@
   },
   "stitched": {
     "wav": "chapter-1.wav",
-    "wav_sha256": "19630f23d8d32e9c5ecef16bcaeff1e5c98adc0b4ad229cb4cd0743f82633fdf",
+    "wav_sha256": "7d25486b01653610f2c84d7896ee38ae4e9b7f29309dc27b79f43e0b015a8507",
     "m4a": "chapter-1.m4a",
-    "m4a_sha256": "5a2564ea4e15554e5c2c8f7c6583e323226f66878d13a3cafa3687441f934246",
+    "m4a_sha256": "17e6392d460bd2a6563fba3038956f6e22193022c94c6153fa78b2bd809347db",
     "note": "start_ms is the block's offset in the stitched file, gaps included; a description starts with its tone (tone_ms)"
   },
   "blocks": [
@@ -103,11 +103,13 @@
       "kind": "paragraph",
       "block_sha256": "971635a695d9ea35c462a796e7907cfadd20ce5e3fa315d54a6484794bd864c6",
       "file": "blocks/c1-b003.wav",
-      "sha256": "4187c5b714ab4f7133c07a257ae9cd9e94d9109b67bdaf237b8ddf0d8f65886a",
+      "sha256": "86c327c0c5f0df3ad5751063775797ab40f546607812bebd4c4c4903508d84b5",
       "duration_ms": 12775,
       "start_ms": 40525,
-      "text": "He looked around, breathed in and briefly stopped to enjoy the nature, dense enough and quiet enough that he almost forgot that he was in the middle of the Kalimar district of Meldan, the capital city of Veridia.",
-      "generation_s": 3.42
+      "text": "He looked around, [breathed](/bɹˈiðd/) in and briefly stopped to enjoy the nature, dense enough and quiet enough that he almost forgot that he was in the middle of the Kalimar district of Meldan, the capital city of Veridia.",
+      "generation_s": 3.42,
+      "respoken_at": "2026-10-08T16:32:59+00:00",
+      "respoken_because": "pronunciation: breathed (owner, 2026-10-08)"
     },
     {
       "idx": 4,
@@ -1623,7 +1625,7 @@
       "tone_ms": 510
     }
   ],
-  "restitched_at": "2026-10-05T18:46:04+00:00",
+  "restitched_at": "2026-10-08T16:33:24+00:00",
   "assist": {
     "model": "claude-coding-agent",
     "by": "the coding agent and its helper agents",

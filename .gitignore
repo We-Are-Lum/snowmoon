@@ -19,3 +19,6 @@ narration-out/
 .venv-image/
 images-out/
 __pycache__/
+
+# scripts/make_channel_art.py
+art-out/

@@ -3,6 +3,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { sdk } from '@farcaster/miniapp-sdk';
+import { authFetch, inMiniApp } from '~/lib/client-auth';
+import { SignInButton, SIGN_IN_SERVICES } from './sign-in';
 import { PrivateTextField } from './private-text-field';
 import { CHAT } from '~/lib/config';
 import type { AskResult, Quote } from '~/lib/chat/ask';
@@ -23,10 +25,7 @@ type Status =
   | { kind: 'signed-out'; inApp: boolean }
   | { kind: 'ready'; available: boolean; reason?: string; model: string; host: string | null; provider: string | null; route: string; perDay: number; left: number };
 
-async function authedFetch(url: string, init?: RequestInit): Promise<Response> {
-  const inApp = await sdk.isInMiniApp().catch(() => false);
-  return inApp ? sdk.quickAuth.fetch(url, init) : fetch(url, init);
-}
+const authedFetch = authFetch;
 
 function untilUtcMidnight(): string {
   const now = new Date();
@@ -432,7 +431,6 @@ function ThreadView({ id, status, refresh }: { id: string; status: Extract<Statu
 
 /** Screen 9d. */
 function SignedOut({ inApp }: { inApp: boolean }) {
-  const [msg, setMsg] = useState('');
   return (
     <section className="as-signed-out">
       <p className="as-label">Sign in to use the assistant <DraftTag /></p>
@@ -441,19 +439,8 @@ function SignedOut({ inApp }: { inApp: boolean }) {
         Questions about the book are saved only on this device, sent to {CHAT.route} to be answered, and never published. The daily limit
         is counted per Farcaster account.
       </p>
-      <button
-        type="button"
-        className="as-primary"
-        onClick={async () => {
-          if (!inApp) return setMsg('Open Snowmoon in a Farcaster app to sign in.');
-          const res = await sdk.quickAuth.fetch('/api/auth/me').catch(() => null);
-          if (res?.ok) window.location.reload();
-          else setMsg('Sign-in didn’t work. Try again.');
-        }}
-      >
-        Sign in with Farcaster
-      </button>
-      {msg && <p className="as-note">{msg}</p>}
+      <SignInButton />
+      {!inApp && <p className="as-note">{SIGN_IN_SERVICES}</p>}
       <Link className="as-quiet-link" href="/chapter/1">
         Keep reading without it
       </Link>
@@ -474,7 +461,7 @@ export function Assistant({ embedded = false }: { embedded?: boolean } = {}) {
   const refresh = useCallback(async () => {
     const res = await authedFetch('/api/chat/status').catch(() => null);
     if (!res || res.status === 401) {
-      const inApp = await sdk.isInMiniApp().catch(() => false);
+      const inApp = await inMiniApp();
       return setStatus({ kind: 'signed-out', inApp });
     }
     const s = (await res.json()) as { available: boolean; reason?: string; model: string; host: string | null; provider: string | null; route: string; perDay: number; left: number };
@@ -489,6 +476,13 @@ export function Assistant({ embedded = false }: { embedded?: boolean } = {}) {
     },
     [embedded],
   );
+
+  // Signing in or out anywhere on the page (or in another tab) refreshes the assistant.
+  useEffect(() => {
+    const again = () => void refresh();
+    window.addEventListener('snowmoon:signin', again);
+    return () => window.removeEventListener('snowmoon:signin', again);
+  }, [refresh]);
 
   useEffect(() => {
     void refresh();
@@ -542,19 +536,20 @@ export function Assistant({ embedded = false }: { embedded?: boolean } = {}) {
       <p className="as-intro">
         Help with reading the book. It comments; it never writes for you. <DraftTag />
       </p>
-      <button
-        type="button"
-        className="as-start"
-        onClick={() => {
-          show(newThread(readTo()).id);
-        }}
-      >
-        <span className="as-start-title">○ Ask about the book</span>
-        <span className="as-start-line">Private. Saved only on this device. Never published.</span>
-      </button>
-      {list.length > 0 && (
-        <section aria-label="Your private threads">
-          <p className="as-label">○ Asking · private</p>
+      <div className="as-kinds">
+        <button type="button" className="as-start" onClick={() => show(newThread(readTo()).id)}>
+          <span className="as-start-title">○ Ask about the book</span>
+          <span className="as-start-line">Private. Saved only on this device. Never published.</span>
+        </button>
+        {/* Planning isn't built: shown in its place, not as a control. */}
+        <div className="as-coming-card">
+          <span className="as-start-title">● Plan a piece</span>
+          <span className="as-start-line">Published with the piece. Coming.</span>
+        </div>
+      </div>
+      <section aria-label="Your private threads">
+        <p className="as-label as-section">○ Asking · private</p>
+        {list.length ? (
           <ul className="as-list">
             {list.map((t) => {
               const first = t.messages.find((m) => m.role === 'user');
@@ -571,8 +566,18 @@ export function Assistant({ embedded = false }: { embedded?: boolean } = {}) {
               );
             })}
           </ul>
-        </section>
-      )}
+        ) : (
+          <p className="as-empty-row">No questions yet.</p>
+        )}
+      </section>
+      <p className="as-label as-section as-coming-row">
+        <span>● Planning · published with the piece</span>
+        <span>Coming</span>
+      </p>
+      <p className="as-label as-section as-coming-row">
+        <span>Pictures</span>
+        <span>Coming</span>
+      </p>
       {ready && (
         <p className="as-foot">
           <span>

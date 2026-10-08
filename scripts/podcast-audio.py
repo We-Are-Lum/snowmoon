@@ -100,6 +100,26 @@ def render_opener():
     return path, recipe
 
 
+def loudness_pass1(path):
+    """ffmpeg loudnorm, first pass: the measured values the second pass needs."""
+    t = CONFIG["audio"]["loudness"]
+    err = subprocess.run(
+        ["ffmpeg", "-hide_banner", "-nostats", "-i", str(path), "-af",
+         f"loudnorm=I={t['integrated_lufs']}:TP={t['true_peak_db']}:LRA={t['lra']}:print_format=json", "-f", "null", "-"],
+        capture_output=True, text=True, check=True).stderr
+    return json.loads(err[err.rindex("{"):err.rindex("}") + 1])
+
+
+def measure(path):
+    """Integrated loudness (LUFS) and true peak (dBTP) of a finished file, by ebur128."""
+    err = subprocess.run(["ffmpeg", "-hide_banner", "-nostats", "-i", str(path), "-af", "ebur128=peak=true", "-f", "null", "-"],
+                         capture_output=True, text=True, check=True).stderr
+    summary = err[err.rindex("Summary:"):]
+    i = float(summary.split("I:")[1].split("LUFS")[0])
+    tp = float(summary.split("Peak:")[1].split("dBFS")[0])
+    return {"integrated_lufs": i, "true_peak_dbtp": tp}
+
+
 def episode(n, opener_path, opener_recipe):
     narration = json.loads((NARRATION_RECIPES / f"chapter-{n}.json").read_text())
     stitched = ROOT / "narration-out" / f"chapter-{n}" / narration["stitched"]["wav"]
@@ -115,8 +135,15 @@ def episode(n, opener_path, opener_recipe):
 
     mp3 = OUT / f"chapter-{n}.mp3"
     title = f"Chapter {n}"
+    # Two-pass loudness normalisation (owner, 2026-10-08): -16 LUFS, true peak -1 dB.
+    t = CONFIG["audio"]["loudness"]
+    m = loudness_pass1(joined)
+    norm = (f"loudnorm=I={t['integrated_lufs']}:TP={t['true_peak_db']}:LRA={t['lra']}"
+            f":measured_I={m['input_i']}:measured_TP={m['input_tp']}:measured_LRA={m['input_lra']}"
+            f":measured_thresh={m['input_thresh']}:offset={m['target_offset']}:linear=true")
     cmd = [
         "ffmpeg", "-y", "-loglevel", "error", "-i", str(joined),
+        "-af", norm,
         "-ac", "1", "-ar", str(CONFIG["audio"]["sample_rate"]), "-c:a", "libmp3lame", "-b:a", CONFIG["audio"]["bitrate"],
         "-id3v2_version", "3", "-write_xing", "1",
         "-metadata", f"title={title}",
@@ -133,6 +160,7 @@ def episode(n, opener_path, opener_recipe):
         ["ffprobe", "-v", "error", "-show_entries", "format=duration,bit_rate:stream=channels,sample_rate", "-of", "json", str(mp3)],
         capture_output=True, text=True, check=True).stdout)
     joined.unlink()
+    after = measure(mp3)
     recipe = {
         "work_id": narrate.WORK,
         "chapter": n,
@@ -150,6 +178,13 @@ def episode(n, opener_path, opener_recipe):
         },
         # The chapter's narration says which of its inputs a model drafted; the opener's words are the owner's.
         "assist": {**narration["assist"], "opener": "the owner's words (config/podcast.json); its pronunciation entries as in opener.json"} if narration.get("assist") else None,
+        "loudness": {
+            "target": {"integrated_lufs": t["integrated_lufs"], "true_peak_db": t["true_peak_db"], "lra": t["lra"]},
+            "method": "ffmpeg loudnorm, two passes; the second uses the first pass's measurements (linear=true)",
+            "before": {"integrated_lufs": float(m["input_i"]), "true_peak_dbtp": float(m["input_tp"]), "lra": float(m["input_lra"])},
+            "first_pass": m,
+            "after_mp3": after,
+        },
         "encoder": {"tool": ffmpeg_version(), "codec": "libmp3lame", "bitrate": CONFIG["audio"]["bitrate"], "channels": 1, "sample_rate": CONFIG["audio"]["sample_rate"],
                     "command": " ".join(c if " " not in c else repr(c) for c in cmd[:-1]) + " chapter-N.mp3"},
         "file": {
@@ -168,8 +203,12 @@ def episode(n, opener_path, opener_recipe):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--chapter", help="one chapter; all 32 if left out")
+    ap.add_argument("--new-opener", action="store_true", help="speak the opener again even if opener.wav matches its recipe")
     args = ap.parse_args()
-    opener_path, opener_recipe = render_opener()
+    opener_path = OUT / "opener.wav"
+    opener_recipe = json.loads((RECIPES / "opener.json").read_text()) if (RECIPES / "opener.json").exists() else None
+    if args.new_opener or not opener_recipe or not opener_path.exists() or narrate.sha256_file(opener_path) != opener_recipe["file"]["sha256"]:
+        opener_path, opener_recipe = render_opener()
     print(f"opener: {opener_recipe['file']['duration_ms'] / 1000:.1f} s")
     for n in [int(args.chapter)] if args.chapter else range(1, 33):
         episode(n, opener_path, opener_recipe)

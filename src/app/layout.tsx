@@ -1,15 +1,16 @@
 import type { Metadata, Viewport } from 'next';
 import { Crimson_Pro, DM_Mono, Instrument_Sans } from 'next/font/google';
-import { MiniappBar } from '~/components/miniapp-bar';
-import { SideRail } from '~/components/side-rail';
-import { AssistantColumn } from '~/components/assistant-column';
-import { chapterDateline, chapterNumbers, loadChapter } from '~/lib/book';
+import { chapterNumbers } from '~/lib/book';
+import { adaptationsConfig } from '~/lib/adaptations';
+import { AppShell } from '~/components/app-shell';
 import { WhatIsThis } from '~/components/first-visit';
 import { loadIntro } from '~/lib/intro';
 import { APP_NAME, appUrl } from '~/lib/config';
-import { PAPER, PAPER_DARK } from '~/lib/tokens';
+import { PAPER } from '~/lib/tokens';
+import { THEME_SCRIPT } from '~/lib/theme';
 import '../styles/tokens.css';
 import './globals.css';
+import '../styles/shell.css';
 
 const url = appUrl();
 
@@ -40,26 +41,23 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   width: 'device-width',
   initialScale: 1,
-  themeColor: [
-    { media: '(prefers-color-scheme: light)', color: PAPER },
-    { media: '(prefers-color-scheme: dark)', color: PAPER_DARK },
-  ],
+  // Light is the default theme; the browser chrome follows it.
+  themeColor: PAPER,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${crimson.variable} ${dmMono.variable} ${instrument.variable}`}>
+    <html lang="en" data-theme="light" suppressHydrationWarning className={`${crimson.variable} ${dmMono.variable} ${instrument.variable}`}>
+      <head>
+        {/* Before first paint: the theme chosen on this device (src/lib/theme.ts). */}
+        <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
+      </head>
       <body>
-        <MiniappBar />
-        {/* Phone widths and the Farcaster frame: the page alone. Wider: a rail, and the assistant when signed in. */}
-        <div className="shell">
-          <SideRail chapters={chapterNumbers().map((n) => ({ n, dateline: chapterDateline(loadChapter(n)!) }))} />
-          <div className="shell-main">
-            <WhatIsThis intro={loadIntro()} />
-            <main>{children}</main>
-          </div>
-          <AssistantColumn />
-        </div>
+        {/* The frame from the prototype: phone top bar and menu; tablet and desktop rail; desktop assistant (src/components/app-shell.tsx). */}
+        <AppShell chapters={chapterNumbers().length} adaptations={adaptationsConfig().seeds.length}>
+          <WhatIsThis intro={loadIntro()} />
+          <main>{children}</main>
+        </AppShell>
       </body>
     </html>
   );

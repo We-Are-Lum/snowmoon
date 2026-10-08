@@ -62,7 +62,13 @@ try {
         if (f) (clearInterval(t), resolve(f));
       }, 100);
     });
-    await frame.waitForSelector('.bar-auth:has-text("fid 6786")', { timeout: 15000 }).catch(() => fail(`${path}: not signed in silently (bar shows "${'?'}")`));
+    // The first-visit intro covers the home page once; skip it, as a visitor would.
+    const skip = frame.getByRole('button', { name: 'Skip', exact: true });
+    if (await skip.isVisible().catch(() => false)) await skip.click();
+    // Signed in silently: the menu shows the account from the Farcaster context.
+    await frame.click('.topbar-icon[aria-label="Menu"]');
+    await frame.waitForSelector('.menu-sheet .account-name:has-text("@check")', { timeout: 15000 }).catch(() => fail(`${path}: not signed in silently`));
+    await frame.click('.menu-close');
     if (path === '/assistant') {
       await frame.waitForSelector('.as-start', { timeout: 15000 });
       await frame.evaluate(() => localStorage.clear());

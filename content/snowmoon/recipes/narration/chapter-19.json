@@ -4,7 +4,7 @@
   "source_sha256": "93e9d60f95ef720f928451513f48f4ee0fd1644f7f8869043937af6fba86aacc",
   "generated_at": "2026-10-03T17:44:21+00:00",
   "generation_seconds": 190.5,
-  "total_duration_ms": 1392895,
+  "total_duration_ms": 1392945,
   "model": {
     "name": "Kokoro-82M",
     "repo": "hexgrad/Kokoro-82M",
@@ -35,7 +35,7 @@
       "figure": 600
     },
     "break_ms": 1800,
-    "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
+    "pronunciation_sha256": "81a5c2fe59fda14824d8465b630ca3bf07b205c08518250999699b51eaff317d",
     "read_aloud_sha256": "6b11d7adf626f9b19d50a03f7b7fc1da4730eb3609edb3c259d347af5e804e7d",
     "description_tone": {
       "notes_hz": [
@@ -59,9 +59,9 @@
   },
   "stitched": {
     "wav": "chapter-19.wav",
-    "wav_sha256": "e7c9c12dfb1042075be78a8ebc48ff5da52bd3972822fd579e2c10af1fb7b0e0",
+    "wav_sha256": "0c1bd78df4623572f10288edb25b38b24ca9bcf2a16b2c2760ea173ef79339d5",
     "m4a": "chapter-19.m4a",
-    "m4a_sha256": "14c397b7803dc0cb9cfbe77c7e0478262229979d3db2eac7b7c89799e4035076",
+    "m4a_sha256": "e1a57b16c6c06073119e3ad9a51580fe0041588a3e20b98c3b69c694a4b9be02",
     "note": "start_ms is the block's offset in the stitched file, gaps included; a description starts with its tone (tone_ms)"
   },
   "blocks": [
@@ -542,11 +542,13 @@
       "kind": "paragraph",
       "block_sha256": "a4229dc498e8f8bdde165e0a5209ff6882010bc4ef1eddab88f8b289f8859db4",
       "file": "blocks/c19-b042.wav",
-      "sha256": "0c9125f3f7d907c8171aaf3c45da3d067c35c6cffaafcd113ea7a6d6f7eb505d",
-      "duration_ms": 30475,
+      "sha256": "d074c250d339f7704f6e92bfab3faa409d7f373a7f81232293ac0f54e43caef9",
+      "duration_ms": 30525,
       "start_ms": 284325,
-      "text": "\"The average concentration of carbon dioxide in our atmosphere is 300 parts per million. Air that we breathe out is 40,000 parts per million. So if the air you're breathing has 700 parts per million, then either there's some other source bringing that extra CO2 in, or, more likely, one percent of the air you're breathing in is air that someone else breathed out. And aerosol particles carrying all kinds of things stick around in the air for a long time — especially airborne viruses.\"",
-      "generation_s": 4.94
+      "text": "\"The average concentration of carbon dioxide in our atmosphere is 300 parts per million. Air that we breathe out is 40,000 parts per million. So if the air you're breathing has 700 parts per million, then either there's some other source bringing that extra CO2 in, or, more likely, one percent of the air you're breathing in is air that someone else [breathed](/bɹˈiðd/) out. And aerosol particles carrying all kinds of things stick around in the air for a long time — especially airborne viruses.\"",
+      "generation_s": 4.94,
+      "respoken_at": "2026-10-08T16:35:27+00:00",
+      "respoken_because": "pronunciation: breathed (owner, 2026-10-08)"
     },
     {
       "idx": 43,
@@ -555,7 +557,7 @@
       "file": "blocks/c19-b043.wav",
       "sha256": "85026c76b200242634b968fe0f7ff94da0fdc1d49ee24b39146477bf4ea28861",
       "duration_ms": 3925,
-      "start_ms": 315250,
+      "start_ms": 315300,
       "text": "\"Ah, I see, so it's not even about industrial pollution.\"",
       "generation_s": 0.57
     },
@@ -566,7 +568,7 @@
       "file": "blocks/c19-b044.wav",
       "sha256": "516344dc22af9331c3877c11552b56dc37de8c0227ca6162f00bf42ca3991d14",
       "duration_ms": 10525,
-      "start_ms": 319625,
+      "start_ms": 319675,
       "text": "\"Actually I'm surprised you're not caught up on this, and that the CO2 numbers are so poor here. I would have thought you would care a lot from the defense side, for pandemic prevention.\"",
       "generation_s": 1.52
     },
@@ -577,7 +579,7 @@
       "file": "blocks/c19-b045.wav",
       "sha256": "16f1c0c62521e29fbadbc2a2f9d75be0a0def6d1d753e8de3ae4fe5bbaa80139",
       "duration_ms": 2650,
-      "start_ms": 330600,
+      "start_ms": 330650,
       "text": "\"Ah well you can ask [Den](/ˈdɛn/) when he comes!\"",
       "generation_s": 0.39
     },
@@ -588,7 +590,7 @@
       "file": "blocks/c19-b046.wav",
       "sha256": "9d36c21748a15ceea4c0625e6c15506b1f67a1fcb9a900a6091727a4c9894117",
       "duration_ms": 8225,
-      "start_ms": 333700,
+      "start_ms": 333750,
       "text": "A robot arrived, bringing a salad and tea for Gladias, and a vegetable and rice dish covered with mushrooms and a tea for [Zei](/ˈzA/).",
       "generation_s": 1.2
     },
@@ -599,7 +601,7 @@
       "file": "blocks/c19-b047.wav",
       "sha256": "d87352714d9221589227265ac0e91df536e09e2a3662accabf7444dd1e76d0b3",
       "duration_ms": 7825,
-      "start_ms": 342375,
+      "start_ms": 342425,
       "text": "\"Wait, that dish you're eating. I think that's exactly what we call Number Ten in our [Dzego](/ˈdzɛɡO/) food trucks!\", Gladias exclaimed.",
       "generation_s": 1.09
     },
@@ -610,7 +612,7 @@
       "file": "blocks/c19-b048.wav",
       "sha256": "3e6c71ed288e069820e39e0015a25861eddc6174e6248b6882ad783bc415b480",
       "duration_ms": 5875,
-      "start_ms": 350650,
+      "start_ms": 350700,
       "text": "\"Do you want to try it? I'm happy to take your salad. Tell me how it compares to the version you're used to.\"",
       "generation_s": 0.95
     },
@@ -621,7 +623,7 @@
       "file": "blocks/c19-b049.wav",
       "sha256": "193ec33392d4d603807a69af1fcab7383504a3469d1546933925fe3840dda3d9",
       "duration_ms": 1350,
-      "start_ms": 356975,
+      "start_ms": 357025,
       "text": "\"Sure!\"",
       "generation_s": 0.27
     },
@@ -632,7 +634,7 @@
       "file": "blocks/c19-b050.wav",
       "sha256": "2b75b2252350dc17c4e0b22ebb44b513775da39fcc65b38b0fd12ebc0665b697",
       "duration_ms": 2525,
-      "start_ms": 358775,
+      "start_ms": 358825,
       "text": "They switched plates, and began eating.",
       "generation_s": 0.38
     },
@@ -643,7 +645,7 @@
       "file": "blocks/c19-b051.wav",
       "sha256": "3104e6d36eb79e6ca5fa013adffed5e89d192d8335e6d93ffdcd114d57da4063",
       "duration_ms": 5575,
-      "start_ms": 361750,
+      "start_ms": 361800,
       "text": "\"Okay, this is much better than what we get in Veridia\", Gladias excitedly remarked.",
       "generation_s": 0.82
     },
@@ -654,7 +656,7 @@
       "file": "blocks/c19-b052.wav",
       "sha256": "3aba82195415bfb580dd46479c0e3af77575c8ce918f906a69552bd552013b69",
       "duration_ms": 6250,
-      "start_ms": 367775,
+      "start_ms": 367825,
       "text": "They continued eating silently for a few minutes, and after finishing their food switched to drinking tea.",
       "generation_s": 0.95
     },
@@ -665,7 +667,7 @@
       "file": "blocks/c19-b053.wav",
       "sha256": "382cc7823a6c4e7086688be99bc62271932af8ea8f393951f614636afbaa3349",
       "duration_ms": 4925,
-      "start_ms": 374475,
+      "start_ms": 374525,
       "text": "[Zei](/ˈzA/)'s watch buzzed again. [Zei](/ˈzA/) checked his watch, and his eyes opened wide.",
       "generation_s": 0.74
     },
@@ -676,7 +678,7 @@
       "file": "blocks/c19-b054.wav",
       "sha256": "8500be2dfed340b6e1675ec2b14edbb1ca99a2cbe112d4412fbcbcdd2810a284",
       "duration_ms": 2375,
-      "start_ms": 379850,
+      "start_ms": 379900,
       "text": "\"What is it?\", Gladias asked.",
       "generation_s": 0.37
     },
@@ -687,7 +689,7 @@
       "file": "blocks/c19-b055.wav",
       "sha256": "f49316e632312a4a06ad08537da9f8ae44321c12c8bdae4400cdcab240f29cd8",
       "duration_ms": 5225,
-      "start_ms": 382675,
+      "start_ms": 382725,
       "text": "\"A message from a courtyard where I ate in [Sadzu](/ˈsɑdzu/) [Du](/ˈdu/) once. This is really weird.\"",
       "generation_s": 0.72
     },
@@ -698,7 +700,7 @@
       "file": "blocks/c19-b056.wav",
       "sha256": "6e7f5eb6399e192a20a4bd04e25d8506092daecd864841af09abe26ad6a48a1d",
       "duration_ms": 2825,
-      "start_ms": 388350,
+      "start_ms": 388400,
       "text": "\"It seems to be addressed directly to me.\"",
       "generation_s": 0.41
     },
@@ -709,7 +711,7 @@
       "file": "blocks/c19-b057.wav",
       "sha256": "ec5c697031dc447c65f17d568c5c09af5f703d2510c0bb9fc560842b0306fa13",
       "duration_ms": 5900,
-      "start_ms": 391625,
+      "start_ms": 391675,
       "text": "\"How does the courtyard know you ate there? Payment is done in zipcoins, that's fully anonymized.\"",
       "generation_s": 1.03
     },
@@ -720,7 +722,7 @@
       "file": "blocks/c19-b058.wav",
       "sha256": "bcc80b68ffed2ca859d2fff73537105a154dce3388e035cd7ff5c185f4087e15",
       "duration_ms": 11450,
-      "start_ms": 397975,
+      "start_ms": 398025,
       "text": "\"Exactly. The courtyard seems to have sent it to all their guests from the past half year, and it has some kind of tag that my local AI accepted, almost everyone else's filtered out.\"",
       "generation_s": 1.6
     },
@@ -731,7 +733,7 @@
       "file": "blocks/c19-b059.wav",
       "sha256": "f4a785c58e74202e036f247ac75a4c9bfbc8d8f6c6a38c5dfbbe97f888d94cda",
       "duration_ms": 19925,
-      "start_ms": 409875,
+      "start_ms": 409925,
       "text": "Two columns, headed [zan](/ˈzɑn/) and [tie](/ˈtjɛ/). On the left: [sa](/ˈsɑ/) [dzu](/ˈdzu/) [du](/ˈdu/) [de](/ˈdɛ/) [len](/ˈlɛn/) [su](/ˈsu/) twenty-four fifteen [de](/ˈdɛ/) [bun](/ˈbun/) [kai](/ˈkI/) [mo](/ˈmO/) [fan](/ˈfɑn/). An arrow points right, to: [ci](/ˈtsi/) [sen](/ˈsɛn/) [hu](/ˈhu/) [jan](/ˈʤɑn/) [pu](/ˈpu/) [zau](/ˈzW/) [fe](/ˈfɛ/) four hundred [lin](/ˈlɪn/) [man](/ˈmɑn/), [ci](/ˈtsi/) [cau](/ˈtsW/) [be](/ˈbɛ/) [fe](/ˈfɛ/) [ti](/ˈti/) [tie](/ˈtjɛ/), [ci](/ˈtsi/) [tan](/ˈtɑn/) [jan](/ˈʤɑn/) [pu](/ˈpu/) [ciu](/ˈtsju/) [cu](/ˈtsu/) [shan](/ˈʃɑn/) [jin](/ˈʤɪn/) [fe](/ˈfɛ/) [pa](/ˈpɑ/) [bi](/ˈbi/), [ci](/ˈtsi/) [sen](/ˈsɛn/) [hu](/ˈhu/) [fe](/ˈfɛ/) [bu](/ˈbu/).",
       "generation_s": 2.75,
       "read_aloud_status": "unreviewed",
@@ -744,7 +746,7 @@
       "file": "blocks/c19-b060.wav",
       "sha256": "16833d9b3c98f65ee899522b146cae53a70815657d362826ddb433689fe7eaac",
       "duration_ms": 2500,
-      "start_ms": 430910,
+      "start_ms": 430960,
       "text": "\"What does it say?\", Gladias asked.",
       "generation_s": 0.37
     },
@@ -755,7 +757,7 @@
       "file": "blocks/c19-b061.wav",
       "sha256": "f6f328c737e60304a0ac13958332b79f29a2400da9da1de7851cba5151c77157",
       "duration_ms": 17475,
-      "start_ms": 433860,
+      "start_ms": 433910,
       "text": "\"It's from the Beautiful Plants food court, on 2415 [Len](/ˈlɛn/) [Su](/ˈsu/) street, in [Sadzu](/ˈsɑdzu/) [Du](/ˈdu/). An anonymous person burned four hundred zipcoins to send this message. The message envelope says that the recipient 'is successful' and is 18 years old. I know nothing else.\"",
       "generation_s": 2.35
     },
@@ -766,7 +768,7 @@
       "file": "blocks/c19-b062.wav",
       "sha256": "ee871e4d4b51f5ee4472fb246524e6a5539a2f1de101417bc60b835b335ea8fb",
       "duration_ms": 2900,
-      "start_ms": 451785,
+      "start_ms": 451835,
       "text": "\"That's a ... well-calibrated description.\"",
       "generation_s": 0.41
     },
@@ -777,7 +779,7 @@
       "file": "blocks/c19-b063.wav",
       "sha256": "7bc5519d55e6e3645080da6d1ce167919eee95bdc80a0373b040f2eb78d3eb11",
       "duration_ms": 19850,
-      "start_ms": 455135,
+      "start_ms": 455185,
       "text": "\"Indeed. They're trying to make the set wide enough to make sure it contains me, they burned four hundred zipcoins to signal to the courtyard, and to our local AIs, and to us, that the message is worth putting an effort into understanding, but also they made the set narrow enough that they could make this broadcast for only four hundred zipcoins.\"",
       "generation_s": 2.64
     },
@@ -788,7 +790,7 @@
       "file": "blocks/c19-b064.wav",
       "sha256": "6f456a6e026dab60ef76037466b3bfa16dc11f6183d369cda37334661dacdf15",
       "duration_ms": 4350,
-      "start_ms": 475435,
+      "start_ms": 475485,
       "text": "\"And narrow enough that not too many people find out about this message.\"",
       "generation_s": 0.61
     },
@@ -799,7 +801,7 @@
       "file": "blocks/c19-b065.wav",
       "sha256": "e574f9851a567f06cb06a3184c050fe08b69c13d4f34470341539d7844ede92c",
       "duration_ms": 2275,
-      "start_ms": 480235,
+      "start_ms": 480285,
       "text": "\"Okay, let me open it up...\"",
       "generation_s": 0.33
     },
@@ -810,7 +812,7 @@
       "file": "blocks/c19-b066.wav",
       "sha256": "ae7efc63d4f17ca52a5c0230b3e66e7904866f6a73ebaeb690fd28ebdb8ebad1",
       "duration_ms": 2075,
-      "start_ms": 482960,
+      "start_ms": 483010,
       "text": "[Zei](/ˈzA/) stared in shock again.",
       "generation_s": 0.3
     },
@@ -821,7 +823,7 @@
       "file": "blocks/c19-b067.wav",
       "sha256": "813eca8121054ae796fc2de4c233f39633498a5ba0f9a4d08f2e24d25e9654c1",
       "duration_ms": 1475,
-      "start_ms": 485485,
+      "start_ms": 485535,
       "text": "\"What is it?\"",
       "generation_s": 0.22
     },
@@ -832,7 +834,7 @@
       "file": "blocks/c19-b068.wav",
       "sha256": "603b704bd3194abbf56fa775b11a5c033234ceb674f4c6efb03e8deecbeb133c",
       "duration_ms": 8525,
-      "start_ms": 487410,
+      "start_ms": 487460,
       "text": "\"The message is a series of links to some files, in total over sixty gigabytes. I need to download eighty percent of them apparently.\"",
       "generation_s": 1.14
     },
@@ -843,7 +845,7 @@
       "file": "blocks/c19-b069.wav",
       "sha256": "9d9c983aefeb8cf481cc8cd7b4879570fe5e1a4536e1b2e3425bc5333c20b2ba",
       "duration_ms": 2325,
-      "start_ms": 496385,
+      "start_ms": 496435,
       "text": "\"Will that take a while to download?\"",
       "generation_s": 0.34
     },
@@ -854,7 +856,7 @@
       "file": "blocks/c19-b070.wav",
       "sha256": "e87941df394813b86dfb4ca8be357fcb3dc08384aff61bdd5abf525577d4c3f9",
       "duration_ms": 8075,
-      "start_ms": 499160,
+      "start_ms": 499210,
       "text": "\"About a day wirelessly. But it looks like the digital archive node inside this mountain pyramid already has enough of the files.\"",
       "generation_s": 1.11
     },
@@ -865,7 +867,7 @@
       "file": "blocks/c19-b071.wav",
       "sha256": "ece3e7c1962d31ce89b18e7b042cb1e04497bf99988d85309a0110dd07bc3af9",
       "duration_ms": 1900,
-      "start_ms": 507685,
+      "start_ms": 507735,
       "text": "\"Shall we just walk there?\"",
       "generation_s": 0.28
     },
@@ -876,7 +878,7 @@
       "file": "blocks/c19-b072.wav",
       "sha256": "d7abac351d306703036a7fbbcc8efb7b388ee792aa0a9864bd6ced61a11f218f",
       "duration_ms": 2075,
-      "start_ms": 510035,
+      "start_ms": 510085,
       "text": "\"Exactly what I'm thinking.\"",
       "generation_s": 0.3
     },
@@ -887,7 +889,7 @@
       "file": "blocks/c19-b073.wav",
       "sha256": "619db5c31fd69e4c632676d2e2d60a31b1e06eb4a5612088bd83f1fa92aa39d6",
       "duration_ms": 9675,
-      "start_ms": 512560,
+      "start_ms": 512610,
       "text": "[Zei](/ˈzA/) put his watch against a green circle on the corner of the desk. A moment later it buzzed. He stood up, and Gladias stood up immediately after him.",
       "generation_s": 1.31
     },
@@ -898,7 +900,7 @@
       "file": "blocks/c19-b074.wav",
       "sha256": "8edd705434cf80027b94075714c6c70b0ad11abd4b6e37cf453a8f48563edbe5",
       "duration_ms": 4900,
-      "start_ms": 522685,
+      "start_ms": 522735,
       "text": "They exited the cafeteria, and started walking through the network of tunnels.",
       "generation_s": 0.68
     },
@@ -908,7 +910,7 @@
       "block_sha256": "cb3f91d54eee30e53e35b2b99905f70f169ed549fd78909d3dac2defc9ed8d3b",
       "file": null,
       "silence_ms": 1800,
-      "start_ms": 528035,
+      "start_ms": 528085,
       "duration_ms": 1800
     },
     {
@@ -918,7 +920,7 @@
       "file": "blocks/c19-b076.wav",
       "sha256": "763f91ecd3cbf68281f9aeeb8d32e2bb1298e4a5b4b1aa4f75d597098fa3c952",
       "duration_ms": 4125,
-      "start_ms": 529835,
+      "start_ms": 529885,
       "text": "A few minutes later, they arrived at a large ornamented door.",
       "generation_s": 0.57
     },
@@ -929,7 +931,7 @@
       "file": "blocks/c19-b077.wav",
       "sha256": "a698e19485ba7c11d208165e134f97723c824c1a119336aa6c91d016d77f72eb",
       "duration_ms": 19600,
-      "start_ms": 534410,
+      "start_ms": 534460,
       "text": "To the left of the door, there was a drawing of a river horse reading a book, with a backdrop of a marsh with green trees and a blue sky in the background. To the right of the door, there was a drawing of a hamster sitting at a computer. Both drawings were a careful balance of cartoon-like playfulness, and a serious aura of mystery.",
       "generation_s": 2.61
     },
@@ -940,7 +942,7 @@
       "file": "blocks/c19-b078.wav",
       "sha256": "bfbf3f4e884190ce8af6716bb71c87cb3fdf76a09b9e30d1f0b4f692491e33e4",
       "duration_ms": 3150,
-      "start_ms": 554460,
+      "start_ms": 554510,
       "text": "At the top of the door, [Zei](/ˈzA/) could read a slogan:",
       "generation_s": 0.45
     },
@@ -951,7 +953,7 @@
       "file": "blocks/c19-b079.wav",
       "sha256": "76c0f986e33a91fdd43f8533c9d86a4d088430e03ff907c946b80bc29f47952d",
       "duration_ms": 9300,
-      "start_ms": 558060,
+      "start_ms": 558110,
       "text": "[mu](/ˈmu/) [fu](/ˈfu/) [bau](/ˈbW/) [hai](/ˈhI/) [ka](/ˈkɑ/) [sha](/ˈʃɑ/) [liu](/ˈlju/) [li](/ˈli/) [dzai](/ˈdzI/) [hen](/ˈhɛn/) [ji](/ˈʤi/) [cin](/ˈtsɪn/) [jan](/ˈʤɑn/) [fe](/ˈfɛ/) [jan](/ˈʤɑn/). [ci](/ˈtsi/) [mu](/ˈmu/) [fu](/ˈfu/) [bau](/ˈbW/) [fei](/ˈfA/) [ka](/ˈkɑ/) [zen](/ˈzɛn/) [die](/ˈdjɛ/) [jia](/ˈʤjɑ/) [cu](/ˈtsu/) [can](/ˈtsɑn/) [hu](/ˈhu/) [fe](/ˈfɛ/) [lo](/ˈlO/) [kin](/ˈkɪn/) [liu](/ˈlju/).",
       "generation_s": 1.27,
       "read_aloud_status": "unreviewed",
@@ -964,7 +966,7 @@
       "file": "blocks/c19-b080.wav",
       "sha256": "97ba1fffa18c52b2d6c817a4c99f19abdf646054f0244e5a7aebd70f70f1e1f8",
       "duration_ms": 8100,
-      "start_ms": 568470,
+      "start_ms": 568520,
       "text": "\"Outside of a dog, a book is man's best friend\", [Zei](/ˈzA/) translated for Gladias. \"Inside of a dog, it's too dark to read.\"",
       "generation_s": 1.11
     },
@@ -975,7 +977,7 @@
       "file": "blocks/c19-b081.wav",
       "sha256": "5e6c8f5a4f60ec9a4fa55f5fba851b869aa2c905485c2999394e24eb751b5e16",
       "duration_ms": 3350,
-      "start_ms": 577020,
+      "start_ms": 577070,
       "text": "[Zei](/ˈzA/) and Gladias stepped through the door, and entered.",
       "generation_s": 0.47
     },
@@ -986,7 +988,7 @@
       "file": "blocks/c19-b082.wav",
       "sha256": "cbbe2fe1cda2a8af332aa347b1b88b125c96f31bbfc46c912ea6ee79ca122372",
       "duration_ms": 16325,
-      "start_ms": 580820,
+      "start_ms": 580870,
       "text": "To their left, the entire wall was a large shelf, about five meters tall, filled with physical paper books. The upper half of the shelf was set back about a meter, allowing the roof of the lower half to serve as a walkway to look at and take books from the upper half.",
       "generation_s": 2.16
     },
@@ -997,7 +999,7 @@
       "file": "blocks/c19-b083.wav",
       "sha256": "1d80584550d5707ab09d22de8aa879c4340a532629d2f2c7a47b304e6601d63e",
       "duration_ms": 26050,
-      "start_ms": 597595,
+      "start_ms": 597645,
       "text": "The shelf had openings in two places on the upper floor, leading to two miniature tunnels lined with more books. The shelf also had an opening in one place on the lower floor, also lined with books. All three openings seemed to go inwards for three to six meters; after that, one of the book-lined hallways turned ninety degrees rightward, another ninety degrees leftward, and the third, the one on the lower floor, turned into a T-shaped intersection.",
       "generation_s": 4.23
     },
@@ -1008,7 +1010,7 @@
       "file": "blocks/c19-b084.wav",
       "sha256": "79c781722fed299a5bf16cc9dcd820a765c9799ccb0cbaa03e19a5aa457c08fe",
       "duration_ms": 5525,
-      "start_ms": 624095,
+      "start_ms": 624145,
       "text": "It looked like the book section was deliberately constructed to be a maze, Gladias thought.",
       "generation_s": 0.87
     },
@@ -1019,7 +1021,7 @@
       "file": "blocks/c19-b085.wav",
       "sha256": "ff8f8029c513fa5be176993bf0d511a5bcef579960ab056e505f56e2a480a39c",
       "duration_ms": 6250,
-      "start_ms": 630070,
+      "start_ms": 630120,
       "text": "To their right, there was an open space with tables, and along the wall, there were many computer terminals.",
       "generation_s": 0.88
     },
@@ -1030,7 +1032,7 @@
       "file": "blocks/c19-b086.wav",
       "sha256": "6b215a73d8fba28f557575a195aae4e8fa79f2a8b620b7e0fdcc803f85b20295",
       "duration_ms": 6425,
-      "start_ms": 636770,
+      "start_ms": 636820,
       "text": "Near the front of the space with tables, [Zei](/ˈzA/) saw a woman wearing a robe. He immediately ran toward her.",
       "generation_s": 0.89
     },
@@ -1041,7 +1043,7 @@
       "file": "blocks/c19-b087.wav",
       "sha256": "22ff7c3e9b867837854d9d97f39903f80374ae4a78decd408430dc8cfca3f046",
       "duration_ms": 1650,
-      "start_ms": 643645,
+      "start_ms": 643695,
       "text": "She turned around.",
       "generation_s": 0.29
     },
@@ -1052,7 +1054,7 @@
       "file": "blocks/c19-b088.wav",
       "sha256": "b15fd8aedf7a841aee918eb2bfd636cfa150c4b6ceade10e785faa7c0f05fb6e",
       "duration_ms": 5450,
-      "start_ms": 645745,
+      "start_ms": 645795,
       "text": "\"Welcome to the [Pafogai](/ˈpɑfOɡI/) [Du](/ˈdu/) grand library. What is it that you seek?\", she asked.",
       "generation_s": 0.77
     },
@@ -1063,7 +1065,7 @@
       "file": "blocks/c19-b089.wav",
       "sha256": "67e662e907a3708cb9c299519eee440fa4c4724034e488c1f1356590be1607fa",
       "duration_ms": 3925,
-      "start_ms": 651645,
+      "start_ms": 651695,
       "text": "\"There are very large files in the archive that I would like to load.\"",
       "generation_s": 0.56
     },
@@ -1074,7 +1076,7 @@
       "file": "blocks/c19-b090.wav",
       "sha256": "4212cba0e5357bd6f3483a89e06a6b598825871ad6c9a2448bc10b84e158b9f8",
       "duration_ms": 1900,
-      "start_ms": 656020,
+      "start_ms": 656070,
       "text": "The librarian laughed.",
       "generation_s": 0.3
     },
@@ -1085,7 +1087,7 @@
       "file": "blocks/c19-b091.wav",
       "sha256": "1c8e4632cf7501abb5891bc039eebf80d699d55d9ebb1b5ca1e1e5f4c3aeadae",
       "duration_ms": 2750,
-      "start_ms": 658370,
+      "start_ms": 658420,
       "text": "\"Glad you're being honest\", she replied.",
       "generation_s": 0.39
     },
@@ -1096,7 +1098,7 @@
       "file": "blocks/c19-b092.wav",
       "sha256": "e4c7c60dcf8ff73e55d88e4618c3f185d637f9de36f715e749b49c663925c728",
       "duration_ms": 10525,
-      "start_ms": 661570,
+      "start_ms": 661620,
       "text": "\"Most people tell me they're looking to learn some high-minded thing about history or culture or mathematics, and then go and download their movies as soon as I'm not looking.\"",
       "generation_s": 1.42
     },
@@ -1107,7 +1109,7 @@
       "file": "blocks/c19-b093.wav",
       "sha256": "f1d7ade93e5a2dc4dfafa4b6e5f810f11cca3340eacd3f3c925913cda18645d2",
       "duration_ms": 4225,
-      "start_ms": 672545,
+      "start_ms": 672595,
       "text": "\"Well I'm not downloading a movie, it's more ... a mysterious message.\"",
       "generation_s": 0.6
     },
@@ -1118,7 +1120,7 @@
       "file": "blocks/c19-b094.wav",
       "sha256": "74bd302df0417be77389269e3a4443c71fbb0017dd4bc393422cd1bdee6b82b7",
       "duration_ms": 8625,
-      "start_ms": 677220,
+      "start_ms": 677270,
       "text": "\"Ah, a quest! Even if that ends up just being an excuse, even that is something new and interesting in my day. Well, just follow me.\"",
       "generation_s": 1.45
     },
@@ -1129,7 +1131,7 @@
       "file": "blocks/c19-b095.wav",
       "sha256": "910a5bc2372da39add83f7042b3886d70b188d83c9a1428747eaaa46f86c5e90",
       "duration_ms": 2200,
-      "start_ms": 686295,
+      "start_ms": 686345,
       "text": "[Zei](/ˈzA/) and Gladias followed.",
       "generation_s": 0.38
     },
@@ -1140,7 +1142,7 @@
       "file": "blocks/c19-b096.wav",
       "sha256": "2e9f1b430f57ff6dad9f21ac73c09caaefcb900fa7330730a1b6627b53e9c86e",
       "duration_ms": 5900,
-      "start_ms": 688945,
+      "start_ms": 688995,
       "text": "\"So you got a mysterious message telling you to download some big files? Any idea what kinds?\"",
       "generation_s": 0.89
     },
@@ -1151,7 +1153,7 @@
       "file": "blocks/c19-b097.wav",
       "sha256": "95f779a84997666f39206db176bd2071f94298ec6b47a536c5bfb602862b54b0",
       "duration_ms": 2700,
-      "start_ms": 695295,
+      "start_ms": 695345,
       "text": "\"Well so far I just saw some hashes...\"",
       "generation_s": 0.41
     },
@@ -1162,7 +1164,7 @@
       "file": "blocks/c19-b098.wav",
       "sha256": "941035c69715b254ba33363f649d7e0152bd2195deabafaa4a5e7e6e453b86cb",
       "duration_ms": 7425,
-      "start_ms": 698445,
+      "start_ms": 698495,
       "text": "They arrived at a computer terminal. The librarian took out a data cable, and put one end of the cable into the terminal.",
       "generation_s": 1.03
     },
@@ -1173,7 +1175,7 @@
       "file": "blocks/c19-b099.wav",
       "sha256": "4c58e19922ca777592438bb42684e46ead4be918360cf49c4b1d0d653dcc2537",
       "duration_ms": 2975,
-      "start_ms": 706320,
+      "start_ms": 706370,
       "text": "\"Here, put the other end into your hand device.\"",
       "generation_s": 0.45
     },
@@ -1184,7 +1186,7 @@
       "file": "blocks/c19-b100.wav",
       "sha256": "f79c15b23deceb87c0c17cecdff3268ae78cfde993eadb9fce326c9a21fdd88f",
       "duration_ms": 5700,
-      "start_ms": 709745,
+      "start_ms": 709795,
       "text": "[Zei](/ˈzA/) followed the librarian's instructions. The download started almost immediately.",
       "generation_s": 0.79
     },
@@ -1195,7 +1197,7 @@
       "file": "blocks/c19-b101.wav",
       "sha256": "33274c8cc093e0c66908079ab30949d85e4ee247bf1dd7e31025211c753880b7",
       "duration_ms": 11150,
-      "start_ms": 715895,
+      "start_ms": 715945,
       "text": "Eight progress bars, each labeled with a file hash, every one barely started, between about one and three percent. At the bottom: [sho](/ˈʃO/) [hei](/ˈhA/) [dai](/ˈdI/), eight twenty-seven [gei](/ˈɡA/) [zen](/ˈzɛn/).",
       "generation_s": 1.65,
       "read_aloud_status": "unreviewed",
@@ -1208,7 +1210,7 @@
       "file": "blocks/c19-b102.wav",
       "sha256": "f0014e42f6cfb784df949d2bc0a7a103ecf4aa8250c5b9076fa96866ec2a9145",
       "duration_ms": 1925,
-      "start_ms": 728155,
+      "start_ms": 728205,
       "text": "\"Wow, only eight minutes!\"",
       "generation_s": 0.3
     },
@@ -1219,7 +1221,7 @@
       "file": "blocks/c19-b103.wav",
       "sha256": "d02ddad1a4ccff671e8cdab6eee07ed4411956bbc61e70b1e42994ef4854f1e5",
       "duration_ms": 9650,
-      "start_ms": 730530,
+      "start_ms": 730580,
       "text": "\"So now might you be more open-minded to the things we stodgy librarians say about how physical spaces are still relevant to the pursuit of knowledge after all?\"",
       "generation_s": 1.69
     },
@@ -1230,7 +1232,7 @@
       "file": "blocks/c19-b104.wav",
       "sha256": "57b47272c113b07239c0833670e68f4a1c80779683a4ac184d467e3f709ab560",
       "duration_ms": 2000,
-      "start_ms": 740630,
+      "start_ms": 740680,
       "text": "A robot slid up to them.",
       "generation_s": 0.37
     },
@@ -1241,7 +1243,7 @@
       "file": "blocks/c19-b105.wav",
       "sha256": "d584e08d106cb55dea0a16aa3aa56c0ade0e7168a0a73bd769c6e310f40e5e37",
       "duration_ms": 1800,
-      "start_ms": 743080,
+      "start_ms": 743130,
       "text": "\"[jie](/ˈʤjɛ/) [hei](/ˈhA/) [ja](/ˈʤɑ/) [ma](/ˈmɑ/)?\"",
       "generation_s": 0.26
     },
@@ -1252,7 +1254,7 @@
       "file": "blocks/c19-b106.wav",
       "sha256": "d6d77bfc9e41ea884281aade3abed4e9fd5d0d9b3d4e586fa503ca728808f394",
       "duration_ms": 5625,
-      "start_ms": 745330,
+      "start_ms": 745380,
       "text": "A menu appeared onscreen; there was no food, but a selection of drinks was available.",
       "generation_s": 0.76
     },
@@ -1263,7 +1265,7 @@
       "file": "blocks/c19-b107.wav",
       "sha256": "109a2d187fdf20d1e8c4d78681f800b0fd03bb5fbc2d2e67c3ed8806d25da9e1",
       "duration_ms": 6000,
-      "start_ms": 751405,
+      "start_ms": 751455,
       "text": "Gladias immediately clicked a button asking for a tea. Following along, [Zei](/ˈzA/) did the same.",
       "generation_s": 0.81
     },
@@ -1274,7 +1276,7 @@
       "file": "blocks/c19-b108.wav",
       "sha256": "64f8825aa49ec31dfa3f4e3b6d280344b8985bfe4b30cc24adf8583612feb5b9",
       "duration_ms": 3150,
-      "start_ms": 757855,
+      "start_ms": 757905,
       "text": "\"This space is beautiful, I am glad you have it.\"",
       "generation_s": 0.45
     },
@@ -1285,7 +1287,7 @@
       "file": "blocks/c19-b109.wav",
       "sha256": "2fef938f47b52a14993b70005226bc6f8f33d9bf7e38272bb378d581fe0e5295",
       "duration_ms": 21025,
-      "start_ms": 761455,
+      "start_ms": 761505,
       "text": "Gladias stood up and walked over to the shelf with the books. He opened a few one by one. At that moment, not in the mood for straining his brain at reading and interpreting [Dzegoban](/ˈdzɛɡObɑn/) — especially not the earlier-version [Dzegoban](/ˈdzɛɡObɑn/) that the older books were in that he could understand nothing of at all — he focused his attention on the diagrams and pictures.",
       "generation_s": 2.92
     },
@@ -1296,7 +1298,7 @@
       "file": "blocks/c19-b110.wav",
       "sha256": "151547634cfd3f9b51daa139b8b847b65453ccb903cabe92a356173e61f713e6",
       "duration_ms": 21250,
-      "start_ms": 782930,
+      "start_ms": 782980,
       "text": "Two minutes later, the robot slid up to him, and gave him his tea. The tea was in a sealed cup, from which he could only drink through a straw. Surprised, Gladias turned to [Zei](/ˈzA/), and saw that [Zei](/ˈzA/), sitting at a table far away from any books, already had his tea. The cup that [Zei](/ˈzA/) received was open-faced, without much protection against the tea spilling.",
       "generation_s": 2.91
     },
@@ -1307,7 +1309,7 @@
       "file": "blocks/c19-b111.wav",
       "sha256": "b8aa8cf7b0b6f85a8535ba5966dc736fe520e0447fe50b0b13cf38d33d155376",
       "duration_ms": 22225,
-      "start_ms": 804630,
+      "start_ms": 804680,
       "text": "Gladias found a book about [Dzego](/ˈdzɛɡO/) architecture, titled \"[zui](/ˈzwi/) [fia](/ˈfjɑ/) [pai](/ˈpI/) [dan](/ˈdɑn/)\". He flipped through it. It contained pictures of many designs of basement rooms, shelters and underground rooms inside of mountain pyramids. The book showed them in roughly chronological order starting shortly after the war against the Arctic Empire a hundred years ago.",
       "generation_s": 3.14
     },
@@ -1318,7 +1320,7 @@
       "file": "blocks/c19-b112.wav",
       "sha256": "1949248bdde1ba68bd324230c4b376671d06fce02c4c2e7296b8b42c6ea5046b",
       "duration_ms": 40625,
-      "start_ms": 827305,
+      "start_ms": 827355,
       "text": "The earlier designs were very practical in construction, with not much thought put to comfort, or even safety against non-human threats. The designs in the middle started resembling ordinary rooms, with the main glaring exception being lack of windows. And finally, the designs near the end of the book were very well-decorated and comfortable, even more so than above-ground construction. About half had imitation windows, pretending to be outside. The other half did not have windows, and instead had plants, well-decorated walls, and other objects that seemed carefully chosen to make the inhabitant not see any space that they might think is supposed to have a window.",
       "generation_s": 6.45
     },
@@ -1329,7 +1331,7 @@
       "file": "blocks/c19-b113.wav",
       "sha256": "6c968bb34e457353b67663d9d7e85b345bf073df6f6a3fded32bd27c2d58b462",
       "duration_ms": 3725,
-      "start_ms": 868380,
+      "start_ms": 868430,
       "text": "\"Gladias!\", [Zei](/ˈzA/) shouted. \"Come back, it's almost done!\"",
       "generation_s": 0.59
     },
@@ -1340,7 +1342,7 @@
       "file": "blocks/c19-b114.wav",
       "sha256": "cdf42d6af671c4c9b38eb40b407f70e3c717c8d8327ff648dac9a6e5401903ee",
       "duration_ms": 18550,
-      "start_ms": 872555,
+      "start_ms": 872605,
       "text": "Gladias turned around, and walked back. Just as he arrived, the last progress bar reached 100%. Another window automatically opened. A script began running. \"Reconstructing data... estimated time remaining 175\", it said onscreen — not in [Dzegoban](/ˈdzɛɡObɑn/).",
       "generation_s": 2.64
     },
@@ -1351,7 +1353,7 @@
       "file": "blocks/c19-b115.wav",
       "sha256": "d3bc3b448b7eb39776b0cd1876e023f7686b79a466ca3a1a6f2be1618c2df59e",
       "duration_ms": 9325,
-      "start_ms": 891555,
+      "start_ms": 891605,
       "text": "Gladias and [Zei](/ˈzA/) sipped their tea, and stared at the timer counting down. The librarian, curious, hovered quietly about two meters behind them.",
       "generation_s": 1.34
     },
@@ -1362,7 +1364,7 @@
       "file": "blocks/c19-b116.wav",
       "sha256": "f4a2ee2b007e109abfc6d6d125c7e2c9638e43062be5d07fc0fcdb08c2d507a0",
       "duration_ms": 5400,
-      "start_ms": 901330,
+      "start_ms": 901380,
       "text": "Right on schedule, a little under two minutes later, the script finished, and a screen appeared.",
       "generation_s": 0.77
     },
@@ -1373,7 +1375,7 @@
       "file": "blocks/c19-b117.wav",
       "sha256": "cc1c22b1e2d62e1e86951c1a4ccf0c26e8b3ba3cd8d252b211958b711993d03a",
       "duration_ms": 8850,
-      "start_ms": 907180,
+      "start_ms": 907230,
       "text": "A prompt appears: What did you do on Firemoon tenth? Explain the day in detail. Below it, an empty text box with a blinking cursor.",
       "generation_s": 1.23,
       "read_aloud_status": "unreviewed",
@@ -1386,7 +1388,7 @@
       "file": "blocks/c19-b118.wav",
       "sha256": "92a3300940a3bee068c9703b0fcc6955e83586e80e4f088965ab80b507f64d29",
       "duration_ms": 1600,
-      "start_ms": 917140,
+      "start_ms": 917190,
       "text": "[Zei](/ˈzA/) stared.",
       "generation_s": 0.24
     },
@@ -1397,7 +1399,7 @@
       "file": "blocks/c19-b119.wav",
       "sha256": "0aa0ab0372991a649842877563fb27ebc491d67ee3f08f0464c69c610515fb81",
       "duration_ms": 6600,
-      "start_ms": 919190,
+      "start_ms": 919240,
       "text": "\"Let's reschedule the meeting with [Den](/ˈdɛn/) for tomorrow. I have a feeling this is not going to be a simple task.\"",
       "generation_s": 0.96
     },
@@ -1408,7 +1410,7 @@
       "file": "blocks/c19-b120.wav",
       "sha256": "f3a9e48284ce9ea06c2a0b34f1cf31a62c0ff854b279187a65c8c9b78523b433",
       "duration_ms": 1825,
-      "start_ms": 926240,
+      "start_ms": 926290,
       "text": "Gladias nodded.",
       "generation_s": 0.32
     },
@@ -1419,7 +1421,7 @@
       "file": "blocks/c19-b121.wav",
       "sha256": "0b93721d2040a423e886099f24d7330e01fb53ec5a90d76f82070fcc740add31",
       "duration_ms": 1875,
-      "start_ms": 928515,
+      "start_ms": 928565,
       "text": "\"Are you going to answer?\"",
       "generation_s": 0.31
     },
@@ -1430,7 +1432,7 @@
       "file": "blocks/c19-b122.wav",
       "sha256": "67e804407b4879aa70b16554bb11c1800ee201657e9b38bbe095fe54345b387e",
       "duration_ms": 19925,
-      "start_ms": 930840,
+      "start_ms": 930890,
       "text": "[Zei](/ˈzA/) pressed a few buttons on his hand device. \"I put this program into a sandbox using a journaling file system, so it can't access the internet, and I can always revert it back to start. So there's no privacy leak risk, and if I'm not happy with the outcome I can just revert it back to start and try again. So why not?\"",
       "generation_s": 2.97
     },
@@ -1441,7 +1443,7 @@
       "file": "blocks/c19-b123.wav",
       "sha256": "f0b4602e621504f1a82b89c7143bc18129bd111e04e7ef25025a5583b1df0e6e",
       "duration_ms": 6050,
-      "start_ms": 951215,
+      "start_ms": 951265,
       "text": "\"Now ... to remember what I did on the 10th of Firemoon ... or rather I'll just ask my hand device.\"",
       "generation_s": 0.9
     },
@@ -1452,7 +1454,7 @@
       "file": "blocks/c19-b124.wav",
       "sha256": "6424ea68bc15df76e3836f69593bbe4ad02d734a86e136c40785418de02f692b",
       "duration_ms": 18425,
-      "start_ms": 957715,
+      "start_ms": 957765,
       "text": "A record of [Zei](/ˈzA/)'s life events on that day popped up. That day was his last [Minpentai](/ˈmɪnpɛntI/) game, the semifinal against Gun — the last day when things in his life were at least somewhat normal. Before that game, he woke up and had a meeting with [Bai](/ˈbI/). After that game, he met up in the courtyard with [Deluin](/dˈɛluɪn/).",
       "generation_s": 2.5
     },
@@ -1463,7 +1465,7 @@
       "file": "blocks/c19-b125.wav",
       "sha256": "e57468151a4dea5e181589800ffb25a84045c8be77928c7cac7db9897f2647f6",
       "duration_ms": 4475,
-      "start_ms": 976590,
+      "start_ms": 976640,
       "text": "Wait, [Zei](/ˈzA/) thought, the courtyard ... what was the address again? He looked it up.",
       "generation_s": 0.67
     },
@@ -1474,7 +1476,7 @@
       "file": "blocks/c19-b126.wav",
       "sha256": "09d48620934ff6c515b7e389120d3b0cd87ce31d3ae9652935e000c77ffac42e",
       "duration_ms": 5925,
-      "start_ms": 981515,
+      "start_ms": 981565,
       "text": "The address: [sa](/ˈsɑ/) [dzu](/ˈdzu/) [du](/ˈdu/) [de](/ˈdɛ/), [len](/ˈlɛn/) [su](/ˈsu/) twenty-four fifteen [de](/ˈdɛ/), [bun](/ˈbun/) [kai](/ˈkI/) [mo](/ˈmO/) [fan](/ˈfɑn/).",
       "generation_s": 0.81,
       "read_aloud_status": "unreviewed",
@@ -1487,7 +1489,7 @@
       "file": "blocks/c19-b127.wav",
       "sha256": "4cab4d696fd819db69800f626efb0daeb89a800b1259a09ca18abab356767183",
       "duration_ms": 4350,
-      "start_ms": 988550,
+      "start_ms": 988600,
       "text": "The exact same cafeteria that the original message was from.",
       "generation_s": 0.62
     },
@@ -1498,7 +1500,7 @@
       "file": "blocks/c19-b128.wav",
       "sha256": "f947bbda83cc439c4b1626fbf08e6d28aefc0beca14696932455c5e9c65fd31f",
       "duration_ms": 13175,
-      "start_ms": 993350,
+      "start_ms": 993400,
       "text": "This was, as his local AI liked to say, the punchline. [Zei](/ˈzA/) started typing, recalling that day of his life from a combination of the AI records and his own memories which were rapidly coming back.",
       "generation_s": 1.84
     },
@@ -1509,7 +1511,7 @@
       "file": "blocks/c19-b129.wav",
       "sha256": "6b014a680a2bd12e4c3ccb4b1f0c3c70d414dea76e5421383748b575faefec2a",
       "duration_ms": 1500,
-      "start_ms": 1006975,
+      "start_ms": 1007025,
       "text": "Waking up.",
       "generation_s": 0.28
     },
@@ -1520,7 +1522,7 @@
       "file": "blocks/c19-b130.wav",
       "sha256": "1dfffc82c6e3055890a672e5eced5768a9e134342de6a1341359d9cd3b265004",
       "duration_ms": 1775,
-      "start_ms": 1008925,
+      "start_ms": 1008975,
       "text": "The meeting with [Bai](/ˈbI/).",
       "generation_s": 0.32
     },
@@ -1531,7 +1533,7 @@
       "file": "blocks/c19-b131.wav",
       "sha256": "3aa47b3972c883e0bf03b21c7f03bafdc81145a8cfffda8caea41e059f607515",
       "duration_ms": 1775,
-      "start_ms": 1011150,
+      "start_ms": 1011200,
       "text": "Going to the game.",
       "generation_s": 0.28
     },
@@ -1542,7 +1544,7 @@
       "file": "blocks/c19-b132.wav",
       "sha256": "b102a3effd3716d6934c8d7eb1a7daf5e855574b21f1dc3c9b350f592da4e88e",
       "duration_ms": 1775,
-      "start_ms": 1013375,
+      "start_ms": 1013425,
       "text": "Waiting for the game.",
       "generation_s": 0.26
     },
@@ -1553,7 +1555,7 @@
       "file": "blocks/c19-b133.wav",
       "sha256": "af6e5ce80dd0b4af283cdec921177aa19cc24e90e4077e1e2f1ea1fc063e8d87",
       "duration_ms": 1700,
-      "start_ms": 1015600,
+      "start_ms": 1015650,
       "text": "The game itself.",
       "generation_s": 0.25
     },
@@ -1564,7 +1566,7 @@
       "file": "blocks/c19-b134.wav",
       "sha256": "eb489d2d67d26eb6d42dcfc9bc1bc6934b3c550016240979fa6b588e178e124f",
       "duration_ms": 2125,
-      "start_ms": 1017750,
+      "start_ms": 1017800,
       "text": "Watching [Deluin](/dˈɛluɪn/)'s game.",
       "generation_s": 0.3
     },
@@ -1575,7 +1577,7 @@
       "file": "blocks/c19-b135.wav",
       "sha256": "6e0563a941525ed1bdd275777a9601c0091e7dd4f5ef2a2b150334d61d31ffc1",
       "duration_ms": 9125,
-      "start_ms": 1020325,
+      "start_ms": 1020375,
       "text": "A brief conversation with [Deluin](/dˈɛluɪn/) after the game. What was it I had said ... \"my style was uglier than yours. Though I also won by playing defense\"",
       "generation_s": 1.3
     },
@@ -1586,7 +1588,7 @@
       "file": "blocks/c19-b136.wav",
       "sha256": "921b1f71ed755f6e19b6d73abf8bdd6fccd309bbc7470d48d8bb132490d0bce3",
       "duration_ms": 8575,
-      "start_ms": 1029900,
+      "start_ms": 1029950,
       "text": "And then the meeting with [Deluin](/dˈɛluɪn/) at the courtyard itself. [Zei](/ˈzA/) spent as much time detailing this event as the rest of the day put together.",
       "generation_s": 1.19
     },
@@ -1597,7 +1599,7 @@
       "file": "blocks/c19-b137.wav",
       "sha256": "d4e20c375a0eef485830dae2d6aee03169a1d39b21ea32b50667ff9f7f883b59",
       "duration_ms": 4825,
-      "start_ms": 1038925,
+      "start_ms": 1038975,
       "text": "The robot. A/B testing the new proposed hieroglyphs for [Dzegoban](/ˈdzɛɡObɑn/).",
       "generation_s": 0.68
     },
@@ -1608,7 +1610,7 @@
       "file": "blocks/c19-b138.wav",
       "sha256": "24ba260e7b04eee5b265a4516a02bb4b7c95fe6d3f47055eaba327a681bdc264",
       "duration_ms": 5600,
-      "start_ms": 1044200,
+      "start_ms": 1044250,
       "text": "[Deluin](/dˈɛluɪn/) invited him to Redshire. He refused. [Deluin](/dˈɛluɪn/) showed pictures of Redshire.",
       "generation_s": 0.77
     },
@@ -1619,7 +1621,7 @@
       "file": "blocks/c19-b139.wav",
       "sha256": "9b23a8198568cf7d59de9e94674af595d2eafbc804e3bdc9d28b385448d75cec",
       "duration_ms": 7300,
-      "start_ms": 1050250,
+      "start_ms": 1050300,
       "text": "[Deluin](/dˈɛluɪn/) talking about how the nature of a place being beautiful actually does say something about the civilization there.",
       "generation_s": 1.03
     },
@@ -1630,7 +1632,7 @@
       "file": "blocks/c19-b140.wav",
       "sha256": "44d64eb6d2c43e8653f667aab992dce22f320a6cad16908b9db519dd41707377",
       "duration_ms": 6325,
-      "start_ms": 1058000,
+      "start_ms": 1058050,
       "text": "And then [Deluin](/dˈɛluɪn/)'s gently trolling line: \"I'll use my championship winnings to pay for you to go.\"",
       "generation_s": 0.89
     },
@@ -1641,7 +1643,7 @@
       "file": "blocks/c19-b141.wav",
       "sha256": "99189aef4ee5ba89b3e39dc9578662d364deb8461470586266286ba9758f9d3f",
       "duration_ms": 3425,
-      "start_ms": 1064775,
+      "start_ms": 1064825,
       "text": "After typing everything in, [Zei](/ˈzA/) clicked \"send\".",
       "generation_s": 0.48
     },
@@ -1652,7 +1654,7 @@
       "file": "blocks/c19-b142.wav",
       "sha256": "bf32bd32b8fe2816710ea6fa22aa43fa59bea3ad8b9d53d0595030a3e1bd23a1",
       "duration_ms": 5125,
-      "start_ms": 1068650,
+      "start_ms": 1068700,
       "text": "The screen reads: Thinking, estimated remaining time four hundred forty.",
       "generation_s": 0.7,
       "read_aloud_status": "unreviewed",
@@ -1665,7 +1667,7 @@
       "file": "blocks/c19-b143.wav",
       "sha256": "259ccba37c7868f54d6c3999299007addce46e21caa02fe9f2404671e638e988",
       "duration_ms": 6375,
-      "start_ms": 1074885,
+      "start_ms": 1074935,
       "text": "\"Okay, so this is a language model. But how large was that file? After the data reconstruction.\"",
       "generation_s": 0.9
     },
@@ -1676,7 +1678,7 @@
       "file": "blocks/c19-b144.wav",
       "sha256": "118fb7356e957fbd9d715d6bb4fa1317609d00e54e8d0c0d576e2fc41665c1c2",
       "duration_ms": 32150,
-      "start_ms": 1081710,
+      "start_ms": 1081760,
       "text": "\"10.7 gigabytes. The overhead was exactly a factor of six. I had a background thread check where the files were from, they were all recently uploaded. One sixth was a few recent movies — public data, though of course the selection of which movies they chose is a secret key of sorts. Another half was a big pile of someone's health data. The last third was also video, though it seemed to be AI-generated. It was all Arctic sermons talking about how fundamentally flawed the Veridian and [Dzego](/ˈdzɛɡO/) civilizations are.\"",
       "generation_s": 5.19
     },
@@ -1687,7 +1689,7 @@
       "file": "blocks/c19-b145.wav",
       "sha256": "79c65caa3c2f9eb472f24a183b9f93fc6f180a53a95f05d081ada08067b2ab6e",
       "duration_ms": 35625,
-      "start_ms": 1114310,
+      "start_ms": 1114360,
       "text": "\"The recombination algorithm was a five-of-six erasure code of five pieces of 10.7 gigabytes each. Each of those pieces, in turn, was a steganographic encoding: they used language models to find bits to flip so that the data still looked plausible, while encoding the actual underlying message, at a very ambitious rate of one bit of plaintext per four bits of ciphertext. And then the movies were a sort of cryptographic pad: if you don't know the exact set of movies that were used, even if you could fully uncover the plaintext, it would just look like random data.\"",
       "generation_s": 5.5
     },
@@ -1698,7 +1700,7 @@
       "file": "blocks/c19-b146.wav",
       "sha256": "2176d47336bb1d4d83bc11485d1d735f75daeb6f687c6fc193016aa12d73cc39",
       "duration_ms": 6625,
-      "start_ms": 1150385,
+      "start_ms": 1150435,
       "text": "\"Wait, if they wanted a pad, couldn't they just pseudorandomly generate one by repeatedly hashing some data?\"",
       "generation_s": 1.17
     },
@@ -1709,7 +1711,7 @@
       "file": "blocks/c19-b147.wav",
       "sha256": "71b00a072f4510e00f5ded25796e6e7ae0d4c5188bbd79129ff650712ded0cfd",
       "duration_ms": 6225,
-      "start_ms": 1157460,
+      "start_ms": 1157510,
       "text": "\"Ah actually you're right. Maybe I was overthinking it, maybe they just did it this way to throw people off.\"",
       "generation_s": 0.92
     },
@@ -1720,7 +1722,7 @@
       "file": "blocks/c19-b148.wav",
       "sha256": "51e0580e8f9c96b46b0e171fa7c227f0337c3eba61da78679237b25f0a3263ae",
       "duration_ms": 3475,
-      "start_ms": 1164135,
+      "start_ms": 1164185,
       "text": "\"Okay, so 10.7 gigabytes, what is it?\"",
       "generation_s": 0.53
     },
@@ -1731,7 +1733,7 @@
       "file": "blocks/c19-b149.wav",
       "sha256": "48097ae57e119213484eaae4668bf2a3cbc15b5c3ed799ad90237732a997661a",
       "duration_ms": 19825,
-      "start_ms": 1168060,
+      "start_ms": 1168110,
       "text": "\"It's not a plaintext language model. It's an obfuscated language model. Level two obfuscation, much weaker parameters than the full cryptographic-grade parameters that are used in the cryptographic networks for voting in DU or [Bansunpei](/ˈbɑnsunpA/) or for that matter the Order of Steering, but it's still the same algorithm.\"",
       "generation_s": 2.83
     },
@@ -1742,7 +1744,7 @@
       "file": "blocks/c19-b150.wav",
       "sha256": "26a433769733e3d219c2aa44081fdeb8599d31901418763f477e14a8b736a5a9",
       "duration_ms": 27925,
-      "start_ms": 1188335,
+      "start_ms": 1188385,
       "text": "\"Level two obfuscation is actually the right tradeoff for language models, because language models themselves are big and compute-intensive, so they can't handle the high overhead of going level four, and on the other hand, language models are at least partially obfuscated and resistant to bit flips all on their own. If you uncover the value of a few weights, or get the ability to reliably flip a few values in a few tensors, it's not like you can get anything useful out of that.\"",
       "generation_s": 4.53
     },
@@ -1753,7 +1755,7 @@
       "file": "blocks/c19-b151.wav",
       "sha256": "41a3fbd6fae017a701a95bfe046ee9d0c8ab1fedfbda989680da48290a7bd7fa",
       "duration_ms": 27500,
-      "start_ms": 1216710,
+      "start_ms": 1216760,
       "text": "\"Overhead factor of level two obfuscation is in the tens to low hundreds on size, and high hundreds to low thousands on compute. So this model is pretty tiny; I suspect whoever sent this fine-tuned it to only do this one task. I also think this language model's wrapper program, the full package that's being obfuscated, is doing the thinking all at once, to verify whether or not my answer is satisfactory. If it is, it will just give us its message at the end.\"",
       "generation_s": 3.93
     },
@@ -1764,7 +1766,7 @@
       "file": "blocks/c19-b152.wav",
       "sha256": "3532e9b1ac31403ba9826d65b19e52bb38b2df351968671f36f3cc6ff9f30017",
       "duration_ms": 7500,
-      "start_ms": 1244660,
+      "start_ms": 1244710,
       "text": "As though on cue, [Zei](/ˈzA/)'s hand device buzzed. The program finished executing. A new message appeared onscreen:",
       "generation_s": 1.15
     },
@@ -1775,14 +1777,14 @@
       "file": "blocks/c19-b153.wav",
       "sha256": "e706f1cfa51e7ce67f22859e9d696de2e6d34cec136bd338c0132877162f2289",
       "duration_ms": 139175,
-      "start_ms": 1252610,
+      "start_ms": 1252660,
       "text": "The message reads: Hello [Zei](/ˈzA/). You may be wondering why I have not communicated any further with you within the past month. I greatly apologize for this, and my goal in sending you this letter is that you are the only friend I have who is outside of Arctic control, and you deserve my explanation about what has been happening. The Arctics did a full sweep of Redshire almost a month ago, to confiscate all electronic devices, and give us back only devices that were backdoored and surveilled by them. This is why I lost contact with you. I had no way to reach you, and so I had to encrypt my message to you by wrapping it in this obfuscated language model that asked you to describe our shared experience to verify your identity. I have only been able to construct and send this message through a series of rounds of stealing devices from others, including two watches containing two Arctics' health data, doing the needed work inside of a non-transmitting room, copying the outputs to an inert storage medium, and then chemically destroying the circuits and storage on those devices. Physical surveillance of Redshire is, fortunately, much less total than the Arctic itself, though the window on that is closing fast. But there was also another window that was closing fast for me. You see, my parents were always on the side of being more sympathetic to the Arctics. And so after the annexation happened, they decided to cooperate with them. They told me that this was the best way to get any chance of autonomy for themselves and for Redshire in the future: to win trust by becoming a helpful part of the Arctic Empire. And so by the time you read this, most likely we will already be on an aeroplane going into the Arctic Empire core territory. I do not share their sympathies. But I have decided that the way that I can maximize my chance of being useful, is to play along, and win their trust too. The Arctic Empire respects strength, I have proven my strength by winning the [Minpentai](/ˈmɪnpɛntI/) semifinals in [Dzego](/ˈdzɛɡO/), and my parents may be proof enough of my alignment. Hopefully, there will come a moment where I will be able to do something helpful to you. But I do not know. And so for this reason, this may well be the last message that you hear from me. I hope that this will not be true, but I cannot guarantee anything. I am sorry for everything. [dze](/ˈdzɛ/) [go](/ˈɡO/) [ba](/ˈbɑ/) [fau](/ˈfW/) [gie](/ˈɡjɛ/). Your dear friend [Deluin](/dˈɛluɪn/).",
       "generation_s": 19.52,
       "read_aloud_status": "unreviewed",
       "tone_ms": 510
     }
   ],
-  "restitched_at": "2026-10-05T18:50:41+00:00",
+  "restitched_at": "2026-10-08T16:35:51+00:00",
   "assist": {
     "model": "claude-coding-agent",
     "by": "the coding agent and its helper agents",

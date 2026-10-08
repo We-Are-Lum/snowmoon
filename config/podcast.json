@@ -15,5 +15,5 @@
   "type": "serial",
   "category": ["Fiction", "Science Fiction"],
   "explicit": false,
-  "audio": { "codec": "mp3", "bitrate": "128k", "channels": 1, "sample_rate": 44100, "opener_gap_ms": 900 }
+  "audio": { "codec": "mp3", "bitrate": "128k", "channels": 1, "sample_rate": 44100, "opener_gap_ms": 900, "loudness": { "integrated_lufs": -16, "true_peak_db": -1, "lra": 11 } }
 }

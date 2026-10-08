@@ -35,7 +35,7 @@
       "figure": 600
     },
     "break_ms": 1800,
-    "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
+    "pronunciation_sha256": "81a5c2fe59fda14824d8465b630ca3bf07b205c08518250999699b51eaff317d",
     "read_aloud_sha256": "de9e30c3a8a39ef2b559fc7c44b950c497e12d7fd9bbf1246e8c5067733f31f4",
     "description_tone": {
       "notes_hz": [
@@ -59,9 +59,9 @@
   },
   "stitched": {
     "wav": "chapter-15.wav",
-    "wav_sha256": "3e2fa01547bd755e61ca61d95c19d5675664c5eebcc204fffa8558a700a3b26b",
+    "wav_sha256": "2f3fcbc33f88fd8c4adb5077573eb5cd6e1bbce5b8644c25d81a7b2ad924decc",
     "m4a": "chapter-15.m4a",
-    "m4a_sha256": "69bc75beba0d8998cb0b6f23b9c2fd7f915f3ca9a1d5fdf4d2d756492b7cbc27",
+    "m4a_sha256": "39bb7ebf3dfda293e79adc52544d5401df7508e3d3f342ba301e7f7e43e87477",
     "note": "start_ms is the block's offset in the stitched file, gaps included; a description starts with its tone (tone_ms)"
   },
   "blocks": [
@@ -670,11 +670,13 @@
       "kind": "paragraph",
       "block_sha256": "13b1894258c51299a7dfbe601445cb7c67dd5350ba3f54cc426f5926212befe2",
       "file": "blocks/c15-b054.wav",
-      "sha256": "d320b3e6a33d830b697b6c1041f81d05a8da936d1d84f605103e78030ddcf30e",
+      "sha256": "904a3e030c15db1b116c5c977bdac5442897057af7aca7668f0fcf751ec15fb2",
       "duration_ms": 7100,
       "start_ms": 443275,
-      "text": "It was not the outcome [Zei](/ˈzA/) wanted, but still much better than the outcome he feared. He breathed a sigh of relief.",
-      "generation_s": 1.24
+      "text": "It was not the outcome [Zei](/ˈzA/) wanted, but still much better than the outcome he feared. He [breathed](/bɹˈiðd/) a sigh of relief.",
+      "generation_s": 1.24,
+      "respoken_at": "2026-10-08T16:34:51+00:00",
+      "respoken_because": "pronunciation: breathed (owner, 2026-10-08)"
     },
     {
       "idx": 55,
@@ -901,11 +903,13 @@
       "kind": "paragraph",
       "block_sha256": "587d0f1de5769fd428c513d5516cc0a2c5d0fb0ad73c68e3333af318e699b5bf",
       "file": "blocks/c15-b073.wav",
-      "sha256": "f577d8026622b2e3114dff3190f967bd9786e9aecff6ef8aa759d82e68ba5c45",
+      "sha256": "68c37dcffa0facb33ca64cf3f86e91b61703d5cbcab07f9a7bc4f8337a07497b",
       "duration_ms": 12900,
       "start_ms": 747160,
-      "text": "[Zei](/ˈzA/) put down his hand device, and breathed out. His eyes briefly wandered around the restaurant, and he saw that by this point there was no one else there. He finally began eating his rice and vegetable dish.",
-      "generation_s": 2.31
+      "text": "[Zei](/ˈzA/) put down his hand device, and [breathed](/bɹˈiðd/) out. His eyes briefly wandered around the restaurant, and he saw that by this point there was no one else there. He finally began eating his rice and vegetable dish.",
+      "generation_s": 2.31,
+      "respoken_at": "2026-10-08T16:34:56+00:00",
+      "respoken_because": "pronunciation: breathed (owner, 2026-10-08)"
     },
     {
       "idx": 74,
@@ -1423,7 +1427,7 @@
       "generation_s": 1.78
     }
   ],
-  "restitched_at": "2026-10-05T18:49:49+00:00",
+  "restitched_at": "2026-10-08T16:35:12+00:00",
   "assist": {
     "model": "claude-coding-agent",
     "by": "the coding agent and its helper agents",

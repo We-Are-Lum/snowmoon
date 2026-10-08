@@ -71,8 +71,29 @@
   }
 }
 
+/* Dark: chosen on this device (data-theme="dark"), or "System" while the device is dark.
+   Light is the default (owner, 2026-10-08). The attribute is set before first paint by the
+   script in src/app/layout.tsx; scripts/check-tokens.ts keeps the two dark blocks identical. */
+:root[data-theme='dark'] {
+  --paper: #161614;
+  --ink: #E7E4DD;
+  --body: #B9B5AB;
+  --muted: #9C988E;
+  --faint: #5E5B55;
+  --rule: #33322E;
+  --soft: #24231F;
+  --card: #1E1D1A;
+  --quote-bg: #201F1C;
+  --warn: #D99A8C;
+  --flag-bg: #4A2A24;
+  --scrim: rgba(0, 0, 0, 0.6);
+  --veridia: #8DB58A;
+  --dzego: #F08DB8;
+  --voice-l: 0.78;
+  color-scheme: dark;
+}
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root[data-theme='system'] {
     --paper: #161614;
     --ink: #E7E4DD;
     --body: #B9B5AB;
@@ -91,3 +112,4 @@
     color-scheme: dark;
   }
 }
+

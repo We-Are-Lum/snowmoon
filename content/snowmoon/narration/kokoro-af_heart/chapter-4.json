@@ -9,8 +9,8 @@
     "role": "maintainer",
     "action": "published via script",
     "script": "scripts/publish-narration.ts",
-    "date": "2026-10-05",
-    "evidence": "docs/prompts/008-narration-and-images.md"
+    "date": "2026-10-08",
+    "evidence": "docs/prompts/010-pronunciation-reports.md"
   },
   "recipe": "content/snowmoon/recipes/narration/chapter-4.json",
   "model": {
@@ -43,7 +43,7 @@
       "figure": 600
     },
     "break_ms": 1800,
-    "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
+    "pronunciation_sha256": "81a5c2fe59fda14824d8465b630ca3bf07b205c08518250999699b51eaff317d",
     "read_aloud_sha256": "31168c50bcba37d6278443d4c67f59b82fb3e839e0457afc39dcaa9ab75010d7",
     "description_tone": {
       "notes_hz": [
@@ -68,10 +68,10 @@
     "tool": "ffmpeg"
   },
   "chapter_file": {
-    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-4-bdef4f3c50e5.m4a",
-    "sha256": "bdef4f3c50e5f351a3a165c148420e10fb826570a4d8aca167c58a811f46de04",
-    "bytes": 20136857,
-    "duration_ms": 1696560
+    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-4-df37ad8db068.m4a",
+    "sha256": "df37ad8db0685a2fe066742ec4a9f88fbe98f0b20b951469b71e77f7a78e814a",
+    "bytes": 20158766,
+    "duration_ms": 1696610
   },
   "breaks": [
     {
@@ -81,12 +81,12 @@
     },
     {
       "idx": 92,
-      "start_ms": 950840,
+      "start_ms": 950890,
       "silence_ms": 1800
     },
     {
       "idx": 143,
-      "start_ms": 1597110,
+      "start_ms": 1597160,
       "silence_ms": 1800
     }
   ],
@@ -1123,13 +1123,13 @@
       "idx": 86,
       "kind": "paragraph",
       "block_sha256": "7dc4ed346c062a1e24e8e2c0fa8920dbabdaf384d5457d41b6165530f3660a2e",
-      "url": "https://media.snowmoon.party/narration/kokoro-af_heart/c4/b086-261039680483.m4a",
-      "sha256": "26103968048306356fd239e3cbae9fab6118631e874c95c4d5a881f586abb326",
-      "bytes": 26359,
-      "duration_ms": 2875,
+      "url": "https://media.snowmoon.party/narration/kokoro-af_heart/c4/b086-737233a91e14.m4a",
+      "sha256": "737233a91e14bdfc7027a3318193d81aa2041ba666f087edfedb555313ba5fe3",
+      "bytes": 26374,
+      "duration_ms": 2925,
       "start_ms": 914465,
-      "source_wav_sha256": "b62193a2f4e427fda7c67c081df442f9447fcac9dc51e2d5261b9f0eefd80879",
-      "text": "[Zei](/ˈzA/) closed his eyes briefly, and breathed."
+      "source_wav_sha256": "b91911b633e32ad45d01c09026f6319a623de06ae78fa77b2140a2bc21ab4b5e",
+      "text": "[Zei](/ˈzA/) closed his eyes briefly, and [breathed](/bɹˈiðd/)."
     },
     {
       "idx": 87,
@@ -1139,7 +1139,7 @@
       "sha256": "7e0394ef22af0a86d609fe5dbfd83ef62bca69011938d438ce25a779ef516ab8",
       "bytes": 15925,
       "duration_ms": 1850,
-      "start_ms": 917790,
+      "start_ms": 917840,
       "source_wav_sha256": "a0282a50ba80ece66a35bd4fc059ce9fea1d8cd6c67d4cde74d5a612126a85c4",
       "text": "\"[PA](/ˈpɑ/) [GU](/ˈɡu/) [GEI](/ˈɡA/) [FA](/ˈfɑ/)\""
     },
@@ -1151,7 +1151,7 @@
       "sha256": "34cab157d849f063011bd226415be250024e5e9be025733b53fcf7621c87c875",
       "bytes": 160067,
       "duration_ms": 17750,
-      "start_ms": 920090,
+      "start_ms": 920140,
       "source_wav_sha256": "93185805f00687fbe894fc2dd64f7285049abbaa92962f5466420a4117a9e0b8",
       "text": "\"Welcome to the first quarter-final round of the eighteenth year of the [Minpentai](/ˈmɪnpɛntI/) tournaments. Tonight, four games will be taking place, one after the other. By midnight, we will know who is advancing to the semi-finals, and who will have to find another career. Or try harder for next year!\""
     },
@@ -1163,7 +1163,7 @@
       "sha256": "5b63de3e947390b46cb6bc2e974dce7c1c33d8f618b281fe399d60286dbfea26",
       "bytes": 49287,
       "duration_ms": 5625,
-      "start_ms": 938290,
+      "start_ms": 938340,
       "source_wav_sha256": "5175abed94f3c30dc05c9dad4bf1e911ceba860a78d266bf456caa60794852b8",
       "text": "\"Today, fated by chance to be on team [Ja](/ˈʤɑ/), we have [Pan](/ˈpɑn/) [Munbau](/ˈmunbW/) and [Dza](/ˈdzɑ/) [Dzingo](/ˈdzɪnɡO/).\""
     },
@@ -1175,7 +1175,7 @@
       "sha256": "859b85cef869b99fff6ca71bab87c99e58f4276ce765c710fb9ee0803fa076ac",
       "bytes": 34926,
       "duration_ms": 3925,
-      "start_ms": 944365,
+      "start_ms": 944415,
       "source_wav_sha256": "cdb14fda348bddbd99518b11399d999e8cd95f8841fd99c3a68c3bd2b5db567a",
       "text": "\"And on team [Zau](/ˈzW/), we have ... [Zei](/ˈzA/) [Leimin](/ˈlAmɪn/) and [Bai](/ˈbI/) [Jahen](/ˈʤɑhɛn/).\""
     },
@@ -1187,7 +1187,7 @@
       "sha256": "9b0e497016dfbe2d5781335a154f346da12b85a00a1b5fbf9b4aadc4c584d734",
       "bytes": 14116,
       "duration_ms": 1650,
-      "start_ms": 948740,
+      "start_ms": 948790,
       "source_wav_sha256": "ea0511f1bd8d802f802731b941874a6d1fcff99fc80ac5a578f86ad4c7f9c4d7",
       "text": "[Zei](/ˈzA/) froze."
     },
@@ -1199,7 +1199,7 @@
       "sha256": "602dbadc86d5bbea703657a7b80ea9ece936e31eb23620b1d43162f22896903d",
       "bytes": 135447,
       "duration_ms": 15025,
-      "start_ms": 952640,
+      "start_ms": 952690,
       "source_wav_sha256": "ef9571219f4e7f71a301774bc601f6c163e427f9a2b9e48a813a9dda3d3c69d4",
       "text": "[Zei](/ˈzA/) could see the game field, which at the beginning appeared completely black. He saw in the corner of his display his symbol: a pattern of dots that, were a copy of it anywhere on the board, would allow him to see everything within thirty squares."
     },
@@ -1211,7 +1211,7 @@
       "sha256": "2150294a073e36eae870dec19df37beea443c7cfbda94166f5a16bf0079f2a8e",
       "bytes": 180907,
       "duration_ms": 20250,
-      "start_ms": 968115,
+      "start_ms": 968165,
       "source_wav_sha256": "e1dcd6f039e243cd96f03ca72b884f7eb57e7fa102d43edf793e374519c884dd",
       "text": "He drew a few copies of his symbol in the bottom right corner of the board, where he was allowed to put down squares during the initiation phase. As soon as he did, nearby parts of the game field became visible. Almost simultaneously, he also became able to see a few parts of the field at the bottom left. [Bai](/ˈbI/) had put down her symbols too."
     },
@@ -1223,7 +1223,7 @@
       "sha256": "9a3f11c9af58e27a352f157523923f7481b3cda9da962ef3f67a225e0bce6d75",
       "bytes": 147471,
       "duration_ms": 16450,
-      "start_ms": 988815,
+      "start_ms": 988865,
       "source_wav_sha256": "d7a06b036676b66508ffa6c78dc6cdd0934c9003ce2bd59a2eba3fc4656f7f29",
       "text": "[Zei](/ˈzA/) saw [Bai](/ˈbI/) setting up walls and glider factories — gliders that would fly right to a nearby rock formation, and then reflect one glider back into [Bai](/ˈbI/)'s territory where a mirror wall would send the glider right back, but also shoot another glider upward."
     },
@@ -1235,7 +1235,7 @@
       "sha256": "6f4fb46928ba439a4965a78b3ad2946cb253fff4378eda828b08235ec2a4ecac",
       "bytes": 89934,
       "duration_ms": 9900,
-      "start_ms": 1005715,
+      "start_ms": 1005765,
       "source_wav_sha256": "53e51e43c7b99141bcf5a8684f54abfaaabba99c7d9b62ec93bdbe916f19ba2f",
       "text": "He began to do the same. He experimented with a few glider and wall formations in his sandbox, and after confirming that they work, deployed them to the field."
     },
@@ -1247,7 +1247,7 @@
       "sha256": "29c3122528bf5502013d51410e1d8e91a4824eb64ffeb708c2ac2157254eafa5",
       "bytes": 16283,
       "duration_ms": 1825,
-      "start_ms": 1016065,
+      "start_ms": 1016115,
       "source_wav_sha256": "b5d38f36eb822f2ad01b85d139c1f4352e108ca9376953fa639a31ad87d8e564",
       "text": "\"[MU](/ˈmu/) [GU](/ˈɡu/) [GEI](/ˈɡA/) [TAU](/ˈtW/) [FA](/ˈfɑ/)\""
     },
@@ -1259,7 +1259,7 @@
       "sha256": "570a95adc6270037a4f9758d58997a8e1554ddf4240d2b7583f47f8f1147342f",
       "bytes": 22341,
       "duration_ms": 2525,
-      "start_ms": 1018340,
+      "start_ms": 1018390,
       "source_wav_sha256": "90f4263bd740a620ccde47b847e87ed8acc516ce5872b65c7242a9cf208e21e2",
       "text": "The battle begins in fifty ticks."
     },
@@ -1271,7 +1271,7 @@
       "sha256": "142f63d3093a7c1b61e953ce66465ccf32ddbd4682b8d78a073c21878bbf2a09",
       "bytes": 212668,
       "duration_ms": 23750,
-      "start_ms": 1021315,
+      "start_ms": 1021365,
       "source_wav_sha256": "c6680abc39e7cadcd5ef87c46711a25106b1bcd32b3446ab35937703f9019f64",
       "text": "Normally, at this stage, the players would be speaking intensely by voice chat, coordinating their strategies. Between [Zei](/ˈzA/) and [Bai](/ˈbI/), neither spoke a word. The closest there was to communication was [Zei](/ˈzA/) intentionally not targeting gliders toward a few rock formations, [Bai](/ˈbI/) taking the hint and taking those rock formations herself, and similarly leaving some rock formations to [Zei](/ˈzA/)."
     },
@@ -1283,7 +1283,7 @@
       "sha256": "5618b7343645d2e6e03f27b3e7c113b03fe5e3f4f27fad5a9b175a07c8688005",
       "bytes": 17058,
       "duration_ms": 1925,
-      "start_ms": 1045515,
+      "start_ms": 1045565,
       "source_wav_sha256": "444cfb847730662f1e8cc02e430dab8d5e7c8d2e55b5268aa9e383bb8645cbf6",
       "text": "\"[LE](/ˈlɛ/) [MU](/ˈmu/) [GEI](/ˈɡA/) [TAU](/ˈtW/) [FA](/ˈfɑ/)\""
     },
@@ -1295,7 +1295,7 @@
       "sha256": "63eb3e365a18549c8285e9a79a181a599df4eb3b418f43c3f17c9dd6659e3f77",
       "bytes": 16955,
       "duration_ms": 1775,
-      "start_ms": 1047890,
+      "start_ms": 1047940,
       "source_wav_sha256": "a0dcfd1045c623629e9ca4c8a483b7ed67425673dcf6493617c516cf9b6fd40f",
       "text": "Twenty-five ticks."
     },
@@ -1307,7 +1307,7 @@
       "sha256": "74c95cf7d501478cd5ba9c861ae0749a5725ad45fe36827cabebe70a2970fd9c",
       "bytes": 111115,
       "duration_ms": 12200,
-      "start_ms": 1050115,
+      "start_ms": 1050165,
       "source_wav_sha256": "b62c839fb2a08307f780ddb21aee40338015066da42573e6f2cc477a6a962250",
       "text": "[Zei](/ˈzA/) suddenly realized: there had not yet been a new rule announced. The rules were the same that he had played many times before. Would the rule be announced at the start? Or was something else going on?"
     },
@@ -1319,7 +1319,7 @@
       "sha256": "218033592163f006d46539061b8414db1d231b74df757caa147271f3a6347d8a",
       "bytes": 40151,
       "duration_ms": 4450,
-      "start_ms": 1062765,
+      "start_ms": 1062815,
       "source_wav_sha256": "0e4228145612eaa7582f26944db01ad3b29570ac9f2d0df25bbc4ab6d557bf21",
       "text": "No time for speculating, [Zei](/ˈzA/) thought. Have to focus on the game."
     },
@@ -1331,7 +1331,7 @@
       "sha256": "746013eebd734a30f26fcb51ed7c9e7e5e21bec428313a5203b547ba71ca22eb",
       "bytes": 28567,
       "duration_ms": 3175,
-      "start_ms": 1067665,
+      "start_ms": 1067715,
       "source_wav_sha256": "46bc84c29a84e46b34e1b7f7ff21b16e7655bad38048c91a9229233ef1d0e839",
       "text": "\"[PA](/ˈpɑ/) [GU](/ˈɡu/) [SO](/ˈsO/) [BI](/ˈbi/) [ZE](/ˈzɛ/) [HA](/ˈhɑ/) [MU](/ˈmu/) [FO](/ˈfO/) [SHI](/ˈʃi/) [LE](/ˈlɛ/) [PA](/ˈpɑ/) ...\""
     },
@@ -1343,7 +1343,7 @@
       "sha256": "afa8870d1485bdc33015d4dfe78af0b92bb52dcd47ff7f7e255e7485cb8f2129",
       "bytes": 13414,
       "duration_ms": 1575,
-      "start_ms": 1071290,
+      "start_ms": 1071340,
       "source_wav_sha256": "d04cd60ca0edd39d4c5e61dde393bbc479ca7bd53c6b6ce70b9654b7835f9ad6",
       "text": "\"[TAU](/ˈtW/) [FA](/ˈfɑ/)\""
     },
@@ -1355,7 +1355,7 @@
       "sha256": "3b302c5783e06c84748553f2abfe33e3eac2cf452f84497bbb5da2b96b84abfc",
       "bytes": 17418,
       "duration_ms": 1975,
-      "start_ms": 1073315,
+      "start_ms": 1073365,
       "source_wav_sha256": "26890c2c43891cfccf2f7c66913708952e0d43409fac804f56c3b7da6e27d2db",
       "text": "Gliders started flying."
     },
@@ -1367,7 +1367,7 @@
       "sha256": "ad05a749ef1a9102cc05b93b9075a1abd7457923cfd9bb0246b7e7a6af2ce300",
       "bytes": 32447,
       "duration_ms": 3775,
-      "start_ms": 1075740,
+      "start_ms": 1075790,
       "source_wav_sha256": "e9e4201e80c98f220814163c256973ba875f5354fb4bfa6e75d337e0823de695",
       "text": "Larger spaceships flew out from [Zei](/ˈzA/) and [Bai](/ˈbI/)'s bases."
     },
@@ -1379,7 +1379,7 @@
       "sha256": "5afcd3594dec1c066f08547071c4d311511757c4b85b64a5128ce20a9a5ca638",
       "bytes": 232879,
       "duration_ms": 26150,
-      "start_ms": 1079965,
+      "start_ms": 1080015,
       "source_wav_sha256": "6f3d8a2934714e685ca73359a0d0c6c7f6a9c933ab433680fa1a1560a0dde775",
       "text": "For the first few hundred turns, there was no combat — it was simply a matter of expanding into the field and gathering resources. Gliders flew out, interacted with rock formations, and created more gliders. Spaceships flew out, acting as large slow-moving gliders that eventually crashed into a rock formation in a controlled way, leaving behind copies of each player's symbols. The portion of the game field that [Zei](/ˈzA/) could see increased."
     },
@@ -1391,7 +1391,7 @@
       "sha256": "873712b6d736240d783400957f6572ca191e19195f6dd52107ac40d8a4d99f8d",
       "bytes": 249904,
       "duration_ms": 28075,
-      "start_ms": 1106565,
+      "start_ms": 1106615,
       "source_wav_sha256": "8a07481e7521116fe4f4b71fc816f73ee9247e54cbf5dbc256f33680cb194ae9",
       "text": "[Zei](/ˈzA/) and [Bai](/ˈbI/)'s territories reached each other. A few stray gliders from [Bai](/ˈbI/) accidentally flew into [Zei](/ˈzA/)'s territory, and wrecked one of his factories. [Zei](/ˈzA/) cursed silently, and spent his next intervention turn putting up more walls facing [Bai](/ˈbI/). When putting up one of his walls, his finger slipped, and he accidentally created a glider that began to fly back toward his own base. [Zei](/ˈzA/) cursed silently, but then felt a sigh of relief when the glider harmlessly crashed into a rock formation."
     },
@@ -1403,7 +1403,7 @@
       "sha256": "e385460ff3a1c357161b443924b331fe1e7ecd403579711e4269d2976394af2f",
       "bytes": 157633,
       "duration_ms": 17375,
-      "start_ms": 1135090,
+      "start_ms": 1135140,
       "source_wav_sha256": "433f86bc4bef12750b2c451adfefb3fadd462708ec40c8d6616b90dfa2cc8b1c",
       "text": "A thousand turns later, the two sides' gliders and ships met. At the same time, the first intervention turn came. Here, all players were able to put down more squares near any copy of their symbols. [Zei](/ˈzA/) frantically adjusted his forces to more effectively attack Dza."
     },
@@ -1415,7 +1415,7 @@
       "sha256": "cc3dde9e9db0b46f120871ed350ed43cff064b484713b9f048c321e67eeb76fc",
       "bytes": 184464,
       "duration_ms": 20375,
-      "start_ms": 1152915,
+      "start_ms": 1152965,
       "source_wav_sha256": "236c00a8624316986709088ec15c0f5030eee0c70e778fa4a68550d3411636eb",
       "text": "At the front, [Zei](/ˈzA/) put down a \"moving wall\" design that he had perfected — a sort of large glider that flew half as fast, but was optimized for reflecting more basic types of gliders right back at the sender. Right behind his three moving walls, all aimed at Dza's corner of the game board, he put his symbol-carrying spaceships."
     },
@@ -1427,7 +1427,7 @@
       "sha256": "edc12ed5f9fb3b8e09e4794d96f3829d6f4d1e5805f75ea8faf6d0347c592684",
       "bytes": 232985,
       "duration_ms": 25800,
-      "start_ms": 1173740,
+      "start_ms": 1173790,
       "source_wav_sha256": "b8a2d029440ba82028419704f61aa8829994df4f80b054ab2fdbc34d454e86a9",
       "text": "On [Bai](/ˈbI/)'s side, her gliders and Pan's flew into each other's territories with roughly equal frequency. [Bai](/ˈbI/) had some success in sending gliders deep inside Pan's territory, turning some rock formations into a chaotic mess that blasted gliders everywhere, and destroyed some of Pan's symbols. Pan, meanwhile, was more effective at pushing into the center, and then rotating back, attacking some of [Bai](/ˈbI/)'s formations from behind."
     },
@@ -1439,7 +1439,7 @@
       "sha256": "cd1f696d6123800db1017e21e7820cb19d349c9c20a3664c7d08233315dee797",
       "bytes": 248124,
       "duration_ms": 27800,
-      "start_ms": 1199990,
+      "start_ms": 1200040,
       "source_wav_sha256": "ae44b75a0959df81462772f3d7f6072eb72ff8d5a86580018f8cb346f0f2e54e",
       "text": "[Zei](/ˈzA/) then rolled out his next move: sending three unusual-looking gliders deep into Dza's territory along the edge. The gliders hit the wall that Dza had set up around his home base in the northeast corner, and came together into [Zei](/ˈzA/)'s symbol for exactly one turn — [Zei](/ˈzA/)'s next intervention turn. [Zei](/ˈzA/) quickly removed junk and put up walls around the symbol, and three gliders aimed in strategic directions. He now had a base right at the core of Dza's territory."
     },
@@ -1451,7 +1451,7 @@
       "sha256": "c2dd474ef2701a91884bd745caf54cdef48c352708fab2c227c1f2fc6cdeaee3",
       "bytes": 118455,
       "duration_ms": 13300,
-      "start_ms": 1228240,
+      "start_ms": 1228290,
       "source_wav_sha256": "55e918783d29da33c7ea7e80ad005cc4fdd0a81bcdab7dfae5ce6c62c395350a",
       "text": "The audience was able to see a large detailed map of everything that was happening onscreen. [Fin](/ˈfɪn/), checking from far away on his hand device, saw the summary view which showed the locations of each player's symbols:"
     },
@@ -1463,7 +1463,7 @@
       "sha256": "01d65b851999e63bafddbfa9ba1019b569d5a1b341039362088b40be24c25761",
       "bytes": 181778,
       "duration_ms": 20350,
-      "start_ms": 1241990,
+      "start_ms": 1242040,
       "tone_ms": 510,
       "source_wav_sha256": "07044efc72db1b128e5c90a752ca3fb86964461e422d34a8599ce21b6e4e72be",
       "text": "The summary map shows four kinds of marks. Dza's plus signs cluster in the northeast corner. [Zei](/ˈzA/)'s circles run up the eastern side from his base in the bottom right, with one reaching right into the northeast corner. Pan's triangles are spread across the north, west and center, and [Bai](/ˈbI/)'s squares are gathered in the bottom left.",
@@ -1477,7 +1477,7 @@
       "sha256": "5ce8e9b81c4d699d7ea30fc4b9cc2d05958eec80e5327c8a93d799410407de38",
       "bytes": 108508,
       "duration_ms": 12025,
-      "start_ms": 1263450,
+      "start_ms": 1263500,
       "source_wav_sha256": "3cbdf36ffee8b20cd245dc2c9649975aef3ab2e3ea9d2c06d2ebe4c7e257f57b",
       "text": "[Zei](/ˈzA/) continued attacking Dza. Remove one of the two players completely, he thought, and that takes out half the activity in the intervention turns — always the biggest source of surprise."
     },
@@ -1489,7 +1489,7 @@
       "sha256": "8a13cbff9a52e6e7b55ce7702a194d468e76f86cef3f15869d75bce3f92c4cc3",
       "bytes": 84775,
       "duration_ms": 9225,
-      "start_ms": 1275925,
+      "start_ms": 1275975,
       "source_wav_sha256": "ac6b22ce06cc4fe314442394ad49b95281d5db7263d708d518b525a8011b14a5",
       "text": "Meanwhile, more of [Bai](/ˈbI/)'s symbols disappeared, as Pan launched an attack going into the middle of the bottom of the field, seeking to cut [Zei](/ˈzA/) off from [Bai](/ˈbI/)."
     },
@@ -1501,7 +1501,7 @@
       "sha256": "0d0004ebebd52450a001c780e8562a5c0d478b951f9a42194382c8ef1afb0711",
       "bytes": 197368,
       "duration_ms": 22100,
-      "start_ms": 1285600,
+      "start_ms": 1285650,
       "source_wav_sha256": "b4ee8d2f759d1f03a233b5e6c3ebf1160a90ece31df049eef45f0de1087aca7e",
       "text": "Watching from the sidelines, [Mu](/ˈmu/) sighed. She knew [Zei](/ˈzA/) and [Bai](/ˈbI/) did not get along, and their side was suffering from it. This was the \"price of anarchy\", she thought — the amount that a group lost from its members independently pursuing their own separate goals without coordinating. She watched intently. The next minute, she knew, would determine if they could figure it out."
     },
@@ -1513,7 +1513,7 @@
       "sha256": "ac7c7690a3bd439e60e32b93ff8dd748099286fae1c8f81c982bdda263a028ef",
       "bytes": 94152,
       "duration_ms": 10900,
-      "start_ms": 1308150,
+      "start_ms": 1308200,
       "source_wav_sha256": "0ca8dcfee5b27150da2222e1aafec634966f0de1bc1d0b04d54fdb08ee994e39",
       "text": "Watching from his hand device kilometers away, [Fin](/ˈfɪn/) felt his own frustration. [Zei](/ˈzA/) wanted to win, [Fin](/ˈfɪn/) knew, but almost as much, [Zei](/ˈzA/) wanted to hear [Bai](/ˈbI/) beg."
     },
@@ -1525,7 +1525,7 @@
       "sha256": "8f175d9e9c4adbc7da9c9d5d67f97925750dc4347bda7636c9c79598dfe7a9c2",
       "bytes": 92162,
       "duration_ms": 10175,
-      "start_ms": 1319500,
+      "start_ms": 1319550,
       "source_wav_sha256": "d24d4a4d86c829a5d996025c2261c17d6ebefe08403147cd13be3d389c54e638",
       "text": "[Zei](/ˈzA/) stared at the board, concentrating his mind and trying to figure out his next move. After what seemed like an eternity, he decided to change his tactics."
     },
@@ -1537,7 +1537,7 @@
       "sha256": "c941671694b53e5ec8bfdc9cee9f7e9c4721e31e70708e3c9ffca682abf6486b",
       "bytes": 190126,
       "duration_ms": 21075,
-      "start_ms": 1330125,
+      "start_ms": 1330175,
       "source_wav_sha256": "d6aff1f2bef503ea333cdb95fe8533843dbc5ac926177b810fa8b18791d05d37",
       "text": "[Zei](/ˈzA/) continued the attack on Dza, but intentionally did not target any of his symbols. Instead, he attacked a northern part of the eastern edge of Pan's territory, and spent a whole intervention turn to put up walls and build glider factories there. He put up more walls, just to let the gliders build up and bounce back and forth."
     },
@@ -1549,7 +1549,7 @@
       "sha256": "b1ced919de38645b5756a94eecdc233181356ae341e82eb31c7ab93c4631fbf6",
       "bytes": 205338,
       "duration_ms": 23000,
-      "start_ms": 1351650,
+      "start_ms": 1351700,
       "source_wav_sha256": "9552f35a73dc8386e480de3ee92d41162f90947e37f395c1c3d64f1f579d73e8",
       "text": "Pan and Dza did not see any of this. Instead, they saw [Zei](/ˈzA/) having greatly wounded Dza, but still struggling to finish him off, while Pan cornered [Bai](/ˈbI/) more and more toward the southeast. Emboldened, Pan launched an attack toward the east, seeking to sow chaos in the weakly defended territory in between [Zei](/ˈzA/)'s home base and the front in the northeast against Dza."
     },
@@ -1561,7 +1561,7 @@
       "sha256": "8b3ee71a7b745ba8ddf2d08a3adba04de0b1308bf2e6e6d9d5a03fb73abe74d6",
       "bytes": 73236,
       "duration_ms": 8075,
-      "start_ms": 1375100,
+      "start_ms": 1375150,
       "source_wav_sha256": "c7ad00a3f310699bf2605afb073ec5776be6f9693016633939587a9193f488c6",
       "text": "[Zei](/ˈzA/) saw that [Bai](/ˈbI/) was struggling. But the communication line between the two remained silent. She was still too proud to beg."
     },
@@ -1573,7 +1573,7 @@
       "sha256": "7f5ca724ccd513dfc3922dbeb73bef1c7034fae8217b64846c2302c96efeff43",
       "bytes": 128219,
       "duration_ms": 14225,
-      "start_ms": 1383625,
+      "start_ms": 1383675,
       "source_wav_sha256": "36d16a6e6597b816b71d047e7351b48cfb7cef6a9101f5f59a26f501306a86e2",
       "text": "Then, [Zei](/ˈzA/) saw that Pan was sending against [Zei](/ˈzA/) the same type of moving wall that [Zei](/ˈzA/) had used himself. He realized that he could not beat Pan alone. And so, he used his intervention turn to try a new strategy."
     },
@@ -1585,7 +1585,7 @@
       "sha256": "3708d2eeb0cb9306b7361017309273f0a2dfebd38e0003491873123184d4edc3",
       "bytes": 301719,
       "duration_ms": 34025,
-      "start_ms": 1398300,
+      "start_ms": 1398350,
       "source_wav_sha256": "774ce626385fd1a7905a5f1449a0cd77e0b4bd095812aa037269f2b38ec0730d",
       "text": "First, [Zei](/ˈzA/) sent some gliders to destroy Pan's symbols in the center of the field. Then came the real attack. [Zei](/ˈzA/), [Bai](/ˈbI/) and the audience saw a spaceship flying diagonally northwest, from [Zei](/ˈzA/)'s homebase, straight toward Pan's. With all of Pan's symbols cleared from the path, Pan and Dza were oblivious to this. What Pan saw was that his attack had successfully split [Bai](/ˈbI/) and [Zei](/ˈzA/), and pushed [Bai](/ˈbI/) back all the way to her home base, surrounded on all sides. Dza still had five symbols, miraculously holding on against the force of [Zei](/ˈzA/)'s primary attack."
     },
@@ -1597,7 +1597,7 @@
       "sha256": "f1c4a80bc39dc42b3203222e3f0ac8d6de854f5466c3e04d2d94a54c73e31be6",
       "bytes": 68656,
       "duration_ms": 7550,
-      "start_ms": 1432775,
+      "start_ms": 1432825,
       "source_wav_sha256": "c913613c5d0011c5879e0cbc674a61e0169df3887bded17501010091687b224b",
       "text": "[Zei](/ˈzA/) checked the clock. Sixty turns until the next intervention turn. His spaceship was almost at Pan's base."
     },
@@ -1609,7 +1609,7 @@
       "sha256": "b809ed62095a96af740a23add47f13d554e2a734d035b5bc2e1689e05d49556a",
       "bytes": 14366,
       "duration_ms": 1650,
-      "start_ms": 1440775,
+      "start_ms": 1440825,
       "source_wav_sha256": "bf208e05d69b25bb64445bbb2428a3514e7addd106d3d57674d177a316e12c48",
       "text": "Forty turns."
     },
@@ -1621,7 +1621,7 @@
       "sha256": "76002d1c4854e04fdfaf2a69a9d903629b8502d44bb1e9df67ec403c6f38c220",
       "bytes": 57614,
       "duration_ms": 6325,
-      "start_ms": 1442875,
+      "start_ms": 1442925,
       "source_wav_sha256": "4643fd55f424468c376c93950d5ca9cc02711a0ae21e24e6cea82fc7c748a03f",
       "text": "Finally, [Zei](/ˈzA/) said the first words that went across his team's audio channel in this entire game."
     },
@@ -1633,7 +1633,7 @@
       "sha256": "9697f50ca22cadf785962742316869ddc2fb8f54f5be538b334261e16fc6a3c9",
       "bytes": 32442,
       "duration_ms": 3650,
-      "start_ms": 1449650,
+      "start_ms": 1449700,
       "source_wav_sha256": "789d7765228e2108a8abb9eba90a149c4955cf262d5cdb948d367ef1f0e2bedd",
       "text": "\"[Bai](/ˈbI/), next intervention turn is your chance to shine.\""
     },
@@ -1645,7 +1645,7 @@
       "sha256": "eed13f542a959abaf03990c7b376ef9ee58059a69947fdae91e3141b1bbf0d04",
       "bytes": 13780,
       "duration_ms": 1625,
-      "start_ms": 1453750,
+      "start_ms": 1453800,
       "source_wav_sha256": "1963d99a91551ea927a235a94223f32055daa10b9852d779d97d15c30eeb5e91",
       "text": "Twenty turns."
     },
@@ -1657,7 +1657,7 @@
       "sha256": "3aa8684092809bad88d8f09736831ac97da1dcc4bbe7ba4e942c6985065aa515",
       "bytes": 73875,
       "duration_ms": 8050,
-      "start_ms": 1455825,
+      "start_ms": 1455875,
       "source_wav_sha256": "3871379839b9f127936d69b9f4f8998b64c6669967a2711a20eea93bc9b64d93",
       "text": "[Zei](/ˈzA/)'s spaceship crashed against the remaining intact southern wall of Pan's home base. It briefly fluttered into chaotic shapes."
     },
@@ -1669,7 +1669,7 @@
       "sha256": "504ccf48b3086749c452c433cf9d66841725e6e761b5dd7ee7c3e6d5c2cc4a4b",
       "bytes": 56007,
       "duration_ms": 6275,
-      "start_ms": 1464325,
+      "start_ms": 1464375,
       "source_wav_sha256": "52b4a3ee8fb2de9fb82cc065364dfb850e8c526cc16dee6e39fd0084975a8e99",
       "text": "Then, seemingly miraculously, for one single turn, the chaos came together into a symbol."
     },
@@ -1681,7 +1681,7 @@
       "sha256": "8c381bb51d96df1cb84c0a9dba3948430393e187a10ae9af1244488fc9064bba",
       "bytes": 14737,
       "duration_ms": 1650,
-      "start_ms": 1471050,
+      "start_ms": 1471100,
       "source_wav_sha256": "c2d364782a336965186c7fd6ea49eb905aa2f9a5c55fdc06a51c9747c8665d79",
       "text": "[Bai](/ˈbI/)'s symbol."
     },
@@ -1693,7 +1693,7 @@
       "sha256": "fa113836a63a32ff5b0ebf7b19345e51a31993e3ea4f24e4ca171f1cea31f3ef",
       "bytes": 55365,
       "duration_ms": 6150,
-      "start_ms": 1473150,
+      "start_ms": 1473200,
       "source_wav_sha256": "6fafde3d99e1e1355165e44b0b7a2366ff7f80ad788c2ce46e05c61da82d3739",
       "text": "[Zei](/ˈzA/) could hear a gasp — the second message that went across his team's audio channel in this game."
     },
@@ -1705,7 +1705,7 @@
       "sha256": "18152bb9721285919b690089d70c640cb0ddba5e77515483446b2f570e20c8e8",
       "bytes": 237899,
       "duration_ms": 26650,
-      "start_ms": 1479750,
+      "start_ms": 1479800,
       "source_wav_sha256": "0279cda19df8ffffa699efdbe8fb21bc0c9e56ce9e9edf932c37775a1c16c08d",
       "text": "[Zei](/ˈzA/) used his intervention turn to remove his own wall. Dozens of gliders flew in all directions, simultaneously targeting all of Dza's remaining symbols from multiple angles. [Bai](/ˈbI/) struggled in her sandbox view, made a few attempts at copying [Zei](/ˈzA/)'s trick from over a thousand turns earlier. On her third try, she succeeded, and she repeated her moves live. The symbol was walled off, and gliders were flying in all directions."
     },
@@ -1717,7 +1717,7 @@
       "sha256": "113b538898ef1b014a08db3cb78618930b461254da721a1c2bb63de75e0b644b",
       "bytes": 47139,
       "duration_ms": 5175,
-      "start_ms": 1506850,
+      "start_ms": 1506900,
       "source_wav_sha256": "a2300c75f9dff2512b5e0a4f0bca48754893c822d7d2878aa33c182fa6bcd00c",
       "text": "Two hundred turns later, all of Dza's remaining symbols had been eliminated."
     },
@@ -1729,7 +1729,7 @@
       "sha256": "0624074df9614b0f96bda0bcdcfce720e6f377cf86275240628b0b2a29108f6e",
       "bytes": 142766,
       "duration_ms": 15950,
-      "start_ms": 1512475,
+      "start_ms": 1512525,
       "tone_ms": 510,
       "source_wav_sha256": "5b8ad8a85189db9c9b6e0c695f8f3088759cb3ef7f0650861a68b6ef9706ed5b",
       "text": "The map once more: the plus signs are gone. [Zei](/ˈzA/)'s circles hold the bottom right and a cluster in the northeast. Pan's triangles fill much of the north, west and center. [Bai](/ˈbI/)'s squares remain in the bottom left, with a single square now up in the northwest.",
@@ -1743,7 +1743,7 @@
       "sha256": "f2433a3b1ccdffbca52819cc2f0ab9813d3d8fed23a8587d42e05941537bd0ca",
       "bytes": 119774,
       "duration_ms": 13500,
-      "start_ms": 1529535,
+      "start_ms": 1529585,
       "source_wav_sha256": "05b3bee3ce8bbf6d34e9ab3ce9670a962b8f88c5b64caf839022cd51c0145f65",
       "text": "By total symbol count, it was fifteen to fifteen — exactly even. But now, Dza was out, and [Zei](/ˈzA/) and [Bai](/ˈbI/) could do twice as much together in their intervention turns as Pan could do alone in his."
     },
@@ -1755,7 +1755,7 @@
       "sha256": "a89198a151aabccec192c70aa3f389504998decbee55bb39b8bf1c40d7878b75",
       "bytes": 193569,
       "duration_ms": 21550,
-      "start_ms": 1543485,
+      "start_ms": 1543535,
       "source_wav_sha256": "adbd04f7a82c22d068fcf4970abf52fda91ec263bdefc3de1575472ea5ac80fc",
       "text": "Pan made a last-ditch effort to send new kinds of gliders to destroy everything he could in [Zei](/ˈzA/)'s home base. He copied [Zei](/ˈzA/)'s signature tactic, sending a spaceship to try to set up a symbol there. The plan partially succeeded. But the keystone, setting up the symbol, did not. [Zei](/ˈzA/) had already put up the countermeasures, and blocked the spaceship in its tracks."
     },
@@ -1767,7 +1767,7 @@
       "sha256": "407a41f9ecaca0dcecd9283ee5ae2e811de98bb2b829a021933230d8b99f0f6f",
       "bytes": 234213,
       "duration_ms": 26100,
-      "start_ms": 1565485,
+      "start_ms": 1565535,
       "source_wav_sha256": "10758613f840971e90ed196a652f036e06e503686a1e83058375d19def35bea6",
       "text": "Meanwhile, [Bai](/ˈbI/) and [Zei](/ˈzA/) continued to wreak havoc on Pan's territory, [Bai](/ˈbI/) attacking the west and [Zei](/ˈzA/) attacking the north and east. A thousand turns later, most of the game field had become a high-entropy wasteland. The main untarnished territories were [Bai](/ˈbI/)'s home base, a fraction of [Zei](/ˈzA/)'s home base, and [Zei](/ˈzA/)'s side of what had been the battle front against Dza. Total symbol count: [Zei](/ˈzA/) five, [Bai](/ˈbI/) five, and Pan four."
     },
@@ -1779,7 +1779,7 @@
       "sha256": "1868b3acd835a087b603f418a719a2b218c4b45481e3da5ac66a34316f91feac",
       "bytes": 20515,
       "duration_ms": 2350,
-      "start_ms": 1592035,
+      "start_ms": 1592085,
       "source_wav_sha256": "ddfa2c3c43a89d6f97c210b0a2ed318c25228f2734cfca01aefdb11c4578ac0f",
       "text": "At that moment, Pan resigned."
     },
@@ -1791,7 +1791,7 @@
       "sha256": "aec2940b23deedafdebf49097f662227467c04fc5bc65f3083e0892d2dc7eff4",
       "bytes": 16220,
       "duration_ms": 1825,
-      "start_ms": 1594835,
+      "start_ms": 1594885,
       "source_wav_sha256": "11afc79d6360455abc030297df82d784b46427cd93556d31ec1077b5e59a4fba",
       "text": "The audience cheered."
     },
@@ -1803,7 +1803,7 @@
       "sha256": "211b48e56fa5da6febd6b159e0641668a3e972c931aded2cb60ca00124c2e170",
       "bytes": 66469,
       "duration_ms": 7475,
-      "start_ms": 1598910,
+      "start_ms": 1598960,
       "source_wav_sha256": "45fb7fc52f609e6c0be579ca8c480d7ed3413898fee3b532aedc38b6b0b53b0f",
       "text": "Two elevators opened up in the waiting room, and [Zei](/ˈzA/) and [Bai](/ˈbI/) simultaneously stepped out. [Mu](/ˈmu/) was waiting for them."
     },
@@ -1815,7 +1815,7 @@
       "sha256": "2131c225e5b764296775274e6edb2dd43bf07bfc51177ce0214bff53320a6f05",
       "bytes": 49073,
       "duration_ms": 5425,
-      "start_ms": 1606835,
+      "start_ms": 1606885,
       "source_wav_sha256": "09bc7edb54cc215db30e785af7a2dd8a66a93c26c9cc6eb126a235dd4ebad129",
       "text": "\"Congratulations, you two. Next stop is the semi-finals in fifteen days.\""
     },
@@ -1827,7 +1827,7 @@
       "sha256": "8958cc20c644f6aac5d9382c0143558612f0e3ca5537bc5f71b30847124a7200",
       "bytes": 50741,
       "duration_ms": 5725,
-      "start_ms": 1612710,
+      "start_ms": 1612760,
       "source_wav_sha256": "c2f5f760a777cd1d137039a4a801350637566d7b5a9343a1cb65d42a0f71a6bb",
       "text": "\"I'm confused. Everything in this game was the same as before. What was the new rule?\""
     },
@@ -1839,7 +1839,7 @@
       "sha256": "842ca4018231291f1cf30a73d85886ff306316c322a571a4e075c61e6cfb6564",
       "bytes": 20319,
       "duration_ms": 2225,
-      "start_ms": 1618885,
+      "start_ms": 1618935,
       "source_wav_sha256": "d5c5a76cb3e0f56e8724e5847d11ec9e9b4408bf7402c5f982c5884160529a15",
       "text": "\"Ah. I thought you would ask that.\""
     },
@@ -1851,7 +1851,7 @@
       "sha256": "793a276553821ab0e76d26f2452542b7774df50785811ed9d796ce07879edbef",
       "bytes": 187848,
       "duration_ms": 21100,
-      "start_ms": 1621560,
+      "start_ms": 1621610,
       "source_wav_sha256": "9fa01fcafc09488dc303f881336104c45bea1c6b1525278dc387a69f1a2412ac",
       "text": "\"A few days ago, right before the priests went into the dungeon to decide on the rule sets, I suggested to one of them that they should make things interesting, and be more creative. The doors stayed sealed for five days — twice as long as usual. And now we know why. The rule change was: the team selection was not done through cryptographic randomness.\""
     },
@@ -1863,7 +1863,7 @@
       "sha256": "790dede55b7239449260e5ce8864de2f6fb56f461346749b43fb6449952573a0",
       "bytes": 19641,
       "duration_ms": 2125,
-      "start_ms": 1643110,
+      "start_ms": 1643160,
       "source_wav_sha256": "c7619a4c0bf127374d5614a1725a06e9cb84fb84f5e1a696405b2f58b5bd4793",
       "text": "[Zei](/ˈzA/)'s eyes opened wide."
     },
@@ -1875,7 +1875,7 @@
       "sha256": "53fda41d7bd11b84fd720e79877458d9ff8e924599ef990afe12d84ef29460c3",
       "bytes": 174778,
       "duration_ms": 19400,
-      "start_ms": 1645685,
+      "start_ms": 1645735,
       "source_wav_sha256": "10803809b54bbaabbf0b80018ccef0dd9e1cc02a8d1a853c20bf51bae9ebcad0",
       "text": "\"This time, the game was a psychological trial. Despite having the teammate you wanted to cooperate with the least, despite making a new all-time record for the fewest messages exchanged in the audio channel during an entire game, when the moment came, almost without talking at all, you cooperated. And so you passed.\""
     },
@@ -1887,7 +1887,7 @@
       "sha256": "1e079df3a4bc9963db3f52cf3c32be0c67b399a1e979854d6dcac4b6c27c1c59",
       "bytes": 13987,
       "duration_ms": 1575,
-      "start_ms": 1665535,
+      "start_ms": 1665585,
       "source_wav_sha256": "4309af19463f76ddab563880d2e794222b8a076b90a6a34fbc52fccda2a7de9e",
       "text": "[Mu](/ˈmu/) paused."
     },
@@ -1899,7 +1899,7 @@
       "sha256": "bfc01b8e21b699fde904cc5ff5d9b424375a477febc38a9dfc387a5f66c2d729",
       "bytes": 18734,
       "duration_ms": 2025,
-      "start_ms": 1667560,
+      "start_ms": 1667610,
       "source_wav_sha256": "440c7a9d0bb52b3b54aaa078940f943b78d1128ffd28c61fca28119412d4a8b8",
       "text": "\"The priests will be pleased.\""
     },
@@ -1911,7 +1911,7 @@
       "sha256": "78b7ab06175be71dadc30437275a5be276a273b747c1160aa80500b50215dc85",
       "bytes": 31978,
       "duration_ms": 3600,
-      "start_ms": 1670035,
+      "start_ms": 1670085,
       "source_wav_sha256": "75662d0e34d53420f28b9ca0d326af01d7f37753425d317480b39f7de205235c",
       "text": "For a moment, [Mu](/ˈmu/) and [Zei](/ˈzA/) silently stared at each other."
     },
@@ -1923,7 +1923,7 @@
       "sha256": "72323e6f38c44a02c08f5a56e509d124146cc7bf96b85d7e4244659cfa89eec5",
       "bytes": 24677,
       "duration_ms": 2650,
-      "start_ms": 1674085,
+      "start_ms": 1674135,
       "source_wav_sha256": "9dfc9236885a3d70b8469a62fec240711f194c4d7adfd8063db15b2dd72acdf2",
       "text": "Breaking the silence, [Bai](/ˈbI/) walked up."
     },
@@ -1935,7 +1935,7 @@
       "sha256": "d9192dda4b6f0384b653beb284b2f30d2aa1b6876f64c5221bacb3986e7a07de",
       "bytes": 13739,
       "duration_ms": 1575,
-      "start_ms": 1677185,
+      "start_ms": 1677235,
       "source_wav_sha256": "ac4bd989c35893f1e0eb6586bebea3b7f5d4dcb820a2718171fafd4b77669243",
       "text": "\"I'm sorry.\""
     },
@@ -1947,7 +1947,7 @@
       "sha256": "589f6ac060c4852ebf58f0dd5716c91786371cddaaa9f86b72d42e25b3df75fc",
       "bytes": 70331,
       "duration_ms": 7750,
-      "start_ms": 1679210,
+      "start_ms": 1679260,
       "source_wav_sha256": "5fb093a8d566a02271a7375710436ba1c53ebca3b0a85278bffc266c5df26a29",
       "text": "\"Come on, you gotta give me something more substantive than that. Say, next time you take a vacation to Redshire, bring me along.\""
     },
@@ -1959,7 +1959,7 @@
       "sha256": "ad0b2c067babc94cfed60250b6e3836783a98f1c36e042e73b085747322ee0cc",
       "bytes": 60173,
       "duration_ms": 6675,
-      "start_ms": 1687410,
+      "start_ms": 1687460,
       "source_wav_sha256": "9d7922b0df2fdcc1d5d626f2d2039fb4dd9a92f12db27af41f1c8bac45f83413",
       "text": "Then, realizing that the suggestion he just made might give [Bai](/ˈbI/) an unintended impression, he quickly added:"
     },
@@ -1971,7 +1971,7 @@
       "sha256": "700e725e000045cda547d4ee77f944d6259c384e51271c9ec65a454c0c0abc0f",
       "bytes": 14273,
       "duration_ms": 1575,
-      "start_ms": 1694535,
+      "start_ms": 1694585,
       "source_wav_sha256": "990d99ecdb5a74eab6eb415f10db94e2cee14460ea0e401b20e80643e58c4d0d",
       "text": "\"And my mom.\""
     }

@@ -9,8 +9,8 @@
     "role": "maintainer",
     "action": "published via script",
     "script": "scripts/publish-narration.ts",
-    "date": "2026-10-05",
-    "evidence": "docs/prompts/008-narration-and-images.md"
+    "date": "2026-10-08",
+    "evidence": "docs/prompts/010-pronunciation-reports.md"
   },
   "recipe": "content/snowmoon/recipes/narration/chapter-12.json",
   "model": {
@@ -43,7 +43,7 @@
       "figure": 600
     },
     "break_ms": 1800,
-    "pronunciation_sha256": "ee9f8edc71dbd404c6aa9d41736abddf5dea72e48b8506e3ed119816646a1cae",
+    "pronunciation_sha256": "81a5c2fe59fda14824d8465b630ca3bf07b205c08518250999699b51eaff317d",
     "read_aloud_sha256": "bdaecc3f77e228329acc0d49f48ee32859eb5999c5a36f9d300fd3e6e5953451",
     "description_tone": {
       "notes_hz": [
@@ -68,10 +68,10 @@
     "tool": "ffmpeg"
   },
   "chapter_file": {
-    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-12-2a1cb297fc1c.m4a",
-    "sha256": "2a1cb297fc1ce787019784aeb408347e7849978740b91ee9974ac7d2ac72a57c",
-    "bytes": 18535357,
-    "duration_ms": 1584235
+    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-12-2cbd8d83f5db.m4a",
+    "sha256": "2cbd8d83f5db3014a2fa816176315a780d1a3bce7598a81bb0375772c6a03f17",
+    "bytes": 18530658,
+    "duration_ms": 1584560
   },
   "breaks": [
     {
@@ -1754,13 +1754,13 @@
       "idx": 141,
       "kind": "paragraph",
       "block_sha256": "60c420a3bf1c0c609ad2d248a5c8a7f94857faf43c5883f69de41a2138d2db88",
-      "url": "https://media.snowmoon.party/narration/kokoro-af_heart/c12/b141-ed99b46874c0.m4a",
-      "sha256": "ed99b46874c02a47fb84547fc1ab8473f0660d778a5253b1df484b4b32882ee9",
-      "bytes": 198362,
-      "duration_ms": 22000,
+      "url": "https://media.snowmoon.party/narration/kokoro-af_heart/c12/b141-ffc55881028e.m4a",
+      "sha256": "ffc55881028e0cd25a9b3234099e29f352b609fbf35c3c3bcea3df8597feb486",
+      "bytes": 196580,
+      "duration_ms": 22125,
       "start_ms": 1032775,
-      "source_wav_sha256": "b9ec04b16efdc84fcea5ac7b8ee4be1c32eb6464b09bcbcb7e6375794ca154e5",
-      "text": "[Zei](/ˈzA/) closed his eyes, and breathed in and out, trying his best to calm himself. This match was not decisive, he knew: if he lost, he could still make it up in the others. But in another way, that fact made him more scared: armed with the excuse that it's okay to lose, will his mind have the motivation needed to keep his full attention and mindpower on the game and win?"
+      "source_wav_sha256": "744c24fb783be02ea9df359bc5cc0e1f4ca3e02fee3c0f62de88f25d85fb5987",
+      "text": "[Zei](/ˈzA/) closed his eyes, and [breathed](/bɹˈiðd/) in and out, trying his best to calm himself. This match was not decisive, he knew: if he lost, he could still make it up in the others. But in another way, that fact made him more scared: armed with the excuse that it's okay to lose, will his mind have the motivation needed to keep his full attention and mindpower on the game and win?"
     },
     {
       "idx": 142,
@@ -1770,7 +1770,7 @@
       "sha256": "73c635934f9c5064f57618d51169ab566fe69f027e282871d32513efb088eb8f",
       "bytes": 16198,
       "duration_ms": 1875,
-      "start_ms": 1055225,
+      "start_ms": 1055350,
       "source_wav_sha256": "2c1399c8297a708f316cc86313681477c76efbc18f0ff30e3e61d7911d903c48",
       "text": "\"[LE](/ˈlɛ/) [MU](/ˈmu/) [GEI](/ˈɡA/) [FA](/ˈfɑ/)\""
     },
@@ -1782,7 +1782,7 @@
       "sha256": "5cac12c4b65e0f8f058afd639007ccd255b32e53735c5e422a61b4e4ba2b3630",
       "bytes": 21417,
       "duration_ms": 2275,
-      "start_ms": 1057550,
+      "start_ms": 1057675,
       "source_wav_sha256": "3ea31d64efc58c63c28dff1ccada200539198bf7e022ec01282e737449aef499",
       "text": "[Zei](/ˈzA/) opened his eyes again."
     },
@@ -1794,7 +1794,7 @@
       "sha256": "0a2dc0ef5e60bb0c897603b568c3ecc0ede2e95cf896a1672c70e7b85cceec93",
       "bytes": 15632,
       "duration_ms": 1850,
-      "start_ms": 1060275,
+      "start_ms": 1060400,
       "source_wav_sha256": "26026930472d6df363c2efae3cd4bf340f62a2bd90aad4aca455cedada7707fc",
       "text": "\"[PA](/ˈpɑ/) [GU](/ˈɡu/) [GEI](/ˈɡA/) [FA](/ˈfɑ/)\""
     },
@@ -1806,7 +1806,7 @@
       "sha256": "aa593bb421eda5a845dbb3f3154d6d2fa3d13d92978866f814493299f21462fe",
       "bytes": 17799,
       "duration_ms": 2000,
-      "start_ms": 1062575,
+      "start_ms": 1062700,
       "source_wav_sha256": "b655db4fdf54d669155c6984a0d068a99bb3bfaffd7939b76f7749b04464d80d",
       "text": "[Zei](/ˈzA/) patiently waited."
     },
@@ -1818,7 +1818,7 @@
       "sha256": "5b492e39714bb9b1a437e381d86a517e86430fb1691464ac7ef2293d84a5f51c",
       "bytes": 107237,
       "duration_ms": 12225,
-      "start_ms": 1065025,
+      "start_ms": 1065150,
       "source_wav_sha256": "908bd6deaa5f311b4595c8799957a4dc587291237530b29c51430fe043412514",
       "text": "\"Welcome to the fourth qualifying match of the north stadium for today. Everyone, meet our players for this round: [Zei](/ˈzA/) [Leimin](/ˈlAmɪn/) from [Pafogai](/ˈpɑfOɡI/) [Du](/ˈdu/), and [Bo](/ˈbO/) [Zume](/ˈzumɛ/), from right here in [Sadzu](/ˈsɑdzu/) [Du](/ˈdu/).\""
     },
@@ -1830,7 +1830,7 @@
       "sha256": "e87abc75f94ab21630119d032fb9c400994f77cc71e92eab9552b9f74f333a67",
       "bytes": 106901,
       "duration_ms": 11750,
-      "start_ms": 1077700,
+      "start_ms": 1077825,
       "source_wav_sha256": "94cb15dfb5fdf8d5824e44105bd61ce2ced0952c87f23a3188b0f4a160d474d5",
       "text": "\"I am also pleased to announce — perhaps one time too many for the audience, but for the first time, for our contestants — today's rule change. Today, [Minpentai](/ˈmɪnpɛntI/) will be played on a hex grid.\""
     },
@@ -1842,7 +1842,7 @@
       "sha256": "9d6e72bcbaf22de0d0e6a32a62e46372a73c2e22d795d34c6464d7efce96c457",
       "bytes": 21502,
       "duration_ms": 2350,
-      "start_ms": 1089900,
+      "start_ms": 1090025,
       "source_wav_sha256": "8f55ac9f259c5498600be6300bf2dae9fc13bd87577231bdc8e32ea3b501d565",
       "text": "[Zei](/ˈzA/) opened his mouth in shock."
     },
@@ -1854,7 +1854,7 @@
       "sha256": "05c815ff9f4750ac68d1c08bbb0c842dbb73e3236152ad824be3cfee52a28a2f",
       "bytes": 100057,
       "duration_ms": 11275,
-      "start_ms": 1092700,
+      "start_ms": 1092825,
       "source_wav_sha256": "fab81aec1d81cf264ae54a6f8b3549c0d556fb523733dc934df90d2115b925c0",
       "text": "\"You will have twenty minutes to figure out your structures, any gliders, spaceships and walls, to the best of your ability. And then the serene battle over a field of snowflakes will begin.\""
     },
@@ -1866,7 +1866,7 @@
       "sha256": "b78c000f17b074c6fded1f5595d91020e3e356e2e0f8ee98c11801d4b92b7aea",
       "bytes": 45264,
       "duration_ms": 4950,
-      "start_ms": 1104425,
+      "start_ms": 1104550,
       "source_wav_sha256": "17c74564e7f8cd27cca5f42e742387fa22859c558b9c69b13a52284c9a673af9",
       "text": "[Zei](/ˈzA/)'s display turned on, and he could see the hexagonal grid in front of him."
     },
@@ -1878,7 +1878,7 @@
       "sha256": "b06994732d2935f15fe6d6f5f2a79ca82109d44ead8ef549f322763fa453049f",
       "bytes": 65583,
       "duration_ms": 7125,
-      "start_ms": 1109825,
+      "start_ms": 1109950,
       "source_wav_sha256": "05a07389e2a7116c160adb9c01667b5b97c65a282562873f61a4939e8976573c",
       "text": "\"[LE](/ˈlɛ/) [FI](/ˈfi/) [SHI](/ˈʃi/) [GEI](/ˈɡA/) [TAU](/ˈtW/) [FA](/ˈfɑ/)\", the automated loud voice shouted. The battle begins in two thousand ticks."
     },
@@ -1890,7 +1890,7 @@
       "sha256": "42d4bf4cf76e7d3ee9ba4a99cdf09b541202303c63c92f867a8923e8033f2022",
       "bytes": 171009,
       "duration_ms": 18800,
-      "start_ms": 1117400,
+      "start_ms": 1117525,
       "source_wav_sha256": "3f8f362039ef328686641bae2aad967702ce073c7aed51f9cba293263e9ff159",
       "text": "[Zei](/ˈzA/) began by quickly drawing random junk in his sandbox, seeing what stayed stable and what turned into a glider. Within one minute, he identified a few gliders and a few static structures that could be used for walls. To his surprise, the gliders that moved the fastest moved ... directly east."
     },
@@ -1902,7 +1902,7 @@
       "sha256": "788d010179111a2b9bf96e863fadf225df34d9f0c716af0723cb8e1480e2b824",
       "bytes": 59053,
       "duration_ms": 6550,
-      "start_ms": 1136650,
+      "start_ms": 1136775,
       "source_wav_sha256": "f3f4cabfa2ee25ae034637886aa739212438839cd93181a04697e61dac09c793",
       "text": "His next move was to deliberately draw different kinds of walls, fly gliders at them, and see what sticks."
     },
@@ -1914,7 +1914,7 @@
       "sha256": "2483eabf899c7e38dbea2653d880dd5cb67edb99361805838ac307069513eecb",
       "bytes": 101908,
       "duration_ms": 11525,
-      "start_ms": 1143650,
+      "start_ms": 1143775,
       "source_wav_sha256": "0a1532864b088c93be93c6018d79184e9399b98b9a8752a26da4f237a8301dc3",
       "text": "He watched the gliders carefully, to try to quickly get an intuition for what kinds of shapes can move while preserving their shape. He did several rounds of defining both the gliders and the walls."
     },
@@ -1926,7 +1926,7 @@
       "sha256": "947f2195a3227c68b4161c2592867ecad9b1c37436146f87d3acaae06fb34363",
       "bytes": 48785,
       "duration_ms": 5150,
-      "start_ms": 1155625,
+      "start_ms": 1155750,
       "source_wav_sha256": "5cda36447693ba85868df3f1276b1264cb3bafc652df37cbda2c9da21a60ba16",
       "text": "\"[PA](/ˈpɑ/) [MU](/ˈmu/) [GU](/ˈɡu/) [GU](/ˈɡu/) [GEI](/ˈɡA/) [TAU](/ˈtW/) [FA](/ˈfɑ/).\" The battle begins in fifteen hundred ticks."
     },
@@ -1938,7 +1938,7 @@
       "sha256": "c37ac8f0ba71fdbad703ecf60a2999595391b58e105cb88a0c7d62b9910916e9",
       "bytes": 167955,
       "duration_ms": 18750,
-      "start_ms": 1161225,
+      "start_ms": 1161350,
       "source_wav_sha256": "0d494d3a265914b87d8a4c32d9ce26ee7d8377c52eaefed7da2d2f1d42819bf9",
       "text": "[Zei](/ˈzA/) began experimenting with shapes that were similar to his symbol, seeing if any of them could function as a glider. He needed to come up with something — otherwise he would be able to progress only very slowly, by repeatedly building a new symbol beside his existing symbol during each intervention turn."
     },
@@ -1950,7 +1950,7 @@
       "sha256": "ddba73bd7344b85932dd2beb524586c3b42c759acc5e5454aefba343f82f51d1",
       "bytes": 139799,
       "duration_ms": 15625,
-      "start_ms": 1180425,
+      "start_ms": 1180550,
       "source_wav_sha256": "afd536155fb2961e4dfba3ed44a1ec14fcf2e1d3fdeb770cb3705a03d9cf26f4",
       "text": "He realized that to make actual headway, he would need to interact with the rock formations. He made a couple of guesses about what shape the rock formations in the hexgrid version of [Minpentai](/ˈmɪnpɛntI/) might look like, and examined the behavior of gliders as they crashed into them."
     },
@@ -1962,7 +1962,7 @@
       "sha256": "43e44efb70c82ae16be9a5810c3873798a362628fa0f56c5e6c8eb25a4205518",
       "bytes": 42824,
       "duration_ms": 4550,
-      "start_ms": 1196500,
+      "start_ms": 1196625,
       "source_wav_sha256": "90e9eb9561df0a330f1967651f27632bfcecd6ffdb9e81d3b03cb38a3d8c1f07",
       "text": "\"[FI](/ˈfi/) [SHI](/ˈʃi/) [GEI](/ˈɡA/) [TAU](/ˈtW/) [FA](/ˈfɑ/).\" The battle begins in a thousand ticks."
     },
@@ -1974,7 +1974,7 @@
       "sha256": "f422edcc162f769ba5140a4179e468f7d64ce4b7312fdcf9d2de529a931c5a7c",
       "bytes": 92934,
       "duration_ms": 10225,
-      "start_ms": 1201500,
+      "start_ms": 1201625,
       "source_wav_sha256": "56bd6e7410b04f864dc2e409cd7b77db2fb31608a3e957e49e6e7271694a99e0",
       "text": "[Zei](/ˈzA/) began to sweat. So far, no luck. No combination of a glider, a plausible rock shape and an offset that he tried led to a copy of his symbol."
     },
@@ -1986,7 +1986,7 @@
       "sha256": "1acf0c26f5f0502353d991139c7a51a807b36ba30e58c4205368ed8a2818d0ba",
       "bytes": 27685,
       "duration_ms": 3100,
-      "start_ms": 1212175,
+      "start_ms": 1212300,
       "source_wav_sha256": "1e0aa00033388286eb29d6261cbc660d81e6d0542a0845f8f67a771454ba975e",
       "text": "He thought more about the exact shape of his symbol."
     },
@@ -1998,7 +1998,7 @@
       "sha256": "69f7670e1726d9a3f26bafc4b782a6449ae2e7d16e4e8222d1dd6667ba4d7f1d",
       "bytes": 81524,
       "duration_ms": 8850,
-      "start_ms": 1215725,
+      "start_ms": 1215850,
       "source_wav_sha256": "31754608b9663ee42a666e861ab1f3d8222c76ae46e791e7866f6f482fc61989",
       "text": "After another two minutes of fruitless exploration, [Zei](/ˈzA/)'s mind flashed back to the textbook he had been reading less than two longhours before."
     },
@@ -2010,7 +2010,7 @@
       "sha256": "09d698f9115a176d3745f67ca8ff488c4d0ce0135722b17da872bb59346c36a4",
       "bytes": 76238,
       "duration_ms": 8350,
-      "start_ms": 1225025,
+      "start_ms": 1225150,
       "source_wav_sha256": "6ce686673c0e1c925dd25b6b9527284144b9bb6c89ddb71a58691ac80b557421",
       "text": "The core building block maps inputs to outputs one-to-one. And not only that, it can be efficiently run both forwards and backwards.."
     },
@@ -2022,7 +2022,7 @@
       "sha256": "eddbada1fff1981c47110c20b05df9529472969b5493af461f203f9fd6c1f46e",
       "bytes": 109181,
       "duration_ms": 12500,
-      "start_ms": 1233975,
+      "start_ms": 1234100,
       "source_wav_sha256": "7b7dbf542f580331c96de2c9905dfd8e31beed3cd5b86c7fe6b4ad87dd895d2a",
       "text": "But unlike the hash function, here there was no truncate-and-xor wrapper at the end. And so if he knew his desired end state ... he just had to put that end state into the sandbox, and play it backwards."
     },
@@ -2034,7 +2034,7 @@
       "sha256": "225331c242d00013268a27a3e1ab968043d5d2f75ac955a1cc9883c4c230aebd",
       "bytes": 21232,
       "duration_ms": 2175,
-      "start_ms": 1246925,
+      "start_ms": 1247050,
       "source_wav_sha256": "7b2cbe39333391d049ce3fa6a58154f547ff27bc8de07858fb3473a5af74fd49",
       "text": "But ... how do you play it backwards?"
     },
@@ -2046,7 +2046,7 @@
       "sha256": "dc5a556f85f089a12399b86116db354d49b439e2ce65df3f8dd05903221b8f7f",
       "bytes": 78008,
       "duration_ms": 8450,
-      "start_ms": 1249550,
+      "start_ms": 1249675,
       "source_wav_sha256": "94368bc02ad9fb30c02c60cb37fb85b971e5eea72bc3a8d606ab4c724dc9d0bc",
       "text": "In the internal permutation of a hash function, you walk backwards from the last layer to the first layer, and invert each step as you go."
     },
@@ -2058,7 +2058,7 @@
       "sha256": "8b57eca874510226f6eba3f75885f8b9e7e1ab1d5105b74355aa52157ae31ff2",
       "bytes": 60200,
       "duration_ms": 6550,
-      "start_ms": 1258450,
+      "start_ms": 1258575,
       "source_wav_sha256": "2ce3ecc0d3e0937e704c7c553a72acd18705d2dd0e44bebae041e1599004b712",
       "text": "Here ... what was the inverse of the hexgrid rules that [Zei](/ˈzA/) was interacting with for the first time in his life?"
     },
@@ -2070,7 +2070,7 @@
       "sha256": "5026d30080b49f19c24e7145458014ef04dade21188a0ea776e0966b73ccb8f4",
       "bytes": 94197,
       "duration_ms": 10775,
-      "start_ms": 1265450,
+      "start_ms": 1265575,
       "source_wav_sha256": "253bb0eff3acf27210cdfdc7352f44c7a94da52d81a35e6fadb9593d5bd47403",
       "text": "[Zei](/ˈzA/) took the gliders he saw, and tried the most basic transformations: flipping them, rotating them 60 degrees, launching them one timestep later. None worked."
     },
@@ -2082,7 +2082,7 @@
       "sha256": "fe42e1c29897f34ef34aeb767247a69ff23dbd014cab4ed068b68a8ee102ff55",
       "bytes": 46703,
       "duration_ms": 4950,
-      "start_ms": 1276675,
+      "start_ms": 1276800,
       "source_wav_sha256": "898c8fa93eab09e0fb9c4fbfe8e42e18bb34507e338d7be90fb9c16be7001992",
       "text": "\"[MU](/ˈmu/) [FI](/ˈfi/) [LE](/ˈlɛ/) [GEI](/ˈɡA/) [TAU](/ˈtW/) [FA](/ˈfɑ/).\" The battle begins in five hundred ticks."
     },
@@ -2094,7 +2094,7 @@
       "sha256": "8b30f8c7836a13777563ced2aa4a71504ef39054d27a0453b385377928c84a56",
       "bytes": 149116,
       "duration_ms": 16075,
-      "start_ms": 1282075,
+      "start_ms": 1282200,
       "source_wav_sha256": "36ca464f2ffcdd719bd7c1996b916b6c1f756c13ea1c3628c51c95c678e144e7",
       "text": "[Zei](/ˈzA/) stepped through each step more slowly. And then he saw it. During each step, the game board split up into triangles, and the hexagons rotated inside each triangle — clockwise if it had one hex filled, counterclockwise if it had two hexes filled."
     },
@@ -2106,7 +2106,7 @@
       "sha256": "678dcc3aa8979b46af44621b1b44b21c6ab93c8fe78ad33237a4d1607f09a59b",
       "bytes": 401252,
       "duration_ms": 44350,
-      "start_ms": 1298600,
+      "start_ms": 1298725,
       "source_wav_sha256": "016521847aa5ba58b1f84f586624ddd9fdc5df6899bced07842160e13b4d22dd",
       "text": "And so in order to time reverse, he just had to ... let each time step happen twice. The opposite of a 120-degree rotation is, after all, two 120-degree rotations. But there was a problem: after each time step, the split into triangles shifted. So to play a time step backward, he had to... play one step forward, then shift time back one step so that he could play the next step forward under the same tiling, then play a second step forward to bring the total rotation under that tiling to 240 degrees within each triangle, then shift time back two steps so that the game would shift to the previous tiling. Invert each step, and play the steps in reverse order, just like inverting a permutation in a hash."
     },
@@ -2118,7 +2118,7 @@
       "sha256": "95924f458168cb17e719202cfeaf8a983efccc6a41bca9eb37cd58e9df6b8fc9",
       "bytes": 137570,
       "duration_ms": 15250,
-      "start_ms": 1343400,
+      "start_ms": 1343525,
       "source_wav_sha256": "5127426abcb0009abbe7dd2e4af062630595058d3f01649c5441bfbd905d0ed3",
       "text": "He confirmed: there was a button to play one step forward, and two buttons to shift time — either forward or backward. So that's what he would have to do. A, b, a, b, b. Like some kind of video game cheat code. Which, in some sense, here it literally was."
     },
@@ -2130,7 +2130,7 @@
       "sha256": "d78afbcbfe767f31f9c1ea3be05296a363c75485b047942237cd0dfa4e26940c",
       "bytes": 14447,
       "duration_ms": 1700,
-      "start_ms": 1359100,
+      "start_ms": 1359225,
       "source_wav_sha256": "dc652c088377a9cc65755c01b8ff5554060db05ec6aa6b343ff24e9c9c49e329",
       "text": "Fine, he thought."
     },
@@ -2142,7 +2142,7 @@
       "sha256": "f6821dcead27c4c76012cb00d2e0e1fe527fe2505312215a95d1c44a5cf7ce9b",
       "bytes": 84195,
       "duration_ms": 9325,
-      "start_ms": 1361250,
+      "start_ms": 1361375,
       "source_wav_sha256": "4b4e58bc0621b44813e937009cb63826081a0de721fd1f0e6c9d2238a1ee0334",
       "text": "He put a glider into the sandbox, and tried it. It was an arduous process, and his fingers quickly tired. But it worked. The glider moved backwards."
     },
@@ -2154,7 +2154,7 @@
       "sha256": "db2922593a5a850352789a31717d2bc20cdb0e23c32036434a2bb437424e9feb",
       "bytes": 17941,
       "duration_ms": 1975,
-      "start_ms": 1371025,
+      "start_ms": 1371150,
       "source_wav_sha256": "9173f4cb79e0468bccc62c14829af7283178c89a8085ccd18b7fb496c822eb45",
       "text": "Basic test passed."
     },
@@ -2166,7 +2166,7 @@
       "sha256": "d4d621bdd532e91e25deef88f17826fddbcd55f5a1298870cb7345b56c327194",
       "bytes": 77644,
       "duration_ms": 8675,
-      "start_ms": 1373450,
+      "start_ms": 1373575,
       "source_wav_sha256": "a0bb2c1b98e2f406fc70c9abf77e12b33b65c70a219a9a4aa58f261d0b2620b4",
       "text": "[Zei](/ˈzA/) tried the real test: using the same technique, starting with a symbol forming beside a rock formation and a glider flying out."
     },
@@ -2178,7 +2178,7 @@
       "sha256": "06622f503e0d6c0b4b60d621db0834632d240a8574831443a2b016d913faed78",
       "bytes": 152642,
       "duration_ms": 16950,
-      "start_ms": 1382575,
+      "start_ms": 1382700,
       "source_wav_sha256": "bb0684a3ce1c0d6c322e414284e159e182e40fe2be8f4499bb555c4c0cbb2d29",
       "text": "The first time, it failed: as time went backwards, the glider and the symbol crashed, but then the same symbol re-formed a few steps away, and the glider flew away. So in that particular history that [Zei](/ˈzA/) had just sampled, before the crash, the symbol had been there all along."
     },
@@ -2190,7 +2190,7 @@
       "sha256": "725fd2eb1fd319a8e1f7d0f9cfe63a9f55bb359dc0e4079f51c1affc2ce41826",
       "bytes": 122755,
       "duration_ms": 13550,
-      "start_ms": 1399975,
+      "start_ms": 1400100,
       "source_wav_sha256": "7e4939d02d8274e6a523f0e5ddbe7144088b1ad2e81c1994c21b84be8057bf7f",
       "text": "He tried again, with a different glider. This time, it succeeded. As time moved backwards, past the moment of the crash, the rock-formation-plus-symbol turned into a bare rock formation, and two gliders flew back out."
     },
@@ -2202,7 +2202,7 @@
       "sha256": "64eedb4ec29120a1b27574cebe838c4cfcc3dd5d4a4d6765e1da30bdfa297ce6",
       "bytes": 43947,
       "duration_ms": 4625,
-      "start_ms": 1413975,
+      "start_ms": 1414100,
       "source_wav_sha256": "2f51f98a521cd395209a0e54dc84c172657f2fb834ddc7e88e76559fb2f2ed96",
       "text": "\"[FI](/ˈfi/) [LE](/ˈlɛ/) [GEI](/ˈɡA/) [TAU](/ˈtW/) [FA](/ˈfɑ/).\" The battle begins in one hundred ticks."
     },
@@ -2214,7 +2214,7 @@
       "sha256": "10ef56bfe0229c6e0a7460dee49fab9f50b4a73d3c7686e07cda594367d61b78",
       "bytes": 123525,
       "duration_ms": 13550,
-      "start_ms": 1419050,
+      "start_ms": 1419175,
       "source_wav_sha256": "3ba5ca23b1f96475a5eca1ae802b35280f3fa19669f5020a84496e842aab9422",
       "text": "[Zei](/ˈzA/) quickly repeated the same experiment with other candidates for a rock formation. He paid no attention to the voice announcing the countdown, and kept trying until he found one for the two other most natural options."
     },
@@ -2226,7 +2226,7 @@
       "sha256": "4616f7c7c868e7bf73dd4d49d982adf5de502cfa5cfcd1987f9e981e15fe131a",
       "bytes": 17711,
       "duration_ms": 1950,
-      "start_ms": 1433050,
+      "start_ms": 1433175,
       "source_wav_sha256": "e96f42a9ba2effc7da7c360847589a45c9f8bcd4c9fe328a484d963c9e55ae02",
       "text": "\"[MU](/ˈmu/) [GU](/ˈɡu/) [GEI](/ˈɡA/) [TAU](/ˈtW/) [FA](/ˈfɑ/).\""
     },
@@ -2238,7 +2238,7 @@
       "sha256": "07a126236432487a2bd24827cf13a58e6e48dbd71d8f2f8809cd344ab6539149",
       "bytes": 71012,
       "duration_ms": 7750,
-      "start_ms": 1435450,
+      "start_ms": 1435575,
       "source_wav_sha256": "ee095e4608a327f8a0a926f16157e1ab9f36bf5d7e617e20c7f49f590235165e",
       "text": "[Zei](/ˈzA/) quickly put up symbols, walls, and gliders that would create symbols if they crashed into favorable rock formations."
     },
@@ -2250,7 +2250,7 @@
       "sha256": "66e3607e5e686a3d5a672d64c9eed72f433063dfaebf5e38ca5daa82a0f19006",
       "bytes": 142893,
       "duration_ms": 15750,
-      "start_ms": 1443650,
+      "start_ms": 1443775,
       "source_wav_sha256": "186d9e94ad58b7196a9b162b765518c35ad6841f7d051c8e81e7e3b434c578bc",
       "text": "He was surprised at his own speed doing this, given how much longer everything else had taken. But almost immediately he realized in the back of his mind that this made sense: figuring out what to deploy is the hard part, deployment is just copy and paste."
     },
@@ -2258,13 +2258,13 @@
       "idx": 183,
       "kind": "paragraph",
       "block_sha256": "b6fec6f904901d607efe932ab7605da0943c60d708a71eadb1620a7985bc0464",
-      "url": "https://media.snowmoon.party/narration/kokoro-af_heart/c12/b183-79a5ba19c5f6.m4a",
-      "sha256": "79a5ba19c5f66ebcba6f90796cf72e3ffe194d1bcbd8c409b45074c11c72e00c",
-      "bytes": 97073,
-      "duration_ms": 10925,
-      "start_ms": 1459850,
-      "source_wav_sha256": "b152b8696279bf788ca704850062c89aeea9fc4a6a975d3ef1a06a47da8d517a",
-      "text": "After making a basic setup on the board, he breathed out. Just as he breathed back in and started doing a final pass refining his structures, a final countdown began."
+      "url": "https://media.snowmoon.party/narration/kokoro-af_heart/c12/b183-3e950f8e7b68.m4a",
+      "sha256": "3e950f8e7b68008961cc557276056622d567b8f87bdeeadfddce7cb2ae2c9115",
+      "bytes": 99096,
+      "duration_ms": 11125,
+      "start_ms": 1459975,
+      "source_wav_sha256": "2209e87ef76c6e5722b03d989407c1eec6bc8d4b51b9712d419930f8e93de9f4",
+      "text": "After making a basic setup on the board, he [breathed](/bɹˈiðd/) out. Just as he [breathed](/bɹˈiðd/) back in and started doing a final pass refining his structures, a final countdown began."
     },
     {
       "idx": 184,
@@ -2274,7 +2274,7 @@
       "sha256": "d92070f0713afa8d9be007fd7ffecac7cb3db5d1350ceb77d43dc89253c6d60d",
       "bytes": 28158,
       "duration_ms": 3175,
-      "start_ms": 1471225,
+      "start_ms": 1471550,
       "source_wav_sha256": "328c9ca960ba81708926539f8cb96d2e31326962d1c28209f16898a7d9a6d6dd",
       "text": "\"[PA](/ˈpɑ/) [GU](/ˈɡu/) [SO](/ˈsO/) [BI](/ˈbi/) [ZE](/ˈzɛ/) [HA](/ˈhɑ/) [MU](/ˈmu/) [FO](/ˈfO/) [SHI](/ˈʃi/) [LE](/ˈlɛ/) [PA](/ˈpɑ/) ...\""
     },
@@ -2286,7 +2286,7 @@
       "sha256": "b2ba0b52b84d1d4ba58c8f7808345d06ae2633e83948bcd1372d4ab24ea2e492",
       "bytes": 14097,
       "duration_ms": 1650,
-      "start_ms": 1474850,
+      "start_ms": 1475175,
       "source_wav_sha256": "2330e6f3e269d949c931ac628bdbbeea8da10a5449e3186ecba1fdfa49337f38",
       "text": "\"[TAU](/ˈtW/) [FA](/ˈfɑ/).\""
     },
@@ -2298,7 +2298,7 @@
       "sha256": "8fa6c64f30a3dc308bca587d6c4b962235e85a1a9528baae89a440f19a63e617",
       "bytes": 35164,
       "duration_ms": 3975,
-      "start_ms": 1476950,
+      "start_ms": 1477275,
       "source_wav_sha256": "7913dd90f007647ce85ab12c2d2e231f3d4f0136ea0a3aa7818e52fc7a918150",
       "text": "Gliders started flying out. At first, nothing happened."
     },
@@ -2310,7 +2310,7 @@
       "sha256": "f0232b1694d4a143347e52db3cdb23468aa1152c49b20ee5f273379601343878",
       "bytes": 103341,
       "duration_ms": 11550,
-      "start_ms": 1481375,
+      "start_ms": 1481700,
       "source_wav_sha256": "c3275007c00032832cf2f76b18b4000a80265c4ae2505f5bf84148a455f7e738",
       "text": "Five hundred turns later, a part of the board came into view. One of his gliders had successfully created a symbol, and revealed a part of the board that showed what the rock formations look like."
     },
@@ -2322,7 +2322,7 @@
       "sha256": "a0f04c65ef60167c62ad13235fa8196468cf978bf44e06f09851d407ff48f17c",
       "bytes": 52313,
       "duration_ms": 5700,
-      "start_ms": 1493375,
+      "start_ms": 1493700,
       "source_wav_sha256": "e1104f513f613dbcd21d465d95352005812c12479e9a7ff18e9c791274a2c90f",
       "text": "Immediately, [Zei](/ˈzA/) switched to the next task: figuring out how to build glider factories."
     },
@@ -2334,7 +2334,7 @@
       "sha256": "5ccb22cea7fe456d20bdddf01387a5a6875963ee5a7ad2fc7e03f96fe9fa367a",
       "bytes": 168264,
       "duration_ms": 19200,
-      "start_ms": 1499525,
+      "start_ms": 1499850,
       "source_wav_sha256": "9b22b74eefcf6a8c7d0de0141d9ee638b2fb27dd46fefc7ba843a87ced406b23",
       "text": "When the first intervention turn hit, [Zei](/ˈzA/) had not yet figured this out. However, he did send out several more gliders that flew from his home base, ready to create more copies of his symbol if they collided into a rock formation in the right place. He also sent gliders from nearby his new symbol, rapidly heading east."
     },
@@ -2346,7 +2346,7 @@
       "sha256": "2bca63856f9eaffd9c79ba9259c43d5a0f6e4cc2847a045741b740f11a54c9d2",
       "bytes": 80538,
       "duration_ms": 8950,
-      "start_ms": 1519175,
+      "start_ms": 1519500,
       "source_wav_sha256": "705eac9a8cb87cc9a9f7c973b912cad227424b07748b206290476d41b101f718",
       "text": "The audience watched intently. From across the river, [Bai](/ˈbI/) was also watching intently. And from afar, so were [Fin](/ˈfɪn/), [Mu](/ˈmu/) and [Den](/ˈdɛn/)."
     },
@@ -2358,7 +2358,7 @@
       "sha256": "96ae6cb10f15f4c1784c53c2fa5b12a7a2bdbf8e0e025ae942d07528433e096f",
       "bytes": 99136,
       "duration_ms": 10875,
-      "start_ms": 1528575,
+      "start_ms": 1528900,
       "tone_ms": 510,
       "source_wav_sha256": "212c45994252ea344871abbc53c864c98f4a4dab31fda75622ab9684f7d451f3",
       "text": "A view of the hexagonal board: a cluster of five light blue dots near the top, and eight small purple squares scattered across the lower half, with open space between them.",
@@ -2372,7 +2372,7 @@
       "sha256": "72cca11b114bb35bb5ba93fac7f282d2077b0cf03ca062c5e84476caa52ad8c4",
       "bytes": 64526,
       "duration_ms": 7175,
-      "start_ms": 1540560,
+      "start_ms": 1540885,
       "source_wav_sha256": "0359451c37d0984f030f97066adb78ac9f0a9d9214581ed2f55425173f7603b5",
       "text": "The audience was surprised. Neither player had managed to figure out any gliders that move vertically, they realized."
     },
@@ -2384,7 +2384,7 @@
       "sha256": "e8b83a9811dedb58725d1fcd733146702d8d3b9dd9c58143f13db5c0a5599fbb",
       "bytes": 65091,
       "duration_ms": 7225,
-      "start_ms": 1548185,
+      "start_ms": 1548510,
       "source_wav_sha256": "6b2b618b6c7d50e76482ac549cbe5d161a3d21b35651de9215623d48cc88e661",
       "text": "On the second intervention turn, [Zei](/ˈzA/) launched gliders from the sides of the board, aiming straight toward [Bo](/ˈbO/)'s home base."
     },
@@ -2396,7 +2396,7 @@
       "sha256": "b4e16c9eaca492f16616a83653874ce659d89d6684a42ecdddef65632c7b7b24",
       "bytes": 91596,
       "duration_ms": 10375,
-      "start_ms": 1555860,
+      "start_ms": 1556185,
       "source_wav_sha256": "401eb5ea18410c040a96792c4cb51591cc0d115e72c37b8974dca81dd81fa264",
       "text": "And just before the third intervention turn, one of [Zei](/ˈzA/)'s gliders hit a rock formation right beside [Bo](/ˈbO/)'s home base, allowing [Zei](/ˈzA/) to see all of [Bo](/ˈbO/)'s symbols."
     },
@@ -2408,7 +2408,7 @@
       "sha256": "abd571aea791dbedee98feef348b59913bff76aef27efa7263fe60fa82a6cd8d",
       "bytes": 94149,
       "duration_ms": 10500,
-      "start_ms": 1566685,
+      "start_ms": 1567010,
       "source_wav_sha256": "6b544085d477b580556ab7a5aec68e0dfbabafbecfb456639077b17614004d74",
       "text": "[Zei](/ˈzA/) used that intervention turn to send gliders directly toward the three of [Bo](/ˈbO/)'s symbols that he could see, and more toward some locations nearby just in case."
     },
@@ -2420,7 +2420,7 @@
       "sha256": "141d8afac63d5ec260272ead529024ae32caf8fab7d5e0ee0cfe82fd968223bc",
       "bytes": 56547,
       "duration_ms": 6150,
-      "start_ms": 1577635,
+      "start_ms": 1577960,
       "source_wav_sha256": "66309535c9c0a4d2e196a5ae51dd01a1b0cd0c1f90be3f62bea703db8eceac0b",
       "text": "Within three hundred turns, all of [Bo](/ˈbO/)'s symbols were destroyed, and [Zei](/ˈzA/) was announced the winner."
     }

@@ -2,6 +2,8 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { sdk } from '@farcaster/miniapp-sdk';
+import { authFetch, useAuth } from '~/lib/client-auth';
+import { SignInButton } from './sign-in';
 
 /**
  * Share a quote as a card. Select text in the chapter (up to four paragraphs),
@@ -39,6 +41,7 @@ export function QuoteShare({ chapter, images }: Props) {
   const [open, setOpen] = useState<Pick | null>(null);
   const [img, setImg] = useState<string | null>(null);
   const [inMiniApp, setInMiniApp] = useState(false);
+  const auth = useAuth();
   const [copied, setCopied] = useState(false);
   const [saved, setSaved] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -115,11 +118,11 @@ export function QuoteShare({ chapter, images }: Props) {
 
   const save = async () => {
     if (!open || !links) return;
-    if (!inMiniApp) return setNote('Open Snowmoon in Farcaster to save cards');
+    if (auth.kind !== 'signed-in') return setNote('sign-in');
     setSaving(true);
     setNote(null);
     try {
-      const res = await sdk.quickAuth.fetch('/api/cards', {
+      const res = await authFetch('/api/cards', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
         body: JSON.stringify({ chapter, range: links.range, q: open.q, img }),
@@ -209,7 +212,13 @@ export function QuoteShare({ chapter, images }: Props) {
                 Close
               </button>
             </div>
-            <p className="share-note">{note ?? 'Saved cards are public, can be liked, and are published under GPL-3.0.'}</p>
+            {note === 'sign-in' ? (
+              <p className="share-note">
+                <SignInButton className="share-sign-in" label="Sign in to save" />
+              </p>
+            ) : (
+              <p className="share-note">{note ?? 'Saved cards are public, can be liked, and are published under GPL-3.0.'}</p>
+            )}
           </div>
         </div>
       )}
