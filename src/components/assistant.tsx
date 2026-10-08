@@ -4,7 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { sdk } from '@farcaster/miniapp-sdk';
 import { authFetch, inMiniApp } from '~/lib/client-auth';
-import { SignInButton, SIGN_IN_SERVICES } from './sign-in';
+import { SignInButton } from './sign-in';
 import { PrivateTextField } from './private-text-field';
 import { CHAT } from '~/lib/config';
 import type { AskResult, Quote } from '~/lib/chat/ask';
@@ -430,9 +430,12 @@ function ThreadView({ id, status, refresh }: { id: string; status: Extract<Statu
 }
 
 /** Screen 9d. */
-function SignedOut({ inApp }: { inApp: boolean }) {
+function SignedOut({ inApp: _inApp }: { inApp: boolean }) {
   return (
     <section className="as-signed-out">
+      <p className="as-intro">
+        Help with reading the book. It comments; it never writes for you. <DraftTag />
+      </p>
       <p className="as-label">Sign in to use the assistant <DraftTag /></p>
       <h1>Your questions need a name to be counted under</h1>
       <p>
@@ -440,7 +443,7 @@ function SignedOut({ inApp }: { inApp: boolean }) {
         is counted per Farcaster account.
       </p>
       <SignInButton />
-      {!inApp && <p className="as-note">{SIGN_IN_SERVICES}</p>}
+      {/* The two outside services are named in the sign-in step itself and on About. */}
       <Link className="as-quiet-link" href="/chapter/1">
         Keep reading without it
       </Link>

@@ -85,16 +85,24 @@ export function AppShell({ chapters, adaptations, children }: { chapters: number
   return (
     <div className={`shell${collapsed ? ' rail-collapsed' : ''}${showPanel ? ' with-panel' : ''}`}>
       <header className="topbar">
-        {inApp ? (
+        {path.startsWith('/assistant') ? (
+          <Link href={`/chapter/${last}`} className="topbar-icon" aria-label={`Back to Chapter ${last}`}>
+            ←
+          </Link>
+        ) : inApp ? (
           <button type="button" className="topbar-icon" aria-label="Close Snowmoon" onClick={() => sdk.actions.close().catch(() => {})}>
             ×
           </button>
         ) : (
           <span className="topbar-icon" aria-hidden="true" />
         )}
-        <Link href="/" className="topbar-title">
-          Snowmoon
-        </Link>
+        {path.startsWith('/assistant') ? (
+          <span className="topbar-title">Assistant</span>
+        ) : (
+          <Link href="/" className="topbar-title">
+            Snowmoon
+          </Link>
+        )}
         <button type="button" className="topbar-icon" aria-label="Menu" aria-haspopup="dialog" aria-expanded={menu} onClick={() => setMenu(true)}>
           ···
         </button>

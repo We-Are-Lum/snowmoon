@@ -16,6 +16,7 @@
  */
 import { build } from 'esbuild';
 import { chromium, type Frame } from 'playwright-core';
+import { CHAT } from '../src/lib/config';
 
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
 const BASE = (arg('url') ?? 'http://localhost:3000').replace(/\/$/, '');
@@ -77,7 +78,8 @@ try {
       await frame.click('.as-send');
       await frame.waitForSelector('.as-sheet');
       const notice = (await frame.textContent('.as-sheet')) ?? '';
-      if (!/Vercel AI Gateway, then Groq/.test(notice)) fail('/assistant: the notice does not name both hops');
+      // The notice names where messages go (src/lib/chat/notice.ts): the provider, and the gateway while it is the fallback.
+      if (!notice.includes(CHAT.providerName ?? '\u0000') || (CHAT.gatewayFallback && !notice.includes(CHAT.host ?? '\u0000'))) fail('/assistant: the notice does not name every hop in use');
       if (!/saved only on this device/i.test(notice) || !/never published/i.test(notice)) fail('/assistant: the notice does not say questions are saved only on this device and never published');
       const box = await frame.locator('.as-sheet .as-primary').boundingBox();
       if (!box || box.y + box.height > 695) fail('/assistant: the notice\'s Continue button is outside the 695px frame');

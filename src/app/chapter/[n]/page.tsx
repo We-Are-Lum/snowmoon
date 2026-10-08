@@ -18,6 +18,13 @@ import type { Block } from '~/lib/book';
 
 type Props = { params: Promise<{ n: string }> };
 
+/** Block indexes in display order: an opening heading + dateline pair shows the dateline first. */
+function displayOrder(blocks: Block[]): number[] {
+  const order = blocks.map((_, i) => i);
+  if (blocks[0]?.kind === 'heading' && blocks[1]?.kind === 'dateline') [order[0], order[1]] = [1, 0];
+  return order;
+}
+
 export const dynamicParams = false;
 
 export function generateStaticParams() {
@@ -80,7 +87,10 @@ export default async function ChapterPage({ params }: Props) {
       labels={Object.fromEntries(chapter.blocks.map((b, i) => [b.idx, facts[i].label]).filter(([, l]) => l !== null))}
     >
     <article className="page chapter" data-chapter={n} data-setting={facts.find((f) => f.setting)?.setting ?? undefined}>
-      {chapter.blocks.map((b, i) => {
+      {/* The prototype sets the dateline above the chapter heading; the book's order (heading, then
+          dateline) is unchanged in the text and the narration. Only that opening pair is swapped. */}
+      {displayOrder(chapter.blocks).map((i) => {
+        const b = chapter.blocks[i];
         const id = blockId(n, b.idx);
         const f = facts[i];
         const common = {

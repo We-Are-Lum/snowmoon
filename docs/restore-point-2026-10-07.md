@@ -15,3 +15,8 @@ After a rollback, Vercel stops promoting new production deployments automaticall
 is promoted by hand (`vercel promote <deployment>`). Migration 0006 only adds a column, an
 index and a table, so the old code runs unchanged against the migrated database; nothing in
 the database needs undoing.
+
+## 2026-10-08: before the site rebuild (branch site-rebuild)
+
+Production before the merge: commit `858529a` (main), deployment taken at merge time; the
+one-step restore for this change is recorded with the deploy in the report.

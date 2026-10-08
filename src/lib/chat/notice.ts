@@ -9,12 +9,14 @@
  */
 export const NOTICE_REVIEW = {
   /** Fingerprint of the chat's code, prompts and settings when the items below were last reread. */
-  reviewedFor: 'ffc2f43aac6c30bf',
+  reviewedFor: 'b4b564ab68e756ce',
   /** Who reread them, and when. */
   by:
     'model-drafted review, 2026-10-08, for the direct Groq route with the gateway as fallback. Items 1 and 2 match config/prompts/chat-ask.md. ' +
     'Item 3\'s "Neither keeps your messages" holds for the gateway route (zero retention asked on every request); on the direct route it rests on ' +
-    'the owner\'s Groq console setting, reported on but not yet confirmed (docs/principles.md §6).',
+    'the owner\'s Groq console setting, reported on but not yet confirmed (docs/principles.md §6). ' +
+    'Reread again (model-drafted, 2026-10-08, session snowmoon-ae) after src/lib/chat/device.ts began keeping the chapters opened and the last one ' +
+    '(on the device only, for the reader\'s rail and sheets): nothing about where messages go, what is kept, or what it will do changed; all four items still hold.',
 };
 
 export function noticeItems({ host, provider, model }: { host: string | null; provider: string | null; model: string }): [string, string][] {

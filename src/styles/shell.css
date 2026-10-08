@@ -131,11 +131,11 @@
 .listen-next { margin-top: var(--space-4); padding-left: 19px; font-size: var(--text-read); line-height: var(--lh-read); color: var(--ink); opacity: 0.4; }
 .listen-progress { display: flex; align-items: center; gap: 2px; height: var(--tap); cursor: pointer; }
 .listen-progress:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
-.listen-progress .tick { flex: 1; min-width: 1px; height: 6px; background: var(--rule); }
+.listen-progress .tick { flex: 1; min-width: 1px; height: 10px; background: var(--rule); }
 .listen-progress .tick.has-image { background: color-mix(in srgb, var(--veridia) 45%, var(--rule)); }
 .listen-progress .tick.is-past { background: var(--muted); }
 .listen-progress .tick.is-past.has-image { background: var(--veridia); }
-.listen-progress .tick.is-now { background: var(--ink); height: 12px; }
+.listen-progress .tick.is-now { background: var(--ink); height: 16px; }
 .listen-meta { display: flex; justify-content: space-between; margin: 4px 0 var(--space-3); font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
 .listen-controls { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
 .listen-controls button {
@@ -273,3 +273,9 @@
 /* One tick per block, however many fit: no minimum width and a hairline gap. */
 .listen-progress { gap: 1px; min-width: 0; }
 .listen-progress .tick { min-width: 0; }
+
+/* Phones: the assistant page has its own top bar ("← Assistant"), so its heading is for screen readers only. */
+.topbar a.topbar-icon { text-decoration: none; }
+@media (max-width: 767px) {
+  .as > h1 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+}

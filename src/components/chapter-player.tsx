@@ -325,7 +325,7 @@ export function ChapterPlayer({ chapter, chapters, label, recipeUrl, url, durati
       </div>
       <p className="listen-meta">
         <span>
-          {para(current) || 'Start'} of {totalParas} · {fmt(time)}
+          {para(current) ? `${para(current)} of ${totalParas}` : `Title · ${totalParas} paragraphs`} · {fmt(time)}
         </span>
         <span>{fmt(duration)}</span>
       </p>
