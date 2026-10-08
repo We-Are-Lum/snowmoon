@@ -279,3 +279,5 @@
 @media (max-width: 767px) {
   .as > h1 { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 }
+.narration-credit { max-width: var(--measure); margin: 0 auto; padding: 0 var(--gutter) var(--space-6); font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
+.narration-credit .recipe-link { display: inline-flex; align-items: center; min-height: var(--tap); }

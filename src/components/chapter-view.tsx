@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { lastChapter, openedChapters } from '~/lib/chat/device';
 import { ChapterPlayer, type PlayerCue, type PlayerImage } from './chapter-player';
+import { RecipeLink } from './recipe-sheet';
 
 /**
  * A chapter, as in the prototype's reader: a context strip; "Ch n / 32" (opens the chapter
@@ -84,6 +85,12 @@ export function ChapterView({
       </div>
       <div className="chapter-read" hidden={view === 'listen'}>
         {children}
+        {/* The narration's credit and recipe, in the page as served (principle 1; check:principles P1d). */}
+        {narration && (
+          <p className="narration-credit">
+            {narration.label} · GPL-3.0 · <RecipeLink file={narration.recipe}>Recipe</RecipeLink>
+          </p>
+        )}
       </div>
       {narration && (
         <ChapterPlayer
