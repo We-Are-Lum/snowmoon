@@ -97,6 +97,13 @@ export const CHAT = {
 } as const;
 
 /** Moderation only: these FIDs may hide content. They never promote or rank anything. */
+/**
+ * Adaptations are out of view (owner, 2026-10-08: image generation first). Off: no Adaptations in
+ * the rail, menu, intro or About; no "cited in" marks in the reader; /adaptations and its pages say
+ * nothing is published yet. Every file stays in the repo; set to true to bring them back.
+ */
+export const ADAPTATIONS = { visible: false };
+
 export const MODERATOR_FIDS: readonly number[] = [];
 
 export function appUrl(): string {

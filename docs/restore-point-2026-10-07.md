@@ -70,3 +70,11 @@ One listener for the app (src/components/external-links.tsx); inside a Farcaster
 openUrl. check:ui clicks the chapter's source-edition link and needs a new tab. To undo (back to `68e475d`):
 
     vercel rollback dpl_EgcPUfj2h12pXQZibuYqahxDSmjt --scope nates-projects-d1780cff
+
+## 2026-10-08: adaptations out of view (branch site-no-adaptations)
+
+ADAPTATIONS.visible = false (src/lib/config.ts): no Adaptations in the rail, menu or intro list;
+no "cited in" marks; /adaptations and its pages say nothing is published yet. Files kept. To undo
+(back to `61d6b4a`):
+
+    vercel rollback dpl_AWEuFNYMMndxuQ8fmPRaD15oaP7F --scope nates-projects-d1780cff

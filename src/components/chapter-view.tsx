@@ -4,6 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { lastChapter, openedChapters } from '~/lib/chat/device';
+import { ADAPTATIONS } from '~/lib/config';
 import { ChapterPlayer, type PlayerCue, type PlayerImage } from './chapter-player';
 
 /**
@@ -176,11 +177,13 @@ function ChapterSheet({
             <Link className="cs-ask" href={`/assistant?chapter=${chapter}`} onClick={onClose}>
               ○ Ask about this chapter
             </Link>
-            {/* Planning isn't built: shown in its place, not as a control. */}
-            <p className="cs-coming">
-              <span>● Plan an adaptation of it</span>
-              <span>Coming</span>
-            </p>
+            {/* Planning isn't built: shown in its place, not as a control. Hidden with adaptations (ADAPTATIONS.visible). */}
+            {ADAPTATIONS.visible && (
+              <p className="cs-coming">
+                <span>● Plan an adaptation of it</span>
+                <span>Coming</span>
+              </p>
+            )}
           </div>
         </div>
         <ol className="chapter-sheet-list">

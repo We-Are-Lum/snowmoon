@@ -2,7 +2,7 @@
   "about": "The first-visit intro, built from docs/design/first-visit-intro.dc.html: five cards, shown once on the home page; replayed from the \"Replay intro screens\" link at the top of /about, and opened by \"What is this?\" on deep-linked pages. The same five items are listed at the bottom of /about. Each card has an eyebrow, one sentence (line), a visual and a status ('live' or 'coming'). Visuals: 'cover' (drawn in code), 'recipe' and 'record' (a published chapter 1 image with its real recipe), 'live' and 'planned' (drawn from the features list). Each feature has a status, 'live' or 'planned', which drives cards 4 and 5 and the About page; a feature goes live by changing one word here (npm run check:intro checks that a live feature links to a page that exists). The disclaimer is shown on card 1 and at the top of /about (principle 7).",
   "version": "v2",
   "model_drafted": false,
-  "model_drafted_note": "Wording from the design board (Claude Design, model-drafted placeholder copy), adapted by the coding agent on Oct 7, 2026 so it says only what is true: the board's '[Author name]' and '[LICENCE NAME]' are filled in, and 'play the game' is moved to the planned list because the game is not on the main site yet. Earlier wording (v1) was drafted by the coding agent on Oct 6, 2026. Shown labelled as model-drafted until the owner edits it; set model_drafted to false, with edited_by_fid and edited_on, when they do. Owner (FID 6786) on 2026-10-08: card 1, the eyebrows of cards 2–4, card 5 and the disclaimer approved as written; the deal, record and now lines rewritten; the feature lists set to what is live (docs/prompts/011-wording-decisions.md).",
+  "model_drafted_note": "Wording from the design board (Claude Design, model-drafted placeholder copy), adapted by the coding agent on Oct 7, 2026 so it says only what is true: the board's '[Author name]' and '[LICENCE NAME]' are filled in, and 'play the game' is moved to the planned list because the game is not on the main site yet. Earlier wording (v1) was drafted by the coding agent on Oct 6, 2026. Shown labelled as model-drafted until the owner edits it; set model_drafted to false, with edited_by_fid and edited_on, when they do. Owner (FID 6786) on 2026-10-08: card 1, the eyebrows of cards 2–4, card 5 and the disclaimer approved as written; the deal, record and now lines rewritten; the feature lists set to what is live (docs/prompts/011-wording-decisions.md). 2026-10-08, later: adaptations taken out of view (owner); the coding agent removed \"Browse adaptation seeds\" from the live list and the words \"and browse adaptation seeds\" from the owner's line on card 4, nothing else.",
   "edited_by_fid": 6786,
   "edited_on": "2026-10-08",
   "disclaimer": "Independent adaptation · Not affiliated with the author · No token",
@@ -37,7 +37,7 @@
     {
       "id": "now",
       "eyebrow": "Available now",
-      "line": "Today you can read, listen, play Minpentai, save a passage, ask about the book and browse adaptation seeds.",
+      "line": "Today you can read, listen, play Minpentai, save a passage and ask about the book.",
       "visual": "live",
       "image": null,
       "status": "live",
@@ -83,11 +83,6 @@
       "label": "Ask about the book (testing)",
       "status": "live",
       "href": "/assistant"
-    },
-    {
-      "label": "Browse adaptation seeds",
-      "status": "live",
-      "href": "/adaptations"
     },
     {
       "label": "Add characters, places and styles",

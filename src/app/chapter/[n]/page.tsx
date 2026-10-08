@@ -13,7 +13,11 @@ import { QuoteShare } from '~/components/quote-share';
 import { ChapterView } from '~/components/chapter-view';
 import { RecipeLink } from '~/components/recipe-sheet';
 import { ReadingRecord } from '~/components/reading-record';
-import { adaptationsCiting } from '~/lib/adaptations';
+import { adaptationsCiting as citing } from '~/lib/adaptations';
+import { ADAPTATIONS } from '~/lib/config';
+
+// No "cited in" marks while adaptations are out of view (ADAPTATIONS.visible).
+const adaptationsCiting: typeof citing = (...a) => (ADAPTATIONS.visible ? citing(...a) : []);
 import type { Block } from '~/lib/book';
 
 type Props = { params: Promise<{ n: string }> };

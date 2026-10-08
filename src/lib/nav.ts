@@ -10,8 +10,10 @@ export interface NavItem {
   meta?: string;
 }
 
+import { ADAPTATIONS } from './config';
+
 export function navItems(last: number, adaptations: number): NavItem[] {
-  return [
+  const items: NavItem[] = [
     { key: 'read', label: 'Read', href: `/chapter/${last}`, meta: `Ch ${last}` },
     { key: 'listen', label: 'Listen', href: `/chapter/${last}?view=listen` },
     { key: 'assistant', label: 'Assistant', href: '/assistant' },
@@ -20,5 +22,7 @@ export function navItems(last: number, adaptations: number): NavItem[] {
     { key: 'podcast', label: 'Podcast', href: '/about#podcast', meta: 'RSS' },
     { key: 'about', label: 'About', href: '/about' },
   ];
+  // Adaptations are out of view for now (ADAPTATIONS.visible).
+  return ADAPTATIONS.visible ? items : items.filter((i) => i.key !== 'adaptations');
 }
 export const COMING = [{ label: 'Pictures', meta: 'Coming' }];

@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { ADAPTATIONS } from '~/lib/config';
 import { Fragment } from 'react';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
@@ -13,7 +14,7 @@ export function generateStaticParams() {
 }
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const seed = findSeed((await params).slug);
+  const seed = ADAPTATIONS.visible ? findSeed((await params).slug) : null;
   return { title: seed ? `${seed.title} · Adaptations` : 'Adaptations' };
 }
 
