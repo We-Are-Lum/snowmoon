@@ -60,10 +60,10 @@ export function SignInButton({ className = 'as-primary', label = 'Sign in with F
       }
       const r = await fetch(`/api/auth/web/status?c=${encodeURIComponent(channelToken)}`).catch(() => null);
       if (!r) return;
-      const s = (await r.json().catch(() => ({}))) as { state?: string; token?: string; username?: string | null };
+      const s = (await r.json().catch(() => ({}))) as { state?: string; token?: string; username?: string | null; nameProof?: string | null };
       if (s.state === 'completed' && s.token) {
         stop();
-        saveWebSession(s.token, s.username);
+        saveWebSession(s.token, s.username, s.nameProof);
         setStep({ kind: 'idle' });
       } else if (s.state === 'expired' || s.state === 'failed') {
         stop();

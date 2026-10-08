@@ -328,17 +328,38 @@ try {
     await checkAssistant(page, scheme);
     await open(page, '/cards');
     await checkFloors(page, '/cards', scheme);
-    // Readers' images (slice 1): the feed, and the composer opened from a scene label, signed out.
+    // Readers' images (slice 1): the feed for everyone; "Add an image" only for a signed-in, invited FID.
     await open(page, '/images');
     await checkFloors(page, '/images', scheme);
     if (!(await page.getByText('Most liked').isVisible())) fail('/images: no "Most liked" order');
     await open(page, '/chapter/1');
-    await page.locator('.scene-label .add-image').first().click();
-    await page.waitForSelector('.image-composer');
-    await checkFloors(page, '/chapter/1 (add an image, signed out)', scheme);
-    if (!/never sent to a model/.test((await page.textContent('.image-composer')) ?? '')) fail('/chapter/1: the composer does not say the book text is never sent to a model');
-    await page.keyboard.press('Escape');
-    if (await page.locator('.image-composer').count()) fail('/chapter/1: Escape does not close the composer');
+    if (await page.locator('.add-image').count()) fail('/chapter/1: "Add an image" shows to a signed-out reader');
+    {
+      // Signed in as an invited FID (session mocked), with the composer's status mocked as ready.
+      const ctx = page.context();
+      // The assistant's status would answer 401 to the mocked session and sign it out.
+      await ctx.route('**/api/chat/status', (r) => r.fulfill({ json: { available: false, model: 'm', host: null, provider: null, route: '', perDay: 30, left: 30 } }));
+      await ctx.route('**/api/images/status**', (r) =>
+        r.fulfill({ json: { label: 'Trial', ready: true, signedIn: true, invited: true, consented: true, left: 10, publishesLeft: 3, perDay: 10, maxBlocks: 8,
+          rules: 'No real people.', model: { name: 'Z-Image Turbo', licence: 'Apache-2.0', host: 'fal.ai' }, styles: [{ id: 'techno-vistas', name: 'Techno vistas', text: 'Style text.' }] } }),
+      );
+      await page.evaluate(() => {
+        const b64 = (o: object) => btoa(JSON.stringify(o)).replace(/=+$/, '');
+        localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `x.${b64({ sub: 6786, exp: 4102444800 })}.y`, fid: 6786, username: 'check', exp: 4102444800 }));
+      });
+      await open(page, '/chapter/1');
+      await page.locator('.scene-label .add-image').first().click();
+      await page.waitForSelector('.image-composer textarea');
+      await checkFloors(page, '/chapter/1 (add an image, invited)', scheme);
+      const text = (await page.textContent('.image-composer')) ?? '';
+      if (!/never sent to a model/.test(text)) fail('/chapter/1: the composer does not say the book text is never sent to a model');
+      if (!/sent to Groq to be checked and to fal\.ai/.test(text)) fail('/chapter/1: the composer does not name both hosts');
+      await page.keyboard.press('Escape');
+      if (await page.locator('.image-composer').count()) fail('/chapter/1: Escape does not close the composer');
+      await page.evaluate(() => localStorage.removeItem('snowmoon.signin'));
+      await ctx.unroute('**/api/images/status**');
+      await ctx.unroute('**/api/chat/status');
+    }
 
     // Minpentai: every tutorial screen and every mode, at phone width.
     for (const q of [...Array.from({ length: MINPENTAI_LESSONS }, (_, i) => `lesson=${i + 1}`), 'mode=practice', 'mode=play', 'mode=free']) {

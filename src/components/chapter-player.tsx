@@ -5,6 +5,7 @@ import Link from 'next/link';
 import { ReportPronunciation } from './report-pronunciation';
 import { RecipeLink } from './recipe-sheet';
 import { openComposer } from '~/lib/images/client';
+import { useCanAddImage } from '~/lib/images/can-add';
 
 /**
  * Play view (brief Milestone 3 and §4e): plays the chapter's house narration,
@@ -69,6 +70,7 @@ function cueAt(cues: PlayerCue[], t: number): number {
 
 export function ChapterPlayer({ chapter, chapters, label, recipeUrl, url, duration, cues, images, labels = {}, view = 'read', onView }: Props) {
   const audio = useRef<HTMLAudioElement | null>(null);
+  const canAddImage = useCanAddImage();
   const [started, setStarted] = useState(false);
   const [playing, setPlaying] = useState(false);
   const [time, setTime] = useState(0);
@@ -355,7 +357,7 @@ export function ChapterPlayer({ chapter, chapters, label, recipeUrl, url, durati
         <span className="listen-voice">house voice</span>
       </div>
       {/* L18: an image for the paragraph being read; playback pauses while the composer is open. */}
-      {current && (
+      {current && canAddImage && (
         <button
           type="button"
           className="add-image listen-add-image"

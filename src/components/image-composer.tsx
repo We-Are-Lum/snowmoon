@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { authFetch, useAuth } from '~/lib/client-auth';
+import { authFetch, useAuth, webNameProof } from '~/lib/client-auth';
 import { ADD_IMAGE_EVENT, deleteDraft, draftKey, loadDraft, saveDraft, type AddImageDetail } from '~/lib/images/client';
 import { ConsentScreen, PublishedTextField, PublishFlow } from './publish-words';
 import { SignInButton } from './sign-in';
@@ -144,7 +144,7 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
 
   const publish = async () => {
     if (!draft) return;
-    const res = await authFetch('/api/images/publish', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ticket: draft.ticket, image: draft.image }) });
+    const res = await authFetch('/api/images/publish', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ ticket: draft.ticket, image: draft.image, nameProof: webNameProof() }) });
     const out = (await res.json().catch(() => ({}))) as { page?: string; error?: string };
     if (!res.ok || !out.page) throw new Error(out.error ?? 'Could not publish');
     await deleteDraft(draftKey(range));
@@ -252,7 +252,7 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={draft.image} alt="" width={1024} height={576} />
                     <figcaption className="block-caption">
-                      Chapter {range.chapter} · {where} · AI-generated image · by {auth.kind === 'signed-in' ? `FID ${auth.fid}` : 'you'} · not by the author
+                      Chapter {range.chapter} · {where} · AI-generated image · by {auth.kind === 'signed-in' ? (auth.username ? `@${auth.username}` : `FID ${auth.fid}`) : 'you'} · not by the author
                     </figcaption>
                     <p className="ic-prompt-preview">{chosen ? `${prompt}\n\n${chosen.text}` : prompt}</p>
                   </figure>

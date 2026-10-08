@@ -4,6 +4,7 @@ import { db } from '~/lib/db';
 import { feed } from '~/lib/images/data';
 import { passageLabel } from '~/lib/images/passage';
 import { ImageFeed } from '~/components/image-feed';
+import { byline } from '~/lib/images/byline';
 
 export const metadata = { title: 'Pictures' };
 export const revalidate = 60;
@@ -41,7 +42,7 @@ export default async function Pictures({ searchParams }: { searchParams: Promise
             url: im.url,
             chapter: im.chapter,
             where: passageLabel(im.chapter, im.start, im.end),
-            byFid: im.byFid,
+            by: byline(im.byName, im.byFid),
             likes: im.likes,
             alt: `AI-generated image: ${im.userPrompt.split(/(?<=[.!?])\s/)[0]}`,
           }))}

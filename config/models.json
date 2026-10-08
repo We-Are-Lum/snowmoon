@@ -42,7 +42,17 @@
       "cost_usd_per_unit": 0,
       "license": "Apache-2.0",
       "open_weights": true,
-      "weights": "https://huggingface.co/black-forest-labs/FLUX.2-klein-4B"
+      "weights": "https://huggingface.co/black-forest-labs/FLUX.2-klein-4B",
+      "hosted": {
+        "host": "fal.ai",
+        "endpoints": {
+          "fal-ai/flux-2/klein/4b": 0.005,
+          "fal-ai/flux-2/klein/4b/edit": 0.01
+        },
+        "price_unit": "USD per megapixel",
+        "price_seen": "2026-10-08",
+        "note": "Hosted on fal.ai for the owner's model comparison (2026-10-08) and, later, reference images (add-an-image proposal, Part B). The local queue still runs the project's own renders."
+      }
     },
     {
       "id": "z-image-turbo",

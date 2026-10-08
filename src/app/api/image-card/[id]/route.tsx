@@ -5,6 +5,7 @@ import sharp from 'sharp';
 import { db } from '~/lib/db';
 import { imageByVersion } from '~/lib/images/data';
 import { passageLabel } from '~/lib/images/passage';
+import { byline } from '~/lib/images/byline';
 
 /**
  * A reader's image as a share card, like quote cards: 1200×800, the image above, and below it
@@ -30,7 +31,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src={im.url} width={W} height={IMG_H} style={{ width: W, height: IMG_H, objectFit: 'cover' }} alt="" />
         <div style={{ display: 'flex', flex: 1, alignItems: 'center', justifyContent: 'space-between', padding: '0 40px', fontSize: 22, color: '#A39F96', letterSpacing: 1 }}>
-          <div style={{ display: 'flex' }}>{`AI-GENERATED IMAGE · BY FID ${im.byFid} · NOT BY THE AUTHOR`}</div>
+          <div style={{ display: 'flex' }}>{`AI-GENERATED IMAGE · BY ${byline(im.byName, im.byFid).toUpperCase()} · NOT BY THE AUTHOR`}</div>
           <div style={{ display: 'flex' }}>{where}</div>
         </div>
       </div>

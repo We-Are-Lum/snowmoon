@@ -17,6 +17,8 @@ export interface ReaderImage {
   start: number;
   end: number;
   byFid: number;
+  /** The Farcaster username recorded when it was published, if any; shown as @name, else "FID n". */
+  byName: string | null;
   createdAt: string;
   likes: number;
   userPrompt: string;
@@ -60,6 +62,7 @@ function shape(r: Record<string, unknown>): ReaderImage {
     start: Number(r.start_idx),
     end: Number(r.end_idx),
     byFid: Number(r.by_fid),
+    byName: typeof p.by_name === 'string' ? p.by_name : null,
     createdAt: new Date(r.created_at as string).toISOString(),
     likes: Number(r.likes),
     userPrompt: String(p.user_prompt ?? ''),

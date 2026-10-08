@@ -46,6 +46,23 @@ check('an expired record is refused', readTicket(signTicket({ ...base, at: new D
 process.env.IMAGES_TICKET_SECRET = 'y'.repeat(40);
 check('another secret is refused', readTicket(tok) === null);
 
+// --- Signed names (decision 12) ----------------------------------------------------
+{
+  const { signName, readName } = await import('../src/lib/names');
+  const proof = signName(6786, 'naaate');
+  check('a signed name reads back for its FID', readName(proof, 6786) === 'naaate');
+  check('a signed name is refused for another FID', readName(proof, 42) === null);
+  const [pb, ps] = (proof ?? '').split('.');
+  const forged = Buffer.from(JSON.stringify({ fid: 6786, username: 'someone', at: Date.now() })).toString('base64url');
+  check('a changed name is refused', readName(`${forged}.${ps}`, 6786) === null);
+  check('a name without a signature is refused', readName(pb, 6786) === null);
+  check('an odd name is never signed', signName(6786, 'not a <name>') === null);
+  const old = Buffer.from(JSON.stringify({ fid: 6786, username: 'naaate', at: Date.now() - 31 * 86400_000 })).toString('base64url');
+  const { createHmac } = await import('node:crypto');
+  const oldSig = createHmac('sha256', Buffer.from(process.env.IMAGES_TICKET_SECRET!)).update(`name:${old}`).digest('base64url');
+  check('an old signed name is refused', readName(`${old}.${oldSig}`, 6786) === null);
+}
+
 // --- The rules ------------------------------------------------------------------
 const { blockedName, finalPrompt, styleText } = await import('../src/lib/images/rules');
 check('a blocked name is caught', blockedName('Vitalik walking on the sky bridge') === 'Vitalik');

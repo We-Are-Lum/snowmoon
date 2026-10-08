@@ -82,6 +82,9 @@ export default function About() {
       <p>Rules: {RULES}</p>
       <p>
         A published image shows who made it, that it is AI-generated and not by the author, and its recipe with the exact prompt.
+        The name shown is your Farcaster username: when you signed in on this website, the one Farcaster&apos;s relay gave our
+        server then; otherwise our server asks Farcaster&apos;s public API (api.farcaster.xyz) for the username of your Farcaster
+        ID, sending only the ID, and keeps the answer for a day.
         Its maker can hide it at once. Anyone signed in can report it: one report of anything sexual involving a minor hides it
         at once, and three reports from different people hide it until a moderator looks. Moderators can only hide. This app
         counts how many images each person makes a day; what they cost is kept only as daily totals, with no names.

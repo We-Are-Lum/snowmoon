@@ -17,6 +17,8 @@ interface WebSession {
   token: string;
   fid: number;
   username?: string | null;
+  /** The relay's name for this FID, signed by our server at sign-in (shown as the byline when publishing). */
+  nameProof?: string | null;
   /** Seconds since the epoch, from the token. */
   exp: number;
 }
@@ -41,14 +43,19 @@ function readSession(): WebSession | null {
   }
 }
 
-export function saveWebSession(token: string, username?: string | null) {
+export function saveWebSession(token: string, username?: string | null, nameProof?: string | null) {
   const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))) as { sub: number | string; exp: number };
   try {
-    localStorage.setItem(KEY, JSON.stringify({ token, fid: Number(payload.sub), username: username ?? null, exp: payload.exp }));
+    localStorage.setItem(KEY, JSON.stringify({ token, fid: Number(payload.sub), username: username ?? null, nameProof: nameProof ?? null, exp: payload.exp }));
   } catch {
     /* storage blocked: signed in until the page closes is not possible; the call still works once */
   }
   window.dispatchEvent(new Event(EVENT));
+}
+
+/** The signed name from a website sign-in, if there is one. */
+export function webNameProof(): string | null {
+  return readSession()?.nameProof ?? null;
 }
 
 export function signOut() {

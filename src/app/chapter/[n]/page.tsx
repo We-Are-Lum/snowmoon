@@ -187,7 +187,8 @@ export default async function ChapterPage({ params }: Props) {
             )}
             {scene && (
               <p className="scene-label">
-                {scene.label} · <AddImageButton chapter={n} start={scene.start} end={scene.end} />
+                {scene.label}
+                <AddImageButton chapter={n} start={scene.start} end={scene.end} />
               </p>
             )}
           </Fragment>

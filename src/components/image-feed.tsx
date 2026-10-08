@@ -5,7 +5,7 @@ import Link from 'next/link';
 import { openedChapters } from '~/lib/chat/device';
 
 /** The feed's list. Images from a chapter past the furthest one opened on this device are covered until shown. */
-type Item = { versionId: string; url: string; chapter: number; where: string | null; byFid: number; likes: number; alt: string };
+type Item = { versionId: string; url: string; chapter: number; where: string | null; by: string; likes: number; alt: string };
 
 export function ImageFeed({ images, sort }: { images: Item[]; sort: 'new' | 'liked' }) {
   const [furthest, setFurthest] = useState<number | null>(null);
@@ -33,7 +33,7 @@ export function ImageFeed({ images, sort }: { images: Item[]; sort: 'new' | 'lik
             )}
             <p className="block-caption">
               Chapter {im.chapter}
-              {im.where ? ` · ${im.where}` : ''} · AI-generated image · by FID {im.byFid} · not by the author · {im.likes} {im.likes === 1 ? 'like' : 'likes'} ·{' '}
+              {im.where ? ` · ${im.where}` : ''} · AI-generated image · by {im.by} · not by the author · {im.likes} {im.likes === 1 ? 'like' : 'likes'} ·{' '}
               <Link href={`/image/${im.versionId}`}>recipe</Link>
             </p>
           </li>

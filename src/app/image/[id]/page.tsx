@@ -5,6 +5,7 @@ import { APP_NAME, IMAGES, appUrl } from '~/lib/config';
 import { db } from '~/lib/db';
 import { imageByVersion } from '~/lib/images/data';
 import { passageLabel } from '~/lib/images/passage';
+import { byline } from '~/lib/images/byline';
 import { PAPER } from '~/lib/tokens';
 import { ImageActions } from '~/components/image-actions';
 
@@ -33,7 +34,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     button: { title: 'See it in Snowmoon', action: { type: 'launch_frame', name: APP_NAME, url: `${appUrl()}/image/${id}`, splashImageUrl: `${appUrl()}/splash.png`, splashBackgroundColor: PAPER } },
   });
   const title = `An image for Snowmoon, Chapter ${im.chapter}`;
-  const description = `AI-generated image by FID ${im.byFid}, not by the author.`;
+  const description = `AI-generated image by ${byline(im.byName, im.byFid)}, not by the author.`;
   return {
     title,
     description,
@@ -62,7 +63,7 @@ export default async function ImagePage({ params }: Props) {
             Chapter {im.chapter}
             {where ? ` · ${where}` : ''}
           </Link>{' '}
-          · AI-generated image · by FID {im.byFid} · not by the author · {date}
+          · AI-generated image · by {byline(im.byName, im.byFid)} · not by the author · {date}
         </figcaption>
       </figure>
       <ImageActions versionId={im.versionId} byFid={im.byFid} chapter={im.chapter} />
@@ -104,7 +105,7 @@ export default async function ImagePage({ params }: Props) {
         <dd>{im.costUsd !== null ? `$${im.costUsd.toFixed(4)}` : 'not recorded'}</dd>
         <dt>Published</dt>
         <dd>
-          By FID {im.byFid}, {date}, for Chapter {im.chapter}
+          By {im.byName ? `@${im.byName} (FID ${im.byFid})` : `FID ${im.byFid}`}, {date}, for Chapter {im.chapter}
           {where ? `, ${where}` : ''}. Licence GPL-3.0.
         </dd>
         <dt>File</dt>

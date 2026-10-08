@@ -8,6 +8,7 @@ import { hasConsented } from '~/lib/consent';
 import { publishesLeft } from '~/lib/images/limits';
 import { putPublic, storageReady } from '~/lib/images/store';
 import { readTicket } from '~/lib/images/ticket';
+import { bylineName } from '~/lib/names';
 
 /**
  * Publish a draft (section 5): the device sends back the image and its signed record. The
@@ -26,7 +27,7 @@ export async function POST(request: Request) {
   if (!IMAGES.enabled) return no('Publishing images is switched off for now', 503);
   const sql = db();
   if (!sql || !process.env.IMAGES_TICKET_SECRET || !storageReady()) return no('Publishing images is not set up on this deployment', 503);
-  let body: { ticket?: unknown; image?: unknown; uses?: unknown; remixedFrom?: unknown };
+  let body: { ticket?: unknown; image?: unknown; uses?: unknown; remixedFrom?: unknown; nameProof?: unknown };
   try {
     body = await request.json();
   } catch {
@@ -53,6 +54,8 @@ export async function POST(request: Request) {
     if (uses.some((u) => type.get(u) !== 'design') || remixedFrom.some((u) => type.get(u) !== 'image')) return no('A linked work is not published', 400);
   }
 
+  // The byline (decision 12): the relay's name signed at website sign-in, else Farcaster's public API.
+  const by = await bylineName(fid, body.nameProof);
   const url = await putPublic(t.sha256, bytes, 'image/jpeg');
   const recipeId = randomUUID(), elementId = randomUUID(), versionId = randomUUID();
   await sql.begin(async (tx) => {
@@ -74,6 +77,8 @@ export async function POST(request: Request) {
         output_sha256: t.sha256,
         size: { width: t.width, height: t.height },
         checks: { prompt: t.guard, host_safety_checker: 'passed' },
+        by_name: by.name,
+        by_name_source: by.source,
       } as never),
       seed: t.seed,
       // The style text was drafted by the coding agent (content/snowmoon/designs/styles), so it says so.

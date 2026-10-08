@@ -4,13 +4,15 @@ import { useEffect, useState } from 'react';
 import { createPortal } from 'react-dom';
 import Link from 'next/link';
 import { openComposer } from '~/lib/images/client';
+import { byline } from '~/lib/images/byline';
+import { useCanAddImage } from '~/lib/images/can-add';
 
 /**
  * Readers' images in the chapter (decision 4, during the trial): after the last block of their
  * passage, behind a tap ("2 images by readers · show"), most liked first, then newest, and the
  * label says so. Each says it is AI-generated, by whom, and not by the author.
  */
-type Img = { versionId: string; url: string; chapter: number; start: number; end: number; byFid: number; likes: number; userPrompt: string };
+type Img = { versionId: string; url: string; chapter: number; start: number; end: number; byFid: number; byName: string | null; likes: number; userPrompt: string };
 
 export function ReaderImages({ chapter }: { chapter: number }) {
   const [groups, setGroups] = useState<{ end: number; images: Img[]; host: HTMLElement }[]>([]);
@@ -62,7 +64,7 @@ function Group({ images }: { images: Img[] }) {
                 <img src={im.url} alt={`AI-generated image: ${im.userPrompt.split(/(?<=[.!?])\s/)[0]}`} width={1024} height={576} loading="lazy" />
               </Link>
               <p className="block-caption">
-                AI-generated image · by FID {im.byFid} · not by the author · {im.likes} {im.likes === 1 ? 'like' : 'likes'} · <Link href={`/image/${im.versionId}`}>recipe</Link>
+                AI-generated image · by {byline(im.byName, im.byFid)} · not by the author · {im.likes} {im.likes === 1 ? 'like' : 'likes'} · <Link href={`/image/${im.versionId}`}>recipe</Link>
               </p>
             </li>
           ))}
@@ -72,11 +74,15 @@ function Group({ images }: { images: Img[] }) {
   );
 }
 
-/** "+ Add an image" on a scene label (L8): opens the composer on the scene's blocks, up to the first 8. */
+/** "+ Add an image" on a scene label (L8): opens the composer on the scene's blocks, up to the first 8. Invited FIDs only. */
 export function AddImageButton({ chapter, start, end, children = '+ Add an image' }: { chapter: number; start: number; end: number; children?: React.ReactNode }) {
+  if (!useCanAddImage()) return null;
   return (
-    <button type="button" className="add-image" onClick={() => openComposer({ chapter, start, end })}>
-      {children}
-    </button>
+    <>
+      {' · '}
+      <button type="button" className="add-image" onClick={() => openComposer({ chapter, start, end })}>
+        {children}
+      </button>
+    </>
   );
 }

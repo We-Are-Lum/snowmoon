@@ -8,7 +8,9 @@ import { IMAGES } from '../config';
  * public one (decision 21), so its link stops working. Public copies are cached for only
  * IMAGES.cacheSeconds, so a hidden image also leaves the cache within minutes, with no cache-purge
  * key. Needs R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY (a key scoped to these two
- * buckets), R2_BUCKET, R2_PRIVATE_BUCKET and R2_PUBLIC_URL.
+ * buckets), R2_BUCKET, R2_PRIVATE_BUCKET, and the bucket's public address: R2_IMAGES_PUBLIC_URL
+ * when readers' images have their own bucket (owner, 2026-10-08: before anyone else is invited),
+ * else R2_PUBLIC_URL.
  */
 function r2() {
   const need = ['R2_ACCOUNT_ID', 'R2_ACCESS_KEY_ID', 'R2_SECRET_ACCESS_KEY', 'R2_BUCKET', 'R2_PRIVATE_BUCKET', 'R2_PUBLIC_URL'];
@@ -19,7 +21,7 @@ function r2() {
     endpoint: `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com`,
     credentials: { accessKeyId: process.env.R2_ACCESS_KEY_ID!, secretAccessKey: process.env.R2_SECRET_ACCESS_KEY! },
   });
-  return { client, pub: process.env.R2_BUCKET!, priv: process.env.R2_PRIVATE_BUCKET!, url: process.env.R2_PUBLIC_URL!.replace(/\/$/, '') };
+  return { client, pub: process.env.R2_BUCKET!, priv: process.env.R2_PRIVATE_BUCKET!, url: (process.env.R2_IMAGES_PUBLIC_URL || process.env.R2_PUBLIC_URL)!.replace(/\/$/, '') };
 }
 
 export const keyFor = (sha256: string) => `images/readers/${sha256.slice(0, 32)}.jpg`;

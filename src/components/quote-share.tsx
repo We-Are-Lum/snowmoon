@@ -5,6 +5,7 @@ import { sdk } from '@farcaster/miniapp-sdk';
 import { authFetch, useAuth } from '~/lib/client-auth';
 import { SignInButton } from './sign-in';
 import { openComposer } from '~/lib/images/client';
+import { useCanAddImage } from '~/lib/images/can-add';
 
 /**
  * Share a quote as a card. Select text in the chapter (up to four paragraphs),
@@ -43,6 +44,7 @@ export function QuoteShare({ chapter, images }: Props) {
   const [img, setImg] = useState<string | null>(null);
   const [inMiniApp, setInMiniApp] = useState(false);
   const auth = useAuth();
+  const canAddImage = useCanAddImage();
   const [copied, setCopied] = useState(false);
   const [saved, setSaved] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
@@ -170,7 +172,8 @@ export function QuoteShare({ chapter, images }: Props) {
           >
             Share quote
           </button>
-          {/* An image for this passage (docs/proposals/add-an-image.md, section 2). */}
+          {/* An image for this passage (docs/proposals/add-an-image.md, section 2). Invited FIDs only during the trial. */}
+          {canAddImage && (
           <button
             type="button"
             className="share-selection"
@@ -182,6 +185,7 @@ export function QuoteShare({ chapter, images }: Props) {
           >
             Add an image
           </button>
+          )}
           {/* Board 1a: ask the assistant about this passage, in a new private thread. */}
           <a className="share-selection" href={`/assistant?block=c${chapter}-b${selection.from}`} onMouseDown={(e) => e.preventDefault()}>
             Ask about this
