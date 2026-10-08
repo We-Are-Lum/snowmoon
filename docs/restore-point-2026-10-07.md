@@ -78,3 +78,11 @@ no "cited in" marks; /adaptations and its pages say nothing is published yet. Fi
 (back to `61d6b4a`):
 
     vercel rollback dpl_AWEuFNYMMndxuQ8fmPRaD15oaP7F --scope nates-projects-d1780cff
+
+## 2026-10-08: readers' images, slice 1 "Trial" (branch site-images)
+
+Migration 0008 applied by the owner. Making images needs FAL_KEY and the R2 variables in
+Production (see the report); until then the composer says it isn't set up. To undo (back to
+`a228576`; 0008's tables can stay, nothing reads them then):
+
+    vercel rollback dpl_EaZuNFKqB95P7YVx4LnV9au5uQuU --scope nates-projects-d1780cff
