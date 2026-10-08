@@ -1,6 +1,9 @@
 import type { Metadata, Viewport } from 'next';
 import { Crimson_Pro, DM_Mono, Instrument_Sans } from 'next/font/google';
 import { MiniappBar } from '~/components/miniapp-bar';
+import { SideRail } from '~/components/side-rail';
+import { AssistantColumn } from '~/components/assistant-column';
+import { chapterDateline, chapterNumbers, loadChapter } from '~/lib/book';
 import { WhatIsThis } from '~/components/first-visit';
 import { loadIntro } from '~/lib/intro';
 import { APP_NAME, appUrl } from '~/lib/config';
@@ -48,8 +51,15 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" className={`${crimson.variable} ${dmMono.variable} ${instrument.variable}`}>
       <body>
         <MiniappBar />
-        <WhatIsThis intro={loadIntro()} />
-        <main>{children}</main>
+        {/* Phone widths and the Farcaster frame: the page alone. Wider: a rail, and the assistant when signed in. */}
+        <div className="shell">
+          <SideRail chapters={chapterNumbers().map((n) => ({ n, dateline: chapterDateline(loadChapter(n)!) }))} />
+          <div className="shell-main">
+            <WhatIsThis intro={loadIntro()} />
+            <main>{children}</main>
+          </div>
+          <AssistantColumn />
+        </div>
       </body>
     </html>
   );
