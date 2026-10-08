@@ -583,3 +583,23 @@ Where the build differs from the text above, and why:
 - **Built to fit what comes next:** publishing accepts `uses` (published design versions) and
   `remixed_from` (published images) and writes them to `studio.links`; `studio.picks` (private,
   0002) is untouched and ready for the composer to pre-fill references later.
+
+### The owner's decisions on slice 1 (2026-10-08, later)
+
+- **Model:** Z-Image Turbo for now. After the first three readers' images, the same three prompts
+  go through FLUX.2 [klein] 4B on fal.ai, side by side (`scripts/compare-image-models.ts`, capped
+  at $0.10).
+- **Usernames, built:** website sign-ins carry the relay's name, signed by our server at sign-in;
+  otherwise the server asks Farcaster's public API (`api.farcaster.xyz/v2/user?fid=`, Farcaster's
+  own) for the username, sending only the FID, cached a day, named on About. No Neynar. The name is
+  recorded with the recipe at publish.
+- **Report alerts:** not needed while only FID 6786 can generate. Before anyone else is invited,
+  propose an alert that carries no content.
+- **Visibility, built:** the feed and images show to everyone; "Add an image" (selection action,
+  scene links, player link) only to a signed-in invited FID.
+- **Accepted:** the consent line naming Groq, the intro edit, rule-hides not restored by moderators,
+  the queue query outside moderator code, and costs on published recipes.
+- **Before anyone else is invited:** readers' images in their own public bucket, so the production
+  key can't write to the bucket holding the book's audio and images. The code reads
+  `R2_IMAGES_PUBLIC_URL` for that bucket's address; `element_versions.asset_url` is append-only, so
+  the move is free only before the first image is published.
