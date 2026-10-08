@@ -1,7 +1,7 @@
 # Proposal: add an image to a passage
 
-> **Status:** proposal, drafted by the coding agent (Claude, a closed model) on
-> 2026-10-08. Not approved. Nothing is built. Meant for
+> **Status:** drafted by the coding agent (Claude, a closed model) on 2026-10-08; decided by the
+> owner the same day (see below); slice 1 built on branch `site-images`, not merged. Meant for
 > `docs/proposals/add-an-image.md`. Board items: L8 ("+ Add an image" on a
 > scene) and L18 (the player's "+ Add an image to this moment") in
 > `docs/design/gap-list.md`. Every on-screen wording below is model-drafted and
