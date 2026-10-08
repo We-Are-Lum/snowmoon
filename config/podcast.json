@@ -1,5 +1,5 @@
 {
-  "about": "The house narration as a podcast (owner instruction, 2026-10-07). The four texts under `words` are the owner's, used exactly as given; do not edit them here without the owner. {n}, {chapter link} and {recipe link} in the episode template are filled in by src/lib/podcast.ts. The feed is served at /podcast.xml; the MP3s and their recipes are made by scripts/podcast-audio.py and published by scripts/publish-podcast.ts.",
+  "about": "The house narration as a podcast (owner instruction, 2026-10-07). The four texts under `words` are the owner's, used exactly as given; do not edit them here without the owner. {n}, {chapter link} and {recipe link} in the episode template are filled in by src/lib/podcast.ts. The feed is served at /podcast.xml; the MP3s and their recipes are made by scripts/podcast-audio.py and published by scripts/publish-podcast.ts. The owner block (itunes:owner, the contact Apple and Spotify use to verify the show) is the contact the owner gave on 2026-10-08.",
   "words": {
     "by": "FID 6786",
     "date": "2026-10-07",
@@ -10,10 +10,30 @@
   },
   "language": "en",
   "publisher": "Snowmoon Party",
+  "owner": {
+    "name": "Snowmoon Party",
+    "email": "snowmoon@wearelum.xyz",
+    "given_by": "FID 6786",
+    "given_on": "2026-10-08"
+  },
   "published": "2026-10-08T00:00:00Z",
   "feed_url": "https://snowmoon.party/podcast.xml",
   "type": "serial",
-  "category": ["Fiction", "Science Fiction"],
+  "category": [
+    "Fiction",
+    "Science Fiction"
+  ],
   "explicit": false,
-  "audio": { "codec": "mp3", "bitrate": "128k", "channels": 1, "sample_rate": 44100, "opener_gap_ms": 900, "loudness": { "integrated_lufs": -16, "true_peak_db": -1, "lra": 11 } }
+  "audio": {
+    "codec": "mp3",
+    "bitrate": "128k",
+    "channels": 1,
+    "sample_rate": 44100,
+    "opener_gap_ms": 900,
+    "loudness": {
+      "integrated_lufs": -16,
+      "true_peak_db": -1,
+      "lra": 11
+    }
+  }
 }

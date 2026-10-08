@@ -6,8 +6,9 @@
  * - The feed is well-formed XML, RSS 2.0, with the itunes and podcast namespaces,
  *   and has the channel tags Apple and Spotify require: title, link, description,
  *   language, itunes:author, itunes:category Fiction › Science Fiction,
- *   itunes:explicit, itunes:type serial, and itunes:image (PNG or JPEG, sent with
- *   Last-Modified), on the channel and on every episode.
+ *   itunes:explicit, itunes:type serial, itunes:owner with the contact email in
+ *   config/podcast.json, and itunes:image (PNG or JPEG, sent with Last-Modified),
+ *   on the channel and on every episode.
  * - One episode per chapter, 1–32 in order, each with a unique guid, pubDate,
  *   title, description, itunes:duration, itunes:episode, and an enclosure
  *   (url, type audio/mpeg, length). Every enclosure answers a HEAD with that
@@ -17,6 +18,7 @@
  * - --plant=… breaks a copy of the feed in one way; the check must fail.
  */
 import { XMLParser, XMLValidator } from 'fast-xml-parser';
+import podcastConfig from '../config/podcast.json';
 
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
 const BASE = (arg('url') ?? 'http://localhost:3000').replace(/\/$/, '');
@@ -40,6 +42,7 @@ if (PLANT === 'enclosure') xml = xml.replace(/<enclosure [^>]*\/>/, '');
 if (PLANT === 'disclosure') xml = xml.replace('read by a synthetic voice (Kokoro-82M, stock voice af_heart)', 'read aloud');
 if (PLANT === 'invalid') xml = xml.replace('</channel>', '');
 if (PLANT === 'cover') xml = xml.replace(/<itunes:image [^>]*\/>/g, '');
+if (PLANT === 'owner') xml = xml.replace(/<itunes:owner>[\s\S]*?<\/itunes:owner>/, '');
 
 const valid = XMLValidator.validate(xml);
 if (valid !== true) {
@@ -58,6 +61,9 @@ if (valid !== true) {
   const cat = ch['itunes:category']?.[0];
   if (cat?.['@text'] !== 'Fiction' || cat?.['itunes:category']?.[0]?.['@text'] !== 'Science Fiction') fail('channel: category is not Fiction › Science Fiction');
   if (!/not affiliated with the author/.test(ch.description ?? '') || !/synthetic voice/.test(ch.description ?? '')) fail('channel: the description lacks the disclosure');
+  const ownerTag = [ch['itunes:owner']].flat()[0] as Record<string, unknown> | undefined;
+  const ownerEmail = String([ownerTag?.['itunes:email']].flat()[0] ?? '');
+  if (ownerEmail !== podcastConfig.owner.email) fail(`channel: itunes:owner email is "${ownerEmail}", not the contact in config/podcast.json`);
   const cover = (ch['itunes:image'] as Record<string, string> | undefined)?.['@href'];
   if (!cover) fail('channel: no itunes:image (cover art), which Apple and Spotify require');
   else {
