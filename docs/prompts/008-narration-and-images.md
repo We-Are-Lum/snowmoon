@@ -501,3 +501,15 @@ Also, I think a very key aspect of this intro section is that we are building up
 ```text
 Let's keep private asking as a quiet option. It shouldn't fail so much. How much is a paid tier?
 ```
+
+```text
+I already have some vercel AI gateway credits
+```
+
+```text
+What is the problem with siwitching providers?
+```
+
+```text
+sure. I do wonder if we need the extra provider if that one
+```

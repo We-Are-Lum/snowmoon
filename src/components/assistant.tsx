@@ -20,7 +20,7 @@ import {
 type Status =
   | { kind: 'loading' }
   | { kind: 'signed-out'; inApp: boolean }
-  | { kind: 'ready'; available: boolean; reason?: string; model: string; host: string; provider: string | null; perDay: number; left: number };
+  | { kind: 'ready'; available: boolean; reason?: string; model: string; host: string | null; provider: string | null; route: string; perDay: number; left: number };
 
 async function authedFetch(url: string, init?: RequestInit): Promise<Response> {
   const inApp = await sdk.isInMiniApp().catch(() => false);
@@ -56,15 +56,20 @@ function DraftTag() {
 }
 
 /** Screen 2: before the first message, until "don't show this again" is ticked. */
-function Notice({ host, provider, model, onClose }: { host: string; provider: string | null; model: string; onClose: (go: boolean) => void }) {
+function Notice({ host, provider, model, onClose }: { host: string | null; provider: string | null; model: string; onClose: (go: boolean) => void }) {
   const [dontShow, setDontShow] = useState(false);
   const items = [
     ['It helps you read', 'Ask about the book. Answers point to the passages they rest on, with chapter and ¶, and show the book’s own words.'],
     ['It won’t write for you', 'No dialogue, narration or description. It gives context and commentary only.'],
-    [`Your messages go to ${host}, then ${provider}`, `Two outside services: ${host} passes each message to ${provider}, which runs ${model}, an open-weights model. Neither keeps your messages, and this app keeps no copy.`],
+    [
+      `Your messages go to ${provider}`,
+      host
+        ? `${provider} runs ${model}, an open-weights model. When ${provider} is busy, a message goes through ${host} to ${provider} instead. Neither keeps your messages, and this app keeps no copy.`
+        : `${provider} runs ${model}, an open-weights model, and keeps no messages. This app keeps no copy.`,
+    ],
     [
       'Your questions are saved only on this device',
-      `They are sent to ${host} and ${provider} to be answered, and never published. Another device won’t have them.`,
+      `They are sent to ${provider}${host ? ` (or through ${host} when it is busy)` : ''} to be answered, and never published. Another device won’t have them.`,
     ],
   ];
   return (
@@ -425,7 +430,8 @@ function ThreadView({ id, status, refresh }: { id: string; status: Extract<Statu
       )}
       <p className="as-foot">
         <span>
-          {status.model} · open weights · via {status.host}{status.provider ? ` → ${status.provider}` : ''}
+          {status.model} · open weights · {status.provider}
+          {status.host ? ` (via ${status.host} when busy)` : ''}
         </span>
         <span>
           {status.left} of {status.perDay} left today
@@ -444,7 +450,7 @@ function SignedOut({ inApp }: { inApp: boolean }) {
       <p className="as-label">Sign in to use the assistant <DraftTag /></p>
       <h1>Your questions need a name to be counted under</h1>
       <p>
-        Questions about the book are saved only on this device, sent to {CHAT.host} and {CHAT.providerName} to be answered, and never published. The daily limit
+        Questions about the book are saved only on this device, sent to {CHAT.route} to be answered, and never published. The daily limit
         is counted per Farcaster account.
       </p>
       <button
@@ -483,7 +489,7 @@ export function Assistant({ embedded = false }: { embedded?: boolean } = {}) {
       const inApp = await sdk.isInMiniApp().catch(() => false);
       return setStatus({ kind: 'signed-out', inApp });
     }
-    const s = (await res.json()) as { available: boolean; reason?: string; model: string; host: string; provider: string | null; perDay: number; left: number };
+    const s = (await res.json()) as { available: boolean; reason?: string; model: string; host: string | null; provider: string | null; route: string; perDay: number; left: number };
     setStatus({ kind: 'ready', ...s });
   }, []);
 
@@ -582,8 +588,8 @@ export function Assistant({ embedded = false }: { embedded?: boolean } = {}) {
       {ready && (
         <p className="as-foot">
           <span>
-            {ready.model} · open weights · via {ready.host}
-            {ready.provider ? ` → ${ready.provider}` : ''}
+            {ready.model} · open weights · {ready.provider}
+            {ready.host ? ` (via ${ready.host} when busy)` : ''}
           </span>
           <span>{ready.left} of {ready.perDay} left today</span>
         </p>

@@ -42,7 +42,7 @@ export function PrivateTextField({
         aria-describedby={`${id}-line`}
       />
       <p id={`${id}-line`} className="private-line">
-        Saved only on this device. Sent to {CHAT.host} and {CHAT.providerName} to be answered. Never published.{' '}
+        Saved only on this device. Sent to {CHAT.route} to be answered. Never published.{' '}
         <span className="as-draft">Draft wording</span>
       </p>
     </div>

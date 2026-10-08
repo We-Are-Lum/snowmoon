@@ -53,8 +53,8 @@ export default function About() {
       {/* Model-drafted wording (owner decision 2026-10-07: say which data centre is unverified). */}
       <p>
         The assistant answers questions about the book with {CHAT.modelName}, an open-weights model. Your questions are
-        saved only on your device and never published. To be answered, each one is sent to {CHAT.host}, then to{' '}
-        {CHAT.providerName}, with zero data retention required; this app keeps no copy, only a count and the cost.
+        saved only on your device and never published. To be answered, each one is sent to {CHAT.route}, with zero data
+        retention required; this app keeps no copy, only a count and the cost.
       </p>
       <p>
         {CHAT.providerName} keeps customer data in the United States and runs data centres in the US, Canada, Finland,

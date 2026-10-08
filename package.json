@@ -23,7 +23,8 @@
     "test:chat": "tsx scripts/test-chat.ts",
     "check:miniapp": "tsx scripts/check-miniapp.ts",
     "publish:podcast": "tsx --env-file-if-exists=.env.local scripts/publish-podcast.ts",
-    "check:podcast": "tsx scripts/check-podcast.ts"
+    "check:podcast": "tsx scripts/check-podcast.ts",
+    "test:chat-route": "tsx --conditions=react-server scripts/test-chat-route.ts"
   },
   "license": "GPL-3.0-only",
   "description": "",

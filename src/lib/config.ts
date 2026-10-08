@@ -54,6 +54,23 @@ export const CHAT = {
    */
   testing: true,
   endpoint: 'https://ai-gateway.vercel.sh/v1/chat/completions',
+  /**
+   * The provider called directly with the project's own key (GROQ_API_KEY), first.
+   * Groq's standard tier queues when busy instead of failing (the gateway's shared
+   * Groq access answered 498, "at capacity", too often). Zero data retention is on
+   * for the whole Groq account (owner, 2026-10-08). With no key set, the gateway is used.
+   */
+  direct: { endpoint: 'https://api.groq.com/openai/v1/chat/completions', keyEnv: 'GROQ_API_KEY' },
+  /**
+   * When the direct call fails (busy, rate-limited, down), try the gateway route
+   * (CHAT.host to the same provider, zero data retention). While true, the notice
+   * names the gateway as the route used when the provider is busy. Owner, 2026-10-08.
+   */
+  gatewayFallback: true,
+  /** How the notice names the route: the provider, and the gateway only while the fallback is on. */
+  get route(): string {
+    return this.gatewayFallback ? `${this.providerName}, or through ${this.host} when ${this.providerName} is busy` : `${this.providerName}`;
+  },
   /** USD per token on Groq, from the gateway's published list (2026-10-07). The gateway's own per-request cost is used when it gives one. */
   prices: {
     'openai/gpt-oss-120b': { input: 0.15e-6, output: 0.6e-6 },

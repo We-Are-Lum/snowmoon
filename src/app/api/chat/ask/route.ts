@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { getFid } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { AskError, ask, type AskInput } from '~/lib/chat/ask';
-import { complete, gatewayToken, promptFile, servingAllowed, ModelUnavailable } from '~/lib/chat/model';
+import { complete, directKey, gatewayToken, promptFile, servingAllowed, ModelUnavailable } from '~/lib/chat/model';
 
 /**
  * Ask about the book (slice 1). Signed-in readers only. The question and the
@@ -14,7 +14,7 @@ export async function POST(request: Request) {
   if (fid === null) return NextResponse.json({ error: 'Sign in with Farcaster to use the assistant' }, { status: 401 });
   const sql = db();
   const token = gatewayToken(request);
-  if (!sql || !token || !servingAllowed()) return NextResponse.json({ error: 'The assistant is not available on this deployment' }, { status: 503 });
+  if (!sql || (!token && !directKey()) || !servingAllowed()) return NextResponse.json({ error: 'The assistant is not available on this deployment' }, { status: 503 });
   try {
     const input = (await request.json()) as AskInput;
     const result = await ask(

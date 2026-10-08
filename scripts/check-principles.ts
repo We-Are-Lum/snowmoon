@@ -256,9 +256,10 @@ add({
       if (file.endsWith('components/publish-words.tsx')) continue;
       if (file.endsWith('components/private-text-field.tsx')) {
         // Owner (2026-10-07): saved only on this device, sent to Vercel and Groq to be answered, never published; labelled draft.
+        // 2026-10-08: Groq directly, the gateway only when Groq is busy; CHAT.route names every hop in use.
         for (const [what, re] of [
           ['saved only on this device', /Saved only on this device/],
-          ['sent to the model\'s two hosts to be answered', /Sent to \{CHAT\.host\} and \{CHAT\.providerName\} to be answered/],
+          ['sent to the model\'s hosts (CHAT.route) to be answered', /Sent to \{CHAT\.route\} to be answered/],
           ['never published', /Never published/],
           ['labelled draft', /as-draft/],
           ['described to screen readers', /aria-describedby/],
