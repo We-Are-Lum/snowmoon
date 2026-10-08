@@ -112,6 +112,22 @@ await check('auth endpoint rejects anonymous and forged tokens', async () => {
   return forged.status === 401 ? null : `forged token: expected 401, got ${forged.status}`;
 });
 
+// Readers' images: the feed renders, and the composer's status answers with the model and the rules
+// (the style file it reads must be in the deployment). Writes refuse anyone signed out.
+await check("readers' images: the feed, the composer's status, and writes need sign-in", async () => {
+  const feed = await get('/images');
+  if (feed.status !== 200 || !feed.body.includes('Most liked')) return `/images HTTP ${feed.status}`;
+  const st = await fetch(base + '/api/images/status?chapter=1&start=3');
+  if (st.status !== 200) return `/api/images/status HTTP ${st.status}`;
+  const s = (await st.json()) as { model?: { id?: string }; styles?: { text?: string }[]; rules?: string };
+  if (!s.model?.id || !s.styles?.[0]?.text || !s.rules) return '/api/images/status lacks the model, the style or the rules';
+  for (const route of ['/api/images/generate', '/api/images/publish', '/api/images/storage-check']) {
+    const r = await fetch(base + route, { method: 'POST' });
+    if (r.status !== 401) return `${route} without sign-in: expected 401, got ${r.status}`;
+  }
+  return null;
+});
+
 // Website sign-in, first step (owner, 2026-10-08, after it shipped broken): start a sign-in and
 // confirm Farcaster's relay gave back a sign-in link and a QR code, without completing it. The
 // channel it opens is never approved and lapses on its own. The channel token is never printed.

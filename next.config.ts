@@ -23,6 +23,8 @@ const nextConfig: NextConfig = {
       './content/snowmoon/illustrations/**',
       // Recipes are read at request time too (the first-visit intro's recipe card, narration).
       './content/snowmoon/recipes/**',
+      // The style a reader may add to an image prompt (src/lib/images/rules.ts).
+      './content/snowmoon/designs/styles/**',
       './config/**',
       './adaptations/**',
       './node_modules/@fontsource/crimson-pro/files/crimson-pro-latin-*-normal.woff',
