@@ -18,13 +18,18 @@ export async function GET(request: Request) {
   const res = await fetch(`${RELAY}/v1/channel/status`, { headers: { Authorization: `Bearer ${channel}` }, cache: 'no-store' }).catch(() => null);
   if (!res) return NextResponse.json({ state: 'pending' });
   if (res.status === 401 || res.status === 404) return NextResponse.json({ state: 'expired' });
-  if (!res.ok) return NextResponse.json({ state: 'pending' });
+  if (!res.ok) {
+    console.error('sign-in status: relay answered', res.status);
+    return NextResponse.json({ state: 'pending' });
+  }
   const s = (await res.json()) as { state: string; message?: string; signature?: `0x${string}`; username?: string };
   if (s.state !== 'completed' || !s.message || !s.signature) return NextResponse.json({ state: 'pending' }, { headers: { 'Cache-Control': 'no-store' } });
   try {
     const { token } = await quickAuth.verifySiwf({ domain: domain(request), message: s.message, signature: s.signature });
     return NextResponse.json({ state: 'completed', token, username: s.username ?? null }, { headers: { 'Cache-Control': 'no-store' } });
-  } catch {
+  } catch (e) {
+    // The error's type only, never the message, signature or token.
+    console.error('sign-in: Farcaster did not accept the signed message', (e as Error).name);
     return NextResponse.json({ state: 'failed' }, { status: 401 });
   }
 }

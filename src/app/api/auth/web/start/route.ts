@@ -16,7 +16,8 @@ const quickAuth = createClient();
 export async function POST(request: Request) {
   const host = domain(request);
   try {
-    const nonce = await quickAuth.generateNonce();
+    // generateNonce resolves to { nonce }, not the string itself (it was sent whole, and the relay refused it).
+    const { nonce } = await quickAuth.generateNonce();
     const res = await fetch(`${RELAY}/v1/channel`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -27,12 +28,18 @@ export async function POST(request: Request) {
         expirationTime: new Date(Date.now() + 5 * 60_000).toISOString(),
       }),
     });
-    if (!res.ok) return NextResponse.json({ error: 'Farcaster sign-in is not answering. Try again in a moment.' }, { status: 502 });
+    if (!res.ok) {
+      // The relay's status and its error label only: nothing about the person, no token.
+      const why = ((await res.json().catch(() => ({}))) as { error?: unknown }).error;
+      console.error('sign-in start: relay refused the channel', res.status, typeof why === 'string' ? why.slice(0, 60) : '');
+      return NextResponse.json({ error: 'Farcaster sign-in is not answering. Try again in a moment.' }, { status: 502 });
+    }
     const { channelToken, url } = (await res.json()) as { channelToken: string; url: string };
     const qr = await QRCode.toString(url, { type: 'svg', margin: 1, errorCorrectionLevel: 'M' });
     return NextResponse.json({ channelToken, url, qr }, { headers: { 'Cache-Control': 'no-store' } });
-  } catch {
-    // Only the error's type would be useful, and there's nothing personal here to log.
+  } catch (e) {
+    // Only the error's type: there is nothing personal here, and no token to print.
+    console.error('sign-in start failed', (e as Error).name);
     return NextResponse.json({ error: 'Farcaster sign-in is not answering. Try again in a moment.' }, { status: 502 });
   }
 }

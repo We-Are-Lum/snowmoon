@@ -52,3 +52,14 @@ the assistant (all but the notice), sign-in, the recipe sheet, the pronunciation
 now show the owner's wording, tagged FID 6786, with no draft line. To undo it (back to `afc272c`):
 
     vercel rollback dpl_AN1A6jZANZkfqrRvpyt5Ls3vnjfv --scope nates-projects-d1780cff
+
+## 2026-10-08: website sign-in fixed; podcast owner; node_modules untracked (branch site-contact)
+
+Website sign-in failed at the first step on production: the start route sent the nonce as
+`{ nonce }` (what `generateNonce` resolves to) instead of the string, and the relay refused it
+(400, "body/nonce must be string"). Fixed; both sign-in routes now log the upstream status (never a
+token, message or signature); check:shipped now starts a sign-in and needs a Farcaster link and a
+QR code back. Also: itunes:owner with the owner's contact, and the committed node_modules link
+removed. To undo (back to `dd32480`):
+
+    vercel rollback dpl_81niopCmc1t8LecYdxFBePq2hPji --scope nates-projects-d1780cff

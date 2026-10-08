@@ -1,6 +1,7 @@
 /**
  * "Shipped" means verified live. Fails (exit 1) unless the deployment at the
- * target URL is running the expected commit and serves the core routes.
+ * target URL is running the expected commit and serves the core routes, and
+ * website sign-in gets as far as a Farcaster link and QR code.
  *
  *   npm run check:shipped                         target NEXT_PUBLIC_URL, expect local HEAD
  *   npm run check:shipped -- --url=https://...    another target
@@ -109,6 +110,21 @@ await check('auth endpoint rejects anonymous and forged tokens', async () => {
   if (anon.status !== 401) return `no token: expected 401, got ${anon.status}`;
   const forged = await fetch(base + '/api/auth/me', { headers: { authorization: 'Bearer not.a.jwt' } });
   return forged.status === 401 ? null : `forged token: expected 401, got ${forged.status}`;
+});
+
+// Website sign-in, first step (owner, 2026-10-08, after it shipped broken): start a sign-in and
+// confirm Farcaster's relay gave back a sign-in link and a QR code, without completing it. The
+// channel it opens is never approved and lapses on its own. The channel token is never printed.
+await check('website sign-in starts: a Farcaster sign-in link and a QR code come back', async () => {
+  const res = await fetch(base + '/api/auth/web/start', { method: 'POST' });
+  if (res.status !== 200) return `start: HTTP ${res.status}`;
+  const s = (await res.json()) as { channelToken?: unknown; url?: unknown; qr?: unknown };
+  if (typeof s.channelToken !== 'string' || !s.channelToken) return 'start: no channel token';
+  if (typeof s.url !== 'string' || !s.url.startsWith('https://farcaster.xyz/~/siwf?')) return `start: the link is not a Farcaster sign-in link (${String(s.url).slice(0, 32)})`;
+  if (typeof s.qr !== 'string' || !s.qr.includes('<svg')) return 'start: no QR code';
+  const st = await fetch(base + '/api/auth/web/status?c=' + encodeURIComponent(s.channelToken));
+  const body = (await st.json().catch(() => ({}))) as { state?: string };
+  return st.status === 200 && body.state === 'pending' ? null : `status: expected pending, got HTTP ${st.status} ${body.state ?? ''}`;
 });
 
 if (failures.length) {
