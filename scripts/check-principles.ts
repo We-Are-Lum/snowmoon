@@ -725,7 +725,9 @@ add({
   },
   run: ({ skipped, names }) => {
     if (skipped) return [`skipped: ${skipped}`];
-    return names.filter((n) => FORBIDDEN_VARS.test(n)).map((n) => `${n} is set on the Vercel project; remove it (the app uses only STUDIO_DATABASE_URL)`);
+    return names.filter((n) => FORBIDDEN_VARS.test(n)).map((n) => n === 'SUPABASE_SECRET_KEY'
+        ? `${n} is set on the Vercel project (accepted open item, owner 2026-10-08: left for now; see docs/principles.md §6)`
+        : `${n} is set on the Vercel project; remove it (the app uses only STUDIO_DATABASE_URL)`);
   },
   plant: (c) => {
     c.skipped = '';

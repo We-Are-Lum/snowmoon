@@ -275,8 +275,19 @@ only, through `studio.rating_totals`, `studio.like_totals` and
 - Review: does a new page, embed or script reach another domain? Does a new
   table expose who did what?
 
-**Status.** Pass. 0004 is applied: the live database refuses individual
+**Status.** Pass, with two open items. 0004 is applied: the live database refuses individual
 ratings and likes and serves the totals.
+
+- `P6d` fails: `SUPABASE_SECRET_KEY` is still set on the Vercel project.
+  Accepted as an open item by the owner (2026-10-08): left in place for
+  now. The check keeps reporting it, and merges to main may proceed with
+  only P6d failing.
+- The reading assistant's direct route to Groq: zero data retention there is
+  a setting in the owner's Groq console (Data Controls → global ZDR). Each
+  request through the gateway asks for zero retention and the gateway enforces
+  it; the direct route cannot ask, and nothing in Groq's replies shows the
+  setting. The owner reported turning it on (2026-10-08). Not yet checked in
+  the console. No automated check covers it.
 
 ## 7. Payments never enter scoring or ordering. No token. The "not affiliated" line stays on the first screen.
 
