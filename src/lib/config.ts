@@ -104,7 +104,54 @@ export const CHAT = {
  */
 export const ADAPTATIONS = { visible: false };
 
-export const MODERATOR_FIDS: readonly number[] = [];
+/** Moderation only: these FIDs may hide content or dismiss a report. They never promote or rank anything. Owner, 2026-10-08 (decision 20). */
+export const MODERATOR_FIDS: readonly number[] = [6786];
+
+/** The public contact for Snowmoon Party: legal, copyright and reports from readers who are signed out (owner, 2026-10-08). */
+export const CONTACT_EMAIL = 'snowmoon@wearelum.xyz';
+
+/**
+ * Readers add an image to a passage: slice 1, labelled "Trial" (docs/proposals/add-an-image.md;
+ * the owner's decisions of 2026-10-08, all as recommended except 11, 12, 18, 20 and 24).
+ * Each number below is one of those decisions.
+ */
+export const IMAGES = {
+  /** The off switch: false stops every generation at once (decision 10). */
+  enabled: true,
+  label: 'Trial',
+  /** Who may generate (decision 11): invited FIDs only, starting with the owner. No Neynar key. */
+  invited: [6786] as readonly number[],
+  /** One model, settings fixed (decisions 3 and 6). On the allowlist in config/models.json. */
+  model: { id: 'z-image-turbo', name: 'Z-Image Turbo', licence: 'Apache-2.0', endpoint: 'fal-ai/z-image/turbo', host: 'fal.ai' },
+  size: { width: 1024, height: 576 },
+  steps: 8,
+  /** Sent with every prompt: the model is never asked for words (section 7). */
+  suffix: 'No text, no lettering, no signs with words.',
+  /** USD per megapixel on fal.ai (fetched 2026-10-08); fal may round up to 1 MP, so 0.005 is reserved. */
+  pricePerMp: 0.005,
+  /** Worst case reserved before each Generate: the image, the prompt check, margin (section 4). */
+  reserveUsd: 0.0065,
+  /** The prompt check (decision 14): open weights, Apache-2.0, on Groq like the assistant. */
+  guardModel: 'openai/gpt-oss-safeguard-20b',
+  promptMaxChars: 600,
+  /** A passage of 1 to 8 consecutive blocks in one chapter (decision 5). */
+  maxBlocks: 8,
+  /** Per person per UTC day; blocked attempts count (decisions 10 and 16). */
+  generationsPerDay: 10,
+  publishesPerDay: 3,
+  /** Across everyone, per UTC day (decision 10), kept apart from the assistant's. */
+  dailySpendCapUsd: 2,
+  /** Test spending while the trial is built and tried: $1 in all, every day together (owner, 2026-10-08). */
+  totalSpendCapUsd: 1,
+  /** A draft's signed record is good for this long; after that, generate again. */
+  ticketHours: 24,
+  /** Readers' images: one report hides at once for these reasons; otherwise this many distinct reporters (decision 17). */
+  hideAtOnce: ['minor'] as readonly string[],
+  hideAfterReporters: 3,
+  reportsPerDay: 20,
+  /** Public copies are cached briefly, so a hidden image leaves the cache within minutes (decision 21). */
+  cacheSeconds: 300,
+} as const;
 
 export function appUrl(): string {
   return process.env.NEXT_PUBLIC_URL?.replace(/\/$/, '') || 'http://localhost:3000';

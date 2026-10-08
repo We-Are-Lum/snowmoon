@@ -12,6 +12,7 @@ import { loadIllustrations } from '~/lib/illustrations';
 import { QuoteShare } from '~/components/quote-share';
 import { ChapterView } from '~/components/chapter-view';
 import { RecipeLink } from '~/components/recipe-sheet';
+import { AddImageButton } from '~/components/reader-images';
 import { ReadingRecord } from '~/components/reading-record';
 import { adaptationsCiting as citing } from '~/lib/adaptations';
 import { ADAPTATIONS } from '~/lib/config';
@@ -40,14 +41,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 /** "Scene 2 · ¶ 9–31", shown at the end of each scene. */
-function sceneLabels(blocks: Block[], facts: BlockFacts[]): Map<number, string> {
-  const out = new Map<number, string>();
+function sceneLabels(blocks: Block[], facts: BlockFacts[]): Map<number, { label: string; start: number; end: number }> {
+  const out = new Map<number, { label: string; start: number; end: number }>();
   let first: number | null = null;
   let last: number | null = null;
   let lastIdx = -1;
+  // The scene's first eight labelled blocks: what "+ Add an image" opens on (decision 5: up to 8).
+  let span: number[] = [];
   const close = (scene: number) => {
-    if (first !== null && last !== null) out.set(lastIdx, `Scene ${scene} · ${labelRange(first, last)}`);
+    if (first !== null && last !== null) out.set(lastIdx, { label: `Scene ${scene} · ${labelRange(first, last)}`, start: span[0], end: span[Math.min(span.length, 8) - 1] });
     first = last = null;
+    span = [];
   };
   blocks.forEach((b, i) => {
     const f = facts[i];
@@ -56,6 +60,7 @@ function sceneLabels(blocks: Block[], facts: BlockFacts[]): Map<number, string> 
       first ??= f.label;
       last = f.label;
       lastIdx = b.idx;
+      span.push(b.idx);
     }
   });
   close(facts[facts.length - 1]?.scene ?? 1);
@@ -180,7 +185,11 @@ export default async function ChapterPage({ params }: Props) {
                 </figcaption>
               </figure>
             )}
-            {scene && <p className="scene-label">{scene}</p>}
+            {scene && (
+              <p className="scene-label">
+                {scene.label} · <AddImageButton chapter={n} start={scene.start} end={scene.end} />
+              </p>
+            )}
           </Fragment>
         );
       })}

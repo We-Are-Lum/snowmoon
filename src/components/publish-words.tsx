@@ -47,7 +47,7 @@ export function PublishedTextField({
 }
 
 /** The blocking consent screen: shown before a person's first contribution of their own words. */
-function ConsentScreen({ wording, name, onAgree, onCancel, error }: { wording: Wording; name: string | null; onAgree: () => void; onCancel: () => void; error: string | null }) {
+export function ConsentScreen({ wording, name, onAgree, onCancel, error }: { wording: Wording; name: string | null; onAgree: () => void; onCancel: () => void; error: string | null }) {
   return (
     <div className="consent-overlay">
       <div className="consent-screen" role="dialog" aria-modal="true" aria-labelledby="consent-title">

@@ -1,0 +1,68 @@
+/* Readers' images (docs/proposals/add-an-image.md): the composer sheet, readers' images in the
+   chapter, the feed, an image's page, its actions, and the moderator queue. Same type, spacing
+   and touch rules as the frame (src/styles/shell.css). */
+
+.add-image { padding: 0; background: none; border: 0; color: var(--link); cursor: pointer; font-family: var(--label); font-size: var(--text-label); line-height: 16px; }
+.scene-label .add-image { text-transform: none; }
+.listen-add-image { align-self: center; margin: 4px 0 0; }
+
+/* The composer */
+.image-composer { gap: 14px; }
+.image-composer .ic-label, .image-composer .ic-note, .image-composer .ic-model, .image-composer .ic-left { margin: 0; font-family: var(--label); font-size: var(--text-label); line-height: 16px; color: var(--muted); }
+.ic-text { max-height: 9.5em; overflow-y: auto; margin: 6px 0; padding: 8px 12px; background: var(--soft); font-size: 16px; line-height: 1.5; color: var(--body); }
+.ic-text p { margin: 0 0 6px; }
+.ic-range { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0; }
+.ic-range button { padding: 5px 10px; background: none; border: 1px solid var(--rule); border-radius: var(--radius); color: var(--ink); cursor: pointer; font-family: var(--label); font-size: var(--text-label); line-height: 16px; }
+.ic-range button:disabled { opacity: 0.4; cursor: default; }
+.ic-gate { margin: 0; font-size: 17px; line-height: 1.45; }
+.ic-gate p { margin: 0 0 10px; }
+.image-composer .published-field { display: flex; flex-direction: column; gap: 4px; }
+.image-composer .published-field label { font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.image-composer .published-field textarea { padding: 10px 12px; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--card); color: var(--ink); font: inherit; font-size: 17px; line-height: 1.4; resize: vertical; }
+.ic-style { margin: 0; padding: 0; border: 0; display: flex; flex-direction: column; gap: 6px; font-size: 16px; }
+.ic-style legend { margin-bottom: 4px; padding: 0; font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
+.ic-style label { display: flex; align-items: center; gap: 8px; }
+.ic-style-text { margin: 0; padding: 8px 12px; background: var(--soft); font-size: 15px; line-height: 1.45; color: var(--body); }
+.ic-rules { margin: 0; padding: 10px 12px; border: 1px dashed var(--rule); border-radius: var(--radius); font-size: 15px; line-height: 1.45; }
+.ic-actions { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.ic-draft { display: flex; flex-direction: column; gap: 8px; padding-top: 12px; border-top: 1px solid var(--rule); }
+.ic-draft img, .ic-preview img { display: block; width: 100%; height: auto; }
+.ic-preview { margin: 0; }
+.ic-prompt-preview { white-space: pre-wrap; font-size: 15px; line-height: 1.45; color: var(--body); }
+.ic-done { margin: 0; font-size: 17px; }
+.publish-flow button { margin: 6px 8px 0 0; padding: 8px 14px; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--paper); color: var(--ink); cursor: pointer; font-family: var(--label); font-size: var(--text-label); line-height: 16px; text-transform: uppercase; }
+
+/* Readers' images in the chapter, behind a tap */
+.reader-images { margin: -8px 0 18px; }
+.ri-toggle { padding: 4px 0; background: none; border: 0; color: var(--link); cursor: pointer; font-family: var(--label); font-size: var(--text-label); line-height: 16px; }
+.ri-list { list-style: none; margin: 8px 0 0; padding: 0; display: flex; flex-direction: column; gap: 16px; }
+.ri-list img, .pictures-list img, .ip-figure img { display: block; width: 100%; height: auto; background: var(--soft); }
+
+/* The feed */
+.pictures-sort { display: flex; gap: 16px; margin: 0 0 16px; font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; }
+.pictures-sort a { padding: 6px 0; }
+.pictures-sort a[aria-current='page'] { color: var(--ink); border-bottom: 2px solid var(--ink); }
+.pictures-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 28px; }
+.pictures-cover { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; aspect-ratio: 16 / 9; background: repeating-linear-gradient(135deg, var(--soft) 0 10px, var(--paper) 10px 20px); border: 1px dashed var(--rule); text-align: center; font-size: 16px; }
+.pictures-cover p { margin: 0; }
+.pictures-empty { color: var(--muted); }
+
+/* An image's page */
+.ip-figure { margin: 0 0 12px; }
+.image-actions { display: flex; flex-direction: column; gap: 8px; margin: 0 0 24px; }
+.ia-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.ia-button { display: inline-block; padding: 7px 12px; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--paper); color: var(--ink); cursor: pointer; text-decoration: none; font-family: var(--label); font-size: var(--text-label); line-height: 16px; text-transform: uppercase; }
+.ia-button[aria-pressed='true'] { border-color: var(--ink); }
+.ia-button:disabled { opacity: 0.5; cursor: default; }
+.ia-quiet { padding: 7px 4px; background: none; border: 0; color: var(--muted); cursor: pointer; font-family: var(--label); font-size: var(--text-label); line-height: 16px; text-transform: uppercase; }
+.ia-note { margin: 0; font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
+.ia-report { display: flex; flex-direction: column; gap: 6px; margin: 0; padding: 12px; border: 1px solid var(--rule); border-radius: var(--radius); font-size: 16px; }
+.ia-report legend { padding: 0 4px; font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; color: var(--muted); }
+.ia-report label { display: flex; align-items: center; gap: 8px; }
+.ia-report .private-field { display: flex; flex-direction: column; gap: 4px; }
+.ia-report textarea { padding: 8px 10px; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--card); color: var(--ink); font: inherit; font-size: 16px; }
+
+/* The moderator queue */
+.moderate-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 28px; }
+.moderate-list img { display: block; width: 100%; height: auto; }
+.moderate-note { margin: 4px 0; font-style: italic; color: var(--body); }

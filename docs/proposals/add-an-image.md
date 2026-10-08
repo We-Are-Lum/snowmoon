@@ -13,6 +13,14 @@
 > website too (`docs/proposals/web-sign-in.md`, built). Where this proposal says
 > "outside Farcaster", read "signed out".
 
+> **Decided and built (2026-10-08):** the owner took all 28 decisions as recommended, except 11
+> (invited FIDs only, starting with 6786; no Neynar key), 12 ("FID n" until a way to show the
+> username without a new outside service is agreed; see "Slice 1, as built"), 18 (contact
+> snowmoon@wearelum.xyz), 20 (moderator 6786) and 24 (migration 0008, after the assistant's 0007;
+> the FID only on rows that count a person's daily limit; costs carry no FID and only the date).
+> Slice 1 is on branch `site-images`, labelled "Trial". Part B (reference images) is answered
+> below, before section 1.
+
 ## In one paragraph
 
 A signed-in Farcaster user selects a passage in the reader. They write their own
@@ -62,6 +70,44 @@ official.
 7. **No public contact address.** Signed-out web readers cannot report anything,
    and copyright or legal notices need an address. You held back
    `itunes:owner` for the same reason (commit 15b42bf).
+
+---
+
+## Part B: a hosted, open-weights model that accepts reference images
+
+Asked by the owner on 2026-10-08, before building, because it decides how character sheets and
+style guides work later. Checked on the hosts' pages that day.
+
+**Yes: FLUX.2 [klein] 4B, edit mode, on fal.ai.**
+
+| | FLUX.2 [klein] 4B edit (recommended) | Qwen-Image-Edit-2509 (alternative) |
+|---|---|---|
+| Endpoint | `fal-ai/flux-2/klein/4b/edit` | `fal-ai/qwen-image-edit-plus` |
+| Licence | Apache-2.0, open weights (the model card: "This model is licensed under the Apache 2.0"; the 9B variant is non-commercial, not this one) | Apache-2.0 per its model card (not stated on fal's page; **unverified there**) |
+| On our allowlist | Yes, already (`flux2-klein-4b`, the model behind the project's own chapter images, run locally) | No; would need adding |
+| Reference images | Up to 4 (`image_urls`, "A maximum of 4 images are allowed") | Up to 4 |
+| Price | "$0.01 per megapixel" (whether reference images count toward it is **unverified**) | "$0.03 per megapixel" |
+| Safety checker | `enable_safety_checker`, default true; output has `has_nsfw_concepts` | default true; output has `has_nsfw_concepts` |
+| Keeps a copy? | `sync_mode`: "Output is not stored when this is True"; `X-Fal-Store-IO: 0` keeps no request or reply | same |
+
+**What it adds as an outside service: nothing new.** It runs on fal.ai, already the host for
+readers' images in this slice. The difference is what fal.ai is sent: with reference images, the
+request also carries the URLs of the referenced images (published character sheets or style
+pictures on media.snowmoon.party), which fal.ai fetches. Those are already public, so nothing
+private leaves; the recipe would record each reference as a `uses` link (built in this slice).
+
+**One more finding:** the same model also does plain text-to-image on fal.ai,
+`fal-ai/flux-2/klein/4b`, at "$0.005 per megapixel", the same price as Z-Image Turbo, with the
+same safety flag. Using FLUX.2 [klein] 4B for both making and editing would give readers' images
+the look of the project's own chapter images and one model throughout. Slice 1 uses Z-Image
+Turbo, as decision 3 says; switching is one line (`IMAGES.model` in `src/lib/config.ts`) and the
+owner's call.
+
+Sources (fetched 2026-10-08): <https://fal.ai/models/fal-ai/flux-2/klein/4b/edit/llms.txt>,
+<https://fal.ai/models/fal-ai/flux-2/klein/4b/llms.txt>,
+<https://huggingface.co/black-forest-labs/FLUX.2-klein-4B>,
+<https://fal.ai/models/fal-ai/qwen-image-edit-plus/llms.txt>,
+<https://fal.ai/docs/model-apis/data-retention>.
 
 ---
 
@@ -496,3 +542,44 @@ public, and the second line says so.
 26. **Likes on readers' images in the trial:** recommended yes (the table and totals exist). Ratings later.
 27. **Test spend cap while building:** $1, logged in a spend file: recommended yes.
 28. **The word list of blocked names** (the author and his pseudonyms, public figures): recommended yes, committed and public.
+
+
+---
+
+## Slice 1, as built (branch `site-images`, 2026-10-08)
+
+Where the build differs from the text above, and why:
+
+- **Drafts are not stored on the server at all**, not even as a private recipe. The server returns
+  the image and a record of how it was made, signed with `IMAGES_TICKET_SECRET`; at Publish the
+  device sends both back, and the recipe is written then, from the signed record. This keeps a
+  draft's prompt and its cost off the server entirely, which the owner's cost rule (decision 24)
+  needs: a stored draft recipe would be a cost tied to a person.
+- **Costs** are daily totals in `studio.image_costs` (per kind of call, model, host, verdict), with
+  no FID, no request id, no time of day and no row number, the rule of the assistant's 0007. The
+  daily limit is counted in `studio.image_asks` (FID and time, no row number). A published image's
+  recipe still shows its cost, as every recipe does (principle 1): that is the published work's
+  provenance, shown with its maker's name by their own choice to publish.
+- **Test spending** is capped in code: `IMAGES.totalSpendCapUsd` = $1 across all days, besides the
+  $2 a day. Log: `docs/proposals/add-an-image-spend.md`.
+- **Hiding** moves the public file to a private bucket (`R2_PRIVATE_BUCKET`), and public copies are
+  cached for 5 minutes, so no Cloudflare cache-purge key is needed.
+- **A moderator's "Dismiss"** never restores an image a stated rule hid: restoring would let
+  moderator code publish (P5b). Those stay hidden until the maintainer restores them.
+- **"The maintainer is told"** of a "minor" report (decision 17): the report is at the top of the
+  moderator queue (`/moderate`), but nothing sends a message: that needs an outside service (email,
+  a cast), which is the owner's choice.
+- **The prompt check** also receives the prompt, so `own-words-v2` and the composer name Groq as
+  well as fal.ai (the draft wording named only fal.ai).
+- **Usernames (decision 12): "FID n" for now.** Ways to show the username without a new outside
+  service, for the owner to choose before anything is added:
+  1. *Website sign-ins:* Farcaster's relay (already named) sends our server the person's username
+     when they sign in. The server could hand it back signed, like a draft, and accept it at
+     Publish. No new service, no new table; miniapp sign-ins would still show "FID n".
+  2. *Miniapp sign-ins:* the Farcaster app tells the page the username, but the page could claim
+     any name, so it can't be trusted for a byline. No way without a lookup.
+  3. *A lookup:* Farcaster's own public API or a public hub (both run by Farcaster). That is a new
+     host our server calls, to be named on About: needs the owner's yes.
+- **Built to fit what comes next:** publishing accepts `uses` (published design versions) and
+  `remixed_from` (published images) and writes them to `studio.links`; `studio.picks` (private,
+  0002) is untouched and ready for the composer to pre-fill references later.

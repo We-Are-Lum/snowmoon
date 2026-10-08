@@ -20,9 +20,11 @@ export function navItems(last: number, adaptations: number): NavItem[] {
     { key: 'adaptations', label: 'Adaptations', href: '/adaptations', meta: String(adaptations) },
     { key: 'minpentai', label: 'Minpentai', href: '/minpentai', meta: 'Tutorial' },
     { key: 'podcast', label: 'Podcast', href: '/about#podcast', meta: 'RSS' },
+    { key: 'pictures', label: 'Pictures', href: '/images', meta: 'Trial' },
     { key: 'about', label: 'About', href: '/about' },
   ];
   // Adaptations are out of view for now (ADAPTATIONS.visible).
   return ADAPTATIONS.visible ? items : items.filter((i) => i.key !== 'adaptations');
 }
-export const COMING = [{ label: 'Pictures', meta: 'Coming' }];
+/** Destinations shown as coming, as text, not links. None now: Pictures is open as a trial. */
+export const COMING: { label: string; meta: string }[] = [];

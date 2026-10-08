@@ -6,6 +6,8 @@ import { useRouter } from 'next/navigation';
 import { lastChapter, openedChapters } from '~/lib/chat/device';
 import { ADAPTATIONS } from '~/lib/config';
 import { ChapterPlayer, type PlayerCue, type PlayerImage } from './chapter-player';
+import { ImageComposer } from './image-composer';
+import { ReaderImages } from './reader-images';
 
 /**
  * A chapter, as in the prototype's reader: a context strip; "Ch n / 32" (opens the chapter
@@ -81,6 +83,8 @@ export function ChapterView({
       <div className="chapter-read" hidden={view === 'listen'}>
         {children}
       </div>
+      <ReaderImages chapter={chapter} />
+      <ImageComposer />
       {narration && (
         <ChapterPlayer
           chapter={chapter}

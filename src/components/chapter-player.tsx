@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ReportPronunciation } from './report-pronunciation';
 import { RecipeLink } from './recipe-sheet';
+import { openComposer } from '~/lib/images/client';
 
 /**
  * Play view (brief Milestone 3 and §4e): plays the chapter's house narration,
@@ -353,6 +354,19 @@ export function ChapterPlayer({ chapter, chapters, label, recipeUrl, url, durati
         </div>
         <span className="listen-voice">house voice</span>
       </div>
+      {/* L18: an image for the paragraph being read; playback pauses while the composer is open. */}
+      {current && (
+        <button
+          type="button"
+          className="add-image listen-add-image"
+          onClick={() => {
+            audio.current?.pause();
+            openComposer({ chapter, start: current.idx, end: current.idx });
+          }}
+        >
+          + Add an image to this moment
+        </button>
+      )}
       </div>
       {ended && chapter < chapters && (
         <Link className="player-next" href={`/chapter/${chapter + 1}?view=listen`}>

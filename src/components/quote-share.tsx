@@ -4,6 +4,7 @@ import { useCallback, useEffect, useMemo, useState } from 'react';
 import { sdk } from '@farcaster/miniapp-sdk';
 import { authFetch, useAuth } from '~/lib/client-auth';
 import { SignInButton } from './sign-in';
+import { openComposer } from '~/lib/images/client';
 
 /**
  * Share a quote as a card. Select text in the chapter (up to four paragraphs),
@@ -168,6 +169,18 @@ export function QuoteShare({ chapter, images }: Props) {
             onClick={() => openSheet(selection)}
           >
             Share quote
+          </button>
+          {/* An image for this passage (docs/proposals/add-an-image.md, section 2). */}
+          <button
+            type="button"
+            className="share-selection"
+            onMouseDown={(e) => e.preventDefault()}
+            onClick={() => {
+              openComposer({ chapter, start: selection.from, end: selection.to });
+              setSelection(null);
+            }}
+          >
+            Add an image
           </button>
           {/* Board 1a: ask the assistant about this passage, in a new private thread. */}
           <a className="share-selection" href={`/assistant?block=c${chapter}-b${selection.from}`} onMouseDown={(e) => e.preventDefault()}>

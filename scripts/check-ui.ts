@@ -328,6 +328,17 @@ try {
     await checkAssistant(page, scheme);
     await open(page, '/cards');
     await checkFloors(page, '/cards', scheme);
+    // Readers' images (slice 1): the feed, and the composer opened from a scene label, signed out.
+    await open(page, '/images');
+    await checkFloors(page, '/images', scheme);
+    if (!(await page.getByText('Most liked').isVisible())) fail('/images: no "Most liked" order');
+    await open(page, '/chapter/1');
+    await page.locator('.scene-label .add-image').first().click();
+    await page.waitForSelector('.image-composer');
+    await checkFloors(page, '/chapter/1 (add an image, signed out)', scheme);
+    if (!/never sent to a model/.test((await page.textContent('.image-composer')) ?? '')) fail('/chapter/1: the composer does not say the book text is never sent to a model');
+    await page.keyboard.press('Escape');
+    if (await page.locator('.image-composer').count()) fail('/chapter/1: Escape does not close the composer');
 
     // Minpentai: every tutorial screen and every mode, at phone width.
     for (const q of [...Array.from({ length: MINPENTAI_LESSONS }, (_, i) => `lesson=${i + 1}`), 'mode=practice', 'mode=play', 'mode=free']) {

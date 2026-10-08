@@ -1,4 +1,5 @@
-import { CHAT, REPO_URL, WORK } from '~/lib/config';
+import { CHAT, CONTACT_EMAIL, IMAGES, REPO_URL, WORK } from '~/lib/config';
+import { RULES } from '~/lib/images/rules';
 import { SIGN_IN_SERVICES } from '~/lib/sign-in-text';
 import { ThemeSwitch } from '~/components/theme-switch';
 import { loadIntro } from '~/lib/intro';
@@ -69,10 +70,30 @@ export default function About() {
           own words.
         </p>
       )}
+      <h2 id="pictures">Pictures ({IMAGES.label})</h2>
+      {/* Model-drafted wording (docs/proposals/add-an-image.md, decisions of 2026-10-08). */}
+      <p>
+        Invited readers can make an image for a passage, with {IMAGES.model.name}, an open-weights model ({IMAGES.model.licence}). Your
+        prompt is sent to {CHAT.providerName} to be checked against the published rules (with gpt-oss-safeguard-20b), then to{' '}
+        {IMAGES.model.host} to make the image. Both are asked to keep nothing: fal.ai returns the image in its reply and keeps no copy
+        of the request. The image is shown to you as a draft, kept only on your device; it becomes public only if you publish
+        it. The book&apos;s text is never sent to a model.
+      </p>
+      <p>Rules: {RULES}</p>
+      <p>
+        A published image shows who made it, that it is AI-generated and not by the author, and its recipe with the exact prompt.
+        Its maker can hide it at once. Anyone signed in can report it: one report of anything sexual involving a minor hides it
+        at once, and three reports from different people hide it until a moderator looks. Moderators can only hide. This app
+        counts how many images each person makes a day; what they cost is kept only as daily totals, with no names.
+      </p>
+      <p>
+        Contact, for legal or copyright notices or to report an image without signing in:{' '}
+        <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.
+      </p>
       <h2>Signing in</h2>
       {/* Model-drafted wording; the same sentence is shown at the sign-in step (src/components/sign-in.tsx). */}
       <p>
-        Reading needs no account. Saving cards, liking them and asking the assistant need a Farcaster sign-in. Inside a
+        Reading needs no account. Saving cards, liking, making images and asking the assistant need a Farcaster sign-in. Inside a
         Farcaster app it happens by itself. On this website, {SIGN_IN_SERVICES.charAt(0).toLowerCase() + SIGN_IN_SERVICES.slice(1)}
       </p>
       <h2>Theme</h2>

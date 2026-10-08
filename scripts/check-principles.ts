@@ -20,7 +20,7 @@ import { PGlite } from '@electric-sql/pglite';
 import postgres from 'postgres';
 import { chromium } from 'playwright-core';
 import { DEFAULT_TEMPLATES } from '../src/templates';
-import { CHAT, REPO_URL } from '../src/lib/config';
+import { CHAT, IMAGES, REPO_URL } from '../src/lib/config';
 import { NOTICE_REVIEW } from '../src/lib/chat/notice';
 import { BOOK_TAG, NARRATION_MAX_WORDS, PERSON_TAG, parseBeats } from '../src/lib/script-beats';
 
@@ -261,6 +261,13 @@ add({
       // The two components that may hold a text box: one shows the publication line, the
       // other (questions kept on the device, never published) says it is never published.
       if (file.endsWith('components/publish-words.tsx')) continue;
+      // A report's note (readers' images, 2026-10-08): read only by moderators, never published, and it says so.
+      if (file.endsWith('components/private-note-field.tsx')) {
+        for (const [what, re] of [['private', /Private:/], ['read only by moderators', /only moderators read it/], ['never published', /Never published/], ['described to screen readers', /aria-describedby/]] as const)
+          if (!re.test(text)) problems.push(`${file}: the note box must say it is ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the note box must not send its text anywhere itself`);
+        continue;
+      }
       if (file.endsWith('components/private-text-field.tsx')) {
         // Owner (2026-10-07): saved only on this device, sent to Vercel and Groq to be answered, never published; labelled draft.
         // 2026-10-08: Groq directly, the gateway only when Groq is busy, and both named while the fallback is on.
@@ -288,6 +295,47 @@ add({
   },
 });
 
+// Readers' images (slice 1, 2026-10-08): the exact prompt of every published one is on its page,
+// readable signed out. Checked live: each image's page is fetched anonymously.
+async function readerImages(status: 'published' | 'hidden') {
+  const url = process.env.STUDIO_DATABASE_URL;
+  if (!url) return null;
+  const sql = postgres(url, { prepare: false, max: 1 });
+  const rows = await sql<{ id: string; prompt: string | null; user_prompt: string | null; asset_url: string | null }[]>`
+    select v.id, r.prompt, r.params->>'user_prompt' as user_prompt, v.asset_url
+    from studio.elements e join studio.element_versions v on v.element_id = e.id left join studio.recipes r on r.id = v.recipe_id
+    where e.element_type = 'image' and e.status = ${status} and r.source = 'in_app'`;
+  await sql.end();
+  return [...rows];
+}
+const htmlText = (h: string) => h.replace(/<[^>]+>/g, ' ').replace(/&quot;/g, '"').replace(/&#x27;|&#39;/g, "'").replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/\s+/g, ' ');
+add({
+  id: 'P1g',
+  principle: 1,
+  name: "a signed-out visitor reads the exact prompt of every reader's published image on its page",
+  load: async () => {
+    const rows = await readerImages('published');
+    if (!rows) return { skipped: true, pages: [] as { id: string; prompt: string; html: string }[] };
+    const pages = [];
+    for (const r of rows) {
+      const res = await fetch(`${BASE}/image/${r.id}`);
+      pages.push({ id: r.id, prompt: r.prompt ?? '', html: res.ok ? await res.text() : '' });
+    }
+    return { skipped: false, pages };
+  },
+  run: ({ skipped, pages }) => {
+    if (skipped) return ['skipped: STUDIO_DATABASE_URL not set'];
+    const norm = (t: string) => t.replace(/\s+/g, ' ').trim();
+    return (pages as { id: string; prompt: string; html: string }[])
+      .filter((p) => !p.prompt || !htmlText(p.html).includes(norm(p.prompt)))
+      .map((p) => `image ${p.id}: its page does not show the exact prompt to a signed-out visitor`);
+  },
+  plant: (c) => {
+    c.skipped = false;
+    c.pages.push({ id: 'planted', prompt: 'a prompt nobody can read', html: '<p>no prompt here</p>' });
+  },
+});
+
 // ---------------------------------------------------------------------------
 // P2. AI use declared on every element; the book's text never altered; nothing
 //     generated presented as the author's.
@@ -310,9 +358,18 @@ add({
   id: 'P2b',
   principle: 2,
   name: 'generated images and narration carry an AI declaration where they are shown',
-  load: async () => ({ ch1: await page('/chapter/1'), card: read('src/app/api/card/[n]/[range]/route.tsx') }),
-  run: ({ ch1, card }) => {
+  load: async () => ({
+    ch1: await page('/chapter/1'),
+    card: read('src/app/api/card/[n]/[range]/route.tsx'),
+    // Readers' images: every place one is shown says AI-generated and not by the author.
+    readers: ['src/components/reader-images.tsx', 'src/components/image-feed.tsx', 'src/app/image/[id]/page.tsx', 'src/app/api/image-card/[id]/route.tsx'].map((f) => ({ file: f, text: read(f) })),
+  }),
+  run: ({ ch1, card, readers }) => {
     const problems: string[] = [];
+    for (const r of readers as { file: string; text: string }[]) {
+      if (!AI_LABEL.test(r.text)) problems.push(`${r.file}: a reader's image is shown without "AI-generated"`);
+      if (!/not by the author/i.test(r.text)) problems.push(`${r.file}: a reader's image is shown without "not by the author"`);
+    }
     const figures = [...ch1.matchAll(/<figure class="seed-image"[\s\S]*?<\/figure>/g)].map((m) => m[0]);
     if (!figures.length) problems.push('chapter 1: no seeded images found to check');
     for (const f of figures) if (!AI_LABEL.test(f.replace(/<[^>]+>/g, ' '))) problems.push(`chapter 1 image caption lacks "AI-generated": ${f.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 70)}`);
@@ -323,6 +380,7 @@ add({
   plant: (c) => {
     c.ch1 = c.ch1.replace(/Synthetic narration/g, 'Narration');
     c.card = c.card.replace(/AI[- ]generated/gi, 'picture');
+    c.readers[0].text = c.readers[0].text.replace(/not by the author/gi, '');
   },
 });
 
@@ -433,6 +491,9 @@ add({
     for (const f of walk('adaptations', /(^|\/)recipe\.json$/)) {
       for (const im of (json(f).images ?? []) as { endpoint?: string }[]) if (im.endpoint) endpoints.set(im.endpoint, f);
     }
+    // Readers' images (slice 1): the image model's endpoint and the prompt check, as configured.
+    endpoints.set(IMAGES.model.endpoint, 'src/lib/config.ts IMAGES.model');
+    endpoints.set(IMAGES.guardModel, 'src/lib/config.ts IMAGES.guardModel');
     return { models: json('config/models.json').models, used: [...used.entries()], endpoints: [...endpoints.entries()] };
   },
   run: ({ models, used, endpoints }) => {
@@ -610,10 +671,39 @@ add({
   },
 });
 
+// Hidden readers' images (decision 21): out of public reads, and their file gone from the public bucket.
+add({
+  id: 'P5c',
+  principle: 5,
+  name: "a hidden reader's image is gone from public pages and from the public bucket",
+  load: async () => {
+    const rows = await readerImages('hidden');
+    if (!rows) return { skipped: true, items: [] as { id: string; page: number; file: number }[] };
+    const items = [];
+    for (const r of rows) {
+      const page = (await fetch(`${BASE}/image/${r.id}`)).status;
+      const file = r.asset_url ? (await fetch(r.asset_url, { method: 'HEAD' })).status : 404;
+      items.push({ id: r.id, page, file });
+    }
+    return { skipped: false, items };
+  },
+  run: ({ skipped, items }) => {
+    if (skipped) return ['skipped: STUDIO_DATABASE_URL not set'];
+    return (items as { id: string; page: number; file: number }[]).flatMap((i) => [
+      ...(i.page === 404 ? [] : [`hidden image ${i.id}: its page still answers (${i.page})`]),
+      ...(i.file === 404 || i.file === 403 ? [] : [`hidden image ${i.id}: its file is still public (${i.file})`]),
+    ]);
+  },
+  plant: (c) => {
+    c.skipped = false;
+    c.items.push({ id: 'planted', page: 200, file: 200 });
+  },
+});
+
 // ---------------------------------------------------------------------------
 // P6. No third-party requests; individual ratings not publicly readable.
 // ---------------------------------------------------------------------------
-const PAGES = ['/', '/chapter/1', '/chapter/30', '/about', '/cards', '/adaptations', '/adaptations/dog-dawn', '/share/1/4?img=c1-b005-toy-drone'];
+const PAGES = ['/', '/chapter/1', '/chapter/30', '/about', '/cards', '/adaptations', '/adaptations/dog-dawn', '/share/1/4?img=c1-b005-toy-drone', '/images', '/moderate'];
 add({
   id: 'P6a',
   principle: 6,
@@ -644,7 +734,7 @@ add({
     seen.push({ page: '/chapter/1', host: 'fonts.googleapis.com' });
   },
 });
-const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents'];
+const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log'];
 add({
   id: 'P6b',
   principle: 6,
@@ -663,7 +753,9 @@ add({
       insert into studio.takes (id, work_id, chapter, title, created_by_fid) values ('00000000-0000-0000-0000-00000000aa01','snowmoon',1,'t',1);
       insert into studio.take_likes (take_id, fid) values ('00000000-0000-0000-0000-00000000aa01', 42);
       insert into studio.picks (fid, entity_id, version_id) values (42,'00000000-0000-0000-0000-00000000e001','00000000-0000-0000-0000-0000000000f1');
-      insert into studio.contributor_consents (fid, kind, consent_text_sha256) values (42,'handmade_upload','${'a'.repeat(64)}');`);
+      insert into studio.contributor_consents (fid, kind, consent_text_sha256) values (42,'handmade_upload','${'a'.repeat(64)}');
+      insert into studio.image_asks (fid) values (42);
+      insert into studio.removal_log (element_id, step, by_fid, role, reason) values ('00000000-0000-0000-0000-0000000000b1','reported',42,'reader','spam');`);
     const problems: string[] = [];
     for (const role of ['anon', 'authenticated']) {
       for (const t of PRIVATE_FID_TABLES) {

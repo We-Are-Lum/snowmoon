@@ -1,0 +1,4 @@
+{
+  "about": "Names a reader's image prompt may not contain (docs/proposals/add-an-image.md, decision 28): the author and his pseudonyms, and public figures most likely to be put next to his text. Matched as whole words, ignoring case. Public on purpose. The prompt check (config/prompts/image-guard.md) refuses named real people in general; this list stops the obvious cases before any model is called. Model-drafted list (coding agent, 2026-10-08), for the owner to extend.",
+  "names": ["Vitalik", "Buterin", "Vitalik Buterin", "VitalikButerin", "vbuterin", "Satoshi", "Nakamoto", "Elon Musk", "Musk", "Donald Trump", "Trump", "Joe Biden", "Biden", "Xi Jinping", "Vladimir Putin", "Putin"]
+}

@@ -11,6 +11,7 @@ import { THEME_SCRIPT } from '~/lib/theme';
 import '../styles/tokens.css';
 import './globals.css';
 import '../styles/shell.css';
+import '../styles/images.css';
 
 const url = appUrl();
 

@@ -6,6 +6,15 @@
 > says the maintainer can be asked to hide. When "Hide this" ships, a new
 > wording version (`own-words-v2` in `config/consent.json`) promises it, and
 > everyone is asked again.
+>
+> **Built for readers' images (slice 1, branch site-images, 2026-10-08):** "Hide this" on one's
+> own image, reports, stated auto-hide rules and a moderator queue (hide or dismiss only),
+> `studio.removal_log` (migration 0008), and `own-words-v2`. One change to step 1, approved as
+> decision 21 of the add-an-image proposal: when an image is hidden, its public file is copied to
+> a private bucket and deleted from the public one, so its link stops working; public copies are
+> cached for five minutes only, so it also leaves the cache. The record and the bytes are kept,
+> as below. Unhiding is for the author's own hides; a hide by a moderator or a stated rule is
+> undone only by the maintainer (decision 22).
 
 People are told before their first contribution that their words are public,
 permanent, GPL-3.0 and shown with their Farcaster name (`config/consent.json`).
