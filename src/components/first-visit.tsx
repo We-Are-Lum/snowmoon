@@ -251,26 +251,42 @@ export function IntroOnce({ intro }: { intro: Intro }) {
   return open ? <IntroScreens intro={intro} onClose={() => setOpen(false)} /> : null;
 }
 
-/** About: replay the screens on request. */
-export function ReplayIntro({ intro }: { intro: Intro }) {
+/** About, the menu and the rail: open the screens on request. */
+export function ReplayIntro({ intro, label = 'Replay intro screens', className = 'replay-intro' }: { intro: Intro; label?: string; className?: string }) {
   const [open, setOpen] = useState(false);
   return (
     <>
-      <button type="button" className="replay-intro" onClick={() => setOpen(true)}>
-        Replay intro screens
+      <button type="button" className={className} onClick={() => setOpen(true)}>
+        {label}
       </button>
       {open && <IntroScreens intro={intro} onClose={() => setOpen(false)} />}
     </>
   );
 }
 
-/** On any page but home and About, before the intro has been seen: a small link that opens it. */
+/**
+ * On the first page of a first visit (not home or About), before the intro has been seen: a small
+ * link that opens it. Gone once the reader moves on (owner, 2026-10-08); after that "What is this?"
+ * is in the menu, the rail and About.
+ */
+const VISITED = 'snowmoon.visited';
+let firstPath: string | null = null;
 export function WhatIsThis({ intro }: { intro: Intro }) {
   const path = usePathname();
   const [show, setShow] = useState(false);
   const [open, setOpen] = useState(false);
   useEffect(() => {
-    setShow(path !== '/' && !path.startsWith('/about') && !seen(intro.version));
+    if (firstPath === null) {
+      let earlier = true;
+      try {
+        earlier = localStorage.getItem(VISITED) !== null;
+        localStorage.setItem(VISITED, '1');
+      } catch {
+        /* storage blocked: treat as seen */
+      }
+      firstPath = earlier ? '' : path;
+    }
+    setShow(path === firstPath && path !== '/' && !path.startsWith('/about') && !seen(intro.version));
   }, [path, intro.version]);
   if (!show && !open) return null;
   return (

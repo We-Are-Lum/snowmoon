@@ -1,52 +1,48 @@
-/* The reading assistant (docs/design/assistant-chat.dc.html). Tokens from
-   src/styles/tokens.css; text 12px or more, tap targets 44px or more. A private
+/* The reading assistant (docs/design/assistant-chat.dc.html; SMAssistant in the clickable
+   prototype, whose sizes and spacing these follow). Text 12px or more; on touch screens every
+   control has a 44px hit area (src/styles/shell.css). A private
    thread is marked by a dashed rule and no fill (○); planning threads, when they
    exist, get a filled band (●). */
 
-.as h1 { font-size: 36px; font-weight: 500; margin: var(--space-2) 0; }
-.as h2 { font-size: var(--text-h2); font-weight: 500; margin: var(--space-2) 0 var(--space-3); }
+.as { display: flex; flex-direction: column; }
+.panel .as { flex: 1; padding: 22px 22px 16px; }
+.as h1 { font-size: 30px; font-weight: 400; line-height: 1.15; margin: 0 0 14px; }
+.as h2 { font-size: var(--text-h2); font-weight: 400; line-height: 1.2; margin: 8px 0 12px; }
 .as-label { margin: 0; font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
-.as-draft {
-  display: inline-block; margin-left: 6px; padding: 1px 6px; vertical-align: 1px;
-  border: 1px dashed var(--muted); border-radius: 2px; font-family: var(--label); font-size: var(--text-label);
-  letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted);
-}
-.as-intro { color: var(--body); }
-/* "Testing": answers can be wrong (CHAT.testing). */
-.as-testing {
-  margin: 0 0 var(--space-3); padding: 8px 12px; border: 1.5px solid var(--warn); border-radius: var(--radius);
-  color: var(--ink); background: var(--flag-bg); font-size: 16px; line-height: 1.4;
-}
-.as-testing strong { margin-right: 6px; font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.08em; text-transform: uppercase; color: var(--warn); }
+/* One small "Draft wording" line per screen or panel (owner, 2026-10-08), not a tag per sentence. */
+.as-draft { margin: 18px 0 0; font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
+.private-line .as-draft { margin: 0; }
+.as-intro { margin: 0 0 14px; font-size: 17px; line-height: 1.45; color: var(--body); text-wrap: pretty; }
+/* "Testing": answers can be wrong (CHAT.testing). One quiet line. */
+.as-testing { margin: 0 0 14px; font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.04em; color: var(--muted); }
 .as-empty { color: var(--muted); }
 .as-visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
 
 /* 1d: the start button and the thread list */
 .as-start {
-  display: flex; flex-direction: column; gap: 2px; width: 100%; min-height: var(--tap); margin: var(--space-4) 0 var(--space-6);
-  padding: 12px 14px; text-align: left; cursor: pointer; color: var(--ink); background: transparent;
-  border: 1.5px dashed var(--ink); border-radius: var(--radius); font-family: var(--reading);
+  display: flex; flex-direction: column; gap: 6px; width: 100%; padding: 14px 12px; text-align: left; cursor: pointer; color: var(--ink); background: transparent;
+  border: 1px dashed var(--faint); border-radius: var(--radius); font-family: var(--label); font-size: var(--text-label);
 }
-.as-start-title { font-family: var(--label); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; }
-.as-start-line { font-size: 16px; color: var(--muted); }
-.as-list { list-style: none; margin: var(--space-2) 0 0; padding: 0; border-top: 1px dashed var(--rule); }
-.as-list li { display: flex; border-bottom: 1px dashed var(--rule); }
+.as-start-title { font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; }
+.as-start-line { font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
+.as-list { list-style: none; margin: 0; padding: 0; }
+.as-list li { display: flex; align-items: flex-start; border-top: 1px dashed var(--faint); }
 .as-list li > button:first-child {
-  flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; gap: 2px; min-height: var(--tap);
-  padding: 10px 2px; background: none; border: 0; text-align: left; color: var(--ink); font: inherit; font-size: 18px; cursor: pointer;
+  flex: 1; min-width: 0; display: flex; justify-content: space-between; align-items: baseline; gap: 12px;
+  padding: 12px 0; background: none; border: 0; text-align: left; color: var(--ink); font-family: var(--reading); font-size: 17px; line-height: 1.3; cursor: pointer;
 }
-.as-meta { font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
-.as-delete { flex: none; min-width: var(--tap); background: none; border: 0; color: var(--muted); font-size: 20px; cursor: pointer; }
+.as-meta { flex: none; font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
+.as-delete { flex: none; padding: 12px 0 12px 12px; background: none; border: 0; color: var(--muted); font-family: var(--label); font-size: 16px; line-height: 1.2; cursor: pointer; }
 
 /* 3: a private thread */
 .as-kind {
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px;
-  padding: 8px 0; border-bottom: 1.5px dashed var(--ink);
+  padding: 8px 0; border-bottom: 1px dashed var(--ink);
   font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.06em; text-transform: uppercase;
 }
 .as-limit { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 10px; padding: 6px 0; font-size: 15px; color: var(--muted); border-bottom: 1px solid var(--rule); }
 .as-picker select {
-  min-height: var(--tap); padding: 0 8px; border: 1px solid var(--rule); border-radius: var(--radius);
+  padding: 4px 6px; border: 1px solid var(--rule); border-radius: var(--radius);
   background: var(--paper); color: var(--ink); font-family: var(--label); font-size: var(--text-label);
 }
 .as-passage { margin-top: var(--space-3); }
@@ -54,14 +50,15 @@
 .as-passage blockquote { font-style: italic; }
 .as-starters { display: flex; flex-direction: column; align-items: flex-start; gap: 8px; }
 .as-starter {
-  min-height: var(--tap); padding: 8px 14px; text-align: left; cursor: pointer;
+  padding: 8px 11px; text-align: left; cursor: pointer;
   background: transparent; color: var(--ink); border: 1px solid var(--rule); border-radius: var(--radius);
-  font-family: var(--reading); font-size: 17px; line-height: 1.3;
+  font-family: var(--reading); font-size: 16px; line-height: 1.3;
 }
 .as-starter:hover { border-color: var(--ink); }
 .as-attached { margin: 8px 0 0; font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
 .as-messages { display: flex; flex-direction: column; gap: var(--space-5); padding: var(--space-5) 0; }
-.as-question { margin: 0; font-size: 21px; line-height: 1.35; }
+.as-question { align-self: flex-end; max-width: 82%; margin: 0; padding: 10px 12px; background: var(--soft); border-radius: var(--radius); font-size: 17px; line-height: 1.4; }
+.as-answer { font-size: 17px; line-height: 1.45; }
 .as-reply { display: flex; flex-direction: column; gap: var(--space-2); }
 .as-answer { display: flex; flex-direction: column; gap: var(--space-3); }
 .as-answer p { margin: 0; color: var(--ink); }
@@ -77,7 +74,7 @@
   display: flex; align-items: center; justify-content: space-between; gap: 8px;
   font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted);
 }
-.as-quote figcaption a { display: inline-flex; align-items: center; min-height: var(--tap); color: var(--ink); }
+.as-quote figcaption a { display: inline-block; padding: 6px 0; }
 
 /* 9b, 9c, refusals */
 .as-held { padding: 12px 14px; border: 1.5px dashed var(--muted); border-radius: var(--radius); }
@@ -87,16 +84,16 @@
 .as-instead { margin: 0; padding-left: 1.1em; }
 .as-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 6px; }
 .as-ink, .as-primary {
-  display: inline-flex; align-items: center; justify-content: center; min-height: var(--tap); padding: 0 16px;
+  display: inline-flex; align-items: center; justify-content: center; padding: 11px 16px;
   border: 0; border-radius: var(--radius); background: var(--btn); color: var(--btn-ink); text-decoration: none;
-  font-family: var(--label); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer;
+  font-family: var(--label); font-size: var(--text-label); line-height: 16px; text-transform: uppercase; cursor: pointer;
 }
-.as-primary { min-width: 160px; height: 48px; }
+.as-primary { min-width: 160px; padding: 14px 16px; }
 .as-quiet {
-  min-height: var(--tap); padding: 0 8px; background: none; border: 0; color: var(--muted);
-  font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer;
+  padding: 8px; background: none; border: 0; color: var(--muted);
+  font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; cursor: pointer;
 }
-.as-quiet-link { display: inline-flex; align-items: center; min-height: var(--tap); margin-top: 6px; font-family: var(--label); font-size: var(--text-label); }
+.as-quiet-link { align-self: center; padding: 8px; font-family: var(--label); font-size: var(--text-label); }
 
 /* The composer and its footer */
 .as-composer {
@@ -106,26 +103,26 @@
 .private-field { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px; }
 .private-line { margin: 0; font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
 .as-composer textarea {
-  flex: 1; min-height: var(--tap); padding: 10px 12px; resize: none; border: 1px solid var(--rule); border-radius: var(--radius);
+  flex: 1; min-height: 44px; padding: 10px 12px; resize: none; border: 1px solid var(--rule); border-radius: var(--radius);
   background: var(--card); color: var(--ink); font: inherit; font-size: 18px; line-height: 1.35;
 }
-.as-send { flex: none; width: var(--tap); height: var(--tap); border: 0; border-radius: var(--radius); background: var(--btn); color: var(--btn-ink); font-family: var(--label); font-size: 18px; cursor: pointer; }
+.as-send { flex: none; width: 44px; height: 44px; border: 0; border-radius: var(--radius); background: var(--btn); color: var(--btn-ink); font-family: var(--label); font-size: 18px; cursor: pointer; }
 .as-send:disabled { opacity: 0.4; cursor: default; }
-.as-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; margin: 4px 0 0; font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
+.as-foot { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; margin: 18px 0 0; font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
 
 /* 2: the first-time notice */
 .as-overlay { position: fixed; inset: 0; z-index: 95; display: flex; align-items: flex-end; justify-content: center; background: var(--scrim); }
 .as-sheet {
-  width: 100%; max-width: 34rem; max-height: 92vh; overflow-y: auto; background: var(--card); color: var(--ink);
-  border-radius: var(--radius-sheet) var(--radius-sheet) 0 0; padding: var(--space-5) var(--gutter) calc(var(--space-5) + env(safe-area-inset-bottom));
+  width: 100%; max-width: 520px; max-height: 92vh; overflow-y: auto; background: var(--paper); color: var(--ink);
+  border-radius: 16px 16px 0 0; padding: 20px 22px calc(28px + env(safe-area-inset-bottom));
 }
 .as-notice { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: var(--space-3); }
 .as-notice li { display: grid; grid-template-columns: 24px 1fr; gap: 8px; font-size: 17px; line-height: 1.4; }
 .as-n { font-family: var(--label); font-size: var(--text-label); color: var(--muted); padding-top: 3px; }
-.as-check { display: flex; align-items: center; gap: 10px; min-height: var(--tap); margin-top: var(--space-3); font-size: 17px; }
+.as-check { display: flex; align-items: center; gap: 10px; min-height: 44px; margin-top: var(--space-3); font-size: 17px; }
 /* A 44px target drawn as a 22px box: rings of box-shadow, so the tap area is the full square. */
 .as-check input {
-  appearance: none; flex: none; width: var(--tap); height: var(--tap); margin: -11px -4px -11px -11px; border: 0; border-radius: 0;
+  appearance: none; flex: none; width: 44px; height: 44px; margin: -11px -4px -11px -11px; border: 0; border-radius: 0;
   background: transparent; cursor: pointer; box-shadow: inset 0 0 0 11px var(--card), inset 0 0 0 13px var(--ink);
 }
 .as-check input:checked { box-shadow: inset 0 0 0 11px var(--card), inset 0 0 0 13px var(--ink), inset 0 0 0 16px var(--card), inset 0 0 0 22px var(--ink); }
@@ -133,17 +130,22 @@
 .as-sheet .as-actions { justify-content: space-between; margin-top: var(--space-3); }
 
 /* 9d */
-.as-signed-out h1 { font-size: 30px; line-height: 1.2; }
+/* 9d, as in the prototype: centred in the panel. */
+.as-signed-out { display: flex; flex-direction: column; gap: 16px; }
+.as-signed-out > * { margin: 0; }
+.as-signed-out h1 { font-size: 30px; line-height: 1.15; margin: 0; }
+.as-signed-out .as-body { font-size: 17px; line-height: 1.45; color: var(--body); text-wrap: pretty; }
+.as-signed-out .as-signin { width: 100%; margin-top: 6px; padding: 14px; }
+.panel .as:has(.as-signed-out) { justify-content: center; padding: 0 30px 24px; }
 .as-note { color: var(--muted); font-size: 16px; }
 
 /* 1d as in the prototype: the two kinds side by side; planning and pictures shown as coming. */
-.as-kinds { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: var(--space-4) 0 var(--space-5); }
-.as-kinds .as-start { margin: 0; }
+.as-kinds { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0 0 16px; }
 .as-coming-card {
-  display: flex; flex-direction: column; gap: 2px; padding: 12px 14px; border: 1px solid var(--rule); border-top: 2px solid var(--muted);
-  border-radius: var(--radius); background: var(--soft); color: var(--muted);
+  display: flex; flex-direction: column; gap: 6px; padding: 14px 12px; border-top: 2px solid var(--muted);
+  border-radius: var(--radius); background: var(--soft); color: var(--muted); font-family: var(--label); font-size: var(--text-label);
 }
 .as-coming-card .as-start-title { color: var(--muted); }
-.as-section { padding-bottom: 6px; border-bottom: 1px dashed var(--rule); }
-.as-coming-row { display: flex; justify-content: space-between; margin-top: var(--space-5); }
-.as-empty-row { margin: 8px 0 0; font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
+.as-section { padding: 10px 0 8px; letter-spacing: 0.06em; }
+.as-coming-row { display: flex; justify-content: space-between; letter-spacing: 0; margin-top: 22px; padding: 12px 0; border-top: 1px solid var(--rule); }
+.as-empty-row { margin: 0; padding: 12px 0; border-top: 1px dashed var(--faint); font-family: var(--label); font-size: var(--text-label); color: var(--muted); }

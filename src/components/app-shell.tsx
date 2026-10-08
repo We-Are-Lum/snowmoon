@@ -7,7 +7,9 @@ import { sdk } from '@farcaster/miniapp-sdk';
 import { inMiniApp, signOut, useAuth, type AuthState } from '~/lib/client-auth';
 import { lastChapter, openedChapters } from '~/lib/chat/device';
 import { COMING, navItems } from '~/lib/nav';
+import type { Intro } from '~/lib/intro';
 import { Assistant } from './assistant';
+import { ReplayIntro } from './first-visit';
 import { SignInButton } from './sign-in';
 import { ThemeSwitch } from './theme-switch';
 import '../app/assistant/assistant.css';
@@ -20,7 +22,7 @@ import '../app/assistant/assistant.css';
  *   state, theme, account) and the assistant beside the page, always there unless closed.
  * Tells the Farcaster host the app is ready (once).
  */
-export function AppShell({ chapters, adaptations, children }: { chapters: number; adaptations: number; children: React.ReactNode }) {
+export function AppShell({ chapters, adaptations, intro, children }: { chapters: number; adaptations: number; intro: Intro; children: React.ReactNode }) {
   const path = usePathname() ?? '/';
   const auth = useAuth();
   const [menu, setMenu] = useState(false);
@@ -138,7 +140,9 @@ export function AppShell({ chapters, adaptations, children }: { chapters: number
           </button>
         </div>
         <div className="rail-body">
-          <Nav items={items} path={path} current={current} />
+          <div className="rail-nav">
+            <Nav items={items} path={path} current={current} />
+          </div>
           <p className="rail-label">
             <span>Chapters</span>
             <span>Read to {Math.max(...opened, 1)}</span>
@@ -156,8 +160,9 @@ export function AppShell({ chapters, adaptations, children }: { chapters: number
               );
             })}
           </ol>
-          <div className="rail-theme">
+          <div className="rail-extra">
             <ThemeSwitch name="theme-rail" />
+            <ReplayIntro intro={intro} label="What is this?" className="quiet-action" />
           </div>
         </div>
         <Account auth={auth} />
@@ -181,12 +186,12 @@ export function AppShell({ chapters, adaptations, children }: { chapters: number
       ) : (
         !path.startsWith('/assistant') && (
           <button type="button" className="panel-reopen" onClick={() => (setPanel(true), remember('snowmoon.panel', null))}>
-            Assistant
+            Assistant ⟩
           </button>
         )
       )}
 
-      {menu && <MenuSheet items={items} path={path} current={current} auth={auth} onClose={() => setMenu(false)} />}
+      {menu && <MenuSheet items={items} path={path} current={current} auth={auth} intro={intro} onClose={() => setMenu(false)} />}
     </div>
   );
 }
@@ -230,7 +235,10 @@ function Account({ auth }: { auth: AuthState }) {
           )}
         </>
       ) : auth.kind === 'signed-out' ? (
-        <SignInButton className="account-action" label="Sign in" />
+        <>
+          <span className="account-name">Signed out</span>
+          <SignInButton className="account-action" label="Sign in" />
+        </>
       ) : (
         <span className="account-name">…</span>
       )}
@@ -238,7 +246,7 @@ function Account({ auth }: { auth: AuthState }) {
   );
 }
 
-function MenuSheet({ items, path, current, auth, onClose }: { items: ReturnType<typeof navItems>; path: string; current: number; auth: AuthState; onClose: () => void }) {
+function MenuSheet({ items, path, current, auth, intro, onClose }: { items: ReturnType<typeof navItems>; path: string; current: number; auth: AuthState; intro: Intro; onClose: () => void }) {
   const sheet = useRef<HTMLDivElement>(null);
   const close = useCallback(onClose, [onClose]);
   useEffect(() => {
@@ -263,14 +271,15 @@ function MenuSheet({ items, path, current, auth, onClose }: { items: ReturnType<
         <p id="menu-title" className="menu-eyebrow">
           Snowmoon
         </p>
-        <Nav items={items} path={path} current={current} />
-        <div className="menu-theme">
-          <ThemeSwitch name="theme-menu" />
-        </div>
-        <Account auth={auth} />
-        <button type="button" className="menu-close" onClick={close}>
-          Close
+        <button type="button" className="sheet-x menu-close" aria-label="Close the menu" onClick={close}>
+          ×
         </button>
+        <Nav items={items} path={path} current={current} />
+        <div className="menu-extra">
+          <ThemeSwitch name="theme-menu" />
+          <ReplayIntro intro={intro} label="What is this?" className="quiet-action" />
+          <Account auth={auth} />
+        </div>
       </div>
     </div>
   );

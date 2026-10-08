@@ -24,7 +24,11 @@ body {
   line-height: var(--lh-read);
 }
 
-a { color: var(--accent); text-underline-offset: 0.15em; }
+/* Links: the prototype's accent, no underline. Inside running text a link is also underlined,
+   since colour alone does not set it apart from the words around it. */
+a { color: var(--link); text-decoration: none; text-underline-offset: 0.15em; }
+a:hover { text-decoration: underline; }
+:where(.chapter p.paragraph, .chapter .quote, .prose p, .prose li, .notice p) a { text-decoration: underline; text-decoration-color: color-mix(in srgb, currentColor 45%, transparent); }
 
 /* Labels: DM Mono, never below 12px. */
 .label,
@@ -43,56 +47,6 @@ a { color: var(--accent); text-underline-offset: 0.15em; }
   letter-spacing: var(--ls-label);
 }
 
-/* ---------- top bar ---------- */
-
-.bar {
-  position: sticky;
-  top: 0;
-  z-index: 10;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 8px;
-  min-height: var(--bar-h);
-  padding: 0 calc(var(--bar-pad) - 8px) 0 var(--bar-pad);
-  background: color-mix(in srgb, var(--paper) 94%, transparent);
-  backdrop-filter: blur(8px);
-  border-bottom: 1px solid var(--rule);
-}
-.bar-title {
-  display: inline-flex;
-  align-items: center;
-  min-height: var(--tap);
-  font-family: var(--reading);
-  font-size: var(--text-bar-title);
-  font-weight: 500;
-  color: var(--ink);
-  text-decoration: none;
-}
-.bar-links { display: flex; align-items: center; gap: 4px; text-transform: uppercase; }
-.bar-links a,
-.bar-auth button,
-.bar-auth > span {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-height: var(--tap);
-  min-width: var(--tap);
-  padding: 0 8px;
-  color: var(--muted);
-  text-decoration: none;
-}
-.bar-auth button {
-  font: inherit;
-  text-transform: inherit;
-  letter-spacing: inherit;
-  color: var(--ink);
-  background: transparent;
-  border: 1px solid var(--rule);
-  border-radius: var(--radius);
-  cursor: pointer;
-}
-
 /* ---------- pages ---------- */
 
 .page {
@@ -101,7 +55,7 @@ a { color: var(--accent); text-underline-offset: 0.15em; }
   padding: var(--space-5) var(--gutter) 64px;
 }
 
-.book-title { font-size: var(--text-display); font-weight: 500; line-height: 1.1; margin: 16px 0 4px; }
+.book-title { font-size: var(--text-display); font-weight: 400; line-height: 1.1; margin: 16px 0 4px; }
 .byline { margin: 0 0 20px; color: var(--muted); text-transform: uppercase; }
 
 .notice {
@@ -113,7 +67,7 @@ a { color: var(--accent); text-underline-offset: 0.15em; }
   line-height: 1.45;
 }
 .notice p { margin: 0 0 4px; }
-.notice-link { display: inline-flex; align-items: center; min-height: var(--tap); text-transform: uppercase; color: var(--ink); }
+.notice-link { display: inline-block; padding: 6px 0; text-transform: uppercase; }
 
 .chapter-list { list-style: none; padding: 0; margin: 0; }
 .chapter-list li { border-top: 1px solid var(--rule); }
@@ -124,16 +78,16 @@ a { color: var(--accent); text-underline-offset: 0.15em; }
   align-items: baseline;
   justify-content: space-between;
   gap: 0 16px;
-  min-height: var(--tap);
   padding: 10px 2px;
   color: var(--ink);
   text-decoration: none;
 }
-.ch-num { font-weight: 500; }
+.ch-num { font-weight: 400; }
 .ch-dateline { color: var(--accent); text-transform: uppercase; }
 
-.prose h1 { font-weight: 500; font-size: 36px; }
-.prose h2 { font-size: var(--text-h2); font-weight: 500; margin-top: 32px; }
+.prose h1 { font-weight: 400; font-size: 36px; line-height: 1.1; }
+.prose h2 { font-size: var(--text-h2); font-weight: 400; line-height: 1.2; margin-top: 32px; }
+.prose h3 { font-weight: 400; }
 
 /* ---------- chapter ---------- */
 
@@ -147,21 +101,28 @@ a { color: var(--accent); text-underline-offset: 0.15em; }
   color: var(--accent);
 }
 
-.chapter .heading h1 { font-size: var(--text-h1); font-weight: 500; line-height: 1.15; margin: 4px 0 8px; }
+/* The opening, as in the prototype: dateline, then the heading at 42/1, regular weight. */
+.chapter .heading h1 { font-size: var(--text-h1); font-weight: 400; line-height: 1; margin: 0 0 18px; }
+.chapter .block:not(.dateline) + .heading h1 { margin-top: 32px; }
 
 .chapter .dateline {
   display: flex;
   align-items: center;
   gap: 10px;
   color: var(--accent);
+  letter-spacing: 0.08em;
   text-transform: uppercase;
-  margin: 0 0 28px;
+  margin: 0 0 8px;
 }
-.chapter .dateline::before { content: ''; flex: 0 0 20px; height: 1px; background: var(--accent); }
-.chapter .dateline strong { font-weight: 500; }
+/* .page has 24px above; the prototype's opening block starts 32px below the bar. */
+.chapter > .dateline:first-child { margin-top: 8px; }
+.chapter .dateline::before { content: ''; flex: 0 0 20px; height: 2px; background: var(--accent); }
+.chapter .dateline strong { font-weight: 400; }
 .chapter .break + .dateline { margin-top: -12px; }
 
-.chapter p.paragraph { margin: 0 0 1em; hyphens: auto; }
+/* Book text: 19/1.6, 16px between blocks, no hyphenation (owner, 2026-10-08). */
+.chapter p.paragraph { margin: 0 0 16px; hyphens: manual; text-wrap: pretty; }
+.chapter .block.quote { hyphens: manual; }
 
 .chapter hr.break {
   border: 0;
@@ -170,7 +131,7 @@ a { color: var(--accent); text-underline-offset: 0.15em; }
   margin: 36px 25%;
 }
 
-.scene-label { color: var(--muted); margin: 4px 0 28px; text-transform: uppercase; }
+.scene-label { color: var(--muted); margin: 4px 0 24px; text-transform: uppercase; }
 
 span[data-hue] { color: oklch(var(--voice-l) 0.15 var(--hue)); }
 
@@ -200,8 +161,8 @@ span[data-hue] { color: oklch(var(--voice-l) 0.15 var(--hue)); }
 
 /* ---------- screens and figures, as the source drew them ---------- */
 
-figure.block { margin: 24px 0; }
-.block-caption { color: var(--muted); margin-top: 6px; text-transform: uppercase; }
+figure.block { margin: 4px 0 18px; }
+.block-caption { color: var(--muted); margin-top: 8px; }
 
 .device-view {
   background-color: #0a0e27;
@@ -290,90 +251,29 @@ figure.figure .device-view svg { min-width: var(--fig-min, 0); }
   display: flex;
   justify-content: space-between;
   margin-top: 48px;
+  padding-top: 4px;
   border-top: 1px solid var(--rule);
   text-transform: uppercase;
 }
-.chapter-nav a { display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 4px; }
+.chapter-nav a { display: inline-block; padding: 10px 0; }
 .provenance {
-  display: flex;
-  align-items: center;
-  min-height: var(--tap);
+  display: block;
+  padding: 6px 0;
   color: var(--muted);
   overflow-wrap: anywhere;
 }
+a.provenance { color: var(--muted); }
 
 /* Seeded key-moment images, shown after the block they illustrate. */
-.chapter .seed-image { margin: 8px 0 1.4em; }
-.chapter .seed-image img { display: block; width: 100%; height: auto; border-radius: var(--radius); background: var(--quote-bg); }
-.chapter .seed-image figcaption { margin-top: 6px; }
+.chapter .seed-image { margin: 4px 0 18px; }
+.chapter .seed-image img { display: block; width: 100%; height: auto; background: var(--quote-bg); }
+.chapter .seed-image figcaption { margin-top: 8px; }
 
 /* Play view: the block being read is marked like a linked block. */
 .chapter:has(.chapter-player) { padding-bottom: 160px; }
 .block.is-reading { box-shadow: -10px 0 0 var(--paper), -12px 0 0 var(--accent); }
 .block { transition: box-shadow 0.2s; }
 
-.chapter-player {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 20;
-  background: var(--paper);
-  border-top: 1px solid var(--rule);
-  padding: 8px 12px calc(8px + env(safe-area-inset-bottom));
-  font-family: var(--label);
-  font-size: 13px;
-}
-.chapter-player .player-image {
-  display: block;
-  margin: 0 auto 8px;
-  padding: 0;
-  border: 0;
-  background: none;
-  max-width: var(--measure);
-  width: 100%;
-  cursor: pointer;
-}
-.chapter-player .player-image img { display: block; width: 100%; max-height: 28vh; object-fit: cover; border-radius: var(--radius); }
-.chapter-player .player-controls {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  max-width: var(--measure);
-  margin: 0 auto;
-}
-.chapter-player button,
-.chapter-player .player-download {
-  min-width: var(--tap);
-  min-height: var(--tap);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  border: 1px solid var(--rule);
-  border-radius: var(--radius);
-  background: var(--paper);
-  color: var(--ink);
-  font: inherit;
-  font-size: 16px;
-  text-decoration: none;
-  cursor: pointer;
-}
-.chapter-player .player-listen { flex: 1; font-size: 15px; color: var(--accent); border-color: var(--accent); }
-.chapter-player .player-play { min-width: 56px; color: var(--accent); border-color: var(--accent); }
-.chapter-player .player-rate { font-size: 13px; }
-.chapter-player .player-time { flex: 1; text-align: center; color: var(--muted); font-size: 13px; white-space: nowrap; }
-.chapter-player .player-label { margin: 6px auto 0; max-width: var(--measure); text-align: center; color: var(--muted); font-size: 12px; }
-.chapter-player .player-next {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: var(--tap);
-  max-width: var(--measure);
-  margin: 6px auto 0;
-  font-size: 14px;
-}
-.chapter .seed-image figcaption a { display: inline-flex; align-items: center; min-height: var(--tap); padding: 0 6px; }
 
 /* Quote cards */
 .selection-actions {
@@ -508,37 +408,12 @@ figure.figure .device-view svg { min-width: var(--fig-min, 0); }
   font-size: 12px;
   color: var(--muted);
 }
-.chapter .cited-by a { display: inline-flex; align-items: center; min-height: var(--tap); }
+.chapter .cited-by a { display: inline-block; padding: 4px 0; }
 .chapter .cite-mark { color: var(--accent); font-size: max(var(--text-label), 0.6em); text-decoration: none; vertical-align: 0.25em; padding: 0 2px; }
-.chapter-player .player-image { position: relative; }
-.chapter-player .player-image-label {
-  position: absolute;
-  right: 6px;
-  bottom: 6px;
-  padding: 2px 6px;
-  border-radius: 4px;
-  background: rgba(22, 22, 20, 0.72);
-  color: #F4F2ED;
-  font-family: var(--label);
-  font-size: 12px;
-}
 
 /* Spoken descriptions (screens, figures, lyric cards): not the author's words. */
 .chapter .described-note { margin: -0.6em 0 1em; }
-.chapter-player .player-description {
-  max-width: var(--measure);
-  margin: 0 auto 8px;
-  padding: 8px 10px;
-  border-left: 3px solid var(--muted);
-  background: var(--quote-bg);
-  font-family: var(--label);
-  font-size: 12px;
-  line-height: 1.45;
-  color: var(--ink);
-  max-height: 22vh;
-  overflow-y: auto;
-}
-.chapter-player .player-description-label { display: block; margin-bottom: 4px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.04em; }
+.chapter-player .player-description-label { display: block; margin-bottom: 4px; font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
 
 /* Adaptation pages: the piece first, working notes collapsed under it. */
 .adaptations .piece-panel { margin: 0 0 2em; }
@@ -652,7 +527,8 @@ figure.figure .device-view svg { min-width: var(--fig-min, 0); }
   border: 2px solid var(--ink); background: var(--paper); font-family: var(--label); font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
 }
 
-.what-is-this, .replay-intro { display: inline-flex; align-items: center; min-height: 44px; padding: 0 12px; font-family: var(--label); font-size: 12px; color: var(--muted); background: none; border: 0; text-decoration: underline; cursor: pointer; }
+/* "What is this?": on the first page of a first visit only; then in the menu, the rail and About. */
+.what-is-this, .replay-intro { display: inline-block; padding: 6px 12px; font-family: var(--label); font-size: var(--text-label); color: var(--link); background: none; border: 0; cursor: pointer; }
 .replay-intro { padding-left: 0; }
 
 /* About: the disclaimer at the top, the same five items at the bottom (board 1f). */
@@ -678,68 +554,26 @@ figure.figure .device-view svg { min-width: var(--fig-min, 0); }
 }
 .ae-planned-tag { font-family: var(--label); font-size: var(--text-label); color: var(--muted); padding-top: 3px; white-space: nowrap; text-transform: uppercase; }
 /* A source figure the Minpentai sandbox can play (c4-b5). */
-.play-figure { display: inline-flex; align-items: center; min-height: var(--tap); font-family: var(--label); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; }
+.play-figure { display: inline-block; padding: 6px 0; font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; }
 /* The assistant's way in from a chapter (board 1b). */
-.ask-chapter { display: inline-flex; align-items: center; min-height: var(--tap); margin-top: var(--space-6); font-family: var(--label); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; }
-
-/* The reader's chapter bar and sheet (src/components/chapter-sheet.tsx). */
-.chapter-bar {
-  position: sticky; top: var(--bar-h); z-index: 9; display: flex; align-items: center;
-  margin: 0 calc(-1 * var(--gutter)) var(--space-4); padding: 0 var(--gutter);
-  background: var(--paper); border-bottom: 1px solid var(--rule);
-}
-.chapter-bar-button {
-  display: inline-flex; align-items: center; gap: 6px; min-height: var(--tap); padding: 0 2px;
-  background: none; border: 0; color: var(--ink); cursor: pointer;
-  font-family: var(--label); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase;
-}
-.chapter-bar-of { color: var(--muted); }
-.sheet-overlay { position: fixed; inset: 0; z-index: 95; display: flex; align-items: flex-end; justify-content: center; background: var(--scrim); }
-.chapter-sheet {
-  display: flex; flex-direction: column; width: 100%; max-width: 34rem; max-height: 85vh;
-  background: var(--card); color: var(--ink); border-radius: var(--radius-sheet) var(--radius-sheet) 0 0;
-  padding: var(--space-3) var(--gutter) calc(var(--space-3) + env(safe-area-inset-bottom));
-}
-.chapter-sheet-head { display: flex; align-items: center; justify-content: space-between; }
-.chapter-sheet-title { margin: 0; font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
-.chapter-sheet-close {
-  min-height: var(--tap); min-width: var(--tap); padding: 0 8px; background: none; border: 0; color: var(--ink); cursor: pointer;
-  font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.06em; text-transform: uppercase;
-}
-.chapter-sheet-ask {
-  display: flex; align-items: center; min-height: var(--tap); margin: var(--space-2) 0; padding: 0 12px;
-  border: 1.5px dashed var(--ink); border-radius: var(--radius); color: var(--ink); text-decoration: none;
-  font-family: var(--label); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase;
-}
-.chapter-sheet-list { list-style: none; margin: 0; padding: 0; overflow-y: auto; border-top: 1px solid var(--rule); }
-.chapter-sheet-list a {
-  display: grid; grid-template-columns: 32px 1fr auto; align-items: center; gap: 8px; min-height: var(--tap); padding: 6px 2px;
-  border-bottom: 1px solid var(--rule); color: var(--ink); text-decoration: none; font-size: 17px; line-height: 1.3;
-}
-.chapter-sheet-list a[aria-current='page'] { font-weight: 600; box-shadow: inset 3px 0 0 var(--ink); padding-left: 8px; }
-.cs-n { font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
-.cs-ahead { font-family: var(--label); font-size: var(--text-label); color: var(--muted); white-space: nowrap; }
-@media (prefers-reduced-motion: no-preference) {
-  .chapter-sheet { animation: sheet-up 160ms ease-out; }
-  @keyframes sheet-up { from { transform: translateY(16px); opacity: 0; } }
-}
+.ask-chapter { display: inline-block; margin-top: var(--space-6); padding: 6px 0; font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; }
 
 /* Report a mispronunciation (src/components/report-pronunciation.tsx). */
-.report-link { display: inline-flex; align-items: center; min-height: var(--tap); font-family: var(--label); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; }
-.page .as-draft {
-  display: inline-block; margin-left: 6px; padding: 1px 6px; border: 1px dashed var(--muted); border-radius: 2px;
-  font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted);
-}
+.report-link { display: inline-block; padding: 8px 0; font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; }
+
 
 /* Theme switch (src/components/theme-switch.tsx). */
-.theme-switch { display: flex; flex-wrap: wrap; gap: 4px; margin: 0; padding: 0; border: 0; }
-.theme-switch legend { width: 100%; margin-bottom: 4px; padding: 0; font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+/* Drawn like the prototype's Read / Listen switch. */
+.theme-switch { display: flex; flex-wrap: wrap; align-items: center; gap: 0; margin: 0; padding: 0; border: 0; }
+.theme-switch legend { float: left; margin: 0 10px 0 0; padding: 5px 0; font-family: var(--label); font-size: var(--text-label); line-height: 16px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
 .theme-option { position: relative; display: inline-flex; }
 .theme-option input { position: absolute; opacity: 0; inset: 0; margin: 0; cursor: pointer; }
 .theme-option span {
-  display: inline-flex; align-items: center; justify-content: center; min-height: var(--tap); min-width: 72px; padding: 0 12px;
-  border: 1px solid var(--rule); border-radius: var(--radius); font-family: var(--label); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink);
+  display: inline-block; padding: 5px 10px; border: 1px solid var(--rule); font-family: var(--label); font-size: var(--text-label); line-height: 16px; text-transform: uppercase; color: var(--ink);
 }
+.theme-option + .theme-option span { border-left: 0; }
+.theme-option:first-of-type span { border-radius: var(--radius) 0 0 var(--radius); }
+.theme-option:last-of-type span { border-radius: 0 var(--radius) var(--radius) 0; }
 .theme-option input:checked + span { background: var(--btn); color: var(--btn-ink); border-color: var(--btn); }
 .theme-option input:focus-visible + span { outline: 2px solid var(--ink); outline-offset: 2px; }
 

@@ -6,8 +6,11 @@
  *   npm run check:ui -- --url=… --inject-css='…'   plant an error; must fail
  *
  * - Text is at least 12px everywhere, including SVG text at its rendered scale.
- * - Tap targets are at least 44×44. Exempt: links inside running text (WCAG 2.5.8's
- *   inline exception) and disabled controls drawn inside source screens.
+ * - Touch targets are at least 44×44 on touch screens (pointer: coarse), counting the invisible
+ *   hit area each control gets there (src/styles/shell.css); controls keep the prototype's visual
+ *   size (owner, 2026-10-08). With a mouse there is no floor. Phone pages and the 1024 tablet run
+ *   as touch screens. Exempt: links inside running text (WCAG 2.5.8's inline exception) and
+ *   disabled controls drawn inside source screens.
  * - App chrome uses Crimson Pro or DM Mono only; source screens, lyric cards, SVGs,
  *   and in-world templates may use their own faces.
  * - Paper is #F4F2ED in light mode in every chapter. Datelines take the accent of
@@ -195,14 +198,30 @@ async function checkFloors(page: Page, path: string, scheme: string) {
           if (!/^(__)?(Crimson[ _]Pro|DM[ _]Mono)/i.test(first)) fonts.push(`${describe(el)} uses ${first}`);
         }
       }
-      for (const el of Array.from(document.querySelectorAll('a, button, input, select, summary, [role="button"]'))) {
-        if (!visible(el)) continue;
+      const touch = matchMedia('(pointer: coarse)').matches;
+      for (const el of Array.from(document.querySelectorAll('a, button, input, select, summary, [role="button"], [role="slider"]'))) {
+        if (!touch || !visible(el)) continue;
         if ((el as HTMLButtonElement).disabled && el.closest('.device-view')) continue;
         if (el.tagName === 'A' && el.closest('p, li') && !el.closest('.chapter-list, nav')) continue; // inline in running text
         const r = el.getBoundingClientRect();
-        if (r.width < MIN_TAP - 0.5 || r.height < MIN_TAP - 0.5) taps.push(`${describe(el)} "${(el.textContent ?? '').trim().slice(0, 20)}" ${Math.round(r.width)}×${Math.round(r.height)}`);
+        // The hit area: the control, or the invisible ::after drawn around it on touch screens.
+        const hit = getComputedStyle(el, '::after');
+        const extra = hit.content !== 'none' && hit.content !== 'normal' && hit.position === 'absolute';
+        const w = Math.max(r.width, extra ? parseFloat(hit.width) : 0);
+        const h = Math.max(r.height, extra ? parseFloat(hit.height) : 0);
+        if (w < MIN_TAP - 0.5 || h < MIN_TAP - 0.5) taps.push(`${describe(el)} "${(el.textContent ?? '').trim().slice(0, 20)}" ${Math.round(w)}×${Math.round(h)}`);
       }
-      return { small, taps, fonts, overflow: document.documentElement.scrollWidth - innerWidth };
+      // One "Draft wording" line per screen or panel (owner, 2026-10-08), not a tag per sentence.
+      const drafts = new Map<Element, number>();
+      for (const el of Array.from(document.querySelectorAll('.as-draft'))) {
+        if (!visible(el)) continue;
+        const root = el.closest('[role="dialog"], .panel, .shell-main') ?? document.body;
+        drafts.set(root, (drafts.get(root) ?? 0) + 1);
+      }
+      const draftDup = [...drafts.entries()].filter(([, n]) => n > 1).map(([root, n]) => `${describe(root)} has ${n}`);
+      // No hyphenation in the book (owner, 2026-10-08).
+      const hyph = Array.from(document.querySelectorAll('.chapter .block')).filter((el) => getComputedStyle(el).hyphens === 'auto').length;
+      return { small, taps, fonts, draftDup, hyph, overflow: document.documentElement.scrollWidth - innerWidth };
     },
     { MIN_TEXT, MIN_TAP, IN_WORLD },
   );
@@ -211,6 +230,8 @@ async function checkFloors(page: Page, path: string, scheme: string) {
   if (r.taps.length) fail(`${where}: ${r.taps.length} tap targets below ${MIN_TAP}px, e.g. ${r.taps.slice(0, 3).join('; ')}`);
   if (r.fonts.length) fail(`${where}: ${r.fonts.length} chrome elements in other fonts, e.g. ${r.fonts.slice(0, 3).join('; ')}`);
   if (r.overflow > 0) fail(`${where}: page scrolls sideways by ${r.overflow}px`);
+  if (r.draftDup.length) fail(`${where}: more than one "Draft wording" line on a screen: ${r.draftDup.join('; ')}`);
+  if (r.hyph) fail(`${where}: ${r.hyph} book blocks are hyphenated`);
 }
 
 /** A page in the given theme: Light is the default, so a dark run chooses Dark (src/lib/theme.ts). */
@@ -226,7 +247,7 @@ try {
   // First-visit intro (config/intro.json): once, home page only, Skip on every
   // card, remembered on the device without cookies; deep links go straight in.
   {
-    const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+    const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true });
     const page = await ctx.newPage();
     await page.goto(BASE + '/', { waitUntil: 'networkidle' });
     const cards = (JSON.parse(readFileSync('config/intro.json', 'utf8')).cards as { id: string }[]).map((c) => c.id);
@@ -247,7 +268,7 @@ try {
     await ctx.close();
   }
   {
-    const ctx = await browser.newContext({ viewport: { width: 390, height: 844 } });
+    const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true });
     const page = await ctx.newPage();
     await page.goto(BASE + '/chapter/1', { waitUntil: 'networkidle' });
     if (await page.locator('.intro-card').count()) fail('intro: shown on a deep link (/chapter/1)');
@@ -282,7 +303,7 @@ try {
   }
 
   for (const scheme of ['light', 'dark'] as const) {
-    const page = await newPage({ viewport: { width: 390, height: 844 }, colorScheme: scheme });
+    const page = await newPage({ viewport: { width: 390, height: 844 }, colorScheme: scheme, hasTouch: true });
     // tsx keeps function names with a __name helper that the page does not have.
     await page.addInitScript('window.__name = (f) => f');
 
@@ -342,7 +363,7 @@ try {
   // 390 and the Farcaster frame: top bar, no rail; 1024: the rail collapsed; 1440: rail open and the assistant beside the page.
   for (const width of [1024, 1440, 2000]) {
     for (const scheme of ['light', 'dark'] as const) {
-      const page = await newPage({ viewport: { width, height: 900 }, colorScheme: scheme });
+      const page = await newPage({ viewport: { width, height: 900 }, colorScheme: scheme, hasTouch: width === 1024 });
       await page.addInitScript('window.__name = (f) => f');
       for (const path of ['/', '/chapter/1', '/about', '/cards', '/adaptations', '/minpentai', '/assistant']) {
         await open(page, path);
@@ -406,7 +427,7 @@ try {
   }
   // Phone width: no rail at all.
   for (const scheme of ['light', 'dark'] as const) {
-    const page = await newPage({ viewport: { width: 390, height: 844 }, colorScheme: scheme });
+    const page = await newPage({ viewport: { width: 390, height: 844 }, colorScheme: scheme, hasTouch: true });
     await open(page, '/chapter/1');
     if (await page.locator('.rail').isVisible()) fail('@390: the rail shows on a phone');
     await shot(page, 'phone-390-chapter', scheme);
@@ -430,7 +451,7 @@ try {
     await page.close();
   }
   {
-    const frame = await newPage({ viewport: { width: 424, height: 695 } });
+    const frame = await newPage({ viewport: { width: 424, height: 695 }, hasTouch: true });
     await open(frame, '/chapter/1');
     if (await frame.locator('.rail').isVisible()) fail('@424×695: the rail shows in the Farcaster frame');
     await frame.close();

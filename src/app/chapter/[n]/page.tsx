@@ -193,6 +193,12 @@ export default async function ChapterPage({ params }: Props) {
       <a className="provenance" href={chapter.source_url}>
         Text from the source edition, fetched {chapter.fetched_at} · GPL v3
       </a>
+      {/* The narration's credit and recipe, in the page as served (principle 1; check:principles P1d). One short line. */}
+      {narration && (
+        <p className="provenance narration-credit">
+          {narration.label.split(' · ')[0]} · <RecipeLink file={narration.recipe}>Recipe</RecipeLink>
+        </p>
+      )}
       <QuoteShare chapter={n} images={images.map(({ id, idx, url, alt }) => ({ id, idx, url, alt }))} />
     </article>
     </ChapterView>

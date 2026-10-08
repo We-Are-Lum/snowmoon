@@ -46,13 +46,14 @@ function TestingLabel() {
   if (!CHAT.testing) return null;
   return (
     <p className="as-testing" role="note">
-      <strong>Testing</strong> Answers can be wrong; check the quotes. <DraftTag />
+      Testing · answers can be wrong; check the quotes
     </p>
   );
 }
 
-function DraftTag() {
-  return <span className="as-draft">Draft wording</span>;
+/** One small line per screen (owner, 2026-10-08): the wording on this screen is model-drafted. */
+function DraftLine() {
+  return <p className="as-draft">Draft wording</p>;
 }
 
 /** Screen 2: before the first message, until "don't show this again" is ticked for these exact words. */
@@ -62,7 +63,7 @@ function Notice({ host, provider, model, onClose }: { host: string | null; provi
   return (
     <div className="as-overlay" role="dialog" aria-modal="true" aria-labelledby="as-notice-title">
       <div className="as-sheet">
-        <p className="as-label">Before you start <DraftTag /></p>
+        <p className="as-label">Before you start</p>
         <h2 id="as-notice-title">What the assistant does</h2>
         <ol className="as-notice">
           {items.map(([h, b], i) => (
@@ -93,6 +94,7 @@ function Notice({ host, provider, model, onClose }: { host: string | null; provi
             Continue
           </button>
         </div>
+        <DraftLine />
       </div>
     </div>
   );
@@ -351,7 +353,6 @@ function ThreadView({ id, status, refresh }: { id: string; status: Extract<Statu
     <section className="as-thread" aria-label="Private thread">
       <div className="as-kind">
         <span>○ Asking · private · never published</span>
-        <DraftTag />
       </div>
       <div className="as-limit">
         <span>Answering from ch 1–{t.limit}{t.limit <= read ? ', what you’ve read' : ', by your choice'}</span>
@@ -381,9 +382,7 @@ function ThreadView({ id, status, refresh }: { id: string; status: Extract<Statu
         )}
         {t.messages.length === 0 && !busy && !reachedLimit && (
           <div className="as-starters">
-            <p className="as-label">
-              Try asking <DraftTag />
-            </p>
+            <p className="as-label">Try asking</p>
             {starters(t).map((s) => (
               <button key={s} type="button" className="as-starter" onClick={() => void send(s)}>
                 {s}
@@ -401,6 +400,9 @@ function ThreadView({ id, status, refresh }: { id: string; status: Extract<Statu
             <p>They come back at 00:00 UTC, in {untilUtcMidnight()}. Your threads are still here.</p>
           </div>
         )
+      ) : null}
+      {reachedLimit ? (
+        <DraftLine />
       ) : (
         <form
           className="as-composer"
@@ -429,24 +431,23 @@ function ThreadView({ id, status, refresh }: { id: string; status: Extract<Statu
   );
 }
 
-/** Screen 9d. */
+/** Screen 9d, as in the prototype: what the assistant does, then signing in. */
 function SignedOut({ inApp: _inApp }: { inApp: boolean }) {
   return (
     <section className="as-signed-out">
-      <p className="as-intro">
-        Help with reading the book. It comments; it never writes for you. <DraftTag />
-      </p>
-      <p className="as-label">Sign in to use the assistant <DraftTag /></p>
+      <p className="as-label">Sign in to use the assistant</p>
       <h1>Your questions need a name to be counted under</h1>
-      <p>
+      <p className="as-body">Help with reading the book. It comments; it never writes for you.</p>
+      <p className="as-body">
         Questions about the book are saved only on this device, sent to {CHAT.route} to be answered, and never published. The daily limit
         is counted per Farcaster account.
       </p>
-      <SignInButton />
+      <SignInButton className="as-primary as-signin" />
       {/* The two outside services are named in the sign-in step itself and on About. */}
       <Link className="as-quiet-link" href="/chapter/1">
         Keep reading without it
       </Link>
+      <DraftLine />
     </section>
   );
 }
@@ -512,9 +513,10 @@ export function Assistant({ embedded = false }: { embedded?: boolean } = {}) {
     if (status.kind === 'signed-out') return <SignedOut inApp={status.inApp} />;
     if (!status.available)
       return (
-        <p className="as-empty">
-          The assistant isn’t available on this deployment yet. <DraftTag />
-        </p>
+        <>
+          <p className="as-empty">The assistant isn’t available on this deployment yet.</p>
+          <DraftLine />
+        </>
       );
     return null;
   }, [status]);
@@ -535,19 +537,18 @@ export function Assistant({ embedded = false }: { embedded?: boolean } = {}) {
   return (
     <div className="as">
       <TestingLabel />
-      {embedded ? <h2>Assistant</h2> : <h1>Assistant</h1>}
-      <p className="as-intro">
-        Help with reading the book. It comments; it never writes for you. <DraftTag />
-      </p>
+      {/* The panel's own title already says "Assistant". */}
+      {!embedded && <h1>Assistant</h1>}
+      <p className="as-intro">Help with reading the book. It comments; it never writes for you.</p>
       <div className="as-kinds">
         <button type="button" className="as-start" onClick={() => show(newThread(readTo()).id)}>
           <span className="as-start-title">○ Ask about the book</span>
-          <span className="as-start-line">Private. Saved only on this device. Never published.</span>
+          <span className="as-start-line">Private. Never published.</span>
         </button>
         {/* Planning isn't built: shown in its place, not as a control. */}
         <div className="as-coming-card">
           <span className="as-start-title">● Plan a piece</span>
-          <span className="as-start-line">Published with the piece. Coming.</span>
+          <span className="as-start-line">Coming</span>
         </div>
       </div>
       <section aria-label="Your private threads">
@@ -590,6 +591,7 @@ export function Assistant({ embedded = false }: { embedded?: boolean } = {}) {
           <span>{ready.left} of {ready.perDay} left today</span>
         </p>
       )}
+      <DraftLine />
     </div>
   );
 }

@@ -69,10 +69,10 @@ function RecipeSheet({ file, item, onClose }: { file: string; item?: string; onC
       <div ref={sheet} className="recipe-sheet" role="dialog" aria-modal="true" aria-labelledby="recipe-title">
         <div className="recipe-head">
           <p id="recipe-title" className="recipe-eyebrow">
-            How this was made <span className="as-draft">Draft wording</span>
+            How this was made
           </p>
-          <button type="button" className="recipe-close" onClick={onClose}>
-            Close
+          <button type="button" className="sheet-x" aria-label="Close" onClick={onClose}>
+            ×
           </button>
         </div>
         {failed && <p>This recipe could not be read here. The full recipe is on GitHub.</p>}
@@ -108,6 +108,7 @@ function RecipeSheet({ file, item, onClose }: { file: string; item?: string; onC
         <a className="recipe-github" href={view?.github ?? (file.startsWith('http') ? file : `${REPO_URL}/blob/main/${file}`)} target="_blank" rel="noopener noreferrer">
           Full recipe on GitHub →
         </a>
+        <p className="as-draft">Draft wording</p>
       </div>
     </div>
   );

@@ -5,7 +5,6 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { lastChapter, openedChapters } from '~/lib/chat/device';
 import { ChapterPlayer, type PlayerCue, type PlayerImage } from './chapter-player';
-import { RecipeLink } from './recipe-sheet';
 
 /**
  * A chapter, as in the prototype's reader: a context strip; "Ch n / 32" (opens the chapter
@@ -58,10 +57,9 @@ export function ChapterView({
 
   return (
     <>
-      {/* Desktop: the context strip above the selector; phones: below it, as in the prototype. */}
-      <div className="context-strip context-wide">
+      {/* Desktop: the crumb above the selector. The dateline is the chapter's own, under it; phones have only the selector. */}
+      <div className="context-strip context-wide" title={dateline || undefined}>
         <span>Chapter {chapter}</span>
-        {dateline && <span className="context-dateline">{dateline}</span>}
         <span>{view === 'listen' ? 'Listen' : 'Read'}</span>
       </div>
       <div className="chapter-bar">
@@ -79,18 +77,8 @@ export function ChapterView({
           </div>
         )}
       </div>
-      <div className="context-strip context-narrow">
-        <span>Chapter {chapter}</span>
-        <span>{view === 'listen' ? 'Listen' : 'Read'}</span>
-      </div>
       <div className="chapter-read" hidden={view === 'listen'}>
         {children}
-        {/* The narration's credit and recipe, in the page as served (principle 1; check:principles P1d). */}
-        {narration && (
-          <p className="narration-credit">
-            {narration.label} · GPL-3.0 · <RecipeLink file={narration.recipe}>Recipe</RecipeLink>
-          </p>
-        )}
       </div>
       {narration && (
         <ChapterPlayer
@@ -168,12 +156,15 @@ function ChapterSheet({
           </p>
           <p className="chapter-sheet-title">You&apos;ve read to ch {furthest}</p>
         </div>
+        <button type="button" className="sheet-x" aria-label="Close" onClick={onClose}>
+          ×
+        </button>
         <div className="cs-current">
           <p className="cs-current-name">
             <span>Chapter {chapter}</span>
             <span className="cs-state">Current</span>
           </p>
-          <div className="cs-modes">
+          <div className="cs-actions">
             <button type="button" onClick={onRead}>
               Read
             </button>
@@ -182,15 +173,15 @@ function ChapterSheet({
                 Listen
               </button>
             )}
+            <Link className="cs-ask" href={`/assistant?chapter=${chapter}`} onClick={onClose}>
+              ○ Ask about this chapter
+            </Link>
+            {/* Planning isn't built: shown in its place, not as a control. */}
+            <p className="cs-coming">
+              <span>● Plan an adaptation of it</span>
+              <span>Coming</span>
+            </p>
           </div>
-          <Link className="cs-ask" href={`/assistant?chapter=${chapter}`} onClick={onClose}>
-            ○ Ask about this chapter
-          </Link>
-          {/* Planning isn't built: shown in its place, not as a control. */}
-          <p className="cs-coming">
-            <span>● Plan an adaptation of it</span>
-            <span className="cs-state">Coming</span>
-          </p>
         </div>
         <ol className="chapter-sheet-list">
           {chapters
@@ -207,9 +198,6 @@ function ChapterSheet({
               );
             })}
         </ol>
-        <button type="button" className="chapter-sheet-close" onClick={onClose}>
-          Close
-        </button>
       </div>
     </div>
   );

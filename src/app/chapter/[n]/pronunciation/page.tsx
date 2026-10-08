@@ -23,7 +23,7 @@ export default async function ReportPage({ params }: Props) {
   return (
     <div className="page prose">
       <p className="label">
-        Chapter {n} · narration <span className="as-draft">Draft wording</span>
+        Chapter {n} · narration
       </p>
       <h1>Report a mispronunciation</h1>
       <p>
@@ -43,6 +43,7 @@ export default async function ReportPage({ params }: Props) {
       <p>
         <Link href={`/chapter/${n}`}>Read Chapter {n}</Link>
       </p>
+      <p className="as-draft">Draft wording</p>
     </div>
   );
 }

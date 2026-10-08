@@ -36,3 +36,11 @@ rebuild had left it only in the Listen view, drawn in the browser. To undo it (b
 After the deploy: check:shipped, check:principles (26 of 27; P6d is the accepted open item),
 check:ui, check:miniapp and check:podcast all pass against https://snowmoon.party. The feed
 is valid on the W3C validator and passes Podbase.
+
+## 2026-10-08: the frame made as light as the prototype (branch site-lightness)
+
+Type, spacing and weights measured against the clickable prototype; touch targets as invisible
+44px hit areas on touch screens only; one "Draft wording" line per screen; no hyphenation; links in
+the prototype's accent; a plain Listen progress bar with image marks. To undo it (back to `8491af9`):
+
+    vercel rollback dpl_2tCMnup8RvLVVP7pKiNKg8hsXPX8 --scope nates-projects-d1780cff

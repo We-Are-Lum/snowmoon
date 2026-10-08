@@ -80,9 +80,7 @@ export function SignInButton({ className = 'as-primary', label = 'Sign in with F
       {step.kind !== 'idle' && step.kind !== 'starting' && (
         <div className="as-overlay" onClick={(e) => e.target === e.currentTarget && close()}>
           <div ref={dialog} className="as-sheet sign-in-sheet" role="dialog" aria-modal="true" aria-labelledby="sign-in-title">
-            <p className="as-label">
-              Sign in <span className="as-draft">Draft wording</span>
-            </p>
+            <p className="as-label">Sign in</p>
             <h2 id="sign-in-title">Sign in with Farcaster</h2>
             {step.kind === 'waiting' ? (
               <>
@@ -105,6 +103,7 @@ export function SignInButton({ className = 'as-primary', label = 'Sign in with F
                 Cancel
               </button>
             </div>
+            <p className="as-draft">Draft wording</p>
           </div>
         </div>
       )}

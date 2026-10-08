@@ -15,6 +15,7 @@
   --rule: #DAD6CC;
   --soft: #E6E2D9; /* quiet fills */
   --card: #FBFAF6; /* raised surfaces: sheets, cards */
+  --chrome: #ECE9E2; /* the rail */
   --quote-bg: #ECE9E2;
   --warn: #8A2F2F;
   --flag-bg: #EFD9D2;
@@ -24,18 +25,19 @@
   --veridia: #2E5A3A;
   --dzego: #B3306E;
   --neutral-accent: var(--ink);
+  --link: var(--veridia); /* the prototype's link colour: 7.1:1 on paper (light), 7.9:1 (dark) */
   --accent: var(--neutral-accent);
   --voice-l: 0.5; /* lightness for speaker colours */
 
   /* Type: Crimson Pro for reading and headings, DM Mono for labels. */
   --reading: var(--font-reading), Georgia, serif;
   --label: var(--font-label), ui-monospace, monospace;
-  --text-read: 19px; /* book text at phone width (boards: 19/1.6) */
+  --text-read: 19px; /* book text (prototype: 19/1.6 at every width) */
   --lh-read: 1.6;
   --text-small: 17px; /* notices, secondary prose */
-  --text-label: 12px; /* the floor: nothing smaller, ever */
+  --text-label: 12px; /* the floor: nothing smaller, ever (the prototype's 10–11px labels are sized up to it) */
   --ls-label: 0.04em;
-  --text-h1: 42px; /* chapter heading at phone width */
+  --text-h1: 42px; /* chapter heading (prototype: 42/1, regular) */
   --text-display: 44px; /* book title */
   --text-h2: 24px;
   --text-bar-title: 18px;
@@ -54,7 +56,7 @@
   /* Shape */
   --radius: 3px;
   --radius-sheet: 14px; /* bottom sheets, top corners only */
-  --tap: 44px; /* tap targets are at least this */
+  --tap: 44px; /* touch targets are at least this: an invisible hit area on touch screens (pointer: coarse) */
 
   /* App bar */
   --bar-h: 44px;
@@ -65,8 +67,6 @@
 
 @media (min-width: 600px) {
   :root {
-    --text-read: 21px; /* direction board: book text 21/1.6 */
-    --text-small: 18px;
     --gutter: 24px;
   }
 }
@@ -83,6 +83,7 @@
   --rule: #33322E;
   --soft: #24231F;
   --card: #1E1D1A;
+  --chrome: #1B1B19;
   --quote-bg: #201F1C;
   --warn: #D99A8C;
   --flag-bg: #4A2A24;
@@ -102,6 +103,7 @@
     --rule: #33322E;
     --soft: #24231F;
     --card: #1E1D1A;
+    --chrome: #1B1B19;
     --quote-bg: #201F1C;
     --warn: #D99A8C;
     --flag-bg: #4A2A24;

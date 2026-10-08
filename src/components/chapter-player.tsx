@@ -227,9 +227,10 @@ export function ChapterPlayer({ chapter, chapters, label, recipeUrl, url, durati
       }}
     />
   );
+  // One short line (owner, 2026-10-08): the model and settings are in the recipe.
   const footer = (
     <p className="player-label">
-      {label} · GPL-3.0 · <RecipeLink file={recipeUrl} item={current ? String(current.idx) : undefined}>Recipe</RecipeLink>
+      {label.split(' · ')[0]} · <RecipeLink file={recipeUrl} item={current ? String(current.idx) : undefined}>Recipe</RecipeLink>
       {started && current && (
         <>
           {' · '}
@@ -243,6 +244,9 @@ export function ChapterPlayer({ chapter, chapters, label, recipeUrl, url, durati
       </a>
     </p>
   );
+  // Where each image starts, as a share of the chapter's paragraphs: marks on the progress bar.
+  const marks = useMemo(() => cues.map((c, i) => (imageIdx.has(c.idx) ? i : -1)).filter((i) => i >= 0), [cues, imageIdx]);
+  const at = (i: number) => `${(i / Math.max(1, cues.length)) * 100}%`;
 
   if (view === 'read')
     return (
@@ -269,7 +273,8 @@ export function ChapterPlayer({ chapter, chapters, label, recipeUrl, url, durati
   return (
     <section className={`chapter-player listen-pane${started ? ' is-started' : ''}`} aria-label="Listen">
       {audioEl}
-      {image ? (
+      {/* No picture for this part: nothing is shown in its place (owner, 2026-10-08). */}
+      {image && (
         <figure className="listen-image">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={image.url} alt={image.alt} width={1024} height={576} />
@@ -285,8 +290,6 @@ export function ChapterPlayer({ chapter, chapters, label, recipeUrl, url, durati
             )}
           </figcaption>
         </figure>
-      ) : (
-        <p className="listen-noimage">No image for this part of the chapter.</p>
       )}
       <div className="listen-text">
         {current?.description ? (
@@ -299,6 +302,7 @@ export function ChapterPlayer({ chapter, chapters, label, recipeUrl, url, durati
         )}
         {next && (next.description ? <p className="listen-next">{next.description}</p> : <div className="listen-next" aria-hidden="true" dangerouslySetInnerHTML={{ __html: texts.next }} />)}
       </div>
+      <div className="listen-bottom">
       <div
         className="listen-progress"
         role="slider"
@@ -319,8 +323,11 @@ export function ChapterPlayer({ chapter, chapters, label, recipeUrl, url, durati
           seek(Math.floor(((e.clientX - r.left) / r.width) * cues.length), playing);
         }}
       >
-        {cues.map((c, i) => (
-          <span key={c.idx} className={`tick${i < cue ? ' is-past' : ''}${i === cue ? ' is-now' : ''}${imageIdx.has(c.idx) ? ' has-image' : ''}`} />
+        {/* A plain bar: the part heard so far, and a mark where each image begins. */}
+        <span className="listen-track" />
+        <span className="listen-fill" style={{ width: at(cue + 1) }} />
+        {marks.map((i) => (
+          <span key={i} className="listen-mark" style={{ left: at(i) }} />
         ))}
       </div>
       <p className="listen-meta">
@@ -333,16 +340,19 @@ export function ChapterPlayer({ chapter, chapters, label, recipeUrl, url, durati
         <button type="button" className="player-rate" onClick={() => setRate(RATES[(RATES.indexOf(rate) + 1) % RATES.length])} aria-label={`Speed ${rate} times`}>
           {rate.toFixed(1)}×
         </button>
-        <button type="button" onClick={() => step(-1)} aria-label="Previous paragraph">
-          ⏮
-        </button>
-        <button type="button" className="listen-play" onClick={toggle} aria-label={playing ? 'Pause' : 'Play'}>
-          {playing ? '⏸' : '▶'}
-        </button>
-        <button type="button" onClick={() => step(1)} aria-label="Next paragraph">
-          ⏭
-        </button>
+        <div className="listen-transport">
+          <button type="button" className="listen-step" onClick={() => step(-1)} aria-label="Previous paragraph">
+            |◀
+          </button>
+          <button type="button" className="listen-play" onClick={toggle} aria-label={playing ? 'Pause' : 'Play'}>
+            {playing ? '❚❚' : '▶'}
+          </button>
+          <button type="button" className="listen-step" onClick={() => step(1)} aria-label="Next paragraph">
+            ▶|
+          </button>
+        </div>
         <span className="listen-voice">house voice</span>
+      </div>
       </div>
       {ended && chapter < chapters && (
         <Link className="player-next" href={`/chapter/${chapter + 1}?view=listen`}>

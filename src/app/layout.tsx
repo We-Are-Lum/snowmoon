@@ -54,7 +54,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       </head>
       <body>
         {/* The frame from the prototype: phone top bar and menu; tablet and desktop rail; desktop assistant (src/components/app-shell.tsx). */}
-        <AppShell chapters={chapterNumbers().length} adaptations={adaptationsConfig().seeds.length}>
+        <AppShell chapters={chapterNumbers().length} adaptations={adaptationsConfig().seeds.length} intro={loadIntro()}>
           <WhatIsThis intro={loadIntro()} />
           <main>{children}</main>
         </AppShell>
