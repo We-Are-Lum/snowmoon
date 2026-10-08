@@ -297,8 +297,10 @@ ratings and likes and serves the totals.
   a setting in the owner's Groq console (Data Controls → global ZDR). Each
   request through the gateway asks for zero retention and the gateway enforces
   it; the direct route cannot ask, and nothing in Groq's replies shows the
-  setting. The owner reported turning it on (2026-10-08). Not yet checked in
-  the console. No automated check covers it.
+  setting. Confirmed by the owner in the Groq console on 2026-10-08:
+  organization "Lum", Global ZDR and Inference APIs ZDR enabled, Batch and
+  Fine-tuning storage off. No automated check covers it; recheck by hand if
+  the key or the Groq organization changes.
 
 ## 7. Payments never enter scoring or ordering. No token. The "not affiliated" line stays on the first screen.
 

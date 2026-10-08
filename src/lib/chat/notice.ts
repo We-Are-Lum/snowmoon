@@ -27,8 +27,8 @@ export const NOTICE_REVIEW: {
   on: '2026-10-08',
   note:
     'For the direct Groq route with the gateway as fallback. Items 1 and 2 match config/prompts/chat-ask.md. ' +
-    'Item 3\'s "Neither keeps your messages" holds for the gateway route (zero retention asked on every request); on the direct route it rests on ' +
-    'the owner\'s Groq console setting, reported on but not yet confirmed (docs/principles.md §6). ' +
+    'Item 3\'s "Neither keeps your messages" holds for the gateway route (zero retention asked on every request) and for the direct route ' +
+    '(Groq organization "Lum": Global ZDR and Inference APIs ZDR enabled, confirmed by the owner in the Groq console on 2026-10-08). ' +
     'Reread again (agent, session snowmoon-ae) after device.ts began keeping the chapters opened, on the device only: all four items still held.',
   /** The words (noticeKey of the items as shown now) the owner last reread, and when. Not yet: the words changed on 2026-10-08. */
   ownerReread: null,

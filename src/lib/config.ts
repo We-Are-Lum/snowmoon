@@ -59,8 +59,10 @@ export const CHAT = {
    * Groq's standard tier queues when busy instead of failing (the gateway's shared
    * Groq access answered 498, "at capacity", too often). With no key set, the gateway is used.
    * Zero data retention on this route is a setting in the owner's Groq console (Data
-   * Controls), not something each request asks for: the owner reported turning it on
-   * (2026-10-08), and nothing in the app or in Groq's replies confirms it.
+   * Controls), not something each request asks for. The owner confirmed it in the
+   * console on 2026-10-08: organization "Lum", Global ZDR and Inference APIs ZDR
+   * enabled, Batch and Fine-tuning storage off. Nothing in the app or in Groq's
+   * replies shows it, so it is rechecked by hand.
    */
   direct: { endpoint: 'https://api.groq.com/openai/v1/chat/completions', keyEnv: 'GROQ_API_KEY' },
   /**
