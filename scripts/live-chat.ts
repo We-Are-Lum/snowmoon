@@ -1,8 +1,8 @@
 /**
  * One live run of slice 1, end to end except sign-in: PGlite with migrations
- * 0001–0006 and every block, the committed prompts, and the real models through
+ * 0001–0007 and every block, the committed prompts, and the real models through
  * Vercel AI Gateway. Costs money (a cent or so); every call lands in
- * studio.chat_calls and the total is printed for docs/proposals/chat-spend.md.
+ * studio.chat_costs and the total is printed for docs/proposals/chat-spend.md.
  *
  *   VERCEL_OIDC_TOKEN=… npx tsx scripts/live-chat.ts [out.json]
  */
@@ -24,7 +24,7 @@ const prompt = async (f: string) => (await readFile(path.join(ROOT, 'config/prom
 
 const pg = new PGlite();
 await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
-for (const f of ['0001_core.sql', '0002_v5.sql', '0003_likes.sql', '0004_private_ratings_and_likes.sql', '0005_public_prompts_and_consent.sql', '0006_chat.sql'])
+for (const f of ['0001_core.sql', '0002_v5.sql', '0003_likes.sql', '0004_private_ratings_and_likes.sql', '0005_public_prompts_and_consent.sql', '0006_chat.sql', '0007_chat_costs_without_person.sql'])
   await pg.exec(await readFile(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
 await pg.exec(`insert into studio.works values ('snowmoon', 'Snowmoon', 'GPL-3.0', 'x'); set role studio_writer;`);
 const server = new PGLiteSocketServer({ db: pg, port: 54333, host: '127.0.0.1' });
@@ -64,7 +64,7 @@ for (const c of cases) {
   out.push({ ...c, result: r });
   console.log(`\n## ${c.question} (ch ≤ ${c.limit})\n${JSON.stringify(r).slice(0, 700)}`);
 }
-const [{ usd, calls }] = await sql`select coalesce(sum(cost_usd),0)::float8 as usd, count(*)::int as calls from studio.chat_calls where kind <> 'ask'`;
+const [{ usd, calls }] = await sql`select coalesce(sum(cost_usd),0)::float8 as usd, coalesce(sum(calls),0)::int as calls from studio.chat_costs`;
 console.log(`\nmodel calls: ${calls}, spend: $${Number(usd).toFixed(5)}`);
 if (process.argv[2]) await writeFile(process.argv[2], JSON.stringify({ spend_usd: usd, calls, out }, null, 1));
 await sql.end();

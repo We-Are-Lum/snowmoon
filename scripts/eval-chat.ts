@@ -7,7 +7,7 @@
  *
  * Questions and their answering blocks: docs/proposals/chat-eval/questions.json (chapters 1–15,
  * written by the coding agent with the blocks checked by hand). Every question is asked with the
- * thread limit at chapter 15. Runs on PGlite with migrations 0001–0006 and every block, like test:chat.
+ * thread limit at chapter 15. Runs on PGlite with migrations 0001–0007 and every block, like test:chat.
  * --full spends money (well under a cent a question); its total is printed and goes in chat-spend.md.
  */
 import { readFile, writeFile } from 'node:fs/promises';
@@ -34,7 +34,7 @@ const questions = JSON.parse(await readFile(path.join(ROOT, 'docs/proposals/chat
 
 const pg = new PGlite();
 await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
-for (const f of ['0001_core.sql', '0002_v5.sql', '0003_likes.sql', '0004_private_ratings_and_likes.sql', '0005_public_prompts_and_consent.sql', '0006_chat.sql'])
+for (const f of ['0001_core.sql', '0002_v5.sql', '0003_likes.sql', '0004_private_ratings_and_likes.sql', '0005_public_prompts_and_consent.sql', '0006_chat.sql', '0007_chat_costs_without_person.sql'])
   await pg.exec(await readFile(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
 await pg.exec(`insert into studio.works values ('snowmoon', 'Snowmoon', 'GPL-3.0', 'x'); set role studio_writer;`);
 const server = new PGLiteSocketServer({ db: pg, port: 54334, host: '127.0.0.1' });
@@ -125,6 +125,6 @@ try {
 }
 
 async function spent(): Promise<number> {
-  const [{ usd }] = await sql`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.chat_calls where kind <> 'ask'`;
+  const [{ usd }] = await sql`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.chat_costs`;
   return Number(usd);
 }

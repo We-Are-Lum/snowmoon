@@ -163,7 +163,7 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
 async function answerOnce(deps: AskDeps, messages: Message[], allowed: Set<string>) {
   const answer = await deps.complete(CHAT.model, messages, { maxTokens: ANSWER_TOKENS, temperature: 0.4 });
   await record(deps.sql, {
-    fid: deps.fid, kind: 'answer', model: answer.model, provider: answer.provider, requestId: answer.requestId,
+    kind: 'answer', model: answer.model, provider: answer.provider,
     promptTokens: answer.promptTokens, completionTokens: answer.completionTokens, costUsd: answer.costUsd,
   });
   const clean = sanitizeReply(answer.text, allowed);
@@ -186,7 +186,7 @@ async function guard(deps: AskDeps, question: string, shown: string): Promise<{ 
     const first = text.split(/\s+/)[0]?.toUpperCase() ?? '';
     const verdict = first.startsWith('VIOLATION') ? 'flagged' : first.startsWith('OK') ? 'ok' : 'none';
     await record(deps.sql, {
-      fid: deps.fid, kind: 'guard', model: g.model, provider: g.provider, requestId: g.requestId,
+      kind: 'guard', model: g.model, provider: g.provider,
       promptTokens: g.promptTokens, completionTokens: g.completionTokens, costUsd: g.costUsd, guard: verdict,
     });
     if (verdict !== 'none') return { verdict, reason: verdict === 'flagged' ? text.slice(first.length).replace(/^[\s:.-]+/, '').slice(0, 200) : '' };
@@ -205,7 +205,7 @@ async function searchTerms(deps: AskDeps, question: string): Promise<string> {
     { maxTokens: SEARCH_TOKENS, temperature: 0 },
   );
   await record(deps.sql, {
-    fid: deps.fid, kind: 'search', model: r.model, provider: r.provider, requestId: r.requestId,
+    kind: 'search', model: r.model, provider: r.provider,
     promptTokens: r.promptTokens, completionTokens: r.completionTokens, costUsd: r.costUsd,
   });
   return (r.text.match(/[\p{L}\p{N}][\p{L}\p{N}'-]*/gu) ?? []).slice(0, 20).join(' ');
@@ -238,7 +238,7 @@ async function supportCheck(deps: AskDeps, question: string, shown: string, cite
     const first = g.text.trim().split(/\s+/)[0]?.toUpperCase() ?? '';
     const verdict = first.startsWith('UNSUPPORTED') ? 'flagged' : first.startsWith('SUPPORTED') ? 'ok' : 'none';
     await record(deps.sql, {
-      fid: deps.fid, kind: 'guard', model: g.model, provider: g.provider, requestId: g.requestId,
+      kind: 'guard', model: g.model, provider: g.provider,
       promptTokens: g.promptTokens, completionTokens: g.completionTokens, costUsd: g.costUsd, guard: verdict,
     });
     if (verdict !== 'none') return verdict === 'ok';

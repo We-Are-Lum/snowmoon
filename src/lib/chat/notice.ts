@@ -21,15 +21,16 @@ export const NOTICE_REVIEW: {
   ownerReread: { words: string; on: string } | null;
 } = {
   /** Fingerprint of the chat's code, prompts and settings when the notice was last reread. */
-  reviewedFor: 'ffc2f43aac6c30bf',
+  reviewedFor: '49f548adeaa546f7',
   /** Who did that reread: the coding agent, or the owner. */
   by: 'agent',
   on: '2026-10-08',
   note:
-    'For the direct Groq route with the gateway as fallback. Items 1 and 2 match config/prompts/chat-ask.md. ' +
-    'Item 3\'s "Neither keeps your messages" holds for the gateway route (zero retention asked on every request) and for the direct route ' +
-    '(Groq organization "Lum": Global ZDR and Inference APIs ZDR enabled, confirmed by the owner in the Groq console on 2026-10-08). ' +
-    'Reread again (agent, session snowmoon-ae) after device.ts began keeping the chapters opened, on the device only: all four items still held.',
+    'Reread for migration 0007 (cost records without a person) and the owner\'s new words for items 3 and 4. Items 1 and 2 match ' +
+    'config/prompts/chat-ask.md. Item 3: both routes keep nothing (gateway: zero retention asked per request; Groq: Global ZDR and ' +
+    'Inference APIs ZDR enabled in the "Lum" organization, confirmed by the owner in the console on 2026-10-08). Item 4: chat_calls ' +
+    'keeps only questions (FID, time, model); chat_costs keeps daily totals with no FID, request id or time of day; true once 0007 is applied. ' +
+    '/about ("only a count and the cost") and the private box still hold.',
   /** The words (noticeKey of the items as shown now) the owner last reread, and when. Not yet: the words changed on 2026-10-08. */
   ownerReread: null,
 };
@@ -41,12 +42,13 @@ export function noticeItems({ host, provider, model }: { host: string | null; pr
     [
       `Your messages go to ${provider}`,
       host
-        ? `${provider} runs ${model}, an open-weights model. When ${provider} is busy, a message goes through ${host} to ${provider} instead. Neither keeps your messages, and this app keeps no copy.`
-        : `${provider} runs ${model}, an open-weights model, and keeps no messages. This app keeps no copy.`,
+        ? `${provider} runs ${model}, an open-weights model. When ${provider} is busy, a message goes through ${host} to ${provider} instead. Both are set to keep nothing, and this app keeps no copy of your messages.`
+        : `${provider} runs ${model}, an open-weights model, and is set to keep nothing. This app keeps no copy of your messages.`,
     ],
     [
       'Your questions are saved only on this device',
-      `They are sent to ${provider}${host ? ` (or through ${host} when it is busy)` : ''} to be answered, and never published. Another device won’t have them.`,
+      `They are sent to ${provider}${host ? ` (or through ${host} when ${provider} is busy)` : ''} to be answered, and never published. Another device won’t have them. ` +
+        'The app records only how many you ask and when, under your Farcaster ID, to count the daily limit. Cost records are kept without your ID.',
     ],
   ];
 }

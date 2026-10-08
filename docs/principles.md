@@ -301,6 +301,12 @@ ratings and likes and serves the totals.
   organization "Lum", Global ZDR and Inference APIs ZDR enabled, Batch and
   Fine-tuning storage off. No automated check covers it; recheck by hand if
   the key or the Groq organization changes.
+- The assistant's records: questions are counted under the FID
+  (`studio.chat_calls`: FID, time, model); model-call costs are kept as daily
+  totals with no FID, request id or time of day (`studio.chat_costs`,
+  migration 0007), so none can be joined to a person. `npm run test:chat`
+  fails if one can. Residual: on a day when only one person asks, that day's
+  totals are theirs.
 
 ## 7. Payments never enter scoring or ordering. No token. The "not affiliated" line stays on the first screen.
 

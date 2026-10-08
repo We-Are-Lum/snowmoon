@@ -513,3 +513,26 @@ What is the problem with siwitching providers?
 ```text
 sure. I do wonder if we need the extra provider if that one
 ```
+
+```text
+Items 1 and 2: reread, no changes.
+
+Item 3: Your messages go to Groq. Groq runs gpt-oss-120b, an open-weights model. When Groq is busy, a message goes through Vercel AI Gateway to Groq instead. Both are set to keep nothing, and this app keeps no copy of your messages.
+
+Item 4: Your questions are saved only on this device. They are sent to Groq (or through Vercel AI Gateway when Groq is busy) to be answered, and never published. Another device won't have them. The app records only how many you ask and when, under your Farcaster ID, to count the daily limit.
+
+With those changes, I have reread all four. Record it, re-run the checks, and merge if they pass.
+```
+
+```text
+Option 2, with three additions:
+
+- Answer and safety-check rows: no Farcaster ID, no Groq request ID, and only the date, not the time. Otherwise they can be matched back to the question row by timing.
+- The migration also clears the Farcaster ID, request ID and time of day from existing answer and safety-check rows.
+- Add a test that fails if an answer or safety-check row can be joined to a person.
+
+Item 4 then reads:
+Your questions are saved only on this device. They are sent to Groq (or through Vercel AI Gateway when Groq is busy) to be answered, and never published. Another device won't have them. The app records only how many you ask and when, under your Farcaster ID, to count the daily limit. Cost records are kept without your ID.
+
+Write the migration as 0007 with a dry-run note like 0006, push the branch, and tell me. I'll apply it, then say "reread" for all four items. You own the notice; tell the site-rebuild session when it's on main.
+```

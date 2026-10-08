@@ -160,6 +160,12 @@ not depend on the model's cooperation.
     `guard` (`ok | flagged | none`), `kind` (`ask | guard`). **No message text, no
     reply text, no block IDs.** Private (no public read policy). Used for the 30
     a day per FID and the spend cap.
+  - **Changed by `0007_chat_costs_without_person.sql`** (owner, 2026-10-08):
+    `chat_calls` now keeps only questions (`fid`, `at`, `model`, no row
+    number), for the daily limit. The model calls' costs go to
+    `studio.chat_costs`: daily totals per date, kind, model, provider and
+    verdict, with no FID, no request id, no time of day and no row per call,
+    so no cost can be matched to a question. The spend cap sums it.
   - The daily count is `count(*) where fid = $1 and kind = 'ask' and at >= today
     00:00 UTC`; the spend cap is `sum(cost_usd)` for today across everyone. Both
     are checked before the call and recorded after it, in one transaction with

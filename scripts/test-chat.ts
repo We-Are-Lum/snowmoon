@@ -3,7 +3,7 @@
  *
  *   npm run test:chat
  *
- * Runs migrations 0001–0006 in an in-memory Postgres (PGlite), seeds all 4,322
+ * Runs migrations 0001–0007 in an in-memory Postgres (PGlite), seeds all 4,322
  * blocks with the real seed script, and talks to it as studio_writer, the app's
  * role. The model is a stand-in that returns whatever each case needs, so no
  * paid call is made. Checks:
@@ -15,6 +15,10 @@
  *   is the stored text of a real block, never the model's words.
  * - The daily limit (30) and the spend cap.
  * - chat_calls is append-only for studio_writer and holds no message text.
+ * - No cost record can be joined to a person (migration 0007): chat_costs has
+ *   no FID, request id, time of day or row per call; chat_calls holds only
+ *   questions, with no row number; a cost row written the old way is moved to
+ *   the totals.
  */
 import { readFile } from 'node:fs/promises';
 import path from 'node:path';
@@ -37,7 +41,7 @@ const check = (label: string, ok: boolean, detail = '') => (ok ? passed++ : fail
 // --- Database: the six migrations, then the real seed, as studio_writer ------
 const pg = new PGlite();
 await pg.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
-for (const f of ['0001_core.sql', '0002_v5.sql', '0003_likes.sql', '0004_private_ratings_and_likes.sql', '0005_public_prompts_and_consent.sql', '0006_chat.sql']) {
+for (const f of ['0001_core.sql', '0002_v5.sql', '0003_likes.sql', '0004_private_ratings_and_likes.sql', '0005_public_prompts_and_consent.sql', '0006_chat.sql', '0007_chat_costs_without_person.sql']) {
   try {
     await pg.exec(await readFile(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
   } catch (e) {
@@ -195,8 +199,8 @@ try {
     check('the search-words call sees only the question', Boolean(search));
     const answerCall = calls.find((c) => c.model === CHAT.model && c.user.startsWith('Passages'))!;
     check('the search words widen what is sent', /Jahen/.test(answerCall.user));
-    const [{ n }] = await sql`select count(*)::int as n from studio.chat_calls where fid = 109 and kind = 'search'`;
-    check('the search-words call is counted (cost only)', n === 1, String(n));
+    const [{ n }] = await sql`select coalesce(sum(calls), 0)::int as n from studio.chat_costs where kind = 'search'`;
+    check('the search-words call is counted in the cost totals', n >= 1, String(n));
     searchText = '';
   }
 
@@ -219,6 +223,49 @@ try {
     check('a supported answer is shown', res3.state === 'answer', res3.state);
   }
 
+  // --- No answer, safety-check or search cost can be joined to a person ------
+  {
+    const columns = async (t: string) =>
+      (await sql`select column_name, data_type, column_default, is_identity from information_schema.columns where table_schema = 'studio' and table_name = ${t}`) as unknown as {
+        column_name: string; data_type: string; column_default: string | null; is_identity: string;
+      }[];
+    const costs = await columns('chat_costs');
+    const names = costs.map((c) => c.column_name);
+    check('chat_costs has no column naming a person or a request', !names.some((c) => /fid|person|user|account|request|thread/.test(c)), names.join(', '));
+    check('chat_costs has no time finer than a date', costs.every((c) => !/time/.test(c.data_type)) && costs.find((c) => c.column_name === 'day')?.data_type === 'date', costs.map((c) => `${c.column_name}:${c.data_type}`).join(', '));
+    const numbered = (cs: typeof costs) => cs.filter((c) => c.is_identity === 'YES' || /nextval/.test(c.column_default ?? '')).map((c) => c.column_name);
+    check('chat_costs has no row number', numbered(costs).length === 0, numbered(costs).join(', '));
+    const calls = await columns('chat_calls');
+    check('chat_calls has no row number to order costs against', numbered(calls).length === 0, numbered(calls).join(', '));
+
+    // Two people ask the same question on the same day: the totals grow, the rows don't.
+    const rowsBefore = (await sql`select count(*)::int as n from studio.chat_costs`)[0].n;
+    const callsBefore = (await sql`select coalesce(sum(calls), 0)::int as n from studio.chat_costs`)[0].n;
+    answerText = 'Commentary.';
+    await ask(deps(201), { question: 'Gladias vote', limit: 1 });
+    const rowsMid = (await sql`select count(*)::int as n from studio.chat_costs`)[0].n;
+    await ask(deps(202), { question: 'Gladias vote', limit: 1 });
+    const rowsAfter = (await sql`select count(*)::int as n from studio.chat_costs`)[0].n;
+    const callsAfter = (await sql`select coalesce(sum(calls), 0)::int as n from studio.chat_costs`)[0].n;
+    check('a second person\'s question adds to the totals without adding a row', rowsAfter === rowsMid && callsAfter > callsBefore, `rows ${rowsBefore}→${rowsMid}→${rowsAfter}, calls ${callsBefore}→${callsAfter}`);
+
+    const kinds = (await sql`select distinct kind from studio.chat_calls`).map((r) => r.kind as string);
+    check('chat_calls holds only questions', kinds.length === 1 && kinds[0] === 'ask', kinds.join(', '));
+
+    // Code from before 0007 wrote cost rows into chat_calls under the FID: they go to the totals instead.
+    const spentBefore = (await sql`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.chat_costs`)[0].usd;
+    await sql`insert into studio.chat_calls (fid, kind, model, provider, request_id, prompt_tokens, completion_tokens, cost_usd, guard)
+              values (203, 'answer', ${CHAT.model}, 'groq', 'req_old', 10, 5, 0.001, 'flagged')`;
+    const [{ n: kept }] = await sql`select count(*)::int as n from studio.chat_calls where fid = 203`;
+    const spentAfter = (await sql`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.chat_costs`)[0].usd;
+    check('a cost row written the old way is not kept under the FID', kept === 0, String(kept));
+    check('a cost row written the old way is added to the totals', Math.abs(spentAfter - spentBefore - 0.001) < 1e-9, `${spentBefore} → ${spentAfter}`);
+    await sql`insert into studio.chat_calls (fid, kind, model, request_id) values (204, 'ask', ${CHAT.model}, 'req_old')`.then(
+      () => failures.push('a question row with a request id was accepted'),
+      () => check('a question row cannot carry a request id', true),
+    );
+  }
+
   // --- Limits ----------------------------------------------------------------
   {
     answerText = 'Commentary.';
@@ -231,7 +278,7 @@ try {
   }
   {
     // Spend is shared by everyone: fill the day close to the cap with one big recorded call.
-    await sql`insert into studio.chat_calls (fid, kind, model, cost_usd) values (1, 'answer', ${CHAT.model}, ${CHAT.dailySpendCapUsd - 0.0001})`;
+    await sql`insert into studio.chat_costs (kind, model, provider, calls, cost_usd) values ('answer', 'spend-test', '', 1, ${CHAT.dailySpendCapUsd - 0.0001})`;
     const res = await ask(deps(106), { question: 'Gladias vote', limit: 1 });
     check('the spend cap stops new questions', res.state === 'spend', res.state);
   }
@@ -241,6 +288,7 @@ try {
     const cols = (await sql`select column_name from information_schema.columns where table_schema = 'studio' and table_name = 'chat_calls'`).map((r) => r.column_name as string);
     check('chat_calls has no column for message text', !cols.some((c) => /question|reply|text|content|message|block/.test(c)), cols.join(', '));
   }
+
 } finally {
   await sql.end();
   await server.stop();
@@ -263,13 +311,19 @@ try {
 
 // Who may change the table: on PGlite directly, as studio_writer (the socket's shared session can reset its role).
 await pg.exec('reset role');
-for (const [what, stmt] of [['update', 'update studio.chat_calls set cost_usd = 0'], ['delete', 'delete from studio.chat_calls'], ['truncate', 'truncate studio.chat_calls']]) {
+for (const [what, stmt] of [
+  ['update chat_calls', 'update studio.chat_calls set model = \'x\''],
+  ['delete from chat_calls', 'delete from studio.chat_calls'],
+  ['truncate chat_calls', 'truncate studio.chat_calls'],
+  ['delete from chat_costs', 'delete from studio.chat_costs'],
+  ['truncate chat_costs', 'truncate studio.chat_costs'],
+]) {
   await pg.exec('set role studio_writer');
   try {
     await pg.exec(stmt);
-    failures.push(`studio_writer could ${what} chat_calls`);
+    failures.push(`studio_writer could ${what}`);
   } catch (e) {
-    check(`studio_writer cannot ${what} chat_calls`, /permission denied/.test((e as Error).message), (e as Error).message);
+    check(`studio_writer cannot ${what}`, /permission denied/.test((e as Error).message), (e as Error).message);
   } finally {
     await pg.exec('reset role');
   }
