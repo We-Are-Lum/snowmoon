@@ -135,3 +135,9 @@ nothing stored or sent. c7-b6 now drawn by a template (dzego/vote). To undo (bac
 Docs only: readers' images in their own buckets marked done; README's Media section names the production key. To undo (back to `8307334`):
 
     vercel rollback dpl_3BQYabZ7zyMSuuamc7bEeFB8nbSB --scope nates-projects-d1780cff
+
+## 2026-10-09: compact AI labels (branch site-ai-labels)
+
+Captions and the narration credit become a short label with AI that opens the recipe sheet; 'AI-generated, not by the author' served and in the sheet; P2b rewritten; share cards keep the full line. To undo (back to `42507cc`):
+
+    vercel rollback dpl_5hyJqgCDLu2WZwAGm7eim1EJCiQz --scope nates-projects-d1780cff
