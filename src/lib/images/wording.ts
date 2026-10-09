@@ -5,8 +5,8 @@
  * "Draft wording" line. The rows below go to the draft-wording doc for the owner's words.
  * Words already on these screens before the restyle are not repeated here.
  *
- * "AI-generated image" and "not by the author" stay written out in each component, since
- * check:principles P2b reads them there.
+ * Under each image: the AI label (src/lib/ai-declared.ts; owner, 2026-10-09), a button opening the
+ * recipe sheet, with "AI-generated image, not by the author" served beside it, visually hidden.
  */
 export const IMAGE_WORDING = {
   draftLine: 'Draft wording',
@@ -50,20 +50,20 @@ export const IMAGE_WORDING_ROWS: { screen: string; where: string; text: string }
   { screen: 'Add an image · compose', where: 'src/components/image-composer.tsx (rules label)', text: IMAGE_WORDING.composer.rulesLabel },
   { screen: 'Add an image · compose', where: 'src/components/image-composer.tsx (Generate button)', text: 'Generate · {n} of {per day} left today / Generate again · {n} of {per day} left today' },
   { screen: 'Add an image · draft', where: 'src/components/image-composer.tsx (privacy strip)', text: IMAGE_WORDING.draft.strip },
-  { screen: 'Add an image · draft', where: 'src/components/image-composer.tsx (under the image)', text: 'AI-generated image · not by the author' },
+  { screen: 'Add an image · draft', where: 'src/components/image-composer.tsx (under the image)', text: 'AI image · by {byline} (button: opens the recipe sheet)' },
   { screen: 'Add an image · draft', where: 'src/components/image-composer.tsx', text: IMAGE_WORDING.draft.kept(24).replace('24', '{hours}') },
   { screen: 'Add an image · draft', where: 'src/components/image-composer.tsx', text: IMAGE_WORDING.draft.editPrompt },
   { screen: 'Add an image · draft', where: 'src/components/image-composer.tsx (action bar)', text: 'Generate again · {n} left' },
   { screen: 'Add an image · compose', where: 'src/components/image-composer.tsx (action bar, when a draft is kept)', text: IMAGE_WORDING.draft.back },
   { screen: 'Add an image · preview', where: 'src/components/image-composer.tsx (preview)', text: IMAGE_WORDING.preview.promptLabel },
-  { screen: 'Image page', where: 'src/app/image/[id]/page.tsx (caption; "Open in reader →" is the assistant’s approved row 23, reused)', text: 'AI-generated image · not by the author / by {byline} · {date} · Chapter {n} · ¶ {a–b} · Open in reader →' },
+  { screen: 'Image page', where: 'src/app/image/[id]/page.tsx (caption; "Open in reader →" is the assistant’s approved row 23, reused)', text: 'AI image · by {byline} (button: opens the recipe sheet) / {date} · Chapter {n} · ¶ {a–b} · Open in reader →' },
   { screen: 'Image page', where: 'src/app/image/[id]/page.tsx (crumb)', text: '← Pictures · Trial' },
   { screen: 'Images by readers (in the chapter)', where: 'src/components/reader-images.tsx (bar)', text: '{n} images by readers · ¶ {a–b} · show ▾ / hide ▴' },
   { screen: 'Pictures (feed)', where: 'src/components/image-feed.tsx (order strip)', text: IMAGE_WORDING.feed.covered(3).replace('3', '{n}') },
   { screen: 'Images by readers (in the chapter)', where: 'src/components/reader-images.tsx (order, now visible)', text: IMAGE_WORDING.reader.order },
   { screen: 'Reports (moderators)', where: 'src/components/moderate-queue.tsx (role strip)', text: IMAGE_WORDING.moderate.strip },
   { screen: 'Reports (moderators)', where: 'src/components/moderate-queue.tsx (role strip)', text: '{n} waiting' },
-  { screen: 'Reports (moderators)', where: 'src/components/moderate-queue.tsx (under the image)', text: 'AI-generated image · not by the author' },
+  { screen: 'Reports (moderators)', where: 'src/components/moderate-queue.tsx (under the image)', text: 'AI image · by FID {fid} (button: opens the recipe sheet)' },
   { screen: 'Reports (moderators)', where: 'src/components/moderate-queue.tsx', text: IMAGE_WORDING.moderate.prompt },
   { screen: 'Reports (moderators)', where: 'src/components/moderate-queue.tsx', text: IMAGE_WORDING.moderate.reasons },
 ];

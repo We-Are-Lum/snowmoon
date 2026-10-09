@@ -3,7 +3,8 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ReportPronunciation } from './report-pronunciation';
-import { RecipeLink } from './recipe-sheet';
+import { AiLabel } from './recipe-sheet';
+import { AI_DECLARED, AI_LABEL } from '~/lib/ai-declared';
 import { openComposer } from '~/lib/images/client';
 import { useCanAddImage } from '~/lib/images/can-add';
 
@@ -31,7 +32,6 @@ export interface PlayerImage {
 interface Props {
   chapter: number;
   chapters: number;
-  label: string;
   /** Public URL of the narration's recipe, with every spoken text. */
   recipeUrl: string;
   url: string;
@@ -68,7 +68,7 @@ function cueAt(cues: PlayerCue[], t: number): number {
   return Math.max(0, found);
 }
 
-export function ChapterPlayer({ chapter, chapters, label, recipeUrl, url, duration, cues, images, labels = {}, view = 'read', onView }: Props) {
+export function ChapterPlayer({ chapter, chapters, recipeUrl, url, duration, cues, images, labels = {}, view = 'read', onView }: Props) {
   const audio = useRef<HTMLAudioElement | null>(null);
   const canAddImage = useCanAddImage();
   const [started, setStarted] = useState(false);
@@ -233,7 +233,7 @@ export function ChapterPlayer({ chapter, chapters, label, recipeUrl, url, durati
   // One short line (owner, 2026-10-08): the model and settings are in the recipe.
   const footer = (
     <p className="player-label">
-      {label.split(' · ')[0]} · <RecipeLink file={recipeUrl} item={current ? String(current.idx) : undefined}>Recipe</RecipeLink>
+      <AiLabel kind="voice" text={AI_LABEL.voice} file={recipeUrl} item={current ? String(current.idx) : undefined} />
       {started && current && (
         <>
           {' · '}
@@ -282,13 +282,13 @@ export function ChapterPlayer({ chapter, chapters, label, recipeUrl, url, durati
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={image.url} alt={image.alt} width={1024} height={576} />
           <figcaption className="block-caption">
-            {labels[image.idx] ? `¶ ${labels[image.idx]} · ` : ''}AI-generated image, a starting point
-            {image.recipe && (
+            {labels[image.idx] ? `¶ ${labels[image.idx]} · ` : ''}
+            {image.recipe ? (
+              <AiLabel kind="image" text={AI_LABEL.image} file={image.recipe} item={image.id} />
+            ) : (
               <>
-                {' · '}
-                <RecipeLink file={image.recipe} item={image.id}>
-                  Recipe
-                </RecipeLink>
+                {AI_LABEL.image}
+                <span className="sr-only"> ({AI_DECLARED.image})</span>
               </>
             )}
           </figcaption>

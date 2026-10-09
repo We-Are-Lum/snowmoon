@@ -2,6 +2,7 @@ import 'server-only';
 import { existsSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { REPO_URL } from './config';
+import { WHOSE } from './ai-declared';
 
 /**
  * What the recipe sheet shows (src/components/recipe-sheet.tsx), read from a committed
@@ -19,6 +20,10 @@ const RECIPES = 'content/snowmoon/recipes/';
 export interface RecipeView {
   file: string;
   github: string;
+  /** Who made it, and that it is AI-generated and not by the author (principle 2; check:principles P2b). Draft wording. */
+  whose: string;
+  /** The full recipe; when absent, the file on GitHub. null: there is no full recipe yet (a draft). */
+  full?: { href: string; text: string } | null;
   what: string;
   model: { name: string; licence: string; where: string } | null;
   /** The exact prompt or spoken text, in full; null when no model was prompted. */
@@ -26,9 +31,12 @@ export interface RecipeView {
   /** Other exact inputs worth showing (reference images, an encoder command). */
   inputs: { label: string; value: string }[];
   published: { by: string; when: string } | null;
-  cost: string;
-  resultLicence: string;
+  /** Said in place of "Published" when it is not (a draft). */
+  notPublished?: string;
+  cost?: string;
+  resultLicence?: string;
 }
+
 
 type J = Record<string, unknown>;
 const read = (p: string): J | null => (existsSync(path.join(ROOT, p)) ? (JSON.parse(readFileSync(path.join(ROOT, p), 'utf8')) as J) : null);
@@ -74,6 +82,7 @@ export function recipeView(file: string, item?: string): RecipeView | null {
     const refs = ((img?.references as J[]) ?? []).map((x) => str(x.file)).filter(Boolean);
     return {
       ...base,
+      whose: WHOSE.projectImage,
       what: img?.chapter ? `An image for Chapter ${str(img.chapter)}, made for one passage as a starting point, not canon.` : `An image made as a reference (${path.basename(file, '.json')}).`,
       model: { name: str(model.repo ?? model.name), licence: str(model.license), where: where(r.host) },
       prompt: img ? { label: 'The exact prompt', text: str(img.prompt) } : null,
@@ -93,6 +102,7 @@ export function recipeView(file: string, item?: string): RecipeView | null {
     const img = ((r.images as J[]) ?? []).find((i) => str(i.id) === item);
     return {
       ...base,
+      whose: WHOSE.lettering,
       what: 'Words drawn over an image in code, so the lettering matches the book exactly.',
       model: null,
       prompt: img ? { label: 'The words drawn', text: ((img.lettering as J[]) ?? []).map((l) => str(l.text)).join('\n\n') } : null,
@@ -112,6 +122,7 @@ export function recipeView(file: string, item?: string): RecipeView | null {
     const index = read(`content/snowmoon/narration/kokoro-af_heart/chapter-${str(r.chapter)}.json`) ?? {};
     return {
       ...base,
+      whose: WHOSE.narration,
       what: `The synthetic narration of Chapter ${str(r.chapter)}: a speech model reading the book's text aloud, one paragraph at a time.`,
       model: { name: `${str(model.name)}, stock voice ${str(voice?.name)}`, licence: str(model.license), where: where(r.host) },
       prompt: block
@@ -135,6 +146,7 @@ export function recipeView(file: string, item?: string): RecipeView | null {
       const model = r.model as J;
       return {
         ...base,
+        whose: WHOSE.opener,
         what: 'The spoken opener at the start of every podcast episode. A person wrote the words; the voice is synthetic.',
         model: { name: `${str(model.name)}, stock voice ${str((r.voice as J)?.name)}`, licence: str(model.license), where: 'on the project\'s own computer, not a hosted service' },
         prompt: { label: 'The exact text spoken', text: str(r.spoken_text) },
@@ -148,6 +160,7 @@ export function recipeView(file: string, item?: string): RecipeView | null {
       const made = r.made_by as J;
       return {
         ...base,
+        whose: WHOSE.cover,
         what: 'The podcast cover, drawn in code. No image model was used.',
         model: null,
         prompt: null,
@@ -160,6 +173,7 @@ export function recipeView(file: string, item?: string): RecipeView | null {
     const enc = r.encoder as J;
     return {
       ...base,
+      whose: WHOSE.episode,
       what: `Podcast episode ${str(r.chapter)}: the spoken opener, then the chapter's narration, joined and encoded by code. No model was prompted for this file.`,
       model: null,
       prompt: null,

@@ -358,34 +358,121 @@ add({
     chs[0].blocks[2].content += ' (edited)';
   },
 });
-const AI_LABEL = /\bAI[- ]generated\b/i;
+// P2b (owner, 2026-10-09): under an image and on the narration, a compact visible label that says
+// "AI", which is a button opening the recipe sheet; the whole declaration ("AI-generated",
+// "not by the author") is in the page as served, inside that button (visually hidden, part of its
+// accessible name), and in the sheet's "Who made it" row.
+const AI_GENERATED = /\bAI[- ]generated\b/i;
+const NOT_AUTHOR = /not by the author/i;
+const SAYS_AI = /\bAI\b/;
+type AiLabelTag = { open: string; visible: string; hidden: string; recipe: string | null; item: string | null };
+/** Every AI label button in served HTML: its opening tag, its visible text, and its visually hidden text. */
+function aiLabels(html: string): AiLabelTag[] {
+  return [...html.matchAll(/(<button\b[^>]*\bclass="ai-label"[^>]*>)([\s\S]*?)<\/button>/g)].map(([, open, inner]) => {
+    const hidden = [...inner.matchAll(/<span class="sr-only">([\s\S]*?)<\/span>/g)].map((m) => htmlText(m[1])).join(' ');
+    const attr = (name: string) => open.match(new RegExp(`\\b${name}="([^"]*)"`))?.[1]?.replace(/&amp;/g, '&') ?? null;
+    return { open, visible: htmlText(inner.replace(/<span class="sr-only">[\s\S]*?<\/span>/g, '')).trim(), hidden, recipe: attr('data-recipe'), item: attr('data-item') };
+  });
+}
+function aiLabelProblems(where: string, html: string, kind: 'image' | 'voice'): string[] {
+  const labels = aiLabels(html).filter((l) => l.open.includes(`data-ai="${kind}"`));
+  if (!labels.length) return [`${where}: no AI label (a button with "AI" in its visible text) in the page as served`];
+  const problems: string[] = [];
+  for (const l of labels) {
+    if (!SAYS_AI.test(l.visible)) problems.push(`${where}: the visible label does not say "AI": "${l.visible.slice(0, 40)}"`);
+    if (!/\baria-haspopup="dialog"/.test(l.open)) problems.push(`${where}: the AI label does not open a dialog (aria-haspopup="dialog")`);
+    if (!AI_GENERATED.test(l.hidden)) problems.push(`${where}: "AI-generated" is not served with the label`);
+    if (!NOT_AUTHOR.test(l.hidden)) problems.push(`${where}: "not by the author" is not served with the label`);
+  }
+  return problems;
+}
+/** A source file without its comments, so a comment cannot stand in for what the code draws. */
+const code = (rel: string) =>
+  read(rel)
+    .replace(/\{\s*\/\*[\s\S]*?\*\/\s*\}/g, '')
+    .replace(/\/\*[\s\S]*?\*\//g, '')
+    .replace(/^\s*\/\/.*$/gm, '');
+const READER_IMAGE_FILES = [
+  'src/components/reader-images.tsx',
+  'src/components/image-feed.tsx',
+  'src/app/image/[id]/page.tsx',
+  'src/components/image-composer.tsx',
+  'src/components/moderate-queue.tsx',
+];
 add({
   id: 'P2b',
   principle: 2,
-  name: 'generated images and narration carry an AI declaration where they are shown',
-  load: async () => ({
-    ch1: await page('/chapter/1'),
-    card: read('src/app/api/card/[n]/[range]/route.tsx'),
-    // Readers' images: every place one is shown says AI-generated and not by the author.
-    readers: ['src/components/reader-images.tsx', 'src/components/image-feed.tsx', 'src/app/image/[id]/page.tsx', 'src/app/api/image-card/[id]/route.tsx'].map((f) => ({ file: f, text: read(f) })),
-  }),
-  run: ({ ch1, card, readers }) => {
-    const problems: string[] = [];
-    for (const r of readers as { file: string; text: string }[]) {
-      if (!AI_LABEL.test(r.text)) problems.push(`${r.file}: a reader's image is shown without "AI-generated"`);
-      if (!/not by the author/i.test(r.text)) problems.push(`${r.file}: a reader's image is shown without "not by the author"`);
+  name: 'generated images and narration carry an AI label, with "AI-generated, not by the author" served and in the recipe sheet',
+  load: async () => {
+    const { AI_LABEL, AI_DECLARED, WHOSE } = await import('../src/lib/ai-declared');
+    const ch1 = await page('/chapter/1');
+    // The recipe sheet as served: GET /api/recipe for each label on chapter 1 that names a recipe file.
+    const sheets: { what: string; whose: string }[] = [];
+    for (const l of aiLabels(ch1).filter((l) => l.recipe)) {
+      const q = new URLSearchParams({ file: l.recipe!, ...(l.item ? { item: l.item } : {}) });
+      const r = await fetch(`${BASE}/api/recipe?${q}`);
+      sheets.push({ what: `${l.recipe}${l.item ? ` (${l.item})` : ''}`, whose: r.ok ? String(((await r.json()) as { whose?: unknown }).whose ?? '') : `HTTP ${r.status}` });
     }
+    // A reader's image page, as served (when the live database is reachable), and the feed.
+    const rows = await readerImages('published');
+    const imagePage = rows?.length ? { id: rows[0].id, html: await page(`/image/${rows[0].id}`) } : null;
+    return {
+      ch1,
+      sheets,
+      feed: await page('/images'),
+      imagePage,
+      wording: {
+        labels: [AI_LABEL.image, AI_LABEL.voice, AI_LABEL.imageBy('@someone')],
+        declared: [AI_DECLARED.image, AI_DECLARED.voice],
+        whose: Object.values(WHOSE).map((w) => (typeof w === 'function' ? w('@someone') : w)),
+      },
+      sheetSource: code('src/components/recipe-sheet.tsx'),
+      card: code('src/app/api/card/[n]/[range]/route.tsx'),
+      imageCard: code('src/app/api/image-card/[id]/route.tsx'),
+      // Readers' images drawn after load (the chapter strip, the composer, the moderators' queue): each uses the label.
+      readers: READER_IMAGE_FILES.map((f) => ({ file: f, text: code(f) })),
+      player: code('src/components/chapter-player.tsx'),
+    };
+  },
+  run: ({ ch1, sheets, feed, imagePage, wording, sheetSource, card, imageCard, readers, player }) => {
+    const problems: string[] = [];
+    // Chapter 1 as served: every seeded image's caption, and the narration credit.
     const figures = [...ch1.matchAll(/<figure class="seed-image"[\s\S]*?<\/figure>/g)].map((m) => m[0]);
     if (!figures.length) problems.push('chapter 1: no seeded images found to check');
-    for (const f of figures) if (!AI_LABEL.test(f.replace(/<[^>]+>/g, ' '))) problems.push(`chapter 1 image caption lacks "AI-generated": ${f.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 70)}`);
-    if (!/Synthetic narration/.test(ch1)) problems.push('chapter 1: the player does not say the narration is synthetic');
-    if (!AI_LABEL.test(card)) problems.push('quote cards with an image do not label the image as AI-generated');
+    figures.forEach((f, i) => problems.push(...aiLabelProblems(`chapter 1 image ${i + 1}`, f, 'image')));
+    const credit = ch1.match(/<p class="[^"]*\bnarration-credit\b[^"]*">[\s\S]*?<\/p>/)?.[0] ?? '';
+    problems.push(...aiLabelProblems('chapter 1 narration credit', credit, 'voice'));
+    if (!/Synthetic narration/.test(aiLabels(credit).map((l) => l.hidden).join(' '))) problems.push('chapter 1: the narration credit does not say "Synthetic narration"');
+    // The sheet, as served for those labels.
+    if (!sheets.length) problems.push('chapter 1: no label names a recipe file, so the sheet could not be checked');
+    for (const s of sheets as { what: string; whose: string }[]) {
+      if (!AI_GENERATED.test(s.whose) || !NOT_AUTHOR.test(s.whose)) problems.push(`recipe sheet for ${s.what}: "Who made it" does not say AI-generated and not by the author: "${s.whose.slice(0, 60)}"`);
+    }
+    if (!/\{view\.whose\}/.test(sheetSource)) problems.push('src/components/recipe-sheet.tsx: the sheet does not show "Who made it" (view.whose)');
+    // The feed and a reader's image page, as served.
+    const captions = [...feed.matchAll(/<p class="block-caption pictures-caption">[\s\S]*?<\/p>/g)].map((m) => m[0]);
+    captions.forEach((c, i) => problems.push(...aiLabelProblems(`/images caption ${i + 1}`, c, 'image')));
+    if (imagePage) problems.push(...aiLabelProblems(`/image/${imagePage.id}`, imagePage.html.match(/<figcaption class="ip-caption">[\s\S]*?<\/figcaption>/)?.[0] ?? '', 'image'));
+    // The wording itself (src/lib/ai-declared.ts).
+    for (const l of wording.labels as string[]) if (!SAYS_AI.test(l)) problems.push(`src/lib/ai-declared.ts: label "${l}" does not say "AI"`);
+    for (const d of [...wording.declared, ...wording.whose] as string[]) if (!NOT_AUTHOR.test(d)) problems.push(`src/lib/ai-declared.ts: "${d.slice(0, 60)}" does not say "not by the author"`);
+    for (const d of wording.declared as string[]) if (!AI_GENERATED.test(d)) problems.push(`src/lib/ai-declared.ts: "${d}" does not say "AI-generated"`);
+    // Where readers' images and the listen view are drawn after load: the label is used.
+    for (const r of readers as { file: string; text: string }[]) {
+      if (!/<AiLabel\b[\s\S]*?\bkind="image"[\s\S]*?\btext=\{AI_LABEL\.(image|imageBy)\b/.test(r.text)) problems.push(`${r.file}: a reader's image is shown without the AI label`);
+    }
+    if (!/<AiLabel\s+kind="voice"/.test(player)) problems.push('src/components/chapter-player.tsx: the player shows the narration without the AI label');
+    if (!/<AiLabel\s+kind="image"/.test(player)) problems.push('src/components/chapter-player.tsx: the listen view shows an image without the AI label');
+    // Pictures shared off the site carry the whole declaration in the picture: there is no sheet to open there.
+    if (!AI_GENERATED.test(card)) problems.push('quote cards with an image do not label the image as AI-generated');
+    if (!AI_GENERATED.test(imageCard) || !NOT_AUTHOR.test(imageCard)) problems.push('the image share card does not say AI-generated and not by the author');
     return problems;
   },
   plant: (c) => {
-    c.ch1 = c.ch1.replace(/Synthetic narration/g, 'Narration');
+    c.ch1 = c.ch1.replace(/not by the author/gi, '');
+    c.sheets.push({ what: 'planted', whose: 'The project made it.' });
+    c.readers[0].text = c.readers[0].text.replace(/<AiLabel\b/g, '<Caption');
     c.card = c.card.replace(/AI[- ]generated/gi, 'picture');
-    c.readers[0].text = c.readers[0].text.replace(/not by the author/gi, '');
   },
 });
 

@@ -168,6 +168,33 @@ for (const role of ['anon', 'authenticated']) {
 }
 await server.stop();
 
+// --- The recipe sheet's "Who made it" (owner, 2026-10-09; check:principles P2b) --------------
+// Every sheet a label opens says who made it, and that it is AI-generated and not by the author.
+{
+  const { recipeView } = await import('../src/lib/recipe-view');
+  const { readerImageView } = await import('../src/lib/ai-declared');
+  const R = 'content/snowmoon/recipes/';
+  const published = JSON.parse(readFileSync(path.join(ROOT, 'content/snowmoon/illustrations/published.json'), 'utf8')) as { images: { id: string; recipe: string }[] };
+  const first = published.images[0];
+  const sheets = [
+    { what: 'a seeded image', view: recipeView(first.recipe, first.id) },
+    { what: 'the narration', view: recipeView(`${R}narration/chapter-1.json`, '3') },
+    { what: 'the podcast opener', view: recipeView(`${R}podcast/opener.json`) },
+    { what: 'a reader\'s image', view: readerImageView({ versionId: 'v', by: '@someone', chapter: 1 }) },
+    { what: 'a draft', view: readerImageView({ versionId: null, by: '@someone', chapter: 1 }) },
+  ];
+  for (const s of sheets) {
+    check(`the sheet for ${s.what} exists`, !!s.view);
+    if (!s.view) continue;
+    check(`the sheet for ${s.what} says "not by the author"`, /not by the author/i.test(s.view.whose), s.view.whose);
+    check(`the sheet for ${s.what} says "AI-generated"`, /\bAI-generated\b/.test(s.view.whose), s.view.whose);
+    check(`the sheet for ${s.what} names the model`, !!s.view.model?.name);
+  }
+  check("a reader's sheet names who made it", readerImageView({ versionId: 'v', by: '@someone', chapter: 1 }).whose.startsWith('@someone'));
+  check("a reader's sheet links the image's own page as the full recipe", readerImageView({ versionId: 'v', by: '@x', chapter: 1 }).full?.href === '/image/v');
+  check('a draft has no full recipe yet', readerImageView({ versionId: null, by: '@x', chapter: 1 }).full === null);
+}
+
 if (failures.length) {
   console.error(`\nIMAGE TESTS FAILED (${failures.length}, ${passed} passed):\n- ` + failures.join('\n- '));
   process.exit(1);

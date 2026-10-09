@@ -11,7 +11,8 @@ import { loadNarration } from '~/lib/narration';
 import { loadIllustrations } from '~/lib/illustrations';
 import { QuoteShare } from '~/components/quote-share';
 import { ChapterView } from '~/components/chapter-view';
-import { RecipeLink } from '~/components/recipe-sheet';
+import { AiLabel, RecipeLink } from '~/components/recipe-sheet';
+import { AI_LABEL } from '~/lib/ai-declared';
 import { AddImageButton } from '~/components/reader-images';
 import { ReadingRecord } from '~/components/reading-record';
 import { LiveScreen } from '~/components/live-screen';
@@ -181,10 +182,7 @@ export default async function ChapterPage({ params }: Props) {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={image.url} alt={image.alt} width={image.width} height={image.height} loading="lazy" />
                 <figcaption className="block-caption">
-                  ¶ {f.label} · AI-generated image, a starting point ·{' '}
-                  <RecipeLink file={image.recipe} item={image.id}>
-                    Recipe
-                  </RecipeLink>
+                  ¶ {f.label} · <AiLabel kind="image" text={AI_LABEL.image} file={image.recipe} item={image.id} />
                   {image.lettering && (
                     <>
                       {' · '}
@@ -221,7 +219,7 @@ export default async function ChapterPage({ params }: Props) {
       {/* The narration's credit and recipe, in the page as served (principle 1; check:principles P1d). One short line. */}
       {narration && (
         <p className="provenance narration-credit">
-          {narration.label.split(' · ')[0]} · <RecipeLink file={narration.recipe}>Recipe</RecipeLink>
+          <AiLabel kind="voice" text={AI_LABEL.voice} file={narration.recipe} />
         </p>
       )}
       <QuoteShare chapter={n} images={images.map(({ id, idx, url, alt }) => ({ id, idx, url, alt }))} />

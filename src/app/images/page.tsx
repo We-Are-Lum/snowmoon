@@ -38,6 +38,7 @@ export default async function Pictures({ searchParams }: { searchParams: Promise
           date: im.createdAt.slice(0, 10),
           likes: im.likes,
           alt: `AI-generated image: ${im.userPrompt.split(/(?<=[.!?])\s/)[0]}`,
+          prompt: im.userPrompt,
         }))}
       />
       <p className="as-draft ic-draftline">{W.draftLine}</p>

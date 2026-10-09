@@ -5,6 +5,8 @@ import { authFetch, useAuth } from '~/lib/client-auth';
 import { REASON_LABELS } from '~/lib/images/reasons';
 import { IMAGE_WORDING as W } from '~/lib/images/wording';
 import { SignInButton } from './sign-in';
+import { AiLabel } from './recipe-sheet';
+import { AI_LABEL, readerImageView } from '~/lib/ai-declared';
 
 type Item = {
   version_id: string;
@@ -63,7 +65,20 @@ export function ModerateQueue() {
               <figure className="mq-media">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src={it.asset_url} alt="The reported image" width={1024} height={576} />
-                <figcaption className="mq-caption">AI-generated image · not by the author</figcaption>
+                <figcaption className="mq-caption">
+                  <AiLabel
+                    kind="image"
+                    text={AI_LABEL.imageBy(`FID ${it.created_by_fid}`)}
+                    view={readerImageView({
+                      versionId: it.status === 'published' ? it.version_id : null,
+                      by: `FID ${it.created_by_fid}`,
+                      chapter: it.chapter,
+                      date: it.created_at.slice(0, 10),
+                      model: it.model,
+                      notPublished: 'Hidden: readers do not see it.',
+                    })}
+                  />
+                </figcaption>
               </figure>
               <div className="mq-detail">
                 <p className="mq-meta">

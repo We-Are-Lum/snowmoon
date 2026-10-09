@@ -185,6 +185,12 @@
 .recipe-prompt { margin: 0; padding: 10px 12px; white-space: pre-wrap; word-break: break-word; background: var(--soft); border-radius: var(--radius); font-family: var(--label); font-size: var(--text-label); line-height: 1.55; }
 .recipe-mono { font-family: var(--label); font-size: var(--text-label); word-break: break-word; }
 .recipe-github { align-self: flex-start; font-family: var(--label); font-size: var(--text-label); text-decoration: none; }
+/* The AI label (src/components/recipe-sheet.tsx AiLabel): the caption's own type, in the link colour, as a
+   button that opens the sheet. Built plainly; Claude Design is drawing it. */
+.ai-label { display: inline; margin: 0; padding: 0; border: 0; background: none; font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--link); cursor: pointer; }
+.ai-label:hover { text-decoration: underline; text-underline-offset: 0.15em; }
+/* In the page as served and read aloud, but not drawn. */
+.sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0; }
 
 /* ---------- Tablet: the rail collapsed, opening over the page ---------- */
 @media (min-width: 768px) {

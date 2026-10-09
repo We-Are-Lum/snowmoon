@@ -9,6 +9,8 @@ import { IMAGE_WORDING as W } from '~/lib/images/wording';
 import { byline } from '~/lib/images/byline';
 import { PAPER } from '~/lib/tokens';
 import { ImageActions } from '~/components/image-actions';
+import { AiLabel } from '~/components/recipe-sheet';
+import { AI_LABEL, readerImageView } from '~/lib/ai-declared';
 
 /**
  * A reader's image (section 5): the image, what it is, and its whole recipe, readable signed
@@ -68,10 +70,17 @@ export default async function ImagePage({ params }: Props) {
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={im.url} alt={`AI-generated image: ${im.userPrompt.split(/(?<=[.!?])\s/)[0]}`} width={1024} height={576} />
           <figcaption className="ip-caption">
-            AI-generated image · not by the author
+            <AiLabel
+              kind="image"
+              text={AI_LABEL.imageBy(by)}
+              view={{
+                ...readerImageView({ versionId: im.versionId, by, prompt: im.userPrompt, chapter: im.chapter, where, date }),
+                full: { href: '#recipe', text: 'Full recipe, on this page ↓' },
+              }}
+            />
             <br />
             <span className="ip-meta">
-              by {by} · {date} ·{' '}
+              {date} ·{' '}
               <Link href={reader}>
                 Chapter {im.chapter}
                 {where ? ` · ${where}` : ''} · Open in reader →
@@ -91,7 +100,9 @@ export default async function ImagePage({ params }: Props) {
       <div className="ip-side">
         <ImageActions versionId={im.versionId} byFid={im.byFid} chapter={im.chapter} />
 
-        <h2 className="ip-h">How this was made</h2>
+        <h2 className="ip-h" id="recipe">
+          How this was made
+        </h2>
         <dl className="recipe-list ip-recipe">
           <dt className="ip-wide">The prompt, as the person wrote it</dt>
           <dd className="ip-wide ip-words">{im.userPrompt}</dd>

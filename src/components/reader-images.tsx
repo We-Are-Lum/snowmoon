@@ -7,11 +7,14 @@ import { openComposer } from '~/lib/images/client';
 import { byline } from '~/lib/images/byline';
 import { useCanAddImage } from '~/lib/images/can-add';
 import { IMAGE_WORDING as W } from '~/lib/images/wording';
+import { AI_LABEL, readerImageView } from '~/lib/ai-declared';
+import { AiLabel } from './recipe-sheet';
 
 /**
  * Readers' images in the chapter (decision 4, during the trial): after the last block of their
  * passage, behind a tap ("2 images by readers · ¶ 2–3 · show"), most liked first, then newest, and
- * the label says so. Each says it is AI-generated, by whom, and not by the author. Laid out as
+ * the label says so. Each is labelled "AI image · by …", a button opening its recipe sheet; "AI-generated"
+ * and "not by the author" are served with the label, visually hidden, and in the sheet (P2b). Laid out as
  * Claude Design's strip: a ruled bar, the order named, the images side by side, swiped.
  */
 type Img = { versionId: string; url: string; chapter: number; start: number; end: number; byFid: number; byName: string | null; likes: number; userPrompt: string };
@@ -98,7 +101,12 @@ function Group({ chapter, images, draftLine, onToggle }: { chapter: number; imag
                   <img src={im.url} alt={`AI-generated image: ${im.userPrompt.split(/(?<=[.!?])\s/)[0]}`} width={1024} height={576} loading="lazy" />
                 </Link>
                 <p className="block-caption">
-                  AI-generated image · by {byline(im.byName, im.byFid)} · not by the author · {im.likes} {im.likes === 1 ? 'like' : 'likes'} · <Link href={`/image/${im.versionId}`}>recipe</Link>
+                  <AiLabel
+                    kind="image"
+                    text={AI_LABEL.imageBy(byline(im.byName, im.byFid))}
+                    view={readerImageView({ versionId: im.versionId, by: byline(im.byName, im.byFid), prompt: im.userPrompt, chapter: im.chapter, where })}
+                  />{' '}
+                  · {im.likes} {im.likes === 1 ? 'like' : 'likes'}
                 </p>
               </li>
             ))}

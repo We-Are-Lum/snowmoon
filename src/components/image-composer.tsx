@@ -8,6 +8,8 @@ import { IMAGES } from '~/lib/config';
 import { IMAGE_WORDING as W } from '~/lib/images/wording';
 import { ConsentScreen, PublishedTextField, PublishFlow, type PublishStep } from './publish-words';
 import { SignInButton } from './sign-in';
+import { AiLabel } from './recipe-sheet';
+import { AI_LABEL, readerImageView } from '~/lib/ai-declared';
 
 /**
  * "Add an image" (docs/proposals/add-an-image.md, section 2): a sheet over the reader. The
@@ -271,7 +273,9 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
                 <img src={draft.image} alt={`AI-generated draft: ${prompt.split(/(?<=[.!?])\s/)[0]}`} width={1024} height={576} />
                 {busy && <span className="ic-veil">Making it…</span>}
               </div>
-              <p className="ic-caption">AI-generated image · not by the author</p>
+              <p className="ic-caption">
+                <AiLabel kind="image" text={AI_LABEL.imageBy(by)} view={readerImageView({ versionId: null, by, prompt, chapter: range.chapter, where })} />
+              </p>
               <p className="ic-explain">{W.draft.kept(IMAGES.ticketHours)}</p>
               <button type="button" className="ic-link" onClick={() => setView('compose')}>
                 {W.draft.editPrompt}
@@ -316,7 +320,7 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
                   {/* eslint-disable-next-line @next/next/no-img-element */}
                   <img src={draft.image} alt="" width={1024} height={576} />
                   <figcaption className="block-caption">
-                    Chapter {range.chapter} · {where} · AI-generated image · by {by} · not by the author
+                    Chapter {range.chapter} · {where} · <AiLabel kind="image" text={AI_LABEL.imageBy(by)} view={readerImageView({ versionId: null, by, prompt, chapter: range.chapter, where })} />
                   </figcaption>
                   <p className="ic-label">{W.preview.promptLabel}</p>
                   <p className="ic-prompt-preview">{prompt}</p>

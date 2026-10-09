@@ -89,7 +89,6 @@ export function ChapterView({
         <ChapterPlayer
           chapter={chapter}
           chapters={chapters.length}
-          label={narration.label}
           recipeUrl={narration.recipe}
           url={narration.url}
           duration={narration.duration}

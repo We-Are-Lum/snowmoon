@@ -553,13 +553,22 @@ try {
         await open(page, '/chapter/1');
       }
     }
-    await page.locator('.seed-image .recipe-link').first().click();
+    // The AI label under an image (owner, 2026-10-09): a button that says AI, reached by keyboard, opening the sheet.
+    const label = page.locator('.seed-image button.ai-label').first();
+    if ((await label.getAttribute('aria-haspopup')) !== 'dialog') fail('@390: the AI label is not a button that opens a dialog');
+    if (!/\bAI\b/.test((await label.innerText()) ?? '')) fail('@390: the AI label does not say AI');
+    await label.focus();
+    await page.keyboard.press('Enter');
     await page.waitForSelector('.recipe-sheet dt');
     const model = await page.textContent('.recipe-sheet');
     if (!/FLUX|Model/.test(model ?? '')) fail('@390: the recipe sheet does not show the model');
+    if (!/not by the author/i.test(model ?? '')) fail('@390: the recipe sheet does not say "not by the author"');
+    if (!(await page.locator('.recipe-sheet a.recipe-github').count())) fail('@390: the recipe sheet does not link the full recipe');
     await checkFloors(page, '/chapter/1 @390 (recipe)', scheme);
     await shot(page, 'phone-390-recipe', scheme);
     await page.keyboard.press('Escape');
+    if (await page.locator('.recipe-sheet').count()) fail('@390: Escape does not close the recipe sheet');
+    if (!(await label.evaluate((el) => el === document.activeElement))) fail('@390: closing the recipe sheet does not return focus to the AI label');
     await open(page, '/chapter/1?view=listen');
     await page.waitForSelector('.listen-pane');
     await checkFloors(page, '/chapter/1?view=listen @390', scheme);

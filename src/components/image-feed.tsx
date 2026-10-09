@@ -4,13 +4,15 @@ import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { openedChapters } from '~/lib/chat/device';
 import { IMAGE_WORDING as W } from '~/lib/images/wording';
+import { AI_LABEL, readerImageView } from '~/lib/ai-declared';
+import { AiLabel } from './recipe-sheet';
 
 /**
  * The feed's order strip and list. Images from a chapter past the furthest one opened on this
  * device are covered until shown; a covered image's caption gives the chapter only, never the
  * paragraph. Laid out as Claude Design's feed: a labelled order strip, then the images.
  */
-type Item = { versionId: string; url: string; chapter: number; where: string | null; by: string; date: string; likes: number; alt: string };
+type Item = { versionId: string; url: string; chapter: number; where: string | null; by: string; date: string; likes: number; alt: string; prompt: string };
 
 export function ImageFeed({ images, sort, empty }: { images: Item[]; sort: 'new' | 'liked'; empty: React.ReactNode }) {
   const [furthest, setFurthest] = useState<number | null>(null);
@@ -57,7 +59,12 @@ export function ImageFeed({ images, sort, empty }: { images: Item[]; sort: 'new'
                   <span className="pictures-date">{im.date}</span>
                 </p>
                 <p className="block-caption pictures-caption">
-                  AI-generated image · not by the author · {im.likes} {im.likes === 1 ? 'like' : 'likes'} · <Link href={`/image/${im.versionId}`}>recipe</Link>
+                  <AiLabel
+                    kind="image"
+                    text={AI_LABEL.image}
+                    view={readerImageView({ versionId: im.versionId, by: im.by, prompt: covered ? undefined : im.prompt, chapter: im.chapter, where: covered ? null : im.where, date: im.date })}
+                  />{' '}
+                  · {im.likes} {im.likes === 1 ? 'like' : 'likes'}
                 </p>
               </li>
             );
