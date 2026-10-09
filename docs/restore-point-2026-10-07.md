@@ -141,3 +141,9 @@ Docs only: readers' images in their own buckets marked done; README's Media sect
 Captions and the narration credit become a short label with AI that opens the recipe sheet; 'AI-generated, not by the author' served and in the sheet; P2b rewritten; share cards keep the full line. To undo (back to `42507cc`):
 
     vercel rollback dpl_5hyJqgCDLu2WZwAGm7eim1EJCiQz --scope nates-projects-d1780cff
+
+## 2026-10-09: Learn's rules note quotes c4-b84 (branch site-learn-quote)
+
+The note quotes "every game there's always some kind of new rule" (c4-b84) instead of saying the rule changes every match; P8d checks the quote. To undo (back to `d31910d`):
+
+    vercel rollback dpl_A2cLgZRsnxpueDFKZ9VTYX1MHMHT --scope nates-projects-d1780cff
