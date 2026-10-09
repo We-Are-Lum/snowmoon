@@ -23,7 +23,7 @@ export const NOTICE_REVIEW: {
   /** Fingerprint of the chat's code, prompts and settings when the notice was last reread. */
   reviewedFor: 'b19cb19144e89aba',
   /** Who did that reread: the coding agent, or the owner. */
-  by: 'agent',
+  by: 'owner (FID 6786)',
   on: '2026-10-08',
   note:
     'Reread for migration 0007 (cost records without a person) and the owner\'s new words for items 3 and 4. Items 1 and 2 match ' +
@@ -31,9 +31,10 @@ export const NOTICE_REVIEW: {
     'Inference APIs ZDR enabled in the "Lum" organization, confirmed by the owner in the console on 2026-10-08). Item 4: chat_calls ' +
     'keeps only questions (FID, time, model); chat_costs keeps daily totals with no FID, request id or time of day; true once 0007 is applied. ' +
     '/about ("only a count and the cost"), the private box and the signed-out screen (owner\'s words on main) still hold. ' +
-    'Also covers main\'s device.ts change (chapters opened, kept on the device only).',
-  /** The words (noticeKey of the items as shown now) the owner last reread, and when. Not yet: the words changed on 2026-10-08. */
-  ownerReread: null,
+    'Also covers main\'s device.ts change (chapters opened, kept on the device only). ' +
+    'The owner (FID 6786) reread and approved all four items as worded here on 2026-10-08, after applying 0007.',
+  /** The words (noticeKey of the items as shown now) the owner last reread, and when. */
+  ownerReread: { words: '1x16ucc', on: '2026-10-08' },
 };
 
 export function noticeItems({ host, provider, model }: { host: string | null; provider: string | null; model: string }): [string, string][] {

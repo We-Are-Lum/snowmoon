@@ -536,3 +536,7 @@ Your questions are saved only on this device. They are sent to Groq (or through 
 
 Write the migration as 0007 with a dry-run note like 0006, push the branch, and tell me. I'll apply it, then say "reread" for all four items. You own the notice; tell the site-rebuild session when it's on main.
 ```
+
+```text
+Reread. All four notice items as they stand on your branch are approved. Record it, merge, deploy, run the production checks, and confirm the spend cap is reading the new table.
+```
