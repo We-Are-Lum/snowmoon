@@ -153,3 +153,9 @@ The note quotes "every game there's always some kind of new rule" (c4-b84) inste
 Learn fills the screen on phones and the Farcaster frame, with a × back to the site. To undo (back to `8239d08`):
 
     vercel rollback dpl_7uZgLaFhNv3Bdyv6sirFKeQcpv5K --scope nates-projects-d1780cff
+
+## 2026-10-09: Free play is Design's game; the book's rule on /minpentai/rule (branch site-free-play)
+
+Sandbox and Play the computer out of the UI (code kept); Free play runs Design's practice match; /minpentai/rule runs the rule recovered from c4-b5. To undo (back to `284bb8c`):
+
+    vercel rollback dpl_2RrpEYmgH1qW12YoWMz9ju7DrV9n --scope nates-projects-d1780cff
