@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import { IMAGES } from '~/lib/config';
 import { db } from '~/lib/db';
-import { byline } from '~/lib/images/byline';
+import { designByline } from '~/lib/images/byline';
 import { bookCharacters, listDesigns, sheetCounts, type DesignOrder } from '~/lib/images/designs';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { DesignIndex } from '~/components/design-index';
@@ -38,7 +38,7 @@ export default async function Designs({ searchParams }: { searchParams: Promise<
           elementId: s.elementId,
           entityId: s.entityId,
           title: s.title || s.entity,
-          meta: W.index.rowMeta(byline(s.byName, s.byFid), s.versionNo, s.builtOn),
+          meta: W.index.rowMeta(designByline(s.byName, s.byFid, s.byRole), s.versionNo),
           drafted: Boolean(s.assist),
           thumb: s.thumb,
         }))}

@@ -223,6 +223,7 @@ export function DesignForm(p: Props) {
                 ))}
               </ul>
             )}
+            {!style && <p className="dz-note">{W.form.viewsShared}</p>}
             {stale && <p className="ic-error">{W.form.stale}</p>}
             <p className="dz-note">{W.form.left(left)}</p>
             <p className="dz-note">{W.form.promptIs(p.suffix)}</p>

@@ -36,7 +36,7 @@ type Status = {
   styles: { id: string; name: string; text: string }[];
   editModel?: { name: string; licence: string; host: string };
   /** Step 4: the person's own picks (private), offered for this image only. */
-  picks?: { style: Chip | null; characters: Chip[] };
+  picks?: { styles: Chip[]; characters: Chip[] };
 };
 type Chip = { versionId: string; kind: 'style' | 'character'; entity: string; title: string; by: string; versionNo: number; text: string; views: number; drafted: boolean };
 const D = W.designs.composer;
@@ -138,7 +138,8 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
     const key = draftKey(range);
     if (!status?.picks || chipsFor === key) return;
     setChipsFor(key);
-    setStyle(status.picks.style ? status.picks.style.versionId : null);
+    // Every picked style is offered; the newest pick starts chosen, for this image only (decision 3).
+    setStyle(status.picks.styles[0]?.versionId ?? null);
     setCharacters(status.picks.characters.filter((c) => mentions(passageText, c.entity)).map((c) => c.versionId));
   }, [status, range, chipsFor, passageText]);
   const widen = (side: 'start' | 'end', d: 1 | -1) => {
@@ -202,8 +203,8 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
   };
 
   const chosen = status?.styles.find((s) => s.id === style) ?? null;
-  const picks = status?.picks ?? { style: null, characters: [] };
-  const styleChip = picks.style && picks.style.versionId === style ? picks.style : null;
+  const picks = status?.picks ?? { styles: [], characters: [] };
+  const styleChip = picks.styles.find((c) => c.versionId === style) ?? null;
   const charChips = picks.characters.filter((c) => characters.includes(c.versionId));
   const withViews = charChips.some((c) => c.views > 0);
   const useEdit = reference && withViews && Boolean(status?.editModel);
@@ -299,12 +300,12 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
                         <input type="radio" name="ic-style" checked={style === s.id} onChange={() => setStyle(s.id)} /> {s.name} (the project&apos;s starting style)
                       </label>
                     ))}
-                    {picks.style && (
-                      <label>
-                        <input type="radio" name="ic-style" checked={style === picks.style.versionId} onChange={() => setStyle(picks.style!.versionId)} /> {chipName(picks.style)}{' '}
+                    {picks.styles.map((c) => (
+                      <label key={c.versionId}>
+                        <input type="radio" name="ic-style" checked={style === c.versionId} onChange={() => setStyle(c.versionId)} /> {chipName(c)}{' '}
                         <span className="ic-chip-key">· {D.yourPick}</span>
                       </label>
-                    )}
+                    ))}
                     {chosen && <p className="ic-style-text">Added to your prompt, and published with it (model-drafted): {chosen.text}</p>}
                     {styleChip && <p className="ic-style-text">{styleChip.drafted ? D.addedDrafted : D.added} {styleChip.text}</p>}
                   </fieldset>
@@ -336,7 +337,7 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
                     </fieldset>
                   )}
                   <p className="ic-note">
-                    <Link href="/images/picks">{picks.style || picks.characters.length ? D.changePicks : D.noPicks}</Link>
+                    <Link href="/images/picks">{picks.styles.length || picks.characters.length ? D.changePicks : D.noPicks}</Link>
                   </p>
 
                   <div className="ic-rules">

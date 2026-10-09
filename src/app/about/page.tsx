@@ -1,3 +1,4 @@
+import { IMAGE_WORDING } from '~/lib/images/wording';
 import { CHAT, CONTACT_EMAIL, IMAGES, REPO_URL, WORK } from '~/lib/config';
 import { RULES } from '~/lib/images/rules';
 import { SIGN_IN_SERVICES } from '~/lib/sign-in-text';
@@ -89,6 +90,8 @@ export default function About() {
         at once, and three reports from different people hide it until a moderator looks. Moderators can only hide. This app
         counts how many images each person makes a day; what they cost is kept only as daily totals, with no names.
       </p>
+      {/* Model-drafted wording, draft (step 4, decision 9 of 2026-10-09). */}
+      <p>{IMAGE_WORDING.designs.about.line}</p>
       <p>
         Contact, for legal or copyright notices or to report an image without signing in:{' '}
         <a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a>.

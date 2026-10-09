@@ -1,6 +1,8 @@
 # Style guides, character sheets, forks and picks (step 4)
 
-> **Built on branch `site-images-designs`. Not merged, not pushed, not deployed.** Written
+> **Built on branch `site-images-designs`. Not merged, not deployed** (the branch is pushed, with
+> no preview deployment). **Decided by the owner on 2026-10-09 (§8)**; the branch stays unmerged until
+> the owner has made their first images with the trial. Written
 > 2026-10-08 by the coding agent while the owner was away ("where you'd ask a question, take the
 > conservative option, write it down, and keep going"). Every new string is draft wording, one
 > "Draft wording" line per screen, and every one is listed in `IMAGE_WORDING_ROWS`
@@ -62,10 +64,10 @@ every page under `/images` (conservative choice 1).
 
 | Thing | Where it lives |
 |---|---|
-| A style | `studio.entities` (kind `style`, `name` = the style's name, unique per work) |
-| A character | `studio.entities` (kind `character`, `name` = the book's name from `content/snowmoon/designs/characters/*.json`, `setting`, `first_chapter` = earliest chapter in its facts). Made when its first sheet is published; never typed by a reader |
+| A style | `studio.entities` (kind `style`, `name` = the style's name, unique per work, never a book character's name) |
+| A character | `studio.entities` (kind `character`, `name` = the book's name from `content/snowmoon/designs/characters/*.json`, `setting`, `first_chapter` = where the book first names them, `first_appearance` in the file). Made when its first sheet is published; never typed by a reader |
 | A style or a sheet | `studio.elements` (`element_type 'design'`, `entity_id`, `created_by_fid`, `status`) |
-| Each version | `studio.element_versions` (`version_no`, `body`); `body` = `DesignBody` in `src/lib/element-body.ts`: `title`, `text`, `samples[]`, `views{front,side,back}`, `by_name`, `by_name_source`, `assist` |
+| Each version | `studio.element_versions` (`version_no`, `body`); `body` = `DesignBody` in `src/lib/element-body.ts`: `title`, `text`, `samples[]`, `views{front,side,back}`, `by_name`, `by_name_source`, `assist`, `role` ('maintainer' for the starting style) |
 | A sample or view | inside the body: `{url, sha256, recipe}`, the recipe with the exact prompt, model, endpoint, settings, seed, request id, cost, date, size, references and checks. Files on the readers' bucket under `images/readers/` by sha256, like images |
 | A fork | a new design element on the same entity; its v1 has a `studio.links` row `remixed_from` → the source version (append-only, so the credit stays) |
 | "Uses" | the existing `uses` links from an image version to the design versions added to it, written at publish from the signed draft record |
@@ -158,8 +160,8 @@ Side-by-sides (Design board frame, Design prototype, built) are in the session s
    not-invited readers can read everything.
 3. Readers create new styles (entity rows) and new sheets only for the book's own characters; they
    never name a character.
-4. With several styles picked, the composer offers the most recently picked one (picks allow one
-   per style entity, so several styles can be picked).
+4. ~~With several styles picked, the composer offers the most recently picked one.~~ Decided
+   2026-10-09: all picked styles are offered, the newest pick chosen to start with.
 5. With no pick, nothing is added. (favourites.md proposed "most built on" as a fallback; that would
    be a de-facto default, so it is not built.)
 6. A character chip starts ticked only when the passage names the character (a whole word of their
@@ -168,7 +170,7 @@ Side-by-sides (Design board frame, Design prototype, built) are in the session s
 8. Picks in the composer are only the person's own; "for this image only" never changes a pick.
 9. Default order newest first; "most built on" is the labelled alternative; characters list in the
    order the book first tells of them.
-10. Built-on counts are shown (on rows, pages and per version), never pick counts.
+10. Built-on counts are shown on a design's own page only (decided 2026-10-09), never pick counts.
 11. Samples and views use the same daily count and caps as images; a style needs 2 to 4 samples, a
     sheet its front view (side and back optional).
 12. A daily cap of 3 published designs (new ones or new versions) per person.
@@ -176,14 +178,14 @@ Side-by-sides (Design board frame, Design prototype, built) are in the session s
 14. Style names are unique without case ("Kalimar Paper" = "kalimar paper"); a taken name is
     refused with "Fork it, or choose another name."
 15. The design text is checked when its samples or views are made (it is in their prompts); the
-    name gets the blocked-names list only, not the model check.
-16. A fork's credit links to the source version; if the source is later hidden, the credit is no
-    longer shown (it would link to a page that is gone).
+    name also goes through the model check at publish (decided 2026-10-09).
+16. A fork's credit links to the source version; if the source is later hidden, the credit stays as
+    text with no name or link (decided 2026-10-09).
 17. "What the book says" shows the book's quotes only, never the model-written facts or "about"
     lines in the character files (they contain spoilers and are model text).
 18. Samples and views last on the page until you publish or leave (not in IndexedDB).
-19. The project's starting style stays a file option in the composer; publishing it as a design is
-    a script that was not run (`npm run seed:designs`, needs `--apply`).
+19. The project's starting style stays a file option until the seed runs at merge time (decided
+    2026-10-09: under FID 6786 as maintainer, model-drafted); then the option retires.
 20. Designs have no likes, no cast and no share card.
 21. The style page's "See them" is a list of the images built on it (newest first), not a filter on
     the feed.
@@ -207,7 +209,36 @@ Side-by-sides (Design board frame, Design prototype, built) are in the session s
 
 None needed, none written, none applied.
 
-## 8. Decisions before this can ship
+## 8. Decisions (decided 2026-10-09)
+
+The owner, 2026-10-09: *"accept your recommendation on 1–12 and 14–20. On 13: publish 'Techno
+vistas' as a design under FID 6786 as maintainer, not a system FID, with its text labelled
+model-drafted."*
+
+| # | Decision | What changed on the branch |
+|---|---|---|
+| 1 | Reader-written text; the model check also reads the **name** | `POST /api/designs` runs `checkWords` (blocked names, then gpt-oss-safeguard-20b) on the name before any picture is uploaded; its cost goes into the day's totals and it is refused when the spend caps are reached (`paid.ts`, `limits.ts`). Text is still checked when its pictures are made |
+| 2 | Readers may create styles and fork | Kept as built |
+| 3 | The composer offers **all** picked styles | Every picked style is a chip, newest pick first and chosen to start with, "for this image only". The "most recent only" rule is gone; My picks says "Offered first when you make an image" / "Also offered when you make an image" |
+| 4 | Newest first by default | Kept as built |
+| 5 | Built-on numbers only on a design's own page | Removed from index rows, character page rows and the list beside a design; kept on the design page ("Built on by n images" and each version's count). "Most built on" stays as a labelled order |
+| 6 | Others may use published views as references; consent unchanged | A draft sentence on the sheet form under the views |
+| 7 | Samples and views count as Generates | Kept as built |
+| 8 | Invited only | Kept as built |
+| 9 | Design text is GPL-3.0 like prompts | One draft line on About, in Pictures |
+| 10 | Safety checker, reports, moderators | Kept as built |
+| 11 | Keep the cover; add a sheet rule | The sheet rules end "Describe how they look early in the book; nothing that happens later." |
+| 12 | Also refuse a style named like a book character | Refused (409, draft message) when the name equals a character's full name or a word they are called by, ignoring case, in the form's publish and in `makeDesign` |
+| 13 | Publish Techno vistas as a design **under FID 6786 as maintainer**, text labelled model-drafted | `seedStartingStyle` (designs.ts) and `scripts/seed-designs.ts`: body `role: 'maintainer'`, `assist` = coding agent; byline "@name · maintainer" (or "FID 6786 · maintainer"). Once it exists the composer's file option retires (status no longer offers it, Generate refuses it) and it sorts like any style. **Not run against production.** It runs at merge time, after the owner's go: `npm run seed:designs -- --apply [--name=<username>]` (a dry run without `--apply`). Tested against PGlite |
+| 14 | No fallback with no pick | Kept as built |
+| 15 | One fixed text per design | Kept as built |
+| 16 | A hidden source's credit stays as text | "Remixed from a design that was hidden", no name or link |
+| 17 | Three designs a day | Kept as built |
+| 18 | All wording draft | Every new or changed string is in `IMAGE_WORDING_ROWS` |
+| 19 | True first appearances | `scripts/first-appearances.ts` writes `first_appearance {chapter, idx, as}` into each character file from the book text (name, call names, `aliases`; `name_exclusions` such as "Hun Min" street). Spoiler covers use it. Changes from the earliest fact: Lord Ephelion 8 → 3, Jahn 5 → 1; others the same. Run without `--write` it checks the files are up to date |
+| 20 | "What the book says" quotes only | Kept as built |
+
+### The questions as asked (2026-10-08)
 
 Each with the question, the options, and the recommendation.
 
@@ -288,3 +319,14 @@ Each with the question, the options, and the recommendation.
 | 8 | Screens match the source | Pass: sheets show the book's own quotes; sheet rules say "Don't contradict what the book says" |
 
 Tension raised, not resolved: built-on counts next to "Use as my …" (decision 5).
+
+## 10. Changed strings (2026-10-09), all draft
+
+- Index and list rows: "{by} · v{v}" (was "{by} · v{v} · {built} built on").
+- Byline of the starting style: "{@name or FID n} · maintainer".
+- Credit when the source is hidden: "Remixed from" + "a design that was hidden".
+- My picks: "Offered first when you make an image" (was "Offered when you make an image"); "Also offered when you make an image" (replaces "Also picked; pick it again to use it").
+- Sheet form, under the views: "Published views can be used by other readers as reference pictures for their images."
+- Sheet rules: "Don’t base a character on a real person. Don’t contradict what the book says. Describe how they look early in the book; nothing that happens later."
+- Refusals: "That is the name of a character in the book. Choose another name for the style." · "This name asks for something the rules don’t allow. Choose another." · "No real people: the name names someone on the blocked list."
+- About (Pictures): "Readers can also publish styles and character sheets. Their names and text are published like prompts: public, permanent, GPL-3.0, under the maker’s name, and added in full to the prompts of images that use them."

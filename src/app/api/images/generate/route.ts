@@ -10,8 +10,8 @@ import { makeEdit, makeImage } from '~/lib/images/fal';
 import { paidPicture } from '~/lib/images/paid';
 import { finalPrompt, STYLES, styleText, type StyleId } from '~/lib/images/rules';
 import { signTicket, type TicketDesign } from '~/lib/images/ticket';
-import { myPicks, type MyPick } from '~/lib/images/designs';
-import { byline } from '~/lib/images/byline';
+import { myPicks, startingStyleRetired, type MyPick } from '~/lib/images/designs';
+import { designByline } from '~/lib/images/byline';
 
 /**
  * Generate one draft image for a passage (docs/proposals/add-an-image.md, section 5). Invited
@@ -26,7 +26,7 @@ import { byline } from '~/lib/images/byline';
  */
 const isId = (s: unknown): s is string => typeof s === 'string' && /^[0-9a-f-]{36}$/.test(s);
 const asDesign = (p: MyPick): TicketDesign => ({
-  versionId: p.versionId, kind: p.kind, entity: p.entity, title: p.title, by: byline(p.byName, p.byFid), versionNo: p.versionNo, text: p.text, assist: p.assist,
+  versionId: p.versionId, kind: p.kind, entity: p.entity, title: p.title, by: designByline(p.byName, p.byFid, p.byRole), versionNo: p.versionNo, text: p.text, assist: p.assist,
 });
 
 /** A picked sheet's view, fetched from the readers' public bucket and checked against its sha256. */
@@ -65,6 +65,8 @@ export async function POST(request: Request) {
   if (!userPrompt || userPrompt.length > IMAGES.promptMaxChars) return no(`Describe the image in up to ${IMAGES.promptMaxChars} characters`, 400);
   const designStyle = isId(style) ? style : null;
   if (style !== null && !designStyle && !(style in STYLES)) return no('No such style', 400);
+  // Decision 13: once the starting style is a published design, only the design is offered.
+  if (style !== null && !designStyle && (await startingStyleRetired(sql))) return no('No such style', 400);
   const wanted = Array.isArray(body.characters) ? body.characters.filter(isId) : [];
   if (wanted.length > IMAGES.designs.maxCharacters) return no(`Up to ${IMAGES.designs.maxCharacters} characters in one image`, 400);
   if (!(await hasConsented(fid))) return no('Agree to how your words are published first', 403, { reason: 'consent' });

@@ -53,6 +53,21 @@ export async function reserve(sql: Sql, fid: number, spend: Spend = DEFAULT_SPEN
   });
 }
 
+/**
+ * A check of words alone (step 4, decision 1: a design's name): no picture, so not counted as a
+ * Generate, but its cost is kept in the day's totals and it is refused when the spend caps are reached.
+ */
+export async function wordsCheckFits(sql: Sql): Promise<boolean> {
+  const [today] = await sql`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${sql.unsafe(TODAY)}`;
+  const [all] = await sql`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs`;
+  const worst = IMAGES.reserveUsd - IMAGES.pricePerMp;
+  return today.usd + worst <= IMAGES.dailySpendCapUsd && all.usd + worst <= IMAGES.totalSpendCapUsd;
+}
+
+export async function recordGuard(sql: Sql, guard: { costUsd: number; provider: string | null; verdict: 'ok' | 'blocked' }) {
+  await addCost(sql, 'guard', IMAGES.guardModel, guard.provider ?? '', guard.verdict, 1, guard.costUsd);
+}
+
 /** Replaces the reservation with what was really spent. Safe to call once per reserve(). */
 export async function settle(
   sql: Sql,

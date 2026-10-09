@@ -58,5 +58,10 @@
   "descriptor": "a boy of about eleven, small and wiry, warm light-brown skin, a mop of curly dark-brown hair, a sprinkle of freckles and a wide gap-toothed grin, wearing a sunny mustard-yellow sleeveless team tunic with a rounded padded collar and a green stripe down one side, a green fitted undershirt, green knee-length gathered shorts, striped socks, soft white seamless shoes and a small hand device strapped to his wrist",
   "wears_privacy_robe_in_public": false,
   "sheet_prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a boy of about eleven, small and wiry, warm light-brown skin, a mop of curly dark-brown hair, a sprinkle of freckles and a wide gap-toothed grin, wearing a sunny mustard-yellow sleeveless team tunic with a rounded padded collar and a green stripe down one side, a green fitted undershirt, green knee-length gathered shorts, striped socks, soft white seamless shoes and a small hand device strapped to his wrist.",
-  "costume_notes": "A playful padded sleeveless team tunic stands in for the t-shirt, keeping the yellow team shirt he wears at Helisport and the hand device he carries."
+  "costume_notes": "A playful padded sleeveless team tunic stands in for the t-shirt, keeping the yellow team shirt he wears at Helisport and the hand device he carries.",
+  "first_appearance": {
+    "chapter": 1,
+    "idx": 110,
+    "as": "Zven"
+  }
 }

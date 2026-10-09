@@ -62,7 +62,7 @@ export default async function CharacterPage({ params, searchParams }: Props) {
                   )}
                   <span className="dz-row-text">
                     <span className="dz-row-title">{s.title || W.page.sheetBy(byline(s.byName, s.byFid))}</span>
-                    <span className="dz-row-meta">{W.index.rowMeta(byline(s.byName, s.byFid), s.versionNo, s.builtOn)}</span>
+                    <span className="dz-row-meta">{W.index.rowMeta(byline(s.byName, s.byFid), s.versionNo)}</span>
                     {s.thumb && <span className="dz-row-ai">Views: AI-generated · not by the author</span>}
                   </span>
                 </Link>

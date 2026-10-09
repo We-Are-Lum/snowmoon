@@ -24,7 +24,7 @@
     "test:chat": "tsx scripts/test-chat.ts",
     "test:images": "tsx --conditions=react-server scripts/test-images.ts && tsx --conditions=react-server scripts/test-designs.ts",
     "test:designs": "tsx --conditions=react-server scripts/test-designs.ts",
-    "seed:designs": "tsx --env-file-if-exists=.env.local scripts/seed-designs.ts",
+    "seed:designs": "tsx --conditions=react-server --env-file-if-exists=.env.local scripts/seed-designs.ts",
     "check:miniapp": "tsx scripts/check-miniapp.ts",
     "publish:podcast": "tsx --env-file-if-exists=.env.local scripts/publish-podcast.ts",
     "check:podcast": "tsx scripts/check-podcast.ts",

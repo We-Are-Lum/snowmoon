@@ -84,7 +84,7 @@ check('a style name is taken in any case', refused === '409', refused);
 const fork = await D.makeDesign(S, { fid: 200, mode: 'fork', kind: 'style', fromVersionId: a.versionId, body: body('Kalimar paper, night', 'Flat paper-cut layers, deep blue and silver, no outlines', 3) });
 const fp = await D.designByVersion(S, fork.versionId);
 check('a fork is a new design on the same style', fp?.entityId === (await D.designByVersion(S, a.versionId))?.entityId && fp?.elementId !== a.elementId);
-check('a fork carries "remixed from" its source version', fp?.remixedFrom?.versionId === a.versionId, JSON.stringify(fp?.remixedFrom));
+check('a fork carries "remixed from" its source version', fp?.remixedFrom?.hidden === false && fp.remixedFrom.versionId === a.versionId, JSON.stringify(fp?.remixedFrom));
 const [link] = await sql`select kind from studio.links where from_version_id = ${fork.versionId} and to_version_id = ${a.versionId}`;
 check('the credit is a remixed_from link', link?.kind === 'remixed_from');
 let changed = true;
@@ -117,7 +117,9 @@ const ents = await sql`select count(*)::int as n from studio.entities where kind
 check('a character\'s entity is made once', ents[0].n === 1);
 check('both sheets list under the character', (await D.listDesigns(S, 'character', 'new', (await D.characterEntity(S, zei))!)).length === 2);
 check('sheet counts are of published sheets', (await D.sheetCounts(S)).get('Zei Leimin') === 2);
-check('a covered character knows its first chapter', zei.firstChapter === Math.min(...zei.quotes.map((q) => q.chapter)));
+check('a covered character starts where the book first names them (decision 19)', zei.firstChapter === 2 && D.bookCharacter('min')!.firstChapter === 5 && D.bookCharacter('ephelion')!.firstChapter === 3);
+const files = D.bookCharacters().map((c) => JSON.parse(read(`content/snowmoon/designs/characters/${c.slug}.json`)) as { first_appearance?: { chapter: number } });
+check('every character file records its first appearance', files.every((f) => Number.isInteger(f.first_appearance?.chapter)));
 
 // Built on: published images with 'uses' links to any version.
 async function imageUsing(uses: string[], status = 'published') {
@@ -158,7 +160,8 @@ check('switching to the newer version', (await D.myPicks(S, 42)).find((p) => p.k
 const other = await D.makeDesign(S, { fid: 400, mode: 'create', kind: 'style', styleName: 'Meldan at dusk', body: body('Meldan at dusk', 'Low sun, long blue shadows', 9) });
 await new Promise((r) => setTimeout(r, 10));
 await D.setPick(S, 42, other.versionId);
-check('with several styles picked, the newest pick is offered', D.composerPicks(await D.myPicks(S, 42)).style?.versionId === other.versionId);
+const offered = D.composerPicks(await D.myPicks(S, 42)).styles.map((x) => x.versionId);
+check('every picked style is offered, the newest pick first (decision 3)', offered.length === 2 && offered[0] === other.versionId, offered.join());
 check('picked characters are offered', D.composerPicks(await D.myPicks(S, 42)).characters.map((c) => c.versionId).join() === s1.versionId);
 await D.clearPick(S, 42, (await D.myPicks(S, 42)).find((p) => p.versionId === other.versionId)!.entityId);
 check('clearing a pick', !(await D.myPicks(S, 42)).some((p) => p.versionId === other.versionId));
@@ -240,14 +243,55 @@ check('a hidden design leaves the lists', !(await D.listDesigns(S, 'style', 'new
 check('a hidden design has no page', (await D.designByVersion(S, fork.versionId)) === null);
 check('a hidden design can\'t be picked', (await D.setPick(S, 44, fork.versionId)) === null);
 await D.setPick(S, 45, a.versionId);
+const fork2 = await D.makeDesign(S, { fid: 201, mode: 'fork', kind: 'style', fromVersionId: a2.versionId, body: body('Kalimar paper, dawn', 'Flat paper-cut layers, pale pink dawn, no outlines', 11) });
 await sql`update studio.elements set status = 'hidden' where id = ${a.elementId}`;
+const f2 = await D.designByVersion(S, fork2.versionId);
+check('a hidden source leaves its fork a credit with no name or link (decision 16)', JSON.stringify(f2?.remixedFrom) === '{"hidden":true}', JSON.stringify(f2?.remixedFrom));
 const p45 = await D.myPicks(S, 45);
-check('a pick of a hidden design is marked and not offered', p45[0].available === false && D.composerPicks(p45).style === null);
+check('a pick of a hidden design is marked and not offered', p45[0].available === false && D.composerPicks(p45).styles.length === 0);
 await sql`update studio.elements set status = 'published' where id = ${a.elementId}`;
 const mod = read('src/app/api/moderate/route.ts');
 const dismiss = mod.slice(mod.indexOf("action === 'dismiss'"), mod.indexOf("else return NextResponse.json({ error: 'Hide or dismiss only' }"));
 check('Dismiss only logs; it never changes a status', /removal_log/.test(dismiss) && !/update studio\.elements/.test(dismiss));
 check('the moderator route can\'t publish or order', !/status\s*=\s*'published'|order by|\.sort\(/i.test(mod));
+
+// Decision 12: a style may not take a book character's name.
+check('a style named like a book character is refused', D.characterNameClash('zei leimin')?.slug === 'zei' && D.characterNameClash('GLADIAS')?.slug === 'gladias' && D.characterNameClash('Lektor')?.slug === 'lektor');
+check('other names are fine', D.characterNameClash('Kalimar paper') === null && D.characterNameClash('General') === null);
+refused = '';
+try {
+  await D.makeDesign(S, { fid: 500, mode: 'create', kind: 'style', styleName: 'Zei', body: body('Zei', 'x') });
+} catch (e) {
+  refused = e instanceof D.MakeRefused ? `${e.status} ${e.message}` : 'other';
+}
+check('making it is refused with the draft message', refused === `409 ${IMAGE_WORDING.designs.form.characterName}`, refused);
+// Decision 1: a design's name goes through the checks too (here: blocked names, and the spend caps, with no paid call).
+const { checkWords } = await import('../src/lib/images/paid');
+const w1 = await checkWords(S, new Request('http://x'), 'Vitalik paper');
+check('a name with a blocked name is refused before any model', !w1.ok && w1.status === 422);
+await sql`insert into studio.image_costs (kind, model, provider, verdict, calls, cost_usd) values ('image', 'test2', 'fal.ai', 'ok', 1, 5)`;
+const w2 = await checkWords(S, new Request('http://x'), 'Kalimar paper');
+check('a name check is refused once the spend caps are reached', !w2.ok && w2.status === 429);
+const route = read('src/app/api/designs/route.ts');
+check('the publish route checks the name with the model check', /checkWords\(sql, request, title\)/.test(route) && /characterNameClash\(title\)/.test(route));
+
+// Decision 13: the starting style as a design, by the maintainer, model-drafted; the file option retires.
+check('before the seed, the file option is offered', !(await D.startingStyleRetired(S)));
+const tvFile = JSON.parse(read(D.STARTING_STYLE_FILE)) as { name: string; prompt: string };
+const seeded = await D.seedStartingStyle(S, { fid: 6786, byName: null, text: tvFile.prompt, title: tvFile.name });
+const tvPage = 'versionId' in seeded ? await D.designByVersion(S, seeded.versionId) : null;
+check('the seed publishes Techno vistas under FID 6786 as the maintainer', tvPage?.byFid === 6786 && tvPage.byRole === 'maintainer' && tvPage.title === 'Techno vistas');
+check('its text is declared model-drafted', tvPage?.assist?.model === 'claude-coding-agent' && tvPage.shown.body.text === tvFile.prompt);
+check('once seeded, the file option retires', await D.startingStyleRetired(S));
+check('seeding twice writes nothing', 'exists' in (await D.seedStartingStyle(S, { fid: 6786, byName: null, text: 'x', title: 'Techno vistas' })));
+const { designByline } = await import('../src/lib/images/byline');
+check('the maintainer\'s byline says so', designByline(null, 6786, 'maintainer') === 'FID 6786 · maintainer' && designByline('naaate', 6786, 'maintainer') === '@naaate · maintainer');
+check('it sorts like any other style (newest first, not pinned first by rule)', (await D.listDesigns(S, 'style', 'new'))[0].versionId === (seeded as { versionId: string }).versionId);
+check('the seed script is a dry run unless --apply', /if \(!apply\)/.test(read('scripts/seed-designs.ts')) && /MAINTAINER_FID = 6786/.test(read('scripts/seed-designs.ts')));
+
+// Decision 5: built-on numbers only on a design's own page.
+check('index rows carry no built-on number', !/built/.test(IMAGE_WORDING.designs.index.rowMeta('@a', 1)));
+check('My picks and the composer show no built-on number', !/builtOn|built on/i.test(read('src/components/my-picks.tsx') + read('src/components/image-composer.tsx') + read('src/components/design-picks.tsx')));
 
 await sql.end();
 await server.stop();

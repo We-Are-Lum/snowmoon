@@ -46,5 +46,10 @@
   "descriptor": "a broad-shouldered man in his mid-forties, tall and heavyset, fair ruddy skin, close-cropped thinning ash-blond hair and a full sandy beard with laugh lines around the eyes, wearing a sleeveless oatmeal knitted tabard with a huge rolled funnel collar and leather side straps, over a moss-brown long-sleeved ribbed bodysuit, a wide woven belt-sash with tool loops, brown segmented work trousers with padded knees and sturdy soft-soled wrap boots",
   "wears_privacy_robe_in_public": false,
   "sheet_prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a broad-shouldered man in his mid-forties, tall and heavyset, fair ruddy skin, close-cropped thinning ash-blond hair and a full sandy beard with laugh lines around the eyes, wearing a sleeveless oatmeal knitted tabard with a huge rolled funnel collar and leather side straps, over a moss-brown long-sleeved ribbed bodysuit, a wide woven belt-sash with tool loops, brown segmented work trousers with padded knees and sturdy soft-soled wrap boots.",
-  "costume_notes": "His homely oatmeal knit becomes a funnel-collared side-closing overtunic with a sash, keeping the comfortable at-home, Northglade-trip ruggedness. Pushed further after the first render still read as present-day."
+  "costume_notes": "His homely oatmeal knit becomes a funnel-collared side-closing overtunic with a sash, keeping the comfortable at-home, Northglade-trip ruggedness. Pushed further after the first render still read as present-day.",
+  "first_appearance": {
+    "chapter": 1,
+    "idx": 125,
+    "as": "Vil"
+  }
 }
