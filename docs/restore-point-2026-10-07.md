@@ -101,3 +101,9 @@ Composer, draft, preview, image page, feed, readers' strip, report sheet and mod
 Design's layout; slice 1's rules unchanged. To undo (back to `6871964`, Minpentai Learn):
 
     vercel rollback dpl_EpU9y57k4AeZ1VyJM3q1N9rzCCUc --scope nates-projects-d1780cff
+
+## 2026-10-08: spend log for the local generation test (docs only)
+
+No code change. To undo (back to `cc0fb3f`, the image screens restyle):
+
+    vercel rollback dpl_9QJrtzj72UR4djeUNL2eoDG2me8b --scope nates-projects-d1780cff
