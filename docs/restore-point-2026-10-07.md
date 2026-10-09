@@ -159,3 +159,9 @@ Learn fills the screen on phones and the Farcaster frame, with a × back to the 
 Sandbox and Play the computer out of the UI (code kept); Free play runs Design's practice match; /minpentai/rule runs the rule recovered from c4-b5. To undo (back to `284bb8c`):
 
     vercel rollback dpl_2RrpEYmgH1qW12YoWMz9ju7DrV9n --scope nates-projects-d1780cff
+
+## 2026-10-09: glossary (branch site-glossary)
+
+/glossary and /glossary/[term]: invented words with the book's own sentences, every mention and a narration clip, limited to the reader's chapters; Glossary in the menu and rail. To undo (back to `9d00b6f`):
+
+    vercel rollback dpl_GZESByBrZCdJRUUsP6LsWd5ukn6n --scope nates-projects-d1780cff
