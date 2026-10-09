@@ -107,3 +107,10 @@ Design's layout; slice 1's rules unchanged. To undo (back to `6871964`, Minpenta
 No code change. To undo (back to `cc0fb3f`, the image screens restyle):
 
     vercel rollback dpl_9QJrtzj72UR4djeUNL2eoDG2me8b --scope nates-projects-d1780cff
+
+## 2026-10-09: Minpentai Learn taken off while it is rebuilt from Design's game (branch site-learn-off)
+
+/minpentai opens on the sandbox; Play the computer and the sandbox stay; old Learn and practice links
+show "being rebuilt". The rail says "Sandbox". To undo (back to `93a308b`):
+
+    vercel rollback dpl_Eoik1u76Yv3CsYVMmkZvDD9eD5Zy --scope nates-projects-d1780cff

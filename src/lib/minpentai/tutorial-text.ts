@@ -8,7 +8,8 @@ export const TUTORIAL_TEXT = {
   modelDrafted: true,
 
   draftNote: 'Draft wording',
-  backToTutorial: 'Tutorial',
+  rebuilt: 'Learn is being rebuilt. Play the computer and the sandbox are open.',
+  rebuiltLink: 'That lesson is being rebuilt. Play the computer and the sandbox are open.',
 
   nav: { learn: 'Learn', practice: 'Practice', play: 'Play', sandbox: 'Sandbox', label: 'Minpentai sections' },
   /** Player names in matches, by colour (the approved board's owner colours). */
