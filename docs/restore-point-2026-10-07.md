@@ -86,3 +86,11 @@ Production (see the report); until then the composer says it isn't set up. To un
 `a228576`; 0008's tables can stay, nothing reads them then):
 
     vercel rollback dpl_EaZuNFKqB95P7YVx4LnV9au5uQuU --scope nates-projects-d1780cff
+
+## 2026-10-08: Minpentai Learn after Design's v3 (branch site-minpentai)
+
+The tutorial becomes Learn: eight watch screens over the recorded match in 3D (three.js bundled),
+seven lessons on the real engine, Under the hood, a practice match with one new rule. Play and
+Sandbox unchanged. To undo (back to `f21b536`):
+
+    vercel rollback dpl_2Z3E2iKHjqxy3ncnf19MnxWVj3Jk --scope nates-projects-d1780cff
