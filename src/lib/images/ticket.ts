@@ -32,6 +32,58 @@ export interface Ticket {
   costUsd: number;
   guard: { model: string; verdict: 'ok' };
   at: string;
+  /**
+   * Picked styles and character sheets added to this image (step 4): each version, its name, maker
+   * and the exact text added to the prompt. Published as 'uses' links. Absent on older drafts.
+   */
+  designs?: TicketDesign[];
+  /** Pictures sent to the edit model as references (a picked sheet's views), if any. */
+  references?: { url: string; sha256: string }[];
+}
+
+export interface TicketDesign {
+  versionId: string;
+  kind: 'style' | 'character';
+  /** The style's or the character's name (the entity). */
+  entity: string;
+  title: string;
+  by: string;
+  versionNo: number;
+  text: string;
+  /** Set when the text was drafted by a model (the project's starting style), as recipes record it. */
+  assist: unknown;
+}
+
+/**
+ * A sample picture for a style, or a view for a character sheet (step 4), made before the design is
+ * published. Like a draft image it is kept on the person's device, never on the server; this signed
+ * record says how it was made, and that it was made with exactly this text.
+ */
+export interface SampleTicket {
+  v: 1;
+  kind: 'design-sample';
+  fid: number;
+  /** style: a sample; front, side, back: a sheet's views. */
+  slot: 'sample' | 'front' | 'side' | 'back';
+  /** The design text the picture was made with; publishing needs the same text. */
+  text: string;
+  /** The fixed subject (samples) or view wording, as shown on the screen. */
+  subject: string;
+  prompt: string;
+  model: string;
+  endpoint: string;
+  host: string;
+  settings: Record<string, unknown>;
+  seed: number | null;
+  requestId: string | null;
+  sha256: string;
+  width: number;
+  height: number;
+  costUsd: number;
+  /** For side and back: the front view it was made from. */
+  references?: { sha256: string }[];
+  guard: { model: string; verdict: 'ok' };
+  at: string;
 }
 
 function secret(): Buffer {
@@ -42,19 +94,38 @@ function secret(): Buffer {
 
 const b64 = (b: Buffer) => b.toString('base64url');
 
-export function signTicket(t: Ticket): string {
+function sign(t: object): string {
   const body = b64(Buffer.from(JSON.stringify(t)));
   return `${body}.${b64(createHmac('sha256', secret()).update(body).digest())}`;
 }
 
-/** The record, if the signature is the server's and it has not expired; otherwise null. */
-export function readTicket(token: string): Ticket | null {
+function read(token: string): (Record<string, unknown> & { v?: unknown; at?: string }) | null {
   const [body, sig] = token.split('.');
   if (!body || !sig) return null;
   const want = createHmac('sha256', secret()).update(body).digest();
   const got = Buffer.from(sig, 'base64url');
   if (got.length !== want.length || !timingSafeEqual(got, want)) return null;
-  const t = JSON.parse(Buffer.from(body, 'base64url').toString()) as Ticket;
+  const t = JSON.parse(Buffer.from(body, 'base64url').toString());
   if (t.v !== 1 || Date.now() - Date.parse(t.at) > IMAGES.ticketHours * 3600_000) return null;
   return t;
+}
+
+export function signTicket(t: Ticket): string {
+  return sign(t);
+}
+
+/** The record, if the signature is the server's and it has not expired; otherwise null. A sample's record is not an image's. */
+export function readTicket(token: string): Ticket | null {
+  const t = read(token);
+  return t && !('kind' in t) ? (t as unknown as Ticket) : null;
+}
+
+export function signSampleTicket(t: SampleTicket): string {
+  return sign(t);
+}
+
+/** A sample's or view's record, if it is the server's, unexpired, and a sample's (never an image's). */
+export function readSampleTicket(token: string): SampleTicket | null {
+  const t = read(token);
+  return t && t.kind === 'design-sample' ? (t as unknown as SampleTicket) : null;
 }

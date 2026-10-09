@@ -26,19 +26,29 @@ export async function publishesLeft(sql: Sql, fid: number): Promise<number> {
   return Math.max(0, IMAGES.publishesPerDay - (r?.n ?? 0));
 }
 
-/** Counts this Generate and reserves its worst case, or says which cap it would pass. */
-export async function reserve(sql: Sql, fid: number): Promise<{ ok: true; left: number } | { ok: false; refusal: Refusal }> {
+/** Which model a Generate uses, and its worst case: the text-to-image model unless given (step 4: the edit model). */
+export interface Spend {
+  model: { id: string; host: string };
+  reserveUsd: number;
+}
+const DEFAULT_SPEND: Spend = { model: IMAGES.model, reserveUsd: IMAGES.reserveUsd };
+
+/**
+ * Counts this Generate and reserves its worst case, or says which cap it would pass. A style's
+ * sample and a sheet's view are Generates too (step 4): the same count, the same caps.
+ */
+export async function reserve(sql: Sql, fid: number, spend: Spend = DEFAULT_SPEND): Promise<{ ok: true; left: number } | { ok: false; refusal: Refusal }> {
   return sql.begin(async (tx) => {
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.images.spend'))`;
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.images.fid'), ${fid}::int)`;
     const left = await generationsLeft(tx as unknown as Sql, fid);
     if (left <= 0) return { ok: false as const, refusal: 'limit' as const };
     const [today] = await tx`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${tx.unsafe(TODAY)}`;
-    if (today.usd + IMAGES.reserveUsd > IMAGES.dailySpendCapUsd) return { ok: false as const, refusal: 'spend' as const };
+    if (today.usd + spend.reserveUsd > IMAGES.dailySpendCapUsd) return { ok: false as const, refusal: 'spend' as const };
     const [all] = await tx`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs`;
-    if (all.usd + IMAGES.reserveUsd > IMAGES.totalSpendCapUsd) return { ok: false as const, refusal: 'trial-spend' as const };
+    if (all.usd + spend.reserveUsd > IMAGES.totalSpendCapUsd) return { ok: false as const, refusal: 'trial-spend' as const };
     await tx`insert into studio.image_asks (fid) values (${fid})`;
-    await addCost(tx as unknown as Sql, 'reserved', IMAGES.model.id, '', '', 1, IMAGES.reserveUsd);
+    await addCost(tx as unknown as Sql, 'reserved', spend.model.id, '', '', 1, spend.reserveUsd);
     return { ok: true as const, left: left - 1 };
   });
 }
@@ -47,12 +57,13 @@ export async function reserve(sql: Sql, fid: number): Promise<{ ok: true; left: 
 export async function settle(
   sql: Sql,
   spent: { guard?: { costUsd: number; provider: string | null; verdict: 'ok' | 'blocked' }; image?: { costUsd: number; verdict: 'ok' | 'nsfw' } },
+  spend: Spend = DEFAULT_SPEND,
 ) {
   await sql.begin(async (tx) => {
     const t = tx as unknown as Sql;
-    await addCost(t, 'reserved', IMAGES.model.id, '', '', -1, -IMAGES.reserveUsd);
+    await addCost(t, 'reserved', spend.model.id, '', '', -1, -spend.reserveUsd);
     if (spent.guard) await addCost(t, 'guard', IMAGES.guardModel, spent.guard.provider ?? '', spent.guard.verdict, 1, spent.guard.costUsd);
-    if (spent.image) await addCost(t, 'image', IMAGES.model.id, IMAGES.model.host, spent.image.verdict, 1, spent.image.costUsd);
+    if (spent.image) await addCost(t, 'image', spend.model.id, spend.model.host, spent.image.verdict, 1, spent.image.costUsd);
   });
 }
 

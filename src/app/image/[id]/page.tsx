@@ -101,13 +101,33 @@ export default async function ImagePage({ params }: Props) {
               <dd className="ip-wide ip-words ip-added">{im.style.text}</dd>
             </>
           )}
+          {im.designs.length > 0 && (
+            <>
+              <dt className="ip-wide">{W.designs.image.added}</dt>
+              {im.designs.map((d) => (
+                <dd key={d.versionId} className="ip-wide ip-words ip-added">
+                  <Link href={`/images/designs/${d.versionId}`}>
+                    {d.kind === 'style' ? d.title || d.entity : d.entity} v{d.versionNo} · {d.by}
+                  </Link>
+                  {d.assist ? ' (text drafted by the coding agent, a closed model)' : ''}: {d.text}
+                </dd>
+              ))}
+            </>
+          )}
+          {im.references.length > 0 && (
+            <>
+              <dt className="ip-wide">{W.designs.image.references}</dt>
+              <dd className="ip-wide recipe-mono">{im.references.map((r) => `sha256 ${r.sha256}`).join(', ')}</dd>
+            </>
+          )}
           <dt className="ip-wide">The exact prompt sent to the model</dt>
           <dd className="ip-wide">
             <pre className="recipe-prompt">{im.prompt}</pre>
           </dd>
           <dt>Model</dt>
           <dd>
-            {IMAGES.model.name} ({im.model}), open weights, {IMAGES.model.licence}. It ran on {im.host}, endpoint <span className="recipe-mono">{im.modelVersion}</span>.
+            {(im.model === IMAGES.editModel.id ? IMAGES.editModel : IMAGES.model).name} ({im.model}), open weights, {(im.model === IMAGES.editModel.id ? IMAGES.editModel : IMAGES.model).licence}. It ran on {im.host}, endpoint{' '}
+            <span className="recipe-mono">{im.modelVersion}</span>.
           </dd>
           <dt>Settings</dt>
           <dd className="recipe-mono">

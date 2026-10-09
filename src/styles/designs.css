@@ -1,0 +1,201 @@
+/* Styles and character sheets (step 4, docs/proposals/style-guides-and-sheets.md).
+   Measured from Claude Design 4a/4b/4c/4-desktop, 5a/5b and 6/6-desktop (docs/design/image-creation-study.md,
+   sections 2.13–2.20 and 5): labels DM Mono 12 upper case, names Crimson 30/1.05, rows with a 64 × 48
+   thumbnail and an 18px name, the action bar's filled button 2fr beside an outlined Fork, a fork's band
+   on --soft with an ink rule, shaded words on --soft, private things dashed. Pictures keep their own
+   ratio (16:9 samples, 3:4 views) rather than Design's hatched frames. Same type, spacing and touch
+   rules as the frame (src/styles/shell.css) and the image screens (images.css). */
+.designs h1 + p { max-width: var(--measure); }
+.dz-tabs { display: flex; flex-wrap: wrap; gap: 0 16px; margin: 0; border-bottom: 1px solid var(--rule); font-family: var(--label); font-size: var(--text-label); line-height: 16px; text-transform: uppercase; }
+.dz-tabs a, .dz-tab-coming { display: flex; align-items: center; min-height: 44px; margin-bottom: -1px; color: var(--muted); border-bottom: 1px solid transparent; text-decoration: none; }
+.dz-tabs a[aria-current='page'] { color: var(--ink); border-bottom-color: var(--ink); }
+.dz-tabs a:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.dz-strip { margin-bottom: 0; }
+.dz-order { margin: 0; padding: 14px 0; font-family: var(--label); font-size: var(--text-label); line-height: 16px; text-transform: uppercase; color: var(--ink); }
+.dz-new { display: flex; align-items: center; min-height: 44px; font-family: var(--label); font-size: var(--text-label); line-height: 16px; text-transform: uppercase; color: var(--link); text-decoration: none; }
+.dz-rows { list-style: none; margin: 0; padding: 0; }
+.dz-rows li { border-bottom: 1px solid var(--rule); }
+.dz-row { display: flex; align-items: flex-start; gap: 12px; padding: 12px 0; color: var(--ink); text-decoration: none; }
+a.dz-row:hover { text-decoration: none; }
+a.dz-row:hover .dz-row-title { text-decoration: underline; }
+a.dz-row:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+a.dz-row[aria-current='page'] { margin: 0 -10px; padding: 12px 10px; background: var(--soft); }
+.dz-thumb { flex: none; display: block; width: 64px; height: 48px; object-fit: cover; background: var(--soft); }
+.dz-thumb-empty { border: 1px dashed var(--muted); background: transparent; }
+.dz-row-text { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.dz-row-title { font-family: var(--reading); font-size: 18px; line-height: 1.25; color: var(--ink); }
+.dz-row-meta, .dz-row-ai, .dz-row-pick { font-family: var(--label); font-size: var(--text-label); line-height: 1.5; color: var(--muted); }
+.dz-row-pick { color: var(--link); text-transform: uppercase; }
+.dz-covered { align-items: center; justify-content: space-between; }
+.dz-show { flex: none; min-height: 44px; padding: 0 12px; border: 1px solid var(--rule); border-radius: var(--radius); background: transparent; color: var(--ink); cursor: pointer; font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; }
+.dz-show:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.dz-footer, .dz-links { margin: 14px 0 0; font-family: var(--label); font-size: var(--text-label); line-height: 1.5; color: var(--muted); }
+.dz-links a { display: inline-flex; align-items: center; min-height: 44px; text-transform: uppercase; text-decoration: none; }
+
+/* A style or a sheet. */
+.dz-split { display: block; }
+.dz-aside { display: none; }
+.dz-main { display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.dz-title { margin: 0; font-family: var(--reading); font-size: 30px; font-weight: 400; line-height: 1.05; color: var(--ink); }
+.dz-meta { margin: 0; font-family: var(--label); font-size: var(--text-label); line-height: 1.5; text-transform: uppercase; color: var(--ink); }
+.dz-meta a { color: var(--link); text-transform: none; }
+.dz-muted { color: var(--muted); }
+.dz-drafted { text-transform: none; color: var(--body); }
+.dz-pictures { margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.dz-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; }
+.dz-grid.is-views, .dz-pictures.is-views .dz-grid { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.dz-grid img { display: block; width: 100%; height: auto; background: var(--soft); }
+.dz-caption { margin: 0; font-family: var(--label); font-size: var(--text-label); line-height: 1.5; text-transform: uppercase; color: var(--muted); }
+.dz-section { display: flex; flex-direction: column; gap: 6px; padding-top: 10px; border-top: 1px solid var(--rule); }
+.dz-text-section { display: flex; flex-direction: column; gap: 14px; }
+.dz-text-col, .dz-versions { display: flex; flex-direction: column; gap: 6px; }
+.dz-label { margin: 0; font-family: var(--label); font-size: var(--text-label); line-height: 16px; text-transform: uppercase; color: var(--muted); }
+.dz-text { margin: 0; white-space: pre-wrap; overflow-wrap: break-word; font-size: 16px; line-height: 1.45; color: var(--ink); }
+.dz-text mark { background: var(--soft); color: inherit; box-shadow: 0 0 0 1px var(--soft); }
+.dz-note { margin: 0; font-family: var(--label); font-size: var(--text-label); line-height: 1.5; color: var(--muted); }
+.dz-versions ul { list-style: none; margin: 0; padding: 0; font-family: var(--label); font-size: var(--text-label); line-height: 1.5; text-transform: uppercase; }
+.dz-versions li { border-top: 1px solid var(--rule); }
+.dz-versions li > * { display: flex; align-items: center; min-height: 44px; }
+.dz-versions a { color: var(--link); text-decoration: none; }
+.dz-versions a:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.dz-built { color: var(--ink); }
+.dz-details summary { display: flex; align-items: center; min-height: 44px; cursor: pointer; font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; color: var(--link); }
+.dz-details summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.dz-built-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.dz-built-list li { display: flex; flex-direction: column; gap: 4px; }
+.dz-built-list a { display: block; }
+.dz-built-list img { display: block; width: 100%; height: auto; background: var(--soft); }
+.dz-recipe dd { font-family: var(--label); font-size: var(--text-label); line-height: 1.5; }
+/* The book's own words: the card Design draws on --card, each line linked to its place. */
+.dz-book { display: flex; flex-direction: column; gap: 6px; padding: 10px 12px; border: 1px solid var(--rule); border-radius: var(--radius); background: var(--card); }
+.dz-book ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; font-size: 16px; line-height: 1.4; }
+.dz-book q { font-style: italic; }
+.dz-ref { font-family: var(--label); font-size: var(--text-label); color: var(--link); text-decoration: none; white-space: nowrap; }
+.designs .dz-book { margin: 0 0 12px; }
+.dz-cover { margin: 10px 0; }
+/* The action bar: "Use as my …" 2fr, Fork 1fr; Report or Hide this below, as on an image. */
+.dz-bar { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; padding-top: 10px; border-top: 1px solid var(--rule); }
+.dz-bar-row { display: grid; grid-template-columns: 2fr 1fr; gap: 8px; align-items: start; }
+.dz-bar-row:has(> :nth-child(3)) { grid-template-columns: 2fr 1fr 1fr; }
+.dz-pick { display: flex; flex-direction: column; gap: 6px; }
+.dz-pick-button { width: 100%; }
+.dz-fork { display: flex; align-items: center; justify-content: center; text-align: center; text-decoration: none; border-color: var(--ink) !important; }
+a.dz-fork:hover { text-decoration: none; }
+.dz-pick-note { margin: 0; font-family: var(--label); font-size: var(--text-label); line-height: 1.5; color: var(--link); }
+.dz-bar .image-actions { margin: 0; }
+
+/* The form: a fork's band, a name on a rule, the text in its box, the pictures' slots. */
+.dz-form { display: flex; flex-direction: column; gap: 12px; margin-top: 10px; }
+.dz-band { margin: 0 calc(-1 * var(--gutter)); padding: 10px var(--gutter); background: var(--soft); border-bottom: 1px solid var(--ink); font-family: var(--label); font-size: var(--text-label); line-height: 1.5; text-transform: uppercase; }
+.dz-band p { margin: 0; }
+.dz-band .dz-muted { text-transform: none; }
+.dz-form .published-field { display: flex; flex-direction: column; gap: 6px; }
+.dz-form .published-field label { padding-right: 76px; font-family: var(--label); font-size: var(--text-label); line-height: 16px; text-transform: uppercase; color: var(--muted); }
+.dz-form .published-field textarea {
+  min-height: 92px; padding: 10px 12px; border: 1px solid var(--ink); border-radius: var(--radius); background: var(--card); color: var(--ink);
+  font-family: var(--reading); font-size: 16px; line-height: 1.4; resize: none;
+}
+.dz-form .dz-name .published-field textarea { min-height: 0; padding: 6px 0; border: 0; border-bottom: 1px solid var(--ink); border-radius: 0; background: transparent; font-size: 20px; line-height: 1.3; overflow: hidden; }
+.dz-form .published-field textarea:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+.dz-form .publication-line { margin: 0; font-family: var(--label); font-size: var(--text-label); line-height: 1.5; color: var(--ink); }
+.dz-form .publication-line::before { content: '● '; }
+.dz-form .ic-note, .dz-form .ic-model { margin: 0; font-family: var(--label); font-size: var(--text-label); line-height: 1.5; color: var(--muted); }
+.dz-form .ic-model { text-align: left; }
+.dz-text-field { position: relative; }
+.dz-diff { display: flex; flex-direction: column; gap: 4px; padding: 8px 12px; border: 1px dashed var(--rule); border-radius: var(--radius); }
+.dz-diff .dz-text { color: var(--muted); }
+.dz-diff mark { color: var(--ink); background: var(--soft); }
+.dz-slots { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px 4px; }
+.dz-slots.is-views { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+.dz-slot { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.dz-slot img, .dz-slot-empty { display: block; width: 100%; aspect-ratio: 16 / 9; height: auto; object-fit: cover; background: var(--soft); }
+.dz-slots.is-views .dz-slot img, .dz-slots.is-views .dz-slot-empty { aspect-ratio: 3 / 4; }
+.dz-slot-empty { border: 1px dashed var(--muted); background: transparent; }
+.dz-slot.is-stale img { opacity: 0.45; outline: 1px dashed var(--warn); outline-offset: 2px; }
+.dz-slot-label { margin: 0; font-size: 13px; line-height: 1.35; color: var(--body); overflow-wrap: anywhere; }
+.dz-slot-name { font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; color: var(--muted); }
+.dz-slot-go { min-height: 44px; }
+.dz-slot-go:disabled { color: var(--muted); cursor: default; }
+.dz-publish { display: flex; flex-direction: column; gap: 6px; padding-top: 10px; border-top: 1px solid var(--rule); }
+.dz-publish .publish-flow { margin: 0; }
+.dz-publish .publish-start, .dz-publish .publish-go {
+  width: 100%; min-height: 48px; margin: 0; padding: 6px 10px; border: 0; border-radius: var(--radius); background: var(--btn); color: var(--btn-ink); cursor: pointer;
+  font-family: var(--label); font-size: 13px; line-height: 18px; letter-spacing: 0.06em; text-transform: uppercase;
+}
+.dz-publish .publish-start:disabled, .dz-publish .publish-go:disabled { background: transparent; border: 1px solid var(--rule); color: var(--muted); cursor: default; }
+.dz-publish .publish-edit { width: 100%; min-height: 44px; margin: 0; border: 1px solid var(--rule); border-radius: var(--radius); background: transparent; color: var(--ink); font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; cursor: pointer; }
+.dz-publish .publish-preview { display: flex; flex-direction: column; gap: 10px; margin: 0; padding: 0; border: 0; }
+.dz-publish .publish-preview > .label { margin: 0; text-transform: uppercase; color: var(--muted); }
+.dz-publish .publish-actions { display: flex; flex-direction: column; gap: 8px; }
+.dz-publish button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.dz-preview { display: flex; flex-direction: column; gap: 8px; padding: 12px; border: 1px solid var(--rule); border-radius: var(--radius); }
+.dz-consent .consent-overlay { position: fixed; inset: 0; z-index: 40; display: flex; justify-content: center; }
+
+/* My picks: private, dashed. */
+.dz-private { margin: 10px 0 0; padding: 9px 0; }
+.dz-lead { margin: 12px 0; font-size: 16px; line-height: 1.45; color: var(--body); }
+.dz-picks-list { display: flex; flex-direction: column; gap: 8px; }
+.dz-pick-list { list-style: none; margin: 0 0 6px; padding: 0; }
+.dz-pick-row { display: flex; flex-direction: column; gap: 8px; padding: 10px 0; border-top: 1px solid var(--rule); }
+.dz-pick-row.is-gone .dz-row-title { color: var(--muted); }
+.dz-pick-line { display: flex; gap: 12px; align-items: flex-start; }
+.dz-pick-line .dz-thumb { width: 56px; height: 44px; }
+.dz-pick-row .dz-row-title { font-size: 17px; text-decoration: none; }
+.dz-pick-actions { display: flex; gap: 16px; font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; }
+.dz-pick-actions a, .dz-pick-actions button { display: inline-flex; align-items: center; min-height: 32px; padding: 0; background: none; border: 0; color: var(--link); cursor: pointer; font: inherit; text-transform: uppercase; text-decoration: none; }
+.dz-pick-actions a:focus-visible, .dz-pick-actions button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.dz-newer { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; min-height: 44px; padding: 8px 10px; border: 1px solid var(--link); border-radius: var(--radius); background: transparent; color: var(--ink); cursor: pointer; font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; text-align: left; }
+.dz-newer span + span { color: var(--link); }
+.dz-newer:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.dz-empty-row { margin: 0; padding: 10px 0; border-top: 1px solid var(--rule); font-size: 16px; color: var(--muted); }
+.dz-compare { display: flex; flex-direction: column; gap: 8px; margin-top: 16px; padding-top: 12px; border-top: 1px solid var(--ink); }
+.dz-compare-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.dz-compare figure { margin: 0; display: flex; flex-direction: column; gap: 4px; }
+.dz-compare img, .dz-compare .dz-slot-empty { display: block; width: 100%; aspect-ratio: 16 / 9; height: auto; object-fit: cover; background: var(--soft); }
+.dz-compare figcaption { color: var(--ink); }
+.dz-compare-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+/* Composer chips from your picks (Design 1b): a mono key, a square for a character added. */
+.ic-chip-key { font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; color: var(--muted); }
+.ic-chars input[type='checkbox'] {
+  appearance: none; position: relative; flex: none; width: 16px; height: 16px; margin: 0; border: 1.5px solid var(--ink); border-radius: 2px; background: transparent; cursor: pointer;
+}
+.ic-chars input[type='checkbox']:checked { background: var(--ink); box-shadow: inset 0 0 0 3px var(--paper); }
+.ic-chars input[type='checkbox']:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.ic-reference { flex-basis: 100%; }
+/* Touch: a 44px target drawn as the same 16px square. */
+@media (pointer: coarse) {
+  .ic-chars input[type='checkbox'], .ic-chars input[type='checkbox']:checked { width: 44px; height: 44px; margin: -14px -4px -14px -14px; border: 0; background: transparent; box-shadow: none; }
+  .ic-chars input[type='checkbox']::before { content: ''; position: absolute; left: 14px; top: 14px; width: 16px; height: 16px; box-sizing: border-box; border: 1.5px solid var(--ink); border-radius: 2px; }
+  .ic-chars input[type='checkbox']:checked::before { background: var(--ink); box-shadow: inset 0 0 0 3px var(--paper); }
+  .ic-chars input[type='checkbox']:focus-visible { outline-offset: -10px; }
+}
+
+/* Wider: the pictures in one row; the style text beside its versions; picks beside the comparison. */
+@media (min-width: 768px) {
+  .dz-grid { grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 8px; }
+  .dz-slots { grid-template-columns: repeat(4, minmax(0, 1fr)); }
+  .dz-band { margin: 0; }
+  .dz-text-section { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 28px; }
+  .dz-text { font-size: 18px; line-height: 1.5; }
+  .dz-picks-grid { display: grid; grid-template-columns: 360px minmax(0, 1fr); gap: 32px; align-items: start; }
+  .dz-compare { margin-top: 0; padding-top: 0; border-top: 0; }
+  .dz-compare-actions { display: flex; gap: 8px; }
+  .dz-compare-actions button { width: auto; min-height: 44px; padding: 6px 16px; }
+  .page.dz-picks-page, .page.designs { max-width: 1100px; }
+}
+/* Desktop (Design 4-desktop): the list beside the page, when there is room (no assistant beside it, or a wide screen). */
+@media (min-width: 1200px) {
+  .shell:not(.with-panel) .page.dz-page:not(.dz-form-page):not(.dz-picks-page) { max-width: 1180px; }
+  .shell:not(.with-panel) .dz-split { display: grid; grid-template-columns: 340px minmax(0, 1fr); }
+  .shell:not(.with-panel) .dz-aside { display: block; padding-right: 18px; border-right: 1px solid var(--rule); }
+  .shell:not(.with-panel) .dz-aside .dz-label { padding: 14px 0; border-bottom: 1px solid var(--rule); color: var(--ink); }
+  .shell:not(.with-panel) .dz-split > .dz-main, .shell:not(.with-panel) .dz-split > div > .dz-main { padding-left: 24px; }
+}
+@media (min-width: 1600px) {
+  .page.dz-page:not(.dz-form-page):not(.dz-picks-page) { max-width: 1180px; }
+  .dz-split { display: grid; grid-template-columns: 340px minmax(0, 1fr); }
+  .dz-aside { display: block; padding-right: 18px; border-right: 1px solid var(--rule); }
+  .dz-aside .dz-label { padding: 14px 0; border-bottom: 1px solid var(--rule); color: var(--ink); }
+  .dz-split > .dz-main, .dz-split > div > .dz-main { padding-left: 24px; }
+}

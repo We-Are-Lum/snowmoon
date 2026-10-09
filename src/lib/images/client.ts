@@ -20,6 +20,9 @@ export interface Draft {
   end: number;
   prompt: string;
   style: string | null;
+  /** Step 4: picked character sheets added for this image, and whether their views went as references. */
+  characters?: string[];
+  reference?: boolean;
   ticket: string;
   image: string;
   savedAt: string;

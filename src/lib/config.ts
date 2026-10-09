@@ -153,6 +153,37 @@ export const IMAGES = {
   reportsPerDay: 20,
   /** Public copies are cached briefly, so a hidden image leaves the cache within minutes (decision 21). */
   cacheSeconds: 300,
+  /**
+   * Reference pictures (step 4, docs/proposals/style-guides-and-sheets.md): FLUX.2 [klein] 4B edit
+   * on fal.ai, on the allowlist (config/models.json, flux2-klein-4b). Used for a character sheet's
+   * side and back views (made from its front view) and, when the person asks, for an image made
+   * with a picked sheet's views as references. Same caps, prompt check and safety checker.
+   */
+  editModel: { id: 'flux2-klein-4b-edit', name: 'FLUX.2 [klein] 4B', licence: 'Apache-2.0', endpoint: 'fal-ai/flux-2/klein/4b/edit', host: 'fal.ai' },
+  /**
+   * USD per megapixel for the edit endpoint: "$0.01 per megapixel" on fal's model page
+   * (fal.ai/models/fal-ai/flux-2/klein/4b/edit, read 2026-10-08). The page doesn't say whether the
+   * input pictures count, so the cost is taken as (output MP + every input's MP) x this price.
+   */
+  editPricePerMp: 0.01,
+  /** At most this many reference pictures go to the edit model (the model takes up to 4). */
+  maxReferences: 3,
+  /** Worst case reserved before an edit: every picture rounded up to 1 MP, plus the prompt check. */
+  editReserveUsd: (inputs: number) => (1 + inputs) * 0.01 + 0.0015,
+  /** A sheet's views are portrait (Design 5a: about 0.77:1). */
+  viewSize: { width: 576, height: 768 },
+  /** Styles and character sheets (step 4). Text added to every prompt that uses them, shown in full. */
+  designs: {
+    nameMaxChars: 60,
+    textMaxChars: 600,
+    /** A style needs at least this many sample pictures, made with its text (Design 4b). */
+    samplesMin: 2,
+    samplesMax: 4,
+    /** A sheet needs its front view; side and back are optional. */
+    publishesPerDay: 3,
+    /** At most this many picked characters' sheets are added to one image. */
+    maxCharacters: 3,
+  },
 } as const;
 
 export function appUrl(): string {

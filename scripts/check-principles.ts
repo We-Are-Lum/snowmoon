@@ -363,7 +363,10 @@ add({
     ch1: await page('/chapter/1'),
     card: read('src/app/api/card/[n]/[range]/route.tsx'),
     // Readers' images: every place one is shown says AI-generated and not by the author.
-    readers: ['src/components/reader-images.tsx', 'src/components/image-feed.tsx', 'src/app/image/[id]/page.tsx', 'src/app/api/image-card/[id]/route.tsx'].map((f) => ({ file: f, text: read(f) })),
+    readers: ['src/components/reader-images.tsx', 'src/components/image-feed.tsx', 'src/app/image/[id]/page.tsx', 'src/app/api/image-card/[id]/route.tsx',
+      // Step 4: styles' samples and sheets' views, wherever they are shown (thumbnails too).
+      'src/components/design-index.tsx', 'src/app/images/designs/[id]/page.tsx', 'src/app/images/designs/character/[slug]/page.tsx',
+      'src/components/design-form.tsx', 'src/components/my-picks.tsx', 'src/components/moderate-queue.tsx', 'src/components/image-composer.tsx'].map((f) => ({ file: f, text: read(f) })),
   }),
   run: ({ ch1, card, readers }) => {
     const problems: string[] = [];
@@ -495,6 +498,8 @@ add({
     // Readers' images (slice 1): the image model's endpoint and the prompt check, as configured.
     endpoints.set(IMAGES.model.endpoint, 'src/lib/config.ts IMAGES.model');
     endpoints.set(IMAGES.guardModel, 'src/lib/config.ts IMAGES.guardModel');
+    // Step 4: reference pictures (a sheet's side and back views; images made with a sheet's views).
+    endpoints.set(IMAGES.editModel.endpoint, 'src/lib/config.ts IMAGES.editModel');
     return { models: json('config/models.json').models, used: [...used.entries()], endpoints: [...endpoints.entries()] };
   },
   run: ({ models, used, endpoints }) => {

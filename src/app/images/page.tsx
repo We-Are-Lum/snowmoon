@@ -5,6 +5,7 @@ import { passageLabel } from '~/lib/images/passage';
 import { ImageFeed } from '~/components/image-feed';
 import { byline } from '~/lib/images/byline';
 import { IMAGE_WORDING as W } from '~/lib/images/wording';
+import Link from 'next/link';
 
 export const metadata = { title: 'Pictures' };
 export const revalidate = 60;
@@ -25,6 +26,9 @@ export default async function Pictures({ searchParams }: { searchParams: Promise
       <p>
         Images readers made for passages of the book, with an image model. Each one is AI-generated, not by the author, and shows
         the exact prompt that made it.
+      </p>
+      <p className="dz-links">
+        <Link href="/images/designs">{W.designs.index.stylesLink}</Link>
       </p>
       <ImageFeed
         sort={sort}

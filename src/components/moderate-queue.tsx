@@ -6,7 +6,25 @@ import { REASON_LABELS } from '~/lib/images/reasons';
 import { IMAGE_WORDING as W } from '~/lib/images/wording';
 import { SignInButton } from './sign-in';
 
+type DesignItem = {
+  type: 'design';
+  version_id: string;
+  status: string;
+  created_by_fid: number;
+  created_at: string;
+  kind: 'style' | 'character';
+  entity: string;
+  title: string;
+  text: string;
+  version_no: number;
+  pictures: string[];
+  last_step: string;
+  last_role: string;
+  reasons: { reason: keyof typeof REASON_LABELS; n: number }[] | null;
+  notes: string[] | null;
+};
 type Item = {
+  type?: 'image';
   version_id: string;
   asset_url: string;
   status: string;
@@ -31,11 +49,11 @@ type Item = {
  */
 export function ModerateQueue() {
   const auth = useAuth();
-  const [items, setItems] = useState<Item[] | null>(null);
+  const [items, setItems] = useState<(Item | DesignItem)[] | null>(null);
   const [error, setError] = useState<string | null>(null);
   const load = useCallback(async () => {
     const res = await authFetch('/api/moderate');
-    if (res.ok) setItems(((await res.json()) as { items: Item[] }).items);
+    if (res.ok) setItems(((await res.json()) as { items: (Item | DesignItem)[] }).items);
     else setError(((await res.json().catch(() => ({}))) as { error?: string }).error ?? 'Could not load the queue');
   }, []);
   useEffect(() => {
@@ -58,7 +76,59 @@ export function ModerateQueue() {
         <p className="mq-empty">No reports waiting.</p>
       ) : (
         <ul className="moderate-list">
-          {items.map((it) => (
+          {items.map((it) =>
+            it.type === 'design' ? (
+            <li key={it.version_id}>
+              <figure className="mq-media">
+                <div className="dz-grid">
+                  {it.pictures.map((u) => (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img key={u} src={u} alt="A picture of the reported design" />
+                  ))}
+                </div>
+                <figcaption className="mq-caption">AI-generated pictures · not by the author</figcaption>
+              </figure>
+              <div className="mq-detail">
+                <p className="mq-meta">
+                  {it.kind === 'style' ? W.designs.moderate.style : W.designs.moderate.sheet(it.entity)} · {it.title || it.entity} v{it.version_no} · by FID {it.created_by_fid} · {it.created_at.slice(0, 10)}
+                  <br />
+                  <span className="mq-muted">
+                    {it.status}
+                    {it.last_role === 'rule' ? ' · hidden by a stated rule' : ''}
+                  </span>
+                </p>
+                <div className="mq-section">
+                  <p className="mq-label">{W.designs.moderate.text}</p>
+                  <p className="mq-prompt">{it.text}</p>
+                </div>
+                <div className="mq-section">
+                  <p className="mq-label">{W.moderate.reasons}</p>
+                  <ul className="mq-reasons">
+                    {(it.reasons ?? []).map((r) => (
+                      <li key={r.reason}>
+                        {REASON_LABELS[r.reason] ?? r.reason}: {r.n}
+                      </li>
+                    ))}
+                  </ul>
+                  {(it.notes ?? []).map((n, i) => (
+                    <p key={i} className="moderate-note">
+                      “{n}”
+                    </p>
+                  ))}
+                </div>
+                <div className="mq-actions">
+                  <button type="button" className="mq-dismiss" onClick={() => act(it.version_id, 'dismiss')}>
+                    Dismiss the reports
+                  </button>
+                  {it.status === 'published' && (
+                    <button type="button" className="mq-hide" onClick={() => act(it.version_id, 'hide')}>
+                      Hide
+                    </button>
+                  )}
+                </div>
+              </div>
+            </li>
+          ) : (
             <li key={it.version_id}>
               <figure className="mq-media">
                 {/* eslint-disable-next-line @next/next/no-img-element */}

@@ -3,8 +3,44 @@
  * is the one place the shapes are defined.
  */
 
+/**
+ * A style or a character sheet (step 4, docs/proposals/style-guides-and-sheets.md). The text is
+ * added to every prompt that uses the design and published with it. Pictures (a style's samples, a
+ * sheet's views) are AI-generated, kept on the public bucket by sha256, each with its own recipe.
+ */
 export interface DesignBody {
-  description: string;
+  /** The design's own name: a style's name, or a fork's new name. Empty for a sheet ("Sheet by @name"). */
+  title: string;
+  text: string;
+  samples: DesignPicture[];
+  views: { front?: DesignPicture; side?: DesignPicture; back?: DesignPicture };
+  /** The maker's Farcaster name when published (decision 12), else null and the byline is the FID. */
+  by_name: string | null;
+  by_name_source: 'relay' | 'farcaster-api' | null;
+  /** Which parts a model drafted (the project's starting style), or null when all are the person's words. */
+  assist: { model: string; drafted: string[]; source?: string } | null;
+}
+
+export interface DesignPicture {
+  url: string;
+  sha256: string;
+  /** How the picture was made: the exact prompt, model, endpoint, settings, seed, request id, cost, checks. */
+  recipe: {
+    prompt: string;
+    model: string;
+    endpoint: string;
+    host: string;
+    settings: Record<string, unknown>;
+    seed: number | null;
+    request_id: string | null;
+    cost_usd: number;
+    made_at: string;
+    width: number;
+    height: number;
+    references?: { sha256: string }[];
+    checks: { prompt: { model: string; verdict: 'ok' }; host_safety_checker: 'passed' };
+    assist: { model: string; drafted: string[]; source?: string } | null;
+  };
 }
 
 export interface TextBody {

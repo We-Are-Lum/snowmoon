@@ -12,6 +12,7 @@ import '../styles/tokens.css';
 import './globals.css';
 import '../styles/shell.css';
 import '../styles/images.css';
+import '../styles/designs.css';
 
 const url = appUrl();
 

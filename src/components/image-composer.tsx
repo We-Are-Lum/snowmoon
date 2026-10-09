@@ -6,6 +6,7 @@ import { authFetch, useAuth, webNameProof } from '~/lib/client-auth';
 import { ADD_IMAGE_EVENT, deleteDraft, draftKey, loadDraft, saveDraft, type AddImageDetail } from '~/lib/images/client';
 import { IMAGES } from '~/lib/config';
 import { IMAGE_WORDING as W } from '~/lib/images/wording';
+import { mentions } from '~/lib/images/design-rules';
 import { ConsentScreen, PublishedTextField, PublishFlow, type PublishStep } from './publish-words';
 import { SignInButton } from './sign-in';
 
@@ -33,7 +34,24 @@ type Status = {
   rules: string;
   model: { name: string; licence: string; host: string };
   styles: { id: string; name: string; text: string }[];
+  editModel?: { name: string; licence: string; host: string };
+  /** Step 4: the person's own picks (private), offered for this image only. */
+  picks?: { style: Chip | null; characters: Chip[] };
 };
+type Chip = { versionId: string; kind: 'style' | 'character'; entity: string; title: string; by: string; versionNo: number; text: string; views: number; drafted: boolean };
+const D = W.designs.composer;
+/** The designs in a draft's signed record (signed, not secret: it is the person's own draft). */
+function ticketDesigns(ticket: string): Chip[] {
+  try {
+    const t = JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(ticket.split('.')[0].replace(/-/g, '+').replace(/_/g, '/')), (ch) => ch.charCodeAt(0)))) as {
+      designs?: { versionId: string; kind: 'style' | 'character'; entity: string; title: string; by: string; versionNo: number; text: string; assist: unknown }[];
+    };
+    return (t.designs ?? []).map((d) => ({ ...d, views: 0, drafted: Boolean(d.assist) }));
+  } catch {
+    return [];
+  }
+}
+const chipName = (c: Chip) => `${c.kind === 'style' ? c.title || c.entity : c.entity} · ${c.by} v${c.versionNo}`;
 type Wording = { version: string; line: string; title: string; text: string[]; sha256: string };
 
 /** The chapter's block ids in reading order, from the page (only blocks a passage can start or end on). */
@@ -61,6 +79,11 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
   const [status, setStatus] = useState<Status | null>(null);
   const [prompt, setPrompt] = useState('');
   const [style, setStyle] = useState<string | null>(null);
+  const [characters, setCharacters] = useState<string[]>([]);
+  const [reference, setReference] = useState(false);
+  const [chipsFor, setChipsFor] = useState<string | null>(null);
+  // What the draft was made with: the preview shows exactly that, even if the chips change after.
+  const [madeWith, setMadeWith] = useState<{ style: string | null; characters: string[]; reference: boolean } | null>(null);
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState<string | null>(null);
   const [draft, setDraft] = useState<{ ticket: string; image: string } | null>(null);
@@ -101,10 +124,23 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
       setView('draft');
       setPrompt(d.prompt);
       setStyle(d.style);
+      setCharacters(d.characters ?? []);
+      setReference(d.reference ?? false);
+      setMadeWith({ style: d.style, characters: d.characters ?? [], reference: d.reference ?? false });
+      setChipsFor(draftKey(range));
     });
   }, [range]);
 
   const passage = ids.current.filter((i) => i >= range.start && i <= range.end);
+  const passageText = passage.map((i) => document.getElementById(`c${range.chapter}-b${i}`)?.textContent ?? '').join(' ');
+  // Picks fill in the chips once per passage: the picked style, and the picked characters the passage names.
+  useEffect(() => {
+    const key = draftKey(range);
+    if (!status?.picks || chipsFor === key) return;
+    setChipsFor(key);
+    setStyle(status.picks.style ? status.picks.style.versionId : null);
+    setCharacters(status.picks.characters.filter((c) => mentions(passageText, c.entity)).map((c) => c.versionId));
+  }, [status, range, chipsFor, passageText]);
   const widen = (side: 'start' | 'end', d: 1 | -1) => {
     const all = ids.current;
     const i = all.indexOf(range[side]);
@@ -138,13 +174,14 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
       const res = await authFetch('/api/images/generate', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ chapter: range.chapter, start: range.start, end: range.end, prompt, style }),
+        body: JSON.stringify({ chapter: range.chapter, start: range.start, end: range.end, prompt, style, characters, reference: reference && withViews }),
       });
       const out = (await res.json().catch(() => ({}))) as { ticket?: string; image?: string; error?: string; left?: number };
       if (res.ok && out.ticket && out.image) {
         setDraft({ ticket: out.ticket, image: out.image });
+        setMadeWith({ style, characters, reference: reference && withViews });
         setView('draft');
-        await saveDraft({ key: draftKey(range), ...range, prompt, style, ticket: out.ticket, image: out.image, savedAt: new Date().toISOString() });
+        await saveDraft({ key: draftKey(range), ...range, prompt, style, characters, reference: reference && withViews, ticket: out.ticket, image: out.image, savedAt: new Date().toISOString() });
       } else setNote(out.error ?? 'Could not make the image');
     } catch {
       setNote('No connection. Try again.');
@@ -165,6 +202,16 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
   };
 
   const chosen = status?.styles.find((s) => s.id === style) ?? null;
+  const picks = status?.picks ?? { style: null, characters: [] };
+  const styleChip = picks.style && picks.style.versionId === style ? picks.style : null;
+  const charChips = picks.characters.filter((c) => characters.includes(c.versionId));
+  const withViews = charChips.some((c) => c.views > 0);
+  const useEdit = reference && withViews && Boolean(status?.editModel);
+  const shownModel = useEdit && status?.editModel ? status.editModel : status?.model;
+  const made = madeWith ?? { style, characters, reference: useEdit };
+  // The styles and sheets the draft was made with, read from its own signed record (what publishing will use).
+  const madeChips = draft ? ticketDesigns(draft.ticket) : [];
+  const madeStyle = status?.styles.find((s) => s.id === made.style) ?? null;
   const left = status?.left ?? 0;
   const ready = auth.kind === 'signed-in' && status?.invited && status.ready && status.consented;
   const showDraft = view === 'draft' && draft !== null && !published;
@@ -245,15 +292,52 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
                   <fieldset className="ic-style">
                     <legend>Style</legend>
                     <label>
-                      <input type="radio" name="ic-style" checked={style === null} onChange={() => setStyle(null)} /> None
+                      <input type="radio" name="ic-style" checked={style === null} onChange={() => setStyle(null)} /> {D.none}
                     </label>
                     {status.styles.map((s) => (
                       <label key={s.id}>
                         <input type="radio" name="ic-style" checked={style === s.id} onChange={() => setStyle(s.id)} /> {s.name} (the project&apos;s starting style)
                       </label>
                     ))}
+                    {picks.style && (
+                      <label>
+                        <input type="radio" name="ic-style" checked={style === picks.style.versionId} onChange={() => setStyle(picks.style!.versionId)} /> {chipName(picks.style)}{' '}
+                        <span className="ic-chip-key">· {D.yourPick}</span>
+                      </label>
+                    )}
                     {chosen && <p className="ic-style-text">Added to your prompt, and published with it (model-drafted): {chosen.text}</p>}
+                    {styleChip && <p className="ic-style-text">{styleChip.drafted ? D.addedDrafted : D.added} {styleChip.text}</p>}
                   </fieldset>
+
+                  {picks.characters.length > 0 && (
+                    <fieldset className="ic-style ic-chars">
+                      <legend>{D.label}</legend>
+                      {picks.characters.map((c) => (
+                        <label key={c.versionId}>
+                          <input
+                            type="checkbox"
+                            checked={characters.includes(c.versionId)}
+                            onChange={(e) => setCharacters(e.target.checked ? [...characters, c.versionId].slice(0, 3) : characters.filter((x) => x !== c.versionId))}
+                          />{' '}
+                          <span className="ic-chip-key">Character</span> {chipName(c)}
+                        </label>
+                      ))}
+                      {charChips.map((c) => (
+                        <p key={c.versionId} className="ic-style-text">
+                          {D.added} {c.text}
+                        </p>
+                      ))}
+                      {withViews && status.editModel && (
+                        <label className="ic-reference">
+                          <input type="checkbox" checked={reference} onChange={(e) => setReference(e.target.checked)} />{' '}
+                          {D.reference(charChips.filter((c) => c.views > 0).map((c) => c.entity).join(', '))}
+                        </label>
+                      )}
+                    </fieldset>
+                  )}
+                  <p className="ic-note">
+                    <Link href="/images/picks">{picks.style || picks.characters.length ? D.changePicks : D.noPicks}</Link>
+                  </p>
 
                   <div className="ic-rules">
                     <p className="ic-label">{W.composer.rulesLabel}</p>
@@ -297,7 +381,7 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
               {busy ? 'Making it…' : draft ? 'Generate again' : 'Generate'} · {count(left)}
             </button>
             <p className="ic-model">
-              {status.model.name} · open weights, {status.model.licence} · runs on {status.model.host}
+              {shownModel?.name} · open weights, {shownModel?.licence} · runs on {shownModel?.host}
             </p>
           </div>
         )}
@@ -320,12 +404,22 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
                   </figcaption>
                   <p className="ic-label">{W.preview.promptLabel}</p>
                   <p className="ic-prompt-preview">{prompt}</p>
-                  {chosen && (
+                  {madeStyle && (
                     <>
                       <p className="ic-label">Style added (text drafted by the coding agent, a closed model)</p>
-                      <p className="ic-prompt-preview ic-style-added">{chosen.text}</p>
+                      <p className="ic-prompt-preview ic-style-added">{madeStyle.text}</p>
                     </>
                   )}
+                  {madeChips.map((c) => (
+                    <div key={c.versionId}>
+                      <p className="ic-label">
+                        {W.designs.preview.added(chipName(c))}
+                        {c.drafted ? ' (model-drafted)' : ''}
+                      </p>
+                      <p className="ic-prompt-preview ic-style-added">{c.text}</p>
+                    </div>
+                  ))}
+                  {made.reference && <p className="ic-label">{D.referenceModel} {status?.editModel?.name}</p>}
                 </figure>
               }
               onPublish={publish}
