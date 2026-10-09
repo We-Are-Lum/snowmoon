@@ -1100,8 +1100,8 @@ add({
       text[n] = {};
       for (const b of json(`content/snowmoon/text/chapter-${n}.json`).blocks) text[n][b.idx] = plain(b.content);
     }
-    // Statements about the book: every screen's sources, and the note that says the book's rule changes
-    // every match. The Learn game's own rules (learn-game/*.ts) are invented for this edition and are
+    // Statements about the book: every screen's sources, and the note that quotes the book on new rules
+    // (c4-b84). The Learn game's own rules (learn-game/*.ts) are invented for this edition and are
     // deliberately not compared with the book's rule (owner, 2026-10-09; P8d checks the label instead).
     const screens = [...LEARN_TEXT.watch, ...Object.values(LEARN_TEXT.lessons)]
       .map((s) => ({ title: s.title, tags: [...s.tags] as string[], sources: s.sources.map(([a, b]) => [a, b] as [string, string]) }));
@@ -1148,7 +1148,7 @@ add({
 add({
   id: 'P8d',
   principle: 8,
-  name: 'the Learn game is labelled as rules invented for this edition, and points to the book\'s rule in the sandbox',
+  name: 'the Learn game is labelled as rules invented for this edition, quotes c4-b84 on new rules, and points to the book\'s rule in the sandbox',
   load: async () => ({
     tags: LEARN_TEXT.tags,
     note: LEARN_TEXT.rulesNote,
@@ -1172,9 +1172,16 @@ add({
       if (!s.tags.includes('rules')) problems.push(`${s.id}: no "${tags.rules}" tag`);
       if (!s.tags.includes('draft')) problems.push(`${s.id}: no "Draft wording" tag`);
     }
-    // The note: invented for this edition, the book's rule changes every match (with its block), and the way to the sandbox.
+    // The note: invented for this edition, the book's own words on new rules (quoted, with its block), and the way
+    // to the sandbox. The book says "every game there's always some kind of new rule" (c4-b84), not that the rule
+    // changes every match: the note and the sources quote it and never paraphrase it so (owner, 2026-10-09).
     if (!/invented for this edition/i.test(note.text)) problems.push('rules note: does not say the rules are invented for this edition');
-    if (!/rule changes every match/i.test(note.text) || !/c4-b84/.test(note.text)) problems.push('rules note: does not say, with c4-b84, that in the book the rule changes every match');
+    if (!/"every game there[’']s always some kind of new rule"/i.test(note.text) || !/c4-b84/.test(note.text)) problems.push('rules note: does not quote c4-b84, "every game there\'s always some kind of new rule"');
+    const unquoted = (s: string) => s.replace(/"[^"]*"/g, ' ');
+    const CHANGES = /\b(?:the\s+)?rules?\s+(?:change|changes|changed|changing|is\s+changed|are\s+changed)\s+(?:(?:with|for|in)\s+)?(?:every|each)\s+(?:match|game)\b|\b(?:new|different)\s+rules?\s+(?:every|each)\s+(?:match|game)\b/i;
+    for (const [where, s] of [['rules note', note.text], ['rules note link', note.link], ...screens.flatMap((x: { id: string; sources: string[][] }) => x.sources.map(([w]) => [`${x.id} source`, w]))] as [string, string][]) {
+      if (CHANGES.test(unquoted(s))) problems.push(`${where}: "${s}" says the rule changes every match; quote c4-b84 instead`);
+    }
     if (!/sandbox/i.test(note.text) || !/c4-b5/.test(note.text) || !/sandbox/i.test(note.link)) problems.push('rules note: does not point to the sandbox for the rule recovered from c4-b5');
     for (const id of ['goal', 'rule', 'practice']) if (!screens.find((s: { id: string }) => s.id === id)?.rulesNote) problems.push(`${id}: does not show the rules note`);
     // The page draws every tag and the note, and the note's link opens the sandbox.

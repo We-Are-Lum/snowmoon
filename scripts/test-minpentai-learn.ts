@@ -200,6 +200,10 @@ const ID_FIX: Record<string, string> = {
 const BOOK_NEW_RULE = ['In the book, "every game there\'s always some kind of new rule"', 'c4-b84'];
 const RECOVERED = ["The sandbox runs the rule recovered from the book's animated board", 'c4-b5 · c4-b7'];
 const INVENTED_LINE = ['The rules of the Learn game (towers, gliders, squares, rocks, turns to act, the new rules) are invented for this edition', 'invented'];
+const QUOTE_FIX: Record<string, string> = {
+  'A new rule every game': BOOK_NEW_RULE[0],
+  'A new rule every game; the priests decide the rule sets': '"Every game there\'s always some kind of new rule"; the priests "decide on the rule sets"',
+};
 const DELIBERATE = {
   tags(where: string, tags: string[]): string[] {
     if (where === 'hood') return tags; // the book's rule: no "invented" tag
@@ -210,9 +214,11 @@ const DELIBERATE = {
     return out;
   },
   sources(where: string, src: string[][]): string[][] {
-    const out = src.map(([a, b]) => [a, ID_FIX[b] ?? b]);
+    // Design's "A new rule every game" (c4-b84) quotes the block instead (owner, 2026-10-09: quote c4-b84,
+    // don't say the rule changes every match).
+    const out = src.map(([a, b]) => (QUOTE_FIX[a] && b === 'c4-b84' ? BOOK_NEW_RULE : [QUOTE_FIX[a] ?? a, ID_FIX[b] ?? b]));
     if (where === 'watch 1') out.push(INVENTED_LINE);
-    if (where === 'goal' || where === 'rule') out.push(BOOK_NEW_RULE, RECOVERED);
+    if (where === 'goal' || where === 'rule') out.push(...[BOOK_NEW_RULE, RECOVERED].filter((x) => !out.some((o) => o[0] === x[0])));
     if (where === 'practice') out.push(RECOVERED);
     return out;
   },

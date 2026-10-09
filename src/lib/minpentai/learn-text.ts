@@ -26,7 +26,7 @@ export interface Screen {
   rulesNote?: true;
 }
 
-/** The book says the rule changes every match: c4-b84 (quoted, so P8c checks the words). */
+/** The book's words on new rules, quoted from c4-b84 (so P8c checks them); never paraphrased as "the rule changes every match" (P8d). */
 const BOOK_NEW_RULE: Source = ['In the book, "every game there\'s always some kind of new rule"', 'c4-b84'];
 const RECOVERED: Source = ["The sandbox runs the rule recovered from the book's animated board", 'c4-b5 · c4-b7'];
 const INVENTED: Source = ['The rules of the Learn game (towers, gliders, squares, rocks, turns to act, the new rules) are invented for this edition', 'invented'];
@@ -54,7 +54,7 @@ export const LEARN_TEXT = {
   } satisfies Record<TagKey, string>,
   /** Added by this build (draft): on lesson 1, lesson 7 and the practice match. */
   rulesNote: {
-    text: 'The rules of this game are invented for this edition. In the book, the rule changes every match: "every game there\'s always some kind of new rule" (c4-b84). The rule recovered from the book\'s figure (c4-b5, c4-b7) is in the sandbox.',
+    text: 'The rules of this game are invented for this edition. The book says that "every game there\'s always some kind of new rule" (c4-b84). The rule recovered from the book\'s figure (c4-b5, c4-b7) is in the sandbox.',
     link: "THE BOOK'S RULE, IN THE SANDBOX →",
   },
 
@@ -121,7 +121,7 @@ export const LEARN_TEXT = {
       tags: ['book', 'imag', 'rules', 'draft'],
       sources: [
         ['A giant room inside the mountain, over a thousand watching', 'c4-b58 · c4-b78'],
-        ['A new rule every game; the priests decide the rule sets', 'c4-b84 · c4-b148'],
+        ['"Every game there\'s always some kind of new rule"; the priests "decide on the rule sets"', 'c4-b84 · c4-b148'],
         ['"MU GU GEI TAU FA" · The battle begins in fifty ticks.', 'c4-b97–b98'],
         ['Players are kept offline so they cannot learn the rule early', 'c12-b133–b134'],
         ['Twenty minutes to build before the battle', 'c12-b149'],
@@ -274,7 +274,7 @@ export const LEARN_TEXT = {
       button: 'START A PRACTICE MATCH',
       tags: ['book', 'rules', 'draft'],
       rulesNote: true,
-      sources: [['A new rule every game', 'c4-b84'], ['Players are kept offline so they cannot learn it early', 'c12-b133–b134'], BOOK_NEW_RULE, RECOVERED],
+      sources: [BOOK_NEW_RULE, ['Players are kept offline so they cannot learn it early', 'c12-b133–b134'], RECOVERED],
     },
     hood: {
       title: 'Under the hood',
@@ -292,7 +292,7 @@ export const LEARN_TEXT = {
       rulesNote: true,
       sources: [
         ['Players put down squares near their symbols on turns to act', 'c4-b110'],
-        ['A new rule every game', 'c4-b84'],
+        BOOK_NEW_RULE,
         ['Sight near your symbols', 'c4-b93'],
         ['8 points; glider 4, square 1, tower 4', 'invented'],
         ['Amber is a simple bot. In the book, bots handle new rules badly.', 'c7-b13–b14'],

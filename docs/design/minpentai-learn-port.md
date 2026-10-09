@@ -67,6 +67,7 @@ Behaviour and timing are identical on every screen (section 2). What differs is 
 - ✔ deliberate **No WebGL:** the same scripted match drawn flat from above (Design showed a note promising "the flat match view").
 - ✔ Pause glyph sits top-left in its box, as in Design (`display: flex`).
 - ✔ Corrected source ids (study §14.3): c4-b58 · c4-b78, c12-b149, c4-b78, c7-b86, c7-b13–b14. Watch 1 adds a source line saying the Learn game's rules are invented.
+- ✔ deliberate: watch 1, lesson 7 and practice quote c4-b84 ("every game there's always some kind of new rule") where Design wrote "A new rule every game" (§6).
 
 **Lesson 1 Keep your towers** — ✔ deliberate: the rules note and the sandbox link; sources add c4-b84 (quoted) and c4-b5 · c4-b7; "Most towers when time runs out" now cites *invented* (Design cited match.ts, which Learn no longer uses).
 **Lesson 2 Gliders fly straight** — no difference beyond the tag.
@@ -74,7 +75,7 @@ Behaviour and timing are identical on every screen (section 2). What differs is 
 **Lesson 4 Squares bounce gliders** — ✔ deliberate: keyboard placing (below).
 **Lesson 5 Your turn to act** — ✔ deliberate: keyboard placing; "8 points; glider 4…" cites *invented*. ✖ the text area is about 33 px at 390 × 695 under the site's top bar (Design 77 px, §13.9); it scrolls.
 **Lesson 6 You only see near your towers** — none beyond the tag.
-**Lesson 7 Every match, a new rule** — ✔ deliberate: rules note and sandbox link; added sources.
+**Lesson 7 Every match, a new rule** — ✔ deliberate: rules note and sandbox link; added sources; Design's "A new rule every game" is replaced by the c4-b84 quote (listed once).
 **Under the hood** — none.
 **Practice** — ✔ deliberate: tags RULES INVENTED + DRAFT WORDING (Design none, §13.4); rules note; c7-b13–b14; keyboard placing.
 
@@ -101,11 +102,13 @@ Ported as Design has it unless an owner non-negotiable says otherwise; the old e
 15. **Text area of 77 px on lesson 5 and practice** (§13.9): worse here under the site's top bar (see §4).
 16. Unused mockup code (tags `rocks`, `recon`, `note`; `isHand`, `pipRef`, `points`; the ninth `SEG`; `SHIP` = `GLIDER`): not ported except `SEG[8]` and `SHIP`, kept for the line-for-line comparison.
 
-## 6. The block that says the rule changes every match
+## 6. The block on new rules (c4-b84), quoted
 
-**c4-b84**: "Though every game there's always some kind of new rule, and the most important tactic of all was knowing how to adapt." That is the one block that says it of every game. Supporting, not cited on the screen: c4-b148 (the priests decide the rule sets), c12-b147 ("today's rule change … played on a hex grid"), c7-b13–b14, c7-b63, c14-b33. Caveat: c4-b84 says "some kind of new rule", not that the board's cell rule changes; in c4-b102–b148 the new rule turns out to be about team selection, not the cells. The note quotes c4-b84's words so P8c checks them.
+**c4-b84**: "Though every game there's always some kind of new rule, and the most important tactic of all was knowing how to adapt." That is the one block that says it of every game, and the note quotes it rather than paraphrasing it (owner, 2026-10-09: "Quote that; don't say the rule changes every match"). Supporting, not cited on the screen: c4-b148 (the priests decide the rule sets), c12-b147 ("today's rule change … played on a hex grid"), c7-b13–b14, c7-b63, c14-b33. Caveat: c4-b84 says "some kind of new rule", not that the board's cell rule changes; in c4-b102–b148 the new rule turns out to be about team selection, not the cells. The note quotes c4-b84's words so P8c checks them.
 
-Wording on lesson 1, lesson 7 and practice (draft): "The rules of this game are invented for this edition. In the book, the rule changes every match: "every game there's always some kind of new rule" (c4-b84). The rule recovered from the book's figure (c4-b5, c4-b7) is in the sandbox." Link: "THE BOOK'S RULE, IN THE SANDBOX →".
+Wording on lesson 1, lesson 7 and practice (draft): "The rules of this game are invented for this edition. The book says that "every game there's always some kind of new rule" (c4-b84). The rule recovered from the book's figure (c4-b5, c4-b7) is in the sandbox." Link: "THE BOOK'S RULE, IN THE SANDBOX →". (Before 2026-10-09 it read "In the book, the rule changes every match: …".)
+
+The source lines that read "A new rule every game" (watch 1, lesson 7, practice; Design's) now quote c4-b84; lesson 7 lists the quote once. Kept as Design's framing of its own game, not presented as the book's words: watch 1's "Before every match, the priests secretly choose a new rule." (Design's paraphrase of c4-b84 and c4-b148, both cited beside it), lesson 7's title "Every match, a new rule" and its text, and the reasons list's "The rules change every match." (in Design's game the practice match does draw a new rule each time: `practice.rule`).
 
 ## 7. Check changes
 
@@ -120,6 +123,11 @@ Wording on lesson 1, lesson 7 and practice (draft): "The rules of this game are 
 - Plant: a source → `c4-b9999`; `hud.dz` → "TAO". Each part was also proven separately: the Dzegoban (TAO), the note's quote ("novel rule" → not in c4-b84), a missing `docs/` file.
 
 **P8d, new** ("the Learn game is labelled as rules invented for this edition, and points to the book's rule in the sandbox"): the `rules` tag says "invented for this edition"; every watch screen, lesson and practice carries it and DRAFT WORDING; Under the hood does **not** carry it and cites c4-b5; the note says invented for this edition, says with c4-b84 that the rule changes every match, names c4-b5 and the sandbox; lessons goal, rule and practice show it; `learn.tsx` renders the tags and the note with its sandbox link. Plant: drop the tag from one screen (also proven: the tag on Under the hood; the note's sentence changed).
+
+**P8d, changed 2026-10-09** (owner: quote c4-b84, don't say the rule changes every match). Name before: "the Learn game is labelled as rules invented for this edition, and points to the book's rule in the sandbox"; after: "the Learn game is labelled as rules invented for this edition, quotes c4-b84 on new rules, and points to the book's rule in the sandbox".
+- Before: `if (!/rule changes every match/i.test(note.text) || !/c4-b84/.test(note.text))` → "rules note: does not say, with c4-b84, that in the book the rule changes every match".
+- After: the note must contain the quote `"every game there's always some kind of new rule"` (straight or curly apostrophe) and `c4-b84`; and outside quotation marks, the note, its link and every screen's source line must not match `rule(s) change/changes/changed/changing/is changed/are changed [with/for/in] every/each match/game` or `new/different rule(s) every/each match/game`.
+- Plant unchanged (drop the tag from one screen). The new parts proven separately: the old note and Design's three "A new rule every game" source lines fail (4 problems); a note without the quote fails.
 
 **check:ui**: `MINPENTAI_LESSONS` 1 → 17 (every Learn screen, light and dark, 390 px); new per-screen checks: the "RULES INVENTED FOR THIS EDITION" tag is shown (absent on Under the hood), and the footer is in view.
 
@@ -166,7 +174,7 @@ Templates show their slots as `{a}`, `{b}`.
 - `tags.inv`: "SYMBOL SHAPE INVENTED"
 - `tags.rules`: "RULES INVENTED FOR THIS EDITION"
 - `tags.draft`: "DRAFT WORDING"
-- `rulesNote.text`: "The rules of this game are invented for this edition. In the book, the rule changes every match: \"every game there's always some kind of new rule\" (c4-b84). The rule recovered from the book's figure (c4-b5, c4-b7) is in the sandbox."
+- `rulesNote.text`: "The rules of this game are invented for this edition. The book says that \"every game there's always some kind of new rule\" (c4-b84). The rule recovered from the book's figure (c4-b5, c4-b7) is in the sandbox."
 - `rulesNote.link`: "THE BOOK'S RULE, IN THE SANDBOX →"
 - `cams.crane`: "CAM 1 · CRANE"
 - `cams.wide`: "CAM 2 · WIDE"
@@ -220,7 +228,7 @@ Templates show their slots as `{a}`, `{b}`.
 - `watch[0].button`: "NEXT"
 - `watch[0].sources[0][0]`: "A giant room inside the mountain, over a thousand watching"
 - `watch[0].sources[0][1]`: "c4-b58 · c4-b78"
-- `watch[0].sources[1][0]`: "A new rule every game; the priests decide the rule sets"
+- `watch[0].sources[1][0]`: "\"Every game there's always some kind of new rule\"; the priests \"decide on the rule sets\""
 - `watch[0].sources[1][1]`: "c4-b84 · c4-b148"
 - `watch[0].sources[2][0]`: "\"MU GU GEI TAU FA\" · The battle begins in fifty ticks."
 - `watch[0].sources[2][1]`: "c4-b97–b98"
@@ -354,14 +362,12 @@ Templates show their slots as `{a}`, `{b}`.
 - `lessons.rule.title`: "Every match, a new rule"
 - `lessons.rule.text`: "Before each match, the priests pick a new rule, and players learn it only when the match begins. That is what makes Minpentai hard:"
 - `lessons.rule.button`: "START A PRACTICE MATCH"
-- `lessons.rule.sources[0][0]`: "A new rule every game"
+- `lessons.rule.sources[0][0]`: "In the book, \"every game there's always some kind of new rule\""
 - `lessons.rule.sources[0][1]`: "c4-b84"
 - `lessons.rule.sources[1][0]`: "Players are kept offline so they cannot learn it early"
 - `lessons.rule.sources[1][1]`: "c12-b133–b134"
-- `lessons.rule.sources[2][0]`: "In the book, \"every game there's always some kind of new rule\""
-- `lessons.rule.sources[2][1]`: "c4-b84"
-- `lessons.rule.sources[3][0]`: "The sandbox runs the rule recovered from the book's animated board"
-- `lessons.rule.sources[3][1]`: "c4-b5 · c4-b7"
+- `lessons.rule.sources[2][0]`: "The sandbox runs the rule recovered from the book's animated board"
+- `lessons.rule.sources[2][1]`: "c4-b5 · c4-b7"
 - `lessons.hood.title`: "Under the hood"
 - `lessons.hood.text`: "Every piece is a few cells, moved by one rule from the book. This is a glider, cell by cell. Press play."
 - `lessons.hood.caption`: "You never need this to play."
@@ -373,7 +379,7 @@ Templates show their slots as `{a}`, `{b}`.
 - `lessons.practice.button`: "END TURN"
 - `lessons.practice.sources[0][0]`: "Players put down squares near their symbols on turns to act"
 - `lessons.practice.sources[0][1]`: "c4-b110"
-- `lessons.practice.sources[1][0]`: "A new rule every game"
+- `lessons.practice.sources[1][0]`: "In the book, \"every game there's always some kind of new rule\""
 - `lessons.practice.sources[1][1]`: "c4-b84"
 - `lessons.practice.sources[2][0]`: "Sight near your symbols"
 - `lessons.practice.sources[2][1]`: "c4-b93"
