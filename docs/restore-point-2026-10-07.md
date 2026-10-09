@@ -114,3 +114,11 @@ No code change. To undo (back to `cc0fb3f`, the image screens restyle):
 show "being rebuilt". The rail says "Sandbox". To undo (back to `93a308b`):
 
     vercel rollback dpl_Eoik1u76Yv3CsYVMmkZvDD9eD5Zy --scope nates-projects-d1780cff
+
+## 2026-10-09: Minpentai Learn ported from Design's game (branch site-minpentai-design)
+
+Learn back on the menu, now Claude Design's game with its own invented rules (src/lib/minpentai/learn-game/),
+labelled "Rules invented for this edition"; the sandbox keeps the book's recovered rule. To undo (back to
+`892b243`, Learn off with the "being rebuilt" note):
+
+    vercel rollback dpl_C9phakj9k4DdXer1NgQimn247Eh4 --scope nates-projects-d1780cff
