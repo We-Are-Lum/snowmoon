@@ -2,7 +2,8 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { readingPlace } from '~/lib/glossary-view';
 import { sdk } from '@farcaster/miniapp-sdk';
 import { inMiniApp, signOut, useAuth, type AuthState } from '~/lib/client-auth';
 import { lastChapter, openedChapters } from '~/lib/chat/device';
@@ -199,6 +200,14 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
 }
 
 function Nav({ items, path, current }: { items: ReturnType<typeof navItems>; path: string; current: number }) {
+  const router = useRouter();
+  // The glossary, opened from a chapter, remembers the block at the top of the screen so its "Back" returns there.
+  const toGlossary = (e: React.MouseEvent) => {
+    const from = current > 0 ? readingPlace() : null;
+    if (!from) return;
+    e.preventDefault();
+    router.push(`/glossary?from=${from}`);
+  };
   return (
     <>
       <ul className="nav-list">
@@ -206,7 +215,7 @@ function Nav({ items, path, current }: { items: ReturnType<typeof navItems>; pat
           const active = it.key === 'read' ? current > 0 : it.key === 'listen' ? false : path.startsWith(it.href.split('#')[0]) && it.href !== '/about#podcast';
           return (
             <li key={it.key}>
-              <Link href={it.href} aria-current={active ? 'page' : undefined}>
+              <Link href={it.href} aria-current={active ? 'page' : undefined} onClick={it.key === 'glossary' ? toGlossary : undefined}>
                 <span>{it.label}</span>
                 {it.meta && <span className="nav-meta">{it.meta}</span>}
               </Link>

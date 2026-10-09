@@ -21,6 +21,8 @@ export function navItems(last: number, adaptations: number): NavItem[] {
     { key: 'minpentai', label: 'Minpentai', href: '/minpentai', meta: 'Learn · play' },
     { key: 'podcast', label: 'Podcast', href: '/about#podcast', meta: 'RSS' },
     { key: 'pictures', label: 'Pictures', href: '/images', meta: 'Trial' },
+    // Opened from the reader, the link carries the reading place (?from=c3-b42) for "Back" (app-shell.tsx).
+    { key: 'glossary', label: 'Glossary', href: '/glossary' },
     { key: 'about', label: 'About', href: '/about' },
   ];
   // Adaptations are out of view for now (ADAPTATIONS.visible).

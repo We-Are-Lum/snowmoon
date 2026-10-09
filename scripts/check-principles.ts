@@ -28,6 +28,7 @@ import { CHAT, IMAGES, REPO_URL } from '../src/lib/config';
 import { NOTICE_REVIEW, currentNoticeItems, noticeKey } from '../src/lib/chat/notice';
 import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
 import { BOOK_TAG, NARRATION_MAX_WORDS, PERSON_TAG, parseBeats } from '../src/lib/script-beats';
+import { GLOSSARY_FILE, loadBlocks, verifyGlossary, type Glossary } from './lib/glossary';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
@@ -548,6 +549,17 @@ add({
     c.exceptions.entries.push({ chapter: 1, idx: 9999, read_aloud_sha256: sha256('A new description a model drafted.') });
   },
 });
+add({
+  id: 'P2e',
+  principle: 2,
+  name: "the glossary's explanations are the book's sentences, verbatim, at real block ids; no written definitions",
+  load: async () => ({ glossary: json<Glossary>(GLOSSARY_FILE), blocks: Object.fromEntries(loadBlocks(ROOT)) }),
+  run: ({ glossary, blocks }) => verifyGlossary(glossary, new Map(Object.entries(blocks))),
+  plant: (c) => {
+    // A model-style definition passed off as a quote, at a real block.
+    c.glossary.terms[0].explanations.push({ block: 'c1-b9', chapter: 1, idx: 9, text: 'An invented word for a kind of bus.' });
+  },
+});
 
 // ---------------------------------------------------------------------------
 // P3. The allowlist records each model's license and whether its weights are
@@ -795,7 +807,7 @@ add({
 // ---------------------------------------------------------------------------
 // P6. No third-party requests; individual ratings not publicly readable.
 // ---------------------------------------------------------------------------
-const PAGES = ['/', '/chapter/1', '/chapter/30', '/about', '/cards', '/adaptations', '/adaptations/dog-dawn', '/share/1/4?img=c1-b005-toy-drone', '/images', '/moderate'];
+const PAGES = ['/', '/chapter/1', '/chapter/30', '/about', '/cards', '/adaptations', '/adaptations/dog-dawn', '/share/1/4?img=c1-b005-toy-drone', '/images', '/moderate', '/glossary', '/glossary/zei'];
 add({
   id: 'P6a',
   principle: 6,

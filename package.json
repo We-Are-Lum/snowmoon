@@ -27,7 +27,9 @@
     "publish:podcast": "tsx --env-file-if-exists=.env.local scripts/publish-podcast.ts",
     "check:podcast": "tsx scripts/check-podcast.ts",
     "publish:podcast-cover": "tsx --env-file-if-exists=.env.local scripts/publish-podcast-cover.ts",
-    "test:chat-route": "tsx --conditions=react-server scripts/test-chat-route.ts"
+    "test:chat-route": "tsx --conditions=react-server scripts/test-chat-route.ts",
+    "build:glossary": "tsx scripts/build-glossary.ts",
+    "test:glossary": "tsx scripts/test-glossary.ts"
   },
   "license": "GPL-3.0-only",
   "description": "",

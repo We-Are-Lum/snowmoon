@@ -1,0 +1,56 @@
+{
+ "about": "Every judgement call in the glossary (content/snowmoon/glossary.json, built by scripts/build-glossary.ts). The build applies these and nothing else: no model is asked anything at build time or at runtime. merge joins spellings of one word under the first-named term; add brings in capitalised in-world terms the narration's pronunciation file has no entry for; exclude drops a candidate; entity_covered records entity-name runs that are already terms by another spelling. Drafted by the coding agent on 2026-10-09 from the book text; unreviewed until someone signs off.",
+ "status": "unreviewed",
+ "merge": [
+  { "term": "autobus", "aliases": ["autobuses"], "why": "plural; the pronunciation file notes 'Plural autobuses follows'" },
+  { "term": "longhour", "aliases": ["longhours"], "why": "plural" },
+  { "term": "lightfoot", "aliases": ["lightfeet"], "why": "plural (c9: one lightfoot, two lightfeet)" },
+  { "term": "the aks", "aliases": ["aks"], "why": "the book writes \"the aks\" (c8-b5) and later \"the aks\" without quotes; the pronunciation file has both" },
+  { "term": "zipcoins", "aliases": ["zipcoin", "zc"], "why": "singular, and the abbreviation on the receipt screen in chapter 6 (10.5 zc) for the same 10.5 zipcoin order (c6)" },
+  { "term": "Veridian", "aliases": ["Veridians"], "why": "plural; the pronunciation file notes 'Plural Veridians follows'" },
+  { "term": "Selwert", "aliases": ["Sewlert"], "why": "the book spells the same judge both ways in chapter 26 (c26-b174 Sewlert, c26-b193 Selwert)" },
+  { "term": "Zei", "aliases": ["Zei Leimin"], "why": "his full name (character entity zei.json; c4-b90)" },
+  { "term": "Bai", "aliases": ["Bai Jahen"], "why": "her full name (character entity bai.json; c4-b90)" },
+  { "term": "Greater Plum Harbor", "aliases": ["GPH"], "why": "location entity greater-plum-harbor.json; GPH is its abbreviation in the book" },
+  { "term": "Decentralized University", "aliases": ["DU", "dzu hu sun du"], "why": "location entity foil-classroom.json; c2-b21 gives all three: DU - \"Decentralized University\", or *dzu hu sun du* in Dzegoban" }
+ ],
+ "add": [
+  { "term": "Keepers", "aliases": ["Keeper"], "kind": "group", "why": "location entity order-booths.json; capitalised in-world group, first c1-b57" },
+  { "term": "Freetown Economics Institute", "aliases": [], "kind": "place", "why": "location entity economics-institute.json; capitalised in-world institution" },
+  { "term": "privacy robe", "aliases": ["Veridian Privacy Robe", "privacy robes"], "match_case": false, "kind": "coinage", "why": "prop entity privacy-robe.json; the book's coined garment, first c1-b45" },
+  { "term": "Order of Steering", "aliases": ["Order", "Steering"], "kind": "group", "why": "capitalised in-world collective, c1-b38, c1-b56; 'the Order' and 'the Steering system' are the book's short forms" },
+  { "term": "Sentinels", "aliases": ["Sentinel"], "kind": "group", "why": "capitalised in-world group, c1-b57" },
+  { "term": "Heralds", "aliases": ["Herald"], "kind": "group", "why": "capitalised in-world group, c6-b71" },
+  { "term": "Acolyte", "aliases": ["Acolytes"], "kind": "group", "why": "capitalised in-world rank, c1-b38" },
+  { "term": "Graph Funding", "aliases": [], "kind": "coinage", "why": "capitalised in-world mechanism, c1-b55" },
+  { "term": "Quadratic Funding", "aliases": [], "kind": "coinage", "why": "capitalised in-world mechanism, c1-b55" },
+  { "term": "Emerald", "aliases": [], "kind": "name", "why": "Gladias's local AI, c1-b9" },
+  { "term": "Arctics", "aliases": ["Arctic"], "kind": "group", "why": "capitalised in-world people and power, c2-b123; 'Arctic' is the book's adjective" },
+  { "term": "Arctic Empire", "aliases": [], "kind": "place", "why": "capitalised in-world state" },
+  { "term": "Arctic Emperor", "aliases": [], "kind": "name", "why": "capitalised in-world title" },
+  { "term": "United Cities", "aliases": [], "kind": "place", "why": "capitalised in-world polity, c1-b134" },
+  { "term": "Ground Law", "aliases": [], "kind": "coinage", "why": "capitalised in-world law ('the fourteenth Ground Law', c25-b111)" }
+ ],
+ "exclude": [
+  { "word": "Lily", "why": "character entity lily.json; an ordinary English given name" },
+  { "word": "Parliament", "why": "location entities parliament.json and senator-office.json; ordinary English" }
+ ],
+ "not_explanations": [
+  { "term": "Acolyte", "block": "c1-b70", "why": "\"was a coin-flip\": a vote, not what an Acolyte is" },
+  { "term": "Dzego", "block": "c17-b29", "why": "\"in Dzego, the players\": the comma ends a phrase, not an appositive" },
+  { "term": "Dzegoban", "block": "c9-b28", "why": "a character's opinion (\"a masterpiece\"), not what the word is" },
+  { "term": "Gun", "block": "c19-b124", "why": "\"Gun - the last day\": the dash phrase is about the day, not Gun" },
+  { "term": "Keepers", "block": "c21-b98", "why": "\"not the Keepers, the parliament\": a contrast, not an appositive" },
+  { "term": "Mov", "block": "c21-b55", "why": "a character's opinion (\"an idiot\"), not who Mov is" },
+  { "term": "Order of Steering", "block": "c16-b112", "why": "a list (\"Keepers, the Order, the institutions\"), not an appositive" },
+  { "term": "privacy robe", "block": "c20-b60", "why": "\"a gesture\" describes removing the hood, not the robe" },
+  { "term": "Silverchat", "block": "c20-b32", "why": "a character's opinion (\"the good ones\"), not what Silverchat is" },
+  { "term": "United Cities", "block": "c22-b43", "why": "\"a hundred years ago\" is a time, not an appositive" },
+  { "term": "Zei", "block": "c14-b87", "why": "an announcement (\"is the winner\"), not who Zei is" }
+ ],
+ "entity_covered": [
+  { "name": "Veridian Privacy Robe", "by": "privacy robe" },
+  { "name": "Zei Leimin", "by": "Zei" },
+  { "name": "Bai Jahen", "by": "Bai" }
+ ]
+}

@@ -222,7 +222,7 @@ async function checkFloors(page: Page, path: string, scheme: string) {
       for (const el of Array.from(document.querySelectorAll('a, button, input, select, summary, [role="button"], [role="slider"]'))) {
         if (!touch || !visible(el)) continue;
         if ((el as HTMLButtonElement).disabled && el.closest('.device-view')) continue;
-        if (el.tagName === 'A' && el.closest('p, li') && !el.closest('.chapter-list, nav')) continue; // inline in running text
+        if (el.tagName === 'A' && el.closest('p, li') && !el.closest('.chapter-list, nav, .gl-index')) continue; // inline in running text
         const r = el.getBoundingClientRect();
         // The hit area: the control, or the invisible ::after drawn around it on touch screens.
         const hit = getComputedStyle(el, '::after');
@@ -252,6 +252,47 @@ async function checkFloors(page: Page, path: string, scheme: string) {
   if (r.overflow > 0) fail(`${where}: page scrolls sideways by ${r.overflow}px`);
   if (r.draftDup.length) fail(`${where}: more than one "Draft wording" line on a screen: ${r.draftDup.join('; ')}`);
   if (r.hyph) fail(`${where}: ${r.hyph} book blocks are hyphenated`);
+}
+
+/**
+ * The glossary (src/components/glossary.tsx): the index and a word's page meet the floors; later
+ * chapters are covered until "Show anyway"; "Back" returns to the reading place, whether it came
+ * in the URL or from the menu's Glossary link in the reader.
+ */
+async function checkGlossary(page: Page, scheme: string) {
+  await open(page, '/glossary');
+  await checkFloors(page, '/glossary', scheme);
+  await shot(page, 'glossary-index', scheme);
+  const rows = await page.locator('.gl-index li').count();
+  if (!(await page.locator('.gl-cover').isVisible())) fail('/glossary: words from later chapters are not covered');
+  await page.locator('.gl-cover button').click();
+  if ((await page.locator('.gl-index li').count()) <= rows) fail('/glossary: "Show them anyway" shows nothing more');
+  await checkFloors(page, '/glossary (all)', scheme);
+
+  await open(page, '/glossary/zei?from=c1-b19');
+  await checkFloors(page, '/glossary/zei', scheme);
+  if ((await page.locator('.gl-back').getAttribute('href')) !== '/chapter/1#c1-b19') fail(`/glossary/zei?from=c1-b19: Back goes to ${await page.locator('.gl-back').getAttribute('href')}`);
+  if ((await page.locator('a', { hasText: 'All words' }).getAttribute('href')) !== '/glossary?from=c1-b19') fail('/glossary/zei: "All words" drops the reading place');
+  // Zei first appears in chapter 2: covered for a reader at chapter 1.
+  if (!(await page.locator('.gl-cover').isVisible())) fail('/glossary/zei: a word from chapter 2 is not covered at chapter 1');
+  await shot(page, 'glossary-covered', scheme);
+  await page.locator('.gl-cover button').click();
+  await page.waitForSelector('.gl-quote, .gl-none');
+  await checkFloors(page, '/glossary/zei (shown)', scheme);
+  await shot(page, 'glossary-term', scheme);
+
+  // From the reader: the menu's Glossary link carries the block at the top of the screen.
+  await open(page, '/chapter/1');
+  await page.evaluate(() => document.querySelector('#c1-b19')!.scrollIntoView({ block: 'start' }));
+  await page.click('.topbar-icon[aria-label="Menu"]');
+  await page.locator('.menu-sheet a', { hasText: 'Glossary' }).click();
+  await page.waitForURL(/\/glossary\?from=c1-b\d+/, { timeout: 10000 }).catch(() => fail(`/chapter/1 menu → Glossary: no reading place in ${page.url()}`));
+  await page.waitForSelector('.gl-back');
+  const back = await page.locator('.gl-back').getAttribute('href');
+  if (!/^\/chapter\/1#c1-b(1[89]|20)$/.test(back ?? '')) fail(`glossary from the reader: Back goes to ${back}, not near c1-b19`);
+  await page.locator('.gl-back').focus();
+  await page.keyboard.press('Enter');
+  await page.waitForURL(/\/chapter\/1#c1-b/, { timeout: 10000 }).catch(() => fail('glossary: Enter on Back does not return to the chapter'));
 }
 
 /** A page in the given theme: Light is the default, so a dark run chooses Dark (src/lib/theme.ts). */
@@ -412,6 +453,7 @@ try {
     await open(page, '/images');
     await checkFloors(page, '/images', scheme);
     if (!(await page.getByText('Most liked').isVisible())) fail('/images: no "Most liked" order');
+    await checkGlossary(page, scheme);
     await open(page, '/chapter/1');
     if (await page.locator('.add-image').count()) fail('/chapter/1: "Add an image" shows to a signed-out reader');
     {
@@ -514,7 +556,7 @@ try {
     for (const scheme of ['light', 'dark'] as const) {
       const page = await newPage({ viewport: { width, height: 900 }, colorScheme: scheme, hasTouch: width === 1024 });
       await page.addInitScript('window.__name = (f) => f');
-      for (const path of ['/', '/chapter/1', '/about', '/cards', '/adaptations', '/minpentai', '/minpentai/rule', '/assistant']) {
+      for (const path of ['/', '/chapter/1', '/about', '/cards', '/adaptations', '/minpentai', '/minpentai/rule', '/assistant', '/glossary', '/glossary/zei']) {
         await open(page, path);
         await checkFloors(page, `${path} @${width}`, scheme);
         const wide = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
@@ -527,6 +569,7 @@ try {
         if (await page.locator('.topbar').isVisible()) fail(`${path} @${width}: the phone top bar shows`);
         // Learn is Design's phone, centred beside the rail, on tablet and desktop (full screen is for phones and the Farcaster app).
         if (path === '/minpentai' && ((await page.locator('.ml-exit').isVisible()) || !(await page.locator('.rail').isVisible()))) fail(`/minpentai @${width}: Learn is full screen outside a phone`);
+        if (path.startsWith('/glossary')) await shot(page, `desktop-${width}${path.replace(/\//g, '-')}`, scheme);
       }
       await open(page, '/chapter/1');
       const bodyShown = await page.locator('.rail-body').isVisible();
@@ -641,4 +684,4 @@ if (failures.length) {
   console.error(`\nUI CHECK FAILED (${failures.length}):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`ui check passed: ${BASE}, ${36 + MINPENTAI_LESSONS + 4} pages, the chapter sheet and 8 assistant states × light and dark; 8 pages at 1024, 1440 and 2000`);
+console.log(`ui check passed: ${BASE}, ${38 + MINPENTAI_LESSONS + 4} pages, the chapter sheet, the glossary's covers and back link, and 8 assistant states × light and dark; 10 pages at 1024, 1440 and 2000`);

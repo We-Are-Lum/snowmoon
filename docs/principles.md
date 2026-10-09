@@ -135,6 +135,11 @@ in 25 words or fewer and records `written_by { fid, date }`.
 - `P2d`: every spoken description is either written by a person (with FID and
   date, 25 words or fewer) or on the exception list, and the list has not
   grown past 148.
+- `P2e`: every explanation in the glossary (`content/snowmoon/glossary.json`) is a
+  sentence of the book, verbatim in its block (speaker-colour span tags removed),
+  at a block id that exists; terms carry no definition field. Nothing on a glossary
+  page defines a word except those quotes. `npm run test:glossary` also rebuilds
+  the file from its sources and must match it byte for byte.
 - Review: is anything generated (a caption, a summary, a spoken description of
   a screen) placed where it could be taken for the book's words?
 
@@ -259,8 +264,8 @@ only, through `studio.rating_totals`, `studio.like_totals` and
 `studio.take_like_totals` (migration 0004).
 
 **Checked by.**
-- `P6a`: a real browser loads eight production pages (including a chapter,
-  the cards gallery, an adaptation and a share page) and fails on any request
+- `P6a`: a real browser loads the production pages in its list (including a chapter,
+  the cards gallery, an adaptation, a share page, the glossary and a glossary word) and fails on any request
   outside the site's own domain.
 - `P6b`: in the committed migrations, no public read policy remains on
   `ratings`, `likes`, `take_likes`, `picks` or `contributor_consents`

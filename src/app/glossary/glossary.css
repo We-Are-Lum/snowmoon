@@ -1,0 +1,54 @@
+/* The glossary (src/components/glossary.tsx): plain pages on the app's tokens. Labels DM Mono 12,
+   reading text Crimson; every control at least 44px tall; the spoiler cover as the Pictures feed's. */
+
+.glossary .gl-back {
+  display: inline-flex; align-items: center; min-height: 44px; margin: 0 0 4px;
+  font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; text-decoration: none;
+}
+.glossary .gl-meta, .glossary .gl-method, .glossary .gl-clip-note {
+  font-family: var(--label); font-size: var(--text-label); line-height: 1.5; color: var(--muted);
+}
+.glossary .gl-ch { font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
+
+/* The index: one row per word, the chapter it first appears in at the right. */
+.gl-index { list-style: none; margin: 16px 0; padding: 0; }
+.gl-index li { margin: 0; border-top: 1px solid var(--rule); }
+.gl-index li:last-child { border-bottom: 1px solid var(--rule); }
+.gl-index a {
+  display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 44px;
+  color: var(--ink); text-decoration: none; font-size: var(--text-small);
+}
+.gl-index a:hover span:first-child, .gl-index a:focus-visible span:first-child { text-decoration: underline; }
+
+/* Past where the reader has read: covered, with a count and "Show anyway". */
+.gl-cover {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 10px; margin: 16px 0; padding: 14px 16px;
+  background: var(--cover); color: var(--cover-ink); border-radius: var(--radius); font-size: 16px; line-height: 1.4;
+}
+.gl-cover p { margin: 0; }
+
+/* The book's sentences. */
+.gl-quote { margin: 12px 0; padding: 10px 14px; border-left: 2px solid var(--rule); background: var(--quote-bg); }
+.gl-quote p { margin: 0; font-size: var(--text-small); line-height: 1.5; }
+.gl-quote .gl-cite {
+  display: inline-flex; align-items: center; min-height: 44px;
+  font-family: var(--label); font-size: var(--text-label); text-transform: uppercase;
+}
+.gl-none { color: var(--body); font-size: var(--text-small); }
+
+/* Every mention: one line per chapter, paragraph links in running text. */
+.gl-mentions { list-style: none; margin: 8px 0 16px; padding: 0; }
+.gl-mentions li { margin: 0; padding: 6px 0; border-top: 1px solid var(--rule); font-size: var(--text-small); line-height: 1.9; }
+.gl-mentions li:last-child { border-bottom: 1px solid var(--rule); }
+
+/* The clip. */
+.gl-clip { display: flex; flex-direction: column; align-items: flex-start; gap: 6px; margin: 12px 0 8px; }
+.gl-play {
+  min-height: 44px; padding: 0 16px; border: 1px solid var(--ink); border-radius: var(--radius); background: var(--btn); color: var(--btn-ink);
+  cursor: pointer; font-family: var(--label); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase;
+}
+.gl-play[aria-pressed='true'] { background: transparent; color: var(--ink); }
+.gl-play:focus-visible, .gl-index a:focus-visible, .gl-back:focus-visible, .gl-cite:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+.gl-clip-note { margin: 0; }
+
+.gl-draftline { margin: 24px 0 0; }
