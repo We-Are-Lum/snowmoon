@@ -4,7 +4,7 @@ import { getFid } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { alertReports } from '~/lib/images/alert';
 import { IMAGES } from '~/lib/config';
-import { elementOf } from '~/lib/images/data';
+import { workOf } from '~/lib/images/designs';
 import { REASONS } from '~/lib/images/reasons';
 import { moveToPrivate } from '~/lib/images/store';
 
@@ -16,6 +16,7 @@ type Ctx = { params: Promise<{ id: string }> };
  * One report per person per image, 20 a day. Stated rules (decision 17): a "minor" report hides it
  * at once; three different reporters hide it until a moderator looks. Otherwise it waits in the
  * moderator queue and stays up. Who reported stays in the private log; moderators never see it.
+ * Step 4: styles and character sheets are reported the same way, with the same rules.
  */
 export async function POST(request: Request, { params }: Ctx) {
   const fid = await getFid(request);
@@ -23,7 +24,7 @@ export async function POST(request: Request, { params }: Ctx) {
   const sql = db();
   if (!sql) return NextResponse.json({ error: 'Not available here' }, { status: 503 });
   const { id } = await params;
-  const el = await elementOf(sql, id);
+  const el = await workOf(sql, id);
   if (!el || el.status !== 'published') return NextResponse.json({ error: 'No such image' }, { status: 404 });
   const { reason: r, note } = (await request.json().catch(() => ({}))) as { reason?: unknown; note?: unknown };
   const reason = String(r);
@@ -41,9 +42,9 @@ export async function POST(request: Request, { params }: Ctx) {
       await tx`update studio.elements set status = 'hidden' where id = ${el.elementId} and status = 'published'`;
       await tx`insert into studio.removal_log ${tx({ element_id: el.elementId, step: 'hidden', by_fid: 0, role: 'rule', reason, note: rule })}`;
     });
-    await moveToPrivate(el.sha256).catch((e) => console.error('report: moving the hidden file failed', (e as Error).name));
+    for (const sha of el.files) await moveToPrivate(sha).catch((e) => console.error('report: moving the hidden file failed', (e as Error).name));
     revalidatePath('/images');
-    revalidatePath(`/image/${id}`);
+    revalidatePath(el.type === 'image' ? `/image/${id}` : '/images/designs', el.type === 'image' ? undefined : 'layout');
   }
   // The moderator's push ("Snowmoon: N reports waiting", nothing else), after the answer; never fails the report.
   after(() => alertReports(sql).then(() => undefined, () => undefined));

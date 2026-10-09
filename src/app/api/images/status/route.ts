@@ -10,11 +10,21 @@ import { blockFacts } from '~/lib/reading';
 import { storageReady } from '~/lib/images/store';
 import { keptValue } from '~/lib/images/neynar';
 import { GATE_WORDING } from '~/lib/images/gate';
+import { composerPicks, myPicks, type MyPick } from '~/lib/images/designs';
+import { byline } from '~/lib/images/byline';
+
+/** A pick as the composer shows it: the text in full, since it becomes part of the public prompt (decision 7). */
+const chip = (p: MyPick) => ({
+  versionId: p.versionId, kind: p.kind, entity: p.entity, title: p.title, by: byline(p.byName, p.byFid), versionNo: p.versionNo, text: p.text,
+  views: (['front', 'side', 'back'] as const).filter((k) => p.views[k]).length, drafted: Boolean(p.assist),
+});
 
 /**
  * What the composer needs before Generate: may this person generate, and how many are left today.
  * Never asks Neynar (it is asked only at Generate): `eligible` is true for an invited FID, true or
  * false from a value kept in the last day, and null when none is kept (Generate will look it up).
+ * Step 4: the person's own picks (private; only ever their own), offered as "for this image only";
+ * picking is open to everyone signed in (owner, 2026-10-10), creating designs to invited FIDs only.
  */
 export async function GET(request: Request) {
   const fid = await getFid(request);
@@ -26,17 +36,20 @@ export async function GET(request: Request) {
   const i = ch ? ch.blocks.findIndex((b) => b.idx === Number(q.get('start'))) : -1;
   const setting = ch && i >= 0 ? (blockFacts(ch.blocks)[i]?.setting ?? null) : null;
   const styles = [{ id: 'techno-vistas', name: 'Techno vistas', text: styleText('techno-vistas', setting) }];
-  const base = { label: IMAGES.label, model: IMAGES.model, rules: RULES, perDay: IMAGES.generationsPerDay, publishesPerDay: IMAGES.publishesPerDay, maxBlocks: IMAGES.maxBlocks, styles, ready };
+  const editModel = { name: IMAGES.editModel.name, licence: IMAGES.editModel.licence, host: IMAGES.editModel.host };
+  const base = { label: IMAGES.label, model: IMAGES.model, editModel, rules: RULES, perDay: IMAGES.generationsPerDay, publishesPerDay: IMAGES.publishesPerDay, maxBlocks: IMAGES.maxBlocks, styles, ready };
   if (fid === null) return NextResponse.json({ ...base, signedIn: false }, { headers: { 'Cache-Control': 'no-store' } });
   const invited = IMAGES.invited.includes(fid);
   if (!sql) return NextResponse.json({ ...base, signedIn: true, fid, invited, eligible: invited ? true : null }, { headers: { 'Cache-Control': 'no-store' } });
   try {
-    const [consented, left, publishes, kept] = await Promise.all([
-      hasConsented(fid), generationsLeft(sql, fid), publishesLeft(sql, fid), invited ? Promise.resolve(null) : keptValue(sql, fid),
+    const [consented, left, publishes, kept, picks] = await Promise.all([
+      hasConsented(fid), generationsLeft(sql, fid), publishesLeft(sql, fid), invited ? Promise.resolve(null) : keptValue(sql, fid), myPicks(sql, fid),
     ]);
     const eligible = invited ? true : kept === null ? null : kept >= IMAGES.neynarMinScore;
     const refusal = eligible === false && kept !== null ? GATE_WORDING.below(kept) : undefined;
-    return NextResponse.json({ ...base, signedIn: true, fid, invited, eligible, refusal, consented, left, publishesLeft: publishes }, { headers: { 'Cache-Control': 'no-store' } });
+    const offered = composerPicks(picks);
+    const mine = { style: offered.style ? chip(offered.style) : null, characters: offered.characters.map(chip) };
+    return NextResponse.json({ ...base, signedIn: true, fid, invited, eligible, refusal, consented, left, publishesLeft: publishes, picks: mine }, { headers: { 'Cache-Control': 'no-store' } });
   } catch (e) {
     console.error('images status failed', (e as { code?: string }).code ?? (e as Error).name);
     return NextResponse.json({ ...base, ready: false, signedIn: true, fid, invited, eligible: invited ? true : null }, { headers: { 'Cache-Control': 'no-store' } });

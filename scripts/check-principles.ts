@@ -701,6 +701,8 @@ add({
     // Readers' images (slice 1): the image model's endpoint and the prompt check, as configured.
     endpoints.set(IMAGES.model.endpoint, 'src/lib/config.ts IMAGES.model');
     endpoints.set(IMAGES.guardModel, 'src/lib/config.ts IMAGES.guardModel');
+    // Step 4: reference pictures (a sheet's side and back views; images made with a sheet's views).
+    endpoints.set(IMAGES.editModel.endpoint, 'src/lib/config.ts IMAGES.editModel');
     return { models: json('config/models.json').models, used: [...used.entries()], endpoints: [...endpoints.entries()] };
   },
   run: ({ models, used, endpoints }) => {

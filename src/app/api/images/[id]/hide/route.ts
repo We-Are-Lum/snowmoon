@@ -3,7 +3,7 @@ import { revalidatePath } from 'next/cache';
 import { getFid } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { alertReports } from '~/lib/images/alert';
-import { elementOf } from '~/lib/images/data';
+import { workOf } from '~/lib/images/designs';
 import { moveToPrivate, restorePublic } from '~/lib/images/store';
 
 type Ctx = { params: Promise<{ id: string }> };
@@ -13,6 +13,7 @@ type Ctx = { params: Promise<{ id: string }> };
  * hidden (dropping it, its recipe and its likes from public reads), the public file moves to the
  * private bucket, and the step is logged. "Unhide" undoes only a hide the author made themselves
  * (decision 22); a hide by a moderator or a rule is undone only by the maintainer.
+ * Step 4: a style or a character sheet is hidden the same way, with all its pictures.
  */
 export async function POST(request: Request, { params }: Ctx) {
   const fid = await getFid(request);
@@ -20,9 +21,9 @@ export async function POST(request: Request, { params }: Ctx) {
   const sql = db();
   if (!sql) return NextResponse.json({ error: 'Not available here' }, { status: 503 });
   const { id } = await params;
-  const el = await elementOf(sql, id);
+  const el = await workOf(sql, id);
   if (!el) return NextResponse.json({ error: 'No such image' }, { status: 404 });
-  if (el.byFid !== fid) return NextResponse.json({ error: 'Only the person who made this image can hide it here. Others can report it.' }, { status: 403 });
+  if (el.byFid !== fid) return NextResponse.json({ error: `Only the person who made this ${el.type === 'image' ? 'image' : 'design'} can hide it here. Others can report it.` }, { status: 403 });
   const { hide } = (await request.json().catch(() => ({}))) as { hide?: unknown };
   if (hide !== false) {
     if (el.status === 'hidden') return NextResponse.json({ hidden: true });
@@ -30,13 +31,13 @@ export async function POST(request: Request, { params }: Ctx) {
       await tx`update studio.elements set status = 'hidden' where id = ${el.elementId}`;
       await tx`insert into studio.removal_log ${tx({ element_id: el.elementId, step: 'hidden', by_fid: fid, role: 'author' })}`;
     });
-    await moveToPrivate(el.sha256);
+    for (const sha of el.files) await moveToPrivate(sha);
     await sql`insert into studio.removal_log ${sql({ element_id: el.elementId, step: 'moved_private', by_fid: fid, role: 'author' })}`;
   } else {
     if (el.status !== 'hidden') return NextResponse.json({ hidden: false });
     const [last] = await sql`select role from studio.removal_log where element_id = ${el.elementId} and step in ('hidden', 'unhidden') order by at desc limit 1`;
-    if (last?.role !== 'author') return NextResponse.json({ error: 'This image was hidden by a moderator or a rule; only the maintainer can bring it back.' }, { status: 403 });
-    await restorePublic(el.sha256);
+    if (last?.role !== 'author') return NextResponse.json({ error: 'This was hidden by a moderator or a rule; only the maintainer can bring it back.' }, { status: 403 });
+    for (const sha of el.files) await restorePublic(sha);
     await sql.begin(async (tx) => {
       await tx`update studio.elements set status = 'published' where id = ${el.elementId}`;
       await tx`insert into studio.removal_log ${tx({ element_id: el.elementId, step: 'restored_public', by_fid: fid, role: 'author' })}`;
@@ -46,6 +47,6 @@ export async function POST(request: Request, { params }: Ctx) {
   // A hide changes what is waiting: the moderator's push, after the answer, at most one an hour.
   if (hide !== false) after(() => alertReports(sql).then(() => undefined, () => undefined));
   revalidatePath('/images');
-  revalidatePath(`/image/${id}`);
+  revalidatePath(el.type === 'image' ? `/image/${id}` : '/images/designs', el.type === 'image' ? undefined : 'layout');
   return NextResponse.json({ hidden: hide !== false });
 }

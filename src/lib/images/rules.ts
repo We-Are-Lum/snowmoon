@@ -12,9 +12,12 @@ export function styleText(id: StyleId, setting: string | null): string {
   return [s.prompt, setting ? s.settings?.[setting] : null].filter(Boolean).join(' ');
 }
 
-/** The exact string sent to the model: the reader's words, the style if chosen, and the no-words line. */
-export function finalPrompt(userPrompt: string, style: string | null): string {
-  return [userPrompt.trim(), style, IMAGES.suffix].filter(Boolean).join('\n\n');
+/**
+ * The exact string sent to the model: the reader's words, the style if chosen, any picked
+ * character sheets' text (step 4), and the no-words line.
+ */
+export function finalPrompt(userPrompt: string, style: string | null, sheets: string[] = []): string {
+  return [userPrompt.trim(), style, ...sheets, IMAGES.suffix].filter(Boolean).join('\n\n');
 }
 
 let names: string[] | null = null;

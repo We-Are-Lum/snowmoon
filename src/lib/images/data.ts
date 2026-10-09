@@ -35,6 +35,9 @@ export interface ReaderImage {
   checks: Record<string, unknown>;
   uses: string[];
   remixedFrom: string[];
+  /** Step 4: picked styles and sheets added (each with the exact text added), and any reference pictures. */
+  designs: { versionId: string; kind: string; entity: string; title: string; by: string; versionNo: number; text: string; assist: unknown }[];
+  references: { url: string; sha256: string }[];
 }
 
 const SELECT = (sql: Sql) => sql`
@@ -79,6 +82,8 @@ function shape(r: Record<string, unknown>): ReaderImage {
     checks: (p.checks as Record<string, unknown>) ?? {},
     uses: (r.uses as string[]) ?? [],
     remixedFrom: (r.remixed_from as string[]) ?? [],
+    designs: Array.isArray(p.designs) ? (p.designs as ReaderImage['designs']) : [],
+    references: Array.isArray(p.references) ? (p.references as ReaderImage['references']) : [],
   };
 }
 
@@ -122,7 +127,7 @@ export async function reportQueue(sql: Sql) {
       select distinct on (element_id) element_id, step, role, at from studio.removal_log
       where step in ('reported', 'hidden', 'dismissed') order by element_id, at desc)
     select e.id as element_id, e.status, e.created_by_fid, e.created_at, v.id as version_id, v.asset_sha256, v.asset_url,
-           r.prompt, r.model, r.params, a.chapter, a.start_idx, a.end_idx, last.step as last_step, last.role as last_role,
+           r.prompt, r.model, r.params, a.chapter, a.start_idx, a.end_idx, last.step as last_step, last.role as last_role, last.at as last_at,
            (select json_agg(json_build_object('reason', reason, 'n', n)) from (
               select reason, count(*)::int as n from studio.removal_log where element_id = e.id and step = 'reported' group by reason) x) as reasons,
            (select json_agg(note) from studio.removal_log where element_id = e.id and step = 'reported' and note is not null) as notes

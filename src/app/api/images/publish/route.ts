@@ -40,7 +40,8 @@ export async function POST(request: Request) {
   if (!m) return no('Bad image', 400);
   const bytes = Buffer.from(m[2], 'base64');
   if (createHash('sha256').update(bytes).digest('hex') !== t.sha256) return no('The image is not the one this draft describes', 400);
-  const uses = Array.isArray(body.uses) ? body.uses.filter(isId).slice(0, 8) : [];
+  // 'uses': the picked styles and sheets the signed record says were added (step 4), and any sent.
+  const uses = [...new Set([...(t.designs ?? []).map((d) => d.versionId), ...(Array.isArray(body.uses) ? body.uses.filter(isId) : [])])].slice(0, 8);
   const remixedFrom = Array.isArray(body.remixedFrom) ? body.remixedFrom.filter(isId).slice(0, 4) : [];
   if (!(await hasConsented(fid))) return no('Agree to how your words are published first', 403);
   if ((await publishesLeft(sql, fid)) <= 0) return no(`You can publish ${IMAGES.publishesPerDay} images a day. More tomorrow (00:00 UTC).`, 429);
@@ -79,10 +80,18 @@ export async function POST(request: Request) {
         checks: { prompt: t.guard, host_safety_checker: 'passed' },
         by_name: by.name,
         by_name_source: by.source,
+        // Step 4: the picked styles and sheets added, each with the exact text added, and any reference pictures.
+        ...(t.designs?.length ? { designs: t.designs } : {}),
+        ...(t.references?.length ? { references: t.references } : {}),
       } as never),
       seed: t.seed,
       // The style text was drafted by the coding agent (content/snowmoon/designs/styles), so it says so.
-      assist: t.style ? tx.json({ model: 'claude-coding-agent', drafted: ['style text'], source: 'content/snowmoon/designs/styles/techno-vistas.json' } as never) : null,
+      // A picked design whose text a model drafted (the project's starting style, published as a design) says so too.
+      assist: t.style
+        ? tx.json({ model: 'claude-coding-agent', drafted: ['style text'], source: 'content/snowmoon/designs/styles/techno-vistas.json' } as never)
+        : t.designs?.some((d) => d.assist)
+          ? tx.json({ model: 'claude-coding-agent', drafted: ['style text'], source: `design versions ${t.designs.filter((d) => d.assist).map((d) => d.versionId).join(', ')}` } as never)
+          : null,
       cost_usd: Number(t.costUsd.toFixed(4)),
       created_by_fid: fid,
     })}`;

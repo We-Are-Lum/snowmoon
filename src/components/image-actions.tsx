@@ -13,7 +13,9 @@ import { PrivateNoteField } from './private-note-field';
  * cards), the author's "Hide this", and "Report" for everyone else signed in. Laid out as Claude
  * Design's image page: one row of equal buttons; the report form is a bottom sheet.
  */
-export function ImageActions({ versionId, byFid, chapter }: { versionId: string; byFid: number; chapter: number }) {
+const IMAGE_WORDING_DESIGN_REPORT = { style: W.designs.report.style, sheet: W.designs.report.sheet };
+
+export function ImageActions({ versionId, byFid, chapter, design }: { versionId: string; byFid: number; chapter: number; design?: 'style' | 'sheet' }) {
   const auth = useAuth();
   const [likes, setLikes] = useState<{ likes: number; liked: boolean } | null>(null);
   const [inApp, setInApp] = useState(false);
@@ -29,7 +31,7 @@ export function ImageActions({ versionId, byFid, chapter }: { versionId: string;
     sdk.isInMiniApp().then(setInApp).catch(() => setInApp(false));
   }, []);
   useEffect(() => {
-    if (auth.kind === 'loading') return;
+    if (auth.kind === 'loading' || design) return;
     void authFetch(`/api/images/${versionId}/like`).then(async (r) => r.ok && setLikes(await r.json()));
   }, [versionId, auth.kind]);
 
@@ -81,15 +83,20 @@ export function ImageActions({ versionId, byFid, chapter }: { versionId: string;
   return (
     <div className="image-actions">
       <div className="ia-row">
-        <button type="button" className="ia-button ia-like" aria-pressed={likes?.liked ?? false} onClick={like} disabled={auth.kind !== 'signed-in'}>
-          {likes?.liked ? '♥ Liked' : '♡ Like'} · {likes?.likes ?? 0}
-        </button>
-        <button type="button" className="ia-button" onClick={cast}>
-          Cast this
-        </button>
-        <a className="ia-button" href={`/api/image-card/${versionId}`} target="_blank" rel="noopener noreferrer">
-          Share card
-        </a>
+        {/* A style or a sheet (step 4) has no likes, cast or card: only Hide this (its maker) and Report. */}
+        {!design && (
+          <>
+            <button type="button" className="ia-button ia-like" aria-pressed={likes?.liked ?? false} onClick={like} disabled={auth.kind !== 'signed-in'}>
+              {likes?.liked ? '♥ Liked' : '♡ Like'} · {likes?.likes ?? 0}
+            </button>
+            <button type="button" className="ia-button" onClick={cast}>
+              Cast this
+            </button>
+            <a className="ia-button" href={`/api/image-card/${versionId}`} target="_blank" rel="noopener noreferrer">
+              Share card
+            </a>
+          </>
+        )}
         {mine && (
           <button type="button" className={`ia-button${hidden ? '' : ' ia-warn'}`} onClick={hide}>
             {hidden ? 'Unhide' : 'Hide this'}
@@ -103,7 +110,7 @@ export function ImageActions({ versionId, byFid, chapter }: { versionId: string;
       </div>
       {auth.kind === 'signed-out' && (
         <p className="ia-note">
-          <SignInButton className="like-sign-in" label="Sign in to like or report" />
+          <SignInButton className="like-sign-in" label={design ? 'Sign in to report' : 'Sign in to like or report'} />
         </p>
       )}
       {reporting && (
@@ -113,7 +120,7 @@ export function ImageActions({ versionId, byFid, chapter }: { versionId: string;
               ×
             </button>
             <fieldset className="ia-report">
-              <legend id="report-title">Why are you reporting this image?</legend>
+              <legend id="report-title">{design ? IMAGE_WORDING_DESIGN_REPORT[design] : 'Why are you reporting this image?'}</legend>
               {REASONS.map((r) => (
                 <label key={r}>
                   <input type="radio" name="report-reason" value={r} checked={reason === r} onChange={() => setReason(r)} /> {REASON_LABELS[r]}
@@ -130,7 +137,7 @@ export function ImageActions({ versionId, byFid, chapter }: { versionId: string;
               </button>
             </div>
             {note && <p className="ia-note">{note}</p>}
-            <p className="as-draft ic-draftline">{W.draftLine}</p>
+            {!design && <p className="as-draft ic-draftline">{W.draftLine}</p>}
           </div>
         </div>
       )}
