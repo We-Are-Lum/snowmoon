@@ -147,3 +147,9 @@ Captions and the narration credit become a short label with AI that opens the re
 The note quotes "every game there's always some kind of new rule" (c4-b84) instead of saying the rule changes every match; P8d checks the quote. To undo (back to `d31910d`):
 
     vercel rollback dpl_A2cLgZRsnxpueDFKZ9VTYX1MHMHT --scope nates-projects-d1780cff
+
+## 2026-10-09: Learn full screen (branch site-learn-fullscreen)
+
+Learn fills the screen on phones and the Farcaster frame, with a × back to the site. To undo (back to `8239d08`):
+
+    vercel rollback dpl_7uZgLaFhNv3Bdyv6sirFKeQcpv5K --scope nates-projects-d1780cff
