@@ -3,7 +3,9 @@
     "deploymentEnabled": {
       "site-minpentai-play": false,
       "site-minpentai-play-2": false,
-      "site-images-everyone": false
+      "site-images-everyone": false,
+      "site-images-designs": false,
+      "site-images-designs-2": false
     }
   }
 }
