@@ -46,5 +46,10 @@
   "descriptor": "a woman in her early sixties, small and wiry, medium brown skin, short silver hair in a sharp asymmetric cut, keen eyes behind thin red-framed glasses, wearing a charcoal asymmetric commander's tabard with one sculpted shoulder panel and bright yellow piping, over a cobalt-blue seamless long-sleeved bodysuit, slim black segmented trousers, soft grey seamless boots and a slim wrist device",
   "wears_privacy_robe_in_public": false,
   "sheet_prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a woman in her early sixties, small and wiry, medium brown skin, short silver hair in a sharp asymmetric cut, keen eyes behind thin red-framed glasses, wearing a charcoal asymmetric commander's tabard with one sculpted shoulder panel and bright yellow piping, over a cobalt-blue seamless long-sleeved bodysuit, slim black segmented trousers, soft grey seamless boots and a slim wrist device.",
-  "costume_notes": "An asymmetric commander's tabard with a single shoulder panel suits a field commander and mentor, keeping her charcoal, yellow and cobalt palette and red glasses."
+  "costume_notes": "An asymmetric commander's tabard with a single shoulder panel suits a field commander and mentor, keeping her charcoal, yellow and cobalt palette and red glasses.",
+  "first_appearance": {
+    "chapter": 4,
+    "idx": 64,
+    "as": "Mu"
+  }
 }

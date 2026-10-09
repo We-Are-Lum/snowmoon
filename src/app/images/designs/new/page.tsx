@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { IMAGES } from '~/lib/config';
 import { db } from '~/lib/db';
-import { byline } from '~/lib/images/byline';
+import { designByline } from '~/lib/images/byline';
 import { SAMPLE_SUBJECTS, VIEW_LINES } from '~/lib/images/design-rules';
 import { bookCharacter, bookCharacters, designByVersion } from '~/lib/images/designs';
 import { RULES } from '~/lib/images/rules';
@@ -49,7 +49,7 @@ export default async function NewDesign({ searchParams }: Props) {
                 versionId: src.shown.versionId,
                 title: src.shown.body.title,
                 entity: src.entity,
-                by: byline(src.byName, src.byFid),
+                by: designByline(src.byName, src.byFid, src.byRole),
                 versionNo: src.shown.versionNo,
                 text: src.shown.body.text,
                 drafted: Boolean(src.shown.body.assist),

@@ -40,5 +40,10 @@
   "descriptor": "a man in his late thirties, tall and lanky, light brown skin, short curly black hair, a thin moustache and an easy smile, wearing a long sleeveless camel-brown duster tabard with a tall angled standing collar and a single diagonal row of small glowing clasps, over a fitted sky-blue long-sleeved bodysuit with seamless panels, a slate-grey harness strap across the chest, slim dark trousers gathered into soft ankle cuffs, brown seamless boots, and a thin folding slate of a computer tucked under one arm",
   "wears_privacy_robe_in_public": false,
   "sheet_prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a man in his late thirties, tall and lanky, light brown skin, short curly black hair, a thin moustache and an easy smile, wearing a long sleeveless camel-brown duster tabard with a tall angled standing collar and a single diagonal row of small glowing clasps, over a fitted sky-blue long-sleeved bodysuit with seamless panels, a slate-grey harness strap across the chest, slim dark trousers gathered into soft ankle cuffs, brown seamless boots, and a thin folding slate of a computer tucked under one arm.",
-  "costume_notes": "Sharp United Cities tailoring with a diagonal closure and cut-away hem replaces the blazer, keeping his camel and sky-blue palette and the computer he works on as a researcher. Pushed further after the first render still read as present-day."
+  "costume_notes": "Sharp United Cities tailoring with a diagonal closure and cut-away hem replaces the blazer, keeping his camel and sky-blue palette and the computer he works on as a researcher. Pushed further after the first render still read as present-day.",
+  "first_appearance": {
+    "chapter": 1,
+    "idx": 134,
+    "as": "Jahn"
+  }
 }

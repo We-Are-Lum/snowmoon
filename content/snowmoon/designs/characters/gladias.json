@@ -82,5 +82,10 @@
   "descriptor": "a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device",
   "wears_privacy_robe_in_public": true,
   "sheet_prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a man of about forty, slim and of medium height, light olive skin, short wavy chestnut-brown hair, a neatly trimmed short beard and hazel eyes, wearing a long sleeveless moss-green woven tabard with a sculpted standing collar that rises to his jaw, over a fitted cream long-sleeved bodysuit with seamless panels, a wide ochre cloth sash at the waist, slim tapered charcoal leggings, smooth seamless grey boots with thick soft soles, a thin silver band around his throat, a small earpiece and a slim pale ceramic wrist device.",
-  "costume_notes": "A long sleeveless woven tabard with a sculpted standing collar and wide sash over a seamless bodysuit gives a calm Veridian future silhouette, keeping his moss-green and cream palette, the neck band and a wrist device in place of the watch; drawn unrobed, the privacy robe being a separate prop."
+  "costume_notes": "A long sleeveless woven tabard with a sculpted standing collar and wide sash over a seamless bodysuit gives a calm Veridian future silhouette, keeping his moss-green and cream palette, the neck band and a wrist device in place of the watch; drawn unrobed, the privacy robe being a separate prop.",
+  "first_appearance": {
+    "chapter": 1,
+    "idx": 2,
+    "as": "Gladias"
+  }
 }

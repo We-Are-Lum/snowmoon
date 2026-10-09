@@ -52,5 +52,10 @@
   "descriptor": "a lanky young man of about seventeen, tall and narrow-shouldered, pale skin with rosy cheeks, straight ash-blond hair falling over his ears and rectangular black-framed glasses, wearing a faded teal hooded half-cape over one shoulder above a fitted grey undertunic, rust-brown ribbed trousers gathered at the ankle, soft grey seamless shoes, and a cross-body harness holding a compact grey box cabled to the small handheld screen in his hand",
   "wears_privacy_robe_in_public": false,
   "sheet_prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a lanky young man of about seventeen, tall and narrow-shouldered, pale skin with rosy cheeks, straight ash-blond hair falling over his ears and rectangular black-framed glasses, wearing a faded teal hooded half-cape over one shoulder above a fitted grey undertunic, rust-brown ribbed trousers gathered at the ankle, soft grey seamless shoes, and a cross-body harness holding a compact grey box cabled to the small handheld screen in his hand.",
-  "costume_notes": "A one-shoulder hooded half-cape replaces the hoodie in the same teal, with a harness carrying the compute box that is cabled to his hand device, as in the book."
+  "costume_notes": "A one-shoulder hooded half-cape replaces the hoodie in the same teal, with a harness carrying the compute box that is cabled to his hand device, as in the book.",
+  "first_appearance": {
+    "chapter": 1,
+    "idx": 111,
+    "as": "Febric"
+  }
 }

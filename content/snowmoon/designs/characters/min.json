@@ -40,5 +40,13 @@
   "descriptor": "a cheerful woman in her mid-forties, short and plump, light golden-tan skin, chin-length black hair with a few grey strands held back by a bright red headband, a round face with smile lines, wearing a sleeveless coral-pink rounded cocoon cape that falls in soft quilted panels to the hips, over a patterned yellow long-sleeved wrap undertunic tied at the side with a wide sash, navy gathered trousers, soft white glowing-soled shoes and a slim wrist device",
   "wears_privacy_robe_in_public": false,
   "sheet_prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a cheerful woman in her mid-forties, short and plump, light golden-tan skin, chin-length black hair with a few grey strands held back by a bright red headband, a round face with smile lines, wearing a sleeveless coral-pink rounded cocoon cape that falls in soft quilted panels to the hips, over a patterned yellow long-sleeved wrap undertunic tied at the side with a wide sash, navy gathered trousers, soft white glowing-soled shoes and a slim wrist device.",
-  "costume_notes": "A rounded quilted cocoon jacket over a side-tied wrap gives a cozy, playful Dzego silhouette that keeps her warmth and coral, yellow and red palette. Pushed further after the first render still read as present-day."
+  "costume_notes": "A rounded quilted cocoon jacket over a side-tied wrap gives a cozy, playful Dzego silhouette that keeps her warmth and coral, yellow and red palette. Pushed further after the first render still read as present-day.",
+  "name_exclusions": [
+    "Hun Min"
+  ],
+  "first_appearance": {
+    "chapter": 5,
+    "idx": 4,
+    "as": "Min"
+  }
 }

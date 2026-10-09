@@ -3,8 +3,9 @@ import type postgres from 'postgres';
 import { IMAGES } from '../config';
 import { checkPrompt } from './guard';
 import { ImageUnavailable, type Made } from './fal';
-import { reserve, settle, type Spend } from './limits';
+import { recordGuard, reserve, settle, wordsCheckFits, type Spend } from './limits';
 import { blockedName } from './rules';
+import { IMAGE_WORDING } from './wording';
 
 /**
  * Every paid picture goes through here, in this order (docs/proposals/add-an-image.md, section 5;
@@ -67,3 +68,24 @@ export async function paidPicture(
   if (made.nsfw) return { ok: false, status: 422, error: 'The image was flagged by the safety checker and dropped.', extra: { reason: 'nsfw', left: r.left } };
   return { ok: true, made, left: r.left };
 }
+
+/**
+ * The prompt check on words that make no picture (decision 1, 2026-10-09: a style's or sheet's name,
+ * which is published but not sent to the image model). Blocked names first, then the same model check;
+ * its cost goes into the day's totals; refused when the spend caps are reached.
+ */
+export async function checkWords(sql: Sql, request: Request, text: string): Promise<{ ok: true } | { ok: false; status: number; error: string }> {
+  if (!text.trim()) return { ok: true };
+  if (blockedName(text)) return { ok: false, status: 422, error: IMAGE_WORDING.designs.form.nameBlocked };
+  if (!(await wordsCheckFits(sql))) return { ok: false, status: 429, error: LIMIT_SAY.spend };
+  let guard;
+  try {
+    guard = await checkPrompt(text, request);
+  } catch (e) {
+    console.error('name check failed', (e as Error).name);
+    return { ok: false, status: 503, error: 'The prompt check did not answer. Try again in a moment.' };
+  }
+  await recordGuard(sql, { costUsd: guard.costUsd, provider: guard.provider, verdict: guard.allow ? 'ok' : 'blocked' });
+  return guard.allow ? { ok: true } : { ok: false, status: 422, error: NAME_REFUSED };
+}
+export const NAME_REFUSED = IMAGE_WORDING.designs.form.nameRefused;

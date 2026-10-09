@@ -19,6 +19,8 @@ export interface DesignBody {
   by_name_source: 'relay' | 'farcaster-api' | null;
   /** Which parts a model drafted (the project's starting style), or null when all are the person's words. */
   assist: { model: string; drafted: string[]; source?: string } | null;
+  /** 'maintainer' when the maintainer published it for the project (the starting style, decision 13); absent otherwise. */
+  role?: 'maintainer' | null;
 }
 
 export interface DesignPicture {

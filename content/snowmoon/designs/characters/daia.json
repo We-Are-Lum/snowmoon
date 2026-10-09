@@ -40,5 +40,10 @@
   "descriptor": "a woman in her mid-forties, short and round-faced, light tan skin, thick black hair streaked with silver piled in a high bun, a warm crinkled smile, wearing a sage-green layered linen wrap dress with a draped crossover bodice and a curved hem, a terracotta knitted half-cape fastened at one shoulder, cream gathered leggings, soft brown seamless clogs and a slim wooden-toned wrist device",
   "wears_privacy_robe_in_public": false,
   "sheet_prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a woman in her mid-forties, short and round-faced, light tan skin, thick black hair streaked with silver piled in a high bun, a warm crinkled smile, wearing a sage-green layered linen wrap dress with a draped crossover bodice and a curved hem, a terracotta knitted half-cape fastened at one shoulder, cream gathered leggings, soft brown seamless clogs and a slim wooden-toned wrist device.",
-  "costume_notes": "Organic Veridian drapes, a crossover wrap dress and a one-shoulder knitted half-cape, keep her warm sage and terracotta look as the household's welcoming aunt."
+  "costume_notes": "Organic Veridian drapes, a crossover wrap dress and a one-shoulder knitted half-cape, keep her warm sage and terracotta look as the household's welcoming aunt.",
+  "first_appearance": {
+    "chapter": 1,
+    "idx": 125,
+    "as": "Daia"
+  }
 }

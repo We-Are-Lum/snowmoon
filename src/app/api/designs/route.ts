@@ -7,8 +7,9 @@ import { IMAGES } from '~/lib/config';
 import { hasConsented } from '~/lib/consent';
 import type { DesignBody, DesignPicture } from '~/lib/element-body';
 import { SAMPLE_ASSIST } from '~/lib/images/design-rules';
-import { bookCharacter, designByVersion, designPublishesToday, makeDesign, MakeRefused, styleNameTaken, type DesignKind, type MakeMode } from '~/lib/images/designs';
+import { bookCharacter, characterNameClash, CHARACTER_NAME_REFUSAL, designByVersion, designPublishesToday, makeDesign, MakeRefused, styleNameTaken, type DesignKind, type MakeMode } from '~/lib/images/designs';
 import { blockedName } from '~/lib/images/rules';
+import { checkWords } from '~/lib/images/paid';
 import { putPublic, storageReady } from '~/lib/images/store';
 import { readSampleTicket, type SampleTicket } from '~/lib/images/ticket';
 import { bylineName } from '~/lib/names';
@@ -99,11 +100,16 @@ export async function POST(request: Request) {
 
   // Refusals that need no pictures come before any picture is put on the public bucket.
   if (mode === 'create' && kind === 'style' && (await styleNameTaken(sql, title))) return no('A style with this name already exists. Fork it, or choose another name.', 409);
+  if (kind === 'style' && characterNameClash(title)) return no(CHARACTER_NAME_REFUSAL, 409);
   if (mode !== 'create') {
     const src = typeof body.from === 'string' ? await designByVersion(sql, body.from) : null;
     if (!src || src.kind !== kind) return no('No such design', 404);
     if (mode === 'version' && src.byFid !== fid) return no('Only its maker can add a version. Fork it to make your own.', 403);
   }
+
+  // The name is published too: the model check reads it (decision 1); the text was checked with its pictures.
+  const named2 = await checkWords(sql, request, title);
+  if (!named2.ok) return no(named2.error, named2.status);
 
   const by = await bylineName(fid, body.nameProof);
   const put = async (p: { t: SampleTicket; bytes: Buffer }): Promise<DesignPicture> => ({ url: await putPublic(p.t.sha256, p.bytes, 'image/jpeg'), sha256: p.t.sha256, recipe: recipeOf(p.t) });

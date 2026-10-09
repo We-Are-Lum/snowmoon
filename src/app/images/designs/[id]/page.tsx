@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { IMAGES } from '~/lib/config';
 import { db } from '~/lib/db';
-import { byline } from '~/lib/images/byline';
+import { byline, designByline } from '~/lib/images/byline';
 import { wordDiff } from '~/lib/images/design-rules';
 import { bookCharacters, designByVersion, imagesBuiltOn, listDesigns, picturesOf } from '~/lib/images/designs';
 import { IMAGE_WORDING } from '~/lib/images/wording';
@@ -46,12 +46,13 @@ export default async function DesignPage({ params }: Props) {
   const d = sql ? await designByVersion(sql, id).catch(() => null) : null;
   if (!d || !sql) notFound();
   const body = d.shown.body;
-  const by = byline(d.byName, d.byFid);
+  const by = designByline(d.byName, d.byFid, d.byRole);
   const style = d.kind === 'style';
   const character = style ? null : (bookCharacters().find((c) => c.name === d.entity) ?? null);
   const callName = character ? character.name.split(' ').find((w) => !/^(Lord|General|Senator)$/.test(w)) ?? character.name : d.entity;
   // A fork shades the words it changed from the version it was remixed from ("the page shows the difference").
-  const sourceText = d.remixedFrom ? ((await designByVersion(sql, d.remixedFrom.versionId).catch(() => null))?.shown.body.text ?? null) : null;
+  const rf = d.remixedFrom && !d.remixedFrom.hidden ? d.remixedFrom : null;
+  const sourceText = rf ? ((await designByVersion(sql, rf.versionId).catch(() => null))?.shown.body.text ?? null) : null;
   const parts = sourceText !== null ? wordDiff(sourceText, body.text) : [{ text: body.text, changed: false }];
   const built = await imagesBuiltOn(sql, d.elementId).catch(() => []);
   const others = await listDesigns(sql, d.kind, 'new', style ? undefined : d.entityId).catch(() => []);
@@ -70,9 +71,13 @@ export default async function DesignPage({ params }: Props) {
       {d.remixedFrom && (
         <p className="dz-meta dz-remix">
           <span className="dz-muted">{W.page.remixedFrom}</span>{' '}
-          <Link href={`/images/designs/${d.remixedFrom.versionId}`}>
-            {d.remixedFrom.title || d.remixedFrom.entity} v{d.remixedFrom.versionNo} · {byline(d.remixedFrom.byName, d.remixedFrom.byFid)} →
-          </Link>
+          {rf ? (
+            <Link href={`/images/designs/${rf.versionId}`}>
+              {rf.title || rf.entity} v{rf.versionNo} · {designByline(rf.byName, rf.byFid, rf.byRole)} →
+            </Link>
+          ) : (
+            <span className="dz-muted">{W.page.remixedHidden}</span>
+          )}
         </p>
       )}
       {body.assist && <p className="dz-meta dz-drafted">{W.page.drafted}</p>}
@@ -95,7 +100,7 @@ export default async function DesignPage({ params }: Props) {
           <p className="dz-text">
             {parts.map((p, i) => (p.changed ? <mark key={i}>{p.text}</mark> : <span key={i}>{p.text}</span>))}
           </p>
-          {sourceText !== null && parts.some((p) => p.changed) && <p className="dz-note">{W.page.changedFrom(d.remixedFrom!.versionNo)}</p>}
+          {sourceText !== null && parts.some((p) => p.changed) && <p className="dz-note">{W.page.changedFrom(rf!.versionNo)}</p>}
         </div>
         <div className="dz-versions">
           <p className="dz-label">{W.page.versions}</p>
@@ -186,7 +191,7 @@ export default async function DesignPage({ params }: Props) {
                   )}
                   <span className="dz-row-text">
                     <span className="dz-row-title">{o.title || (style ? o.entity : W.page.sheetBy(byline(o.byName, o.byFid)))}</span>
-                    <span className="dz-row-meta">{W.index.rowMeta(byline(o.byName, o.byFid), o.versionNo, o.builtOn)}</span>
+                    <span className="dz-row-meta">{W.index.rowMeta(designByline(o.byName, o.byFid, o.byRole), o.versionNo)}</span>
                     {o.thumb && <span className="dz-row-ai">{style ? 'Sample' : 'Views'}: AI-generated · not by the author</span>}
                   </span>
                 </Link>

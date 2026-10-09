@@ -52,7 +52,7 @@ export const IMAGE_WORDING = {
       newStyle: '+ New style',
       footer: 'Nothing here is official. “Most built on” counts published images that used each one. No one sees how many people picked anything.',
       noStyles: 'No styles yet.',
-      rowMeta: (by: string, v: number, built: number) => `${by} · v${v} · ${built} built on`,
+      rowMeta: (by: string, v: number) => `${by} · v${v}`,
       sheets: (n: number) => (n === 0 ? 'No sheet yet' : n === 1 ? '1 sheet' : `${n} sheets`),
       coveredRow: (ch: number) => `A character from chapter ${ch}, past where you’ve read.`,
       showAnyway: 'Show anyway',
@@ -68,6 +68,7 @@ export const IMAGE_WORDING = {
     page: {
       meta: (v: number, of: number, by: string, date: string) => `v${v} of ${of} · by ${by} · ${date}`,
       remixedFrom: 'Remixed from',
+      remixedHidden: 'a design that was hidden',
       drafted: 'The project’s starting style. Its text was drafted by the coding agent, a closed model.',
       samplesCaption: 'Sample images · AI-generated · not by the author',
       viewsCaption: 'Front, side, back · AI-generated · not by the author',
@@ -122,7 +123,11 @@ export const IMAGE_WORDING = {
       frontFirst: 'Make the front view first.',
       viewModel: 'Side and back are made from the front view',
       styleRules: 'No living artists’ names. No other works’ styles by name. The same image rules as Compose.',
-      sheetRules: 'Don’t base a character on a real person. Don’t contradict what the book says.',
+      sheetRules: 'Don’t base a character on a real person. Don’t contradict what the book says. Describe how they look early in the book; nothing that happens later.',
+      viewsShared: 'Published views can be used by other readers as reference pictures for their images.',
+      characterName: 'That is the name of a character in the book. Choose another name for the style.',
+      nameRefused: 'This name asks for something the rules don’t allow. Choose another.',
+      nameBlocked: 'No real people: the name names someone on the blocked list.',
       published: 'Published.',
       see: 'See it',
       promptIs: (suffix: string) => `Each picture’s prompt is its line above, then your text, then “${suffix}”`,
@@ -139,8 +144,8 @@ export const IMAGE_WORDING = {
       lead: 'Your picks fill in the style and characters when you make an image. Nobody else’s images change.',
       style: 'Style',
       characters: 'Characters',
-      used: 'Offered when you make an image',
-      alsoPicked: 'Also picked; pick it again to use it',
+      used: 'Offered first when you make an image',
+      alsoOffered: 'Also offered when you make an image',
       charUsed: (name: string) => `Offered when a passage names ${name}`,
       change: 'Change',
       clear: 'Clear',
@@ -178,6 +183,9 @@ export const IMAGE_WORDING = {
     image: {
       added: 'Added from picked styles and sheets',
       references: 'Reference pictures',
+    },
+    about: {
+      line: 'Readers can also publish styles and character sheets. Their names and text are published like prompts: public, permanent, GPL-3.0, under the maker’s name, and added in full to the prompts of images that use them.',
     },
     report: {
       style: 'Why are you reporting this style?',
@@ -230,6 +238,7 @@ const DESIGN_SCREENS: Record<keyof typeof IMAGE_WORDING.designs, { screen: strin
   composer: { screen: 'Add an image · compose (from your picks)', where: 'src/components/image-composer.tsx' },
   preview: { screen: 'Add an image · preview', where: 'src/components/image-composer.tsx' },
   image: { screen: 'Image page (recipe)', where: 'src/app/image/[id]/page.tsx' },
+  about: { screen: 'About', where: 'src/app/about/page.tsx (Pictures section)' },
   report: { screen: 'Report a style or a sheet', where: 'src/components/image-actions.tsx' },
   moderate: { screen: 'Reports (moderators)', where: 'src/components/moderate-queue.tsx' },
 };

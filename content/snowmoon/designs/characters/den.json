@@ -40,5 +40,10 @@
   "descriptor": "a composed man in his fifties, tall and gaunt, light beige skin, long black hair streaked with grey tied in a low knot, high cheekbones and a still, unreadable expression, wearing the long hooded shadow-grey cloak of a priest, its hem traced with faint glowing geometric patterns, over a black high-necked seamless tunic with a sculpted collar, and holding a slim dark hand device",
   "wears_privacy_robe_in_public": false,
   "sheet_prompt": "Character reference sheet on a plain flat off-white background with no scenery: three full-body views of the same person side by side, front view facing the viewer, three-quarter view, and back view, neutral standing pose, even lighting. The person is a composed man in his fifties, tall and gaunt, light beige skin, long black hair streaked with grey tied in a low knot, high cheekbones and a still, unreadable expression, wearing the long hooded shadow-grey cloak of a priest, its hem traced with faint glowing geometric patterns, over a black high-necked seamless tunic with a sculpted collar, and holding a slim dark hand device.",
-  "costume_notes": "Keeps the shadowy cloak of the Minpentai priests and his hand device, adding glowing geometric hem patterns and a sculpted collar."
+  "costume_notes": "Keeps the shadowy cloak of the Minpentai priests and his hand device, adding glowing geometric hem patterns and a sculpted collar.",
+  "first_appearance": {
+    "chapter": 9,
+    "idx": 56,
+    "as": "Den"
+  }
 }

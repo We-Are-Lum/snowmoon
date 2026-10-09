@@ -10,12 +10,12 @@ import { blockFacts } from '~/lib/reading';
 import { storageReady } from '~/lib/images/store';
 import { keptValue } from '~/lib/images/neynar';
 import { GATE_WORDING } from '~/lib/images/gate';
-import { composerPicks, myPicks, type MyPick } from '~/lib/images/designs';
-import { byline } from '~/lib/images/byline';
+import { composerPicks, myPicks, startingStyleRetired, type MyPick } from '~/lib/images/designs';
+import { designByline } from '~/lib/images/byline';
 
 /** A pick as the composer shows it: the text in full, since it becomes part of the public prompt (decision 7). */
 const chip = (p: MyPick) => ({
-  versionId: p.versionId, kind: p.kind, entity: p.entity, title: p.title, by: byline(p.byName, p.byFid), versionNo: p.versionNo, text: p.text,
+  versionId: p.versionId, kind: p.kind, entity: p.entity, title: p.title, by: designByline(p.byName, p.byFid, p.byRole), versionNo: p.versionNo, text: p.text,
   views: (['front', 'side', 'back'] as const).filter((k) => p.views[k]).length, drafted: Boolean(p.assist),
 });
 
@@ -35,7 +35,9 @@ export async function GET(request: Request) {
   const ch = loadChapter(Number(q.get('chapter')));
   const i = ch ? ch.blocks.findIndex((b) => b.idx === Number(q.get('start'))) : -1;
   const setting = ch && i >= 0 ? (blockFacts(ch.blocks)[i]?.setting ?? null) : null;
-  const styles = [{ id: 'techno-vistas', name: 'Techno vistas', text: styleText('techno-vistas', setting) }];
+  // Decision 13: once "Techno vistas" is published as a design, the file option is retired; it is then a style like any other.
+  const retired = sql ? await startingStyleRetired(sql).catch(() => false) : false;
+  const styles = retired ? [] : [{ id: 'techno-vistas', name: 'Techno vistas', text: styleText('techno-vistas', setting) }];
   const editModel = { name: IMAGES.editModel.name, licence: IMAGES.editModel.licence, host: IMAGES.editModel.host };
   const base = { label: IMAGES.label, model: IMAGES.model, editModel, rules: RULES, perDay: IMAGES.generationsPerDay, publishesPerDay: IMAGES.publishesPerDay, maxBlocks: IMAGES.maxBlocks, styles, ready };
   if (fid === null) return NextResponse.json({ ...base, signedIn: false }, { headers: { 'Cache-Control': 'no-store' } });
@@ -48,7 +50,8 @@ export async function GET(request: Request) {
     const eligible = invited ? true : kept === null ? null : kept >= IMAGES.neynarMinScore;
     const refusal = eligible === false && kept !== null ? GATE_WORDING.below(kept) : undefined;
     const offered = composerPicks(picks);
-    const mine = { style: offered.style ? chip(offered.style) : null, characters: offered.characters.map(chip) };
+    // Every picked style, newest pick first; the composer starts with that one, for this image only (decision 3).
+    const mine = { styles: offered.styles.map(chip), characters: offered.characters.map(chip) };
     return NextResponse.json({ ...base, signedIn: true, fid, invited, eligible, refusal, consented, left, publishesLeft: publishes, picks: mine }, { headers: { 'Cache-Control': 'no-store' } });
   } catch (e) {
     console.error('images status failed', (e as { code?: string }).code ?? (e as Error).name);

@@ -4,6 +4,7 @@ import path from 'node:path';
 import type postgres from 'postgres';
 import { WORK_ID } from '../config';
 import type { DesignBody, DesignPicture } from '../element-body';
+import { IMAGE_WORDING } from './wording';
 
 /**
  * Styles and character sheets (step 4, docs/proposals/style-guides-and-sheets.md), on the tables
@@ -42,7 +43,16 @@ export interface DesignRow {
   builtOn: number;
   thumb: string | null;
   assist: DesignBody['assist'];
-  remixedFrom: { versionId: string; title: string; entity: string; byFid: number; byName: string | null; versionNo: number } | null;
+  /**
+   * The credit a fork carries, for good. When the source was hidden since, only that it was a remix
+   * (decision 16, 2026-10-09): no name, maker or link.
+   */
+  remixedFrom:
+    | { hidden: false; versionId: string; title: string; entity: string; byFid: number; byName: string | null; byRole: DesignBody['role']; versionNo: number }
+    | { hidden: true }
+    | null;
+  /** 'maintainer' for the project's starting style, published by the maintainer (decision 13). */
+  byRole: DesignBody['role'];
 }
 
 const isId = (s: unknown): s is string => typeof s === 'string' && /^[0-9a-f-]{36}$/.test(s);
@@ -61,10 +71,10 @@ const ROWS = (sql: Sql) => sql`
          v.id as version_id, v.version_no, v.body, v.created_at as updated_at,
          (select count(*)::int from studio.element_versions vv where vv.element_id = e.id) as versions,
          ${BUILT_ON(sql)} as built_on,
-         (select json_build_object('version_id', sv.id, 'body', sv.body, 'version_no', sv.version_no, 'by_fid', se.created_by_fid, 'entity', sen.name)
+         (select json_build_object('version_id', sv.id, 'body', sv.body, 'version_no', sv.version_no, 'by_fid', se.created_by_fid, 'entity', sen.name, 'status', se.status)
             from studio.element_versions fv0 join studio.links l0 on l0.from_version_id = fv0.id and l0.kind = 'remixed_from'
             join studio.element_versions sv on sv.id = l0.to_version_id
-            join studio.elements se on se.id = sv.element_id and se.status = 'published'
+            join studio.elements se on se.id = sv.element_id
             join studio.entities sen on sen.id = se.entity_id
             where fv0.element_id = e.id order by fv0.version_no limit 1) as remixed_from
   from studio.elements e
@@ -74,12 +84,12 @@ const ROWS = (sql: Sql) => sql`
 
 const bodyOf = (b: unknown): DesignBody => {
   const o = (b ?? {}) as Partial<DesignBody> & { description?: string };
-  return { title: o.title ?? '', text: o.text ?? o.description ?? '', samples: o.samples ?? [], views: o.views ?? {}, by_name: o.by_name ?? null, by_name_source: o.by_name_source ?? null, assist: o.assist ?? null };
+  return { title: o.title ?? '', text: o.text ?? o.description ?? '', samples: o.samples ?? [], views: o.views ?? {}, by_name: o.by_name ?? null, by_name_source: o.by_name_source ?? null, assist: o.assist ?? null, role: o.role ?? null };
 };
 
 function shape(r: Record<string, unknown>): DesignRow {
   const b = bodyOf(r.body);
-  const rf = r.remixed_from as { version_id: string; body: unknown; version_no: number; by_fid: number; entity: string } | null;
+  const rf = r.remixed_from as { version_id: string; body: unknown; version_no: number; by_fid: number; entity: string; status: string } | null;
   const rb = rf ? bodyOf(rf.body) : null;
   return {
     elementId: String(r.element_id),
@@ -98,7 +108,12 @@ function shape(r: Record<string, unknown>): DesignRow {
     builtOn: Number(r.built_on),
     thumb: b.samples[0]?.url ?? b.views.front?.url ?? null,
     assist: b.assist,
-    remixedFrom: rf && rb ? { versionId: String(rf.version_id), title: rb.title, entity: rf.entity, byFid: Number(rf.by_fid), byName: rb.by_name, versionNo: Number(rf.version_no) } : null,
+    byRole: b.role,
+    remixedFrom: !rf || !rb
+      ? null
+      : rf.status !== 'published'
+        ? { hidden: true }
+        : { hidden: false, versionId: String(rf.version_id), title: rb.title, entity: rf.entity, byFid: Number(rf.by_fid), byName: rb.by_name, byRole: rb.role, versionNo: Number(rf.version_no) },
   };
 }
 
@@ -172,7 +187,7 @@ export interface BookCharacter {
   slug: string;
   name: string;
   setting: string | null;
-  /** The earliest chapter in which the book says something about them (for covering spoilers). */
+  /** The chapter in which the book first names them (for covering spoilers). */
   firstChapter: number;
   /** The book's own words about them, each with where it is. */
   quotes: { chapter: number; idx: number; quote: string }[];
@@ -184,10 +199,11 @@ export function bookCharacters(): BookCharacter[] {
   const dir = path.join(process.cwd(), 'content/snowmoon/designs/characters');
   characters = readdirSync(dir)
     .filter((f) => f.endsWith('.json'))
-    .map((f) => JSON.parse(readFileSync(path.join(dir, f), 'utf8')) as { slug: string; name: string; setting?: string; facts?: { chapter: number; idx: number; quote: string }[] })
+    .map((f) => JSON.parse(readFileSync(path.join(dir, f), 'utf8')) as { slug: string; name: string; setting?: string; facts?: { chapter: number; idx: number; quote: string }[]; first_appearance?: { chapter: number; idx: number } })
     .map((c) => {
       const quotes = (c.facts ?? []).map((q) => ({ chapter: q.chapter, idx: q.idx, quote: q.quote })).sort((a, b) => a.chapter - b.chapter || a.idx - b.idx);
-      return { slug: c.slug, name: c.name, setting: c.setting ?? null, firstChapter: quotes[0]?.chapter ?? 1, quotes };
+      // Where the book first names them (scripts/first-appearances.ts, decision 19); the earliest fact only as a fallback.
+      return { slug: c.slug, name: c.name, setting: c.setting ?? null, firstChapter: c.first_appearance?.chapter ?? quotes[0]?.chapter ?? 1, quotes };
     })
     .sort((a, b) => a.firstChapter - b.firstChapter || a.name.localeCompare(b.name));
   return characters;
@@ -224,6 +240,7 @@ export interface MakeInput {
   fromVersionId?: string;
   body: DesignBody;
 }
+export const CHARACTER_NAME_REFUSAL = IMAGE_WORDING.designs.form.characterName;
 export class MakeRefused extends Error {
   constructor(public status: number, message: string) {
     super(message);
@@ -243,6 +260,15 @@ export async function styleNameTaken(sql: Sql, name: string): Promise<boolean> {
   return Boolean(r);
 }
 
+/**
+ * A style may not be named like one of the book's characters (decision 12, 2026-10-09): their full
+ * name, or a word they are called by ("Zei", "Lektor"), ignoring case.
+ */
+export function characterNameClash(name: string): BookCharacter | null {
+  const n = name.trim().toLowerCase();
+  return bookCharacters().find((c) => c.name.toLowerCase() === n || c.name.split(/\s+/).some((w) => w.toLowerCase() === n && !/^(lord|lady|general|senator)$/.test(n))) ?? null;
+}
+
 export async function makeDesign(sql: Sql, m: MakeInput): Promise<{ versionId: string; elementId: string }> {
   return sql.begin(async (tx) => {
     const t = tx as unknown as Sql;
@@ -254,6 +280,7 @@ export async function makeDesign(sql: Sql, m: MakeInput): Promise<{ versionId: s
       const name = (m.styleName ?? '').trim();
       if (!name) throw new MakeRefused(400, 'Give the style a name');
       if (await styleNameTaken(t, name)) throw new MakeRefused(409, 'A style with this name already exists. Fork it, or choose another name.');
+      if (characterNameClash(name)) throw new MakeRefused(409, CHARACTER_NAME_REFUSAL);
       const [en] = await t`insert into studio.entities ${t({ work_id: WORK_ID, kind: 'style', name })} returning id`;
       entityId = String(en.id);
     } else if (m.mode === 'create' && m.kind === 'character') {
@@ -310,6 +337,7 @@ export interface MyPick {
   views: DesignBody['views'];
   samples: DesignPicture[];
   assist: DesignBody['assist'];
+  byRole: DesignBody['role'];
 }
 
 export async function myPicks(sql: Sql, fid: number): Promise<MyPick[]> {
@@ -344,6 +372,7 @@ export async function myPicks(sql: Sql, fid: number): Promise<MyPick[]> {
       views: b.views,
       samples: b.samples,
       assist: b.assist,
+      byRole: b.role,
     };
   });
 }
@@ -365,12 +394,13 @@ export async function clearPick(sql: Sql, fid: number, entityId: string): Promis
 }
 
 /**
- * The person's picks the composer offers: the style picked most recently (several styles can be
- * picked, one per style; decision 3 in the proposal), and each picked character. Hidden ones drop out.
+ * The person's picks the composer offers (decision 3, 2026-10-09): every picked style, newest pick
+ * first (that one is chosen to start with, for this image only), and each picked character.
+ * Hidden ones drop out.
  */
-export function composerPicks(picks: MyPick[]): { style: MyPick | null; characters: MyPick[] } {
+export function composerPicks(picks: MyPick[]): { styles: MyPick[]; characters: MyPick[] } {
   const live = picks.filter((p) => p.available);
-  return { style: live.find((p) => p.kind === 'style') ?? null, characters: live.filter((p) => p.kind === 'character') };
+  return { styles: live.filter((p) => p.kind === 'style'), characters: live.filter((p) => p.kind === 'character') };
 }
 
 // ---------------------------------------------------------------------------------------------
@@ -448,4 +478,34 @@ export async function fullQueue(sql: Sql) {
   const images = (await reportQueue(sql)).map((r) => ({ type: 'image' as const, ...(r as Record<string, unknown>), version_id: String(r.version_id), last_at: new Date(r.last_at as string).toISOString() }));
   const designs = await designQueue(sql);
   return [...images, ...designs].sort((a, b) => Date.parse(a.last_at) - Date.parse(b.last_at));
+}
+
+/** The file the project's starting style comes from; once it is published as a design, the composer's file option retires (decision 13). */
+export const STARTING_STYLE_FILE = 'content/snowmoon/designs/styles/techno-vistas.json';
+
+export async function startingStyleRetired(sql: Sql): Promise<boolean> {
+  const [r] = await sql`select 1 from studio.elements e join studio.element_versions v on v.element_id = e.id
+    where e.element_type = 'design' and e.status = 'published' and e.work_id = ${WORK_ID} and v.body->'assist'->>'source' = ${STARTING_STYLE_FILE} limit 1`;
+  return Boolean(r);
+}
+
+/**
+ * Publishes the project's starting style as a design (decision 13, 2026-10-09): under the
+ * maintainer's FID, labelled the maintainer's, its text declared model-drafted. Used by
+ * scripts/seed-designs.ts (dry run unless --apply) at merge time, after the owner's go.
+ */
+export async function seedStartingStyle(sql: Sql, opts: { fid: number; byName: string | null; text: string; title: string }): Promise<{ versionId: string } | { exists: true }> {
+  if (await startingStyleRetired(sql)) return { exists: true };
+  return sql.begin(async (tx) => {
+    const t = tx as unknown as Sql;
+    const [have] = await t`select id from studio.entities where work_id = ${WORK_ID} and kind = 'style' and lower(name) = lower(${opts.title})`;
+    const entityId = have ? String(have.id) : String((await t`insert into studio.entities ${t({ work_id: WORK_ID, kind: 'style', name: opts.title })} returning id`)[0].id);
+    const body: DesignBody = {
+      title: opts.title, text: opts.text, samples: [], views: {}, by_name: opts.byName, by_name_source: null, role: 'maintainer',
+      assist: { model: 'claude-coding-agent', drafted: ['style text'], source: STARTING_STYLE_FILE },
+    };
+    const [el] = await t`insert into studio.elements ${t({ work_id: WORK_ID, element_type: 'design', entity_id: entityId, created_by_fid: opts.fid })} returning id`;
+    const [v] = await t`insert into studio.element_versions ${t({ element_id: el.id, version_no: 1, body: t.json(body as never) })} returning id`;
+    return { versionId: String(v.id) };
+  });
 }
