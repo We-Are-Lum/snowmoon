@@ -94,3 +94,10 @@ seven lessons on the real engine, Under the hood, a practice match with one new 
 Sandbox unchanged. To undo (back to `f21b536`):
 
     vercel rollback dpl_2Z3E2iKHjqxy3ncnf19MnxWVj3Jk --scope nates-projects-d1780cff
+
+## 2026-10-08: readers' image screens restyled to Design (branch site-images-restyle)
+
+Composer, draft, preview, image page, feed, readers' strip, report sheet and moderator queue in
+Design's layout; slice 1's rules unchanged. To undo (back to `6871964`, Minpentai Learn):
+
+    vercel rollback dpl_EpU9y57k4AeZ1VyJM3q1N9rzCCUc --scope nates-projects-d1780cff
