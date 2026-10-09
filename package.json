@@ -19,7 +19,7 @@
     "check:adaptations": "tsx scripts/check-adaptations.ts",
     "check:principles": "tsx --env-file-if-exists=.env.local scripts/check-principles.ts",
     "check:intro": "tsx scripts/check-intro.ts",
-    "test:minpentai-lessons": "tsx scripts/test-minpentai-lessons.ts",
+    "test:minpentai-learn": "tsx scripts/test-minpentai-learn.ts",
     "check:tokens": "tsx scripts/check-tokens.ts",
     "test:chat": "tsx scripts/test-chat.ts",
     "test:images": "tsx --conditions=react-server scripts/test-images.ts",

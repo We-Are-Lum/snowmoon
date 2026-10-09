@@ -1,445 +1,357 @@
 'use client';
 
 /**
- * Learn Minpentai (docs/design/minpentai-study.md): the match first, then the pieces.
- * Eight watch screens over the recorded match in 3D, seven lessons on a real board, the
- * optional "under the hood" lesson, and a practice match against the computer.
+ * Learn Minpentai: Claude Design's "Minpentai Intro v3" (docs/design/minpentai-intro-v3.dc.html),
+ * ported. Eight watch screens over Design's scripted 3D broadcast, seven lessons on Design's pieces
+ * board, the optional Under the hood, and the practice match against Design's bot. The game is
+ * Design's, with RULES INVENTED FOR THIS EDITION; the book's own rule is in the sandbox.
  *
- * Layout after Design's phone frame: the app bar, the stage (the broadcast or the board), the
- * screen's controls, tags, title and text (this part scrolls), and a footer with the progress
- * and Back beside one main button.
+ * The logic is src/lib/minpentai/learn-game/controller.ts (Design's Component, tested against
+ * Design's own script); this file is the frame (Design's markup, lines 33–166) and the loop.
+ * Added for the owner's standing rules, each listed in docs/design/minpentai-learn-port.md: the
+ * commentary, pause and CELLS sit outside the role="img" stage; keyboard placing on the board; the
+ * pause on screen 2; bundled three.js; the frame fits 390–424 px phones under the site's top bar.
  */
-import dynamic from 'next/dynamic';
-import { useEffect, useMemo, useRef, useState } from 'react';
-import { step, type Board } from '~/lib/minpentai/engine';
-import { advance, isIntervention, place, placeProblem, snap, type Dir, type Match, type Placement, type StampKind } from '~/lib/minpentai/match';
-import { playTurn, rng } from '~/lib/minpentai/ai';
-import { LESSONS, NEW_RULES, WATCH, hoodBoard, practiceMatch, type Lesson, type NewRule } from '~/lib/minpentai/lessons';
-import { LEARN_TEXT as T, type LearnScreen, type Source, type Tag } from '~/lib/minpentai/learn-text';
-import { PiecesBoard } from './pieces-board';
-import { CellsView } from './cells-view';
+import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import type * as THREE_NS from 'three';
+import { LearnController, browserEnv, isCells } from '~/lib/minpentai/learn-game/controller';
+import { COL, NAME } from '~/lib/minpentai/learn-game/broadcast';
+import { PH, PW } from '~/lib/minpentai/learn-game/pieces';
+import { LS, indexOf } from '~/lib/minpentai/learn-game/lessons';
+import { LEARN_TEXT as T } from '~/lib/minpentai/learn-text';
+import { drawBoard, drawView } from './learn-draw';
+import type { Scene } from './broadcast-scene';
 
-const BroadcastStage = dynamic(() => import('./broadcast').then((m) => m.BroadcastStage), {
-  ssr: false,
-  loading: () => <div className="bc bc-loading" aria-hidden="true" />,
-});
+/** Screens by number: 0–7 watch, 8–14 the lessons, 15 Under the hood, 16 the practice match. */
+export const LEARN_SCREENS = T.watch.length + LS.length;
+export const PRACTICE_SCREEN = T.watch.length + indexOf('practice');
 
-/** Screens in order: 0–7 watch, 8–14 lessons, 15 under the hood, 16 practice. */
-export const LEARN_SCREENS = WATCH.length + LESSONS.length + 2;
-const HOOD = WATCH.length + LESSONS.length;
-const PRACTICE = HOOD + 1;
-/** Design: lessons at 3 of its steps a second, practice at 4; a step is 4 turns (a glider's two cells). */
-const LESSON_TURNS_PER_SECOND = 12;
-const PRACTICE_TURNS_PER_SECOND = 16;
-const reduced = () => typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-export function Learn({ index, onScreen, onFree }: { index: number; onScreen: (i: number) => void; onFree: () => void }) {
-  const go = (i: number) => onScreen(Math.max(0, Math.min(LEARN_SCREENS - 1, i)));
-  const bodyRef = useRef<HTMLDivElement>(null);
-  useEffect(() => { bodyRef.current?.scrollTo?.(0, 0); }, [index]);
-
-  if (index < WATCH.length) return <WatchScreen key={index} i={index} go={go} onFree={onFree} bodyRef={bodyRef} />;
-  if (index < HOOD) return <LessonScreen key={index} lesson={LESSONS[index - WATCH.length]} n={index - WATCH.length} go={(d) => go(index + d)} toPractice={() => go(PRACTICE)} toHood={() => go(HOOD)} onFree={onFree} bodyRef={bodyRef} />;
-  if (index === HOOD) return <HoodScreen go={(d) => (d > 0 ? go(PRACTICE) : go(HOOD - 1))} onFree={onFree} bodyRef={bodyRef} />;
-  return <PracticeScreen back={() => go(HOOD - 1)} onFree={onFree} bodyRef={bodyRef} />;
+const prefersReduced = () => typeof window !== 'undefined' && !!window.matchMedia?.('(prefers-reduced-motion: reduce)').matches;
+function webglOk(): boolean {
+  try {
+    const c = document.createElement('canvas');
+    return !!(c.getContext('webgl2') || c.getContext('webgl'));
+  } catch {
+    return false;
+  }
 }
 
-/* ---------------- the frame ---------------- */
+export function Learn({ start, onScreen, onFree }: { start: number; onScreen: (n: number) => void; onFree: () => void }) {
+  const ctl = useMemo(() => {
+    const c = new LearnController(browserEnv(), { reduced: prefersReduced() });
+    if (start >= T.watch.length) c.startLesson(Math.min(LS.length - 1, start - T.watch.length));
+    else if (start > 0) c.go(start);
+    return c;
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+  const [, force] = useReducer((x: number) => x + 1, 0);
+  useEffect(() => ctl.subscribe(force), [ctl]);
 
-function Frame(props: {
-  stage: React.ReactNode;
-  controls?: React.ReactNode;
-  tags: Tag[];
-  title: string;
-  text: React.ReactNode;
-  caption?: string;
-  status?: string | null;
-  extra?: React.ReactNode;
-  toast?: string | null;
-  sources: Source[];
-  progress: { count: number; at: number; label: string };
-  onBack: (() => void) | null;
-  primary: { label: string; onClick: () => void; disabled?: boolean };
-  onFree: () => void;
-  bodyRef: React.RefObject<HTMLDivElement | null>;
-}) {
-  const [open, setOpen] = useState(false);
-  const tags = props.tags.filter((t) => t !== 'draft' || T.modelDrafted);
+  const S = ctl.state;
+  const v = ctl.view();
+  const L = ctl.L;
+  const screen = S.mode === 'watch' ? S.i : T.watch.length + S.li;
+
+  const stageRef = useRef<HTMLDivElement>(null);
+  const boardRef = useRef<HTMLCanvasElement>(null);
+  const flatRef = useRef<HTMLCanvasElement>(null);
+  const camRefs = useRef<(HTMLCanvasElement | null)[]>([]);
+  const bodyRef = useRef<HTMLDivElement>(null);
+  const frameRef = useRef<HTMLElement>(null);
+  // On a phone the frame fills the screen below whatever sits above it (the top bar, and on a first
+  // visit the "What is this?" link), so the footer is always in view.
+  useEffect(() => {
+    const el = frameRef.current;
+    if (!el) return;
+    const fit = () => el.style.setProperty('--ml-top', `${Math.max(0, el.getBoundingClientRect().top + window.scrollY)}px`);
+    fit();
+    const ro = typeof ResizeObserver !== 'undefined' ? new ResizeObserver(fit) : null;
+    ro?.observe(document.body);
+    window.addEventListener('resize', fit);
+    return () => { ro?.disconnect(); window.removeEventListener('resize', fit); };
+  }, []);
+  const sceneRef = useRef<Scene | null>(null);
+  const [noGL, setNoGL] = useState(false);
+  const [cursor, setCursor] = useState<[number, number]>([4, 5]);
+  const [focused, setFocused] = useState(false);
+  const draw = useRef({ cursor: null as [number, number] | null });
+  draw.current.cursor = focused && v.boardPlaceable ? cursor : null;
+
+  // The screen in the address bar, and the text back at its top, on every new screen.
+  useEffect(() => {
+    onScreen(screen);
+    bodyRef.current?.scrollTo?.(0, 0);
+  }, [screen]); // eslint-disable-line react-hooks/exhaustive-deps
+
+  // Reduced motion, read on mount as in Design, and followed if it changes.
+  useEffect(() => {
+    const mq = window.matchMedia?.('(prefers-reduced-motion: reduce)');
+    if (!mq) return;
+    const on = () => ctl.setReduced(mq.matches);
+    mq.addEventListener?.('change', on);
+    return () => mq.removeEventListener?.('change', on);
+  }, [ctl]);
+
+  // three.js (bundled), once the broadcast is first needed.
+  const wantsGL = S.mode === 'watch';
+  useEffect(() => {
+    if (!wantsGL || sceneRef.current || noGL) return;
+    let dead = false;
+    if (!webglOk()) { setNoGL(true); return; }
+    void Promise.all([import('three'), import('./broadcast-scene')]).then(([THREE, m]) => {
+      if (dead || !stageRef.current || sceneRef.current) return;
+      try { sceneRef.current = m.buildScene(THREE as typeof THREE_NS, stageRef.current); } catch { setNoGL(true); }
+    }).catch(() => setNoGL(true));
+    return () => { dead = true; };
+  }, [wantsGL, noGL]);
+  useEffect(() => () => { sceneRef.current?.dispose(); sceneRef.current = null; }, []);
+  useEffect(() => {
+    const el = stageRef.current;
+    if (!el || typeof ResizeObserver === 'undefined') return;
+    const ro = new ResizeObserver(() => sceneRef.current?.resize());
+    ro.observe(el);
+    return () => ro.disconnect();
+  }, []);
+
+  // The loop (Design's loop, tick and 100 ms watchdog).
+  useEffect(() => {
+    let raf = 0, dead = false;
+    const frame = () => {
+      const now = performance.now();
+      ctl.tick(now);
+      if (ctl.state.mode === 'watch') {
+        sceneRef.current?.render(ctl.S, ctl.cam);
+        if (flatRef.current) drawView(flatRef.current, ctl.S, null);
+        if (ctl.state.i === 1) camRefs.current.forEach((c, p) => drawView(c, ctl.S, p));
+      } else if (ctl.L && ctl.L.dirty) {
+        if (drawBoard(boardRef.current, ctl.L, ctl.state.cellsOn, now, draw.current.cursor)) ctl.L.dirty = false;
+      }
+    };
+    const loop = () => { if (dead) return; raf = requestAnimationFrame(loop); frame(); };
+    raf = requestAnimationFrame(loop);
+    const dog = window.setInterval(() => { if (performance.now() - ctl.last > 180) frame(); }, 100);
+    return () => { dead = true; cancelAnimationFrame(raf); window.clearInterval(dog); };
+  }, [ctl]);
+  useEffect(() => { if (ctl.L) ctl.L.dirty = true; }, [cursor, focused, ctl, screen]);
+
+  // Taps and keys on the lesson board.
+  const onBoardDown = (e: React.PointerEvent<HTMLCanvasElement>) => {
+    setFocused(false);
+    if (!ctl.L || isCells(ctl.L) || !ctl.L.def.place || ctl.L.demo) return;
+    const r = e.currentTarget.getBoundingClientRect();
+    const x = Math.floor(((e.clientX - r.left) / r.width) * PW), y = Math.floor(((e.clientY - r.top) / r.height) * PH);
+    setCursor([x, y]);
+    ctl.tap(x, y);
+  };
+  const onBoardKey = (e: React.KeyboardEvent<HTMLCanvasElement>) => {
+    const mv: Record<string, [number, number]> = { ArrowLeft: [-1, 0], ArrowRight: [1, 0], ArrowUp: [0, -1], ArrowDown: [0, 1] };
+    if (mv[e.key]) {
+      e.preventDefault();
+      setFocused(true);
+      setCursor(([x, y]) => [Math.max(0, Math.min(PW - 1, x + mv[e.key][0])), Math.max(0, Math.min(PH - 1, y + mv[e.key][1]))]);
+    } else if (e.key === 'Enter' || e.key === ' ') {
+      e.preventDefault();
+      setFocused(true);
+      ctl.tap(cursor[0], cursor[1]);
+    }
+  };
+  const cursorWords = () => {
+    if (!L || isCells(L)) return '';
+    const s = L.s, q = s.pieces.find((p) => p.x === cursor[0] && p.y === cursor[1]);
+    const what = q ? (q.k === 'rock' ? T.board.what.rock : `${q.p === 0 ? T.board.what.cyan : T.board.what.amber} ${T.board.what[q.k]}`) : T.board.what.empty;
+    return T.board.at(cursor[0], cursor[1], what);
+  };
+
+  const hud = S.hud;
+  const learn = S.mode === 'learn';
+  const tagClass = (k: string) => (k === 'book' ? 'ml-tag ml-tag-solid' : k === 'draft' ? 'ml-tag ml-tag-draft' : 'ml-tag ml-tag-dashed');
+  const reactP = hud.react;
   return (
-    <section className="mp-learn" aria-label={T.appTitle}>
-      <header className="mp-learn-bar">
-        <h1 className="mp-learn-title">{T.appTitle}</h1>
-        <button type="button" className="mp-learn-skip" onClick={props.onFree}>{T.skip}</button>
+    <section className="ml-learn" aria-label={T.appTitle} ref={frameRef}>
+      <header className="ml-learn-bar">
+        <h1 className="ml-learn-title">{T.appTitle}</h1>
+        <button type="button" className="ml-learn-skip" onClick={onFree}>{T.skip}</button>
       </header>
-      <div className="mp-learn-stage">{props.stage}</div>
-      {props.controls}
-      <div className="mp-learn-body" ref={props.bodyRef}>
-        <p className="mp-tags mp-learn-tags">
-          {tags.map((t) => (
-            <span key={t} className={`mp-tag mp-tag-${t}`}>{T.tags[t]}</span>
-          ))}
-        </p>
-        <h2 className="mp-learn-h">{props.title}</h2>
-        <p className="mp-learn-text">{props.text}</p>
-        {props.caption && <p className="mp-learn-caption">{props.caption}</p>}
-        {props.status && <p className="mp-learn-status" role="status">{props.status}</p>}
-        {props.extra}
-        <button type="button" className="mp-sources-toggle" aria-expanded={open} onClick={() => setOpen((v) => !v)}>
-          {open ? T.hideSources(props.sources.length) : T.sources(props.sources.length)}
-        </button>
-        {open && (
-          <ul className="mp-sources">
-            {props.sources.map(([what, where]) => (
-              <li key={what}>
-                <span>{what}</span>
-                <span className="mp-source-ref">{where}</span>
-              </li>
+
+      <div className="ml-stage">
+        <div className="ml-stage-gl" role="img" aria-label={learn ? undefined : (noGL ? T.hud.noGL + ' ' : '') + v.stageLabel} aria-hidden={learn || undefined}>
+          <div ref={stageRef} className="ml-gl-host" />
+          {noGL && !learn && <canvas ref={flatRef} className="ml-flat" width={390} height={260} aria-hidden="true" />}
+        </div>
+        {!learn && (
+          <>
+            <div className="ml-hud" aria-hidden="true">
+              <div className="ml-hud-box ml-hud-score">
+                <div className="ml-hud-live"><span className="ml-hud-dot" />{T.hud.live}{hud.turn}</div>
+                <div className="ml-hud-grid">
+                  {hud.counts.map((c, k) => <span key={k} style={{ color: c.c }}>{c.t}</span>)}
+                </div>
+              </div>
+              <div className="ml-hud-box ml-hud-cam">{hud.cam}</div>
+              {hud.minus && <div className="ml-hud-minus" style={{ color: hud.minusC }}>{hud.minus}</div>}
+              {hud.countdown && (
+                <div className="ml-countdown">
+                  <span className="ml-countdown-dz">{T.hud.dz}</span>
+                  <span className="ml-countdown-en">{T.hud.dzEnglish}</span>
+                </div>
+              )}
+              {hud.banner && <div className="ml-banner" style={{ borderTopColor: hud.bannerC }}>{hud.banner}</div>}
+              {v.hasReact && reactP >= 0 && (
+                <div className="ml-react">
+                  <span className="ml-react-label" style={{ color: COL[reactP] }}>{T.hud.atConsole(NAME[reactP])}</span>
+                  <div className="ml-react-frame" style={{ borderColor: COL[reactP] }}>
+                    <Face p={reactP} eyes={hud.reactWin ? { ...hud.eyes[reactP], eh: 8 } : hud.eyes[reactP]} />
+                  </div>
+                </div>
+              )}
+              {v.showCams && (
+                <div className="ml-cams">
+                  {[0, 1, 2, 3].map((p) => (
+                    <div key={p} className="ml-cam">
+                      <span className="ml-cam-label" style={{ color: COL[p] }}>{NAME[p].toUpperCase() + (hud.counts[p]?.t.endsWith(T.hud.out) ? T.hud.camOut : '')}</span>
+                      <Face p={p} eyes={hud.eyes[p]} />
+                      <canvas ref={(c) => { camRefs.current[p] = c; }} width={192} height={128} />
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+            <p className={v.commentShown ? 'ml-comment' : 'mp-visually-hidden'} aria-live="polite">{hud.comment}</p>
+            <button type="button" className={v.showCams ? 'ml-pause ml-pause-cams' : 'ml-pause'} aria-label={S.paused ? T.hud.playLabel : T.hud.pauseLabel} onClick={() => ctl.togglePause()}>
+              {S.paused ? T.hud.play : T.hud.pause}
+            </button>
+          </>
+        )}
+        {learn && L && (
+          <div className="ml-lesson">
+            <div className="ml-board">
+              <canvas
+                ref={boardRef}
+                className={v.boardPlaceable ? 'ml-board-canvas is-placing' : 'ml-board-canvas'}
+                width={780}
+                height={520}
+                role={v.boardPlaceable ? 'application' : 'img'}
+                aria-roledescription={v.boardPlaceable ? 'board' : undefined}
+                aria-label={v.stageLabel + (v.boardPlaceable ? ' ' + T.board.keys + ' ' + cursorWords() : '')}
+                tabIndex={v.boardPlaceable ? 0 : undefined}
+                onPointerDown={onBoardDown}
+                onKeyDown={v.boardPlaceable ? onBoardKey : undefined}
+                onFocus={(e) => setFocused(e.currentTarget.matches(':focus-visible'))}
+                onBlur={() => setFocused(false)}
+              />
+              <p className="ml-strip" aria-hidden="true">{S.lt.strip}</p>
+              {S.lt.hasMinus && <p className="ml-board-minus" style={{ color: S.lt.minusC }} aria-hidden="true">{S.lt.minus}</p>}
+              {v.hasCellsBtn && (
+                <button type="button" className="ml-cells" aria-pressed={S.cellsOn} onClick={() => ctl.toggleCells()}>{T.board.cells}</button>
+              )}
+            </div>
+          </div>
+        )}
+      </div>
+
+      {learn && v.hasTools && (
+        <div className="ml-tools" role="group" aria-label={T.board.controls}>
+          <button type="button" aria-label={T.board.stepBackLabel} onClick={() => ctl.ltool('back')}>{T.board.stepBack}</button>
+          <button type="button" aria-pressed={v.lplaying} onClick={() => ctl.ltool('play')}>{v.playLabel}</button>
+          <button type="button" aria-label={T.board.stepLabel} onClick={() => ctl.ltool('step')}>{T.board.step}</button>
+          <button type="button" onClick={() => ctl.ltool('reset')}>{T.board.reset}</button>
+        </div>
+      )}
+      {learn && v.hasPalette && (
+        <div className="ml-palette" role="group" aria-label={T.board.pieces}>
+          <div className="ml-palette-row">
+            {v.palette.map((p) => (
+              <button key={p.k} type="button" aria-pressed={p.on} onClick={() => ctl.pickTool(p.k)}>{p.t}</button>
             ))}
+          </div>
+          {v.hasDirs && (
+            <div className="ml-dirs">
+              {v.dirs.map((r) => (
+                <button key={r.t} type="button" aria-label={r.label} aria-pressed={r.on} onClick={() => ctl.pickDir(r.dx, r.dy)}>{r.t}</button>
+              ))}
+            </div>
+          )}
+        </div>
+      )}
+
+      <div className="ml-body" ref={bodyRef}>
+        {/* Design's tag row sits above the text; here it scrolls with it, so the text keeps its room on short phones. */}
+        <div className="ml-tags">
+          {v.tags.map((k) => <span key={k} className={tagClass(k)}>{T.tags[k]}</span>)}
+        </div>
+        <h2 className="ml-title">{v.title}</h2>
+        <p className="ml-text">{v.text}</p>
+        {v.caption && <p className="ml-caption">{v.caption}</p>}
+        <p className="ml-status" aria-live="polite">{v.status}</p>
+        {v.hasReasons && (
+          <ol className="ml-reasons">
+            {T.reasons.map((r, k) => <li key={r}><span className="ml-reason-n">{k + 1}</span><span>{r}</span></li>)}
+          </ol>
+        )}
+        {v.hasHood && <button type="button" className="ml-textlink" onClick={() => ctl.startLesson(indexOf('hood'))}>{T.hoodLink}</button>}
+        {v.hasRule && (
+          <>
+            <button type="button" className="ml-textlink" aria-expanded={v.ruleOpen} onClick={() => ctl.toggleRule()}>{v.ruleLabel}</button>
+            {v.ruleOpen && (
+              <div className="ml-rulecard">
+                {T.rule.rows.map(([h, t, a, b]) => (
+                  <div key={h} className="ml-rule-row">
+                    <div className="ml-rule-blocks" aria-hidden="true">
+                      <div className="ml-mini">{a.map((q, k) => <span key={k} className={q ? 'on' : ''} />)}</div>
+                      <span className="ml-rule-arrow">→</span>
+                      <div className="ml-mini">{b.map((q, k) => <span key={k} className={q ? 'on' : ''} />)}</div>
+                    </div>
+                    <div className="ml-rule-words"><span className="ml-rule-h">{h}</span><span className="ml-rule-t">{t}</span></div>
+                  </div>
+                ))}
+                <p className="ml-rule-closing">{T.rule.closing}</p>
+              </div>
+            )}
+          </>
+        )}
+        {v.rulesNote && (
+          <div className="ml-rulesnote">
+            <p>{T.rulesNote.text}</p>
+            <button type="button" className="ml-textlink" onClick={onFree}>{T.rulesNote.link}</button>
+          </div>
+        )}
+        <button type="button" className="ml-textlink" aria-expanded={S.src} onClick={() => ctl.toggleSrc()}>{v.srcLabel}</button>
+        {S.src && (
+          <ul className="ml-sources">
+            {v.sources.map(([t, id]) => <li key={t}><span>{t}</span><span className="ml-source-id">{id}</span></li>)}
           </ul>
         )}
       </div>
-      {props.toast && <p className="mp-learn-toast" role="status">{props.toast}</p>}
-      <footer className="mp-learn-foot">
-        <div className="mp-learn-progress">
-          <span className="mp-marks" aria-hidden="true">
-            {Array.from({ length: props.progress.count }, (_, k) => (
-              <span key={k} className={k < props.progress.at ? 'is-past' : k === props.progress.at ? 'is-current' : ''} />
-            ))}
-          </span>
-          <span className="mp-learn-count">{props.progress.label}</span>
+
+      <footer className="ml-foot">
+        <div className="ml-progress">
+          <div className="ml-marks" aria-hidden="true">{v.dots.map((d, k) => <span key={k} className={`is-${d}`} />)}</div>
+          <span className="ml-stepof">{v.stepOf}</span>
         </div>
-        <div className="mp-learn-buttons">
-          {props.onBack ? (
-            <button type="button" className="mp-learn-back" onClick={props.onBack}>{T.back}</button>
-          ) : (
-            <span className="mp-learn-back mp-learn-back-none" aria-hidden="true" />
-          )}
-          <button type="button" className="mp-learn-primary" onClick={props.primary.onClick} disabled={props.primary.disabled}>{props.primary.label}</button>
+        <div className="ml-buttons">
+          <button type="button" className="ml-back" onClick={() => ctl.back()} aria-hidden={v.backHidden || undefined} tabIndex={v.backHidden ? -1 : 0} style={{ visibility: v.backHidden ? 'hidden' : 'visible' }}>{T.back}</button>
+          <button type="button" className="ml-main" onClick={() => ctl.next()}>{v.button}</button>
         </div>
       </footer>
+      {S.toast && <div className="ml-toast" role="status">{S.toast}</div>}
     </section>
   );
 }
 
-/* ---------------- watch ---------------- */
-
-function WatchScreen({ i, go, onFree, bodyRef }: { i: number; go: (i: number) => void; onFree: () => void; bodyRef: React.RefObject<HTMLDivElement | null> }) {
-  const w = WATCH[i];
-  const t = T.watch[w.id];
-  const [paused, setPaused] = useState(false);
-  return (
-    <Frame
-      stage={<BroadcastStage segment={w.segment} paused={paused} onPause={() => setPaused((p) => !p)} label={T.broadcastLabel} />}
-      tags={t.tags}
-      title={t.title}
-      text={t.text}
-      caption={'caption' in t ? t.caption : undefined}
-      sources={t.sources}
-      progress={{ count: WATCH.length, at: i, label: T.watchOf(i + 1, WATCH.length) }}
-      onBack={i > 0 ? () => go(i - 1) : null}
-      primary={{ label: t.button, onClick: () => go(i + 1) }}
-      onFree={onFree}
-      bodyRef={bodyRef}
-    />
-  );
-}
-
-/* ---------------- a lesson board: play, step, back, reset ---------------- */
-
-function useMatchPlayer(start: () => Match, stopWhen: (m: Match) => boolean, speed = LESSON_TURNS_PER_SECOND) {
-  const [hist, setHist] = useState<Match[]>(() => [start()]);
-  const [playing, setPlaying] = useState(false);
-  const m = hist[hist.length - 1];
-  const stop = useRef(stopWhen);
-  stop.current = stopWhen;
-  useEffect(() => {
-    if (!playing) return;
-    const id = window.setInterval(() => {
-      setHist((h) => {
-        const cur = h[h.length - 1];
-        if (stop.current(cur) || cur.winner !== undefined) { setPlaying(false); return h; }
-        const next = advance(cur);
-        if (stop.current(next)) setPlaying(false);
-        return [...h.slice(-400), next];
-      });
-    }, 1000 / speed);
-    return () => window.clearInterval(id);
-  }, [playing, speed]);
-  return {
-    m,
-    hist,
-    playing,
-    setPlaying,
-    forward: () => setHist((h) => [...h, advance(h[h.length - 1])]),
-    back: () => setHist((h) => (h.length > 1 ? h.slice(0, -1) : h)),
-    reset: () => { setPlaying(false); setHist([start()]); },
-    /** Replaces the current turn (a piece put down). */
-    set: (f: (m: Match) => Match) => setHist((h) => [...h.slice(0, -1), f(h[h.length - 1])]),
-  };
-}
-
-function Transport({ p, onReset }: { p: ReturnType<typeof useMatchPlayer>; onReset: () => void }) {
-  return (
-    <div className="mp-transport4" role="group" aria-label={T.board.controlsLabel}>
-      <button type="button" onClick={() => { p.setPlaying(false); p.back(); }} disabled={p.hist.length < 2} aria-label={T.board.stepBack}>{T.board.stepBackShort}</button>
-      <button type="button" onClick={() => p.setPlaying(!p.playing)} aria-pressed={p.playing}>{p.playing ? T.board.pause : T.board.play}</button>
-      <button type="button" onClick={() => { p.setPlaying(false); p.forward(); }} aria-label={T.board.stepLabel}>{T.board.step}</button>
-      <button type="button" onClick={onReset}>{T.board.reset}</button>
+/** A player at the console (Design's face card, 97 × 62): head, shoulders, cable, clear lenses. */
+function Face({ p, eyes }: { p: number; eyes: { ex: number; ey: number; eh: number; op: number } }) {
+  const col = COL[p], lens = col + '2E';
+  const eye = (
+    <div className="ml-eye" style={{ height: eyes.eh }}>
+      <div className="ml-pupil" style={{ transform: `translate(${eyes.ex}px, ${eyes.ey}px)` }} />
     </div>
   );
-}
-
-const TOOLS: StampKind[] = ['glider', 'mirror', 'symbol'];
-const COST: Record<StampKind, number> = { glider: 4, mirror: 1, symbol: 4 };
-const DIRS: Dir[] = ['left', 'up', 'down', 'right'];
-const ARROW: Record<Dir, string> = { left: '←', up: '↑', down: '↓', right: '→' };
-
-function Palette({ tool, setTool, dir, setDir, left }: { tool: StampKind; setTool: (t: StampKind) => void; dir: Dir; setDir: (d: Dir) => void; left: number }) {
   return (
-    <>
-      <div className="mp-palette" role="group" aria-label={T.board.toolsLabel}>
-        {TOOLS.map((k) => (
-          <button key={k} type="button" aria-pressed={tool === k} onClick={() => setTool(k)} disabled={COST[k] > left}>
-            {T.board.tools[k]} {T.board.cost(COST[k])}
-          </button>
-        ))}
-      </div>
-      {tool === 'glider' && (
-        <div className="mp-dirs" role="group" aria-label={T.board.dirsLabel}>
-          {DIRS.map((d) => (
-            <button key={d} type="button" aria-pressed={dir === d} aria-label={T.board.dirs[d]} onClick={() => setDir(d)}>{ARROW[d]}</button>
-          ))}
-        </div>
-      )}
-    </>
-  );
-}
-
-/** Tap handling shared by lessons and practice: puts down the chosen piece, or says why not. */
-function usePlacing(p: ReturnType<typeof useMatchPlayer>, onlySquare: boolean) {
-  const [tool, setTool] = useState<StampKind>(onlySquare ? 'mirror' : 'glider');
-  const [dir, setDir] = useState<Dir>('right');
-  const [toast, setToast] = useState<string | null>(null);
-  useEffect(() => {
-    if (!toast) return;
-    const id = window.setTimeout(() => setToast(null), 2200);
-    return () => window.clearTimeout(id);
-  }, [toast]);
-  const pick = (x: number, y: number) => {
-    const kind = onlySquare ? 'mirror' : tool;
-    const pl: Placement = kind === 'mirror' ? { kind, x, y } : snap(p.m.board, { kind, x, y, dir });
-    const why = placeProblem(p.m, 0, pl);
-    if (why) { setToast(T.board.problems[why]); return; }
-    p.set((m) => place(m, 0, pl));
-    setToast(null);
-  };
-  return { tool, setTool, dir, setDir, toast, pick };
-}
-
-/* ---------------- lessons ---------------- */
-
-function LessonScreen(props: {
-  lesson: Lesson;
-  n: number;
-  go: (d: number) => void;
-  toPractice: () => void;
-  toHood: () => void;
-  onFree: () => void;
-  bodyRef: React.RefObject<HTMLDivElement | null>;
-}) {
-  const { lesson: l, n } = props;
-  const t: LearnScreen = T.lessons[l.id];
-  const byDemo = useRef(false);
-  const [outcome, setOutcome] = useState<'met' | 'failed' | null>(null);
-  // The board runs on after the goal (as in Design); it stops if the lesson fails.
-  const p = useMatchPlayer(l.setup, (m) => !!l.fail?.(m) && !l.goal?.(m));
-  useEffect(() => {
-    if (outcome) return;
-    if (l.goal?.(p.m)) setOutcome('met');
-    else if (l.fail?.(p.m)) setOutcome('failed');
-  }, [p.m, l, outcome]);
-  const met = outcome === 'met';
-  const canPlace = !!l.place && isIntervention(p.m) && !met;
-  const reset = () => { p.reset(); setOutcome(null); byDemo.current = false; };
-  const placing = usePlacing(p, l.place === 'square');
-
-  // A read lesson's board quietly runs on its own.
-  useEffect(() => {
-    if (l.kind === 'read' && !reduced()) p.setPlaying(true);
-  }, []); // eslint-disable-line react-hooks/exhaustive-deps
-
-  const timers = useRef<number[]>([]);
-  useEffect(() => () => timers.current.forEach((id) => window.clearTimeout(id)), []);
-  const later = (f: () => void, ms: number) => { timers.current.push(window.setTimeout(f, reduced() ? 0 : ms)); };
-  // The big button: reset if needed, put the demo's pieces down (300 ms, then every 550 ms), then play.
-  const runDemo = () => {
-    byDemo.current = true;
-    const moves = l.demo?.kind === 'place' ? l.demo.moves : [];
-    if (moves.length || outcome === 'failed' || p.m.board.turn > 0) reset();
-    byDemo.current = true;
-    moves.forEach((mv, k) => later(() => p.set((m) => place(m, 0, mv)), 300 + 550 * k));
-    later(() => p.setPlaying(true), moves.length ? 300 + 550 * moves.length : 0);
-  };
-
-  const primary =
-    l.id === 'rule'
-      ? { label: t.button, onClick: props.toPractice }
-      : l.kind === 'read' || met
-        ? { label: l.kind === 'do' ? T.next : t.button, onClick: () => props.go(1) }
-        : { label: t.button, onClick: runDemo, disabled: p.playing };
-  const status = met ? t.met ?? (byDemo.current ? T.likeThat : T.youDidIt) : outcome === 'failed' ? t.failed ?? null : null;
-
-  return (
-    <Frame
-      stage={
-        <PiecesBoard
-          match={p.m}
-          viewer={l.fog ? 0 : null}
-          lit={l.place === 'palette' && canPlace}
-          hints={canPlace ? l.hints : []}
-          onPick={canPlace ? placing.pick : l.place ? () => placing.pick(-1, -1) : undefined}
-          points={l.place === 'palette' ? p.m.left[0] : null}
-          label={T.boardLabel(t.title)}
-          trail={p.hist}
-        />
-      }
-      toast={placing.toast}
-      controls={
-        l.kind === 'do' ? (
-          <>
-            <Transport p={p} onReset={reset} />
-            {l.place === 'palette' && canPlace && <Palette tool={placing.tool} setTool={placing.setTool} dir={placing.dir} setDir={placing.setDir} left={p.m.left[0]} />}
-          </>
-        ) : undefined
-      }
-      tags={t.tags}
-      title={t.title}
-      text={t.text}
-      caption={t.caption}
-      status={status}
-      extra={
-        l.id === 'rule' ? (
-          <>
-            <ol className="mp-reasons2">
-              {T.reasons.map((r, k) => (
-                <li key={r}><span className="mp-reason-n">{k + 1}</span>{r}</li>
-              ))}
-            </ol>
-            <button type="button" className="mp-hood-link" onClick={props.toHood}>{T.hoodLink}</button>
-          </>
-        ) : undefined
-      }
-      sources={t.sources}
-      progress={{ count: LESSONS.length, at: n, label: T.learnOf(n + 1, LESSONS.length) }}
-      onBack={() => props.go(-1)}
-      primary={primary}
-      onFree={props.onFree}
-      bodyRef={props.bodyRef}
-    />
-  );
-}
-
-/* ---------------- under the hood ---------------- */
-
-function HoodScreen({ go, onFree, bodyRef }: { go: (d: number) => void; onFree: () => void; bodyRef: React.RefObject<HTMLDivElement | null> }) {
-  const t = T.hood;
-  const [hist, setHist] = useState<Board[]>(() => [hoodBoard()]);
-  const [playing, setPlaying] = useState(false);
-  const b = hist[hist.length - 1];
-  const met = b.turn >= 16;
-  useEffect(() => {
-    if (!playing) return;
-    const id = window.setInterval(() => setHist((h) => [...h.slice(-200), step(h[h.length - 1])]), 1000 / 6);
-    return () => window.clearInterval(id);
-  }, [playing]);
-  return (
-    <Frame
-      stage={<CellsView board={b} label={T.boardLabel(t.title)} />}
-      controls={
-        <div className="mp-transport4" role="group" aria-label={T.board.controlsLabel}>
-          <button type="button" onClick={() => { setPlaying(false); setHist((h) => (h.length > 1 ? h.slice(0, -1) : h)); }} disabled={hist.length < 2} aria-label={T.board.stepBack}>{T.board.stepBackShort}</button>
-          <button type="button" onClick={() => setPlaying((v) => !v)} aria-pressed={playing}>{playing ? T.board.pause : T.board.play}</button>
-          <button type="button" onClick={() => { setPlaying(false); setHist((h) => [...h, step(h[h.length - 1])]); }} aria-label={T.board.stepLabel}>{T.board.step}</button>
-          <button type="button" onClick={() => { setPlaying(false); setHist([hoodBoard()]); }}>{T.board.reset}</button>
-        </div>
-      }
-      tags={t.tags}
-      title={t.title}
-      text={t.text}
-      caption={t.caption}
-      status={met ? T.youDidIt : null}
-      extra={
-        <figure className="mp-rulecard">
-          <figcaption>{T.ruleCardLabel}</figcaption>
-          <dl>
-            {T.ruleCard.map(([a, b2]) => (
-              <div key={a}><dt>{a}</dt><dd>{b2}</dd></div>
-            ))}
-          </dl>
-        </figure>
-      }
-      sources={t.sources}
-      progress={{ count: LESSONS.length, at: LESSONS.length, label: T.learnOptional }}
-      onBack={() => go(-1)}
-      primary={met ? { label: T.lessons.rule.button, onClick: () => go(1) } : { label: t.button, onClick: () => setPlaying(true), disabled: playing }}
-      onFree={onFree}
-      bodyRef={bodyRef}
-    />
-  );
-}
-
-/* ---------------- practice ---------------- */
-
-export function PracticeScreen({ back, onFree, bodyRef }: { back: (() => void) | null; onFree: () => void; bodyRef: React.RefObject<HTMLDivElement | null> }) {
-  const [seed, setSeed] = useState(() => Math.floor(Math.random() * 1e9));
-  const rule: NewRule = useMemo(() => NEW_RULES[seed % NEW_RULES.length], [seed]);
-  return <Practice key={seed} rule={rule} seed={seed} again={() => setSeed((s) => s + 1 + Math.floor(Math.random() * 1e6))} back={back} onFree={onFree} bodyRef={bodyRef} />;
-}
-
-function Practice({ rule, seed, again, back, onFree, bodyRef }: { rule: NewRule; seed: number; again: () => void; back: (() => void) | null; onFree: () => void; bodyRef: React.RefObject<HTMLDivElement | null> }) {
-  const t = T.practice;
-  const random = useMemo(() => rng(seed), [seed]);
-  const p = useMatchPlayer(() => practiceMatch(rule), (m) => isIntervention(m) || m.winner !== undefined, PRACTICE_TURNS_PER_SECOND);
-  const yourTurn = isIntervention(p.m) && !p.playing;
-  const placing = usePlacing(p, false);
-  const over = p.m.winner !== undefined;
-  const endTurn = () => {
-    // Amber takes its turn on the same turn to act, then the match runs to the next one.
-    p.set((m) => playTurn(m, 1, 'easy', random));
-    p.set((m) => advance(m));
-    p.setPlaying(true);
-  };
-  const toNext = p.m.rules.interval - (p.m.board.turn % p.m.rules.interval);
-  const status = over
-    ? p.m.winner === 0 ? t.won : p.m.winner === null ? t.draw : t.lost
-    : yourTurn ? t.yourTurn(p.m.board.turn) : t.running(toNext);
-  return (
-    <Frame
-      stage={
-        <PiecesBoard
-          match={p.m}
-          viewer={over ? null : 0}
-          lit={yourTurn}
-          onPick={yourTurn ? placing.pick : () => placing.pick(-1, -1)}
-          points={p.m.left[0]}
-          label={T.boardLabel(t.title)}
-          trail={p.hist}
-          stripTurn={`${p.m.board.turn}/${p.m.rules.maxTurns}`}
-        />
-      }
-      toast={placing.toast}
-      controls={yourTurn && !over ? <Palette tool={placing.tool} setTool={placing.setTool} dir={placing.dir} setDir={placing.setDir} left={p.m.left[0]} /> : undefined}
-      tags={t.tags}
-      title={t.title}
-      text={t.text}
-      caption={t.rule(t.rules[rule.id])}
-      status={status}
-      sources={t.sources}
-      progress={{ count: LESSONS.length, at: LESSONS.length, label: T.practiceLabel }}
-      onBack={back}
-      primary={over ? { label: t.again, onClick: again } : { label: t.endTurn, onClick: endTurn, disabled: !yourTurn }}
-      onFree={onFree}
-      bodyRef={bodyRef}
-    />
+    <div className="ml-face" style={{ opacity: eyes.op }}>
+      <div className="ml-face-shoulders" />
+      <div className="ml-face-head" />
+      <div className="ml-face-cable" />
+      <div className="ml-face-lens" style={{ borderColor: col, background: lens, boxShadow: `0 0 10px ${lens}` }} />
+      <div className="ml-face-eyes">{eye}{eye}</div>
+    </div>
   );
 }

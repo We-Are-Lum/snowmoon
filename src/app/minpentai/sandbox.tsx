@@ -6,6 +6,7 @@ import { STATES, findSymbols } from '~/lib/minpentai/symbol';
 import { c4b5Preset, impactPreset } from '~/lib/minpentai/presets';
 import { decodeBoard, encodeBoard } from '~/lib/minpentai/url';
 import { PlayComputer } from './match-view';
+import { Learn, LEARN_SCREENS, PRACTICE_SCREEN } from './learn';
 import { TUTORIAL_TEXT as T } from '~/lib/minpentai/tutorial-text';
 
 /* Colours from the approved board (docs/design/direction-boards, section 1c). */
@@ -20,8 +21,9 @@ type Brush = 'cell' | 'rock';
 type Zoom = 1 | 2 | 3;
 const ZOOMS: Zoom[] = [1, 2, 3];
 /** Set once the tutorial is finished or skipped; later bare visits open free play. */
+const DONE_KEY = 'minpentai-tutorial-done';
 
-type Mode = { kind: 'tutorial'; lesson: number } | { kind: 'practice' } | { kind: 'play' } | { kind: 'free' };
+type Mode = { kind: 'tutorial'; lesson: number } | { kind: 'play' } | { kind: 'free' };
 
 function setQuery(params: Record<string, string | null>) {
   const url = new URL(window.location.href);
@@ -44,29 +46,42 @@ function usePlayer(initial: () => Board, autoplay = false) {
 }
 
 export function Sandbox() {
-  // Learn is being rebuilt from Claude Design's game (owner, 2026-10-09). Until then the page opens on
-  // the sandbox, and old Learn and practice links show a short note instead.
-  const [mode, setMode] = useState<Mode>({ kind: 'free' });
-  const [rebuilt, setRebuilt] = useState(false);
+  const [mode, setMode] = useState<Mode>({ kind: 'tutorial', lesson: 0 });
   const [handover, setHandover] = useState<Board | null>(null);
+  /** Remounts Learn when a tab or link (not Learn's own buttons) picks the screen. */
+  const [visit, setVisit] = useState(0);
 
+  // Choose the mode on the client: a lesson link, a shared board, a returning visitor, or Learn.
   useEffect(() => {
     const q = new URLSearchParams(window.location.search);
-    if (q.get('lesson') || q.get('mode') === 'practice') setRebuilt(true);
-    if (q.get('mode') === 'play') setMode({ kind: 'play' });
+    const lesson = Number(q.get('lesson'));
+    if (Number.isInteger(lesson) && lesson >= 1 && lesson <= LEARN_SCREENS) setMode({ kind: 'tutorial', lesson: lesson - 1 });
+    else if (q.get('mode') === 'practice') setMode({ kind: 'tutorial', lesson: PRACTICE_SCREEN });
+    else if (q.get('mode') === 'play') setMode({ kind: 'play' });
+    else if (q.get('s') || q.get('mode') === 'free') setMode({ kind: 'free' });
+    else if (window.localStorage.getItem(DONE_KEY)) setMode({ kind: 'free' });
+    setVisit((v) => v + 1);
   }, []);
 
+  const goLesson = (i: number) => { setMode({ kind: 'tutorial', lesson: i }); setVisit((v) => v + 1); setQuery(i === PRACTICE_SCREEN ? { mode: 'practice' } : { lesson: String(i + 1) }); };
+  const onScreen = (i: number) => setQuery(i === PRACTICE_SCREEN ? { mode: 'practice' } : { lesson: String(i + 1) });
   const goFree = (from?: Board) => {
+    try { window.localStorage.setItem(DONE_KEY, '1'); } catch { /* private mode: Learn opens again next time */ }
     setHandover(from ?? null);
     setMode({ kind: 'free' });
     setQuery({ mode: 'free' });
   };
-  const goPlay = () => { setMode({ kind: 'play' }); setQuery({ mode: 'play' }); };
-  const tabs: [Mode['kind'], string, () => void][] = [
+  const goPlay = () => { try { window.localStorage.setItem(DONE_KEY, '1'); } catch { /* as above */ } setMode({ kind: 'play' }); setQuery({ mode: 'play' }); };
+  const tabs: [string, string, () => void][] = [
+    ['tutorial', T.nav.learn, () => goLesson(0)],
+    ['practice', T.nav.practice, () => goLesson(PRACTICE_SCREEN)],
     ['play', T.nav.play, goPlay],
     ['free', T.nav.sandbox, () => goFree()],
   ];
 
+  // Learn (and its practice match) fills the screen in Design's phone frame; the other modes keep the page.
+  // (Until the address has been read, an empty frame: Learn must not start on the wrong screen.)
+  if (mode.kind === 'tutorial') return visit ? <Learn key={visit} start={mode.lesson} onScreen={onScreen} onFree={() => goFree()} /> : <section className="ml-learn" aria-busy="true" />;
   return (
     <div className="mp-page">
       <p className="mp-provenance">
@@ -74,14 +89,13 @@ export function Sandbox() {
         marked <em>invented</em> does not.
       </p>
       <h1>Minpentai</h1>
-      <p className="mp-rebuilt" role="status">{rebuilt ? T.rebuiltLink : T.rebuilt}</p>
       <nav className="mp-nav" aria-label={T.nav.label}>
         {tabs.map(([kind, label, go]) => (
           <button key={kind} type="button" aria-current={mode.kind === kind ? 'page' : undefined} onClick={go}>{label}</button>
         ))}
       </nav>
       {mode.kind === 'play' && <PlayComputer onSandbox={() => goFree()} />}
-      {mode.kind === 'free' && <FreePlay initial={handover} />}
+      {mode.kind === 'free' && <FreePlay initial={handover} onTutorial={() => goLesson(0)} />}
       <p className="mp-note">
         From the book: the rule, recovered from the animated board in chapter 4 (figure c4-b5, the &ldquo;rotate one
         eighty if three&rdquo; rule), and that figure&rsquo;s opening frame. Invented: the 48 × 32 wrapping board,
@@ -254,7 +268,7 @@ function TimeControls({ playing, setPlaying, setBoard, turn, minTurn }: {
 
 /* ---------------- free play ---------------- */
 
-function FreePlay({ initial }: { initial: Board | null }) {
+function FreePlay({ initial, onTutorial }: { initial: Board | null; onTutorial: () => void }) {
   const p = usePlayer(() => initial ?? c4b5Preset());
   const { board, setBoard, playing, setPlaying, speed, setSpeed } = p;
   const [brush, setBrush] = useState<Brush>('cell');
@@ -330,6 +344,7 @@ function FreePlay({ initial }: { initial: Board | null }) {
 
       <div className="mp-controls">
         <button type="button" onClick={copyLink}>{copied ? 'Link copied' : 'Copy a link to this board'}</button>
+        <button type="button" onClick={onTutorial}>{T.backToTutorial}</button>
       </div>
 
       <h2>Symbol <em className="mp-inv">invented</em></h2>

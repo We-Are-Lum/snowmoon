@@ -1001,7 +1001,7 @@ add({
 add({
   id: 'P8c',
   principle: 8,
-  name: 'the Minpentai lessons cite a real block for every book claim, and their Dzegoban is the source\'s',
+  name: 'what Learn says about the book cites a real block, and its Dzegoban is the source\'s (its own game is not checked against the book)',
   load: async () => {
     const text: Record<number, Record<number, string>> = {};
     const plain = (c: string) => c.replace(/<[^>]+>/g, ' ').replace(/&[a-z#0-9]+;/gi, ' ').replace(/\s+/g, ' ');
@@ -1009,18 +1009,24 @@ add({
       text[n] = {};
       for (const b of json(`content/snowmoon/text/chapter-${n}.json`).blocks) text[n][b.idx] = plain(b.content);
     }
-    const screens = [...Object.values(LEARN_TEXT.watch), ...Object.values(LEARN_TEXT.lessons), LEARN_TEXT.hood, LEARN_TEXT.practice]
+    // Statements about the book: every screen's sources, and the note that says the book's rule changes
+    // every match. The Learn game's own rules (learn-game/*.ts) are invented for this edition and are
+    // deliberately not compared with the book's rule (owner, 2026-10-09; P8d checks the label instead).
+    const screens = [...LEARN_TEXT.watch, ...Object.values(LEARN_TEXT.lessons)]
       .map((s) => ({ title: s.title, tags: [...s.tags] as string[], sources: s.sources.map(([a, b]) => [a, b] as [string, string]) }));
     const sources = screens.flatMap((s) => s.sources.map(([what, where]) => ({ screen: s.title, what, where })));
-    const broadcast = read('src/app/minpentai/broadcast.tsx');
-    return { text, sources, screens, broadcast };
+    sources.push({ screen: 'the rules note', what: LEARN_TEXT.rulesNote.text, where: (LEARN_TEXT.rulesNote.text.match(/c\d+-b\d+(?:–b\d+)?/g) ?? []).join(' · ') });
+    const files = Object.fromEntries(sources.filter((s) => /^(src|docs)\//.test(s.where)).map((s) => [s.where, existsSync(path.join(ROOT, s.where.split(' ')[0]))]));
+    const countdown = { dz: LEARN_TEXT.hud.dz, english: LEARN_TEXT.hud.dzEnglish, page: read('src/app/minpentai/learn.tsx') };
+    return { text, sources, screens, files, countdown };
   },
-  run: ({ text, sources, screens, broadcast }) => {
+  run: ({ text, sources, screens, files, countdown }) => {
     const problems: string[] = [];
     const norm = (s: string) => s.toLowerCase().replace(/[’']/g, "'").replace(/[^a-z0-9' ]+/g, ' ').replace(/\s+/g, ' ').trim();
     for (const { screen, what, where } of sources) {
-      // A source is a block id (or a range or list of them), something marked invented, or a file of ours.
-      if (/^invented\b/.test(where) || /^src\//.test(where)) continue;
+      // A source is a block id (or a range or list of them), something marked invented, or a file of ours that exists.
+      if (/^invented\b/.test(where)) continue;
+      if (/^(src|docs)\//.test(where)) { if (!files[where]) problems.push(`${screen}: "${what}" cites ${where}, which does not exist`); continue; }
       const ids = [...where.matchAll(/c(\d+)-b(\d+)(?:–b(\d+))?/g)];
       if (!ids.length) { problems.push(`${screen}: "${what}" cites "${where}", which is not a block id and not marked invented`); continue; }
       let body = '';
@@ -1035,17 +1041,58 @@ add({
     }
     // Every screen with a "From the book" tag lists at least one block.
     for (const s of screens) if ((s.tags as string[]).includes('book') && !s.sources.some(([, w]: [string, string]) => /c\d+-b\d+/.test(w))) problems.push(`${s.title}: tagged From the book but cites no block`);
-    // The countdown in the broadcast is the book's Dzegoban, with its English.
-    for (const dz of broadcast.match(/[A-Z]{2,}(?: [A-Z]{2,}){3,}/g) ?? []) {
-      if (!Object.values(text[4]).some((t: string) => t.includes(dz))) problems.push(`broadcast: "${dz}" is not chapter 4's Dzegoban`);
-    }
-    if (!broadcast.includes('The battle begins in fifty ticks.') || !text[4][98].includes('The battle begins in fifty ticks.')) problems.push('broadcast: the countdown\'s English is not c4-b98');
+    // The broadcast's countdown is the book's Dzegoban (c4-b97, as written) and its English (c4-b98), and the page shows those words.
+    if (!text[4][97]?.includes(`"${countdown.dz}"`) && !text[4][97]?.includes(countdown.dz)) problems.push(`countdown: "${countdown.dz}" is not c4-b97's Dzegoban`);
+    if (text[4][98]?.trim() !== countdown.english) problems.push(`countdown: "${countdown.english}" is not c4-b98`);
+    if (!/T\.hud\.dz\}/.test(countdown.page) || !/T\.hud\.dzEnglish\}/.test(countdown.page)) problems.push('countdown: learn.tsx does not show the countdown from learn-text.ts');
     if (!sources.length) problems.push('no Minpentai sources found');
     return problems;
   },
   plant: (c) => {
     c.sources[0].where = 'c4-b9999';
-    c.broadcast = c.broadcast.replace('MU GU GEI TAU FA', 'MU GU GEI TAO FA');
+    c.countdown.dz = 'MU GU GEI TAO FA';
+  },
+});
+
+add({
+  id: 'P8d',
+  principle: 8,
+  name: 'the Learn game is labelled as rules invented for this edition, and points to the book\'s rule in the sandbox',
+  load: async () => ({
+    tags: LEARN_TEXT.tags,
+    note: LEARN_TEXT.rulesNote,
+    screens: [
+      ...LEARN_TEXT.watch.map((s, i) => ({ id: `watch ${i + 1}`, tags: [...s.tags] as string[], sources: s.sources.map(([a, b]) => [a, b]), rulesNote: false })),
+      ...Object.entries(LEARN_TEXT.lessons).map(([id, s]) => ({ id, tags: [...s.tags] as string[], sources: s.sources.map(([a, b]) => [a, b]), rulesNote: 'rulesNote' in s && !!s.rulesNote })),
+    ],
+    page: read('src/app/minpentai/learn.tsx'),
+  }),
+  run: ({ tags, note, screens, page }) => {
+    const problems: string[] = [];
+    if (!/invented for this edition/i.test(tags.rules)) problems.push(`the "rules" tag reads "${tags.rules}", not "invented for this edition"`);
+    for (const s of screens) {
+      // Under the hood runs the rule recovered from the book: it is the book's, so it must not carry the
+      // invented label, and it must cite the figure.
+      if (s.id === 'hood') {
+        if (s.tags.includes('rules')) problems.push('hood: the book\'s rule is labelled as invented');
+        if (!s.sources.some(([, w]: string[]) => /c4-b5\b/.test(w))) problems.push('hood: does not cite the figure c4-b5');
+        continue;
+      }
+      if (!s.tags.includes('rules')) problems.push(`${s.id}: no "${tags.rules}" tag`);
+      if (!s.tags.includes('draft')) problems.push(`${s.id}: no "Draft wording" tag`);
+    }
+    // The note: invented for this edition, the book's rule changes every match (with its block), and the way to the sandbox.
+    if (!/invented for this edition/i.test(note.text)) problems.push('rules note: does not say the rules are invented for this edition');
+    if (!/rule changes every match/i.test(note.text) || !/c4-b84/.test(note.text)) problems.push('rules note: does not say, with c4-b84, that in the book the rule changes every match');
+    if (!/sandbox/i.test(note.text) || !/c4-b5/.test(note.text) || !/sandbox/i.test(note.link)) problems.push('rules note: does not point to the sandbox for the rule recovered from c4-b5');
+    for (const id of ['goal', 'rule', 'practice']) if (!screens.find((s: { id: string }) => s.id === id)?.rulesNote) problems.push(`${id}: does not show the rules note`);
+    // The page draws every tag and the note, and the note's link opens the sandbox.
+    if (!/T\.tags\[k\]/.test(page)) problems.push('learn.tsx does not show the screens\' tags');
+    if (!/T\.rulesNote\.text/.test(page) || !/onClick=\{onFree\}>\{T\.rulesNote\.link\}/.test(page)) problems.push('learn.tsx does not show the rules note with its sandbox link');
+    return problems;
+  },
+  plant: (c) => {
+    c.screens[4].tags = c.screens[4].tags.filter((t: string) => t !== 'rules');
   },
 });
 

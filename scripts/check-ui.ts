@@ -35,8 +35,10 @@ const PAPER = 'rgb(244, 242, 237)';
 const ACCENT: Record<string, string> = { veridia: 'rgb(46, 90, 58)', dzego: 'rgb(179, 48, 110)' };
 const INK = 'rgb(29, 29, 27)';
 const IN_WORLD = '.device-view, .dz-card, svg, [data-template]';
-/** Learn is being rebuilt (2026-10-09): an old lesson link shows the note; practice, play and free still load. */
-const MINPENTAI_LESSONS = 1;
+/** Learn screens at /minpentai (src/app/minpentai/learn.tsx: 8 watch, 7 lessons, under the hood, practice). */
+const MINPENTAI_LESSONS = 17;
+/** Under the hood runs the book's rule (c4-b5); every other Learn screen is the game invented for this edition. */
+const MINPENTAI_HOOD = 16;
 
 const failures: string[] = [];
 const fail = (msg: string) => failures.push(msg);
@@ -368,6 +370,16 @@ try {
       await checkFloors(page, `/minpentai?${q}`, scheme);
       const wide = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1);
       if (wide) fail(`/minpentai?${q} (${scheme}): the page scrolls sideways at 390px`);
+      if (q.startsWith('lesson=') || q === 'mode=practice') {
+        // Learn: the game is labelled as invented for this edition (P8d), except Under the hood, which is the book's rule.
+        const tags = await page.locator('.ml-tag').allTextContents();
+        const labelled = tags.includes('RULES INVENTED FOR THIS EDITION');
+        if (q === `lesson=${MINPENTAI_HOOD}` ? labelled : !labelled) fail(`/minpentai?${q} (${scheme}): the "Rules invented for this edition" tag is ${labelled ? 'on the book\'s rule' : 'missing'}`);
+        // The footer (progress, BACK, the main button) stays in view.
+        const foot = await page.locator('.ml-foot').boundingBox();
+        const tall = await page.evaluate(() => innerHeight);
+        if (!foot || foot.y + foot.height > tall + 1) fail(`/minpentai?${q} (${scheme}): the footer is cut off`);
+      }
     }
 
     for (let n = 1; n <= 32; n++) {
