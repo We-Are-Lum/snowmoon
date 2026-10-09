@@ -165,3 +165,9 @@ Sandbox and Play the computer out of the UI (code kept); Free play runs Design's
 /glossary and /glossary/[term]: invented words with the book's own sentences, every mention and a narration clip, limited to the reader's chapters; Glossary in the menu and rail. To undo (back to `9d00b6f`):
 
     vercel rollback dpl_GZESByBrZCdJRUUsP6LsWd5ukn6n --scope nates-projects-d1780cff
+
+## 2026-10-09: AI labels name who made them (branch site-ai-labels-2)
+
+The edition's images and narration say 'by Snowmoon Party'; check:ui checks every rendered AI image and the narration control for the label. To undo (back to `43e5306`):
+
+    vercel rollback dpl_BhSNG22KDdys4VfrA1Q3m4Zes2M9 --scope nates-projects-d1780cff
