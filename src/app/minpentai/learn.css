@@ -1,6 +1,6 @@
 /* Learn Minpentai: Design's phone frame (docs/design/minpentai-intro-v3.dc.html, lines 33–166; measurements in
-   docs/design/minpentai-study.md §2, §3.0, §4.2–4.3, §7). Under 768px it fills the screen below the site's top
-   bar; wider, it is Design's 390 × 695 phone. Theme tokens are the site's, which are Design's TH values. */
+   docs/design/minpentai-study.md §2, §3.0, §4.2–4.3, §7). Under 768px (and inside the Farcaster mini app) it
+   fills the screen, full screen; wider, it is Design's 390 × 695 phone. Theme tokens are the site's, which are Design's TH values. */
 .minpentai:has(.ml-learn) { padding: 0; }
 .ml-learn {
   position: relative; display: flex; flex-direction: column; overflow: hidden;
@@ -13,6 +13,32 @@
     box-shadow: 0 0 0 1px #CFCAC0, 0 24px 60px rgba(29, 29, 27, 0.18);
   }
 }
+/* Full screen (owner, 2026-10-09): under 768px, and inside the Farcaster mini app at any width, the frame fills the
+   viewport (100dvh, inside the safe area) and the site's top bar and first-visit link are hidden; the bar's × goes
+   back to the site. Farcaster draws its own close button. The same rules twice: a media query cannot OR a class. */
+.ml-learn-bar .ml-exit { display: none; }
+@media (max-width: 767px) {
+  html:has(.ml-learn) :is(.topbar, .what-is-this) { display: none; }
+  .ml-learn {
+    position: fixed; inset: 0; z-index: 40; height: 100dvh; max-width: none; margin: 0; box-sizing: border-box;
+    padding: max(env(safe-area-inset-top), var(--ml-safe-top, 0px)) max(env(safe-area-inset-right), var(--ml-safe-right, 0px)) 0 max(env(safe-area-inset-left), var(--ml-safe-left, 0px));
+  }
+  .ml-learn-bar { padding-left: 0; }
+  .ml-learn-bar .ml-exit { display: flex; }
+}
+html.ml-in-app:has(.ml-learn) :is(.topbar, .what-is-this, .rail, .rail-scrim, .panel, .panel-reopen) { display: none; }
+html.ml-in-app .ml-learn {
+  position: fixed; inset: 0; z-index: 40; width: auto; height: 100dvh; max-width: none; margin: 0; box-sizing: border-box; border-radius: 0; box-shadow: none;
+  padding: max(env(safe-area-inset-top), var(--ml-safe-top, 0px)) max(env(safe-area-inset-right), var(--ml-safe-right, 0px)) 0 max(env(safe-area-inset-left), var(--ml-safe-left, 0px));
+}
+html.ml-in-app .ml-learn-bar { padding-left: 0; }
+html.ml-in-app .ml-learn-bar .ml-exit { display: flex; }
+.ml-learn .ml-exit {
+  flex: none; align-items: center; justify-content: center; width: 44px; height: 44px; color: var(--muted); text-decoration: none;
+  font-family: var(--font-label), monospace; font-size: 18px; line-height: 1;
+}
+.ml-learn .ml-exit:focus-visible { outline: 2px solid #46D7E8; outline-offset: -2px; }
+.ml-learn .ml-exit + .ml-learn-title { flex: 1; }
 .ml-learn button { font: inherit; color: inherit; cursor: pointer; }
 .ml-learn button:focus-visible { outline: 2px solid #46D7E8; outline-offset: 2px; }
 .ml-learn-bar {
@@ -156,7 +182,8 @@
 
 /* The footer and the toast (§2.4). */
 .ml-foot { flex: none; border-top: 1px solid var(--rule); padding: 10px 18px 14px; display: flex; flex-direction: column; gap: 8px; }
-@media (max-width: 767px) { .ml-foot { padding-bottom: max(14px, env(safe-area-inset-bottom)); } }
+@media (max-width: 767px) { .ml-foot { padding-bottom: max(14px, env(safe-area-inset-bottom), var(--ml-safe-bottom, 0px)); } }
+html.ml-in-app .ml-foot { padding-bottom: max(14px, env(safe-area-inset-bottom), var(--ml-safe-bottom, 0px)); }
 .ml-progress { display: flex; align-items: center; gap: 8px; }
 .ml-marks { flex: 1; display: flex; gap: 3px; }
 .ml-marks span { flex: 1; height: 3px; background: var(--rule); }

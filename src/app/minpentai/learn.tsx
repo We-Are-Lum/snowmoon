@@ -10,10 +10,15 @@
  * Design's own script); this file is the frame (Design's markup, lines 33–166) and the loop.
  * Added for the owner's standing rules, each listed in docs/design/minpentai-learn-port.md: the
  * commentary, pause and CELLS sit outside the role="img" stage; keyboard placing on the board; the
- * pause on screen 2; bundled three.js; the frame fits 390–424 px phones under the site's top bar.
+ * pause on screen 2; bundled three.js. Full screen (owner, 2026-10-09): under 768 px and inside the
+ * Farcaster mini app the frame fills the viewport (learn.css hides the site's top bar), with an exit
+ * link back to the site; on tablet and desktop it is Design's phone, centred beside the rail.
  */
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
+import Link from 'next/link';
+import { sdk } from '@farcaster/miniapp-sdk';
 import type * as THREE_NS from 'three';
+import { inMiniApp } from '~/lib/client-auth';
 import { LearnController, browserEnv, isCells } from '~/lib/minpentai/learn-game/controller';
 import { COL, NAME } from '~/lib/minpentai/learn-game/broadcast';
 import { PH, PW } from '~/lib/minpentai/learn-game/pieces';
@@ -68,6 +73,25 @@ export function Learn({ start, onScreen, onFree }: { start: number; onScreen: (n
     ro?.observe(document.body);
     window.addEventListener('resize', fit);
     return () => { ro?.disconnect(); window.removeEventListener('resize', fit); };
+  }, []);
+  // Inside the Farcaster mini app the frame is full screen at every width, inside the host's safe area.
+  useEffect(() => {
+    let live = true;
+    const root = document.documentElement;
+    void inMiniApp().then(async (yes) => {
+      if (!live || !yes) return;
+      root.classList.add('ml-in-app');
+      // sdk.context is a remote thenable: await it (its .catch would be sent to the host as a call).
+      let inset;
+      try { inset = (await sdk.context)?.client?.safeAreaInsets; } catch { return; }
+      if (!live || !inset) return;
+      for (const side of ['top', 'right', 'bottom', 'left'] as const) root.style.setProperty(`--ml-safe-${side}`, `${inset[side]}px`);
+    });
+    return () => {
+      live = false;
+      root.classList.remove('ml-in-app');
+      for (const side of ['top', 'right', 'bottom', 'left']) root.style.removeProperty(`--ml-safe-${side}`);
+    };
   }, []);
   const sceneRef = useRef<Scene | null>(null);
   const [noGL, setNoGL] = useState(false);
@@ -168,6 +192,8 @@ export function Learn({ start, onScreen, onFree }: { start: number; onScreen: (n
   return (
     <section className="ml-learn" aria-label={T.appTitle} ref={frameRef}>
       <header className="ml-learn-bar">
+        {/* Full screen only (learn.css): the way back to the site, since its top bar is hidden. */}
+        <Link href="/" className="ml-exit" aria-label={T.exitLabel}>{T.exit}</Link>
         <h1 className="ml-learn-title">{T.appTitle}</h1>
         <button type="button" className="ml-learn-skip" onClick={onFree}>{T.skip}</button>
       </header>

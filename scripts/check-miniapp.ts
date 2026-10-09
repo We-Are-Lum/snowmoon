@@ -9,6 +9,7 @@
  * - Sign-in is silent and happens once per launch, shared by the bar and the assistant;
  *   every chat request carries the Quick Auth token as a bearer.
  * - The assistant works inside the 424×695 frame: home, the notice, an answer.
+ * - Learn Minpentai fills the 424×695 frame: no site top bar, a × back to the site.
  * - The page can be framed (no X-Frame-Options or frame-ancestors).
  * - /assistant has its own embed, so a cast link opens the assistant.
  * The Quick Auth server and the chat API are mocked: what is checked is the client's
@@ -94,6 +95,37 @@ try {
     for (const e of errors) fail(`${path}: page error: ${e}`);
     await page.close();
   }
+  // Learn Minpentai fills the Farcaster frame (owner, 2026-10-09): no site top bar, the frame is the iframe's viewport, × back to the site.
+  for (const path of ['/minpentai?lesson=13', '/minpentai?mode=practice']) {
+    const page = await browser.newPage({ viewport: { width: 480, height: 760 } });
+    await page.addInitScript('window.__name = (f) => f');
+    const errors: string[] = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    await page.route(HOST + '**', (r) => r.fulfill({ contentType: 'text/html', body: `<!doctype html><body style="margin:0"><script>${bundle.replace(/<\/script>/g, '<\\/script>')}</script></body>` }));
+    await page.route('https://auth.farcaster.xyz/**', (r) => r.fulfill({ json: new URL(r.request().url()).pathname.includes('nonce') ? { nonce: 'checknonce1' } : { token: TOKEN } }));
+    await page.route('**/api/**', (r) => r.fulfill({ json: {} }));
+    await page.goto(`${HOST}?url=${encodeURIComponent(BASE + path)}`);
+    const frame = await new Promise<Frame>((resolve) => {
+      const t = setInterval(() => {
+        const f = page.frames().find((x) => x !== page.mainFrame() && x.url().startsWith(BASE));
+        if (f) (clearInterval(t), resolve(f));
+      }, 100);
+    });
+    await frame.waitForSelector('html.ml-in-app .ml-learn .ml-foot', { timeout: 15000 }).catch(() => fail(`${path}: Learn does not know it is in the mini app`));
+    const r = await frame.evaluate(() => {
+      const b = document.querySelector('.ml-learn')!.getBoundingClientRect();
+      const top = document.querySelector('.topbar');
+      const exit = document.querySelector('.ml-exit') as HTMLAnchorElement | null;
+      return { x: b.x, y: b.y, w: b.width, h: b.height, vw: innerWidth, vh: innerHeight, bar: !!top && getComputedStyle(top).display !== 'none', exit: !!exit && getComputedStyle(exit).display !== 'none' && exit.getAttribute('href') };
+    });
+    if (Math.abs(r.x) > 1 || Math.abs(r.y) > 1 || Math.abs(r.w - r.vw) > 1 || Math.abs(r.h - r.vh) > 1) fail(`${path}: Learn does not fill the Farcaster frame (${Math.round(r.w)}×${Math.round(r.h)} at ${Math.round(r.x)},${Math.round(r.y)} in ${r.vw}×${r.vh})`);
+    if (r.bar) fail(`${path}: the site's top bar shows above Learn in the Farcaster frame`);
+    if (r.exit !== '/') fail(`${path}: no × back to the site in the Farcaster frame`);
+    const host = await page.evaluate(() => window.__host);
+    if (host.ready !== 1) fail(`${path}: ready() called ${host.ready} times, not once`);
+    for (const e of errors) fail(`${path}: page error: ${e}`);
+    await page.close();
+  }
 } finally {
   await browser.close();
 }
@@ -101,4 +133,4 @@ if (failures.length) {
   console.error(`MINIAPP CHECK FAILED (${failures.length}):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`miniapp check passed: ${BASE}, home, a chapter and the assistant in a stand-in Farcaster client`);
+console.log(`miniapp check passed: ${BASE}, home, a chapter, the assistant and Learn Minpentai (full screen) in a stand-in Farcaster client`);

@@ -23,6 +23,8 @@
  *   question (9b) and the daily limit (9c). The API is replayed from results recorded
  *   live (scripts/fixtures/chat-live-2026-10-07.json); quotes are checked against the
  *   stored text by test:chat. --shots=DIR also saves a screenshot of each.
+ * - Learn Minpentai's screens are full screen at 390 and in the 424 × 695 Farcaster frame (the frame fills the
+ *   viewport, no site top bar, a × back to the site), and Design's centred phone beside the rail at 1024 and up.
  */
 import { readFileSync } from 'node:fs';
 import { chromium, type Browser, type Page } from 'playwright-core';
@@ -60,6 +62,18 @@ async function shot(page: Page, name: string, scheme: string) {
   // Let opening animations finish (not endless ones, like the "reading" pulse).
   await page.evaluate(() => Promise.all(document.getAnimations().filter((a) => a.effect?.getTiming().iterations !== Infinity).map((a) => a.finished)));
   await page.screenshot({ path: `${SHOTS}/${name}-${scheme}.png`, fullPage: false });
+}
+
+/** Learn's lessons and practice on a phone or in the Farcaster frame: full screen, with a way back to the site. */
+async function checkLearnFullScreen(page: Page, where: string) {
+  const box = await page.locator('.ml-learn').boundingBox();
+  const vp = page.viewportSize()!;
+  if (!box || Math.abs(box.x) > 1 || Math.abs(box.y) > 1 || Math.abs(box.width - vp.width) > 1 || Math.abs(box.height - vp.height) > 1) {
+    fail(`${where}: Learn is not full screen (${box ? `${Math.round(box.x)},${Math.round(box.y)} ${Math.round(box.width)}×${Math.round(box.height)}` : 'no frame'} in ${vp.width}×${vp.height})`);
+  }
+  if (await page.locator('.topbar').isVisible()) fail(`${where}: the site's top bar shows above Learn`);
+  const exit = page.locator('.ml-exit');
+  if (!(await exit.isVisible()) || (await exit.getAttribute('href')) !== '/') fail(`${where}: no visible × back to the site`);
 }
 
 /** Screens 1a, 1b, 9d, 1d, 2, 3, 9b and 9c, with the chat API replayed from the live run. */
@@ -441,6 +455,8 @@ try {
         const foot = await page.locator('.ml-foot').boundingBox();
         const tall = await page.evaluate(() => innerHeight);
         if (!foot || foot.y + foot.height > tall + 1) fail(`/minpentai?${q} (${scheme}): the footer is cut off`);
+        // Full screen (owner, 2026-10-09): the frame fills the viewport, the site's top bar is hidden, and × goes back to the site.
+        await checkLearnFullScreen(page, `/minpentai?${q} (${scheme})`);
       }
     }
 
@@ -482,6 +498,8 @@ try {
         });
         if (measure > 700) fail(`${path} @${width}: the reading column is ${Math.round(measure)}px wide`);
         if (await page.locator('.topbar').isVisible()) fail(`${path} @${width}: the phone top bar shows`);
+        // Learn is Design's phone, centred beside the rail, on tablet and desktop (full screen is for phones and the Farcaster app).
+        if (path === '/minpentai' && ((await page.locator('.ml-exit').isVisible()) || !(await page.locator('.rail').isVisible()))) fail(`/minpentai @${width}: Learn is full screen outside a phone`);
       }
       await open(page, '/chapter/1');
       const bodyShown = await page.locator('.rail-body').isVisible();
@@ -579,6 +597,13 @@ try {
     const frame = await newPage({ viewport: { width: 424, height: 695 }, hasTouch: true });
     await open(frame, '/chapter/1');
     if (await frame.locator('.rail').isVisible()) fail('@424×695: the rail shows in the Farcaster frame');
+    // Learn fills the Farcaster frame: a watch screen, a lesson, Under the hood and the practice match.
+    for (const q of ['lesson=1', 'lesson=13', `lesson=${MINPENTAI_HOOD}`, 'mode=practice']) {
+      await open(frame, `/minpentai?${q}`);
+      await checkLearnFullScreen(frame, `/minpentai?${q} @424×695`);
+      const foot = await frame.locator('.ml-foot').boundingBox();
+      if (!foot || foot.y + foot.height > 695 + 1) fail(`/minpentai?${q} @424×695: the footer is cut off`);
+    }
     await frame.close();
   }
 } finally {

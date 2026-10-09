@@ -35,6 +35,9 @@ export const LEARN_TEXT = {
   modelDrafted: true,
   appTitle: 'Learn Minpentai',
   skip: 'SKIP TO FREE PLAY',
+  /** Added by this build (draft): full screen's way back to the site (phones, the Farcaster frame). */
+  exit: '×',
+  exitLabel: 'Exit Learn, back to Snowmoon',
   back: 'BACK',
   next: 'NEXT',
   startLessons: 'START THE LESSONS',

@@ -49,13 +49,14 @@ Other runs: `npx tsc --noEmit` clean; `test-minpentai.ts` OK; `test-minpentai-ma
 Behaviour and timing are identical on every screen (section 2). What differs is listed; ✔ closed, ✖ not closed.
 
 **Every screen**
-- ✖ **The site's top bar.** On a phone the frame sits under the site's 44 px top bar (the menu); Design's phone has none. The text area is 44 px shorter. Not closed: removing the site's menu is not this task's to decide.
+- ✔ **The site's top bar** (closed 2026-10-09, owner: "Full screen for Learn's lessons and practice. Inside Farcaster, fill the frame."). Every Learn screen (watch, lessons, Under the hood, practice) is full screen under 768 px and inside the Farcaster mini app at any width: the frame is `position: fixed`, 100dvh, inside the safe area (`env(safe-area-inset-*)`, or in the mini app the host's `context.client.safeAreaInsets`), and the site's top bar and first-visit "What is this?" link are hidden (in the mini app also the rail and the assistant panel). Before, the frame sat under the 44 px top bar (and, on a first visit, the 31 px "What is this?" link). Full screen for all Learn screens, not only lessons and practice, because Design's frame is the same on every screen and switching the site's bar on and off between screens would jump.
+- ✔ deliberate **× back to the site** (added with full screen): a 44 × 44 × link at the left of Design's app bar, to `/`, labelled "Exit Learn, back to Snowmoon"; shown only when full screen. The title moves 26 px right. Farcaster draws its own close button over the mini app. Escape does nothing: leaving the page on Escape would surprise, and on tablet and desktop, where a keyboard is usual, Learn is not full screen.
 - ✔ deliberate **Tags scroll with the text.** Design's tag row is fixed above the text; here it is the first thing in the scrolling text area, same spacing, so lesson 5 and practice keep the footer in view on short phones.
 - ✔ deliberate **"RULES INVENTED FOR THIS EDITION" tag** on every watch screen, lessons 1–7 and practice (replacing GAME SIMPLIFIED on the lessons). Not on Under the hood (the book's rule). Rows wrap one line more.
 - ✔ deliberate **Text back at the top on a new screen** (Design's text box keeps its scroll position between screens).
 - ✔ deliberate **Skip to free play** opens the sandbox (Design shows "Not part of this mockup").
 - ✖ **Glyphs DM Mono lacks** (← ↑ ↓ → and the diagonals, ●, ◁, ▷, ▶) come from the site's DM Mono fallback face; Design's browser drew them in plain `monospace`. The direction arrows look visibly larger than Design's. Not closed: drawing them in `monospace` fails check:ui's rule that chrome uses only the site's fonts; closing it means adding an arrow glyph source to the site's label font, the owner's call.
-- ✔ deliberate **Desktop:** Design's 390 × 695 phone, centred in the page beside the site's rail.
+- ✔ deliberate **Tablet and desktop (768 px and up, outside the mini app):** Design's 390 × 695 phone, centred in the page beside the site's rail, with the site's rail and assistant (not full screen).
 - ✔ deliberate **Address bar** follows the screen (`?lesson=n`, `?mode=practice`).
 
 **Watch 1–8**
@@ -73,7 +74,7 @@ Behaviour and timing are identical on every screen (section 2). What differs is 
 **Lesson 2 Gliders fly straight** — no difference beyond the tag.
 **Lesson 3 A hit destroys a tower** — none beyond the tag.
 **Lesson 4 Squares bounce gliders** — ✔ deliberate: keyboard placing (below).
-**Lesson 5 Your turn to act** — ✔ deliberate: keyboard placing; "8 points; glider 4…" cites *invented*. ✖ the text area is about 33 px at 390 × 695 under the site's top bar (Design 77 px, §13.9); it scrolls.
+**Lesson 5 Your turn to act** — ✔ deliberate: keyboard placing; "8 points; glider 4…" cites *invented*. ✔ the text area is 138 px at 390 × 695 and 424 × 695, full screen (Design 77 px, §13.9; before full screen it was 63 px under the top bar and the first-visit link).
 **Lesson 6 You only see near your towers** — none beyond the tag.
 **Lesson 7 Every match, a new rule** — ✔ deliberate: rules note and sandbox link; added sources; Design's "A new rule every game" is replaced by the c4-b84 quote (listed once).
 **Under the hood** — none.
@@ -99,7 +100,7 @@ Ported as Design has it unless an owner non-negotiable says otherwise; the old e
 12. **Citation slips** (§13.11): corrected.
 13. **"Slow motion for the half-second"** vs 0.9 s windows in code (§13.12): the code's 0.9 s is ported.
 14. **The "−1 NAME" at top 44 px** touches the two-line scoreboard when the name is long: ported as is.
-15. **Text area of 77 px on lesson 5 and practice** (§13.9): worse here under the site's top bar (see §4).
+15. **Text area of 77 px on lesson 5 and practice** (§13.9): here 138 px (lesson 5) and 190 px (practice) at 390 × 695, full screen; the tags scroll with the text (see §4).
 16. Unused mockup code (tags `rocks`, `recon`, `note`; `isHand`, `pipRef`, `points`; the ninth `SEG`; `SHIP` = `GLIDER`): not ported except `SEG[8]` and `SHIP`, kept for the line-for-line comparison.
 
 ## 6. The block on new rules (c4-b84), quoted
@@ -131,17 +132,21 @@ The source lines that read "A new rule every game" (watch 1, lesson 7, practice;
 
 **check:ui**: `MINPENTAI_LESSONS` 1 → 17 (every Learn screen, light and dark, 390 px); new per-screen checks: the "RULES INVENTED FOR THIS EDITION" tag is shown (absent on Under the hood), and the footer is in view.
 
+**check:ui, full screen (2026-10-09).** Before: at 390 × 844 each Learn screen checked the tag and that the footer is in view; at 424 × 695 only that /chapter/1 has no rail; at 1024/1440/2000 /minpentai was checked like any page (floors, no sideways scroll, column ≤ 700 px, no top bar). After, added: (1) at 390 × 844, on all 17 Learn screens, light and dark, `checkLearnFullScreen`: the frame's box is the viewport (0, 0, full width and height, ±1 px), the site's top bar is not visible, and a visible `.ml-exit` links to `/`; (2) at 424 × 695 (the Farcaster frame) the same on watch 1, lesson 5, Under the hood and practice, plus the footer in view; (3) at 1024/1440/2000, /minpentai shows no `.ml-exit` and the rail is visible (not full screen). Proven: injecting `.ml-learn{position:relative;height:600px} .ml-exit{display:none}` fails it (80 problems).
+
+**check:miniapp, full screen (2026-10-09).** Before: home, a chapter and /assistant in the stand-in Farcaster client. After, added: /minpentai?lesson=13 and ?mode=practice in the 424 × 695 iframe: Learn marks itself in the mini app (`html.ml-in-app`), its frame is the iframe's viewport (±1 px), the site's top bar is hidden, `.ml-exit` links to `/`, ready() is called once, no page errors. (It caught one bug while being written: `sdk.context.catch` is sent to the host as a remote call.)
+
 **docs/principles.md §8** updated to say this.
 
 ## 8. Wording
 
-All strings are in `src/lib/minpentai/learn-text.ts`, draft, one DRAFT WORDING tag per screen. New in this build (not Design's): the RULES INVENTED FOR THIS EDITION tag; the rules note and its link; the source lines "In the book, "every game there's always some kind of new rule"" (c4-b84), "The sandbox runs the rule recovered from the book's animated board" (c4-b5 · c4-b7), "The rules of the Learn game … are invented for this edition" (invented); the keyboard hint and square descriptions; the no-WebGL line. The full list is in section 10.
+All strings are in `src/lib/minpentai/learn-text.ts`, draft, one DRAFT WORDING tag per screen. New in this build (not Design's): the RULES INVENTED FOR THIS EDITION tag; the rules note and its link; the source lines "In the book, "every game there's always some kind of new rule"" (c4-b84), "The sandbox runs the rule recovered from the book's animated board" (c4-b5 · c4-b7), "The rules of the Learn game … are invented for this edition" (invented); the keyboard hint and square descriptions; the no-WebGL line; the full-screen × and its label. The full list is in section 10.
 
 ## 9. Principles
 
 **Tensions first.**
 - *Exact port vs accessibility (owner rules).* Design hides the pause on screen 2, nests controls in `role="img"`, places pieces by pointer only: changed (pause kept, controls outside the image, keyboard placing). Everything else in Design's behaviour is kept, including slips that are not accessibility problems (§5).
-- *Exact port vs the site frame.* The site's top bar costs 44 px of text on phones; not closed.
+- *Exact port vs the site frame.* Closed 2026-10-09: Learn is full screen on phones and in the Farcaster frame. Tension left: on a first visit straight to /minpentai on a phone, full screen hides the site's menu and "What is this?" link (the intro and the "not affiliated" line are one tap away, through × to the home page).
 - *Labelling vs Design's look.* The new tag adds a line of tags on every screen.
 
 1. **Recipes for generated assets** — pass; nothing generated.
@@ -159,6 +164,8 @@ Templates show their slots as `{a}`, `{b}`.
 
 - `appTitle`: "Learn Minpentai"
 - `skip`: "SKIP TO FREE PLAY"
+- `exit`: "×"
+- `exitLabel`: "Exit Learn, back to Snowmoon"
 - `back`: "BACK"
 - `next`: "NEXT"
 - `startLessons`: "START THE LESSONS"
