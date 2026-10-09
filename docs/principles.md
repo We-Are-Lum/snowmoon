@@ -364,6 +364,15 @@ quoted as written. Minpentai boards and maps come from the source's own SVGs.
   "Rules invented for this edition" and a draft tag; Under the hood, the
   book's rule, does not; lessons 1 and 7 and practice say, citing c4-b84,
   that in the book the rule changes every match, and link to the sandbox.
+- `P8e`: every live voting screen (c1-b18, c1-b31, c7-b6) starts in the state
+  the book shows: the slider's range, step and starting value are the source's
+  `<input type="range">` with its HTML defaults, its marks and title are the
+  source's, and the island's first render (its value, the drawn thumb, the
+  marks, the reading under the screen) matches; every slider the book draws is
+  live. The reading itself is this edition's (the book never shows one).
+  `test:render` also checks that Reset returns to the source's value from
+  anywhere and that the island neither stores nor sends; `check:ui` moves each
+  slider and resets it in a browser with no request made.
 - `npm run check:ingest`: the committed text, screens and figures re-parse
   byte-identical from the fetched source. `npm run test:render`: template cases.
 - Review: do generated images that depict boards, maps or screens (for example

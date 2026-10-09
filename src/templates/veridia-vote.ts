@@ -1,11 +1,14 @@
 /**
  * veridia/vote: the land-tax vote card on a Veridian hand device (c1-b18, c1-b31).
  * Drawn from the direction board (docs/design/direction-boards.png, "In-world
- * screens"): Instrument Sans, hairline rules, a light device face. Static: the
- * slider sits where the source's untouched slider sits (centre), and nothing reacts.
+ * screens"): Instrument Sans, hairline rules, a light device face. The HTML is static:
+ * the slider sits where the source's untouched slider sits (centre). The reader makes it
+ * live (`live`, src/templates/live.ts): a client island puts a real range input over the
+ * drawn track. Nothing is stored or sent.
  */
 import type { BlockLike } from '~/lib/reading';
 import type { ScreenTemplate } from './index';
+import { RANGE_DEFAULTS, rangeDefaultValue, sliderFraction, type LiveSlider } from './live';
 
 type Cell = string | { text: string; controls: { type: string; labels?: string[]; label?: string }[] };
 interface VoteFields {
@@ -32,17 +35,25 @@ function voteFields(b: BlockLike): VoteFields | null {
   return { title, summary, sliderLabels: s.labels, button: btn.label };
 }
 
+/** The source's slider: a range input with no attributes (so its HTML defaults) and its marks. */
+function slider(f: VoteFields): LiveSlider {
+  const { min, max, step } = RANGE_DEFAULTS;
+  return { name: f.title, min, max, step, start: rangeDefaultValue(min, max, step), labels: f.sliderLabels };
+}
+
 const esc = (s: string) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
 
 export const veridiaVote: ScreenTemplate = {
   id: 'veridia/vote',
   matches: (b) => voteFields(b) !== null,
+  live: (b) => slider(voteFields(b)!),
   render(b) {
     const f = voteFields(b)!;
+    const s = slider(f);
     return `<div class="tpl-veridia-vote" data-template="veridia/vote">
 <div class="vv-title">${esc(f.title)}</div>
 <div class="vv-summary">${esc(f.summary)}</div>
-<div class="vv-slider"><div class="vv-track" aria-hidden="true"><span class="vv-tick"></span><span class="vv-thumb"></span></div>
+<div class="vv-slider"><div class="vv-track" data-live-track style="--f:${sliderFraction(s, s.start)}"><span class="vv-tick" aria-hidden="true"></span><span class="vv-thumb" aria-hidden="true"></span></div>
 <div class="vv-labels">${f.sliderLabels.map((l) => `<span>${esc(l)}</span>`).join('')}</div></div>
 <div class="vv-button">${esc(f.button)}</div>
 </div>`;

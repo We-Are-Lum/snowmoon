@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import { Fragment, type CSSProperties } from 'react';
 import { blockId, chapterDateline, chapterNumbers, loadChapter } from '~/lib/book';
 import { blockFacts, labelRange, type BlockFacts } from '~/lib/reading';
-import { figureMinWidth, renderMarkdown, renderScreen, screenBasePx } from '~/lib/render';
+import { figureMinWidth, renderMarkdown, renderScreen, screenBasePx, type ScreenSource } from '~/lib/render';
 import { DEFAULT_TEMPLATES } from '~/templates';
 import { REPO_URL, WORK } from '~/lib/config';
 import { loadNarration } from '~/lib/narration';
@@ -14,6 +14,7 @@ import { ChapterView } from '~/components/chapter-view';
 import { RecipeLink } from '~/components/recipe-sheet';
 import { AddImageButton } from '~/components/reader-images';
 import { ReadingRecord } from '~/components/reading-record';
+import { LiveScreen } from '~/components/live-screen';
 import { adaptationsCiting as citing } from '~/lib/adaptations';
 import { ADAPTATIONS } from '~/lib/config';
 
@@ -81,6 +82,11 @@ export default async function ChapterPage({ params }: Props) {
   const DESCRIBED = 'narrated as a model-drafted description, not the author’s words';
   // Figures the Minpentai sandbox can play. Its free mode opens on the c4-b5 board.
   const PLAYABLE: Record<string, string> = { 'c4-b5': '/minpentai?mode=free' };
+  // Voting screens the reader can try (src/templates/live.ts). One "Draft wording" line per
+  // page: on the first of them.
+  const liveSlider = (b: Block, source: ScreenSource) =>
+    source.from === 'template' ? (DEFAULT_TEMPLATES.find((t) => t.id === source.templateId)?.live?.(b) ?? null) : null;
+  const firstLive = chapter.blocks.find((b) => (b.kind === 'screen' || b.kind === 'figure') && liveSlider(b, renderScreen(b, DEFAULT_TEMPLATES).source))?.idx;
 
   return (
     <ChapterView
@@ -112,11 +118,16 @@ export default async function ChapterPage({ params }: Props) {
           el = <hr {...common} className="block break" />;
         } else if (b.kind === 'screen' || b.kind === 'figure') {
           const { html, source } = renderScreen(b, DEFAULT_TEMPLATES);
+          const live = liveSlider(b, source);
           const minWidth = b.kind === 'figure' ? figureMinWidth(b) : null;
           const style = { '--screen-base': `${screenBasePx(b)}px`, ...(minWidth ? { '--fig-min': `${minWidth}px` } : {}) } as CSSProperties;
           el = (
             <figure {...common} className={`block ${b.kind}`} style={style}>
-              <div dangerouslySetInnerHTML={{ __html: html }} />
+              {live ? (
+                <LiveScreen html={html} slider={live} draftLine={b.idx === firstLive} />
+              ) : (
+                <div dangerouslySetInnerHTML={{ __html: html }} />
+              )}
               <figcaption className="block-caption">
                 ¶ {f.label} · {source.from === 'template' ? `template ${source.templateId}` : 'as drawn in the book'}
                 {described.has(b.idx) && ` · ${DESCRIBED}`}

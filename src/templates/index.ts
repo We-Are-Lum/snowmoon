@@ -11,14 +11,21 @@
  * Register new ones in DEFAULT_TEMPLATES; each needs a case in `npm run test:render`.
  */
 import type { BlockLike } from '~/lib/reading';
+import type { LiveSlider } from './live';
 import { veridiaVote } from './veridia-vote';
+import { dzegoVote } from './dzego-vote';
 
 export interface ScreenTemplate {
   id: string;
   /** True if this template is the default for the block. Reads block.data (setting, device, fields). */
   matches(block: BlockLike): boolean;
-  /** HTML for the block. Must show the same content the source shows. */
+  /** HTML for the block. Must show the same content the source shows, in the source's state. */
   render(block: BlockLike): string;
+  /**
+   * A voting screen the reader can try (src/components/live-screen.tsx): the source's slider.
+   * The HTML from render() marks the track with `data-live-track`. Checked by P8e.
+   */
+  live?(block: BlockLike): LiveSlider;
 }
 
-export const DEFAULT_TEMPLATES: readonly ScreenTemplate[] = [veridiaVote];
+export const DEFAULT_TEMPLATES: readonly ScreenTemplate[] = [veridiaVote, dzegoVote];

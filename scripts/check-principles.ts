@@ -19,7 +19,11 @@ import path from 'node:path';
 import { PGlite } from '@electric-sql/pglite';
 import postgres from 'postgres';
 import { chromium } from 'playwright-core';
+import * as cheerio from 'cheerio';
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
 import { DEFAULT_TEMPLATES } from '../src/templates';
+import { LiveScreen } from '../src/components/live-screen';
 import { CHAT, IMAGES, REPO_URL } from '../src/lib/config';
 import { NOTICE_REVIEW, currentNoticeItems, noticeKey } from '../src/lib/chat/notice';
 import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
@@ -1096,9 +1100,77 @@ add({
   },
 });
 
+add({
+  id: 'P8e',
+  principle: 8,
+  name: 'every live voting screen starts in the state the book shows (slider, reading, marks, title), and every slider in the book is one',
+  load: async () => {
+    const items: {
+      id: string;
+      source: { title: string; min: number; max: number; step: number; value: number; labels: string[] };
+      spec: { name: string; min: number; max: number; step: number; start: number; labels: string[] } | null;
+      ssr: string;
+    }[] = [];
+    for (let n = 1; n <= 32; n++) {
+      for (const b of json(`content/snowmoon/text/chapter-${n}.json`).blocks) {
+        if (b.kind !== 'screen' && b.kind !== 'figure') continue;
+        const $ = cheerio.load(b.content);
+        const input = $('input[type="range"]');
+        const t = DEFAULT_TEMPLATES.find((t) => t.matches(b));
+        if (!input.length && !t?.live) continue;
+        // The source's slider, read from its HTML with the HTML defaults for a range input.
+        const attr = (k: string, d: number) => (input.attr(k) !== undefined ? Number(input.attr(k)) : d);
+        const min = attr('min', 0);
+        const max = attr('max', 100);
+        const step = attr('step', 1);
+        const value = input.attr('value') !== undefined ? Number(input.attr('value')) : max < min ? min : min + Math.round((max - min) / 2 / step) * step;
+        const labels = input.next('div').children('span').map((_, s) => $(s).text().replace(/\s+/g, '')).get();
+        const title = $('th').first().text().trim();
+        const spec = t?.live ? t.live(b) : null;
+        const ssr = spec ? renderToStaticMarkup(createElement(LiveScreen, { html: t!.render(b), slider: spec, draftLine: false })) : '';
+        items.push({ id: `c${n}-b${b.idx}`, source: { title, min, max, step, value, labels }, spec, ssr });
+      }
+    }
+    return items;
+  },
+  run: (items) => {
+    const problems: string[] = [];
+    if (!items.length) problems.push('no voting screens found');
+    for (const { id, source: s, spec, ssr } of items) {
+      if (!spec) {
+        problems.push(`${id}: the book draws a slider here, but the screen is not live`);
+        continue;
+      }
+      const same = (what: string, got: unknown, want: unknown) => {
+        if (JSON.stringify(got) !== JSON.stringify(want)) problems.push(`${id}: ${what} is ${JSON.stringify(got)}, the source's is ${JSON.stringify(want)}`);
+      };
+      same('the slider\'s range', [spec.min, spec.max, spec.step], [s.min, s.max, s.step]);
+      same('the slider\'s starting value', spec.start, s.value);
+      same('the slider\'s marks', spec.labels, s.labels);
+      same('the slider\'s name', spec.name, s.title);
+      // What the island renders first: its value, the drawn thumb, the marks, the reading.
+      const $ = cheerio.load(ssr);
+      same('the island\'s starting value', Number($('[data-value]').attr('data-value')), s.value);
+      const f = /--f:\s*([\d.]+)/.exec($('[data-live-track]').attr('style') ?? '')?.[1];
+      same('the drawn thumb', f === undefined ? null : Number(f), (s.value - s.min) / (s.max - s.min));
+      same('the marks drawn', $('.vv-labels > span, .dv-labels > span').map((_, e) => $(e).text().replace(/\s+/g, '')).get(), s.labels);
+      // The reading starts as the mark under the source's thumb (the marks are spread evenly).
+      const at = ((s.value - s.min) / (s.max - s.min)) * (s.labels.length - 1);
+      const under = Number.isInteger(at) ? s.labels[at] : null;
+      if (under === null) problems.push(`${id}: the source's thumb is between marks; no reading to check`);
+      else same('the starting reading', $('.live-value').text().replace(/\s+/g, ''), under);
+      if (!$('.live-reset').length) problems.push(`${id}: no Reset`);
+    }
+    return problems;
+  },
+  plant: (items) => {
+    items[0].ssr = items[0].ssr.replace(/--f:\s*[\d.]+/, '--f:0.6');
+  },
+});
+
 // ---------------------------------------------------------------------------
 
-const selected = checks.filter((c) => !ONLY || c.id.startsWith(ONLY));
+const selected =checks.filter((c) => !ONLY || c.id.startsWith(ONLY));
 let failed = 0;
 let unproven = 0;
 /** Checks that could not run here (no database URL, no Vercel CLI…): never counted as passing. */

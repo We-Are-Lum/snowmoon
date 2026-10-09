@@ -16,6 +16,8 @@
  * - Paper is #F4F2ED in light mode in every chapter. Datelines take the accent of
  *   their setting: #2E5A3A Veridia, #B3306E Dzego, ink otherwise.
  * - The first screen says: independent adaptation, not affiliated with the author, no token.
+ * - The live voting screens (c1-b18, c1-b31, c7-b6) start where the book shows them, move by
+ *   keyboard, and Reset returns them, with no request made and no storage changed.
  * - The assistant (/assistant) meets the same floors signed out (9d), the reader's "Ask about this" (1a), its home (1d),
  *   the first-time notice (2), a thread with an answer and quote cards (3), a held-back
  *   question (9b) and the daily limit (9c). The API is replayed from results recorded
@@ -237,6 +239,65 @@ async function checkFloors(page: Page, path: string, scheme: string) {
 }
 
 /** A page in the given theme: Light is the default, so a dark run chooses Dark (src/lib/theme.ts). */
+/**
+ * Live voting screens (src/components/live-screen.tsx): each starts where the book shows it,
+ * moves by keyboard, and Reset returns it; no request is made and no storage changes.
+ */
+async function checkLiveScreens(page: Page, scheme: string) {
+  const cases = [
+    { path: '/chapter/1', id: 'c1-b18', keys: ['ArrowRight', 'ArrowRight', 'ArrowRight', 'ArrowRight', 'ArrowRight'], start: '0', moved: '+0.5' },
+    { path: '/chapter/1', id: 'c1-b31', keys: ['Home'], start: '0', moved: '-5.0' },
+    { path: '/chapter/7', id: 'c7-b6', keys: ['End'], start: '😐', moved: '😊2' },
+  ];
+  for (const c of cases) {
+    const where = `${c.path} #${c.id} live (${scheme})`;
+    if (!(await page.url()).endsWith(c.path)) await open(page, c.path);
+    const range = page.locator(`#${c.id} .live-range`);
+    await range.waitFor({ state: 'attached', timeout: 5000 }).catch(() => fail(`${where}: the slider never went live`));
+    if (!(await range.count())) continue;
+    const state = () =>
+      page.evaluate((id) => {
+        const root = document.getElementById(id)!;
+        const thumb = root.querySelector('.vv-thumb, .dv-thumb')!.getBoundingClientRect();
+        const input = root.querySelector<HTMLInputElement>('.live-range')!;
+        return {
+          value: input.value,
+          text: input.getAttribute('aria-valuetext'),
+          name: input.getAttribute('aria-label'),
+          shown: root.querySelector('.live-value')!.textContent,
+          thumb: Math.round(thumb.left),
+          storage: JSON.stringify([Object.entries(localStorage), Object.entries(sessionStorage), document.cookie]),
+        };
+      }, c.id);
+    const requests: string[] = [];
+    // The page's own lazy images may load while the screen is in view: they are not the slider's.
+    await range.scrollIntoViewIfNeeded();
+    await page.waitForLoadState('networkidle');
+    const lazy = new Set(await page.evaluate(() => Array.from(document.querySelectorAll<HTMLImageElement>('img[loading="lazy"]')).map((i) => i.src)));
+    const onRequest = (r: { url(): string }) => {
+      if (!lazy.has(r.url())) requests.push(r.url());
+    };
+    page.on('request', onRequest);
+    const s0 = await state();
+    if (s0.value !== '50' || s0.text !== c.start || s0.shown !== c.start) fail(`${where}: starts at ${s0.value} "${s0.shown}", not 50 "${c.start}"`);
+    if (!s0.name) fail(`${where}: the slider has no name`);
+    await range.focus();
+    for (const k of c.keys) await page.keyboard.press(k);
+    await page.waitForTimeout(150);
+    const s1 = await state();
+    if (s1.text !== c.moved || s1.shown !== c.moved) fail(`${where}: after ${c.keys.join(' ')} reads "${s1.shown}", not "${c.moved}"`);
+    if (s1.thumb === s0.thumb) fail(`${where}: the drawn thumb did not move`);
+    await page.locator(`#${c.id} .live-reset`).click();
+    await page.waitForTimeout(150);
+    const s2 = await state();
+    if (s2.value !== '50' || s2.shown !== c.start || s2.thumb !== s0.thumb) fail(`${where}: Reset leaves it at ${s2.value} "${s2.shown}"`);
+    if (s2.storage !== s0.storage) fail(`${where}: storage changed`);
+    page.off('request', onRequest);
+    if (requests.length) fail(`${where}: made requests: ${requests.slice(0, 3).join(', ')}`);
+    await checkFloors(page, `${c.path} (live ${c.id})`, scheme);
+  }
+}
+
 async function newPage(opts: Parameters<Browser['newPage']>[0] = {}) {
   const p = await browser.newPage(opts);
   // tsx keeps function names with a __name helper that the page does not have.
@@ -328,6 +389,7 @@ try {
     await open(page, '/about');
     await checkFloors(page, '/about', scheme);
     await checkAssistant(page, scheme);
+    await checkLiveScreens(page, scheme);
     await open(page, '/cards');
     await checkFloors(page, '/cards', scheme);
     // Readers' images (slice 1): the feed for everyone; "Add an image" only for a signed-in, invited FID.

@@ -10,7 +10,10 @@
  * - An uncovered screen or figure renders from a matching default template, else as
  *   the source drew it; a covered one never uses the default.
  * - veridia/vote is the default for every vote screen in chapter 1 (b18, b31) and
- *   nothing else in the book, and shows the same words as the source.
+ *   nothing else in the book, and shows the same words as the source; dzego/vote the same
+ *   for the robot's voting view (c7-b6).
+ * - The three voting screens are live: they start at the source's slider value, Reset
+ *   returns there from anywhere, and the island and its logic neither store nor send.
  * - A render may replace only a span of screen and figure blocks.
  * - A figure's minimum width keeps its smallest text at 12px or more.
  */
@@ -20,6 +23,10 @@ import { blockFacts, READABLE_KINDS, type BlockLike } from '../src/lib/reading';
 import * as cheerio from 'cheerio';
 import { figureMinWidth, MIN_TEXT_PX, renderMayReplace, renderScreen } from '../src/lib/render';
 import { DEFAULT_TEMPLATES, type ScreenTemplate } from '../src/templates';
+import { initialValue, liveReducer, sliderReading } from '../src/templates/live';
+import { createElement } from 'react';
+import { renderToStaticMarkup } from 'react-dom/server';
+import { LiveScreen } from '../src/components/live-screen';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const failures: string[] = [];
@@ -83,13 +90,24 @@ for (let n = 1; n <= 32; n++) {
   check('template ids are unique', new Set(ids).size === ids.length, ids.join(','));
   const words = (html: string) => cheerio.load(html).text().replace(/\s+/g, '');
   const hits: string[] = [];
+  const dzHits: string[] = [];
   for (let n = 1; n <= 32; n++) {
     for (const b of chapter(n)) {
       if (b.kind !== 'screen' && b.kind !== 'figure') continue;
       const matched = DEFAULT_TEMPLATES.filter((t) => t.matches(b));
       check(`c${n}-b${b.idx} matches at most one template`, matched.length <= 1, matched.map((t) => t.id).join(','));
       if (matched[0]?.id === 'veridia/vote') hits.push(`c${n}-b${b.idx}`);
+      if (matched[0]?.id === 'dzego/vote') dzHits.push(`c${n}-b${b.idx}`);
     }
+  }
+  check('dzego/vote covers exactly the robot\'s voting view (c7-b6)', dzHits.join(',') === 'c7-b6', dzHits.join(','));
+  {
+    const b = chapter(7)[6];
+    const r = renderScreen(b, DEFAULT_TEMPLATES);
+    check('c7-b6 renders from dzego/vote', r.source.from === 'template' && r.source.templateId === 'dzego/vote');
+    check('c7-b6 template shows the source\'s words', words(r.html) === words(b.content), `${words(r.html)} | ${words(b.content)}`);
+    check('c7-b6 template is static', !/<(input|button|select|textarea|a|script)\b|\son\w+=/i.test(r.html));
+    check('c7-b6 covered ignores dzego/vote', renderScreen(b, DEFAULT_TEMPLATES, true).source.from === 'book');
   }
   const voteScreens = chapter(1).filter((b) => b.kind === 'screen' && b.content.includes('Vote on:')).map((b) => `c1-b${b.idx}`);
   check('chapter 1 has the two vote screens', voteScreens.join(',') === 'c1-b18,c1-b31', voteScreens.join(','));
@@ -105,6 +123,58 @@ for (let n = 1; n <= 32; n++) {
   }
   const off = { ...chapter(1)[18], data: { ...chapter(1)[18].data, setting: 'dzego' } };
   check('veridia/vote needs a Veridian screen', !DEFAULT_TEMPLATES.some((t) => t.matches(off)));
+}
+
+// Live voting screens: they start where the book shows them, Reset returns there, nothing is stored or sent
+{
+  const live = [
+    [1, 18],
+    [1, 31],
+    [7, 6],
+  ] as const;
+  const found: string[] = [];
+  for (let n = 1; n <= 32; n++) {
+    for (const b of chapter(n)) if (DEFAULT_TEMPLATES.find((t) => t.matches(b))?.live) found.push(`c${n}-b${b.idx}`);
+  }
+  check('the live screens are the three voting views', found.join(',') === 'c1-b18,c1-b31,c7-b6', found.join(','));
+  for (const [n, idx] of live) {
+    const b = chapter(n)[idx];
+    const t = DEFAULT_TEMPLATES.find((t) => t.matches(b))!;
+    const s = t.live!(b);
+    const html = t.render(b);
+    const start = initialValue(s);
+    check(`c${n}-b${idx} live: starts at the source's value`, start === s.start && start === 50, String(start));
+    check(`c${n}-b${idx} live: the track is marked for the island`, (html.match(/data-live-track/g) ?? []).length === 1);
+    // Reset, from anywhere, returns to the start.
+    const step = liveReducer(s);
+    for (const v of [0, 37, 80, 100, 250, -9]) {
+      const moved = step(start, { type: 'set', value: v });
+      check(`c${n}-b${idx} live: set ${v} stays on the track`, moved >= s.min && moved <= s.max);
+      check(`c${n}-b${idx} live: Reset after ${v} returns to the source`, step(moved, { type: 'reset' }) === start);
+    }
+    check(`c${n}-b${idx} live: the slider moves`, sliderReading(s, step(start, { type: 'set', value: 100 })) !== sliderReading(s, start));
+    // The island's server render: the template's HTML untouched, at the start.
+    const ssr = renderToStaticMarkup(createElement(LiveScreen, { html, slider: s, draftLine: false }));
+    check(`c${n}-b${idx} live: the island's server HTML contains the template's HTML`, ssr.includes(html));
+    check(`c${n}-b${idx} live: the island renders no control before it mounts but Reset`, !/<(input|select|textarea)\b/.test(ssr));
+    check(`c${n}-b${idx} live: the island starts at the source's value`, ssr.includes(`data-value="${start}"`));
+  }
+  const readings = live.map(([n, idx]) => {
+    const b = chapter(n)[idx];
+    const s = DEFAULT_TEMPLATES.find((t) => t.matches(b))!.live!(b);
+    return [0, 50, 55, 75, 100].map((v) => sliderReading(s, v)).join(' ');
+  });
+  check('Veridia readings', readings[0] === '-5.0 0 +0.5 +2.5 +5.0', readings[0]);
+  check('Dzego readings', readings[2] === '🙁2 😐 😐 😊 😊2', readings[2]);
+  // Nothing is stored or sent: a static scan of the island and its logic.
+  const NOPE = /localStorage|sessionStorage|indexedDB|document\.cookie|cookieStore|caches\.|fetch\s*\(|XMLHttpRequest|WebSocket|EventSource|sendBeacon|serviceWorker|import\s*\(|\bform\b|action=|navigator\./;
+  for (const f of ['src/components/live-screen.tsx', 'src/templates/live.ts', 'src/templates/veridia-vote.ts', 'src/templates/dzego-vote.ts']) {
+    const code = readFileSync(path.join(ROOT, f), 'utf8').replace(/\/\*[\s\S]*?\*\/|\/\/[^\n]*/g, '');
+    const hit = code.match(NOPE);
+    check(`${f} neither stores nor sends`, !hit, hit?.[0]);
+  }
+  // The scan catches a planted write.
+  check('the storage scan catches localStorage', NOPE.test('useEffect(() => localStorage.setItem("v", v))'));
 }
 
 // A render replaces only screens and figures
