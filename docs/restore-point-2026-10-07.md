@@ -122,3 +122,10 @@ labelled "Rules invented for this edition"; the sandbox keeps the book's recover
 `892b243`, Learn off with the "being rebuilt" note):
 
     vercel rollback dpl_C9phakj9k4DdXer1NgQimn247Eh4 --scope nates-projects-d1780cff
+
+## 2026-10-09: the book's voting screens live (branch site-live-voting)
+
+c1-b18, c1-b31 and c7-b6: the slider moves, the reading follows, Reset returns to the book's state;
+nothing stored or sent. c7-b6 now drawn by a template (dzego/vote). To undo (back to `6aab89b`):
+
+    vercel rollback dpl_BRKrEY8iNeVBihT1ZXrrY8J5nTog --scope nates-projects-d1780cff
