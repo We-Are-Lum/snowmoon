@@ -1406,6 +1406,8 @@ These are recorded as found. None of them is decided here.
 
 ## 14. What was built (step 2, branch `site-minpentai`)
 
+*Superseded (2026-10-09): the owner reversed "the engine stays". Learn is now Design's game ported as its own engine; see `docs/design/minpentai-learn-port.md`. The citation corrections in §14.3 still apply.*
+
 The Learn flow follows Design's order, frame, pacing and motion: eight watch screens over a 3D broadcast, seven lessons, the optional Under the hood, and a practice match. **The engine is unchanged.** Every lesson is a real match (`match.ts`) on a 30 × 20 board, and the broadcast draws the recorded match turn by turn, so nothing a visitor sees is scripted by hand.
 
 ### 14.1 Files

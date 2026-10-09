@@ -111,6 +111,8 @@
 .ml-dirs { display: flex; gap: 4px; min-width: 0; }
 .ml-learn .ml-dirs button {
   flex: 1; min-width: 0; height: 44px; border: 1px solid var(--rule); border-radius: 3px; background: transparent; color: var(--ink);
+  /* DM Mono has no arrows; Design's browser drew them in plain monospace, here they come from the site's
+     DM Mono fallback face and look larger (the site allows only its own fonts: check:ui). */
   font-family: var(--font-label), monospace; font-size: 16px;
 }
 .ml-learn .ml-palette-row button[aria-pressed='true'], .ml-learn .ml-dirs button[aria-pressed='true'] { background: var(--btn); color: var(--btn-ink); }

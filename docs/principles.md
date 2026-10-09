@@ -352,9 +352,18 @@ quoted as written. Minpentai boards and maps come from the source's own SVGs.
   source screen.
 - `P8b`: Dzegoban lettering on images uses lines that appear in that chapter's
   source.
-- `P8c`: every book claim in the Minpentai Learn wording (`learn-text.ts`)
-  cites a block that exists, words it quotes are in that block, and the
-  broadcast's countdown is chapter 4's Dzegoban (c4-b97–b98).
+- `P8c`: every book claim in the Minpentai Learn wording (`learn-text.ts`,
+  including the note that the book's rule changes every match) cites a block
+  that exists, words it quotes are in that block, a file it cites exists, and
+  the broadcast's countdown is chapter 4's Dzegoban (c4-b97–b98). P8 applies
+  to what is presented as the book's (the sandbox's recovered rule and c4-b5
+  board, Under the hood, Dzegoban, claims about the book); the Learn game's
+  own rules are invented for this edition and are not checked against the
+  book's rule (owner, 2026-10-09).
+- `P8d`: every Learn screen with the game (watch, lessons, practice) carries
+  "Rules invented for this edition" and a draft tag; Under the hood, the
+  book's rule, does not; lessons 1 and 7 and practice say, citing c4-b84,
+  that in the book the rule changes every match, and link to the sandbox.
 - `npm run check:ingest`: the committed text, screens and figures re-parse
   byte-identical from the fetched source. `npm run test:render`: template cases.
 - Review: do generated images that depict boards, maps or screens (for example
