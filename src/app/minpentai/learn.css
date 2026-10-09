@@ -164,6 +164,7 @@ html.ml-in-app .ml-learn-bar .ml-exit { display: flex; }
   font-family: var(--font-label), monospace; font-size: 12px; letter-spacing: 0.04em; text-align: left;
 }
 .ml-rulesnote { display: flex; flex-direction: column; }
+.ml-learn a.ml-textlink { display: inline-flex; align-items: center; text-decoration: none; }
 .ml-rulesnote p { margin: 0; font-size: 16px; line-height: 1.4; color: var(--muted); text-wrap: pretty; }
 .ml-rulecard { display: flex; flex-direction: column; }
 .ml-rule-row { display: grid; grid-template-columns: 88px 1fr; gap: 10px; align-items: center; padding: 8px 0; border-top: 1px solid var(--rule); }
@@ -203,3 +204,24 @@ html.ml-in-app .ml-foot { padding-bottom: max(14px, env(safe-area-inset-bottom),
   position: absolute; left: 18px; right: 18px; bottom: 90px; z-index: 10; background: var(--btn); color: var(--btn-ink);
   padding: 10px 12px; border-radius: 3px; font-family: var(--font-label), monospace; font-size: 12px; line-height: 1.5;
 }
+
+/* /minpentai/rule (rule/rule-view.tsx): the book's rule on a page in the reading column, with Learn's tags, board
+   strip, controls and rule card. */
+.mr { display: flex; flex-direction: column; gap: 10px; }
+.mr-back, .mr-link {
+  align-self: flex-start; display: inline-flex; align-items: center; min-height: 44px; padding: 0; border: none; background: none;
+  color: var(--link); font-family: var(--font-label), monospace; font-size: 12px; letter-spacing: 0.04em; text-decoration: none; cursor: pointer; text-align: left;
+}
+.mr-title { margin: 0; font-family: var(--reading); font-size: 30px; font-weight: 400; line-height: 1.1; text-wrap: pretty; }
+.mr-text { margin: 0; font-size: 18px; line-height: 1.42; text-wrap: pretty; }
+.mr-caption { margin: 0; font-size: 16px; line-height: 1.4; color: var(--muted); text-wrap: pretty; }
+.mr-board { position: relative; background: #060608; }
+.mr-board canvas { display: block; width: 100%; height: auto; }
+.mr-tools { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; }
+.mr-tools button {
+  height: 44px; border: 1px solid var(--rule); border-radius: 3px; background: transparent; color: var(--ink); cursor: pointer;
+  font-family: var(--font-label), monospace; font-size: 12px; letter-spacing: 0.04em;
+}
+.mr-tools button[aria-pressed='true'] { background: var(--btn); color: var(--btn-ink); }
+.mr-tools button:disabled { color: var(--muted); cursor: default; }
+.mr :is(button, a):focus-visible { outline: 2px solid #46D7E8; outline-offset: 2px; }

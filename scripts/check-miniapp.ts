@@ -9,7 +9,7 @@
  * - Sign-in is silent and happens once per launch, shared by the bar and the assistant;
  *   every chat request carries the Quick Auth token as a bearer.
  * - The assistant works inside the 424×695 frame: home, the notice, an answer.
- * - Learn Minpentai fills the 424×695 frame: no site top bar, a × back to the site.
+ * - Learn Minpentai and Free play fill the 424×695 frame: no site top bar, a × back to the site.
  * - The page can be framed (no X-Frame-Options or frame-ancestors).
  * - /assistant has its own embed, so a cast link opens the assistant.
  * The Quick Auth server and the chat API are mocked: what is checked is the client's
@@ -96,7 +96,7 @@ try {
     await page.close();
   }
   // Learn Minpentai fills the Farcaster frame (owner, 2026-10-09): no site top bar, the frame is the iframe's viewport, × back to the site.
-  for (const path of ['/minpentai?lesson=13', '/minpentai?mode=practice']) {
+  for (const path of ['/minpentai?lesson=13', '/minpentai?mode=practice', '/minpentai?mode=free']) {
     const page = await browser.newPage({ viewport: { width: 480, height: 760 } });
     await page.addInitScript('window.__name = (f) => f');
     const errors: string[] = [];
@@ -133,4 +133,4 @@ if (failures.length) {
   console.error(`MINIAPP CHECK FAILED (${failures.length}):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`miniapp check passed: ${BASE}, home, a chapter, the assistant and Learn Minpentai (full screen) in a stand-in Farcaster client`);
+console.log(`miniapp check passed: ${BASE}, home, a chapter, the assistant and Learn Minpentai and Free play (full screen) in a stand-in Farcaster client`);

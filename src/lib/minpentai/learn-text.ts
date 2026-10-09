@@ -22,13 +22,13 @@ export interface Screen {
   /** Lessons: the status line when the goal is met (overrides "NICE…"/"LIKE THAT."), or failed. */
   metText?: string;
   failText?: string;
-  /** Shows the note that these rules are invented, with the way to the sandbox. */
+  /** Shows the note that these rules are invented, with the link to the book's rule (/minpentai/rule). */
   rulesNote?: true;
 }
 
 /** The book's words on new rules, quoted from c4-b84 (so P8c checks them); never paraphrased as "the rule changes every match" (P8d). */
 const BOOK_NEW_RULE: Source = ['In the book, "every game there\'s always some kind of new rule"', 'c4-b84'];
-const RECOVERED: Source = ["The sandbox runs the rule recovered from the book's animated board", 'c4-b5 · c4-b7'];
+const RECOVERED: Source = ["The rule page runs the rule recovered from the book's animated board", 'c4-b5 · c4-b7'];
 const INVENTED: Source = ['The rules of the Learn game (towers, gliders, squares, rocks, turns to act, the new rules) are invented for this edition', 'invented'];
 
 export const LEARN_TEXT = {
@@ -38,6 +38,14 @@ export const LEARN_TEXT = {
   /** Added by this build (draft): full screen's way back to the site (phones, the Farcaster frame). */
   exit: '×',
   exitLabel: 'Exit Learn, back to Snowmoon',
+  /** Added by this build (draft): Free play, Design's practice match on its own (owner, 2026-10-09). */
+  freePlay: {
+    appTitle: 'Minpentai',
+    label: 'Minpentai free play',
+    title: 'Free play',
+    stepOf: 'FREE PLAY',
+    learn: 'LEARN THE GAME',
+  },
   back: 'BACK',
   next: 'NEXT',
   startLessons: 'START THE LESSONS',
@@ -57,8 +65,9 @@ export const LEARN_TEXT = {
   } satisfies Record<TagKey, string>,
   /** Added by this build (draft): on lesson 1, lesson 7 and the practice match. */
   rulesNote: {
-    text: 'The rules of this game are invented for this edition. The book says that "every game there\'s always some kind of new rule" (c4-b84). The rule recovered from the book\'s figure (c4-b5, c4-b7) is in the sandbox.',
-    link: "THE BOOK'S RULE, IN THE SANDBOX →",
+    text: 'The rules of this game are invented for this edition. The book says that "every game there\'s always some kind of new rule" (c4-b84). The rule recovered from the book\'s figure (c4-b5, c4-b7) has its own page.',
+    link: "THE RULE RECOVERED FROM THE BOOK'S FIGURE →",
+    href: '/minpentai/rule',
   },
 
   cams: {
@@ -362,5 +371,26 @@ export const LEARN_TEXT = {
       lose: 'AMBER WINS.',
       draw: 'DRAW.',
     },
+  },
+
+  /**
+   * Added by this build (draft): /minpentai/rule, the rule recovered from the book's figure, on
+   * engine.ts. It is the book's rule: tagged FROM THE BOOK, never RULES INVENTED (P8d), and its
+   * sources are checked like Learn's (P8c).
+   */
+  rulePage: {
+    title: "The rule from the book's figure",
+    text: 'In chapter 4 the book draws a Minpentai board in motion (c4-b5), and a player names its rule: "rotate one eighty if three" (c4-b7). This board runs that rule, recovered from the figure, and opens on the figure\'s first frame.',
+    caption: "Cells live in 2 × 2 blocks, and the blocks shift one cell diagonally every turn. The game in Learn and Free play does not use this rule: its rules are invented for this edition.",
+    stageLabel: "The board of the book's figure c4-b5, running the rule recovered from it. ",
+    recipe: 'HOW THE RULE WAS RECOVERED (GITHUB) →',
+    back: '← MINPENTAI',
+    tags: ['book', 'draft'] as TagKey[],
+    sources: [
+      ["The board, the figure's 24 × 16 squares, and its first frame", 'c4-b5'],
+      ['"rotate one eighty if three"', 'c4-b7'],
+      ['How the rule was recovered from the figure\'s 120 frames', 'docs/minpentai-rules.md'],
+      ["Beyond the figure's right edge, cells the book does not show, chosen so the figure's squares replay all 120 frames", 'invented'],
+    ] as Source[],
   },
 };

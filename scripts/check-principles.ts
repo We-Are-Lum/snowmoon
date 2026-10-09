@@ -1103,10 +1103,13 @@ add({
     // Statements about the book: every screen's sources, and the note that quotes the book on new rules
     // (c4-b84). The Learn game's own rules (learn-game/*.ts) are invented for this edition and are
     // deliberately not compared with the book's rule (owner, 2026-10-09; P8d checks the label instead).
-    const screens = [...LEARN_TEXT.watch, ...Object.values(LEARN_TEXT.lessons)]
+    // The rule page (/minpentai/rule) is the book's rule and is checked the same way: its sources, and its text's quote.
+    const screens = [...LEARN_TEXT.watch, ...Object.values(LEARN_TEXT.lessons), LEARN_TEXT.rulePage]
       .map((s) => ({ title: s.title, tags: [...s.tags] as string[], sources: s.sources.map(([a, b]) => [a, b] as [string, string]) }));
     const sources = screens.flatMap((s) => s.sources.map(([what, where]) => ({ screen: s.title, what, where })));
-    sources.push({ screen: 'the rules note', what: LEARN_TEXT.rulesNote.text, where: (LEARN_TEXT.rulesNote.text.match(/c\d+-b\d+(?:–b\d+)?/g) ?? []).join(' · ') });
+    const ids = (s: string) => (s.match(/c\d+-b\d+(?:–b\d+)?/g) ?? []).join(' · ');
+    sources.push({ screen: 'the rules note', what: LEARN_TEXT.rulesNote.text, where: ids(LEARN_TEXT.rulesNote.text) });
+    sources.push({ screen: 'the rule page', what: LEARN_TEXT.rulePage.text, where: ids(LEARN_TEXT.rulePage.text) });
     const files = Object.fromEntries(sources.filter((s) => /^(src|docs)\//.test(s.where)).map((s) => [s.where, existsSync(path.join(ROOT, s.where.split(' ')[0]))]));
     const countdown = { dz: LEARN_TEXT.hud.dz, english: LEARN_TEXT.hud.dzEnglish, page: read('src/app/minpentai/learn.tsx') };
     return { text, sources, screens, files, countdown };
@@ -1148,7 +1151,7 @@ add({
 add({
   id: 'P8d',
   principle: 8,
-  name: 'the Learn game is labelled as rules invented for this edition, quotes c4-b84 on new rules, and points to the book\'s rule in the sandbox',
+  name: 'the Learn game is labelled as rules invented for this edition, quotes c4-b84 on new rules, and links to the book\'s rule on /minpentai/rule, which is labelled as the book\'s',
   load: async () => ({
     tags: LEARN_TEXT.tags,
     note: LEARN_TEXT.rulesNote,
@@ -1157,8 +1160,16 @@ add({
       ...Object.entries(LEARN_TEXT.lessons).map(([id, s]) => ({ id, tags: [...s.tags] as string[], sources: s.sources.map(([a, b]) => [a, b]), rulesNote: 'rulesNote' in s && !!s.rulesNote })),
     ],
     page: read('src/app/minpentai/learn.tsx'),
+    // The rule page: the book's rule (c4-b5, c4-b7) on engine.ts. Its words, its page, and its view.
+    rulePage: {
+      tags: [...LEARN_TEXT.rulePage.tags] as string[],
+      sources: LEARN_TEXT.rulePage.sources.map(([a, b]) => [a, b]),
+      text: LEARN_TEXT.rulePage.text,
+      route: existsSync(path.join(ROOT, 'src/app/minpentai/rule/page.tsx')) ? read('src/app/minpentai/rule/page.tsx') : '',
+      view: existsSync(path.join(ROOT, 'src/app/minpentai/rule/rule-view.tsx')) ? read('src/app/minpentai/rule/rule-view.tsx') : '',
+    },
   }),
-  run: ({ tags, note, screens, page }) => {
+  run: ({ tags, note, screens, page, rulePage }) => {
     const problems: string[] = [];
     if (!/invented for this edition/i.test(tags.rules)) problems.push(`the "rules" tag reads "${tags.rules}", not "invented for this edition"`);
     for (const s of screens) {
@@ -1172,8 +1183,8 @@ add({
       if (!s.tags.includes('rules')) problems.push(`${s.id}: no "${tags.rules}" tag`);
       if (!s.tags.includes('draft')) problems.push(`${s.id}: no "Draft wording" tag`);
     }
-    // The note: invented for this edition, the book's own words on new rules (quoted, with its block), and the way
-    // to the sandbox. The book says "every game there's always some kind of new rule" (c4-b84), not that the rule
+    // The note: invented for this edition, the book's own words on new rules (quoted, with its block), and the link
+    // to the rule page. The book says "every game there's always some kind of new rule" (c4-b84), not that the rule
     // changes every match: the note and the sources quote it and never paraphrase it so (owner, 2026-10-09).
     if (!/invented for this edition/i.test(note.text)) problems.push('rules note: does not say the rules are invented for this edition');
     if (!/"every game there[’']s always some kind of new rule"/i.test(note.text) || !/c4-b84/.test(note.text)) problems.push('rules note: does not quote c4-b84, "every game there\'s always some kind of new rule"');
@@ -1182,11 +1193,19 @@ add({
     for (const [where, s] of [['rules note', note.text], ['rules note link', note.link], ...screens.flatMap((x: { id: string; sources: string[][] }) => x.sources.map(([w]) => [`${x.id} source`, w]))] as [string, string][]) {
       if (CHANGES.test(unquoted(s))) problems.push(`${where}: "${s}" says the rule changes every match; quote c4-b84 instead`);
     }
-    if (!/sandbox/i.test(note.text) || !/c4-b5/.test(note.text) || !/sandbox/i.test(note.link)) problems.push('rules note: does not point to the sandbox for the rule recovered from c4-b5');
+    if (note.href !== '/minpentai/rule' || !/c4-b5/.test(note.text) || !/rule recovered from the book.s figure/i.test(note.link)) problems.push('rules note: does not link to /minpentai/rule for the rule recovered from c4-b5');
     for (const id of ['goal', 'rule', 'practice']) if (!screens.find((s: { id: string }) => s.id === id)?.rulesNote) problems.push(`${id}: does not show the rules note`);
-    // The page draws every tag and the note, and the note's link opens the sandbox.
+    // The page draws every tag and the note, and the note's link opens the rule page.
     if (!/T\.tags\[k\]/.test(page)) problems.push('learn.tsx does not show the screens\' tags');
-    if (!/T\.rulesNote\.text/.test(page) || !/onClick=\{onFree\}>\{T\.rulesNote\.link\}/.test(page)) problems.push('learn.tsx does not show the rules note with its sandbox link');
+    if (!/T\.rulesNote\.text/.test(page) || !/<Link href=\{T\.rulesNote\.href\}[^>]*>\{T\.rulesNote\.link\}<\/Link>/.test(page)) problems.push('learn.tsx does not show the rules note with its link to the rule page');
+    // The rule page is the book's rule: labelled FROM THE BOOK, never as invented; cites the figure (c4-b5) and the
+    // rule's name (c4-b7); exists; shows its tags; runs engine.ts on the figure's board.
+    const R = rulePage;
+    if (!R.tags.includes('book') || R.tags.includes('rules')) problems.push(`rule page: tagged ${R.tags.join(', ')}; the book's rule must be FROM THE BOOK and not RULES INVENTED`);
+    for (const id of ['c4-b5', 'c4-b7']) if (!R.sources.some(([, w]: string[]) => new RegExp(`${id}\\b`).test(w)) || !R.text.includes(id)) problems.push(`rule page: does not cite ${id} in its text and its sources`);
+    if (!/<RuleView\b/.test(R.route)) problems.push('rule page: src/app/minpentai/rule/page.tsx is missing or does not render the rule view');
+    if (!/R\.tags\.map[\s\S]*T\.tags\[k\]/.test(R.view)) problems.push('rule page: the view does not show its tags');
+    if (!/from '~\/lib\/minpentai\/engine'/.test(R.view) || !/c4b5Preset/.test(R.view)) problems.push('rule page: the view does not run engine.ts on the c4-b5 board');
     return problems;
   },
   plant: (c) => {

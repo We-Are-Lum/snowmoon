@@ -1,6 +1,8 @@
 # Minpentai sandbox: what is from the book and what is invented
 
-The sandbox at `/minpentai` is an unofficial reconstruction. This file records where each part comes from. The rule and its evidence are in `minpentai-rules.md`.
+**Out of the UI since 2026-10-09 (owner).** `/minpentai` is now Learn and Free play (Claude Design's game). The rule recovered from the book's figure runs on `/minpentai/rule`. The sandbox's code (`src/app/minpentai/sandbox.tsx`) and this record are kept. Its old links (`?mode=free`, `?s=…`) open Free play and the rule page (docs/design/minpentai-learn-port.md §11).
+
+The sandbox that was at `/minpentai` is an unofficial reconstruction. This file records where each part comes from. The rule and its evidence are in `minpentai-rules.md`.
 
 ## From the book
 

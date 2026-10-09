@@ -18,7 +18,7 @@ export function navItems(last: number, adaptations: number): NavItem[] {
     { key: 'listen', label: 'Listen', href: `/chapter/${last}?view=listen` },
     { key: 'assistant', label: 'Assistant', href: '/assistant' },
     { key: 'adaptations', label: 'Adaptations', href: '/adaptations', meta: String(adaptations) },
-    { key: 'minpentai', label: 'Minpentai', href: '/minpentai', meta: 'Tutorial' },
+    { key: 'minpentai', label: 'Minpentai', href: '/minpentai', meta: 'Learn · play' },
     { key: 'podcast', label: 'Podcast', href: '/about#podcast', meta: 'RSS' },
     { key: 'pictures', label: 'Pictures', href: '/images', meta: 'Trial' },
     { key: 'about', label: 'About', href: '/about' },

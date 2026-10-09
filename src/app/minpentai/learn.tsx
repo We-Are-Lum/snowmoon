@@ -4,7 +4,8 @@
  * Learn Minpentai: Claude Design's "Minpentai Intro v3" (docs/design/minpentai-intro-v3.dc.html),
  * ported. Eight watch screens over Design's scripted 3D broadcast, seven lessons on Design's pieces
  * board, the optional Under the hood, and the practice match against Design's bot. The game is
- * Design's, with RULES INVENTED FOR THIS EDITION; the book's own rule is in the sandbox.
+ * Design's, with RULES INVENTED FOR THIS EDITION; the book's own rule is on /minpentai/rule. With `free`, the
+ * same frame is Free play: Design's practice match on its own (no lesson progress, no BACK).
  *
  * The logic is src/lib/minpentai/learn-game/controller.ts (Design's Component, tested against
  * Design's own script); this file is the frame (Design's markup, lines 33–166) and the loop.
@@ -41,7 +42,10 @@ function webglOk(): boolean {
   }
 }
 
-export function Learn({ start, onScreen, onFree }: { start: number; onScreen: (n: number) => void; onFree: () => void }) {
+/**
+ * `onFree` is the app bar's link: "SKIP TO FREE PLAY" in Learn, "LEARN THE GAME" in Free play (`free`).
+ */
+export function Learn({ start, onScreen, onFree, free = false }: { start: number; onScreen: (n: number) => void; onFree: () => void; free?: boolean }) {
   const ctl = useMemo(() => {
     const c = new LearnController(browserEnv(), { reduced: prefersReduced() });
     if (start >= T.watch.length) c.startLesson(Math.min(LS.length - 1, start - T.watch.length));
@@ -52,7 +56,11 @@ export function Learn({ start, onScreen, onFree }: { start: number; onScreen: (n
   useEffect(() => ctl.subscribe(force), [ctl]);
 
   const S = ctl.state;
-  const v = ctl.view();
+  const view = ctl.view();
+  // Free play: Design's practice match without the course around it (its own title, no lesson dots, no BACK).
+  const v = free
+    ? { ...view, title: view.title === T.lessons.practice.title ? T.freePlay.title : view.title, stepOf: T.freePlay.stepOf, dots: [], backHidden: true }
+    : view;
   const L = ctl.L;
   const screen = S.mode === 'watch' ? S.i : T.watch.length + S.li;
 
@@ -190,12 +198,12 @@ export function Learn({ start, onScreen, onFree }: { start: number; onScreen: (n
   const tagClass = (k: string) => (k === 'book' ? 'ml-tag ml-tag-solid' : k === 'draft' ? 'ml-tag ml-tag-draft' : 'ml-tag ml-tag-dashed');
   const reactP = hud.react;
   return (
-    <section className="ml-learn" aria-label={T.appTitle} ref={frameRef}>
+    <section className="ml-learn" aria-label={free ? T.freePlay.label : T.appTitle} ref={frameRef}>
       <header className="ml-learn-bar">
         {/* Full screen only (learn.css): the way back to the site, since its top bar is hidden. */}
         <Link href="/" className="ml-exit" aria-label={T.exitLabel}>{T.exit}</Link>
-        <h1 className="ml-learn-title">{T.appTitle}</h1>
-        <button type="button" className="ml-learn-skip" onClick={onFree}>{T.skip}</button>
+        <h1 className="ml-learn-title">{free ? T.freePlay.appTitle : T.appTitle}</h1>
+        <button type="button" className="ml-learn-skip" onClick={onFree}>{free ? T.freePlay.learn : T.skip}</button>
       </header>
 
       <div className="ml-stage">
@@ -337,7 +345,7 @@ export function Learn({ start, onScreen, onFree }: { start: number; onScreen: (n
         {v.rulesNote && (
           <div className="ml-rulesnote">
             <p>{T.rulesNote.text}</p>
-            <button type="button" className="ml-textlink" onClick={onFree}>{T.rulesNote.link}</button>
+            <Link href={T.rulesNote.href} className="ml-textlink">{T.rulesNote.link}</Link>
           </div>
         )}
         <button type="button" className="ml-textlink" aria-expanded={S.src} onClick={() => ctl.toggleSrc()}>{v.srcLabel}</button>

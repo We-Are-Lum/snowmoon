@@ -198,7 +198,7 @@ const ID_FIX: Record<string, string> = {
   'src/lib/minpentai/match.ts': 'invented',
 };
 const BOOK_NEW_RULE = ['In the book, "every game there\'s always some kind of new rule"', 'c4-b84'];
-const RECOVERED = ["The sandbox runs the rule recovered from the book's animated board", 'c4-b5 · c4-b7'];
+const RECOVERED = ["The rule page runs the rule recovered from the book's animated board", 'c4-b5 · c4-b7'];
 const INVENTED_LINE = ['The rules of the Learn game (towers, gliders, squares, rocks, turns to act, the new rules) are invented for this edition', 'invented'];
 const QUOTE_FIX: Record<string, string> = {
   'A new rule every game': BOOK_NEW_RULE[0],

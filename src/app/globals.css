@@ -594,7 +594,7 @@ a.provenance { color: var(--muted); }
   background: repeating-linear-gradient(135deg, transparent 0 7px, color-mix(in srgb, var(--ink) 7%, transparent) 7px 8px);
 }
 .ae-planned-tag { font-family: var(--label); font-size: var(--text-label); color: var(--muted); padding-top: 3px; white-space: nowrap; text-transform: uppercase; }
-/* A source figure the Minpentai sandbox can play (c4-b5). */
+/* A source figure the site can play (c4-b5, on /minpentai/rule). */
 .play-figure { display: inline-block; padding: 6px 0; font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; }
 /* The assistant's way in from a chapter (board 1b). */
 .ask-chapter { display: inline-block; margin-top: var(--space-6); padding: 6px 0; font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; }

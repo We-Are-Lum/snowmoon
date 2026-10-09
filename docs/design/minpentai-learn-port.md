@@ -54,7 +54,7 @@ Behaviour and timing are identical on every screen (section 2). What differs is 
 - ✔ deliberate **Tags scroll with the text.** Design's tag row is fixed above the text; here it is the first thing in the scrolling text area, same spacing, so lesson 5 and practice keep the footer in view on short phones.
 - ✔ deliberate **"RULES INVENTED FOR THIS EDITION" tag** on every watch screen, lessons 1–7 and practice (replacing GAME SIMPLIFIED on the lessons). Not on Under the hood (the book's rule). Rows wrap one line more.
 - ✔ deliberate **Text back at the top on a new screen** (Design's text box keeps its scroll position between screens).
-- ✔ deliberate **Skip to free play** opens the sandbox (Design shows "Not part of this mockup").
+- ✔ deliberate **Skip to free play** opens Free play, Design's practice match on its own (Design shows "Not part of this mockup"). Until 2026-10-09 it opened the sandbox (§11).
 - ✖ **Glyphs DM Mono lacks** (← ↑ ↓ → and the diagonals, ●, ◁, ▷, ▶) come from the site's DM Mono fallback face; Design's browser drew them in plain `monospace`. The direction arrows look visibly larger than Design's. Not closed: drawing them in `monospace` fails check:ui's rule that chrome uses only the site's fonts; closing it means adding an arrow glyph source to the site's label font, the owner's call.
 - ✔ deliberate **Tablet and desktop (768 px and up, outside the mini app):** Design's 390 × 695 phone, centred in the page beside the site's rail, with the site's rail and assistant (not full screen).
 - ✔ deliberate **Address bar** follows the screen (`?lesson=n`, `?mode=practice`).
@@ -107,7 +107,7 @@ Ported as Design has it unless an owner non-negotiable says otherwise; the old e
 
 **c4-b84**: "Though every game there's always some kind of new rule, and the most important tactic of all was knowing how to adapt." That is the one block that says it of every game, and the note quotes it rather than paraphrasing it (owner, 2026-10-09: "Quote that; don't say the rule changes every match"). Supporting, not cited on the screen: c4-b148 (the priests decide the rule sets), c12-b147 ("today's rule change … played on a hex grid"), c7-b13–b14, c7-b63, c14-b33. Caveat: c4-b84 says "some kind of new rule", not that the board's cell rule changes; in c4-b102–b148 the new rule turns out to be about team selection, not the cells. The note quotes c4-b84's words so P8c checks them.
 
-Wording on lesson 1, lesson 7 and practice (draft): "The rules of this game are invented for this edition. The book says that "every game there's always some kind of new rule" (c4-b84). The rule recovered from the book's figure (c4-b5, c4-b7) is in the sandbox." Link: "THE BOOK'S RULE, IN THE SANDBOX →". (Before 2026-10-09 it read "In the book, the rule changes every match: …".)
+Wording on lesson 1, lesson 7 and practice (draft): "The rules of this game are invented for this edition. The book says that "every game there's always some kind of new rule" (c4-b84). The rule recovered from the book's figure (c4-b5, c4-b7) has its own page." Link: "THE RULE RECOVERED FROM THE BOOK'S FIGURE →" to `/minpentai/rule` (§11). (Before 2026-10-09 it read "In the book, the rule changes every match: …", and its last sentence and link pointed to the sandbox.)
 
 The source lines that read "A new rule every game" (watch 1, lesson 7, practice; Design's) now quote c4-b84; lesson 7 lists the quote once. Kept as Design's framing of its own game, not presented as the book's words: watch 1's "Before every match, the priests secretly choose a new rule." (Design's paraphrase of c4-b84 and c4-b148, both cited beside it), lesson 7's title "Every match, a new rule" and its text, and the reasons list's "The rules change every match." (in Design's game the practice match does draw a new rule each time: `practice.rule`).
 
@@ -140,7 +140,7 @@ The source lines that read "A new rule every game" (watch 1, lesson 7, practice;
 
 ## 8. Wording
 
-All strings are in `src/lib/minpentai/learn-text.ts`, draft, one DRAFT WORDING tag per screen. New in this build (not Design's): the RULES INVENTED FOR THIS EDITION tag; the rules note and its link; the source lines "In the book, "every game there's always some kind of new rule"" (c4-b84), "The sandbox runs the rule recovered from the book's animated board" (c4-b5 · c4-b7), "The rules of the Learn game … are invented for this edition" (invented); the keyboard hint and square descriptions; the no-WebGL line; the full-screen × and its label. The full list is in section 10.
+All strings are in `src/lib/minpentai/learn-text.ts`, draft, one DRAFT WORDING tag per screen. New in this build (not Design's): the RULES INVENTED FOR THIS EDITION tag; the rules note and its link; the source lines "In the book, "every game there's always some kind of new rule"" (c4-b84), "The rule page runs the rule recovered from the book's animated board" (c4-b5 · c4-b7), "The rules of the Learn game … are invented for this edition" (invented); the keyboard hint and square descriptions; the no-WebGL line; the full-screen × and its label. The full list is in section 10.
 
 ## 9. Principles
 
@@ -181,8 +181,9 @@ Templates show their slots as `{a}`, `{b}`.
 - `tags.inv`: "SYMBOL SHAPE INVENTED"
 - `tags.rules`: "RULES INVENTED FOR THIS EDITION"
 - `tags.draft`: "DRAFT WORDING"
-- `rulesNote.text`: "The rules of this game are invented for this edition. The book says that \"every game there's always some kind of new rule\" (c4-b84). The rule recovered from the book's figure (c4-b5, c4-b7) is in the sandbox."
-- `rulesNote.link`: "THE BOOK'S RULE, IN THE SANDBOX →"
+- `rulesNote.text`: "The rules of this game are invented for this edition. The book says that \"every game there's always some kind of new rule\" (c4-b84). The rule recovered from the book's figure (c4-b5, c4-b7) has its own page."
+- `rulesNote.link`: "THE RULE RECOVERED FROM THE BOOK'S FIGURE →"
+- `rulesNote.href`: "/minpentai/rule"
 - `cams.crane`: "CAM 1 · CRANE"
 - `cams.wide`: "CAM 2 · WIDE"
 - `cams.cyanCorner`: "CAM 3 · CYAN CORNER"
@@ -325,7 +326,7 @@ Templates show their slots as `{a}`, `{b}`.
 - `lessons.goal.sources[2][1]`: "invented"
 - `lessons.goal.sources[3][0]`: "In the book, \"every game there's always some kind of new rule\""
 - `lessons.goal.sources[3][1]`: "c4-b84"
-- `lessons.goal.sources[4][0]`: "The sandbox runs the rule recovered from the book's animated board"
+- `lessons.goal.sources[4][0]`: "The rule page runs the rule recovered from the book's animated board"
 - `lessons.goal.sources[4][1]`: "c4-b5 · c4-b7"
 - `lessons.glider.title`: "Gliders fly straight"
 - `lessons.glider.text`: "A glider flies in a straight line, up, down, left or right, one square per step. It bounces off the edge. Press play."
@@ -373,7 +374,7 @@ Templates show their slots as `{a}`, `{b}`.
 - `lessons.rule.sources[0][1]`: "c4-b84"
 - `lessons.rule.sources[1][0]`: "Players are kept offline so they cannot learn it early"
 - `lessons.rule.sources[1][1]`: "c12-b133–b134"
-- `lessons.rule.sources[2][0]`: "The sandbox runs the rule recovered from the book's animated board"
+- `lessons.rule.sources[2][0]`: "The rule page runs the rule recovered from the book's animated board"
 - `lessons.rule.sources[2][1]`: "c4-b5 · c4-b7"
 - `lessons.hood.title`: "Under the hood"
 - `lessons.hood.text`: "Every piece is a few cells, moved by one rule from the book. This is a glider, cell by cell. Press play."
@@ -394,7 +395,7 @@ Templates show their slots as `{a}`, `{b}`.
 - `lessons.practice.sources[3][1]`: "invented"
 - `lessons.practice.sources[4][0]`: "Amber is a simple bot. In the book, bots handle new rules badly."
 - `lessons.practice.sources[4][1]`: "c7-b13–b14"
-- `lessons.practice.sources[5][0]`: "The sandbox runs the rule recovered from the book's animated board"
+- `lessons.practice.sources[5][0]`: "The rule page runs the rule recovered from the book's animated board"
 - `lessons.practice.sources[5][1]`: "c4-b5 · c4-b7"
 - `status.you`: "NICE. YOU DID IT."
 - `status.demo`: "LIKE THAT."
@@ -467,3 +468,58 @@ Templates show their slots as `{a}`, `{b}`.
 - `practice.status.win`: "YOU WIN."
 - `practice.status.lose`: "AMBER WINS."
 - `practice.status.draw`: "DRAW."
+
+## 11. Free play, and the book's rule on its own page (2026-10-09)
+
+Owner: "Take the sandbox and the old 'Play the computer' out of the tabs. Free play becomes Design's game. Keep the rule recovered from the book's figure on one small page, linked from the rules note, and point P8d at it. Keep the old code and docs in the repo."
+
+**Free play is Design's practice match on its own.** Design's file has one game a player can play freely: the practice match against Amber, with a new rule drawn each time (`practice.rules`). It has no free board. A free board would be a new game, invented here. Free play opens that match in Design's frame (`learn.tsx` with `free`), without the course around it: the app bar reads "Minpentai" and "LEARN THE GAME" (to watch 1), the body title is "Free play" (Design: "Practice match"; the win, lose and draw titles are kept), the footer reads "FREE PLAY" with no lesson dots and no BACK. Tags (RULES INVENTED FOR THIS EDITION, DRAFT WORDING), the rules note and the sources are the practice screen's. PLAY AGAIN starts a new match with a new rule. It is full screen like Learn (§4).
+
+**No separate Practice tab.** The practice match and Free play are the same game, so there are two places, Learn and Free play. Learn keeps its practice match as its last step (lesson 7's START A PRACTICE MATCH, `?mode=practice`). The old row of tabs (Learn / Practice / Play / Sandbox) lived on the sandbox's page. Both places are now Design's full-screen frame, which has no room for a tab row above it, so the app bar switches between them: "SKIP TO FREE PLAY" in Learn and "LEARN THE GAME" in Free play.
+
+**Addresses.** `?mode=free` is Free play. The old links: `?mode=free` (the sandbox) and `?mode=play` (Play the computer) open Free play; `?s=…` (a shared sandbox board) opens `/minpentai/rule`. That page always opens on the figure's board, so a shared board is not shown. Returning visitors (`minpentai-tutorial-done`) open Free play, as they used to open the sandbox. Chapter 4's "Play this figure" (c4-b5) now goes to `/minpentai/rule`. The rail's meta for Minpentai is "Learn · play" (was "Tutorial").
+
+**`/minpentai/rule`** (`src/app/minpentai/rule/`). The c4-b5 figure's 24 × 16 squares, the top left of `c4b5Preset()` (the figure's first frame, plus the invented hidden side that lets it replay all 120 frames), running on `engine.ts`. It has ◁ STEP, PLAY/PAUSE, STEP ▷ and RESET, and like the figure it loops after 120 turns at 10 a second. Nothing plays until asked. Below the board come Design's rule card (`rule.rows`, `rule.closing`), a caption, a link to `docs/minpentai-rules.md` on GitHub (`REPO_URL`), and the sources. It is tagged FROM THE BOOK and DRAFT WORDING, never RULES INVENTED, and it is an ordinary page with the site's top bar.
+
+**Kept in the repo, out of the UI:** `sandbox.tsx`, `match-view.tsx`, `match.ts`, `ai.ts`, `tutorial-text.ts`, `presets.ts` (still used by the rule page), `url.ts`, `minpentai.css`, their tests (`test-minpentai.ts`, `test-minpentai-match.ts`) and `docs/minpentai-sandbox.md`. `page.tsx` renders `minpentai-app.tsx` instead of `Sandbox`.
+
+**Check changes.**
+- **P8c.** Before: the inputs were every Learn screen's sources and the rules note. After: also `LEARN_TEXT.rulePage`, its sources (block ids exist, quotes in the blocks, `docs/minpentai-rules.md` exists) and its text's quote ("rotate one eighty if three", c4-b7). The FROM THE BOOK rule now covers it as well. Plant unchanged.
+- **P8d.** Name before: "… quotes c4-b84 on new rules, and points to the book's rule in the sandbox". After: "… quotes c4-b84 on new rules, and links to the book's rule on /minpentai/rule, which is labelled as the book's".
+  - Before: `!/sandbox/i.test(note.text) || !/c4-b5/.test(note.text) || !/sandbox/i.test(note.link)`, and `learn.tsx` matched `onClick={onFree}>{T.rulesNote.link}`.
+  - After: `note.href === '/minpentai/rule'`, the note names c4-b5, and the link says "rule recovered from the book's figure". `learn.tsx` must render `<Link href={T.rulesNote.href} …>{T.rulesNote.link}</Link>`.
+  - New for the rule page: its tags include `book` and not `rules`; c4-b5 and c4-b7 appear in both its text and its sources; `rule/page.tsx` renders `<RuleView`; `rule-view.tsx` renders its tags and imports `engine.ts` and `c4b5Preset`.
+  - Plant unchanged. Proven separately: rule page tags → `rules`, the note's href → `/minpentai?mode=free`, c4-b7 → c4-b9 (four problems).
+- **check:ui.** Before: 17 Learn screens plus `?mode=practice`, `?mode=play` and `?mode=free` at 390. Only the Learn screens and practice got the tag, footer and full-screen checks; play and free got the floors and no sideways scroll. After:
+  - All 20 get the tag, footer, full-screen and rules-note-link (`/minpentai/rule`) checks.
+  - `?mode=free` and `?mode=play` must show FREE PLAY and LEARN THE GAME and end at `?mode=free`.
+  - `/minpentai/rule` at 390, light and dark, gets the floors, no sideways scroll, FROM THE BOOK without RULES INVENTED, c4-b5 and c4-b7 in its words, the GitHub link, STEP ▷ advancing to TURN 1, and the site's top bar shown.
+  - `/minpentai?s=…` must land on `/minpentai/rule`.
+  - `/minpentai/rule` joins the 1024/1440/2000 pages.
+  - `?mode=free` joins the 424 × 695 frame list.
+  - Count line: 57 pages, 8 at desktop widths.
+- **check:miniapp.** `/minpentai?mode=free` is added to the full-screen list.
+- **check:intro.** Unchanged: the feature "Play Minpentai" → `/minpentai` is still true.
+- **test:minpentai-learn.** The deliberate source line "The rule page runs …" (was "The sandbox runs …").
+
+**New strings (draft):**
+- `freePlay.appTitle` "Minpentai"
+- `freePlay.label` "Minpentai free play"
+- `freePlay.title` "Free play"
+- `freePlay.stepOf` "FREE PLAY"
+- `freePlay.learn` "LEARN THE GAME"
+- `rulesNote.link` "THE RULE RECOVERED FROM THE BOOK'S FIGURE →"
+- `rulePage.title` "The rule from the book's figure"
+- `rulePage.text` "In chapter 4 the book draws a Minpentai board in motion (c4-b5), and a player names its rule: "rotate one eighty if three" (c4-b7). This board runs that rule, recovered from the figure, and opens on the figure's first frame."
+- `rulePage.caption` "Cells live in 2 × 2 blocks, and the blocks shift one cell diagonally every turn. The game in Learn and Free play does not use this rule: its rules are invented for this edition."
+- `rulePage.stageLabel` "The board of the book's figure c4-b5, running the rule recovered from it. "
+- `rulePage.recipe` "HOW THE RULE WAS RECOVERED (GITHUB) →"
+- `rulePage.back` "← MINPENTAI"
+- `rulePage.sources`:
+  - "The board, the figure's 24 × 16 squares, and its first frame" (c4-b5)
+  - ""rotate one eighty if three"" (c4-b7)
+  - "How the rule was recovered from the figure's 120 frames" (docs/minpentai-rules.md)
+  - "Beyond the figure's right edge, cells the book does not show, chosen so the figure's squares replay all 120 frames" (invented)
+- Rail meta "Learn · play"
+
+The rule page reuses `board.*`, `rule.*`, `sources` and `tags.*`.

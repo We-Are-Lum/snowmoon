@@ -81,8 +81,8 @@ export default async function ChapterPage({ params }: Props) {
   // Blocks the narration speaks as a description rather than the book's words.
   const described = new Set((narration?.cues ?? []).filter((c) => c.description).map((c) => c.idx));
   const DESCRIBED = 'narrated as a model-drafted description, not the author’s words';
-  // Figures the Minpentai sandbox can play. Its free mode opens on the c4-b5 board.
-  const PLAYABLE: Record<string, string> = { 'c4-b5': '/minpentai?mode=free' };
+  // Figures the site can play: the c4-b5 board runs the rule recovered from it on /minpentai/rule.
+  const PLAYABLE: Record<string, string> = { 'c4-b5': '/minpentai/rule' };
   // Voting screens the reader can try (src/templates/live.ts). One "Draft wording" line per
   // page: on the first of them.
   const liveSlider = (b: Block, source: ScreenSource) =>
