@@ -129,3 +129,9 @@ c1-b18, c1-b31 and c7-b6: the slider moves, the reading follows, Reset returns t
 nothing stored or sent. c7-b6 now drawn by a template (dzego/vote). To undo (back to `6aab89b`):
 
     vercel rollback dpl_BRKrEY8iNeVBihT1ZXrrY8J5nTog --scope nates-projects-d1780cff
+
+## 2026-10-09: storage docs (branch site-docs-storage)
+
+Docs only: readers' images in their own buckets marked done; README's Media section names the production key. To undo (back to `8307334`):
+
+    vercel rollback dpl_3BQYabZ7zyMSuuamc7bEeFB8nbSB --scope nates-projects-d1780cff
