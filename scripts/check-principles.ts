@@ -456,6 +456,8 @@ add({
     if (imagePage) problems.push(...aiLabelProblems(`/image/${imagePage.id}`, imagePage.html.match(/<figcaption class="ip-caption">[\s\S]*?<\/figcaption>/)?.[0] ?? '', 'image'));
     // The wording itself (src/lib/ai-declared.ts).
     for (const l of wording.labels as string[]) if (!SAYS_AI.test(l)) problems.push(`src/lib/ai-declared.ts: label "${l}" does not say "AI"`);
+    // Every label names who made it (owner, 2026-10-09).
+    for (const l of wording.labels as string[]) if (!/ · by \S/.test(l)) problems.push(`src/lib/ai-declared.ts: label "${l}" does not name who made it (" · by …")`);
     for (const d of [...wording.declared, ...wording.whose] as string[]) if (!NOT_AUTHOR.test(d)) problems.push(`src/lib/ai-declared.ts: "${d.slice(0, 60)}" does not say "not by the author"`);
     for (const d of wording.declared as string[]) if (!AI_GENERATED.test(d)) problems.push(`src/lib/ai-declared.ts: "${d}" does not say "AI-generated"`);
     // Where readers' images and the listen view are drawn after load: the label is used.

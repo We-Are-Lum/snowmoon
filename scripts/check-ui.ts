@@ -27,8 +27,21 @@
  *   fills the viewport, no site top bar, a × back to the site), and Design's centred phone beside the rail at 1024
  *   and up. The old ?mode=free and ?mode=play open Free play; ?s= opens /minpentai/rule, the book's rule, tagged
  *   FROM THE BOOK, citing c4-b5 and c4-b7, with its GitHub write-up.
+ * - AI labels as rendered (owner, 2026-10-09): on the chapter (seeded images, the readers' strip,
+ *   the narration credit), the listen view's player, the feed, an image's page, the composer's draft
+ *   and preview, and the moderators' queue, every AI image and the narration control carry the label
+ *   button (button.ai-label, aria-haspopup="dialog", shown) whose visible text says "AI" and names who
+ *   made it (" · by …"). An AI image is any rendered <img> at least 64×64 CSS px: every picture on
+ *   these screens is generated, and UI marks are SVG or smaller. Its label is looked for in its own
+ *   figure, list item or section. Readers' images come from local data: check:ui starts this
+ *   checkout's production build a second time (.next, so build first) on a free port against an
+ *   in-memory database with two published readers' images (scripts/fixtures/reader-images-db.ts);
+ *   sign-in, the composer's status and the queue are mocked in the browser.
  */
+import { spawn } from 'node:child_process';
 import { readFileSync } from 'node:fs';
+import { createServer } from 'node:net';
+import path from 'node:path';
 import { chromium, type Browser, type Page } from 'playwright-core';
 
 const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--${name}=`))?.split('=').slice(1).join('=');
@@ -362,8 +375,173 @@ async function newPage(opts: Parameters<Browser['newPage']>[0] = {}) {
   await p.addInitScript(`try{localStorage.setItem('snowmoon.theme','${opts?.colorScheme === 'dark' ? 'dark' : 'light'}')}catch(e){}`);
   return p;
 }
+// ---------------------------------------------------------------------------
+// AI labels as rendered (owner, 2026-10-09).
+// ---------------------------------------------------------------------------
+const PICTURE_MIN = 64;
+const freePort = () =>
+  new Promise<number>((resolve) => {
+    const s = createServer();
+    s.listen(0, () => {
+      const { port } = s.address() as { port: number };
+      s.close(() => resolve(port));
+    });
+  });
+
+/** Every rendered picture carries a label; at least `min` pictures are on the screen. */
+async function checkPictureLabels(page: Page, where: string, min: number) {
+  const r = await page.evaluate((MIN) => {
+    const shown = (el: Element) => {
+      const b = el.getBoundingClientRect();
+      const s = getComputedStyle(el);
+      return b.width > 0 && b.height > 0 && s.visibility !== 'hidden' && s.display !== 'none' && s.opacity !== '0';
+    };
+    const problems: string[] = [];
+    let pictures = 0;
+    for (const img of Array.from(document.querySelectorAll('img'))) {
+      const b = img.getBoundingClientRect();
+      if (!shown(img) || b.width < MIN || b.height < MIN) continue; // not drawn, or a UI mark
+      pictures++;
+      const unit = img.closest('figure, li, section');
+      const label = unit?.querySelector<HTMLElement>('.ai-label') ?? null;
+      const name = (img.getAttribute('src') ?? '').split('/').pop()?.slice(0, 40);
+      if (!unit) problems.push(`${name}: not inside a figure, list item or section`);
+      else if (!label || !shown(label)) problems.push(`${name}: no AI label (button.ai-label) shown with it`);
+      else {
+        const copy = label.cloneNode(true) as HTMLElement;
+        copy.querySelectorAll('.sr-only').forEach((n) => n.remove());
+        const visible = (copy.textContent ?? '').trim();
+        if (label.tagName !== 'BUTTON' || label.getAttribute('aria-haspopup') !== 'dialog') problems.push(`${name}: its label is not a button that opens a dialog`);
+        if (!/\bAI\b/.test(visible)) problems.push(`${name}: its label's visible text does not say AI: "${visible}"`);
+        if (!/ · by \S/.test(visible)) problems.push(`${name}: its label does not name who made it: "${visible}"`);
+      }
+    }
+    return { problems, pictures };
+  }, PICTURE_MIN);
+  if (r.pictures < min) fail(`${where}: ${r.pictures} AI images rendered, expected at least ${min}`);
+  for (const p of r.problems) fail(`${where}: ${p}`);
+}
+
+/** The narration control: the voice label, shown, a dialog button, saying AI and who made it. */
+async function checkVoiceLabel(page: Page, where: string, scope: string) {
+  const label = page.locator(`${scope} button.ai-label[data-ai="voice"]`).first();
+  if (!(await label.count()) || !(await label.isVisible())) return fail(`${where}: the narration control has no AI label shown`);
+  const visible = await label.evaluate((el) => {
+    const copy = el.cloneNode(true) as HTMLElement;
+    copy.querySelectorAll('.sr-only').forEach((n) => n.remove());
+    return (copy.textContent ?? '').trim();
+  });
+  if ((await label.getAttribute('aria-haspopup')) !== 'dialog') fail(`${where}: the narration label is not a button that opens a dialog`);
+  if (!/\bAI\b/.test(visible)) fail(`${where}: the narration label's visible text does not say AI: "${visible}"`);
+  if (!/ · by \S/.test(visible)) fail(`${where}: the narration label does not name who made it: "${visible}"`);
+}
+
+async function checkAiLabels() {
+  const { startReaderImagesDb, FIXTURE_IMAGES } = await import('./fixtures/reader-images-db');
+  const data = await startReaderImagesDb(await freePort());
+  const port = await freePort();
+  // This checkout's production build, a second time, reading the local data.
+  const server = spawn(process.execPath, [path.join('node_modules', 'next', 'dist', 'bin', 'next'), 'start', '-p', String(port)], {
+    env: { ...process.env, STUDIO_DATABASE_URL: data.url },
+    stdio: 'ignore',
+  });
+  const LOCAL = `http://localhost:${port}`;
+  try {
+    for (let i = 0; ; i++) {
+      if (await fetch(LOCAL).then((r) => r.ok, () => false)) break;
+      if (i > 120) throw new Error('the local build did not start (run next build first)');
+      await new Promise((r) => setTimeout(r, 500));
+    }
+    const IMG = FIXTURE_IMAGES[0].url;
+    for (const [w, h, touch] of [
+      [390, 844, true],
+      [1440, 900, false],
+    ] as const) {
+      const page = await newPage({ viewport: { width: w, height: h }, colorScheme: 'light', hasTouch: touch });
+      const exp = Math.floor(Date.now() / 1000) + 86400;
+      const token = `a.${Buffer.from(JSON.stringify({ sub: 6786, exp })).toString('base64url')}.c`;
+      // Signed in as an invited moderator, in the browser only (the token is not a real one), and read to the end.
+      await page.addInitScript(
+        `try{localStorage.setItem('snowmoon.read-to','32');localStorage.setItem('snowmoon.signin',${JSON.stringify(JSON.stringify({ token, fid: 6786, username: 'naaate', nameProof: null, exp }))})}catch(e){}`,
+      );
+      await page.route('**/api/chat/status**', (r) => r.abort());
+      await page.route('**/api/images/status**', async (r) => {
+        const real = (await (await r.fetch()).json()) as Record<string, unknown>;
+        await r.fulfill({ json: { ...real, ready: true, signedIn: true, fid: 6786, invited: true, consented: true, left: 9, publishesLeft: 3 } });
+      });
+      await page.route('**/api/consent', (r) => r.fulfill({ json: { wording: { sha256: 'x', title: 'x', text: 'x' }, agreed: true } }));
+      await page.route('**/api/moderate', (r) =>
+        r.fulfill({
+          json: {
+            items: [
+              { version_id: FIXTURE_IMAGES[0].version, element_id: 'e', asset_url: IMG, asset_sha256: 'a', status: 'published', created_by_fid: 6786, created_at: '2026-10-09T10:00:00Z', prompt: 'A footbridge. No text, no lettering, no signs with words.', model: 'z-image-turbo', params: {}, chapter: 1, start_idx: 3, end_idx: 5, last_step: 'reported', last_role: 'reader', reasons: [{ reason: 'spam', n: 1 }], notes: [] },
+            ],
+          },
+        }),
+      );
+      const at = async (p: string) => {
+        await page.goto(LOCAL + p, { waitUntil: 'networkidle' });
+        if (INJECT) await page.addStyleTag({ content: INJECT });
+      };
+      const tag = `@${w}`;
+
+      await at('/chapter/1');
+      await page.waitForSelector('.ri-toggle');
+      for (const t of await page.locator('.ri-toggle').all()) await t.click();
+      await checkPictureLabels(page, `/chapter/1 ${tag} (seeded images and readers' strip)`, 3);
+      if ((await page.locator('.ri-list img').count()) < FIXTURE_IMAGES.length) fail(`/chapter/1 ${tag}: the readers' strip shows fewer than ${FIXTURE_IMAGES.length} images`);
+      await checkVoiceLabel(page, `/chapter/1 ${tag} (narration credit)`, '.narration-credit');
+
+      await at('/chapter/1?view=listen');
+      await page.waitForSelector('.listen-pane');
+      await checkVoiceLabel(page, `/chapter/1?view=listen ${tag} (player)`, '.player-label');
+      await checkPictureLabels(page, `/chapter/1?view=listen ${tag}`, 0);
+
+      await at('/images');
+      await checkPictureLabels(page, `/images ${tag}`, FIXTURE_IMAGES.length);
+
+      await at(`/image/${FIXTURE_IMAGES[0].version}`);
+      await checkPictureLabels(page, `/image ${tag}`, 1);
+
+      await at('/moderate');
+      await page.waitForSelector('.mq-media', { timeout: 10000 }).catch(() => fail(`/moderate ${tag}: the queue did not show`));
+      await checkPictureLabels(page, `/moderate ${tag}`, 1);
+
+      // The composer: a draft kept on this device, then the preview before publishing.
+      await at('/chapter/1');
+      await page.evaluate(
+        async ({ IMG }) => {
+          await new Promise<void>((resolve) => {
+            const req = indexedDB.open('snowmoon', 1);
+            req.onupgradeneeded = () => req.result.createObjectStore('image-drafts', { keyPath: 'key' });
+            req.onsuccess = () => {
+              const tx = req.result.transaction('image-drafts', 'readwrite');
+              tx.objectStore('image-drafts').put({ key: 'c1-b3-b5', chapter: 1, start: 3, end: 5, prompt: 'A footbridge at dawn.', style: null, ticket: 't', image: IMG, savedAt: new Date().toISOString() });
+              tx.oncomplete = () => resolve();
+            };
+          });
+          window.dispatchEvent(new CustomEvent('snowmoon:add-image', { detail: { chapter: 1, start: 3, end: 5 } }));
+        },
+        { IMG },
+      );
+      await page.waitForSelector('.ic-draft', { timeout: 10000 }).catch(() => fail(`composer ${tag}: the draft did not show`));
+      // Only the composer's own pictures: the chapter behind it is checked above.
+      await page.evaluate(() => document.querySelectorAll('.chapter-read img').forEach((i) => ((i as HTMLElement).style.display = 'none')));
+      await checkPictureLabels(page, `composer draft ${tag}`, 1);
+      await page.locator('.publish-start').click();
+      await page.waitForSelector('.ic-preview', { timeout: 10000 }).catch(() => fail(`composer ${tag}: the preview did not show`));
+      await checkPictureLabels(page, `composer preview ${tag}`, 1);
+      await page.close();
+    }
+  } finally {
+    server.kill();
+    await data.stop();
+  }
+}
+
 const browser = await chromium.launch({ channel: 'chrome' });
 try {
+  await checkAiLabels();
   // First-visit intro (config/intro.json): once, home page only, Skip on every
   // card, remembered on the device without cookies; deep links go straight in.
   {
@@ -645,18 +823,21 @@ try {
     const label = page.locator('.seed-image button.ai-label').first();
     if ((await label.getAttribute('aria-haspopup')) !== 'dialog') fail('@390: the AI label is not a button that opens a dialog');
     if (!/\bAI\b/.test((await label.innerText()) ?? '')) fail('@390: the AI label does not say AI');
-    await label.focus();
-    await page.keyboard.press('Enter');
-    await page.waitForSelector('.recipe-sheet dt');
-    const model = await page.textContent('.recipe-sheet');
-    if (!/FLUX|Model/.test(model ?? '')) fail('@390: the recipe sheet does not show the model');
-    if (!/not by the author/i.test(model ?? '')) fail('@390: the recipe sheet does not say "not by the author"');
-    if (!(await page.locator('.recipe-sheet a.recipe-github').count())) fail('@390: the recipe sheet does not link the full recipe');
-    await checkFloors(page, '/chapter/1 @390 (recipe)', scheme);
-    await shot(page, 'phone-390-recipe', scheme);
-    await page.keyboard.press('Escape');
-    if (await page.locator('.recipe-sheet').count()) fail('@390: Escape does not close the recipe sheet');
-    if (!(await label.evaluate((el) => el === document.activeElement))) fail('@390: closing the recipe sheet does not return focus to the AI label');
+    if (!(await label.isVisible())) fail('@390: the AI label under a seeded image is not shown, so its recipe sheet cannot be opened');
+    else {
+      await label.focus();
+      await page.keyboard.press('Enter');
+      await page.waitForSelector('.recipe-sheet dt');
+      const model = await page.textContent('.recipe-sheet');
+      if (!/FLUX|Model/.test(model ?? '')) fail('@390: the recipe sheet does not show the model');
+      if (!/not by the author/i.test(model ?? '')) fail('@390: the recipe sheet does not say "not by the author"');
+      if (!(await page.locator('.recipe-sheet a.recipe-github').count())) fail('@390: the recipe sheet does not link the full recipe');
+      await checkFloors(page, '/chapter/1 @390 (recipe)', scheme);
+      await shot(page, 'phone-390-recipe', scheme);
+      await page.keyboard.press('Escape');
+      if (await page.locator('.recipe-sheet').count()) fail('@390: Escape does not close the recipe sheet');
+      if (!(await label.evaluate((el) => el === document.activeElement))) fail('@390: closing the recipe sheet does not return focus to the AI label');
+    }
     await open(page, '/chapter/1?view=listen');
     await page.waitForSelector('.listen-pane');
     await checkFloors(page, '/chapter/1?view=listen @390', scheme);
@@ -684,4 +865,4 @@ if (failures.length) {
   console.error(`\nUI CHECK FAILED (${failures.length}):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`ui check passed: ${BASE}, ${38 + MINPENTAI_LESSONS + 4} pages, the chapter sheet, the glossary's covers and back link, and 8 assistant states × light and dark; 10 pages at 1024, 1440 and 2000`);
+console.log(`ui check passed: ${BASE}, ${38 + MINPENTAI_LESSONS + 4} pages, the chapter sheet, the glossary's covers and back link, and 8 assistant states × light and dark; 10 pages at 1024, 1440 and 2000; AI labels on 8 screens at 390 and 1440`);

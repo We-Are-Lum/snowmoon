@@ -61,7 +61,7 @@ export function ImageFeed({ images, sort, empty }: { images: Item[]; sort: 'new'
                 <p className="block-caption pictures-caption">
                   <AiLabel
                     kind="image"
-                    text={AI_LABEL.image}
+                    text={AI_LABEL.imageBy(im.by)}
                     view={readerImageView({ versionId: im.versionId, by: im.by, prompt: covered ? undefined : im.prompt, chapter: im.chapter, where: covered ? null : im.where, date: im.date })}
                   />{' '}
                   · {im.likes} {im.likes === 1 ? 'like' : 'likes'}

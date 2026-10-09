@@ -9,10 +9,17 @@ import type { RecipeView } from './recipe-view';
  * All of it is draft wording by the coding agent (a closed model); check:principles P2b reads it.
  */
 
-/** The visible label: short, says AI, and who made it where a person did. */
+/** Who made the edition's own images and narration, as the labels name it (owner, 2026-10-09). */
+export const EDITION_MAKER = 'Snowmoon Party';
+
+/**
+ * The visible label: short, says AI, and always names who made it (owner, 2026-10-09: "every
+ * label names who made it"). `image` and `voice` are the edition's own (seeded illustrations,
+ * the house narration); a reader's image is `imageBy` its @name or FID.
+ */
 export const AI_LABEL = {
-  image: 'AI image',
-  voice: 'AI voice',
+  image: `AI image · by ${EDITION_MAKER}`,
+  voice: `AI voice · by ${EDITION_MAKER}`,
   imageBy: (who: string) => `AI image · by ${who}`,
 } as const;
 
@@ -30,9 +37,9 @@ export const AI_OPENS = 'Opens how it was made';
  * AI-generated and "not by the author" in words (check:principles P2b reads them here).
  */
 export const WHOSE = {
-  projectImage: 'The project made it with an image model. AI-generated, not by the author.',
-  lettering: "The project drew it in code over an AI-generated image. Not by the author; the words drawn are the book's.",
-  narration: "The project made it with a speech model. AI-generated voice, not by the author; the words it reads are the book's.",
+  projectImage: 'Snowmoon Party, the project, made it with an image model. AI-generated, not by the author.',
+  lettering: "Snowmoon Party, the project, drew it in code over an AI-generated image. Not by the author; the words drawn are the book's.",
+  narration: "Snowmoon Party, the project, made it with a speech model. AI-generated voice, not by the author; the words it reads are the book's.",
   opener: 'AI-generated voice, not by the author. A person on the project wrote the words.',
   episode: 'Made in code from the AI-generated narration. Not by the author.',
   cover: 'Drawn in code by the project, with no model. Not by the author.',
