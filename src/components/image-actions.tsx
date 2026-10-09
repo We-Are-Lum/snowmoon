@@ -1,15 +1,17 @@
 'use client';
 
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { sdk } from '@farcaster/miniapp-sdk';
 import { authFetch, useAuth } from '~/lib/client-auth';
 import { REASONS, REASON_LABELS } from '~/lib/images/reasons';
+import { IMAGE_WORDING as W } from '~/lib/images/wording';
 import { SignInButton } from './sign-in';
 import { PrivateNoteField } from './private-note-field';
 
 /**
  * On a reader's image: Like (the existing likes), "Cast this" with its share card (like quote
- * cards), the author's "Hide this", and "Report" for everyone else signed in.
+ * cards), the author's "Hide this", and "Report" for everyone else signed in. Laid out as Claude
+ * Design's image page: one row of equal buttons; the report form is a bottom sheet.
  */
 export function ImageActions({ versionId, byFid, chapter }: { versionId: string; byFid: number; chapter: number }) {
   const auth = useAuth();
@@ -20,6 +22,8 @@ export function ImageActions({ versionId, byFid, chapter }: { versionId: string;
   const [reason, setReason] = useState<string>('');
   const [why, setWhy] = useState('');
   const [hidden, setHidden] = useState(false);
+  const reportButton = useRef<HTMLButtonElement>(null);
+  const sheet = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     sdk.isInMiniApp().then(setInApp).catch(() => setInApp(false));
@@ -28,6 +32,19 @@ export function ImageActions({ versionId, byFid, chapter }: { versionId: string;
     if (auth.kind === 'loading') return;
     void authFetch(`/api/images/${versionId}/like`).then(async (r) => r.ok && setLikes(await r.json()));
   }, [versionId, auth.kind]);
+
+  // The report sheet: focus in, Escape closes, focus back on Report.
+  useEffect(() => {
+    if (!reporting) return;
+    sheet.current?.querySelector<HTMLElement>('input, button')?.focus();
+    const onKey = (e: KeyboardEvent) => e.key === 'Escape' && setReporting(false);
+    document.addEventListener('keydown', onKey);
+    const back = reportButton.current;
+    return () => {
+      document.removeEventListener('keydown', onKey);
+      back?.focus();
+    };
+  }, [reporting]);
 
   const like = async () => {
     const res = await authFetch(`/api/images/${versionId}/like`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ like: !likes?.liked }) });
@@ -64,7 +81,7 @@ export function ImageActions({ versionId, byFid, chapter }: { versionId: string;
   return (
     <div className="image-actions">
       <div className="ia-row">
-        <button type="button" className="ia-button" aria-pressed={likes?.liked ?? false} onClick={like} disabled={auth.kind !== 'signed-in'}>
+        <button type="button" className="ia-button ia-like" aria-pressed={likes?.liked ?? false} onClick={like} disabled={auth.kind !== 'signed-in'}>
           {likes?.liked ? '♥ Liked' : '♡ Like'} · {likes?.likes ?? 0}
         </button>
         <button type="button" className="ia-button" onClick={cast}>
@@ -74,12 +91,12 @@ export function ImageActions({ versionId, byFid, chapter }: { versionId: string;
           Share card
         </a>
         {mine && (
-          <button type="button" className="ia-button" onClick={hide}>
+          <button type="button" className={`ia-button${hidden ? '' : ' ia-warn'}`} onClick={hide}>
             {hidden ? 'Unhide' : 'Hide this'}
           </button>
         )}
-        {!mine && auth.kind === 'signed-in' && !reporting && (
-          <button type="button" className="ia-quiet" onClick={() => setReporting(true)}>
+        {!mine && auth.kind === 'signed-in' && (
+          <button ref={reportButton} type="button" className="ia-button ia-warn" aria-haspopup="dialog" aria-expanded={reporting} onClick={() => setReporting(true)}>
             Report
           </button>
         )}
@@ -90,27 +107,39 @@ export function ImageActions({ versionId, byFid, chapter }: { versionId: string;
         </p>
       )}
       {reporting && (
-        <fieldset className="ia-report">
-          <legend>Why are you reporting this image?</legend>
-          {REASONS.map((r) => (
-            <label key={r}>
-              <input type="radio" name="report-reason" value={r} checked={reason === r} onChange={() => setReason(r)} /> {REASON_LABELS[r]}
-            </label>
-          ))}
-          <PrivateNoteField id="report-note" label="A note for the moderators (optional)" value={why} onChange={setWhy} maxLength={280} />
-          <div className="ia-row">
-            <button type="button" className="ia-button" onClick={report} disabled={!reason}>
-              Send report
+        <div className="sheet-overlay ia-overlay" onClick={(e) => e.target === e.currentTarget && setReporting(false)}>
+          <div ref={sheet} className="recipe-sheet ia-sheet" role="dialog" aria-modal="true" aria-labelledby="report-title">
+            <button type="button" className="sheet-x" aria-label="Close" onClick={() => setReporting(false)}>
+              ×
             </button>
-            <button type="button" className="ia-quiet" onClick={() => setReporting(false)}>
-              Cancel
-            </button>
+            <fieldset className="ia-report">
+              <legend id="report-title">Why are you reporting this image?</legend>
+              {REASONS.map((r) => (
+                <label key={r}>
+                  <input type="radio" name="report-reason" value={r} checked={reason === r} onChange={() => setReason(r)} /> {REASON_LABELS[r]}
+                </label>
+              ))}
+            </fieldset>
+            <PrivateNoteField id="report-note" label="A note for the moderators (optional)" value={why} onChange={setWhy} maxLength={280} />
+            <div className="ia-sheet-actions">
+              <button type="button" className="ia-cancel" onClick={() => setReporting(false)}>
+                Cancel
+              </button>
+              <button type="button" className="ia-send" onClick={report} disabled={!reason}>
+                Send report
+              </button>
+            </div>
+            {note && <p className="ia-note">{note}</p>}
+            <p className="as-draft ic-draftline">{W.draftLine}</p>
           </div>
-        </fieldset>
+        </div>
       )}
       {hidden && <p className="ia-note">Hidden. It is gone from view; you can unhide it.</p>}
-      {note && <p className="ia-note">{note}</p>}
+      {note && !reporting && (
+        <p className="ia-note" role="status">
+          {note}
+        </p>
+      )}
     </div>
   );
 }
-

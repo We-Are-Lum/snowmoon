@@ -59,11 +59,11 @@ export function ConsentScreen({ wording, name, onAgree, onCancel, error }: { wor
         <p>{name ? `Your words will be shown as @${name}.` : 'Your words will be shown with your Farcaster name.'}</p>
         {error && <p className="consent-error">{error}</p>}
         <div className="consent-actions">
-          <button type="button" onClick={onAgree}>
-            I agree
-          </button>
-          <button type="button" onClick={onCancel}>
+          <button type="button" className="consent-cancel" onClick={onCancel}>
             Not now
+          </button>
+          <button type="button" className="consent-agree" onClick={onAgree}>
+            I agree
           </button>
         </div>
         <p className="label">Wording {wording.version}</p>
@@ -72,8 +72,15 @@ export function ConsentScreen({ wording, name, onAgree, onCancel, error }: { wor
   );
 }
 
-export function PublishFlow({ preview, onPublish, disabled }: { preview: ReactNode; onPublish: () => Promise<void>; disabled?: boolean }) {
-  const [step, setStep] = useState<'edit' | 'consent' | 'preview' | 'publishing'>('edit');
+export type PublishStep = 'edit' | 'consent' | 'preview' | 'publishing';
+
+/** `onStep` tells the screen around it which step is showing, so it can lay itself out around the preview. */
+export function PublishFlow({ preview, onPublish, disabled, onStep }: { preview: ReactNode; onPublish: () => Promise<void>; disabled?: boolean; onStep?: (step: PublishStep) => void }) {
+  const [step, setStepState] = useState<PublishStep>('edit');
+  const setStep = (s: PublishStep) => {
+    setStepState(s);
+    onStep?.(s);
+  };
   const [wording, setWording] = useState<Wording | null>(null);
   const [name, setName] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -120,7 +127,7 @@ export function PublishFlow({ preview, onPublish, disabled }: { preview: ReactNo
   return (
     <div className="publish-flow">
       {step === 'edit' && (
-        <button type="button" onClick={start} disabled={disabled}>
+        <button type="button" className="publish-start" onClick={start} disabled={disabled}>
           Preview
         </button>
       )}
@@ -132,12 +139,14 @@ export function PublishFlow({ preview, onPublish, disabled }: { preview: ReactNo
           <p className="publication-line">
             {PUBLICATION_LINE} {name ? `Shown as @${name}.` : ''}
           </p>
-          <button type="button" onClick={publish} disabled={step === 'publishing'}>
-            Publish
-          </button>
-          <button type="button" onClick={() => setStep('edit')}>
-            Edit
-          </button>
+          <div className="publish-actions">
+            <button type="button" className="publish-go" onClick={publish} disabled={step === 'publishing'}>
+              Publish
+            </button>
+            <button type="button" className="publish-edit" onClick={() => setStep('edit')}>
+              Edit
+            </button>
+          </div>
         </section>
       )}
       {error && step !== 'consent' && <p className="consent-error">{error}</p>}

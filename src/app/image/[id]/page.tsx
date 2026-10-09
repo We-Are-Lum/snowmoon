@@ -4,7 +4,8 @@ import type { Metadata } from 'next';
 import { APP_NAME, IMAGES, appUrl } from '~/lib/config';
 import { db } from '~/lib/db';
 import { imageByVersion } from '~/lib/images/data';
-import { passageLabel } from '~/lib/images/passage';
+import { passageBlocks, passageLabel } from '~/lib/images/passage';
+import { IMAGE_WORDING as W } from '~/lib/images/wording';
 import { byline } from '~/lib/images/byline';
 import { PAPER } from '~/lib/tokens';
 import { ImageActions } from '~/components/image-actions';
@@ -50,67 +51,87 @@ export default async function ImagePage({ params }: Props) {
   if (!im) notFound();
   const where = passageLabel(im.chapter, im.start, im.end);
   const date = im.createdAt.slice(0, 10);
+  const by = byline(im.byName, im.byFid);
+  const reader = `/chapter/${im.chapter}#c${im.chapter}-b${im.start}`;
+  // The passage's own words (book text, never sent to a model), shown beside the image at desktop width.
+  const passage = passageBlocks(im.chapter, im.start, im.end)
+    .filter((b) => b.kind === 'paragraph' || b.kind === 'quote')
+    .map((b) => b.content.replace(/<[^>]+>/g, '').replace(/\*\*|__/g, '').trim())
+    .filter(Boolean);
   return (
     <div className="page prose image-page">
-      <p className="label">
-        <Link href="/images">Pictures</Link> · {IMAGES.label}
+      <p className="label ip-crumb">
+        <Link href="/images">← Pictures</Link> · {IMAGES.label}
       </p>
-      <figure className="ip-figure">
-        {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={im.url} alt={`AI-generated image: ${im.userPrompt.split(/(?<=[.!?])\s/)[0]}`} width={1024} height={576} />
-        <figcaption className="block-caption">
-          <Link href={`/chapter/${im.chapter}#c${im.chapter}-b${im.start}`}>
-            Chapter {im.chapter}
-            {where ? ` · ${where}` : ''}
-          </Link>{' '}
-          · AI-generated image · by {byline(im.byName, im.byFid)} · not by the author · {date}
-        </figcaption>
-      </figure>
-      <ImageActions versionId={im.versionId} byFid={im.byFid} chapter={im.chapter} />
-
-      <h2>How this was made</h2>
-      <dl className="recipe-list">
-        <dt>The prompt, as the person wrote it</dt>
-        <dd>
-          <pre className="recipe-prompt">{im.userPrompt}</pre>
-        </dd>
-        {im.style && (
-          <>
-            <dt>Style added (text drafted by the coding agent, a closed model)</dt>
-            <dd>
-              <pre className="recipe-prompt">{im.style.text}</pre>
-            </dd>
-          </>
+      <div className="ip-main">
+        <figure className="ip-figure">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={im.url} alt={`AI-generated image: ${im.userPrompt.split(/(?<=[.!?])\s/)[0]}`} width={1024} height={576} />
+          <figcaption className="ip-caption">
+            AI-generated image · not by the author
+            <br />
+            <span className="ip-meta">
+              by {by} · {date} ·{' '}
+              <Link href={reader}>
+                Chapter {im.chapter}
+                {where ? ` · ${where}` : ''} · Open in reader →
+              </Link>
+            </span>
+          </figcaption>
+        </figure>
+        {passage.length > 0 && (
+          <blockquote className="ip-passage">
+            {passage.map((t, i) => (
+              <p key={i}>{t}</p>
+            ))}
+          </blockquote>
         )}
-        <dt>The exact prompt sent to the model</dt>
-        <dd>
-          <pre className="recipe-prompt">{im.prompt}</pre>
-        </dd>
-        <dt>Model</dt>
-        <dd>
-          {IMAGES.model.name} ({im.model}), open weights, {IMAGES.model.licence}. It ran on {im.host}, endpoint <span className="recipe-mono">{im.modelVersion}</span>.
-        </dd>
-        <dt>Settings</dt>
-        <dd className="recipe-mono">
-          {Object.entries(im.settings)
-            .map(([k, v]) => `${k} ${typeof v === 'object' ? JSON.stringify(v) : String(v)}`)
-            .join(', ')}
-          {im.seed !== null ? `, seed ${im.seed}` : ''}
-        </dd>
-        <dt>Checks</dt>
-        <dd>The prompt was checked by gpt-oss-safeguard-20b against the published rules, and the image by the host&apos;s safety checker, before anyone saw it.</dd>
-        <dt>Request</dt>
-        <dd className="recipe-mono">{im.requestId ?? 'not recorded'}</dd>
-        <dt>Cost</dt>
-        <dd>{im.costUsd !== null ? `$${im.costUsd.toFixed(4)}` : 'not recorded'}</dd>
-        <dt>Published</dt>
-        <dd>
-          By {im.byName ? `@${im.byName} (FID ${im.byFid})` : `FID ${im.byFid}`}, {date}, for Chapter {im.chapter}
-          {where ? `, ${where}` : ''}. Licence GPL-3.0.
-        </dd>
-        <dt>File</dt>
-        <dd className="recipe-mono">sha256 {im.sha256}</dd>
-      </dl>
+      </div>
+
+      <div className="ip-side">
+        <ImageActions versionId={im.versionId} byFid={im.byFid} chapter={im.chapter} />
+
+        <h2 className="ip-h">How this was made</h2>
+        <dl className="recipe-list ip-recipe">
+          <dt className="ip-wide">The prompt, as the person wrote it</dt>
+          <dd className="ip-wide ip-words">{im.userPrompt}</dd>
+          {im.style && (
+            <>
+              <dt className="ip-wide">Style added (text drafted by the coding agent, a closed model)</dt>
+              <dd className="ip-wide ip-words ip-added">{im.style.text}</dd>
+            </>
+          )}
+          <dt className="ip-wide">The exact prompt sent to the model</dt>
+          <dd className="ip-wide">
+            <pre className="recipe-prompt">{im.prompt}</pre>
+          </dd>
+          <dt>Model</dt>
+          <dd>
+            {IMAGES.model.name} ({im.model}), open weights, {IMAGES.model.licence}. It ran on {im.host}, endpoint <span className="recipe-mono">{im.modelVersion}</span>.
+          </dd>
+          <dt>Settings</dt>
+          <dd className="recipe-mono">
+            {Object.entries(im.settings)
+              .map(([k, v]) => `${k} ${typeof v === 'object' ? JSON.stringify(v) : String(v)}`)
+              .join(', ')}
+            {im.seed !== null ? `, seed ${im.seed}` : ''}
+          </dd>
+          <dt>Checks</dt>
+          <dd>The prompt was checked by gpt-oss-safeguard-20b against the published rules, and the image by the host&apos;s safety checker, before anyone saw it.</dd>
+          <dt>Request</dt>
+          <dd className="recipe-mono">{im.requestId ?? 'not recorded'}</dd>
+          <dt>Cost</dt>
+          <dd>{im.costUsd !== null ? `$${im.costUsd.toFixed(4)}` : 'not recorded'}</dd>
+          <dt>Published</dt>
+          <dd>
+            By {im.byName ? `@${im.byName} (FID ${im.byFid})` : `FID ${im.byFid}`}, {date}, for Chapter {im.chapter}
+            {where ? `, ${where}` : ''}. Licence GPL-3.0.
+          </dd>
+          <dt>File</dt>
+          <dd className="recipe-mono">sha256 {im.sha256}</dd>
+        </dl>
+        <p className="as-draft ic-draftline">{W.draftLine}</p>
+      </div>
     </div>
   );
 }

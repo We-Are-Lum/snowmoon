@@ -24,6 +24,8 @@
   --scrim: rgba(29, 29, 27, 0.45);
   --veridia: #2E5A3A;
   --dzego: #B3306E;
+  --cover: #1D1D1B; /* a covered spoiler in the feed (image creation board): ink tile, light text, in both themes */
+  --cover-ink: #E7E4DD;
   --neutral-accent: var(--ink);
   --link: var(--veridia); /* the prototype's link colour: 7.1:1 on paper (light), 7.9:1 (dark) */
   --accent: var(--neutral-accent);
@@ -90,6 +92,8 @@
   --scrim: rgba(0, 0, 0, 0.6);
   --veridia: #8DB58A;
   --dzego: #F08DB8;
+  --cover: #2A2925;
+  --cover-ink: #E7E4DD;
   --voice-l: 0.78;
   color-scheme: dark;
 }
@@ -110,6 +114,8 @@
     --scrim: rgba(0, 0, 0, 0.6);
     --veridia: #8DB58A;
     --dzego: #F08DB8;
+    --cover: #2A2925;
+    --cover-ink: #E7E4DD;
     --voice-l: 0.78;
     color-scheme: dark;
   }

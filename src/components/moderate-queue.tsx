@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import { authFetch, useAuth } from '~/lib/client-auth';
 import { REASON_LABELS } from '~/lib/images/reasons';
+import { IMAGE_WORDING as W } from '~/lib/images/wording';
 import { SignInButton } from './sign-in';
 
 type Item = {
@@ -23,7 +24,11 @@ type Item = {
   notes: string[] | null;
 };
 
-/** Hide or dismiss: the only two things a moderator can do here. */
+/**
+ * Hide or dismiss: the only two things a moderator can do here. Laid out as Claude Design's
+ * queue: a red "moderators only" strip naming the order, then each reported image with what
+ * was sent, the reasons and the notes, and the two actions. The list is the server's, oldest first.
+ */
 export function ModerateQueue() {
   const auth = useAuth();
   const [items, setItems] = useState<Item[] | null>(null);
@@ -43,42 +48,66 @@ export function ModerateQueue() {
   if (auth.kind === 'signed-out') return <SignInButton />;
   if (error) return <p>{error}</p>;
   if (!items) return <p className="label">…</p>;
-  if (!items.length) return <p>No reports waiting.</p>;
   return (
-    <ul className="moderate-list">
-      {items.map((it) => (
-        <li key={it.version_id}>
-          <p className="label">
-            Chapter {it.chapter} · blocks {it.start_idx}–{it.end_idx} · by FID {it.created_by_fid} · {it.created_at.slice(0, 10)} · {it.model} · {it.status}
-            {it.last_role === 'rule' ? ' · hidden by a stated rule' : ''}
-          </p>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={it.asset_url} alt="The reported image" width={1024} height={576} />
-          <pre className="recipe-prompt">{it.prompt}</pre>
-          <ul>
-            {(it.reasons ?? []).map((r) => (
-              <li key={r.reason}>
-                {REASON_LABELS[r.reason] ?? r.reason}: {r.n}
-              </li>
-            ))}
-          </ul>
-          {(it.notes ?? []).map((n, i) => (
-            <p key={i} className="moderate-note">
-              “{n}”
-            </p>
+    <>
+      <p className="mq-strip">
+        <span>{W.moderate.strip}</span>
+        <span>{W.moderate.waiting(items.length)}</span>
+      </p>
+      {!items.length ? (
+        <p className="mq-empty">No reports waiting.</p>
+      ) : (
+        <ul className="moderate-list">
+          {items.map((it) => (
+            <li key={it.version_id}>
+              <figure className="mq-media">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src={it.asset_url} alt="The reported image" width={1024} height={576} />
+                <figcaption className="mq-caption">AI-generated image · not by the author</figcaption>
+              </figure>
+              <div className="mq-detail">
+                <p className="mq-meta">
+                  by FID {it.created_by_fid} · Chapter {it.chapter} · blocks {it.start_idx}–{it.end_idx} · {it.created_at.slice(0, 10)}
+                  <br />
+                  <span className="mq-muted">
+                    {it.model} · {it.status}
+                    {it.last_role === 'rule' ? ' · hidden by a stated rule' : ''}
+                  </span>
+                </p>
+                <div className="mq-section">
+                  <p className="mq-label">{W.moderate.prompt}</p>
+                  <p className="mq-prompt">{it.prompt}</p>
+                </div>
+                <div className="mq-section">
+                  <p className="mq-label">{W.moderate.reasons}</p>
+                  <ul className="mq-reasons">
+                    {(it.reasons ?? []).map((r) => (
+                      <li key={r.reason}>
+                        {REASON_LABELS[r.reason] ?? r.reason}: {r.n}
+                      </li>
+                    ))}
+                  </ul>
+                  {(it.notes ?? []).map((n, i) => (
+                    <p key={i} className="moderate-note">
+                      “{n}”
+                    </p>
+                  ))}
+                </div>
+                <div className="mq-actions">
+                  <button type="button" className="mq-dismiss" onClick={() => act(it.version_id, 'dismiss')}>
+                    Dismiss the reports
+                  </button>
+                  {it.status === 'published' && (
+                    <button type="button" className="mq-hide" onClick={() => act(it.version_id, 'hide')}>
+                      Hide
+                    </button>
+                  )}
+                </div>
+              </div>
+            </li>
           ))}
-          <div className="ia-row">
-            {it.status === 'published' && (
-              <button type="button" className="ia-button" onClick={() => act(it.version_id, 'hide')}>
-                Hide
-              </button>
-            )}
-            <button type="button" className="ia-quiet" onClick={() => act(it.version_id, 'dismiss')}>
-              Dismiss the reports
-            </button>
-          </div>
-        </li>
-      ))}
-    </ul>
+        </ul>
+      )}
+    </>
   );
 }

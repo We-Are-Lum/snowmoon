@@ -1,5 +1,6 @@
 import { ModerateQueue } from '~/components/moderate-queue';
 import { StorageCheck } from '~/components/storage-check';
+import { IMAGE_WORDING as W } from '~/lib/images/wording';
 
 export const metadata = { title: 'Reports', robots: { index: false } };
 
@@ -11,6 +12,7 @@ export default function Moderate() {
       <p>Reported images, with each reason, its count and the reporters&apos; notes. Who reported is never shown. Moderators can hide an image or dismiss its reports; nothing else.</p>
       <ModerateQueue />
       <StorageCheck />
+      <p className="as-draft ic-draftline">{W.draftLine}</p>
     </div>
   );
 }
