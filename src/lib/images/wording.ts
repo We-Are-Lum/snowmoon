@@ -141,6 +141,7 @@ export const IMAGE_WORDING = {
       characters: 'Characters',
       used: 'Offered when you make an image',
       alsoPicked: 'Also picked; pick it again to use it',
+      charUsed: (name: string) => `Offered when a passage names ${name}`,
       change: 'Change',
       clear: 'Clear',
       noStyle: 'No style picked · nothing is added',

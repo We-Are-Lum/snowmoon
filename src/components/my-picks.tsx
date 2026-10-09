@@ -55,7 +55,7 @@ export function MyPicks() {
             {nameOf(p)} v{p.versionNo}
           </Link>
           <span className="dz-row-meta">
-            {!p.available ? W.picks.hidden : p.kind === 'style' ? (i === 0 ? W.picks.used : W.picks.alsoPicked) : by(p)}
+            {!p.available ? W.picks.hidden : p.kind === 'style' ? (i === 0 ? W.picks.used : W.picks.alsoPicked) : W.picks.charUsed(p.entity.split(' ')[0])}
           </span>
           <span className="dz-pick-actions">
             <Link href={p.kind === 'style' ? '/images/designs' : '/images/designs?tab=characters'}>{W.picks.change}</Link>

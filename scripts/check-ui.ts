@@ -29,6 +29,8 @@ const arg = (name: string) => process.argv.slice(2).find((a) => a.startsWith(`--
 const BASE = (arg('url') ?? 'http://localhost:3000').replace(/\/$/, '');
 const INJECT = arg('inject-css');
 const SHOTS = arg('shots');
+/** A published style or sheet to check too (its version id), when the database has one. */
+const DESIGN = arg('design');
 const MIN_TEXT = 12;
 const MIN_TAP = 44;
 const PAPER = 'rgb(244, 242, 237)';
@@ -332,6 +334,13 @@ try {
     await open(page, '/images');
     await checkFloors(page, '/images', scheme);
     if (!(await page.getByText('Most liked').isVisible())) fail('/images: no "Most liked" order');
+    // Styles and character sheets (step 4): readable signed out; making and picking only for invited FIDs.
+    for (const p of ['/images/designs', '/images/designs?sort=built', '/images/designs?tab=characters', '/images/designs/character/gladias', ...(DESIGN ? [`/images/designs/${DESIGN}`] : [])]) {
+      await open(page, p);
+      await checkFloors(page, p, scheme);
+      if (await page.locator('.dz-new, .dz-fork, .dz-pick-button').count()) fail(`${p}: making or picking shows to a signed-out reader`);
+      if (p.startsWith('/images/designs?') && !(await page.getByText('Nothing here is official.', { exact: false }).count())) fail(`${p}: no "Nothing here is official"`);
+    }
     await open(page, '/chapter/1');
     if (await page.locator('.add-image').count()) fail('/chapter/1: "Add an image" shows to a signed-out reader');
     {
@@ -356,6 +365,21 @@ try {
       if (!/sent to Groq to be checked and to fal\.ai/.test(text)) fail('/chapter/1: the composer does not name both hosts');
       await page.keyboard.press('Escape');
       if (await page.locator('.image-composer').count()) fail('/chapter/1: Escape does not close the composer');
+      // Step 4, signed in and invited (mocked): My picks (private) and the new-style form.
+      await ctx.route('**/api/designs/picks', (r) => r.fulfill({ json: { picks: [] } }));
+      await ctx.route('**/api/consent', (r) => r.fulfill({ json: { wording: { version: 'v', line: 'l', title: 't', text: ['a'], sha256: 'x' }, signedIn: true, agreed: true } }));
+      await open(page, '/images/picks');
+      await page.waitForSelector('.dz-private');
+      await checkFloors(page, '/images/picks (invited)', scheme);
+      if (!/only you see your picks/i.test((await page.textContent('.dz-private')) ?? '')) fail('/images/picks: the private strip is missing');
+      await open(page, '/images/designs/new?kind=style');
+      await page.waitForSelector('#dz-text');
+      await checkFloors(page, '/images/designs/new (invited)', scheme);
+      const form = (await page.textContent('.dz-form')) ?? '';
+      if ((form.match(/Public, permanent, GPL-3\.0/g) ?? []).length < 2) fail('/images/designs/new: a published box lacks the publication line');
+      if (!/sent to Groq to be checked and to fal\.ai/.test(form)) fail('/images/designs/new: the form does not name both hosts');
+      await ctx.unroute('**/api/designs/picks');
+      await ctx.unroute('**/api/consent');
       await page.evaluate(() => localStorage.removeItem('snowmoon.signin'));
       await ctx.unroute('**/api/images/status**');
       await ctx.unroute('**/api/chat/status');
