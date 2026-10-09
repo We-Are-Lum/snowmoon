@@ -59,6 +59,16 @@ a.dz-row[aria-current='page'] { margin: 0 -10px; padding: 12px 10px; background:
 .dz-versions a { color: var(--link); text-decoration: none; }
 .dz-versions a:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .dz-built { color: var(--ink); }
+/* Phone: the versions as one row ("v3 v2 v1", the shown one underlined), and the action bar kept at the foot. */
+@media (max-width: 767px) {
+  .dz-versions { flex-direction: row; flex-wrap: wrap; align-items: center; gap: 0 14px; }
+  .dz-versions ul { display: flex; flex-wrap: wrap; gap: 0 14px; }
+  .dz-versions li { border-top: 0; }
+  .dz-versions li > [aria-current='page'] { text-decoration: underline; text-underline-offset: 4px; }
+  .dz-v-more { display: none; }
+  .dz-versions .dz-note { flex-basis: 100%; }
+  .dz-bar-row { position: sticky; bottom: 0; z-index: 2; margin: 0 calc(-1 * var(--gutter)); padding: 10px var(--gutter) calc(14px + env(safe-area-inset-bottom)); border-top: 1px solid var(--rule); background: var(--paper); }
+}
 .dz-details summary { display: flex; align-items: center; min-height: 44px; cursor: pointer; font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; color: var(--link); }
 .dz-details summary:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .dz-built-list { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
@@ -75,13 +85,15 @@ a.dz-row[aria-current='page'] { margin: 0 -10px; padding: 12px 10px; background:
 .dz-cover { margin: 10px 0; }
 /* The action bar: "Use as my …" 2fr, Fork 1fr; Report or Hide this below, as on an image. */
 .dz-bar { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; padding-top: 10px; border-top: 1px solid var(--rule); }
-.dz-bar-row { display: grid; grid-template-columns: 2fr 1fr; gap: 8px; align-items: start; }
+.dz-bar-row { display: grid; grid-template-columns: 2fr 1fr; gap: 8px; align-items: start; padding-top: 10px; border-top: 1px solid var(--rule); }
+.dz-bar-row + .dz-bar { border-top: 0; padding-top: 0; }
 .dz-bar-row:has(> :nth-child(3)) { grid-template-columns: 2fr 1fr 1fr; }
 .dz-pick { display: flex; flex-direction: column; gap: 6px; }
 .dz-pick-button { width: 100%; }
 .dz-fork { display: flex; align-items: center; justify-content: center; text-align: center; text-decoration: none; border-color: var(--ink) !important; }
 a.dz-fork:hover { text-decoration: none; }
 .dz-pick-note { margin: 0; font-family: var(--label); font-size: var(--text-label); line-height: 1.5; color: var(--link); }
+.dz-pick-state { text-transform: uppercase; }
 .dz-bar .image-actions { margin: 0; }
 
 /* The form: a fork's band, a name on a rule, the text in its box, the pictures' slots. */
@@ -115,6 +127,7 @@ a.dz-fork:hover { text-decoration: none; }
 .dz-slot-label { margin: 0; font-size: 13px; line-height: 1.35; color: var(--body); overflow-wrap: anywhere; }
 .dz-slot-name { font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; color: var(--muted); }
 .dz-slot-go { min-height: 44px; }
+.dz-view-lines { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; font-size: 14px; line-height: 1.4; color: var(--body); }
 .dz-slot-go:disabled { color: var(--muted); cursor: default; }
 .dz-publish { display: flex; flex-direction: column; gap: 6px; padding-top: 10px; border-top: 1px solid var(--rule); }
 .dz-publish .publish-flow { margin: 0; }

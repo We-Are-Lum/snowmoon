@@ -18,8 +18,9 @@ export function DesignBar(p: { versionId: string; versionNo: number; elementId: 
   const auth = useAuth();
   const canAdd = useCanAddImage();
   const mine = auth.kind === 'signed-in' && auth.fid === p.byFid;
+  // A fragment, so the bar row is a child of the page's column and can stay at the foot on a phone.
   return (
-    <div className="dz-bar">
+    <>
       {canAdd && (
         <div className="dz-bar-row">
           <PickButton versionId={p.versionId} versionNo={p.versionNo} elementId={p.elementId} entityId={p.entityId} kind={p.kind} name={p.name} />
@@ -33,7 +34,9 @@ export function DesignBar(p: { versionId: string; versionNo: number; elementId: 
           )}
         </div>
       )}
-      <ImageActions versionId={p.versionId} byFid={p.byFid} chapter={0} design={p.kind === 'style' ? 'style' : 'sheet'} />
-    </div>
+      <div className="dz-bar">
+        <ImageActions versionId={p.versionId} byFid={p.byFid} chapter={0} design={p.kind === 'style' ? 'style' : 'sheet'} />
+      </div>
+    </>
   );
 }

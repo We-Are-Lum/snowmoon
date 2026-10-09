@@ -91,7 +91,7 @@ export function PickButton({ versionId, versionNo, elementId, entityId, kind, na
         </button>
       )}
       {mine && !exact && (
-        <p className="dz-pick-note">
+        <p className="dz-pick-note dz-pick-state">
           {W.index.yourPick} · {sameDesign ? `v${mine.versionNo}` : mine.title || mine.entity}
         </p>
       )}

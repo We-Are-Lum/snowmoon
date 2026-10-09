@@ -135,7 +135,7 @@ export function DesignForm(p: Props) {
           <span className="dz-slot-empty" aria-hidden="true" />
         )}
         <p className="dz-slot-label">
-          <span className="dz-slot-name">{label}</span> {line}
+          <span className="dz-slot-name">{label}</span> {slot === 'sample' ? line : null}
         </p>
         <button
           type="button"
@@ -214,6 +214,15 @@ export function DesignForm(p: Props) {
                 ? samples.map((x, i) => pictureFor('sample', i, x, p.subjects[i]))
                 : (['front', 'side', 'back'] as const).map((k, i) => pictureFor(k, i, views[k], p.viewLines[k]))}
             </ul>
+            {!style && (
+              <ul className="dz-view-lines">
+                {(['front', 'side', 'back'] as const).map((k) => (
+                  <li key={k}>
+                    <span className="dz-slot-name">{k}</span> {p.viewLines[k]}
+                  </li>
+                ))}
+              </ul>
+            )}
             {stale && <p className="ic-error">{W.form.stale}</p>}
             <p className="dz-note">{W.form.left(left)}</p>
             <p className="dz-note">{W.form.promptIs(p.suffix)}</p>

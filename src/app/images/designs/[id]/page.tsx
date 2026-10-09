@@ -20,6 +20,17 @@ export const revalidate = 60;
 type Props = { params: Promise<{ id: string }> };
 const W = IMAGE_WORDING.designs;
 const day = (iso: string) => iso.slice(0, 10);
+/** "v3 · 2026-10-04 · 2 built on": on a phone only "v3" shows, as Design's row of versions; the rest from 768px. */
+const versionRow = (h: { versionNo: number; createdAt: string; builtOn: number }) => {
+  const full = W.page.versionRow(h.versionNo, day(h.createdAt), h.builtOn);
+  const short = `v${h.versionNo}`;
+  return (
+    <>
+      {short}
+      <span className="dz-v-more">{full.slice(short.length)}</span>
+    </>
+  );
+};
 
 export async function generateMetadata({ params }: Props) {
   const { id } = await params;
@@ -92,9 +103,9 @@ export default async function DesignPage({ params }: Props) {
             {d.history.map((h) => (
               <li key={h.versionId}>
                 {h.versionId === d.shown.versionId ? (
-                  <span aria-current="page">{W.page.versionRow(h.versionNo, day(h.createdAt), h.builtOn)}</span>
+                  <span aria-current="page">{versionRow(h)}</span>
                 ) : (
-                  <Link href={`/images/designs/${h.versionId}`}>{W.page.versionRow(h.versionNo, day(h.createdAt), h.builtOn)}</Link>
+                  <Link href={`/images/designs/${h.versionId}`}>{versionRow(h)}</Link>
                 )}
               </li>
             ))}
