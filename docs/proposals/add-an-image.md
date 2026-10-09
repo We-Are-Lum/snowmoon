@@ -599,7 +599,10 @@ Where the build differs from the text above, and why:
   scene links, player link) only to a signed-in invited FID.
 - **Accepted:** the consent line naming Groq, the intro edit, rule-hides not restored by moderators,
   the queue query outside moderator code, and costs on published recipes.
-- **Before anyone else is invited:** readers' images in their own public bucket, so the production
-  key can't write to the bucket holding the book's audio and images. The code reads
-  `R2_IMAGES_PUBLIC_URL` for that bucket's address; `element_versions.asset_url` is append-only, so
-  the move is free only before the first image is published.
+- **Done, 2026-10-09: readers' images in their own public bucket,** so the production key can't
+  write to the bucket holding the book's audio and images. Readers' images go to `snowmoon-readers`,
+  served at `https://pictures.snowmoon.party` (`R2_IMAGES_PUBLIC_URL`); hidden images move to
+  `snowmoon-private`. The owner ran the storage check on production (2026-10-09): the readers' bucket
+  and the private bucket are writable, and a write to the book's media bucket is refused
+  (AccessDenied). `element_versions.asset_url` is append-only, so the move was made before the first
+  image was published.

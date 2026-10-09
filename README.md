@@ -145,16 +145,24 @@ prompts keep images free of writing), and
 
 ## Media
 
-Audio and images are served from Cloudflare R2 at `media.snowmoon.party`.
-Uploads run only from a trusted machine with a key scoped to the one bucket;
-the deployed app never holds R2 keys, only `R2_PUBLIC_URL`. Keys carry each
-file's sha256, so objects are immutable and cached forever, and re-running a
-publish script uploads only what is missing.
+The book's audio and images are served from Cloudflare R2 at
+`media.snowmoon.party`. They are uploaded only from a trusted machine, with the
+book's key, scoped to that one bucket. Keys carry each file's sha256, so
+objects are immutable and cached forever, and re-running a publish script
+uploads only what is missing.
 
-`.env.local` needs `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`, `R2_SECRET_ACCESS_KEY`,
-`R2_BUCKET` and `R2_PUBLIC_URL`. With the Vercel CLI linked to the project,
-`vercel env pull .env.local --environment=development` fetches them; the R2
-keys are stored in Vercel for the Development environment only.
+Readers' images live in their own buckets: `snowmoon-readers`, served at
+`pictures.snowmoon.party` (`R2_IMAGES_PUBLIC_URL`), and `snowmoon-private` for
+hidden images (`R2_PRIVATE_BUCKET`). The deployed app holds its own R2 key in
+the Production environment, scoped to those two buckets only; it can't write
+to the book's media bucket (the storage check on `/moderate` confirmed this on
+production on 2026-10-09: a write there is refused with AccessDenied).
+
+For the publish scripts, `.env.local` needs `R2_ACCOUNT_ID`, `R2_ACCESS_KEY_ID`,
+`R2_SECRET_ACCESS_KEY`, `R2_BUCKET` and `R2_PUBLIC_URL`. With the Vercel CLI
+linked to the project, `vercel env pull .env.local --environment=development`
+fetches them: the Development environment keeps the book's key, and only
+Development has it.
 
 ## Sign in
 
