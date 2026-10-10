@@ -731,7 +731,7 @@ try {
       const redrawn = page.locator('figure[data-source="template"] .info-label[data-label="redrawn"]');
       if (!(await redrawn.count())) fail(`/chapter/1 (${scheme}): no "Redrawn" label on a screen redrawn from a template`);
       else {
-        if ((await redrawn.first().locator('.info-word').textContent()) !== 'Redrawn') fail(`/chapter/1 (${scheme}): the redrawn label's word is not "Redrawn"`);
+        if (!(await redrawn.first().locator('.info-word').isVisible()) || (await redrawn.first().locator('.info-word').innerText()) !== 'Redrawn') fail(`/chapter/1 (${scheme}): the redrawn label's word is not "Redrawn"`);
         await redrawn.first().click();
         const sheet = page.locator('.info-sheet');
         if (!/Every word on it is the book/.test((await sheet.textContent().catch(() => '')) ?? '')) fail(`/chapter/1 (${scheme}): "Redrawn" does not open its details`);
@@ -795,7 +795,7 @@ try {
       {
         // Learn and Free play: the game is labelled as invented for this edition (P8d), except Under the hood, which is the book's rule.
         // Short labels (owner ruling, 2026-10-09): "Invented ⓘ", "Draft ⓘ", "Book ⓘ", each opening its explanation.
-        const tags = await page.locator('.ml-tag .info-word').allTextContents();
+        const tags = await page.locator('.ml-tag .info-word').evaluateAll((els) => els.filter((e) => (e as HTMLElement).checkVisibility({ opacityProperty: true, visibilityProperty: true }) && e.getBoundingClientRect().width > 0).map((e) => (e.textContent ?? '').trim()));
         const labelled = tags.includes('Invented');
         if (q === `lesson=${MINPENTAI_HOOD}` ? labelled : !labelled) fail(`/minpentai?${q} (${scheme}): the "Invented" label is ${labelled ? 'on the book\'s rule' : 'missing'}`);
         if (q === 'lesson=1') {
@@ -821,7 +821,7 @@ try {
     await checkFloors(page, '/minpentai/rule', scheme);
     if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)) fail(`/minpentai/rule (${scheme}): the page scrolls sideways at 390px`);
     {
-      const tags = await page.locator('.mr .ml-tag .info-word').allTextContents();
+      const tags = await page.locator('.mr .ml-tag .info-word').evaluateAll((els) => els.filter((e) => (e as HTMLElement).checkVisibility({ opacityProperty: true, visibilityProperty: true }) && e.getBoundingClientRect().width > 0).map((e) => (e.textContent ?? '').trim()));
       if (!tags.includes('Book') || tags.includes('Invented')) fail(`/minpentai/rule (${scheme}): tagged ${tags.join(', ')}, not as the book's rule`);
       const words = (await page.locator('.mr').textContent()) ?? '';
       if (!words.includes('c4-b5') || !words.includes('c4-b7')) fail(`/minpentai/rule (${scheme}): does not cite c4-b5 and c4-b7`);
