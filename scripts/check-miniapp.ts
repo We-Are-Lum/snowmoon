@@ -96,7 +96,7 @@ try {
     await page.close();
   }
   // Learn Minpentai fills the Farcaster frame (owner, 2026-10-09): no site top bar, the frame is the iframe's viewport, × back to the site.
-  // ?mode=free became Minpentai Play's free play (another session, 2026-10-09); it is checked below as Play.
+  // ?mode=free opens Play's free play since Play shipped (2026-10-10); it is checked below.
   for (const path of ['/minpentai?lesson=13', '/minpentai?mode=practice']) {
     const page = await browser.newPage({ viewport: { width: 480, height: 760 } });
     await page.addInitScript('window.__name = (f) => f');
@@ -127,17 +127,16 @@ try {
     for (const e of errors) fail(`${path}: page error: ${e}`);
     await page.close();
   }
-  // Minpentai Play's free play loads in the Farcaster frame: its frame shows, ready() once, no page errors.
-  // Whether Play should fill the frame is for Play's owner to decide; this checks only that it works there.
-  {
-    const path = '/minpentai?mode=free';
+  // Play in the Farcaster frame (Design's "frame" device): free play fills the frame, ready() once, no errors.
+  for (const path of ['/minpentai?mode=free', '/minpentai?mode=play']) {
     const page = await browser.newPage({ viewport: { width: 480, height: 760 } });
     await page.addInitScript('window.__name = (f) => f');
     const errors: string[] = [];
     page.on('pageerror', (e) => errors.push(e.message));
     await page.route(HOST + '**', (r) => r.fulfill({ contentType: 'text/html', body: `<!doctype html><body style="margin:0"><script>${bundle.replace(/<\/script>/g, '<\\/script>')}</script></body>` }));
     await page.route('https://auth.farcaster.xyz/**', (r) => r.fulfill({ json: new URL(r.request().url()).pathname.includes('nonce') ? { nonce: 'checknonce1' } : { token: TOKEN } }));
-    // Play's own API calls go to the server under test (an empty stand-in reply breaks it; it reads them signed out).
+    // An empty stand-in reply for every API call, as for Learn: Play must not break on a malformed answer.
+    await page.route('**/api/**', (r) => r.fulfill({ json: {} }));
     await page.goto(`${HOST}?url=${encodeURIComponent(BASE + path)}`);
     const frame = await new Promise<Frame>((resolve) => {
       const t = setInterval(() => {
@@ -145,7 +144,17 @@ try {
         if (f) (clearInterval(t), resolve(f));
       }, 100);
     });
-    await frame.waitForSelector('.mp-play:not([aria-busy])', { timeout: 15000 }).catch(() => fail(`${path}: Minpentai Play does not show in the Farcaster frame`));
+    const shown = await frame.waitForSelector('.mp-play:not([aria-busy])', { timeout: 15000 }).then(() => true, () => false);
+    if (!shown) fail(`${path}: Play does not open in the Farcaster frame`);
+    else {
+      const r = await frame.evaluate(() => {
+        const b = document.querySelector('.mp-play')!.getBoundingClientRect();
+        return { x: b.x, w: b.width, bottom: b.bottom, vw: innerWidth, vh: innerHeight, wide: document.documentElement.scrollWidth > innerWidth + 1, cls: document.querySelector('.mp-play')!.className };
+      });
+      console.log(`${path}: ${JSON.stringify(r)}`);
+      if (Math.abs(r.x) > 1 || Math.abs(r.w - r.vw) > 1) fail(`${path}: Play is ${Math.round(r.w)}px wide at x=${Math.round(r.x)} in a ${r.vw}px frame`);
+      if (r.wide) fail(`${path}: Play scrolls sideways in the Farcaster frame`);
+    }
     const host = await page.evaluate(() => window.__host);
     if (host.ready !== 1) fail(`${path}: ready() called ${host.ready} times, not once`);
     for (const e of errors) fail(`${path}: page error: ${e}`);

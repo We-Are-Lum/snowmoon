@@ -29,6 +29,12 @@ import { SignInButton } from '~/components/sign-in';
 /** The Book label's explanation where a match's new rule is drawn (model-drafted). */
 const PLAY_BOOK_RULE = 'In the book, "every game there\'s always some kind of new rule" (c4-b84). Here, one of four rules invented for this edition is drawn at random for each match.';
 
+/** Only a well-formed answer replaces the progress; anything else keeps what is shown (never a blank screen). */
+function isProgress(p: unknown): p is LadderProgress {
+  const q = p as LadderProgress | null;
+  return !!q && typeof q === 'object' && Number.isInteger(q.opened) && q.opened >= 1 && q.opened <= 5 && !!q.rec && typeof q.rec === 'object';
+}
+
 export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | 'person'; onLearn: () => void }) {
   const auth = useAuth();
   const signed = auth.kind === 'signed-in';
@@ -39,7 +45,7 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
     onLadderResult: (r) => {
       void authFetch('/api/minpentai/ladder/result', { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(r) })
         .then((res) => (res.ok ? res.json() : null))
-        .then((p: LadderProgress | null) => { if (p) ctl.setState({ prog: p }); })
+        .then((p: LadderProgress | null) => { if (isProgress(p)) ctl.setState({ prog: p }); })
         .catch(() => {});
     },
     signIn: () => signInRef.current?.querySelector('button')?.click(),
@@ -69,7 +75,7 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
   useEffect(() => {
     ctl.setState({ signed });
     if (!signed) { ctl.setState({ prog: { opened: 1, rec: {} } }); return; }
-    void authFetch('/api/minpentai/ladder').then((r) => (r.ok ? r.json() : null)).then((p: LadderProgress | null) => { if (p) ctl.setState({ prog: p }); }).catch(() => {});
+    void authFetch('/api/minpentai/ladder').then((r) => (r.ok ? r.json() : null)).then((p: LadderProgress | null) => { if (isProgress(p)) ctl.setState({ prog: p }); }).catch(() => {});
   }, [ctl, signed]);
 
   const v = ctl.view();
