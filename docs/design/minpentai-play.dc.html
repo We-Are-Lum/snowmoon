@@ -1,0 +1,717 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<title>Minpentai · full screen, free play, ladder, one-on-one</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>html,body{margin:0;background:#E9E6DF;-webkit-font-smoothing:antialiased}a{color:#2E5A3A}a:hover{color:#1D1D1B}</style>
+</helmet>
+<div style="padding:48px;display:flex;flex-direction:column;gap:56px;font-family:'Crimson Pro',serif;color:#1D1D1B">
+
+<section id="intro" style="display:flex;flex-direction:column;gap:12px;max-width:1000px">
+  <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;color:#6A675F">SNOWMOON PARTY · MINPENTAI · ALL WORDING IS DRAFT FOR NATE · RULES INVENTED FOR THIS EDITION</div>
+  <div style="font-size:44px;line-height:1.05">Full screen, free play, the ladder and one-on-one</div>
+  <div style="font-size:19px;line-height:1.45;color:#4A463F;text-wrap:pretty">Every screen plays by <a href="Minpentai Rules.dc.html">the rules page</a>. Phone at 390 × 695; full screen at the Farcaster frame, 424 × 695; desktop at 1280 × 800. You are always Cyan.</div>
+  <div style="display:flex;flex-wrap:wrap;gap:10px 22px;font-family:'DM Mono',monospace;font-size:12px;color:#4A463F;padding-top:4px">
+    <span style="display:flex;align-items:center;gap:8px"><span style="border-bottom:2px dotted #B3306E">@wren · 61 steps</span>dotted magenta = sample person or number</span>
+    <span style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:14px;background:#46D7E8;box-shadow:inset 0 0 0 3px #0E0F13"></span>tower</span>
+    <span style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:14px;border:1px dashed #FFB43A;box-sizing:border-box"></span>last seen</span>
+    <span style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:14px;border:2px solid #46D7E8;box-sizing:border-box"></span>square · <span style="width:14px;height:14px;border:2px dashed #46D7E8;box-sizing:border-box"></span>cracked</span>
+    <span style="display:flex;align-items:center;gap:6px"><span style="width:14px;height:14px;background:#3A3B42"></span>rock</span>
+    <span>No rankings, no leaderboard, nothing featured. Your record is visible to you only.</span>
+  </div>
+</section>
+
+<section id="flow" style="display:flex;flex-direction:column;gap:16px">
+  <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;color:#6A675F">FLOWS</div>
+  <div style="background:#F4F2ED;border:1px solid #DAD6CC;border-radius:6px;padding:28px;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px 26px;max-width:1500px;font-size:16px;line-height:1.35">
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">FULL SCREEN</div>
+      <a href="#a1" style="border:1px solid #1D1D1B;border-radius:3px;padding:10px;color:#1D1D1B;text-decoration:none">A1 · Any lesson or match → ⤢ on the board</a>
+      <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;padding-left:10px">↓ phone or Farcaster frame</div>
+      <a href="#a2" style="border:1px solid #1D1D1B;border-radius:3px;padding:10px;color:#1D1D1B;text-decoration:none">A2 · Board turns upright, fills the frame; pieces in one row</a>
+      <a href="#a3" style="border:1px solid #1D1D1B;border-radius:3px;padding:10px;color:#1D1D1B;text-decoration:none">A3 · Lessons: text folds into a sheet</a>
+      <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;padding-left:10px">↓ desktop</div>
+      <a href="#a4" style="border:1px solid #1D1D1B;border-radius:3px;padding:10px;color:#1D1D1B;text-decoration:none">A4 · Browser full screen, side panel can hide</a>
+      <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;padding-left:10px">✕ or Esc returns to the same step</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">PLAY · FREE PLAY</div>
+      <a href="#p1" style="border:1px solid #1D1D1B;border-radius:3px;padding:10px;color:#1D1D1B;text-decoration:none">P1 · Play: practice, the ladder, a person</a>
+      <a href="#b1" style="border:1px solid #1D1D1B;border-radius:3px;padding:10px;color:#1D1D1B;text-decoration:none">B1 · Free play: place anything, either side</a>
+      <a href="#b2" style="border:1px solid #1D1D1B;border-radius:3px;padding:10px;color:#1D1D1B;text-decoration:none">B2 · Board options: start, rules, sight, share</a>
+      <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;padding-left:10px">Replaces the sandbox. The book's cell rule stays in Under the hood.</div>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">COMPUTER LADDER · SIGNED IN</div>
+      <a href="#c1" style="border:1px solid #1D1D1B;border-radius:3px;padding:10px;color:#1D1D1B;text-decoration:none">C1 · Ladder: five rungs, yours marked</a>
+      <a href="#c2" style="border:1px dashed #6A675F;border-radius:3px;padding:10px;color:#1D1D1B;text-decoration:none">C2 · Signed out: rungs shown, sign in to climb</a>
+      <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;padding-left:10px">↓ rung</div>
+      <a href="#c3" style="border:1px solid #1D1D1B;border-radius:3px;padding:10px;color:#1D1D1B;text-decoration:none">C3 · Rung start: how it plays, the new rule</a>
+      <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;padding-left:10px">↓ match (A1) · ··· → resign</div>
+      <a href="#c5" style="border:1px solid #1D1D1B;border-radius:3px;padding:10px;color:#1D1D1B;text-decoration:none">C5 · Resign, one confirmation</a>
+      <a href="#c4" style="border:1px solid #1D1D1B;border-radius:3px;padding:10px;color:#1D1D1B;text-decoration:none">C4 · Result: next rung opens</a>
+      <a href="#c6" style="border:1px solid #1D1D1B;border-radius:3px;padding:10px;color:#1D1D1B;text-decoration:none">C6 · Desktop ladder</a>
+    </div>
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">ONE-ON-ONE · SIGNED IN</div>
+      <a href="#d1" style="border:1px solid #1D1D1B;border-radius:3px;padding:10px;color:#1D1D1B;text-decoration:none">D1 · I'm ready</a>
+      <a href="#d2" style="border:1px solid #1D1D1B;border-radius:3px;padding:10px;color:#1D1D1B;text-decoration:none">D2 · Looking for a player · cancel</a>
+      <a href="#d3" style="border:1px solid #1D1D1B;border-radius:3px;padding:10px;color:#1D1D1B;text-decoration:none">D3 · Matched: who, the new rule, countdown</a>
+      <a href="#d4" style="border:1px solid #1D1D1B;border-radius:3px;padding:10px;color:#1D1D1B;text-decoration:none">D4 · Turn to act, 45 s, both at once</a>
+      <a href="#d5" style="border:1px solid #1D1D1B;border-radius:3px;padding:10px;color:#1D1D1B;text-decoration:none">D5 · The run · opponent loses connection</a>
+      <a href="#d6" style="border:1px solid #1D1D1B;border-radius:3px;padding:10px;color:#1D1D1B;text-decoration:none">D6 · Result · rematch needs both</a>
+      <a href="#d7" style="border:1px solid #1D1D1B;border-radius:3px;padding:10px;color:#1D1D1B;text-decoration:none">D7 · They left: counted as resigning</a>
+      <a href="#d8" style="border:1px solid #1D1D1B;border-radius:3px;padding:10px;color:#1D1D1B;text-decoration:none">D8 · Desktop</a>
+    </div>
+  </div>
+</section>
+
+<section id="ga" style="display:flex;flex-direction:column;gap:16px">
+  <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;color:#6A675F">A · FULL SCREEN</div>
+  <div style="display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start">
+
+    <div id="a1" style="display:flex;flex-direction:column;gap:8px">
+      <div style="font-family:'DM Mono',monospace;font-size:12px"><span style="background:#1D1D1B;color:#F4F2ED;padding:3px 7px;border-radius:3px">A1</span> Match, normal view (ladder rung 3)</div>
+      <div style="width:390px;height:695px;background:#F4F2ED;border-radius:18px;overflow:hidden;box-shadow:0 0 0 1px #CFCAC0,0 20px 50px rgba(29,29,27,.16);display:flex;flex-direction:column;position:relative">
+        <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 6px 0 16px;border-bottom:1px solid #DAD6CC"><span style="font-size:18px">Rung 3 · Builder</span><span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;color:#6A675F">···</span></div>
+        <div style="position:relative;height:260px;flex:none;background:#060608">
+          <div style="display:grid;grid-template-columns:repeat(15,26px);grid-template-rows:repeat(10,26px)"><sc-for list="{{ B.act.cells }}" as="c" hint-placeholder-count="150"><div style="margin:1px;background:{{ c.bg }};border:{{ c.bd }};box-shadow:{{ c.sh }};color:{{ c.fg }};font-size:{{ c.fs }};display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;line-height:1;box-sizing:border-box">{{ c.t }}</div></sc-for></div>
+          <div style="position:absolute;left:8px;top:8px;background:rgba(5,5,7,.82);padding:5px 8px;border-radius:3px;font-family:'DM Mono',monospace;font-size:12px;color:#E7E4DD;white-space:nowrap">STEP 24 · CYAN 2 · AMBER 0 SEEN</div>
+          <div style="position:absolute;right:8px;top:8px;width:44px;height:44px;border:1px solid #E7E4DD;border-radius:3px;background:rgba(5,5,7,.82);color:#E7E4DD;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:18px">⤢</div>
+        </div>
+        <div style="flex:none;display:flex;flex-direction:column;gap:6px;padding:8px 18px 0">
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px">
+            <span style="height:44px;border:1px solid #1D1D1B;border-radius:3px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em">GLIDER · 4</span>
+            <span style="height:44px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em">SQUARE · 1</span>
+            <span style="height:44px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em">TOWER · 4</span>
+          </div>
+          <div style="display:flex;gap:4px"><span style="flex:1;height:44px;border:1px solid #DAD6CC;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:16px">←</span><span style="flex:1;height:44px;border:1px solid #DAD6CC;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:16px">↑</span><span style="flex:1;height:44px;border:1px solid #DAD6CC;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:16px">↓</span><span style="flex:1;height:44px;border:1px solid #1D1D1B;background:#1D1D1B;color:#F4F2ED;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:16px">→</span></div>
+        </div>
+        <div style="display:flex;gap:6px;flex-wrap:wrap;padding:10px 18px 0"><span style="font-family:'DM Mono',monospace;font-size:12px;padding:3px 7px;border:1px dashed #6A675F;color:#6A675F;border-radius:2px">RULES INVENTED FOR THIS EDITION</span><span style="font-family:'DM Mono',monospace;font-size:12px;padding:3px 7px;border:1px dashed #6A675F;color:#6A675F;border-radius:2px">DRAFT WORDING</span></div>
+        <div style="flex:1;min-height:0;padding:8px 18px;display:flex;flex-direction:column;gap:6px">
+          <div style="font-size:18px;line-height:1.42;text-wrap:pretty">Your turn. You can't see Amber's towers now; the outlines are where you last saw them. Spend 8 points in the lit area, then end your turn.</div>
+          <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">NEW RULE THIS MATCH: NONE DRAWN ON THIS RUNG'S FIRST TRY</div>
+        </div>
+        <div style="flex:none;padding:10px 18px 14px;border-top:1px solid #DAD6CC;display:flex;gap:8px;align-items:center">
+          <span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;width:88px">4 OF 8 PTS LEFT</span>
+          <span style="flex:1;height:48px;border-radius:3px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em">END TURN</span>
+        </div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;max-width:390px;line-height:1.5">⤢ sits on the board in every lesson and match. The dotted line is your glider's path until it leaves your sight. ··· holds Resign, Rules page and Leave.</div>
+    </div>
+
+    <div id="a2" style="display:flex;flex-direction:column;gap:8px">
+      <div style="font-family:'DM Mono',monospace;font-size:12px"><span style="background:#1D1D1B;color:#F4F2ED;padding:3px 7px;border-radius:3px">A2</span> Full screen in the Farcaster frame, 424 × 695</div>
+      <div style="width:424px;height:695px;background:#060608;border-radius:18px;overflow:hidden;box-shadow:0 0 0 1px #CFCAC0,0 20px 50px rgba(29,29,27,.16);display:flex;flex-direction:column;position:relative;color:#E7E4DD">
+        <div style="height:44px;flex:none;display:flex;align-items:center;gap:6px;padding:0 4px">
+          <span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:16px">✕</span>
+          <span style="flex:1;text-align:center;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em">STEP 24 · CYAN 2 · AMBER 0 SEEN</span>
+          <span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace">···</span>
+        </div>
+        <div style="flex:none;display:grid;grid-template-columns:repeat(10,40px);grid-template-rows:repeat(15,40px);padding:0 12px"><sc-for list="{{ B.actFS.cells }}" as="c" hint-placeholder-count="150"><div style="margin:1px;background:{{ c.bg }};border:{{ c.bd }};box-shadow:{{ c.sh }};color:{{ c.fg }};font-size:{{ c.fs }};display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;line-height:1;box-sizing:border-box">{{ c.t }}</div></sc-for></div>
+        <div style="flex:1;display:flex;align-items:center;gap:6px;padding:0 12px;border-top:1px solid #2A2C34">
+          <span style="height:40px;padding:0 10px;border:1px solid #E7E4DD;background:#E7E4DD;color:#060608;border-radius:3px;display:flex;align-items:center;font-family:'DM Mono',monospace;font-size:12px">GLIDER</span>
+          <span style="height:40px;padding:0 10px;border:1px solid #4A4843;border-radius:3px;display:flex;align-items:center;font-family:'DM Mono',monospace;font-size:12px">SQ</span>
+          <span style="height:40px;padding:0 10px;border:1px solid #4A4843;border-radius:3px;display:flex;align-items:center;font-family:'DM Mono',monospace;font-size:12px">TWR</span>
+          <span style="flex:1;text-align:center;font-family:'DM Mono',monospace;font-size:12px;color:#B4B3BA">0 PTS</span>
+          <span style="height:40px;padding:0 12px;background:#46D7E8;color:#060608;border-radius:3px;display:flex;align-items:center;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em">END TURN</span>
+        </div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;max-width:424px;line-height:1.5">Inside Farcaster the app can't grow past the host's frame. Full screen here means: our 44 px bar, the text and the tags go; the board turns upright (your side at the bottom) so squares grow from 26 to 40 px. A new glider shows four arrows around it; tap one to aim. The host's own close stays outside, untouched.</div>
+    </div>
+
+    <div id="a3" style="display:flex;flex-direction:column;gap:8px">
+      <div style="font-family:'DM Mono',monospace;font-size:12px"><span style="background:#1D1D1B;color:#F4F2ED;padding:3px 7px;border-radius:3px">A3</span> Full screen, lesson 4, text folded</div>
+      <div style="width:424px;height:695px;background:#060608;border-radius:18px;overflow:hidden;box-shadow:0 0 0 1px #CFCAC0,0 20px 50px rgba(29,29,27,.16);display:flex;flex-direction:column;position:relative;color:#E7E4DD">
+        <div style="height:44px;flex:none;display:flex;align-items:center;gap:6px;padding:0 4px">
+          <span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:16px">✕</span>
+          <span style="flex:1;text-align:center;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em">LEARN · 4 / 7 · TURN 0</span>
+          <span style="width:44px"></span>
+        </div>
+        <div style="flex:none;display:grid;grid-template-columns:repeat(10,40px);grid-template-rows:repeat(15,40px);padding:0 12px"><sc-for list="{{ B.lessonFS.cells }}" as="c" hint-placeholder-count="150"><div style="margin:1px;background:{{ c.bg }};border:{{ c.bd }};box-shadow:{{ c.sh }};color:{{ c.fg }};font-size:{{ c.fs }};display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;line-height:1;box-sizing:border-box">{{ c.t }}</div></sc-for></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;background:#F4F2ED;color:#1D1D1B;border-radius:12px 12px 0 0;display:flex;flex-direction:column">
+          <div style="display:flex;justify-content:center;padding-top:6px"><span style="width:36px;height:4px;border-radius:2px;background:#ABA79D"></span></div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:4px 16px 0;min-height:44px"><span style="font-size:19px">Squares bounce gliders</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">▴ READ</span></div>
+          <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:4px 16px 12px">
+            <span style="height:44px;border:1px solid #DAD6CC;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px">◁ STEP</span>
+            <span style="height:44px;border:1px solid #DAD6CC;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px">RESET</span>
+            <span style="grid-column:span 2;height:44px;border-radius:3px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em">BLOCK IT FOR ME</span>
+          </div>
+        </div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;max-width:424px;line-height:1.5">The lesson's text and sources fold into a sheet; ▴ READ opens it over the board. The board starts from the lesson's turn 0, so full screen never loses your place.</div>
+    </div>
+  </div>
+
+  <div id="a4" style="display:flex;flex-direction:column;gap:8px">
+    <div style="font-family:'DM Mono',monospace;font-size:12px"><span style="background:#1D1D1B;color:#F4F2ED;padding:3px 7px;border-radius:3px">A4</span> Desktop, browser full screen</div>
+    <div style="width:1280px;height:800px;background:#060608;border-radius:8px;overflow:hidden;box-shadow:0 0 0 1px #CFCAC0,0 20px 50px rgba(29,29,27,.16);display:flex;color:#E7E4DD">
+      <div style="flex:1;display:flex;flex-direction:column">
+        <div style="height:52px;flex:none;display:flex;align-items:center;gap:14px;padding:0 16px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em">
+          <span style="height:36px;padding:0 12px;border:1px solid #4A4843;border-radius:3px;display:flex;align-items:center">✕ EXIT FULL SCREEN · ESC</span>
+          <span style="flex:1;text-align:center">RUNG 3 · BUILDER · STEP 24 · CYAN 2 · AMBER 0 SEEN</span>
+          <span style="height:36px;padding:0 12px;border:1px solid #4A4843;border-radius:3px;display:flex;align-items:center">···</span>
+        </div>
+        <div style="flex:1;display:flex;align-items:center;justify-content:center">
+          <div style="display:grid;grid-template-columns:repeat(15,56px);grid-template-rows:repeat(10,56px)"><sc-for list="{{ B.desk.cells }}" as="c" hint-placeholder-count="150"><div style="margin:1px;background:{{ c.bg }};border:{{ c.bd }};box-shadow:{{ c.sh }};color:{{ c.fg }};font-size:{{ c.fs }};display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;line-height:1;box-sizing:border-box">{{ c.t }}</div></sc-for></div>
+        </div>
+      </div>
+      <div style="width:300px;flex:none;background:#F4F2ED;color:#1D1D1B;display:flex;flex-direction:column;border-left:1px solid #2A2C34">
+        <div style="height:52px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 16px;border-bottom:1px solid #DAD6CC"><span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">YOUR TURN</span><span style="font-family:'DM Mono',monospace;font-size:12px">HIDE ▸</span></div>
+        <div style="padding:16px;display:flex;flex-direction:column;gap:10px;flex:1">
+          <div style="display:grid;grid-template-columns:1fr;gap:6px">
+            <span style="height:40px;border-radius:3px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;padding:0 12px;font-family:'DM Mono',monospace;font-size:12px">G · GLIDER · 4</span>
+            <span style="height:40px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;padding:0 12px;font-family:'DM Mono',monospace;font-size:12px">S · SQUARE · 1</span>
+            <span style="height:40px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;padding:0 12px;font-family:'DM Mono',monospace;font-size:12px">T · TOWER · 4</span>
+          </div>
+          <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;line-height:1.5">ARROW KEYS AIM · ENTER PLACES · SPACE ENDS TURN</div>
+          <div style="font-size:17px;line-height:1.42;border-top:1px solid #DAD6CC;padding-top:10px">Spend 8 points in the lit area, then end your turn. Outlines are where you last saw Amber's towers.</div>
+          <div style="flex:1"></div>
+          <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">4 OF 8 PTS LEFT</div>
+          <span style="height:48px;border-radius:3px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em">END TURN</span>
+        </div>
+      </div>
+    </div>
+    <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;max-width:900px;line-height:1.5">Desktop asks the browser for real full screen. Where the host doesn't allow it (some Farcaster web clients), the same layout fills the window instead. The panel hides to a 44 px strip with END TURN; the site's rail, chapter list and assistant are gone until exit.</div>
+  </div>
+</section>
+
+<section id="gb" style="display:flex;flex-direction:column;gap:16px">
+  <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;color:#6A675F">P · PLAY &amp; B · FREE PLAY</div>
+  <div style="display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start">
+
+    <div id="p1" style="display:flex;flex-direction:column;gap:8px">
+      <div style="font-family:'DM Mono',monospace;font-size:12px"><span style="background:#1D1D1B;color:#F4F2ED;padding:3px 7px;border-radius:3px">P1</span> Play</div>
+      <div style="width:390px;height:695px;background:#F4F2ED;border-radius:18px;overflow:hidden;box-shadow:0 0 0 1px #CFCAC0,0 20px 50px rgba(29,29,27,.16);display:flex;flex-direction:column">
+        <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 6px 0 16px;border-bottom:1px solid #DAD6CC"><span style="font-size:18px">Minpentai</span><span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;color:#6A675F">···</span></div>
+        <div style="flex:none;display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid #DAD6CC;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em">
+          <span style="height:44px;display:flex;align-items:center;justify-content:center;color:#6A675F">LEARN</span>
+          <span style="height:44px;display:flex;align-items:center;justify-content:center;border-bottom:2px solid #1D1D1B">PLAY</span>
+          <span style="height:44px;display:flex;align-items:center;justify-content:center;color:#6A675F">FREE PLAY</span>
+        </div>
+        <div style="flex:1;padding:18px;display:flex;flex-direction:column;gap:12px">
+          <div style="border:1px solid #1D1D1B;border-radius:3px;padding:14px;display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:22px">Practice match</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">ANYONE</span></div>
+            <div style="font-size:17px;line-height:1.4;color:#4A463F">Against a simple rival. Nothing is saved.</div>
+          </div>
+          <div style="border:1px solid #1D1D1B;border-radius:3px;padding:14px;display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:22px">The computer ladder</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">RUNG <span style="border-bottom:2px dotted #B3306E">3</span> OF 5</span></div>
+            <div style="font-size:17px;line-height:1.4;color:#4A463F">Five computer players, each harder. Beat one to open the next.</div>
+          </div>
+          <div style="border:1px solid #1D1D1B;border-radius:3px;padding:14px;display:flex;flex-direction:column;gap:4px">
+            <div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:22px">Play a person</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F"><span style="border-bottom:2px dotted #B3306E">2</span> READY NOW</span></div>
+            <div style="font-size:17px;line-height:1.4;color:#4A463F">One-on-one with another signed-in player.</div>
+          </div>
+          <div style="flex:1"></div>
+          <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;line-height:1.5">RULES INVENTED FOR THIS EDITION · <span style="color:#2E5A3A">THE RULES PAGE →</span></div>
+        </div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;max-width:390px;line-height:1.5">Three tabs replace v3's four (Learn, Practice, Play, Sandbox). "Ready now" is a live count of people who said ready; it is shown only when it is 1 or more.</div>
+    </div>
+
+    <div id="b1" style="display:flex;flex-direction:column;gap:8px">
+      <div style="font-family:'DM Mono',monospace;font-size:12px"><span style="background:#1D1D1B;color:#F4F2ED;padding:3px 7px;border-radius:3px">B1</span> Free play</div>
+      <div style="width:390px;height:695px;background:#F4F2ED;border-radius:18px;overflow:hidden;box-shadow:0 0 0 1px #CFCAC0,0 20px 50px rgba(29,29,27,.16);display:flex;flex-direction:column">
+        <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 6px 0 16px;border-bottom:1px solid #DAD6CC"><span style="font-size:18px">Free play</span><span style="height:44px;padding:0 10px;display:flex;align-items:center;font-family:'DM Mono',monospace;font-size:12px">BOARD ▾</span></div>
+        <div style="position:relative;height:260px;flex:none;background:#060608">
+          <div style="display:grid;grid-template-columns:repeat(15,26px);grid-template-rows:repeat(10,26px)"><sc-for list="{{ B.free.cells }}" as="c" hint-placeholder-count="150"><div style="margin:1px;background:{{ c.bg }};border:{{ c.bd }};box-shadow:{{ c.sh }};color:{{ c.fg }};font-size:{{ c.fs }};display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;line-height:1;box-sizing:border-box">{{ c.t }}</div></sc-for></div>
+          <div style="position:absolute;left:8px;top:8px;background:rgba(5,5,7,.82);padding:5px 8px;border-radius:3px;font-family:'DM Mono',monospace;font-size:12px;color:#E7E4DD">STEP 6 · SEE ALL</div>
+          <div style="position:absolute;right:8px;top:8px;width:44px;height:44px;border:1px solid #E7E4DD;border-radius:3px;background:rgba(5,5,7,.82);color:#E7E4DD;display:flex;align-items:center;justify-content:center;font-size:18px">⤢</div>
+        </div>
+        <div style="flex:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:8px 18px 0">
+          <span style="height:44px;border:1px solid #DAD6CC;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px">◁ STEP</span>
+          <span style="height:44px;border:1px solid #DAD6CC;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px">PLAY</span>
+          <span style="height:44px;border:1px solid #DAD6CC;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px">STEP ▷</span>
+          <span style="height:44px;border:1px solid #DAD6CC;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px">TO STEP 0</span>
+        </div>
+        <div style="flex:none;padding:10px 18px 0;display:flex;flex-direction:column;gap:6px">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">PLACE FOR</div>
+          <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px">
+            <span style="height:44px;border-radius:3px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center;gap:6px;font-family:'DM Mono',monospace;font-size:12px"><span style="width:10px;height:10px;background:#46D7E8"></span>CYAN</span>
+            <span style="height:44px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;gap:6px;font-family:'DM Mono',monospace;font-size:12px"><span style="width:10px;height:10px;background:#FFB43A"></span>AMBER</span>
+            <span style="height:44px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;gap:6px;font-family:'DM Mono',monospace;font-size:12px"><span style="width:10px;height:10px;background:#3A3B42"></span>ROCK</span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px">
+            <span style="height:44px;border-radius:3px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px">GLIDER</span>
+            <span style="height:44px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px">SQUARE</span>
+            <span style="height:44px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px">TOWER</span>
+            <span style="height:44px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px">ERASE</span>
+          </div>
+        </div>
+        <div style="flex:1;min-height:0;padding:10px 18px;font-size:17px;line-height:1.4;color:#4A463F;text-wrap:pretty">No points, no turns to act, nothing scored. Placing is allowed at step 0 only; step back to 0 to change the board.</div>
+        <div style="flex:none;padding:0 18px 14px;display:flex;gap:6px;flex-wrap:wrap"><span style="font-family:'DM Mono',monospace;font-size:12px;padding:3px 7px;border:1px dashed #6A675F;color:#6A675F;border-radius:2px">RULES INVENTED FOR THIS EDITION</span><span style="font-family:'DM Mono',monospace;font-size:12px;padding:3px 7px;border:1px solid #DAD6CC;border-radius:2px">THE BOOK'S CELL RULE: UNDER THE HOOD →</span></div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;max-width:390px;line-height:1.5">Stepping back replays from step 0 (the game keeps the history; it isn't reversible like the book's cell rule).</div>
+    </div>
+
+    <div id="b2" style="display:flex;flex-direction:column;gap:8px">
+      <div style="font-family:'DM Mono',monospace;font-size:12px"><span style="background:#1D1D1B;color:#F4F2ED;padding:3px 7px;border-radius:3px">B2</span> Free play · board options</div>
+      <div style="width:390px;height:695px;background:#F4F2ED;border-radius:18px;overflow:hidden;box-shadow:0 0 0 1px #CFCAC0,0 20px 50px rgba(29,29,27,.16);display:flex;flex-direction:column;position:relative">
+        <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 6px 0 16px;border-bottom:1px solid #DAD6CC"><span style="font-size:18px">Free play</span><span style="height:44px;padding:0 10px;display:flex;align-items:center;font-family:'DM Mono',monospace;font-size:12px">BOARD ▴</span></div>
+        <div style="height:260px;flex:none;background:#060608;opacity:.45"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;top:120px;background:#F4F2ED;border-top:1px solid #1D1D1B;border-radius:12px 12px 0 0;padding:16px 18px;display:flex;flex-direction:column;gap:14px;overflow:hidden">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">START FROM</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+              <span style="height:44px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;padding:0 10px;font-size:16px">Empty board</span>
+              <span style="height:44px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;padding:0 10px;font-size:16px">Practice start</span>
+              <span style="height:44px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;padding:0 10px;font-size:16px">Any lesson ▾</span>
+              <span style="height:44px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;padding:0 10px;font-size:16px">My last match</span>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">NEW RULES · ANY NUMBER</div>
+            <div style="display:flex;flex-direction:column;border-top:1px solid #DAD6CC;font-size:16px">
+              <div style="min-height:44px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #DAD6CC"><span>Gliders may also fly diagonally</span><span style="font-family:'DM Mono',monospace;font-size:12px;background:#1D1D1B;color:#F4F2ED;padding:4px 8px;border-radius:2px">ON</span></div>
+              <div style="min-height:44px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #DAD6CC"><span>Gliders cost 3 points</span><span style="font-family:'DM Mono',monospace;font-size:12px;border:1px solid #DAD6CC;padding:4px 8px;border-radius:2px;color:#6A675F">OFF</span></div>
+              <div style="min-height:44px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #DAD6CC"><span>Sight of 2 squares</span><span style="font-family:'DM Mono',monospace;font-size:12px;border:1px solid #DAD6CC;padding:4px 8px;border-radius:2px;color:#6A675F">OFF</span></div>
+            </div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">SEE AS</div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);border:1px solid #1D1D1B;border-radius:3px;overflow:hidden;font-family:'DM Mono',monospace;font-size:12px"><span style="height:40px;display:flex;align-items:center;justify-content:center;background:#1D1D1B;color:#F4F2ED">ALL</span><span style="height:40px;display:flex;align-items:center;justify-content:center">CYAN</span><span style="height:40px;display:flex;align-items:center;justify-content:center">AMBER</span></div>
+          </div>
+          <div style="flex:1"></div>
+          <span style="height:48px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em">COPY A LINK TO THIS BOARD</span>
+          <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;text-align:center">The link holds the board. Nothing is stored on our side.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="gc" style="display:flex;flex-direction:column;gap:16px">
+  <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;color:#6A675F">C · THE COMPUTER LADDER · SIGNED IN</div>
+  <div style="display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start">
+
+    <div id="c1" style="display:flex;flex-direction:column;gap:8px">
+      <div style="font-family:'DM Mono',monospace;font-size:12px"><span style="background:#1D1D1B;color:#F4F2ED;padding:3px 7px;border-radius:3px">C1</span> The ladder</div>
+      <div style="width:390px;height:695px;background:#F4F2ED;border-radius:18px;overflow:hidden;box-shadow:0 0 0 1px #CFCAC0,0 20px 50px rgba(29,29,27,.16);display:flex;flex-direction:column">
+        <div style="height:44px;flex:none;display:flex;align-items:center;gap:8px;padding:0 16px;border-bottom:1px solid #DAD6CC"><span style="font-family:'DM Mono',monospace;font-size:16px;color:#6A675F">←</span><span style="font-size:18px">The computer ladder</span></div>
+        <div style="flex:1;min-height:0;overflow:hidden;padding:14px 18px;display:flex;flex-direction:column;gap:10px">
+          <div style="font-size:17px;line-height:1.4;color:#4A463F;text-wrap:pretty">Win once to open the next rung. Replay any rung you've opened. Only you see this page.</div>
+          <div style="display:flex;flex-direction:column-reverse;gap:0;border-top:1px solid #1D1D1B">
+            <div style="display:grid;grid-template-columns:36px 1fr auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid #DAD6CC"><span style="font-family:'DM Mono',monospace;font-size:14px;width:28px;height:28px;border:1px solid #1D1D1B;display:flex;align-items:center;justify-content:center">✓</span><span style="display:flex;flex-direction:column"><span style="font-size:19px">1 · Rival</span><span style="font-size:15px;color:#4A463F">Fires one glider a turn at a tower it can see. Never defends.</span></span><span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;text-align:right">WON IN<br><span style="border-bottom:2px dotted #B3306E">38</span> STEPS</span></div>
+            <div style="display:grid;grid-template-columns:36px 1fr auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid #DAD6CC"><span style="font-family:'DM Mono',monospace;font-size:14px;width:28px;height:28px;border:1px solid #1D1D1B;display:flex;align-items:center;justify-content:center">✓</span><span style="display:flex;flex-direction:column"><span style="font-size:19px">2 · Blocker</span><span style="font-size:15px;color:#4A463F">Also puts squares in front of gliders it sees coming.</span></span><span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;text-align:right">WON IN<br><span style="border-bottom:2px dotted #B3306E">61</span> STEPS</span></div>
+            <div style="display:grid;grid-template-columns:36px 1fr auto;gap:10px;align-items:center;padding:10px 8px;margin:0 -8px;border-bottom:1px solid #1D1D1B;background:#FBFAF6;outline:1px solid #1D1D1B"><span style="font-family:'DM Mono',monospace;font-size:12px;width:28px;height:28px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center">3</span><span style="display:flex;flex-direction:column"><span style="font-size:19px">3 · Builder</span><span style="font-size:15px;color:#4A463F">Also builds towers to see and reach further.</span></span><span style="font-family:'DM Mono',monospace;font-size:12px;text-align:right"><span style="border-bottom:2px dotted #B3306E">2</span> TRIES<br>PLAY →</span></div>
+            <div style="display:grid;grid-template-columns:36px 1fr auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px dashed #ABA79D;color:#6A675F"><span style="font-family:'DM Mono',monospace;font-size:12px;width:28px;height:28px;border:1px dashed #ABA79D;display:flex;align-items:center;justify-content:center">4</span><span style="display:flex;flex-direction:column"><span style="font-size:19px">4 · Opportunist</span><span style="font-size:15px">Also uses the match's new rule against you.</span></span><span style="font-family:'DM Mono',monospace;font-size:12px">CLOSED</span></div>
+            <div style="display:grid;grid-template-columns:36px 1fr auto;gap:10px;align-items:center;padding:10px 0;border-bottom:1px dashed #ABA79D;color:#6A675F"><span style="font-family:'DM Mono',monospace;font-size:12px;width:28px;height:28px;border:1px dashed #ABA79D;display:flex;align-items:center;justify-content:center">5</span><span style="display:flex;flex-direction:column"><span style="font-size:19px">5 · Planner</span><span style="font-size:15px">Tests its moves two turns ahead on what it can see.</span></span><span style="font-family:'DM Mono',monospace;font-size:12px">CLOSED</span></div>
+          </div>
+          <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;line-height:1.5">Every rung plays by the same rules and sees only what its towers light. Harder means better plans, never more information.</div>
+        </div>
+        <div style="flex:none;padding:10px 18px 14px;border-top:1px solid #DAD6CC"><span style="height:48px;border-radius:3px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em">PLAY RUNG 3</span></div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;max-width:390px;line-height:1.5">Drawn top-down as a ladder would read, rung 1 at the bottom. Records are saved to your FID and readable by you only.</div>
+    </div>
+
+    <div id="c2" style="display:flex;flex-direction:column;gap:8px">
+      <div style="font-family:'DM Mono',monospace;font-size:12px"><span style="background:#1D1D1B;color:#F4F2ED;padding:3px 7px;border-radius:3px">C2</span> Signed out</div>
+      <div style="width:390px;height:695px;background:#F4F2ED;border-radius:18px;overflow:hidden;box-shadow:0 0 0 1px #CFCAC0,0 20px 50px rgba(29,29,27,.16);display:flex;flex-direction:column">
+        <div style="height:44px;flex:none;display:flex;align-items:center;gap:8px;padding:0 16px;border-bottom:1px solid #DAD6CC"><span style="font-family:'DM Mono',monospace;font-size:16px;color:#6A675F">←</span><span style="font-size:18px">The computer ladder</span></div>
+        <div style="flex:1;padding:14px 18px;display:flex;flex-direction:column;gap:10px">
+          <div style="border:1px dashed #6A675F;border-radius:3px;padding:14px;display:flex;flex-direction:column;gap:8px">
+            <div style="font-size:20px">Sign in to climb</div>
+            <div style="font-size:17px;line-height:1.4;color:#4A463F;text-wrap:pretty">The ladder remembers which rungs you've beaten, under your Farcaster account. Only you can see it.</div>
+            <span style="height:48px;border-radius:3px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em">SIGN IN WITH FARCASTER</span>
+          </div>
+          <div style="display:flex;flex-direction:column;border-top:1px solid #DAD6CC;color:#6A675F">
+            <div style="padding:10px 0;border-bottom:1px dashed #ABA79D;font-size:17px">5 · Planner</div>
+            <div style="padding:10px 0;border-bottom:1px dashed #ABA79D;font-size:17px">4 · Opportunist</div>
+            <div style="padding:10px 0;border-bottom:1px dashed #ABA79D;font-size:17px">3 · Builder</div>
+            <div style="padding:10px 0;border-bottom:1px dashed #ABA79D;font-size:17px">2 · Blocker</div>
+            <div style="padding:10px 0;border-bottom:1px dashed #ABA79D;font-size:17px">1 · Rival</div>
+          </div>
+          <div style="flex:1"></div>
+          <span style="height:48px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em">PLAY A PRACTICE MATCH INSTEAD</span>
+        </div>
+      </div>
+    </div>
+
+    <div id="c3" style="display:flex;flex-direction:column;gap:8px">
+      <div style="font-family:'DM Mono',monospace;font-size:12px"><span style="background:#1D1D1B;color:#F4F2ED;padding:3px 7px;border-radius:3px">C3</span> Rung start · the new rule</div>
+      <div style="width:390px;height:695px;background:#F4F2ED;border-radius:18px;overflow:hidden;box-shadow:0 0 0 1px #CFCAC0,0 20px 50px rgba(29,29,27,.16);display:flex;flex-direction:column">
+        <div style="height:44px;flex:none;display:flex;align-items:center;gap:8px;padding:0 16px;border-bottom:1px solid #DAD6CC"><span style="font-family:'DM Mono',monospace;font-size:16px;color:#6A675F">←</span><span style="font-size:18px">Rung 3 · Builder</span></div>
+        <div style="position:relative;height:260px;flex:none;background:#060608">
+          <div style="display:grid;grid-template-columns:repeat(15,26px);grid-template-rows:repeat(10,26px)"><sc-for list="{{ B.base.cells }}" as="c" hint-placeholder-count="150"><div style="margin:1px;background:{{ c.bg }};border:{{ c.bd }};box-shadow:{{ c.sh }};color:{{ c.fg }};font-size:{{ c.fs }};display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;line-height:1;box-sizing:border-box">{{ c.t }}</div></sc-for></div>
+          <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#F4F2ED;color:#1D1D1B;padding:10px 14px;display:flex;flex-direction:column;gap:2px;text-align:center;min-width:240px">
+            <span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">NEW RULE THIS MATCH</span>
+            <span style="font-size:21px">Gliders may also fly diagonally.</span>
+          </div>
+        </div>
+        <div style="flex:1;padding:14px 18px;display:flex;flex-direction:column;gap:10px">
+          <div style="font-size:18px;line-height:1.42;text-wrap:pretty">Amber builds new towers to see further and to build further. Watch the lit area grow on its side.</div>
+          <div style="display:grid;grid-template-columns:auto 1fr;gap:4px 14px;font-size:16px;border-top:1px solid #DAD6CC;padding-top:10px">
+            <span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;padding-top:3px">BOARD</span><span>15 × 10, 2 towers each, 96 steps</span>
+            <span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;padding-top:3px">TURNS</span><span>Every 12 steps, 8 points</span>
+            <span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;padding-top:3px">TO OPEN 4</span><span>Win once</span>
+          </div>
+          <div style="flex:1"></div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap"><span style="font-family:'DM Mono',monospace;font-size:12px;padding:3px 7px;border:1px dashed #6A675F;color:#6A675F;border-radius:2px">RULES INVENTED FOR THIS EDITION</span><span style="font-family:'DM Mono',monospace;font-size:12px;padding:3px 7px;border:1px solid #1D1D1B;border-radius:2px">A NEW RULE EVERY MATCH · c4-b84</span></div>
+        </div>
+        <div style="flex:none;padding:10px 18px 14px;border-top:1px solid #DAD6CC"><span style="height:48px;border-radius:3px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em">START SETUP</span></div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;max-width:390px;line-height:1.5">The rule is drawn as this screen opens, so it can't be rerolled by going back. A drawn rule stays for replays of the same try.</div>
+    </div>
+
+    <div id="c5" style="display:flex;flex-direction:column;gap:8px">
+      <div style="font-family:'DM Mono',monospace;font-size:12px"><span style="background:#1D1D1B;color:#F4F2ED;padding:3px 7px;border-radius:3px">C5</span> ··· → Resign</div>
+      <div style="width:390px;height:695px;background:#F4F2ED;border-radius:18px;overflow:hidden;box-shadow:0 0 0 1px #CFCAC0,0 20px 50px rgba(29,29,27,.16);display:flex;flex-direction:column;position:relative">
+        <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 6px 0 16px;border-bottom:1px solid #DAD6CC"><span style="font-size:18px">Rung 3 · Builder</span><span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace">···</span></div>
+        <div style="height:260px;flex:none;background:#060608"></div>
+        <div style="position:absolute;inset:0;background:rgba(29,29,27,.45)"></div>
+        <div style="position:absolute;left:0;right:0;bottom:0;background:#F4F2ED;border-radius:12px 12px 0 0;padding:18px;display:flex;flex-direction:column;gap:12px">
+          <div style="font-size:24px">Resign this match?</div>
+          <div style="font-size:17px;line-height:1.42;color:#4A463F;text-wrap:pretty">It counts as a loss on rung 3. You keep every rung you've already opened. In the book, players resign when they see the end coming (c4-b141).</div>
+          <span style="height:48px;border-radius:3px;background:#8A2F2F;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em">RESIGN</span>
+          <span style="height:48px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em">KEEP PLAYING</span>
+        </div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;max-width:390px;line-height:1.5">Same sheet in practice and one-on-one; the middle line changes ("Counts as a loss against @name").</div>
+    </div>
+
+    <div id="c4" style="display:flex;flex-direction:column;gap:8px">
+      <div style="font-family:'DM Mono',monospace;font-size:12px"><span style="background:#1D1D1B;color:#F4F2ED;padding:3px 7px;border-radius:3px">C4</span> Result · rung 4 opens</div>
+      <div style="width:390px;height:695px;background:#F4F2ED;border-radius:18px;overflow:hidden;box-shadow:0 0 0 1px #CFCAC0,0 20px 50px rgba(29,29,27,.16);display:flex;flex-direction:column">
+        <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 6px 0 16px;border-bottom:1px solid #DAD6CC"><span style="font-size:18px">Rung 3 · Builder</span><span style="width:44px"></span></div>
+        <div style="position:relative;height:260px;flex:none;background:#060608">
+          <div style="display:grid;grid-template-columns:repeat(15,26px);grid-template-rows:repeat(10,26px)"><sc-for list="{{ B.result.cells }}" as="c" hint-placeholder-count="150"><div style="margin:1px;background:{{ c.bg }};border:{{ c.bd }};box-shadow:{{ c.sh }};color:{{ c.fg }};font-size:{{ c.fs }};display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;line-height:1;box-sizing:border-box">{{ c.t }}</div></sc-for></div>
+          <div style="position:absolute;left:8px;top:8px;background:rgba(5,5,7,.82);padding:5px 8px;border-radius:3px;font-family:'DM Mono',monospace;font-size:12px;color:#E7E4DD">STEP <span style="border-bottom:2px dotted #B3306E">71</span> · WHOLE BOARD SHOWN</div>
+        </div>
+        <div style="flex:1;padding:16px 18px;display:flex;flex-direction:column;gap:10px">
+          <div style="font-size:30px;line-height:1.1">You win</div>
+          <div style="font-size:18px;line-height:1.42">Amber is out of towers at step <span style="border-bottom:2px dotted #B3306E">71</span>. You kept 2.</div>
+          <div style="border:1px solid #1D1D1B;border-radius:3px;padding:12px;display:flex;align-items:center;gap:12px;background:#FBFAF6">
+            <span style="font-family:'DM Mono',monospace;font-size:12px;width:28px;height:28px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center">4</span>
+            <span style="display:flex;flex-direction:column"><span style="font-size:19px">Rung 4 · Opportunist is open</span><span style="font-size:15px;color:#4A463F">Uses the match's new rule against you.</span></span>
+          </div>
+          <div style="flex:1"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+            <span style="height:48px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em">WATCH IT AGAIN</span>
+            <span style="height:48px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em">OPEN IN FREE PLAY</span>
+          </div>
+          <span style="height:48px;border-radius:3px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em">PLAY RUNG 4</span>
+        </div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;max-width:390px;line-height:1.5">The result reveals the whole board and the true counts. A loss keeps the rung open and shows "Try again"; nothing is lost.</div>
+    </div>
+  </div>
+
+  <div id="c6" style="display:flex;flex-direction:column;gap:8px">
+    <div style="font-family:'DM Mono',monospace;font-size:12px"><span style="background:#1D1D1B;color:#F4F2ED;padding:3px 7px;border-radius:3px">C6</span> Desktop ladder, in the site's middle column</div>
+    <div style="width:1280px;height:800px;background:#F4F2ED;border-radius:8px;overflow:hidden;box-shadow:0 0 0 1px #CFCAC0,0 20px 50px rgba(29,29,27,.16);display:flex">
+      <div style="width:220px;flex:none;border-right:1px solid #DAD6CC;padding:18px;display:flex;flex-direction:column;gap:10px;font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">
+        <span style="font-family:'Crimson Pro',serif;font-size:22px;color:#1D1D1B">Snowmoon</span>
+        <span>READ</span><span>ADAPTATIONS</span><span>IMAGES</span><span style="color:#1D1D1B;border-left:2px solid #1D1D1B;padding-left:8px;margin-left:-10px">MINPENTAI</span><span>ABOUT</span>
+      </div>
+      <div style="flex:1;display:flex;flex-direction:column;min-width:0">
+        <div style="height:52px;flex:none;display:flex;align-items:center;gap:24px;padding:0 32px;border-bottom:1px solid #DAD6CC;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em"><span style="color:#6A675F">LEARN</span><span style="border-bottom:2px solid #1D1D1B;padding:17px 0">PLAY</span><span style="color:#6A675F">FREE PLAY</span></div>
+        <div style="flex:1;display:grid;grid-template-columns:minmax(0,1fr) 420px;gap:40px;padding:32px">
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div style="font-size:36px">The computer ladder</div>
+            <div style="font-size:18px;color:#4A463F">Win once to open the next rung. Only you see this page.</div>
+            <div style="display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:8px;padding-top:12px;align-items:end">
+              <div style="height:120px;border:1px solid #1D1D1B;border-radius:3px;padding:10px;display:flex;flex-direction:column;justify-content:space-between"><span style="font-family:'DM Mono',monospace;font-size:12px">✓ 1</span><span style="font-size:18px">Rival</span></div>
+              <div style="height:150px;border:1px solid #1D1D1B;border-radius:3px;padding:10px;display:flex;flex-direction:column;justify-content:space-between"><span style="font-family:'DM Mono',monospace;font-size:12px">✓ 2</span><span style="font-size:18px">Blocker</span></div>
+              <div style="height:180px;border:1px solid #1D1D1B;border-radius:3px;padding:10px;display:flex;flex-direction:column;justify-content:space-between;background:#1D1D1B;color:#F4F2ED"><span style="font-family:'DM Mono',monospace;font-size:12px">3 · NEXT</span><span style="font-size:18px">Builder</span></div>
+              <div style="height:210px;border:1px dashed #ABA79D;border-radius:3px;padding:10px;display:flex;flex-direction:column;justify-content:space-between;color:#6A675F"><span style="font-family:'DM Mono',monospace;font-size:12px">4</span><span style="font-size:18px">Opportunist</span></div>
+              <div style="height:240px;border:1px dashed #ABA79D;border-radius:3px;padding:10px;display:flex;flex-direction:column;justify-content:space-between;color:#6A675F"><span style="font-family:'DM Mono',monospace;font-size:12px">5</span><span style="font-size:18px">Planner</span></div>
+            </div>
+            <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;padding-top:6px">YOUR RECORD · <span style="border-bottom:2px dotted #B3306E">9</span> MATCHES · <span style="border-bottom:2px dotted #B3306E">4</span> WON · VISIBLE TO YOU ONLY</div>
+          </div>
+          <div style="border:1px solid #1D1D1B;border-radius:3px;background:#FBFAF6;padding:20px;display:flex;flex-direction:column;gap:12px">
+            <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">RUNG 3</div>
+            <div style="font-size:28px">Builder</div>
+            <div style="font-size:18px;line-height:1.42">Fires at towers it can see, blocks gliders it sees coming, and builds towers to see and reach further.</div>
+            <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;line-height:1.6">YOUR TRIES · <span style="border-bottom:2px dotted #B3306E">2</span> · BEST: <span style="border-bottom:2px dotted #B3306E">1</span> TOWER LEFT AT STEP 96</div>
+            <div style="flex:1"></div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap"><span style="font-family:'DM Mono',monospace;font-size:12px;padding:3px 7px;border:1px dashed #6A675F;color:#6A675F;border-radius:2px">RULES INVENTED FOR THIS EDITION</span></div>
+            <span style="height:48px;border-radius:3px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em">PLAY RUNG 3</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="gd" style="display:flex;flex-direction:column;gap:16px">
+  <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;color:#6A675F">D · ONE-ON-ONE · SIGNED IN</div>
+  <div style="display:flex;gap:32px;flex-wrap:wrap;align-items:flex-start">
+
+    <div id="d1" style="display:flex;flex-direction:column;gap:8px">
+      <div style="font-family:'DM Mono',monospace;font-size:12px"><span style="background:#1D1D1B;color:#F4F2ED;padding:3px 7px;border-radius:3px">D1</span> Play a person</div>
+      <div style="width:390px;height:695px;background:#F4F2ED;border-radius:18px;overflow:hidden;box-shadow:0 0 0 1px #CFCAC0,0 20px 50px rgba(29,29,27,.16);display:flex;flex-direction:column">
+        <div style="height:44px;flex:none;display:flex;align-items:center;gap:8px;padding:0 16px;border-bottom:1px solid #DAD6CC"><span style="font-family:'DM Mono',monospace;font-size:16px;color:#6A675F">←</span><span style="font-size:18px">Play a person</span></div>
+        <div style="flex:1;padding:18px;display:flex;flex-direction:column;gap:12px">
+          <div style="font-size:19px;line-height:1.45;text-wrap:pretty">You'll be matched with the next signed-in player who is ready. You both see the same new rule at the same moment.</div>
+          <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:16px;border-top:1px solid #DAD6CC;padding-top:10px">
+            <span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;padding-top:3px">BOARD</span><span>15 × 10, 2 towers each, 96 steps</span>
+            <span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;padding-top:3px">TIME</span><span>90 s to set up, 45 s each turn to act</span>
+            <span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;padding-top:3px">LENGTH</span><span>About 8 minutes</span>
+            <span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;padding-top:3px">SHOWN</span><span>Your Farcaster name, to your opponent only</span>
+          </div>
+          <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;line-height:1.5">NO RATING, NO RANKING. RESULTS ARE KEPT FOR THE TWO PLAYERS ONLY.</div>
+          <div style="flex:1"></div>
+          <span style="height:48px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em">OR SEND ONE PERSON A LINK</span>
+        </div>
+        <div style="flex:none;padding:10px 18px 14px;border-top:1px solid #DAD6CC;display:flex;flex-direction:column;gap:6px"><span style="height:48px;border-radius:3px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em">I'M READY</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;text-align:center">Signed in as <span style="border-bottom:2px dotted #B3306E">@ilse</span></span></div>
+      </div>
+    </div>
+
+    <div id="d2" style="display:flex;flex-direction:column;gap:8px">
+      <div style="font-family:'DM Mono',monospace;font-size:12px"><span style="background:#1D1D1B;color:#F4F2ED;padding:3px 7px;border-radius:3px">D2</span> Looking for a player</div>
+      <div style="width:390px;height:695px;background:#F4F2ED;border-radius:18px;overflow:hidden;box-shadow:0 0 0 1px #CFCAC0,0 20px 50px rgba(29,29,27,.16);display:flex;flex-direction:column">
+        <div style="height:44px;flex:none;display:flex;align-items:center;gap:8px;padding:0 16px;border-bottom:1px solid #DAD6CC"><span style="font-size:18px">Play a person</span></div>
+        <div style="flex:1;padding:18px;display:flex;flex-direction:column;gap:14px;justify-content:center;align-items:center;text-align:center">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;letter-spacing:.06em">READY · WAITING <span style="border-bottom:2px dotted #B3306E">0:14</span></div>
+          <div style="font-size:26px;line-height:1.15;max-width:280px">Looking for another ready player</div>
+          <div style="font-size:17px;line-height:1.42;color:#4A463F;max-width:300px;text-wrap:pretty">You can leave this screen. We'll ask you here when someone's found, and you'll have 20 seconds to accept.</div>
+          <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;max-width:300px;line-height:1.5">AFTER 3 MINUTES YOU'RE TAKEN OFF THE LIST. TRY THE LADDER MEANWHILE.</div>
+        </div>
+        <div style="flex:none;padding:10px 18px 14px;border-top:1px solid #DAD6CC"><span style="height:48px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em">I'M NOT READY</span></div>
+      </div>
+    </div>
+
+    <div id="d3" style="display:flex;flex-direction:column;gap:8px">
+      <div style="font-family:'DM Mono',monospace;font-size:12px"><span style="background:#1D1D1B;color:#F4F2ED;padding:3px 7px;border-radius:3px">D3</span> Matched · setup countdown</div>
+      <div style="width:390px;height:695px;background:#F4F2ED;border-radius:18px;overflow:hidden;box-shadow:0 0 0 1px #CFCAC0,0 20px 50px rgba(29,29,27,.16);display:flex;flex-direction:column">
+        <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 6px 0 16px;border-bottom:1px solid #DAD6CC"><span style="font-size:18px">You v <span style="border-bottom:2px dotted #B3306E">@wren</span></span><span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace">···</span></div>
+        <div style="position:relative;height:260px;flex:none;background:#060608">
+          <div style="display:grid;grid-template-columns:repeat(15,26px);grid-template-rows:repeat(10,26px)"><sc-for list="{{ B.setup.cells }}" as="c" hint-placeholder-count="150"><div style="margin:1px;background:{{ c.bg }};border:{{ c.bd }};box-shadow:{{ c.sh }};color:{{ c.fg }};font-size:{{ c.fs }};display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;line-height:1;box-sizing:border-box">{{ c.t }}</div></sc-for></div>
+          <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#F4F2ED;color:#1D1D1B;padding:8px 12px;display:flex;flex-direction:column;gap:1px;text-align:center"><span style="font-size:22px;font-weight:600;letter-spacing:.03em;white-space:nowrap">MU GU GEI TAU FA</span><span style="font-size:16px;font-style:italic;color:#4A463F;white-space:nowrap">The battle begins in fifty ticks.</span></div>
+        </div>
+        <div style="flex:1;padding:14px 18px;display:flex;flex-direction:column;gap:10px">
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+            <div style="border:1px solid #DAD6CC;border-radius:3px;padding:10px;display:flex;flex-direction:column;gap:2px"><span style="display:flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:12px"><span style="width:10px;height:10px;background:#46D7E8"></span>CYAN · YOU</span><span style="font-size:17px;border-bottom:2px dotted #B3306E;align-self:flex-start">@ilse</span></div>
+            <div style="border:1px solid #DAD6CC;border-radius:3px;padding:10px;display:flex;flex-direction:column;gap:2px"><span style="display:flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:12px"><span style="width:10px;height:10px;background:#FFB43A"></span>AMBER</span><span style="font-size:17px;border-bottom:2px dotted #B3306E;align-self:flex-start">@wren</span></div>
+          </div>
+          <div style="border-top:1px solid #DAD6CC;padding-top:10px;display:flex;flex-direction:column;gap:2px"><span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">NEW RULE THIS MATCH, DRAWN AT RANDOM</span><span style="font-size:20px">Gliders cost 3 points.</span></div>
+          <div style="font-size:17px;line-height:1.42;color:#4A463F">Setup: 90 seconds to place in the lit area. Then the battle runs.</div>
+          <div style="flex:1"></div>
+          <div style="display:flex;gap:6px;flex-wrap:wrap"><span style="font-family:'DM Mono',monospace;font-size:12px;padding:3px 7px;border:1px solid #1D1D1B;border-radius:2px">COUNTDOWN FROM THE BOOK · c4-b97–b98</span><span style="font-family:'DM Mono',monospace;font-size:12px;padding:3px 7px;border:1px dashed #6A675F;color:#6A675F;border-radius:2px">RULES INVENTED</span></div>
+        </div>
+        <div style="flex:none;padding:10px 18px 14px;border-top:1px solid #DAD6CC"><span style="height:48px;border-radius:3px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em">START SETUP · 1:30</span></div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;max-width:390px;line-height:1.5">Before this: "Found a player. Accept? 0:20" over D2. Declining or not answering puts the other person back at the front of the list.</div>
+    </div>
+
+    <div id="d4" style="display:flex;flex-direction:column;gap:8px">
+      <div style="font-family:'DM Mono',monospace;font-size:12px"><span style="background:#1D1D1B;color:#F4F2ED;padding:3px 7px;border-radius:3px">D4</span> Turn to act · you've ended yours</div>
+      <div style="width:390px;height:695px;background:#F4F2ED;border-radius:18px;overflow:hidden;box-shadow:0 0 0 1px #CFCAC0,0 20px 50px rgba(29,29,27,.16);display:flex;flex-direction:column">
+        <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 6px 0 16px;border-bottom:1px solid #DAD6CC"><span style="font-size:18px">You v <span style="border-bottom:2px dotted #B3306E">@wren</span></span><span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace">···</span></div>
+        <div style="position:relative;height:260px;flex:none;background:#060608">
+          <div style="display:grid;grid-template-columns:repeat(15,26px);grid-template-rows:repeat(10,26px)"><sc-for list="{{ B.act.cells }}" as="c" hint-placeholder-count="150"><div style="margin:1px;background:{{ c.bg }};border:{{ c.bd }};box-shadow:{{ c.sh }};color:{{ c.fg }};font-size:{{ c.fs }};display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;line-height:1;box-sizing:border-box">{{ c.t }}</div></sc-for></div>
+          <div style="position:absolute;left:8px;top:8px;background:rgba(5,5,7,.82);padding:5px 8px;border-radius:3px;font-family:'DM Mono',monospace;font-size:12px;color:#E7E4DD">STEP 24 · CYAN 2 · AMBER 0 SEEN</div>
+          <div style="position:absolute;right:8px;top:8px;width:44px;height:44px;border:1px solid #E7E4DD;border-radius:3px;background:rgba(5,5,7,.82);color:#E7E4DD;display:flex;align-items:center;justify-content:center;font-size:18px">⤢</div>
+        </div>
+        <div style="flex:none;height:4px;background:#DAD6CC;margin:10px 18px 0"><div style="width:47%;height:4px;background:#1D1D1B"></div></div>
+        <div style="flex:1;padding:10px 18px;display:flex;flex-direction:column;gap:8px">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em">TURN ENDED · WAITING FOR <span style="border-bottom:2px dotted #B3306E">@WREN</span> · <span style="border-bottom:2px dotted #B3306E">0:21</span></div>
+          <div style="font-size:18px;line-height:1.42;text-wrap:pretty">Your glider and square are placed. They appear for both of you when the run starts. Tap one to take it back while the clock runs.</div>
+          <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">NEW RULE: GLIDERS COST 3 · 1 OF 8 PTS LEFT</div>
+        </div>
+        <div style="flex:none;padding:10px 18px 14px;border-top:1px solid #DAD6CC"><span style="height:48px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em">CHANGE MY TURN</span></div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;max-width:390px;line-height:1.5">The run starts when both have ended their turn or the 45 s run out. The bar is the shared clock.</div>
+    </div>
+
+    <div id="d5" style="display:flex;flex-direction:column;gap:8px">
+      <div style="font-family:'DM Mono',monospace;font-size:12px"><span style="background:#1D1D1B;color:#F4F2ED;padding:3px 7px;border-radius:3px">D5</span> The run · opponent disconnected</div>
+      <div style="width:390px;height:695px;background:#F4F2ED;border-radius:18px;overflow:hidden;box-shadow:0 0 0 1px #CFCAC0,0 20px 50px rgba(29,29,27,.16);display:flex;flex-direction:column">
+        <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 6px 0 16px;border-bottom:1px solid #DAD6CC"><span style="font-size:18px">You v <span style="border-bottom:2px dotted #B3306E">@wren</span></span><span style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace">···</span></div>
+        <div style="position:relative;height:260px;flex:none;background:#060608">
+          <div style="display:grid;grid-template-columns:repeat(15,26px);grid-template-rows:repeat(10,26px);opacity:.55"><sc-for list="{{ B.run.cells }}" as="c" hint-placeholder-count="150"><div style="margin:1px;background:{{ c.bg }};border:{{ c.bd }};box-shadow:{{ c.sh }};color:{{ c.fg }};font-size:{{ c.fs }};display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;line-height:1;box-sizing:border-box">{{ c.t }}</div></sc-for></div>
+          <div style="position:absolute;left:8px;top:8px;background:rgba(5,5,7,.82);padding:5px 8px;border-radius:3px;font-family:'DM Mono',monospace;font-size:12px;color:#E7E4DD">STEP 30 · PAUSED</div>
+          <div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(5,5,7,.88);border-top:2px solid #FFB43A;padding:10px 14px;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;color:#F4F2ED;text-align:center;line-height:1.5;white-space:nowrap"><span style="border-bottom:2px dotted #B3306E">@WREN</span> LOST CONNECTION<br>BACK WITHIN 0:48</div>
+        </div>
+        <div style="flex:1;padding:14px 18px;display:flex;flex-direction:column;gap:8px">
+          <div style="font-size:18px;line-height:1.42;text-wrap:pretty">The match is paused for both of you. If they're not back in 60 seconds, it counts as resigning and you win.</div>
+          <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;line-height:1.5">IF YOU LOSE CONNECTION, YOU GET THE SAME 60 SECONDS. REOPENING THE APP TAKES YOU BACK INTO THE MATCH.</div>
+        </div>
+        <div style="flex:none;padding:10px 18px 14px;border-top:1px solid #DAD6CC"><span style="height:48px;border:1px solid #DAD6CC;color:#6A675F;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em">PAUSED</span></div>
+      </div>
+    </div>
+
+    <div id="d6" style="display:flex;flex-direction:column;gap:8px">
+      <div style="font-family:'DM Mono',monospace;font-size:12px"><span style="background:#1D1D1B;color:#F4F2ED;padding:3px 7px;border-radius:3px">D6</span> Result · loss · rematch</div>
+      <div style="width:390px;height:695px;background:#F4F2ED;border-radius:18px;overflow:hidden;box-shadow:0 0 0 1px #CFCAC0,0 20px 50px rgba(29,29,27,.16);display:flex;flex-direction:column">
+        <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 6px 0 16px;border-bottom:1px solid #DAD6CC"><span style="font-size:18px">You v <span style="border-bottom:2px dotted #B3306E">@wren</span></span><span style="width:44px"></span></div>
+        <div style="position:relative;height:260px;flex:none;background:#060608">
+          <div style="display:grid;grid-template-columns:repeat(15,26px);grid-template-rows:repeat(10,26px)"><sc-for list="{{ B.loss.cells }}" as="c" hint-placeholder-count="150"><div style="margin:1px;background:{{ c.bg }};border:{{ c.bd }};box-shadow:{{ c.sh }};color:{{ c.fg }};font-size:{{ c.fs }};display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;line-height:1;box-sizing:border-box">{{ c.t }}</div></sc-for></div>
+          <div style="position:absolute;left:8px;top:8px;background:rgba(5,5,7,.82);padding:5px 8px;border-radius:3px;font-family:'DM Mono',monospace;font-size:12px;color:#E7E4DD">STEP 96 · WHOLE BOARD SHOWN</div>
+        </div>
+        <div style="flex:1;padding:16px 18px;display:flex;flex-direction:column;gap:10px">
+          <div style="font-size:30px;line-height:1.1"><span style="border-bottom:2px dotted #B3306E">@wren</span> wins</div>
+          <div style="font-size:18px;line-height:1.42">Time ran out at step 96. Amber had 2 towers, you had 1.</div>
+          <div style="border:1px dashed #6A675F;border-radius:3px;padding:10px 12px;font-size:16px;line-height:1.4;color:#4A463F">Rematch? <span style="border-bottom:2px dotted #B3306E">@wren</span> asked for one. A new rule is drawn. <span style="font-family:'DM Mono',monospace;font-size:12px">0:16</span></div>
+          <div style="flex:1"></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px">
+            <span style="height:48px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em">WATCH IT AGAIN</span>
+            <span style="height:48px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em">DONE</span>
+          </div>
+          <span style="height:48px;border-radius:3px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em">REMATCH</span>
+        </div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;max-width:390px;line-height:1.5">A rematch starts only when both press it within 20 s. The replay is the whole board, steps 0–96.</div>
+    </div>
+
+    <div id="d7" style="display:flex;flex-direction:column;gap:8px">
+      <div style="font-family:'DM Mono',monospace;font-size:12px"><span style="background:#1D1D1B;color:#F4F2ED;padding:3px 7px;border-radius:3px">D7</span> They left</div>
+      <div style="width:390px;height:695px;background:#F4F2ED;border-radius:18px;overflow:hidden;box-shadow:0 0 0 1px #CFCAC0,0 20px 50px rgba(29,29,27,.16);display:flex;flex-direction:column">
+        <div style="height:44px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 6px 0 16px;border-bottom:1px solid #DAD6CC"><span style="font-size:18px">You v <span style="border-bottom:2px dotted #B3306E">@wren</span></span><span style="width:44px"></span></div>
+        <div style="flex:1;padding:18px;display:flex;flex-direction:column;gap:12px">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">STEP 30 · MATCH OVER</div>
+          <div style="font-size:30px;line-height:1.1">You win</div>
+          <div style="font-size:18px;line-height:1.42;text-wrap:pretty"><span style="border-bottom:2px dotted #B3306E">@wren</span> didn't come back within 60 seconds. That counts as resigning.</div>
+          <div style="font-size:17px;line-height:1.42;color:#4A463F;text-wrap:pretty">Connections drop. Nothing about this is shown to anyone else.</div>
+          <div style="flex:1"></div>
+          <span style="height:48px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em">WATCH IT AGAIN</span>
+          <span style="height:48px;border-radius:3px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em">I'M READY AGAIN</span>
+        </div>
+      </div>
+      <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;max-width:390px;line-height:1.5">Leaving on purpose (··· → Leave) asks first: "Leaving counts as resigning." Leaving during setup cancels the match with no result.</div>
+    </div>
+  </div>
+
+  <div id="d8" style="display:flex;flex-direction:column;gap:8px">
+    <div style="font-family:'DM Mono',monospace;font-size:12px"><span style="background:#1D1D1B;color:#F4F2ED;padding:3px 7px;border-radius:3px">D8</span> Desktop one-on-one, turn to act</div>
+    <div style="width:1280px;height:800px;background:#F4F2ED;border-radius:8px;overflow:hidden;box-shadow:0 0 0 1px #CFCAC0,0 20px 50px rgba(29,29,27,.16);display:flex">
+      <div style="width:56px;flex:none;border-right:1px solid #DAD6CC;display:flex;flex-direction:column;align-items:center;padding-top:16px;gap:16px;font-family:'DM Mono',monospace;font-size:12px;color:#6A675F"><span>≡</span></div>
+      <div style="flex:1;display:flex;flex-direction:column;min-width:0">
+        <div style="height:52px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 24px;border-bottom:1px solid #DAD6CC"><span style="font-size:22px">You v <span style="border-bottom:2px dotted #B3306E">@wren</span></span><span style="display:flex;gap:8px;font-family:'DM Mono',monospace;font-size:12px"><span style="height:36px;padding:0 12px;border:1px solid #DAD6CC;border-radius:3px;display:flex;align-items:center">⤢ FULL SCREEN</span><span style="height:36px;padding:0 12px;border:1px solid #DAD6CC;border-radius:3px;display:flex;align-items:center">···</span></span></div>
+        <div style="flex:1;display:flex;gap:28px;padding:24px;min-height:0">
+          <div style="position:relative;background:#060608;width:780px;height:520px;flex:none">
+            <div style="display:grid;grid-template-columns:repeat(15,52px);grid-template-rows:repeat(10,52px)"><sc-for list="{{ B.desk2.cells }}" as="c" hint-placeholder-count="150"><div style="margin:1px;background:{{ c.bg }};border:{{ c.bd }};box-shadow:{{ c.sh }};color:{{ c.fg }};font-size:{{ c.fs }};display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;line-height:1;box-sizing:border-box">{{ c.t }}</div></sc-for></div>
+            <div style="position:absolute;left:10px;top:10px;background:rgba(5,5,7,.82);padding:6px 10px;border-radius:3px;font-family:'DM Mono',monospace;font-size:12px;color:#E7E4DD">STEP 24 · CYAN 2 · AMBER 0 SEEN</div>
+          </div>
+          <div style="flex:1;display:flex;flex-direction:column;gap:12px;min-width:0">
+            <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em">YOUR TURN · <span style="border-bottom:2px dotted #B3306E">0:32</span> LEFT</div>
+            <div style="height:4px;background:#DAD6CC"><div style="width:71%;height:4px;background:#1D1D1B"></div></div>
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px">
+              <span style="height:44px;border-radius:3px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px">GLIDER · 3</span>
+              <span style="height:44px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px">SQUARE · 1</span>
+              <span style="height:44px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px">TOWER · 4</span>
+            </div>
+            <div style="font-size:18px;line-height:1.42">New rule this match: gliders cost 3 points. <span style="border-bottom:2px dotted #B3306E">@wren</span> is placing too; you'll see their pieces when the run starts.</div>
+            <div style="flex:1"></div>
+            <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">1 OF 8 PTS LEFT</div>
+            <span style="height:48px;border-radius:3px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em">END TURN</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;max-width:900px;line-height:1.5">On desktop a match takes the middle and right columns; the assistant column closes for the match and reopens after. The left rail collapses to ≡.</div>
+  </div>
+</section>
+
+<section id="ge" style="display:flex;flex-direction:column;gap:16px;max-width:1100px">
+  <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;color:#6A675F">E · ROOM TO GROW · NOT DESIGNED, ONLY KEPT POSSIBLE</div>
+  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:20px">
+    <div style="border:1px dashed #6A675F;border-radius:6px;padding:18px;display:flex;flex-direction:column;gap:10px">
+      <div style="font-size:20px">The strip is a list</div>
+      <div style="background:#060608;color:#E7E4DD;font-family:'DM Mono',monospace;font-size:12px;padding:6px 8px;border-radius:3px;display:flex;flex-wrap:wrap;gap:4px 12px"><span>STEP 140</span><span style="color:#46D7E8">CYAN 3</span><span style="color:#FFB43A">AMBER 1 SEEN</span><span style="color:#FF5C8A">PINK OUT</span><span style="color:#A98BFF">VIOLET 0 SEEN</span></div>
+      <div style="font-size:16px;line-height:1.4;color:#4A463F">With four players it wraps to two lines. Colours are v3's four.</div>
+    </div>
+    <div style="border:1px dashed #6A675F;border-radius:6px;padding:18px;display:flex;flex-direction:column;gap:10px">
+      <div style="font-size:20px">Bigger boards pan</div>
+      <div style="height:90px;background:#060608;position:relative;border-radius:3px"><div style="position:absolute;left:18%;top:14%;width:46%;height:62%;border:1px solid #E7E4DD"></div><div style="position:absolute;right:6px;bottom:6px;font-family:'DM Mono',monospace;font-size:12px;color:#B4B3BA">24 × 16</div></div>
+      <div style="font-size:16px;line-height:1.4;color:#4A463F">Past 15 squares wide, squares would fall under 26 px on a phone. Full screen becomes the default and the board pans, starting on your corner.</div>
+    </div>
+    <div style="border:1px dashed #6A675F;border-radius:6px;padding:18px;display:flex;flex-direction:column;gap:10px">
+      <div style="font-size:20px">Ready, for more people</div>
+      <div style="font-family:'DM Mono',monospace;font-size:12px;border:1px solid #DAD6CC;border-radius:3px;padding:8px;display:flex;justify-content:space-between"><span>FOUR PLAYERS</span><span>2 OF 4 READY</span></div>
+      <div style="font-size:16px;line-height:1.4;color:#4A463F">D2 waits for a full table instead of one person. Places 1st to 4th by order out, as the book's "third place" (c2-b12).</div>
+    </div>
+  </div>
+</section>
+
+<section id="decisions" style="display:flex;flex-direction:column;gap:12px;max-width:1100px">
+  <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;color:#6A675F">DECISIONS I GUESSED · MINPENTAI</div>
+  <ol style="margin:0;padding:0 0 0 22px;display:flex;flex-direction:column;gap:6px;font-size:17px;line-height:1.45">
+    <li>Full screen in Farcaster can't leave the frame, so it hides our chrome and turns the board upright. Squares go from 26 to 40 px.</li>
+    <li>In full screen, a new glider is aimed by tapping one of four arrows around it on the board. That replaces the arrow row.</li>
+    <li>Three tabs: Learn, Play, Free play. Practice, the ladder and one-on-one sit under Play.</li>
+    <li>Free play replaces the sandbox. The book's cell rule and the c4-b5 board stay reachable from Under the hood. That changes the lessons' "the book's rule, in the sandbox" link and P8d.</li>
+    <li>Free play allows placing only at step 0. Stepping back replays history, because the piece game isn't reversible.</li>
+    <li>The ladder has five rungs: Rival, Blocker, Builder, Opportunist, Planner. Names, behaviours and the order are mine.</li>
+    <li>A rung opens on one win; draws don't count. Progress is saved to your FID, readable only by you. There is no public record and no ranking.</li>
+    <li>The ladder needs sign-in, as asked. Signed-out players keep practice and free play.</li>
+    <li>One-on-one matches the next ready person, with no rating, so there's nothing to rank. A link for one named person is offered too.</li>
+    <li>Turns to act are simultaneous and hidden in every mode. Timers are 90 s for setup and 45 s per turn.</li>
+    <li>Disconnects pause the match for both players for 60 s, then count as resigning. Leaving during setup cancels the match with no result.</li>
+    <li>A rematch needs both players within 20 s and draws a new rule.</li>
+    <li>The setup countdown reuses the book's Dzegoban line (c4-b97–b98), as the broadcast does.</li>
+  </ol>
+</section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const COL = { C: '#46D7E8', A: '#FFB43A' };
+const AR = { '>': ['C', '→'], '<': ['C', '←'], '^': ['C', '↑'], 'v': ['C', '↓'], 'R': ['A', '→'], 'L': ['A', '←'], 'U': ['A', '↑'], 'D': ['A', '↓'] };
+const ROT = { '→': '↑', '←': '↓', '↑': '←', '↓': '→' };
+const OPT = { '1': '→', '2': '←', '3': '↑', '4': '↓' };
+function board(rows, o = {}) {
+  const cs = o.cs || 26, H = rows.length, W = rows[0].length, g = rows.map(r => r.padEnd(W, '.').slice(0, W));
+  const tw = []; g.forEach((r, y) => [...r].forEach((ch, x) => { if (ch === 'C') tw.push([x, y]); }));
+  const near = (x, y, r) => tw.some(([a, b]) => Math.max(Math.abs(a - x), Math.abs(b - y)) <= r);
+  const cell = (x, y) => {
+    const ch = g[y][x], c = { bg: '#0E0F13', bd: '0', sh: 'none', fg: '#E7E4DD', t: '', fs: Math.round(cs * .58) + 'px' };
+    const keep = '#a*1234n'.includes(ch);
+    if (o.fog && !near(x, y, o.fog) && !keep) { c.bg = '#050507'; return c; }
+    let rot = s => o.portrait ? (ROT[s] || s) : s;
+    if (ch === '.' && o.zone && near(x, y, o.zone)) c.bg = '#14272C';
+    else if (ch === '#') c.bg = '#3A3B42';
+    else if (ch === 'C' || ch === 'A') { c.bg = COL[ch]; c.sh = `inset 0 0 0 ${Math.round(cs * .2)}px #0E0F13`; }
+    else if (ch === 'a') { c.bd = '1px dashed #FFB43A'; c.bg = 'transparent'; c.t = '?'; c.fg = '#FFB43A'; c.fs = Math.round(cs * .4) + 'px'; }
+    else if (AR[ch]) { c.fg = COL[AR[ch][0]]; c.t = rot(AR[ch][1]); }
+    else if (ch === 's' || ch === 'S') { c.bd = `2px solid ${ch === 's' ? COL.C : COL.A}`; c.bg = '#16181E'; }
+    else if (ch === 'k' || ch === 'K') { c.bd = `2px dashed ${ch === 'k' ? COL.C : COL.A}`; c.bg = '#16181E'; }
+    else if (ch === '*') { c.t = '·'; c.fg = COL.C; c.fs = Math.round(cs * .7) + 'px'; }
+    else if (ch === '!') { c.bg = '#F4F2ED'; }
+    else if (ch === 'h') { c.bd = '2px dashed rgba(255,255,255,.75)'; }
+    else if (ch === 'n') { c.bd = `2px solid ${COL.C}`; c.t = '◆'; c.fg = COL.C; c.fs = Math.round(cs * .4) + 'px'; }
+    else if (OPT[ch]) { c.bd = '1px dashed #E7E4DD'; c.t = rot(OPT[ch]); c.fs = Math.round(cs * .5) + 'px'; }
+    return c;
+  };
+  const cells = [];
+  if (o.portrait) { for (let r = 0; r < W; r++) for (let col = 0; col < H; col++) cells.push(cell(W - 1 - r, col)); }
+  else { for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) cells.push(cell(x, y)); }
+  return { cells };
+}
+const BASE = ['......#........', '...............', '.C...........A.', '.........#.....', '.......#.......', '.......#.......', '.....#.........', '.C...........A.', '...............', '........#......'];
+const ACT = ['......#........', '...............', '.C..>********a.', '...s.....#.....', '.......#.......', '.......#.......', '..k..#.........', '.Cs.L........a.', '...............', '........#......'];
+const ACTFS = ACT.slice(); ACTFS[4] = '....3..#.......'; ACTFS[5] = '...2n1.#.......'; ACTFS[6] = '..k.4#.........';
+const RUN = ['......#........', '...............', '.C..........>a.', '...s.....#.....', '.......#.......', '.......#.......', '..k..#.........', '.Ck.R........a.', '...............', '........#......'];
+const FREE = ['......#........', '....>..........', '.C.........S.A.', '.........#.....', '.......#..L....', '...s...#.......', '.....#....U....', '.C.........K.A.', '...............', '........#......'];
+const RESULT = ['......#........', '...............', '.C.............', '...s.....#.....', '.......#.......', '.......#.......', '..k..#.........', '.C...........!.', '...............', '........#......'];
+const LOSS = ['......#........', '...........S...', '.!...........A.', '...k.....#.....', '.......#..S....', '.......#.......', '.....#.........', '.C..........KA.', '...............', '........#......'];
+const LESSON = ['...............', '...............', '...............', '...............', '...............', '..C...h.h...L..', '...............', '...............', '...............', '...............'];
+const SETUP = BASE.map(r => r.replace(/A/g, 'a'));
+class Component extends DCLogic {
+  renderVals() {
+    if (!this._B) this._B = {
+      base: board(BASE),
+      setup: board(SETUP, { zone: 3, fog: 3 }),
+      act: board(ACT, { fog: 3, zone: 3 }),
+      actFS: board(ACTFS, { fog: 3, zone: 3, portrait: true, cs: 40 }),
+      lessonFS: board(LESSON, { portrait: true, cs: 40 }),
+      desk: board(ACT, { fog: 3, zone: 3, cs: 56 }),
+      desk2: board(ACT, { fog: 3, zone: 3, cs: 52 }),
+      run: board(RUN, { fog: 3 }),
+      free: board(FREE),
+      result: board(RESULT),
+      loss: board(LOSS)
+    };
+    return { B: this._B };
+  }
+}
+</script>
+</body>
+</html>
