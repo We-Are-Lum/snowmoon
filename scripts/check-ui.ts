@@ -754,7 +754,8 @@ try {
           await label.first().click();
           const sheet = page.locator('.recipe-sheet');
           await sheet.waitFor({ timeout: 5000 }).catch(() => fail(`intro: card ${i + 1}: the AI label does not open the recipe sheet`));
-          if (!/not by the author/i.test((await sheet.textContent().catch(() => '')) ?? '')) fail(`intro: card ${i + 1}: the recipe sheet does not say "not by the author"`);
+          // The sheet fetches its recipe after it opens; "Who made it" arrives with it.
+          await sheet.getByText(/not by the author/i).first().waitFor({ timeout: 10000 }).catch(() => fail(`intro: card ${i + 1}: the recipe sheet does not say "not by the author"`));
           await checkFloors(page, `intro card ${i + 1} (recipe sheet)`, 'light');
           await page.keyboard.press('Escape');
           if ((await page.locator('.intro-card').getAttribute('data-card')) !== cards[i]) fail(`intro: card ${i + 1}: closing the recipe sheet moved the intro on`);
