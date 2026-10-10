@@ -7,7 +7,7 @@ import { readingPlace } from '~/lib/glossary-view';
 import { sdk } from '@farcaster/miniapp-sdk';
 import { inMiniApp, signOut, useAuth, type AuthState } from '~/lib/client-auth';
 import { lastChapter, openedChapters } from '~/lib/chat/device';
-import { COMING, navItems } from '~/lib/nav';
+import { COMING, navItems, type NavItem } from '~/lib/nav';
 import type { Intro } from '~/lib/intro';
 import { Assistant } from './assistant';
 import { ReplayIntro } from './first-visit';
@@ -18,7 +18,7 @@ import '../app/assistant/assistant.css';
 
 /**
  * The app's frame, from the clickable prototype (structure, spacing, type), with real controls:
- * - under 768px (phones, the Farcaster frame): a top bar "× Snowmoon ···"; ··· opens the menu sheet;
+ * - under 768px (phones, the Farcaster frame): a top bar "× Snowmoon ? ☰"; ? is About, ☰ opens the menu sheet;
  * - 768–1199px: the rail collapsed to its expand control, opening over the page;
  * - 1200px and up: the rail open (wordmark, collapse, the destinations, the chapters with their
  *   state, theme, account) and the assistant beside the page, always there unless closed.
@@ -107,9 +107,16 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
             Snowmoon
           </Link>
         )}
-        <button type="button" className="topbar-icon" aria-label="Menu" aria-haspopup="dialog" aria-expanded={menu} onClick={() => setMenu(true)}>
-          ···
-        </button>
+        <span className="topbar-end">
+          <Link href="/about" className="topbar-icon topbar-about" aria-label="About" title="About" aria-current={path.startsWith('/about') ? 'page' : undefined}>
+            ?
+          </Link>
+          <button type="button" className="topbar-icon" aria-label="Menu" title="Menu" aria-haspopup="dialog" aria-expanded={menu} onClick={() => setMenu(true)}>
+            <svg className="menu-glyph" width="18" height="14" viewBox="0 0 18 14" aria-hidden="true">
+              <path d="M0 1h18M0 7h18M0 13h18" stroke="currentColor" strokeWidth="1.6" />
+            </svg>
+          </button>
+        </span>
       </header>
 
       <aside
@@ -165,6 +172,9 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
           <div className="rail-extra">
             <ThemeSwitch name="theme-rail" />
             <ReplayIntro intro={intro} label="What is this?" className="quiet-action" />
+            <Link href="/about" className="quiet-action" aria-current={path.startsWith('/about') ? 'page' : undefined}>
+              About
+            </Link>
           </div>
         </div>
         <Account auth={auth} />
@@ -208,20 +218,33 @@ function Nav({ items, path, current }: { items: ReturnType<typeof navItems>; pat
     e.preventDefault();
     router.push(`/glossary?from=${from}`);
   };
+  const isActive = (it: NavItem) =>
+    it.key === 'read' ? current > 0 : it.key === 'listen' ? false : path.startsWith(it.href.split('#')[0]);
+  const link = (it: NavItem) => (
+    <Link href={it.href} aria-current={isActive(it) ? 'page' : undefined} onClick={it.key === 'glossary' ? toGlossary : undefined}>
+      <span>{it.label}</span>
+      {it.meta && <span className="nav-meta">{it.meta}</span>}
+    </Link>
+  );
   return (
     <>
       <ul className="nav-list">
-        {items.map((it) => {
-          const active = it.key === 'read' ? current > 0 : it.key === 'listen' ? false : path.startsWith(it.href.split('#')[0]) && it.href !== '/about#podcast';
-          return (
-            <li key={it.key}>
-              <Link href={it.href} aria-current={active ? 'page' : undefined} onClick={it.key === 'glossary' ? toGlossary : undefined}>
-                <span>{it.label}</span>
-                {it.meta && <span className="nav-meta">{it.meta}</span>}
-              </Link>
+        {items.map((it) =>
+          it.children ? (
+            <li key={it.key} className="nav-group">
+              <span className="nav-group-label" id={`nav-${it.key}`}>
+                {it.label}
+              </span>
+              <ul className="nav-sub" aria-labelledby={`nav-${it.key}`}>
+                {it.children.map((c) => (
+                  <li key={c.key}>{link(c)}</li>
+                ))}
+              </ul>
             </li>
-          );
-        })}
+          ) : (
+            <li key={it.key}>{link(it)}</li>
+          ),
+        )}
       </ul>
       {COMING.map((c) => (
         <p key={c.label} className="nav-coming">

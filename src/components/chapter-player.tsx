@@ -276,6 +276,10 @@ export function ChapterPlayer({ chapter, chapters, recipeUrl, url, duration, cue
   return (
     <section className={`chapter-player listen-pane${started ? ' is-started' : ''}`} aria-label="Listen">
       {audioEl}
+      {/* The podcast feed, moved here from the menu (owner, 2026-10-09). Model-drafted wording. */}
+      <p className="listen-podcast">
+        Every chapter as a podcast: <a href="/podcast.xml">RSS feed</a>
+      </p>
       {/* No picture for this part: nothing is shown in its place (owner, 2026-10-08). */}
       {image && (
         <figure className="listen-image">
