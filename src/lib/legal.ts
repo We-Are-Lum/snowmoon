@@ -74,7 +74,7 @@ export const PRIVACY: LegalDoc = {
           'That you agreed to the terms for publishing, and any of your own work you have hidden.',
           'Images you publish, with their prompt, your Farcaster username and the record of how they were made. These are public.',
           'How many images you make each day, to count the daily limit, and the reports you make.',
-          'If you play Minpentai: your progress against the computer and the people you block, kept until you ask us to delete them; your matches, deleted 30 days after they end; and invites, deleted when they expire after 24 hours. While you say you are ready to play, other signed-in players see your Farcaster username.',
+          'If you play Minpentai: your progress against the computer and the people you block, kept until you ask us to delete them; your matches, deleted 30 days after they end; and invites, deleted when they expire after 24 hours. Challenges you send or receive, deleted an hour after they are answered or expire; and a count of today\'s Play requests, deleted the next day. While you say you are ready to play, other signed-in players see your Farcaster username.',
         ],
       ],
     },

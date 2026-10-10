@@ -1,4 +1,4 @@
-# Privacy Policy: fact-check (2026-10-09; redone 2026-10-10 for the owner's wording)
+# Privacy Policy: fact-check (2026-10-09; redone 2026-10-10 for the owner's wording, and 4.0 again after the Minpentai sentence)
 
 Every factual statement on `/privacy` (the owner's legal starter, sections 1–11, words in
 `src/lib/legal.ts`), checked against the code, migrations, config and principle checks of branch
@@ -41,7 +41,7 @@ else was re-judged; the wording is unchanged.
 | 3.7 | "where you stopped listening" and "a few other settings of yours" (the list is now complete) | true | Where you stopped listening: `snowmoon:position:cN` (`src/components/chapter-player.tsx:85,205`). Other settings: rail and panel state (`app-shell.tsx:44-45`), the notice's "Don't show this again" (`device.ts:37,107`), `snowmoon.visited` (`first-visit.tsx:272,283`), Minpentai's tutorial done (`minpentai-app.tsx:18,52`). No other `localStorage`, `sessionStorage` or IndexedDB key in `src`. Nuance kept from 3.6: the sign-in entry also holds the FID, username and a 30-day name proof. |
 | 3.8 | These stay on your device. | true | Stored only client-side; threads are sent with a question to be answered (section 5) but never stored by the server (`src/lib/chat/device.ts:2`); drafts are sent only on Publish (`src/components/image-composer.tsx:161`). |
 | 3.9 | Clearing your browser's site data removes them. | true | All of it is localStorage or IndexedDB of this origin (above); nothing in cookies or elsewhere. |
-| 4.0 | Kept by us when you sign in (the list) | false (still incomplete, narrowly) | Now listed: consent records and your own hides (4.1b). Still not listed: Minpentai challenges (who asked whom, deleted 1 h after) and per-person Play request counts for today (`mp_rate`, deleted the next day), both on site-minpentai-play-2; the Neynar score under your FID is said in §7, not §4. The assistant's count is said in §5. |
+| 4.0 | Kept by us when you sign in (the list) | true, with nuances | Complete since the owner's sentence of 2026-10-10 in the Minpentai bullet: challenges (`mp_challenges`, deleted once `least(expires_at, closed_at)` is an hour past, `src/lib/minpentai/play-server/store.ts:401-402`, `MINPENTAI_PLAY.challengeKeepMs` = 1 h) and today's Play request count (`mp_rate.day_count`, deleted once its day is before today, `store.ts:417`). Nuances: the same `mp_rate` row also holds this minute's count and the time of your last match and lobby views (`0009_minpentai_play.sql:234-242`), used for the poll intervals; deletion runs when a later Play request triggers the cleanup, so it can come later than stated if nobody plays. The Neynar score under your FID is said in §7, the assistant's count in §5. |
 | 4.1 | Quote cards you save, and your likes. A saved card's page is public. | true | `studio.elements.created_by_fid`, `src/lib/cards.ts:88-90`; likes `cards.ts:156`, `images/[id]/like/route.ts:24`; card page public (`card/[id]/page.tsx:14`). |
 | 4.1b | That you agreed to the terms for publishing, and any of your own work you have hidden. | true | `studio.contributor_consents` (FID, wording hash, time; `0002_v5.sql:95`, `src/lib/consent.ts:61`); your own hides and unhides in `studio.removal_log` with `by_fid` (`src/app/api/images/[id]/hide/route.ts:30-42`). |
 | 4.3 | (ratings) | removed | The words about ratings are gone; nothing writes `studio.ratings`. |
@@ -87,9 +87,9 @@ else was re-judged; the wording is unchanged.
 
 ## For the owner
 
-- **False (1):** 4.0 — §4 still leaves out Minpentai challenges (deleted 1 h after) and per-person
-  Play request counts (deleted the next day), both on site-minpentai-play-2.
-- **Nuances, not false:** 6.2 (an image whose maker has no username found shows "FID n"); 7.14
+- **False:** none.
+- **Nuances, not false:** 4.0 (the Play request row also holds this minute's count and the last
+  view times; Play's deletions run on later Play requests, so they can lag if nobody plays); 6.2 (an image whose maker has no username found shows "FID n"); 7.14
   (the alert also goes out when an author hides their own image, not only on a report); 3.6 (the
   sign-in entry also holds the FID, username and a 30-day name proof).
 - **Can't tell from the code:** 1.1, 2.5, 8.1, 10.1 (promises or facts outside the code); 5.2 for
