@@ -279,7 +279,8 @@ async function checkFloors(page: Page, path: string, scheme: string) {
  *   not affiliated with the author, no token, and says it in the dark hero (principle 7; owner, 2026-10-10);
  * - "How this works" opens the intro; "Read from here" lands on the quoted block;
  * - "Just made" shows each image with its AI label, or the empty state;
- * - the Minpentai board steps on its own, and starts paused under reduced motion until Play.
+ * - the Minpentai board steps on its own, and starts paused under reduced motion until Play;
+ * - a reader who opened a chapter before (the reading record on the device) gets Continue · Chapter n.
  */
 async function checkHome(page: Page, scheme: 'light' | 'dark') {
   const own = (sel: string) =>
@@ -337,10 +338,13 @@ async function checkHome(page: Page, scheme: 'light' | 'dark') {
     if (at === null || at < 0 || at > 844) fail(`/ (${scheme}): "Read from here" does not show block ${block} (top ${at})`);
   }
 
-  // Reduced motion: still until Play.
+  // Reduced motion: still until Play. This reader has opened chapter 3 before: Continue · Chapter 3.
   const still = await newPage({ viewport: { width: 390, height: 844 }, colorScheme: scheme, hasTouch: true, reducedMotion: 'reduce' });
   await still.addInitScript(`try{localStorage.setItem('snowmoon.intro-seen',${JSON.stringify(JSON.parse(readFileSync('config/intro.json', 'utf8')).version)})}catch(e){}`);
+  await still.addInitScript(`try{localStorage.setItem('snowmoon.last-chapter','3')}catch(e){}`);
   await still.goto(BASE + '/', { waitUntil: 'networkidle' });
+  const cont = still.locator('.home-hero-actions a[href="/chapter/3"]');
+  if (!(await cont.isVisible()) || !/Continue · Chapter 3/i.test((await cont.textContent()) ?? '')) fail(`/ (${scheme}): a returning reader (chapter 3 opened last) is not offered Continue · Chapter 3`);
   await still.locator('.home-board').scrollIntoViewIfNeeded();
   const r0 = await still.locator('.home-turn').getAttribute('data-turn');
   await still.waitForTimeout(1200);
