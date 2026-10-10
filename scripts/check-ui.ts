@@ -893,7 +893,7 @@ try {
     const page = await newPage({ viewport: { width: 390, height: 844 }, colorScheme: scheme, hasTouch: true });
     await open(page, '/chapter/1');
     if (await page.locator('.rail').isVisible()) fail('@390: the rail shows on a phone');
-    if (await page.locator('.legal-line').isVisible()) fail('@390: the footer line shows on the reading screen (it belongs at the foot of About and in the menu)');
+    if (await page.locator('.legal-line:visible').count()) fail('@390: the footer line shows on the reading screen (it belongs at the foot of About and in the menu)');
     await shot(page, 'phone-390-chapter', scheme);
     await page.click('.topbar-icon[aria-label="Menu"]');
     await page.waitForSelector('.menu-sheet');
