@@ -393,6 +393,8 @@ const code = (rel: string) =>
     .replace(/\{\s*\/\*[\s\S]*?\*\/\s*\}/g, '')
     .replace(/\/\*[\s\S]*?\*\//g, '')
     .replace(/^\s*\/\/.*$/gm, '');
+/** A glossary word whose first narrated clip is in chapter 1 (c1-b87), so it is in the served HTML. */
+const GLOSSARY_CLIP_PAGE = '/glossary/autobus';
 const READER_IMAGE_FILES = [
   'src/components/reader-images.tsx',
   'src/components/image-feed.tsx',
@@ -407,9 +409,11 @@ add({
   load: async () => {
     const { AI_LABEL, AI_DECLARED, WHOSE } = await import('../src/lib/ai-declared');
     const ch1 = await page('/chapter/1');
-    // The recipe sheet as served: GET /api/recipe for each label on chapter 1 that names a recipe file.
+    // A glossary word whose clip is in chapter 1, so the server's HTML (limit: chapter 1) draws it.
+    const glossary = await page(GLOSSARY_CLIP_PAGE);
+    // The recipe sheet as served: GET /api/recipe for each label on chapter 1 (and the glossary clip) that names a recipe file.
     const sheets: { what: string; whose: string }[] = [];
-    for (const l of aiLabels(ch1).filter((l) => l.recipe)) {
+    for (const l of [...aiLabels(ch1), ...aiLabels(glossary)].filter((l) => l.recipe)) {
       const q = new URLSearchParams({ file: l.recipe!, ...(l.item ? { item: l.item } : {}) });
       const r = await fetch(`${BASE}/api/recipe?${q}`);
       sheets.push({ what: `${l.recipe}${l.item ? ` (${l.item})` : ''}`, whose: r.ok ? String(((await r.json()) as { whose?: unknown }).whose ?? '') : `HTTP ${r.status}` });
@@ -419,6 +423,7 @@ add({
     const imagePage = rows?.length ? { id: rows[0].id, html: await page(`/image/${rows[0].id}`) } : null;
     return {
       ch1,
+      glossary,
       sheets,
       feed: await page('/images'),
       imagePage,
@@ -435,7 +440,7 @@ add({
       player: code('src/components/chapter-player.tsx'),
     };
   },
-  run: ({ ch1, sheets, feed, imagePage, wording, sheetSource, card, imageCard, readers, player }) => {
+  run: ({ ch1, glossary, sheets, feed, imagePage, wording, sheetSource, card, imageCard, readers, player }) => {
     const problems: string[] = [];
     // Chapter 1 as served: every seeded image's caption, and the narration credit.
     const figures = [...ch1.matchAll(/<figure class="seed-image"[\s\S]*?<\/figure>/g)].map((m) => m[0]);
@@ -444,6 +449,10 @@ add({
     const credit = ch1.match(/<p class="[^"]*\bnarration-credit\b[^"]*">[\s\S]*?<\/p>/)?.[0] ?? '';
     problems.push(...aiLabelProblems('chapter 1 narration credit', credit, 'voice'));
     if (!/Synthetic narration/.test(aiLabels(credit).map((l) => l.hidden).join(' '))) problems.push('chapter 1: the narration credit does not say "Synthetic narration"');
+    // The glossary's "Hear it" clip: the same voice label, beside its "no word timings" note.
+    const clip = glossary.match(/<div class="gl-clip">[\s\S]*?<\/p><\/div>/)?.[0] ?? '';
+    problems.push(...aiLabelProblems(`${GLOSSARY_CLIP_PAGE} clip`, clip, 'voice'));
+    if (clip && !/no word timings/.test(clip)) problems.push(`${GLOSSARY_CLIP_PAGE}: the clip does not say it plays the whole paragraph (no word timings)`);
     // The sheet, as served for those labels.
     if (!sheets.length) problems.push('chapter 1: no label names a recipe file, so the sheet could not be checked');
     for (const s of sheets as { what: string; whose: string }[]) {
@@ -473,6 +482,7 @@ add({
   },
   plant: (c) => {
     c.ch1 = c.ch1.replace(/not by the author/gi, '');
+    c.glossary = c.glossary.replace(/class="ai-label"/g, 'class="clip-credit"');
     c.sheets.push({ what: 'planted', whose: 'The project made it.' });
     c.readers[0].text = c.readers[0].text.replace(/<AiLabel\b/g, '<Caption');
     c.card = c.card.replace(/AI[- ]generated/gi, 'picture');

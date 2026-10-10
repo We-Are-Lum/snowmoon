@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { lastChapter, openedChapters } from '~/lib/chat/device';
+import { AiLabel } from '~/components/recipe-sheet';
+import { AI_LABEL } from '~/lib/ai-declared';
 import { blockHref, parsePlace, quoteHtml, type GlossaryIndexEntry, type GlossaryTermView } from '~/lib/glossary-view';
 
 /**
@@ -218,7 +220,7 @@ function Clip({ clip, respelling }: { clip: NonNullable<GlossaryTermView['clip']
         {playing ? 'Stop' : `Hear it · ${clip.seconds} s`}
       </button>
       <p className="gl-clip-note">
-        {clip.voice.split(' · ')[0]}, AI-generated · the whole of{' '}
+        <AiLabel kind="voice" text={AI_LABEL.voice} file={clip.recipe} item={String(clip.idx)} /> · the whole of{' '}
         <Link href={blockHref(clip.block)}>
           Chapter {clip.chapter}, {clip.label}
         </Link>

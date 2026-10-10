@@ -66,7 +66,7 @@ export function glossaryTerm(slug: string): GlossaryTermView | null {
       blocks: list.map((idx) => ({ block: `c${ch}-b${idx}`, label: label(Number(ch), idx) })),
     })),
     clip: t.clip
-      ? { block: t.clip.block, chapter: t.clip.chapter, label: label(t.clip.chapter, t.clip.idx), url: t.clip.url, seconds: Math.max(1, Math.round(t.clip.duration_ms / 1000)), voice: loadNarration(t.clip.chapter)?.label ?? 'Synthetic narration' }
+      ? { block: t.clip.block, chapter: t.clip.chapter, idx: t.clip.idx, label: label(t.clip.chapter, t.clip.idx), url: t.clip.url, seconds: Math.max(1, Math.round(t.clip.duration_ms / 1000)), recipe: loadNarration(t.clip.chapter)!.recipe }
       : null,
   };
 }

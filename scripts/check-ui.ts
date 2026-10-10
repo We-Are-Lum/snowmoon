@@ -506,6 +506,12 @@ async function checkAiLabels() {
       await checkVoiceLabel(page, `/chapter/1?view=listen ${tag} (player)`, '.player-label');
       await checkPictureLabels(page, `/chapter/1?view=listen ${tag}`, 0);
 
+      // The glossary's "Hear it" clip is the narration too (read to 32 here, so nothing is covered).
+      await at('/glossary/heralds');
+      await page.waitForSelector('.gl-clip', { timeout: 10000 }).catch(() => fail(`/glossary/heralds ${tag}: the clip did not show`));
+      await checkVoiceLabel(page, `/glossary/heralds ${tag} (clip)`, '.gl-clip');
+      if (!/no word timings/.test((await page.locator('.gl-clip-note').textContent().catch(() => '')) ?? '')) fail(`/glossary/heralds ${tag}: the clip note does not say there are no word timings`);
+
       await at('/images');
       await checkPictureLabels(page, `/images ${tag}`, FIXTURE_IMAGES.length);
 
@@ -883,4 +889,4 @@ if (failures.length) {
   console.error(`\nUI CHECK FAILED (${failures.length}):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`ui check passed: ${BASE}, ${38 + MINPENTAI_LESSONS + 4} pages, the chapter sheet, the glossary's covers and back link, and 8 assistant states × light and dark; 10 pages at 1024, 1440 and 2000; AI labels on 8 screens at 390 and 1440`);
+console.log(`ui check passed: ${BASE}, ${38 + MINPENTAI_LESSONS + 4} pages, the chapter sheet, the glossary's covers and back link, and 8 assistant states × light and dark; 10 pages at 1024, 1440 and 2000; AI labels on 9 screens at 390 and 1440`);

@@ -19,7 +19,8 @@ export interface GlossaryTermView {
   firstSentence: { block: string; chapter: number; label: string; text: string };
   explanations: { block: string; chapter: number; label: string; text: string }[];
   mentions: { chapter: number; blocks: { block: string; label: string }[] }[];
-  clip: { block: string; chapter: number; label: string; url: string; seconds: number; voice: string } | null;
+  /** The narration's block clip; recipe is the chapter's narration recipe (the AI label opens it at this block). */
+  clip: { block: string; chapter: number; idx: number; label: string; url: string; seconds: number; recipe: string } | null;
 }
 
 /** A reading place: "c3-b42" (chapter 3, block 42), or null if it isn't one. */

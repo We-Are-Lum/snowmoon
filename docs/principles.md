@@ -128,7 +128,9 @@ in 25 words or fewer and records `written_by { fid, date }`.
   source and must reproduce the committed text byte for byte.
 - `P2b`: on chapter pages, every seeded image's caption says "AI-generated";
   the player says the narration is synthetic; quote cards with an image label
-  it as AI-generated.
+  it as AI-generated. The glossary's "Hear it" clip (`/glossary/autobus` as
+  served) carries the same voice label ("AI voice · by Snowmoon Party"), and its
+  recipe sheet is checked like the chapter's.
 - `P2c`: every narration and dialogue line in an adaptation script carries a
   human author tag. `npm run check:adaptations` also checks every book line
   verbatim against its block and narration at 25 words or fewer per beat.
