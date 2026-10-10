@@ -209,3 +209,9 @@ Play replaces v3's four tabs: practice, a ladder against the computer, one-on-on
     vercel rollback dpl_7D1FoPE54Xh9bPz22pdQMLxhkx2b --scope nates-projects-d1780cff
 
 Rolling back the code leaves 0009's tables in place; they are private and unused without it.
+
+## 2026-10-10: storage check names two more variables; 0007 marked applied; check:ui and check:miniapp fixed for Minpentai Play (branch site-storage-check-names)
+
+NEYNAR_API_KEY and SNOWMOON_ALERT_URL listed when missing (names only); 0007's header says applied; check:ui accepts a 3-point glider under cost3; check:miniapp checks ?mode=free as Play. To undo (back to `4fb3c16`):
+
+    vercel rollback dpl_HeSRboPJkeGpgdovmhnND7kXFEVm --scope nates-projects-d1780cff
