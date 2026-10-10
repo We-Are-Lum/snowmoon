@@ -395,7 +395,7 @@ async function checkPlay(page: Page, scheme: string) {
   await noSideways(`/minpentai practice match (${scheme})`);
   await page.locator('[role="gridcell"]').nth(2 * 15 + 3).click();
   // The match draws one new rule; under "Gliders cost 3 points." a glider spends 3 (as check:minpentai-live, 4fb3c16).
-  const cost3 = (await page.getByText('Gliders cost 3 points.').count()) > 0;
+  const cost3 = (await page.getByText(/gliders cost 3 points/i).count()) > 0;
   const left = cost3 ? '5 OF 8' : '4 OF 8';
   if (!((await page.locator('.mp-pts').textContent()) ?? '').startsWith(left)) fail(`/minpentai practice match (${scheme}): placing a glider did not spend ${cost3 ? 3 : 4} points`);
   const foot = await page.locator('.mp-foot').boundingBox();
