@@ -35,7 +35,7 @@ export function ReaderImages({ chapter }: { chapter: number }) {
           if (!block) continue;
           // After the block, and after the seeded image that follows it, if any.
           let after: Element = block;
-          while (after.nextElementSibling?.matches('.seed-image, .cited-by, .described-note')) after = after.nextElementSibling;
+          while (after.nextElementSibling?.matches('.seed-image, .cited-by')) after = after.nextElementSibling;
           const host = document.createElement('div');
           host.className = 'reader-images';
           after.after(host);

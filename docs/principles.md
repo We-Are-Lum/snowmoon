@@ -117,7 +117,8 @@ text and begins "AI-generated image:".
 
 **Recorded exception.** The house narration keeps 148 model-drafted spoken
 descriptions of screens, figures and lyric cards. Each is preceded by a tone
-and shown with the label "Model-drafted description, not the author's words".
+and shown in Listen with the label "AI description ⓘ", which opens the details
+(owner ruling, 2026-10-09).
 They are listed in `content/snowmoon/read-aloud/exceptions.json`. The list
 may only shrink: an entry is removed when a person rewrites that description
 in 25 words or fewer and records `written_by { fid, date }`.
@@ -144,6 +145,15 @@ in 25 words or fewer and records `written_by { fid, date }`.
   definition field. Nothing on a glossary
   page defines a word except those quotes. `npm run test:glossary` also rebuilds
   the file from its sources and must match it byte for byte.
+- `P2g`: on every chapter page as served, each screen redrawn from a template
+  (`data-source="template"`) carries one "Redrawn ⓘ" label: the visible word,
+  the ⓘ, the declaration served with it, and a dialog with the details; screens
+  drawn as in the book carry no marker (owner ruling, 2026-10-09: "a short
+  visible word, with ⓘ for the details. An icon alone doesn't count."). The
+  proof blanks the word.
+- `P2h`: Listen shows "AI description ⓘ" while a model-drafted description
+  plays; the label renders with its word, ⓘ and declaration ("not the author's
+  words"). The proof blanks the word.
 - Review: is anything generated (a caption, a summary, a spoken description of
   a screen) placed where it could be taken for the book's words?
 
@@ -379,6 +389,10 @@ quoted as written. Minpentai boards and maps come from the source's own SVGs.
   close variant) outside a quotation (owner, 2026-10-09). The rule page is the
   book's rule: tagged FROM THE BOOK and never RULES INVENTED, it cites c4-b5
   and c4-b7 in its text and sources, and runs `engine.ts` on the c4-b5 board.
+- `P8f`: Minpentai's tags are "Book ⓘ", "Invented ⓘ" (the rules, the broadcast,
+  the lenses and the symbol's shape, folded into one label whose details list
+  each) and "Draft ⓘ", each a visible word opening its explanation, on every
+  Learn screen and the rule page. The proof blanks each of the three words.
 - `P8e`: every live voting screen (c1-b18, c1-b31, c7-b6) starts in the state
   the book shows: the slider's range, step and starting value are the source's
   `<input type="range">` with its HTML defaults, its marks and title are the

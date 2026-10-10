@@ -724,6 +724,41 @@ try {
     await open(page, '/chapter/1');
     if (await page.locator('.add-image').count()) fail('/chapter/1: "Add an image" shows to a signed-out reader');
     {
+      // Labels (owner ruling, 2026-10-09). Scene lines are hidden: nothing of them shows but the add-image button.
+      const scene = await page.locator('.scene-label').evaluateAll((els) => els.map((e) => (e as HTMLElement).innerText.trim()).filter(Boolean));
+      if (scene.length) fail(`/chapter/1 (${scheme}): scene lines still show: ${scene.slice(0, 2).join(' | ')}`);
+      // A screen redrawn from a template says "Redrawn ⓘ", which opens its details; the book's own drawings carry no marker.
+      const redrawn = page.locator('figure[data-source="template"] .info-label[data-label="redrawn"]');
+      if (!(await redrawn.count())) fail(`/chapter/1 (${scheme}): no "Redrawn" label on a screen redrawn from a template`);
+      else {
+        if ((await redrawn.first().locator('.info-word').textContent()) !== 'Redrawn') fail(`/chapter/1 (${scheme}): the redrawn label's word is not "Redrawn"`);
+        await redrawn.first().click();
+        const sheet = page.locator('.info-sheet');
+        if (!/Every word on it is the book/.test((await sheet.textContent().catch(() => '')) ?? '')) fail(`/chapter/1 (${scheme}): "Redrawn" does not open its details`);
+        await checkFloors(page, '/chapter/1 (Redrawn details)', scheme);
+        await page.keyboard.press('Escape');
+        if (await sheet.count()) fail(`/chapter/1 (${scheme}): Escape does not close the Redrawn details`);
+      }
+      if (await page.locator('figure:not([data-source="template"]) .info-label[data-label="redrawn"]').count()) fail(`/chapter/1 (${scheme}): a screen drawn as in the book is marked "Redrawn"`);
+    }
+    // Citation links (the assistant's, quote cards', the glossary's) land on the paragraph and highlight it.
+    for (const target of ['/chapter/1#c1-b19', '/chapter/2#c2-b2']) {
+      await open(page, target);
+      await page.waitForTimeout(300);
+      const id = target.split('#')[1];
+      const landed = await page.evaluate((id) => {
+        const el = document.getElementById(id);
+        if (!el) return 'missing';
+        const r = el.getBoundingClientRect();
+        if (!el.matches(':target')) return 'not the target';
+        if (getComputedStyle(el).boxShadow === 'none') return 'not highlighted';
+        if (r.top < 0 || r.top > innerHeight * 0.6) return `not in view (top ${Math.round(r.top)})`;
+        return 'ok';
+      }, id);
+      if (landed !== 'ok') fail(`${target} (${scheme}): the cited paragraph is ${landed}`);
+    }
+    await open(page, '/chapter/1');
+    {
       // Signed in as an invited FID (session mocked), with the composer's status mocked as ready.
       const ctx = page.context();
       // The assistant's status would answer 401 to the mocked session and sign it out.
@@ -759,9 +794,16 @@ try {
       if (wide) fail(`/minpentai?${q} (${scheme}): the page scrolls sideways at 390px`);
       {
         // Learn and Free play: the game is labelled as invented for this edition (P8d), except Under the hood, which is the book's rule.
-        const tags = await page.locator('.ml-tag').allTextContents();
-        const labelled = tags.includes('RULES INVENTED FOR THIS EDITION');
-        if (q === `lesson=${MINPENTAI_HOOD}` ? labelled : !labelled) fail(`/minpentai?${q} (${scheme}): the "Rules invented for this edition" tag is ${labelled ? 'on the book\'s rule' : 'missing'}`);
+        // Short labels (owner ruling, 2026-10-09): "Invented ⓘ", "Draft ⓘ", "Book ⓘ", each opening its explanation.
+        const tags = await page.locator('.ml-tag .info-word').allTextContents();
+        const labelled = tags.includes('Invented');
+        if (q === `lesson=${MINPENTAI_HOOD}` ? labelled : !labelled) fail(`/minpentai?${q} (${scheme}): the "Invented" label is ${labelled ? 'on the book\'s rule' : 'missing'}`);
+        if (q === 'lesson=1') {
+          await page.locator('.ml-tag[data-label="invented"]').click();
+          if (!/invented for this edition/i.test((await page.locator('.info-sheet').textContent().catch(() => '')) ?? '')) fail(`/minpentai?${q} (${scheme}): "Invented" does not open its explanation`);
+          await checkFloors(page, `/minpentai?${q} (Invented details)`, scheme);
+          await page.keyboard.press('Escape');
+        }
         // The footer (progress, BACK, the main button) stays in view.
         const foot = await page.locator('.ml-foot').boundingBox();
         const tall = await page.evaluate(() => innerHeight);
@@ -779,8 +821,8 @@ try {
     await checkFloors(page, '/minpentai/rule', scheme);
     if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)) fail(`/minpentai/rule (${scheme}): the page scrolls sideways at 390px`);
     {
-      const tags = await page.locator('.mr .ml-tag').allTextContents();
-      if (!tags.includes('FROM THE BOOK') || tags.includes('RULES INVENTED FOR THIS EDITION')) fail(`/minpentai/rule (${scheme}): tagged ${tags.join(', ')}, not as the book's rule`);
+      const tags = await page.locator('.mr .ml-tag .info-word').allTextContents();
+      if (!tags.includes('Book') || tags.includes('Invented')) fail(`/minpentai/rule (${scheme}): tagged ${tags.join(', ')}, not as the book's rule`);
       const words = (await page.locator('.mr').textContent()) ?? '';
       if (!words.includes('c4-b5') || !words.includes('c4-b7')) fail(`/minpentai/rule (${scheme}): does not cite c4-b5 and c4-b7`);
       if (!(await page.locator('.mr-link[href$="/blob/main/docs/minpentai-rules.md"]').count())) fail(`/minpentai/rule (${scheme}): no link to docs/minpentai-rules.md on GitHub`);

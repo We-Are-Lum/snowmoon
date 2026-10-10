@@ -26,6 +26,7 @@ import { PH, PW } from '~/lib/minpentai/learn-game/pieces';
 import { LS, indexOf } from '~/lib/minpentai/learn-game/lessons';
 import { LEARN_TEXT as T } from '~/lib/minpentai/learn-text';
 import { drawBoard, drawView } from './learn-draw';
+import { MinpentaiTags } from './mp-tags';
 import type { Scene } from './broadcast-scene';
 
 /** Screens by number: 0–7 watch, 8–14 the lessons, 15 Under the hood, 16 the practice match. */
@@ -195,7 +196,6 @@ export function Learn({ start, onScreen, onFree, free = false }: { start: number
 
   const hud = S.hud;
   const learn = S.mode === 'learn';
-  const tagClass = (k: string) => (k === 'book' ? 'ml-tag ml-tag-solid' : k === 'draft' ? 'ml-tag ml-tag-draft' : 'ml-tag ml-tag-dashed');
   const reactP = hud.react;
   return (
     <section className="ml-learn" aria-label={free ? T.freePlay.label : T.appTitle} ref={frameRef}>
@@ -309,9 +309,7 @@ export function Learn({ start, onScreen, onFree, free = false }: { start: number
 
       <div className="ml-body" ref={bodyRef}>
         {/* Design's tag row sits above the text; here it scrolls with it, so the text keeps its room on short phones. */}
-        <div className="ml-tags">
-          {v.tags.map((k) => <span key={k} className={tagClass(k)}>{T.tags[k]}</span>)}
-        </div>
+        <MinpentaiTags tags={v.tags} />
         <h2 className="ml-title">{v.title}</h2>
         <p className="ml-text">{v.text}</p>
         {v.caption && <p className="ml-caption">{v.caption}</p>}
