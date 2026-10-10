@@ -540,3 +540,13 @@ Write the migration as 0007 with a dry-run note like 0006, push the branch, and 
 ```text
 Reread. All four notice items as they stand on your branch are approved. Record it, merge, deploy, run the production checks, and confirm the spend cap is reading the new table.
 ```
+
+The 35-minute spoken summary (branch summary-35min). The brief of 2026-10-09 and the owner's message of 2026-10-10 changing the writer are recorded word for word in `docs/prompts/008a-agent-prompts.md#spoken-summary-pass-2`. In between:
+
+```text
+Go ahead: $2 total, redo pass 2 from the existing notes, with your four rules (exact citations from the note lines, length fixed before checking, fixes may only cut, no hand edits without my OK). Plus:
+1. Gate: write and check part 1 only, then show me its text before parts 2–8.
+2. Checker: flag only claims that are wrong or absent from the cited blocks (who, what, where, when, what was said or decided). A fair paraphrase of a feeling the cited block shows passes. Record the changed checker prompt in the recipe.
+3. Pronunciation: leave pronunciation.json alone. Add a summary-only override for "Vitalik" (vi-TAH-lik) to the summary's narration settings and record it in its recipe.
+4. Compress the calls log before anything reaches main.
+```
