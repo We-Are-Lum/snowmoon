@@ -13,6 +13,7 @@
 import { COL, DT, NAME, SEG, SEGS_LEN, hudAt, newSim, shotAt, slowAt, stepSim, type CamState, type Hud, type Sim } from './broadcast';
 import { COST, DIAG, DIRS, G_, PH, Q_, RULES, T_, near, pClone, pStep, towers, type Costs, type Hit, type NewRule, type PState, type Tool } from './pieces';
 import { bBack, bStep, live, type CBoard } from './cells';
+import { botTurn } from './bot';
 import { LS, MAIN, indexOf, type CellsLesson, type LessonDef, type PiecesLesson } from './lessons';
 import { LEARN_TEXT as T, type TagKey } from '../learn-text';
 
@@ -261,27 +262,10 @@ export class LearnController {
     this.setState({ lphase: 'run', lplaying: true });
     L.dirty = true;
   }
-  /** Amber's turn: Design's bot, which reads the whole board (it ignores fog). */
+  /** Amber's turn: Design's bot, which reads the whole board (it ignores fog). Moved to bot.ts unchanged. */
   botTurn() {
-    const L = this.L as PiecesL, s = pClone(L.s), cost = L.cost!, rnd = () => this.env.random();
-    let pts = 8;
-    const occ = (x: number, y: number) => s.pieces.some((q) => q.x === x && q.y === y), zoneB = (x: number, y: number) => near(s, x, y, 3, 1);
-    const add = (q: ReturnType<typeof Q_>) => s.pieces.push({ ...q, id: s.nid++, trail: [] });
-    for (const tw of s.pieces.filter((q) => q.k === 'tower' && q.p === 1)) {
-      const threat = s.pieces.some((q) => q.k === 'glider' && q.p === 0 && q.y === tw.y && q.dx === 1 && q.x < tw.x && !s.pieces.some((o) => o.k !== 'glider' && o.y === tw.y && o.x > q.x && o.x < tw.x));
-      if (threat && pts >= cost.square) for (let x = tw.x - 1; x >= tw.x - 3; x--) if (!occ(x, tw.y) && zoneB(x, tw.y)) { add(Q_(x, tw.y, 1)); pts -= cost.square; break; }
-    }
-    const targets = s.pieces.filter((q) => q.k === 'tower' && q.p === 0);
-    let tries = 0;
-    while (targets.length && pts >= cost.glider && tries++ < 24) {
-      const tg = targets[Math.floor(rnd() * targets.length)], y = tries < 6 ? tg.y : Math.floor(rnd() * PH);
-      for (let x = 12; x >= 10; x--) if (!occ(x, y) && zoneB(x, y)) { add(G_(x, y, 1, -1, 0)); pts -= cost.glider; break; }
-    }
-    while (pts >= cost.square && tries++ < 40) {
-      const x = 10 + Math.floor(rnd() * 3), y = Math.floor(rnd() * PH);
-      if (!occ(x, y) && zoneB(x, y)) { add(Q_(x, y, 1)); pts -= cost.square; }
-    }
-    L.s = s;
+    const L = this.L as PiecesL;
+    L.s = botTurn(L.s, 1, L.cost!, () => this.env.random());
   }
   lreset() {
     const L = this.L!;

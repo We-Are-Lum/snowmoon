@@ -15,7 +15,9 @@
  *   and in-world templates may use their own faces.
  * - Paper is #F4F2ED in light mode in every chapter. Datelines take the accent of
  *   their setting: #2E5A3A Veridia, #B3306E Dzego, ink otherwise.
- * - The first screen says: independent adaptation, not affiliated with the author, no token.
+ * - The first screen says: independent adaptation, not affiliated with the author, no token; on the home
+ *   page it says so in the dark hero (checkHome, with the home's other checks: How this works, Read from
+ *   here, Just made, the Minpentai board).
  * - The live voting screens (c1-b18, c1-b31, c7-b6) start where the book shows them, move by
  *   keyboard, and Reset returns them, with no request made and no storage changed.
  * - The assistant (/assistant) meets the same floors signed out (9d), the reader's "Ask about this" (1a), its home (1d),
@@ -271,6 +273,83 @@ async function checkFloors(page: Page, path: string, scheme: string) {
   if (r.hyph) fail(`${where}: ${r.hyph} book blocks are hyphenated`);
 }
 
+/**
+ * The home page (src/app/page.tsx, from Design's HomeWindow), at 390 × 844 with the intro seen:
+ * - the first screen (elements in the viewport, their own text nodes) says independent adaptation,
+ *   not affiliated with the author, no token, and says it in the dark hero (principle 7; owner, 2026-10-10);
+ * - "How this works" opens the intro; "Read from here" lands on the quoted block;
+ * - "Just made" shows each image with its AI label, or the empty state;
+ * - the Minpentai board steps on its own, and starts paused under reduced motion until Play.
+ */
+async function checkHome(page: Page, scheme: 'light' | 'dark') {
+  const own = (sel: string) =>
+    page.evaluate(
+      (sel) =>
+        Array.from(document.querySelectorAll(sel))
+          .filter((e) => e.getBoundingClientRect().top < innerHeight && e.getBoundingClientRect().bottom > 0)
+          .map((e) => Array.from(e.childNodes).filter((n) => n.nodeType === 3).map((n) => n.textContent).join(' '))
+          .join(' ')
+          .replace(/\s+/g, ' ')
+          .toLowerCase(),
+      sel,
+    );
+  await page.evaluate(() => scrollTo(0, 0));
+  const first = await own('body *');
+  const hero = await own('.home-hero *');
+  for (const phrase of ['independent adaptation', 'not affiliated with the author', 'no token']) {
+    if (!first.includes(phrase)) fail(`/ (${scheme}): first screen does not say "${phrase}"`);
+    else if (!hero.includes(phrase)) fail(`/ (${scheme}): "${phrase}" is on the first screen but not in the hero`);
+  }
+  if (!(await page.locator('.home-hero .home-disclaimer a[href="/about"]').isVisible())) fail(`/ (${scheme}): the hero does not link About (licence and sources)`);
+  if ((await page.locator('.home-chapters .chapter-list a').count()) !== 32) fail(`/ (${scheme}): the chapter list does not link all 32 chapters`);
+
+  // How this works: the intro, opened again.
+  await page.locator('.home-how').click();
+  if (!(await page.locator('.intro-card').isVisible())) fail(`/ (${scheme}): "How this works" does not open the intro`);
+  else await page.locator('.intro-skip').click();
+
+  // Just made.
+  const rows = await page.locator('.home-feed-list li').count();
+  if (rows) {
+    for (const li of await page.locator('.home-feed-list li').all()) {
+      const label = li.locator('button.ai-label');
+      if (!(await label.count()) || !/\bAI\b.* · by \S/.test((await label.innerText()) ?? '')) fail(`/ (${scheme}): a "Just made" image has no AI label naming who made it`);
+    }
+  } else if (!(await page.locator('.home-feed-empty').isVisible())) fail(`/ (${scheme}): "Just made" shows neither images nor its empty state`);
+
+  // The board plays itself, once it is on screen.
+  await page.locator('.home-board').scrollIntoViewIfNeeded();
+  const turn = async () => Number(await page.locator('.home-turn').getAttribute('data-turn'));
+  const t0 = await turn();
+  await page.waitForTimeout(1600);
+  if ((await turn()) === t0) fail(`/ (${scheme}): the Minpentai board does not step (turn ${t0})`);
+  if (!(await page.locator('.home-game .info-label[data-label="invented"]').isVisible())) fail(`/ (${scheme}): the board has no "Invented ⓘ" label`);
+
+  // A moment: the link lands on its block.
+  await page.evaluate(() => scrollTo(0, 0));
+  const block = await page.locator('.home-quote').getAttribute('data-block');
+  await page.locator('.home-moment-read').click();
+  await page.waitForURL(/\/chapter\/\d+#c\d+-b\d+$/, { timeout: 10000 }).catch(() => {});
+  if (!page.url().endsWith(`#${block}`)) fail(`/ (${scheme}): "Read from here" goes to ${page.url()}, not #${block}`);
+  else {
+    await page.waitForTimeout(500);
+    const at = await page.evaluate((id) => document.getElementById(id)?.getBoundingClientRect().top ?? null, block!);
+    if (at === null || at < 0 || at > 844) fail(`/ (${scheme}): "Read from here" does not show block ${block} (top ${at})`);
+  }
+
+  // Reduced motion: still until Play.
+  const still = await newPage({ viewport: { width: 390, height: 844 }, colorScheme: scheme, hasTouch: true, reducedMotion: 'reduce' });
+  await still.addInitScript(`try{localStorage.setItem('snowmoon.intro-seen',${JSON.stringify(JSON.parse(readFileSync('config/intro.json', 'utf8')).version)})}catch(e){}`);
+  await still.goto(BASE + '/', { waitUntil: 'networkidle' });
+  await still.locator('.home-board').scrollIntoViewIfNeeded();
+  const r0 = await still.locator('.home-turn').getAttribute('data-turn');
+  await still.waitForTimeout(1200);
+  if ((await still.locator('.home-turn').getAttribute('data-turn')) !== r0) fail(`/ (${scheme}): the board moves under prefers-reduced-motion`);
+  await still.locator('.home-board-toggle').click();
+  await still.waitForTimeout(1200);
+  if ((await still.locator('.home-turn').getAttribute('data-turn')) === r0) fail(`/ (${scheme}): Play does not start the board under reduced motion`);
+  await still.close();
+}
 /**
  * The glossary (src/components/glossary.tsx): the index and a word's page meet the floors; later
  * chapters are covered until "Show anyway"; "Back" returns to the reading place, whether it came
@@ -580,6 +659,11 @@ async function checkAiLabels() {
       await at('/images');
       await checkPictureLabels(page, `/images ${tag}`, FIXTURE_IMAGES.length);
 
+      // Home's "Just made": whatever it shows is labelled. (The page is prerendered and revalidated every
+      // 60 s, so it shows the build's data, not this fixture's; checkHome checks its labels or empty state.)
+      await at('/');
+      await checkPictureLabels(page, `/ ${tag}`, 0);
+
       await at(`/image/${FIXTURE_IMAGES[0].version}`);
       await checkPictureLabels(page, `/image ${tag}`, 1);
 
@@ -694,22 +778,14 @@ try {
     // tsx keeps function names with a __name helper that the page does not have.
     await page.addInitScript('window.__name = (f) => f');
 
+    // Home (src/app/page.tsx): first as a first visit (the intro over it), then with the intro seen.
     await open(page, '/');
+    await checkFloors(page, '/ (first visit, intro)', scheme);
+    await page.evaluate((v) => localStorage.setItem('snowmoon.intro-seen', v), JSON.parse(readFileSync('config/intro.json', 'utf8')).version as string);
+    await open(page, '/');
+    if (await page.locator('.intro-card').count()) fail(`/ (${scheme}): the intro shows after it was seen`);
     await checkFloors(page, '/', scheme);
-    if (scheme === 'light') {
-      const first = await page.evaluate(() =>
-        Array.from(document.querySelectorAll('body *'))
-          .filter((e) => e.getBoundingClientRect().top < innerHeight && e.getBoundingClientRect().bottom > 0)
-          .map((e) => Array.from(e.childNodes).filter((n) => n.nodeType === 3).map((n) => n.textContent).join(' '))
-          .join(' ')
-          .replace(/\s+/g, ' ')
-          .toLowerCase(),
-      );
-      for (const phrase of ['independent adaptation', 'not affiliated with the author', 'no token']) {
-        if (!first.includes(phrase)) fail(`/: first screen does not say "${phrase}"`);
-      }
-    }
-
+    await checkHome(page, scheme);
     await open(page, '/about');
     if (!(await page.locator('a[href="https://open.spotify.com/show/0J9O3tKC3BI4buQ8Hry3YN"]').count())) fail(`/about (${scheme}): no link to the podcast on Spotify`);
     await checkFloors(page, '/about', scheme);
@@ -871,6 +947,11 @@ try {
           return el ? el.getBoundingClientRect().width : 0;
         });
         if (measure > 700) fail(`${path} @${width}: the reading column is ${Math.round(measure)}px wide`);
+        // Home is Design's wide page (no .page column): its hero text keeps Design's 780px measure.
+        if (path === '/') {
+          const hero = await page.evaluate(() => document.querySelector('.home-hero-text')?.getBoundingClientRect().width ?? 0);
+          if (!hero || hero > 781) fail(`/ @${width}: the hero text is ${Math.round(hero)}px wide (Design: at most 780)`);
+        }
         if (await page.locator('.topbar').isVisible()) fail(`${path} @${width}: the phone top bar shows`);
         // Learn is Design's phone, centred beside the rail, on tablet and desktop (full screen is for phones and the Farcaster app).
         if (path === '/minpentai' && ((await page.locator('.ml-exit').isVisible()) || !(await page.locator('.rail').isVisible()))) fail(`/minpentai @${width}: Learn is full screen outside a phone`);

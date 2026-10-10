@@ -398,6 +398,7 @@ const GLOSSARY_CLIP_PAGE = '/glossary/autobus';
 const READER_IMAGE_FILES = [
   'src/components/reader-images.tsx',
   'src/components/image-feed.tsx',
+  'src/components/home-feed.tsx',
   'src/app/image/[id]/page.tsx',
   'src/components/image-composer.tsx',
   'src/components/moderate-queue.tsx',
@@ -426,6 +427,7 @@ add({
       glossary,
       sheets,
       feed: await page('/images'),
+      home: await page('/'),
       imagePage,
       wording: {
         labels: [AI_LABEL.image, AI_LABEL.voice, AI_LABEL.imageBy('@someone')],
@@ -440,7 +442,7 @@ add({
       player: code('src/components/chapter-player.tsx'),
     };
   },
-  run: ({ ch1, glossary, sheets, feed, imagePage, wording, sheetSource, card, imageCard, readers, player }) => {
+  run: ({ ch1, glossary, sheets, feed, home, imagePage, wording, sheetSource, card, imageCard, readers, player }) => {
     const problems: string[] = [];
     // Chapter 1 as served: every seeded image's caption, and the narration credit.
     const figures = [...ch1.matchAll(/<figure class="seed-image"[\s\S]*?<\/figure>/g)].map((m) => m[0]);
@@ -462,6 +464,12 @@ add({
     // The feed and a reader's image page, as served.
     const captions = [...feed.matchAll(/<p class="block-caption pictures-caption">[\s\S]*?<\/p>/g)].map((m) => m[0]);
     captions.forEach((c, i) => problems.push(...aiLabelProblems(`/images caption ${i + 1}`, c, 'image')));
+    // The home page's "Just made" (src/components/home-feed.tsx): each reader's image with its label, or the empty state.
+    const homeCaptions = [...home.matchAll(/<p class="block-caption home-feed-caption">[\s\S]*?<\/p>/g)].map((m) => m[0]);
+    homeCaptions.forEach((c, i) => problems.push(...aiLabelProblems(`/ "Just made" ${i + 1}`, c, 'image')));
+    const homeRows = (home.match(/<ul class="home-feed-list"[\s\S]*?<\/ul>/)?.[0].match(/<li\b/g) ?? []).length;
+    if (homeRows !== homeCaptions.length) problems.push(`/ "Just made": ${homeRows} images but ${homeCaptions.length} labels`);
+    if (!homeRows && !/class="home-feed-empty"/.test(home)) problems.push('/ "Just made": neither images nor the empty state');
     if (imagePage) problems.push(...aiLabelProblems(`/image/${imagePage.id}`, imagePage.html.match(/<figcaption class="ip-caption">[\s\S]*?<\/figcaption>/)?.[0] ?? '', 'image'));
     // The wording itself (src/lib/ai-declared.ts).
     for (const l of wording.labels as string[]) if (!SAYS_AI.test(l)) problems.push(`src/lib/ai-declared.ts: label "${l}" does not say "AI"`);
@@ -486,6 +494,7 @@ add({
     c.sheets.push({ what: 'planted', whose: 'The project made it.' });
     c.readers[0].text = c.readers[0].text.replace(/<AiLabel\b/g, '<Caption');
     c.card = c.card.replace(/AI[- ]generated/gi, 'picture');
+    c.home = c.home.replace(/class="home-feed-empty"/g, 'class="home-feed-x"').replace(/class="ai-label"/g, 'class="by-line"');
   },
 });
 
@@ -572,6 +581,28 @@ add({
     c.glossary.terms[0].explanations.push({ block: 'c1-b9', chapter: 1, idx: 9, text: 'An invented word for a kind of bus.' });
     // And a first sentence that is not the book's (one word changed). test:glossary proves each kind alone.
     c.glossary.terms[1].first_sentence.text = c.glossary.terms[1].first_sentence.text.replace(/\w+/, 'Plainly');
+  },
+});
+
+// P2i: the home page's "A moment from the book" (src/lib/home.ts) quotes the book, verbatim, at its block.
+add({
+  id: 'P2i',
+  principle: 2,
+  name: 'each "moment from the book" on the home page is whole sentences of its block, verbatim, at a real paragraph',
+  load: async () => {
+    const { HOME_MOMENTS } = await import('../src/lib/home');
+    return { moments: clone(HOME_MOMENTS), blocks: Object.fromEntries(loadBlocks(ROOT)) };
+  },
+  run: async ({ moments, blocks }) => {
+    const { momentProblems } = await import('../src/lib/home');
+    const problems = momentProblems(moments, new Map(Object.entries(blocks)));
+    if (!moments.length) problems.push('src/lib/home.ts: no moments');
+    return problems;
+  },
+  plant: (c) => {
+    // One word changed in a real sentence, and Design's screen block c1-b18 quoted as if a sentence.
+    c.moments[0].text = c.moments[0].text.replace(/\w+/, 'Quietly');
+    c.moments.push({ chapter: 1, block: 'c1-b18', text: 'Vote on: Badra St #1103.' });
   },
 });
 
@@ -1132,9 +1163,12 @@ add({
   }),
   run: ({ home, code }) => {
     const problems: string[] = [];
-    const firstScreen = home.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 1500);
+    // The page's own first words (inside <main>; the rail and the menu come before it in the HTML).
+    // The home hero carries the owner-approved line "… Not affiliated with the author · No token" (config/intro.json).
+    const main = home.slice(Math.max(0, home.indexOf('<main')));
+    const firstScreen = main.replace(/<script[\s\S]*?<\/script>/g, ' ').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 700);
     if (!/not affiliated with the author/i.test(firstScreen)) problems.push('first screen: "not affiliated with the author" is missing');
-    if (!/There is no token/i.test(firstScreen)) problems.push('first screen: "There is no token" is missing');
+    if (!/\bno token\b/i.test(firstScreen)) problems.push('first screen: "no token" is missing');
     for (const { file, text } of code) if (/\b(erc-?20|erc-?721|tokenomics|airdrop|token sale|mint\s*\()/i.test(text)) problems.push(`${file}: token code`);
     return problems;
   },

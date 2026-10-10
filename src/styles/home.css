@@ -1,0 +1,101 @@
+/* The home page (src/app/page.tsx), from Claude Design's HomeWindow (docs/design/home/). Type, colour
+   and space come from tokens.css; the hero is night in both themes, as in Design. Floors: text 12px,
+   controls 44px (check:ui). */
+
+.home { width: 100%; overflow-x: clip; container-type: inline-size; }
+
+/* ---------- hero ---------- */
+.home-hero { position: relative; overflow: hidden; background: var(--night); color: var(--night-ink); }
+.home-sky { position: absolute; inset: 0; width: 100%; height: 100%; image-rendering: pixelated; pointer-events: none; }
+.home-hero-inner { position: relative; max-width: 1180px; margin: 0 auto; padding: clamp(36px, 8cqi, 96px) var(--gutter) 40px; }
+.home-hero-text { display: flex; flex-direction: column; gap: 18px; max-width: 780px; }
+.home-kicker { margin: 0; font-family: var(--label); font-size: var(--text-label); line-height: 1.5; letter-spacing: 0.08em; text-transform: uppercase; color: var(--night-muted); }
+.home-title { margin: 0; font-size: clamp(32px, 5.4cqi, 58px); font-weight: 400; line-height: 1.06; text-wrap: balance; }
+.home-lines { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 10px 24px; margin: 0; padding: 0; list-style: none; font-size: 18px; line-height: 1.35; color: var(--night-body); }
+.home-lines li { padding-top: 8px; border-top: 1px solid var(--night-ink); }
+.home-hero-actions { display: flex; flex-wrap: wrap; gap: 8px; padding-top: 6px; }
+.home-disclaimer { margin: 0; font-family: var(--label); font-size: var(--text-label); line-height: 1.6; letter-spacing: var(--ls-label); color: var(--night-body); }
+.home-disclaimer a { color: var(--night-link); text-decoration: underline; text-underline-offset: 0.2em; }
+
+/* ---------- buttons ---------- */
+.home-btn {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 16px; border-radius: var(--radius);
+  font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.06em; text-transform: uppercase; text-decoration: none; cursor: pointer;
+  border: 1px solid transparent; background: none; color: inherit;
+}
+.home-btn:hover { text-decoration: none; }
+.home-hero .home-btn { min-height: 48px; padding: 0 18px; font-size: 13px; }
+.home-btn-light { background: var(--night-ink); color: var(--night); }
+.home-btn-night { border-color: var(--night-ink); color: var(--night-ink); }
+.home-btn-night:hover { background: rgba(231, 228, 221, 0.08); }
+.home-btn-solid { background: var(--btn); color: var(--btn-ink); }
+.home-btn-line { border-color: var(--ink); color: var(--ink); }
+.home-btn-line:hover { background: var(--soft); }
+.home-actions { display: flex; flex-wrap: wrap; gap: 8px; }
+
+/* ---------- body ---------- */
+.home-body { display: flex; flex-direction: column; gap: 36px; max-width: 1180px; margin: 0 auto; padding: 28px var(--gutter) 56px; }
+.home-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); gap: 28px 24px; align-items: start; }
+.home-card { display: flex; flex-direction: column; gap: 12px; min-width: 0; padding-top: 12px; border-top: 2px solid var(--ink); }
+.home-card-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; }
+.home-card-head h2,
+.home-card-head span,
+.home-section-head,
+.home-do-meta,
+.home-more,
+.home-feed-ago,
+.home-feed-caption,
+.home-foot { font-family: var(--label); font-size: var(--text-label); font-weight: 400; line-height: 1.5; letter-spacing: 0.06em; text-transform: uppercase; color: var(--muted); }
+.home-card-head h2 { margin: 0; display: flex; align-items: center; gap: 8px; }
+.home-ref { text-transform: none !important; }
+
+.home-quote { margin: 0; font-size: 24px; line-height: 1.3; font-style: italic; text-wrap: pretty; overflow-wrap: anywhere; }
+
+/* Just made */
+.home-feed { gap: 0; }
+.home-feed .home-card-head { padding-bottom: 6px; }
+.home-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--veridia); flex: none; }
+.home-feed-list { margin: 0; padding: 0; list-style: none; }
+.home-feed-list li { display: grid; grid-template-columns: 64px 1fr auto; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--rule); }
+.home-feed-thumb { display: block; width: 64px; height: 64px; }
+.home-feed-thumb img { display: block; width: 64px; height: 64px; object-fit: cover; background: var(--soft); }
+.home-feed-cover { display: block; width: 64px; height: 64px; background: var(--cover); }
+.home-feed-body { display: flex; flex-direction: column; min-width: 0; }
+.home-feed-what { font-size: 17px; line-height: 1.25; }
+.home-feed-caption { margin: 0; text-transform: none; letter-spacing: var(--ls-label); }
+.home-feed-caption .ai-label { text-transform: uppercase; text-align: left; }
+.home-feed-ago { white-space: nowrap; text-transform: none; }
+.home-feed-empty { margin: 8px 0; font-size: var(--text-small); color: var(--body); }
+.home-more { display: inline-flex; align-items: center; min-height: 44px; color: var(--link); }
+
+/* Minpentai */
+.home-board { position: relative; padding: 8px; background: var(--night); border-radius: 2px; }
+.home-board canvas { display: block; width: 100%; aspect-ratio: 3 / 2; }
+.home-board-toggle {
+  position: absolute; right: 12px; bottom: 12px; min-height: 32px; padding: 0 10px; border: 1px solid rgba(231, 228, 221, 0.5); border-radius: var(--radius);
+  background: rgba(6, 6, 8, 0.7); color: var(--night-ink); font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.06em; text-transform: uppercase; cursor: pointer;
+}
+.home-game-caption { margin: 0; font-size: 16px; line-height: 1.4; color: var(--body); }
+.home-game-foot { display: flex; flex-wrap: wrap; gap: 8px; }
+.home-game .home-btn { width: 100%; }
+
+/* Everything you can do here */
+.home-section-head { margin: 0; padding-bottom: 8px; border-bottom: 2px solid var(--ink); letter-spacing: 0.08em; }
+.home-do-cols { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 320px), 1fr)); column-gap: 32px; align-items: start; }
+.home-do-group { margin: 0; padding: 12px 0 4px; font-size: 22px; line-height: 1.3; }
+.home-do-list { margin: 0; padding: 0; list-style: none; }
+.home-do-list a { display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: baseline; padding: 12px 0; border-bottom: 1px solid var(--rule); color: var(--ink); text-decoration: none; }
+.home-do-list a:hover { background: var(--soft); text-decoration: none; }
+.home-do-sub a { padding-left: 18px; }
+.home-do-text { display: flex; flex-direction: column; }
+.home-do-name { font-size: 22px; line-height: 1.3; }
+.home-do-sub .home-do-name { font-size: 20px; }
+.home-do-what { font-size: 16px; line-height: 1.4; color: var(--body); }
+.home-do-meta { white-space: nowrap; }
+
+/* Chapters: the list the home page always had (globals.css .chapter-list). */
+.home-chapters .chapter-list { margin-top: 0; }
+.home-chapters .chapter-list li:first-child { border-top: 0; }
+
+.home-foot { margin: 0; text-transform: none; letter-spacing: var(--ls-label); }
+.home-foot a { text-decoration: underline; text-underline-offset: 0.2em; }

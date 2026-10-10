@@ -131,7 +131,9 @@ in 25 words or fewer and records `written_by { fid, date }`.
   the player says the narration is synthetic; quote cards with an image label
   it as AI-generated. The glossary's "Hear it" clip (`/glossary/autobus` as
   served) carries the same voice label ("AI voice · by Snowmoon Party"), and its
-  recipe sheet is checked like the chapter's.
+  recipe sheet is checked like the chapter's. The home page's "Just made"
+  (`src/components/home-feed.tsx`) shows each reader's image with the same
+  label, or its empty state.
 - `P2c`: every narration and dialogue line in an adaptation script carries a
   human author tag. `npm run check:adaptations` also checks every book line
   verbatim against its block and narration at 25 words or fewer per beat.
@@ -145,6 +147,12 @@ in 25 words or fewer and records `written_by { fid, date }`.
   definition field. Nothing on a glossary
   page defines a word except those quotes. `npm run test:glossary` also rebuilds
   the file from its sources and must match it byte for byte.
+- `P2i`: every "moment from the book" on the home page (`HOME_MOMENTS` in
+  `src/lib/home.ts`) is one or more whole sentences of a paragraph or quote
+  block, verbatim (speaker-colour span tags removed, no quote marks added or
+  changed), at a block id that exists (`check:ui` follows "Read from here" and
+  checks it lands on that block). The proof changes one word and adds Design's screen block c1-b18
+  as if it were a sentence.
 - `P2g`: on every chapter page as served, each screen redrawn from a template
   (`data-source="template"`) carries one "Redrawn ⓘ" label: the visible word,
   the ⓘ, the declaration served with it, and a dialog with the details; screens
@@ -346,8 +354,11 @@ is no token.
 **Checked by.**
 - `P7a`: no ordering (`order by`, `.sort`) or scoring code references
   donations, grants, amounts, costs or sponsors.
-- `P7b`: the deployed first screen contains "not affiliated with the author"
-  and "There is no token"; no token code (ERC-20/721, mint, airdrop) exists in
+- `P7b`: the deployed first screen (the first words of the home page's
+  `<main>`, its dark hero) contains "not affiliated with the author" and "no
+  token" (the owner-approved line "Independent adaptation · Not affiliated
+  with the author · No token", `config/intro.json`; the owner moved it from
+  Design's footer into the hero, 2026-10-10); no token code (ERC-20/721, mint, airdrop) exists in
   the repo. `npm run check:ui` also checks the first screen at phone size.
 - `npm run check:intro`: the first-visit intro's disclaimer (`config/intro.json`),
   shown on card 1 and at the top of /about, keeps "not affiliated with the
