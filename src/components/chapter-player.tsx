@@ -2,7 +2,7 @@
 
 import { InfoLabel } from './info-label';
 import { LABELS } from '~/lib/labels';
-import { REPO_URL } from '~/lib/config';
+import { PODCAST_LINKS, REPO_URL } from '~/lib/config';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ReportPronunciation } from './report-pronunciation';
@@ -281,7 +281,7 @@ export function ChapterPlayer({ chapter, chapters, recipeUrl, url, duration, cue
       {audioEl}
       {/* The podcast feed, moved here from the menu (owner, 2026-10-09). Model-drafted wording. */}
       <p className="listen-podcast">
-        Every chapter as a podcast: <a href="/podcast.xml">RSS feed</a>
+        Every chapter as a podcast: <a href={PODCAST_LINKS.spotify} target="_blank" rel="noreferrer">Spotify ↗</a> · <a href={PODCAST_LINKS.feed}>RSS feed</a>
       </p>
       {/* No picture for this part: nothing is shown in its place (owner, 2026-10-08). */}
       {image && (

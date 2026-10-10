@@ -646,6 +646,7 @@ try {
     }
 
     await open(page, '/about');
+    if (!(await page.locator('a[href="https://open.spotify.com/show/0J9O3tKC3BI4buQ8Hry3YN"]').count())) fail(`/about (${scheme}): no link to the podcast on Spotify`);
     await checkFloors(page, '/about', scheme);
     await checkAssistant(page, scheme);
     await checkLiveScreens(page, scheme);
