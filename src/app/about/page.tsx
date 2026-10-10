@@ -93,7 +93,7 @@ export default function About() {
         ID, sending only the ID, and keeps the answer for a day.
         Its maker can hide it at once. Anyone signed in can report it: one report of anything sexual involving a minor hides it
         at once, and three reports from different people hide it until a moderator looks. Moderators can only hide. This app
-        counts how many images each person makes a day; what they cost is kept only as daily totals, with no names.
+        counts how many images each person makes a day; what they cost is kept as daily totals, with no names; a published image’s recipe shows its own cost.
       </p>
       <p>
         Contact, for legal or copyright notices or to report an image without signing in:{' '}
@@ -110,7 +110,8 @@ export default function About() {
       <p>
         Vercel hosts the site and sees your IP address and browser details, as any web host does. Cloudflare stores and serves
         the pictures and audio. Supabase holds the database. A report link for the narration opens GitHub or Farcaster, where
-        what you post is public. Every outside service, and what each receives, is in the <a href="/privacy">Privacy Policy</a>;
+        what you post is public. When an image is reported, ntfy delivers us a short alert that carries no content and
+        nothing about you. Every outside service, and what each receives, is in the <a href="/privacy">Privacy Policy</a>;
         the rules for using this site are in the <a href="/terms">Terms</a>.
       </p>
       <h2>Theme</h2>

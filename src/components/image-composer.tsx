@@ -245,7 +245,7 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
                       {prompt.length} / 600
                     </span>
                   </div>
-                  <p className="ic-note">Your prompt is sent to Groq to be checked and to fal.ai to make the image. It becomes public only if you publish.</p>
+                  <p className="ic-note">Your prompt is sent to Groq to be checked (through Vercel AI Gateway when Groq is busy) and to fal.ai to make the image. It becomes public only if you publish.</p>
                   {!status.invited && <p className="ic-note">At Generate, your Farcaster ID (and nothing else) is sent to Neynar to check your account&apos;s score, once a day.</p>}
 
                   <fieldset className="ic-style">

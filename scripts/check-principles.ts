@@ -1145,9 +1145,13 @@ const SERVICES: [string, RegExp][] = [
   ['Farcaster', /\bFarcaster\b(?!(?:['’]s)? (?:ID|name|username|app|mini app)\b)/g],
   ['Neynar', /\bNeynar\b/g],
   ['GitHub', /\bGitHub\b/g],
+  // Owner's Privacy wording of 2026-10-10 names these two as well.
+  ['ntfy', /\bntfy\b/g],
+  ['Spotify', /\bSpotify\b/g],
 ];
-/** At Generate, the image prompt goes to Groq (the check) and fal.ai (the image), the FID to Neynar (the gate). */
-const AT_GENERATE = ['Groq', 'fal.ai', 'Neynar'];
+/** At Generate, the image prompt goes to Groq (the check; through Vercel AI Gateway when Groq is busy) and
+ *  fal.ai (the image), the FID to Neynar (the gate). The gateway is named on the consent screen too (owner, 2026-10-10). */
+const AT_GENERATE = ['Groq', 'Vercel AI Gateway', 'fal.ai', 'Neynar'];
 const named = (text: string) => new Set(SERVICES.filter(([, re]) => text.match(re)).map(([n]) => n));
 const diff = (a: Set<string>, b: Set<string>) => [...a].filter((x) => !b.has(x));
 const pageText = (html: string, sel: string) => {

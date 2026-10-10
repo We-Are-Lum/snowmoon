@@ -736,7 +736,7 @@ try {
       await checkFloors(page, '/chapter/1 (add an image, invited)', scheme);
       const text = (await page.textContent('.image-composer')) ?? '';
       if (!/never sent to a model/.test(text)) fail('/chapter/1: the composer does not say the book text is never sent to a model');
-      if (!/sent to Groq to be checked and to fal\.ai/.test(text)) fail('/chapter/1: the composer does not name both hosts');
+      if (!/sent to Groq to be checked \(through Vercel AI Gateway when Groq is busy\) and to fal\.ai/.test(text)) fail('/chapter/1: the composer does not name the hosts that receive the prompt');
       await page.keyboard.press('Escape');
       if (await page.locator('.image-composer').count()) fail('/chapter/1: Escape does not close the composer');
       // A reader below the Neynar score (kept from an earlier Generate): the composer says why, plainly, and offers no Generate.

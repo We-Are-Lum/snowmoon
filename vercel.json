@@ -1,0 +1,9 @@
+{
+  "git": {
+    "deploymentEnabled": {
+      "site-minpentai-play": false,
+      "site-minpentai-play-2": false,
+      "site-images-everyone": false
+    }
+  }
+}

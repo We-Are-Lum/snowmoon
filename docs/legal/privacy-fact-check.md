@@ -1,4 +1,4 @@
-# Privacy Policy: fact-check (2026-10-09; updated 2026-10-10)
+# Privacy Policy: fact-check (2026-10-09; redone 2026-10-10 for the owner's wording)
 
 Every factual statement on `/privacy` (the owner's legal starter, sections 1–11, words in
 `src/lib/legal.ts`), checked against the code, migrations, config and principle checks of branch
@@ -11,7 +11,12 @@ Generate with only the FID, cached a day in a new table, invited FIDs skip; the 
 branch). Minpentai Play is judged on branch `site-minpentai-play-2` (read-only; migration 0009 not
 applied), so those lines are "true on site-minpentai-play-2, not live".
 
-**Update, 2026-10-10 (after site-legal merged into site-images-everyone):** 0009 is applied on
+**Redone, 2026-10-10, after the owner's wording changes** (§3, §4, §5, §6, §7, §8, applied exactly in
+`src/lib/legal.ts`): every row those changes touch is re-judged below against branch
+`site-images-everyone` at the time of writing; rows the changes don't touch keep their verdict. Rows
+removed with the words they checked: 4.3 (ratings), 5.5's old wording. New rows: 4.1b, 7.9b, 7.14.
+
+**Earlier update, 2026-10-10 (after site-legal merged into site-images-everyone):** 0009 is applied on
 production (owner, 2026-10-09 23:55), so 4.9–4.12 are true once site-minpentai-play-2 is live.
 7.10 and 7.11 were checked against the gate's code (`src/lib/images/neynar.ts`, `gate.ts`, 0010):
 true once site-images-everyone merges; 7.11's rows are deleted, not only treated as stale (each
@@ -29,19 +34,19 @@ else was re-judged; the wording is unchanged.
 | 2.5 | We do not sell data. | can't tell | A promise, not a code fact. Nothing in the code sends data to a buyer; the only outside recipients are those in section 7 (and see 7.x below). |
 | 3.1 | The browser stores whether you have seen the introduction. | true | `snowmoon.intro-seen`, `src/components/first-visit.tsx:15,28`. |
 | 3.2 | …your light or dark setting. | true | `snowmoon.theme`, `src/lib/theme.ts:7`, `src/components/theme-switch.tsx:24`. |
-| 3.3 | …the furthest chapter you have opened. | true, and more | `snowmoon.read-to` (`src/lib/chat/device.ts:36`); also every chapter opened (`snowmoon.opened`) and the last one (`snowmoon.last-chapter`), `src/lib/chat/device.ts:59-67`. |
+| 3.3 | …the furthest chapter you have opened. | true | `snowmoon.read-to` (`src/lib/chat/device.ts:36`); also every chapter opened and the last one (`device.ts:59-67`), which "a few other settings of yours" now covers. |
 | 3.4 | …your questions to the assistant and its answers. | true | `snowmoon.ask.threads.v1`, `src/lib/chat/device.ts:35,90`. |
 | 3.5 | …drafts of images you make until you publish them. | true | IndexedDB `snowmoon` / `image-drafts`, `src/lib/images/client.ts:28-35`; deleted on publish, `src/components/image-composer.tsx:164`. |
 | 3.6 | …on the website, a sign-in token that lasts about an hour. | true, with a nuance | One-hour Quick Auth token, `src/lib/client-auth.ts:10,49`. The same entry (`snowmoon.signin`) also holds the FID, username and a server-signed name proof valid 30 days (`src/lib/client-auth.ts:49`, `src/lib/names.ts:13`), and it is not removed when the token expires, only ignored (`src/lib/client-auth.ts:38-40`) until sign-out (`:63`). |
-| 3.7 | "a few things" (the list of what is stored) | false (incomplete) | Also stored, not listed: the audio position per chapter `snowmoon:position:cN` (`src/components/chapter-player.tsx:85,205`); the rail collapsed and the assistant panel closed, `snowmoon.rail` / `snowmoon.panel` (`src/components/app-shell.tsx:44-45`); the notice's "Don't show this again", `snowmoon.ask.notice-seen` (`src/lib/chat/device.ts:37,107`); a first-visit flag `snowmoon.visited` (`src/components/first-visit.tsx:272,283`); Minpentai's tutorial done, `minpentai-tutorial-done` (`src/app/minpentai/minpentai-app.tsx:18,52`, `src/app/minpentai/sandbox.tsx:24,69`). None is sent anywhere. |
+| 3.7 | "where you stopped listening" and "a few other settings of yours" (the list is now complete) | true | Where you stopped listening: `snowmoon:position:cN` (`src/components/chapter-player.tsx:85,205`). Other settings: rail and panel state (`app-shell.tsx:44-45`), the notice's "Don't show this again" (`device.ts:37,107`), `snowmoon.visited` (`first-visit.tsx:272,283`), Minpentai's tutorial done (`minpentai-app.tsx:18,52`). No other `localStorage`, `sessionStorage` or IndexedDB key in `src`. Nuance kept from 3.6: the sign-in entry also holds the FID, username and a 30-day name proof. |
 | 3.8 | These stay on your device. | true | Stored only client-side; threads are sent with a question to be answered (section 5) but never stored by the server (`src/lib/chat/device.ts:2`); drafts are sent only on Publish (`src/components/image-composer.tsx:161`). |
 | 3.9 | Clearing your browser's site data removes them. | true | All of it is localStorage or IndexedDB of this origin (above); nothing in cookies or elsewhere. |
-| 4.0 | Kept by us when you sign in: your Farcaster ID, and what you do with it here (the list) | false (incomplete) | Also kept under the FID, not listed: your agreement to the publication wording (FID, wording hash, time), `studio.contributor_consents` (`supabase/migrations/0002_v5.sql:95`, `src/lib/consent.ts:61`); hiding and unhiding your own image, `studio.removal_log` with `by_fid` (`src/app/api/images/[id]/hide/route.ts:30-42`); the assistant's question count (said in section 5); Minpentai challenges and per-person request counts (see 4.9). |
-| 4.1 | Quote cards you save. | true | `studio.elements.created_by_fid`, `src/lib/cards.ts:88-90`. |
-| 4.2 | …and your likes. | true | `studio.likes (version_id, fid)`, `src/lib/cards.ts:156`, `src/app/api/images/[id]/like/route.ts:24`. |
-| 4.3 | …and your ratings. | false (not collected) | `studio.ratings` exists (`supabase/migrations/0001_core.sql:147`) but no route or library writes it (no `ratings` insert in `src`). |
+| 4.0 | Kept by us when you sign in (the list) | false (still incomplete, narrowly) | Now listed: consent records and your own hides (4.1b). Still not listed: Minpentai challenges (who asked whom, deleted 1 h after) and per-person Play request counts for today (`mp_rate`, deleted the next day), both on site-minpentai-play-2; the Neynar score under your FID is said in §7, not §4. The assistant's count is said in §5. |
+| 4.1 | Quote cards you save, and your likes. A saved card's page is public. | true | `studio.elements.created_by_fid`, `src/lib/cards.ts:88-90`; likes `cards.ts:156`, `images/[id]/like/route.ts:24`; card page public (`card/[id]/page.tsx:14`). |
+| 4.1b | That you agreed to the terms for publishing, and any of your own work you have hidden. | true | `studio.contributor_consents` (FID, wording hash, time; `0002_v5.sql:95`, `src/lib/consent.ts:61`); your own hides and unhides in `studio.removal_log` with `by_fid` (`src/app/api/images/[id]/hide/route.ts:30-42`). |
+| 4.3 | (ratings) | removed | The words about ratings are gone; nothing writes `studio.ratings`. |
 | 4.4 | A saved card's page is public. | true | `/card/[id]` renders for anyone, `src/app/card/[id]/page.tsx:14`; it shows "saved by FID n" (`:43`). |
-| 4.5 | Your individual likes and ratings are private; only totals are shown. | true | `supabase/migrations/0004_private_ratings_and_likes.sql:41,51` (totals views); P6b (`scripts/check-principles.ts`, PRIVATE_FID_TABLES) and P6c (live API) check it. |
+| 4.5 | Your individual likes are private; only totals are shown. | true | `0004_private_ratings_and_likes.sql:41,51`; P6b and P6c check it. |
 | 4.6 | Images you publish, with their prompt, your Farcaster username and the record of how they were made. These are public. | true | `src/app/api/images/publish/route.ts:62-91`: recipe with `prompt`, `user_prompt`, `by_name`, request id, settings, checks; recipes are public (P1d). The recipe also keeps that image's `cost_usd` under `created_by_fid` (`:86-87`), which About's "what they cost is kept only as daily totals, with no names" does not allow for. |
 | 4.7 | How many images you make each day, to count the daily limit. | true | `studio.image_asks (fid, at)`, `supabase/migrations/0008_images.sql:34`, `src/lib/images/limits.ts:19,40`. |
 | 4.8 | …and the reports you make. | true | `studio.removal_log` step `reported`, `by_fid`, reason, note, `src/app/api/images/[id]/report/route.ts:35`; `supabase/migrations/0008_images.sql:78-90`. |
@@ -53,9 +58,9 @@ else was re-judged; the wording is unchanged.
 | 5.2 | Both are set to keep nothing. | true for the gateway; can't tell for Groq from code | Gateway: `zeroDataRetention` asked per request, `src/lib/chat/provider.ts:10`. Groq direct: a console setting the owner confirmed on 2026-10-08 (`src/lib/config.ts:63-67`; docs/principles.md §6); nothing in code or Groq's replies shows it. |
 | 5.3 | We keep no copy of your questions or the answers. | true | `studio.chat_calls` has no question or answer column (`supabase/migrations/0007_chat_costs_without_person.sql`); errors log only the error type (`src/app/api/chat/ask/route.ts:37-38`). |
 | 5.4 | Under your Farcaster ID we record only how many questions you ask and when, to count the daily limit. | true in code; can't tell whether 0007 is live | After 0007, `chat_calls` = FID, time, model (`src/lib/chat/limits.ts:44`; 0007 header). The starter assumes 0007 is applied; the file header still says "NOT APPLIED", and `src/lib/chat/notice.ts:32,35` records the owner applying it on 2026-10-08. The live database can't be read from here. Before 0007, cost rows with request ids were kept under the FID. |
-| 5.5 | Records of each answer's size and cost are kept without your ID, to track our spending. | false as worded | There are no per-answer records: `studio.chat_costs` holds daily totals per kind, model, provider and verdict (`supabase/migrations/0007_chat_costs_without_person.sql`, `src/lib/chat/limits.ts:61`). Without the ID: true. |
+| 5.5 | The assistant's costs are kept only as daily totals, without your ID, to track our spending. | true | `studio.chat_costs` holds daily totals per kind, model, provider and verdict, with no FID (`0007_chat_costs_without_person.sql`, `src/lib/chat/limits.ts:61`). Same 0007 caveat as 5.4: true in code; whether 0007 is applied on the live database can't be read from here. |
 | 6.1 | Anything you publish is public… | true | Images (P1d), cards (`src/app/card/[id]/page.tsx`). |
-| 6.2 | …and is shown with your Farcaster name… | false for quote cards | Images: `by_name` (`src/app/api/images/publish/route.ts:80`). A saved card shows "saved by FID n", not a name (`src/app/card/[id]/page.tsx:43`); an image with no name found shows "FID n" (`src/lib/names.ts:10`). |
+| 6.2 | Anything you publish is public, shown with your Farcaster username (your Farcaster ID on quote cards), the date, and the record of how it was made. | true, with a nuance | Images show `by_name` (`publish/route.ts:80`); cards show "saved by FID n" (`card/[id]/page.tsx:43`). Nuance: if no username can be found at publish, an image shows "FID n" too (`src/lib/names.ts:10`). |
 | 6.3 | …the date, and the record of how it was made. | true | Recipe `made_at` and version `created_at`; recipe linked from every published image (P1d, P2b). |
 | 7.1 | Vercel hosts the site and sees your IP address and browser details. | true | Deployed on Vercel (check:principles P6d reads the Vercel project; `next.config.ts` uses `VERCEL_GIT_COMMIT_SHA`). |
 | 7.2 | Cloudflare stores and serves the pictures and audio, and sees the same when your device fetches them. | true | R2: `src/lib/images/store.ts:21` (readers' images, `pictures.snowmoon.party`), book media `media.snowmoon.party` (`content/snowmoon/illustrations/published.json:27`), uploaded with `R2_*` (`scripts/publish-narration.ts:70`). |
@@ -65,14 +70,15 @@ else was re-judged; the wording is unchanged.
 | 7.6 | fal.ai receives the prompt for an image you make, and makes the image. It is asked to keep no copy. | true | `src/lib/images/fal.ts:34-37`: `sync_mode`, `X-Fal-Store-IO: 0`. Whether fal.ai honours it can't be seen from here. |
 | 7.7 | Farcaster's sign-in services confirm who you are when you sign in. | true | `relay.farcaster.xyz` (`src/app/api/auth/web/start/route.ts:13,21`), `auth.farcaster.xyz` nonce and token verification (`@farcaster/quick-auth`, `src/lib/auth.ts:12,25`); in a Farcaster app, `sdk.quickAuth.fetch` (`src/lib/client-auth.ts:72`). |
 | 7.8 | They learn your Farcaster ID and that you signed in here, not what you read or ask. | true | Only the domain, nonce and channel go to the relay (`start/route.ts:21-29`); no reading or question data is sent to Farcaster. |
-| 7.9 | Farcaster's public API receives a Farcaster ID when we look up the username to show with published work. | true (and more on site-minpentai-play-2) | `src/lib/names.ts:50` (`api.farcaster.xyz/v2/user?fid=`), cached a day (`:44-56`), used at publish (`publish/route.ts:58`). On site-minpentai-play-2 the same lookup also names Play players (`play-server/route.ts` imports `bylineName`), which is not "published work". |
+| 7.9 | Farcaster's public API receives a Farcaster ID when we look up the username to show with published work, and in Minpentai's lobby and matches. | true (the Minpentai half once site-minpentai-play-2 is live) | `src/lib/names.ts:50`, cached a day; at publish (`publish/route.ts:58`); on site-minpentai-play-2 the lobby, challenges and invites use the same lookup (`play-server/route.ts`, `verifiedName`). |
 | 7.10 | Neynar receives your Farcaster ID when you first make an image on a given day, to look up its account score, which decides whether you can make images. | true once site-images-everyone merges | Not on this branch: `src/lib/config.ts:126` "No Neynar key"; no Neynar call in `src`. Per the spec (only the FID, at Generate, score ≥ 0.7). Two nuances: the cache is "a day" from the lookup, so the next lookup is about 24 h later, not the first image of each calendar day; invited FIDs are never looked up. |
 | 7.11 | We keep the score for a day. | true once site-images-everyone merges | `studio.image_scores` (0010); a kept score is used for 24 h from its lookup, and each lookup deletes rows older than a day (`src/lib/images/neynar.ts`). Low scores are kept a day too. |
-| 7.12 | If you listen as a podcast, your podcast app fetches the audio from our media host. | true for the feed; can't tell for Spotify | Enclosures point at the media host (`src/lib/podcast.ts:107`). The show is also on Spotify (`src/lib/config.ts:19`, linked from About and Listen); Spotify usually ingests a feed's audio and serves it itself, and then Spotify, not our media host, sees the listener. Spotify is not named on the Privacy page. |
+| 7.12 | If you listen as a podcast, your podcast app fetches the audio from our media host; Spotify serves its own copy. | true for the feed; can't tell from code for Spotify | Enclosures point at the media host (`src/lib/podcast.ts:107`). That Spotify re-hosts the audio is Spotify for Creators' practice for RSS shows, outside the code. |
 | 7.13 | A "report" link may open GitHub or Farcaster, where what you post is public and under their terms. | true | Mispronunciation reports: a prefilled GitHub issue or a cast to /snowmoon (`src/lib/report-pronunciation.ts:3-8,32`). Image reports are in-app (4.8). |
-| 7.x | (the list of outside services is complete) | false once site-images-everyone merges | That branch sends report alerts through ntfy (to `SNOWMOON_ALERT_URL`), carrying only the text "Snowmoon: N reports waiting" (no image, prompt, FID or name; `src/lib/images/alert.ts`); ntfy is not named. Spotify: see 7.12. Inside a Farcaster app, the host app (e.g. Warpcast) also sees that the mini app is used; not named. |
+| 7.14 | ntfy delivers a short alert to us when an image is reported. It carries no content and nothing about you. | true once site-images-everyone merges | The POST body is exactly `Snowmoon: N reports waiting`, with only `Content-Type: text/plain` (`src/lib/images/alert.ts:30,50`); it is sent from our server, so ntfy sees our server, not the reader. Also sent when an author hides their own image (not only on a report); the words say "when an image is reported". |
+| 7.x | (the list of outside services is complete) | true, with one nuance | Every outside service the code calls is named: Vercel, Vercel AI Gateway, Cloudflare, Supabase, Groq, fal.ai, Farcaster, Neynar, ntfy, Spotify (podcast), GitHub (report link). Nuance: inside a Farcaster app, the host app also sees that the mini app is used; not named. |
 | 8.1 | The Service is not directed to children under 13. | can't tell | A statement of intent; nothing in code. |
-| 8.2 | Signing in requires that you be at least 18. | false as a fact of the Service (true as a rule) | No age check anywhere in the sign-in flow (`src/components/sign-in.tsx`, `src/lib/auth.ts`); it is a rule in Terms §4. |
+| 8.2 | You must be at least 18 to sign in; we do not verify age. | true | A rule (Terms §4) with no age check in the sign-in flow (`src/components/sign-in.tsx`, `src/lib/auth.ts`), as the words now say. |
 | 9.1 | We keep account-linked records while you use the Service. | true, mostly longer | No automatic deletion for cards, likes, consents, image_asks, removal_log or recipes (append-only; `0008_images.sql:44,96`); they stay after you stop using the Service until an erasure (docs/removal.md §2, line 58). Exceptions: Minpentai matches, invites, challenges, rate rows (4.10-4.11). |
 | 9.2 | Write to us to ask for a copy or for deletion. | true for deletion; can't tell for a copy | Erasure is a logged maintainer procedure (docs/removal.md:58-83). No procedure or tooling for giving a person a copy of their data exists in the repo. |
 | 9.3 | Work you have published can be hidden on request. | true | The maker hides at once (`src/app/api/images/[id]/hide/route.ts`), moderators hide (`src/app/api/moderate/route.ts:37`), by email for signed-out (About). |
@@ -81,18 +87,15 @@ else was re-judged; the wording is unchanged.
 
 ## For the owner
 
-- **False:** 3.7 (device list leaves out the audio position, rail/panel state, the notice's
-  "don't show again", the visited flag and Minpentai's tutorial flag); 4.0 (consent records and
-  your own hides are kept under your FID, not listed); 4.3 (ratings are not collected); 5.5
-  ("records of each answer": they are daily totals); 6.2 (quote cards show the FID, not a name);
-  8.2 (no age check exists); 7.x once the images branch merges (ntfy not named).
-- **Can't tell:** 1.1, 2.5, 8.1, 10.1 (promises or facts outside the code); 5.2 for Groq (console
-  setting, your confirmation of 2026-10-08); 5.4 (whether 0007 is applied on the live database:
-  the notice records that you applied it on 2026-10-08, the migration header still says
-  NOT APPLIED); 7.12 (Spotify); 9.2 (a copy of one's data).
-- **Depends on unmerged branches:** 7.10–7.11 (site-images-everyone); 4.9–4.12 and the Play
-  half of 7.9 (site-minpentai-play-2, 0009 not applied). Ship section 4's Minpentai bullet only
-  with that branch, or the page describes something that isn't there.
-- The consent screen (own-words-v3) says the prompt goes "to Groq to be checked"; when Groq is
-  busy it goes through Vercel AI Gateway (7.5). The Privacy page says so; the consent screen
-  doesn't.
+- **False (1):** 4.0 — §4 still leaves out Minpentai challenges (deleted 1 h after) and per-person
+  Play request counts (deleted the next day), both on site-minpentai-play-2.
+- **Nuances, not false:** 6.2 (an image whose maker has no username found shows "FID n"); 7.14
+  (the alert also goes out when an author hides their own image, not only on a report); 3.6 (the
+  sign-in entry also holds the FID, username and a 30-day name proof).
+- **Can't tell from the code:** 1.1, 2.5, 8.1, 10.1 (promises or facts outside the code); 5.2 for
+  Groq (console setting); 5.4 and 5.5 (whether 0007 is applied on the live database); 7.12
+  (Spotify's copy); 9.2 (a copy of one's data).
+- **Depends on unmerged branches:** 7.10, 7.11, 7.14 (site-images-everyone); 4.9–4.12 and 7.9's
+  Minpentai half (site-minpentai-play-2, now being pushed).
+- The consent screen now names Vercel AI Gateway for the prompt check, as §7 does (own-words-v3,
+  revised before it shipped).
