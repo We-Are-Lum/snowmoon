@@ -1,5 +1,7 @@
 -- 0007_chat_costs_without_person.sql — the assistant's cost records can't be
--- joined to a person (owner, 2026-10-08). NOT APPLIED.
+-- joined to a person (owner, 2026-10-08).
+-- APPLIED on production by the owner; confirmed live 2026-10-10 09:19 (studio.chat_costs exists).
+-- Do not edit what this file creates; change it in a new migration.
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the
 -- Supabase SQL Editor. Requires 0001–0006. Dry run first: paste everything,
