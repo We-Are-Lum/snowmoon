@@ -189,3 +189,9 @@ Docs only: P8e and live.ts say the book's sliders are working range inputs; the 
 Docs only: docs/proposals/word-pronunciation-clips.md. To undo (back to `473f94c`):
 
     vercel rollback dpl_9mdPcZ8FsEE65ot9h1UoYByGtCq4 --scope nates-projects-d1780cff
+
+## 2026-10-09: glossary First appears, review signed off, clip's AI label (branch site-glossary-2)
+
+Every word shows the sentence where it first appears; the review file is reviewed by FID 6786; the clip carries AI voice · by Snowmoon Party; P2b and P2e cover them. To undo (back to `84b78f1`):
+
+    vercel rollback dpl_FDdV4x29HL6WpjhSnbdbVicimTyK --scope nates-projects-d1780cff
