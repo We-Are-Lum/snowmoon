@@ -15,6 +15,8 @@ export const WORK = {
 
 export const APP_NAME = 'Snowmoon Living Edition';
 export const REPO_URL = 'https://github.com/We-Are-Lum/snowmoon';
+/** Where the podcast is listed. Spotify: the show the owner added through Spotify for Creators (2026-10-09). */
+export const PODCAST_LINKS = { feed: '/podcast.xml', spotify: 'https://open.spotify.com/show/0J9O3tKC3BI4buQ8Hry3YN' } as const;
 
 /**
  * FID credited for system generations (narration, digests, analysis): the

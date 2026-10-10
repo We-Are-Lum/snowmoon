@@ -1,4 +1,4 @@
-import { CHAT, CONTACT_EMAIL, IMAGES, REPO_URL, WORK } from '~/lib/config';
+import { CHAT, CONTACT_EMAIL, IMAGES, PODCAST_LINKS, REPO_URL, WORK } from '~/lib/config';
 import { RULES } from '~/lib/images/rules';
 import { SIGN_IN_SERVICES } from '~/lib/sign-in-text';
 import { ThemeSwitch } from '~/components/theme-switch';
@@ -50,7 +50,7 @@ export default function About() {
       <p id="podcast">
         {/* The feed's own words are the owner's (config/podcast.json); this link is model-drafted. */}
         <a href="/podcast.xml">Listen as a podcast</a>: the house narration, one chapter per episode, as a feed for
-        any podcast app.
+        any podcast app. It is also <a href={PODCAST_LINKS.spotify} target="_blank" rel="noreferrer">on Spotify ↗</a>.
       </p>
       <h2>The reading assistant</h2>
       {/* Model-drafted wording (owner decision 2026-10-07: say which data centre is unverified). */}
