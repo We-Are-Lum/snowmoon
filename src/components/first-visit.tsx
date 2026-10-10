@@ -188,6 +188,9 @@ function IntroScreens({ intro, onClose }: { intro: Intro; onClose: () => void })
         tabIndex={-1}
         ref={dialog}
         onKeyDown={(e) => {
+          // Keys from the recipe sheet (a portal, so React still bubbles them here) are the sheet's own:
+          // Escape there closes the sheet, not the intro.
+          if (!e.currentTarget.contains(e.target as Node)) return;
           if (e.key === 'Escape') close();
           else if (e.key === 'ArrowRight') go(i + 1);
           else if (e.key === 'ArrowLeft') go(i - 1);
