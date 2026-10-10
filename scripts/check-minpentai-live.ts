@@ -145,7 +145,9 @@ const text = (page: Page, sel: string) => page.locator(sel).first().textContent(
 const until = async (page: Page, fn: () => Promise<boolean>, what: string, ms = 15000) => {
   const end = Date.now() + ms;
   while (Date.now() < end) { if (await fn().catch(() => false)) return true; await page.waitForTimeout(250); }
-  fail(`timed out: ${what}`); return false;
+  // What the screen showed when it gave up: the strip, the points, any toast or sheet.
+  const seen = await page.evaluate(() => ['.mp-strip', '.mp-pts', '.mp-toast', '.mp-sheet', '.mp-bar-title'].map((s) => `${s}=${JSON.stringify(document.querySelector(s)?.textContent?.trim().slice(0, 120) ?? null)}`).join(' ')).catch(() => '');
+  fail(`timed out: ${what} (${seen})`); return false;
 };
 
 const browser = await chromium.launch({ channel: 'chrome' });
@@ -180,7 +182,8 @@ try {
   }
   // Setup: ilse places a glider and ends; wren ends.
   await A.page.locator('[role="gridcell"]').nth(2 * W + 3).click();
-  await until(A.page, async () => ((await text(A.page, '.mp-pts')) ?? '').startsWith('4 OF 8'), 'ilse places a glider (4 points left)');
+  // A glider costs 4, or 3 under the drawn rule "cost3" (src/lib/minpentai/play-game/game.ts): 4 or 5 left.
+  await until(A.page, async () => /^[45] OF 8/.test((await text(A.page, '.mp-pts')) ?? ''), 'ilse places a glider (4 points left, or 5 when gliders cost 3)');
   await floors(A.page, 'ilse placing');
   await A.page.getByRole('button', { name: 'END TURN' }).click();
   await until(A.page, async () => ((await text(A.page, '.mp-body .mp-label.ink')) ?? '').startsWith('TURN ENDED · WAITING FOR @WREN'), 'ilse waits for @wren');
