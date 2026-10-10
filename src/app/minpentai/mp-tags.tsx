@@ -6,6 +6,7 @@
  * the lenses, the symbol's shape) folds into one "Invented ⓘ" whose sheet lists each. The full tag
  * words stay in learn-text.ts and in each label's accessible name.
  */
+import React from 'react';
 import { InfoLabel } from '~/components/info-label';
 import { LABELS } from '~/lib/labels';
 import { LEARN_TEXT as T, type TagKey } from '~/lib/minpentai/learn-text';
