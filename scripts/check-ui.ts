@@ -733,6 +733,8 @@ try {
   // card, remembered on the device without cookies; deep links go straight in.
   {
     const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true });
+    // checkFloors' page code needs the transpiler's __name helper, as in the main context.
+    await ctx.addInitScript('window.__name = (f) => f');
     const page = await ctx.newPage();
     await page.goto(BASE + '/', { waitUntil: 'networkidle' });
     const cards = (JSON.parse(readFileSync('config/intro.json', 'utf8')).cards as { id: string }[]).map((c) => c.id);
