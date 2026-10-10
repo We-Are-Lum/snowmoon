@@ -195,3 +195,9 @@ Docs only: docs/proposals/word-pronunciation-clips.md. To undo (back to `473f94c
 Every word shows the sentence where it first appears; the review file is reviewed by FID 6786; the clip carries AI voice · by Snowmoon Party; P2b and P2e cover them. To undo (back to `84b78f1`):
 
     vercel rollback dpl_FDdV4x29HL6WpjhSnbdbVicimTyK --scope nates-projects-d1780cff
+
+## 2026-10-09: untrack the links d62f616 committed (branch site-untrack-links)
+
+Repo hygiene: .venv, narration-out, images-out and art-out are no longer tracked; .gitignore entries without a trailing slash. To undo (back to `85ad0f1`):
+
+    vercel rollback dpl_BHDcuK9uunUocUjdfaMcCn93oVa8 --scope nates-projects-d1780cff
