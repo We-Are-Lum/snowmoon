@@ -535,7 +535,10 @@ a.provenance { color: var(--muted); }
 .iv-chip { font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.06em; text-transform: uppercase; border: 1px solid var(--ink); padding: 4px 8px; border-radius: 2px; }
 .iv-recipe { display: flex; flex-direction: column; }
 .iv-recipe img { display: block; width: 100%; height: auto; max-height: 58%; object-fit: cover; border-radius: var(--radius) var(--radius) 0 0; background: var(--soft); }
-.iv-ai { margin: 6px 0 0; }
+.iv-pic { position: relative; flex: none; max-height: 58%; display: flex; }
+.iv-pic img { max-height: 100%; }
+.iv-ai { position: absolute; left: 8px; bottom: 8px; }
+.iv-ai .ai-label { background: var(--paper); }
 .iv-recipe-box {
   flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 6px; padding: 12px 14px;
   border: 1px solid var(--rule); border-top: 0; font-family: var(--label); font-size: var(--text-label); line-height: 1.45; color: var(--muted);

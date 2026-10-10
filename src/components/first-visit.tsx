@@ -57,10 +57,13 @@ function Visual({ card, intro }: { card: IntroCard; intro: Intro }) {
     case 'recipe':
       return im ? (
         <div className="iv iv-recipe">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={im.url} alt={im.alt} width={im.width} height={im.height} />
-          {/* Owner, 2026-10-10: the intro's images carry the AI label too, opening the recipe sheet. */}
-          <p className="iv-ai"><AiLabel kind="image" text={AI_LABEL.image} file={im.recipeFile} item={im.id} /></p>
+          {/* Owner, 2026-10-10: the intro's images carry the AI label too, opening the recipe sheet. It sits on
+              the picture's corner, so the card's clipped height can never hide it. */}
+          <div className="iv-pic">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={im.url} alt={im.alt} width={im.width} height={im.height} />
+            <span className="iv-ai"><AiLabel kind="image" text={AI_LABEL.image} file={im.recipeFile} item={im.id} /></span>
+          </div>
           <div className="iv-recipe-box">
             <span className="iv-row iv-strong">
               <span>How this was made</span>
