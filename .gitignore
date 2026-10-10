@@ -15,11 +15,11 @@ next-env.d.ts
 private/
 
 # narration (local speech model env and generated audio)
-.venv/
-narration-out/
-.venv-image/
-images-out/
+.venv
+narration-out
+.venv-image
+images-out
 __pycache__/
 
 # scripts/make_channel_art.py
-art-out/
+art-out
