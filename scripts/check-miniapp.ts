@@ -96,7 +96,8 @@ try {
     await page.close();
   }
   // Learn Minpentai fills the Farcaster frame (owner, 2026-10-09): no site top bar, the frame is the iframe's viewport, × back to the site.
-  for (const path of ['/minpentai?lesson=13', '/minpentai?mode=practice', '/minpentai?mode=free']) {
+  // ?mode=free became Minpentai Play's free play (another session, 2026-10-09); it is checked below as Play.
+  for (const path of ['/minpentai?lesson=13', '/minpentai?mode=practice']) {
     const page = await browser.newPage({ viewport: { width: 480, height: 760 } });
     await page.addInitScript('window.__name = (f) => f');
     const errors: string[] = [];
@@ -126,6 +127,30 @@ try {
     for (const e of errors) fail(`${path}: page error: ${e}`);
     await page.close();
   }
+  // Minpentai Play's free play loads in the Farcaster frame: its frame shows, ready() once, no page errors.
+  // Whether Play should fill the frame is for Play's owner to decide; this checks only that it works there.
+  {
+    const path = '/minpentai?mode=free';
+    const page = await browser.newPage({ viewport: { width: 480, height: 760 } });
+    await page.addInitScript('window.__name = (f) => f');
+    const errors: string[] = [];
+    page.on('pageerror', (e) => errors.push(e.message));
+    await page.route(HOST + '**', (r) => r.fulfill({ contentType: 'text/html', body: `<!doctype html><body style="margin:0"><script>${bundle.replace(/<\/script>/g, '<\\/script>')}</script></body>` }));
+    await page.route('https://auth.farcaster.xyz/**', (r) => r.fulfill({ json: new URL(r.request().url()).pathname.includes('nonce') ? { nonce: 'checknonce1' } : { token: TOKEN } }));
+    // Play's own API calls go to the server under test (an empty stand-in reply breaks it; it reads them signed out).
+    await page.goto(`${HOST}?url=${encodeURIComponent(BASE + path)}`);
+    const frame = await new Promise<Frame>((resolve) => {
+      const t = setInterval(() => {
+        const f = page.frames().find((x) => x !== page.mainFrame() && x.url().startsWith(BASE));
+        if (f) (clearInterval(t), resolve(f));
+      }, 100);
+    });
+    await frame.waitForSelector('.mp-play:not([aria-busy])', { timeout: 15000 }).catch(() => fail(`${path}: Minpentai Play does not show in the Farcaster frame`));
+    const host = await page.evaluate(() => window.__host);
+    if (host.ready !== 1) fail(`${path}: ready() called ${host.ready} times, not once`);
+    for (const e of errors) fail(`${path}: page error: ${e}`);
+    await page.close();
+  }
 } finally {
   await browser.close();
 }
@@ -133,4 +158,4 @@ if (failures.length) {
   console.error(`MINIAPP CHECK FAILED (${failures.length}):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`miniapp check passed: ${BASE}, home, a chapter, the assistant and Learn Minpentai and Free play (full screen) in a stand-in Farcaster client`);
+console.log(`miniapp check passed: ${BASE}, home, a chapter, the assistant and Learn Minpentai (full screen) and Minpentai Play in a stand-in Farcaster client`);
