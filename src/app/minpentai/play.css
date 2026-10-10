@@ -179,3 +179,5 @@ html:has(.mp-play.is-desk.is-fs) :is(.rail, .panel, .panel-reopen) { display: no
 .mp-banner-en { font-size: 16px; font-style: italic; color: #4A463F; white-space: nowrap; }
 .mp-banner.dark { background: rgba(5, 5, 7, 0.9); color: #F4F2ED; border-top: 2px solid #FFB43A; padding: 10px 14px; font-family: var(--label); font-size: 13px; letter-spacing: 0.06em; line-height: 1.5; white-space: nowrap; }
 .mp-btn:disabled { opacity: 0.5; cursor: default; }
+
+.mp-rules-note { margin: 0 0 20px; font-size: 17px; line-height: 1.45; color: var(--body); display: flex; flex-wrap: wrap; gap: 8px; align-items: baseline; }

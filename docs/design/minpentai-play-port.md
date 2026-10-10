@@ -98,6 +98,39 @@ Planted divergences are caught: square hit points; the builder rung starting a l
 
 ## 4. Before this goes live
 
-1. **Apply 0009** (`supabase/migrations/0009_minpentai_play.sql`) in the Supabase SQL editor as postgres, after a dry run with `rollback`. Without it, the ladder and one-on-one routes fail; practice and free play don't need it.
-2. **Ladder wins are reported by the browser.** The server checks the rung is open, but a player who cheats only changes their own private progress. The earlier proposal's server-run computer matches remain possible later.
-3. **The lobby shows your Farcaster username** to other signed-in players while you are ready. That is the owner's decision, and the screen says so.
+1. **Apply 0009** (`supabase/migrations/0009_minpentai_play.sql`) in the Supabase SQL editor as postgres, after a dry run with `rollback`. Without it, the ladder and one-on-one fail; practice and free play don't need it.
+2. **Ladder wins reported by the browser are accepted.** The ladder's matches run in the browser, and the server records the result it is sent; it checks only that the rung is open.
+   - **Condition (owner, 2026-10-09):** this is accepted only while ladder progress stays private (readable only by that person, through the server) and there is no ranking, leaderboard or public count of any kind.
+   - If either changes, the computer matches must move to the server first, as the earlier proposal describes, so a result can be trusted.
+3. **The owner plays one real match** with a second Farcaster account after it is live and before anyone is told (owner, 2026-10-09).
+
+### Privacy draft: what Play keeps
+
+*Draft wording, for the privacy section.* Practice matches and free play keep nothing: they run in your browser, and a free play link holds the board in the link itself. Signed-in play keeps:
+
+| What | What it holds | Who can see it | How long |
+|---|---|---|---|
+| Ladder progress | Your FID, the highest rung open, and per rung the tries and the step of your first win | Only you | Until you ask for it to be erased |
+| Blocks | Your FID and the FID you blocked | Only you (the other person isn't told) | Until you ask for it to be erased |
+| The ready list | Your FID and your Farcaster username, while you say you're ready (3 minutes, renewed while the screen is open) | Other signed-in players who are ready | Deleted 1 hour after you stop being ready |
+| Challenges | Who asked whom to play, and the answer | The two players | Deleted 1 hour after they're answered or run out |
+| Invite links | The link, your FID and username, who used it | You, and whoever opens the link | Deleted when they run out, 24 hours after they're made |
+| Match records | Both FIDs and usernames, the rule drawn, every move and every step (for "watch it again"), and the result | The two players only | Deleted 30 days after the match ends. A match nobody has opened for 24 hours ends with no result, and is deleted 30 days after that |
+| Request counts | Per person, only this minute's and today's counts, for the limits | No one | Deleted the next day |
+| Daily total | Requests to Play per day, with no person in it | No one | Deleted after 90 days |
+
+Cleanup has no schedule of its own: any Play request runs it after answering, at most once every 10 minutes per server, up to 500 rows per table each time. An invite link that has expired and been cleaned up answers "This invite link is not valid."
+
+### Limits (`MINPENTAI_PLAY` in src/lib/config.ts)
+
+| Limit | Number | Answer past it |
+|---|---|---|
+| Requests per person per minute | 60 | 429 "Too many requests. Try again in a moment." with `retryAfterMs` and `Retry-After` |
+| Requests per person per UTC day | 3,000 | the same 429 |
+| One match's view, per person | at most once a second | the same 429; the page waits `retryAfterMs` |
+| The lobby, per person | at most once every 2 seconds | the same 429 |
+| All requests to Play, everyone, per UTC day | 200,000 | 503 "Play has reached today's limit. Practice and free play still work." |
+
+Sign-in is checked first (401), then the database, then the limits. Every request counts toward the person's own limits; only those within them count toward the sitewide total, so one person at 429 does not spend everyone's budget.
+
+There is no rating, ranking or leaderboard, no chat, and no record of anyone's matches shown to anyone but the two players.

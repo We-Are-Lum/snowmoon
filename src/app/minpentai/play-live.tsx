@@ -65,9 +65,13 @@ export function PlayPerson({ onBack, invite: inviteToken }: { onBack: () => void
   const say = (t: string) => { setToast(t); window.setTimeout(() => setToast((x) => (x === t ? null : x)), 2800); };
   const proof = () => ({ nameProof: webNameProof() });
 
+  const lobbyQuiet = useRef(0);
   const refresh = useCallback(async () => {
+    if (Date.now() < lobbyQuiet.current) return;
     try {
-      const l = await json<LobbyView>(await authFetch('/api/minpentai/lobby'));
+      const res = await authFetch('/api/minpentai/lobby');
+      if (res.status === 429) { const j = (await res.json().catch(() => ({}))) as { retryAfterMs?: number }; lobbyQuiet.current = Date.now() + (j.retryAfterMs ?? 3000); return; }
+      const l = await json<LobbyView>(res);
       got.current = Date.now();
       setLobby(l);
       setErr(null);
@@ -235,9 +239,14 @@ function LiveMatch({ id, onDone, onMatch }: { id: string; onDone: () => void; on
     setM(x);
     setGot(Date.now());
   }, []);
+  // The server answers a match view at most once a second (and caps requests per person and per day):
+  // when it says wait, wait that long before asking again.
+  const quietUntil = useRef(0);
   const poll = useCallback(async () => {
+    if (Date.now() < quietUntil.current) return;
     const r = await authFetch(`/api/minpentai/match/${id}${vRef.current !== null ? `?v=${vRef.current}` : ''}`).catch(() => null);
     if (!r || r.status === 204) return;
+    if (r.status === 429) { const j = (await r.json().catch(() => ({}))) as { retryAfterMs?: number }; quietUntil.current = Date.now() + (j.retryAfterMs ?? 2000); return; }
     if (r.ok) take(await r.json());
   }, [id, take]);
   useEffect(() => {
