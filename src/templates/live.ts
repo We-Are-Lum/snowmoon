@@ -8,6 +8,8 @@
  *
  * What is the source's and what is this edition's (check:principles P8e):
  * - min, max, step, start: the source's own <input type="range"> with its HTML defaults
+ *   (the source's sliders work: <input type="range" style="width:100%">, not disabled; the import
+ *   disables every input it keeps, in scripts/lib/parse-chapter.ts safeHtml, which made them look grey)
  *   (no attributes: 0..100, step 1, value at the middle). From the source.
  * - labels: the marks under the slider, in order, evenly spread (the source lays them out
  *   with space-between). From the source.

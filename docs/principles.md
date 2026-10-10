@@ -380,6 +380,10 @@ quoted as written. Minpentai boards and maps come from the source's own SVGs.
   source's, and the island's first render (its value, the drawn thumb, the
   marks, the reading under the screen) matches; every slider the book draws is
   live. The reading itself is this edition's (the book never shows one).
+  The book's sliders are working range inputs (`<input type="range"
+  style="width:100%">`, not disabled, in `content/snowmoon/source`); the
+  grey, inert slider readers saw before came from our import, which disables
+  every input and button it keeps (`scripts/lib/parse-chapter.ts`, `safeHtml`).
   `test:render` also checks that Reset returns to the source's value from
   anywhere and that the island neither stores nor sends; `check:ui` moves each
   slider and resets it in a browser with no request made.
