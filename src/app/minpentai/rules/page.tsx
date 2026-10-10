@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { MinpentaiTags } from '../mp-tags';
 import { RULES_HTML } from './rules-html';
 
 export const metadata = { title: 'Minpentai in this edition: the rules' };
@@ -13,7 +14,7 @@ export default function MinpentaiRulesPage() {
     <div className="page minpentai mp-rules-page">
       <p className="mp-rules-back"><Link href="/minpentai?mode=play">← Minpentai</Link></p>
       {/* Owner, 2026-10-09: one draft line, since the page says it overrides the lessons. Model-drafted wording. */}
-      <p className="mp-rules-note"><span className="mp-tag dashed">DRAFT WORDING</span> For now the lessons still teach the first version of these rules (v3); Play follows this page.</p>
+      <div className="mp-rules-note"><MinpentaiTags tags={['draft']} /><p>For now the lessons still teach the first version of these rules (v3); Play follows this page.</p></div>
       <article className="mp-rules" dangerouslySetInnerHTML={{ __html: RULES_HTML }} />
     </div>
   );

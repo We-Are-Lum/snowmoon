@@ -13,13 +13,14 @@ import { LEARN_TEXT as T, type TagKey } from '~/lib/minpentai/learn-text';
 
 const INVENTED: TagKey[] = ['rules', 'imag', 'lens', 'inv'];
 
-export function MinpentaiTags({ tags }: { tags: readonly TagKey[] }) {
+export function MinpentaiTags({ tags, details = {} }: { tags: readonly TagKey[]; details?: Partial<Record<TagKey, string>> }) {
+  const D = { ...T.tagDetails, ...details };
   const L = LABELS.minpentai;
   const invented = INVENTED.filter((k) => tags.includes(k));
   return (
     <div className="ml-tags">
       {tags.includes('book') && (
-        <InfoLabel className="ml-tag ml-tag-solid" word={L.book.word} kind="book" declaration={`${T.tags.book}: ${L.book.declaration}`} title={L.book.title} body={[T.tagDetails.book]} />
+        <InfoLabel className="ml-tag ml-tag-solid" word={L.book.word} kind="book" declaration={`${T.tags.book}: ${L.book.declaration}`} title={L.book.title} body={[D.book]} />
       )}
       {invented.length > 0 && (
         <InfoLabel
@@ -28,12 +29,12 @@ export function MinpentaiTags({ tags }: { tags: readonly TagKey[] }) {
           kind="invented"
           declaration={`${invented.map((k) => T.tags[k]).join(', ')}: ${L.invented.declaration}`}
           title={L.invented.title}
-          body={invented.map((k) => T.tagDetails[k])}
+          body={invented.map((k) => D[k])}
           links={tags.includes('rules') ? [{ href: '/minpentai/rule', label: "The rule recovered from the book's figure →" }] : []}
         />
       )}
       {tags.includes('draft') && (
-        <InfoLabel className="ml-tag ml-tag-draft" word={L.draft.word} kind="draft" declaration={`${T.tags.draft}: ${L.draft.declaration}`} title={L.draft.title} body={[T.tagDetails.draft]} />
+        <InfoLabel className="ml-tag ml-tag-draft" word={L.draft.word} kind="draft" declaration={`${T.tags.draft}: ${L.draft.declaration}`} title={L.draft.title} body={[D.draft]} />
       )}
     </div>
   );

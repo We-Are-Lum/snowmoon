@@ -15,6 +15,7 @@
  *
  * Words are Design's where Design's screens have them (D1–D8); the rest is draft.
  */
+import { MinpentaiTags } from './mp-tags';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { authFetch, useAuth, webNameProof } from '~/lib/client-auth';
@@ -24,7 +25,6 @@ import { board } from '~/lib/minpentai/play-game/board';
 import type { BoardView, LobbyView, MatchView, Person } from '~/lib/minpentai/play-game/live-types';
 import { PlayBoard } from './play-board';
 
-const TAG_INVENTED = 'RULES INVENTED FOR THIS EDITION';
 const post = (url: string, b?: unknown) => authFetch(url, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify(b ?? {}) });
 async function json<T>(r: Response): Promise<T> {
   const j = await r.json().catch(() => ({}));
@@ -365,7 +365,8 @@ function LiveMatch({ id, onDone, onMatch }: { id: string; onDone: () => void; on
             <div className="mp-rule"><span className="mp-label">NEW RULE THIS MATCH, DRAWN AT RANDOM</span><span className="mp-rule-text">{RULES[m.rule]}</span></div>
             <p className="mp-text">Setup: 90 seconds to place in the lit area. Then the battle runs.</p>
             <div className="mp-grow" />
-            <div className="mp-tags"><span className="mp-tag">COUNTDOWN FROM THE BOOK · c4-b97–b98</span><span className="mp-tag dashed">RULES INVENTED</span></div>
+            {/* Owner ruling, 2026-10-09: short labels. Model-drafted wording. */}
+            <MinpentaiTags tags={['book', 'rules']} details={{ book: 'The countdown is the book\'s: "MU GU GEI TAU FA" (c4-b97), "The battle begins in fifty ticks." (c4-b98).' }} />
           </div>
           <div className="mp-foot"><button className="mp-btn primary" onClick={() => setBegun(true)}>START SETUP · {fmt(msLeft ?? 0)}</button></div>
         </>
@@ -382,7 +383,7 @@ function LiveMatch({ id, onDone, onMatch }: { id: string; onDone: () => void; on
           <div className="mp-body tight">
             <p className="mp-text big" aria-live="polite">{m.board.step === 0 ? 'Setup. Spend 8 points in the lit area near your towers. Nothing moves until you end your turn or the clock runs out; then both sides’ pieces appear at once.' : mineDrawn.length ? `Placed: ${mineDrawn.map((p) => (p.t === 'g' ? 'glider' : p.t === 's' ? 'square' : 'tower')).join(', ')}. The dotted line is your glider's path until it leaves your sight. Tap a piece to take it back.` : `${seen ? 'Your turn. ' : `Your turn. You can't see @${opp}'s towers now; the outlines are where you last saw them. `}Spend 8 points in the lit area, then end your turn. Tap a piece you placed to take it back.`}</p>
             <p className="mp-label">{ruleLine}</p>
-            <div className="mp-tags"><span className="mp-tag dashed">{TAG_INVENTED}</span><span className="mp-tag dashed">DRAFT WORDING</span></div>
+            <MinpentaiTags tags={['rules', 'draft']} />
           </div>
           <div className="mp-foot row"><span className="mp-label mp-pts">{pts} OF 8 PTS LEFT</span><button className="mp-btn primary flex" onClick={() => placeTurn(mineDrawn, true)}>END TURN</button></div>
         </>

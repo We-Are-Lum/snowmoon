@@ -403,7 +403,10 @@ quoted as written. Minpentai boards and maps come from the source's own SVGs.
 - `P8f`: Minpentai's tags are "Book ⓘ", "Invented ⓘ" (the rules, the broadcast,
   the lenses and the symbol's shape, folded into one label whose details list
   each) and "Draft ⓘ", each a visible word opening its explanation, on every
-  Learn screen and the rule page. The proof blanks each of the three words.
+  Learn screen and the rule page. Play's tags (`play.tsx`, `play-live.tsx`, the rules page) are the
+  same labels, with no old-style tag carrying a label's words, and nothing there paraphrases c4-b84 as
+  "a new rule each match" (the ruling of 2026-10-09, which P8d checks in Learn; 2026-10-10). The proof
+  blanks each of the three words and plants the old c4-b84 tag.
 - `P8e`: every live voting screen (c1-b18, c1-b31, c7-b6) starts in the state
   the book shows: the slider's range, step and starting value are the source's
   `<input type="range">` with its HTML defaults, its marks and title are the

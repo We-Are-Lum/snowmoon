@@ -16,6 +16,7 @@
  *   board turns upright (Design's A2); on desktop it asks the browser for real full screen (A4);
  * - the board is keyboard reachable (play-board.tsx).
  */
+import { MinpentaiTags } from './mp-tags';
 import { useEffect, useMemo, useReducer, useRef, useState } from 'react';
 import Link from 'next/link';
 import { authFetch, inMiniApp, useAuth } from '~/lib/client-auth';
@@ -25,7 +26,8 @@ import { PlayBoard } from './play-board';
 import { PlayPerson } from './play-live';
 import { SignInButton } from '~/components/sign-in';
 
-const TAG_INVENTED = 'RULES INVENTED FOR THIS EDITION';
+/** The Book label's explanation where a match's new rule is drawn (model-drafted). */
+const PLAY_BOOK_RULE = 'In the book, "every game there\'s always some kind of new rule" (c4-b84). Here, one of four rules invented for this edition is drawn at random for each match.';
 
 export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | 'person'; onLearn: () => void }) {
   const auth = useAuth();
@@ -138,7 +140,7 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
                 <span className="mp-card-text">One-on-one with another signed-in player.</span>
               </button>
               <div className="mp-grow" />
-              <p className="mp-label mp-note">{TAG_INVENTED} · <Link href="/minpentai/rules">THE RULES PAGE →</Link></p>
+              <p className="mp-label mp-note">RULES INVENTED FOR THIS EDITION · <Link href="/minpentai/rules">THE RULES PAGE →</Link></p>
             </div>
           )}
           {v.tLearn && (
@@ -252,7 +254,8 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
                         <div className="mp-rule"><span className="mp-label">NEW RULE THIS MATCH, DRAWN AT RANDOM</span><span className="mp-rule-text">{v.ruleText}</span></div>
                         <p className="mp-text">{v.stNote}</p>
                         <div className="mp-grow" />
-                        <div className="mp-tags"><span className="mp-tag dashed">{TAG_INVENTED}</span><span className="mp-tag">A NEW RULE EACH MATCH · c4-b84</span></div>
+                        {/* Owner ruling, 2026-10-09: short labels; the book is quoted, never paraphrased as "a new rule each match". Model-drafted wording. */}
+                        <MinpentaiTags tags={['book', 'rules']} details={{ book: PLAY_BOOK_RULE }} />
                       </div>
                       <div className="mp-foot"><button className="mp-btn primary" onClick={v.begin}>START MATCH</button></div>
                     </>
@@ -270,7 +273,7 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
                       <div className="mp-body tight">
                         <p className="mp-text big" aria-live="polite">{v.msg}</p>
                         <p className="mp-label">{v.ruleLine}</p>
-                        <div className="mp-tags"><span className="mp-tag dashed">{TAG_INVENTED}</span><span className="mp-tag dashed">DRAFT WORDING</span></div>
+                        <MinpentaiTags tags={['rules', 'draft']} />
                       </div>
                       <div className="mp-foot row"><span className="mp-label mp-pts">{v.ptsTxt}</span><button className="mp-btn primary flex" onClick={v.endTurn}>{v.endLabel}</button></div>
                     </>
@@ -320,7 +323,7 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
                         </div>
                       </div>
                       <p className="mp-body mp-text">No points, no turns to act, nothing scored. Placing is allowed at step 0 only; tap a piece with the same tool to remove it.</p>
-                      <div className="mp-tags pad"><span className="mp-tag dashed">{TAG_INVENTED}</span><Link className="mp-tag" href="/minpentai/rule">THE BOOK&apos;S CELL RULE: UNDER THE HOOD</Link></div>
+                      <div className="mp-tags pad"><MinpentaiTags tags={['rules']} /><Link className="mp-tag" href="/minpentai/rule">THE BOOK&apos;S CELL RULE: UNDER THE HOOD</Link></div>
                     </>
                   )}
                 </div>

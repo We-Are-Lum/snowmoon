@@ -215,3 +215,9 @@ Rolling back the code leaves 0009's tables in place; they are private and unused
 NEYNAR_API_KEY and SNOWMOON_ALERT_URL listed when missing (names only); 0007's header says applied; check:ui accepts a 3-point glider under cost3; check:miniapp checks ?mode=free as Play. To undo (back to `4fb3c16`):
 
     vercel rollback dpl_HeSRboPJkeGpgdovmhnND7kXFEVm --scope nates-projects-d1780cff
+
+## 2026-10-10: menu, short labels, home page, selection fix (branch site-release-2)
+
+One push for three branches (owner, 2026-10-10). The menu groups Read, Listen and Glossary under Book, with ? for About and ☰ (site-menu). Short labels with ⓘ: "Redrawn" on template screens, "AI description" in Listen, "Book", "Invented" and "Draft" in Minpentai, now on Play's tags too (the c4-b84 tag quotes the book instead of "a new rule each match"); scene lines hidden; the podcast on Spotify; the selection options stay on a phone's screen (site-labels). Design's home page, with the not-affiliated line in the first screen (site-home). Play's labels meet the 44px floor, and Play keeps its ladder progress unless the server's answer is well-formed. To undo (back to `4525cc4`):
+
+    vercel rollback https://snowmoon-pf5iwm44s-nates-projects-d1780cff.vercel.app --scope nates-projects-d1780cff

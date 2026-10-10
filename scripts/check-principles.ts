@@ -1434,6 +1434,7 @@ add({
   },
 });
 
+const PLAY_TAG_FILES = ['src/app/minpentai/play.tsx', 'src/app/minpentai/play-live.tsx', 'src/app/minpentai/rules/page.tsx'];
 add({
   id: 'P8f',
   principle: 8,
@@ -1449,9 +1450,12 @@ add({
     return {
       words: { book: LABELS.minpentai.book.word, invented: LABELS.minpentai.invented.word, draft: LABELS.minpentai.draft.word } as Record<string, string>,
       screens: screens.map((s) => ({ ...s, html: renderToStaticMarkup(createElement(MinpentaiTags, { tags: s.tags as never })) })),
+      // Play (2026-10-10): its tags are the same short labels, and none of its words paraphrases c4-b84 as
+      // "a new rule each match" (P8d's ruling of 2026-10-09, which reads Learn only).
+      play: PLAY_TAG_FILES.map((f) => ({ file: f, text: code(f) })),
     };
   },
-  run: ({ words, screens }) => {
+  run: ({ words, screens, play }) => {
     const problems: string[] = [];
     const INVENTED = ['rules', 'imag', 'lens', 'inv'];
     if (words.book !== 'Book' || words.invented !== 'Invented' || words.draft !== 'Draft') problems.push(`src/lib/labels.ts: the words are ${JSON.stringify(words)}, not Book, Invented and Draft`);
@@ -1465,9 +1469,21 @@ add({
       if (JSON.stringify(labels.map((l) => l.kind)) !== JSON.stringify(want)) problems.push(`${s.id}: labels ${labels.map((l) => l.kind).join(', ') || 'none'}, expected ${want.join(', ')}`);
       for (const l of labels) if (words[l.kind]) problems.push(...infoLabelProblems(s.id, l, words[l.kind]));
     }
+    const CHANGES = /\b(?:the\s+)?rules?\s+(?:change|changes|changed|changing)\s+(?:(?:with|for|in)\s+)?(?:every|each)\s+(?:match|game)\b|\b(?:a\s+)?(?:new|different)\s+rules?\s+(?:every|each)\s+(?:match|game)\b/i;
+    for (const { file, text } of play as { file: string; text: string }[]) {
+      // An old-style tag: a span or link styled mp-tag that carries a label's words instead of the label.
+      for (const m of text.matchAll(/className="mp-tag[^"]*"[^>]*>([^<]*)</g)) {
+        if (/RULES INVENTED|DRAFT WORDING|FROM THE BOOK|·\s*c\d+-b\d+/i.test(m[1])) problems.push(`${file}: a tag "${m[1].trim()}" in place of the short label (Book ⓘ, Invented ⓘ, Draft ⓘ)`);
+      }
+      if (!/<MinpentaiTags\b/.test(text)) problems.push(`${file}: no short labels (MinpentaiTags)`);
+      const unquoted = text.replace(/"[^"\n]*"/g, ' ').replace(/“[^”]*”/g, ' ');
+      const hit = unquoted.match(CHANGES);
+      if (hit) problems.push(`${file}: "${hit[0]}" paraphrases c4-b84 as a rule for each match; quote the book instead`);
+    }
     return problems;
   },
   plant: (c) => {
+    c.play[0].text += '\n<div className="mp-tags"><span className="mp-tag">A NEW RULE EACH MATCH · c4-b84</span></div>';
     // A missing word for each of the three.
     for (const k of ['book', 'invented', 'draft']) {
       const s = c.screens.find((x: { html: string }) => x.html.includes(`<span class="info-word">${c.words[k]}</span>`));
