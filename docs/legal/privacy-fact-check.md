@@ -1,4 +1,4 @@
-# Privacy Policy: fact-check (2026-10-09)
+# Privacy Policy: fact-check (2026-10-09; updated 2026-10-10)
 
 Every factual statement on `/privacy` (the owner's legal starter, sections 1–11, words in
 `src/lib/legal.ts`), checked against the code, migrations, config and principle checks of branch
@@ -10,6 +10,14 @@ site-images-everyone merges** (the Neynar gate, judged against its spec: score �
 Generate with only the FID, cached a day in a new table, invited FIDs skip; the code is not on this
 branch). Minpentai Play is judged on branch `site-minpentai-play-2` (read-only; migration 0009 not
 applied), so those lines are "true on site-minpentai-play-2, not live".
+
+**Update, 2026-10-10 (after site-legal merged into site-images-everyone):** 0009 is applied on
+production (owner, 2026-10-09 23:55), so 4.9–4.12 are true once site-minpentai-play-2 is live.
+7.10 and 7.11 were checked against the gate's code (`src/lib/images/neynar.ts`, `gate.ts`, 0010):
+true once site-images-everyone merges; 7.11's rows are deleted, not only treated as stale (each
+lookup deletes rows older than a day). 7.x: the ntfy alert carries only the text
+"Snowmoon: N reports waiting" (`src/lib/images/alert.ts`), but ntfy is still not named. Nothing
+else was re-judged; the wording is unchanged.
 
 | # | Statement | Verdict | Evidence |
 |---|---|---|---|
@@ -37,10 +45,10 @@ applied), so those lines are "true on site-minpentai-play-2, not live".
 | 4.6 | Images you publish, with their prompt, your Farcaster username and the record of how they were made. These are public. | true | `src/app/api/images/publish/route.ts:62-91`: recipe with `prompt`, `user_prompt`, `by_name`, request id, settings, checks; recipes are public (P1d). The recipe also keeps that image's `cost_usd` under `created_by_fid` (`:86-87`), which About's "what they cost is kept only as daily totals, with no names" does not allow for. |
 | 4.7 | How many images you make each day, to count the daily limit. | true | `studio.image_asks (fid, at)`, `supabase/migrations/0008_images.sql:34`, `src/lib/images/limits.ts:19,40`. |
 | 4.8 | …and the reports you make. | true | `studio.removal_log` step `reported`, `by_fid`, reason, note, `src/app/api/images/[id]/report/route.ts:35`; `supabase/migrations/0008_images.sql:78-90`. |
-| 4.9 | Minpentai: your progress against the computer and the people you block, kept until you ask us to delete them. | true on site-minpentai-play-2, not live | `0009_minpentai_play.sql` (that branch) lines 15, 28, 56-57: `mp_progress`, `mp_blocks` "kept until the person asks for erasure". Not listed: `mp_challenges` (deleted 1 h after they expire or are answered, line 49) and `mp_rate` (per-FID request counts for today, deleted daily, lines 29-31, 54). |
-| 4.10 | …your matches, deleted 30 days after they end. | true on site-minpentai-play-2, not live | 0009 lines 51-53 (an unpolled match is ended as abandoned after 24 h, then deleted 30 days after it ended). Cleanup runs on later Play requests, no cron (line 45), so deletion can lag if nobody plays. |
-| 4.11 | …and invites, deleted when they expire after 24 hours. | true on site-minpentai-play-2, not live | 0009 lines 27, 48 (same cleanup caveat). |
-| 4.12 | While you say you are ready to play, other signed-in players see your Farcaster username. | true on site-minpentai-play-2, not live | `mp_lobby.username` (0009 line 88); the lobby view lists ready players' username and FID to signed-in players only (`src/lib/minpentai/play-server/store.ts:78-91`, `route.ts` 401 without a FID, on that branch). |
+| 4.9 | Minpentai: your progress against the computer and the people you block, kept until you ask us to delete them. | true once site-minpentai-play-2 is live (0009 applied) | `0009_minpentai_play.sql` (that branch) lines 15, 28, 56-57: `mp_progress`, `mp_blocks` "kept until the person asks for erasure". Not listed: `mp_challenges` (deleted 1 h after they expire or are answered, line 49) and `mp_rate` (per-FID request counts for today, deleted daily, lines 29-31, 54). |
+| 4.10 | …your matches, deleted 30 days after they end. | true once site-minpentai-play-2 is live (0009 applied) | 0009 lines 51-53 (an unpolled match is ended as abandoned after 24 h, then deleted 30 days after it ended). Cleanup runs on later Play requests, no cron (line 45), so deletion can lag if nobody plays. |
+| 4.11 | …and invites, deleted when they expire after 24 hours. | true once site-minpentai-play-2 is live (0009 applied) | 0009 lines 27, 48 (same cleanup caveat). |
+| 4.12 | While you say you are ready to play, other signed-in players see your Farcaster username. | true once site-minpentai-play-2 is live (0009 applied) | `mp_lobby.username` (0009 line 88); the lobby view lists ready players' username and FID to signed-in players only (`src/lib/minpentai/play-server/store.ts:78-91`, `route.ts` 401 without a FID, on that branch). |
 | 5.1 | Your question is sent to Groq to be answered, or through Vercel AI Gateway to Groq when Groq is busy. | true | `src/lib/chat/model.ts:77` (direct, `api.groq.com`, `src/lib/config.ts:69`) then `:109` (gateway, `src/lib/config.ts:58`) when the direct call fails and `gatewayFallback` is on (`src/lib/config.ts:75`); pinned to Groq (`src/lib/chat/provider.ts:10`). |
 | 5.2 | Both are set to keep nothing. | true for the gateway; can't tell for Groq from code | Gateway: `zeroDataRetention` asked per request, `src/lib/chat/provider.ts:10`. Groq direct: a console setting the owner confirmed on 2026-10-08 (`src/lib/config.ts:63-67`; docs/principles.md §6); nothing in code or Groq's replies shows it. |
 | 5.3 | We keep no copy of your questions or the answers. | true | `studio.chat_calls` has no question or answer column (`supabase/migrations/0007_chat_costs_without_person.sql`); errors log only the error type (`src/app/api/chat/ask/route.ts:37-38`). |
@@ -59,10 +67,10 @@ applied), so those lines are "true on site-minpentai-play-2, not live".
 | 7.8 | They learn your Farcaster ID and that you signed in here, not what you read or ask. | true | Only the domain, nonce and channel go to the relay (`start/route.ts:21-29`); no reading or question data is sent to Farcaster. |
 | 7.9 | Farcaster's public API receives a Farcaster ID when we look up the username to show with published work. | true (and more on site-minpentai-play-2) | `src/lib/names.ts:50` (`api.farcaster.xyz/v2/user?fid=`), cached a day (`:44-56`), used at publish (`publish/route.ts:58`). On site-minpentai-play-2 the same lookup also names Play players (`play-server/route.ts` imports `bylineName`), which is not "published work". |
 | 7.10 | Neynar receives your Farcaster ID when you first make an image on a given day, to look up its account score, which decides whether you can make images. | true once site-images-everyone merges | Not on this branch: `src/lib/config.ts:126` "No Neynar key"; no Neynar call in `src`. Per the spec (only the FID, at Generate, score ≥ 0.7). Two nuances: the cache is "a day" from the lookup, so the next lookup is about 24 h later, not the first image of each calendar day; invited FIDs are never looked up. |
-| 7.11 | We keep the score for a day. | true once site-images-everyone merges | Spec: cached a day in a new table. Whether old rows are deleted after a day or only treated as stale can't be told until that branch's migration and code are read. |
+| 7.11 | We keep the score for a day. | true once site-images-everyone merges | `studio.image_scores` (0010); a kept score is used for 24 h from its lookup, and each lookup deletes rows older than a day (`src/lib/images/neynar.ts`). Low scores are kept a day too. |
 | 7.12 | If you listen as a podcast, your podcast app fetches the audio from our media host. | true for the feed; can't tell for Spotify | Enclosures point at the media host (`src/lib/podcast.ts:107`). The show is also on Spotify (`src/lib/config.ts:19`, linked from About and Listen); Spotify usually ingests a feed's audio and serves it itself, and then Spotify, not our media host, sees the listener. Spotify is not named on the Privacy page. |
 | 7.13 | A "report" link may open GitHub or Farcaster, where what you post is public and under their terms. | true | Mispronunciation reports: a prefilled GitHub issue or a cast to /snowmoon (`src/lib/report-pronunciation.ts:3-8,32`). Image reports are in-app (4.8). |
-| 7.x | (the list of outside services is complete) | false once site-images-everyone merges | That branch adds report alerts through ntfy (per the parallel task); ntfy is not named. What an alert carries (image id, reason, note, reporter?) can't be told from here. Spotify: see 7.12. Inside a Farcaster app, the host app (e.g. Warpcast) also sees that the mini app is used; not named. |
+| 7.x | (the list of outside services is complete) | false once site-images-everyone merges | That branch sends report alerts through ntfy (to `SNOWMOON_ALERT_URL`), carrying only the text "Snowmoon: N reports waiting" (no image, prompt, FID or name; `src/lib/images/alert.ts`); ntfy is not named. Spotify: see 7.12. Inside a Farcaster app, the host app (e.g. Warpcast) also sees that the mini app is used; not named. |
 | 8.1 | The Service is not directed to children under 13. | can't tell | A statement of intent; nothing in code. |
 | 8.2 | Signing in requires that you be at least 18. | false as a fact of the Service (true as a rule) | No age check anywhere in the sign-in flow (`src/components/sign-in.tsx`, `src/lib/auth.ts`); it is a rule in Terms §4. |
 | 9.1 | We keep account-linked records while you use the Service. | true, mostly longer | No automatic deletion for cards, likes, consents, image_asks, removal_log or recipes (append-only; `0008_images.sql:44,96`); they stay after you stop using the Service until an erasure (docs/removal.md §2, line 58). Exceptions: Minpentai matches, invites, challenges, rate rows (4.10-4.11). |
@@ -81,7 +89,7 @@ applied), so those lines are "true on site-minpentai-play-2, not live".
 - **Can't tell:** 1.1, 2.5, 8.1, 10.1 (promises or facts outside the code); 5.2 for Groq (console
   setting, your confirmation of 2026-10-08); 5.4 (whether 0007 is applied on the live database:
   the notice records that you applied it on 2026-10-08, the migration header still says
-  NOT APPLIED); 7.11 (how the score rows are expired); 7.12 (Spotify); 9.2 (a copy of one's data).
+  NOT APPLIED); 7.12 (Spotify); 9.2 (a copy of one's data).
 - **Depends on unmerged branches:** 7.10–7.11 (site-images-everyone); 4.9–4.12 and the Play
   half of 7.9 (site-minpentai-play-2, 0009 not applied). Ship section 4's Minpentai bullet only
   with that branch, or the page describes something that isn't there.

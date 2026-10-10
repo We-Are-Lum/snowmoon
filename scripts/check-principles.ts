@@ -1034,7 +1034,8 @@ add({
       // Open beyond the invited list: the gate decides by score, not by the list alone.
       openBeyondInvited: /lookUp\(/.test(gate),
       terms: page('src/app/terms/page.tsx'),
-      privacy: page('src/app/privacy/page.tsx'),
+      // The page renders the words kept in src/lib/legal.ts; read both.
+      privacy: page('src/app/privacy/page.tsx') === null ? null : `${page('src/app/privacy/page.tsx')}\n${page('src/lib/legal.ts') ?? ''}`,
     };
   },
   run: ({ enabled, openBeyondInvited, terms, privacy }) => {
