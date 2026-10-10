@@ -221,3 +221,9 @@ NEYNAR_API_KEY and SNOWMOON_ALERT_URL listed when missing (names only); 0007's h
 One push for three branches (owner, 2026-10-10). The menu groups Read, Listen and Glossary under Book, with ? for About and ☰ (site-menu). Short labels with ⓘ: "Redrawn" on template screens, "AI description" in Listen, "Book", "Invented" and "Draft" in Minpentai, now on Play's tags too (the c4-b84 tag quotes the book instead of "a new rule each match"); scene lines hidden; the podcast on Spotify; the selection options stay on a phone's screen (site-labels). Design's home page, with the not-affiliated line in the first screen (site-home). Play's labels meet the 44px floor, and Play keeps its ladder progress unless the server's answer is well-formed. To undo (back to `4525cc4`):
 
     vercel rollback https://snowmoon-pf5iwm44s-nates-projects-d1780cff.vercel.app --scope nates-projects-d1780cff
+
+## 2026-10-10: the intro's images carry the AI label (branch site-intro-labels)
+
+The first-visit intro's recipe and record cards show the AI image label, opening the recipe sheet; Escape in the sheet closes the sheet, not the intro; P2b and check:ui require the label. To undo (back to `5f45959`, the release):
+
+    vercel rollback https://snowmoon-9tame9dp3-nates-projects-d1780cff.vercel.app --scope nates-projects-d1780cff
