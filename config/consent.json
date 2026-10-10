@@ -1,6 +1,6 @@
 {
-  "about": "The wording a person agrees to before their first contribution that stores their own words (a prompt or a line). The agreement is recorded in studio.contributor_consents with kind 'own_words' and the sha256 of this version's line and text (src/lib/consent.ts). A new wording gets a new version; earlier versions stay here so every recorded hash can be read back. own-words-v1 does not promise immediate hiding, because \"Hide this\" is not built yet; own-words-v2, written when it ships with the first form that stores a person's words, promises it (docs/removal.md).",
-  "current": "own-words-v2",
+  "about": "The wording a person agrees to before their first contribution that stores their own words (a prompt or a line). The agreement is recorded in studio.contributor_consents with kind 'own_words' and the sha256 of this version's line and text (src/lib/consent.ts). A new wording gets a new version; earlier versions stay here so every recorded hash can be read back. own-words-v1 does not promise immediate hiding, because \"Hide this\" is not built yet; own-words-v2, written when it ships with the first form that stores a person's words, promises it (docs/removal.md). own-words-v3 (2026-10-09) names Neynar in its last line: at Generate, the Farcaster ID is sent to Neynar to look up the account's score (the image gate). Its hash differs from v2's, so anyone who agreed to v2 is asked again before their next Generate or publish.",
+  "current": "own-words-v3",
   "versions": {
     "own-words-v1": {
       "line": "Public, permanent, GPL-3.0, shown with your Farcaster name.",
@@ -23,6 +23,18 @@
         "It is licensed GPL-3.0, like everything in this edition, so others may copy and adapt it under the same license.",
         "It is shown with your Farcaster name.",
         "To make an image, your prompt is sent to Groq to be checked and to fal.ai to make it. Drafts you don’t publish stay on your device."
+      ]
+    },
+    "own-words-v3": {
+      "line": "Public, permanent, GPL-3.0, shown with your Farcaster name. You can hide it.",
+      "title": "Your words will be public",
+      "text": [
+        "What you write here (a prompt, a line, a description) is published with what it makes.",
+        "It is public: anyone can read it, signed in or not, including the prompt that made an image or a voice.",
+        "It is permanent: the project keeps the record. You can hide your own work at any time, and it disappears from view at once. Moderators can also hide it. Copies others have already made may remain.",
+        "It is licensed GPL-3.0, like everything in this edition, so others may copy and adapt it under the same license.",
+        "It is shown with your Farcaster name.",
+        "To make an image, your prompt is sent to Groq to be checked and to fal.ai to make it, and your Farcaster ID to Neynar to check your account's score. Drafts you don’t publish stay on your device."
       ]
     }
   }

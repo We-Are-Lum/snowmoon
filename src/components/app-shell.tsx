@@ -12,6 +12,7 @@ import type { Intro } from '~/lib/intro';
 import { Assistant } from './assistant';
 import { ReplayIntro } from './first-visit';
 import { ExternalLinks } from './external-links';
+import { LegalLine } from './legal-line';
 import { SignInButton } from './sign-in';
 import { ThemeSwitch } from './theme-switch';
 import '../app/assistant/assistant.css';
@@ -176,6 +177,7 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
               About
             </Link>
           </div>
+          <LegalLine />
         </div>
         <Account auth={auth} />
       </aside>
@@ -313,6 +315,7 @@ function MenuSheet({ items, path, current, auth, intro, onClose }: { items: Retu
           <ThemeSwitch name="theme-menu" />
           <ReplayIntro intro={intro} label="What is this?" className="quiet-action" />
           <Account auth={auth} />
+          <LegalLine />
         </div>
       </div>
     </div>
