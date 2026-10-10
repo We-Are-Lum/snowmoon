@@ -1,6 +1,9 @@
 -- 0009_minpentai_play.sql — Minpentai Play: the computer ladder's progress and
 -- one-on-one (owner's decisions of 2026-10-09; the earlier proposal is
--- docs/proposals/minpentai-multiplayer.md on branch site-multiplayer-proposal). NOT APPLIED.
+-- docs/proposals/minpentai-multiplayer.md on branch site-multiplayer-proposal).
+-- APPLIED on production by the owner, 2026-10-09 23:55 (PDT). The owner's final check: all
+-- eight mp_ tables with row-level security on, no anon or authenticated reads, and the
+-- expected studio_writer privileges. Do not edit what this file creates; change it in a new migration.
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the
 -- Supabase SQL Editor. Requires 0001; independent of 0002–0008 (it touches none

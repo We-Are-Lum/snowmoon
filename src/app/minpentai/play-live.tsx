@@ -62,7 +62,7 @@ export function PlayPerson({ onBack, invite: inviteToken }: { onBack: () => void
   const [myLink, setMyLink] = useState<string | null>(null);
   const [blockAsk, setBlockAsk] = useState<Person | null>(null);
   const got = useRef(0);
-  const say = (t: string) => { setToast(t); window.setTimeout(() => setToast((x) => (x === t ? null : x)), 2800); };
+  const say = (t: string) => { setToast(t); window.setTimeout(() => setToast((x) => (x === t ? null : x)), Math.max(2800, t.length * 60)); };
   const proof = () => ({ nameProof: webNameProof() });
 
   const lobbyQuiet = useRef(0);
@@ -228,7 +228,7 @@ function LiveMatch({ id, onDone, onMatch }: { id: string; onDone: () => void; on
   const [toast, setToast] = useState<string | null>(null);
   const [replay, setReplay] = useState<{ i: number; playing: boolean } | null>(null);
   const [fs, setFs] = useState(false);
-  const say = (t: string) => { setToast(t); window.setTimeout(() => setToast((x) => (x === t ? null : x)), 2800); };
+  const say = (t: string) => { setToast(t); window.setTimeout(() => setToast((x) => (x === t ? null : x)), Math.max(2800, t.length * 60)); };
   const vRef = useRef<number | null>(null);
   const stepRef = useRef<number | null>(null);
   const take = useCallback((x: MatchView) => {

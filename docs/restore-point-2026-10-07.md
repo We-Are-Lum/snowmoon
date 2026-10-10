@@ -201,3 +201,11 @@ Every word shows the sentence where it first appears; the review file is reviewe
 Repo hygiene: .venv, narration-out, images-out and art-out are no longer tracked; .gitignore entries without a trailing slash. To undo (back to `85ad0f1`):
 
     vercel rollback dpl_BHDcuK9uunUocUjdfaMcCn93oVa8 --scope nates-projects-d1780cff
+
+## 2026-10-10: Minpentai Play: Design's hub, ladder, one-on-one, free play and rules page (branch site-minpentai-play-2)
+
+Play replaces v3's four tabs: practice, a ladder against the computer, one-on-one by username or invite link, free play and full screen, on the new rules page's game; Learn stays on v3. Signed-in play uses 0009 (applied by the owner on 2026-10-09, 23:55), with per-person and sitewide limits and cleanup. A Farcaster username that doesn't fit the lobby is refused with a clear message. To undo (back to `d3d0f56`):
+
+    vercel rollback dpl_7D1FoPE54Xh9bPz22pdQMLxhkx2b --scope nates-projects-d1780cff
+
+Rolling back the code leaves 0009's tables in place; they are private and unused without it.

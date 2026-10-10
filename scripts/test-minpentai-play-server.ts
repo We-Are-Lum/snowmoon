@@ -645,6 +645,43 @@ function both(m: LiveMatch, from: number, to: number) { for (let t = from; t <= 
   }
 }
 
+// --- Usernames: a Farcaster name that doesn't fit the lobby's rule is refused plainly, never a 500 ---
+{
+  const { verifiedName } = await import('../src/lib/minpentai/play-server/route');
+  const { NAME } = await import('../src/lib/names');
+  const real = globalThis.fetch;
+  const answer = (username: string) => (async () => new Response(JSON.stringify({ result: { user: { username } } }), { status: 200 })) as typeof fetch;
+  const expectRefusal = async (label: string, fid: number, username: string, re: RegExp) => {
+    globalThis.fetch = answer(username);
+    try {
+      await verifiedName(fid, null);
+      failures.push(`${label}: expected a refusal`);
+    } catch (e) {
+      if (e instanceof Refused && e.status === 400 && re.test(e.message)) passed++;
+      else failures.push(`${label}: got ${e instanceof Refused ? `${e.status} ${e.message}` : String(e)}`);
+    }
+  };
+  try {
+    const long = 'a-very-long-name-for-a-farcaster-account.base.eth';
+    await expectRefusal('names: a 49-character name is refused with a clear message', 90001, long, /can't be shown in the lobby: usernames here are 1 to 31 letters, numbers, dots or hyphens\. Playing the computer and free play still work\./);
+    await expectRefusal('names: the refusal names the name', 90002, long, /"a-very-long-name-for-a-farcaster-accoun…"|a-very-long-name/);
+    await expectRefusal('names: an emoji name is refused the same way', 90003, 'moon🌕.eth', /can't be shown in the lobby/);
+    globalThis.fetch = (async () => new Response('{}', { status: 200 })) as typeof fetch;
+    try { await verifiedName(90004, null); failures.push('names: no name: expected a refusal'); } catch (e) {
+      check('names: no name at all keeps the "could not find yours" message', e instanceof Refused && e.status === 400 && /could not find yours/.test(e.message));
+    }
+    globalThis.fetch = answer('sixteen-chars-xx.base.eth');
+    check('names: the longest Farcaster name (a 16-character basename, 25 characters) is accepted', (await verifiedName(90005, null)) === 'sixteen-chars-xx.base.eth');
+    // The lobby table holds the same rule as NAME, so a name that passes can always be stored.
+    const t31 = 'a'.repeat(31), t32 = 'a'.repeat(32);
+    check('names: NAME takes 31 characters and refuses 32', NAME.test(t31) && !NAME.test(t32));
+    const sql0009 = readFileSync(path.join(ROOT, 'supabase/migrations/0009_minpentai_play.sql'), 'utf8');
+    check('names: the lobby table\'s check is the same rule as NAME', sql0009.includes("check (username ~ '^[A-Za-z0-9][A-Za-z0-9.-]{0,30}$')") && NAME.source === '^[a-z0-9][a-z0-9.-]{0,30}$' && NAME.flags.includes('i'));
+  } finally {
+    globalThis.fetch = real;
+  }
+}
+
 if (failures.length) {
   console.error(`minpentai play server tests FAILED (${failures.length}, ${passed} passed):\n- ` + failures.join('\n- '));
   process.exit(1);

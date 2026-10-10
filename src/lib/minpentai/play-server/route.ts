@@ -3,7 +3,7 @@ import { NextResponse, after } from 'next/server';
 import type postgres from 'postgres';
 import { getFid } from '~/lib/auth';
 import { db } from '~/lib/db';
-import { bylineName } from '~/lib/names';
+import { NAME_RULE, bylineName } from '~/lib/names';
 import { Refused } from './match';
 import { cleanup, cleanupDue, limitRequest, type RequestKind } from './store';
 
@@ -71,6 +71,11 @@ export async function body(request: Request): Promise<Record<string, unknown>> {
  */
 export async function verifiedName(fid: number, nameProof: unknown): Promise<string> {
   const by = await bylineName(fid, nameProof);
+  if (!by.name && by.unfit) {
+    // Model-drafted wording. Farcaster's names fit (see NAME in src/lib/names.ts); this is for one that doesn't.
+    const shown = by.unfit.length > 40 ? `${by.unfit.slice(0, 40)}…` : by.unfit;
+    throw new Refused(400, `Your Farcaster username, "${shown}", can't be shown in the lobby: usernames here are ${NAME_RULE}. Playing the computer and free play still work.`);
+  }
   if (!by.name) {
     throw new Refused(400, 'Playing other people needs a Farcaster username, and we could not find yours. Set one in Farcaster, or sign in again, then try again.');
   }
