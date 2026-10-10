@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
 import { usePathname } from 'next/navigation';
 import type { Intro, IntroCard } from '~/lib/intro';
+import { AiLabel } from './recipe-sheet';
+import { AI_LABEL } from '~/lib/ai-declared';
 
 /**
  * The first-visit intro (config/intro.json), built from
@@ -57,6 +59,8 @@ function Visual({ card, intro }: { card: IntroCard; intro: Intro }) {
         <div className="iv iv-recipe">
           {/* eslint-disable-next-line @next/next/no-img-element */}
           <img src={im.url} alt={im.alt} width={im.width} height={im.height} />
+          {/* Owner, 2026-10-10: the intro's images carry the AI label too, opening the recipe sheet. */}
+          <p className="iv-ai"><AiLabel kind="image" text={AI_LABEL.image} file={im.recipeFile} item={im.id} /></p>
           <div className="iv-recipe-box">
             <span className="iv-row iv-strong">
               <span>How this was made</span>
@@ -90,6 +94,7 @@ function Visual({ card, intro }: { card: IntroCard; intro: Intro }) {
             <span className="iv-step-body">
               <span className="iv-step-who">An image of it</span>
               <span className="iv-step-what">AI-generated, anchored to ¶ {im.block.label}</span>
+              <AiLabel kind="image" text={AI_LABEL.image} file={im.recipeFile} item={im.id} />
             </span>
           </div>
           <div className="iv-step iv-indent-2">

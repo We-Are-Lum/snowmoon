@@ -741,6 +741,21 @@ try {
       if (!(await card.isVisible())) { fail(`intro: card ${i + 1} is not showing on a first visit to /`); break; }
       if ((await card.getAttribute('data-card')) !== cards[i]) fail(`intro: card ${i + 1} is ${await card.getAttribute('data-card')}, not ${cards[i]}`);
       if (!(await page.locator('.intro-skip').isVisible())) fail(`intro: card ${i + 1} has no Skip`);
+      // A card showing an AI image carries the AI label, which opens the recipe sheet (owner, 2026-10-10).
+      if ((await card.locator('img').count()) > 0) {
+        const label = card.locator('.ai-label[data-ai="image"]');
+        if (!(await label.count()) || !(await label.first().isVisible())) fail(`intro: card ${i + 1} (${cards[i]}) shows an AI image without the AI label`);
+        else {
+          if (!/\bAI\b/.test((await label.first().innerText()) ?? '')) fail(`intro: card ${i + 1}: the label does not say "AI"`);
+          await label.first().click();
+          const sheet = page.locator('.recipe-sheet');
+          await sheet.waitFor({ timeout: 5000 }).catch(() => fail(`intro: card ${i + 1}: the AI label does not open the recipe sheet`));
+          if (!/not by the author/i.test((await sheet.textContent().catch(() => '')) ?? '')) fail(`intro: card ${i + 1}: the recipe sheet does not say "not by the author"`);
+          await checkFloors(page, `intro card ${i + 1} (recipe sheet)`, 'light');
+          await page.keyboard.press('Escape');
+          if ((await page.locator('.intro-card').getAttribute('data-card')) !== cards[i]) fail(`intro: card ${i + 1}: closing the recipe sheet moved the intro on`);
+        }
+      }
       if (i < cards.length - 1) await page.getByRole('button', { name: 'Next' }).click();
     }
     await page.locator('.intro-skip').click();

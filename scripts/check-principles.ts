@@ -402,6 +402,8 @@ const READER_IMAGE_FILES = [
   'src/app/image/[id]/page.tsx',
   'src/components/image-composer.tsx',
   'src/components/moderate-queue.tsx',
+  // The first-visit intro's recipe and record cards show a seeded image (owner, 2026-10-10).
+  'src/components/first-visit.tsx',
 ];
 add({
   id: 'P2b',
