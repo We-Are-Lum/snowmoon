@@ -177,3 +177,9 @@ The edition's images and narration say 'by Snowmoon Party'; check:ui checks ever
 Checks only: check:ui fails when a local server, or the local build it starts for the readers' screens, is from another commit. To undo (back to `fa0e88f`):
 
     vercel rollback dpl_PdaddFGtgYMxV2NDaN489Pv3nSmt --scope nates-projects-d1780cff
+
+## 2026-10-09: the book's sliders work (branch site-c7b6-note)
+
+Docs only: P8e and live.ts say the book's sliders are working range inputs; the grey disabled look came from our import. To undo (back to `67bf0d3`):
+
+    vercel rollback dpl_FQ75udfwBAfWgkDfgdhr1xHS8t89 --scope nates-projects-d1780cff
