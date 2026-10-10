@@ -546,6 +546,15 @@ async function checkAiLabels() {
   }
 }
 
+// A local server must be serving this checkout's commit; otherwise the check would pass old code.
+if (/^http:\/\/(localhost|127\.0\.0\.1)(:|\/|$)/.test(BASE)) {
+  const head = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+  const served = await fetch(`${BASE}/api/version`).then((r) => r.json() as Promise<{ commit?: string }>, () => ({ commit: undefined }));
+  if (served.commit !== head) {
+    console.error(`UI CHECK FAILED (1):\n- ${BASE} serves a build of ${(served.commit ?? 'unknown').slice(0, 7)}, but this checkout is at ${head.slice(0, 7)}; run next build, then next start`);
+    process.exit(1);
+  }
+}
 const browser = await chromium.launch({ channel: 'chrome' });
 try {
   await checkAiLabels();
