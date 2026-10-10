@@ -537,8 +537,9 @@ a.provenance { color: var(--muted); }
 .iv-recipe img { display: block; width: 100%; height: auto; max-height: 58%; object-fit: cover; border-radius: var(--radius) var(--radius) 0 0; background: var(--soft); }
 .iv-pic { position: relative; flex: none; max-height: 58%; display: flex; }
 .iv-pic img { max-height: 100%; }
-.iv-ai { position: absolute; left: 8px; bottom: 8px; }
-.iv-ai .ai-label { background: var(--paper); }
+.iv-ai { position: absolute; left: 8px; bottom: 8px; display: flex; }
+.iv-ai { right: 8px; }
+.iv-ai .ai-label { display: inline-flex; align-items: center; min-height: 32px; max-width: 100%; padding: 4px 8px; border-radius: var(--radius); background: var(--paper); font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.04em; text-transform: uppercase; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .iv-recipe-box {
   flex: 1; min-height: 0; overflow: hidden; display: flex; flex-direction: column; gap: 6px; padding: 12px 14px;
   border: 1px solid var(--rule); border-top: 0; font-family: var(--label); font-size: var(--text-label); line-height: 1.45; color: var(--muted);
@@ -640,3 +641,4 @@ a.provenance { color: var(--muted); }
   min-height: var(--tap); padding: 0 12px; background: none; border: 1px solid var(--rule); border-radius: var(--radius); color: var(--ink); cursor: pointer;
   font-family: var(--label); font-size: 13px; letter-spacing: 0.06em; text-transform: uppercase;
 }
+.iv-step-body .ai-label { align-self: flex-start; font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; letter-spacing: 0.04em; text-align: left; min-height: 32px; }
