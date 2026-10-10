@@ -57,8 +57,8 @@ else was re-judged; the wording is unchanged.
 | 5.1 | Your question is sent to Groq to be answered, or through Vercel AI Gateway to Groq when Groq is busy. | true | `src/lib/chat/model.ts:77` (direct, `api.groq.com`, `src/lib/config.ts:69`) then `:109` (gateway, `src/lib/config.ts:58`) when the direct call fails and `gatewayFallback` is on (`src/lib/config.ts:75`); pinned to Groq (`src/lib/chat/provider.ts:10`). |
 | 5.2 | Both are set to keep nothing. | true for the gateway; can't tell for Groq from code | Gateway: `zeroDataRetention` asked per request, `src/lib/chat/provider.ts:10`. Groq direct: a console setting the owner confirmed on 2026-10-08 (`src/lib/config.ts:63-67`; docs/principles.md §6); nothing in code or Groq's replies shows it. |
 | 5.3 | We keep no copy of your questions or the answers. | true | `studio.chat_calls` has no question or answer column (`supabase/migrations/0007_chat_costs_without_person.sql`); errors log only the error type (`src/app/api/chat/ask/route.ts:37-38`). |
-| 5.4 | Under your Farcaster ID we record only how many questions you ask and when, to count the daily limit. | true in code; can't tell whether 0007 is live | After 0007, `chat_calls` = FID, time, model (`src/lib/chat/limits.ts:44`; 0007 header). The starter assumes 0007 is applied; the file header still says "NOT APPLIED", and `src/lib/chat/notice.ts:32,35` records the owner applying it on 2026-10-08. The live database can't be read from here. Before 0007, cost rows with request ids were kept under the FID. |
-| 5.5 | The assistant's costs are kept only as daily totals, without your ID, to track our spending. | true | `studio.chat_costs` holds daily totals per kind, model, provider and verdict, with no FID (`0007_chat_costs_without_person.sql`, `src/lib/chat/limits.ts:61`). Same 0007 caveat as 5.4: true in code; whether 0007 is applied on the live database can't be read from here. |
+| 5.4 | Under your Farcaster ID we record only how many questions you ask and when, to count the daily limit. | true | After 0007, `chat_calls` = FID, time, model (`src/lib/chat/limits.ts:44`; 0007 header). 0007 is live on production (owner, confirmed 2026-10-10; relayed by another Snowmoon session). |
+| 5.5 | The assistant's costs are kept only as daily totals, without your ID, to track our spending. | true | `studio.chat_costs` holds daily totals per kind, model, provider and verdict, with no FID (`0007_chat_costs_without_person.sql`, `src/lib/chat/limits.ts:61`). 0007 is live (see 5.4). |
 | 6.1 | Anything you publish is public… | true | Images (P1d), cards (`src/app/card/[id]/page.tsx`). |
 | 6.2 | Anything you publish is public, shown with your Farcaster username (your Farcaster ID on quote cards), the date, and the record of how it was made. | true, with a nuance | Images show `by_name` (`publish/route.ts:80`); cards show "saved by FID n" (`card/[id]/page.tsx:43`). Nuance: if no username can be found at publish, an image shows "FID n" too (`src/lib/names.ts:10`). |
 | 6.3 | …the date, and the record of how it was made. | true | Recipe `made_at` and version `created_at`; recipe linked from every published image (P1d, P2b). |
@@ -93,9 +93,9 @@ else was re-judged; the wording is unchanged.
   (the alert also goes out when an author hides their own image, not only on a report); 3.6 (the
   sign-in entry also holds the FID, username and a 30-day name proof).
 - **Can't tell from the code:** 1.1, 2.5, 8.1, 10.1 (promises or facts outside the code); 5.2 for
-  Groq (console setting); 5.4 and 5.5 (whether 0007 is applied on the live database); 7.12
+  Groq (console setting); 7.12
   (Spotify's copy); 9.2 (a copy of one's data).
-- **Depends on unmerged branches:** 7.10, 7.11, 7.14 (site-images-everyone); 4.9–4.12 and 7.9's
+- **Depends on unmerged branches:** 7.10, 7.11, 7.14 (site-images-everyone; 0010 is applied on production, 2026-10-10); 4.9–4.12 and 7.9's
   Minpentai half (site-minpentai-play-2, now being pushed).
 - The consent screen now names Vercel AI Gateway for the prompt check, as §7 does (own-words-v3,
   revised before it shipped).

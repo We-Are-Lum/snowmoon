@@ -1,5 +1,8 @@
 -- 0010_image_scores.sql — image making for everyone, gated by Neynar score;
--- report alerts (owner, 2026-10-09; docs/proposals/add-an-image.md, decision 11). NOT APPLIED.
+-- report alerts (owner, 2026-10-09; docs/proposals/add-an-image.md, decision 11).
+-- APPLIED on production by the owner; confirmed 2026-10-10 09:19: image_scores and alert_state,
+-- RLS on, no anon or authenticated reads, columns as expected. (Relayed to this branch by
+-- another Snowmoon session on the owner's behalf.) Change what it creates in a new migration.
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the
 -- Supabase SQL Editor. Requires 0001–0008; independent of 0009 (Minpentai
