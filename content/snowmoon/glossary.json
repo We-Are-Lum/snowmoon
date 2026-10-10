@@ -3,26 +3,26 @@
  "about": "Glossary of the invented words in Snowmoon. Built by scripts/build-glossary.ts from the files in `sources`; do not edit by hand (npm run build:glossary). Every explanation is a sentence of the book, quoted exactly with its block id; no definition is written by a model or a person. Judgement calls are in content/snowmoon/glossary-review.json.",
  "rules": {
   "inclusion": "Every pronunciation.json entry except kind common-word and phrases of four or more words; every capitalised run in a character, location or prop name (article, title and possessive dropped), decided in the review file; the review file's added terms; spellings joined by the review file's merges. Terms the book never mentions are dropped.",
-  "mentions": "A spelling as a whole word in a block's text (tags and Markdown marks removed), longest spellings first; case as the pronunciation entry says; single lowercase Dzegoban words only inside italics or single quotes; headings and breaks skipped.",
+  "mentions": "A spelling as a whole word in a block's text (tags and Markdown marks removed), longest spellings first; case as the pronunciation entry says; single lowercase Dzegoban words only inside italics or single quotes made only of Dzegoban words; headings and breaks skipped.",
   "explanations": "A sentence of a paragraph or quote block, exactly as written (speaker-colour span tags removed), that mentions the term as: T is/was/are/were/means/stands for/refers to + a|an|the|one|…|a capitalised word; called/named/known as/nicknamed/dubbed/word for T; T, a|an|the (not after a quote mark); T - a|an|the|quote; T: a|an|the; T ( or (T); in Dzegoban / Dzegoban for in the sentence; T, as … call/know/say. First five in book order. Sentences with markup are skipped.",
   "clip": "The block clip of the house narration (no word timings exist) in which the term is spoken, in the first chapter where it is, the shortest; never a model-drafted spoken description. The whole block plays."
  },
  "sources": {
   "pronunciation_sha256": "81a5c2fe59fda14824d8465b630ca3bf07b205c08518250999699b51eaff317d",
-  "review_sha256": "868c4ff92ebd6ed9ac2e223cbb27bf4d0b0451851b9c7c525326d80bc5f7be4d",
+  "review_sha256": "542b04576db995f3128ee4379f99d1854f6faf6cd072aa8e07985e84db873de6",
   "text_blocks_sha256": "14cce96f6da8a69258a2e77ee5f7540d7dbeb7ab8895b4ef377415b9dfbe2d76",
   "entities_sha256": "39c8e44ccbf42a7971ccf12b0f628113b47d913ec1585294fee5a1bb210e1413",
   "narration_sha256": "4152445eac7a5423d4f3f09034a046f5045ee9617a8becf13de6d8641e7c880c",
   "narration_voice": "kokoro-af_heart"
  },
  "counts": {
-  "terms": 208,
+  "terms": 207,
   "with_explanation": 25,
-  "with_clip": 182,
-  "from_pronunciation": 193,
+  "with_clip": 181,
+  "from_pronunciation": 192,
   "from_entity": 3,
   "from_review": 12,
-  "excluded": 145
+  "excluded": 146
  },
  "terms": [
   {
@@ -36,6 +36,12 @@
    "respelling": null,
    "first": "c1-b38",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b38",
+    "chapter": 1,
+    "idx": 38,
+    "text": "That was just a warmup, he thought - a random fluke that he had been assigned an aesthetics vote as a Veridian citizen right before one of his more consequential votes as an Acolyte in the Order of Steering."
+   },
    "explanations": [
     {
      "block": "c1-b57",
@@ -93,6 +99,12 @@
    "respelling": null,
    "first": "c6-b68",
    "first_chapter": 6,
+   "first_sentence": {
+    "block": "c6-b68",
+    "chapter": 6,
+    "idx": 68,
+    "text": "I'm Alagael, I've been a Herald for seven years."
+   },
    "explanations": [],
    "mentions": {
     "6": [
@@ -123,6 +135,12 @@
    "respelling": null,
    "first": "c15-b10",
    "first_chapter": 15,
+   "first_sentence": {
+    "block": "c15-b10",
+    "chapter": 15,
+    "idx": 10,
+    "text": "> Three government aeroplanes containing President Albor, Prime Minister Celedil and most of the parliament attempted to take off."
+   },
    "explanations": [],
    "mentions": {
     "15": [
@@ -149,6 +167,12 @@
    "respelling": null,
    "first": "c8-b77",
    "first_chapter": 8,
+   "first_sentence": {
+    "block": "c8-b77",
+    "chapter": 8,
+    "idx": 77,
+    "text": "\"Senator Ancus?\""
+   },
    "explanations": [],
    "mentions": {
     "8": [
@@ -176,6 +200,12 @@
    "respelling": null,
    "first": "c1-b56",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b56",
+    "chapter": 1,
+    "idx": 56,
+    "text": "If Dreadknot wanted to, they could have all their songs repeatedly shouting \"Hail the Arctic Emperor\" and \"we hope all government officials get painfully murdered\" over and over again, and they would never be shut down or go to jail."
+   },
    "explanations": [],
    "mentions": {
     "1": [
@@ -212,6 +242,12 @@
    "respelling": null,
    "first": "c2-b28",
    "first_chapter": 2,
+   "first_sentence": {
+    "block": "c2-b28",
+    "chapter": 2,
+    "idx": 28,
+    "text": "I hear the Arctic Empire is getting more aggressive, so we're stepping up security.\""
+   },
    "explanations": [],
    "mentions": {
     "2": [
@@ -275,6 +311,12 @@
    "respelling": null,
    "first": "c2-b123",
    "first_chapter": 2,
+   "first_sentence": {
+    "block": "c2-b123",
+    "chapter": 2,
+    "idx": 123,
+    "text": "\"Wow, the Arctics are getting aggressive."
+   },
    "explanations": [
     {
      "block": "c32-b51",
@@ -592,6 +634,12 @@
    "respelling": null,
    "first": "c5-b46",
    "first_chapter": 5,
+   "first_sentence": {
+    "block": "c5-b46",
+    "chapter": 5,
+    "idx": 46,
+    "text": "Arturia"
+   },
    "explanations": [],
    "mentions": {
     "5": [
@@ -626,6 +674,12 @@
    "respelling": null,
    "first": "c27-b54",
    "first_chapter": 27,
+   "first_sentence": {
+    "block": "c27-b54",
+    "chapter": 27,
+    "idx": 54,
+    "text": "F: Arturian military advisors.\""
+   },
    "explanations": [],
    "mentions": {
     "27": [
@@ -656,6 +710,12 @@
    "respelling": "AW-toh-bus",
    "first": "c1-b11",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b11",
+    "chapter": 1,
+    "idx": 11,
+    "text": "Smoothly, and suddenly, the path transitioned into a sky bridge above a busy road, with many cars and autobuses and a few autonomous delivery vehicles passing beneath him."
+   },
    "explanations": [],
    "mentions": {
     "1": [
@@ -716,6 +776,12 @@
    "respelling": "BAD-ruh",
    "first": "c1-b18",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b18",
+    "chapter": 1,
+    "idx": 18,
+    "text": "Vote on: Badra St #1103"
+   },
    "explanations": [],
    "mentions": {
     "1": [
@@ -752,6 +818,12 @@
    "respelling": null,
    "first": "c4-b16",
    "first_chapter": 4,
+   "first_sentence": {
+    "block": "c4-b16",
+    "chapter": 4,
+    "idx": 16,
+    "text": "\"You mean this year is your last chance to impress Bai?\""
+   },
    "explanations": [],
    "mentions": {
     "4": [
@@ -973,6 +1045,12 @@
    "respelling": null,
    "first": "c20-b95",
    "first_chapter": 20,
+   "first_sentence": {
+    "block": "c20-b95",
+    "chapter": 20,
+    "idx": 95,
+    "text": "\"Hi, I'm Balme."
+   },
    "explanations": [],
    "mentions": {
     "20": [
@@ -1006,6 +1084,12 @@
    "respelling": null,
    "first": "c4-b27",
    "first_chapter": 4,
+   "first_sentence": {
+    "block": "c4-b27",
+    "chapter": 4,
+    "idx": 27,
+    "text": "On the front cover, there was the Bansunpei logo: two horizontal arms, one from the left and one from the right, meeting in the middle to hold their hands."
+   },
    "explanations": [],
    "mentions": {
     "4": [
@@ -1061,37 +1145,6 @@
    }
   },
   {
-   "slug": "be",
-   "term": "be",
-   "aliases": [],
-   "source": "pronunciation",
-   "kind": "dzegoban",
-   "respelling": null,
-   "first": "c12-b162",
-   "first_chapter": 12,
-   "explanations": [],
-   "mentions": {
-    "12": [
-     162
-    ],
-    "15": [
-     41,
-     61,
-     64
-    ]
-   },
-   "mention_count": 4,
-   "clip": {
-    "block": "c12-b162",
-    "chapter": 12,
-    "idx": 162,
-    "url": "https://media.snowmoon.party/narration/kokoro-af_heart/c12/b162-09d698f9115a.m4a",
-    "duration_ms": 8350,
-    "start_ms": 1225150,
-    "chapter_url": "https://media.snowmoon.party/narration/kokoro-af_heart/chapter-12-2cbd8d83f5db.m4a"
-   }
-  },
-  {
    "slug": "belgor",
    "term": "Belgor",
    "aliases": [],
@@ -1100,6 +1153,12 @@
    "respelling": null,
    "first": "c17-b44",
    "first_chapter": 17,
+   "first_sentence": {
+    "block": "c17-b44",
+    "chapter": 17,
+    "idx": 44,
+    "text": "\"Belgor, good to see you again!\""
+   },
    "explanations": [],
    "mentions": {
     "17": [
@@ -1127,6 +1186,12 @@
    "respelling": null,
    "first": "c5-b46",
    "first_chapter": 5,
+   "first_sentence": {
+    "block": "c5-b46",
+    "chapter": 5,
+    "idx": 46,
+    "text": "Belpaki"
+   },
    "explanations": [],
    "mentions": {
     "5": [
@@ -1163,6 +1228,12 @@
    "respelling": null,
    "first": "c6-b103",
    "first_chapter": 6,
+   "first_sentence": {
+    "block": "c6-b103",
+    "chapter": 6,
+    "idx": 103,
+    "text": "All the books are either some boring business books, or things in foreign languages nobody understands, either Old Belpakian or something from Haragmir.\""
+   },
    "explanations": [],
    "mentions": {
     "6": [
@@ -1189,6 +1260,12 @@
    "respelling": null,
    "first": "c2-b8",
    "first_chapter": 2,
+   "first_sentence": {
+    "block": "c2-b8",
+    "chapter": 2,
+    "idx": 8,
+    "text": "\"gie fe kiu kai ci bin hu\", Zei thought to himself."
+   },
    "explanations": [],
    "mentions": {
     "2": [
@@ -1222,6 +1299,12 @@
    "respelling": null,
    "first": "c11-b1",
    "first_chapter": 11,
+   "first_sentence": {
+    "block": "c11-b1",
+    "chapter": 11,
+    "idx": 1,
+    "text": "**Meldan, Veridia** · 3724 Bloomtime 15"
+   },
    "explanations": [],
    "mentions": {
     "11": [
@@ -1248,6 +1331,12 @@
    "respelling": null,
    "first": "c16-b57",
    "first_chapter": 16,
+   "first_sentence": {
+    "block": "c16-b57",
+    "chapter": 16,
+    "idx": 57,
+    "text": "He caught a blueball in midair."
+   },
    "explanations": [],
    "mentions": {
     "16": [
@@ -1278,6 +1367,12 @@
    "respelling": null,
    "first": "c3-b19",
    "first_chapter": 3,
+   "first_sentence": {
+    "block": "c3-b19",
+    "chapter": 3,
+    "idx": 19,
+    "text": "\"Bluewhale announced a month ago that they're cutting their API and are only letting verified hardware interface with the platform."
+   },
    "explanations": [],
    "mentions": {
     "3": [
@@ -1335,6 +1430,12 @@
    "respelling": null,
    "first": "c12-b128",
    "first_chapter": 12,
+   "first_sentence": {
+    "block": "c12-b128",
+    "chapter": 12,
+    "idx": 128,
+    "text": "Meet Bo.\""
+   },
    "explanations": [],
    "mentions": {
     "12": [
@@ -1369,6 +1470,12 @@
    "respelling": null,
    "first": "c17-b73",
    "first_chapter": 17,
+   "first_sentence": {
+    "block": "c17-b73",
+    "chapter": 17,
+    "idx": 73,
+    "text": "Bonne"
+   },
    "explanations": [],
    "mentions": {
     "17": [
@@ -1387,6 +1494,12 @@
    "respelling": null,
    "first": "c26-b167",
    "first_chapter": 26,
+   "first_sentence": {
+    "block": "c26-b167",
+    "chapter": 26,
+    "idx": 167,
+    "text": "\"Caeron\", Gladias interrupted."
+   },
    "explanations": [],
    "mentions": {
     "26": [
@@ -1414,6 +1527,12 @@
    "respelling": null,
    "first": "c14-b31",
    "first_chapter": 14,
+   "first_sentence": {
+    "block": "c14-b31",
+    "chapter": 14,
+    "idx": 31,
+    "text": "The top four players in the qualifiers were: Deluin from Redshire, who won six of six games, Zei Leimin from Pafogai Du who won five of six with an average win time of 5,047 turns, Gun Caibai from Dzundei who won five of six with an average win time of 5,699 turns, and Kau Seiza from Geijaken who won five of six with an average win time of 6,740 turns.\""
+   },
    "explanations": [],
    "mentions": {
     "14": [
@@ -1441,6 +1560,12 @@
    "respelling": null,
    "first": "c12-b36",
    "first_chapter": 12,
+   "first_sentence": {
+    "block": "c12-b36",
+    "chapter": 12,
+    "idx": 36,
+    "text": "cau tie zen"
+   },
    "explanations": [],
    "mentions": {
     "12": [
@@ -1465,6 +1590,12 @@
    "respelling": null,
    "first": "c15-b10",
    "first_chapter": 15,
+   "first_sentence": {
+    "block": "c15-b10",
+    "chapter": 15,
+    "idx": 10,
+    "text": "> Three government aeroplanes containing President Albor, Prime Minister Celedil and most of the parliament attempted to take off."
+   },
    "explanations": [],
    "mentions": {
     "15": [
@@ -1491,6 +1622,12 @@
    "respelling": "CLEER-hill",
    "first": "c1-b28",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b28",
+    "chapter": 1,
+    "idx": 28,
+    "text": "Clearhill Ave #980"
+   },
    "explanations": [],
    "mentions": {
     "1": [
@@ -1509,6 +1646,12 @@
    "respelling": null,
    "first": "c8-b64",
    "first_chapter": 8,
+   "first_sentence": {
+    "block": "c8-b64",
+    "chapter": 8,
+    "idx": 64,
+    "text": "\"I remember enjoying playing Colorball when I was a kid?"
+   },
    "explanations": [],
    "mentions": {
     "8": [
@@ -1535,6 +1678,12 @@
    "respelling": "DAY-uh",
    "first": "c1-b125",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b125",
+    "chapter": 1,
+    "idx": 125,
+    "text": "This was Gladias and Seila's fourth last dinner with the kids - of whom Zven and Lily were theirs, and Febric and Hreda were from their co-family, Uncle Vil and Aunt Daia."
+   },
    "explanations": [],
    "mentions": {
     "1": [
@@ -1593,6 +1742,12 @@
    "respelling": null,
    "first": "c17-b73",
    "first_chapter": 17,
+   "first_sentence": {
+    "block": "c17-b73",
+    "chapter": 17,
+    "idx": 73,
+    "text": "Dalias et al"
+   },
    "explanations": [],
    "mentions": {
     "17": [
@@ -1611,6 +1766,12 @@
    "respelling": null,
    "first": "c12-b78",
    "first_chapter": 12,
+   "first_sentence": {
+    "block": "c12-b78",
+    "chapter": 12,
+    "idx": 78,
+    "text": "\"De lu hin, they call me here. 'A fork with the appearance of'."
+   },
    "explanations": [],
    "mentions": {
     "12": [
@@ -1640,6 +1801,12 @@
    "respelling": null,
    "first": "c2-b20",
    "first_chapter": 2,
+   "first_sentence": {
+    "block": "c2-b20",
+    "chapter": 2,
+    "idx": 20,
+    "text": "\"Are they gonna cover an entire year of critical governance studies in ten days in DU now?\""
+   },
    "explanations": [
     {
      "block": "c2-b21",
@@ -1686,6 +1853,12 @@
    "respelling": null,
    "first": "c11-b64",
    "first_chapter": 11,
+   "first_sentence": {
+    "block": "c11-b64",
+    "chapter": 11,
+    "idx": 64,
+    "text": "\"Nice catch by Dela!"
+   },
    "explanations": [],
    "mentions": {
     "11": [
@@ -1713,6 +1886,12 @@
    "respelling": null,
    "first": "c12-b71",
    "first_chapter": 12,
+   "first_sentence": {
+    "block": "c12-b71",
+    "chapter": 12,
+    "idx": 71,
+    "text": "\"Hi, I'm Deluin\", he said."
+   },
    "explanations": [],
    "mentions": {
     "12": [
@@ -1820,6 +1999,12 @@
    "respelling": null,
    "first": "c3-b87",
    "first_chapter": 3,
+   "first_sentence": {
+    "block": "c3-b87",
+    "chapter": 3,
+    "idx": 87,
+    "text": "\"Ah, my name is Delwart."
+   },
    "explanations": [
     {
      "block": "c20-b30",
@@ -1951,6 +2136,12 @@
    "respelling": null,
    "first": "c9-b56",
    "first_chapter": 9,
+   "first_sentence": {
+    "block": "c9-b56",
+    "chapter": 9,
+    "idx": 56,
+    "text": "\"I'm Den."
+   },
    "explanations": [],
    "mentions": {
     "9": [
@@ -2070,6 +2261,12 @@
    "respelling": null,
    "first": "c5-b46",
    "first_chapter": 5,
+   "first_sentence": {
+    "block": "c5-b46",
+    "chapter": 5,
+    "idx": 46,
+    "text": "Deplexi"
+   },
    "explanations": [],
    "mentions": {
     "5": [
@@ -2099,6 +2296,12 @@
    "respelling": null,
    "first": "c2-b16",
    "first_chapter": 2,
+   "first_sentence": {
+    "block": "c2-b16",
+    "chapter": 2,
+    "idx": 16,
+    "text": "Freetown gets five percent votes in Devanvil, Devanvil gets fifteen percent votes in Redshire, Redshire gets...\""
+   },
    "explanations": [],
    "mentions": {
     "2": [
@@ -2137,6 +2340,12 @@
    "respelling": null,
    "first": "c12-b97",
    "first_chapter": 12,
+   "first_sentence": {
+    "block": "c12-b97",
+    "chapter": 12,
+    "idx": 97,
+    "text": "[dia lau shau]"
+   },
    "explanations": [],
    "mentions": {
     "12": [
@@ -2155,6 +2364,12 @@
    "respelling": null,
    "first": "c26-b144",
    "first_chapter": 26,
+   "first_sentence": {
+    "block": "c26-b144",
+    "chapter": 26,
+    "idx": 144,
+    "text": "\"Our drones touched down at a large shopping complex in Dolinar."
+   },
    "explanations": [],
    "mentions": {
     "26": [
@@ -2181,6 +2396,12 @@
    "respelling": null,
    "first": "c11-b51",
    "first_chapter": 11,
+   "first_sentence": {
+    "block": "c11-b51",
+    "chapter": 11,
+    "idx": 51,
+    "text": "\"Nice catch by Dommus!\", the instructor shouted."
+   },
    "explanations": [],
    "mentions": {
     "11": [
@@ -2207,6 +2428,12 @@
    "respelling": "DRED-not",
    "first": "c1-b50",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b50",
+    "chapter": 1,
+    "idx": 50,
+    "text": "He soon got to the concert stage area, and was able to clearly hear the gnarly voice of Dreadknot's lead singer."
+   },
    "explanations": [],
    "mentions": {
     "1": [
@@ -2259,6 +2486,12 @@
    "respelling": null,
    "first": "c4-b89",
    "first_chapter": 4,
+   "first_sentence": {
+    "block": "c4-b89",
+    "chapter": 4,
+    "idx": 89,
+    "text": "\"Today, fated by chance to be on team Ja, we have Pan Munbau and Dza Dzingo.\""
+   },
    "explanations": [],
    "mentions": {
     "4": [
@@ -2285,6 +2518,12 @@
    "respelling": null,
    "first": "c4-b50",
    "first_chapter": 4,
+   "first_sentence": {
+    "block": "c4-b50",
+    "chapter": 4,
+    "idx": 50,
+    "text": "Zei stopped at a streetlight, and crossed Dzai Gun street: the last street before Pafogai Du officially ended, and the point at which a straight well-maintained path leading directly to the entrance of the mountain pyramid began."
+   },
    "explanations": [],
    "mentions": {
     "4": [
@@ -2315,6 +2554,12 @@
    "respelling": "DZEH-go",
    "first": "c1-b104",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b104",
+    "chapter": 1,
+    "idx": 104,
+    "text": "\"Well, the Dzego food truck is coming in seven minutes, how about we have that again?\""
+   },
    "explanations": [],
    "mentions": {
     "1": [
@@ -2510,6 +2755,12 @@
    "respelling": null,
    "first": "c26-b190",
    "first_chapter": 26,
+   "first_sentence": {
+    "block": "c26-b190",
+    "chapter": 26,
+    "idx": 190,
+    "text": "We are not going to stomp our feet over our democracy just because a bunch of Dzego-man whiz kids rescued a prince and you think you're smarter and more morally pure than the entire parliament.\""
+   },
    "explanations": [],
    "mentions": {
     "26": [
@@ -2536,6 +2787,12 @@
    "respelling": null,
    "first": "c2-b21",
    "first_chapter": 2,
+   "first_sentence": {
+    "block": "c2-b21",
+    "chapter": 2,
+    "idx": 21,
+    "text": "DU - \"Decentralized University\", or *dzu hu sun du* in Dzegoban - the place they were going."
+   },
    "explanations": [],
    "mentions": {
     "2": [
@@ -2611,6 +2868,12 @@
    "respelling": null,
    "first": "c2-b4",
    "first_chapter": 2,
+   "first_sentence": {
+    "block": "c2-b4",
+    "chapter": 2,
+    "idx": 4,
+    "text": "Privacy and transparency, monitoring and anti-monitoring - the duality of keeping the Dzegojan safe."
+   },
    "explanations": [],
    "mentions": {
     "2": [
@@ -2673,6 +2936,12 @@
    "respelling": null,
    "first": "c14-b31",
    "first_chapter": 14,
+   "first_sentence": {
+    "block": "c14-b31",
+    "chapter": 14,
+    "idx": 31,
+    "text": "The top four players in the qualifiers were: Deluin from Redshire, who won six of six games, Zei Leimin from Pafogai Du who won five of six with an average win time of 5,047 turns, Gun Caibai from Dzundei who won five of six with an average win time of 5,699 turns, and Kau Seiza from Geijaken who won five of six with an average win time of 6,740 turns.\""
+   },
    "explanations": [],
    "mentions": {
     "14": [
@@ -2699,6 +2968,12 @@
    "respelling": null,
    "first": "c11-b69",
    "first_chapter": 11,
+   "first_sentence": {
+    "block": "c11-b69",
+    "chapter": 11,
+    "idx": 69,
+    "text": "\"Nice catch by Egardo!"
+   },
    "explanations": [],
    "mentions": {
     "11": [
@@ -2725,6 +3000,12 @@
    "respelling": null,
    "first": "c29-b13",
    "first_chapter": 29,
+   "first_sentence": {
+    "block": "c29-b13",
+    "chapter": 29,
+    "idx": 13,
+    "text": "\"Last train to Eldil is arriving today."
+   },
    "explanations": [],
    "mentions": {
     "29": [
@@ -2751,6 +3032,12 @@
    "respelling": null,
    "first": "c29-b1",
    "first_chapter": 29,
+   "first_sentence": {
+    "block": "c29-b1",
+    "chapter": 29,
+    "idx": 1,
+    "text": "**Elenar Forest, Veridia** · 3725 Snowmoon 29"
+   },
    "explanations": [],
    "mentions": {
     "29": [
@@ -2783,6 +3070,12 @@
    "respelling": null,
    "first": "c1-b9",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b9",
+    "chapter": 1,
+    "idx": 9,
+    "text": "And playing into Gladias's ear this whole time, there was an audio program from Emerald, the local AI running from Gladias's hand device, explaining the nuances of airborne virus transmission and how to calculate how much a given change to a building's ventilation or density might affect total city-wide cases in an epidemic."
+   },
    "explanations": [
     {
      "block": "c1-b9",
@@ -2877,6 +3170,12 @@
    "respelling": null,
    "first": "c3-b5",
    "first_chapter": 3,
+   "first_sentence": {
+    "block": "c3-b5",
+    "chapter": 3,
+    "idx": 5,
+    "text": "Lord Ephelion"
+   },
    "explanations": [],
    "mentions": {
     "3": [
@@ -2952,6 +3251,12 @@
    "respelling": null,
    "first": "c27-b21",
    "first_chapter": 27,
+   "first_sentence": {
+    "block": "c27-b21",
+    "chapter": 27,
+    "idx": 21,
+    "text": "We convince Evelor, the founder of Silverchat, to do it himself, through the company."
+   },
    "explanations": [
     {
      "block": "c27-b21",
@@ -2998,6 +3303,12 @@
    "respelling": null,
    "first": "c12-b50",
    "first_chapter": 12,
+   "first_sentence": {
+    "block": "c12-b50",
+    "chapter": 12,
+    "idx": 50,
+    "text": "fai hie"
+   },
    "explanations": [],
    "mentions": {
     "12": [
@@ -3016,6 +3327,12 @@
    "respelling": null,
    "first": "c10-b34",
    "first_chapter": 10,
+   "first_sentence": {
+    "block": "c10-b34",
+    "chapter": 10,
+    "idx": 34,
+    "text": "\"Isn't it the 'gie' that you're supposed to replace? 'fau' just means 'again'.\""
+   },
    "explanations": [],
    "mentions": {
     "10": [
@@ -3042,6 +3359,12 @@
    "respelling": null,
    "first": "c2-b128",
    "first_chapter": 2,
+   "first_sentence": {
+    "block": "c2-b128",
+    "chapter": 2,
+    "idx": 128,
+    "text": "\"And our counter-game is 'gie fe kiu kai ci bin hu': grow roots, no head."
+   },
    "explanations": [],
    "mentions": {
     "2": [
@@ -3078,6 +3401,12 @@
    "respelling": null,
    "first": "c26-b4",
    "first_chapter": 26,
+   "first_sentence": {
+    "block": "c26-b4",
+    "chapter": 26,
+    "idx": 4,
+    "text": "> jo hen jei fe fei go de di mei dan du"
+   },
    "explanations": [],
    "mentions": {
     "26": [
@@ -3106,6 +3435,12 @@
    "respelling": "FEB-rick",
    "first": "c1-b111",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b111",
+    "chapter": 1,
+    "idx": 111,
+    "text": "The older teenage boy, Febric, walked down more slowly, carrying his hand device in one hand, attached by a cable to a larger compute box in the other."
+   },
    "explanations": [],
    "mentions": {
     "1": [
@@ -3211,6 +3546,12 @@
    "respelling": null,
    "first": "c2-b2",
    "first_chapter": 2,
+   "first_sentence": {
+    "block": "c2-b2",
+    "chapter": 2,
+    "idx": 2,
+    "text": "Fin and Zei got off the autobus and walked down Hun Min street."
+   },
    "explanations": [],
    "mentions": {
     "2": [
@@ -3326,6 +3667,12 @@
    "respelling": null,
    "first": "c14-b1",
    "first_chapter": 14,
+   "first_sentence": {
+    "block": "c14-b1",
+    "chapter": 14,
+    "idx": 1,
+    "text": "**Sadzu Du, Dzego** · 3724 Firemoon 10"
+   },
    "explanations": [],
    "mentions": {
     "14": [
@@ -3362,6 +3709,12 @@
    "respelling": "FREE-town",
    "first": "c1-b21",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b21",
+    "chapter": 1,
+    "idx": 21,
+    "text": "The style was modern, but tasteful, nothing like the soulless rectangular concrete buildings that he was accustomed to seeing in pictures of places like Freetown."
+   },
    "explanations": [],
    "mentions": {
     "1": [
@@ -3480,6 +3833,12 @@
    "respelling": null,
    "first": "c5-b39",
    "first_chapter": 5,
+   "first_sentence": {
+    "block": "c5-b39",
+    "chapter": 5,
+    "idx": 39,
+    "text": "\"Freetown Economics Institute\", a sign read."
+   },
    "explanations": [],
    "mentions": {
     "5": [
@@ -3516,6 +3875,12 @@
    "respelling": null,
    "first": "c25-b1",
    "first_chapter": 25,
+   "first_sentence": {
+    "block": "c25-b1",
+    "chapter": 25,
+    "idx": 1,
+    "text": "**Pafogai Du, Dzego** · 3724 Frostime 1"
+   },
    "explanations": [],
    "mentions": {
     "25": [
@@ -3554,6 +3919,12 @@
    "respelling": null,
    "first": "c17-b1",
    "first_chapter": 17,
+   "first_sentence": {
+    "block": "c17-b1",
+    "chapter": 17,
+    "idx": 1,
+    "text": "**Meldan, Veridia** · 3724 Fruitmoon 11"
+   },
    "explanations": [],
    "mentions": {
     "17": [
@@ -3583,6 +3954,12 @@
    "respelling": null,
    "first": "c6-b87",
    "first_chapter": 6,
+   "first_sentence": {
+    "block": "c6-b87",
+    "chapter": 6,
+    "idx": 87,
+    "text": "\"I really appreciate Galanar Square, the one that's on the border of Kalimar about a kilometer south of here."
+   },
    "explanations": [],
    "mentions": {
     "6": [
@@ -3610,6 +3987,12 @@
    "respelling": null,
    "first": "c29-b22",
    "first_chapter": 29,
+   "first_sentence": {
+    "block": "c29-b22",
+    "chapter": 29,
+    "idx": 22,
+    "text": "\"Gallowar?\""
+   },
    "explanations": [],
    "mentions": {
     "29": [
@@ -3650,6 +4033,12 @@
    "respelling": null,
    "first": "c19-b101",
    "first_chapter": 19,
+   "first_sentence": {
+    "block": "c19-b101",
+    "chapter": 19,
+    "idx": 101,
+    "text": "sho hei dai - 827 gei zen"
+   },
    "explanations": [],
    "mentions": {
     "19": [
@@ -3668,6 +4057,12 @@
    "respelling": null,
    "first": "c14-b31",
    "first_chapter": 14,
+   "first_sentence": {
+    "block": "c14-b31",
+    "chapter": 14,
+    "idx": 31,
+    "text": "The top four players in the qualifiers were: Deluin from Redshire, who won six of six games, Zei Leimin from Pafogai Du who won five of six with an average win time of 5,047 turns, Gun Caibai from Dzundei who won five of six with an average win time of 5,699 turns, and Kau Seiza from Geijaken who won five of six with an average win time of 6,740 turns.\""
+   },
    "explanations": [],
    "mentions": {
     "14": [
@@ -3694,6 +4089,12 @@
    "respelling": null,
    "first": "c26-b16",
    "first_chapter": 26,
+   "first_sentence": {
+    "block": "c26-b16",
+    "chapter": 26,
+    "idx": 16,
+    "text": "\"On the right, there are the Gelebor mountains.\""
+   },
    "explanations": [],
    "mentions": {
     "26": [
@@ -3721,6 +4122,12 @@
    "respelling": null,
    "first": "c19-b14",
    "first_chapter": 19,
+   "first_sentence": {
+    "block": "c19-b14",
+    "chapter": 19,
+    "idx": 14,
+    "text": "gi dai"
+   },
    "explanations": [],
    "mentions": {
     "19": [
@@ -3739,6 +4146,12 @@
    "respelling": null,
    "first": "c2-b128",
    "first_chapter": 2,
+   "first_sentence": {
+    "block": "c2-b128",
+    "chapter": 2,
+    "idx": 128,
+    "text": "\"And our counter-game is 'gie fe kiu kai ci bin hu': grow roots, no head."
+   },
    "explanations": [],
    "mentions": {
     "2": [
@@ -3774,6 +4187,12 @@
    "respelling": "GLAD-ee-us",
    "first": "c1-b2",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b2",
+    "chapter": 1,
+    "idx": 2,
+    "text": "Gladias was walking along a foot path, with tall trees towering on both sides."
+   },
    "explanations": [
     {
      "block": "c1-b57",
@@ -4344,6 +4763,12 @@
    "respelling": null,
    "first": "c31-b23",
    "first_chapter": 31,
+   "first_sentence": {
+    "block": "c31-b23",
+    "chapter": 31,
+    "idx": 23,
+    "text": "They said that they should come to Glasscrown, and advise the top leadership on integration - first of the captured Redshire population, then of Northglade residents and eventually of everyone else that they would conquer.\""
+   },
    "explanations": [
     {
      "block": "c31-b42",
@@ -4379,6 +4804,12 @@
    "respelling": null,
    "first": "c19-b1",
    "first_chapter": 19,
+   "first_sentence": {
+    "block": "c19-b1",
+    "chapter": 19,
+    "idx": 1,
+    "text": "**Pafogai Du, Dzego** · 3724 Grapetime 15"
+   },
    "explanations": [],
    "mentions": {
     "19": [
@@ -4412,6 +4843,12 @@
    "respelling": null,
    "first": "c1-b55",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b55",
+    "chapter": 1,
+    "idx": 55,
+    "text": "Tax rates increased by 2.5x on proceeds from Veridian national Quadratic Funding and Graph Funding."
+   },
    "explanations": [],
    "mentions": {
     "1": [
@@ -4486,6 +4923,12 @@
    "respelling": null,
    "first": "c12-b1",
    "first_chapter": 12,
+   "first_sentence": {
+    "block": "c12-b1",
+    "chapter": 12,
+    "idx": 1,
+    "text": "**Sadzu Du, Dzego** · 3724 Grasstime 22"
+   },
    "explanations": [],
    "mentions": {
     "12": [
@@ -4515,6 +4958,12 @@
    "respelling": null,
    "first": "c3-b12",
    "first_chapter": 3,
+   "first_sentence": {
+    "block": "c3-b12",
+    "chapter": 3,
+    "idx": 12,
+    "text": "Wait, I'm like one of a hundred people walking toward the Greater Plum Harbor wearing a privacy robe, how did you figure out where I am?\""
+   },
    "explanations": [],
    "mentions": {
     "3": [
@@ -4588,6 +5037,12 @@
    "respelling": null,
    "first": "c16-b62",
    "first_chapter": 16,
+   "first_sentence": {
+    "block": "c16-b62",
+    "chapter": 16,
+    "idx": 62,
+    "text": "Greenball player hits"
+   },
    "explanations": [],
    "mentions": {
     "16": [
@@ -4607,6 +5062,12 @@
    "respelling": null,
    "first": "c25-b111",
    "first_chapter": 25,
+   "first_sentence": {
+    "block": "c25-b111",
+    "chapter": 25,
+    "idx": 111,
+    "text": "It's the fourteenth Ground Law, it's written right there in the documents."
+   },
    "explanations": [],
    "mentions": {
     "25": [
@@ -4637,6 +5098,12 @@
    "respelling": null,
    "first": "c18-b21",
    "first_chapter": 18,
+   "first_sentence": {
+    "block": "c18-b21",
+    "chapter": 18,
+    "idx": 21,
+    "text": "\"GUI SAU\", a sign on a store selling lamps, most of them in the shapes of long cylinders, read."
+   },
    "explanations": [],
    "mentions": {
     "18": [
@@ -4663,6 +5130,12 @@
    "respelling": null,
    "first": "c14-b22",
    "first_chapter": 14,
+   "first_sentence": {
+    "block": "c14-b22",
+    "chapter": 14,
+    "idx": 22,
+    "text": "All the other players - *definitely* Gun, but really all the others too, are way too impatient."
+   },
    "explanations": [],
    "mentions": {
     "14": [
@@ -4711,6 +5184,12 @@
    "respelling": null,
    "first": "c5-b46",
    "first_chapter": 5,
+   "first_sentence": {
+    "block": "c5-b46",
+    "chapter": 5,
+    "idx": 46,
+    "text": "Hapton"
+   },
    "explanations": [],
    "mentions": {
     "5": [
@@ -4741,6 +5220,12 @@
    "respelling": null,
    "first": "c6-b103",
    "first_chapter": 6,
+   "first_sentence": {
+    "block": "c6-b103",
+    "chapter": 6,
+    "idx": 103,
+    "text": "All the books are either some boring business books, or things in foreign languages nobody understands, either Old Belpakian or something from Haragmir.\""
+   },
    "explanations": [],
    "mentions": {
     "6": [
@@ -4770,6 +5255,12 @@
    "respelling": null,
    "first": "c13-b1",
    "first_chapter": 13,
+   "first_sentence": {
+    "block": "c13-b1",
+    "chapter": 13,
+    "idx": 1,
+    "text": "**Meldan, Veridia** · 3724 Harvestmoon 8"
+   },
    "explanations": [],
    "mentions": {
     "13": [
@@ -4797,6 +5288,12 @@
    "respelling": null,
    "first": "c3-b35",
    "first_chapter": 3,
+   "first_sentence": {
+    "block": "c3-b35",
+    "chapter": 3,
+    "idx": 35,
+    "text": "He could make out one of them saying something about a recent visit to Northglade with his family, and the other mentioning that he liked their Helisport team."
+   },
    "explanations": [],
    "mentions": {
     "3": [
@@ -4857,6 +5354,12 @@
    "respelling": null,
    "first": "c6-b68",
    "first_chapter": 6,
+   "first_sentence": {
+    "block": "c6-b68",
+    "chapter": 6,
+    "idx": 68,
+    "text": "I'm Alagael, I've been a Herald for seven years."
+   },
    "explanations": [
     {
      "block": "c6-b73",
@@ -4905,6 +5408,12 @@
    "respelling": null,
    "first": "c12-b157",
    "first_chapter": 12,
+   "first_sentence": {
+    "block": "c12-b157",
+    "chapter": 12,
+    "idx": 157,
+    "text": "He made a couple of guesses about what shape the rock formations in the hexgrid version of Minpentai might look like, and examined the behavior of gliders as they crashed into them."
+   },
    "explanations": [],
    "mentions": {
     "12": [
@@ -4932,6 +5441,12 @@
    "respelling": "HRED-uh",
    "first": "c1-b115",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b115",
+    "chapter": 1,
+    "idx": 115,
+    "text": "\"What about Lily and Hreda?\""
+   },
    "explanations": [],
    "mentions": {
     "1": [
@@ -5016,6 +5531,12 @@
    "respelling": null,
    "first": "c2-b2",
    "first_chapter": 2,
+   "first_sentence": {
+    "block": "c2-b2",
+    "chapter": 2,
+    "idx": 2,
+    "text": "Fin and Zei got off the autobus and walked down Hun Min street."
+   },
    "explanations": [
     {
      "block": "c2-b3",
@@ -5051,6 +5572,12 @@
    "respelling": "HY-druh-fill",
    "first": "c1-b93",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b93",
+    "chapter": 1,
+    "idx": 93,
+    "text": "The second advertisement was for Hydrafill, a brand selling water and various kinds of drinks."
+   },
    "explanations": [
     {
      "block": "c1-b93",
@@ -5113,6 +5640,12 @@
    "respelling": null,
    "first": "c31-b70",
    "first_chapter": 31,
+   "first_sentence": {
+    "block": "c31-b70",
+    "chapter": 31,
+    "idx": 70,
+    "text": "In the background was a giant factory building, on the side of which there was a prominently displayed logo of Ichara - one of the now famous Freetown defense companies."
+   },
    "explanations": [],
    "mentions": {
     "31": [
@@ -5139,6 +5672,12 @@
    "respelling": null,
    "first": "c5-b46",
    "first_chapter": 5,
+   "first_sentence": {
+    "block": "c5-b46",
+    "chapter": 5,
+    "idx": 46,
+    "text": "Imber"
+   },
    "explanations": [],
    "mentions": {
     "5": [
@@ -5168,6 +5707,12 @@
    "respelling": null,
    "first": "c17-b73",
    "first_chapter": 17,
+   "first_sentence": {
+    "block": "c17-b73",
+    "chapter": 17,
+    "idx": 73,
+    "text": "Pov and Imerry"
+   },
    "explanations": [],
    "mentions": {
     "17": [
@@ -5186,6 +5731,12 @@
    "respelling": null,
    "first": "c3-b65",
    "first_chapter": 3,
+   "first_sentence": {
+    "block": "c3-b65",
+    "chapter": 3,
+    "idx": 65,
+    "text": "If this was Devanvil or Inglewore, GPH would be fighting to not get shut down entirely.\""
+   },
    "explanations": [],
    "mentions": {
     "3": [
@@ -5224,6 +5775,12 @@
    "respelling": null,
    "first": "c5-b46",
    "first_chapter": 5,
+   "first_sentence": {
+    "block": "c5-b46",
+    "chapter": 5,
+    "idx": 46,
+    "text": "Iptak"
+   },
    "explanations": [],
    "mentions": {
     "5": [
@@ -5257,6 +5814,12 @@
    "respelling": null,
    "first": "c4-b89",
    "first_chapter": 4,
+   "first_sentence": {
+    "block": "c4-b89",
+    "chapter": 4,
+    "idx": 89,
+    "text": "\"Today, fated by chance to be on team Ja, we have Pan Munbau and Dza Dzingo.\""
+   },
    "explanations": [],
    "mentions": {
     "4": [
@@ -5283,6 +5846,12 @@
    "respelling": null,
    "first": "c14-b115",
    "first_chapter": 14,
+   "first_sentence": {
+    "block": "c14-b115",
+    "chapter": 14,
+    "idx": 115,
+    "text": "The cup is water - 'ja'."
+   },
    "explanations": [],
    "mentions": {
     "14": [
@@ -5313,6 +5882,12 @@
    "respelling": "JAHN",
    "first": "c1-b134",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b134",
+    "chapter": 1,
+    "idx": 134,
+    "text": "\"I'm going to visit Freetown for a month or two, see Jahn, maybe figure out some blog post to write on the United Cities."
+   },
    "explanations": [],
    "mentions": {
     "1": [
@@ -5400,6 +5975,12 @@
    "respelling": null,
    "first": "c9-b31",
    "first_chapter": 9,
+   "first_sentence": {
+    "block": "c9-b31",
+    "chapter": 9,
+    "idx": 31,
+    "text": "Take a simple sentence, like in elementary school: 'giu jan li mo fe jia dzu lie'."
+   },
    "explanations": [],
    "mentions": {
     "9": [
@@ -5429,6 +6010,12 @@
    "respelling": null,
    "first": "c9-b33",
    "first_chapter": 9,
+   "first_sentence": {
+    "block": "c9-b33",
+    "chapter": 9,
+    "idx": 33,
+    "text": "Theoretically, we have the separator for that: 'ji'."
+   },
    "explanations": [],
    "mentions": {
     "9": [
@@ -5455,6 +6042,12 @@
    "respelling": null,
    "first": "c9-b31",
    "first_chapter": 9,
+   "first_sentence": {
+    "block": "c9-b31",
+    "chapter": 9,
+    "idx": 31,
+    "text": "Take a simple sentence, like in elementary school: 'giu jan li mo fe jia dzu lie'."
+   },
    "explanations": [],
    "mentions": {
     "9": [
@@ -5483,6 +6076,12 @@
    "respelling": null,
    "first": "c12-b85",
    "first_chapter": 12,
+   "first_sentence": {
+    "block": "c12-b85",
+    "chapter": 12,
+    "idx": 85,
+    "text": "\"I am pleased to introduce our lead organizer, Taskmaster Jin.\""
+   },
    "explanations": [],
    "mentions": {
     "12": [
@@ -5509,6 +6108,12 @@
    "respelling": null,
    "first": "c15-b41",
    "first_chapter": 15,
+   "first_sentence": {
+    "block": "c15-b41",
+    "chapter": 15,
+    "idx": 41,
+    "text": "For Delwart to be able to take over my votes, he would have to take over my identity, which means going to the KAG and *pretending to be me in person* - difficult because the whole point of the KAG is that it includes people I've met in person.\""
+   },
    "explanations": [],
    "mentions": {
     "15": [
@@ -5535,6 +6140,12 @@
    "respelling": null,
    "first": "c2-b128",
    "first_chapter": 2,
+   "first_sentence": {
+    "block": "c2-b128",
+    "chapter": 2,
+    "idx": 128,
+    "text": "\"And our counter-game is 'gie fe kiu kai ci bin hu': grow roots, no head."
+   },
    "explanations": [],
    "mentions": {
     "2": [
@@ -5574,6 +6185,12 @@
    "respelling": null,
    "first": "c4-b23",
    "first_chapter": 4,
+   "first_sentence": {
+    "block": "c4-b23",
+    "chapter": 4,
+    "idx": 23,
+    "text": "kai can"
+   },
    "explanations": [],
    "mentions": {
     "4": [
@@ -5592,6 +6209,12 @@
    "respelling": null,
    "first": "c17-b20",
    "first_chapter": 17,
+   "first_sentence": {
+    "block": "c17-b20",
+    "chapter": 17,
+    "idx": 20,
+    "text": "And if you want tea, that's 'kai ja'."
+   },
    "explanations": [],
    "mentions": {
     "17": [
@@ -5622,6 +6245,12 @@
    "respelling": "KAL-ih-mar",
    "first": "c1-b3",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b3",
+    "chapter": 1,
+    "idx": 3,
+    "text": "He looked around, breathed in and briefly stopped to enjoy the nature, dense enough and quiet enough that he almost forgot that he was in the middle of the Kalimar district of Meldan, the capital city of Veridia."
+   },
    "explanations": [],
    "mentions": {
     "1": [
@@ -5670,6 +6299,12 @@
    "respelling": null,
    "first": "c14-b31",
    "first_chapter": 14,
+   "first_sentence": {
+    "block": "c14-b31",
+    "chapter": 14,
+    "idx": 31,
+    "text": "The top four players in the qualifiers were: Deluin from Redshire, who won six of six games, Zei Leimin from Pafogai Du who won five of six with an average win time of 5,047 turns, Gun Caibai from Dzundei who won five of six with an average win time of 5,699 turns, and Kau Seiza from Geijaken who won five of six with an average win time of 6,740 turns.\""
+   },
    "explanations": [],
    "mentions": {
     "14": [
@@ -5701,18 +6336,18 @@
    "respelling": null,
    "first": "c1-b57",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b57",
+    "chapter": 1,
+    "idx": 57,
+    "text": "One part of this collective, the Keepers, voted on tax rubrics that determined what the taxes are."
+   },
    "explanations": [
     {
      "block": "c6-b18",
      "chapter": 6,
      "idx": 18,
      "text": "\"The Keeper role is where the real ability to make change lies."
-    },
-    {
-     "block": "c11-b53",
-     "chapter": 11,
-     "idx": 53,
-     "text": "\"Well, Glad, you're a -\" she stopped herself, briefly remembering that it would be improper even to specify Keeper - \"an Order member now."
     }
    ],
    "mentions": {
@@ -5862,6 +6497,12 @@
    "respelling": null,
    "first": "c17-b73",
    "first_chapter": 17,
+   "first_sentence": {
+    "block": "c17-b73",
+    "chapter": 17,
+    "idx": 73,
+    "text": "Kudlin and Melana:"
+   },
    "explanations": [],
    "mentions": {
     "17": [
@@ -5880,6 +6521,12 @@
    "respelling": null,
    "first": "c19-b14",
    "first_chapter": 19,
+   "first_sentence": {
+    "block": "c19-b14",
+    "chapter": 19,
+    "idx": 14,
+    "text": "kun gau min jan"
+   },
    "explanations": [],
    "mentions": {
     "19": [
@@ -5911,6 +6558,12 @@
    "respelling": null,
    "first": "c9-b56",
    "first_chapter": 9,
+   "first_sentence": {
+    "block": "c9-b56",
+    "chapter": 9,
+    "idx": 56,
+    "text": "High Council member of the Kungaupei."
+   },
    "explanations": [
     {
      "block": "c27-b54",
@@ -5997,6 +6650,12 @@
    "respelling": null,
    "first": "c20-b139",
    "first_chapter": 20,
+   "first_sentence": {
+    "block": "c20-b139",
+    "chapter": 20,
+    "idx": 139,
+    "text": "\"I'm Lectoby."
+   },
    "explanations": [],
    "mentions": {
     "20": [
@@ -6029,6 +6688,12 @@
    "respelling": null,
    "first": "c4-b23",
    "first_chapter": 4,
+   "first_sentence": {
+    "block": "c4-b23",
+    "chapter": 4,
+    "idx": 23,
+    "text": "lei kai fun"
+   },
    "explanations": [],
    "mentions": {
     "4": [
@@ -6047,6 +6712,12 @@
    "respelling": null,
    "first": "c28-b14",
    "first_chapter": 28,
+   "first_sentence": {
+    "block": "c28-b14",
+    "chapter": 28,
+    "idx": 14,
+    "text": "\"I'm Lektor\", he exclaimed."
+   },
    "explanations": [
     {
      "block": "c28-b96",
@@ -6104,6 +6775,12 @@
    "respelling": null,
    "first": "c19-b59",
    "first_chapter": 19,
+   "first_sentence": {
+    "block": "c19-b59",
+    "chapter": 19,
+    "idx": 59,
+    "text": "len su 2415 de"
+   },
    "explanations": [],
    "mentions": {
     "19": [
@@ -6132,6 +6809,12 @@
    "respelling": null,
    "first": "c9-b31",
    "first_chapter": 9,
+   "first_sentence": {
+    "block": "c9-b31",
+    "chapter": 9,
+    "idx": 31,
+    "text": "Take a simple sentence, like in elementary school: 'giu jan li mo fe jia dzu lie'."
+   },
    "explanations": [],
    "mentions": {
     "9": [
@@ -6160,6 +6843,12 @@
    "respelling": null,
    "first": "c9-b39",
    "first_chapter": 9,
+   "first_sentence": {
+    "block": "c9-b39",
+    "chapter": 9,
+    "idx": 39,
+    "text": "\"Yeah, at some point we want to replace the meter with the lightfoot."
+   },
    "explanations": [],
    "mentions": {
     "9": [
@@ -6192,6 +6881,12 @@
    "respelling": null,
    "first": "c19-b59",
    "first_chapter": 19,
+   "first_sentence": {
+    "block": "c19-b59",
+    "chapter": 19,
+    "idx": 59,
+    "text": "ci sen hu jan pu zau fe 400 lin man"
+   },
    "explanations": [],
    "mentions": {
     "19": [
@@ -6210,6 +6905,12 @@
    "respelling": null,
    "first": "c9-b32",
    "first_chapter": 9,
+   "first_sentence": {
+    "block": "c9-b32",
+    "chapter": 9,
+    "idx": 32,
+    "text": "\"You can get more complex. 'lo mo fe jia dzu lie zo hen jun'."
+   },
    "explanations": [],
    "mentions": {
     "9": [
@@ -6238,6 +6939,12 @@
    "respelling": "LONG-our",
    "first": "c1-b83",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b83",
+    "chapter": 1,
+    "idx": 83,
+    "text": "\"Delete all audio, images and video from the last longhour."
+   },
    "explanations": [],
    "mentions": {
     "1": [
@@ -6329,6 +7036,12 @@
    "respelling": null,
    "first": "c5-b46",
    "first_chapter": 5,
+   "first_sentence": {
+    "block": "c5-b46",
+    "chapter": 5,
+    "idx": 46,
+    "text": "Mabuli"
+   },
    "explanations": [],
    "mentions": {
     "5": [
@@ -6361,6 +7074,12 @@
    "respelling": null,
    "first": "c5-b46",
    "first_chapter": 5,
+   "first_sentence": {
+    "block": "c5-b46",
+    "chapter": 5,
+    "idx": 46,
+    "text": "Mantak"
+   },
    "explanations": [],
    "mentions": {
     "5": [
@@ -6390,6 +7109,12 @@
    "respelling": null,
    "first": "c17-b73",
    "first_chapter": 17,
+   "first_sentence": {
+    "block": "c17-b73",
+    "chapter": 17,
+    "idx": 73,
+    "text": "Mawart"
+   },
    "explanations": [],
    "mentions": {
     "17": [
@@ -6408,6 +7133,12 @@
    "respelling": null,
    "first": "c17-b73",
    "first_chapter": 17,
+   "first_sentence": {
+    "block": "c17-b73",
+    "chapter": 17,
+    "idx": 73,
+    "text": "Kudlin and Melana:"
+   },
    "explanations": [],
    "mentions": {
     "17": [
@@ -6426,6 +7157,12 @@
    "respelling": "MEL-dun",
    "first": "c1-b1",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b1",
+    "chapter": 1,
+    "idx": 1,
+    "text": "**Meldan, Veridia** · 3724 Snowmoon 3"
+   },
    "explanations": [
     {
      "block": "c1-b3",
@@ -6526,6 +7263,12 @@
    "respelling": null,
    "first": "c11-b67",
    "first_chapter": 11,
+   "first_sentence": {
+    "block": "c11-b67",
+    "chapter": 11,
+    "idx": 67,
+    "text": "\"And a nice catch by Meny!"
+   },
    "explanations": [],
    "mentions": {
     "11": [
@@ -6552,6 +7295,12 @@
    "respelling": null,
    "first": "c28-b33",
    "first_chapter": 28,
+   "first_sentence": {
+    "block": "c28-b33",
+    "chapter": 28,
+    "idx": 33,
+    "text": "Then they will take down the United Cities one by one, and then they will go south and clear out Messalia and Haragmir, or just bomb them to save time."
+   },
    "explanations": [],
    "mentions": {
     "28": [
@@ -6578,6 +7327,12 @@
    "respelling": null,
    "first": "c2-b10",
    "first_chapter": 2,
+   "first_sentence": {
+    "block": "c2-b10",
+    "chapter": 2,
+    "idx": 10,
+    "text": "The whole chain of events - the flyby, the authentication, the confirmation - finished within hundreds of milli-ticks, and Fin and Zei both barely noticed that any of it had even happened."
+   },
    "explanations": [],
    "mentions": {
     "2": [
@@ -6604,6 +7359,12 @@
    "respelling": null,
    "first": "c5-b4",
    "first_chapter": 5,
+   "first_sentence": {
+    "block": "c5-b4",
+    "chapter": 5,
+    "idx": 4,
+    "text": "Zei's mother, Min, hurried forward and came out through the door."
+   },
    "explanations": [],
    "mentions": {
     "5": [
@@ -6635,6 +7396,12 @@
    "respelling": null,
    "first": "c19-b18",
    "first_chapter": 19,
+   "first_sentence": {
+    "block": "c19-b18",
+    "chapter": 19,
+    "idx": 18,
+    "text": "\"'min' is machine, 'jan' is person, so I guess the two together mean ... robot?\""
+   },
    "explanations": [],
    "mentions": {
     "19": [
@@ -6661,6 +7428,12 @@
    "respelling": null,
    "first": "c18-b20",
    "first_chapter": 18,
+   "first_sentence": {
+    "block": "c18-b20",
+    "chapter": 18,
+    "idx": 20,
+    "text": "\"MIN KUI\", a sign on a store selling compute boxes read."
+   },
    "explanations": [],
    "mentions": {
     "18": [
@@ -6687,6 +7460,12 @@
    "respelling": null,
    "first": "c2-b11",
    "first_chapter": 2,
+   "first_sentence": {
+    "block": "c2-b11",
+    "chapter": 2,
+    "idx": 11,
+    "text": "\"How was the Minpentai game last night?\", Fin asked."
+   },
    "explanations": [
     {
      "block": "c31-b30",
@@ -6807,6 +7586,12 @@
    "respelling": null,
    "first": "c20-b1",
    "first_chapter": 20,
+   "first_sentence": {
+    "block": "c20-b1",
+    "chapter": 20,
+    "idx": 1,
+    "text": "**Meldan, Veridia** · 3724 Mistime 10"
+   },
    "explanations": [],
    "mentions": {
     "20": [
@@ -6845,6 +7630,12 @@
    "respelling": null,
    "first": "c19-b14",
    "first_chapter": 19,
+   "first_sentence": {
+    "block": "c19-b14",
+    "chapter": 19,
+    "idx": 14,
+    "text": "mo fan min jan"
+   },
    "explanations": [],
    "mentions": {
     "19": [
@@ -6874,6 +7665,12 @@
    "respelling": null,
    "first": "c19-b14",
    "first_chapter": 19,
+   "first_sentence": {
+    "block": "c19-b14",
+    "chapter": 19,
+    "idx": 14,
+    "text": "mo fan lai"
+   },
    "explanations": [],
    "mentions": {
     "19": [
@@ -6892,6 +7689,12 @@
    "respelling": null,
    "first": "c10-b24",
    "first_chapter": 10,
+   "first_sentence": {
+    "block": "c10-b24",
+    "chapter": 10,
+    "idx": 24,
+    "text": "Mogna was unwilling to contribute to defense - they said something about corruption, though everyone thought they were just being cheap - and then the charging station makers came together and threatened to lock out Mogna's cars from their grid, ninety percent of charging stations across Freetown, unless they joined in."
+   },
    "explanations": [],
    "mentions": {
     "10": [
@@ -6918,6 +7721,12 @@
    "respelling": null,
    "first": "c3-b10",
    "first_chapter": 3,
+   "first_sentence": {
+    "block": "c3-b10",
+    "chapter": 3,
+    "idx": 10,
+    "text": "\"Oh, is it you, Mov?\""
+   },
    "explanations": [],
    "mentions": {
     "3": [
@@ -7028,6 +7837,12 @@
    "respelling": null,
    "first": "c4-b64",
    "first_chapter": 4,
+   "first_sentence": {
+    "block": "c4-b64",
+    "chapter": 4,
+    "idx": 64,
+    "text": "\"Ah, Mu, good to see you again!\""
+   },
    "explanations": [],
    "mentions": {
     "4": [
@@ -7144,6 +7959,12 @@
    "respelling": null,
    "first": "c2-b24",
    "first_chapter": 2,
+   "first_sentence": {
+    "block": "c2-b24",
+    "chapter": 2,
+    "idx": 24,
+    "text": "MUN GUI 1842"
+   },
    "explanations": [],
    "mentions": {
     "2": [
@@ -7172,6 +7993,12 @@
    "respelling": null,
    "first": "c3-b35",
    "first_chapter": 3,
+   "first_sentence": {
+    "block": "c3-b35",
+    "chapter": 3,
+    "idx": 35,
+    "text": "He could make out one of them saying something about a recent visit to Northglade with his family, and the other mentioning that he liked their Helisport team."
+   },
    "explanations": [],
    "mentions": {
     "3": [
@@ -7282,6 +8109,12 @@
    "respelling": null,
    "first": "c31-b46",
    "first_chapter": 31,
+   "first_sentence": {
+    "block": "c31-b46",
+    "chapter": 31,
+    "idx": 46,
+    "text": "Even when they gave some of it to the Northgladers, it was on their own terms - you come to our health clinics, you don't get to learn what we are doing to your body, and if you don't want to go back to how you were before, you have to keep coming back to our clinics again and again.\""
+   },
    "explanations": [],
    "mentions": {
     "31": [
@@ -7308,6 +8141,12 @@
    "respelling": null,
    "first": "c20-b8",
    "first_chapter": 20,
+   "first_sentence": {
+    "block": "c20-b8",
+    "chapter": 20,
+    "idx": 8,
+    "text": "> At 5,250 this morning, Arctic soldiers, flying vehicles and drones descended on the province of Northshore from all sides."
+   },
    "explanations": [],
    "mentions": {
     "20": [
@@ -7374,6 +8213,12 @@
    "respelling": null,
    "first": "c5-b46",
    "first_chapter": 5,
+   "first_sentence": {
+    "block": "c5-b46",
+    "chapter": 5,
+    "idx": 46,
+    "text": "Ondak"
+   },
    "explanations": [],
    "mentions": {
     "5": [
@@ -7409,6 +8254,12 @@
    "respelling": null,
    "first": "c1-b38",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b38",
+    "chapter": 1,
+    "idx": 38,
+    "text": "That was just a warmup, he thought - a random fluke that he had been assigned an aesthetics vote as a Veridian citizen right before one of his more consequential votes as an Acolyte in the Order of Steering."
+   },
    "explanations": [
     {
      "block": "c1-b56",
@@ -7541,6 +8392,12 @@
    "respelling": null,
    "first": "c4-b87",
    "first_chapter": 4,
+   "first_sentence": {
+    "block": "c4-b87",
+    "chapter": 4,
+    "idx": 87,
+    "text": "\"PA GU GEI FA\""
+   },
    "explanations": [],
    "mentions": {
     "4": [
@@ -7582,6 +8439,12 @@
    "respelling": null,
    "first": "c12-b106",
    "first_chapter": 12,
+   "first_sentence": {
+    "block": "c12-b106",
+    "chapter": 12,
+    "idx": 106,
+    "text": "\"So how's Pafogai?\""
+   },
    "explanations": [],
    "mentions": {
     "12": [
@@ -7615,6 +8478,12 @@
    "respelling": null,
    "first": "c2-b1",
    "first_chapter": 2,
+   "first_sentence": {
+    "block": "c2-b1",
+    "chapter": 2,
+    "idx": 1,
+    "text": "**Pafogai Du, Dzego** · 3724 Snowmoon 5"
+   },
    "explanations": [
     {
      "block": "c4-b53",
@@ -7714,6 +8583,12 @@
    "respelling": null,
    "first": "c4-b89",
    "first_chapter": 4,
+   "first_sentence": {
+    "block": "c4-b89",
+    "chapter": 4,
+    "idx": 89,
+    "text": "\"Today, fated by chance to be on team Ja, we have Pan Munbau and Dza Dzingo.\""
+   },
    "explanations": [],
    "mentions": {
     "4": [
@@ -7740,6 +8615,12 @@
    "respelling": null,
    "first": "c8-b58",
    "first_chapter": 8,
+   "first_sentence": {
+    "block": "c8-b58",
+    "chapter": 8,
+    "idx": 58,
+    "text": "Papli.\""
+   },
    "explanations": [],
    "mentions": {
     "8": [
@@ -7770,6 +8651,12 @@
    "respelling": null,
    "first": "c6-b62",
    "first_chapter": 6,
+   "first_sentence": {
+    "block": "c6-b62",
+    "chapter": 6,
+    "idx": 62,
+    "text": "\"Hi, I'm Pelae.\""
+   },
    "explanations": [],
    "mentions": {
     "6": [
@@ -7800,6 +8687,12 @@
    "respelling": null,
    "first": "c16-b102",
    "first_chapter": 16,
+   "first_sentence": {
+    "block": "c16-b102",
+    "chapter": 16,
+    "idx": 102,
+    "text": "Either Mov or Pelow - or, of course, if he really had to, himself running to the vault and picking up his second key."
+   },
    "explanations": [],
    "mentions": {
     "16": [
@@ -7826,6 +8719,12 @@
    "respelling": null,
    "first": "c5-b46",
    "first_chapter": 5,
+   "first_sentence": {
+    "block": "c5-b46",
+    "chapter": 5,
+    "idx": 46,
+    "text": "Petersvil"
+   },
    "explanations": [],
    "mentions": {
     "5": [
@@ -7844,6 +8743,12 @@
    "respelling": null,
    "first": "c11-b66",
    "first_chapter": 11,
+   "first_sentence": {
+    "block": "c11-b66",
+    "chapter": 11,
+    "idx": 66,
+    "text": "\"Nice catch by Plat!"
+   },
    "explanations": [],
    "mentions": {
     "11": [
@@ -7870,6 +8775,12 @@
    "respelling": null,
    "first": "c17-b73",
    "first_chapter": 17,
+   "first_sentence": {
+    "block": "c17-b73",
+    "chapter": 17,
+    "idx": 73,
+    "text": "Poppe and"
+   },
    "explanations": [],
    "mentions": {
     "17": [
@@ -7888,6 +8799,12 @@
    "respelling": null,
    "first": "c17-b73",
    "first_chapter": 17,
+   "first_sentence": {
+    "block": "c17-b73",
+    "chapter": 17,
+    "idx": 73,
+    "text": "Pov and Imerry"
+   },
    "explanations": [],
    "mentions": {
     "17": [
@@ -7909,6 +8826,12 @@
    "respelling": null,
    "first": "c1-b45",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b45",
+    "chapter": 1,
+    "idx": 45,
+    "text": "He could see a few of the attendees wearing the same signature Veridian Privacy Robe that he was wearing."
+   },
    "explanations": [],
    "mentions": {
     "1": [
@@ -8002,6 +8925,12 @@
    "respelling": null,
    "first": "c1-b55",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b55",
+    "chapter": 1,
+    "idx": 55,
+    "text": "Tax rates increased by 2.5x on proceeds from Veridian national Quadratic Funding and Graph Funding."
+   },
    "explanations": [],
    "mentions": {
     "1": [
@@ -8043,6 +8972,12 @@
    "respelling": null,
    "first": "c5-b1",
    "first_chapter": 5,
+   "first_sentence": {
+    "block": "c5-b1",
+    "chapter": 5,
+    "idx": 1,
+    "text": "**Freetown, United Cities** · 3724 Rainmoon 11"
+   },
    "explanations": [],
    "mentions": {
     "5": [
@@ -8089,6 +9024,12 @@
    "respelling": null,
    "first": "c11-b26",
    "first_chapter": 11,
+   "first_sentence": {
+    "block": "c11-b26",
+    "chapter": 11,
+    "idx": 26,
+    "text": "If you catch a redball, bring it back to me, and your team gets one point."
+   },
    "explanations": [],
    "mentions": {
     "11": [
@@ -8136,6 +9077,12 @@
    "respelling": null,
    "first": "c2-b16",
    "first_chapter": 2,
+   "first_sentence": {
+    "block": "c2-b16",
+    "chapter": 2,
+    "idx": 16,
+    "text": "Freetown gets five percent votes in Devanvil, Devanvil gets fifteen percent votes in Redshire, Redshire gets...\""
+   },
    "explanations": [],
    "mentions": {
     "2": [
@@ -8272,6 +9219,12 @@
    "respelling": null,
    "first": "c12-b5",
    "first_chapter": 12,
+   "first_sentence": {
+    "block": "c12-b5",
+    "chapter": 12,
+    "idx": 5,
+    "text": "sa dzu du"
+   },
    "explanations": [],
    "mentions": {
     "12": [
@@ -8305,6 +9258,12 @@
    "respelling": null,
    "first": "c12-b1",
    "first_chapter": 12,
+   "first_sentence": {
+    "block": "c12-b1",
+    "chapter": 12,
+    "idx": 1,
+    "text": "**Sadzu Du, Dzego** · 3724 Grasstime 22"
+   },
    "explanations": [],
    "mentions": {
     "12": [
@@ -8349,6 +9308,12 @@
    "respelling": "SAY-luh",
    "first": "c1-b101",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b101",
+    "chapter": 1,
+    "idx": 101,
+    "text": "\"Are you home, Seila?\", he shouted."
+   },
    "explanations": [],
    "mentions": {
     "1": [
@@ -8591,6 +9556,12 @@
    "respelling": null,
    "first": "c14-b31",
    "first_chapter": 14,
+   "first_sentence": {
+    "block": "c14-b31",
+    "chapter": 14,
+    "idx": 31,
+    "text": "The top four players in the qualifiers were: Deluin from Redshire, who won six of six games, Zei Leimin from Pafogai Du who won five of six with an average win time of 5,047 turns, Gun Caibai from Dzundei who won five of six with an average win time of 5,699 turns, and Kau Seiza from Geijaken who won five of six with an average win time of 6,740 turns.\""
+   },
    "explanations": [],
    "mentions": {
     "14": [
@@ -8619,6 +9590,12 @@
    "respelling": null,
    "first": "c26-b174",
    "first_chapter": 26,
+   "first_sentence": {
+    "block": "c26-b174",
+    "chapter": 26,
+    "idx": 174,
+    "text": "\"Come on, Sewlert, you know as well as I do that the parliament is corrupt."
+   },
    "explanations": [],
    "mentions": {
     "26": [
@@ -8646,6 +9623,12 @@
    "respelling": null,
    "first": "c19-b12",
    "first_chapter": 19,
+   "first_sentence": {
+    "block": "c19-b12",
+    "chapter": 19,
+    "idx": 12,
+    "text": "sen hu ?"
+   },
    "explanations": [],
    "mentions": {
     "19": [
@@ -8670,6 +9653,12 @@
    "respelling": null,
    "first": "c1-b57",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b57",
+    "chapter": 1,
+    "idx": 57,
+    "text": "Another part, the Sentinels, audited individual businesses, each audit assigning a particular business a position on a particular rubric."
+   },
    "explanations": [
     {
      "block": "c3-b114",
@@ -8742,6 +9731,12 @@
    "respelling": null,
    "first": "c19-b101",
    "first_chapter": 19,
+   "first_sentence": {
+    "block": "c19-b101",
+    "chapter": 19,
+    "idx": 101,
+    "text": "sho hei dai - 827 gei zen"
+   },
    "explanations": [],
    "mentions": {
     "19": [
@@ -8760,6 +9755,12 @@
    "respelling": null,
    "first": "c5-b46",
    "first_chapter": 5,
+   "first_sentence": {
+    "block": "c5-b46",
+    "chapter": 5,
+    "idx": 46,
+    "text": "Silverbeach"
+   },
    "explanations": [],
    "mentions": {
     "5": [
@@ -8781,6 +9782,12 @@
    "respelling": null,
    "first": "c3-b24",
    "first_chapter": 3,
+   "first_sentence": {
+    "block": "c3-b24",
+    "chapter": 3,
+    "idx": 24,
+    "text": "The mention of Bluewhale brought Gladias back to his younger days, when he had learned programming by writing an alternative client for the other major social platform, Silverchat."
+   },
    "explanations": [
     {
      "block": "c27-b80",
@@ -8887,6 +9894,12 @@
    "respelling": "SNOW-moon",
    "first": "c1-b1",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b1",
+    "chapter": 1,
+    "idx": 1,
+    "text": "**Meldan, Veridia** · 3724 Snowmoon 3"
+   },
    "explanations": [],
    "mentions": {
     "1": [
@@ -8929,6 +9942,12 @@
    "respelling": null,
    "first": "c12-b16",
    "first_chapter": 12,
+   "first_sentence": {
+    "block": "c12-b16",
+    "chapter": 12,
+    "idx": 16,
+    "text": "\"I'm Su by the way."
+   },
    "explanations": [],
    "mentions": {
     "12": [
@@ -8975,6 +9994,12 @@
    "respelling": null,
    "first": "c8-b17",
    "first_chapter": 8,
+   "first_sentence": {
+    "block": "c8-b17",
+    "chapter": 8,
+    "idx": 17,
+    "text": "\"Live debate between Professor Sylka, president of VNU, and Lord Ephelion, Arctic ambassador to Veridia\"."
+   },
    "explanations": [],
    "mentions": {
     "8": [
@@ -9014,6 +10039,12 @@
    "respelling": null,
    "first": "c15-b10",
    "first_chapter": 15,
+   "first_sentence": {
+    "block": "c15-b10",
+    "chapter": 15,
+    "idx": 10,
+    "text": "> The president's son, Tafindel, is believed to be in Arctic captivity."
+   },
    "explanations": [
     {
      "block": "c26-b88",
@@ -9065,6 +10096,12 @@
    "respelling": null,
    "first": "c18-b55",
    "first_chapter": 18,
+   "first_sentence": {
+    "block": "c18-b55",
+    "chapter": 18,
+    "idx": 55,
+    "text": "He saw the hotel address: 1565 Tan Kai."
+   },
    "explanations": [],
    "mentions": {
     "18": [
@@ -9092,6 +10129,12 @@
    "respelling": null,
    "first": "c6-b102",
    "first_chapter": 6,
+   "first_sentence": {
+    "block": "c6-b102",
+    "chapter": 6,
+    "idx": 102,
+    "text": "\"There's a similar square about a kilometer further west, Tapaia Square."
+   },
    "explanations": [],
    "mentions": {
     "6": [
@@ -9120,6 +10163,12 @@
    "respelling": null,
    "first": "c4-b97",
    "first_chapter": 4,
+   "first_sentence": {
+    "block": "c4-b97",
+    "chapter": 4,
+    "idx": 97,
+    "text": "\"MU GU GEI TAU FA\""
+   },
    "explanations": [],
    "mentions": {
     "4": [
@@ -9171,6 +10220,12 @@
    "respelling": null,
    "first": "c2-b24",
    "first_chapter": 2,
+   "first_sentence": {
+    "block": "c2-b24",
+    "chapter": 2,
+    "idx": 24,
+    "text": "TEI 70000"
+   },
    "explanations": [],
    "mentions": {
     "2": [
@@ -9189,6 +10244,12 @@
    "respelling": null,
    "first": "c29-b24",
    "first_chapter": 29,
+   "first_sentence": {
+    "block": "c29-b24",
+    "chapter": 29,
+    "idx": 24,
+    "text": "You, Telpo?\""
+   },
    "explanations": [],
    "mentions": {
     "29": [
@@ -9224,6 +10285,12 @@
    "respelling": null,
    "first": "c20-b67",
    "first_chapter": 20,
+   "first_sentence": {
+    "block": "c20-b67",
+    "chapter": 20,
+    "idx": 67,
+    "text": "\"I'm Telroy."
+   },
    "explanations": [],
    "mentions": {
     "20": [
@@ -9257,6 +10324,12 @@
    "respelling": null,
    "first": "c29-b104",
    "first_chapter": 29,
+   "first_sentence": {
+    "block": "c29-b104",
+    "chapter": 29,
+    "idx": 104,
+    "text": "They had landed ground craft, both east of Northglade and in Arctic core territory in Telten hundreds of kilometers further east."
+   },
    "explanations": [],
    "mentions": {
     "29": [
@@ -9283,6 +10356,12 @@
    "respelling": null,
    "first": "c19-b12",
    "first_chapter": 19,
+   "first_sentence": {
+    "block": "c19-b12",
+    "chapter": 19,
+    "idx": 12,
+    "text": "ten min"
+   },
    "explanations": [],
    "mentions": {
     "19": [
@@ -9315,6 +10394,12 @@
    "respelling": null,
    "first": "c29-b29",
    "first_chapter": 29,
+   "first_sentence": {
+    "block": "c29-b29",
+    "chapter": 29,
+    "idx": 29,
+    "text": "Stretch goal is to also attack the Arctic core territory further east on Thaldur Island.\""
+   },
    "explanations": [
     {
      "block": "c30-b74",
@@ -9373,6 +10458,12 @@
    "respelling": null,
    "first": "c8-b5",
    "first_chapter": 8,
+   "first_sentence": {
+    "block": "c8-b5",
+    "chapter": 8,
+    "idx": 5,
+    "text": "Neither he nor Seila had ever before been to \"the aks\", as the Veridians liked to call the cluster of Ondak, Iptak, Mantak and Belpaki."
+   },
    "explanations": [
     {
      "block": "c8-b5",
@@ -9409,6 +10500,12 @@
    "respelling": null,
    "first": "c1-b134",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b134",
+    "chapter": 1,
+    "idx": 134,
+    "text": "\"I'm going to visit Freetown for a month or two, see Jahn, maybe figure out some blog post to write on the United Cities."
+   },
    "explanations": [],
    "mentions": {
     "1": [
@@ -9467,6 +10564,12 @@
    "respelling": null,
    "first": "c10-b9",
    "first_chapter": 10,
+   "first_sentence": {
+    "block": "c10-b9",
+    "chapter": 10,
+    "idx": 9,
+    "text": "\"I'm Utaku."
+   },
    "explanations": [],
    "mentions": {
     "10": [
@@ -9504,6 +10607,12 @@
    "respelling": null,
    "first": "c29-b28",
    "first_chapter": 29,
+   "first_sentence": {
+    "block": "c29-b28",
+    "chapter": 29,
+    "idx": 28,
+    "text": "\"Vakaria?\""
+   },
    "explanations": [],
    "mentions": {
     "29": [
@@ -9535,6 +10644,12 @@
    "respelling": null,
    "first": "c8-b50",
    "first_chapter": 8,
+   "first_sentence": {
+    "block": "c8-b50",
+    "chapter": 8,
+    "idx": 50,
+    "text": "\"Senator Verdow, you may ask your question.\""
+   },
    "explanations": [],
    "mentions": {
     "8": [
@@ -9618,6 +10733,12 @@
    "respelling": "veh-RID-ee-uh",
    "first": "c1-b1",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b1",
+    "chapter": 1,
+    "idx": 1,
+    "text": "**Meldan, Veridia** · 3724 Snowmoon 3"
+   },
    "explanations": [
     {
      "block": "c26-b173",
@@ -9827,6 +10948,12 @@
    "respelling": "veh-RID-ee-un",
    "first": "c1-b20",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b20",
+    "chapter": 1,
+    "idx": 20,
+    "text": "The goal of the voting, Gladias remembered from the Veridian civics lessons of his youth, was to determine the public aesthetics tax - a major component of the composite land tax - that each building would have to pay."
+   },
    "explanations": [],
    "mentions": {
     "1": [
@@ -9983,6 +11110,12 @@
    "respelling": null,
    "first": "c17-b73",
    "first_chapter": 17,
+   "first_sentence": {
+    "block": "c17-b73",
+    "chapter": 17,
+    "idx": 73,
+    "text": "Vidrik"
+   },
    "explanations": [],
    "mentions": {
     "17": [
@@ -10001,6 +11134,12 @@
    "respelling": "VILL",
    "first": "c1-b125",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b125",
+    "chapter": 1,
+    "idx": 125,
+    "text": "This was Gladias and Seila's fourth last dinner with the kids - of whom Zven and Lily were theirs, and Febric and Hreda were from their co-family, Uncle Vil and Aunt Daia."
+   },
    "explanations": [
     {
      "block": "c1-b130",
@@ -10080,6 +11219,12 @@
    "respelling": null,
    "first": "c8-b17",
    "first_chapter": 8,
+   "first_sentence": {
+    "block": "c8-b17",
+    "chapter": 8,
+    "idx": 17,
+    "text": "\"Live debate between Professor Sylka, president of VNU, and Lord Ephelion, Arctic ambassador to Veridia\"."
+   },
    "explanations": [],
    "mentions": {
     "8": [
@@ -10113,6 +11258,12 @@
    "respelling": null,
    "first": "c10-b1",
    "first_chapter": 10,
+   "first_sentence": {
+    "block": "c10-b1",
+    "chapter": 10,
+    "idx": 1,
+    "text": "**Freetown, United Cities** · 3724 Windmoon 24"
+   },
    "explanations": [],
    "mentions": {
     "10": [
@@ -10139,6 +11290,12 @@
    "respelling": null,
    "first": "c4-b90",
    "first_chapter": 4,
+   "first_sentence": {
+    "block": "c4-b90",
+    "chapter": 4,
+    "idx": 90,
+    "text": "\"And on team Zau, we have ..."
+   },
    "explanations": [],
    "mentions": {
     "4": [
@@ -10167,6 +11324,12 @@
    "respelling": null,
    "first": "c2-b2",
    "first_chapter": 2,
+   "first_sentence": {
+    "block": "c2-b2",
+    "chapter": 2,
+    "idx": 2,
+    "text": "Fin and Zei got off the autobus and walked down Hun Min street."
+   },
    "explanations": [],
    "mentions": {
     "2": [
@@ -10827,6 +11990,12 @@
    "respelling": null,
    "first": "c26-b193",
    "first_chapter": 26,
+   "first_sentence": {
+    "block": "c26-b193",
+    "chapter": 26,
+    "idx": 193,
+    "text": "The remaining judge, Zevin, seemed much more sympathetic to Gladias - no doubt in no small part because he also had a son stuck in Northglade - but he did not seem to feel comfortable expressing his opinion."
+   },
    "explanations": [],
    "mentions": {
     "26": [
@@ -10853,6 +12022,12 @@
    "respelling": null,
    "first": "c18-b76",
    "first_chapter": 18,
+   "first_sentence": {
+    "block": "c18-b76",
+    "chapter": 18,
+    "idx": 76,
+    "text": "And soon after that, Gladias arrived at the next street: Zin Go."
+   },
    "explanations": [],
    "mentions": {
     "18": [
@@ -10882,6 +12057,12 @@
    "respelling": null,
    "first": "c6-b133",
    "first_chapter": 6,
+   "first_sentence": {
+    "block": "c6-b133",
+    "chapter": 6,
+    "idx": 133,
+    "text": "2773 zipcoins"
+   },
    "explanations": [],
    "mentions": {
     "6": [
@@ -10946,6 +12127,12 @@
    "respelling": null,
    "first": "c9-b32",
    "first_chapter": 9,
+   "first_sentence": {
+    "block": "c9-b32",
+    "chapter": 9,
+    "idx": 32,
+    "text": "\"You can get more complex. 'lo mo fe jia dzu lie zo hen jun'."
+   },
    "explanations": [],
    "mentions": {
     "9": [
@@ -10972,6 +12159,12 @@
    "respelling": null,
    "first": "c12-b36",
    "first_chapter": 12,
+   "first_sentence": {
+    "block": "c12-b36",
+    "chapter": 12,
+    "idx": 36,
+    "text": "zo lia kin"
+   },
    "explanations": [],
    "mentions": {
     "12": [
@@ -10993,6 +12186,12 @@
    "respelling": null,
    "first": "c12-b146",
    "first_chapter": 12,
+   "first_sentence": {
+    "block": "c12-b146",
+    "chapter": 12,
+    "idx": 146,
+    "text": "Everyone, meet our players for this round: Zei Leimin from Pafogai Du, and Bo Zume, from right here in Sadzu Du.\""
+   },
    "explanations": [],
    "mentions": {
     "12": [
@@ -11019,6 +12218,12 @@
    "respelling": "ZVEN",
    "first": "c1-b110",
    "first_chapter": 1,
+   "first_sentence": {
+    "block": "c1-b110",
+    "chapter": 1,
+    "idx": 110,
+    "text": "\"Dad is home!\", the younger boy, Zven, shouted."
+   },
    "explanations": [],
    "mentions": {
     "1": [
@@ -11115,6 +12320,10 @@
   },
   {
    "word": "bau",
+   "why": "no mention in the book text (after longer terms take their words)"
+  },
+  {
+   "word": "be",
    "why": "no mention in the book text (after longer terms take their words)"
   },
   {

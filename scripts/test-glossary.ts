@@ -2,7 +2,9 @@
  * The glossary data file is the book's, and only the book's:
  *
  *   - reproducible: rebuilding from the committed sources gives the committed file byte for byte;
- *   - every quoted sentence is verbatim in its block, every block id exists (verifyGlossary);
+ *   - every quoted sentence (explanations, and each word's "First appears" sentence) is verbatim
+ *     in its block, every block id exists, the first sentence is in the word's first block and
+ *     names the word (verifyGlossary);
  *   - no definition text: a term carries only the fields the build writes (no "meaning",
  *     "definition", "summary"…), and the only prose is book quotes;
  *   - each of those checks fails on a planted violation;
@@ -12,7 +14,7 @@
  */
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
-import { GLOSSARY_FILE, buildGlossary, loadBlocks, serialize, verifyGlossary, type Glossary } from './lib/glossary';
+import { GLOSSARY_FILE, buildGlossary, loadBlocks, quoteSource, serialize, verifyGlossary, type Glossary } from './lib/glossary';
 import { blockHref, parsePlace, quoteHtml } from '../src/lib/glossary-view';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
@@ -31,6 +33,7 @@ ok(serialize(buildGlossary(ROOT)) === rebuilt, 'two builds differ');
 const g = JSON.parse(committed) as Glossary;
 const blocks = loadBlocks(ROOT);
 const problems = verifyGlossary(g, blocks);
+const quoteSourceOf = (block: string) => quoteSource(blocks.get(block)?.content ?? '');
 ok(problems.length === 0, `verify: ${problems.slice(0, 5).join('; ')}`);
 
 // No definition text anywhere: keys that would hold one, at any depth.
@@ -63,6 +66,21 @@ ok(planted((c) => c.terms[0].explanations.push({ block: 'c1-b9', chapter: 1, idx
 ok(planted((c) => (c.terms[0].mentions['1'] = [99999])), 'plant: a missing block id is not caught');
 ok(planted((c) => ((c.terms[0] as unknown as Record<string, unknown>).meaning = 'water')), 'plant: a meaning field is not caught');
 ok(planted((c) => (c.terms.find((t) => t.slug === withQuote.slug)!.explanations[0].block = 'c40-b1')), 'plant: a block in no chapter is not caught');
+
+// "First appears": every term has one, in its first block, verbatim, naming the term.
+ok(g.terms.every((t) => t.first_sentence && t.first_sentence.block === t.first), 'a first sentence is not in the first block');
+ok(g.terms.every((t) => quoteSourceOf(t.first_sentence.block).includes(t.first_sentence.text)), 'a first sentence is not verbatim in its block');
+const zei = g.terms.find((t) => t.slug === 'zei')!;
+ok(zei.first_sentence.text === 'Fin and Zei got off the autobus and walked down Hun Min street.' && zei.first_sentence.block === 'c2-b2', `zei's first sentence: ${zei.first_sentence.block} ${zei.first_sentence.text}`);
+// The same block holds a sentence that does not name the word (Hun Min street's second sentence).
+const hunMin = g.terms.find((t) => t.slug === 'hun-min')!;
+ok(planted((c) => (c.terms.find((t) => t.slug === 'zei')!.first_sentence.text = 'A sentence the book never wrote.')), 'plant: a first sentence not in the book is not caught');
+ok(planted((c) => (c.terms.find((t) => t.slug === 'zei')!.first_sentence.text += ' (edited)')), 'plant: an edited first sentence is not caught');
+ok(planted((c) => Object.assign(c.terms.find((t) => t.slug === 'zei')!.first_sentence, { block: 'c40-b1', chapter: 40, idx: 1 })), 'plant: a first sentence at a block in no chapter is not caught');
+ok(planted((c) => Object.assign(c.terms.find((t) => t.slug === 'zei')!.first_sentence, { block: 'c2-b3', idx: 3, text: hunMin.explanations[0].text })), 'plant: a first sentence outside the first block is not caught');
+// Verbatim and in the right block, but without the word.
+ok(planted((c) => (c.terms.find((t) => t.slug === 'zei')!.first_sentence.text = 'walked down Hun Min street.')), 'plant: a first sentence that does not name the word is not caught');
+ok(planted((c) => delete (c.terms[0] as Partial<(typeof c.terms)[0]>).first_sentence), 'plant: a missing first sentence is not caught');
 
 // Page helpers.
 ok(parsePlace('c3-b42')?.block === 'c3-b42', 'parsePlace c3-b42');

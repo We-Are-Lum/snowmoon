@@ -1,6 +1,6 @@
 {
- "about": "Every judgement call in the glossary (content/snowmoon/glossary.json, built by scripts/build-glossary.ts). The build applies these and nothing else: no model is asked anything at build time or at runtime. merge joins spellings of one word under the first-named term; add brings in capitalised in-world terms the narration's pronunciation file has no entry for; exclude drops a candidate; entity_covered records entity-name runs that are already terms by another spelling. Drafted by the coding agent on 2026-10-09 from the book text; unreviewed until someone signs off.",
- "status": "unreviewed",
+ "about": "Every judgement call in the glossary (content/snowmoon/glossary.json, built by scripts/build-glossary.ts). The build applies these and nothing else: no model is asked anything at build time or at runtime. merge joins spellings of one word under the first-named term; add brings in capitalised in-world terms the narration's pronunciation file has no entry for; exclude drops a candidate; entity_covered records entity-name runs that are already terms by another spelling. not_explanations lists sentences the explanation rule picks that do not explain the term. Drafted by the coding agent on 2026-10-09 from the book text; reviewed by the owner (FID 6786) on 2026-10-09.",
+ "reviewed": { "by": "FID 6786", "on": "2026-10-09" },
  "merge": [
   { "term": "autobus", "aliases": ["autobuses"], "why": "plural; the pronunciation file notes 'Plural autobuses follows'" },
   { "term": "longhour", "aliases": ["longhours"], "why": "plural" },
@@ -40,6 +40,7 @@
   { "term": "Dzego", "block": "c17-b29", "why": "\"in Dzego, the players\": the comma ends a phrase, not an appositive" },
   { "term": "Dzegoban", "block": "c9-b28", "why": "a character's opinion (\"a masterpiece\"), not what the word is" },
   { "term": "Gun", "block": "c19-b124", "why": "\"Gun - the last day\": the dash phrase is about the day, not Gun" },
+  { "term": "Keepers", "block": "c11-b53", "why": "\"an Order member now\" does not say what a Keeper is (owner, FID 6786, 2026-10-09)" },
   { "term": "Keepers", "block": "c21-b98", "why": "\"not the Keepers, the parliament\": a contrast, not an appositive" },
   { "term": "Mov", "block": "c21-b55", "why": "a character's opinion (\"an idiot\"), not who Mov is" },
   { "term": "Order of Steering", "block": "c16-b112", "why": "a list (\"Keepers, the Order, the institutions\"), not an appositive" },

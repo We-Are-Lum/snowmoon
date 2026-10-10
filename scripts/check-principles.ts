@@ -554,12 +554,14 @@ add({
 add({
   id: 'P2e',
   principle: 2,
-  name: "the glossary's explanations are the book's sentences, verbatim, at real block ids; no written definitions",
+  name: "the glossary's quotes (explanations and each word's first sentence) are the book's sentences, verbatim, at real block ids; no written definitions",
   load: async () => ({ glossary: json<Glossary>(GLOSSARY_FILE), blocks: Object.fromEntries(loadBlocks(ROOT)) }),
   run: ({ glossary, blocks }) => verifyGlossary(glossary, new Map(Object.entries(blocks))),
   plant: (c) => {
     // A model-style definition passed off as a quote, at a real block.
     c.glossary.terms[0].explanations.push({ block: 'c1-b9', chapter: 1, idx: 9, text: 'An invented word for a kind of bus.' });
+    // And a first sentence that is not the book's (one word changed). test:glossary proves each kind alone.
+    c.glossary.terms[1].first_sentence.text = c.glossary.terms[1].first_sentence.text.replace(/\w+/, 'Plainly');
   },
 });
 

@@ -23,7 +23,7 @@
  * text (tags and Markdown marks removed); longest spellings first, so "Pafogai Du" is not also a
  * mention of "Pafogai". Case follows the pronunciation entry's match_case (default: exact case).
  * Single lowercase Dzegoban words (many are also English: li, be, min) count only inside the
- * book's italics or single quotes, as the narration applies them. Headings and breaks are skipped.
+ * book's italics or single quotes made only of Dzegoban words, as the narration applies them. Headings and breaks are skipped.
  *
  * EXPLANATIONS. The book's own sentences, quoted exactly, never written by a model: a sentence of
  * a paragraph or quote block (speaker-colour span tags removed, nothing else) that mentions the
@@ -79,6 +79,8 @@ export interface Term {
   respelling: string | null;
   first: string;
   first_chapter: number;
+  /** The sentence of the first block where the term appears, by the mention rule, verbatim. */
+  first_sentence: Explanation;
   explanations: Explanation[];
   /** Block idx lists by chapter number. */
   mentions: Record<string, number[]>;
@@ -286,10 +288,14 @@ export function buildGlossary(root: string): Glossary {
   const spellings: { s: Spelling; d: Draft; re: RegExp }[] = [];
   for (const d of drafts) for (const s of [d.primary, ...d.aliases]) spellings.push({ s, d, re: new RegExp(`${B1}${src(s)}${B2}`, 'g') });
   spellings.sort((a, b) => b.s.text.length - a.s.text.length || a.s.text.localeCompare(b.s.text));
-  const italicSpans = (content: string) => [
-    ...[...content.matchAll(/(?<!\*)\*([^*]+)\*(?!\*)/g)].map((m) => m[1]),
-    ...[...content.matchAll(/(?<![\w])'([a-z][a-z ]*)'(?![\w])/g)].map((m) => m[1]),
-  ];
+  // Italic or single-quoted runs made only of Dzegoban words (so English italics such as "*… can be run …*" are not Dzegoban).
+  const dzWords = new Set(pron.filter((e) => e.rule === 'dzegoban').flatMap((e) => e.word.toLowerCase().split(/\s+/)));
+  const isDz = (span: string) => span.toLowerCase().split(/[\s.,!?]+/).filter(Boolean).every((w) => dzWords.has(w));
+  const italicSpans = (content: string) =>
+    [
+      ...[...content.matchAll(/(?<!\*)\*([^*]+)\*(?!\*)/g)].map((m) => m[1]),
+      ...[...content.matchAll(/(?<![\w])'([a-z][a-z ]*)'(?![\w])/g)].map((m) => m[1]),
+    ].filter(isDz);
 
   const mentions = new Map<Draft, Map<number, number[]>>();
   const add = (d: Draft, ch: number, idx: number) => {
@@ -298,24 +304,42 @@ export function buildGlossary(root: string): Glossary {
     if (!m.has(ch)) m.set(ch, []);
     if (!m.get(ch)!.includes(idx)) m.get(ch)!.push(idx);
   };
+  /** The terms a piece of book text mentions, by the mention rule (longer spellings masking shorter ones). */
+  const hitsIn = (content: string): Set<Draft> => {
+    const hits = new Set<Draft>();
+    let text = plainText(content);
+    const italics = italicSpans(content).join(' | ');
+    for (const { s, d, re } of spellings) {
+      re.lastIndex = 0;
+      let hit = false;
+      if (s.mode === 'italic') hit = re.test(italics);
+      // Mask matched spans so shorter spellings do not match inside them.
+      else text = text.replace(re, (m) => ((hit = true), '\u0000'.repeat(m.length)));
+      if (hit) hits.add(d);
+    }
+    return hits;
+  };
   for (const c of chapters) {
     for (const b of c.blocks) {
       if (b.kind === 'heading' || b.kind === 'break') continue;
-      let text = plainText(b.content);
-      const italics = italicSpans(b.content).join(' | ');
-      for (const { s, d, re } of spellings) {
-        const hay = s.mode === 'italic' ? italics : text;
-        re.lastIndex = 0;
-        let hit = false;
-        if (s.mode === 'italic') hit = re.test(hay);
-        else {
-          // Mask matched spans so shorter spellings do not match inside them.
-          text = text.replace(re, (m) => ((hit = true), '\u0000'.repeat(m.length)));
-        }
-        if (hit) add(d, c.chapter, b.idx);
-      }
+      for (const d of hitsIn(b.content)) add(d, c.chapter, b.idx);
     }
   }
+
+  /**
+   * FIRST SENTENCE. In the term's first block, the first sentence that mentions it by the same
+   * rule, quoted exactly: the block (speaker-colour span tags removed) is cut at its tags and
+   * line breaks (screens and figures are HTML), then into sentences.
+   */
+  const firstSentence = (d: Draft, chapter: number, idx: number): Explanation => {
+    const b = chapters[chapter - 1].blocks.find((x) => x.idx === idx)!;
+    for (const piece of quoteSource(b.content).split(/<[^>]+>|\n+/)) {
+      for (const sentence of sentences(piece)) {
+        if (hitsIn(sentence).has(d)) return { block: `c${chapter}-b${idx}`, chapter, idx, text: sentence };
+      }
+    }
+    throw new Error(`${d.term}: no sentence of c${chapter}-b${idx} mentions it on its own`);
+  };
 
   // ---- Explanations ----
   const patterns = new Map<Draft, RegExp[]>();
@@ -406,6 +430,7 @@ export function buildGlossary(root: string): Glossary {
       respelling: d.respelling,
       first: `c${firstCh}-b${byCh[String(firstCh)][0]}`,
       first_chapter: firstCh,
+      first_sentence: firstSentence(d, firstCh, byCh[String(firstCh)][0]),
       explanations: explanations.get(d) ?? [],
       mentions: byCh,
       mention_count: chs.reduce((n, ch) => n + byCh[String(ch)].length, 0),
@@ -435,7 +460,7 @@ export function buildGlossary(root: string): Glossary {
       inclusion:
         'Every pronunciation.json entry except kind common-word and phrases of four or more words; every capitalised run in a character, location or prop name (article, title and possessive dropped), decided in the review file; the review file\'s added terms; spellings joined by the review file\'s merges. Terms the book never mentions are dropped.',
       mentions:
-        'A spelling as a whole word in a block\'s text (tags and Markdown marks removed), longest spellings first; case as the pronunciation entry says; single lowercase Dzegoban words only inside italics or single quotes; headings and breaks skipped.',
+        'A spelling as a whole word in a block\'s text (tags and Markdown marks removed), longest spellings first; case as the pronunciation entry says; single lowercase Dzegoban words only inside italics or single quotes made only of Dzegoban words; headings and breaks skipped.',
       explanations:
         'A sentence of a paragraph or quote block, exactly as written (speaker-colour span tags removed), that mentions the term as: T is/was/are/were/means/stands for/refers to + a|an|the|one|…|a capitalised word; called/named/known as/nicknamed/dubbed/word for T; T, a|an|the (not after a quote mark); T - a|an|the|quote; T: a|an|the; T ( or (T); in Dzegoban / Dzegoban for in the sentence; T, as … call/know/say. First five in book order. Sentences with markup are skipped.',
       clip:
@@ -478,7 +503,7 @@ export const serialize = (g: Glossary) => JSON.stringify(g, null, 1) + '\n';
 /** Problems with a glossary against the book: quotes exact, block ids real, nothing but book quotes. */
 export function verifyGlossary(g: Glossary, blocks: Map<string, { kind: string; content: string }>): string[] {
   const problems: string[] = [];
-  const TERM_KEYS = ['slug', 'term', 'aliases', 'source', 'kind', 'respelling', 'first', 'first_chapter', 'explanations', 'mentions', 'mention_count', 'clip'];
+  const TERM_KEYS = ['slug', 'term', 'aliases', 'source', 'kind', 'respelling', 'first', 'first_chapter', 'first_sentence', 'explanations', 'mentions', 'mention_count', 'clip'];
   for (const t of g.terms) {
     const extra = Object.keys(t).filter((k) => !TERM_KEYS.includes(k));
     if (extra.length) problems.push(`${t.slug}: fields that are not the book's (${extra.join(', ')})`);
@@ -492,9 +517,26 @@ export function verifyGlossary(g: Glossary, blocks: Map<string, { kind: string; 
       else if (!quoteSource(b.content).includes(e.text)) problems.push(`${t.slug}: "${e.text.slice(0, 50)}…" is not verbatim in ${e.block}`);
     }
     for (const [ch, list] of Object.entries(t.mentions)) for (const idx of list) if (!blocks.has(`c${ch}-b${idx}`)) problems.push(`${t.slug}: mention c${ch}-b${idx} does not exist`);
+    const f = t.first_sentence;
+    if (!f) problems.push(`${t.slug}: no first sentence`);
+    else {
+      const fb = blocks.get(f.block);
+      const fk = Object.keys(f).filter((k) => !['block', 'chapter', 'idx', 'text'].includes(k));
+      if (fk.length) problems.push(`${t.slug}: the first sentence carries ${fk.join(', ')}`);
+      if (f.block !== t.first || f.block !== `c${f.chapter}-b${f.idx}`) problems.push(`${t.slug}: first sentence ${f.block} is not the first block ${t.first}`);
+      if (!fb) problems.push(`${t.slug}: first-sentence block ${f.block} does not exist`);
+      else if (!quoteSource(fb.content).includes(f.text)) problems.push(`${t.slug}: first sentence "${f.text.slice(0, 50)}…" is not verbatim in ${f.block}`);
+      else if (!spelledIn(f.text, [t.term, ...t.aliases])) problems.push(`${t.slug}: first sentence "${f.text.slice(0, 50)}…" does not mention ${t.term}`);
+    }
     if (t.clip && !blocks.has(t.clip.block)) problems.push(`${t.slug}: clip block ${t.clip.block} does not exist`);
   }
   return problems;
+}
+
+/** Whether a quote names the term: one of its spellings as a whole word, any case, Markdown marks and tags aside. */
+function spelledIn(text: string, spellings: string[]): boolean {
+  const flat = plainText(text);
+  return spellings.some((w) => new RegExp(`${B1}${esc(w)}${B2}`, 'i').test(flat));
 }
 
 export function loadBlocks(root: string): Map<string, { kind: string; content: string }> {

@@ -291,6 +291,8 @@ async function checkGlossary(page: Page, scheme: string) {
   await shot(page, 'glossary-covered', scheme);
   await page.locator('.gl-cover button').click();
   await page.waitForSelector('.gl-quote, .gl-none');
+  // "First appears": the sentence of the first block, linked to that block.
+  if ((await page.locator('.gl-first .gl-cite').getAttribute('href').catch(() => null)) !== '/chapter/2#c2-b2') fail('/glossary/zei: "First appears" is missing or not linked to c2-b2');
   await checkFloors(page, '/glossary/zei (shown)', scheme);
   await shot(page, 'glossary-term', scheme);
 

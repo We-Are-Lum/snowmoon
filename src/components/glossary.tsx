@@ -123,10 +123,12 @@ export function GlossaryTerm({ t }: { t: GlossaryTermView }) {
   const hiddenQuotes = t.explanations.length - quotes.length;
   const hiddenMentions = t.mentions.filter((m) => !within(m.chapter)).reduce((n, m) => n + m.blocks.length, 0);
   const clip = t.clip && within(t.clip.chapter) ? t.clip : null;
+  const first = within(t.firstSentence.chapter) ? t.firstSentence : null;
   const hiddenParts = [
     hiddenQuotes ? `${hiddenQuotes} ${hiddenQuotes === 1 ? 'sentence' : 'sentences'}` : '',
     hiddenMentions ? `${hiddenMentions} ${hiddenMentions === 1 ? 'mention' : 'mentions'}` : '',
     t.clip && !clip ? 'the clip' : '',
+    first ? '' : 'the first sentence',
   ].filter(Boolean);
 
   return (
@@ -137,6 +139,19 @@ export function GlossaryTerm({ t }: { t: GlossaryTermView }) {
       {t.aliases.length > 0 && <p className="gl-meta">Also written: {t.aliases.join(', ')}</p>}
 
       {clip && <Clip clip={clip} respelling={t.respelling} />}
+
+      {/* Always shown, even when the same sentence is also under "In the book's words". */}
+      {first && (
+        <>
+          <h2>First appears</h2>
+          <blockquote className="gl-quote gl-first">
+            <p dangerouslySetInnerHTML={{ __html: quoteHtml(first.text) }} />
+            <Link className="gl-cite" href={blockHref(first.block)}>
+              Chapter {first.chapter}, {first.label}
+            </Link>
+          </blockquote>
+        </>
+      )}
 
       <h2>In the book&apos;s words</h2>
       {quotes.length ? (

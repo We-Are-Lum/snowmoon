@@ -15,6 +15,8 @@ export interface GlossaryTermView {
   aliases: string[];
   respelling: string | null;
   firstChapter: number;
+  /** The sentence of the first block where the word appears, verbatim. */
+  firstSentence: { block: string; chapter: number; label: string; text: string };
   explanations: { block: string; chapter: number; label: string; text: string }[];
   mentions: { chapter: number; blocks: { block: string; label: string }[] }[];
   clip: { block: string; chapter: number; label: string; url: string; seconds: number; voice: string } | null;
@@ -39,7 +41,8 @@ export function quoteHtml(text: string): string {
     .replace(/>/g, '&gt;')
     .replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em>$1</em>')
     .replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>')
-    .replace(/\\(.)/g, '$1');
+    .replace(/\\(.)/g, '$1')
+    .replace(/&amp;nbsp;/g, ' ');
 }
 
 /**

@@ -18,6 +18,7 @@ interface Term {
   respelling: string | null;
   first: string;
   first_chapter: number;
+  first_sentence: { block: string; chapter: number; idx: number; text: string };
   explanations: { block: string; chapter: number; idx: number; text: string }[];
   mentions: Record<string, number[]>;
   mention_count: number;
@@ -58,6 +59,7 @@ export function glossaryTerm(slug: string): GlossaryTermView | null {
     aliases: t.aliases,
     respelling: t.respelling,
     firstChapter: t.first_chapter,
+    firstSentence: { block: t.first_sentence.block, chapter: t.first_sentence.chapter, label: label(t.first_sentence.chapter, t.first_sentence.idx), text: t.first_sentence.text },
     explanations: t.explanations.map((e) => ({ block: e.block, chapter: e.chapter, label: label(e.chapter, e.idx), text: e.text })),
     mentions: Object.entries(t.mentions).map(([ch, list]) => ({
       chapter: Number(ch),

@@ -135,9 +135,11 @@ in 25 words or fewer and records `written_by { fid, date }`.
 - `P2d`: every spoken description is either written by a person (with FID and
   date, 25 words or fewer) or on the exception list, and the list has not
   grown past 148.
-- `P2e`: every explanation in the glossary (`content/snowmoon/glossary.json`) is a
-  sentence of the book, verbatim in its block (speaker-colour span tags removed),
-  at a block id that exists; terms carry no definition field. Nothing on a glossary
+- `P2e`: every quote in the glossary (`content/snowmoon/glossary.json`), both the
+  explanations and each word's "First appears" sentence, is a sentence of the book,
+  verbatim in its block (speaker-colour span tags removed), at a block id that exists;
+  the first sentence is in the word's first block and names the word; terms carry no
+  definition field. Nothing on a glossary
   page defines a word except those quotes. `npm run test:glossary` also rebuilds
   the file from its sources and must match it byte for byte.
 - Review: is anything generated (a caption, a summary, a spoken description of
