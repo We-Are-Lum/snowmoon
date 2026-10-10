@@ -38,7 +38,7 @@
  *   in-memory database with two published readers' images (scripts/fixtures/reader-images-db.ts);
  *   sign-in, the composer's status and the queue are mocked in the browser.
  */
-import { spawn } from 'node:child_process';
+import { execFileSync, spawn } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import { createServer } from 'node:net';
 import path from 'node:path';
@@ -451,6 +451,13 @@ async function checkAiLabels() {
       if (await fetch(LOCAL).then((r) => r.ok, () => false)) break;
       if (i > 120) throw new Error('the local build did not start (run next build first)');
       await new Promise((r) => setTimeout(r, 500));
+    }
+    // The local build must be this checkout's commit, or the readers' screens would be checked on old code.
+    const head = execFileSync('git', ['rev-parse', 'HEAD'], { encoding: 'utf8' }).trim();
+    const built = ((await (await fetch(`${LOCAL}/api/version`)).json()) as { commit?: string }).commit ?? 'unknown';
+    if (built !== head) {
+      fail(`AI labels: the local build is from ${built.slice(0, 7)}, but this checkout is at ${head.slice(0, 7)}; run next build first`);
+      return;
     }
     const IMG = FIXTURE_IMAGES[0].url;
     for (const [w, h, touch] of [
