@@ -6,9 +6,9 @@ import summaries from '../../content/snowmoon/chapter-summaries.json';
 /**
  * A chapter's summary, collapsed until the reader opens it (owner, 2026-10-10), so nobody
  * sees this chapter's events unless they choose to. It rests only on this chapter and earlier
- * ones (scripts/chapter-summaries.ts check). Written by the coding agent, a closed model
- * (principle 3), checked against the book; declared as AI where it is shown (principle 2).
- * Labels are draft wording by the coding agent.
+ * ones (scripts/chapter-summaries.ts check). Written by the coding agent, a closed model,
+ * accepted by the owner as labelled and recorded (principle 3, 2026-10-10); declared as AI
+ * where it is shown (principle 2). The label is the owner's draft wording.
  */
 const RECIPE = 'content/snowmoon/chapter-summaries.json';
 type Para = { from_paragraph: number; text: string; sources: string[] };
@@ -57,8 +57,9 @@ export function ChapterSummary({ chapter: n }: { chapter: number }) {
         </div>
       ))}
       <p className="chapter-summary-made">
-        AI summary · written by an AI model, Claude, not by the author, and checked against the book. Nothing from later
-        chapters. <a href={`${REPO_URL}/blob/main/${RECIPE}`}>How it was made</a>
+        {/* The owner's draft wording (2026-10-10). */}
+        AI summary · written by an AI model, Claude, not by the author, and checked against the book by AI. Nothing from
+        later chapters. <a href={`${REPO_URL}/blob/main/${RECIPE}`}>How it was made</a>
       </p>
     </details>
   );

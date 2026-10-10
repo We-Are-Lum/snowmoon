@@ -554,3 +554,9 @@ Go ahead: $2 total, redo pass 2 from the existing notes, with your four rules (e
 ```text
 Yeah go with 2. Make summary expandable. Or a popup, so people don't see spoilers if they don't want to
 ```
+
+```text
+1. Keep Claude's text; no gpt-oss rewrite. Accepted as a closed model, labelled and recorded.
+2. Label wording (draft): "AI summary · written by an AI model, Claude, not by the author, and checked against the book by AI. Nothing from later chapters. How it was made."
+3. Don't merge yet. I'll listen to the summary first. When I say "publish", merge summary-35min and chapter-summaries together: the script, the recipe, the chapter summaries and the edits file. The audio stays off the site and the feed until I decide that separately.
+```
