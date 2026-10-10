@@ -183,3 +183,9 @@ Checks only: check:ui fails when a local server, or the local build it starts fo
 Docs only: P8e and live.ts say the book's sliders are working range inputs; the grey disabled look came from our import. To undo (back to `67bf0d3`):
 
     vercel rollback dpl_FQ75udfwBAfWgkDfgdhr1xHS8t89 --scope nates-projects-d1780cff
+
+## 2026-10-09: proposal, word-only pronunciation clips (branch site-word-clips-proposal)
+
+Docs only: docs/proposals/word-pronunciation-clips.md. To undo (back to `473f94c`):
+
+    vercel rollback dpl_9mdPcZ8FsEE65ot9h1UoYByGtCq4 --scope nates-projects-d1780cff
