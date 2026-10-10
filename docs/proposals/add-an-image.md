@@ -14,7 +14,8 @@
 > "outside Farcaster", read "signed out".
 
 > **Decided and built (2026-10-08):** the owner took all 28 decisions as recommended, except 11
-> (invited FIDs only, starting with 6786; no Neynar key), 12 ("FID n" until a way to show the
+> (invited FIDs only, starting with 6786; no Neynar key; **updated 2026-10-09:** any account with a
+> Neynar score of at least 0.7, see decision 11 below), 12 ("FID n" until a way to show the
 > username without a new outside service is agreed; see "Slice 1, as built"), 18 (contact
 > snowmoon@wearelum.xyz), 20 (moderator 6786) and 24 (migration 0008, after the assistant's 0007;
 > the FID only on rows that count a person's daily limit; costs carry no FID and only the date).
@@ -525,6 +526,17 @@ public, and the second line says so.
 9. **Content rules:** shown on the compose screen, not part of the hashed consent: recommended not hashed.
 10. **Caps:** 10 generations and 3 publishes per person per UTC day, $2 total image spend a day, kept apart from chat's $2: recommended as stated.
 11. **Who may generate:** an invited FID allowlist first, then Neynar score ≥ 0.7 (needs a Neynar key): recommended allowlist first.
+    **Updated by the owner, 2026-10-09:** any signed-in Farcaster account with a Neynar user score
+    of at least 0.7 (`IMAGES.neynarMinScore`, the one place the threshold lives). The server looks
+    the score up at Generate only, never on page load, with `NEYNAR_API_KEY` (Vercel Production
+    only), sending only the FID, and keeps it a day per FID (`studio.image_scores`, migration 0010).
+    If Neynar can't be reached (no key, down, an error, too slow, no score in the answer), Generate
+    is refused with a clear message, never let through, and nothing is kept. Below 0.7, the refusal
+    says why, shows the score, and says reading, saving and everything else still work. FIDs on the
+    invited list (`IMAGES.invited`) skip the lookup. The refusal comes before anything is counted
+    or reserved. "Add an image" shows to every signed-in reader; the server decides. Not live for
+    anyone outside the invited list until the Terms and Privacy pages are in the build and report
+    alerts are set (`SNOWMOON_ALERT_URL`): see "Image making for everyone" below.
 12. **Byline name:** look up the username on the server (Neynar or a public hub), "FID n" until then: recommended Neynar, with the gating key.
 13. **Drafts:** device only, never on the server, optionally kept in IndexedDB: recommended device only, with IndexedDB.
 14. **Prompt check:** run gpt-oss-safeguard-20b on every prompt before spending: recommended yes.
@@ -560,8 +572,9 @@ Where the build differs from the text above, and why:
   daily limit is counted in `studio.image_asks` (FID and time, no row number). A published image's
   recipe still shows its cost, as every recipe does (principle 1): that is the published work's
   provenance, shown with its maker's name by their own choice to publish.
-- **Test spending** is capped in code: `IMAGES.totalSpendCapUsd` = $1 across all days, besides the
-  $2 a day. Log: `docs/proposals/add-an-image-spend.md`.
+- **Test spending** was capped in code: `IMAGES.totalSpendCapUsd` = $1 across all days, besides the
+  $2 a day. **Removed by the owner on 2026-10-09**, with every use of it; the $2 a day across
+  everyone stays. Log: `docs/proposals/add-an-image-spend.md`.
 - **Hiding** moves the public file to a private bucket (`R2_PRIVATE_BUCKET`), and public copies are
   cached for 5 minutes, so no Cloudflare cache-purge key is needed.
 - **A moderator's "Dismiss"** never restores an image a stated rule hid: restoring would let
@@ -594,7 +607,7 @@ Where the build differs from the text above, and why:
   own) for the username, sending only the FID, cached a day, named on About. No Neynar. The name is
   recorded with the recipe at publish.
 - **Report alerts:** not needed while only FID 6786 can generate. Before anyone else is invited,
-  propose an alert that carries no content.
+  propose an alert that carries no content. **Built 2026-10-09:** see "Image making for everyone" below.
 - **Visibility, built:** the feed and images show to everyone; "Add an image" (selection action,
   scene links, player link) only to a signed-in invited FID.
 - **Accepted:** the consent line naming Groq, the intro edit, rule-hides not restored by moderators,
@@ -606,3 +619,26 @@ Where the build differs from the text above, and why:
   and the private bucket are writable, and a write to the book's media bucket is refused
   (AccessDenied). `element_versions.asset_url` is append-only, so the move was made before the first
   image was published.
+
+### Image making for everyone (owner, 2026-10-09; branch `site-images-everyone`)
+
+- **Gate:** decision 11 as updated above (`src/lib/images/gate.ts`, `src/lib/images/neynar.ts`).
+  The lookup is `GET https://api.neynar.com/v2/farcaster/user/bulk?fids=<fid>` with the key in
+  `x-api-key`; the value read is `users[0].score`, else `users[0].experimental.neynar_user_score`;
+  4 s timeout. `/api/images/status` never calls Neynar: it reports `eligible` from a value kept in
+  the last day (true or false), or null when none is kept.
+- **Caps:** the $1 all-days cap is gone. $2 a day across everyone, 10 images and 3 published per
+  person per UTC day stay. The "Trial" label stays.
+- **Launch order, in code.** Outside the invited list, Generate is refused (503) until both hold:
+  1. *Terms and Privacy are in the build.* `next.config.ts` checks at build time that
+     `src/app/terms/page.tsx` and `src/app/privacy/page.tsx` exist and inlines the result as
+     `APP_LEGAL_PAGES`; being inlined at build, it can't be switched on by hand on Vercel. A runtime
+     `fs.existsSync` would be unreliable (the source files aren't in the deployed function) and a
+     hand-set constant proves nothing. `check:principles` P6g also fails while image making is
+     open beyond the invited list and either page is missing, or the Privacy page doesn't name
+     Neynar.
+  2. *Report alerts are set:* `SNOWMOON_ALERT_URL` is present at runtime.
+- **Report alerts:** `docs/removal.md`, "Report alerts".
+- **Wording** of the refusals was drafted by the coding agent (a closed model) and is marked so in
+  `src/lib/images/gate.ts`, for the owner's review.
+

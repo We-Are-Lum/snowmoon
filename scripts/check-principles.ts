@@ -940,7 +940,7 @@ add({
     seen.push({ page: '/chapter/1', host: 'fonts.googleapis.com' });
   },
 });
-const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log'];
+const PRIVATE_FID_TABLES = ['ratings', 'likes', 'take_likes', 'picks', 'contributor_consents', 'image_asks', 'removal_log', 'image_scores'];
 add({
   id: 'P6b',
   principle: 6,
@@ -961,6 +961,7 @@ add({
       insert into studio.picks (fid, entity_id, version_id) values (42,'00000000-0000-0000-0000-00000000e001','00000000-0000-0000-0000-0000000000f1');
       insert into studio.contributor_consents (fid, kind, consent_text_sha256) values (42,'handmade_upload','${'a'.repeat(64)}');
       insert into studio.image_asks (fid) values (42);
+      insert into studio.image_scores (fid, score) values (42, 0.8);
       insert into studio.removal_log (element_id, step, by_fid, role, reason) values ('00000000-0000-0000-0000-0000000000b1','reported',42,'reader','spam');`);
     const problems: string[] = [];
     for (const role of ['anon', 'authenticated']) {
@@ -1013,6 +1014,40 @@ add({
   plant: (c) => {
     c.skipped = false;
     c.results = [{ table: 'likes', status: 200, body: '[]' }];
+  },
+});
+
+// Image making for everyone (owner, 2026-10-09) does not go live before the Terms and Privacy pages
+// do, and the Privacy page must say that Neynar receives the FID. At runtime the generate route
+// also refuses everyone outside the invited list until next.config.ts has found both page files at
+// build time (APP_LEGAL_PAGES) and SNOWMOON_ALERT_URL is set (src/lib/images/gate.ts).
+add({
+  id: 'P6g',
+  principle: 6,
+  name: 'image making is open beyond the invited list only with Terms and Privacy pages, the Privacy page naming Neynar',
+  load: async () => {
+    const page = (p: string) => (existsSync(path.join(ROOT, p)) ? read(p) : null);
+    const gate = page('src/lib/images/gate.ts') ?? '';
+    return {
+      enabled: IMAGES.enabled,
+      // Open beyond the invited list: the gate decides by score, not by the list alone.
+      openBeyondInvited: /lookUp\(/.test(gate),
+      terms: page('src/app/terms/page.tsx'),
+      privacy: page('src/app/privacy/page.tsx'),
+    };
+  },
+  run: ({ enabled, openBeyondInvited, terms, privacy }) => {
+    if (!enabled || !openBeyondInvited) return [];
+    const problems: string[] = [];
+    if (terms === null) problems.push('image making is open beyond the invited list, but src/app/terms/page.tsx is missing');
+    if (privacy === null) problems.push('image making is open beyond the invited list, but src/app/privacy/page.tsx is missing');
+    else if (!/Neynar/.test(privacy)) problems.push('the Privacy page does not say that Neynar receives the Farcaster ID at Generate');
+    return problems;
+  },
+  plant: (c) => {
+    c.enabled = true;
+    c.openBeyondInvited = true;
+    c.terms = null;
   },
 });
 

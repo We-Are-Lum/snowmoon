@@ -476,7 +476,7 @@ async function checkAiLabels() {
       await page.route('**/api/chat/status**', (r) => r.abort());
       await page.route('**/api/images/status**', async (r) => {
         const real = (await (await r.fetch()).json()) as Record<string, unknown>;
-        await r.fulfill({ json: { ...real, ready: true, signedIn: true, fid: 6786, invited: true, consented: true, left: 9, publishesLeft: 3 } });
+        await r.fulfill({ json: { ...real, ready: true, signedIn: true, fid: 6786, invited: true, eligible: true, consented: true, left: 9, publishesLeft: 3 } });
       });
       await page.route('**/api/consent', (r) => r.fulfill({ json: { wording: { sha256: 'x', title: 'x', text: 'x' }, agreed: true } }));
       await page.route('**/api/moderate', (r) =>
@@ -700,7 +700,7 @@ try {
       // The assistant's status would answer 401 to the mocked session and sign it out.
       await ctx.route('**/api/chat/status', (r) => r.fulfill({ json: { available: false, model: 'm', host: null, provider: null, route: '', perDay: 30, left: 30 } }));
       await ctx.route('**/api/images/status**', (r) =>
-        r.fulfill({ json: { label: 'Trial', ready: true, signedIn: true, invited: true, consented: true, left: 10, publishesLeft: 3, perDay: 10, maxBlocks: 8,
+        r.fulfill({ json: { label: 'Trial', ready: true, signedIn: true, invited: true, eligible: true, consented: true, left: 10, publishesLeft: 3, perDay: 10, maxBlocks: 8,
           rules: 'No real people.', model: { name: 'Z-Image Turbo', licence: 'Apache-2.0', host: 'fal.ai' }, styles: [{ id: 'techno-vistas', name: 'Techno vistas', text: 'Style text.' }] } }),
       );
       await page.evaluate(() => {
@@ -716,6 +716,20 @@ try {
       if (!/sent to Groq to be checked and to fal\.ai/.test(text)) fail('/chapter/1: the composer does not name both hosts');
       await page.keyboard.press('Escape');
       if (await page.locator('.image-composer').count()) fail('/chapter/1: Escape does not close the composer');
+      // A reader below the Neynar score (kept from an earlier Generate): the composer says why, plainly, and offers no Generate.
+      const why = 'Image making is open to Farcaster accounts with a Neynar score of 0.7 or more, to keep out spam accounts. Yours is 0.42.';
+      await ctx.unroute('**/api/images/status**');
+      await ctx.route('**/api/images/status**', (r) =>
+        r.fulfill({ json: { label: 'Trial', ready: true, signedIn: true, invited: false, eligible: false, refusal: why, consented: true, left: 10, publishesLeft: 3, perDay: 10, maxBlocks: 8,
+          rules: 'No real people.', model: { name: 'Z-Image Turbo', licence: 'Apache-2.0', host: 'fal.ai' }, styles: [] } }),
+      );
+      await open(page, '/chapter/1');
+      await page.locator('.scene-label .add-image').first().click();
+      await page.waitForSelector('.image-composer .ic-gate');
+      if (!(await page.getByText(why).isVisible())) fail(`/chapter/1 (${scheme}): the composer does not show the score refusal`);
+      if (await page.locator('.image-composer .ic-generate').count()) fail(`/chapter/1 (${scheme}): Generate shows below the score`);
+      await checkFloors(page, '/chapter/1 (add an image, below the score)', scheme);
+      await page.keyboard.press('Escape');
       await page.evaluate(() => localStorage.removeItem('snowmoon.signin'));
       await ctx.unroute('**/api/images/status**');
       await ctx.unroute('**/api/chat/status');

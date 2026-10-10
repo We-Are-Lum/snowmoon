@@ -27,6 +27,9 @@ type Status = {
   ready: boolean;
   signedIn: boolean;
   invited?: boolean;
+  /** From a Neynar value kept in the last day; null when none is kept (Generate looks it up). */
+  eligible?: boolean | null;
+  refusal?: string;
   consented?: boolean;
   left?: number;
   publishesLeft?: number;
@@ -168,7 +171,7 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
 
   const chosen = status?.styles.find((s) => s.id === style) ?? null;
   const left = status?.left ?? 0;
-  const ready = auth.kind === 'signed-in' && status?.invited && status.ready && status.consented;
+  const ready = auth.kind === 'signed-in' && status?.eligible !== false && status?.ready && status.consented;
   const showDraft = view === 'draft' && draft !== null && !published;
   const previewing = step === 'preview' || step === 'publishing';
   const by = auth.kind === 'signed-in' ? (auth.username ? `@${auth.username}` : `FID ${auth.fid}`) : 'you';
@@ -218,13 +221,13 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
                 </p>
               ) : auth.kind !== 'signed-in' ? (
                 <div className="ic-gate">
-                  <p>Sign in to make an image. The trial is open to invited readers.</p>
+                  <p>Sign in to make an image.</p>
                   <SignInButton />
                 </div>
               ) : !status ? (
                 <p className="ic-note">…</p>
-              ) : !status.invited ? (
-                <p className="ic-gate">The trial is open to invited readers only, for now.</p>
+              ) : status.eligible === false ? (
+                <p className="ic-gate" role="status">{status.refusal ?? 'Image making is not open to this account.'}</p>
               ) : !status.ready ? (
                 <p className="ic-gate">Making images isn&apos;t set up on this deployment yet.</p>
               ) : !status.consented ? (
@@ -243,6 +246,7 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
                     </span>
                   </div>
                   <p className="ic-note">Your prompt is sent to Groq to be checked and to fal.ai to make the image. It becomes public only if you publish.</p>
+                  {!status.invited && <p className="ic-note">At Generate, your Farcaster ID (and nothing else) is sent to Neynar to check your account&apos;s score, once a day.</p>}
 
                   <fieldset className="ic-style">
                     <legend>Style</legend>

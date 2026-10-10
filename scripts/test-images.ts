@@ -9,8 +9,8 @@
  *   secret or an expired one is refused.
  * - The rules: blocked names as whole words; the exact prompt sent ends with the no-words line;
  *   the style text is the committed style plus the passage's setting.
- * - The caps: 10 Generates a day per FID, the day's spend cap and the trial's total cap, each
- *   checked with the worst case reserved first; settling replaces the reservation with real costs.
+ * - The caps: 10 Generates a day per FID, and the day's spend cap across everyone ($2; the $1
+ *   all-days test cap was removed on 2026-10-09), checked with the worst case reserved first; settling replaces the reservation with real costs.
  * - No cost can be joined to a person (owner, 2026-10-08, the assistant's rule): image_costs has no
  *   person or request column, no time finer than a date, no row number; a second person's
  *   Generate adds to the day's totals without adding a row. image_asks has no row number either.
@@ -127,9 +127,9 @@ for (let i = 0; i < IMAGES.generationsPerDay - 1; i++) {
   if (r.ok) await settle(S, {});
 }
 check('the daily limit stops the 11th Generate', (await generationsLeft(S, 6786)) === 0 && !(await reserve(S, 6786)).ok);
-await sql`insert into studio.image_costs (kind, model, provider, verdict, calls, cost_usd) values ('image', 'test', 'fal.ai', 'ok', 1, ${IMAGES.totalSpendCapUsd})`;
+await sql`insert into studio.image_costs (kind, model, provider, verdict, calls, cost_usd) values ('image', 'test', 'fal.ai', 'ok', 1, ${IMAGES.dailySpendCapUsd})`;
 const r3 = await reserve(S, 7);
-check('the trial\'s total cap stops a Generate', !r3.ok && (r3.refusal === 'spend' || r3.refusal === 'trial-spend'), JSON.stringify(r3));
+check('the day\'s spend cap stops a Generate', !r3.ok && r3.refusal === 'spend', JSON.stringify(r3));
 
 // Private, and append-only where it should be.
 await sql`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') on conflict do nothing`;

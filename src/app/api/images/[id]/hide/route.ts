@@ -1,7 +1,8 @@
-import { NextResponse } from 'next/server';
+import { after, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { getFid } from '~/lib/auth';
 import { db } from '~/lib/db';
+import { alertReports } from '~/lib/images/alert';
 import { elementOf } from '~/lib/images/data';
 import { moveToPrivate, restorePublic } from '~/lib/images/store';
 
@@ -42,6 +43,8 @@ export async function POST(request: Request, { params }: Ctx) {
       await tx`insert into studio.removal_log ${tx({ element_id: el.elementId, step: 'unhidden', by_fid: fid, role: 'author' })}`;
     });
   }
+  // A hide changes what is waiting: the moderator's push, after the answer, at most one an hour.
+  if (hide !== false) after(() => alertReports(sql).then(() => undefined, () => undefined));
   revalidatePath('/images');
   revalidatePath(`/image/${id}`);
   return NextResponse.json({ hidden: hide !== false });

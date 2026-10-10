@@ -86,6 +86,31 @@ anything is erased.
 **What is kept.** The log entry (private), the tombstone, ids and hashes. A
 hash of erased text proves nothing about its content to anyone without it.
 
+## Report alerts (owner, 2026-10-09)
+
+When an image is reported (`/api/images/[id]/report`, including the stated rules that hide it at
+once) or its author hides it (`/api/images/[id]/hide`), the server sends a push to the moderator
+through ntfy, at `SNOWMOON_ALERT_URL` (`src/lib/images/alert.ts`). It runs after the answer
+(Next's `after()`), so it can never slow, fail or change a report or a hide.
+
+- **What it says:** exactly `Snowmoon: N reports waiting`, as a plain-text body. No title, tags or
+  click link; no image, prompt, FID, name, URL or reason. The only header set is
+  `Content-Type: text/plain`.
+- **What "waiting" means:** the moderator queue (`reportQueue`, `/moderate`): images whose latest
+  step among reported / hidden / dismissed is a report, or a hide by a stated rule (it stays until
+  a moderator looks). N counts the reports on those images made since each one's last dismissal.
+  A moderator's hide, a dismissal, or the author's own hide takes an image off the list. Nothing
+  is sent when N is 0.
+- **How often:** at most one an hour (`IMAGES.alertEveryMinutes`) across every server. The send
+  time is kept in `studio.alert_state` (migration 0010; no FID, no count) and claimed in one
+  statement (`insert … on conflict do update … where sent_at < now() - 60 minutes returning`), so
+  two servers can't both send. If the push fails, the hour is given back, so the next report
+  tries again.
+- **Unset:** with no `SNOWMOON_ALERT_URL`, nothing is sent (the log says the variable's name
+  only). Image making stays closed to everyone outside the invited list until it is set
+  (`src/lib/images/gate.ts`).
+- **Checked by** `npm run test:images-gate`, with a planted report and a local stand-in for ntfy.
+
 ## What would need building
 
 - `studio.removal_log` (private, append-only) and the "Hide this" route, in a

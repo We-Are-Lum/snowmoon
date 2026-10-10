@@ -1,5 +1,9 @@
 # Readers' images: test spending
 
+> **Removed, owner 2026-10-09:** the $1 all-days cap (`IMAGES.totalSpendCapUsd`) is gone, with
+> every use of it, when image making opened to everyone with a Neynar score of 0.7 or more. The
+> $2 a day across everyone (`IMAGES.dailySpendCapUsd`) stays. The log below is kept as a record.
+
 Owner, 2026-10-08: cap test spending at $1. Enforced in code as `IMAGES.totalSpendCapUsd` (all
 days together) in `src/lib/config.ts`, on top of `IMAGES.dailySpendCapUsd` ($2 a day). The totals
 live in `studio.image_costs` (daily, no person). Every paid call made while building or trying the

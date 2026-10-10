@@ -282,7 +282,8 @@ only, through `studio.rating_totals`, `studio.like_totals` and
   the cards gallery, an adaptation, a share page, the glossary and a glossary word) and fails on any request
   outside the site's own domain.
 - `P6b`: in the committed migrations, no public read policy remains on
-  `ratings`, `likes`, `take_likes`, `picks` or `contributor_consents`
+  `ratings`, `likes`, `take_likes`, `picks`, `contributor_consents`, `image_asks`,
+  `removal_log` or `image_scores` (Neynar scores by FID, migration 0010)
   (`npm run test:db` proves it on an in-memory database, totals views
   included).
 - `P6c`: on the live database, through the public API with the public key,
@@ -302,6 +303,14 @@ only, through `studio.rating_totals`, `studio.like_totals` and
 - `P6f`: the notice's words, as readers see them now, are words the owner
   (FID 6786) has reread (`NOTICE_REVIEW.ownerReread`). Any change to the
   words fails until the owner rereads them; it is set only on the owner's word.
+- `P6g`: image making is open beyond the invited list (the gate looks up a
+  Neynar score) only when `src/app/terms/page.tsx` and `src/app/privacy/page.tsx`
+  both exist, and the Privacy page names Neynar (which receives the FID at
+  Generate). The owner's launch order (2026-10-09). At runtime the generate
+  route also refuses everyone outside the invited list until `next.config.ts`
+  has found both page files at build time (`APP_LEGAL_PAGES`) and
+  `SNOWMOON_ALERT_URL` is set. Fails on branch `site-images-everyone` alone,
+  by design, until the Terms and Privacy pages are merged.
 - Review: does a new page, embed or script reach another domain? Does a new
   table expose who did what?
 
@@ -417,6 +426,10 @@ quoted as written. Minpentai boards and maps come from the source's own SVGs.
 ---
 
 ## Summary of current failures
+
+- `P6g` (2026-10-09) fails on branch `site-images-everyone` until the Terms and
+  Privacy pages are merged; image making stays closed outside the invited list
+  until then (the generate route checks the same at build time).
 
 None. All automated checks pass on production (Oct 5, 2026).
 

@@ -123,8 +123,19 @@ export const IMAGES = {
   /** The off switch: false stops every generation at once (decision 10). */
   enabled: true,
   label: 'Trial',
-  /** Who may generate (decision 11): invited FIDs only, starting with the owner. No Neynar key. */
+  /**
+   * Who may generate (decision 11, owner 2026-10-09): any signed-in Farcaster account whose Neynar
+   * user score is at least neynarMinScore, looked up at Generate with only the FID (NEYNAR_API_KEY)
+   * and kept a day per FID (studio.image_scores, migration 0010). If Neynar can't be reached, no one
+   * outside the invited list may generate. Invited FIDs skip the lookup.
+   */
   invited: [6786] as readonly number[],
+  /** The one place the threshold lives. */
+  neynarMinScore: 0.7,
+  /** How long a looked-up Neynar user value is kept before it is asked again. */
+  scoreCacheHours: 24,
+  /** Report alerts (ntfy, SNOWMOON_ALERT_URL): at most one per this many minutes, across every server. */
+  alertEveryMinutes: 60,
   /** One model, settings fixed (decisions 3 and 6). On the allowlist in config/models.json. */
   model: { id: 'z-image-turbo', name: 'Z-Image Turbo', licence: 'Apache-2.0', endpoint: 'fal-ai/z-image/turbo', host: 'fal.ai' },
   size: { width: 1024, height: 576 },
@@ -145,8 +156,6 @@ export const IMAGES = {
   publishesPerDay: 3,
   /** Across everyone, per UTC day (decision 10), kept apart from the assistant's. */
   dailySpendCapUsd: 2,
-  /** Test spending while the trial is built and tried: $1 in all, every day together (owner, 2026-10-08). */
-  totalSpendCapUsd: 1,
   /** A draft's signed record is good for this long; after that, generate again. */
   ticketHours: 24,
   /** Readers' images: one report hides at once for these reasons; otherwise this many distinct reporters (decision 17). */

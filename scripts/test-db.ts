@@ -11,7 +11,7 @@
  * PGlite runs as a superuser, unlike Supabase's `postgres` role, so role
  * creation and ownership are only approximated. Permission checks use SET ROLE.
  */
-import { readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import path from 'node:path';
 import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
@@ -420,6 +420,39 @@ for (const role of ['anon', 'authenticated']) {
     `insert into studio.recipe_assist (recipe_id, assist, source, recorded_by_fid) values ('00000000-0000-0000-0000-00000000b0a4', ${ASSIST}, 'x', 1)`, PERM);
 }
 
+// --- 0006 onwards, in order; then 0010: Neynar scores and the alert's send time ----------
+const REST = (await readdir(path.join(ROOT, 'supabase/migrations'))).filter((f) => f.endsWith('.sql') && f > '0006').sort();
+for (const f of REST) {
+  try {
+    await db.exec(await readFile(path.join(ROOT, 'supabase/migrations', f), 'utf8'));
+    passed++;
+  } catch (e) {
+    failures.push(`${f} failed to apply: ${(e as Error).message}`);
+  }
+}
+await equal('RLS on every studio table after the last migration', 'postgres',
+  `select count(*)::int as v from pg_tables where schemaname = 'studio' and not rowsecurity`, 0);
+// image_scores: one row per FID, kept a day; the app reads, writes, refreshes and deletes old rows.
+await ok('writer keeps a score', W, `insert into studio.image_scores (fid, score) values (7, 0.82)`);
+await ok('writer refreshes a score', W, `insert into studio.image_scores (fid, score) values (7, 0.75) on conflict (fid) do update set score = excluded.score, fetched_at = now()`);
+await equal('one row per FID', W, `select count(*)::int as v from studio.image_scores where fid = 7`, 1);
+await denied('a score is between 0 and 1', W, `insert into studio.image_scores (fid, score) values (8, 1.5)`, /image_scores_score_check/);
+await ok('writer deletes old scores', W, `delete from studio.image_scores where fetched_at < now() - interval '1 day'`);
+await denied('writer cannot truncate scores', W, `truncate studio.image_scores`, PERM);
+// alert_state: when the last alert went out; no FID; never deleted.
+await ok('writer claims the alert hour', W, `insert into studio.alert_state (kind, sent_at) values ('reports', now()) on conflict (kind) do update set sent_at = now() where studio.alert_state.sent_at < now() - interval '60 minutes'`);
+await ok('writer gives the hour back', W, `update studio.alert_state set sent_at = '-infinity' where kind = 'reports'`);
+await denied('writer cannot delete alert_state', W, `delete from studio.alert_state`, PERM);
+await denied('only known alert kinds', W, `insert into studio.alert_state (kind, sent_at) values ('anything', now())`, /alert_state_kind_check/);
+await equal('alert_state holds no FID', 'postgres',
+  `select count(*)::int as v from information_schema.columns where table_schema = 'studio' and table_name = 'alert_state' and column_name like '%fid%'`, 0);
+for (const role of ['anon', 'authenticated']) {
+  await denied(`${role} cannot read scores`, role, `select fid from studio.image_scores`, PERM);
+  await denied(`${role} cannot write scores`, role, `insert into studio.image_scores (fid, score) values (9, 0.9)`, PERM);
+  await denied(`${role} cannot read alert_state`, role, `select * from studio.alert_state`, PERM);
+  await denied(`${role} cannot write alert_state`, role, `update studio.alert_state set sent_at = now()`, PERM);
+}
+
 // --- The real seed script, as studio_writer, over the wire --------------------
 await db.exec(`delete from studio.text_blocks`);
 await db.exec(`set role studio_writer`);
@@ -453,4 +486,4 @@ if (failures.length) {
   console.error(`\nDB TESTS FAILED (${failures.length}, ${passed} passed):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`db tests passed: ${passed} checks against ${path.relative(ROOT, MIGRATION)}, then ${[...LATER, PRIVATE, PROMPTS].map((f) => path.basename(f)).join(', ')}`);
+console.log(`db tests passed: ${passed} checks against ${path.relative(ROOT, MIGRATION)}, then ${[...LATER, PRIVATE, PROMPTS].map((f) => path.basename(f)).join(', ')}, ${REST.join(', ')}`);

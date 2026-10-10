@@ -8,13 +8,15 @@ import { loadChapter } from '~/lib/book';
 import { blockFacts } from '~/lib/reading';
 import { checkPrompt } from '~/lib/images/guard';
 import { ImageUnavailable, makeImage } from '~/lib/images/fal';
+import { mayGenerate } from '~/lib/images/gate';
 import { reserve, settle } from '~/lib/images/limits';
 import { blockedName, finalPrompt, STYLES, styleText, type StyleId } from '~/lib/images/rules';
 import { signTicket } from '~/lib/images/ticket';
 
 /**
- * Generate one draft image for a passage (docs/proposals/add-an-image.md, section 5). Invited
- * FIDs only, after consent, within the caps. The prompt is checked before anything is spent;
+ * Generate one draft image for a passage (docs/proposals/add-an-image.md, section 5). Any
+ * signed-in account with a Neynar score of at least IMAGES.neynarMinScore, or an invited FID
+ * (decision 11, owner 2026-10-09; src/lib/images/gate.ts), after consent, within the caps. The prompt is checked before anything is spent;
  * the host's safety checker runs on the image. Nothing about the draft is stored here: the
  * image and a signed record of how it was made go back to the person's device. The daily count
  * (studio.image_asks) and the day's cost totals (studio.image_costs, no FID) are all that is kept.
@@ -25,7 +27,6 @@ export async function POST(request: Request) {
   const fid = await getFid(request);
   if (fid === null) return NextResponse.json({ error: 'Sign in with Farcaster to make an image' }, { status: 401 });
   if (!IMAGES.enabled) return no('Making images is switched off for now', 503);
-  if (!IMAGES.invited.includes(fid)) return no('The trial is open to invited readers only', 403, { reason: 'invited' });
   const sql = db();
   if (!sql || !process.env.FAL_KEY || !process.env.IMAGES_TICKET_SECRET) return no('Making images is not set up on this deployment', 503);
 
@@ -47,10 +48,14 @@ export async function POST(request: Request) {
   if (style !== null && !(style in STYLES)) return no('No such style', 400);
   if (!(await hasConsented(fid))) return no('Agree to how your words are published first', 403, { reason: 'consent' });
 
+  // Who may generate, before anything is counted or reserved (decision 11). Invited FIDs skip it.
+  const gate = await mayGenerate(sql, fid);
+  if (!gate.ok) return no(gate.error, gate.status, { reason: gate.reason });
+
   // Counted from here, whatever happens next (decision 16: blocked attempts count).
   const r = await reserve(sql, fid);
   if (!r.ok) {
-    const say = { limit: `You've made ${IMAGES.generationsPerDay} today. More tomorrow (00:00 UTC).`, spend: 'Image making has reached today’s spending limit for everyone. It comes back at 00:00 UTC.', 'trial-spend': 'The trial has used its test budget for now.' }[r.refusal];
+    const say = { limit: `You've made ${IMAGES.generationsPerDay} today. More tomorrow (00:00 UTC).`, spend: 'Image making has reached today’s spending limit for everyone. It comes back at 00:00 UTC.' }[r.refusal];
     return no(say, 429, { reason: r.refusal });
   }
   const facts = blockFacts(ch.blocks);
