@@ -148,6 +148,7 @@ html.ml-in-app .ml-learn-bar .ml-exit { display: flex; }
 .ml-tag { font-family: var(--font-label), monospace; font-size: 12px; letter-spacing: 0.04em; padding: 3px 7px; border-radius: 2px; border: 1px solid var(--ink); color: var(--ink); background: transparent; }
 .ml-tag-dashed { border-style: dashed; border-color: var(--muted); }
 .ml-tag-draft { border-color: var(--soft); background: var(--soft); }
+.ml-tag.info-label { min-height: 24px; gap: 5px; cursor: pointer; }
 .ml-body {
   flex: 1; min-height: 0; min-width: 0; overflow-y: auto; overflow-x: hidden; overflow-wrap: anywhere;
   padding: 8px 18px 8px; display: flex; flex-direction: column; gap: 8px;

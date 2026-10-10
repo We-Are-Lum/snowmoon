@@ -10,6 +10,7 @@
  * Kept from the sandbox (src/app/minpentai/sandbox.tsx, out of the menus since 2026-10-09): the engine,
  * the preset and the colours. The words are in learn-text.ts (rulePage, board, rule), checked by P8c/P8d.
  */
+import { MinpentaiTags } from '../mp-tags';
 import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { step, stepBack, type Board } from '~/lib/minpentai/engine';
@@ -64,14 +65,11 @@ export function RuleView({ github }: { github: string }) {
   const live = (() => { let n = 0; for (let y = 0; y < FIGURE_H; y++) for (let x = 0; x < FIGURE_W; x++) n += board.cells[y * board.w + x]; return n; })();
   const strip = T.board.stripCells(board.turn, live);
   const R = T.rulePage;
-  const tagClass = (k: string) => (k === 'book' ? 'ml-tag ml-tag-solid' : k === 'draft' ? 'ml-tag ml-tag-draft' : 'ml-tag ml-tag-dashed');
 
   return (
     <article className="mr" aria-labelledby="mr-title">
       <Link href="/minpentai" className="mr-back">{R.back}</Link>
-      <div className="ml-tags">
-        {R.tags.map((k) => <span key={k} className={tagClass(k)}>{T.tags[k]}</span>)}
-      </div>
+      <MinpentaiTags tags={R.tags} />
       <h1 id="mr-title" className="mr-title">{R.title}</h1>
       <p className="mr-text">{R.text}</p>
 

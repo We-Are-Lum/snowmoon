@@ -131,7 +131,10 @@ a:hover { text-decoration: underline; }
   margin: 36px 25%;
 }
 
-.scene-label { color: var(--muted); margin: 4px 0 24px; text-transform: uppercase; }
+/* Scene lines are hidden (owner ruling, 2026-10-09); only the add-image button shows. */
+.scene-label { margin: 4px 0 24px; }
+.scene-label:empty { display: none; }
+.chapter figcaption .info-label { margin-top: 6px; }
 
 span[data-hue] { color: oklch(var(--voice-l) 0.15 var(--hue)); }
 
@@ -452,9 +455,8 @@ a.provenance { color: var(--muted); }
 .chapter .cited-by a { display: inline-block; padding: 4px 0; }
 .chapter .cite-mark { color: var(--accent); font-size: max(var(--text-label), 0.6em); text-decoration: none; vertical-align: 0.25em; padding: 0 2px; }
 
-/* Spoken descriptions (screens, figures, lyric cards): not the author's words. */
-.chapter .described-note { margin: -0.6em 0 1em; }
-.chapter-player .player-description-label { display: block; margin-bottom: 4px; font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
+/* While a spoken description plays: not the author's words. */
+.chapter-player .player-description-label { display: block; margin-bottom: 4px; }
 
 /* Adaptation pages: the piece first, working notes collapsed under it. */
 .adaptations .piece-panel { margin: 0 0 2em; }

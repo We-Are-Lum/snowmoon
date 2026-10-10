@@ -63,6 +63,15 @@ export const LEARN_TEXT = {
     rules: 'RULES INVENTED FOR THIS EDITION',
     draft: 'DRAFT WORDING',
   } satisfies Record<TagKey, string>,
+  /** What each tag means, in the sheet its short label opens (owner ruling, 2026-10-09; model-drafted). */
+  tagDetails: {
+    book: 'What this screen says about the book comes from it; every statement cites its block under SOURCES.',
+    imag: 'The broadcast is imagined: the book describes matches being watched, but never shows the pictures.',
+    lens: 'The clear lenses are invented for this edition.',
+    inv: 'The symbol’s shape is invented: the book never draws one.',
+    rules: 'The rules of this game are invented for this edition. In the book, "every game there\'s always some kind of new rule" (c4-b84).',
+    draft: 'The words on this screen are drafts, written for this edition and waiting for a person to rewrite them.',
+  } satisfies Record<TagKey, string>,
   /** Added by this build (draft): on lesson 1, lesson 7 and the practice match. */
   rulesNote: {
     text: 'The rules of this game are invented for this edition. The book says that "every game there\'s always some kind of new rule" (c4-b84). The rule recovered from the book\'s figure (c4-b5, c4-b7) has its own page.',

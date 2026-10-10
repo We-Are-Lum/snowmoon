@@ -14,6 +14,8 @@ import { ChapterView } from '~/components/chapter-view';
 import { AiLabel, RecipeLink } from '~/components/recipe-sheet';
 import { AI_LABEL } from '~/lib/ai-declared';
 import { AddImageButton } from '~/components/reader-images';
+import { InfoLabel } from '~/components/info-label';
+import { LABELS } from '~/lib/labels';
 import { ReadingRecord } from '~/components/reading-record';
 import { LiveScreen } from '~/components/live-screen';
 import { adaptationsCiting as citing } from '~/lib/adaptations';
@@ -78,9 +80,6 @@ export default async function ChapterPage({ params }: Props) {
   const narration = loadNarration(n);
   const images = loadIllustrations(n);
   const imageAt = new Map(images.map((im) => [im.idx, im]));
-  // Blocks the narration speaks as a description rather than the book's words.
-  const described = new Set((narration?.cues ?? []).filter((c) => c.description).map((c) => c.idx));
-  const DESCRIBED = 'narrated as a model-drafted description, not the author’s words';
   // Figures the site can play: the c4-b5 board runs the rule recovered from it on /minpentai/rule.
   const PLAYABLE: Record<string, string> = { 'c4-b5': '/minpentai/rule' };
   // Voting screens the reader can try (src/templates/live.ts). One "Draft wording" line per
@@ -123,16 +122,25 @@ export default async function ChapterPage({ params }: Props) {
           const minWidth = b.kind === 'figure' ? figureMinWidth(b) : null;
           const style = { '--screen-base': `${screenBasePx(b)}px`, ...(minWidth ? { '--fig-min': `${minWidth}px` } : {}) } as CSSProperties;
           el = (
-            <figure {...common} className={`block ${b.kind}`} style={style}>
+            <figure {...common} className={`block ${b.kind}`} style={style} data-source={source.from}>
               {live ? (
                 <LiveScreen html={html} slider={live} draftLine={b.idx === firstLive} />
               ) : (
                 <div dangerouslySetInnerHTML={{ __html: html }} />
               )}
-              <figcaption className="block-caption">
-                ¶ {f.label} · {source.from === 'template' ? `template ${source.templateId}` : 'as drawn in the book'}
-                {described.has(b.idx) && ` · ${DESCRIBED}`}
-              </figcaption>
+              {/* Owner ruling, 2026-10-09: the book's own drawing gets no marker; a template's gets "Redrawn ⓘ". */}
+              {source.from === 'template' && (
+                <figcaption className="block-caption">
+                  <InfoLabel
+                    word={LABELS.redrawn.word}
+                    kind="redrawn"
+                    declaration={LABELS.redrawn.declaration}
+                    title={LABELS.redrawn.title}
+                    body={LABELS.redrawn.body(source.templateId)}
+                    links={[{ href: `https://vitalik.eth.limo/snowmoon/html/chapter-${n}.html`, label: LABELS.redrawn.original, external: true }]}
+                  />
+                </figcaption>
+              )}
               {PLAYABLE[id] && (
                 <Link className="play-figure" href={PLAYABLE[id]}>
                   Play this figure
@@ -150,14 +158,6 @@ export default async function ChapterPage({ params }: Props) {
                   .join('')
               : '';
           el = <Tag {...common} className={`block ${b.kind}`} dangerouslySetInnerHTML={{ __html: renderMarkdown(b) + marks }} />;
-          if (described.has(b.idx)) {
-            el = (
-              <>
-                {el}
-                <p className="block-caption described-note">¶ {f.label} · {DESCRIBED}</p>
-              </>
-            );
-          }
         }
         const scene = scenes.get(b.idx);
         const image = imageAt.get(b.idx);
@@ -194,11 +194,11 @@ export default async function ChapterPage({ params }: Props) {
                 </figcaption>
               </figure>
             )}
+            {/* Scene lines are hidden (owner, 2026-10-09); only the add-image button stays, where it shows. */}
             {scene && (
-              <p className="scene-label">
-                {scene.label}
+              <div className="scene-label" data-scene={scene.label}>
                 <AddImageButton chapter={n} start={scene.start} end={scene.end} />
-              </p>
+              </div>
             )}
           </Fragment>
         );

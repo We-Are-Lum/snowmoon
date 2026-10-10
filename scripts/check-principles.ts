@@ -575,6 +575,94 @@ add({
   },
 });
 
+// Short labels with ⓘ (owner ruling, 2026-10-09): "a short visible word, with ⓘ for the details. An icon
+// alone doesn't count." Each InfoLabel is a button with its word visible, the ⓘ, the declaration served
+// visually hidden, and it opens a dialog. P2g, P2h and P8f require the word, and plant a missing one.
+type InfoLabelTag = { kind: string; visible: string; hidden: string; dialog: boolean; icon: boolean };
+function infoLabels(html: string): InfoLabelTag[] {
+  const $ = cheerio.load(html);
+  return $('button.info-label').map((_, el) => {
+    const b = $(el);
+    return {
+      kind: b.attr('data-label') ?? '',
+      visible: b.find('.info-word').text().trim(),
+      hidden: b.find('.sr-only').text().trim(),
+      dialog: b.attr('aria-haspopup') === 'dialog',
+      icon: b.find('svg.info-i').length === 1,
+    };
+  }).get();
+}
+function infoLabelProblems(where: string, l: InfoLabelTag, word: string): string[] {
+  const problems: string[] = [];
+  if (l.visible !== word) problems.push(`${where}: the label's visible word is "${l.visible}", not "${word}" (an icon alone doesn't count)`);
+  if (!l.icon) problems.push(`${where}: the "${word}" label has no ⓘ`);
+  if (!l.dialog) problems.push(`${where}: the "${word}" label does not open its details (aria-haspopup="dialog")`);
+  if (l.hidden.replace(/[()\s]/g, '').length < 10) problems.push(`${where}: the "${word}" label serves no declaration`);
+  return problems;
+}
+const blankWord = (html: string, word: string) => html.replace(`<span class="info-word">${word}</span>`, '<span class="info-word"></span>');
+
+add({
+  id: 'P2g',
+  principle: 2,
+  name: 'on every chapter page as served, each screen redrawn from a template says "Redrawn ⓘ"; screens drawn as in the book get no marker',
+  load: async () => {
+    const { LABELS } = await import('../src/lib/labels');
+    return { word: LABELS.redrawn.word as string, pages: await Promise.all(Array.from({ length: 32 }, async (_, i) => ({ n: i + 1, html: await page(`/chapter/${i + 1}`) }))) };
+  },
+  run: ({ word, pages }) => {
+    const problems: string[] = [];
+    let redrawn = 0;
+    for (const { n, html } of pages as { n: number; html: string }[]) {
+      const $ = cheerio.load(html);
+      const figures = $('figure.block[data-source]');
+      if (!figures.length && /<figure class="block (screen|figure)/.test(html)) problems.push(`chapter ${n}: screens carry no data-source, so their markers cannot be checked`);
+      figures.each((_, el) => {
+        const f = $(el);
+        const id = f.attr('id') ?? '?';
+        const labels = infoLabels($.html(f)).filter((l) => l.kind === 'redrawn');
+        if (f.attr('data-source') === 'template') {
+          redrawn++;
+          if (labels.length !== 1) problems.push(`${id}: redrawn from a template, but has ${labels.length} "Redrawn" labels`);
+          for (const l of labels) problems.push(...infoLabelProblems(id, l, word));
+        } else if (labels.length) problems.push(`${id}: drawn as in the book, but marked "Redrawn"`);
+      });
+    }
+    if (!redrawn) problems.push('no screen redrawn from a template found to check');
+    return problems;
+  },
+  plant: (c) => {
+    const p = c.pages.find((x: { html: string }) => x.html.includes(`<span class="info-word">${c.word}</span>`));
+    if (p) p.html = blankWord(p.html, c.word);
+  },
+});
+add({
+  id: 'P2h',
+  principle: 2,
+  name: 'Listen shows "AI description ⓘ" while a model-drafted description plays',
+  load: async () => {
+    const { LABELS } = await import('../src/lib/labels');
+    const L = LABELS.aiDescription;
+    return { word: L.word as string, props: { word: L.word as string, kind: 'ai-description' as const, declaration: L.declaration, title: L.title, body: [...L.body] }, player: code('src/components/chapter-player.tsx') };
+  },
+  run: async ({ word, props, player }) => {
+    const { InfoLabel } = await import('../src/components/info-label');
+    const problems: string[] = [];
+    if (!/\bAI\b/.test(word) || !/description/i.test(word)) problems.push(`src/lib/labels.ts: the word "${word}" does not say "AI description"`);
+    if (!/not the author/i.test(props.declaration)) problems.push('src/lib/labels.ts: the AI description declaration does not say it is not the author\'s words');
+    const labels = infoLabels(renderToStaticMarkup(createElement(InfoLabel, props)));
+    if (labels.length !== 1) problems.push('the AI description label does not render as one label');
+    for (const l of labels) problems.push(...infoLabelProblems('Listen', l, word));
+    // Drawn in the player wherever the current line is a description.
+    const branch = player.match(/current\?\.description \?([\s\S]*?)\{current\.description\}/)?.[1] ?? '';
+    if (!/<InfoLabel\b[\s\S]*?word=\{LABELS\.aiDescription\.word\}[\s\S]*?kind="ai-description"/.test(branch)) problems.push('src/components/chapter-player.tsx: a spoken description plays without the "AI description" label');
+    return problems;
+  },
+  plant: (c) => {
+    c.props.word = '';
+  },
+});
+
 // ---------------------------------------------------------------------------
 // P3. The allowlist records each model's license and whether its weights are
 //     open; every model in use is on it; closed models in use are reported.
@@ -1222,7 +1310,7 @@ add({
     if (note.href !== '/minpentai/rule' || !/c4-b5/.test(note.text) || !/rule recovered from the book.s figure/i.test(note.link)) problems.push('rules note: does not link to /minpentai/rule for the rule recovered from c4-b5');
     for (const id of ['goal', 'rule', 'practice']) if (!screens.find((s: { id: string }) => s.id === id)?.rulesNote) problems.push(`${id}: does not show the rules note`);
     // The page draws every tag and the note, and the note's link opens the rule page.
-    if (!/T\.tags\[k\]/.test(page)) problems.push('learn.tsx does not show the screens\' tags');
+    if (!/<MinpentaiTags tags=\{v\.tags\}/.test(page)) problems.push('learn.tsx does not show the screens\' tags');
     if (!/T\.rulesNote\.text/.test(page) || !/<Link href=\{T\.rulesNote\.href\}[^>]*>\{T\.rulesNote\.link\}<\/Link>/.test(page)) problems.push('learn.tsx does not show the rules note with its link to the rule page');
     // The rule page is the book's rule: labelled FROM THE BOOK, never as invented; cites the figure (c4-b5) and the
     // rule's name (c4-b7); exists; shows its tags; runs engine.ts on the figure's board.
@@ -1230,7 +1318,7 @@ add({
     if (!R.tags.includes('book') || R.tags.includes('rules')) problems.push(`rule page: tagged ${R.tags.join(', ')}; the book's rule must be FROM THE BOOK and not RULES INVENTED`);
     for (const id of ['c4-b5', 'c4-b7']) if (!R.sources.some(([, w]: string[]) => new RegExp(`${id}\\b`).test(w)) || !R.text.includes(id)) problems.push(`rule page: does not cite ${id} in its text and its sources`);
     if (!/<RuleView\b/.test(R.route)) problems.push('rule page: src/app/minpentai/rule/page.tsx is missing or does not render the rule view');
-    if (!/R\.tags\.map[\s\S]*T\.tags\[k\]/.test(R.view)) problems.push('rule page: the view does not show its tags');
+    if (!/<MinpentaiTags tags=\{R\.tags\}/.test(R.view)) problems.push('rule page: the view does not show its tags');
     if (!/from '~\/lib\/minpentai\/engine'/.test(R.view) || !/c4b5Preset/.test(R.view)) problems.push('rule page: the view does not run engine.ts on the c4-b5 board');
     return problems;
   },
@@ -1304,6 +1392,48 @@ add({
   },
   plant: (items) => {
     items[0].ssr = items[0].ssr.replace(/--f:\s*[\d.]+/, '--f:0.6');
+  },
+});
+
+add({
+  id: 'P8f',
+  principle: 8,
+  name: 'Minpentai\'s tags are "Book ⓘ", "Invented ⓘ" and "Draft ⓘ", each a visible word opening its explanation',
+  load: async () => {
+    const { MinpentaiTags } = await import('../src/app/minpentai/mp-tags');
+    const { LABELS } = await import('../src/lib/labels');
+    const screens = [
+      ...LEARN_TEXT.watch.map((s, i) => ({ id: `watch ${i + 1}`, tags: [...s.tags] as string[] })),
+      ...Object.entries(LEARN_TEXT.lessons).map(([id, s]) => ({ id, tags: [...s.tags] as string[] })),
+      { id: 'rule page', tags: [...LEARN_TEXT.rulePage.tags] as string[] },
+    ];
+    return {
+      words: { book: LABELS.minpentai.book.word, invented: LABELS.minpentai.invented.word, draft: LABELS.minpentai.draft.word } as Record<string, string>,
+      screens: screens.map((s) => ({ ...s, html: renderToStaticMarkup(createElement(MinpentaiTags, { tags: s.tags as never })) })),
+    };
+  },
+  run: ({ words, screens }) => {
+    const problems: string[] = [];
+    const INVENTED = ['rules', 'imag', 'lens', 'inv'];
+    if (words.book !== 'Book' || words.invented !== 'Invented' || words.draft !== 'Draft') problems.push(`src/lib/labels.ts: the words are ${JSON.stringify(words)}, not Book, Invented and Draft`);
+    for (const s of screens as { id: string; tags: string[]; html: string }[]) {
+      const want = [
+        ...(s.tags.includes('book') ? ['book'] : []),
+        ...(s.tags.some((t) => INVENTED.includes(t)) ? ['invented'] : []),
+        ...(s.tags.includes('draft') ? ['draft'] : []),
+      ];
+      const labels = infoLabels(s.html);
+      if (JSON.stringify(labels.map((l) => l.kind)) !== JSON.stringify(want)) problems.push(`${s.id}: labels ${labels.map((l) => l.kind).join(', ') || 'none'}, expected ${want.join(', ')}`);
+      for (const l of labels) if (words[l.kind]) problems.push(...infoLabelProblems(s.id, l, words[l.kind]));
+    }
+    return problems;
+  },
+  plant: (c) => {
+    // A missing word for each of the three.
+    for (const k of ['book', 'invented', 'draft']) {
+      const s = c.screens.find((x: { html: string }) => x.html.includes(`<span class="info-word">${c.words[k]}</span>`));
+      if (s) s.html = blankWord(s.html, c.words[k]);
+    }
   },
 });
 

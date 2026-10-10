@@ -1,5 +1,8 @@
 'use client';
 
+import { InfoLabel } from './info-label';
+import { LABELS } from '~/lib/labels';
+import { REPO_URL } from '~/lib/config';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { ReportPronunciation } from './report-pronunciation';
@@ -301,7 +304,17 @@ export function ChapterPlayer({ chapter, chapters, recipeUrl, url, duration, cue
       <div className="listen-text">
         {current?.description ? (
           <p className="listen-current listen-description">
-            <span className="player-description-label">Model-drafted description, not the author&apos;s words</span>
+            {/* Owner ruling, 2026-10-09: while a spoken description plays, "AI description ⓘ". */}
+            <span className="player-description-label">
+              <InfoLabel
+                word={LABELS.aiDescription.word}
+                kind="ai-description"
+                declaration={LABELS.aiDescription.declaration}
+                title={LABELS.aiDescription.title}
+                body={[...LABELS.aiDescription.body]}
+                links={[{ href: `${REPO_URL}/blob/main/docs/prompts/008a-agent-prompts.md`, label: LABELS.aiDescription.prompt, external: true }]}
+              />
+            </span>
             {current.description}
           </p>
         ) : (

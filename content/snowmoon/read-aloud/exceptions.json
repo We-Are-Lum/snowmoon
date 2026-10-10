@@ -1,5 +1,5 @@
 {
- "about": "Recorded exception to principle 2 (owner ruling, Oct 5, 2026). These spoken descriptions of screens, figures and lyric cards were drafted by a model (docs/prompts/008a-agent-prompts.md) and are kept in the house narration, each preceded by a tone and shown with the label 'Model-drafted description, not the author's words'. The list may only shrink: npm run check:principles (P2d) fails if it grows or if a spoken description is neither listed here nor written by a person. An entry is removed when a person rewrites that description in 25 words or fewer and records it in the read-aloud file as written_by { fid, date }.",
+ "about": "Recorded exception to principle 2 (owner ruling, Oct 5, 2026). These spoken descriptions of screens, figures and lyric cards were drafted by a model (docs/prompts/008a-agent-prompts.md) and are kept in the house narration, each preceded by a tone and shown in Listen with the label 'AI description ⓘ' (owner ruling, 2026-10-09). The list may only shrink: npm run check:principles (P2d) fails if it grows or if a spoken description is neither listed here nor written by a person. An entry is removed when a person rewrites that description in 25 words or fewer and records it in the read-aloud file as written_by { fid, date }.",
  "ruling": "2026-10-05",
  "max_entries": 148,
  "entries": [
