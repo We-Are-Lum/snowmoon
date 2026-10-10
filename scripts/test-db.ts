@@ -449,8 +449,101 @@ await equal('seed loaded every block', 'postgres', `select count(*)::int as v fr
 await equal('seed stored data as jsonb', 'postgres',
   `select data->>'setting' as v from studio.text_blocks where chapter = 1 and idx = 18`, 'veridia');
 
+// --- 0006–0008 in order, then 0009: Minpentai Play, private to the server -------
+const BETWEEN = ['supabase/migrations/0006_chat.sql', 'supabase/migrations/0007_chat_costs_without_person.sql', 'supabase/migrations/0008_images.sql'];
+const PLAY = 'supabase/migrations/0009_minpentai_play.sql';
+for (const file of [...BETWEEN, PLAY]) {
+  try {
+    await db.exec(await readFile(path.join(ROOT, file), 'utf8'));
+    passed++;
+  } catch (e) {
+    failures.push(`${file} failed to apply: ${(e as Error).message}`);
+  }
+}
+{
+  // Exactly the privileges the routes use (src/lib/minpentai/play-server/store.ts).
+  const MP: Record<string, string[]> = {
+    mp_progress: ['select', 'insert', 'update'],
+    mp_lobby: ['select', 'insert', 'update', 'delete'],
+    mp_matches: ['select', 'insert', 'update'],
+    mp_challenges: ['select', 'insert', 'update'],
+    mp_invites: ['select', 'insert', 'update'],
+    mp_blocks: ['select', 'insert'],
+  };
+  const ALL = ['select', 'insert', 'update', 'delete', 'truncate', 'references', 'trigger'];
+  await equal('0009 adds six tables, RLS on each', 'postgres',
+    `select array_agg(tablename::text order by tablename) as v from pg_tables where schemaname = 'studio' and tablename like 'mp\\_%' and rowsecurity`,
+    Object.keys(MP).sort());
+  await equal('RLS on every studio table after 0009', 'postgres',
+    `select count(*)::int as v from pg_tables where schemaname = 'studio' and not rowsecurity`, 0);
+  await equal('0009 policies are for studio_writer only', 'postgres',
+    `select count(*)::int as v from pg_policies where schemaname = 'studio' and tablename like 'mp\\_%' and roles <> '{studio_writer}'`, 0);
+  for (const [t, want] of Object.entries(MP)) {
+    for (const role of ['anon', 'authenticated', 'service_role']) {
+      await equal(`${role} has no privilege on ${t}`, 'postgres',
+        `select count(*)::int as v from unnest(array[${ALL.map((p) => `'${p}'`).join(',')}]) p where has_table_privilege('${role}', 'studio.${t}', p)`, 0);
+    }
+    await equal(`studio_writer may exactly ${want.join(', ')} on ${t}`, 'postgres',
+      `select array_agg(p order by p) as v from unnest(array[${ALL.map((p) => `'${p}'`).join(',')}]) p where has_table_privilege('studio_writer', 'studio.${t}', p)`,
+      [...want].sort());
+  }
+  const M1 = '00000000-0000-0000-0000-00000000c001';
+  await ok('writer records ladder progress and updates it', W, `
+    insert into studio.mp_progress (fid) values (7);
+    update studio.mp_progress set opened = 2, rec = '{"1": {"tries": 1, "won": 40}}', updated_at = now() where fid = 7;`);
+  await denied('progress opens at most rung 5', W, `update studio.mp_progress set opened = 6 where fid = 7`, /mp_progress_opened_check/);
+  await ok('writer goes ready, stays ready, and stops', W, `
+    insert into studio.mp_lobby (fid, username, ready_until) values (7, 'naaate', now() + interval '3 minutes');
+    insert into studio.mp_lobby (fid, username, ready_until) values (7, 'naaate', now() + interval '3 minutes')
+      on conflict (fid) do update set ready_until = excluded.ready_until;
+    insert into studio.mp_lobby (fid, username, ready_until) values (8, 'wren', now() + interval '3 minutes');
+    delete from studio.mp_lobby where fid = 7;`);
+  await denied('a lobby name is a username, not free text', W,
+    `insert into studio.mp_lobby (fid, username, ready_until) values (9, 'hello there!', now())`, /mp_lobby_username_check/);
+  await ok('writer creates a match, locks it and updates it', W, `
+    begin;
+    select pg_advisory_xact_lock(hashtext('snowmoon.minpentai.play'), 7);
+    insert into studio.mp_matches (id, fid_c, fid_a, username_c, username_a, rules_version, rule, seed, state)
+      values ('${M1}', 7, 8, 'naaate', 'wren', 'x', 'diag', 42, '{}');
+    select id from studio.mp_matches where id = '${M1}' for update;
+    update studio.mp_matches set version = version + 1, status = 'over', ended_at = now(), result = '{"win": "C"}' where id = '${M1}';
+    commit;`);
+  await denied('a match is between two people', W, `
+    insert into studio.mp_matches (fid_c, fid_a, username_c, username_a, rules_version, rule, seed, state) values (7, 7, 'a', 'a', 'x', 'diag', 1, '{}')`, /mp_matches_check/);
+  await denied('a live match has no end time', W, `update studio.mp_matches set status = 'live' where id = '${M1}'`, /mp_matches_check/);
+  await denied('only the four rules', W, `update studio.mp_matches set rule = 'anything' where id = '${M1}'`, /mp_matches_rule_check/);
+  await ok('writer sends a challenge and closes it', W, `
+    insert into studio.mp_challenges (from_fid, from_username, to_fid, to_username, expires_at) values (7, 'naaate', 8, 'wren', now() + interval '20 seconds');
+    update studio.mp_challenges set status = 'accepted', match_id = '${M1}' where from_fid = 7;`);
+  await ok('a second challenge once the first is closed', W, `
+    insert into studio.mp_challenges (from_fid, from_username, to_fid, to_username, expires_at) values (7, 'naaate', 9, 'kit', now() + interval '20 seconds')`);
+  await denied('one open challenge per challenger', W, `
+    insert into studio.mp_challenges (from_fid, from_username, to_fid, to_username, expires_at) values (7, 'naaate', 8, 'wren', now() + interval '20 seconds')`, /mp_challenges_one_open/);
+  await ok('writer makes an invite and marks it used', W, `
+    insert into studio.mp_invites (token, from_fid, from_username, expires_at) values ('AAAAAAAAAAAAAAAAAAAAAA', 7, 'naaate', now() + interval '24 hours');
+    update studio.mp_invites set used_by = 8, used_at = now(), match_id = '${M1}' where token = 'AAAAAAAAAAAAAAAAAAAAAA';`);
+  await denied('no one accepts their own invite', W, `update studio.mp_invites set used_by = 7`, /mp_invites_check/);
+  await ok('writer records a block, twice is once', W, `
+    insert into studio.mp_blocks (fid, blocked_fid) values (7, 9);
+    insert into studio.mp_blocks (fid, blocked_fid) values (7, 9) on conflict do nothing;`);
+  await denied('no blocking yourself', W, `insert into studio.mp_blocks (fid, blocked_fid) values (7, 7)`, /mp_blocks_check/);
+  for (const [t, where] of [['mp_progress', 'fid = 7'], ['mp_matches', `id = '${M1}'`], ['mp_challenges', 'from_fid = 7'], ['mp_invites', 'from_fid = 7'], ['mp_blocks', 'fid = 7']]) {
+    await denied(`writer cannot delete from ${t}`, W, `delete from studio.${t} where ${where}`, PERM);
+    await denied(`writer cannot truncate ${t}`, W, `truncate studio.${t}`, PERM);
+  }
+  await denied('a block is for good (no update)', W, `update studio.mp_blocks set blocked_fid = 8`, PERM);
+  for (const role of ['anon', 'authenticated']) {
+    for (const t of Object.keys(MP)) {
+      await denied(`${role} cannot read ${t}`, role, `select * from studio.${t}`, PERM);
+      await denied(`${role} cannot write ${t}`, role, `insert into studio.${t} default values`, PERM);
+    }
+    await denied(`${role} cannot update a match`, role, `update studio.mp_matches set version = 0`, PERM);
+    await denied(`${role} cannot delete from the lobby`, role, `delete from studio.mp_lobby`, PERM);
+  }
+}
+
 if (failures.length) {
   console.error(`\nDB TESTS FAILED (${failures.length}, ${passed} passed):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`db tests passed: ${passed} checks against ${path.relative(ROOT, MIGRATION)}, then ${[...LATER, PRIVATE, PROMPTS].map((f) => path.basename(f)).join(', ')}`);
+console.log(`db tests passed: ${passed} checks against ${path.relative(ROOT, MIGRATION)}, then ${[...LATER, PRIVATE, PROMPTS, ...BETWEEN, PLAY].map((f) => path.basename(f)).join(', ')}`);
