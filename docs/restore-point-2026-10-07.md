@@ -201,3 +201,9 @@ Every word shows the sentence where it first appears; the review file is reviewe
 Repo hygiene: .venv, narration-out, images-out and art-out are no longer tracked; .gitignore entries without a trailing slash. To undo (back to `85ad0f1`):
 
     vercel rollback dpl_BHDcuK9uunUocUjdfaMcCn93oVa8 --scope nates-projects-d1780cff
+
+## 2026-10-09: smaller menu: Book group, ? for About, ☰, podcast on Listen (branch site-menu)
+
+The menu groups Read, Listen and Glossary under Book; About is a ? beside a ☰ menu button (phone) and a rail link (desktop); the podcast feed is linked from the Listen pane. To undo (back to `d3d0f56`):
+
+    vercel rollback dpl_7D1FoPE54Xh9bPz22pdQMLxhkx2b --scope nates-projects-d1780cff
