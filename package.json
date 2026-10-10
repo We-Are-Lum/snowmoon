@@ -29,7 +29,10 @@
     "publish:podcast-cover": "tsx --env-file-if-exists=.env.local scripts/publish-podcast-cover.ts",
     "test:chat-route": "tsx --conditions=react-server scripts/test-chat-route.ts",
     "build:glossary": "tsx scripts/build-glossary.ts",
-    "test:glossary": "tsx scripts/test-glossary.ts"
+    "test:glossary": "tsx scripts/test-glossary.ts",
+    "test:minpentai-play": "tsx scripts/test-minpentai-play.ts",
+    "test:minpentai-play-server": "tsx --conditions=react-server scripts/test-minpentai-play-server.ts",
+    "check:minpentai-live": "tsx --conditions=react-server scripts/check-minpentai-live.ts"
   },
   "license": "GPL-3.0-only",
   "description": "",
