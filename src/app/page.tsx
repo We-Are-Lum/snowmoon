@@ -15,7 +15,9 @@ import { HomeFeed, type HomeFeedItem } from '~/components/home-feed';
 import { HomeMinpentai } from '~/components/home-minpentai';
 import '../styles/home.css';
 
-export const revalidate = 60;
+// Rendered per request, like /images: "Just made" is the newest images now. (With ISR, revalidate = 60,
+// a stale home's prefetch from other pages never finished in Chrome, so pages linking home never went idle.)
+export const dynamic = 'force-dynamic';
 
 /**
  * Home, from Claude Design's HomeWindow (docs/design/home/HomeWindow.dc.html; the site's own top bar,

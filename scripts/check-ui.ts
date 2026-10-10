@@ -659,10 +659,9 @@ async function checkAiLabels() {
       await at('/images');
       await checkPictureLabels(page, `/images ${tag}`, FIXTURE_IMAGES.length);
 
-      // Home's "Just made": whatever it shows is labelled. (The page is prerendered and revalidated every
-      // 60 s, so it shows the build's data, not this fixture's; checkHome checks its labels or empty state.)
+      // Home's "Just made": the fixture's images, newest first, each labelled.
       await at('/');
-      await checkPictureLabels(page, `/ ${tag}`, 0);
+      await checkPictureLabels(page, `/ ${tag}`, FIXTURE_IMAGES.length);
 
       await at(`/image/${FIXTURE_IMAGES[0].version}`);
       await checkPictureLabels(page, `/image ${tag}`, 1);
