@@ -612,6 +612,15 @@ a.provenance { color: var(--muted); }
 /* The assistant's way in from a chapter (board 1b). */
 .ask-chapter { display: inline-block; margin-top: var(--space-6); padding: 6px 0; font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; }
 
+/* A chapter's summary, collapsed until opened (src/components/chapter-summary.tsx). */
+.chapter-summary { margin-top: var(--space-6); border-top: 1px solid var(--rule); border-bottom: 1px solid var(--rule); }
+.chapter-summary > summary { min-height: 44px; display: flex; align-items: center; cursor: pointer; font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; }
+.chapter-summary-warn { color: var(--muted); margin-left: 0.4em; }
+.chapter-summary-para p { margin: 0 0 6px; }
+.chapter-summary-para { margin-bottom: var(--space-4, 16px); }
+.chapter-summary-sources, .chapter-summary-made { color: var(--muted); font-size: var(--text-label); }
+.chapter-summary-made { padding-bottom: 8px; }
+
 /* Report a mispronunciation (src/components/report-pronunciation.tsx). */
 .report-link { display: inline-block; padding: 8px 0; font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; }
 

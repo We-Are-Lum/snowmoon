@@ -203,7 +203,7 @@
       "name": "Claude (Anthropic), as Claude Code and its helper agents",
       "license": "proprietary; used under Anthropic's terms",
       "open_weights": false,
-      "use": "Not used to generate any published image or audio. Drafted inputs: code, read-aloud descriptions of screens and figures, pronunciation word lists, character and location profiles, image prompts, lettering, adaptation scripts, and the script of the spoken summary (content/snowmoon/recipes/summary/; owner, 2026-10-10). Recorded in each affected recipe's `assist`.",
+      "use": "Not used to generate any published image or audio. Drafted inputs: code, read-aloud descriptions of screens and figures, pronunciation word lists, character and location profiles, image prompts, lettering, adaptation scripts, the script of the spoken summary (content/snowmoon/recipes/summary/; owner, 2026-10-10), and the chapter summaries taken from it (content/snowmoon/chapter-summaries.json). Recorded in each affected recipe's `assist`.",
       "prompts": "docs/prompts/"
     }
   ]

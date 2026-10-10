@@ -550,3 +550,7 @@ Go ahead: $2 total, redo pass 2 from the existing notes, with your four rules (e
 3. Pronunciation: leave pronunciation.json alone. Add a summary-only override for "Vitalik" (vi-TAH-lik) to the summary's narration settings and record it in its recipe.
 4. Compress the calls log before anything reaches main.
 ```
+
+```text
+Yeah go with 2. Make summary expandable. Or a popup, so people don't see spoilers if they don't want to
+```
