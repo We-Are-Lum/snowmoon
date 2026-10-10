@@ -26,6 +26,7 @@ import { DEFAULT_TEMPLATES } from '../src/templates';
 import { LiveScreen } from '../src/components/live-screen';
 import { CHAT, IMAGES, REPO_URL } from '../src/lib/config';
 import { NOTICE_REVIEW, currentNoticeItems, noticeKey } from '../src/lib/chat/notice';
+import { LEGAL, PRIVACY, TERMS, legalKey } from '../src/lib/legal';
 import { LEARN_TEXT } from '../src/lib/minpentai/learn-text';
 import { BOOK_TAG, NARRATION_MAX_WORDS, PERSON_TAG, parseBeats } from '../src/lib/script-beats';
 import { GLOSSARY_FILE, loadBlocks, verifyGlossary, type Glossary } from './lib/glossary';
@@ -909,7 +910,7 @@ add({
 // ---------------------------------------------------------------------------
 // P6. No third-party requests; individual ratings not publicly readable.
 // ---------------------------------------------------------------------------
-const PAGES = ['/', '/chapter/1', '/chapter/30', '/about', '/cards', '/adaptations', '/adaptations/dog-dawn', '/share/1/4?img=c1-b005-toy-drone', '/images', '/moderate', '/glossary', '/glossary/zei'];
+const PAGES = ['/', '/chapter/1', '/chapter/30', '/about', '/cards', '/adaptations', '/adaptations/dog-dawn', '/share/1/4?img=c1-b005-toy-drone', '/images', '/moderate', '/glossary', '/glossary/zei', '/terms', '/privacy'];
 add({
   id: 'P6a',
   principle: 6,
@@ -1022,7 +1023,7 @@ add({
 // also refuses everyone outside the invited list until next.config.ts has found both page files at
 // build time (APP_LEGAL_PAGES) and SNOWMOON_ALERT_URL is set (src/lib/images/gate.ts).
 add({
-  id: 'P6g',
+  id: 'P6n',
   principle: 6,
   name: 'image making is open beyond the invited list only with Terms and Privacy pages, the Privacy page naming Neynar',
   load: async () => {
@@ -1124,6 +1125,167 @@ add({
   },
   plant: (c) => {
     c.ownerReread = { words: 'not-these-words', on: '2026-01-01' };
+  },
+});
+
+// P6g–P6j (owner, 2026-10-09): the Privacy page, About, the assistant's notice and the image
+// consent screen name the same outside services. The vocabulary is the services the Privacy page
+// names (src/lib/legal.ts, section 7). "Vercel" is the host, apart from "Vercel AI Gateway";
+// "Farcaster" is its services (sign-in, relay, public API, a report there), not a Farcaster ID,
+// name, username or app. Pages are read as served (--url); the notice and the consent screen
+// from their source, as readers are shown them.
+const SERVICES: [string, RegExp][] = [
+  ['Vercel AI Gateway', /\bVercel AI Gateway\b/g],
+  ['Vercel', /\bVercel\b(?! AI Gateway)/g],
+  ['Cloudflare', /\bCloudflare\b/g],
+  ['Supabase', /\bSupabase\b/g],
+  ['Groq', /\bGroq\b/g],
+  ['fal.ai', /\bfal\.ai\b/g],
+  ['Farcaster', /\bFarcaster\b(?!(?:['’]s)? (?:ID|name|username|app|mini app)\b)/g],
+  ['Neynar', /\bNeynar\b/g],
+  ['GitHub', /\bGitHub\b/g],
+];
+/** At Generate, the image prompt goes to Groq (the check) and fal.ai (the image), the FID to Neynar (the gate). */
+const AT_GENERATE = ['Groq', 'fal.ai', 'Neynar'];
+const named = (text: string) => new Set(SERVICES.filter(([, re]) => text.match(re)).map(([n]) => n));
+const diff = (a: Set<string>, b: Set<string>) => [...a].filter((x) => !b.has(x));
+const pageText = (html: string, sel: string) => {
+  // A space before every tag, so a heading's last word and the next paragraph's first don't run together.
+  const $ = cheerio.load(html.replace(/</g, ' <'));
+  $('script, style, noscript').remove();
+  return $(sel).first().text().replace(/\s+/g, ' ');
+};
+interface Named {
+  /** The Privacy page as served: its paragraphs and list items, one per unit. */
+  privacy: string[];
+  about: string;
+  notice: string;
+  consent: string;
+}
+let namedCache: Named | null = null;
+async function loadNamed(): Promise<Named> {
+  if (!namedCache) {
+    const $ = cheerio.load(await page('/privacy'));
+    const privacy = $('.legal p, .legal li').map((_, el) => $(el).text().replace(/\s+/g, ' ')).get();
+    const c = json('config/consent.json');
+    const w = c.versions[c.current];
+    namedCache = {
+      privacy,
+      about: pageText(await page('/about'), '.shell-main .page, main .page, .page'),
+      notice: currentNoticeItems().flat().join('\n'),
+      consent: [w.line, w.title, ...w.text].join('\n'),
+    };
+  }
+  return clone(namedCache);
+}
+const privacyAll = (c: Named) => named(c.privacy.join('\n'));
+add({
+  id: 'P6g',
+  principle: 6,
+  name: 'the Privacy page names every outside service that About, the assistant\'s notice or the image consent screen names',
+  load: loadNamed,
+  run: (c: Named) => {
+    if (!c.privacy.length) return ['/privacy: no policy text served (.legal p, .legal li)'];
+    const p = privacyAll(c);
+    const problems: string[] = [];
+    for (const [where, text] of [['About', c.about], ['the assistant\'s notice', c.notice], ['the image consent screen', c.consent]] as const)
+      for (const s of diff(named(text), p)) problems.push(`${where} names ${s}; the Privacy page does not`);
+    for (const s of AT_GENERATE) if (!p.has(s)) problems.push(`the Privacy page does not name ${s}, which receives the prompt or the Farcaster ID at Generate`);
+    return problems;
+  },
+  plant: (c: Named) => {
+    c.privacy = c.privacy.map((u) => u.replace(/Neynar/g, 'A scoring service'));
+  },
+});
+add({
+  id: 'P6h',
+  principle: 6,
+  name: 'About names the same outside services as the Privacy page',
+  load: loadNamed,
+  run: (c: Named) => {
+    const p = privacyAll(c), a = named(c.about);
+    if (!c.about.trim()) return ['/about: no page text served'];
+    return [
+      ...diff(p, a).map((s) => `the Privacy page names ${s}; About does not`),
+      ...diff(a, p).map((s) => `About names ${s}; the Privacy page does not`),
+    ];
+  },
+  plant: (c: Named) => {
+    c.about = c.about.replace(/Neynar/g, 'A scoring service');
+  },
+});
+add({
+  id: 'P6i',
+  principle: 6,
+  name: 'the assistant\'s notice names exactly the services the Privacy page says receive assistant questions',
+  load: loadNamed,
+  run: (c: Named) => {
+    // Privacy, section 5 ("Your question is sent to…") and section 7 ("…receive assistant questions").
+    const units = c.privacy.filter((u) => /\bYour question is sent\b|\breceive assistant questions\b/.test(u));
+    if (!units.length) return ['the Privacy page no longer says where assistant questions go'];
+    const want = named(units.join('\n')), got = named(c.notice);
+    return [
+      ...diff(want, got).map((s) => `the Privacy page says ${s} receives assistant questions; the notice does not name it`),
+      ...diff(got, want).map((s) => `the notice names ${s}; the Privacy page does not say it receives assistant questions`),
+    ];
+  },
+  plant: (c: Named) => {
+    c.notice = c.notice.replace(/Vercel AI Gateway/g, 'a gateway');
+  },
+});
+add({
+  id: 'P6j',
+  principle: 6,
+  name: 'the image consent screen (config/consent.json, current) names exactly the services that receive the prompt or the FID at Generate',
+  load: loadNamed,
+  run: (c: Named) => {
+    const got = named(c.consent), want = new Set(AT_GENERATE);
+    return [
+      ...diff(want, got).map((s) => `the consent screen does not name ${s}, which receives the prompt or the Farcaster ID at Generate`),
+      ...diff(got, want).map((s) => `the consent screen names ${s}, which receives nothing at Generate`),
+    ];
+  },
+  plant: (c: Named) => {
+    c.consent = c.consent.replace(/, and your Farcaster ID to Neynar[^.]*/, '');
+  },
+});
+
+// P6k, P6l: the words of /privacy and /terms are words the owner (FID 6786) has reread, the
+// notice's P6f rule. LEGAL.ownerReread is set only on the owner's word, never by an agent.
+for (const [id, which, doc] of [['P6k', 'privacy', PRIVACY], ['P6l', 'terms', TERMS]] as const) {
+  add({
+    id,
+    principle: 6,
+    name: `the ${which === 'privacy' ? 'Privacy' : 'Terms'} page shows words the owner (FID 6786) has reread`,
+    load: async () => ({ words: legalKey(doc), ownerReread: LEGAL.ownerReread[which] }),
+    run: ({ words, ownerReread }) => {
+      if (!ownerReread) return [`the owner has not reread the ${which} page's current words (key ${words}); after the owner says "reread", set LEGAL.ownerReread.${which} to { words: '${words}', on: <date>, by: 'FID 6786' } (src/lib/legal.ts)`];
+      if (ownerReread.words !== words) return [`the ${which} page's words changed since the owner reread them on ${ownerReread.on}; an agent's reread is not enough. After the owner rereads them, set LEGAL.ownerReread.${which}.words to '${words}'`];
+      return [];
+    },
+    plant: (c) => {
+      c.ownerReread = { words: 'not-these-words', on: '2026-01-01', by: 'FID 6786' };
+    },
+  });
+}
+add({
+  id: 'P6m',
+  principle: 6,
+  name: 'the Terms and Privacy pages carry their effective date (LEGAL.effective is set; no placeholder ships)',
+  load: async () => ({ effective: LEGAL.effective, served: [await page('/terms'), await page('/privacy')].map((h) => pageText(h, '.legal')) }),
+  run: ({ effective, served }) => {
+    if (!effective) return ['LEGAL.effective (src/lib/legal.ts) is null: set it to the day the pages go live (YYYY-MM-DD) when the owner merges'];
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(effective)) return [`LEGAL.effective is "${effective}", not YYYY-MM-DD`];
+    const problems: string[] = [];
+    served.forEach((t: string, i: number) => {
+      const p = i ? '/privacy' : '/terms';
+      if (!t.includes(`Effective: ${effective}`)) problems.push(`${p}: does not show "Effective: ${effective}" (deployed before the date was set?)`);
+      if (/\{\{|EFFECTIVE_DATE/.test(t)) problems.push(`${p}: a placeholder is showing`);
+    });
+    return problems;
+  },
+  plant: (c) => {
+    c.effective = null;
   },
 });
 

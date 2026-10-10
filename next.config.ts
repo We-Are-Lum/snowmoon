@@ -17,7 +17,7 @@ function buildCommit(): string {
  * The owner's launch order (2026-10-09): image making for everyone does not go live before the
  * Terms and Privacy pages do. Read here, at build time, from the page files themselves, and
  * inlined into the server code as APP_LEGAL_PAGES (src/lib/images/gate.ts). Being inlined, it
- * can't be set by hand on the host; check:principles P6g fails while either page is missing.
+ * can't be set by hand on the host; check:principles P6n fails while either page is missing.
  */
 function legalPages(): string {
   const has = (p: string) => existsSync(path.join(process.cwd(), 'src/app', p, 'page.tsx'));

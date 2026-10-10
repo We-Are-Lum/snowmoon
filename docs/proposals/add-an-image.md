@@ -634,7 +634,7 @@ Where the build differs from the text above, and why:
      `src/app/terms/page.tsx` and `src/app/privacy/page.tsx` exist and inlines the result as
      `APP_LEGAL_PAGES`; being inlined at build, it can't be switched on by hand on Vercel. A runtime
      `fs.existsSync` would be unreliable (the source files aren't in the deployed function) and a
-     hand-set constant proves nothing. `check:principles` P6g also fails while image making is
+     hand-set constant proves nothing. `check:principles` P6n also fails while image making is
      open beyond the invited list and either page is missing, or the Privacy page doesn't name
      Neynar.
   2. *Report alerts are set:* `SNOWMOON_ALERT_URL` is present at runtime.

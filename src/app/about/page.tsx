@@ -4,6 +4,7 @@ import { SIGN_IN_SERVICES } from '~/lib/sign-in-text';
 import { ThemeSwitch } from '~/components/theme-switch';
 import { loadIntro } from '~/lib/intro';
 import { AboutEdition, ReplayIntro } from '~/components/first-visit';
+import { LegalLine } from '~/components/legal-line';
 import consent from '../../../config/consent.json';
 
 const wording = consent.versions[consent.current as keyof typeof consent.versions];
@@ -79,6 +80,11 @@ export default function About() {
         of the request. The image is shown to you as a draft, kept only on your device; it becomes public only if you publish
         it. The book&apos;s text is never sent to a model.
       </p>
+      {/* Model-drafted wording (the image gate, Neynar score; owner, 2026-10-09). */}
+      <p>
+        Neynar receives your Farcaster ID when you make an image, to look up its account score, which decides whether you can
+        make images. The score is kept for a day.
+      </p>
       <p>Rules: {RULES}</p>
       <p>
         A published image shows who made it, that it is AI-generated and not by the author, and its recipe with the exact prompt.
@@ -99,6 +105,14 @@ export default function About() {
         Reading needs no account. Saving cards, liking, making images and asking the assistant need a Farcaster sign-in. Inside a
         Farcaster app it happens by itself. On this website, {SIGN_IN_SERVICES.charAt(0).toLowerCase() + SIGN_IN_SERVICES.slice(1)}
       </p>
+      <h2 id="services">Where it runs</h2>
+      {/* Model-drafted wording: the outside services the Privacy Policy names that are not named above (check:principles P6h). */}
+      <p>
+        Vercel hosts the site and sees your IP address and browser details, as any web host does. Cloudflare stores and serves
+        the pictures and audio. Supabase holds the database. A report link for the narration opens GitHub or Farcaster, where
+        what you post is public. Every outside service, and what each receives, is in the <a href="/privacy">Privacy Policy</a>;
+        the rules for using this site are in the <a href="/terms">Terms</a>.
+      </p>
       <h2>Theme</h2>
       <ThemeSwitch name="theme-about" />
       <h2>No token</h2>
@@ -108,6 +122,7 @@ export default function About() {
         Nothing in this edition is official. Every design, image, and take can be replaced by a better one.
       </p>
       <AboutEdition intro={intro} />
+      <LegalLine />
     </div>
   );
 }

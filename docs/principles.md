@@ -303,18 +303,40 @@ only, through `studio.rating_totals`, `studio.like_totals` and
 - `P6f`: the notice's words, as readers see them now, are words the owner
   (FID 6786) has reread (`NOTICE_REVIEW.ownerReread`). Any change to the
   words fails until the owner rereads them; it is set only on the owner's word.
-- `P6g`: image making is open beyond the invited list (the gate looks up a
+- `P6g`–`P6j` (owner, 2026-10-09): the Privacy page (`/privacy`), About, the
+  assistant's notice (`currentNoticeItems`) and the image consent screen
+  (`config/consent.json`, current version) name the same outside services. The
+  vocabulary is the services the Privacy page names: Vercel, Vercel AI Gateway,
+  Cloudflare, Supabase, Groq, fal.ai, Farcaster (its services, not a Farcaster
+  ID or name), Neynar, GitHub. The pages are read as served.
+  - `P6g`: the Privacy page names every service that About, the notice or the
+    consent screen names, and the three that receive something at Generate.
+  - `P6h`: About names the same set as the Privacy page, no more and no fewer.
+  - `P6i`: the notice names exactly the services the Privacy page says receive
+    assistant questions (section 5, and section 7's "receive assistant questions").
+  - `P6j`: the consent screen names exactly the services that receive the image
+    prompt or the Farcaster ID at Generate: Groq, fal.ai and Neynar.
+- `P6k`, `P6l`: the Privacy and Terms pages' words are words the owner (FID 6786)
+  has reread (`LEGAL.ownerReread` in `src/lib/legal.ts`), the notice's `P6f`
+  rule: any change to the words fails until the owner rereads them; it is set
+  only on the owner's word. Until then each page shows one "Draft wording"
+  line; after it, "Reread by FID 6786" with the date. No per-sentence tags.
+- `P6m`: the Terms and Privacy pages carry their effective date
+  (`LEGAL.effective`, the day they go live), and no placeholder shows.
+- `P6n`: image making is open beyond the invited list (the gate looks up a
   Neynar score) only when `src/app/terms/page.tsx` and `src/app/privacy/page.tsx`
   both exist, and the Privacy page names Neynar (which receives the FID at
   Generate). The owner's launch order (2026-10-09). At runtime the generate
   route also refuses everyone outside the invited list until `next.config.ts`
   has found both page files at build time (`APP_LEGAL_PAGES`) and
-  `SNOWMOON_ALERT_URL` is set. Fails on branch `site-images-everyone` alone,
-  by design, until the Terms and Privacy pages are merged.
+  `SNOWMOON_ALERT_URL` is set. It failed on branch `site-images-everyone` alone, by design, until
+  the Terms and Privacy pages were merged into it.
 - Review: does a new page, embed or script reach another domain? Does a new
   table expose who did what?
 
-**Status.** Pass, with two open items. 0004 is applied: the live database refuses individual
+**Status.** Pass, with two open items, and the Terms and Privacy pages waiting
+for the owner: `P6k`, `P6l` (the owner's reread) and `P6m` (the effective date,
+set on the day they go live) fail until then, by design. 0004 is applied: the live database refuses individual
 ratings and likes and serves the totals.
 
 - `P6d` fails: `SUPABASE_SECRET_KEY` is still set on the Vercel project.
@@ -426,10 +448,6 @@ quoted as written. Minpentai boards and maps come from the source's own SVGs.
 ---
 
 ## Summary of current failures
-
-- `P6g` (2026-10-09) fails on branch `site-images-everyone` until the Terms and
-  Privacy pages are merged; image making stays closed outside the invited list
-  until then (the generate route checks the same at build time).
 
 None. All automated checks pass on production (Oct 5, 2026).
 

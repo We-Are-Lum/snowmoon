@@ -37,6 +37,9 @@
  *   checkout's production build a second time (.next, so build first) on a free port against an
  *   in-memory database with two published readers' images (scripts/fixtures/reader-images-db.ts);
  *   sign-in, the composer's status and the queue are mocked in the browser.
+ * - The footer line (owner's legal starter, 2026-10-09) reads exactly as written, with Terms, Privacy
+ *   and Source linked, at the foot of About, in the menu sheet and at the bottom of the rail; not on a
+ *   phone's reading screen. /terms and /privacy meet the floors.
  */
 import { execFileSync, spawn } from 'node:child_process';
 import { readFileSync } from 'node:fs';
@@ -202,6 +205,19 @@ async function checkAssistant(page: Page, scheme: string) {
   await page.unroute('**/api/chat/status');
   await page.unroute('**/api/chat/ask');
   await page.evaluate(() => localStorage.clear());
+}
+
+const LEGAL_LINE = 'Snowmoon Party · operated by Lum LLC · independent, not affiliated with the author · book and adaptations GPL v3 · Terms · Privacy · Source';
+/** The footer line inside `within`: the starter's words exactly, shown, with its three links. */
+async function checkLegalLine(page: Page, within: string, where: string, scheme: string) {
+  const line = page.locator(`${within} .legal-line`).first();
+  if (!(await line.count())) return fail(`${where} (${scheme}): no footer line`);
+  const text = (await line.textContent())?.replace(/\s+/g, ' ').trim();
+  if (text !== LEGAL_LINE) fail(`${where} (${scheme}): the footer line reads "${text}"`);
+  if (!(await line.isVisible())) fail(`${where} (${scheme}): the footer line is not shown`);
+  const hrefs = await line.locator('a').evaluateAll((as) => as.map((a) => `${a.textContent}=${a.getAttribute('href')}`));
+  const want = ['Terms=/terms', 'Privacy=/privacy', 'Source=https://github.com/We-Are-Lum/snowmoon'];
+  if (hrefs.join(' ') !== want.join(' ')) fail(`${where} (${scheme}): the footer links are ${hrefs.join(', ')}`);
 }
 
 async function checkFloors(page: Page, path: string, scheme: string) {
@@ -648,6 +664,13 @@ try {
     await open(page, '/about');
     if (!(await page.locator('a[href="https://open.spotify.com/show/0J9O3tKC3BI4buQ8Hry3YN"]').count())) fail(`/about (${scheme}): no link to the podcast on Spotify`);
     await checkFloors(page, '/about', scheme);
+    await checkLegalLine(page, '.shell-main', '/about', scheme);
+    for (const p of ['/terms', '/privacy']) {
+      await open(page, p);
+      await checkFloors(page, p, scheme);
+      await checkLegalLine(page, '.shell-main', p, scheme);
+      if (!(await page.locator('.shell-main a[href="/about"]').count())) fail(`${p} (${scheme}): no link back to About`);
+    }
     await checkAssistant(page, scheme);
     await checkLiveScreens(page, scheme);
     await open(page, '/cards');
@@ -815,7 +838,7 @@ try {
     for (const scheme of ['light', 'dark'] as const) {
       const page = await newPage({ viewport: { width, height: 900 }, colorScheme: scheme, hasTouch: width === 1024 });
       await page.addInitScript('window.__name = (f) => f');
-      for (const path of ['/', '/chapter/1', '/about', '/cards', '/adaptations', '/minpentai', '/minpentai/rule', '/assistant', '/glossary', '/glossary/zei']) {
+      for (const path of ['/', '/chapter/1', '/about', '/cards', '/adaptations', '/minpentai', '/minpentai/rule', '/assistant', '/glossary', '/glossary/zei', '/terms', '/privacy']) {
         await open(page, path);
         await checkFloors(page, `${path} @${width}`, scheme);
         const wide = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
@@ -846,6 +869,7 @@ try {
         if (!(await page.evaluate(() => document.activeElement?.classList.contains('rail-collapse')))) fail('@1024: focus does not return to the rail control');
       } else {
         if (!bodyShown) fail(`@${width}: the rail is not open`);
+        await checkLegalLine(page, '.rail', `/chapter/1 @${width} rail`, scheme);
         const current = await page.locator('.rail-chapters a[aria-current="page"]').textContent();
         if (!current?.includes('Chapter 1')) fail(`@${width}: the rail does not mark the current chapter`);
         // Signed out: the assistant panel is there, with what it does and a sign-in button.
@@ -883,10 +907,12 @@ try {
     const page = await newPage({ viewport: { width: 390, height: 844 }, colorScheme: scheme, hasTouch: true });
     await open(page, '/chapter/1');
     if (await page.locator('.rail').isVisible()) fail('@390: the rail shows on a phone');
+    if (await page.locator('.legal-line:visible').count()) fail('@390: the footer line shows on the reading screen (it belongs at the foot of About and in the menu)');
     await shot(page, 'phone-390-chapter', scheme);
     await page.click('.topbar-icon[aria-label="Menu"]');
     await page.waitForSelector('.menu-sheet');
     await checkFloors(page, '/chapter/1 @390 (menu)', scheme);
+    await checkLegalLine(page, '.menu-sheet', '@390 menu', scheme);
     await shot(page, 'phone-390-menu', scheme);
     await page.keyboard.press('Escape');
     if (await page.locator('.menu-sheet').count()) fail('@390: Escape does not close the menu');
