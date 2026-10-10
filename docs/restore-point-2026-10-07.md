@@ -171,3 +171,9 @@ Sandbox and Play the computer out of the UI (code kept); Free play runs Design's
 The edition's images and narration say 'by Snowmoon Party'; check:ui checks every rendered AI image and the narration control for the label. To undo (back to `43e5306`):
 
     vercel rollback dpl_BhSNG22KDdys4VfrA1Q3m4Zes2M9 --scope nates-projects-d1780cff
+
+## 2026-10-09: check:ui refuses a build of another commit (branch site-checkui-build)
+
+Checks only: check:ui fails when a local server, or the local build it starts for the readers' screens, is from another commit. To undo (back to `fa0e88f`):
+
+    vercel rollback dpl_PdaddFGtgYMxV2NDaN489Pv3nSmt --scope nates-projects-d1780cff
