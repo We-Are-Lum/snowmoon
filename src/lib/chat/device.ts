@@ -74,11 +74,6 @@ export function openedChapters(): Set<number> {
   return s;
 }
 
-/** Whether this device has opened a chapter (the reading record above); reads only. */
-export function hasReadingRecord(): boolean {
-  return get<number>(LAST, 0) > 0 || get<number[]>(OPENED, []).length > 0 || get<number>(READ_TO, 0) > 1;
-}
-
 /** The chapter opened last on this device, for "Read · Ch n"; 1 if none. */
 export function lastChapter(): number {
   const n = get<number>(LAST, 0);
