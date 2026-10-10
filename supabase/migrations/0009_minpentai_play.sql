@@ -26,16 +26,35 @@
 --    (20 seconds to accept). At most one open challenge per challenger.
 -- 5. studio.mp_invites: invite links (one use, 24 hours).
 -- 6. studio.mp_blocks: a player's own blocks, for good (no unblock).
--- Nothing is counted per day, so there is no daily table.
+-- 7. studio.mp_rate: limits per person, one row per FID holding only this
+--    minute's and today's request counts and when they last viewed a match
+--    and the lobby (src/lib/config.ts MINPENTAI_PLAY). No history, no request log.
+-- 8. studio.mp_daily: Play requests per UTC day across everyone, for the
+--    sitewide cap. No FID (like chat_costs).
 --
--- studio_writer's privileges, exactly what the routes use:
---   mp_progress    select, insert, update
---   mp_lobby       select, insert, update, delete   (stop being ready; start a match)
---   mp_matches     select, insert, update           (row locks: select … for update)
---   mp_challenges  select, insert, update           (status changes; never deleted)
---   mp_invites     select, insert, update           (marked used; never deleted)
---   mp_blocks      select, insert                   (a block is for good)
--- Retention (deleting old matches and invites) is not in this migration.
+-- studio_writer's privileges, exactly what the routes and the cleanup use:
+--   mp_progress    select, insert, update           (kept until erasure)
+--   mp_blocks      select, insert                   (kept until erasure; a block is for good)
+--   mp_lobby       select, insert, update, delete
+--   mp_matches     select, insert, update, delete   (row locks: select … for update)
+--   mp_challenges  select, insert, update, delete
+--   mp_invites     select, insert, update, delete
+--   mp_rate        select, insert, update, delete
+--   mp_daily       select, insert, update, delete
+--
+-- Retention. No cron: any Play request runs the cleanup after its answer, at
+-- most once per 10 minutes per server instance, at most 500 rows per table per
+-- run (src/lib/minpentai/play-server/store.ts, cleanup):
+--   mp_invites     deleted once expired (24 h after creation, used or not)
+--   mp_challenges  deleted 1 h after they expired or were answered
+--   mp_lobby       deleted 1 h after the ready time ended
+--   mp_matches     a match nobody has polled for 24 h is ended as abandoned
+--                  (no result); every match is deleted 30 days after it
+--                  ended, with its state, replay and both usernames
+--   mp_rate        deleted once its day is before today (UTC)
+--   mp_daily       deleted once older than 90 days
+--   mp_progress    kept until the person asks for erasure (docs/removal.md)
+--   mp_blocks      kept until the person asks for erasure (docs/removal.md)
 
 begin;
 
@@ -96,7 +115,8 @@ create table studio.mp_matches (
   rule text not null check (rule in ('diag', 'cost3', 'sight2', 'every8')),
   -- Draws the match's new rule; never sent to a browser.
   seed bigint not null,
-  status text not null default 'live' check (status in ('live', 'over', 'cancelled')),
+  -- 'abandoned': nobody polled it for 24 hours; ended with no result.
+  status text not null default 'live' check (status in ('live', 'over', 'cancelled', 'abandoned')),
   -- Bumped on every change; the poll's ?v=.
   version int not null default 1,
   state jsonb not null,
@@ -105,7 +125,7 @@ create table studio.mp_matches (
   last_seen_a timestamptz not null default now(),
   -- Once over: {win, kind, step, by, counts}.
   result jsonb,
-  rematch_of uuid references studio.mp_matches(id),
+  rematch_of uuid references studio.mp_matches(id) on delete set null,
   created_at timestamptz not null default now(),
   ended_at timestamptz,
   check (fid_c <> fid_a),
@@ -113,14 +133,16 @@ create table studio.mp_matches (
 );
 create index mp_matches_c on studio.mp_matches (fid_c, status);
 create index mp_matches_a on studio.mp_matches (fid_a, status);
+create index mp_matches_ended on studio.mp_matches (ended_at) where ended_at is not null;
 
 alter table studio.mp_matches enable row level security;
 create policy writer_read on studio.mp_matches for select to studio_writer using (true);
 create policy writer_insert on studio.mp_matches for insert to studio_writer with check (true);
 create policy writer_update on studio.mp_matches for update to studio_writer using (true) with check (true);
 revoke all on studio.mp_matches from anon, authenticated;
-revoke delete, truncate on studio.mp_matches from studio_writer;
-grant select, insert, update on studio.mp_matches to studio_writer;
+create policy writer_delete on studio.mp_matches for delete to studio_writer using (true);
+revoke truncate on studio.mp_matches from studio_writer;
+grant select, insert, update, delete on studio.mp_matches to studio_writer;
 
 -- ---------------------------------------------------------------------------
 -- 4. Challenges between ready players.
@@ -135,8 +157,11 @@ create table studio.mp_challenges (
   created_at timestamptz not null default now(),
   expires_at timestamptz not null,
   status text not null default 'open' check (status in ('open', 'accepted', 'declined', 'cancelled')),
-  match_id uuid references studio.mp_matches(id),
-  check (from_fid <> to_fid)
+  -- When it was answered or withdrawn (null while open).
+  closed_at timestamptz,
+  match_id uuid references studio.mp_matches(id) on delete set null,
+  check (from_fid <> to_fid),
+  check ((status = 'open') = (closed_at is null))
 );
 -- One open challenge per challenger (expired ones are closed before a new one).
 create unique index mp_challenges_one_open on studio.mp_challenges (from_fid) where status = 'open';
@@ -147,8 +172,9 @@ create policy writer_read on studio.mp_challenges for select to studio_writer us
 create policy writer_insert on studio.mp_challenges for insert to studio_writer with check (true);
 create policy writer_update on studio.mp_challenges for update to studio_writer using (true) with check (true);
 revoke all on studio.mp_challenges from anon, authenticated;
-revoke delete, truncate on studio.mp_challenges from studio_writer;
-grant select, insert, update on studio.mp_challenges to studio_writer;
+create policy writer_delete on studio.mp_challenges for delete to studio_writer using (true);
+revoke truncate on studio.mp_challenges from studio_writer;
+grant select, insert, update, delete on studio.mp_challenges to studio_writer;
 
 -- ---------------------------------------------------------------------------
 -- 5. Invite links: one use, 24 hours.
@@ -163,18 +189,20 @@ create table studio.mp_invites (
   expires_at timestamptz not null,
   used_by bigint,
   used_at timestamptz,
-  match_id uuid references studio.mp_matches(id),
+  match_id uuid references studio.mp_matches(id) on delete set null,
   check (used_by is null or used_by <> from_fid)
 );
 create index mp_invites_from on studio.mp_invites (from_fid, expires_at);
+create index mp_invites_expires on studio.mp_invites (expires_at);
 
 alter table studio.mp_invites enable row level security;
 create policy writer_read on studio.mp_invites for select to studio_writer using (true);
 create policy writer_insert on studio.mp_invites for insert to studio_writer with check (true);
 create policy writer_update on studio.mp_invites for update to studio_writer using (true) with check (true);
 revoke all on studio.mp_invites from anon, authenticated;
-revoke delete, truncate on studio.mp_invites from studio_writer;
-grant select, insert, update on studio.mp_invites to studio_writer;
+create policy writer_delete on studio.mp_invites for delete to studio_writer using (true);
+revoke truncate on studio.mp_invites from studio_writer;
+grant select, insert, update, delete on studio.mp_invites to studio_writer;
 
 -- ---------------------------------------------------------------------------
 -- 6. Blocks, for good.
@@ -195,6 +223,48 @@ create policy writer_insert on studio.mp_blocks for insert to studio_writer with
 revoke all on studio.mp_blocks from anon, authenticated;
 revoke update, delete, truncate on studio.mp_blocks from studio_writer;
 grant select, insert on studio.mp_blocks to studio_writer;
+
+-- ---------------------------------------------------------------------------
+-- 7. Limits per person: this minute's and today's counts only.
+-- ---------------------------------------------------------------------------
+
+create table studio.mp_rate (
+  fid bigint primary key,
+  minute timestamptz not null,
+  minute_count int not null default 0 check (minute_count >= 0),
+  day date not null,
+  day_count int not null default 0 check (day_count >= 0),
+  last_match_at timestamptz,
+  last_lobby_at timestamptz
+);
+create index mp_rate_day on studio.mp_rate (day);
+
+alter table studio.mp_rate enable row level security;
+create policy writer_read on studio.mp_rate for select to studio_writer using (true);
+create policy writer_insert on studio.mp_rate for insert to studio_writer with check (true);
+create policy writer_update on studio.mp_rate for update to studio_writer using (true) with check (true);
+create policy writer_delete on studio.mp_rate for delete to studio_writer using (true);
+revoke all on studio.mp_rate from anon, authenticated;
+revoke truncate on studio.mp_rate from studio_writer;
+grant select, insert, update, delete on studio.mp_rate to studio_writer;
+
+-- ---------------------------------------------------------------------------
+-- 8. Requests per day across everyone. No FID.
+-- ---------------------------------------------------------------------------
+
+create table studio.mp_daily (
+  day date primary key,
+  requests int not null default 0 check (requests >= 0)
+);
+
+alter table studio.mp_daily enable row level security;
+create policy writer_read on studio.mp_daily for select to studio_writer using (true);
+create policy writer_insert on studio.mp_daily for insert to studio_writer with check (true);
+create policy writer_update on studio.mp_daily for update to studio_writer using (true) with check (true);
+create policy writer_delete on studio.mp_daily for delete to studio_writer using (true);
+revoke all on studio.mp_daily from anon, authenticated;
+revoke truncate on studio.mp_daily from studio_writer;
+grant select, insert, update, delete on studio.mp_daily to studio_writer;
 
 commit;
 

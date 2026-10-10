@@ -155,6 +155,29 @@ export const IMAGES = {
   cacheSeconds: 300,
 } as const;
 
+/** Minpentai Play's limits and retention (owner, 2026-10-09). Every /api/minpentai/* request counts. */
+export const MINPENTAI_PLAY = {
+  /** Per person (FID): requests per minute and per UTC day; over either is 429 with retryAfterMs. */
+  perMinute: 60,
+  perDay: 3000,
+  /** The server answers a person's match view at most this often, and their lobby view (ms). */
+  matchViewEveryMs: 1000,
+  lobbyViewEveryMs: 2000,
+  /** Across everyone, per UTC day; over is 503 (practice and free play run in the browser). */
+  sitewidePerDay: 200_000,
+  /** Cleanup: at most once per this many ms per server instance, at most this many rows per table. */
+  cleanupEveryMs: 10 * 60_000,
+  cleanupBatch: 500,
+  /** Challenges and lobby rows are deleted this long after they ended (ms). */
+  challengeKeepMs: 3600_000,
+  lobbyKeepMs: 3600_000,
+  /** A match nobody has polled for this long ends as abandoned, with no result (ms). */
+  abandonAfterMs: 24 * 3600_000,
+  /** Matches are deleted this many days after they ended; daily totals after this many days. */
+  matchKeepDays: 30,
+  dailyKeepDays: 90,
+} as const;
+
 export function appUrl(): string {
   return process.env.NEXT_PUBLIC_URL?.replace(/\/$/, '') || 'http://localhost:3000';
 }

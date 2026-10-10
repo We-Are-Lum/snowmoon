@@ -1,11 +1,12 @@
 import 'server-only';
 import { randomBytes, randomInt, randomUUID } from 'node:crypto';
 import type postgres from 'postgres';
+import { MINPENTAI_PLAY as L } from '../../config';
 import type { Side } from '../play-game/game';
 import type { LadderProgress, LobbyView, MatchView, Person } from '../play-game/live-types';
 import { readProgress, recordResult } from './ladder';
 import {
-  RULES_VERSION, Refused, advance, askRematch, createMatch, leave, playTurn, resign, touch, type LiveMatch,
+  RULES_VERSION, Refused, abandon, advance, askRematch, createMatch, leave, playTurn, resign, touch, type LiveMatch,
 } from './match';
 import { viewFor } from './view';
 
@@ -58,12 +59,12 @@ async function blockedEither(q: Tx | Sql, a: number, b: number): Promise<boolean
   return !!r;
 }
 
-export async function block(sql: Sql, fid: number, other: unknown): Promise<{ ok: true }> {
+export async function block(sql: Sql, fid: number, other: unknown, now = Date.now()): Promise<{ ok: true }> {
   if (!isFid(other)) throw new Refused(400, 'Bad FID');
   if (other === fid) throw new Refused(400, "You can't block yourself.");
   await sql.begin(async (tx) => {
     await tx`insert into studio.mp_blocks (fid, blocked_fid) values (${fid}, ${other}) on conflict do nothing`;
-    await tx`update studio.mp_challenges set status = 'cancelled' where status = 'open'
+    await tx`update studio.mp_challenges set status = 'cancelled', closed_at = ${at(now)} where status = 'open'
       and ((from_fid = ${fid} and to_fid = ${other}) or (from_fid = ${other} and to_fid = ${fid}))`;
   });
   return { ok: true };
@@ -110,7 +111,7 @@ export async function goReady(sql: Sql, fid: number, username: string, now: numb
 export async function stopReady(sql: Sql, fid: number, now: number): Promise<LobbyView> {
   return sql.begin(async (tx) => {
     await tx`delete from studio.mp_lobby where fid = ${fid}`;
-    await tx`update studio.mp_challenges set status = 'cancelled' where status = 'open' and (from_fid = ${fid} or to_fid = ${fid})`;
+    await tx`update studio.mp_challenges set status = 'cancelled', closed_at = ${at(now)} where status = 'open' and (from_fid = ${fid} or to_fid = ${fid})`;
     return lobbyView(tx, fid, now);
   });
 }
@@ -128,7 +129,7 @@ export async function challenge(sql: Sql, fid: number, toFid: unknown, now: numb
     const [them] = await tx`select username from studio.mp_lobby where fid = ${toFid} and ready_until > ${t}`;
     // A block reads exactly like someone who is no longer ready.
     if (!them || (await blockedEither(tx, fid, toFid))) throw new Refused(409, 'They are no longer ready.');
-    await tx`update studio.mp_challenges set status = 'cancelled' where from_fid = ${fid} and status = 'open' and expires_at <= ${t}`;
+    await tx`update studio.mp_challenges set status = 'cancelled', closed_at = ${t} where from_fid = ${fid} and status = 'open' and expires_at <= ${t}`;
     const [open] = await tx`select 1 from studio.mp_challenges where from_fid = ${fid} and status = 'open'`;
     if (open) throw new Refused(409, 'You already have a challenge waiting for an answer.');
     const id = randomUUID();
@@ -153,16 +154,16 @@ export async function acceptChallenge(sql: Sql, fid: number, id: unknown, now: n
     if (await liveMatchOf(tx, from, now)) throw new Refused(409, 'They are in another match now.');
     // The challenger plays Cyan; the one who accepts plays Amber.
     const matchId = await insertMatch(tx, { fid: from, username: String(c.from_username) }, { fid, username: String(c.to_username) }, now, null);
-    await tx`update studio.mp_challenges set status = 'accepted', match_id = ${matchId} where id = ${id}`;
-    await clearLobby(tx, [fid, from]);
+    await tx`update studio.mp_challenges set status = 'accepted', closed_at = ${at(now)}, match_id = ${matchId} where id = ${id}`;
+    await clearLobby(tx, [fid, from], now);
     return { matchId };
   });
 }
 
 /** Decline a challenge to me, or take back my own. */
-export async function declineChallenge(sql: Sql, fid: number, id: unknown): Promise<{ ok: true }> {
+export async function declineChallenge(sql: Sql, fid: number, id: unknown, now = Date.now()): Promise<{ ok: true }> {
   if (!isUuid(id)) throw new Refused(404, 'No such challenge');
-  const r = await sql`update studio.mp_challenges set status = case when to_fid = ${fid} then 'declined' else 'cancelled' end
+  const r = await sql`update studio.mp_challenges set status = case when to_fid = ${fid} then 'declined' else 'cancelled' end, closed_at = ${at(now)}
     where id = ${id} and status = 'open' and (to_fid = ${fid} or from_fid = ${fid}) returning id`;
   if (!r.length) {
     const [c] = await sql`select 1 from studio.mp_challenges where id = ${id} and (to_fid = ${fid} or from_fid = ${fid})`;
@@ -209,7 +210,7 @@ export async function acceptInvite(sql: Sql, fid: number, username: string, toke
     if (await liveMatchOf(tx, from, now)) throw new Refused(409, 'They are in another match now. Try the link again later.');
     const matchId = await insertMatch(tx, { fid: from, username: String(i.from_username) }, { fid, username }, now, null);
     await tx`update studio.mp_invites set used_by = ${fid}, used_at = ${at(now)}, match_id = ${matchId} where token = ${token}`;
-    await clearLobby(tx, [fid, from]);
+    await clearLobby(tx, [fid, from], now);
     return { matchId };
   });
 }
@@ -222,9 +223,9 @@ async function lockFids(tx: Tx, fids: number[]) {
   }
 }
 
-async function clearLobby(tx: Tx, fids: number[]) {
+async function clearLobby(tx: Tx, fids: number[], now: number) {
   await tx`delete from studio.mp_lobby where fid in ${tx(fids)}`;
-  await tx`update studio.mp_challenges set status = 'cancelled' where status = 'open' and (from_fid in ${tx(fids)} or to_fid in ${tx(fids)})`;
+  await tx`update studio.mp_challenges set status = 'cancelled', closed_at = ${at(now)} where status = 'open' and (from_fid in ${tx(fids)} or to_fid in ${tx(fids)})`;
 }
 
 type Row = Record<string, unknown>;
@@ -247,7 +248,7 @@ async function save(tx: Tx, l: Loaded, changed: boolean) {
     }
     return;
   }
-  const status = !m.over ? 'live' : m.over.kind === 'cancelled' ? 'cancelled' : 'over';
+  const status = !m.over ? 'live' : m.over.abandoned ? 'abandoned' : m.over.kind === 'cancelled' ? 'cancelled' : 'over';
   const [r] = await tx`update studio.mp_matches set
       state = ${tx.json(stored(m) as never)}, version = version + 1, status = ${status},
       act_deadline = ${m.over ? null : at(m.deadline)}, last_seen_c = ${seenC}, last_seen_a = ${seenA},
@@ -319,7 +320,7 @@ export async function onMatch(sql: Sql, fid: number, id: unknown, now: number, a
           if (await blockedEither(tx, c.fid, a.fid)) throw new Refused(409, 'No rematch after this match.');
           if ((await liveMatchOf(tx, c.fid, now)) || (await liveMatchOf(tx, a.fid, now))) throw new Refused(409, 'One of you is in another match now.');
           l.m.rm!.matchId = await insertMatch(tx, c, a, now, String(row.id));
-          await clearLobby(tx, [c.fid, a.fid]);
+          await clearLobby(tx, [c.fid, a.fid], now);
           changed = true;
         }
       }
@@ -335,4 +336,86 @@ export async function onMatch(sql: Sql, fid: number, id: unknown, now: number, a
   });
   if (out instanceof Refused) throw out;
   return out;
+}
+
+// --- Limits (MINPENTAI_PLAY) -------------------------------------------------------
+
+export type RequestKind = 'match-view' | 'lobby-view' | 'other';
+const MINUTE = 60_000, DAY = 86_400_000;
+const utcDay = (t: number) => new Date(t).toISOString().slice(0, 10);
+const dayOf = (d: unknown) => (d instanceof Date ? d.toISOString().slice(0, 10) : String(d).slice(0, 10));
+
+/**
+ * Count this request and refuse it if it is over a limit: per person, 60 a minute and 3,000 a
+ * UTC day (429), a match view at most once a second and a lobby view once every 2 s (429), and
+ * 200,000 a day across everyone (503). Every request that reaches here counts toward the person's
+ * own limits; only requests within them count toward the sitewide total. One transaction: the
+ * person's own row (locked), then one upsert of today's sitewide row, always in that order.
+ */
+export async function limitRequest(sql: Sql, fid: number, kind: RequestKind, now: number): Promise<void> {
+  const minute = Math.floor(now / MINUTE) * MINUTE, day = utcDay(now);
+  const refusal = await sql.begin(async (tx): Promise<Refused | null> => {
+    await tx`insert into studio.mp_rate (fid, minute, day) values (${fid}, ${at(minute)}, ${day}) on conflict (fid) do nothing`;
+    const [r] = await tx`select * from studio.mp_rate where fid = ${fid} for update`;
+    const mc = (ms(r.minute) === minute ? Number(r.minute_count) : 0) + 1;
+    const dc = (dayOf(r.day) === day ? Number(r.day_count) : 0) + 1;
+    const lastMatch = r.last_match_at ? ms(r.last_match_at) : null, lastLobby = r.last_lobby_at ? ms(r.last_lobby_at) : null;
+    const too = (retryAfterMs: number) => new Refused(429, 'Too many requests. Try again in a moment.', { retryAfterMs: Math.max(1, retryAfterMs) });
+    let no: Refused | null = null;
+    if (mc > L.perMinute) no = too(minute + MINUTE - now);
+    else if (dc > L.perDay) no = too(Math.floor(now / DAY) * DAY + DAY - now);
+    else if (kind === 'match-view' && lastMatch !== null && now - lastMatch < L.matchViewEveryMs) no = too(lastMatch + L.matchViewEveryMs - now);
+    else if (kind === 'lobby-view' && lastLobby !== null && now - lastLobby < L.lobbyViewEveryMs) no = too(lastLobby + L.lobbyViewEveryMs - now);
+    const seenMatch = !no && kind === 'match-view' ? at(now) : r.last_match_at, seenLobby = !no && kind === 'lobby-view' ? at(now) : r.last_lobby_at;
+    await tx`update studio.mp_rate set minute = ${at(minute)}, minute_count = ${mc}, day = ${day}, day_count = ${dc},
+      last_match_at = ${seenMatch}, last_lobby_at = ${seenLobby} where fid = ${fid}`;
+    if (no) return no;
+    const [d] = await tx`insert into studio.mp_daily (day, requests) values (${day}, 1)
+      on conflict (day) do update set requests = studio.mp_daily.requests + 1 returning requests`;
+    if (Number(d.requests) > L.sitewidePerDay) return new Refused(503, "Play has reached today's limit. Practice and free play still work.");
+    return null;
+  });
+  if (refusal) throw refusal;
+}
+
+// --- Cleanup (retention; 0009's header) --------------------------------------------------
+
+let lastCleanup = -Infinity;
+/** At most once per cleanupEveryMs per server instance. */
+export function cleanupDue(now: number): boolean {
+  if (now - lastCleanup < L.cleanupEveryMs) return false;
+  lastCleanup = now;
+  return true;
+}
+
+/**
+ * Delete what 0009 keeps no longer, at most cleanupBatch rows per table per run; end matches
+ * nobody has polled for a day as abandoned. mp_progress and mp_blocks are never touched here
+ * (kept until the person asks for erasure, docs/removal.md). Returns the rows touched per table.
+ */
+export async function cleanup(sql: Sql, now: number): Promise<Record<string, number>> {
+  const B = L.cleanupBatch, t = at(now), today = utcDay(now);
+  const n: Record<string, number> = {};
+  n.invites = (await sql`delete from studio.mp_invites where token in
+    (select token from studio.mp_invites where expires_at < ${t} limit ${B})`).count;
+  n.challenges = (await sql`delete from studio.mp_challenges where id in
+    (select id from studio.mp_challenges where least(expires_at, closed_at) < ${at(now - L.challengeKeepMs)} limit ${B})`).count;
+  n.lobby = (await sql`delete from studio.mp_lobby where fid in
+    (select fid from studio.mp_lobby where ready_until < ${at(now - L.lobbyKeepMs)} limit ${B})`).count;
+  n.abandoned = await sql.begin(async (tx) => {
+    const rows = await tx`select * from studio.mp_matches where status = 'live'
+      and greatest(last_seen_c, last_seen_a) < ${at(now - L.abandonAfterMs)} order by created_at limit ${B} for update skip locked`;
+    for (const row of rows) {
+      const l = load(row);
+      abandon(l.m, now);
+      await save(tx, l, true);
+    }
+    return rows.length;
+  });
+  n.matches = (await sql`delete from studio.mp_matches where id in
+    (select id from studio.mp_matches where ended_at < ${at(now - L.matchKeepDays * DAY)} limit ${B})`).count;
+  n.rate = (await sql`delete from studio.mp_rate where fid in (select fid from studio.mp_rate where day < ${today} limit ${B})`).count;
+  n.daily = (await sql`delete from studio.mp_daily where day in
+    (select day from studio.mp_daily where day < ${utcDay(now - L.dailyKeepDays * DAY)} limit ${B})`).count;
+  return n;
 }
