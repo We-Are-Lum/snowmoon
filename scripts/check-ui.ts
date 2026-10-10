@@ -742,8 +742,10 @@ try {
       if ((await card.getAttribute('data-card')) !== cards[i]) fail(`intro: card ${i + 1} is ${await card.getAttribute('data-card')}, not ${cards[i]}`);
       if (!(await page.locator('.intro-skip').isVisible())) fail(`intro: card ${i + 1} has no Skip`);
       // A card showing an AI image carries the AI label, which opens the recipe sheet (owner, 2026-10-10).
-      if ((await card.locator('img').count()) > 0) {
-        const label = card.locator('.ai-label[data-ai="image"]');
+      // The slide showing (the others sit off screen in the track, inert).
+      const slide = card.locator(`.intro-slide[data-slide="${cards[i]}"]`);
+      if ((await slide.locator('img').count()) > 0) {
+        const label = slide.locator('.ai-label[data-ai="image"]');
         if (!(await label.count()) || !(await label.first().isVisible())) fail(`intro: card ${i + 1} (${cards[i]}) shows an AI image without the AI label`);
         else {
           if (!/\bAI\b/.test((await label.first().innerText()) ?? '')) fail(`intro: card ${i + 1}: the label does not say "AI"`);
