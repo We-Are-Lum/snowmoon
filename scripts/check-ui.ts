@@ -747,6 +747,8 @@ try {
         if (!(await label.count()) || !(await label.first().isVisible())) fail(`intro: card ${i + 1} (${cards[i]}) shows an AI image without the AI label`);
         else {
           if (!/\bAI\b/.test((await label.first().innerText()) ?? '')) fail(`intro: card ${i + 1}: the label does not say "AI"`);
+          // Once the card has finished sliding in, as a person would tap it.
+          await page.waitForFunction(() => !document.getAnimations().some((a) => a.playState === 'running'), null, { timeout: 5000 }).catch(() => {});
           await label.first().click();
           const sheet = page.locator('.recipe-sheet');
           await sheet.waitFor({ timeout: 5000 }).catch(() => fail(`intro: card ${i + 1}: the AI label does not open the recipe sheet`));
