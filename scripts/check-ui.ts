@@ -737,6 +737,7 @@ try {
     await ctx.addInitScript('window.__name = (f) => f');
     const page = await ctx.newPage();
     await page.goto(BASE + '/', { waitUntil: 'networkidle' });
+    if (INJECT) await page.addStyleTag({ content: INJECT });
     const cards = (JSON.parse(readFileSync('config/intro.json', 'utf8')).cards as { id: string }[]).map((c) => c.id);
     for (let i = 0; i < cards.length; i++) {
       const card = page.locator('.intro-card');
