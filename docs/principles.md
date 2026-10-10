@@ -217,7 +217,8 @@ repo (the prompt log of the request that asked for it).
 
 **Checked by.**
 - `P4a`: every API route that writes (POST, PUT, PATCH, DELETE) calls `getFid`
-  and refuses without it (401). `npm run check:shipped` also confirms on the
+  and refuses without it (401), or hands the request to a shared wrapper that
+  does (listed in the check; today only Minpentai Play's `play()`, read each run). `npm run check:shipped` also confirms on the
   live site that save and like refuse anonymous requests.
 - `P4b`: the published image index and every narration index record
   `published_by` with an FID and the action; for the maintainer path, also
