@@ -659,7 +659,9 @@ async function checkAiLabels() {
       await at('/images');
       await checkPictureLabels(page, `/images ${tag}`, FIXTURE_IMAGES.length);
 
-      // Home's "Just made": the fixture's images, newest first, each labelled.
+      // Home's "Just made": the fixture's images, newest first, each labelled. With the intro seen: its
+      // card images (a seeded image with its recipe written out, not the label button) are not this check's.
+      await page.evaluate((v) => localStorage.setItem('snowmoon.intro-seen', v), JSON.parse(readFileSync('config/intro.json', 'utf8')).version as string);
       await at('/');
       await checkPictureLabels(page, `/ ${tag}`, FIXTURE_IMAGES.length);
 
