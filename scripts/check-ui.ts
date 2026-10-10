@@ -97,6 +97,14 @@ async function checkLearnFullScreen(page: Page, where: string) {
   if (!(await exit.isVisible()) || (await exit.getAttribute('href')) !== '/') fail(`${where}: no visible × back to the site`);
 }
 
+/** The selection's options are all inside the viewport (owner, 2026-10-10: they went off the side on a phone). */
+async function checkSelectionFits(page: Page, where: string) {
+  const out = await page.$$eval('.selection-actions > *', (els) => els.map((e) => { const r = e.getBoundingClientRect(); return { t: (e.textContent ?? '').trim(), l: r.left, r: r.right, w: innerWidth }; }));
+  if (!out.length) fail(`${where}: no selection options shown`);
+  for (const o of out) if (o.l < 0 || o.r > o.w + 0.5) fail(`${where}: "${o.t}" is off the side of the screen (${Math.round(o.l)}–${Math.round(o.r)} of ${o.w}px)`);
+  return out.length;
+}
+
 /** Screens 1a, 1b, 9d, 1d, 2, 3, 9b and 9c, with the chat API replayed from the live run. */
 async function checkAssistant(page: Page, scheme: string) {
   // 1a: select a passage in the reader; "Ask about this" appears beside "Share quote".
@@ -112,6 +120,7 @@ async function checkAssistant(page: Page, scheme: string) {
   const ask = await page.waitForSelector('.selection-actions a');
   if ((await ask.getAttribute('href')) !== '/assistant?block=c1-b19') fail(`/chapter/1: "Ask about this" points to ${await ask.getAttribute('href')}`);
   await checkFloors(page, '/chapter/1 (1a selection)', scheme);
+  await checkSelectionFits(page, `/chapter/1 (${scheme}, selection, signed out)`);
   await shot(page, '1a-selection', scheme);
   await page.evaluate(() => getSelection()!.removeAllRanges());
   // 1b: the chapter's own link.
@@ -854,6 +863,18 @@ try {
         localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `x.${b64({ sub: 6786, exp: 4102444800 })}.y`, fid: 6786, username: 'check', exp: 4102444800 }));
       });
       await open(page, '/chapter/1');
+      // Signed in, all three options: still inside the screen at 390px.
+      await page.evaluate(() => {
+        const p = document.querySelector('#c1-b19')!;
+        p.scrollIntoView({ block: 'center' });
+        const r = document.createRange();
+        r.selectNodeContents(p);
+        getSelection()!.removeAllRanges();
+        getSelection()!.addRange(r);
+      });
+      await page.waitForSelector('.selection-actions button:has-text("Add an image")');
+      if ((await checkSelectionFits(page, `/chapter/1 (${scheme}, selection, signed in)`)) !== 3) fail(`/chapter/1 (${scheme}): signed in, the selection does not offer Share quote, Add an image and Ask about this`);
+      await page.evaluate(() => getSelection()!.removeAllRanges());
       await page.locator('.scene-label .add-image').first().click();
       await page.waitForSelector('.image-composer textarea');
       await checkFloors(page, '/chapter/1 (add an image, invited)', scheme);

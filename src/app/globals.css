@@ -320,15 +320,21 @@ a.provenance { color: var(--muted); }
 
 
 /* Quote cards */
+/* Owner, 2026-10-10: the options went off the side on a phone. They stay inside the screen's margins
+   and wrap to a second row when they don't fit in one. */
 .selection-actions {
   position: fixed;
-  left: 50%;
+  left: max(12px, env(safe-area-inset-left));
+  right: max(12px, env(safe-area-inset-right));
   bottom: calc(150px + env(safe-area-inset-bottom));
-  transform: translateX(-50%);
   z-index: 30;
   display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
   gap: 8px;
+  pointer-events: none;
 }
+.selection-actions > * { pointer-events: auto; }
 .share-selection {
   display: inline-flex;
   align-items: center;
