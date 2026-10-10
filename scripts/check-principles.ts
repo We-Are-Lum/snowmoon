@@ -1115,7 +1115,8 @@ const AT_GENERATE = ['Groq', 'fal.ai', 'Neynar'];
 const named = (text: string) => new Set(SERVICES.filter(([, re]) => text.match(re)).map(([n]) => n));
 const diff = (a: Set<string>, b: Set<string>) => [...a].filter((x) => !b.has(x));
 const pageText = (html: string, sel: string) => {
-  const $ = cheerio.load(html);
+  // A space before every tag, so a heading's last word and the next paragraph's first don't run together.
+  const $ = cheerio.load(html.replace(/</g, ' <'));
   $('script, style, noscript').remove();
   return $(sel).first().text().replace(/\s+/g, ' ');
 };
