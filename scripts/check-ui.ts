@@ -23,10 +23,14 @@
  *   question (9b) and the daily limit (9c). The API is replayed from results recorded
  *   live (scripts/fixtures/chat-live-2026-10-07.json); quotes are checked against the
  *   stored text by test:chat. --shots=DIR also saves a screenshot of each.
- * - Learn Minpentai's screens and Free play are full screen at 390 and in the 424 × 695 Farcaster frame (the frame
+ * - Learn Minpentai's screens are full screen at 390 and in the 424 × 695 Farcaster frame (the frame
  *   fills the viewport, no site top bar, a × back to the site), and Design's centred phone beside the rail at 1024
- *   and up. The old ?mode=free and ?mode=play open Free play; ?s= opens /minpentai/rule, the book's rule, tagged
- *   FROM THE BOOK, citing c4-b5 and c4-b7, with its GitHub write-up.
+ *   and up. ?s= opens /minpentai/rule, the book's rule, tagged FROM THE BOOK, citing c4-b5 and c4-b7, with its
+ *   GitHub write-up.
+ * - Minpentai Play (Design's "Minpentai Play", owner 2026-10-09): ?mode=play opens the hub with Learn, Play and
+ *   Free play; ?mode=free opens free play; a practice match starts, takes a glider and ends its turn; ⤢ makes it
+ *   full screen (the site's top bar hidden, the board upright) at 390 and in the Farcaster frame; every Play screen is
+ *   labelled RULES INVENTED FOR THIS EDITION; /minpentai/rules is Design's rules page. No sideways scroll.
  * - AI labels as rendered (owner, 2026-10-09): on the chapter (seeded images, the readers' strip,
  *   the narration credit), the listen view's player, the feed, an image's page, the composer's draft
  *   and preview, and the moderators' queue, every AI image and the narration control carry the label
@@ -272,6 +276,64 @@ async function checkFloors(page: Page, path: string, scheme: string) {
  * chapters are covered until "Show anyway"; "Back" returns to the reading place, whether it came
  * in the URL or from the menu's Glossary link in the reader.
  */
+/** Minpentai Play at phone width: the hub, free play, a practice match, full screen and the rules page. */
+async function checkPlay(page: Page, scheme: string) {
+  const where = (q: string) => `/minpentai?${q} (${scheme})`;
+  const noSideways = async (w: string) => { if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)) fail(`${w}: the page scrolls sideways at 390px`); };
+  await open(page, '/minpentai?mode=play');
+  await page.waitForSelector('.mp-play .mp-tabs', { timeout: 10000 }).catch(() => fail(`${where('mode=play')}: no Play hub`));
+  await checkFloors(page, '/minpentai?mode=play', scheme);
+  await noSideways(where('mode=play'));
+  const tabs = (await page.locator('.mp-tabs button').allTextContents()).join(' | ');
+  if (tabs !== 'LEARN | PLAY | FREE PLAY') fail(`${where('mode=play')}: tabs are ${tabs}`);
+  for (const t of ['Practice match', 'The computer ladder', 'Play a person']) if (!(await page.locator('.mp-card-title', { hasText: t }).count())) fail(`${where('mode=play')}: no "${t}"`);
+  if (!((await page.locator('.mp-hub').textContent()) ?? '').includes('RULES INVENTED FOR THIS EDITION')) fail(`${where('mode=play')}: not labelled as invented rules`);
+  // Free play.
+  await open(page, '/minpentai?mode=free');
+  await page.waitForSelector('.mp-play [role="grid"]', { timeout: 10000 }).catch(() => fail(`${where('mode=free')}: no board`));
+  await checkFloors(page, '/minpentai?mode=free', scheme);
+  await noSideways(where('mode=free'));
+  if (!((await page.locator('.mp-strip').textContent()) ?? '').startsWith('STEP 0')) fail(`${where('mode=free')}: the strip does not read STEP 0`);
+  if ((await page.locator('.mp-tag', { hasText: "THE BOOK'S CELL RULE" }).getAttribute('href')) !== '/minpentai/rule') fail(`${where('mode=free')}: no link to the book's cell rule`);
+  // A practice match: start, place a glider, end the turn; the turn's run plays.
+  await open(page, '/minpentai?mode=play');
+  await page.locator('.mp-card', { hasText: 'Practice match' }).click();
+  await page.getByRole('button', { name: 'START MATCH' }).click();
+  await checkFloors(page, '/minpentai practice match', scheme);
+  await noSideways(`/minpentai practice match (${scheme})`);
+  await page.locator('[role="gridcell"]').nth(2 * 15 + 3).click();
+  if (!((await page.locator('.mp-pts').textContent()) ?? '').startsWith('4 OF 8')) fail(`/minpentai practice match (${scheme}): placing a glider did not spend 4 points`);
+  const foot = await page.locator('.mp-foot').boundingBox();
+  if (!foot || foot.y + foot.height > (await page.evaluate(() => innerHeight)) + 1) fail(`/minpentai practice match (${scheme}): END TURN is cut off`);
+  await page.getByRole('button', { name: 'END TURN' }).click();
+  await page.waitForTimeout(600);
+  if (!/^STEP [1-9]/.test((await page.locator('.mp-strip').textContent()) ?? '')) fail(`/minpentai practice match (${scheme}): the run does not play`);
+  await checkPlayFullScreen(page, `(${scheme})`, await page.evaluate(() => innerHeight));
+  // The rules page.
+  await open(page, '/minpentai/rules');
+  await checkFloors(page, '/minpentai/rules', scheme);
+  await noSideways(`/minpentai/rules (${scheme})`);
+  const words = (await page.locator('.mp-rules').textContent()) ?? '';
+  if (!words.includes('RULES, DRAFT 1') || !words.includes('c4-b84')) fail(`/minpentai/rules (${scheme}): not Design's rules page`);
+}
+/** ⤢ on a match: the frame covers the site (no top bar), the board upright, END TURN in view. */
+async function checkPlayFullScreen(page: Page, where: string, tall: number) {
+  if (!(await page.locator('.mp-play .mp-boardscr').count())) {
+    await open(page, '/minpentai?mode=play');
+    await page.locator('.mp-card', { hasText: 'Practice match' }).click();
+    await page.getByRole('button', { name: 'START MATCH' }).click();
+  }
+  await page.waitForFunction(() => !!document.querySelector('.mp-fsgo'), null, { timeout: 15000 }).catch(() => {});
+  await page.locator('.mp-fsgo').click().catch(() => fail(`/minpentai Play ${where}: no full screen button`));
+  await page.waitForTimeout(200);
+  if (await page.locator('.topbar').isVisible()) fail(`/minpentai Play full screen ${where}: the site's top bar shows`);
+  const grid = await page.locator('.mp-port [role="grid"]').boundingBox();
+  if (!grid || grid.height <= grid.width) fail(`/minpentai Play full screen ${where}: the board is not upright`);
+  const ctl = await page.locator('.mp-port-ctl').boundingBox();
+  if (!ctl || ctl.y + ctl.height > tall + 1) fail(`/minpentai Play full screen ${where}: the controls are cut off`);
+  await page.getByRole('button', { name: 'Exit full screen' }).click();
+}
+
 async function checkGlossary(page: Page, scheme: string) {
   await open(page, '/glossary');
   await checkFloors(page, '/glossary', scheme);
@@ -686,18 +748,12 @@ try {
     }
 
     // Minpentai: every Learn screen and Free play (and the sandbox's and "Play the computer"'s old links, which open Free play), at phone width.
-    for (const q of [...Array.from({ length: MINPENTAI_LESSONS }, (_, i) => `lesson=${i + 1}`), 'mode=practice', 'mode=play', 'mode=free']) {
+    for (const q of [...Array.from({ length: MINPENTAI_LESSONS }, (_, i) => `lesson=${i + 1}`), 'mode=practice']) {
       await open(page, `/minpentai?${q}`);
       await page.waitForTimeout(150);
       await checkFloors(page, `/minpentai?${q}`, scheme);
       const wide = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1);
       if (wide) fail(`/minpentai?${q} (${scheme}): the page scrolls sideways at 390px`);
-      if (q === 'mode=free' || q === 'mode=play') {
-        // Free play: Design's practice match on its own, with the way to Learn; the old links land on it.
-        if ((await page.locator('.ml-stepof').textContent()) !== 'FREE PLAY') fail(`/minpentai?${q} (${scheme}): does not open Free play`);
-        if ((await page.locator('.ml-learn-skip').textContent()) !== 'LEARN THE GAME') fail(`/minpentai?${q} (${scheme}): Free play has no way to Learn`);
-        if (!page.url().endsWith('?mode=free')) fail(`/minpentai?${q} (${scheme}): the address is ${page.url()}, not ?mode=free`);
-      }
       {
         // Learn and Free play: the game is labelled as invented for this edition (P8d), except Under the hood, which is the book's rule.
         const tags = await page.locator('.ml-tag').allTextContents();
@@ -714,6 +770,7 @@ try {
         if ((await note.count()) && (await note.getAttribute('href')) !== '/minpentai/rule') fail(`/minpentai?${q} (${scheme}): the rules note does not link to /minpentai/rule`);
       }
     }
+    await checkPlay(page, scheme);
     // The rule recovered from the book's figure (c4-b5, c4-b7), on its own page; the sandbox's board links (?s=) land on it.
     await open(page, '/minpentai/rule');
     await checkFloors(page, '/minpentai/rule', scheme);
@@ -873,12 +930,13 @@ try {
     await open(frame, '/chapter/1');
     if (await frame.locator('.rail').isVisible()) fail('@424×695: the rail shows in the Farcaster frame');
     // Learn fills the Farcaster frame: a watch screen, a lesson, Under the hood and the practice match.
-    for (const q of ['lesson=1', 'lesson=13', `lesson=${MINPENTAI_HOOD}`, 'mode=practice', 'mode=free']) {
+    for (const q of ['lesson=1', 'lesson=13', `lesson=${MINPENTAI_HOOD}`, 'mode=practice']) {
       await open(frame, `/minpentai?${q}`);
       await checkLearnFullScreen(frame, `/minpentai?${q} @424×695`);
       const foot = await frame.locator('.ml-foot').boundingBox();
       if (!foot || foot.y + foot.height > 695 + 1) fail(`/minpentai?${q} @424×695: the footer is cut off`);
     }
+    await checkPlayFullScreen(frame, '@424×695', 695);
     await frame.close();
   }
 } finally {

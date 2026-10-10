@@ -190,7 +190,7 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
         </div>
       )}
 
-      {v.sPerson && <PlayPerson onBack={v.goHome} />}
+      {v.sPerson && <PlayPerson onBack={v.goHome} invite={typeof window !== 'undefined' ? new URLSearchParams(window.location.search).get('invite') : null} />}
 
       {v.sBoard && (
         <div className="mp-boardscr">
@@ -263,7 +263,7 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
                         <div className="mp-pieces" role="group" aria-label="What to place">
                           {v.pieces.map((p) => <button key={p.label} className={`mp-btn small${p.on ? ' primary' : ''}`} aria-pressed={p.on} onClick={p.click}>{p.label}</button>)}
                         </div>
-                        <div className="mp-arrows" role="group" aria-label="Glider direction">
+                        <div className={`mp-arrows${v.arrows.length > 4 ? ' eight' : ''}`} role="group" aria-label="Glider direction">
                           {v.arrows.map((a) => <button key={a.t} className={`mp-arrow${a.on ? ' on' : ''}`} aria-pressed={a.on} onClick={a.click}>{a.t}</button>)}
                         </div>
                       </div>
@@ -315,7 +315,7 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
                         <div className="mp-four" role="group" aria-label="Piece">
                           {v.fpPieces!.map((b) => <button key={b.label} className={`mp-btn small${b.on ? ' primary' : ''}`} aria-pressed={b.on} onClick={b.click}>{b.label}</button>)}
                         </div>
-                        <div className="mp-arrows" role="group" aria-label="Glider direction">
+                        <div className={`mp-arrows${v.arrows.length > 4 ? ' eight' : ''}`} role="group" aria-label="Glider direction">
                           {v.arrows.map((a) => <button key={a.t} className={`mp-arrow${a.on ? ' on' : ''}`} aria-pressed={a.on} onClick={a.click}>{a.t}</button>)}
                         </div>
                       </div>

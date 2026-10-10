@@ -71,7 +71,7 @@ export function PlayBoard({ bd, label, fitHeight = false, children }: { bd: Boar
                   className="mp-cell"
                   onClick={() => { setFocus(i); bd.tap(c); }}
                   onKeyDown={(e) => onKey(e, i, c)}
-                  style={{ background: c.bg, border: c.bd === '0' ? 0 : c.bd, boxShadow: scale(c.sh, k), color: c.fg, fontSize: `${Math.round(parseFloat(c.fs) * k)}px` }}
+                  style={{ background: c.bg, border: c.bd === '0' ? 0 : c.bd, boxShadow: scale(c.sh, k), color: c.fg, fontSize: `${Math.max(12, Math.round(parseFloat(c.fs) * k))}px` }}
                 >
                   <span aria-hidden="true">{c.t}</span>
                 </div>
