@@ -461,17 +461,20 @@ for (const file of [...BETWEEN, PLAY]) {
   }
 }
 {
-  // Exactly the privileges the routes use (src/lib/minpentai/play-server/store.ts).
+  // Exactly the privileges the routes and the cleanup use (src/lib/minpentai/play-server/store.ts).
+  // Delete only where the cleanup deletes; progress and blocks are kept until erasure.
   const MP: Record<string, string[]> = {
     mp_progress: ['select', 'insert', 'update'],
     mp_lobby: ['select', 'insert', 'update', 'delete'],
-    mp_matches: ['select', 'insert', 'update'],
-    mp_challenges: ['select', 'insert', 'update'],
-    mp_invites: ['select', 'insert', 'update'],
+    mp_matches: ['select', 'insert', 'update', 'delete'],
+    mp_challenges: ['select', 'insert', 'update', 'delete'],
+    mp_invites: ['select', 'insert', 'update', 'delete'],
     mp_blocks: ['select', 'insert'],
+    mp_rate: ['select', 'insert', 'update', 'delete'],
+    mp_daily: ['select', 'insert', 'update', 'delete'],
   };
   const ALL = ['select', 'insert', 'update', 'delete', 'truncate', 'references', 'trigger'];
-  await equal('0009 adds six tables, RLS on each', 'postgres',
+  await equal('0009 adds eight tables, RLS on each', 'postgres',
     `select array_agg(tablename::text order by tablename) as v from pg_tables where schemaname = 'studio' and tablename like 'mp\\_%' and rowsecurity`,
     Object.keys(MP).sort());
   await equal('RLS on every studio table after 0009', 'postgres',
@@ -514,7 +517,7 @@ for (const file of [...BETWEEN, PLAY]) {
   await denied('only the four rules', W, `update studio.mp_matches set rule = 'anything' where id = '${M1}'`, /mp_matches_rule_check/);
   await ok('writer sends a challenge and closes it', W, `
     insert into studio.mp_challenges (from_fid, from_username, to_fid, to_username, expires_at) values (7, 'naaate', 8, 'wren', now() + interval '20 seconds');
-    update studio.mp_challenges set status = 'accepted', match_id = '${M1}' where from_fid = 7;`);
+    update studio.mp_challenges set status = 'accepted', closed_at = now(), match_id = '${M1}' where from_fid = 7;`);
   await ok('a second challenge once the first is closed', W, `
     insert into studio.mp_challenges (from_fid, from_username, to_fid, to_username, expires_at) values (7, 'naaate', 9, 'kit', now() + interval '20 seconds')`);
   await denied('one open challenge per challenger', W, `
@@ -522,15 +525,39 @@ for (const file of [...BETWEEN, PLAY]) {
   await ok('writer makes an invite and marks it used', W, `
     insert into studio.mp_invites (token, from_fid, from_username, expires_at) values ('AAAAAAAAAAAAAAAAAAAAAA', 7, 'naaate', now() + interval '24 hours');
     update studio.mp_invites set used_by = 8, used_at = now(), match_id = '${M1}' where token = 'AAAAAAAAAAAAAAAAAAAAAA';`);
+  await denied('an answered challenge records when', W, `update studio.mp_challenges set status = 'declined' where to_fid = 9`, /mp_challenges_check1/);
+  await ok('writer counts a person\'s requests (this minute and today only)', W, `
+    insert into studio.mp_rate (fid, minute, day) values (7, date_trunc('minute', now()), current_date) on conflict (fid) do nothing;
+    select fid from studio.mp_rate where fid = 7 for update;
+    update studio.mp_rate set minute_count = minute_count + 1, day_count = day_count + 1, last_match_at = now() where fid = 7;`);
+  await ok('writer counts the day\'s total in one upsert', W, `
+    insert into studio.mp_daily (day, requests) values (current_date, 1) on conflict (day) do update set requests = studio.mp_daily.requests + 1;
+    insert into studio.mp_daily (day, requests) values (current_date, 1) on conflict (day) do update set requests = studio.mp_daily.requests + 1;`);
+  await equal('the day\'s total', W, `select requests as v from studio.mp_daily where day = current_date`, 2);
+  await equal('mp_daily has no person column', 'postgres',
+    `select array_agg(column_name::text order by ordinal_position) as v from information_schema.columns where table_schema = 'studio' and table_name = 'mp_daily'`, ['day', 'requests']);
+  await equal('mp_rate holds only counts and the last views', 'postgres',
+    `select array_agg(column_name::text order by ordinal_position) as v from information_schema.columns where table_schema = 'studio' and table_name = 'mp_rate'`,
+    ['fid', 'minute', 'minute_count', 'day', 'day_count', 'last_match_at', 'last_lobby_at']);
+  await ok('the cleanup deletes what it may (bounded)', W, `
+    delete from studio.mp_lobby where fid in (select fid from studio.mp_lobby where ready_until < now() - interval '1 hour' limit 500);
+    delete from studio.mp_rate where day < current_date - 1;
+    delete from studio.mp_daily where day < current_date - 90;`);
+  await ok('deleting a match leaves its challenges and invites, unlinked', W, `
+    insert into studio.mp_matches (id, fid_c, fid_a, username_c, username_a, rules_version, rule, seed, state, status, ended_at)
+      values ('00000000-0000-0000-0000-00000000c002', 7, 8, 'naaate', 'wren', 'x', 'diag', 1, '{}', 'abandoned', now());
+    update studio.mp_challenges set match_id = '00000000-0000-0000-0000-00000000c002' where status = 'accepted';
+    delete from studio.mp_matches where id = '00000000-0000-0000-0000-00000000c002';`);
+  await equal('…the challenge stays, unlinked', W, `select count(*)::int as v from studio.mp_challenges where status = 'accepted' and match_id is null`, 1);
   await denied('no one accepts their own invite', W, `update studio.mp_invites set used_by = 7`, /mp_invites_check/);
   await ok('writer records a block, twice is once', W, `
     insert into studio.mp_blocks (fid, blocked_fid) values (7, 9);
     insert into studio.mp_blocks (fid, blocked_fid) values (7, 9) on conflict do nothing;`);
   await denied('no blocking yourself', W, `insert into studio.mp_blocks (fid, blocked_fid) values (7, 7)`, /mp_blocks_check/);
-  for (const [t, where] of [['mp_progress', 'fid = 7'], ['mp_matches', `id = '${M1}'`], ['mp_challenges', 'from_fid = 7'], ['mp_invites', 'from_fid = 7'], ['mp_blocks', 'fid = 7']]) {
-    await denied(`writer cannot delete from ${t}`, W, `delete from studio.${t} where ${where}`, PERM);
-    await denied(`writer cannot truncate ${t}`, W, `truncate studio.${t}`, PERM);
+  for (const [t, where] of [['mp_progress', 'fid = 7'], ['mp_blocks', 'fid = 7']]) {
+    await denied(`writer cannot delete from ${t} (kept until erasure)`, W, `delete from studio.${t} where ${where}`, PERM);
   }
+  for (const t of Object.keys(MP)) await denied(`writer cannot truncate ${t}`, W, `truncate studio.${t}`, PERM);
   await denied('a block is for good (no update)', W, `update studio.mp_blocks set blocked_fid = 8`, PERM);
   for (const role of ['anon', 'authenticated']) {
     for (const t of Object.keys(MP)) {

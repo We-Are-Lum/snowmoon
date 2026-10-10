@@ -16,6 +16,10 @@
  *   leaving at setup cancels; a rematch needs both within 20 s.
  * - The ladder: open rungs only, tries, first win, a win opens the next rung, draws don't.
  * - The store: lobby, challenges, invites, blocks, matches, 204 on an unchanged version.
+ * - Limits: 60 a minute and 3,000 a day per person (429 with retryAfterMs), match views once a
+ *   second and lobby views once every 2 s (429), 200,000 a day across everyone (503).
+ * - Cleanup: every retention rule, just inside and just past its threshold, 500 rows a run; ladder
+ *   progress and blocks are never deleted.
  */
 import path from 'node:path';
 import { readdirSync, readFileSync } from 'node:fs';
@@ -488,6 +492,151 @@ function both(m: LiveMatch, from: number, to: number) { for (let t = from; t <= 
     check('store: blocking twice is fine', true);
     await S.stopReady(sql, 7, T2 + 6000);
     check('store: stop being ready', (await S.lobbyView(sql, 7, T2 + 6000)).me.ready === false);
+
+    // --- Limits (MINPENTAI_PLAY) ---------------------------------------------------------
+    const { MINPENTAI_PLAY: LIM } = await import('../src/lib/config');
+    const limitIs = async (label: string, p: Promise<unknown>, status: number, retry?: number) => {
+      try {
+        await p;
+        failures.push(`${label}: expected ${status}`);
+      } catch (e) {
+        const got = e instanceof Refused ? e.extra?.retryAfterMs : undefined;
+        if (e instanceof Refused && e.status === status && (retry === undefined || got === retry)) passed++;
+        else failures.push(`${label}: got ${e instanceof Refused ? `${e.status} ${e.message} retryAfterMs=${got}` : String(e)}`);
+      }
+    };
+    const D0 = Date.UTC(2026, 9, 12, 10, 0, 0);
+    for (let i = 0; i < LIM.perMinute; i++) await S.limitRequest(sql, 100, 'other', D0 + 1000 + i);
+    check(`limits: ${LIM.perMinute} requests in a minute are fine`, true);
+    await limitIs(`limits: request ${LIM.perMinute + 1} in the minute is 429, retry at the next minute`, S.limitRequest(sql, 100, 'other', D0 + 20_000), 429, 40_000);
+    await S.limitRequest(sql, 100, 'other', D0 + 60_000);
+    check('limits: the next minute starts a new count', true);
+    await sql`update studio.mp_rate set day_count = ${LIM.perDay} where fid = 100`;
+    const toMidnight = Date.UTC(2026, 9, 13) - (D0 + 61_000);
+    await limitIs(`limits: request ${LIM.perDay + 1} in the UTC day is 429, retry at midnight`, S.limitRequest(sql, 100, 'other', D0 + 61_000), 429, toMidnight);
+    await S.limitRequest(sql, 100, 'other', Date.UTC(2026, 9, 13, 0, 0, 1));
+    const [r100] = await sql`select day_count, minute_count from studio.mp_rate where fid = 100`;
+    check('limits: a new UTC day starts a new count', r100.day_count === 1 && r100.minute_count === 1, JSON.stringify(r100));
+    // Poll intervals: match view once a second, lobby view once every 2 s; writes are only counted.
+    const P0 = D0 + 3600_000;
+    await S.limitRequest(sql, 101, 'match-view', P0);
+    await limitIs('limits: a second match view within 1,000 ms is 429 with the time until allowed', S.limitRequest(sql, 101, 'match-view', P0 + 999), 429, 1);
+    await limitIs('limits: …at 400 ms, 600 ms to wait', S.limitRequest(sql, 101, 'match-view', P0 + 400), 429, 600);
+    await S.limitRequest(sql, 101, 'other', P0 + 401);
+    check('limits: a write right after a view is not interval-limited', true);
+    await S.limitRequest(sql, 101, 'match-view', P0 + 1000);
+    check('limits: a refused view does not move the interval; at 1,000 ms it is answered', true);
+    await S.limitRequest(sql, 101, 'lobby-view', P0 + 1001);
+    check('limits: lobby and match views have their own intervals', true);
+    await limitIs('limits: a second lobby view within 2,000 ms is 429', S.limitRequest(sql, 101, 'lobby-view', P0 + 2999), 429, 2);
+    await S.limitRequest(sql, 101, 'lobby-view', P0 + 3001);
+    check('limits: at 2,000 ms the lobby is answered', true);
+    for (let i = 0; i < 4; i++) await S.limitRequest(sql, 102, 'match-view', P0 + 1500 * i);
+    check('limits: the page\'s 1,500 ms match poll never hits the interval', true);
+    for (let i = 0; i < 4; i++) await S.limitRequest(sql, 102, 'lobby-view', P0 + 10_000 + 3000 * i);
+    check('limits: the page\'s 3,000 ms lobby poll never hits the interval', true);
+    // Sitewide daily total.
+    const day = '2026-10-12';
+    const [before] = await sql`select requests from studio.mp_daily where day = ${day}`;
+    await limitIs('limits: a person over their own limit is refused before the sitewide count', S.limitRequest(sql, 101, 'match-view', P0 + 1500), 429, 500);
+    const [afterRefusal] = await sql`select requests from studio.mp_daily where day = ${day}`;
+    check('limits: …and does not add to it', afterRefusal.requests === before.requests);
+    await sql`update studio.mp_daily set requests = ${LIM.sitewidePerDay - 1} where day = ${day}`;
+    await S.limitRequest(sql, 103, 'other', P0 + 5000);
+    check(`limits: request ${LIM.sitewidePerDay} of the day across everyone is fine`, true);
+    await limitIs(`limits: request ${LIM.sitewidePerDay + 1} across everyone is 503`, S.limitRequest(sql, 104, 'other', P0 + 6000), 503);
+    try { await S.limitRequest(sql, 105, 'other', P0 + 7000); } catch (e) {
+      check('limits: the sitewide refusal names practice and free play', (e as Error).message === "Play has reached today's limit. Practice and free play still work.");
+    }
+    await S.limitRequest(sql, 104, 'other', Date.UTC(2026, 9, 13, 1));
+    check('limits: the next UTC day is open again', true);
+    {
+      const R = await import('../src/lib/minpentai/play-server/route');
+      const req = (m: string, p: string) => new Request(`https://x.test${p}`, { method: m });
+      check('limits: match and lobby GETs are the views; everything else is counted only',
+        R.kindOf(req('GET', '/api/minpentai/match/abc')) === 'match-view' && R.kindOf(req('GET', '/api/minpentai/lobby')) === 'lobby-view'
+        && R.kindOf(req('POST', '/api/minpentai/match/abc/turn')) === 'other' && R.kindOf(req('GET', '/api/minpentai/ladder')) === 'other'
+        && R.kindOf(req('DELETE', '/api/minpentai/lobby')) === 'other');
+      const res = await R.play(req('GET', '/api/minpentai/lobby'), async () => ({ ok: true }));
+      check('order: no sign-in is 401 before anything else', res.status === 401 && res.headers.get('Cache-Control') === 'private, no-store');
+    }
+
+    // --- Cleanup (retention) ------------------------------------------------------------------
+    const C = Date.UTC(2026, 10, 20, 12);
+    const H1 = LIM.challengeKeepMs, DAYMS = 86_400_000;
+    const iso = (t: number) => new Date(t);
+    await S.cleanup(sql, C - 30 * DAYMS);
+    const stored = (m: ReturnType<typeof createMatch>) => ({ ...m, seen: undefined });
+    const addMatch = async (id: string, seenC: number, seenA: number, status = 'live', endedAt: number | null = null) => {
+      const m = createMatch(11, seenC);
+      await sql`insert into studio.mp_matches ${sql({
+        id, fid_c: 201, fid_a: 202, username_c: 'aa', username_a: 'bb', rules_version: 'x', rule: m.rule, seed: 11, status,
+        state: sql.json(stored(m) as never), last_seen_c: iso(seenC), last_seen_a: iso(seenA), ended_at: endedAt === null ? null : iso(endedAt), created_at: iso(seenC),
+      })}`;
+    };
+    const U = (n: number) => `00000000-0000-0000-0000-0000000d${String(n).padStart(4, '0')}`;
+    await addMatch(U(1), C - LIM.abandonAfterMs - 1, C - LIM.abandonAfterMs - 1);
+    await addMatch(U(2), C - LIM.abandonAfterMs - 1, C - LIM.abandonAfterMs + 1);
+    await addMatch(U(3), C - 40 * DAYMS, C - 40 * DAYMS, 'over', C - LIM.matchKeepDays * DAYMS - 1);
+    await addMatch(U(4), C - 40 * DAYMS, C - 40 * DAYMS, 'over', C - LIM.matchKeepDays * DAYMS + 1);
+    const tok = (n: number) => `cleanup${String(n).padStart(15, '0')}`;
+    await sql`insert into studio.mp_invites ${sql([
+      { token: tok(1), from_fid: 201, from_username: 'aa', created_at: iso(C - DAYMS - 1), expires_at: iso(C - 1) },
+      { token: tok(2), from_fid: 201, from_username: 'aa', created_at: iso(C - DAYMS + 1), expires_at: iso(C + 1) },
+      { token: tok(3), from_fid: 201, from_username: 'aa', created_at: iso(C - DAYMS - 1), expires_at: iso(C - 1), used_by: 202, used_at: iso(C - DAYMS), match_id: U(3) },
+    ])}`;
+    await sql`insert into studio.mp_challenges ${sql([
+      { id: U(11), from_fid: 201, from_username: 'aa', to_fid: 202, to_username: 'bb', created_at: iso(C - H1 - 30_000), expires_at: iso(C - H1 - 1), status: 'open', closed_at: null },
+      { id: U(12), from_fid: 203, from_username: 'cc', to_fid: 202, to_username: 'bb', created_at: iso(C - H1 - 10_000), expires_at: iso(C - H1 + 1), status: 'open', closed_at: null },
+      { id: U(13), from_fid: 204, from_username: 'dd', to_fid: 202, to_username: 'bb', created_at: iso(C - H1 - 10_000), expires_at: iso(C - H1 + 10_000), status: 'declined', closed_at: iso(C - H1 - 1) },
+      { id: U(14), from_fid: 205, from_username: 'ee', to_fid: 202, to_username: 'bb', created_at: iso(C - H1 - 10_000), expires_at: iso(C - H1 + 10_000), status: 'accepted', closed_at: iso(C - H1 + 1), match_id: U(3) },
+    ] as never)}`;
+    await sql`insert into studio.mp_lobby ${sql([
+      { fid: 211, username: 'old', ready_at: iso(C - 2 * H1), ready_until: iso(C - LIM.lobbyKeepMs - 1) },
+      { fid: 212, username: 'recent', ready_at: iso(C - 2 * H1), ready_until: iso(C - LIM.lobbyKeepMs + 1) },
+    ])}`;
+    await sql`insert into studio.mp_rate ${sql([
+      { fid: 221, minute: iso(C - DAYMS), day: '2026-11-19', minute_count: 1, day_count: 1 },
+      { fid: 222, minute: iso(C), day: '2026-11-20', minute_count: 1, day_count: 1 },
+    ])}`;
+    await sql`insert into studio.mp_daily ${sql([{ day: '2026-08-22', requests: 5 }, { day: '2026-08-21', requests: 5 }])}`;
+    await sql`insert into studio.mp_progress (fid, updated_at) values (231, ${iso(C - 400 * DAYMS)})`;
+    await sql`insert into studio.mp_blocks (fid, blocked_fid, at) values (231, 232, ${iso(C - 400 * DAYMS)})`;
+    const progressBefore = (await sql`select count(*)::int as n from studio.mp_progress`)[0].n;
+    const blocksBefore = (await sql`select count(*)::int as n from studio.mp_blocks`)[0].n;
+    check('cleanup: due on the first request, then not for 10 minutes, then due', S.cleanupDue(C) && !S.cleanupDue(C + LIM.cleanupEveryMs - 1) && S.cleanupDue(C + LIM.cleanupEveryMs));
+    await S.cleanup(sql, C);
+    const has = async (q: PromiseLike<readonly unknown[]>) => (await q).length > 0;
+    check('cleanup: an invite past its expiry is deleted', !(await has(sql`select 1 from studio.mp_invites where token = ${tok(1)}`)));
+    check('cleanup: …used or not', !(await has(sql`select 1 from studio.mp_invites where token = ${tok(3)}`)));
+    check('cleanup: an invite just inside 24 h is kept', await has(sql`select 1 from studio.mp_invites where token = ${tok(2)}`));
+    check('cleanup: a challenge expired just over 1 h ago is deleted', !(await has(sql`select 1 from studio.mp_challenges where id = ${U(11)}`)));
+    check('cleanup: one expired just under 1 h ago is kept', await has(sql`select 1 from studio.mp_challenges where id = ${U(12)}`));
+    check('cleanup: a challenge answered just over 1 h ago is deleted', !(await has(sql`select 1 from studio.mp_challenges where id = ${U(13)}`)));
+    check('cleanup: one answered just under 1 h ago is kept', await has(sql`select 1 from studio.mp_challenges where id = ${U(14)}`));
+    check('cleanup: a lobby row whose ready time ended just over 1 h ago is deleted', !(await has(sql`select 1 from studio.mp_lobby where fid = 211`)));
+    check('cleanup: one just under 1 h ago is kept', await has(sql`select 1 from studio.mp_lobby where fid = 212`));
+    const [ab] = await sql`select status, result, ended_at, version from studio.mp_matches where id = ${U(1)}`;
+    check('cleanup: a match nobody polled for just over 24 h ends as abandoned, no result', ab.status === 'abandoned' && ab.result.kind === 'cancelled' && ab.result.win === 'D' && ab.result.abandoned === true && ab.version === 2, JSON.stringify(ab));
+    const [live] = await sql`select status from studio.mp_matches where id = ${U(2)}`;
+    check('cleanup: one polled just under 24 h ago stays live', live.status === 'live');
+    const va2 = (await S.onMatch(sql, 201, U(1), C + 1000, null)) as MatchView;
+    check('cleanup: the abandoned match reads as ended with no result', va2.phase === 'over' && va2.result?.kind === 'cancelled' && va2.result.why === 'Nobody came back to this match for a day, so it ended with no result.' && va2.result.rematch.msLeft === 0);
+    check('cleanup: a match ended just over 30 days ago is deleted, state, replay and names with it', !(await has(sql`select 1 from studio.mp_matches where id = ${U(3)}`)));
+    check('cleanup: one ended just under 30 days ago is kept', await has(sql`select 1 from studio.mp_matches where id = ${U(4)}`));
+    const [unlinked] = await sql`select match_id from studio.mp_challenges where id = ${U(14)}`;
+    check('cleanup: a kept challenge loses its link to a deleted match', unlinked.match_id === null);
+    check('cleanup: yesterday\'s rate row is deleted, today\'s kept', !(await has(sql`select 1 from studio.mp_rate where fid = 221`)) && (await has(sql`select 1 from studio.mp_rate where fid = 222`)));
+    check('cleanup: a daily total 91 days old is deleted, 90 days old kept', !(await has(sql`select 1 from studio.mp_daily where day = '2026-08-21'`)) && (await has(sql`select 1 from studio.mp_daily where day = '2026-08-22'`)));
+    check('cleanup: ladder progress and blocks are never deleted',
+      (await sql`select count(*)::int as n from studio.mp_progress`)[0].n === progressBefore && (await sql`select count(*)::int as n from studio.mp_blocks`)[0].n === blocksBefore);
+    // At most 500 rows per table per run.
+    await sql`insert into studio.mp_invites ${sql(Array.from({ length: LIM.cleanupBatch + 1 }, (_, i) => ({ token: `bulk${String(i).padStart(18, '0')}`, from_fid: 241, from_username: 'ff', created_at: iso(C - 2 * DAYMS), expires_at: iso(C - DAYMS) })))}`;
+    const n1 = await S.cleanup(sql, C + 1);
+    const left = (await sql`select count(*)::int as n from studio.mp_invites where token like 'bulk%'`)[0].n;
+    check(`cleanup: at most ${LIM.cleanupBatch} rows per table per run`, n1.invites === LIM.cleanupBatch && left === 1, `${n1.invites}, ${left} left`);
+    await S.cleanup(sql, C + 2);
+    check('cleanup: the rest go on the next run', (await sql`select count(*)::int as n from studio.mp_invites where token like 'bulk%'`)[0].n === 0);
   } catch (e) {
     failures.push(`store: ${(e as Error).stack ?? e}`);
   } finally {

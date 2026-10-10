@@ -37,6 +37,8 @@ export interface Over {
   /** True tower counts at the end. */
   counts: Record<Side, number>;
   at: number;
+  /** Nobody polled the match for 24 hours (the cleanup ended it): no result, kind 'cancelled'. */
+  abandoned?: boolean;
 }
 
 export interface LiveMatch {
@@ -208,7 +210,14 @@ export function touch(m: LiveMatch, side: Side, now: number): boolean {
 }
 
 export class Refused extends Error {
-  constructor(public status: number, message: string) { super(message); }
+  constructor(public status: number, message: string, public extra?: Record<string, unknown>) { super(message); }
+}
+
+/** Nobody polled the match for a day: it ends with no result (kind 'cancelled', abandoned). */
+export function abandon(m: LiveMatch, at: number) {
+  if (m.over) return;
+  finish(m, 'D', 'cancelled', null, at);
+  m.over!.abandoned = true;
 }
 
 export interface PlacementIn { t: Piece; x: number; y: number; dx: number; dy: number }

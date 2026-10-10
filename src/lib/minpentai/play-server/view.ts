@@ -50,7 +50,7 @@ export function why(o: Over, you: Side, opp: string): string {
         ? "You didn't come back within 60 seconds. That counts as resigning."
         : `${them} didn't come back within 60 seconds. That counts as resigning.`;
     case 'cancelled':
-      return 'Match cancelled during setup. No result.';
+      return o.abandoned ? 'Nobody came back to this match for a day, so it ended with no result.' : 'Match cancelled during setup. No result.';
   }
 }
 
