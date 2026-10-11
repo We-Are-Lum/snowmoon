@@ -316,8 +316,9 @@
 .menu-sheet .nav-list a, .menu-sheet .nav-coming { line-height: 22px; }
 
 /* A short visible word with ⓘ, opening the details (owner ruling, 2026-10-09). */
-.info-label { display: inline-flex; align-items: center; gap: 4px; min-height: 24px; padding: 2px 6px; font-family: var(--label); font-size: var(--text-label); letter-spacing: 0.04em; color: var(--muted); background: transparent; border: 1px solid var(--rule); border-radius: 2px; cursor: pointer; }
-.info-label:hover, .info-label:focus-visible { color: var(--ink); border-color: var(--ink); }
+/* Owner ruling 2026-10-10: the ⓘ alone, on a 44px tap area; the word is in its accessible name. */
+.info-label { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding: 0; color: var(--muted); background: transparent; border: 0; border-radius: 50%; cursor: pointer; vertical-align: middle; }
+.info-label:hover, .info-label:focus-visible { color: var(--ink); }
 .info-label .info-i { flex: none; }
 .info-sheet { display: flex; flex-direction: column; gap: 10px; }
 .info-sheet .sheet-x { align-self: flex-end; }

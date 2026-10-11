@@ -497,7 +497,7 @@ async function checkHome(page: Page, scheme: 'light' | 'dark') {
   const t0 = await turn();
   await page.waitForTimeout(1600);
   if ((await turn()) === t0) fail(`/ (${scheme}): the Minpentai board does not step (turn ${t0})`);
-  if (!(await page.locator('.home-game .info-label[data-label="invented"]').isVisible())) fail(`/ (${scheme}): the board has no "Invented ⓘ" label`);
+  if (!(await page.locator('.home-game .info-label[data-label="invented"]').isVisible())) fail(`/ (${scheme}): the board has no ⓘ named "Invented"`);
 
   // A moment: the link lands on its block.
   await page.evaluate(() => scrollTo(0, 0));
@@ -1048,7 +1048,8 @@ try {
       const redrawn = page.locator('figure[data-source="template"] .info-label[data-label="redrawn"]');
       if (!(await redrawn.count())) fail(`/chapter/1 (${scheme}): no "Redrawn" label on a screen redrawn from a template`);
       else {
-        if (!(await redrawn.first().locator('.info-word').isVisible()) || (await redrawn.first().locator('.info-word').innerText()) !== 'Redrawn') fail(`/chapter/1 (${scheme}): the redrawn label's word is not "Redrawn"`);
+        // The ⓘ alone (owner ruling 2026-10-10), named "Redrawn" for screen readers.
+        if (!(await redrawn.first().locator('svg.info-i').isVisible()) || ((await redrawn.first().locator('.info-word').textContent()) ?? '').trim() !== 'Redrawn') fail(`/chapter/1 (${scheme}): the redrawn label is not the ⓘ named "Redrawn"`);
         await redrawn.first().click();
         const sheet = page.locator('.info-sheet');
         if (!/Every word on it is the book/.test((await sheet.textContent().catch(() => '')) ?? '')) fail(`/chapter/1 (${scheme}): "Redrawn" does not open its details`);
@@ -1142,8 +1143,8 @@ try {
       if (wide) fail(`/minpentai?${q} (${scheme}): the page scrolls sideways at 390px`);
       {
         // Learn and Free play: the game is labelled as invented for this edition (P8d), except Under the hood, which is the book's rule.
-        // Short labels (owner ruling, 2026-10-09): "Invented ⓘ", "Draft ⓘ", "Book ⓘ", each opening its explanation.
-        const tags = await page.locator('.ml-tag .info-word').evaluateAll((els) => els.filter((e) => (e as HTMLElement).checkVisibility({ opacityProperty: true, visibilityProperty: true }) && e.getBoundingClientRect().width > 0).map((e) => (e.textContent ?? '').trim()));
+        // Short labels (owner ruling, 2026-10-10): the ⓘ named "Invented", "Draft" or "Book", each opening its explanation.
+        const tags = await page.locator('.ml-tag.info-label').evaluateAll((els) => els.filter((e) => { const i = e.querySelector('svg.info-i') as SVGElement | null; return !!i && i.getBoundingClientRect().width > 0; }).map((e) => (e.querySelector('.info-word')?.textContent ?? '').trim()));
         const labelled = tags.includes('Invented');
         if (q === `lesson=${MINPENTAI_HOOD}` ? labelled : !labelled) fail(`/minpentai?${q} (${scheme}): the "Invented" label is ${labelled ? 'on the book\'s rule' : 'missing'}`);
         if (q === 'lesson=1') {
@@ -1169,7 +1170,7 @@ try {
     await checkFloors(page, '/minpentai/rule', scheme);
     if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)) fail(`/minpentai/rule (${scheme}): the page scrolls sideways at 390px`);
     {
-      const tags = await page.locator('.mr .ml-tag .info-word').evaluateAll((els) => els.filter((e) => (e as HTMLElement).checkVisibility({ opacityProperty: true, visibilityProperty: true }) && e.getBoundingClientRect().width > 0).map((e) => (e.textContent ?? '').trim()));
+      const tags = await page.locator('.mr .ml-tag.info-label').evaluateAll((els) => els.filter((e) => { const i = e.querySelector('svg.info-i') as SVGElement | null; return !!i && i.getBoundingClientRect().width > 0; }).map((e) => (e.querySelector('.info-word')?.textContent ?? '').trim()));
       if (!tags.includes('Book') || tags.includes('Invented')) fail(`/minpentai/rule (${scheme}): tagged ${tags.join(', ')}, not as the book's rule`);
       const words = (await page.locator('.mr').textContent()) ?? '';
       if (!words.includes('c4-b5') || !words.includes('c4-b7')) fail(`/minpentai/rule (${scheme}): does not cite c4-b5 and c4-b7`);

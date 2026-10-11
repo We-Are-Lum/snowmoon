@@ -248,8 +248,8 @@ Anyone signed in with a Neynar user score of at least 0.7 can make images (invit
 
 Rolling back the code leaves 0010's tables in place; they are private and unused without it.
 
-## 2026-10-10: chapter 20's door image left out; no stray "·" before "+ Add an image" (branch site-c20-image)
+## 2026-10-10: chapter 20's door image left out; no stray "·" before "+ Add an image"; the short labels are the ⓘ alone (branch site-c20-image)
 
-c20-b013-door-screen is no longer published (owner: "This image isn't good"; the scene is the wrong way round), listed in published.json's excluded with its reason; its recipe stays. "+ Add an image" no longer starts with a "·" left from the hidden scene line. To undo (back to `05172f6`):
+The short labels (Redrawn, AI description, Book, Invented, Draft) show only the ⓘ, on a 44px tap area, with the word as its accessible name (owner ruling, 2026-10-10: "Icon only for all short labels"). c20-b013-door-screen is no longer published (owner: "This image isn't good"; the scene is the wrong way round), listed in published.json's excluded with its reason; its recipe stays. "+ Add an image" no longer starts with a "·" left from the hidden scene line. To undo (back to `05172f6`):
 
     vercel rollback https://snowmoon-bohf00i8z-nates-projects-d1780cff.vercel.app --scope nates-projects-d1780cff
