@@ -1,0 +1,101 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="974" viewBox="0 0 900 974" font-family="sans-serif" font-size="11">
+<defs><clipPath id="c"><rect x="30" y="34" width="840" height="880"/></clipPath></defs>
+<rect width="900" height="974" fill="#fff"/>
+<text x="30" y="22" font-size="14" font-weight="bold">Pafogai Du: a proposed layout</text>
+<text x="30" y="952" fill="#555">Solid outlines, dots and upright labels: placed from the book. Dashed, pale, italic: placed by us.</text>
+<text x="30" y="966" fill="#555">Red lines: roads, routes and links; blue: water. AI-made proposal, not by the author. Grid: 1 km.</text>
+<g clip-path="url(#c)">
+<line x1="58.5" y1="904.0" x2="58.5" y2="64.0" stroke="#eee"/>
+<line x1="200.8" y1="904.0" x2="200.8" y2="64.0" stroke="#eee"/>
+<line x1="343.2" y1="904.0" x2="343.2" y2="64.0" stroke="#eee"/>
+<line x1="485.6" y1="904.0" x2="485.6" y2="64.0" stroke="#eee"/>
+<line x1="30.0" y1="818.6" x2="542.5" y2="818.6" stroke="#eee"/>
+<line x1="30.0" y1="676.2" x2="542.5" y2="676.2" stroke="#eee"/>
+<line x1="30.0" y1="533.8" x2="542.5" y2="533.8" stroke="#eee"/>
+<line x1="30.0" y1="391.5" x2="542.5" y2="391.5" stroke="#eee"/>
+<line x1="30.0" y1="249.1" x2="542.5" y2="249.1" stroke="#eee"/>
+<line x1="30.0" y1="106.7" x2="542.5" y2="106.7" stroke="#eee"/>
+<polygon points="58.5,533.8 514.1,533.8 514.1,78.2 58.5,78.2" fill="#e3ecd9" fill-opacity="1" stroke="#667"/>
+<polygon points="247.1,726.0 353.9,726.0 353.9,619.3 247.1,619.3" fill="#e9e4d4" fill-opacity="1" stroke="#667"/>
+<polygon points="270.2,703.0 330.8,703.0 330.8,642.3 270.2,642.3" fill="#e9e4d4" fill-opacity="1" stroke="#667"/>
+<polygon points="86.9,875.5 229.3,875.5 229.3,718.9 86.9,718.9" fill="#e9e4d4" fill-opacity="0.55" stroke="#667" stroke-dasharray="5,3"/>
+<polyline points="58.5,533.8 514.1,533.8" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="58.5,505.4 514.1,505.4" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="58.5,476.9 514.1,476.9" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="58.5,448.4 514.1,448.4" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="58.5,419.9 514.1,419.9" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="58.5,391.5 514.1,391.5" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="58.5,363.0 514.1,363.0" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="58.5,334.5 514.1,334.5" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="58.5,306.0 514.1,306.0" fill="none" stroke="#b33" stroke-width="1.3" stroke-dasharray="5,3" opacity="0.6"/>
+<polyline points="58.5,277.6 514.1,277.6" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="58.5,249.1 514.1,249.1" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="58.5,220.6 514.1,220.6" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="58.5,192.1 514.1,192.1" fill="none" stroke="#b33" stroke-width="1.3" stroke-dasharray="5,3" opacity="0.6"/>
+<polyline points="58.5,163.7 514.1,163.7" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="58.5,135.2 514.1,135.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="58.5,106.7 514.1,106.7" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="58.5,78.2 514.1,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="58.5,533.8 58.5,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="72.7,533.8 72.7,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="86.9,533.8 86.9,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="101.2,533.8 101.2,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="115.4,533.8 115.4,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="129.7,533.8 129.7,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="143.9,533.8 143.9,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="158.1,533.8 158.1,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="172.4,533.8 172.4,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="186.6,533.8 186.6,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="200.8,533.8 200.8,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="215.1,533.8 215.1,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="229.3,533.8 229.3,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="243.6,533.8 243.6,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="257.8,533.8 257.8,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="272.0,533.8 272.0,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="286.3,533.8 286.3,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="300.5,533.8 300.5,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="314.7,533.8 314.7,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="329.0,533.8 329.0,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="343.2,533.8 343.2,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="357.5,533.8 357.5,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="371.7,533.8 371.7,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="385.9,533.8 385.9,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="400.2,533.8 400.2,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="414.4,533.8 414.4,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="428.6,533.8 428.6,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="442.9,533.8 442.9,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="457.1,533.8 457.1,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="471.4,533.8 471.4,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="485.6,533.8 485.6,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="499.8,533.8 499.8,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="514.1,533.8 514.1,78.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="341.8,306.0 343.2,306.0 343.2,192.1 320.7,192.1" fill="none" stroke="#b33" stroke-width="1.3" stroke-dasharray="5,3" opacity="0.6"/>
+<polyline points="281.3,476.9 300.5,476.9 300.5,533.8" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="300.5,476.9 300.5,505.4" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="300.5,533.8 300.5,619.3 300.5,642.3" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<circle cx="300.5" cy="533.8" r="3.5" fill="#222" stroke="#222"/>
+<circle cx="300.5" cy="476.9" r="3.5" fill="#222" stroke="#222"/>
+<circle cx="281.3" cy="476.9" r="3.5" fill="#222" stroke="#222"/>
+<circle cx="341.8" cy="306.0" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="343.2" cy="306.0" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="320.7" cy="192.1" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="300.5" cy="672.6" r="3.5" fill="#222" stroke="#222"/>
+<circle cx="300.5" cy="642.3" r="3.5" fill="#222" stroke="#222"/>
+<text x="291.3" y="302.0" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">Pafogai Du</text>
+<text x="305.5" y="668.6" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">mountain pyramid</text>
+<text x="163.1" y="793.2" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">nearby forest</text>
+<text x="519.1" y="529.8" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">Dzai Gun</text>
+<text x="519.1" y="501.4" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">Zin Go</text>
+<text x="519.1" y="472.9" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">Tan Kai</text>
+<text x="519.1" y="302.0" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Hun Min</text>
+<text x="519.1" y="188.1" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Mun Gui</text>
+<text x="63.5" y="74.2" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">0th street</text>
+<text x="305.5" y="74.2" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">17th street</text>
+<text x="348.2" y="92.2" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">20th street</text>
+<text x="305.5" y="615.3" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">path up the pyramid</text>
+<text x="286.3" y="472.9" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">hotel, 1565 Tan Kai</text>
+<text x="325.7" y="188.1" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">the lesson, 1842 Mun Gui</text>
+<text x="305.5" y="686.6" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">summit (500 m)</text>
+<text x="305.5" y="638.3" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">main door (half height)</text>
+</g>
+</svg>

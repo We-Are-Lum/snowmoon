@@ -1,0 +1,2714 @@
+{
+  "map": "world",
+  "title": "The world of Snowmoon: a proposed layout",
+  "label": "AI-made: a proposed layout by an AI model, Claude (the coding agent, a closed model), from the world guide's geography lines; every placement is marked \"book\" or \"placed by us\". Not by the author.",
+  "license": "A map proposal for Snowmoon by Vitalik Buterin, made from the book on 2026-10-11. GPL-3.0, like the book.",
+  "units": "Degrees of latitude and longitude on an Earth-sized globe (our assumption). Places in the \"northshore\" frame are in the pixels of the book's battle map (c29-b34); places in the \"uc\" frame are in km east and north of Redshire. \"book\": the book fixes where it is relative to what is already placed; \"placed by us\": it does not.",
+  "coords": "deg",
+  "views": [
+    {
+      "suffix": "",
+      "title": "The world of Snowmoon: a proposed layout",
+      "bounds": [
+        -32,
+        14,
+        160,
+        82
+      ]
+    },
+    {
+      "suffix": "-northshore",
+      "title": "Northshore and Thaldur, on the book's battle map",
+      "bounds": [
+        9.5,
+        55.8,
+        31.5,
+        62.6
+      ]
+    },
+    {
+      "suffix": "-united-cities",
+      "title": "The United Cities: the book's links, our positions",
+      "bounds": [
+        42,
+        36.5,
+        80,
+        59.5
+      ]
+    }
+  ],
+  "frames": {
+    "northshore": {
+      "kind": "figure",
+      "block": "c29-b34",
+      "origin_px": [
+        196.6,
+        162.6
+      ],
+      "origin": [
+        58.36,
+        19.13
+      ],
+      "km_per_px": 2.6,
+      "provenance": "placed by us",
+      "note": "The book's own battle map, taken as north-up. Its scale is ours: 2.6 km per pixel makes Group North's route about 225 km, the \"hundreds of kilometers\" of cable (c29-b38). Anchored on Northglade."
+    },
+    "uc": {
+      "kind": "km",
+      "origin": [
+        56,
+        70
+      ],
+      "provenance": "placed by us",
+      "note": "Anchored on Redshire. Where the United Cities are relative to Veridia, the book does not say."
+    }
+  },
+  "places": [
+    {
+      "id": "veridia",
+      "name": "Veridia",
+      "shape": "polygon",
+      "points": [
+        [
+          47.5,
+          -4
+        ],
+        [
+          59.45,
+          -4
+        ],
+        [
+          59.4,
+          13.6
+        ],
+        [
+          57.5,
+          15.5
+        ],
+        [
+          56.5,
+          20
+        ],
+        [
+          54,
+          22
+        ],
+        [
+          49,
+          22
+        ],
+        [
+          47.5,
+          12
+        ]
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-364"
+      ],
+      "note": "[region] The outline is ours: the book gives no coastline or border for Veridia except in Northshore."
+    },
+    {
+      "id": "meldan",
+      "name": "Meldan",
+      "shape": "point",
+      "at": [
+        52,
+        8
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-355",
+        "wg-357"
+      ],
+      "note": "The capital. Where Veridia lies on the globe is ours; everything else in Veridia is placed relative to Meldan."
+    },
+    {
+      "id": "rail_eldil",
+      "name": "railway to Eldil",
+      "shape": "polyline",
+      "points": [
+        [
+          52,
+          8
+        ],
+        [
+          55.5,
+          9.5
+        ],
+        [
+          57.3,
+          10.2
+        ]
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-365"
+      ],
+      "note": "Trains run to Eldil (c29-b13); the route is ours.",
+      "hide_label": true
+    },
+    {
+      "id": "eldil",
+      "name": "Eldil",
+      "shape": "point",
+      "at": [
+        5,
+        205
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-365"
+      ],
+      "note": "Where the army arrives by train (c29-b13). Not otherwise located.",
+      "frame": "northshore"
+    },
+    {
+      "id": "elenar_forest",
+      "name": "Elenar Forest",
+      "shape": "polygon",
+      "points": [
+        [
+          15,
+          140
+        ],
+        [
+          118,
+          140
+        ],
+        [
+          128,
+          232
+        ],
+        [
+          15,
+          232
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-365"
+      ],
+      "note": "[land] West of Northshore, where the groups start (c29-b13, c29-b34). Outline ours.",
+      "frame": "northshore"
+    },
+    {
+      "id": "northern_ice",
+      "name": "Hydrafill's northern ice",
+      "shape": "point",
+      "at": [
+        40,
+        133
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-364"
+      ],
+      "note": "Thirty kilometers from the Arctic border, says an advertisement (c11-b124); where along the border is ours.",
+      "frame": "northshore"
+    },
+    {
+      "id": "north_sea",
+      "name": "northern sea and inlet",
+      "shape": "polygon",
+      "points": [
+        [
+          136.8,
+          0.5
+        ],
+        [
+          107.8,
+          32.6
+        ],
+        [
+          104.3,
+          52.4
+        ],
+        [
+          95.1,
+          84.6
+        ],
+        [
+          93.9,
+          95.9
+        ],
+        [
+          76.5,
+          119.5
+        ],
+        [
+          74.2,
+          126.1
+        ],
+        [
+          77.1,
+          128.5
+        ],
+        [
+          81.7,
+          123.8
+        ],
+        [
+          88.1,
+          125.2
+        ],
+        [
+          138,
+          53.4
+        ],
+        [
+          183.8,
+          18.9
+        ],
+        [
+          191.9,
+          15.1
+        ],
+        [
+          219.7,
+          12.3
+        ],
+        [
+          228.4,
+          21.3
+        ],
+        [
+          218.6,
+          38.7
+        ],
+        [
+          196.5,
+          40.6
+        ],
+        [
+          187.8,
+          46.8
+        ],
+        [
+          186.7,
+          51.5
+        ],
+        [
+          191.9,
+          55.7
+        ],
+        [
+          210.4,
+          64.3
+        ],
+        [
+          215.1,
+          64.3
+        ],
+        [
+          222,
+          61.4
+        ],
+        [
+          222.6,
+          66.6
+        ],
+        [
+          219.1,
+          78
+        ],
+        [
+          239.4,
+          93.5
+        ],
+        [
+          240,
+          0.5
+        ],
+        [
+          137.4,
+          0
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-370",
+        "wg-366"
+      ],
+      "note": "[sea] The pale area at the top of the battle map (c29-b34). We read the pale areas as sea: Group Naval's seaborne drones start in one.",
+      "frame": "northshore"
+    },
+    {
+      "id": "south_sea",
+      "name": "southern sea",
+      "shape": "polygon",
+      "points": [
+        [
+          238.8,
+          131.8
+        ],
+        [
+          227.2,
+          139.9
+        ],
+        [
+          220.1,
+          149.3
+        ],
+        [
+          208.6,
+          157.8
+        ],
+        [
+          194.7,
+          165.4
+        ],
+        [
+          134.5,
+          211.2
+        ],
+        [
+          129.9,
+          239.5
+        ],
+        [
+          239.4,
+          240
+        ],
+        [
+          239.4,
+          131.3
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-370",
+        "wg-369"
+      ],
+      "note": "[sea] The pale area at the lower right of the battle map (c29-b34).",
+      "frame": "northshore"
+    },
+    {
+      "id": "northshore",
+      "name": "Northshore",
+      "shape": "polygon",
+      "points": [
+        [
+          88.1,
+          125.2
+        ],
+        [
+          138,
+          53.4
+        ],
+        [
+          183.8,
+          18.9
+        ],
+        [
+          191.9,
+          15.1
+        ],
+        [
+          219.7,
+          12.3
+        ],
+        [
+          228.4,
+          21.3
+        ],
+        [
+          218.6,
+          38.7
+        ],
+        [
+          196.5,
+          40.6
+        ],
+        [
+          187.8,
+          46.8
+        ],
+        [
+          186.7,
+          51.5
+        ],
+        [
+          191.9,
+          55.7
+        ],
+        [
+          210.4,
+          64.3
+        ],
+        [
+          215.1,
+          64.3
+        ],
+        [
+          222,
+          61.4
+        ],
+        [
+          222.6,
+          66.6
+        ],
+        [
+          219.1,
+          78
+        ],
+        [
+          239.4,
+          93.5
+        ],
+        [
+          238.8,
+          131.8
+        ],
+        [
+          227.2,
+          139.9
+        ],
+        [
+          220.1,
+          149.3
+        ],
+        [
+          208.6,
+          157.8
+        ],
+        [
+          194.7,
+          165.4
+        ],
+        [
+          134.5,
+          211.2
+        ],
+        [
+          118,
+          190
+        ],
+        [
+          100,
+          160
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-359",
+        "wg-366",
+        "wg-374"
+      ],
+      "note": "[land] The land between the two seas, east of the inlet: Group North reaching the inlet \"cuts the Arctics off from the whole peninsula\" (c29-b23). Coasts from the battle map; the western boundary, against Elenar Forest, is ours.",
+      "frame": "northshore"
+    },
+    {
+      "id": "peninsula",
+      "name": "the eastern peninsula",
+      "shape": "polygon",
+      "points": [
+        [
+          239.4,
+          93.5
+        ],
+        [
+          300,
+          98
+        ],
+        [
+          340,
+          108
+        ],
+        [
+          300,
+          122
+        ],
+        [
+          238.8,
+          131.8
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-375"
+      ],
+      "note": "[land] Dangling off the eastern end of Northshore, between Northglade and Thaldur (c31-b61). It leaves the battle map at its right edge between the two seas; the part beyond the edge is ours.",
+      "frame": "northshore"
+    },
+    {
+      "id": "northglade",
+      "name": "Northglade",
+      "shape": "point",
+      "at": [
+        196.6,
+        162.6
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-355",
+        "wg-356",
+        "wg-357",
+        "wg-358",
+        "wg-359"
+      ],
+      "note": "On the battle map (c29-b34), at the southern sea. About 1,000 km north-east of Meldan (c17-b100, c23-b86) and over 200 km from the Arctic border (c17-b101).",
+      "frame": "northshore"
+    },
+    {
+      "id": "ng_island",
+      "name": "Northglade's island",
+      "shape": "circle",
+      "center": [
+        198.6,
+        163.8
+      ],
+      "r": 10,
+      "provenance": "book",
+      "lines": [
+        "wg-362"
+      ],
+      "note": "[land] About twenty kilometers wide, too small for simplified maps (c31-b4), which is why the battle map does not draw it. We put it at the coast where the battle map has Northglade.",
+      "frame": "northshore",
+      "hide_label": true
+    },
+    {
+      "id": "ng_summit",
+      "name": "the island's summit",
+      "shape": "point",
+      "at": [
+        195.8,
+        162.9
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-363"
+      ],
+      "note": "Northglade's main city lies to its east (c31-b5).",
+      "frame": "northshore",
+      "hide_label": true
+    },
+    {
+      "id": "river",
+      "name": "border river",
+      "shape": "polyline",
+      "points": [
+        [
+          74.2,
+          126.1
+        ],
+        [
+          40,
+          121
+        ],
+        [
+          0,
+          116
+        ]
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-373",
+        "wg-356"
+      ],
+      "note": "[water] The line between Veridian and core Arctic territory, reached by Group North (c30-b73). We run it west from the head of the inlet.",
+      "frame": "northshore"
+    },
+    {
+      "id": "arctic_west",
+      "name": "Arctic core (west of the inlet)",
+      "shape": "polygon",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          137.4,
+          0
+        ],
+        [
+          136.8,
+          0.5
+        ],
+        [
+          107.8,
+          32.6
+        ],
+        [
+          104.3,
+          52.4
+        ],
+        [
+          95.1,
+          84.6
+        ],
+        [
+          93.9,
+          95.9
+        ],
+        [
+          76.5,
+          119.5
+        ],
+        [
+          74.2,
+          126.1
+        ],
+        [
+          40,
+          121
+        ],
+        [
+          0,
+          116
+        ]
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-373",
+        "wg-356"
+      ],
+      "note": "[region] Across the river from Veridia (c30-b73).",
+      "frame": "northshore"
+    },
+    {
+      "id": "north_route",
+      "name": "Group North",
+      "shape": "polyline",
+      "points": [
+        [
+          34.2,
+          178.6
+        ],
+        [
+          86.8,
+          149.7
+        ],
+        [
+          82.8,
+          123.4
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-366",
+        "wg-371"
+      ],
+      "note": "The battle map's dashed route (c29-b34).",
+      "frame": "northshore"
+    },
+    {
+      "id": "north_start",
+      "name": "Group North start",
+      "shape": "point",
+      "at": [
+        34.2,
+        178.6
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-366"
+      ],
+      "frame": "northshore",
+      "hide_label": true
+    },
+    {
+      "id": "north_end",
+      "name": "Group North end",
+      "shape": "point",
+      "at": [
+        82.8,
+        123.4
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-366",
+        "wg-373"
+      ],
+      "frame": "northshore",
+      "hide_label": true
+    },
+    {
+      "id": "center_route",
+      "name": "Group Center",
+      "shape": "polyline",
+      "points": [
+        [
+          63.2,
+          200.8
+        ],
+        [
+          139.6,
+          143
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-367"
+      ],
+      "note": "The battle map draws it heading east-north-east; the text says \"directly east\" (c29-b25).",
+      "frame": "northshore"
+    },
+    {
+      "id": "center_start",
+      "name": "Group Center start",
+      "shape": "point",
+      "at": [
+        63.2,
+        200.8
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-367"
+      ],
+      "frame": "northshore",
+      "hide_label": true
+    },
+    {
+      "id": "center_end",
+      "name": "Group Center end",
+      "shape": "point",
+      "at": [
+        139.6,
+        143
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-367"
+      ],
+      "frame": "northshore",
+      "hide_label": true
+    },
+    {
+      "id": "south_route",
+      "name": "Group South",
+      "shape": "polyline",
+      "points": [
+        [
+          90,
+          215
+        ],
+        [
+          151.4,
+          170.8
+        ],
+        [
+          171.6,
+          166.3
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-368"
+      ],
+      "note": "The battle map draws it heading north-east, then east; the text says \"toward the southeast\" (c29-b27).",
+      "frame": "northshore"
+    },
+    {
+      "id": "south_start",
+      "name": "Group South start",
+      "shape": "point",
+      "at": [
+        90,
+        215
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-368"
+      ],
+      "frame": "northshore",
+      "hide_label": true
+    },
+    {
+      "id": "south_end",
+      "name": "Group South end",
+      "shape": "point",
+      "at": [
+        171.6,
+        166.3
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-368"
+      ],
+      "frame": "northshore",
+      "hide_label": true
+    },
+    {
+      "id": "naval_route",
+      "name": "Group Naval",
+      "shape": "polyline",
+      "points": [
+        [
+          232.5,
+          176.5
+        ],
+        [
+          220.5,
+          138.8
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-369"
+      ],
+      "frame": "northshore"
+    },
+    {
+      "id": "naval_start",
+      "name": "Group Naval start",
+      "shape": "point",
+      "at": [
+        232.5,
+        176.5
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-369",
+        "wg-370"
+      ],
+      "frame": "northshore",
+      "hide_label": true
+    },
+    {
+      "id": "naval_end",
+      "name": "Group Naval end",
+      "shape": "point",
+      "at": [
+        220.5,
+        138.8
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-369"
+      ],
+      "frame": "northshore",
+      "hide_label": true
+    },
+    {
+      "id": "thaldur",
+      "name": "Thaldur",
+      "shape": "polygon",
+      "points": [
+        [
+          370,
+          92
+        ],
+        [
+          440,
+          88
+        ],
+        [
+          460,
+          112
+        ],
+        [
+          430,
+          135
+        ],
+        [
+          372,
+          128
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-374",
+        "wg-375"
+      ],
+      "note": "[region] An island east of Northshore, core Arctic territory (c30-b74), beyond the eastern peninsula (c31-b61). Size and distance ours.",
+      "frame": "northshore"
+    },
+    {
+      "id": "telten",
+      "name": "Telten",
+      "shape": "point",
+      "at": [
+        378,
+        110
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-372"
+      ],
+      "note": "Arctic core territory hundreds of kilometers east of Northglade, reached by sea (c29-b104). The book does not say whether it is on Thaldur or the Arctic mainland; we put it on Thaldur's west coast.",
+      "frame": "northshore"
+    },
+    {
+      "id": "arctic",
+      "name": "Arctic Empire",
+      "shape": "polygon",
+      "points": [
+        [
+          62.2,
+          -30
+        ],
+        [
+          80,
+          -30
+        ],
+        [
+          80,
+          150
+        ],
+        [
+          59,
+          150
+        ],
+        [
+          58.2,
+          90
+        ],
+        [
+          58,
+          62
+        ],
+        [
+          59,
+          40
+        ],
+        [
+          62.2,
+          25
+        ]
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-385",
+        "wg-377"
+      ],
+      "note": "[region] North of Veridia and of the United Cities. The outline is ours; the book fixes only that it lies north of Northshore and of Redshire."
+    },
+    {
+      "id": "glasscrown",
+      "name": "Glasscrown",
+      "shape": "point",
+      "at": [
+        76,
+        55
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-377"
+      ],
+      "note": "A month and a half of polar night (c31-b44) puts it far north; where exactly is ours."
+    },
+    {
+      "id": "uc_continent",
+      "name": "United Cities",
+      "shape": "polygon",
+      "points": [
+        [
+          -1750,
+          -1300
+        ],
+        [
+          -1720,
+          -300
+        ],
+        [
+          -1500,
+          100
+        ],
+        [
+          -900,
+          30
+        ],
+        [
+          -420,
+          200
+        ],
+        [
+          -100,
+          190
+        ],
+        [
+          250,
+          150
+        ],
+        [
+          600,
+          -100
+        ],
+        [
+          600,
+          -1250
+        ],
+        [
+          100,
+          -1300
+        ],
+        [
+          -800,
+          -1350
+        ]
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-378",
+        "wg-391"
+      ],
+      "note": "[region] The coastline is ours; the book says only that the continent has many mountains and peninsulas (c10-b143).",
+      "frame": "uc"
+    },
+    {
+      "id": "redshire_gulf",
+      "name": "gulf between Redshire and Arturia",
+      "shape": "polygon",
+      "points": [
+        [
+          -200,
+          190
+        ],
+        [
+          -70,
+          140
+        ],
+        [
+          -50,
+          -60
+        ],
+        [
+          -60,
+          -230
+        ],
+        [
+          -150,
+          -260
+        ],
+        [
+          -170,
+          -60
+        ],
+        [
+          -150,
+          60
+        ]
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-388",
+        "wg-386"
+      ],
+      "note": "[sea] The seaborne drone heads west from Redshire's coast to Arturia's (c26-b149, c26-b151). The gulf's shape is ours.",
+      "frame": "uc",
+      "hide_label": true
+    },
+    {
+      "id": "redshire_islands",
+      "name": "Redshire's south islands",
+      "shape": "point",
+      "at": [
+        -100,
+        -180
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-386"
+      ],
+      "note": "Redshire has islands in the south (c4-b73). We put them in the gulf.",
+      "frame": "uc"
+    },
+    {
+      "id": "redshire",
+      "name": "Redshire",
+      "shape": "point",
+      "at": [
+        0,
+        0
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-379",
+        "wg-380",
+        "wg-384",
+        "wg-385",
+        "wg-386"
+      ],
+      "note": "Where the United Cities sit on the globe is ours. Nothing in the United Cities lies due north of Redshire (c10-b149, c13-b11).",
+      "frame": "uc"
+    },
+    {
+      "id": "arturia",
+      "name": "Arturia",
+      "shape": "point",
+      "at": [
+        -240,
+        140
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-379",
+        "wg-380",
+        "wg-388"
+      ],
+      "note": "West of Redshire across water (c26-b149, c26-b151). We put it north-west, which keeps the co-governance links from crossing.",
+      "frame": "uc"
+    },
+    {
+      "id": "petersvil",
+      "name": "Petersvil",
+      "shape": "point",
+      "at": [
+        380,
+        -80
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-379",
+        "wg-380"
+      ],
+      "note": "Its neighbors are the book's (c5-b46); its position is ours, moved as little as possible from the book's diagram.",
+      "frame": "uc"
+    },
+    {
+      "id": "devanvil",
+      "name": "Devanvil",
+      "shape": "point",
+      "at": [
+        -300,
+        -540
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-379",
+        "wg-380"
+      ],
+      "note": "Its neighbors are the book's (c5-b46); its position is ours, moved as little as possible from the book's diagram.",
+      "frame": "uc"
+    },
+    {
+      "id": "imber",
+      "name": "Imber",
+      "shape": "point",
+      "at": [
+        -930,
+        -290
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-379",
+        "wg-380"
+      ],
+      "note": "Its neighbors are the book's (c5-b46); its position is ours, moved as little as possible from the book's diagram.",
+      "frame": "uc"
+    },
+    {
+      "id": "hapton",
+      "name": "Hapton",
+      "shape": "point",
+      "at": [
+        -1330,
+        -120
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-379",
+        "wg-380"
+      ],
+      "note": "Its neighbors are the book's (c5-b46); its position is ours, moved as little as possible from the book's diagram.",
+      "frame": "uc"
+    },
+    {
+      "id": "deplexi",
+      "name": "Deplexi",
+      "shape": "point",
+      "at": [
+        -810,
+        -490
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-379",
+        "wg-380"
+      ],
+      "note": "Its neighbors are the book's (c5-b46); its position is ours, moved as little as possible from the book's diagram.",
+      "frame": "uc"
+    },
+    {
+      "id": "inglewore",
+      "name": "Inglewore",
+      "shape": "point",
+      "at": [
+        -1230,
+        -570
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-379",
+        "wg-380"
+      ],
+      "note": "Its neighbors are the book's (c5-b46); its position is ours, moved as little as possible from the book's diagram.",
+      "frame": "uc"
+    },
+    {
+      "id": "silverbeach",
+      "name": "Silverbeach",
+      "shape": "point",
+      "at": [
+        -1560,
+        -870
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-379",
+        "wg-380",
+        "wg-382",
+        "wg-383"
+      ],
+      "note": "Farther from Redshire than Freetown (c15-b25).",
+      "frame": "uc"
+    },
+    {
+      "id": "mabuli",
+      "name": "Mabuli",
+      "shape": "point",
+      "at": [
+        -1170,
+        -990
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-379",
+        "wg-380",
+        "wg-382",
+        "wg-383"
+      ],
+      "note": "Farther from Redshire than Freetown (c15-b25).",
+      "frame": "uc"
+    },
+    {
+      "id": "freetown",
+      "name": "Freetown",
+      "shape": "point",
+      "at": [
+        -900,
+        -1100
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-379",
+        "wg-380",
+        "wg-382",
+        "wg-383"
+      ],
+      "note": "Nearly the farthest from Redshire; only Silverbeach and Mabuli are farther (c15-b25).",
+      "frame": "uc"
+    },
+    {
+      "id": "ondak",
+      "name": "Ondak",
+      "shape": "point",
+      "at": [
+        -130,
+        -790
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-379",
+        "wg-380",
+        "wg-381"
+      ],
+      "note": "Its neighbors are the book's (c5-b46); its position is ours, moved as little as possible from the book's diagram.",
+      "frame": "uc"
+    },
+    {
+      "id": "iptak",
+      "name": "Iptak",
+      "shape": "point",
+      "at": [
+        300,
+        -650
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-379",
+        "wg-380",
+        "wg-381"
+      ],
+      "note": "Its neighbors are the book's (c5-b46); its position is ours, moved as little as possible from the book's diagram.",
+      "frame": "uc"
+    },
+    {
+      "id": "mantak",
+      "name": "Mantak",
+      "shape": "point",
+      "at": [
+        240,
+        -820
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-379",
+        "wg-380",
+        "wg-381"
+      ],
+      "note": "Its neighbors are the book's (c5-b46); its position is ours, moved as little as possible from the book's diagram.",
+      "frame": "uc"
+    },
+    {
+      "id": "belpaki",
+      "name": "Belpaki",
+      "shape": "point",
+      "at": [
+        190,
+        -990
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-379",
+        "wg-380",
+        "wg-381"
+      ],
+      "note": "Its neighbors are the book's (c5-b46); its position is ours, moved as little as possible from the book's diagram.",
+      "frame": "uc"
+    },
+    {
+      "id": "link_silverbeach_mabuli",
+      "name": "silverbeach–mabuli",
+      "shape": "polyline",
+      "points": [
+        [
+          -1560,
+          -870
+        ],
+        [
+          -1170,
+          -990
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-380"
+      ],
+      "frame": "uc",
+      "hide_label": true
+    },
+    {
+      "id": "link_silverbeach_inglewore",
+      "name": "silverbeach–inglewore",
+      "shape": "polyline",
+      "points": [
+        [
+          -1560,
+          -870
+        ],
+        [
+          -1230,
+          -570
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-380"
+      ],
+      "frame": "uc",
+      "hide_label": true
+    },
+    {
+      "id": "link_mabuli_freetown",
+      "name": "mabuli–freetown",
+      "shape": "polyline",
+      "points": [
+        [
+          -1170,
+          -990
+        ],
+        [
+          -900,
+          -1100
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-380"
+      ],
+      "frame": "uc",
+      "hide_label": true
+    },
+    {
+      "id": "link_inglewore_hapton",
+      "name": "inglewore–hapton",
+      "shape": "polyline",
+      "points": [
+        [
+          -1230,
+          -570
+        ],
+        [
+          -1330,
+          -120
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-380"
+      ],
+      "frame": "uc",
+      "hide_label": true
+    },
+    {
+      "id": "link_inglewore_deplexi",
+      "name": "inglewore–deplexi",
+      "shape": "polyline",
+      "points": [
+        [
+          -1230,
+          -570
+        ],
+        [
+          -810,
+          -490
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-380"
+      ],
+      "frame": "uc",
+      "hide_label": true
+    },
+    {
+      "id": "link_hapton_imber",
+      "name": "hapton–imber",
+      "shape": "polyline",
+      "points": [
+        [
+          -1330,
+          -120
+        ],
+        [
+          -930,
+          -290
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-380"
+      ],
+      "frame": "uc",
+      "hide_label": true
+    },
+    {
+      "id": "link_hapton_deplexi",
+      "name": "hapton–deplexi",
+      "shape": "polyline",
+      "points": [
+        [
+          -1330,
+          -120
+        ],
+        [
+          -810,
+          -490
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-380"
+      ],
+      "frame": "uc",
+      "hide_label": true
+    },
+    {
+      "id": "link_imber_arturia",
+      "name": "imber–arturia",
+      "shape": "polyline",
+      "points": [
+        [
+          -930,
+          -290
+        ],
+        [
+          -240,
+          140
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-380"
+      ],
+      "frame": "uc",
+      "hide_label": true
+    },
+    {
+      "id": "link_imber_deplexi",
+      "name": "imber–deplexi",
+      "shape": "polyline",
+      "points": [
+        [
+          -930,
+          -290
+        ],
+        [
+          -810,
+          -490
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-380"
+      ],
+      "frame": "uc",
+      "hide_label": true
+    },
+    {
+      "id": "link_arturia_redshire",
+      "name": "arturia–redshire",
+      "shape": "polyline",
+      "points": [
+        [
+          -240,
+          140
+        ],
+        [
+          0,
+          0
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-380"
+      ],
+      "frame": "uc",
+      "hide_label": true
+    },
+    {
+      "id": "link_arturia_petersvil",
+      "name": "arturia–petersvil",
+      "shape": "polyline",
+      "points": [
+        [
+          -240,
+          140
+        ],
+        [
+          380,
+          -80
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-380"
+      ],
+      "frame": "uc",
+      "hide_label": true
+    },
+    {
+      "id": "link_redshire_petersvil",
+      "name": "redshire–petersvil",
+      "shape": "polyline",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          380,
+          -80
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-380"
+      ],
+      "frame": "uc",
+      "hide_label": true
+    },
+    {
+      "id": "link_redshire_devanvil",
+      "name": "redshire–devanvil",
+      "shape": "polyline",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          -300,
+          -540
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-380"
+      ],
+      "frame": "uc",
+      "hide_label": true
+    },
+    {
+      "id": "link_petersvil_devanvil",
+      "name": "petersvil–devanvil",
+      "shape": "polyline",
+      "points": [
+        [
+          380,
+          -80
+        ],
+        [
+          -300,
+          -540
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-380"
+      ],
+      "frame": "uc",
+      "hide_label": true
+    },
+    {
+      "id": "link_petersvil_iptak",
+      "name": "petersvil–iptak",
+      "shape": "polyline",
+      "points": [
+        [
+          380,
+          -80
+        ],
+        [
+          300,
+          -650
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-380"
+      ],
+      "frame": "uc",
+      "hide_label": true
+    },
+    {
+      "id": "link_deplexi_freetown",
+      "name": "deplexi–freetown",
+      "shape": "polyline",
+      "points": [
+        [
+          -810,
+          -490
+        ],
+        [
+          -900,
+          -1100
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-380"
+      ],
+      "frame": "uc",
+      "hide_label": true
+    },
+    {
+      "id": "link_deplexi_devanvil",
+      "name": "deplexi–devanvil",
+      "shape": "polyline",
+      "points": [
+        [
+          -810,
+          -490
+        ],
+        [
+          -300,
+          -540
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-380"
+      ],
+      "frame": "uc",
+      "hide_label": true
+    },
+    {
+      "id": "link_freetown_devanvil",
+      "name": "freetown–devanvil",
+      "shape": "polyline",
+      "points": [
+        [
+          -900,
+          -1100
+        ],
+        [
+          -300,
+          -540
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-380"
+      ],
+      "frame": "uc",
+      "hide_label": true
+    },
+    {
+      "id": "link_freetown_ondak",
+      "name": "freetown–ondak",
+      "shape": "polyline",
+      "points": [
+        [
+          -900,
+          -1100
+        ],
+        [
+          -130,
+          -790
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-380"
+      ],
+      "frame": "uc",
+      "hide_label": true
+    },
+    {
+      "id": "link_devanvil_ondak",
+      "name": "devanvil–ondak",
+      "shape": "polyline",
+      "points": [
+        [
+          -300,
+          -540
+        ],
+        [
+          -130,
+          -790
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-380"
+      ],
+      "frame": "uc",
+      "hide_label": true
+    },
+    {
+      "id": "link_ondak_iptak",
+      "name": "ondak–iptak",
+      "shape": "polyline",
+      "points": [
+        [
+          -130,
+          -790
+        ],
+        [
+          300,
+          -650
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-380"
+      ],
+      "frame": "uc",
+      "hide_label": true
+    },
+    {
+      "id": "link_ondak_mantak",
+      "name": "ondak–mantak",
+      "shape": "polyline",
+      "points": [
+        [
+          -130,
+          -790
+        ],
+        [
+          240,
+          -820
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-380"
+      ],
+      "frame": "uc",
+      "hide_label": true
+    },
+    {
+      "id": "link_ondak_belpaki",
+      "name": "ondak–belpaki",
+      "shape": "polyline",
+      "points": [
+        [
+          -130,
+          -790
+        ],
+        [
+          190,
+          -990
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-380"
+      ],
+      "frame": "uc",
+      "hide_label": true
+    },
+    {
+      "id": "link_iptak_mantak",
+      "name": "iptak–mantak",
+      "shape": "polyline",
+      "points": [
+        [
+          300,
+          -650
+        ],
+        [
+          240,
+          -820
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-380"
+      ],
+      "frame": "uc",
+      "hide_label": true
+    },
+    {
+      "id": "link_mantak_belpaki",
+      "name": "mantak–belpaki",
+      "shape": "polyline",
+      "points": [
+        [
+          240,
+          -820
+        ],
+        [
+          190,
+          -990
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-380"
+      ],
+      "frame": "uc",
+      "hide_label": true
+    },
+    {
+      "id": "link_iptak_belpaki",
+      "name": "iptak–belpaki",
+      "shape": "polyline",
+      "points": [
+        [
+          300,
+          -650
+        ],
+        [
+          190,
+          -990
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-380"
+      ],
+      "frame": "uc",
+      "hide_label": true
+    },
+    {
+      "id": "messalia",
+      "name": "Messalia",
+      "shape": "point",
+      "at": [
+        -700,
+        -2100
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-391"
+      ],
+      "note": "South of the United Cities: the Arctics would \"go south\" to it after them (c28-b33).",
+      "frame": "uc"
+    },
+    {
+      "id": "haragmir",
+      "name": "Haragmir",
+      "shape": "point",
+      "at": [
+        100,
+        -2000
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-391"
+      ],
+      "note": "As Messalia.",
+      "frame": "uc"
+    },
+    {
+      "id": "dzego",
+      "name": "Dzego",
+      "shape": "polygon",
+      "points": [
+        [
+          18,
+          142
+        ],
+        [
+          28.5,
+          142
+        ],
+        [
+          28.5,
+          156
+        ],
+        [
+          18,
+          156
+        ]
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-354"
+      ],
+      "note": "[region] Halfway across the world from Veridia, says Seila (c21-b85). Where exactly, and whether it shares the United Cities' continent (c22-b46), is ours to choose."
+    },
+    {
+      "id": "pafogai",
+      "name": "Pafogai Du",
+      "shape": "point",
+      "at": [
+        22,
+        150
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-354",
+        "wg-347"
+      ]
+    },
+    {
+      "id": "sadzu",
+      "name": "Sadzu Du",
+      "shape": "point",
+      "at": [
+        24.5,
+        147.5
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-347"
+      ],
+      "note": "A train ride from Pafogai Du (c15-b119); no distance or time is given."
+    }
+  ],
+  "tests": [
+    {
+      "line": "wg-355",
+      "test": "bearing",
+      "from": "meldan",
+      "to": "northglade",
+      "deg": [
+        22.5,
+        67.5
+      ],
+      "note": "far north-east"
+    },
+    {
+      "line": "wg-355",
+      "test": "edge_distance",
+      "a": "northglade",
+      "b": "river",
+      "km": [
+        200,
+        450
+      ],
+      "note": "almost at the Arctic border"
+    },
+    {
+      "line": "wg-356",
+      "test": "edge_distance",
+      "a": "northglade",
+      "b": "arctic_west",
+      "km": [
+        200,
+        450
+      ]
+    },
+    {
+      "line": "wg-356",
+      "test": "edge_distance",
+      "a": "northglade",
+      "b": "arctic",
+      "km": [
+        200,
+        600
+      ]
+    },
+    {
+      "line": "wg-357",
+      "test": "distance",
+      "a": "meldan",
+      "b": "northglade",
+      "km": [
+        800,
+        1200
+      ]
+    },
+    {
+      "line": "wg-358",
+      "test": "bearing",
+      "from": "meldan",
+      "to": "northglade",
+      "deg": [
+        0,
+        67.5
+      ],
+      "note": "\"up\" north"
+    },
+    {
+      "line": "wg-359",
+      "test": "inside",
+      "a": "northglade",
+      "b": "northshore"
+    },
+    {
+      "line": "wg-362",
+      "test": "inside",
+      "a": "northglade",
+      "b": "ng_island"
+    },
+    {
+      "line": "wg-363",
+      "test": "inside",
+      "a": "ng_summit",
+      "b": "ng_island"
+    },
+    {
+      "line": "wg-363",
+      "test": "bearing",
+      "from": "ng_summit",
+      "to": "northglade",
+      "deg": [
+        45,
+        135
+      ]
+    },
+    {
+      "line": "wg-364",
+      "test": "edge_distance",
+      "a": "northern_ice",
+      "b": "river",
+      "km": [
+        20,
+        40
+      ]
+    },
+    {
+      "line": "wg-364",
+      "test": "inside",
+      "a": "northern_ice",
+      "b": "veridia"
+    },
+    {
+      "line": "wg-365",
+      "test": "west_of",
+      "a": "elenar_forest",
+      "b": "north_end"
+    },
+    {
+      "line": "wg-365",
+      "test": "inside",
+      "a": "north_start",
+      "b": "elenar_forest"
+    },
+    {
+      "line": "wg-366",
+      "test": "bearing",
+      "from": "north_start",
+      "to": "north_end",
+      "deg": [
+        22.5,
+        67.5
+      ]
+    },
+    {
+      "line": "wg-366",
+      "test": "edge_distance",
+      "a": "north_end",
+      "b": "north_sea",
+      "km": [
+        0,
+        15
+      ],
+      "note": "to the coast"
+    },
+    {
+      "line": "wg-367",
+      "test": "bearing",
+      "from": "center_start",
+      "to": "center_end",
+      "deg": [
+        67.5,
+        112.5
+      ],
+      "expect": "conflict",
+      "note": "the text's \"directly east\" against the battle map's route"
+    },
+    {
+      "line": "wg-368",
+      "test": "bearing",
+      "from": "south_start",
+      "to": "south_end",
+      "deg": [
+        112.5,
+        157.5
+      ],
+      "expect": "conflict",
+      "note": "the text's \"southeast\" against the battle map's route"
+    },
+    {
+      "line": "wg-368",
+      "test": "distance",
+      "a": "south_end",
+      "b": "northglade",
+      "km": [
+        0,
+        80
+      ],
+      "note": "the outskirts of Northglade"
+    },
+    {
+      "line": "wg-369",
+      "test": "west_of",
+      "a": "northglade",
+      "b": "naval_end"
+    },
+    {
+      "line": "wg-369",
+      "test": "bearing",
+      "from": "naval_start",
+      "to": "naval_end",
+      "deg": [
+        315,
+        45
+      ],
+      "note": "from the south"
+    },
+    {
+      "line": "wg-370",
+      "test": "inside",
+      "a": "naval_start",
+      "b": "south_sea"
+    },
+    {
+      "line": "wg-370",
+      "test": "edge_distance",
+      "a": "northglade",
+      "b": "south_sea",
+      "km": [
+        0,
+        10
+      ]
+    },
+    {
+      "line": "wg-371",
+      "test": "path_length",
+      "path": "north_route",
+      "km": [
+        200,
+        900
+      ]
+    },
+    {
+      "line": "wg-372",
+      "test": "distance",
+      "a": "northglade",
+      "b": "telten",
+      "km": [
+        200,
+        900
+      ]
+    },
+    {
+      "line": "wg-372",
+      "test": "bearing",
+      "from": "northglade",
+      "to": "telten",
+      "deg": [
+        45,
+        135
+      ]
+    },
+    {
+      "line": "wg-373",
+      "test": "edge_distance",
+      "a": "north_end",
+      "b": "river",
+      "km": [
+        0,
+        40
+      ]
+    },
+    {
+      "line": "wg-374",
+      "test": "bearing",
+      "from": "northshore",
+      "to": "thaldur",
+      "deg": [
+        45,
+        135
+      ]
+    },
+    {
+      "line": "wg-375",
+      "test": "between",
+      "a": "northglade",
+      "b": "peninsula",
+      "c": "thaldur",
+      "max_off_km": 250
+    },
+    {
+      "line": "wg-379",
+      "test": "link_lengths",
+      "links": [
+        [
+          "silverbeach",
+          "mabuli"
+        ],
+        [
+          "silverbeach",
+          "inglewore"
+        ],
+        [
+          "mabuli",
+          "freetown"
+        ],
+        [
+          "inglewore",
+          "hapton"
+        ],
+        [
+          "inglewore",
+          "deplexi"
+        ],
+        [
+          "hapton",
+          "imber"
+        ],
+        [
+          "hapton",
+          "deplexi"
+        ],
+        [
+          "imber",
+          "arturia"
+        ],
+        [
+          "imber",
+          "deplexi"
+        ],
+        [
+          "arturia",
+          "redshire"
+        ],
+        [
+          "arturia",
+          "petersvil"
+        ],
+        [
+          "redshire",
+          "petersvil"
+        ],
+        [
+          "redshire",
+          "devanvil"
+        ],
+        [
+          "petersvil",
+          "devanvil"
+        ],
+        [
+          "petersvil",
+          "iptak"
+        ],
+        [
+          "deplexi",
+          "freetown"
+        ],
+        [
+          "deplexi",
+          "devanvil"
+        ],
+        [
+          "freetown",
+          "devanvil"
+        ],
+        [
+          "freetown",
+          "ondak"
+        ],
+        [
+          "devanvil",
+          "ondak"
+        ],
+        [
+          "ondak",
+          "iptak"
+        ],
+        [
+          "ondak",
+          "mantak"
+        ],
+        [
+          "ondak",
+          "belpaki"
+        ],
+        [
+          "iptak",
+          "mantak"
+        ],
+        [
+          "mantak",
+          "belpaki"
+        ],
+        [
+          "iptak",
+          "belpaki"
+        ]
+      ],
+      "km": [
+        150,
+        900
+      ],
+      "note": "neighbors: no link longer than 900 km"
+    },
+    {
+      "line": "wg-380",
+      "test": "planar",
+      "links": [
+        [
+          "silverbeach",
+          "mabuli"
+        ],
+        [
+          "silverbeach",
+          "inglewore"
+        ],
+        [
+          "mabuli",
+          "freetown"
+        ],
+        [
+          "inglewore",
+          "hapton"
+        ],
+        [
+          "inglewore",
+          "deplexi"
+        ],
+        [
+          "hapton",
+          "imber"
+        ],
+        [
+          "hapton",
+          "deplexi"
+        ],
+        [
+          "imber",
+          "arturia"
+        ],
+        [
+          "imber",
+          "deplexi"
+        ],
+        [
+          "arturia",
+          "redshire"
+        ],
+        [
+          "arturia",
+          "petersvil"
+        ],
+        [
+          "redshire",
+          "petersvil"
+        ],
+        [
+          "redshire",
+          "devanvil"
+        ],
+        [
+          "petersvil",
+          "devanvil"
+        ],
+        [
+          "petersvil",
+          "iptak"
+        ],
+        [
+          "deplexi",
+          "freetown"
+        ],
+        [
+          "deplexi",
+          "devanvil"
+        ],
+        [
+          "freetown",
+          "devanvil"
+        ],
+        [
+          "freetown",
+          "ondak"
+        ],
+        [
+          "devanvil",
+          "ondak"
+        ],
+        [
+          "ondak",
+          "iptak"
+        ],
+        [
+          "ondak",
+          "mantak"
+        ],
+        [
+          "ondak",
+          "belpaki"
+        ],
+        [
+          "iptak",
+          "mantak"
+        ],
+        [
+          "mantak",
+          "belpaki"
+        ],
+        [
+          "iptak",
+          "belpaki"
+        ]
+      ],
+      "note": "drawn as borders or short crossings, no two links cross"
+    },
+    {
+      "line": "wg-381",
+      "test": "max_pairwise",
+      "ids": [
+        "ondak",
+        "iptak",
+        "mantak",
+        "belpaki"
+      ],
+      "km": 500
+    },
+    {
+      "line": "wg-382",
+      "test": "farther_than",
+      "from": "redshire",
+      "subject": "freetown",
+      "nearer": [
+        "arturia",
+        "petersvil",
+        "devanvil",
+        "imber",
+        "hapton",
+        "deplexi",
+        "inglewore",
+        "ondak",
+        "iptak",
+        "mantak",
+        "belpaki"
+      ],
+      "farther": [
+        "silverbeach",
+        "mabuli"
+      ]
+    },
+    {
+      "line": "wg-383",
+      "test": "closer_share",
+      "from": "redshire",
+      "subject": "freetown",
+      "among": [
+        "arturia",
+        "petersvil",
+        "devanvil",
+        "imber",
+        "hapton",
+        "deplexi",
+        "inglewore",
+        "silverbeach",
+        "mabuli",
+        "ondak",
+        "iptak",
+        "mantak",
+        "belpaki"
+      ],
+      "min_share": 0.5
+    },
+    {
+      "line": "wg-384",
+      "test": "none_within_bearing",
+      "from": "redshire",
+      "among": [
+        "redshire",
+        "arturia",
+        "petersvil",
+        "devanvil",
+        "imber",
+        "hapton",
+        "deplexi",
+        "inglewore",
+        "silverbeach",
+        "mabuli",
+        "freetown",
+        "ondak",
+        "iptak",
+        "mantak",
+        "belpaki"
+      ],
+      "deg": [
+        315,
+        45
+      ],
+      "note": "Redshire among the northern cities: none due north of it"
+    },
+    {
+      "line": "wg-385",
+      "test": "nearest_edge_bearing",
+      "a": "redshire",
+      "b": "arctic",
+      "deg": [
+        315,
+        45
+      ]
+    },
+    {
+      "line": "wg-385",
+      "test": "edge_distance",
+      "a": "redshire",
+      "b": "arctic",
+      "km": [
+        50,
+        500
+      ]
+    },
+    {
+      "line": "wg-386",
+      "test": "bearing",
+      "from": "redshire",
+      "to": "redshire_islands",
+      "deg": [
+        135,
+        225
+      ]
+    },
+    {
+      "line": "wg-386",
+      "test": "inside",
+      "a": "redshire_islands",
+      "b": "redshire_gulf"
+    },
+    {
+      "line": "wg-388",
+      "test": "bearing",
+      "from": "redshire",
+      "to": "arturia",
+      "deg": [
+        225,
+        315
+      ]
+    },
+    {
+      "line": "wg-391",
+      "test": "bearing",
+      "from": "uc_continent",
+      "to": "messalia",
+      "deg": [
+        135,
+        225
+      ]
+    },
+    {
+      "line": "wg-391",
+      "test": "bearing",
+      "from": "uc_continent",
+      "to": "haragmir",
+      "deg": [
+        135,
+        225
+      ]
+    },
+    {
+      "line": "wg-354",
+      "test": "angular_distance",
+      "a": "meldan",
+      "b": "pafogai",
+      "deg": [
+        90,
+        180
+      ],
+      "note": "halfway across the world; thousands of kilometers"
+    }
+  ],
+  "not_tested": [
+    {
+      "line": "wg-347",
+      "why": "Gives a mode of travel (train), not a distance or time."
+    },
+    {
+      "line": "wg-348",
+      "why": "Inside Sadzu Du, for which no map was asked."
+    },
+    {
+      "line": "wg-349",
+      "why": "Inside Sadzu Du, for which no map was asked."
+    },
+    {
+      "line": "wg-350",
+      "why": "A street address in Sadzu Du, for which no map was asked."
+    },
+    {
+      "line": "wg-351",
+      "why": "Gives a mode of travel (air), not a distance or direction."
+    },
+    {
+      "line": "wg-352",
+      "why": "Gives a mode of travel (air), not a distance or direction."
+    },
+    {
+      "line": "wg-353",
+      "why": "Gives a mode of travel (air), not a distance or direction."
+    },
+    {
+      "line": "wg-360",
+      "why": "An event: the attack came from all sides. It says the Arctics could reach Northshore by land, sea and air, which the layout allows."
+    },
+    {
+      "line": "wg-361",
+      "why": "Inside Northglade, below this map's scale; no Northglade map was asked."
+    },
+    {
+      "line": "wg-376",
+      "why": "A size, not a relation."
+    },
+    {
+      "line": "wg-377",
+      "why": "Polar night implies far north; Glasscrown is placed by inference, not tested."
+    },
+    {
+      "line": "wg-378",
+      "why": "Terrain (mountains and peninsulas), not a relation; the coastline is drawn by us."
+    },
+    {
+      "line": "wg-387",
+      "why": "Terrain, not a relation."
+    },
+    {
+      "line": "wg-389",
+      "why": "Inside Freetown, below this map's scale."
+    },
+    {
+      "line": "wg-390",
+      "why": "Inside Freetown, below this map's scale."
+    },
+    {
+      "line": "wg-392",
+      "why": "Ambiguous: \"this continent\" may or may not include Dzego. Not a placement rule; see the feasibility note."
+    }
+  ]
+}

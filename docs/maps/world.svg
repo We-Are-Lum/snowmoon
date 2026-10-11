@@ -1,0 +1,131 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="587" viewBox="0 0 900 587" font-family="sans-serif" font-size="11">
+<defs><clipPath id="c"><rect x="30" y="34" width="840" height="493"/></clipPath></defs>
+<rect width="900" height="587" fill="#fff"/>
+<text x="30" y="22" font-size="14" font-weight="bold">The world of Snowmoon: a proposed layout</text>
+<text x="30" y="565" fill="#555">Solid outlines, dots and upright labels: placed from the book. Dashed, pale, italic: placed by us.</text>
+<text x="30" y="579" fill="#555">Red lines: roads, routes and links; blue: water. AI-made proposal, not by the author.</text>
+<g clip-path="url(#c)">
+<polygon points="152.5,293.6 152.5,213.9 229.5,214.2 237.8,226.9 257.5,233.6 266.3,250.3 266.3,283.6 222.5,293.6" fill="#f3efe6" fill-opacity="0.55" stroke="#667" stroke-dasharray="5,3"/>
+<polygon points="218.0,217.7 238.3,217.7 240.6,232.0 219.1,232.0" fill="#e9e4d4" fill-opacity="1" stroke="#667"/>
+<polygon points="241.4,195.9 235.6,200.9 235.0,204.0 233.4,209.0 233.2,210.8 229.9,214.5 229.5,215.5 230.1,215.9 231.0,215.1 232.3,215.3 241.8,204.2 251.1,198.8 252.7,198.2 258.4,197.7 260.2,199.1 258.2,201.9 253.7,202.2 251.9,203.1 251.7,203.9 252.7,204.5 256.5,205.9 257.4,205.9 258.8,205.4 258.9,206.2 258.2,208.0 262.2,210.4 262.6,195.9 241.5,195.8" fill="#cfe3f3" fill-opacity="1" stroke="#667"/>
+<polygon points="262.0,216.4 259.7,217.6 258.3,219.1 256.0,220.4 253.3,221.6 241.8,228.8 241.0,233.2 261.8,233.2 262.1,216.3" fill="#cfe3f3" fill-opacity="1" stroke="#667"/>
+<polygon points="232.3,215.3 241.8,204.2 251.1,198.8 252.7,198.2 258.4,197.7 260.2,199.1 258.2,201.9 253.7,202.2 251.9,203.1 251.7,203.9 252.7,204.5 256.5,205.9 257.4,205.9 258.8,205.4 258.9,206.2 258.2,208.0 262.2,210.4 262.0,216.4 259.7,217.6 258.3,219.1 256.0,220.4 253.3,221.6 241.8,228.8 238.5,225.5 234.8,220.8" fill="#e9e4d4" fill-opacity="1" stroke="#667"/>
+<polygon points="262.2,210.4 274.3,211.1 282.2,212.7 274.1,214.9 262.0,216.4" fill="#e9e4d4" fill-opacity="1" stroke="#667"/>
+<polygon points="254.8,221.4 254.8,221.3 254.8,221.2 254.7,221.1 254.7,221.0 254.6,220.9 254.5,220.8 254.3,220.8 254.2,220.8 254.1,220.8 254.0,220.8 253.8,220.8 253.7,220.8 253.6,220.9 253.5,221.0 253.4,221.1 253.4,221.2 253.3,221.3 253.3,221.4 253.3,221.5 253.4,221.6 253.4,221.7 253.5,221.8 253.6,221.8 253.7,221.9 253.8,221.9 254.0,222.0 254.1,222.0 254.2,222.0 254.3,221.9 254.5,221.9 254.6,221.8 254.7,221.8 254.7,221.7 254.8,221.6 254.8,221.5" fill="#e9e4d4" fill-opacity="1" stroke="#667"/>
+<polygon points="213.2,195.8 241.5,195.8 241.4,195.9 235.6,200.9 235.0,204.0 233.4,209.0 233.2,210.8 229.9,214.5 229.5,215.5 222.7,214.7 214.8,213.9" fill="#f3efe6" fill-opacity="0.55" stroke="#667" stroke-dasharray="5,3"/>
+<polygon points="288.3,210.2 302.4,209.5 305.9,213.3 299.6,216.9 288.3,215.8" fill="#f3efe6" fill-opacity="1" stroke="#667"/>
+<polygon points="38.7,195.6 38.7,76.9 826.2,76.9 826.2,216.9 563.8,222.2 441.2,223.6 345.0,216.9 279.4,195.6" fill="#f3efe6" fill-opacity="0.55" stroke="#667" stroke-dasharray="5,3"/>
+<polygon points="368.8,314.9 359.3,254.9 369.5,230.9 412.7,235.1 446.0,224.9 469.1,225.5 494.2,227.9 518.0,242.9 513.3,311.9 482.4,314.9 427.4,317.9" fill="#f3efe6" fill-opacity="0.55" stroke="#667" stroke-dasharray="5,3"/>
+<polygon points="461.9,225.5 471.2,228.5 472.8,240.5 472.1,250.7 466.0,252.5 464.4,240.5 465.6,233.3" fill="#cfe3f3" fill-opacity="0.55" stroke="#667" stroke-dasharray="5,3"/>
+<polygon points="791.3,490.3 791.3,420.3 852.5,420.3 852.5,490.3" fill="#f3efe6" fill-opacity="0.55" stroke="#667" stroke-dasharray="5,3"/>
+<polyline points="205.0,263.6 211.6,240.3 214.6,228.2" fill="none" stroke="#b33" stroke-width="1.3" stroke-dasharray="5,3" opacity="0.6"/>
+<polyline points="229.5,215.5 222.7,214.7 214.8,213.9" fill="none" stroke="#4a86b8" stroke-width="1.3" stroke-dasharray="5,3" opacity="0.6"/>
+<polyline points="222.2,223.7 232.2,219.2 231.2,215.1" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="228.0,227.1 242.5,218.1" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="233.3,229.4 244.9,222.5 248.8,221.8" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="260.7,223.3 258.4,217.5" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="376.4,289.1 402.2,296.3" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="376.4,289.1 395.0,271.1" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="402.2,296.3 419.9,302.9" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="395.0,271.1 384.0,244.1" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="395.0,271.1 422.3,266.3" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="384.0,244.1 412.9,254.3" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="384.0,244.1 422.3,266.3" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="412.9,254.3 459.1,228.5" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="412.9,254.3 422.3,266.3" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="459.1,228.5 476.3,236.9" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="459.1,228.5 502.7,241.7" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="476.3,236.9 502.7,241.7" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="476.3,236.9 456.4,269.3" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="502.7,241.7 456.4,269.3" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="502.7,241.7 495.9,275.9" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="422.3,266.3 419.9,302.9" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="422.3,266.3 456.4,269.3" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="419.9,302.9 456.4,269.3" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="419.9,302.9 467.9,284.3" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="456.4,269.3 467.9,284.3" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="467.9,284.3 495.9,275.9" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="467.9,284.3 491.7,286.1" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="467.9,284.3 488.3,296.3" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="495.9,275.9 491.7,286.1" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="491.7,286.1 488.3,296.3" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="495.9,275.9 488.3,296.3" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<circle cx="205.0" cy="263.6" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="216.8" cy="227.8" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="222.9" cy="216.6" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="253.7" cy="221.2" r="3.5" fill="#222" stroke="#222"/>
+<circle cx="253.5" cy="221.2" r="3.5" fill="#222" stroke="#222"/>
+<circle cx="222.2" cy="223.7" r="3.5" fill="#222" stroke="#222"/>
+<circle cx="231.2" cy="215.1" r="3.5" fill="#222" stroke="#222"/>
+<circle cx="228.0" cy="227.1" r="3.5" fill="#222" stroke="#222"/>
+<circle cx="242.5" cy="218.1" r="3.5" fill="#222" stroke="#222"/>
+<circle cx="233.3" cy="229.4" r="3.5" fill="#222" stroke="#222"/>
+<circle cx="248.8" cy="221.8" r="3.5" fill="#222" stroke="#222"/>
+<circle cx="260.7" cy="223.3" r="3.5" fill="#222" stroke="#222"/>
+<circle cx="258.4" cy="217.5" r="3.5" fill="#222" stroke="#222"/>
+<circle cx="289.7" cy="213.0" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="410.6" cy="103.5" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="469.4" cy="247.7" r="3.5" fill="#222" stroke="#222"/>
+<circle cx="476.3" cy="236.9" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="459.1" cy="228.5" r="3.5" fill="#222" stroke="#222"/>
+<circle cx="502.7" cy="241.7" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="456.4" cy="269.3" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="412.9" cy="254.3" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="384.0" cy="244.1" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="422.3" cy="266.3" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="395.0" cy="271.1" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="376.4" cy="289.1" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="402.2" cy="296.3" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="419.9" cy="302.9" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="467.9" cy="284.3" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="495.9" cy="275.9" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="491.7" cy="286.1" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="488.3" cy="296.3" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="436.2" cy="362.9" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="482.0" cy="356.9" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="826.2" cy="463.7" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="815.3" cy="447.0" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<text x="207.2" y="251.8" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Veridia</text>
+<text x="234.2" y="220.9" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">Elenar Forest</text>
+<text x="252.3" y="198.5" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">northern sea and inlet</text>
+<text x="258.5" y="241.4" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">southern sea</text>
+<text x="252.5" y="209.4" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">Northshore</text>
+<text x="274.6" y="209.1" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">the eastern peninsula</text>
+<text x="33.9" y="200.5" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Arctic core (west of the inlet)</text>
+<text x="301.4" y="209.1" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">Thaldur</text>
+<text x="409.7" y="145.4" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Arctic Empire</text>
+<text x="440.8" y="269.4" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">United Cities</text>
+<text x="826.4" y="451.5" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Dzego</text>
+<text x="145.7" y="228.7" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">border river</text>
+<text x="161.2" y="215.2" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">Group North</text>
+<text x="247.5" y="214.1" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">Group Center</text>
+<text x="249.9" y="218.5" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">Group South</text>
+<text x="263.4" y="213.5" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">Group Naval</text>
+<text x="210.0" y="277.6" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Meldan</text>
+<text x="221.8" y="223.8" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Eldil</text>
+<text x="227.9" y="212.6" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Hydrafill's northern ice</text>
+<text x="258.7" y="217.2" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">Northglade</text>
+<text x="294.7" y="209.0" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Telten</text>
+<text x="415.6" y="99.5" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Glasscrown</text>
+<text x="474.4" y="243.7" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">Redshire's south islands</text>
+<text x="423.3" y="232.9" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Redshire</text>
+<text x="464.1" y="210.5" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">Arturia</text>
+<text x="507.7" y="255.7" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Petersvil</text>
+<text x="461.4" y="283.3" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Devanvil</text>
+<text x="417.9" y="250.3" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Imber</text>
+<text x="343.0" y="240.1" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Hapton</text>
+<text x="375.3" y="262.3" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Deplexi</text>
+<text x="400.0" y="285.1" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Inglewore</text>
+<text x="381.4" y="303.1" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Silverbeach</text>
+<text x="407.2" y="324.3" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Mabuli</text>
+<text x="424.9" y="298.9" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Freetown</text>
+<text x="472.9" y="312.3" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Ondak</text>
+<text x="480.9" y="297.9" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Iptak</text>
+<text x="496.7" y="282.1" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Mantak</text>
+<text x="493.3" y="292.3" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Belpaki</text>
+<text x="441.2" y="358.9" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Messalia</text>
+<text x="487.0" y="370.9" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Haragmir</text>
+<text x="831.2" y="477.7" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Pafogai Du</text>
+<text x="762.3" y="443.0" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Sadzu Du</text>
+</g>
+</svg>

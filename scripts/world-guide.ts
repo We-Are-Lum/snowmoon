@@ -24,19 +24,26 @@ const read = (f: string) => readFileSync(path.join(ROOT, f), 'utf8');
 const sha256 = (s: string) => createHash('sha256').update(s).digest('hex');
 const chapterOf = (id: string) => Number(id.slice(1).split('-')[0]);
 
-type Line = { id: string; section: string; entity: string; kind: string; text: string; sources: string[]; from_chapter: number };
+type Relation = { a: string; rel: string; b: string };
+type Line = { id: string; section: string; entity: string; kind: string; text: string; sources: string[]; from_chapter: number; relation?: Relation };
+// Geography lines (owner, 2026-10-11): where places are, each also stated as one relation, a → rel → b.
+const GEO_KINDS = ['direction', 'distance', 'border', 'adjacency', 'travel', 'terrain', 'layout', 'size'];
 type Guide = { about: string; label: string; license: string; recipe: string; sections: string[]; lines: Line[] };
 
 const blocks = new Map<string, string>();
+// Figures (the co-governance diagram, the battle maps) are SVG: stripped, only their labels are left,
+// so the checker is shown the drawing itself, with coordinates.
+const figures = new Map<string, string>();
 for (let n = 1; n <= 32; n++) {
   for (const b of JSON.parse(read(`content/snowmoon/text/chapter-${n}.json`)).blocks as { idx: number; content: string; kind: string }[]) {
     const t = b.content.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').trim();
     if (t) blocks.set(`c${n}-b${b.idx}`, t);
+    if (b.kind === 'figure' && /<svg/.test(b.content)) figures.set(`c${n}-b${b.idx}`, `[an SVG figure; y grows downward] ${b.content.replace(/\s+/g, ' ').replace(/<\/?(div|defs|marker)[^>]*>/g, '').trim()}`);
   }
 }
 
 function render(g: Guide): string {
-  const title: Record<string, string> = { characters: 'Characters', places: 'Places', institutions: 'Institutions', technology: 'Technology', minpentai: 'Minpentai', factions: 'Factions', timeline: 'Timeline' };
+  const title: Record<string, string> = { characters: 'Characters', places: 'Places', geography: 'Geography', institutions: 'Institutions', technology: 'Technology', minpentai: 'Minpentai', factions: 'Factions', timeline: 'Timeline' };
   const out = [
     '# Snowmoon: a world guide',
     '',
@@ -78,6 +85,10 @@ function problems(g: Guide): string[] {
     for (const s of l.sources) if (!blocks.has(s)) found.push(`${l.id}: cites ${s}, which is not a block of the book`);
     const latest = Math.max(...l.sources.map(chapterOf));
     if (l.from_chapter !== latest) found.push(`${l.id}: from_chapter is ${l.from_chapter}, but it cites chapter ${latest}`);
+    if (l.section === 'geography') {
+      if (!GEO_KINDS.includes(l.kind)) found.push(`${l.id}: geography kind must be one of ${GEO_KINDS.join(', ')}`);
+      if (!l.relation?.a || !l.relation.rel || !l.relation.b) found.push(`${l.id}: a geography line needs its relation (a, rel, b)`);
+    }
   }
   return found;
 }
@@ -108,7 +119,7 @@ if (step === 'render') {
   let cost = 0;
   for (const l of guide.lines) {
     if (recipe.results[l.id]?.text === l.text && JSON.stringify(recipe.results[l.id]?.sources) === JSON.stringify(l.sources)) continue;
-    const user = `LINE:\n${l.entity}: ${l.text}\n\nCITED BLOCKS:\n${l.sources.map((s) => `[${s}] ${blocks.get(s)}`).join('\n')}`;
+    const user = `LINE:\n${l.entity}: ${l.text}\n\nCITED BLOCKS:\n${l.sources.map((s) => `[${s}] ${figures.get(s) ?? blocks.get(s)}`).join('\n')}`;
     const t0 = Date.now();
     // Groq's free plan allows few tokens a minute; on a refusal, wait and try again before giving up.
     let r: Awaited<ReturnType<typeof complete>> | null = null;

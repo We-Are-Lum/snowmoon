@@ -1,0 +1,1127 @@
+{
+  "map": "meldan",
+  "title": "Meldan: a proposed layout",
+  "label": "AI-made: a proposed layout by an AI model, Claude (the coding agent, a closed model), from the world guide's geography lines; every placement is marked \"book\" or \"placed by us\". Not by the author.",
+  "license": "A map proposal for Snowmoon by Vitalik Buterin, made from the book on 2026-10-11. GPL-3.0, like the book.",
+  "units": "km; x east, y north; origin the summit of the mountain in the center. \"book\": the book fixes where it is relative to what is already placed (direction, and distance where given), though the outline is ours. \"placed by us\": the book does not say where it is.",
+  "coords": "km",
+  "views": [
+    {
+      "suffix": "",
+      "title": "Meldan: a proposed layout (whole city)",
+      "bounds": [
+        -7.6,
+        -6.1,
+        5.6,
+        5.1
+      ]
+    },
+    {
+      "suffix": "-center",
+      "title": "Meldan: the center, from Kalimar to the mountain",
+      "bounds": [
+        -3.6,
+        -3.9,
+        3.8,
+        1.2
+      ]
+    }
+  ],
+  "places": [
+    {
+      "id": "city",
+      "name": "Meldan (extent)",
+      "shape": "polygon",
+      "points": [
+        [
+          -7.5,
+          -6
+        ],
+        [
+          5.5,
+          -6
+        ],
+        [
+          5.5,
+          5
+        ],
+        [
+          -7.5,
+          5
+        ]
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-305"
+      ],
+      "note": "[region] About 13 by 11 km, our guess for 1.1 million people at Veridia's low, green density.",
+      "hide_label": true
+    },
+    {
+      "id": "mountain_foot",
+      "name": "the mountain's foot",
+      "shape": "circle",
+      "center": [
+        0,
+        0
+      ],
+      "r": 1.4,
+      "provenance": "placed by us",
+      "lines": [
+        "wg-301",
+        "wg-322"
+      ],
+      "note": "[land] Size ours. Parliament sits on this lower slope, about forty meters up.",
+      "hide_label": true
+    },
+    {
+      "id": "mountain_core",
+      "name": "the mountain",
+      "shape": "circle",
+      "center": [
+        0,
+        0
+      ],
+      "r": 1,
+      "provenance": "placed by us",
+      "lines": [
+        "wg-301",
+        "wg-312",
+        "wg-320"
+      ],
+      "note": "[land] The steep part. Size ours; the book gives a two-hundred-meter staircase up its side, so we make it about 320 m tall."
+    },
+    {
+      "id": "summit",
+      "name": "summit",
+      "shape": "point",
+      "at": [
+        0,
+        0
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-301"
+      ],
+      "note": "The mountain is in the center of Meldan (c26-b22).",
+      "hide_label": true
+    },
+    {
+      "id": "kalimar",
+      "name": "Kalimar",
+      "shape": "polygon",
+      "points": [
+        [
+          -3,
+          -4.6
+        ],
+        [
+          -0.2,
+          -4.6
+        ],
+        [
+          -0.2,
+          -1
+        ],
+        [
+          -3,
+          -1
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-303",
+        "wg-307",
+        "wg-327"
+      ],
+      "note": "[district] South of the mountain (c26-b26). Outline ours."
+    },
+    {
+      "id": "business",
+      "name": "business (commercial) district",
+      "shape": "polygon",
+      "points": [
+        [
+          -0.2,
+          -4.6
+        ],
+        [
+          4.6,
+          -4.6
+        ],
+        [
+          4.6,
+          2.5
+        ],
+        [
+          1.3,
+          2.5
+        ],
+        [
+          1.3,
+          -1.3
+        ],
+        [
+          -0.2,
+          -2.6
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-302",
+        "wg-323"
+      ],
+      "note": "[district] East of the mountain (c26-b24). We take the \"business district\" of the aerial tour and the \"commercial district\" of chapters 3, 13 and 32 to be the same place. Outline ours; it reaches south-west to the road, so the sky bridge leads into it, and holds Greater Plum Harbor as an enclave on its north side."
+    },
+    {
+      "id": "residential",
+      "name": "residential district",
+      "shape": "polygon",
+      "points": [
+        [
+          -7.5,
+          -1
+        ],
+        [
+          -1.4,
+          -1
+        ],
+        [
+          -1.4,
+          3.5
+        ],
+        [
+          -7.5,
+          3.5
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-304"
+      ],
+      "note": "[district] West of the mountain (c26-b28). Outline ours."
+    },
+    {
+      "id": "north",
+      "name": "north of the mountain (unnamed)",
+      "shape": "polygon",
+      "points": [
+        [
+          -1.4,
+          1.4
+        ],
+        [
+          1.3,
+          1.4
+        ],
+        [
+          1.3,
+          5
+        ],
+        [
+          -1.4,
+          5
+        ]
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-305"
+      ],
+      "note": "[region] The book names nothing north of the mountain."
+    },
+    {
+      "id": "road",
+      "name": "busy road",
+      "shape": "polyline",
+      "points": [
+        [
+          -0.2,
+          -6
+        ],
+        [
+          -0.2,
+          -1.3
+        ],
+        [
+          1.3,
+          -1.3
+        ],
+        [
+          4.6,
+          -1.3
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-312"
+      ],
+      "note": "Runs about two kilometers north from the sky bridge, then turns right (c1-b13). Where it goes after the turn is ours."
+    },
+    {
+      "id": "sky_bridge",
+      "name": "sky bridge",
+      "shape": "point",
+      "at": [
+        -0.2,
+        -3
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-307",
+        "wg-312"
+      ],
+      "note": "Where the Kalimar footpath crosses the road (c1-b11); the road's right turn is about 2 km to its left as Gladias walks (c1-b13)."
+    },
+    {
+      "id": "road_turn",
+      "name": "road turns right",
+      "shape": "point",
+      "at": [
+        -0.2,
+        -1.3
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-312"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "kalimar_path",
+      "name": "Kalimar footpath",
+      "shape": "polyline",
+      "points": [
+        [
+          -2.1,
+          -1
+        ],
+        [
+          -1.5,
+          -2
+        ],
+        [
+          -0.8,
+          -2.8
+        ],
+        [
+          -0.2,
+          -3
+        ]
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-307",
+        "wg-329"
+      ],
+      "note": "The book gives its stone houses, the shrubbery and the rise onto the bridge, not its route.",
+      "hide_label": true
+    },
+    {
+      "id": "y_junction",
+      "name": "Y-shaped intersection (tunnel)",
+      "shape": "point",
+      "at": [
+        0.05,
+        -3
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-317",
+        "wg-319"
+      ],
+      "note": "Just past the sky bridge, in a tunnel (c6-b143, c32-b8)."
+    },
+    {
+      "id": "badra",
+      "name": "Badra St #1103",
+      "shape": "point",
+      "at": [
+        0.1,
+        -2.94
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-314"
+      ],
+      "note": "In the row of five-storey buildings on the left, soon after the bridge (c1-b15, c1-b18)."
+    },
+    {
+      "id": "aeroplane",
+      "name": "aeroplane-shaped building",
+      "shape": "point",
+      "at": [
+        1.4,
+        -2.3
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-315",
+        "wg-323"
+      ],
+      "note": "In the commercial district, in the distance from Badra Street (c1-b25, c32-b105). Exact spot ours."
+    },
+    {
+      "id": "concert_venue",
+      "name": "concert venue",
+      "shape": "polygon",
+      "points": [
+        [
+          0,
+          -3.6
+        ],
+        [
+          0.75,
+          -3.6
+        ],
+        [
+          0.75,
+          -3.07
+        ],
+        [
+          0,
+          -3.07
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-316",
+        "wg-323"
+      ],
+      "note": "[district] Behind the soundproof barrier, a minute past Badra St #1103 (c1-b39); on the commercial district's right edge seen from parliament (c32-b106)."
+    },
+    {
+      "id": "concert_entrance",
+      "name": "concert entrance",
+      "shape": "point",
+      "at": [
+        0.18,
+        -3.07
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-316"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "path_parliament",
+      "name": "walk to parliament",
+      "shape": "polyline",
+      "points": [
+        [
+          0.05,
+          -3
+        ],
+        [
+          0.05,
+          -2.5
+        ],
+        [
+          0.35,
+          -2.3
+        ],
+        [
+          0.55,
+          -1.6
+        ],
+        [
+          0.6,
+          -1.05
+        ]
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-321"
+      ],
+      "note": "Left at the Y, up into the open, right (c32-b8); twenty minutes (c32-b9). The route is ours.",
+      "hide_label": true
+    },
+    {
+      "id": "parliament",
+      "name": "parliament",
+      "shape": "point",
+      "at": [
+        0.6,
+        -1.05
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-321",
+        "wg-322",
+        "wg-323"
+      ],
+      "note": "Partway up the mountain, forty meters up; the steep slope begins about 200 m to its right looking toward Kalimar (c32-b108). With Kalimar to the south, that puts it on the south-east slope."
+    },
+    {
+      "id": "highways",
+      "name": "highways over the path",
+      "shape": "polyline",
+      "points": [
+        [
+          -1.2,
+          -2.2
+        ],
+        [
+          1.3,
+          -2.2
+        ]
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-320"
+      ],
+      "note": "The path to the Order's staircase snakes under a few highways (c6-b144).",
+      "hide_label": true
+    },
+    {
+      "id": "path_order",
+      "name": "walk to the Order's tower",
+      "shape": "polyline",
+      "points": [
+        [
+          0.05,
+          -3
+        ],
+        [
+          0.05,
+          -2.5
+        ],
+        [
+          -0.1,
+          -1.9
+        ],
+        [
+          0,
+          -1.3
+        ],
+        [
+          0.1,
+          -0.6
+        ]
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-320"
+      ],
+      "note": "Left at the Y, under highways, then a straight staircase two hundred meters tall (c6-b143 to c6-b147). Route ours.",
+      "hide_label": true
+    },
+    {
+      "id": "order_tower",
+      "name": "the Order's tower",
+      "shape": "point",
+      "at": [
+        0.1,
+        -0.6
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-320"
+      ],
+      "note": "At the top of the staircase on the side of the mountain; which side is ours."
+    },
+    {
+      "id": "gph",
+      "name": "Greater Plum Harbor",
+      "shape": "polygon",
+      "points": [
+        [
+          2.6,
+          -0.25
+        ],
+        [
+          3.55,
+          -0.25
+        ],
+        [
+          3.55,
+          0.7
+        ],
+        [
+          2.6,
+          0.7
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-324",
+        "wg-325",
+        "wg-323"
+      ],
+      "note": "[district] A square nearly a kilometer wide (c32-b106), further left than the commercial district from parliament's roof; walled, its doors opening onto the commercial district (c13-b24)."
+    },
+    {
+      "id": "gph_gate",
+      "name": "GPH gate",
+      "shape": "point",
+      "at": [
+        3,
+        -0.25
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-325"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "gph_walk",
+      "name": "walk to Greater Plum Harbor",
+      "shape": "polyline",
+      "points": [
+        [
+          0.05,
+          -3
+        ],
+        [
+          0.6,
+          -3
+        ],
+        [
+          1.6,
+          -2.2
+        ],
+        [
+          2.6,
+          -0.9
+        ],
+        [
+          3,
+          -0.25
+        ]
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-318"
+      ],
+      "note": "Through the Y's tunnel, up among trees, into the commercial part (c3-b3 to c3-b41). The book never says which branch of the Y; Gladias almost never turns left (c6-b143), so we take the right.",
+      "hide_label": true
+    },
+    {
+      "id": "silverchat",
+      "name": "Silverchat headquarters (hill)",
+      "shape": "point",
+      "at": [
+        -0.9,
+        -1.4
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-308",
+        "wg-309",
+        "wg-310"
+      ],
+      "note": "In Kalimar (c32-b107), a few hundred meters on foot from where cars must stop (c27-b28). We take the hill building where they meet Evelor (c27-b32) to be Silverchat's headquarters; the book does not say so outright."
+    },
+    {
+      "id": "house",
+      "name": "Gladias's house",
+      "shape": "point",
+      "at": [
+        -2.3,
+        0.35
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-326"
+      ],
+      "note": "The book never says which district he lives in. We put it in the residential district, because Galanar Square, about a kilometer from his corner, is on Kalimar's border."
+    },
+    {
+      "id": "community_center",
+      "name": "community center",
+      "shape": "point",
+      "at": [
+        -2.3,
+        0
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-326"
+      ],
+      "note": "At the first street corner from his door (c6-b52)."
+    },
+    {
+      "id": "galanar",
+      "name": "Galanar Square",
+      "shape": "point",
+      "at": [
+        -2.3,
+        -1
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-327"
+      ],
+      "note": "About a kilometer south of the community center, on the border of Kalimar (c6-b87)."
+    },
+    {
+      "id": "tapaia",
+      "name": "Tapaia Square",
+      "shape": "point",
+      "at": [
+        -3.3,
+        -1
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-328"
+      ],
+      "note": "About a kilometer further west (c6-b102)."
+    },
+    {
+      "id": "restaurant",
+      "name": "restaurant",
+      "shape": "point",
+      "at": [
+        -2,
+        -0.6
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-329"
+      ],
+      "note": "A few hundred meters from where the path enters Kalimar's forest (c6-b141)."
+    },
+    {
+      "id": "gelebor",
+      "name": "Gelebor mountains",
+      "shape": "polyline",
+      "points": [
+        [
+          -15,
+          -13
+        ],
+        [
+          -10,
+          -16
+        ]
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-306"
+      ],
+      "note": "A row of small mountains with Meldan beyond them, seen from an aeroplane on its approach; the aeroplane's heading is not given, so the side is ours. Off the drawn map.",
+      "draw": false
+    }
+  ],
+  "tests": [
+    {
+      "line": "wg-301",
+      "test": "distance",
+      "a": "summit",
+      "b": "city",
+      "km": [
+        0,
+        1.5
+      ],
+      "note": "the mountain is in the center"
+    },
+    {
+      "line": "wg-302",
+      "test": "bearing",
+      "from": "summit",
+      "to": "business",
+      "deg": [
+        45,
+        135
+      ]
+    },
+    {
+      "line": "wg-303",
+      "test": "bearing",
+      "from": "summit",
+      "to": "kalimar",
+      "deg": [
+        135,
+        225
+      ]
+    },
+    {
+      "line": "wg-304",
+      "test": "bearing",
+      "from": "summit",
+      "to": "residential",
+      "deg": [
+        225,
+        315
+      ]
+    },
+    {
+      "line": "wg-307",
+      "test": "ends_at",
+      "path": "kalimar_path",
+      "a": "sky_bridge"
+    },
+    {
+      "line": "wg-307",
+      "test": "edge_distance",
+      "a": "sky_bridge",
+      "b": "kalimar",
+      "km": [
+        0,
+        0.1
+      ],
+      "note": "the footpath leaves Kalimar onto the bridge"
+    },
+    {
+      "line": "wg-308",
+      "test": "edge_distance",
+      "a": "silverchat",
+      "b": "kalimar",
+      "km": [
+        0.1,
+        0.6
+      ],
+      "note": "a few hundred meters on foot from the border of the car-free zone, taken as Kalimar's border"
+    },
+    {
+      "line": "wg-309",
+      "test": "inside",
+      "a": "silverchat",
+      "b": "kalimar"
+    },
+    {
+      "line": "wg-310",
+      "test": "inside",
+      "a": "silverchat",
+      "b": "kalimar"
+    },
+    {
+      "line": "wg-310",
+      "test": "view",
+      "from": "parliament",
+      "facing": "kalimar",
+      "subject": "silverchat",
+      "deg": [
+        -60,
+        60
+      ],
+      "note": "in view from the roof, toward Kalimar"
+    },
+    {
+      "line": "wg-312",
+      "test": "distance",
+      "a": "sky_bridge",
+      "b": "road_turn",
+      "km": [
+        1.6,
+        2.4
+      ]
+    },
+    {
+      "line": "wg-312",
+      "test": "view",
+      "from": "sky_bridge",
+      "facing": "y_junction",
+      "subject": "road_turn",
+      "deg": [
+        -135,
+        -45
+      ],
+      "note": "to his left as he walks"
+    },
+    {
+      "line": "wg-312",
+      "test": "view",
+      "from": "sky_bridge",
+      "facing": "y_junction",
+      "subject": "summit",
+      "deg": [
+        -135,
+        -45
+      ],
+      "note": "the mountain to the left"
+    },
+    {
+      "line": "wg-312",
+      "test": "distance",
+      "a": "sky_bridge",
+      "b": "summit",
+      "km": [
+        2.2,
+        4.5
+      ],
+      "note": "beyond the road's turn"
+    },
+    {
+      "line": "wg-314",
+      "test": "distance",
+      "a": "sky_bridge",
+      "b": "badra",
+      "km": [
+        0.1,
+        0.5
+      ]
+    },
+    {
+      "line": "wg-314",
+      "test": "inside",
+      "a": "badra",
+      "b": "business",
+      "note": "what Gladias thinks of as a corporate district"
+    },
+    {
+      "line": "wg-315",
+      "test": "inside",
+      "a": "aeroplane",
+      "b": "business"
+    },
+    {
+      "line": "wg-315",
+      "test": "distance",
+      "a": "badra",
+      "b": "aeroplane",
+      "km": [
+        0.5,
+        3
+      ]
+    },
+    {
+      "line": "wg-316",
+      "test": "distance",
+      "a": "badra",
+      "b": "concert_entrance",
+      "km": [
+        0.04,
+        0.2
+      ],
+      "note": "a minute's walk"
+    },
+    {
+      "line": "wg-317",
+      "test": "distance",
+      "a": "sky_bridge",
+      "b": "y_junction",
+      "km": [
+        0,
+        0.4
+      ]
+    },
+    {
+      "line": "wg-318",
+      "test": "starts_at",
+      "path": "gph_walk",
+      "a": "y_junction"
+    },
+    {
+      "line": "wg-318",
+      "test": "ends_at",
+      "path": "gph_walk",
+      "a": "gph_gate"
+    },
+    {
+      "line": "wg-320",
+      "test": "starts_at",
+      "path": "path_order",
+      "a": "y_junction"
+    },
+    {
+      "line": "wg-320",
+      "test": "ends_at",
+      "path": "path_order",
+      "a": "order_tower"
+    },
+    {
+      "line": "wg-320",
+      "test": "inside",
+      "a": "order_tower",
+      "b": "mountain_core"
+    },
+    {
+      "line": "wg-321",
+      "test": "starts_at",
+      "path": "path_parliament",
+      "a": "y_junction"
+    },
+    {
+      "line": "wg-321",
+      "test": "ends_at",
+      "path": "path_parliament",
+      "a": "parliament"
+    },
+    {
+      "line": "wg-321",
+      "test": "path_length",
+      "path": "path_parliament",
+      "km": [
+        1.4,
+        2.6
+      ],
+      "note": "twenty minutes on foot"
+    },
+    {
+      "line": "wg-322",
+      "test": "inside",
+      "a": "parliament",
+      "b": "mountain_foot"
+    },
+    {
+      "line": "wg-322",
+      "test": "edge_distance",
+      "a": "parliament",
+      "b": "mountain_core",
+      "km": [
+        0.1,
+        0.3
+      ],
+      "note": "the steep slope begins about 200 m away"
+    },
+    {
+      "line": "wg-322",
+      "test": "view",
+      "from": "parliament",
+      "facing": "kalimar",
+      "subject": "summit",
+      "deg": [
+        45,
+        135
+      ],
+      "note": "the mountain to the right"
+    },
+    {
+      "line": "wg-323",
+      "test": "view",
+      "from": "parliament",
+      "facing": "kalimar",
+      "subject": "business",
+      "deg": [
+        -150,
+        -60
+      ],
+      "note": "commercial district to the left"
+    },
+    {
+      "line": "wg-323",
+      "test": "left_of_more",
+      "from": "parliament",
+      "facing": "kalimar",
+      "a": "gph",
+      "b": "business",
+      "note": "GPH further left"
+    },
+    {
+      "line": "wg-323",
+      "test": "left_of_more",
+      "from": "parliament",
+      "facing": "kalimar",
+      "a": "business",
+      "b": "concert_venue",
+      "note": "the concert venue on the district's right edge"
+    },
+    {
+      "line": "wg-323",
+      "test": "inside",
+      "a": "concert_venue",
+      "b": "business"
+    },
+    {
+      "line": "wg-324",
+      "test": "sides",
+      "a": "gph",
+      "km": [
+        0.85,
+        1
+      ]
+    },
+    {
+      "line": "wg-325",
+      "test": "inside",
+      "a": "gph_gate",
+      "b": "business",
+      "note": "its doors open onto the commercial district"
+    },
+    {
+      "line": "wg-326",
+      "test": "distance",
+      "a": "house",
+      "b": "community_center",
+      "km": [
+        0.1,
+        0.4
+      ]
+    },
+    {
+      "line": "wg-327",
+      "test": "bearing",
+      "from": "community_center",
+      "to": "galanar",
+      "deg": [
+        157.5,
+        202.5
+      ]
+    },
+    {
+      "line": "wg-327",
+      "test": "distance",
+      "a": "community_center",
+      "b": "galanar",
+      "km": [
+        0.8,
+        1.2
+      ]
+    },
+    {
+      "line": "wg-327",
+      "test": "edge_distance",
+      "a": "galanar",
+      "b": "kalimar",
+      "km": [
+        0,
+        0.1
+      ]
+    },
+    {
+      "line": "wg-328",
+      "test": "bearing",
+      "from": "galanar",
+      "to": "tapaia",
+      "deg": [
+        247.5,
+        292.5
+      ]
+    },
+    {
+      "line": "wg-328",
+      "test": "distance",
+      "a": "galanar",
+      "b": "tapaia",
+      "km": [
+        0.8,
+        1.2
+      ]
+    },
+    {
+      "line": "wg-329",
+      "test": "edge_distance",
+      "a": "restaurant",
+      "b": "kalimar",
+      "km": [
+        0.15,
+        0.6
+      ]
+    }
+  ],
+  "not_tested": [
+    {
+      "line": "wg-305",
+      "why": "A size, not a relation; we chose the city's extent from it."
+    },
+    {
+      "line": "wg-306",
+      "why": "The view is from an aeroplane whose heading is not given, so it fixes no direction; the Gelebor mountains are placed by us."
+    },
+    {
+      "line": "wg-311",
+      "why": "The underground house has no anchor except \"a few hundred meters\" along an unnamed stretch of the path; not placed."
+    },
+    {
+      "line": "wg-313",
+      "why": "Street-level detail of one side of the street, below this map's scale."
+    },
+    {
+      "line": "wg-319",
+      "why": "Says two walks pass the same Y; the layout has one Y, so it holds by construction."
+    }
+  ]
+}
