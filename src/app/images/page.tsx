@@ -1,7 +1,7 @@
 import { IMAGES } from '~/lib/config';
 import { db } from '~/lib/db';
 import { feed } from '~/lib/images/data';
-import { passageLabel } from '~/lib/images/passage';
+import { passageLabel, passageText } from '~/lib/images/passage';
 import { ImageFeed } from '~/components/image-feed';
 import { byline } from '~/lib/images/byline';
 import { IMAGE_WORDING as W } from '~/lib/images/wording';
@@ -23,8 +23,8 @@ export default async function Pictures({ searchParams }: { searchParams: Promise
       <p className="label pictures-label">{IMAGES.label}</p>
       <h1>Pictures</h1>
       <p>
-        Images readers made for passages of the book, with an image model. Each one is AI-generated, not by the author, and shows
-        the exact prompt that made it.
+        Images readers made for passages of the book, with an image model, each shown with the passage it is of. Each one is
+        AI-generated, not by the author; its page shows the exact prompt that made it.
       </p>
       <ImageFeed
         sort={sort}
@@ -39,6 +39,7 @@ export default async function Pictures({ searchParams }: { searchParams: Promise
           likes: im.likes,
           alt: `AI-generated image: ${im.userPrompt.split(/(?<=[.!?])\s/)[0]}`,
           prompt: im.userPrompt,
+          passage: passageText(im.chapter, im.start, im.end),
         }))}
       />
       <p className="as-draft ic-draftline">{W.draftLine}</p>

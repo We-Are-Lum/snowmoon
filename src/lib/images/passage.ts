@@ -19,3 +19,11 @@ export function passageBlocks(chapter: number, start: number, end: number) {
     .map((b, i) => ({ idx: b.idx, kind: b.kind, content: b.content, label: facts[i].label }))
     .filter((b) => b.idx >= start && b.idx <= end);
 }
+
+/** The passage's own words, one string per paragraph or quote (book text, unaltered; markup removed). */
+export function passageText(chapter: number, start: number, end: number): string[] {
+  return passageBlocks(chapter, start, end)
+    .filter((b) => b.kind === 'paragraph' || b.kind === 'quote')
+    .map((b) => b.content.replace(/<[^>]+>/g, '').replace(/\*\*|__/g, '').trim())
+    .filter(Boolean);
+}

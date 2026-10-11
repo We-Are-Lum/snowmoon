@@ -241,7 +241,11 @@
 .ip-caption { margin: 0; font-family: var(--label); font-size: var(--text-label); line-height: 1.5; text-transform: uppercase; color: var(--ink); }
 .ip-meta { color: var(--muted); }
 .ip-meta a { color: var(--link); }
-.ip-passage { display: none; }
+.ip-passage { margin: 14px 0 0; padding: 0 0 0 14px; border-left: 2px solid var(--rule); font-family: var(--reading); font-size: 19px; line-height: 1.5; color: var(--ink); }
+.ip-passage p { margin: 0 0 0.6em; }
+.ip-how { margin: 14px 0 0; }
+.ip-how > summary { cursor: pointer; min-height: 44px; display: flex; align-items: center; list-style-position: inside; }
+.ip-how > summary::-webkit-details-marker { margin-right: 6px; }
 .ip-side { display: flex; flex-direction: column; }
 .image-actions { display: flex; flex-direction: column; gap: 8px; margin: 12px 0 0; }
 /* One row of equal buttons, 44px tall. */
@@ -355,3 +359,10 @@ a.ia-button:hover { text-decoration: none; }
   .ic-style input[type='radio']:focus-visible, .ia-report input[type='radio']:focus-visible { outline-offset: -10px; }
   .ic-style label { padding-left: 14px; }
 }
+
+/* The feed: the passage an image is of, in the reading type, a few lines; the whole passage is on the image's page. */
+.pictures-passage { display: block; color: var(--ink); text-decoration: none; }
+.pictures-passage:hover { text-decoration: none; }
+.pictures-passage blockquote { margin: 10px 0 0; padding: 0 0 0 12px; border-left: 2px solid var(--rule); font-family: var(--reading); font-size: 18px; line-height: 1.45; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 5; line-clamp: 5; overflow: hidden; }
+.pictures-passage blockquote p { margin: 0; display: inline; }
+.pictures-passage blockquote p + p::before { content: ' '; }

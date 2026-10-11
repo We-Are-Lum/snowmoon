@@ -12,7 +12,7 @@ import { AiLabel } from './recipe-sheet';
  * device are covered until shown; a covered image's caption gives the chapter only, never the
  * paragraph. Laid out as Claude Design's feed: a labelled order strip, then the images.
  */
-type Item = { versionId: string; url: string; chapter: number; where: string | null; by: string; date: string; likes: number; alt: string; prompt: string };
+type Item = { versionId: string; url: string; chapter: number; where: string | null; by: string; date: string; likes: number; alt: string; prompt: string; passage: string[] };
 
 export function ImageFeed({ images, sort, empty }: { images: Item[]; sort: 'new' | 'liked'; empty: React.ReactNode }) {
   const [furthest, setFurthest] = useState<number | null>(null);
@@ -49,6 +49,16 @@ export function ImageFeed({ images, sort, empty }: { images: Item[]; sort: 'new'
                   <Link href={`/image/${im.versionId}`} className="pictures-image">
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={im.url} alt={im.alt} width={1024} height={576} loading="lazy" />
+                  </Link>
+                )}
+                {/* The book's words the image is of, first (owner, 2026-10-10); the prompt is in the label's sheet and on its page. */}
+                {!covered && im.passage.length > 0 && (
+                  <Link href={`/image/${im.versionId}`} className="pictures-passage">
+                    <blockquote>
+                      {im.passage.map((t, i) => (
+                        <p key={i}>{t}</p>
+                      ))}
+                    </blockquote>
                   </Link>
                 )}
                 <p className="pictures-row">

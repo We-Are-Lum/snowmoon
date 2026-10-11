@@ -671,6 +671,11 @@ async function checkAiLabels() {
 
       await at('/images');
       await checkPictureLabels(page, `/images ${tag}`, FIXTURE_IMAGES.length);
+      // Browsing (owner, 2026-10-10): each image shows the passage it is of, in the reading type.
+      {
+        const n = await page.locator('.pictures-list li .pictures-passage blockquote').evaluateAll((els) => els.filter((e) => (e as HTMLElement).innerText.trim().length > 20 && e.getBoundingClientRect().height > 20).length);
+        if (n < FIXTURE_IMAGES.length) fail(`/images ${tag}: ${n} of ${FIXTURE_IMAGES.length} images show the passage they are of`);
+      }
 
       // Home's "Just made": the fixture's images, newest first, each labelled. With the intro seen: its
       // card images (a seeded image with its recipe written out, not the label button) are not this check's.
@@ -680,6 +685,19 @@ async function checkAiLabels() {
 
       await at(`/image/${FIXTURE_IMAGES[0].version}`);
       await checkPictureLabels(page, `/image ${tag}`, 1);
+      // The passage first, at every width; the prompt and the model when "How this was made" is opened.
+      {
+        if (!(await page.locator('.ip-passage').isVisible())) fail(`/image ${tag}: the passage is not shown`);
+        const how = page.locator('details.ip-how');
+        if (!(await how.count())) fail(`/image ${tag}: no "How this was made" to open`);
+        else {
+          if (await how.evaluate((d) => (d as HTMLDetailsElement).open)) fail(`/image ${tag}: "How this was made" starts open`);
+          if (await page.locator('.ip-recipe').isVisible()) fail(`/image ${tag}: the prompt and model show before "How this was made" is opened`);
+          await how.locator('summary').click();
+          if (!(await page.locator('.ip-recipe .recipe-prompt').isVisible())) fail(`/image ${tag}: opening "How this was made" does not show the exact prompt`);
+          await checkFloors(page, `/image ${tag} (recipe open)`, 'light');
+        }
+      }
 
       await at('/moderate');
       await page.waitForSelector('.mq-media', { timeout: 10000 }).catch(() => fail(`/moderate ${tag}: the queue did not show`));
