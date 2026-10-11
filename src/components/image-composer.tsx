@@ -62,7 +62,10 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
   const [range, setRange] = useState(initial);
   const [status, setStatus] = useState<Status | null>(null);
   const [prompt, setPrompt] = useState('');
-  const [style, setStyle] = useState<string | null>(null);
+  // The project's starting style is chosen unless the person picks another or None (owner, 2026-10-10:
+  // without it the model draws realistic pictures). undefined = not picked yet; a restored draft keeps its own.
+  const [picked, setStyle] = useState<string | null | undefined>(undefined);
+  const style = picked === undefined ? (status?.styles[0]?.id ?? null) : picked;
   const [busy, setBusy] = useState(false);
   const [note, setNote] = useState<string | null>(null);
   const [draft, setDraft] = useState<{ ticket: string; image: string } | null>(null);

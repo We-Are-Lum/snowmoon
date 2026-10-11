@@ -898,6 +898,11 @@ try {
       await page.evaluate(() => getSelection()!.removeAllRanges());
       await page.locator('.scene-label .add-image').first().click();
       await page.waitForSelector('.image-composer textarea');
+      // The project's starting style is chosen by default (owner, 2026-10-10); None is still there.
+      const styleChecked = await page.locator('.ic-style input[type="radio"]').evaluateAll((els) => els.map((e) => ({ on: (e as HTMLInputElement).checked, label: (e.parentElement?.textContent ?? '').trim() })));
+      if (!styleChecked.find((x) => x.on)?.label.startsWith('Techno vistas')) fail(`/chapter/1 (${scheme}): the composer does not start with the project's style chosen (${JSON.stringify(styleChecked)})`);
+      if (!styleChecked.some((x) => x.label.startsWith('None'))) fail(`/chapter/1 (${scheme}): the composer has no "None" style`);
+      if (!(await page.locator('.ic-style-text').count())) fail(`/chapter/1 (${scheme}): the chosen style's text is not shown`);
       await checkFloors(page, '/chapter/1 (add an image, invited)', scheme);
       const text = (await page.textContent('.image-composer')) ?? '';
       if (!/never sent to a model/.test(text)) fail('/chapter/1: the composer does not say the book text is never sent to a model');
