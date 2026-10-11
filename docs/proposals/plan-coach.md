@@ -9,11 +9,11 @@
 | Piece | File | State |
 |---|---|---|
 | World guide | `content/snowmoon/world-guide.json`, `.md` | 278 lines (with 92 geography lines, see `docs/maps/feasibility.md`, and 29 added for the guide episodes), each cited and tagged with the latest chapter it depends on; `scripts/world-guide.ts check` passes; every line read against its blocks by gpt-oss-120b and by the coding agent (`content/snowmoon/recipes/world-guide.json`) |
-| Craft guide | `docs/craft/visual-storytelling.md` | Draft, **not approved**; the owner edits and approves before the coach may use it |
-| Coach prompt | `config/prompts/plan-coach.md` | Draft |
-| Eval | `scripts/plan-coach-eval.ts`, fixtures in `scripts/fixtures/plan-coach/` | Three invented openings run; the owner's freewrite still to come; review in `docs/craft/plan-coach-eval-review.md` |
+| Craft guide | `docs/craft/visual-storytelling.md` | **Approved** (owner, 2026-10-11), with sections 8 to 17 added from Design v3's principles |
+| Coach prompts | `config/prompts/plan-coach.md`, `plan-coach-claims.md`, `plan-coach-world-check.md`, `plan-coach-guard.md` | Design 2 (the owner's four changes) |
+| Eval | `scripts/plan-coach-eval.ts`, fixtures in `scripts/fixtures/plan-coach/` | Design 1: three invented openings, reviewed in `docs/craft/plan-coach-eval-review.md`. Design 2: one test run; the full run, and the comparison of gpt-oss-120b, Kimi K3 and Claude Sonnet 5.5, wait for the owner's freewrite. Every call through the Vercel AI Gateway only |
 
-## Eval so far (gpt-oss-120b)
+## Eval of design 1 (gpt-oss-120b)
 
 The craft notes are reasonable. The coach fails in the two places the owner
 named:
