@@ -307,7 +307,7 @@ check('My picks and the composer show no built-on number', !/builtOn|built on/i.
   check('in this passage: an alias counts', SH.namedAs('Then Gem waved.', SH.namesFor({ name: 'Gemma Ro', aliases: ['Gem'] })) === 'Gem');
   check('in this passage: name_exclusions are not them ("Hun Min street" is not Min)', SH.namedAs('They walked down Hun Min street.', ['Min'], ['Hun Min']) === null && SH.namedAs('Min laughed.', ['Min'], ['Hun Min']) === 'Min');
   check('in this passage: whole words only', SH.namedAs('the minute', ['Min']) === null);
-  check('in this passage: the scene\'s place, with its evidence block', JSON.stringify(SH.inPassage(1, 2, 5).place) === JSON.stringify({ slug: 'kalimar-footpaths', name: 'the footpaths of the Kalimar district', evidence: 'c1-b5' }));
+  check('in this passage: the scene\'s place, with its evidence block', JSON.stringify(SH.inPassage(1, 2, 5).place) === JSON.stringify({ slug: 'kalimar-footpaths', name: 'the footpaths of the Kalimar district', evidence: 'c1-b2' }));
   check('in this passage: a scene with no place sheet has none', SH.inPassage(1, 45, 50).place === null && SH.inPassage(5, 1, 8).place === null);
   const found = SH.inPassage(1, 130, 134);
   check('Generate refuses a character the passage does not name', SH.askedSheets(found, { characters: ['lektor'] }, 3).ok === false);

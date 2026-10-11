@@ -261,3 +261,9 @@ Rolling back the code removes the bonus episode from the feed; its MP3 stays in 
 The short labels (Redrawn, AI description, Book, Invented, Draft) show only the ⓘ, on a 44px tap area, with the word as its accessible name (owner ruling, 2026-10-10: "Icon only for all short labels"). c20-b013-door-screen is no longer published (owner: "This image isn't good"; the scene is the wrong way round), listed in published.json's excluded with its reason; its recipe stays. "+ Add an image" no longer starts with a "·" left from the hidden scene line. To undo (back to `3acabd1`):
 
     vercel rollback https://snowmoon-qe3cj0c8l-nates-projects-d1780cff.vercel.app --scope nates-projects-d1780cff
+
+## 2026-10-10: styles, character sheets and place sheets; sheets connected to images (branch site-images-designs-2)
+
+Styles & characters: styles, character sheets, forks and My picks (step 4, the owner's decisions of 2026-10-09); making and picking are for invited readers only, for now (owner, 2026-10-10), browsing is open. Character and place sheets as text (the book's words, verbatim, and this edition's shorthand, labelled Invented and model-drafted); the Places tab and a page per place; content/snowmoon/designs/scenes.json gives each scene's place, with no model. The composer's "In this passage" adds the characters named and the scene's place to the prompt (removable, published with it); images record them ("In this image"). No migration; nothing seeded (seed:designs not run). To undo (back to `f281396`):
+
+    vercel rollback https://snowmoon-nsmd8uxui-nates-projects-d1780cff.vercel.app --scope nates-projects-d1780cff
