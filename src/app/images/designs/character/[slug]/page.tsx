@@ -7,6 +7,9 @@ import { bookCharacter, characterEntity, listDesigns, type DesignOrder } from '~
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { BookQuotes, CharacterGate } from '~/components/design-book';
 import { NewSheetLink } from '~/components/design-new-link';
+import { SheetImages, Shorthand } from '~/components/design-sheets';
+import { sheetCharacter } from '~/lib/images/sheets';
+import { sheetImages } from '~/lib/images/sheet-images';
 
 /**
  * One of the book's characters (step 4): what the book says (up to the chapters this reader has
@@ -30,6 +33,9 @@ export default async function CharacterPage({ params, searchParams }: Props) {
   const entityId = sql ? await characterEntity(sql, c).catch(() => null) : null;
   const sheets = sql && entityId ? await listDesigns(sql, 'character', sort, entityId).catch(() => []) : [];
   const href = `/images/designs/character/${c.slug}`;
+  // Sheets as text (2026-10-10): the project's summary and shorthand, and the images with them in.
+  const sheet = sheetCharacter(c.slug);
+  const images = await sheetImages('character', c.slug, c.name);
   return (
     <div className="page prose pictures designs">
       <p className="label ip-crumb">
@@ -37,7 +43,14 @@ export default async function CharacterPage({ params, searchParams }: Props) {
       </p>
       <CharacterGate firstChapter={c.firstChapter}>
         <h1>{c.name}</h1>
+        {sheet?.about && (
+          <section className="dz-about">
+            <p>{sheet.about}</p>
+            <p className="dz-note">{W.sheets.summaryNote}</p>
+          </section>
+        )}
         <BookQuotes name={c.name} quotes={c.quotes} />
+        {sheet?.descriptor && <Shorthand name={c.name} descriptor={sheet.descriptor} />}
         <div className="pictures-strip dz-strip">
           <nav className="pictures-sort" aria-label="Order">
             <Link href={href} aria-current={sort === 'new' ? 'page' : undefined}>
@@ -72,6 +85,7 @@ export default async function CharacterPage({ params, searchParams }: Props) {
         ) : (
           <p className="pictures-empty">{W.index.noSheets}</p>
         )}
+        <SheetImages images={images} />
         <p className="dz-footer">{W.index.footer}</p>
         <p className="as-draft ic-draftline">{IMAGE_WORDING.draftLine}</p>
       </CharacterGate>

@@ -212,3 +212,26 @@ a.dz-fork:hover { text-decoration: none; }
   .dz-aside .dz-label { padding: 14px 0; border-bottom: 1px solid var(--rule); color: var(--ink); }
   .dz-split > .dz-main, .dz-split > div > .dz-main { padding-left: 24px; }
 }
+
+/* "In this passage" (sheets as text, 2026-10-10): the found characters and place as chips, then their text in full. */
+.ic-in-passage { margin-top: 2px; }
+.ic-in-passage .ic-note { flex-basis: 100%; margin: 0; }
+.ic-sheet-text p { margin: 0; }
+.ic-sheet-text p + p { margin-top: 6px; }
+.ic-sheet-text .ic-sheet-head { font-family: var(--label); font-size: var(--text-label); line-height: 1.5; text-transform: uppercase; color: var(--muted); margin-bottom: 4px; }
+.ic-in-passage label:has(input:disabled) { color: var(--muted); cursor: default; }
+
+/* Sheets as text (2026-10-10): the summary, this edition's shorthand (Invented ⓘ), where a place appears, its images. */
+.designs .dz-about { margin: 0 0 12px; }
+.designs .dz-about p:first-child { margin: 0 0 4px; }
+.dz-shorthand, .dz-appears, .dz-images { display: flex; flex-direction: column; gap: 6px; margin: 0 0 12px; padding: 10px 12px; border: 1px solid var(--rule); border-radius: var(--radius); }
+.dz-label .info-label { margin-left: 6px; vertical-align: middle; }
+.dz-shorthand-text { margin: 0; font-size: 16px; line-height: 1.45; color: var(--body); }
+.dz-appears ul, .dz-image-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.dz-appears .dz-ref { display: inline-flex; align-items: center; min-height: 44px; white-space: normal; }
+.dz-image-list { gap: 14px; }
+.dz-image-list img { display: block; width: 100%; height: auto; background: var(--soft); }
+.dz-image-caption { margin: 6px 0 0; }
+.ip-in-image { margin: 12px 0 0; font-size: 16px; line-height: 1.5; }
+.ip-in-image-key { font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; color: var(--muted); }
+.seed-in-image { font-family: var(--label); font-size: var(--text-label); }

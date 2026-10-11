@@ -12,6 +12,7 @@ import { keptValue } from '~/lib/images/neynar';
 import { GATE_WORDING } from '~/lib/images/gate';
 import { composerPicks, myPicks, startingStyleRetired, type MyPick } from '~/lib/images/designs';
 import { designByline } from '~/lib/images/byline';
+import { inPassage, sheetCharacter, sheetPlace, shorthandLine } from '~/lib/images/sheets';
 
 /** A pick as the composer shows it: the text in full, since it becomes part of the public prompt (decision 7). */
 const chip = (p: MyPick) => ({
@@ -38,8 +39,16 @@ export async function GET(request: Request) {
   // Decision 13: once "Techno vistas" is published as a design, the file option is retired; it is then a style like any other.
   const retired = sql ? await startingStyleRetired(sql).catch(() => false) : false;
   const styles = retired ? [] : [{ id: 'techno-vistas', name: 'Techno vistas', text: styleText('techno-vistas', setting) }];
+  // "In this passage" (2026-10-10): the characters it names and its scene's place, with the exact shorthand text Generate would add.
+  const end = Number(q.get('end') ?? q.get('start'));
+  const found = ch && i >= 0 && Number.isInteger(end) ? inPassage(ch.chapter, Number(q.get('start')), end) : { characters: [], place: null };
+  const passageSheets = {
+    characters: found.characters.map((c) => ({ slug: c.slug, name: c.name, text: shorthandLine(sheetCharacter(c.slug)!) })),
+    place: found.place ? { slug: found.place.slug, name: found.place.name, text: shorthandLine(sheetPlace(found.place.slug)!) } : null,
+    maxCharacters: IMAGES.designs.maxCharacters,
+  };
   const editModel = { name: IMAGES.editModel.name, licence: IMAGES.editModel.licence, host: IMAGES.editModel.host };
-  const base = { label: IMAGES.label, model: IMAGES.model, editModel, rules: RULES, perDay: IMAGES.generationsPerDay, publishesPerDay: IMAGES.publishesPerDay, maxBlocks: IMAGES.maxBlocks, styles, ready };
+  const base = { label: IMAGES.label, model: IMAGES.model, editModel, rules: RULES, perDay: IMAGES.generationsPerDay, publishesPerDay: IMAGES.publishesPerDay, maxBlocks: IMAGES.maxBlocks, styles, ready, inPassage: passageSheets };
   if (fid === null) return NextResponse.json({ ...base, signedIn: false }, { headers: { 'Cache-Control': 'no-store' } });
   const invited = IMAGES.invited.includes(fid);
   if (!sql) return NextResponse.json({ ...base, signedIn: true, fid, invited, eligible: invited ? true : null }, { headers: { 'Cache-Control': 'no-store' } });

@@ -23,6 +23,8 @@ export interface Draft {
   /** Step 4: picked character sheets added for this image, and whether their views went as references. */
   characters?: string[];
   reference?: boolean;
+  /** Sheets as text (2026-10-10): the characters and place chosen from "In this passage". */
+  sheets?: { characters: string[]; place: string | null };
   ticket: string;
   image: string;
   savedAt: string;

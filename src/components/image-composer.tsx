@@ -42,7 +42,11 @@ type Status = {
   editModel?: { name: string; licence: string; host: string };
   /** Step 4: the person's own picks (private), offered for this image only. */
   picks?: { styles: Chip[]; characters: Chip[] };
+  /** Sheets as text: the characters this passage names and its scene's place, with the text Generate would add. */
+  inPassage?: { passage: { chapter: number; start: number; end: number }; characters: SheetChip[]; place: SheetChip | null; maxCharacters: number };
 };
+type SheetChip = { slug: string; name: string; text: string };
+const SH = W.designs.sheets;
 type Chip = { versionId: string; kind: 'style' | 'character'; entity: string; title: string; by: string; versionNo: number; text: string; views: number; drafted: boolean };
 const D = W.designs.composer;
 /** The designs in a draft's signed record (signed, not secret: it is the person's own draft). */
@@ -56,6 +60,80 @@ function ticketDesigns(ticket: string): Chip[] {
     return [];
   }
 }
+/** The sheets in a draft's signed record: who is in it, where, and the shorthand text added. */
+function ticketSheets(ticket: string): { characters: string[]; place: string | null; added: { kind: string; slug: string; name: string; text: string }[] } | null {
+  try {
+    const t = JSON.parse(new TextDecoder().decode(Uint8Array.from(atob(ticket.split('.')[0].replace(/-/g, '+').replace(/_/g, '/')), (ch) => ch.charCodeAt(0)))) as { sheets?: ReturnType<typeof ticketSheets> };
+    return t.sheets ?? null;
+  } catch {
+    return null;
+  }
+}
+const sameRange = (a: { chapter: number; start: number; end: number }, b: { chapter: number; start: number; end: number }) => a.chapter === b.chapter && a.start === b.start && a.end === b.end;
+const placeTitle = (name: string) => name.replace(/^./, (c) => c.toUpperCase());
+
+/**
+ * "In this passage" (owner, 2026-10-10): each character the passage names and its scene's place,
+ * chosen to start, removable for this image. Their shorthand (this edition's invented look) is
+ * shown in full, since it is added to the prompt and published with it.
+ */
+export function InPassage({
+  found,
+  chosen,
+  pickedFor,
+  onChange,
+}: {
+  found: NonNullable<Status['inPassage']>;
+  chosen: { characters: string[]; place: string | null };
+  pickedFor: Set<string>;
+  onChange: (next: { characters: string[]; place: string | null }) => void;
+}) {
+  const full = chosen.characters.length >= found.maxCharacters;
+  const added = [
+    ...found.characters.filter((c) => chosen.characters.includes(c.slug) && !pickedFor.has(c.name)),
+    ...(found.place && chosen.place ? [found.place] : []),
+  ];
+  return (
+    <fieldset className="ic-style ic-chars ic-in-passage">
+      <legend>{SH.inPassage}</legend>
+      {found.characters.map((c) => {
+        const on = chosen.characters.includes(c.slug);
+        return (
+          <label key={c.slug} data-sheet={`character:${c.slug}`}>
+            <input
+              type="checkbox"
+              checked={on}
+              disabled={!on && full}
+              onChange={(e) => onChange({ ...chosen, characters: e.target.checked ? [...chosen.characters, c.slug] : chosen.characters.filter((x) => x !== c.slug) })}
+            />{' '}
+            <span className="ic-chip-key">{SH.character}</span> {c.name}
+          </label>
+        );
+      })}
+      {found.place ? (
+        <label data-sheet={`place:${found.place.slug}`}>
+          <input type="checkbox" checked={chosen.place === found.place.slug} onChange={(e) => onChange({ ...chosen, place: e.target.checked ? found.place!.slug : null })} />{' '}
+          <span className="ic-chip-key">{SH.place}</span> {placeTitle(found.place.name)}
+        </label>
+      ) : (
+        <p className="ic-note ic-no-place">{SH.noPlace}</p>
+      )}
+      {found.characters.length > found.maxCharacters && <p className="ic-note">{SH.upTo(found.maxCharacters)}</p>}
+      {[...pickedFor].filter((n) => found.characters.some((c) => c.name === n && chosen.characters.includes(c.slug))).map((n) => (
+        <p key={n} className="ic-note">{SH.pickReplaces(n)}</p>
+      ))}
+      {added.length > 0 && (
+        <div className="ic-style-text ic-sheet-text">
+          <p className="ic-sheet-head">{SH.added}</p>
+          {added.map((a) => (
+            <p key={a.slug}>{a.text}</p>
+          ))}
+        </div>
+      )}
+    </fieldset>
+  );
+}
+
 const chipName = (c: Chip) => `${c.kind === 'style' ? c.title || c.entity : c.entity} · ${c.by} v${c.versionNo}`;
 type Wording = { version: string; line: string; title: string; text: string[]; sha256: string };
 
@@ -90,6 +168,8 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
   const [characters, setCharacters] = useState<string[]>([]);
   const [reference, setReference] = useState(false);
   const [chipsFor, setChipsFor] = useState<string | null>(null);
+  // "In this passage": the characters and place chosen for this image (all found, up to the limit, to start).
+  const [sheetPick, setSheetPick] = useState<{ for: string; characters: string[]; place: string | null } | null>(null);
   // What the draft was made with: the preview shows exactly that, even if the chips change after.
   const [madeWith, setMadeWith] = useState<{ style: string | null; characters: string[]; reference: boolean } | null>(null);
   const [busy, setBusy] = useState(false);
@@ -104,9 +184,9 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
   const ids = useRef<number[]>([]);
 
   const refresh = useCallback(async () => {
-    const res = await authFetch(`/api/images/status?chapter=${range.chapter}&start=${range.start}`).catch(() => null);
+    const res = await authFetch(`/api/images/status?chapter=${range.chapter}&start=${range.start}&end=${range.end}`).catch(() => null);
     if (res?.ok) setStatus((await res.json()) as Status);
-  }, [range.chapter, range.start]);
+  }, [range.chapter, range.start, range.end]);
   useEffect(() => {
     void refresh();
   }, [refresh, auth.kind]);
@@ -136,6 +216,7 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
       setReference(d.reference ?? false);
       setMadeWith({ style: d.style, characters: d.characters ?? [], reference: d.reference ?? false });
       setChipsFor(draftKey(range));
+      if (d.sheets) setSheetPick({ for: `${d.chapter}-${d.start}-${d.end}`, ...d.sheets });
     });
   }, [range]);
 
@@ -149,8 +230,20 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
     // Every picked style is offered; the newest pick starts chosen, for this image only (decision 3).
     // With no picked style, the project's starting style stays chosen (main's default, 2026-10-10).
     if (status.picks.styles[0]) setStyle(status.picks.styles[0].versionId);
-    setCharacters(status.picks.characters.filter((c) => mentions(passageText, c.entity)).map((c) => c.versionId));
+    // A picked sheet is offered for a character the passage names (the same rule as "In this passage").
+    const named = status.inPassage && sameRange(status.inPassage.passage, range) ? status.inPassage.characters.map((c) => c.name) : null;
+    setCharacters(status.picks.characters.filter((c) => (named ? named.includes(c.entity) : mentions(passageText, c.entity))).map((c) => c.versionId));
   }, [status, range, chipsFor, passageText]);
+  // The chips of "In this passage" start chosen, once per passage, from the status for this very passage.
+  const rangeKey = `${range.chapter}-${range.start}-${range.end}`;
+  const found = status?.inPassage && sameRange(status.inPassage.passage, range) ? status.inPassage : null;
+  useEffect(() => {
+    if (!found || sheetPick?.for === rangeKey) return;
+    setSheetPick({ for: rangeKey, characters: found.characters.slice(0, found.maxCharacters).map((c) => c.slug), place: found.place?.slug ?? null });
+  }, [found, rangeKey, sheetPick?.for]);
+  const chosenSheets = sheetPick && sheetPick.for === rangeKey && found
+    ? { characters: sheetPick.characters.filter((s) => found.characters.some((c) => c.slug === s)), place: sheetPick.place === found.place?.slug ? sheetPick.place : null }
+    : { characters: [], place: null };
   const widen = (side: 'start' | 'end', d: 1 | -1) => {
     const all = ids.current;
     const i = all.indexOf(range[side]);
@@ -184,14 +277,14 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
       const res = await authFetch('/api/images/generate', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ chapter: range.chapter, start: range.start, end: range.end, prompt, style, characters, reference: reference && withViews }),
+        body: JSON.stringify({ chapter: range.chapter, start: range.start, end: range.end, prompt, style, characters, reference: reference && withViews, sheets: chosenSheets }),
       });
       const out = (await res.json().catch(() => ({}))) as { ticket?: string; image?: string; error?: string; left?: number };
       if (res.ok && out.ticket && out.image) {
         setDraft({ ticket: out.ticket, image: out.image });
         setMadeWith({ style, characters, reference: reference && withViews });
         setView('draft');
-        await saveDraft({ key: draftKey(range), ...range, prompt, style, characters, reference: reference && withViews, ticket: out.ticket, image: out.image, savedAt: new Date().toISOString() });
+        await saveDraft({ key: draftKey(range), ...range, prompt, style, characters, reference: reference && withViews, sheets: chosenSheets, ticket: out.ticket, image: out.image, savedAt: new Date().toISOString() });
       } else setNote(out.error ?? 'Could not make the image');
     } catch {
       setNote('No connection. Try again.');
@@ -221,6 +314,9 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
   const made = madeWith ?? { style, characters, reference: useEdit };
   // The styles and sheets the draft was made with, read from its own signed record (what publishing will use).
   const madeChips = draft ? ticketDesigns(draft.ticket) : [];
+  const madeSheets = draft ? ticketSheets(draft.ticket) : null;
+  // A picked sheet for a character replaces this edition's shorthand for them.
+  const pickedFor = new Set(charChips.map((c) => c.entity));
   const madeStyle = status?.styles.find((s) => s.id === made.style) ?? null;
   const left = status?.left ?? 0;
   const ready = auth.kind === 'signed-in' && status?.eligible !== false && status?.ready && status.consented;
@@ -266,6 +362,14 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
                 </div>
               </section>
               <p className="ic-note">The book&apos;s text is shown to help you write. It is never sent to a model.</p>
+              {found && !published && (
+                <InPassage
+                  found={found}
+                  chosen={chosenSheets}
+                  pickedFor={pickedFor}
+                  onChange={(next) => setSheetPick({ for: rangeKey, ...next })}
+                />
+              )}
 
               {published ? (
                 <p className="ic-done">
@@ -432,6 +536,14 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
                         {c.drafted ? ' (model-drafted)' : ''}
                       </p>
                       <p className="ic-prompt-preview ic-style-added">{c.text}</p>
+                    </div>
+                  ))}
+                  {madeSheets?.added.map((a) => (
+                    <div key={`${a.kind}-${a.slug}`}>
+                      <p className="ic-label">
+                        {W.designs.preview.added(placeTitle(a.name))} ({SH.shorthandTitle.toLowerCase()}, model-drafted)
+                      </p>
+                      <p className="ic-prompt-preview ic-style-added">{a.text}</p>
                     </div>
                   ))}
                   {made.reference && <p className="ic-label">{D.referenceModel} {status?.editModel?.name}</p>}

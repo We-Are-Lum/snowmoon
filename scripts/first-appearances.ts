@@ -5,7 +5,8 @@
  *
  * Derived from the book text (content/snowmoon/text/chapter-*.json): the earliest block that names
  * them, by their full name, a word of it they are called by (titles like "General" left out), or an
- * alias listed in the file's "aliases". Whole words, case kept. Phrases in the file's
+ * alias listed in the file's "aliases" (namesFor and namedAs in src/lib/images/sheets.ts, which the
+ * composer's "In this passage" uses too). Whole words, case kept. Phrases in the file's
  * "name_exclusions" are not them (e.g. "Hun Min" street is not Min).
  *
  *   npx tsx scripts/first-appearances.ts           check: exit 1 if a file is out of date
@@ -13,27 +14,23 @@
  */
 import { readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
+import { namedAs, namesFor } from '../src/lib/images/sheets';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const DIR = path.join(ROOT, 'content/snowmoon/designs/characters');
 const write = process.argv.includes('--write');
-const TITLES = /^(Lord|Lady|General|Senator|Doctor|Dr\.?)$/;
 
 const chapters = readdirSync(path.join(ROOT, 'content/snowmoon/text'))
   .filter((f) => /^chapter-\d+\.json$/.test(f))
   .map((f) => JSON.parse(readFileSync(path.join(ROOT, 'content/snowmoon/text', f), 'utf8')) as { chapter: number; blocks: { idx: number; content: string }[] })
   .sort((a, b) => a.chapter - b.chapter);
 
-export function namesFor(c: { name: string; aliases?: string[] }): string[] {
-  return [...new Set([c.name, ...c.name.split(/\s+/).filter((w) => !TITLES.test(w) && w.length > 1), ...(c.aliases ?? [])])];
-}
+export { namesFor };
 
 export function firstNamed(names: string[], exclusions: string[] = []): { chapter: number; idx: number; as: string } | null {
-  const res = names.map((n) => ({ n, re: new RegExp(`(^|[^\\p{L}\\p{N}])${n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}($|[^\\p{L}\\p{N}])`, 'u') }));
   for (const ch of chapters) for (const b of ch.blocks) {
-    const text = exclusions.reduce((t, x) => t.split(x).join(' '), b.content);
-    const hit = res.find((r) => r.re.test(text));
-    if (hit) return { chapter: ch.chapter, idx: b.idx, as: hit.n };
+    const as = namedAs(b.content, names, exclusions);
+    if (as) return { chapter: ch.chapter, idx: b.idx, as };
   }
   return null;
 }

@@ -295,10 +295,75 @@ check('the seed script is a dry run unless --apply', /if \(!apply\)/.test(read('
 check('index rows carry no built-on number', !/built/.test(IMAGE_WORDING.designs.index.rowMeta('@a', 1)));
 check('My picks and the composer show no built-on number', !/builtOn|built on/i.test(read('src/components/my-picks.tsx') + read('src/components/image-composer.tsx') + read('src/components/design-picks.tsx')));
 
+// --- Sheets as text (owner, 2026-10-10): who is in a passage, where, and what Generate adds ------------
+{
+  const SH = await import('../src/lib/images/sheets');
+  const { buildScenes } = await import('./designs-scenes');
+  check('scenes.json is what npm run designs:scenes derives', read('content/snowmoon/designs/scenes.json') === JSON.stringify(buildScenes(), null, 1) + '\n');
+  const names = (c: number, a: number, b: number) => SH.inPassage(c, a, b).characters.map((x) => x.slug);
+  check('in this passage: a character by their name', names(1, 2, 5).includes('gladias'));
+  check('in this passage: by a word of the name (Zei Leimin as "Zei"), in the order first named', names(5, 1, 8).join(',') === 'zei,min,bai', names(5, 1, 8).join(','));
+  check('in this passage: titles left out, the rest a call name (General Lektor as "Lektor")', SH.namesFor({ name: 'General Lektor' }).includes('Lektor') && !SH.namesFor({ name: 'General Lektor' }).includes('General'));
+  check('in this passage: an alias counts', SH.namedAs('Then Gem waved.', SH.namesFor({ name: 'Gemma Ro', aliases: ['Gem'] })) === 'Gem');
+  check('in this passage: name_exclusions are not them ("Hun Min street" is not Min)', SH.namedAs('They walked down Hun Min street.', ['Min'], ['Hun Min']) === null && SH.namedAs('Min laughed.', ['Min'], ['Hun Min']) === 'Min');
+  check('in this passage: whole words only', SH.namedAs('the minute', ['Min']) === null);
+  check('in this passage: the scene\'s place, with its evidence block', JSON.stringify(SH.inPassage(1, 2, 5).place) === JSON.stringify({ slug: 'kalimar-footpaths', name: 'the footpaths of the Kalimar district', evidence: 'c1-b5' }));
+  check('in this passage: a scene with no place sheet has none', SH.inPassage(1, 45, 50).place === null && SH.inPassage(5, 1, 8).place === null);
+  const found = SH.inPassage(1, 130, 134);
+  check('Generate refuses a character the passage does not name', SH.askedSheets(found, { characters: ['lektor'] }, 3).ok === false);
+  check('Generate refuses an arbitrary id', SH.askedSheets(found, { characters: ['../../etc'] }, 3).ok === false && SH.askedSheets(found, { characters: [], place: 'autobus' }, 3).ok === false);
+  check('Generate refuses more characters than the limit', SH.askedSheets(found, { characters: found.characters.slice(0, 4).map((c) => c.slug) }, 3).ok === false);
+  const asked = SH.askedSheets(found, { characters: ['seila', 'gladias'], place: 'family-home' }, 3);
+  check('Generate accepts the passage\'s own characters and place', asked.ok && asked.characters.join(',') === 'seila,gladias' && asked.place === 'family-home');
+  check('nothing asked, nothing added', SH.askedSheets(found, undefined, 3).ok && SH.sheetsForImage({ characters: [], place: null }, []) === null);
+  const seila = JSON.parse(read('content/snowmoon/designs/characters/seila.json')) as { descriptor: string };
+  const home = JSON.parse(read('content/snowmoon/designs/locations/family-home.json')) as { descriptor: string };
+  const image = SH.sheetsForImage(asked as { characters: string[]; place: string | null }, []);
+  check('the shorthand added is the project\'s descriptor, by name', image?.added.map((a) => a.text).join('|') === `Seila: ${seila.descriptor}.|Gladias: ${(JSON.parse(read('content/snowmoon/designs/characters/gladias.json')) as { descriptor: string }).descriptor}.|The place, Gladias and Seila's house: ${home.descriptor}.`);
+  const withPick = SH.sheetsForImage(asked as { characters: string[]; place: string | null }, ['Seila']);
+  check('a picked sheet replaces the project\'s shorthand for that character', withPick?.added.every((a) => a.slug !== 'seila') === true && withPick?.characters.includes('seila') === true);
+  check('a picked sheet\'s character is recorded in the image', SH.sheetsForImage({ characters: [], place: null }, ['Zei Leimin'])?.characters.join() === 'zei');
+  const prompt = finalPrompt('Dinner at home', 'STYLE', image!.added.map((a) => a.text));
+  check('the shorthand goes in the prompt after the style, before the no-words line', prompt.startsWith('Dinner at home\n\nSTYLE\n\nSeila: ') && prompt.endsWith(`${home.descriptor}.\n\n${IMAGES.suffix}`));
+  // The recipe: the signed record carries the sheets; publish writes them and says who drafted the text.
+  const tk = signTicket({ v: 1, fid: 6786, chapter: 1, start: 130, end: 134, userPrompt: 'u', style: null, prompt, model: 'm', endpoint: 'e', host: 'h', settings: {}, seed: 1, requestId: null, sha256: 'c'.repeat(64), width: 1024, height: 576, costUsd: 0.003, guard: { model: 'g', verdict: 'ok' }, at, sheets: image! });
+  check('the signed record keeps the characters, the place and the text added', JSON.stringify(readTicket(tk)?.sheets) === JSON.stringify(image));
+  const { recipeAssist } = await import('../src/lib/images/ticket');
+  const assist = recipeAssist({ style: null, designs: undefined, sheets: image! });
+  check('the recipe marks the shorthand as the coding agent\'s draft', assist?.model === 'claude-coding-agent' && assist.drafted.includes('character and place shorthand') && /designs\/characters/.test(assist.source));
+  check('with the file style too, both are declared', recipeAssist({ style: { id: 'techno-vistas', text: 't' }, sheets: image! })?.drafted.join(',') === 'style text,character and place shorthand');
+  check('no sheets, no style: nothing drafted', recipeAssist({ style: null }) === null);
+  const pub = read('src/app/api/images/publish/route.ts');
+  check('publish records the sheets in the recipe and its assist', /\.\.\.\(t\.sheets \? \{ sheets: t\.sheets \} : \{\}\)/.test(pub) && /recipeAssist\(t\)/.test(pub));
+  const gen = read('src/app/api/images/generate/route.ts');
+  const g = (x: string) => gen.indexOf(x);
+  check('Generate checks the ids against the passage before consent, the gate and any count', g('askedSheets(inPassage(chapter, start, end)') > 0 && g('askedSheets(') < g('hasConsented(fid)') && g('askedSheets(') < g('await mayGenerate(') && g('await mayGenerate(') < g('await paidPicture('));
+  check('the prompt check reads the full prompt, as sent', /checkText: prompt,/.test(gen) && g('const prompt = finalPrompt(') < g('checkText: prompt'));
+  check('the signed record carries the sheets', /\.\.\.\(imageSheets \? \{ sheets: imageSheets \} : \{\}\)/.test(gen));
+  // Readers' images of a character or a place, from the recipe, newest first; hidden ones never.
+  async function imageWith(params: unknown, status = 'published', when = '2026-10-10T10:00:00Z') {
+    const [r] = await sql`insert into studio.recipes (source, provider, model, prompt, params, created_by_fid) values ('in_app', 'fal.ai', 'z-image-turbo', 'p', ${sql.json(params as never)}, 5) returning id`;
+    const [el] = await sql`insert into studio.elements (work_id, element_type, created_by_fid, status, created_at) values ('snowmoon', 'image', 5, ${status}, ${when}) returning id`;
+    const [v] = await sql`insert into studio.element_versions (element_id, version_no, body, asset_url, asset_sha256, recipe_id) values (${el.id}, 1, '{"lettering":[]}', 'https://x/y.jpg', ${String(Math.random()).slice(2).padEnd(64, '0')}, ${r.id}) returning id`;
+    await sql`insert into studio.anchors (version_id, work_id, chapter, start_idx, end_idx) values (${v.id}, 'snowmoon', 1, 130, 134)`;
+    return String(v.id);
+  }
+  const DATA = await import('../src/lib/images/data');
+  const older = await imageWith({ user_prompt: 'a', sheets: image }, 'published', '2026-10-09T10:00:00Z');
+  const newer = await imageWith({ user_prompt: 'b', sheets: { characters: ['seila'], place: null, added: [] } });
+  await imageWith({ user_prompt: 'c', sheets: image }, 'hidden');
+  const picked = await imageWith({ user_prompt: 'd', designs: [{ kind: 'character', entity: 'Seila', versionId: 'x' }] }, 'published', '2026-10-08T10:00:00Z');
+  const ofSeila = await DATA.imagesWithSheet(S as never, 'character', 'seila', 'Seila');
+  check('a character\'s images: from the recipe, newest first, and older ones with a picked sheet; never hidden', ofSeila.map((x) => x.versionId).join() === [newer, older, picked].join(), JSON.stringify(ofSeila.map((x) => x.userPrompt)));
+  const ofHome = await DATA.imagesWithSheet(S as never, 'place', 'family-home', "Gladias and Seila's house");
+  check('a place\'s images: those whose recipe names it', ofHome.map((x) => x.versionId).join() === older && ofHome[0].sheets?.place === 'family-home');
+  check('the composer sends the chips and shows their text in full', /sheets: chosenSheets/.test(read('src/components/image-composer.tsx')) && /<p key=\{a\.slug\}>\{a\.text\}<\/p>/.test(read('src/components/image-composer.tsx')));
+}
+
 await sql.end();
 await server.stop();
 if (failures.length) {
   console.error(`\nDESIGN TESTS FAILED (${failures.length}, ${passed} passed):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`design tests passed: ${passed} checks (styles, sheets, forks, versions, built on, orders, private picks, caps on edit calls, report and hide)`);
+console.log(`design tests passed: ${passed} checks (styles, sheets, forks, versions, built on, orders, private picks, caps on edit calls, report and hide, sheets as text: in this passage, Generate's ids, the recipe)`);

@@ -4,6 +4,7 @@ import { useEffect, useState, type ReactNode } from 'react';
 import Link from 'next/link';
 import { openedChapters } from '~/lib/chat/device';
 import { IMAGE_WORDING } from '~/lib/images/wording';
+import { BookLabel } from './design-sheets';
 
 /**
  * A character sheet's "What the book says" (Design 5a): the book's own words about the character,
@@ -18,12 +19,14 @@ function useFurthest() {
   return furthest;
 }
 
-export function BookQuotes({ name, quotes }: { name: string; quotes: { chapter: number; idx: number; quote: string }[] }) {
+export function BookQuotes({ name, quotes }: { name: string; quotes: { chapter: number; idx: number; quote: string; fact?: string }[] }) {
   const furthest = useFurthest();
   const shown = furthest === null ? [] : quotes.filter((q) => q.chapter <= furthest);
   return (
     <section className="dz-book" aria-label={`What the book says about ${name}`}>
-      <p className="dz-label">{W.page.bookTitle}</p>
+      <p className="dz-label">
+        {W.page.bookTitle} <BookLabel />
+      </p>
       {shown.length ? (
         <ul>
           {shown.map((q) => (
@@ -43,14 +46,15 @@ export function BookQuotes({ name, quotes }: { name: string; quotes: { chapter: 
   );
 }
 
-export function CharacterGate({ firstChapter, children }: { firstChapter: number; children: ReactNode }) {
+/** A character or a place first met past where the reader has got to is covered until shown. */
+export function CharacterGate({ firstChapter, children, covered }: { firstChapter: number; children: ReactNode; covered?: string }) {
   const furthest = useFurthest();
   const [show, setShow] = useState(false);
   if (furthest !== null && (firstChapter <= furthest || show)) return <>{children}</>;
   return (
     <div className="dz-main">
       <div className="pictures-cover dz-cover">
-        <p>{W.page.coveredPage(firstChapter)}</p>
+        <p>{covered ?? W.page.coveredPage(firstChapter)}</p>
         <button type="button" className="pictures-show" onClick={() => setShow(true)} disabled={furthest === null}>
           {W.index.showAnyway}
         </button>

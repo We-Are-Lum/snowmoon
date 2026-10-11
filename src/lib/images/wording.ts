@@ -71,7 +71,7 @@ export const IMAGE_WORDING = {
       lead: 'Styles and character sheets readers made. The text of each one is added, in full, to the prompts that use it.',
       tabStyles: 'Styles',
       tabCharacters: 'Characters',
-      tabPlaces: 'Places · coming',
+      tabPlaces: 'Places',
       newest: 'Newest first',
       built: 'Most built on',
       newStyle: '+ New style',
@@ -217,6 +217,51 @@ export const IMAGE_WORDING = {
       style: 'Why are you reporting this style?',
       sheet: 'Why are you reporting this sheet?',
     },
+    /**
+     * Sheets as text (owner, 2026-10-10): the project's summaries of the book's characters and places,
+     * the book's own words about them, and this edition's shorthand (its invented look), connected to
+     * images made from the text. Model-drafted wording, for the owner to rewrite.
+     */
+    sheets: {
+      leadPlaces: 'The places the book’s scenes happen in. Each has what the book says, and this edition’s shorthand for how it looks.',
+      placesOrder: 'In the order the book first goes there',
+      coveredPlaceRow: (ch: number) => `A place from chapter ${ch}, past where you’ve read.`,
+      scenes: (n: number) => (n === 0 ? 'Not yet tied to a scene' : n === 1 ? 'In 1 scene' : `In ${n} scenes`),
+      coveredPlace: (ch: number) => `This place first appears in chapter ${ch}, past where you’ve read.`,
+      summaryNote: 'Summary drafted by the coding agent, a closed model.',
+      shorthandTitle: 'This edition’s shorthand',
+      shorthandNote: 'Added to an image’s prompt when it is in the passage, and published with it. Drafted by the coding agent, a closed model; not from the book.',
+      inventedDeclaration: 'invented for this edition by the coding agent, a closed model; not from the book',
+      inventedTitle: 'Invented for this edition',
+      inventedBody: [
+        'The book says little or nothing about how this looks, so this edition invented a look, to keep images of it alike.',
+        'The coding agent (a closed model) drafted it. It is not the author’s, and readers’ own sheets can replace it.',
+      ],
+      bookDeclaration: 'the book’s own words, verbatim; each quote links to its block',
+      bookTitleLabel: 'From the book',
+      bookBody: ['These are the book’s own words, verbatim, from the chapters you’ve read. Each one links to where it is.'],
+      appears: 'Where it appears',
+      appearsRow: (ch: number, scene: number, where: string) => `Chapter ${ch} · scene ${scene}${where ? ` · ${where}` : ''}`,
+      appearsLater: (n: number) => `And ${n} more ${n === 1 ? 'scene' : 'scenes'} past where you’ve read.`,
+      appearsNote: 'Worked out from the book’s scenes, with no model: a scene is here when it quotes this place’s facts or has a seeded image of it.',
+      images: 'Images',
+      imagesNote: 'Readers’ images newest first, then this edition’s starting images in book order.',
+      noImages: 'No images yet.',
+      seeded: 'This edition’s image',
+      imageOf: (ch: number) => `Chapter ${ch} · AI-generated image · not by the author`,
+      coveredImage: (ch: number) => `From chapter ${ch}, past where you’ve read.`,
+      inThisImage: 'In this image',
+      inPassage: 'In this passage · change for this image only',
+      character: 'Character',
+      place: 'Place',
+      noPlace: 'No place sheet for this scene yet',
+      added: 'Added to your prompt, and published with it (this edition’s invented look, model-drafted):',
+      pickReplaces: (name: string) => `Your picked sheet for ${name} is added instead of this edition’s shorthand.`,
+      upTo: (n: number) => `Up to ${n} characters in one image`,
+      notNamed: 'That character is not named in this passage.',
+      notThisPlace: 'That place is not this scene’s.',
+      sheetsLink: 'Characters & places →',
+    },
     moderate: {
       style: 'Style',
       sheet: (name: string) => `Sheet for ${name}`,
@@ -290,9 +335,11 @@ const DESIGN_SCREENS: Record<keyof typeof IMAGE_WORDING.designs, { screen: strin
   about: { screen: 'About', where: 'src/app/about/page.tsx (Pictures section)' },
   report: { screen: 'Report a style or a sheet', where: 'src/components/image-actions.tsx' },
   moderate: { screen: 'Reports (moderators)', where: 'src/components/moderate-queue.tsx' },
+  sheets: { screen: 'Character and place sheets, and “In this passage”', where: 'src/app/images/designs/place/[slug]/page.tsx, character/[slug]/page.tsx, design-sheets.tsx, image-composer.tsx, src/app/image/[id]/page.tsx, chapter pages' },
 };
 function filled(v: unknown): string {
   if (typeof v === 'string') return v;
+  if (Array.isArray(v)) return v.join(' / ');
   const fn = v as (...a: unknown[]) => string;
   const names = (fn.toString().match(/^\(?([^)=]*)\)?\s*=>/)?.[1] ?? '').split(',').map((n) => n.replace(/:.*$/, '').trim()).filter(Boolean);
   return fn(...names.map((n) => `{${n}}`));

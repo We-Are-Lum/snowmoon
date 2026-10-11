@@ -640,6 +640,95 @@ add({
   },
 });
 
+// P2j: character and place sheets as text (owner, 2026-10-10). The book's words on a sheet are the
+// book's, verbatim, at their blocks; this edition's shorthand (descriptor) is shown only through
+// <Shorthand>, which labels it "Invented ⓘ" and says the coding agent drafted it; the scene→place
+// map (content/snowmoon/designs/scenes.json) is what npm run designs:scenes derives, and each
+// assignment's evidence block exists, is inside its part, and is that place's fact or seeded image.
+type SheetFile = { file: string; slug: string; facts: { chapter: number; idx: number; quote: string }[] };
+add({
+  id: 'P2j',
+  principle: 2,
+  name: 'sheets: each quote is verbatim at its block, each shown shorthand is labelled Invented and model-drafted, scenes.json is up to date with its evidence in place',
+  load: async () => {
+    const { buildScenes } = await import('./designs-scenes');
+    const sheets: SheetFile[] = ['characters', 'locations'].flatMap((d) =>
+      readdirSync(path.join(ROOT, 'content/snowmoon/designs', d)).filter((f) => f.endsWith('.json')).map((f) => {
+        const j = json<{ slug: string; facts?: SheetFile['facts'] }>(`content/snowmoon/designs/${d}/${f}`);
+        return { file: `content/snowmoon/designs/${d}/${f}`, slug: j.slug, facts: j.facts ?? [] };
+      }));
+    const sources = walk('src', /\.tsx$/).map((f) => ({ file: f, text: read(f) }));
+    return {
+      sheets,
+      blocks: Object.fromEntries(loadBlocks(ROOT)),
+      committed: read('content/snowmoon/designs/scenes.json'),
+      derived: JSON.stringify(buildScenes(), null, 1) + '\n',
+      seeded: json<{ images: { id: string; chapter: number; idx: number; location: string | null }[] }>('content/snowmoon/illustrations/published.json').images,
+      sources,
+    };
+  },
+  run: ({ sheets, blocks, committed, derived, seeded, sources }) => {
+    const problems: string[] = [];
+    const plain = (s: string) => s.replace(/<[^>]+>/g, '').replace(/\*\*|__|\*|_/g, '').replace(/\\(.)/g, '$1');
+    for (const sh of sheets as SheetFile[]) for (const f of sh.facts) {
+      const b = blocks[`c${f.chapter}-b${f.idx}`] as { content: string } | undefined;
+      if (!b) problems.push(`${sh.file}: c${f.chapter}-b${f.idx} is not a block of the book`);
+      else if (!b.content.includes(f.quote) && !plain(b.content).includes(f.quote)) problems.push(`${sh.file}: "${f.quote.slice(0, 50)}" is not verbatim at c${f.chapter}-b${f.idx}`);
+    }
+    // The shorthand component: "Invented" in .info-word with the ⓘ (InfoLabel), and the drafted note.
+    const comp = (sources as { file: string; text: string }[]).find((x) => x.file === 'src/components/design-sheets.tsx')?.text ?? '';
+    const shorthand = comp.slice(comp.indexOf('export function Shorthand'), comp.indexOf('export type SheetImage'));
+    if (!/<InventedLabel \/>/.test(shorthand) || !/word="Invented" kind="invented"/.test(comp)) problems.push('src/components/design-sheets.tsx: the shorthand is not labelled "Invented ⓘ" (InfoLabel, kind invented)');
+    if (!/SH\.shorthandNote/.test(shorthand) || !/data-drafted="claude-coding-agent"/.test(shorthand)) problems.push('src/components/design-sheets.tsx: the shorthand does not say the coding agent drafted it');
+    // Every screen that shows a sheet's descriptor does it through <Shorthand>.
+    for (const x of sources as { file: string; text: string }[]) {
+      if (x.file === 'src/components/design-sheets.tsx') continue;
+      const shows = /\.descriptor\b/.test(x.text);
+      if (shows && !/<Shorthand\b[^>]*descriptor=/.test(x.text)) problems.push(`${x.file}: shows a sheet's descriptor without <Shorthand> (Invented ⓘ, model-drafted)`);
+      for (const m of x.text.matchAll(/\.descriptor\b/g)) {
+        const line = x.text.slice(x.text.lastIndexOf('\n', m.index) + 1, x.text.indexOf('\n', m.index));
+        if (!/<Shorthand\b|sheet\?\.descriptor &&|p\.descriptor &&/.test(line)) problems.push(`${x.file}: a descriptor shown outside <Shorthand>: ${line.trim().slice(0, 80)}`);
+      }
+    }
+    // scenes.json: up to date, and each assignment's evidence in place.
+    if (committed !== derived) problems.push('content/snowmoon/designs/scenes.json is out of date (npm run designs:scenes)');
+    let parts: { chapter: number; start: number; end: number; place: string | null; evidence: string | null }[] = [];
+    try {
+      parts = JSON.parse(committed).parts;
+    } catch {
+      problems.push('content/snowmoon/designs/scenes.json does not parse');
+    }
+    const places = new Map((sheets as SheetFile[]).filter((x) => x.file.includes('/locations/')).map((x) => [x.slug, x]));
+    for (const p of parts) {
+      if (!p.place) continue;
+      const where = `scenes.json c${p.chapter} ${p.start}–${p.end} (${p.place})`;
+      const m = p.evidence?.match(/^c(\d+)-b(\d+)$/);
+      if (!m || !blocks[p.evidence!]) {
+        problems.push(`${where}: evidence ${p.evidence} is not a block of the book`);
+        continue;
+      }
+      const [ch, idx] = [Number(m[1]), Number(m[2])];
+      if (ch !== p.chapter || idx < p.start || idx > p.end) problems.push(`${where}: evidence ${p.evidence} is outside the part`);
+      const loc = places.get(p.place);
+      if (!loc) problems.push(`${where}: no such place sheet`);
+      const isFact = loc?.facts.some((f) => f.chapter === ch && f.idx === idx);
+      const isImage = (seeded as { chapter: number; idx: number; location: string | null }[]).some((s) => s.chapter === ch && s.idx === idx && s.location?.endsWith(`/${p.place}.json`));
+      if (!isFact && !isImage) problems.push(`${where}: ${p.evidence} is neither a fact of this place nor a seeded image of it`);
+    }
+    return problems;
+  },
+  plant: (c) => {
+    // One word of a quote changed; a descriptor shown bare; an assignment moved off its evidence.
+    const sh = (c.sheets as SheetFile[]).find((x) => x.facts.length)!;
+    sh.facts[0].quote = sh.facts[0].quote.replace(/\w+/, 'Plainly');
+    c.sources.push({ file: 'src/app/planted.tsx', text: '<p>{place.descriptor}</p>' });
+    const j = JSON.parse(c.committed);
+    const p = j.parts.find((x: { place: string | null }) => x.place);
+    p.evidence = `c${p.chapter}-b${p.end + 1}`;
+    c.committed = JSON.stringify(j, null, 1) + '\n';
+  },
+});
+
 // Short labels with ⓘ (owner ruling, 2026-10-09): "a short visible word, with ⓘ for the details. An icon
 // alone doesn't count." Each InfoLabel is a button with its word visible, the ⓘ, the declaration served
 // visually hidden, and it opens a dialog. P2g, P2h and P8f require the word, and plant a missing one.

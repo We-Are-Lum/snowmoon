@@ -5,6 +5,7 @@ import { designByline } from '~/lib/images/byline';
 import { bookCharacters, listDesigns, sheetCounts, type DesignOrder } from '~/lib/images/designs';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { DesignIndex } from '~/components/design-index';
+import { partsOf, placeFirstChapter, placeTitle, sheetPlaces } from '~/lib/images/sheets';
 
 export const metadata = { title: 'Styles & characters' };
 export const revalidate = 60;
@@ -14,11 +15,12 @@ const W = IMAGE_WORDING.designs;
  * Styles and character sheets (step 4; Claude Design's 4-desktop index and the prototype's
  * library). Two tabs. Styles: readers' styles, newest first or most built on, the order always
  * named. Characters: the book's characters, each with its sheets. Nothing is official or featured;
- * no pick is counted or shown here. Places are "coming", as text.
+ * no pick is counted or shown here. Places (2026-10-10): the book's places as text sheets, in the
+ * order the book first goes there.
  */
 export default async function Designs({ searchParams }: { searchParams: Promise<{ tab?: string; sort?: string }> }) {
   const q = await searchParams;
-  const tab = q.tab === 'characters' ? 'characters' : 'styles';
+  const tab = q.tab === 'characters' ? 'characters' : q.tab === 'places' ? 'places' : 'styles';
   const sort: DesignOrder = q.sort === 'built' ? 'built' : 'new';
   const sql = db();
   const styles = sql && tab === 'styles' ? await listDesigns(sql, 'style', sort).catch(() => []) : [];
@@ -29,7 +31,7 @@ export default async function Designs({ searchParams }: { searchParams: Promise<
         <Link href="/images">← Pictures</Link> · {IMAGES.label}
       </p>
       <h1>{W.index.title}</h1>
-      <p>{W.index.lead}</p>
+      <p>{tab === 'places' ? W.sheets.leadPlaces : W.index.lead}</p>
       <DesignIndex
         tab={tab}
         sort={sort}
@@ -43,6 +45,9 @@ export default async function Designs({ searchParams }: { searchParams: Promise<
           thumb: s.thumb,
         }))}
         characters={bookCharacters().map((c) => ({ slug: c.slug, name: c.name, firstChapter: c.firstChapter, sheets: counts.get(c.name) ?? 0 }))}
+        places={sheetPlaces()
+          .map((p) => ({ slug: p.slug, name: placeTitle(p.name), firstChapter: placeFirstChapter(p), scenes: new Set(partsOf(p.slug).map((s) => `${s.chapter}-${s.scene}`)).size }))
+          .sort((a, b) => a.firstChapter - b.firstChapter || a.name.localeCompare(b.name))}
       />
     </div>
   );

@@ -7,7 +7,7 @@ import { IMAGES, WORK_ID } from '~/lib/config';
 import { hasConsented } from '~/lib/consent';
 import { publishesLeft } from '~/lib/images/limits';
 import { putPublic, storageReady } from '~/lib/images/store';
-import { readTicket } from '~/lib/images/ticket';
+import { readTicket, recipeAssist } from '~/lib/images/ticket';
 import { bylineName } from '~/lib/names';
 
 /**
@@ -83,15 +83,14 @@ export async function POST(request: Request) {
         // Step 4: the picked styles and sheets added, each with the exact text added, and any reference pictures.
         ...(t.designs?.length ? { designs: t.designs } : {}),
         ...(t.references?.length ? { references: t.references } : {}),
+        // Sheets as text (2026-10-10): who is in the image and where, and the shorthand text added.
+        ...(t.sheets ? { sheets: t.sheets } : {}),
       } as never),
       seed: t.seed,
       // The style text was drafted by the coding agent (content/snowmoon/designs/styles), so it says so.
       // A picked design whose text a model drafted (the project's starting style, published as a design) says so too.
-      assist: t.style
-        ? tx.json({ model: 'claude-coding-agent', drafted: ['style text'], source: 'content/snowmoon/designs/styles/techno-vistas.json' } as never)
-        : t.designs?.some((d) => d.assist)
-          ? tx.json({ model: 'claude-coding-agent', drafted: ['style text'], source: `design versions ${t.designs.filter((d) => d.assist).map((d) => d.versionId).join(', ')}` } as never)
-          : null,
+      // The project's shorthand for characters and places (their descriptors) was drafted by the coding agent too.
+      assist: (() => { const a = recipeAssist(t); return a ? tx.json(a as never) : null; })(),
       cost_usd: Number(t.costUsd.toFixed(4)),
       created_by_fid: fid,
     })}`;

@@ -1,4 +1,6 @@
 import Link from 'next/link';
+import { IMAGE_WORDING } from '~/lib/images/wording';
+import { seededInImage } from '~/lib/images/sheet-images';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import { Fragment, type CSSProperties } from 'react';
@@ -191,6 +193,22 @@ export default async function ChapterPage({ params }: Props) {
                       </RecipeLink>
                     </>
                   )}
+                  {/* Sheets as text (2026-10-10): who and where, from published.json, each linking to its sheet. */}
+                  {(() => {
+                    const inImage = seededInImage(image.id);
+                    return inImage.length > 0 ? (
+                      <span className="seed-in-image" data-in-image="">
+                        {' · '}
+                        {IMAGE_WORDING.designs.sheets.inThisImage}:{' '}
+                        {inImage.map((x, k) => (
+                          <Fragment key={x.href}>
+                            {k > 0 && ' · '}
+                            <Link href={x.href}>{x.name}</Link>
+                          </Fragment>
+                        ))}
+                      </span>
+                    ) : null;
+                  })()}
                 </figcaption>
               </figure>
             )}

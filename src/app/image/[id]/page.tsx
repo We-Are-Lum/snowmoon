@@ -12,6 +12,8 @@ import { ImageActions } from '~/components/image-actions';
 import { MakeImageLink } from '~/components/make-image-link';
 import { AiLabel } from '~/components/recipe-sheet';
 import { AI_LABEL, readerImageView } from '~/lib/ai-declared';
+import { inThisImage } from '~/lib/images/sheet-images';
+import { sheetCharacters } from '~/lib/images/sheets';
 
 /**
  * A reader's image (section 5): the image, what it is, and its whole recipe, readable signed
@@ -58,6 +60,11 @@ export default async function ImagePage({ params }: Props) {
   const reader = `/chapter/${im.chapter}#c${im.chapter}-b${im.start}`;
   // The passage's own words (book text, never sent to a model): what the image is of, shown first (owner, 2026-10-10).
   const passage = passageText(im.chapter, im.start, im.end);
+  // "In this image" (2026-10-10): the characters and place its recipe records (older images: the picked sheets' characters).
+  const inImage = inThisImage(
+    im.sheets?.characters ?? im.designs.filter((d) => d.kind === 'character').map((d) => sheetCharacters().find((c) => c.name === d.entity)?.slug).filter((x): x is string => Boolean(x)),
+    im.sheets?.place ?? null,
+  );
   return (
     <div className="page prose image-page">
       <p className="label ip-crumb">
@@ -93,6 +100,7 @@ export default async function ImagePage({ params }: Props) {
             ))}
           </blockquote>
         )}
+        {inImage.length > 0 && <InThisImage items={inImage} />}
         {/* Another image of the same passage (owner, 2026-10-10); shown where "Add an image" shows. Model-drafted wording. */}
         <MakeImageLink className="mi-from ip-make" passage={{ chapter: im.chapter, start: im.start, end: im.end }}>
           {W.create.ofThis} →
@@ -133,6 +141,16 @@ export default async function ImagePage({ params }: Props) {
               <dd className="ip-wide recipe-mono">{im.references.map((r) => `sha256 ${r.sha256}`).join(', ')}</dd>
             </>
           )}
+          {im.sheets && im.sheets.added.length > 0 && (
+            <>
+              <dt className="ip-wide">{W.designs.sheets.shorthandTitle} (text drafted by the coding agent, a closed model)</dt>
+              {im.sheets.added.map((a) => (
+                <dd key={`${a.kind}-${a.slug}`} className="ip-wide ip-words ip-added">
+                  {a.text}
+                </dd>
+              ))}
+            </>
+          )}
           <dt className="ip-wide">The exact prompt sent to the model</dt>
           <dd className="ip-wide">
             <pre className="recipe-prompt">{im.prompt}</pre>
@@ -167,5 +185,20 @@ export default async function ImagePage({ params }: Props) {
         <p className="as-draft ic-draftline">{W.draftLine}</p>
       </div>
     </div>
+  );
+}
+
+/** "In this image: Seila · Gladias and Seila's house", each linking to its sheet. */
+function InThisImage({ items }: { items: { href: string; name: string }[] }) {
+  return (
+    <p className="ip-in-image" data-in-image="">
+      <span className="ip-in-image-key">{W.designs.sheets.inThisImage}:</span>{' '}
+      {items.map((x, i) => (
+        <span key={x.href}>
+          {i > 0 && ' · '}
+          <Link href={x.href}>{x.name}</Link>
+        </span>
+      ))}
+    </p>
   );
 }

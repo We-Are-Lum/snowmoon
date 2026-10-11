@@ -13,6 +13,7 @@ import { finalPrompt, STYLES, styleText, type StyleId } from '~/lib/images/rules
 import { signTicket, type TicketDesign } from '~/lib/images/ticket';
 import { myPicks, startingStyleRetired, type MyPick } from '~/lib/images/designs';
 import { designByline } from '~/lib/images/byline';
+import { askedSheets, inPassage, sheetsForImage } from '~/lib/images/sheets';
 
 /**
  * Generate one draft image for a passage (docs/proposals/add-an-image.md, section 5). Any
@@ -25,6 +26,12 @@ import { designByline } from '~/lib/images/byline';
  * Step 4: the person may add their own picks (a picked style instead of the starting one, and
  * picked character sheets), each one's text added to the prompt and checked with it. When asked,
  * a picked sheet's views go to FLUX.2 [klein] 4B edit as reference pictures, through the same caps.
+ *
+ * Sheets as text (owner, 2026-10-10): the characters this passage names and its scene's place
+ * (src/lib/images/sheets.ts, no model), as the person left them chosen. Only those may be asked
+ * for; the text added is built here from the project's files (the edition's invented look, drafted
+ * by the coding agent), and a picked sheet for the same character replaces it. The prompt check
+ * reads the whole prompt as it will be sent.
  */
 const isId = (s: unknown): s is string => typeof s === 'string' && /^[0-9a-f-]{36}$/.test(s);
 const asDesign = (p: MyPick): TicketDesign => ({
@@ -49,7 +56,7 @@ export async function POST(request: Request) {
   const sql = db();
   if (!sql || !process.env.FAL_KEY || !process.env.IMAGES_TICKET_SECRET) return no('Making images is not set up on this deployment', 503);
 
-  let body: { chapter?: unknown; start?: unknown; end?: unknown; prompt?: unknown; style?: unknown; characters?: unknown; reference?: unknown };
+  let body: { chapter?: unknown; start?: unknown; end?: unknown; prompt?: unknown; style?: unknown; characters?: unknown; reference?: unknown; sheets?: { characters?: unknown; place?: unknown } };
   try {
     body = await request.json();
   } catch {
@@ -70,6 +77,9 @@ export async function POST(request: Request) {
   if (style !== null && !designStyle && (await startingStyleRetired(sql))) return no('No such style', 400);
   const wanted = Array.isArray(body.characters) ? body.characters.filter(isId) : [];
   if (wanted.length > IMAGES.designs.maxCharacters) return no(`Up to ${IMAGES.designs.maxCharacters} characters in one image`, 400);
+  // "In this passage": only the characters it names and its scene's place, never an arbitrary id.
+  const asked = askedSheets(inPassage(chapter, start, end), body.sheets, IMAGES.designs.maxCharacters);
+  if (!asked.ok) return no(asked.error, 400);
   if (!(await hasConsented(fid))) return no('Agree to how your words are published first', 403, { reason: 'consent' });
 
   // Who may generate, before anything is counted or reserved (decision 11). Invited FIDs skip it.
@@ -83,11 +93,15 @@ export async function POST(request: Request) {
   const sheets = wanted.map((id) => picks.find((p) => p.kind === 'character' && p.versionId === id));
   if (sheets.some((p) => !p)) return no('That sheet is not one of your picks', 400);
   const designs = [...(stylePick ? [stylePick] : []), ...(sheets as MyPick[])];
+  // The project's shorthand for each chosen character without a picked sheet, and for the place.
+  const imageSheets = sheetsForImage(asked, (sheets as MyPick[]).map((p) => p.entity));
+  if (imageSheets && imageSheets.characters.length > IMAGES.designs.maxCharacters) return no(`Up to ${IMAGES.designs.maxCharacters} characters in one image`, 400);
+  const added = imageSheets?.added ?? [];
 
   const facts = blockFacts(ch.blocks);
   const setting = facts[ch.blocks.findIndex((b) => b.idx === start)]?.setting ?? null;
   const styleObj = style && !designStyle ? { id: style, text: styleText(style as StyleId, setting) } : null;
-  const prompt = finalPrompt(userPrompt, styleObj?.text ?? stylePick?.text ?? null, (sheets as MyPick[]).map((p) => p.text));
+  const prompt = finalPrompt(userPrompt, styleObj?.text ?? stylePick?.text ?? null, [...(sheets as MyPick[]).map((p) => p.text), ...added.map((a) => a.text)]);
 
   // Reference pictures: the chosen sheets' views, front first, up to the model's limit.
   const refs: { url: string; sha256: string }[] = [];
@@ -103,10 +117,10 @@ export async function POST(request: Request) {
   }
   const model = pictures.length ? IMAGES.editModel : IMAGES.model;
 
-  // Counted from here, whatever happens next (decision 16: blocked attempts count). The person's
-  // words and any added sheet or reader-made style text are checked together.
+  // Counted from here, whatever happens next (decision 16: blocked attempts count). The whole prompt
+  // as it will be sent (the person's words, any style, sheet and shorthand text) is checked.
   const paid = await paidPicture(sql, fid, request, {
-    checkText: designs.length ? [userPrompt, ...designs.map((d) => d.text)].join('\n\n') : userPrompt,
+    checkText: prompt,
     spend: pictures.length ? { model: IMAGES.editModel, reserveUsd: IMAGES.editReserveUsd(pictures.length) } : undefined,
     make: () => (pictures.length ? makeEdit(prompt, pictures) : makeImage(prompt)),
   });
@@ -121,6 +135,7 @@ export async function POST(request: Request) {
     costUsd: made.costUsd, guard: { model: IMAGES.guardModel, verdict: 'ok' }, at: new Date().toISOString(),
     ...(designs.length ? { designs: designs.map(asDesign) } : {}),
     ...(refs.length ? { references: refs } : {}),
+    ...(imageSheets ? { sheets: imageSheets } : {}),
   });
   return NextResponse.json(
     { ticket, image: `data:${made.contentType};base64,${made.bytes.toString('base64')}`, sha256, left: paid.left },

@@ -1,6 +1,7 @@
 import 'server-only';
 import { createHmac, timingSafeEqual } from 'node:crypto';
 import { IMAGES } from '../config';
+import { SHORTHAND_ASSIST_SOURCE } from './sheets';
 
 /**
  * A draft image is never stored on the server (docs/proposals/add-an-image.md, section 5). The
@@ -39,6 +40,19 @@ export interface Ticket {
   designs?: TicketDesign[];
   /** Pictures sent to the edit model as references (a picked sheet's views), if any. */
   references?: { url: string; sha256: string }[];
+  /**
+   * Sheets as text (2026-10-10): the characters in this image and its place (slugs of
+   * content/snowmoon/designs), as the person left them chosen from "In this passage", and the
+   * project's shorthand text added for those without a picked sheet. Absent on older drafts.
+   */
+  sheets?: TicketSheets;
+}
+
+export interface TicketSheets {
+  characters: string[];
+  place: string | null;
+  /** Each text added, exactly; the edition's invented look, drafted by the coding agent. */
+  added: { kind: 'character' | 'place'; slug: string; name: string; text: string }[];
 }
 
 export interface TicketDesign {
@@ -128,4 +142,22 @@ export function signSampleTicket(t: SampleTicket): string {
 export function readSampleTicket(token: string): SampleTicket | null {
   const t = read(token);
   return t && t.kind === 'design-sample' ? (t as unknown as SampleTicket) : null;
+}
+
+/** Which inputs a model drafted: the file style's text, a model-drafted design's text, the project's shorthand. */
+export function recipeAssist(t: Pick<Ticket, 'style' | 'designs' | 'sheets'>) {
+  const drafted: string[] = [];
+  const sources: string[] = [];
+  if (t.style) {
+    drafted.push('style text');
+    sources.push('content/snowmoon/designs/styles/techno-vistas.json');
+  } else if (t.designs?.some((d) => d.assist)) {
+    drafted.push('style text');
+    sources.push(`design versions ${t.designs.filter((d) => d.assist).map((d) => d.versionId).join(', ')}`);
+  }
+  if (t.sheets?.added.length) {
+    drafted.push('character and place shorthand');
+    sources.push(SHORTHAND_ASSIST_SOURCE);
+  }
+  return drafted.length ? { model: 'claude-coding-agent', drafted, source: sources.join('; ') } : null;
 }

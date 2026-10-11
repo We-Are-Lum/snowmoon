@@ -38,6 +38,8 @@ export interface ReaderImage {
   /** Step 4: picked styles and sheets added (each with the exact text added), and any reference pictures. */
   designs: { versionId: string; kind: string; entity: string; title: string; by: string; versionNo: number; text: string; assist: unknown }[];
   references: { url: string; sha256: string }[];
+  /** Sheets as text (2026-10-10): the characters and place this image is of, and the shorthand text added. */
+  sheets: { characters: string[]; place: string | null; added: { kind: 'character' | 'place'; slug: string; name: string; text: string }[] } | null;
 }
 
 const SELECT = (sql: Sql) => sql`
@@ -84,6 +86,7 @@ function shape(r: Record<string, unknown>): ReaderImage {
     remixedFrom: (r.remixed_from as string[]) ?? [],
     designs: Array.isArray(p.designs) ? (p.designs as ReaderImage['designs']) : [],
     references: Array.isArray(p.references) ? (p.references as ReaderImage['references']) : [],
+    sheets: p.sheets && typeof p.sheets === 'object' ? (p.sheets as ReaderImage['sheets']) : null,
   };
 }
 
@@ -105,6 +108,22 @@ export async function imageByVersion(sql: Sql, versionId: string): Promise<Reade
   if (!/^[0-9a-f-]{36}$/.test(versionId)) return null;
   const [row] = await sql`select * from (${SELECT(sql)}) x where x.version_id = ${versionId}`;
   return row ? shape(row) : null;
+}
+
+/**
+ * Readers' published images of a character or a place, newest first (for its sheet page): those
+ * whose recipe records it among the image's sheets, and (for a character) older images that added
+ * a picked sheet of that character.
+ */
+export async function imagesWithSheet(sql: Sql, kind: 'character' | 'place', slug: string, name: string, limit = 48): Promise<ReaderImage[]> {
+  const rows = await sql`select * from (${SELECT(sql)}) x where ${
+    kind === 'place'
+      ? sql`x.params->'sheets'->>'place' = ${slug}`
+      : sql`(jsonb_exists(coalesce(x.params->'sheets'->'characters', '[]'::jsonb), ${slug})
+             or exists (select 1 from jsonb_array_elements(case when jsonb_typeof(x.params->'designs') = 'array' then x.params->'designs' else '[]'::jsonb end) d
+                        where d->>'kind' = 'character' and d->>'entity' = ${name}))`
+  } order by x.created_at desc limit ${limit}`;
+  return rows.map(shape);
 }
 
 /** The element behind a version, whatever its status (for the author's hide and unhide, and moderation). */
