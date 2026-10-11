@@ -290,6 +290,14 @@ add({
         if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the private box must not send its text anywhere itself`);
         continue;
       }
+      if (file.endsWith('components/search-field.tsx')) {
+        // "Make an image" (2026-10-10): a search of the book's own text, sent only to the site's search route, never kept or published.
+        for (const [what, re] of [['searched on this site’s server', /Searched on this site’s server/], ['not kept', /Not kept by this site\./], ['never published', /Never published/], ['described to screen readers', /aria-describedby/]] as const)
+          if (!re.test(text)) problems.push(`${file}: the search box must say it is ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text.replace(/GET \/api\/book\/search/, ''))) problems.push(`${file}: the search box must not send its text anywhere itself`);
+        if (/<textarea\b/.test(text)) problems.push(`${file}: the search box must be a single-line search input`);
+        continue;
+      }
       for (const m of text.matchAll(/<textarea\b|<input\b(?![^>]*type=["'](?:hidden|checkbox|radio|range|submit|button|file)["'])[^>]*>/g)) {
         problems.push(`${file}: a bare text box; use PublishedTextField so the publication line shows (${m[0].slice(0, 40)})`);
       }

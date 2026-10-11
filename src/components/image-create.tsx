@@ -7,6 +7,7 @@ import { openComposer } from '~/lib/images/client';
 import { IMAGES } from '~/lib/config';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { ImageComposer } from './image-composer';
+import { SearchField } from './search-field';
 
 /**
  * "Make an image" (/images/new): choose the text, then the prompt (owner, 2026-10-10). Browse a
@@ -219,11 +220,7 @@ function Search({ ahead }: { ahead: (n: number) => boolean }) {
   }, [q]);
   return (
     <section className="mi-search" aria-label={W.searchLabel}>
-      <label className="mi-h" htmlFor="mi-q">
-        {W.searchLabel}
-      </label>
-      <input ref={input} id="mi-q" type="search" value={q} onChange={(e) => setQ(e.target.value)} maxLength={80} autoComplete="off" spellCheck={false} />
-      <p className="mi-note">{q.trim().length < MIN_Q ? W.searchHint(MIN_Q) : W.searchNote}</p>
+      <SearchField ref={input} id="mi-q" label={W.searchLabel} value={q} onChange={setQ} maxLength={80} hint={q.trim().length < MIN_Q ? W.searchHint(MIN_Q) : undefined} />
       {state && 'error' in state && (
         <p className="mi-cap" role="status">
           {state.error}
