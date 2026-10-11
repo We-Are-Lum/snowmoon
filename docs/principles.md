@@ -43,7 +43,11 @@ coding agent and its helpers are in `docs/prompts/`.
 - `P1e`: through the public database API, with only the public key, the
   spoken text of the house narration is readable.
 - `P1f`: every text box whose contents may be published is a
-  `PublishedTextField`, which shows the publication line under it.
+  `PublishedTextField`, which shows the publication line under it. The boxes
+  that are never published say so instead: the assistant's question
+  (`PrivateTextField`), a report's note (`PrivateNoteField`) and the search of
+  the book's text on "Make an image" (`SearchField`, 2026-10-10: searched on
+  the site's server, not kept by the site, never published).
 - `npm run test:db`: after 0005, a recipe is public only if it made a
   published element version or a segment of a narration that is not hidden;
   drafts, hidden work and abandoned attempts stay private.
