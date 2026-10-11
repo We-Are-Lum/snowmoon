@@ -100,7 +100,7 @@ export const IMAGE_WORDING_ROWS: { screen: string; where: string; text: string }
   { screen: 'Make an image', where: 'src/components/image-create.tsx (deep link)', text: IMAGE_WORDING.create.badLink },
   { screen: 'Make an image', where: 'src/components/image-create.tsx (search)', text: IMAGE_WORDING.create.searchLabel },
   { screen: 'Make an image', where: 'src/components/image-create.tsx (search)', text: IMAGE_WORDING.create.searchHint(3).replace('3', '{min}') },
-  { screen: 'Make an image', where: 'src/components/search-field.tsx (under the search box)', text: 'Searched on this site’s server, in the book’s own text. Not kept by this site. Never published.' },
+  { screen: 'Make an image', where: 'src/components/search-field.tsx (under the search box)', text: 'Searched on your device, in the book’s own text. Your search is not sent anywhere. Never published.' },
   { screen: 'Make an image', where: 'src/components/image-create.tsx (search)', text: IMAGE_WORDING.create.noHits('{q}') },
   { screen: 'Make an image', where: 'src/components/image-create.tsx (search)', text: IMAGE_WORDING.create.more(20).replace('20', '{n}') },
   { screen: 'Make an image', where: 'src/components/image-create.tsx (search)', text: IMAGE_WORDING.create.searchFailed },

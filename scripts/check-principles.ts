@@ -291,10 +291,16 @@ add({
         continue;
       }
       if (file.endsWith('components/search-field.tsx')) {
-        // "Make an image" (2026-10-10): a search of the book's own text, sent only to the site's search route, never kept or published.
-        for (const [what, re] of [['searched on this site’s server', /Searched on this site’s server/], ['not kept', /Not kept by this site\./], ['never published', /Never published/], ['described to screen readers', /aria-describedby/]] as const)
+        // "Make an image" (2026-10-10): a search of the book's own text, run on the reader's device over the text
+        // served whole by GET /api/book/text; the query is never sent anywhere, kept or published.
+        for (const [what, re] of [['searched on your device', /Searched on your device/], ['not sent anywhere', /Your search is not sent anywhere\./], ['never published', /Never published/], ['described to screen readers', /aria-describedby/]] as const)
           if (!re.test(text)) problems.push(`${file}: the search box must say it is ${what}`);
-        if (/fetch\(|supabase|\/api\//.test(text.replace(/GET \/api\/book\/search/, ''))) problems.push(`${file}: the search box must not send its text anywhere itself`);
+        if (/fetch\(|supabase|\/api\//.test(text.replace(/GET \/api\/book\/text/, ''))) problems.push(`${file}: the search box must not send its text anywhere itself`);
+        // The page that uses it fetches only the whole text, with no query, and searches it on the device.
+        const create = read('src/components/image-create.tsx');
+        const fetches = [...create.matchAll(/fetch\(([^)]*)\)/g)].map((m) => m[1].trim());
+        if (fetches.some((f) => f !== "'/api/book/text'")) problems.push(`src/components/image-create.tsx: fetches ${fetches.join(', ')}; the search must fetch only '/api/book/text' and never send the query`);
+        if (!/searchCorpus\(/.test(create)) problems.push('src/components/image-create.tsx: does not search on the device (searchCorpus)');
         if (/<textarea\b/.test(text)) problems.push(`${file}: the search box must be a single-line search input`);
         continue;
       }

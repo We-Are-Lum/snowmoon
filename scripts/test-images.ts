@@ -195,12 +195,19 @@ await server.stop();
   check('a draft has no full recipe yet', readerImageView({ versionId: null, by: '@x', chapter: 1 }).full === null);
 }
 
-// --- Searching the book's text, for "Make an image" (GET /api/book/search) ------------------
+// --- Searching the book's text, for "Make an image": on the device, over GET /api/book/text ------
 {
-  const { GET } = await import('../src/app/api/book/search/route');
+  const { GET } = await import('../src/app/api/book/text/route');
+  const { searchCorpus } = await import('../src/lib/book-search-core');
+  const res = GET();
+  const { entries } = (await res.json()) as { entries: [number, number, number | null, string][] };
+  check('search: the text route serves every paragraph and quote', entries.length > 3000 && entries.every((e) => e.length === 4 && typeof e[3] === 'string' && e[3].length > 0), String(entries.length));
+  check('search: the text route takes no query (nothing about a search reaches the server)', GET.length === 0);
+  check('search: the text is cached', /max-age=\d+/.test(res.headers.get('cache-control') ?? ''));
+  // The page's own search (src/lib/book-search-core.ts), over what the route served.
   const ask = async (q: string) => {
-    const res = GET(new Request(`http://x/api/book/search?q=${encodeURIComponent(q)}`));
-    return { status: res.status, body: (await res.json()) as { hits: { chapter: number; idx: number; label: number | null; before: string; match: string; after: string }[]; more?: boolean; error?: string } };
+    const r = searchCorpus(entries, q);
+    return { status: r.ok ? 200 : 400, body: r.ok ? { hits: r.hits, more: r.more } : { hits: [] as never[], error: r.error } } as { status: number; body: { hits: { chapter: number; idx: number; label: number | null; before: string; match: string; after: string }[]; more?: boolean; error?: string } };
   };
   const k = await ask('Kalimar');
   check('search: "Kalimar" answers 200', k.status === 200, String(k.status));

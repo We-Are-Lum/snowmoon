@@ -308,11 +308,17 @@ async function checkMakeImage(page: Page, scheme: string) {
   // Search.
   await open(page, '/images/new');
   await page.locator('.mi-switch button', { hasText: 'Search' }).click();
+  // The search runs on the device: no request after the page has loaded carries what is typed (owner, 2026-10-10).
+  const sent: string[] = [];
+  const watch = (r: { url: () => string; postData: () => string | null }) => sent.push(`${r.url()} ${r.postData() ?? ''}`);
+  page.on('request', watch);
   await page.fill('#mi-q', 'ka');
   await page.waitForTimeout(500);
   if (await page.locator('.mi-hit').count()) fail(`/images/new (${scheme}): a 2-letter search shows results`);
   await page.fill('#mi-q', 'kalimar');
   await page.waitForSelector('.mi-hit', { timeout: 5000 }).catch(() => fail(`/images/new (${scheme}): searching "kalimar" shows no hits`));
+  page.off('request', watch);
+  if (sent.some((u) => /kalimar/i.test(u))) fail(`/images/new (${scheme}): the search query left the device: ${sent.filter((u) => /kalimar/i.test(u)).slice(0, 2).join(' | ')}`);
   const first = page.locator('.mi-hit').first();
   if ((await first.getAttribute('href')) !== '/images/new?chapter=1&pick=3') fail(`/images/new (${scheme}): the first "kalimar" hit points to ${await first.getAttribute('href')}, not chapter 1 ¶ 2 (c1-b3)`);
   if ((await first.locator('mark').textContent()) !== 'Kalimar') fail(`/images/new (${scheme}): the hit does not mark "Kalimar"`);

@@ -7,6 +7,7 @@ import { openComposer } from '~/lib/images/client';
 import { IMAGES } from '~/lib/config';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { ImageComposer } from './image-composer';
+import { searchCorpus, type CorpusEntry } from '~/lib/book-search-core';
 import { SearchField } from './search-field';
 
 /**
@@ -194,28 +195,41 @@ export function ImageCreate({
   );
 }
 
-/** Search the book's text (GET /api/book/search), debounced; a hit opens its chapter with the paragraph chosen. */
+/** The book's text, fetched once when Search is first used (about 200 KB), then searched on this device. */
+let corpusOnce: Promise<CorpusEntry[]> | null = null;
+const loadCorpus = () =>
+  (corpusOnce ??= fetch('/api/book/text')
+    .then((r) => (r.ok ? (r.json() as Promise<{ entries: CorpusEntry[] }>) : Promise.reject(new Error('text'))))
+    .then((j) => j.entries)
+    .catch((e) => {
+      corpusOnce = null;
+      throw e;
+    }));
+
+/** Search the book's text on this device (no query leaves it), debounced; a hit opens its chapter with the paragraph chosen. */
 function Search({ ahead }: { ahead: (n: number) => boolean }) {
   const [q, setQ] = useState('');
   const [state, setState] = useState<{ q: string; hits: Hit[]; more: boolean } | { error: string } | null>(null);
   const input = useRef<HTMLInputElement>(null);
   useEffect(() => input.current?.focus(), []);
   useEffect(() => {
+    void loadCorpus().catch(() => {});
+  }, []);
+  useEffect(() => {
     const term = q.trim();
     if (term.length < MIN_Q) return setState(null);
-    const ac = new AbortController();
+    let live = true;
     const t = setTimeout(async () => {
       try {
-        const res = await fetch(`/api/book/search?q=${encodeURIComponent(term)}`, { signal: ac.signal });
-        const out = (await res.json()) as { q: string; hits: Hit[]; more: boolean; error?: string };
-        setState(res.ok ? out : { error: out.error ?? W.searchFailed });
-      } catch (e) {
-        if ((e as Error).name !== 'AbortError') setState({ error: W.searchFailed });
+        const r = searchCorpus(await loadCorpus(), term);
+        if (live) setState(r.ok ? { q: r.q, hits: r.hits, more: r.more } : { error: r.error });
+      } catch {
+        if (live) setState({ error: W.searchFailed });
       }
     }, 300);
     return () => {
+      live = false;
       clearTimeout(t);
-      ac.abort();
     };
   }, [q]);
   return (
