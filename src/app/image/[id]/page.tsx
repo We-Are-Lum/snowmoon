@@ -4,11 +4,12 @@ import type { Metadata } from 'next';
 import { APP_NAME, IMAGES, appUrl } from '~/lib/config';
 import { db } from '~/lib/db';
 import { imageByVersion } from '~/lib/images/data';
-import { passageBlocks, passageLabel } from '~/lib/images/passage';
+import { passageLabel, passageText } from '~/lib/images/passage';
 import { IMAGE_WORDING as W } from '~/lib/images/wording';
 import { byline } from '~/lib/images/byline';
 import { PAPER } from '~/lib/tokens';
 import { ImageActions } from '~/components/image-actions';
+import { MakeImageLink } from '~/components/make-image-link';
 import { AiLabel } from '~/components/recipe-sheet';
 import { AI_LABEL, readerImageView } from '~/lib/ai-declared';
 
@@ -55,11 +56,8 @@ export default async function ImagePage({ params }: Props) {
   const date = im.createdAt.slice(0, 10);
   const by = byline(im.byName, im.byFid);
   const reader = `/chapter/${im.chapter}#c${im.chapter}-b${im.start}`;
-  // The passage's own words (book text, never sent to a model), shown beside the image at desktop width.
-  const passage = passageBlocks(im.chapter, im.start, im.end)
-    .filter((b) => b.kind === 'paragraph' || b.kind === 'quote')
-    .map((b) => b.content.replace(/<[^>]+>/g, '').replace(/\*\*|__/g, '').trim())
-    .filter(Boolean);
+  // The passage's own words (book text, never sent to a model): what the image is of, shown first (owner, 2026-10-10).
+  const passage = passageText(im.chapter, im.start, im.end);
   return (
     <div className="page prose image-page">
       <p className="label ip-crumb">
@@ -75,7 +73,7 @@ export default async function ImagePage({ params }: Props) {
               text={AI_LABEL.imageBy(by)}
               view={{
                 ...readerImageView({ versionId: im.versionId, by, prompt: im.userPrompt, chapter: im.chapter, where, date }),
-                full: { href: '#recipe', text: 'Full recipe, on this page ↓' },
+                full: { href: '#recipe', text: 'Full recipe, on this page (How this was made) ↓' },
               }}
             />
             <br />
@@ -95,14 +93,18 @@ export default async function ImagePage({ params }: Props) {
             ))}
           </blockquote>
         )}
+        {/* Another image of the same passage (owner, 2026-10-10); shown where "Add an image" shows. Model-drafted wording. */}
+        <MakeImageLink className="mi-from ip-make" passage={{ chapter: im.chapter, start: im.start, end: im.end }}>
+          {W.create.ofThis} →
+        </MakeImageLink>
       </div>
 
       <div className="ip-side">
         <ImageActions versionId={im.versionId} byFid={im.byFid} chapter={im.chapter} />
 
-        <h2 className="ip-h" id="recipe">
-          How this was made
-        </h2>
+        {/* Owner, 2026-10-10: the passage first; the prompt, the model and the rest when opened. Still on the page as served (P1g). */}
+        <details className="ip-how" id="recipe">
+        <summary className="ip-h">How this was made: the prompt, the model, the settings</summary>
         <dl className="recipe-list ip-recipe">
           <dt className="ip-wide">The prompt, as the person wrote it</dt>
           <dd className="ip-wide ip-words">{im.userPrompt}</dd>
@@ -141,6 +143,7 @@ export default async function ImagePage({ params }: Props) {
           <dt>File</dt>
           <dd className="recipe-mono">sha256 {im.sha256}</dd>
         </dl>
+        </details>
         <p className="as-draft ic-draftline">{W.draftLine}</p>
       </div>
     </div>

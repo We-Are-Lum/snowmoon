@@ -291,6 +291,20 @@ add({
         if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the private box must not send its text anywhere itself`);
         continue;
       }
+      if (file.endsWith('components/search-field.tsx')) {
+        // "Make an image" (2026-10-10): a search of the book's own text, run on the reader's device over the text
+        // served whole by GET /api/book/text; the query is never sent anywhere, kept or published.
+        for (const [what, re] of [['searched on your device', /Searched on your device/], ['not sent anywhere', /Your search is not sent anywhere\./], ['never published', /Never published/], ['described to screen readers', /aria-describedby/]] as const)
+          if (!re.test(text)) problems.push(`${file}: the search box must say it is ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text.replace(/GET \/api\/book\/text/, ''))) problems.push(`${file}: the search box must not send its text anywhere itself`);
+        // The page that uses it fetches only the whole text, with no query, and searches it on the device.
+        const create = read('src/components/image-create.tsx');
+        const fetches = [...create.matchAll(/fetch\(([^)]*)\)/g)].map((m) => m[1].trim());
+        if (fetches.some((f) => f !== "'/api/book/text'")) problems.push(`src/components/image-create.tsx: fetches ${fetches.join(', ')}; the search must fetch only '/api/book/text' and never send the query`);
+        if (!/searchCorpus\(/.test(create)) problems.push('src/components/image-create.tsx: does not search on the device (searchCorpus)');
+        if (/<textarea\b/.test(text)) problems.push(`${file}: the search box must be a single-line search input`);
+        continue;
+      }
       for (const m of text.matchAll(/<textarea\b|<input\b(?![^>]*type=["'](?:hidden|checkbox|radio|range|submit|button|file)["'])[^>]*>/g)) {
         problems.push(`${file}: a bare text box; use PublishedTextField so the publication line shows (${m[0].slice(0, 40)})`);
       }
@@ -399,9 +413,12 @@ const GLOSSARY_CLIP_PAGE = '/glossary/autobus';
 const READER_IMAGE_FILES = [
   'src/components/reader-images.tsx',
   'src/components/image-feed.tsx',
+  'src/components/home-feed.tsx',
   'src/app/image/[id]/page.tsx',
   'src/components/image-composer.tsx',
   'src/components/moderate-queue.tsx',
+  // The first-visit intro's recipe and record cards show a seeded image (owner, 2026-10-10).
+  'src/components/first-visit.tsx',
 ];
 add({
   id: 'P2b',
@@ -427,6 +444,7 @@ add({
       glossary,
       sheets,
       feed: await page('/images'),
+      home: await page('/'),
       imagePage,
       wording: {
         labels: [AI_LABEL.image, AI_LABEL.voice, AI_LABEL.imageBy('@someone')],
@@ -441,7 +459,7 @@ add({
       player: code('src/components/chapter-player.tsx'),
     };
   },
-  run: ({ ch1, glossary, sheets, feed, imagePage, wording, sheetSource, card, imageCard, readers, player }) => {
+  run: ({ ch1, glossary, sheets, feed, home, imagePage, wording, sheetSource, card, imageCard, readers, player }) => {
     const problems: string[] = [];
     // Chapter 1 as served: every seeded image's caption, and the narration credit.
     const figures = [...ch1.matchAll(/<figure class="seed-image"[\s\S]*?<\/figure>/g)].map((m) => m[0]);
@@ -463,6 +481,12 @@ add({
     // The feed and a reader's image page, as served.
     const captions = [...feed.matchAll(/<p class="block-caption pictures-caption">[\s\S]*?<\/p>/g)].map((m) => m[0]);
     captions.forEach((c, i) => problems.push(...aiLabelProblems(`/images caption ${i + 1}`, c, 'image')));
+    // The home page's "Just made" (src/components/home-feed.tsx): each reader's image with its label, or the empty state.
+    const homeCaptions = [...home.matchAll(/<p class="block-caption home-feed-caption">[\s\S]*?<\/p>/g)].map((m) => m[0]);
+    homeCaptions.forEach((c, i) => problems.push(...aiLabelProblems(`/ "Just made" ${i + 1}`, c, 'image')));
+    const homeRows = (home.match(/<ul class="home-feed-list"[\s\S]*?<\/ul>/)?.[0].match(/<li\b/g) ?? []).length;
+    if (homeRows !== homeCaptions.length) problems.push(`/ "Just made": ${homeRows} images but ${homeCaptions.length} labels`);
+    if (!homeRows && !/class="home-feed-empty"/.test(home)) problems.push('/ "Just made": neither images nor the empty state');
     if (imagePage) problems.push(...aiLabelProblems(`/image/${imagePage.id}`, imagePage.html.match(/<figcaption class="ip-caption">[\s\S]*?<\/figcaption>/)?.[0] ?? '', 'image'));
     // The wording itself (src/lib/ai-declared.ts).
     for (const l of wording.labels as string[]) if (!SAYS_AI.test(l)) problems.push(`src/lib/ai-declared.ts: label "${l}" does not say "AI"`);
@@ -487,6 +511,7 @@ add({
     c.sheets.push({ what: 'planted', whose: 'The project made it.' });
     c.readers[0].text = c.readers[0].text.replace(/<AiLabel\b/g, '<Caption');
     c.card = c.card.replace(/AI[- ]generated/gi, 'picture');
+    c.home = c.home.replace(/class="home-feed-empty"/g, 'class="home-feed-x"').replace(/class="ai-label"/g, 'class="by-line"');
   },
 });
 
@@ -573,6 +598,28 @@ add({
     c.glossary.terms[0].explanations.push({ block: 'c1-b9', chapter: 1, idx: 9, text: 'An invented word for a kind of bus.' });
     // And a first sentence that is not the book's (one word changed). test:glossary proves each kind alone.
     c.glossary.terms[1].first_sentence.text = c.glossary.terms[1].first_sentence.text.replace(/\w+/, 'Plainly');
+  },
+});
+
+// P2i: the home page's "A moment from the book" (src/lib/home.ts) quotes the book, verbatim, at its block.
+add({
+  id: 'P2i',
+  principle: 2,
+  name: 'each "moment from the book" on the home page is whole sentences of its block, verbatim, at a real paragraph',
+  load: async () => {
+    const { HOME_MOMENTS } = await import('../src/lib/home');
+    return { moments: clone(HOME_MOMENTS), blocks: Object.fromEntries(loadBlocks(ROOT)) };
+  },
+  run: async ({ moments, blocks }) => {
+    const { momentProblems } = await import('../src/lib/home');
+    const problems = momentProblems(moments, new Map(Object.entries(blocks)));
+    if (!moments.length) problems.push('src/lib/home.ts: no moments');
+    return problems;
+  },
+  plant: (c) => {
+    // One word changed in a real sentence, and Design's screen block c1-b18 quoted as if a sentence.
+    c.moments[0].text = c.moments[0].text.replace(/\w+/, 'Quietly');
+    c.moments.push({ chapter: 1, block: 'c1-b18', text: 'Vote on: Badra St #1103.' });
   },
 });
 
@@ -780,6 +827,8 @@ add({
 // ---------------------------------------------------------------------------
 // P4. No model output is published without a signed-in person's action.
 // ---------------------------------------------------------------------------
+/** Shared sign-in wrappers routes may call instead of checking getFid themselves (P4a reads each one). */
+const P4A_WRAPPERS = [{ module: '~/lib/minpentai/play-server/route', file: 'src/lib/minpentai/play-server/route.ts', call: 'play' }];
 const P4A_EXEMPT = new Set(['src/app/api/auth/web/start/route.ts']);
 add({
   id: 'P4a',
@@ -788,11 +837,14 @@ add({
   load: async () => walk('src/app/api', /route\.tsx?$/).map((f) => ({ file: f, src: read(f) })),
   // Named exemption (owner instruction, 2026-10-08: website sign-in): the route that starts a sign-in
   // cannot require one. It writes nothing of ours; it opens a channel on Farcaster's relay.
+  // A route may instead hand every request to a shared wrapper listed in P4A_WRAPPERS; it passes only
+  // if it imports and calls that wrapper, and the wrapper itself checks getFid and answers 401.
   run: (routes) =>
     routes
       .filter((r: { file: string }) => !P4A_EXEMPT.has(r.file))
       .filter((r: { src: string }) => /export async function (POST|PUT|PATCH|DELETE)\b/.test(r.src))
       .filter((r: { src: string }) => !(/getFid\(/.test(r.src) && /status: 401/.test(r.src)))
+      .filter((r: { src: string }) => !P4A_WRAPPERS.some((w) => r.src.includes(`from '${w.module}'`) && new RegExp(`\\b${w.call}\\(request,`).test(r.src) && /getFid\(/.test(read(w.file)) && /\b401\)/.test(read(w.file))))
       .map((r: { file: string }) => `${r.file}: writes without requiring sign-in`),
   plant: (routes) => {
     routes.push({ file: 'src/app/api/planted/route.ts', src: 'export async function POST() { return new Response("ok"); }' });
@@ -1329,9 +1381,12 @@ add({
   }),
   run: ({ home, code }) => {
     const problems: string[] = [];
-    const firstScreen = home.replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 1500);
+    // The page's own first words (inside <main>; the rail and the menu come before it in the HTML).
+    // The home hero carries the owner-approved line "… Not affiliated with the author · No token" (config/intro.json).
+    const main = home.slice(Math.max(0, home.indexOf('<main')));
+    const firstScreen = main.replace(/<script[\s\S]*?<\/script>/g, ' ').replace(/<[^>]+>/g, ' ').replace(/\s+/g, ' ').slice(0, 700);
     if (!/not affiliated with the author/i.test(firstScreen)) problems.push('first screen: "not affiliated with the author" is missing');
-    if (!/There is no token/i.test(firstScreen)) problems.push('first screen: "There is no token" is missing');
+    if (!/\bno token\b/i.test(firstScreen)) problems.push('first screen: "no token" is missing');
     for (const { file, text } of code) if (/\b(erc-?20|erc-?721|tokenomics|airdrop|token sale|mint\s*\()/i.test(text)) problems.push(`${file}: token code`);
     return problems;
   },
@@ -1597,6 +1652,7 @@ add({
   },
 });
 
+const PLAY_TAG_FILES = ['src/app/minpentai/play.tsx', 'src/app/minpentai/play-live.tsx', 'src/app/minpentai/rules/page.tsx'];
 add({
   id: 'P8f',
   principle: 8,
@@ -1612,9 +1668,12 @@ add({
     return {
       words: { book: LABELS.minpentai.book.word, invented: LABELS.minpentai.invented.word, draft: LABELS.minpentai.draft.word } as Record<string, string>,
       screens: screens.map((s) => ({ ...s, html: renderToStaticMarkup(createElement(MinpentaiTags, { tags: s.tags as never })) })),
+      // Play (2026-10-10): its tags are the same short labels, and none of its words paraphrases c4-b84 as
+      // "a new rule each match" (P8d's ruling of 2026-10-09, which reads Learn only).
+      play: PLAY_TAG_FILES.map((f) => ({ file: f, text: code(f) })),
     };
   },
-  run: ({ words, screens }) => {
+  run: ({ words, screens, play }) => {
     const problems: string[] = [];
     const INVENTED = ['rules', 'imag', 'lens', 'inv'];
     if (words.book !== 'Book' || words.invented !== 'Invented' || words.draft !== 'Draft') problems.push(`src/lib/labels.ts: the words are ${JSON.stringify(words)}, not Book, Invented and Draft`);
@@ -1628,9 +1687,21 @@ add({
       if (JSON.stringify(labels.map((l) => l.kind)) !== JSON.stringify(want)) problems.push(`${s.id}: labels ${labels.map((l) => l.kind).join(', ') || 'none'}, expected ${want.join(', ')}`);
       for (const l of labels) if (words[l.kind]) problems.push(...infoLabelProblems(s.id, l, words[l.kind]));
     }
+    const CHANGES = /\b(?:the\s+)?rules?\s+(?:change|changes|changed|changing)\s+(?:(?:with|for|in)\s+)?(?:every|each)\s+(?:match|game)\b|\b(?:a\s+)?(?:new|different)\s+rules?\s+(?:every|each)\s+(?:match|game)\b/i;
+    for (const { file, text } of play as { file: string; text: string }[]) {
+      // An old-style tag: a span or link styled mp-tag that carries a label's words instead of the label.
+      for (const m of text.matchAll(/className="mp-tag[^"]*"[^>]*>([^<]*)</g)) {
+        if (/RULES INVENTED|DRAFT WORDING|FROM THE BOOK|·\s*c\d+-b\d+/i.test(m[1])) problems.push(`${file}: a tag "${m[1].trim()}" in place of the short label (Book ⓘ, Invented ⓘ, Draft ⓘ)`);
+      }
+      if (!/<MinpentaiTags\b/.test(text)) problems.push(`${file}: no short labels (MinpentaiTags)`);
+      const unquoted = text.replace(/"[^"\n]*"/g, ' ').replace(/“[^”]*”/g, ' ');
+      const hit = unquoted.match(CHANGES);
+      if (hit) problems.push(`${file}: "${hit[0]}" paraphrases c4-b84 as a rule for each match; quote the book instead`);
+    }
     return problems;
   },
   plant: (c) => {
+    c.play[0].text += '\n<div className="mp-tags"><span className="mp-tag">A NEW RULE EACH MATCH · c4-b84</span></div>';
     // A missing word for each of the three.
     for (const k of ['book', 'invented', 'draft']) {
       const s = c.screens.find((x: { html: string }) => x.html.includes(`<span class="info-word">${c.words[k]}</span>`));

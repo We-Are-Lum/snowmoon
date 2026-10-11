@@ -195,8 +195,50 @@ await server.stop();
   check('a draft has no full recipe yet', readerImageView({ versionId: null, by: '@x', chapter: 1 }).full === null);
 }
 
+// --- Searching the book's text, for "Make an image": on the device, over GET /api/book/text ------
+{
+  const { GET } = await import('../src/app/api/book/text/route');
+  const { searchCorpus } = await import('../src/lib/book-search-core');
+  const res = GET();
+  const { entries } = (await res.json()) as { entries: [number, number, number | null, string][] };
+  check('search: the text route serves every paragraph and quote', entries.length > 3000 && entries.every((e) => e.length === 4 && typeof e[3] === 'string' && e[3].length > 0), String(entries.length));
+  check('search: the text route takes no query (nothing about a search reaches the server)', GET.length === 0);
+  check('search: the text is cached', /max-age=\d+/.test(res.headers.get('cache-control') ?? ''));
+  // The page's own search (src/lib/book-search-core.ts), over what the route served.
+  const ask = async (q: string) => {
+    const r = searchCorpus(entries, q);
+    return { status: r.ok ? 200 : 400, body: r.ok ? { hits: r.hits, more: r.more } : { hits: [] as never[], error: r.error } } as { status: number; body: { hits: { chapter: number; idx: number; label: number | null; before: string; match: string; after: string }[]; more?: boolean; error?: string } };
+  };
+  const k = await ask('Kalimar');
+  check('search: "Kalimar" answers 200', k.status === 200, String(k.status));
+  check('search: "Kalimar" has a chapter 1 hit', k.body.hits.some((h) => h.chapter === 1), JSON.stringify(k.body.hits.slice(0, 2)));
+  check('search: each hit marks the match', k.body.hits.length > 0 && k.body.hits.every((h) => h.match.toLowerCase() === 'kalimar'));
+  check('search: hits are in reading order', k.body.hits.every((h, i, a) => i === 0 || a[i - 1].chapter < h.chapter || (a[i - 1].chapter === h.chapter && a[i - 1].idx < h.idx)));
+  check('search: excerpts are short', k.body.hits.every((h) => (h.before + h.match + h.after).length <= 220));
+  const low = await ask('kALIMAR');
+  check('search: case-insensitive', JSON.stringify(low.body.hits) === JSON.stringify(k.body.hits));
+  const gladias = await ask('Gladias');
+  check('search: at most 20 hits, and says there are more', gladias.body.hits.length === 20 && gladias.body.more === true, `${gladias.body.hits.length} ${gladias.body.more}`);
+  check('search: a hit points at a paragraph or quote', (() => {
+    const h = gladias.body.hits[0];
+    const ch = JSON.parse(readFileSync(path.join(ROOT, `content/snowmoon/text/chapter-${h.chapter}.json`), 'utf8')) as { blocks: { idx: number; kind: string; content: string }[] };
+    const b = ch.blocks.find((x) => x.idx === h.idx);
+    return !!b && (b.kind === 'paragraph' || b.kind === 'quote') && b.content.includes('Gladias');
+  })());
+  check('search: markup is not searched or shown', (await ask('data-hue')).body.hits.length === 0);
+  for (const q of ['', 'ab', '  a  ', 'x'.repeat(81)]) {
+    const r = await ask(q);
+    check(`search: ${JSON.stringify(q.slice(0, 12))} is refused with a reason`, r.status === 400 && !!r.body.error && r.body.hits.length === 0, `${r.status} ${r.body.error}`);
+  }
+  check('search: no paragraph has a made-up word', (await ask('zzqxv')).body.hits.length === 0);
+  {
+    const straight = (await ask("didn't")).body.hits, curly = (await ask('didn’t')).body.hits;
+    check('search: curly and straight apostrophes find the same paragraphs', straight.length > 0 && JSON.stringify(straight) === JSON.stringify(curly), `${straight.length} / ${curly.length}`);
+  }
+}
+
 if (failures.length) {
   console.error(`\nIMAGE TESTS FAILED (${failures.length}, ${passed} passed):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`image tests passed: ${passed} checks (signed drafts, rules, caps, costs without a person, privacy)`);
+console.log(`image tests passed: ${passed} checks (signed drafts, rules, caps, costs without a person, privacy, searching the book)`);

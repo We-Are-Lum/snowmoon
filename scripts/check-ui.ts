@@ -15,7 +15,9 @@
  *   and in-world templates may use their own faces.
  * - Paper is #F4F2ED in light mode in every chapter. Datelines take the accent of
  *   their setting: #2E5A3A Veridia, #B3306E Dzego, ink otherwise.
- * - The first screen says: independent adaptation, not affiliated with the author, no token.
+ * - The first screen says: independent adaptation, not affiliated with the author, no token; on the home
+ *   page it says so in the dark hero (checkHome, with the home's other checks: How this works, Read from
+ *   here, Just made, the Minpentai board).
  * - The live voting screens (c1-b18, c1-b31, c7-b6) start where the book shows them, move by
  *   keyboard, and Reset returns them, with no request made and no storage changed.
  * - The assistant (/assistant) meets the same floors signed out (9d), the reader's "Ask about this" (1a), its home (1d),
@@ -23,10 +25,21 @@
  *   question (9b) and the daily limit (9c). The API is replayed from results recorded
  *   live (scripts/fixtures/chat-live-2026-10-07.json); quotes are checked against the
  *   stored text by test:chat. --shots=DIR also saves a screenshot of each.
- * - Learn Minpentai's screens and Free play are full screen at 390 and in the 424 × 695 Farcaster frame (the frame
+ * - Make an image (/images/new; owner, 2026-10-10), light and dark: browse chapter 1, tap the first and last paragraph,
+ *   the count and the 8-block cap's message, "Write the prompt" opens the composer (signed out: its sign-in prompt);
+ *   search "kalimar" (chapter 1 ¶ 2, marked; tapping it chooses it); the deep link opens the prompt (invited, status
+ *   mocked), bad ones fall back to browsing; chapters and hits past where you've read are marked, not hidden. Its
+ *   links: the Pictures page's button, "Make one from this passage" in the feed and "Make an image of this passage"
+ *   on an image's page (fixture images) and on the assistant's quote cards, each with the same range, shown only
+ *   where "Add an image" shows.
+ * - Learn Minpentai's screens are full screen at 390 and in the 424 × 695 Farcaster frame (the frame
  *   fills the viewport, no site top bar, a × back to the site), and Design's centred phone beside the rail at 1024
- *   and up. The old ?mode=free and ?mode=play open Free play; ?s= opens /minpentai/rule, the book's rule, tagged
- *   FROM THE BOOK, citing c4-b5 and c4-b7, with its GitHub write-up.
+ *   and up. ?s= opens /minpentai/rule, the book's rule, tagged FROM THE BOOK, citing c4-b5 and c4-b7, with its
+ *   GitHub write-up.
+ * - Minpentai Play (Design's "Minpentai Play", owner 2026-10-09): ?mode=play opens the hub with Learn, Play and
+ *   Free play; ?mode=free opens free play; a practice match starts, takes a glider and ends its turn; ⤢ makes it
+ *   full screen (the site's top bar hidden, the board upright) at 390 and in the Farcaster frame; every Play screen is
+ *   labelled RULES INVENTED FOR THIS EDITION; /minpentai/rules is Design's rules page. No sideways scroll.
  * - AI labels as rendered (owner, 2026-10-09): on the chapter (seeded images, the readers' strip,
  *   the narration credit), the listen view's player, the feed, an image's page, the composer's draft
  *   and preview, and the moderators' queue, every AI image and the narration control carry the label
@@ -94,6 +107,14 @@ async function checkLearnFullScreen(page: Page, where: string) {
   if (!(await exit.isVisible()) || (await exit.getAttribute('href')) !== '/') fail(`${where}: no visible × back to the site`);
 }
 
+/** The selection's options are all inside the viewport (owner, 2026-10-10: they went off the side on a phone). */
+async function checkSelectionFits(page: Page, where: string) {
+  const out = await page.$$eval('.selection-actions > *', (els) => els.map((e) => { const r = e.getBoundingClientRect(); return { t: (e.textContent ?? '').trim(), l: r.left, r: r.right, w: innerWidth }; }));
+  if (!out.length) fail(`${where}: no selection options shown`);
+  for (const o of out) if (o.l < 0 || o.r > o.w + 0.5) fail(`${where}: "${o.t}" is off the side of the screen (${Math.round(o.l)}–${Math.round(o.r)} of ${o.w}px)`);
+  return out.length;
+}
+
 /** Screens 1a, 1b, 9d, 1d, 2, 3, 9b and 9c, with the chat API replayed from the live run. */
 async function checkAssistant(page: Page, scheme: string) {
   // 1a: select a passage in the reader; "Ask about this" appears beside "Share quote".
@@ -109,6 +130,7 @@ async function checkAssistant(page: Page, scheme: string) {
   const ask = await page.waitForSelector('.selection-actions a');
   if ((await ask.getAttribute('href')) !== '/assistant?block=c1-b19') fail(`/chapter/1: "Ask about this" points to ${await ask.getAttribute('href')}`);
   await checkFloors(page, '/chapter/1 (1a selection)', scheme);
+  await checkSelectionFits(page, `/chapter/1 (${scheme}, selection, signed out)`);
   await shot(page, '1a-selection', scheme);
   await page.evaluate(() => getSelection()!.removeAllRanges());
   // 1b: the chapter's own link.
@@ -179,6 +201,31 @@ async function checkAssistant(page: Page, scheme: string) {
   if (!host?.includes('Vercel AI Gateway')) fail(`/assistant: the footer does not name the host (${host})`);
   await checkFloors(page, '/assistant (3 thread)', scheme);
   await shot(page, '3-thread', scheme);
+  // "Make an image of this passage" on each quote card, where "Add an image" shows (an invited FID; session mocked):
+  // the cited block only goes in the link, nothing from the conversation.
+  {
+    const signIn = (on: boolean) =>
+      page.evaluate((on) => {
+        const b64 = (o: object) => btoa(JSON.stringify(o)).replace(/=+$/, '');
+        if (on) localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `x.${b64({ sub: 6786, exp: 4102444800 })}.y`, fid: 6786, username: 'check', exp: 4102444800 }));
+        else localStorage.removeItem('snowmoon.signin');
+        window.dispatchEvent(new Event('snowmoon:signin'));
+      }, on);
+    if (await page.locator('.as-make').count()) fail(`/assistant (${scheme}): "Make an image" shows on quote cards signed out`);
+    await signIn(true);
+    await page.waitForSelector('.as-make', { timeout: 5000 }).catch(() => fail(`/assistant (${scheme}): no "Make an image of this passage" on the quote cards`));
+    const cards = await page.locator('.as-quote:not(.as-passage)').evaluateAll((els) =>
+      els.map((e) => ({ reader: e.querySelector('figcaption a')?.getAttribute('href') ?? '', make: e.querySelector('.as-make')?.getAttribute('href') ?? '' })),
+    );
+    for (const c of cards) {
+      const m = c.reader.match(/^\/chapter\/(\d+)#c\d+-b(\d+)$/);
+      const want = m ? `/images/new?chapter=${m[1]}&start=${m[2]}&end=${m[2]}` : '?';
+      if (c.make !== want) fail(`/assistant (${scheme}): a quote card's "Make an image" points to ${c.make || 'nothing'}, not ${want}`);
+    }
+    if (!cards.length) fail(`/assistant (${scheme}): no quote cards to check "Make an image" on`);
+    await checkFloors(page, '/assistant (3 thread, Make an image links)', scheme);
+    await signIn(false);
+  }
 
   if (!(await page.locator('.as-testing').isVisible())) fail('/assistant: no "Testing" label');
   await page.fill('#as-q', LIVE.results[1].question);
@@ -218,6 +265,122 @@ async function checkLegalLine(page: Page, within: string, where: string, scheme:
   const hrefs = await line.locator('a').evaluateAll((as) => as.map((a) => `${a.textContent}=${a.getAttribute('href')}`));
   const want = ['Terms=/terms', 'Privacy=/privacy', 'Source=https://github.com/We-Are-Lum/snowmoon'];
   if (hrefs.join(' ') !== want.join(' ')) fail(`${where} (${scheme}): the footer links are ${hrefs.join(', ')}`);
+}
+
+/**
+ * "Make an image" (/images/new; owner, 2026-10-10): choose the text, then the prompt.
+ * - Browse: the 32 chapters, those past the furthest opened on the device marked, not hidden; chapter 1's
+ *   paragraphs; tap the first and the last, the count, the 8-block cap refused with a message; "Write the
+ *   prompt" opens the composer on that passage (signed out: its sign-in prompt; invited, status mocked: the prompt).
+ * - Search: "Kalimar" finds chapter 1 ¶ 2 with the match marked; tapping it chooses that paragraph.
+ * - The deep link opens the composer on its passage; a bad one falls back to browsing with a note.
+ * - The Pictures page's button shows only where "Add an image" shows.
+ */
+async function checkMakeImage(page: Page, scheme: string) {
+  const ctx = page.context();
+  await page.evaluate(() => {
+    localStorage.removeItem('snowmoon.signin');
+    localStorage.setItem('snowmoon.read-to', '3');
+  });
+  await open(page, '/images');
+  if (await page.locator('.mi-entry').count()) fail(`/images (${scheme}): "Make an image" shows to a signed-out reader`);
+  await open(page, '/images/new');
+  await checkFloors(page, '/images/new (chapters)', scheme);
+  const rows = await page.locator('.mi-chapters li').count();
+  if (rows !== 32) fail(`/images/new (${scheme}): ${rows} chapters listed, not 32`);
+  const marked = await page.locator('.mi-chapters li:has(.mi-ahead) .ch-num').allTextContents();
+  const opened = await page.evaluate(() => Math.max(...JSON.parse(localStorage.getItem('snowmoon.opened') ?? '[]').concat([Number(localStorage.getItem('snowmoon.read-to') ?? 1)])));
+  if (marked.length !== 32 - opened || marked[0] !== `Chapter ${opened + 1}`) fail(`/images/new (${scheme}): ${marked.length} chapters marked past where you've read (first ${marked[0]}), want ${32 - opened} from Chapter ${opened + 1}`);
+  await page.locator('.mi-chapters a[href="/images/new?chapter=1"]').click();
+  await page.waitForURL('**/images/new?chapter=1');
+  await page.waitForSelector('.mi-pick');
+  await checkFloors(page, '/images/new?chapter=1 (browse)', scheme);
+  const picks = await page.locator('.mi-pick').evaluateAll((els) => els.map((e) => Number(e.id.split('-b')[1])));
+  const pick = (idx: number) => page.locator(`#c1-b${idx}`).click();
+  const countText = async () => ((await page.locator('.mi-count').textContent().catch(() => '')) ?? '').trim();
+  await pick(picks[0]);
+  await pick(picks[2]);
+  const n3 = picks[2] - picks[0] + 1;
+  if (!(await countText()).includes(`${n3} of up to 8 blocks`)) fail(`/images/new (${scheme}): after tapping the first and third paragraphs the count reads "${await countText()}"`);
+  const pressed = await page.locator('.mi-pick[aria-pressed="true"]').count();
+  if (pressed !== 3) fail(`/images/new (${scheme}): ${pressed} paragraphs marked chosen, not 3`);
+  // The cap: a new first paragraph, then one too far.
+  await pick(picks[0]);
+  await pick(picks[10]);
+  const cap = ((await page.locator('.mi-cap').textContent().catch(() => '')) ?? '').trim();
+  if (!/up to 8 blocks/.test(cap)) fail(`/images/new (${scheme}): no message when a passage would be over 8 blocks (${cap || 'nothing'})`);
+  if (!(await countText()).includes('1 of up to 8')) fail(`/images/new (${scheme}): a passage over the cap was chosen anyway ("${await countText()}")`);
+  await checkFloors(page, '/images/new?chapter=1 (cap message)', scheme);
+  await pick(picks[7]);
+  if (!(await countText()).includes('8 of up to 8')) fail(`/images/new (${scheme}): 8 blocks are not allowed ("${await countText()}")`);
+  // Signed out, "Write the prompt" opens the composer with its sign-in prompt.
+  await page.locator('.mi-write').click();
+  await page.waitForSelector('.image-composer', { timeout: 5000 }).catch(() => fail(`/images/new (${scheme}): "Write the prompt" does not open the composer`));
+  if (!/Sign in to make an image/.test((await page.locator('.image-composer').textContent().catch(() => '')) ?? '')) fail(`/images/new (${scheme}): signed out, the composer does not ask to sign in`);
+  if (!/Chapter 1 · ¶ 1–8 · 8 blocks/.test((await page.locator('.image-composer .ic-label').first().textContent().catch(() => '')) ?? '')) fail(`/images/new (${scheme}): the composer is not on the chosen passage (${await page.locator('.image-composer .ic-label').first().textContent().catch(() => '')})`);
+  await checkFloors(page, '/images/new (composer, signed out)', scheme);
+  await page.keyboard.press('Escape');
+
+  // Search.
+  await open(page, '/images/new');
+  await page.locator('.mi-switch button', { hasText: 'Search' }).click();
+  // The search runs on the device: no request after the page has loaded carries what is typed (owner, 2026-10-10).
+  const sent: string[] = [];
+  const watch = (r: { url: () => string; postData: () => string | null }) => sent.push(`${r.url()} ${r.postData() ?? ''}`);
+  page.on('request', watch);
+  await page.fill('#mi-q', 'ka');
+  await page.waitForTimeout(500);
+  if (await page.locator('.mi-hit').count()) fail(`/images/new (${scheme}): a 2-letter search shows results`);
+  await page.fill('#mi-q', 'kalimar');
+  await page.waitForSelector('.mi-hit', { timeout: 5000 }).catch(() => fail(`/images/new (${scheme}): searching "kalimar" shows no hits`));
+  page.off('request', watch);
+  if (sent.some((u) => /kalimar/i.test(u))) fail(`/images/new (${scheme}): the search query left the device: ${sent.filter((u) => /kalimar/i.test(u)).slice(0, 2).join(' | ')}`);
+  const first = page.locator('.mi-hit').first();
+  if ((await first.getAttribute('href')) !== '/images/new?chapter=1&pick=3') fail(`/images/new (${scheme}): the first "kalimar" hit points to ${await first.getAttribute('href')}, not chapter 1 ¶ 2 (c1-b3)`);
+  if ((await first.locator('mark').textContent()) !== 'Kalimar') fail(`/images/new (${scheme}): the hit does not mark "Kalimar"`);
+  if (!(await page.locator('.mi-hit .mi-ahead').count())) fail(`/images/new (${scheme}): hits past where you've read are not marked`);
+  await checkFloors(page, '/images/new (search)', scheme);
+  await first.click();
+  await page.waitForURL('**/images/new?chapter=1&pick=3');
+  await page.waitForSelector('#c1-b3[aria-pressed="true"]', { timeout: 5000 }).catch(() => fail(`/images/new (${scheme}): tapping a hit does not choose its paragraph`));
+  if (!(await countText()).includes('¶ 2 · 1 of up to 8')) fail(`/images/new (${scheme}): after a hit the count reads "${await countText()}"`);
+  await pick(5);
+  if (!(await countText()).includes('¶ 2–4 · 3 of up to 8')) fail(`/images/new (${scheme}): a hit's passage does not widen by tapping ("${await countText()}")`);
+
+  // The deep link, signed in as an invited FID (session and the composer's status mocked).
+  await ctx.route('**/api/images/status**', (r) =>
+    r.fulfill({ json: { label: 'Trial', ready: true, signedIn: true, invited: true, consented: true, left: 10, publishesLeft: 3, perDay: 10, maxBlocks: 8,
+      rules: 'No real people.', model: { name: 'Z-Image Turbo', licence: 'Apache-2.0', host: 'fal.ai' }, styles: [{ id: 'techno-vistas', name: 'Techno vistas', text: 'Style text.' }] } }),
+  );
+  await ctx.route('**/api/chat/status', (r) => r.fulfill({ json: { available: false, model: 'm', host: null, provider: null, route: '', perDay: 30, left: 30 } }));
+  await page.evaluate(() => {
+    const b64 = (o: object) => btoa(JSON.stringify(o)).replace(/=+$/, '');
+    localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `x.${b64({ sub: 6786, exp: 4102444800 })}.y`, fid: 6786, username: 'check', exp: 4102444800 }));
+  });
+  await open(page, '/images/new?chapter=1&start=3&end=5');
+  await page.waitForSelector('.image-composer textarea', { timeout: 5000 }).catch(() => fail(`/images/new?chapter=1&start=3&end=5 (${scheme}): the deep link does not open the prompt`));
+  const label = ((await page.locator('.image-composer .ic-label').first().textContent().catch(() => '')) ?? '').trim();
+  if (label !== 'Chapter 1 · ¶ 2–4 · 3 blocks') fail(`/images/new (${scheme}): the deep link's composer reads "${label}", not Chapter 1 · ¶ 2–4 · 3 blocks`);
+  await checkFloors(page, '/images/new (deep link, composer invited)', scheme);
+  await page.keyboard.press('Escape');
+  if ((await page.locator('.mi-pick[aria-pressed="true"]').count()) !== 3) fail(`/images/new (${scheme}): after closing the composer the deep link's passage is not shown chosen`);
+  for (const bad of ['/images/new?chapter=1&start=3&end=40', '/images/new?chapter=1&start=5&end=3', '/images/new?chapter=99&start=1&end=2']) {
+    await open(page, bad);
+    await page.waitForTimeout(200);
+    if (await page.locator('.image-composer').count()) fail(`${bad} (${scheme}): a bad deep link opens the composer`);
+    if (!(await page.locator('.mi-note', { hasText: 'can’t be opened' }).count())) fail(`${bad} (${scheme}): a bad deep link says nothing`);
+    if (!(await page.locator('.mi-pick, .mi-chapters li').count())) fail(`${bad} (${scheme}): a bad deep link does not fall back to browsing`);
+  }
+  await open(page, '/images');
+  const entry = page.locator('.mi-entry');
+  if (!(await entry.count()) || (await entry.getAttribute('href')) !== '/images/new') fail(`/images (${scheme}): no "Make an image" button to /images/new for an invited reader`);
+  await checkFloors(page, '/images (invited)', scheme);
+  await page.evaluate(() => {
+    localStorage.removeItem('snowmoon.signin');
+    localStorage.removeItem('snowmoon.read-to');
+  });
+  await ctx.unroute('**/api/images/status**');
+  await ctx.unroute('**/api/chat/status');
 }
 
 async function checkFloors(page: Page, path: string, scheme: string) {
@@ -284,10 +447,152 @@ async function checkFloors(page: Page, path: string, scheme: string) {
 }
 
 /**
+ * The home page (src/app/page.tsx, from Design's HomeWindow), at 390 × 844 with the intro seen:
+ * - the first screen (elements in the viewport, their own text nodes) says independent adaptation,
+ *   not affiliated with the author, no token, and says it in the dark hero (principle 7; owner, 2026-10-10);
+ * - "How this works" opens the intro; "Read from here" lands on the quoted block;
+ * - "Just made" shows each image with its AI label, or the empty state;
+ * - the Minpentai board steps on its own, and starts paused under reduced motion until Play;
+ * - a reader who opened a chapter before (the reading record on the device) gets Continue · Chapter n.
+ */
+async function checkHome(page: Page, scheme: 'light' | 'dark') {
+  const own = (sel: string) =>
+    page.evaluate(
+      (sel) =>
+        Array.from(document.querySelectorAll(sel))
+          .filter((e) => e.getBoundingClientRect().top < innerHeight && e.getBoundingClientRect().bottom > 0)
+          .map((e) => Array.from(e.childNodes).filter((n) => n.nodeType === 3).map((n) => n.textContent).join(' '))
+          .join(' ')
+          .replace(/\s+/g, ' ')
+          .toLowerCase(),
+      sel,
+    );
+  await page.evaluate(() => scrollTo(0, 0));
+  const first = await own('body *');
+  const hero = await own('.home-hero *');
+  for (const phrase of ['independent adaptation', 'not affiliated with the author', 'no token']) {
+    if (!first.includes(phrase)) fail(`/ (${scheme}): first screen does not say "${phrase}"`);
+    else if (!hero.includes(phrase)) fail(`/ (${scheme}): "${phrase}" is on the first screen but not in the hero`);
+  }
+  if (!(await page.locator('.home-hero .home-disclaimer a[href="/about"]').isVisible())) fail(`/ (${scheme}): the hero does not link About (licence and sources)`);
+  if ((await page.locator('.home-chapters .chapter-list a').count()) !== 32) fail(`/ (${scheme}): the chapter list does not link all 32 chapters`);
+
+  // How this works: the intro, opened again.
+  await page.locator('.home-how').click();
+  if (!(await page.locator('.intro-card').isVisible())) fail(`/ (${scheme}): "How this works" does not open the intro`);
+  else await page.locator('.intro-skip').click();
+
+  // Just made.
+  const rows = await page.locator('.home-feed-list li').count();
+  if (rows) {
+    for (const li of await page.locator('.home-feed-list li').all()) {
+      const label = li.locator('button.ai-label');
+      if (!(await label.count()) || !/\bAI\b.* · by \S/i.test((await label.innerText()) ?? '')) fail(`/ (${scheme}): a "Just made" image has no AI label naming who made it`);
+    }
+  } else if (!(await page.locator('.home-feed-empty').isVisible())) fail(`/ (${scheme}): "Just made" shows neither images nor its empty state`);
+
+  // The board plays itself, once it is on screen.
+  await page.locator('.home-board').scrollIntoViewIfNeeded();
+  const turn = async () => Number(await page.locator('.home-turn').getAttribute('data-turn'));
+  const t0 = await turn();
+  await page.waitForTimeout(1600);
+  if ((await turn()) === t0) fail(`/ (${scheme}): the Minpentai board does not step (turn ${t0})`);
+  if (!(await page.locator('.home-game .info-label[data-label="invented"]').isVisible())) fail(`/ (${scheme}): the board has no "Invented ⓘ" label`);
+
+  // A moment: the link lands on its block.
+  await page.evaluate(() => scrollTo(0, 0));
+  const block = await page.locator('.home-quote').getAttribute('data-block');
+  await page.locator('.home-moment-read').click();
+  await page.waitForURL(/\/chapter\/\d+#c\d+-b\d+$/, { timeout: 10000 }).catch(() => {});
+  if (!page.url().endsWith(`#${block}`)) fail(`/ (${scheme}): "Read from here" goes to ${page.url()}, not #${block}`);
+  else {
+    await page.waitForTimeout(500);
+    const at = await page.evaluate((id) => document.getElementById(id)?.getBoundingClientRect().top ?? null, block!);
+    if (at === null || at < 0 || at > 844) fail(`/ (${scheme}): "Read from here" does not show block ${block} (top ${at})`);
+  }
+
+  // Reduced motion: still until Play. This reader has opened chapter 3 before: Continue · Chapter 3.
+  const still = await newPage({ viewport: { width: 390, height: 844 }, colorScheme: scheme, hasTouch: true, reducedMotion: 'reduce' });
+  await still.addInitScript(`try{localStorage.setItem('snowmoon.intro-seen',${JSON.stringify(JSON.parse(readFileSync('config/intro.json', 'utf8')).version)})}catch(e){}`);
+  await still.addInitScript(`try{localStorage.setItem('snowmoon.last-chapter','3')}catch(e){}`);
+  await still.goto(BASE + '/', { waitUntil: 'networkidle' });
+  const cont = still.locator('.home-hero-actions a[href="/chapter/3"]');
+  if (!(await cont.isVisible()) || !/Continue · Chapter 3/i.test((await cont.textContent()) ?? '')) fail(`/ (${scheme}): a returning reader (chapter 3 opened last) is not offered Continue · Chapter 3`);
+  await still.locator('.home-board').scrollIntoViewIfNeeded();
+  const r0 = await still.locator('.home-turn').getAttribute('data-turn');
+  await still.waitForTimeout(1200);
+  if ((await still.locator('.home-turn').getAttribute('data-turn')) !== r0) fail(`/ (${scheme}): the board moves under prefers-reduced-motion`);
+  await still.locator('.home-board-toggle').click();
+  await still.waitForTimeout(1200);
+  if ((await still.locator('.home-turn').getAttribute('data-turn')) === r0) fail(`/ (${scheme}): Play does not start the board under reduced motion`);
+  await still.close();
+}
+/**
  * The glossary (src/components/glossary.tsx): the index and a word's page meet the floors; later
  * chapters are covered until "Show anyway"; "Back" returns to the reading place, whether it came
  * in the URL or from the menu's Glossary link in the reader.
  */
+/** Minpentai Play at phone width: the hub, free play, a practice match, full screen and the rules page. */
+async function checkPlay(page: Page, scheme: string) {
+  const where = (q: string) => `/minpentai?${q} (${scheme})`;
+  const noSideways = async (w: string) => { if (await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1)) fail(`${w}: the page scrolls sideways at 390px`); };
+  await open(page, '/minpentai?mode=play');
+  await page.waitForSelector('.mp-play .mp-tabs', { timeout: 10000 }).catch(() => fail(`${where('mode=play')}: no Play hub`));
+  await checkFloors(page, '/minpentai?mode=play', scheme);
+  await noSideways(where('mode=play'));
+  const tabs = (await page.locator('.mp-tabs button').allTextContents()).join(' | ');
+  if (tabs !== 'LEARN | PLAY | FREE PLAY') fail(`${where('mode=play')}: tabs are ${tabs}`);
+  for (const t of ['Practice match', 'The computer ladder', 'Play a person']) if (!(await page.locator('.mp-card-title', { hasText: t }).count())) fail(`${where('mode=play')}: no "${t}"`);
+  if (!((await page.locator('.mp-hub').textContent()) ?? '').includes('RULES INVENTED FOR THIS EDITION')) fail(`${where('mode=play')}: not labelled as invented rules`);
+  // Free play.
+  await open(page, '/minpentai?mode=free');
+  await page.waitForSelector('.mp-play [role="grid"]', { timeout: 10000 }).catch(() => fail(`${where('mode=free')}: no board`));
+  await checkFloors(page, '/minpentai?mode=free', scheme);
+  await noSideways(where('mode=free'));
+  if (!((await page.locator('.mp-strip').textContent()) ?? '').startsWith('STEP 0')) fail(`${where('mode=free')}: the strip does not read STEP 0`);
+  if ((await page.locator('.mp-tag', { hasText: "THE BOOK'S CELL RULE" }).getAttribute('href')) !== '/minpentai/rule') fail(`${where('mode=free')}: no link to the book's cell rule`);
+  // A practice match: start, place a glider, end the turn; the turn's run plays.
+  await open(page, '/minpentai?mode=play');
+  await page.locator('.mp-card', { hasText: 'Practice match' }).click();
+  await page.getByRole('button', { name: 'START MATCH' }).click();
+  await checkFloors(page, '/minpentai practice match', scheme);
+  await noSideways(`/minpentai practice match (${scheme})`);
+  await page.locator('[role="gridcell"]').nth(2 * 15 + 3).click();
+  // The match draws one new rule; under "Gliders cost 3 points." a glider spends 3 (as check:minpentai-live, 4fb3c16).
+  const cost3 = (await page.getByText(/gliders cost 3 points/i).count()) > 0;
+  const left = cost3 ? '5 OF 8' : '4 OF 8';
+  if (!((await page.locator('.mp-pts').textContent()) ?? '').startsWith(left)) fail(`/minpentai practice match (${scheme}): placing a glider did not spend ${cost3 ? 3 : 4} points`);
+  const foot = await page.locator('.mp-foot').boundingBox();
+  if (!foot || foot.y + foot.height > (await page.evaluate(() => innerHeight)) + 1) fail(`/minpentai practice match (${scheme}): END TURN is cut off`);
+  await page.getByRole('button', { name: 'END TURN' }).click();
+  await page.waitForTimeout(600);
+  if (!/^STEP [1-9]/.test((await page.locator('.mp-strip').textContent()) ?? '')) fail(`/minpentai practice match (${scheme}): the run does not play`);
+  await checkPlayFullScreen(page, `(${scheme})`, await page.evaluate(() => innerHeight));
+  // The rules page.
+  await open(page, '/minpentai/rules');
+  await checkFloors(page, '/minpentai/rules', scheme);
+  await noSideways(`/minpentai/rules (${scheme})`);
+  const words = (await page.locator('.mp-rules').textContent()) ?? '';
+  if (!words.includes('RULES, DRAFT 1') || !words.includes('c4-b84')) fail(`/minpentai/rules (${scheme}): not Design's rules page`);
+}
+/** ⤢ on a match: the frame covers the site (no top bar), the board upright, END TURN in view. */
+async function checkPlayFullScreen(page: Page, where: string, tall: number) {
+  if (!(await page.locator('.mp-play .mp-boardscr').count())) {
+    await open(page, '/minpentai?mode=play');
+    await page.locator('.mp-card', { hasText: 'Practice match' }).click();
+    await page.getByRole('button', { name: 'START MATCH' }).click();
+  }
+  await page.waitForFunction(() => !!document.querySelector('.mp-fsgo'), null, { timeout: 15000 }).catch(() => {});
+  await page.locator('.mp-fsgo').click().catch(() => fail(`/minpentai Play ${where}: no full screen button`));
+  await page.waitForTimeout(200);
+  if (await page.locator('.topbar').isVisible()) fail(`/minpentai Play full screen ${where}: the site's top bar shows`);
+  const grid = await page.locator('.mp-port [role="grid"]').boundingBox();
+  if (!grid || grid.height <= grid.width) fail(`/minpentai Play full screen ${where}: the board is not upright`);
+  const ctl = await page.locator('.mp-port-ctl').boundingBox();
+  if (!ctl || ctl.y + ctl.height > tall + 1) fail(`/minpentai Play full screen ${where}: the controls are cut off`);
+  await page.getByRole('button', { name: 'Exit full screen' }).click();
+}
+
 async function checkGlossary(page: Page, scheme: string) {
   await open(page, '/glossary');
   await checkFloors(page, '/glossary', scheme);
@@ -530,9 +835,48 @@ async function checkAiLabels() {
 
       await at('/images');
       await checkPictureLabels(page, `/images ${tag}`, FIXTURE_IMAGES.length);
+      // Browsing (owner, 2026-10-10): each image shows the passage it is of, in the reading type.
+      {
+        const n = await page.locator('.pictures-list li .pictures-passage blockquote').evaluateAll((els) => els.filter((e) => (e as HTMLElement).innerText.trim().length > 20 && e.getBoundingClientRect().height > 20).length);
+        if (n < FIXTURE_IMAGES.length) fail(`/images ${tag}: ${n} of ${FIXTURE_IMAGES.length} images show the passage they are of`);
+        // "Make one from this passage" under each passage (an invited FID here), with the same range.
+        const links = await page.locator('.pictures-list li .mi-from').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
+        const want = FIXTURE_IMAGES.map((im) => `/images/new?chapter=1&start=${im.start}&end=${im.end}`);
+        for (const w of want) if (!links.includes(w)) fail(`/images ${tag}: no "Make one from this passage" to ${w} (${links.join(', ') || 'none'})`);
+        if (!(await page.locator('.mi-entry[href="/images/new"]').count())) fail(`/images ${tag}: no "Make an image" button`);
+      }
+
+      // Home's "Just made": the fixture's images, newest first, each labelled. With the intro seen: its
+      // card images (a seeded image with its recipe written out, not the label button) are not this check's.
+      await page.evaluate((v) => localStorage.setItem('snowmoon.intro-seen', v), JSON.parse(readFileSync('config/intro.json', 'utf8')).version as string);
+      await at('/');
+      await checkPictureLabels(page, `/ ${tag}`, FIXTURE_IMAGES.length);
 
       await at(`/image/${FIXTURE_IMAGES[0].version}`);
       await checkPictureLabels(page, `/image ${tag}`, 1);
+      {
+        const make = page.locator('.ip-make');
+        const want = `/images/new?chapter=1&start=${FIXTURE_IMAGES[0].start}&end=${FIXTURE_IMAGES[0].end}`;
+        if (!(await make.isVisible().catch(() => false)) || (await make.getAttribute('href')) !== want) fail(`/image ${tag}: no "Make an image of this passage" to ${want}`);
+        if (w === 390) await checkFloors(page, `/image ${tag} (Make an image)`, 'light');
+        if (w === 390 && SHOTS) {
+          await make.scrollIntoViewIfNeeded();
+          await page.screenshot({ path: path.join(SHOTS, 'create-image-page.png') });
+        }
+      }
+      // The passage first, at every width; the prompt and the model when "How this was made" is opened.
+      {
+        if (!(await page.locator('.ip-passage').isVisible())) fail(`/image ${tag}: the passage is not shown`);
+        const how = page.locator('details.ip-how');
+        if (!(await how.count())) fail(`/image ${tag}: no "How this was made" to open`);
+        else {
+          if (await how.evaluate((d) => (d as HTMLDetailsElement).open)) fail(`/image ${tag}: "How this was made" starts open`);
+          if (await page.locator('.ip-recipe').isVisible()) fail(`/image ${tag}: the prompt and model show before "How this was made" is opened`);
+          await how.locator('summary').click();
+          if (!(await page.locator('.ip-recipe .recipe-prompt').isVisible())) fail(`/image ${tag}: opening "How this was made" does not show the exact prompt`);
+          await checkFloors(page, `/image ${tag} (recipe open)`, 'light');
+        }
+      }
 
       await at('/moderate');
       await page.waitForSelector('.mq-media', { timeout: 10000 }).catch(() => fail(`/moderate ${tag}: the queue did not show`));
@@ -586,14 +930,35 @@ try {
   // card, remembered on the device without cookies; deep links go straight in.
   {
     const ctx = await browser.newContext({ viewport: { width: 390, height: 844 }, hasTouch: true });
+    // checkFloors' page code needs the transpiler's __name helper, as in the main context.
+    await ctx.addInitScript('window.__name = (f) => f');
     const page = await ctx.newPage();
     await page.goto(BASE + '/', { waitUntil: 'networkidle' });
+    if (INJECT) await page.addStyleTag({ content: INJECT });
     const cards = (JSON.parse(readFileSync('config/intro.json', 'utf8')).cards as { id: string }[]).map((c) => c.id);
     for (let i = 0; i < cards.length; i++) {
       const card = page.locator('.intro-card');
       if (!(await card.isVisible())) { fail(`intro: card ${i + 1} is not showing on a first visit to /`); break; }
       if ((await card.getAttribute('data-card')) !== cards[i]) fail(`intro: card ${i + 1} is ${await card.getAttribute('data-card')}, not ${cards[i]}`);
       if (!(await page.locator('.intro-skip').isVisible())) fail(`intro: card ${i + 1} has no Skip`);
+      // A card showing an AI image carries the AI label, which opens the recipe sheet (owner, 2026-10-10).
+      // The slide showing (the others sit off screen in the track, inert).
+      const slide = card.locator(`.intro-slide[data-slide="${cards[i]}"]`);
+      if ((await slide.locator('img').count()) > 0) {
+        const label = slide.locator('.ai-label[data-ai="image"]');
+        if (!(await label.count()) || !(await label.first().isVisible())) fail(`intro: card ${i + 1} (${cards[i]}) shows an AI image without the AI label`);
+        else {
+          if (!/\bAI\b/.test((await label.first().innerText()) ?? '')) fail(`intro: card ${i + 1}: the label does not say "AI"`);
+          await label.first().click();
+          const sheet = page.locator('.recipe-sheet');
+          await sheet.waitFor({ timeout: 5000 }).catch(() => fail(`intro: card ${i + 1}: the AI label does not open the recipe sheet`));
+          // The sheet fetches its recipe after it opens; "Who made it" arrives with it.
+          await sheet.getByText(/not by the author/i).first().waitFor({ timeout: 10000 }).catch(() => fail(`intro: card ${i + 1}: the recipe sheet does not say "not by the author"`));
+          await checkFloors(page, `intro card ${i + 1} (recipe sheet)`, 'light');
+          await page.keyboard.press('Escape');
+          if ((await page.locator('.intro-card').getAttribute('data-card')) !== cards[i]) fail(`intro: card ${i + 1}: closing the recipe sheet moved the intro on`);
+        }
+      }
       if (i < cards.length - 1) await page.getByRole('button', { name: 'Next' }).click();
     }
     await page.locator('.intro-skip').click();
@@ -645,22 +1010,14 @@ try {
     // tsx keeps function names with a __name helper that the page does not have.
     await page.addInitScript('window.__name = (f) => f');
 
+    // Home (src/app/page.tsx): first as a first visit (the intro over it), then with the intro seen.
     await open(page, '/');
+    await checkFloors(page, '/ (first visit, intro)', scheme);
+    await page.evaluate((v) => localStorage.setItem('snowmoon.intro-seen', v), JSON.parse(readFileSync('config/intro.json', 'utf8')).version as string);
+    await open(page, '/');
+    if (await page.locator('.intro-card').count()) fail(`/ (${scheme}): the intro shows after it was seen`);
     await checkFloors(page, '/', scheme);
-    if (scheme === 'light') {
-      const first = await page.evaluate(() =>
-        Array.from(document.querySelectorAll('body *'))
-          .filter((e) => e.getBoundingClientRect().top < innerHeight && e.getBoundingClientRect().bottom > 0)
-          .map((e) => Array.from(e.childNodes).filter((n) => n.nodeType === 3).map((n) => n.textContent).join(' '))
-          .join(' ')
-          .replace(/\s+/g, ' ')
-          .toLowerCase(),
-      );
-      for (const phrase of ['independent adaptation', 'not affiliated with the author', 'no token']) {
-        if (!first.includes(phrase)) fail(`/: first screen does not say "${phrase}"`);
-      }
-    }
-
+    await checkHome(page, scheme);
     await open(page, '/about');
     if (!(await page.locator('a[href="https://open.spotify.com/show/0J9O3tKC3BI4buQ8Hry3YN"]').count())) fail(`/about (${scheme}): no link to the podcast on Spotify`);
     await checkFloors(page, '/about', scheme);
@@ -679,6 +1036,7 @@ try {
     await open(page, '/images');
     await checkFloors(page, '/images', scheme);
     if (!(await page.getByText('Most liked').isVisible())) fail('/images: no "Most liked" order');
+    await checkMakeImage(page, scheme);
     await checkGlossary(page, scheme);
     await open(page, '/chapter/1');
     if (await page.locator('.add-image').count()) fail('/chapter/1: "Add an image" shows to a signed-out reader');
@@ -731,8 +1089,25 @@ try {
         localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `x.${b64({ sub: 6786, exp: 4102444800 })}.y`, fid: 6786, username: 'check', exp: 4102444800 }));
       });
       await open(page, '/chapter/1');
+      // Signed in, all three options: still inside the screen at 390px.
+      await page.evaluate(() => {
+        const p = document.querySelector('#c1-b19')!;
+        p.scrollIntoView({ block: 'center' });
+        const r = document.createRange();
+        r.selectNodeContents(p);
+        getSelection()!.removeAllRanges();
+        getSelection()!.addRange(r);
+      });
+      await page.waitForSelector('.selection-actions button:has-text("Add an image")');
+      if ((await checkSelectionFits(page, `/chapter/1 (${scheme}, selection, signed in)`)) !== 3) fail(`/chapter/1 (${scheme}): signed in, the selection does not offer Share quote, Add an image and Ask about this`);
+      await page.evaluate(() => getSelection()!.removeAllRanges());
       await page.locator('.scene-label .add-image').first().click();
       await page.waitForSelector('.image-composer textarea');
+      // The project's starting style is chosen by default (owner, 2026-10-10); None is still there.
+      const styleChecked = await page.locator('.ic-style input[type="radio"]').evaluateAll((els) => els.map((e) => ({ on: (e as HTMLInputElement).checked, label: (e.parentElement?.textContent ?? '').trim() })));
+      if (!styleChecked.find((x) => x.on)?.label.startsWith('Techno vistas')) fail(`/chapter/1 (${scheme}): the composer does not start with the project's style chosen (${JSON.stringify(styleChecked)})`);
+      if (!styleChecked.some((x) => x.label.startsWith('None'))) fail(`/chapter/1 (${scheme}): the composer has no "None" style`);
+      if (!(await page.locator('.ic-style-text').count())) fail(`/chapter/1 (${scheme}): the chosen style's text is not shown`);
       await checkFloors(page, '/chapter/1 (add an image, invited)', scheme);
       const text = (await page.textContent('.image-composer')) ?? '';
       if (!/never sent to a model/.test(text)) fail('/chapter/1: the composer does not say the book text is never sent to a model');
@@ -759,18 +1134,12 @@ try {
     }
 
     // Minpentai: every Learn screen and Free play (and the sandbox's and "Play the computer"'s old links, which open Free play), at phone width.
-    for (const q of [...Array.from({ length: MINPENTAI_LESSONS }, (_, i) => `lesson=${i + 1}`), 'mode=practice', 'mode=play', 'mode=free']) {
+    for (const q of [...Array.from({ length: MINPENTAI_LESSONS }, (_, i) => `lesson=${i + 1}`), 'mode=practice']) {
       await open(page, `/minpentai?${q}`);
       await page.waitForTimeout(150);
       await checkFloors(page, `/minpentai?${q}`, scheme);
       const wide = await page.evaluate(() => document.documentElement.scrollWidth > innerWidth + 1);
       if (wide) fail(`/minpentai?${q} (${scheme}): the page scrolls sideways at 390px`);
-      if (q === 'mode=free' || q === 'mode=play') {
-        // Free play: Design's practice match on its own, with the way to Learn; the old links land on it.
-        if ((await page.locator('.ml-stepof').textContent()) !== 'FREE PLAY') fail(`/minpentai?${q} (${scheme}): does not open Free play`);
-        if ((await page.locator('.ml-learn-skip').textContent()) !== 'LEARN THE GAME') fail(`/minpentai?${q} (${scheme}): Free play has no way to Learn`);
-        if (!page.url().endsWith('?mode=free')) fail(`/minpentai?${q} (${scheme}): the address is ${page.url()}, not ?mode=free`);
-      }
       {
         // Learn and Free play: the game is labelled as invented for this edition (P8d), except Under the hood, which is the book's rule.
         // Short labels (owner ruling, 2026-10-09): "Invented ⓘ", "Draft ⓘ", "Book ⓘ", each opening its explanation.
@@ -794,6 +1163,7 @@ try {
         if ((await note.count()) && (await note.getAttribute('href')) !== '/minpentai/rule') fail(`/minpentai?${q} (${scheme}): the rules note does not link to /minpentai/rule`);
       }
     }
+    await checkPlay(page, scheme);
     // The rule recovered from the book's figure (c4-b5, c4-b7), on its own page; the sandbox's board links (?s=) land on it.
     await open(page, '/minpentai/rule');
     await checkFloors(page, '/minpentai/rule', scheme);
@@ -848,6 +1218,11 @@ try {
           return el ? el.getBoundingClientRect().width : 0;
         });
         if (measure > 700) fail(`${path} @${width}: the reading column is ${Math.round(measure)}px wide`);
+        // Home is Design's wide page (no .page column): its hero text keeps Design's 780px measure.
+        if (path === '/') {
+          const hero = await page.evaluate(() => document.querySelector('.home-hero-text')?.getBoundingClientRect().width ?? 0);
+          if (!hero || hero > 781) fail(`/ @${width}: the hero text is ${Math.round(hero)}px wide (Design: at most 780)`);
+        }
         if (await page.locator('.topbar').isVisible()) fail(`${path} @${width}: the phone top bar shows`);
         // Learn is Design's phone, centred beside the rail, on tablet and desktop (full screen is for phones and the Farcaster app).
         if (path === '/minpentai' && ((await page.locator('.ml-exit').isVisible()) || !(await page.locator('.rail').isVisible()))) fail(`/minpentai @${width}: Learn is full screen outside a phone`);
@@ -956,12 +1331,13 @@ try {
     await open(frame, '/chapter/1');
     if (await frame.locator('.rail').isVisible()) fail('@424×695: the rail shows in the Farcaster frame');
     // Learn fills the Farcaster frame: a watch screen, a lesson, Under the hood and the practice match.
-    for (const q of ['lesson=1', 'lesson=13', `lesson=${MINPENTAI_HOOD}`, 'mode=practice', 'mode=free']) {
+    for (const q of ['lesson=1', 'lesson=13', `lesson=${MINPENTAI_HOOD}`, 'mode=practice']) {
       await open(frame, `/minpentai?${q}`);
       await checkLearnFullScreen(frame, `/minpentai?${q} @424×695`);
       const foot = await frame.locator('.ml-foot').boundingBox();
       if (!foot || foot.y + foot.height > 695 + 1) fail(`/minpentai?${q} @424×695: the footer is cut off`);
     }
+    await checkPlayFullScreen(frame, '@424×695', 695);
     await frame.close();
   }
 } finally {
@@ -972,4 +1348,4 @@ if (failures.length) {
   console.error(`\nUI CHECK FAILED (${failures.length}):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`ui check passed: ${BASE}, ${38 + MINPENTAI_LESSONS + 4} pages, the chapter sheet, the glossary's covers and back link, and 8 assistant states × light and dark; 10 pages at 1024, 1440 and 2000; AI labels on 9 screens at 390 and 1440`);
+console.log(`ui check passed: ${BASE}, ${38 + MINPENTAI_LESSONS + 4} pages, Make an image (browse, the 8-block cap, search, deep links, its links from the feed, an image's page and the assistant), the chapter sheet, the glossary's covers and back link, and 8 assistant states × light and dark; 10 pages at 1024, 1440 and 2000; AI labels on 9 screens at 390 and 1440`);

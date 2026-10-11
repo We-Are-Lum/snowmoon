@@ -3,6 +3,8 @@
 import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from 'react';
 import { usePathname } from 'next/navigation';
 import type { Intro, IntroCard } from '~/lib/intro';
+import { AiLabel } from './recipe-sheet';
+import { AI_LABEL } from '~/lib/ai-declared';
 
 /**
  * The first-visit intro (config/intro.json), built from
@@ -55,8 +57,13 @@ function Visual({ card, intro }: { card: IntroCard; intro: Intro }) {
     case 'recipe':
       return im ? (
         <div className="iv iv-recipe">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={im.url} alt={im.alt} width={im.width} height={im.height} />
+          {/* Owner, 2026-10-10: the intro's images carry the AI label too, opening the recipe sheet. It sits on
+              the picture's corner, so the card's clipped height can never hide it. */}
+          <div className="iv-pic">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={im.url} alt={im.alt} width={im.width} height={im.height} />
+            <span className="iv-ai"><AiLabel kind="image" text={AI_LABEL.image} file={im.recipeFile} item={im.id} /></span>
+          </div>
           <div className="iv-recipe-box">
             <span className="iv-row iv-strong">
               <span>How this was made</span>
@@ -90,6 +97,7 @@ function Visual({ card, intro }: { card: IntroCard; intro: Intro }) {
             <span className="iv-step-body">
               <span className="iv-step-who">An image of it</span>
               <span className="iv-step-what">AI-generated, anchored to ¶ {im.block.label}</span>
+              <AiLabel kind="image" text={AI_LABEL.image} file={im.recipeFile} item={im.id} />
             </span>
           </div>
           <div className="iv-step iv-indent-2">
@@ -180,6 +188,11 @@ function IntroScreens({ intro, onClose }: { intro: Intro; onClose: () => void })
         tabIndex={-1}
         ref={dialog}
         onKeyDown={(e) => {
+          // Keys from the recipe sheet (a portal, so React still bubbles them here) are the sheet's own:
+          // Escape there closes the sheet, not the intro.
+          if (!e.currentTarget.contains(e.target as Node)) return;
+          // Nor while a sheet is open over the intro, even before focus has moved into it.
+          if (document.querySelector('.sheet-overlay')) return;
           if (e.key === 'Escape') close();
           else if (e.key === 'ArrowRight') go(i + 1);
           else if (e.key === 'ArrowLeft') go(i - 1);

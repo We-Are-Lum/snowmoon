@@ -26,6 +26,12 @@
   --dzego: #B3306E;
   --cover: #1D1D1B; /* a covered spoiler in the feed (image creation board): ink tile, light text, in both themes */
   --cover-ink: #E7E4DD;
+  /* The home page's night hero and the Minpentai board (HomeWindow.dc.html): dark in both themes. */
+  --night: #060608;
+  --night-ink: #E7E4DD;
+  --night-body: #CFCCC4; /* 13:1 on --night */
+  --night-muted: #B4B3BA; /* 9.6:1 on --night */
+  --night-link: #8DB58A;
   --neutral-accent: var(--ink);
   --link: var(--veridia); /* the prototype's link colour: 7.1:1 on paper (light), 7.9:1 (dark) */
   --accent: var(--neutral-accent);

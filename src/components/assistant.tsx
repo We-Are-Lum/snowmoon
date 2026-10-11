@@ -5,6 +5,8 @@ import Link from 'next/link';
 import { sdk } from '@farcaster/miniapp-sdk';
 import { authFetch, inMiniApp } from '~/lib/client-auth';
 import { SignInButton } from './sign-in';
+import { MakeImageLink } from './make-image-link';
+import { IMAGE_WORDING } from '~/lib/images/wording';
 import { PrivateTextField } from './private-text-field';
 import { CHAT } from '~/lib/config';
 import { OWNER_WORDING } from '~/lib/wording';
@@ -138,8 +140,13 @@ function PassageCard({ id }: { id: string }) {
   );
 }
 
-/** A citation: the book's own words, rendered from the stored text by block id. */
+/**
+ * A citation: the book's own words, rendered from the stored text by block id. "Make an image of
+ * this passage" (shown where "Add an image" shows) links to /images/new with the cited block only:
+ * nothing from the conversation goes in the link. Model-drafted wording.
+ */
 function QuoteCard({ q }: { q: Quote }) {
+  const idx = Number(q.id.match(/-b(\d+)$/)?.[1]);
   return (
     <figure className="as-quote">
       <blockquote dangerouslySetInnerHTML={{ __html: q.html }} />
@@ -150,6 +157,11 @@ function QuoteCard({ q }: { q: Quote }) {
         </span>
         <Link href={`/chapter/${q.chapter}#${q.id}`}>Open in reader →</Link>
       </figcaption>
+      {Number.isInteger(idx) && (
+        <MakeImageLink className="mi-from as-make" passage={{ chapter: q.chapter, start: idx, end: idx }}>
+          {IMAGE_WORDING.create.ofThis} →
+        </MakeImageLink>
+      )}
     </figure>
   );
 }
