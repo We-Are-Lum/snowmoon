@@ -866,6 +866,27 @@ async function checkAiLabels() {
           await page.screenshot({ path: path.join(SHOTS, 'create-image-page.png') });
         }
       }
+      // Sheets as text (2026-10-10): "In this image", from the recipe, each linking to its sheet.
+      {
+        const links = await page.locator('.ip-in-image a').evaluateAll((els) => els.map((e) => e.getAttribute('href')));
+        if (links.join() !== '/images/designs/character/gladias,/images/designs/place/kalimar-footpaths') fail(`/image ${tag}: "In this image" does not link Gladias and the Kalimar footpaths (${links.join()})`);
+        if (!/In this image/.test((await page.locator('.ip-in-image').textContent().catch(() => '')) ?? '')) fail(`/image ${tag}: no "In this image"`);
+        if (w === 390 && SHOTS) {
+          await page.locator('.ip-in-image').scrollIntoViewIfNeeded();
+          await page.screenshot({ path: path.join(SHOTS, 'sheets-image-page.png') });
+        }
+      }
+      // A sheet page lists the readers' images of it, newest first, each labelled, then the edition's.
+      for (const sheet of ['/images/designs/place/kalimar-footpaths', '/images/designs/character/gladias']) {
+        await at(sheet);
+        await page.waitForSelector('.dz-image-list');
+        await checkPictureLabels(page, `${sheet} ${tag}`, 2);
+        const first = await page.locator('.dz-image-list li').first().locator('a').first().getAttribute('href');
+        if (first !== `/image/${FIXTURE_IMAGES[0].version}`) fail(`${sheet} ${tag}: the reader's image of it is not listed first (${first})`);
+        if (w === 390) await checkFloors(page, `${sheet} ${tag} (images)`, 'light');
+        if (w === 390 && SHOTS) await page.screenshot({ path: path.join(SHOTS, `sheets-${sheet.includes('place') ? 'place' : 'character'}-page.png`), fullPage: true });
+      }
+      await at(`/image/${FIXTURE_IMAGES[0].version}`);
       // The passage first, at every width; the prompt and the model when "How this was made" is opened.
       {
         if (!(await page.locator('.ip-passage').isVisible())) fail(`/image ${tag}: the passage is not shown`);
@@ -1041,11 +1062,32 @@ try {
     await checkMakeImage(page, scheme);
     await checkGlossary(page, scheme);
     // Styles and character sheets (step 4): readable signed out; making and picking only for invited FIDs.
-    for (const p of ['/images/designs', '/images/designs?sort=built', '/images/designs?tab=characters', '/images/designs/character/gladias', ...(DESIGN ? [`/images/designs/${DESIGN}`] : [])]) {
+    for (const p of ['/images/designs', '/images/designs?sort=built', '/images/designs?tab=characters', '/images/designs?tab=places', '/images/designs/character/gladias', '/images/designs/place/autobus', ...(DESIGN ? [`/images/designs/${DESIGN}`] : [])]) {
       await open(page, p);
       await checkFloors(page, p, scheme);
       if (await page.locator('.dz-new, .dz-fork, .dz-pick-button').count()) fail(`${p}: making or picking shows to a signed-out reader`);
       if (p.startsWith('/images/designs?') && !(await page.getByText('Nothing here is official.', { exact: false }).count())) fail(`${p}: no "Nothing here is official"`);
+      // Sheets as text (2026-10-10): the places tab is live; a sheet's book words say Book ⓘ, its shorthand Invented ⓘ.
+      if (p === '/images/designs?tab=places' && (await page.locator('.dz-rows a[href^="/images/designs/place/"]').count()) < 1) fail(`${p} (${scheme}): no places listed`);
+      if (p.includes('/character/') || p.includes('/place/')) {
+        await page.waitForSelector('.dz-book');
+        for (const [scope, kind, word] of [['.dz-book', 'book', 'Book'], ['.dz-shorthand', 'invented', 'Invented']] as const) {
+          const l = page.locator(`${scope} .info-label[data-label="${kind}"]`);
+          if ((await l.count()) !== 1) fail(`${p} (${scheme}): ${scope} has no "${word} ⓘ" label`);
+          else {
+            if ((await l.locator('.info-word').textContent())?.trim() !== word) fail(`${p} (${scheme}): the ${scope} label's word is not "${word}"`);
+            if (!(await l.locator('svg.info-i').isVisible())) fail(`${p} (${scheme}): the ${scope} label has no visible ⓘ`);
+          }
+        }
+        if (!/coding agent/.test((await page.locator('.dz-shorthand').textContent()) ?? '')) fail(`${p} (${scheme}): the shorthand does not say the coding agent drafted it`);
+        if (!(await page.locator('.dz-images').count())) fail(`${p} (${scheme}): no images list`);
+        if (p.includes('/place/') && !(await page.locator('.dz-appears a.dz-ref').count())) fail(`${p} (${scheme}): no "Where it appears"`);
+        if ((await page.locator('.dz-book a.dz-ref').count()) < 1) fail(`${p} (${scheme}): no book quote linked to its block`);
+        await page.locator('.dz-shorthand .info-label').click();
+        if (!/invented a look/.test((await page.locator('.info-sheet').textContent().catch(() => '')) ?? '')) fail(`${p} (${scheme}): "Invented" does not open its details`);
+        await checkFloors(page, `${p} (Invented details)`, scheme);
+        await page.keyboard.press('Escape');
+      }
     }
     await open(page, '/chapter/1');
     if (await page.locator('.add-image').count()) fail('/chapter/1: "Add an image" shows to a signed-out reader');
@@ -1091,8 +1133,17 @@ try {
       await ctx.route('**/api/chat/status', (r) => r.fulfill({ json: { available: false, model: 'm', host: null, provider: null, route: '', perDay: 30, left: 30 } }));
       await ctx.route('**/api/images/status**', (r) =>
         r.fulfill({ json: { label: 'Trial', ready: true, signedIn: true, invited: true, eligible: true, consented: true, left: 10, publishesLeft: 3, perDay: 10, maxBlocks: 8,
-          rules: 'No real people.', model: { name: 'Z-Image Turbo', licence: 'Apache-2.0', host: 'fal.ai' }, styles: [{ id: 'techno-vistas', name: 'Techno vistas', text: 'Style text.' }] } }),
+          rules: 'No real people.', model: { name: 'Z-Image Turbo', licence: 'Apache-2.0', host: 'fal.ai' }, styles: [{ id: 'techno-vistas', name: 'Techno vistas', text: 'Style text.' }],
+          // "In this passage" for whatever passage is asked (the real one is the server's; test:designs checks it).
+          inPassage: { passage: Object.fromEntries(['chapter', 'start', 'end'].map((k) => [k, Number(new URL(r.request().url()).searchParams.get(k))])), maxCharacters: 3,
+            characters: [{ slug: 'gladias', name: 'Gladias', text: 'Gladias: a man in his early forties (shorthand).' }],
+            place: { slug: 'kalimar-footpaths', name: 'the footpaths of the Kalimar district', text: 'The place, the footpaths of the Kalimar district: tall trees (shorthand).' } } } }),
       );
+      let sentSheets: unknown = null;
+      await ctx.route('**/api/images/generate', (r) => {
+        sentSheets = (r.request().postDataJSON() as { sheets?: unknown }).sheets ?? null;
+        return r.fulfill({ status: 400, json: { error: 'check:ui stops here' } });
+      });
       await page.evaluate(() => {
         const b64 = (o: object) => btoa(JSON.stringify(o)).replace(/=+$/, '');
         localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `x.${b64({ sub: 6786, exp: 4102444800 })}.y`, fid: 6786, username: 'check', exp: 4102444800 }));
@@ -1117,6 +1168,26 @@ try {
       if (!styleChecked.find((x) => x.on)?.label.startsWith('Techno vistas')) fail(`/chapter/1 (${scheme}): the composer does not start with the project's style chosen (${JSON.stringify(styleChecked)})`);
       if (!styleChecked.some((x) => x.label.startsWith('None'))) fail(`/chapter/1 (${scheme}): the composer has no "None" style`);
       if (!(await page.locator('.ic-style-text').count())) fail(`/chapter/1 (${scheme}): the chosen style's text is not shown`);
+      // "In this passage" (2026-10-10): the character and the place, chosen to start, their text in full; one removed.
+      {
+        const chips = page.locator('.ic-in-passage label');
+        await page.waitForSelector('.ic-in-passage');
+        const on = await chips.evaluateAll((els) => els.map((e) => `${e.getAttribute('data-sheet')}:${(e.querySelector('input') as HTMLInputElement).checked}`));
+        if (on.join() !== 'character:gladias:true,place:kalimar-footpaths:true') fail(`/chapter/1 (${scheme}): "In this passage" does not start with Gladias and the place chosen (${on.join()})`);
+        const added = (await page.locator('.ic-sheet-text').textContent()) ?? '';
+        if (!added.includes('Gladias: a man in his early forties (shorthand).') || !added.includes('The place, the footpaths')) fail(`/chapter/1 (${scheme}): the shorthand added is not shown in full`);
+        if (SHOTS && scheme === 'light') {
+          await page.locator('.ic-in-passage').scrollIntoViewIfNeeded();
+          await page.screenshot({ path: path.join(SHOTS, 'sheets-composer-chips.png') });
+        }
+        await checkFloors(page, '/chapter/1 (add an image, In this passage)', scheme);
+        await page.locator('.ic-in-passage label[data-sheet="character:gladias"]').click();
+        if ((await page.locator('.ic-sheet-text').textContent())?.includes('Gladias:')) fail(`/chapter/1 (${scheme}): removing Gladias leaves the shorthand in the prompt`);
+        await page.fill('.image-composer textarea', 'A walk under the trees');
+        await page.locator('.ic-generate').click();
+        await page.waitForSelector('.ic-error');
+        if (JSON.stringify(sentSheets) !== JSON.stringify({ characters: [], place: 'kalimar-footpaths' })) fail(`/chapter/1 (${scheme}): Generate was not sent the chips as left (${JSON.stringify(sentSheets)})`);
+      }
       await checkFloors(page, '/chapter/1 (add an image, invited)', scheme);
       const text = (await page.textContent('.image-composer')) ?? '';
       if (!/never sent to a model/.test(text)) fail('/chapter/1: the composer does not say the book text is never sent to a model');
@@ -1138,6 +1209,7 @@ try {
       if (!/sent to Groq to be checked \(through Vercel AI Gateway when Groq is busy\) and to fal\.ai/.test(form)) fail('/images/designs/new: the form does not name the hosts that receive the prompt');
       await ctx.unroute('**/api/designs/picks');
       await ctx.unroute('**/api/consent');
+      await ctx.unroute('**/api/images/generate');
       // A reader below the Neynar score (kept from an earlier Generate): the composer says why, plainly, and offers no Generate.
       const why = 'Image making is open to Farcaster accounts with a Neynar score of 0.7 or more, to keep out spam accounts. Yours is 0.42.';
       await ctx.unroute('**/api/images/status**');

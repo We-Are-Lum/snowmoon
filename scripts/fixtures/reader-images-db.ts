@@ -24,6 +24,16 @@ export const FIXTURE_IMAGES = [
   },
 ] as const;
 
+/** The first image is of Gladias on the Kalimar footpaths (sheets as text, 2026-10-10): its page says "In this image". */
+export const FIXTURE_SHEETS = {
+  characters: ['gladias'],
+  place: 'kalimar-footpaths',
+  added: [
+    { kind: 'character', slug: 'gladias', name: 'Gladias', text: 'Gladias: (fixture shorthand).' },
+    { kind: 'place', slug: 'kalimar-footpaths', name: 'the footpaths of the Kalimar district', text: 'The place, the footpaths of the Kalimar district: (fixture shorthand).' },
+  ],
+};
+
 export async function startReaderImagesDb(port: number): Promise<{ url: string; stop: () => Promise<void> }> {
   const db = new PGlite();
   await db.exec(`create role anon nologin; create role authenticated nologin; create role service_role nologin bypassrls;`);
@@ -35,7 +45,7 @@ export async function startReaderImagesDb(port: number): Promise<{ url: string; 
     await db.query(
       `insert into studio.recipes (id, source, provider, model, model_version, prompt, params, seed, cost_usd, created_by_fid)
        values ($1,'in_app','fal.ai','z-image-turbo','fal-ai/z-image/turbo',$2,$3,42,0.003,6786)`,
-      [im.recipe, `${im.prompt} No text, no lettering, no signs with words.`, JSON.stringify({ user_prompt: im.prompt, settings: { steps: 8 }, request_id: `fixture-${i}`, by_name: im.name })],
+      [im.recipe, `${im.prompt} No text, no lettering, no signs with words.`, JSON.stringify({ user_prompt: im.prompt, settings: { steps: 8 }, request_id: `fixture-${i}`, by_name: im.name, ...(i === 0 ? { sheets: FIXTURE_SHEETS } : {}) })],
     );
     await db.query(`insert into studio.elements (id, work_id, element_type, created_by_fid) values ($1,'snowmoon','image',6786)`, [im.element]);
     await db.query(
