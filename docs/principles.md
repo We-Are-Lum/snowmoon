@@ -47,7 +47,9 @@ coding agent and its helpers are in `docs/prompts/`.
   that are never published say so instead: the assistant's question
   (`PrivateTextField`), a report's note (`PrivateNoteField`) and the search of
   the book's text on "Make an image" (`SearchField`, 2026-10-10: searched on
-  the site's server, not kept by the site, never published).
+  the reader's device over the text served whole by `/api/book/text`; the
+  query is never sent anywhere, kept or published, and the page may fetch
+  only that text).
 - `npm run test:db`: after 0005, a recipe is public only if it made a
   published element version or a segment of a narration that is not hidden;
   drafts, hidden work and abandoned attempts stay private.
