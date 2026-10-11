@@ -127,11 +127,9 @@ function Group({ chapter, images, draftLine, onToggle }: { chapter: number; imag
 export function AddImageButton({ chapter, start, end, children = '+ Add an image' }: { chapter: number; start: number; end: number; children?: React.ReactNode }) {
   if (!useCanAddImage()) return null;
   return (
-    <>
-      {' · '}
-      <button type="button" className="add-image" onClick={() => openComposer({ chapter, start, end })}>
-        {children}
-      </button>
-    </>
+    // No separator: the scene line it followed is hidden (owner, 2026-10-09), so a lone "·" was left (2026-10-10).
+    <button type="button" className="add-image" onClick={() => openComposer({ chapter, start, end })}>
+      {children}
+    </button>
   );
 }

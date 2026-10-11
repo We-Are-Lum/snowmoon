@@ -5,10 +5,11 @@ import Link from 'next/link';
 import { createPortal } from 'react-dom';
 
 /**
- * A short visible word with ⓘ, opening the details (owner ruling, 2026-10-09: "a short visible
- * word, with ⓘ for the details. An icon alone doesn't count."). The whole declaration is also in
- * the page as served, visually hidden inside the button, so it is part of its accessible name and
- * crawlers read it. check:principles (P2g, P8f) require the word and plant a missing one.
+ * ⓘ, opening the details (owner ruling, 2026-10-10, replacing that of 2026-10-09: "Icon only for all
+ * short labels"). The word ("Redrawn", "AI description", "Book", "Invented", "Draft") and the whole
+ * declaration are in the page as served, visually hidden inside the button, so they are its
+ * accessible name and crawlers read them. check:principles (P2g, P2h, P8f) require the word in the
+ * name and the ⓘ shown, and plant a missing word.
  *
  * Used for: "Redrawn" (a screen redrawn from a template), "AI description" (Listen, while a
  * spoken description plays), and Minpentai's "Invented", "Draft" and "Book".
@@ -22,7 +23,7 @@ export function InfoLabel({
   links = [],
   className = '',
 }: {
-  /** The short visible word: "Redrawn", "AI description", "Invented", "Draft", "Book". */
+  /** The label's word, read with the declaration (not shown): "Redrawn", "AI description", "Invented", "Draft", "Book". */
   word: string;
   /** For checks and styling: data-label. */
   kind: 'redrawn' | 'ai-description' | 'invented' | 'draft' | 'book';
@@ -38,8 +39,8 @@ export function InfoLabel({
   return (
     <>
       <button ref={opener} type="button" className={`info-label ${className}`.trim()} data-label={kind} aria-haspopup="dialog" onClick={() => setOpen(true)}>
-        <span className="info-word">{word}</span>
-        <svg className="info-i" width="12" height="12" viewBox="0 0 12 12" aria-hidden="true">
+        <span className="info-word sr-only">{word}</span>
+        <svg className="info-i" width="18" height="18" viewBox="0 0 12 12" aria-hidden="true">
           <circle cx="6" cy="6" r="5.25" fill="none" stroke="currentColor" strokeWidth="1.2" />
           <path d="M6 5.2v3.6M6 3.2v.9" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
         </svg>

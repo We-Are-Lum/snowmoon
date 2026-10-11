@@ -1,6 +1,6 @@
 /**
- * Short labels with ⓘ (owner ruling, 2026-10-09: "a short visible word, with ⓘ for the details. An icon
- * alone doesn't count."). Each has its word, a one-sentence declaration (in the page, read with the word)
+ * Short labels: the ⓘ alone (owner ruling, 2026-10-10: "Icon only for all short labels", replacing
+ * 2026-10-09's "a short visible word, with ⓘ"); the word is the button's accessible name. Each has its word, a one-sentence declaration (in the page, read with the word)
  * and the details its sheet opens. Model-drafted wording, for the owner to rewrite. Rendered by
  * src/components/info-label.tsx; check:principles P2g, P2h and P8f require the words.
  */

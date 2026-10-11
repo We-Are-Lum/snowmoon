@@ -161,14 +161,15 @@ in 25 words or fewer and records `written_by { fid, date }`.
   checks it lands on that block). The proof changes one word and adds Design's screen block c1-b18
   as if it were a sentence.
 - `P2g`: on every chapter page as served, each screen redrawn from a template
-  (`data-source="template"`) carries one "Redrawn ⓘ" label: the visible word,
-  the ⓘ, the declaration served with it, and a dialog with the details; screens
-  drawn as in the book carry no marker (owner ruling, 2026-10-09: "a short
-  visible word, with ⓘ for the details. An icon alone doesn't count."). The
-  proof blanks the word.
-- `P2h`: Listen shows "AI description ⓘ" while a model-drafted description
-  plays; the label renders with its word, ⓘ and declaration ("not the author's
-  words"). The proof blanks the word.
+  (`data-source="template"`) carries one ⓘ label named "Redrawn": the ⓘ shown,
+  the word and the declaration served with it as its accessible name, and a
+  dialog with the details; screens drawn as in the book carry no marker. Owner
+  ruling, 2026-10-10: "Icon only for all short labels", replacing that of
+  2026-10-09 ("a short visible word, with ⓘ … An icon alone doesn't count");
+  no word shows beside the ⓘ. The proof blanks the word.
+- `P2h`: Listen shows the ⓘ named "AI description" while a model-drafted
+  description plays; the label renders with the ⓘ, and its word and declaration
+  ("not the author's words") as its accessible name. The proof blanks the word.
 - Review: is anything generated (a caption, a summary, a spoken description of
   a screen) placed where it could be taken for the book's words?
 
@@ -438,9 +439,10 @@ quoted as written. Minpentai boards and maps come from the source's own SVGs.
   close variant) outside a quotation (owner, 2026-10-09). The rule page is the
   book's rule: tagged FROM THE BOOK and never RULES INVENTED, it cites c4-b5
   and c4-b7 in its text and sources, and runs `engine.ts` on the c4-b5 board.
-- `P8f`: Minpentai's tags are "Book ⓘ", "Invented ⓘ" (the rules, the broadcast,
-  the lenses and the symbol's shape, folded into one label whose details list
-  each) and "Draft ⓘ", each a visible word opening its explanation, on every
+- `P8f`: Minpentai's tags are the ⓘ named "Book", "Invented" (the rules, the
+  broadcast, the lenses and the symbol's shape, folded into one label whose
+  details list each) or "Draft", each opening its explanation (the ⓘ alone, the
+  word as its accessible name; owner ruling 2026-10-10), on every
   Learn screen and the rule page. Play's tags (`play.tsx`, `play-live.tsx`, the rules page) are the
   same labels, with no old-style tag carrying a label's words, and nothing there paraphrases c4-b84 as
   "a new rule each match" (the ruling of 2026-10-09, which P8d checks in Learn; 2026-10-10). The proof

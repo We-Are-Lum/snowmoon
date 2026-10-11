@@ -15,7 +15,8 @@ const SITE = 'https://snowmoon.party';
 const RECIPES = path.join(process.cwd(), 'content/snowmoon/recipes/podcast');
 
 export interface Episode {
-  n: number;
+  /** The chapter, or null for the bonus episode (the spoken summary). */
+  n: number | null;
   title: string;
   guid: string;
   pubDate: string;
@@ -66,11 +67,32 @@ export function episodes(): Episode[] {
       seconds: Math.round(r.file.duration_ms / 1000),
       chapterUrl,
       recipeUrl,
-      description: podcast.words.episode_description_template
+      // A spoiler-free line first (config/podcast.json episode_lines), then the owner's template.
+      description: `${podcast.episode_lines.lines[String(n) as keyof typeof podcast.episode_lines.lines]} ${podcast.words.episode_description_template}`
         .replace('{n}', String(n))
         .replace('{chapter link}', chapterUrl)
         .replace('{recipe link}', recipeUrl),
     });
+  }
+  // The spoken summary as a bonus episode, after the chapters (owner, 2026-10-10).
+  const bonus = path.join(RECIPES, 'summary.json');
+  if (existsSync(bonus)) {
+    const r = JSON.parse(readFileSync(bonus, 'utf8')) as { file: { url?: string; bytes: number; duration_ms: number } };
+    if (r.file.url) {
+      const recipeUrl = `${REPO_URL}/blob/main/content/snowmoon/recipes/podcast/summary.json`;
+      out.push({
+        n: null,
+        title: podcast.bonus.title,
+        guid: podcast.bonus.guid,
+        pubDate: new Date(podcast.bonus.published).toUTCString(),
+        url: r.file.url,
+        bytes: r.file.bytes,
+        seconds: Math.round(r.file.duration_ms / 1000),
+        chapterUrl: `${SITE}/chapter/1`,
+        recipeUrl,
+        description: podcast.bonus.description.replace('{recipe link}', recipeUrl),
+      });
+    }
   }
   return out;
 }
@@ -97,8 +119,7 @@ export function feedXml(coverUrl: string | null): string {
       (e) => `    <item>
       <title>${esc(e.title)}</title>
       <itunes:title>${esc(e.title)}</itunes:title>
-      <itunes:episode>${e.n}</itunes:episode>
-      <itunes:episodeType>full</itunes:episodeType>
+${e.n === null ? '      <itunes:episodeType>bonus</itunes:episodeType>' : `      <itunes:episode>${e.n}</itunes:episode>\n      <itunes:episodeType>full</itunes:episodeType>`}
       <guid isPermaLink="false">${e.guid}</guid>
       <pubDate>${e.pubDate}</pubDate>
       <link>${e.chapterUrl}</link>

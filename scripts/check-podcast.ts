@@ -73,17 +73,23 @@ if (valid !== true) {
     if (!head.headers.get('last-modified')) fail('cover art: the server sends no Last-Modified (Apple requires it)');
   }
 
-  const items: Record<string, unknown>[] = ch.item ?? [];
-  if (items.length !== 32) fail(`${items.length} episodes, not 32`);
+  const all: Record<string, unknown>[] = ch.item ?? [];
+  // The chapters are "full" episodes; the spoken summary is a "bonus" episode after them (owner, 2026-10-10).
+  const items = all.filter((it) => it['itunes:episodeType'] !== 'bonus');
+  const bonuses = all.filter((it) => it['itunes:episodeType'] === 'bonus');
+  if (items.length !== 32) fail(`${items.length} chapter episodes, not 32`);
+  if (all.slice(0, 32).some((it) => it['itunes:episodeType'] === 'bonus')) fail('a bonus episode comes before the chapters');
   const guids = new Set<string>();
-  for (const [i, it] of items.entries()) {
+  for (const [i, it] of [...items, ...bonuses].entries()) {
+    const bonus = i >= items.length;
     const n = i + 1;
-    const at = `episode ${n}`;
+    const at = bonus ? `bonus episode "${String(it.title)}"` : `episode ${n}`;
     const text = (k: string) => {
       const v = it[k] as unknown;
       return typeof v === 'object' && v ? String((v as Record<string, unknown>)['#text'] ?? (v as Record<string, unknown>)['#cdata'] ?? '') : String(v ?? '');
     };
-    if (Number(it['itunes:episode']) !== n) fail(`${at}: itunes:episode is ${it['itunes:episode']}, not ${n} (book order)`);
+    if (!bonus && Number(it['itunes:episode']) !== n) fail(`${at}: itunes:episode is ${it['itunes:episode']}, not ${n} (book order)`);
+    if (bonus && !/spoilers/i.test(String(it.title))) fail(`${at}: the title does not warn of spoilers`);
     for (const k of ['title', 'pubDate', 'itunes:duration']) if (!text(k)) fail(`${at}: no <${k}>`);
     const guid = text('guid');
     if (!guid) fail(`${at}: no guid`);
@@ -91,7 +97,13 @@ if (valid !== true) {
     guids.add(guid);
     if (Number.isNaN(Date.parse(text('pubDate')))) fail(`${at}: pubDate is not a date`);
     const desc = text('description');
-    const d = DISCLOSURE_RES.filter(([, re]) => !re.test(desc)).map(([what]) => what);
+    const rules = bonus
+      ? DISCLOSURE_RES.filter(([what]) => what !== 'a link to its recipe').concat([['a link to its recipe', /href="https:\/\/github\.com\/We-Are-Lum\/snowmoon\/blob\/main\/content\/snowmoon\/recipes\/podcast\/summary\.json"/]])
+      : DISCLOSURE_RES;
+    const d = rules.filter(([, re]) => !re.test(desc)).map(([what]) => what);
+    // Each chapter opens with its spoiler-free line (config/podcast.json episode_lines).
+    const line = bonus ? null : (podcastConfig.episode_lines.lines as Record<string, string>)[String(n)];
+    if (line && !desc.includes(line.replace(/&/g, '&amp;').replace(/'/g, "'"))) fail(`${at}: the description does not open with its line`);
     if (d.length) fail(`${at}: the description lacks ${d.join(', ')}`);
     if ((it['itunes:image'] as Record<string, string> | undefined)?.['@href'] !== cover) fail(`${at}: no itunes:image, or not the show's cover`);
     const enc = it.enclosure as Record<string, string> | undefined;
@@ -113,5 +125,5 @@ if (failures.length) {
   console.error(`PODCAST CHECK FAILED (${failures.length}):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`podcast check passed: ${BASE}/podcast.xml, 32 episodes, every enclosure answers HEAD and byte ranges`);
+console.log(`podcast check passed: ${BASE}/podcast.xml, 32 chapter episodes with their lines, the bonus episode, every enclosure answers HEAD and byte ranges`);
 

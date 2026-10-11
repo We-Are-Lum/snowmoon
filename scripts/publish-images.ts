@@ -29,6 +29,7 @@ const dryRun = process.argv.includes('--dry-run');
 const EXCLUDED = new Map([
   ['c26-b132-drone-escape', 'the same man appears twice, even after a rewrite with one rider'],
   ['c27-b071-tea-robot', 'the robot takes on the reference man\'s face and clothes'],
+  ['c20-b013-door-screen', `the scene is the wrong way round: Seila stands outside and the robed man is in the doorway, with no screen showing him (owner, 2026-10-10: "This image isn't good")`],
 ]);
 
 async function main() {

@@ -36,7 +36,8 @@
     "test:minpentai-play": "tsx scripts/test-minpentai-play.ts",
     "test:minpentai-play-server": "tsx --conditions=react-server scripts/test-minpentai-play-server.ts",
     "check:minpentai-live": "tsx --conditions=react-server scripts/check-minpentai-live.ts",
-    "designs:scenes": "tsx scripts/designs-scenes.ts"
+    "designs:scenes": "tsx scripts/designs-scenes.ts",
+    "check:chapter-summaries": "tsx scripts/chapter-summaries.ts check"
   },
   "license": "GPL-3.0-only",
   "description": "",

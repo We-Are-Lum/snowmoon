@@ -729,17 +729,21 @@ add({
   },
 });
 
-// Short labels with ⓘ (owner ruling, 2026-10-09): "a short visible word, with ⓘ for the details. An icon
-// alone doesn't count." Each InfoLabel is a button with its word visible, the ⓘ, the declaration served
-// visually hidden, and it opens a dialog. P2g, P2h and P8f require the word, and plant a missing one.
-type InfoLabelTag = { kind: string; visible: string; hidden: string; dialog: boolean; icon: boolean };
+// Short labels (owner ruling, 2026-10-10, replacing 2026-10-09's): the ⓘ alone, opening the details.
+// Each InfoLabel is a button showing only the ⓘ; its word and declaration are served visually hidden
+// inside it, so they are its accessible name. P2g, P2h and P8f require the word there, the ⓘ, the
+// declaration and the dialog, and plant a missing word.
+type InfoLabelTag = { kind: string; word: string; shown: string; hidden: string; dialog: boolean; icon: boolean };
 function infoLabels(html: string): InfoLabelTag[] {
   const $ = cheerio.load(html);
   return $('button.info-label').map((_, el) => {
     const b = $(el);
+    const shown = b.clone();
+    shown.find('.sr-only, svg').remove();
     return {
       kind: b.attr('data-label') ?? '',
-      visible: b.find('.info-word').text().trim(),
+      word: b.find('.info-word').text().trim(),
+      shown: shown.text().trim(),
       hidden: b.find('.sr-only').text().trim(),
       dialog: b.attr('aria-haspopup') === 'dialog',
       icon: b.find('svg.info-i').length === 1,
@@ -748,18 +752,20 @@ function infoLabels(html: string): InfoLabelTag[] {
 }
 function infoLabelProblems(where: string, l: InfoLabelTag, word: string): string[] {
   const problems: string[] = [];
-  if (l.visible !== word) problems.push(`${where}: the label's visible word is "${l.visible}", not "${word}" (an icon alone doesn't count)`);
+  if (l.word !== word) problems.push(`${where}: the label's word, read with it, is "${l.word}", not "${word}"`);
   if (!l.icon) problems.push(`${where}: the "${word}" label has no ⓘ`);
+  if (l.shown) problems.push(`${where}: the "${word}" label shows "${l.shown}" beside the ⓘ (the ⓘ alone, owner ruling 2026-10-10)`);
   if (!l.dialog) problems.push(`${where}: the "${word}" label does not open its details (aria-haspopup="dialog")`);
   if (l.hidden.replace(/[()\s]/g, '').length < 10) problems.push(`${where}: the "${word}" label serves no declaration`);
   return problems;
 }
-const blankWord = (html: string, word: string) => html.replace(`<span class="info-word">${word}</span>`, '<span class="info-word"></span>');
+const WORD_SPAN = (word: string) => `<span class="info-word sr-only">${word}</span>`;
+const blankWord = (html: string, word: string) => html.replace(WORD_SPAN(word), '<span class="info-word sr-only"></span>');
 
 add({
   id: 'P2g',
   principle: 2,
-  name: 'on every chapter page as served, each screen redrawn from a template says "Redrawn ⓘ"; screens drawn as in the book get no marker',
+  name: 'on every chapter page as served, each screen redrawn from a template carries the ⓘ named "Redrawn"; screens drawn as in the book get no marker',
   load: async () => {
     const { LABELS } = await import('../src/lib/labels');
     return { word: LABELS.redrawn.word as string, pages: await Promise.all(Array.from({ length: 32 }, async (_, i) => ({ n: i + 1, html: await page(`/chapter/${i + 1}`) }))) };
@@ -786,14 +792,14 @@ add({
     return problems;
   },
   plant: (c) => {
-    const p = c.pages.find((x: { html: string }) => x.html.includes(`<span class="info-word">${c.word}</span>`));
+    const p = c.pages.find((x: { html: string }) => x.html.includes(WORD_SPAN(c.word)));
     if (p) p.html = blankWord(p.html, c.word);
   },
 });
 add({
   id: 'P2h',
   principle: 2,
-  name: 'Listen shows "AI description ⓘ" while a model-drafted description plays',
+  name: 'Listen shows the ⓘ named "AI description" while a model-drafted description plays',
   load: async () => {
     const { LABELS } = await import('../src/lib/labels');
     const L = LABELS.aiDescription;
@@ -1766,7 +1772,7 @@ const PLAY_TAG_FILES = ['src/app/minpentai/play.tsx', 'src/app/minpentai/play-li
 add({
   id: 'P8f',
   principle: 8,
-  name: 'Minpentai\'s tags are "Book ⓘ", "Invented ⓘ" and "Draft ⓘ", each a visible word opening its explanation',
+  name: 'Minpentai\'s tags are the ⓘ named "Book", "Invented" or "Draft", each opening its explanation',
   load: async () => {
     const { MinpentaiTags } = await import('../src/app/minpentai/mp-tags');
     const { LABELS } = await import('../src/lib/labels');
@@ -1814,7 +1820,7 @@ add({
     c.play[0].text += '\n<div className="mp-tags"><span className="mp-tag">A NEW RULE EACH MATCH · c4-b84</span></div>';
     // A missing word for each of the three.
     for (const k of ['book', 'invented', 'draft']) {
-      const s = c.screens.find((x: { html: string }) => x.html.includes(`<span class="info-word">${c.words[k]}</span>`));
+      const s = c.screens.find((x: { html: string }) => x.html.includes(WORD_SPAN(c.words[k])));
       if (s) s.html = blankWord(s.html, c.words[k]);
     }
   },

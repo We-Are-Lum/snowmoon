@@ -12,7 +12,7 @@ import { WHOSE } from './ai-declared';
  *
  * Recipe families: images (content/snowmoon/recipes/images: chapters, cast, locations, style
  * tests, and lettering done in code), narration (recipes/narration/chapter-N), and the podcast
- * (recipes/podcast: chapter-N, opener, cover).
+ * (recipes/podcast: chapter-N, opener, cover, summary).
  */
 const ROOT = process.cwd();
 const RECIPES = 'content/snowmoon/recipes/';
@@ -167,6 +167,23 @@ export function recipeView(file: string, item?: string): RecipeView | null {
         inputs: [{ label: 'Drawn by', value: `${str(made.script)} (${str(made.supplied_by)})` }],
         published: publishedBy(r.published_by),
         cost: 'Nothing: drawn in code',
+        resultLicence: 'GPL-3.0',
+      };
+    }
+    if (name === 'summary') {
+      const enc = r.encoder as J;
+      return {
+        ...base,
+        whose: 'Written by AI models, not by the author: Claude wrote the script from the book and from chapter notes by gpt-oss-120b; read by a synthetic voice. AI-generated, not by the author.',
+        what: 'The bonus episode: the spoken summary of the whole book, with full spoilers. Its script, checks and narration are in its own recipe.',
+        model: null,
+        prompt: null,
+        inputs: [
+          { label: 'Made from', value: str((r.inputs as J)?.summary && ((r.inputs as J).summary as J).recipe) },
+          { label: 'Encoder', value: str(enc?.command) },
+        ],
+        published: publishedBy(r.published_by),
+        cost: str(r.cost_note),
         resultLicence: 'GPL-3.0',
       };
     }

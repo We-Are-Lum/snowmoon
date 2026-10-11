@@ -148,7 +148,7 @@ export function seededImages(): SeededImage[] {
 export const slugOfLocation = (p: string | null | undefined) => (p ? (p.match(/locations\/([a-z0-9-]+)\.json$/)?.[1] ?? null) : null);
 
 export const SCENE_RULE =
-  'Each scene (the text between two breaks) takes the place its evidence gives. Evidence is a seeded image with a location (people chose those), or else a block quoted as one of a location’s facts. Where a scene’s evidence changes place, the scene is split at that evidence block; the part before the first evidence takes the first place. A seeded image marked with no location starts a part with no place. A scene with no evidence has no place.';
+  'Each scene (the text between two breaks) takes the place its evidence gives. Evidence is a seeded image with a location (people chose those) from its own block on, and before a scene’s first seeded image, a block quoted as one of a location’s facts. Where a scene’s evidence changes place, the scene is split at that evidence block; the part before the first evidence takes the first place. A seeded image marked with no location starts a part with no place. A scene with no evidence has no place.';
 
 /** Derive the parts of every scene and their places. Deterministic: the book, the location files, published.json. */
 export function deriveScenes(chapters: Chapter[], locs: SheetPlace[], seeded: SeededImage[]): ScenePart[] {
@@ -166,13 +166,17 @@ export function deriveScenes(chapters: Chapter[], locs: SheetPlace[], seeded: Se
       const first = blocks[0].idx, last = blocks[blocks.length - 1].idx;
       const inside = (idx: number) => idx >= first && idx <= last;
       const images = seeded.filter((s) => s.chapter === ch.chapter && inside(s.idx)).sort((a, b) => a.idx - b.idx);
-      // Seeded images when the scene has any; otherwise the locations' facts.
-      let evidence: { idx: number; place: string | null; why: string }[] = images.map((s) => ({ idx: s.idx, place: slugOfLocation(s.location), why: `seeded image ${s.id}` }));
-      if (!images.length) {
-        evidence = locs
-          .flatMap((l) => l.facts.filter((f) => f.chapter === ch.chapter && inside(f.idx)).map((f) => ({ idx: f.idx, place: l.slug, why: `a fact of ${l.slug}` })))
-          .sort((a, b) => a.idx - b.idx || a.place!.localeCompare(b.place!));
-      }
+      // Seeded images decide from their own block on; before a scene's first seeded image (or in a scene
+      // with none), the locations' facts do (2026-10-10: an image with no place no longer erases the
+      // book's own evidence earlier in its scene).
+      const firstImage = images.length ? images[0].idx : Infinity;
+      const factEvidence = locs
+        .flatMap((l) => l.facts.filter((f) => f.chapter === ch.chapter && inside(f.idx) && f.idx < firstImage).map((f) => ({ idx: f.idx, place: l.slug as string | null, why: `a fact of ${l.slug}` })))
+        .sort((a, b) => a.idx - b.idx || a.place!.localeCompare(b.place!));
+      const evidence: { idx: number; place: string | null; why: string }[] = [
+        ...factEvidence,
+        ...images.map((s) => ({ idx: s.idx, place: slugOfLocation(s.location), why: `seeded image ${s.id}` })),
+      ];
       // Runs of the same place; each change starts a new part at its evidence block.
       const runs: { at: number; place: string | null; evidence: number; why: string }[] = [];
       for (const e of evidence) if (!runs.length || runs[runs.length - 1].place !== e.place) runs.push({ at: e.idx, place: e.place, evidence: e.idx, why: e.why });
