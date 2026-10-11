@@ -1,0 +1,2080 @@
+{
+  "about": "A guide to Snowmoon's world for planning pieces: characters, places, institutions and technology, Minpentai, factions and a timeline. Every line cites the blocks it rests on and carries from_chapter, the latest chapter it depends on, so it can be filtered to how far someone has read.",
+  "label": "AI-made: written by an AI model, Claude (the coding agent, a closed model), from the book and from the spoken summary's chapter notes; each line checked against its cited passages. Not by the author.",
+  "license": "A guide to Snowmoon by Vitalik Buterin, made from the book on 2026-10-11. GPL-3.0, like the book.",
+  "recipe": "content/snowmoon/recipes/world-guide.json",
+  "sections": [
+    "characters",
+    "places",
+    "institutions",
+    "technology",
+    "minpentai",
+    "factions",
+    "timeline"
+  ],
+  "lines": [
+    {
+      "id": "wg-001",
+      "section": "characters",
+      "entity": "Gladias",
+      "kind": "who",
+      "text": "A Veridian citizen in Meldan and an Acolyte, an Order of Steering member in training.",
+      "sources": [
+        "c1-b1",
+        "c1-b57",
+        "c1-b19",
+        "c1-b56"
+      ],
+      "from_chapter": 1
+    },
+    {
+      "id": "wg-002",
+      "section": "characters",
+      "entity": "Gladias",
+      "kind": "who",
+      "text": "Thirty-nine; from a fairly middle-class family; took up programming and law in his spare time.",
+      "sources": [
+        "c8-b52",
+        "c8-b54"
+      ],
+      "from_chapter": 8
+    },
+    {
+      "id": "wg-003",
+      "section": "characters",
+      "entity": "Gladias",
+      "kind": "wants",
+      "text": "To become a Sentinel; his prediction score is ninety-two, and above ninety he gets in.",
+      "sources": [
+        "c1-b65",
+        "c1-b68"
+      ],
+      "from_chapter": 1
+    },
+    {
+      "id": "wg-004",
+      "section": "characters",
+      "entity": "Gladias",
+      "kind": "wants",
+      "text": "Steering to reward openness: writing an alternative client for Silverchat's open interface is what drew him into Steering.",
+      "sources": [
+        "c3-b24",
+        "c8-b56"
+      ],
+      "from_chapter": 8
+    },
+    {
+      "id": "wg-005",
+      "section": "characters",
+      "entity": "Gladias",
+      "kind": "fears",
+      "text": "Being exposed: the Order's security rests on its members' privacy, and a bounty rewards anyone who guesses a member's task.",
+      "sources": [
+        "c1-b75",
+        "c1-b76"
+      ],
+      "from_chapter": 1
+    },
+    {
+      "id": "wg-006",
+      "section": "characters",
+      "entity": "Gladias",
+      "kind": "changes",
+      "text": "Chooses to apply as a Keeper rather than a Sentinel, after Delwart's push and Seila's encouragement.",
+      "sources": [
+        "c3-b112",
+        "c5-b113",
+        "c5-b116",
+        "c6-b158",
+        "c3-b110",
+        "c5-b102"
+      ],
+      "from_chapter": 6
+    },
+    {
+      "id": "wg-007",
+      "section": "characters",
+      "entity": "Gladias",
+      "kind": "changes",
+      "text": "Is accepted into the Order by a ten-to-ten committee vote broken by the chairman.",
+      "sources": [
+        "c8-b97",
+        "c8-b99",
+        "c8-b101"
+      ],
+      "from_chapter": 8
+    },
+    {
+      "id": "wg-008",
+      "section": "characters",
+      "entity": "Gladias",
+      "kind": "changes",
+      "text": "Goes to Dzego to learn how it resists the Arctics, and becomes a de facto adviser to the Kungaupei.",
+      "sources": [
+        "c16-b25",
+        "c18-b2",
+        "c24-b20",
+        "c16-b27"
+      ],
+      "from_chapter": 24
+    },
+    {
+      "id": "wg-009",
+      "section": "characters",
+      "entity": "Gladias",
+      "kind": "changes",
+      "text": "Apologizes to Seila for not trusting her mind as well as her heart.",
+      "sources": [
+        "c21-b90",
+        "c21-b91"
+      ],
+      "from_chapter": 21
+    },
+    {
+      "id": "wg-010",
+      "section": "characters",
+      "entity": "Gladias",
+      "kind": "relationships",
+      "text": "Partner of Seila; father of Zven and Lily; \"Uncle Glad\" to Febric.",
+      "sources": [
+        "c1-b101",
+        "c1-b125",
+        "c1-b130"
+      ],
+      "from_chapter": 1
+    },
+    {
+      "id": "wg-011",
+      "section": "characters",
+      "entity": "Gladias",
+      "kind": "relationships",
+      "text": "Close friend of Mov, who calls him Glad.",
+      "sources": [
+        "c3-b32",
+        "c3-b10"
+      ],
+      "from_chapter": 3
+    },
+    {
+      "id": "wg-012",
+      "section": "characters",
+      "entity": "Seila",
+      "kind": "who",
+      "text": "Gladias's partner, a Veridian blogger who writes about economics and culture.",
+      "sources": [
+        "c1-b101",
+        "c1-b102",
+        "c5-b58",
+        "c5-b64",
+        "c5-b61"
+      ],
+      "from_chapter": 5
+    },
+    {
+      "id": "wg-013",
+      "section": "characters",
+      "entity": "Seila",
+      "kind": "wants",
+      "text": "Gladias to use the Keeper role to make the tax rules help Dzego.",
+      "sources": [
+        "c5-b113"
+      ],
+      "from_chapter": 5
+    },
+    {
+      "id": "wg-014",
+      "section": "characters",
+      "entity": "Seila",
+      "kind": "changes",
+      "text": "Sees through Delwart's Silverchat story, tracks down other Keepers he approached, and concludes he is not from Silverchat.",
+      "sources": [
+        "c20-b36",
+        "c20-b42",
+        "c20-b179",
+        "c20-b63",
+        "c20-b177"
+      ],
+      "from_chapter": 20
+    },
+    {
+      "id": "wg-015",
+      "section": "characters",
+      "entity": "Seila",
+      "kind": "changes",
+      "text": "Concludes Delwart is an Arctic propagandist working to make the Order ineffective.",
+      "sources": [
+        "c21-b71",
+        "c21-b75",
+        "c21-b77",
+        "c21-b49",
+        "c21-b57"
+      ],
+      "from_chapter": 21
+    },
+    {
+      "id": "wg-016",
+      "section": "characters",
+      "entity": "Seila",
+      "kind": "changes",
+      "text": "Proposes a Silverchat poll to show the courts that changing the army would be democratic.",
+      "sources": [
+        "c27-b11",
+        "c27-b15",
+        "c27-b14"
+      ],
+      "from_chapter": 27
+    },
+    {
+      "id": "wg-017",
+      "section": "characters",
+      "entity": "Seila",
+      "kind": "relationships",
+      "text": "Friend of Jahn in Freetown; meets Zei and Bai there by chance.",
+      "sources": [
+        "c5-b58",
+        "c5-b93",
+        "c5-b1",
+        "c5-b56",
+        "c5-b57"
+      ],
+      "from_chapter": 5
+    },
+    {
+      "id": "wg-018",
+      "section": "characters",
+      "entity": "Mov",
+      "kind": "who",
+      "text": "Gladias's friend in the Order, who jokes that he is the Arctic Emperor.",
+      "sources": [
+        "c3-b10",
+        "c3-b11",
+        "c3-b32",
+        "c3-b12"
+      ],
+      "from_chapter": 3
+    },
+    {
+      "id": "wg-019",
+      "section": "characters",
+      "entity": "Mov",
+      "kind": "wants",
+      "text": "To shadow Gladias at his meetings and find out who Delwart really is.",
+      "sources": [
+        "c3-b13",
+        "c6-b28",
+        "c13-b39",
+        "c13-b40"
+      ],
+      "from_chapter": 13
+    },
+    {
+      "id": "wg-020",
+      "section": "characters",
+      "entity": "Mov",
+      "kind": "changes",
+      "text": "Is selected at random to become a Herald, a retired member with no formal power.",
+      "sources": [
+        "c8-b134",
+        "c8-b136",
+        "c6-b73"
+      ],
+      "from_chapter": 8
+    },
+    {
+      "id": "wg-021",
+      "section": "characters",
+      "entity": "Mov",
+      "kind": "relationships",
+      "text": "Follows Delwart for months; later searches for the truth with Seila.",
+      "sources": [
+        "c6-b30",
+        "c20-b15",
+        "c20-b30",
+        "c20-b42",
+        "c20-b56"
+      ],
+      "from_chapter": 20
+    },
+    {
+      "id": "wg-022",
+      "section": "characters",
+      "entity": "Delwart",
+      "kind": "who",
+      "text": "A man in a privacy robe who tracks Gladias down and meets him in Greater Plum Harbor.",
+      "sources": [
+        "c3-b83",
+        "c3-b87",
+        "c3-b71",
+        "c3-b79",
+        "c3-b86"
+      ],
+      "from_chapter": 3
+    },
+    {
+      "id": "wg-023",
+      "section": "characters",
+      "entity": "Delwart",
+      "kind": "wants",
+      "text": "Says he wants \"actual freedom\": fewer nudges, and Keepers who delete every rubric.",
+      "sources": [
+        "c3-b108",
+        "c3-b112"
+      ],
+      "from_chapter": 3
+    },
+    {
+      "id": "wg-024",
+      "section": "characters",
+      "entity": "Delwart",
+      "kind": "changes",
+      "text": "After Redshire falls, claims he works with others for Silverchat.",
+      "sources": [
+        "c16-b13",
+        "c15-b6",
+        "c16-b10"
+      ],
+      "from_chapter": 16
+    },
+    {
+      "id": "wg-025",
+      "section": "characters",
+      "entity": "Delwart",
+      "kind": "changes",
+      "text": "Seila finds he told each Keeper something different, and concludes he is an Arctic.",
+      "sources": [
+        "c20-b152",
+        "c21-b71",
+        "c20-b177"
+      ],
+      "from_chapter": 21
+    },
+    {
+      "id": "wg-026",
+      "section": "characters",
+      "entity": "Zei",
+      "kind": "who",
+      "text": "Zei Leimin, a student in Pafogai Du and a Minpentai player.",
+      "sources": [
+        "c2-b2",
+        "c4-b90",
+        "c2-b1",
+        "c2-b11"
+      ],
+      "from_chapter": 4
+    },
+    {
+      "id": "wg-027",
+      "section": "characters",
+      "entity": "Zei",
+      "kind": "wants",
+      "text": "To win the Minpentai championship, partly to buy his mother a compute box with the prize money.",
+      "sources": [
+        "c4-b15",
+        "c4-b73",
+        "c7-b138"
+      ],
+      "from_chapter": 7
+    },
+    {
+      "id": "wg-028",
+      "section": "characters",
+      "entity": "Zei",
+      "kind": "fears",
+      "text": "That the Arctic threat is real, after his classroom is bombed and his arm broken.",
+      "sources": [
+        "c2-b100",
+        "c2-b104",
+        "c2-b112",
+        "c5-b72"
+      ],
+      "from_chapter": 5
+    },
+    {
+      "id": "wg-029",
+      "section": "characters",
+      "entity": "Zei",
+      "kind": "changes",
+      "text": "Is recruited by Den into defense and switches his studies to cryptography.",
+      "sources": [
+        "c9-b73",
+        "c9-b137",
+        "c9-b56"
+      ],
+      "from_chapter": 9
+    },
+    {
+      "id": "wg-030",
+      "section": "characters",
+      "entity": "Zei",
+      "kind": "changes",
+      "text": "Is named national champion when the final is cancelled, and says he does not want to win like this.",
+      "sources": [
+        "c15-b82",
+        "c15-b85",
+        "c15-b86"
+      ],
+      "from_chapter": 15
+    },
+    {
+      "id": "wg-031",
+      "section": "characters",
+      "entity": "Zei",
+      "kind": "changes",
+      "text": "Supervises the drone battle for Northshore.",
+      "sources": [
+        "c29-b31",
+        "c29-b32",
+        "c29-b13"
+      ],
+      "from_chapter": 29
+    },
+    {
+      "id": "wg-032",
+      "section": "characters",
+      "entity": "Zei",
+      "kind": "relationships",
+      "text": "Close friend of Fin; rival, then ally and friend, of Bai; friend of Deluin.",
+      "sources": [
+        "c2-b2",
+        "c4-b72",
+        "c29-b10",
+        "c14-b99",
+        "c2-b113",
+        "c14-b19",
+        "c14-b96"
+      ],
+      "from_chapter": 29
+    },
+    {
+      "id": "wg-033",
+      "section": "characters",
+      "entity": "Zei",
+      "kind": "relationships",
+      "text": "His mother is Min.",
+      "sources": [
+        "c5-b4"
+      ],
+      "from_chapter": 5
+    },
+    {
+      "id": "wg-034",
+      "section": "characters",
+      "entity": "Fin",
+      "kind": "who",
+      "text": "Zei's friend in Pafogai Du, a student training with the Bansunpei.",
+      "sources": [
+        "c2-b2",
+        "c7-b11",
+        "c2-b1"
+      ],
+      "from_chapter": 7
+    },
+    {
+      "id": "wg-035",
+      "section": "characters",
+      "entity": "Fin",
+      "kind": "changes",
+      "text": "Explains that Dzegoban is coordination training, and that the Bansunpei used its channels to change Dzego's habits after Redshire.",
+      "sources": [
+        "c18-b110",
+        "c18-b117",
+        "c18-b120"
+      ],
+      "from_chapter": 18
+    },
+    {
+      "id": "wg-036",
+      "section": "characters",
+      "entity": "Fin",
+      "kind": "changes",
+      "text": "Helps build the attack on the Arctic drones' AI with Bansunpei researchers.",
+      "sources": [
+        "c30-b6",
+        "c30-b9",
+        "c30-b10",
+        "c30-b11"
+      ],
+      "from_chapter": 30
+    },
+    {
+      "id": "wg-037",
+      "section": "characters",
+      "entity": "Bai",
+      "kind": "who",
+      "text": "Bai Jahen, Zei's Minpentai rival in Pafogai Du.",
+      "sources": [
+        "c4-b72",
+        "c4-b90",
+        "c4-b1",
+        "c4-b7"
+      ],
+      "from_chapter": 4
+    },
+    {
+      "id": "wg-038",
+      "section": "characters",
+      "entity": "Bai",
+      "kind": "fears",
+      "text": "Losing what she has: her parents died in a lab explosion, and all she had was her success.",
+      "sources": [
+        "c9-b13",
+        "c9-b14",
+        "c9-b19"
+      ],
+      "from_chapter": 9
+    },
+    {
+      "id": "wg-039",
+      "section": "characters",
+      "entity": "Bai",
+      "kind": "wants",
+      "text": "Success as proof she is strong; she later says Zei's curiosity was a purer motive.",
+      "sources": [
+        "c24-b48",
+        "c24-b50",
+        "c24-b52"
+      ],
+      "from_chapter": 24
+    },
+    {
+      "id": "wg-040",
+      "section": "characters",
+      "entity": "Bai",
+      "kind": "changes",
+      "text": "Learns to cooperate with Zei, then gives him advice and hugs as a friend.",
+      "sources": [
+        "c4-b135",
+        "c14-b24",
+        "c29-b8",
+        "c29-b7",
+        "c29-b9"
+      ],
+      "from_chapter": 29
+    },
+    {
+      "id": "wg-041",
+      "section": "characters",
+      "entity": "Bai",
+      "kind": "changes",
+      "text": "Considers spending a year in Thaldur to understand the Arctics.",
+      "sources": [
+        "c32-b98"
+      ],
+      "from_chapter": 32
+    },
+    {
+      "id": "wg-042",
+      "section": "characters",
+      "entity": "Mu",
+      "kind": "who",
+      "text": "An older woman in Dzego who knows Zei, at the Minpentai games.",
+      "sources": [
+        "c4-b62",
+        "c4-b67",
+        "c4-b1",
+        "c4-b63",
+        "c4-b65"
+      ],
+      "from_chapter": 4
+    },
+    {
+      "id": "wg-043",
+      "section": "characters",
+      "entity": "Mu",
+      "kind": "changes",
+      "text": "Explains that Minpentai is military training; later works with the Kungaupei.",
+      "sources": [
+        "c10-b192",
+        "c10-b194",
+        "c26-b95",
+        "c10-b175",
+        "c10-b185"
+      ],
+      "from_chapter": 26
+    },
+    {
+      "id": "wg-044",
+      "section": "characters",
+      "entity": "Mu",
+      "kind": "changes",
+      "text": "Saves the rescue of Tafindel with a new plan, and takes over Group South when Den is lost.",
+      "sources": [
+        "c26-b122",
+        "c29-b110",
+        "c26-b121",
+        "c26-b151",
+        "c29-b108"
+      ],
+      "from_chapter": 29
+    },
+    {
+      "id": "wg-045",
+      "section": "characters",
+      "entity": "Den",
+      "kind": "who",
+      "text": "A High Council member of the Kungaupei.",
+      "sources": [
+        "c9-b56"
+      ],
+      "from_chapter": 9
+    },
+    {
+      "id": "wg-046",
+      "section": "characters",
+      "entity": "Den",
+      "kind": "wants",
+      "text": "To recruit Zei into defense; after Redshire, for the shadow society to become the society.",
+      "sources": [
+        "c9-b73",
+        "c15-b117",
+        "c15-b118",
+        "c9-b56",
+        "c15-b6",
+        "c15-b94"
+      ],
+      "from_chapter": 15
+    },
+    {
+      "id": "wg-047",
+      "section": "characters",
+      "entity": "Den",
+      "kind": "changes",
+      "text": "Leads Group South in the battle for Northshore and is almost certainly killed when a rear base is hit.",
+      "sources": [
+        "c29-b27",
+        "c29-b108",
+        "c29-b13",
+        "c29-b26"
+      ],
+      "from_chapter": 29
+    },
+    {
+      "id": "wg-048",
+      "section": "characters",
+      "entity": "Deluin",
+      "kind": "who",
+      "text": "A contestant from Redshire at Dzego's national championship.",
+      "sources": [
+        "c12-b71",
+        "c12-b75",
+        "c12-b80",
+        "c12-b84"
+      ],
+      "from_chapter": 12
+    },
+    {
+      "id": "wg-049",
+      "section": "characters",
+      "entity": "Deluin",
+      "kind": "changes",
+      "text": "Trapped by the invasion; his parents side with the Arctics, and he plays along to win their trust.",
+      "sources": [
+        "c15-b53",
+        "c19-b153",
+        "c15-b12"
+      ],
+      "from_chapter": 19
+    },
+    {
+      "id": "wg-050",
+      "section": "characters",
+      "entity": "Deluin",
+      "kind": "changes",
+      "text": "Becomes an Arctic commander and helps Veridia break the southern flank.",
+      "sources": [
+        "c29-b114",
+        "c30-b61"
+      ],
+      "from_chapter": 30
+    },
+    {
+      "id": "wg-051",
+      "section": "characters",
+      "entity": "Deluin",
+      "kind": "relationships",
+      "text": "Befriends Zei at the nationals and invites him to Redshire.",
+      "sources": [
+        "c14-b99",
+        "c14-b120",
+        "c14-b96",
+        "c14-b103"
+      ],
+      "from_chapter": 14
+    },
+    {
+      "id": "wg-052",
+      "section": "characters",
+      "entity": "Lily",
+      "kind": "who",
+      "text": "Gladias and Seila's daughter, who struggles at school.",
+      "sources": [
+        "c1-b119",
+        "c1-b125"
+      ],
+      "from_chapter": 1
+    },
+    {
+      "id": "wg-053",
+      "section": "characters",
+      "entity": "Lily",
+      "kind": "changes",
+      "text": "Is drawn to Arctic propaganda and runs away to Arctic-held Northglade.",
+      "sources": [
+        "c23-b84",
+        "c23-b88",
+        "c23-b91",
+        "c26-b62"
+      ],
+      "from_chapter": 26
+    },
+    {
+      "id": "wg-054",
+      "section": "characters",
+      "entity": "Lily",
+      "kind": "changes",
+      "text": "Argues back at her Arctic teacher, is put in detention, and wants to come home.",
+      "sources": [
+        "c28-b61",
+        "c28-b64",
+        "c28-b67",
+        "c28-b63"
+      ],
+      "from_chapter": 28
+    },
+    {
+      "id": "wg-055",
+      "section": "characters",
+      "entity": "Zven",
+      "kind": "who",
+      "text": "Gladias and Seila's younger son.",
+      "sources": [
+        "c1-b110",
+        "c1-b125"
+      ],
+      "from_chapter": 1
+    },
+    {
+      "id": "wg-056",
+      "section": "characters",
+      "entity": "Zven",
+      "kind": "changes",
+      "text": "Wins a Helisport game; stays in touch with Lily and learns where she is.",
+      "sources": [
+        "c11-b82",
+        "c24-b14",
+        "c26-b62",
+        "c11-b26"
+      ],
+      "from_chapter": 26
+    },
+    {
+      "id": "wg-057",
+      "section": "characters",
+      "entity": "Febric",
+      "kind": "who",
+      "text": "Teenage son of Vil and Daia, the co-family; studies computer science.",
+      "sources": [
+        "c1-b111",
+        "c1-b125",
+        "c17-b104"
+      ],
+      "from_chapter": 17
+    },
+    {
+      "id": "wg-058",
+      "section": "characters",
+      "entity": "Hreda",
+      "kind": "who",
+      "text": "Daughter of Vil and Daia; good at mathematics.",
+      "sources": [
+        "c1-b125",
+        "c13-b55",
+        "c17-b103"
+      ],
+      "from_chapter": 17
+    },
+    {
+      "id": "wg-059",
+      "section": "characters",
+      "entity": "Febric",
+      "kind": "changes",
+      "text": "With Hreda, takes refuge in Northglade's Greater Plum Harbor when Northshore is invaded.",
+      "sources": [
+        "c20-b10",
+        "c20-b8"
+      ],
+      "from_chapter": 20
+    },
+    {
+      "id": "wg-060",
+      "section": "characters",
+      "entity": "Vil",
+      "kind": "who",
+      "text": "Uncle Vil, co-parent with Aunt Daia; part of a class action by Jump's former employees against the hedge fund Divergent.",
+      "sources": [
+        "c1-b125",
+        "c11-b16",
+        "c11-b18",
+        "c11-b14"
+      ],
+      "from_chapter": 11
+    },
+    {
+      "id": "wg-061",
+      "section": "characters",
+      "entity": "Jahn",
+      "kind": "who",
+      "text": "Seila's friend in Freetown, a researcher at the Freetown Economics Institute.",
+      "sources": [
+        "c5-b58",
+        "c10-b2"
+      ],
+      "from_chapter": 10
+    },
+    {
+      "id": "wg-062",
+      "section": "characters",
+      "entity": "Jahn",
+      "kind": "changes",
+      "text": "Introduces Zei to Freetown's defense companies through the Institute's director.",
+      "sources": [
+        "c22-b71",
+        "c22-b72"
+      ],
+      "from_chapter": 22
+    },
+    {
+      "id": "wg-063",
+      "section": "characters",
+      "entity": "Verdow",
+      "kind": "who",
+      "text": "A Veridian senator who questioned Gladias at his hearing.",
+      "sources": [
+        "c8-b50",
+        "c17-b11",
+        "c8-b51"
+      ],
+      "from_chapter": 17
+    },
+    {
+      "id": "wg-064",
+      "section": "characters",
+      "entity": "Verdow",
+      "kind": "changes",
+      "text": "Proposes using the courts to replace the failed military leadership.",
+      "sources": [
+        "c25-b111",
+        "c25-b112",
+        "c25-b109",
+        "c25-b110"
+      ],
+      "from_chapter": 25
+    },
+    {
+      "id": "wg-065",
+      "section": "characters",
+      "entity": "Lord Ephelion",
+      "kind": "who",
+      "text": "The Arctic ambassador to Veridia, who argues that only economic growth compounds.",
+      "sources": [
+        "c8-b17",
+        "c8-b35",
+        "c8-b31"
+      ],
+      "from_chapter": 8
+    },
+    {
+      "id": "wg-066",
+      "section": "characters",
+      "entity": "Sylka",
+      "kind": "who",
+      "text": "President of Veridia National University, who debates Ephelion.",
+      "sources": [
+        "c8-b17"
+      ],
+      "from_chapter": 8
+    },
+    {
+      "id": "wg-067",
+      "section": "characters",
+      "entity": "Lektor",
+      "kind": "who",
+      "text": "A respected Veridian general who becomes head general and commands the battle for Northshore.",
+      "sources": [
+        "c28-b7",
+        "c28-b96",
+        "c29-b21",
+        "c29-b82"
+      ],
+      "from_chapter": 29
+    },
+    {
+      "id": "wg-068",
+      "section": "characters",
+      "entity": "Evelor",
+      "kind": "who",
+      "text": "The founder of Silverchat.",
+      "sources": [
+        "c27-b21",
+        "c27-b37"
+      ],
+      "from_chapter": 27
+    },
+    {
+      "id": "wg-069",
+      "section": "characters",
+      "entity": "Tafindel",
+      "kind": "who",
+      "text": "The son of Redshire's president, held by the Arctics and rescued by the Kungaupei.",
+      "sources": [
+        "c15-b10",
+        "c26-b88",
+        "c26-b151",
+        "c26-b158"
+      ],
+      "from_chapter": 26
+    },
+    {
+      "id": "wg-070",
+      "section": "characters",
+      "entity": "Min",
+      "kind": "who",
+      "text": "Zei's mother; Freetown is her first trip abroad.",
+      "sources": [
+        "c5-b4",
+        "c5-b7",
+        "c5-b1"
+      ],
+      "from_chapter": 5
+    },
+    {
+      "id": "wg-071",
+      "section": "characters",
+      "entity": "Su",
+      "kind": "who",
+      "text": "A Minpentai priest and an organizer of the nationals.",
+      "sources": [
+        "c12-b14",
+        "c12-b16",
+        "c12-b13"
+      ],
+      "from_chapter": 12
+    },
+    {
+      "id": "wg-072",
+      "section": "places",
+      "entity": "Veridia",
+      "kind": "fact",
+      "text": "A country of trees and medieval-style stone houses; its capital is Meldan.",
+      "sources": [
+        "c1-b2",
+        "c1-b3"
+      ],
+      "from_chapter": 1
+    },
+    {
+      "id": "wg-073",
+      "section": "places",
+      "entity": "Meldan",
+      "kind": "fact",
+      "text": "Veridia's capital, with the forest-like Kalimar district, sky bridges and a tree-covered mountain.",
+      "sources": [
+        "c1-b3",
+        "c1-b11",
+        "c1-b13"
+      ],
+      "from_chapter": 1
+    },
+    {
+      "id": "wg-074",
+      "section": "places",
+      "entity": "Greater Plum Harbor",
+      "kind": "fact",
+      "text": "A walled enclave in Meldan, \"almost like a country inside a country\"; many Veridians push its land taxes up.",
+      "sources": [
+        "c3-b48",
+        "c3-b57",
+        "c3-b64",
+        "c3-b1"
+      ],
+      "from_chapter": 3
+    },
+    {
+      "id": "wg-075",
+      "section": "places",
+      "entity": "Greater Plum Harbor",
+      "kind": "fact",
+      "text": "Its buildings are uniform, futuristic glass and steel, unlike the rest of Veridia.",
+      "sources": [
+        "c3-b72"
+      ],
+      "from_chapter": 3
+    },
+    {
+      "id": "wg-076",
+      "section": "places",
+      "entity": "Dzego",
+      "kind": "fact",
+      "text": "A country that lost a war to the Arctics a century ago and grows its strength in small, spread-out workshops.",
+      "sources": [
+        "c2-b128",
+        "c9-b29"
+      ],
+      "from_chapter": 9
+    },
+    {
+      "id": "wg-077",
+      "section": "places",
+      "entity": "Pafogai Du",
+      "kind": "fact",
+      "text": "A Dzego city of small electronics shops and factories on a regular street grid.",
+      "sources": [
+        "c2-b3",
+        "c4-b53",
+        "c2-b1"
+      ],
+      "from_chapter": 4
+    },
+    {
+      "id": "wg-078",
+      "section": "places",
+      "entity": "Pafogai Du",
+      "kind": "fact",
+      "text": "A half-kilometer pyramid at its southern edge is a refurbished mountain holding part of the government.",
+      "sources": [
+        "c4-b48",
+        "c4-b49"
+      ],
+      "from_chapter": 4
+    },
+    {
+      "id": "wg-079",
+      "section": "places",
+      "entity": "Sadzu Du",
+      "kind": "fact",
+      "text": "Dzego's capital; the name means \"main city\".",
+      "sources": [
+        "c12-b5",
+        "c12-b6",
+        "c12-b1"
+      ],
+      "from_chapter": 12
+    },
+    {
+      "id": "wg-080",
+      "section": "places",
+      "entity": "United Cities",
+      "kind": "fact",
+      "text": "Cities that elect a share of each other's parliaments, called co-governance.",
+      "sources": [
+        "c5-b47"
+      ],
+      "from_chapter": 5
+    },
+    {
+      "id": "wg-081",
+      "section": "places",
+      "entity": "Freetown",
+      "kind": "fact",
+      "text": "A city of the United Cities, mixed rich and run-down, with the Freetown Economics Institute.",
+      "sources": [
+        "c5-b1",
+        "c5-b16",
+        "c5-b39"
+      ],
+      "from_chapter": 5
+    },
+    {
+      "id": "wg-082",
+      "section": "places",
+      "entity": "Redshire",
+      "kind": "fact",
+      "text": "A country of castles, pine forests and red snowy mountains.",
+      "sources": [
+        "c14-b124",
+        "c15-b10"
+      ],
+      "from_chapter": 15
+    },
+    {
+      "id": "wg-083",
+      "section": "places",
+      "entity": "Redshire",
+      "kind": "fact",
+      "text": "Invaded and annexed by the Arctic Empire.",
+      "sources": [
+        "c15-b6"
+      ],
+      "from_chapter": 15
+    },
+    {
+      "id": "wg-084",
+      "section": "places",
+      "entity": "Northglade",
+      "kind": "fact",
+      "text": "A Veridian town in the province of Northshore, near the Arctic border, with Veridia's best math university.",
+      "sources": [
+        "c17-b100",
+        "c17-b103",
+        "c20-b8"
+      ],
+      "from_chapter": 20
+    },
+    {
+      "id": "wg-085",
+      "section": "places",
+      "entity": "Northglade",
+      "kind": "fact",
+      "text": "Taken by the Arctics, except its Greater Plum Harbor, which they leave alone.",
+      "sources": [
+        "c20-b5",
+        "c20-b8"
+      ],
+      "from_chapter": 20
+    },
+    {
+      "id": "wg-086",
+      "section": "places",
+      "entity": "Thaldur",
+      "kind": "fact",
+      "text": "An island of the Arctic core territory east of Northshore, taken by Veridian sea drones.",
+      "sources": [
+        "c29-b29",
+        "c30-b74"
+      ],
+      "from_chapter": 30
+    },
+    {
+      "id": "wg-087",
+      "section": "places",
+      "entity": "Glasscrown",
+      "kind": "fact",
+      "text": "An Arctic city like a giant ice crystal, with a kilometer-tall tower.",
+      "sources": [
+        "c31-b42",
+        "c31-b23"
+      ],
+      "from_chapter": 31
+    },
+    {
+      "id": "wg-088",
+      "section": "places",
+      "entity": "Elenar Forest",
+      "kind": "fact",
+      "text": "Snowy pine forest in Veridia where the battle for Northshore begins.",
+      "sources": [
+        "c29-b1",
+        "c29-b2",
+        "c29-b13"
+      ],
+      "from_chapter": 29
+    },
+    {
+      "id": "wg-089",
+      "section": "institutions",
+      "entity": "Order of Steering",
+      "kind": "fact",
+      "text": "A government-linked, decentralized collective that sets Veridia's taxes and subsidies instead of bans.",
+      "sources": [
+        "c1-b56"
+      ],
+      "from_chapter": 1
+    },
+    {
+      "id": "wg-090",
+      "section": "institutions",
+      "entity": "Order of Steering",
+      "kind": "fact",
+      "text": "Keepers vote on tax rubrics; Sentinels audit businesses; Acolytes are members in training.",
+      "sources": [
+        "c1-b57"
+      ],
+      "from_chapter": 1
+    },
+    {
+      "id": "wg-091",
+      "section": "institutions",
+      "entity": "Order of Steering",
+      "kind": "fact",
+      "text": "Anyone can guess a member's task for a bounty, so members keep their roles private.",
+      "sources": [
+        "c1-b76"
+      ],
+      "from_chapter": 1
+    },
+    {
+      "id": "wg-092",
+      "section": "institutions",
+      "entity": "Order of Steering",
+      "kind": "fact",
+      "text": "Each rubric has twenty-one Keepers in three groups of seven that discuss separately and don't know who is in the other groups; thirteen votes pass a change.",
+      "sources": [
+        "c23-b60",
+        "c7-b130"
+      ],
+      "from_chapter": 23
+    },
+    {
+      "id": "wg-093",
+      "section": "institutions",
+      "entity": "Heralds",
+      "kind": "fact",
+      "text": "Order members picked at random to retire and explain the Order to the public, transparent only once they have no power.",
+      "sources": [
+        "c6-b73",
+        "c6-b74"
+      ],
+      "from_chapter": 6
+    },
+    {
+      "id": "wg-094",
+      "section": "institutions",
+      "entity": "Courts",
+      "kind": "fact",
+      "text": "Five judges per case, chosen at random from a large pool and anonymous; an appeal draws a new sample.",
+      "sources": [
+        "c6-b41",
+        "c23-b63",
+        "c7-b130"
+      ],
+      "from_chapter": 23
+    },
+    {
+      "id": "wg-095",
+      "section": "institutions",
+      "entity": "Graph Funding",
+      "kind": "fact",
+      "text": "Public funding split down a graph, each node's share decided by a randomly selected committee.",
+      "sources": [
+        "c17-b55",
+        "c17-b60"
+      ],
+      "from_chapter": 17
+    },
+    {
+      "id": "wg-096",
+      "section": "institutions",
+      "entity": "Quadratic Funding",
+      "kind": "fact",
+      "text": "Public matching of donations; attacked by Bluewhale and later at larger scale by the Arctics.",
+      "sources": [
+        "c11-b113",
+        "c17-b56"
+      ],
+      "from_chapter": 17
+    },
+    {
+      "id": "wg-097",
+      "section": "institutions",
+      "entity": "Parliament",
+      "kind": "fact",
+      "text": "Veridia's transparent parliament; a committee of twenty senators approves new Order members.",
+      "sources": [
+        "c8-b43",
+        "c8-b47",
+        "c7-b131"
+      ],
+      "from_chapter": 8
+    },
+    {
+      "id": "wg-098",
+      "section": "institutions",
+      "entity": "Citizens' assemblies",
+      "kind": "fact",
+      "text": "Public meetings, some run by Heralds, whose results Keepers check when debating rubrics.",
+      "sources": [
+        "c6-b68",
+        "c6-b94",
+        "c6-b75",
+        "c6-b76"
+      ],
+      "from_chapter": 6
+    },
+    {
+      "id": "wg-099",
+      "section": "institutions",
+      "entity": "DU",
+      "kind": "fact",
+      "text": "Dzego's Decentralized University, which runs by anonymous cryptographic coordination.",
+      "sources": [
+        "c2-b21",
+        "c2-b128",
+        "c2-b1"
+      ],
+      "from_chapter": 2
+    },
+    {
+      "id": "wg-100",
+      "section": "institutions",
+      "entity": "Bansunpei",
+      "kind": "fact",
+      "text": "The priests who keep improving the Dzegoban language, testing versions across the country.",
+      "sources": [
+        "c4-b27",
+        "c4-b44",
+        "c9-b34"
+      ],
+      "from_chapter": 9
+    },
+    {
+      "id": "wg-101",
+      "section": "institutions",
+      "entity": "Kungaupei",
+      "kind": "fact",
+      "text": "Dzego's secret society for defense, a shadow army.",
+      "sources": [
+        "c9-b56",
+        "c9-b57"
+      ],
+      "from_chapter": 9
+    },
+    {
+      "id": "wg-102",
+      "section": "technology",
+      "entity": "Privacy robe",
+      "kind": "fact",
+      "text": "The Veridian privacy robe: a loose dark purple garment covering the body from hood to ankles.",
+      "sources": [
+        "c1-b45"
+      ],
+      "from_chapter": 1
+    },
+    {
+      "id": "wg-103",
+      "section": "technology",
+      "entity": "Neck band",
+      "kind": "fact",
+      "text": "A band that picks up silent, whispered speech.",
+      "sources": [
+        "c1-b12"
+      ],
+      "from_chapter": 1
+    },
+    {
+      "id": "wg-104",
+      "section": "technology",
+      "entity": "Emerald",
+      "kind": "fact",
+      "text": "The local AI on Gladias's hand device.",
+      "sources": [
+        "c1-b9"
+      ],
+      "from_chapter": 1
+    },
+    {
+      "id": "wg-105",
+      "section": "technology",
+      "entity": "Zero-knowledge proofs",
+      "kind": "fact",
+      "text": "Watches and gates verify devices and credentials while learning nothing else.",
+      "sources": [
+        "c1-b4",
+        "c1-b43"
+      ],
+      "from_chapter": 1
+    },
+    {
+      "id": "wg-106",
+      "section": "technology",
+      "entity": "Anti-transmission foil",
+      "kind": "fact",
+      "text": "A common material lining rooms to block wireless signals.",
+      "sources": [
+        "c2-b4"
+      ],
+      "from_chapter": 2
+    },
+    {
+      "id": "wg-107",
+      "section": "technology",
+      "entity": "Mixnet",
+      "kind": "fact",
+      "text": "Messages, and in Dzego even parcels, pass through three randomly chosen nodes so no one sees both sender and receiver.",
+      "sources": [
+        "c9-b115",
+        "c9-b116",
+        "c9-b122",
+        "c9-b121",
+        "c9-b123"
+      ],
+      "from_chapter": 9
+    },
+    {
+      "id": "wg-108",
+      "section": "technology",
+      "entity": "Security cameras",
+      "kind": "fact",
+      "text": "In Dzego anyone may unscrew a public camera and inspect it, so cameras can be trusted.",
+      "sources": [
+        "c5-b79",
+        "c9-b97"
+      ],
+      "from_chapter": 9
+    },
+    {
+      "id": "wg-109",
+      "section": "technology",
+      "entity": "Zipcoins",
+      "kind": "fact",
+      "text": "The currency; payments and even sales tax are zero-knowledge.",
+      "sources": [
+        "c6-b135",
+        "c6-b138"
+      ],
+      "from_chapter": 6
+    },
+    {
+      "id": "wg-110",
+      "section": "technology",
+      "entity": "Time",
+      "kind": "fact",
+      "text": "A hundred ticks a minute, a hundred minutes a longhour, ten longhours a day.",
+      "sources": [
+        "c9-b37"
+      ],
+      "from_chapter": 9
+    },
+    {
+      "id": "wg-111",
+      "section": "technology",
+      "entity": "Silverchat and Bluewhale",
+      "kind": "fact",
+      "text": "Veridia's two big social platforms: Silverchat open to other clients, Bluewhale closed.",
+      "sources": [
+        "c3-b19",
+        "c3-b24"
+      ],
+      "from_chapter": 3
+    },
+    {
+      "id": "wg-112",
+      "section": "technology",
+      "entity": "Hydrafill",
+      "kind": "fact",
+      "text": "A drinks brand known for its odd, funny advertisements.",
+      "sources": [
+        "c1-b93",
+        "c3-b46"
+      ],
+      "from_chapter": 3
+    },
+    {
+      "id": "wg-113",
+      "section": "minpentai",
+      "entity": "Minpentai",
+      "kind": "fact",
+      "text": "A strategy game played on a board of walls, gliders and ships carrying each player's symbol.",
+      "sources": [
+        "c4-b84",
+        "c4-b93",
+        "c4-b111",
+        "c4-b7",
+        "c4-b88"
+      ],
+      "from_chapter": 4
+    },
+    {
+      "id": "wg-114",
+      "section": "minpentai",
+      "entity": "Minpentai",
+      "kind": "fact",
+      "text": "Its rules are time-reversible, so anything that can be built can be destroyed.",
+      "sources": [
+        "c4-b9",
+        "c4-b13",
+        "c4-b7"
+      ],
+      "from_chapter": 4
+    },
+    {
+      "id": "wg-115",
+      "section": "minpentai",
+      "entity": "Minpentai",
+      "kind": "fact",
+      "text": "Each match has a new rule chosen by priests.",
+      "sources": [
+        "c4-b84",
+        "c4-b148"
+      ],
+      "from_chapter": 4
+    },
+    {
+      "id": "wg-116",
+      "section": "minpentai",
+      "entity": "Minpentai",
+      "kind": "fact",
+      "text": "Intervention turns let players add squares near their symbols.",
+      "sources": [
+        "c4-b110",
+        "c4-b88"
+      ],
+      "from_chapter": 4
+    },
+    {
+      "id": "wg-117",
+      "section": "minpentai",
+      "entity": "Minpentai",
+      "kind": "fact",
+      "text": "Really military training: a way to raise defenders, safe because it looks like a game.",
+      "sources": [
+        "c10-b192",
+        "c10-b194",
+        "c10-b202"
+      ],
+      "from_chapter": 10
+    },
+    {
+      "id": "wg-118",
+      "section": "minpentai",
+      "entity": "Minpentai",
+      "kind": "fact",
+      "text": "Its players sit in Veridia's command centres and help run the drones in the battle for Northshore.",
+      "sources": [
+        "c29-b42",
+        "c29-b71",
+        "c29-b13"
+      ],
+      "from_chapter": 29
+    },
+    {
+      "id": "wg-119",
+      "section": "factions",
+      "entity": "Arctic Empire",
+      "kind": "fact",
+      "text": "The most technologically advanced power; its aim is to keep Dzego's industry and technology down.",
+      "sources": [
+        "c10-b145",
+        "c2-b127"
+      ],
+      "from_chapter": 10
+    },
+    {
+      "id": "wg-120",
+      "section": "factions",
+      "entity": "Arctic Empire",
+      "kind": "fact",
+      "text": "Its ideology rates people by intelligence and treats love as a reward for winning.",
+      "sources": [
+        "c18-b124",
+        "c24-b42"
+      ],
+      "from_chapter": 24
+    },
+    {
+      "id": "wg-121",
+      "section": "factions",
+      "entity": "Arctic Empire",
+      "kind": "fact",
+      "text": "Smuggles surveillance devices into Veridia and corrupts officials.",
+      "sources": [
+        "c3-b30",
+        "c24-b79"
+      ],
+      "from_chapter": 24
+    },
+    {
+      "id": "wg-122",
+      "section": "factions",
+      "entity": "Arctic Empire",
+      "kind": "fact",
+      "text": "Invades Redshire, then Northglade.",
+      "sources": [
+        "c15-b6",
+        "c20-b5"
+      ],
+      "from_chapter": 20
+    },
+    {
+      "id": "wg-123",
+      "section": "factions",
+      "entity": "Dzego",
+      "kind": "fact",
+      "text": "Its slogan, \"grow roots, no head\": spread-out manufacturing and anonymous coordination with no leaders to target.",
+      "sources": [
+        "c2-b8",
+        "c2-b128"
+      ],
+      "from_chapter": 2
+    },
+    {
+      "id": "wg-124",
+      "section": "factions",
+      "entity": "Dzego",
+      "kind": "fact",
+      "text": "\"Dze go ba fau gie\": Dzego will rise again.",
+      "sources": [
+        "c2-b130",
+        "c2-b131"
+      ],
+      "from_chapter": 2
+    },
+    {
+      "id": "wg-125",
+      "section": "factions",
+      "entity": "Freetown's defense companies",
+      "kind": "fact",
+      "text": "Arm after Redshire, and later help Dzego hunt Arctic drones.",
+      "sources": [
+        "c10-b24",
+        "c22-b20",
+        "c22-b76",
+        "c22-b74"
+      ],
+      "from_chapter": 22
+    },
+    {
+      "id": "wg-126",
+      "section": "factions",
+      "entity": "Silverchat",
+      "kind": "fact",
+      "text": "The more open social platform, which Delwart claims to work for.",
+      "sources": [
+        "c3-b24",
+        "c16-b13",
+        "c16-b10"
+      ],
+      "from_chapter": 16
+    },
+    {
+      "id": "wg-127",
+      "section": "timeline",
+      "entity": "3724 Snowmoon 3",
+      "kind": "event",
+      "text": "Meldan: Gladias rates a band as an Acolyte, escapes being exposed, and gets an anonymous request.",
+      "sources": [
+        "c1-b1",
+        "c1-b71",
+        "c1-b73",
+        "c1-b140",
+        "c1-b58",
+        "c1-b85"
+      ],
+      "from_chapter": 1
+    },
+    {
+      "id": "wg-128",
+      "section": "timeline",
+      "entity": "3724 Snowmoon 5",
+      "kind": "event",
+      "text": "Pafogai Du: a blast hits Zei and Fin's class; Zei's arm is broken.",
+      "sources": [
+        "c2-b1",
+        "c2-b98",
+        "c2-b112",
+        "c2-b2",
+        "c2-b100",
+        "c5-b72"
+      ],
+      "from_chapter": 5
+    },
+    {
+      "id": "wg-129",
+      "section": "timeline",
+      "entity": "3724 Snowmoon 8",
+      "kind": "event",
+      "text": "Meldan: Gladias meets Delwart, who urges him to become a Keeper.",
+      "sources": [
+        "c3-b1",
+        "c3-b87",
+        "c3-b112",
+        "c3-b88"
+      ],
+      "from_chapter": 3
+    },
+    {
+      "id": "wg-130",
+      "section": "timeline",
+      "entity": "3724 Snowmoon 24",
+      "kind": "event",
+      "text": "Pafogai Du: Zei and Bai win a quarter final together.",
+      "sources": [
+        "c4-b1",
+        "c4-b90",
+        "c4-b141",
+        "c4-b145"
+      ],
+      "from_chapter": 4
+    },
+    {
+      "id": "wg-131",
+      "section": "timeline",
+      "entity": "3724 Rainmoon 11",
+      "kind": "event",
+      "text": "Freetown: Zei, Min and Bai meet Seila and Jahn.",
+      "sources": [
+        "c5-b1",
+        "c5-b58",
+        "c5-b4",
+        "c5-b56",
+        "c5-b57"
+      ],
+      "from_chapter": 5
+    },
+    {
+      "id": "wg-132",
+      "section": "timeline",
+      "entity": "3724 Rainmoon 12–13",
+      "kind": "event",
+      "text": "Meldan: Gladias applies to become a Keeper.",
+      "sources": [
+        "c6-b1",
+        "c6-b47",
+        "c6-b158",
+        "c6-b149"
+      ],
+      "from_chapter": 6
+    },
+    {
+      "id": "wg-133",
+      "section": "timeline",
+      "entity": "3724 Rainmoon 24",
+      "kind": "event",
+      "text": "Pafogai Du: a chip factory is hit; Bai resigns and Zei wins the city final.",
+      "sources": [
+        "c7-b22",
+        "c7-b37",
+        "c7-b120",
+        "c7-b33",
+        "c7-b61"
+      ],
+      "from_chapter": 7
+    },
+    {
+      "id": "wg-134",
+      "section": "timeline",
+      "entity": "3724 Rainmoon 26",
+      "kind": "event",
+      "text": "Meldan: Gladias is accepted into the Order; Mov becomes a Herald.",
+      "sources": [
+        "c8-b1",
+        "c8-b101",
+        "c8-b134",
+        "c8-b129"
+      ],
+      "from_chapter": 8
+    },
+    {
+      "id": "wg-135",
+      "section": "timeline",
+      "entity": "3724 Rainmoon 28",
+      "kind": "event",
+      "text": "Pafogai Du: Den recruits Zei into defense.",
+      "sources": [
+        "c9-b1",
+        "c9-b73",
+        "c9-b56",
+        "c9-b137"
+      ],
+      "from_chapter": 9
+    },
+    {
+      "id": "wg-136",
+      "section": "timeline",
+      "entity": "3724 Windmoon 24",
+      "kind": "event",
+      "text": "Freetown prepares; Gladias attends his first Keeper meetings; Zei learns Minpentai is military training.",
+      "sources": [
+        "c10-b1",
+        "c10-b24",
+        "c10-b30",
+        "c10-b194",
+        "c10-b29",
+        "c10-b175"
+      ],
+      "from_chapter": 10
+    },
+    {
+      "id": "wg-137",
+      "section": "timeline",
+      "entity": "3724 Bloomtime 15",
+      "kind": "event",
+      "text": "Meldan: Zven wins at Helisport.",
+      "sources": [
+        "c11-b1",
+        "c11-b82",
+        "c11-b5",
+        "c11-b26"
+      ],
+      "from_chapter": 11
+    },
+    {
+      "id": "wg-138",
+      "section": "timeline",
+      "entity": "3724 Grasstime 22–25",
+      "kind": "event",
+      "text": "Sadzu Du: the national championship begins; Zei meets Deluin.",
+      "sources": [
+        "c12-b1",
+        "c12-b71",
+        "c12-b96",
+        "c12-b73",
+        "c12-b84"
+      ],
+      "from_chapter": 12
+    },
+    {
+      "id": "wg-139",
+      "section": "timeline",
+      "entity": "3724 Harvestmoon 8–9",
+      "kind": "event",
+      "text": "Meldan: Mov finds Delwart has contacts in two discussion groups of one rubric; Gladias's group agrees to wait two months.",
+      "sources": [
+        "c13-b1",
+        "c13-b38",
+        "c13-b71",
+        "c13-b99",
+        "c13-b30",
+        "c13-b35",
+        "c13-b100"
+      ],
+      "from_chapter": 13
+    },
+    {
+      "id": "wg-140",
+      "section": "timeline",
+      "entity": "3724 Firemoon 10",
+      "kind": "event",
+      "text": "Sadzu Du: Zei and Deluin win their semi finals.",
+      "sources": [
+        "c14-b1",
+        "c14-b87",
+        "c14-b94",
+        "c14-b30"
+      ],
+      "from_chapter": 14
+    },
+    {
+      "id": "wg-141",
+      "section": "timeline",
+      "entity": "3724 Firemoon 17",
+      "kind": "event",
+      "text": "The Arctic Empire invades and annexes Redshire; the final is cancelled.",
+      "sources": [
+        "c15-b1",
+        "c15-b6",
+        "c15-b82"
+      ],
+      "from_chapter": 15
+    },
+    {
+      "id": "wg-142",
+      "section": "timeline",
+      "entity": "3724 Firemoon 25",
+      "kind": "event",
+      "text": "Meldan: Delwart claims to work for Silverchat.",
+      "sources": [
+        "c16-b1",
+        "c16-b13",
+        "c16-b10"
+      ],
+      "from_chapter": 16
+    },
+    {
+      "id": "wg-143",
+      "section": "timeline",
+      "entity": "3724 Fruitmoon 11",
+      "kind": "event",
+      "text": "Meldan: the Keepers vote on the hardware openness rubric.",
+      "sources": [
+        "c17-b1",
+        "c17-b111",
+        "c17-b85",
+        "c17-b110"
+      ],
+      "from_chapter": 17
+    },
+    {
+      "id": "wg-144",
+      "section": "timeline",
+      "entity": "3724 Fruitmoon 18",
+      "kind": "event",
+      "text": "Pafogai Du: Gladias arrives in Dzego.",
+      "sources": [
+        "c18-b1",
+        "c18-b2"
+      ],
+      "from_chapter": 18
+    },
+    {
+      "id": "wg-145",
+      "section": "timeline",
+      "entity": "3724 Grapetime 15",
+      "kind": "event",
+      "text": "Pafogai Du: Deluin's letter reaches Zei.",
+      "sources": [
+        "c19-b1",
+        "c19-b153"
+      ],
+      "from_chapter": 19
+    },
+    {
+      "id": "wg-146",
+      "section": "timeline",
+      "entity": "3724 Mistime 10",
+      "kind": "event",
+      "text": "The Arctic Empire invades Northglade; Seila finds Delwart is not from Silverchat.",
+      "sources": [
+        "c20-b1",
+        "c20-b5",
+        "c20-b179",
+        "c20-b177"
+      ],
+      "from_chapter": 20
+    },
+    {
+      "id": "wg-147",
+      "section": "timeline",
+      "entity": "3724 Mistime 20",
+      "kind": "event",
+      "text": "Meldan: Seila concludes Delwart is an Arctic.",
+      "sources": [
+        "c21-b1",
+        "c21-b71",
+        "c21-b49"
+      ],
+      "from_chapter": 21
+    },
+    {
+      "id": "wg-148",
+      "section": "timeline",
+      "entity": "3724 Mistime 22",
+      "kind": "event",
+      "text": "Freetown and Pafogai Du: drone hunts in Redshire; Lily runs away.",
+      "sources": [
+        "c22-b1",
+        "c22-b76",
+        "c23-b1",
+        "c23-b91",
+        "c22-b74",
+        "c23-b79"
+      ],
+      "from_chapter": 23
+    },
+    {
+      "id": "wg-149",
+      "section": "timeline",
+      "entity": "3724 Mistime 27",
+      "kind": "event",
+      "text": "Pafogai Du: Gladias proposes that Dzego spy on Veridia's spies.",
+      "sources": [
+        "c24-b1",
+        "c24-b76",
+        "c24-b64",
+        "c24-b72"
+      ],
+      "from_chapter": 24
+    },
+    {
+      "id": "wg-150",
+      "section": "timeline",
+      "entity": "3724 Frostime 1",
+      "kind": "event",
+      "text": "Pafogai Du: the plan to persuade Veridia's courts.",
+      "sources": [
+        "c25-b1",
+        "c25-b102"
+      ],
+      "from_chapter": 25
+    },
+    {
+      "id": "wg-151",
+      "section": "timeline",
+      "entity": "3724 Frostime 5–6",
+      "kind": "event",
+      "text": "Veridia: Tafindel is rescued; the judges refuse the case.",
+      "sources": [
+        "c26-b1",
+        "c26-b78",
+        "c26-b151",
+        "c26-b192",
+        "c26-b88",
+        "c26-b162",
+        "c26-b173",
+        "c26-b158"
+      ],
+      "from_chapter": 26
+    },
+    {
+      "id": "wg-152",
+      "section": "timeline",
+      "entity": "3724 Frostime 7–8",
+      "kind": "event",
+      "text": "Meldan: the Silverchat poll and the forecasting bots.",
+      "sources": [
+        "c27-b1",
+        "c27-b98",
+        "c27-b120",
+        "c27-b136"
+      ],
+      "from_chapter": 27
+    },
+    {
+      "id": "wg-153",
+      "section": "timeline",
+      "entity": "3724 Frostime 15–18",
+      "kind": "event",
+      "text": "Meldan: Lektor becomes head general.",
+      "sources": [
+        "c28-b1",
+        "c28-b90",
+        "c28-b96"
+      ],
+      "from_chapter": 28
+    },
+    {
+      "id": "wg-154",
+      "section": "timeline",
+      "entity": "3725 Snowmoon 29–30",
+      "kind": "event",
+      "text": "Elenar Forest: the battle for Northshore.",
+      "sources": [
+        "c29-b1",
+        "c29-b54",
+        "c30-b1",
+        "c29-b13"
+      ],
+      "from_chapter": 30
+    },
+    {
+      "id": "wg-155",
+      "section": "timeline",
+      "entity": "3725 Snowmoon 30",
+      "kind": "event",
+      "text": "Northglade is retaken and Thaldur taken.",
+      "sources": [
+        "c30-b71",
+        "c30-b74",
+        "c30-b75"
+      ],
+      "from_chapter": 30
+    },
+    {
+      "id": "wg-156",
+      "section": "timeline",
+      "entity": "3725 Rainmoon 2",
+      "kind": "event",
+      "text": "Northglade: Zei meets Deluin; Gladias's family is reunited.",
+      "sources": [
+        "c31-b1",
+        "c31-b7",
+        "c31-b79",
+        "c31-b77",
+        "c31-b10"
+      ],
+      "from_chapter": 31
+    },
+    {
+      "id": "wg-157",
+      "section": "timeline",
+      "entity": "3725 Rainmoon 12",
+      "kind": "event",
+      "text": "Meldan: Verdow warns this was only the first round.",
+      "sources": [
+        "c32-b1",
+        "c32-b29",
+        "c32-b12"
+      ],
+      "from_chapter": 32
+    }
+  ]
+}

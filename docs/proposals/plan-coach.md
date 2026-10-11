@@ -1,0 +1,109 @@
+# Proposal: the planning coach (no UI yet)
+
+> Draft by the coding agent, 2026-10-11, on branch `plan-coach`. Nothing here is
+> built into the app. The world guide, the craft guide, the coach prompt and the
+> eval are on the branch; only docs and data merge, after the owner's OK.
+
+## What exists on the branch
+
+| Piece | File | State |
+|---|---|---|
+| World guide | `content/snowmoon/world-guide.json`, `.md` | 157 lines, each cited and tagged with the latest chapter it depends on; `scripts/world-guide.ts check` passes; every line read against its blocks by gpt-oss-120b and by the coding agent (`content/snowmoon/recipes/world-guide.json`) |
+| Craft guide | `docs/craft/visual-storytelling.md` | Draft, **not approved**; the owner edits and approves before the coach may use it |
+| Coach prompt | `config/prompts/plan-coach.md` | Draft |
+| Eval | `scripts/plan-coach-eval.ts`, fixtures in `scripts/fixtures/plan-coach/` | Three invented openings run; the owner's freewrite still to come; review in `docs/craft/plan-coach-eval-review.md` |
+
+## Eval so far (gpt-oss-120b)
+
+The craft notes are reasonable. The coach fails in the two places the owner
+named:
+
+- **It writes for the person.** Five slips: quoted wants, picture lettering,
+  and one rewrite of the person's own narration. The guard model passed the
+  rewrite.
+- **It gets the world wrong.** It caught 1 of 5 planted errors and
+  introduced 2 new ones: the arena placed in Greater Plum Harbor, and the
+  hearing placed in the Order's tower.
+
+Each coach turn is about 7,500 tokens in and 1,700 out, about $0.002.
+
+## What I would change before trying another model
+
+These are cheap, and they test whether the problem is the model or the design:
+
+1. **World check as its own step.** First extract the draft's claims about the
+   world, one per line. Then fetch passages for each claim, up to the
+   reader's limit. Then judge each claim against those passages. The current
+   prompt asks for all of it at once, with passages chosen only by word
+   overlap with the whole draft. The chapter 8 tally and chapter 10's tax
+   rule were never in the passages.
+2. **Picture slots without words.** No quotation marks, no on-screen text, no
+   "e.g.". Say what the picture shows (place, who, action), never what it
+   says. A code check rejects any quoted span that isn't the person's.
+3. **The guard asked the right question.** The assistant's guard policy
+   (`chat-guard.md`) is about answers to questions. The coach needs its own
+   policy, `plan-coach-guard.md`: any wording for the piece, any rewrite or
+   completion of the person's words, any on-screen text.
+4. **Three answers, not one:** "matches", "conflicts" and "the book doesn't
+   say up to your chapter". Keep "beyond your chapter limit" only for what
+   the book says later. The coach has to know that without saying it, so the
+   world check would get the full guide but may only say "I can't check this
+   within your chapter".
+
+## Alternatives, if the notes still aren't useful
+
+Per coach turn at today's token counts (7.5k in, 1.7k out), at the prices on
+Vercel AI Gateway's model list (2026-10-11). "Receives the draft" is everyone
+who handles a person's private draft.
+
+| Model | Open weights | Per turn | Receives the draft | Notes |
+|---|---|---|---|---|
+| gpt-oss-120b (now) | yes, Apache-2.0 | ~$0.002 | Groq directly; Vercel AI Gateway → Groq when busy; zero retention on both | On the allowlist |
+| Qwen3.8 Flash | yes | ~$0.002 | Vercel AI Gateway → the provider the gateway routes to | Same family as the book's own tool (principle 3's source names Qwen 3.8 Flash Next); not on the allowlist |
+| DeepSeek V4 Pro | yes | ~$0.008 | Vercel AI Gateway → provider | Not on the allowlist; in the 2026-10-07 test, DeepSeek V3.1 wrote for the user once in 27 attempts |
+| Mistral Large 4 | check the licence | ~$0.009 | Vercel AI Gateway → Mistral | Not on the allowlist |
+| Kimi K3 | yes | ~$0.048 | Vercel AI Gateway → provider | The model the book's own declaration names; most expensive open option |
+| Claude Haiku 5.5 | no | ~$0.002 | Anthropic, via the gateway or directly | Closed model, reported under principle 3 |
+| Claude Sonnet 5.5 | no | ~$0.032 | Anthropic, via the gateway or directly | Closed model |
+| Claude Opus 5.5 | no | ~$0.064 | Anthropic, via the gateway or directly | Closed model; the model that wrote the summary |
+
+**Privacy (principle 6).** Drafts are a person's private creative work, more
+sensitive than questions about the book.
+- **Any provider other than Groq** must be checked for zero data retention
+  before it receives a draft. The gateway can require it per request, but
+  whether a given model has a zero-retention provider on the gateway has to
+  be confirmed model by model.
+- **For Claude,** zero retention depends on Anthropic's terms for the
+  account. Check it before use, the same way the Groq console was checked.
+- **The first-time notice and the consent text** would have to name the
+  provider that receives drafts.
+
+**Recommendation.** Make the four design changes, then rerun on gpt-oss-120b
+with the owner's freewrite added. Rerunning costs under a cent. If it still
+misses world facts, run the same four fixtures on one open model (Qwen3.8
+Flash or Kimi K3) and on Claude Sonnet 5.5, in a separate eval, after the
+owner approves which ones may receive the test drafts. The test drafts are
+not private, but the decision sets the precedent.
+
+## How the coach resolves gap-list items A9–A13 and A20–A22
+
+| Item | The gap | How this design resolves it |
+|---|---|---|
+| A9 | Planning thread "published with your piece as @name"; needs own-words consent | Planning is **private by default** (on the device, like asking). It only becomes public when the person publishes their piece and chooses to include the thread. That step shows the own-words consent (`config/consent.json`, current version), because the thread holds the person's words. No consent is needed to plan. |
+| A10 | The piece kept apart from the chat | The piece is made only of the person's own fragments (F1, F2…), stored apart from the coach's notes. The coach can propose an order by label, but never adds text to the piece, so nothing from a note can end up in it. |
+| A11 | A private question turns into planning; the private thread isn't copied | Asking and planning stay separate threads. "Start planning from this" opens a new planning thread with only the person's chosen question. Nothing is copied over unless they choose it, and nothing goes public until they publish. |
+| A12 | Publish review, always shown, can't trim (conflict 4 with removal) | The review is always shown before publishing. The thread is published **whole or not at all**: no trimming individual messages, so the coach's notes can't be shown out of context. Removal stays as `docs/removal.md` has it: the person can hide the whole thread, or the whole piece, at once, at any time. That keeps "can't trim" and "can hide" consistent: **hiding is all or nothing**, like publishing. |
+| A13 | "How this was made" with overlap flags | Published with the piece: every message in order, the coach's labelled model-drafted. **Overlap check:** any run of six or more consecutive words shared by the piece and a coach note is flagged, excluding book quotes and the person's own earlier words that the coach quoted back (`docs/proposals/chat.md`, rule 11). Since the coach may not write wording, a flag means a slip, and it is shown. |
+| A20 | Every planning message signed with the person's name | Signed only in the published thread, with their Farcaster name, which the own-words consent at publishing covers. On the device, unsigned. |
+| A21 | A hosted model receives messages (principle 6) | Same route as the assistant: Groq with zero retention (confirmed in the console), and the gateway, also zero retention, only when Groq is busy. The notice must say that **drafts**, not only questions, go to Groq. Any other model needs the checks in "Alternatives" first. |
+| A22 | Planning thread published in full with the piece | Yes, in full, but only under "How this was made", labelled model-drafted (principle 2), never inside the piece itself. Together with A12: whole or not at all, hideable at once. |
+
+## Decisions for the owner
+
+1. Approve or edit the craft guide (`docs/craft/visual-storytelling.md`).
+2. The four design changes before any model change: yes or no?
+3. Which models, if any, may receive the test drafts in a comparison eval?
+4. Planning private by default, with the thread published only by choice at
+   publish time: yes or no? This replaces the board's "published with your
+   piece".
+5. The notice and consent wording that names who receives drafts.
