@@ -13,3 +13,13 @@ export function useCanAddImage(): boolean {
   const auth = useAuth();
   return IMAGES.enabled && auth.kind === 'signed-in';
 }
+
+/**
+ * Making a style or a character sheet (new, fork, new version, samples and views): invited FIDs
+ * only, for now (owner, 2026-10-10: "Invited only, for now"). Browsing, picking and using picks in
+ * the composer are for everyone signed in. The server refuses others (/api/designs, /api/designs/sample).
+ */
+export function useCanMakeDesigns(): boolean {
+  const auth = useAuth();
+  return IMAGES.enabled && auth.kind === 'signed-in' && IMAGES.invited.includes(auth.fid);
+}

@@ -9,7 +9,9 @@ import type { DesignBody, DesignPicture } from '~/lib/element-body';
 import { SAMPLE_ASSIST } from '~/lib/images/design-rules';
 import { bookCharacter, characterNameClash, CHARACTER_NAME_REFUSAL, designByVersion, designPublishesToday, makeDesign, MakeRefused, styleNameTaken, type DesignKind, type MakeMode } from '~/lib/images/designs';
 import { blockedName } from '~/lib/images/rules';
+import { mayGenerate } from '~/lib/images/gate';
 import { checkWords } from '~/lib/images/paid';
+import { IMAGE_WORDING } from '~/lib/images/wording';
 import { putPublic, storageReady } from '~/lib/images/store';
 import { readSampleTicket, type SampleTicket } from '~/lib/images/ticket';
 import { bylineName } from '~/lib/names';
@@ -17,7 +19,8 @@ import { bylineName } from '~/lib/names';
 /**
  * Publish a style or a character sheet (step 4): a new style, a sheet for one of the book's
  * characters, a fork of someone's design ("remixed from" it, for good), or a new version of your
- * own. Invited FIDs, after consent, a few a day. The device sends back each sample or view with its
+ * own. Invited FIDs only, for now (owner, 2026-10-10), after consent and the
+ * same gate as Generate, a few a day. The device sends back each sample or view with its
  * signed record; every one must be this person's and made with exactly the text being published, so
  * the text was checked when they were made, and the pictures show what the text does. Then the
  * pictures go to the public bucket and the design is written in one transaction.
@@ -46,7 +49,7 @@ export async function POST(request: Request) {
   const fid = await getFid(request);
   if (fid === null) return NextResponse.json({ error: 'Sign in with Farcaster to publish' }, { status: 401 });
   if (!IMAGES.enabled) return no('Publishing is switched off for now', 503);
-  if (!IMAGES.invited.includes(fid)) return no('The trial is open to invited readers only', 403);
+  if (!IMAGES.invited.includes(fid)) return no(IMAGE_WORDING.designs.form.notInvited, 403);
   const sql = db();
   if (!sql || !process.env.IMAGES_TICKET_SECRET || !storageReady()) return no('Publishing styles and sheets is not set up on this deployment', 503);
   let body: { mode?: unknown; kind?: unknown; title?: unknown; text?: unknown; character?: unknown; from?: unknown; samples?: unknown; views?: unknown; nameProof?: unknown };
@@ -68,6 +71,9 @@ export async function POST(request: Request) {
   const character = kind === 'character' && mode === 'create' ? bookCharacter(String(body.character ?? '')) : null;
   if (kind === 'character' && mode === 'create' && !character) return no('Choose one of the book’s characters', 400);
   if (!(await hasConsented(fid))) return no('Agree to how your words are published first', 403);
+  // The name's model check is paid: the same gate as Generate first (invited FIDs pass it without a lookup).
+  const gate = await mayGenerate(sql, fid);
+  if (!gate.ok) return no(gate.error, gate.status);
   if ((await designPublishesToday(sql, fid)) >= IMAGES.designs.publishesPerDay) return no(`You can publish ${IMAGES.designs.publishesPerDay} styles or sheets a day. More tomorrow (00:00 UTC).`, 429);
 
   // The pictures: a style's samples (2 to 4), or a sheet's views (front needed; side and back optional).

@@ -22,7 +22,7 @@
     "test:minpentai-learn": "tsx scripts/test-minpentai-learn.ts",
     "check:tokens": "tsx scripts/check-tokens.ts",
     "test:chat": "tsx scripts/test-chat.ts",
-    "test:images": "tsx --conditions=react-server scripts/test-images.ts && tsx --conditions=react-server scripts/test-designs.ts",
+    "test:images": "tsx --conditions=react-server scripts/test-images.ts && tsx --conditions=react-server scripts/test-images-gate.ts && tsx --conditions=react-server scripts/test-designs.ts",
     "test:images-gate": "tsx --conditions=react-server scripts/test-images-gate.ts",
     "test:designs": "tsx --conditions=react-server scripts/test-designs.ts",
     "seed:designs": "tsx --conditions=react-server --env-file-if-exists=.env.local scripts/seed-designs.ts",

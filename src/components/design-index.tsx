@@ -3,7 +3,7 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { openedChapters } from '~/lib/chat/device';
-import { useCanAddImage } from '~/lib/images/can-add';
+import { useCanAddImage, useCanMakeDesigns } from '~/lib/images/can-add';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { useMyPicks } from './design-picks';
 
@@ -18,6 +18,7 @@ type CharacterRow = { slug: string; name: string; firstChapter: number; sheets: 
 
 export function DesignIndex({ tab, sort, styles, characters }: { tab: 'styles' | 'characters'; sort: 'new' | 'built'; styles: StyleRow[]; characters: CharacterRow[] }) {
   const canAdd = useCanAddImage();
+  const canMake = useCanMakeDesigns();
   const picks = useMyPicks();
   const [furthest, setFurthest] = useState<number | null>(null);
   const [shown, setShown] = useState<Set<string>>(new Set());
@@ -46,7 +47,7 @@ export function DesignIndex({ tab, sort, styles, characters }: { tab: 'styles' |
                 {W.index.built}
               </Link>
             </nav>
-            {canAdd && (
+            {canMake && (
               <Link className="dz-new" href="/images/designs/new?kind=style">
                 {W.index.newStyle}
               </Link>

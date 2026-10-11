@@ -5,13 +5,16 @@ import { db } from '~/lib/db';
 import { IMAGES } from '~/lib/config';
 import { hasConsented } from '~/lib/consent';
 import { makeEdit, makeImage } from '~/lib/images/fal';
+import { mayGenerate } from '~/lib/images/gate';
 import { paidPicture } from '~/lib/images/paid';
+import { IMAGE_WORDING } from '~/lib/images/wording';
 import { SAMPLE_SUBJECTS, VIEW_LINES, samplePrompt } from '~/lib/images/design-rules';
 import { readSampleTicket, signSampleTicket } from '~/lib/images/ticket';
 
 /**
  * One sample picture for a style, or one view for a character sheet (step 4), before the design
- * is published. The same rules as any image: invited FIDs, consent, the day's count and the spend
+ * is published. Making designs is for invited FIDs only, for now (owner,
+ * 2026-10-10). Then the same rules and order as Generate: setup, input, consent, the gate (gate.ts), the day's count and the spend
  * caps, the prompt check, the safety checker. Nothing is stored here: the picture and a signed
  * record of how it was made (with exactly this text) go back to the person's device.
  * A sample or a front view: Z-Image Turbo from the text. A side or back view: FLUX.2 [klein] 4B
@@ -25,7 +28,7 @@ export async function POST(request: Request) {
   const fid = await getFid(request);
   if (fid === null) return NextResponse.json({ error: 'Sign in with Farcaster to make a picture' }, { status: 401 });
   if (!IMAGES.enabled) return no('Making images is switched off for now', 503);
-  if (!IMAGES.invited.includes(fid)) return no('The trial is open to invited readers only', 403, { reason: 'invited' });
+  if (!IMAGES.invited.includes(fid)) return no(IMAGE_WORDING.designs.form.notInvited, 403, { reason: 'invited' });
   const sql = db();
   if (!sql || !process.env.FAL_KEY || !process.env.IMAGES_TICKET_SECRET) return no('Making images is not set up on this deployment', 503);
 
@@ -42,6 +45,9 @@ export async function POST(request: Request) {
   const index = Number(body.index ?? 0);
   if (slot === 'sample' && !(Number.isInteger(index) && index >= 0 && index < SAMPLE_SUBJECTS.length)) return no('Bad request', 400);
   if (!(await hasConsented(fid))) return no('Agree to how your words are published first', 403, { reason: 'consent' });
+  // The same gate as Generate, before anything is counted or reserved (invited FIDs pass it without a lookup).
+  const gate = await mayGenerate(sql, fid);
+  if (!gate.ok) return no(gate.error, gate.status, { reason: gate.reason });
 
   // Side and back are made from the front view: its record must be this person's, with this text.
   let front: { bytes: Buffer; sha256: string } | null = null;

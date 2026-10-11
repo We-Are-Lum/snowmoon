@@ -1,14 +1,13 @@
 import { NextResponse } from 'next/server';
 import { getFid } from '~/lib/auth';
 import { db } from '~/lib/db';
-import { IMAGES } from '~/lib/config';
 import { clearPick, myPicks, setPick } from '~/lib/images/designs';
 
 /**
  * "Use as my style" / "Use as my {character}" and My picks (step 4). Private: every request reads or
  * writes only the signed-in person's own picks (studio.picks, one per entity). No route lists
- * anyone else's picks or how many people picked anything. During the trial, invited FIDs only,
- * since picks only fill in the composer.
+ * anyone else's picks or how many people picked anything. Open to everyone signed in (owner,
+ * 2026-10-10: everyone may browse, pick and use styles and sheets; only invited FIDs may make them).
  */
 const noStore = { 'Cache-Control': 'no-store' };
 const no = (error: string, status: number) => NextResponse.json({ error }, { status, headers: noStore });
@@ -16,7 +15,6 @@ const no = (error: string, status: number) => NextResponse.json({ error }, { sta
 async function who(request: Request) {
   const fid = await getFid(request);
   if (fid === null) return { error: NextResponse.json({ error: 'Sign in with Farcaster to see your picks' }, { status: 401, headers: noStore }) };
-  if (!IMAGES.invited.includes(fid)) return { error: no('The trial is open to invited readers only', 403) };
   const sql = db();
   if (!sql) return { error: no('Not available here', 503) };
   return { fid, sql };

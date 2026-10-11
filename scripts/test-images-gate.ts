@@ -203,8 +203,22 @@ process.env.APP_LEGAL_PAGES = 'terms+privacy';
   const src = readFileSync(path.join(ROOT, 'src/app/api/images/generate/route.ts'), 'utf8');
   const at = (s: string) => src.indexOf(s);
   check('the generate route calls the gate', at('await mayGenerate(') > 0);
-  check('the gate comes before the count and the reservation', at('await mayGenerate(') < at('await reserve('));
-  check('the gate comes before the prompt check and the image model', at('await mayGenerate(') < at('checkPrompt(userPrompt') && at('await mayGenerate(') < at('makeImage(prompt)'));
+  // Step 4: counting, reserving, the prompt check and the model all happen in paidPicture (paid.ts), in that order.
+  check('the gate comes before the count and the reservation', at('await mayGenerate(') > 0 && at('await mayGenerate(') < at('await paidPicture('));
+  const paidSrc = readFileSync(path.join(ROOT, 'src/lib/images/paid.ts'), 'utf8');
+  const pat = (s: string) => paidSrc.indexOf(s);
+  check('the gate comes before the prompt check and the image model', at('await mayGenerate(') < at('makeImage(prompt)') && pat('await reserve(') > 0 && pat('await reserve(') < pat('checkPrompt(job.checkText') && pat('checkPrompt(job.checkText') < pat('await job.make()'));
+  // Samples and views for designs: invited FIDs only (owner, 2026-10-10), then the same gate before anything is paid.
+  const sample = readFileSync(path.join(ROOT, 'src/app/api/designs/sample/route.ts'), 'utf8');
+  const sat = (s: string) => sample.indexOf(s);
+  check('samples and views are for invited FIDs only, with the drafted refusal', sat('if (!IMAGES.invited.includes(fid)) return no(IMAGE_WORDING.designs.form.notInvited') > 0);
+  check('samples and views go through the same gate before anything is counted', sat('await mayGenerate(') > sat('hasConsented(fid)') && sat('await mayGenerate(') < sat('await paidPicture('));
+  const publish = readFileSync(path.join(ROOT, 'src/app/api/designs/route.ts'), 'utf8');
+  const dat = (s: string) => publish.indexOf(s);
+  check('publishing a design is for invited FIDs only, with the drafted refusal', dat('if (!IMAGES.invited.includes(fid)) return no(IMAGE_WORDING.designs.form.notInvited') > 0);
+  check('publishing a design passes the gate before the name\'s paid check', dat('await mayGenerate(') > 0 && dat('await mayGenerate(') < dat('await checkWords('));
+  const picksSrc = readFileSync(path.join(ROOT, 'src/app/api/designs/picks/route.ts'), 'utf8');
+  check('picks are open to everyone signed in', !/invited/.test(picksSrc.replace(/\/\*[\s\S]*?\*\//g, '')));
   check('the gate\'s refusal is returned at once', /if \(!gate\.ok\) return no\(gate\.error, gate\.status/.test(src));
   check('no invited-only refusal is left', !/invited readers only/.test(src));
   const nx = readFileSync(path.join(ROOT, 'next.config.ts'), 'utf8');
@@ -234,8 +248,11 @@ check('the daily cap is $2', IMAGES.dailySpendCapUsd === 2 && IMAGES.generations
 
 // --- Report alerts ----------------------------------------------------------------------
 const el = async (by: number) => (await sql`insert into studio.elements (work_id, element_type, created_by_fid, status) values ('snowmoon', 'image', ${by}, 'published') returning id`)[0].id as string;
-const log = (element_id: string, step: string, by_fid: number, role: string, reason: string | null = null, note: string | null = null) =>
-  sql`insert into studio.removal_log ${sql({ element_id, step, by_fid, role, reason, note })}`;
+// Each step a few milliseconds after the last, so "the latest step" is never a tie on `at` (it was flaky).
+const log = async (element_id: string, step: string, by_fid: number, role: string, reason: string | null = null, note: string | null = null) => {
+  await new Promise((r) => setTimeout(r, 3));
+  return sql`insert into studio.removal_log ${sql({ element_id, step, by_fid, role, reason, note })}`;
+};
 const A = await el(777001), B = await el(777002), C = await el(777003);
 const REPORTER = 424242;
 

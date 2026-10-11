@@ -1,5 +1,6 @@
 # Style guides, character sheets, forks and picks (step 4)
 
+> **Brought up to date on branch `site-images-designs-2` (2026-10-10, §11), after site-images-everyone.**
 > **Built on branch `site-images-designs`. Not merged, not deployed** (the branch is pushed, with
 > no preview deployment). **Decided by the owner on 2026-10-09 (§8)**; the branch stays unmerged until
 > the owner has made their first images with the trial. Written
@@ -86,8 +87,8 @@ entity row is created with its first sheet.
 ## 3. Rules, as built
 
 - **Same machinery as images.** Samples, sheet views and reference images are Generates: invited
-  FIDs only, consent (the existing `own-words-v2` wording, unchanged) before the first one, the
-  day's count (10), the daily ($2) and trial ($1) spend caps with the worst case reserved first,
+  FIDs only, consent (the current consent wording, unchanged) before the first one, the
+  day's count (10), the daily ($2) spend cap (the $1 all-days cap was removed, 2026-10-09) with the worst case reserved first,
   the blocked-names list, the prompt check (gpt-oss-safeguard-20b on Groq), the host's safety
   checker, pictures flagged by it dropped, signed records instead of server-side drafts.
 - **Edit model.** FLUX.2 [klein] 4B edit on fal.ai (`fal-ai/flux-2/klein/4b/edit`, allowlisted as
@@ -330,3 +331,31 @@ Tension raised, not resolved: built-on counts next to "Use as my …" (decision 
 - Sheet rules: "Don’t base a character on a real person. Don’t contradict what the book says. Describe how they look early in the book; nothing that happens later."
 - Refusals: "That is the name of a character in the book. Choose another name for the style." · "This name asks for something the rules don’t allow. Choose another." · "No real people: the name names someone on the blocked list."
 - About (Pictures): "Readers can also publish styles and character sheets. Their names and text are published like prompts: public, permanent, GPL-3.0, under the maker’s name, and added in full to the prompts of images that use them."
+
+## 11. Brought up to date (2026-10-10, branch `site-images-designs-2`)
+
+Replayed onto site-images-everyone (the menu, the new home page, Minpentai Play, Terms and
+Privacy, the Neynar gate, report alerts, the removal of the $1 all-days cap, migration 0010).
+
+- **Who may do what** (owner, 2026-10-10: "Invited only, for now"). Everyone may browse; everyone
+  signed in may pick (`/api/designs/picks` no longer checks the invited list), see My picks, and
+  use their picks as chips in the composer when they can generate (the Neynar gate decides that
+  at Generate, as for any image). Only invited FIDs (`IMAGES.invited`) may create a style or
+  sheet, fork, add a version, or make samples and views: `/api/designs` and `/api/designs/sample`
+  refuse others with `IMAGE_WORDING.designs.form.notInvited` (draft, model-drafted), and the
+  "+ New style", "+ New … sheet", Fork and New version controls show only to them
+  (`useCanMakeDesigns`, `src/lib/images/can-add.ts`).
+- **The gate.** Generate keeps its order: sign-in, off switch, setup, input, consent, the gate
+  (`mayGenerate`), then `paidPicture` (count and reserve, blocked names, prompt check, model,
+  settle). Samples and views pass the same gate after consent, before `paidPicture`; publishing a
+  design passes it before the name's paid check. Invited FIDs pass without a Neynar lookup, so
+  today no design route asks Neynar; the gate is there for when making opens wider.
+- **Caps.** No all-days cap: `reserve` and `wordsCheckFits` check the daily cap only; the
+  'trial-spend' refusal and its wording are gone.
+- **Hosts named.** The design form names the same hosts as the composer ("…Groq to be checked
+  (through Vercel AI Gateway when Groq is busy) and to fal.ai…").
+- **AI label.** Design pictures declare "AI-generated" and "not by the author" in words; they do
+  not yet use the AI label (`AiLabel`, owner 2026-10-09) that images use. P2b checks the words.
+- **Privacy.** What the designs store and send that the Privacy Policy does not cover is listed in
+  `docs/legal/privacy-designs-gap.md`, for the owner's words. No service is added.
+- **Migrations.** Still none (`git diff 93a308b site-images-designs -- supabase` is empty).

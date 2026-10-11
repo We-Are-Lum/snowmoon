@@ -53,13 +53,13 @@ export async function reserve(sql: Sql, fid: number, spend: Spend = DEFAULT_SPEN
 
 /**
  * A check of words alone (step 4, decision 1: a design's name): no picture, so not counted as a
- * Generate, but its cost is kept in the day's totals and it is refused when the spend caps are reached.
+ * Generate, but its cost is kept in the day's totals and it is refused when the daily spend cap is reached
+ * (the all-days cap is gone, owner 2026-10-09).
  */
 export async function wordsCheckFits(sql: Sql): Promise<boolean> {
   const [today] = await sql`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${sql.unsafe(TODAY)}`;
-  const [all] = await sql`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs`;
   const worst = IMAGES.reserveUsd - IMAGES.pricePerMp;
-  return today.usd + worst <= IMAGES.dailySpendCapUsd && all.usd + worst <= IMAGES.totalSpendCapUsd;
+  return today.usd + worst <= IMAGES.dailySpendCapUsd;
 }
 
 export async function recordGuard(sql: Sql, guard: { costUsd: number; provider: string | null; verdict: 'ok' | 'blocked' }) {

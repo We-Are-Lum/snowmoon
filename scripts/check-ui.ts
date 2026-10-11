@@ -777,6 +777,27 @@ try {
       if (await page.locator('.image-composer .ic-generate').count()) fail(`/chapter/1 (${scheme}): Generate shows below the score`);
       await checkFloors(page, '/chapter/1 (add an image, below the score)', scheme);
       await page.keyboard.press('Escape');
+      // Step 4, signed in but not invited (owner, 2026-10-10: "Invited only, for now"): picks yes, making no.
+      await page.evaluate(() => {
+        const b64 = (o: object) => btoa(JSON.stringify(o)).replace(/=+$/, '');
+        localStorage.setItem('snowmoon.signin', JSON.stringify({ token: `x.${b64({ sub: 2, exp: 4102444800 })}.y`, fid: 2, username: 'check', exp: 4102444800 }));
+      });
+      await ctx.route('**/api/designs/picks', (r) => r.fulfill({ json: { picks: [] } }));
+      await ctx.route('**/api/consent', (r) => r.fulfill({ json: { wording: { version: 'v', line: 'l', title: 't', text: ['a'], sha256: 'x' }, signedIn: true, agreed: true } }));
+      await open(page, '/images/picks');
+      await page.waitForSelector('.dz-private');
+      await checkFloors(page, '/images/picks (not invited)', scheme);
+      await open(page, '/images/designs');
+      await page.waitForTimeout(200);
+      if (await page.locator('.dz-new').count()) fail(`/images/designs (${scheme}): "New style" shows to a reader who is not invited`);
+      if (!(await page.locator('a[href="/images/picks"]').count())) fail(`/images/designs (${scheme}): no "My picks" link for a signed-in reader`);
+      await open(page, '/images/designs/new?kind=style');
+      await page.waitForSelector('.dz-form .ic-gate');
+      if (!(await page.getByText('Making styles and character sheets is open to invited readers only, for now.', { exact: false }).isVisible())) fail(`/images/designs/new (${scheme}): no invited-only refusal for a reader who is not invited`);
+      if (await page.locator('#dz-text').count()) fail(`/images/designs/new (${scheme}): the form shows to a reader who is not invited`);
+      await checkFloors(page, '/images/designs/new (not invited)', scheme);
+      await ctx.unroute('**/api/designs/picks');
+      await ctx.unroute('**/api/consent');
       await page.evaluate(() => localStorage.removeItem('snowmoon.signin'));
       await ctx.unroute('**/api/images/status**');
       await ctx.unroute('**/api/chat/status');

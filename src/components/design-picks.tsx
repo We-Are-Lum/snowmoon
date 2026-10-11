@@ -41,7 +41,7 @@ export async function changePick(method: 'POST' | 'DELETE', body: { versionId?: 
   return picks;
 }
 
-/** Your picks, or null while loading or when you can't have any (signed out, not invited). */
+/** Your picks, or null while loading or when you can't have any (signed out). */
 export function useMyPicks(): PickView[] | null {
   const canAdd = useCanAddImage();
   const [picks, setPicks] = useState<PickView[] | null>(null);

@@ -3,7 +3,6 @@
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { authFetch, useAuth } from '~/lib/client-auth';
-import { useCanAddImage } from '~/lib/images/can-add';
 import { wordDiff } from '~/lib/images/design-rules';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { changePick, useMyPicks, type PickView } from './design-picks';
@@ -21,7 +20,6 @@ const nameOf = (p: PickView) => (p.kind === 'style' ? p.title || p.entity : `${p
 
 export function MyPicks() {
   const auth = useAuth();
-  const canAdd = useCanAddImage();
   const picks = useMyPicks();
   const [comparing, setComparing] = useState<PickView | null>(null);
   const [note, setNote] = useState<string | null>(null);
@@ -33,7 +31,6 @@ export function MyPicks() {
         <SignInButton />
       </div>
     );
-  if (auth.kind === 'signed-in' && !canAdd) return <p className="ic-gate">{W.picks.notInvited}</p>;
 
   const styles = (picks ?? []).filter((p) => p.kind === 'style');
   const chars = (picks ?? []).filter((p) => p.kind === 'character');

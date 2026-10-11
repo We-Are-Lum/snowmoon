@@ -403,6 +403,18 @@ const READER_IMAGE_FILES = [
   'src/components/image-composer.tsx',
   'src/components/moderate-queue.tsx',
 ];
+/**
+ * Step 4: styles' samples and sheets' views, wherever they are shown (thumbnails too). They declare
+ * AI in words ("AI-generated", "not by the author"), not yet with the AI label (owner to decide).
+ */
+const DESIGN_IMAGE_FILES = [
+  'src/components/design-index.tsx',
+  'src/app/images/designs/[id]/page.tsx',
+  'src/app/images/designs/character/[slug]/page.tsx',
+  'src/components/design-form.tsx',
+  'src/components/my-picks.tsx',
+  'src/components/moderate-queue.tsx',
+];
 add({
   id: 'P2b',
   principle: 2,
@@ -438,10 +450,11 @@ add({
       imageCard: code('src/app/api/image-card/[id]/route.tsx'),
       // Readers' images drawn after load (the chapter strip, the composer, the moderators' queue): each uses the label.
       readers: READER_IMAGE_FILES.map((f) => ({ file: f, text: code(f) })),
+      designs: DESIGN_IMAGE_FILES.map((f) => ({ file: f, text: code(f) })),
       player: code('src/components/chapter-player.tsx'),
     };
   },
-  run: ({ ch1, glossary, sheets, feed, imagePage, wording, sheetSource, card, imageCard, readers, player }) => {
+  run: ({ ch1, glossary, sheets, feed, imagePage, wording, sheetSource, card, imageCard, readers, designs, player }) => {
     const problems: string[] = [];
     // Chapter 1 as served: every seeded image's caption, and the narration credit.
     const figures = [...ch1.matchAll(/<figure class="seed-image"[\s\S]*?<\/figure>/g)].map((m) => m[0]);
@@ -473,6 +486,10 @@ add({
     // Where readers' images and the listen view are drawn after load: the label is used.
     for (const r of readers as { file: string; text: string }[]) {
       if (!/<AiLabel\b[\s\S]*?\bkind="image"[\s\S]*?\btext=\{AI_LABEL\.(image|imageBy)\b/.test(r.text)) problems.push(`${r.file}: a reader's image is shown without the AI label`);
+    }
+    for (const r of designs as { file: string; text: string }[]) {
+      if (!AI_GENERATED.test(r.text)) problems.push(`${r.file}: a style's sample or a sheet's view is shown without "AI-generated"`);
+      if (!NOT_AUTHOR.test(r.text)) problems.push(`${r.file}: a style's sample or a sheet's view is shown without "not by the author"`);
     }
     if (!/<AiLabel\s+kind="voice"/.test(player)) problems.push('src/components/chapter-player.tsx: the player shows the narration without the AI label');
     if (!/<AiLabel\s+kind="image"/.test(player)) problems.push('src/components/chapter-player.tsx: the listen view shows an image without the AI label');
