@@ -378,13 +378,14 @@ images. People write every published word") and the coach's prompt.
 - Glass, Ira. Talks on storytelling, 2009 (recorded video series).
 - McCloud, Scott. *Understanding Comics*. 1993; *Making Comics*. 2006.
 - McKee, Robert. *Story*. 1997.
-- Truby, John. *The Anatomy of Story*. 2007.
-- Weiland, K. M. *Creating Character Arcs*. 2016.
 - Murch, Walter. *In the Blink of an Eye*. 1995 (second edition 2001).
+- Truby, John. *The Anatomy of Story*. 2007.
 - Vonnegut, Kurt. Preface to *Bagombo Snuff Box*. 1999.
+- Weiland, K. M. *Creating Character Arcs*. 2016.
 - Chekhov, Anton. Letter to Alexander Chekhov, 1886 (paraphrased as above).
 
 The coding agent wrote these summaries from memory, sections 8 to 17
-included, and has not checked them against the books. Before approval, please check the wording you want to
-keep against the sources. Nothing here quotes them directly except
+included, and has not checked them against the books. The owner approved
+the guide on that understanding; anyone quoting a source should check its
+wording first. Nothing here quotes them directly except
 Vonnegut's line about a glass of water, which is widely quoted.
