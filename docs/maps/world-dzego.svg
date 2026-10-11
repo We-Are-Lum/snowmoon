@@ -1,0 +1,132 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="900" height="974" viewBox="0 0 900 974" font-family="sans-serif" font-size="11">
+<defs><clipPath id="c"><rect x="30" y="34" width="840" height="880"/></clipPath></defs>
+<rect width="900" height="974" fill="#fff"/>
+<text x="30" y="22" font-size="14" font-weight="bold">Dzego (inset)</text>
+<text x="38" y="52" font-size="12" fill="#333">(draft) The book doesn't say where Dzego lies relative to the United Cities.</text>
+<text x="30" y="952" fill="#555">Solid outlines, dots and upright labels: placed from the book. Dashed, pale, italic: placed by us.</text>
+<text x="30" y="966" fill="#555">Red lines: roads, routes and links; blue: water. AI-made proposal, not by the author.</text>
+<g clip-path="url(#c)">
+<polygon points="-4860.9,-802.3 -4860.9,-1429.6 -4254.7,-1427.0 -4189.3,-1327.3 -4034.3,-1274.8 -3965.4,-1143.5 -3965.4,-881.0 -4309.8,-802.3" fill="#f3efe6" fill-opacity="0.55" stroke="#667" stroke-dasharray="5,3"/>
+<polygon points="-4345.1,-1400.1 -4185.8,-1400.1 -4167.2,-1287.2 -4336.8,-1287.2" fill="#e9e4d4" fill-opacity="1" stroke="#667"/>
+<polygon points="-4161.3,-1571.4 -4206.8,-1532.0 -4211.4,-1507.7 -4224.2,-1468.1 -4225.5,-1454.3 -4251.3,-1425.3 -4254.5,-1417.2 -4249.8,-1414.3 -4242.9,-1420.0 -4232.9,-1418.3 -4157.6,-1506.4 -4084.9,-1548.8 -4071.8,-1553.5 -4026.9,-1556.9 -4013.0,-1545.8 -4029.0,-1524.5 -4064.4,-1522.2 -4078.3,-1514.5 -4080.0,-1508.8 -4071.7,-1503.6 -4042.3,-1493.1 -4034.9,-1493.1 -4023.9,-1496.6 -4023.0,-1490.2 -4028.7,-1476.2 -3997.0,-1457.2 -3993.8,-1571.4 -4160.4,-1572.0" fill="#cfe3f3" fill-opacity="1" stroke="#667"/>
+<polygon points="-3998.8,-1410.2 -4016.9,-1400.3 -4028.0,-1388.7 -4045.8,-1378.3 -4067.2,-1369.0 -4158.1,-1312.7 -4164.1,-1278.0 -4000.2,-1277.4 -3997.9,-1410.8" fill="#cfe3f3" fill-opacity="1" stroke="#667"/>
+<polygon points="-4232.9,-1418.3 -4157.6,-1506.4 -4084.9,-1548.8 -4071.8,-1553.5 -4026.9,-1556.9 -4013.0,-1545.8 -4029.0,-1524.5 -4064.4,-1522.2 -4078.3,-1514.5 -4080.0,-1508.8 -4071.7,-1503.6 -4042.3,-1493.1 -4034.9,-1493.1 -4023.9,-1496.6 -4023.0,-1490.2 -4028.7,-1476.2 -3997.0,-1457.2 -3998.8,-1410.2 -4016.9,-1400.3 -4028.0,-1388.7 -4045.8,-1378.3 -4067.2,-1369.0 -4158.1,-1312.7 -4183.8,-1338.8 -4212.7,-1375.6" fill="#e9e4d4" fill-opacity="1" stroke="#667"/>
+<polygon points="-3997.0,-1457.2 -3902.0,-1451.7 -3840.0,-1439.4 -3903.3,-1422.2 -3998.8,-1410.2" fill="#e9e4d4" fill-opacity="1" stroke="#667"/>
+<polygon points="-4055.3,-1370.9 -4055.4,-1371.7 -4055.6,-1372.5 -4056.1,-1373.3 -4056.7,-1374.0 -4057.4,-1374.5 -4058.2,-1375.0 -4059.2,-1375.4 -4060.2,-1375.6 -4061.2,-1375.6 -4062.2,-1375.6 -4063.2,-1375.4 -4064.1,-1375.0 -4065.0,-1374.5 -4065.7,-1374.0 -4066.3,-1373.3 -4066.7,-1372.5 -4067.0,-1371.7 -4067.1,-1370.9 -4067.0,-1370.1 -4066.7,-1369.3 -4066.3,-1368.6 -4065.7,-1367.9 -4065.0,-1367.3 -4064.1,-1366.8 -4063.2,-1366.5 -4062.2,-1366.3 -4061.2,-1366.2 -4060.2,-1366.3 -4059.2,-1366.5 -4058.2,-1366.8 -4057.4,-1367.3 -4056.7,-1367.9 -4056.1,-1368.6 -4055.6,-1369.3 -4055.4,-1370.1" fill="#e9e4d4" fill-opacity="1" stroke="#667"/>
+<polygon points="-4383.4,-1572.0 -4160.4,-1572.0 -4161.3,-1571.4 -4206.8,-1532.0 -4211.4,-1507.7 -4224.2,-1468.1 -4225.5,-1454.3 -4251.3,-1425.3 -4254.5,-1417.2 -4308.0,-1423.5 -4370.8,-1429.6" fill="#f3efe6" fill-opacity="0.55" stroke="#667" stroke-dasharray="5,3"/>
+<polygon points="-3791.7,-1459.1 -3681.1,-1464.0 -3653.0,-1434.5 -3702.6,-1406.3 -3791.9,-1414.9" fill="#f3efe6" fill-opacity="1" stroke="#667"/>
+<polygon points="-5756.4,-1574.0 -5756.4,-2508.5 443.3,-2508.5 443.3,-1406.0 -1623.3,-1364.0 -2587.7,-1353.5 -3345.4,-1406.0 -3862.1,-1574.0" fill="#f3efe6" fill-opacity="0.55" stroke="#667" stroke-dasharray="5,3"/>
+<polygon points="-3158.1,-634.7 -3233.0,-1106.9 -3152.8,-1295.7 -2812.4,-1262.7 -2550.3,-1342.9 -2368.8,-1338.2 -2171.2,-1319.3 -1983.6,-1201.3 -2020.7,-658.3 -2263.8,-634.7 -2697.1,-611.1" fill="#f3efe6" fill-opacity="0.55" stroke="#667" stroke-dasharray="5,3"/>
+<polygon points="-2425.4,-1338.2 -2351.5,-1314.6 -2339.6,-1220.2 -2344.5,-1139.9 -2392.8,-1125.7 -2405.6,-1220.2 -2395.8,-1276.8" fill="#cfe3f3" fill-opacity="0.55" stroke="#667" stroke-dasharray="5,3"/>
+<polygon points="167.8,746.5 167.8,195.3 650.0,195.3 650.0,746.5" fill="#f3efe6" fill-opacity="0.55" stroke="#667" stroke-dasharray="5,3"/>
+<polyline points="-4447.6,-1038.5 -4395.9,-1222.3 -4371.8,-1316.8" fill="none" stroke="#b33" stroke-width="1.3" stroke-dasharray="5,3" opacity="0.6"/>
+<polyline points="-4254.5,-1417.2 -4308.0,-1423.5 -4370.8,-1429.6" fill="none" stroke="#4a86b8" stroke-width="1.3" stroke-dasharray="5,3" opacity="0.6"/>
+<polyline points="-4312.3,-1352.8 -4233.5,-1388.2 -4241.3,-1420.5" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-4266.5,-1325.5 -4152.3,-1396.5" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-4225.1,-1308.1 -4133.5,-1362.3 -4102.6,-1367.9" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-4009.4,-1355.3 -4027.3,-1401.6" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-3098.5,-837.8 -2894.9,-781.1" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-3098.5,-837.8 -2951.7,-979.4" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-2894.9,-781.1 -2755.6,-729.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-2951.7,-979.4 -3038.7,-1191.8" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-2951.7,-979.4 -2736.9,-1017.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-3038.7,-1191.8 -2810.6,-1111.6" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-3038.7,-1191.8 -2736.9,-1017.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-2810.6,-1111.6 -2447.3,-1314.6" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-2810.6,-1111.6 -2736.9,-1017.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-2447.3,-1314.6 -2312.1,-1248.5" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-2447.3,-1314.6 -2103.6,-1210.7" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-2312.1,-1248.5 -2103.6,-1210.7" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-2312.1,-1248.5 -2468.6,-993.6" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-2103.6,-1210.7 -2468.6,-993.6" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-2103.6,-1210.7 -2157.5,-941.6" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-2736.9,-1017.2 -2755.6,-729.2" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-2736.9,-1017.2 -2468.6,-993.6" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-2755.6,-729.2 -2468.6,-993.6" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-2755.6,-729.2 -2378.2,-875.5" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-2468.6,-993.6 -2378.2,-875.5" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-2378.2,-875.5 -2157.5,-941.6" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-2378.2,-875.5 -2190.5,-861.4" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-2378.2,-875.5 -2217.5,-781.1" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-2157.5,-941.6 -2190.5,-861.4" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-2190.5,-861.4 -2217.5,-781.1" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<polyline points="-2157.5,-941.6 -2217.5,-781.1" fill="none" stroke="#b33" stroke-width="1.8" opacity="0.9"/>
+<circle cx="-4447.6" cy="-1038.5" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="-4354.3" cy="-1320.4" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="-4307.0" cy="-1408.7" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="-4064.3" cy="-1372.4" r="3.5" fill="#222" stroke="#222"/>
+<circle cx="-4065.5" cy="-1372.0" r="3.5" fill="#222" stroke="#222"/>
+<circle cx="-4312.3" cy="-1352.8" r="3.5" fill="#222" stroke="#222"/>
+<circle cx="-4241.3" cy="-1420.5" r="3.5" fill="#222" stroke="#222"/>
+<circle cx="-4266.5" cy="-1325.5" r="3.5" fill="#222" stroke="#222"/>
+<circle cx="-4152.3" cy="-1396.5" r="3.5" fill="#222" stroke="#222"/>
+<circle cx="-4225.1" cy="-1308.1" r="3.5" fill="#222" stroke="#222"/>
+<circle cx="-4102.6" cy="-1367.9" r="3.5" fill="#222" stroke="#222"/>
+<circle cx="-4009.4" cy="-1355.3" r="3.5" fill="#222" stroke="#222"/>
+<circle cx="-4027.3" cy="-1401.6" r="3.5" fill="#222" stroke="#222"/>
+<circle cx="-3780.8" cy="-1437.0" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="-2828.8" cy="-2298.5" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="-2366.4" cy="-1163.5" r="3.5" fill="#222" stroke="#222"/>
+<circle cx="-2312.1" cy="-1248.5" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="-2447.3" cy="-1314.6" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="-2103.6" cy="-1210.7" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="-2468.6" cy="-993.6" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="-2810.6" cy="-1111.6" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="-3038.7" cy="-1191.8" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="-2736.9" cy="-1017.2" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="-2951.7" cy="-979.4" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="-3098.5" cy="-837.8" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="-2894.9" cy="-781.1" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="-2755.6" cy="-729.2" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="-2378.2" cy="-875.5" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="-2157.5" cy="-941.6" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="-2190.5" cy="-861.4" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="-2217.5" cy="-781.1" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="-2627.4" cy="-257.0" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="-2266.7" cy="-304.3" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="443.3" cy="536.5" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="357.2" cy="405.3" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<text x="-4464.4" y="-1103.7" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Veridia</text>
+<text x="-4252.2" y="-1346.8" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">Elenar Forest</text>
+<text x="-4109.5" y="-1523.2" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">northern sea and inlet</text>
+<text x="-4061.0" y="-1327.7" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">southern sea</text>
+<text x="-4108.0" y="-1437.4" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">Northshore</text>
+<text x="-3934.0" y="-1439.7" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">the eastern peninsula</text>
+<text x="-4285.8" y="-1507.6" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Arctic core (west of the inlet)</text>
+<text x="-3723.0" y="-1440.4" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">Thaldur</text>
+<text x="-2870.1" y="-1941.1" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Arctic Empire</text>
+<text x="-2625.6" y="-965.1" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">United Cities</text>
+<text x="409.8" y="468.5" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Dzego</text>
+<text x="-4303.0" y="-1427.5" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">border river</text>
+<text x="-4228.5" y="-1392.2" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">Group North</text>
+<text x="-4147.3" y="-1400.5" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">Group Center</text>
+<text x="-4128.5" y="-1366.3" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">Group South</text>
+<text x="-4022.3" y="-1405.6" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">Group Naval</text>
+<text x="-4442.6" y="-1042.5" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Meldan</text>
+<text x="-4349.3" y="-1324.4" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Eldil</text>
+<text x="-4302.0" y="-1412.7" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Hydrafill's northern ice</text>
+<text x="-4059.3" y="-1376.4" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">Northglade</text>
+<text x="-3775.8" y="-1441.0" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Telten</text>
+<text x="-2823.8" y="-2302.5" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Glasscrown</text>
+<text x="-2361.4" y="-1167.5" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">Redshire's south islands</text>
+<text x="-2307.1" y="-1252.5" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Redshire</text>
+<text x="-2442.3" y="-1318.6" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Arturia</text>
+<text x="-2098.6" y="-1214.7" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Petersvil</text>
+<text x="-2463.6" y="-997.6" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Devanvil</text>
+<text x="-2805.6" y="-1115.6" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Imber</text>
+<text x="-3033.7" y="-1195.8" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Hapton</text>
+<text x="-2731.9" y="-1021.2" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Deplexi</text>
+<text x="-2946.7" y="-983.4" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Inglewore</text>
+<text x="-3093.5" y="-841.8" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Silverbeach</text>
+<text x="-2889.9" y="-785.1" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Mabuli</text>
+<text x="-2750.6" y="-733.2" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Freetown</text>
+<text x="-2373.2" y="-879.5" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Ondak</text>
+<text x="-2152.5" y="-945.6" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Iptak</text>
+<text x="-2185.5" y="-865.4" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Mantak</text>
+<text x="-2212.5" y="-785.1" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Belpaki</text>
+<text x="-2622.4" y="-261.0" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Messalia</text>
+<text x="-2261.7" y="-308.3" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Haragmir</text>
+<text x="448.3" y="532.5" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Pafogai Du</text>
+<text x="362.2" y="401.3" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Sadzu Du</text>
+</g>
+</svg>
