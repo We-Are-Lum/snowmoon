@@ -239,3 +239,11 @@ The composer starts with the project's starting style (Techno vistas) chosen, so
 Pushed together with site-style-default above (one push). Browsing images shows the passage each is of; an image's prompt, model and settings fold into "How this was made". "Make an image" (/images/new): choose a passage by chapter or by searching the book (searched on the reader's device over GET /api/book/text; no query reaches the server), then the prompt; links from an image's page, the feed and the assistant's quote cards (invited readers during the trial). Home's "Just made" waits at most 2 s for the database. To undo both (back to `82534c6`):
 
     vercel rollback https://snowmoon-7jxqj1r2c-nates-projects-d1780cff.vercel.app --scope nates-projects-d1780cff
+
+## 2026-10-10: image making for everyone (Neynar score ≥ 0.7), Terms and Privacy, report alerts (branch site-images-everyone)
+
+Anyone signed in with a Neynar user score of at least 0.7 can make images (invited FIDs skip the score); the $1 all-days cap is gone ($2 a day, 10 images and 3 published per person stay); report alerts go to ntfy ("Snowmoon: N reports waiting", at most hourly). /terms and /privacy, reread by the owner on 2026-10-10 and effective that day, with the footer line on About, the menu and the rail; Neynar named on About and the consent screen (own-words-v3, asked again once). Uses 0010 (applied by the owner on production). To undo (back to `e984430`):
+
+    vercel rollback https://snowmoon-hxqv70exz-nates-projects-d1780cff.vercel.app --scope nates-projects-d1780cff
+
+Rolling back the code leaves 0010's tables in place; they are private and unused without it.
