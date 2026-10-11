@@ -9,6 +9,7 @@ import { IMAGE_WORDING as W } from '~/lib/images/wording';
 import { byline } from '~/lib/images/byline';
 import { PAPER } from '~/lib/tokens';
 import { ImageActions } from '~/components/image-actions';
+import { MakeImageLink } from '~/components/make-image-link';
 import { AiLabel } from '~/components/recipe-sheet';
 import { AI_LABEL, readerImageView } from '~/lib/ai-declared';
 
@@ -92,6 +93,10 @@ export default async function ImagePage({ params }: Props) {
             ))}
           </blockquote>
         )}
+        {/* Another image of the same passage (owner, 2026-10-10); shown where "Add an image" shows. Model-drafted wording. */}
+        <MakeImageLink className="mi-from ip-make" passage={{ chapter: im.chapter, start: im.start, end: im.end }}>
+          {W.create.ofThis} →
+        </MakeImageLink>
       </div>
 
       <div className="ip-side">

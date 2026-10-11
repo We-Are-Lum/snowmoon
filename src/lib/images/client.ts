@@ -72,3 +72,6 @@ export async function deleteDraft(key: string): Promise<void> {
     tx.oncomplete = tx.onerror = () => resolve();
   });
 }
+
+/** "Make an image" for a passage (/images/new): only the block range goes in the link. */
+export const createHref = (d?: AddImageDetail) => (d ? `/images/new?chapter=${d.chapter}&start=${d.start}&end=${d.end}` : '/images/new');

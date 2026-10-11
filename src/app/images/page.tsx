@@ -3,6 +3,7 @@ import { db } from '~/lib/db';
 import { feed } from '~/lib/images/data';
 import { passageLabel, passageText } from '~/lib/images/passage';
 import { ImageFeed } from '~/components/image-feed';
+import { MakeImageLink } from '~/components/make-image-link';
 import { byline } from '~/lib/images/byline';
 import { IMAGE_WORDING as W } from '~/lib/images/wording';
 
@@ -26,6 +27,8 @@ export default async function Pictures({ searchParams }: { searchParams: Promise
         Images readers made for passages of the book, with an image model, each shown with the passage it is of. Each one is
         AI-generated, not by the author; its page shows the exact prompt that made it.
       </p>
+      {/* Choose the text, then the prompt (owner, 2026-10-10); shown where "Add an image" shows. Model-drafted wording. */}
+      <MakeImageLink className="ic-primary mi-entry">{W.create.entry}</MakeImageLink>
       <ImageFeed
         sort={sort}
         empty={<p className="pictures-empty">Nothing is published here yet.</p>}
@@ -40,6 +43,8 @@ export default async function Pictures({ searchParams }: { searchParams: Promise
           alt: `AI-generated image: ${im.userPrompt.split(/(?<=[.!?])\s/)[0]}`,
           prompt: im.userPrompt,
           passage: passageText(im.chapter, im.start, im.end),
+          start: im.start,
+          end: im.end,
         }))}
       />
       <p className="as-draft ic-draftline">{W.draftLine}</p>

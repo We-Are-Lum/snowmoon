@@ -366,3 +366,53 @@ a.ia-button:hover { text-decoration: none; }
 .pictures-passage blockquote { margin: 10px 0 0; padding: 0 0 0 12px; border-left: 2px solid var(--rule); font-family: var(--reading); font-size: 18px; line-height: 1.45; display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 5; line-clamp: 5; overflow: hidden; }
 .pictures-passage blockquote p { margin: 0; display: inline; }
 .pictures-passage blockquote p + p::before { content: ' '; }
+
+/* ---------- Make an image (/images/new): choose the text, then the prompt ---------- */
+.make-image .mi-switch { margin: 0 0 4px; }
+.make-image .mi-h { display: block; margin: 18px 0 8px; font-family: var(--label); font-size: var(--text-label); font-weight: 400; line-height: 16px; text-transform: uppercase; color: var(--muted); }
+.make-image h2.mi-h { color: var(--ink); }
+.mi-dateline { color: var(--accent); }
+.mi-ahead { font-family: var(--label); font-size: var(--text-label); line-height: 16px; text-transform: uppercase; color: var(--muted); }
+.mi-chapters .mi-ahead { flex-basis: 100%; }
+.make-image .mi-ahead-line { margin: -4px 0 8px; }
+.make-image .mi-back, .make-image .mi-tap, .make-image .mi-note { margin: 6px 0; font-family: var(--label); font-size: var(--text-label); line-height: 1.5; color: var(--muted); }
+.make-image .mi-tap { color: var(--ink); }
+.chapter.mi-text { margin-top: 10px; }
+.chapter.mi-text .block.mi-pick {
+  min-height: 44px; margin: 0 0 8px; padding: 6px 10px 8px 12px; border-left: 2px solid transparent; border-radius: var(--radius); cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+.chapter.mi-text .block.mi-pick::before { content: '¶ ' attr(data-label); display: block; font-family: var(--label); font-size: var(--text-label); font-style: normal; line-height: 16px; color: var(--muted); }
+.chapter.mi-text .block.mi-pick.is-in { background: var(--card); border-left-color: var(--link); }
+.chapter.mi-text .block.mi-pick:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.chapter.mi-text .block.mi-other { margin: 0 0 8px; padding: 8px 12px; border: 1px dashed var(--rule); border-radius: var(--radius); font-family: var(--label); font-size: var(--text-label); line-height: 1.5; color: var(--muted); }
+.chapter.mi-text .block.mi-other.is-in { border-left: 2px solid var(--link); }
+.make-image .chapter-nav { margin-top: 24px; }
+/* The passage chosen: a bar that stays at the foot of the screen while the chapter is in view. */
+.mi-bar {
+  position: sticky; bottom: 0; z-index: 5; display: flex; flex-direction: column; gap: 8px; margin-top: 16px;
+  padding: 10px 0 calc(10px + env(safe-area-inset-bottom)); border-top: 1px solid var(--rule); background: var(--paper);
+}
+.make-image .mi-count { margin: 0; font-family: var(--label); font-size: var(--text-label); line-height: 16px; text-transform: uppercase; color: var(--ink); }
+.make-image .mi-cap { margin: 0; font-size: 16px; line-height: 1.4; font-style: italic; color: var(--ink); }
+.mi-actions { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 2fr); gap: 8px; }
+/* Search */
+.mi-search input {
+  box-sizing: border-box; width: 100%; min-height: 48px; padding: 8px 12px; border: 1px solid var(--rule); border-radius: var(--radius);
+  background: var(--card); color: var(--ink); font-family: var(--reading); font-size: 18px; line-height: 1.3;
+}
+.mi-search input:focus-visible { outline: 2px solid var(--ink); outline-offset: 1px; }
+.mi-hits { list-style: none; margin: 8px 0 0; padding: 0; }
+.make-image .mi-hits li { margin: 0; border-top: 1px solid var(--rule); }
+.make-image .mi-hits li:last-child { border-bottom: 1px solid var(--rule); }
+.mi-hit { display: flex; flex-direction: column; gap: 4px; padding: 10px 2px; color: var(--ink); text-decoration: none; }
+.mi-hit:hover { text-decoration: none; }
+.mi-hit-where { font-family: var(--label); font-size: var(--text-label); line-height: 16px; text-transform: uppercase; color: var(--muted); }
+.mi-hit-text { font-family: var(--reading); font-size: 17px; line-height: 1.45; }
+.mi-hit mark { padding: 0 1px; border-radius: 2px; background: color-mix(in srgb, var(--link) 24%, transparent); color: inherit; }
+/* Entry points: the Pictures page's button, the image page's and the feed's links. */
+.mi-entry { display: inline-flex; align-items: center; justify-content: center; width: auto; margin: 0 0 16px; padding: 6px 18px; text-decoration: none; }
+.mi-entry:hover { text-decoration: none; }
+.mi-from { display: inline-block; margin: 8px 0 0; font-family: var(--label); font-size: var(--text-label); line-height: 16px; color: var(--link); }
+.ip-make { display: block; width: fit-content; margin-top: 12px; }
+.as-quote .as-make { display: block; width: fit-content; margin: 0 0 6px; padding: 4px 0; text-transform: uppercase; letter-spacing: 0.04em; }

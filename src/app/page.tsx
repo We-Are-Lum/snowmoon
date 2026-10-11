@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { HomeMakeImageRow } from '~/components/make-image-link';
 import { chapterDateline, chapterNumbers, loadChapter } from '~/lib/book';
 import { blockFacts } from '~/lib/reading';
 import { db } from '~/lib/db';
@@ -112,7 +113,10 @@ export default async function Home() {
               <p className="home-do-group">Book</p>
               <ul className="home-do-list home-do-sub">{book.map(row)}</ul>
             </div>
-            <ul className="home-do-list">{more.map(row)}</ul>
+            <ul className="home-do-list">
+              {more.map(row)}
+              <HomeMakeImageRow />
+            </ul>
           </div>
         </section>
 

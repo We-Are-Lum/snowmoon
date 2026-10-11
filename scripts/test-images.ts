@@ -195,8 +195,43 @@ await server.stop();
   check('a draft has no full recipe yet', readerImageView({ versionId: null, by: '@x', chapter: 1 }).full === null);
 }
 
+// --- Searching the book's text, for "Make an image" (GET /api/book/search) ------------------
+{
+  const { GET } = await import('../src/app/api/book/search/route');
+  const ask = async (q: string) => {
+    const res = GET(new Request(`http://x/api/book/search?q=${encodeURIComponent(q)}`));
+    return { status: res.status, body: (await res.json()) as { hits: { chapter: number; idx: number; label: number | null; before: string; match: string; after: string }[]; more?: boolean; error?: string } };
+  };
+  const k = await ask('Kalimar');
+  check('search: "Kalimar" answers 200', k.status === 200, String(k.status));
+  check('search: "Kalimar" has a chapter 1 hit', k.body.hits.some((h) => h.chapter === 1), JSON.stringify(k.body.hits.slice(0, 2)));
+  check('search: each hit marks the match', k.body.hits.length > 0 && k.body.hits.every((h) => h.match.toLowerCase() === 'kalimar'));
+  check('search: hits are in reading order', k.body.hits.every((h, i, a) => i === 0 || a[i - 1].chapter < h.chapter || (a[i - 1].chapter === h.chapter && a[i - 1].idx < h.idx)));
+  check('search: excerpts are short', k.body.hits.every((h) => (h.before + h.match + h.after).length <= 220));
+  const low = await ask('kALIMAR');
+  check('search: case-insensitive', JSON.stringify(low.body.hits) === JSON.stringify(k.body.hits));
+  const gladias = await ask('Gladias');
+  check('search: at most 20 hits, and says there are more', gladias.body.hits.length === 20 && gladias.body.more === true, `${gladias.body.hits.length} ${gladias.body.more}`);
+  check('search: a hit points at a paragraph or quote', (() => {
+    const h = gladias.body.hits[0];
+    const ch = JSON.parse(readFileSync(path.join(ROOT, `content/snowmoon/text/chapter-${h.chapter}.json`), 'utf8')) as { blocks: { idx: number; kind: string; content: string }[] };
+    const b = ch.blocks.find((x) => x.idx === h.idx);
+    return !!b && (b.kind === 'paragraph' || b.kind === 'quote') && b.content.includes('Gladias');
+  })());
+  check('search: markup is not searched or shown', (await ask('data-hue')).body.hits.length === 0);
+  for (const q of ['', 'ab', '  a  ', 'x'.repeat(81)]) {
+    const r = await ask(q);
+    check(`search: ${JSON.stringify(q.slice(0, 12))} is refused with a reason`, r.status === 400 && !!r.body.error && r.body.hits.length === 0, `${r.status} ${r.body.error}`);
+  }
+  check('search: no paragraph has a made-up word', (await ask('zzqxv')).body.hits.length === 0);
+  {
+    const straight = (await ask("didn't")).body.hits, curly = (await ask('didn’t')).body.hits;
+    check('search: curly and straight apostrophes find the same paragraphs', straight.length > 0 && JSON.stringify(straight) === JSON.stringify(curly), `${straight.length} / ${curly.length}`);
+  }
+}
+
 if (failures.length) {
   console.error(`\nIMAGE TESTS FAILED (${failures.length}, ${passed} passed):\n- ` + failures.join('\n- '));
   process.exit(1);
 }
-console.log(`image tests passed: ${passed} checks (signed drafts, rules, caps, costs without a person, privacy)`);
+console.log(`image tests passed: ${passed} checks (signed drafts, rules, caps, costs without a person, privacy, searching the book)`);
