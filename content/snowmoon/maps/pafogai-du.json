@@ -1,0 +1,1623 @@
+{
+  "map": "pafogai-du",
+  "title": "Pafogai Du: a proposed layout",
+  "label": "AI-made: a proposed layout by an AI model, Claude (the coding agent, a closed model), from the world guide's geography lines; every placement is marked \"book\" or \"placed by us\". Not by the author.",
+  "license": "A map proposal for Snowmoon by Vitalik Buterin, made from the book on 2026-10-11. GPL-3.0, like the book.",
+  "units": "km; x east, y north; origin the corner of 0th street and Dzai Gun (the city's south-west corner). Elevations in meters, on path points and on the door and summit. \"book\": the book fixes where it is relative to what is already placed; \"placed by us\": it does not.",
+  "coords": "km",
+  "views": [
+    {
+      "suffix": "",
+      "title": "Pafogai Du: a proposed layout",
+      "bounds": [
+        -0.2,
+        -2.6,
+        3.4,
+        3.3
+      ]
+    }
+  ],
+  "places": [
+    {
+      "id": "city",
+      "name": "Pafogai Du",
+      "shape": "polygon",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          3.2,
+          0
+        ],
+        [
+          3.2,
+          3.2
+        ],
+        [
+          0,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330",
+        "wg-333",
+        "wg-334",
+        "wg-338"
+      ],
+      "note": "[district] Seventeen streets 200 m apart north to south and thirty-three 100 m apart east to west (c4-b53): 3.2 km square, ringed by a tree-covered path (c18-b81)."
+    },
+    {
+      "id": "dzai_gun",
+      "name": "Dzai Gun",
+      "shape": "polyline",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          3.2,
+          0
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330",
+        "wg-336",
+        "wg-338"
+      ],
+      "note": "The last street before the city ends in the south (c4-b50).",
+      "hide_label": false
+    },
+    {
+      "id": "zin_go",
+      "name": "Zin Go",
+      "shape": "polyline",
+      "points": [
+        [
+          0,
+          0.2
+        ],
+        [
+          3.2,
+          0.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330",
+        "wg-336",
+        "wg-338"
+      ],
+      "note": "Crossed before Dzai Gun, walking south on 17th (c18-b76).",
+      "hide_label": false
+    },
+    {
+      "id": "tan_kai",
+      "name": "Tan Kai",
+      "shape": "polyline",
+      "points": [
+        [
+          0,
+          0.4
+        ],
+        [
+          3.2,
+          0.4
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330",
+        "wg-336",
+        "wg-338"
+      ],
+      "note": "Two streets north of Dzai Gun (c18-b82).",
+      "hide_label": false
+    },
+    {
+      "id": "ew_3",
+      "name": "named street 4 from the south",
+      "shape": "polyline",
+      "points": [
+        [
+          0,
+          0.6
+        ],
+        [
+          3.2,
+          0.6
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "ew_4",
+      "name": "named street 5 from the south",
+      "shape": "polyline",
+      "points": [
+        [
+          0,
+          0.8
+        ],
+        [
+          3.2,
+          0.8
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "ew_5",
+      "name": "named street 6 from the south",
+      "shape": "polyline",
+      "points": [
+        [
+          0,
+          1
+        ],
+        [
+          3.2,
+          1
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "ew_6",
+      "name": "named street 7 from the south",
+      "shape": "polyline",
+      "points": [
+        [
+          0,
+          1.2
+        ],
+        [
+          3.2,
+          1.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "ew_7",
+      "name": "named street 8 from the south",
+      "shape": "polyline",
+      "points": [
+        [
+          0,
+          1.4
+        ],
+        [
+          3.2,
+          1.4
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "hun_min",
+      "name": "Hun Min",
+      "shape": "polyline",
+      "points": [
+        [
+          0,
+          1.6
+        ],
+        [
+          3.2,
+          1.6
+        ]
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-330",
+        "wg-332"
+      ],
+      "note": "Which row is ours; the book gives only its distance to Mun Gui.",
+      "hide_label": false
+    },
+    {
+      "id": "ew_9",
+      "name": "named street 10 from the south",
+      "shape": "polyline",
+      "points": [
+        [
+          0,
+          1.8
+        ],
+        [
+          3.2,
+          1.8
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "ew_10",
+      "name": "named street 11 from the south",
+      "shape": "polyline",
+      "points": [
+        [
+          0,
+          2
+        ],
+        [
+          3.2,
+          2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "ew_11",
+      "name": "named street 12 from the south",
+      "shape": "polyline",
+      "points": [
+        [
+          0,
+          2.2
+        ],
+        [
+          3.2,
+          2.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "mun_gui",
+      "name": "Mun Gui",
+      "shape": "polyline",
+      "points": [
+        [
+          0,
+          2.4
+        ],
+        [
+          3.2,
+          2.4
+        ]
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-330",
+        "wg-332"
+      ],
+      "note": "Four named streets (800 m) north of Hun Min: Fin and Zei, walking toward higher numbers, turn left on 20th to reach it (c2-b29 to c2-b31). Its row follows from Hun Min's, which is ours.",
+      "hide_label": false
+    },
+    {
+      "id": "ew_13",
+      "name": "named street 14 from the south",
+      "shape": "polyline",
+      "points": [
+        [
+          0,
+          2.6
+        ],
+        [
+          3.2,
+          2.6
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "ew_14",
+      "name": "named street 15 from the south",
+      "shape": "polyline",
+      "points": [
+        [
+          0,
+          2.8
+        ],
+        [
+          3.2,
+          2.8
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "ew_15",
+      "name": "named street 16 from the south",
+      "shape": "polyline",
+      "points": [
+        [
+          0,
+          3
+        ],
+        [
+          3.2,
+          3
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "ew_16",
+      "name": "named street 17 from the south",
+      "shape": "polyline",
+      "points": [
+        [
+          0,
+          3.2
+        ],
+        [
+          3.2,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_0",
+      "name": "0th street",
+      "shape": "polyline",
+      "points": [
+        [
+          0,
+          0
+        ],
+        [
+          0,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330",
+        "wg-333"
+      ],
+      "note": "The west edge (c18-b81).",
+      "hide_label": false
+    },
+    {
+      "id": "st_1",
+      "name": "1th street",
+      "shape": "polyline",
+      "points": [
+        [
+          0.1,
+          0
+        ],
+        [
+          0.1,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_2",
+      "name": "2th street",
+      "shape": "polyline",
+      "points": [
+        [
+          0.2,
+          0
+        ],
+        [
+          0.2,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_3",
+      "name": "3th street",
+      "shape": "polyline",
+      "points": [
+        [
+          0.3,
+          0
+        ],
+        [
+          0.3,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_4",
+      "name": "4th street",
+      "shape": "polyline",
+      "points": [
+        [
+          0.4,
+          0
+        ],
+        [
+          0.4,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_5",
+      "name": "5th street",
+      "shape": "polyline",
+      "points": [
+        [
+          0.5,
+          0
+        ],
+        [
+          0.5,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_6",
+      "name": "6th street",
+      "shape": "polyline",
+      "points": [
+        [
+          0.6,
+          0
+        ],
+        [
+          0.6,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_7",
+      "name": "7th street",
+      "shape": "polyline",
+      "points": [
+        [
+          0.7,
+          0
+        ],
+        [
+          0.7,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_8",
+      "name": "8th street",
+      "shape": "polyline",
+      "points": [
+        [
+          0.8,
+          0
+        ],
+        [
+          0.8,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_9",
+      "name": "9th street",
+      "shape": "polyline",
+      "points": [
+        [
+          0.9,
+          0
+        ],
+        [
+          0.9,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_10",
+      "name": "10th street",
+      "shape": "polyline",
+      "points": [
+        [
+          1,
+          0
+        ],
+        [
+          1,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_11",
+      "name": "11th street",
+      "shape": "polyline",
+      "points": [
+        [
+          1.1,
+          0
+        ],
+        [
+          1.1,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_12",
+      "name": "12th street",
+      "shape": "polyline",
+      "points": [
+        [
+          1.2,
+          0
+        ],
+        [
+          1.2,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_13",
+      "name": "13th street",
+      "shape": "polyline",
+      "points": [
+        [
+          1.3,
+          0
+        ],
+        [
+          1.3,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_14",
+      "name": "14th street",
+      "shape": "polyline",
+      "points": [
+        [
+          1.4,
+          0
+        ],
+        [
+          1.4,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_15",
+      "name": "15th street",
+      "shape": "polyline",
+      "points": [
+        [
+          1.5,
+          0
+        ],
+        [
+          1.5,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_16",
+      "name": "16th street",
+      "shape": "polyline",
+      "points": [
+        [
+          1.6,
+          0
+        ],
+        [
+          1.6,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_17",
+      "name": "17th street",
+      "shape": "polyline",
+      "points": [
+        [
+          1.7,
+          0
+        ],
+        [
+          1.7,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330",
+        "wg-336",
+        "wg-337"
+      ],
+      "hide_label": false
+    },
+    {
+      "id": "st_18",
+      "name": "18th street",
+      "shape": "polyline",
+      "points": [
+        [
+          1.8,
+          0
+        ],
+        [
+          1.8,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_19",
+      "name": "19th street",
+      "shape": "polyline",
+      "points": [
+        [
+          1.9,
+          0
+        ],
+        [
+          1.9,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_20",
+      "name": "20th street",
+      "shape": "polyline",
+      "points": [
+        [
+          2,
+          0
+        ],
+        [
+          2,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330",
+        "wg-331",
+        "wg-332"
+      ],
+      "hide_label": false
+    },
+    {
+      "id": "st_21",
+      "name": "21th street",
+      "shape": "polyline",
+      "points": [
+        [
+          2.1,
+          0
+        ],
+        [
+          2.1,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_22",
+      "name": "22th street",
+      "shape": "polyline",
+      "points": [
+        [
+          2.2,
+          0
+        ],
+        [
+          2.2,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_23",
+      "name": "23th street",
+      "shape": "polyline",
+      "points": [
+        [
+          2.3,
+          0
+        ],
+        [
+          2.3,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_24",
+      "name": "24th street",
+      "shape": "polyline",
+      "points": [
+        [
+          2.4,
+          0
+        ],
+        [
+          2.4,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_25",
+      "name": "25th street",
+      "shape": "polyline",
+      "points": [
+        [
+          2.5,
+          0
+        ],
+        [
+          2.5,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_26",
+      "name": "26th street",
+      "shape": "polyline",
+      "points": [
+        [
+          2.6,
+          0
+        ],
+        [
+          2.6,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_27",
+      "name": "27th street",
+      "shape": "polyline",
+      "points": [
+        [
+          2.7,
+          0
+        ],
+        [
+          2.7,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_28",
+      "name": "28th street",
+      "shape": "polyline",
+      "points": [
+        [
+          2.8,
+          0
+        ],
+        [
+          2.8,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_29",
+      "name": "29th street",
+      "shape": "polyline",
+      "points": [
+        [
+          2.9,
+          0
+        ],
+        [
+          2.9,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_30",
+      "name": "30th street",
+      "shape": "polyline",
+      "points": [
+        [
+          3,
+          0
+        ],
+        [
+          3,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_31",
+      "name": "31th street",
+      "shape": "polyline",
+      "points": [
+        [
+          3.1,
+          0
+        ],
+        [
+          3.1,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "st_32",
+      "name": "32th street",
+      "shape": "polyline",
+      "points": [
+        [
+          3.2,
+          0
+        ],
+        [
+          3.2,
+          3.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-330"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "corner_17_dzai_gun",
+      "name": "path to the pyramid begins",
+      "shape": "point",
+      "at": [
+        1.7,
+        0
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-334",
+        "wg-336"
+      ],
+      "note": "Gladias crosses Dzai Gun on 17th street and starts up the incline (c18-b77).",
+      "hide_label": true
+    },
+    {
+      "id": "corner_17_tan_kai",
+      "name": "17th & Tan Kai",
+      "shape": "point",
+      "at": [
+        1.7,
+        0.4
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-337"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "hotel",
+      "name": "hotel, 1565 Tan Kai",
+      "shape": "point",
+      "at": [
+        1.565,
+        0.4
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-337",
+        "wg-331"
+      ],
+      "note": "House numbers are meters, counted from 0th street: 20th street is number 2000 (c2-b30, c2-b31). So 1565 is 1.565 km east of the west edge."
+    },
+    {
+      "id": "hun_min_1990",
+      "name": "1990 Hun Min",
+      "shape": "point",
+      "at": [
+        1.99,
+        1.6
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-332"
+      ],
+      "note": "East–west position from the number (book); row ours.",
+      "hide_label": true
+    },
+    {
+      "id": "corner_20_hun_min",
+      "name": "20th & Hun Min (number 2000)",
+      "shape": "point",
+      "at": [
+        2,
+        1.6
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-331"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "lesson",
+      "name": "the lesson, 1842 Mun Gui",
+      "shape": "point",
+      "at": [
+        1.842,
+        2.4
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-332"
+      ],
+      "note": "East–west position from the number (book); row follows Hun Min's, which is ours."
+    },
+    {
+      "id": "walk_fin_zei",
+      "name": "Fin and Zei's walk",
+      "shape": "polyline",
+      "points": [
+        [
+          1.99,
+          1.6
+        ],
+        [
+          2,
+          1.6
+        ],
+        [
+          2,
+          2.4
+        ],
+        [
+          1.842,
+          2.4
+        ]
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-332"
+      ],
+      "note": "Left on 20th, left on Mun Gui (c2-b30): 958 m from number 2000 (c2-b31).",
+      "hide_label": true
+    },
+    {
+      "id": "gladias_walk",
+      "name": "Gladias's walk",
+      "shape": "polyline",
+      "points": [
+        [
+          1.565,
+          0.4
+        ],
+        [
+          1.7,
+          0.4
+        ],
+        [
+          1.7,
+          0
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-336",
+        "wg-337"
+      ],
+      "note": "Right out of the hotel, right on 17th, across Zin Go and Dzai Gun (c18-b56 to c18-b77).",
+      "hide_label": true
+    },
+    {
+      "id": "st17_block",
+      "name": "17th street, Tan Kai to Zin Go",
+      "shape": "polyline",
+      "points": [
+        [
+          1.7,
+          0.4
+        ],
+        [
+          1.7,
+          0.2
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-339"
+      ],
+      "hide_label": true
+    },
+    {
+      "id": "pyramid",
+      "name": "mountain pyramid",
+      "shape": "polygon",
+      "points": [
+        [
+          1.325,
+          -1.35
+        ],
+        [
+          2.075,
+          -1.35
+        ],
+        [
+          2.075,
+          -0.6
+        ],
+        [
+          1.325,
+          -0.6
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-335",
+        "wg-342",
+        "wg-345"
+      ],
+      "note": "[land] South of the city, half a kilometer tall, with a square base (c4-b48). The base, 0.75 km on a side and 0.6 km south of Dzai Gun, is ours: it makes the walk around it halfway up about twenty minutes (c24-b21)."
+    },
+    {
+      "id": "half_ring",
+      "name": "trees around the pyramid at half height",
+      "shape": "polygon",
+      "points": [
+        [
+          1.487,
+          -1.188
+        ],
+        [
+          1.913,
+          -1.188
+        ],
+        [
+          1.913,
+          -0.762
+        ],
+        [
+          1.487,
+          -0.762
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-342",
+        "wg-344"
+      ],
+      "note": "[land] At exactly half its height (c4-b48). Its size follows from our base.",
+      "hide_label": true
+    },
+    {
+      "id": "pyramid_top",
+      "name": "summit (500 m)",
+      "shape": "point",
+      "at": [
+        1.7,
+        -0.975
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-335"
+      ],
+      "note": "Half a kilometer tall (c4-b48).",
+      "elevation": 500
+    },
+    {
+      "id": "main_door",
+      "name": "main door (half height)",
+      "shape": "point",
+      "at": [
+        1.7,
+        -0.762
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-342"
+      ],
+      "note": "At the row of trees halfway up (c4-b48, c4-b58).",
+      "elevation": 250
+    },
+    {
+      "id": "pyramid_path",
+      "name": "path up the pyramid",
+      "shape": "polyline",
+      "points": [
+        [
+          1.7,
+          0,
+          0
+        ],
+        [
+          1.7,
+          -0.6,
+          60
+        ],
+        [
+          1.7,
+          -0.762,
+          250
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-334",
+        "wg-341",
+        "wg-342",
+        "wg-343"
+      ],
+      "note": "Straight from Dzai Gun to the main door (c4-b50). The first stretch rises at about ten percent (c4-b52); we make the last stretch, up the pyramid's face, a steep stair. Where it steepens is ours."
+    },
+    {
+      "id": "forest",
+      "name": "nearby forest",
+      "shape": "polygon",
+      "points": [
+        [
+          0.2,
+          -2.4
+        ],
+        [
+          1.2,
+          -2.4
+        ],
+        [
+          1.2,
+          -1.3
+        ],
+        [
+          0.2,
+          -1.3
+        ]
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-344"
+      ],
+      "note": "[land] Gladias sometimes walks down into \"the nearby forest\" (c24-b21); which side is ours."
+    }
+  ],
+  "tests": [
+    {
+      "line": "wg-330",
+      "test": "grid",
+      "a": "city",
+      "ew_streets": [
+        17,
+        0.2
+      ],
+      "ns_streets": [
+        33,
+        0.1
+      ]
+    },
+    {
+      "line": "wg-331",
+      "test": "x_equals",
+      "a": "corner_20_hun_min",
+      "x": 2,
+      "note": "20th street is number 2000"
+    },
+    {
+      "line": "wg-331",
+      "test": "x_equals",
+      "a": "hotel",
+      "x": 1.565
+    },
+    {
+      "line": "wg-332",
+      "test": "x_equals",
+      "a": "lesson",
+      "x": 1.842
+    },
+    {
+      "line": "wg-332",
+      "test": "x_equals",
+      "a": "hun_min_1990",
+      "x": 1.99
+    },
+    {
+      "line": "wg-332",
+      "test": "dy",
+      "a": "hun_min",
+      "b": "mun_gui",
+      "km": [
+        0.799,
+        0.801
+      ],
+      "note": "four named streets"
+    },
+    {
+      "line": "wg-332",
+      "test": "path_length",
+      "path": "walk_fin_zei",
+      "km": [
+        0.95,
+        0.98
+      ],
+      "note": "958 m from number 2000, plus the 10 m from 1990"
+    },
+    {
+      "line": "wg-333",
+      "test": "x_equals",
+      "a": "st_0",
+      "x": 0
+    },
+    {
+      "line": "wg-334",
+      "test": "y_equals",
+      "a": "dzai_gun",
+      "y": 0
+    },
+    {
+      "line": "wg-334",
+      "test": "starts_at",
+      "path": "pyramid_path",
+      "a": "corner_17_dzai_gun"
+    },
+    {
+      "line": "wg-335",
+      "test": "bearing",
+      "from": "city",
+      "to": "pyramid",
+      "deg": [
+        135,
+        225
+      ]
+    },
+    {
+      "line": "wg-335",
+      "test": "distance",
+      "a": "corner_17_dzai_gun",
+      "b": "pyramid",
+      "km": [
+        0,
+        1.5
+      ],
+      "note": "at the southern edge"
+    },
+    {
+      "line": "wg-336",
+      "test": "north_order",
+      "ids": [
+        "tan_kai",
+        "zin_go",
+        "dzai_gun"
+      ],
+      "step": [
+        0.199,
+        0.201
+      ]
+    },
+    {
+      "line": "wg-336",
+      "test": "bearing",
+      "from": "corner_17_tan_kai",
+      "to": "pyramid",
+      "deg": [
+        157.5,
+        202.5
+      ],
+      "note": "the pyramid in front of him on 17th"
+    },
+    {
+      "line": "wg-337",
+      "test": "y_equals",
+      "a": "hotel",
+      "y": 0.4
+    },
+    {
+      "line": "wg-337",
+      "test": "west_of",
+      "a": "hotel",
+      "b": "corner_17_tan_kai",
+      "note": "he turns right (east) out of the hotel, then right (south) on 17th"
+    },
+    {
+      "line": "wg-338",
+      "test": "perimeter",
+      "a": "city",
+      "km": [
+        12.79,
+        12.81
+      ]
+    },
+    {
+      "line": "wg-338",
+      "test": "north_order",
+      "ids": [
+        "tan_kai",
+        "zin_go",
+        "dzai_gun"
+      ],
+      "step": [
+        0.199,
+        0.201
+      ],
+      "note": "Tan Kai two streets north of Dzai Gun"
+    },
+    {
+      "line": "wg-339",
+      "test": "path_length",
+      "path": "st17_block",
+      "km": [
+        0.08,
+        0.25
+      ],
+      "note": "room for shops about twenty meters apart"
+    },
+    {
+      "line": "wg-341",
+      "test": "slope",
+      "path": "pyramid_path",
+      "segment": 0,
+      "pct": [
+        8,
+        12
+      ]
+    },
+    {
+      "line": "wg-342",
+      "test": "elevation",
+      "a": "main_door",
+      "m": [
+        240,
+        260
+      ],
+      "note": "half of 500 m"
+    },
+    {
+      "line": "wg-342",
+      "test": "ends_at",
+      "path": "pyramid_path",
+      "a": "main_door"
+    },
+    {
+      "line": "wg-342",
+      "test": "elevation",
+      "a": "pyramid_top",
+      "m": [
+        480,
+        520
+      ]
+    },
+    {
+      "line": "wg-343",
+      "test": "elevation_after",
+      "path": "pyramid_path",
+      "km": 0.4,
+      "m": [
+        20,
+        200
+      ],
+      "note": "five minutes up (about 400 m): above the one- and two-storey roofs"
+    },
+    {
+      "line": "wg-344",
+      "test": "perimeter",
+      "a": "half_ring",
+      "km": [
+        1.3,
+        2.2
+      ],
+      "note": "about twenty minutes on foot"
+    }
+  ],
+  "not_tested": [
+    {
+      "line": "wg-340",
+      "why": "Describes the buildings and roads, not where anything is."
+    },
+    {
+      "line": "wg-345",
+      "why": "Describes the inside of the pyramid, below this map's scale."
+    },
+    {
+      "line": "wg-346",
+      "why": "The direction the car comes from is not given; the tunnel is not placed."
+    }
+  ]
+}

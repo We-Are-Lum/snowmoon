@@ -1,11 +1,12 @@
 {
-  "about": "A guide to Snowmoon's world for planning pieces: characters, places, institutions and technology, Minpentai, factions and a timeline. Every line cites the blocks it rests on and carries from_chapter, the latest chapter it depends on, so it can be filtered to how far someone has read.",
+  "about": "A guide to Snowmoon's world for planning pieces: characters, places, geography (where places are, each line also stated as one relation), institutions and technology, Minpentai, factions and a timeline. Every line cites the blocks it rests on and carries from_chapter, the latest chapter it depends on, so it can be filtered to how far someone has read.",
   "label": "AI-made: written by an AI model, Claude (the coding agent, a closed model), from the book and from the spoken summary's chapter notes; each line checked against its cited passages. Not by the author.",
   "license": "A guide to Snowmoon by Vitalik Buterin, made from the book on 2026-10-11. GPL-3.0, like the book.",
   "recipe": "content/snowmoon/recipes/world-guide.json",
   "sections": [
     "characters",
     "places",
+    "geography",
     "institutions",
     "technology",
     "minpentai",
@@ -2075,6 +2076,1850 @@
         "c32-b12"
       ],
       "from_chapter": 32
+    },
+    {
+      "id": "wg-158",
+      "section": "characters",
+      "entity": "Zei",
+      "kind": "changes",
+      "text": "Learns that Minpentai is military training, and promises to tell no one, not even Fin.",
+      "sources": [
+        "c10-b192",
+        "c10-b194",
+        "c10-b202",
+        "c10-b206"
+      ],
+      "from_chapter": 10
+    },
+    {
+      "id": "wg-159",
+      "section": "characters",
+      "entity": "Zei",
+      "kind": "changes",
+      "text": "Tells Deluin how to hide messages better in an Arctic soldier's health data; the soldier sends thanks.",
+      "sources": [
+        "c15-b60",
+        "c15-b61",
+        "c15-b66",
+        "c15-b110",
+        "c15-b114"
+      ],
+      "from_chapter": 15
+    },
+    {
+      "id": "wg-160",
+      "section": "characters",
+      "entity": "Zei",
+      "kind": "changes",
+      "text": "Directs drone hunts in Redshire with Freetown's defense companies; Den calls him one of their best cryptographers.",
+      "sources": [
+        "c22-b71",
+        "c22-b76",
+        "c22-b110",
+        "c24-b87",
+        "c24-b89"
+      ],
+      "from_chapter": 24
+    },
+    {
+      "id": "wg-161",
+      "section": "characters",
+      "entity": "Zei",
+      "kind": "changes",
+      "text": "Supervises the main plan of the rescue of Tafindel, and says he failed completely when Mu's new plan saves it.",
+      "sources": [
+        "c26-b88",
+        "c26-b92",
+        "c26-b122",
+        "c26-b153"
+      ],
+      "from_chapter": 26
+    },
+    {
+      "id": "wg-162",
+      "section": "characters",
+      "entity": "Zei",
+      "kind": "changes",
+      "text": "Trusts Deluin's battlefield messages and passes his coordinates to Mu, opening the southern front.",
+      "sources": [
+        "c29-b114",
+        "c30-b61",
+        "c30-b63",
+        "c30-b65",
+        "c30-b68"
+      ],
+      "from_chapter": 30
+    },
+    {
+      "id": "wg-163",
+      "section": "characters",
+      "entity": "Zei",
+      "kind": "wants",
+      "text": "Wants AI to be a player, not the game: Veridia's institutions, he says, have no built-in concept of predicting the future.",
+      "sources": [
+        "c32-b45",
+        "c32-b46",
+        "c32-b47"
+      ],
+      "from_chapter": 32
+    },
+    {
+      "id": "wg-164",
+      "section": "characters",
+      "entity": "Zei",
+      "kind": "changes",
+      "text": "Is asked by Verdow to stay and help figure out the questions facing Veridia's government, and agrees.",
+      "sources": [
+        "c32-b37",
+        "c32-b70",
+        "c32-b71",
+        "c32-b72",
+        "c32-b75"
+      ],
+      "from_chapter": 32
+    },
+    {
+      "id": "wg-165",
+      "section": "characters",
+      "entity": "Deluin",
+      "kind": "changes",
+      "text": "Sends Zei a letter hidden in an obfuscated language model that asks him to describe their day together.",
+      "sources": [
+        "c19-b117",
+        "c19-b124",
+        "c19-b149",
+        "c19-b152",
+        "c19-b153"
+      ],
+      "from_chapter": 19
+    },
+    {
+      "id": "wg-166",
+      "section": "characters",
+      "entity": "Gladias",
+      "kind": "changes",
+      "text": "Suggests that Dzego backdoor the security cameras Veridia buys from Dzego; Verdow later credits him with it.",
+      "sources": [
+        "c24-b90",
+        "c24-b91",
+        "c24-b95",
+        "c26-b58",
+        "c26-b62",
+        "c26-b63"
+      ],
+      "from_chapter": 26
+    },
+    {
+      "id": "wg-167",
+      "section": "institutions",
+      "entity": "Order of Steering",
+      "kind": "fact",
+      "text": "There are over a thousand Keepers; in a rubric circle they know each other only by numbers.",
+      "sources": [
+        "c17-b23",
+        "c10-b54",
+        "c10-b56"
+      ],
+      "from_chapter": 17
+    },
+    {
+      "id": "wg-168",
+      "section": "institutions",
+      "entity": "Order of Steering",
+      "kind": "fact",
+      "text": "A Keeper's voting key is made by meeting at least three of five people in a Key Allocation Group, and no one can tell which keys are valid.",
+      "sources": [
+        "c15-b40",
+        "c15-b41"
+      ],
+      "from_chapter": 15
+    },
+    {
+      "id": "wg-169",
+      "section": "institutions",
+      "entity": "Order of Steering",
+      "kind": "fact",
+      "text": "To be accepted, an Acolyte needs a prediction score in the top ten percent and a Senate committee's approval.",
+      "sources": [
+        "c23-b61",
+        "c1-b68"
+      ],
+      "from_chapter": 23
+    },
+    {
+      "id": "wg-170",
+      "section": "institutions",
+      "entity": "Order of Steering",
+      "kind": "fact",
+      "text": "Delwart got contacts in two discussion groups of the same rubric, defeating the point of splitting them.",
+      "sources": [
+        "c13-b35",
+        "c13-b38"
+      ],
+      "from_chapter": 13
+    },
+    {
+      "id": "wg-171",
+      "section": "institutions",
+      "entity": "Order of Steering",
+      "kind": "fact",
+      "text": "Mu calls Steering one of the most opaque parts of Veridia's government, and one of the most trustworthy for that reason.",
+      "sources": [
+        "c7-b126",
+        "c7-b130"
+      ],
+      "from_chapter": 7
+    },
+    {
+      "id": "wg-172",
+      "section": "institutions",
+      "entity": "Order of Steering",
+      "kind": "fact",
+      "text": "Rubrics get gamed and then adjusted; one rewarding ground-floor active use is gamed with things nobody wants to use.",
+      "sources": [
+        "c6-b105",
+        "c32-b55"
+      ],
+      "from_chapter": 32
+    },
+    {
+      "id": "wg-173",
+      "section": "institutions",
+      "entity": "Order of Steering",
+      "kind": "fact",
+      "text": "With the latest rubric changes, Silverchat's taxes have dropped to zero for its transparency, interoperability and privacy.",
+      "sources": [
+        "c27-b25"
+      ],
+      "from_chapter": 27
+    },
+    {
+      "id": "wg-174",
+      "section": "institutions",
+      "entity": "Order of Steering",
+      "kind": "fact",
+      "text": "After the war, Verdow says the Order, the Courts and Graph Funding worked, and everything more transparent broke.",
+      "sources": [
+        "c32-b1",
+        "c32-b28",
+        "c32-b37",
+        "c32-b38"
+      ],
+      "from_chapter": 32
+    },
+    {
+      "id": "wg-301",
+      "section": "geography",
+      "entity": "Meldan",
+      "kind": "layout",
+      "text": "A small mountain stands in the center of Meldan; homes fill its lower half, and part of the government works in its upper half.",
+      "sources": [
+        "c26-b22"
+      ],
+      "from_chapter": 26,
+      "relation": {
+        "a": "a small mountain",
+        "rel": "in the center of",
+        "b": "Meldan"
+      }
+    },
+    {
+      "id": "wg-302",
+      "section": "geography",
+      "entity": "Meldan",
+      "kind": "direction",
+      "text": "The business district lies east of the mountain.",
+      "sources": [
+        "c26-b24"
+      ],
+      "from_chapter": 26,
+      "relation": {
+        "a": "the business district",
+        "rel": "east of",
+        "b": "the mountain"
+      }
+    },
+    {
+      "id": "wg-303",
+      "section": "geography",
+      "entity": "Meldan",
+      "kind": "direction",
+      "text": "Kalimar district lies south of the mountain; it looks like a forest but holds many hidden homes.",
+      "sources": [
+        "c26-b26"
+      ],
+      "from_chapter": 26,
+      "relation": {
+        "a": "Kalimar",
+        "rel": "south of",
+        "b": "the mountain"
+      }
+    },
+    {
+      "id": "wg-304",
+      "section": "geography",
+      "entity": "Meldan",
+      "kind": "direction",
+      "text": "A large residential district lies west of the mountain.",
+      "sources": [
+        "c26-b28"
+      ],
+      "from_chapter": 26,
+      "relation": {
+        "a": "a large residential district",
+        "rel": "west of",
+        "b": "the mountain"
+      }
+    },
+    {
+      "id": "wg-305",
+      "section": "geography",
+      "entity": "Meldan",
+      "kind": "size",
+      "text": "Meldan has 1.1 million people and many districts.",
+      "sources": [
+        "c26-b20"
+      ],
+      "from_chapter": 26,
+      "relation": {
+        "a": "Meldan",
+        "rel": "has",
+        "b": "1.1 million people"
+      }
+    },
+    {
+      "id": "wg-306",
+      "section": "geography",
+      "entity": "Meldan",
+      "kind": "terrain",
+      "text": "Shortly before the aeroplane descends, the view is a mostly flat, green landscape; the Gelebor mountains, a row of small mountains, are on the right, and Meldan lies beyond them.",
+      "sources": [
+        "c26-b2",
+        "c26-b9",
+        "c26-b16",
+        "c26-b18"
+      ],
+      "from_chapter": 26,
+      "relation": {
+        "a": "Meldan",
+        "rel": "beyond",
+        "b": "the Gelebor mountains"
+      }
+    },
+    {
+      "id": "wg-307",
+      "section": "geography",
+      "entity": "Kalimar",
+      "kind": "layout",
+      "text": "A footpath through Kalimar, between stone houses behind trees, gives way to shrubbery, curves upward and becomes a sky bridge over a busy road.",
+      "sources": [
+        "c1-b2",
+        "c1-b3",
+        "c1-b11"
+      ],
+      "from_chapter": 1,
+      "relation": {
+        "a": "the Kalimar footpath",
+        "rel": "leads to",
+        "b": "the sky bridge"
+      }
+    },
+    {
+      "id": "wg-308",
+      "section": "geography",
+      "entity": "Kalimar",
+      "kind": "layout",
+      "text": "Cars can only go up to the border of a car-free zone in Kalimar; the last few hundred meters are on foot.",
+      "sources": [
+        "c27-b28"
+      ],
+      "from_chapter": 27,
+      "relation": {
+        "a": "Kalimar",
+        "rel": "is",
+        "b": "car-free"
+      }
+    },
+    {
+      "id": "wg-309",
+      "section": "geography",
+      "entity": "Kalimar",
+      "kind": "layout",
+      "text": "A right turn off the usual Kalimar path leads about a hundred meters, past stone houses and then forest, to a door into what looks like a small hill, where they meet Evelor.",
+      "sources": [
+        "c27-b28",
+        "c27-b30",
+        "c27-b31",
+        "c27-b32",
+        "c27-b37"
+      ],
+      "from_chapter": 27,
+      "relation": {
+        "a": "a building inside a hill",
+        "rel": "about a hundred meters off",
+        "b": "the main Kalimar path"
+      }
+    },
+    {
+      "id": "wg-310",
+      "section": "geography",
+      "entity": "Kalimar",
+      "kind": "layout",
+      "text": "Silverchat's headquarters is in Kalimar, visible from parliament's roof among the trees.",
+      "sources": [
+        "c32-b8",
+        "c32-b101",
+        "c32-b104",
+        "c32-b107"
+      ],
+      "from_chapter": 32,
+      "relation": {
+        "a": "Silverchat's headquarters",
+        "rel": "in",
+        "b": "Kalimar"
+      }
+    },
+    {
+      "id": "wg-311",
+      "section": "geography",
+      "entity": "Kalimar",
+      "kind": "layout",
+      "text": "A few hundred meters along the forested path through Kalimar, a right turn and thirty meters lead to a stone house that is mostly underground.",
+      "sources": [
+        "c20-b87"
+      ],
+      "from_chapter": 20,
+      "relation": {
+        "a": "a mostly underground stone house",
+        "rel": "thirty meters off",
+        "b": "the forested path"
+      }
+    },
+    {
+      "id": "wg-312",
+      "section": "geography",
+      "entity": "the sky bridge",
+      "kind": "direction",
+      "text": "From the middle of the sky bridge, turning to his left and looking along it, Gladias sees the busy road beneath run on about two kilometers and turn right; beyond that point is the tree-covered mountain, with castle-shaped apartment towers on its lower slope.",
+      "sources": [
+        "c1-b13"
+      ],
+      "from_chapter": 1,
+      "relation": {
+        "a": "the mountain",
+        "rel": "beyond the road's right turn, about two kilometers to the left of",
+        "b": "the sky bridge"
+      }
+    },
+    {
+      "id": "wg-313",
+      "section": "geography",
+      "entity": "the sky bridge",
+      "kind": "layout",
+      "text": "To the right of the sky bridge, the road runs on past much denser buildings. Past the bridge, five-storey apartments line the left side and a soundproof barrier the right.",
+      "sources": [
+        "c1-b14",
+        "c1-b15",
+        "c1-b16"
+      ],
+      "from_chapter": 1,
+      "relation": {
+        "a": "denser buildings",
+        "rel": "to the right of",
+        "b": "the sky bridge"
+      }
+    },
+    {
+      "id": "wg-314",
+      "section": "geography",
+      "entity": "Badra Street",
+      "kind": "layout",
+      "text": "Badra St #1103, a five-storey apartment building, is in view soon after the sky bridge, while Gladias walks beside the soundproof barrier; he thinks of the area as already a corporate district.",
+      "sources": [
+        "c1-b15",
+        "c1-b17",
+        "c1-b18",
+        "c1-b21",
+        "c1-b33"
+      ],
+      "from_chapter": 1,
+      "relation": {
+        "a": "Badra St #1103",
+        "rel": "just past",
+        "b": "the sky bridge"
+      }
+    },
+    {
+      "id": "wg-315",
+      "section": "geography",
+      "entity": "Badra Street",
+      "kind": "direction",
+      "text": "Standing by Badra St #1103 and looking at other nearby buildings, Gladias can just make out, in the distance, the building shaped like an aeroplane, an aviation company's headquarters.",
+      "sources": [
+        "c1-b21",
+        "c1-b22",
+        "c1-b25",
+        "c1-b26",
+        "c1-b33"
+      ],
+      "from_chapter": 1,
+      "relation": {
+        "a": "the aeroplane-shaped building",
+        "rel": "in the distance from",
+        "b": "Badra Street"
+      }
+    },
+    {
+      "id": "wg-316",
+      "section": "geography",
+      "entity": "the concert venue",
+      "kind": "layout",
+      "text": "A minute's walk further on, an opening in the soundproof barrier is the entrance to the concert; after it, a fifteen-minute autobus ride and a short walk take Gladias home.",
+      "sources": [
+        "c1-b39",
+        "c1-b100"
+      ],
+      "from_chapter": 1,
+      "relation": {
+        "a": "the concert entrance",
+        "rel": "a minute's walk past",
+        "b": "Badra St #1103"
+      }
+    },
+    {
+      "id": "wg-317",
+      "section": "geography",
+      "entity": "the Y-shaped intersection",
+      "kind": "layout",
+      "text": "Past the sky bridge, the path goes into a tunnel and reaches a Y-shaped intersection.",
+      "sources": [
+        "c6-b143",
+        "c32-b8"
+      ],
+      "from_chapter": 32,
+      "relation": {
+        "a": "a Y-shaped intersection",
+        "rel": "in a tunnel past",
+        "b": "the sky bridge"
+      }
+    },
+    {
+      "id": "wg-318",
+      "section": "geography",
+      "entity": "the Y-shaped intersection",
+      "kind": "layout",
+      "text": "On a walk through Meldan that next finds him at Greater Plum Harbor's gate, Gladias crosses a street, goes down into a tunnel and passes a Y-shaped intersection with a poster from Lord Ephelion; the tunnel comes up among trees, then a more urban, commercial part of Meldan.",
+      "sources": [
+        "c3-b2",
+        "c3-b3",
+        "c3-b4",
+        "c3-b5",
+        "c3-b34",
+        "c3-b41",
+        "c3-b66",
+        "c3-b68"
+      ],
+      "from_chapter": 3,
+      "relation": {
+        "a": "Greater Plum Harbor",
+        "rel": "reached through",
+        "b": "the Y-shaped intersection"
+      }
+    },
+    {
+      "id": "wg-319",
+      "section": "geography",
+      "entity": "the Y-shaped intersection",
+      "kind": "layout",
+      "text": "The Y past the sky bridge is the one with Lord Ephelion's poster: when Gladias next comes through, the poster is gone. He turns left there for what may be only the second time in his life.",
+      "sources": [
+        "c3-b4",
+        "c3-b5",
+        "c6-b143"
+      ],
+      "from_chapter": 6,
+      "relation": {
+        "a": "the Y of the Greater Plum Harbor walk",
+        "rel": "is the same as",
+        "b": "the Y past the sky bridge"
+      }
+    },
+    {
+      "id": "wg-320",
+      "section": "geography",
+      "entity": "the Order's tower",
+      "kind": "layout",
+      "text": "Left at the Y, the path comes back above ground, snakes under highways, and becomes a straight, two-hundred-meter-tall outdoor staircase on the side of the mountain; about ten minutes of climbing, a tunnel and two flights of stairs lead to the top floor of the Order's tower.",
+      "sources": [
+        "c6-b143",
+        "c6-b144",
+        "c6-b146",
+        "c6-b147"
+      ],
+      "from_chapter": 6,
+      "relation": {
+        "a": "the Order's tower",
+        "rel": "at the top of a 200-meter staircase on",
+        "b": "the mountain"
+      }
+    },
+    {
+      "id": "wg-321",
+      "section": "geography",
+      "entity": "Parliament",
+      "kind": "travel",
+      "text": "Parliament, a large circular building, is about twenty minutes' walk from the Y: left at the Y, then right once the path is back above ground.",
+      "sources": [
+        "c32-b8",
+        "c32-b9"
+      ],
+      "from_chapter": 32,
+      "relation": {
+        "a": "parliament",
+        "rel": "twenty minutes' walk from",
+        "b": "the Y-shaped intersection"
+      }
+    },
+    {
+      "id": "wg-322",
+      "section": "geography",
+      "entity": "Parliament",
+      "kind": "layout",
+      "text": "Parliament stands partway up the mountain, about forty meters above most of Meldan; looking out from its roof toward Kalimar, the mountain begins to rise properly about two hundred meters to the right.",
+      "sources": [
+        "c32-b8",
+        "c32-b101",
+        "c32-b104",
+        "c32-b107",
+        "c32-b108"
+      ],
+      "from_chapter": 32,
+      "relation": {
+        "a": "parliament",
+        "rel": "partway up",
+        "b": "the mountain"
+      }
+    },
+    {
+      "id": "wg-323",
+      "section": "geography",
+      "entity": "Parliament",
+      "kind": "direction",
+      "text": "From parliament's roof, looking toward Kalimar: the commercial district to the left, Greater Plum Harbor further left, Kalimar in front, and the mountain to the right. The concert venue is on the commercial district's right edge.",
+      "sources": [
+        "c32-b8",
+        "c32-b9",
+        "c32-b101",
+        "c32-b104",
+        "c32-b105",
+        "c32-b106",
+        "c32-b107",
+        "c32-b108"
+      ],
+      "from_chapter": 32,
+      "relation": {
+        "a": "the commercial district",
+        "rel": "to the left of",
+        "b": "parliament, looking toward Kalimar"
+      }
+    },
+    {
+      "id": "wg-324",
+      "section": "geography",
+      "entity": "Greater Plum Harbor (Meldan)",
+      "kind": "size",
+      "text": "Meldan's Greater Plum Harbor is a square nearly a kilometer wide.",
+      "sources": [
+        "c32-b106"
+      ],
+      "from_chapter": 32,
+      "relation": {
+        "a": "Greater Plum Harbor",
+        "rel": "is",
+        "b": "a square nearly a kilometer wide"
+      }
+    },
+    {
+      "id": "wg-325",
+      "section": "geography",
+      "entity": "Greater Plum Harbor (Meldan)",
+      "kind": "layout",
+      "text": "Greater Plum Harbor is walled, with an entrance gate; inside, walking through its tunnels to the exit takes about ten minutes, and its doors open onto Meldan's commercial district.",
+      "sources": [
+        "c3-b64",
+        "c3-b68",
+        "c13-b24"
+      ],
+      "from_chapter": 13,
+      "relation": {
+        "a": "Greater Plum Harbor",
+        "rel": "opens onto",
+        "b": "the commercial district"
+      }
+    },
+    {
+      "id": "wg-326",
+      "section": "geography",
+      "entity": "Gladias's street",
+      "kind": "layout",
+      "text": "Gladias's street is lined with similar recent houses; turning right from his door, he passes a house with a coffee shop within three hundred meters and reaches a community center at the first street corner.",
+      "sources": [
+        "c6-b48",
+        "c6-b49",
+        "c6-b51",
+        "c6-b52"
+      ],
+      "from_chapter": 6,
+      "relation": {
+        "a": "a community center",
+        "rel": "at the first corner from",
+        "b": "Gladias's house"
+      }
+    },
+    {
+      "id": "wg-327",
+      "section": "geography",
+      "entity": "Galanar Square",
+      "kind": "direction",
+      "text": "Galanar Square is on the border of Kalimar, about a kilometer south of that community center, where the assembly is held.",
+      "sources": [
+        "c6-b52",
+        "c6-b86",
+        "c6-b87"
+      ],
+      "from_chapter": 6,
+      "relation": {
+        "a": "Galanar Square",
+        "rel": "about a kilometer south of",
+        "b": "the community center"
+      }
+    },
+    {
+      "id": "wg-328",
+      "section": "geography",
+      "entity": "Tapaia Square",
+      "kind": "direction",
+      "text": "Tapaia Square is about a kilometer further west than Galanar Square.",
+      "sources": [
+        "c6-b102"
+      ],
+      "from_chapter": 6,
+      "relation": {
+        "a": "Tapaia Square",
+        "rel": "about a kilometer west of",
+        "b": "Galanar Square"
+      }
+    },
+    {
+      "id": "wg-329",
+      "section": "geography",
+      "entity": "Gladias's street",
+      "kind": "layout",
+      "text": "Soon after the assembly, Gladias eats at a restaurant; from there, a few hundred meters along the street and a right turn lead into forest, then the stone houses of Kalimar, then the sky bridge.",
+      "sources": [
+        "c6-b110",
+        "c6-b141",
+        "c6-b142",
+        "c6-b143"
+      ],
+      "from_chapter": 6,
+      "relation": {
+        "a": "Kalimar",
+        "rel": "a few hundred meters from",
+        "b": "a restaurant near the community center"
+      }
+    },
+    {
+      "id": "wg-330",
+      "section": "geography",
+      "entity": "Pafogai Du",
+      "kind": "layout",
+      "text": "Pafogai Du is a perfectly regular grid: seventeen streets two hundred meters apart from north to south, and thirty-three streets one hundred meters apart from east to west.",
+      "sources": [
+        "c4-b53"
+      ],
+      "from_chapter": 4,
+      "relation": {
+        "a": "Pafogai Du",
+        "rel": "is",
+        "b": "a grid of 17 by 33 streets"
+      }
+    },
+    {
+      "id": "wg-331",
+      "section": "geography",
+      "entity": "Pafogai Du",
+      "kind": "layout",
+      "text": "Named streets are two hundred meters apart, and house numbers are meters: turning off at 20th street, Zei counts from 2000.",
+      "sources": [
+        "c2-b1",
+        "c2-b29",
+        "c2-b30",
+        "c2-b31"
+      ],
+      "from_chapter": 2,
+      "relation": {
+        "a": "named streets",
+        "rel": "are",
+        "b": "two hundred meters apart"
+      }
+    },
+    {
+      "id": "wg-332",
+      "section": "geography",
+      "entity": "Pafogai Du",
+      "kind": "layout",
+      "text": "Mun Gui is four named streets from Hun Min. From 1990 Hun Min, Fin and Zei turn left on 20th street and left again on Mun Gui to reach 1842, about 958 meters.",
+      "sources": [
+        "c2-b29",
+        "c2-b30",
+        "c2-b31"
+      ],
+      "from_chapter": 2,
+      "relation": {
+        "a": "Mun Gui",
+        "rel": "four streets from",
+        "b": "Hun Min"
+      }
+    },
+    {
+      "id": "wg-333",
+      "section": "geography",
+      "entity": "Pafogai Du",
+      "kind": "border",
+      "text": "0th street is on the west edge of the city.",
+      "sources": [
+        "c18-b1",
+        "c18-b81"
+      ],
+      "from_chapter": 18,
+      "relation": {
+        "a": "0th street",
+        "rel": "is",
+        "b": "the west edge of Pafogai Du"
+      }
+    },
+    {
+      "id": "wg-334",
+      "section": "geography",
+      "entity": "Pafogai Du",
+      "kind": "border",
+      "text": "Dzai Gun is the last street before Pafogai Du ends in the south; a straight path to the pyramid's entrance begins there, and the hill begins after it.",
+      "sources": [
+        "c4-b50",
+        "c18-b77"
+      ],
+      "from_chapter": 18,
+      "relation": {
+        "a": "Dzai Gun street",
+        "rel": "is",
+        "b": "the south edge of Pafogai Du"
+      }
+    },
+    {
+      "id": "wg-335",
+      "section": "geography",
+      "entity": "Pafogai Du",
+      "kind": "direction",
+      "text": "A half-kilometer-tall mountain pyramid stands at the southern edge of Pafogai Du.",
+      "sources": [
+        "c4-b48",
+        "c18-b35"
+      ],
+      "from_chapter": 18,
+      "relation": {
+        "a": "the mountain pyramid",
+        "rel": "at the southern edge of",
+        "b": "Pafogai Du"
+      }
+    },
+    {
+      "id": "wg-336",
+      "section": "geography",
+      "entity": "Pafogai Du",
+      "kind": "layout",
+      "text": "Turning onto 17th street with the pyramid, which is south of the city, in front of him, Gladias crosses Zin Go and then Dzai Gun, where the pyramid path starts: two streets on.",
+      "sources": [
+        "c18-b35",
+        "c18-b69",
+        "c18-b76",
+        "c18-b77"
+      ],
+      "from_chapter": 18,
+      "relation": {
+        "a": "Tan Kai, Zin Go, Dzai Gun",
+        "rel": "in order from north to south",
+        "b": "along 17th street"
+      }
+    },
+    {
+      "id": "wg-337",
+      "section": "geography",
+      "entity": "Pafogai Du",
+      "kind": "layout",
+      "text": "Gladias's hotel is at 1565 Tan Kai. He turns right out of it, then right on 17th street, with the pyramid in front of him.",
+      "sources": [
+        "c18-b54",
+        "c18-b55",
+        "c18-b56",
+        "c18-b69"
+      ],
+      "from_chapter": 18,
+      "relation": {
+        "a": "Gladias's hotel",
+        "rel": "at",
+        "b": "1565 Tan Kai"
+      }
+    },
+    {
+      "id": "wg-338",
+      "section": "geography",
+      "entity": "Pafogai Du",
+      "kind": "layout",
+      "text": "A tree-covered path runs around the whole perimeter of the city. Following it west along Dzai Gun, it turns north at 0th street; Tan Kai is two streets north of Dzai Gun.",
+      "sources": [
+        "c18-b81",
+        "c18-b82"
+      ],
+      "from_chapter": 18,
+      "relation": {
+        "a": "a tree-covered path",
+        "rel": "around",
+        "b": "the perimeter of Pafogai Du"
+      }
+    },
+    {
+      "id": "wg-339",
+      "section": "geography",
+      "entity": "Pafogai Du",
+      "kind": "layout",
+      "text": "On 17th street before Zin Go, shops and stairways down to basements come about twenty meters apart.",
+      "sources": [
+        "c18-b1",
+        "c18-b70",
+        "c18-b75",
+        "c18-b76"
+      ],
+      "from_chapter": 18,
+      "relation": {
+        "a": "shops",
+        "rel": "about twenty meters apart on",
+        "b": "17th street"
+      }
+    },
+    {
+      "id": "wg-340",
+      "section": "geography",
+      "entity": "Pafogai Du",
+      "kind": "terrain",
+      "text": "Pafogai Du is low-rise: one- and two-storey buildings, many stairways leading underground, and car lanes that go below ground where sidewalks need the space.",
+      "sources": [
+        "c2-b3",
+        "c4-b53"
+      ],
+      "from_chapter": 4,
+      "relation": {
+        "a": "Pafogai Du",
+        "rel": "is",
+        "b": "low-rise, with roads partly underground"
+      }
+    },
+    {
+      "id": "wg-341",
+      "section": "geography",
+      "entity": "the mountain pyramid (Pafogai Du)",
+      "kind": "terrain",
+      "text": "The street up to the pyramid curves up at about a ten percent slope; from somewhat further up, the whole grid is in view, and the main door is about five minutes on.",
+      "sources": [
+        "c4-b52",
+        "c4-b53",
+        "c4-b54"
+      ],
+      "from_chapter": 4,
+      "relation": {
+        "a": "the pyramid path",
+        "rel": "rises at",
+        "b": "about ten percent"
+      }
+    },
+    {
+      "id": "wg-342",
+      "section": "geography",
+      "entity": "the mountain pyramid (Pafogai Du)",
+      "kind": "layout",
+      "text": "Two rows of trees line the path up to a point halfway to the top, and a row of trees runs around the pyramid at exactly half its height; from the main door, a horizontal tree-covered path leads thirty meters to a side entrance.",
+      "sources": [
+        "c4-b48",
+        "c4-b58"
+      ],
+      "from_chapter": 4,
+      "relation": {
+        "a": "the main door",
+        "rel": "at",
+        "b": "half the pyramid's height"
+      }
+    },
+    {
+      "id": "wg-343",
+      "section": "geography",
+      "entity": "the mountain pyramid (Pafogai Du)",
+      "kind": "travel",
+      "text": "About five minutes up the incline from Dzai Gun, Gladias is high enough to see the roofs of nearly the whole city.",
+      "sources": [
+        "c18-b77",
+        "c18-b78"
+      ],
+      "from_chapter": 18,
+      "relation": {
+        "a": "a view over the city's roofs",
+        "rel": "five minutes up from",
+        "b": "Dzai Gun"
+      }
+    },
+    {
+      "id": "wg-344",
+      "section": "geography",
+      "entity": "the mountain pyramid (Pafogai Du)",
+      "kind": "travel",
+      "text": "Living in the pyramid at the south end of Pafogai Du, Gladias took daily twenty-minute walks for over two months along the trees around its perimeter halfway up, and sometimes longer walks down into the nearby forest.",
+      "sources": [
+        "c24-b20",
+        "c24-b21"
+      ],
+      "from_chapter": 24,
+      "relation": {
+        "a": "a walk around the pyramid",
+        "rel": "takes",
+        "b": "twenty minutes"
+      }
+    },
+    {
+      "id": "wg-345",
+      "section": "geography",
+      "entity": "the mountain pyramid (Pafogai Du)",
+      "kind": "terrain",
+      "text": "The pyramid is a pre-existing mountain with caves made into living and working space; a cafeteria inside is thirty meters below ground.",
+      "sources": [
+        "c4-b49",
+        "c19-b2"
+      ],
+      "from_chapter": 19,
+      "relation": {
+        "a": "the pyramid",
+        "rel": "is",
+        "b": "a refurbished mountain with caves"
+      }
+    },
+    {
+      "id": "wg-346",
+      "section": "geography",
+      "entity": "Pafogai Du",
+      "kind": "travel",
+      "text": "On the drive into Pafogai Du, a tunnel swaps cabins between cars; less than a minute after leaving it, the pyramid south of the city comes into view.",
+      "sources": [
+        "c18-b32",
+        "c18-b34",
+        "c18-b35"
+      ],
+      "from_chapter": 18,
+      "relation": {
+        "a": "a cabin-swapping tunnel",
+        "rel": "less than a minute before",
+        "b": "the pyramid comes into view"
+      }
+    },
+    {
+      "id": "wg-347",
+      "section": "geography",
+      "entity": "Sadzu Du",
+      "kind": "travel",
+      "text": "Sadzu Du, Dzego's capital, is reached from Pafogai Du by train.",
+      "sources": [
+        "c12-b1",
+        "c12-b2",
+        "c12-b5",
+        "c12-b6",
+        "c15-b87",
+        "c15-b119"
+      ],
+      "from_chapter": 15,
+      "relation": {
+        "a": "Sadzu Du",
+        "rel": "by train from",
+        "b": "Pafogai Du"
+      }
+    },
+    {
+      "id": "wg-348",
+      "section": "geography",
+      "entity": "Sadzu Du",
+      "kind": "terrain",
+      "text": "In Sadzu Du, several mountain pyramids, each about half as tall as the one south of Pafogai Du, stand behind a park; past the park, a bridge crosses a small river.",
+      "sources": [
+        "c12-b1",
+        "c12-b30",
+        "c12-b31"
+      ],
+      "from_chapter": 12,
+      "relation": {
+        "a": "several mountain pyramids",
+        "rel": "behind a park in",
+        "b": "Sadzu Du"
+      }
+    },
+    {
+      "id": "wg-349",
+      "section": "geography",
+      "entity": "Sadzu Du",
+      "kind": "layout",
+      "text": "Sadzu Du has a southern mountain pyramid, and the qualifying matches are in its \"north stadium\".",
+      "sources": [
+        "c15-b87",
+        "c12-b146"
+      ],
+      "from_chapter": 15,
+      "relation": {
+        "a": "a southern mountain pyramid",
+        "rel": "in",
+        "b": "Sadzu Du"
+      }
+    },
+    {
+      "id": "wg-350",
+      "section": "geography",
+      "entity": "Sadzu Du",
+      "kind": "layout",
+      "text": "The Beautiful Plants food court is at 2415 Len Su street, Sadzu Du.",
+      "sources": [
+        "c19-b61"
+      ],
+      "from_chapter": 19,
+      "relation": {
+        "a": "the Beautiful Plants food court",
+        "rel": "at",
+        "b": "2415 Len Su street"
+      }
+    },
+    {
+      "id": "wg-351",
+      "section": "geography",
+      "entity": "Dzego",
+      "kind": "travel",
+      "text": "Zei, his mother Min and Bai arrive in Freetown through its air harbor; it is Min's first time abroad.",
+      "sources": [
+        "c5-b1",
+        "c5-b2",
+        "c5-b3",
+        "c5-b6",
+        "c5-b7"
+      ],
+      "from_chapter": 5,
+      "relation": {
+        "a": "Freetown",
+        "rel": "by air from",
+        "b": "Dzego"
+      }
+    },
+    {
+      "id": "wg-352",
+      "section": "geography",
+      "entity": "Dzego",
+      "kind": "travel",
+      "text": "From Sadzu Du, Deluin flies home to Redshire.",
+      "sources": [
+        "c14-b1",
+        "c14-b120"
+      ],
+      "from_chapter": 14,
+      "relation": {
+        "a": "Redshire",
+        "rel": "by air from",
+        "b": "Sadzu Du"
+      }
+    },
+    {
+      "id": "wg-353",
+      "section": "geography",
+      "entity": "Dzego",
+      "kind": "travel",
+      "text": "Zei, Bai, Gladias and Den come to Meldan by aeroplane.",
+      "sources": [
+        "c26-b2",
+        "c26-b7"
+      ],
+      "from_chapter": 26,
+      "relation": {
+        "a": "Meldan",
+        "rel": "by aeroplane from",
+        "b": "Dzego"
+      }
+    },
+    {
+      "id": "wg-354",
+      "section": "geography",
+      "entity": "Dzego",
+      "kind": "distance",
+      "text": "Seila calls Dzego halfway across the world from Veridia; in Pafogai Du, everyone Gladias could hug is thousands of kilometers away.",
+      "sources": [
+        "c21-b79",
+        "c21-b85",
+        "c21-b94",
+        "c24-b1",
+        "c24-b2",
+        "c24-b5"
+      ],
+      "from_chapter": 24,
+      "relation": {
+        "a": "Dzego",
+        "rel": "halfway across the world from",
+        "b": "Veridia"
+      }
+    },
+    {
+      "id": "wg-355",
+      "section": "geography",
+      "entity": "Northglade",
+      "kind": "direction",
+      "text": "Speaking in Meldan, Gladias says Northglade is pretty far northeast, almost at the Arctic border.",
+      "sources": [
+        "c17-b1",
+        "c17-b99",
+        "c17-b100"
+      ],
+      "from_chapter": 17,
+      "relation": {
+        "a": "Northglade",
+        "rel": "far northeast of",
+        "b": "Meldan"
+      }
+    },
+    {
+      "id": "wg-356",
+      "section": "geography",
+      "entity": "Northglade",
+      "kind": "distance",
+      "text": "Hreda says Northglade is not right at the border: it is over two hundred kilometers inland.",
+      "sources": [
+        "c17-b101"
+      ],
+      "from_chapter": 17,
+      "relation": {
+        "a": "Northglade",
+        "rel": "over 200 km from",
+        "b": "the Arctic border"
+      }
+    },
+    {
+      "id": "wg-357",
+      "section": "geography",
+      "entity": "Northglade",
+      "kind": "distance",
+      "text": "Seila, at home in Meldan, says Febric and Hreda are stuck a thousand kilometers away.",
+      "sources": [
+        "c20-b1",
+        "c20-b13",
+        "c20-b44",
+        "c23-b79",
+        "c23-b81",
+        "c23-b86"
+      ],
+      "from_chapter": 23,
+      "relation": {
+        "a": "Northglade",
+        "rel": "about 1000 km from",
+        "b": "Meldan"
+      }
+    },
+    {
+      "id": "wg-358",
+      "section": "geography",
+      "entity": "Northglade",
+      "kind": "direction",
+      "text": "From Meldan, people speak of a trip \"up to Northglade\" and of being \"up north\" there, with months of snow and no green.",
+      "sources": [
+        "c8-b1",
+        "c8-b120",
+        "c32-b1",
+        "c32-b109",
+        "c32-b110"
+      ],
+      "from_chapter": 32,
+      "relation": {
+        "a": "Northglade",
+        "rel": "up north from",
+        "b": "Meldan"
+      }
+    },
+    {
+      "id": "wg-359",
+      "section": "geography",
+      "entity": "Northglade",
+      "kind": "layout",
+      "text": "Northglade is in the province of Northshore, and a Greater Plum Harbor is inside Northglade.",
+      "sources": [
+        "c20-b8"
+      ],
+      "from_chapter": 20,
+      "relation": {
+        "a": "Northglade",
+        "rel": "in the province of",
+        "b": "Northshore"
+      }
+    },
+    {
+      "id": "wg-360",
+      "section": "geography",
+      "entity": "Northshore",
+      "kind": "border",
+      "text": "The Arctics descended on Northshore from all sides.",
+      "sources": [
+        "c20-b8"
+      ],
+      "from_chapter": 20,
+      "relation": {
+        "a": "Northshore",
+        "rel": "open on all sides to",
+        "b": "the Arctics"
+      }
+    },
+    {
+      "id": "wg-361",
+      "section": "geography",
+      "entity": "Northglade",
+      "kind": "distance",
+      "text": "Lily's Arctic boarding school in Northglade is about a kilometer from the Greater Plum Harbor.",
+      "sources": [
+        "c26-b62",
+        "c26-b63"
+      ],
+      "from_chapter": 26,
+      "relation": {
+        "a": "Lily's boarding school",
+        "rel": "about a kilometer from",
+        "b": "Northglade's Greater Plum Harbor"
+      }
+    },
+    {
+      "id": "wg-362",
+      "section": "geography",
+      "entity": "Northglade",
+      "kind": "size",
+      "text": "Northglade is on an island about twenty kilometers wide, too small for the most simplified, zoomed-out maps of the region to show.",
+      "sources": [
+        "c31-b4"
+      ],
+      "from_chapter": 31,
+      "relation": {
+        "a": "Northglade's island",
+        "rel": "is",
+        "b": "about twenty kilometers wide"
+      }
+    },
+    {
+      "id": "wg-363",
+      "section": "geography",
+      "entity": "Northglade",
+      "kind": "direction",
+      "text": "From the platform at the top of a mountain on the island, the main city of Northglade lies to the east; snowy hills and forest stretch west and north.",
+      "sources": [
+        "c31-b2",
+        "c31-b3",
+        "c31-b4",
+        "c31-b5"
+      ],
+      "from_chapter": 31,
+      "relation": {
+        "a": "the main city of Northglade",
+        "rel": "east of",
+        "b": "the island's summit"
+      }
+    },
+    {
+      "id": "wg-364",
+      "section": "geography",
+      "entity": "Veridia",
+      "kind": "distance",
+      "text": "A Hydrafill advertisement says its Veridian northern ice is extracted thirty kilometers from the Arctic border.",
+      "sources": [
+        "c11-b124"
+      ],
+      "from_chapter": 11,
+      "relation": {
+        "a": "a source of northern ice",
+        "rel": "thirty kilometers from",
+        "b": "the Arctic border"
+      }
+    },
+    {
+      "id": "wg-365",
+      "section": "geography",
+      "entity": "Elenar Forest",
+      "kind": "direction",
+      "text": "From the forests where the army gathers, served by the last train to Eldil, the plan is to push into the northern part of Northshore from the west and bypass Northglade.",
+      "sources": [
+        "c29-b1",
+        "c29-b13"
+      ],
+      "from_chapter": 29,
+      "relation": {
+        "a": "Elenar Forest",
+        "rel": "west of",
+        "b": "northern Northshore"
+      }
+    },
+    {
+      "id": "wg-366",
+      "section": "geography",
+      "entity": "Elenar Forest",
+      "kind": "direction",
+      "text": "Group North crosses the forest and goes far northeast to the coast, cutting the Arctics off from the whole peninsula; Arctic reinforcements would come on its northern flank.",
+      "sources": [
+        "c29-b23"
+      ],
+      "from_chapter": 29,
+      "relation": {
+        "a": "Group North",
+        "rel": "far northeast to",
+        "b": "the coast"
+      }
+    },
+    {
+      "id": "wg-367",
+      "section": "geography",
+      "entity": "Elenar Forest",
+      "kind": "direction",
+      "text": "Group Center crosses the forest directly east.",
+      "sources": [
+        "c29-b1",
+        "c29-b25"
+      ],
+      "from_chapter": 29,
+      "relation": {
+        "a": "Group Center",
+        "rel": "directly east across",
+        "b": "the forest"
+      }
+    },
+    {
+      "id": "wg-368",
+      "section": "geography",
+      "entity": "Elenar Forest",
+      "kind": "direction",
+      "text": "Group South crosses the forest toward the southeast, to the outskirts of Northglade.",
+      "sources": [
+        "c29-b27"
+      ],
+      "from_chapter": 29,
+      "relation": {
+        "a": "Group South",
+        "rel": "southeast to",
+        "b": "the outskirts of Northglade"
+      }
+    },
+    {
+      "id": "wg-369",
+      "section": "geography",
+      "entity": "Northshore",
+      "kind": "direction",
+      "text": "Group Naval attacks Northshore east of Northglade from the south, with seaborne drones.",
+      "sources": [
+        "c29-b29"
+      ],
+      "from_chapter": 29,
+      "relation": {
+        "a": "Group Naval",
+        "rel": "attacks from the south, east of",
+        "b": "Northglade"
+      }
+    },
+    {
+      "id": "wg-370",
+      "section": "geography",
+      "entity": "Northshore",
+      "kind": "layout",
+      "text": "The battle plan's map draws two pale areas on a dark ground: a long inlet reaching down from the top, and an area along the lower right. Group Naval starts inside the lower one and Northglade sits at its edge; Groups North, Center and South start at the left and lower left, with dashed routes toward the right.",
+      "sources": [
+        "c29-b34",
+        "c29-b35"
+      ],
+      "from_chapter": 29,
+      "relation": {
+        "a": "the battle map",
+        "rel": "shows",
+        "b": "two seas, Northglade on the southern coast"
+      }
+    },
+    {
+      "id": "wg-371",
+      "section": "geography",
+      "entity": "Elenar Forest",
+      "kind": "distance",
+      "text": "The fiber-optic cables trailing behind the drones would stretch for hundreds of kilometers that night.",
+      "sources": [
+        "c29-b1",
+        "c29-b38"
+      ],
+      "from_chapter": 29,
+      "relation": {
+        "a": "the front",
+        "rel": "hundreds of kilometers from",
+        "b": "the forest edge"
+      }
+    },
+    {
+      "id": "wg-372",
+      "section": "geography",
+      "entity": "Telten",
+      "kind": "direction",
+      "text": "Telten, in Arctic core territory, is hundreds of kilometers further east than Northglade; seaborne drones land there and east of Northglade.",
+      "sources": [
+        "c29-b104"
+      ],
+      "from_chapter": 29,
+      "relation": {
+        "a": "Telten",
+        "rel": "hundreds of kilometers east of",
+        "b": "Northglade"
+      }
+    },
+    {
+      "id": "wg-373",
+      "section": "geography",
+      "entity": "Northshore",
+      "kind": "border",
+      "text": "Fighting north, Group North reaches the river that marks the line between Veridian and core Arctic territory; Arctic towns lie nearby across it.",
+      "sources": [
+        "c30-b73"
+      ],
+      "from_chapter": 30,
+      "relation": {
+        "a": "a river",
+        "rel": "marks the line between",
+        "b": "Veridian and core Arctic territory"
+      }
+    },
+    {
+      "id": "wg-374",
+      "section": "geography",
+      "entity": "Thaldur",
+      "kind": "direction",
+      "text": "Thaldur is an island east of Northshore and core Arctic territory, too far away for either side to reach quickly.",
+      "sources": [
+        "c30-b74"
+      ],
+      "from_chapter": 30,
+      "relation": {
+        "a": "Thaldur",
+        "rel": "east of",
+        "b": "Northshore"
+      }
+    },
+    {
+      "id": "wg-375",
+      "section": "geography",
+      "entity": "Thaldur",
+      "kind": "layout",
+      "text": "On the mountain on Northglade's island, the peninsula dangling off the eastern end of Northshore, between there and Thaldur, is suggested as the place for a new Redshire.",
+      "sources": [
+        "c31-b3",
+        "c31-b4",
+        "c31-b53",
+        "c31-b60",
+        "c31-b61"
+      ],
+      "from_chapter": 31,
+      "relation": {
+        "a": "a peninsula",
+        "rel": "between Northglade and",
+        "b": "Thaldur"
+      }
+    },
+    {
+      "id": "wg-376",
+      "section": "geography",
+      "entity": "Thaldur",
+      "kind": "size",
+      "text": "Tens of thousands of people live on Thaldur, which has springs.",
+      "sources": [
+        "c31-b48",
+        "c32-b6"
+      ],
+      "from_chapter": 32,
+      "relation": {
+        "a": "Thaldur",
+        "rel": "has",
+        "b": "tens of thousands of people"
+      }
+    },
+    {
+      "id": "wg-377",
+      "section": "geography",
+      "entity": "Glasscrown",
+      "kind": "terrain",
+      "text": "Glasscrown has a month and a half of polar night in winter.",
+      "sources": [
+        "c31-b44"
+      ],
+      "from_chapter": 31,
+      "relation": {
+        "a": "Glasscrown",
+        "rel": "has",
+        "b": "a month and a half of polar night"
+      }
+    },
+    {
+      "id": "wg-378",
+      "section": "geography",
+      "entity": "United Cities",
+      "kind": "terrain",
+      "text": "A student argues that the United Cities stayed independent partly because their continent has so many mountains and peninsulas.",
+      "sources": [
+        "c10-b143"
+      ],
+      "from_chapter": 10,
+      "relation": {
+        "a": "the United Cities' continent",
+        "rel": "has",
+        "b": "many mountains and peninsulas"
+      }
+    },
+    {
+      "id": "wg-379",
+      "section": "geography",
+      "entity": "United Cities",
+      "kind": "adjacency",
+      "text": "Each United City gives a share of the votes in its parliament to its neighbors.",
+      "sources": [
+        "c22-b49"
+      ],
+      "from_chapter": 22,
+      "relation": {
+        "a": "each city",
+        "rel": "gives votes to",
+        "b": "its neighbors"
+      }
+    },
+    {
+      "id": "wg-380",
+      "section": "geography",
+      "entity": "United Cities",
+      "kind": "adjacency",
+      "text": "The co-governance diagram links fifteen cities: Silverbeach–Mabuli, Silverbeach–Inglewore, Mabuli–Freetown, Inglewore–Hapton, Inglewore–Deplexi, Hapton–Imber, Hapton–Deplexi, Imber–Arturia, Imber–Deplexi, Arturia–Redshire, Arturia–Petersvil, Redshire–Petersvil, Redshire–Devanvil, Petersvil–Devanvil, Petersvil–Iptak, Deplexi–Freetown, Deplexi–Devanvil, Freetown–Devanvil, Freetown–Ondak, Devanvil–Ondak, Ondak–Iptak, Ondak–Mantak, Ondak–Belpaki, Iptak–Mantak, Iptak–Belpaki and Mantak–Belpaki.",
+      "sources": [
+        "c5-b46",
+        "c5-b47"
+      ],
+      "from_chapter": 5,
+      "relation": {
+        "a": "fifteen cities",
+        "rel": "linked in",
+        "b": "the co-governance diagram"
+      }
+    },
+    {
+      "id": "wg-381",
+      "section": "geography",
+      "entity": "United Cities",
+      "kind": "adjacency",
+      "text": "Veridians call the cluster of Ondak, Iptak, Mantak and Belpaki \"the aks\".",
+      "sources": [
+        "c8-b5"
+      ],
+      "from_chapter": 8,
+      "relation": {
+        "a": "Ondak, Iptak, Mantak and Belpaki",
+        "rel": "form",
+        "b": "a cluster"
+      }
+    },
+    {
+      "id": "wg-382",
+      "section": "geography",
+      "entity": "Freetown",
+      "kind": "distance",
+      "text": "Freetown is about as far from Redshire as you can get in the United Cities, except for Silverbeach and Mabuli.",
+      "sources": [
+        "c15-b25"
+      ],
+      "from_chapter": 15,
+      "relation": {
+        "a": "Freetown",
+        "rel": "nearly the farthest United City from",
+        "b": "Redshire"
+      }
+    },
+    {
+      "id": "wg-383",
+      "section": "geography",
+      "entity": "Freetown",
+      "kind": "distance",
+      "text": "In a Freetown conversation, someone says that about half the United Cities are closer to Redshire than Freetown is.",
+      "sources": [
+        "c10-b1",
+        "c10-b19",
+        "c10-b20"
+      ],
+      "from_chapter": 10,
+      "relation": {
+        "a": "about half the United Cities",
+        "rel": "closer to Redshire than",
+        "b": "Freetown"
+      }
+    },
+    {
+      "id": "wg-384",
+      "section": "geography",
+      "entity": "Redshire",
+      "kind": "direction",
+      "text": "Arctic drones are flown around the northern United Cities, and patrol near Redshire.",
+      "sources": [
+        "c10-b149",
+        "c13-b11"
+      ],
+      "from_chapter": 13,
+      "relation": {
+        "a": "Redshire",
+        "rel": "among",
+        "b": "the northern United Cities"
+      }
+    },
+    {
+      "id": "wg-385",
+      "section": "geography",
+      "entity": "Redshire",
+      "kind": "border",
+      "text": "The Arctics invaded Redshire by air and by land from the north, with vehicles coming out of underground tunnels.",
+      "sources": [
+        "c15-b8"
+      ],
+      "from_chapter": 15,
+      "relation": {
+        "a": "Arctic territory",
+        "rel": "north of",
+        "b": "Redshire"
+      }
+    },
+    {
+      "id": "wg-386",
+      "section": "geography",
+      "entity": "Redshire",
+      "kind": "layout",
+      "text": "Redshire has islands in the south, and its last garrison is in the south; that garrison's people are allowed to fly to Devanvil.",
+      "sources": [
+        "c4-b73",
+        "c15-b12"
+      ],
+      "from_chapter": 15,
+      "relation": {
+        "a": "islands",
+        "rel": "in the south of",
+        "b": "Redshire"
+      }
+    },
+    {
+      "id": "wg-387",
+      "section": "geography",
+      "entity": "Redshire",
+      "kind": "terrain",
+      "text": "Redshire has castles, pine forests, large grasslands, red mountains with snowy tops, and a giant icy waterfall.",
+      "sources": [
+        "c14-b124"
+      ],
+      "from_chapter": 14,
+      "relation": {
+        "a": "Redshire",
+        "rel": "has",
+        "b": "castles, pine forests, grasslands, red snowy mountains"
+      }
+    },
+    {
+      "id": "wg-388",
+      "section": "geography",
+      "entity": "Arturia",
+      "kind": "direction",
+      "text": "From the Redshire coast, a seaborne drone heads west and lands its passengers on the coast of Arturia.",
+      "sources": [
+        "c26-b149",
+        "c26-b151"
+      ],
+      "from_chapter": 26,
+      "relation": {
+        "a": "Arturia",
+        "rel": "west by sea of",
+        "b": "Redshire"
+      }
+    },
+    {
+      "id": "wg-389",
+      "section": "geography",
+      "entity": "Freetown",
+      "kind": "layout",
+      "text": "Freetown is building new roads and shelters, most on the northern side of town; a shelter is advertised \"on the northern edge of central Freetown\".",
+      "sources": [
+        "c22-b6",
+        "c22-b9"
+      ],
+      "from_chapter": 22,
+      "relation": {
+        "a": "new roads and shelters",
+        "rel": "mostly on the northern side of",
+        "b": "Freetown"
+      }
+    },
+    {
+      "id": "wg-390",
+      "section": "geography",
+      "entity": "Freetown",
+      "kind": "layout",
+      "text": "From the highway out of Freetown's air harbor, Bai takes a nicer walled area in grey and purple for the local Greater Plum Harbor.",
+      "sources": [
+        "c5-b2",
+        "c5-b5",
+        "c5-b11",
+        "c5-b13",
+        "c5-b14"
+      ],
+      "from_chapter": 5,
+      "relation": {
+        "a": "a walled area",
+        "rel": "seen from the highway from",
+        "b": "the air harbor"
+      }
+    },
+    {
+      "id": "wg-391",
+      "section": "geography",
+      "entity": "United Cities",
+      "kind": "direction",
+      "text": "A Dzego council member predicts the Arctics would take Veridia, then the United Cities one by one, then \"go south\" to Messalia and Haragmir, leaving Dzego last.",
+      "sources": [
+        "c28-b29",
+        "c28-b33"
+      ],
+      "from_chapter": 28,
+      "relation": {
+        "a": "Messalia and Haragmir",
+        "rel": "south of",
+        "b": "the United Cities"
+      }
+    },
+    {
+      "id": "wg-392",
+      "section": "geography",
+      "entity": "United Cities",
+      "kind": "layout",
+      "text": "In a Freetown conversation about the early United Cities, someone says the armies \"of this continent\" came together, which helped stop the Arctic offensive against Dzego.",
+      "sources": [
+        "c22-b1",
+        "c22-b43",
+        "c22-b46"
+      ],
+      "from_chapter": 22,
+      "relation": {
+        "a": "the armies of this continent",
+        "rel": "helped stop",
+        "b": "the Arctic offensive against Dzego"
+      }
     }
   ]
 }
