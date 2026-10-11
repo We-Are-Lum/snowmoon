@@ -24,7 +24,10 @@ Each principle has three parts:
 - **what a note looks like**, without any prose for the piece.
 
 Examples point at Snowmoon by block ID, so a writer can see the idea in the
-book.
+book. Each example is tagged with the latest chapter it depends on, like
+[ch 7]. As with the world guide, code drops every example past the person's
+chapter limit before the coach sees the guide (`scripts/lib/craft-guide.ts`);
+a principle left with none says so.
 
 ## 1. Each scene has a want, an obstacle and a turn
 
@@ -36,9 +39,8 @@ in the character's life goes from positive to negative, or the reverse
 drives drama (*The Art of Dramatic Writing*, 1946). A beat where nothing
 turns is a candidate to cut or merge.
 
-**In the book.** At the concert, Gladias wants to keep his prediction score
-above ninety (c1-b68). The crowd and a stranger's shout stand in his way
-(c1-b73). The turn: he escapes, but someone now knows who he is (c1-b138).
+**In the book.**
+- [ch 1] At the concert, Gladias wants to keep his prediction score above ninety (c1-b68). The crowd and a stranger's shout stand in his way (c1-b73). The turn: he escapes, but someone now knows who he is (c1-b138).
 
 **The coach asks.** "In this beat, what does your character want, and what
 stops them?" "What is different at the end of the scene?"
@@ -56,9 +58,9 @@ to Anton Chekhov, show the glint of moonlight on broken glass rather than
 saying the moon shone, is a popular paraphrase of a letter he wrote to his
 brother in 1886. It is cited here for the idea, not as a quotation.
 
-**In the book.** Zei opening and closing each finger of his healed arm
-(c4-b51, c9-b75). The dark purple letter he pockets unopened (c7-b141,
-c7-b144).
+**In the book.**
+- [ch 4] Zei opening and closing each finger of his healed arm (c4-b51).
+- [ch 7] The dark purple letter he pockets unopened (c7-b141, c7-b144).
 
 **The coach asks.** "What could your character do or hold that shows this,
 so the narration doesn't have to say it?"
@@ -77,9 +79,9 @@ Eisner, *Comics and Sequential Art*, 1985). Snowmoon switches between
 storylines, so a scene that opens on a face can leave the reader unsure
 which country they are in.
 
-**In the book.** Each chapter opens with a place and a date (c1-b1, c2-b1),
-then a wide view before people: the Kalimar path (c1-b2), Hun Min street
-(c2-b3).
+**In the book.**
+- [ch 1] Chapter 1 opens with a place and a date (c1-b1), then a wide view before people: the Kalimar path (c1-b2).
+- [ch 2] Chapter 2 does the same: a place and a date (c2-b1), then Hun Min street (c2-b3).
 
 **The coach asks.** "Where are we in your first picture of this scene?
 Could someone who skipped the last scene tell?"
@@ -97,8 +99,8 @@ Murch, writing about film editing, puts the emotion of the moment first
 among the reasons for a cut (*In the Blink of an Eye*, 1995). A beat that
 asks one image to show two events usually shows neither.
 
-**In the book.** The moment Zei's spaceship turns into Bai's symbol (c4-b132,
-c4-b133) is one image. Everything around it in the game is setup.
+**In the book.**
+- [ch 4] The moment Zei's spaceship turns into Bai's symbol (c4-b132, c4-b133) is one image. Everything around it in the game is setup.
 
 **The coach asks.** "If this beat had only one picture, what would it show?"
 
@@ -115,9 +117,8 @@ the picture wastes the reader's attention. Narration that gives time,
 thought, a fact the eye can't see, or a contrast with the picture earns its
 place. With a 25-word limit per beat, every word counts.
 
-**In the book.** What a picture can't show: that the drone was checked by a
-zero-knowledge proof and found harmless (c1-b4), or that his vote has perhaps a
-twenty or thirty percent chance of mattering (c1-b70).
+**In the book.**
+- [ch 1] What a picture can't show: that the drone was checked by a zero-knowledge proof and found harmless (c1-b4), or that his vote has perhaps a twenty or thirty percent chance of mattering (c1-b70).
 
 **The coach asks.** "What does your narration here tell us that the picture
 doesn't?"
@@ -134,10 +135,9 @@ character should want something, even if it is only a glass of water (the
 preface to *Bagombo Snuff Box*, 1999). Introducing someone through a want
 gives the audience a reason to follow them before they know anything else.
 
-**In the book.** Zei is introduced through the game he cares about, a wall
-design that won him third place (c2-b12). Soon after, we learn he wants the
-championship (c4-b15). Bai is introduced through the prize she wants to take
-from him (c4-b73).
+**In the book.**
+- [ch 2] Zei is introduced through the game he cares about, a wall design that won him third place (c2-b12).
+- [ch 4] Soon after, we learn he wants the championship (c4-b15). Bai is introduced through the prize she wants to take from him (c4-b73).
 
 **The coach asks.** "When we first see this character, what are they trying
 to get?"
@@ -156,8 +156,9 @@ questions the listener wants answered (his talks on storytelling, 2009). A
 short piece can end on a question even when the book has already answered
 it, if the piece stops just before the answer.
 
-**In the book.** Chapter 1 ends on the anonymous request (c1-b140). Chapter
-7 ends with the unopened letter (c7-b144).
+**In the book.**
+- [ch 1] Chapter 1 ends on the anonymous request (c1-b140).
+- [ch 7] Chapter 7 ends with the unopened letter (c7-b144).
 
 **The coach asks.** "What does your last picture leave the viewer wanting
 to know?"
@@ -178,9 +179,8 @@ enough to picture. Robert McKee calls it the protagonist's *object of
 desire*: something they consciously pursue (*Story*, 1997). A want the
 reader can name gives every later beat something to be measured against.
 
-**In the book.** Before the quarter-final, Fin knows what Zei is after:
-"Zei wanted to win, Fin knew, but almost as much, Zei wanted to hear Bai
-beg." (c4-b119)
+**In the book.**
+- [ch 4] Before the quarter-final, Fin knows what Zei is after: "Zei wanted to win, Fin knew, but almost as much, Zei wanted to hear Bai beg." (c4-b119)
 
 **The coach asks.** "What does your main character want in this piece, in
 words a reader could repeat?"
@@ -196,9 +196,8 @@ revealed in the choices a person makes under pressure, and that the greater
 the pressure, the more true the revelation (*Story*, 1997). A piece where
 the difficulty stays the same from beginning to end tends to feel flat.
 
-**In the book.** In the Pafogai Du final, Zei falls into Bai's trap and is
-behind, seventeen symbols to twenty-two; watching, Mu expects a game of
-attrition that will go Bai's way (c7-b98). Only then does he try his gamble (c7-b102).
+**In the book.**
+- [ch 7] In the Pafogai Du final, Zei falls into Bai's trap and is behind, seventeen symbols to twenty-two; watching, Mu expects a game of attrition that will go Bai's way (c7-b98). Only then does he try his gamble (c7-b102).
 
 **The coach asks.** "Is it harder for your character at the end of this
 scene than at the start? What makes it harder?"
@@ -214,8 +213,8 @@ or the reverse. McKee's *turning point* (*Story*, 1997); Aristotle's
 *reversal* (*Poetics*). A turn the reader didn't see coming, but believes
 afterwards, is the strongest kind. See principle 1.
 
-**In the book.** Zei's hidden factory fires from a place Bai never expected,
-and "Bai, and her AI, were caught completely by surprise." (c7-b109)
+**In the book.**
+- [ch 7] Zei's hidden factory fires from a place Bai never expected, and "Bai, and her AI, were caught completely by surprise." (c7-b109)
 
 **The coach asks.** "Where does the situation change direction? Could a
 reader point to the exact picture?"
@@ -230,9 +229,8 @@ real choice costs something. McKee describes the crisis as a dilemma:
 between two goods that can't both be had, or the lesser of two evils
 (*Story*, 1997). If the choice is free, it reveals little.
 
-**In the book.** Told that Minpentai trains people for war, Zei promises:
-"I won't tell anyone. Not even Fin." (c10-b206). The price: a secret,
-kept even from Fin.
+**In the book.**
+- [ch 10] Told that Minpentai trains people for war, Zei promises: "I won't tell anyone. Not even Fin." (c10-b206). The price: a secret, kept even from Fin.
 
 **The coach asks.** "What does your character choose, and what does it cost
 them?"
@@ -247,8 +245,10 @@ the reader can feel which way. McKee calls this the story event: a
 meaningful change, expressed and experienced in terms of a value (*Story*,
 1997). A piece that ends where it started needs a reason to.
 
-**In the book.** At the end of the book: "For the first time in a century,
-the Arctic Empire has been defeated." (c32-b28)
+**In the book.**
+- [ch 7] After the final, Bai: "Congratulations, Zei. You only had to wait until our last season to beat me." (c7-b124)
+- [ch 15] A special broadcast: "ARCTIC EMPIRE INVADES AND ANNEXES REDSHIRE" (c15-b6).
+- [ch 32] At the end of the book: "For the first time in a century, the Arctic Empire has been defeated." (c32-b28)
 
 **The coach asks.** "What is different at the end of your piece, compared
 with the start?"
@@ -270,10 +270,8 @@ change in themselves to live better (*The Anatomy of Story*, 2007). A
 character who gets the want but not the need is a story; so is the
 reverse.
 
-**In the book.** Bai wanted to succeed, and says why: "my desire to succeed
-in order to prove to the world that I deserve love because I am strong"
-(c24-b50), after growing up with no one who loved her unconditionally
-(c24-b48).
+**In the book.**
+- [ch 24] Bai wanted to succeed, and says why: "my desire to succeed in order to prove to the world that I deserve love because I am strong" (c24-b50), after growing up with no one who loved her unconditionally (c24-b48).
 
 **The coach asks.** "What does your character want? Is there something they
 need that they don't know about?"
@@ -289,9 +287,9 @@ Truby calls it the character's *weakness* (*The Anatomy of Story*, 2007);
 Aristotle's *hamartia* is the error that brings a fall (*Poetics*). A flaw
 the reader sees before the character does creates tension.
 
-**In the book.** Gladias's willingness to see every side. Seila: "Gladias...
-how can you be so naive?" (c21-b74), and later "DON'T YOU DARE GET IN YOUR
-PHILOSOPHER MOOD" (c23-b95).
+**In the book.**
+- [ch 21] Gladias's willingness to see every side. Seila: "Gladias... how can you be so naive?" (c21-b74)
+- [ch 23] Later, Seila again: "DON'T YOU DARE GET IN YOUR PHILOSOPHER MOOD" (c23-b95).
 
 **The coach asks.** "What in your character makes things harder for them?"
 
@@ -304,9 +302,8 @@ letting the character's own habit cause one of them."
 this *dimension*: a consistent contradiction, either within a character or
 between how they appear and who they are (*Story*, 1997).
 
-**In the book.** Bai tells Zei, "You know I enjoy making you feel afraid"
-(c4-b73). Later, when Gladias is in despair, she "walked up to Gladias, and
-gently hugged him" (c24-b39).
+**In the book.**
+- [ch 24] Bai tells Zei, "You know I enjoy making you feel afraid" (c4-b73). Later, when Gladias is in despair, she "walked up to Gladias, and gently hugged him" (c24-b39).
 
 **The coach asks.** "Is there something your character does that seems to
 go against what we first learn about them?"
@@ -323,10 +320,8 @@ Anatomy of Story*, 2007); K. M. Weiland describes positive, negative and
 flat arcs (*Creating Character Arcs*, 2016). The reader should be able to
 see where the character started.
 
-**In the book.** Lily cheers Lord Ephelion's messages (c23-b84). At the
-Arctic school she argues with her instructor and is put in detention, and
-now thinks the Arctics "just care about their own authority" (c28-b66,
-c28-b67, c28-b68). At the end she runs to Gladias: "Dad!" (c31-b77).
+**In the book.**
+- [ch 31] Lily cheers Lord Ephelion's messages (c23-b84). At the Arctic school she argues with her instructor and is put in detention, and now thinks the Arctics "just care about their own authority" (c28-b66, c28-b67, c28-b68). At the end she runs to Gladias: "Dad!" (c31-b77).
 
 **The coach asks.** "Where does your character start, and where do they
 end? Which picture shows each?"
@@ -342,9 +337,8 @@ dimensions, one of them sociological: class, work, education, surroundings
 (*The Art of Dramatic Writing*, 1946). Truby treats the story world as an
 expression of the characters (*The Anatomy of Story*, 2007).
 
-**In the book.** Zei plans a walk in Pafogai Du's units: street spacing,
-house numbers in meters, ticks before the lesson (c2-b31). Only someone
-from Dzego thinks like that.
+**In the book.**
+- [ch 2] Zei plans a walk in Pafogai Du's units: street spacing, house numbers in meters, ticks before the lesson (c2-b31). Only someone from Dzego thinks like that.
 
 **The coach asks.** "What does your character do or know that only someone
 from their place in the book would?"

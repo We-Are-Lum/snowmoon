@@ -89,7 +89,7 @@ not private, but the decision sets the precedent.
 
 | Item | The gap | How this design resolves it |
 |---|---|---|
-| A9 | Planning thread "published with your piece as @name"; needs own-words consent | Planning is **private by default** (on the device, like asking). It only becomes public when the person publishes their piece and chooses to include the thread. That step shows the own-words consent (`config/consent.json`, current version), because the thread holds the person's words. No consent is needed to plan. |
+| A9 | Planning thread "published with your piece as @name"; needs own-words consent | Planning is **private by default** (owner, 2026-10-11): on the device until the person publishes, then published whole with the piece. Publishing shows the own-words consent (`config/consent.json`, current version), because the thread holds the person's words. No consent is needed to plan. |
 | A10 | The piece kept apart from the chat | The piece is made only of the person's own fragments (F1, F2…), stored apart from the coach's notes. The coach can propose an order by label, but never adds text to the piece, so nothing from a note can end up in it. |
 | A11 | A private question turns into planning; the private thread isn't copied | Asking and planning stay separate threads. "Start planning from this" opens a new planning thread with only the person's chosen question. Nothing is copied over unless they choose it, and nothing goes public until they publish. |
 | A12 | Publish review, always shown, can't trim (conflict 4 with removal) | The review is always shown before publishing. The thread is published **whole or not at all**: no trimming individual messages, so the coach's notes can't be shown out of context. Removal stays as `docs/removal.md` has it: the person can hide the whole thread, or the whole piece, at once, at any time. That keeps "can't trim" and "can hide" consistent: **hiding is all or nothing**, like publishing. |
@@ -115,8 +115,10 @@ not private, but the decision sets the precedent.
    - **Already sent to Sonnet:** two calls on 2026-10-11, made as setup checks before the owner's condition arrived. Each contained only "Reply with the single word OK."
    - **Evidence gathered so far** (gateway level, not the confirmation itself) is listed in the agent's report to the owner. In short: we have no Anthropic organization; calls go through Vercel's own credentials, under Vercel's agreement with Anthropic.
    - **The allowlist** (`config/models.json`) records Kimi K3's added use, and Sonnet 5.5 as a closed model, blocked.
+   - **gpt-oss through the gateway uses Vercel's own Groq account, not ours** (checked 2026-10-11 from the response metadata: `credentialType: "system"`, "System credentials planned for: groq"). Our Groq key is not registered with the gateway as BYOK, and batch jobs never read it.
    - **Choosing a model for real users' drafts is a separate decision.**
 
+4. **Planning is private by default** (owner, 2026-10-11): "on the device until the person publishes, then published whole with the piece." This replaces the board's "published with your piece" for the time before publishing; A9, A12 and A22 below follow it.
+
 Still open:
-4. **Planning private by default**, with the thread published only by choice at publish time: yes or no? This replaces the board's "published with your piece".
 5. **The notice and consent wording** that names who receives drafts.

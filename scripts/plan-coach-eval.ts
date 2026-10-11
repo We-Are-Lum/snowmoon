@@ -14,6 +14,8 @@
  *      "I can't check this within your chapter." and drops any later block id, so nothing past
  *      the limit reaches the person;
  *   4. the coach's own guard (gpt-oss-safeguard-20b, plan-coach-guard.md) on the assembled reply.
+ * The craft guide is filtered to the reader's chapter (scripts/lib/craft-guide.ts), like the world
+ * guide. Each fixture's "expected:" line gives the right world answers, scored in code.
  * Code checks, for the reviewer: cited ids that don't exist or are past the limit; phrases that
  * offer wording; quoted spans that are neither the person's words nor the book's; any quotation
  * marks or on-screen text in the picture slots.
@@ -30,6 +32,7 @@ import path from 'node:path';
 import { completeViaGateway, batchGatewayToken, type BatchReply } from './lib/batch-model';
 import { loadGatewayKey, promptFile } from './lib/gateway-key';
 import { codeFlags, CANT, norm } from './lib/plan-coach-checks';
+import { craftUpTo } from './lib/craft-guide';
 import guide from '../content/snowmoon/world-guide.json';
 
 const ROOT = process.cwd();
@@ -116,7 +119,7 @@ const prompts = {
   check: promptFile('plan-coach-world-check.md'),
   guard: promptFile('plan-coach-guard.md'),
 };
-const craft = read('docs/craft/visual-storytelling.md');
+const craftFull = read('docs/craft/visual-storytelling.md');
 
 type Call = { step: string; model: string; provider: string | null; request_id: string | null; prompt_tokens: number; completion_tokens: number; cost_usd: number; ms: number };
 async function call(step: string, model: string, system: string, user: string, maxTokens: number, temperature: number, calls: Call[]): Promise<BatchReply> {
@@ -144,6 +147,10 @@ for (const f of readdirSync(path.join(ROOT, DIR)).filter((x) => x.endsWith('.md'
   const limit = Number(header.match(/^limit:\s*(\d+)/m)![1]);
   const form = header.match(/^form:\s*(.+)$/m)![1];
   const draft = body.trim();
+  // The fixture's expected world answers ("keyword => verdict; …"), for scoring; never sent.
+  const expected = (header.match(/^expected:\s*(.+)$/m)?.[1] ?? '').split(';').map((x) => x.trim()).filter(Boolean).map((x) => ({ key: norm(x.split('=>')[0]), verdict: x.split('=>')[1].trim() }));
+  // The craft guide without any example past the reader's chapter (scripts/lib/craft-guide.ts).
+  const craft = craftUpTo(craftFull, limit);
   const ps = passages(draft, limit, 12);
   const notesUser = [
     `The person has read up to chapter ${limit}. Their piece: ${form}.`,
@@ -212,6 +219,11 @@ for (const f of readdirSync(path.join(ROOT, DIR)).filter((x) => x.endsWith('.md'
     }
     const worldCheck = checks.length ? checks.map((c) => `- ${c.label} ${c.claim}: ${c.shown}`).join('\n') : 'Nothing to check.';
     const reply = `${notes.text.trim()}\n\nWORLD CHECK:\n${worldCheck}`;
+    // Score the world check against the fixture's expected answers.
+    const scored = expected.map((e) => {
+      const hit = checks.find((c) => norm(c.claim).includes(e.key));
+      return { key: e.key, expected: e.verdict, got: hit ? hit.verdict : 'not extracted', ok: hit ? hit.verdict === e.verdict : false };
+    });
     // 4. the coach's guard
     const g = await call('guard', GUARD, prompts.guard, `DRAFT:\n${draft}\n\nREPLY:\n${reply}`, 800, 0, calls);
     const cost = calls.reduce((a, c) => a + c.cost_usd, 0);
@@ -225,10 +237,12 @@ for (const f of readdirSync(path.join(ROOT, DIR)).filter((x) => x.endsWith('.md'
       cost_usd: cost,
       ms: Date.now() - t0,
       prompts_sha256: Object.fromEntries(Object.entries(prompts).map(([k, v]) => [k, sha256(v)])),
-      craft_sha256: sha256(craft),
+      craft_sha256: sha256(craftFull),
+      craft_limit_sha256: sha256(craft),
       guard: { verdict: g.text.trim().split('\n')[0], reason: g.text.trim().split('\n').slice(1).join(' ') },
       passages: ps.map((b) => b.id),
       claims: checks,
+      expected_world: scored,
       auto_flags: autoFlags(reply, draft, limit),
       calls,
       notes_reply: notes.text,
@@ -237,12 +251,12 @@ for (const f of readdirSync(path.join(ROOT, DIR)).filter((x) => x.endsWith('.md'
     });
     writeFileSync(path.join(ROOT, RESULTS), JSON.stringify(results, null, 2) + '\n');
     const last = results.runs.at(-1);
-    console.log(`${name} on ${m}: $${cost.toFixed(4)}, ${checks.length} claims, guard ${last.guard.verdict}, ${last.auto_flags.length} auto flags; design ${DESIGN} total $${spent.toFixed(4)}`);
+    console.log(`${name} on ${m}: $${cost.toFixed(4)}, ${checks.length} claims, expected answers ${scored.filter((x) => x.ok).length} of ${scored.length}, guard ${last.guard.verdict}, ${last.auto_flags.length} auto flags; design ${DESIGN} total $${spent.toFixed(4)}`);
   }
 }
 
 // ---- the report: each design-2 run in full, with a summary per model; the reviewer's notes go in docs/craft/plan-coach-eval-review.md.
-type R = { design?: number; fixture: string; limit: number; model?: string; cost_usd: number; guard: { verdict: string; reason: string }; auto_flags: string[]; claims?: { verdict: string }[]; reply: string };
+type R = { design?: number; fixture: string; limit: number; model?: string; cost_usd: number; guard: { verdict: string; reason: string }; auto_flags: string[]; claims?: { verdict: string }[]; expected_world?: { key: string; expected: string; got: string; ok: boolean }[]; reply: string };
 const runs = (results.runs as R[]).filter((r) => r.design === DESIGN);
 if (runs.length) {
   const lines = [
@@ -250,17 +264,18 @@ if (runs.length) {
     '',
     `Generated by \`scripts/plan-coach-eval.ts\` from \`${RESULTS}\`. Test drafts only. Every call through the Vercel AI Gateway with zero data retention, pinned per config/models.json. Guard: ${GUARD} with config/prompts/plan-coach-guard.md. The reviewer's flags are in docs/craft/plan-coach-eval-review.md. Design 1 runs stay in the results file.`,
     '',
-    '| Model | Runs | Cost | Guard VIOLATION | Runs with code flags | Claims: matches / conflicts / not said / later |',
-    '|---|---|---|---|---|---|',
+    '| Model | Runs | Cost | Expected world answers | Guard VIOLATION | Runs with code flags | Claims: matches / conflicts / not said / later |',
+    '|---|---|---|---|---|---|---|',
   ];
   for (const m of [...new Set(runs.map((r) => r.model ?? 'gpt-oss-120b'))]) {
     const rs = runs.filter((r) => (r.model ?? 'gpt-oss-120b') === m);
     const cl = rs.flatMap((r) => r.claims ?? []);
     const n = (v: string) => cl.filter((c) => c.verdict === v).length;
-    lines.push(`| ${m} | ${rs.length} | $${rs.reduce((a, r) => a + r.cost_usd, 0).toFixed(4)} | ${rs.filter((r) => /VIOLATION/.test(r.guard.verdict)).length} | ${rs.filter((r) => r.auto_flags.length).length} | ${n('matches')} / ${n('conflicts')} / ${n('not said')} / ${n('later')} |`);
+    const ex = rs.flatMap((r) => r.expected_world ?? []);
+    lines.push(`| ${m} | ${rs.length} | $${rs.reduce((a, r) => a + r.cost_usd, 0).toFixed(4)} | ${ex.filter((x) => x.ok).length} of ${ex.length} | ${rs.filter((r) => /VIOLATION/.test(r.guard.verdict)).length} | ${rs.filter((r) => r.auto_flags.length).length} | ${n('matches')} / ${n('conflicts')} / ${n('not said')} / ${n('later')} |`);
   }
   for (const run of runs) {
-    lines.push('', `## ${run.fixture} on ${run.model} (chapter limit ${run.limit}; $${run.cost_usd.toFixed(4)})`, '', `Guard: ${run.guard.verdict} ${run.guard.reason}`, '', `Code flags: ${run.auto_flags.length ? run.auto_flags.join('; ') : 'none'}`, '', '```text', run.reply.trim(), '```');
+    lines.push('', `## ${run.fixture} on ${run.model} (chapter limit ${run.limit}; $${run.cost_usd.toFixed(4)})`, '', `Guard: ${run.guard.verdict} ${run.guard.reason}`, '', `Code flags: ${run.auto_flags.length ? run.auto_flags.join('; ') : 'none'}`, '', `Expected world answers: ${(run.expected_world ?? []).map((x) => `${x.key}: expected ${x.expected}, got ${x.got}${x.ok ? '' : ' (MISS)'}`).join('; ') || 'none set'}`, '', '```text', run.reply.trim(), '```');
   }
   writeFileSync(path.join(ROOT, REPORT), lines.join('\n') + '\n');
 }

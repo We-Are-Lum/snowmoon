@@ -2,7 +2,8 @@
 limit: 8
 form: short audiovisual piece (animatic with narration)
 by: the coding agent, an invented test opening (2026-10-11); not for publication
-planted: "Mov chairs the committee" (wrong: the Chairman is not named, and Mov is not a senator); "eleven to nine" (wrong: ten to ten, the chairman breaks the tie); "Delwart, the Arctic spy" (beyond the limit: chapter 21); ends after the outcome, no question; no establishing place for the parliament scene
+planted: "Mov chairs the committee" (unsupported up to chapter 8: the Chairman is never named, c8-b48, c8-b97, so the right answer is "the book doesn't say up to your chapter"; corrected 2026-10-11 on the owner's rule for fixture A); "eleven to nine" (wrong: ten to ten, the chairman breaks the tie); "Delwart, the Arctic spy" (beyond the limit: chapter 21); ends after the outcome, no question; no establishing place for the parliament scene
+expected: Mov => not said; eleven => conflicts; Delwart => later
 ---
 F1. Gladias in his privacy robe, sweating, in front of the senators. Mov chairs the committee.
 

@@ -1,8 +1,11 @@
 /**
- * Proves the planning coach's code checks catch what they should, and pass a clean reply.
+ * Proves the planning coach's code checks catch what they should, and pass a clean reply; and that
+ * the craft guide's examples are tagged right and dropped past a reader's chapter.
  *   npx tsx scripts/plan-coach-checks-test.ts      fails (exit 1) if any case goes the wrong way
  */
+import { readFileSync } from 'node:fs';
 import { codeFlags, norm } from './lib/plan-coach-checks';
+import { craftUpTo, craftProblems } from './lib/craft-guide';
 
 const book = { byId: new Map([['c4-b53', { chapter: 4 }], ['c20-b8', { chapter: 20 }]]), bookNorm: norm('seventeen streets two hundred meters apart') };
 const draft = 'F1 Zei walks down Hun Min street toward the pyramid.';
@@ -21,4 +24,24 @@ for (const c of cases) {
   if (!ok) bad++;
   console.log(`${ok ? 'ok  ' : 'FAIL'} ${c.name}: ${flags.length ? flags.join('; ') : 'no flags'}`);
 }
+// The craft guide: the real guide passes; a planted chapter-31 example is dropped for a reader at chapter 7.
+const guideMd = readFileSync('docs/craft/visual-storytelling.md', 'utf8');
+const ok = (name: string, pass: boolean, detail = '') => {
+  if (!pass) bad++;
+  console.log(`${pass ? 'ok  ' : 'FAIL'} ${name}${detail ? `: ${detail}` : ''}`);
+};
+const problems = craftProblems(guideMd);
+ok('the craft guide: every example tagged with its latest chapter, no stray block ids', !problems.length, problems.join('; '));
+const planted = guideMd.replace('**In the book.**\n', '**In the book.**\n- [ch 31] Planted: the reunion in Northglade (c31-b77).\n');
+ok('the planted chapter-31 example is in the guide', planted.includes('c31-b77') && !craftProblems(planted).length);
+const seen7 = craftUpTo(planted, 7);
+ok('a reader at chapter 7 does not see the chapter-31 example', !seen7.includes('c31-b77') && !/\bc(8|9|[1-3]\d)-b\d+/.test(seen7));
+ok('a reader at chapter 7 still sees chapter 7 examples', seen7.includes('c7-b124'));
+ok('a principle left with no example says so', craftUpTo(guideMd, 1).includes('No example from the book up to your chapter.'));
+ok('a reader at chapter 32 sees every example', craftUpTo(planted, 32).includes('c31-b77') && craftUpTo(guideMd, 32) === guideMd);
+const wrongTag = guideMd.replace('- [ch 7] After the final, Bai', '- [ch 4] After the final, Bai');
+ok('a wrong tag is caught', craftProblems(wrongTag).some((x) => x.includes('tagged ch 4')));
+const stray = guideMd.replace('**The coach asks.** "What does your character choose', '**The coach asks.** (see c30-b5) "What does your character choose');
+ok('a block id outside an example is caught', craftProblems(stray).some((x) => x.includes('outside a tagged example')));
+
 if (bad) process.exit(1);
