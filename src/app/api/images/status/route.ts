@@ -43,6 +43,7 @@ export async function GET(request: Request) {
   const end = Number(q.get('end') ?? q.get('start'));
   const found = ch && i >= 0 && Number.isInteger(end) ? inPassage(ch.chapter, Number(q.get('start')), end) : { characters: [], place: null };
   const passageSheets = {
+    passage: { chapter: ch?.chapter ?? 0, start: Number(q.get('start')), end },
     characters: found.characters.map((c) => ({ slug: c.slug, name: c.name, text: shorthandLine(sheetCharacter(c.slug)!) })),
     place: found.place ? { slug: found.place.slug, name: found.place.name, text: shorthandLine(sheetPlace(found.place.slug)!) } : null,
     maxCharacters: IMAGES.designs.maxCharacters,

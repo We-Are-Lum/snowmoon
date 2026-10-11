@@ -69,7 +69,8 @@ function ticketSheets(ticket: string): { characters: string[]; place: string | n
     return null;
   }
 }
-const sameRange = (a: { chapter: number; start: number; end: number }, b: { chapter: number; start: number; end: number }) => a.chapter === b.chapter && a.start === b.start && a.end === b.end;
+const sameRange = (a: { chapter: number; start: number; end: number } | undefined, b: { chapter: number; start: number; end: number }) =>
+  a !== undefined && a.chapter === b.chapter && a.start === b.start && a.end === b.end;
 const placeTitle = (name: string) => name.replace(/^./, (c) => c.toUpperCase());
 
 /**
