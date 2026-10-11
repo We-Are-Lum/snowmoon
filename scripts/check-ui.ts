@@ -275,7 +275,7 @@ async function checkMakeImage(page: Page, scheme: string) {
   const marked = await page.locator('.mi-chapters li:has(.mi-ahead) .ch-num').allTextContents();
   const opened = await page.evaluate(() => Math.max(...JSON.parse(localStorage.getItem('snowmoon.opened') ?? '[]').concat([Number(localStorage.getItem('snowmoon.read-to') ?? 1)])));
   if (marked.length !== 32 - opened || marked[0] !== `Chapter ${opened + 1}`) fail(`/images/new (${scheme}): ${marked.length} chapters marked past where you've read (first ${marked[0]}), want ${32 - opened} from Chapter ${opened + 1}`);
-  await page.locator('.mi-chapters a', { hasText: /^Chapter 1\b/ }).first().click();
+  await page.locator('.mi-chapters a[href="/images/new?chapter=1"]').click();
   await page.waitForURL('**/images/new?chapter=1');
   await page.waitForSelector('.mi-pick');
   await checkFloors(page, '/images/new?chapter=1 (browse)', scheme);
