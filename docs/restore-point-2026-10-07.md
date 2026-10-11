@@ -247,3 +247,11 @@ Anyone signed in with a Neynar user score of at least 0.7 can make images (invit
     vercel rollback https://snowmoon-hxqv70exz-nates-projects-d1780cff.vercel.app --scope nates-projects-d1780cff
 
 Rolling back the code leaves 0010's tables in place; they are private and unused without it.
+
+## 2026-10-11: the spoken summary, chapter summaries, the podcast bonus episode and chapter lines (branches summary-35min and chapter-summaries)
+
+Published on the owner's "Go ahead. And publish" (2026-10-10). Each chapter page ends with "Chapter N in brief", collapsed until opened, resting only on that chapter and earlier ones, labelled as written by an AI model, Claude, with the GPL notice. The podcast feed gains a bonus episode after the 32 chapters, "The whole story in 32 minutes (full spoilers)", and each chapter episode opens with one spoiler-free line. The summary's script and full recipe are in content/snowmoon/recipes/summary/. To undo (back to `05172f6`):
+
+    vercel rollback dpl_84gzZp9u74gc8MKG5XNPnJVMxYme --scope nates-projects-d1780cff
+
+Rolling back the code removes the bonus episode from the feed; its MP3 stays in the media bucket at media.snowmoon.party/podcast/summary-7e2f182235c4.mp3, unlisted.
