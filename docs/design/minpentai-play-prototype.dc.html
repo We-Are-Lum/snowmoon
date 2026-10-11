@@ -1,0 +1,800 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Minpentai · working mockup · draft</title>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>html,body{margin:0;background:#E9E6DF;-webkit-font-smoothing:antialiased}a{color:#2E5A3A}a:hover{color:#1D1D1B}</style>
+</helmet>
+<div style="min-height:100vh;display:flex;flex-direction:column;font-family:'Crimson Pro',serif;color:#1D1D1B">
+
+<div style="background:#1D1D1B;color:#E7E4DD;display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;padding:8px 16px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.03em">
+  <span style="color:#ABA79D">MOCKUP CONTROLS · OUTSIDE THE APP</span>
+  <div style="display:flex;gap:4px"><sc-for list="{{ devs }}" as="d" hint-placeholder-count="3"><span onClick="{{ d.click }}" style="padding:6px 9px;border:1px solid #4A4843;border-radius:3px;cursor:pointer;background:{{ d.bg }};color:{{ d.fg }}">{{ d.label }}</span></sc-for></div>
+  <span onClick="{{ toggleSign }}" style="padding:6px 9px;border:1px solid #4A4843;border-radius:3px;cursor:pointer">{{ signLabel }}</span>
+  <div style="display:flex;gap:4px;align-items:center"><span style="color:#ABA79D">LADDER</span><span onClick="{{ progFresh }}" style="padding:6px 9px;border:1px solid #4A4843;border-radius:3px;cursor:pointer">FRESH</span><span onClick="{{ progSample }}" style="padding:6px 9px;border:1px solid #4A4843;border-radius:3px;cursor:pointer">SAMPLE: ON RUNG 3</span></div>
+  <sc-if value="{{ duelLive }}" hint-placeholder-val="{{ false }}"><span onClick="{{ drop }}" style="padding:6px 9px;border:1px solid #FFB43A;color:#FFB43A;border-radius:3px;cursor:pointer">OPPONENT LOSES CONNECTION</span></sc-if>
+  <sc-if value="{{ pausedCtl }}" hint-placeholder-val="{{ false }}"><div style="display:flex;gap:4px"><span onClick="{{ comeBack }}" style="padding:6px 9px;border:1px solid #4A4843;border-radius:3px;cursor:pointer">THEY COME BACK</span><span onClick="{{ oppGone }}" style="padding:6px 9px;border:1px solid #4A4843;border-radius:3px;cursor:pointer">THEY DON'T · SKIP 60 S</span></div></sc-if>
+  <span style="display:flex;align-items:center;gap:6px;color:#ABA79D"><span style="border-bottom:2px dotted #D96AA0;color:#E7E4DD">@wren</span>= SAMPLE PERSON OR NUMBER</span>
+</div>
+
+<div style="flex:1;display:flex;flex-direction:column;align-items:center;padding:18px 16px 32px;gap:8px">
+  <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">{{ frameLabel }}</div>
+  <div style="width:{{ sw }}px;height:{{ sh }}px;position:relative">
+  <div style="position:absolute;left:0;top:0;width:{{ fw }}px;height:{{ fh }}px;transform:scale({{ scale }});transform-origin:0 0;background:#F4F2ED;border-radius:{{ fr }};overflow:hidden;box-shadow:0 0 0 1px #CFCAC0,0 20px 50px rgba(29,29,27,.16);display:flex">
+
+    <sc-if value="{{ showNav }}" hint-placeholder-val="{{ false }}">
+      <div style="width:220px;flex:none;border-right:1px solid #DAD6CC;padding:18px 0;display:flex;flex-direction:column;gap:2px;font-size:17px">
+        <div style="padding:0 18px 14px;font-size:22px">Snowmoon</div>
+        <div style="padding:8px 18px;color:#6A675F">Read</div>
+        <div style="padding:8px 18px;color:#6A675F">Adaptations</div>
+        <div style="padding:8px 18px">Minpentai</div>
+        <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="3"><div onClick="{{ n.click }}" style="padding:9px 18px 9px 32px;cursor:pointer;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;background:{{ n.bg }};border-left:{{ n.bl }}">{{ n.label }}</div></sc-for>
+        <div style="padding:8px 18px;color:#6A675F">About</div>
+      </div>
+    </sc-if>
+
+    <div style="flex:1;min-width:0;display:flex;flex-direction:column;position:relative">
+
+      <sc-if value="{{ sHome }}" hint-placeholder-val="{{ true }}">
+        <div style="flex:1;min-height:0;display:flex;flex-direction:column;max-width:{{ L.colMax }};width:100%;margin:0 auto;border-left:{{ L.colBd }};border-right:{{ L.colBd }};box-sizing:border-box">
+          <div style="height:44px;flex:none;display:flex;align-items:center;padding:0 16px;border-bottom:1px solid #DAD6CC"><span style="font-size:18px">Minpentai</span></div>
+          <div style="flex:none;display:grid;grid-template-columns:repeat(3,1fr);border-bottom:1px solid #DAD6CC;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em">
+            <sc-for list="{{ tabs }}" as="t" hint-placeholder-count="3"><span onClick="{{ t.click }}" style="height:44px;display:flex;align-items:center;justify-content:center;cursor:pointer;color:{{ t.fg }};border-bottom:{{ t.ul }};box-sizing:border-box">{{ t.label }}</span></sc-for>
+          </div>
+          <sc-if value="{{ tPlay }}" hint-placeholder-val="{{ true }}">
+            <div style="flex:1;min-height:0;overflow:auto;padding:18px;display:flex;flex-direction:column;gap:12px">
+              <div onClick="{{ openPractice }}" style="border:1px solid #1D1D1B;border-radius:3px;padding:14px;display:flex;flex-direction:column;gap:4px;cursor:pointer" style-hover="background:#FBFAF6">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><span style="font-size:22px">Practice match</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">ANYONE</span></div>
+                <div style="font-size:17px;line-height:1.4;color:#4A463F">Against a simple rival. Nothing is saved.</div>
+              </div>
+              <div onClick="{{ openLadder }}" style="border:1px solid #1D1D1B;border-radius:3px;padding:14px;display:flex;flex-direction:column;gap:4px;cursor:pointer" style-hover="background:#FBFAF6">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><span style="font-size:22px">The computer ladder</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;border-bottom:{{ ladTagUl }}">{{ ladTag }}</span></div>
+                <div style="font-size:17px;line-height:1.4;color:#4A463F">Five computer players, each harder. Beat one to open the next.</div>
+              </div>
+              <div onClick="{{ openPerson }}" style="border:1px solid #1D1D1B;border-radius:3px;padding:14px;display:flex;flex-direction:column;gap:4px;cursor:pointer" style-hover="background:#FBFAF6">
+                <div style="display:flex;justify-content:space-between;align-items:baseline;gap:8px"><span style="font-size:22px">Play a person</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;border-bottom:{{ personTagUl }}">{{ personTag }}</span></div>
+                <div style="font-size:17px;line-height:1.4;color:#4A463F">One-on-one with another signed-in player.</div>
+              </div>
+              <div style="flex:1"></div>
+              <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;line-height:1.5">RULES INVENTED FOR THIS EDITION · <a href="Minpentai Rules.dc.html" target="_blank">THE RULES PAGE →</a></div>
+            </div>
+          </sc-if>
+          <sc-if value="{{ tLearn }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:1;padding:18px;display:flex;flex-direction:column;gap:12px">
+              <div style="font-size:19px;line-height:1.45;text-wrap:pretty">Seven short lessons and the broadcast are in the current build.</div>
+              <a href="Minpentai Intro v3.dc.html" target="_blank" style="height:48px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;color:#1D1D1B;text-decoration:none">OPEN THE LESSONS →</a>
+              <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;line-height:1.5">FULL SCREEN INSIDE LESSONS (A3) IS DESIGNED BUT NOT WIRED INTO THIS MOCKUP.</div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ sLadder }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-height:0;display:flex;flex-direction:column;max-width:{{ L.colMax }};width:100%;margin:0 auto;border-left:{{ L.colBd }};border-right:{{ L.colBd }};box-sizing:border-box">
+          <div style="height:44px;flex:none;display:flex;align-items:center;gap:4px;padding:0 16px 0 4px;border-bottom:1px solid #DAD6CC"><span onClick="{{ goHome }}" style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:16px;color:#6A675F;cursor:pointer">←</span><span style="font-size:18px">The computer ladder</span></div>
+          <sc-if value="{{ signed }}" hint-placeholder-val="{{ true }}">
+            <div style="flex:1;min-height:0;overflow:auto;padding:14px 18px;display:flex;flex-direction:column;gap:10px">
+              <div style="font-size:17px;line-height:1.4;color:#4A463F;text-wrap:pretty">Win once to open the next rung. Replay any rung you've opened. Only you see this page.</div>
+              <div style="display:flex;flex-direction:column;border-top:1px solid #1D1D1B">
+                <sc-for list="{{ rungs }}" as="r" hint-placeholder-count="5">
+                  <div onClick="{{ r.click }}" style="display:grid;grid-template-columns:36px 1fr auto;gap:10px;align-items:center;padding:10px 8px;border-bottom:{{ r.bb }};background:{{ r.rowBg }};outline:{{ r.ol }};color:{{ r.fg }};cursor:pointer">
+                    <span style="font-family:'DM Mono',monospace;font-size:13px;width:28px;height:28px;border:{{ r.ibd }};background:{{ r.ibg }};color:{{ r.ifg }};display:flex;align-items:center;justify-content:center;box-sizing:border-box">{{ r.icon }}</span>
+                    <span style="display:flex;flex-direction:column"><span style="font-size:19px">{{ r.name }}</span><span style="font-size:15px;color:{{ r.dfg }}">{{ r.desc }}</span></span>
+                    <span style="font-family:'DM Mono',monospace;font-size:12px;text-align:right;display:flex;flex-direction:column;align-items:flex-end"><span>{{ r.r1 }}</span><span style="border-bottom:{{ r.ul }}">{{ r.r2 }}</span></span>
+                  </div>
+                </sc-for>
+              </div>
+              <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;line-height:1.5">Every rung plays by the same rules and sees only what its towers light. Harder means better plans, never more information.</div>
+            </div>
+            <div style="flex:none;padding:10px 18px 14px;border-top:1px solid #DAD6CC"><span onClick="{{ playRung }}" style="height:48px;border-radius:3px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;cursor:pointer">{{ playRungLabel }}</span></div>
+          </sc-if>
+          <sc-if value="{{ signedOut }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:1;padding:14px 18px;display:flex;flex-direction:column;gap:10px">
+              <div style="border:1px dashed #6A675F;border-radius:3px;padding:14px;display:flex;flex-direction:column;gap:8px">
+                <div style="font-size:20px">Sign in to climb</div>
+                <div style="font-size:17px;line-height:1.4;color:#4A463F;text-wrap:pretty">The ladder remembers which rungs you've beaten, under your Farcaster account. Only you can see it.</div>
+                <span onClick="{{ signIn }}" style="height:48px;border-radius:3px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;cursor:pointer">SIGN IN WITH FARCASTER</span>
+              </div>
+              <div style="display:flex;flex-direction:column;border-top:1px solid #DAD6CC;color:#6A675F;font-size:17px">
+                <div style="padding:10px 0;border-bottom:1px dashed #ABA79D">5 · Planner</div><div style="padding:10px 0;border-bottom:1px dashed #ABA79D">4 · Opportunist</div><div style="padding:10px 0;border-bottom:1px dashed #ABA79D">3 · Builder</div><div style="padding:10px 0;border-bottom:1px dashed #ABA79D">2 · Blocker</div><div style="padding:10px 0;border-bottom:1px dashed #ABA79D">1 · Rival</div>
+              </div>
+              <div style="flex:1"></div>
+              <span onClick="{{ openPractice }}" style="height:48px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;cursor:pointer">PLAY A PRACTICE MATCH INSTEAD</span>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ sPerson }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-height:0;display:flex;flex-direction:column;max-width:{{ L.colMax }};width:100%;margin:0 auto;border-left:{{ L.colBd }};border-right:{{ L.colBd }};box-sizing:border-box">
+          <div style="height:44px;flex:none;display:flex;align-items:center;gap:4px;padding:0 16px 0 4px;border-bottom:1px solid #DAD6CC"><span onClick="{{ goHome }}" style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:16px;color:#6A675F;cursor:pointer">←</span><span style="font-size:18px">Play a person</span></div>
+          <sc-if value="{{ signed }}" hint-placeholder-val="{{ true }}">
+            <div style="flex:1;padding:18px;display:flex;flex-direction:column;gap:12px">
+              <div style="font-size:19px;line-height:1.45;text-wrap:pretty">You'll be matched with the next signed-in player who is ready. You both see the same new rule at the same moment.</div>
+              <div style="display:grid;grid-template-columns:auto 1fr;gap:6px 14px;font-size:16px;border-top:1px solid #DAD6CC;padding-top:10px">
+                <span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;padding-top:3px">BOARD</span><span>15 × 10, 2 towers each, 96 steps</span>
+                <span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;padding-top:3px">TIME</span><span>90 s to set up, 45 s each turn to act</span>
+                <span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;padding-top:3px">LENGTH</span><span>About 8 minutes</span>
+                <span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;padding-top:3px">SHOWN</span><span>Your Farcaster name, to your opponent only</span>
+              </div>
+              <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;line-height:1.5">NO RATING, NO RANKING. RESULTS ARE KEPT FOR THE TWO PLAYERS ONLY.</div>
+              <div style="flex:1"></div>
+              <span onClick="{{ sendLink }}" style="height:48px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;cursor:pointer">OR SEND ONE PERSON A LINK</span>
+            </div>
+            <div style="flex:none;padding:10px 18px 14px;border-top:1px solid #DAD6CC;display:flex;flex-direction:column;gap:6px"><span onClick="{{ ready }}" style="height:48px;border-radius:3px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;cursor:pointer">I'M READY</span><span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;text-align:center">Signed in as <span style="border-bottom:2px dotted #B3306E">@ilse</span></span></div>
+          </sc-if>
+          <sc-if value="{{ signedOut }}" hint-placeholder-val="{{ false }}">
+            <div style="flex:1;padding:18px;display:flex;flex-direction:column;gap:12px">
+              <div style="border:1px dashed #6A675F;border-radius:3px;padding:14px;display:flex;flex-direction:column;gap:8px">
+                <div style="font-size:20px">Sign in to play a person</div>
+                <div style="font-size:17px;line-height:1.4;color:#4A463F;text-wrap:pretty">Your opponent sees your Farcaster name. No one else sees the match.</div>
+                <span onClick="{{ signIn }}" style="height:48px;border-radius:3px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;cursor:pointer">SIGN IN WITH FARCASTER</span>
+              </div>
+            </div>
+          </sc-if>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ sWait }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-height:0;display:flex;flex-direction:column;max-width:{{ L.colMax }};width:100%;margin:0 auto;border-left:{{ L.colBd }};border-right:{{ L.colBd }};box-sizing:border-box">
+          <div style="height:44px;flex:none;display:flex;align-items:center;padding:0 16px;border-bottom:1px solid #DAD6CC"><span style="font-size:18px">Play a person</span></div>
+          <div style="flex:1;padding:18px;display:flex;flex-direction:column;gap:14px;justify-content:center;align-items:center;text-align:center">
+            <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;letter-spacing:.06em">READY · WAITING {{ waitTime }}</div>
+            <div style="font-size:26px;line-height:1.15;max-width:280px">Looking for another ready player</div>
+            <div style="font-size:17px;line-height:1.42;color:#4A463F;max-width:300px;text-wrap:pretty">You can leave this screen. We'll ask you here when someone's found, and you'll have 20 seconds to accept.</div>
+            <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;max-width:300px;line-height:1.5">AFTER 3 MINUTES YOU'RE TAKEN OFF THE LIST. IN THIS MOCKUP SOMEONE IS FOUND AFTER 5 SECONDS.</div>
+          </div>
+          <div style="flex:none;padding:10px 18px 14px;border-top:1px solid #DAD6CC"><span onClick="{{ notReady }}" style="height:48px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;cursor:pointer">I'M NOT READY</span></div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ sBoard }}" hint-placeholder-val="{{ false }}">
+        <div style="flex:1;min-height:0;display:flex;flex-direction:column">
+          <sc-if value="{{ hdrLight }}" hint-placeholder-val="{{ true }}">
+            <div style="height:44px;flex:none;display:flex;align-items:center;gap:4px;padding:0 6px 0 4px;border-bottom:1px solid #DAD6CC">
+              <sc-if value="{{ hasBack }}" hint-placeholder-val="{{ false }}"><span onClick="{{ hBack }}" style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:16px;color:#6A675F;cursor:pointer">←</span></sc-if>
+              <span style="flex:1;font-size:18px;padding-left:{{ hPad }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ hTitle }}<span style="border-bottom:2px dotted #B3306E">{{ hSample }}</span></span>
+              <sc-if value="{{ hasRight }}" hint-placeholder-val="{{ false }}"><span onClick="{{ hRightClick }}" style="min-width:44px;height:44px;padding:0 8px;box-sizing:border-box;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px;color:#4A463F;cursor:pointer">{{ hRight }}</span></sc-if>
+            </div>
+          </sc-if>
+          <sc-if value="{{ hdrDark }}" hint-placeholder-val="{{ false }}">
+            <div style="height:52px;flex:none;display:flex;align-items:center;gap:12px;padding:0 16px;background:#060608;color:#E7E4DD;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em">
+              <span onClick="{{ exitFS }}" style="height:36px;padding:0 12px;border:1px solid #4A4843;border-radius:3px;display:flex;align-items:center;cursor:pointer">✕ EXIT FULL SCREEN · ESC</span>
+              <span style="flex:1;text-align:center">{{ hTitleCaps }} · {{ strip }}</span>
+              <span onClick="{{ togglePanel }}" style="height:36px;padding:0 12px;border:1px solid #4A4843;border-radius:3px;display:flex;align-items:center;cursor:pointer">{{ panelLabel }}</span>
+              <sc-if value="{{ hasRight }}" hint-placeholder-val="{{ false }}"><span onClick="{{ hRightClick }}" style="height:36px;padding:0 12px;border:1px solid #4A4843;border-radius:3px;display:flex;align-items:center;cursor:pointer">{{ hRight }}</span></sc-if>
+            </div>
+          </sc-if>
+          <div style="flex:1;min-height:0;display:flex;flex-direction:{{ L.dir }}">
+            <div style="flex:{{ L.bflex }};min-width:0;background:#060608;display:flex;align-items:center;justify-content:center;padding:{{ L.bpad }}">
+              <div style="position:relative">
+                <div style="display:grid;grid-template-columns:repeat({{ bd.cols }},{{ bd.cs }}px);grid-auto-rows:{{ bd.cs }}px"><sc-for list="{{ bd.cells }}" as="c" hint-placeholder-count="150"><div onClick="{{ c.click }}" style="margin:1px;background:{{ c.bg }};border:{{ c.bd }};box-shadow:{{ c.sh }};color:{{ c.fg }};font-size:{{ c.fs }};display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;line-height:1;box-sizing:border-box;cursor:pointer;user-select:none">{{ c.t }}</div></sc-for></div>
+                <sc-if value="{{ hdrLight }}" hint-placeholder-val="{{ true }}"><div style="position:absolute;left:8px;top:8px;background:rgba(5,5,7,.82);padding:5px 8px;border-radius:3px;font-family:'DM Mono',monospace;font-size:12px;color:#E7E4DD;white-space:nowrap;pointer-events:none">{{ strip }}</div></sc-if>
+                <sc-if value="{{ fsBtn }}" hint-placeholder-val="{{ false }}"><div onClick="{{ enterFS }}" title="Full screen" style="position:absolute;right:8px;top:8px;width:44px;height:44px;border:1px solid #E7E4DD;border-radius:3px;background:rgba(5,5,7,.82);color:#E7E4DD;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:18px;cursor:pointer;box-sizing:border-box">⤢</div></sc-if>
+                <sc-if value="{{ bannerMatched }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:#F4F2ED;color:#1D1D1B;padding:8px 12px;display:flex;flex-direction:column;gap:1px;text-align:center;pointer-events:none"><span style="font-size:22px;font-weight:600;letter-spacing:.03em;white-space:nowrap">MU GU GEI TAU FA</span><span style="font-size:16px;font-style:italic;color:#4A463F;white-space:nowrap">The battle begins in fifty ticks.</span></div></sc-if>
+                <sc-if value="{{ bannerPaused }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(5,5,7,.9);border-top:2px solid #FFB43A;padding:10px 14px;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;color:#F4F2ED;text-align:center;line-height:1.5;white-space:nowrap;pointer-events:none"><span style="border-bottom:2px dotted #D96AA0">@WREN</span> LOST CONNECTION<br>BACK WITHIN {{ pauseTime }}</div></sc-if>
+              </div>
+            </div>
+
+            <sc-if value="{{ panelOn }}" hint-placeholder-val="{{ true }}">
+            <div style="flex:{{ L.pflex }};width:{{ L.pw }};min-height:0;min-width:0;display:flex;flex-direction:column;border-left:{{ L.pbl }};background:#F4F2ED;box-sizing:border-box">
+
+              <sc-if value="{{ pStart }}" hint-placeholder-val="{{ false }}">
+                <div style="flex:1;min-height:0;overflow:auto;padding:14px 18px;display:flex;flex-direction:column;gap:10px">
+                  <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">HOW IT PLAYS</div>
+                  <div style="font-size:18px;line-height:1.42;text-wrap:pretty">{{ stDesc }}</div>
+                  <div style="border-top:1px solid #DAD6CC;padding-top:10px;display:flex;flex-direction:column;gap:2px"><span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">NEW RULE THIS MATCH, DRAWN AT RANDOM</span><span style="font-size:20px">{{ ruleText }}</span></div>
+                  <div style="font-size:16px;line-height:1.42;color:#4A463F;text-wrap:pretty">{{ stNote }}</div>
+                  <div style="flex:1"></div>
+                  <div style="display:flex;gap:6px;flex-wrap:wrap"><span style="font-family:'DM Mono',monospace;font-size:12px;padding:3px 7px;border:1px dashed #6A675F;color:#6A675F;border-radius:2px">RULES INVENTED FOR THIS EDITION</span><span style="font-family:'DM Mono',monospace;font-size:12px;padding:3px 7px;border:1px solid #1D1D1B;border-radius:2px">A NEW RULE EACH MATCH · c4-b84</span></div>
+                </div>
+                <div style="flex:none;padding:10px 18px 14px;border-top:1px solid #DAD6CC"><span onClick="{{ begin }}" style="height:48px;border-radius:3px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;cursor:pointer">START MATCH</span></div>
+              </sc-if>
+
+              <sc-if value="{{ pMatched }}" hint-placeholder-val="{{ false }}">
+                <div style="flex:1;min-height:0;overflow:auto;padding:14px 18px;display:flex;flex-direction:column;gap:10px">
+                  <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+                    <div style="border:1px solid #DAD6CC;border-radius:3px;padding:10px;display:flex;flex-direction:column;gap:2px"><span style="display:flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:12px"><span style="width:10px;height:10px;background:#46D7E8"></span>CYAN · YOU</span><span style="font-size:17px;border-bottom:2px dotted #B3306E;align-self:flex-start">@ilse</span></div>
+                    <div style="border:1px solid #DAD6CC;border-radius:3px;padding:10px;display:flex;flex-direction:column;gap:2px"><span style="display:flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:12px"><span style="width:10px;height:10px;background:#FFB43A"></span>AMBER</span><span style="font-size:17px;border-bottom:2px dotted #B3306E;align-self:flex-start">@wren</span></div>
+                  </div>
+                  <div style="border-top:1px solid #DAD6CC;padding-top:10px;display:flex;flex-direction:column;gap:2px"><span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">NEW RULE THIS MATCH, DRAWN AT RANDOM</span><span style="font-size:20px">{{ ruleText }}</span></div>
+                  <div style="font-size:17px;line-height:1.42;color:#4A463F">Setup: 90 seconds to place in the lit area. Then the battle runs.</div>
+                  <div style="flex:1"></div>
+                  <div style="display:flex;gap:6px;flex-wrap:wrap"><span style="font-family:'DM Mono',monospace;font-size:12px;padding:3px 7px;border:1px solid #1D1D1B;border-radius:2px">COUNTDOWN FROM THE BOOK · c4-b97–b98</span><span style="font-family:'DM Mono',monospace;font-size:12px;padding:3px 7px;border:1px dashed #6A675F;color:#6A675F;border-radius:2px">RULES INVENTED</span></div>
+                </div>
+                <div style="flex:none;padding:10px 18px 14px;border-top:1px solid #DAD6CC"><span onClick="{{ begin }}" style="height:48px;border-radius:3px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;cursor:pointer">START SETUP · 1:30</span></div>
+              </sc-if>
+
+              <sc-if value="{{ duelClock }}" hint-placeholder-val="{{ false }}">
+                <div style="flex:none;height:4px;background:#DAD6CC;margin:10px 18px 0"><div style="width:{{ clockPct }}%;height:4px;background:#1D1D1B"></div></div>
+              </sc-if>
+
+              <sc-if value="{{ pAct }}" hint-placeholder-val="{{ false }}">
+                <div style="flex:none;display:flex;flex-direction:column;gap:6px;padding:8px 18px 0">
+                  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px">
+                    <sc-for list="{{ pieces }}" as="p" hint-placeholder-count="3"><span onClick="{{ p.click }}" style="height:44px;border:1px solid #1D1D1B;border-radius:3px;background:{{ p.bg }};color:{{ p.fg }};display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;cursor:pointer">{{ p.label }}</span></sc-for>
+                  </div>
+                  <div style="display:flex;gap:4px"><sc-for list="{{ arrows }}" as="a" hint-placeholder-count="4"><span onClick="{{ a.click }}" style="flex:1;height:44px;border:1px solid {{ a.bd }};background:{{ a.bg }};color:{{ a.fg }};border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:16px;cursor:pointer">{{ a.t }}</span></sc-for></div>
+                </div>
+                <div style="flex:1;min-height:0;overflow:auto;padding:10px 18px;display:flex;flex-direction:column;gap:6px">
+                  <div style="font-size:18px;line-height:1.42;text-wrap:pretty">{{ msg }}</div>
+                  <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;line-height:1.5">{{ ruleLine }}</div>
+                  <div style="display:flex;gap:6px;flex-wrap:wrap;padding-top:4px"><span style="font-family:'DM Mono',monospace;font-size:12px;padding:3px 7px;border:1px dashed #6A675F;color:#6A675F;border-radius:2px">RULES INVENTED FOR THIS EDITION</span><span style="font-family:'DM Mono',monospace;font-size:12px;padding:3px 7px;border:1px dashed #6A675F;color:#6A675F;border-radius:2px">DRAFT WORDING</span></div>
+                </div>
+                <div style="flex:none;padding:10px 18px 14px;border-top:1px solid #DAD6CC;display:flex;gap:8px;align-items:center">
+                  <span style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;width:96px;line-height:1.3">{{ ptsTxt }}</span>
+                  <span onClick="{{ endTurn }}" style="flex:1;height:48px;border-radius:3px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;cursor:pointer">{{ endLabel }}</span>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ pWaitTurn }}" hint-placeholder-val="{{ false }}">
+                <div style="flex:1;min-height:0;overflow:auto;padding:10px 18px;display:flex;flex-direction:column;gap:8px">
+                  <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em">TURN ENDED · WAITING FOR <span style="border-bottom:2px dotted #B3306E">@WREN</span> · {{ clockTxt }}</div>
+                  <div style="font-size:18px;line-height:1.42;text-wrap:pretty">{{ waitMsg }}</div>
+                  <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">{{ ruleLine }}</div>
+                </div>
+                <div style="flex:none;padding:10px 18px 14px;border-top:1px solid #DAD6CC"><span onClick="{{ changeTurn }}" style="height:48px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;cursor:pointer">CHANGE MY TURN</span></div>
+              </sc-if>
+
+              <sc-if value="{{ pRun }}" hint-placeholder-val="{{ false }}">
+                <div style="flex:1;min-height:0;overflow:auto;padding:14px 18px;display:flex;flex-direction:column;gap:8px">
+                  <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em">THE RUN · {{ runHead }}</div>
+                  <div style="font-size:18px;line-height:1.42;text-wrap:pretty">{{ runMsg }}</div>
+                  <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;line-height:1.5">{{ ruleLine }}</div>
+                </div>
+                <div style="flex:none;padding:10px 18px 14px;border-top:1px solid #DAD6CC"><span onClick="{{ ffClick }}" style="height:48px;border:1px solid {{ ffBd }};color:{{ ffFg }};border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;cursor:pointer">{{ ffLabel }}</span></div>
+              </sc-if>
+
+              <sc-if value="{{ pResult }}" hint-placeholder-val="{{ false }}">
+                <div style="flex:1;min-height:0;overflow:auto;padding:16px 18px;display:flex;flex-direction:column;gap:10px">
+                  <div style="font-size:30px;line-height:1.1"><span style="border-bottom:2px dotted #B3306E">{{ resA }}</span>{{ resB }}</div>
+                  <div style="font-size:18px;line-height:1.42;text-wrap:pretty">{{ resWhy }}</div>
+                  <sc-if value="{{ resCard }}" hint-placeholder-val="{{ false }}">
+                    <div style="border:1px solid #1D1D1B;border-radius:3px;padding:12px;display:flex;align-items:center;gap:12px;background:#FBFAF6">
+                      <span style="font-family:'DM Mono',monospace;font-size:12px;width:28px;height:28px;flex:none;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center">{{ resCardN }}</span>
+                      <span style="display:flex;flex-direction:column"><span style="font-size:19px">{{ resCardT }}</span><span style="font-size:15px;color:#4A463F">{{ resCardD }}</span></span>
+                    </div>
+                  </sc-if>
+                  <sc-if value="{{ rmShow }}" hint-placeholder-val="{{ false }}"><div style="border:1px dashed #6A675F;border-radius:3px;padding:10px 12px;font-size:16px;line-height:1.4;color:#4A463F">{{ rmText }} <span style="font-family:'DM Mono',monospace;font-size:12px">{{ rmTime }}</span></div></sc-if>
+                  <div style="font-size:16px;line-height:1.4;color:#4A463F">{{ resNote }}</div>
+                  <div style="flex:1"></div>
+                  <div style="display:flex;flex-direction:column;gap:6px"><sc-for list="{{ resBtns }}" as="b" hint-placeholder-count="3"><span onClick="{{ b.click }}" style="height:48px;border:1px solid {{ b.bd }};border-radius:3px;background:{{ b.bg }};color:{{ b.fg }};display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;cursor:pointer;box-sizing:border-box">{{ b.label }}</span></sc-for></div>
+                </div>
+              </sc-if>
+
+              <sc-if value="{{ pReplay }}" hint-placeholder-val="{{ false }}">
+                <div style="flex:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:12px 18px 0">
+                  <sc-for list="{{ rpBtns }}" as="b" hint-placeholder-count="4"><span onClick="{{ b.click }}" style="height:44px;border:1px solid #DAD6CC;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px;cursor:pointer">{{ b.label }}</span></sc-for>
+                </div>
+                <div style="flex:1;padding:12px 18px;font-size:17px;line-height:1.42;color:#4A463F;text-wrap:pretty">The whole board, steps 0 to {{ rpEnd }}, as anyone watching would see it. During the match neither player could.</div>
+                <div style="flex:none;padding:10px 18px 14px;border-top:1px solid #DAD6CC"><span onClick="{{ rpDone }}" style="height:48px;border-radius:3px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;cursor:pointer">DONE</span></div>
+              </sc-if>
+
+              <sc-if value="{{ pFree }}" hint-placeholder-val="{{ false }}">
+                <div style="flex:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:8px 18px 0">
+                  <sc-for list="{{ fpBtns }}" as="b" hint-placeholder-count="4"><span onClick="{{ b.click }}" style="height:44px;border:1px solid #DAD6CC;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px;cursor:pointer">{{ b.label }}</span></sc-for>
+                </div>
+                <div style="flex:none;padding:10px 18px 0;display:flex;flex-direction:column;gap:6px">
+                  <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">PLACE FOR</div>
+                  <div style="display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px">
+                    <sc-for list="{{ fpSides }}" as="b" hint-placeholder-count="3"><span onClick="{{ b.click }}" style="height:44px;border:1px solid #1D1D1B;border-radius:3px;background:{{ b.bg }};color:{{ b.fg }};display:flex;align-items:center;justify-content:center;gap:6px;font-family:'DM Mono',monospace;font-size:12px;cursor:pointer"><span style="width:10px;height:10px;background:{{ b.sw }}"></span>{{ b.label }}</span></sc-for>
+                  </div>
+                  <div style="display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px">
+                    <sc-for list="{{ fpPieces }}" as="b" hint-placeholder-count="4"><span onClick="{{ b.click }}" style="height:44px;border:1px solid #1D1D1B;border-radius:3px;background:{{ b.bg }};color:{{ b.fg }};display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px;cursor:pointer">{{ b.label }}</span></sc-for>
+                  </div>
+                  <div style="display:flex;gap:4px"><sc-for list="{{ arrows }}" as="a" hint-placeholder-count="4"><span onClick="{{ a.click }}" style="flex:1;height:40px;border:1px solid {{ a.bd }};background:{{ a.bg }};color:{{ a.fg }};border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:15px;cursor:pointer">{{ a.t }}</span></sc-for></div>
+                </div>
+                <div style="flex:1;min-height:0;overflow:auto;padding:10px 18px;font-size:16px;line-height:1.4;color:#4A463F;text-wrap:pretty">No points, no turns to act, nothing scored. Placing is allowed at step 0 only; tap a piece with the same tool to remove it.</div>
+                <div style="flex:none;padding:0 18px 14px;display:flex;gap:6px;flex-wrap:wrap"><span style="font-family:'DM Mono',monospace;font-size:12px;padding:3px 7px;border:1px dashed #6A675F;color:#6A675F;border-radius:2px">RULES INVENTED FOR THIS EDITION</span><span style="font-family:'DM Mono',monospace;font-size:12px;padding:3px 7px;border:1px solid #DAD6CC;border-radius:2px">THE BOOK'S CELL RULE: UNDER THE HOOD</span></div>
+              </sc-if>
+            </div>
+            </sc-if>
+          </div>
+        </div>
+      </sc-if>
+    </div>
+
+    <sc-if value="{{ port }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;inset:0;background:#060608;color:#E7E4DD;display:flex;flex-direction:column;z-index:5">
+        <div style="height:44px;flex:none;display:flex;align-items:center;gap:6px;padding:0 4px">
+          <span onClick="{{ exitFS }}" style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:16px;cursor:pointer">✕</span>
+          <span style="flex:1;text-align:center;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;white-space:nowrap;overflow:hidden">{{ strip }}</span>
+          <span onClick="{{ hRightClick }}" style="width:44px;height:44px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;cursor:pointer">{{ fsRight }}</span>
+        </div>
+        <div style="flex:none;display:flex;justify-content:center;position:relative">
+          <div style="display:grid;grid-template-columns:repeat({{ bd.cols }},{{ bd.cs }}px);grid-auto-rows:{{ bd.cs }}px"><sc-for list="{{ bd.cells }}" as="c" hint-placeholder-count="150"><div onClick="{{ c.click }}" style="margin:1px;background:{{ c.bg }};border:{{ c.bd }};box-shadow:{{ c.sh }};color:{{ c.fg }};font-size:{{ c.fs }};display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;line-height:1;box-sizing:border-box;cursor:pointer;user-select:none">{{ c.t }}</div></sc-for></div>
+          <sc-if value="{{ bannerPaused }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);background:rgba(5,5,7,.9);border-top:2px solid #FFB43A;padding:10px 14px;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;color:#F4F2ED;text-align:center;line-height:1.5;white-space:nowrap"><span style="border-bottom:2px dotted #D96AA0">@WREN</span> LOST CONNECTION<br>BACK WITHIN {{ pauseTime }}</div></sc-if>
+        </div>
+        <div style="flex:1;display:flex;align-items:center;gap:6px;padding:0 12px;border-top:1px solid #2A2C34;font-family:'DM Mono',monospace;font-size:12px">
+          <sc-if value="{{ pAct }}" hint-placeholder-val="{{ false }}">
+            <sc-for list="{{ pieces }}" as="p" hint-placeholder-count="3"><span onClick="{{ p.click }}" style="height:40px;padding:0 10px;border:1px solid {{ p.fsBd }};background:{{ p.fsBg }};color:{{ p.fsFg }};border-radius:3px;display:flex;align-items:center;cursor:pointer">{{ p.short }}</span></sc-for>
+            <span style="flex:1;text-align:center;color:#B4B3BA">{{ ptsShort }}</span>
+            <span onClick="{{ endTurn }}" style="height:40px;padding:0 12px;background:#46D7E8;color:#060608;border-radius:3px;display:flex;align-items:center;letter-spacing:.04em;cursor:pointer">END TURN</span>
+          </sc-if>
+          <sc-if value="{{ pWaitTurn }}" hint-placeholder-val="{{ false }}">
+            <span style="flex:1;color:#B4B3BA">WAITING FOR <span style="border-bottom:2px dotted #D96AA0">@WREN</span> · {{ clockTxt }}</span>
+            <span onClick="{{ changeTurn }}" style="height:40px;padding:0 12px;border:1px solid #E7E4DD;border-radius:3px;display:flex;align-items:center;cursor:pointer">CHANGE</span>
+          </sc-if>
+          <sc-if value="{{ pRun }}" hint-placeholder-val="{{ false }}">
+            <span style="flex:1;color:#B4B3BA">{{ runHead }}</span>
+            <span onClick="{{ ffClick }}" style="height:40px;padding:0 12px;border:1px solid #4A4843;border-radius:3px;display:flex;align-items:center;cursor:pointer;color:{{ ffFsFg }}">{{ ffShort }}</span>
+          </sc-if>
+          <sc-if value="{{ pFree }}" hint-placeholder-val="{{ false }}">
+            <sc-for list="{{ fpBtnsFS }}" as="b" hint-placeholder-count="6"><span onClick="{{ b.click }}" style="flex:1;height:40px;border:1px solid #4A4843;border-radius:3px;display:flex;align-items:center;justify-content:center;cursor:pointer;white-space:nowrap">{{ b.label }}</span></sc-for>
+          </sc-if>
+        </div>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ sheetOn }}" hint-placeholder-val="{{ false }}">
+      <div onClick="{{ closeSheet }}" style="position:absolute;inset:0;background:rgba(29,29,27,.45);z-index:10"></div>
+      <div style="position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:{{ sheetW }};max-width:100%;background:#F4F2ED;border-radius:12px 12px 0 0;padding:18px;display:flex;flex-direction:column;gap:12px;z-index:11;box-sizing:border-box">
+        <sc-if value="{{ shMenu }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;border-top:1px solid #DAD6CC;font-size:18px">
+            <span onClick="{{ askResign }}" style="min-height:48px;display:flex;align-items:center;border-bottom:1px solid #DAD6CC;cursor:pointer">Resign</span>
+            <a href="Minpentai Rules.dc.html" target="_blank" style="min-height:48px;display:flex;align-items:center;border-bottom:1px solid #DAD6CC;color:#1D1D1B;text-decoration:none">The rules page ↗</a>
+            <span onClick="{{ askLeave }}" style="min-height:48px;display:flex;align-items:center;border-bottom:1px solid #DAD6CC;cursor:pointer">{{ leaveLabel }}</span>
+          </div>
+          <span onClick="{{ closeSheet }}" style="height:48px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;cursor:pointer">CLOSE</span>
+        </sc-if>
+        <sc-if value="{{ shResign }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:24px">Resign this match?</div>
+          <div style="font-size:17px;line-height:1.42;color:#4A463F;text-wrap:pretty">{{ resignText }}</div>
+          <span onClick="{{ resign }}" style="height:48px;border-radius:3px;background:#8A2F2F;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;cursor:pointer">RESIGN</span>
+          <span onClick="{{ closeSheet }}" style="height:48px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;cursor:pointer">KEEP PLAYING</span>
+        </sc-if>
+        <sc-if value="{{ shLeave }}" hint-placeholder-val="{{ false }}">
+          <div style="font-size:24px">{{ leaveTitle }}</div>
+          <div style="font-size:17px;line-height:1.42;color:#4A463F;text-wrap:pretty">{{ leaveText }}</div>
+          <span onClick="{{ leave }}" style="height:48px;border-radius:3px;background:#8A2F2F;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;cursor:pointer">LEAVE</span>
+          <span onClick="{{ closeSheet }}" style="height:48px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;cursor:pointer">STAY</span>
+        </sc-if>
+        <sc-if value="{{ shAccept }}" hint-placeholder-val="{{ false }}">
+          <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">FOUND A PLAYER · {{ acceptTime }}</div>
+          <div style="font-size:24px">Accept the match?</div>
+          <div style="font-size:17px;line-height:1.42;color:#4A463F;text-wrap:pretty">Not answering puts the other person back at the front of the list, and takes you off it.</div>
+          <span onClick="{{ accept }}" style="height:48px;border-radius:3px;background:#1D1D1B;color:#F4F2ED;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;cursor:pointer">ACCEPT</span>
+          <span onClick="{{ decline }}" style="height:48px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;cursor:pointer">NOT NOW</span>
+        </sc-if>
+        <sc-if value="{{ shOpts }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">START FROM</div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px"><sc-for list="{{ fpStarts }}" as="b" hint-placeholder-count="3"><span onClick="{{ b.click }}" style="height:44px;border:1px solid {{ b.bd }};color:{{ b.fg }};border-radius:3px;display:flex;align-items:center;padding:0 10px;font-size:16px;cursor:pointer">{{ b.label }}</span></sc-for></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">NEW RULES · ANY NUMBER</div>
+            <div style="display:flex;flex-direction:column;border-top:1px solid #DAD6CC;font-size:16px"><sc-for list="{{ fpRules }}" as="b" hint-placeholder-count="2"><div onClick="{{ b.click }}" style="min-height:44px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #DAD6CC;cursor:pointer"><span>{{ b.label }}</span><span style="font-family:'DM Mono',monospace;font-size:12px;background:{{ b.bg }};color:{{ b.fg }};border:1px solid {{ b.bd }};padding:4px 8px;border-radius:2px">{{ b.v }}</span></div></sc-for></div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:6px">
+            <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F">SEE AS</div>
+            <div style="display:grid;grid-template-columns:repeat(3,1fr);border:1px solid #1D1D1B;border-radius:3px;overflow:hidden;font-family:'DM Mono',monospace;font-size:12px"><sc-for list="{{ fpSee }}" as="b" hint-placeholder-count="3"><span onClick="{{ b.click }}" style="height:40px;display:flex;align-items:center;justify-content:center;background:{{ b.bg }};color:{{ b.fg }};cursor:pointer">{{ b.label }}</span></sc-for></div>
+          </div>
+          <span onClick="{{ copyLink }}" style="height:48px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;cursor:pointer">COPY A LINK TO THIS BOARD</span>
+          <div style="font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;text-align:center">The link holds the board. Nothing is stored on our side.</div>
+        </sc-if>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{ toastOn }}" hint-placeholder-val="{{ false }}">
+      <div style="position:absolute;left:50%;bottom:86px;transform:translateX(-50%);width:max-content;max-width:calc(100% - 36px);background:#1D1D1B;color:#F4F2ED;padding:10px 14px;border-radius:3px;font-size:16px;line-height:1.35;z-index:20;box-sizing:border-box;text-wrap:pretty;pointer-events:none">{{ toast }}</div>
+    </sc-if>
+  </div>
+  </div>
+  <div style="max-width:{{ fw }}px;font-family:'DM Mono',monospace;font-size:12px;color:#6A675F;line-height:1.5;text-align:center">Plays by <a href="Minpentai Rules.dc.html" target="_blank">the rules page</a>. Screens from <a href="Minpentai Play.dc.html" target="_blank">Minpentai Play</a>. Opponent, matchmaking and connection drops are simulated. Nothing is official. All wording is draft.</div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const W = 15, H = 10, MAXS = 96, KEY = 'minpentai-play-proto';
+const ROCKS = [[6,0],[9,3],[7,4],[7,5],[5,6],[8,9]];
+const COL = { C: '#46D7E8', A: '#FFB43A' };
+const AR = { '1,0':'→','-1,0':'←','0,-1':'↑','0,1':'↓','1,-1':'↗','1,1':'↘','-1,1':'↙','-1,-1':'↖' };
+const ROT = { '→':'↑','↑':'←','←':'↓','↓':'→','↗':'↖','↖':'↙','↙':'↘','↘':'↗' };
+const D4 = [[-1,0],[0,-1],[0,1],[1,0]];
+const D8 = [[-1,-1],[0,-1],[1,-1],[-1,0],[1,0],[-1,1],[0,1],[1,1]];
+const RULES = { diag: 'Gliders may also fly diagonally.', cost3: 'Gliders cost 3 points.', sight2: 'You see only 2 squares around your towers.', every8: 'Turns to act come every 8 steps.' };
+const RUNGS = [null,
+  { n: 'Rival', d: 'Fires one glider a turn at a tower it can see. Never defends.' },
+  { n: 'Blocker', d: 'Also puts squares in front of gliders it sees coming.' },
+  { n: 'Builder', d: 'Also builds towers to see and reach further, and aims off rocks.' },
+  { n: 'Opportunist', d: "Also uses the match's new rule against you." },
+  { n: 'Planner', d: 'Tests its moves ahead on what it can see, and fires twice when it can.' }];
+const COST = { s: 1, t: 4 };
+const K = (x, y) => y * W + x, XY = k => [k % W, (k / W) | 0];
+const inb = (x, y) => x >= 0 && y >= 0 && x < W && y < H;
+const fmt = ms => { const s = Math.max(0, Math.ceil(ms / 1000)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); };
+function rng(seed) { let a = seed >>> 0; return () => { a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function world(empty) {
+  const w = { step: 0, rock: {}, sq: {}, tw: {}, gl: [], nid: 1, flash: [] };
+  if (!empty) { ROCKS.forEach(([x, y]) => w.rock[K(x, y)] = 1); [[1,2],[1,7]].forEach(([x, y]) => w.tw[K(x, y)] = 'C'); [[13,2],[13,7]].forEach(([x, y]) => w.tw[K(x, y)] = 'A'); }
+  return w;
+}
+function clone(w) { const sq = {}; for (const k in w.sq) sq[k] = { ...w.sq[k] }; return { step: w.step, rock: { ...w.rock }, sq, tw: { ...w.tw }, gl: w.gl.map(g => ({ ...g })), nid: w.nid, flash: (w.flash || []).slice() }; }
+function towers(w, o) { return Object.keys(w.tw).filter(k => w.tw[k] === o).map(Number); }
+function lit(w, o, R, tws) { const s = new Set(); (tws || towers(w, o)).forEach(k => { const [x, y] = XY(k); for (let dy = -R; dy <= R; dy++) for (let dx = -R; dx <= R; dx++) if (inb(x + dx, y + dy)) s.add(K(x + dx, y + dy)); }); return s; }
+function empty(w, k) { return !w.rock[k] && !w.sq[k] && !w.tw[k] && !w.gl.some(g => K(g.x, g.y) === k); }
+// One step, rules page §3: all gliders at once.
+function step(w) {
+  const gl = w.gl; w.flash = [];
+  for (const g of gl) { g.dead = false; const tx = g.x + g.dx, ty = g.y + g.dy, bx = tx < 0 || tx >= W, by = ty < 0 || ty >= H; if (bx) g.dx = -g.dx; if (by) g.dy = -g.dy; if (bx || by) { g.tx = g.x; g.ty = g.y; g.stay = 1; } else { g.tx = tx; g.ty = ty; g.stay = 0; } }
+  for (let i = 0; i < gl.length; i++) for (let j = i + 1; j < gl.length; j++) {
+    const a = gl[i], b = gl[j]; if (a.o === b.o) continue;
+    if ((a.tx === b.tx && a.ty === b.ty) || (a.x + a.tx === b.x + b.tx && a.y + a.ty === b.y + b.ty)) { a.dead = b.dead = true; w.flash.push(K(a.tx, a.ty)); }
+  }
+  for (const g of gl.filter(g => !g.dead).sort((a, b) => a.id - b.id)) {
+    if (g.stay) continue; const k = K(g.tx, g.ty);
+    if (w.rock[k]) { g.dx = -g.dx; g.dy = -g.dy; continue; }
+    const s = w.sq[k]; if (s) { if (s.hp > 1) { s.hp = 1; g.dx = -g.dx; g.dy = -g.dy; } else { delete w.sq[k]; g.dead = true; w.flash.push(k); } continue; }
+    const t = w.tw[k]; if (t) { if (t !== g.o) { delete w.tw[k]; g.dead = true; w.flash.push(k); } else { g.dx = -g.dx; g.dy = -g.dy; } continue; }
+    g.x = g.tx; g.y = g.ty;
+  }
+  w.gl = gl.filter(g => !g.dead); w.step++; return w;
+}
+// Computer player: sees only what its towers light (§8).
+function botPlan(m) {
+  const w = m.w, o = 'A', e = 'C', L = m.lvl, R = m.R, r = m.rng, cost = m.cost;
+  const used = new Set(), out = []; let pts = 8;
+  const zoneAll = [...lit(w, o, R, m.snap.A)].filter(k => empty(w, k));
+  const zone = () => zoneAll.filter(k => !used.has(k));
+  const see = lit(w, o, R);
+  const b = world(true); Object.assign(b.rock, w.rock); b.step = w.step;
+  for (const k in w.tw) if (w.tw[k] === o) b.tw[k] = o;
+  for (const k in m.lsA) b.tw[k] = e;
+  for (const k in w.sq) if (w.sq[k].o === o || see.has(+k)) b.sq[k] = { ...w.sq[k] };
+  b.gl = w.gl.filter(g => see.has(K(g.x, g.y))).map(g => ({ ...g }));
+  const add = (t, k, dx = 0, dy = 0) => { const [x, y] = XY(k); out.push({ t, o, x, y, dx, dy }); used.add(k); pts -= t === 'g' ? cost : COST[t]; if (t === 's') b.sq[k] = { o, hp: 2 }; if (t === 't') b.tw[k] = o; };
+  const cnt = (s, who) => Object.values(s.tw).filter(t => t === who).length;
+  const dirs = (m.rule === 'diag' && L >= 4) ? D8 : D4;
+  if (L >= 2) { let n = 0;
+    for (const g of b.gl) { if (g.o !== e || n >= 2 || pts < 1) continue;
+      const sw = clone(b); sw.gl = [{ ...g }]; const base = cnt(sw, o), path = [];
+      for (let i = 0; i < m.every + 6; i++) { const q = sw.gl[0]; if (!q) break; if (inb(q.x + q.dx, q.y + q.dy)) path.push(K(q.x + q.dx, q.y + q.dy)); step(sw);
+        if (!sw.gl.length) { if (cnt(sw, o) < base) { const c = path.find(k => zoneAll.includes(k) && !used.has(k)); if (c !== undefined) { add('s', c); n++; } } break; } } } }
+  const shots = () => { const cs = [], base = cnt(b, e);
+    for (const k of zone()) { const [x, y] = XY(k);
+      for (const [dx, dy] of dirs) {
+        if (L <= 2) { let cx = x + dx, cy = y + dy, n = 1; while (inb(cx, cy)) { const kk = K(cx, cy); if (b.rock[kk] || b.sq[kk]) break; if (b.tw[kk]) { if (b.tw[kk] === e) cs.push({ k, dx, dy, s: 100 - n }); break; } cx += dx; cy += dy; n++; } }
+        else { const sw = clone(b); sw.gl.push({ id: 1e6, o, x, y, dx, dy }); const lim = Math.min(40, MAXS - b.step);
+          for (let n = 1; n <= lim; n++) { step(sw); if (!sw.gl.some(g => g.id === 1e6)) { if (cnt(sw, e) < base) cs.push({ k, dx, dy, s: 100 - n }); break; } } } } }
+    return cs.sort((a, c) => c.s - a.s); };
+  const c = pts >= cost ? shots() : [];
+  if (c.length) { const p = L <= 1 ? c[Math.floor(r() * Math.min(c.length, 5))] : c[0]; add('g', p.k, p.dx, p.dy); }
+  else if (pts >= cost && (L > 0 || r() < .85)) { const rows = Object.keys(m.lsA).map(k => XY(+k)[1]); let z = zone().filter(k => rows.includes(XY(k)[1])); if (!z.length) z = zone(); if (z.length) add('g', z[Math.floor(r() * z.length)], -1, 0); }
+  if (L >= 3 && pts >= 4 && cnt(b, o) < (L >= 5 ? 3 : 5)) { const z = zone(); if (z.length) { const mx = Math.min(...z.map(k => XY(k)[0])); const f = z.filter(k => XY(k)[0] === mx); add('t', f[Math.floor(r() * f.length)]); } }
+  if (L >= 5 && pts >= cost) { const c2 = shots().filter(s => !used.has(s.k)); if (c2.length) add('g', c2[0].k, c2[0].dx, c2[0].dy); }
+  if (L >= 2) { let n = 0; for (const tk of towers(w, o)) { const [tx, ty] = XY(tk); for (const [dx, dy] of [[-1,0],[-1,-1],[-1,1]]) { if (pts < 1 || n >= 3) break; const x = tx + dx, y = ty + dy; if (!inb(x, y)) continue; const k = K(x, y); if (zoneAll.includes(k) && !used.has(k)) { add('s', k); n++; } } } }
+  return out;
+}
+function apply(m) {
+  const w = m.w, all = [...m.pend.C, ...m.pend.A], n = {};
+  all.forEach(p => { const k = K(p.x, p.y); n[k] = (n[k] || 0) + 1; });
+  all.forEach(p => { const k = K(p.x, p.y); if (n[k] > 1) return; if (p.t === 'g') w.gl.push({ id: w.nid++, o: p.o, x: p.x, y: p.y, dx: p.dx, dy: p.dy }); else if (p.t === 's') w.sq[k] = { o: p.o, hp: 2 }; else w.tw[k] = p.o; });
+}
+function updLS(m) {
+  lit(m.w, 'C', m.R).forEach(k => { if (m.w.tw[k] === 'A') m.lsC[k] = m.w.step; else delete m.lsC[k]; });
+  lit(m.w, 'A', m.R).forEach(k => { if (m.w.tw[k] === 'C') m.lsA[k] = m.w.step; else delete m.lsA[k]; });
+}
+function board(o) {
+  const { w, cs } = o, vis = o.fog ? lit(w, o.fog, o.R) : null, glAt = {}, pAt = {}, am = {};
+  w.gl.forEach(g => { const k = K(g.x, g.y); if (!glAt[k]) glAt[k] = g; });
+  (o.pend || []).forEach(p => pAt[K(p.x, p.y)] = p);
+  const fl = new Set(o.flash ? w.flash : []);
+  if (o.aim) (o.dirs || D4).forEach(([dx, dy]) => { const x = o.aim.x + dx, y = o.aim.y + dy; if (inb(x, y)) am[K(x, y)] = [dx, dy]; });
+  const rot = t => o.portrait ? (ROT[t] || t) : t, fz = f => Math.round(cs * f) + 'px', ring = `inset 0 0 0 ${Math.round(cs * .2)}px #0E0F13`, pr = '0 0 0 1px #E7E4DD';
+  const one = (x, y) => {
+    const k = K(x, y), c = { bg: '#0E0F13', bd: '0', sh: 'none', fg: '#E7E4DD', t: '', fs: fz(.58), click: () => o.onCell && o.onCell(x, y) };
+    if (am[k]) { const [dx, dy] = am[k]; c.bd = '1px dashed #E7E4DD'; c.t = rot(AR[dx + ',' + dy]); c.fs = fz(.5); c.click = () => o.onAim(dx, dy); return c; }
+    if (w.rock[k]) { c.bg = '#3A3B42'; return c; }
+    if (vis && !vis.has(k)) { c.bg = '#050507'; if (o.ls && o.ls[k] !== undefined) { c.bd = '1px dashed #FFB43A'; c.t = '?'; c.fg = '#FFB43A'; c.fs = fz(.4); } return c; }
+    if (fl.has(k)) { c.bg = '#F4F2ED'; return c; }
+    const t = w.tw[k], q = w.sq[k], g = glAt[k], p = pAt[k];
+    if (t) { c.bg = COL[t]; c.sh = ring; }
+    else if (q) { c.bd = `2px ${q.hp > 1 ? 'solid' : 'dashed'} ${COL[q.o]}`; c.bg = '#16181E'; }
+    else if (g) { c.fg = COL[g.o]; c.t = rot(AR[g.dx + ',' + g.dy]); }
+    else if (p) { const col = COL[p.o || 'C']; if (p.t === 't') { c.bg = col; c.sh = ring + ',' + pr; } else if (p.t === 's') { c.bd = '2px solid ' + col; c.bg = '#16181E'; c.sh = pr; } else { c.fg = col; c.t = rot(AR[p.dx + ',' + p.dy]); c.sh = pr; c.bg = '#14272C'; } }
+    else if (o.dots && o.dots.has(k)) { c.t = '·'; c.fg = COL.C; c.fs = fz(.7); if (o.zone && o.zone.has(k)) c.bg = '#14272C'; }
+    else if (o.zone && o.zone.has(k)) c.bg = '#14272C';
+    return c;
+  };
+  const cells = [];
+  if (o.portrait) { for (let r = 0; r < W; r++) for (let col = 0; col < H; col++) cells.push(one(W - 1 - r, col)); }
+  else { for (let y = 0; y < H; y++) for (let x = 0; x < W; x++) cells.push(one(x, y)); }
+  return { cells, cols: o.portrait ? H : W, cs };
+}
+const SAMPLE_PROG = { opened: 3, rec: { 1: { tries: 1, won: 38, s: 1 }, 2: { tries: 3, won: 61, s: 1 }, 3: { tries: 2, s: 1 } }, sample: true };
+
+class Component extends DCLogic {
+  state = { dev: 'phone', signed: true, scr: 'home', tab: 'play', fs: false, panel: true, sheet: null, toast: null, prog: { opened: 1, rec: {} }, rungSel: null, piece: 'g', dir: [1, 0], aim: false, v: 0, vw: 1200, vh: 900 };
+  componentDidMount() {
+    try { const s = JSON.parse(localStorage.getItem(KEY) || '{}'); const p = {}; if (s.dev) p.dev = s.dev; if (s.signed !== undefined) p.signed = s.signed; if (s.prog) p.prog = s.prog; this.setState(p); } catch (e) {}
+    this.onR = () => this.setState({ vw: window.innerWidth, vh: window.innerHeight }); this.onR(); window.addEventListener('resize', this.onR);
+    this.onK = e => { if (e.key !== 'Escape') return; if (this.state.sheet && this.state.sheet !== 'accept') this.setState({ sheet: null }); else if (this.state.fs) this.setState({ fs: false, aim: false }); };
+    window.addEventListener('keydown', this.onK);
+    this.clk = setInterval(() => this.tick(), 250);
+    const h = location.hash; if (h.startsWith('#fp=')) { try { this.loadFree(JSON.parse(atob(decodeURIComponent(h.slice(4))))); this.setState({ scr: 'free' }); } catch (e) {} }
+  }
+  componentWillUnmount() { [this.clk, this.rt, this.ft, this.pt].forEach(clearInterval); clearTimeout(this.tt); window.removeEventListener('resize', this.onR); window.removeEventListener('keydown', this.onK); }
+  set(p) { this.setState(p); if ('dev' in p || 'signed' in p || 'prog' in p) { const s = { ...this.state, ...p }; try { localStorage.setItem(KEY, JSON.stringify({ dev: s.dev, signed: s.signed, prog: s.prog })); } catch (e) {} } }
+  bump() { this.setState(s => ({ v: s.v + 1 })); }
+  say(t) { clearTimeout(this.tt); this.setState({ toast: t }); this.tt = setTimeout(() => this.setState({ toast: null }), 2800); }
+  portrait() { return this.state.fs && this.state.dev !== 'desk'; }
+  tick() {
+    const now = Date.now(); let ch = false;
+    if (this.wait) { ch = true;
+      if (!this.accept && now - this.wait.t0 > 5000) { this.accept = { t0: now }; this.setState({ sheet: 'accept' }); }
+      if (this.accept && now - this.accept.t0 > 20000) { this.wait = this.accept = null; this.setState({ scr: 'person', sheet: null }); this.say("You didn't answer in time, so you're off the list."); } }
+    const m = this.m;
+    if (m && m.mode === 'duel') { ch = true;
+      if (m.paused) { if (now > m.paused.until) this.oppGone(); }
+      else if (m.phase === 'act') { if (!m.oppEnded && now >= m.oppEndAt) m.oppEnded = true; if ((m.ended && m.oppEnded) || now >= m.clock.end) this.startRun(); }
+      else if (m.phase === 'over' && m.rm && m.rm.mine && now >= Math.max(m.rm.ask, m.rm.mine + 1500) && now < m.rm.until) this.rematch(); }
+    if (ch) this.bump();
+  }
+  mk(mode, rung) {
+    const seed = (Date.now() % 1e6) | 0, r = rng(seed), ids = Object.keys(RULES), rule = ids[Math.floor(r() * ids.length)];
+    const m = { mode, rung, lvl: mode === 'practice' ? 0 : mode === 'ladder' ? rung : 3, rule, R: rule === 'sight2' ? 2 : 3, every: rule === 'every8' ? 8 : 12, cost: rule === 'cost3' ? 3 : 4, rng: r, w: world(), hist: [], phase: 'pre', pend: { C: [], A: [] }, snap: { C: [], A: [] }, lsC: {}, lsA: {}, ended: false, oppEnded: false, clock: null, res: null };
+    m.lsC[K(13, 2)] = 0; m.lsC[K(13, 7)] = 0; m.lsA[K(1, 2)] = 0; m.lsA[K(1, 7)] = 0;
+    m.hist.push(clone(m.w)); return m;
+  }
+  openStart(mode, rung) { clearInterval(this.rt); this.m = this.mk(mode, rung); this.setState({ scr: 'start', fs: false, sheet: null }); }
+  begin() { this.beginAct(); this.setState({ scr: 'match', piece: 'g', dir: [1, 0], aim: false }); }
+  beginAct() {
+    const m = this.m, w = m.w, now = Date.now();
+    m.phase = 'act'; m.snap = { C: towers(w, 'C'), A: towers(w, 'A') }; m.pend = { C: [], A: [] }; m.ended = m.oppEnded = false; m.lastG = null; m.ff = false;
+    m.pend.A = botPlan(m);
+    if (m.mode === 'duel') { const d = w.step === 0 ? 90000 : 45000; m.clock = { end: now + d, dur: d }; m.oppEndAt = now + (w.step === 0 ? 9000 + m.rng() * 20000 : 4000 + m.rng() * 17000); }
+    this.setState({ aim: false });
+  }
+  startRun() { const m = this.m; if (!m || m.phase !== 'act') return; apply(m); updLS(m); m.hist[m.hist.length - 1] = clone(m.w); m.phase = 'run'; m.clock = null; this.setState({ aim: false }); this.runT(); }
+  runT() { clearInterval(this.rt); this.rt = setInterval(() => this.runTick(), this.m.ff ? 40 : 170); }
+  runTick() {
+    const m = this.m; if (!m || m.phase !== 'run') { clearInterval(this.rt); return; } if (m.paused) return;
+    step(m.w); updLS(m); m.hist.push(clone(m.w));
+    if (this.checkEnd()) return;
+    if (m.w.step % m.every === 0) { clearInterval(this.rt); this.beginAct(); }
+    this.bump();
+  }
+  checkEnd() {
+    const m = this.m, w = m.w, c = towers(w, 'C').length, a = towers(w, 'A').length, n = w.step; let win, why;
+    if (!c && !a) { win = 'D'; why = `Both sides lost their last tower at step ${n}.`; }
+    else if (!c) { win = 'A'; why = `Your last tower fell at step ${n}.`; }
+    else if (!a) { win = 'C'; why = `Amber's last tower fell at step ${n}.`; }
+    else if (n >= MAXS) { win = c > a ? 'C' : a > c ? 'A' : 'D'; why = `Time ran out at step ${MAXS}. Amber had ${a} tower${a === 1 ? '' : 's'}, you had ${c}.`; }
+    else return false;
+    this.finish(win, why); return true;
+  }
+  finish(win, why, kind) {
+    const m = this.m; clearInterval(this.rt); m.phase = 'over'; m.paused = null; m.res = { win, why, kind: kind || 'end', step: m.w.step };
+    if (m.mode === 'duel') { const now = Date.now(); m.rm = kind === 'gone' || kind === 'left' ? null : { ask: now + 3000, until: now + 23000, mine: null }; }
+    let prog = this.state.prog; m.newOpen = false;
+    if (m.mode === 'ladder') { const rec = { ...prog.rec }, r = { ...(rec[m.rung] || { tries: 0 }) }; r.tries = (r.tries || 0) + 1; if (win === 'C' && !r.won) { r.won = m.w.step; delete r.s; } rec[m.rung] = r; const opened = win === 'C' ? Math.max(prog.opened, Math.min(5, m.rung + 1)) : prog.opened; m.newOpen = opened > prog.opened; prog = { ...prog, rec, opened }; }
+    this.lastStart = m.hist[0];
+    this.set({ scr: 'result', fs: false, sheet: null, aim: false, prog });
+  }
+  resign() { this.finish('A', `You resigned at step ${this.m.w.step}. It counts as a loss.`, 'resign'); }
+  leave() {
+    const m = this.m;
+    if (m.mode === 'duel' && m.w.step === 0 && m.phase === 'act') { this.m = null; this.setState({ scr: 'person', sheet: null, fs: false }); this.say('Match cancelled during setup. No result.'); return; }
+    if (m.mode === 'practice') { clearInterval(this.rt); this.m = null; this.setState({ scr: 'home', tab: 'play', sheet: null, fs: false }); return; }
+    this.finish('A', `You left at step ${m.w.step}. Leaving counts as resigning.`, 'left');
+  }
+  drop() { const m = this.m; if (!m || m.mode !== 'duel' || m.phase === 'over' || m.paused || this.state.scr !== 'match') return; m.paused = { at: Date.now(), until: Date.now() + 60000 }; this.bump(); }
+  comeBack() { const m = this.m; if (!m || !m.paused) return; const d = Date.now() - m.paused.at; if (m.clock) m.clock.end += d; m.oppEndAt += d; m.paused = null; this.say('@wren is back. The match goes on.'); this.bump(); }
+  oppGone() { if (!this.m || this.m.phase === 'over') return; this.finish('C', "@wren didn't come back within 60 seconds. That counts as resigning.", 'gone'); }
+  rematch() { this.m = this.mk('duel'); this.setState({ scr: 'matched' }); }
+  pts() { const m = this.m; return 8 - m.pend.C.reduce((s, p) => s + (p.t === 'g' ? m.cost : COST[p.t]), 0); }
+  next() { const m = this.m; return (Math.floor(m.w.step / m.every) + 1) * m.every; }
+  cellMatch(x, y) {
+    const m = this.m; if (!m) return; const k = K(x, y);
+    if (m.paused) return;
+    if (m.phase === 'run') { const n = this.next(); this.say(n >= MAXS ? 'Your last turn to act is over. The match ends at step 96.' : `Your turn to act is over. The next one is at step ${n}.`); return; }
+    if (m.phase !== 'act') return;
+    const i = m.pend.C.findIndex(p => K(p.x, p.y) === k);
+    if (i >= 0) { const p = m.pend.C.splice(i, 1)[0]; if (p === m.lastG) m.lastG = null; m.ended = false; this.setState({ aim: false }); this.bump(); return; }
+    if (m.ended) { this.say('Tap CHANGE MY TURN to place more.'); return; }
+    if (!lit(m.w, 'C', m.R, m.snap.C).has(k)) { this.say(`Place in the lit area: within ${m.R} squares of a tower you had when this turn began.`); return; }
+    if (!empty(m.w, k)) { this.say('That square is taken.'); return; }
+    const pc = this.state.piece, c = pc === 'g' ? m.cost : COST[pc];
+    if (this.pts() < c) { this.say('Not enough points left this turn.'); return; }
+    const p = { t: pc, o: 'C', x, y, dx: this.state.dir[0], dy: this.state.dir[1] }; m.pend.C.push(p); if (pc === 'g') m.lastG = p;
+    this.setState({ aim: pc === 'g' && this.portrait() }); this.bump();
+  }
+  endTurn() { const m = this.m; if (!m || m.phase !== 'act') return; this.setState({ aim: false }); if (m.mode !== 'duel') { this.startRun(); return; } m.ended = true; if (m.oppEnded) this.startRun(); this.bump(); }
+  setDir(d) {
+    this.setState({ dir: d }); const sc = this.state.scr;
+    const g = sc === 'match' && this.m ? this.m.lastG : sc === 'free' && this.fp && this.fp.i === 0 ? this.fp.lastG : null;
+    if (g) { g.dx = d[0]; g.dy = d[1]; if (sc === 'free') this.fpReset(); }
+    this.bump();
+  }
+  // Free play
+  openFree() { if (!this.fp) this.loadFree(null); this.setState({ scr: 'free', fs: false, sheet: null, dir: [1, 0], aim: false }); }
+  loadFree(d, w0) {
+    clearInterval(this.ft); let w;
+    if (w0) w = clone(w0);
+    else if (d && d.w) { w = world(true); (d.w.r || []).forEach(k => w.rock[k] = 1); (d.w.t || []).forEach(([k, o]) => w.tw[k] = o); (d.w.s || []).forEach(([k, o, hp]) => w.sq[k] = { o, hp }); (d.w.g || []).forEach(([x, y, dx, dy, o]) => w.gl.push({ id: w.nid++, o, x, y, dx, dy })); }
+    else w = d === 'empty' ? world(true) : world();
+    w.step = 0; w.flash = [];
+    const old = this.fp || {};
+    this.fp = { w0: w, hist: [clone(w)], i: 0, playing: false, side: old.side || 'C', piece: old.piece || 'g', see: (d && d.see) || old.see || 'all', diag: d && d.w ? !!d.diag : !!old.diag, sight2: d && d.w ? !!d.sight2 : !!old.sight2, lastG: null };
+  }
+  fpReset() { const f = this.fp; f.hist = [clone(f.w0)]; f.i = 0; }
+  cellFree(x, y) {
+    const f = this.fp, k = K(x, y), w = f.w0;
+    if (f.i !== 0) { this.say('Placing is allowed at step 0 only. Step back to 0 to change the board.'); return; }
+    const gi = w.gl.findIndex(g => K(g.x, g.y) === k);
+    if (f.piece === 'e') { delete w.rock[k]; delete w.sq[k]; delete w.tw[k]; w.gl = w.gl.filter(g => K(g.x, g.y) !== k); }
+    else if (f.side === 'R') { if (w.rock[k]) delete w.rock[k]; else if (empty(w, k)) w.rock[k] = 1; else { this.say('That square is taken. Erase it first.'); return; } }
+    else {
+      const same = (f.piece === 't' && w.tw[k] === f.side) || (f.piece === 's' && w.sq[k] && w.sq[k].o === f.side) || (f.piece === 'g' && gi >= 0 && w.gl[gi].o === f.side);
+      if (same) { delete w.tw[k]; delete w.sq[k]; if (gi >= 0) { if (w.gl[gi] === f.lastG) f.lastG = null; w.gl.splice(gi, 1); } }
+      else if (!empty(w, k)) { this.say('That square is taken. Erase it first.'); return; }
+      else if (f.piece === 't') w.tw[k] = f.side;
+      else if (f.piece === 's') w.sq[k] = { o: f.side, hp: 2 };
+      else { const g = { id: w.nid++, o: f.side, x, y, dx: this.state.dir[0], dy: this.state.dir[1] }; w.gl.push(g); f.lastG = g; this.setState({ aim: this.portrait() }); }
+    }
+    this.fpReset(); this.bump();
+  }
+  fpFwd() { const f = this.fp; if (f.i + 1 < f.hist.length) f.i++; else { if (!f.hist[f.i].gl.length || f.i >= 200) { this.fpStop(); return; } f.hist.push(step(clone(f.hist[f.i]))); f.i++; } this.bump(); }
+  fpStop() { clearInterval(this.ft); if (this.fp) this.fp.playing = false; this.bump(); }
+  fpPlay() { const f = this.fp; if (f.playing) { this.fpStop(); return; } f.playing = true; this.setState({ aim: false }); clearInterval(this.ft); this.ft = setInterval(() => this.fpFwd(), 170); this.bump(); }
+  copyLink() {
+    const f = this.fp, w = f.w0;
+    const d = { w: { r: Object.keys(w.rock).map(Number), t: Object.entries(w.tw).map(([k, o]) => [+k, o]), s: Object.entries(w.sq).map(([k, v]) => [+k, v.o, v.hp]), g: w.gl.map(g => [g.x, g.y, g.dx, g.dy, g.o]) }, see: f.see, diag: f.diag, sight2: f.sight2 };
+    const url = location.href.split('#')[0] + '#fp=' + encodeURIComponent(btoa(JSON.stringify(d)));
+    try { navigator.clipboard.writeText(url); } catch (e) {}
+    this.say('Link copied. Opening it loads this board in free play.');
+  }
+  openReplay() { this.rp = { hist: this.m.hist, i: 0, playing: true }; this.setState({ scr: 'replay' }); this.rpT(); }
+  rpT() { clearInterval(this.pt); this.pt = setInterval(() => { const r = this.rp; if (!r || !r.playing || this.state.scr !== 'replay') { clearInterval(this.pt); return; } if (r.i < r.hist.length - 1) r.i++; else r.playing = false; this.bump(); }, 110); }
+
+  renderVals() {
+    const s = this.state, m = this.m, f = this.fp, now = Date.now(), scr = s.scr;
+    const desk = s.dev === 'desk', fw = desk ? 1280 : s.dev === 'frame' ? 424 : 390, fh = desk ? 800 : 695;
+    const scale = Math.max(.3, Math.min(1, (s.vw - 32) / fw, (s.vh - 150) / fh));
+    const boardScr = ['start', 'matched', 'match', 'result', 'replay', 'free'].includes(scr);
+    const fsAble = scr === 'match' || scr === 'free', fs = s.fs && fsAble, port = fs && !desk;
+    const L = desk ? (fs ? { dir: 'row', cs: 60, bflex: '1', bpad: '20px', pflex: 'none', pw: '340px', pbl: '1px solid #DAD6CC', colMax: '100%', colBd: '0' } : { dir: 'row', cs: 44, bflex: '1', bpad: '24px', pflex: 'none', pw: '380px', pbl: '1px solid #DAD6CC', colMax: '640px', colBd: '1px solid #DAD6CC' }) : { dir: 'column', cs: 26, bflex: 'none', bpad: '0', pflex: '1', pw: '100%', pbl: '0', colMax: '100%', colBd: '0' };
+    const cs = port ? (s.dev === 'frame' ? 40 : 36) : L.cs, P = { cs, portrait: port };
+    const btn = on => ({ bg: on ? '#1D1D1B' : 'transparent', fg: on ? '#F4F2ED' : '#1D1D1B' });
+    const go = p => () => { clearInterval(this.rt); this.setState({ sheet: null, fs: false, ...p }); };
+    const prog = s.prog, ul = '2px dotted #B3306E';
+    const v = {
+      devs: [['phone', 'PHONE 390'], ['frame', 'FARCASTER 424'], ['desk', 'DESKTOP 1280']].map(([id, label]) => ({ label, bg: s.dev === id ? '#E7E4DD' : 'transparent', fg: s.dev === id ? '#1D1D1B' : '#E7E4DD', click: () => this.set({ dev: id, aim: false }) })),
+      signLabel: s.signed ? 'SIGNED IN AS @ILSE · SIGN OUT' : 'SIGNED OUT · SIGN IN', toggleSign: () => this.set({ signed: !s.signed }), signIn: () => this.set({ signed: true }),
+      progFresh: () => { this.set({ prog: { opened: 1, rec: {} }, rungSel: null }); this.say('Ladder progress cleared.'); },
+      progSample: () => { this.set({ prog: SAMPLE_PROG, rungSel: null }); this.say('Sample progress loaded: rung 3 open.'); },
+      duelLive: !!(m && m.mode === 'duel' && scr === 'match' && m.phase !== 'over' && !m.paused), pausedCtl: !!(m && m.paused),
+      drop: () => this.drop(), comeBack: () => this.comeBack(), oppGone: () => this.oppGone(),
+      frameLabel: desk ? 'DESKTOP · 1280 × 800 · SITE MIDDLE COLUMN' : s.dev === 'frame' ? 'FARCASTER MINIAPP FRAME · 424 × 695 · THE HOST’S OWN CLOSE SITS OUTSIDE' : 'PHONE · 390 × 695',
+      fw, fh, scale, sw: Math.round(fw * scale), sh: Math.round(fh * scale), fr: desk ? '8px' : '18px', L, signed: s.signed, signedOut: !s.signed,
+      showNav: desk && !fs,
+      navItems: [['LEARN', scr === 'home' && s.tab === 'learn', go({ scr: 'home', tab: 'learn' })], ['PLAY', ['home', 'ladder', 'person', 'wait', 'start', 'matched', 'match', 'result', 'replay'].includes(scr) && !(scr === 'home' && s.tab === 'learn'), go({ scr: 'home', tab: 'play' })], ['FREE PLAY', scr === 'free', () => this.openFree()]].map(([label, on, click]) => ({ label, click, bg: on ? '#EAE6DD' : 'transparent', bl: on ? '2px solid #1D1D1B' : '2px solid transparent' })),
+      sHome: scr === 'home', tPlay: s.tab === 'play', tLearn: s.tab === 'learn', sLadder: scr === 'ladder', sPerson: scr === 'person', sWait: scr === 'wait', sBoard: boardScr,
+      tabs: [['LEARN', 'learn'], ['PLAY', 'play'], ['FREE PLAY', 'free']].map(([label, id]) => ({ label, fg: s.tab === id ? '#1D1D1B' : '#6A675F', ul: s.tab === id ? '2px solid #1D1D1B' : '2px solid transparent', click: () => id === 'free' ? this.openFree() : this.setState({ tab: id }) })),
+      openPractice: () => this.openStart('practice'), openLadder: go({ scr: 'ladder' }), openPerson: go({ scr: 'person' }), goHome: go({ scr: 'home' }),
+      ladTag: s.signed ? (prog.rec[5] && prog.rec[5].won ? 'ALL 5 BEATEN' : `RUNG ${prog.opened} OF 5`) : 'SIGN IN', ladTagUl: s.signed && prog.sample ? ul : '0',
+      personTag: s.signed ? '2 READY NOW' : 'SIGN IN', personTagUl: s.signed ? ul : '0',
+      ready: () => { this.wait = { t0: Date.now() }; this.accept = null; this.setState({ scr: 'wait' }); }, notReady: () => { this.wait = this.accept = null; this.setState({ scr: 'person', sheet: null }); },
+      sendLink: () => this.say('A one-person invite link. Not in this mockup.'),
+      waitTime: this.wait ? fmt(now - this.wait.t0 + 999).replace(/^/, '') : '0:00',
+      accept: () => { this.wait = this.accept = null; this.m = this.mk('duel'); this.setState({ sheet: null, scr: 'matched' }); },
+      decline: () => { this.wait = this.accept = null; this.setState({ sheet: null, scr: 'person' }); this.say("You're off the list. The other player goes back to the front."); },
+      acceptTime: this.accept ? fmt(20000 - (now - this.accept.t0)) : '0:20',
+      toastOn: !!s.toast, toast: s.toast || '',
+      closeSheet: () => s.sheet !== 'accept' && this.setState({ sheet: null }),
+      sheetOn: !!s.sheet, sheetW: desk ? '440px' : '100%', shMenu: s.sheet === 'menu', shResign: s.sheet === 'resign', shLeave: s.sheet === 'leave', shAccept: s.sheet === 'accept', shOpts: s.sheet === 'opts',
+      enterFS: () => this.setState({ fs: true, aim: false }), exitFS: () => this.setState({ fs: false, aim: false }), togglePanel: () => this.setState({ panel: !s.panel }), panelLabel: s.panel ? 'HIDE PANEL' : 'SHOW PANEL',
+      port, fsBtn: fsAble && !fs, hdrLight: !(desk && fs), hdrDark: desk && fs, panelOn: !(desk && fs && !s.panel),
+      pStart: scr === 'start', pMatched: scr === 'matched', pAct: false, pWaitTurn: false, pRun: false, pResult: scr === 'result', pReplay: scr === 'replay', pFree: scr === 'free',
+      bannerMatched: scr === 'matched', bannerPaused: !!(m && m.paused && scr === 'match'), pauseTime: m && m.paused ? fmt(m.paused.until - now) : '',
+      duelClock: false, hasBack: false, hasRight: false, hPad: '12px', hSample: '', hTitle: '', hTitleCaps: '', hRight: '', hRightClick: () => {}, fsRight: '···', strip: '', bd: { cells: [], cols: 15, cs: 26 },
+      arrows: [], pieces: [], begin: () => this.begin()
+    };
+    // ladder
+    const sel = s.rungSel || prog.opened;
+    v.rungs = [5, 4, 3, 2, 1].map(n => { const rec = prog.rec[n] || {}, open = n <= prog.opened, won = !!rec.won, isSel = open && n === sel;
+      return { name: `${n} · ${RUNGS[n].n}`, desc: RUNGS[n].d, icon: won ? '✓' : String(n), ibd: open ? '1px solid #1D1D1B' : '1px dashed #ABA79D', ibg: isSel && !won ? '#1D1D1B' : 'transparent', ifg: isSel && !won ? '#F4F2ED' : 'inherit',
+        r1: won ? 'WON IN' : open ? (rec.tries ? `${rec.tries} TR${rec.tries === 1 ? 'Y' : 'IES'}` : '') : 'CLOSED', r2: won ? `${rec.won} STEPS` : open ? 'PLAY →' : '', ul: rec.s ? ul : '0',
+        bb: open ? '1px solid #DAD6CC' : '1px dashed #ABA79D', rowBg: isSel ? '#FBFAF6' : 'transparent', ol: isSel ? '1px solid #1D1D1B' : '0', fg: open ? '#1D1D1B' : '#6A675F', dfg: open ? '#4A463F' : '#6A675F',
+        click: () => open ? this.setState({ rungSel: n }) : this.say(`Win rung ${n - 1} to open this one.`) }; });
+    v.playRungLabel = `PLAY RUNG ${sel}`; v.playRung = () => this.openStart('ladder', sel);
+    const title = () => m.mode === 'practice' ? ['Practice match', ''] : m.mode === 'ladder' ? [`Rung ${m.rung} · ${RUNGS[m.rung].n}`, ''] : ['You v ', '@wren'];
+    if (m && ['start', 'matched', 'match', 'result', 'replay'].includes(scr)) { const [a, b] = title(); v.hTitle = a; v.hSample = b; v.hTitleCaps = (a + b).toUpperCase(); v.ruleText = RULES[m.rule]; }
+    if (scr === 'start' || scr === 'matched') {
+      const w = m.w; v.bd = board({ w, fog: 'C', R: m.R, zone: new Set([...lit(w, 'C', m.R)].filter(k => empty(w, k))), ls: m.lsC, ...P });
+      v.strip = 'SETUP · CYAN 2 · AMBER 0 SEEN';
+      if (scr === 'start') { v.hasBack = true; v.hPad = '0'; v.hBack = m.mode === 'ladder' ? go({ scr: 'ladder' }) : go({ scr: 'home' });
+        v.stDesc = m.mode === 'practice' ? 'A simple rival. It fires gliders at towers it has seen and never defends. Nothing is saved.' : RUNGS[m.rung].d + ' It sees only what its towers light.';
+        const rec = prog.rec[m.rung] || {};
+        v.stNote = m.mode === 'practice' ? 'The outlines on the right are where Amber starts. Starts are mirrored, so you know them.' : (m.rung >= 4 ? 'This rung uses the new rule too. ' : 'This rung ignores the new rule; you can use it. ') + (rec.tries ? `Tries so far: ${rec.tries}.` : 'Win once to open the next rung.'); }
+    }
+    if (scr === 'match') {
+      const w = m.w, act = m.phase === 'act', vis = lit(w, 'C', m.R), pend = act ? m.pend.C : [], dots = new Set();
+      pend.forEach(p => { if (p.t !== 'g') return; let x = p.x + p.dx, y = p.y + p.dy, n = 0; while (inb(x, y) && n < 14 && vis.has(K(x, y)) && empty(w, K(x, y)) && !pend.some(q => q.x === x && q.y === y)) { dots.add(K(x, y)); x += p.dx; y += p.dy; n++; } });
+      const zone = act && !m.ended ? new Set([...lit(w, 'C', m.R, m.snap.C)].filter(k => empty(w, k))) : null, dirs = m.rule === 'diag' ? D8 : D4;
+      v.bd = board({ w, fog: 'C', R: m.R, zone, pend, dots, ls: m.lsC, flash: m.phase === 'run', aim: s.aim && port && m.lastG && act ? m.lastG : null, dirs, ...P, onCell: (x, y) => this.cellMatch(x, y), onAim: (dx, dy) => { this.setDir([dx, dy]); this.setState({ aim: false }); } });
+      const seen = towers(w, 'A').filter(k => vis.has(k)).length, mine = towers(w, 'C').length;
+      v.strip = m.paused ? `STEP ${w.step} · PAUSED` : `STEP ${w.step} · CYAN ${mine} · AMBER ${seen} SEEN`;
+      v.hasRight = true; v.hRight = '···'; v.hRightClick = () => this.setState({ sheet: 'menu' });
+      const duel = m.mode === 'duel', left = this.pts(), n = this.next();
+      v.pAct = act && !m.ended; v.pWaitTurn = act && m.ended; v.pRun = m.phase === 'run';
+      v.duelClock = duel && act; const rem = m.clock ? (m.paused ? m.clock.end - m.paused.at : m.clock.end - now) : 0;
+      v.clockPct = m.clock ? Math.max(0, Math.min(100, rem / m.clock.dur * 100)).toFixed(1) : 0; v.clockTxt = fmt(rem);
+      v.pieces = [['g', 'GLIDER', 'GLIDER', m.cost], ['s', 'SQUARE', 'SQ', 1], ['t', 'TOWER', 'TWR', 4]].map(([id, n1, sh, c]) => { const on = s.piece === id; return { label: `${n1} · ${c}`, short: sh, ...btn(on), fsBg: on ? '#E7E4DD' : 'transparent', fsFg: on ? '#060608' : '#E7E4DD', fsBd: on ? '#E7E4DD' : '#4A4843', click: () => this.setState({ piece: id, aim: false }) }; });
+      const order = dirs === D8 ? [[-1,-1],[0,-1],[1,-1],[-1,0],[1,0],[-1,1],[0,1],[1,1]] : [[-1,0],[0,-1],[0,1],[1,0]];
+      v.arrows = order.map(d => { const on = s.dir[0] === d[0] && s.dir[1] === d[1]; return { t: AR[d[0] + ',' + d[1]], bd: on ? '#1D1D1B' : '#DAD6CC', bg: on ? '#1D1D1B' : 'transparent', fg: on ? '#F4F2ED' : '#1D1D1B', click: () => this.setDir(d) }; });
+      const first = w.step === 0, rulesLine = `NEW RULE THIS MATCH: ${RULES[m.rule].toUpperCase().replace(/\.$/, '')}`;
+      v.msg = first ? `Setup. Spend 8 points in the lit area near your towers. Nothing moves until you end your turn${duel ? ' or the clock runs out' : ''}; then both sides' pieces appear at once.` : (seen ? 'Your turn. ' : "Your turn. You can't see Amber's towers now; the outlines are where you last saw them. ") + 'Spend 8 points in the lit area, then end your turn. Tap a piece you placed to take it back.';
+      if (pend.length && !first) v.msg = `Placed: ${pend.map(p => p.t === 'g' ? 'glider' : p.t === 's' ? 'square' : 'tower').join(', ')}. The dotted line is your glider's path until it leaves your sight. Tap a piece to take it back.`;
+      v.ruleLine = rulesLine + (duel ? ` · ${v.clockTxt} LEFT` : '');
+      v.ptsTxt = `${left} OF 8 PTS LEFT`; v.ptsShort = `${left} PTS`; v.endLabel = 'END TURN'; v.endTurn = () => this.endTurn();
+      v.waitMsg = pend.length ? 'Your pieces are placed. They appear for both of you when the run starts. Tap one to take it back while the clock runs.' : 'You placed nothing this turn. The run starts when @wren ends theirs or the clock runs out.';
+      v.changeTurn = () => { m.ended = false; this.bump(); };
+      v.runHead = n >= MAXS ? 'NO MORE TURNS · ENDS AT STEP 96' : `NEXT TURN AT STEP ${n}`;
+      v.runMsg = m.paused ? "The match is paused for both of you. If they're not back in 60 seconds, it counts as resigning and you win." : 'Steps move on their own. You see only what your towers light; a white flash is a hit.';
+      if (duel) { v.ffLabel = m.paused ? 'PAUSED' : 'RUNNING'; v.ffShort = v.ffLabel; v.ffBd = '#DAD6CC'; v.ffFg = '#6A675F'; v.ffFsFg = '#6A675F'; v.ffClick = () => {}; }
+      else { v.ffLabel = m.ff ? 'FAST-FORWARDING…' : (n >= MAXS ? 'FAST-FORWARD TO THE END' : `FAST-FORWARD TO STEP ${n}`); v.ffShort = m.ff ? '▸▸ …' : '▸▸ FAST'; v.ffBd = '#1D1D1B'; v.ffFg = '#1D1D1B'; v.ffFsFg = '#E7E4DD'; v.ffClick = () => { if (!m.ff) { m.ff = true; this.runT(); this.bump(); } }; }
+      v.leaveLabel = m.mode === 'practice' ? 'Back to Play' : 'Leave';
+      v.askResign = () => this.setState({ sheet: 'resign' }); v.askLeave = () => m.mode === 'practice' ? this.leave() : this.setState({ sheet: 'leave' });
+      v.resignText = m.mode === 'ladder' ? `It counts as a loss on rung ${m.rung}. You keep every rung you've already opened. In the book, players resign when they see the end coming (c4-b141).` : m.mode === 'duel' ? 'It counts as a loss. Only you and @wren see the result.' : 'It counts as a loss. Nothing is saved.';
+      v.resign = () => this.resign(); v.leave = () => this.leave();
+      const setup = duel && w.step === 0 && act;
+      v.leaveTitle = setup ? 'Leave during setup?' : 'Leave this match?'; v.leaveText = setup ? 'The match is cancelled with no result for either of you.' : 'Leaving counts as resigning.';
+    }
+    if (scr === 'result') {
+      const r = m.res, duel = m.mode === 'duel';
+      v.bd = board({ w: m.w, ...P }); v.strip = `STEP ${m.w.step} · WHOLE BOARD SHOWN`;
+      v.resA = duel && r.win === 'A' ? '@wren' : ''; v.resB = r.win === 'C' ? 'You win' : r.win === 'D' ? 'Draw' : duel ? ' wins' : 'Amber wins'; v.resWhy = r.why;
+      v.resNote = r.kind === 'gone' ? 'Connections drop. Nothing about this is shown to anyone else.' : m.mode === 'ladder' && r.win !== 'C' ? (r.win === 'D' ? "Draws don't open the next rung." : '') : '';
+      v.resCard = m.mode === 'ladder' && r.win === 'C' && (m.newOpen || m.rung === 5);
+      if (v.resCard) { if (m.rung < 5) { v.resCardN = String(m.rung + 1); v.resCardT = `Rung ${m.rung + 1} · ${RUNGS[m.rung + 1].n} is open`; v.resCardD = RUNGS[m.rung + 1].d; } else { v.resCardN = '✓'; v.resCardT = "You've beaten every rung"; v.resCardD = 'Replay any of them from the ladder.'; } }
+      const P1 = (label, click) => ({ label, click, bg: '#1D1D1B', fg: '#F4F2ED', bd: '#1D1D1B' }), S1 = (label, click) => ({ label, click, bg: 'transparent', fg: '#1D1D1B', bd: '#1D1D1B' });
+      const watch = S1('WATCH IT AGAIN', () => this.openReplay()), done = S1('DONE', go({ scr: 'home', tab: 'play' }));
+      v.rmShow = false; v.rmText = ''; v.rmTime = '';
+      if (m.mode === 'practice') v.resBtns = [P1('PLAY AGAIN', () => this.openStart('practice')), watch, done];
+      else if (m.mode === 'ladder') v.resBtns = [r.win === 'C' && m.rung < 5 ? P1(`PLAY RUNG ${m.rung + 1}`, () => { this.setState({ rungSel: m.rung + 1 }); this.openStart('ladder', m.rung + 1); }) : P1(r.win === 'C' ? 'PLAY RUNG 5 AGAIN' : `TRY RUNG ${m.rung} AGAIN`, () => this.openStart('ladder', m.rung)), watch, S1('THE LADDER', go({ scr: 'ladder' }))];
+      else if (r.kind === 'gone' || r.kind === 'left') v.resBtns = [P1("I'M READY AGAIN", () => { this.wait = { t0: Date.now() }; this.setState({ scr: 'wait' }); }), watch, done];
+      else { const rm = m.rm, asked = now >= rm.ask, over = now >= rm.until;
+        v.rmShow = asked || !!rm.mine;
+        v.rmText = over ? 'The rematch offer ran out.' : rm.mine ? (asked ? 'Both said yes. A new rule is being drawn…' : 'Rematch asked. Waiting for @wren.') : 'Rematch? @wren asked for one. A new rule is drawn.';
+        v.rmTime = !over && asked && !rm.mine ? fmt(rm.until - now) : '';
+        v.resBtns = [over ? { label: 'REMATCH', click: () => {}, bg: 'transparent', fg: '#ABA79D', bd: '#DAD6CC' } : rm.mine ? { label: 'REMATCH ASKED', click: () => {}, bg: 'transparent', fg: '#6A675F', bd: '#DAD6CC' } : P1('REMATCH', () => { rm.mine = Date.now(); if (!asked) rm.until = Math.max(rm.until, Date.now() + 20000); this.bump(); }), watch, done]; }
+    }
+    if (scr === 'replay') {
+      const r = this.rp, w = r.hist[r.i]; v.bd = board({ w, flash: true, ...P }); v.strip = `REPLAY · STEP ${w.step} OF ${r.hist[r.hist.length - 1].step} · WHOLE BOARD`;
+      v.rpEnd = r.hist[r.hist.length - 1].step; v.hasBack = true; v.hPad = '0'; v.hBack = go({ scr: 'result' }); v.hTitle = 'Watch it again'; v.hSample = '';
+      v.rpBtns = [['◁ STEP', () => { r.playing = false; r.i = Math.max(0, r.i - 1); this.bump(); }], [r.playing ? 'PAUSE' : 'PLAY', () => { if (r.i >= r.hist.length - 1) r.i = 0; r.playing = !r.playing; if (r.playing) this.rpT(); this.bump(); }], ['STEP ▷', () => { r.playing = false; r.i = Math.min(r.hist.length - 1, r.i + 1); this.bump(); }], ['TO STEP 0', () => { r.playing = false; r.i = 0; this.bump(); }]].map(([label, click]) => ({ label, click }));
+      v.rpDone = go({ scr: 'result' });
+    }
+    if (scr === 'free' && f) {
+      const w = f.hist[f.i], R = f.sight2 ? 2 : 3, dirs = f.diag ? D8 : D4;
+      v.bd = board({ w, fog: f.see === 'all' ? null : f.see, R, flash: f.i > 0, aim: s.aim && port && f.lastG && f.i === 0 ? f.lastG : null, dirs, ...P, onCell: (x, y) => this.cellFree(x, y), onAim: (dx, dy) => { this.setDir([dx, dy]); this.setState({ aim: false }); } });
+      v.strip = `STEP ${w.step} · SEE ${f.see === 'all' ? 'ALL' : f.see === 'C' ? 'AS CYAN' : 'AS AMBER'}`;
+      v.hasBack = true; v.hPad = '0'; v.hBack = go({ scr: 'home', tab: 'play' }); v.hTitle = 'Free play'; v.hTitleCaps = 'FREE PLAY'; v.hasRight = true; v.hRight = s.sheet === 'opts' ? 'BOARD ▴' : 'BOARD ▾'; v.fsRight = '▾';
+      v.hRightClick = () => { this.fpStop(); this.setState({ sheet: 'opts' }); };
+      const ctl = [['◁ STEP', () => { this.fpStop(); f.i = Math.max(0, f.i - 1); this.bump(); }], [f.playing ? 'PAUSE' : 'PLAY', () => this.fpPlay()], ['STEP ▷', () => { this.fpStop(); this.fpFwd(); }], ['TO STEP 0', () => { this.fpStop(); f.i = 0; this.bump(); }]];
+      v.fpBtns = ctl.map(([label, click]) => ({ label, click }));
+      const sideN = { C: 'CYAN', A: 'AMBER', R: 'ROCK' }, pieceN = { g: 'GLIDER', s: 'SQUARE', t: 'TOWER', e: 'ERASE' };
+      v.fpBtnsFS = [['◁', ctl[0][1]], [f.playing ? '❚❚' : '▶', ctl[1][1]], ['▷', ctl[2][1]], ['0', ctl[3][1]], [sideN[f.side], () => { f.side = { C: 'A', A: 'R', R: 'C' }[f.side]; this.bump(); }], [pieceN[f.piece].slice(0, 4), () => { f.piece = { g: 's', s: 't', t: 'e', e: 'g' }[f.piece]; this.bump(); }]].map(([label, click]) => ({ label, click }));
+      v.fpSides = [['C', 'CYAN', COL.C], ['A', 'AMBER', COL.A], ['R', 'ROCK', '#3A3B42']].map(([id, label, sw]) => ({ label, sw, ...btn(f.side === id), click: () => { f.side = id; this.bump(); } }));
+      v.fpPieces = ['g', 's', 't', 'e'].map(id => ({ label: pieceN[id], ...btn(f.piece === id), click: () => { f.piece = id; this.bump(); } }));
+      const order = f.diag ? [[-1,-1],[0,-1],[1,-1],[-1,0],[1,0],[-1,1],[0,1],[1,1]] : [[-1,0],[0,-1],[0,1],[1,0]];
+      v.arrows = order.map(d => { const on = s.dir[0] === d[0] && s.dir[1] === d[1]; return { t: AR[d[0] + ',' + d[1]], bd: on ? '#1D1D1B' : '#DAD6CC', bg: on ? '#1D1D1B' : 'transparent', fg: on ? '#F4F2ED' : '#1D1D1B', click: () => this.setDir(d) }; });
+      v.fpStarts = [['Empty board', () => { this.loadFree('empty'); this.setState({ sheet: null }); }, true], ['Practice start', () => { this.loadFree(null); this.setState({ sheet: null }); }, true], ['My last match', () => { if (this.lastStart) { this.loadFree(null, this.lastStart); this.setState({ sheet: null }); } else this.say('Play a match first.'); }, !!this.lastStart]].map(([label, click, ok]) => ({ label, click, bd: ok ? '#1D1D1B' : '#DAD6CC', fg: ok ? '#1D1D1B' : '#ABA79D' }));
+      v.fpRules = [['Gliders may also fly diagonally', 'diag'], ['Sight of 2 squares', 'sight2']].map(([label, id]) => ({ label, v: f[id] ? 'ON' : 'OFF', bg: f[id] ? '#1D1D1B' : 'transparent', fg: f[id] ? '#F4F2ED' : '#6A675F', bd: f[id] ? '#1D1D1B' : '#DAD6CC', click: () => { f[id] = !f[id]; if (id === 'diag' && !f.diag && s.dir[0] && s.dir[1]) this.setState({ dir: [1, 0] }); this.bump(); } }));
+      v.fpSee = [['ALL', 'all'], ['CYAN', 'C'], ['AMBER', 'A']].map(([label, id]) => ({ label, ...btn(f.see === id), click: () => { f.see = id; this.bump(); } }));
+      v.copyLink = () => this.copyLink();
+    }
+    return v;
+  }
+}
+</script>
+</body>
+</html>

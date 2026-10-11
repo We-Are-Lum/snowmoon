@@ -34,8 +34,12 @@ export const LEGAL: {
     privacy: { words: string; on: string; by: 'FID 6786' } | null;
   };
 } = {
-  effective: null,
-  ownerReread: { terms: null, privacy: null },
+  effective: '2026-10-10',
+  // The owner said "Reread" on 2026-10-10, covering both pages at these words.
+  ownerReread: {
+    terms: { words: '3iuvyo', on: '2026-10-10', by: 'FID 6786' },
+    privacy: { words: '1r2aajz', on: '2026-10-10', by: 'FID 6786' },
+  },
 };
 
 export const TERMS: LegalDoc = {

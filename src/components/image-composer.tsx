@@ -83,7 +83,10 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
   const [range, setRange] = useState(initial);
   const [status, setStatus] = useState<Status | null>(null);
   const [prompt, setPrompt] = useState('');
-  const [style, setStyle] = useState<string | null>(null);
+  // The project's starting style is chosen unless the person picks another or None (owner, 2026-10-10:
+  // without it the model draws realistic pictures). undefined = not picked yet; a restored draft keeps its own.
+  const [picked, setStyle] = useState<string | null | undefined>(undefined);
+  const style = picked === undefined ? (status?.styles[0]?.id ?? null) : picked;
   const [characters, setCharacters] = useState<string[]>([]);
   const [reference, setReference] = useState(false);
   const [chipsFor, setChipsFor] = useState<string | null>(null);
@@ -144,7 +147,8 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
     if (!status?.picks || chipsFor === key) return;
     setChipsFor(key);
     // Every picked style is offered; the newest pick starts chosen, for this image only (decision 3).
-    setStyle(status.picks.styles[0]?.versionId ?? null);
+    // With no picked style, the project's starting style stays chosen (main's default, 2026-10-10).
+    if (status.picks.styles[0]) setStyle(status.picks.styles[0].versionId);
     setCharacters(status.picks.characters.filter((c) => mentions(passageText, c.entity)).map((c) => c.versionId));
   }, [status, range, chipsFor, passageText]);
   const widen = (side: 'start' | 'end', d: 1 | -1) => {

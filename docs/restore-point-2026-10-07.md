@@ -202,8 +202,48 @@ Repo hygiene: .venv, narration-out, images-out and art-out are no longer tracked
 
     vercel rollback dpl_BHDcuK9uunUocUjdfaMcCn93oVa8 --scope nates-projects-d1780cff
 
-## 2026-10-09: smaller menu: Book group, ? for About, ☰, podcast on Listen (branch site-menu)
+## 2026-10-10: Minpentai Play: Design's hub, ladder, one-on-one, free play and rules page (branch site-minpentai-play-2)
 
-The menu groups Read, Listen and Glossary under Book; About is a ? beside a ☰ menu button (phone) and a rail link (desktop); the podcast feed is linked from the Listen pane. To undo (back to `d3d0f56`):
+Play replaces v3's four tabs: practice, a ladder against the computer, one-on-one by username or invite link, free play and full screen, on the new rules page's game; Learn stays on v3. Signed-in play uses 0009 (applied by the owner on 2026-10-09, 23:55), with per-person and sitewide limits and cleanup. A Farcaster username that doesn't fit the lobby is refused with a clear message. To undo (back to `d3d0f56`):
 
     vercel rollback dpl_7D1FoPE54Xh9bPz22pdQMLxhkx2b --scope nates-projects-d1780cff
+
+Rolling back the code leaves 0009's tables in place; they are private and unused without it.
+
+## 2026-10-10: storage check names two more variables; 0007 marked applied; check:ui and check:miniapp fixed for Minpentai Play (branch site-storage-check-names)
+
+NEYNAR_API_KEY and SNOWMOON_ALERT_URL listed when missing (names only); 0007's header says applied; check:ui accepts a 3-point glider under cost3; check:miniapp checks ?mode=free as Play. To undo (back to `4fb3c16`):
+
+    vercel rollback dpl_HeSRboPJkeGpgdovmhnND7kXFEVm --scope nates-projects-d1780cff
+
+## 2026-10-10: menu, short labels, home page, selection fix (branch site-release-2)
+
+One push for three branches (owner, 2026-10-10). The menu groups Read, Listen and Glossary under Book, with ? for About and ☰ (site-menu). Short labels with ⓘ: "Redrawn" on template screens, "AI description" in Listen, "Book", "Invented" and "Draft" in Minpentai, now on Play's tags too (the c4-b84 tag quotes the book instead of "a new rule each match"); scene lines hidden; the podcast on Spotify; the selection options stay on a phone's screen (site-labels). Design's home page, with the not-affiliated line in the first screen (site-home). Play's labels meet the 44px floor, and Play keeps its ladder progress unless the server's answer is well-formed. To undo (back to `4525cc4`):
+
+    vercel rollback https://snowmoon-pf5iwm44s-nates-projects-d1780cff.vercel.app --scope nates-projects-d1780cff
+
+## 2026-10-10: the intro's images carry the AI label (branch site-intro-labels)
+
+The first-visit intro's recipe and record cards show the AI image label, opening the recipe sheet; Escape in the sheet closes the sheet, not the intro; P2b and check:ui require the label. To undo (back to `5f45959`, the release):
+
+    vercel rollback https://snowmoon-9tame9dp3-nates-projects-d1780cff.vercel.app --scope nates-projects-d1780cff
+
+## 2026-10-10: the image composer starts with the project's style; Escape in the intro (branch site-style-default)
+
+The composer starts with the project's starting style (Techno vistas) chosen, so a prompt is no longer sent without it by default; None stays, and a saved draft keeps its own choice (owner: without it the pictures come out realistic). The intro ignores Escape while a sheet is open. check:ui requires the default and reads home's uppercase AI labels in any case. To undo (back to `82534c6`):
+
+    vercel rollback https://snowmoon-7jxqj1r2c-nates-projects-d1780cff.vercel.app --scope nates-projects-d1780cff
+
+## 2026-10-10: Pictures: the passage first, and "Make an image" (branch site-images-create)
+
+Pushed together with site-style-default above (one push). Browsing images shows the passage each is of; an image's prompt, model and settings fold into "How this was made". "Make an image" (/images/new): choose a passage by chapter or by searching the book (searched on the reader's device over GET /api/book/text; no query reaches the server), then the prompt; links from an image's page, the feed and the assistant's quote cards (invited readers during the trial). Home's "Just made" waits at most 2 s for the database. To undo both (back to `82534c6`):
+
+    vercel rollback https://snowmoon-7jxqj1r2c-nates-projects-d1780cff.vercel.app --scope nates-projects-d1780cff
+
+## 2026-10-10: image making for everyone (Neynar score ≥ 0.7), Terms and Privacy, report alerts (branch site-images-everyone)
+
+Anyone signed in with a Neynar user score of at least 0.7 can make images (invited FIDs skip the score); the $1 all-days cap is gone ($2 a day, 10 images and 3 published per person stay); report alerts go to ntfy ("Snowmoon: N reports waiting", at most hourly). /terms and /privacy, reread by the owner on 2026-10-10 and effective that day, with the footer line on About, the menu and the rail; Neynar named on About and the consent screen (own-words-v3, asked again once). Uses 0010 (applied by the owner on production). To undo (back to `e984430`):
+
+    vercel rollback https://snowmoon-hxqv70exz-nates-projects-d1780cff.vercel.app --scope nates-projects-d1780cff
+
+Rolling back the code leaves 0010's tables in place; they are private and unused without it.

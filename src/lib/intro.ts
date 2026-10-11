@@ -24,6 +24,9 @@ export interface IntroImage {
   block: { id: string; label: number | null; chapter: number; excerpt: string };
   /** From the committed recipe. */
   recipe: { url: string; model: string; prompt: string; costUsd: number; runsOn: string; publishedBy: number | null };
+  /** The image's id and its recipe file, for the AI label's recipe sheet (as on the chapter page). */
+  id: string;
+  recipeFile: string;
 }
 
 export interface IntroCard {
@@ -101,6 +104,8 @@ export function resolveIntroImage(ref: string | null): IntroImage | null {
   const models = read('config/models.json').models as { repo?: string; runs_on?: string }[];
   const model = models.find((x) => x.repo === recipeFile.model.repo);
   return {
+    id: im.id,
+    recipeFile: im.recipe,
     url: im.url,
     alt: im.alt,
     width: im.width,

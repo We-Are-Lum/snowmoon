@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,500;0,600;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+</helmet>
+<div style="height:100%;display:flex;flex-direction:column;background:{{ th.paper }};color:{{ th.ink }};font-family:'Crimson Pro',serif;overflow:hidden">
+  <sc-if value="{{ isIntro }}" hint-placeholder-val="{{ true }}">
+    <div style="height:52px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 8px 0 22px">
+      <span style="font-size:20px">Snowmoon</span>
+      <span onClick="{{ onDone }}" style="font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;padding:14px;cursor:pointer">SKIP</span>
+    </div>
+    <div style="flex:none;display:flex;gap:4px;padding:0 22px">
+      <sc-for list="{{ dots }}" as="d" hint-placeholder-count="6"><div onClick="{{ d.go }}" style="flex:1;height:3px;cursor:pointer;background:{{ d.c }}"></div></sc-for>
+    </div>
+    <div style="flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;padding:24px 24px 0;display:flex;flex-direction:column;gap:22px">
+      <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;color:{{ th.muted }}">{{ c.eyebrow }}</div>
+      <div style="height:340px;flex:none;position:relative">
+        <sc-if value="{{ c.is0 }}" hint-placeholder-val="{{ true }}">
+          <div style="height:100%;display:flex;flex-direction:column;justify-content:center;gap:0;border-top:1px solid {{ th.ink }}">
+            <sc-for list="{{ why }}" as="w" hint-placeholder-count="3">
+              <div style="display:grid;grid-template-columns:34px 1fr;gap:10px;padding:16px 0;border-bottom:1px solid {{ th.rule }}">
+                <span style="font-family:'DM Mono',monospace;font-size:12px;color:{{ th.muted }};padding-top:5px">{{ w.n }}</span>
+                <span style="display:flex;flex-direction:column;gap:4px"><span style="font-size:22px;line-height:1.15">{{ w.t }}</span><span style="font-size:16px;line-height:1.35;color:{{ th.muted }}">{{ w.d }}</span></span>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ c.is1 }}" hint-placeholder-val="{{ false }}">
+          <div style="height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;background:{{ th.tile }};border-radius:3px">
+            <div style="width:190px;height:262px;background:#2E4733;color:#F4F2ED;box-shadow:6px 6px 0 {{ th.rule }};display:flex;flex-direction:column;justify-content:space-between;padding:20px 16px;box-sizing:border-box">
+              <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.1em">A NOVEL</div>
+              <div style="display:flex;flex-direction:column;gap:6px"><div style="font-size:32px;line-height:.95">Snowmoon</div><div style="font-size:15px;font-style:italic">[Author name]</div></div>
+            </div>
+            <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em;border:1px solid {{ th.ink }};padding:4px 8px;border-radius:2px">OPEN LICENCE · [LICENCE NAME]</div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ c.is2 }}" hint-placeholder-val="{{ false }}">
+          <div style="height:100%;display:flex;flex-direction:column">
+            <div style="height:200px;flex:none;background:repeating-linear-gradient(135deg,{{ th.hatchA }} 0 10px,{{ th.hatchB }} 10px 20px);display:flex;align-items:flex-end;padding:12px;box-sizing:border-box;font-family:'DM Mono',monospace;font-size:11px;color:{{ th.hatchInk }}">Image · foot path, tall trees, stone houses</div>
+            <div style="flex:1;border:1px solid {{ th.rule }};border-top:none;padding:12px 14px;display:flex;flex-direction:column;gap:7px;font-family:'DM Mono',monospace;font-size:11px;line-height:1.45;color:{{ th.muted }}">
+              <div style="display:flex;justify-content:space-between;color:{{ th.ink }}"><span>HOW THIS WAS MADE</span><span>@ilse · v3</span></div>
+              <div>"wide shot, foot path between tall trees, stone-brick houses set back…"</div>
+              <div>img-a 4.0 · $0.031 · funded by @nadia</div>
+              <div>uses Kalimar path · @ilse v5</div>
+            </div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ c.is3 }}" hint-placeholder-val="{{ false }}">
+          <div style="height:100%;display:flex;flex-direction:column;justify-content:center;padding:0 6px">
+            <sc-for list="{{ chain }}" as="k" hint-placeholder-count="3">
+              <div style="display:flex;flex-direction:column">
+                <div style="display:grid;grid-template-columns:96px 1fr;gap:14px;align-items:center;margin-left:{{ k.indent }}px">
+                  <div style="height:68px;background:repeating-linear-gradient(135deg,{{ th.hatchA }} 0 8px,{{ th.hatchB }} 8px 16px)"></div>
+                  <div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:19px">{{ k.who }}</span><span style="font-family:'DM Mono',monospace;font-size:11px;color:{{ th.muted }}">{{ k.what }}</span></div>
+                </div>
+                <div style="height:26px;margin-left:{{ k.lineX }}px;border-left:1px solid {{ th.ink }};display:{{ k.lineD }}"></div>
+              </div>
+            </sc-for>
+            <div style="margin-top:20px;border-top:1px solid {{ th.rule }};padding-top:10px;font-family:'DM Mono',monospace;font-size:11px;color:{{ th.muted }}">CREDITED ON THE FINAL IMAGE · @ilse · @tovah · @kaz</div>
+          </div>
+        </sc-if>
+        <sc-if value="{{ c.is4 }}" hint-placeholder-val="{{ false }}">
+          <div style="height:100%;display:grid;grid-template-columns:1fr 1fr;grid-template-rows:repeat(3,1fr);gap:8px">
+            <sc-for list="{{ live }}" as="l" hint-placeholder-count="5">
+              <div style="grid-column:{{ l.span }};border:1.5px solid {{ th.ink }};border-radius:3px;padding:12px;display:flex;flex-direction:column;justify-content:space-between">
+                <div style="display:flex;align-items:center;gap:6px;font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;color:{{ th.accent }}"><span style="width:7px;height:7px;border-radius:50%;background:{{ th.accent }}"></span>LIVE</div>
+                <span style="font-size:20px;line-height:1.05">{{ l.label }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ c.is5 }}" hint-placeholder-val="{{ false }}">
+          <div style="height:100%;display:flex;flex-direction:column;gap:8px;position:relative">
+            <sc-for list="{{ planned }}" as="p" hint-placeholder-count="3">
+              <div style="flex:1;border:1.5px dashed {{ th.muted }};border-radius:3px;padding:12px;display:flex;flex-direction:column;justify-content:space-between;background:repeating-linear-gradient(135deg,transparent 0 7px,{{ th.hatchFaint }} 7px 8px)">
+                <div style="font-family:'DM Mono',monospace;font-size:10px;letter-spacing:.08em;color:{{ th.muted }}">PLANNED · NOT AVAILABLE YET</div>
+                <span style="font-size:20px;line-height:1.1">{{ p }}</span>
+              </div>
+            </sc-for>
+            <div style="position:absolute;right:10px;top:-14px;transform:rotate(4deg);border:2px solid {{ th.ink }};background:{{ th.paper }};padding:3px 10px;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.14em">PLANNED</div>
+          </div>
+        </sc-if>
+      </div>
+      <div style="font-size:27px;line-height:1.22;text-wrap:pretty">{{ c.line }}</div>
+      <sc-if value="{{ c.is1 }}" hint-placeholder-val="{{ false }}">
+        <div style="font-family:'DM Mono',monospace;font-size:12px;line-height:1.6;border-top:1px solid {{ th.rule }};padding-top:10px">Independent adaptation · Not affiliated with the author · No token</div>
+      </sc-if>
+    </div>
+    <div style="flex:none;padding:12px 22px 22px;display:flex;align-items:center;gap:12px">
+      <span onClick="{{ prev }}" style="font-family:'DM Mono',monospace;font-size:12px;padding:14px 4px;cursor:pointer;color:{{ th.muted }};visibility:{{ prevVis }}">BACK</span>
+      <div onClick="{{ next }}" style="margin-left:auto;min-width:160px;height:48px;border-radius:3px;background:{{ th.ink }};color:{{ th.paper }};display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;cursor:pointer;padding:0 18px">{{ nextLabel }}</div>
+    </div>
+  </sc-if>
+
+  <sc-if value="{{ isAbout }}" hint-placeholder-val="{{ false }}">
+    <div style="flex:1;min-height:0;overflow-y:auto;overflow-x:hidden">
+      <div style="max-width:{{ maxW }};margin:0 auto;padding-bottom:40px">
+        <div style="padding:28px 22px 6px;font-size:36px;line-height:1">About this edition</div>
+        <div style="padding:6px 22px 18px;font-family:'DM Mono',monospace;font-size:12px;line-height:1.6;border-bottom:1px solid {{ th.rule }}">Independent adaptation · Not affiliated with the author · No token</div>
+        <sc-for list="{{ about }}" as="a" hint-placeholder-count="5">
+          <div style="padding:18px 22px;border-bottom:1px solid {{ th.rule }};display:grid;grid-template-columns:28px 1fr;gap:10px">
+            <span style="font-family:'DM Mono',monospace;font-size:11px;color:{{ th.muted }};padding-top:5px">{{ a.n }}</span>
+            <div style="display:flex;flex-direction:column;gap:10px">
+              <div style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.08em;color:{{ th.muted }}">{{ a.head }}</div>
+              <div style="font-size:19px;line-height:1.4;text-wrap:pretty">{{ a.line }}</div>
+              <sc-if value="{{ a.isLive }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-wrap:wrap;gap:6px"><sc-for list="{{ live }}" as="l" hint-placeholder-count="5"><span style="display:flex;align-items:center;gap:6px;border:1.5px solid {{ th.ink }};border-radius:3px;padding:5px 8px;font-size:15px"><span style="width:6px;height:6px;border-radius:50%;background:{{ th.accent }}"></span>{{ l.label }}</span></sc-for></div>
+              </sc-if>
+              <sc-if value="{{ a.isPlanned }}" hint-placeholder-val="{{ false }}">
+                <div style="display:flex;flex-direction:column;gap:6px"><sc-for list="{{ planned }}" as="p" hint-placeholder-count="3"><div style="border:1.5px dashed {{ th.muted }};border-radius:3px;padding:7px 9px;display:flex;justify-content:space-between;gap:8px;font-size:15px"><span>{{ p }}</span><span style="font-family:'DM Mono',monospace;font-size:10px;color:{{ th.muted }};padding-top:3px">PLANNED</span></div></sc-for></div>
+              </sc-if>
+            </div>
+          </div>
+        </sc-for>
+        <div onClick="{{ replay }}" style="margin:22px;font-family:'DM Mono',monospace;font-size:12px;color:{{ th.accent }};cursor:pointer">Replay the intro →</div>
+      </div>
+    </div>
+  </sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:760},&quot;dark&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;mode&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;intro&quot;,&quot;about&quot;],&quot;default&quot;:&quot;intro&quot;,&quot;tsType&quot;:&quot;'intro'|'about'&quot;},&quot;wide&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;onDone&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;()=&gt;void&quot;},&quot;onReplay&quot;:{&quot;editor&quot;:null,&quot;tsType&quot;:&quot;()=&gt;void&quot;}}">
+const TH = {
+  light: { paper: '#F4F2ED', ink: '#1D1D1B', muted: '#6A675F', rule: '#DAD6CC', tile: '#EAE7E0', accent: '#2E5A3A', hatchA: '#C9CFBE', hatchB: '#C1C8B5', hatchInk: '#3E4538', hatchFaint: 'rgba(29,29,27,.07)' },
+  dark: { paper: '#161614', ink: '#E7E4DD', muted: '#9C988E', rule: '#33322E', tile: '#201F1C', accent: '#8DB58A', hatchA: '#2D3229', hatchB: '#292E25', hatchInk: '#B5BBAA', hatchFaint: 'rgba(231,228,221,.07)' },
+};
+const CARDS = [
+  { eyebrow: '1 / 6 · WHY BE HERE', line: 'Build a world together.' },
+  { eyebrow: '2 / 6 · THE BOOK', line: 'Snowmoon is a novel its author released under an open licence, inviting anyone to adapt it.' },
+  { eyebrow: '3 / 6 · THE DEAL', line: 'Build anything you like from it, as long as you show how you made it.' },
+  { eyebrow: '4 / 6 · WHAT THIS APP DOES', line: 'This app keeps that record for you, so working together is easy and your name stays on your work.' },
+  { eyebrow: '5 / 6 · AVAILABLE NOW', line: 'Today you can read, listen, save a passage, play the game and browse adaptation seeds.' },
+  { eyebrow: '6 / 6 · COMING LATER', line: 'Later you will be able to add characters, places and styles, pick favourites that carry into your work, and start adaptations.' },
+];
+class Component extends DCLogic {
+  state = { i: 0 };
+  renderVals() {
+    const th = TH[this.props.dark ? 'dark' : 'light'], i = this.state.i, done = () => this.props.onDone && this.props.onDone();
+    const isAbout = this.props.mode === 'about';
+    return {
+      th, isIntro: !isAbout, isAbout, maxW: this.props.wide ? '680px' : '100%',
+      c: { ...CARDS[i], is0: i === 0, is1: i === 1, is2: i === 2, is3: i === 3, is4: i === 4, is5: i === 5 },
+      why: [
+        { n: '01', t: 'Make something with others', d: 'Build on what other readers made. Your name stays on your part.' },
+        { n: '02', t: 'Get to know a world in depth', d: 'Veridia, one passage at a time: its places, its people, its rules.' },
+        { n: '03', t: 'Learn to make things with AI, in the open', d: 'Every recipe is public, so you can see how anything was made and try it.' },
+      ],
+      dots: CARDS.map((_, k) => ({ c: k === i ? th.ink : th.rule, go: () => this.setState({ i: k }) })),
+      prev: () => this.setState({ i: Math.max(0, i - 1) }), prevVis: i ? 'visible' : 'hidden',
+      next: () => i >= 5 ? (this.setState({ i: 0 }), done()) : this.setState({ i: i + 1 }), nextLabel: i >= 5 ? 'START READING' : 'NEXT', onDone: () => { this.setState({ i: 0 }); done(); },
+      chain: [
+        { who: '@ilse', what: 'v1 · Kalimar path', indent: 0, lineX: 48, lineD: 'block' },
+        { who: '@tovah', what: 'remix of @ilse v1', indent: 40, lineX: 88, lineD: 'block' },
+        { who: '@kaz', what: 'adds Privacy Robe v4', indent: 80, lineX: 0, lineD: 'none' },
+      ],
+      live: ['Read', 'Listen', 'Save a passage', 'Play the game', 'Browse adaptation seeds'].map((label, k) => ({ label, span: k === 4 ? '1 / 3' : 'auto' })),
+      planned: ['Add characters, places and styles', 'Pick favourites that carry into your work', 'Start an adaptation'],
+      about: CARDS.map((c, k) => ({ n: String(k + 1).padStart(2, '0'), head: c.eyebrow.split(' · ')[1], line: c.line, isLive: k === 4, isPlanned: k === 5 })),
+      replay: () => this.props.onReplay && this.props.onReplay(),
+    };
+  }
+}
+</script>
+</body>
+</html>

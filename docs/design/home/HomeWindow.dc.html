@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,500;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>a{color:#8DB58A}a:hover{color:#F4F2ED}</style>
+</helmet>
+<div style="min-height:100%;background:#F4F2ED;color:#1D1D1B;font-family:'Crimson Pro',serif;container-type:inline-size;position:relative">
+  <div ref="{{ hdrRef }}" style="position:sticky;top:0;z-index:30;background:#060608;color:#E7E4DD;border-bottom:1px solid #1A1B20">
+    <div style="max-width:1180px;margin:0 auto;padding:0 20px">
+      <div style="height:52px;display:flex;align-items:center;gap:16px">
+        <span onClick="{{ nav.home }}" style="font-size:22px;flex:1;cursor:pointer">Snowmoon</span>
+        <span onClick="{{ signTap }}" style="font-family:'DM Mono',monospace;font-size:12px;border-bottom:{{ signUl }};cursor:pointer">{{ signLabel }}</span>
+        <span onClick="{{ openMenu }}" style="height:40px;padding:0 12px;margin-right:-8px;border:1px solid #4A4843;border-radius:3px;display:flex;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;cursor:pointer" style-hover="border-color:#E7E4DD"><span style="display:flex;flex-direction:column;gap:3px"><span style="width:14px;height:1.5px;background:#E7E4DD"></span><span style="width:14px;height:1.5px;background:#E7E4DD"></span><span style="width:14px;height:1.5px;background:#E7E4DD"></span></span>MENU</span>
+      </div>
+    </div>
+    <sc-if value="{{ menuOn }}" hint-placeholder-val="{{ false }}">
+      <div onClick="{{ closeMenu }}" style="position:absolute;left:0;right:0;top:0;height:{{ menuH }}px;background:rgba(6,6,8,.55);z-index:20"></div>
+      <div style="position:absolute;top:0;right:0;width:min(100%,380px);height:{{ menuH }}px;overflow-y:auto;color:#1D1D1B;background:#F4F2ED;z-index:21;display:flex;flex-direction:column;box-shadow:-12px 0 40px rgba(6,6,8,.25)">
+        <div style="height:52px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:0 12px 0 20px;border-bottom:1px solid #DAD6CC">
+          <span style="font-size:22px">Snowmoon</span>
+          <span onClick="{{ closeMenu }}" style="height:40px;padding:0 12px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;cursor:pointer">✕ CLOSE</span>
+        </div>
+        <sc-if value="{{ returning }}" hint-placeholder-val="{{ false }}">
+          <div onClick="{{ nav.cont }}" style="margin:14px 20px 0;padding:12px 14px;background:#1D1D1B;color:#F4F2ED;border-radius:3px;display:flex;justify-content:space-between;align-items:center;gap:8px;cursor:pointer"><span style="display:flex;flex-direction:column"><span style="font-family:'DM Mono',monospace;font-size:11px;letter-spacing:.06em;color:#ABA79D">CONTINUE READING</span><span style="font-size:18px">Chapter 3, <span style="border-bottom:2px dotted #D96AA0">¶ 41</span></span></span><span style="font-family:'DM Mono',monospace">→</span></div>
+        </sc-if>
+        <div style="padding:6px 20px 0;display:flex;flex-direction:column">
+          <div onClick="{{ nav.home }}" style="min-height:48px;display:flex;justify-content:space-between;align-items:center;gap:8px;padding-left:0;border-bottom:1px solid #DAD6CC;cursor:pointer" style-hover="background:#EAE6DD"><span style="font-size:22px">Home</span><span style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;color:#6A675F"><span style="color:#2E5A3A">HERE</span></span></div>
+          <div style="display:flex;flex-direction:column;border-bottom:1px solid #DAD6CC;padding-bottom:6px"><div style="padding:12px 0 2px;font-size:22px">Book</div><div onClick="{{ nav.read }}" style="min-height:48px;display:flex;justify-content:space-between;align-items:center;gap:8px;padding-left:18px;border-bottom:0;cursor:pointer" style-hover="background:#EAE6DD"><span style="font-size:20px">Read</span><span style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;color:#6A675F">CH 1</span></div><div onClick="{{ nav.listen }}" style="min-height:48px;display:flex;justify-content:space-between;align-items:center;gap:8px;padding-left:18px;border-bottom:0;cursor:pointer" style-hover="background:#EAE6DD"><span style="font-size:20px">Listen</span><span style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;color:#6A675F">PODCAST · CHAPTERS</span></div><div onClick="{{ nav.glossary }}" style="min-height:48px;display:flex;justify-content:space-between;align-items:center;gap:8px;padding-left:18px;border-bottom:0;cursor:pointer" style-hover="background:#EAE6DD"><span style="font-size:20px">Glossary</span><span style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;color:#6A675F"></span></div></div>
+          <div onClick="{{ nav.asst }}" style="min-height:48px;display:flex;justify-content:space-between;align-items:center;gap:8px;padding-left:0;border-bottom:1px solid #DAD6CC;cursor:pointer" style-hover="background:#EAE6DD"><span style="font-size:22px">Assistant</span><span style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;color:#6A675F"></span></div>
+          <div onClick="{{ nav.game }}" style="min-height:48px;display:flex;justify-content:space-between;align-items:center;gap:8px;padding-left:0;border-bottom:1px solid #DAD6CC;cursor:pointer" style-hover="background:#EAE6DD"><span style="font-size:22px">Minpentai</span><span style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;color:#6A675F">LEARN · PLAY</span></div>
+          <div onClick="{{ nav.pics }}" style="min-height:48px;display:flex;justify-content:space-between;align-items:center;gap:8px;padding-left:0;border-bottom:1px solid #DAD6CC;cursor:pointer" style-hover="background:#EAE6DD"><span style="font-size:22px">Pictures</span><span style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;color:#6A675F">TRIAL</span></div>
+        </div>
+        <div style="padding:14px 20px;display:flex;flex-direction:column;font-size:18px">
+          <sc-for list="{{ menu2 }}" as="i" hint-placeholder-count="3"><span onClick="{{ i.go }}" style="min-height:44px;display:flex;align-items:center;cursor:pointer;color:#4A463F">{{ i.t }}</span></sc-for>
+        </div>
+        <div style="flex:1"></div>
+        <div style="padding:14px 20px 20px;border-top:1px solid #DAD6CC;display:flex;justify-content:space-between;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:12px">
+          <span style="color:#6A675F">{{ signedAs }}<span style="border-bottom:{{ signUl }};color:#1D1D1B">{{ signName }}</span></span>
+          <span onClick="{{ toggleSign }}" style="cursor:pointer">{{ signAction }}</span>
+        </div>
+      </div>
+    </sc-if>
+    </div>
+  <div style="background:#060608;color:#E7E4DD;position:relative;overflow:hidden">
+    <canvas ref="{{ skyRef }}" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;image-rendering:pixelated;pointer-events:none"></canvas>
+    <div style="position:relative;max-width:1180px;margin:0 auto;padding:0 20px">
+      <div style="padding:clamp(40px,8cqi,96px) 0 28px;display:flex;flex-direction:column;gap:18px;max-width:780px">
+        <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#B4B3BA">AN OPEN NOVEL, BEING ADAPTED BY ITS READERS · DRAFT</div>
+        <div style="font-size:clamp(32px,5.4cqi,58px);line-height:1.06;text-wrap:balance">Build a world together.</div>
+        <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px 24px;font-size:18px;line-height:1.35;color:#CFCCC4">
+          <span style="border-top:1px solid #E7E4DD;padding-top:8px">Make something with others, and keep your name on it.</span>
+          <span style="border-top:1px solid #E7E4DD;padding-top:8px">Get to know Veridia in depth, one passage at a time.</span>
+          <span style="border-top:1px solid #E7E4DD;padding-top:8px">Learn to make things with AI, in the open.</span>
+        </div>
+        <sc-if value="{{ returning }}" hint-placeholder-val="{{ false }}">
+          <div style="display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-top:6px">
+            <span onClick="{{ nav.cont }}" style="height:48px;padding:0 18px;background:#F4F2ED;color:#060608;border-radius:3px;display:flex;align-items:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;cursor:pointer">CONTINUE · CHAPTER 3, <span style="border-bottom:2px dotted #B3306E;margin-left:6px">¶ 41</span></span>
+          </div>
+        </sc-if>
+        <sc-if value="{{ newcomer }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-wrap:wrap;gap:8px;padding-top:6px">
+            <span onClick="{{ nav.start }}" style="height:48px;padding:0 18px;background:#F4F2ED;color:#060608;border-radius:3px;display:flex;align-items:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;cursor:pointer">START CHAPTER 1</span>
+            <span onClick="{{ nav.intro }}" style="height:48px;padding:0 18px;border:1px solid #E7E4DD;border-radius:3px;display:flex;align-items:center;font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.06em;cursor:pointer">HOW THIS WORKS</span>
+          </div>
+        </sc-if>
+      </div>
+      <div style="height:20px"></div>
+    </div>
+  </div>
+
+  <div style="max-width:1180px;margin:0 auto;padding:28px 20px 40px;display:flex;flex-direction:column;gap:32px">
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:24px;align-items:start">
+      <div style="display:flex;flex-direction:column;gap:12px;border-top:2px solid #1D1D1B;padding-top:12px">
+        <div style="display:flex;justify-content:space-between;gap:8px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;color:#6A675F"><span>{{ momentHead }}</span><span>{{ m.ref }}</span></div>
+        <div style="font-size:24px;line-height:1.3;font-style:italic;text-wrap:pretty">{{ m.q }}</div>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span onClick="{{ nav.moment }}" style="height:44px;padding:0 14px;background:#1D1D1B;color:#F4F2ED;border-radius:3px;display:flex;align-items:center;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;cursor:pointer">READ FROM HERE →</span>
+          <span onClick="{{ reroll }}" style="height:44px;padding:0 14px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;cursor:pointer" style-hover="background:#EAE6DD">ANOTHER ↻</span>
+        </div>
+      </div>
+      <div style="display:flex;flex-direction:column;border-top:2px solid #1D1D1B;padding-top:12px">
+        <div style="display:flex;align-items:center;gap:8px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;color:#6A675F;padding-bottom:6px"><span style="width:7px;height:7px;border-radius:50%;background:#2E5A3A"></span>JUST MADE · ALL AI-ASSISTED</div>
+        <sc-for list="{{ feed5 }}" as="f" hint-placeholder-count="5">
+          <div onClick="{{ nav.adapt }}" style="display:grid;grid-template-columns:52px 1fr auto;gap:12px;align-items:center;padding:8px 0;border-bottom:1px solid #DAD6CC;background:{{ f.bg }};transition:background 1.2s;cursor:pointer">
+            <div style="width:52px;height:40px;background:{{ f.thumb }};border:{{ f.tbd }};box-sizing:border-box"></div>
+            <div style="display:flex;flex-direction:column;min-width:0"><span style="font-size:17px;line-height:1.2">{{ f.what }}</span><span style="font-family:'DM Mono',monospace;font-size:11px;color:#6A675F"><span>{{ f.kind }} · </span><span style="border-bottom:2px dotted #B3306E">{{ f.who }}</span></span></div>
+            <span style="font-family:'DM Mono',monospace;font-size:11px;color:#6A675F;border-bottom:2px dotted #B3306E;white-space:nowrap">{{ f.ago }}</span>
+          </div>
+        </sc-for>
+        <span onClick="{{ nav.adapt }}" style="padding-top:10px;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;cursor:pointer">EVERYTHING MADE →</span>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:10px;border-top:2px solid #1D1D1B;padding-top:12px">
+        <div style="display:flex;justify-content:space-between;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;color:#6A675F"><span>MINPENTAI · PLAYING ITSELF</span><span>STEP {{ step }}</span></div>
+        <div style="background:#060608;padding:8px;border-radius:2px"><div style="display:grid;grid-template-columns:repeat(15,minmax(0,1fr));gap:1px"><sc-for list="{{ cells }}" as="c" hint-placeholder-count="150"><div style="aspect-ratio:1;background:{{ c.bg }};border-radius:{{ c.r }}"></div></sc-for></div></div>
+        <div style="font-size:16px;line-height:1.4;color:#4A463F">The game the boy is playing in chapter 1, with rules invented for this edition.</div>
+        <span onClick="{{ nav.game }}" style="height:44px;border:1px solid #1D1D1B;border-radius:3px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.06em;cursor:pointer">PLAY MINPENTAI →</span>
+      </div>
+    </div>
+
+    <div style="display:flex;flex-direction:column">
+      <div style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.08em;color:#6A675F;padding-bottom:8px;border-bottom:2px solid #1D1D1B">EVERYTHING YOU CAN DO HERE</div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));column-gap:32px;align-items:start">
+        <div style="display:flex;flex-direction:column">
+          <div style="padding:12px 0 4px;font-size:22px">Book</div>
+          <div onClick="{{ nav.read }}" style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:baseline;padding:12px 0 12px 18px;border-bottom:1px solid #DAD6CC;cursor:pointer" style-hover="background:#EFECE5"><span style="display:flex;flex-direction:column"><span style="font-size:20px">Read</span><span style="font-size:16px;color:#4A463F">The book, with readers’ images beside it</span></span><span style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;color:#6A675F">CH 1 →</span></div>
+          <div onClick="{{ nav.listen }}" style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:baseline;padding:12px 0 12px 18px;border-bottom:1px solid #DAD6CC;cursor:pointer" style-hover="background:#EFECE5"><span style="display:flex;flex-direction:column"><span style="font-size:20px">Listen</span><span style="font-size:16px;color:#4A463F">The podcast first, then the narrated chapters</span></span><span style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;color:#6A675F">→</span></div>
+          <div onClick="{{ nav.glossary }}" style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:baseline;padding:12px 0 12px 18px;border-bottom:1px solid #DAD6CC;cursor:pointer" style-hover="background:#EFECE5"><span style="display:flex;flex-direction:column"><span style="font-size:20px">Glossary</span><span style="font-size:16px;color:#4A463F">The book’s invented words</span></span><span style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;color:#6A675F">→</span></div>
+        </div>
+        <div style="display:flex;flex-direction:column">
+          <div onClick="{{ nav.asst }}" style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:baseline;padding:12px 0 12px 0;border-bottom:1px solid #DAD6CC;cursor:pointer" style-hover="background:#EFECE5"><span style="display:flex;flex-direction:column"><span style="font-size:22px">Assistant</span><span style="font-size:16px;color:#4A463F">Ask about the book, privately</span></span><span style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;color:#6A675F">→</span></div>
+          <div onClick="{{ nav.game }}" style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:baseline;padding:12px 0 12px 0;border-bottom:1px solid #DAD6CC;cursor:pointer" style-hover="background:#EFECE5"><span style="display:flex;flex-direction:column"><span style="font-size:22px">Minpentai</span><span style="font-size:16px;color:#4A463F">The game from the book</span></span><span style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;color:#6A675F">LEARN · PLAY →</span></div>
+          <div onClick="{{ nav.pics }}" style="display:grid;grid-template-columns:1fr auto;gap:10px;align-items:baseline;padding:12px 0 12px 0;border-bottom:1px solid #DAD6CC;cursor:pointer" style-hover="background:#EFECE5"><span style="display:flex;flex-direction:column"><span style="font-size:22px">Pictures</span><span style="font-size:16px;color:#4A463F">Make an image for a passage, a style or a character</span></span><span style="font-family:'DM Mono',monospace;font-size:12px;letter-spacing:.04em;color:#6A675F">TRIAL →</span></div>
+        </div>
+      </div>
+    </div>
+    <div style="font-family:'DM Mono',monospace;font-size:11px;line-height:1.6;color:#6A675F">Independent adaptation · Not affiliated with the author · No token · All wording draft</div>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:390,&quot;height&quot;:1400},&quot;returning&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;},&quot;sky&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;}}">
+class Component extends DCLogic {
+  state = { mi: 0, feed: [], q: 0, tick: 0, menu: false };
+  skyRef = React.createRef();
+  hdrRef = React.createRef();
+  initSky() {
+    const c = this.skyRef.current; if (!c || this.skyOn) return; this.skyOn = true;
+    const P = 4, ctx = c.getContext('2d'), still = window.matchMedia && matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const BAYER = [0, 8, 2, 10, 12, 4, 14, 6, 3, 11, 1, 9, 15, 7, 13, 5];
+    let W, H, R, cx, cy, moon, stars, t0 = performance.now(), last = 0;
+    const size = () => {
+      const r = c.parentElement.getBoundingClientRect(); W = Math.max(1, Math.ceil(r.width / P)); H = Math.max(1, Math.ceil(r.height / P)); c.width = W; c.height = H;
+      R = Math.max(10, Math.round(Math.min(H * .3, W * .2))); cx = Math.round(W - Math.max(R + 8, W * .18)); cy = Math.round(H * .4);
+      moon = document.createElement('canvas'); moon.width = moon.height = R * 2 + 1; const m = moon.getContext('2d'), id = m.createImageData(R * 2 + 1, R * 2 + 1);
+      const maria = (u, v) => .5 + .5 * (Math.sin(u * 3.1 + 1.3) * Math.cos(v * 2.7 - .4) * .6 + Math.sin(u * 5.3 - v * 4.1 + 2) * .4);
+      for (let y = -R; y <= R; y++) for (let x = -R; x <= R; x++) {
+        const u = x / R, w = y / R, d = Math.hypot(u, w); if (d > 1) continue;
+        const cut = Math.hypot(u - .42, w + .16) / .9;
+        if (cut < 1) continue;
+        const edge = Math.min(1, (cut - 1) * 3.2);
+        let v = (.45 + .55 * edge) * (.8 + .2 * (1 - Math.max(0, maria(u, w) - .6) * 2));
+        if (v * 16 < BAYER[((y + R) % 4) * 4 + ((x + R) % 4)] + .5) continue;
+        const i = ((y + R) * (R * 2 + 1) + (x + R)) * 4; id.data[i] = 231; id.data[i + 1] = 236; id.data[i + 2] = 240; id.data[i + 3] = 255;
+      }
+      m.putImageData(id, 0, 0);
+      let a = 20261009; const rnd = () => (a = (a * 1664525 + 1013904223) >>> 0) / 4294967296;
+      stars = []; const n = Math.round(W * H / 70);
+      for (let i = 0; i < n; i++) { const x = rnd() * W | 0, y = rnd() * H | 0; if (Math.hypot(x - cx, y - cy) < R + 3) continue; stars.push({ x, y, b: .2 + rnd() * .8, p: rnd() * 6.28, s: .6 + rnd() * 1.8, d: rnd() * 1.4, big: rnd() < .06 }); }
+    };
+    const ease = k => 1 - Math.pow(1 - Math.min(1, Math.max(0, k)), 3);
+    const draw = now => {
+      const t = still ? 99 : (now - t0) / 1000; ctx.clearRect(0, 0, W, H);
+      const mk = ease(t / 2.2); ctx.globalAlpha = .26 * mk; ctx.drawImage(moon, cx - R, cy - R + Math.round((1 - mk) * R * .6));
+      for (const s of stars) {
+        const k = ease((t - s.d) / .8); if (k <= 0) continue;
+        const tw = still ? .7 : .55 + .45 * Math.sin(t * s.s + s.p), al = s.b * tw * k * .5;
+        ctx.globalAlpha = al; ctx.fillStyle = '#E7ECF0'; ctx.fillRect(s.x, s.y, 1, 1);
+        if (s.big && tw > .9) { ctx.globalAlpha = al * .5; ctx.fillRect(s.x - 1, s.y, 1, 1); ctx.fillRect(s.x + 1, s.y, 1, 1); ctx.fillRect(s.x, s.y - 1, 1, 1); ctx.fillRect(s.x, s.y + 1, 1, 1); }
+      }
+      if (!still && t > 1.6) { const g = Math.sin(t * .9); if (g > .96) { ctx.globalAlpha = (g - .96) * 8; ctx.fillStyle = '#FFFFFF'; ctx.fillRect(cx - Math.round(R * .62), cy - Math.round(R * .62), 1, 1); } }
+      ctx.globalAlpha = 1;
+    };
+    const loop = now => { if (now - last > 50) { draw(now); last = now; } this.raf = requestAnimationFrame(loop); };
+    size(); this.ro = new ResizeObserver(() => { size(); draw(performance.now()); }); this.ro.observe(c.parentElement);
+    if (still) draw(0); else this.raf = requestAnimationFrame(loop);
+  }
+  componentDidUpdate() { if (this.props.sky !== false) this.initSky(); }
+  componentDidMount() {
+    if (this.props.sky !== false) this.initSky();
+    import('./home-live.js').then(L => {
+      this.L = L; this.b = L.newBoard(Date.now() + 7);
+      const ages = ['4 MIN', '11 MIN', '26 MIN', '40 MIN', '1 H', '2 H'];
+      this.setState({ mi: Math.floor(Math.random() * L.MOMENTS.length), q: 6, feed: L.FEED.slice(0, 6).map((f, i) => ({ ...f, ago: ages[i], fresh: false })) });
+      this.bt = setInterval(() => { L.stepBoard(this.b); if (this.b.over) this.b = L.newBoard(Date.now()); this.setState(s => ({ tick: s.tick + 1 })); }, 260);
+      this.ft = setInterval(() => this.setState(s => {
+        const f = L.FEED[s.q % L.FEED.length];
+        const old = s.feed.map(x => ({ ...x, fresh: false, ago: x.ago === 'JUST NOW' ? '1 MIN' : x.ago }));
+        return { q: s.q + 1, feed: [{ ...f, ago: 'JUST NOW', fresh: true }, ...old].slice(0, 8) };
+      }), 6500);
+    });
+  }
+  componentWillUnmount() { clearInterval(this.bt); clearInterval(this.ft); cancelAnimationFrame(this.raf); if (this.ro) this.ro.disconnect(); }
+  renderVals() {
+    const L = this.L, s = this.state, ret = !!this.props.returning;
+    const hatch = 'repeating-linear-gradient(135deg,#C9CFBE 0 8px,#C1C8B5 8px 16px)';
+    const go = (k, x) => () => { this.setState({ menu: false }); if (this.props.onNav) this.props.onNav(k, x); };
+    const mo = L ? L.MOMENTS[s.mi] : null;
+    const nav = { home: go('home'), read: go('read'), listen: go('listen'), glossary: go('glossary'), asst: go('asst'), game: go('game'), pics: go('pics'), adapt: go('adapt'), about: go('about'), intro: go('intro'), settings: go('settings'), work: go('work'), cont: go('cont'), start: go('start'), moment: go('moment', mo ? { ch: mo.ch, b: +mo.ref.split('-b')[1] } : null) };
+    return {
+      returning: ret, newcomer: !ret, skyRef: this.skyRef,
+      menuOn: s.menu, hdrRef: this.hdrRef, menuH: s.menuH || 700, openMenu: () => { const h = this.hdrRef.current; let p = h && h.parentElement; while (p && p !== document.body) { const o = getComputedStyle(p).overflowY; if ((o === 'auto' || o === 'scroll') && p.clientHeight) break; p = p.parentElement; } this.setState({ menu: true, menuH: p && p !== document.body ? p.clientHeight : window.innerHeight }); }, closeMenu: () => this.setState({ menu: false }),
+      menu: [['Home', 'You are here', 'HERE', '#2E5A3A'], ['Read', 'The book, with readers’ images', '→', '#1D1D1B'], ['Listen', 'The narrated chapters', '→', '#1D1D1B'], ['Play Minpentai', 'Learn, play, free play', '→', '#1D1D1B'], ['Make an image', 'For a passage, a style or a character', '→', '#1D1D1B'], ['Ask about the book', 'Private questions', '→', '#1D1D1B'], ['Browse adaptations', 'What people have made, and how', '→', '#1D1D1B']].map(([n, d, tag, fg]) => ({ n, d, tag, fg })),
+      menu2: (ret ? [['Your work', 'work'], ['Reading settings', 'settings'], ['About this edition', 'about']] : [['Reading settings', 'settings'], ['About this edition', 'about'], ['Replay the intro', 'intro']]).map(([t, k]) => ({ t, go: nav[k] })), nav,
+      toggleSign: () => { this.setState({ menu: false }); this.props.onToggleSign && this.props.onToggleSign(); }, signTap: ret ? () => this.setState({ menu: true }) : () => this.props.onToggleSign && this.props.onToggleSign(),
+      signedAs: ret ? 'SIGNED IN AS ' : 'NOT SIGNED IN', signName: ret ? '@ilse' : '', signAction: ret ? 'SIGN OUT' : 'SIGN IN WITH FARCASTER', signLabel: ret ? '@ilse' : 'SIGN IN', signUl: ret ? '2px dotted #B3306E' : '0',
+      momentHead: ret ? 'A MOMENT FROM WHAT YOU’VE READ' : 'A MOMENT FROM CHAPTER 1',
+      m: L ? { ...L.MOMENTS[s.mi], q: /^"/.test(L.MOMENTS[s.mi].t) ? L.MOMENTS[s.mi].t.replace(/^"/, '“').replace(/",/, '”,') : '“' + L.MOMENTS[s.mi].t + '”' } : { q: '', ref: '' },
+      reroll: () => L && this.setState(st => ({ mi: (st.mi + 1 + Math.floor(Math.random() * (L.MOMENTS.length - 1))) % L.MOMENTS.length })),
+      feed: s.feed.map(f => ({ ...f, ol: f.fresh ? '2px solid #2E5A3A' : '2px solid transparent', thumb: f.img ? hatch : '#F4F2ED', tbd: f.img ? '0' : '1px dashed #6A675F' })),
+      feed5: s.feed.slice(0, 5).map(f => ({ ...f, bg: f.fresh ? '#E3EBDD' : 'transparent', thumb: f.img ? hatch : 'transparent', tbd: f.img ? '0' : '1px dashed #6A675F' })),
+      cells: L && this.b ? L.boardCells(this.b) : [], step: this.b ? this.b.step : 0,
+      options: (L ? L.OPTIONS : []).map((o, i) => ({ ...o, num: String(i + 1).padStart(2, '0') })),
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -6,13 +6,14 @@ import { openedChapters } from '~/lib/chat/device';
 import { IMAGE_WORDING as W } from '~/lib/images/wording';
 import { AI_LABEL, readerImageView } from '~/lib/ai-declared';
 import { AiLabel } from './recipe-sheet';
+import { MakeImageLink } from './make-image-link';
 
 /**
  * The feed's order strip and list. Images from a chapter past the furthest one opened on this
  * device are covered until shown; a covered image's caption gives the chapter only, never the
  * paragraph. Laid out as Claude Design's feed: a labelled order strip, then the images.
  */
-type Item = { versionId: string; url: string; chapter: number; where: string | null; by: string; date: string; likes: number; alt: string; prompt: string };
+type Item = { versionId: string; url: string; chapter: number; where: string | null; by: string; date: string; likes: number; alt: string; prompt: string; passage: string[]; start: number; end: number };
 
 export function ImageFeed({ images, sort, empty }: { images: Item[]; sort: 'new' | 'liked'; empty: React.ReactNode }) {
   const [furthest, setFurthest] = useState<number | null>(null);
@@ -50,6 +51,22 @@ export function ImageFeed({ images, sort, empty }: { images: Item[]; sort: 'new'
                     {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img src={im.url} alt={im.alt} width={1024} height={576} loading="lazy" />
                   </Link>
+                )}
+                {/* The book's words the image is of, first (owner, 2026-10-10); the prompt is in the label's sheet and on its page. */}
+                {!covered && im.passage.length > 0 && (
+                  <Link href={`/image/${im.versionId}`} className="pictures-passage">
+                    <blockquote>
+                      {im.passage.map((t, i) => (
+                        <p key={i}>{t}</p>
+                      ))}
+                    </blockquote>
+                  </Link>
+                )}
+                {/* The same passage, into "Make an image" (shown where "Add an image" shows). Model-drafted wording. */}
+                {!covered && im.passage.length > 0 && (
+                  <MakeImageLink className="mi-from" passage={{ chapter: im.chapter, start: im.start, end: im.end }}>
+                    {W.create.fromThis} →
+                  </MakeImageLink>
                 )}
                 <p className="pictures-row">
                   <span>

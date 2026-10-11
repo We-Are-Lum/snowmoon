@@ -43,7 +43,13 @@ coding agent and its helpers are in `docs/prompts/`.
 - `P1e`: through the public database API, with only the public key, the
   spoken text of the house narration is readable.
 - `P1f`: every text box whose contents may be published is a
-  `PublishedTextField`, which shows the publication line under it.
+  `PublishedTextField`, which shows the publication line under it. The boxes
+  that are never published say so instead: the assistant's question
+  (`PrivateTextField`), a report's note (`PrivateNoteField`) and the search of
+  the book's text on "Make an image" (`SearchField`, 2026-10-10: searched on
+  the reader's device over the text served whole by `/api/book/text`; the
+  query is never sent anywhere, kept or published, and the page may fetch
+  only that text).
 - `npm run test:db`: after 0005, a recipe is public only if it made a
   published element version or a segment of a narration that is not hidden;
   drafts, hidden work and abandoned attempts stay private.
@@ -131,7 +137,10 @@ in 25 words or fewer and records `written_by { fid, date }`.
   the player says the narration is synthetic; quote cards with an image label
   it as AI-generated. The glossary's "Hear it" clip (`/glossary/autobus` as
   served) carries the same voice label ("AI voice · by Snowmoon Party"), and its
-  recipe sheet is checked like the chapter's.
+  recipe sheet is checked like the chapter's. The first-visit intro's images (its recipe and
+  record cards) carry the same image label (owner, 2026-10-10). The home page's "Just made"
+  (`src/components/home-feed.tsx`) shows each reader's image with the same
+  label, or its empty state.
 - `P2c`: every narration and dialogue line in an adaptation script carries a
   human author tag. `npm run check:adaptations` also checks every book line
   verbatim against its block and narration at 25 words or fewer per beat.
@@ -145,6 +154,12 @@ in 25 words or fewer and records `written_by { fid, date }`.
   definition field. Nothing on a glossary
   page defines a word except those quotes. `npm run test:glossary` also rebuilds
   the file from its sources and must match it byte for byte.
+- `P2i`: every "moment from the book" on the home page (`HOME_MOMENTS` in
+  `src/lib/home.ts`) is one or more whole sentences of a paragraph or quote
+  block, verbatim (speaker-colour span tags removed, no quote marks added or
+  changed), at a block id that exists (`check:ui` follows "Read from here" and
+  checks it lands on that block). The proof changes one word and adds Design's screen block c1-b18
+  as if it were a sentence.
 - `P2g`: on every chapter page as served, each screen redrawn from a template
   (`data-source="template"`) carries one "Redrawn ⓘ" label: the visible word,
   the ⓘ, the declaration served with it, and a dialog with the details; screens
@@ -227,7 +242,8 @@ repo (the prompt log of the request that asked for it).
 
 **Checked by.**
 - `P4a`: every API route that writes (POST, PUT, PATCH, DELETE) calls `getFid`
-  and refuses without it (401). `npm run check:shipped` also confirms on the
+  and refuses without it (401), or hands the request to a shared wrapper that
+  does (listed in the check; today only Minpentai Play's `play()`, read each run). `npm run check:shipped` also confirms on the
   live site that save and like refuse anonymous requests.
 - `P4b`: the published image index and every narration index record
   `published_by` with an FID and the action; for the maintainer path, also
@@ -376,8 +392,11 @@ is no token.
 **Checked by.**
 - `P7a`: no ordering (`order by`, `.sort`) or scoring code references
   donations, grants, amounts, costs or sponsors.
-- `P7b`: the deployed first screen contains "not affiliated with the author"
-  and "There is no token"; no token code (ERC-20/721, mint, airdrop) exists in
+- `P7b`: the deployed first screen (the first words of the home page's
+  `<main>`, its dark hero) contains "not affiliated with the author" and "no
+  token" (the owner-approved line "Independent adaptation · Not affiliated
+  with the author · No token", `config/intro.json`; the owner moved it from
+  Design's footer into the hero, 2026-10-10); no token code (ERC-20/721, mint, airdrop) exists in
   the repo. `npm run check:ui` also checks the first screen at phone size.
 - `npm run check:intro`: the first-visit intro's disclaimer (`config/intro.json`),
   shown on card 1 and at the top of /about, keeps "not affiliated with the
@@ -422,7 +441,10 @@ quoted as written. Minpentai boards and maps come from the source's own SVGs.
 - `P8f`: Minpentai's tags are "Book ⓘ", "Invented ⓘ" (the rules, the broadcast,
   the lenses and the symbol's shape, folded into one label whose details list
   each) and "Draft ⓘ", each a visible word opening its explanation, on every
-  Learn screen and the rule page. The proof blanks each of the three words.
+  Learn screen and the rule page. Play's tags (`play.tsx`, `play-live.tsx`, the rules page) are the
+  same labels, with no old-style tag carrying a label's words, and nothing there paraphrases c4-b84 as
+  "a new rule each match" (the ruling of 2026-10-09, which P8d checks in Learn; 2026-10-10). The proof
+  blanks each of the three words and plants the old c4-b84 tag.
 - `P8e`: every live voting screen (c1-b18, c1-b31, c7-b6) starts in the state
   the book shows: the slider's range, step and starting value are the source's
   `<input type="range">` with its HTML defaults, its marks and title are the
