@@ -317,7 +317,7 @@
 
 /* A short visible word with ⓘ, opening the details (owner ruling, 2026-10-09). */
 /* Owner ruling 2026-10-10: the ⓘ alone, on a 44px tap area; the word is in its accessible name. */
-.info-label { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding: 0; color: var(--muted); background: transparent; border: 0; border-radius: 50%; cursor: pointer; vertical-align: middle; }
+.info-label { display: inline-flex; align-items: center; justify-content: center; min-width: 44px; min-height: 44px; padding: 0; font-family: var(--label); font-size: var(--text-label); color: var(--muted); background: transparent; border: 0; border-radius: 50%; cursor: pointer; vertical-align: middle; }
 .info-label:hover, .info-label:focus-visible { color: var(--ink); }
 .info-label .info-i { flex: none; }
 .info-sheet { display: flex; flex-direction: column; gap: 10px; }
