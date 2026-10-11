@@ -233,3 +233,9 @@ The first-visit intro's recipe and record cards show the AI image label, opening
 The composer starts with the project's starting style (Techno vistas) chosen, so a prompt is no longer sent without it by default; None stays, and a saved draft keeps its own choice (owner: without it the pictures come out realistic). The intro ignores Escape while a sheet is open. check:ui requires the default and reads home's uppercase AI labels in any case. To undo (back to `82534c6`):
 
     vercel rollback https://snowmoon-7jxqj1r2c-nates-projects-d1780cff.vercel.app --scope nates-projects-d1780cff
+
+## 2026-10-10: Pictures: the passage first, and "Make an image" (branch site-images-create)
+
+Pushed together with site-style-default above (one push). Browsing images shows the passage each is of; an image's prompt, model and settings fold into "How this was made". "Make an image" (/images/new): choose a passage by chapter or by searching the book (searched on the reader's device over GET /api/book/text; no query reaches the server), then the prompt; links from an image's page, the feed and the assistant's quote cards (invited readers during the trial). Home's "Just made" waits at most 2 s for the database. To undo both (back to `82534c6`):
+
+    vercel rollback https://snowmoon-7jxqj1r2c-nates-projects-d1780cff.vercel.app --scope nates-projects-d1780cff
