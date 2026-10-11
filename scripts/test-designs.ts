@@ -308,6 +308,16 @@ check('My picks and the composer show no built-on number', !/builtOn|built on/i.
   check('in this passage: name_exclusions are not them ("Hun Min street" is not Min)', SH.namedAs('They walked down Hun Min street.', ['Min'], ['Hun Min']) === null && SH.namedAs('Min laughed.', ['Min'], ['Hun Min']) === 'Min');
   check('in this passage: whole words only', SH.namedAs('the minute', ['Min']) === null);
   check('in this passage: the scene\'s place, with its evidence block', JSON.stringify(SH.inPassage(1, 2, 5).place) === JSON.stringify({ slug: 'kalimar-footpaths', name: 'the footpaths of the Kalimar district', evidence: 'c1-b2' }));
+// Sheet summaries describe; they don't say where or when in the book (2026-10-10: no chapter numbers or later events,
+// which "Where it appears" shows with its spoiler cover).
+{
+  for (const dir of ['characters', 'locations']) {
+    for (const f of readdirSync(path.join(ROOT, 'content/snowmoon/designs', dir)).filter((x) => x.endsWith('.json'))) {
+      const about = (JSON.parse(readFileSync(path.join(ROOT, 'content/snowmoon/designs', dir, f), 'utf8')) as { about?: string }).about ?? '';
+      check(`sheet summary ${dir}/${f} names no chapter and nothing later`, !/\bchapters?\b|\blater\b|\bfinally\b|\beventually\b/i.test(about), about.slice(0, 80));
+    }
+  }
+}
   check('in this passage: a scene with no place sheet has none', SH.inPassage(1, 45, 50).place === null && SH.inPassage(5, 1, 8).place === null);
   const found = SH.inPassage(1, 130, 134);
   check('Generate refuses a character the passage does not name', SH.askedSheets(found, { characters: ['lektor'] }, 3).ok === false);

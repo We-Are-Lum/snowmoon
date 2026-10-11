@@ -267,3 +267,9 @@ The short labels (Redrawn, AI description, Book, Invented, Draft) show only the 
 Styles & characters: styles, character sheets, forks and My picks (step 4, the owner's decisions of 2026-10-09); making and picking are for invited readers only, for now (owner, 2026-10-10), browsing is open. Character and place sheets as text (the book's words, verbatim, and this edition's shorthand, labelled Invented and model-drafted); the Places tab and a page per place; content/snowmoon/designs/scenes.json gives each scene's place, with no model. The composer's "In this passage" adds the characters named and the scene's place to the prompt (removable, published with it); images record them ("In this image"). No migration; nothing seeded (seed:designs not run). To undo (back to `f281396`):
 
     vercel rollback https://snowmoon-nsmd8uxui-nates-projects-d1780cff.vercel.app --scope nates-projects-d1780cff
+
+## 2026-10-11: sheet summaries without chapter numbers or later events (branch site-sheets-next)
+
+The summaries of 24 places and of Deluin describe only the place or the person; where they appear stays on "Where it appears", with its spoiler cover. test:designs checks no summary names a chapter or says "later". To undo (back to `67374b3`):
+
+    vercel rollback https://snowmoon-mivpj2oui-nates-projects-d1780cff.vercel.app --scope nates-projects-d1780cff
