@@ -1307,6 +1307,20 @@
       "elevation": 500
     },
     {
+      "id": "pyramid_path_top",
+      "name": "where the path steepens",
+      "shape": "point",
+      "at": [
+        1.7,
+        -0.6
+      ],
+      "provenance": "placed by us",
+      "lines": [
+        "wg-341"
+      ],
+      "hide_label": true
+    },
+    {
       "id": "main_door",
       "name": "main door (half height)",
       "shape": "point",
@@ -1335,6 +1349,26 @@
           1.7,
           -0.6,
           60
+        ]
+      ],
+      "provenance": "book",
+      "lines": [
+        "wg-334",
+        "wg-341",
+        "wg-343"
+      ],
+      "note": "Straight from Dzai Gun toward the main door (c4-b50), rising at about ten percent (c4-b52).",
+      "tap": "From the book: \"The street curved up with about a ten percent slope\" (c4-b52)."
+    },
+    {
+      "id": "pyramid_stair",
+      "name": "stair to the main door",
+      "shape": "polyline",
+      "points": [
+        [
+          1.7,
+          -0.6,
+          60
         ],
         [
           1.7,
@@ -1342,14 +1376,14 @@
           250
         ]
       ],
-      "provenance": "book",
+      "provenance": "placed by us",
       "lines": [
-        "wg-334",
         "wg-341",
         "wg-342",
-        "wg-343"
+        "wg-344"
       ],
-      "note": "Straight from Dzai Gun to the main door (c4-b50). The first stretch rises at about ten percent (c4-b52); we make the last stretch, up the pyramid's face, a steep stair. Where it steepens is ours."
+      "note": "A steep stair up the pyramid's face to the main door. A ten percent path all the way up would be 2.5 km long, and the pyramid it needs would make the walk around it at half height far longer than twenty minutes. Where the path steepens is ours.",
+      "tap": "The book gives both \"The street curved up with about a ten percent slope\" (c4-b52) and \"he would take daily twenty minute walks every day along the trees around the perimeter halfway up the mountain pyramid\" (c24-b21). A ten percent path all the way to the door at half height would need a pyramid too wide for a twenty-minute walk around it, so we made the last stretch a steep stair."
     },
     {
       "id": "forest",
@@ -1572,8 +1606,14 @@
     {
       "line": "wg-342",
       "test": "ends_at",
-      "path": "pyramid_path",
+      "path": "pyramid_stair",
       "a": "main_door"
+    },
+    {
+      "line": "wg-342",
+      "test": "starts_at",
+      "path": "pyramid_stair",
+      "a": "pyramid_path_top"
     },
     {
       "line": "wg-342",
