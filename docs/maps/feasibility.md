@@ -10,7 +10,7 @@
 |---|---|
 | 92 geography lines, wg-301 to wg-392: every statement in the book about where places are, each cited, tagged with the latest chapter it depends on, and stated as one relation (a → rel → b) | `content/snowmoon/world-guide.json`, section `geography` |
 | Three proposed layouts. Every placement is marked `book` or `placed by us`, with the lines it rests on | `content/snowmoon/maps/meldan.json`, `pafogai-du.json`, `world.json` |
-| A checker. It runs 112 numeric tests (bearing, distance, inside, a view from a roof...) and fails if any cited relation doesn't hold, or if a geography line is neither tested nor listed with a reason | `scripts/maps.ts check` (`report` lists every result) |
+| A checker. It runs 113 numeric tests (bearing, distance, inside, a view from a roof...) and fails if any cited relation doesn't hold, or if a geography line is neither tested nor listed with a reason | `scripts/maps.ts check` (`report` lists every result) |
 | Drawings: solid means from the book, dashed means placed by us | `docs/maps/*.svg` (Meldan whole and center; Pafogai Du; world, Northshore, United Cities) |
 
 **"Book" and "placed by us".** A placement is **book** when the book fixes
@@ -21,7 +21,7 @@ say where it is, so we chose. Every map also needs one anchor that is ours:
 Meldan's summit, Pafogai Du's south-west corner, Meldan on the globe.
 
 **How the lines were checked.**
-- `scripts/world-guide.ts check` passes on all 249 lines.
+- `scripts/world-guide.ts check` passes on all 266 lines.
 - gpt-oss-120b read each geography line against its cited blocks: 92 lines,
   $0.045, now able to see SVG figures.
 - I reviewed every flag. Real errors were fixed:
@@ -131,7 +131,7 @@ that walk take twenty minutes (c24-b21). Our layout:
 The cost: Zei's "about five minutes later" (c4-b54) only works if "somewhat
 further up" is already high on the stair. The book doesn't rule that out.
 
-**Layout:** 25 tests hold. View `docs/maps/pafogai-du.svg`.
+**Layout:** 26 tests hold. View `docs/maps/pafogai-du.svg`.
 
 ## The world
 
@@ -184,7 +184,8 @@ further up" is already high on the stair. The book doesn't rule that out.
 - the river's course;
 - Eldil;
 - Thaldur's size;
-- the positions of the fifteen cities.
+- the positions of the fifteen cities, including Arturia north-west of Redshire;
+- the stair up the pyramid's face (on the Pafogai Du map).
 
 **Contradictions:**
 
@@ -229,7 +230,7 @@ water. That fits the book: the Arctic land invasion came "out of
 never-before-seen underground tunnels" (c15-b8), not across a land border.
 
 **Layout:** 41 tests hold and 2 contradictions fail as expected. Views:
-`docs/maps/world.svg`, `world-northshore.svg`, `world-united-cities.svg`.
+`docs/maps/world.svg`, `world-northshore.svg`, `world-united-cities.svg`, `world-dzego.svg`.
 
 ## Not tested, with reasons
 
