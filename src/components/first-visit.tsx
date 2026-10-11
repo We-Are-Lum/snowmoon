@@ -191,6 +191,8 @@ function IntroScreens({ intro, onClose }: { intro: Intro; onClose: () => void })
           // Keys from the recipe sheet (a portal, so React still bubbles them here) are the sheet's own:
           // Escape there closes the sheet, not the intro.
           if (!e.currentTarget.contains(e.target as Node)) return;
+          // Nor while a sheet is open over the intro, even before focus has moved into it.
+          if (document.querySelector('.sheet-overlay')) return;
           if (e.key === 'Escape') close();
           else if (e.key === 'ArrowRight') go(i + 1);
           else if (e.key === 'ArrowLeft') go(i - 1);
