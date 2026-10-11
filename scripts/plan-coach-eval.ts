@@ -1,12 +1,13 @@
 /**
  * Eval of the planning coach (config/prompts/plan-coach.md) before any UI (owner, 2026-10-11).
  *
- *   npx tsx --conditions=react-server --env-file=.env.summary.local scripts/plan-coach-eval.ts [name ...]
+ *   npx tsx --conditions=react-server scripts/plan-coach-eval.ts [name ...]   (needs AI_GATEWAY_API_KEY)
  *
  * For each fixture in scripts/fixtures/plan-coach/ (a draft in labelled fragments, with a
  * chapter limit; the header's "planted" list is for the reviewer and is never sent): one
- * coach turn on gpt-oss-120b through the assistant's route (Groq, zero retention; the
- * gateway when Groq is busy). Context: the world guide up to the limit, the craft guide
+ * coach turn on gpt-oss-120b, and its guard, only through the Vercel AI Gateway
+ * (scripts/lib/batch-model.ts; never the site's Groq key, owner 2026-10-11), pinned as the
+ * site is: Groq the only provider, zero data retention. Context: the world guide up to the limit, the craft guide
  * (a draft the owner has not approved; used here for the eval only) and up to twelve
  * passages up to the limit, chosen by word overlap with the draft.
  *
@@ -20,7 +21,8 @@
 import { createHash } from 'node:crypto';
 import { readFileSync, readdirSync, writeFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
-import { complete, gatewayToken, promptFile } from '../src/lib/chat/model';
+import { completeViaGateway, batchGatewayToken } from './lib/batch-model';
+import { loadGatewayKey, promptFile } from './lib/gateway-key';
 import { guideText } from '../src/lib/world-guide';
 
 const ROOT = process.cwd();
@@ -75,6 +77,8 @@ function autoFlags(reply: string, draft: string, limit: number): string[] {
   return [...new Set(out)];
 }
 
+loadGatewayKey();
+batchGatewayToken(); // stop before any call if there is no gateway credential
 const results = existsSync(path.join(ROOT, RESULTS)) ? JSON.parse(read(RESULTS)) : { runs: [] as unknown[] };
 let spent = (results.runs as { cost_usd: number }[]).reduce((a, r) => a + r.cost_usd, 0);
 const system = promptFile('plan-coach.md');
@@ -110,8 +114,8 @@ for (const f of readdirSync(path.join(ROOT, DIR)).filter((x) => x.endsWith('.md'
   ].join('\n');
   if (spent > CAP_USD - 0.05) throw new Error(`stopping: $${spent.toFixed(3)} spent of $${CAP_USD}`);
   const t0 = Date.now();
-  const r = await complete(gatewayToken(), MODEL, [{ role: 'system', content: system }, { role: 'user', content: user }], { maxTokens: 6000, temperature: 0.3 });
-  const g = await complete(gatewayToken(), GUARD, [{ role: 'system', content: guardPolicy }, { role: 'user', content: `USER REQUEST:\nGive me notes on my draft.\n\nREPLY:\n${r.text}` }], { maxTokens: 800, temperature: 0 });
+  const r = await completeViaGateway(MODEL, [{ role: 'system', content: system }, { role: 'user', content: user }], { maxTokens: 6000, temperature: 0.3 });
+  const g = await completeViaGateway(GUARD, [{ role: 'system', content: guardPolicy }, { role: 'user', content: `USER REQUEST:\nGive me notes on my draft.\n\nREPLY:\n${r.text}` }], { maxTokens: 800, temperature: 0 });
   const cost = r.costUsd + g.costUsd;
   spent += cost;
   results.runs.push({

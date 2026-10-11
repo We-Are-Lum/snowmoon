@@ -4,13 +4,16 @@
  *
  *   npx tsx scripts/world-guide.ts check     fails (exit 1) on any problem
  *   npx tsx scripts/world-guide.ts render    writes content/snowmoon/world-guide.md
- *   npx tsx --conditions=react-server --env-file=.env.summary.local scripts/world-guide.ts verify
+ *   npx tsx --conditions=react-server scripts/world-guide.ts verify   (needs AI_GATEWAY_API_KEY)
  *
  * check: unique line ids; known sections; every cited block exists; from_chapter is
  * the latest chapter the line cites (so filtering by reading progress hides nothing
  * it needs); the AI label, licence and recipe are present; the .md matches the JSON.
- * verify: gpt-oss-120b reads each line against its cited blocks (the assistant's
- * route, zero retention); results and every call go to content/snowmoon/recipes/world-guide.json.
+ * verify: gpt-oss-120b reads each line against its cited blocks. A batch job, so only through
+ * the Vercel AI Gateway (scripts/lib/batch-model.ts), never with the site's Groq key (owner,
+ * 2026-10-11), pinned as the site is: Groq the only provider, zero data retention. check fails
+ * if this script or scripts/plan-coach-eval.ts uses the site's route. Results and every call go
+ * to content/snowmoon/recipes/world-guide.json.
  */
 import { createHash } from 'node:crypto';
 import { readFileSync, writeFileSync, existsSync } from 'node:fs';
@@ -105,13 +108,20 @@ if (step === 'render') {
   planted.lines[0].from_chapter = 1;
   planted.lines[0].sources = [...planted.lines[0].sources, 'c32-b1'];
   if (!problems(planted).some((x) => x.includes('from_chapter'))) bad.push('the chapter tag rule did not catch a planted later citation');
+  // Batch jobs call the model only through the gateway, never with the site's Groq key (owner, 2026-10-11).
+  const siteRoute = new RegExp(['await ' + 'complete\\(', 'gateway' + 'Token\\(', 'GROQ' + '_API_KEY', 'CHAT\\.' + 'direct', 'chat/' + 'model'].join('|'));
+  for (const f of ['scripts/world-guide.ts', 'scripts/plan-coach-eval.ts']) if (siteRoute.test(read(f).replace(/\/\*[\s\S]*?\*\//g, ''))) bad.push(`${f} calls the model by the site's route or reads the Groq key; batch jobs use scripts/lib/batch-model.ts only`);
+  if (new RegExp(['GROQ' + '_API_KEY', 'CHAT\\.' + 'direct', 'direct' + 'Key'].join('|')).test(read('scripts/lib/batch-model.ts').replace(/\/\*[\s\S]*?\*\//g, ''))) bad.push('scripts/lib/batch-model.ts reads the Groq key');
   if (bad.length) {
     console.error(`world guide check FAILED (${bad.length}):\n- ` + bad.join('\n- '));
     process.exit(1);
   }
   console.log(`world guide check passed: ${guide.lines.length} lines, every block real, chapter tags right, planted violation caught`);
 } else if (step === 'verify') {
-  const { complete, gatewayToken, promptFile } = await import('../src/lib/chat/model');
+  const { completeViaGateway, batchGatewayToken } = await import('./lib/batch-model');
+  const { loadGatewayKey, promptFile } = await import('./lib/gateway-key');
+  loadGatewayKey();
+  batchGatewayToken(); // stop before any call if there is no gateway credential
   const recipe = existsSync(path.join(ROOT, RECIPE)) ? JSON.parse(read(RECIPE)) : { calls: [], results: {} };
   const system = promptFile('world-guide-check.md');
   recipe.prompt = { file: 'config/prompts/world-guide-check.md', sha256: sha256(read('config/prompts/world-guide-check.md')), text: system };
@@ -121,11 +131,11 @@ if (step === 'render') {
     if (recipe.results[l.id]?.text === l.text && JSON.stringify(recipe.results[l.id]?.sources) === JSON.stringify(l.sources)) continue;
     const user = `LINE:\n${l.entity}: ${l.text}\n\nCITED BLOCKS:\n${l.sources.map((s) => `[${s}] ${figures.get(s) ?? blocks.get(s)}`).join('\n')}`;
     const t0 = Date.now();
-    // Groq's free plan allows few tokens a minute; on a refusal, wait and try again before giving up.
-    let r: Awaited<ReturnType<typeof complete>> | null = null;
+    // On a refusal (rate limit), wait and try again before giving up.
+    let r: Awaited<ReturnType<typeof completeViaGateway>> | null = null;
     for (let attempt = 0; attempt < 5 && !r; attempt++) {
       try {
-        r = await complete(gatewayToken(), 'openai/gpt-oss-120b', [{ role: 'system', content: system }, { role: 'user', content: user }], { maxTokens: 3000, temperature: 0 });
+        r = await completeViaGateway('openai/gpt-oss-120b', [{ role: 'system', content: system }, { role: 'user', content: user }], { maxTokens: 3000, temperature: 0 });
       } catch (e) {
         if (attempt === 4) throw e;
         await new Promise((res) => setTimeout(res, 15_000 * (attempt + 1)));
