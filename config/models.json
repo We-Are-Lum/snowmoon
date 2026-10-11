@@ -219,7 +219,7 @@
         "on": "2026-10-11",
         "source": "https://www.anthropic.com/legal/commercial-terms"
       },
-      "notes": "Closed model, reported under principle 3. Approved by the owner on 2026-10-11 for the planning coach's comparison eval only, on test drafts only (the eval's invented fixtures and the owner's own freewrite); not for real users' drafts, which is a separate decision. The owner's condition, retention terms confirmed on our account: through the Vercel AI Gateway with zeroDataRetention and only: [anthropic], the gateway answered 'ZDR requested: all 1 attempts support ZDR', served by anthropic on the gateway's own credentials (no BYOK), 2026-10-11. Vercel's ZDR page (https://vercel.com/docs/ai-gateway/security-and-compliance/zdr, updated 2026-09-22) lists Anthropic as a ZDR provider; only claude-fable-5 is excepted. The terms also forbid using outputs to train competing models, which this use does not do.",
+      "notes": "Closed model, reported under principle 3. Proposed by the owner on 2026-10-11 for the planning coach's comparison eval only, on test drafts only (the eval's invented fixtures and the owner's own freewrite); not for real users' drafts, which is a separate decision. BLOCKED: the owner's condition is that Sonnet receives nothing until Anthropic's data retention for our account is confirmed, without assuming zero retention. Gateway-level evidence gathered 2026-10-11 (the gateway's own listing marks every Sonnet 5.5 endpoint has_zdr; a zero-retention test request was answered 'ZDR requested: all 1 attempts support ZDR', served by anthropic on Vercel's system credentials; we have no Anthropic organization or key of our own) is not that confirmation. scripts/plan-coach-eval.ts refuses to call this model until hosted.retention_confirmed_by_owner is set. Two calls were made on 2026-10-11 before the owner's condition arrived, each containing only 'Reply with the single word OK.'.",
       "runs_on": "hosted",
       "hosted": {
         "host": "Vercel AI Gateway",
@@ -233,14 +233,15 @@
           "input": 2.0,
           "output": 10.0
         },
-        "price_seen": "2026-10-11"
+        "price_seen": "2026-10-11",
+        "retention_confirmed_by_owner": null
       },
       "model_record": "gateway model id, date, provider and the gateway request id (the host does not expose a weights revision)",
       "cost_usd_per_unit": null,
       "license": "proprietary (Anthropic Commercial Terms)",
       "open_weights": false,
       "weights": null,
-      "role": "planning-coach comparison eval (test drafts only)"
+      "role": "planning-coach comparison eval (test drafts only), blocked until the owner confirms retention"
     }
   ],
   "candidates": [

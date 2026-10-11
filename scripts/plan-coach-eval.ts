@@ -98,6 +98,13 @@ const models = (modelArg ? modelArg.split(',') : ['gpt-oss-120b']).map((m) => {
   return m;
 });
 const only = args.filter((a) => !a.startsWith('--'));
+// The owner (2026-10-11): Sonnet receives nothing until Anthropic's data retention for our account
+// is confirmed. config/models.json records that confirmation; until then this model is refused.
+const allowlist = JSON.parse(read('config/models.json')) as { models: { id: string; hosted?: { retention_confirmed_by_owner?: string | null } }[] };
+for (const m of models) {
+  const entry = allowlist.models.find((x) => x.id === m);
+  if (m === 'claude-sonnet-5.5' && !entry?.hosted?.retention_confirmed_by_owner) throw new Error('claude-sonnet-5.5 is blocked: the owner has not confirmed Anthropic\'s data retention for our account (config/models.json hosted.retention_confirmed_by_owner)');
+}
 
 const results = existsSync(path.join(ROOT, RESULTS)) ? JSON.parse(read(RESULTS)) : { runs: [] as unknown[] };
 results.assist = results.assist ?? null;

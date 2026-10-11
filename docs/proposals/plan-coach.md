@@ -11,7 +11,7 @@
 | World guide | `content/snowmoon/world-guide.json`, `.md` | 278 lines (with 92 geography lines, see `docs/maps/feasibility.md`, and 29 added for the guide episodes), each cited and tagged with the latest chapter it depends on; `scripts/world-guide.ts check` passes; every line read against its blocks by gpt-oss-120b and by the coding agent (`content/snowmoon/recipes/world-guide.json`) |
 | Craft guide | `docs/craft/visual-storytelling.md` | **Approved** (owner, 2026-10-11), with sections 8 to 17 added from Design v3's principles |
 | Coach prompts | `config/prompts/plan-coach.md`, `plan-coach-claims.md`, `plan-coach-world-check.md`, `plan-coach-guard.md` | Design 2 (the owner's four changes) |
-| Eval | `scripts/plan-coach-eval.ts`, fixtures in `scripts/fixtures/plan-coach/` | Design 1: three invented openings, reviewed in `docs/craft/plan-coach-eval-review.md`. Design 2: one test run; the full run, and the comparison of gpt-oss-120b, Kimi K3 and Claude Sonnet 5.5, wait for the owner's freewrite. Every call through the Vercel AI Gateway only |
+| Eval | `scripts/plan-coach-eval.ts`, fixtures in `scripts/fixtures/plan-coach/` | Design 1: three invented openings, reviewed in `docs/craft/plan-coach-eval-review.md`. Design 2: one test run; the full run and the comparison (gpt-oss-120b and Kimi K3; Claude Sonnet 5.5 blocked until the owner confirms retention) wait for the owner's freewrite. Every call through the Vercel AI Gateway only |
 
 ## Eval of design 1 (gpt-oss-120b)
 
@@ -110,9 +110,11 @@ not private, but the decision sets the precedent.
    - the coach's own guard (`plan-coach-guard.md`);
    - three answers plus "I can't check this within your chapter", enforced in code.
    **gpt-oss reruns with the owner's freewrite once it is pasted.** One test run on invented fixture A ($0.0041) checked that the pipeline works.
-3. **Comparison eval, test drafts only:** gpt-oss-120b; Kimi K3, pinned to moonshotai with zero retention; Claude Sonnet 5.5, after its retention terms were confirmed on our account.
-   - **Sonnet's terms, confirmed 2026-10-11:** a zero-retention request with only Anthropic allowed was answered "ZDR requested: all 1 attempts support ZDR", served by Anthropic on the gateway's own credentials. Vercel's ZDR page lists Anthropic as a ZDR provider; only claude-fable-5 is excepted.
-   - **The allowlist** (`config/models.json`) now records Kimi K3's added use and Sonnet 5.5 as a closed model, both for test drafts only.
+3. **Comparison eval, test drafts only:** gpt-oss-120b; Kimi K3, pinned to moonshotai with zero retention; Claude Sonnet 5.5 **only after the owner confirms Anthropic's data retention for our account** (owner, 2026-10-11: "Before Sonnet receives anything, confirm Anthropic's data retention terms for our account; don't assume zero retention").
+   - **Sonnet is blocked in code** until `hosted.retention_confirmed_by_owner` is set in `config/models.json`.
+   - **Already sent to Sonnet:** two calls on 2026-10-11, made as setup checks before the owner's condition arrived. Each contained only "Reply with the single word OK."
+   - **Evidence gathered so far** (gateway level, not the confirmation itself) is listed in the agent's report to the owner. In short: we have no Anthropic organization; calls go through Vercel's own credentials, under Vercel's agreement with Anthropic.
+   - **The allowlist** (`config/models.json`) records Kimi K3's added use, and Sonnet 5.5 as a closed model, blocked.
    - **Choosing a model for real users' drafts is a separate decision.**
 
 Still open:
