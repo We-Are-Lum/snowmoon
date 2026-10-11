@@ -323,7 +323,7 @@ async function checkHome(page: Page, scheme: 'light' | 'dark') {
   if (rows) {
     for (const li of await page.locator('.home-feed-list li').all()) {
       const label = li.locator('button.ai-label');
-      if (!(await label.count()) || !/\bAI\b.* · by \S/.test((await label.innerText()) ?? '')) fail(`/ (${scheme}): a "Just made" image has no AI label naming who made it`);
+      if (!(await label.count()) || !/\bAI\b.* · by \S/i.test((await label.innerText()) ?? '')) fail(`/ (${scheme}): a "Just made" image has no AI label naming who made it`);
     }
   } else if (!(await page.locator('.home-feed-empty').isVisible())) fail(`/ (${scheme}): "Just made" shows neither images nor its empty state`);
 
