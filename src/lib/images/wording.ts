@@ -134,7 +134,8 @@ export const IMAGE_WORDING = {
       needSamples: (n: number) => `Make at least ${n} sample pictures with this text to publish.`,
       signIn: 'Sign in to make a style or a sheet. For now, making them is open to invited readers only.',
       // Owner, 2026-10-10: "Invited only, for now". Shown by the form and sent by /api/designs and /api/designs/sample.
-      notInvited: 'Making styles and character sheets is open to invited readers only, for now. You can still browse them, pick them, and use your picks when you make an image.',
+      // 2026-10-10: picks too, until the Privacy Policy covers them (the owner's words are pending). Model-drafted.
+      notInvited: 'Making and picking styles and character sheets is open to invited readers only, for now. You can still browse them.',
       notReady: 'Making styles and sheets isn’t set up on this deployment yet.',
       consentFirst: 'Before your first style or sheet: how your words are published.',
       readAndAgree: 'Read and agree',

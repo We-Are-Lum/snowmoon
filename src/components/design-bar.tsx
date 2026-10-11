@@ -23,7 +23,7 @@ export function DesignBar(p: { versionId: string; versionNo: number; elementId: 
   // A fragment, so the bar row is a child of the page's column and can stay at the foot on a phone.
   return (
     <>
-      {canAdd && (
+      {canAdd && canMake && (
         <div className="dz-bar-row">
           <PickButton versionId={p.versionId} versionNo={p.versionNo} elementId={p.elementId} entityId={p.entityId} kind={p.kind} name={p.name} />
           {canMake && (

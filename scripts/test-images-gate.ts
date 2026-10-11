@@ -216,9 +216,12 @@ process.env.APP_LEGAL_PAGES = 'terms+privacy';
   const publish = readFileSync(path.join(ROOT, 'src/app/api/designs/route.ts'), 'utf8');
   const dat = (s: string) => publish.indexOf(s);
   check('publishing a design is for invited FIDs only, with the drafted refusal', dat('if (!IMAGES.invited.includes(fid)) return no(IMAGE_WORDING.designs.form.notInvited') > 0);
+  {
+    const picks = readFileSync(path.join(ROOT, 'src/app/api/designs/picks/route.ts'), 'utf8');
+    check('picks are for invited FIDs only (POST and DELETE refuse others; GET gives them none)', (picks.match(/if \(!IMAGES\.invited\.includes\(w\.fid\)\) return no\(IMAGE_WORDING\.designs\.form\.notInvited, 403\)/g) ?? []).length === 2 && /if \(!IMAGES\.invited\.includes\(w\.fid\)\) return NextResponse\.json\(\{ picks: \[\] \}/.test(picks));
+    check('the composer is offered picks only for invited FIDs', /composerPicks\(invited \? picks : \[\]\)/.test(readFileSync(path.join(ROOT, 'src/app/api/images/status/route.ts'), 'utf8')));
+  }
   check('publishing a design passes the gate before the name\'s paid check', dat('await mayGenerate(') > 0 && dat('await mayGenerate(') < dat('await checkWords('));
-  const picksSrc = readFileSync(path.join(ROOT, 'src/app/api/designs/picks/route.ts'), 'utf8');
-  check('picks are open to everyone signed in', !/invited/.test(picksSrc.replace(/\/\*[\s\S]*?\*\//g, '')));
   check('the gate\'s refusal is returned at once', /if \(!gate\.ok\) return no\(gate\.error, gate\.status/.test(src));
   check('no invited-only refusal is left', !/invited readers only/.test(src));
   const nx = readFileSync(path.join(ROOT, 'next.config.ts'), 'utf8');

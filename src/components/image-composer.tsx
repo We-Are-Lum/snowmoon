@@ -342,9 +342,11 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
                       )}
                     </fieldset>
                   )}
-                  <p className="ic-note">
-                    <Link href="/images/picks">{picks.styles.length || picks.characters.length ? D.changePicks : D.noPicks}</Link>
-                  </p>
+                  {status.invited && (
+                    <p className="ic-note">
+                      <Link href="/images/picks">{picks.styles.length || picks.characters.length ? D.changePicks : D.noPicks}</Link>
+                    </p>
+                  )}
 
                   <div className="ic-rules">
                     <p className="ic-label">{W.composer.rulesLabel}</p>

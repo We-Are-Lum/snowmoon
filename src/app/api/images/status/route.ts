@@ -49,7 +49,8 @@ export async function GET(request: Request) {
     ]);
     const eligible = invited ? true : kept === null ? null : kept >= IMAGES.neynarMinScore;
     const refusal = eligible === false && kept !== null ? GATE_WORDING.below(kept) : undefined;
-    const offered = composerPicks(picks);
+    // Picks are invited-only for now (2026-10-10): others are offered none, so no reference pictures either.
+    const offered = composerPicks(invited ? picks : []);
     // Every picked style, newest pick first; the composer starts with that one, for this image only (decision 3).
     const mine = { styles: offered.styles.map(chip), characters: offered.characters.map(chip) };
     return NextResponse.json({ ...base, signedIn: true, fid, invited, eligible, refusal, consented, left, publishesLeft: publishes, picks: mine }, { headers: { 'Cache-Control': 'no-store' } });
