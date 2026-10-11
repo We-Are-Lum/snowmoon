@@ -173,6 +173,11 @@ Generated from `content/snowmoon/world-guide.json` by `scripts/world-guide.ts re
 ### Gladias
 
 - *changes:* Suggests that Dzego backdoor the security cameras Veridia buys from Dzego; Verdow later credits him with it. (ch 26; c24-b90, c24-b91, c24-b95, c26-b58, c26-b62, c26-b63)
+- *changes:* As a new Keeper, persuades his circle on the hardware openness rubric to wait two months before voting, to see whether the Arctics move against Redshire. (ch 13; c10-b29, c13-b82, c13-b93, c13-b95, c13-b99, c13-b100, c13-b101)
+- *changes:* Quarrels with Seila when Lily runs away; she hangs up on him, and he lies awake all night. (ch 24; c23-b91, c23-b95, c23-b97, c23-b99, c24-b2, c24-b4)
+- *changes:* Is told by Bai that, to bring his family back, he may need to become "at least ten or twenty percent Arctic" and win. (ch 24; c24-b34, c24-b61, c24-b62)
+- *changes:* Pitches five judges a case to fire Veridia's military leadership under the fourteenth Ground Law; they refuse. (ch 26; c26-b162, c26-b165, c26-b192, c26-b193, c26-b194)
+- *changes:* Is reunited with Lily, Febric and Hreda in the Greater Plum Harbor in Northglade. (ch 31; c31-b66, c31-b77, c31-b79)
 
 ## Places
 
@@ -543,6 +548,13 @@ Generated from `content/snowmoon/world-guide.json` by `scripts/world-guide.ts re
 - Intervention turns let players add squares near their symbols. (ch 4; c4-b110, c4-b88)
 - Really military training: a way to raise defenders, safe because it looks like a game. (ch 10; c10-b192, c10-b194, c10-b202)
 - Its players sit in Veridia's command centres and help run the drones in the battle for Northshore. (ch 29; c29-b42, c29-b71, c29-b13)
+- One named variant rule is "rotate one eighty if three". (ch 4; c4-b7)
+- In the Pafogai Du quarter-final, the new rule was that teams were not chosen by cryptographic randomness: a psychological trial. (ch 4; c4-b1, c4-b88, c4-b148, c4-b150)
+- In the Pafogai Du final, each player has a powerful AI, and both can read the thought transcripts of the other's AI. (ch 7; c7-b61, c7-b63, c7-b65)
+- The national championship in Sadzu Du has thirty-two contestants, four of them foreign, and six qualifying rounds. (ch 12; c12-b1, c12-b19, c12-b88, c12-b90)
+- A rule change can put the game on a hex grid, where each step splits the board into triangles whose hexagons rotate. (ch 12; c12-b147, c12-b169)
+- In the national semi-finals, intervention resources are cut by eighty percent, and five shrines apply their changes as an XOR every thousand turns. (ch 14; c14-b1, c14-b30, c14-b33)
+- The national final is cancelled after Redshire is invaded, and Zei is named champion. (ch 15; c15-b6, c15-b82, c15-b85, c15-b99)
 
 ## Factions
 

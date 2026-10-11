@@ -8,7 +8,7 @@
 
 | Piece | File | State |
 |---|---|---|
-| World guide | `content/snowmoon/world-guide.json`, `.md` | 266 lines (with 92 geography lines, see `docs/maps/feasibility.md`, and 17 added for the guide episodes), each cited and tagged with the latest chapter it depends on; `scripts/world-guide.ts check` passes; every line read against its blocks by gpt-oss-120b and by the coding agent (`content/snowmoon/recipes/world-guide.json`) |
+| World guide | `content/snowmoon/world-guide.json`, `.md` | 278 lines (with 92 geography lines, see `docs/maps/feasibility.md`, and 29 added for the guide episodes), each cited and tagged with the latest chapter it depends on; `scripts/world-guide.ts check` passes; every line read against its blocks by gpt-oss-120b and by the coding agent (`content/snowmoon/recipes/world-guide.json`) |
 | Craft guide | `docs/craft/visual-storytelling.md` | Draft, **not approved**; the owner edits and approves before the coach may use it |
 | Coach prompt | `config/prompts/plan-coach.md` | Draft |
 | Eval | `scripts/plan-coach-eval.ts`, fixtures in `scripts/fixtures/plan-coach/` | Three invented openings run; the owner's freewrite still to come; review in `docs/craft/plan-coach-eval-review.md` |

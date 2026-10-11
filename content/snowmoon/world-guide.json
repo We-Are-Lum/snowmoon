@@ -2308,6 +2308,171 @@
       "from_chapter": 32
     },
     {
+      "id": "wg-175",
+      "section": "characters",
+      "entity": "Gladias",
+      "kind": "changes",
+      "text": "As a new Keeper, persuades his circle on the hardware openness rubric to wait two months before voting, to see whether the Arctics move against Redshire.",
+      "sources": [
+        "c10-b29",
+        "c13-b82",
+        "c13-b93",
+        "c13-b95",
+        "c13-b99",
+        "c13-b100",
+        "c13-b101"
+      ],
+      "from_chapter": 13
+    },
+    {
+      "id": "wg-176",
+      "section": "characters",
+      "entity": "Gladias",
+      "kind": "changes",
+      "text": "Quarrels with Seila when Lily runs away; she hangs up on him, and he lies awake all night.",
+      "sources": [
+        "c23-b91",
+        "c23-b95",
+        "c23-b97",
+        "c23-b99",
+        "c24-b2",
+        "c24-b4"
+      ],
+      "from_chapter": 24
+    },
+    {
+      "id": "wg-177",
+      "section": "characters",
+      "entity": "Gladias",
+      "kind": "changes",
+      "text": "Is told by Bai that, to bring his family back, he may need to become \"at least ten or twenty percent Arctic\" and win.",
+      "sources": [
+        "c24-b34",
+        "c24-b61",
+        "c24-b62"
+      ],
+      "from_chapter": 24
+    },
+    {
+      "id": "wg-178",
+      "section": "characters",
+      "entity": "Gladias",
+      "kind": "changes",
+      "text": "Pitches five judges a case to fire Veridia's military leadership under the fourteenth Ground Law; they refuse.",
+      "sources": [
+        "c26-b162",
+        "c26-b165",
+        "c26-b192",
+        "c26-b193",
+        "c26-b194"
+      ],
+      "from_chapter": 26
+    },
+    {
+      "id": "wg-179",
+      "section": "characters",
+      "entity": "Gladias",
+      "kind": "changes",
+      "text": "Is reunited with Lily, Febric and Hreda in the Greater Plum Harbor in Northglade.",
+      "sources": [
+        "c31-b66",
+        "c31-b77",
+        "c31-b79"
+      ],
+      "from_chapter": 31
+    },
+    {
+      "id": "wg-180",
+      "section": "minpentai",
+      "entity": "Minpentai",
+      "kind": "fact",
+      "text": "One named variant rule is \"rotate one eighty if three\".",
+      "sources": [
+        "c4-b7"
+      ],
+      "from_chapter": 4
+    },
+    {
+      "id": "wg-181",
+      "section": "minpentai",
+      "entity": "Minpentai",
+      "kind": "fact",
+      "text": "In the Pafogai Du quarter-final, the new rule was that teams were not chosen by cryptographic randomness: a psychological trial.",
+      "sources": [
+        "c4-b1",
+        "c4-b88",
+        "c4-b148",
+        "c4-b150"
+      ],
+      "from_chapter": 4
+    },
+    {
+      "id": "wg-182",
+      "section": "minpentai",
+      "entity": "Minpentai",
+      "kind": "fact",
+      "text": "In the Pafogai Du final, each player has a powerful AI, and both can read the thought transcripts of the other's AI.",
+      "sources": [
+        "c7-b61",
+        "c7-b63",
+        "c7-b65"
+      ],
+      "from_chapter": 7
+    },
+    {
+      "id": "wg-183",
+      "section": "minpentai",
+      "entity": "Minpentai",
+      "kind": "fact",
+      "text": "The national championship in Sadzu Du has thirty-two contestants, four of them foreign, and six qualifying rounds.",
+      "sources": [
+        "c12-b1",
+        "c12-b19",
+        "c12-b88",
+        "c12-b90"
+      ],
+      "from_chapter": 12
+    },
+    {
+      "id": "wg-184",
+      "section": "minpentai",
+      "entity": "Minpentai",
+      "kind": "fact",
+      "text": "A rule change can put the game on a hex grid, where each step splits the board into triangles whose hexagons rotate.",
+      "sources": [
+        "c12-b147",
+        "c12-b169"
+      ],
+      "from_chapter": 12
+    },
+    {
+      "id": "wg-185",
+      "section": "minpentai",
+      "entity": "Minpentai",
+      "kind": "fact",
+      "text": "In the national semi-finals, intervention resources are cut by eighty percent, and five shrines apply their changes as an XOR every thousand turns.",
+      "sources": [
+        "c14-b1",
+        "c14-b30",
+        "c14-b33"
+      ],
+      "from_chapter": 14
+    },
+    {
+      "id": "wg-186",
+      "section": "minpentai",
+      "entity": "Minpentai",
+      "kind": "fact",
+      "text": "The national final is cancelled after Redshire is invaded, and Zei is named champion.",
+      "sources": [
+        "c15-b6",
+        "c15-b82",
+        "c15-b85",
+        "c15-b99"
+      ],
+      "from_chapter": 15
+    },
+    {
       "id": "wg-301",
       "section": "geography",
       "entity": "Meldan",

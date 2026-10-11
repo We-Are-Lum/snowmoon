@@ -5345,6 +5345,454 @@
       "ms": 2552,
       "user": "LINE:\nThaldur: On the mountain on Northglade's island, the peninsula dangling off the eastern end of Northshore, between there and Thaldur, is suggested as the place for a new Redshire.\n\nCITED BLOCKS:\n[c31-b3] A strong, cold wind blasted into their faces. They continued climbing. Several minutes later, they reached the circular platform at the top of the mountain.\n[c31-b4] From there, they could see a full view of the island on which Northglade was located. It was about twenty kilometers wide - small enough that the most simplified and highly zoomed out maps of the region did not even bother showing it, but at the same time large enough that it seemed like if it really had to, that island alone would be large enough to sustain a civilization. If Northglade had been a Dzego city, Zei thought, it would have a fully self-sufficient emergency industry already.\n[c31-b53] The conversation paused. Deluin took his turn to walk all around the top of the mountain and enjoy the view of Northglade.\n[c31-b60] \"Tafindel is recommending that we play a little bit of hardball. Close the borders between Thaldur and the rest of Arctic territory. And then offer a deal. We let anyone who wants to go back to the Arctic Empire go back, and in exchange anyone in Redshire who wants to leave is allowed to leave. They keep Redshire, we keep Thaldur. And then find a beautiful place in Veridia to make a new Redshire.\"\n[c31-b61] \"Why not just give them the peninsula between here and Thaldur, the one dangling off the eastern end of Northshore? Very beautiful land there.\"",
       "reply": "UNSUPPORTED: Thaldur says the peninsula on the mountain on Northglade's island is suggested as the place for a new Redshire | The cited blocks only mention a peninsula dangling off the eastern end of Northshore as a possible location (c31‑b61) and discuss finding a new Redshire elsewhere (c31‑b60); they do not state the peninsula is on the mountain, nor do they attribute the suggestion to Thaldur."
+    },
+    {
+      "line": "wg-158",
+      "at": "2026-10-11T18:47:25.674Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4N2E97CQ4YXBKB4NDWQ3P",
+      "prompt_tokens": 424,
+      "completion_tokens": 283,
+      "cost_usd": 0.0002334,
+      "ms": 992,
+      "user": "LINE:\nZei: Learns that Minpentai is military training, and promises to tell no one, not even Fin.\n\nCITED BLOCKS:\n[c10-b192] \"It's because Minpentai isn't just a sport.\"\n[c10-b194] \"It's military training.\"\n[c10-b202] The realizations hit Zei all at once. At first, he had wanted to ask a basic question: why pretend it's a game, why not just have a regular military with regular recruitment? But as soon as he put together the question, he already knew the answer: the Arctics would put all their energy into targeting anything like that. Minpentai was only safe because it pretended to be just a game. But even then, Zei knew, the ruse could not be safe forever.\n[c10-b206] \"I won't tell anyone. Not even Fin.\"",
+      "reply": "SUPPORTED"
+    },
+    {
+      "line": "wg-159",
+      "at": "2026-10-11T18:47:28.963Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4N3CEM1CQ0QABVB8DJAEP",
+      "prompt_tokens": 728,
+      "completion_tokens": 1068,
+      "cost_usd": 0.00075,
+      "ms": 3281,
+      "user": "LINE:\nZei: Tells Deluin how to hide messages better in an Arctic soldier's health data; the soldier sends thanks.\n\nCITED BLOCKS:\n[c15-b60] Zei thought for a moment, and realized that perhaps the time had arrived for him to become the instructor. He took out a keyboard and started typing furiously.\n[c15-b61] tie dun Or actually, on second thought, he won't answer. But tell him that randomly flipping the least-significant bits, the strategy that everyone always reaches for when they encounter this problem for the first time, is not the ideal solution. Sometimes higher-order bits are totally fine to flip, and sometimes flipping even a least-significant bit is dangerous. What you want to do is: * Train a language model on the actual distribution, so that conditional on what all the other bits are, it can give you probabilities for whether a given bit should be 0 or 1 * Split the data up into buckets - make sure to use the decryption key itself to choose the buckets randomly - and require the bits in the i'th bucket to XOR to the i'th bit in the ciphertext. Within each bucket, use the model to determine which bit's probabilities are closest to 50/50 - meaning both values are \"natural\" for that bit to have in that context - and flip that bit to make the bucket XOR correct. So you're letting the LLM decide which bits are \"least significant\" and okay to flip, instead of just always taking the lowest-order binary digit in each number. → Deluin be\n[c15-b66] tie dun I learned that from Den's cryptography textbooks. → Deluin be\n[c15-b110] \"Okay, now I wonder if that was me. I told Deluin to tell the soldier to train an LLM on his own health data and then modify the health data that he is sending out in-flight by flipping the bits that the LLM says are safest to flip, and using XOR over buckets to encode the message so he has a lot of freedom in choosing which bit to flip. Much better for reducing the 'suspiciousness' per bit of hidden data encoded, so he could afford to hide more data inside the same cover traffic.\"\n[c15-b114] zan tie tei Deluin → Arctic soldier says thanks, it helped a lot. 92115",
+      "reply": "SUPPORTED"
+    },
+    {
+      "line": "wg-160",
+      "at": "2026-10-11T18:47:30.621Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4N6HBRP4XHVF61807EE0H",
+      "prompt_tokens": 423,
+      "completion_tokens": 563,
+      "cost_usd": 0.00040125,
+      "ms": 1651,
+      "user": "LINE:\nZei: Directs drone hunts in Redshire with Freetown's defense companies; Den calls him one of their best cryptographers.\n\nCITED BLOCKS:\n[c22-b71] \"Thank you again for that connection you made with the defense companies last month. I actually have some interesting updates there!\"\n[c22-b76] \"They've been hunting down Arctic drones in Redshire.\"\n[c22-b110] \"Yep, that's exactly what I'm doing. Temporarily have the two damaged-but-alive jammers play dead, lure the attackers to center, jammers reactivate, reform a circle, and then make a kill.\"\n[c24-b87] \"I like this plan. Zei?\"\n[c24-b89] \"Of course. You're already one of our best cryptographers. You've been coordinating the work with the Freetown corps. What do you think?\"",
+      "reply": "SUPPORTED"
+    },
+    {
+      "line": "wg-161",
+      "at": "2026-10-11T18:47:31.929Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4N85FM791VSST9DJYXGK3",
+      "prompt_tokens": 466,
+      "completion_tokens": 317,
+      "cost_usd": 0.0002601,
+      "ms": 1303,
+      "user": "LINE:\nZei: Supervises the main plan of the rescue of Tafindel, and says he failed completely when Mu's new plan saves it.\n\nCITED BLOCKS:\n[c26-b88] \"Location: Redshire, presidential residence. Goal: rescue our target - Tafindel, the president's son. Strategy: our man on the inside asks the target to step out onto the balcony. We fly in, drop down a rope for him to tie around his waist and hold on to, fly out before the Arctics can do anything.\"\n[c26-b92] \"Supervising the mainline plan.\"\n[c26-b122] \"New plan. Everyone fly low, under the buildings and trees. Fly through the streets. That's where their firing ability is weakest. Then I have a trick up my sleeve.\"\n[c26-b153] \"I'm so sorry guys\" , Zei muttered softly. \"I failed completely, and if it weren't for Mu somehow saving us with a completely new plan, we would have failed, and probably everything else we're planning would have failed too.\"",
+      "reply": "SUPPORTED"
+    },
+    {
+      "line": "wg-162",
+      "at": "2026-10-11T18:47:33.892Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4N9DKEGSGGGT8CGQW259C",
+      "prompt_tokens": 576,
+      "completion_tokens": 734,
+      "cost_usd": 0.0005268,
+      "ms": 1958,
+      "user": "LINE:\nZei: Trusts Deluin's battlefield messages and passes his coordinates to Mu, opening the southern front.\n\nCITED BLOCKS:\n[c29-b114] This is Deluin. Over these past months, I have been executing on my plan. I have earned the Arctics' trust; with the combination of my successful Minpentai background and my parents' status, this proved to be easy. As a result, I am now one of the commanders on the Arctic side. We are being heavily surveilled, and there are great limits to what I can do to the Arctic drone fleet without blowing my cover. However, I have managed to set up an exploitable weakness for you. This file contains descriptions of tactics that should be effective specifically against the southern flank, which I control. If you apply them, you should be able to break through about twenty kilometers north of the shore, and then proceed north and south to expand the rupture into a complete victory on the southern front. From there, it will be up to you to surround the remaining forces from the south, and recover Northglade.\n[c30-b61] I hope you trust me now. My next message will contain exact coordinates of some of our units on the southern flank, and recommended weak points to attack through. jie fe hen dzi.\n[c30-b63] Of course I trust you, Deluin, he thought.\n[c30-b65] He forwarded the coordinates to Mu.\n[c30-b68] Within minutes, casualty ratios on the southern front began to diverge heavily from the fronts further north, going back up in the Veridians' favor.",
+      "reply": "UNSUPPORTED: Zei trusts Deluin's battlefield messages and passes his coordinates to Mu, opening the southern front. | The cited blocks describe an unnamed male (“he”) trusting Deluin, forwarding coordinates to Mu, and affecting the southern front, but they never identify that person as Zei."
+    },
+    {
+      "line": "wg-163",
+      "at": "2026-10-11T18:47:35.397Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4NBAWYKB6050JTKVCE1B4",
+      "prompt_tokens": 526,
+      "completion_tokens": 370,
+      "cost_usd": 0.0003009,
+      "ms": 1498,
+      "user": "LINE:\nZei: Wants AI to be a player, not the game: Veridia's institutions, he says, have no built-in concept of predicting the future.\n\nCITED BLOCKS:\n[c32-b45] \"I would first take a step back and ask what the problems are. And I think I have noticed one. Veridian institutions, as they exist today, don't really have a built-in concept of predicting the future. It's all about the present, and public opinion in the present.\"\n[c32-b46] \"There's no position where you have to stand up and say - if we do X, then Y will happen - and you rise up if you're right, and fall if you're wrong. The closest is Acolytes, that have to predict the Sentinels. But even there, they're not predicting the real world. They're predicting Sentinels. So they're still just predicting other people's opinions. You've aligning people to each other, but you're not aligning people to reality.\"\n[c32-b47] \"That's where AI could do very well - it's where AI already *has* done very well for us. But I don't think we should pick one AI, we should have some kind of open competition of them. AI should be a player, not the game. Let different people choose different AIs and different ways of working with them, and hold them accountable to the goals.\"",
+      "reply": "UNSUPPORTED: Veridia's institutions, he says, have no built-in concept of predicting the future. | The cited blocks refer to Veridian institutions, not Veridia."
+    },
+    {
+      "line": "wg-164",
+      "at": "2026-10-11T18:47:36.960Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4NCT7PTN8SHJGMM04W1SX",
+      "prompt_tokens": 376,
+      "completion_tokens": 420,
+      "cost_usd": 0.0003084,
+      "ms": 1556,
+      "user": "LINE:\nZei: Is asked by Verdow to stay and help figure out the questions facing Veridia's government, and agrees.\n\nCITED BLOCKS:\n[c32-b37] \"What do you think about our government?\" , he asked Verdow.\n[c32-b70] She sighed deeply. After a few moments, Verdow replied again.\n[c32-b71] \"These are all good thoughts.\"\n[c32-b72] \"Zei, would you be interested in staying back and helping us figure out some of these issues?\"\n[c32-b75] \"Of course! Though you might find Fin will be even more helpful than I am.\"",
+      "reply": "SUPPORTED"
+    },
+    {
+      "line": "wg-165",
+      "at": "2026-10-11T18:47:38.331Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4NEBCJTCP9MF38SF1HGRR",
+      "prompt_tokens": 987,
+      "completion_tokens": 273,
+      "cost_usd": 0.00031185,
+      "ms": 1365,
+      "user": "LINE:\nDeluin: Sends Zei a letter hidden in an obfuscated language model that asks him to describe their day together.\n\nCITED BLOCKS:\n[c19-b117] What did you do on Firemoon 10th? Explain the day in detail. &gt;\n[c19-b124] A record of Zei's life events on that day popped up. That day was his last Minpentai game, the semifinal against Gun - the last day when things in his life were at least somewhat normal. Before that game, he woke up and had a meeting with Bai. After that game, he met up in the courtyard with Deluin.\n[c19-b149] \"It's not a plaintext language model. It's an obfuscated language model. Level two obfuscation, much weaker parameters than the full cryptographic-grade parameters that are used in the cryptographic networks for voting in DU or Bansunpei or for that matter the Order of Steering, but it's still the same algorithm.\"\n[c19-b152] As though on cue, Zei's hand device buzzed. The program finished executing. A new message appeared onscreen:\n[c19-b153] Hello Zei. You may be wondering why I have not communicated any further with you within the past month. I greatly apologize for this, and my goal in sending you this letter is that you are the only friend I have who is outside of Arctic control, and you deserve my explanation about what has been happening. The Arctics did a full sweep of Redshire almost a month ago, to confiscate all electronic devices, and give us back only devices that were backdoored and surveilled by them. This is why I lost contact with you. I had no way to reach you, and so I had to encrypt my message to you by wrapping it in this obfuscated language model that asked you to describe our shared experience to verify your identity. I have only been able to construct and send this message through a series of rounds of stealing devices from others, including two watches containing two Arctics' health data, doing the needed work inside of a non-transmitting room, copying the outputs to an inert storage medium, and then chemically destroying the circuits and storage on those devices. Physical surveillance of Redshire is, fortunately, much less total than the Arctic itself, though the window on that is closing fast. But there was also another window that was closing fast for me. You see, my parents were always on the side of being more sympathetic to the Arctics. And so after the annexation happened, they decided to cooperate with them. They told me that this was the best way to get any chance of autonomy for themselves and for Redshire in the future: to win trust by becoming a helpful part of the Arctic Empire. And so by the time you read this, most likely we will already be on an aeroplane going into the Arctic Empire core territory. I do not share their sympathies. But I have decided that the way that I can maximize my chance of being useful, is to play along, and win their trust too. The Arctic Empire respects strength, I have proven my strength by winning the Minpentai semifinals in Dzego, and my parents may be proof enough of my alignment. Hopefully, there will come a moment where I will be able to do something helpful to you. But I do not know. And so for this reason, this may well be the last message that you hear from me. I hope that this will not be true, but I cannot guarantee anything. I am sorry for everything. dze go ba fau gie Your dear friend Deluin.",
+      "reply": "SUPPORTED"
+    },
+    {
+      "line": "wg-166",
+      "at": "2026-10-11T18:47:40.211Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4NFNWS96CSP0V9NHG46SQ",
+      "prompt_tokens": 632,
+      "completion_tokens": 600,
+      "cost_usd": 0.0004548,
+      "ms": 1872,
+      "user": "LINE:\nGladias: Suggests that Dzego backdoor the security cameras Veridia buys from Dzego; Verdow later credits him with it.\n\nCITED BLOCKS:\n[c24-b90] \"For the past fifteen years now, security on digital devices has been very strong. Spying is primarily a physical-world thing, the physical world is much harder to secure. I think we should take Gladias on a tour of some of the stores and the fabs, like the one you showed me way back then, and we can try to think, what would be a reasonably unobtrusive way to get more information on Veridia.\"\n[c24-b91] \"Actually ... I think Veridia buys its security cameras from Dzego. The ones that are already in a bunch of places, and that they wanted to put everywhere else too. Veridia used to require cryptographically enforced limits on what the data gets used for if the cameras are in public places, but that got watered down a few years back, an administrative change by the Transportation Ministry no one paid attention to. Could you just ... backdoor those?\"\n[c24-b95] \"Yes? That's what I've been trying to tell you all along!\"\n[c26-b58] \"So first of all, Gladias, I have some very good news for you.\"\n[c26-b62] \"Seila pushed really hard and got in touch with me, she told me the whole situation. Zven stayed in touch with Lily, and she admitted to him where she was: she had crossed over into Arctic-occupied territory and was in Northglade.\"\n[c26-b63] \"We then scanned through all the feeds the security cameras that you so brilliantly suggested the Dzegojan should hack into. After a few days, we found her. She is in some kind of boarding school that the Arctics set up. About one kilometer away from the GPH.\"",
+      "reply": "UNSUPPORTED: Gladias suggests that Dzego backdoor the security cameras Veridia buys from Dzego | The blocks contain a request to backdoor the cameras but do not attribute that suggestion to Gladias.  \nUNSUPPORTED: Verdow later credits him with it | No mention of Verdow appears in any of the cited blocks."
+    },
+    {
+      "line": "wg-167",
+      "at": "2026-10-11T18:47:41.480Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4NHHG512FXVB4HDJPM2Q8",
+      "prompt_tokens": 444,
+      "completion_tokens": 391,
+      "cost_usd": 0.0003012,
+      "ms": 1257,
+      "user": "LINE:\nOrder of Steering: There are over a thousand Keepers; in a rubric circle they know each other only by numbers.\n\nCITED BLOCKS:\n[c17-b23] \"You're obviously smart. Of course I have no idea what you say in your secret meetings, but judging from everything you said in the hearing, and from your original application to the Order years ago, I think you're a good and smart person. We need people like you to be more active in serving our country. Being a Keeper is nice, but come on, you're only one of over a thousand. I think getting and bringing back some first-hand experience from Dzego could be even more meaningful.\"\n[c10-b54] \"Welcome! You must be number Four\" , one of them exclaimed.\n[c10-b56] \"I'm number Twenty in this circle, a third-year. We have two second-years - though Eleven has not arrived yet - two third-years, two other first-years, and now also you.\"",
+      "reply": "SUPPORTED"
+    },
+    {
+      "line": "wg-168",
+      "at": "2026-10-11T18:47:42.875Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4NJQVY47AA5PAXXJA100G",
+      "prompt_tokens": 505,
+      "completion_tokens": 508,
+      "cost_usd": 0.00038055,
+      "ms": 1389,
+      "user": "LINE:\nOrder of Steering: A Keeper's voting key is made by meeting at least three of five people in a Key Allocation Group, and no one can tell which keys are valid.\n\nCITED BLOCKS:\n[c15-b40] \"Only votes signed with a valid key count\" , Gladias recited. \"You generate your voting key by meeting at least 3 of 5 people from your Key Allocation Group and registering each blinded share of the voting key with them. Once that's done, the information of which keys are and are not valid is only decryptable by the obfuscated circuit under the conditions that it specifies.\"\n[c15-b41] \"So neither Delwart nor anyone else - technically, not even I - will know which key, how many keys or if any key actually got successfully registered. Only the result of the vote gets decrypted. So Delwart can't tell which votes I submit are real or fake. I don't have the ability to prove that to him, even if I wanted to. For Delwart to be able to take over my votes, he would have to take over my identity, which means going to the KAG and *pretending to be me in person* - difficult because the whole point of the KAG is that it includes people I've met in person.\"",
+      "reply": "SUPPORTED"
+    },
+    {
+      "line": "wg-169",
+      "at": "2026-10-11T18:47:43.645Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4NM3T0AVYGHANA82A3XDA",
+      "prompt_tokens": 525,
+      "completion_tokens": 157,
+      "cost_usd": 0.00017295,
+      "ms": 761,
+      "user": "LINE:\nOrder of Steering: To be accepted, an Acolyte needs a prediction score in the top ten percent and a Senate committee's approval.\n\nCITED BLOCKS:\n[c23-b61] \"There is a separate mechanism, the Sentinels, who are randomly selected and put into groups that audit individual businesses. There, it's three groups of three. They have a very specific task: determine what tier on each rubric a business gets. And then smaller businesses have audits done by Acolytes, Order members in training. For an Acolyte to get accepted, they have to both pass Senate committee approval, and be in the top ten percent by prediction score - by how well their votes on the small portion of their audits that get randomly sampled and re-done by Sentinels agree with the Sentinels' results.\"\n[c1-b68] Ten percent of the time, any audit made by Acolytes would be repeated by Sentinels. An Acolyte's score reflected how well that portion of their votes predicted the Sentinels' judgements. Today, Gladias's score was ninety two. If it stayed above ninety, he would get in and become a Sentinel - or, if he changed his mind, a Keeper. But if his score dropped by even three points, his career would be on hold for at least another year.",
+      "reply": "SUPPORTED"
+    },
+    {
+      "line": "wg-170",
+      "at": "2026-10-11T18:47:44.796Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4NMVQCKAJ6GFG7SAQNHVS",
+      "prompt_tokens": 384,
+      "completion_tokens": 345,
+      "cost_usd": 0.0002646,
+      "ms": 1145,
+      "user": "LINE:\nOrder of Steering: Delwart got contacts in two discussion groups of the same rubric, defeating the point of splitting them.\n\nCITED BLOCKS:\n[c13-b35] \"Anyway, the other Keeper was in the hardware openness rubric, in a different discussion group from you. He was fully on board with Delwart's program.\"\n[c13-b38] \"Delwart was really forceful. He seems to really care about this. And, between you and this other Keeper, he has managed to get contacts in two discussion groups for the same rubric. The whole point of splitting the discussion groups is to force people to think independently, to have them all taking cues from the same person!\"",
+      "reply": "SUPPORTED"
+    },
+    {
+      "line": "wg-171",
+      "at": "2026-10-11T18:47:45.609Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4NNZW3TF9PGXWCRG9F07C",
+      "prompt_tokens": 364,
+      "completion_tokens": 194,
+      "cost_usd": 0.000171,
+      "ms": 807,
+      "user": "LINE:\nOrder of Steering: Mu calls Steering one of the most opaque parts of Veridia's government, and one of the most trustworthy for that reason.\n\nCITED BLOCKS:\n[c7-b126] Mu paused for a few moments.\n[c7-b130] \"Look at the Veridian Steering system, for example. It's one of the most opaque parts of the government - even the Keepers don't know who each other are - and yet one of the most trustworthy and incorruptible parts precisely for that reason. Similar for the Courts - anonymous, randomly selected committees out of a large pool.\"",
+      "reply": "SUPPORTED"
+    },
+    {
+      "line": "wg-172",
+      "at": "2026-10-11T18:47:46.890Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4NPSBWAFHHD0MGPZ68DGC",
+      "prompt_tokens": 429,
+      "completion_tokens": 290,
+      "cost_usd": 0.00023835,
+      "ms": 1275,
+      "user": "LINE:\nOrder of Steering: Rubrics get gamed and then adjusted; one rewarding ground-floor active use is gamed with things nobody wants to use.\n\nCITED BLOCKS:\n[c6-b105] \"Ah yeah, I know what's going on there. There's a rubric that incentivizes ground-floor active use, but a lot of people are gaming the system - putting things in that theoretically qualify but that nobody actually wants to use. I suspect whoever runs Tapaia thinks that their main customer base doesn't like being around kids.\"\n[c32-b55] \"What if part of the human condition is that we don't fully know what we want, and any attempt to crystallize it into one piece breaks down if you push it far enough? We see this with our rubrics: they work for some time, then eventually they get gamed, and then we adjust the rubrics, and repeat. What if that's unavoidable?\"",
+      "reply": "SUPPORTED"
+    },
+    {
+      "line": "wg-173",
+      "at": "2026-10-11T18:47:47.797Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4NR10N29VDPY0YFX0AR1P",
+      "prompt_tokens": 340,
+      "completion_tokens": 211,
+      "cost_usd": 0.0001776,
+      "ms": 901,
+      "user": "LINE:\nOrder of Steering: With the latest rubric changes, Silverchat's taxes have dropped to zero for its transparency, interoperability and privacy.\n\nCITED BLOCKS:\n[c27-b25] \"With the latest rubric changes, given how well Silverchat has been behaving with its algorithmic transparency - the exact proof mechanism that doesn't let them just directly backdoor and break their own rules - and interoperability, respecting users' privacy, cooperating with researchers, their taxes have dropped to zero.\"",
+      "reply": "SUPPORTED"
+    },
+    {
+      "line": "wg-174",
+      "at": "2026-10-11T18:47:49.205Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4NRXRE58SMWRAW94MGS8T",
+      "prompt_tokens": 455,
+      "completion_tokens": 442,
+      "cost_usd": 0.00033345,
+      "ms": 1391,
+      "user": "LINE:\nOrder of Steering: After the war, Verdow says the Order, the Courts and Graph Funding worked, and everything more transparent broke.\n\nCITED BLOCKS:\n[c32-b1] **Meldan, Veridia** · 3725 Rainmoon 12\n[c32-b28] \"A lot of people are celebrating this month. For the first time in a century, the Arctic Empire has been defeated. Northglade is free. And we already have many people in Thaldur taking up our offers and helping open up the Arctic technologies we captured so that we can properly benefit and learn from them.\"\n[c32-b37] \"What do you think about our government?\" , he asked Verdow.\n[c32-b38] \"The Order of Steering worked, the Courts worked, Graph Funding has been fine. But everything more transparent has been broken. By default, I expect that everything the government does is going to become even more private going forward. More digital-first, more sealed anti-transmission rooms, more privacy robes.\"",
+      "reply": "UNSUPPORTED: After the war | The cited blocks do not mention a war or indicate that Verdow’s statement was made after a war."
+    },
+    {
+      "line": "wg-175",
+      "at": "2026-10-11T18:47:50.528Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4NT9D3ZHZRTCWR9RWGVJP",
+      "prompt_tokens": 582,
+      "completion_tokens": 388,
+      "cost_usd": 0.0003201,
+      "ms": 1318,
+      "user": "LINE:\nGladias: As a new Keeper, persuades his circle on the hardware openness rubric to wait two months before voting, to see whether the Arctics move against Redshire.\n\nCITED BLOCKS:\n[c13-b82] \"I drafted the change in language\" , he interjected. \"To exempt all military, surveillance and counter-surveillance products from the more favorable tiers on the openness tax rubric. All that stuff becomes minimum tier 3, unconditionally.\"\n[c13-b93] \"We don't have to decide this now. We still have two months before we have to vote, don't we?\"\n[c13-b95] \"Eighteen, in what timeframe do you think the Arctic Empire is going to make some kind of move, do some more serious sabotage against Redshire?\"\n[c13-b99] \"So how about this? Of course, this is not binding, it's just a preliminary thought. But, how about we all wait for two months and see what happens. If there's no attack, then we'll all be more inclined to accept Zero's amendment. But if there is, then we'll keep the rubric as is, or even increase the distance between the tax brackets.\"\n[c13-b100] Zero softly muttered some disapproval under his breath but did not say anything. He clearly did not like to be pinned down like this. But he could not come up with any argument to rebut Gladias's proposal.\n[c13-b101] Eighteen seemed to have a similar reaction. Like Zero, he did not like being pinned down, but he could not avoid admitting that he could not come up with any better way to break the impasse.",
+      "reply": "UNSUPPORTED: Gladias is a new Keeper | The cited blocks do not state Gladias's role or that he is a new Keeper."
+    },
+    {
+      "line": "wg-176",
+      "at": "2026-10-11T18:47:52.410Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4NVK05AVVHHMZ1J5ZZ7C5",
+      "prompt_tokens": 571,
+      "completion_tokens": 690,
+      "cost_usd": 0.00049965,
+      "ms": 1877,
+      "user": "LINE:\nGladias: Quarrels with Seila when Lily runs away; she hangs up on him, and he lies awake all night.\n\nCITED BLOCKS:\n[c23-b91] \"I cried for a longhour. And then, when I opened the door again, the window was open, and she was gone.\"\n[c23-b95] \"GLADIAS, SHE GOT BRAINWASHED BY THE ARCTICS. DON'T YOU DARE GET IN YOUR PHILOSOPHER MOOD AND TELL ME THEY HAVE A POINT.\"\n[c23-b97] \"Okay, hold on. Not seeing through Delwart, that one is on me. I was dumb. Mov was dumb. I admit it. This, this is on both of us. You're Lily's mom. You saw her many times - before she went to Vil and Daia's, when we visited them during her time with them, and after she came back. You had many chances to make things better, just like I did. And you didn't succeed, just like I didn't succeed. So let's solve this problem together.\"\n[c23-b99] Seila hung up the call.\n[c24-b2] Gladias checked his watch. The time just hit 20,000. He had been awake all night after his call with Seila. He had tried to go to sleep twice, but gave up after twenty minutes each time.\n[c24-b4] He could not go to sleep after Seila gave him that kind of vote of non-confidence, and then cut off communication without giving him any chance to even apologize.",
+      "reply": "UNSUPPORTED: Quarrels with Seila when Lily runs away | The cited blocks do not state that Gladias quarrels with Seila because Lily runs away; they only show Seila hanging up and Gladias staying awake, with no mention of Lily’s departure as the cause of the quarrel."
+    },
+    {
+      "line": "wg-177",
+      "at": "2026-10-11T18:47:54.406Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4NXE7M870B348J4T3D855",
+      "prompt_tokens": 463,
+      "completion_tokens": 705,
+      "cost_usd": 0.00049245,
+      "ms": 1985,
+      "user": "LINE:\nGladias: Is told by Bai that, to bring his family back, he may need to become \"at least ten or twenty percent Arctic\" and win.\n\nCITED BLOCKS:\n[c24-b61] \"So how do I save Lily? And, for that matter, Febric and Hreda? And how do I get Seila to stop hating me?\"\n[c24-b62] \"Well, maybe that's the one place where you do need to become at least ten or twenty percent Arctic. Your family will be back together, fully, if we can win. Think about it from Seila's perspective. The only way *she* can be happy, is if she can hug Febric, Hreda and Lily again. And there is no way to use emotional support and love alone to bring the three of them back. The only thing that *will* bring them back, is if you win - by helping Veridia win against the Arctics. So let that motivate you to try harder, so that in this next battle you can be a winner.\"",
+      "reply": "UNSUPPORTED: Gladias is told by Bai that, to bring his family back, he may need to become “at least ten or twenty percent Arctic” and win. | The cited blocks contain the advice about becoming “at least ten or twenty percent Arctic” and winning to reunite his family, but they do not name Bai as the speaker."
+    },
+    {
+      "line": "wg-178",
+      "at": "2026-10-11T18:47:55.377Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4NZCXKNX2GKY2X4QR6T4S",
+      "prompt_tokens": 543,
+      "completion_tokens": 206,
+      "cost_usd": 0.00020505,
+      "ms": 966,
+      "user": "LINE:\nGladias: Pitches five judges a case to fire Veridia's military leadership under the fourteenth Ground Law; they refuse.\n\nCITED BLOCKS:\n[c26-b162] Gladias slid open the door to the booth, and stepped in. Five judges that Mov and Seila had helped to identify - with significant help from surveillance cameras that had been backdoored by Dzego - were already sitting inside.\n[c26-b165] \"I am planning to open a case against the Veridian military leadership. Under the fourteenth Ground Law, the Veridian military is required to defend Veridia. As we have seen from what happened in Northglade, they have completely failed to do this. And so I am arguing that they have broken the law, and should be fired.\"\n[c26-b192] \"So we're not doing this.\"\n[c26-b193] Gladias looked around. Three of the other four judges were nodding along to what Selwert was saying. The remaining judge, Zevin, seemed much more sympathetic to Gladias - no doubt in no small part because he also had a son stuck in Northglade - but he did not seem to feel comfortable expressing his opinion.\n[c26-b194] \"Understood\" , Gladias said softly. If this sample of judges was that hostile to his pitch, the sample of judges that he would get if he launched a real case would almost certainly be quite hostile too. He needed a different strategy.",
+      "reply": "SUPPORTED"
+    },
+    {
+      "line": "wg-179",
+      "at": "2026-10-11T18:47:57.683Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4P1KVBZP9BYCSQFW6TK1A",
+      "prompt_tokens": 430,
+      "completion_tokens": 283,
+      "cost_usd": 0.0002343,
+      "ms": 2300,
+      "user": "LINE:\nGladias: Is reunited with Lily, Febric and Hreda in the Greater Plum Harbor in Northglade.\n\nCITED BLOCKS:\n[c31-b66] Gladias and Seila walked through the large stone gates at the entrance to the Greater Plum Harbor in Northglade. The turnstile gates had been smashed and thrown to the ground to let people freely move in and out, and the administrative staff did not seem to have the heart to enforce any visa rules at that particular time. Two Greater Plum Harbor security guards, wearing purple and grey attire, simply watched the crowds move in and out, and resigned themselves to meeting the fallback objective of preventing any theft and violence.\n[c31-b77] \"Dad!\" , Lily yelled as she ran up to Gladias and hugged him.\n[c31-b79] Febric and Hreda emerged from another room, and rushed to embrace Gladias and Seila.",
+      "reply": "SUPPORTED"
+    },
+    {
+      "line": "wg-180",
+      "at": "2026-10-11T18:47:58.407Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4P2JQ0HTND0YHVC4GANE9",
+      "prompt_tokens": 328,
+      "completion_tokens": 149,
+      "cost_usd": 0.0001386,
+      "ms": 717,
+      "user": "LINE:\nMinpentai: One named variant rule is \"rotate one eighty if three\".\n\nCITED BLOCKS:\n[c4-b7] \"This was from my last Minpentai game. We were playing with the 'rotate one eighty if three' rule. Someone discovered this new way to breach the usual wall construction, and flooded their opponent's territory with garbage. I'm trying to figure out some countermeasures.\"",
+      "reply": "SUPPORTED"
+    },
+    {
+      "line": "wg-181",
+      "at": "2026-10-11T18:47:59.120Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4P38XVN7CX24WWR255T25",
+      "prompt_tokens": 525,
+      "completion_tokens": 159,
+      "cost_usd": 0.00017415,
+      "ms": 709,
+      "user": "LINE:\nMinpentai: In the Pafogai Du quarter-final, the new rule was that teams were not chosen by cryptographic randomness: a psychological trial.\n\nCITED BLOCKS:\n[c4-b1] **Pafogai Du, Dzego** · 3724 Snowmoon 24\n[c4-b88] \"Welcome to the first quarter-final round of the eighteenth year of the Minpentai tournaments. Tonight, four games will be taking place, one after the other. By midnight, we will know who is advancing to the semi-finals, and who will have to find another career. Or try harder for next year!\"\n[c4-b148] \"A few days ago, right before the priests went into the dungeon to decide on the rule sets, I suggested to one of them that they should make things interesting, and be more creative. The doors stayed sealed for five days - twice as long as usual. And now we know why. The rule change was: the team selection was not done through cryptographic randomness.\"\n[c4-b150] \"This time, the game was a psychological trial. Despite having the teammate you wanted to cooperate with the least, despite making a new all-time record for the fewest messages exchanged in the audio channel during an entire game, when the moment came, almost without talking at all, you cooperated. And so you passed.\"",
+      "reply": "SUPPORTED"
+    },
+    {
+      "line": "wg-182",
+      "at": "2026-10-11T18:47:59.983Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4P3Z8BC4BND7DG4KYZ9VQ",
+      "prompt_tokens": 420,
+      "completion_tokens": 176,
+      "cost_usd": 0.0001686,
+      "ms": 858,
+      "user": "LINE:\nMinpentai: In the Pafogai Du final, each player has a powerful AI, and both can read the thought transcripts of the other's AI.\n\nCITED BLOCKS:\n[c7-b61] \"Welcome to the final round of the eighteenth year of the Minpentai tournaments in Pafogai Du. Tonight, we will witness the most decisive game in our entire city, between contestants whose playing skills have both been rated by AI as better than the national champions of only five years before.\"\n[c7-b63] \"And today, I am also pleased to announce the new rule for this round. Both players will have access to a powerful personal AI, which will be able to assist them in their gameplay.\"\n[c7-b65] \"However, the players and their AIs will have full read access to the thought transcripts of each other's AI.\"",
+      "reply": "SUPPORTED"
+    },
+    {
+      "line": "wg-183",
+      "at": "2026-10-11T18:48:01.567Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4P4T3E7RSCG5F2W61PRT7",
+      "prompt_tokens": 393,
+      "completion_tokens": 593,
+      "cost_usd": 0.00041475,
+      "ms": 1578,
+      "user": "LINE:\nMinpentai: The national championship in Sadzu Du has thirty-two contestants, four of them foreign, and six qualifying rounds.\n\nCITED BLOCKS:\n[c12-b1] **Sadzu Du, Dzego** · 3724 Grasstime 22\n[c12-b19] \"Check in to the hotel, then orientation tomorrow morning. Thirty-two contestants, the brightest young minds in Minpentai across all of Dzego. You'll get to meet them all.\"\n[c12-b88] \"I'm also honored to announce that this year, we have four distinguished foreign guests participating along with us.\"\n[c12-b90] \"There will be six rounds of qualifying games, with an eight-day-long break in between each game.\"",
+      "reply": "SUPPORTED"
+    },
+    {
+      "line": "wg-184",
+      "at": "2026-10-11T18:48:03.977Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4P7QAV0CQNS9E52T04X5R",
+      "prompt_tokens": 391,
+      "completion_tokens": 303,
+      "cost_usd": 0.00024045,
+      "ms": 2401,
+      "user": "LINE:\nMinpentai: A rule change can put the game on a hex grid, where each step splits the board into triangles whose hexagons rotate.\n\nCITED BLOCKS:\n[c12-b147] \"I am also pleased to announce - perhaps one time too many for the audience, but for the first time, for our contestants - today's rule change. Today, Minpentai will be played on a hex grid.\"\n[c12-b169] Zei stepped through each step more slowly. And then he saw it. During each step, the game board split up into triangles, and the hexagons rotated inside each triangle - clockwise if it had one hex filled, counterclockwise if it had two hexes filled.",
+      "reply": "SUPPORTED"
+    },
+    {
+      "line": "wg-185",
+      "at": "2026-10-11T18:48:05.769Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4P8QD5PKXS1J7MXE55WQ3",
+      "prompt_tokens": 405,
+      "completion_tokens": 625,
+      "cost_usd": 0.00043575,
+      "ms": 1784,
+      "user": "LINE:\nMinpentai: In the national semi-finals, intervention resources are cut by eighty percent, and five shrines apply their changes as an XOR every thousand turns.\n\nCITED BLOCKS:\n[c14-b30] \"Welcome to the semi-finals\" , the announcer voice shouted.\n[c14-b33] \"And of course, today's rule change. The resources you can allocate in each intervention turn are reduced by eighty percent. But in addition, there will be five shrines, four arranged along the center of each edge of the board, and one in the center. Each thousand turns, any changes that had taken place to the contents of the shrine will be applied as an XOR to the regions near the four corners of the shrine, and the shrine will reset to being a default rock formation.\"",
+      "reply": "UNSUPPORTED: In the national semi-finals | the blocks only mention “semi‑finals” without specifying a national level  \nUNSUPPORTED: Minpentai says … | the cited blocks are spoken by an announcer, not by Minpentai."
+    },
+    {
+      "line": "wg-186",
+      "at": "2026-10-11T18:48:06.756Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4PAF439RY889VTJEVN2AK",
+      "prompt_tokens": 405,
+      "completion_tokens": 285,
+      "cost_usd": 0.00023175,
+      "ms": 980,
+      "user": "LINE:\nMinpentai: The national final is cancelled after Redshire is invaded, and Zei is named champion.\n\nCITED BLOCKS:\n[c15-b6] > Special broadcast > > ARCTIC EMPIRE INVADES AND ANNEXES REDSHIRE\n[c15-b82] \"The finals are cancelled\" , Su added.\n[c15-b85] \"You're the champion this year. And if Deluin does come back, we'll give him the same trophy and the same prize money that we're giving you.\"\n[c15-b99] Zei's eyes opened wide. He was now the national Minpentai champion, and he was getting far in his studies from Den's cryptography books, yes, but ... he still did not know how that made him valuable at this exact moment.",
+      "reply": "SUPPORTED"
+    },
+    {
+      "line": "wg-175",
+      "at": "2026-10-11T18:48:33.619Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4Q4J8E94GFZZD0HX63NPV",
+      "prompt_tokens": 603,
+      "completion_tokens": 383,
+      "cost_usd": 0.00032025,
+      "ms": 1438,
+      "user": "LINE:\nGladias: As a new Keeper, persuades his circle on the hardware openness rubric to wait two months before voting, to see whether the Arctics move against Redshire.\n\nCITED BLOCKS:\n[c10-b29] \"You off to your first Keeper meeting?\" , Seila asked Gladias.\n[c13-b82] \"I drafted the change in language\" , he interjected. \"To exempt all military, surveillance and counter-surveillance products from the more favorable tiers on the openness tax rubric. All that stuff becomes minimum tier 3, unconditionally.\"\n[c13-b93] \"We don't have to decide this now. We still have two months before we have to vote, don't we?\"\n[c13-b95] \"Eighteen, in what timeframe do you think the Arctic Empire is going to make some kind of move, do some more serious sabotage against Redshire?\"\n[c13-b99] \"So how about this? Of course, this is not binding, it's just a preliminary thought. But, how about we all wait for two months and see what happens. If there's no attack, then we'll all be more inclined to accept Zero's amendment. But if there is, then we'll keep the rubric as is, or even increase the distance between the tax brackets.\"\n[c13-b100] Zero softly muttered some disapproval under his breath but did not say anything. He clearly did not like to be pinned down like this. But he could not come up with any argument to rebut Gladias's proposal.\n[c13-b101] Eighteen seemed to have a similar reaction. Like Zero, he did not like being pinned down, but he could not avoid admitting that he could not come up with any better way to break the impasse.",
+      "reply": "SUPPORTED"
+    },
+    {
+      "line": "wg-177",
+      "at": "2026-10-11T18:48:35.372Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4Q5NM7DBXX9JMC2YBS12R",
+      "prompt_tokens": 476,
+      "completion_tokens": 421,
+      "cost_usd": 0.000324,
+      "ms": 1745,
+      "user": "LINE:\nGladias: Is told by Bai that, to bring his family back, he may need to become \"at least ten or twenty percent Arctic\" and win.\n\nCITED BLOCKS:\n[c24-b34] Bai noticed him, and walked up.\n[c24-b61] \"So how do I save Lily? And, for that matter, Febric and Hreda? And how do I get Seila to stop hating me?\"\n[c24-b62] \"Well, maybe that's the one place where you do need to become at least ten or twenty percent Arctic. Your family will be back together, fully, if we can win. Think about it from Seila's perspective. The only way *she* can be happy, is if she can hug Febric, Hreda and Lily again. And there is no way to use emotional support and love alone to bring the three of them back. The only thing that *will* bring them back, is if you win - by helping Veridia win against the Arctics. So let that motivate you to try harder, so that in this next battle you can be a winner.\"",
+      "reply": "SUPPORTED"
+    },
+    {
+      "line": "wg-185",
+      "at": "2026-10-11T18:48:37.300Z",
+      "model": "openai/gpt-oss-120b",
+      "route": "gateway",
+      "provider": "groq",
+      "request_id": "gen_01M4P4Q7D9Y464JHBEMZQYFK0S",
+      "prompt_tokens": 427,
+      "completion_tokens": 710,
+      "cost_usd": 0.00049005,
+      "ms": 1885,
+      "user": "LINE:\nMinpentai: In the national semi-finals, intervention resources are cut by eighty percent, and five shrines apply their changes as an XOR every thousand turns.\n\nCITED BLOCKS:\n[c14-b1] **Sadzu Du, Dzego** · 3724 Firemoon 10\n[c14-b30] \"Welcome to the semi-finals\" , the announcer voice shouted.\n[c14-b33] \"And of course, today's rule change. The resources you can allocate in each intervention turn are reduced by eighty percent. But in addition, there will be five shrines, four arranged along the center of each edge of the board, and one in the center. Each thousand turns, any changes that had taken place to the contents of the shrine will be applied as an XOR to the regions near the four corners of the shrine, and the shrine will reset to being a default rock formation.\"",
+      "reply": "UNSUPPORTED: Minpentai: | The cited blocks show the announcer voice speaking, not a character named Minpentai.  \nUNSUPPORTED: In the national semi-finals, | The blocks refer only to “the semi‑finals” without specifying that they are national."
     }
   ],
   "results": {
@@ -8014,6 +8462,354 @@
         "c10-b206"
       ],
       "verdict": "supported",
+      "flags": []
+    },
+    "wg-159": {
+      "text": "Tells Deluin how to hide messages better in an Arctic soldier's health data; the soldier sends thanks.",
+      "sources": [
+        "c15-b60",
+        "c15-b61",
+        "c15-b66",
+        "c15-b110",
+        "c15-b114"
+      ],
+      "verdict": "supported",
+      "flags": []
+    },
+    "wg-160": {
+      "text": "Directs drone hunts in Redshire with Freetown's defense companies; Den calls him one of their best cryptographers.",
+      "sources": [
+        "c22-b71",
+        "c22-b76",
+        "c22-b110",
+        "c24-b87",
+        "c24-b89"
+      ],
+      "verdict": "supported",
+      "flags": []
+    },
+    "wg-161": {
+      "text": "Supervises the main plan of the rescue of Tafindel, and says he failed completely when Mu's new plan saves it.",
+      "sources": [
+        "c26-b88",
+        "c26-b92",
+        "c26-b122",
+        "c26-b153"
+      ],
+      "verdict": "supported",
+      "flags": []
+    },
+    "wg-162": {
+      "text": "Trusts Deluin's battlefield messages and passes his coordinates to Mu, opening the southern front.",
+      "sources": [
+        "c29-b114",
+        "c30-b61",
+        "c30-b63",
+        "c30-b65",
+        "c30-b68"
+      ],
+      "verdict": "flagged",
+      "flags": [
+        "Zei trusts Deluin's battlefield messages and passes his coordinates to Mu, opening the southern front. | The cited blocks describe an unnamed male (“he”) trusting Deluin, forwarding coordinates to Mu, and affecting the southern front, but they never identify that person as Zei."
+      ]
+    },
+    "wg-163": {
+      "text": "Wants AI to be a player, not the game: Veridia's institutions, he says, have no built-in concept of predicting the future.",
+      "sources": [
+        "c32-b45",
+        "c32-b46",
+        "c32-b47"
+      ],
+      "verdict": "flagged",
+      "flags": [
+        "Veridia's institutions, he says, have no built-in concept of predicting the future. | The cited blocks refer to Veridian institutions, not Veridia."
+      ]
+    },
+    "wg-164": {
+      "text": "Is asked by Verdow to stay and help figure out the questions facing Veridia's government, and agrees.",
+      "sources": [
+        "c32-b37",
+        "c32-b70",
+        "c32-b71",
+        "c32-b72",
+        "c32-b75"
+      ],
+      "verdict": "supported",
+      "flags": []
+    },
+    "wg-165": {
+      "text": "Sends Zei a letter hidden in an obfuscated language model that asks him to describe their day together.",
+      "sources": [
+        "c19-b117",
+        "c19-b124",
+        "c19-b149",
+        "c19-b152",
+        "c19-b153"
+      ],
+      "verdict": "supported",
+      "flags": []
+    },
+    "wg-166": {
+      "text": "Suggests that Dzego backdoor the security cameras Veridia buys from Dzego; Verdow later credits him with it.",
+      "sources": [
+        "c24-b90",
+        "c24-b91",
+        "c24-b95",
+        "c26-b58",
+        "c26-b62",
+        "c26-b63"
+      ],
+      "verdict": "flagged",
+      "flags": [
+        "Gladias suggests that Dzego backdoor the security cameras Veridia buys from Dzego | The blocks contain a request to backdoor the cameras but do not attribute that suggestion to Gladias.",
+        "Verdow later credits him with it | No mention of Verdow appears in any of the cited blocks."
+      ]
+    },
+    "wg-167": {
+      "text": "There are over a thousand Keepers; in a rubric circle they know each other only by numbers.",
+      "sources": [
+        "c17-b23",
+        "c10-b54",
+        "c10-b56"
+      ],
+      "verdict": "supported",
+      "flags": []
+    },
+    "wg-168": {
+      "text": "A Keeper's voting key is made by meeting at least three of five people in a Key Allocation Group, and no one can tell which keys are valid.",
+      "sources": [
+        "c15-b40",
+        "c15-b41"
+      ],
+      "verdict": "supported",
+      "flags": []
+    },
+    "wg-169": {
+      "text": "To be accepted, an Acolyte needs a prediction score in the top ten percent and a Senate committee's approval.",
+      "sources": [
+        "c23-b61",
+        "c1-b68"
+      ],
+      "verdict": "supported",
+      "flags": []
+    },
+    "wg-170": {
+      "text": "Delwart got contacts in two discussion groups of the same rubric, defeating the point of splitting them.",
+      "sources": [
+        "c13-b35",
+        "c13-b38"
+      ],
+      "verdict": "supported",
+      "flags": []
+    },
+    "wg-171": {
+      "text": "Mu calls Steering one of the most opaque parts of Veridia's government, and one of the most trustworthy for that reason.",
+      "sources": [
+        "c7-b126",
+        "c7-b130"
+      ],
+      "verdict": "supported",
+      "flags": []
+    },
+    "wg-172": {
+      "text": "Rubrics get gamed and then adjusted; one rewarding ground-floor active use is gamed with things nobody wants to use.",
+      "sources": [
+        "c6-b105",
+        "c32-b55"
+      ],
+      "verdict": "supported",
+      "flags": []
+    },
+    "wg-173": {
+      "text": "With the latest rubric changes, Silverchat's taxes have dropped to zero for its transparency, interoperability and privacy.",
+      "sources": [
+        "c27-b25"
+      ],
+      "verdict": "supported",
+      "flags": []
+    },
+    "wg-174": {
+      "text": "After the war, Verdow says the Order, the Courts and Graph Funding worked, and everything more transparent broke.",
+      "sources": [
+        "c32-b1",
+        "c32-b28",
+        "c32-b37",
+        "c32-b38"
+      ],
+      "verdict": "flagged",
+      "flags": [
+        "After the war | The cited blocks do not mention a war or indicate that Verdow’s statement was made after a war."
+      ]
+    },
+    "wg-175": {
+      "text": "As a new Keeper, persuades his circle on the hardware openness rubric to wait two months before voting, to see whether the Arctics move against Redshire.",
+      "sources": [
+        "c10-b29",
+        "c13-b82",
+        "c13-b93",
+        "c13-b95",
+        "c13-b99",
+        "c13-b100",
+        "c13-b101"
+      ],
+      "verdict": "supported",
+      "flags": []
+    },
+    "wg-176": {
+      "text": "Quarrels with Seila when Lily runs away; she hangs up on him, and he lies awake all night.",
+      "sources": [
+        "c23-b91",
+        "c23-b95",
+        "c23-b97",
+        "c23-b99",
+        "c24-b2",
+        "c24-b4"
+      ],
+      "verdict": "flagged",
+      "flags": [
+        "Quarrels with Seila when Lily runs away | The cited blocks do not state that Gladias quarrels with Seila because Lily runs away; they only show Seila hanging up and Gladias staying awake, with no mention of Lily’s departure as the cause of the quarrel."
+      ]
+    },
+    "wg-177": {
+      "text": "Is told by Bai that, to bring his family back, he may need to become \"at least ten or twenty percent Arctic\" and win.",
+      "sources": [
+        "c24-b34",
+        "c24-b61",
+        "c24-b62"
+      ],
+      "verdict": "supported",
+      "flags": []
+    },
+    "wg-178": {
+      "text": "Pitches five judges a case to fire Veridia's military leadership under the fourteenth Ground Law; they refuse.",
+      "sources": [
+        "c26-b162",
+        "c26-b165",
+        "c26-b192",
+        "c26-b193",
+        "c26-b194"
+      ],
+      "verdict": "supported",
+      "flags": []
+    },
+    "wg-179": {
+      "text": "Is reunited with Lily, Febric and Hreda in the Greater Plum Harbor in Northglade.",
+      "sources": [
+        "c31-b66",
+        "c31-b77",
+        "c31-b79"
+      ],
+      "verdict": "supported",
+      "flags": []
+    },
+    "wg-180": {
+      "text": "One named variant rule is \"rotate one eighty if three\".",
+      "sources": [
+        "c4-b7"
+      ],
+      "verdict": "supported",
+      "flags": []
+    },
+    "wg-181": {
+      "text": "In the Pafogai Du quarter-final, the new rule was that teams were not chosen by cryptographic randomness: a psychological trial.",
+      "sources": [
+        "c4-b1",
+        "c4-b88",
+        "c4-b148",
+        "c4-b150"
+      ],
+      "verdict": "supported",
+      "flags": []
+    },
+    "wg-182": {
+      "text": "In the Pafogai Du final, each player has a powerful AI, and both can read the thought transcripts of the other's AI.",
+      "sources": [
+        "c7-b61",
+        "c7-b63",
+        "c7-b65"
+      ],
+      "verdict": "supported",
+      "flags": []
+    },
+    "wg-183": {
+      "text": "The national championship in Sadzu Du has thirty-two contestants, four of them foreign, and six qualifying rounds.",
+      "sources": [
+        "c12-b1",
+        "c12-b19",
+        "c12-b88",
+        "c12-b90"
+      ],
+      "verdict": "supported",
+      "flags": []
+    },
+    "wg-184": {
+      "text": "A rule change can put the game on a hex grid, where each step splits the board into triangles whose hexagons rotate.",
+      "sources": [
+        "c12-b147",
+        "c12-b169"
+      ],
+      "verdict": "supported",
+      "flags": []
+    },
+    "wg-185": {
+      "text": "In the national semi-finals, intervention resources are cut by eighty percent, and five shrines apply their changes as an XOR every thousand turns.",
+      "sources": [
+        "c14-b1",
+        "c14-b30",
+        "c14-b33"
+      ],
+      "verdict": "flagged",
+      "flags": [
+        "Minpentai: | The cited blocks show the announcer voice speaking, not a character named Minpentai.",
+        "In the national semi-finals, | The blocks refer only to “the semi‑finals” without specifying that they are national."
+      ]
+    },
+    "wg-186": {
+      "text": "The national final is cancelled after Redshire is invaded, and Zei is named champion.",
+      "sources": [
+        "c15-b6",
+        "c15-b82",
+        "c15-b85",
+        "c15-b99"
+      ],
+      "verdict": "supported",
+      "flags": []
+    }
+  },
+  "prompt": {
+    "file": "config/prompts/world-guide-check.md",
+    "sha256": "ce9cbb5f5e3053e6b97dfba5e651aed21a11b5a2e087cb2405d9ac9c05b1f5aa",
+    "text": "You check one line of a reference guide to the novel Snowmoon against the passages it cites. You get the line and the full text of each cited block, with its id.\n\nFlag only claims that are wrong, or absent from the cited blocks, about who someone is, what they did, where, when, what they want or fear, or what was said or decided. A name spelled differently from the blocks is wrong.\n\nThese pass: paraphrase and compression; leaving things out; a fair summary of what the blocks show, including a feeling or motive a character plainly shows or says.\n\nAnswer in exactly this form. If nothing is wrong or absent:\nSUPPORTED\nOtherwise, one line per flagged claim:\nUNSUPPORTED: <the claim, as the line puts it> | <what the blocks say instead, or that they don't say it>\n"
+  },
+  "guide_sha256": "72cd34a1a2f9f1b20b176d16a6b9f63f1f9da6de51673eef8aef645913b7d8da",
+  "made_by": {
+    "writer": "claude-coding-agent",
+    "from": [
+      "the book (content/snowmoon/text/)",
+      "the coding agent's reading notes (content/snowmoon/recipes/summary/agent-reading-notes.md)",
+      "gpt-oss-120b chapter notes (content/snowmoon/recipes/summary/summary-35min.json)"
+    ],
+    "date": "2026-10-11"
+  },
+  "review": {
+    "by": "claude-coding-agent",
+    "date": "2026-10-11",
+    "first_run": "96 of 157 lines flagged by gpt-oss-120b. Real problems fixed: wg-010 (\"Uncle Glad\" is only Febric's word), wg-028 (the book calls it a bombing, not a blast), wg-060 (Vil is part of a class action, not suing alone), wg-092 (Keepers don't know who is in the other groups, not each other), wg-094 (judges random and anonymous, c7-b130), wg-098 (some assemblies are run by Heralds; Keepers check their results), wg-118 (Minpentai players sit in the command centres, they don't command), wg-133, wg-139 and wg-019 (reworded to what the blocks show). Every other flag was a claim true in the book whose cited block did not name the speaker or place; context blocks were added so each line stands on its own citations.",
+    "second_run": "66 flagged. All read: lines of dialogue whose speaker is known only from the conversation's order, misspellings invented by the checker (\"Seilla\", \"Verdun\", \"Gladios\"), and order facts that follow the chapter dates. Two more context citations added (wg-107, wg-151). No unsupported claim left by the agent's reading.",
+    "unsupported_left": 0,
+    "additions": "29 lines from the guide-episodes session (site-guides): wga-001 to wga-017 (commit 5121013) as wg-158 to wg-174, and wga-018 to wga-029 (commit da37429) as wg-175 to wg-186, same order. All 29 checked here by gpt-oss-120b through the Vercel AI Gateway only (scripts/lib/batch-model.ts; owner, 2026-10-11: batch jobs never use the site’s Groq key), every reply served by the pinned provider (groq) with zero retention, $0.0102 in all. That session’s earlier results for wg-158 to wg-174 are kept under results_site_guides. Context citations added (wording and chapter tags unchanged): wg-175 + c10-b29 (Gladias is a Keeper from chapter 10), wg-177 + c24-b34 (Bai is the speaker), wg-185 + c14-b1 (the chapter is the Sadzu Du nationals). Left flagged, read by the coding agent as false positives: wg-162 (the speaker is Zei, c29-b114 is his letter), wg-163 (\"Veridian institutions\" is Veridia’s), wg-166 (c26-b63 credits Gladias), wg-174 (c32-b28 sets it after the war), wg-176 (Lily is gone in c23-b91, the cause of the quarrel), wg-185 (\"national\" from the chapter; \"Minpentai\" is the entity, not a speaker). No unsupported claim left.",
+    "geography": "92 geography lines, wg-301 to wg-392. First run flagged 61; real problems fixed: wg-306 (\"coming in to land\" → shortly before the plane descends, c26-b9), wg-312 (the road is beneath him, seen turning to his left), wg-314 (\"calls\" → thinks of), wg-319 (the poster is Lord Ephelion’s, c3-b5), wg-344 (the walks were over two months, past), wg-357 and wg-383 (speakers), wg-384 (\"later\" had the chapter order backwards), wg-375 (the peninsula is suggested for a new Redshire, not given to the Arctics). Context citations added where the block lacked the place or speaker. Last run: 26 flagged, all read as false positives: entity names taken as speakers, chapter-header places, and misreadings (wg-319, wg-345). Figures are now shown to the checker as SVG. Cost of the geography checks: about $0.045."
+  },
+  "results_site_guides": {
+    "wg-158": {
+      "text": "Learns that Minpentai is military training, and promises to tell no one, not even Fin.",
+      "sources": [
+        "c10-b192",
+        "c10-b194",
+        "c10-b202",
+        "c10-b206"
+      ],
+      "verdict": "supported",
       "flags": [],
       "call": 94,
       "checked_as": "wga-001 on branch site-guides (commit 5121013), by the Snowmoon small things session; its calls are in content/snowmoon/recipes/world-guide-additions.json there"
@@ -8225,29 +9021,5 @@
       "call": 113,
       "checked_as": "wga-017 on branch site-guides (commit 5121013), by the Snowmoon small things session; its calls are in content/snowmoon/recipes/world-guide-additions.json there"
     }
-  },
-  "prompt": {
-    "file": "config/prompts/world-guide-check.md",
-    "sha256": "ce9cbb5f5e3053e6b97dfba5e651aed21a11b5a2e087cb2405d9ac9c05b1f5aa",
-    "text": "You check one line of a reference guide to the novel Snowmoon against the passages it cites. You get the line and the full text of each cited block, with its id.\n\nFlag only claims that are wrong, or absent from the cited blocks, about who someone is, what they did, where, when, what they want or fear, or what was said or decided. A name spelled differently from the blocks is wrong.\n\nThese pass: paraphrase and compression; leaving things out; a fair summary of what the blocks show, including a feeling or motive a character plainly shows or says.\n\nAnswer in exactly this form. If nothing is wrong or absent:\nSUPPORTED\nOtherwise, one line per flagged claim:\nUNSUPPORTED: <the claim, as the line puts it> | <what the blocks say instead, or that they don't say it>\n"
-  },
-  "guide_sha256": "55cabe626cfc0d114d09bd9b08121122c559f5e1a2eb6eb6dc81d3a75ba91528",
-  "made_by": {
-    "writer": "claude-coding-agent",
-    "from": [
-      "the book (content/snowmoon/text/)",
-      "the coding agent's reading notes (content/snowmoon/recipes/summary/agent-reading-notes.md)",
-      "gpt-oss-120b chapter notes (content/snowmoon/recipes/summary/summary-35min.json)"
-    ],
-    "date": "2026-10-11"
-  },
-  "review": {
-    "by": "claude-coding-agent",
-    "date": "2026-10-11",
-    "first_run": "96 of 157 lines flagged by gpt-oss-120b. Real problems fixed: wg-010 (\"Uncle Glad\" is only Febric's word), wg-028 (the book calls it a bombing, not a blast), wg-060 (Vil is part of a class action, not suing alone), wg-092 (Keepers don't know who is in the other groups, not each other), wg-094 (judges random and anonymous, c7-b130), wg-098 (some assemblies are run by Heralds; Keepers check their results), wg-118 (Minpentai players sit in the command centres, they don't command), wg-133, wg-139 and wg-019 (reworded to what the blocks show). Every other flag was a claim true in the book whose cited block did not name the speaker or place; context blocks were added so each line stands on its own citations.",
-    "second_run": "66 flagged. All read: lines of dialogue whose speaker is known only from the conversation's order, misspellings invented by the checker (\"Seilla\", \"Verdun\", \"Gladios\"), and order facts that follow the chapter dates. Two more context citations added (wg-107, wg-151). No unsupported claim left by the agent's reading.",
-    "unsupported_left": 0,
-    "additions": "17 lines from the guide-episodes session (site-guides 5121013, content/snowmoon/world-guide-additions.json), folded in as wg-158 to wg-174 (wga-001 to wga-017, same order). That session checked them with this prompt (gpt-oss-120b); 3 stayed flagged. The coding agent read those 3 against their blocks: wga-006 (\"Veridian institutions\" is Veridia’s), wga-009 (c26-b63 credits Gladias for the camera idea), wga-017 (c32-b28 sets it after the war): false positives. Also read wga-013 and wga-016: supported. Not re-run here: Groq’s daily token limit was reached on 2026-10-11.",
-    "geography": "92 geography lines, wg-301 to wg-392. First run flagged 61; real problems fixed: wg-306 (\"coming in to land\" → shortly before the plane descends, c26-b9), wg-312 (the road is beneath him, seen turning to his left), wg-314 (\"calls\" → thinks of), wg-319 (the poster is Lord Ephelion’s, c3-b5), wg-344 (the walks were over two months, past), wg-357 and wg-383 (speakers), wg-384 (\"later\" had the chapter order backwards), wg-375 (the peninsula is suggested for a new Redshire, not given to the Arctics). Context citations added where the block lacked the place or speaker. Last run: 26 flagged, all read as false positives: entity names taken as speakers, chapter-header places, and misreadings (wg-319, wg-345). Figures are now shown to the checker as SVG. Cost of the geography checks: about $0.045."
   }
 }
