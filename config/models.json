@@ -173,6 +173,74 @@
       "open_weights": true,
       "weights": "https://huggingface.co/openai/gpt-oss-safeguard-20b",
       "role": "guard"
+    },
+    {
+      "id": "kimi-k3",
+      "kind": "text",
+      "repo": "moonshotai/Kimi-K3",
+      "revision": "f831ab66814297da540d832a5235f8e904f29d06",
+      "license_line": "license: other (license_name: kimi-k3)",
+      "license_checked": {
+        "by": "coding agent, approved by the owner",
+        "on": "2026-10-11",
+        "source": "https://huggingface.co/moonshotai/Kimi-K3/blob/main/LICENSE"
+      },
+      "notes": "Kimi K3 License (modified MIT): use, modification, redistribution and derivative works allowed, keeping the notice; the model-as-a-service revenue clause (over $20M a year) and the display clause (over 100M monthly users or $20M monthly revenue) do not apply to this project. Named in the book's own AI usage declaration. Approved by the owner on 2026-10-11 for writing from the book's text only (guide episodes; docs/proposals/kimi-k3-writer.md): calls pinned to the maker's endpoint with zero data retention. Never send readers' own words to it without asking the owner again about the provider. Also approved by the owner on 2026-10-11 for the planning coach's comparison eval, on test drafts only: the eval's invented fixtures and the owner's own freewrite (docs/proposals/plan-coach.md). Choosing a model for real users' drafts is a separate decision.",
+      "runs_on": "hosted",
+      "hosted": {
+        "host": "Vercel AI Gateway",
+        "endpoints": {
+          "moonshotai/kimi-k3": null
+        },
+        "provider": "moonshotai",
+        "zero_data_retention": true,
+        "price_unit": "USD per million tokens (input, output)",
+        "prices": {
+          "input": 3.0,
+          "output": 15.0
+        },
+        "price_seen": "2026-10-11"
+      },
+      "model_record": "gateway model id, date, provider and the gateway request id (the host does not expose a weights revision)",
+      "cost_usd_per_unit": null,
+      "license": "Kimi K3 License (modified MIT)",
+      "open_weights": true,
+      "weights": "https://huggingface.co/moonshotai/Kimi-K3",
+      "role": "writer (book text only); planning-coach comparison eval (test drafts only)"
+    },
+    {
+      "id": "claude-sonnet-5.5",
+      "kind": "text",
+      "repo": "anthropic/claude-sonnet-5.5",
+      "revision": null,
+      "license_line": "Anthropic Commercial Terms of Service (effective June 17, 2025): \"Subject to Customer's compliance with these Terms, Anthropic hereby assigns to Customer its right, title and interest (if any) in and to Outputs.\"",
+      "license_checked": {
+        "by": "coding agent",
+        "on": "2026-10-11",
+        "source": "https://www.anthropic.com/legal/commercial-terms"
+      },
+      "notes": "Closed model, reported under principle 3. Approved by the owner on 2026-10-11 for the planning coach's comparison eval only, on test drafts only (the eval's invented fixtures and the owner's own freewrite); not for real users' drafts, which is a separate decision. The owner's condition, retention terms confirmed on our account: through the Vercel AI Gateway with zeroDataRetention and only: [anthropic], the gateway answered 'ZDR requested: all 1 attempts support ZDR', served by anthropic on the gateway's own credentials (no BYOK), 2026-10-11. Vercel's ZDR page (https://vercel.com/docs/ai-gateway/security-and-compliance/zdr, updated 2026-09-22) lists Anthropic as a ZDR provider; only claude-fable-5 is excepted. The terms also forbid using outputs to train competing models, which this use does not do.",
+      "runs_on": "hosted",
+      "hosted": {
+        "host": "Vercel AI Gateway",
+        "endpoints": {
+          "anthropic/claude-sonnet-5.5": null
+        },
+        "provider": "anthropic",
+        "zero_data_retention": true,
+        "price_unit": "USD per million tokens (input, output)",
+        "prices": {
+          "input": 2.0,
+          "output": 10.0
+        },
+        "price_seen": "2026-10-11"
+      },
+      "model_record": "gateway model id, date, provider and the gateway request id (the host does not expose a weights revision)",
+      "cost_usd_per_unit": null,
+      "license": "proprietary (Anthropic Commercial Terms)",
+      "open_weights": false,
+      "weights": null,
+      "role": "planning-coach comparison eval (test drafts only)"
     }
   ],
   "candidates": [

@@ -1,9 +1,14 @@
 # Visual storytelling: what the planning coach looks for
 
-> **Draft for the owner to edit and approve.** Written by the coding agent
-> (Claude, a closed model), 2026-10-11, from the owner's list of principles.
-> The coach (`config/prompts/plan-coach.md`) may only use an approved
-> version. Status: **not approved**.
+> Written by the coding agent (Claude, a closed model), 2026-10-11, from the
+> owner's list of principles. **Approved by the owner, 2026-10-11**, with one
+> addition: the two sets of principles from Design v3, so the coach and the
+> screens match. Those are sections 8 to 17, written by the coding agent the
+> same day from the set names the owner gave (stories: want, pressure, turn,
+> choice with a price, change; characters: want and need, flaw,
+> contradiction, arc, fits the world). The coding agent has not seen Design
+> v3 itself; if its wording differs, these sections should follow it.
+> The coach (`config/prompts/plan-coach.md`) uses this version.
 
 This is the craft the coach applies to two forms: **comics with narration**
 (the stage 1 format in `docs/adaptation-format.md`: one image per beat, at
@@ -160,6 +165,194 @@ to know?"
 **A note looks like.** "The piece ends after the question is answered.
 Consider ending one beat earlier, on the message arriving."
 
+## Stories: want, pressure, turn, choice, change (Design v3)
+
+These five follow one scene, or one short piece, from start to end. They
+widen principle 1: the want and the turn are the same idea, now with what
+happens between them.
+
+## 8. Want: someone is after something
+
+**The idea.** A story starts moving when someone wants something specific
+enough to picture. Robert McKee calls it the protagonist's *object of
+desire*: something they consciously pursue (*Story*, 1997). A want the
+reader can name gives every later beat something to be measured against.
+
+**In the book.** Before the quarter-final, Fin knows what Zei is after:
+"Zei wanted to win, Fin knew, but almost as much, Zei wanted to hear Bai
+beg." (c4-b119)
+
+**The coach asks.** "What does your main character want in this piece, in
+words a reader could repeat?"
+
+**A note looks like.** "By the end of the draft the reader still can't say
+what the main character is after. Fragments 1 and 2 could show it, before
+the first obstacle arrives."
+
+## 9. Pressure: the want gets harder to reach
+
+**The idea.** The obstacle should grow. McKee argues that character is
+revealed in the choices a person makes under pressure, and that the greater
+the pressure, the more true the revelation (*Story*, 1997). A piece where
+the difficulty stays the same from beginning to end tends to feel flat.
+
+**In the book.** In the Pafogai Du final, Zei falls into Bai's trap and is
+behind, seventeen symbols to twenty-two; watching, Mu expects a game of
+attrition that will go Bai's way (c7-b98). Only then does he try his gamble (c7-b102).
+
+**The coach asks.** "Is it harder for your character at the end of this
+scene than at the start? What makes it harder?"
+
+**A note looks like.** "Beats 2 to 4 repeat the same obstacle at the same
+size. Consider raising the cost or narrowing the options from one beat to
+the next."
+
+## 10. Turn: the situation changes direction
+
+**The idea.** Somewhere the situation flips: what was going well goes badly,
+or the reverse. McKee's *turning point* (*Story*, 1997); Aristotle's
+*reversal* (*Poetics*). A turn the reader didn't see coming, but believes
+afterwards, is the strongest kind. See principle 1.
+
+**In the book.** Zei's hidden factory fires from a place Bai never expected,
+and "Bai, and her AI, were caught completely by surprise." (c7-b109)
+
+**The coach asks.** "Where does the situation change direction? Could a
+reader point to the exact picture?"
+
+**A note looks like.** "The change happens between beats, in no picture. A
+picture slot at the moment it changes would let the viewer see it."
+
+## 11. Choice, with a price
+
+**The idea.** The strongest turns come from a character's own choice, and a
+real choice costs something. McKee describes the crisis as a dilemma:
+between two goods that can't both be had, or the lesser of two evils
+(*Story*, 1997). If the choice is free, it reveals little.
+
+**In the book.** Told that Minpentai trains people for war, Zei promises:
+"I won't tell anyone. Not even Fin." (c10-b206). The price: a secret,
+kept even from Fin.
+
+**The coach asks.** "What does your character choose, and what does it cost
+them?"
+
+**A note looks like.** "Fragment 5's decision costs the character nothing,
+so it reads as a formality. What would they have to give up to make it?"
+
+## 12. Change: something is different at the end
+
+**The idea.** By the end, a value in the characters' lives has changed, and
+the reader can feel which way. McKee calls this the story event: a
+meaningful change, expressed and experienced in terms of a value (*Story*,
+1997). A piece that ends where it started needs a reason to.
+
+**In the book.** At the end of the book: "For the first time in a century,
+the Arctic Empire has been defeated." (c32-b28)
+
+**The coach asks.** "What is different at the end of your piece, compared
+with the start?"
+
+**A note looks like.** "The first and last pictures show the same situation.
+If that's the point, the narration could signal it; if not, the last picture
+could show what changed."
+
+## Characters: want and need, flaw, contradiction, arc, fits the world (Design v3)
+
+These five are for building a character, whether from the book or one a
+person adds. They widen principle 6.
+
+## 13. Want and need
+
+**The idea.** What a character wants and what they need can differ. John
+Truby separates *desire*, the goal they pursue, from *need*, what they must
+change in themselves to live better (*The Anatomy of Story*, 2007). A
+character who gets the want but not the need is a story; so is the
+reverse.
+
+**In the book.** Bai wanted to succeed, and says why: "my desire to succeed
+in order to prove to the world that I deserve love because I am strong"
+(c24-b50), after growing up with no one who loved her unconditionally
+(c24-b48).
+
+**The coach asks.** "What does your character want? Is there something they
+need that they don't know about?"
+
+**A note looks like.** "The character's want is clear, but nothing hints at
+a need underneath. One object or action in an early picture could suggest
+it without stating it."
+
+## 14. Flaw
+
+**The idea.** A flaw is the weakness that gets in the character's own way.
+Truby calls it the character's *weakness* (*The Anatomy of Story*, 2007);
+Aristotle's *hamartia* is the error that brings a fall (*Poetics*). A flaw
+the reader sees before the character does creates tension.
+
+**In the book.** Gladias's willingness to see every side. Seila: "Gladias...
+how can you be so naive?" (c21-b74), and later "DON'T YOU DARE GET IN YOUR
+PHILOSOPHER MOOD" (c23-b95).
+
+**The coach asks.** "What in your character makes things harder for them?"
+
+**A note looks like.** "The obstacles all come from outside. Consider
+letting the character's own habit cause one of them."
+
+## 15. Contradiction
+
+**The idea.** People who hold two opposite traits feel real. McKee calls
+this *dimension*: a consistent contradiction, either within a character or
+between how they appear and who they are (*Story*, 1997).
+
+**In the book.** Bai tells Zei, "You know I enjoy making you feel afraid"
+(c4-b73). Later, when Gladias is in despair, she "walked up to Gladias, and
+gently hugged him" (c24-b39).
+
+**The coach asks.** "Is there something your character does that seems to
+go against what we first learn about them?"
+
+**A note looks like.** "The character acts the same way in every beat.
+A single moment against type, shown not told, could make them more
+believable."
+
+## 16. Arc
+
+**The idea.** Over the piece, the character changes, or pointedly refuses
+to. Truby places the change in a *self-revelation* near the end (*The
+Anatomy of Story*, 2007); K. M. Weiland describes positive, negative and
+flat arcs (*Creating Character Arcs*, 2016). The reader should be able to
+see where the character started.
+
+**In the book.** Lily cheers Lord Ephelion's messages (c23-b84). At the
+Arctic school she argues with her instructor and is put in detention, and
+now thinks the Arctics "just care about their own authority" (c28-b66,
+c28-b67, c28-b68). At the end she runs to Gladias: "Dad!" (c31-b77).
+
+**The coach asks.** "Where does your character start, and where do they
+end? Which picture shows each?"
+
+**A note looks like.** "The character's change happens off the page. A
+picture of where they start would make the end land."
+
+## 17. Fits the world
+
+**The idea.** A character should belong to the world they live in: its
+work, its tools, its habits of thought. Lajos Egri gives characters three
+dimensions, one of them sociological: class, work, education, surroundings
+(*The Art of Dramatic Writing*, 1946). Truby treats the story world as an
+expression of the characters (*The Anatomy of Story*, 2007).
+
+**In the book.** Zei plans a walk in Pafogai Du's units: street spacing,
+house numbers in meters, ticks before the lesson (c2-b31). Only someone
+from Dzego thinks like that.
+
+**The coach asks.** "What does your character do or know that only someone
+from their place in the book would?"
+
+**A note looks like.** "The character could be from anywhere. One detail of
+how they work or measure or speak, from their country in the book, would
+place them. The world guide lists what the book gives."
+
 ## What the coach never does
 
 These come from `docs/adaptation-format.md` ("Models build structure and
@@ -177,6 +370,7 @@ images. People write every published word") and the coach's prompt.
 
 ## Sources
 
+- Aristotle. *Poetics* (reversal, *peripeteia*; error, *hamartia*).
 - Arijon, Daniel. *Grammar of the Film Language*. 1976.
 - Egri, Lajos. *The Art of Dramatic Writing*. 1946.
 - Eisner, Will. *Comics and Sequential Art*. 1985.
@@ -184,11 +378,13 @@ images. People write every published word") and the coach's prompt.
 - Glass, Ira. Talks on storytelling, 2009 (recorded video series).
 - McCloud, Scott. *Understanding Comics*. 1993; *Making Comics*. 2006.
 - McKee, Robert. *Story*. 1997.
+- Truby, John. *The Anatomy of Story*. 2007.
+- Weiland, K. M. *Creating Character Arcs*. 2016.
 - Murch, Walter. *In the Blink of an Eye*. 1995 (second edition 2001).
 - Vonnegut, Kurt. Preface to *Bagombo Snuff Box*. 1999.
 - Chekhov, Anton. Letter to Alexander Chekhov, 1886 (paraphrased as above).
 
-The coding agent wrote these summaries from memory and has not checked them
-against the books. Before approval, please check the wording you want to
+The coding agent wrote these summaries from memory, sections 8 to 17
+included, and has not checked them against the books. Before approval, please check the wording you want to
 keep against the sources. Nothing here quotes them directly except
 Vonnegut's line about a glass of water, which is widely quoted.

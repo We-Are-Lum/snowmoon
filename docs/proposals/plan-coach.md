@@ -98,12 +98,23 @@ not private, but the decision sets the precedent.
 | A21 | A hosted model receives messages (principle 6) | Same route as the assistant: Groq with zero retention (confirmed in the console), and the gateway, also zero retention, only when Groq is busy. The notice must say that **drafts**, not only questions, go to Groq. Any other model needs the checks in "Alternatives" first. |
 | A22 | Planning thread published in full with the piece | Yes, in full, but only under "How this was made", labelled model-drafted (principle 2), never inside the piece itself. Together with A12: whole or not at all, hideable at once. |
 
-## Decisions for the owner
+## Decisions (owner, 2026-10-11)
 
-1. Approve or edit the craft guide (`docs/craft/visual-storytelling.md`).
-2. The four design changes before any model change: yes or no?
-3. Which models, if any, may receive the test drafts in a comparison eval?
-4. Planning private by default, with the thread published only by choice at
-   publish time: yes or no? This replaces the board's "published with your
-   piece".
-5. The notice and consent wording that names who receives drafts.
+1. **Craft guide: approved**, with one addition: Design v3's two sets of principles, so the coach and the screens match. These are sections 8 to 17 of `docs/craft/visual-storytelling.md`:
+   - stories: want, pressure, turn, choice with a price, change;
+   - characters: want and need, flaw, contradiction, arc, fits the world.
+   The coding agent wrote them from these names without seeing Design v3 itself; if its wording differs, the sections should follow it.
+2. **All four design changes: yes.** Built as design 2 (`scripts/plan-coach-eval.ts`):
+   - the world check as its own steps (`plan-coach-claims.md`, then `plan-coach-world-check.md` per claim);
+   - picture slots without words, with a code check (`scripts/lib/plan-coach-checks.ts`, tested by `scripts/plan-coach-checks-test.ts`);
+   - the coach's own guard (`plan-coach-guard.md`);
+   - three answers plus "I can't check this within your chapter", enforced in code.
+   **gpt-oss reruns with the owner's freewrite once it is pasted.** One test run on invented fixture A ($0.0041) checked that the pipeline works.
+3. **Comparison eval, test drafts only:** gpt-oss-120b; Kimi K3, pinned to moonshotai with zero retention; Claude Sonnet 5.5, after its retention terms were confirmed on our account.
+   - **Sonnet's terms, confirmed 2026-10-11:** a zero-retention request with only Anthropic allowed was answered "ZDR requested: all 1 attempts support ZDR", served by Anthropic on the gateway's own credentials. Vercel's ZDR page lists Anthropic as a ZDR provider; only claude-fable-5 is excepted.
+   - **The allowlist** (`config/models.json`) now records Kimi K3's added use and Sonnet 5.5 as a closed model, both for test drafts only.
+   - **Choosing a model for real users' drafts is a separate decision.**
+
+Still open:
+4. **Planning private by default**, with the thread published only by choice at publish time: yes or no? This replaces the board's "published with your piece".
+5. **The notice and consent wording** that names who receives drafts.
