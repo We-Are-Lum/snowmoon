@@ -1,4 +1,16 @@
 {
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent (Claude, a closed model; principle 3)",
+    "instructions": [
+      "the owner's brief of 2026-10-11 (docs/prompts/008-narration-and-images.md)"
+    ],
+    "see": "config/models.json drafting; principle 3",
+    "drafted": [
+      "every line of the world guide",
+      "the checker prompt (config/prompts/world-guide-check.md)"
+    ]
+  },
   "calls": [
     {
       "line": "wg-001",

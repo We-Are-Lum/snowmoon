@@ -568,3 +568,18 @@ Do the summaries fit with the terms of the license? And could we do Audio summar
 ```text
 Go ahead. And publish
 ```
+
+```text
+Plan a piece: build and test the coach first, no UI. On a branch; merge only docs and data, after my OK.
+1. World guide: content/snowmoon/world-guide.json, plus a readable .md. Characters (who, wants, fears, relationships, how they change), places, institutions and technology, Minpentai, factions, timeline. Cite every line with block IDs and tag it with the first chapter it depends on, so it can be filtered by how far someone has read. Build it from the book and the summary's chapter notes. Check every line against its cited blocks and list unsupported ones. Label it AI-made, with a recipe.
+2. Craft guide: docs/craft/visual-storytelling.md, the principles the coach applies to comics with narration and short audiovisual pieces: each scene has a want, an obstacle and a turn; inner states shown through action and objects; place established before faces; one clear image per beat; narration says what the pictures can't; a character introduced through what they want; end on a question. Name the sources you draw on. It's a draft for me to edit and approve before the coach uses it.
+3. Coach prompt: config/prompts/plan-coach.md.
+   - Asks one question at a time.
+   - Never writes narration, dialogue or description for the piece (docs/adaptation-format.md).
+   - Notes say what to change and why, never replacement sentences.
+   - May propose an order for the person's own fragments, and suggest picture slots with what each should show.
+   - Checks world facts against the guide, cites passages, and respects the person's chapter limit.
+4. Eval before any UI: my café-to-invasion freewrite (I'll paste it) plus three invented openings. Run the coach on gpt-oss-120b, cap $2, and show me its notes. Flag every note that writes prose for me or gets a world fact wrong. If the notes aren't useful, list the alternatives (open models we could add to the allowlist, and Claude), with who would receive people's private drafts and what each costs.
+5. Say how this resolves gap-list items A9–A13 and A20–A22: consent, publish review, hiding all or nothing, and the overlap check.
+Report with the Principles section.
+```
