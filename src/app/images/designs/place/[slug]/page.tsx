@@ -3,7 +3,7 @@ import { notFound } from 'next/navigation';
 import { IMAGES } from '~/lib/config';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { labelRange } from '~/lib/reading';
-import { partsOf, placeFirstChapter, placeTitle, sheetPlace, sheetPlaces } from '~/lib/images/sheets';
+import { partsOf, placeFirstChapter, placeTitle, sheetPlace } from '~/lib/images/sheets';
 import { sheetImages } from '~/lib/images/sheet-images';
 import { BookQuotes, CharacterGate } from '~/components/design-book';
 import { Appears, SheetImages, Shorthand } from '~/components/design-sheets';
@@ -18,10 +18,6 @@ export const revalidate = 60;
 type Props = { params: Promise<{ slug: string }> };
 const W = IMAGE_WORDING.designs;
 const SH = W.sheets;
-
-export function generateStaticParams() {
-  return sheetPlaces().map((p) => ({ slug: p.slug }));
-}
 
 export async function generateMetadata({ params }: Props) {
   const p = sheetPlace((await params).slug);
