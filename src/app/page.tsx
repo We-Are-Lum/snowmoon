@@ -34,7 +34,11 @@ export default async function Home() {
     return { n, dateline: chapterDateline(ch), setting: blockFacts(ch.blocks).find((f) => f.setting)?.setting ?? null };
   });
   const sql = db();
-  const images = sql ? await feed(sql, 'new', 5).catch(() => null) : null;
+  // At most 2 s: the home page never waits on the database (one connection per server instance is
+  // shared by every request); past that, "Just made" shows its "Nothing to show right now." line.
+  const images = sql
+    ? await Promise.race([feed(sql, 'new', 5), new Promise<null>((r) => setTimeout(() => r(null), 2000))]).catch(() => null)
+    : null;
   const items: HomeFeedItem[] = (images ?? []).map((im) => ({
     versionId: im.versionId,
     url: im.url,
