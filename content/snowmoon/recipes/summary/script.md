@@ -1,6 +1,8 @@
 # Snowmoon: a spoken summary (script)
 
-Written by the coding agent (Claude) from the book and from chapter notes by gpt-oss-120b; checked by gpt-oss-120b and by the coding agent against the cited blocks. Recipe: summary-35min.json. Draft: not published.
+Written by the coding agent (Claude) from the book and from chapter notes by gpt-oss-120b; checked by gpt-oss-120b and by the coding agent against the cited blocks. Recipe: summary-35min.json.
+
+A summary of Snowmoon by Vitalik Buterin, modified from the book on 2026-10-10. GPL-3.0, like the book.
 
 This is a summary of Snowmoon by Vitalik Buterin. It was written by AI models, not by the author: Claude, made by Anthropic, wrote it from the book and from chapter notes by gpt-oss-120b. It is read by an AI voice. It gives away the whole story, including the ending.
 

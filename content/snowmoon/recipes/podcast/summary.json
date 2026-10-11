@@ -1,0 +1,92 @@
+{
+  "work_id": "snowmoon",
+  "what": "A podcast bonus episode: the spoken summary of the whole book, with full spoilers, encoded to MP3 (no opener).",
+  "generated_at": "2026-10-10T07:57:15+00:00",
+  "inputs": {
+    "summary": {
+      "recipe": "content/snowmoon/recipes/summary/summary-35min.json",
+      "sha256": "d40339d7a213e1d0b3726d7f248f31defdadd7a642ded20778c184ee427e6fbf",
+      "script": "content/snowmoon/recipes/summary/script.md",
+      "model": "Kokoro-82M",
+      "voice": "af_heart"
+    }
+  },
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent (Claude, a closed model; principle 3)",
+    "drafted": [
+      "the script of the summary, pass 2 (all 56 paragraphs)",
+      "the spoken opening, changed from the owner's draft wording to name the models that wrote it",
+      "the prompts in config/prompts/summary-*.md",
+      "the summary-only pronunciation override for \"Vitalik\""
+    ],
+    "instructions": [
+      "docs/prompts/008a-agent-prompts.md#spoken-summary-pass-2"
+    ],
+    "see": "config/models.json drafting; principle 3"
+  },
+  "license": {
+    "license": "GPL-3.0",
+    "text": "A summary of Snowmoon by Vitalik Buterin, modified from the book on 2026-10-10. GPL-3.0, like the book.",
+    "book": {
+      "title": "Snowmoon",
+      "author": "Vitalik Buterin",
+      "license": "GPL-3.0",
+      "source": "https://vitalik.eth.limo/snowmoon/"
+    },
+    "url": "https://www.gnu.org/licenses/gpl-3.0.html",
+    "why": "GPL-3.0 section 5: a modified version carries a notice that it was modified, with a date, and is released under the same licence (owner question, 2026-10-10)"
+  },
+  "loudness": {
+    "target": {
+      "integrated_lufs": -16,
+      "true_peak_db": -1,
+      "lra": 11
+    },
+    "method": "ffmpeg loudnorm, two passes; the second uses the first pass's measurements (linear=true)",
+    "first_pass": {
+      "input_i": "-25.63",
+      "input_tp": "-1.57",
+      "input_lra": "2.60",
+      "input_thresh": "-35.99",
+      "output_i": "-16.27",
+      "output_tp": "-1.00",
+      "output_lra": "2.70",
+      "output_thresh": "-26.66",
+      "normalization_type": "dynamic",
+      "target_offset": "0.27"
+    }
+  },
+  "encoder": {
+    "tool": "ffmpeg version 9.0.1 Copyright (c) 2000-2026 the FFmpeg developers",
+    "codec": "libmp3lame",
+    "bitrate": "128k",
+    "channels": 1,
+    "sample_rate": 44100,
+    "command": "ffmpeg -y -loglevel error -i /Users/nathan/snowmoon-summary/summary-out/summary-35min.wav -af loudnorm=I=-16:TP=-1:LRA=11:measured_I=-25.63:measured_TP=-1.57:measured_LRA=2.60:measured_thresh=-35.99:offset=0.27:linear=true -ac 1 -ar 44100 -c:a libmp3lame -b:a 128k -id3v2_version 3 -write_xing 1 -metadata title=Snowmoon: a spoken summary (written by an AI model) -metadata artist=Snowmoon Party -metadata comment=Summary written by gpt-oss-120b, not by the author; read by an AI voice (Kokoro-82M, af_heart). Independent; not affiliated with the author. /Users/nathan/snowmoon-summary/summary-out/summary-35min.mp3",
+    "retagged": {
+      "at": "2026-10-10",
+      "why": "licence and title in the MP3 tags, as the podcast episodes carry; audio unchanged (stream copy)",
+      "before_sha256": "c44d6eaa13616869926ec034f11c7dd66e7fdb1f92132c12c399bf966ec6fd20",
+      "command": "ffmpeg -i summary-35min.mp3 -map 0:a -c copy -id3v2_version 3 -write_xing 1 -metadata 'title=The whole story in 32 minutes (full spoilers)' -metadata 'album=Snowmoon Party: an independent reading of Snowmoon' -metadata 'artist=Snowmoon Party' -metadata genre=Audiobook -metadata 'copyright=GPL-3.0. A summary of Snowmoon by Vitalik Buterin, modified from the book on 2026-10-10; written by AI models (Claude, from notes by gpt-oss-120b). Synthetic voice: Kokoro-82M, af_heart.' -metadata 'comment=Independent, not affiliated with the author. Full spoilers. https://snowmoon.party'"
+    }
+  },
+  "file": {
+    "name": "summary-35min.mp3",
+    "sha256": "7e2f182235c4523971e85095e517cfda73a389622024e33b7463e1855d95fc37",
+    "bytes": 31010990,
+    "duration_ms": 1938100,
+    "channels": 1,
+    "sample_rate": 44100,
+    "url": "https://media.snowmoon.party/podcast/summary-7e2f182235c4.mp3"
+  },
+  "cost_note": "$1.08 of model calls for the summary (gpt-oss-120b notes, discarded attempts and checks); narration and encoding on the owner's Mac",
+  "published_by": {
+    "fid": 6786,
+    "role": "maintainer",
+    "action": "published via script",
+    "script": "scripts/publish-podcast-summary.ts",
+    "date": "2026-10-11",
+    "evidence": "docs/prompts/008-narration-and-images.md"
+  }
+}

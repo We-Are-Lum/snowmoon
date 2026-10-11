@@ -1,7 +1,7 @@
 {
   "work_id": "snowmoon",
   "what": "A spoken summary of the whole book, about 35 minutes: story notes per chapter (pass 1), the summary written from them (pass 2), every paragraph read against its cited blocks and fixed by re-prompting, then narrated.",
-  "status": "draft: not published (the owner publishes with \"publish\")",
+  "status": "published by the owner (2026-10-10, \"Go ahead. And publish\")",
   "generated_at": "2026-10-10T06:21:34.906Z",
   "inputs": {
     "sources": [
@@ -23509,14 +23509,20 @@
       },
       "mp3": {
         "name": "summary-35min.mp3",
-        "sha256": "c44d6eaa13616869926ec034f11c7dd66e7fdb1f92132c12c399bf966ec6fd20",
-        "bytes": 31010773,
+        "sha256": "7e2f182235c4523971e85095e517cfda73a389622024e33b7463e1855d95fc37",
+        "bytes": 31010990,
         "duration_ms": 1938100,
         "channels": 1,
         "sample_rate": 44100,
         "bitrate": "128k"
       },
-      "where": "summary-out/ on the owner's Mac only; not on the site, in the podcast feed or in the media bucket"
+      "where": "published to the media bucket as a podcast bonus episode on the owner's \"publish\" (2026-10-10); see content/snowmoon/recipes/podcast/summary.json"
+    },
+    "retagged": {
+      "at": "2026-10-10",
+      "why": "licence and title in the MP3 tags, as the podcast episodes carry; audio unchanged (stream copy)",
+      "before_sha256": "c44d6eaa13616869926ec034f11c7dd66e7fdb1f92132c12c399bf966ec6fd20",
+      "command": "ffmpeg -i summary-35min.mp3 -map 0:a -c copy -id3v2_version 3 -write_xing 1 -metadata 'title=The whole story in 32 minutes (full spoilers)' -metadata 'album=Snowmoon Party: an independent reading of Snowmoon' -metadata 'artist=Snowmoon Party' -metadata genre=Audiobook -metadata 'copyright=GPL-3.0. A summary of Snowmoon by Vitalik Buterin, modified from the book on 2026-10-10; written by AI models (Claude, from notes by gpt-oss-120b). Synthetic voice: Kokoro-82M, af_heart.' -metadata 'comment=Independent, not affiliated with the author. Full spoilers. https://snowmoon.party'"
     }
   },
   "assist": {
@@ -23536,9 +23542,10 @@
   "published_by": {
     "fid": 6786,
     "role": "owner",
-    "action": null,
-    "date": null,
-    "status": "not published: waiting for the owner's \"publish\"; the audio is not on the site, in the podcast feed or in the media bucket"
+    "action": "published by merging to main, and the audio as a podcast bonus episode via scripts/publish-podcast-summary.ts",
+    "date": "2026-10-11",
+    "evidence": "docs/prompts/008-narration-and-images.md (\"Go ahead. And publish\")",
+    "status": "published"
   },
   "calls_log": {
     "file": "calls.jsonl.gz",
@@ -23548,5 +23555,17 @@
     "calls": 650,
     "bytes": 3454461,
     "uncompressed_bytes": 13082533
+  },
+  "license": {
+    "license": "GPL-3.0",
+    "text": "A summary of Snowmoon by Vitalik Buterin, modified from the book on 2026-10-10. GPL-3.0, like the book.",
+    "book": {
+      "title": "Snowmoon",
+      "author": "Vitalik Buterin",
+      "license": "GPL-3.0",
+      "source": "https://vitalik.eth.limo/snowmoon/"
+    },
+    "url": "https://www.gnu.org/licenses/gpl-3.0.html",
+    "why": "GPL-3.0 section 5: a modified version carries a notice that it was modified, with a date, and is released under the same licence (owner question, 2026-10-10)"
   }
 }

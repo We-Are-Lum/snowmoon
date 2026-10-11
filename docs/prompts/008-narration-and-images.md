@@ -560,3 +560,11 @@ Yeah go with 2. Make summary expandable. Or a popup, so people don't see spoiler
 2. Label wording (draft): "AI summary · written by an AI model, Claude, not by the author, and checked against the book by AI. Nothing from later chapters. How it was made."
 3. Don't merge yet. I'll listen to the summary first. When I say "publish", merge summary-35min and chapter-summaries together: the script, the recipe, the chapter summaries and the edits file. The audio stays off the site and the feed until I decide that separately.
 ```
+
+```text
+Do the summaries fit with the terms of the license? And could we do Audio summary to podcast feed? Would be cool if podcasts chapters had different descriptions
+```
+
+```text
+Go ahead. And publish
+```

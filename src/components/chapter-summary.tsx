@@ -61,6 +61,10 @@ export function ChapterSummary({ chapter: n }: { chapter: number }) {
         AI summary · written by an AI model, Claude, not by the author, and checked against the book by AI. Nothing from
         later chapters. <a href={`${REPO_URL}/blob/main/${RECIPE}`}>How it was made</a>
       </p>
+      {/* GPL-3.0 section 5: a modified version says so, with a date, under the same licence (coding agent draft, 2026-10-10). */}
+      <p className="chapter-summary-made">
+        A summary of Snowmoon by Vitalik Buterin, modified from the book on 2026-10-10. GPL-3.0, like the book.
+      </p>
     </details>
   );
 }

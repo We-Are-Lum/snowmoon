@@ -53,6 +53,7 @@ function build() {
     about:
       "Each chapter's summary, shown collapsed under the chapter. Written by the coding agent (Claude, a closed model) as part of the spoken summary, checked against the book by gpt-oss-120b and by the coding agent, then edited so that no chapter's summary rests on a later chapter. The owner accepted the closed model's text, labelled and recorded (principle 3, 2026-10-10).",
     written_by: 'claude-coding-agent',
+    license: 'A summary of Snowmoon by Vitalik Buterin, modified from the book on 2026-10-10. GPL-3.0, like the book.',
     from: { recipe: RECIPE, recipe_sha256: sha256(recipeRaw), edits: EDITS, edits_sha256: sha256(editsRaw) },
     chapters,
   };
