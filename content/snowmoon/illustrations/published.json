@@ -11,7 +11,8 @@
   },
   "excluded": {
     "c26-b132-drone-escape": "the same man appears twice, even after a rewrite with one rider",
-    "c27-b071-tea-robot": "the robot takes on the reference man's face and clothes"
+    "c27-b071-tea-robot": "the robot takes on the reference man's face and clothes",
+    "c20-b013-door-screen": "the scene is the wrong way round: Seila stands outside and the robed man is in the doorway, with no screen showing him (owner, 2026-10-10: \"This image isn't good\")"
   },
   "images": [
     {
@@ -1413,22 +1414,6 @@
       "url": "https://media.snowmoon.party/images/seed/c20/c20-b002-red-alert-5517ec1fca6e.jpg",
       "sha256": "5517ec1fca6ef3a13777bd365e6427f57a32e75f756e8ea17c20bc8a48f2fbc1",
       "png_sha256": "bbe3fcf0ad059eace0e858ac26890509ca23261d07eb8a9b3bb49d560e6edfc2"
-    },
-    {
-      "chapter": 20,
-      "idx": 13,
-      "id": "c20-b013-door-screen",
-      "setting": "veridia",
-      "location": "designs/locations/family-home.json",
-      "characters": [
-        "seila"
-      ],
-      "width": 1024,
-      "height": 576,
-      "recipe": "content/snowmoon/recipes/images/chapter-20.json",
-      "url": "https://media.snowmoon.party/images/seed/c20/c20-b013-door-screen-9e365280b74a.jpg",
-      "sha256": "9e365280b74a76d5c2f58708404ff0772f3d064794ca7db7ef2080215a65281c",
-      "png_sha256": "346254b77ba127fddea7f7e48e967120ca1910946a6ed9eb781aadd2fe8f5826"
     },
     {
       "chapter": 20,
