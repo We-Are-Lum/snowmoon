@@ -7,13 +7,13 @@ import { IMAGES } from '../config';
  * studio.image_asks (the daily limit, nothing else). Money is counted only as daily totals in
  * studio.image_costs, with no FID and no row per call, so no cost can be matched to a person
  * (owner, 2026-10-08, the assistant's rule). Under one lock, before any model is called:
- * the person's count, today's spend and the trial's total spend, each with the worst case of
- * this Generate added to 'reserved'; afterwards the reservation is replaced by the real costs.
+ * the person's count and today's spend across everyone, with the worst case of this Generate
+ * added to 'reserved' (the $1 all-days test cap was removed by the owner, 2026-10-09); afterwards the reservation is replaced by the real costs.
  */
 type Sql = postgres.Sql;
 const TODAY = `(now() at time zone 'utc')::date`;
 
-export type Refusal = 'limit' | 'spend' | 'trial-spend';
+export type Refusal = 'limit' | 'spend';
 
 export async function generationsLeft(sql: Sql, fid: number): Promise<number> {
   const [r] = await sql`select count(*)::int as n from studio.image_asks where fid = ${fid} and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
@@ -35,8 +35,6 @@ export async function reserve(sql: Sql, fid: number): Promise<{ ok: true; left: 
     if (left <= 0) return { ok: false as const, refusal: 'limit' as const };
     const [today] = await tx`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${tx.unsafe(TODAY)}`;
     if (today.usd + IMAGES.reserveUsd > IMAGES.dailySpendCapUsd) return { ok: false as const, refusal: 'spend' as const };
-    const [all] = await tx`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs`;
-    if (all.usd + IMAGES.reserveUsd > IMAGES.totalSpendCapUsd) return { ok: false as const, refusal: 'trial-spend' as const };
     await tx`insert into studio.image_asks (fid) values (${fid})`;
     await addCost(tx as unknown as Sql, 'reserved', IMAGES.model.id, '', '', 1, IMAGES.reserveUsd);
     return { ok: true as const, left: left - 1 };

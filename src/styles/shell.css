@@ -324,3 +324,14 @@
 .info-sheet-title { margin: 0; font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); }
 .info-sheet-text { margin: 0; }
 .info-sheet-links { margin: 4px 0 0; display: flex; flex-wrap: wrap; gap: 8px 16px; }
+
+/* ---------- The footer line (src/components/legal-line.tsx) and /terms, /privacy ---------- */
+/* Quiet label type: at the foot of About, in the menu sheet, at the bottom of the rail. Not on every phone screen. */
+.legal-line { margin: 0; font-family: var(--label); font-size: var(--text-label); line-height: 1.6; letter-spacing: var(--ls-label); color: var(--muted); }
+.legal-line a { color: var(--link); }
+.page .legal-line { margin-top: var(--space-6); padding-top: 12px; border-top: 1px solid var(--rule); }
+.menu-extra .legal-line { padding-top: 12px; border-top: 1px solid var(--rule); }
+.rail .legal-line { padding: 12px 20px 16px; border-top: 1px solid var(--rule); }
+.legal-back { margin: 0 0 8px; font-family: var(--label); font-size: var(--text-label); }
+.legal-effective, .legal-reread { font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
+.legal ul { padding-left: 1.2em; }

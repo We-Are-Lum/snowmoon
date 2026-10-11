@@ -1,7 +1,8 @@
-import { NextResponse } from 'next/server';
+import { after, NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
 import { getFid } from '~/lib/auth';
 import { db } from '~/lib/db';
+import { alertReports } from '~/lib/images/alert';
 import { IMAGES } from '~/lib/config';
 import { elementOf } from '~/lib/images/data';
 import { REASONS } from '~/lib/images/reasons';
@@ -44,5 +45,7 @@ export async function POST(request: Request, { params }: Ctx) {
     revalidatePath('/images');
     revalidatePath(`/image/${id}`);
   }
+  // The moderator's push ("Snowmoon: N reports waiting", nothing else), after the answer; never fails the report.
+  after(() => alertReports(sql).then(() => undefined, () => undefined));
   return NextResponse.json({ reported: true, hidden: Boolean(rule) });
 }

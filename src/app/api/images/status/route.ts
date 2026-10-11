@@ -8,8 +8,14 @@ import { RULES, styleText } from '~/lib/images/rules';
 import { loadChapter } from '~/lib/book';
 import { blockFacts } from '~/lib/reading';
 import { storageReady } from '~/lib/images/store';
+import { keptValue } from '~/lib/images/neynar';
+import { GATE_WORDING } from '~/lib/images/gate';
 
-/** What the composer needs before Generate: may this person generate, and how many are left today. */
+/**
+ * What the composer needs before Generate: may this person generate, and how many are left today.
+ * Never asks Neynar (it is asked only at Generate): `eligible` is true for an invited FID, true or
+ * false from a value kept in the last day, and null when none is kept (Generate will look it up).
+ */
 export async function GET(request: Request) {
   const fid = await getFid(request);
   const sql = db();
@@ -23,12 +29,16 @@ export async function GET(request: Request) {
   const base = { label: IMAGES.label, model: IMAGES.model, rules: RULES, perDay: IMAGES.generationsPerDay, publishesPerDay: IMAGES.publishesPerDay, maxBlocks: IMAGES.maxBlocks, styles, ready };
   if (fid === null) return NextResponse.json({ ...base, signedIn: false }, { headers: { 'Cache-Control': 'no-store' } });
   const invited = IMAGES.invited.includes(fid);
-  if (!sql || !invited) return NextResponse.json({ ...base, signedIn: true, fid, invited }, { headers: { 'Cache-Control': 'no-store' } });
+  if (!sql) return NextResponse.json({ ...base, signedIn: true, fid, invited, eligible: invited ? true : null }, { headers: { 'Cache-Control': 'no-store' } });
   try {
-    const [consented, left, publishes] = await Promise.all([hasConsented(fid), generationsLeft(sql, fid), publishesLeft(sql, fid)]);
-    return NextResponse.json({ ...base, signedIn: true, fid, invited, consented, left, publishesLeft: publishes }, { headers: { 'Cache-Control': 'no-store' } });
+    const [consented, left, publishes, kept] = await Promise.all([
+      hasConsented(fid), generationsLeft(sql, fid), publishesLeft(sql, fid), invited ? Promise.resolve(null) : keptValue(sql, fid),
+    ]);
+    const eligible = invited ? true : kept === null ? null : kept >= IMAGES.neynarMinScore;
+    const refusal = eligible === false && kept !== null ? GATE_WORDING.below(kept) : undefined;
+    return NextResponse.json({ ...base, signedIn: true, fid, invited, eligible, refusal, consented, left, publishesLeft: publishes }, { headers: { 'Cache-Control': 'no-store' } });
   } catch (e) {
     console.error('images status failed', (e as { code?: string }).code ?? (e as Error).name);
-    return NextResponse.json({ ...base, ready: false, signedIn: true, fid, invited }, { headers: { 'Cache-Control': 'no-store' } });
+    return NextResponse.json({ ...base, ready: false, signedIn: true, fid, invited, eligible: invited ? true : null }, { headers: { 'Cache-Control': 'no-store' } });
   }
 }

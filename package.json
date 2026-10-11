@@ -23,6 +23,7 @@
     "check:tokens": "tsx scripts/check-tokens.ts",
     "test:chat": "tsx scripts/test-chat.ts",
     "test:images": "tsx --conditions=react-server scripts/test-images.ts",
+    "test:images-gate": "tsx --conditions=react-server scripts/test-images-gate.ts",
     "check:miniapp": "tsx scripts/check-miniapp.ts",
     "publish:podcast": "tsx --env-file-if-exists=.env.local scripts/publish-podcast.ts",
     "check:podcast": "tsx scripts/check-podcast.ts",

@@ -240,8 +240,15 @@ Pushed together with site-style-default above (one push). Browsing images shows 
 
     vercel rollback https://snowmoon-7jxqj1r2c-nates-projects-d1780cff.vercel.app --scope nates-projects-d1780cff
 
-## 2026-10-10: chapter 20's door image left out; no stray "·" before "+ Add an image" (branch site-c20-image)
+## 2026-10-10: image making for everyone (Neynar score ≥ 0.7), Terms and Privacy, report alerts (branch site-images-everyone)
 
-c20-b013-door-screen is no longer published (owner: "This image isn't good"; the scene is the wrong way round), listed in published.json's excluded with its reason; its recipe stays. "+ Add an image" no longer starts with a "·" left from the hidden scene line. To undo (back to `e984430`):
+Anyone signed in with a Neynar user score of at least 0.7 can make images (invited FIDs skip the score); the $1 all-days cap is gone ($2 a day, 10 images and 3 published per person stay); report alerts go to ntfy ("Snowmoon: N reports waiting", at most hourly). /terms and /privacy, reread by the owner on 2026-10-10 and effective that day, with the footer line on About, the menu and the rail; Neynar named on About and the consent screen (own-words-v3, asked again once). Uses 0010 (applied by the owner on production). To undo (back to `e984430`):
 
     vercel rollback https://snowmoon-hxqv70exz-nates-projects-d1780cff.vercel.app --scope nates-projects-d1780cff
+
+Rolling back the code leaves 0010's tables in place; they are private and unused without it.
+## 2026-10-10: chapter 20's door image left out; no stray "·" before "+ Add an image" (branch site-c20-image)
+
+c20-b013-door-screen is no longer published (owner: "This image isn't good"; the scene is the wrong way round), listed in published.json's excluded with its reason; its recipe stays. "+ Add an image" no longer starts with a "·" left from the hidden scene line. To undo (back to `05172f6`):
+
+    vercel rollback https://snowmoon-bohf00i8z-nates-projects-d1780cff.vercel.app --scope nates-projects-d1780cff
