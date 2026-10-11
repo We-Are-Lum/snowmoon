@@ -17,6 +17,7 @@ import { AddImageButton } from '~/components/reader-images';
 import { InfoLabel } from '~/components/info-label';
 import { LABELS } from '~/lib/labels';
 import { ReadingRecord } from '~/components/reading-record';
+import { ChapterSummary } from '~/components/chapter-summary';
 import { LiveScreen } from '~/components/live-screen';
 import { adaptationsCiting as citing } from '~/lib/adaptations';
 import { ADAPTATIONS } from '~/lib/config';
@@ -204,6 +205,8 @@ export default async function ChapterPage({ params }: Props) {
         );
       })}
       <ReadingRecord chapter={n} />
+      {/* Collapsed by default: the chapter's events stay hidden unless the reader opens it. */}
+      <ChapterSummary chapter={n} />
       {/* Board 1b (there is no chapter menu yet): a private thread about this chapter. */}
       <Link className="ask-chapter" href={`/assistant?chapter=${n}`}>
         Ask about this chapter

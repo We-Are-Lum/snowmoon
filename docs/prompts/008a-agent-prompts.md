@@ -183,3 +183,69 @@ TASK 3 — Edit every content/snowmoon/illustrations/chapter-N.json: set the fil
 
 Validate with a script: all files parse; every location file referenced by a job exists; every plate id in locations.json matches a profile's plate; no descriptor or plate_prompt contains a capitalized proper noun from the book or any character name (gladias, seila, zven, lily, febric, hreda, vil, daia, mov, delwart, ephelion, verdow, lektor, zei, bai, fin, mu, den, min, deluin, jahn, tafindel); quotes verified. Reply with a table: slug, name, setting, number of jobs tagged, and a few words of its design; then how many of the 142 jobs got a location and anything you were unsure about.
 ```
+
+## Spoken summary, pass 2
+
+The coding agent itself (Claude, a closed model; `claude-coding-agent` in
+`config/models.json` drafting) wrote pass 2 of the 35-minute spoken summary,
+after the owner stopped the gpt-oss-120b writing on 2026-10-10. Its
+instructions were the owner's two messages below, word for word. It read all
+32 chapters with block ids, kept reading notes
+(`content/snowmoon/recipes/summary/agent-reading-notes.md`), and wrote the
+script; gpt-oss-120b then read each paragraph as an independent second check,
+and the agent reread every paragraph and every attribution against the cited
+blocks. Everything is in `content/snowmoon/recipes/summary/summary-35min.json`.
+
+The brief (2026-10-09):
+
+```text
+Make a spoken summary of the whole book that I can listen to in 30–40 minutes, with a full published recipe. Branch: summary-35min. Merge nothing until I say "publish".
+
+1. Model: openai/gpt-oss-120b, through the same host and provider as the assistant, with zero retention. Cap spending at $1.
+   - Pass 1: story notes for each chapter, with block IDs for every claim.
+   - Pass 2: the summary, written from those notes.
+2. How it should read: like a story told aloud, not a list of plot points.
+   - What people do and talk about, where they are, what they want and fear, and what's at stake between them.
+   - Chronological. When the book switches between storylines, say clearly where we are and whose story it is.
+   - Name only the characters who matter, and remind me who someone is when they come back.
+   - World mechanics only where the plot needs them, in a sentence.
+   - Full spoilers, including the ending.
+   - Spoken English: short sentences, no lists, no parentheses, no block IDs read aloud.
+   - 5,000–5,800 words, about 31–36 minutes at the book narration's pace of about 160 words a minute.
+3. Opening line, spoken (draft wording): "This is a summary of Snowmoon by Vitalik Buterin. It was written by an AI model, gpt-oss-120b, not by the author, and is read by an AI voice. It gives away the whole story, including the ending."
+4. Check before narrating.
+   - Store each script paragraph with the block IDs it draws on, kept out of the spoken text.
+   - Every ID must exist, and every name must be spelled as the book spells it.
+   - Read each paragraph against its cited blocks and list every claim the blocks don't support.
+   - Fix them by re-prompting the model with the correction, and record that in the recipe. Any hand edit is recorded as a diff with who made it.
+   - Narrate only when no unsupported claims are left. Show me the list and the fixes.
+5. Narration: Kokoro af_heart on the local queue, with pronunciation.json and the same settings as the chapter narration. MP3, mono, 128 kbps.
+6. Recipe in content/snowmoon/recipes/summary/, in the same form as the existing recipes:
+   - every prompt, word for word;
+   - the model, host, provider and request IDs;
+   - the source files' sha256 values;
+   - the chapter notes and the script;
+   - tokens, cost and timings;
+   - the check results and edits;
+   - the narration recipe, and the output files' sha256 values;
+   - published by FID 6786.
+7. Don't put the audio on the site, in the podcast feed or in the media bucket until I say so. Give me the MP3's path on this Mac and the script.
+
+Report: word count, length, cost, the check results, and the Principles section.
+```
+
+The change of writer (2026-10-10):
+
+```text
+Stop the gpt-oss writing. Part 1 isn't accurate. The checker passed these:
+- ¶11 presents Mov's joke as the real Arctic Emperor ("The Emperor reminds Gladias…"), and Mov is never named.
+- ¶12 gives Gladias the line "we should focus on our own problems first". It's Delwart's (c3-b119).
+- ¶6 says the family will stay with Uncle Vil. The kids go to Vil and Daia for six months, and Gladias looks forward to the freedom (c1-b125–b126).
+- Chapter 4 is missing entirely, though part 1 covers chapters 1–4.
+New plan:
+1. Writer: you, the coding agent, write pass 2 from the existing notes and the book text, to the original brief: a story told aloud; who each main character is and what they want when they first appear; people named in every scene; bigger moments over small sights; full spoilers; 5,000–5,800 words. Record it under principle 3 as a closed model, with your instructions word for word, the way the read-aloud descriptions are recorded.
+2. Check: run the gpt-oss checker as an independent second check, then check every paragraph yourself against its cited blocks, especially who said or did what. Report what each check caught.
+3. Keep the gpt-oss attempts in the recipe as discarded, with these four errors as the reason.
+4. The opening line names the models that actually wrote it. Then narrate with the Vitalik override and give me the MP3's path and the script.
+Spending: no new model calls except the checker; stay under $2 in total.
+```

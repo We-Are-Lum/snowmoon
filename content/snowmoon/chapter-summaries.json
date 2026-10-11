@@ -1,0 +1,1175 @@
+{
+  "about": "Each chapter's summary, shown collapsed under the chapter. Written by the coding agent (Claude, a closed model) as part of the spoken summary, checked against the book by gpt-oss-120b and by the coding agent, then edited so that no chapter's summary rests on a later chapter. The owner accepted the closed model's text, labelled and recorded (principle 3, 2026-10-10).",
+  "written_by": "claude-coding-agent",
+  "license": "A summary of Snowmoon by Vitalik Buterin, modified from the book on 2026-10-10. GPL-3.0, like the book.",
+  "from": {
+    "recipe": "content/snowmoon/recipes/summary/summary-35min.json",
+    "recipe_sha256": "d40339d7a213e1d0b3726d7f248f31defdadd7a642ded20778c184ee427e6fbf",
+    "edits": "config/chapter-summaries-edits.json",
+    "edits_sha256": "1f0b722516b59b5070d46b481b28a7cf530c1001373187399b1297cc18a4c91c"
+  },
+  "chapters": {
+    "1": [
+      {
+        "from_paragraph": 1,
+        "text": "The story begins in Meldan, the capital of Veridia. It is a green city, full of trees, where the houses look medieval but spotless. Gladias is walking through the forest paths of the Kalimar district. His watch checks a passing drone before he can even think about it. An AI called Emerald talks quietly in his ear. In Veridia, almost nothing is banned. Instead, a decentralized body linked to the government, the Order of Steering, sets taxes that gently nudge people and businesses toward what society wants. Keepers vote on the tax rules. Sentinels audit businesses against them. Gladias is an Acolyte, an Order member in training.",
+        "sources": [
+          "c1-b1",
+          "c1-b2",
+          "c1-b3",
+          "c1-b4",
+          "c1-b9",
+          "c1-b56",
+          "c1-b57"
+        ]
+      },
+      {
+        "from_paragraph": 2,
+        "text": "Today his job is to judge a band. Gladias stands at a Dreadknot concert in a dark purple privacy robe that hides his whole body. The lyrics are violent. But the crowd is dancing, not hating anyone. Lately the Sentinels have been pushing for a softer, gentler society. Gladias is scored on how well his votes predict theirs. His score is ninety two. If it drops by three points, his career waits another year. He feels a burst of courage, and gives the band the neutral rating, Tier three. For a moment, he is proud.",
+        "sources": [
+          "c1-b45",
+          "c1-b50",
+          "c1-b58",
+          "c1-b62",
+          "c1-b63",
+          "c1-b64",
+          "c1-b68",
+          "c1-b69",
+          "c1-b71",
+          "c1-b72"
+        ]
+      },
+      {
+        "from_paragraph": 3,
+        "text": "Then someone behind him yells: \"Hey everyone, it's an Order member!\" The Order is only safe while its members stay anonymous. Anyone who guesses a member's task can claim a bounty from his salary. A stranger in a robe runs off as a decoy, and the crowd films him instead. But a large man points a device straight at Gladias's face. Gladias asks if that is a new screed from the Arctic Emperor. The man turns to look. Gladias grabs the device, deletes the videos, tosses it in the air, and escapes onto a bus.",
+        "sources": [
+          "c1-b73",
+          "c1-b76",
+          "c1-b77",
+          "c1-b78",
+          "c1-b81",
+          "c1-b82",
+          "c1-b83",
+          "c1-b84",
+          "c1-b85",
+          "c1-b87"
+        ]
+      },
+      {
+        "from_paragraph": 4,
+        "text": "At home is his partner, Seila, who writes a blog. The family is shared. Zven and Lily are Gladias and Seila's own. Febric and Hreda belong to their co-parents, Uncle Vil and Aunt Daia. In four days, Vil and Daia will take all four children for half a year. Lily is sad over a bad history exam and turns away from comfort. Gladias will miss the kids, but he looks forward to six months of freedom. Then his hand device buzzes. An anonymous message says: I saw you at the concert. I know you are in the Order. I won't report you. But I have a request.",
+        "sources": [
+          "c1-b101",
+          "c1-b102",
+          "c1-b110",
+          "c1-b111",
+          "c1-b119",
+          "c1-b120",
+          "c1-b121",
+          "c1-b125",
+          "c1-b126",
+          "c1-b138",
+          "c1-b140",
+          "c1-b137"
+        ]
+      }
+    ],
+    "2": [
+      {
+        "from_paragraph": 5,
+        "text": "The second storyline is in Dzego, a country that lost a war a century ago and now lives under pressure from the Arctic Empire. Two students, Fin and Zei, walk through Pafogai Du, a city of small electronics shops and tiny factories. Dzego's strategy has a slogan: grow roots, no head. Build everything in small, spread-out workshops. Coordinate in secret, through cryptography, with no leaders the enemy can target. Zei is a gifted student who plays a strategy game called Minpentai.",
+        "sources": [
+          "c2-b1",
+          "c2-b2",
+          "c2-b3",
+          "c2-b8",
+          "c2-b11",
+          "c2-b12",
+          "c2-b95",
+          "c2-b127",
+          "c2-b128",
+          "c2-b28"
+        ]
+      },
+      {
+        "from_paragraph": 6,
+        "text": "Their school keeps changing rooms at the last minute, for safety. In physics class, Zei explains entropy so well that the teacher praises him. Then there is a blast. The wall comes down, and a stone breaks Zei's arm. Moving rooms had saved their lives. Zei understands that the Arctic Empire is not just a lesson in geography class. It is real. Afterwards the teacher explains the Arctics' goal: to keep Dzego weak forever. Fin and Zei answer with the old saying: Dzego will rise again.",
+        "sources": [
+          "c2-b35",
+          "c2-b95",
+          "c2-b98",
+          "c2-b99",
+          "c2-b100",
+          "c2-b103",
+          "c2-b104",
+          "c2-b124",
+          "c2-b112",
+          "c2-b127",
+          "c2-b129",
+          "c2-b130",
+          "c2-b131",
+          "c2-b43",
+          "c2-b47",
+          "c2-b125"
+        ]
+      }
+    ],
+    "3": [
+      {
+        "from_paragraph": 7,
+        "text": "Back in Meldan, Gladias goes to meet the stranger. On the way, his friend Mov taps him on the shoulder and jokes that he is the Arctic Emperor, here to suck out his soul. Mov is in the Order too, and a close friend. He will secretly follow the stranger afterwards. They meet in a hidden booth inside Greater Plum Harbor, a walled enclave that many Veridians dislike. The man calls himself Delwart. He already knows the names of Gladias's family.",
+        "sources": [
+          "c3-b7",
+          "c3-b10",
+          "c3-b11",
+          "c3-b13",
+          "c3-b17",
+          "c3-b32",
+          "c3-b51",
+          "c3-b57",
+          "c3-b64",
+          "c3-b79",
+          "c3-b85",
+          "c3-b87",
+          "c3-b89",
+          "c3-b127",
+          "c3-b1",
+          "c3-b70",
+          "c3-b71"
+        ]
+      },
+      {
+        "from_paragraph": 8,
+        "text": "Delwart praises Gladias for his brave vote on Dreadknot. Then he makes his case. Steering is too much. It nudges everyone, and lets prejudice raise people's taxes. He wants actual freedom. His request is simple. Soon Gladias must choose to become a Sentinel or a Keeper. Choose Keeper, Delwart says, and vote to delete every rule you see. Gladias asks whether Veridia's funding, which helps Dzego defend itself, isn't important. Delwart answers that Veridia is too close to funding a war, and should focus on its own problems first. He adds that if he can find Gladias, so can others. He can protect him.",
+        "sources": [
+          "c3-b95",
+          "c3-b101",
+          "c3-b106",
+          "c3-b108",
+          "c3-b110",
+          "c3-b112",
+          "c3-b115",
+          "c3-b118",
+          "c3-b119",
+          "c3-b124",
+          "c3-b125",
+          "c3-b99",
+          "c3-b105"
+        ]
+      }
+    ],
+    "4": [
+      {
+        "from_paragraph": 9,
+        "text": "In Dzego, Zei's arm is healing. This is his last year to win the city's Minpentai championship. Minpentai is played on a huge board, with walls and gliders and ships that carry each player's symbol. Zei wants the prize money to buy his mother a compute box. Fin teases him that he really wants to impress Bai. Bai is his rival. She has beaten him three times out of three, and she enjoys scaring him. Then the quarter final is announced, two against two. Zei's teammate is Bai.",
+        "sources": [
+          "c4-b7",
+          "c4-b15",
+          "c4-b16",
+          "c4-b51",
+          "c4-b72",
+          "c4-b73",
+          "c4-b84",
+          "c4-b89",
+          "c4-b90",
+          "c4-b91",
+          "c4-b93",
+          "c4-b111"
+        ]
+      },
+      {
+        "from_paragraph": 10,
+        "text": "They refuse to talk to each other. The other team splits them apart, and Zei sees he cannot win alone. So he sends a ship deep into enemy territory and speaks for the first time: \"Bai, next intervention turn is your chance to shine.\" The ship forms Bai's symbol, and together they win. Afterwards, an older friend of Zei's named Mu explains the hidden rule. The teams were not random. The game was a test of whether rivals could cooperate. They passed. Bai says sorry. Zei says she can make it up to him by taking him to Redshire one day. And his mom.",
+        "sources": [
+          "c4-b99",
+          "c4-b117",
+          "c4-b124",
+          "c4-b125",
+          "c4-b129",
+          "c4-b133",
+          "c4-b135",
+          "c4-b141",
+          "c4-b145",
+          "c4-b148",
+          "c4-b150",
+          "c4-b155",
+          "c4-b156",
+          "c4-b158",
+          "c4-b62",
+          "c4-b67",
+          "c4-b131",
+          "c4-b132"
+        ]
+      }
+    ],
+    "5": [
+      {
+        "from_paragraph": 11,
+        "text": "Zei and Bai both win their semi finals, so the final will be Zei against Bai. Before it, they travel together to Freetown, a city in the United Cities, with Zei's mother. It is her first trip abroad. There, by chance, they share lunch with a Veridian blogger. It is Seila, Gladias's partner. Zei mentions that his arm broke when his classroom was bombed. He explains that the Arctics have spies inside all of Dzego's agencies. So Dzego's security cameras are checked by cryptography, and anyone may unscrew one and look inside.",
+        "sources": [
+          "c5-b1",
+          "c5-b4",
+          "c5-b7",
+          "c5-b30",
+          "c5-b45",
+          "c5-b56",
+          "c5-b58",
+          "c5-b61",
+          "c5-b64",
+          "c5-b72",
+          "c5-b77",
+          "c5-b78",
+          "c5-b79",
+          "c5-b2",
+          "c5-b3",
+          "c5-b89",
+          "c5-b92"
+        ]
+      },
+      {
+        "from_paragraph": 12,
+        "text": "That evening Gladias calls Seila. Someone has suggested he become a Keeper, he says. He does not say who. Seila has been thinking about Dzego. Veridia's funding helps them, she says, but the tax rules do nothing for them. Become a Keeper, she tells him, and make the rules support Dzego. Gladias stares, wide-eyed.",
+        "sources": [
+          "c5-b89",
+          "c5-b102",
+          "c5-b109",
+          "c5-b111",
+          "c5-b112",
+          "c5-b113",
+          "c5-b115",
+          "c5-b116",
+          "c5-b91",
+          "c5-b92",
+          "c5-b108",
+          "c5-b110"
+        ]
+      }
+    ],
+    "6": [
+      {
+        "from_paragraph": 13,
+        "text": "He tells Mov he will apply as a Keeper. Mov guesses at once that it was Delwart. Mov has been following him. Delwart goes from tea shop to tea shop, meeting people. He changes his robe every day, but he never turns his head. Maybe Gladias is not the only one he is trying to turn into a Keeper. Their plan is to play along and keep their eyes open. Gladias climbs to the Order's tower and makes his choice: Keeper.",
+        "sources": [
+          "c6-b13",
+          "c6-b19",
+          "c6-b28",
+          "c6-b30",
+          "c6-b32",
+          "c6-b33",
+          "c6-b35",
+          "c6-b37",
+          "c6-b146",
+          "c6-b158",
+          "c6-b162",
+          "c6-b6",
+          "c6-b7",
+          "c6-b147"
+        ]
+      }
+    ],
+    "7": [
+      {
+        "from_paragraph": 14,
+        "text": "In Dzego, on the way to the final, the ground shakes, and smoke rises from the city's largest chip factory. It was run by the government. Fin says the government breaks the rule of no head by putting too much in one place. Zei adds that many officials are probably paid by the Arctics. Before the game, Mu raises a glass: to our future. Dzego will rise again. Zei is puzzled. It sounds more like a toast for a battle than for a game.",
+        "sources": [
+          "c7-b23",
+          "c7-b33",
+          "c7-b37",
+          "c7-b38",
+          "c7-b40",
+          "c7-b41",
+          "c7-b49",
+          "c7-b50",
+          "c7-b26",
+          "c7-b39"
+        ]
+      },
+      {
+        "from_paragraph": 15,
+        "text": "The rule for the final is new. Each player gets an AI helper, and each can read the other AI's thoughts. Bai uses this to set a trap, and Zei walks into it. He falls far behind. Then he has an idea. He builds a single factory that can carry out sixteen different attacks. Which one it fires depends on a glider that only he knows about. Bai cannot defend against all sixteen at once. Zei wins. Mu explains what the priests wanted to teach. In real life, it is not enough to think well. You must also hide your thoughts, sometimes even from your allies. In the prize bag, Zei finds a dark purple letter: for Zei's eyes only.",
+        "sources": [
+          "c7-b63",
+          "c7-b65",
+          "c7-b96",
+          "c7-b98",
+          "c7-b102",
+          "c7-b104",
+          "c7-b106",
+          "c7-b109",
+          "c7-b120",
+          "c7-b127",
+          "c7-b132",
+          "c7-b141",
+          "c7-b143"
+        ]
+      }
+    ],
+    "8": [
+      {
+        "from_paragraph": 16,
+        "text": "In Veridia, the Arctic ambassador, Lord Ephelion, debates a university president in a live broadcast. She says a society is more than its wealth: health, happiness, friendship. Ephelion answers that those things go in circles, while only growth keeps building on itself. Gladias thinks him a gifted demagogue. Then comes Gladias's own test: twenty senators must approve him. One senator, Papli, calls him out of touch. Another, Ancus, defends him. The vote is ten to ten, and the chairman breaks the tie. Gladias is in. But on the same day, Lily fails a civics test and sobs on Vil's couch. And Mov is picked at random to become a Herald, a retired member who explains the Order to the public. He has no power any more, but more time to help.",
+        "sources": [
+          "c8-b17",
+          "c8-b21",
+          "c8-b28",
+          "c8-b31",
+          "c8-b37",
+          "c8-b47",
+          "c8-b65",
+          "c8-b84",
+          "c8-b97",
+          "c8-b101",
+          "c8-b104",
+          "c8-b110",
+          "c8-b116",
+          "c8-b134",
+          "c8-b136",
+          "c8-b138",
+          "c6-b73",
+          "c8-b43",
+          "c8-b129"
+        ]
+      }
+    ],
+    "9": [
+      {
+        "from_paragraph": 17,
+        "text": "In Dzego, Bai cries to Fin. Her mother and father were killed in a lab explosion when she was small. \"You know who did it,\" she says. Her aunt barely looked after her. She survived by her own effort, and all she had was winning. Now Zei has taken that too. Fin, meanwhile, is training with the Bansunpei, the priests who keep improving the Dzegoban language. Why put such work into language? Because when Dzego works on industry, the Arctics bomb it. Language is harmless.",
+        "sources": [
+          "c9-b2",
+          "c9-b13",
+          "c9-b14",
+          "c9-b16",
+          "c9-b17",
+          "c9-b19",
+          "c7-b11",
+          "c9-b34",
+          "c9-b37"
+        ]
+      },
+      {
+        "from_paragraph": 18,
+        "text": "Zei follows directions deep inside the mountain pyramid. There he meets Den, a council member of the Kungaupei: a secret society for defense, a shadow army. Den has studied Zei's final. Hiding sixteen strategies in one factory, he says, is close to inventing cryptography. He wants to recruit Zei into defense. Zei thinks of his broken arm. He also remembers that a secret room change saved his life. He agrees to study cryptography and see where it leads. He cannot tell his mother. She has already watched him heal from one bomb.",
+        "sources": [
+          "c9-b52",
+          "c9-b56",
+          "c9-b57",
+          "c9-b61",
+          "c9-b66",
+          "c9-b70",
+          "c9-b73",
+          "c9-b75",
+          "c9-b76",
+          "c9-b137",
+          "c9-b140",
+          "c9-b50",
+          "c9-b60"
+        ]
+      }
+    ],
+    "10": [
+      {
+        "from_paragraph": 19,
+        "text": "Months pass. In Freetown, Seila's friend Jahn, a researcher at the Economics Institute, sees prices rising. Arctic drone activity is rising, and the city's big companies are paying for defense. In Veridia, Gladias joins his Keeper groups. Each member is known only by a number. One group discusses whether military products should lose their tax break for being open. A Keeper called Zero says weapons only cancel each other out, so Veridia should stay out. Gladias notices the argument sounds just like Delwart. Another Keeper, Eighteen, says open technology is a lifeline for Dzego.",
+        "sources": [
+          "c10-b2",
+          "c10-b16",
+          "c10-b18",
+          "c10-b24",
+          "c10-b38",
+          "c10-b54",
+          "c10-b104",
+          "c10-b132",
+          "c10-b136",
+          "c10-b140",
+          "c10-b141",
+          "c10-b147",
+          "c10-b3",
+          "c10-b13",
+          "c10-b144"
+        ]
+      },
+      {
+        "from_paragraph": 20,
+        "text": "In Dzego, Mu and Den tell Zei the truth about his game. Minpentai is not just a sport. It is military training: a way to raise defenders who think fast, cooperate with allies, and handle sudden changes of rule. It is only safe because it pretends to be a game. Zei promises to tell no one, not even Fin.",
+        "sources": [
+          "c10-b175",
+          "c10-b192",
+          "c10-b194",
+          "c10-b195",
+          "c10-b196",
+          "c10-b197",
+          "c10-b199",
+          "c10-b202",
+          "c10-b206",
+          "c10-b155"
+        ]
+      }
+    ],
+    "11": [
+      {
+        "from_paragraph": 21,
+        "text": "In Meldan, Gladias watches his son Zven win a game of Helisport, flying a little copter to catch drone balls. Later he tells Seila something strange about the Keepers. The older ones see the Arctic danger. Many of the newer ones think Veridia should simply not care.",
+        "sources": [
+          "c11-b5",
+          "c11-b23",
+          "c11-b26",
+          "c11-b82",
+          "c11-b137",
+          "c11-b128",
+          "c11-b134"
+        ]
+      }
+    ],
+    "12": [
+      {
+        "from_paragraph": 22,
+        "text": "Zei goes to Sadzu Du, Dzego's capital, for the national championship. Bai is sent there too, by Den's people, to study every player. Zei meets Deluin, a cheerful older boy from Redshire, one of four foreign players invited this year. In his first game, the board is suddenly hexagonal. Zei works out how to run the game backwards, the way you invert part of a code, and wins.",
+        "sources": [
+          "c12-b1",
+          "c12-b6",
+          "c12-b19",
+          "c12-b70",
+          "c12-b71",
+          "c12-b75",
+          "c12-b80",
+          "c12-b107",
+          "c12-b110",
+          "c12-b147",
+          "c12-b163",
+          "c12-b170",
+          "c12-b196",
+          "c12-b84"
+        ]
+      }
+    ],
+    "13": [
+      {
+        "from_paragraph": 23,
+        "text": "In Veridia, Gladias tells Delwart that almost half the new Keepers share his ideas. Gladias secretly fears an Arctic attack on Redshire, but he says it probably won't happen. Delwart tells him to convince the others not to worry. Then Mov calls. He has heard Delwart through a booth wall, coaching another Keeper on the same rule as Gladias, but in a different group. The groups are kept apart so that their members think independently. Delwart has reached into two of them. This is more organized than they thought.",
+        "sources": [
+          "c13-b6",
+          "c13-b14",
+          "c13-b15",
+          "c13-b16",
+          "c13-b30",
+          "c13-b35",
+          "c13-b37",
+          "c13-b38",
+          "c13-b39",
+          "c13-b12",
+          "c13-b13"
+        ]
+      },
+      {
+        "from_paragraph": 24,
+        "text": "That evening, at a family dinner, the screen is suddenly taken over by a broadcast from Lord Ephelion. Seila rushes to unplug it. Lily just stares at it. The next day, Gladias's Keeper group is split on the military question. Gladias proposes a test. Two of the Keepers expect an Arctic attack within two months. So wait two months. If the Arctics attack, keep the rule. If not, change it. The group agrees.",
+        "sources": [
+          "c13-b49",
+          "c13-b62",
+          "c13-b63",
+          "c13-b65",
+          "c13-b66",
+          "c13-b89",
+          "c13-b93",
+          "c13-b95",
+          "c13-b96",
+          "c13-b98",
+          "c13-b99",
+          "c13-b102"
+        ]
+      }
+    ],
+    "14": [
+      {
+        "from_paragraph": 25,
+        "text": "In the capital, Bai has been watching every game and making friends with the players. She learned those social skills, she says, to survive growing up. Her advice to Zei: the others are all too impatient. Don't rush. In the semi final, Zei is outgunned. He hides his last ship, builds another, hunkers down and outlasts his opponent. Deluin wins the other semi final the same way, by patient defense. Over tea, Deluin invites Zei to Redshire for his parents' birthdays. Zei can't afford it. Deluin shows him pictures of castles, pine forests, red snowy mountains. When I win the final, Deluin jokes, I'll use my prize money to pay for your trip.",
+        "sources": [
+          "c14-b16",
+          "c14-b18",
+          "c14-b19",
+          "c14-b22",
+          "c14-b24",
+          "c14-b56",
+          "c14-b62",
+          "c14-b84",
+          "c14-b87",
+          "c14-b91",
+          "c14-b92",
+          "c14-b94",
+          "c14-b99",
+          "c14-b120",
+          "c14-b121",
+          "c14-b124",
+          "c14-b129",
+          "c14-b130",
+          "c14-b30",
+          "c14-b31",
+          "c14-b61",
+          "c14-b102"
+        ]
+      }
+    ],
+    "15": [
+      {
+        "from_paragraph": 26,
+        "text": "A week later, the news breaks. The Arctic Empire has invaded and annexed Redshire. Drones and aircraft landed across the country, and an army came out of tunnels no one knew existed. Redshire's army was caught unprepared, and many suspect corruption at the top. The planes carrying the president, the prime minister and most of parliament were shot down. The president's son, Tafindel, is believed to be a prisoner. The Arctics cut Redshire off from the world.",
+        "sources": [
+          "c14-b1",
+          "c15-b1",
+          "c15-b6",
+          "c15-b8",
+          "c15-b10",
+          "c15-b12"
+        ]
+      },
+      {
+        "from_paragraph": 27,
+        "text": "In Veridia, Gladias watches the news with Seila at sunrise. His first thought is that the Keepers will surely not cut the military tax break now. His second is anger at Delwart. He and Mov agree: Delwart owes them answers. The Order's voting system protects Gladias, at least. Only he can register his voting key, in person, with people who know him. So Delwart cannot check his votes or cast them for him.",
+        "sources": [
+          "c15-b17",
+          "c15-b18",
+          "c15-b28",
+          "c15-b29",
+          "c15-b33",
+          "c15-b40",
+          "c15-b41",
+          "c15-b42",
+          "c15-b32"
+        ]
+      },
+      {
+        "from_paragraph": 28,
+        "text": "In Dzego, Zei sits in a hotel restaurant, crying, sending message after message to Deluin. At last an answer comes. Deluin is alive, but trapped. Messages are getting out of Redshire hidden inside an Arctic soldier's health data. Zei sends back better ways to hide them, from Den's textbooks. The final is cancelled, and Zei is named champion. He does not want to win like this. Den tells him the time for hiding is over. The shadow society must become the society. The shadow government must become the government. He sends Zei back to Pafogai Du, where Dzego's secret cryptography is run.",
+        "sources": [
+          "c15-b48",
+          "c15-b49",
+          "c15-b51",
+          "c15-b53",
+          "c15-b55",
+          "c15-b61",
+          "c15-b66",
+          "c15-b82",
+          "c15-b85",
+          "c15-b86",
+          "c15-b117",
+          "c15-b118",
+          "c15-b119",
+          "c15-b12",
+          "c15-b94"
+        ]
+      }
+    ],
+    "16": [
+      {
+        "from_paragraph": 29,
+        "text": "Gladias confronts Delwart. Delwart apologizes. He was wrong about defense, he says. Then he confesses: he and a group of others work for Silverchat, the more open of Veridia's two big social networks. They wanted Silverchat to be a refuge from the blandness spreading through Veridia. Gladias's anger softens a little. Delwart now suggests something new: go to Dzego, learn how they deal with the Arctics, and bring it home. Mov likes the idea. Seila does not. You're not the best person for that trip, she tells him, and the Keepers need a strong hand. But if Mov agrees, go, and do your homework first. She will introduce him to Zei and Bai.",
+        "sources": [
+          "c16-b5",
+          "c16-b13",
+          "c16-b14",
+          "c16-b16",
+          "c16-b17",
+          "c16-b25",
+          "c16-b27",
+          "c16-b44",
+          "c16-b113",
+          "c16-b116",
+          "c16-b118",
+          "c3-b24"
+        ]
+      }
+    ],
+    "17": [
+      {
+        "from_paragraph": 30,
+        "text": "Gladias does his homework. Senator Verdow, who questioned him at his hearing, urges him to go. When Gladias mentions Zei, Verdow is delighted: Dzego's Minpentai players are so good, he would almost trust them over Dzego's army. A steward of Graph Funding, Veridia's public funding system, explains why its choices are made by random secret committees. The Arctics have just attacked the other funding system, which works by public donations. Then the vote comes. Since Redshire fell, the Keepers who wanted to drop the military tax break have gone quiet. Gladias votes no to that, and yes to raising the tax brackets, so that openness pays even more.",
+        "sources": [
+          "c17-b11",
+          "c17-b23",
+          "c17-b28",
+          "c17-b29",
+          "c17-b38",
+          "c17-b55",
+          "c17-b56",
+          "c11-b113",
+          "c17-b91",
+          "c17-b111",
+          "c17-b114",
+          "c17-b60",
+          "c17-b90"
+        ]
+      }
+    ],
+    "18": [
+      {
+        "from_paragraph": 31,
+        "text": "Gladias flies to Dzego. Zei and Bai meet him in a black car with fake windows. Pafogai Du has changed. Most shops are shut. Nearly everyone speaks through neck bands. Cars swap cabins in tunnels, so no one can follow who is inside. Then Fin arrives, after half a month away, with an answer to a question he has wondered about for years. Why does Dzego put so much effort into its language? Because Dzegoban is coordination training. When Redshire fell, the Bansunpei paused the new version of the language. Through the same channel, they sent out new privacy and security habits instead. Within three days, a new trend was sweeping all of Dzego. The Arctics believe only a strong leader can do that. Dzego does it with no head.",
+        "sources": [
+          "c18-b1",
+          "c18-b2",
+          "c18-b3",
+          "c18-b14",
+          "c18-b22",
+          "c18-b27",
+          "c18-b34",
+          "c18-b100",
+          "c18-b104",
+          "c18-b108",
+          "c18-b110",
+          "c18-b117",
+          "c18-b120",
+          "c18-b121",
+          "c18-b122",
+          "c18-b126",
+          "c18-b32"
+        ]
+      }
+    ],
+    "19": [
+      {
+        "from_paragraph": 32,
+        "text": "Zei is about to introduce Gladias to Den when a strange message arrives. Someone has paid to send it to everyone who ate at one food court in the capital. It leads to a huge hidden file. The file asks a question: what did you do on the tenth of Firemoon? That was the day of Zei's tea with Deluin, at that very food court. Zei describes it in detail, and the file opens. It is a letter from Deluin. The Arctics have taken every device in Redshire. Deluin's parents always leaned toward the Arctics, and now they are joining them. The family is flying into the Arctic Empire's heartland. Deluin does not share their views. But he will play along and win the Arctics' trust, hoping one day to help. This may be his last message. It ends: Dzego will rise again. Your dear friend, Deluin.",
+        "sources": [
+          "c19-b3",
+          "c19-b4",
+          "c19-b55",
+          "c19-b59",
+          "c19-b61",
+          "c19-b68",
+          "c19-b117",
+          "c19-b124",
+          "c19-b127",
+          "c19-b136",
+          "c19-b153",
+          "c19-b58",
+          "c14-b102",
+          "c19-b141",
+          "c19-b152",
+          "c2-b131"
+        ]
+      }
+    ],
+    "20": [
+      {
+        "from_paragraph": 33,
+        "text": "Back in Veridia, Seila wakes to an alarm. The Arctic Empire has invaded Northglade, in Veridia's northern province of Northshore. The army barely fought. Febric and Hreda are there on a school trip. Their message comes through: they made it inside the Greater Plum Harbor there, the one place the Arctics have left alone. Seila cries. Then Mov knocks on her door. Gladias is busy in Dzego, so Mov tells her everything about Delwart. Seila has always loved Silverchat. Something about this does not sit right with her.",
+        "sources": [
+          "c20-b1",
+          "c20-b2",
+          "c20-b5",
+          "c20-b8",
+          "c20-b10",
+          "c20-b11",
+          "c20-b15",
+          "c20-b28",
+          "c20-b30",
+          "c20-b31",
+          "c20-b36",
+          "c20-b37",
+          "c17-b99",
+          "c17-b100",
+          "c17-b104",
+          "c20-b13"
+        ]
+      },
+      {
+        "from_paragraph": 34,
+        "text": "So she goes to find out. With Mov, she visits other Keepers that Delwart approached. To one, he argued for more surveillance and less privacy. To another, he argued against rewarding schools for teaching children to love Veridia. A third Keeper, on the rule about social media openness, has never heard of him. Nobody in that group has. But that is the one rule Silverchat should care about most. Seila stands up. Delwart is not from Silverchat.",
+        "sources": [
+          "c20-b53",
+          "c20-b72",
+          "c20-b73",
+          "c20-b87",
+          "c20-b103",
+          "c20-b139",
+          "c20-b149",
+          "c20-b166",
+          "c20-b172",
+          "c20-b177",
+          "c20-b179",
+          "c20-b50",
+          "c20-b66",
+          "c20-b148",
+          "c20-b163"
+        ]
+      }
+    ],
+    "21": [
+      {
+        "from_paragraph": 35,
+        "text": "At a family dinner, Seila says only that someone has been manipulating the Order, telling each person what they want to hear. Zven blurts out: is it the Arctics? The table goes silent. Later, Seila calls Gladias. \"Gladias, you idiot! Do you know what you've done?\" Delwart was never from Silverchat, she says. He even planted that meeting for Mov to overhear. He is an Arctic. Ephelion and Delwart are not thinkers, she says. They are propagandists. Ephelion tries to win Veridians over. Delwart only had to make the Order weaker, so he told each person whatever would move them. The parts of Veridia he could not break were the private ones: the Order, the courts, the funding committees. Privacy is not a luxury. It is why we are still here.",
+        "sources": [
+          "c21-b36",
+          "c21-b37",
+          "c21-b38",
+          "c21-b49",
+          "c21-b57",
+          "c21-b65",
+          "c21-b71",
+          "c21-b75",
+          "c21-b76",
+          "c21-b77",
+          "c21-b88",
+          "c21-b2",
+          "c21-b45",
+          "c21-b46"
+        ]
+      },
+      {
+        "from_paragraph": 36,
+        "text": "Gladias apologizes. He should have trusted not just her heart but her mind. He tells her what he has learned. Dzego's real army is hidden inside Minpentai, trained for a drone war. He has been trying to persuade the Dzegojan that the next battle will be in Veridia, and that they must come and help. Seila says that is only half the battle. Veridia's corrupt parliament must also let them in. Neither of them knows how. Seila says she will try to figure it out, but he will have to trust her. No more secrets, she says. He promises.",
+        "sources": [
+          "c21-b90",
+          "c21-b91",
+          "c21-b95",
+          "c21-b96",
+          "c21-b98",
+          "c21-b100",
+          "c21-b101",
+          "c21-b104",
+          "c21-b106",
+          "c20-b29",
+          "c21-b102",
+          "c21-b103"
+        ]
+      }
+    ],
+    "22": [
+      {
+        "from_paragraph": 37,
+        "text": "In Freetown, people are buying shelters, and the defense companies are arming. Jahn helped introduce Zei to them. Now, with their help, Zei and the Dzegojan are hunting Arctic drones inside Redshire. He shows Jahn one hunt as it happens. Their drones surround an Arctic drone and jam it. Then they dance around it as long as they can, to learn how to survive the Arctics, before they finish it off.",
+        "sources": [
+          "c22-b6",
+          "c22-b8",
+          "c22-b20",
+          "c22-b71",
+          "c22-b72",
+          "c22-b76",
+          "c22-b83",
+          "c22-b84",
+          "c22-b101",
+          "c22-b103",
+          "c22-b104",
+          "c22-b74"
+        ]
+      }
+    ],
+    "23": [
+      {
+        "from_paragraph": 38,
+        "text": "In Dzego, Gladias explains his thinking to the others. Working with Freetown first gives the Kungaupei quick wins, and builds trust for bigger steps. But to win the big battle, one of them says, they need Veridia's big institutions on their side. Seila is working on it, with Senator Verdow. Then, late at night, Seila calls Gladias, screaming. Lily has been chatting with a group that shares Arctic propaganda and cheers on Lord Ephelion. When Seila confronted her, Lily said the Arctics were right. Some people are better than others, and love should be earned by winning. Their family's unconditional love was poison. That idea pulled her out of her hole. Seila screamed at her and shut the door. When she opened it again, Lily was gone through the window. She had thrown her watch onto a bus. Seila asks Gladias how he could have been so negligent. He says the failure is theirs together. She hangs up.",
+        "sources": [
+          "c23-b10",
+          "c23-b11",
+          "c23-b13",
+          "c23-b15",
+          "c23-b74",
+          "c23-b79",
+          "c23-b84",
+          "c23-b88",
+          "c23-b90",
+          "c23-b91",
+          "c23-b93",
+          "c23-b96",
+          "c23-b97",
+          "c23-b99"
+        ]
+      }
+    ],
+    "24": [
+      {
+        "from_paragraph": 39,
+        "text": "Gladias cannot sleep. Three of the four children he loves are, one way or another, in Arctic hands. He calls Zven and asks him to stay in touch with Lily, kindly, and find out where she is. Zven says his mother asked him the very same thing a little earlier. In the library, Bai sees Gladias's face and hugs him without asking a single question. He tells her about Lily. Bai says the Arctic idea, love as a reward for winning, was her own childhood. It drove her all the way to second place. But Zei beat her, and his reason was purer than hers: curiosity. And her hug just now? A year ago she would not have done it. Maybe there is no single formula. But to bring his family back, Bai says, Gladias must win, by helping Veridia beat the Arctics.",
+        "sources": [
+          "c24-b2",
+          "c24-b3",
+          "c24-b6",
+          "c24-b14",
+          "c24-b17",
+          "c24-b37",
+          "c24-b38",
+          "c24-b39",
+          "c24-b40",
+          "c24-b48",
+          "c24-b50",
+          "c24-b52",
+          "c24-b55",
+          "c24-b60",
+          "c24-b62",
+          "c24-b33",
+          "c24-b34"
+        ]
+      },
+      {
+        "from_paragraph": 40,
+        "text": "Then Gladias makes a strange proposal to Den. Spy on us. The Arctics have corrupted Veridia's politicians and its army. If Dzego spies on Veridia, it can spy on the spies. Gladias points out that Veridia buys its security cameras from Dzego, and quietly dropped the rules on what they may record. Couldn't Dzego just backdoor them? If it is that easy, comes the reply, haven't the Arctics already done it? Yes, Gladias says. That's what he has been trying to tell them all along.",
+        "sources": [
+          "c24-b64",
+          "c24-b76",
+          "c24-b79",
+          "c24-b80",
+          "c24-b91",
+          "c24-b92",
+          "c24-b95",
+          "c24-b72"
+        ]
+      }
+    ],
+    "25": [
+      {
+        "from_paragraph": 41,
+        "text": "Zei teaches Gladias an old children's game with piles of circles. With a secret trick and the right start, the second player always wins, because he gets to answer every move. Is the fight for Veridia like that? The Arctics moved first. They bribed, spied, and attacked. But in the fight for Veridia's institutions, Zei says, we can answer them. We want what the people we persuade actually want. The word for that is convincing. Gladias has the idea: do to the courts what Delwart did to the Order, but tell the truth. Verdow, on a call, offers the legal case. Veridia's law says the army must defend the country. In Northglade it failed. So the courts can fire its leaders, and fire parliament too if it gets in the way. It is crazy, Verdow admits. But Veridia is in a crazy time.",
+        "sources": [
+          "c25-b2",
+          "c25-b6",
+          "c25-b22",
+          "c25-b53",
+          "c25-b63",
+          "c25-b74",
+          "c25-b77",
+          "c25-b79",
+          "c25-b82",
+          "c25-b86",
+          "c25-b88",
+          "c25-b91",
+          "c25-b102",
+          "c25-b111",
+          "c25-b112",
+          "c25-b118",
+          "c25-b96",
+          "c25-b99"
+        ]
+      }
+    ],
+    "26": [
+      {
+        "from_paragraph": 42,
+        "text": "Gladias flies home to Meldan with Zei, Bai and Den. Verdow meets them with good news. Zven kept talking to Lily, and she told him where she is: in Arctic-held Northglade. Through the hacked cameras, they found her in a boarding school the Arctics run, near the Greater Plum Harbor where Febric and Hreda are hiding. At the hotel, Seila is waiting. She runs to Gladias with open arms.",
+        "sources": [
+          "c26-b2",
+          "c26-b7",
+          "c26-b50",
+          "c26-b51",
+          "c26-b60",
+          "c26-b62",
+          "c26-b63",
+          "c26-b75",
+          "c26-b76",
+          "c26-b58",
+          "c20-b10",
+          "c26-b73"
+        ]
+      },
+      {
+        "from_paragraph": 43,
+        "text": "The next day, the Kungaupei try to rescue Tafindel, the captured son of Redshire's president. Zei leads the drones from a console like his old Minpentai seat, with Den and Mu on the line from other rooms. Tafindel steps onto a balcony. Then someone pulls him back inside, and Arctic drones open fire. The rescue drone is blown apart. Zei despairs. Mu takes over with a new plan. Fly low, through the streets. With passwords from friends in Redshire, she takes control of the streetlights and makes them flash wildly. At Den's call, Zei crashes a drone into the building. Tafindel and his assistant escape clinging to two drones, switch to a car, then a sea drone, and reach safety in Arturia. Zei feels he failed. Den tells him: welcome to real warfare. Sometimes you have to jump out of your chair. The Arctics have been humiliated. Now the Kungaupei can step forward.",
+        "sources": [
+          "c26-b78",
+          "c26-b79",
+          "c26-b81",
+          "c26-b87",
+          "c26-b92",
+          "c26-b94",
+          "c26-b96",
+          "c26-b105",
+          "c26-b110",
+          "c26-b111",
+          "c26-b119",
+          "c26-b120",
+          "c26-b122",
+          "c26-b124",
+          "c26-b126",
+          "c26-b132",
+          "c26-b137",
+          "c26-b151",
+          "c26-b153",
+          "c26-b154",
+          "c26-b156",
+          "c26-b158",
+          "c26-b160",
+          "c26-b95",
+          "c26-b121",
+          "c26-b127"
+        ]
+      },
+      {
+        "from_paragraph": 44,
+        "text": "The same day, Gladias meets five judges in a booth and lays out the case. They refuse. Veridia is a democracy, they say. Changing the army is parliament's job, not the courts'. And a case would take months, while the Arctics wait. Only one judge, whose son is trapped in Northglade, seems to sympathize, and he stays silent. Gladias leaves. He needs a different plan.",
+        "sources": [
+          "c26-b162",
+          "c26-b165",
+          "c26-b173",
+          "c26-b182",
+          "c26-b190",
+          "c26-b191",
+          "c26-b193",
+          "c26-b194",
+          "c26-b167",
+          "c26-b169"
+        ]
+      }
+    ],
+    "27": [
+      {
+        "from_paragraph": 45,
+        "text": "The next morning, Gladias tells Seila he has failed the whole family. Seila hugs him, then smiles. She has a new idea. The judges won't do something undemocratic, so make it democratic. Silverchat lets anyone pay to poll a large share of its users. They take the plan to Silverchat's founder, Evelor. They will ask the whole country a thousand questions, with the few that matter hidden among decoys. They add a second test, to show the plan would actually work. The best forecasting AIs on Silverchat will study the Kungaupei's secret information inside a sealed computation, which reveals only their answer.",
+        "sources": [
+          "c27-b4",
+          "c27-b5",
+          "c27-b6",
+          "c27-b8",
+          "c27-b11",
+          "c27-b15",
+          "c27-b16",
+          "c27-b21",
+          "c27-b37",
+          "c27-b50",
+          "c27-b52",
+          "c27-b59",
+          "c27-b66",
+          "c27-b1",
+          "c27-b7",
+          "c27-b64",
+          "c27-b103"
+        ]
+      },
+      {
+        "from_paragraph": 46,
+        "text": "Evelor asks Gladias what is wrong with Ephelion's argument, that only wealth keeps growing. Gladias answers that many good things grow together. Zei says the world is fragile. With modern robots and surveillance, whoever conquers the world could hold it forever, and narrow humanity's future for good. Seila's answer is simpler. If the Arctics come, hundreds of thousands, perhaps millions, could die, and the world we love would be destroyed. That is enough to fight against. The beauty of our world and our friendships is enough to fight for.",
+        "sources": [
+          "c27-b76",
+          "c27-b77",
+          "c27-b90",
+          "c27-b91",
+          "c27-b92",
+          "c27-b95",
+          "c27-b72",
+          "c27-b89"
+        ]
+      }
+    ],
+    "28": [
+      {
+        "from_paragraph": 47,
+        "text": "The poll goes out. Two in five Veridians have no confidence at all in their army. Asked who should run it, more choose the Kungaupei than anyone else. Among people with ties to Northshore, more than half do. The forecasting AIs agree: Veridia's best chance is with the Kungaupei taking part, while keeping the change gentle. A respected general, Lektor, comes to talk. You cannot fire a whole army, he says. It has years of training and logistics. Bai agrees, and changes the plan on the spot. We never wanted to replace your army, she says. We want you to lead it, and we will work inside it. The Kungaupei give him exploits against Arctic drones to take credit for, and proof that one general takes Arctic bribes.",
+        "sources": [
+          "c27-b115",
+          "c27-b118",
+          "c27-b120",
+          "c27-b125",
+          "c27-b136",
+          "c28-b7",
+          "c28-b14",
+          "c28-b19",
+          "c28-b34",
+          "c28-b37",
+          "c28-b39",
+          "c28-b42",
+          "c28-b47",
+          "c28-b49"
+        ]
+      },
+      {
+        "from_paragraph": 48,
+        "text": "Meanwhile Zven brings news. Lily wants to come home. Her Arctic teacher mocked Helisport's scoring as too complicated. Lily stood up and explained why multiplying scores rewards balance, and said real life needs balance too. She got detention. Now she thinks the Arctics only care about their own authority. In a closed session of parliament, Lektor exposes the top general's meetings with an Arctic spy. He becomes the head of the army. The battle for Meldan is over. The battle for Northshore is about to begin.",
+        "sources": [
+          "c28-b59",
+          "c28-b61",
+          "c28-b63",
+          "c28-b64",
+          "c28-b66",
+          "c28-b67",
+          "c28-b68",
+          "c28-b93",
+          "c28-b94",
+          "c28-b96",
+          "c28-b100",
+          "c28-b55"
+        ]
+      }
+    ],
+    "29": [
+      {
+        "from_paragraph": 49,
+        "text": "On a snowy hill in Elenar Forest, Zei stands with Mu. Are we ready, he asks? No, Mu says. But nothing meaningful happens when people are ready. Bai climbs up and hugs Zei. Whatever happens today, she says, I am happy I got to know you. The plan is to strike that night. Lektor commands, with army groups to the north, center and south, and drones by sea. Den leads the southern group. Zei watches over the drone tactics on every front. He realizes that every Minpentai game he ever played was training for this night.",
+        "sources": [
+          "c29-b1",
+          "c29-b2",
+          "c29-b3",
+          "c29-b4",
+          "c29-b5",
+          "c29-b8",
+          "c29-b13",
+          "c29-b21",
+          "c29-b23",
+          "c29-b25",
+          "c29-b27",
+          "c29-b29",
+          "c29-b31",
+          "c29-b32",
+          "c29-b42",
+          "c29-b9",
+          "c29-b26",
+          "c28-b96",
+          "c29-b7"
+        ]
+      },
+      {
+        "from_paragraph": 50,
+        "text": "The first clash goes well. But then the main battle turns. Most of Zei's tricks no longer work. He realizes the Arctics must have learned from the drones he fought in Redshire. Then a message arrives: a rear base has been destroyed by Arctic missiles, probably betrayed by traitors. Den was there. He almost certainly did not survive. Zei cries. Mu takes over Den's group. Zei believes the battle is lost.",
+        "sources": [
+          "c29-b72",
+          "c29-b88",
+          "c29-b91",
+          "c29-b95",
+          "c29-b96",
+          "c29-b98",
+          "c29-b108",
+          "c29-b109",
+          "c29-b110"
+        ]
+      },
+      {
+        "from_paragraph": 51,
+        "text": "Then his watch buzzes. It is Deluin. He has won the Arctics' trust and is now one of their commanders, in charge of their southern flank. He sends tactics to break through it. But can they trust him? Bai has an idea. We have no reason to trust Deluin, she says, but he has every reason to trust us. So let him take the first leap. Ask him for the Arctic drones' AI. With it, they could design patterns that make the drones blind to them.",
+        "sources": [
+          "c29-b111",
+          "c29-b114",
+          "c29-b117",
+          "c29-b127",
+          "c29-b130",
+          "c29-b132",
+          "c29-b136",
+          "c29-b138",
+          "c29-b123",
+          "c29-b124"
+        ]
+      }
+    ],
+    "30": [
+      {
+        "from_paragraph": 52,
+        "text": "Through the night, Veridia's forces retreat slowly, laying traps. Deluin cannot get the Arctic drones' AI itself. But he gives them access to the Arctics' own simulator. Fin and the language experts of the Bansunpei join the work, and they train attacks against the simulator. At sunrise, soldiers print the patterns on paper and stick them on the drones: colorful squiggles, and in giant letters, the word DOG. The Arctic drones cannot see the Veridian drones for what they are, and the Veridians tear through their lines. Zei remembers Den's words about jumping out of your chair. Den would be proud. The Arctics adapt, and access to the simulator is cut off. But Deluin sends one more message, with the exact weak points of his own units, and Zei passes them to Mu. The south breaks open. Northglade is retaken. Drones from the sea seize Thaldur, an island of the Arctic heartland. By late afternoon the battle is won, and Zei sleeps for the first time in fourteen longhours.",
+        "sources": [
+          "c30-b2",
+          "c30-b5",
+          "c30-b9",
+          "c30-b10",
+          "c30-b33",
+          "c30-b35",
+          "c30-b41",
+          "c30-b47",
+          "c30-b48",
+          "c30-b51",
+          "c30-b52",
+          "c30-b53",
+          "c30-b57",
+          "c30-b61",
+          "c30-b65",
+          "c30-b66",
+          "c30-b68",
+          "c30-b71",
+          "c30-b74",
+          "c30-b75",
+          "c30-b76",
+          "c30-b21",
+          "c30-b54",
+          "c30-b60",
+          "c30-b4"
+        ]
+      }
+    ],
+    "31": [
+      {
+        "from_paragraph": 53,
+        "text": "Two days later, on a snowy mountain above Northglade, Zei, Bai and Mu meet Deluin at last. He throws himself into Zei's arms. He tells his story. His parents went to Glasscrown, an Arctic city, to advise on bringing the conquered into the Empire. Deluin pretended to believe, and used his Minpentai fame to rise. The Arctics are easy to fool, he says. They value only talent, never loyalty. Say the right slogans, and they trust you. Their technology is real and amazing, but they keep it for themselves. Now that technology has been captured. Deluin wants it shared with the whole world, openly. But there is bad news. Redshire cannot be won back. Tafindel proposes a trade. The Arctics keep Redshire, Veridia keeps Thaldur, and anyone who wants to leave either place may go. A new Redshire will be built in Veridia. Deluin agrees, sadly.",
+        "sources": [
+          "c31-b1",
+          "c31-b2",
+          "c31-b7",
+          "c31-b9",
+          "c31-b23",
+          "c31-b24",
+          "c31-b30",
+          "c31-b34",
+          "c31-b35",
+          "c31-b37",
+          "c31-b41",
+          "c31-b46",
+          "c31-b48",
+          "c31-b49",
+          "c31-b58",
+          "c31-b59",
+          "c31-b60",
+          "c31-b63",
+          "c31-b27"
+        ]
+      },
+      {
+        "from_paragraph": 54,
+        "text": "In the Greater Plum Harbor of Northglade, the gates are smashed open. Gladias and Seila walk through, and a door opens before they can knock. Lily runs out and hugs her father. Febric and Hreda follow. Lily says sorry to her mother. Don't be, Seila tells her. We all made lots of mistakes this year. We're a family. That afternoon, they will honor Den and the fallen soldiers at a funeral on the mountain. Then their new friends from Dzego will come and cook them real Dzego food.",
+        "sources": [
+          "c31-b66",
+          "c31-b75",
+          "c31-b76",
+          "c31-b77",
+          "c31-b79",
+          "c31-b81",
+          "c31-b82",
+          "c31-b90",
+          "c31-b93"
+        ]
+      }
+    ],
+    "32": [
+      {
+        "from_paragraph": 55,
+        "text": "Back in Meldan, Gladias and Seila walk the Kalimar path where the story began. A man is unscrewing security cameras from the trees and dropping them in a box. A shop sells red flowers from Northglade. A Hydrafill ad offers fresh water seized from the Arctic heartland. At parliament, Gladias orders his meal from the robot in Dzegoban. Verdow warns that this was only the first round. The Arctics kept Redshire, and they are racing ahead in new technology. Veridia's secret institutions worked: the Order, the courts, the funding committees. Its open ones failed. Many senators have resigned, and parliament wants new ideas. He asks Zei to stay and help.",
+        "sources": [
+          "c32-b1",
+          "c32-b2",
+          "c32-b3",
+          "c32-b4",
+          "c32-b6",
+          "c32-b16",
+          "c32-b29",
+          "c32-b30",
+          "c32-b38",
+          "c32-b72",
+          "c32-b76",
+          "c32-b18",
+          "c32-b21",
+          "c32-b27",
+          "c32-b100"
+        ]
+      },
+      {
+        "from_paragraph": 56,
+        "text": "They talk about how a society should be run. Verdow imagines a lake. Every drop of water moves on its own, and the lake still finds its level. But in winter, the water freezes into hard ice. That, Verdow says, is the ideal. In peacetime, flow like water, free and many-minded. In danger, come together like ice, to defend. Resist the Arctic Empire, without becoming one. Seila adds that the Arctics are ice without water. Veridia is water that does not yet know how to become ice. Dzego has learned to be both. Bai is thinking of spending a year in Thaldur, to understand the Arctics and look for a path to peace. Seila says she just hopes for peace. Then they climb to the roof. Below them lies Meldan: the forest of Kalimar, the walled Greater Plum Harbor, the aeroplane building, the castle towers on the mountain. Not as beautiful as Northglade, Verdow asks? The answer comes: I like the green here. And besides, Meldan is my home.",
+        "sources": [
+          "c32-b57",
+          "c32-b58",
+          "c32-b62",
+          "c32-b63",
+          "c32-b69",
+          "c32-b95",
+          "c32-b98",
+          "c32-b104",
+          "c32-b105",
+          "c32-b106",
+          "c32-b107",
+          "c32-b108",
+          "c32-b109",
+          "c32-b110",
+          "c32-b111",
+          "c32-b55",
+          "c32-b56",
+          "c32-b101",
+          "c3-b48",
+          "c32-b103"
+        ]
+      }
+    ]
+  }
+}

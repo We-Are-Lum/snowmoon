@@ -35,5 +35,49 @@
       "true_peak_db": -1,
       "lra": 11
     }
+  },
+  "episode_lines": {
+    "about": "One spoiler-free line per chapter, put in front of the owner's episode template: where we are and whose story it is, no outcomes. Draft wording by the coding agent (from the checked summary), approved for publication by the owner, FID 6786, on 2026-10-10 (\"Go ahead. And publish\"); the owner may rewrite any of them.",
+    "lines": {
+      "1": "In Meldan, the capital of Veridia, Gladias goes to judge a concert for the Order of Steering.",
+      "2": "In Pafogai Du, in Dzego, two students, Fin and Zei, walk to a physics class.",
+      "3": "Gladias goes to meet the stranger who sent him an anonymous message.",
+      "4": "In Dzego, Zei prepares for the quarter final of the Minpentai championship.",
+      "5": "Zei, his mother and Bai travel to Freetown, in the United Cities.",
+      "6": "Gladias talks with his friend Mov, and goes to a citizens' assembly.",
+      "7": "In Dzego, Zei faces Bai in the city's Minpentai final.",
+      "8": "In Meldan, Gladias goes before the senators who decide whether he joins the Order.",
+      "9": "In Dzego, Bai talks with Fin, and Zei makes his way deep inside the mountain pyramid.",
+      "10": "In Freetown, Meldan and Pafogai Du, three conversations about the Arctic threat.",
+      "11": "In Meldan, Gladias watches Zven play Helisport, and joins a Keeper group on air quality.",
+      "12": "Zei arrives in Sadzu Du, Dzego's capital, for the national championship.",
+      "13": "Gladias meets Delwart again, and Mov has news about him.",
+      "14": "In Sadzu Du, Zei plays his semi final, and has tea with a new friend.",
+      "15": "News from Redshire reaches Freetown, Meldan and Dzego.",
+      "16": "Gladias confronts Delwart.",
+      "17": "Gladias visits the parliament, and the Keepers vote.",
+      "18": "Gladias arrives in Dzego, and meets Zei, Bai and Fin.",
+      "19": "Deep in the mountain pyramid, Zei receives a strange message.",
+      "20": "In Meldan, Seila wakes to an alarm, and goes looking for answers.",
+      "21": "Seila's family gathers for dinner, and she calls Gladias.",
+      "22": "In Freetown, Jahn sees the city preparing, and Zei shows him something remarkable.",
+      "23": "In Dzego, the friends plan their next steps, and a call comes from home.",
+      "24": "Gladias, unable to sleep, turns to Bai, and then to Den with an unusual idea.",
+      "25": "Zei teaches Gladias an old game, and they call Senator Verdow.",
+      "26": "The friends fly to Veridia, and the Kungaupei attempt a daring rescue.",
+      "27": "Seila has a new idea, and the friends meet Silverchat's founder.",
+      "28": "A general comes to talk, and there is news about Lily.",
+      "29": "On a snowy hill in Elenar Forest, the battle for Northshore begins.",
+      "30": "The battle for Northshore goes on through the night.",
+      "31": "On a mountain above Northglade, old friends meet again.",
+      "32": "Back in Meldan, Gladias and Seila walk to the parliament to talk about what comes next."
+    }
+  },
+  "bonus": {
+    "about": "The spoken summary as a bonus episode, after the 32 chapters. Title and description: draft wording by the coding agent, approved for publication by the owner, FID 6786, on 2026-10-10 (\"Go ahead. And publish\"); the owner may rewrite them. {recipe link} is filled in by src/lib/podcast.ts.",
+    "guid": "snowmoon-party-summary",
+    "published": "2026-10-10T20:00:00Z",
+    "title": "The whole story in 32 minutes (full spoilers)",
+    "description": "A summary of the whole of Snowmoon by Vitalik Buterin, with full spoilers, including the ending. Written by AI models, not by the author: Claude wrote it from the book and from chapter notes by gpt-oss-120b, and each paragraph was checked against the book. Read by a synthetic voice (Kokoro-82M, stock voice af_heart). An independent project, not affiliated with the author. Read the book: https://snowmoon.party/chapter/1. How this was made: {recipe link}. Summary and audio: GPL v3, like the book; modified from the book on 2026-10-10."
   }
 }
