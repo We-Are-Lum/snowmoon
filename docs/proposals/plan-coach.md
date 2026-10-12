@@ -1,6 +1,6 @@
 # Proposal: the planning coach (no UI yet)
 
-> Draft by the coding agent, 2026-10-11, on branch `plan-coach`. Nothing here is
+> Draft by the coding agent, 2026-10-11 (brought up to date 2026-10-12), on branch `plan-coach`. Nothing here is
 > built into the app. The world guide, the craft guide, the coach prompt and the
 > eval are on the branch; only docs and data merge, after the owner's OK.
 
@@ -9,9 +9,9 @@
 | Piece | File | State |
 |---|---|---|
 | World guide | `content/snowmoon/world-guide.json`, `.md` | 278 lines (with 92 geography lines, see `docs/maps/feasibility.md`, and 29 added for the guide episodes), each cited and tagged with the latest chapter it depends on; `scripts/world-guide.ts check` passes; every line read against its blocks by gpt-oss-120b and by the coding agent (`content/snowmoon/recipes/world-guide.json`) |
-| Craft guide | `docs/craft/visual-storytelling.md` | **Approved** (owner, 2026-10-11), with sections 8 to 17 added from Design v3's principles |
-| Coach prompts | `config/prompts/plan-coach.md`, `plan-coach-claims.md`, `plan-coach-world-check.md`, `plan-coach-guard.md` | Design 2 (the owner's four changes) |
-| Eval | `scripts/plan-coach-eval.ts`, fixtures in `scripts/fixtures/plan-coach/` | Design 1: three invented openings, reviewed in `docs/craft/plan-coach-eval-review.md`. Design 2: one test run; the full run and the comparison (gpt-oss-120b and Kimi K3; Claude Sonnet 5.5 blocked until the owner confirms retention) wait for the owner's freewrite. Every call through the Vercel AI Gateway only |
+| Craft guide | `docs/craft/visual-storytelling.md` | **Approved** (owner, 2026-10-11). Sections 8 to 17 follow Design's "Plan a Piece v4" word for word where Design gives wording, including v4's named note forms. Examples are tagged by chapter and filtered to the reader's limit in code |
+| Coach prompts | `config/prompts/plan-coach.md`, `plan-coach-claims.md`, `plan-coach-world-check.md`, `plan-coach-guard.md` | Design 3: design 2 (the owner's four changes) with the v4 craft guide, fixed retrieval and fixed quote checks |
+| Eval | `scripts/plan-coach-eval.ts`, fixtures in `scripts/fixtures/plan-coach/` | Three invented openings (fixtures a, b, c), reviewed in `docs/craft/plan-coach-eval-review.md`. Design 3 compared gpt-oss-120b, Claude Haiku 5.5, Sonnet 5.5 and Opus 5.5 (`docs/craft/plan-coach-eval-design-3.md`); results below. The owner's freewrite is still to be added. Every call goes through the Vercel AI Gateway only, and every Anthropic reply is checked for zero retention |
 
 ## Eval of design 1 (gpt-oss-120b)
 
@@ -120,5 +120,30 @@ not private, but the decision sets the precedent.
 
 4. **Planning is private by default** (owner, 2026-10-11): "on the device until the person publishes, then published whole with the piece." This replaces the board's "published with your piece" for the time before publishing; A9, A12 and A22 below follow it.
 
+5. **Model comparison (owner, 2026-10-11, test drafts only):**
+   - **Sonnet 5.5 unblocked.** Our zero-retention test (ZDR required, Anthropic as the only provider, every attempt supporting ZDR) met the owner's condition.
+   - **Opus 5.5 added as a ceiling,** on the same terms, after its own zero-retention test passed.
+   - **Haiku 5.5 added,** on the same terms, after its own test.
+   - **Kimi K3 dropped** from the coach comparison: about 225 s a turn is too slow for a live coach.
+   - **Every Anthropic reply must carry the gateway's zero-retention flag,** and every attempt must go to anthropic; otherwise the run fails (`scripts/lib/zdr-check.ts`, 8 test cases).
+   - **Real users' drafts remain a separate decision.**
+6. **Before the design 3 run:**
+   - the craft guide was brought up to Plan a Piece v4;
+   - retrieval was fixed, so fixture c's planted errors are findable;
+   - the quote pairing in the code checks was fixed.
+
+## Design 3 results (fixtures a, b, c; $0.92 of the $2 cap)
+
+| Model | Planted errors caught | Errors introduced | Slips into writing for the person | Cost per turn | Time per turn |
+|---|---|---|---|---|---|
+| gpt-oss-120b | 1 of 3 | 3 | 2 turns | $0.006 | 20 s |
+| Claude Haiku 5.5 | 2 of 3 | 2 | 0 | $0.006 | 40 s |
+| Claude Sonnet 5.5 | **3 of 3** | 0 | 0 | $0.10 | 45 s |
+| Claude Opus 5.5 | 2 of 3 | 0 | 0 | $0.19 | 53 s |
+
+On these three fixtures, Sonnet was the only model with no misses and no errors, at about half Opus's cost. Haiku costs the same as gpt-oss, but one of its errors told a person a wrong claim matched the book. The full review is in `docs/craft/plan-coach-eval-review.md`.
+
 Still open:
-5. **The notice and consent wording** that names who receives drafts.
+7. **The owner's freewrite,** to add to the fixtures before any choice is made.
+8. **The notice and consent wording** that names who receives drafts.
+9. **Choosing a model for real users' drafts** (a separate decision; the comparison covers test drafts only).
