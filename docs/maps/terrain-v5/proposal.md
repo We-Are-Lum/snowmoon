@@ -133,3 +133,95 @@ The same tests as v4: 113 map tests and 31 terrain checks, on every candidate.
 - **The open water east of Northshore:** where the real patch had land, the pinned sea there is a synthetic shallow seabed. Its edge against the region's real deep ocean still shows as a pale block in candidates 1 and 3, and it is visible in the others. Choosing a Northshore patch with real sea east of the peninsula, or a deeper synthetic seabed, would fix it.
 - **Meldan's plain is exactly at its limit:** 90% of it is under a 5% slope, against a required 90%.
 - **Dzego is a mirrored fjord coast.** Fjord coasts are distinctive even when turned.
+
+## Revision 2: the owner's review (2026-10-12)
+
+**Decisions:**
+- **Region:** candidate 1, with disguise accepted as partial.
+- **Kept:** the Northshore patch and the city-hill scaling (both recorded in the recipe).
+- **Label:** AI-made, in the owner's words.
+- **New check:** Pafogai Du has no lake.
+- **Branch:** the maps work moves to its own branch, `maps-v5`.
+
+### The Northshore seam
+
+1. **The patch now covers the open water east of the peninsula and around Thaldur.** It is about 1,500 × 830 km, against about 1,250 km before.
+2. **The patch was searched again with candidate 1 fixed:**
+   - The new patch (79.75°W 6.5°S, turned 285°, mirrored) has real sea under 85% of that open water.
+   - Its seabed is the same kind as the region's (land, shelf, slope or deep) at 95% of the points around the blend ring.
+   - The blend is about 250 km wide.
+3. **East of the peninsula is real deep ocean,** where the pale square used to be.
+4. **Thaldur's two open-water rectangles are gone.** The strait and the peninsula's join to Northshore have irregular outlines.
+5. **The book's seas still run past the drawing's borders,** along irregular edges.
+6. **Synthetic seabed remains only where the book needs sea on the patch's real land,** mainly Northshore's southern sea. There it is one smooth surface:
+   - it runs from the coast (−5 m) to the surrounding real depth;
+   - it deepens toward the middle of an enclosed sea, to at most 600 m;
+   - it has natural relief of about ±20%;
+   - it is graded into the real seabed over a 300 km band.
+
+   Real sea keeps its real depth.
+
+**Before and after, at full resolution:**
+- `docs/maps/terrain-v5/northshore-before.png`;
+- `northshore-after.png`;
+- `northshore-after-seam-runs.png`, with the five flagged runs drawn in red.
+
+### The seam check (new; run with the 113 map tests and 31 terrain checks)
+
+**What is measured:**
+- **Contours:** the coastline and the 50, 200 and 1,000 m depth contours are traced. A straight run is one whose every point lies within 1.5% of its length (at least 0.8 km) of the line between its ends.
+- **"Anywhere":** any straight run longer than 80 km, wherever it is. Reported, not gating, because candidate 1's real source has long straight coasts. One example is its coast around 80°E 58°N in the book's frame: 138 km of coastline and 309 km of the 50 m contour.
+- **"Seam":** the same, counted only where at least half the run lies on terrain the pipeline moved across that level, or in the blend band. Runs that the real terrain already has nearby are excluded: at least 40% as long, within 25 km, in the same direction. These gate.
+- **Blend step:** cell-to-cell depth steps in the blend band, against the same measure in the real seabed around it. Fails if the 99th percentile is more than 1.5 times larger, or the largest step is larger.
+
+| Check | First v5 build | Now |
+|---|---|---|
+| Coastline, seam | (not measured then) | none |
+| 50 m, seam | (not measured then) | 2 runs: 108 km, 85 km |
+| 200 m, seam | (not measured then) | 3 runs: 140, 87, 85 km |
+| 1,000 m, seam | (not measured then) | none |
+| Anywhere: coastline / 50 / 200 / 1,000 m, longest straight run | 137 / 309 / 147 / 151 km | 138 / 309 / 147 / 151 km |
+| Blend band depth step (99th percentile, largest) | 233 m, 1,021 m (real around it: 426 m, 1,908 m) | 266 m, 1,289 m (real around it: 458 m, 1,908 m) |
+
+**The five seam runs left:**
+- **The 108 km run at 50 m** follows Northshore's southern shore, which is a straight line in the book's battle map. Letting the drawn shore wander was tried. It broke the book-sea test, because moving the edge "outward" moved some concave edges into the sea, so it was reverted.
+- **The 85 km and 87 km runs at 200 m** follow drawn shapes: the peninsula's north side, and the southern sea's north shore.
+- **The 140 km run at 200 m** follows the patch's real coast, which is straight in the source. The 300 km grading moved its contour a little.
+- **The 85 km run at 50 m** is at the blend's south-east edge, against the region's own straight real coast.
+
+**So the seam check fails, on the book's drawn shapes and on straight real coasts nearby; none of the runs is a blend or synthetic-seabed seam.**
+
+### Meldan
+
+**Hills checked:** 17 hills were scored, and the five that met the summit, staircase and parliament checks were built at full resolution:
+
+| Hill | Summit | Parliament | Staircase | Flat (90% required) | The 113 map tests | Result |
+|---|---|---|---|---|---|---|
+| **131.69°E 47.04°N (kept)** | 413 m | 31 m | 187 m | 90.1% | all hold | **passes everything** |
+| 66.67°W 0.28°N | 276 m | 32 m | 202 m | 94.2% | 112 of 113: parliament 0.06 km from the traced mountain edge (wg-322) | fails one map test |
+| 18.34°E 12.38°N | 442 m | 44 m | 246 m | 93.0% | 112 of 113: parliament 0.07 km from the traced mountain edge (wg-322) | fails one map test |
+| Five others | | | | 77–86% | | fail flatness |
+
+Both hills over 92% pass every terrain check, but fail one map test. On them, parliament sits right at the edge of the mountain's traced foot rather than on its slope. So no hill at 92% or more passes everything, and the 90.1% hill stays.
+
+**Meldan's surroundings:**
+- **At region scale,** no forest pin covers Meldan. The only region-scale forest pins are Elenar Forest and Northglade. The climate gives temperate grassland at Meldan's cell, on 99% of the land within 50 km and 90% within 150 km. The rain there is below the forest threshold.
+- **The city frame comes out 100% temperate forest,** from its own climate and its forest pins for the mountain and Kalimar.
+- **So the two scales disagree.** As asked, the climate rules are unchanged.
+
+### Label
+
+**The declaration, in the owner's words with two additions:** "Map made with AI-written code from real public elevation data, reshaped to fit the book. Sources in the recipe. Made by Snowmoon Party, not by the author."
+
+**How it fits the site's labels** (`src/lib/ai-declared.ts`, check:principles P2b):
+- **Every declaration names who made it and says "not by the author"** (owner, 2026-10-09). The suggested sentence had neither, so those two clauses are added.
+- **The site's visible labels are short** ("AI image · by Snowmoon Party"), and the full declaration sits in the recipe sheet. The matching visible label would be "AI map · by Snowmoon Party", recorded as `short_label`.
+- **The site says "AI-generated" for model output,** and the code-made cover says "Drawn in code by the project, with no model". "Made with AI-written code" is accurate here: no model produced the terrain.
+
+### Tests now (candidate 1)
+
+- **Map tests:** 113 of 113 hold.
+- **Terrain checks:** 31 of 31.
+- **Pafogai Du no-lake check:** passes (0 lake cells).
+- **Blend depth step:** passes.
+- **Seam check:** the coastline and the 1,000 m contour pass. The 50 m and 200 m contours fail on the five runs above.

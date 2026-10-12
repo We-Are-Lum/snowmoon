@@ -1,5 +1,5 @@
 {
-  "made": "2026-10-12T05:01:05.973Z",
+  "made": "2026-10-12T15:31:07.002Z",
   "kind": "meldan",
   "results": [
     {
@@ -256,6 +256,390 @@
         "okStair": true,
         "okParl": true,
         "plain": 10.470614433288574
+      }
+    },
+    {
+      "screened": {
+        "lon": -85.825,
+        "lat": 11.74166666666666,
+        "top": 352,
+        "plain": 31,
+        "prominence": 321,
+        "ringRange": 6,
+        "lowNear": 31
+      },
+      "placement": {
+        "lon": -85.81628365502164,
+        "lat": 11.73804904886798,
+        "rot": 315,
+        "mirror": true,
+        "vscale": 1,
+        "hscale": 1.3,
+        "x0": 0,
+        "y0": 0
+      },
+      "fit": {
+        "score": 3.246970837660477,
+        "top": 523.0467529296875,
+        "stair": 163.4500732421875,
+        "parl": 239.59280395507812,
+        "flat": 0.8268917819365338,
+        "okTop": true,
+        "okStair": true,
+        "okParl": false,
+        "plain": 31
+      }
+    },
+    {
+      "screened": {
+        "lon": 109.27499999999998,
+        "lat": -0.375,
+        "top": 206,
+        "plain": 4,
+        "prominence": 202,
+        "ringRange": 7,
+        "lowNear": 2
+      },
+      "placement": {
+        "lon": 109.27904248687078,
+        "lat": -0.3655037532784661,
+        "rot": 225,
+        "mirror": true,
+        "vscale": 1,
+        "hscale": 1.5,
+        "x0": 0,
+        "y0": 0
+      },
+      "fit": {
+        "score": 3.2957757182540273,
+        "top": 320.6388945579529,
+        "stair": 152.6091423034668,
+        "parl": 25.96637487411499,
+        "flat": 0.8991049633848658,
+        "okTop": false,
+        "okStair": true,
+        "okParl": true,
+        "plain": 6.505178928375244
+      }
+    },
+    {
+      "screened": {
+        "lon": 90.32499999999999,
+        "lat": 26.34166666666667,
+        "top": 265,
+        "plain": 44,
+        "prominence": 221,
+        "ringRange": 13,
+        "lowNear": 30
+      },
+      "placement": {
+        "lon": 90.33051317789683,
+        "lat": 26.347545295589523,
+        "rot": 255,
+        "mirror": true,
+        "vscale": 1,
+        "hscale": 1.75,
+        "x0": 0,
+        "y0": 0
+      },
+      "fit": {
+        "score": 3.1956464049202733,
+        "top": 370.5168113708496,
+        "stair": 223.8276824951172,
+        "parl": 58.30647659301758,
+        "flat": 0.8852725793327909,
+        "okTop": false,
+        "okStair": true,
+        "okParl": true,
+        "plain": 45.350345611572266
+      }
+    },
+    {
+      "screened": {
+        "lon": -65.225,
+        "lat": 0.22499999999999432,
+        "top": 339,
+        "plain": 83,
+        "prominence": 256,
+        "ringRange": 25,
+        "lowNear": 70
+      },
+      "placement": {
+        "lon": -65.21332186467946,
+        "lat": 0.22726101112416905,
+        "rot": 255,
+        "mirror": true,
+        "vscale": 1,
+        "hscale": 0.9,
+        "x0": 0,
+        "y0": 0
+      },
+      "fit": {
+        "score": 4.248174095303715,
+        "top": 465.6319580078125,
+        "stair": 159.7345733642578,
+        "parl": 35.41656494140625,
+        "flat": 0.7805126118795769,
+        "okTop": true,
+        "okStair": true,
+        "okParl": true,
+        "plain": 100.4986572265625
+      }
+    },
+    {
+      "screened": {
+        "lon": -69.225,
+        "lat": 3.308333333333337,
+        "top": 433,
+        "plain": 154,
+        "prominence": 279,
+        "ringRange": 21,
+        "lowNear": 137
+      },
+      "placement": {
+        "lon": -69.22320037846141,
+        "lat": 3.3137597600313566,
+        "rot": 120,
+        "mirror": true,
+        "vscale": 1,
+        "hscale": 1,
+        "x0": 0,
+        "y0": 0
+      },
+      "fit": {
+        "score": 4.407648494711147,
+        "top": 452.9396667480469,
+        "stair": 154.9102325439453,
+        "parl": 31.4442138671875,
+        "flat": 0.8445890968266884,
+        "okTop": true,
+        "okStair": true,
+        "okParl": true,
+        "plain": 173.52285766601562
+      }
+    },
+    {
+      "screened": {
+        "lon": 97.47500000000002,
+        "lat": 25.441666666666663,
+        "top": 379,
+        "plain": 150,
+        "prominence": 229,
+        "ringRange": 18,
+        "lowNear": 138
+      },
+      "placement": {
+        "lon": 97.47798434608659,
+        "lat": 25.448901902264023,
+        "rot": 75,
+        "mirror": true,
+        "vscale": 1,
+        "hscale": 1.15,
+        "x0": 0,
+        "y0": 0
+      },
+      "fit": {
+        "score": 3.3784510060296706,
+        "top": 982.9736175537109,
+        "stair": 180.1256561279297,
+        "parl": 58.67070007324219,
+        "flat": 0.8689991863303499,
+        "okTop": false,
+        "okStair": true,
+        "okParl": true,
+        "plain": 151.93470764160156
+      }
+    },
+    {
+      "screened": {
+        "lon": -57.84166666666667,
+        "lat": -19.391666666666666,
+        "top": 303,
+        "plain": 82,
+        "prominence": 221,
+        "ringRange": 16,
+        "lowNear": 82
+      },
+      "placement": {
+        "lon": -57.83404797626545,
+        "lat": -19.39754529558952,
+        "rot": 210,
+        "mirror": false,
+        "vscale": 1,
+        "hscale": 1,
+        "x0": 0,
+        "y0": 0
+      },
+      "fit": {
+        "score": 4.291022511526987,
+        "top": 315.31634521484375,
+        "stair": 154.68091583251953,
+        "parl": 53.55094909667969,
+        "flat": 0.774613506916192,
+        "okTop": true,
+        "okStair": true,
+        "okParl": true,
+        "plain": 83.36886596679688
+      }
+    },
+    {
+      "screened": {
+        "lon": -66.675,
+        "lat": 0.2750000000000057,
+        "top": 293,
+        "plain": 76,
+        "prominence": 217,
+        "ringRange": 15,
+        "lowNear": 68
+      },
+      "placement": {
+        "lon": -66.67365251771677,
+        "lat": 0.27952202224835515,
+        "rot": 255,
+        "mirror": true,
+        "vscale": 1,
+        "hscale": 1.15,
+        "x0": 0,
+        "y0": 0
+      },
+      "fit": {
+        "score": 4.43011902881242,
+        "top": 262.6754150390625,
+        "stair": 170.21813201904297,
+        "parl": 56.506011962890625,
+        "flat": 0.9448738812042311,
+        "okTop": true,
+        "okStair": true,
+        "okParl": true,
+        "plain": 91.325927734375
+      }
+    },
+    {
+      "screened": {
+        "lon": 18.34166666666667,
+        "lat": 12.375,
+        "top": 641,
+        "plain": 378,
+        "prominence": 263,
+        "ringRange": 30,
+        "lowNear": 356
+      },
+      "placement": {
+        "lon": 18.343046185329488,
+        "lat": 12.37590440444967,
+        "rot": 150,
+        "mirror": true,
+        "vscale": 1,
+        "hscale": 1,
+        "x0": 0,
+        "y0": 0
+      },
+      "fit": {
+        "score": 4.5,
+        "top": 409.8676452636719,
+        "stair": 205.8037109375,
+        "parl": 56.295257568359375,
+        "flat": 0.9267697314890154,
+        "okTop": true,
+        "okStair": true,
+        "okParl": true,
+        "plain": 383.0901184082031
+      }
+    },
+    {
+      "screened": {
+        "lon": -12.175000000000011,
+        "lat": 8.341666666666669,
+        "top": 270,
+        "plain": 70,
+        "prominence": 200,
+        "ringRange": 14,
+        "lowNear": 59
+      },
+      "placement": {
+        "lon": -12.164105002807155,
+        "lat": 8.332170419945134,
+        "rot": 240,
+        "mirror": true,
+        "vscale": 0.9,
+        "hscale": 1.3,
+        "x0": 0,
+        "y0": 0
+      },
+      "fit": {
+        "score": 2.786552027024276,
+        "top": 299.36800384521484,
+        "stair": 30.530624389648438,
+        "parl": 75.85591888427734,
+        "flat": 0.8576078112286412,
+        "okTop": true,
+        "okStair": false,
+        "okParl": false,
+        "plain": 72.1183853149414
+      }
+    },
+    {
+      "screened": {
+        "lon": -61.00833333333334,
+        "lat": 3.9749999999999943,
+        "top": 315,
+        "plain": 113,
+        "prominence": 202,
+        "ringRange": 15,
+        "lowNear": 99
+      },
+      "placement": {
+        "lon": -61.011034765444194,
+        "lat": 3.978165415573839,
+        "rot": 195,
+        "mirror": true,
+        "vscale": 1.2,
+        "hscale": 1,
+        "x0": 0,
+        "y0": 0
+      },
+      "fit": {
+        "score": 4.257824789802007,
+        "top": 370.55936431884766,
+        "stair": 157.34455108642578,
+        "parl": 59.75531768798828,
+        "flat": 0.8746948738812043,
+        "okTop": true,
+        "okStair": true,
+        "okParl": true,
+        "plain": 112.1146469116211
+      }
+    },
+    {
+      "screened": {
+        "lon": 116.79166666666669,
+        "lat": 33.99166666666667,
+        "top": 196,
+        "plain": 33,
+        "prominence": 163,
+        "ringRange": 5,
+        "lowNear": 29
+      },
+      "placement": {
+        "lon": 116.79708393058567,
+        "lat": 33.994832082240514,
+        "rot": 0,
+        "mirror": false,
+        "vscale": 0.9,
+        "hscale": 1,
+        "x0": 0,
+        "y0": 0
+      },
+      "fit": {
+        "score": 3.8369554901123046,
+        "top": 203.53760528564453,
+        "stair": 87.39109802246094,
+        "parl": 56.11334228515625,
+        "flat": 0.9178193653376729,
+        "okTop": true,
+        "okStair": false,
+        "okParl": true,
+        "plain": 33.299095153808594
       }
     }
   ]

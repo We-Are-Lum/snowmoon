@@ -21,7 +21,8 @@ import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs';
 import { execFileSync } from 'node:child_process';
 import path from 'node:path';
 import { readGeoTiff } from './lib/geotiff-lite';
-import { type XY, pointInPoly } from './lib/terrain-core';
+import { inflateSync } from 'node:zlib';
+import { type XY, type GridSpec, pointInPoly } from './lib/terrain-core';
 import { Noise2 } from './lib/noise';
 import { rgbPng, rgbaPng, grey8Png, grey16Png, writeTiles, downsample, newRGBA, type RGBA } from './lib/raster-out';
 import {
@@ -34,8 +35,11 @@ const ROOT = process.cwd();
 const REC = 'content/snowmoon/maps/terrain-v5';
 const OUT = 'out/maps-v5';
 const CACHE = 'data-cache';
-const LABEL = 'Terrain adapted from real elevation data (source in the recipe), reshaped to fit the book.';
-const LABEL_FULL = `${LABEL} (Draft label.) The heights are real, moved and possibly mirrored, then reshaped by code written by an AI model, Claude (the coding agent, a closed model); no image model. Every book fact is pinned. Not by the author.`;
+// the owner's wording (2026-10-12), with the two things every label on the site carries (owner, 2026-10-09): who made it
+// and "not by the author" (src/lib/ai-declared.ts); the short visible label follows the site's "AI image · by …" pattern
+const LABEL = 'Map made with AI-written code from real public elevation data, reshaped to fit the book. Sources in the recipe.';
+const SHORT_LABEL = 'AI map · by Snowmoon Party';
+const LABEL_FULL = `${LABEL} Made by Snowmoon Party, not by the author. (Draft label.) The heights are real, moved and possibly mirrored, then reshaped by code written by an AI model, Claude (the coding agent, a closed model); no image model. Every book fact is pinned.`;
 const LICENSE = 'Terrain for Snowmoon, the book by Vitalik Buterin, adapted from public-domain elevation data (see the recipe), 2026-10-12. GPL-3.0, like the book.';
 const SOURCES = ['scripts/terrain-v5.ts', 'scripts/terrain-v4.ts', 'scripts/lib/geotiff-lite.ts', 'scripts/lib/terrain-core.ts', 'scripts/lib/noise.ts', 'scripts/lib/raster-out.ts', 'scripts/lib/map-tests.ts'];
 const codeVersion = () => Object.fromEntries(SOURCES.map((f) => [f, createHash('sha256').update(readFileSync(path.join(ROOT, f))).digest('hex')]));
@@ -96,7 +100,7 @@ export function dest(lon0: number, lat0: number, d: number, b: number): XY {
 type FrameName = 'region' | 'dzego' | 'northshore';
 // Northshore: the chapter 29 battle map and what the book places around it (the peninsula, Thaldur, Northglade's
 // island), in the battle map's pixels (2.6 km each); its own real patch, blended into the region
-const NS_CORE: [number, number, number, number] = [-20, -10, 440, 250];
+const NS_CORE: [number, number, number, number] = [-40, -40, 540, 280]; // includes the open water east of the peninsula and around Thaldur
 const nsBox = (() => { let a = Infinity, b = Infinity, c = -Infinity, d = -Infinity; for (const x of [NS_CORE[0], NS_CORE[2]]) for (const y of [NS_CORE[1], NS_CORE[3]]) { const [lo, la] = nsLL([x, y]); a = Math.min(a, lo); c = Math.max(c, lo); b = Math.min(b, la); d = Math.max(d, la); } return [a, b, c, d] as [number, number, number, number]; })();
 const CENTRE: Record<FrameName, XY> = { region: [38, 51], dzego: [149, 23], northshore: [(nsBox[0] + nsBox[2]) / 2, (nsBox[1] + nsBox[3]) / 2] };
 /** Where a book point (lon, lat) of a frame comes from on the real globe. */
@@ -147,15 +151,16 @@ export function famousIn(frame: FrameName, xf: Xf): { name: string; w: number }[
 const penalty = (xf: Xf, hits: { w: number }[]) => 0.035 * hits.reduce((a, h) => a + h.w, 0) * (!xf.mirror && Math.min(xf.rot % 360, 360 - (xf.rot % 360)) <= 45 ? 1 : 0.6);
 
 // ---- what the book asks of the terrain, as sampled targets (from the same pins v4 uses)
-type Target = { group: number; d: number; b: number; want: 'land' | 'sea' | 'low' | 'high900' };
-type Group = { name: string; weight: number; kind: 'frac' | 'max1800' | 'frac03' | 'atleast03' | 'landshare'; provenance: string; cat: 'battle' | 'sea' | 'land' | 'places' | 'relief' };
-function targetsFor(frame: FrameName, stride: number, cap = 120): { targets: Target[]; groups: Group[] } {
+type Target = { group: number; d: number; b: number; want: 'land' | 'sea' | 'low' | 'high900' | 'match'; ref?: number };
+type Group = { name: string; weight: number; kind: 'frac' | 'max1800' | 'frac03' | 'atleast03' | 'landshare'; provenance: string; cat: 'battle' | 'sea' | 'land' | 'places' | 'relief' | 'blend' };
+function targetsFor(frame: FrameName, stride: number, cap = 120, regionXf?: Xf): { targets: Target[]; groups: Group[] } {
   const f: Frame = frame === 'dzego' ? DZEGO : REGION;
   const inNs = (lo: number, la: number) => lo > nsBox[0] && lo < nsBox[2] && la > nsBox[1] && la < nsBox[3];
-  const pins = (frame === 'dzego' ? dzegoPins() : regionPins()).filter((p) => p.kind !== 'river' && p.kind !== 'cover');
+  // Northshore is scored against v5's own pins (with the open water east of the peninsula), the region against v4's
+  const pins = (frame === 'dzego' ? dzegoPins() : frame === 'northshore' ? regionPinsV5() : regionPins()).filter((p) => p.kind !== 'river' && p.kind !== 'cover');
   const [c0, c1] = CENTRE[frame];
   const targets: Target[] = [], groups: Group[] = [];
-  const add = (group: number, x: number, y: number, want: Target['want']) => { const [lo, la] = f.toLL(x, y); const [d, b] = polar(c0, c1, lo, la); targets.push({ group, d, b, want }); };
+  const add = (group: number, x: number, y: number, want: Target['want'], ref?: number) => { const [lo, la] = f.toLL(x, y); const [d, b] = polar(c0, c1, lo, la); targets.push({ group, d, b, want, ref }); };
   const probe = new Float32Array(f.w * f.h);
   for (const p of pins) {
     probe.fill(0);
@@ -206,8 +211,24 @@ function targetsFor(frame: FrameName, stride: number, cap = 120): { targets: Tar
     const gc = groups.push({ name: 'Dzego has coasts: 35–80% of the frame is land', weight: 1, kind: 'landshare', provenance: 'placed by us', cat: 'relief' }) - 1;
     for (let j = 0; j < f.h; j += stride * 3) for (let i = 0; i < f.w; i += stride * 3) add(gc, f.x0 + i * f.dx, f.y0 + j * f.dy, 'high900');
   }
+  if (frame === 'northshore' && regionXf) {
+    // the blend ring: up to 250 km outside the patch, where it meets the chosen region window; the patch should have
+    // the same kind of ground there (land, shelf, slope or deep sea) as the region, so the blend leaves no seam
+    const gb = groups.push({ name: 'the patch matches the region around the blend', weight: 1, kind: 'frac', provenance: 'placed by us', cat: 'blend' }) - 1;
+    const eg: Grid16 = { data: etopo(), w: ETOPO.w, h: ETOPO.h, res: ETOPO.res };
+    for (let j = 0; j < f.h; j += stride * 2) for (let i = 0; i < f.w; i += stride * 2) {
+      const x = f.x0 + i * f.dx, y = f.y0 + j * f.dy, [lo, la] = f.toLL(x, y);
+      if (lo < nsBox[0] - 8 || lo > nsBox[2] + 8 || la < nsBox[1] - 4 || la > nsBox[3] + 4) continue;
+      const [px, py] = llToFrame('northshore', lo, la);
+      const out = Math.max(NS_CORE[0] - px, px - NS_CORE[2], NS_CORE[1] - py, py - NS_CORE[3], 0) * 2.6;
+      if (out <= 0 || out > 250) continue;
+      const [sx, sy] = toSource('region', regionXf, lo, la);
+      add(gb, x, y, 'match', sampleGrid(eg, sx, sy));
+    }
+  }
   return { targets, groups };
 }
+const depthClass = (z: number) => (z >= 0 ? 0 : z > -200 ? 1 : z > -1000 ? 2 : 3);
 
 /** Score one placement: the weighted share of the book's constraints the real terrain already meets. */
 function scoreXf(frame: FrameName, xf: Xf, T: { targets: Target[]; groups: Group[] }, grid: Grid16, detail = false) {
@@ -227,9 +248,10 @@ function scoreXf(frame: FrameName, xf: Xf, T: { targets: Target[]; groups: Group
     if (t.want === 'land') ok[g] += z >= 0 ? 1 : 0;
     else if (t.want === 'sea') ok[g] += z < 0 ? 1 : 0;
     else if (t.want === 'low') ok[g] += z >= 0 && z < 350 ? 1 : 0;
+    else if (t.want === 'match') ok[g] += depthClass(z) === depthClass(t.ref!) ? 1 : 0;
     else { mx[g] = Math.max(mx[g], z); if (z >= 0) { land[g]++; if (z >= 300) hi300[g]++; } if (z >= 900) ok[g]++; }
   }
-  const cs = { battle: 0, sea: 0, land: 0, places: 0, relief: 0 }, cw = { battle: 0, sea: 0, land: 0, places: 0, relief: 0 };
+  const cs = { battle: 0, sea: 0, land: 0, places: 0, relief: 0, blend: 0 }, cw = { battle: 0, sea: 0, land: 0, places: 0, relief: 0, blend: 0 };
   const parts: Record<string, number> = {};
   for (let g = 0; g < n; g++) {
     const G = T.groups[g];
@@ -249,18 +271,20 @@ function scoreXf(frame: FrameName, xf: Xf, T: { targets: Target[]; groups: Group
   // named places on real land count as much as the book's seas, so no city ends up a pinned speck in open water
   // the battle map's coasts and the named places on real land weigh most; places count one each, and a placement with
   // fewer than 80% of them on real land is cut to 40%
-  const share = frame === 'northshore' ? { battle: 1, places: 0, sea: 0, land: 0, relief: 0 } : { battle: 0.05, places: 0.35, sea: 0.15, land: 0.15, relief: 0.3 };
+  // Northshore: the battle map (with the open water east of the peninsula) and, when a region is chosen, how well the
+  // patch meets it around the blend
+  const share = frame === 'northshore' ? { battle: 0.6, places: 0, sea: 0, land: 0, relief: 0, blend: 0.4 } : { battle: 0.05, places: 0.35, sea: 0.15, land: 0.15, relief: 0.3, blend: 0 };
   let fit = 0, used = 0;
   // the battle map counts its seas and its land half and half, whatever the number of pins on each
   if (bSeaN && bLandN) { cs.battle = 0.5 * (bSea / bSeaN) + 0.5 * (bLand / bLandN); cw.battle = 1; }
-  for (const k of ['battle', 'places', 'sea', 'land', 'relief'] as const) if (cw[k]) { fit += share[k] * (cs[k] / cw[k]); used += share[k]; }
+  for (const k of ['battle', 'places', 'sea', 'land', 'relief', 'blend'] as const) if (cw[k]) { fit += share[k] * (cs[k] / cw[k]); used += share[k]; }
   fit /= used;
   if (placesN && placesOn / placesN < 0.8) fit *= 0.4;
   if (cw.sea && cs.sea / cw.sea < 0.5) fit *= 0.5;
   if (frame === 'northshore' && bSeaN && bSea / bSeaN < 0.5) fit *= 0.5;
   const mg = T.groups.findIndex((G) => G.name === 'Meldan on a low plain');
   if (mg >= 0 && cnt[mg] && ok[mg] / cnt[mg] < 0.7) fit *= 0.6;
-  if (detail) { for (const k of ['battle', 'places', 'sea', 'land', 'relief'] as const) if (cw[k]) parts[`(${k}, overall)`] = Number((cs[k] / cw[k]).toFixed(3)); if (placesN) parts['(places on real land)'] = Number((placesOn / placesN).toFixed(3)); }
+  if (detail) { for (const k of ['battle', 'places', 'sea', 'land', 'relief', 'blend'] as const) if (cw[k]) parts[`(${k}, overall)`] = Number((cs[k] / cw[k]).toFixed(3)); if (placesN) parts['(places on real land)'] = Number((placesOn / placesN).toFixed(3)); }
   const fam = famousIn(frame, xf);
   const score = fit - penalty(xf, fam);
   return detail ? { score, fit, famous: fam.map((x) => x.name), parts } : { score, fit, famous: [] as string[], parts };
@@ -268,10 +292,10 @@ function scoreXf(frame: FrameName, xf: Xf, T: { targets: Target[]; groups: Group
 
 // ---- the search
 type Cand = { xf: Xf; score: number; fit: number; famous: string[]; parts: Record<string, number> };
-function search(frame: FrameName, top: number): Cand[] {
+function search(frame: FrameName, top: number, regionXf?: Xf): Cand[] {
   const fine: Grid16 = { data: etopo(), w: ETOPO.w, h: ETOPO.h, res: ETOPO.res };
   const coarse = coarsen(fine, 6); // 6 arc-minutes, about 11 km
-  const Tc = targetsFor(frame, 10, 30), Tf = targetsFor(frame, 4, 120);
+  const Tc = targetsFor(frame, 10, 30, regionXf), Tf = targetsFor(frame, 4, 120, regionXf);
   console.log(`${frame}: ${Tc.targets.length} coarse targets, ${Tf.targets.length} fine targets, ${Tc.groups.length} constraint groups`);
   const keep: Cand[] = [];
   let worst = -Infinity, tried = 0;
@@ -330,6 +354,177 @@ function realFrame(frame: FrameName, xf: Xf): Float32Array {
   }
   return z;
 }
+// ---- v5's own checks: the seam (no straight runs in coasts or depth contours, no depth step across the blend) and
+// no lake in Pafogai Du
+type Pt = [number, number];
+/** Contour polylines at a level (marching squares on cell centres), in km. */
+function contourLines(g: GridSpec, z: Float32Array, level: number): Pt[][] {
+  const km = (x: number, y: number): Pt => [x * g.kmx(x, y), y * g.kmy];
+  const segs: [string, string, Pt, Pt][] = [];
+  const key = (a: number, b: number, c: number) => `${a},${b},${c}`;
+  for (let j = 0; j < g.h - 1; j++) for (let i = 0; i < g.w - 1; i++) {
+    const v = [z[j * g.w + i], z[j * g.w + i + 1], z[(j + 1) * g.w + i + 1], z[(j + 1) * g.w + i]].map((t) => t - level);
+    const idxc = (v[0] > 0 ? 1 : 0) | (v[1] > 0 ? 2 : 0) | (v[2] > 0 ? 4 : 0) | (v[3] > 0 ? 8 : 0);
+    if (idxc === 0 || idxc === 15) continue;
+    // edges: 0 bottom (0-1), 1 right (1-2), 2 top (3-2), 3 left (0-3); an edge's point is keyed by its cell edge
+    const ep = (e: number): [string, Pt] => {
+      const [a, b, ia, ja, ib, jb] = e === 0 ? [v[0], v[1], i, j, i + 1, j] : e === 1 ? [v[1], v[2], i + 1, j, i + 1, j + 1] : e === 2 ? [v[3], v[2], i, j + 1, i + 1, j + 1] : [v[0], v[3], i, j, i, j + 1];
+      const t = a / (a - b), x = g.x0 + (ia + (ib - ia) * t) * g.dx, y = g.y0 + (ja + (jb - ja) * t) * g.dy;
+      return [ja === jb ? key(0, ia, ja) : key(1, ia, ja), km(x, y)];
+    };
+    const pairs: number[][] = ({ 1: [[3, 0]], 2: [[0, 1]], 3: [[3, 1]], 4: [[1, 2]], 5: [[3, 2], [0, 1]], 6: [[0, 2]], 7: [[3, 2]], 8: [[2, 3]], 9: [[2, 0]], 10: [[0, 3], [1, 2]], 11: [[2, 1]], 12: [[1, 3]], 13: [[1, 0]], 14: [[0, 3]] } as Record<number, number[][]>)[idxc];
+    for (const [e1, e2] of pairs) { const [k1, p1] = ep(e1), [k2, p2] = ep(e2); segs.push([k1, k2, p1, p2]); }
+  }
+  // chain segments into polylines
+  const adj = new Map<string, number[]>();
+  segs.forEach((sg, n) => { for (const k of [sg[0], sg[1]]) { const l = adj.get(k); if (l) l.push(n); else adj.set(k, [n]); } });
+  const used = new Uint8Array(segs.length), lines: Pt[][] = [];
+  for (let n = 0; n < segs.length; n++) {
+    if (used[n]) continue;
+    used[n] = 1;
+    const line: Pt[] = [segs[n][2], segs[n][3]];
+    for (const dir of [1, 0]) {
+      let k = segs[n][dir] as string;
+      for (;;) {
+        const next = (adj.get(k) ?? []).find((m) => !used[m]);
+        if (next === undefined) break;
+        used[next] = 1;
+        const sg = segs[next], forward = sg[0] === k;
+        const p = forward ? sg[3] : sg[2];
+        if (dir === 1) line.push(p); else line.unshift(p);
+        k = forward ? sg[1] : sg[0];
+      }
+    }
+    lines.push(line);
+  }
+  return lines;
+}
+/** The longest straight run (km) in a set of polylines: every point within 1.5% of the run's length (at least tol km)
+ * of the chord, and the chord at least 95% of the path along it. */
+function longestStraight(lines: Pt[][], minKm: number, tol: number): { km: number; at: Pt | null; runs: { km: number; from: Pt; to: Pt }[] } {
+  let best = 0, at: Pt | null = null;
+  const runs: { km: number; from: Pt; to: Pt }[] = [];
+  for (const L of lines) {
+    const n = L.length;
+    if (n < 3) continue;
+    const arc = new Float64Array(n);
+    for (let i = 1; i < n; i++) arc[i] = arc[i - 1] + Math.hypot(L[i][0] - L[i - 1][0], L[i][1] - L[i - 1][1]);
+    if (arc[n - 1] < minKm) continue;
+    const straight = (i: number, j: number) => {
+      const [ax, ay] = L[i], [bx, by] = L[j], len = Math.hypot(bx - ax, by - ay);
+      if (len < 0.95 * (arc[j] - arc[i])) return false;
+      const lim = Math.max(tol, 0.015 * len); // what reads as straight on the map: within 1.5% of the run's length
+      for (let k = i + 1; k < j; k++) if (Math.abs((bx - ax) * (L[k][1] - ay) - (by - ay) * (L[k][0] - ax)) / len > lim) return false;
+      return true;
+    };
+    let j = 0;
+    for (let i = 0; i < n; i++) {
+      if (j < i) j = i;
+      while (j < n - 1 && arc[j] - arc[i] < minKm) j++;
+      if (arc[j] - arc[i] < minKm) break;
+      if (!straight(i, j)) continue;
+      let e = j;
+      while (e < n - 1 && straight(i, e + 1)) e++;
+      const len = arc[e] - arc[i];
+      runs.push({ km: len, from: L[i], to: L[e] });
+      if (len > best) { best = len; at = L[i]; }
+      i = e - 1;
+    }
+  }
+  return { km: best, at, runs: runs.sort((a, b) => b.km - a.km) };
+}
+function seamChecks(fr: FrameRun, W: Float32Array, real0?: Float32Array) {
+  const g = fr.g, z = fr.z, checks: { check: string; ok: boolean; got: string }[] = [], numbers: Record<string, unknown> = {};
+  const tol = 0.25 * g.dx; // km: a quarter of a cell
+  for (const level of [0, -50, -200, -1000]) {
+    const r = longestStraight(contourLines(g, z, level), 80, tol);
+    const name = level === 0 ? 'the coastline' : `the ${-level} m depth contour`;
+    // the same runs, kept only where they cross terrain this pipeline changed (pins, synthetic seabed, the blend band)
+    if (real0) {
+      // where this contour was moved: the terrain crosses the level because of the pipeline (it did not before, or the
+      // other way round), widened by 2 cells; and the blend band
+      const changed = new Uint8Array(z.length);
+      for (let k = 0; k < z.length; k++) if ((real0[k] >= level) !== (z[k] >= level) || (W[k] > 0.02 && W[k] < 0.98)) { const i = k % g.w, j = (k / g.w) | 0; for (let b = -2; b <= 2; b++) for (let a = -2; a <= 2; a++) { const ii = i + a, jj = j + b; if (ii >= 0 && jj >= 0 && ii < g.w && jj < g.h) changed[jj * g.w + ii] = 1; } }
+      const touches = (x: { from: Pt; to: Pt }) => { let hit = 0; for (let t = 0; t <= 20; t++) { const px = x.from[0] + ((x.to[0] - x.from[0]) * t) / 20, py = x.from[1] + ((x.to[1] - x.from[1]) * t) / 20, y = py / g.kmy, xx = px / g.kmx(0, y), i = Math.round((xx - g.x0) / g.dx), j = Math.round((y - g.y0) / g.dy); if (i >= 0 && j >= 0 && i < g.w && j < g.h && changed[j * g.w + i]) hit++; } return hit >= 11; }; // at least half of the run
+      // straightness that the real terrain already has at this level nearby (a straight run at least 40% as long, its
+      // middle within 25 km of the run's span, the same direction) is not a seam
+      const realRuns = longestStraight(contourLines(g, real0, level), 48, tol).runs;
+      const mid = (x: { from: Pt; to: Pt }): Pt => [(x.from[0] + x.to[0]) / 2, (x.from[1] + x.to[1]) / 2];
+      const inReal = (x: { km: number; from: Pt; to: Pt }) => realRuns.some((rr) => rr.km >= 0.4 * x.km && Math.hypot(mid(rr)[0] - mid(x)[0], mid(rr)[1] - mid(x)[1]) < 25 + x.km / 2 && angDiff(rr, x) < 0.35);
+      function angDiff(a: { from: Pt; to: Pt }, b: { from: Pt; to: Pt }) { const o = (q: { from: Pt; to: Pt }) => ((Math.atan2(q.to[1] - q.from[1], q.to[0] - q.from[0]) % Math.PI) + Math.PI) % Math.PI; const d = Math.abs(o(a) - o(b)); return Math.min(d, Math.PI - d); }
+      const seam = r.runs.filter((x) => touches(x) && !inReal(x));
+      checks.push({ check: `Seam: no straight run longer than 80 km in ${name} where the pipeline moved it (half the run or more)`, ok: !seam.length, got: seam.length ? `${seam.length} runs, longest ${Math.round(seam[0].km)} km` : 'none' });
+      const ll2 = (q: Pt) => { const y = q[1] / g.kmy, x = q[0] / g.kmx(0, y); return REGION.toLL(x, y).map((v) => Number(v.toFixed(1))); };
+      numbers[`seam_runs_over_80km_${level === 0 ? 'coast' : -level + 'm'}`] = seam.map((x) => ({ km: Math.round(x.km), from_lon_lat: ll2(x.from), to_lon_lat: ll2(x.to) }));
+    }
+    const where = r.at ? (() => { const y = r.at[1] / g.kmy, x = r.at[0] / g.kmx(0, y); const [lo, la] = REGION.toLL(x, y); return ` (starting near ${lo.toFixed(1)}°, ${la.toFixed(1)}° in the book's frame)`; })() : '';
+    checks.push({ check: `Anywhere: no straight run longer than 80 km in ${name}`, ok: r.km <= 80, got: `longest straight run ${r.km.toFixed(0)} km${r.km > 80 ? where : ''}` });
+    numbers[`longest_straight_km_${level === 0 ? 'coast' : -level + 'm'}`] = Number(r.km.toFixed(1));
+    const ll = (p: Pt) => { const y = p[1] / g.kmy, x = p[0] / g.kmx(0, y); return REGION.toLL(x, y).map((v) => Number(v.toFixed(1))); };
+    numbers[`straight_runs_over_80km_${level === 0 ? 'coast' : -level + 'm'}`] = r.runs.map((x) => ({ km: Math.round(x.km), from_lon_lat: ll(x.from), to_lon_lat: ll(x.to) }));
+  }
+  // depth steps across the blend band, against the same measure in the real seabed around it
+  const steps = (inBand: boolean) => {
+    const out: number[] = [];
+    for (let j = 0; j < g.h - 1; j++) for (let i = 0; i < g.w - 1; i++) {
+      const k = j * g.w + i;
+      if (z[k] >= 0) continue;
+      const band = W[k] > 0.02 && W[k] < 0.98;
+      if (band !== inBand) continue;
+      if (!inBand && W[k] >= 0.98) continue; // the patch itself is not the comparison
+      if (!inBand) { const [lo, la] = REGION.toLL(cxy(g, k)[0], cxy(g, k)[1]); if (lo < nsBox[0] - 15 || lo > nsBox[2] + 15 || la < nsBox[1] - 8 || la > nsBox[3] + 8) continue; }
+      for (const n of [k + 1, k + g.w]) if (z[n] < 0) out.push(Math.abs(z[n] - z[k]));
+    }
+    out.sort((a, b) => a - b);
+    return { p99: out[Math.floor(out.length * 0.99)] ?? 0, max: out[out.length - 1] ?? 0, n: out.length };
+  };
+  const inB = steps(true), outB = steps(false);
+  numbers.blend_band_depth_step_m = { p99: Math.round(inB.p99), max: Math.round(inB.max), pairs: inB.n };
+  numbers.real_seabed_around_depth_step_m = { p99: Math.round(outB.p99), max: Math.round(outB.max), pairs: outB.n };
+  checks.push({ check: 'No sharp depth step across the Northshore blend (cell-to-cell steps within the real seabed\'s own range)', ok: inB.p99 <= 1.5 * outB.p99 && inB.max <= outB.max, got: `blend band: 99th percentile ${inB.p99.toFixed(0)} m, largest ${inB.max.toFixed(0)} m; real seabed around it: ${outB.p99.toFixed(0)} m, ${outB.max.toFixed(0)} m` });
+  return { checks, numbers };
+}
+function pafogaiLakes(fr: FrameRun): number {
+  let n = 0;
+  for (let k = 0; k < fr.z.length; k++) { const [x, y] = cxy(fr.g, k); if (x >= -1 && x <= 4.2 && y >= -1 && y <= 4.2 && fr.hydro.lakes[k]) n++; }
+  return n;
+}
+
+/** A synthetic seabed where pins made sea out of real land: Laplace between the coast (−5 m) and the real seabed
+ * around it, then a 300 km band of real seabed graded toward it, so the depth never steps and no plateau remains. */
+function synthSeabed(g: GridSpec, z: Float32Array, synth: number[], bed: Noise2) {
+  const N = z.length, inS = new Uint8Array(N);
+  for (const k of synth) inS[k] = 1;
+  // the 300 km band of real seabed around the synthetic area (distance in cells over sea)
+  const band = Math.round(300 / g.dx), dS = new Int32Array(N).fill(-1), cells: number[] = [...synth];
+  for (const k of synth) dS[k] = 0;
+  for (let qi = 0; qi < cells.length; qi++) {
+    const k = cells[qi], i = k % g.w, j = (k / g.w) | 0;
+    if (dS[k] >= band) continue;
+    for (const [a, b] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const ii = i + a, jj = j + b; if (ii < 0 || jj < 0 || ii >= g.w || jj >= g.h) continue; const n = jj * g.w + ii; if (dS[n] < 0 && z[n] < 0) { dS[n] = dS[k] + 1; cells.push(n); } }
+  }
+  const real = Float32Array.from(z), inC = new Uint8Array(N);
+  for (const k of cells) inC[k] = 1;
+  // one smooth surface over the synthetic area and its band: the coast at −5 m, the band's outer edge at the real
+  // depth, and a constant sink so an enclosed sea deepens toward its middle instead of lying flat (Poisson, by SOR)
+  const sink = 0.12 * (g.dx / 3.14) ** 2; // metres per cell², scaled to the grid
+  const u = new Float32Array(N);
+  for (const k of cells) u[k] = inS[k] ? -40 : real[k];
+  for (let it = 0; it < 2500; it++)
+    for (const k of cells) {
+      const i = k % g.w, j = (k / g.w) | 0;
+      let s2 = 0, n2 = 0;
+      for (const [a, b] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const ii = i + a, jj = j + b; if (ii < 0 || jj < 0 || ii >= g.w || jj >= g.h) continue; const n = jj * g.w + ii; s2 += inC[n] ? u[n] : z[n] >= 0 ? -5 : real[n]; n2++; }
+      u[k] += 1.85 * ((s2 - sink * n2) / n2 - u[k]);
+    }
+  for (const k of cells) {
+    // natural relief on the synthetic seabed (about ±20% at 30–60 km), so its contours do not copy a drawn shore
+    const [x, y] = cxy(g, k), shaped = Math.max(-600, u[k]) * (1 + 0.22 * bed.fbm(x / 45, y / 45, 4) + 0.1 * (bed.ridged(x / 25 + 5, y / 25, 3) - 0.4));
+    if (inS[k]) z[k] = Math.min(-2, shaped);
+    else { const w = 1 - smooth(dS[k] / band); z[k] = Math.min(-2, real[k] * (1 - w) + Math.min(real[k] * 0.5, shaped) * w); }
+  }
+}
+
 /** v4's finishing steps on real heights: soft and hard pins, a light erosion so the pins settle in,
  * the book's river carved, lakes and rivers from the real drainage, climate from the book's latitudes.
  * Unlike v4 the seabed is left as measured (no smoothing, no added noise). */
@@ -362,7 +557,13 @@ function finishReal(g: Frame | CityFrame, z: Float32Array, pins: Pin[], seed: nu
       for (const [a, b] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const ii = i + a, jj = j + b; if (ii < 0 || jj < 0 || ii >= g.w || jj >= g.h) continue; const n = jj * g.w + ii; if (dist[n] === Infinity) { dist[n] = dist[k] + 1; queue.push(n); } }
     }
     const bed = new Noise2(seed + 777);
-    for (let k = 0; k < z.length; k++) if (made[k]) { const [x, y] = cxy(g, k), dk = dist[k] * g.dx; const natural = -(6 + 150 * smooth(dk / 60)) * (0.85 + 0.3 * (0.5 + 0.5 * bed.fbm(x / 40, y / 40, 3))); z[k] = before[k] < 0 ? Math.min(-2, before[k]) : Math.min(-2, natural); } // real sea keeps its real depth
+    // real sea keeps its real depth; sea a pin made out of real land gets a synthetic seabed, solved as a smooth surface
+    // (Laplace) between the coast (5 m) and the surrounding real seabed, then graded into the real seabed over 300 km
+    const synth: number[] = [];
+    for (let k = 0; k < z.length; k++) if (made[k]) { if (before[k] < 0) z[k] = Math.min(-2, before[k]); else synth.push(k); }
+    if (synth.length) synthSeabed(g, z, synth, bed);
+  }
+  {
   }
   dropSpecks(g, z, pins, 80);
   const carved = carve(g, z, pins);
@@ -583,7 +784,24 @@ function regionPinsV5(): Pin[] {
       out.push([q[0], y2]); open.push(onY(next) !== null || p.open![i]);
       if (onY(next) === null) { out.push(q); open.push(p.open![i]); }
     });
-    return { ...p, poly: out.map(fromNs), open };
+    // the edges beyond the drawing are not ruled lines: each is cut into pieces pushed outward by 15 to 60 px (noise),
+    // so where the real terrain beyond is land, the coast there is irregular
+    const nz2 = new Noise2(9907), fin: XY[] = [], finOpen: boolean[] = [];
+    out.forEach((q, i) => {
+      fin.push(q); finOpen.push(open[i]);
+      if (!open[i]) return;
+      const r = out[(i + 1) % out.length], len = Math.hypot(r[0] - q[0], r[1] - q[1]);
+      if (len < 20) return;
+      const mx = (q[0] + r[0]) / 2, my = (q[1] + r[1]) / 2;
+      let nx = -(r[1] - q[1]) / len, ny = (r[0] - q[0]) / len;
+      if (nx * (mx - 120) + ny * (my - 120) < 0) { nx = -nx; ny = -ny; }
+      const pieces = Math.ceil(len / 4);
+      for (let t = 1; t < pieces; t++) {
+        const x = q[0] + ((r[0] - q[0]) * t) / pieces, y = q[1] + ((r[1] - q[1]) * t) / pieces, off = 15 + 45 * (0.5 + 0.5 * nz2.fbm(x / 11, y / 11, 4));
+        fin.push([x + nx * off, y + ny * off]); finOpen.push(true);
+      }
+    });
+    return { ...p, poly: fin.map(fromNs), open: finOpen };
   };
   const all = regionPins().map(extend);
   const attach = all.find((p) => p.kind === 'land' && /attached to Northshore/.test(p.why));
@@ -602,7 +820,17 @@ function regionPinsV5(): Pin[] {
       }
     }
     return { ...p, poly: out, why: `${p.why} (held inside an irregular inset from the drawing's border)` };
-  }).flatMap((p, n) => (n === 0 ? [openSeaEast(), p] : [p]));
+  }).flatMap((p, n) => (n === 0 ? [openSeaEast(), p] : [p]))
+    // Thaldur's open-water rectangles (ours) are covered by the open sea east of Northshore; their ruled edges went
+    .filter((p) => !(p.kind === 'sea' && /open water (north|south) of it/.test(p.why)))
+    // the book's strait between Thaldur and the peninsula, and the peninsula's join to Northshore: the same areas,
+    // their edges irregular rather than ruled
+    .map((p) => {
+      if (!((p.kind === 'sea' && /a strait between it and the peninsula/.test(p.why)) || (p.kind === 'land' && /attached to Northshore/.test(p.why)))) return p;
+      const nz3 = new Noise2(4401), c = p.poly.map(toNs), cx = c.reduce((a, q) => a + q[0], 0) / c.length, cy = c.reduce((a, q) => a + q[1], 0) / c.length, outS: XY[] = [];
+      c.forEach((q, i) => { const r = c[(i + 1) % c.length]; for (let t = 0; t < 10; t++) { const x = q[0] + ((r[0] - q[0]) * t) / 10, y = q[1] + ((r[1] - q[1]) * t) / 10, len = Math.hypot(x - cx, y - cy) || 1, off = 4 * nz3.fbm(x / 6, y / 6, 2); outS.push([x + ((x - cx) / len) * off, y + ((y - cy) / len) * off]); } });
+      return { ...p, poly: outS.map(fromNs) };
+    });
 }
 /** Thaldur is an island east of Northshore, and the peninsula dangles toward it: the sea east of the battle map is
  * open water around both (as the battle map shows), whatever the real patch has there. The peninsula's and Thaldur's
@@ -613,7 +841,8 @@ function openSeaEast(): Pin {
   for (let t = 0; t < 72; t++) {
     const an = (t / 72) * 2 * Math.PI, r = 1 + 0.18 * nz.fbm(Math.cos(an) * 1.7 + 3, Math.sin(an) * 1.7 - 2, 3);
     // a half-ellipse east of the battle map's edge: its west side runs along the edge (x = 244)
-    const x = 244 + Math.max(0, 235 * r * Math.cos(an)), y = 115 + 85 * r * Math.sin(an);
+    // its west side follows the battle map's edge, but wanders (0 to 18 px) rather than running straight
+    const x = Math.cos(an) > 0 ? 244 + 235 * r * Math.cos(an) : 244 + 18 * (0.5 + 0.5 * nz.fbm(3.3, an * 4, 3)), y = 115 + 85 * r * Math.sin(an);
     out.push([x, y]);
   }
   const box = out.map((q) => { const [lo, la] = nsLL(q); return REGION.fromLL(lo, la); });
@@ -637,17 +866,19 @@ function raiseRedshire(z: Float32Array): number {
 
 /** Northshore's own real patch, feathered into the region: the battle map's core (and the peninsula, Thaldur and
  * Northglade's island) takes the patch; over about 220 km outside it, with an irregular edge, the two blend. */
-function blendNorthshore(zr: Float32Array, zp: Float32Array) {
-  const nz = new Noise2(3131);
+function blendNorthshore(zr: Float32Array, zp: Float32Array | null, core: [number, number, number, number] = NS_CORE, feather = 250): Float32Array {
+  const nz = new Noise2(3131), W = new Float32Array(zr.length);
   for (let k = 0; k < zr.length; k++) {
     const [x, y] = cxy(REGION, k);
     const [lo, la] = REGION.toLL(x, y);
     if (lo < nsBox[0] - 7 || lo > nsBox[2] + 7 || la < nsBox[1] - 4 || la > nsBox[3] + 4) continue;
     const [px, py] = llToFrame('northshore', lo, la);
-    const out = Math.max(NS_CORE[0] - px, px - NS_CORE[2], NS_CORE[1] - py, py - NS_CORE[3], 0) * 2.6;
-    const w = 1 - smooth((out + 90 * nz.fbm(x / 110, y / 110, 3)) / 220);
-    if (w > 0) zr[k] = w * zp[k] + (1 - w) * zr[k];
+    const out = Math.max(core[0] - px, px - core[2], core[1] - py, py - core[3], 0) * 2.6;
+    const w = 1 - smooth((out + 90 * nz.fbm(x / 110, y / 110, 3)) / feather);
+    W[k] = Math.max(0, w);
+    if (w > 0 && zp) zr[k] = w * zp[k] + (1 - w) * zr[k];
   }
+  return W;
 }
 
 export { search, scoreXf, targetsFor, realFrame, finishReal, coarsen, findHills, placeCity, cityHeights, srtmTile, tileName, regionPinsV5 };
@@ -681,7 +912,9 @@ if (!isMain) {
   for (const [name, lo, la] of [['Mount Everest area', 86.925, 27.988], ['Challenger Deep area', 142.2, 11.35], ['Dead Sea', 35.5, 31.5], ['Amsterdam', 4.9, 52.37]] as [string, number, number][]) console.log(`  ${name}: ${sampleGrid(g, lo, la).toFixed(0)} m`);
 } else if (step === 'search') {
   const frame = (args.frame ?? 'region') as FrameName, top = Number(args.top ?? 5);
-  const picked = search(frame, top);
+  // Northshore can be searched for a chosen region candidate (--region=N), to match it around the blend
+  const regionXf = frame === 'northshore' && args.region ? (() => { const c = JSON.parse(readFileSync(path.join(ROOT, REC, 'search-region.json'), 'utf8')).candidates[Number(args.region) - 1]; return { lon: c.source_centre_lon_lat[0], lat: c.source_centre_lon_lat[1], rot: c.rotation_deg, mirror: c.mirrored } as Xf; })() : undefined;
+  const picked = search(frame, top, regionXf);
   const file = path.join(ROOT, REC, `search-${frame}.json`);
   writeFileSync(file, JSON.stringify({
     made: new Date().toISOString(), code_version: codeVersion(), frame,
@@ -716,6 +949,40 @@ if (!isMain) {
     writeFileSync(`/tmp/geo/peek-${frame}-${c.rank}.png`, rgbPng(img));
   }
   console.log('peeks in /tmp/geo');
+} else if (step === 'seamfile') {
+  // the seam check on a saved region height file (16-bit PNG as written by build), with a given blend:
+  // --core=-20,-10,440,250 --feather=220 reproduces the first v5 build's blend
+  const buf = readFileSync(args.file);
+  const idat: Buffer[] = [];
+  for (let o = 8; o < buf.length;) { const len = buf.readUInt32BE(o), type = buf.toString('latin1', o + 4, o + 8); if (type === 'IDAT') idat.push(buf.subarray(o + 8, o + 8 + len)); o += 12 + len; }
+  const raw = inflateSync(Buffer.concat(idat)), w = REGION.w, h = REGION.h, z = new Float32Array(w * h);
+  for (let r = 0; r < h; r++) for (let i = 0; i < w; i++) z[(h - 1 - r) * w + i] = raw.readUInt16BE(r * (w * 2 + 1) + 1 + i * 2) - 32768;
+  const core = (args.core ?? NS_CORE.join(',')).split(',').map(Number) as [number, number, number, number];
+  const W = blendNorthshore(new Float32Array(z.length), null, core, Number(args.feather ?? 250));
+  const res = seamChecks({ g: REGION, z } as unknown as FrameRun, W);
+  for (const c of res.checks) console.log(`${c.ok ? 'ok  ' : 'FAIL'} ${c.check}: ${c.got}`);
+  for (const [k, v] of Object.entries(res.numbers)) if (k.startsWith('straight_runs')) console.log(k, JSON.stringify(v));
+} else if (step === 'meldancheck') {
+  // every Meldan hill whose search placement met the summit, staircase and parliament checks, built at full resolution
+  // and checked as the build checks it
+  const list = JSON.parse(readFileSync(path.join(ROOT, REC, 'city-meldan.json'), 'utf8')).results as { screened: Hill; placement: CityXf; fit: Record<string, unknown> }[];
+  const city = pts(place(maps.meldan, 'city'));
+  for (const [n, r] of list.entries()) {
+    if (!(r.fit.okTop && r.fit.okStair && r.fit.okParl)) continue;
+    const H = cityHeights(MELDAN, r.placement, 1);
+    const M = finishReal(MELDAN, H.z, meldanPinsV4(H.plain, 1).slice(1), 303, 0, 400, [400, 4], 1.5, (y) => 52 + y / 111.2, MELDAN.toLL, MELDAN.render, undefined, () => true);
+    const g = M.g, at = (p: XY) => M.z[Math.round((p[1] - g.y0) / g.dy) * g.w + Math.round((p[0] - g.x0) / g.dx)];
+    let top = -Infinity, topAt: XY = [0, 0], flat = 0, cells = 0;
+    for (let k = 0; k < M.z.length; k++) {
+      const [x, y] = cxy(g, k);
+      if (M.z[k] > top) { top = M.z[k]; topAt = [x, y]; }
+      const i = k % g.w, j = (k / g.w) | 0;
+      if (pointInPoly(x, y, city) && Math.hypot(x, y) > 1.8 && i > 0 && j > 0 && i < g.w - 1 && j < g.h - 1) { cells++; if (Math.hypot(M.z[k + 1] - M.z[k - 1], M.z[k + g.w] - M.z[k - g.w]) / (2 * g.dx * 1000) < 0.05) flat++; }
+    }
+    const parl = at(place(maps.meldan, 'parliament').at as XY) - H.plain, stair = at([0.1, -0.6]) - at([0, -1.3]);
+    const ok = Math.hypot(...topAt) < 0.3 && parl >= 25 && parl <= 60 && stair >= 150 && stair <= 250 && flat / cells >= 0.9;
+    console.log(`#${n + 1} ${r.screened.lon.toFixed(3)}, ${r.screened.lat.toFixed(3)}: ${ok ? 'passes' : 'fails'}; summit ${(top - H.plain).toFixed(0)} m at ${Math.hypot(...topAt).toFixed(2)} km from the centre, parliament ${parl.toFixed(0)} m, staircase ${stair.toFixed(0)} m, flat ${((100 * flat) / cells).toFixed(1)}%`);
+  }
 } else if (step === 'city') {
   const kind = (args.kind ?? 'meldan') as 'meldan' | 'pafogai', n = Number(args.n ?? 4);
   const hills = JSON.parse(readFileSync(path.join(ROOT, REC, 'hills.json'), 'utf8'))[kind] as Hill[];
@@ -753,7 +1020,7 @@ if (!isMain) {
     save(`${dir}/data/biome.png`, grey8Png(g.w, g.h, Uint8Array.from({ length: g.w * g.h }, (_, k) => { const j = g.h - 1 - Math.floor(k / g.w), i = k % g.w; return fr.clim.biome[j * g.w + i]; })));
     const toOut = (q: XY) => { const [lo, la] = fr.toLL(q[0], q[1]); return [Number(lo.toFixed(5)), Number(la.toFixed(5))]; };
     save(`${dir}/data/rivers.json`, Buffer.from(JSON.stringify({ coordinates: '[longitude, latitude] in the book\'s frame', rivers: fr.hydro.rivers.map((rv) => ({ flow_km2: rv.flow_km2, flows_km2: rv.flows, points: rv.points.map(toOut) })) }) + '\n'));
-    save(`${dir}/data/meta.json`, Buffer.from(JSON.stringify({ label: LABEL_FULL, license: LICENSE, recipe: `${REC}/recipe.json`, grid: { w: g.w, h: g.h, cell_km: Number(g.dx.toFixed(5)) }, source, height_png: '16-bit grey, meters + 32768, row 0 is the north edge', biome_png: { legend: BIOMES, note: '8-bit grey, the value is an index into the legend; row 0 is the north edge' }, render: { width: L2.w, height: L2.h, vertical_exaggeration: ex } }, null, 2) + '\n'));
+    save(`${dir}/data/meta.json`, Buffer.from(JSON.stringify({ short_label: SHORT_LABEL, label: LABEL_FULL, license: LICENSE, recipe: `${REC}/recipe.json`, grid: { w: g.w, h: g.h, cell_km: Number(g.dx.toFixed(5)) }, source, height_png: '16-bit grey, meters + 32768, row 0 is the north edge', biome_png: { legend: BIOMES, note: '8-bit grey, the value is an index into the legend; row 0 is the north edge' }, render: { width: L2.w, height: L2.h, vertical_exaggeration: ex } }, null, 2) + '\n'));
     return L2;
   };
   // Dzego: the best placement; Sadzu Du's river comes from the real drainage if there is one within 12 km, otherwise the book's pin is carved
@@ -787,13 +1054,20 @@ if (!isMain) {
     const c = sr[rank - 1], xf = xfOf(c);
     const meldanXY = REGION.fromLL(8, 52);
     const rz = realFrame('region', xf);
-    blendNorthshore(rz, nsPatch);
+    const W = blendNorthshore(rz, nsPatch);
+    const real0 = Float32Array.from(rz); // the real terrain (with the Northshore patch blended in), before any reshaping
     const raised = raiseRedshire(rz);
     const region = finishReal(REGION, rz, regionPinsV5(), 1, 60000, 1000, [40, 50, 4, 700, 22], 5000, REGION.lat, REGION.toLL, REGION.render, undefined, (x, y) => kmDist(REGION, [x, y], meldanXY) < 130);
     const run: SeedRun = { seed: rank, region, dzego, meldan, pafogai };
     const t = testSeed(run);
+    const seam = seamChecks(region, W, real0), lakeP = pafogaiLakes(pafogai);
+    const extra = [...seam.checks, { check: 'No lake inside Pafogai Du (the grid and 1 km around it)', ok: lakeP === 0, got: `${lakeP} lake cells` }];
+    for (const x of extra) if (!x.ok && !x.check.startsWith('Anywhere')) t.failed.push(`${x.check}: ${x.got}`);
+    for (const x of extra) console.log(`  ${x.ok ? 'ok  ' : 'FAIL'} ${x.check}: ${x.got}`);
+    for (const [k, v] of Object.entries(seam.numbers)) if (k.startsWith('seam_runs')) console.log(`  ${k} ${JSON.stringify(v)}`);
+    writeFileSync(`/tmp/geo/seam-runs-${rank}.json`, JSON.stringify(seam.numbers));
     console.log(`candidate ${rank}: ${t.failed.length ? `fails ${t.failed.length}: ${t.failed.slice(0, 6).join(' | ')}` : 'passes every test'}`);
-    results[rank] = { redshire_range_raised_m: raised, passes: !t.failed.length, failed: t.failed, map_tests: `${t.mapResults.filter((x) => x.ok).length} of ${t.mapResults.length} hold`, terrain_checks: t.checks.map((x) => ({ check: x.id, ok: x.ok, got: x.got })) };
+    results[rank] = { redshire_range_raised_m: raised, seam_checks: extra, seam_numbers: seam.numbers, passes: !t.failed.length, failed: t.failed, map_tests: `${t.mapResults.filter((x) => x.ok).length} of ${t.mapResults.length} hold`, terrain_checks: t.checks.map((x) => ({ check: x.id, ok: x.ok, got: x.got })) };
     const L2 = writeFrame(`candidate-${rank}/region`, region, 6, { dataset: 'ETOPO 2022', centre: c.source_centre_lon_lat, rotation_deg: c.rotation_deg, mirrored: c.mirrored, scale: 1 });
     sheet.push(downsample(L2.composite, 4));
   }
@@ -811,7 +1085,7 @@ if (!isMain) {
   const sourceBox = (frame: FrameName, xf: Xf) => { const [lo0, la0, lo1, la1] = BOUNDS[frame]; let a = Infinity, b2 = Infinity, c2 = -Infinity, d2 = -Infinity; for (let t = 0; t <= 40; t++) for (const [lo, la] of [[lo0 + ((lo1 - lo0) * t) / 40, la0], [lo0 + ((lo1 - lo0) * t) / 40, la1], [lo0, la0 + ((la1 - la0) * t) / 40], [lo1, la0 + ((la1 - la0) * t) / 40]]) { const [x, y] = toSource(frame, xf, lo, la); a = Math.min(a, x); c2 = Math.max(c2, x); b2 = Math.min(b2, y); d2 = Math.max(d2, y); } return { west: Number(a.toFixed(3)), south: Number(b2.toFixed(3)), east: Number(c2.toFixed(3)), north: Number(d2.toFixed(3)), note: 'the box around the frame\'s outline on the real globe (longitudes may wrap)' }; };
   const describe = (ps: Pin[], frame: string) => ps.map((p) => ({ frame, kind: p.kind, why: p.why, provenance: p.provenance, lines: p.lines, ...('detail' in p ? { detail: p.detail } : {}), ...('band' in p ? { band_km: p.band } : {}) }));
   writeFileSync(path.join(ROOT, REC, 'recipe.json'), JSON.stringify({
-    label: LABEL_FULL, license: LICENSE, made: new Date().toISOString(), code_version: codeVersion(),
+    short_label: SHORT_LABEL, label: LABEL_FULL, license: LICENSE, made: new Date().toISOString(), code_version: codeVersion(),
     sources: JSON.parse(readFileSync(path.join(ROOT, REC, 'sources.json'), 'utf8')),
     region_candidates: ranks.map((rank) => { const c = sr[rank - 1]; return { rank, dataset: 'ETOPO 2022 v1, 60 arc-second surface elevation', source_centre_lon_lat: c.source_centre_lon_lat, source_box: sourceBox('region', xfOf(c)), rotation_deg: c.rotation_deg, mirrored: c.mirrored, scale: 1, search_score: c.score, constraint_fit: c.fit, famous_coastlines_in_frame: c.famous_coastlines_in_frame, tests: results[rank] }; }),
     northshore: { dataset: 'ETOPO 2022 v1, 60 arc-second surface elevation', note: 'the chapter 29 battle map\'s area (with the peninsula, Thaldur and Northglade\'s island) comes from its own real patch, feathered into each region candidate over about 220 km: no region-scale window matches the book\'s drawn coast there', source_centre_lon_lat: [nxf.lon, nxf.lat], source_box: sourceBox('northshore', nxf), rotation_deg: nxf.rot, mirrored: nxf.mirror, scale: 1 },
