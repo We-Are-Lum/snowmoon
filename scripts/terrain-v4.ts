@@ -1171,14 +1171,10 @@ function render(fr: FrameRun, exaggerate: number, seed: number): Layers {
 
 // ---- commands
 const args = Object.fromEntries(process.argv.slice(3).map((a) => a.replace(/^--/, '').split('=')) as [string, string][]);
-// the commands run only when this file is the script invoked; maps v5 imports the pipeline below
-const isMain = /terrain-v4\.ts$/.test(process.argv[1] ?? '');
-const step = isMain ? process.argv[2] : '';
-if (isMain) mkdirSync(path.join(ROOT, REC), { recursive: true });
+const step = process.argv[2];
+mkdirSync(path.join(ROOT, REC), { recursive: true });
 
-if (!isMain) {
-  // imported: no command
-} else if (step === 'search') {
+if (step === 'search') {
   const from = Number(args.from ?? 1), want = Number(args.want ?? 3), max = Number(args.max ?? 12);
   const file = path.join(ROOT, REC, 'search.json');
   const prior = existsSync(file) ? JSON.parse(readFileSync(file, 'utf8')) : null;
@@ -1306,10 +1302,3 @@ if (!isMain) {
   console.log('rivers through carved cells', through.length, through.map((rv) => rv.points.length + ' pts from ' + rv.points[0].map((v) => v.toFixed(0)).join(',') + ' to ' + rv.points.at(-1)!.map((v) => v.toFixed(0)).join(',')).slice(0, 4), 'carved bbox', [cxmin, cymin, cxmax, cymax].map((v) => v.toFixed(0)));
   console.log('carved land cells: in lakes', inLake, 'flow stays in channel', recIn, 'flow leaves channel', recOut, 'no receiver', noRec);
 } else throw new Error('step: search | build');
-
-export {
-  W, LL, nsLL, ucLL, llToFrame, projFrame, cityFrame, REGION, DZEGO, MELDAN, PAFOGAI, kmDist, polySigned, bilinear, applyPins,
-  regionPins, dzegoPins, meldanPinsV4, pafogaiPinsV4, finish, generatedMaps, terrainChecks, testSeed, render, hydrology, climate,
-  BIOMES, LABEL, smooth, place, pts, maps, cxy, idx, softPins, erodeDroplets, carve, dropSpecks, B, FOREST,
-};
-export type { Frame, CityFrame, FrameRun, SeedRun, Pin, Layers, Check };
