@@ -852,6 +852,7 @@ function removeThin(g: GridSpec, z: Float32Array, pins: Pin[]) {
 /** v4's finishing steps on real heights: soft and hard pins, a light erosion so the pins settle in,
  * the book's river carved, lakes and rivers from the real drainage, climate from the book's latitudes.
  * Unlike v4 the seabed is left as measured (no smoothing, no added noise). */
+const FOREST_V5 = new Set<string>(['boreal pine forest', 'temperate forest', 'subtropical forest', 'tropical forest']);
 let lastTouched: Uint8Array | null = null; // cells the pins and v5's rules changed in the last finishReal (not erosion)
 function finishReal(g: Frame | CityFrame, z: Float32Array, pins: Pin[], seed: number, droplets: number, hScale: number, lake: [number, number, number?, number?, number?], riverKm2: number, latOf: (y: number) => number, toLL: (x: number, y: number) => XY, renderPx: number, noRiver?: (x: number, y: number) => boolean, noLake?: (x: number, y: number) => boolean): FrameRun {
   // where the book's shape and the real terrain disagree, bring the real terrain near sea level first, so the
@@ -874,6 +875,16 @@ function finishReal(g: Frame | CityFrame, z: Float32Array, pins: Pin[], seed: nu
   const preRules = Float32Array.from(z);
   openChanged(g, z, before, pins);
   removeThin(g, z, pins);
+  if (g.dx < 0.5) {
+    // city frames: specks of real ground just below sea level (a few cells) are not water; they lift to 1 m
+    const seen = new Uint8Array(z.length);
+    for (let s0 = 0; s0 < z.length; s0++) {
+      if (seen[s0] || z[s0] >= 0) continue;
+      const q = [s0]; seen[s0] = 1;
+      for (let qi = 0; qi < q.length && q.length <= 200; qi++) { const k = q[qi], i = k % g.w, j = (k / g.w) | 0; for (const [a, b] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const ii = i + a, jj = j + b; if (ii < 0 || jj < 0 || ii >= g.w || jj >= g.h) continue; const n = jj * g.w + ii; if (!seen[n] && z[n] < 0) { seen[n] = 1; q.push(n); } } }
+      if (q.length <= 200) for (const k of q) z[k] = 1;
+    }
+  }
   // where the lift toward land did not end as land (trimmed, opened, sunk), the real depth comes back: no shallow plates
   // stranded in deep water
   for (let k = 0; k < z.length; k++) if (z[k] < 0 && orig[k] < z[k] && wantSea[k] >= 0 && orig[k] < -40) z[k] = orig[k];
@@ -934,7 +945,29 @@ function finishReal(g: Frame | CityFrame, z: Float32Array, pins: Pin[], seed: nu
   const carved = carve(g, z, pins);
   const hydro = hydrology(g, z, lake[0], lake[1], riverKm2, noRiver, noLake, carved, lake[2] ?? 10, lake[3] ?? Infinity, lake[4] ?? 0);
   const clim = climate(g, z, hydro.lakes, latOf);
-  for (const p of pins) if (p.kind === 'cover') for (let k = 0; k < z.length; k++) { const q = cxy(g, k); if (z[k] >= 0 && !hydro.lakes[k] && pointInPoly(q[0], q[1], p.poly)) clim.biome[k] = B(p.biome as (typeof BIOMES)[number]); }
+  // cover pins: forest covers are feathered into the climate's own biome (the edge wanders by up to about a third of the
+  // cover's size, at least 25 km in the region and 250 m in a city) and never replace a forest the climate already made;
+  // other covers (the built-up grid) keep their edge
+  const featherNz = new Noise2(seed + 919);
+  for (const p of pins) {
+    if (p.kind !== 'cover') continue;
+    const biome = B(p.biome as (typeof BIOMES)[number]), forestCover = FOREST_V5.has(p.biome);
+    const xs = p.poly.map((q) => q[0]), ys = p.poly.map((q) => q[1]);
+    const size = Math.min((Math.max(...xs) - Math.min(...xs)) * g.kmx(0, 0), (Math.max(...ys) - Math.min(...ys)) * g.kmy);
+    const F = forestCover ? Math.max(g.dx > 1 ? 25 : 0.25, 0.35 * size) : 0;
+    for (let k = 0; k < z.length; k++) {
+      if (z[k] < 0 || hydro.lakes[k]) continue;
+      const q = cxy(g, k);
+      if (q[0] < Math.min(...xs) - F || q[0] > Math.max(...xs) + F || q[1] < Math.min(...ys) - F || q[1] > Math.max(...ys) + F) continue;
+      const sd = polySigned(g, q, p.poly);
+      // the edge: broad lobes, plus a fine patchy fringe a few cells wide, like the climate's own forest edge
+      // (the threshold spreads across the whole band, from 30% of F outside the line to F inside it)
+      const u = Math.max(0, Math.min(1, 0.5 + 1.6 * featherNz.fbm(q[0] / (F * 0.6), q[1] / (F * 0.6), 4) + 0.9 * featherNz.fbm(q[0] / (2.5 * g.dx) + 17, q[1] / (2.5 * g.dx), 2)));
+      if (sd <= (F ? F * (1.3 * u - 0.3) : 0)) continue;
+      if (forestCover && FOREST_V5.has(BIOMES[clim.biome[k]])) continue;
+      clim.biome[k] = biome;
+    }
+  }
   return { g, z, hydro, clim, pins, latOf, toLL, render: renderPx, carved };
 }
 
@@ -1052,7 +1085,7 @@ function citySource(c: CityXf, x: number, y: number): XY {
 }
 /** Sample a city frame from SRTM, smoothed (SRTM carries a few metres of noise per pixel), heights
  * scaled about the plain by c.vscale. Returns the heights and the plain's level. */
-function cityHeights(cf: CityFrame, c: CityXf, stride = 1, cross = true): { z: Float32Array; w: number; h: number; plain: number } {
+function cityHeights(cf: CityFrame, c: CityXf, stride = 1, cross = true, heavy?: (x: number, y: number) => number): { z: Float32Array; w: number; h: number; plain: number } {
   const w = Math.ceil(cf.w / stride), h = Math.ceil(cf.h / stride), z = new Float32Array(w * h);
   const dk = cf.dx * stride;
   for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) {
@@ -1066,11 +1099,23 @@ function cityHeights(cf: CityFrame, c: CityXf, stride = 1, cross = true): { z: F
   for (let pass = 0; pass < 20; pass++) { let left = 0; for (let k = 0; k < z.length; k++) if (Number.isNaN(z[k])) { const i = k % w, j = (k / w) | 0; let s2 = 0, n2 = 0; for (const [a, b] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const ii = i + a, jj = j + b; if (ii >= 0 && jj >= 0 && ii < w && jj < h && !Number.isNaN(z[jj * w + ii])) { s2 += z[jj * w + ii]; n2++; } } if (n2) z[k] = s2 / n2; else left++; } if (!left) break; }
   // smoothing in km, the same at any stride (two box passes of about 150 m): SRTM carries a few metres of
   // noise per pixel, which at 27 m cells would read as slopes of more than 5% on flat ground
-  const r = Math.max(1, Math.round(0.15 / dk));
-  for (let pass = 0; pass < 2; pass++) {
-    const t = new Float32Array(z.length);
-    for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) { let s2 = 0, n2 = 0; for (let a = -r; a <= r; a++) { const ii = i + a; if (ii >= 0 && ii < w) { s2 += z[j * w + ii]; n2++; } } t[j * w + i] = s2 / n2; }
-    for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) { let s2 = 0, n2 = 0; for (let b = -r; b <= r; b++) { const jj = j + b; if (jj >= 0 && jj < h) { s2 += t[jj * w + i]; n2++; } } z[j * w + i] = s2 / n2; }
+  // With a mask (the builds), the 150 m smoothing applies only where the mask asks for flat ground (Pafogai Du's grid,
+  // Meldan's plain inside the city), and about 40 m (SRTM's own pixel) everywhere else, so real ridges stay sharp
+  const boxBlur = (src: Float32Array, r: number) => {
+    let cur = Float32Array.from(src);
+    for (let pass = 0; pass < 2; pass++) {
+      const t = new Float32Array(cur.length), o = new Float32Array(cur.length);
+      for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) { let s2 = 0, n2 = 0; for (let a = -r; a <= r; a++) { const ii = i + a; if (ii >= 0 && ii < w) { s2 += cur[j * w + ii]; n2++; } } t[j * w + i] = s2 / n2; }
+      for (let j = 0; j < h; j++) for (let i = 0; i < w; i++) { let s2 = 0, n2 = 0; for (let b = -r; b <= r; b++) { const jj = j + b; if (jj >= 0 && jj < h) { s2 += t[jj * w + i]; n2++; } } o[j * w + i] = s2 / n2; }
+      cur = o;
+    }
+    return cur;
+  };
+  const heavyZ = boxBlur(z, Math.max(1, Math.round(0.15 / dk)));
+  if (!heavy) z.set(heavyZ);
+  else {
+    const lightZ = boxBlur(z, Math.max(1, Math.round(0.02 / dk)));
+    for (let k = 0; k < z.length; k++) { const wgt = heavy(cf.x0 + (k % w) * dk, cf.y0 + ((k / w) | 0) * dk); z[k] = wgt * heavyZ[k] + (1 - wgt) * lightZ[k]; }
   }
   // the plain: the median height between 3 and 10 km from the frame's anchor
   const ring: number[] = [];
@@ -1244,7 +1289,7 @@ const BATTLE_COAST = /battle map's northern sea|battle map's southern sea|battle
  * are unchanged; this is a cover pin like Elenar Forest's. */
 function meldanWoods(): Pin {
   const c = REGION.fromLL(8, 52), nz = new Noise2(6060), poly: XY[] = [];
-  for (let t = 0; t < 48; t++) { const an = (t / 48) * 2 * Math.PI, r = 60 * (1 + 0.25 * nz.fbm(Math.cos(an) * 1.5, Math.sin(an) * 1.5, 3)); poly.push([c[0] + (r * Math.cos(an)) / REGION.kmx(c[0], c[1]), c[1] + (r * Math.sin(an)) / REGION.kmy]); }
+  for (let t = 0; t < 96; t++) { const an = (t / 96) * 2 * Math.PI, r = 65 * (1 + 0.45 * nz.fbm(Math.cos(an) * 2.2, Math.sin(an) * 2.2, 4)); poly.push([c[0] + (r * Math.cos(an)) / REGION.kmx(c[0], c[1]), c[1] + (r * Math.sin(an)) / REGION.kmy]); }
   return { kind: 'cover', poly, biome: 'temperate forest', why: 'Meldan is wooded: "tall trees towering on both sides" (c1-b2); Kalimar is "not too different from a forest" (c32-b107)', provenance: 'book', lines: ['wg-306'] };
 }
 /** Thaldur is an island east of Northshore, and the peninsula dangles toward it: the sea east of the battle map is
@@ -1458,17 +1503,20 @@ if (!isMain) {
   console.log('dzego built; Sadzu Du\'s river from', sadzuRiver);
   // Meldan: a real lone hill; v4's invented mountain shape is dropped, the rest of its pins kept
   const mc = bestCity(cm, args.meldan);
-  const mh = cityHeights(MELDAN, mc, 1);
+  // Meldan: the 150 m smoothing on the city's plain (outside the mountain), feathered over 400 m; lighter elsewhere
+  const mCity = pts(place(maps.meldan, 'city'));
+  const mh = cityHeights(MELDAN, mc, 1, true, (x, y) => { const d = polySigned(MELDAN, [x, y], mCity); return smooth((d + 0.4) / 0.8) * smooth((Math.hypot(x, y) - 1.5) / 0.4); });
   const meldanPins = meldanPinsV4(mh.plain, 1).slice(1);
-  const meldan = { ...finishReal(MELDAN, mh.z, meldanPins, 303, 0, 400, [400, 4], 1.5, (y) => 52 + y / 111.2, MELDAN.toLL, MELDAN.render, undefined, () => true), base: mh.plain };
+  const meldan = { ...finishReal(MELDAN, mh.z, meldanPins, 303, 0, 400, [400, 4], 40, (y) => 52 + y / 111.2, MELDAN.toLL, MELDAN.render, undefined, () => true), base: mh.plain };
   // Pafogai Du: a real steep hill behind the city; v4's invented massif is dropped, the grid, the path and the pyramid are kept
   const pc = bestCity(cp, args.pafogai);
-  const ph = cityHeights(PAFOGAI, pc, 1);
+  // Pafogai Du: the 150 m smoothing only on the grid and 500 m around it
+  const ph = cityHeights(PAFOGAI, pc, 1, true, (x, y) => { const d = Math.max(-0.5 - x, x - 3.7, -0.5 - y, y - 3.7); return 1 - smooth((d + 0.2) / 0.4); });
   const pbase = ph.z[Math.round((0 - PAFOGAI.y0) / PAFOGAI.dx) * PAFOGAI.w + Math.round((0 - PAFOGAI.x0) / PAFOGAI.dx)];
   const pv4 = pafogaiPinsV4(pbase, 1);
   const pathPin: Pin = { kind: 'shape', bbox: [1.6, -0.7, 1.8, 0], f: (x, y) => (y < 0 && y >= -0.62 && Math.abs(x - 1.7) < 0.04 ? { target: pbase + 60 * Math.min(-y, 0.6) / 0.6, weight: 1 } : null), why: 'The path from Dzai Gun climbs at ten percent to the pyramid\'s foot', provenance: 'book', lines: ['wg-341'], detail: '0 m to 60 m over 600 m' };
   const pafogaiPins = [pv4[0], pathPin, pv4[2], pv4[3], pv4[4]];
-  const pafogai = { ...finishReal(PAFOGAI, ph.z, pafogaiPins, 404, 0, 400, [400, 4], 1.5, (y) => PAFOGAI.lat0 + y / 111.2, PAFOGAI.toLL, PAFOGAI.render, (x, y) => x >= -0.02 && x <= 3.22 && y >= -0.02 && y <= 3.22, () => true), base: pbase }; // no lakes: the real floodplain's hollows drain rather than flood the city
+  const pafogai = { ...finishReal(PAFOGAI, ph.z, pafogaiPins, 404, 0, 400, [400, 4], 6, (y) => PAFOGAI.lat0 + y / 111.2, PAFOGAI.toLL, PAFOGAI.render, (x, y) => x >= -0.02 && x <= 3.22 && y >= -0.02 && y <= 3.22, () => true), base: pbase }; // no lakes: the real floodplain's hollows drain rather than flood the city
   console.log('cities built');
   const sn = JSON.parse(readFileSync(path.join(ROOT, REC, 'search-northshore.json'), 'utf8')).candidates as typeof sr;
   const nxf = xfOf(sn[Number(args.northshore ?? 1) - 1]);
@@ -1509,8 +1557,8 @@ if (!isMain) {
     sheet.push(downsample(L2.composite, 4));
   }
   writeFrame('dzego', dzego, 4, { dataset: 'ETOPO 2022', centre: [dxf.lon, dxf.lat], rotation_deg: dxf.rot, mirrored: dxf.mirror, scale: 1 });
-  writeFrame('meldan', meldan, 1.6, { dataset: 'SRTM GL1 v003', placement: mc });
-  writeFrame('pafogai-du', pafogai, 1.4, { dataset: 'SRTM GL1 v003', placement: pc });
+  writeFrame('meldan', meldan, 4, { dataset: 'SRTM GL1 v003', placement: mc });
+  writeFrame('pafogai-du', pafogai, 2.5, { dataset: 'SRTM GL1 v003', placement: pc });
   // the candidates on one sheet, two across, no source named
   const pw = sheet[0].w, phh = sheet[0].h, gap = 16, cols = 2, rows = Math.ceil(sheet.length / cols);
   const sh = newRGBA(pw * cols + gap, phh * rows + gap * (rows - 1));

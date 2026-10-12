@@ -2,10 +2,10 @@
   "short_label": "AI map · by Snowmoon Party",
   "label": "Map made with AI-written code from real public elevation data, reshaped to fit the book. Sources in the recipe. Made by Snowmoon Party, not by the author. (Label accepted by the owner, 2026-10-12.) The heights are real, moved and possibly mirrored, then reshaped by code written by an AI model, Claude (the coding agent, a closed model); no image model. Every book fact is pinned.",
   "license": "Terrain for Snowmoon, the book by Vitalik Buterin, adapted from public-domain elevation data (see the recipe), 2026-10-12. GPL-3.0, like the book.",
-  "made": "2026-10-12T21:32:47.067Z",
+  "made": "2026-10-12T23:12:57.323Z",
   "code_version": {
-    "scripts/terrain-v5.ts": "43eb4fdb2dccb0d0a5cf7476947a55b22965940ba425f5fd9c3a561b520f5502",
-    "scripts/terrain-v4.ts": "2878d0450b814f60f5fb05c2e46920ce9120801dba729cafd1f6e00636098e62",
+    "scripts/terrain-v5.ts": "d0dae40cf01d8666936dfb43c48db4ffbcc0ed34c4da050a64f8c0d6e4e1ad90",
+    "scripts/terrain-v4.ts": "cad633f0abec25621ff7feb6780d0c6d4eef6cc5c2d5867626d7f877e93d5e38",
     "scripts/lib/geotiff-lite.ts": "b439401048dbfe2c7c46b4dbce41979e1e7d13e4f33243919558844d019acdc0",
     "scripts/lib/terrain-core.ts": "5140c0a7e5d4357c97b4a54c000c9654c406dd6f127e249b028ee0b23b6a36d0",
     "scripts/lib/noise.ts": "ef2aba4f58c28e0cb002c0992ac3bd80dd99af8b1d4b4e5b5bf5d849047c2395",
@@ -1036,27 +1036,27 @@
           {
             "check": "Rivers run downhill to the sea or off the frame (Meldan)",
             "ok": true,
-            "got": "143 rivers, 0 climb; lakes 0 cells"
+            "got": "5 rivers, 0 climb; lakes 0 cells"
           },
           {
             "check": "Rivers run downhill to the sea or off the frame (Pafogai Du)",
             "ok": true,
-            "got": "31 rivers, 0 climb; lakes 0 cells"
+            "got": "7 rivers, 0 climb; lakes 0 cells"
           },
           {
             "check": "Meldan: a tree-covered mountain in the center (c1-b13, c26-b22)",
             "ok": true,
-            "got": "413 m above the city; 100% wooded"
+            "got": "474 m above the city; 100% wooded"
           },
           {
             "check": "Parliament about forty meters above most of Meldan",
             "ok": true,
-            "got": "31 m"
+            "got": "26 m"
           },
           {
             "check": "The Order's staircase climbs about two hundred meters",
             "ok": true,
-            "got": "187 m"
+            "got": "185 m"
           },
           {
             "check": "Around the mountain, Meldan is mostly flat",
@@ -1076,7 +1076,7 @@
           {
             "check": "The path's height at Dzai Gun",
             "ok": true,
-            "got": "-0 m, layout 0 m"
+            "got": "1 m, layout 0 m"
           },
           {
             "check": "The path's height at the pyramid's foot",
@@ -1905,14 +1905,14 @@
   "outputs": {
     "where": "out/maps-v5/ (not in the repository; copied to Drive)",
     "sha256": {
-      "out/maps-v5/candidate-1/region/composite.png": "591a3ff45533f998843bf424ae912bded98f33944b9078beac901b3c98018592",
+      "out/maps-v5/candidate-1/region/composite.png": "aa95db9d67a385466f5cff71090108156cb2d17598a51f7a3f4c70d8c1195bbe",
       "out/maps-v5/candidate-1/region/layers/hillshade.png": "57fddd45fc99406540ade80735068c48e6005ba382aab28f3b3825ca3bf67937",
-      "out/maps-v5/candidate-1/region/layers/tint.png": "60de3bcb8b28d4d59511018962a3af86c2a0e732d1616c60e52530932855f3b0",
+      "out/maps-v5/candidate-1/region/layers/tint.png": "dfc20eac9765625375a6f7912c85df839631e5d956e6c5db3255be87e41af5af",
       "out/maps-v5/candidate-1/region/layers/water.png": "1fe6d17fd4309249361f6b3a06eda5af5c3cabfd955d84dca2b4c6af7065244b",
       "out/maps-v5/candidate-1/region/layers/rivers.png": "ef02831fd0848beba44551e2c2d26f90c91e18e8ea6cba84ffb51af848a31c54",
-      "out/maps-v5/candidate-1/region/layers/forest.png": "f8790255bb8b96c8d04290e77a28e04ebb7e753849f77e1823e621eb238ea432",
+      "out/maps-v5/candidate-1/region/layers/forest.png": "e6323de38d81b44857035cc47297d09569c5373191b38740292f0734c9002d80",
       "out/maps-v5/candidate-1/region/data/height.png": "2442223a964381458e7da7af21b83445a05ee7e1d9354df4991ab1156f8fa6ef",
-      "out/maps-v5/candidate-1/region/data/biome.png": "1961a6290376df9be5fd14896dba543a5744591eea46df18ab6eaf4f740d6738",
+      "out/maps-v5/candidate-1/region/data/biome.png": "7d5515825fff81dc15e4e315efc32fcb9dfc53893f47bebaf8c6443456ddc569",
       "out/maps-v5/candidate-1/region/data/rivers.json": "a05818f59b0fb726d3b68f7e0485b4094673270c12f1da45db14d75f210be5c9",
       "out/maps-v5/candidate-1/region/data/meta.json": "2e387d43ede4bc2ee264ca6484ba931275c62a86c0750fbe80a92d686fb3a8d3",
       "out/maps-v5/dzego/composite.png": "695f1822102a581701a612aa3ee9e4f440ff7ebeb305b8279123364f9bd0acb1",
@@ -1925,26 +1925,26 @@
       "out/maps-v5/dzego/data/biome.png": "06a2b31476791f276e76a8942ac99e1ecff8310ebbaf9660ca5e229199cc5edd",
       "out/maps-v5/dzego/data/rivers.json": "9753ee77b9cb6e4f72bfcccd1ee562db12f36889429a4a5b5614c21918b99d26",
       "out/maps-v5/dzego/data/meta.json": "ac5818a43696ff38f31d333c6971e04225742644199203ab1eccffe532dea99f",
-      "out/maps-v5/meldan/composite.png": "8519c22672d2ab737ad34fc142dde28e544ce5a454dca00eabf929b90886da88",
-      "out/maps-v5/meldan/layers/hillshade.png": "08b81b9923f8f330b5c2c3276ec4b76303363ee980a59d54173567bfd7731e46",
-      "out/maps-v5/meldan/layers/tint.png": "d1e44d9d4b02a0d72217ffecb4423a6b7f13681cb2be2e85c270d54e71eef14f",
+      "out/maps-v5/meldan/composite.png": "716b053882fb477d4d7beb590f42683f97b3deeca22172bfadbdd0bf25d6c531",
+      "out/maps-v5/meldan/layers/hillshade.png": "5da7ec0418f0ad735bf25b4ece4f071fb5c1fc3ec9e106b385abfff88565c277",
+      "out/maps-v5/meldan/layers/tint.png": "e80872543b2bf851f5168e81b568d0a329534adf333e071accc44d7364ee6b2b",
       "out/maps-v5/meldan/layers/water.png": "a46a0424d36cb5a313fcab03f0e76cf204095c242bd8721bfd030106a418374b",
-      "out/maps-v5/meldan/layers/rivers.png": "72f37057e8c1c0739d02b273cdf72373c2cdc72cb3c342c24fecef3c604b8c2a",
+      "out/maps-v5/meldan/layers/rivers.png": "5be208bb068c8fc30192d4cf863ff4013a2a5bcf9b1907dfd264ac830a5ff919",
       "out/maps-v5/meldan/layers/forest.png": "dc675fac8c90c361be7b9b76f03a1749ea338ef62e519c5addda58865170e0c8",
-      "out/maps-v5/meldan/data/height.png": "c6f08867e9db482c70755e7aacb333eac7318a054168b4cc37088d7c77733bd6",
-      "out/maps-v5/meldan/data/biome.png": "475c4da7fb181ae9324aa647ed149a7d8089dbe2c696d27a55903fc61c6705e6",
-      "out/maps-v5/meldan/data/rivers.json": "17fbf54e66454793ca780ebb646831a2531a55d02f6540a47e7288fa0e1376d0",
-      "out/maps-v5/meldan/data/meta.json": "c9c3632186fd158a4d1434b0b1fef880227001140c08d4cfc15091e4561b36f6",
-      "out/maps-v5/pafogai-du/composite.png": "0b9a1d47931728232620b7e9f4c89461e78a2750109b6fa65aa8cc1bac283db2",
-      "out/maps-v5/pafogai-du/layers/hillshade.png": "19802b242203c618aba6bb6f2dafc911f2b6827bf0874230d97210a6c5ff2361",
-      "out/maps-v5/pafogai-du/layers/tint.png": "30888a135df9bf2e5a2fa751602cb37a5c5f615216037196fdadeee90a7b8775",
+      "out/maps-v5/meldan/data/height.png": "5fc4a8c621e2cad0c55ece2686fa9bc0f1b764279d4a372b280662ab0a30e7ec",
+      "out/maps-v5/meldan/data/biome.png": "8cf339e847dbd1cc86cb4cf9724a650629dc67547e3ac114efc827c4558c097d",
+      "out/maps-v5/meldan/data/rivers.json": "16c4ac2d3db80e53b3154652ff6da8babc2dff4f437bffb224fedd9b24269b99",
+      "out/maps-v5/meldan/data/meta.json": "8adcfe12ca925f94efcdbbde7c534e86254a40a5a60ed3a9e273db3c74dd3047",
+      "out/maps-v5/pafogai-du/composite.png": "714dfed6702f16dd9d9e6c2871fff1e2e8cd4d4f1de826820d268a6d75b803d7",
+      "out/maps-v5/pafogai-du/layers/hillshade.png": "a7489f4935a1873216b9345f35c1a0dc1fdf39d42e62f26413a03c2d909917ed",
+      "out/maps-v5/pafogai-du/layers/tint.png": "28d0728fb1e0d4a3e6b2307c7512d84cd5d70010f8f381675cc378ba4a9d7131",
       "out/maps-v5/pafogai-du/layers/water.png": "1c0a9bb1dbfa81dd1abb70b8da28483ee0da4b1a8a459e031b66b64a0c679e20",
-      "out/maps-v5/pafogai-du/layers/rivers.png": "ffe120d35a2324793cded417e5061eb62d740bede6de982a44eefd0aeaad4561",
-      "out/maps-v5/pafogai-du/layers/forest.png": "fa593e352cbc32d09a22e15a27ddb706ec857cd4e10c1eae261b108f6d2b7c23",
-      "out/maps-v5/pafogai-du/data/height.png": "eafa528e47935b19f4548821a1baef52547c776d5863ff3dde4847165ec66df2",
-      "out/maps-v5/pafogai-du/data/biome.png": "d979666ce93847dc5d1bd571c419192d2e339d89c9d2a24aad4b25fa0bdb2bef",
-      "out/maps-v5/pafogai-du/data/rivers.json": "4a320646e133672631a1ecbbae94bb86b7091094d84d0788940eb54bd6e3450f",
-      "out/maps-v5/pafogai-du/data/meta.json": "bb6038ec8fc6d023ae0316409c3111fb1b73be9f13355ef5cdd860c9c1e2206e"
+      "out/maps-v5/pafogai-du/layers/rivers.png": "f42c39a26a10c79859fb0f8c25b9d87d1eb6ecd0692e59413bfaf26dbc905b83",
+      "out/maps-v5/pafogai-du/layers/forest.png": "0ab6f0f1e02a1682caa906d6b7cd27757109758c5cbdde0c751017f8354b23e9",
+      "out/maps-v5/pafogai-du/data/height.png": "b695f76082e92103f819b1628dc6eaaa3322834ab3beb228a275fa70cc0e529a",
+      "out/maps-v5/pafogai-du/data/biome.png": "aff739fa3b7d4f51293ef9ff37ae9df41658231cbbc648ce924004227823bccf",
+      "out/maps-v5/pafogai-du/data/rivers.json": "f5792d74b041e19d34f6664bcb12e1515156514126933aaed640cf7de6282b05",
+      "out/maps-v5/pafogai-du/data/meta.json": "a763a512519f3af1439713584692985fed790843087ff35a742ea3a3eccba86d"
     }
   }
 }

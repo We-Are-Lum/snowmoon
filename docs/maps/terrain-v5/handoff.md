@@ -58,3 +58,20 @@ Each of these is listed in `recipe.json` (`constraints`, `book_test_changes`):
 4. **The battle map's land is mostly low.** Only Northglade's pinned summit (369 m) reads as "snowy hills".
 5. **Disguise is partial at the region's scale** (accepted). The region's own straight real coasts fail the "anywhere" straight-run measure: 138 km of coastline, 309 km at 50 m. They are reported, not gating.
 6. **Meldan's forest is pinned at region scale** (a cover pin, c1-b2 and c32-b107). The climate alone gives grassland there.
+
+## City fix round (2026-10-12, after the freeze)
+
+The owner reviewed the city previews; these are display and city-frame fixes only:
+- **Meldan's rivers:** the combed, parallel rivers came from the plain being nearly flat. 80% of the frame lies within 9 m (58 to 67 m), with an overall tilt of only 0.32 m/km. On ground that flat, the flood-fill's tie-breaking gradient and the eight-direction routing decided where water went, not the real heights. Now:
+  - rivers draw only above 40 km² of catchment (it was 1.5 km²);
+  - the 150 m smoothing applies only on the city's plain; elsewhere it is about 40 m;
+  - city rivers are drawn with gentle bends.
+- **Meldan's hill:** display exaggeration 4×, up from 1.6×. Heights are unchanged.
+- **Pafogai Du's hills:** the 150 m smoothing applies only on the grid and 500 m around it; about 40 m elsewhere. The frame's 11 m cells still sample SRTM's 30 m pixels, about 2.7× finer, so some softness remains.
+- **Pafogai Du's ghost rectangle:** it was the forest pin painting one forest biome over another. Forest pins no longer replace a forest the climate already made.
+- **Pafogai Du's river sawtooth:** two causes.
+  - The display line followed grid cells: it now thins them and draws smooth bends.
+  - The terrain had stair-stepped drainage trenches: city frames now fill small hollows instead.
+- **City specks:** specks of ground just below sea level are lifted to 1 m.
+- **Region:** forest pins are feathered into the climate's own biome with lobed, patchy edges, so Meldan's woods are no longer a disc. The long east–west forest edge south of Northshore is the climate's boreal/temperate line, which follows latitude, not a pin; it is unchanged.
+- **Tests:** still 113/113 and 31/31; the lake and blend checks pass. Parliament is now 26 m (25 to 60 m required).

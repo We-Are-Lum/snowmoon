@@ -332,7 +332,8 @@ function hydrology(g: GridSpec, z: Float32Array, lakeMinCells: number, lakeMinDe
     const inNoLake = !!noLake && cells.some((c2) => noLake(...cxy(g, c2)));
     const tooBig = cells.length > lakeMaxCells;
     const ok = cells.length >= lakeMinCells && depth >= lakeMinDepthM && !inNoLake && !tooBig;
-    basins.push({ cells, ok, breach: (inNoLake || tooBig) && depth > 8 });
+    // cities (cells under 0.5 km): no trench, the hollow fills; on their fine grid a cut channel is a visible sawtooth
+    basins.push({ cells, ok, breach: (inNoLake || tooBig) && depth > 8 && g.dx >= 0.5 });
   }
   // only the largest qualifying basins hold lakes; every other hollow fills with sediment
   const kept = new Set(basins.filter((b) => b.ok).sort((a, b) => b.cells.length - a.cells.length).slice(0, maxLakes));
@@ -1059,9 +1060,15 @@ function hypso(h: number): number[] {
 type Layers = { composite: RGBA; hillshade: Uint8Array; tint: RGBA; water: RGBA; rivers: RGBA; forest: RGBA; w: number; h: number };
 /** For display only: a river's cell path smoothed (Chaikin, two passes) and given a gentle meander,
  * so it doesn't follow the grid's straight lines. The data layer (rivers.json) keeps the cell path. */
-function displayCourse(rv: River, seed: number): River {
+function displayCourse(rv: River, seed: number, fineDx = 0): River {
+  const fine = fineDx > 0;
   let p = rv.points, fl = rv.flows;
-  for (let it = 0; it < 2; it++) {
+  if (fine && p.length > 8) {
+    // city frames: the cell path's stair-steps read as a sawtooth at this zoom; keep every 6th point (and the ends)
+    const keep = p.map((_, i) => i % 6 === 0 || i === p.length - 1);
+    p = p.filter((_, i) => keep[i]); fl = fl.filter((_, i) => keep[i]);
+  }
+  for (let it = 0; it < (fine ? 3 : 2); it++) {
     const np: XY[] = [p[0]], nf: number[] = [fl[0]];
     for (let i = 0; i < p.length - 1; i++) {
       const a = p[i], b = p[i + 1];
@@ -1075,8 +1082,8 @@ function displayCourse(rv: River, seed: number): River {
   const out: XY[] = p.map((q, i) => {
     if (i === 0 || i === p.length - 1) return q;
     const a = p[i - 1], b = p[i + 1], tx = b[0] - a[0], ty = b[1] - a[1], tl = Math.hypot(tx, ty) || 1;
-    const step = Math.hypot(p[1][0] - p[0][0], p[1][1] - p[0][1]) * 4, amp = 0.8 * step;
-    const m = amp * nz.fbm(q[0] / (step * 7 + 1e-9), q[1] / (step * 7 + 1e-9), 2);
+    const step = Math.hypot(p[1][0] - p[0][0], p[1][1] - p[0][1]) * 4, amp = fine ? 30 * fineDx : 0.8 * step, wl = fine ? 110 * fineDx : step * 7; // city rivers: the noise is about ±0.3, so bends of about ±10 cells over about 60
+    const m = amp * nz.fbm(q[0] / (wl + 1e-9), q[1] / (wl + 1e-9), fine ? 1 : 2); // one smooth octave in the cities: bends, not jitter
     return [q[0] - (ty / tl) * m, q[1] + (tx / tl) * m];
   });
   return { points: out, flow_km2: rv.flow_km2, flows: fl };
@@ -1145,7 +1152,7 @@ function render(fr: FrameRun, exaggerate: number, seed: number): Layers {
   // rivers, antialiased, wider with more water
   const maxFlow = Math.max(1, ...fr.hydro.rivers.map((r) => r.flow_km2));
   for (const river of fr.hydro.rivers) {
-    const rv = displayCourse(river, seed);
+    const rv = displayCourse(river, seed, g.dx < 0.5 ? g.dx : 0);
     for (let s = 0; s < rv.points.length - 1; s++) {
       // width grows with the water carried at this point (about as its square root, as real channels do)
       const width = (0.55 + 4.2 * Math.sqrt(rv.flows[s] / maxFlow)) * Math.max(1, S / 2);
