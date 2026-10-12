@@ -219,7 +219,7 @@
         "on": "2026-10-11",
         "source": "https://www.anthropic.com/legal/commercial-terms"
       },
-      "notes": "Closed model, reported under principle 3. Proposed by the owner on 2026-10-11 for the planning coach's comparison eval only, on test drafts only (the eval's invented fixtures and the owner's own freewrite); not for real users' drafts, which is a separate decision. BLOCKED: the owner's condition is that Sonnet receives nothing until Anthropic's data retention for our account is confirmed, without assuming zero retention. Gateway-level evidence gathered 2026-10-11 (the gateway's own listing marks every Sonnet 5.5 endpoint has_zdr; a zero-retention test request was answered 'ZDR requested: all 1 attempts support ZDR', served by anthropic on Vercel's system credentials; we have no Anthropic organization or key of our own) is not that confirmation. scripts/plan-coach-eval.ts refuses to call this model until hosted.retention_confirmed_by_owner is set. Two calls were made on 2026-10-11 before the owner's condition arrived, each containing only 'Reply with the single word OK.'.",
+      "notes": "Closed model, reported under principle 3. For the planning coach's comparison eval only, on test drafts only (the eval's invented fixtures and the owner's own freewrite); not for real users' drafts, which is a separate decision. Zero-retention test on our account, 2026-10-11: a request with ZDR required and Anthropic as the only provider was answered 'ZDR requested: all 1 attempts support ZDR', served by anthropic (Vercel's system credentials; we have no Anthropic organization or key of our own). The owner, 2026-10-11: that test meets the condition; unblocked for the comparison, test drafts only. Every reply must carry the gateway's zero-retention flag and come only from anthropic, or the run fails (scripts/lib/zdr-check.ts).",
       "runs_on": "hosted",
       "hosted": {
         "host": "Vercel AI Gateway",
@@ -234,14 +234,49 @@
           "output": 10.0
         },
         "price_seen": "2026-10-11",
-        "retention_confirmed_by_owner": null
+        "retention_confirmed_by_owner": "2026-10-11, owner: the zero-retention test (ZDR required, Anthropic as the only provider, every attempt supported ZDR) meets the condition; comparison eval, test drafts only"
       },
       "model_record": "gateway model id, date, provider and the gateway request id (the host does not expose a weights revision)",
       "cost_usd_per_unit": null,
       "license": "proprietary (Anthropic Commercial Terms)",
       "open_weights": false,
       "weights": null,
-      "role": "planning-coach comparison eval (test drafts only), blocked until the owner confirms retention"
+      "role": "planning-coach comparison eval (test drafts only)"
+    },
+    {
+      "id": "claude-opus-5.5",
+      "kind": "text",
+      "repo": "anthropic/claude-opus-5.5",
+      "revision": null,
+      "license_line": "Anthropic Commercial Terms of Service (effective June 17, 2025): \"Subject to Customer's compliance with these Terms, Anthropic hereby assigns to Customer its right, title and interest (if any) in and to Outputs.\"",
+      "license_checked": {
+        "by": "coding agent",
+        "on": "2026-10-11",
+        "source": "https://www.anthropic.com/legal/commercial-terms"
+      },
+      "notes": "Closed model, reported under principle 3. Added by the owner on 2026-10-11 as a ceiling for the planning coach's comparison eval, on the same terms as Sonnet 5.5: test drafts only, Anthropic as the only provider, zero retention required on every call, the same $2 cap. Not for real users' drafts, which is a separate decision. Zero-retention test on our account, 2026-10-11, before any test draft was sent: one request containing only 'Reply with the single word OK.', ZDR required, only anthropic; answered 'OK', 'ZDR requested: all 1 attempts support ZDR', served by anthropic on Vercel's system credentials, enabledZeroDataRetention true, is_byok false. Every reply must carry the gateway's zero-retention flag and come only from anthropic, or the run fails (scripts/lib/zdr-check.ts).",
+      "runs_on": "hosted",
+      "hosted": {
+        "host": "Vercel AI Gateway",
+        "endpoints": {
+          "anthropic/claude-opus-5.5": null
+        },
+        "provider": "anthropic",
+        "zero_data_retention": true,
+        "price_unit": "USD per million tokens (input, output)",
+        "prices": {
+          "input": 4.0,
+          "output": 20.0
+        },
+        "price_seen": "2026-10-11 (from the test reply's inference cost: 18 input tokens $0.000072, 4 output tokens $0.00008)",
+        "retention_confirmed_by_owner": "2026-10-11, owner: same terms as Sonnet 5.5, conditional on its own zero-retention test, which passed the same day"
+      },
+      "model_record": "gateway model id, date, provider and the gateway request id (the host does not expose a weights revision)",
+      "cost_usd_per_unit": null,
+      "license": "proprietary (Anthropic Commercial Terms)",
+      "open_weights": false,
+      "weights": null,
+      "role": "planning-coach comparison eval, as a ceiling (test drafts only)"
     }
   ],
   "candidates": [

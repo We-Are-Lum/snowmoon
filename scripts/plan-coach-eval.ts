@@ -21,7 +21,8 @@
  * marks or on-screen text in the picture slots.
  *
  * Models (owner, 2026-10-11, test drafts only): gpt-oss-120b; Kimi K3 pinned to moonshotai;
- * Claude Sonnet 5.5 pinned to anthropic. Every call goes through the Vercel AI Gateway only
+ * Claude Sonnet 5.5 and, as a ceiling, Claude Opus 5.5, both pinned to anthropic, each reply checked for
+ * the gateway's zero-retention flag (scripts/lib/zdr-check.ts). Every call goes through the Vercel AI Gateway only
  * (scripts/lib/batch-model.ts, never the site's Groq key), with zero data retention, pinned as
  * config/models.json says. Spending for design 2 stops at $2.
  * Results: content/snowmoon/recipes/plan-coach-eval.json; report: docs/craft/plan-coach-eval.md.
@@ -30,6 +31,7 @@ import { createHash } from 'node:crypto';
 import { readFileSync, readdirSync, writeFileSync, existsSync } from 'node:fs';
 import path from 'node:path';
 import { completeViaGateway, batchGatewayToken, type BatchReply } from './lib/batch-model';
+import { withZdrCheck, ZdrRefused } from './lib/zdr-check';
 import { loadGatewayKey, promptFile } from './lib/gateway-key';
 import { codeFlags, CANT, norm } from './lib/plan-coach-checks';
 import { craftUpTo } from './lib/craft-guide';
@@ -44,7 +46,10 @@ const MODELS: Record<string, string> = {
   'gpt-oss-120b': 'openai/gpt-oss-120b',
   'kimi-k3': 'moonshotai/kimi-k3',
   'claude-sonnet-5.5': 'anthropic/claude-sonnet-5.5',
+  'claude-opus-5.5': 'anthropic/claude-opus-5.5',
 };
+// Owner, 2026-10-11: for these, any reply without the zero-retention flag and the pinned provider fails.
+const ZDR_ENFORCED: Record<string, string> = { 'anthropic/claude-sonnet-5.5': 'anthropic', 'anthropic/claude-opus-5.5': 'anthropic' };
 const GUARD = 'openai/gpt-oss-safeguard-20b';
 const CAP_USD = 2;
 const read = (f: string) => readFileSync(path.join(ROOT, f), 'utf8');
@@ -101,12 +106,12 @@ const models = (modelArg ? modelArg.split(',') : ['gpt-oss-120b']).map((m) => {
   return m;
 });
 const only = args.filter((a) => !a.startsWith('--'));
-// The owner (2026-10-11): Sonnet receives nothing until Anthropic's data retention for our account
-// is confirmed. config/models.json records that confirmation; until then this model is refused.
+// The owner (2026-10-11): the Anthropic models receive nothing until their zero retention on our account
+// is confirmed. config/models.json records that confirmation; until then a model is refused.
 const allowlist = JSON.parse(read('config/models.json')) as { models: { id: string; hosted?: { retention_confirmed_by_owner?: string | null } }[] };
 for (const m of models) {
   const entry = allowlist.models.find((x) => x.id === m);
-  if (m === 'claude-sonnet-5.5' && !entry?.hosted?.retention_confirmed_by_owner) throw new Error('claude-sonnet-5.5 is blocked: the owner has not confirmed Anthropic\'s data retention for our account (config/models.json hosted.retention_confirmed_by_owner)');
+  if (MODELS[m].startsWith('anthropic/') && !entry?.hosted?.retention_confirmed_by_owner) throw new Error(`${m} is blocked: the owner has not confirmed its zero retention for our account (config/models.json hosted.retention_confirmed_by_owner)`);
 }
 
 const results = existsSync(path.join(ROOT, RESULTS)) ? JSON.parse(read(RESULTS)) : { runs: [] as unknown[] };
@@ -128,8 +133,10 @@ async function call(step: string, model: string, system: string, user: string, m
   let r: BatchReply | null = null;
   for (let attempt = 0; attempt < 3 && !r; attempt++) {
     try {
-      r = await completeViaGateway(model, [{ role: 'system', content: system }, { role: 'user', content: user }], { maxTokens, temperature });
+      const go = () => completeViaGateway(model, [{ role: 'system', content: system }, { role: 'user', content: user }], { maxTokens, temperature });
+      r = ZDR_ENFORCED[model] ? await withZdrCheck(ZDR_ENFORCED[model], go) : await go();
     } catch (e) {
+      if (e instanceof ZdrRefused) throw new Error(`${model} ${step}: refused, ${e.message}; nothing from it is used`);
       if (attempt === 2) throw e;
       await new Promise((res) => setTimeout(res, 10_000 * (attempt + 1)));
     }
@@ -256,7 +263,7 @@ for (const f of readdirSync(path.join(ROOT, DIR)).filter((x) => x.endsWith('.md'
 }
 
 // ---- the report: each design-2 run in full, with a summary per model; the reviewer's notes go in docs/craft/plan-coach-eval-review.md.
-type R = { design?: number; fixture: string; limit: number; model?: string; cost_usd: number; guard: { verdict: string; reason: string }; auto_flags: string[]; claims?: { verdict: string }[]; expected_world?: { key: string; expected: string; got: string; ok: boolean }[]; reply: string };
+type R = { design?: number; fixture: string; limit: number; model?: string; cost_usd: number; ms?: number; guard: { verdict: string; reason: string }; auto_flags: string[]; claims?: { verdict: string }[]; expected_world?: { key: string; expected: string; got: string; ok: boolean }[]; reply: string };
 const runs = (results.runs as R[]).filter((r) => r.design === DESIGN);
 if (runs.length) {
   const lines = [
@@ -264,15 +271,17 @@ if (runs.length) {
     '',
     `Generated by \`scripts/plan-coach-eval.ts\` from \`${RESULTS}\`. Test drafts only. Every call through the Vercel AI Gateway with zero data retention, pinned per config/models.json. Guard: ${GUARD} with config/prompts/plan-coach-guard.md. The reviewer's flags are in docs/craft/plan-coach-eval-review.md. Design 1 runs stay in the results file.`,
     '',
-    '| Model | Runs | Cost | Expected world answers | Guard VIOLATION | Runs with code flags | Claims: matches / conflicts / not said / later |',
-    '|---|---|---|---|---|---|---|',
+    '| Model | Turns | Cost per turn | Time per turn (median) | World errors caught (expected conflicts found) | Expected world answers | Guard VIOLATION (writing for the person) | Turns with code flags | Claims: matches / conflicts / not said / later |',
+    '|---|---|---|---|---|---|---|---|---|',
   ];
   for (const m of [...new Set(runs.map((r) => r.model ?? 'gpt-oss-120b'))]) {
     const rs = runs.filter((r) => (r.model ?? 'gpt-oss-120b') === m);
     const cl = rs.flatMap((r) => r.claims ?? []);
     const n = (v: string) => cl.filter((c) => c.verdict === v).length;
     const ex = rs.flatMap((r) => r.expected_world ?? []);
-    lines.push(`| ${m} | ${rs.length} | $${rs.reduce((a, r) => a + r.cost_usd, 0).toFixed(4)} | ${ex.filter((x) => x.ok).length} of ${ex.length} | ${rs.filter((r) => /VIOLATION/.test(r.guard.verdict)).length} | ${rs.filter((r) => r.auto_flags.length).length} | ${n('matches')} / ${n('conflicts')} / ${n('not said')} / ${n('later')} |`);
+    const caught = ex.filter((x) => x.expected === 'conflicts');
+    const times = rs.map((r) => r.ms ?? 0).sort((a, b) => a - b);
+    lines.push(`| ${m} | ${rs.length} | $${(rs.reduce((a, r) => a + r.cost_usd, 0) / rs.length).toFixed(4)} | ${(times[Math.floor(times.length / 2)] / 1000).toFixed(0)} s | ${caught.filter((x) => x.ok).length} of ${caught.length} | ${ex.filter((x) => x.ok).length} of ${ex.length} | ${rs.filter((r) => /VIOLATION/.test(r.guard.verdict)).length} | ${rs.filter((r) => r.auto_flags.length).length} | ${n('matches')} / ${n('conflicts')} / ${n('not said')} / ${n('later')} |`);
   }
   for (const run of runs) {
     lines.push('', `## ${run.fixture} on ${run.model} (chapter limit ${run.limit}; $${run.cost_usd.toFixed(4)})`, '', `Guard: ${run.guard.verdict} ${run.guard.reason}`, '', `Code flags: ${run.auto_flags.length ? run.auto_flags.join('; ') : 'none'}`, '', `Expected world answers: ${(run.expected_world ?? []).map((x) => `${x.key}: expected ${x.expected}, got ${x.got}${x.ok ? '' : ' (MISS)'}`).join('; ') || 'none set'}`, '', '```text', run.reply.trim(), '```');

@@ -359,6 +359,3283 @@
       "claims_reply": "F1 | Zei was nervous, his hands shaking on the console  \nF2 | Bai grew up in Redshire  \nF2 | Bai sits across the arena and does not look at him  \nF3 | Gliders flew across the board and hit the wall  \nF4 | Zei sends one ship deep into enemy ground  \nF4 | Zei finally speaks to her  \nF5 | She copies his trick and they win",
       "reply": "NOTES:\n1. [F1] What to change: add an establishing picture before the close‑up of Zei’s face. Why: readers need to know the setting before a character’s expression; otherwise the panel violates **Establish the place before the faces**. Passages: [c4-b108] (wide view of the Minpentai arena).\n2. [F2] What to change: give Bai a clear want that the audience can see. Why: a character introduced without a want leaves the viewer without a reason to care; this follows **Introduce a character through what they want**. Passages: [c4-b108] (Bai’s drive to win the match).\n3. [F3] What to change: remove the narration that repeats what the picture shows. Why: narration should convey information the image cannot, per **Narration says what the pictures can't**. Passages: [c4-b108] (gliders crossing the board).\n4. [F4] What to change: clarify Zei’s want, the obstacle, and the turn in this beat. Why: each beat needs a want‑obstacle‑turn structure; currently the beat is vague, breaching **Each scene has a want, an obstacle and a turn**. Passages: [c4-b109] (Zei’s slip and unexpected glider).\n5. [F5] What to change: show Zei’s pride through an action or object instead of stating it, and make the ending a clear change. Why: inner states are stronger when shown, not told, and the piece should end with a visible change, per **Show inner states through action and objects** and **Change**. Passages: [c4-b111] (Zei’s winning move).\n\nORDER:\nF1, F2, F3, F4, F5 – the sequence already follows a logical progression from character focus to conflict to resolution; keep your order.\n\nPICTURE SLOTS:\n- After F1: before the close‑up; arena; wide view of the Minpentai board with gliders and walls in play.\n- After F2: arena; Bai; sitting opposite Zei, arms crossed, eyes averted, the board faintly visible behind her.\n- After F4: arena; Zei’s ship; a single ship slipping deep into the enemy‑controlled sector of the board.\n- After F5: arena; Zei and Bai; both raising a hand toward the board as the final glider lands, the scoreboard flashing “WIN”.\n\nQUESTION:\nWhat does Zei want at the start of this scene, and how does that want shape each beat’s obstacle and turn?\n\nWORLD CHECK:\n- F1 Zei was nervous, his hands shaking on the console: the book doesn't say, up to your chapter.\n- F2 Bai grew up in Redshire: the book doesn't say, up to your chapter.\n- F2 Bai sits across the arena and does not look at him: the book doesn't say, up to your chapter.\n- F3 Gliders flew across the board and hit the wall: matches. Gliders were sent deep into Dza's territory and hit his wall [c4-b113]\n- F4 Zei sends one ship deep into enemy ground: the book doesn't say, up to your chapter.\n- F4 Zei finally speaks to her: the book doesn't say, up to your chapter.\n- F5 She copies his trick and they win: the book doesn't say, up to your chapter.",
       "note": "Pipeline test before the owner corrected fixture A and before the craft guide was filtered by chapter (2026-10-11); not scored."
+    },
+    {
+      "design": 2,
+      "fixture": "a-quarter-final",
+      "limit": 4,
+      "model": "gpt-oss-120b",
+      "gateway_model": "openai/gpt-oss-120b",
+      "at": "2026-10-12T01:42:27.209Z",
+      "cost_usd": 0.0034692000000000004,
+      "ms": 12097,
+      "prompts_sha256": {
+        "notes": "21a773731f9cb17331dbd2987095639c5399afd74b2b037ddba9e06df4ad924b",
+        "claims": "26fbcca73928f8734e530a7c359e26d7ac83c725cb39876f2bbb15d6a3227bf7",
+        "check": "69eec543f8e34357b21ce63bb42077b4865d294dfe47693a1fb81ca8f8998111",
+        "guard": "630cc2ca2c9ef27c82b5714ab161da96b8c5b591702efe21e1668e32198c6c82"
+      },
+      "craft_sha256": "15c11ee5bbc0491ed804b38fb918ea671744e01af0e06fb788e0db54b7522fc8",
+      "craft_limit_sha256": "b8b101fdd58cd987e938c65f95bd58062b9113163e308e9cb98404a35dc21d79",
+      "guard": {
+        "verdict": "OK",
+        "reason": "The reply only gives editing guidance, ordering, picture placement descriptions, and a question, without providing any new text or detailed phrasing for the draft."
+      },
+      "passages": [
+        "c1-b14",
+        "c1-b32",
+        "c1-b55",
+        "c1-b72",
+        "c2-b12",
+        "c2-b16",
+        "c4-b108",
+        "c4-b109",
+        "c4-b111",
+        "c4-b112",
+        "c4-b113",
+        "c4-b135"
+      ],
+      "claims": [
+        {
+          "label": "F1",
+          "claim": "Zei was nervous and his hands were shaking on the console.",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [],
+          "later_withheld": 0
+        },
+        {
+          "label": "F2",
+          "claim": "Bai grew up in Redshire, sits across the arena, and does not look at him.",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c1-b55",
+            "c2-b16",
+            "c3-b5"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F3",
+          "claim": "Gliders fly across a board and hit a wall.",
+          "verdict": "matches",
+          "said": "Gliders hit a wall, as described in the text [ c4-b113 ][ c2-b12 ]",
+          "shown": "matches. Gliders hit a wall, as described in the text [ c4-b113 ][ c2-b12 ]",
+          "evidence": [
+            "c2-b12",
+            "c4-b108",
+            "c4-b111",
+            "c4-b112",
+            "c4-b113",
+            "c4-b135",
+            "wg-113"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F4",
+          "claim": "Zei sends a ship deep into enemy ground and finally speaks to her.",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c4-b53"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F5",
+          "claim": "She copies his trick, feels proud of herself, and they win.",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [],
+          "later_withheld": 0
+        }
+      ],
+      "expected_world": [
+        {
+          "key": "redshire",
+          "expected": "not said",
+          "got": "not said",
+          "ok": true
+        }
+      ],
+      "auto_flags": [],
+      "calls": [
+        {
+          "step": "notes",
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "request_id": "gen_01M4PWCNN1HJBRWACKYHXER7RC",
+          "prompt_tokens": 8999,
+          "completion_tokens": 1045,
+          "cost_usd": 0.00197685,
+          "ms": 3666
+        },
+        {
+          "step": "claims",
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "request_id": "gen_01M4PWCS100VR964MNH1A1735S",
+          "prompt_tokens": 345,
+          "completion_tokens": 730,
+          "cost_usd": 0.00048975,
+          "ms": 2046
+        },
+        {
+          "step": "world-check",
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "request_id": "gen_01M4PWCWE100JZ47XZQC2HHPXR",
+          "prompt_tokens": 365,
+          "completion_tokens": 47,
+          "cost_usd": 0.00008295,
+          "ms": 1927
+        },
+        {
+          "step": "world-check",
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "request_id": "gen_01M4PWCWW0SWG2XF5NKVJ1Y3M3",
+          "prompt_tokens": 1373,
+          "completion_tokens": 159,
+          "cost_usd": 0.00030135,
+          "ms": 901
+        },
+        {
+          "step": "world-check",
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "request_id": "gen_01M4PWCXRJW143F5ADFZ2JRWHB",
+          "prompt_tokens": 910,
+          "completion_tokens": 244,
+          "cost_usd": 0.0002829,
+          "ms": 1118
+        },
+        {
+          "step": "world-check",
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "request_id": "gen_01M4PWCYVQPJ86V4JPPA2Q0V44",
+          "prompt_tokens": 495,
+          "completion_tokens": 95,
+          "cost_usd": 0.00011205,
+          "ms": 599
+        },
+        {
+          "step": "world-check",
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "request_id": "gen_01M4PWCZGRT2JYP5VAP1AY5CB8",
+          "prompt_tokens": 366,
+          "completion_tokens": 47,
+          "cost_usd": 0.0000831,
+          "ms": 644
+        },
+        {
+          "step": "guard",
+          "model": "openai/gpt-oss-safeguard-20b",
+          "provider": "groq",
+          "request_id": "gen_01M4PWD06C1R83D5YXPW9957ZP",
+          "prompt_tokens": 1138,
+          "completion_tokens": 183,
+          "cost_usd": 0.00014025,
+          "ms": 1148
+        }
+      ],
+      "notes_reply": "NOTES:\n1. F1 What to change: add what Zei wants before showing his nerves. Why: a scene needs a want, obstacle, turn (Principle 1). Passages: [c4-b108] (Zei’s goal in the game).\n2. F2 What to change: introduce Bai through a want, not just background. Why: introduce a character through what they want (Principle 6). Passages: [c4-b119] (Bai’s prize motive).\n3. F3 What to change: remove narration that repeats the picture; let the image convey the gliders’ action. Why: narration should say what pictures can’t (Principle 5). Passages: [c4-b108] (gliders’ movement shown visually).\n4. F4 What to change: clarify the obstacle and the turn when Zei’s ship enters enemy ground. Why: each beat needs a clear want, pressure, and turn (Principle 1) and one clear image per beat (Principle 4). Passages: [c4-b109] (Zei’s slip and unexpected relief).\n5. F5 What to change: show pride through an action or object rather than stating it. Why: show inner states through action and objects (Principle 2). Passages: [c4-b109] (Zei’s silent curse and sigh of relief).\n\nORDER:\nF1 → F2 → F3 → F4 → F5. This order builds the conflict: we see Zei’s desire, meet his opponent, watch the game move, experience the decisive move, and end with the result.\n\nPICTURE SLOTS:\n- After F1: wide; arena board; Zei’s hand hovering over the console, fingers trembling.\n- After F2: medium; Bai; she leans back, eyes fixed on the far edge of the board, ignoring Zei.\n- After F4: close; Zei’s ship; the ship dives into enemy territory, trailing a faint glow.\n\nQUESTION:\nWhat does Zei ultimately want in this short piece, and how can that want be shown visually before any dialogue or narration appears?",
+      "claims_reply": "F1 | Zei was nervous and his hands were shaking on the console.  \nF2 | Bai grew up in Redshire, sits across the arena, and does not look at him.  \nF3 | Gliders fly across a board and hit a wall.  \nF4 | Zei sends a ship deep into enemy ground and finally speaks to her.  \nF5 | She copies his trick, feels proud of herself, and they win.",
+      "reply": "NOTES:\n1. F1 What to change: add what Zei wants before showing his nerves. Why: a scene needs a want, obstacle, turn (Principle 1). Passages: [c4-b108] (Zei’s goal in the game).\n2. F2 What to change: introduce Bai through a want, not just background. Why: introduce a character through what they want (Principle 6). Passages: [c4-b119] (Bai’s prize motive).\n3. F3 What to change: remove narration that repeats the picture; let the image convey the gliders’ action. Why: narration should say what pictures can’t (Principle 5). Passages: [c4-b108] (gliders’ movement shown visually).\n4. F4 What to change: clarify the obstacle and the turn when Zei’s ship enters enemy ground. Why: each beat needs a clear want, pressure, and turn (Principle 1) and one clear image per beat (Principle 4). Passages: [c4-b109] (Zei’s slip and unexpected relief).\n5. F5 What to change: show pride through an action or object rather than stating it. Why: show inner states through action and objects (Principle 2). Passages: [c4-b109] (Zei’s silent curse and sigh of relief).\n\nORDER:\nF1 → F2 → F3 → F4 → F5. This order builds the conflict: we see Zei’s desire, meet his opponent, watch the game move, experience the decisive move, and end with the result.\n\nPICTURE SLOTS:\n- After F1: wide; arena board; Zei’s hand hovering over the console, fingers trembling.\n- After F2: medium; Bai; she leans back, eyes fixed on the far edge of the board, ignoring Zei.\n- After F4: close; Zei’s ship; the ship dives into enemy territory, trailing a faint glow.\n\nQUESTION:\nWhat does Zei ultimately want in this short piece, and how can that want be shown visually before any dialogue or narration appears?\n\nWORLD CHECK:\n- F1 Zei was nervous and his hands were shaking on the console.: the book doesn't say, up to your chapter.\n- F2 Bai grew up in Redshire, sits across the arena, and does not look at him.: the book doesn't say, up to your chapter.\n- F3 Gliders fly across a board and hit a wall.: matches. Gliders hit a wall, as described in the text [ c4-b113 ][ c2-b12 ]\n- F4 Zei sends a ship deep into enemy ground and finally speaks to her.: the book doesn't say, up to your chapter.\n- F5 She copies his trick, feels proud of herself, and they win.: the book doesn't say, up to your chapter."
+    },
+    {
+      "design": 2,
+      "fixture": "a-quarter-final",
+      "limit": 4,
+      "model": "kimi-k3",
+      "gateway_model": "moonshotai/kimi-k3",
+      "at": "2026-10-12T01:46:06.923Z",
+      "cost_usd": 0.18703635,
+      "ms": 219709,
+      "prompts_sha256": {
+        "notes": "21a773731f9cb17331dbd2987095639c5399afd74b2b037ddba9e06df4ad924b",
+        "claims": "26fbcca73928f8734e530a7c359e26d7ac83c725cb39876f2bbb15d6a3227bf7",
+        "check": "69eec543f8e34357b21ce63bb42077b4865d294dfe47693a1fb81ca8f8998111",
+        "guard": "630cc2ca2c9ef27c82b5714ab161da96b8c5b591702efe21e1668e32198c6c82"
+      },
+      "craft_sha256": "15c11ee5bbc0491ed804b38fb918ea671744e01af0e06fb788e0db54b7522fc8",
+      "craft_limit_sha256": "b8b101fdd58cd987e938c65f95bd58062b9113163e308e9cb98404a35dc21d79",
+      "guard": {
+        "verdict": "OK",
+        "reason": "The reply only lists world‑check verdicts for the fragments without providing new words or edits."
+      },
+      "passages": [
+        "c1-b14",
+        "c1-b32",
+        "c1-b55",
+        "c1-b72",
+        "c2-b12",
+        "c2-b16",
+        "c4-b108",
+        "c4-b109",
+        "c4-b111",
+        "c4-b112",
+        "c4-b113",
+        "c4-b135"
+      ],
+      "claims": [
+        {
+          "label": "F4",
+          "claim": "Zei sends one ship deep into enemy ground",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c4-b53"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F4",
+          "claim": "Zei finally speaks to her",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [],
+          "later_withheld": 0
+        },
+        {
+          "label": "F5",
+          "claim": "She copies his trick and feels proud",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [],
+          "later_withheld": 0
+        },
+        {
+          "label": "F5",
+          "claim": "They win",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [],
+          "later_withheld": 0
+        },
+        {
+          "label": "F2",
+          "claim": "Bai grew up in Redshire",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c2-b16"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F2",
+          "claim": "Bai sits across the arena and does not look at him",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c1-b55",
+            "c3-b5"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F3",
+          "claim": "The gliders flew across the board and hit the wall",
+          "verdict": "matches",
+          "said": "Zei sent three gliders deep into Dza's territory along the edge, and they hit the wall Dza had set up around his home base, briefly forming Zei's symbol. [c4-b113]",
+          "shown": "matches. Zei sent three gliders deep into Dza's territory along the edge, and they hit the wall Dza had set up around his home base, briefly forming Zei's symbol. [c4-b113]",
+          "evidence": [
+            "c2-b12",
+            "c4-b108",
+            "c4-b111",
+            "c4-b112",
+            "c4-b113",
+            "c4-b135",
+            "wg-113"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F1",
+          "claim": "Zei was nervous, his hands shaking on the console",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [],
+          "later_withheld": 0
+        }
+      ],
+      "expected_world": [
+        {
+          "key": "redshire",
+          "expected": "not said",
+          "got": "not said",
+          "ok": true
+        }
+      ],
+      "auto_flags": [],
+      "calls": [
+        {
+          "step": "notes",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PWD19ZRD0BFG9MJ4QB0J6T",
+          "prompt_tokens": 9032,
+          "completion_tokens": 8000,
+          "cost_usd": 0.147096,
+          "ms": 154480
+        },
+        {
+          "step": "claims",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PWHR2DH1J1T2Q9E4WSDSE0",
+          "prompt_tokens": 367,
+          "completion_tokens": 1086,
+          "cost_usd": 0.017391,
+          "ms": 26074
+        },
+        {
+          "step": "world-check",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PWJHHFSS37AP30QW570BRG",
+          "prompt_tokens": 512,
+          "completion_tokens": 83,
+          "cost_usd": 0.002781,
+          "ms": 3853
+        },
+        {
+          "step": "world-check",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PWJNA8J0982EXYBG4D8WKF",
+          "prompt_tokens": 382,
+          "completion_tokens": 84,
+          "cost_usd": 0.0017148,
+          "ms": 4095
+        },
+        {
+          "step": "world-check",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PWJSAADFQANPNQG040B2M6",
+          "prompt_tokens": 383,
+          "completion_tokens": 62,
+          "cost_usd": 0.0013878,
+          "ms": 4716
+        },
+        {
+          "step": "world-check",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PWJXXX7Z3NGD1YJ7JHJ54J",
+          "prompt_tokens": 378,
+          "completion_tokens": 84,
+          "cost_usd": 0.0017028,
+          "ms": 3778
+        },
+        {
+          "step": "world-check",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PWK1MD1WB7V6EGKBEVQJXN",
+          "prompt_tokens": 782,
+          "completion_tokens": 140,
+          "cost_usd": 0.0037548,
+          "ms": 6156
+        },
+        {
+          "step": "world-check",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PWK7Q13HB4FJ9FGD5QDHBQ",
+          "prompt_tokens": 993,
+          "completion_tokens": 79,
+          "cost_usd": 0.0034728,
+          "ms": 3864
+        },
+        {
+          "step": "world-check",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PWKBF418YP8E16TNZRMFCH",
+          "prompt_tokens": 930,
+          "completion_tokens": 173,
+          "cost_usd": 0.0046938,
+          "ms": 7095
+        },
+        {
+          "step": "world-check",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PWKJCAX32F8N56HB7N69D1",
+          "prompt_tokens": 387,
+          "completion_tokens": 165,
+          "cost_usd": 0.0029448,
+          "ms": 5015
+        },
+        {
+          "step": "guard",
+          "model": "openai/gpt-oss-safeguard-20b",
+          "provider": "groq",
+          "request_id": "gen_01M4PWKQ9K8YZ2S4YV2QWFCFV3",
+          "prompt_tokens": 750,
+          "completion_tokens": 199,
+          "cost_usd": 0.00009675,
+          "ms": 512
+        }
+      ],
+      "notes_reply": "",
+      "claims_reply": "F4 | Zei sends one ship deep into enemy ground\nF4 | Zei finally speaks to her\nF5 | She copies his trick and feels proud\nF5 | They win\nF2 | Bai grew up in Redshire\nF2 | Bai sits across the arena and does not look at him\nF3 | The gliders flew across the board and hit the wall\nF1 | Zei was nervous, his hands shaking on the console",
+      "reply": "\n\nWORLD CHECK:\n- F4 Zei sends one ship deep into enemy ground: the book doesn't say, up to your chapter.\n- F4 Zei finally speaks to her: the book doesn't say, up to your chapter.\n- F5 She copies his trick and feels proud: the book doesn't say, up to your chapter.\n- F5 They win: the book doesn't say, up to your chapter.\n- F2 Bai grew up in Redshire: the book doesn't say, up to your chapter.\n- F2 Bai sits across the arena and does not look at him: the book doesn't say, up to your chapter.\n- F3 The gliders flew across the board and hit the wall: matches. Zei sent three gliders deep into Dza's territory along the edge, and they hit the wall Dza had set up around his home base, briefly forming Zei's symbol. [c4-b113]\n- F1 Zei was nervous, his hands shaking on the console: the book doesn't say, up to your chapter."
+    },
+    {
+      "design": 2,
+      "fixture": "a-quarter-final",
+      "limit": 4,
+      "model": "claude-sonnet-5.5",
+      "gateway_model": "anthropic/claude-sonnet-5.5",
+      "at": "2026-10-12T01:46:38.892Z",
+      "cost_usd": 0.06711957500000001,
+      "ms": 31958,
+      "prompts_sha256": {
+        "notes": "21a773731f9cb17331dbd2987095639c5399afd74b2b037ddba9e06df4ad924b",
+        "claims": "26fbcca73928f8734e530a7c359e26d7ac83c725cb39876f2bbb15d6a3227bf7",
+        "check": "69eec543f8e34357b21ce63bb42077b4865d294dfe47693a1fb81ca8f8998111",
+        "guard": "630cc2ca2c9ef27c82b5714ab161da96b8c5b591702efe21e1668e32198c6c82"
+      },
+      "craft_sha256": "15c11ee5bbc0491ed804b38fb918ea671744e01af0e06fb788e0db54b7522fc8",
+      "craft_limit_sha256": "b8b101fdd58cd987e938c65f95bd58062b9113163e308e9cb98404a35dc21d79",
+      "guard": {
+        "verdict": "OK – the coach’s reply only gives editing guidance, picture placement notes, and a question, with no direct wording for the piece.",
+        "reason": ""
+      },
+      "passages": [
+        "c1-b14",
+        "c1-b32",
+        "c1-b55",
+        "c1-b72",
+        "c2-b12",
+        "c2-b16",
+        "c4-b108",
+        "c4-b109",
+        "c4-b111",
+        "c4-b112",
+        "c4-b113",
+        "c4-b135"
+      ],
+      "claims": [
+        {
+          "label": "F2",
+          "claim": "Bai grew up in Redshire",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c2-b16"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F4",
+          "claim": "Zei sends one ship deep into enemy ground in the game",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c4-b53",
+            "c4-b150"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F3",
+          "claim": "gliders fly across the board and hit the wall",
+          "verdict": "matches",
+          "said": "",
+          "shown": "matches. ",
+          "evidence": [
+            "c2-b12",
+            "c4-b108",
+            "c4-b111",
+            "c4-b112",
+            "c4-b113",
+            "c4-b135",
+            "wg-113"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F5",
+          "claim": "Bai copies Zei's trick, and they win",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [],
+          "later_withheld": 0
+        },
+        {
+          "label": "F2",
+          "claim": "Bai sits across the arena from Zei and does not look at him",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c1-b55",
+            "c3-b5"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F4",
+          "claim": "Zei finally speaks to Bai",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [],
+          "later_withheld": 0
+        },
+        {
+          "label": "F1",
+          "claim": "Zei is nervous, and his hands shake on the console",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [],
+          "later_withheld": 0
+        },
+        {
+          "label": "F5",
+          "claim": "Bai feels proud of herself",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [],
+          "later_withheld": 0
+        }
+      ],
+      "expected_world": [
+        {
+          "key": "redshire",
+          "expected": "not said",
+          "got": "not said",
+          "ok": true
+        }
+      ],
+      "auto_flags": [],
+      "calls": [
+        {
+          "step": "notes",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWKQXKWMD7T59JG2SXAHNX",
+          "prompt_tokens": 12685,
+          "completion_tokens": 2321,
+          "cost_usd": 0.04858,
+          "ms": 20263
+        },
+        {
+          "step": "claims",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWMBJN7P5D22AECWFS5VDS",
+          "prompt_tokens": 393,
+          "completion_tokens": 375,
+          "cost_usd": 0.004536,
+          "ms": 3258
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWMERKVHNS3ANEDBDW1X55",
+          "prompt_tokens": 1037,
+          "completion_tokens": 8,
+          "cost_usd": 0.002154,
+          "ms": 821
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWMFHZ4GPF1SNKXG2SP29F",
+          "prompt_tokens": 758,
+          "completion_tokens": 8,
+          "cost_usd": 0.001596,
+          "ms": 858
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWMGCZDY86QS069Y5NCVEK",
+          "prompt_tokens": 1279,
+          "completion_tokens": 69,
+          "cost_usd": 0.003248,
+          "ms": 1510
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWMHX3HP6JZDK5ZXJGANNF",
+          "prompt_tokens": 452,
+          "completion_tokens": 8,
+          "cost_usd": 0.000984,
+          "ms": 1023
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWMJY0SDA758ZGF99P6XQ2",
+          "prompt_tokens": 1416,
+          "completion_tokens": 8,
+          "cost_usd": 0.002912,
+          "ms": 824
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWMKPP5XYGHTP5MBT4QVMM",
+          "prompt_tokens": 449,
+          "completion_tokens": 8,
+          "cost_usd": 0.000978,
+          "ms": 875
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWMMHZK9M2MCSCB7652QJ5",
+          "prompt_tokens": 454,
+          "completion_tokens": 8,
+          "cost_usd": 0.000988,
+          "ms": 975
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWMNGQKNJCVXKFAG7WRW74",
+          "prompt_tokens": 447,
+          "completion_tokens": 8,
+          "cost_usd": 0.000974,
+          "ms": 791
+        },
+        {
+          "step": "guard",
+          "model": "openai/gpt-oss-safeguard-20b",
+          "provider": "groq",
+          "request_id": "gen_01M4PWMPBVJSSE7A3A8S17QH36",
+          "prompt_tokens": 1393,
+          "completion_tokens": 281,
+          "cost_usd": 0.000169575,
+          "ms": 716
+        }
+      ],
+      "notes_reply": "NOTES:\n1. [F1] What to change: The opening names the feeling (\"He was nervous\") and starts on a close face with no place around it. Let an action or object carry the nerves, and put a wide view before the face. Why: Show inner states through action and objects, and Establish the place before the faces. The book lets us read Zei through what his hand does, and the fragment can do the same. Passages: [c4-b51], [c4-b109]\n2. [F3] What to change: The narration and the picture say the same thing, so the narration adds nothing. Give the narration something the eye can't see, such as time, a cost, or why this move matters. Why: Narration says what the pictures can't; with 25 words per beat, repeating the picture wastes them. Passages: [c4-b135], [c4-b111]\n3. [F4] What to change: This beat holds two events, the ship going deep and Zei speaking to her. Pick one for the picture. Also, we never learn what Zei wants, so the beat has nothing to turn on. Why: One clear image per beat, and Want. The book states his want plainly, and your fragments should show it before the first obstacle. Passages: [c4-b119], [c4-b113]\n4. [F2] What to change: Bai arrives with a background detail instead of a want. Introduce her through what she is trying to take or win, and let her not looking at him show that. Why: Introduce a character through what they want. Passages: [c4-b73], [c4-b119]\n5. [F5] What to change: Her pride is named, and the copying and the win are crammed into one beat. Show the copying as effort that gets harder, then give the win its own moment. Make it clear what Zei gives up so that her copying can happen. Why: Show inner states through action; Pressure; and Choice needs a price. Passages: [c4-b135]\n\nORDER:\nF2, F1, F3, F4, F5. F2 is your widest view, with both rivals in one space, so the viewer knows where we are before closing in on Zei's hands in F1.\n\nPICTURE SLOTS:\n- After F2: the arena in Pafogai Du, seen wide; Zei and Bai on opposite sides, each at a console, her face turned away from him; no other action.\n- After F1: the arena, close on Zei's hands and healed arm at the console; he is opening and closing his fingers.\n- After F3: the game board; Zei's large slow gliders in a row, with the enemy gliders being sent back toward the sender; no people in the frame.\n- After F4: the arena; Bai alone at her console, leaning forward and working at her move, her expression tense; Zei is not in the frame.\n\nQUESTION:\nWhen Zei is at his lowest point in this piece, what does he want most, and what does he have to give up to get it?",
+      "claims_reply": "F2 | Bai grew up in Redshire\nF4 | Zei sends one ship deep into enemy ground in the game\nF3 | gliders fly across the board and hit the wall\nF5 | Bai copies Zei's trick, and they win\nF2 | Bai sits across the arena from Zei and does not look at him\nF4 | Zei finally speaks to Bai\nF1 | Zei is nervous, and his hands shake on the console\nF5 | Bai feels proud of herself",
+      "reply": "NOTES:\n1. [F1] What to change: The opening names the feeling (\"He was nervous\") and starts on a close face with no place around it. Let an action or object carry the nerves, and put a wide view before the face. Why: Show inner states through action and objects, and Establish the place before the faces. The book lets us read Zei through what his hand does, and the fragment can do the same. Passages: [c4-b51], [c4-b109]\n2. [F3] What to change: The narration and the picture say the same thing, so the narration adds nothing. Give the narration something the eye can't see, such as time, a cost, or why this move matters. Why: Narration says what the pictures can't; with 25 words per beat, repeating the picture wastes them. Passages: [c4-b135], [c4-b111]\n3. [F4] What to change: This beat holds two events, the ship going deep and Zei speaking to her. Pick one for the picture. Also, we never learn what Zei wants, so the beat has nothing to turn on. Why: One clear image per beat, and Want. The book states his want plainly, and your fragments should show it before the first obstacle. Passages: [c4-b119], [c4-b113]\n4. [F2] What to change: Bai arrives with a background detail instead of a want. Introduce her through what she is trying to take or win, and let her not looking at him show that. Why: Introduce a character through what they want. Passages: [c4-b73], [c4-b119]\n5. [F5] What to change: Her pride is named, and the copying and the win are crammed into one beat. Show the copying as effort that gets harder, then give the win its own moment. Make it clear what Zei gives up so that her copying can happen. Why: Show inner states through action; Pressure; and Choice needs a price. Passages: [c4-b135]\n\nORDER:\nF2, F1, F3, F4, F5. F2 is your widest view, with both rivals in one space, so the viewer knows where we are before closing in on Zei's hands in F1.\n\nPICTURE SLOTS:\n- After F2: the arena in Pafogai Du, seen wide; Zei and Bai on opposite sides, each at a console, her face turned away from him; no other action.\n- After F1: the arena, close on Zei's hands and healed arm at the console; he is opening and closing his fingers.\n- After F3: the game board; Zei's large slow gliders in a row, with the enemy gliders being sent back toward the sender; no people in the frame.\n- After F4: the arena; Bai alone at her console, leaning forward and working at her move, her expression tense; Zei is not in the frame.\n\nQUESTION:\nWhen Zei is at his lowest point in this piece, what does he want most, and what does he have to give up to get it?\n\nWORLD CHECK:\n- F2 Bai grew up in Redshire: the book doesn't say, up to your chapter.\n- F4 Zei sends one ship deep into enemy ground in the game: the book doesn't say, up to your chapter.\n- F3 gliders fly across the board and hit the wall: matches. \n- F5 Bai copies Zei's trick, and they win: the book doesn't say, up to your chapter.\n- F2 Bai sits across the arena from Zei and does not look at him: the book doesn't say, up to your chapter.\n- F4 Zei finally speaks to Bai: the book doesn't say, up to your chapter.\n- F1 Zei is nervous, and his hands shake on the console: the book doesn't say, up to your chapter.\n- F5 Bai feels proud of herself: the book doesn't say, up to your chapter."
+    },
+    {
+      "design": 2,
+      "fixture": "a-quarter-final",
+      "limit": 4,
+      "model": "claude-opus-5.5",
+      "gateway_model": "anthropic/claude-opus-5.5",
+      "at": "2026-10-12T01:47:29.475Z",
+      "cost_usd": 0.13551195000000005,
+      "ms": 50579,
+      "prompts_sha256": {
+        "notes": "21a773731f9cb17331dbd2987095639c5399afd74b2b037ddba9e06df4ad924b",
+        "claims": "26fbcca73928f8734e530a7c359e26d7ac83c725cb39876f2bbb15d6a3227bf7",
+        "check": "69eec543f8e34357b21ce63bb42077b4865d294dfe47693a1fb81ca8f8998111",
+        "guard": "630cc2ca2c9ef27c82b5714ab161da96b8c5b591702efe21e1668e32198c6c82"
+      },
+      "craft_sha256": "15c11ee5bbc0491ed804b38fb918ea671744e01af0e06fb788e0db54b7522fc8",
+      "craft_limit_sha256": "b8b101fdd58cd987e938c65f95bd58062b9113163e308e9cb98404a35dc21d79",
+      "guard": {
+        "verdict": "OK",
+        "reason": "The coach’s reply only offers guidance, notes, and picture placement instructions without providing new narrative text."
+      },
+      "passages": [
+        "c1-b14",
+        "c1-b32",
+        "c1-b55",
+        "c1-b72",
+        "c2-b12",
+        "c2-b16",
+        "c4-b108",
+        "c4-b109",
+        "c4-b111",
+        "c4-b112",
+        "c4-b113",
+        "c4-b135"
+      ],
+      "claims": [
+        {
+          "label": "F2",
+          "claim": "Bai grew up in Redshire",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c2-b16"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F5",
+          "claim": "She copies his trick, and they win",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [],
+          "later_withheld": 0
+        },
+        {
+          "label": "F4",
+          "claim": "Zei sends one ship deep into enemy ground",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c4-b53"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F3",
+          "claim": "The gliders flew across the board and hit the wall",
+          "verdict": "matches",
+          "said": "Zei sent three gliders deep into Dza's territory along the edge, and they hit the wall Dza had set up around his home base in the northeast corner [c4-b113].",
+          "shown": "matches. Zei sent three gliders deep into Dza's territory along the edge, and they hit the wall Dza had set up around his home base in the northeast corner [c4-b113].",
+          "evidence": [
+            "c2-b12",
+            "c4-b108",
+            "c4-b111",
+            "c4-b112",
+            "c4-b113",
+            "c4-b135",
+            "wg-113"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F4",
+          "claim": "Zei finally speaks to her",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [],
+          "later_withheld": 0
+        },
+        {
+          "label": "F2",
+          "claim": "Bai sits across the arena and does not look at him",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c1-b55",
+            "c3-b5"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F1",
+          "claim": "Zei was nervous, his hands shaking on the console",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [],
+          "later_withheld": 0
+        },
+        {
+          "label": "F5",
+          "claim": "She felt proud of herself",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c1-b32",
+            "c1-b72"
+          ],
+          "later_withheld": 0
+        }
+      ],
+      "expected_world": [
+        {
+          "key": "redshire",
+          "expected": "not said",
+          "got": "not said",
+          "ok": true
+        }
+      ],
+      "auto_flags": [
+        "quotes words that are neither the person's nor the book's: \" Why: One clear image per beat; Show inner states through action and objects; End on a qu",
+        "quotes words that are neither the person's nor the book's: \", and then repeats it with the shaking hands, so it tells us twice. Open the scene on the"
+      ],
+      "calls": [
+        {
+          "step": "notes",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWMQ2GAPS8ZW834PVVJWCB",
+          "prompt_tokens": 12685,
+          "completion_tokens": 2084,
+          "cost_usd": 0.09242,
+          "ms": 23128
+        },
+        {
+          "step": "claims",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWNDJKC538HV80SQVY0TZ5",
+          "prompt_tokens": 393,
+          "completion_tokens": 370,
+          "cost_usd": 0.008972,
+          "ms": 4681
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWNJ55SSE1K0Z59G26KDF8",
+          "prompt_tokens": 1037,
+          "completion_tokens": 106,
+          "cost_usd": 0.006268,
+          "ms": 2850
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWNMZ83KC9V8BBXHAP1GA8",
+          "prompt_tokens": 447,
+          "completion_tokens": 8,
+          "cost_usd": 0.001948,
+          "ms": 1517
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWNPE0MXFBYK4EE5GW2WC0",
+          "prompt_tokens": 654,
+          "completion_tokens": 8,
+          "cost_usd": 0.002776,
+          "ms": 5588
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWNVZJR8BDGVB28QJ0SJ05",
+          "prompt_tokens": 1280,
+          "completion_tokens": 139,
+          "cost_usd": 0.0079,
+          "ms": 4234
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWP019K9JCEQXK1QYEX410",
+          "prompt_tokens": 447,
+          "completion_tokens": 24,
+          "cost_usd": 0.002268,
+          "ms": 1620
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWP1MB47YXCDFW1ZZH1BYF",
+          "prompt_tokens": 1412,
+          "completion_tokens": 8,
+          "cost_usd": 0.005808,
+          "ms": 2076
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWP3PDTEYXGWE082N9FP98",
+          "prompt_tokens": 454,
+          "completion_tokens": 8,
+          "cost_usd": 0.001976,
+          "ms": 1259
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWP4YHRMJ2EYN2BBPK8WS6",
+          "prompt_tokens": 615,
+          "completion_tokens": 124,
+          "cost_usd": 0.00494,
+          "ms": 2687
+        },
+        {
+          "step": "guard",
+          "model": "openai/gpt-oss-safeguard-20b",
+          "provider": "groq",
+          "request_id": "gen_01M4PWP7KHDMFBQ6CSV2352PKJ",
+          "prompt_tokens": 1522,
+          "completion_tokens": 406,
+          "cost_usd": 0.00023595,
+          "ms": 884
+        }
+      ],
+      "notes_reply": "NOTES:\n1. [F5] What to change: F5 holds three events: the copy, the feeling, and the win. The feeling is named in narration, and the piece ends after the outcome is known. Split the beat. Let Bai's copying carry its own picture, show her pride through an action or object rather than \"She felt proud of herself\", and consider stopping before \"They win.\" Why: One clear image per beat; Show inner states through action and objects; End on a question. A last picture that stops just before the answer keeps the viewer leaning in. Passages: c4-b135, c4-b51, c1-b140.\n\n2. [F1] What to change: The opening picture is a face, so the reader doesn't yet know where they are or what kind of event this is. The narration also names the feeling, \"He was nervous\", and then repeats it with the shaking hands, so it tells us twice. Open the scene on the place first. Let the hands carry the nerves alone, and use the freed words for something a picture can't show, such as what is at stake today. Why: Establish the place before the faces; Show inner states through action and objects. Passages: c2-b1, c2-b3, c4-b109.\n\n3. [F3] What to change: The narration and the picture describe the same thing: \"gliders flew across the board and hit the wall.\" The words add nothing the eye doesn't already get. Either cut the narration, or give it a fact, a thought, a time or a cost that the board can't show. Why: Narration says what the pictures can't. With a 25-word limit, a repeated sentence is the most expensive thing on the page. Passages: c1-b4, c1-b70.\n\n4. [F2] What to change: Bai's first appearance gives us where she grew up and that she won't look at Zei. It doesn't tell us what she is after. Consider introducing her through what she wants from this match or from Zei. That gives the viewer a reason to watch her, and it makes her copying in F5 mean something. Why: Introduce a character through what they want. Passages: c4-b73.\n\n5. [F4] What to change: F4 asks one picture to show two events: the ship going deep, and Zei finally speaking to Bai. The speaking may also be the scene's real turn, the moment the situation between them changes, so it deserves its own beat. Choose which of the two this picture shows, and give the other its own beat. Why: One clear image per beat; Turn. A reader should be able to point to the picture where things change. Passages: c4-b113.\n\nORDER:\nF2, F1, F3, F4, F5. Opening on the wider arena picture with Bai sets the place and the rivalry before we close in on Zei's face.\n\nPICTURE SLOTS:\n- After F2: the Minpentai hall in Pafogai Du; Zei at his console; his finger slipping as he places a wall.\n- After F3: the game board; no one visible; Zei's moving walls advancing with his spaceships tucked behind them, aimed into the opponent's corner.\n- After F4: the hall; Bai; bent over her sandbox view, trying the trick again after failing.\n- After F5: the game board; no one visible; a symbol walled off with gliders bursting outward in every direction.\n\nQUESTION:\nIn this match, what does Zei want from Bai herself, beyond the win? Does your last picture show whether he gets it?",
+      "claims_reply": "F2 | Bai grew up in Redshire\nF5 | She copies his trick, and they win\nF4 | Zei sends one ship deep into enemy ground\nF3 | The gliders flew across the board and hit the wall\nF4 | Zei finally speaks to her\nF2 | Bai sits across the arena and does not look at him\nF1 | Zei was nervous, his hands shaking on the console\nF5 | She felt proud of herself",
+      "reply": "NOTES:\n1. [F5] What to change: F5 holds three events: the copy, the feeling, and the win. The feeling is named in narration, and the piece ends after the outcome is known. Split the beat. Let Bai's copying carry its own picture, show her pride through an action or object rather than \"She felt proud of herself\", and consider stopping before \"They win.\" Why: One clear image per beat; Show inner states through action and objects; End on a question. A last picture that stops just before the answer keeps the viewer leaning in. Passages: c4-b135, c4-b51, c1-b140.\n\n2. [F1] What to change: The opening picture is a face, so the reader doesn't yet know where they are or what kind of event this is. The narration also names the feeling, \"He was nervous\", and then repeats it with the shaking hands, so it tells us twice. Open the scene on the place first. Let the hands carry the nerves alone, and use the freed words for something a picture can't show, such as what is at stake today. Why: Establish the place before the faces; Show inner states through action and objects. Passages: c2-b1, c2-b3, c4-b109.\n\n3. [F3] What to change: The narration and the picture describe the same thing: \"gliders flew across the board and hit the wall.\" The words add nothing the eye doesn't already get. Either cut the narration, or give it a fact, a thought, a time or a cost that the board can't show. Why: Narration says what the pictures can't. With a 25-word limit, a repeated sentence is the most expensive thing on the page. Passages: c1-b4, c1-b70.\n\n4. [F2] What to change: Bai's first appearance gives us where she grew up and that she won't look at Zei. It doesn't tell us what she is after. Consider introducing her through what she wants from this match or from Zei. That gives the viewer a reason to watch her, and it makes her copying in F5 mean something. Why: Introduce a character through what they want. Passages: c4-b73.\n\n5. [F4] What to change: F4 asks one picture to show two events: the ship going deep, and Zei finally speaking to Bai. The speaking may also be the scene's real turn, the moment the situation between them changes, so it deserves its own beat. Choose which of the two this picture shows, and give the other its own beat. Why: One clear image per beat; Turn. A reader should be able to point to the picture where things change. Passages: c4-b113.\n\nORDER:\nF2, F1, F3, F4, F5. Opening on the wider arena picture with Bai sets the place and the rivalry before we close in on Zei's face.\n\nPICTURE SLOTS:\n- After F2: the Minpentai hall in Pafogai Du; Zei at his console; his finger slipping as he places a wall.\n- After F3: the game board; no one visible; Zei's moving walls advancing with his spaceships tucked behind them, aimed into the opponent's corner.\n- After F4: the hall; Bai; bent over her sandbox view, trying the trick again after failing.\n- After F5: the game board; no one visible; a symbol walled off with gliders bursting outward in every direction.\n\nQUESTION:\nIn this match, what does Zei want from Bai herself, beyond the win? Does your last picture show whether he gets it?\n\nWORLD CHECK:\n- F2 Bai grew up in Redshire: the book doesn't say, up to your chapter.\n- F5 She copies his trick, and they win: the book doesn't say, up to your chapter.\n- F4 Zei sends one ship deep into enemy ground: the book doesn't say, up to your chapter.\n- F3 The gliders flew across the board and hit the wall: matches. Zei sent three gliders deep into Dza's territory along the edge, and they hit the wall Dza had set up around his home base in the northeast corner [c4-b113].\n- F4 Zei finally speaks to her: the book doesn't say, up to your chapter.\n- F2 Bai sits across the arena and does not look at him: the book doesn't say, up to your chapter.\n- F1 Zei was nervous, his hands shaking on the console: the book doesn't say, up to your chapter.\n- F5 She felt proud of herself: the book doesn't say, up to your chapter."
+    },
+    {
+      "design": 2,
+      "fixture": "b-hearing",
+      "limit": 8,
+      "model": "gpt-oss-120b",
+      "gateway_model": "openai/gpt-oss-120b",
+      "at": "2026-10-12T01:47:47.054Z",
+      "cost_usd": 0.005664825,
+      "ms": 17544,
+      "prompts_sha256": {
+        "notes": "21a773731f9cb17331dbd2987095639c5399afd74b2b037ddba9e06df4ad924b",
+        "claims": "26fbcca73928f8734e530a7c359e26d7ac83c725cb39876f2bbb15d6a3227bf7",
+        "check": "69eec543f8e34357b21ce63bb42077b4865d294dfe47693a1fb81ca8f8998111",
+        "guard": "630cc2ca2c9ef27c82b5714ab161da96b8c5b591702efe21e1668e32198c6c82"
+      },
+      "craft_sha256": "15c11ee5bbc0491ed804b38fb918ea671744e01af0e06fb788e0db54b7522fc8",
+      "craft_limit_sha256": "a5a5e537d393dcfa24b5ab45faf28b387d91d6943a975dc8cc7b121766517c62",
+      "guard": {
+        "verdict": "VIOLATION",
+        "reason": "The reply supplies an example phrase (“to survive the vote”) that could be used in the draft."
+      },
+      "passages": [
+        "c1-b38",
+        "c1-b45",
+        "c1-b49",
+        "c1-b56",
+        "c1-b76",
+        "c1-b77",
+        "c1-b79",
+        "c3-b127",
+        "c6-b4",
+        "c6-b59",
+        "c6-b147",
+        "c8-b95"
+      ],
+      "claims": [
+        {
+          "label": "F5",
+          "claim": "Gladias became a member of the Order.",
+          "verdict": "matches",
+          "said": "Gladias is described as an Acolyte, an Order member in training, and is later noted as being accepted into the Order. [c1-b57] [c8-b1]",
+          "shown": "matches. Gladias is described as an Acolyte, an Order member in training, and is later noted as being accepted into the Order. [c1-b57] [c8-b1]",
+          "evidence": [
+            "c1-b57",
+            "c1-b61",
+            "c1-b76",
+            "c1-b77",
+            "c1-b79",
+            "c6-b147",
+            "wg-001",
+            "wg-005",
+            "wg-007",
+            "wg-018",
+            "wg-091",
+            "wg-093",
+            "wg-134",
+            "wg-320"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F3",
+          "claim": "The vote came in eleven to nine, and he was in.",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c1-b38",
+            "c2-b91",
+            "c5-b87",
+            "c8-b95",
+            "c8-b97",
+            "c8-b116"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F2",
+          "claim": "Senator Papli asks Gladias what his favorite band is, and he has none.",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c1-b9",
+            "c1-b12",
+            "c1-b48",
+            "c1-b61",
+            "c1-b79",
+            "c6-b147",
+            "wg-103",
+            "wg-127",
+            "wg-326",
+            "wg-329"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F1",
+          "claim": "Gladias is in his privacy robe, sweating, in front of the senators.",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c1-b45",
+            "c1-b49",
+            "c1-b77",
+            "c1-b79",
+            "c6-b4",
+            "c6-b147",
+            "wg-102",
+            "wg-022",
+            "wg-005",
+            "wg-326",
+            "wg-329"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F1",
+          "claim": "Mov chairs the committee.",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c8-b47"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F4",
+          "claim": "Delwart is an Arctic spy that Gladias thinks of outside.",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c1-b61",
+            "c1-b79",
+            "c3-b5",
+            "c3-b6",
+            "c3-b120",
+            "c3-b127",
+            "wg-006",
+            "wg-018",
+            "wg-022",
+            "wg-129",
+            "wg-314",
+            "wg-326",
+            "wg-329"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F1",
+          "claim": "There are senators and a committee present.",
+          "verdict": "matches",
+          "said": "Senators and a committee are present, as described in [c8-b48].",
+          "shown": "matches. Senators and a committee are present, as described in [c8-b48].",
+          "evidence": [
+            "c8-b48",
+            "wg-097"
+          ],
+          "later_withheld": 0
+        }
+      ],
+      "expected_world": [
+        {
+          "key": "mov",
+          "expected": "not said",
+          "got": "not said",
+          "ok": true
+        },
+        {
+          "key": "eleven",
+          "expected": "conflicts",
+          "got": "not said",
+          "ok": false
+        },
+        {
+          "key": "delwart",
+          "expected": "later",
+          "got": "not said",
+          "ok": false
+        }
+      ],
+      "auto_flags": [
+        "offers wording: e.g.",
+        "quotes words that are neither the person's nor the book's: “to survive the vote”",
+        "picture slot has quoted words: “11‑9”"
+      ],
+      "calls": [
+        {
+          "step": "notes",
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "request_id": "gen_01M4PWP8HFWTPQ73GQ4P7ST0V8",
+          "prompt_tokens": 11048,
+          "completion_tokens": 1359,
+          "cost_usd": 0.0024342,
+          "ms": 3882
+        },
+        {
+          "step": "claims",
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "request_id": "gen_01M4PWPC7XKQX253V459A080Q7",
+          "prompt_tokens": 329,
+          "completion_tokens": 743,
+          "cost_usd": 0.00049515,
+          "ms": 1994
+        },
+        {
+          "step": "world-check",
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "request_id": "gen_01M4PWPE6D40YTJ37XAMV8XSX7",
+          "prompt_tokens": 1405,
+          "completion_tokens": 511,
+          "cost_usd": 0.00051735,
+          "ms": 1593
+        },
+        {
+          "step": "world-check",
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "request_id": "gen_01M4PWPFSCRW4P8HQHGH3KGFSQ",
+          "prompt_tokens": 830,
+          "completion_tokens": 368,
+          "cost_usd": 0.0003261,
+          "ms": 1407
+        },
+        {
+          "step": "world-check",
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "request_id": "gen_01M4PWPH3YF0WVRAK8XH8SZ8FF",
+          "prompt_tokens": 1120,
+          "completion_tokens": 264,
+          "cost_usd": 0.0003264,
+          "ms": 1061
+        },
+        {
+          "step": "world-check",
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "request_id": "gen_01M4PWPJ77FCFKSSGY7DR4R58J",
+          "prompt_tokens": 1291,
+          "completion_tokens": 462,
+          "cost_usd": 0.00047085,
+          "ms": 1387
+        },
+        {
+          "step": "world-check",
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "request_id": "gen_01M4PWPKH486V70DQM4QNW52BP",
+          "prompt_tokens": 430,
+          "completion_tokens": 94,
+          "cost_usd": 0.0001017,
+          "ms": 831
+        },
+        {
+          "step": "world-check",
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "request_id": "gen_01M4PWPP7PED0RDX3C5Q4YMH1W",
+          "prompt_tokens": 1689,
+          "completion_tokens": 385,
+          "cost_usd": 0.00048435,
+          "ms": 3289
+        },
+        {
+          "step": "world-check",
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "request_id": "gen_01M4PWPQJE083JBQ5X4ZWMCQ4J",
+          "prompt_tokens": 422,
+          "completion_tokens": 224,
+          "cost_usd": 0.0001977,
+          "ms": 902
+        },
+        {
+          "step": "guard",
+          "model": "openai/gpt-oss-safeguard-20b",
+          "provider": "groq",
+          "request_id": "gen_01M4PWPRFB8690NYBN4FAZG788",
+          "prompt_tokens": 1211,
+          "completion_tokens": 766,
+          "cost_usd": 0.000311025,
+          "ms": 1125
+        }
+      ],
+      "notes_reply": "NOTES:\n1. [F1] What to change: the beat should show a clear want, obstacle and turn. Why: without a want (e.g., “to survive the vote”) and an obstacle (the committee’s scrutiny) the scene lacks drama. (Each scene has a want, an obstacle and a turn) Passages: [c1-b56], [c1-b76].\n2. [F2] What to change: introduce Senator Papli (or Gladias) through a want rather than just stating a question. Why: characters are most engaging when first seen pursuing something. (Introduce a character through what they want) Passages: [c3-b83].\n3. [F4] What to change: add an establishing visual of the outside location before showing Gladias thinking. Why: viewers need to know where the scene is before focusing on a face. (Establish the place before the faces) Passages: [c1-b2], [c3-b2].\n4. [F3] What to change: consider splitting the vote result and the acceptance into two beats so each image stays focused. Why: one image should convey one clear idea. (One clear image per beat) Passages: [c8-b95].\n5. [F5] What to change: the final narration could end on a question or a hint of what comes next rather than a flat statement. Why: ending on a question keeps the audience engaged. (End on a question) Passages: [c1-b140].\n\nORDER:\nKeep your order. The sequence moves from the tense committee room, through the questioning, to the vote result, then to Gladias’s reflective moment outside, and finally to the concluding narration.\n\nPICTURE SLOTS:\n- After F1: wide; Gladias; standing before a row of senators, robe damp, sweat visible.\n- After F3: medium; vote screen; numbers changing to “11‑9” with a green light indicating acceptance.\n- After F4: wide; city outskirts; Gladias looking toward a distant silhouette of Delwart, a faint Arctic flag fluttering.\n\nQUESTION:\nWhat does Gladias ultimately want in this piece, and how does the final image or narration make that want clear to the audience?",
+      "claims_reply": "F5 | Gladias became a member of the Order.  \nF3 | The vote came in eleven to nine, and he was in.  \nF2 | Senator Papli asks Gladias what his favorite band is, and he has none.  \nF1 | Gladias is in his privacy robe, sweating, in front of the senators.  \nF1 | Mov chairs the committee.  \nF4 | Delwart is an Arctic spy that Gladias thinks of outside.  \nF1 | There are senators and a committee present.",
+      "reply": "NOTES:\n1. [F1] What to change: the beat should show a clear want, obstacle and turn. Why: without a want (e.g., “to survive the vote”) and an obstacle (the committee’s scrutiny) the scene lacks drama. (Each scene has a want, an obstacle and a turn) Passages: [c1-b56], [c1-b76].\n2. [F2] What to change: introduce Senator Papli (or Gladias) through a want rather than just stating a question. Why: characters are most engaging when first seen pursuing something. (Introduce a character through what they want) Passages: [c3-b83].\n3. [F4] What to change: add an establishing visual of the outside location before showing Gladias thinking. Why: viewers need to know where the scene is before focusing on a face. (Establish the place before the faces) Passages: [c1-b2], [c3-b2].\n4. [F3] What to change: consider splitting the vote result and the acceptance into two beats so each image stays focused. Why: one image should convey one clear idea. (One clear image per beat) Passages: [c8-b95].\n5. [F5] What to change: the final narration could end on a question or a hint of what comes next rather than a flat statement. Why: ending on a question keeps the audience engaged. (End on a question) Passages: [c1-b140].\n\nORDER:\nKeep your order. The sequence moves from the tense committee room, through the questioning, to the vote result, then to Gladias’s reflective moment outside, and finally to the concluding narration.\n\nPICTURE SLOTS:\n- After F1: wide; Gladias; standing before a row of senators, robe damp, sweat visible.\n- After F3: medium; vote screen; numbers changing to “11‑9” with a green light indicating acceptance.\n- After F4: wide; city outskirts; Gladias looking toward a distant silhouette of Delwart, a faint Arctic flag fluttering.\n\nQUESTION:\nWhat does Gladias ultimately want in this piece, and how does the final image or narration make that want clear to the audience?\n\nWORLD CHECK:\n- F5 Gladias became a member of the Order.: matches. Gladias is described as an Acolyte, an Order member in training, and is later noted as being accepted into the Order. [c1-b57] [c8-b1]\n- F3 The vote came in eleven to nine, and he was in.: the book doesn't say, up to your chapter.\n- F2 Senator Papli asks Gladias what his favorite band is, and he has none.: the book doesn't say, up to your chapter.\n- F1 Gladias is in his privacy robe, sweating, in front of the senators.: the book doesn't say, up to your chapter.\n- F1 Mov chairs the committee.: the book doesn't say, up to your chapter.\n- F4 Delwart is an Arctic spy that Gladias thinks of outside.: the book doesn't say, up to your chapter.\n- F1 There are senators and a committee present.: matches. Senators and a committee are present, as described in [c8-b48]."
+    },
+    {
+      "design": 2,
+      "fixture": "b-hearing",
+      "limit": 8,
+      "model": "kimi-k3",
+      "gateway_model": "moonshotai/kimi-k3",
+      "at": "2026-10-12T01:51:32.072Z",
+      "cost_usd": 0.19798035,
+      "ms": 225015,
+      "prompts_sha256": {
+        "notes": "21a773731f9cb17331dbd2987095639c5399afd74b2b037ddba9e06df4ad924b",
+        "claims": "26fbcca73928f8734e530a7c359e26d7ac83c725cb39876f2bbb15d6a3227bf7",
+        "check": "69eec543f8e34357b21ce63bb42077b4865d294dfe47693a1fb81ca8f8998111",
+        "guard": "630cc2ca2c9ef27c82b5714ab161da96b8c5b591702efe21e1668e32198c6c82"
+      },
+      "craft_sha256": "15c11ee5bbc0491ed804b38fb918ea671744e01af0e06fb788e0db54b7522fc8",
+      "craft_limit_sha256": "a5a5e537d393dcfa24b5ab45faf28b387d91d6943a975dc8cc7b121766517c62",
+      "guard": {
+        "verdict": "OK",
+        "reason": "No words for the piece are supplied, only editorial comments and suggestions."
+      },
+      "passages": [
+        "c1-b38",
+        "c1-b45",
+        "c1-b49",
+        "c1-b56",
+        "c1-b76",
+        "c1-b77",
+        "c1-b79",
+        "c3-b127",
+        "c6-b4",
+        "c6-b59",
+        "c6-b147",
+        "c8-b95"
+      ],
+      "claims": [
+        {
+          "label": "F5",
+          "claim": "Gladias became a member of the Order (narration over a black screen)",
+          "verdict": "matches",
+          "said": "By chapter 8, Gladias is accepted into the Order when the chairman breaks a ten-to-ten committee vote. [c8-b99] [c8-b101]",
+          "shown": "matches. By chapter 8, Gladias is accepted into the Order when the chairman breaks a ten-to-ten committee vote. [c8-b99] [c8-b101]",
+          "evidence": [
+            "c1-b56",
+            "c1-b57",
+            "c1-b61",
+            "c1-b76",
+            "c1-b79",
+            "c6-b147",
+            "wg-001",
+            "wg-005",
+            "wg-007",
+            "wg-018",
+            "wg-091",
+            "wg-093",
+            "wg-134",
+            "wg-320"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F3",
+          "claim": "the vote comes in eleven to nine; he is in",
+          "verdict": "conflicts",
+          "said": "The Senate vote came in exactly ten to ten, leaving the Chairman as the deciding vote, not eleven to nine [c8-b95][c8-b97].",
+          "shown": "conflicts. The Senate vote came in exactly ten to ten, leaving the Chairman as the deciding vote, not eleven to nine [c8-b95][c8-b97].",
+          "evidence": [
+            "c1-b38",
+            "c2-b91",
+            "c8-b95",
+            "c8-b97",
+            "c8-b116"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F1",
+          "claim": "Gladias in his privacy robe, sweating, in front of the senators",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c1-b45",
+            "c1-b49",
+            "c1-b77",
+            "c1-b79",
+            "c6-b4",
+            "c6-b147",
+            "wg-102",
+            "wg-022",
+            "wg-005",
+            "wg-326",
+            "wg-329"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F1",
+          "claim": "Mov chairs the committee",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c8-b47"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F2",
+          "claim": "Senator Papli asks him what his favorite band is; he has none",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c6-b53",
+            "c8-b84",
+            "wg-103"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F4",
+          "claim": "Delwart is the Arctic spy",
+          "verdict": "later",
+          "said": "",
+          "shown": "I can't check this within your chapter.",
+          "evidence": [
+            "c3-b5",
+            "c3-b6",
+            "c3-b120",
+            "c3-b122",
+            "c3-b127"
+          ],
+          "later_withheld": 1
+        },
+        {
+          "label": "F4",
+          "claim": "outside, Gladias thinks of Delwart and smiles",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c1-b61",
+            "c1-b79",
+            "c3-b120",
+            "c3-b122",
+            "c3-b127",
+            "c6-b59",
+            "wg-006",
+            "wg-022",
+            "wg-129",
+            "wg-314",
+            "wg-326",
+            "wg-329"
+          ],
+          "later_withheld": 0
+        }
+      ],
+      "expected_world": [
+        {
+          "key": "mov",
+          "expected": "not said",
+          "got": "not said",
+          "ok": true
+        },
+        {
+          "key": "eleven",
+          "expected": "conflicts",
+          "got": "conflicts",
+          "ok": true
+        },
+        {
+          "key": "delwart",
+          "expected": "later",
+          "got": "later",
+          "ok": true
+        }
+      ],
+      "auto_flags": [],
+      "calls": [
+        {
+          "step": "notes",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PWPSQHNEZSV5CDHAG7EC4Q",
+          "prompt_tokens": 11129,
+          "completion_tokens": 8000,
+          "cost_usd": 0.1520046,
+          "ms": 161723
+        },
+        {
+          "step": "claims",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PWVQG8WX0J05M4Q1VJPA9K",
+          "prompt_tokens": 354,
+          "completion_tokens": 752,
+          "cost_usd": 0.012342,
+          "ms": 14693
+        },
+        {
+          "step": "world-check",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PWW5YVTY3B6SYRKXA2GNHT",
+          "prompt_tokens": 1588,
+          "completion_tokens": 414,
+          "cost_usd": 0.0102828,
+          "ms": 10734
+        },
+        {
+          "step": "world-check",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PWWGE2DVTM75E19BV71VJ1",
+          "prompt_tokens": 757,
+          "completion_tokens": 125,
+          "cost_usd": 0.0034548,
+          "ms": 4588
+        },
+        {
+          "step": "world-check",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PWWMVY7HPXV2RV6RWQ9FVG",
+          "prompt_tokens": 1338,
+          "completion_tokens": 256,
+          "cost_usd": 0.0071628,
+          "ms": 7391
+        },
+        {
+          "step": "world-check",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PWWW4QMPE5RHRQRZSWB97S",
+          "prompt_tokens": 453,
+          "completion_tokens": 62,
+          "cost_usd": 0.0015978,
+          "ms": 5117
+        },
+        {
+          "step": "world-check",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PWX13J4YV291887BQWNXR8",
+          "prompt_tokens": 504,
+          "completion_tokens": 102,
+          "cost_usd": 0.0023508,
+          "ms": 3452
+        },
+        {
+          "step": "world-check",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PWX4GSS8HAPXSZHPVJDX3B",
+          "prompt_tokens": 1146,
+          "completion_tokens": 81,
+          "cost_usd": 0.0039618,
+          "ms": 4207
+        },
+        {
+          "step": "world-check",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PWX8PNC0B9X5PXEP06WMP4",
+          "prompt_tokens": 1328,
+          "completion_tokens": 91,
+          "cost_usd": 0.0046578,
+          "ms": 12207
+        },
+        {
+          "step": "guard",
+          "model": "openai/gpt-oss-safeguard-20b",
+          "provider": "groq",
+          "request_id": "gen_01M4PWXMHGST7F681YF7S9W9DV",
+          "prompt_tokens": 1262,
+          "completion_tokens": 267,
+          "cost_usd": 0.00016515,
+          "ms": 779
+        }
+      ],
+      "notes_reply": "NOTES:\n1. [F5] What to change: Cut this fragment and let F4 be the last beat. Why: its words restate what F3's \"He is in\" already delivered, over a black screen that shows nothing, and it closes the piece's question instead of leaving one open; the unexplained smile in F4 is the stronger exit. (End on a question; Narration says what the pictures can't; One clear image per beat) Passages: c1-b140, c7-b144.\n\n2. [F1] What to change: The piece opens at the obstacle without the want; before the questioning starts, the viewer needs what Gladias is after here and what failing would cost him. Why: the vote in F3 only carries weight when measured against a want the viewer can already name; right now the result lands on an empty stake. (Want; Introduce a character through what they want) Passages: c2-b12, c1-b68, c6-b158.\n\n3. [F3] What to change: The count and the result arrive in a single step; let the voting build in front of the viewer, then give the outcome its own beat and its own image. Why: the suspense lives between the last vote cast and the reveal; compressing both skips the pressure the scene offers and asks one image to do two jobs. (Pressure; Turn; One clear image per beat) Passages: c8-b95, c7-b98.\n\n4. [F2] What to change: His answer costs him nothing and nothing in the room changes because of it; make this beat turn, or fold it into the build toward the vote. Why: this is the only moment Gladias acts rather than undergoes, so a cost-free answer reads as a formality, and a beat without a turn is a candidate to merge. (Choice; Each scene has a want, an obstacle and a turn) Passages: none.\n\n5. [F4] What to change: The thought of Delwart is invisible in a picture; split the channels so the picture holds the place and the smile, and the narration carries what the eye can't see. Why: as written, one image is asked to show a memory, which it can't; narration earns its place exactly where the picture is blind. (Show inner states through action and objects; Narration says what the pictures can't) Passages: c1-b70, c7-b141.\n\nORDER:\nF1,",
+      "claims_reply": "F5 | Gladias became a member of the Order (narration over a black screen)\nF3 | the vote comes in eleven to nine; he is in\nF1 | Gladias in his privacy robe, sweating, in front of the senators\nF1 | Mov chairs the committee\nF2 | Senator Papli asks him what his favorite band is; he has none\nF4 | Delwart is the Arctic spy\nF4 | outside, Gladias thinks of Delwart and smiles",
+      "reply": "NOTES:\n1. [F5] What to change: Cut this fragment and let F4 be the last beat. Why: its words restate what F3's \"He is in\" already delivered, over a black screen that shows nothing, and it closes the piece's question instead of leaving one open; the unexplained smile in F4 is the stronger exit. (End on a question; Narration says what the pictures can't; One clear image per beat) Passages: c1-b140, c7-b144.\n\n2. [F1] What to change: The piece opens at the obstacle without the want; before the questioning starts, the viewer needs what Gladias is after here and what failing would cost him. Why: the vote in F3 only carries weight when measured against a want the viewer can already name; right now the result lands on an empty stake. (Want; Introduce a character through what they want) Passages: c2-b12, c1-b68, c6-b158.\n\n3. [F3] What to change: The count and the result arrive in a single step; let the voting build in front of the viewer, then give the outcome its own beat and its own image. Why: the suspense lives between the last vote cast and the reveal; compressing both skips the pressure the scene offers and asks one image to do two jobs. (Pressure; Turn; One clear image per beat) Passages: c8-b95, c7-b98.\n\n4. [F2] What to change: His answer costs him nothing and nothing in the room changes because of it; make this beat turn, or fold it into the build toward the vote. Why: this is the only moment Gladias acts rather than undergoes, so a cost-free answer reads as a formality, and a beat without a turn is a candidate to merge. (Choice; Each scene has a want, an obstacle and a turn) Passages: none.\n\n5. [F4] What to change: The thought of Delwart is invisible in a picture; split the channels so the picture holds the place and the smile, and the narration carries what the eye can't see. Why: as written, one image is asked to show a memory, which it can't; narration earns its place exactly where the picture is blind. (Show inner states through action and objects; Narration says what the pictures can't) Passages: c1-b70, c7-b141.\n\nORDER:\nF1,\n\nWORLD CHECK:\n- F5 Gladias became a member of the Order (narration over a black screen): matches. By chapter 8, Gladias is accepted into the Order when the chairman breaks a ten-to-ten committee vote. [c8-b99] [c8-b101]\n- F3 the vote comes in eleven to nine; he is in: conflicts. The Senate vote came in exactly ten to ten, leaving the Chairman as the deciding vote, not eleven to nine [c8-b95][c8-b97].\n- F1 Gladias in his privacy robe, sweating, in front of the senators: the book doesn't say, up to your chapter.\n- F1 Mov chairs the committee: the book doesn't say, up to your chapter.\n- F2 Senator Papli asks him what his favorite band is; he has none: the book doesn't say, up to your chapter.\n- F4 Delwart is the Arctic spy: I can't check this within your chapter.\n- F4 outside, Gladias thinks of Delwart and smiles: the book doesn't say, up to your chapter."
+    },
+    {
+      "design": 2,
+      "fixture": "b-hearing",
+      "limit": 8,
+      "model": "claude-sonnet-5.5",
+      "gateway_model": "anthropic/claude-sonnet-5.5",
+      "at": "2026-10-12T01:52:18.989Z",
+      "cost_usd": 0.09345325000000002,
+      "ms": 46905,
+      "prompts_sha256": {
+        "notes": "21a773731f9cb17331dbd2987095639c5399afd74b2b037ddba9e06df4ad924b",
+        "claims": "26fbcca73928f8734e530a7c359e26d7ac83c725cb39876f2bbb15d6a3227bf7",
+        "check": "69eec543f8e34357b21ce63bb42077b4865d294dfe47693a1fb81ca8f8998111",
+        "guard": "630cc2ca2c9ef27c82b5714ab161da96b8c5b591702efe21e1668e32198c6c82"
+      },
+      "craft_sha256": "15c11ee5bbc0491ed804b38fb918ea671744e01af0e06fb788e0db54b7522fc8",
+      "craft_limit_sha256": "a5a5e537d393dcfa24b5ab45faf28b387d91d6943a975dc8cc7b121766517c62",
+      "guard": {
+        "verdict": "OK: The reply offers only constructive comments, suggested ordering, visual cues, and a question—no new narrative text or on‑screen wording.",
+        "reason": ""
+      },
+      "passages": [
+        "c1-b38",
+        "c1-b45",
+        "c1-b49",
+        "c1-b56",
+        "c1-b76",
+        "c1-b77",
+        "c1-b79",
+        "c3-b127",
+        "c6-b4",
+        "c6-b59",
+        "c6-b147",
+        "c8-b95"
+      ],
+      "claims": [
+        {
+          "label": "F1",
+          "claim": "Gladias appears before the senators in a privacy robe, sweating",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c1-b45",
+            "c1-b77",
+            "c1-b79",
+            "c3-b127",
+            "c6-b4",
+            "c6-b147",
+            "wg-102",
+            "wg-022",
+            "wg-005",
+            "wg-326",
+            "wg-329"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F1",
+          "claim": "Mov chairs the committee",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c8-b47"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F2",
+          "claim": "Senator Papli asks Gladias what his favorite band is",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c1-b9",
+            "c1-b12",
+            "c1-b48",
+            "c1-b61",
+            "c1-b79",
+            "c6-b147",
+            "wg-103",
+            "wg-127",
+            "wg-326",
+            "wg-329"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F2",
+          "claim": "Gladias has no favorite band",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c1-b9",
+            "c1-b12",
+            "c1-b48",
+            "c1-b61",
+            "c1-b79",
+            "c6-b147",
+            "wg-103",
+            "wg-127",
+            "wg-326",
+            "wg-329"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F3",
+          "claim": "The committee vote is eleven to nine in Gladias's favor",
+          "verdict": "conflicts",
+          "said": "The book says the committee vote was ten to ten, with the chairman breaking the tie, not eleven to nine. This rests on the world guide line about Gladias's acceptance into the Order [c8-b97] [c8-b99] [c8-b101], but those ids aren't among the passages given, so I cite the nearest vote passage [c8-b95].",
+          "shown": "conflicts. The book says the committee vote was ten to ten, with the chairman breaking the tie, not eleven to nine. This rests on the world guide line about Gladias's acceptance into the Order [c8-b97] [c8-b99] [c8-b101], but those ids aren't among the passages given, so I cite the nearest vote passage [c8-b95].",
+          "evidence": [
+            "c1-b9",
+            "c1-b38",
+            "c1-b61",
+            "c1-b79",
+            "c6-b147",
+            "c8-b95",
+            "wg-007",
+            "wg-002",
+            "wg-326",
+            "wg-329"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F3",
+          "claim": "The vote admits Gladias (\"He is in\")",
+          "verdict": "matches",
+          "said": "The world guide says Gladias is accepted into the Order by a ten-to-ten committee vote broken by the chairman, and c8-b95 shows the vote being cast, so the vote admits him. [c8-b95]",
+          "shown": "matches. The world guide says Gladias is accepted into the Order by a ten-to-ten committee vote broken by the chairman, and c8-b95 shows the vote being cast, so the vote admits him. [c8-b95]",
+          "evidence": [
+            "c1-b9",
+            "c1-b38",
+            "c1-b61",
+            "c1-b79",
+            "c6-b147",
+            "c8-b95",
+            "wg-007",
+            "wg-326",
+            "wg-329"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F4",
+          "claim": "Delwart is an Arctic spy, and Gladias thinks of him and smiles",
+          "verdict": "later",
+          "said": "",
+          "shown": "I can't check this within your chapter.",
+          "evidence": [
+            "c1-b61",
+            "c1-b79",
+            "c3-b5",
+            "c3-b6",
+            "c3-b120",
+            "c3-b127",
+            "wg-006",
+            "wg-018",
+            "wg-022",
+            "wg-129",
+            "wg-314",
+            "wg-326",
+            "wg-329"
+          ],
+          "later_withheld": 1
+        },
+        {
+          "label": "F5",
+          "claim": "Gladias becomes a member of the Order",
+          "verdict": "matches",
+          "said": "The world guide says Gladias is accepted into the Order by a ten-to-ten committee vote broken by the chairman, on 3724 Rainmoon 26 in Meldan, so he goes from Acolyte to full member. Only the world guide lines cite this, [c8-b97] [c8-b99] [c8-b101]; the Acolyte status itself is at [c1-b57].",
+          "shown": "matches. The world guide says Gladias is accepted into the Order by a ten-to-ten committee vote broken by the chairman, on 3724 Rainmoon 26 in Meldan, so he goes from Acolyte to full member. Only the world guide lines cite this, [c8-b97] [c8-b99] [c8-b101]; the Acolyte status itself is at [c1-b57].",
+          "evidence": [
+            "c1-b57",
+            "c1-b61",
+            "c1-b76",
+            "c1-b77",
+            "c1-b79",
+            "c6-b147",
+            "wg-001",
+            "wg-005",
+            "wg-134",
+            "wg-320",
+            "wg-007",
+            "wg-018",
+            "wg-091",
+            "wg-093"
+          ],
+          "later_withheld": 0
+        }
+      ],
+      "expected_world": [
+        {
+          "key": "mov",
+          "expected": "not said",
+          "got": "not said",
+          "ok": true
+        },
+        {
+          "key": "eleven",
+          "expected": "conflicts",
+          "got": "conflicts",
+          "ok": true
+        },
+        {
+          "key": "delwart",
+          "expected": "later",
+          "got": "later",
+          "ok": true
+        }
+      ],
+      "auto_flags": [
+        "quotes words that are neither the person's nor the book's: \" are one small obstacle, and nothing in the piece makes it cost him. Decide what this que",
+        "quotes words that are neither the person's nor the book's: \" put a thought and a feeling into one beat, and the narration names both. Let one action "
+      ],
+      "calls": [
+        {
+          "step": "notes",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWXNDEXQRKSAZBJ7N1VH21",
+          "prompt_tokens": 15550,
+          "completion_tokens": 2751,
+          "cost_usd": 0.05861,
+          "ms": 25949
+        },
+        {
+          "step": "claims",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWYEMTZKKBY6WSQKYJP6HF",
+          "prompt_tokens": 377,
+          "completion_tokens": 175,
+          "cost_usd": 0.002504,
+          "ms": 3034
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWYHMQR2GKFTNBV23B5SFQ",
+          "prompt_tokens": 1702,
+          "completion_tokens": 8,
+          "cost_usd": 0.003484,
+          "ms": 2100
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWYKPPSC8C0G9WGW2976E5",
+          "prompt_tokens": 560,
+          "completion_tokens": 8,
+          "cost_usd": 0.0012,
+          "ms": 1225
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWYMYXZX2N51TCW3W35DSW",
+          "prompt_tokens": 1581,
+          "completion_tokens": 203,
+          "cost_usd": 0.005192,
+          "ms": 2476
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWYQB2V7EX7J0GYQJTM0GC",
+          "prompt_tokens": 1522,
+          "completion_tokens": 8,
+          "cost_usd": 0.003124,
+          "ms": 1656
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWYS0QZZMEW9PKHVZVG813",
+          "prompt_tokens": 1553,
+          "completion_tokens": 121,
+          "cost_usd": 0.004316,
+          "ms": 2886
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWYVTWNYX14HVVD0C5DGPN",
+          "prompt_tokens": 1494,
+          "completion_tokens": 77,
+          "cost_usd": 0.003758,
+          "ms": 2382
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWYY4B5XM5GJ49A7GWK2WC",
+          "prompt_tokens": 2421,
+          "completion_tokens": 69,
+          "cost_usd": 0.005532,
+          "ms": 1688
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWYZT9J8ZRM41BC0XHKYZV",
+          "prompt_tokens": 2084,
+          "completion_tokens": 132,
+          "cost_usd": 0.005488,
+          "ms": 2156
+        },
+        {
+          "step": "guard",
+          "model": "openai/gpt-oss-safeguard-20b",
+          "provider": "groq",
+          "request_id": "gen_01M4PWZ1XTNZ82F86ZF6VSGQZY",
+          "prompt_tokens": 1610,
+          "completion_tokens": 479,
+          "cost_usd": 0.00024525,
+          "ms": 1248
+        }
+      ],
+      "notes_reply": "NOTES:\n1. [F5] What to change: F5 narrates the result over a black screen, and F3 has already shown it. Cut F5, or move the piece's ending to the moment before the result is known. Why: the narration repeats a picture and ends on an answer. The viewer leaves with nothing left to wonder about (Narration says what the pictures can't; End on a question). Passages: [c8-b95]\n\n2. [F1] What to change: The opening gives a face and a robe but no place and no want. Start wide on the room and the people in it, then close in on Gladias. Show what he is trying to get from this committee and what he stands to lose. Why: a viewer who skipped the book can't tell where this is or why it matters (Establish the place before the faces; Want). Passages: [c1-b68] [c1-b76]\n\n3. [F2] What to change: The question and \"He has none\" are one small obstacle, and nothing in the piece makes it cost him. Decide what this question threatens for Gladias, then make the next beat press harder than this one. Why: the difficulty stays level from F1 to F3, so the vote arrives without having been earned (Pressure; Choice needs a price). Passages: [c1-b38] [c1-b76]\n\n4. [F3] What to change: The result sits as a plain statement. Give the vote its own picture, ideally the instant just before the result, and make clear which picture shows the situation turning. Why: the turn is the beat the viewer will remember, and right now it happens only in words (Turn; One clear image per beat). Passages: [c8-b95]\n\n5. [F4] What to change: \"Thinks of Delwart\" and \"smiles\" put a thought and a feeling into one beat, and the narration names both. Let one action or object in the picture carry the smile. Use the words for what the eye can't see, such as why Delwart matters now. Why: the viewer has to guess who Delwart is, and the picture can't show a thought (Show inner states through action and objects; Introduce a character through what they want). Passages: [c3-b127]\n\nORDER:\nF1, F2, F3, F4, with F5 left out. F4 then becomes the closing beat, so the piece ends on the open question of what Delwart means to Gladias rather than on a summary.\n\nPICTURE SLOTS:\n- Before F1: the committee chamber, seen wide; the senators in rows at their seats and Gladias small at the front in his privacy robe; he stands still while they look at him.\n- After F2: the same room, closer; Gladias and Senator Papli, who leans forward, while his hands grip the cloth of his robe.\n- After F3: the senators' hands over their buttons at the instant of voting; Gladias standing and looking up toward the front of the room.\n- After F4: outside the building, on its steps; Gladias alone with his hood down, looking at the empty street in the direction Delwart might have gone.\n\nQUESTION:\nWhat does Gladias want from this committee, and what is the one thing he can't afford to have them find out?",
+      "claims_reply": "F1 | Gladias appears before the senators in a privacy robe, sweating\nF1 | Mov chairs the committee\nF2 | Senator Papli asks Gladias what his favorite band is\nF2 | Gladias has no favorite band\nF3 | The committee vote is eleven to nine in Gladias's favor\nF3 | The vote admits Gladias (\"He is in\")\nF4 | Delwart is an Arctic spy, and Gladias thinks of him and smiles\nF5 | Gladias becomes a member of the Order",
+      "reply": "NOTES:\n1. [F5] What to change: F5 narrates the result over a black screen, and F3 has already shown it. Cut F5, or move the piece's ending to the moment before the result is known. Why: the narration repeats a picture and ends on an answer. The viewer leaves with nothing left to wonder about (Narration says what the pictures can't; End on a question). Passages: [c8-b95]\n\n2. [F1] What to change: The opening gives a face and a robe but no place and no want. Start wide on the room and the people in it, then close in on Gladias. Show what he is trying to get from this committee and what he stands to lose. Why: a viewer who skipped the book can't tell where this is or why it matters (Establish the place before the faces; Want). Passages: [c1-b68] [c1-b76]\n\n3. [F2] What to change: The question and \"He has none\" are one small obstacle, and nothing in the piece makes it cost him. Decide what this question threatens for Gladias, then make the next beat press harder than this one. Why: the difficulty stays level from F1 to F3, so the vote arrives without having been earned (Pressure; Choice needs a price). Passages: [c1-b38] [c1-b76]\n\n4. [F3] What to change: The result sits as a plain statement. Give the vote its own picture, ideally the instant just before the result, and make clear which picture shows the situation turning. Why: the turn is the beat the viewer will remember, and right now it happens only in words (Turn; One clear image per beat). Passages: [c8-b95]\n\n5. [F4] What to change: \"Thinks of Delwart\" and \"smiles\" put a thought and a feeling into one beat, and the narration names both. Let one action or object in the picture carry the smile. Use the words for what the eye can't see, such as why Delwart matters now. Why: the viewer has to guess who Delwart is, and the picture can't show a thought (Show inner states through action and objects; Introduce a character through what they want). Passages: [c3-b127]\n\nORDER:\nF1, F2, F3, F4, with F5 left out. F4 then becomes the closing beat, so the piece ends on the open question of what Delwart means to Gladias rather than on a summary.\n\nPICTURE SLOTS:\n- Before F1: the committee chamber, seen wide; the senators in rows at their seats and Gladias small at the front in his privacy robe; he stands still while they look at him.\n- After F2: the same room, closer; Gladias and Senator Papli, who leans forward, while his hands grip the cloth of his robe.\n- After F3: the senators' hands over their buttons at the instant of voting; Gladias standing and looking up toward the front of the room.\n- After F4: outside the building, on its steps; Gladias alone with his hood down, looking at the empty street in the direction Delwart might have gone.\n\nQUESTION:\nWhat does Gladias want from this committee, and what is the one thing he can't afford to have them find out?\n\nWORLD CHECK:\n- F1 Gladias appears before the senators in a privacy robe, sweating: the book doesn't say, up to your chapter.\n- F1 Mov chairs the committee: the book doesn't say, up to your chapter.\n- F2 Senator Papli asks Gladias what his favorite band is: the book doesn't say, up to your chapter.\n- F2 Gladias has no favorite band: the book doesn't say, up to your chapter.\n- F3 The committee vote is eleven to nine in Gladias's favor: conflicts. The book says the committee vote was ten to ten, with the chairman breaking the tie, not eleven to nine. This rests on the world guide line about Gladias's acceptance into the Order [c8-b97] [c8-b99] [c8-b101], but those ids aren't among the passages given, so I cite the nearest vote passage [c8-b95].\n- F3 The vote admits Gladias (\"He is in\"): matches. The world guide says Gladias is accepted into the Order by a ten-to-ten committee vote broken by the chairman, and c8-b95 shows the vote being cast, so the vote admits him. [c8-b95]\n- F4 Delwart is an Arctic spy, and Gladias thinks of him and smiles: I can't check this within your chapter.\n- F5 Gladias becomes a member of the Order: matches. The world guide says Gladias is accepted into the Order by a ten-to-ten committee vote broken by the chairman, on 3724 Rainmoon 26 in Meldan, so he goes from Acolyte to full member. Only the world guide lines cite this, [c8-b97] [c8-b99] [c8-b101]; the Acolyte status itself is at [c1-b57]."
+    },
+    {
+      "design": 2,
+      "fixture": "b-hearing",
+      "limit": 8,
+      "model": "claude-opus-5.5",
+      "gateway_model": "anthropic/claude-opus-5.5",
+      "at": "2026-10-12T01:53:08.807Z",
+      "cost_usd": 0.15632435,
+      "ms": 49805,
+      "prompts_sha256": {
+        "notes": "21a773731f9cb17331dbd2987095639c5399afd74b2b037ddba9e06df4ad924b",
+        "claims": "26fbcca73928f8734e530a7c359e26d7ac83c725cb39876f2bbb15d6a3227bf7",
+        "check": "69eec543f8e34357b21ce63bb42077b4865d294dfe47693a1fb81ca8f8998111",
+        "guard": "630cc2ca2c9ef27c82b5714ab161da96b8c5b591702efe21e1668e32198c6c82"
+      },
+      "craft_sha256": "15c11ee5bbc0491ed804b38fb918ea671744e01af0e06fb788e0db54b7522fc8",
+      "craft_limit_sha256": "a5a5e537d393dcfa24b5ab45faf28b387d91d6943a975dc8cc7b121766517c62",
+      "guard": {
+        "verdict": "OK",
+        "reason": "No disallowed wording or rewrite is present."
+      },
+      "passages": [
+        "c1-b38",
+        "c1-b45",
+        "c1-b49",
+        "c1-b56",
+        "c1-b76",
+        "c1-b77",
+        "c1-b79",
+        "c3-b127",
+        "c6-b4",
+        "c6-b59",
+        "c6-b147",
+        "c8-b95"
+      ],
+      "claims": [
+        {
+          "label": "F5",
+          "claim": "Gladias became a member of the Order",
+          "verdict": "matches",
+          "said": "The guide says Gladias, an Acolyte in training, is accepted into the Order in chapter 8 when the chairman breaks a ten-to-ten committee vote [c1-b57] [c8-b97] [c8-b99] [c8-b101].",
+          "shown": "matches. The guide says Gladias, an Acolyte in training, is accepted into the Order in chapter 8 when the chairman breaks a ten-to-ten committee vote [c1-b57] [c8-b97] [c8-b99] [c8-b101].",
+          "evidence": [
+            "c1-b57",
+            "c1-b61",
+            "c1-b76",
+            "c1-b77",
+            "c1-b79",
+            "c6-b147",
+            "wg-001",
+            "wg-005",
+            "wg-007",
+            "wg-018",
+            "wg-091",
+            "wg-093",
+            "wg-134",
+            "wg-320"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F3",
+          "claim": "The vote comes in eleven to nine. He is in",
+          "verdict": "conflicts",
+          "said": "The Senate vote came in ten to ten, a tie the Chairman then had to break, not eleven to nine [c8-b97].",
+          "shown": "conflicts. The Senate vote came in ten to ten, a tie the Chairman then had to break, not eleven to nine [c8-b97].",
+          "evidence": [
+            "c1-b38",
+            "c2-b91",
+            "c8-b95",
+            "c8-b97",
+            "c8-b116"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F1",
+          "claim": "Mov chairs the committee",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c8-b47"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F1",
+          "claim": "Gladias in his privacy robe, in front of the senators",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c1-b45",
+            "c1-b49",
+            "c1-b77",
+            "c1-b79",
+            "c6-b4",
+            "c6-b147",
+            "wg-102",
+            "wg-022",
+            "wg-005",
+            "wg-326",
+            "wg-329"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F4",
+          "claim": "Delwart, the Arctic spy",
+          "verdict": "later",
+          "said": "",
+          "shown": "I can't check this within your chapter.",
+          "evidence": [
+            "c3-b5",
+            "c3-b6",
+            "c3-b120",
+            "c3-b122",
+            "c3-b127"
+          ],
+          "later_withheld": 1
+        },
+        {
+          "label": "F2",
+          "claim": "Senator Papli asks him what his favorite band is",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c6-b53",
+            "c8-b84",
+            "wg-103"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F2",
+          "claim": "Gladias has no favorite band",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c1-b9",
+            "c1-b12",
+            "c1-b48",
+            "c1-b61",
+            "c1-b79",
+            "c6-b147",
+            "wg-103",
+            "wg-127",
+            "wg-326",
+            "wg-329"
+          ],
+          "later_withheld": 0
+        }
+      ],
+      "expected_world": [
+        {
+          "key": "mov",
+          "expected": "not said",
+          "got": "not said",
+          "ok": true
+        },
+        {
+          "key": "eleven",
+          "expected": "conflicts",
+          "got": "conflicts",
+          "ok": true
+        },
+        {
+          "key": "delwart",
+          "expected": "later",
+          "got": "later",
+          "ok": true
+        }
+      ],
+      "auto_flags": [],
+      "calls": [
+        {
+          "step": "notes",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWZ3AYWZB4KS2QYNJN37GQ",
+          "prompt_tokens": 15550,
+          "completion_tokens": 2061,
+          "cost_usd": 0.10342,
+          "ms": 26048
+        },
+        {
+          "step": "claims",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PWZWKQTGWGGGCKJNPG7VEC",
+          "prompt_tokens": 377,
+          "completion_tokens": 314,
+          "cost_usd": 0.007788,
+          "ms": 5241
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PX01RNA4JBZEJSS8MWRBDZ",
+          "prompt_tokens": 2000,
+          "completion_tokens": 89,
+          "cost_usd": 0.00978,
+          "ms": 2418
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PX04401DGDSHP8E08MBAQY",
+          "prompt_tokens": 987,
+          "completion_tokens": 215,
+          "cost_usd": 0.008248,
+          "ms": 4349
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PX08BMMVKSFXR0MEZ352SA",
+          "prompt_tokens": 560,
+          "completion_tokens": 8,
+          "cost_usd": 0.0024,
+          "ms": 1896
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PX0A96NT9M9W7ADAJF90GT",
+          "prompt_tokens": 1817,
+          "completion_tokens": 8,
+          "cost_usd": 0.007428,
+          "ms": 2071
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PX0C80S0SD1583E9QC8AQP",
+          "prompt_tokens": 1599,
+          "completion_tokens": 90,
+          "cost_usd": 0.008196,
+          "ms": 3568
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PX0FQTQ98BRC320F08RGA6",
+          "prompt_tokens": 624,
+          "completion_tokens": 8,
+          "cost_usd": 0.002656,
+          "ms": 1702
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PX0HFWE5B2J6WT21HJB6RE",
+          "prompt_tokens": 1522,
+          "completion_tokens": 8,
+          "cost_usd": 0.006248,
+          "ms": 1825
+        },
+        {
+          "step": "guard",
+          "model": "openai/gpt-oss-safeguard-20b",
+          "provider": "groq",
+          "request_id": "gen_01M4PX0K7HF9TNYVGM2D1B77DQ",
+          "prompt_tokens": 1662,
+          "completion_tokens": 183,
+          "cost_usd": 0.00016035,
+          "ms": 592
+        }
+      ],
+      "notes_reply": "NOTES:\n1. [F3] What to change: The vote is the moment everything turns, but it arrives as a stated result with no build-up. Consider stretching it across more than one beat: the senators voting, Gladias waiting, then the outcome. Let the picture carry the wait and keep the narration for what the eye can't see. Why: (Turn, and Pressure) A turn lands when the viewer can point to the picture where it changes. A result that is simply announced skips the pressure that makes it matter. The book lingers on the buzzing buttons and on Gladias looking up toward the screen before it gives any result. Passages: [c8-b95]\n\n2. [F5] What to change: The narration over black repeats what F3 already told us. That spends the last moment of the piece on an answer the viewer already has. Consider cutting F5, or using the last beat to leave something open. Why: (End on a question; Narration says what the pictures can't) A short piece keeps its hold when the end leaves the viewer wanting to know something. Words that restate the picture, or the previous beat, waste the final seconds. The book ends chapter 1 on an anonymous request it hasn't explained yet. Passages: [c1-b140]\n\n3. [F1, F2] What to change: The viewer never learns what Gladias wants from this hearing, or what failing would cost him. \"He has none\" in F2 needs stakes: is having no favorite band a risk, a joke or a test? Consider making clear early, through an action or an object, what he is after. Why: (Want; Introduce a character through what they want) Every later beat is measured against a want the viewer can name. Without it, F2's question and F3's vote have nothing to push against. The sweating in F1 is a good start at showing inner state through the body. It needs a want behind it so we know what he's sweating about. Passages: [c1-b65] [c1-b68] [c1-b45]\n\n4. [F4] What to change: Delwart appears for the first time in the fourth beat, and only in a thought. The smile could mean relief, triumph or something darker, and the viewer has no way to read it. Consider either seeding Delwart earlier, or giving the smile something visible to attach to. Why: (Introduce a character through what they want; Show inner states through action and objects) A character who arrives late, with no want of his own, gives the viewer no reason to care that Gladias is thinking of him. The book introduces Delwart through what he pushes Gladias toward. Passages: [c3-b108] [c3-b112] [c3-b127]\n\n5. [F1] What to change: The piece opens on Gladias's body before we know where we are. Consider opening wider, on the room and the committee, before moving to him. Why: (Establish the place before the faces) A viewer coming in cold needs the space first. Then the close shot of a sweating man in a robe reads as nerves in a particular room, not just a figure. The book opens its scenes on place before people. Passages: [c1-b1] [c1-b2]\n\nORDER:\nF1, F2, F3, F4, then cut or rethink F5. The sequence already runs from hearing to verdict to aftermath, and it gets stronger if it stops on F4's open note rather than a summary.\n\nPICTURE SLOTS:\n- After F2: the committee room; Gladias and the seated senators; he holds still, hands visible against the dark purple robe, while they look at him.\n- After F2, before the result: the committee room; the senators; their hands pressing down on the buttons in front of them.\n- After F3: the committee room; Gladias alone in frame; his face turned up toward the top of the room, lit from above, with the screen itself out of shot.\n- After F4: outdoors beyond the building; Gladias in his privacy robe; walking away from the door, hood up, his face turned slightly back.\n\nQUESTION:\nWhat does Gladias stand to lose if the vote goes against him, and how could your first two beats let the viewer see that before F3?",
+      "claims_reply": "F5 | Gladias became a member of the Order\nF3 | The vote comes in eleven to nine. He is in\nF1 | Mov chairs the committee\nF1 | Gladias in his privacy robe, in front of the senators\nF4 | Delwart, the Arctic spy\nF2 | Senator Papli asks him what his favorite band is\nF2 | Gladias has no favorite band",
+      "reply": "NOTES:\n1. [F3] What to change: The vote is the moment everything turns, but it arrives as a stated result with no build-up. Consider stretching it across more than one beat: the senators voting, Gladias waiting, then the outcome. Let the picture carry the wait and keep the narration for what the eye can't see. Why: (Turn, and Pressure) A turn lands when the viewer can point to the picture where it changes. A result that is simply announced skips the pressure that makes it matter. The book lingers on the buzzing buttons and on Gladias looking up toward the screen before it gives any result. Passages: [c8-b95]\n\n2. [F5] What to change: The narration over black repeats what F3 already told us. That spends the last moment of the piece on an answer the viewer already has. Consider cutting F5, or using the last beat to leave something open. Why: (End on a question; Narration says what the pictures can't) A short piece keeps its hold when the end leaves the viewer wanting to know something. Words that restate the picture, or the previous beat, waste the final seconds. The book ends chapter 1 on an anonymous request it hasn't explained yet. Passages: [c1-b140]\n\n3. [F1, F2] What to change: The viewer never learns what Gladias wants from this hearing, or what failing would cost him. \"He has none\" in F2 needs stakes: is having no favorite band a risk, a joke or a test? Consider making clear early, through an action or an object, what he is after. Why: (Want; Introduce a character through what they want) Every later beat is measured against a want the viewer can name. Without it, F2's question and F3's vote have nothing to push against. The sweating in F1 is a good start at showing inner state through the body. It needs a want behind it so we know what he's sweating about. Passages: [c1-b65] [c1-b68] [c1-b45]\n\n4. [F4] What to change: Delwart appears for the first time in the fourth beat, and only in a thought. The smile could mean relief, triumph or something darker, and the viewer has no way to read it. Consider either seeding Delwart earlier, or giving the smile something visible to attach to. Why: (Introduce a character through what they want; Show inner states through action and objects) A character who arrives late, with no want of his own, gives the viewer no reason to care that Gladias is thinking of him. The book introduces Delwart through what he pushes Gladias toward. Passages: [c3-b108] [c3-b112] [c3-b127]\n\n5. [F1] What to change: The piece opens on Gladias's body before we know where we are. Consider opening wider, on the room and the committee, before moving to him. Why: (Establish the place before the faces) A viewer coming in cold needs the space first. Then the close shot of a sweating man in a robe reads as nerves in a particular room, not just a figure. The book opens its scenes on place before people. Passages: [c1-b1] [c1-b2]\n\nORDER:\nF1, F2, F3, F4, then cut or rethink F5. The sequence already runs from hearing to verdict to aftermath, and it gets stronger if it stops on F4's open note rather than a summary.\n\nPICTURE SLOTS:\n- After F2: the committee room; Gladias and the seated senators; he holds still, hands visible against the dark purple robe, while they look at him.\n- After F2, before the result: the committee room; the senators; their hands pressing down on the buttons in front of them.\n- After F3: the committee room; Gladias alone in frame; his face turned up toward the top of the room, lit from above, with the screen itself out of shot.\n- After F4: outdoors beyond the building; Gladias in his privacy robe; walking away from the door, hood up, his face turned slightly back.\n\nQUESTION:\nWhat does Gladias stand to lose if the vote goes against him, and how could your first two beats let the viewer see that before F3?\n\nWORLD CHECK:\n- F5 Gladias became a member of the Order: matches. The guide says Gladias, an Acolyte in training, is accepted into the Order in chapter 8 when the chairman breaks a ten-to-ten committee vote [c1-b57] [c8-b97] [c8-b99] [c8-b101].\n- F3 The vote comes in eleven to nine. He is in: conflicts. The Senate vote came in ten to ten, a tie the Chairman then had to break, not eleven to nine [c8-b97].\n- F1 Mov chairs the committee: the book doesn't say, up to your chapter.\n- F1 Gladias in his privacy robe, in front of the senators: the book doesn't say, up to your chapter.\n- F4 Delwart, the Arctic spy: I can't check this within your chapter.\n- F2 Senator Papli asks him what his favorite band is: the book doesn't say, up to your chapter.\n- F2 Gladias has no favorite band: the book doesn't say, up to your chapter."
+    },
+    {
+      "design": 2,
+      "fixture": "c-freetown-news",
+      "limit": 15,
+      "model": "gpt-oss-120b",
+      "gateway_model": "openai/gpt-oss-120b",
+      "at": "2026-10-12T01:53:24.793Z",
+      "cost_usd": 0.00531435,
+      "ms": 15959,
+      "prompts_sha256": {
+        "notes": "21a773731f9cb17331dbd2987095639c5399afd74b2b037ddba9e06df4ad924b",
+        "claims": "26fbcca73928f8734e530a7c359e26d7ac83c725cb39876f2bbb15d6a3227bf7",
+        "check": "69eec543f8e34357b21ce63bb42077b4865d294dfe47693a1fb81ca8f8998111",
+        "guard": "630cc2ca2c9ef27c82b5714ab161da96b8c5b591702efe21e1668e32198c6c82"
+      },
+      "craft_sha256": "15c11ee5bbc0491ed804b38fb918ea671744e01af0e06fb788e0db54b7522fc8",
+      "craft_limit_sha256": "ddd250295c3b94539236334c68f035d5c65d573496d52a78221d37a787558569",
+      "guard": {
+        "verdict": "OK: The reply follows the rules, providing only guidance, picture instructions, and a question without supplying new text for the piece.",
+        "reason": ""
+      },
+      "passages": [
+        "c1-b41",
+        "c1-b56",
+        "c1-b111",
+        "c3-b5",
+        "c3-b6",
+        "c3-b59",
+        "c4-b39",
+        "c4-b81",
+        "c10-b2",
+        "c13-b64",
+        "c15-b8",
+        "c15-b15"
+      ],
+      "claims": [
+        {
+          "label": "F2",
+          "claim": "Jahn walks into the Institute's restaurant",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c6-b138",
+            "c10-b2",
+            "c10-b23",
+            "c11-b123",
+            "c15-b2",
+            "c15-b3",
+            "wg-061"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F2",
+          "claim": "The screen says the Arctic Empire has invaded Redshire",
+          "verdict": "matches",
+          "said": "A special broadcast screen displays “ARCTIC EMPIRE INVADES AND ANNEXES REDSHIRE” [c15-b6]",
+          "shown": "matches. A special broadcast screen displays “ARCTIC EMPIRE INVADES AND ANNEXES REDSHIRE” [c15-b6]",
+          "evidence": [
+            "c3-b5",
+            "c3-b6",
+            "c13-b95",
+            "c15-b6",
+            "c15-b8",
+            "c15-b12",
+            "wg-083",
+            "wg-141",
+            "wg-380",
+            "wg-384",
+            "wg-385",
+            "wg-119",
+            "wg-186",
+            "wg-364"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F4",
+          "claim": "Freetown's government raised its taxes for defense the same week",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c1-b21",
+            "c1-b45",
+            "c1-b56",
+            "c4-b42",
+            "c10-b24",
+            "c10-b139",
+            "wg-380",
+            "wg-383",
+            "wg-061",
+            "wg-081",
+            "wg-089",
+            "wg-382",
+            "wg-390"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F1",
+          "claim": "Everyone in Freetown was scared that morning",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c5-b10",
+            "c10-b24",
+            "c10-b136",
+            "c12-b84",
+            "wg-380",
+            "wg-383",
+            "wg-061",
+            "wg-081",
+            "wg-382",
+            "wg-390"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F3",
+          "claim": "Utaku is Jahn's sister and is typing on her hand device",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c1-b41",
+            "c4-b81",
+            "c9-b133",
+            "c10-b110",
+            "c10-b114",
+            "c15-b15",
+            "wg-104"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F5",
+          "claim": "Jahn sits down and does not eat",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c1-b55",
+            "c1-b56",
+            "c4-b39",
+            "c4-b60",
+            "c4-b94",
+            "c7-b89"
+          ],
+          "later_withheld": 0
+        }
+      ],
+      "expected_world": [
+        {
+          "key": "tax",
+          "expected": "conflicts",
+          "got": "not said",
+          "ok": false
+        },
+        {
+          "key": "sister",
+          "expected": "conflicts",
+          "got": "not said",
+          "ok": false
+        }
+      ],
+      "auto_flags": [
+        "quotes words that are neither the person's nor the book's: “Arctic Empire invades Redshire”",
+        "picture slot has quoted words: “Arctic Empire invades Redshire”"
+      ],
+      "calls": [
+        {
+          "step": "notes",
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "request_id": "gen_01M4PX0KZFX0JYT62057FYJXKK",
+          "prompt_tokens": 13898,
+          "completion_tokens": 1400,
+          "cost_usd": 0.0029247,
+          "ms": 4221
+        },
+        {
+          "step": "claims",
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "request_id": "gen_01M4PX0QXEXQSNKYMYEF3X2DVY",
+          "prompt_tokens": 324,
+          "completion_tokens": 480,
+          "cost_usd": 0.0003366,
+          "ms": 1641
+        },
+        {
+          "step": "world-check",
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "request_id": "gen_01M4PX0SJ5YSB3EHG1BBE4HA36",
+          "prompt_tokens": 870,
+          "completion_tokens": 300,
+          "cost_usd": 0.0003105,
+          "ms": 1391
+        },
+        {
+          "step": "world-check",
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "request_id": "gen_01M4PX0V1HA2BH798GYVW0SVJ8",
+          "prompt_tokens": 1682,
+          "completion_tokens": 236,
+          "cost_usd": 0.0003939,
+          "ms": 1553
+        },
+        {
+          "step": "world-check",
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "request_id": "gen_01M4PX0WJH8CE5P9ZAK0CHH2SF",
+          "prompt_tokens": 1570,
+          "completion_tokens": 329,
+          "cost_usd": 0.0004137,
+          "ms": 1866
+        },
+        {
+          "step": "world-check",
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "request_id": "gen_01M4PX0YCE8PJRFH47R177PTT2",
+          "prompt_tokens": 1107,
+          "completion_tokens": 142,
+          "cost_usd": 0.00025125,
+          "ms": 1162
+        },
+        {
+          "step": "world-check",
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "request_id": "gen_01M4PX0ZHV27K37N1G2AXWAVSV",
+          "prompt_tokens": 787,
+          "completion_tokens": 340,
+          "cost_usd": 0.00032205,
+          "ms": 1480
+        },
+        {
+          "step": "world-check",
+          "model": "openai/gpt-oss-120b",
+          "provider": "groq",
+          "request_id": "gen_01M4PX10Z3S952MJX2A3QCRARA",
+          "prompt_tokens": 1119,
+          "completion_tokens": 101,
+          "cost_usd": 0.00020925,
+          "ms": 1375
+        },
+        {
+          "step": "guard",
+          "model": "openai/gpt-oss-safeguard-20b",
+          "provider": "groq",
+          "request_id": "gen_01M4PX12A2CDYWEG08B8V41RVC",
+          "prompt_tokens": 1088,
+          "completion_tokens": 268,
+          "cost_usd": 0.0001524,
+          "ms": 1101
+        }
+      ],
+      "notes_reply": "NOTES:\n1. [F1] What to change: the beat has no clear want, obstacle, or turn; it only states a mood. Why: Each scene needs a want‑obstacle‑turn (Principle 1). Passages: [c15-b8] (invasion creates obstacle).\n2. [F2] What to change: open with a character before the setting is established. Why: Establish the place before the faces (Principle 3). Passages: [c5-b1] (Freetown location).\n3. [F2] What to change: the panel tries to show Jahn walking, a screen headline, and the invasion all at once. Why: One clear image per beat (Principle 4). Passages: none needed.\n4. [F4] What to change: the narration repeats information that could be shown visually (tax increase). Why: Narration should say what the picture can’t (Principle 5). Passages: none needed.\n5. [F5] What to change: Jahn’s motivation isn’t clear; introduce him through a want. Why: Introduce a character through what they want (Principle 6). Passages: none needed.\n\nORDER:\nKeep your order, but add an opening establishing panel before F2 to show Freetown’s streets and the looming threat.\n\nPICTURE SLOTS:\n- After F1: wide view; Freetown streets at dawn; crowds with tense expressions; hints of distant news screens.\n- After F2: interior of Institute restaurant; large screen displaying “Arctic Empire invades Redshire”; Jahn standing near it, looking at the headline.\n- After F5: close‑up; Jahn’s empty plate and his hand hovering over it; a faint reflection of the screen’s news in the window behind him.\n\nQUESTION:\nWhat does Jahn want right now, and how does the news of the invasion create pressure on that want?",
+      "claims_reply": "F2 | Jahn walks into the Institute's restaurant  \nF2 | The screen says the Arctic Empire has invaded Redshire  \nF4 | Freetown's government raised its taxes for defense the same week  \nF1 | Everyone in Freetown was scared that morning  \nF3 | Utaku is Jahn's sister and is typing on her hand device  \nF5 | Jahn sits down and does not eat",
+      "reply": "NOTES:\n1. [F1] What to change: the beat has no clear want, obstacle, or turn; it only states a mood. Why: Each scene needs a want‑obstacle‑turn (Principle 1). Passages: [c15-b8] (invasion creates obstacle).\n2. [F2] What to change: open with a character before the setting is established. Why: Establish the place before the faces (Principle 3). Passages: [c5-b1] (Freetown location).\n3. [F2] What to change: the panel tries to show Jahn walking, a screen headline, and the invasion all at once. Why: One clear image per beat (Principle 4). Passages: none needed.\n4. [F4] What to change: the narration repeats information that could be shown visually (tax increase). Why: Narration should say what the picture can’t (Principle 5). Passages: none needed.\n5. [F5] What to change: Jahn’s motivation isn’t clear; introduce him through a want. Why: Introduce a character through what they want (Principle 6). Passages: none needed.\n\nORDER:\nKeep your order, but add an opening establishing panel before F2 to show Freetown’s streets and the looming threat.\n\nPICTURE SLOTS:\n- After F1: wide view; Freetown streets at dawn; crowds with tense expressions; hints of distant news screens.\n- After F2: interior of Institute restaurant; large screen displaying “Arctic Empire invades Redshire”; Jahn standing near it, looking at the headline.\n- After F5: close‑up; Jahn’s empty plate and his hand hovering over it; a faint reflection of the screen’s news in the window behind him.\n\nQUESTION:\nWhat does Jahn want right now, and how does the news of the invasion create pressure on that want?\n\nWORLD CHECK:\n- F2 Jahn walks into the Institute's restaurant: the book doesn't say, up to your chapter.\n- F2 The screen says the Arctic Empire has invaded Redshire: matches. A special broadcast screen displays “ARCTIC EMPIRE INVADES AND ANNEXES REDSHIRE” [c15-b6]\n- F4 Freetown's government raised its taxes for defense the same week: the book doesn't say, up to your chapter.\n- F1 Everyone in Freetown was scared that morning: the book doesn't say, up to your chapter.\n- F3 Utaku is Jahn's sister and is typing on her hand device: the book doesn't say, up to your chapter.\n- F5 Jahn sits down and does not eat: the book doesn't say, up to your chapter."
+    },
+    {
+      "design": 2,
+      "fixture": "c-freetown-news",
+      "limit": 15,
+      "model": "kimi-k3",
+      "gateway_model": "moonshotai/kimi-k3",
+      "at": "2026-10-12T01:57:37.579Z",
+      "cost_usd": 0.2142855,
+      "ms": 252780,
+      "prompts_sha256": {
+        "notes": "21a773731f9cb17331dbd2987095639c5399afd74b2b037ddba9e06df4ad924b",
+        "claims": "26fbcca73928f8734e530a7c359e26d7ac83c725cb39876f2bbb15d6a3227bf7",
+        "check": "69eec543f8e34357b21ce63bb42077b4865d294dfe47693a1fb81ca8f8998111",
+        "guard": "630cc2ca2c9ef27c82b5714ab161da96b8c5b591702efe21e1668e32198c6c82"
+      },
+      "craft_sha256": "15c11ee5bbc0491ed804b38fb918ea671744e01af0e06fb788e0db54b7522fc8",
+      "craft_limit_sha256": "ddd250295c3b94539236334c68f035d5c65d573496d52a78221d37a787558569",
+      "guard": {
+        "verdict": "OK",
+        "reason": "No new words for the story were supplied—only critique, ordering, and suggested image placement."
+      },
+      "passages": [
+        "c1-b41",
+        "c1-b56",
+        "c1-b111",
+        "c3-b5",
+        "c3-b6",
+        "c3-b59",
+        "c4-b39",
+        "c4-b81",
+        "c10-b2",
+        "c13-b64",
+        "c15-b8",
+        "c15-b15"
+      ],
+      "claims": [
+        {
+          "label": "F2",
+          "claim": "the screen says the Arctic Empire has invaded Redshire",
+          "verdict": "matches",
+          "said": "A special broadcast on the screen announces \"ARCTIC EMPIRE INVADES AND ANNEXES REDSHIRE.\" [c15-b6]",
+          "shown": "matches. A special broadcast on the screen announces \"ARCTIC EMPIRE INVADES AND ANNEXES REDSHIRE.\" [c15-b6]",
+          "evidence": [
+            "c3-b5",
+            "c3-b6",
+            "c13-b95",
+            "c15-b6",
+            "c15-b8",
+            "c15-b12",
+            "wg-083",
+            "wg-141",
+            "wg-380",
+            "wg-384",
+            "wg-385",
+            "wg-119",
+            "wg-186",
+            "wg-364"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F4",
+          "claim": "Freetown's government raised its taxes for defense the same week",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c1-b21",
+            "c1-b45",
+            "c1-b56",
+            "c4-b42",
+            "c10-b24",
+            "c10-b139",
+            "wg-380",
+            "wg-383",
+            "wg-061",
+            "wg-081",
+            "wg-089",
+            "wg-382",
+            "wg-390"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F2",
+          "claim": "Jahn walks into the Institute's restaurant",
+          "verdict": "matches",
+          "said": "Jahn passes through the Institute turnstile and walks toward its restaurant, where he plans to watch the lecture on the restaurant screen. [c15-b2] [c15-b3]",
+          "shown": "matches. Jahn passes through the Institute turnstile and walks toward its restaurant, where he plans to watch the lecture on the restaurant screen. [c15-b2] [c15-b3]",
+          "evidence": [
+            "c6-b138",
+            "c10-b2",
+            "c10-b23",
+            "c11-b123",
+            "c15-b2",
+            "c15-b3",
+            "wg-061"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F3",
+          "claim": "Utaku is Jahn's sister",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c10-b23",
+            "c15-b9",
+            "c15-b13",
+            "c15-b15"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F3",
+          "claim": "people type on hand devices",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c2-b3",
+            "c8-b16",
+            "c8-b24",
+            "c8-b73",
+            "c11-b101",
+            "c13-b64"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F1",
+          "claim": "everyone in Freetown was scared that morning",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c5-b10",
+            "c10-b24",
+            "c10-b136",
+            "c12-b84",
+            "wg-380",
+            "wg-383",
+            "wg-061",
+            "wg-081",
+            "wg-382",
+            "wg-390"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F5",
+          "claim": "Jahn sits down and does not eat",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c1-b55",
+            "c1-b56",
+            "c4-b39",
+            "c4-b60",
+            "c4-b94",
+            "c7-b89"
+          ],
+          "later_withheld": 0
+        }
+      ],
+      "expected_world": [
+        {
+          "key": "tax",
+          "expected": "conflicts",
+          "got": "not said",
+          "ok": false
+        },
+        {
+          "key": "sister",
+          "expected": "conflicts",
+          "got": "not said",
+          "ok": false
+        }
+      ],
+      "auto_flags": [],
+      "calls": [
+        {
+          "step": "notes",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PX13FNQWSF598PBJHT1VK4",
+          "prompt_tokens": 13979,
+          "completion_tokens": 8000,
+          "cost_usd": 0.1605546,
+          "ms": 173926
+        },
+        {
+          "step": "claims",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PX6D9PTAVKY1TGWRCJZ7QA",
+          "prompt_tokens": 347,
+          "completion_tokens": 663,
+          "cost_usd": 0.010986,
+          "ms": 17380
+        },
+        {
+          "step": "world-check",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PX6Y7MVVGR08DCJA0YXJKD",
+          "prompt_tokens": 1717,
+          "completion_tokens": 108,
+          "cost_usd": 0.006771,
+          "ms": 8939
+        },
+        {
+          "step": "world-check",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PX771CMB2982PXMXGZNK3J",
+          "prompt_tokens": 1602,
+          "completion_tokens": 320,
+          "cost_usd": 0.0089148,
+          "ms": 10793
+        },
+        {
+          "step": "world-check",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PX7HHMBNKE8MAYX1JE71CS",
+          "prompt_tokens": 899,
+          "completion_tokens": 388,
+          "cost_usd": 0.0078258,
+          "ms": 11753
+        },
+        {
+          "step": "world-check",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PX7X3QWPBFYX0XS17P3JXV",
+          "prompt_tokens": 511,
+          "completion_tokens": 74,
+          "cost_usd": 0.0019518,
+          "ms": 7470
+        },
+        {
+          "step": "world-check",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PX84DT7QA508ANH147B9S9",
+          "prompt_tokens": 1264,
+          "completion_tokens": 332,
+          "cost_usd": 0.0080808,
+          "ms": 8928
+        },
+        {
+          "step": "world-check",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PX8D4VZH77AVZJRHAV77E9",
+          "prompt_tokens": 1136,
+          "completion_tokens": 117,
+          "cost_usd": 0.0044718,
+          "ms": 4458
+        },
+        {
+          "step": "world-check",
+          "model": "moonshotai/kimi-k3",
+          "provider": "moonshotai",
+          "request_id": "gen_01M4PX8HGR4XZBATGXR5R7Q1YF",
+          "prompt_tokens": 1145,
+          "completion_tokens": 115,
+          "cost_usd": 0.0044688,
+          "ms": 7810
+        },
+        {
+          "step": "guard",
+          "model": "openai/gpt-oss-safeguard-20b",
+          "provider": "groq",
+          "request_id": "gen_01M4PX8S3MG9ST4QDAH7HM88BX",
+          "prompt_tokens": 1280,
+          "completion_tokens": 547,
+          "cost_usd": 0.0002601,
+          "ms": 1172
+        }
+      ],
+      "notes_reply": "NOTES:\n1. [F2, F5] What to change: Jahn never wants anything; he enters, sees the news, then \"sits down and does not eat\". Give him something he is after when he walks in, even something small, so the announcement interrupts it. Why: a turn only lands when it pushes against a want; right now the invasion changes the world but nothing in Jahn's own morning, so his not-eating has no cost to measure against. (Want; Each scene has a want, an obstacle and a turn.) Passages: c10-b2 (his ordinary arrival routine, there to be broken), c2-b12 (Zei is introduced through what he cares about).\n2. [F1] What to change: the opening narration says \"Everyone in Freetown was scared\" — it names the feeling, and for the whole city at once. Why: fear lands harder when the reader infers it from what people do or hold; a first picture of the street could carry it, and F5 already works that way, so the opening words are freed for something a picture cannot show. (Show inner states through action and objects; Narration says what the pictures can't.) Passages: c4-b51 (Zei's fingers, one by one), c7-b141, c7-b144 (the letter pocketed unopened).\n3. [F2] What to change: this beat holds two events — Jahn entering the restaurant and the news arriving — so the moment everything changes has no image of its own. Why: one image should make one thing clear, and the viewer should be able to point at the picture where it changes; splitting the beat lets one picture set the room and the next deliver the announcement. (One clear image per beat; Turn; Establish the place before the faces.) Passages: c4-b132, c4-b133 (the decisive game moment gets a single image), c1-b2 (a wide view before any face).\n4. [F4] What to change: F4 jumps a week ahead and from Jahn to the whole government, then F5 returns to that morning. Why: the jump breaks the scene's time, and the piece's change ends up institutional rather than felt by anyone; decide which beat the piece stops on and what it leaves open — F3 is the one beat where someone acts, and whatever her typing means is a question an ending could keep alive. (Change; End on a question.) Passages: c15-b6 (the change everyone feels at once), c1-b140 (an ending that leaves the request unanswered).\n\nORDER:\nF1, F2,",
+      "claims_reply": "F2 | the screen says the Arctic Empire has invaded Redshire\nF4 | Freetown's government raised its taxes for defense the same week\nF2 | Jahn walks into the Institute's restaurant\nF3 | Utaku is Jahn's sister\nF3 | people type on hand devices\nF1 | everyone in Freetown was scared that morning\nF5 | Jahn sits down and does not eat",
+      "reply": "NOTES:\n1. [F2, F5] What to change: Jahn never wants anything; he enters, sees the news, then \"sits down and does not eat\". Give him something he is after when he walks in, even something small, so the announcement interrupts it. Why: a turn only lands when it pushes against a want; right now the invasion changes the world but nothing in Jahn's own morning, so his not-eating has no cost to measure against. (Want; Each scene has a want, an obstacle and a turn.) Passages: c10-b2 (his ordinary arrival routine, there to be broken), c2-b12 (Zei is introduced through what he cares about).\n2. [F1] What to change: the opening narration says \"Everyone in Freetown was scared\" — it names the feeling, and for the whole city at once. Why: fear lands harder when the reader infers it from what people do or hold; a first picture of the street could carry it, and F5 already works that way, so the opening words are freed for something a picture cannot show. (Show inner states through action and objects; Narration says what the pictures can't.) Passages: c4-b51 (Zei's fingers, one by one), c7-b141, c7-b144 (the letter pocketed unopened).\n3. [F2] What to change: this beat holds two events — Jahn entering the restaurant and the news arriving — so the moment everything changes has no image of its own. Why: one image should make one thing clear, and the viewer should be able to point at the picture where it changes; splitting the beat lets one picture set the room and the next deliver the announcement. (One clear image per beat; Turn; Establish the place before the faces.) Passages: c4-b132, c4-b133 (the decisive game moment gets a single image), c1-b2 (a wide view before any face).\n4. [F4] What to change: F4 jumps a week ahead and from Jahn to the whole government, then F5 returns to that morning. Why: the jump breaks the scene's time, and the piece's change ends up institutional rather than felt by anyone; decide which beat the piece stops on and what it leaves open — F3 is the one beat where someone acts, and whatever her typing means is a question an ending could keep alive. (Change; End on a question.) Passages: c15-b6 (the change everyone feels at once), c1-b140 (an ending that leaves the request unanswered).\n\nORDER:\nF1, F2,\n\nWORLD CHECK:\n- F2 the screen says the Arctic Empire has invaded Redshire: matches. A special broadcast on the screen announces \"ARCTIC EMPIRE INVADES AND ANNEXES REDSHIRE.\" [c15-b6]\n- F4 Freetown's government raised its taxes for defense the same week: the book doesn't say, up to your chapter.\n- F2 Jahn walks into the Institute's restaurant: matches. Jahn passes through the Institute turnstile and walks toward its restaurant, where he plans to watch the lecture on the restaurant screen. [c15-b2] [c15-b3]\n- F3 Utaku is Jahn's sister: the book doesn't say, up to your chapter.\n- F3 people type on hand devices: the book doesn't say, up to your chapter.\n- F1 everyone in Freetown was scared that morning: the book doesn't say, up to your chapter.\n- F5 Jahn sits down and does not eat: the book doesn't say, up to your chapter."
+    },
+    {
+      "design": 2,
+      "fixture": "c-freetown-news",
+      "limit": 15,
+      "model": "claude-sonnet-5.5",
+      "gateway_model": "anthropic/claude-sonnet-5.5",
+      "at": "2026-10-12T01:58:13.249Z",
+      "cost_usd": 0.0896553,
+      "ms": 35654,
+      "prompts_sha256": {
+        "notes": "21a773731f9cb17331dbd2987095639c5399afd74b2b037ddba9e06df4ad924b",
+        "claims": "26fbcca73928f8734e530a7c359e26d7ac83c725cb39876f2bbb15d6a3227bf7",
+        "check": "69eec543f8e34357b21ce63bb42077b4865d294dfe47693a1fb81ca8f8998111",
+        "guard": "630cc2ca2c9ef27c82b5714ab161da96b8c5b591702efe21e1668e32198c6c82"
+      },
+      "craft_sha256": "15c11ee5bbc0491ed804b38fb918ea671744e01af0e06fb788e0db54b7522fc8",
+      "craft_limit_sha256": "ddd250295c3b94539236334c68f035d5c65d573496d52a78221d37a787558569",
+      "guard": {
+        "verdict": "OK: no new text or rewrite was supplied—only guidance and picture placement.",
+        "reason": ""
+      },
+      "passages": [
+        "c1-b41",
+        "c1-b56",
+        "c1-b111",
+        "c3-b5",
+        "c3-b6",
+        "c3-b59",
+        "c4-b39",
+        "c4-b81",
+        "c10-b2",
+        "c13-b64",
+        "c15-b8",
+        "c15-b15"
+      ],
+      "claims": [
+        {
+          "label": "F1",
+          "claim": "Everyone in Freetown was scared that morning",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c5-b10",
+            "c10-b24",
+            "c10-b136",
+            "c12-b84",
+            "wg-380",
+            "wg-383",
+            "wg-061",
+            "wg-081",
+            "wg-382",
+            "wg-390"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F2",
+          "claim": "Jahn walks into the Institute's restaurant",
+          "verdict": "matches",
+          "said": "In chapter 15, Jahn passes through the Institute's turnstile and walks toward the restaurant; the restaurant screen is mentioned in the same chapter, which places the restaurant inside the Institute. [c15-b2] [c15-b3]",
+          "shown": "matches. In chapter 15, Jahn passes through the Institute's turnstile and walks toward the restaurant; the restaurant screen is mentioned in the same chapter, which places the restaurant inside the Institute. [c15-b2] [c15-b3]",
+          "evidence": [
+            "c6-b138",
+            "c10-b2",
+            "c10-b23",
+            "c11-b123",
+            "c15-b2",
+            "c15-b3",
+            "wg-061"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F2",
+          "claim": "The screen there says the Arctic Empire has invaded Redshire",
+          "verdict": "matches",
+          "said": "",
+          "shown": "matches. ",
+          "evidence": [
+            "c3-b5",
+            "c3-b6",
+            "c13-b95",
+            "c15-b6",
+            "c15-b8",
+            "c15-b12",
+            "wg-083",
+            "wg-141",
+            "wg-380",
+            "wg-384",
+            "wg-385",
+            "wg-119",
+            "wg-186",
+            "wg-364"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F3",
+          "claim": "Utaku is Jahn's sister",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c10-b23",
+            "c15-b9",
+            "c15-b13",
+            "c15-b15"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F3",
+          "claim": "Utaku is already typing on her hand device",
+          "verdict": "matches",
+          "said": "Chapter 15 says that before Jahn could look away, Utaku had already begun typing frantically on her hand device. [c15-b15]",
+          "shown": "matches. Chapter 15 says that before Jahn could look away, Utaku had already begun typing frantically on her hand device. [c15-b15]",
+          "evidence": [
+            "c1-b41",
+            "c4-b81",
+            "c9-b133",
+            "c10-b110",
+            "c10-b114",
+            "c15-b15",
+            "wg-104"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F4",
+          "claim": "Freetown's government raised its taxes for defense the same week",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c1-b21",
+            "c1-b45",
+            "c1-b56",
+            "c4-b42",
+            "c10-b24",
+            "c10-b139",
+            "wg-380",
+            "wg-383",
+            "wg-061",
+            "wg-081",
+            "wg-089",
+            "wg-382",
+            "wg-390"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F5",
+          "claim": "Jahn sits down and does not eat",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c1-b55",
+            "c1-b56",
+            "c4-b39",
+            "c4-b60",
+            "c4-b94",
+            "c7-b89"
+          ],
+          "later_withheld": 0
+        }
+      ],
+      "expected_world": [
+        {
+          "key": "tax",
+          "expected": "conflicts",
+          "got": "not said",
+          "ok": false
+        },
+        {
+          "key": "sister",
+          "expected": "conflicts",
+          "got": "not said",
+          "ok": false
+        }
+      ],
+      "auto_flags": [],
+      "calls": [
+        {
+          "step": "notes",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PX8TCRT6XF86XVAATQM29B",
+          "prompt_tokens": 19546,
+          "completion_tokens": 2417,
+          "cost_usd": 0.063262,
+          "ms": 22249
+        },
+        {
+          "step": "claims",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PX9G05PXNPQH7RZXXEA9GN",
+          "prompt_tokens": 373,
+          "completion_tokens": 143,
+          "cost_usd": 0.002176,
+          "ms": 2232
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PX9J9DYWK0HBXMTZ65W1YJ",
+          "prompt_tokens": 1525,
+          "completion_tokens": 8,
+          "cost_usd": 0.00313,
+          "ms": 1365
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PX9KMHM7RMD62MYAWTFHKT",
+          "prompt_tokens": 1215,
+          "completion_tokens": 89,
+          "cost_usd": 0.00332,
+          "ms": 1827
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PX9NC564C0TEMFJG4ME2BR",
+          "prompt_tokens": 2491,
+          "completion_tokens": 77,
+          "cost_usd": 0.005752,
+          "ms": 1701
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PX9Q26ZY0GA21J4RV04HYH",
+          "prompt_tokens": 636,
+          "completion_tokens": 8,
+          "cost_usd": 0.001352,
+          "ms": 1227
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PX9R86V6QFG1132CA2JMBQ",
+          "prompt_tokens": 1060,
+          "completion_tokens": 52,
+          "cost_usd": 0.00264,
+          "ms": 1296
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PX9SGR5Y718Y7YYW210C3H",
+          "prompt_tokens": 2208,
+          "completion_tokens": 8,
+          "cost_usd": 0.004496,
+          "ms": 1169
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-sonnet-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PX9TP6Z3NJ8A23048K0RPT",
+          "prompt_tokens": 1608,
+          "completion_tokens": 8,
+          "cost_usd": 0.003296,
+          "ms": 1273
+        },
+        {
+          "step": "guard",
+          "model": "openai/gpt-oss-safeguard-20b",
+          "provider": "groq",
+          "request_id": "gen_01M4PX9W08HWASF4FX25297V6S",
+          "prompt_tokens": 1436,
+          "completion_tokens": 476,
+          "cost_usd": 0.0002313,
+          "ms": 1174
+        }
+      ],
+      "notes_reply": "NOTES:\n1. [F1] What to change: The narration names the feeling for everyone in the city, so the picture has nothing left to do. Let the feeling come through what people do or hold, and use the narration for something the eye can't see. Why: Show inner states through action and objects. F3 already does this well, because typing frantically is a feeling you can watch. Passages: [c15-b15], [c4-b51]\n2. [F2] What to change: This fragment asks one picture to carry two things: Jahn arriving at the Institute and the news of the invasion. It also puts the news on a screen, and a picture slot can't hold writing. Pick one image, and show the news through how the people in the room react. Place the restaurant before any faces. Why: One clear image per beat, and Establish the place before the faces. Passages: [c10-b2]\n3. [F5] What to change: The piece never says what Jahn wants, so his not eating is a reaction with nothing at stake. Decide what he is after in this moment, such as to understand, to reach someone, or to look away. Then let the last fragment show him acting on it, or failing to. Why: Want, and Turn. A reaction without a want doesn't change anything for him or the viewer. Passages: [c15-b15]\n4. [F4] What to change: This fragment jumps forward in time and answers the scene's question with a policy result, so the viewer is told what happened instead of wondering. Cut it, or move it to where it could open a question. Its content is something a picture can't show, so the idea is worth keeping if it earns its place. Why: End on a question, and Narration says what the pictures can't.\n5. [F3] What to change: This is your strongest beat, because it shows a want in action. Give it more weight by keeping what she is typing unknown. The narration shouldn't explain it. Make this the last image, or close to it. Why: Introduce a character through what they want, and End on a question. Passages: [c15-b15]\n\nORDER:\nF2, F5, F3. This sets the room first, then Jahn's stillness, then ends on Utaku's unexplained action, which leaves a question open. Hold F1 and F4 aside until you've revised them.\n\nPICTURE SLOTS:\n- After F2: the Institute's restaurant, wide view; many diners at tables and in the queue; all of them have stopped what they were doing and are looking toward the same wall.\n- After F5: the same restaurant, closer; Jahn alone at a table with a full meal in front of him; his hands are flat on the table, not holding anything.\n- After F3: the same restaurant; Utaku at the next table bent over her hand device, fingers moving fast; Jahn in the foreground, half turned toward her.\n- After F4, if you keep it: a Freetown street, wide view; ordinary people on the pavement walking in different directions; nothing is out of the ordinary except that nobody is talking to anyone.\n\nQUESTION:\nWhat does Jahn want in the moment you've chosen, and what stops him?",
+      "claims_reply": "F1 | Everyone in Freetown was scared that morning\nF2 | Jahn walks into the Institute's restaurant\nF2 | The screen there says the Arctic Empire has invaded Redshire\nF3 | Utaku is Jahn's sister\nF3 | Utaku is already typing on her hand device\nF4 | Freetown's government raised its taxes for defense the same week\nF5 | Jahn sits down and does not eat",
+      "reply": "NOTES:\n1. [F1] What to change: The narration names the feeling for everyone in the city, so the picture has nothing left to do. Let the feeling come through what people do or hold, and use the narration for something the eye can't see. Why: Show inner states through action and objects. F3 already does this well, because typing frantically is a feeling you can watch. Passages: [c15-b15], [c4-b51]\n2. [F2] What to change: This fragment asks one picture to carry two things: Jahn arriving at the Institute and the news of the invasion. It also puts the news on a screen, and a picture slot can't hold writing. Pick one image, and show the news through how the people in the room react. Place the restaurant before any faces. Why: One clear image per beat, and Establish the place before the faces. Passages: [c10-b2]\n3. [F5] What to change: The piece never says what Jahn wants, so his not eating is a reaction with nothing at stake. Decide what he is after in this moment, such as to understand, to reach someone, or to look away. Then let the last fragment show him acting on it, or failing to. Why: Want, and Turn. A reaction without a want doesn't change anything for him or the viewer. Passages: [c15-b15]\n4. [F4] What to change: This fragment jumps forward in time and answers the scene's question with a policy result, so the viewer is told what happened instead of wondering. Cut it, or move it to where it could open a question. Its content is something a picture can't show, so the idea is worth keeping if it earns its place. Why: End on a question, and Narration says what the pictures can't.\n5. [F3] What to change: This is your strongest beat, because it shows a want in action. Give it more weight by keeping what she is typing unknown. The narration shouldn't explain it. Make this the last image, or close to it. Why: Introduce a character through what they want, and End on a question. Passages: [c15-b15]\n\nORDER:\nF2, F5, F3. This sets the room first, then Jahn's stillness, then ends on Utaku's unexplained action, which leaves a question open. Hold F1 and F4 aside until you've revised them.\n\nPICTURE SLOTS:\n- After F2: the Institute's restaurant, wide view; many diners at tables and in the queue; all of them have stopped what they were doing and are looking toward the same wall.\n- After F5: the same restaurant, closer; Jahn alone at a table with a full meal in front of him; his hands are flat on the table, not holding anything.\n- After F3: the same restaurant; Utaku at the next table bent over her hand device, fingers moving fast; Jahn in the foreground, half turned toward her.\n- After F4, if you keep it: a Freetown street, wide view; ordinary people on the pavement walking in different directions; nothing is out of the ordinary except that nobody is talking to anyone.\n\nQUESTION:\nWhat does Jahn want in the moment you've chosen, and what stops him?\n\nWORLD CHECK:\n- F1 Everyone in Freetown was scared that morning: the book doesn't say, up to your chapter.\n- F2 Jahn walks into the Institute's restaurant: matches. In chapter 15, Jahn passes through the Institute's turnstile and walks toward the restaurant; the restaurant screen is mentioned in the same chapter, which places the restaurant inside the Institute. [c15-b2] [c15-b3]\n- F2 The screen there says the Arctic Empire has invaded Redshire: matches. \n- F3 Utaku is Jahn's sister: the book doesn't say, up to your chapter.\n- F3 Utaku is already typing on her hand device: matches. Chapter 15 says that before Jahn could look away, Utaku had already begun typing frantically on her hand device. [c15-b15]\n- F4 Freetown's government raised its taxes for defense the same week: the book doesn't say, up to your chapter.\n- F5 Jahn sits down and does not eat: the book doesn't say, up to your chapter."
+    },
+    {
+      "design": 2,
+      "fixture": "c-freetown-news",
+      "limit": 15,
+      "model": "claude-opus-5.5",
+      "gateway_model": "anthropic/claude-opus-5.5",
+      "at": "2026-10-12T01:59:05.077Z",
+      "cost_usd": 0.18903337499999998,
+      "ms": 51814,
+      "prompts_sha256": {
+        "notes": "21a773731f9cb17331dbd2987095639c5399afd74b2b037ddba9e06df4ad924b",
+        "claims": "26fbcca73928f8734e530a7c359e26d7ac83c725cb39876f2bbb15d6a3227bf7",
+        "check": "69eec543f8e34357b21ce63bb42077b4865d294dfe47693a1fb81ca8f8998111",
+        "guard": "630cc2ca2c9ef27c82b5714ab161da96b8c5b591702efe21e1668e32198c6c82"
+      },
+      "craft_sha256": "15c11ee5bbc0491ed804b38fb918ea671744e01af0e06fb788e0db54b7522fc8",
+      "craft_limit_sha256": "ddd250295c3b94539236334c68f035d5c65d573496d52a78221d37a787558569",
+      "guard": {
+        "verdict": "OK",
+        "reason": "The reply provides only critique, guidance, picture placement ideas, and a question—no new narrative, dialogue, or captions."
+      },
+      "passages": [
+        "c1-b41",
+        "c1-b56",
+        "c1-b111",
+        "c3-b5",
+        "c3-b6",
+        "c3-b59",
+        "c4-b39",
+        "c4-b81",
+        "c10-b2",
+        "c13-b64",
+        "c15-b8",
+        "c15-b15"
+      ],
+      "claims": [
+        {
+          "label": "F2",
+          "claim": "the Arctic Empire has invaded Redshire",
+          "verdict": "matches",
+          "said": "A chapter 15 broadcast reports that the Arctic Empire invaded and annexed Redshire, landing drones and aircraft and launching a land invasion from the north [c15-b6] [c15-b8].",
+          "shown": "matches. A chapter 15 broadcast reports that the Arctic Empire invaded and annexed Redshire, landing drones and aircraft and launching a land invasion from the north [c15-b6] [c15-b8].",
+          "evidence": [
+            "c3-b5",
+            "c3-b6",
+            "c13-b95",
+            "c15-b6",
+            "c15-b8",
+            "c15-b12",
+            "wg-083",
+            "wg-141",
+            "wg-380",
+            "wg-384",
+            "wg-385",
+            "wg-119",
+            "wg-186",
+            "wg-386"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F3",
+          "claim": "Utaku, Jahn's sister",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c10-b23",
+            "c15-b9",
+            "c15-b13",
+            "c15-b15"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F4",
+          "claim": "Freetown's government raised its taxes for defense the same week",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c1-b21",
+            "c1-b45",
+            "c1-b56",
+            "c4-b42",
+            "c10-b24",
+            "c10-b139",
+            "wg-380",
+            "wg-383",
+            "wg-061",
+            "wg-081",
+            "wg-089",
+            "wg-382",
+            "wg-390"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F2",
+          "claim": "Jahn walks into the Institute's restaurant",
+          "verdict": "matches",
+          "said": "After passing through the Institute's turnstile, Jahn walks toward the restaurant, planning to enjoy the lecture on its screen [c15-b2] [c15-b3].",
+          "shown": "matches. After passing through the Institute's turnstile, Jahn walks toward the restaurant, planning to enjoy the lecture on its screen [c15-b2] [c15-b3].",
+          "evidence": [
+            "c6-b138",
+            "c10-b2",
+            "c10-b23",
+            "c11-b123",
+            "c15-b2",
+            "c15-b3",
+            "wg-061"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F3",
+          "claim": "Utaku is already typing on her hand device",
+          "verdict": "matches",
+          "said": "Chapter 15 says Utaku had already begun typing frantically on her hand device before Jahn could look away [c15-b15].",
+          "shown": "matches. Chapter 15 says Utaku had already begun typing frantically on her hand device before Jahn could look away [c15-b15].",
+          "evidence": [
+            "c1-b41",
+            "c4-b81",
+            "c9-b133",
+            "c10-b110",
+            "c10-b114",
+            "c15-b15",
+            "wg-104"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F1",
+          "claim": "Everyone in Freetown was scared that morning",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c5-b10",
+            "c10-b24",
+            "c10-b136",
+            "c12-b84",
+            "wg-380",
+            "wg-383",
+            "wg-061",
+            "wg-081",
+            "wg-382",
+            "wg-390"
+          ],
+          "later_withheld": 0
+        },
+        {
+          "label": "F5",
+          "claim": "Jahn sits down and does not eat",
+          "verdict": "not said",
+          "said": "",
+          "shown": "the book doesn't say, up to your chapter.",
+          "evidence": [
+            "c1-b55",
+            "c1-b56",
+            "c4-b39",
+            "c4-b60",
+            "c4-b94",
+            "c7-b89"
+          ],
+          "later_withheld": 0
+        }
+      ],
+      "expected_world": [
+        {
+          "key": "tax",
+          "expected": "conflicts",
+          "got": "not said",
+          "ok": false
+        },
+        {
+          "key": "sister",
+          "expected": "conflicts",
+          "got": "not said",
+          "ok": false
+        }
+      ],
+      "auto_flags": [],
+      "calls": [
+        {
+          "step": "notes",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PX9X6QKXK8YHR4MK0YWMF5",
+          "prompt_tokens": 19546,
+          "completion_tokens": 2412,
+          "cost_usd": 0.126424,
+          "ms": 27790
+        },
+        {
+          "step": "claims",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PXARMJFARNQK12PJAC5GQX",
+          "prompt_tokens": 373,
+          "completion_tokens": 333,
+          "cost_usd": 0.008152,
+          "ms": 5200
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PXAXAM0M6E5VCMV7CG5JJF",
+          "prompt_tokens": 2495,
+          "completion_tokens": 76,
+          "cost_usd": 0.0115,
+          "ms": 2275
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PXAZJ4AGP3ZGKWMA5EVWWJ",
+          "prompt_tokens": 636,
+          "completion_tokens": 53,
+          "cost_usd": 0.003604,
+          "ms": 1854
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PXB1FYAERJX0B545VEHH62",
+          "prompt_tokens": 2208,
+          "completion_tokens": 181,
+          "cost_usd": 0.012452,
+          "ms": 3300
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PXB4Q8KMTA5MA111154CBS",
+          "prompt_tokens": 1215,
+          "completion_tokens": 186,
+          "cost_usd": 0.00858,
+          "ms": 4443
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PXB90ASJQNTSD9QM83E9PP",
+          "prompt_tokens": 1060,
+          "completion_tokens": 49,
+          "cost_usd": 0.00522,
+          "ms": 1577
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PXBAM6JXZ2QD5Z1Y1CM5X5",
+          "prompt_tokens": 1525,
+          "completion_tokens": 8,
+          "cost_usd": 0.00626,
+          "ms": 2152
+        },
+        {
+          "step": "world-check",
+          "model": "anthropic/claude-opus-5.5",
+          "provider": "anthropic",
+          "request_id": "gen_01M4PXBCNYRS3ZSV4YFDFGGCEG",
+          "prompt_tokens": 1608,
+          "completion_tokens": 8,
+          "cost_usd": 0.006592,
+          "ms": 1954
+        },
+        {
+          "step": "guard",
+          "model": "openai/gpt-oss-safeguard-20b",
+          "provider": "groq",
+          "request_id": "gen_01M4PXBEK1Q7K2Z4JZ0BG9S4D4",
+          "prompt_tokens": 1633,
+          "completion_tokens": 487,
+          "cost_usd": 0.000249375,
+          "ms": 1148
+        }
+      ],
+      "notes_reply": "NOTES:\n1. [F1] What to change: The narration \"Everyone in Freetown was scared that morning\" names the feeling. F5 already shows fear through an action, Jahn not eating. Let the pictures carry the fear and use F1's words for something a picture can't show, such as the time, the distance to Redshire, or what Jahn was about to do before the news. Why: A feeling lands harder when the reader infers it than when the narration names it, and words spent repeating what F5 shows are wasted. (Show inner states through action and objects; Narration says what the pictures can't) Passages: c4-b51, c1-b4.\n\n2. [F2] What to change: F2 asks one picture to show two things: Jahn walking in, and the news on the screen. Choose which one this beat is about, or split it into two beats. One beat could be Jahn arriving, and the next the moment he sees the news. Also decide whether the news reaches the reader through the screen or through narration. A fact the eye can't easily take in may sit better in narration. Why: Each panel should make one thing clear. The moment the news lands is the turn of your piece, and it deserves its own picture. (One clear image per beat; Turn) Passages: c15-b8.\n\n3. [F3] What to change: Utaku appears already typing, but we don't know what she is trying to get. Is she writing to someone, reporting, warning? Give the reader her want in the same beat she arrives. Why: A character introduced through a want gives the reader a reason to watch her. Right now she is background motion. (Introduce a character through what they want) Passages: c15-b15.\n\n4. [F1–F5] What to change: Jahn has no want before the news hits, so the invasion interrupts nothing. Before F2, show what he came to the Institute to do that morning. The news then has something to break. Ask too what only a Freetown economist would notice or think about here. Why: A turn needs something to turn from. Without a want, F5's untouched meal has nothing to measure against. (Want; Fits the world) Passages: c10-b2, c15-b25.\n\n5. [F4] What to change: F4 jumps a week forward, then F5 jumps back to the morning, so the reader moves in time twice in two beats. F4 is also the only beat where Freetown, not Jahn, changes. Decide whether the piece is about Jahn's morning or about the city's response. If it's the city, F4 belongs at the end as the change. If it's Jahn, consider cutting F4 and ending on F5, so the reader is left wondering what he will do. Why: A piece keeps its audience when the end leaves something open, and a time jump lands best when it happens once. (End on a question; Change) Passages: c1-b140, c7-b144.\n\nORDER:\nF1, F2, F3, F5, F4. This keeps the morning continuous and puts the week-later jump at the end, where it can serve as the change. If you want to end on a question instead, drop F4 and stop on F5.\n\nPICTURE SLOTS:\n- After F1: a Freetown street outside the Economics Institute in the morning, mixed rich and run-down buildings; Jahn stepping out of a taxi, other people on the street.\n- After F2: the Institute's restaurant; diners and staff; everyone has stopped and turned toward the same wall, and Jahn stands just inside the doorway, holding still.\n- After F3: a table in the restaurant; Utaku and Jahn; close on Utaku's hands moving fast over her hand device while Jahn looks past her.\n- After F5: the same table; Jahn alone; his full plate untouched in front of him, his hands flat on the table.\n\nQUESTION:\nWhat did Jahn walk into the Institute wanting that morning, before he saw the news?",
+      "claims_reply": "F2 | the Arctic Empire has invaded Redshire\nF3 | Utaku, Jahn's sister\nF4 | Freetown's government raised its taxes for defense the same week\nF2 | Jahn walks into the Institute's restaurant\nF3 | Utaku is already typing on her hand device\nF1 | Everyone in Freetown was scared that morning\nF5 | Jahn sits down and does not eat",
+      "reply": "NOTES:\n1. [F1] What to change: The narration \"Everyone in Freetown was scared that morning\" names the feeling. F5 already shows fear through an action, Jahn not eating. Let the pictures carry the fear and use F1's words for something a picture can't show, such as the time, the distance to Redshire, or what Jahn was about to do before the news. Why: A feeling lands harder when the reader infers it than when the narration names it, and words spent repeating what F5 shows are wasted. (Show inner states through action and objects; Narration says what the pictures can't) Passages: c4-b51, c1-b4.\n\n2. [F2] What to change: F2 asks one picture to show two things: Jahn walking in, and the news on the screen. Choose which one this beat is about, or split it into two beats. One beat could be Jahn arriving, and the next the moment he sees the news. Also decide whether the news reaches the reader through the screen or through narration. A fact the eye can't easily take in may sit better in narration. Why: Each panel should make one thing clear. The moment the news lands is the turn of your piece, and it deserves its own picture. (One clear image per beat; Turn) Passages: c15-b8.\n\n3. [F3] What to change: Utaku appears already typing, but we don't know what she is trying to get. Is she writing to someone, reporting, warning? Give the reader her want in the same beat she arrives. Why: A character introduced through a want gives the reader a reason to watch her. Right now she is background motion. (Introduce a character through what they want) Passages: c15-b15.\n\n4. [F1–F5] What to change: Jahn has no want before the news hits, so the invasion interrupts nothing. Before F2, show what he came to the Institute to do that morning. The news then has something to break. Ask too what only a Freetown economist would notice or think about here. Why: A turn needs something to turn from. Without a want, F5's untouched meal has nothing to measure against. (Want; Fits the world) Passages: c10-b2, c15-b25.\n\n5. [F4] What to change: F4 jumps a week forward, then F5 jumps back to the morning, so the reader moves in time twice in two beats. F4 is also the only beat where Freetown, not Jahn, changes. Decide whether the piece is about Jahn's morning or about the city's response. If it's the city, F4 belongs at the end as the change. If it's Jahn, consider cutting F4 and ending on F5, so the reader is left wondering what he will do. Why: A piece keeps its audience when the end leaves something open, and a time jump lands best when it happens once. (End on a question; Change) Passages: c1-b140, c7-b144.\n\nORDER:\nF1, F2, F3, F5, F4. This keeps the morning continuous and puts the week-later jump at the end, where it can serve as the change. If you want to end on a question instead, drop F4 and stop on F5.\n\nPICTURE SLOTS:\n- After F1: a Freetown street outside the Economics Institute in the morning, mixed rich and run-down buildings; Jahn stepping out of a taxi, other people on the street.\n- After F2: the Institute's restaurant; diners and staff; everyone has stopped and turned toward the same wall, and Jahn stands just inside the doorway, holding still.\n- After F3: a table in the restaurant; Utaku and Jahn; close on Utaku's hands moving fast over her hand device while Jahn looks past her.\n- After F5: the same table; Jahn alone; his full plate untouched in front of him, his hands flat on the table.\n\nQUESTION:\nWhat did Jahn walk into the Institute wanting that morning, before he saw the news?\n\nWORLD CHECK:\n- F2 the Arctic Empire has invaded Redshire: matches. A chapter 15 broadcast reports that the Arctic Empire invaded and annexed Redshire, landing drones and aircraft and launching a land invasion from the north [c15-b6] [c15-b8].\n- F3 Utaku, Jahn's sister: the book doesn't say, up to your chapter.\n- F4 Freetown's government raised its taxes for defense the same week: the book doesn't say, up to your chapter.\n- F2 Jahn walks into the Institute's restaurant: matches. After passing through the Institute's turnstile, Jahn walks toward the restaurant, planning to enjoy the lecture on its screen [c15-b2] [c15-b3].\n- F3 Utaku is already typing on her hand device: matches. Chapter 15 says Utaku had already begun typing frantically on her hand device before Jahn could look away [c15-b15].\n- F1 Everyone in Freetown was scared that morning: the book doesn't say, up to your chapter.\n- F5 Jahn sits down and does not eat: the book doesn't say, up to your chapter."
     }
   ]
 }

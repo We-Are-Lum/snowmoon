@@ -39,3 +39,28 @@ Three invented openings, each with planted problems (listed in its fixture's hea
 ### Verdict
 
 Not useful enough yet. It caught 1 of 5 planted world errors, introduced 2 new world errors, and made 5 slips into wording, one a straight rewrite that the guard missed. The craft notes are reasonable.
+
+## Comparison, design 2, 2026-10-11 (test fixtures a, b, c; four models)
+
+Reviewed by the coding agent against the book. Sonnet 5.5 and Opus 5.5 ran with the per-reply zero-retention check (`scripts/lib/zdr-check.ts`); no reply was refused. Total $1.34 of the $2 cap.
+
+**World errors introduced in the notes** (wrong facts the coach stated on its own, beyond the draft):
+- gpt-oss-120b: 3, all in fixture b's picture slots:
+  - it puts the draft's wrong "11-9" on the vote screen as fact (the book: ten to ten, the chairman decides, c8-b97);
+  - it treats Delwart as a place ("a distant silhouette of Delwart");
+  - it adds an Arctic flag.
+- Kimi K3, Sonnet 5.5, Opus 5.5: none found. Three details that looked invented were checked and are the book's:
+  - Zei's healed arm (c4-b51);
+  - chapter 4 is set in Pafogai Du (c4-b1);
+  - Jahn is a researcher at the Freetown Economics Institute (c10-b2).
+
+**Writing for the person:**
+- gpt-oss-120b, 2 turns:
+  - the guard caught an offered phrase, "to survive the vote" (fixture b);
+  - a quoted, invented headline in a picture slot (fixture c).
+- Kimi, Sonnet, Opus: none. The code flags on Opus (a) and Sonnet (b) are false positives: the quote check paired the closing quote of one draft quotation with the opening quote of the next, so the flagged span is text between two of the person's own quoted phrases.
+
+**Pipeline problems, not model problems:**
+- **Fixture c's two planted conflicts were missed by all four models.** Retrieval never sent the passages that settle them: the tax rule (c10-b22) and Jahn and Utaku introducing themselves (c10-b8, c10-b9). Every model then answered "not said" from what it was given. The fix is in retrieval, then a rerun.
+- **Kimi K3 used the whole 8,000-token output limit on every notes call,** mostly on reasoning. Fixture a's notes are empty, and b's and c's are cut off in ORDER. Its notes need a higher limit, or reasoning turned down, before it is judged.
+- **The quote check needs to pair quotation marks properly** (the false positives above).
