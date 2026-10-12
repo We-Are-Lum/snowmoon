@@ -1,6 +1,6 @@
 # Planning coach eval: review
 
-The coach's replies, in full, are in the generated eval reports on branch `plan-coach` (`docs/craft/plan-coach-eval-design-2.md`, `docs/craft/plan-coach-eval-design-3.md`). This file is the reviewer's.
+The coach's replies, in full, are in the generated eval reports on branch `plan-coach` (`docs/craft/plan-coach-eval-design1.md`, `docs/craft/plan-coach-eval-design-2.md`, `docs/craft/plan-coach-eval-design-3.md`). This file is the reviewer's.
 
 ## Round 1 (the coding agent, 2026-10-11)
 
