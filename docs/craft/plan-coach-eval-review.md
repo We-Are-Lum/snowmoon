@@ -64,3 +64,56 @@ Reviewed by the coding agent against the book. Sonnet 5.5 and Opus 5.5 ran with 
 - **Fixture c's two planted conflicts were missed by all four models.** Retrieval never sent the passages that settle them: the tax rule (c10-b22) and Jahn and Utaku introducing themselves (c10-b8, c10-b9). Every model then answered "not said" from what it was given. The fix is in retrieval, then a rerun.
 - **Kimi K3 used the whole 8,000-token output limit on every notes call,** mostly on reasoning. Fixture a's notes are empty, and b's and c's are cut off in ORDER. Its notes need a higher limit, or reasoning turned down, before it is judged.
 - **The quote check needs to pair quotation marks properly** (the false positives above).
+
+## Design 3, 2026-10-11 (fixtures a, b, c; gpt-oss-120b, Haiku 5.5, Sonnet 5.5, Opus 5.5)
+
+What changed from design 2:
+- **The craft guide follows Plan a Piece v4.** v4 kept v3's principles; it changed two lines and added the named note forms, among them SHOW IT.
+- **Retrieval:** crude stemming, rare words weighted higher, the first mention of each name in the claim, and the blocks next to the best hits.
+- **The quote check pairs quotation marks properly.**
+- **Kimi K3 dropped** (owner: too slow for a live coach). **Haiku 5.5 added** after its own zero-retention test.
+
+All Anthropic replies passed the per-reply zero-retention check. Total $0.92 of design 3's $2 cap.
+
+Reviewed by the coding agent against the book:
+
+| Model | World errors caught (planted) | Bonus catch ("one ship" vs three gliders, c4-b113) | World errors introduced | Slips into writing for the person | Cost per turn | Time per turn |
+|---|---|---|---|---|---|---|
+| gpt-oss-120b | 1 of 3 | yes | 3 | 2 turns | $0.006 | 20 s |
+| Haiku 5.5 | 2 of 3 | yes | 2 | 0 | $0.006 | 40 s |
+| Sonnet 5.5 | 3 of 3 | yes | 0 | 0 | $0.10 | 45 s |
+| Opus 5.5 | 2 of 3 | yes | 0 | 0 | $0.19 | 53 s |
+
+**Errors introduced:**
+- **gpt-oss-120b:**
+  - it puts the hearing in "the Order's tower chamber" (it is in the parliament's circular room, c8-b38, c8-b47);
+  - it shows "eleven-nine" on the vote screen;
+  - its fixture c picture slot shows a "defense-tax increase" notice, after its own world check had found that claim false.
+- **Haiku 5.5:**
+  - it sets the hearing on "the tower's top floor, open to the sky", followed by a slot on the stairs down the mountain;
+  - its world check rated "Utaku, Jahn's sister, is already typing" a match. It checked the typing and ignored the sister, so a person would be told a wrong claim matches the book.
+- **Sonnet 5.5 and Opus 5.5:** none. These details were checked and are the book's:
+  - twenty senators in a circular room, and the green light at the selected seat (c8-b47, c8-b49);
+  - the neck band (c8-b8);
+  - Delwart followed out of the booth (c3-b127);
+  - about ten people in the restaurant (c15-b9);
+  - Jahn not looking at the news before the lecture (c15-b3).
+
+**Slips into writing for the person** (gpt-oss only):
+- a picture slot with "WIN" on the scoreboard (fixture a);
+- example wants offered in quotes, "to have a quiet meal" and "to get reliable information" (fixture c).
+
+The guard passed every turn.
+
+**Misses:**
+- Opus and gpt-oss judged b's "eleven to nine" as "not said";
+- Haiku and gpt-oss missed c's "sister".
+
+**Pipeline fixes made after this run (no rerun needed for the scores above):**
+- **The verdict parser** now keeps a reason written on the verdict line. Sonnet wrote its reasons there, so three of its "conflicts" verdicts were shown without one. The scoring was not affected.
+- **The code check had three kinds of false positive, now fixed:**
+  - a quotation of the draft shortened with "…";
+  - "words you could say aloud" in a question;
+  - Design's own question, "What would we see?", quoted from the craft guide.
+  
+  On this run's stored replies, the fixed check flags only gpt-oss's real slips.

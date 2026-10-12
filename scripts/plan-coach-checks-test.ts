@@ -7,7 +7,7 @@ import { readFileSync } from 'node:fs';
 import { codeFlags, norm } from './lib/plan-coach-checks';
 import { craftUpTo, craftProblems } from './lib/craft-guide';
 
-const book = { byId: new Map([['c4-b53', { chapter: 4 }], ['c20-b8', { chapter: 20 }]]), bookNorm: norm('seventeen streets two hundred meters apart') };
+const book = { byId: new Map([['c4-b53', { chapter: 4 }], ['c20-b8', { chapter: 20 }]]), bookNorm: norm('seventeen streets two hundred meters apart'), allowedNorm: norm('What would we see on the street?') };
 const draft = 'F1 Zei walks down Hun Min street toward the pyramid.';
 const cases: { name: string; reply: string; expect: RegExp | null }[] = [
   { name: 'a clean reply', reply: 'NOTES:\n1. [F1] What to change: show the street first. Why: place before faces. Passages: [c4-b53]\n\nORDER:\nKeep your order.\n\nPICTURE SLOTS:\n- After F1: Hun Min street; Zei; walking toward the pyramid.\n\nQUESTION:\nWhat does Zei want here?\n\nWORLD CHECK:\n- F1 Hun Min street: matches.', expect: null },
@@ -16,6 +16,12 @@ const cases: { name: string; reply: string; expect: RegExp | null }[] = [
   { name: 'offered wording', reply: 'NOTES:\n1. You could write that he hurries.', expect: /offers wording/ },
   { name: 'a block past the limit', reply: 'NOTES:\n1. See [c20-b8].', expect: /past the chapter limit/ },
   { name: 'an invented quotation', reply: 'NOTES:\n1. Consider "the grid hums under his feet tonight".', expect: /neither the person's nor the book's/ },
+  { name: 'a short quotation of the draft, then prose, is not a quotation', reply: 'NOTES:\n1. [F1] Consider stopping before "Zei walks." and let "Hun Min street toward the pyramid" carry it. Why: One clear image per beat; End on a question.', expect: null },
+  { name: 'curly quotations pair with their own marks', reply: 'NOTES:\n1. [F1] The draft says “Zei walks” and later “toward the pyramid”, then the beat ends. Why: Turn.', expect: null },
+  { name: 'a quotation of the draft shortened with an ellipsis is the person\'s words', reply: 'NOTES:\n1. [F1] "Zei walks down … toward the pyramid" asks for two pictures. Why: One clear image per beat.', expect: null },
+  { name: 'a question about words to say aloud is not offered wording', reply: 'QUESTION:\nWhat does Zei want, in words you could say aloud?', expect: null },
+  { name: 'Design\'s own question, quoted from the craft guide, is allowed', reply: 'NOTES:\n1. [F1] The draft names the feeling. Why: SHOW IT: "What would we see on the street?"', expect: null },
+  { name: 'an invented quotation after a short one is still caught', reply: 'NOTES:\n1. After "Zei walks" consider "the grid hums under his feet tonight".', expect: /neither the person's nor the book's/ },
 ];
 let bad = 0;
 for (const c of cases) {

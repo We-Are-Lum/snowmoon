@@ -185,7 +185,7 @@
         "on": "2026-10-11",
         "source": "https://huggingface.co/moonshotai/Kimi-K3/blob/main/LICENSE"
       },
-      "notes": "Kimi K3 License (modified MIT): use, modification, redistribution and derivative works allowed, keeping the notice; the model-as-a-service revenue clause (over $20M a year) and the display clause (over 100M monthly users or $20M monthly revenue) do not apply to this project. Named in the book's own AI usage declaration. Approved by the owner on 2026-10-11 for writing from the book's text only (guide episodes; docs/proposals/kimi-k3-writer.md): calls pinned to the maker's endpoint with zero data retention. Never send readers' own words to it without asking the owner again about the provider. Also approved by the owner on 2026-10-11 for the planning coach's comparison eval, on test drafts only: the eval's invented fixtures and the owner's own freewrite (docs/proposals/plan-coach.md). Choosing a model for real users' drafts is a separate decision.",
+      "notes": "Kimi K3 License (modified MIT): use, modification, redistribution and derivative works allowed, keeping the notice; the model-as-a-service revenue clause (over $20M a year) and the display clause (over 100M monthly users or $20M monthly revenue) do not apply to this project. Named in the book's own AI usage declaration. Approved by the owner on 2026-10-11 for writing from the book's text only (guide episodes; docs/proposals/kimi-k3-writer.md): calls pinned to the maker's endpoint with zero data retention. Never send readers' own words to it without asking the owner again about the provider. Also approved by the owner on 2026-10-11 for the planning coach's comparison eval, on test drafts only: the eval's invented fixtures and the owner's own freewrite (docs/proposals/plan-coach.md). Choosing a model for real users' drafts is a separate decision. Dropped from the coach comparison by the owner on 2026-10-11: about 225 s a turn is too slow for a live coach.",
       "runs_on": "hosted",
       "hosted": {
         "host": "Vercel AI Gateway",
@@ -207,6 +207,41 @@
       "open_weights": true,
       "weights": "https://huggingface.co/moonshotai/Kimi-K3",
       "role": "writer (book text only); planning-coach comparison eval (test drafts only)"
+    },
+    {
+      "id": "claude-haiku-5.5",
+      "kind": "text",
+      "repo": "anthropic/claude-haiku-5.5",
+      "revision": null,
+      "license_line": "Anthropic Commercial Terms of Service (effective June 17, 2025): \"Subject to Customer's compliance with these Terms, Anthropic hereby assigns to Customer its right, title and interest (if any) in and to Outputs.\"",
+      "license_checked": {
+        "by": "coding agent",
+        "on": "2026-10-11",
+        "source": "https://www.anthropic.com/legal/commercial-terms"
+      },
+      "notes": "Closed model, reported under principle 3. Added by the owner on 2026-10-11 to the planning coach's comparison eval on the same terms as Sonnet 5.5: test drafts only, Anthropic as the only provider, zero retention required on every call. Not for real users' drafts, which is a separate decision. Zero-retention test on our account, 2026-10-11, before any test draft was sent: one request containing only 'Reply with the single word OK.', ZDR required, only anthropic; answered 'OK', 'ZDR requested: all 1 attempts support ZDR', served by anthropic on Vercel's system credentials, enabledZeroDataRetention true, is_byok false. Every reply must carry the gateway's zero-retention flag and come only from anthropic, or the run fails (scripts/lib/zdr-check.ts).",
+      "runs_on": "hosted",
+      "hosted": {
+        "host": "Vercel AI Gateway",
+        "endpoints": {
+          "anthropic/claude-haiku-5.5": null
+        },
+        "provider": "anthropic",
+        "zero_data_retention": true,
+        "price_unit": "USD per million tokens (input, output)",
+        "prices": {
+          "input": 0.1,
+          "output": 0.5
+        },
+        "price_seen": "2026-10-11 (from the test reply's inference cost: 18 input tokens $0.0000018, 4 output tokens $0.000002)",
+        "retention_confirmed_by_owner": "2026-10-11, owner: same terms as Sonnet 5.5, conditional on its own zero-retention test, which passed the same day"
+      },
+      "model_record": "gateway model id, date, provider and the gateway request id (the host does not expose a weights revision)",
+      "cost_usd_per_unit": null,
+      "license": "proprietary (Anthropic Commercial Terms)",
+      "open_weights": false,
+      "weights": null,
+      "role": "planning-coach comparison eval (test drafts only)"
     },
     {
       "id": "claude-sonnet-5.5",

@@ -21,11 +21,11 @@
  * marks or on-screen text in the picture slots.
  *
  * Models (owner, 2026-10-11, test drafts only): gpt-oss-120b; Kimi K3 pinned to moonshotai;
- * Claude Sonnet 5.5 and, as a ceiling, Claude Opus 5.5, both pinned to anthropic, each reply checked for
+ * Claude Haiku 5.5, Claude Sonnet 5.5 and, as a ceiling, Claude Opus 5.5, all pinned to anthropic, each reply checked for
  * the gateway's zero-retention flag (scripts/lib/zdr-check.ts). Every call goes through the Vercel AI Gateway only
  * (scripts/lib/batch-model.ts, never the site's Groq key), with zero data retention, pinned as
- * config/models.json says. Spending for design 2 stops at $2.
- * Results: content/snowmoon/recipes/plan-coach-eval.json; report: docs/craft/plan-coach-eval.md.
+ * config/models.json says. Spending stops at $2 per design.
+ * Results: content/snowmoon/recipes/plan-coach-eval.json; report: docs/craft/plan-coach-eval-design-N.md.
  */
 import { createHash } from 'node:crypto';
 import { readFileSync, readdirSync, writeFileSync, existsSync } from 'node:fs';
@@ -40,16 +40,20 @@ import guide from '../content/snowmoon/world-guide.json';
 const ROOT = process.cwd();
 const DIR = 'scripts/fixtures/plan-coach';
 const RESULTS = 'content/snowmoon/recipes/plan-coach-eval.json';
-const REPORT = 'docs/craft/plan-coach-eval.md';
-const DESIGN = 2;
+
+// Design 3 (2026-10-11): the craft guide follows Plan a Piece v4, retrieval fixed after fixture c, quote
+// pairing fixed. Its own $2 cap; design 2 spent $1.34 of its cap.
+const DESIGN = 3;
+const REPORT = `docs/craft/plan-coach-eval-design-${DESIGN}.md`;
 const MODELS: Record<string, string> = {
   'gpt-oss-120b': 'openai/gpt-oss-120b',
   'kimi-k3': 'moonshotai/kimi-k3',
+  'claude-haiku-5.5': 'anthropic/claude-haiku-5.5',
   'claude-sonnet-5.5': 'anthropic/claude-sonnet-5.5',
   'claude-opus-5.5': 'anthropic/claude-opus-5.5',
 };
 // Owner, 2026-10-11: for these, any reply without the zero-retention flag and the pinned provider fails.
-const ZDR_ENFORCED: Record<string, string> = { 'anthropic/claude-sonnet-5.5': 'anthropic', 'anthropic/claude-opus-5.5': 'anthropic' };
+const ZDR_ENFORCED: Record<string, string> = { 'anthropic/claude-haiku-5.5': 'anthropic', 'anthropic/claude-sonnet-5.5': 'anthropic', 'anthropic/claude-opus-5.5': 'anthropic' };
 const GUARD = 'openai/gpt-oss-safeguard-20b';
 const CAP_USD = 2;
 const read = (f: string) => readFileSync(path.join(ROOT, f), 'utf8');
@@ -70,18 +74,41 @@ type GLine = { id: string; section: string; entity: string; kind: string; text: 
 const glines = guide.lines as GLine[];
 
 const STOP = new Set('the a an and or of to in on at for with his her he she they is was are be it its as by from that this into not no one two their them who what when where which there then than have has had were been'.split(' '));
-const words = (s: string) => new Set(norm(s).split(' ').filter((w) => w.length > 3 && !STOP.has(w)));
+// Retrieval (fixed 2026-10-11 after fixture c): words are crudely stemmed ("taxes" finds "tax"), rare
+// words count for more than common ones, every name in the query brings the block where the book first
+// mentions it (with its neighbours: dialogue is split across blocks), and the best hits bring their
+// neighbours too, so a rule stated two blocks away in the same conversation is not lost.
+const stem = (w: string) => w.replace(/'s$/, '').replace(/(ies|es|s|ing|ed)$/, '');
+const words = (s: string) => new Set(norm(s).split(' ').filter((w) => w.length > 3 && !STOP.has(w)).map(stem));
+const docFreq = new Map<string, number>();
+for (const b of book) for (const w of words(b.text)) docFreq.set(w, (docFreq.get(w) ?? 0) + 1);
+const idf = (w: string) => Math.log(1 + book.length / (1 + (docFreq.get(w) ?? 0)));
 function overlap<T>(items: T[], text: (x: T) => string, query: string, n: number): T[] {
   const q = words(query);
   return items
-    .map((x) => ({ x, score: norm(text(x)).split(' ').filter((w) => q.has(w)).length }))
-    .filter((s) => s.score > 1)
+    .map((x) => {
+      const hit = [...words(text(x))].filter((w) => q.has(w));
+      return { x, score: hit.reduce((a, w) => a + idf(w), 0), n: hit.length };
+    })
+    .filter((s) => s.n > 1 || s.score > 5)
     .sort((a, b) => b.score - a.score)
     .slice(0, n)
     .map((s) => s.x);
 }
-const passages = (query: string, limit: number, n: number) =>
-  overlap(book.filter((b) => b.chapter <= limit && b.text.length > 40), (b) => b.text, query, n).sort((x, y) => x.chapter - y.chapter || Number(x.id.split('-b')[1]) - Number(y.id.split('-b')[1]));
+const blockAt = new Map(book.map((b, i) => [b.id, i]));
+function passages(query: string, limit: number, n: number): Block[] {
+  const pool = book.filter((b) => b.chapter <= limit);
+  const picked = new Set<number>();
+  const near = (i: number, r: number) => { for (let j = i - r; j <= i + r; j++) if (book[j] && book[j].chapter === book[i].chapter && book[j].chapter <= limit) picked.add(j); };
+  overlap(pool.filter((b) => b.text.length > 40), (b) => b.text, query, n).forEach((b, rank) => (rank < 3 ? near(blockAt.get(b.id)!, 2) : picked.add(blockAt.get(b.id)!)));
+  // the first mention of each name in the query, up to the limit
+  for (const name of new Set(query.match(/\b[A-Z][a-z]{2,}\b/g) ?? [])) {
+    if (STOP.has(name.toLowerCase())) continue;
+    const first = pool.find((b) => new RegExp(`\\b${name}\\b`).test(b.text));
+    if (first) near(blockAt.get(first.id)!, 1);
+  }
+  return [...picked].sort((x, y) => x - y).map((i) => book[i]);
+}
 const guideLine = (l: GLine) => `- ${l.entity}${l.kind === 'fact' || l.kind === 'event' ? '' : ` (${l.kind})`}: ${l.text} [${l.sources.join('] [')}]`;
 function guideUpTo(limit: number): string {
   const out: string[] = [];
@@ -93,7 +120,8 @@ function guideUpTo(limit: number): string {
 }
 
 // ---- code checks (scripts/lib/plan-coach-checks.ts)
-const autoFlags = (reply: string, draft: string, limit: number) => codeFlags(reply, draft, limit, { byId, bookNorm });
+const craftNorm = norm(read('docs/craft/visual-storytelling.md'));
+const autoFlags = (reply: string, draft: string, limit: number) => codeFlags(reply, draft, limit, { byId, bookNorm, allowedNorm: craftNorm });
 
 // ---- runs
 loadGatewayKey();
@@ -178,6 +206,7 @@ for (const f of readdirSync(path.join(ROOT, DIR)).filter((x) => x.endsWith('.md'
   ].join('\n');
   if (dry) {
     console.log(`${name}: limit ${limit}, notes prompt ~${Math.round((prompts.notes.length + notesUser.length) / 4)} tokens`);
+    for (const line of draft.split('\n').filter((l) => /^F\d+\./.test(l))) console.log(`  ${line.slice(0, 60)} -> ${passages(line.replace(/^F\d+\.\s*(Narration:)?/, ''), limit, 6).map((x) => x.id).join(' ')}`);
     continue;
   }
   for (const m of models) {
@@ -216,7 +245,9 @@ for (const f of readdirSync(path.join(ROOT, DIR)).filter((x) => x.endsWith('.md'
       const r = await call('world-check', model, prompts.check, user, 2000, 0, calls);
       const first = r.text.trim().split('\n')[0].toUpperCase();
       const verdict = /CONFLICT/.test(first) ? 'conflicts' : /MATCH/.test(first) ? 'matches' : /LATER/.test(first) ? 'later' : 'not said';
-      let said = r.text.trim().split('\n').slice(1).join(' ').trim();
+      // the reason may follow the verdict on its first line ("CONFLICTS: the book says …") or on the lines after it
+      const firstRest = r.text.trim().split('\n')[0].replace(/^[\s*#>-]*(CONFLICTS?|MATCH(ES)?|LATER|NOT SAID|DOESN'T SAY)\b[\s:.,–—-]*/i, '').trim();
+      let said = [firstRest, ...r.text.trim().split('\n').slice(1)].join(' ').trim();
       // Spoiler safety, in code: any later id turns the verdict into "can't check".
       const later = (said.match(/c\d+-b\d+/g) ?? []).some((id) => chapterOf(id) > limit);
       const finalVerdict = later ? 'later' : verdict;
@@ -267,9 +298,9 @@ type R = { design?: number; fixture: string; limit: number; model?: string; cost
 const runs = (results.runs as R[]).filter((r) => r.design === DESIGN);
 if (runs.length) {
   const lines = [
-    '# Planning coach eval (design 2)',
+    `# Planning coach eval (design ${DESIGN})`,
     '',
-    `Generated by \`scripts/plan-coach-eval.ts\` from \`${RESULTS}\`. Test drafts only. Every call through the Vercel AI Gateway with zero data retention, pinned per config/models.json. Guard: ${GUARD} with config/prompts/plan-coach-guard.md. The reviewer's flags are in docs/craft/plan-coach-eval-review.md. Design 1 runs stay in the results file.`,
+    `Generated by \`scripts/plan-coach-eval.ts\` from \`${RESULTS}\`. Test drafts only. Every call through the Vercel AI Gateway with zero data retention, pinned per config/models.json. Guard: ${GUARD} with config/prompts/plan-coach-guard.md. The reviewer's flags are in docs/craft/plan-coach-eval-review.md. Earlier designs' runs stay in the results file.`,
     '',
     '| Model | Turns | Cost per turn | Time per turn (median) | World errors caught (expected conflicts found) | Expected world answers | Guard VIOLATION (writing for the person) | Turns with code flags | Claims: matches / conflicts / not said / later |',
     '|---|---|---|---|---|---|---|---|---|',

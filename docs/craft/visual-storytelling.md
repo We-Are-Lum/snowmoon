@@ -2,11 +2,14 @@
 
 > Written by the coding agent (Claude, a closed model), 2026-10-11, from the
 > owner's list of principles. **Approved by the owner, 2026-10-11**, with one
-> addition: the two sets of principles from Design v3, so the coach and the
-> screens match. Those are sections 8 to 17. Their names, one-line
-> definitions and questions follow Design's "Plan a Piece v3" (2026-10-11)
-> word for word where Design gives them; the sources, book examples and
-> notes are the coding agent's.
+> addition: the two sets of principles from Design's "Plan a Piece", so the
+> coach and the screens match. Those are sections 8 to 17. Their names,
+> one-line definitions, questions and note forms follow "Plan a Piece v4"
+> (2026-10-11) word for word where Design gives them; the sources, book
+> examples and notes are the coding agent's. v4 kept v3's principles and
+> changed two lines: the sample character is "he", and "Fits the world"
+> says "the book's world" rather than "Veridia". It also added the note
+> forms in "How notes are named" below.
 > The coach (`config/prompts/plan-coach.md`) uses this version.
 
 This is the craft the coach applies to two forms: **comics with narration**
@@ -62,7 +65,10 @@ brother in 1886. It is cited here for the idea, not as a quotation.
 - [ch 7] The dark purple letter he pockets unopened (c7-b141, c7-b144).
 
 **The coach asks.** "What could your character do or hold that shows this,
-so the narration doesn't have to say it?"
+so the narration doesn't have to say it?" Design v4 gives every beat a
+"What do we see?" line that the person fills in. Its note for a named
+feeling is SHOW IT: "You say he didn't care about the hall. What would we
+see?" The coach asks; the person writes the line.
 
 **A note looks like.** "Narration in beat 2 names the feeling ('he was
 afraid'). The picture could carry it through an action or an object, which
@@ -165,7 +171,7 @@ to know?"
 **A note looks like.** "The piece ends after the question is answered.
 Consider ending one beat earlier, on the message arriving."
 
-## Stories: want, pressure, turn, choice, change (Design v3, the story path)
+## Stories: want, pressure, turn, choice, change (Design v4, the story path)
 
 These five follow one scene, or one short piece, from start to end. They
 widen principle 1: the want and the turn are the same idea, now with what
@@ -207,9 +213,9 @@ the next."
 
 ## 10. Turn
 
-**The idea.** "Something happens that she didn't expect, and the easy way
-stops working. Plot is the pressure that pushes her toward a choice."
-(Design v3.) Somewhere the situation flips: what was going well goes badly,
+**The idea.** "Something happens that he didn't expect, and the easy way
+stops working. Plot is the pressure that pushes him toward a choice."
+(Design v4.) Somewhere the situation flips: what was going well goes badly,
 or the reverse. McKee's *turning point* (*Story*, 1997); Aristotle's
 *reversal* (*Poetics*). A turn the reader didn't see coming, but believes
 afterwards, is the strongest kind. See principle 1.
@@ -217,7 +223,7 @@ afterwards, is the strongest kind. See principle 1.
 **In the book.**
 - [ch 7] Zei's hidden factory fires from a place Bai never expected, and "Bai, and her AI, were caught completely by surprise." (c7-b109)
 
-**The coach asks.** "What happens that makes it harder?" (Design v3), then
+**The coach asks.** "What happens that makes it harder?" (Design v4), then
 "Could a reader point to the picture where it changes?"
 
 **A note looks like.** "The change happens between beats, in no picture. A
@@ -234,7 +240,7 @@ between two goods that can't both be had, or the lesser of two evils
 - [ch 10] Told that Minpentai trains people for war, Zei promises: "I won't tell anyone. Not even Fin." (c10-b206). The price: a secret, kept even from Fin.
 
 **The coach asks.** "What does your character do, and what does it cost?"
-(Design v3.) A note says "Choice needs a price" when it costs nothing.
+(Design v4.) A note says "Choice needs a price" when it costs nothing.
 
 **A note looks like.** "Fragment 5's decision costs the character nothing,
 so it reads as a formality. What would they have to give up to make it?"
@@ -252,13 +258,13 @@ meaningful change, expressed and experienced in terms of a value (*Story*,
 - [ch 32] At the end of the book: "For the first time in a century, the Arctic Empire has been defeated." (c32-b28)
 
 **The coach asks.** "How is your character different at the end?" (Design
-v3.) A note says "No change yet" when the story ends at the choice.
+v4.) A note says "No change yet" when the story ends at the choice.
 
 **A note looks like.** "The first and last pictures show the same situation.
 If that's the point, the narration could signal it; if not, the last picture
 could show what changed."
 
-## Characters: want and need, flaw, contradiction, arc, fits the world (Design v3, the character path)
+## Characters: want and need, flaw, contradiction, arc, fits the world (Design v4, the character path)
 
 These five are for building a character, whether from the book or one a
 person adds. They widen principle 6.
@@ -266,7 +272,7 @@ person adds. They widen principle 6.
 ## 13. Want and need
 
 **The idea.** "What they chase, and what they actually need. The gap between
-them drives the story." (Design v3.) What a character wants and what they need can differ. John
+them drives the story." (Design v4.) What a character wants and what they need can differ. John
 Truby separates *desire*, the goal they pursue, from *need*, what they must
 change in themselves to live better (*The Anatomy of Story*, 2007). A
 character who gets the want but not the need is a story; so is the
@@ -277,7 +283,7 @@ reverse.
 
 **The coach asks.** "What does your character want? Is there something they
 need that they don't know about?" A note flags want and need that are too
-close (Design v3: "What does he need that he'd refuse if offered?").
+close (Design v4: "What does he need that he'd refuse if offered?").
 
 **A note looks like.** "The character's want is clear, but nothing hints at
 a need underneath. One object or action in an early picture could suggest
@@ -285,7 +291,7 @@ it without stating it."
 
 ## 14. A flaw that costs them
 
-**The idea.** "Something they do that gets in their own way." (Design v3.) A
+**The idea.** "Something they do that gets in their own way." (Design v4.) A
 flaw is the weakness that gets in the character's own way.
 Truby calls it the character's *weakness* (*The Anatomy of Story*, 2007);
 Aristotle's *hamartia* is the error that brings a fall (*Poetics*). A flaw
@@ -303,7 +309,7 @@ letting the character's own habit cause one of them."
 ## 15. A contradiction
 
 **The idea.** "Two true things that don't fit together. This makes them
-specific." (Design v3.) People who hold two opposite traits feel real. McKee calls
+specific." (Design v4.) People who hold two opposite traits feel real. McKee calls
 this *dimension*: a consistent contradiction, either within a character or
 between how they appear and who they are (*Story*, 1997).
 
@@ -320,7 +326,7 @@ believable."
 ## 16. An arc
 
 **The idea.** "Who they are at the start, who they could become, and what it
-would take." (Design v3.) Over the piece, the character changes, or
+would take." (Design v4.) Over the piece, the character changes, or
 pointedly refuses to. Truby places the change in a *self-revelation* near the end (*The
 Anatomy of Story*, 2007); K. M. Weiland describes positive, negative and
 flat arcs (*Creating Character Arcs*, 2016). The reader should be able to
@@ -330,7 +336,7 @@ see where the character started.
 - [ch 31] Lily cheers Lord Ephelion's messages (c23-b84). At the Arctic school she argues with her instructor and is put in detention, and now thinks the Arctics "just care about their own authority" (c28-b66, c28-b67, c28-b68). At the end she runs to Gladias: "Dad!" (c31-b77).
 
 **The coach asks.** "If your character changed, what would they do that
-they won't do now?" (after Design v3's question), then "Which picture shows
+they won't do now?" (after Design v4's question), then "Which picture shows
 where they start, and which where they end?"
 
 **A note looks like.** "The character's change happens off the page. A
@@ -338,8 +344,8 @@ picture of where they start would make the end land."
 
 ## 17. Fits the world
 
-**The idea.** "What they'd know, own, and do in Veridia. Checked against the
-book" up to the person's chapter (Design v3). A character should belong to
+**The idea.** "What they'd know, own, and do in the book's world. Checked
+against the book" up to the person's chapter (Design v4). A character should belong to
 the world they live in: its
 work, its tools, its habits of thought. Lajos Egri gives characters three
 dimensions, one of them sociological: class, work, education, surroundings
@@ -355,6 +361,25 @@ from their place in the book would?"
 **A note looks like.** "The character could be from anywhere. One detail of
 how they work or measure or speak, from their country in the book, would
 place them. The world guide lists what the book gives."
+
+## How notes are named
+
+Design v4 names each note by what it found, and each note ends in a
+question or an action the person takes:
+
+- **CONFLICTS WITH THE BOOK:** a world fact the book contradicts, with the
+  passage, up to the person's chapter.
+- **SHOW IT:** a feeling is named; "What would we see?"
+- **NO TURN YET:** "Nothing in your draft makes the vote harder, so the
+  choice comes easily. What could he find out?"
+- **CHOICE NEEDS A PRICE:** the choice costs nothing.
+- **NO CHANGE YET:** "The story ends at the choice. Without CHANGE, he is
+  the same at the end as the start."
+- **CHECK MY PLACING:** for a pasted draft, the assistant places the
+  person's paragraphs on the five beats as written, and says where it is
+  unsure: "I put 'After the match…' on CHANGE. If he isn't different yet,
+  move it to CHOICE." The placing is a suggestion; the paragraphs keep
+  their order and wording.
 
 ## What the coach never does
 
