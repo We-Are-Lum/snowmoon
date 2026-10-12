@@ -1,0 +1,43 @@
+{
+  "about": "Elevation data used by maps v5 (owner, 2026-10-12: public-domain elevation only). Each entry quotes the licence line from the source's own record, like a model entry in config/models.json.",
+  "datasets": [
+    {
+      "id": "etopo-2022-60s-surface",
+      "name": "ETOPO 2022 Global Relief Model, version 1, 60 arc-second, surface elevation (land and bathymetry)",
+      "publisher": "NOAA National Centers for Environmental Information (NCEI)",
+      "version": "ETOPO 2022 v1",
+      "file": "ETOPO_2022_v1_60s_N90W180_surface.tif",
+      "url": "https://www.ngdc.noaa.gov/mgg/global/relief/ETOPO2022/data/60s/60s_surface_elev_gtif/ETOPO_2022_v1_60s_N90W180_surface.tif",
+      "resolution": "1 arc-minute (about 1.85 km), global; heights in meters (EGM2008); ice-sheet surfaces, not bedrock",
+      "license_line": "These data were produced by NOAA and are not subject to copyright protection in the United States. NOAA waives any potential copyright and related rights in these data worldwide through the Creative Commons Zero 1.0 Universal Public Domain Dedication (CC0-1.0).",
+      "license": "CC0-1.0",
+      "license_checked": {
+        "by": "coding agent",
+        "on": "2026-10-12",
+        "source": "https://www.ncei.noaa.gov/metadata/geoportal/rest/metadata/item/gov.noaa.ngdc.mgg.dem:etopo_2022/xml"
+      },
+      "attribution": "NOAA National Centers for Environmental Information. 2022: ETOPO 2022 15 Arc-Second Global Relief Model. NOAA National Centers for Environmental Information. https://doi.org/10.25921/fd45-gt74",
+      "attribution_note": "The source's own citation line names the 15 arc-second model; the 60 arc-second file used here is a product of the same release and shares its DOI.",
+      "use_limitation": "Not to be used for navigation.",
+      "used_for": "the region and Dzego"
+    },
+    {
+      "id": "srtm-gl1-v003",
+      "name": "NASA Shuttle Radar Topography Mission Global 1 arc second, version 3 (SRTMGL1.003)",
+      "publisher": "NASA JPL, distributed by NASA EOSDIS Land Processes DAAC; the copies used are from OpenTopography's public bucket",
+      "version": "V003",
+      "url": "https://opentopography.s3.sdsc.edu/raster/SRTM_GL1/SRTM_GL1_srtm/",
+      "resolution": "1 arc-second (about 30 m), 60°N to 56°S; heights in meters",
+      "license_line": "Unless the content is marked with a use restriction or license, data provided from a NASA-led mission are licensed as Creative Commons Zero (CC0).",
+      "license": "CC0-1.0",
+      "license_checked": {
+        "by": "coding agent",
+        "on": "2026-10-12",
+        "source": "https://lpdaac.usgs.gov/data/data-citation-and-policies/ (NASA Earthdata's data use and citation guidance)",
+        "note": "OpenTopography's page for its copy says \"Use License: Not Provided\"; the licence line above is NASA's, for the mission's data. SRTM was a joint NASA and NGA mission led by NASA JPL."
+      },
+      "attribution": "NASA JPL (2013). NASA Shuttle Radar Topography Mission Global 1 arc second [Data set]. NASA EOSDIS Land Processes DAAC. https://doi.org/10.5067/MEASURES/SRTM/SRTMGL1.003. Distributed by OpenTopography: https://doi.org/10.5069/G9445JDF",
+      "used_for": "the Meldan and Pafogai Du city patches"
+    }
+  ]
+}

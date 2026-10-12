@@ -24,3 +24,4 @@ __pycache__/
 # scripts/make_channel_art.py
 art-out
 summary-out
+data-cache/
