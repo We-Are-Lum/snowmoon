@@ -1,0 +1,144 @@
+{
+  "at": "2026-10-12T00:26:48.460Z",
+  "code_version": {
+    "scripts/terrain.ts": "6dcab85ec64ac77fcdff5cec29c089c4679f11858fe3cca4b47c423212dc59bf",
+    "scripts/lib/terrain-core.ts": "5140c0a7e5d4357c97b4a54c000c9654c406dd6f127e249b028ee0b23b6a36d0",
+    "scripts/lib/noise.ts": "ef2aba4f58c28e0cb002c0992ac3bd80dd99af8b1d4b4e5b5bf5d849047c2395",
+    "scripts/lib/map-tests.ts": "925f5018db8e5284c2fac2e6474384d43324df3327a2883354ebb8f5370d4385"
+  },
+  "tried": [
+    {
+      "seed": 1,
+      "passed": true,
+      "failed": [],
+      "ms": 7668
+    },
+    {
+      "seed": 2,
+      "passed": false,
+      "failed": [
+        "terrain: No lake inside Meldan larger than a pond: 1.735 km² of ponds"
+      ],
+      "ms": 8573
+    },
+    {
+      "seed": 3,
+      "passed": false,
+      "failed": [
+        "terrain: No lake inside Meldan larger than a pond: 4.503 km² of ponds"
+      ],
+      "ms": 8680
+    },
+    {
+      "seed": 4,
+      "passed": false,
+      "failed": [
+        "terrain: No lake inside Meldan larger than a pond: 2.150 km² of ponds"
+      ],
+      "ms": 8871
+    },
+    {
+      "seed": 5,
+      "passed": true,
+      "failed": [],
+      "ms": 8894
+    },
+    {
+      "seed": 6,
+      "passed": false,
+      "failed": [
+        "terrain: No lake inside Meldan larger than a pond: 0.060 km² of ponds"
+      ],
+      "ms": 8927
+    },
+    {
+      "seed": 7,
+      "passed": false,
+      "failed": [
+        "terrain: No lake inside Meldan larger than a pond: 0.482 km² of ponds"
+      ],
+      "ms": 9185
+    },
+    {
+      "seed": 8,
+      "passed": false,
+      "failed": [
+        "terrain: No lake inside Meldan larger than a pond: 0.143 km² of ponds"
+      ],
+      "ms": 8910
+    },
+    {
+      "seed": 9,
+      "passed": false,
+      "failed": [
+        "terrain: No lake inside Meldan larger than a pond: 0.988 km² of ponds"
+      ],
+      "ms": 9010
+    },
+    {
+      "seed": 10,
+      "passed": false,
+      "failed": [
+        "terrain: No lake inside Meldan larger than a pond: 0.113 km² of ponds"
+      ],
+      "ms": 8751
+    },
+    {
+      "seed": 11,
+      "passed": false,
+      "failed": [
+        "terrain: No lake inside Meldan larger than a pond: 0.985 km² of ponds"
+      ],
+      "ms": 9229
+    },
+    {
+      "seed": 12,
+      "passed": false,
+      "failed": [
+        "terrain: Elenar Forest is snowy pine forest: sea",
+        "terrain: No lake inside Meldan larger than a pond: 1.990 km² of ponds"
+      ],
+      "ms": 8987
+    },
+    {
+      "seed": 13,
+      "passed": false,
+      "failed": [
+        "terrain: No lake inside Meldan larger than a pond: 1.278 km² of ponds"
+      ],
+      "ms": 9394
+    },
+    {
+      "seed": 14,
+      "passed": false,
+      "failed": [
+        "terrain: Elenar Forest is snowy pine forest: sea",
+        "terrain: No lake inside Meldan larger than a pond: 4.510 km² of ponds"
+      ],
+      "ms": 9153
+    },
+    {
+      "seed": 15,
+      "passed": false,
+      "failed": [
+        "terrain: No lake inside Meldan larger than a pond: 8.367 km² of ponds",
+        "terrain: Pafogai Du's grid lies on flat ground: 325 steep cells"
+      ],
+      "ms": 8768
+    },
+    {
+      "seed": 16,
+      "passed": false,
+      "failed": [
+        "terrain: No lake inside Meldan larger than a pond: 0.107 km² of ponds"
+      ],
+      "ms": 8823
+    },
+    {
+      "seed": 17,
+      "passed": true,
+      "failed": [],
+      "ms": 8939
+    }
+  ]
+}
