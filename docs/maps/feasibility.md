@@ -244,16 +244,14 @@ never-before-seen underground tunnels" (c15-b8), not across a land border.
 Each is listed with its reason in the map files' `not_tested`. The checker
 requires that every one of the 92 lines is either tested or listed there.
 
-## Decided (owner, 2026-10-11)
+## Decisions for the owner
 
-1. **Battle groups: follow the drawing.** The tap sheets quote wg-367 and wg-368 (c29-b25, c29-b27) and say the text differs. Recorded in `docs/maps/errata.md`.
-2. **Arturia north-west of Redshire, marked "placed by us"**, with a note that the chapter 5 figure shows links between cities, not a map.
-3. **The pyramid: the stair, marked "placed by us"**, quoting the ten percent line (c4-b52) and the twenty-minute line (c24-b21). The path's first stretch stays "book".
-4. **Dzego: undecided.** It has its own inset (`docs/maps/world-dzego.svg`), with the line "(draft) The book doesn't say where Dzego lies relative to the United Cities." The main world view no longer includes it.
-5. **No author sign-off.** Each map publishes its full "placed by us" list (`docs/maps/<map>-placed-by-us.md`), with a way to report a mistake: an email to snowmoon@wearelum.xyz or an issue on the public repository, naming the placement's id.
-
-**Also decided:**
-- **Publishing order:** Pafogai Du first, then central Meldan, then the world map. The world map is titled "one possible layout".
-- **Errata:** the Redshire–Devanvil 15 vs 12 percent conflict is in `docs/maps/errata.md`.
-
-The design handoff is `docs/maps/design-handoff.md`.
+1. **The battle groups:** follow the drawing (as now) or the text?
+2. **Should the United Cities layout keep Arturia north-west of Redshire?**
+   It is the price of no crossing links. Or accept one crossing and keep the
+   diagram's shape.
+3. **The pyramid:** a steep final stair (as now), or a longer path that keeps
+   10% throughout (which breaks the twenty-minute walk)?
+4. **Should Dzego share the United Cities' continent?**
+5. **Before any map goes public:** should the author see the "placed by us"
+   list? Everything dashed on the drawings is invention.

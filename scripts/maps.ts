@@ -14,7 +14,7 @@
  * Coordinates: Meldan and Pafogai Du in km (x east, y north). The world map in degrees, with
  * two local frames: the battle map's own pixels (c29-b34) and a km frame for the United Cities.
  */
-import { readFileSync, readdirSync, writeFileSync, mkdirSync, existsSync } from 'node:fs';
+import { readFileSync, readdirSync, writeFileSync, mkdirSync } from 'node:fs';
 import path from 'node:path';
 
 const ROOT = process.cwd();
@@ -27,14 +27,13 @@ type Place = {
   id: string; name: string; shape: 'point' | 'polyline' | 'polygon' | 'circle';
   at?: Pt; points?: Pt[]; center?: Pt; r?: number; frame?: string; elevation?: number;
   provenance: 'book' | 'placed by us'; lines: string[]; note?: string; hide_label?: boolean; draw?: boolean;
-  tap?: string; // the tap sheet's text for design: book quotes with block ids, and what we chose
 };
 type Frame = { kind: 'figure' | 'km'; origin: XY; origin_px?: XY; km_per_px?: number; block?: string; provenance: string; note?: string };
 type Test = { line: string; test: string; expect?: 'conflict'; note?: string; [k: string]: unknown };
 type MapFile = {
   map: string; title: string; label: string; license: string; units: string; coords: 'km' | 'deg';
   frames?: Record<string, Frame>; places: Place[]; tests: Test[]; not_tested: { line: string; why: string }[];
-  views?: { suffix: string; title: string; bounds: [number, number, number, number]; note?: string }[]; // [west, south, east, north] in the map's own units (km, or lon/lat)
+  views?: { suffix: string; title: string; bounds: [number, number, number, number] }[]; // [west, south, east, north] in the map's own units (km, or lon/lat)
 };
 
 const guide = JSON.parse(read('content/snowmoon/world-guide.json')) as { lines: { id: string; section: string; text: string }[] };
@@ -279,10 +278,6 @@ function check(): string[] {
   for (const m of maps) {
     if (!/AI-made/.test(m.label) || !/not by the author/i.test(m.label)) bad.push(`${m.map}: the label must say AI-made and not by the author`);
     if (!/GPL-3\.0/.test(m.license)) bad.push(`${m.map}: the licence must name GPL-3.0`);
-    const listFile = path.join(ROOT, `docs/maps/${m.map}-placed-by-us.md`);
-    if (!existsSync(listFile) || readFileSync(listFile, 'utf8') !== placedList(m)) bad.push(`docs/maps/${m.map}-placed-by-us.md does not match the data; run render`);
-    const tapFile = path.join(ROOT, `docs/maps/${m.map}-tap-sheets.md`);
-    if (!existsSync(tapFile) || readFileSync(tapFile, 'utf8') !== tapSheets(m)) bad.push(`docs/maps/${m.map}-tap-sheets.md does not match the data; run render`);
     const ids = new Set<string>();
     for (const p of m.places) {
       if (ids.has(p.id)) bad.push(`${m.map}: place ${p.id} repeated`);
@@ -316,7 +311,7 @@ function check(): string[] {
 }
 
 // ---- render: one SVG per view. Book placements solid, ours dashed and paler.
-function render(m: MapFile, view?: { title: string; bounds: [number, number, number, number]; note?: string }): string {
+function render(m: MapFile, view?: { title: string; bounds: [number, number, number, number] }): string {
   const drawn = m.places.filter((p) => p.draw !== false);
   // plot x = east, y = north; in degrees, longitude is scaled by cos(mid latitude)
   const all = drawn.flatMap((p) => pointsOf(m, p));
@@ -342,7 +337,6 @@ function render(m: MapFile, view?: { title: string; bounds: [number, number, num
     `<defs><clipPath id="c"><rect x="${pad}" y="${top}" width="${W - 2 * pad}" height="${H - top - 40 - pad + 10}"/></clipPath></defs>`,
     `<rect width="${W}" height="${H}" fill="#fff"/>`,
     `<text x="${pad}" y="22" font-size="14" font-weight="bold">${view?.title ?? m.title}</text>`,
-    view?.note ? `<text x="${pad + 8}" y="${top + 18}" font-size="12" fill="#333">${view.note}</text>` : '',
     `<text x="${pad}" y="${H - 22}" fill="#555">Solid outlines, dots and upright labels: placed from the book. Dashed, pale, italic: placed by us.</text>`,
     `<text x="${pad}" y="${H - 8}" fill="#555">Red lines: roads, routes and links; blue: water. AI-made proposal, not by the author.${m.coords === 'km' ? ' Grid: 1 km.' : ''}</text>`,
     '<g clip-path="url(#c)">',
@@ -383,44 +377,6 @@ function render(m: MapFile, view?: { title: string; bounds: [number, number, num
   return out.filter(Boolean).join('\n') + '\n';
 }
 
-// ---- the published "placed by us" list for each map (owner, 2026-10-11: no author sign-off;
-// each map publishes its full list, with a way to report a mistake).
-const REPORT_EMAIL = 'snowmoon@wearelum.xyz';
-const REPORT_REPO = 'https://github.com/We-Are-Lum/snowmoon';
-function placedList(m: MapFile): string {
-  const ours = m.places.filter((p) => p.provenance === 'placed by us');
-  const out = [
-    `# What we placed: ${m.title}`,
-    '',
-    `> ${m.label}`,
-    '',
-    `The book does not say where these are, so we chose. Everything else on this map is placed from the book, and its source passages are named in its tap sheet. ${ours.length} placements.`,
-    '',
-    `**Report a mistake.** Email ${REPORT_EMAIL} with the subject "Map mistake: ${m.map} <id>", or open an issue at ${REPORT_REPO}/issues. Name the id in brackets below, or the place, and the passage you think it contradicts.`,
-    '',
-  ];
-  for (const p of ours) out.push(`- **${p.name}** [${p.id}]: ${(p.note ?? 'Placed by us.').replace(/^\[\w+\]\s*/, '')}${p.lines.length ? ` (lines ${p.lines.join(', ')})` : ''}`);
-  if (m.frames) {
-    out.push('', 'Also ours, for the whole map:');
-    for (const [k, f] of Object.entries(m.frames)) out.push(`- **frame ${k}**: ${f.note ?? ''}`);
-  }
-  return out.join('\n') + '\n';
-}
-
-// ---- tap sheets: what a reader sees on tapping a place (for design). The tap text where one
-// is written; otherwise the placement note, with the world guide lines it rests on.
-function tapSheets(m: MapFile): string {
-  const text = new Map(geo.map((l) => [l.id, l.text]));
-  const out = [`# Tap sheets: ${m.title}`, '', `> ${m.label}`, '', 'One entry per labelled place. "Book": the book fixes where it is (its outline may be ours). "Placed by us": the book does not say, so we chose. Lines are from the world guide, with the book passages they cite.', ''];
-  for (const p of m.places.filter((q) => !q.hide_label && q.draw !== false)) {
-    out.push(`## ${p.name}`, '', `${p.provenance === 'book' ? 'Book' : 'Placed by us'}. ${p.tap ?? (p.note ?? '').replace(/^\[\w+\]\s*/, '')}`.trim());
-    const ls = p.lines.filter((l) => text.has(l));
-    if (ls.length) out.push('', ...ls.map((l) => `- ${l}: ${text.get(l)} (${guide.lines.find((x) => x.id === l) ? (guide.lines.find((x) => x.id === l) as unknown as { sources: string[] }).sources.join(', ') : ''})`));
-    out.push('');
-  }
-  return out.join('\n');
-}
-
 const step = process.argv[2];
 if (step === 'check') {
   const bad = check();
@@ -434,9 +390,6 @@ if (step === 'check') {
 } else if (step === 'render') {
   mkdirSync(path.join(ROOT, 'docs/maps'), { recursive: true });
   for (const m of maps) {
-    writeFileSync(path.join(ROOT, `docs/maps/${m.map}-placed-by-us.md`), placedList(m));
-    writeFileSync(path.join(ROOT, `docs/maps/${m.map}-tap-sheets.md`), tapSheets(m));
-    console.log(`wrote docs/maps/${m.map}-placed-by-us.md`);
     for (const v of m.views ?? [{ suffix: '', title: m.title, bounds: undefined as unknown as [number, number, number, number] }]) {
       writeFileSync(path.join(ROOT, `docs/maps/${m.map}${v.suffix}.svg`), render(m, v.bounds ? v : undefined));
       console.log(`wrote docs/maps/${m.map}${v.suffix}.svg`);

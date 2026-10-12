@@ -1,6 +1,6 @@
 {
   "map": "world",
-  "title": "The world of Snowmoon: one possible layout",
+  "title": "The world of Snowmoon: a proposed layout",
   "label": "AI-made: a proposed layout by an AI model, Claude (the coding agent, a closed model), from the world guide's geography lines; every placement is marked \"book\" or \"placed by us\". Not by the author.",
   "license": "A map proposal for Snowmoon by Vitalik Buterin, made from the book on 2026-10-11. GPL-3.0, like the book.",
   "units": "Degrees of latitude and longitude on an Earth-sized globe (our assumption). Places in the \"northshore\" frame are in the pixels of the book's battle map (c29-b34); places in the \"uc\" frame are in km east and north of Redshire. \"book\": the book fixes where it is relative to what is already placed; \"placed by us\": it does not.",
@@ -8,11 +8,11 @@
   "views": [
     {
       "suffix": "",
-      "title": "The world of Snowmoon: one possible layout",
+      "title": "The world of Snowmoon: a proposed layout",
       "bounds": [
         -32,
-        30,
-        100,
+        14,
+        160,
         82
       ]
     },
@@ -28,24 +28,13 @@
     },
     {
       "suffix": "-united-cities",
-      "title": "The United Cities: the book's links, our positions (one possible layout)",
+      "title": "The United Cities: the book's links, our positions",
       "bounds": [
         42,
         36.5,
         80,
         59.5
       ]
-    },
-    {
-      "suffix": "-dzego",
-      "title": "Dzego (inset)",
-      "bounds": [
-        138,
-        15,
-        160,
-        31
-      ],
-      "note": "(draft) The book doesn't say where Dzego lies relative to the United Cities."
     }
   ],
   "frames": {
@@ -754,8 +743,7 @@
         "wg-367"
       ],
       "note": "The battle map draws it heading east-north-east; the text says \"directly east\" (c29-b25).",
-      "frame": "northshore",
-      "tap": "Drawn as on the book's battle map (c29-b34). The text differs: \"I'm leading Group Center, our task is to cross the forest directly east.\" (c29-b25; world guide wg-367)"
+      "frame": "northshore"
     },
     {
       "id": "center_start",
@@ -810,8 +798,7 @@
         "wg-368"
       ],
       "note": "The battle map draws it heading north-east, then east; the text says \"toward the southeast\" (c29-b27).",
-      "frame": "northshore",
-      "tap": "Drawn as on the book's battle map (c29-b34). The text differs: \"I'm leading Group South, our task is to cross the forest, move toward the southeast, and then set up a perimeter on the outskirts of Northglade.\" (c29-b27; world guide wg-368)"
+      "frame": "northshore"
     },
     {
       "id": "south_start",
@@ -1145,15 +1132,14 @@
         -240,
         140
       ],
-      "provenance": "placed by us",
+      "provenance": "book",
       "lines": [
         "wg-379",
         "wg-380",
         "wg-388"
       ],
-      "note": "The book puts Arturia west of Redshire, across water (c26-b149, c26-b151). We put it north-west, so that the co-governance links don't cross. The chapter 5 figure (c5-b46) shows links between cities, not a map.",
-      "frame": "uc",
-      "tap": "The book: \"the seaborne drone making its way westward away from the Redshire coast\" (c26-b149), then \"The targets have successfully arrived on the coast of Arturia.\" (c26-b151). We put Arturia north-west of Redshire so the co-governance links don't cross; the chapter 5 figure (c5-b46) shows links between cities, not a map."
+      "note": "West of Redshire across water (c26-b149, c26-b151). We put it north-west, which keeps the co-governance links from crossing.",
+      "frame": "uc"
     },
     {
       "id": "petersvil",
@@ -1975,8 +1961,7 @@
       "lines": [
         "wg-354"
       ],
-      "note": "[region] Halfway across the world from Veridia, says Seila (c21-b85). Where exactly, and whether it shares the United Cities' continent (c22-b46), is ours to choose.",
-      "tap": "(draft) The book doesn't say where Dzego lies relative to the United Cities. Seila calls it \"halfway across the world\" from Veridia (c21-b85)."
+      "note": "[region] Halfway across the world from Veridia, says Seila (c21-b85). Where exactly, and whether it shares the United Cities' continent (c22-b46), is ours to choose."
     },
     {
       "id": "pafogai",

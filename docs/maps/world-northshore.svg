@@ -67,7 +67,7 @@
 <circle cx="1767.3" cy="-715.6" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
 <circle cx="2279.9" cy="542.6" r="3.5" fill="#222" stroke="#222"/>
 <circle cx="2340.0" cy="448.4" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
-<circle cx="2190.2" cy="375.1" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="2190.2" cy="375.1" r="3.5" fill="#222" stroke="#222"/>
 <circle cx="2571.2" cy="490.2" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
 <circle cx="2166.5" cy="731.0" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
 <circle cx="1787.5" cy="600.1" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
@@ -109,7 +109,7 @@
 <text x="1772.3" y="-719.6" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Glasscrown</text>
 <text x="2284.9" y="538.6" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">Redshire's south islands</text>
 <text x="2345.0" y="444.4" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Redshire</text>
-<text x="2195.2" y="371.1" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Arturia</text>
+<text x="2195.2" y="371.1" fill="#111" stroke="#fff" stroke-width="3" paint-order="stroke">Arturia</text>
 <text x="2576.2" y="486.2" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Petersvil</text>
 <text x="2171.5" y="727.0" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Devanvil</text>
 <text x="1792.5" y="596.1" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Imber</text>
