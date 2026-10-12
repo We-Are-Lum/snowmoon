@@ -92,10 +92,9 @@ function segKm(g: GridSpec, p: XY, a: XY, b: XY): number {
   const dx = bx - ax, dy = by - ay, t = Math.max(0, Math.min(1, -(ax * dx + ay * dy) / (dx * dx + dy * dy || 1)));
   return Math.hypot(ax + t * dx, ay + t * dy);
 }
-/** Signed distance to a polygon (positive inside). Edges marked open (a drawing's own border, not a coast) are not counted. */
-function polySigned(g: GridSpec, p: XY, poly: XY[], open?: boolean[]): number {
+function polySigned(g: GridSpec, p: XY, poly: XY[]): number {
   let d = Infinity;
-  for (let i = 0; i < poly.length; i++) if (!open?.[i]) d = Math.min(d, segKm(g, p, poly[i], poly[(i + 1) % poly.length]));
+  for (let i = 0; i < poly.length; i++) d = Math.min(d, segKm(g, p, poly[i], poly[(i + 1) % poly.length]));
   return pointInPoly(p[0], p[1], poly) ? d : -d;
 }
 /** Clip a polygon to a convex polygon (Sutherland–Hodgman). */
@@ -136,7 +135,7 @@ function bilinear(g: GridSpec, z: Float32Array, x: number, y: number): number {
 // ---- pins: every book fact and Design's checked cues, as hard constraints
 type Prov = 'book' | 'placed by us';
 type Pin =
-  | { kind: 'sea'; poly: XY[]; open?: boolean[]; band: number; bandNear?: { c: XY; r: number; band: number }; depth: number; why: string; provenance: Prov; lines: string[] }
+  | { kind: 'sea'; poly: XY[]; band: number; depth: number; why: string; provenance: Prov; lines: string[] }
   | { kind: 'land'; poly: XY[]; band: number; min: number; why: string; provenance: Prov; lines: string[] }
   | { kind: 'land-box'; poly: XY[]; seas: XY[][]; band: number; min: number; why: string; provenance: Prov; lines: string[] }
   | { kind: 'land-disk'; c: XY; r: number; min: number; why: string; provenance: Prov; lines: string[] }
@@ -149,9 +148,9 @@ const L = (...ids: string[]) => ids;
 
 /** Pins are applied with a bounding box test first; polygon pins are expensive on big grids. */
 function applyPins(g: GridSpec, z: Float32Array, pins: Pin[]) {
-  // the held core reaches out irregularly into the inner half of the band; the outer half is left to the terrain
+  // the held core reaches out irregularly into the band the coast may move within; it never shrinks below the band's inner edge
   const coastNz = new Noise2(9091);
-  const wander = (i: number, j: number, off: number) => 1 - 0.5 * Math.min(1, Math.max(0, 0.5 + 0.9 * coastNz.fbm(i / 3 + off, j / 3, 4)));
+  const wander = (i: number, j: number, off: number) => 1 - 0.95 * Math.min(1, Math.max(0, 0.5 + 0.9 * coastNz.fbm(i / 3 + off, j / 3, 4)));
   for (const p of pins) {
     let box: [number, number, number, number] | null = null;
     const pad = (km: number) => km / g.dx + 2;
@@ -165,7 +164,7 @@ function applyPins(g: GridSpec, z: Float32Array, pins: Pin[]) {
     for (let j = j0; j <= j1; j++)
       for (let i = i0; i <= i1; i++) {
         const k = idx(g, i, j), q: XY = [g.x0 + i * g.dx, g.y0 + j * g.dy];
-        if (p.kind === 'sea') { const sd = polySigned(g, q, p.poly, p.open), band = p.bandNear && kmDist(g, q, p.bandNear.c) < p.bandNear.r ? p.bandNear.band : p.band; if (sd > band * wander(i, j, 50)) z[k] = Math.min(z[k], -12 - 25 * smooth((sd - band) / 45)); }
+        if (p.kind === 'sea') { const sd = polySigned(g, q, p.poly); if (sd > p.band * wander(i, j, 50)) z[k] = Math.min(z[k], -15 + (p.depth + 15) * smooth((sd - p.band) / 45)); }
         else if (p.kind === 'land') { if (polySigned(g, q, p.poly) > p.band * wander(i, j, 0)) z[k] = Math.max(z[k], p.min); }
         else if (p.kind === 'land-box') { if (pointInPoly(q[0], q[1], p.poly) && p.seas.every((s) => polySigned(g, q, s) < -p.band)) z[k] = Math.max(z[k], p.min); }
         else if (p.kind === 'sea-poly') { const sd = polySigned(g, q, p.poly); if (sd > 0) z[k] = Math.min(z[k], -15 + (p.depth + 15) * smooth(sd / 30)); }
@@ -181,16 +180,15 @@ function softPins(g: GridSpec, z: Float32Array, pins: Pin[]) {
   for (const p of pins) {
     if ((p.kind !== 'sea' && p.kind !== 'land') || p.band <= 0) continue; // coasts only: pins with a band the coast may move within
     const xs = p.poly.map((q) => q[0]), ys = p.poly.map((q) => q[1]);
-    const m = (Math.max(p.band, p.kind === 'sea' && p.bandNear ? p.bandNear.band : 0) + 30) / g.dx;
+    const m = (p.band + 30) / g.dx;
     const i0 = Math.max(0, Math.floor((Math.min(...xs) - g.x0) / g.dx - m * 2)), i1 = Math.min(g.w - 1, Math.ceil((Math.max(...xs) - g.x0) / g.dx + m * 2));
     const j0 = Math.max(0, Math.floor((Math.min(...ys) - g.y0) / g.dy - m)), j1 = Math.min(g.h - 1, Math.ceil((Math.max(...ys) - g.y0) / g.dy + m));
     for (let j = j0; j <= j1; j++)
       for (let i = i0; i <= i1; i++) {
         // the coast settles irregularly inside its band, not along the drawn polygon
-        const q: XY = [g.x0 + i * g.dx, g.y0 + j * g.dy], band = p.kind === 'sea' && p.bandNear && kmDist(g, q, p.bandNear.c) < p.bandNear.r ? p.bandNear.band : p.band;
-        const s = polySigned(g, [g.x0 + i * g.dx, g.y0 + j * g.dy], p.poly, p.kind === 'sea' ? p.open : undefined) + band * (1.5 * coastNz.fbm(i / 6, j / 6, 3) + 0.7 * coastNz.ridged(i / 2.5 + 9, j / 2.5, 2) - 0.35);
-        if (s > -band - 10 && s <= band) {
-          const t = smooth((s + band + 10) / (2 * band + 10));
+        const s = polySigned(g, [g.x0 + i * g.dx, g.y0 + j * g.dy], p.poly) + 0.9 * p.band * coastNz.fbm(i / 3.5, j / 3.5, 4);
+        if (s > -p.band - 10 && s <= p.band) {
+          const t = smooth((s + p.band + 10) / (2 * p.band + 10));
           z[idx(g, i, j)] += (p.kind === 'sea' ? -300 : 300) * t;
         }
       }
@@ -301,10 +299,8 @@ function erodeDroplets(g: GridSpec, z: Float32Array, n: number, seed: number, he
 }
 
 // ---- lakes only where they make sense, then drainage and rivers
-/** A river from its head to the sea, the frame's edge, a lake or the river it joins; flows are the drainage area at each point. */
-type River = { points: XY[]; flow_km2: number; flows: number[] };
-type Hydro = { lakes: Uint8Array; filled: Float32Array; acc: Float32Array; rec: Int32Array; rivers: River[] };
-function hydrology(g: GridSpec, z: Float32Array, lakeMinCells: number, lakeMinDepthM: number, riverKm2: number, noRiver?: (x: number, y: number) => boolean, noLake?: (x: number, y: number) => boolean, forced?: Uint8Array, maxLakes = 10, lakeMaxCells = Infinity, minBranchCells = 0): Hydro {
+type Hydro = { lakes: Uint8Array; filled: Float32Array; acc: Float32Array; rec: Int32Array; rivers: { points: XY[]; flow_km2: number }[] };
+function hydrology(g: GridSpec, z: Float32Array, lakeMinCells: number, lakeMinDepthM: number, riverKm2: number, noRiver?: (x: number, y: number) => boolean, noLake?: (x: number, y: number) => boolean, forced?: Uint8Array, maxLakes = 10, lakeMaxCells = Infinity): Hydro {
   const parent = new Int32Array(g.w * g.h);
   const F = fillMeander(g, z, 811, parent);
   const lakes = new Uint8Array(g.w * g.h);
@@ -363,34 +359,22 @@ function hydrology(g: GridSpec, z: Float32Array, lakeMinCells: number, lakeMinDe
   const hasUp = new Uint8Array(z.length);
   for (let k = 0; k < z.length; k++) if (isRiver(k) && rec[k] >= 0) hasUp[rec[k]] = 1;
   const used = new Uint8Array(z.length);
-  const rivers: River[] = [];
-  // heads in order of their path to the mouth, longest first: the longest stream claims the main
-  // channel, so every later head traces only its own branch, and short branches are pruned
-  const heads: { k: number; len: number }[] = [];
+  const rivers: { points: XY[]; flow_km2: number }[] = [];
   for (let k = 0; k < z.length; k++) {
     if (!isRiver(k) || hasUp[k]) continue;
-    let len = 0;
-    for (let c = k; c >= 0 && isRiver(c) && len < 100000; c = rec[c]) len++;
-    heads.push({ k, len });
-  }
-  heads.sort((a, b) => b.len - a.len);
-  for (const { k } of heads) {
-    const ptsR: XY[] = [], flows: number[] = [], cells: number[] = [];
-    let c = k, joined = false;
+    const ptsR: XY[] = [];
+    let c = k, flow = 0;
     for (;;) {
       ptsR.push(cxy(g, c));
-      flows.push(Math.round(acc[c]));
-      if (used[c] && ptsR.length > 1) { joined = true; break; }
-      cells.push(c);
+      flow = acc[c];
+      if (used[c] && ptsR.length > 1) break;
+      used[c] = 1;
       const r = rec[c];
       if (r < 0) break;
-      if (!isRiver(r)) { ptsR.push(cxy(g, r)); flows.push(Math.round(acc[c])); break; }
+      if (!isRiver(r)) { ptsR.push(cxy(g, r)); break; }
       c = r;
     }
-    const isForced = !!forced && cells.some((q) => forced[q] === 1);
-    if (ptsR.length <= 2 || (joined && cells.length < minBranchCells && !isForced)) continue;
-    for (const q of cells) used[q] = 1;
-    rivers.push({ points: ptsR, flow_km2: flows[flows.length - 1], flows });
+    if (ptsR.length > 2) rivers.push({ points: ptsR, flow_km2: Math.round(flow) });
   }
   return { lakes, filled, acc, rec, rivers };
 }
@@ -502,19 +486,15 @@ function regionSetup(seed: number) {
   const masks: { name: string; poly: XY[]; warp: number }[] = [
     { name: 'Veridia\'s continent', warp: 230, poly: [[-6, 40], [-7.5, 47], [-5, 53], [-2, 57.5], [3, 59.7], [10, 59.6], [13.3, 59.35], [14, 57.2], [21, 56.3], [25, 57.5], [30, 55.5], [31.5, 50], [28, 44], [20, 40], [10, 38], [1, 37.8]] },
     { name: 'Northshore', warp: 30, poly: [[10.3, 56.6], [10.3, 59.4], [14.2, 60.6], [15, 62.1], [21.0, 62.0], [21.0, 56.6]] },
-    { name: 'the Arctic\'s southern edge', warp: 260, poly: [[-8, 59.8], [12.8, 59.55], [14.0, 60.6], [15.2, 62.9], [22, 63.1], [24.5, 62.3], [27.5, 61.9], [29.2, 62.9], [31, 61.7], [33.5, 62.0], [35.5, 60.5], [38, 60.9], [40, 61.1], [42.5, 62.4], [45.5, 60.3], [50, 60.0], [52.5, 58.8], [55, 59.7], [58, 58.9], [60.5, 60.0], [63, 58.5], [66, 58.6], [69.5, 59.8], [73, 58.4], [76, 58.7], [79.5, 59.9], [84, 58.9], [84, 66], [-8, 66]] },
+    { name: 'the Arctic\'s southern edge', warp: 260, poly: [[-8, 59.8], [12.8, 59.55], [14.0, 60.6], [15.2, 62.9], [22, 63.1], [27.5, 61.9], [31, 61.7], [40, 61.1], [50, 60.0], [58, 58.9], [66, 58.6], [76, 58.7], [84, 58.9], [84, 66], [-8, 66]] },
     { name: 'the United Cities\' continent', warp: 300, poly: pts(place(W, 'uc_continent')).map(ucLL) },
     { name: 'the land south of the United Cities (Messalia, Haragmir)', warp: 220, poly: [[52, 36], [53.5, 39.2], [59, 40.6], [66, 40.4], [74, 39.6], [84, 39.4], [84, 36]] },
   ].map((m) => ({ ...m, poly: lonlatPoly(m.poly as XY[], f), warp: m.warp * (0.8 + 0.4 * rnd()) }));
   const sp = (line: XY[], height: number, width: number, why: string, lines: string[] = [], jit = 0.7): Spine => ({ line: lonlatPoly(jitter(line, rnd, jit), f), height: height * (0.85 + 0.3 * rnd()), width, why, lines });
   const spines: Spine[] = [
     sp([[-8, 64.2], [4, 63.8], [13, 64.6]], 1500, 70, 'a range in the Arctic\'s south-west (ours)'),
-    sp([[24, 64.6], [30, 63.9]], 2200, 55, 'a short high range in the Arctic, north of the open sea (ours)'),
-    sp([[33, 65.6], [38, 63.6], [41, 62.7]], 1300, 50, 'a range in the Arctic running north-east to south-west (ours)'),
-    sp([[47, 64.9], [52, 63.3]], 1800, 45, 'a range in the Arctic (ours)'),
-    sp([[58.5, 65.6], [61.5, 62.9]], 2500, 60, 'a high range in the Arctic running north to south (ours)'),
-    sp([[66, 62.1], [72, 61.5]], 1500, 55, 'a range in the Arctic, north of the United Cities (ours)'),
-    sp([[76, 65.0], [80.5, 63.0], [84, 62.7]], 2000, 60, 'a range in the Arctic\'s far east (ours)'),
+    sp([[24, 64.4], [36, 63.6], [46, 63.2]], 1400, 65, 'a range in the Arctic, north of the open sea (ours)'),
+    sp([[60, 61.8], [72, 61.4], [84, 62.2]], 1600, 70, 'a range in the Arctic, north of the United Cities (ours)'),
     sp([[3.6, 50.7], [5.6, 50.1]], 700, 22, 'the Gelebor mountains, a row of small mountains outside Meldan (their place is ours)', L('wg-306'), 0.3),
     sp([[-4, 44], [-1.5, 49], [0, 54], [2, 57]], 1400, 110, 'western Veridian uplands (ours)'),
     sp([[6, 41.2], [14, 42.6], [22, 44.2]], 1600, 100, 'southern Veridian range (ours)'),
@@ -524,9 +504,7 @@ function regionSetup(seed: number) {
     sp(([[250, -450], [360, -920]] as XY[]).map(ucLL), 1200, 65, 'an eastern United Cities range (ours)', L('wg-378')),
     sp([[57, 38.4], [66, 39.2], [77, 38.4]], 1800, 95, 'a range in the land to the south (ours)'),
   ];
-  // ice domes: broad high plateaus under ice, of different sizes, in the Arctic (ours)
-  const domes = ([[-1, 65.2, 220, 750], [28, 65.4, 170, 950], [44, 65.3, 150, 600], [55, 65.0, 230, 1150], [70.5, 64.6, 170, 850]] as [number, number, number, number][]).map(([lo, la, r, h]) => ({ c: f.fromLL(lo + (rnd() - 0.5) * 2, la), r: r * (0.8 + 0.4 * rnd()), h: h * (0.8 + 0.4 * rnd()) }));
-  return { masks, spines, domes, flat: [{ c: f.fromLL(8, 52), r: 140 }] };
+  return { masks, spines, flat: [{ c: f.fromLL(8, 52), r: 140 }] };
 }
 
 function regionPins(): Pin[] {
@@ -537,24 +515,7 @@ function regionPins(): Pin[] {
   const box: XY[] = ([[10, 10], [230, 10], [230, 230], [10, 230]] as XY[]).map(ns);
   // the figure's own edges are not coasts: sea pins are clipped just inside them
   const inner = ([[2, 2], [238, 2], [238, 238], [2, 238]] as XY[]);
-  // The battle map's two seas: clipped just inside the figure, then carried 25 px past its east border, where
-  // the open sea continues (so no strip of land is left between the drawing and the sea beyond). The drawn
-  // coast is unchanged: each border run keeps its original end points. Edges on the border are open: the
-  // drawing's edge, not a coast.
-  const seaPoly = (poly: XY[]): { poly: XY[]; open: boolean[] } => {
-    const c = clipPoly(poly, inner), east = (q: XY) => q[0] > 237.5, out: XY[] = [];
-    c.forEach((q, i) => {
-      if (!east(q)) return void out.push(q);
-      const prev = c[(i + c.length - 1) % c.length], next = c[(i + 1) % c.length];
-      if (!east(prev)) out.push(q);
-      out.push([263, q[1]]);
-      if (!east(next)) out.push(q);
-    });
-    const onB = (q: XY) => q[0] < 2.5 || q[0] > 237.5 || q[1] < 2.5 || q[1] > 237.5;
-    const open = out.map((q, i) => { const r = out[(i + 1) % out.length]; return onB(q) && onB(r) && (Math.abs(q[0] - r[0]) < 0.5 || Math.abs(q[1] - r[1]) < 0.5); });
-    return { poly: out.map(ns), open };
-  };
-  const northSea = seaPoly(pts(place(W, 'north_sea'))), southSea = seaPoly(pts(place(W, 'south_sea')));
+  const clip = (poly: XY[]) => clipPoly(poly, inner).map(ns);
   const island = ns(place(W, 'ng_island').center as XY), summit = ns(place(W, 'ng_summit').at as XY);
   const elenar = ns([60, 190]);
   const bump = (c: XY, r: number, h: number, base: number, w: number, why: string, prov: Prov, lines: string[], detail: string): Pin => ({
@@ -573,18 +534,18 @@ function regionPins(): Pin[] {
   }
   return [
     { kind: 'land-box', poly: box, seas: [nsPoly('north_sea'), nsPoly('south_sea')], band: 6, min: 20, why: 'The battle map\'s dark ground is land, up to a 6 km band along its coasts', provenance: 'book', lines: L('wg-370') },
-    { kind: 'sea', poly: northSea.poly, open: northSea.open, band: 6, depth: -150, why: 'The battle map\'s northern sea and inlet are water', provenance: 'book', lines: L('wg-370', 'wg-366') },
-    { kind: 'sea', poly: southSea.poly, open: southSea.open, band: 6, depth: -150, why: 'The battle map\'s southern sea is water', provenance: 'book', lines: L('wg-370', 'wg-369') },
-    { kind: 'land', poly: nsPoly('peninsula'), band: 16, min: 25, why: 'The peninsula dangling off Northshore\'s eastern end', provenance: 'book', lines: L('wg-375') },
+    { kind: 'sea', poly: clip(pts(place(W, 'north_sea'))), band: 6, depth: -150, why: 'The battle map\'s northern sea and inlet are water', provenance: 'book', lines: L('wg-370', 'wg-366') },
+    { kind: 'sea', poly: clip(pts(place(W, 'south_sea'))), band: 6, depth: -150, why: 'The battle map\'s southern sea is water', provenance: 'book', lines: L('wg-370', 'wg-369') },
+    { kind: 'land', poly: nsPoly('peninsula'), band: 4, min: 25, why: 'The peninsula dangling off Northshore\'s eastern end', provenance: 'book', lines: L('wg-375') },
     { kind: 'land', poly: ([[232, 102], [252, 102], [252, 124], [232, 124]] as XY[]).map(ns), band: 0, min: 25, why: 'The peninsula is attached to Northshore', provenance: 'book', lines: L('wg-375') },
-    { kind: 'land', poly: nsPoly('thaldur'), band: 30, min: 25, why: 'Thaldur, an island east of Northshore', provenance: 'book', lines: L('wg-374') },
-    { kind: 'sea', poly: ([[345, 80], [364, 80], [364, 145], [345, 145]] as XY[]).map(ns), band: 6, depth: -90, why: 'Thaldur is an island: a strait between it and the peninsula', provenance: 'book', lines: L('wg-374') },
-    { kind: 'sea', poly: ([[300, 40], [480, 40], [480, 80], [300, 80]] as XY[]).map(ns), band: 16, depth: -120, why: 'Thaldur is an island: open water north of it', provenance: 'placed by us', lines: L('wg-374') },
-    { kind: 'sea', poly: ([[300, 146], [480, 146], [480, 200], [300, 200]] as XY[]).map(ns), band: 16, depth: -120, why: 'Thaldur is an island: open water south of it', provenance: 'placed by us', lines: L('wg-374') },
+    { kind: 'land', poly: nsPoly('thaldur'), band: 12, min: 25, why: 'Thaldur, an island east of Northshore', provenance: 'book', lines: L('wg-374') },
+    { kind: 'sea-poly', poly: ([[345, 80], [364, 80], [364, 145], [345, 145]] as XY[]).map(ns), depth: -90, why: 'Thaldur is an island: a strait between it and the peninsula', provenance: 'book', lines: L('wg-374') },
+    { kind: 'sea-poly', poly: ([[300, 40], [480, 40], [480, 86], [300, 86]] as XY[]).map(ns), depth: -120, why: 'Thaldur is an island: open water north of it', provenance: 'placed by us', lines: L('wg-374') },
+    { kind: 'sea-poly', poly: ([[300, 140], [480, 140], [480, 200], [300, 200]] as XY[]).map(ns), depth: -120, why: 'Thaldur is an island: open water south of it', provenance: 'placed by us', lines: L('wg-374') },
     { kind: 'land-disk', c: ns(place(W, 'telten').at as XY), r: 5, min: 25, why: 'Telten, on Thaldur (our choice)', provenance: 'placed by us', lines: L('wg-372') },
-    { kind: 'land-disk', c: island, r: 6.3, min: 15, why: 'Northglade\'s island, about 20 km wide', provenance: 'book', lines: L('wg-362') },
-    { kind: 'sea-ring', c: island, r1: 7.6, r2: 15, depth: -35, why: 'Northglade\'s island is an island', provenance: 'book', lines: L('wg-362') },
-    bump(summit, 6.6, 430, 60, 0.85, 'Northglade\'s island: a mountain at its summit, snowy hills to the west and north', 'book', L('wg-363'), 'a summit near 490 m; the hills\' shape is ours'),
+    { kind: 'land-disk', c: island, r: 8.5, min: 15, why: 'Northglade\'s island, about 20 km wide', provenance: 'book', lines: L('wg-362') },
+    { kind: 'sea-ring', c: island, r1: 10.5, r2: 18, depth: -35, why: 'Northglade\'s island is an island', provenance: 'book', lines: L('wg-362') },
+    bump(summit, 9, 430, 60, 0.85, 'Northglade\'s island: a mountain at its summit, snowy hills to the west and north', 'book', L('wg-363'), 'a summit near 490 m; the hills\' shape is ours'),
     bump(elenar, 70, 420, 120, 0.6, 'Elenar Forest: snowy hills under thick snowy pine (Design\'s cue, c29-b2, c29-b19)', 'book', L('wg-365'), 'hills near 540 m; their shape is ours'),
     { kind: 'cover', poly: lonlatPoly([[11.2, 56.9], [15.3, 56.9], [15.3, 58.7], [11.2, 58.7]], f), biome: 'boreal pine forest', why: 'Elenar Forest is thick snowy pine forest (c29-b2, c29-b19)', provenance: 'book', lines: L('wg-365') },
     { kind: 'cover', poly: ([[180, 150], [215, 150], [215, 175], [180, 175]] as XY[]).map(ns), biome: 'boreal pine forest', why: 'Northglade: pine on snowy hills (c31-b2, c31-b5)', provenance: 'book', lines: L('wg-363') },
@@ -634,8 +595,8 @@ function dzegoPins(): Pin[] {
   ];
 }
 
-function buildBase(f: Frame, seed: number, setup: { masks: { poly: XY[]; warp: number }[]; spines: Spine[]; flat?: { c: XY; r: number }[]; domes?: { c: XY; r: number; h: number }[]; seas?: { poly: XY[]; open?: boolean[] }[] }, hills: number) {
-  const n = new Noise2(seed), warpN = new Noise2(seed + 1), ridge = new Noise2(seed + 2), hill = new Noise2(seed + 3), along = new Noise2(seed + 4), mass = new Noise2(seed + 5), fine = new Noise2(seed + 6), sea = new Noise2(seed + 7);
+function buildBase(f: Frame, seed: number, setup: { masks: { poly: XY[]; warp: number }[]; spines: Spine[]; flat?: { c: XY; r: number }[] }, hills: number) {
+  const n = new Noise2(seed), warpN = new Noise2(seed + 1), ridge = new Noise2(seed + 2), hill = new Noise2(seed + 3), along = new Noise2(seed + 4), mass = new Noise2(seed + 5);
   const z = new Float32Array(f.w * f.h);
   // the continent masks' signed distance, on a coarse grid (every 4 cells) then interpolated
   const C = 4, cw = Math.ceil(f.w / C) + 1, ch = Math.ceil(f.h / C) + 1;
@@ -645,14 +606,6 @@ function buildBase(f: Frame, seed: number, setup: { masks: { poly: XY[]; warp: n
       const p: XY = [i * C * f.dx, j * C * f.dy];
       let best = -Infinity, warp = 200;
       for (const m of setup.masks) { const d = polySigned(f, p, m.poly); if (d > best) { best = d; warp = m.warp; } }
-      // the book's seas are seas in the base terrain too, so their seabed is natural (the pins then only hold them)
-      for (const sea of setup.seas ?? []) {
-        // fade out toward the open (drawing's-edge) side, so no seam is left where the drawn sea ends
-        let dOpen = Infinity;
-        sea.poly.forEach((q, e) => { if (sea.open?.[e]) dOpen = Math.min(dOpen, segKm(f, p, q, sea.poly[(e + 1) % sea.poly.length])); });
-        const inside = -polySigned(f, p, sea.poly, sea.open) - 25, w = dOpen === Infinity ? 1 : smooth(dOpen / 120);
-        if (inside < best) best = best + (inside - best) * w;
-      }
       coarse[j * cw + i] = best;
       coarseWarp[j * cw + i] = warp;
     }
@@ -667,30 +620,20 @@ function buildBase(f: Frame, seed: number, setup: { masks: { poly: XY[]; warp: n
       // the coast: domain-warped noise at two scales, for bays, capes, peninsulas and offshore islands
       const qx = 420 * warpN.fbm(x / 1100, y / 1100, 3), qy = 420 * warpN.fbm(x / 1100 + 5.2, y / 1100 - 1.3, 3);
       const wx = x + qx, wy = y + qy;
-      const d0 = d + warp * 1.6 * n.fbm(wx / 650, wy / 650, 4) + 75 * n.fbm(wx / 140 + 9, wy / 140 - 3, 4);
-      // finer octaves near the coast only: headlands, bays, inlets and small islands at 40 km and 12 km,
-      // stronger in the cold north, where coasts are cut by ice into fjords and skerries
-      const near = Math.exp(-((d0 / 240) ** 2)), north = smooth((f.lat(y) - 58) / 5);
-      const dd = d0 + near * ((150 + 60 * north) * fine.fbm(wx / 220, wy / 220, 2) + (80 + 40 * north) * fine.fbm(wx / 70 + 3, wy / 70, 2) + (36 + 20 * north) * fine.fbm(wx / 22 - 5, wy / 22 + 8, 2) + (14 + 10 * north) * fine.ridged(wx / 8 + 7, wy / 8 - 4, 2) - 10);
+      const dd = d + warp * 1.6 * n.fbm(wx / 650, wy / 650, 4) + 75 * n.fbm(wx / 140 + 9, wy / 140 - 3, 4);
       // flat zones (the book's flat land around Meldan) damp all relief
       let flat = 0;
       for (const fz of setup.flat ?? []) flat = Math.max(flat, 1 - smooth((kmDist(f, [x, y], fz.c) - fz.r * 0.6) / (fz.r * 0.6)));
       const relief = 1 - 0.85 * flat;
       let h: number;
       if (dd >= 0) {
-        h = 25 + 280 * smooth(dd / 600) * (1 - 0.6 * flat) + relief * hills * hill.fbm(wx / 170, wy / 170, 5) * (0.35 + 0.65 * smooth(dd / 220)) + relief * 30 * smooth(dd / 40) * fine.fbm(wx / 28 + 11, wy / 28 - 7, 3);
+        h = 25 + 280 * smooth(dd / 600) * (1 - 0.6 * flat) + relief * hills * hill.fbm(wx / 170, wy / 170, 5) * (0.35 + 0.65 * smooth(dd / 220));
         // broad uplands and massifs, not only along spines
         const m = mass.ridged(wx / 420, wy / 420, 4);
         h += relief * 900 * Math.max(0, m - 0.52) * smooth(dd / 150);
       } else {
-        // a continental shelf whose width varies along the coast, a slope, then the deep floor with banks and ridges
-        const sv = Math.max(0, Math.min(1, 0.5 + 0.9 * sea.fbm(x / 450, y / 450, 3))), sw = 12 + 260 * sv * sv, shelf = smooth(-dd / sw), deep = smooth((-dd - sw * 0.8) / (260 + 220 * (0.5 + 0.5 * sea.fbm(x / 700 + 4, y / 700, 2))));
-        h = -8 - 150 * shelf - 2900 * deep + 60 * sea.fbm(x / 120, y / 120, 4) + 650 * deep * Math.max(0, sea.ridged(x / 480 + 2, y / 480 - 6, 3) - 0.55) + 90 * shelf * (1 - deep) * sea.fbm(x / 60, y / 60, 3);
-      }
-      // ice domes: broad plateaus, their edges broken by noise
-      if (dd >= 0) for (const dm of setup.domes ?? []) {
-        const dist = kmDist(f, [x + 0.5 * qx, y + 0.5 * qy], dm.c);
-        if (dist < dm.r * 1.4) h += dm.h * smooth(1 - dist / dm.r + 0.25 * fine.fbm(wx / 80, wy / 80, 3)) * (0.85 + 0.3 * fine.fbm(wx / 30, wy / 30, 2));
+        const shelf = smooth(-dd / 90), deep = smooth((-dd - 60) / 420);
+        h = -15 - 140 * shelf - 2700 * deep + 50 * hill.fbm(x / 220, y / 220, 3);
       }
       // mountain chains along spines: a warped distance, foothills, peaks that rise and fall along the chain
       for (const sp of setup.spines) {
@@ -782,8 +725,7 @@ function dropSpecks(g: GridSpec, z: Float32Array, pins: Pin[], maxCells: number)
   }
 }
 /** Seabed settles: blur sea depths (two box passes) so pinned water has no edges. Land is untouched; sea stays sea. */
-function smoothSeabed(g: GridSpec, z: Float32Array, r: number, seed: number) {
-  const bed = new Noise2(seed + 71);
+function smoothSeabed(g: GridSpec, z: Float32Array, r: number) {
   const sea = new Uint8Array(z.length);
   for (let k = 0; k < z.length; k++) sea[k] = z[k] < 0 ? 1 : 0;
   let v = new Float32Array(z.length);
@@ -794,18 +736,17 @@ function smoothSeabed(g: GridSpec, z: Float32Array, r: number, seed: number) {
     for (let x = 0; x < g.w; x++) { let acc = 0; for (let y = -r; y < g.h; y++) { if (y + r < g.h) acc += t[(y + r) * g.w + x]; if (y - r - 1 >= 0) acc -= t[(y - r - 1) * g.w + x]; if (y >= 0) o[y * g.w + x] = acc / (Math.min(g.h - 1, y + r) - Math.max(0, y - r) + 1); } }
     v = o;
   }
-  // then the seabed's own small relief comes back: banks, troughs and channels, never above sea level
-  for (let k = 0; k < z.length; k++) if (sea[k]) { const i = k % g.w, j = (k / g.w) | 0, dep = -v[k]; z[k] = Math.min(-1, v[k] + Math.min(dep * 0.6, 25 + dep * 0.08) * bed.fbm(i / 9, j / 9, 4)); }
+  for (let k = 0; k < z.length; k++) if (sea[k]) z[k] = Math.min(-1, v[k]);
 }
-function finish(g: GridSpec, z: Float32Array, pins: Pin[], seed: number, droplets: number, hScale: number, lake: [number, number, number?, number?, number?], riverKm2: number, latOf: (y: number) => number, toLL: (x: number, y: number) => XY, render: number, noRiver?: (x: number, y: number) => boolean, noLake?: (x: number, y: number) => boolean): FrameRun {
+function finish(g: GridSpec, z: Float32Array, pins: Pin[], seed: number, droplets: number, hScale: number, lake: [number, number, number?, number?], riverKm2: number, latOf: (y: number) => number, toLL: (x: number, y: number) => XY, render: number, noRiver?: (x: number, y: number) => boolean, noLake?: (x: number, y: number) => boolean): FrameRun {
   softPins(g, z, pins);
   applyPins(g, z, pins);
   erodeDroplets(g, z, droplets, seed, hScale);
   applyPins(g, z, pins);
   dropSpecks(g, z, pins, 80);
   const carved = carve(g, z, pins);
-  const hydro = hydrology(g, z, lake[0], lake[1], riverKm2, noRiver, noLake, carved, lake[2] ?? 10, lake[3] ?? Infinity, lake[4] ?? 0);
-  smoothSeabed(g, z, 3, seed);
+  const hydro = hydrology(g, z, lake[0], lake[1], riverKm2, noRiver, noLake, carved, lake[2] ?? 10, lake[3] ?? Infinity);
+  smoothSeabed(g, z, 6);
   const clim = climate(g, z, hydro.lakes, latOf);
   // forced cover (Design's checked cues and the book's forests)
   for (const p of pins) if (p.kind === 'cover') for (let k = 0; k < z.length; k++) { const q = cxy(g, k); if (z[k] >= 0 && !hydro.lakes[k] && pointInPoly(q[0], q[1], p.poly)) clim.biome[k] = B(p.biome as Biome); }
@@ -815,14 +756,14 @@ type SeedRun = { seed: number; region: FrameRun; dzego: FrameRun; meldan: FrameR
 function runSeed(seed: number, log = false): SeedRun {
   const t = (s: string) => log && console.log(`  ${s}`);
   const rs = regionSetup(seed);
-  const rz = buildBase(REGION, seed, { ...rs, seas: regionPins().flatMap((p) => (p.kind === 'sea' ? [{ poly: p.poly, open: p.open }] : [])) }, 260);
+  const rz = buildBase(REGION, seed, rs, 260);
   t('region base');
   const meldanXY = REGION.fromLL(8, 52);
-  const region = finish(REGION, rz, regionPins(), seed, 520000, 1000, [40, 50, 4, 700, 22], 5000, REGION.lat, REGION.toLL, REGION.render, undefined, (x, y) => kmDist(REGION, [x, y], meldanXY) < 130);
+  const region = finish(REGION, rz, regionPins(), seed, 520000, 1000, [40, 50, 4, 700], 3500, REGION.lat, REGION.toLL, REGION.render, undefined, (x, y) => kmDist(REGION, [x, y], meldanXY) < 130);
   t('region done');
   const ds = dzegoSetup(seed);
   const dz = buildBase(DZEGO, seed + 50, ds, 420);
-  const dzego = finish(DZEGO, dz, dzegoPins(), seed + 50, 380000, 1000, [40, 50, 3, 500, 22], 3500, DZEGO.lat, DZEGO.toLL, DZEGO.render);
+  const dzego = finish(DZEGO, dz, dzegoPins(), seed + 50, 380000, 1000, [40, 50, 3, 500], 2500, DZEGO.lat, DZEGO.toLL, DZEGO.render);
   t('dzego done');
   // cities start from the bigger frame's heights, plus fine detail
   const city = (cf: CityFrame, parent: Frame, parentZ: Float32Array, pins: (base: number) => Pin[], seedOff: number, noRiver?: (x: number, y: number) => boolean, noLake?: (x: number, y: number) => boolean) => {
@@ -903,7 +844,7 @@ function terrainChecks(r: SeedRun): Check[] {
     for (let j = Math.max(0, Math.floor(Math.min(...ys) / g.dy)); j <= Math.min(g.h - 1, Math.ceil(Math.max(...ys) / g.dy)); j++)
       for (let i = Math.max(0, Math.floor(Math.min(...xs) / g.dx)); i <= Math.min(g.w - 1, Math.ceil(Math.max(...xs) / g.dx)); i++) {
         const q: XY = [i * g.dx, j * g.dy];
-        if (polySigned(g, q, poly) > band && !islandsXY.some(([c, rr]) => kmDist(g, q, c) < rr)) { cells++; if (R.z[j * g.w + i] >= 0) { bad++; if (process.env.TV4_BAD) { const [lo, la] = REGION.toLL(q[0], q[1]); console.log('  land in book sea', id, lo.toFixed(2), la.toFixed(2), 'ns', llToFrame('northshore', lo, la).map((v) => v.toFixed(0)).join(','), 'z', R.z[j * g.w + i].toFixed(0), 'sd', polySigned(g, q, poly).toFixed(1)); } } }
+        if (polySigned(g, q, poly) > band && !islandsXY.some(([c, rr]) => kmDist(g, q, c) < rr)) { cells++; if (R.z[j * g.w + i] >= 0) bad++; }
       }
     c(`Book sea is water: ${place(W, id).name}`, place(W, id).lines, bad === 0 && cells > 0, `${cells - bad} of ${cells} cells water`);
   }
@@ -1052,30 +993,6 @@ function hypso(h: number): number[] {
   return TINT[TINT.length - 1][1];
 }
 type Layers = { composite: RGBA; hillshade: Uint8Array; tint: RGBA; water: RGBA; rivers: RGBA; forest: RGBA; w: number; h: number };
-/** For display only: a river's cell path smoothed (Chaikin, two passes) and given a gentle meander,
- * so it doesn't follow the grid's straight lines. The data layer (rivers.json) keeps the cell path. */
-function displayCourse(rv: River, seed: number): River {
-  let p = rv.points, fl = rv.flows;
-  for (let it = 0; it < 2; it++) {
-    const np: XY[] = [p[0]], nf: number[] = [fl[0]];
-    for (let i = 0; i < p.length - 1; i++) {
-      const a = p[i], b = p[i + 1];
-      np.push([a[0] * 0.75 + b[0] * 0.25, a[1] * 0.75 + b[1] * 0.25], [a[0] * 0.25 + b[0] * 0.75, a[1] * 0.25 + b[1] * 0.75]);
-      nf.push(fl[i], fl[i + 1]);
-    }
-    np.push(p[p.length - 1]); nf.push(fl[fl.length - 1]);
-    p = np; fl = nf;
-  }
-  const nz = new Noise2(seed + 404);
-  const out: XY[] = p.map((q, i) => {
-    if (i === 0 || i === p.length - 1) return q;
-    const a = p[i - 1], b = p[i + 1], tx = b[0] - a[0], ty = b[1] - a[1], tl = Math.hypot(tx, ty) || 1;
-    const step = Math.hypot(p[1][0] - p[0][0], p[1][1] - p[0][1]) * 4, amp = 0.8 * step;
-    const m = amp * nz.fbm(q[0] / (step * 7 + 1e-9), q[1] / (step * 7 + 1e-9), 2);
-    return [q[0] - (ty / tl) * m, q[1] + (tx / tl) * m];
-  });
-  return { points: out, flow_km2: rv.flow_km2, flows: fl };
-}
 function render(fr: FrameRun, exaggerate: number, seed: number): Layers {
   const g = fr.g, S = fr.render / g.w, W2 = fr.render, H2 = Math.round(g.h * S);
   const detail = new Noise2(seed + 999);
@@ -1104,12 +1021,8 @@ function render(fr: FrameRun, exaggerate: number, seed: number): Layers {
     const bio = BIOMES[fr.clim.biome[c]];
     let col: number[];
     if (h < 0 && fr.z[c] < 0) {
-      // colour by depth along a continuous ramp (shoals, shelf, slope, deep), then the seabed's own relief
-      const dep = -h;
-      col = dep < 40 ? lerpC([186, 208, 216], [160, 190, 204], dep / 40) : dep < 200 ? lerpC([160, 190, 204], [128, 162, 184], (dep - 40) / 160) : dep < 1500 ? lerpC([128, 162, 184], [92, 124, 152], Math.sqrt((dep - 200) / 1300)) : lerpC([92, 124, 152], [70, 98, 128], Math.min(1, (dep - 1500) / 2500));
-      const sgx = (hz[k + 1] - hz[k - 1]) / (2 * pxKm), sgy = (hz[k - W2] - hz[k + W2]) / (2 * pxKm);
-      const sea = Math.max(-1, Math.min(1, (-sgx + sgy) * 6));
-      col = col.map((v) => v * (0.94 + 0.08 * sea));
+      const d = Math.min(1, -h / 2400);
+      col = -h < 160 ? lerpC([176, 200, 212], [140, 172, 192], -h / 160) : lerpC([140, 172, 192], [80, 112, 140], Math.sqrt(d)); // a narrow shelf, then deep water
       water.px.set([col[0], col[1], col[2], 255], k * 4);
     } else if (fr.hydro.lakes[c]) {
       col = [138, 172, 194];
@@ -1139,11 +1052,9 @@ function render(fr: FrameRun, exaggerate: number, seed: number): Layers {
   }
   // rivers, antialiased, wider with more water
   const maxFlow = Math.max(1, ...fr.hydro.rivers.map((r) => r.flow_km2));
-  for (const river of fr.hydro.rivers) {
-    const rv = displayCourse(river, seed);
+  for (const rv of fr.hydro.rivers) {
+    const width = Math.max(0.7, 0.6 + 2.6 * Math.sqrt(rv.flow_km2 / maxFlow)) * Math.max(1, S / 2);
     for (let s = 0; s < rv.points.length - 1; s++) {
-      // width grows with the water carried at this point (about as its square root, as real channels do)
-      const width = (0.55 + 4.2 * Math.sqrt(rv.flows[s] / maxFlow)) * Math.max(1, S / 2);
       const a = rv.points[s], b = rv.points[s + 1];
       const ax = ((a[0] - g.x0) / g.dx) * S, ay = H2 - 1 - ((a[1] - g.y0) / g.dy) * S, bx = ((b[0] - g.x0) / g.dx) * S, by = H2 - 1 - ((b[1] - g.y0) / g.dy) * S;
       const steps = Math.ceil(Math.hypot(bx - ax, by - ay) * 2) + 1;
@@ -1216,7 +1127,7 @@ if (step === 'search') {
       save(`${dir}/data/height.png`, grey16Png(g.w, g.h, Uint16Array.from({ length: g.w * g.h }, (_, k) => { const j = g.h - 1 - Math.floor(k / g.w), i = k % g.w; return Math.max(0, Math.min(65535, Math.round(fr.z[j * g.w + i] + 32768))); })));
       save(`${dir}/data/biome.png`, grey8Png(g.w, g.h, Uint8Array.from({ length: g.w * g.h }, (_, k) => { const j = g.h - 1 - Math.floor(k / g.w), i = k % g.w; return fr.clim.biome[j * g.w + i]; })));
       const toOut = (q: XY) => { const [lo, la] = fr.toLL(q[0], q[1]); return [Number(lo.toFixed(5)), Number(la.toFixed(5))]; };
-      save(`${dir}/data/rivers.json`, Buffer.from(JSON.stringify({ coordinates: '[longitude, latitude]', rivers: fr.hydro.rivers.map((rv) => ({ flow_km2: rv.flow_km2, flows_km2: rv.flows, points: rv.points.map(toOut) })) }) + '\n'));
+      save(`${dir}/data/rivers.json`, Buffer.from(JSON.stringify({ coordinates: '[longitude, latitude]', rivers: fr.hydro.rivers.map((rv) => ({ flow_km2: rv.flow_km2, points: rv.points.map(toOut) })) }) + '\n'));
       save(`${dir}/data/meta.json`, Buffer.from(JSON.stringify({
         label: LABEL_FULL, license: LICENSE, seed, frame: name, recipe: `${REC}/recipe.json`,
         grid: { w: g.w, h: g.h, cell_km: Number(g.dx.toFixed(5)), x0: g.x0, y0: g.y0, projection: 'name' in fr.g && (fr.g as Frame).lon0 !== undefined && (fr.g as Frame).phi !== undefined ? `equirectangular, standard parallel ${(fr.g as Frame).phi}°, origin ${(fr.g as Frame).lon0}°E ${(fr.g as Frame).lat0}°N; x = km east, y = km north` : `km east and north of the city frame's origin` },

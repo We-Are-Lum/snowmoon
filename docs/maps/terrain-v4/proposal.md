@@ -116,7 +116,7 @@ For each seed and each frame, in `out/maps-v4/seed-N/<frame>/` (not in the repos
 - **`data/`:**
   - `height.png`: 16-bit, meters + 32768;
   - `biome.png`, with its key in `meta.json`;
-  - `rivers.json`: polylines in longitude and latitude, with the drainage area at the mouth and at every point (`flows_km2`);
+  - `rivers.json`: polylines in longitude and latitude, with drainage area;
   - `meta.json`: bounds, projection, label and license.
 
 One per seed, `out/maps-v4/seed-N/overlay.json`: the book's places, each marked "book" or "placed by us", with its lines.
@@ -129,64 +129,19 @@ One per seed, `out/maps-v4/seed-N/overlay.json`: the book's places, each marked 
 - every test result;
 - the SHA-256 of every output.
 
-`npx tsx scripts/terrain-v4.ts build --seeds=1` regenerates them. The recipe's hashes show whether a rebuild matches; I have not run a rebuild to check.
-
-## Revision 2: the owner's decisions and the realism pass (2026-10-11)
-
-**Decisions:**
-- **Seed:** 1.
-- **Thaldur and the peninsula:** their battle-map band is widened so they read as natural land.
-- **Northglade's island:** narrowed to about 20 km.
-- **Label:** the draft label stays.
-
-Seeds 2 and 3 are dropped from the outputs.
-
-**What changed:**
-- **Coastlines:**
-  - Fractal detail near the coast at four scales, about 220, 70, 22 and 8 km, for bays, headlands, inlets and small islands. It is stronger in the cold north.
-  - The book's battle-map seas are seas in the base terrain too, so their seabed is natural. The pins only hold them as water.
-  - Edges that are the drawing's border, not a coast, are left out. The seas continue 25 px past the battle map's east edge, where the open sea is. That removes the old pale rectangles and the strip of land at the edge.
-- **The Arctic:**
-  - East of Northshore the coast is irregular, with gulfs and capes about a degree deep. West of Northshore and around it, it is unchanged, so no book fact moves.
-  - Two of the three long, parallel ranges become six of different lengths, heights (about 1,300–2,500 m) and directions, some running north to south.
-  - Five ice domes of different sizes.
-- **Rivers:**
-  - Width grows with the drainage area at each point, so a river widens downstream.
-  - Rivers are traced longest first. A branch shorter than 22 cells (about 70 km) that joins another river is pruned, unless it is on the book's carved river.
-  - The drainage area needed before a river is drawn rises from 3,500 to 5,000 km² in the region, and from 2,500 to 3,500 km² in Dzego.
-  - Gentle low relief on the plains makes drainage wander instead of running in parallel lines.
-  - The render draws each river along a smoothed course. `rivers.json` keeps the exact cell path, which the downhill test checks.
-- **Shallow water:**
-  - The continental shelf's width varies along each coast, from about 12 to 270 km, so some coasts drop off steeply and others have wide shallows.
-  - The deep floor has banks and ridges.
-  - The seabed is shaded by depth on a continuous ramp (shoals, shelf, slope, deep), with its own relief. There is no uniform halo.
-- **Thaldur and the peninsula:**
-  - Their bands widen from 12 and 4 km to 30 and 16 km. The rectangles that forced open water around Thaldur become ordinary sea pins with their own band.
-  - Thaldur is now an island with an irregular coast. The peninsula keeps the drawing's long, thin shape, but its coast is ragged instead of ruled.
-  - The battle-map seas keep their 6 km band, so the book-sea test is unchanged.
-- **Northglade's island:** the land disk's radius goes from 8.5 to 6.3 km, and the ring of water around it moves inward to match. It now measures 23 km: 7 cells on the 3.1 km grid, about 20 km of land between the outer cells' centres.
-
-**Tests:** the same 113 map tests and 31 terrain checks. Seed 1 passes all of them.
-
-| Seed 1 | Before | After |
-|---|---|---|
-| Northglade's island | 27 km | 23 km |
-| Northglade's summit | 445 m | 369 m |
-| Border river drawn along its line | 100% | 95% |
-| Redshire's peak, temperature at the top | 2,237 m, −11 °C | 2,094 m, −10 °C |
-| Meldan's mountain, parliament, staircase | 386, 41, 182 m | 386, 41, 182 m |
-| Pyramid; path at the door | 498 m; 254 m | 498 m; 254 m |
-
-**Before and after**, in `docs/maps/terrain-v4/`:
-- `seed-1-region-before-after.png`;
-- `seed-1-dzego-before-after.png`;
-- `seed-1-meldan-before-after.png`;
-- `seed-1-pafogai-du-before-after.png`.
+`npx tsx scripts/terrain-v4.ts build --seeds=1,2,3` regenerates them. The recipe's hashes show whether a rebuild matches; I have not run a rebuild to check.
 
 ## Limits
 
 - **The large shapes are ours:** where the continents sit, their outlines beyond the pins, the ranges, and Dzego's shape. The book fixes only what is pinned.
-- **The peninsula is still long and thin.** That is the battle map's shape. Its coast is now irregular, but its silhouette follows the drawing.
+- **Thaldur and the peninsula still look drawn at full size.** They follow the chapter 29 battle map within a 4–12 km band. Their edges now wander inside that band, but the band is narrow, so the outlines keep some of the drawing's straight sides. Widening the band would let them look natural but hold the drawing less closely.
+- **Northglade's island comes out 27 km wide; the book says "about twenty".** The test allows it. Narrowing it is a parameter change.
 - **The city frames show terrain only.** Meldan's districts and Pafogai Du's streets are drawn over it, not carved in. Meldan's frame is uniform forest around the mountain, because the region's climate there is a single value with no local variation.
 - **Dzego's interior is dry steppe with a forested coast.** That follows from its latitude and the trade winds, with no book cue either way.
-- **The ice domes are smooth white shapes at full size.** Their snow cover is drawn as a flat colour, so a dome's surface relief barely shows.
+
+## Decisions for the owner
+
+1. **The seed:** 1, 2 or 3? All three pass. My suggestion is seed 1, as the first to pass, not on looks.
+2. **Thaldur and the peninsula:** keep the battle map's narrow band, or widen it so their coasts look natural?
+3. **Northglade's island:** narrow it toward twenty km?
+4. **The label:** keep the draft, "Terrain invented for this edition, shaped to fit the book."

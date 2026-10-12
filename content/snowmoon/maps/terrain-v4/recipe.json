@@ -5,16 +5,18 @@
     "model": "claude-coding-agent",
     "drafted": "the generator code, its masks, spines and parameters; no model generates terrain or images"
   },
-  "made": "2026-10-12T02:35:54.158Z",
+  "made": "2026-10-12T01:40:03.167Z",
   "code_version": {
-    "scripts/terrain-v4.ts": "a957e40068b99b71ae3eea22ae9a7bbb2d465052fefff09415b9227f5b9e50ef",
+    "scripts/terrain-v4.ts": "7f4c181b868a4661335af30a249fc78b7b84e729712d21a227655f7161eee786",
     "scripts/lib/terrain-core.ts": "5140c0a7e5d4357c97b4a54c000c9654c406dd6f127e249b028ee0b23b6a36d0",
     "scripts/lib/noise.ts": "ef2aba4f58c28e0cb002c0992ac3bd80dd99af8b1d4b4e5b5bf5d849047c2395",
     "scripts/lib/raster-out.ts": "24e0822f47b2552285ca49efdc1583d933ea9c84bf1722a495ad14266757194e",
     "scripts/lib/map-tests.ts": "925f5018db8e5284c2fac2e6474384d43324df3327a2883354ebb8f5370d4385"
   },
   "seeds": [
-    1
+    1,
+    2,
+    3
   ],
   "frames": {
     "region": {
@@ -125,59 +127,35 @@
           "width_km": 70
         },
         {
-          "why": "a short high range in the Arctic, north of the open sea (ours)",
+          "why": "a range in the Arctic, north of the open sea (ours)",
           "lines": [],
-          "height_m": 2455,
-          "width_km": 55
-        },
-        {
-          "why": "a range in the Arctic running north-east to south-west (ours)",
-          "lines": [],
-          "height_m": 1191,
-          "width_km": 50
-        },
-        {
-          "why": "a range in the Arctic (ours)",
-          "lines": [],
-          "height_m": 1908,
-          "width_km": 45
-        },
-        {
-          "why": "a high range in the Arctic running north to south (ours)",
-          "lines": [],
-          "height_m": 2595,
-          "width_km": 60
+          "height_m": 1590,
+          "width_km": 65
         },
         {
           "why": "a range in the Arctic, north of the United Cities (ours)",
           "lines": [],
-          "height_m": 1642,
-          "width_km": 55
-        },
-        {
-          "why": "a range in the Arctic's far east (ours)",
-          "lines": [],
-          "height_m": 2035,
-          "width_km": 60
+          "height_m": 1474,
+          "width_km": 70
         },
         {
           "why": "the Gelebor mountains, a row of small mountains outside Meldan (their place is ours)",
           "lines": [
             "wg-306"
           ],
-          "height_m": 739,
+          "height_m": 715,
           "width_km": 22
         },
         {
           "why": "western Veridian uplands (ours)",
           "lines": [],
-          "height_m": 1474,
+          "height_m": 1330,
           "width_km": 110
         },
         {
           "why": "southern Veridian range (ours)",
           "lines": [],
-          "height_m": 1495,
+          "height_m": 1825,
           "width_km": 100
         },
         {
@@ -185,7 +163,7 @@
           "lines": [
             "wg-387"
           ],
-          "height_m": 2531,
+          "height_m": 2676,
           "width_km": 55
         },
         {
@@ -193,7 +171,7 @@
           "lines": [
             "wg-378"
           ],
-          "height_m": 1726,
+          "height_m": 1904,
           "width_km": 85
         },
         {
@@ -201,7 +179,7 @@
           "lines": [
             "wg-378"
           ],
-          "height_m": 1294,
+          "height_m": 1551,
           "width_km": 75
         },
         {
@@ -209,13 +187,13 @@
           "lines": [
             "wg-378"
           ],
-          "height_m": 1350,
+          "height_m": 1326,
           "width_km": 65
         },
         {
           "why": "a range in the land to the south (ours)",
           "lines": [],
-          "height_m": 1864,
+          "height_m": 1727,
           "width_km": 95
         }
       ]
@@ -288,7 +266,7 @@
       "lines": [
         "wg-375"
       ],
-      "band_km": 16
+      "band_km": 4
     },
     {
       "frame": "region",
@@ -308,37 +286,34 @@
       "lines": [
         "wg-374"
       ],
-      "band_km": 30
+      "band_km": 12
     },
     {
       "frame": "region",
-      "kind": "sea",
+      "kind": "sea-poly",
       "why": "Thaldur is an island: a strait between it and the peninsula",
       "provenance": "book",
       "lines": [
         "wg-374"
-      ],
-      "band_km": 6
+      ]
     },
     {
       "frame": "region",
-      "kind": "sea",
+      "kind": "sea-poly",
       "why": "Thaldur is an island: open water north of it",
       "provenance": "placed by us",
       "lines": [
         "wg-374"
-      ],
-      "band_km": 16
+      ]
     },
     {
       "frame": "region",
-      "kind": "sea",
+      "kind": "sea-poly",
       "why": "Thaldur is an island: open water south of it",
       "provenance": "placed by us",
       "lines": [
         "wg-374"
-      ],
-      "band_km": 16
+      ]
     },
     {
       "frame": "region",
@@ -358,7 +333,7 @@
       "lines": [
         "wg-362"
       ],
-      "r_km": 6.3
+      "r_km": 8.5
     },
     {
       "frame": "region",
@@ -369,8 +344,8 @@
         "wg-362"
       ],
       "ring_km": [
-        7.6,
-        15
+        10.5,
+        18
       ]
     },
     {
@@ -1098,7 +1073,7 @@
             "wg-373"
           ],
           "ok": true,
-          "got": "95% of its line is a drawn river; sea at its mouth"
+          "got": "100% of its line is a drawn river; sea at its mouth"
         },
         {
           "check": "Northglade: snowy hills and pine (c31-b2, c31-b5)",
@@ -1107,7 +1082,7 @@
             "wg-358"
           ],
           "ok": true,
-          "got": "summit 369 m, boreal pine forest, 0.5 °C"
+          "got": "summit 445 m, boreal pine forest, -0.0 °C"
         },
         {
           "check": "Elenar Forest: snowy hills under thick snowy pine (c29-b2, c29-b19)",
@@ -1115,7 +1090,7 @@
             "wg-365"
           ],
           "ok": true,
-          "got": "hills to 498 m; 100% pine"
+          "got": "hills to 506 m; 100% pine"
         },
         {
           "check": "Northglade's island is an island, about twenty kilometers wide",
@@ -1123,7 +1098,7 @@
             "wg-362"
           ],
           "ok": true,
-          "got": "23 km wide"
+          "got": "27 km wide"
         },
         {
           "check": "Thaldur is an island",
@@ -1155,7 +1130,7 @@
             "wg-387"
           ],
           "ok": true,
-          "got": "2094 m, -10.3 °C at the top"
+          "got": "2237 m, -11.2 °C at the top"
         },
         {
           "check": "The United Cities' continent has many mountains",
@@ -1163,13 +1138,13 @@
             "wg-378"
           ],
           "ok": true,
-          "got": "330 peaks over 900 m"
+          "got": "338 peaks over 900 m"
         },
         {
           "check": "Colder to the north",
           "lines": [],
           "ok": true,
-          "got": "north -4.1 °C, south 10.7 °C"
+          "got": "north -3.8 °C, south 10.6 °C"
         },
         {
           "check": "Meldan is green",
@@ -1183,25 +1158,25 @@
           "check": "Rivers run downhill to the sea or off the frame (region)",
           "lines": [],
           "ok": true,
-          "got": "511 rivers, 0 climb; lakes 1841 cells"
+          "got": "1194 rivers, 0 climb; lakes 1337 cells"
         },
         {
           "check": "Rivers run downhill to the sea or off the frame (Dzego)",
           "lines": [],
           "ok": true,
-          "got": "212 rivers, 0 climb; lakes 1455 cells"
+          "got": "320 rivers, 0 climb; lakes 1435 cells"
         },
         {
           "check": "Rivers run downhill to the sea or off the frame (Meldan)",
           "lines": [],
           "ok": true,
-          "got": "151 rivers, 0 climb; lakes 0 cells"
+          "got": "157 rivers, 0 climb; lakes 0 cells"
         },
         {
           "check": "Rivers run downhill to the sea or off the frame (Pafogai Du)",
           "lines": [],
           "ok": true,
-          "got": "34 rivers, 0 climb; lakes 295325 cells"
+          "got": "32 rivers, 0 climb; lakes 293064 cells"
         },
         {
           "check": "Meldan: a tree-covered mountain in the center (c1-b13, c26-b22)",
@@ -1305,53 +1280,641 @@
           "got": "a river within 12 km"
         }
       ]
+    },
+    "2": {
+      "map_tests": "113 of 113 hold (contradictions that must fail counted as holding)",
+      "terrain_checks": [
+        {
+          "check": "Book sea is water: northern sea and inlet",
+          "lines": [
+            "wg-370",
+            "wg-366"
+          ],
+          "ok": true,
+          "got": "4702 of 4702 cells water"
+        },
+        {
+          "check": "Book sea is water: southern sea",
+          "lines": [
+            "wg-370",
+            "wg-369"
+          ],
+          "ok": true,
+          "got": "5111 of 5111 cells water"
+        },
+        {
+          "check": "Book sea is water: gulf between Redshire and Arturia",
+          "lines": [
+            "wg-388",
+            "wg-386"
+          ],
+          "ok": true,
+          "got": "3042 of 3042 cells water"
+        },
+        {
+          "check": "Every named place is on land",
+          "lines": [
+            "wg-380",
+            "wg-355"
+          ],
+          "ok": true,
+          "got": "26 places"
+        },
+        {
+          "check": "The river marking the Veridian–Arctic line runs as a river into the inlet (c30-b73)",
+          "lines": [
+            "wg-373"
+          ],
+          "ok": true,
+          "got": "95% of its line is a drawn river; sea at its mouth"
+        },
+        {
+          "check": "Northglade: snowy hills and pine (c31-b2, c31-b5)",
+          "lines": [
+            "wg-363",
+            "wg-358"
+          ],
+          "ok": true,
+          "got": "summit 456 m, boreal pine forest, -0.1 °C"
+        },
+        {
+          "check": "Elenar Forest: snowy hills under thick snowy pine (c29-b2, c29-b19)",
+          "lines": [
+            "wg-365"
+          ],
+          "ok": true,
+          "got": "hills to 485 m; 100% pine"
+        },
+        {
+          "check": "Northglade's island is an island, about twenty kilometers wide",
+          "lines": [
+            "wg-362"
+          ],
+          "ok": true,
+          "got": "27 km wide"
+        },
+        {
+          "check": "Thaldur is an island",
+          "lines": [
+            "wg-374"
+          ],
+          "ok": true,
+          "got": ""
+        },
+        {
+          "check": "The peninsula is attached to Northshore",
+          "lines": [
+            "wg-375"
+          ],
+          "ok": true,
+          "got": ""
+        },
+        {
+          "check": "Redshire's south islands are islands",
+          "lines": [
+            "wg-386"
+          ],
+          "ok": true,
+          "got": ""
+        },
+        {
+          "check": "Redshire: red mountains with snowy tops",
+          "lines": [
+            "wg-387"
+          ],
+          "ok": true,
+          "got": "2527 m, -13.1 °C at the top"
+        },
+        {
+          "check": "The United Cities' continent has many mountains",
+          "lines": [
+            "wg-378"
+          ],
+          "ok": true,
+          "got": "300 peaks over 900 m"
+        },
+        {
+          "check": "Colder to the north",
+          "lines": [],
+          "ok": true,
+          "got": "north -3.4 °C, south 10.6 °C"
+        },
+        {
+          "check": "Meldan is green",
+          "lines": [
+            "wg-306"
+          ],
+          "ok": true,
+          "got": "temperate grassland"
+        },
+        {
+          "check": "Rivers run downhill to the sea or off the frame (region)",
+          "lines": [],
+          "ok": true,
+          "got": "1233 rivers, 0 climb; lakes 1190 cells"
+        },
+        {
+          "check": "Rivers run downhill to the sea or off the frame (Dzego)",
+          "lines": [],
+          "ok": true,
+          "got": "349 rivers, 0 climb; lakes 1336 cells"
+        },
+        {
+          "check": "Rivers run downhill to the sea or off the frame (Meldan)",
+          "lines": [],
+          "ok": true,
+          "got": "155 rivers, 0 climb; lakes 0 cells"
+        },
+        {
+          "check": "Rivers run downhill to the sea or off the frame (Pafogai Du)",
+          "lines": [],
+          "ok": true,
+          "got": "39 rivers, 0 climb; lakes 273884 cells"
+        },
+        {
+          "check": "Meldan: a tree-covered mountain in the center (c1-b13, c26-b22)",
+          "lines": [
+            "wg-301",
+            "wg-312"
+          ],
+          "ok": true,
+          "got": "385 m above the city; 100% wooded"
+        },
+        {
+          "check": "Parliament about forty meters above most of Meldan",
+          "lines": [
+            "wg-322"
+          ],
+          "ok": true,
+          "got": "42 m"
+        },
+        {
+          "check": "The Order's staircase climbs about two hundred meters",
+          "lines": [
+            "wg-320"
+          ],
+          "ok": true,
+          "got": "182 m"
+        },
+        {
+          "check": "Around the mountain, Meldan is mostly flat",
+          "lines": [
+            "wg-306"
+          ],
+          "ok": true,
+          "got": "100% under a 5% slope"
+        },
+        {
+          "check": "No lake inside Meldan",
+          "lines": [
+            "wg-305"
+          ],
+          "ok": true,
+          "got": "0 lake cells"
+        },
+        {
+          "check": "Pafogai Du's grid lies on flat ground",
+          "lines": [
+            "wg-330"
+          ],
+          "ok": true,
+          "got": "0 steep cells"
+        },
+        {
+          "check": "The path's height at Dzai Gun",
+          "lines": [
+            "wg-341",
+            "wg-342"
+          ],
+          "ok": true,
+          "got": "1 m, layout 0 m"
+        },
+        {
+          "check": "The path's height at the pyramid's foot",
+          "lines": [
+            "wg-341",
+            "wg-342"
+          ],
+          "ok": true,
+          "got": "62 m, layout 60 m"
+        },
+        {
+          "check": "The path's height at the main door",
+          "lines": [
+            "wg-341",
+            "wg-342"
+          ],
+          "ok": true,
+          "got": "254 m, layout 250 m"
+        },
+        {
+          "check": "The pyramid is half a kilometer tall",
+          "lines": [
+            "wg-335"
+          ],
+          "ok": true,
+          "got": "498 m"
+        },
+        {
+          "check": "Dzego is hilly: mountain pyramids (c12-b30)",
+          "lines": [
+            "wg-348",
+            "wg-354"
+          ],
+          "ok": true,
+          "got": "70% of Dzego above 300 m"
+        },
+        {
+          "check": "Sadzu Du has a small river by the town (c12-b31, c12-b107)",
+          "lines": [
+            "wg-348"
+          ],
+          "ok": true,
+          "got": "a river within 12 km"
+        }
+      ]
+    },
+    "3": {
+      "map_tests": "113 of 113 hold (contradictions that must fail counted as holding)",
+      "terrain_checks": [
+        {
+          "check": "Book sea is water: northern sea and inlet",
+          "lines": [
+            "wg-370",
+            "wg-366"
+          ],
+          "ok": true,
+          "got": "4702 of 4702 cells water"
+        },
+        {
+          "check": "Book sea is water: southern sea",
+          "lines": [
+            "wg-370",
+            "wg-369"
+          ],
+          "ok": true,
+          "got": "5111 of 5111 cells water"
+        },
+        {
+          "check": "Book sea is water: gulf between Redshire and Arturia",
+          "lines": [
+            "wg-388",
+            "wg-386"
+          ],
+          "ok": true,
+          "got": "3042 of 3042 cells water"
+        },
+        {
+          "check": "Every named place is on land",
+          "lines": [
+            "wg-380",
+            "wg-355"
+          ],
+          "ok": true,
+          "got": "26 places"
+        },
+        {
+          "check": "The river marking the Veridian–Arctic line runs as a river into the inlet (c30-b73)",
+          "lines": [
+            "wg-373"
+          ],
+          "ok": true,
+          "got": "100% of its line is a drawn river; sea at its mouth"
+        },
+        {
+          "check": "Northglade: snowy hills and pine (c31-b2, c31-b5)",
+          "lines": [
+            "wg-363",
+            "wg-358"
+          ],
+          "ok": true,
+          "got": "summit 446 m, boreal pine forest, -0.0 °C"
+        },
+        {
+          "check": "Elenar Forest: snowy hills under thick snowy pine (c29-b2, c29-b19)",
+          "lines": [
+            "wg-365"
+          ],
+          "ok": true,
+          "got": "hills to 504 m; 100% pine"
+        },
+        {
+          "check": "Northglade's island is an island, about twenty kilometers wide",
+          "lines": [
+            "wg-362"
+          ],
+          "ok": true,
+          "got": "27 km wide"
+        },
+        {
+          "check": "Thaldur is an island",
+          "lines": [
+            "wg-374"
+          ],
+          "ok": true,
+          "got": ""
+        },
+        {
+          "check": "The peninsula is attached to Northshore",
+          "lines": [
+            "wg-375"
+          ],
+          "ok": true,
+          "got": ""
+        },
+        {
+          "check": "Redshire's south islands are islands",
+          "lines": [
+            "wg-386"
+          ],
+          "ok": true,
+          "got": ""
+        },
+        {
+          "check": "Redshire: red mountains with snowy tops",
+          "lines": [
+            "wg-387"
+          ],
+          "ok": true,
+          "got": "3310 m, -17.8 °C at the top"
+        },
+        {
+          "check": "The United Cities' continent has many mountains",
+          "lines": [
+            "wg-378"
+          ],
+          "ok": true,
+          "got": "322 peaks over 900 m"
+        },
+        {
+          "check": "Colder to the north",
+          "lines": [],
+          "ok": true,
+          "got": "north -3.6 °C, south 10.6 °C"
+        },
+        {
+          "check": "Meldan is green",
+          "lines": [
+            "wg-306"
+          ],
+          "ok": true,
+          "got": "temperate grassland"
+        },
+        {
+          "check": "Rivers run downhill to the sea or off the frame (region)",
+          "lines": [],
+          "ok": true,
+          "got": "1181 rivers, 0 climb; lakes 1369 cells"
+        },
+        {
+          "check": "Rivers run downhill to the sea or off the frame (Dzego)",
+          "lines": [],
+          "ok": true,
+          "got": "301 rivers, 0 climb; lakes 1410 cells"
+        },
+        {
+          "check": "Rivers run downhill to the sea or off the frame (Meldan)",
+          "lines": [],
+          "ok": true,
+          "got": "145 rivers, 0 climb; lakes 0 cells"
+        },
+        {
+          "check": "Rivers run downhill to the sea or off the frame (Pafogai Du)",
+          "lines": [],
+          "ok": true,
+          "got": "34 rivers, 0 climb; lakes 208363 cells"
+        },
+        {
+          "check": "Meldan: a tree-covered mountain in the center (c1-b13, c26-b22)",
+          "lines": [
+            "wg-301",
+            "wg-312"
+          ],
+          "ok": true,
+          "got": "388 m above the city; 100% wooded"
+        },
+        {
+          "check": "Parliament about forty meters above most of Meldan",
+          "lines": [
+            "wg-322"
+          ],
+          "ok": true,
+          "got": "44 m"
+        },
+        {
+          "check": "The Order's staircase climbs about two hundred meters",
+          "lines": [
+            "wg-320"
+          ],
+          "ok": true,
+          "got": "187 m"
+        },
+        {
+          "check": "Around the mountain, Meldan is mostly flat",
+          "lines": [
+            "wg-306"
+          ],
+          "ok": true,
+          "got": "100% under a 5% slope"
+        },
+        {
+          "check": "No lake inside Meldan",
+          "lines": [
+            "wg-305"
+          ],
+          "ok": true,
+          "got": "0 lake cells"
+        },
+        {
+          "check": "Pafogai Du's grid lies on flat ground",
+          "lines": [
+            "wg-330"
+          ],
+          "ok": true,
+          "got": "0 steep cells"
+        },
+        {
+          "check": "The path's height at Dzai Gun",
+          "lines": [
+            "wg-341",
+            "wg-342"
+          ],
+          "ok": true,
+          "got": "2 m, layout 0 m"
+        },
+        {
+          "check": "The path's height at the pyramid's foot",
+          "lines": [
+            "wg-341",
+            "wg-342"
+          ],
+          "ok": true,
+          "got": "62 m, layout 60 m"
+        },
+        {
+          "check": "The path's height at the main door",
+          "lines": [
+            "wg-341",
+            "wg-342"
+          ],
+          "ok": true,
+          "got": "254 m, layout 250 m"
+        },
+        {
+          "check": "The pyramid is half a kilometer tall",
+          "lines": [
+            "wg-335"
+          ],
+          "ok": true,
+          "got": "498 m"
+        },
+        {
+          "check": "Dzego is hilly: mountain pyramids (c12-b30)",
+          "lines": [
+            "wg-348",
+            "wg-354"
+          ],
+          "ok": true,
+          "got": "65% of Dzego above 300 m"
+        },
+        {
+          "check": "Sadzu Du has a small river by the town (c12-b31, c12-b107)",
+          "lines": [
+            "wg-348"
+          ],
+          "ok": true,
+          "got": "a river within 12 km"
+        }
+      ]
     }
   },
   "search": "content/snowmoon/maps/terrain-v4/search.json",
   "outputs": {
     "where": "out/maps-v4/ (not in the repository; copied to Drive)",
     "sha256": {
-      "out/maps-v4/seed-1/region/composite.png": "41e9136a133f504e26aa8fb0f520e2f856aaf55ab34a502eacbbe1124e67238d",
-      "out/maps-v4/seed-1/region/layers/hillshade.png": "70e35179b86a343b389e11a0d57adf25110ce12c56accf6e6a7a764610649c78",
-      "out/maps-v4/seed-1/region/layers/tint.png": "938a97b04e7d6ef831f335b5251e64351da40d2d6e8572765a8553fc6ea63e92",
-      "out/maps-v4/seed-1/region/layers/water.png": "90fd17308cb6455ec9a0db696c688e20700ac851f71e691da2dd090ba30051aa",
-      "out/maps-v4/seed-1/region/layers/rivers.png": "b73a72f093662e5651e8e5ecfdb185e4055c8d27f536dd4fcf200709a4bfd1f0",
-      "out/maps-v4/seed-1/region/layers/forest.png": "00e362052dae50ce960e62c8a4807100d71b6e301c68f219f73bdb00c380db5e",
-      "out/maps-v4/seed-1/region/data/height.png": "55e4e80c3c73bf370af29af0cabb0a02c3d29c448703fc644a0b3c2c04daf1e4",
-      "out/maps-v4/seed-1/region/data/biome.png": "3a3dea7e15368af5b386c0ccbc6ea145d710f268c29d2591d2f42da72b58b91a",
-      "out/maps-v4/seed-1/region/data/rivers.json": "28be44eb0566ac073dbf909ec4accacd84868a17a4e981d36eeab8b897a79d23",
+      "out/maps-v4/seed-1/region/composite.png": "9d3509a5f5e18e963f5503e1b90196fc3cc37eb4b0fa4eb2a3eb620f841c6dd0",
+      "out/maps-v4/seed-1/region/layers/hillshade.png": "edb236fb53d842977b1a140f18ab5e89a2ef766459227900fac77cd42dc16824",
+      "out/maps-v4/seed-1/region/layers/tint.png": "74099bfe3f895fb5ca957c91ad86839dfa8f37bfcbd550b3581753ed893af868",
+      "out/maps-v4/seed-1/region/layers/water.png": "88b2c15bf6123d682d766c2a1c7c7713e6c5b9cc9df0de9d5720723795627abc",
+      "out/maps-v4/seed-1/region/layers/rivers.png": "d8e34fa7f7a855cd16862ebc6d9c1d866bd05a947fb5ca5c3a462658bbdbbc61",
+      "out/maps-v4/seed-1/region/layers/forest.png": "c1ad8bd9015c5034bded2fada08958975c9748f62997c3d546d23e8993e0bca4",
+      "out/maps-v4/seed-1/region/data/height.png": "2d21070f8f2cc67401d9aa196d69b7fbe1f1a16847127867021a6b482f82cb11",
+      "out/maps-v4/seed-1/region/data/biome.png": "4d5cf41b461a3a65dd7383bc3d580351f4ec8a93833c268713d24c5071e9c75e",
+      "out/maps-v4/seed-1/region/data/rivers.json": "aec7ee6f2e1354c037d11a22379946e5d0c95d62d365425105765dfa0165597b",
       "out/maps-v4/seed-1/region/data/meta.json": "db0bd23ad36ac147cb90abe5606d852995583454b7d2b8a33d6b9bd5a2156b09",
-      "out/maps-v4/seed-1/dzego/composite.png": "24891441934c5d2abb2155abaa414d6782b0f911280d407d6619737804e4d41e",
-      "out/maps-v4/seed-1/dzego/layers/hillshade.png": "25792867aedf54d97c08140ecb9c88892c0b38e757ff7e056d84ff3c51ee95f3",
-      "out/maps-v4/seed-1/dzego/layers/tint.png": "b26e4012adb1d14499570795282d86fa122f3fb21da6cb53cfb8fe7e1fdc2b12",
-      "out/maps-v4/seed-1/dzego/layers/water.png": "6b864b55433e12410bf94aedc0aa1f72546588b5e1700d180f00384947ac3939",
-      "out/maps-v4/seed-1/dzego/layers/rivers.png": "21155d9d9c904ef2fe0ef5abe8108f61796c49bf606bd0af45d59cd2da60c56a",
-      "out/maps-v4/seed-1/dzego/layers/forest.png": "544f664a192fe2dd81a41f0b26eb8408e11995268142960ccf060eae0ef06dde",
-      "out/maps-v4/seed-1/dzego/data/height.png": "4ea4d6a2402ed3f3d12fd57fe608d8d160f442329b0b134ba3ef499950f96568",
-      "out/maps-v4/seed-1/dzego/data/biome.png": "53c8c048e0b9854d11d835585beb5628c0761f5532fc9ae8696f567b549cca8d",
-      "out/maps-v4/seed-1/dzego/data/rivers.json": "f19c3f149b35be50ebceca96a0eee2ca7fa07c6741efc1e4a8320ce06c99ceb5",
+      "out/maps-v4/seed-1/dzego/composite.png": "99ddcc38bb4257e1fee5fc0b39cd3a488f000d4c25b28cb77a4c52df693b1940",
+      "out/maps-v4/seed-1/dzego/layers/hillshade.png": "75fc4574155af8cea4f5ee73c322e92d87d06c264c717fcdf5b89f26eef5c3bc",
+      "out/maps-v4/seed-1/dzego/layers/tint.png": "33621945414d56510b412ebcf6dd3c22825cebc86d4cbc262992adca10a504ae",
+      "out/maps-v4/seed-1/dzego/layers/water.png": "b01b2aef59bfd3ced1141efdd3b563d597e35c67ac14918ab57d7afcc3305ae3",
+      "out/maps-v4/seed-1/dzego/layers/rivers.png": "478629f1653115b544e092a657284c04376bacadc36c9bc7dab511d88d2f7689",
+      "out/maps-v4/seed-1/dzego/layers/forest.png": "e1b8e3c828b3250cba8b6d179cc22188a4c8387be59f820a85518e1884572464",
+      "out/maps-v4/seed-1/dzego/data/height.png": "c1c56e6996df74d2aa483e236b4833fec2850bc8b05e2f15fa263d3d9426b113",
+      "out/maps-v4/seed-1/dzego/data/biome.png": "57408c758208c7610c925066b38c873e079ae8581272aa0dd9c944ef63bd3cd0",
+      "out/maps-v4/seed-1/dzego/data/rivers.json": "f3b76a245f6706fd340765a6b9d4a457e8935bd4c467f5838bdeaf4f7da9d340",
       "out/maps-v4/seed-1/dzego/data/meta.json": "a13bb60b75ca2b42078eb64e5ddcaabb4f48da34eb0d30a09c1ddc0164f14b79",
-      "out/maps-v4/seed-1/meldan/composite.png": "67b100a427980e034770e677f02e52f60578d3e0c8f02433d1584e0f712fc786",
-      "out/maps-v4/seed-1/meldan/layers/hillshade.png": "7bfa171a425addb7660b8d25a61a5c05de192c2df7d919d4313f874b4a0c4af9",
-      "out/maps-v4/seed-1/meldan/layers/tint.png": "dae32205ae3c6fef066eceb54853650f773039eeeecb90126d04a2e7984fdb51",
+      "out/maps-v4/seed-1/meldan/composite.png": "cdd99e71e8a29c38ff676b528cf7fe6b742d0ab3399530037ccd80a579b62f2b",
+      "out/maps-v4/seed-1/meldan/layers/hillshade.png": "b7977dcb5e0057b5be8580d4b1d1c5403016ba9b41b78f57b829976d3ce2b04c",
+      "out/maps-v4/seed-1/meldan/layers/tint.png": "3505af9c07bc7d66158c32dc26778093e3601177b1d962781a74b811567c3093",
       "out/maps-v4/seed-1/meldan/layers/water.png": "a46a0424d36cb5a313fcab03f0e76cf204095c242bd8721bfd030106a418374b",
-      "out/maps-v4/seed-1/meldan/layers/rivers.png": "fb509e1c4646fceec02537061747f9b7bbf7f4ba895684e09decfbc44532fcc1",
+      "out/maps-v4/seed-1/meldan/layers/rivers.png": "ee34ca76a248eee038d55871b124f50e28f50c0e2178514b6d995e912b3a990f",
       "out/maps-v4/seed-1/meldan/layers/forest.png": "dc675fac8c90c361be7b9b76f03a1749ea338ef62e519c5addda58865170e0c8",
-      "out/maps-v4/seed-1/meldan/data/height.png": "93ba95b62a27d7ef95094dd155cd2d405a052ca2fe5c61aaea1e9d625f7b88b7",
+      "out/maps-v4/seed-1/meldan/data/height.png": "0b25979ae98f1fd8c7e526396c314c6096ce530afbf4b4b32e97f68c5150120b",
       "out/maps-v4/seed-1/meldan/data/biome.png": "958190a2c2ff41028ac8bb3a668a9de9e97b46d0ff0aa89e7213b28e223acf9b",
-      "out/maps-v4/seed-1/meldan/data/rivers.json": "687c7e4928e226bba5444ae2658fdd9d84b0b9beaab18df6e2ffb41d7abd9a97",
+      "out/maps-v4/seed-1/meldan/data/rivers.json": "74edda5b72ff17f9b96ac8a158583dd890a9cc6b3e2ed1403ccc8ae3b60f3110",
       "out/maps-v4/seed-1/meldan/data/meta.json": "e67efea2d882393457cbc43eecbeb417bc66091760c41395237312339adca64a",
-      "out/maps-v4/seed-1/pafogai-du/composite.png": "d942194ff55e1a2fc3f99feb52483e1e8e93c672035fe340f85594e514c8a9fa",
-      "out/maps-v4/seed-1/pafogai-du/layers/hillshade.png": "c4b5326135806def2e6f906c5e0039ddbdba22d4b368e2b263106a0dc12dd168",
-      "out/maps-v4/seed-1/pafogai-du/layers/tint.png": "cb88d9404b7201bb1e3d163580cdeaa9fbf89aab42c88f053d5530a442e752fc",
-      "out/maps-v4/seed-1/pafogai-du/layers/water.png": "cf3049b3ac705dca94e3d4dea664609d6dd9a6f1d446a91d09c5c78246f892d6",
-      "out/maps-v4/seed-1/pafogai-du/layers/rivers.png": "b63977aaaf0f5add4b5790f17f169b44c495251888f8f4200607dced018cf60c",
-      "out/maps-v4/seed-1/pafogai-du/layers/forest.png": "c0382d1d4d49c21829d17a719724b7a169f13db82c2ba7cd6ddb3ac51103a1b2",
-      "out/maps-v4/seed-1/pafogai-du/data/height.png": "aa42398aa5a735084f4e0692f417398d5f794591d2bdb7518b5c09d1ee380e4f",
-      "out/maps-v4/seed-1/pafogai-du/data/biome.png": "b456d174e8dedd939280a36206f5992a4f477f5083a101dc611c0e253431f235",
-      "out/maps-v4/seed-1/pafogai-du/data/rivers.json": "30ed0967090dbb17bd60814504c4222bf870def6e4237e9d5acffc66ba00aa9a",
+      "out/maps-v4/seed-1/pafogai-du/composite.png": "f6fca28450ab89a0bca5764b86067eed3453c0f4bc69fbb37c0d705e611fb22b",
+      "out/maps-v4/seed-1/pafogai-du/layers/hillshade.png": "6e51bc8df6ed2fa9cd5703ebf193505f0c860a886b7372efb70efc0deca92ecd",
+      "out/maps-v4/seed-1/pafogai-du/layers/tint.png": "0bee29ea524b224692ff2ade6b0a4d10031f4d28aad4b35694c576ffa51b3f76",
+      "out/maps-v4/seed-1/pafogai-du/layers/water.png": "db7a86065b3451ce58d7ffdac1daaa144082f057b6d1469b9e4500b67d574e43",
+      "out/maps-v4/seed-1/pafogai-du/layers/rivers.png": "ef1fb88fe1afe2647224de8ddf8df0b3fe87dc76af4e48a9969788cc823abd50",
+      "out/maps-v4/seed-1/pafogai-du/layers/forest.png": "e6d18d1681e45cb4fe0a8c9c9321a14df09d9deda3285b3b4a50ffb9c1f766a9",
+      "out/maps-v4/seed-1/pafogai-du/data/height.png": "b5e160ed6964c65372aea2dfeac3d12d6abd68eded2b50836b772a7bab574136",
+      "out/maps-v4/seed-1/pafogai-du/data/biome.png": "8a1dd023c5943e468984fe8d301b81eba447997b4b2865c34df73944be9238e9",
+      "out/maps-v4/seed-1/pafogai-du/data/rivers.json": "a2ced1c2f4b472b7ca0221a3d9f95b7d8a0be87c7c06340bdfaf2b601d60b976",
       "out/maps-v4/seed-1/pafogai-du/data/meta.json": "89738d4bac588830694d647ea0eeaa69228dcb0fe840119cd018a55dc170239e",
-      "out/maps-v4/seed-1/overlay.json": "a28e4d6092bef1280a461b36364a333dae8695c4aa144f425d83a089d088f2d0"
+      "out/maps-v4/seed-1/overlay.json": "37652fc53072fdcc43e3a34cc4afa705144807fc21130cc43863b0a09edc48d6",
+      "out/maps-v4/seed-2/region/composite.png": "4468e0f85b7afe033ed01fb0e63a790dea810fbc8ac939fdd6c94b29221d8289",
+      "out/maps-v4/seed-2/region/layers/hillshade.png": "4a5d985c33a5dea81a460725040d0463cac457e96cb21c6c99dbd0aec1e8ea31",
+      "out/maps-v4/seed-2/region/layers/tint.png": "458e8fe6dc683a207bbac836c7da96987bc5c2290355f1ccb0807fdd8b38802c",
+      "out/maps-v4/seed-2/region/layers/water.png": "5f36d4b7d7311048a5a70cff0cf411b832575aabd02b5a5e4494a3ca8e435c39",
+      "out/maps-v4/seed-2/region/layers/rivers.png": "7de162db09b2804875d0e5451c80c0e414c37a84aea609ebf8e70469ed6ef00e",
+      "out/maps-v4/seed-2/region/layers/forest.png": "40f1f69aa41c6c2bc4a53acdead1de17c1b8571d593e103e4e163080744bf5cf",
+      "out/maps-v4/seed-2/region/data/height.png": "57fdd51733eaa1aac99954779d38a91f5f48ecb6f90044395760ab2215806830",
+      "out/maps-v4/seed-2/region/data/biome.png": "dcde3c8922f1b1e21fcd5109f7bc5788e1149d65642bf39a866053fdc8a288f4",
+      "out/maps-v4/seed-2/region/data/rivers.json": "5e8b4191c034d1797272c0fa430667268025fd4ff10c0daad8b9659792b50b45",
+      "out/maps-v4/seed-2/region/data/meta.json": "1288b3a4cc0e9ca410fd1b8e0584ffd3614d5fb589b45c025ecd9857e9180c0c",
+      "out/maps-v4/seed-2/dzego/composite.png": "ce4dd67a2a8051ef5b8280a43b22bccbfdf9fc9064291559665f8fcf5b5cc69f",
+      "out/maps-v4/seed-2/dzego/layers/hillshade.png": "5dce6a89c66d0b3b3b21e9121bfccc83073a614dc9f7acb375b90219e50c9450",
+      "out/maps-v4/seed-2/dzego/layers/tint.png": "c63fce27c541c0477d2f750ebb26a49b57c6199b1f36d1344f7211ec8d12be86",
+      "out/maps-v4/seed-2/dzego/layers/water.png": "d9c1fd09d2660506cba396af29db901201655bdfd4b6a6de7da039aba1dd0a16",
+      "out/maps-v4/seed-2/dzego/layers/rivers.png": "10ab4f5dddde3db211baac2e28abe77b4f92915b6b05309d8add190751484f13",
+      "out/maps-v4/seed-2/dzego/layers/forest.png": "c8a0269fe96c4b8194b78df5f06c0c5e972f1b9272fa9d02a5e24cacd1ce673c",
+      "out/maps-v4/seed-2/dzego/data/height.png": "0d67ab81acebdcaab8a9be98041b326b9d35efc493c2cb41ec1d028d3b64192e",
+      "out/maps-v4/seed-2/dzego/data/biome.png": "51fbdf8934f1a238fcdb9e3d4afc2d0f28deeb8d1d14076ea1c8ab3d8cfde958",
+      "out/maps-v4/seed-2/dzego/data/rivers.json": "b51ed826cf665aa8d273527be5dd6b2ebe1c4b65648ee89edae2add94c438cf0",
+      "out/maps-v4/seed-2/dzego/data/meta.json": "45537e08a91f799e6003f646bbfb3b5efe34d5f1bd51c6e368a3562025ec0447",
+      "out/maps-v4/seed-2/meldan/composite.png": "ee4f1586501481822ed1660151c8e70dab6b2cc5237f38ce607b1bd201c00f11",
+      "out/maps-v4/seed-2/meldan/layers/hillshade.png": "cf1c35346b8b8b7ee56196cf340949227aae4898257a2994cf61083941694561",
+      "out/maps-v4/seed-2/meldan/layers/tint.png": "ef50ebe06016afc121315e5909b7269618ba8158d30034e618bc0ef303abf5f9",
+      "out/maps-v4/seed-2/meldan/layers/water.png": "a46a0424d36cb5a313fcab03f0e76cf204095c242bd8721bfd030106a418374b",
+      "out/maps-v4/seed-2/meldan/layers/rivers.png": "c97ebc224d124b66bb80e5331b6a9ade16d97cf4c0883112b75ceadfb915ca66",
+      "out/maps-v4/seed-2/meldan/layers/forest.png": "e118bc0fc59f22a3add0cfec04fd041dca60f17863bc15f9767ce492476c7a25",
+      "out/maps-v4/seed-2/meldan/data/height.png": "8ef2354552fbdd16cd294c6138c2c13b39678bb0c426b17b3d5b70822c5d146c",
+      "out/maps-v4/seed-2/meldan/data/biome.png": "958190a2c2ff41028ac8bb3a668a9de9e97b46d0ff0aa89e7213b28e223acf9b",
+      "out/maps-v4/seed-2/meldan/data/rivers.json": "86c0eef8887ece8393ebc5304069973721e4b8e946add1fa7a043766eb2ba127",
+      "out/maps-v4/seed-2/meldan/data/meta.json": "56bccb14d6b9fb46f7ef8c704f13a258c6c1b48c3b20122a22fd45bb04cb22fd",
+      "out/maps-v4/seed-2/pafogai-du/composite.png": "25ced75209e4fba897b5b88c66499eed37eaf8db82756e48e5fda5812033f701",
+      "out/maps-v4/seed-2/pafogai-du/layers/hillshade.png": "ca90c453c72b80f9fc31a4e5b5ff4786f09d1ccb84ad7b9f1987e2da36e541ed",
+      "out/maps-v4/seed-2/pafogai-du/layers/tint.png": "090ed2c6cd1f49db4aa056de1d9706a26df53d3207d2d463facda215eed02e05",
+      "out/maps-v4/seed-2/pafogai-du/layers/water.png": "5c37d6f15b64cd457a49e839c0f3b7a8e5ab9cfd52674e403bf2c46a5ed55e44",
+      "out/maps-v4/seed-2/pafogai-du/layers/rivers.png": "3869804d2664adc999dcaad51184262638af2ba9563703603300b6834186689d",
+      "out/maps-v4/seed-2/pafogai-du/layers/forest.png": "f5229af2fe40d4b3b2960d96e38affb830c8f9cdbef5199937473987b57b3c98",
+      "out/maps-v4/seed-2/pafogai-du/data/height.png": "23c52d509679733f058061c132956640c6d945f892ed22ab791efb3f4e750bb6",
+      "out/maps-v4/seed-2/pafogai-du/data/biome.png": "97d66c41a4f92995bd8a49a8253a9cfdb393af53b4ede2f5b5e177caf4a09583",
+      "out/maps-v4/seed-2/pafogai-du/data/rivers.json": "c24a6a09501f08c6252b3e3d2658989b189413a1b74b127ee1400bbd9229889f",
+      "out/maps-v4/seed-2/pafogai-du/data/meta.json": "257d82dc462d33c60e68b3cecc628ed0accd566cd291e35b23b2344ce48764ad",
+      "out/maps-v4/seed-2/overlay.json": "eca48e09ad202c4971dd0bb85b50db2587b212e86f80f1677c00e2b270e47bb0",
+      "out/maps-v4/seed-3/region/composite.png": "2d42097f4befd2efacda8a51078ec07856a0f42eb5a10776b6cafdb26c1fa4a0",
+      "out/maps-v4/seed-3/region/layers/hillshade.png": "fc9e018af67781595f9c3b3e91bd8dacbb84d86981cd043772828ea7508353d4",
+      "out/maps-v4/seed-3/region/layers/tint.png": "644f2608577b2fa2dffe133ad6c99e98a386008801829bb2f2e2031219218b55",
+      "out/maps-v4/seed-3/region/layers/water.png": "4e2821411893bdc666bb51f0c91e2c0748d88d3857cd48f0a0e7cebd073e3a94",
+      "out/maps-v4/seed-3/region/layers/rivers.png": "cbced0cd2a8fb2d0612032d94a993fecb7d642acde2d000392279bf1b5985c17",
+      "out/maps-v4/seed-3/region/layers/forest.png": "bf762b75d4bef22d930cb98ea1850d467fa60b6a49f6c2fd86dba9416026e68a",
+      "out/maps-v4/seed-3/region/data/height.png": "c4b601f7d06ff90616f475690fe86769527296e24cd63559f01a31fc3114bc32",
+      "out/maps-v4/seed-3/region/data/biome.png": "27160c40ada45879f8e2ad7e2c0d0f223b29487fb2b4fc2eb61e312cbcbc9c36",
+      "out/maps-v4/seed-3/region/data/rivers.json": "f3405bbd91f71d558ea8124ca71f9b95155d8b1ba42f618932447187e9c3e335",
+      "out/maps-v4/seed-3/region/data/meta.json": "bd6ce5a5450856bcb6027f112cfaf11dafba1c452d2f357efc31ba51c2da157f",
+      "out/maps-v4/seed-3/dzego/composite.png": "1eddbb3b3df33bcf190f55cf2bd966515e7ac8dc90eddfa5d223834704deae10",
+      "out/maps-v4/seed-3/dzego/layers/hillshade.png": "5c52da7eef3ef6949fb8648743cca017815262d31d339343f2a559a89bbbedce",
+      "out/maps-v4/seed-3/dzego/layers/tint.png": "689dce8215a7bda61e3969a95312c0c265f636b96f0334d5b45390c4460f9f04",
+      "out/maps-v4/seed-3/dzego/layers/water.png": "20217a9df4d2379be6caadd2436386a65c7e9459c0301911b106a8114c7f0038",
+      "out/maps-v4/seed-3/dzego/layers/rivers.png": "b0d091f8f855083bd4a6a9c92be60f5cd926707f63457b0027817166ee516448",
+      "out/maps-v4/seed-3/dzego/layers/forest.png": "2b16460c8dd2eb566ace2dca853bd1851b6111be931162009f0fac45af2a6357",
+      "out/maps-v4/seed-3/dzego/data/height.png": "2b1cc238a09d168e6ab3c3cb2455f65b726caac11cbeaad482707774271b23e7",
+      "out/maps-v4/seed-3/dzego/data/biome.png": "cf250a29d137f579854f2fa9103d210fbaf043bc1b60ae8cb39252a85f57eadb",
+      "out/maps-v4/seed-3/dzego/data/rivers.json": "34a9de3af1e023fd8a63b41de47d14cb5a38c8046c95d8914b274797f7f22dd5",
+      "out/maps-v4/seed-3/dzego/data/meta.json": "adf8e29fa47f727bd4f3b6c63e27384b8f5a6671d4b606a5a32995caf528579c",
+      "out/maps-v4/seed-3/meldan/composite.png": "a4b5459095b91f10f4d5db330d0acff5841d25e0f2c991f779161ef387d560a7",
+      "out/maps-v4/seed-3/meldan/layers/hillshade.png": "174fdb777103786f72fb1f46f50150892883d2bc661475020cdc4ba30096c4f2",
+      "out/maps-v4/seed-3/meldan/layers/tint.png": "fe72c4a343962699eebbdf2346e7e462f382057c59544ea148bb32e41e47d22f",
+      "out/maps-v4/seed-3/meldan/layers/water.png": "a46a0424d36cb5a313fcab03f0e76cf204095c242bd8721bfd030106a418374b",
+      "out/maps-v4/seed-3/meldan/layers/rivers.png": "f928dd445a584efc9b5a99b4f3459f1cbf5aed9cb58914ab35683038e9cd0393",
+      "out/maps-v4/seed-3/meldan/layers/forest.png": "0caf0c80108ee6e205139e45df709f191de562a89e6b39294d5f807591fffb8b",
+      "out/maps-v4/seed-3/meldan/data/height.png": "9d7058b22881c2f11cb11fe1f309a34ab2b038ddcebb1836fbaa8a0976ba6d8d",
+      "out/maps-v4/seed-3/meldan/data/biome.png": "958190a2c2ff41028ac8bb3a668a9de9e97b46d0ff0aa89e7213b28e223acf9b",
+      "out/maps-v4/seed-3/meldan/data/rivers.json": "245ae21ddc39f11f36ef770a65d52e04d2bb3a9a7a4c8a83afe9553a2a2a8950",
+      "out/maps-v4/seed-3/meldan/data/meta.json": "5b0dd5652fb78fa5d9a98a5a00c00fafc541e3f4adf010199637f5e5ce4a08a1",
+      "out/maps-v4/seed-3/pafogai-du/composite.png": "d2caee3dfe01268ae4080c6139ed56c43e0724202b2653a21bf98f91a5dcefd7",
+      "out/maps-v4/seed-3/pafogai-du/layers/hillshade.png": "c24756388c0d1a997f2751b4bfaed1e7c6960712d84d9ed1150f0a154cdf2e1e",
+      "out/maps-v4/seed-3/pafogai-du/layers/tint.png": "269a3904e17184b010c16c05bc6eca88ff7d2e92d32ea3110992aca3b323a9c2",
+      "out/maps-v4/seed-3/pafogai-du/layers/water.png": "bef81595cb638892569f271f10f22a452b17ac93bcad8c3a8bebb37d4e1c2474",
+      "out/maps-v4/seed-3/pafogai-du/layers/rivers.png": "5471c43aa9aaf08c58c2a11f6b5765352ab2889477207a39b484a41d7338cd9f",
+      "out/maps-v4/seed-3/pafogai-du/layers/forest.png": "a6799b3c1ed723df73114e0c70ebcc063d2230c9ba1b5051d403859385ccd35c",
+      "out/maps-v4/seed-3/pafogai-du/data/height.png": "1182a9a587d278e1ed2d80715020287511ec568a426a7248e4eb6ccac6295476",
+      "out/maps-v4/seed-3/pafogai-du/data/biome.png": "c7295f0017c377342efef2c4fc3dc5f02d1120ecfa06b8f47ec5ca1ec3022ba8",
+      "out/maps-v4/seed-3/pafogai-du/data/rivers.json": "6d1f87402168532af470e532d375f46baee628c73ed2285d6ea0ba4a5fbe3bef",
+      "out/maps-v4/seed-3/pafogai-du/data/meta.json": "238cac60f14b5f51c9449be5c7f1039d06b3ecb66bca2193d3ce1e677a6494ae",
+      "out/maps-v4/seed-3/overlay.json": "a553ae69b2248e1baf5e15169d1d636a1f39a46ae546dd17f750cb113da8b89d"
     }
   }
 }
