@@ -887,6 +887,9 @@ function generatedMaps(r: SeedRun) {
   return { world: w, meldan: m, pafogai: structuredClone(maps['pafogai-du']), missing };
 }
 
+/** How far inside each book sea its "is water" test starts (km from the drawn line). v4 holds the drawn coasts within
+ * 6 km; maps v5 lets the battle map's coasts move within 20 km (owner, 2026-10-12) and tests them from 20 km in. */
+const BOOK_SEA_BAND: Record<'north_sea' | 'south_sea' | 'redshire_gulf', number> = { north_sea: 6, south_sea: 6, redshire_gulf: 15 };
 type Check = { id: string; lines: string[]; ok: boolean; got: string };
 function terrainChecks(r: SeedRun): Check[] {
   const out: Check[] = [];
@@ -896,7 +899,7 @@ function terrainChecks(r: SeedRun): Check[] {
   const regionAt = (frame: string, p: XY) => { const [lo, la] = LL(p, frame); return at(R, REGION.fromLL(lo, la)); };
   // book seas are water: every cell more than 6 km inside each book sea, apart from the book's own islands in it
   const islandsXY: [XY, number][] = [[(() => { const [lo, la] = nsLL(place(W, 'ng_island').center as XY); return REGION.fromLL(lo, la); })(), 12], [(() => { const [lo, la] = ucLL(place(W, 'redshire_islands').at as XY); return REGION.fromLL(lo, la); })(), 18]];
-  for (const [id, frame, band] of [['north_sea', 'northshore', 6], ['south_sea', 'northshore', 6], ['redshire_gulf', 'uc', 15]] as [string, string, number][]) {
+  for (const [id, frame, band] of [['north_sea', 'northshore', BOOK_SEA_BAND.north_sea], ['south_sea', 'northshore', BOOK_SEA_BAND.south_sea], ['redshire_gulf', 'uc', BOOK_SEA_BAND.redshire_gulf]] as [string, string, number][]) {
     const poly = pts(place(W, id)).map((q) => { const [lo, la] = LL(q, frame); return REGION.fromLL(lo, la); });
     let bad = 0, cells = 0;
     const xs = poly.map((q) => q[0]), ys = poly.map((q) => q[1]);
@@ -1310,6 +1313,6 @@ if (!isMain) {
 export {
   W, LL, nsLL, ucLL, llToFrame, projFrame, cityFrame, REGION, DZEGO, MELDAN, PAFOGAI, kmDist, polySigned, bilinear, applyPins,
   regionPins, dzegoPins, meldanPinsV4, pafogaiPinsV4, finish, generatedMaps, terrainChecks, testSeed, render, hydrology, climate,
-  BIOMES, LABEL, smooth, place, pts, maps, cxy, idx, softPins, erodeDroplets, carve, dropSpecks, B, FOREST,
+  BIOMES, LABEL, smooth, place, pts, maps, cxy, idx, softPins, erodeDroplets, carve, dropSpecks, B, FOREST, BOOK_SEA_BAND, clipPoly,
 };
 export type { Frame, CityFrame, FrameRun, SeedRun, Pin, Layers, Check };

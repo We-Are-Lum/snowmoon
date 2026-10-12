@@ -1,0 +1,155 @@
+{
+  "made": "2026-10-12T16:35:02.626Z",
+  "note": "Real islands of about Thaldur's size (half to twice its drawn area) on ETOPO 2022 at 2 arc-minutes, each turned (15° steps) and mirrored to overlap Thaldur's drawn outline; scored by the overlap, with a bonus for 300 to 2,500 m of relief. Famous islands excluded.",
+  "excluded": [
+    "Sicily",
+    "Sardinia",
+    "Corsica",
+    "Cyprus",
+    "Crete",
+    "Jamaica",
+    "Puerto Rico",
+    "Hawaii",
+    "Taiwan",
+    "Hainan",
+    "Sri Lanka",
+    "Vancouver Island",
+    "Tasmania",
+    "Shikoku",
+    "Kyushu",
+    "Long Island",
+    "Trinidad",
+    "Mallorca",
+    "Bali",
+    "Iceland",
+    "Hokkaido",
+    "Sakhalin",
+    "Svalbard",
+    "Zealand",
+    "Isle of Man",
+    "Newfoundland",
+    "Cape Breton"
+  ],
+  "candidates": [
+    {
+      "lon": -59.451690395163624,
+      "lat": -51.74553097737157,
+      "areaKm2": 16120,
+      "maxM": 481,
+      "rot": 0,
+      "mirror": false,
+      "iou": 0.6715893108298172,
+      "score": 0.7715893108298172
+    },
+    {
+      "lon": 124.9513572208229,
+      "lat": 11.552676447824183,
+      "areaKm2": 20787,
+      "maxM": 958,
+      "rot": 90,
+      "mirror": true,
+      "iou": 0.6038732394366197,
+      "score": 0.7038732394366197
+    },
+    {
+      "lon": -153.36378295581602,
+      "lat": 57.58252055681001,
+      "areaKm2": 13712,
+      "maxM": 990,
+      "rot": 45,
+      "mirror": false,
+      "iou": 0.5650730411686588,
+      "score": 0.6650730411686587
+    },
+    {
+      "lon": -99.09808729749369,
+      "lat": 72.67185643485433,
+      "areaKm2": 34829,
+      "maxM": 393,
+      "rot": 270,
+      "mirror": false,
+      "iou": 0.5621978021978022,
+      "score": 0.6621978021978022
+    },
+    {
+      "lon": 177.9786742509438,
+      "lat": -17.831278170605415,
+      "areaKm2": 11115,
+      "maxM": 1081,
+      "rot": 345,
+      "mirror": false,
+      "iou": 0.509705248023005,
+      "score": 0.609705248023005
+    },
+    {
+      "lon": 117.85293458683032,
+      "lat": -8.627921716741483,
+      "areaKm2": 15424,
+      "maxM": 2231,
+      "rot": 180,
+      "mirror": true,
+      "iou": 0.5096573208722741,
+      "score": 0.6096573208722741
+    },
+    {
+      "lon": 125.10907428067651,
+      "lat": -9.251738726648512,
+      "areaKm2": 28701,
+      "maxM": 2445,
+      "rot": 30,
+      "mirror": false,
+      "iou": 0.5095471903982542,
+      "score": 0.6095471903982542
+    },
+    {
+      "lon": 122.46472428964267,
+      "lat": 11.163345083126131,
+      "areaKm2": 12455,
+      "maxM": 1461,
+      "rot": 330,
+      "mirror": true,
+      "iou": 0.48662492885600456,
+      "score": 0.5866249288560046
+    },
+    {
+      "lon": 119.9618397946158,
+      "lat": -9.765977621910594,
+      "areaKm2": 10869,
+      "maxM": 1003,
+      "rot": 345,
+      "mirror": true,
+      "iou": 0.4768353528153956,
+      "score": 0.5768353528153956
+    },
+    {
+      "lon": -132.19062420770595,
+      "lat": 53.35106854034924,
+      "areaKm2": 11340,
+      "maxM": 674,
+      "rot": 285,
+      "mirror": false,
+      "iou": 0.4691011235955056,
+      "score": 0.5691011235955056
+    },
+    {
+      "lon": 128.0156593821003,
+      "lat": 0.8806522797779905,
+      "areaKm2": 18585,
+      "maxM": 1088,
+      "rot": 105,
+      "mirror": false,
+      "iou": 0.461283185840708,
+      "score": 0.561283185840708
+    },
+    {
+      "lon": 123.00359168532412,
+      "lat": 10.036409197461765,
+      "areaKm2": 13015,
+      "maxM": 1783,
+      "rot": 225,
+      "mirror": false,
+      "iou": 0.4447424892703863,
+      "score": 0.5447424892703863
+    }
+  ]
+}

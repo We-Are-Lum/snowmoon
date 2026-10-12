@@ -1,11 +1,11 @@
 {
   "short_label": "AI map · by Snowmoon Party",
-  "label": "Map made with AI-written code from real public elevation data, reshaped to fit the book. Sources in the recipe. Made by Snowmoon Party, not by the author. (Draft label.) The heights are real, moved and possibly mirrored, then reshaped by code written by an AI model, Claude (the coding agent, a closed model); no image model. Every book fact is pinned.",
+  "label": "Map made with AI-written code from real public elevation data, reshaped to fit the book. Sources in the recipe. Made by Snowmoon Party, not by the author. (Label accepted by the owner, 2026-10-12.) The heights are real, moved and possibly mirrored, then reshaped by code written by an AI model, Claude (the coding agent, a closed model); no image model. Every book fact is pinned.",
   "license": "Terrain for Snowmoon, the book by Vitalik Buterin, adapted from public-domain elevation data (see the recipe), 2026-10-12. GPL-3.0, like the book.",
-  "made": "2026-10-12T15:37:48.995Z",
+  "made": "2026-10-12T17:37:43.300Z",
   "code_version": {
-    "scripts/terrain-v5.ts": "9d3d49bb0066b5f01e66cbc9fbbdd164b5cc2a7b0131ff3bc09f727da26dc9d5",
-    "scripts/terrain-v4.ts": "226b143a6e29175971daaeba4e7b67740777c6f08469a04bdcac4ebece1dbf8b",
+    "scripts/terrain-v5.ts": "1085bacfdb0707059d4b56cd31f27d5edaf3160affbd670530a1b7cf573a1949",
+    "scripts/terrain-v4.ts": "91619fb42a7d8e350e9654ad4f1ad2c8be06e50884a461dae57b466715843f23",
     "scripts/lib/geotiff-lite.ts": "b439401048dbfe2c7c46b4dbce41979e1e7d13e4f33243919558844d019acdc0",
     "scripts/lib/terrain-core.ts": "5140c0a7e5d4357c97b4a54c000c9654c406dd6f127e249b028ee0b23b6a36d0",
     "scripts/lib/noise.ts": "ef2aba4f58c28e0cb002c0992ac3bd80dd99af8b1d4b4e5b5bf5d849047c2395",
@@ -80,12 +80,24 @@
         "East African rift lakes"
       ],
       "tests": {
+        "thaldur_island": {
+          "source_centre_lon_lat": [
+            124.95,
+            11.55
+          ],
+          "area_km2": 20787,
+          "rotation_deg": 90,
+          "mirrored": true,
+          "scale": 1,
+          "overlap_with_drawn_outline": 0.6,
+          "dataset": "ETOPO 2022 v1, 60 arc-second"
+        },
         "redshire_range_raised_m": 25,
         "seam_checks": [
           {
             "check": "Seam: no straight run longer than 80 km in the coastline where the pipeline moved it (half the run or more)",
-            "ok": true,
-            "got": "none"
+            "ok": false,
+            "got": "1 runs, longest 95 km"
           },
           {
             "check": "Anywhere: no straight run longer than 80 km in the coastline",
@@ -95,7 +107,7 @@
           {
             "check": "Seam: no straight run longer than 80 km in the 50 m depth contour where the pipeline moved it (half the run or more)",
             "ok": false,
-            "got": "2 runs, longest 108 km"
+            "got": "1 runs, longest 97 km"
           },
           {
             "check": "Anywhere: no straight run longer than 80 km in the 50 m depth contour",
@@ -105,12 +117,12 @@
           {
             "check": "Seam: no straight run longer than 80 km in the 200 m depth contour where the pipeline moved it (half the run or more)",
             "ok": false,
-            "got": "3 runs, longest 140 km"
+            "got": "2 runs, longest 99 km"
           },
           {
             "check": "Anywhere: no straight run longer than 80 km in the 200 m depth contour",
             "ok": false,
-            "got": "longest straight run 147 km (starting near 32.1°, 53.5° in the book's frame)"
+            "got": "longest straight run 265 km (starting near 38.7°, 52.3° in the book's frame)"
           },
           {
             "check": "Seam: no straight run longer than 80 km in the 1000 m depth contour where the pipeline moved it (half the run or more)",
@@ -120,12 +132,42 @@
           {
             "check": "Anywhere: no straight run longer than 80 km in the 1000 m depth contour",
             "ok": false,
-            "got": "longest straight run 151 km (starting near 54.2°, 54.2° in the book's frame)"
+            "got": "longest straight run 141 km (starting near 82.1°, 59.0° in the book's frame)"
+          },
+          {
+            "check": "Seam: no right-angle corner (both legs straight for 20 km) in the coastline where the pipeline moved it",
+            "ok": true,
+            "got": "0 (0 anywhere)"
+          },
+          {
+            "check": "Seam: no right-angle corner (both legs straight for 20 km) in the 50 m depth contour where the pipeline moved it",
+            "ok": true,
+            "got": "0 (0 anywhere)"
+          },
+          {
+            "check": "Seam: no right-angle corner (both legs straight for 20 km) in the 200 m depth contour where the pipeline moved it",
+            "ok": true,
+            "got": "0 (0 anywhere)"
+          },
+          {
+            "check": "Seam: no right-angle corner (both legs straight for 20 km) in the 1000 m depth contour where the pipeline moved it",
+            "ok": true,
+            "got": "0 (0 anywhere)"
+          },
+          {
+            "check": "Seam: no needles (land or sea one cell, about 3 km, wide) where the pipeline changed the terrain",
+            "ok": false,
+            "got": "15 cells (21 anywhere, mostly real coast)"
+          },
+          {
+            "check": "Seam: no flat stamped areas (moved by more than 30 m, almost no relief, 200 km² or more)",
+            "ok": false,
+            "got": "6 areas, largest 4560 km²"
           },
           {
             "check": "No sharp depth step across the Northshore blend (cell-to-cell steps within the real seabed's own range)",
             "ok": true,
-            "got": "blend band: 99th percentile 266 m, largest 1289 m; real seabed around it: 458 m, 1908 m"
+            "got": "blend band: 99th percentile 221 m, largest 1298 m; real seabed around it: 404 m, 1717 m"
           },
           {
             "check": "No lake inside Pafogai Du (the grid and 1 km around it)",
@@ -134,7 +176,19 @@
           }
         ],
         "seam_numbers": {
-          "seam_runs_over_80km_coast": [],
+          "seam_runs_over_80km_coast": [
+            {
+              "km": 95,
+              "from_lon_lat": [
+                38.7,
+                52.3
+              ],
+              "to_lon_lat": [
+                39.3,
+                51.8
+              ]
+            }
+          ],
           "longest_straight_km_coast": 137.6,
           "straight_runs_over_80km_coast": [
             {
@@ -162,8 +216,19 @@
             {
               "km": 95,
               "from_lon_lat": [
-                32.2,
-                53.1
+                38.7,
+                52.3
+              ],
+              "to_lon_lat": [
+                39.3,
+                51.8
+              ]
+            },
+            {
+              "km": 95,
+              "from_lon_lat": [
+                32.3,
+                53
               ],
               "to_lon_lat": [
                 33,
@@ -182,38 +247,27 @@
               ]
             },
             {
-              "km": 81,
+              "km": 82,
               "from_lon_lat": [
                 40,
                 51.2
               ],
               "to_lon_lat": [
-                40.4,
+                40.5,
                 50.8
               ]
             }
           ],
           "seam_runs_over_80km_50m": [
             {
-              "km": 108,
+              "km": 97,
               "from_lon_lat": [
-                19.1,
-                58.2
+                22.8,
+                56.6
               ],
               "to_lon_lat": [
-                17.3,
-                57.5
-              ]
-            },
-            {
-              "km": 85,
-              "from_lon_lat": [
-                31.1,
-                54.1
-              ],
-              "to_lon_lat": [
-                31.7,
-                53.6
+                23,
+                57.4
               ]
             }
           ],
@@ -231,53 +285,97 @@
               ]
             },
             {
-              "km": 139,
+              "km": 150,
               "from_lon_lat": [
-                53.5,
-                53.8
+                38.7,
+                52.3
               ],
               "to_lon_lat": [
-                55.2,
-                53.5
+                39.6,
+                51.5
               ]
             },
             {
-              "km": 108,
+              "km": 147,
               "from_lon_lat": [
-                19.1,
+                39.8,
+                51.5
+              ],
+              "to_lon_lat": [
+                40.7,
+                50.7
+              ]
+            },
+            {
+              "km": 126,
+              "from_lon_lat": [
+                28.2,
+                56.8
+              ],
+              "to_lon_lat": [
+                28.7,
+                55.9
+              ]
+            },
+            {
+              "km": 115,
+              "from_lon_lat": [
+                32.1,
+                53.1
+              ],
+              "to_lon_lat": [
+                33,
+                52.6
+              ]
+            },
+            {
+              "km": 97,
+              "from_lon_lat": [
+                24.1,
                 58.2
               ],
               "to_lon_lat": [
-                17.3,
-                57.5
+                25.2,
+                57.8
               ]
             },
             {
-              "km": 96,
+              "km": 97,
               "from_lon_lat": [
-                59.8,
+                22.8,
+                56.6
+              ],
+              "to_lon_lat": [
+                23,
+                57.4
+              ]
+            },
+            {
+              "km": 95,
+              "from_lon_lat": [
+                23.3,
+                58.7
+              ],
+              "to_lon_lat": [
+                24.1,
+                58.2
+              ]
+            },
+            {
+              "km": 90,
+              "from_lon_lat": [
+                30.3,
+                54.4
+              ],
+              "to_lon_lat": [
+                30.9,
                 53.9
-              ],
-              "to_lon_lat": [
-                61,
-                53.7
               ]
             },
             {
-              "km": 91,
+              "km": 90,
               "from_lon_lat": [
-                50.5,
-                54.1
-              ],
-              "to_lon_lat": [
-                51.7,
-                54
-              ]
-            },
-            {
-              "km": 85,
-              "from_lon_lat": [
-                1.3,
+                1.4,
                 38.2
               ],
               "to_lon_lat": [
@@ -286,14 +384,47 @@
               ]
             },
             {
-              "km": 85,
+              "km": 89,
               "from_lon_lat": [
-                31.1,
-                54.1
+                51.8,
+                53.8
               ],
               "to_lon_lat": [
-                31.7,
+                52.8,
                 53.6
+              ]
+            },
+            {
+              "km": 89,
+              "from_lon_lat": [
+                31.2,
+                53.7
+              ],
+              "to_lon_lat": [
+                31.9,
+                53.3
+              ]
+            },
+            {
+              "km": 86,
+              "from_lon_lat": [
+                -2.3,
+                41.9
+              ],
+              "to_lon_lat": [
+                -2.6,
+                42.6
+              ]
+            },
+            {
+              "km": 84,
+              "from_lon_lat": [
+                2,
+                37.1
+              ],
+              "to_lon_lat": [
+                1.6,
+                37.8
               ]
             },
             {
@@ -308,74 +439,140 @@
               ]
             },
             {
-              "km": 82,
+              "km": 83,
               "from_lon_lat": [
-                61.1,
-                53.7
+                -0.1,
+                39.4
               ],
               "to_lon_lat": [
-                62.3,
-                53.7
+                -1,
+                39.7
+              ]
+            },
+            {
+              "km": 83,
+              "from_lon_lat": [
+                -3.5,
+                44.3
+              ],
+              "to_lon_lat": [
+                -3.8,
+                44.9
+              ]
+            },
+            {
+              "km": 81,
+              "from_lon_lat": [
+                60.8,
+                53.6
+              ],
+              "to_lon_lat": [
+                62.1,
+                53.6
               ]
             }
           ],
           "seam_runs_over_80km_200m": [
             {
-              "km": 140,
+              "km": 99,
               "from_lon_lat": [
-                25.8,
-                57.5
+                20.8,
+                60
               ],
               "to_lon_lat": [
-                27.3,
-                56.9
+                22.5,
+                60
               ]
             },
             {
-              "km": 87,
+              "km": 95,
               "from_lon_lat": [
-                23.7,
-                57.9
+                29.8,
+                55
               ],
               "to_lon_lat": [
-                25.1,
-                57.8
-              ]
-            },
-            {
-              "km": 85,
-              "from_lon_lat": [
-                22.3,
-                59.9
-              ],
-              "to_lon_lat": [
-                23.7,
-                59.8
+                30.4,
+                54.4
               ]
             }
           ],
-          "longest_straight_km_200m": 147.1,
+          "longest_straight_km_200m": 265,
           "straight_runs_over_80km_200m": [
             {
-              "km": 147,
+              "km": 265,
               "from_lon_lat": [
-                32.1,
-                53.5
+                38.7,
+                52.3
               ],
               "to_lon_lat": [
-                33.3,
-                52.8
+                40.7,
+                51.1
               ]
             },
             {
-              "km": 140,
+              "km": 209,
               "from_lon_lat": [
-                25.8,
-                57.5
+                28.1,
+                57.1
               ],
               "to_lon_lat": [
-                27.3,
-                56.9
+                29.1,
+                55.7
+              ]
+            },
+            {
+              "km": 172,
+              "from_lon_lat": [
+                32.1,
+                53.2
+              ],
+              "to_lon_lat": [
+                33.6,
+                52.4
+              ]
+            },
+            {
+              "km": 149,
+              "from_lon_lat": [
+                31,
+                54
+              ],
+              "to_lon_lat": [
+                32.1,
+                53.2
+              ]
+            },
+            {
+              "km": 142,
+              "from_lon_lat": [
+                -3.5,
+                44.1
+              ],
+              "to_lon_lat": [
+                -4.1,
+                45.3
+              ]
+            },
+            {
+              "km": 137,
+              "from_lon_lat": [
+                51.7,
+                53.8
+              ],
+              "to_lon_lat": [
+                53.4,
+                53.6
+              ]
+            },
+            {
+              "km": 135,
+              "from_lon_lat": [
+                8.2,
+                59.8
+              ],
+              "to_lon_lat": [
+                10.7,
+                60.3
               ]
             },
             {
@@ -390,17 +587,6 @@
               ]
             },
             {
-              "km": 118,
-              "from_lon_lat": [
-                64.7,
-                54.5
-              ],
-              "to_lon_lat": [
-                66.3,
-                54.4
-              ]
-            },
-            {
               "km": 115,
               "from_lon_lat": [
                 82,
@@ -412,130 +598,196 @@
               ]
             },
             {
-              "km": 97,
+              "km": 110,
               "from_lon_lat": [
-                54.7,
-                54
+                -2.7,
+                50.7
               ],
               "to_lon_lat": [
-                55.7,
-                53.8
+                -3,
+                51.7
               ]
             },
             {
-              "km": 87,
+              "km": 106,
               "from_lon_lat": [
-                39.9,
-                52.4
+                -2.4,
+                41.5
               ],
               "to_lon_lat": [
-                40.4,
-                51.9
+                -2.7,
+                42.4
               ]
             },
             {
-              "km": 87,
+              "km": 99,
               "from_lon_lat": [
-                23.7,
-                57.9
+                20.8,
+                60
               ],
               "to_lon_lat": [
-                25.1,
-                57.8
+                22.5,
+                60
               ]
             },
             {
-              "km": 86,
+              "km": 95,
               "from_lon_lat": [
-                52.2,
+                29.8,
+                55
+              ],
+              "to_lon_lat": [
+                30.4,
+                54.4
+              ]
+            },
+            {
+              "km": 91,
+              "from_lon_lat": [
+                66,
                 54.3
               ],
               "to_lon_lat": [
-                53.3,
-                54.1
+                67.3,
+                54.3
               ]
             },
             {
-              "km": 85,
+              "km": 88,
               "from_lon_lat": [
-                22.3,
-                59.9
+                58.9,
+                53.6
               ],
               "to_lon_lat": [
-                23.7,
-                59.8
+                60.3,
+                53.6
               ]
             },
             {
               "km": 84,
               "from_lon_lat": [
-                66.3,
-                54.4
+                26.8,
+                59.5
               ],
               "to_lon_lat": [
-                67.4,
-                54.3
+                27,
+                60.2
               ]
             },
             {
               "km": 83,
               "from_lon_lat": [
-                61,
+                26.6,
+                57.8
+              ],
+              "to_lon_lat": [
+                27.4,
+                57.4
+              ]
+            },
+            {
+              "km": 83,
+              "from_lon_lat": [
+                27.8,
+                59
+              ],
+              "to_lon_lat": [
+                26.9,
+                59.3
+              ]
+            },
+            {
+              "km": 83,
+              "from_lon_lat": [
+                49.5,
                 54
               ],
               "to_lon_lat": [
-                62.2,
-                54
+                50.5,
+                53.9
+              ]
+            },
+            {
+              "km": 83,
+              "from_lon_lat": [
+                29.3,
+                55.6
+              ],
+              "to_lon_lat": [
+                29.7,
+                55.1
+              ]
+            },
+            {
+              "km": 83,
+              "from_lon_lat": [
+                61.2,
+                53.7
+              ],
+              "to_lon_lat": [
+                62.4,
+                53.7
               ]
             },
             {
               "km": 82,
               "from_lon_lat": [
-                40.7,
-                51.8
+                -2.7,
+                54.7
               ],
               "to_lon_lat": [
-                41.2,
-                51.3
+                -2.5,
+                55.4
               ]
             },
             {
               "km": 81,
               "from_lon_lat": [
-                58.5,
-                53.8
+                30.4,
+                54.4
               ],
               "to_lon_lat": [
-                58,
-                54.1
+                31,
+                54
               ]
             },
             {
               "km": 81,
               "from_lon_lat": [
-                30.9,
-                54.3
+                -3,
+                43.4
               ],
               "to_lon_lat": [
-                31.5,
-                53.9
+                -3.5,
+                44
+              ]
+            },
+            {
+              "km": 81,
+              "from_lon_lat": [
+                0.5,
+                38.6
+              ],
+              "to_lon_lat": [
+                -0.2,
+                39
+              ]
+            },
+            {
+              "km": 80,
+              "from_lon_lat": [
+                -3,
+                52.1
+              ],
+              "to_lon_lat": [
+                -3.3,
+                52.8
               ]
             }
           ],
           "seam_runs_over_80km_1000m": [],
-          "longest_straight_km_1000m": 151.3,
+          "longest_straight_km_1000m": 141.2,
           "straight_runs_over_80km_1000m": [
-            {
-              "km": 151,
-              "from_lon_lat": [
-                54.2,
-                54.2
-              ],
-              "to_lon_lat": [
-                55.8,
-                53.9
-              ]
-            },
             {
               "km": 141,
               "from_lon_lat": [
@@ -548,99 +800,177 @@
               ]
             },
             {
-              "km": 124,
+              "km": 108,
               "from_lon_lat": [
-                29,
-                56.9
+                28.1,
+                60.5
               ],
               "to_lon_lat": [
-                30,
-                56.2
+                30.1,
+                60.5
               ]
             },
             {
-              "km": 96,
+              "km": 90,
               "from_lon_lat": [
-                57.4,
-                54.3
+                54.8,
+                54.1
               ],
               "to_lon_lat": [
-                58.1,
+                55.7,
                 53.9
+              ]
+            },
+            {
+              "km": 87,
+              "from_lon_lat": [
+                31,
+                60.2
+              ],
+              "to_lon_lat": [
+                31.8,
+                59.7
               ]
             },
             {
               "km": 86,
               "from_lon_lat": [
-                41.4,
-                52
+                60.5,
+                54.6
               ],
               "to_lon_lat": [
-                41.5,
-                51.4
-              ]
-            },
-            {
-              "km": 81,
-              "from_lon_lat": [
-                31.4,
-                54
-              ],
-              "to_lon_lat": [
-                32,
-                53.6
-              ]
-            },
-            {
-              "km": 81,
-              "from_lon_lat": [
-                52.9,
-                54.4
-              ],
-              "to_lon_lat": [
-                54,
+                61.3,
                 54.3
               ]
             },
             {
-              "km": 81,
+              "km": 85,
               "from_lon_lat": [
-                58.1,
-                54
+                27.9,
+                58.9
               ],
               "to_lon_lat": [
-                57.6,
+                27,
+                59.2
+              ]
+            },
+            {
+              "km": 81,
+              "from_lon_lat": [
+                48.2,
+                54.4
+              ],
+              "to_lon_lat": [
+                49.4,
+                54.4
+              ]
+            },
+            {
+              "km": 80,
+              "from_lon_lat": [
+                54,
+                54.4
+              ],
+              "to_lon_lat": [
+                54.8,
+                54.1
+              ]
+            }
+          ],
+          "corners_coast": {
+            "moved": [],
+            "anywhere": 0
+          },
+          "corners_50m": {
+            "moved": [],
+            "anywhere": 0
+          },
+          "corners_200m": {
+            "moved": [],
+            "anywhere": 0
+          },
+          "corners_1000m": {
+            "moved": [],
+            "anywhere": 0
+          },
+          "needle_cells": {
+            "moved": 15,
+            "anywhere": 21
+          },
+          "flat_stamped_areas": [
+            {
+              "cells": 456,
+              "at": [
+                15.6,
+                55.5
+              ]
+            },
+            {
+              "cells": 174,
+              "at": [
+                14,
+                59.4
+              ]
+            },
+            {
+              "cells": 107,
+              "at": [
+                14.6,
+                56.5
+              ]
+            },
+            {
+              "cells": 82,
+              "at": [
+                15.7,
+                56.5
+              ]
+            },
+            {
+              "cells": 73,
+              "at": [
+                22.8,
+                59.5
+              ]
+            },
+            {
+              "cells": 49,
+              "at": [
+                68.4,
                 54.3
               ]
             }
           ],
           "blend_band_depth_step_m": {
-            "p99": 266,
-            "max": 1289,
-            "pairs": 202948
+            "p99": 221,
+            "max": 1298,
+            "pairs": 204462
           },
           "real_seabed_around_depth_step_m": {
-            "p99": 458,
-            "max": 1908,
-            "pairs": 551100
+            "p99": 404,
+            "max": 1717,
+            "pairs": 551269
           }
         },
         "passes": false,
         "failed": [
-          "Seam: no straight run longer than 80 km in the 50 m depth contour where the pipeline moved it (half the run or more): 2 runs, longest 108 km",
-          "Seam: no straight run longer than 80 km in the 200 m depth contour where the pipeline moved it (half the run or more): 3 runs, longest 140 km"
+          "Seam: no straight run longer than 80 km in the coastline where the pipeline moved it (half the run or more): 1 runs, longest 95 km",
+          "Seam: no straight run longer than 80 km in the 50 m depth contour where the pipeline moved it (half the run or more): 1 runs, longest 97 km",
+          "Seam: no straight run longer than 80 km in the 200 m depth contour where the pipeline moved it (half the run or more): 2 runs, longest 99 km",
+          "Seam: no needles (land or sea one cell, about 3 km, wide) where the pipeline changed the terrain: 15 cells (21 anywhere, mostly real coast)",
+          "Seam: no flat stamped areas (moved by more than 30 m, almost no relief, 200 km² or more): 6 areas, largest 4560 km²"
         ],
         "map_tests": "113 of 113 hold",
         "terrain_checks": [
           {
             "check": "Book sea is water: northern sea and inlet",
             "ok": true,
-            "got": "4702 of 4702 cells water"
+            "got": "1881 of 1881 cells water"
           },
           {
             "check": "Book sea is water: southern sea",
             "ok": true,
-            "got": "5111 of 5111 cells water"
+            "got": "3671 of 3671 cells water"
           },
           {
             "check": "Book sea is water: gulf between Redshire and Arturia",
@@ -660,12 +990,12 @@
           {
             "check": "Northglade: snowy hills and pine (c31-b2, c31-b5)",
             "ok": true,
-            "got": "summit 369 m, boreal pine forest, 0.3 °C"
+            "got": "summit 369 m, boreal pine forest, 0.4 °C"
           },
           {
             "check": "Elenar Forest: snowy hills under thick snowy pine (c29-b2, c29-b19)",
             "ok": true,
-            "got": "hills to 928 m; 100% pine"
+            "got": "hills to 465 m; 100% pine"
           },
           {
             "check": "Northglade's island is an island, about twenty kilometers wide",
@@ -700,22 +1030,22 @@
           {
             "check": "Colder to the north",
             "ok": true,
-            "got": "north -3.7 °C, south 10.7 °C"
+            "got": "north 1.3 °C, south 10.7 °C"
           },
           {
             "check": "Meldan is green",
             "ok": true,
-            "got": "temperate grassland"
+            "got": "temperate forest"
           },
           {
             "check": "Rivers run downhill to the sea or off the frame (region)",
             "ok": true,
-            "got": "524 rivers, 0 climb; lakes 2438 cells"
+            "got": "515 rivers, 0 climb; lakes 2438 cells"
           },
           {
             "check": "Rivers run downhill to the sea or off the frame (Dzego)",
             "ok": true,
-            "got": "106 rivers, 0 climb; lakes 1421 cells"
+            "got": "107 rivers, 0 climb; lakes 1421 cells"
           },
           {
             "check": "Rivers run downhill to the sea or off the frame (Meldan)",
@@ -780,7 +1110,7 @@
           {
             "check": "Dzego is hilly: mountain pyramids (c12-b30)",
             "ok": true,
-            "got": "62% of Dzego above 300 m"
+            "got": "61% of Dzego above 300 m"
           },
           {
             "check": "Sadzu Du has a small river by the town (c12-b31, c12-b107)",
@@ -795,17 +1125,17 @@
     "dataset": "ETOPO 2022 v1, 60 arc-second surface elevation",
     "note": "the chapter 29 battle map's area (with the peninsula, Thaldur and Northglade's island) comes from its own real patch, feathered into each region candidate over about 220 km: no region-scale window matches the book's drawn coast there",
     "source_centre_lon_lat": [
-      -79.753,
-      -6.5
+      -14.968,
+      11
     ],
     "source_box": {
-      "west": -85.727,
-      "south": -14.777,
-      "east": -74.913,
-      "north": 0.663,
+      "west": -19.567,
+      "south": 3.206,
+      "east": -11.154,
+      "north": 18.764,
       "note": "the box around the frame's outline on the real globe (longitudes may wrap)"
     },
-    "rotation_deg": 285,
+    "rotation_deg": 270,
     "mirrored": true,
     "scale": 1
   },
@@ -858,60 +1188,56 @@
     "vertical_scale": 1,
     "note": "v4's invented massif is dropped; the grid, the path and the pyramid stay pinned"
   },
+  "book_test_changes": [
+    "Owner, 2026-10-12: the chapter 29 battle map is a sketch, not a survey. Its drawn coasts (the dark ground, both seas, the peninsula, Thaldur, the strait) may move within a 20 km band, the real terrain deciding the line inside it; only the interior is held, beyond a fractal line 1 to 20 km in from the drawn edge (a shape's thin tip, under 8 km half-width, is not held). v4 held these within 4 to 30 km bands with soft pulls toward the drawing.",
+    "The book-sea test for the battle map's northern and southern seas now counts cells more than 20 km inside the drawn line (v4: 6 km). The Redshire gulf test is unchanged (15 km).",
+    "The battle map's seas are no longer carried past the drawing's borders as fixed polygons: inside the drawing they are held to the border, beyond it they run on along a fractal line 60 to 220 km out.",
+    "Thaldur's open-water rectangles (ours) are removed; Thaldur is a real island (see thaldur_island).",
+    "Meldan has a region-scale forest cover pin (c1-b2, c32-b107), like Elenar Forest's; the climate rules are unchanged."
+  ],
   "method": "Real heights moved by a rigid motion of the sphere (the book frame's centre onto a source point, turned in 15° steps, mirrored or not, at true scale); then v4's soft and hard pins for every book fact, a light droplet erosion (region 60,000, Dzego 40,000 droplets) so the pins settle into the real relief, the book's river carved, priority-flood lakes, rivers from flow accumulation on the real terrain, climate from the book's latitudes and the real heights, biomes, and the book's forests forced. The seabed is as measured.",
   "constraints": [
     {
       "frame": "region",
-      "kind": "sea",
-      "why": "Open water east of Northshore, around the peninsula and Thaldur (the battle map's seas run on past its edge)",
-      "provenance": "placed by us",
-      "lines": [
-        "wg-374",
-        "wg-375"
-      ],
-      "band_km": 25
-    },
-    {
-      "frame": "region",
       "kind": "land-box",
-      "why": "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border)",
+      "why": "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)",
       "provenance": "book",
       "lines": [
         "wg-370"
       ],
-      "band_km": 6
+      "band_km": 20
     },
     {
       "frame": "region",
       "kind": "sea",
-      "why": "The battle map's northern sea and inlet are water",
+      "why": "The battle map's northern sea and inlet are water (its drawn coast may move within 20 km)",
       "provenance": "book",
       "lines": [
         "wg-370",
         "wg-366"
       ],
-      "band_km": 6
+      "band_km": 20
     },
     {
       "frame": "region",
       "kind": "sea",
-      "why": "The battle map's southern sea is water",
+      "why": "The battle map's southern sea is water (its drawn coast may move within 20 km)",
       "provenance": "book",
       "lines": [
         "wg-370",
         "wg-369"
       ],
-      "band_km": 6
+      "band_km": 20
     },
     {
       "frame": "region",
       "kind": "land",
-      "why": "The peninsula dangling off Northshore's eastern end",
+      "why": "The peninsula dangling off Northshore's eastern end (its drawn coast may move within 20 km)",
       "provenance": "book",
       "lines": [
         "wg-375"
       ],
-      "band_km": 16
+      "band_km": 20
     },
     {
       "frame": "region",
@@ -926,22 +1252,22 @@
     {
       "frame": "region",
       "kind": "land",
-      "why": "Thaldur, an island east of Northshore",
+      "why": "Thaldur, an island east of Northshore (its drawn coast may move within 20 km)",
       "provenance": "book",
       "lines": [
         "wg-374"
       ],
-      "band_km": 30
+      "band_km": 20
     },
     {
       "frame": "region",
       "kind": "sea",
-      "why": "Thaldur is an island: a strait between it and the peninsula",
+      "why": "Thaldur is an island: a strait between it and the peninsula (its drawn coast may move within 20 km)",
       "provenance": "book",
       "lines": [
         "wg-374"
       ],
-      "band_km": 6
+      "band_km": 20
     },
     {
       "frame": "region",
@@ -1451,6 +1777,15 @@
       ]
     },
     {
+      "frame": "region",
+      "kind": "cover",
+      "why": "Meldan is wooded: \"tall trees towering on both sides\" (c1-b2); Kalimar is \"not too different from a forest\" (c32-b107)",
+      "provenance": "book",
+      "lines": [
+        "wg-306"
+      ]
+    },
+    {
       "frame": "dzego",
       "kind": "land-disk",
       "why": "Pafogai Du is on land",
@@ -1580,26 +1915,26 @@
   "outputs": {
     "where": "out/maps-v5/ (not in the repository; copied to Drive)",
     "sha256": {
-      "out/maps-v5/candidate-1/region/composite.png": "cdd08e06dc1610a40ffd036539ce10218766b8fe58fe556d981977d5e6691a45",
-      "out/maps-v5/candidate-1/region/layers/hillshade.png": "98829258effb176a64b19e63855f307346d5be2cc00d5a5d809cd315f2ace3f9",
-      "out/maps-v5/candidate-1/region/layers/tint.png": "7e0b75b6cb6a95c4f1b27c367e51d4b152ebef85f0d066c433c189ab13249acc",
-      "out/maps-v5/candidate-1/region/layers/water.png": "cfb60609f06b977e220138b2a5aa91a37abd66c6286bb7e023d980f7a5e7081e",
-      "out/maps-v5/candidate-1/region/layers/rivers.png": "3a3074a0792c4bce906326839355686981b024a55842cb0507a570929a350e4f",
-      "out/maps-v5/candidate-1/region/layers/forest.png": "5815236d63880d5163a978e64ed853846c394ec412003aa8883673805f7fbfde",
-      "out/maps-v5/candidate-1/region/data/height.png": "21ed8593ca7ba9f5e690afeb69e354f1e7a4629aff82c76be32a09773ec49f26",
-      "out/maps-v5/candidate-1/region/data/biome.png": "0a8c303f43766c729500bfeabd67a17a401621432010c58a13e249ea14663122",
-      "out/maps-v5/candidate-1/region/data/rivers.json": "f2c33373332d3e633e47d8324d9dddcc06f1e659872fb68f44cbfe17de1c113a",
-      "out/maps-v5/candidate-1/region/data/meta.json": "7a3f8f8654e3f3d3163afa4209eafad0239cac586f43ba56308da06c183b9fd5",
-      "out/maps-v5/dzego/composite.png": "3d8739d8c14fe369dd7aaa183f21cfc002759c95d27f5eaa775e14ed6be98ea2",
-      "out/maps-v5/dzego/layers/hillshade.png": "4049046ac1513598da99d3bc3c2b053b9169325d3ef0d5dccdae92b702f3e8b1",
-      "out/maps-v5/dzego/layers/tint.png": "e3d6510f9df8aa96b13280f3f395b007cf958d6771b61b9258146b9af2f22f0b",
-      "out/maps-v5/dzego/layers/water.png": "00e94cbfdbacc02f6895e2514544804122b29c9067a782e10e0d105acea3364f",
-      "out/maps-v5/dzego/layers/rivers.png": "2ff72085e3f0fa112b342bbef35345068f44328b1048f3012bd9f820ecfb5938",
-      "out/maps-v5/dzego/layers/forest.png": "ede99784253e46970f29e66d9acd4aa3fb93211e052d422f87ecd33462d123db",
-      "out/maps-v5/dzego/data/height.png": "d34548e3e33cc3c0d818d34493b7bef5992506efb1b8beb9a1ed30953dda6a2f",
-      "out/maps-v5/dzego/data/biome.png": "309740867cf99ca2df1cad7cff497513dffcb80cd0c8247b0fdd8abde1390c4b",
-      "out/maps-v5/dzego/data/rivers.json": "70fffcd3645232bff4a91efe3028c4a450faebdfa02a160b90cd31db868ee997",
-      "out/maps-v5/dzego/data/meta.json": "fc227962c55adf043308f0a39d86200b0aafaf7be9996ea5ef9494970ea23da5",
+      "out/maps-v5/candidate-1/region/composite.png": "6145ed8c318393a126c932aa9b88d832e41319e38692b5314c2a7bfb5df37e7b",
+      "out/maps-v5/candidate-1/region/layers/hillshade.png": "d270855930fd29e5835afc9c04c153d141a3a051f923eae5afa929a0b9ae130f",
+      "out/maps-v5/candidate-1/region/layers/tint.png": "dd55101766bdc1fdcc0a3ec078b0b27e18c1a153a6a7a1853c184e596a6060fc",
+      "out/maps-v5/candidate-1/region/layers/water.png": "d88ba40529197900bda78684a40ba8638c741bebcd8dbfa0c3c61c60d67dcd65",
+      "out/maps-v5/candidate-1/region/layers/rivers.png": "8a55e50491f4dfaaec7ac5bd82e4609011f61fef0d0c6a0041f709821366e305",
+      "out/maps-v5/candidate-1/region/layers/forest.png": "bf55639f5dfcafa936871dcff44d8a3fc49b276950ed6e95d23c1de482dad3d6",
+      "out/maps-v5/candidate-1/region/data/height.png": "3261edae19e84fc6c5c305fa53d5c0216ec6a4add8431e4eb90573c92d9c84f2",
+      "out/maps-v5/candidate-1/region/data/biome.png": "35230787080743e0db64f14843636ff83e87ec6d74e4e2847f11d8138c258e0d",
+      "out/maps-v5/candidate-1/region/data/rivers.json": "6256a7724de15144069f2a61966f378a2b4aebdaacd27a2817ba7ca74e6be5d8",
+      "out/maps-v5/candidate-1/region/data/meta.json": "2e387d43ede4bc2ee264ca6484ba931275c62a86c0750fbe80a92d686fb3a8d3",
+      "out/maps-v5/dzego/composite.png": "484292a30ec048029c2a166a1fc826680315a4869d4562db70194e8e9230bc65",
+      "out/maps-v5/dzego/layers/hillshade.png": "5994197bb2db30a2d7142c4ad352f5fe634127a4ff124b80ff3f866f43006530",
+      "out/maps-v5/dzego/layers/tint.png": "a66d90aa4712c768e993304b7d6228b6032fab865696b5a105632605aae8ac3e",
+      "out/maps-v5/dzego/layers/water.png": "5f26b6b81c9e990d7ce3388e36423b8ba7dbc4cc299554282de7958f29a4dfb4",
+      "out/maps-v5/dzego/layers/rivers.png": "1f221c9fd59b1289694bc22874d8ee3765fbab36d4bd1c8c6011b83014b757df",
+      "out/maps-v5/dzego/layers/forest.png": "9f6435b03106f18a41e889856081cbb4a9fc90e6927145bb2da58986baa87449",
+      "out/maps-v5/dzego/data/height.png": "478d4a5b8ac94c7e0e3d031977d8973f2f393b4889b46894ab5cdf4a6060bdfc",
+      "out/maps-v5/dzego/data/biome.png": "06a2b31476791f276e76a8942ac99e1ecff8310ebbaf9660ca5e229199cc5edd",
+      "out/maps-v5/dzego/data/rivers.json": "9753ee77b9cb6e4f72bfcccd1ee562db12f36889429a4a5b5614c21918b99d26",
+      "out/maps-v5/dzego/data/meta.json": "ac5818a43696ff38f31d333c6971e04225742644199203ab1eccffe532dea99f",
       "out/maps-v5/meldan/composite.png": "8519c22672d2ab737ad34fc142dde28e544ce5a454dca00eabf929b90886da88",
       "out/maps-v5/meldan/layers/hillshade.png": "08b81b9923f8f330b5c2c3276ec4b76303363ee980a59d54173567bfd7731e46",
       "out/maps-v5/meldan/layers/tint.png": "d1e44d9d4b02a0d72217ffecb4423a6b7f13681cb2be2e85c270d54e71eef14f",
@@ -1609,7 +1944,7 @@
       "out/maps-v5/meldan/data/height.png": "c6f08867e9db482c70755e7aacb333eac7318a054168b4cc37088d7c77733bd6",
       "out/maps-v5/meldan/data/biome.png": "475c4da7fb181ae9324aa647ed149a7d8089dbe2c696d27a55903fc61c6705e6",
       "out/maps-v5/meldan/data/rivers.json": "17fbf54e66454793ca780ebb646831a2531a55d02f6540a47e7288fa0e1376d0",
-      "out/maps-v5/meldan/data/meta.json": "8334b54a6e57bc2fa418ddeba24079f2764c7e0ad314b953ff81bffba6af67e1",
+      "out/maps-v5/meldan/data/meta.json": "c9c3632186fd158a4d1434b0b1fef880227001140c08d4cfc15091e4561b36f6",
       "out/maps-v5/pafogai-du/composite.png": "0b9a1d47931728232620b7e9f4c89461e78a2750109b6fa65aa8cc1bac283db2",
       "out/maps-v5/pafogai-du/layers/hillshade.png": "19802b242203c618aba6bb6f2dafc911f2b6827bf0874230d97210a6c5ff2361",
       "out/maps-v5/pafogai-du/layers/tint.png": "30888a135df9bf2e5a2fa751602cb37a5c5f615216037196fdadeee90a7b8775",
@@ -1619,7 +1954,7 @@
       "out/maps-v5/pafogai-du/data/height.png": "eafa528e47935b19f4548821a1baef52547c776d5863ff3dde4847165ec66df2",
       "out/maps-v5/pafogai-du/data/biome.png": "d979666ce93847dc5d1bd571c419192d2e339d89c9d2a24aad4b25fa0bdb2bef",
       "out/maps-v5/pafogai-du/data/rivers.json": "4a320646e133672631a1ecbbae94bb86b7091094d84d0788940eb54bd6e3450f",
-      "out/maps-v5/pafogai-du/data/meta.json": "ac47d55fc21d205e7e595cdfa04a73dca05e0ccfa1e5e84e0ef1039ed6a18c0d"
+      "out/maps-v5/pafogai-du/data/meta.json": "bb6038ec8fc6d023ae0316409c3111fb1b73be9f13355ef5cdd860c9c1e2206e"
     }
   }
 }

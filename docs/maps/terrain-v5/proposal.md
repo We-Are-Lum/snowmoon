@@ -163,8 +163,8 @@ The same tests as v4: 113 map tests and 31 terrain checks, on every candidate.
 
 **Before and after, at full resolution:**
 - `docs/maps/terrain-v5/northshore-before.png`;
-- `northshore-after.png`;
-- `northshore-after-seam-runs.png`, with the five flagged runs drawn in red.
+- `northshore-review-1.png`;
+- `northshore-review-1-seam-runs.png`, with the five flagged runs drawn in red.
 
 ### The seam check (new; run with the 113 map tests and 31 terrain checks)
 
@@ -225,3 +225,24 @@ Both hills over 92% pass every terrain check, but fail one map test. On them, pa
 - **Pafogai Du no-lake check:** passes (0 lake cells).
 - **Blend depth step:** passes.
 - **Seam check:** the coastline and the 1,000 m contour pass. The 50 m and 200 m contours fail on the five runs above.
+
+## Revision 3: the owner's second review (2026-10-12)
+
+**What changed:**
+- **The battle map is treated as a sketch.** All its drawn coasts may move within 20 km, with the real terrain deciding the line. Only each shape's interior is held, beyond a line that wanders 1–20 km in from the drawing.
+  - The book-sea test now counts cells more than 20 km inside the drawn line (it was 6 km).
+  - All the changes to book tests are listed in the recipe under `book_test_changes`.
+- **A new Northshore patch** (14.97°W 11°N, turned 270°, mirrored): a low coast of hills and islands. The previous patch (79.75°W 6.5°S) was the northern Andes, with peaks up to 5,977 m; it is now ruled out by a "hills, not high mountains" target.
+- **Thaldur is a real island** of 20,787 km², turned 90° and mirrored. Its source (124.95°E 11.55°N) is in the recipe, under `thaldur_island`.
+- **Thin features are removed.** No land or sea feature is narrower than about 5 km unless it is a named book feature. Spurs the rules left behind are opened away.
+- **Meldan has a region-scale forest cover pin** (c1-b2, c32-b107). The region now gives temperate forest at Meldan.
+- **The label is accepted:** the full declaration, plus "AI map · by Snowmoon Party".
+
+**New seam checks:**
+- right-angle corners with both legs straight for 20 km or more;
+- needles about one cell (3 km) wide;
+- flat stamped areas.
+
+They are scoped to cells the pins and v5's rules changed, not the light erosion.
+
+**Before and after:** `northshore-review-1.png` and `northshore-review-2.png`. `northshore-review-2-flagged.png` marks what the checks still flag: straight runs in red, flat areas in yellow.
