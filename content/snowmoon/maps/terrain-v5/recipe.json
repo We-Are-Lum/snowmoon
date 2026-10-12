@@ -2,10 +2,10 @@
   "short_label": "AI map · by Snowmoon Party",
   "label": "Map made with AI-written code from real public elevation data, reshaped to fit the book. Sources in the recipe. Made by Snowmoon Party, not by the author. (Label accepted by the owner, 2026-10-12.) The heights are real, moved and possibly mirrored, then reshaped by code written by an AI model, Claude (the coding agent, a closed model); no image model. Every book fact is pinned.",
   "license": "Terrain for Snowmoon, the book by Vitalik Buterin, adapted from public-domain elevation data (see the recipe), 2026-10-12. GPL-3.0, like the book.",
-  "made": "2026-10-12T17:37:43.300Z",
+  "made": "2026-10-12T21:32:47.067Z",
   "code_version": {
-    "scripts/terrain-v5.ts": "1085bacfdb0707059d4b56cd31f27d5edaf3160affbd670530a1b7cf573a1949",
-    "scripts/terrain-v4.ts": "91619fb42a7d8e350e9654ad4f1ad2c8be06e50884a461dae57b466715843f23",
+    "scripts/terrain-v5.ts": "43eb4fdb2dccb0d0a5cf7476947a55b22965940ba425f5fd9c3a561b520f5502",
+    "scripts/terrain-v4.ts": "2878d0450b814f60f5fb05c2e46920ce9120801dba729cafd1f6e00636098e62",
     "scripts/lib/geotiff-lite.ts": "b439401048dbfe2c7c46b4dbce41979e1e7d13e4f33243919558844d019acdc0",
     "scripts/lib/terrain-core.ts": "5140c0a7e5d4357c97b4a54c000c9654c406dd6f127e249b028ee0b23b6a36d0",
     "scripts/lib/noise.ts": "ef2aba4f58c28e0cb002c0992ac3bd80dd99af8b1d4b4e5b5bf5d849047c2395",
@@ -80,7 +80,20 @@
         "East African rift lakes"
       ],
       "tests": {
+        "inner_sea_bay": {
+          "source_centre_lon_lat": [
+            157.84,
+            59
+          ],
+          "rotation_deg": 90,
+          "mirrored": true,
+          "scale": 1,
+          "fit": 0.7075,
+          "dataset": "ETOPO 2022 v1, 60 arc-second",
+          "source_name": "the head of the Shelikhov Gulf, northern Sea of Okhotsk (Russia)"
+        },
         "thaldur_island": {
+          "source_name": "Samar and Leyte (Philippines), which the 1 to 2 arc-minute grids join across the San Juanico Strait (about 2 km wide); Samar alone is about 13,400 km², Leyte about 7,400 km²",
           "source_centre_lon_lat": [
             124.95,
             11.55
@@ -107,7 +120,7 @@
           {
             "check": "Seam: no straight run longer than 80 km in the 50 m depth contour where the pipeline moved it (half the run or more)",
             "ok": false,
-            "got": "1 runs, longest 97 km"
+            "got": "1 runs, longest 80 km"
           },
           {
             "check": "Anywhere: no straight run longer than 80 km in the 50 m depth contour",
@@ -117,12 +130,12 @@
           {
             "check": "Seam: no straight run longer than 80 km in the 200 m depth contour where the pipeline moved it (half the run or more)",
             "ok": false,
-            "got": "2 runs, longest 99 km"
+            "got": "4 runs, longest 123 km"
           },
           {
             "check": "Anywhere: no straight run longer than 80 km in the 200 m depth contour",
             "ok": false,
-            "got": "longest straight run 265 km (starting near 38.7°, 52.3° in the book's frame)"
+            "got": "longest straight run 276 km (starting near 31.4°, 53.6° in the book's frame)"
           },
           {
             "check": "Seam: no straight run longer than 80 km in the 1000 m depth contour where the pipeline moved it (half the run or more)",
@@ -132,7 +145,7 @@
           {
             "check": "Anywhere: no straight run longer than 80 km in the 1000 m depth contour",
             "ok": false,
-            "got": "longest straight run 141 km (starting near 82.1°, 59.0° in the book's frame)"
+            "got": "longest straight run 159 km (starting near 27.5°, 60.5° in the book's frame)"
           },
           {
             "check": "Seam: no right-angle corner (both legs straight for 20 km) in the coastline where the pipeline moved it",
@@ -157,17 +170,17 @@
           {
             "check": "Seam: no needles (land or sea one cell, about 3 km, wide) where the pipeline changed the terrain",
             "ok": false,
-            "got": "15 cells (21 anywhere, mostly real coast)"
+            "got": "183 cells (223 anywhere, mostly real coast)"
           },
           {
             "check": "Seam: no flat stamped areas (moved by more than 30 m, almost no relief, 200 km² or more)",
             "ok": false,
-            "got": "6 areas, largest 4560 km²"
+            "got": "10 areas, largest 1830 km²"
           },
           {
             "check": "No sharp depth step across the Northshore blend (cell-to-cell steps within the real seabed's own range)",
             "ok": true,
-            "got": "blend band: 99th percentile 221 m, largest 1298 m; real seabed around it: 404 m, 1717 m"
+            "got": "blend band: 99th percentile 236 m, largest 1291 m; real seabed around it: 404 m, 1717 m"
           },
           {
             "check": "No lake inside Pafogai Du (the grid and 1 km around it)",
@@ -260,14 +273,14 @@
           ],
           "seam_runs_over_80km_50m": [
             {
-              "km": 97,
+              "km": 80,
               "from_lon_lat": [
-                22.8,
-                56.6
+                16.6,
+                57
               ],
               "to_lon_lat": [
-                23,
-                57.4
+                16.4,
+                56.3
               ]
             }
           ],
@@ -307,17 +320,6 @@
               ]
             },
             {
-              "km": 126,
-              "from_lon_lat": [
-                28.2,
-                56.8
-              ],
-              "to_lon_lat": [
-                28.7,
-                55.9
-              ]
-            },
-            {
               "km": 115,
               "from_lon_lat": [
                 32.1,
@@ -326,50 +328,6 @@
               "to_lon_lat": [
                 33,
                 52.6
-              ]
-            },
-            {
-              "km": 97,
-              "from_lon_lat": [
-                24.1,
-                58.2
-              ],
-              "to_lon_lat": [
-                25.2,
-                57.8
-              ]
-            },
-            {
-              "km": 97,
-              "from_lon_lat": [
-                22.8,
-                56.6
-              ],
-              "to_lon_lat": [
-                23,
-                57.4
-              ]
-            },
-            {
-              "km": 95,
-              "from_lon_lat": [
-                23.3,
-                58.7
-              ],
-              "to_lon_lat": [
-                24.1,
-                58.2
-              ]
-            },
-            {
-              "km": 90,
-              "from_lon_lat": [
-                30.3,
-                54.4
-              ],
-              "to_lon_lat": [
-                30.9,
-                53.9
               ]
             },
             {
@@ -395,17 +353,6 @@
               ]
             },
             {
-              "km": 89,
-              "from_lon_lat": [
-                31.2,
-                53.7
-              ],
-              "to_lon_lat": [
-                31.9,
-                53.3
-              ]
-            },
-            {
               "km": 86,
               "from_lon_lat": [
                 -2.3,
@@ -425,17 +372,6 @@
               "to_lon_lat": [
                 1.6,
                 37.8
-              ]
-            },
-            {
-              "km": 84,
-              "from_lon_lat": [
-                79.5,
-                58.1
-              ],
-              "to_lon_lat": [
-                80.2,
-                57.8
               ]
             },
             {
@@ -463,6 +399,17 @@
             {
               "km": 81,
               "from_lon_lat": [
+                79.6,
+                58
+              ],
+              "to_lon_lat": [
+                80.2,
+                57.8
+              ]
+            },
+            {
+              "km": 81,
+              "from_lon_lat": [
                 60.8,
                 53.6
               ],
@@ -470,34 +417,89 @@
                 62.1,
                 53.6
               ]
+            },
+            {
+              "km": 81,
+              "from_lon_lat": [
+                18.6,
+                58.2
+              ],
+              "to_lon_lat": [
+                17.3,
+                57.6
+              ]
+            },
+            {
+              "km": 80,
+              "from_lon_lat": [
+                16.6,
+                57
+              ],
+              "to_lon_lat": [
+                16.4,
+                56.3
+              ]
             }
           ],
           "seam_runs_over_80km_200m": [
             {
-              "km": 99,
+              "km": 123,
               "from_lon_lat": [
-                20.8,
-                60
+                7.2,
+                60.8
               ],
               "to_lon_lat": [
-                22.5,
-                60
+                7.7,
+                61.9
               ]
             },
             {
-              "km": 95,
+              "km": 98,
               "from_lon_lat": [
-                29.8,
-                55
+                28.8,
+                54.3
               ],
               "to_lon_lat": [
-                30.4,
+                30,
+                54
+              ]
+            },
+            {
+              "km": 91,
+              "from_lon_lat": [
+                18,
+                55.9
+              ],
+              "to_lon_lat": [
+                19.3,
+                55.8
+              ]
+            },
+            {
+              "km": 87,
+              "from_lon_lat": [
+                26.8,
                 54.4
+              ],
+              "to_lon_lat": [
+                28.1,
+                54.3
               ]
             }
           ],
-          "longest_straight_km_200m": 265,
+          "longest_straight_km_200m": 275.8,
           "straight_runs_over_80km_200m": [
+            {
+              "km": 276,
+              "from_lon_lat": [
+                31.4,
+                53.6
+              ],
+              "to_lon_lat": [
+                33.7,
+                52.4
+              ]
+            },
             {
               "km": 265,
               "from_lon_lat": [
@@ -507,39 +509,6 @@
               "to_lon_lat": [
                 40.7,
                 51.1
-              ]
-            },
-            {
-              "km": 209,
-              "from_lon_lat": [
-                28.1,
-                57.1
-              ],
-              "to_lon_lat": [
-                29.1,
-                55.7
-              ]
-            },
-            {
-              "km": 172,
-              "from_lon_lat": [
-                32.1,
-                53.2
-              ],
-              "to_lon_lat": [
-                33.6,
-                52.4
-              ]
-            },
-            {
-              "km": 149,
-              "from_lon_lat": [
-                31,
-                54
-              ],
-              "to_lon_lat": [
-                32.1,
-                53.2
               ]
             },
             {
@@ -565,17 +534,6 @@
               ]
             },
             {
-              "km": 135,
-              "from_lon_lat": [
-                8.2,
-                59.8
-              ],
-              "to_lon_lat": [
-                10.7,
-                60.3
-              ]
-            },
-            {
               "km": 134,
               "from_lon_lat": [
                 79.4,
@@ -584,6 +542,28 @@
               "to_lon_lat": [
                 80.9,
                 58.1
+              ]
+            },
+            {
+              "km": 123,
+              "from_lon_lat": [
+                7.2,
+                60.8
+              ],
+              "to_lon_lat": [
+                7.7,
+                61.9
+              ]
+            },
+            {
+              "km": 120,
+              "from_lon_lat": [
+                13.7,
+                62
+              ],
+              "to_lon_lat": [
+                15,
+                61.3
               ]
             },
             {
@@ -620,25 +600,14 @@
               ]
             },
             {
-              "km": 99,
+              "km": 98,
               "from_lon_lat": [
-                20.8,
-                60
+                28.8,
+                54.3
               ],
               "to_lon_lat": [
-                22.5,
-                60
-              ]
-            },
-            {
-              "km": 95,
-              "from_lon_lat": [
-                29.8,
-                55
-              ],
-              "to_lon_lat": [
-                30.4,
-                54.4
+                30,
+                54
               ]
             },
             {
@@ -653,6 +622,17 @@
               ]
             },
             {
+              "km": 91,
+              "from_lon_lat": [
+                18,
+                55.9
+              ],
+              "to_lon_lat": [
+                19.3,
+                55.8
+              ]
+            },
+            {
               "km": 88,
               "from_lon_lat": [
                 58.9,
@@ -664,36 +644,25 @@
               ]
             },
             {
-              "km": 84,
+              "km": 87,
               "from_lon_lat": [
                 26.8,
-                59.5
+                54.4
               ],
               "to_lon_lat": [
-                27,
-                60.2
+                28.1,
+                54.3
               ]
             },
             {
-              "km": 83,
+              "km": 86,
               "from_lon_lat": [
-                26.6,
-                57.8
+                30,
+                54
               ],
               "to_lon_lat": [
-                27.4,
-                57.4
-              ]
-            },
-            {
-              "km": 83,
-              "from_lon_lat": [
-                27.8,
-                59
-              ],
-              "to_lon_lat": [
-                26.9,
-                59.3
+                31,
+                53.7
               ]
             },
             {
@@ -705,17 +674,6 @@
               "to_lon_lat": [
                 50.5,
                 53.9
-              ]
-            },
-            {
-              "km": 83,
-              "from_lon_lat": [
-                29.3,
-                55.6
-              ],
-              "to_lon_lat": [
-                29.7,
-                55.1
               ]
             },
             {
@@ -738,17 +696,6 @@
               "to_lon_lat": [
                 -2.5,
                 55.4
-              ]
-            },
-            {
-              "km": 81,
-              "from_lon_lat": [
-                30.4,
-                54.4
-              ],
-              "to_lon_lat": [
-                31,
-                54
               ]
             },
             {
@@ -786,8 +733,19 @@
             }
           ],
           "seam_runs_over_80km_1000m": [],
-          "longest_straight_km_1000m": 141.2,
+          "longest_straight_km_1000m": 159.5,
           "straight_runs_over_80km_1000m": [
+            {
+              "km": 159,
+              "from_lon_lat": [
+                27.5,
+                60.5
+              ],
+              "to_lon_lat": [
+                30.5,
+                60.5
+              ]
+            },
             {
               "km": 141,
               "from_lon_lat": [
@@ -800,14 +758,14 @@
               ]
             },
             {
-              "km": 108,
+              "km": 92,
               "from_lon_lat": [
-                28.1,
-                60.5
+                31.1,
+                54.3
               ],
               "to_lon_lat": [
-                30.1,
-                60.5
+                31.8,
+                53.8
               ]
             },
             {
@@ -822,14 +780,14 @@
               ]
             },
             {
-              "km": 87,
+              "km": 88,
               "from_lon_lat": [
-                31,
-                60.2
+                23.4,
+                57
               ],
               "to_lon_lat": [
-                31.8,
-                59.7
+                24.1,
+                56.5
               ]
             },
             {
@@ -844,17 +802,6 @@
               ]
             },
             {
-              "km": 85,
-              "from_lon_lat": [
-                27.9,
-                58.9
-              ],
-              "to_lon_lat": [
-                27,
-                59.2
-              ]
-            },
-            {
               "km": 81,
               "from_lon_lat": [
                 48.2,
@@ -863,6 +810,17 @@
               "to_lon_lat": [
                 49.4,
                 54.4
+              ]
+            },
+            {
+              "km": 81,
+              "from_lon_lat": [
+                28,
+                58.9
+              ],
+              "to_lon_lat": [
+                27.1,
+                59.2
               ]
             },
             {
@@ -894,42 +852,42 @@
             "anywhere": 0
           },
           "needle_cells": {
-            "moved": 15,
-            "anywhere": 21
+            "moved": 183,
+            "anywhere": 223
           },
           "flat_stamped_areas": [
             {
-              "cells": 456,
+              "cells": 183,
               "at": [
-                15.6,
-                55.5
+                13.9,
+                59.2
               ]
             },
             {
-              "cells": 174,
+              "cells": 148,
               "at": [
-                14,
-                59.4
+                15.8,
+                56
               ]
             },
             {
-              "cells": 107,
+              "cells": 78,
+              "at": [
+                22.8,
+                59.5
+              ]
+            },
+            {
+              "cells": 66,
               "at": [
                 14.6,
                 56.5
               ]
             },
             {
-              "cells": 82,
+              "cells": 62,
               "at": [
-                15.7,
-                56.5
-              ]
-            },
-            {
-              "cells": 73,
-              "at": [
-                22.8,
+                20.7,
                 59.5
               ]
             },
@@ -939,33 +897,61 @@
                 68.4,
                 54.3
               ]
+            },
+            {
+              "cells": 39,
+              "at": [
+                21.9,
+                59.8
+              ]
+            },
+            {
+              "cells": 36,
+              "at": [
+                20.1,
+                59.7
+              ]
+            },
+            {
+              "cells": 21,
+              "at": [
+                15.6,
+                55.6
+              ]
+            },
+            {
+              "cells": 20,
+              "at": [
+                15.8,
+                56.6
+              ]
             }
           ],
           "blend_band_depth_step_m": {
-            "p99": 221,
-            "max": 1298,
-            "pairs": 204462
+            "p99": 236,
+            "max": 1291,
+            "pairs": 209346
           },
           "real_seabed_around_depth_step_m": {
             "p99": 404,
             "max": 1717,
-            "pairs": 551269
+            "pairs": 551194
           }
         },
         "passes": false,
         "failed": [
           "Seam: no straight run longer than 80 km in the coastline where the pipeline moved it (half the run or more): 1 runs, longest 95 km",
-          "Seam: no straight run longer than 80 km in the 50 m depth contour where the pipeline moved it (half the run or more): 1 runs, longest 97 km",
-          "Seam: no straight run longer than 80 km in the 200 m depth contour where the pipeline moved it (half the run or more): 2 runs, longest 99 km",
-          "Seam: no needles (land or sea one cell, about 3 km, wide) where the pipeline changed the terrain: 15 cells (21 anywhere, mostly real coast)",
-          "Seam: no flat stamped areas (moved by more than 30 m, almost no relief, 200 km² or more): 6 areas, largest 4560 km²"
+          "Seam: no straight run longer than 80 km in the 50 m depth contour where the pipeline moved it (half the run or more): 1 runs, longest 80 km",
+          "Seam: no straight run longer than 80 km in the 200 m depth contour where the pipeline moved it (half the run or more): 4 runs, longest 123 km",
+          "Seam: no needles (land or sea one cell, about 3 km, wide) where the pipeline changed the terrain: 183 cells (223 anywhere, mostly real coast)",
+          "Seam: no flat stamped areas (moved by more than 30 m, almost no relief, 200 km² or more): 10 areas, largest 1830 km²"
         ],
         "map_tests": "113 of 113 hold",
         "terrain_checks": [
           {
             "check": "Book sea is water: northern sea and inlet",
             "ok": true,
-            "got": "1881 of 1881 cells water"
+            "got": "1458 of 1458 cells water"
           },
           {
             "check": "Book sea is water: southern sea",
@@ -990,12 +976,12 @@
           {
             "check": "Northglade: snowy hills and pine (c31-b2, c31-b5)",
             "ok": true,
-            "got": "summit 369 m, boreal pine forest, 0.4 °C"
+            "got": "summit 369 m, boreal pine forest, 0.3 °C"
           },
           {
             "check": "Elenar Forest: snowy hills under thick snowy pine (c29-b2, c29-b19)",
             "ok": true,
-            "got": "hills to 465 m; 100% pine"
+            "got": "hills to 560 m; 100% pine"
           },
           {
             "check": "Northglade's island is an island, about twenty kilometers wide",
@@ -1030,7 +1016,7 @@
           {
             "check": "Colder to the north",
             "ok": true,
-            "got": "north 1.3 °C, south 10.7 °C"
+            "got": "north -0.8 °C, south 10.7 °C"
           },
           {
             "check": "Meldan is green",
@@ -1040,7 +1026,7 @@
           {
             "check": "Rivers run downhill to the sea or off the frame (region)",
             "ok": true,
-            "got": "515 rivers, 0 climb; lakes 2438 cells"
+            "got": "517 rivers, 0 climb; lakes 2588 cells"
           },
           {
             "check": "Rivers run downhill to the sea or off the frame (Dzego)",
@@ -1125,17 +1111,17 @@
     "dataset": "ETOPO 2022 v1, 60 arc-second surface elevation",
     "note": "the chapter 29 battle map's area (with the peninsula, Thaldur and Northglade's island) comes from its own real patch, feathered into each region candidate over about 220 km: no region-scale window matches the book's drawn coast there",
     "source_centre_lon_lat": [
-      -14.968,
-      11
+      41.363,
+      -9.5
     ],
     "source_box": {
-      "west": -19.567,
-      "south": 3.206,
-      "east": -11.154,
-      "north": 18.764,
+      "west": 33.592,
+      "south": -17.016,
+      "east": 48.958,
+      "north": -1.907,
       "note": "the box around the frame's outline on the real globe (longitudes may wrap)"
     },
-    "rotation_deg": 270,
+    "rotation_deg": 135,
     "mirrored": true,
     "scale": 1
   },
@@ -1193,7 +1179,9 @@
     "The book-sea test for the battle map's northern and southern seas now counts cells more than 20 km inside the drawn line (v4: 6 km). The Redshire gulf test is unchanged (15 km).",
     "The battle map's seas are no longer carried past the drawing's borders as fixed polygons: inside the drawing they are held to the border, beyond it they run on along a fractal line 60 to 220 km out.",
     "Thaldur's open-water rectangles (ours) are removed; Thaldur is a real island (see thaldur_island).",
-    "Meldan has a region-scale forest cover pin (c1-b2, c32-b107), like Elenar Forest's; the climate rules are unchanged."
+    "Meldan has a region-scale forest cover pin (c1-b2, c32-b107), like Elenar Forest's; the climate rules are unchanged.",
+    "Owner, 2026-10-12 (review 3): the peninsula's and the inlet's drawn outlines are let go. The peninsula is held only as a meandering land strip 20 to 50 km wide, with irregular edges and a rounded end, from Northshore's eastern end toward Thaldur; the inlet only as a meandering water strip 6 to 18 km wide; the inlet arm is left out of the northern sea's area test, its role being tested through Group North's route ending on it (wg-366) and the river reaching the sea from the open northern sea to the border river's mouth. The real terrain shapes the rest. The tests on them (the peninsula attached and between Northshore and Thaldur; Group North's route ending on the inlet; the river reaching the sea) are unchanged and run on outlines traced from the terrain.",
+    "The inner sea (the battle map's southern sea) comes from a real bay, transplanted (see inner_sea_bay); the drawn sea's interior is still held."
   ],
   "method": "Real heights moved by a rigid motion of the sphere (the book frame's centre onto a source point, turned in 15° steps, mirrored or not, at true scale); then v4's soft and hard pins for every book fact, a light droplet erosion (region 60,000, Dzego 40,000 droplets) so the pins settle into the real relief, the book's river carved, priority-flood lakes, rivers from flow accumulation on the real terrain, climate from the book's latitudes and the real heights, biomes, and the book's forests forced. The seabed is as measured.",
   "constraints": [
@@ -1228,26 +1216,6 @@
         "wg-369"
       ],
       "band_km": 20
-    },
-    {
-      "frame": "region",
-      "kind": "land",
-      "why": "The peninsula dangling off Northshore's eastern end (its drawn coast may move within 20 km)",
-      "provenance": "book",
-      "lines": [
-        "wg-375"
-      ],
-      "band_km": 20
-    },
-    {
-      "frame": "region",
-      "kind": "land",
-      "why": "The peninsula is attached to Northshore",
-      "provenance": "book",
-      "lines": [
-        "wg-375"
-      ],
-      "band_km": 0
     },
     {
       "frame": "region",
@@ -1778,6 +1746,28 @@
     },
     {
       "frame": "region",
+      "kind": "land",
+      "why": "The peninsula: a land strip attached to Northshore's eastern end, pointing at Thaldur (its role; its outline is the terrain's)",
+      "provenance": "book",
+      "lines": [
+        "wg-375"
+      ],
+      "band_km": 0
+    },
+    {
+      "frame": "region",
+      "kind": "sea",
+      "why": "The inlet: water from the open northern sea down to the border river's mouth (its role; its outline is the terrain's)",
+      "provenance": "book",
+      "lines": [
+        "wg-366",
+        "wg-370",
+        "wg-373"
+      ],
+      "band_km": 0
+    },
+    {
+      "frame": "region",
       "kind": "cover",
       "why": "Meldan is wooded: \"tall trees towering on both sides\" (c1-b2); Kalimar is \"not too different from a forest\" (c32-b107)",
       "provenance": "book",
@@ -1915,23 +1905,23 @@
   "outputs": {
     "where": "out/maps-v5/ (not in the repository; copied to Drive)",
     "sha256": {
-      "out/maps-v5/candidate-1/region/composite.png": "6145ed8c318393a126c932aa9b88d832e41319e38692b5314c2a7bfb5df37e7b",
-      "out/maps-v5/candidate-1/region/layers/hillshade.png": "d270855930fd29e5835afc9c04c153d141a3a051f923eae5afa929a0b9ae130f",
-      "out/maps-v5/candidate-1/region/layers/tint.png": "dd55101766bdc1fdcc0a3ec078b0b27e18c1a153a6a7a1853c184e596a6060fc",
-      "out/maps-v5/candidate-1/region/layers/water.png": "d88ba40529197900bda78684a40ba8638c741bebcd8dbfa0c3c61c60d67dcd65",
-      "out/maps-v5/candidate-1/region/layers/rivers.png": "8a55e50491f4dfaaec7ac5bd82e4609011f61fef0d0c6a0041f709821366e305",
-      "out/maps-v5/candidate-1/region/layers/forest.png": "bf55639f5dfcafa936871dcff44d8a3fc49b276950ed6e95d23c1de482dad3d6",
-      "out/maps-v5/candidate-1/region/data/height.png": "3261edae19e84fc6c5c305fa53d5c0216ec6a4add8431e4eb90573c92d9c84f2",
-      "out/maps-v5/candidate-1/region/data/biome.png": "35230787080743e0db64f14843636ff83e87ec6d74e4e2847f11d8138c258e0d",
-      "out/maps-v5/candidate-1/region/data/rivers.json": "6256a7724de15144069f2a61966f378a2b4aebdaacd27a2817ba7ca74e6be5d8",
+      "out/maps-v5/candidate-1/region/composite.png": "591a3ff45533f998843bf424ae912bded98f33944b9078beac901b3c98018592",
+      "out/maps-v5/candidate-1/region/layers/hillshade.png": "57fddd45fc99406540ade80735068c48e6005ba382aab28f3b3825ca3bf67937",
+      "out/maps-v5/candidate-1/region/layers/tint.png": "60de3bcb8b28d4d59511018962a3af86c2a0e732d1616c60e52530932855f3b0",
+      "out/maps-v5/candidate-1/region/layers/water.png": "1fe6d17fd4309249361f6b3a06eda5af5c3cabfd955d84dca2b4c6af7065244b",
+      "out/maps-v5/candidate-1/region/layers/rivers.png": "ef02831fd0848beba44551e2c2d26f90c91e18e8ea6cba84ffb51af848a31c54",
+      "out/maps-v5/candidate-1/region/layers/forest.png": "f8790255bb8b96c8d04290e77a28e04ebb7e753849f77e1823e621eb238ea432",
+      "out/maps-v5/candidate-1/region/data/height.png": "2442223a964381458e7da7af21b83445a05ee7e1d9354df4991ab1156f8fa6ef",
+      "out/maps-v5/candidate-1/region/data/biome.png": "1961a6290376df9be5fd14896dba543a5744591eea46df18ab6eaf4f740d6738",
+      "out/maps-v5/candidate-1/region/data/rivers.json": "a05818f59b0fb726d3b68f7e0485b4094673270c12f1da45db14d75f210be5c9",
       "out/maps-v5/candidate-1/region/data/meta.json": "2e387d43ede4bc2ee264ca6484ba931275c62a86c0750fbe80a92d686fb3a8d3",
-      "out/maps-v5/dzego/composite.png": "484292a30ec048029c2a166a1fc826680315a4869d4562db70194e8e9230bc65",
-      "out/maps-v5/dzego/layers/hillshade.png": "5994197bb2db30a2d7142c4ad352f5fe634127a4ff124b80ff3f866f43006530",
-      "out/maps-v5/dzego/layers/tint.png": "a66d90aa4712c768e993304b7d6228b6032fab865696b5a105632605aae8ac3e",
-      "out/maps-v5/dzego/layers/water.png": "5f26b6b81c9e990d7ce3388e36423b8ba7dbc4cc299554282de7958f29a4dfb4",
+      "out/maps-v5/dzego/composite.png": "695f1822102a581701a612aa3ee9e4f440ff7ebeb305b8279123364f9bd0acb1",
+      "out/maps-v5/dzego/layers/hillshade.png": "57697fa6c205e1fb3ca61adedd1113c8e0ebf457c1935028885e4b1db19af7d6",
+      "out/maps-v5/dzego/layers/tint.png": "1c38fe2229fe08cc01bd2e51ebca2a7fd573b4ad0bb11f23729d6fccb40ef861",
+      "out/maps-v5/dzego/layers/water.png": "546701c94bac2af823cef0ddb7e101c014c3e55570ade9e1191de20b757e91d6",
       "out/maps-v5/dzego/layers/rivers.png": "1f221c9fd59b1289694bc22874d8ee3765fbab36d4bd1c8c6011b83014b757df",
       "out/maps-v5/dzego/layers/forest.png": "9f6435b03106f18a41e889856081cbb4a9fc90e6927145bb2da58986baa87449",
-      "out/maps-v5/dzego/data/height.png": "478d4a5b8ac94c7e0e3d031977d8973f2f393b4889b46894ab5cdf4a6060bdfc",
+      "out/maps-v5/dzego/data/height.png": "fb4c0502ad8e769c7694ff202fb252df19eddec5bb2dc15a87ee690dc2c32ab6",
       "out/maps-v5/dzego/data/biome.png": "06a2b31476791f276e76a8942ac99e1ecff8310ebbaf9660ca5e229199cc5edd",
       "out/maps-v5/dzego/data/rivers.json": "9753ee77b9cb6e4f72bfcccd1ee562db12f36889429a4a5b5614c21918b99d26",
       "out/maps-v5/dzego/data/meta.json": "ac5818a43696ff38f31d333c6971e04225742644199203ab1eccffe532dea99f",

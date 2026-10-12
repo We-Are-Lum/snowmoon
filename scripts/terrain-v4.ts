@@ -890,6 +890,8 @@ function generatedMaps(r: SeedRun) {
 /** How far inside each book sea its "is water" test starts (km from the drawn line). v4 holds the drawn coasts within
  * 6 km; maps v5 lets the battle map's coasts move within 20 km (owner, 2026-10-12) and tests them from 20 km in. */
 const BOOK_SEA_BAND: Record<'north_sea' | 'south_sea' | 'redshire_gulf', number> = { north_sea: 6, south_sea: 6, redshire_gulf: 15 };
+/** Parts of a book sea its test leaves out (maps v5: the inlet arm, whose role is tested on its own). */
+const BOOK_SEA_EXCLUDE: { fn: ((id: string, q: XY) => boolean) | null } = { fn: null };
 type Check = { id: string; lines: string[]; ok: boolean; got: string };
 function terrainChecks(r: SeedRun): Check[] {
   const out: Check[] = [];
@@ -906,7 +908,7 @@ function terrainChecks(r: SeedRun): Check[] {
     for (let j = Math.max(0, Math.floor(Math.min(...ys) / g.dy)); j <= Math.min(g.h - 1, Math.ceil(Math.max(...ys) / g.dy)); j++)
       for (let i = Math.max(0, Math.floor(Math.min(...xs) / g.dx)); i <= Math.min(g.w - 1, Math.ceil(Math.max(...xs) / g.dx)); i++) {
         const q: XY = [i * g.dx, j * g.dy];
-        if (polySigned(g, q, poly) > band && !islandsXY.some(([c, rr]) => kmDist(g, q, c) < rr)) { cells++; if (R.z[j * g.w + i] >= 0) { bad++; if (process.env.TV4_BAD) { const [lo, la] = REGION.toLL(q[0], q[1]); console.log('  land in book sea', id, lo.toFixed(2), la.toFixed(2), 'ns', llToFrame('northshore', lo, la).map((v) => v.toFixed(0)).join(','), 'z', R.z[j * g.w + i].toFixed(0), 'sd', polySigned(g, q, poly).toFixed(1)); } } }
+        if (polySigned(g, q, poly) > band && !islandsXY.some(([c, rr]) => kmDist(g, q, c) < rr) && !(BOOK_SEA_EXCLUDE.fn && BOOK_SEA_EXCLUDE.fn(id, q))) { cells++; if (R.z[j * g.w + i] >= 0) { bad++; if (process.env.TV4_BAD) { const [lo, la] = REGION.toLL(q[0], q[1]); console.log('  land in book sea', id, lo.toFixed(2), la.toFixed(2), 'ns', llToFrame('northshore', lo, la).map((v) => v.toFixed(0)).join(','), 'z', R.z[j * g.w + i].toFixed(0), 'sd', polySigned(g, q, poly).toFixed(1)); } } }
       }
     c(`Book sea is water: ${place(W, id).name}`, place(W, id).lines, bad === 0 && cells > 0, `${cells - bad} of ${cells} cells water`);
   }
@@ -1313,6 +1315,6 @@ if (!isMain) {
 export {
   W, LL, nsLL, ucLL, llToFrame, projFrame, cityFrame, REGION, DZEGO, MELDAN, PAFOGAI, kmDist, polySigned, bilinear, applyPins,
   regionPins, dzegoPins, meldanPinsV4, pafogaiPinsV4, finish, generatedMaps, terrainChecks, testSeed, render, hydrology, climate,
-  BIOMES, LABEL, smooth, place, pts, maps, cxy, idx, softPins, erodeDroplets, carve, dropSpecks, B, FOREST, BOOK_SEA_BAND, clipPoly,
+  BIOMES, LABEL, smooth, place, pts, maps, cxy, idx, softPins, erodeDroplets, carve, dropSpecks, B, FOREST, BOOK_SEA_BAND, BOOK_SEA_EXCLUDE, clipPoly,
 };
 export type { Frame, CityFrame, FrameRun, SeedRun, Pin, Layers, Check };

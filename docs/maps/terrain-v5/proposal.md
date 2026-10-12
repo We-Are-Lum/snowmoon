@@ -246,3 +246,15 @@ Both hills over 92% pass every terrain check, but fail one map test. On them, pa
 They are scoped to cells the pins and v5's rules changed, not the light erosion.
 
 **Before and after:** `northshore-review-1.png` and `northshore-review-2.png`. `northshore-review-2-flagged.png` marks what the checks still flag: straight runs in red, flat areas in yellow.
+
+## Revision 4: the owner's third review (2026-10-12), frozen
+
+**What changed:**
+- **The peninsula and the inlet** are held only as their roles (meandering strips). The inlet arm is left out of the northern sea's area test.
+- **The inner sea** is a real gulf (the head of the Shelikhov Gulf), transplanted.
+- **The pale dots were stranded shallow plates in deep water,** left where a land hold had lifted the seabed. The real depth now returns wherever the lift did not end as land.
+- **Islets under about 400 km² are sunk** in the battle map's area.
+- **Thaldur's source is named:** Samar and Leyte, joined at these grids' resolution.
+- **The previous Northshore patch duplicated a coast the region already showed.** 1,524 of its 1,947 sample points were also visible on the region's west coast. Patch searches now reject any source the region shows, and the patch is now southern Tanzania's coast.
+
+**Crop:** `northshore-review-3.png`. **Handoff:** `handoff.md`.

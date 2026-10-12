@@ -28,7 +28,7 @@ import { rgbPng, rgbaPng, grey8Png, grey16Png, writeTiles, downsample, newRGBA, 
 import {
   W, LL, ucLL, nsLL, llToFrame, REGION, DZEGO, MELDAN, PAFOGAI, kmDist, applyPins, softPins, erodeDroplets, carve, dropSpecks, hydrology, climate,
   regionPins, dzegoPins, meldanPinsV4, pafogaiPinsV4, testSeed, render, BIOMES, B, smooth, place, pts, maps, cxy, polySigned,
-  BOOK_SEA_BAND, clipPoly, type Frame, type CityFrame, type FrameRun, type SeedRun, type Pin,
+  BOOK_SEA_BAND, BOOK_SEA_EXCLUDE, clipPoly, type Frame, type CityFrame, type FrameRun, type SeedRun, type Pin,
 } from './terrain-v4';
 
 const ROOT = process.cwd();
@@ -97,12 +97,15 @@ export function dest(lon0: number, lat0: number, d: number, b: number): XY {
   const l2 = rad(lon0) + Math.atan2(Math.sin(b) * Math.sin(d) * Math.cos(p1), Math.cos(d) - Math.sin(p1) * Math.sin(p2));
   return [((deg(l2) + 540) % 360) - 180, deg(p2)];
 }
-type FrameName = 'region' | 'dzego' | 'northshore';
+type FrameName = 'region' | 'dzego' | 'northshore' | 'bay';
+// the battle map's southern sea (the inner sea) and the land around it, in the battle map's pixels
+const BAY_BOX: [number, number, number, number] = [95, 105, 290, 290];
 // Northshore: the chapter 29 battle map and what the book places around it (the peninsula, Thaldur, Northglade's
 // island), in the battle map's pixels (2.6 km each); its own real patch, blended into the region
 const NS_CORE: [number, number, number, number] = [-40, -40, 540, 280]; // includes the open water east of the peninsula and around Thaldur
 const nsBox = (() => { let a = Infinity, b = Infinity, c = -Infinity, d = -Infinity; for (const x of [NS_CORE[0], NS_CORE[2]]) for (const y of [NS_CORE[1], NS_CORE[3]]) { const [lo, la] = nsLL([x, y]); a = Math.min(a, lo); c = Math.max(c, lo); b = Math.min(b, la); d = Math.max(d, la); } return [a, b, c, d] as [number, number, number, number]; })();
-const CENTRE: Record<FrameName, XY> = { region: [38, 51], dzego: [149, 23], northshore: [(nsBox[0] + nsBox[2]) / 2, (nsBox[1] + nsBox[3]) / 2] };
+const bayBox = (() => { let a = Infinity, b = Infinity, c = -Infinity, d = -Infinity; for (const x of [BAY_BOX[0], BAY_BOX[2]]) for (const y of [BAY_BOX[1], BAY_BOX[3]]) { const [lo, la] = nsLL([x, y]); a = Math.min(a, lo); c = Math.max(c, lo); b = Math.min(b, la); d = Math.max(d, la); } return [a, b, c, d] as [number, number, number, number]; })();
+const CENTRE: Record<FrameName, XY> = { region: [38, 51], dzego: [149, 23], northshore: [(nsBox[0] + nsBox[2]) / 2, (nsBox[1] + nsBox[3]) / 2], bay: [(bayBox[0] + bayBox[2]) / 2, (bayBox[1] + bayBox[3]) / 2] };
 /** Where a book point (lon, lat) of a frame comes from on the real globe. */
 export function toSource(frame: FrameName, xf: Xf, lon: number, lat: number): XY {
   const [c0, c1] = CENTRE[frame];
@@ -140,7 +143,7 @@ const FAMOUS: [string, number, [number, number][]][] = [
   ['Tibetan Plateau and the Himalaya', 2, [[88, 31], [80, 34], [95, 31], [86, 28], [76, 36]]], ['Alps', 1.5, [[10, 46.5], [7, 45.8]]], ['Gulf of Guinea', 1.5, [[3, 4], [8, 4.3], [-2, 5], [9.5, 2]]],
   ['East African rift lakes', 1.5, [[30, -6], [34.5, -11], [29.5, -1]]], ['Lake Victoria', 1.5, [[33, -1]]], ['Bering Strait and Chukotka', 1.5, [[-169, 65.8], [-172, 64.5], [-175, 67]]], ['Gulf of Finland', 1, [[26, 60]]], ['Adriatic Sea', 1.5, [[15, 43]]], ['Aegean Sea', 1.5, [[25, 38.5]]], ['Gulf of California', 1.5, [[-111, 28]]], ['Lake Baikal', 1.5, [[108, 53.5]]],
 ];
-const BOUNDS: Record<FrameName, [number, number, number, number]> = { region: [-8, 36, 84, 66], dzego: [138, 15, 160, 31], northshore: nsBox };
+const BOUNDS: Record<FrameName, [number, number, number, number]> = { region: [-8, 36, 84, 66], dzego: [138, 15, 160, 31], northshore: nsBox, bay: bayBox };
 export function famousIn(frame: FrameName, xf: Xf): { name: string; w: number }[] {
   const [lo0, la0, lo1, la1] = BOUNDS[frame];
   const out: { name: string; w: number }[] = [];
@@ -157,19 +160,20 @@ function targetsFor(frame: FrameName, stride: number, cap = 120, regionXf?: Xf):
   const f: Frame = frame === 'dzego' ? DZEGO : REGION;
   const inNs = (lo: number, la: number) => lo > nsBox[0] && lo < nsBox[2] && la > nsBox[1] && la < nsBox[3];
   // Northshore is scored against v5's own pins (with the open water east of the peninsula), the region against v4's
-  const pins = (frame === 'dzego' ? dzegoPins() : frame === 'northshore' ? [openSeaEast(), ...regionPinsV5()] : regionPins()).filter((p) => p.kind !== 'river' && p.kind !== 'cover');
+  const pins = (frame === 'dzego' ? dzegoPins() : frame === 'northshore' ? [openSeaEast(), ...regionPinsV5()] : frame === 'bay' ? regionPinsV5().filter((p) => p.kind === 'land-box' || /battle map's southern sea/.test(p.why)) : regionPins()).filter((p) => p.kind !== 'river' && p.kind !== 'cover');
   const [c0, c1] = CENTRE[frame];
   const targets: Target[] = [], groups: Group[] = [];
   const add = (group: number, x: number, y: number, want: Target['want'], ref?: number) => { const [lo, la] = f.toLL(x, y); const [d, b] = polar(c0, c1, lo, la); targets.push({ group, d, b, want, ref }); };
   const probe = new Float32Array(f.w * f.h);
   for (const p of pins) {
     probe.fill(0);
-    if (frame === 'northshore') applyAll(f, probe, [p]); else applyPins(f, probe, [p]);
+    if (frame === 'northshore' || frame === 'bay') applyAll(f, probe, [p]); else applyPins(f, probe, [p]);
     const cells: [number, number, Target['want']][] = [];
     for (let j = 0; j < f.h; j += stride) for (let i = 0; i < f.w; i += stride) {
       const v = probe[j * f.w + i];
       if (v === 0 || Math.abs(v) <= 1) continue;
       if (frame === 'northshore') { const [lo, la] = f.toLL(f.x0 + i * f.dx, f.y0 + j * f.dy); if (!inNs(lo, la)) continue; }
+      if (frame === 'bay') { const [lo, la] = f.toLL(f.x0 + i * f.dx, f.y0 + j * f.dy), [bx, by] = llToFrame('northshore', lo, la); if (bx < BAY_BOX[0] || bx > BAY_BOX[2] || by < BAY_BOX[1] || by > BAY_BOX[3]) continue; }
       cells.push([i, j, v > 0 ? 'land' : 'sea']);
     }
     if (!cells.length) continue;
@@ -210,6 +214,16 @@ function targetsFor(frame: FrameName, stride: number, cap = 120, regionXf?: Xf):
     // a country with coasts, as v4 drew it: between 35% and 80% of the frame is land (ours)
     const gc = groups.push({ name: 'Dzego has coasts: 35–80% of the frame is land', weight: 1, kind: 'landshare', provenance: 'placed by us', cat: 'relief' }) - 1;
     for (let j = 0; j < f.h; j += stride * 3) for (let i = 0; i < f.w; i += stride * 3) add(gc, f.x0 + i * f.dx, f.y0 + j * f.dy, 'high900');
+  }
+  if (frame === 'bay') {
+    // in this map the inner sea is closed by land beyond the drawing's south and east borders (ours; the book does not say
+    // what lies past its edges), so the real match is a gulf, not an open coast
+    const ge = groups.push({ name: 'land beyond the drawing closes the inner sea (ours)', weight: 1, kind: 'frac', provenance: 'placed by us', cat: 'battle' }) - 1;
+    for (let py = 125; py <= 285; py += 4) for (let px = 125; px <= 285; px += 4) {
+      if (!((px >= 250 && py >= 125) || (py >= 250 && px >= 125))) continue;
+      const [lo, la] = nsLL([px, py]), [x, y] = f.fromLL(lo, la);
+      add(ge, x, y, 'land');
+    }
   }
   if (frame === 'northshore') {
     // the battle map's land is snowy hills under pine (Northglade c31-b2, c31-b5; Elenar Forest c29-b2, c29-b19, c29-b38),
@@ -281,7 +295,7 @@ function scoreXf(frame: FrameName, xf: Xf, T: { targets: Target[]; groups: Group
   // fewer than 80% of them on real land is cut to 40%
   // Northshore: the battle map (with the open water east of the peninsula) and, when a region is chosen, how well the
   // patch meets it around the blend
-  const share = frame === 'northshore' ? { battle: 0.6, places: 0, sea: 0, land: 0, relief: 0, blend: 0.4 } : { battle: 0.05, places: 0.35, sea: 0.15, land: 0.15, relief: 0.3, blend: 0 };
+  const share = frame === 'bay' ? { battle: 1, places: 0, sea: 0, land: 0, relief: 0, blend: 0 } : frame === 'northshore' ? { battle: 0.6, places: 0, sea: 0, land: 0, relief: 0, blend: 0.4 } : { battle: 0.05, places: 0.35, sea: 0.15, land: 0.15, relief: 0.3, blend: 0 };
   let fit = 0, used = 0;
   // the battle map counts its seas and its land half and half, whatever the number of pins on each
   const hg = T.groups.findIndex((G) => G.name.startsWith('the battle map\'s land is hills'));
@@ -300,6 +314,33 @@ function scoreXf(frame: FrameName, xf: Xf, T: { targets: Target[]; groups: Group
 }
 
 // ---- the search
+/** The share of the bay's box whose real source the region window or the chosen Northshore patch also shows. */
+let bayRefs: { region: Xf; ns: Xf } | null = null;
+function bayShownElsewhere(bx: Xf): number {
+  if (!bayRefs) return 0;
+  let n = 0, dup = 0;
+  for (let px = BAY_BOX[0]; px <= BAY_BOX[2]; px += 15) for (let py = BAY_BOX[1]; py <= BAY_BOX[3]; py += 15) {
+    const [lon, lat] = nsLL([px, py]), [slo, sla] = toSource('bay', bx, lon, lat);
+    n++;
+    const [rlo, rla] = toBook('region', bayRefs.region, slo, sla);
+    if (rlo >= -8 && rlo <= 84 && rla >= 36 && rla <= 66) { dup++; continue; }
+    const [nlo, nla] = toBook('northshore', bayRefs.ns, slo, sla), [fx, fy] = llToFrame('northshore', nlo, nla);
+    if (Math.max(NS_CORE[0] - fx, fx - NS_CORE[2], NS_CORE[1] - fy, fy - NS_CORE[3], 0) * 2.6 < 250) dup++;
+  }
+  return dup / n;
+}
+/** The share of a Northshore patch's core whose real source the region window also shows outside the blend. */
+function shownTwice(nx: Xf, rx: Xf): number {
+  let n = 0, dup = 0;
+  for (let px = NS_CORE[0]; px <= NS_CORE[2]; px += 20) for (let py = NS_CORE[1]; py <= NS_CORE[3]; py += 20) {
+    const [lon, lat] = nsLL([px, py]), [slo, sla] = toSource('northshore', nx, lon, lat), [blo, bla] = toBook('region', rx, slo, sla);
+    n++;
+    if (blo < -8 || blo > 84 || bla < 36 || bla > 66) continue;
+    const [fx, fy] = llToFrame('northshore', blo, bla);
+    if (Math.max(NS_CORE[0] - fx, fx - NS_CORE[2], NS_CORE[1] - fy, fy - NS_CORE[3], 0) * 2.6 > 250) dup++;
+  }
+  return dup / n;
+}
 type Cand = { xf: Xf; score: number; fit: number; famous: string[]; parts: Record<string, number> };
 function search(frame: FrameName, top: number, regionXf?: Xf): Cand[] {
   const fine: Grid16 = { data: etopo(), w: ETOPO.w, h: ETOPO.h, res: ETOPO.res };
@@ -343,6 +384,10 @@ function search(frame: FrameName, top: number, regionXf?: Xf): Cand[] {
   const picked: Cand[] = [];
   for (const c of refined) {
     if (picked.some((p) => polar(p.xf.lon, p.xf.lat, c.xf.lon, c.xf.lat)[0] * RE < (frame === 'northshore' ? 600 : 1500))) continue;
+    // no real coast shown twice: a Northshore patch whose source the region window also shows (outside the blend) is skipped
+    if (frame === 'northshore' && regionXf && shownTwice(c.xf, regionXf) > 0.02) continue;
+    if (frame === 'bay' && bayShownElsewhere(c.xf) > 0.02) continue;
+    if (frame === 'bay' && c.fit < 0.6) continue;
     picked.push(c);
     if (picked.length >= Math.max(top, 30)) break;
   }
@@ -714,6 +759,7 @@ function applyFreePins(g: GridSpec, z: Float32Array, pins: Pin[]) {
     for (let j = j0; j <= j1; j++) for (let i = i0; i <= i1; i++) {
       const n = (j - j0) * bw + (i - i0), v = sd[n];
       if (v <= 0) continue;
+      if (p.kind === 'sea' && /battle map's northern sea/.test(p.why)) { const [lo2, la2] = REGION.toLL(g.x0 + i * g.dx, g.y0 + j * g.dy), [fx, fy] = llToFrame('northshore', lo2, la2); if (fx < 150 && fy > 45) continue; } // the inlet arm: its role is held by its own strip
       const x = g.x0 + i * g.dx, y = g.y0 + j * g.dy;
       const u = Math.max(0.05, Math.min(1, 0.5 + 0.45 * nz.fbm(x / 15, y / 15, 2) + 0.35 * nz.fbm(x / 45 + 7, y / 45, 2) + 0.25 * nz.fbm(x / 120 - 3, y / 120, 2)));
       // a shape's thin tip (half-width under 8 km) is not held: the terrain decides how it ends
@@ -740,21 +786,42 @@ function applyAll(g: GridSpec, z: Float32Array, pins: Pin[]) {
 /** Spurs and slivers the rules left behind (narrower than about 12 km), removed by an opening of two cells, but only
  * on terrain the pins changed: real coasts and named book features are left alone. */
 function openChanged(g: GridSpec, z: Float32Array, before: Float32Array, pins: Pin[]) {
-  const named = pins.filter((p) => /Northglade's island|a strait between|Redshire's south islands|Islands: water|is on land|attached to Northshore|peninsula dangling|Thaldur, an island/.test(p.why));
+  const named = pins.filter((p) => /Northglade's island|a strait between|Redshire's south islands|Islands: water|is on land|attached to Northshore|peninsula|Thaldur, an island|The inlet/.test(p.why));
   const prot = new Uint8Array(z.length);
   for (const p of named) { const probe = new Float32Array(z.length); applyAll(g, probe, [p]); for (let k = 0; k < z.length; k++) if (probe[k] !== 0) prot[k] = 1; }
   if (narrowHold && narrowHold.length === z.length) for (let k = 0; k < z.length; k++) if (narrowHold[k]) prot[k] = 1;
   for (const landSide of [true, false]) {
     const m = new Uint8Array(z.length);
     for (let k = 0; k < z.length; k++) m[k] = (z[k] >= 0) === landSide ? 1 : 0;
-    const morph = (src: Uint8Array, erode: boolean) => { const out = new Uint8Array(src.length); for (let j = 0; j < g.h; j++) for (let i = 0; i < g.w; i++) { let v = erode ? 1 : 0; for (let b = -2; b <= 2 && (erode ? v : !v); b++) for (let a = -2; a <= 2; a++) { if (a * a + b * b > 5) continue; const ii = i + a, jj = j + b; const s2 = ii < 0 || jj < 0 || ii >= g.w || jj >= g.h ? src[j * g.w + i] : src[jj * g.w + ii]; if (erode && !s2) { v = 0; break; } if (!erode && s2) { v = 1; break; } } out[j * g.w + i] = v; } return out; };
-    const opened = morph(morph(m, true), false);
+    const R = landSide ? 2 : 4, R2 = landSide ? 5 : 17; // sea pockets the rules made (lagoons) go if under about 25 km across
+    const morph = (src: Uint8Array, erode: boolean) => { const out = new Uint8Array(src.length); for (let j = 0; j < g.h; j++) for (let i = 0; i < g.w; i++) { let v = erode ? 1 : 0; for (let b = -R; b <= R && (erode ? v : !v); b++) for (let a = -R; a <= R; a++) { if (a * a + b * b > R2) continue; const ii = i + a, jj = j + b; const s2 = ii < 0 || jj < 0 || ii >= g.w || jj >= g.h ? src[j * g.w + i] : src[jj * g.w + ii]; if (erode && !s2) { v = 0; break; } if (!erode && s2) { v = 1; break; } } out[j * g.w + i] = v; } return out; };
+    const opened = landSide ? morph(morph(m, true), false) : m;
+    const inBattle = (k: number) => { if (g !== REGION) return false; const [lo, la] = REGION.toLL(cxy(g, k)[0], cxy(g, k)[1]); return lo > nsBox[0] - 2 && lo < nsBox[2] + 2 && la > nsBox[1] - 1 && la < nsBox[3] + 1; };
+    const opened2 = landSide ? opened : morph(morph(m, true), false);
+    const small = landSide ? opened : (() => { const R0 = 2, out2 = new Uint8Array(m.length); const er = new Uint8Array(m.length); for (let j = 0; j < g.h; j++) for (let i = 0; i < g.w; i++) { let v = 1; for (let b = -R0; b <= R0 && v; b++) for (let a = -R0; a <= R0; a++) { if (a * a + b * b > 5) continue; const ii = i + a, jj = j + b; const s2 = ii < 0 || jj < 0 || ii >= g.w || jj >= g.h ? m[j * g.w + i] : m[jj * g.w + ii]; if (!s2) { v = 0; break; } } er[j * g.w + i] = v; } for (let j = 0; j < g.h; j++) for (let i = 0; i < g.w; i++) { let v = 0; for (let b = -R0; b <= R0 && !v; b++) for (let a = -R0; a <= R0; a++) { if (a * a + b * b > 5) continue; const ii = i + a, jj = j + b; const s2 = ii < 0 || jj < 0 || ii >= g.w || jj >= g.h ? er[j * g.w + i] : er[jj * g.w + ii]; if (s2) { v = 1; break; } } out2[j * g.w + i] = v; } return out2; })();
     for (let k = 0; k < z.length; k++) {
-      if (!m[k] || opened[k] || prot[k]) continue;
+      const op = landSide ? opened2[k] : inBattle(k) ? opened2[k] : small[k]; // the wider sea opening only in the battle map's area
+      if (!m[k] || op || prot[k]) continue;
       const changed = (before[k] >= 0) !== landSide || Math.abs(z[k] - before[k]) > 30;
       if (!changed) continue;
       z[k] = landSide ? -3 : 3;
     }
+  }
+}
+
+/** The inner sea from a real bay: its real shoreline and seabed carried into the bay's box, feathered over about
+ * 150 km at the box's edge (an irregular feather), after the Northshore patch is blended in. */
+function transplantBay(z: Float32Array, bx: Xf) {
+  const nz = new Noise2(8181), g: Grid16 = { data: etopo(), w: ETOPO.w, h: ETOPO.h, res: ETOPO.res };
+  for (let k = 0; k < z.length; k++) {
+    const [x, y] = cxy(REGION, k), [lo, la] = REGION.toLL(x, y);
+    if (lo < bayBox[0] - 3 || lo > bayBox[2] + 3 || la < bayBox[1] - 1.5 || la > bayBox[3] + 1.5) continue;
+    const [px, py] = llToFrame('northshore', lo, la);
+    const inside = Math.min(px - BAY_BOX[0], BAY_BOX[2] - px, py - BAY_BOX[1], BAY_BOX[3] - py) * 2.6; // km inside the box
+    const w = smooth((inside + 40 * nz.fbm(x / 60, y / 60, 3)) / 150);
+    if (w <= 0) continue;
+    const [slo, sla] = toSource('bay', bx, lo, la);
+    z[k] = w * sampleGrid(g, slo, sla) + (1 - w) * z[k];
   }
 }
 
@@ -763,7 +830,7 @@ function openChanged(g: GridSpec, z: Float32Array, before: Float32Array, pins: P
  * Protected: Northglade's island and its ring, the strait, the peninsula, Thaldur, Redshire's islands and their ring,
  * and every named place. Repeated until nothing changes. */
 function removeThin(g: GridSpec, z: Float32Array, pins: Pin[]) {
-  const named = pins.filter((p) => /Northglade's island|a strait between|peninsula|Thaldur|Redshire's south islands|Islands: water|is on land|attached to Northshore/.test(p.why));
+  const named = pins.filter((p) => /Northglade's island|a strait between|peninsula|Thaldur|Redshire's south islands|Islands: water|is on land|attached to Northshore|The inlet/.test(p.why));
   const prot = new Float32Array(z.length);
   for (const p of named) { const probe = new Float32Array(z.length); applyPins(g, probe, [p]); for (let k = 0; k < z.length; k++) if (probe[k] !== 0) prot[k] = 1; }
   const opp = [[[1, 0], [-1, 0]], [[0, 1], [0, -1]], [[1, 1], [-1, -1]], [[1, -1], [-1, 1]]];
@@ -792,6 +859,7 @@ function finishReal(g: Frame | CityFrame, z: Float32Array, pins: Pin[], seed: nu
   const wantLand = new Float32Array(z.length), wantSea = new Float32Array(z.length);
   applyAll(g, wantLand, pins.filter((p) => p.kind === 'land' || p.kind === 'land-disk' || p.kind === 'land-box'));
   applyAll(g, wantSea, pins.filter((p) => p.kind === 'sea' || p.kind === 'sea-poly' || p.kind === 'sea-ring'));
+  const orig = Float32Array.from(z); // the real terrain as it came in
   for (let k = 0; k < z.length; k++) { if (wantLand[k] > 0) z[k] = Math.max(z[k], -40); if (wantSea[k] < 0) z[k] = Math.min(z[k], 40); }
   const before = Float32Array.from(z);
   softPins(g, z, pins.filter((p) => !(p as { free?: boolean }).free)); // the battle map's coasts: no pull, the real terrain decides
@@ -806,6 +874,35 @@ function finishReal(g: Frame | CityFrame, z: Float32Array, pins: Pin[], seed: nu
   const preRules = Float32Array.from(z);
   openChanged(g, z, before, pins);
   removeThin(g, z, pins);
+  // where the lift toward land did not end as land (trimmed, opened, sunk), the real depth comes back: no shallow plates
+  // stranded in deep water
+  for (let k = 0; k < z.length; k++) if (z[k] < 0 && orig[k] < z[k] && wantSea[k] >= 0 && orig[k] < -40) z[k] = orig[k];
+  if (g === REGION) {
+    // unpinned islets under about 400 km² in the battle map's area (pale dots at this scale) sink to the sea around them
+    const seen = new Uint8Array(z.length), probe = new Float32Array(z.length);
+    applyAll(g, probe, pins.filter((p) => p.kind === 'land' || p.kind === 'land-disk' || p.kind === 'shape'));
+    for (let s0 = 0; s0 < z.length; s0++) {
+      if (seen[s0] || z[s0] < 0) continue;
+      const q = [s0]; seen[s0] = 1; let pinned = probe[s0] > 0;
+      for (let qi = 0; qi < q.length && q.length <= 40; qi++) { const k = q[qi], i = k % g.w, j = (k / g.w) | 0; for (const [a, b] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const n = (j + b) * g.w + i + a; if (n >= 0 && n < z.length && !seen[n] && z[n] >= 0) { seen[n] = 1; q.push(n); if (probe[n] > 0) pinned = true; } } }
+      if (pinned || q.length > 40) continue;
+      const [lo, la] = REGION.toLL(cxy(g, s0)[0], cxy(g, s0)[1]);
+      if (lo < nsBox[0] - 4 || lo > nsBox[2] + 4 || la < nsBox[1] - 2 || la > nsBox[3] + 2) continue;
+      for (const k of q) z[k] = -25;
+    }
+    // isolated shoals and specks (under about 60 m deep, the sea 15 km around them deeper than 300 m) in the battle
+    // map's area are pale dots, not features: they take the depth around them
+    for (let j = 3; j < g.h - 3; j++) for (let i = 3; i < g.w - 3; i++) {
+      const k = j * g.w + i;
+      if (z[k] < -60) continue;
+      const [lo, la] = REGION.toLL(cxy(g, k)[0], cxy(g, k)[1]);
+      if (lo < nsBox[0] - 4 || lo > nsBox[2] + 4 || la < nsBox[1] - 2 || la > nsBox[3] + 2) continue;
+      const ring: number[] = [];
+      for (let b = -5; b <= 5; b++) for (let a = -5; a <= 5; a++) if (Math.max(Math.abs(a), Math.abs(b)) >= 4) { const n = (j + b) * g.w + i + a; if (n >= 0 && n < z.length) ring.push(z[n]); }
+      ring.sort((x, y) => x - y);
+      if (ring[ring.length - 1] < -150) z[k] = ring[ring.length >> 1];
+    }
+  }
   {
     const probe = new Float32Array(z.length);
     applyAll(g, probe, pins.filter((p) => p.kind !== 'cover' && p.kind !== 'river'));
@@ -1091,7 +1188,7 @@ function regionPinsV5(): Pin[] {
       for (let t = 0; t < 120; t++) {
         const x = a[0] + ((b[0] - a[0]) * t) / 120, y = a[1] + ((b[1] - a[1]) * t) / 120;
         // km beyond the original 26 km inset; none where the peninsula joins Northshore, so it stays attached
-        const len = Math.hypot(cx - x, cy - y), inset = Math.max(0, 75 + 75 * nz.fbm(x / 140, y / 140, 2) + 45 * nz.fbm(x / 45 + 3, y / 45, 2) + 18 * nz.fbm(x / 14 - 5, y / 14, 2)) * smooth((kmDist(REGION, [x, y], join) - 40) / 50);
+        const len = Math.hypot(cx - x, cy - y), inset = Math.max(0, 75 + 75 * nz.fbm(x / 140, y / 140, 2) + 45 * nz.fbm(x / 45 + 3, y / 45, 3) + (6 + 10 * (0.5 + 0.5 * nz.fbm(x / 60 + 9, y / 60, 2))) * nz.fbm(x / 11 - 5, y / 11, 4)) * smooth((kmDist(REGION, [x, y], join) - 40) / 50);
         out.push([x + ((cx - x) / len) * inset, y + ((cy - y) / len) * inset]);
       }
     }
@@ -1110,7 +1207,36 @@ function regionPinsV5(): Pin[] {
     // the battle map is a sketch, not a survey (owner, 2026-10-12): its drawn coasts may move within 20 km, the real
     // terrain deciding the line inside the band (no soft pull toward the drawing); only the interior is held
     .map((p) => (BATTLE_COAST.test(p.why) && (p.kind === 'sea' || p.kind === 'land' || p.kind === 'land-box') ? ({ ...p, band: 20, free: true, why: `${p.why} (its drawn coast may move within 20 km)` } as unknown as Pin) : p))
-    .concat([meldanWoods()]);
+    // the peninsula and the inlet keep their roles, not their drawn outlines (owner, 2026-10-12): the peninsula is a
+    // land strip attached to Northshore pointing at Thaldur; the inlet is water from the open northern sea down to the
+    // border river's mouth. Each is held only as a narrow, meandering core; the real terrain shapes the rest
+    .filter((p) => !(p.kind === 'land' && /peninsula dangling|attached to Northshore/.test(p.why)))
+    .concat([
+      ribbon('land', [[215, 112], [250, 106], [275, 113], [300, 104], [322, 110], [340, 107]], 12, 55, 'The peninsula: a land strip attached to Northshore\'s eastern end, pointing at Thaldur (its role; its outline is the terrain\'s)', ['wg-375'], toNs, fromNs, 1, 6, 9),
+      ribbon('sea', [[124, 22], [112, 44], [120, 62], [101, 80], [104, 97], [86, 110], [84, 120], [78, 124]], 6, 20, 'The inlet: water from the open northern sea down to the border river\'s mouth (its role; its outline is the terrain\'s)', ['wg-366', 'wg-370', 'wg-373'], toNs, fromNs, 2, 8, 4),
+      meldanWoods(),
+    ]);
+}
+/** A meandering strip along a spine (battle map pixels), held as land or sea; its half-width varies between lo and hi km. */
+function ribbon(kind: 'land' | 'sea', spine: XY[], lo: number, hi: number, why: string, lines: string[], _toNs: (q: XY) => XY, fromNs: (q: XY) => XY, seed: number, amp = 6, edge = 0): Pin {
+  const nz = new Noise2(7700 + seed), left: XY[] = [], right: XY[] = [];
+  let along = 0, total = 0;
+  for (let s3 = 0; s3 < spine.length - 1; s3++) total += Math.hypot(spine[s3 + 1][0] - spine[s3][0], spine[s3 + 1][1] - spine[s3][1]);
+  for (let s2 = 0; s2 < spine.length - 1; s2++) {
+    const a = spine[s2], b = spine[s2 + 1], len = Math.hypot(b[0] - a[0], b[1] - a[1]), nx = -(b[1] - a[1]) / len, ny = (b[0] - a[0]) / len;
+    for (let t = 0; t < Math.ceil(len); t++) {
+      const f = t / Math.ceil(len), d = along + len * f, x = a[0] + (b[0] - a[0]) * f, y = a[1] + (b[1] - a[1]) * f;
+      // the strip narrows to a rounded end over its last 15%; its two edges wander independently (edge, in px)
+      const endF = Math.min(1, (along + len * f) / 1) , tail = Math.sqrt(Math.max(0.05, Math.min(1, (total - d) / (0.15 * total))));
+      const off = amp * nz.fbm(d / 25, 0.3, 3), hw = ((lo + (hi - lo) * (0.5 + 0.5 * nz.fbm(d / 12 + 5, 1.7, 2))) / 2.6) * tail;
+      const eL = edge * (0.5 + 0.5 * nz.fbm(d / 4 + 11, 3.1, 3)), eR = edge * (0.5 + 0.5 * nz.fbm(d / 4 - 7, 5.3, 3));
+      void endF;
+      left.push([x + nx * (off + hw + eL), y + ny * (off + hw + eL)]); right.push([x + nx * (off - hw - eR), y + ny * (off - hw - eR)]);
+    }
+    along += len;
+  }
+  const poly = [...left, ...right.reverse()].map(fromNs);
+  return kind === 'land' ? { kind: 'land', poly, band: 0, min: 25, why, provenance: 'book', lines } : { kind: 'sea', poly, band: 0, depth: -40, why, provenance: 'book', lines };
 }
 const BATTLE_COAST = /battle map's northern sea|battle map's southern sea|battle map's dark ground|peninsula dangling|Thaldur, an island|a strait between it and the peninsula/;
 /** Meldan is wooded (c1-b2 "tall trees towering on both sides"; c32-b107 Kalimar is "not too different from a forest"):
@@ -1204,6 +1330,10 @@ if (!isMain) {
   const frame = (args.frame ?? 'region') as FrameName, top = Number(args.top ?? 5);
   // Northshore can be searched for a chosen region candidate (--region=N), to match it around the blend
   const regionXf = frame === 'northshore' && args.region ? (() => { const c = JSON.parse(readFileSync(path.join(ROOT, REC, 'search-region.json'), 'utf8')).candidates[Number(args.region) - 1]; return { lon: c.source_centre_lon_lat[0], lat: c.source_centre_lon_lat[1], rot: c.rotation_deg, mirror: c.mirrored } as Xf; })() : undefined;
+  if (frame === 'bay') {
+    const R0 = JSON.parse(readFileSync(path.join(ROOT, REC, 'search-region.json'), 'utf8')).candidates[0], N0 = JSON.parse(readFileSync(path.join(ROOT, REC, 'search-northshore.json'), 'utf8')).candidates[Number(args.northshore ?? 1) - 1];
+    bayRefs = { region: { lon: R0.source_centre_lon_lat[0], lat: R0.source_centre_lon_lat[1], rot: R0.rotation_deg, mirror: R0.mirrored }, ns: { lon: N0.source_centre_lon_lat[0], lat: N0.source_centre_lon_lat[1], rot: N0.rotation_deg, mirror: N0.mirrored } };
+  }
   const picked = search(frame, top, regionXf);
   const file = path.join(ROOT, REC, `search-${frame}.json`);
   writeFileSync(file, JSON.stringify({
@@ -1222,8 +1352,9 @@ if (!isMain) {
   const list = JSON.parse(readFileSync(path.join(ROOT, REC, `search-${frame}.json`), 'utf8')).candidates as { rank: number; source_centre_lon_lat: XY; rotation_deg: number; mirrored: boolean }[];
   const f: Frame = frame === 'dzego' ? DZEGO : REGION;
   // Northshore: only its box, at full resolution
-  const [i0, j0, i1, j1] = frame === 'northshore' ? (() => { const a = f.fromLL(nsBox[0], nsBox[1]), b2 = f.fromLL(nsBox[2], nsBox[3]); return [Math.floor(a[0] / f.dx), Math.floor(a[1] / f.dy), Math.ceil(b2[0] / f.dx), Math.ceil(b2[1] / f.dy)]; })() : [0, 0, f.w, f.h];
-  const S = frame === 'northshore' ? 1 : 3, w = Math.floor((i1 - i0) / S), h = Math.floor((j1 - j0) / S);
+  const box2 = frame === 'bay' ? bayBox : nsBox;
+  const [i0, j0, i1, j1] = frame === 'northshore' || frame === 'bay' ? (() => { const a = f.fromLL(box2[0] - (frame === 'bay' ? 3 : 0), box2[1] - (frame === 'bay' ? 1.5 : 0)), b2 = f.fromLL(box2[2] + (frame === 'bay' ? 3 : 0), box2[3] + (frame === 'bay' ? 1.5 : 0)); return [Math.floor(a[0] / f.dx), Math.floor(a[1] / f.dy), Math.ceil(b2[0] / f.dx), Math.ceil(b2[1] / f.dy)]; })() : [0, 0, f.w, f.h];
+  const S = frame === 'northshore' || frame === 'bay' ? 1 : 3, w = Math.floor((i1 - i0) / S), h = Math.floor((j1 - j0) / S);
   const g: Grid16 = { data: etopo(), w: ETOPO.w, h: ETOPO.h, res: ETOPO.res };
   for (const c of list.slice(0, Number(args.n ?? 10))) {
     const xf: Xf = { lon: c.source_centre_lon_lat[0], lat: c.source_centre_lon_lat[1], rot: c.rotation_deg, mirror: c.mirrored };
@@ -1351,6 +1482,10 @@ if (!isMain) {
     const W = blendNorthshore(rz, nsPatch);
     const islands = JSON.parse(readFileSync(path.join(ROOT, REC, 'islands-thaldur.json'), 'utf8')).candidates as Island[];
     const isl = islands[Number(args.thaldur ?? 1) - 1];
+    const bays = existsSync(path.join(ROOT, REC, 'search-bay.json')) ? JSON.parse(readFileSync(path.join(ROOT, REC, 'search-bay.json'), 'utf8')).candidates : [];
+    const bayC = args.bay && bays[Number(args.bay) - 1];
+    const bayXf: Xf | null = bayC ? { lon: bayC.source_centre_lon_lat[0], lat: bayC.source_centre_lon_lat[1], rot: bayC.rotation_deg, mirror: bayC.mirrored } : null;
+    if (bayXf) transplantBay(rz, bayXf);
     transplantThaldur(rz, isl);
     const real0 = Float32Array.from(rz); // the real terrain (with the Northshore patch blended in), before any reshaping
     const raised = raiseRedshire(rz);
@@ -1358,6 +1493,9 @@ if (!isMain) {
     const run: SeedRun = { seed: rank, region, dzego, meldan, pafogai };
     // the battle map's seas are tested on their interior: cells more than 20 km from the drawn line (owner, 2026-10-12)
     BOOK_SEA_BAND.north_sea = 20; BOOK_SEA_BAND.south_sea = 20;
+    // the inlet arm's role (water from the open sea to the river's mouth) is held by its own strip and tested through
+    // Group North's route ending on it (wg-366) and the river reaching the sea; it is left out of the area test
+    BOOK_SEA_EXCLUDE.fn = (id, q) => { if (id !== 'north_sea') return false; const [lo, la] = REGION.toLL(q[0], q[1]), [fx, fy] = llToFrame('northshore', lo, la); return fx < 150 && fy > 45; };
     const t = testSeed(run);
     const seam = seamChecks(region, W, real0, lastTouched), lakeP = pafogaiLakes(pafogai);
     const extra = [...seam.checks, { check: 'No lake inside Pafogai Du (the grid and 1 km around it)', ok: lakeP === 0, got: `${lakeP} lake cells` }];
@@ -1366,7 +1504,7 @@ if (!isMain) {
     for (const [k, v] of Object.entries(seam.numbers)) if (k.startsWith('seam_runs')) console.log(`  ${k} ${JSON.stringify(v)}`);
     writeFileSync(`/tmp/geo/seam-runs-${rank}.json`, JSON.stringify(seam.numbers));
     console.log(`candidate ${rank}: ${t.failed.length ? `fails ${t.failed.length}: ${t.failed.slice(0, 6).join(' | ')}` : 'passes every test'}`);
-    results[rank] = { thaldur_island: { source_centre_lon_lat: [Number(isl.lon.toFixed(2)), Number(isl.lat.toFixed(2))], area_km2: isl.areaKm2, rotation_deg: isl.rot, mirrored: isl.mirror, scale: 1, overlap_with_drawn_outline: Number(isl.iou.toFixed(2)), dataset: 'ETOPO 2022 v1, 60 arc-second' }, redshire_range_raised_m: raised, seam_checks: extra, seam_numbers: seam.numbers, passes: !t.failed.length, failed: t.failed, map_tests: `${t.mapResults.filter((x) => x.ok).length} of ${t.mapResults.length} hold`, terrain_checks: t.checks.map((x) => ({ check: x.id, ok: x.ok, got: x.got })) };
+    results[rank] = { inner_sea_bay: bayXf ? { source_centre_lon_lat: [Number(bayXf.lon.toFixed(2)), Number(bayXf.lat.toFixed(2))], rotation_deg: bayXf.rot, mirrored: bayXf.mirror, scale: 1, fit: bayC.fit, dataset: 'ETOPO 2022 v1, 60 arc-second', source_name: args.bayname ?? null } : null, thaldur_island: { source_name: args.thaldurname ?? null, source_centre_lon_lat: [Number(isl.lon.toFixed(2)), Number(isl.lat.toFixed(2))], area_km2: isl.areaKm2, rotation_deg: isl.rot, mirrored: isl.mirror, scale: 1, overlap_with_drawn_outline: Number(isl.iou.toFixed(2)), dataset: 'ETOPO 2022 v1, 60 arc-second' }, redshire_range_raised_m: raised, seam_checks: extra, seam_numbers: seam.numbers, passes: !t.failed.length, failed: t.failed, map_tests: `${t.mapResults.filter((x) => x.ok).length} of ${t.mapResults.length} hold`, terrain_checks: t.checks.map((x) => ({ check: x.id, ok: x.ok, got: x.got })) };
     const L2 = writeFrame(`candidate-${rank}/region`, region, 6, { dataset: 'ETOPO 2022', centre: c.source_centre_lon_lat, rotation_deg: c.rotation_deg, mirrored: c.mirrored, scale: 1 });
     sheet.push(downsample(L2.composite, 4));
   }
@@ -1397,6 +1535,8 @@ if (!isMain) {
       'The battle map\'s seas are no longer carried past the drawing\'s borders as fixed polygons: inside the drawing they are held to the border, beyond it they run on along a fractal line 60 to 220 km out.',
       'Thaldur\'s open-water rectangles (ours) are removed; Thaldur is a real island (see thaldur_island).',
       'Meldan has a region-scale forest cover pin (c1-b2, c32-b107), like Elenar Forest\'s; the climate rules are unchanged.',
+      'Owner, 2026-10-12 (review 3): the peninsula\'s and the inlet\'s drawn outlines are let go. The peninsula is held only as a meandering land strip 20 to 50 km wide, with irregular edges and a rounded end, from Northshore\'s eastern end toward Thaldur; the inlet only as a meandering water strip 6 to 18 km wide; the inlet arm is left out of the northern sea\'s area test, its role being tested through Group North\'s route ending on it (wg-366) and the river reaching the sea from the open northern sea to the border river\'s mouth. The real terrain shapes the rest. The tests on them (the peninsula attached and between Northshore and Thaldur; Group North\'s route ending on the inlet; the river reaching the sea) are unchanged and run on outlines traced from the terrain.',
+      'The inner sea (the battle map\'s southern sea) comes from a real bay, transplanted (see inner_sea_bay); the drawn sea\'s interior is still held.',
     ],
     method: 'Real heights moved by a rigid motion of the sphere (the book frame\'s centre onto a source point, turned in 15° steps, mirrored or not, at true scale); then v4\'s soft and hard pins for every book fact, a light droplet erosion (region 60,000, Dzego 40,000 droplets) so the pins settle into the real relief, the book\'s river carved, priority-flood lakes, rivers from flow accumulation on the real terrain, climate from the book\'s latitudes and the real heights, biomes, and the book\'s forests forced. The seabed is as measured.',
     constraints: [...describe(regionPinsV5(), 'region'), ...describe(dzego.pins, 'dzego'), ...describe(meldanPins, 'meldan'), ...describe(pafogaiPins, 'pafogai-du')],

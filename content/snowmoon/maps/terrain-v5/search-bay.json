@@ -1,0 +1,350 @@
+{
+  "made": "2026-10-12T21:08:16.001Z",
+  "code_version": {
+    "scripts/terrain-v5.ts": "3ca9f128dd817f980c25c0a462ae0aa58cb2e438412ab3f4ff224de29e0cf897",
+    "scripts/terrain-v4.ts": "91619fb42a7d8e350e9654ad4f1ad2c8be06e50884a461dae57b466715843f23",
+    "scripts/lib/geotiff-lite.ts": "b439401048dbfe2c7c46b4dbce41979e1e7d13e4f33243919558844d019acdc0",
+    "scripts/lib/terrain-core.ts": "5140c0a7e5d4357c97b4a54c000c9654c406dd6f127e249b028ee0b23b6a36d0",
+    "scripts/lib/noise.ts": "ef2aba4f58c28e0cb002c0992ac3bd80dd99af8b1d4b4e5b5bf5d849047c2395",
+    "scripts/lib/raster-out.ts": "24e0822f47b2552285ca49efdc1583d933ea9c84bf1722a495ad14266757194e",
+    "scripts/lib/map-tests.ts": "925f5018db8e5284c2fac2e6474384d43324df3327a2883354ebb8f5370d4385"
+  },
+  "frame": "bay",
+  "method": "Every source centre on a 1.5° grid (−58° to 76° latitude), every rotation in 15° steps, mirrored and not, at true scale; each placement scored by the weighted share of the book's constraints the real terrain already meets (each pin a group; book facts weigh twice what we placed), minus a penalty for famous coastlines in the frame. The best 1,500 are re-scored on the 1-arc-minute grid with denser targets and nudged by half a degree; the list keeps source centres at least 1,500 km apart.",
+  "candidates": [
+    {
+      "rank": 1,
+      "score": 0.72,
+      "fit": 0.72,
+      "source_centre_lon_lat": [
+        58.472,
+        25
+      ],
+      "rotation_deg": 60,
+      "mirrored": false,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.991,
+        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.715,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "land beyond the drawing closes the inner sea (ours)": 0.542,
+        "(battle, overall)": 0.72,
+        "(relief, overall)": 1
+      }
+    },
+    {
+      "rank": 2,
+      "score": 0.7188,
+      "fit": 0.7188,
+      "source_centre_lon_lat": [
+        37.272,
+        22.5
+      ],
+      "rotation_deg": 195,
+      "mirrored": true,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.954,
+        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.754,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "land beyond the drawing closes the inner sea (ours)": 0.498,
+        "(battle, overall)": 0.719,
+        "(relief, overall)": 1
+      }
+    },
+    {
+      "rank": 3,
+      "score": 0.7155,
+      "fit": 0.7155,
+      "source_centre_lon_lat": [
+        47.39,
+        13
+      ],
+      "rotation_deg": 300,
+      "mirrored": true,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.996,
+        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.889,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "land beyond the drawing closes the inner sea (ours)": 0.23,
+        "(battle, overall)": 0.716,
+        "(relief, overall)": 1
+      }
+    },
+    {
+      "rank": 4,
+      "score": 0.7075,
+      "fit": 0.7075,
+      "source_centre_lon_lat": [
+        157.839,
+        59
+      ],
+      "rotation_deg": 90,
+      "mirrored": true,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.956,
+        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.846,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "land beyond the drawing closes the inner sea (ours)": 0.303,
+        "(battle, overall)": 0.708,
+        "(relief, overall)": 1
+      }
+    },
+    {
+      "rank": 5,
+      "score": 0.6999,
+      "fit": 0.6999,
+      "source_centre_lon_lat": [
+        16.712,
+        56
+      ],
+      "rotation_deg": 270,
+      "mirrored": true,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.945,
+        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.777,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "land beyond the drawing closes the inner sea (ours)": 0.4,
+        "(battle, overall)": 0.7,
+        "(relief, overall)": 1
+      }
+    },
+    {
+      "rank": 6,
+      "score": 0.6963,
+      "fit": 0.6963,
+      "source_centre_lon_lat": [
+        -74.666,
+        63
+      ],
+      "rotation_deg": 150,
+      "mirrored": true,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.921,
+        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.58,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "land beyond the drawing closes the inner sea (ours)": 0.738,
+        "(battle, overall)": 0.696,
+        "(relief, overall)": 1
+      }
+    },
+    {
+      "rank": 7,
+      "score": 0.6954,
+      "fit": 0.6954,
+      "source_centre_lon_lat": [
+        -87.456,
+        17.5
+      ],
+      "rotation_deg": 255,
+      "mirrored": true,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.951,
+        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.811,
+        "Dzego is hilly (mountain pyramids)": 0.686,
+        "Dzego has coasts: 35–80% of the frame is land": 0.833,
+        "land beyond the drawing closes the inner sea (ours)": 0.324,
+        "(battle, overall)": 0.695,
+        "(relief, overall)": 0.735
+      }
+    },
+    {
+      "rank": 8,
+      "score": 0.6923,
+      "fit": 0.6923,
+      "source_centre_lon_lat": [
+        120.016,
+        39.5
+      ],
+      "rotation_deg": 285,
+      "mirrored": true,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 1,
+        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.662,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "land beyond the drawing closes the inner sea (ours)": 0.531,
+        "(battle, overall)": 0.692,
+        "(relief, overall)": 1
+      }
+    },
+    {
+      "rank": 9,
+      "score": 0.6874,
+      "fit": 0.6874,
+      "source_centre_lon_lat": [
+        -3.449,
+        44
+      ],
+      "rotation_deg": 165,
+      "mirrored": true,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.971,
+        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.756,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "land beyond the drawing closes the inner sea (ours)": 0.376,
+        "(battle, overall)": 0.687,
+        "(relief, overall)": 1
+      }
+    },
+    {
+      "rank": 10,
+      "score": 0.685,
+      "fit": 0.685,
+      "source_centre_lon_lat": [
+        97.077,
+        15
+      ],
+      "rotation_deg": 60,
+      "mirrored": true,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.929,
+        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.764,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "land beyond the drawing closes the inner sea (ours)": 0.384,
+        "(battle, overall)": 0.685,
+        "(relief, overall)": 1
+      }
+    },
+    {
+      "rank": 11,
+      "score": 0.6715,
+      "fit": 0.703,
+      "source_centre_lon_lat": [
+        39.049,
+        43
+      ],
+      "rotation_deg": 75,
+      "mirrored": false,
+      "scale": 1,
+      "famous_coastlines_in_frame": [
+        "Black Sea"
+      ],
+      "constraint_fit": {
+        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.958,
+        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.867,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "land beyond the drawing closes the inner sea (ours)": 0.25,
+        "(battle, overall)": 0.703,
+        "(relief, overall)": 1
+      }
+    },
+    {
+      "rank": 12,
+      "score": 0.6706,
+      "fit": 0.6706,
+      "source_centre_lon_lat": [
+        -126.248,
+        71.5
+      ],
+      "rotation_deg": 90,
+      "mirrored": false,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.748,
+        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.811,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "land beyond the drawing closes the inner sea (ours)": 0.381,
+        "(battle, overall)": 0.671,
+        "(relief, overall)": 1
+      }
+    },
+    {
+      "rank": 13,
+      "score": 0.667,
+      "fit": 0.667,
+      "source_centre_lon_lat": [
+        65.724,
+        71
+      ],
+      "rotation_deg": 120,
+      "mirrored": false,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.863,
+        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.787,
+        "Dzego is hilly (mountain pyramids)": 0.697,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "land beyond the drawing closes the inner sea (ours)": 0.329,
+        "(battle, overall)": 0.667,
+        "(relief, overall)": 0.798
+      }
+    },
+    {
+      "rank": 14,
+      "score": 0.6422,
+      "fit": 0.6737,
+      "source_centre_lon_lat": [
+        119.046,
+        -1
+      ],
+      "rotation_deg": 105,
+      "mirrored": true,
+      "scale": 1,
+      "famous_coastlines_in_frame": [
+        "Sulawesi"
+      ],
+      "constraint_fit": {
+        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.779,
+        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.799,
+        "Dzego is hilly (mountain pyramids)": 0.457,
+        "Dzego has coasts: 35–80% of the frame is land": 0.57,
+        "land beyond the drawing closes the inner sea (ours)": 0.39,
+        "(battle, overall)": 0.674,
+        "(relief, overall)": 0.494
+      }
+    },
+    {
+      "rank": 15,
+      "score": 0.6119,
+      "fit": 0.6119,
+      "source_centre_lon_lat": [
+        132.598,
+        72.5
+      ],
+      "rotation_deg": 255,
+      "mirrored": true,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.578,
+        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.633,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "land beyond the drawing closes the inner sea (ours)": 0.6,
+        "(battle, overall)": 0.612,
+        "(relief, overall)": 1
+      }
+    }
+  ]
+}

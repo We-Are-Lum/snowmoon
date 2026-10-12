@@ -1,7 +1,7 @@
 {
-  "made": "2026-10-12T17:28:10.347Z",
+  "made": "2026-10-12T20:49:27.002Z",
   "code_version": {
-    "scripts/terrain-v5.ts": "eaefdd4bd2fe3d24a563cbf70dee45b4cb92a1959a85a9dc7220ca8766ad6722",
+    "scripts/terrain-v5.ts": "5dcd77bb75dc1b8f775d31d798ed357028278ac6fc7abae8afa7f72646a781c3",
     "scripts/terrain-v4.ts": "91619fb42a7d8e350e9654ad4f1ad2c8be06e50884a461dae57b466715843f23",
     "scripts/lib/geotiff-lite.ts": "b439401048dbfe2c7c46b4dbce41979e1e7d13e4f33243919558844d019acdc0",
     "scripts/lib/terrain-core.ts": "5140c0a7e5d4357c97b4a54c000c9654c406dd6f127e249b028ee0b23b6a36d0",
@@ -122,42 +122,6 @@
     },
     {
       "rank": 4,
-      "score": 0.7901,
-      "fit": 0.7901,
-      "source_centre_lon_lat": [
-        -14.968,
-        11
-      ],
-      "rotation_deg": 270,
-      "mirrored": true,
-      "scale": 1,
-      "famous_coastlines_in_frame": [],
-      "constraint_fit": {
-        "Open water east of Northshore, around the peninsula and Thaldur (the battle map's seas run on past its edge)": 0.901,
-        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.941,
-        "The battle map's northern sea and inlet are water (its drawn coast may move within 20 km)": 0.877,
-        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.048,
-        "The peninsula dangling off Northshore's eastern end (its drawn coast may move within 20 km)": 0.188,
-        "The peninsula is attached to Northshore": 0.84,
-        "Thaldur, an island east of Northshore (its drawn coast may move within 20 km)": 0,
-        "Thaldur is an island: a strait between it and the peninsula (its drawn coast may move within 20 km)": 1,
-        "Northglade's island is an island": 0,
-        "Northglade's island: a mountain at its summit, snowy hills to the west and north": 1,
-        "Elenar Forest: snowy hills under thick snowy pine (Design's cue, c29-b2, c29-b19)": 1,
-        "The border river runs between Veridian and Arctic land": 1,
-        "Hydrafill's northern ice is drawn on land": 1,
-        "Eldil is on land": 1,
-        "Dzego is hilly (mountain pyramids)": 0.891,
-        "Dzego has coasts: 35–80% of the frame is land": 0.891,
-        "the battle map's land is hills, not high mountains (below 1,100 m)": 1,
-        "the patch matches the region around the blend": 0.973,
-        "(battle, overall)": 0.668,
-        "(relief, overall)": 0.891,
-        "(blend, overall)": 0.973
-      }
-    },
-    {
-      "rank": 5,
       "score": 0.7822,
       "fit": 0.7822,
       "source_centre_lon_lat": [
@@ -193,43 +157,7 @@
       }
     },
     {
-      "rank": 6,
-      "score": 0.7797,
-      "fit": 0.7797,
-      "source_centre_lon_lat": [
-        -17.181,
-        19.5
-      ],
-      "rotation_deg": 315,
-      "mirrored": true,
-      "scale": 1,
-      "famous_coastlines_in_frame": [],
-      "constraint_fit": {
-        "Open water east of Northshore, around the peninsula and Thaldur (the battle map's seas run on past its edge)": 1,
-        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.9,
-        "The battle map's northern sea and inlet are water (its drawn coast may move within 20 km)": 0.94,
-        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.26,
-        "The peninsula dangling off Northshore's eastern end (its drawn coast may move within 20 km)": 0,
-        "The peninsula is attached to Northshore": 0,
-        "Thaldur, an island east of Northshore (its drawn coast may move within 20 km)": 0,
-        "Thaldur is an island: a strait between it and the peninsula (its drawn coast may move within 20 km)": 1,
-        "Northglade's island is an island": 0,
-        "Northglade's island: a mountain at its summit, snowy hills to the west and north": 1,
-        "Elenar Forest: snowy hills under thick snowy pine (Design's cue, c29-b2, c29-b19)": 1,
-        "The border river runs between Veridian and Arctic land": 1,
-        "Hydrafill's northern ice is drawn on land": 1,
-        "Eldil is on land": 1,
-        "Dzego is hilly (mountain pyramids)": 1,
-        "Dzego has coasts: 35–80% of the frame is land": 1,
-        "the battle map's land is hills, not high mountains (below 1,100 m)": 1,
-        "the patch matches the region around the blend": 0.899,
-        "(battle, overall)": 0.7,
-        "(relief, overall)": 1,
-        "(blend, overall)": 0.899
-      }
-    },
-    {
-      "rank": 7,
+      "rank": 5,
       "score": 0.7771,
       "fit": 0.7771,
       "source_centre_lon_lat": [
@@ -265,43 +193,7 @@
       }
     },
     {
-      "rank": 8,
-      "score": 0.7763,
-      "fit": 0.7763,
-      "source_centre_lon_lat": [
-        -10.913,
-        7
-      ],
-      "rotation_deg": 180,
-      "mirrored": false,
-      "scale": 1,
-      "famous_coastlines_in_frame": [],
-      "constraint_fit": {
-        "Open water east of Northshore, around the peninsula and Thaldur (the battle map's seas run on past its edge)": 0.801,
-        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.992,
-        "The battle map's northern sea and inlet are water (its drawn coast may move within 20 km)": 0.819,
-        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.023,
-        "The peninsula dangling off Northshore's eastern end (its drawn coast may move within 20 km)": 0.5,
-        "The peninsula is attached to Northshore": 1,
-        "Thaldur, an island east of Northshore (its drawn coast may move within 20 km)": 0,
-        "Thaldur is an island: a strait between it and the peninsula (its drawn coast may move within 20 km)": 1,
-        "Northglade's island is an island": 0,
-        "Northglade's island: a mountain at its summit, snowy hills to the west and north": 1,
-        "Elenar Forest: snowy hills under thick snowy pine (Design's cue, c29-b2, c29-b19)": 1,
-        "The border river runs between Veridian and Arctic land": 1,
-        "Hydrafill's northern ice is drawn on land": 1,
-        "Eldil is on land": 1,
-        "Dzego is hilly (mountain pyramids)": 0.935,
-        "Dzego has coasts: 35–80% of the frame is land": 0.935,
-        "the battle map's land is hills, not high mountains (below 1,100 m)": 1,
-        "the patch matches the region around the blend": 0.939,
-        "(battle, overall)": 0.668,
-        "(relief, overall)": 0.935,
-        "(blend, overall)": 0.939
-      }
-    },
-    {
-      "rank": 9,
+      "rank": 6,
       "score": 0.7754,
       "fit": 0.7754,
       "source_centre_lon_lat": [
@@ -337,43 +229,7 @@
       }
     },
     {
-      "rank": 10,
-      "score": 0.775,
-      "fit": 0.775,
-      "source_centre_lon_lat": [
-        -6.176,
-        3.5
-      ],
-      "rotation_deg": 240,
-      "mirrored": true,
-      "scale": 1,
-      "famous_coastlines_in_frame": [],
-      "constraint_fit": {
-        "Open water east of Northshore, around the peninsula and Thaldur (the battle map's seas run on past its edge)": 1,
-        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.853,
-        "The battle map's northern sea and inlet are water (its drawn coast may move within 20 km)": 0.94,
-        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.481,
-        "The peninsula dangling off Northshore's eastern end (its drawn coast may move within 20 km)": 0,
-        "The peninsula is attached to Northshore": 0,
-        "Thaldur, an island east of Northshore (its drawn coast may move within 20 km)": 0,
-        "Thaldur is an island: a strait between it and the peninsula (its drawn coast may move within 20 km)": 1,
-        "Northglade's island is an island": 0,
-        "Northglade's island: a mountain at its summit, snowy hills to the west and north": 1,
-        "Elenar Forest: snowy hills under thick snowy pine (Design's cue, c29-b2, c29-b19)": 1,
-        "The border river runs between Veridian and Arctic land": 1,
-        "Hydrafill's northern ice is drawn on land": 1,
-        "Eldil is on land": 1,
-        "Dzego is hilly (mountain pyramids)": 1,
-        "Dzego has coasts: 35–80% of the frame is land": 1,
-        "the battle map's land is hills, not high mountains (below 1,100 m)": 1,
-        "the patch matches the region around the blend": 0.845,
-        "(battle, overall)": 0.728,
-        "(relief, overall)": 1,
-        "(blend, overall)": 0.845
-      }
-    },
-    {
-      "rank": 11,
+      "rank": 7,
       "score": 0.7747,
       "fit": 0.7747,
       "source_centre_lon_lat": [
@@ -409,7 +265,43 @@
       }
     },
     {
-      "rank": 12,
+      "rank": 8,
+      "score": 0.7731,
+      "fit": 0.7731,
+      "source_centre_lon_lat": [
+        -7.343,
+        5
+      ],
+      "rotation_deg": 225,
+      "mirrored": true,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "Open water east of Northshore, around the peninsula and Thaldur (the battle map's seas run on past its edge)": 0.889,
+        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.853,
+        "The battle map's northern sea and inlet are water (its drawn coast may move within 20 km)": 0.881,
+        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.015,
+        "The peninsula dangling off Northshore's eastern end (its drawn coast may move within 20 km)": 0.525,
+        "The peninsula is attached to Northshore": 1,
+        "Thaldur, an island east of Northshore (its drawn coast may move within 20 km)": 0,
+        "Thaldur is an island: a strait between it and the peninsula (its drawn coast may move within 20 km)": 1,
+        "Northglade's island is an island": 0,
+        "Northglade's island: a mountain at its summit, snowy hills to the west and north": 1,
+        "Elenar Forest: snowy hills under thick snowy pine (Design's cue, c29-b2, c29-b19)": 1,
+        "The border river runs between Veridian and Arctic land": 1,
+        "Hydrafill's northern ice is drawn on land": 1,
+        "Eldil is on land": 1,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "the battle map's land is hills, not high mountains (below 1,100 m)": 1,
+        "the patch matches the region around the blend": 0.943,
+        "(battle, overall)": 0.66,
+        "(relief, overall)": 1,
+        "(blend, overall)": 0.943
+      }
+    },
+    {
+      "rank": 9,
       "score": 0.7728,
       "fit": 0.7728,
       "source_centre_lon_lat": [
@@ -445,7 +337,7 @@
       }
     },
     {
-      "rank": 13,
+      "rank": 10,
       "score": 0.7709,
       "fit": 0.7709,
       "source_centre_lon_lat": [
@@ -481,7 +373,7 @@
       }
     },
     {
-      "rank": 14,
+      "rank": 11,
       "score": 0.7697,
       "fit": 0.7697,
       "source_centre_lon_lat": [
@@ -517,7 +409,7 @@
       }
     },
     {
-      "rank": 15,
+      "rank": 12,
       "score": 0.7674,
       "fit": 0.7674,
       "source_centre_lon_lat": [
@@ -553,7 +445,7 @@
       }
     },
     {
-      "rank": 16,
+      "rank": 13,
       "score": 0.7665,
       "fit": 0.798,
       "source_centre_lon_lat": [
@@ -591,79 +483,7 @@
       }
     },
     {
-      "rank": 17,
-      "score": 0.7652,
-      "fit": 0.7652,
-      "source_centre_lon_lat": [
-        9.874,
-        -5.5
-      ],
-      "rotation_deg": 285,
-      "mirrored": true,
-      "scale": 1,
-      "famous_coastlines_in_frame": [],
-      "constraint_fit": {
-        "Open water east of Northshore, around the peninsula and Thaldur (the battle map's seas run on past its edge)": 1,
-        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.632,
-        "The battle map's northern sea and inlet are water (its drawn coast may move within 20 km)": 0.975,
-        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.444,
-        "The peninsula dangling off Northshore's eastern end (its drawn coast may move within 20 km)": 0,
-        "The peninsula is attached to Northshore": 0,
-        "Thaldur, an island east of Northshore (its drawn coast may move within 20 km)": 0,
-        "Thaldur is an island: a strait between it and the peninsula (its drawn coast may move within 20 km)": 1,
-        "Northglade's island is an island": 1,
-        "Northglade's island: a mountain at its summit, snowy hills to the west and north": 0,
-        "Elenar Forest: snowy hills under thick snowy pine (Design's cue, c29-b2, c29-b19)": 1,
-        "The border river runs between Veridian and Arctic land": 1,
-        "Hydrafill's northern ice is drawn on land": 1,
-        "Eldil is on land": 1,
-        "Dzego is hilly (mountain pyramids)": 1,
-        "Dzego has coasts: 35–80% of the frame is land": 1,
-        "the battle map's land is hills, not high mountains (below 1,100 m)": 1,
-        "the patch matches the region around the blend": 0.896,
-        "(battle, overall)": 0.678,
-        "(relief, overall)": 1,
-        "(blend, overall)": 0.896
-      }
-    },
-    {
-      "rank": 18,
-      "score": 0.765,
-      "fit": 0.765,
-      "source_centre_lon_lat": [
-        -14.222,
-        25.5
-      ],
-      "rotation_deg": 270,
-      "mirrored": false,
-      "scale": 1,
-      "famous_coastlines_in_frame": [],
-      "constraint_fit": {
-        "Open water east of Northshore, around the peninsula and Thaldur (the battle map's seas run on past its edge)": 0.774,
-        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.949,
-        "The battle map's northern sea and inlet are water (its drawn coast may move within 20 km)": 0.863,
-        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.031,
-        "The peninsula dangling off Northshore's eastern end (its drawn coast may move within 20 km)": 0.563,
-        "The peninsula is attached to Northshore": 1,
-        "Thaldur, an island east of Northshore (its drawn coast may move within 20 km)": 0,
-        "Thaldur is an island: a strait between it and the peninsula (its drawn coast may move within 20 km)": 1,
-        "Northglade's island is an island": 0,
-        "Northglade's island: a mountain at its summit, snowy hills to the west and north": 1,
-        "Elenar Forest: snowy hills under thick snowy pine (Design's cue, c29-b2, c29-b19)": 1,
-        "The border river runs between Veridian and Arctic land": 1,
-        "Hydrafill's northern ice is drawn on land": 1,
-        "Eldil is on land": 1,
-        "Dzego is hilly (mountain pyramids)": 1,
-        "Dzego has coasts: 35–80% of the frame is land": 1,
-        "the battle map's land is hills, not high mountains (below 1,100 m)": 1,
-        "the patch matches the region around the blend": 0.914,
-        "(battle, overall)": 0.665,
-        "(relief, overall)": 1,
-        "(blend, overall)": 0.914
-      }
-    },
-    {
-      "rank": 19,
+      "rank": 14,
       "score": 0.7639,
       "fit": 0.7639,
       "source_centre_lon_lat": [
@@ -699,7 +519,7 @@
       }
     },
     {
-      "rank": 20,
+      "rank": 15,
       "score": 0.7632,
       "fit": 0.7632,
       "source_centre_lon_lat": [
@@ -735,7 +555,7 @@
       }
     },
     {
-      "rank": 21,
+      "rank": 16,
       "score": 0.7629,
       "fit": 0.7629,
       "source_centre_lon_lat": [
@@ -771,7 +591,7 @@
       }
     },
     {
-      "rank": 22,
+      "rank": 17,
       "score": 0.7589,
       "fit": 0.7589,
       "source_centre_lon_lat": [
@@ -807,7 +627,7 @@
       }
     },
     {
-      "rank": 23,
+      "rank": 18,
       "score": 0.7528,
       "fit": 0.7528,
       "source_centre_lon_lat": [
@@ -843,7 +663,7 @@
       }
     },
     {
-      "rank": 24,
+      "rank": 19,
       "score": 0.749,
       "fit": 0.7805,
       "source_centre_lon_lat": [
@@ -881,7 +701,7 @@
       }
     },
     {
-      "rank": 25,
+      "rank": 20,
       "score": 0.7461,
       "fit": 0.7461,
       "source_centre_lon_lat": [
@@ -917,7 +737,7 @@
       }
     },
     {
-      "rank": 26,
+      "rank": 21,
       "score": 0.7432,
       "fit": 0.7432,
       "source_centre_lon_lat": [
@@ -953,79 +773,7 @@
       }
     },
     {
-      "rank": 27,
-      "score": 0.743,
-      "fit": 0.743,
-      "source_centre_lon_lat": [
-        37.259,
-        -20.5
-      ],
-      "rotation_deg": 90,
-      "mirrored": false,
-      "scale": 1,
-      "famous_coastlines_in_frame": [],
-      "constraint_fit": {
-        "Open water east of Northshore, around the peninsula and Thaldur (the battle map's seas run on past its edge)": 1,
-        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.609,
-        "The battle map's northern sea and inlet are water (its drawn coast may move within 20 km)": 0.985,
-        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.39,
-        "The peninsula dangling off Northshore's eastern end (its drawn coast may move within 20 km)": 0,
-        "The peninsula is attached to Northshore": 0,
-        "Thaldur, an island east of Northshore (its drawn coast may move within 20 km)": 0,
-        "Thaldur is an island: a strait between it and the peninsula (its drawn coast may move within 20 km)": 1,
-        "Northglade's island is an island": 1,
-        "Northglade's island: a mountain at its summit, snowy hills to the west and north": 0,
-        "Elenar Forest: snowy hills under thick snowy pine (Design's cue, c29-b2, c29-b19)": 1,
-        "The border river runs between Veridian and Arctic land": 1,
-        "Hydrafill's northern ice is drawn on land": 1,
-        "Eldil is on land": 1,
-        "Dzego is hilly (mountain pyramids)": 1,
-        "Dzego has coasts: 35–80% of the frame is land": 1,
-        "the battle map's land is hills, not high mountains (below 1,100 m)": 0.996,
-        "the patch matches the region around the blend": 0.862,
-        "(battle, overall)": 0.663,
-        "(relief, overall)": 1,
-        "(blend, overall)": 0.862
-      }
-    },
-    {
-      "rank": 28,
-      "score": 0.7405,
-      "fit": 0.7405,
-      "source_centre_lon_lat": [
-        10.034,
-        -20.5
-      ],
-      "rotation_deg": 300,
-      "mirrored": true,
-      "scale": 1,
-      "famous_coastlines_in_frame": [],
-      "constraint_fit": {
-        "Open water east of Northshore, around the peninsula and Thaldur (the battle map's seas run on past its edge)": 1,
-        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.352,
-        "The battle map's northern sea and inlet are water (its drawn coast may move within 20 km)": 0.998,
-        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.708,
-        "The peninsula dangling off Northshore's eastern end (its drawn coast may move within 20 km)": 0,
-        "The peninsula is attached to Northshore": 0,
-        "Thaldur, an island east of Northshore (its drawn coast may move within 20 km)": 0,
-        "Thaldur is an island: a strait between it and the peninsula (its drawn coast may move within 20 km)": 1,
-        "Northglade's island is an island": 1,
-        "Northglade's island: a mountain at its summit, snowy hills to the west and north": 0,
-        "Elenar Forest: snowy hills under thick snowy pine (Design's cue, c29-b2, c29-b19)": 1,
-        "The border river runs between Veridian and Arctic land": 1,
-        "Hydrafill's northern ice is drawn on land": 1,
-        "Eldil is on land": 1,
-        "Dzego is hilly (mountain pyramids)": 0.825,
-        "Dzego has coasts: 35–80% of the frame is land": 0.825,
-        "the battle map's land is hills, not high mountains (below 1,100 m)": 0.936,
-        "the patch matches the region around the blend": 0.893,
-        "(battle, overall)": 0.639,
-        "(relief, overall)": 0.825,
-        "(blend, overall)": 0.893
-      }
-    },
-    {
-      "rank": 29,
+      "rank": 22,
       "score": 0.7403,
       "fit": 0.7403,
       "source_centre_lon_lat": [
@@ -1061,7 +809,7 @@
       }
     },
     {
-      "rank": 30,
+      "rank": 23,
       "score": 0.7402,
       "fit": 0.7822,
       "source_centre_lon_lat": [
@@ -1096,6 +844,264 @@
         "(battle, overall)": 0.795,
         "(relief, overall)": 0.141,
         "(blend, overall)": 0.763
+      }
+    },
+    {
+      "rank": 24,
+      "score": 0.7381,
+      "fit": 0.7381,
+      "source_centre_lon_lat": [
+        -77.19,
+        -42
+      ],
+      "rotation_deg": 315,
+      "mirrored": true,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "Open water east of Northshore, around the peninsula and Thaldur (the battle map's seas run on past its edge)": 1,
+        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.285,
+        "The battle map's northern sea and inlet are water (its drawn coast may move within 20 km)": 1,
+        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.638,
+        "The peninsula dangling off Northshore's eastern end (its drawn coast may move within 20 km)": 0,
+        "The peninsula is attached to Northshore": 0,
+        "Thaldur, an island east of Northshore (its drawn coast may move within 20 km)": 0,
+        "Thaldur is an island: a strait between it and the peninsula (its drawn coast may move within 20 km)": 1,
+        "Northglade's island is an island": 1,
+        "Northglade's island: a mountain at its summit, snowy hills to the west and north": 0,
+        "Elenar Forest: snowy hills under thick snowy pine (Design's cue, c29-b2, c29-b19)": 1,
+        "The border river runs between Veridian and Arctic land": 0.167,
+        "Hydrafill's northern ice is drawn on land": 1,
+        "Eldil is on land": 1,
+        "Dzego is hilly (mountain pyramids)": 0.391,
+        "Dzego has coasts: 35–80% of the frame is land": 0.391,
+        "the battle map's land is hills, not high mountains (below 1,100 m)": 0.972,
+        "the patch matches the region around the blend": 0.913,
+        "(battle, overall)": 0.622,
+        "(relief, overall)": 0.391,
+        "(blend, overall)": 0.913
+      }
+    },
+    {
+      "rank": 25,
+      "score": 0.7362,
+      "fit": 0.7362,
+      "source_centre_lon_lat": [
+        151.584,
+        -38.5
+      ],
+      "rotation_deg": 60,
+      "mirrored": false,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "Open water east of Northshore, around the peninsula and Thaldur (the battle map's seas run on past its edge)": 1,
+        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.627,
+        "The battle map's northern sea and inlet are water (its drawn coast may move within 20 km)": 0.985,
+        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.742,
+        "The peninsula dangling off Northshore's eastern end (its drawn coast may move within 20 km)": 0,
+        "The peninsula is attached to Northshore": 0,
+        "Thaldur, an island east of Northshore (its drawn coast may move within 20 km)": 0,
+        "Thaldur is an island: a strait between it and the peninsula (its drawn coast may move within 20 km)": 1,
+        "Northglade's island is an island": 1,
+        "Northglade's island: a mountain at its summit, snowy hills to the west and north": 0,
+        "Elenar Forest: snowy hills under thick snowy pine (Design's cue, c29-b2, c29-b19)": 1,
+        "The border river runs between Veridian and Arctic land": 1,
+        "Hydrafill's northern ice is drawn on land": 1,
+        "Eldil is on land": 1,
+        "Dzego is hilly (mountain pyramids)": 0.595,
+        "Dzego has coasts: 35–80% of the frame is land": 0.595,
+        "the battle map's land is hills, not high mountains (below 1,100 m)": 0.953,
+        "the patch matches the region around the blend": 0.775,
+        "(battle, overall)": 0.711,
+        "(relief, overall)": 0.595,
+        "(blend, overall)": 0.775
+      }
+    },
+    {
+      "rank": 26,
+      "score": 0.7356,
+      "fit": 0.7566,
+      "source_centre_lon_lat": [
+        16.614,
+        -33.5
+      ],
+      "rotation_deg": 180,
+      "mirrored": false,
+      "scale": 1,
+      "famous_coastlines_in_frame": [
+        "Cape of Good Hope"
+      ],
+      "constraint_fit": {
+        "Open water east of Northshore, around the peninsula and Thaldur (the battle map's seas run on past its edge)": 1,
+        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.686,
+        "The battle map's northern sea and inlet are water (its drawn coast may move within 20 km)": 0.981,
+        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.577,
+        "The peninsula dangling off Northshore's eastern end (its drawn coast may move within 20 km)": 0,
+        "The peninsula is attached to Northshore": 0,
+        "Thaldur, an island east of Northshore (its drawn coast may move within 20 km)": 0,
+        "Thaldur is an island: a strait between it and the peninsula (its drawn coast may move within 20 km)": 1,
+        "Northglade's island is an island": 1,
+        "Northglade's island: a mountain at its summit, snowy hills to the west and north": 0,
+        "Elenar Forest: snowy hills under thick snowy pine (Design's cue, c29-b2, c29-b19)": 1,
+        "The border river runs between Veridian and Arctic land": 1,
+        "Hydrafill's northern ice is drawn on land": 1,
+        "Eldil is on land": 1,
+        "Dzego is hilly (mountain pyramids)": 0.669,
+        "Dzego has coasts: 35–80% of the frame is land": 0.669,
+        "the battle map's land is hills, not high mountains (below 1,100 m)": 0.879,
+        "the patch matches the region around the blend": 0.897,
+        "(battle, overall)": 0.663,
+        "(relief, overall)": 0.669,
+        "(blend, overall)": 0.897
+      }
+    },
+    {
+      "rank": 27,
+      "score": 0.7355,
+      "fit": 0.767,
+      "source_centre_lon_lat": [
+        75.991,
+        8.5
+      ],
+      "rotation_deg": 120,
+      "mirrored": false,
+      "scale": 1,
+      "famous_coastlines_in_frame": [
+        "Indian subcontinent"
+      ],
+      "constraint_fit": {
+        "Open water east of Northshore, around the peninsula and Thaldur (the battle map's seas run on past its edge)": 0.995,
+        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.938,
+        "The battle map's northern sea and inlet are water (its drawn coast may move within 20 km)": 0.781,
+        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.919,
+        "The peninsula dangling off Northshore's eastern end (its drawn coast may move within 20 km)": 0,
+        "The peninsula is attached to Northshore": 0,
+        "Thaldur, an island east of Northshore (its drawn coast may move within 20 km)": 0,
+        "Thaldur is an island: a strait between it and the peninsula (its drawn coast may move within 20 km)": 1,
+        "Northglade's island is an island": 1,
+        "Northglade's island: a mountain at its summit, snowy hills to the west and north": 0,
+        "Elenar Forest: snowy hills under thick snowy pine (Design's cue, c29-b2, c29-b19)": 1,
+        "The border river runs between Veridian and Arctic land": 1,
+        "Hydrafill's northern ice is drawn on land": 1,
+        "Eldil is on land": 1,
+        "Dzego is hilly (mountain pyramids)": 0.54,
+        "Dzego has coasts: 35–80% of the frame is land": 0.54,
+        "the battle map's land is hills, not high mountains (below 1,100 m)": 0.974,
+        "the patch matches the region around the blend": 0.738,
+        "(battle, overall)": 0.787,
+        "(relief, overall)": 0.54,
+        "(blend, overall)": 0.738
+      }
+    },
+    {
+      "rank": 28,
+      "score": 0.7355,
+      "fit": 0.7355,
+      "source_centre_lon_lat": [
+        -128.638,
+        46
+      ],
+      "rotation_deg": 210,
+      "mirrored": false,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "Open water east of Northshore, around the peninsula and Thaldur (the battle map's seas run on past its edge)": 1,
+        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.321,
+        "The battle map's northern sea and inlet are water (its drawn coast may move within 20 km)": 1,
+        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.769,
+        "The peninsula dangling off Northshore's eastern end (its drawn coast may move within 20 km)": 0,
+        "The peninsula is attached to Northshore": 0,
+        "Thaldur, an island east of Northshore (its drawn coast may move within 20 km)": 0,
+        "Thaldur is an island: a strait between it and the peninsula (its drawn coast may move within 20 km)": 1,
+        "Northglade's island is an island": 1,
+        "Northglade's island: a mountain at its summit, snowy hills to the west and north": 0,
+        "Elenar Forest: snowy hills under thick snowy pine (Design's cue, c29-b2, c29-b19)": 1,
+        "The border river runs between Veridian and Arctic land": 1,
+        "Hydrafill's northern ice is drawn on land": 1,
+        "Eldil is on land": 1,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "the battle map's land is hills, not high mountains (below 1,100 m)": 0.967,
+        "the patch matches the region around the blend": 0.856,
+        "(battle, overall)": 0.655,
+        "(relief, overall)": 1,
+        "(blend, overall)": 0.856
+      }
+    },
+    {
+      "rank": 29,
+      "score": 0.7352,
+      "fit": 0.7667,
+      "source_centre_lon_lat": [
+        55.567,
+        15.5
+      ],
+      "rotation_deg": 90,
+      "mirrored": false,
+      "scale": 1,
+      "famous_coastlines_in_frame": [
+        "Arabian peninsula"
+      ],
+      "constraint_fit": {
+        "Open water east of Northshore, around the peninsula and Thaldur (the battle map's seas run on past its edge)": 0.998,
+        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.692,
+        "The battle map's northern sea and inlet are water (its drawn coast may move within 20 km)": 0.981,
+        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.583,
+        "The peninsula dangling off Northshore's eastern end (its drawn coast may move within 20 km)": 0,
+        "The peninsula is attached to Northshore": 0,
+        "Thaldur, an island east of Northshore (its drawn coast may move within 20 km)": 0,
+        "Thaldur is an island: a strait between it and the peninsula (its drawn coast may move within 20 km)": 1,
+        "Northglade's island is an island": 1,
+        "Northglade's island: a mountain at its summit, snowy hills to the west and north": 0,
+        "Elenar Forest: snowy hills under thick snowy pine (Design's cue, c29-b2, c29-b19)": 1,
+        "The border river runs between Veridian and Arctic land": 1,
+        "Hydrafill's northern ice is drawn on land": 1,
+        "Eldil is on land": 1,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "the battle map's land is hills, not high mountains (below 1,100 m)": 0.996,
+        "the patch matches the region around the blend": 0.844,
+        "(battle, overall)": 0.715,
+        "(relief, overall)": 1,
+        "(blend, overall)": 0.844
+      }
+    },
+    {
+      "rank": 30,
+      "score": 0.7344,
+      "fit": 0.7344,
+      "source_centre_lon_lat": [
+        24.098,
+        -37
+      ],
+      "rotation_deg": 120,
+      "mirrored": false,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "Open water east of Northshore, around the peninsula and Thaldur (the battle map's seas run on past its edge)": 1,
+        "The battle map's dark ground is land, up to a 6 km band along its coasts (held inside an irregular inset from the drawing's border) (its drawn coast may move within 20 km)": 0.303,
+        "The battle map's northern sea and inlet are water (its drawn coast may move within 20 km)": 1,
+        "The battle map's southern sea is water (its drawn coast may move within 20 km)": 0.742,
+        "The peninsula dangling off Northshore's eastern end (its drawn coast may move within 20 km)": 0,
+        "The peninsula is attached to Northshore": 0,
+        "Thaldur, an island east of Northshore (its drawn coast may move within 20 km)": 0,
+        "Thaldur is an island: a strait between it and the peninsula (its drawn coast may move within 20 km)": 1,
+        "Northglade's island is an island": 1,
+        "Northglade's island: a mountain at its summit, snowy hills to the west and north": 0,
+        "Elenar Forest: snowy hills under thick snowy pine (Design's cue, c29-b2, c29-b19)": 1,
+        "The border river runs between Veridian and Arctic land": 1,
+        "Hydrafill's northern ice is drawn on land": 1,
+        "Eldil is on land": 1,
+        "Dzego is hilly (mountain pyramids)": 0.541,
+        "Dzego has coasts: 35–80% of the frame is land": 0.541,
+        "the battle map's land is hills, not high mountains (below 1,100 m)": 0.95,
+        "the patch matches the region around the blend": 0.876,
+        "(battle, overall)": 0.64,
+        "(relief, overall)": 0.541,
+        "(blend, overall)": 0.876
       }
     }
   ]
