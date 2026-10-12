@@ -1,0 +1,131 @@
+{
+  "made": "2026-10-12T04:25:58.579Z",
+  "code_version": {
+    "scripts/terrain-v5.ts": "4d41764cd40501c0397d61fc84ca29511c4352b43d83d554ca903d52fa5d7c27",
+    "scripts/terrain-v4.ts": "226b143a6e29175971daaeba4e7b67740777c6f08469a04bdcac4ebece1dbf8b",
+    "scripts/lib/geotiff-lite.ts": "b439401048dbfe2c7c46b4dbce41979e1e7d13e4f33243919558844d019acdc0",
+    "scripts/lib/terrain-core.ts": "5140c0a7e5d4357c97b4a54c000c9654c406dd6f127e249b028ee0b23b6a36d0",
+    "scripts/lib/noise.ts": "ef2aba4f58c28e0cb002c0992ac3bd80dd99af8b1d4b4e5b5bf5d849047c2395",
+    "scripts/lib/raster-out.ts": "24e0822f47b2552285ca49efdc1583d933ea9c84bf1722a495ad14266757194e",
+    "scripts/lib/map-tests.ts": "925f5018db8e5284c2fac2e6474384d43324df3327a2883354ebb8f5370d4385"
+  },
+  "frame": "dzego",
+  "method": "Every source centre on a 1.5° grid (−58° to 76° latitude), every rotation in 15° steps, mirrored and not, at true scale; each placement scored by the weighted share of the book's constraints the real terrain already meets (each pin a group; book facts weigh twice what we placed), minus a penalty for famous coastlines in the frame. The best 1,500 are re-scored on the 1-arc-minute grid with denser targets and nudged by half a degree; the list keeps source centres at least 1,500 km apart.",
+  "candidates": [
+    {
+      "rank": 1,
+      "score": 1,
+      "fit": 1,
+      "source_centre_lon_lat": [
+        -72.745,
+        -45
+      ],
+      "rotation_deg": 150,
+      "mirrored": true,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "Pafogai Du is on land": 1,
+        "Sadzu Du is on land": 1,
+        "Sadzu Du: several mountain pyramids behind a park, about half as tall as Pafogai Du's (Design's cue, c12-b30)": 1,
+        "The mountain the pyramid south of Pafogai Du was cut from": 1,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "(land, overall)": 1,
+        "(relief, overall)": 1
+      }
+    },
+    {
+      "rank": 2,
+      "score": 1,
+      "fit": 1,
+      "source_centre_lon_lat": [
+        118.539,
+        -34
+      ],
+      "rotation_deg": 105,
+      "mirrored": false,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "Pafogai Du is on land": 1,
+        "Sadzu Du is on land": 1,
+        "Sadzu Du: several mountain pyramids behind a park, about half as tall as Pafogai Du's (Design's cue, c12-b30)": 1,
+        "The mountain the pyramid south of Pafogai Du was cut from": 1,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "(land, overall)": 1,
+        "(relief, overall)": 1
+      }
+    },
+    {
+      "rank": 3,
+      "score": 1,
+      "fit": 1,
+      "source_centre_lon_lat": [
+        -69.753,
+        -31
+      ],
+      "rotation_deg": 15,
+      "mirrored": false,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "Pafogai Du is on land": 1,
+        "Sadzu Du is on land": 1,
+        "Sadzu Du: several mountain pyramids behind a park, about half as tall as Pafogai Du's (Design's cue, c12-b30)": 1,
+        "The mountain the pyramid south of Pafogai Du was cut from": 1,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "(land, overall)": 1,
+        "(relief, overall)": 1
+      }
+    },
+    {
+      "rank": 4,
+      "score": 1,
+      "fit": 1,
+      "source_centre_lon_lat": [
+        28.244,
+        -31
+      ],
+      "rotation_deg": 60,
+      "mirrored": false,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "Pafogai Du is on land": 1,
+        "Sadzu Du is on land": 1,
+        "Sadzu Du: several mountain pyramids behind a park, about half as tall as Pafogai Du's (Design's cue, c12-b30)": 1,
+        "The mountain the pyramid south of Pafogai Du was cut from": 1,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "(land, overall)": 1,
+        "(relief, overall)": 1
+      }
+    },
+    {
+      "rank": 5,
+      "score": 1,
+      "fit": 1,
+      "source_centre_lon_lat": [
+        -50.887,
+        -27.5
+      ],
+      "rotation_deg": 15,
+      "mirrored": false,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "Pafogai Du is on land": 1,
+        "Sadzu Du is on land": 1,
+        "Sadzu Du: several mountain pyramids behind a park, about half as tall as Pafogai Du's (Design's cue, c12-b30)": 1,
+        "The mountain the pyramid south of Pafogai Du was cut from": 1,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "(land, overall)": 1,
+        "(relief, overall)": 1
+      }
+    }
+  ]
+}

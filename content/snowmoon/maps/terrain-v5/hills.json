@@ -1,0 +1,822 @@
+{
+  "made": "2026-10-12T04:47:08.683Z",
+  "note": "Candidate lone hills screened on ETOPO 2022 at 1 arc-minute; each is checked on SRTM GL1 before use. Famous or sacred hills are excluded.",
+  "excluded": [
+    "Uluru",
+    "Kata Tjuta",
+    "Sugarloaf Mountain, Rio de Janeiro",
+    "Table Mountain",
+    "Bear Butte",
+    "Devils Tower",
+    "Stone Mountain",
+    "Sigiriya",
+    "Mount Tabor",
+    "Ayers Rock region",
+    "Mount Kailash",
+    "Mount Fuji"
+  ],
+  "meldan": [
+    {
+      "lon": 112.97500000000002,
+      "lat": 22.924999999999997,
+      "top": 228,
+      "plain": 4,
+      "prominence": 224,
+      "ringRange": 4,
+      "lowNear": 2
+    },
+    {
+      "lon": 131.69166666666666,
+      "lat": 47.041666666666664,
+      "top": 337,
+      "plain": 64,
+      "prominence": 273,
+      "ringRange": 12,
+      "lowNear": 62
+    },
+    {
+      "lon": 33.991666666666674,
+      "lat": 5.74166666666666,
+      "top": 690,
+      "plain": 433,
+      "prominence": 257,
+      "ringRange": 17,
+      "lowNear": 423
+    },
+    {
+      "lon": 104.60833333333335,
+      "lat": 10.775000000000006,
+      "top": 271,
+      "plain": 13,
+      "prominence": 258,
+      "ringRange": 19,
+      "lowNear": 5
+    },
+    {
+      "lon": -78.425,
+      "lat": 22.108333333333334,
+      "top": 234,
+      "plain": 6,
+      "prominence": 228,
+      "ringRange": 12,
+      "lowNear": 0
+    },
+    {
+      "lon": 110.99166666666667,
+      "lat": 0.5750000000000028,
+      "top": 278,
+      "plain": 44,
+      "prominence": 234,
+      "ringRange": 14,
+      "lowNear": 34
+    },
+    {
+      "lon": -73.05833333333334,
+      "lat": 45.475,
+      "top": 264,
+      "plain": 35,
+      "prominence": 229,
+      "ringRange": 14,
+      "lowNear": 28
+    },
+    {
+      "lon": 104.75833333333333,
+      "lat": 12.375,
+      "top": 237,
+      "plain": 8,
+      "prominence": 229,
+      "ringRange": 15,
+      "lowNear": 4
+    },
+    {
+      "lon": -85.825,
+      "lat": 11.74166666666666,
+      "top": 352,
+      "plain": 31,
+      "prominence": 321,
+      "ringRange": 6,
+      "lowNear": 31
+    },
+    {
+      "lon": 109.27499999999998,
+      "lat": -0.375,
+      "top": 206,
+      "plain": 4,
+      "prominence": 202,
+      "ringRange": 7,
+      "lowNear": 2
+    },
+    {
+      "lon": 90.32499999999999,
+      "lat": 26.34166666666667,
+      "top": 265,
+      "plain": 44,
+      "prominence": 221,
+      "ringRange": 13,
+      "lowNear": 30
+    },
+    {
+      "lon": -65.225,
+      "lat": 0.22499999999999432,
+      "top": 339,
+      "plain": 83,
+      "prominence": 256,
+      "ringRange": 25,
+      "lowNear": 70
+    },
+    {
+      "lon": -69.225,
+      "lat": 3.308333333333337,
+      "top": 433,
+      "plain": 154,
+      "prominence": 279,
+      "ringRange": 21,
+      "lowNear": 137
+    },
+    {
+      "lon": 97.47500000000002,
+      "lat": 25.441666666666663,
+      "top": 379,
+      "plain": 150,
+      "prominence": 229,
+      "ringRange": 18,
+      "lowNear": 138
+    },
+    {
+      "lon": -57.84166666666667,
+      "lat": -19.391666666666666,
+      "top": 303,
+      "plain": 82,
+      "prominence": 221,
+      "ringRange": 16,
+      "lowNear": 82
+    },
+    {
+      "lon": -66.675,
+      "lat": 0.2750000000000057,
+      "top": 293,
+      "plain": 76,
+      "prominence": 217,
+      "ringRange": 15,
+      "lowNear": 68
+    },
+    {
+      "lon": 18.34166666666667,
+      "lat": 12.375,
+      "top": 641,
+      "plain": 378,
+      "prominence": 263,
+      "ringRange": 30,
+      "lowNear": 356
+    },
+    {
+      "lon": -12.175000000000011,
+      "lat": 8.341666666666669,
+      "top": 270,
+      "plain": 70,
+      "prominence": 200,
+      "ringRange": 14,
+      "lowNear": 59
+    },
+    {
+      "lon": -61.00833333333334,
+      "lat": 3.9749999999999943,
+      "top": 315,
+      "plain": 113,
+      "prominence": 202,
+      "ringRange": 15,
+      "lowNear": 99
+    },
+    {
+      "lon": 116.79166666666669,
+      "lat": 33.99166666666667,
+      "top": 196,
+      "plain": 33,
+      "prominence": 163,
+      "ringRange": 5,
+      "lowNear": 29
+    },
+    {
+      "lon": 41.45833333333334,
+      "lat": 11.625,
+      "top": 658,
+      "plain": 357,
+      "prominence": 301,
+      "ringRange": 22,
+      "lowNear": 343
+    },
+    {
+      "lon": 72.85833333333332,
+      "lat": 25.608333333333334,
+      "top": 425,
+      "plain": 180,
+      "prominence": 245,
+      "ringRange": 30,
+      "lowNear": 156
+    },
+    {
+      "lon": 142.80833333333334,
+      "lat": -4.208333333333329,
+      "top": 260,
+      "plain": 13,
+      "prominence": 247,
+      "ringRange": 31,
+      "lowNear": 8
+    },
+    {
+      "lon": 110.45833333333331,
+      "lat": -1.8083333333333371,
+      "top": 342,
+      "plain": 35,
+      "prominence": 307,
+      "ringRange": 21,
+      "lowNear": 22
+    },
+    {
+      "lon": -60.30833333333334,
+      "lat": 6.25833333333334,
+      "top": 393,
+      "plain": 89,
+      "prominence": 304,
+      "ringRange": 22,
+      "lowNear": 77
+    },
+    {
+      "lon": 73.50833333333333,
+      "lat": 22.474999999999994,
+      "top": 367,
+      "plain": 102,
+      "prominence": 265,
+      "ringRange": 34,
+      "lowNear": 77
+    },
+    {
+      "lon": 33.241666666666674,
+      "lat": 19.74166666666666,
+      "top": 567,
+      "plain": 343,
+      "prominence": 224,
+      "ringRange": 25,
+      "lowNear": 332
+    },
+    {
+      "lon": -48.724999999999994,
+      "lat": -25.974999999999994,
+      "top": 228,
+      "plain": 10,
+      "prominence": 218,
+      "ringRange": 24,
+      "lowNear": 4
+    },
+    {
+      "lon": 86.84166666666664,
+      "lat": 24.49166666666666,
+      "top": 487,
+      "plain": 236,
+      "prominence": 251,
+      "ringRange": 34,
+      "lowNear": 202
+    },
+    {
+      "lon": -56.55833333333334,
+      "lat": 4.424999999999997,
+      "top": 320,
+      "plain": 86,
+      "prominence": 234,
+      "ringRange": 29,
+      "lowNear": 67
+    },
+    {
+      "lon": -72.625,
+      "lat": 1.3083333333333371,
+      "top": 434,
+      "plain": 237,
+      "prominence": 197,
+      "ringRange": 18,
+      "lowNear": 212
+    },
+    {
+      "lon": 84.67500000000001,
+      "lat": 19.54166666666667,
+      "top": 275,
+      "plain": 40,
+      "prominence": 235,
+      "ringRange": 31,
+      "lowNear": 26
+    },
+    {
+      "lon": 139.99166666666667,
+      "lat": 51.80833333333333,
+      "top": 246,
+      "plain": 10,
+      "prominence": 236,
+      "ringRange": 32,
+      "lowNear": 5
+    },
+    {
+      "lon": -51.525000000000006,
+      "lat": 3.6416666666666657,
+      "top": 280,
+      "plain": 9,
+      "prominence": 271,
+      "ringRange": 36,
+      "lowNear": 3
+    },
+    {
+      "lon": 104.125,
+      "lat": 17.974999999999994,
+      "top": 458,
+      "plain": 166,
+      "prominence": 292,
+      "ringRange": 30,
+      "lowNear": 147
+    },
+    {
+      "lon": 17.90833333333333,
+      "lat": 10.325000000000003,
+      "top": 516,
+      "plain": 359,
+      "prominence": 157,
+      "ringRange": 9,
+      "lowNear": 354
+    },
+    {
+      "lon": -77.75833333333334,
+      "lat": -4.174999999999997,
+      "top": 432,
+      "plain": 190,
+      "prominence": 242,
+      "ringRange": 35,
+      "lowNear": 172
+    },
+    {
+      "lon": 80.75833333333333,
+      "lat": 18.974999999999994,
+      "top": 604,
+      "plain": 309,
+      "prominence": 295,
+      "ringRange": 30,
+      "lowNear": 289
+    },
+    {
+      "lon": 118.84166666666664,
+      "lat": 32.075,
+      "top": 225,
+      "plain": 15,
+      "prominence": 210,
+      "ringRange": 26,
+      "lowNear": 2
+    },
+    {
+      "lon": 147.175,
+      "lat": -19.941666666666663,
+      "top": 333,
+      "plain": 43,
+      "prominence": 290,
+      "ringRange": 32,
+      "lowNear": 30
+    }
+  ],
+  "pafogai": [
+    {
+      "lon": -89.35833333333333,
+      "lat": 15.541666666666671,
+      "top": 520,
+      "plain": 1,
+      "prominence": 519,
+      "ringRange": 14,
+      "lowNear": 2,
+      "lowLon": -89.325,
+      "lowLat": 15.50833333333334
+    },
+    {
+      "lon": 170.14166666666665,
+      "lat": -45.875,
+      "top": 529,
+      "plain": 4,
+      "prominence": 525,
+      "ringRange": 22,
+      "lowNear": 5,
+      "lowLon": 170.20833333333331,
+      "lowLat": -45.875
+    },
+    {
+      "lon": 103.95833333333331,
+      "lat": 11.025000000000006,
+      "top": 531,
+      "plain": 7,
+      "prominence": 524,
+      "ringRange": 23,
+      "lowNear": 9,
+      "lowLon": 103.90833333333336,
+      "lowLat": 11.025000000000006
+    },
+    {
+      "lon": 168.875,
+      "lat": -44.008333333333326,
+      "top": 527,
+      "plain": 9,
+      "prominence": 518,
+      "ringRange": 23,
+      "lowNear": 6,
+      "lowLon": 168.875,
+      "lowLat": -43.95833333333334
+    },
+    {
+      "lon": 109.84166666666664,
+      "lat": 1.7083333333333286,
+      "top": 521,
+      "plain": 7,
+      "prominence": 514,
+      "ringRange": 8,
+      "lowNear": 6,
+      "lowLon": 109.875,
+      "lowLat": 1.6749999999999972
+    },
+    {
+      "lon": -121.875,
+      "lat": 49.24166666666667,
+      "top": 534,
+      "plain": 10,
+      "prominence": 524,
+      "ringRange": 22,
+      "lowNear": 10,
+      "lowLon": -121.925,
+      "lowLat": 49.208333333333336
+    },
+    {
+      "lon": 22.474999999999994,
+      "lat": 38.775,
+      "top": 522,
+      "plain": 8,
+      "prominence": 514,
+      "ringRange": 25,
+      "lowNear": 5,
+      "lowLon": 22.474999999999994,
+      "lowLat": 38.825
+    },
+    {
+      "lon": 111.15833333333336,
+      "lat": 1.25833333333334,
+      "top": 534,
+      "plain": 8,
+      "prominence": 526,
+      "ringRange": 8,
+      "lowNear": 8,
+      "lowLon": 111.20833333333331,
+      "lowLat": 1.25833333333334
+    },
+    {
+      "lon": -72.25833333333334,
+      "lat": 19.74166666666666,
+      "top": 536,
+      "plain": 7,
+      "prominence": 529,
+      "ringRange": 15,
+      "lowNear": 18,
+      "lowLon": -72.25833333333334,
+      "lowLat": 19.691666666666663
+    },
+    {
+      "lon": 109.20833333333331,
+      "lat": 12.891666666666666,
+      "top": 536,
+      "plain": 8,
+      "prominence": 528,
+      "ringRange": 5,
+      "lowNear": 10,
+      "lowLon": 109.20833333333331,
+      "lowLat": 12.941666666666663
+    },
+    {
+      "lon": -129.70833333333334,
+      "lat": 55.275,
+      "top": 537,
+      "plain": 1,
+      "prominence": 536,
+      "ringRange": 9,
+      "lowNear": 1,
+      "lowLon": -129.775,
+      "lowLat": 55.30833333333333
+    },
+    {
+      "lon": -77.725,
+      "lat": 18.00833333333334,
+      "top": 511,
+      "plain": 4,
+      "prominence": 507,
+      "ringRange": 22,
+      "lowNear": 4,
+      "lowLon": -77.775,
+      "lowLat": 18.00833333333334
+    },
+    {
+      "lon": 19.741666666666674,
+      "lat": 41.675,
+      "top": 515,
+      "plain": 7,
+      "prominence": 508,
+      "ringRange": 10,
+      "lowNear": 3,
+      "lowLon": 19.67500000000001,
+      "lowLat": 41.675
+    },
+    {
+      "lon": 92.07499999999999,
+      "lat": 25.20833333333333,
+      "top": 539,
+      "plain": 9,
+      "prominence": 530,
+      "ringRange": 21,
+      "lowNear": 10,
+      "lowLon": 92.07499999999999,
+      "lowLat": 25.15833333333333
+    },
+    {
+      "lon": 35.65833333333333,
+      "lat": 36.90833333333333,
+      "top": 529,
+      "plain": 15,
+      "prominence": 514,
+      "ringRange": 4,
+      "lowNear": 12,
+      "lowLon": 35.59166666666667,
+      "lowLat": 36.90833333333333
+    },
+    {
+      "lon": 117.09166666666664,
+      "lat": 4.141666666666666,
+      "top": 531,
+      "plain": 16,
+      "prominence": 515,
+      "ringRange": 25,
+      "lowNear": 17,
+      "lowLon": 117.05833333333334,
+      "lowLat": 4.108333333333334
+    },
+    {
+      "lon": 20.64166666666668,
+      "lat": 39.25833333333333,
+      "top": 538,
+      "plain": 20,
+      "prominence": 518,
+      "ringRange": 18,
+      "lowNear": 56,
+      "lowLon": 20.57499999999999,
+      "lowLat": 39.25833333333333
+    },
+    {
+      "lon": -86.94166666666666,
+      "lat": 15.674999999999997,
+      "top": 543,
+      "plain": 10,
+      "prominence": 533,
+      "ringRange": 25,
+      "lowNear": 1,
+      "lowLon": -86.94166666666666,
+      "lowLat": 15.724999999999994
+    },
+    {
+      "lon": 27.441666666666663,
+      "lat": 37.791666666666664,
+      "top": 518,
+      "plain": 11,
+      "prominence": 507,
+      "ringRange": 20,
+      "lowNear": 9,
+      "lowLon": 27.441666666666663,
+      "lowLat": 37.74166666666667
+    },
+    {
+      "lon": -47.15833333333333,
+      "lat": -24.391666666666666,
+      "top": 544,
+      "plain": 8,
+      "prominence": 536,
+      "ringRange": 5,
+      "lowNear": 10,
+      "lowLon": -47.15833333333333,
+      "lowLat": -24.441666666666663
+    },
+    {
+      "lon": 13.241666666666674,
+      "lat": 41.375,
+      "top": 503,
+      "plain": 4,
+      "prominence": 499,
+      "ringRange": 19,
+      "lowNear": 2,
+      "lowLon": 13.175000000000011,
+      "lowLat": 41.375
+    },
+    {
+      "lon": 121.19166666666666,
+      "lat": -2.0416666666666714,
+      "top": 545,
+      "plain": 6,
+      "prominence": 539,
+      "ringRange": 7,
+      "lowNear": 7,
+      "lowLon": 121.24166666666667,
+      "lowLat": -2.0416666666666714
+    },
+    {
+      "lon": 29.40833333333333,
+      "lat": 36.325,
+      "top": 502,
+      "plain": 4,
+      "prominence": 498,
+      "ringRange": 8,
+      "lowNear": 7,
+      "lowLon": 29.34166666666667,
+      "lowLat": 36.325
+    },
+    {
+      "lon": 119.39166666666665,
+      "lat": 26.05833333333333,
+      "top": 500,
+      "plain": 4,
+      "prominence": 496,
+      "ringRange": 3,
+      "lowNear": 7,
+      "lowLon": 119.34166666666664,
+      "lowLat": 26.05833333333333
+    },
+    {
+      "lon": 130.72500000000002,
+      "lat": 33.30833333333333,
+      "top": 537,
+      "plain": 23,
+      "prominence": 514,
+      "ringRange": 12,
+      "lowNear": 36,
+      "lowLon": 130.72500000000002,
+      "lowLat": 33.358333333333334
+    },
+    {
+      "lon": -72.74166666666666,
+      "lat": -42.741666666666674,
+      "top": 539,
+      "plain": 24,
+      "prominence": 515,
+      "ringRange": 18,
+      "lowNear": 15,
+      "lowLon": -72.79166666666667,
+      "lowLat": -42.775000000000006
+    },
+    {
+      "lon": -12.991666666666674,
+      "lat": 9.591666666666669,
+      "top": 522,
+      "plain": 16,
+      "prominence": 506,
+      "ringRange": 20,
+      "lowNear": 26,
+      "lowLon": -12.991666666666674,
+      "lowLat": 9.541666666666671
+    },
+    {
+      "lon": 114.14166666666665,
+      "lat": 3.558333333333337,
+      "top": 520,
+      "plain": 15,
+      "prominence": 505,
+      "ringRange": 15,
+      "lowNear": 16,
+      "lowLon": 114.14166666666665,
+      "lowLat": 3.6083333333333343
+    },
+    {
+      "lon": 15.541666666666657,
+      "lat": 41.75833333333333,
+      "top": 547,
+      "plain": 29,
+      "prominence": 518,
+      "ringRange": 17,
+      "lowNear": 38,
+      "lowLon": 15.491666666666674,
+      "lowLat": 41.725
+    },
+    {
+      "lon": 121.05833333333334,
+      "lat": 13.924999999999997,
+      "top": 551,
+      "plain": 4,
+      "prominence": 547,
+      "ringRange": 0,
+      "lowNear": 4,
+      "lowLon": 121.00833333333333,
+      "lowLat": 13.924999999999997
+    },
+    {
+      "lon": -121.55833333333334,
+      "lat": 36.50833333333333,
+      "top": 548,
+      "plain": 30,
+      "prominence": 518,
+      "ringRange": 15,
+      "lowNear": 58,
+      "lowLon": -121.50833333333333,
+      "lowLat": 36.541666666666664
+    },
+    {
+      "lon": -115.99166666666666,
+      "lat": 32.975,
+      "top": 552,
+      "plain": 20,
+      "prominence": 532,
+      "ringRange": 13,
+      "lowNear": 20,
+      "lowLon": -115.925,
+      "lowLat": 32.975
+    },
+    {
+      "lon": -68.35833333333333,
+      "lat": -54.60833333333332,
+      "top": 536,
+      "plain": 25,
+      "prominence": 511,
+      "ringRange": 20,
+      "lowNear": 25,
+      "lowLon": -68.29166666666667,
+      "lowLat": -54.57499999999999
+    },
+    {
+      "lon": -59.55833333333334,
+      "lat": 53.425,
+      "top": 553,
+      "plain": 34,
+      "prominence": 519,
+      "ringRange": 10,
+      "lowNear": 28,
+      "lowLon": -59.625,
+      "lowLat": 53.458333333333336
+    },
+    {
+      "lon": 121.90833333333336,
+      "lat": -5.141666666666666,
+      "top": 500,
+      "plain": 8,
+      "prominence": 492,
+      "ringRange": 8,
+      "lowNear": 5,
+      "lowLon": 121.85833333333335,
+      "lowLat": -5.141666666666666
+    },
+    {
+      "lon": 134.05833333333334,
+      "lat": -2.50833333333334,
+      "top": 557,
+      "plain": 8,
+      "prominence": 549,
+      "ringRange": 20,
+      "lowNear": 8,
+      "lowLon": 134.00833333333333,
+      "lowLat": -2.50833333333334
+    },
+    {
+      "lon": 135.675,
+      "lat": 34.675,
+      "top": 488,
+      "plain": 3,
+      "prominence": 485,
+      "ringRange": 3,
+      "lowNear": 3,
+      "lowLon": 135.60833333333335,
+      "lowLat": 34.675
+    },
+    {
+      "lon": 102.72500000000002,
+      "lat": 12.275000000000006,
+      "top": 529,
+      "plain": 25,
+      "prominence": 504,
+      "ringRange": 17,
+      "lowNear": 13,
+      "lowLon": 102.67500000000001,
+      "lowLat": 12.275000000000006
+    },
+    {
+      "lon": 97.70833333333331,
+      "lat": 2.9083333333333314,
+      "top": 561,
+      "plain": 13,
+      "prominence": 548,
+      "ringRange": 13,
+      "lowNear": 17,
+      "lowLon": 97.70833333333331,
+      "lowLat": 2.8583333333333343
+    },
+    {
+      "lon": 139.05833333333334,
+      "lat": -4.674999999999997,
+      "top": 527,
+      "plain": 24,
+      "prominence": 503,
+      "ringRange": 25,
+      "lowNear": 34,
+      "lowLon": 139.05833333333334,
+      "lowLat": -4.724999999999994
+    }
+  ]
+}
