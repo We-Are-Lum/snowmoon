@@ -103,7 +103,7 @@ not private, but the decision sets the precedent.
 1. **Craft guide: approved**, with one addition: Design v3's two sets of principles, so the coach and the screens match. These are sections 8 to 17 of `docs/craft/visual-storytelling.md`:
    - stories: want, pressure, turn, choice with a price, change;
    - characters: want and need, flaw, contradiction, arc, fits the world.
-   The coding agent wrote them from these names without seeing Design v3 itself; if its wording differs, the sections should follow it.
+   Done: once Design's files arrived, the sections were matched to Plan a Piece v3, then to v4 (see 6).
 2. **All four design changes: yes.** Built as design 2 (`scripts/plan-coach-eval.ts`):
    - the world check as its own steps (`plan-coach-claims.md`, then `plan-coach-world-check.md` per claim);
    - picture slots without words, with a code check (`scripts/lib/plan-coach-checks.ts`, tested by `scripts/plan-coach-checks-test.ts`);
@@ -111,10 +111,10 @@ not private, but the decision sets the precedent.
    - three answers plus "I can't check this within your chapter", enforced in code.
    **gpt-oss reruns with the owner's freewrite once it is pasted.** One test run on invented fixture A ($0.0041) checked that the pipeline works.
 3. **Comparison eval, test drafts only:** gpt-oss-120b; Kimi K3, pinned to moonshotai with zero retention; Claude Sonnet 5.5 **only after the owner confirms Anthropic's data retention for our account** (owner, 2026-10-11: "Before Sonnet receives anything, confirm Anthropic's data retention terms for our account; don't assume zero retention").
-   - **Sonnet is blocked in code** until `hosted.retention_confirmed_by_owner` is set in `config/models.json`.
+   - **Superseded by 5:** Sonnet was blocked in code until `hosted.retention_confirmed_by_owner` was set in `config/models.json`; the owner has since confirmed it.
    - **Already sent to Sonnet:** two calls on 2026-10-11, made as setup checks before the owner's condition arrived. Each contained only "Reply with the single word OK."
    - **Evidence gathered so far** (gateway level, not the confirmation itself) is listed in the agent's report to the owner. In short: we have no Anthropic organization; calls go through Vercel's own credentials, under Vercel's agreement with Anthropic.
-   - **The allowlist** (`config/models.json`) records Kimi K3's added use, and Sonnet 5.5 as a closed model, blocked.
+   - **The allowlist** (`config/models.json`) records each model's use; Haiku, Sonnet and Opus 5.5 are recorded as closed models, test drafts only.
    - **gpt-oss through the gateway uses Vercel's own Groq account, not ours** (checked 2026-10-11 from the response metadata: `credentialType: "system"`, "System credentials planned for: groq"). Our Groq key is not registered with the gateway as BYOK, and batch jobs never read it.
    - **Choosing a model for real users' drafts is a separate decision.**
 
