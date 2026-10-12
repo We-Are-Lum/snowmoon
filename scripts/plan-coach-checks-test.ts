@@ -41,7 +41,7 @@ ok('a principle left with no example says so', craftUpTo(guideMd, 1).includes('N
 ok('a reader at chapter 32 sees every example', craftUpTo(planted, 32).includes('c31-b77') && craftUpTo(guideMd, 32) === guideMd);
 const wrongTag = guideMd.replace('- [ch 7] After the final, Bai', '- [ch 4] After the final, Bai');
 ok('a wrong tag is caught', craftProblems(wrongTag).some((x) => x.includes('tagged ch 4')));
-const stray = guideMd.replace('**The coach asks.** "What does your character choose', '**The coach asks.** (see c30-b5) "What does your character choose');
+const stray = guideMd.replace('**The coach asks.** "What does your character do, and what does it cost?"', '**The coach asks.** (see c30-b5) "What does your character do, and what does it cost?"');
 ok('a block id outside an example is caught', craftProblems(stray).some((x) => x.includes('outside a tagged example')));
 
 if (bad) process.exit(1);

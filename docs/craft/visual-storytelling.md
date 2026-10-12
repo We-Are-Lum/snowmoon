@@ -3,11 +3,10 @@
 > Written by the coding agent (Claude, a closed model), 2026-10-11, from the
 > owner's list of principles. **Approved by the owner, 2026-10-11**, with one
 > addition: the two sets of principles from Design v3, so the coach and the
-> screens match. Those are sections 8 to 17, written by the coding agent the
-> same day from the set names the owner gave (stories: want, pressure, turn,
-> choice with a price, change; characters: want and need, flaw,
-> contradiction, arc, fits the world). The coding agent has not seen Design
-> v3 itself; if its wording differs, these sections should follow it.
+> screens match. Those are sections 8 to 17. Their names, one-line
+> definitions and questions follow Design's "Plan a Piece v3" (2026-10-11)
+> word for word where Design gives them; the sources, book examples and
+> notes are the coding agent's.
 > The coach (`config/prompts/plan-coach.md`) uses this version.
 
 This is the craft the coach applies to two forms: **comics with narration**
@@ -166,15 +165,15 @@ to know?"
 **A note looks like.** "The piece ends after the question is answered.
 Consider ending one beat earlier, on the message arriving."
 
-## Stories: want, pressure, turn, choice, change (Design v3)
+## Stories: want, pressure, turn, choice, change (Design v3, the story path)
 
 These five follow one scene, or one short piece, from start to end. They
 widen principle 1: the want and the turn are the same idea, now with what
 happens between them.
 
-## 8. Want: someone is after something
+## 8. Want
 
-**The idea.** A story starts moving when someone wants something specific
+**The idea.** What your character is after. A story starts moving when someone wants something specific
 enough to picture. Robert McKee calls it the protagonist's *object of
 desire*: something they consciously pursue (*Story*, 1997). A want the
 reader can name gives every later beat something to be measured against.
@@ -189,9 +188,9 @@ words a reader could repeat?"
 what the main character is after. Fragments 1 and 2 could show it, before
 the first obstacle arrives."
 
-## 9. Pressure: the want gets harder to reach
+## 9. Pressure
 
-**The idea.** The obstacle should grow. McKee argues that character is
+**The idea.** What pushes against the want, and keeps pushing. The obstacle should grow. McKee argues that character is
 revealed in the choices a person makes under pressure, and that the greater
 the pressure, the more true the revelation (*Story*, 1997). A piece where
 the difficulty stays the same from beginning to end tends to feel flat.
@@ -206,9 +205,11 @@ scene than at the start? What makes it harder?"
 size. Consider raising the cost or narrowing the options from one beat to
 the next."
 
-## 10. Turn: the situation changes direction
+## 10. Turn
 
-**The idea.** Somewhere the situation flips: what was going well goes badly,
+**The idea.** "Something happens that she didn't expect, and the easy way
+stops working. Plot is the pressure that pushes her toward a choice."
+(Design v3.) Somewhere the situation flips: what was going well goes badly,
 or the reverse. McKee's *turning point* (*Story*, 1997); Aristotle's
 *reversal* (*Poetics*). A turn the reader didn't see coming, but believes
 afterwards, is the strongest kind. See principle 1.
@@ -216,15 +217,15 @@ afterwards, is the strongest kind. See principle 1.
 **In the book.**
 - [ch 7] Zei's hidden factory fires from a place Bai never expected, and "Bai, and her AI, were caught completely by surprise." (c7-b109)
 
-**The coach asks.** "Where does the situation change direction? Could a
-reader point to the exact picture?"
+**The coach asks.** "What happens that makes it harder?" (Design v3), then
+"Could a reader point to the picture where it changes?"
 
 **A note looks like.** "The change happens between beats, in no picture. A
 picture slot at the moment it changes would let the viewer see it."
 
-## 11. Choice, with a price
+## 11. Choice
 
-**The idea.** The strongest turns come from a character's own choice, and a
+**The idea.** What your character does about it, and what it costs. The strongest turns come from a character's own choice, and a
 real choice costs something. McKee describes the crisis as a dilemma:
 between two goods that can't both be had, or the lesser of two evils
 (*Story*, 1997). If the choice is free, it reveals little.
@@ -232,15 +233,15 @@ between two goods that can't both be had, or the lesser of two evils
 **In the book.**
 - [ch 10] Told that Minpentai trains people for war, Zei promises: "I won't tell anyone. Not even Fin." (c10-b206). The price: a secret, kept even from Fin.
 
-**The coach asks.** "What does your character choose, and what does it cost
-them?"
+**The coach asks.** "What does your character do, and what does it cost?"
+(Design v3.) A note says "Choice needs a price" when it costs nothing.
 
 **A note looks like.** "Fragment 5's decision costs the character nothing,
 so it reads as a formality. What would they have to give up to make it?"
 
-## 12. Change: something is different at the end
+## 12. Change
 
-**The idea.** By the end, a value in the characters' lives has changed, and
+**The idea.** How your character is different at the end. By the end, a value in the characters' lives has changed, and
 the reader can feel which way. McKee calls this the story event: a
 meaningful change, expressed and experienced in terms of a value (*Story*,
 1997). A piece that ends where it started needs a reason to.
@@ -250,21 +251,22 @@ meaningful change, expressed and experienced in terms of a value (*Story*,
 - [ch 15] A special broadcast: "ARCTIC EMPIRE INVADES AND ANNEXES REDSHIRE" (c15-b6).
 - [ch 32] At the end of the book: "For the first time in a century, the Arctic Empire has been defeated." (c32-b28)
 
-**The coach asks.** "What is different at the end of your piece, compared
-with the start?"
+**The coach asks.** "How is your character different at the end?" (Design
+v3.) A note says "No change yet" when the story ends at the choice.
 
 **A note looks like.** "The first and last pictures show the same situation.
 If that's the point, the narration could signal it; if not, the last picture
 could show what changed."
 
-## Characters: want and need, flaw, contradiction, arc, fits the world (Design v3)
+## Characters: want and need, flaw, contradiction, arc, fits the world (Design v3, the character path)
 
 These five are for building a character, whether from the book or one a
 person adds. They widen principle 6.
 
 ## 13. Want and need
 
-**The idea.** What a character wants and what they need can differ. John
+**The idea.** "What they chase, and what they actually need. The gap between
+them drives the story." (Design v3.) What a character wants and what they need can differ. John
 Truby separates *desire*, the goal they pursue, from *need*, what they must
 change in themselves to live better (*The Anatomy of Story*, 2007). A
 character who gets the want but not the need is a story; so is the
@@ -274,15 +276,17 @@ reverse.
 - [ch 24] Bai wanted to succeed, and says why: "my desire to succeed in order to prove to the world that I deserve love because I am strong" (c24-b50), after growing up with no one who loved her unconditionally (c24-b48).
 
 **The coach asks.** "What does your character want? Is there something they
-need that they don't know about?"
+need that they don't know about?" A note flags want and need that are too
+close (Design v3: "What does he need that he'd refuse if offered?").
 
 **A note looks like.** "The character's want is clear, but nothing hints at
 a need underneath. One object or action in an early picture could suggest
 it without stating it."
 
-## 14. Flaw
+## 14. A flaw that costs them
 
-**The idea.** A flaw is the weakness that gets in the character's own way.
+**The idea.** "Something they do that gets in their own way." (Design v3.) A
+flaw is the weakness that gets in the character's own way.
 Truby calls it the character's *weakness* (*The Anatomy of Story*, 2007);
 Aristotle's *hamartia* is the error that brings a fall (*Poetics*). A flaw
 the reader sees before the character does creates tension.
@@ -296,9 +300,10 @@ the reader sees before the character does creates tension.
 **A note looks like.** "The obstacles all come from outside. Consider
 letting the character's own habit cause one of them."
 
-## 15. Contradiction
+## 15. A contradiction
 
-**The idea.** People who hold two opposite traits feel real. McKee calls
+**The idea.** "Two true things that don't fit together. This makes them
+specific." (Design v3.) People who hold two opposite traits feel real. McKee calls
 this *dimension*: a consistent contradiction, either within a character or
 between how they appear and who they are (*Story*, 1997).
 
@@ -312,10 +317,11 @@ go against what we first learn about them?"
 A single moment against type, shown not told, could make them more
 believable."
 
-## 16. Arc
+## 16. An arc
 
-**The idea.** Over the piece, the character changes, or pointedly refuses
-to. Truby places the change in a *self-revelation* near the end (*The
+**The idea.** "Who they are at the start, who they could become, and what it
+would take." (Design v3.) Over the piece, the character changes, or
+pointedly refuses to. Truby places the change in a *self-revelation* near the end (*The
 Anatomy of Story*, 2007); K. M. Weiland describes positive, negative and
 flat arcs (*Creating Character Arcs*, 2016). The reader should be able to
 see where the character started.
@@ -323,15 +329,18 @@ see where the character started.
 **In the book.**
 - [ch 31] Lily cheers Lord Ephelion's messages (c23-b84). At the Arctic school she argues with her instructor and is put in detention, and now thinks the Arctics "just care about their own authority" (c28-b66, c28-b67, c28-b68). At the end she runs to Gladias: "Dad!" (c31-b77).
 
-**The coach asks.** "Where does your character start, and where do they
-end? Which picture shows each?"
+**The coach asks.** "If your character changed, what would they do that
+they won't do now?" (after Design v3's question), then "Which picture shows
+where they start, and which where they end?"
 
 **A note looks like.** "The character's change happens off the page. A
 picture of where they start would make the end land."
 
 ## 17. Fits the world
 
-**The idea.** A character should belong to the world they live in: its
+**The idea.** "What they'd know, own, and do in Veridia. Checked against the
+book" up to the person's chapter (Design v3). A character should belong to
+the world they live in: its
 work, its tools, its habits of thought. Lajos Egri gives characters three
 dimensions, one of them sociological: class, work, education, surroundings
 (*The Art of Dramatic Writing*, 1946). Truby treats the story world as an
