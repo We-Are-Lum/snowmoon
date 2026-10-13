@@ -3,7 +3,7 @@ import type postgres from 'postgres';
 import { IMAGES } from '../config';
 import { checkPrompt } from './guard';
 import { ImageUnavailable, type Made } from './fal';
-import { recordGuard, reserve, settle, wordsCheckFits, type Spend } from './limits';
+import { perDay, recordGuard, reserve, settle, wordsCheckFits, type Spend } from './limits';
 import { blockedName } from './rules';
 import { IMAGE_WORDING } from './wording';
 
@@ -25,7 +25,7 @@ export type Paid =
   | { ok: false; status: number; error: string; extra: Record<string, unknown> };
 
 export const LIMIT_SAY = {
-  limit: `You've made ${IMAGES.generationsPerDay} today. More tomorrow (00:00 UTC).`,
+  limit: (n: number) => `You've made ${n} today. More tomorrow (00:00 UTC).`,
   spend: 'Image making has reached today’s spending limit for everyone. It comes back at 00:00 UTC.',
 } as const;
 
@@ -37,7 +37,7 @@ export async function paidPicture(
 ): Promise<Paid> {
   const spend = job.spend;
   const r = await reserve(sql, fid, spend);
-  if (!r.ok) return { ok: false, status: 429, error: LIMIT_SAY[r.refusal], extra: { reason: r.refusal } };
+  if (!r.ok) return { ok: false, status: 429, error: r.refusal === 'limit' ? LIMIT_SAY.limit(perDay(fid)) : LIMIT_SAY.spend, extra: { reason: r.refusal } };
   const name = blockedName(job.checkText);
   if (name) {
     await settle(sql, {}, spend);

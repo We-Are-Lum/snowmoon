@@ -15,11 +15,14 @@ const TODAY = `(now() at time zone 'utc')::date`;
 
 export type Refusal = 'limit' | 'spend';
 
-/** Infinity for an FID on IMAGES.unlimited: no daily count (it is still recorded in image_asks). */
+/** This person's daily Generate count: IMAGES.perDayFor if they are on it, else IMAGES.generationsPerDay. */
+export function perDay(fid: number): number {
+  return IMAGES.perDayFor[fid] ?? IMAGES.generationsPerDay;
+}
+
 export async function generationsLeft(sql: Sql, fid: number): Promise<number> {
-  if (IMAGES.unlimited.includes(fid)) return Infinity;
   const [r] = await sql`select count(*)::int as n from studio.image_asks where fid = ${fid} and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
-  return Math.max(0, IMAGES.generationsPerDay - (r?.n ?? 0));
+  return Math.max(0, perDay(fid) - (r?.n ?? 0));
 }
 
 export async function publishesLeft(sql: Sql, fid: number): Promise<number> {

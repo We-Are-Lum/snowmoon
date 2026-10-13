@@ -153,8 +153,8 @@ export const IMAGES = {
   maxBlocks: 8,
   /** Per person per UTC day; blocked attempts count (decisions 10 and 16). */
   generationsPerDay: 10,
-  /** No daily Generate count for these FIDs (owner, 2026-10-13); the daily spend cap still applies to them. */
-  unlimited: [6786] as readonly number[],
+  /** A higher daily Generate count for these FIDs (owner, 2026-10-13); the daily spend cap still applies to them. */
+  perDayFor: { 6786: 300 } as Readonly<Record<number, number>>,
   publishesPerDay: 3,
   /** Across everyone, per UTC day (decision 10), kept apart from the assistant's. */
   dailySpendCapUsd: 2,

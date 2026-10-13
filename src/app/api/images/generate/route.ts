@@ -138,7 +138,7 @@ export async function POST(request: Request) {
     ...(imageSheets ? { sheets: imageSheets } : {}),
   });
   return NextResponse.json(
-    { ticket, image: `data:${made.contentType};base64,${made.bytes.toString('base64')}`, sha256, left: Number.isFinite(paid.left) ? paid.left : null },
+    { ticket, image: `data:${made.contentType};base64,${made.bytes.toString('base64')}`, sha256, left: paid.left },
     { headers: { 'Cache-Control': 'no-store' } },
   );
 }

@@ -32,9 +32,7 @@ type Status = {
   eligible?: boolean | null;
   refusal?: string;
   consented?: boolean;
-  left?: number | null;
-  /** No daily Generate count for this FID (IMAGES.unlimited). */
-  unlimited?: boolean;
+  left?: number;
   publishesLeft?: number;
   perDay: number;
   maxBlocks: number;
@@ -321,12 +319,12 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
   // A picked sheet for a character replaces this edition's shorthand for them.
   const pickedFor = new Set(charChips.map((c) => c.entity));
   const madeStyle = status?.styles.find((s) => s.id === made.style) ?? null;
-  const left = status?.unlimited ? Infinity : (status?.left ?? 0);
+  const left = status?.left ?? 0;
   const ready = auth.kind === 'signed-in' && status?.eligible !== false && status?.ready && status.consented;
   const showDraft = view === 'draft' && draft !== null && !published;
   const previewing = step === 'preview' || step === 'publishing';
   const by = auth.kind === 'signed-in' ? (auth.username ? `@${auth.username}` : `FID ${auth.fid}`) : 'you';
-  const count = (n: number) => (Number.isFinite(n) ? `${n} of ${status?.perDay ?? 0} left today` : W.draft.noLimit);
+  const count = (n: number) => `${n} of ${status?.perDay ?? 0} left today`;
   return (
     <div className="sheet-overlay ic-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div ref={sheet} className="recipe-sheet image-composer" role="dialog" aria-modal="true" aria-labelledby="composer-title">
@@ -511,7 +509,7 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
           <div className={`ic-bar ic-bar-two${previewing ? ' is-preview' : ''}`}>
             {!previewing && (
               <button type="button" className="ic-secondary" onClick={generate} disabled={busy || !prompt.trim() || left <= 0}>
-                {busy ? 'Making it…' : 'Generate again'} · {Number.isFinite(left) ? W.draft.left(left) : W.draft.noLimit}
+                {busy ? 'Making it…' : 'Generate again'} · {W.draft.left(left)}
               </button>
             )}
             <PublishFlow

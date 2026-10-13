@@ -3,7 +3,7 @@ import { getFid } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { IMAGES } from '~/lib/config';
 import { hasConsented } from '~/lib/consent';
-import { generationsLeft, publishesLeft } from '~/lib/images/limits';
+import { generationsLeft, perDay, publishesLeft } from '~/lib/images/limits';
 import { RULES, styleText } from '~/lib/images/rules';
 import { loadChapter } from '~/lib/book';
 import { blockFacts } from '~/lib/reading';
@@ -63,7 +63,7 @@ export async function GET(request: Request) {
     const offered = composerPicks(invited ? picks : []);
     // Every picked style, newest pick first; the composer starts with that one, for this image only (decision 3).
     const mine = { styles: offered.styles.map(chip), characters: offered.characters.map(chip) };
-    return NextResponse.json({ ...base, signedIn: true, fid, invited, eligible, refusal, consented, left: Number.isFinite(left) ? left : null, unlimited: !Number.isFinite(left), publishesLeft: publishes, picks: mine }, { headers: { 'Cache-Control': 'no-store' } });
+    return NextResponse.json({ ...base, perDay: perDay(fid), signedIn: true, fid, invited, eligible, refusal, consented, left, publishesLeft: publishes, picks: mine }, { headers: { 'Cache-Control': 'no-store' } });
   } catch (e) {
     console.error('images status failed', (e as { code?: string }).code ?? (e as Error).name);
     return NextResponse.json({ ...base, ready: false, signedIn: true, fid, invited, eligible: invited ? true : null }, { headers: { 'Cache-Control': 'no-store' } });

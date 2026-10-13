@@ -127,13 +127,13 @@ for (let i = 0; i < IMAGES.generationsPerDay - 1; i++) {
   if (r.ok) await settle(S, {});
 }
 check('the daily limit stops the 11th Generate', (await generationsLeft(S, 6787)) === 0 && !(await reserve(S, 6787)).ok);
+const { perDay } = await import('../src/lib/images/limits');
+check('FID 6786 has 300 a day, everyone else the default', perDay(6786) === 300 && perDay(6787) === IMAGES.generationsPerDay);
 for (let i = 0; i < IMAGES.generationsPerDay + 1; i++) {
   const r = await reserve(S, 6786);
   if (r.ok) await settle(S, {});
 }
-const owner = await reserve(S, 6786);
-check('an FID on IMAGES.unlimited has no daily count', IMAGES.unlimited.includes(6786) && owner.ok && (await generationsLeft(S, 6786)) === Infinity, JSON.stringify(owner));
-if (owner.ok) await settle(S, {});
+check('FID 6786 is not stopped at the default count', (await generationsLeft(S, 6786)) === 300 - IMAGES.generationsPerDay - 1);
 await sql`insert into studio.image_costs (kind, model, provider, verdict, calls, cost_usd) values ('image', 'test', 'fal.ai', 'ok', 1, ${IMAGES.dailySpendCapUsd})`;
 const r3 = await reserve(S, 7);
 check('the day\'s spend cap stops a Generate', !r3.ok && r3.refusal === 'spend', JSON.stringify(r3));

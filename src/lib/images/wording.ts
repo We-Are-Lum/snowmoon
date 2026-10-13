@@ -23,8 +23,6 @@ export const IMAGE_WORDING = {
     editPrompt: 'Edit prompt',
     back: 'Back to draft',
     left: (n: number) => `${n} left`,
-    /** Shown only to an FID on IMAGES.unlimited (the owner). */
-    noLimit: 'no daily limit',
   },
   preview: {
     promptLabel: 'Prompt, published in full',
@@ -285,7 +283,6 @@ export const IMAGE_WORDING_ROWS: { screen: string; where: string; text: string }
   { screen: 'Add an image · draft', where: 'src/components/image-composer.tsx', text: IMAGE_WORDING.draft.kept(24).replace('24', '{hours}') },
   { screen: 'Add an image · draft', where: 'src/components/image-composer.tsx', text: IMAGE_WORDING.draft.editPrompt },
   { screen: 'Add an image · draft', where: 'src/components/image-composer.tsx (action bar)', text: 'Generate again · {n} left' },
-  { screen: 'Add an image · compose and draft', where: 'src/components/image-composer.tsx (Generate buttons, FIDs on IMAGES.unlimited only)', text: `Generate · ${IMAGE_WORDING.draft.noLimit}` },
   { screen: 'Add an image · compose', where: 'src/components/image-composer.tsx (action bar, when a draft is kept)', text: IMAGE_WORDING.draft.back },
   { screen: 'Add an image · preview', where: 'src/components/image-composer.tsx (preview)', text: IMAGE_WORDING.preview.promptLabel },
   { screen: 'Image page', where: 'src/app/image/[id]/page.tsx (caption; "Open in reader →" is the assistant’s approved row 23, reused)', text: 'AI image · by {byline} (button: opens the recipe sheet) / {date} · Chapter {n} · ¶ {a–b} · Open in reader →' },
