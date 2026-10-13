@@ -273,3 +273,9 @@ Styles & characters: styles, character sheets, forks and My picks (step 4, the o
 The summaries of 24 places and of Deluin describe only the place or the person; where they appear stays on "Where it appears", with its spoiler cover. test:designs checks no summary names a chapter or says "later". To undo (back to `67374b3`):
 
     vercel rollback https://snowmoon-mivpj2oui-nates-projects-d1780cff.vercel.app --scope nates-projects-d1780cff
+
+## 2026-10-13: fonts from the repo (branch site-local-fonts)
+
+Production builds of b8d5afc failed in next/font/google; the three fonts now come from src/fonts through next/font/local. To undo (back to `1885342`, the last build that served):
+
+    vercel rollback dpl_GgL2SeDzfVcrJiMyRhpvJbneyo2G --scope nates-projects-d1780cff
