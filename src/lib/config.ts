@@ -222,6 +222,8 @@ export const IMAGES = {
     samplesMax: 4,
     /** A sheet needs its front view; side and back are optional. */
     publishesPerDay: 3,
+    /** More styles or sheets a day for these FIDs (owner, 2026-10-13). */
+    publishesPerDayFor: { 6786: 30 } as Readonly<Record<number, number>>,
     /** At most this many picked characters' sheets are added to one image. */
     maxCharacters: 3,
   },

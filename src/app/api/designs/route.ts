@@ -10,6 +10,7 @@ import { SAMPLE_ASSIST } from '~/lib/images/design-rules';
 import { bookCharacter, characterNameClash, CHARACTER_NAME_REFUSAL, designByVersion, designPublishesToday, makeDesign, MakeRefused, styleNameTaken, type DesignKind, type MakeMode } from '~/lib/images/designs';
 import { blockedName } from '~/lib/images/rules';
 import { mayGenerate } from '~/lib/images/gate';
+import { designsPerDay } from '~/lib/images/limits';
 import { checkWords } from '~/lib/images/paid';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { putPublic, storageReady } from '~/lib/images/store';
@@ -74,7 +75,7 @@ export async function POST(request: Request) {
   // The name's model check is paid: the same gate as Generate first (invited FIDs pass it without a lookup).
   const gate = await mayGenerate(sql, fid);
   if (!gate.ok) return no(gate.error, gate.status);
-  if ((await designPublishesToday(sql, fid)) >= IMAGES.designs.publishesPerDay) return no(`You can publish ${IMAGES.designs.publishesPerDay} styles or sheets a day. More tomorrow (00:00 UTC).`, 429);
+  if ((await designPublishesToday(sql, fid)) >= designsPerDay(fid)) return no(`You can publish ${designsPerDay(fid)} styles or sheets a day. More tomorrow (00:00 UTC).`, 429);
 
   // The pictures: a style's samples (2 to 4), or a sheet's views (front needed; side and back optional).
   const samples: { t: SampleTicket; bytes: Buffer }[] = [];

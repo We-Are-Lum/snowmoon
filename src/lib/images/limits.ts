@@ -27,6 +27,11 @@ export function perDay(fid: number): number {
   return IMAGES.perDayFor[fid] ?? IMAGES.generationsPerDay;
 }
 
+/** How many styles or sheets this person may publish a day: IMAGES.designs.publishesPerDayFor if they are on it, else IMAGES.designs.publishesPerDay. */
+export function designsPerDay(fid: number): number {
+  return IMAGES.designs.publishesPerDayFor[fid] ?? IMAGES.designs.publishesPerDay;
+}
+
 /** For a wallet account: how many text-to-image Generates its balance pays for. */
 export async function generationsLeft(sql: Sql, fid: number): Promise<number> {
   if (fid < 0) return Math.floor((await balanceUsd(sql, -fid)) / priceUsd(IMAGES.reserveUsd));

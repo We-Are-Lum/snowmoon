@@ -127,8 +127,9 @@ for (let i = 0; i < IMAGES.generationsPerDay - 1; i++) {
   if (r.ok) await settle(S, {});
 }
 check('the daily limit stops the 11th Generate', (await generationsLeft(S, 6787)) === 0 && !(await reserve(S, 6787)).ok);
-const { perDay } = await import('../src/lib/images/limits');
+const { perDay, designsPerDay } = await import('../src/lib/images/limits');
 check('FID 6786 has 300 a day, everyone else the default', perDay(6786) === 300 && perDay(6787) === IMAGES.generationsPerDay);
+check('FID 6786 may publish 30 styles or sheets a day, everyone else 3', designsPerDay(6786) === 30 && designsPerDay(6787) === 3);
 for (let i = 0; i < IMAGES.generationsPerDay + 1; i++) {
   const r = await reserve(S, 6786);
   if (r.ok) await settle(S, {});

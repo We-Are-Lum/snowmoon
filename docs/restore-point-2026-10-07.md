@@ -279,9 +279,3 @@ The summaries of 24 places and of Deluin describe only the place or the person; 
 Production builds of b8d5afc failed in next/font/google; the three fonts now come from src/fonts through next/font/local. To undo (back to `1885342`, the last build that served):
 
     vercel rollback dpl_GgL2SeDzfVcrJiMyRhpvJbneyo2G --scope nates-projects-d1780cff
-
-## 2026-10-13: fonts from the repo (branch site-local-fonts)
-
-Production builds of b8d5afc failed in next/font/google; the three fonts now come from src/fonts through next/font/local. To undo (back to `1885342`, the last build that served):
-
-    vercel rollback dpl_GgL2SeDzfVcrJiMyRhpvJbneyo2G --scope nates-projects-d1780cff
