@@ -1,5 +1,5 @@
 import type { Metadata, Viewport } from 'next';
-import { Crimson_Pro, DM_Mono, Instrument_Sans } from 'next/font/google';
+import localFont from 'next/font/local';
 import { chapterNumbers } from '~/lib/book';
 import { adaptationsConfig } from '~/lib/adaptations';
 import { AppShell } from '~/components/app-shell';
@@ -16,11 +16,29 @@ import '../styles/designs.css';
 
 const url = appUrl();
 
-/** The only two families in app chrome. In-world templates may use others, inside the template only. */
-const crimson = Crimson_Pro({ subsets: ['latin'], weight: ['400', '500', '600'], style: ['normal', 'italic'], variable: '--font-reading' });
-const dmMono = DM_Mono({ subsets: ['latin'], weight: ['400', '500'], variable: '--font-label' });
+/**
+ * The only two families in app chrome. In-world templates may use others, inside the template only.
+ * The files live in src/fonts (Google Fonts' latin subset, OFL) so builds never download them;
+ * Vercel's build crashed in next/font/google on 2026-10-13 when Google's answer changed.
+ * The names match the families' (check:ui reads them).
+ */
+const Crimson_Pro = localFont({
+  src: [
+    { path: '../fonts/CrimsonPro-latin.woff2', weight: '400 600', style: 'normal' },
+    { path: '../fonts/CrimsonPro-Italic-latin.woff2', weight: '400 600', style: 'italic' },
+  ],
+  variable: '--font-reading',
+  adjustFontFallback: 'Times New Roman',
+});
+const DM_Mono = localFont({
+  src: [
+    { path: '../fonts/DMMono-Regular-latin.woff2', weight: '400', style: 'normal' },
+    { path: '../fonts/DMMono-Medium-latin.woff2', weight: '500', style: 'normal' },
+  ],
+  variable: '--font-label',
+});
 /** Veridian devices only (templates in src/templates/veridia-*). Not preloaded: most pages have none. */
-const instrument = Instrument_Sans({ subsets: ['latin'], weight: ['400', '500', '600'], variable: '--font-veridia', preload: false });
+const Instrument_Sans = localFont({ src: '../fonts/InstrumentSans-latin.woff2', weight: '400 600', variable: '--font-veridia', preload: false });
 
 /** Embed shown when the app URL is cast. */
 const miniappEmbed = JSON.stringify({
@@ -49,7 +67,7 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" data-theme="light" suppressHydrationWarning className={`${crimson.variable} ${dmMono.variable} ${instrument.variable}`}>
+    <html lang="en" data-theme="light" suppressHydrationWarning className={`${Crimson_Pro.variable} ${DM_Mono.variable} ${Instrument_Sans.variable}`}>
       <head>
         {/* Before first paint: the theme chosen on this device (src/lib/theme.ts). */}
         <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
