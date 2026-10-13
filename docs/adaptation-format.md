@@ -70,9 +70,11 @@ Each beat is a `## Beat N · Title` section with these fields, in this order:
   details are marked *(Invented: …)*. This is an input to the image model; it
   is not published as text.
 - **lettering**: text that appears in the image, as `kind, lang` and the text
-  (with a gloss for Dzegoban). Drawn in code over the image, never by the image
-  model. Only book words or words a person wrote; Dzegoban must use the
-  source's words.
+  (with a gloss for Dzegoban). The text in the image must match its lettering record exactly. It may be drawn in code, or repainted by the image model from the code-drawn version, and it is checked either way. The image model never invents text. Only book words or
+  words a person wrote; Dzegoban must use the source's words. An in-world
+  screen is the book's own screen block, captured from the reader's template
+  (`scripts/capture-screen.ts`) and composited onto the device
+  (`scripts/composite-screens.py`); a cut of it is marked `…` and recorded.
 - **narration**: empty until a person writes it. At most 25 words per beat.
   Each line is tagged:
   - `` `book c<ch>-b<idx>` ``: a book line, verbatim (usually one of the
@@ -137,7 +139,8 @@ audio and written to `shots.md`; nothing is timed by hand.
   hold) and a cut or dissolve.
 - `shots.md` grows into a shot list: per shot, the image, its framing, its
   move, and its start and end time within the beat.
-- Lettering is still drawn in code, and may now appear and move on cue.
+- Lettering follows the same rule (drawn in code, or repainted from the
+  code-drawn version, and checked), and may now appear and move on cue.
 - Output: one video, made entirely from approved stills and audio.
 
 ## Stage 4: video

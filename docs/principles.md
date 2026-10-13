@@ -417,6 +417,12 @@ the rules of Minpentai and Dzegoban" among the checks the author made
 either as drawn or through a template that keeps every word. Dzegoban is
 quoted as written. Minpentai boards and maps come from the source's own SVGs.
 
+**Lettering.** Text in an image must match its lettering record exactly. It may be drawn in code, or repainted by the image model from the code-drawn version, and it is checked either way. An in-world screen shown on a device in a
+panel is the book's own screen block, as the reader's template draws it; a cut
+is marked `…` and recorded. (Owner's wording, Oct 5, 2026. Applied first to
+dog-dawn panel 7's versions; the check is extended to every lettered image
+once the owner picks a version.)
+
 **Checked by.**
 - `P8a`: every screen drawn by a default template shows every word of the
   source screen.
