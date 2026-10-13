@@ -63,7 +63,7 @@ export async function GET(request: Request) {
     const offered = composerPicks(invited ? picks : []);
     // Every picked style, newest pick first; the composer starts with that one, for this image only (decision 3).
     const mine = { styles: offered.styles.map(chip), characters: offered.characters.map(chip) };
-    return NextResponse.json({ ...base, signedIn: true, fid, invited, eligible, refusal, consented, left, publishesLeft: publishes, picks: mine }, { headers: { 'Cache-Control': 'no-store' } });
+    return NextResponse.json({ ...base, signedIn: true, fid, invited, eligible, refusal, consented, left: Number.isFinite(left) ? left : null, unlimited: !Number.isFinite(left), publishesLeft: publishes, picks: mine }, { headers: { 'Cache-Control': 'no-store' } });
   } catch (e) {
     console.error('images status failed', (e as { code?: string }).code ?? (e as Error).name);
     return NextResponse.json({ ...base, ready: false, signedIn: true, fid, invited, eligible: invited ? true : null }, { headers: { 'Cache-Control': 'no-store' } });

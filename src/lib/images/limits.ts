@@ -15,7 +15,9 @@ const TODAY = `(now() at time zone 'utc')::date`;
 
 export type Refusal = 'limit' | 'spend';
 
+/** Infinity for an FID on IMAGES.unlimited: no daily count (it is still recorded in image_asks). */
 export async function generationsLeft(sql: Sql, fid: number): Promise<number> {
+  if (IMAGES.unlimited.includes(fid)) return Infinity;
   const [r] = await sql`select count(*)::int as n from studio.image_asks where fid = ${fid} and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
   return Math.max(0, IMAGES.generationsPerDay - (r?.n ?? 0));
 }

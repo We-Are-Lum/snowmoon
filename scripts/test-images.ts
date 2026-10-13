@@ -90,7 +90,7 @@ const { reserve, settle, generationsLeft } = await import('../src/lib/images/lim
 type Sql = Parameters<typeof reserve>[0];
 const S = sql as unknown as Sql;
 
-const r1 = await reserve(S, 6786);
+const r1 = await reserve(S, 6787);
 check('a first Generate is counted', r1.ok && r1.left === IMAGES.generationsPerDay - 1, JSON.stringify(r1));
 const [reserved] = await sql`select calls, cost_usd::float8 as usd from studio.image_costs where kind = 'reserved'`;
 check('its worst case is reserved', reserved?.calls === 1 && Math.abs(reserved.usd - IMAGES.reserveUsd) < 1e-9, JSON.stringify(reserved));
@@ -123,10 +123,17 @@ check('image_asks holds only the FID and the time', askCols === 'at,fid', askCol
 
 // The caps.
 for (let i = 0; i < IMAGES.generationsPerDay - 1; i++) {
+  const r = await reserve(S, 6787);
+  if (r.ok) await settle(S, {});
+}
+check('the daily limit stops the 11th Generate', (await generationsLeft(S, 6787)) === 0 && !(await reserve(S, 6787)).ok);
+for (let i = 0; i < IMAGES.generationsPerDay + 1; i++) {
   const r = await reserve(S, 6786);
   if (r.ok) await settle(S, {});
 }
-check('the daily limit stops the 11th Generate', (await generationsLeft(S, 6786)) === 0 && !(await reserve(S, 6786)).ok);
+const owner = await reserve(S, 6786);
+check('an FID on IMAGES.unlimited has no daily count', IMAGES.unlimited.includes(6786) && owner.ok && (await generationsLeft(S, 6786)) === Infinity, JSON.stringify(owner));
+if (owner.ok) await settle(S, {});
 await sql`insert into studio.image_costs (kind, model, provider, verdict, calls, cost_usd) values ('image', 'test', 'fal.ai', 'ok', 1, ${IMAGES.dailySpendCapUsd})`;
 const r3 = await reserve(S, 7);
 check('the day\'s spend cap stops a Generate', !r3.ok && r3.refusal === 'spend', JSON.stringify(r3));
