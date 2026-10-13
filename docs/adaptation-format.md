@@ -12,7 +12,9 @@ Each adaptation lives in `adaptations/<seed>/`:
 |---|---|
 | `brief.md` | The seed: citations, what the text gives and what must be invented, open questions |
 | `script.md` | **The single source.** Every rendering (comic, audio, animatic, video) is made from it |
-| `shots.md` | What was made for each beat: images, attempts, audio, durations, recipes |
+| `timeline.json` | **The source of the edit**: every cue (voice line, ambience, Foley, music, shot, lettering), its track, level, fades and stem, and for shots the image or clip, framing and move. Times are anchors and offsets, never fixed starts (see Timing) |
+| `shots.md` | The log of what was made: every attempt, its recipe and the notes on why it was or wasn't picked |
+| `voices/` | The piece's voice sheets (Stage 2) |
 | `prompts/` | Every prompt used: the owner's requests, the agent's drafting instructions, every image and speech prompt |
 
 Nothing rendered is edited by hand afterwards. A change goes into `script.md`
@@ -26,6 +28,12 @@ and is rendered again.
   who is present, wants, obstacles, costs, what changes, context, image
   descriptions and lettering plans. It may also collect candidate lines from
   the book, verbatim.
+- Voice descriptions, the sound line for each place, and style texts are
+  the owner's words; until the owner sends them they are clearly marked
+  placeholders, and nothing is published with one. Per-shot and per-cue
+  prompts (image, motion, sound effect) may be drafted by a model and are
+  labelled model-drafted in their recipes, like image prompts (owner,
+  2026-10-13).
 - A model never writes narration, dialogue, or any description that is
   published. Those fields stay empty until a person writes them.
 - Every published word is the author's (a verbatim book line, tagged with its
@@ -89,7 +97,15 @@ An empty field reads `*(empty until a person writes it)*`.
 ### Timing
 
 A beat lasts as long as its audio. Durations are measured from the rendered
-audio and written to `shots.md`; nothing is timed by hand.
+audio; nothing is timed by hand. `timeline.json` holds only edit decisions:
+each voice line points to its place in `script.md` (`b<beat>-<n>`) and follows
+a named cue with a gap; a negative offset overlaps it (J-cuts and L-cuts).
+Shots run from one cue to another, beds and Foley hang off a cue or a shot
+with an offset, and lettering on cue points to a record in the lettering
+file, never to text. `scripts/mix-scene.py` measures every stem, resolves the
+absolute times, measures and normalises loudness, and writes
+`timeline.resolved.json` into the mix's recipe with each stem's sha256. The
+renderer and the player read only the resolved file.
 
 ## Stage 1: narrated comic
 
@@ -119,9 +135,23 @@ audio and written to `shots.md`; nothing is timed by hand.
 ## Stage 2: audio drama with character voices
 
 - The same script, with `dialogue` voiced: each named speaker is cast to a
-  voice. Synthetic voices are stock or blended stock voices from the allowlist,
-  never a clone of a real person; human voice actors record their own lines,
-  with consent recorded (brief §4e).
+  voice. Synthetic voices are stock voices, voices designed from a written
+  description (the owner's words), or a consenting person's performance
+  converted into a designed voice, all through models on the allowlist.
+  A voice is never a clone of a real person who has not signed the voice
+  consent, and no prompt names a real person. A person who performs signs a
+  consent covering GPL release, derivatives, conversion into another voice
+  and publication of their raw takes; their raw take is kept beside the
+  converted stem (owner, 2026-10-13).
+- **Voice sheets.** Each character's voice is a voice sheet in
+  `adaptations/<seed>/voices/`: the character, the description (the owner's
+  words), the model, seed and a reference clip of about ten seconds,
+  pronunciation notes, and the recipe. Later lines are spoken through a
+  model that clones from the reference clip, so the voice stays the same.
+  A sheet is forkable, shown with its character, and labelled AI voice.
+- Text-only voice models take respellings from the pronunciation table;
+  Kokoro keeps phonemes. Dzegoban has a respelling rule beside its phoneme
+  rule.
 - The narrator keeps the `narration` lines, as people wrote them. Sound and music, if any, are
   licensed for GPL release or made for the piece, each with a recipe or
   source.
@@ -137,8 +167,9 @@ audio and written to `shots.md`; nothing is timed by hand.
 - A storyboard timed to the stage 2 audio. A beat may hold several shots;
   each shot is a still (or a crop of one) with a simple camera move (pan, push,
   hold) and a cut or dissolve.
-- `shots.md` grows into a shot list: per shot, the image, its framing, its
-  move, and its start and end time within the beat.
+- The shot list is in `timeline.json`: per shot, the image (or clip), its
+  framing, its move, and the cues it runs between. `shots.md` keeps the log
+  of attempts.
 - Lettering follows the same rule (drawn in code, or repainted from the
   code-drawn version, and checked), and may now appear and move on cue.
 - Output: one video, made entirely from approved stills and audio.

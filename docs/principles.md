@@ -121,6 +121,13 @@ people's lines, images) and puts the structure under a collapsed "How this was
 built", labelled model-drafted. Image alt text is model-drafted accessibility
 text and begins "AI-generated image:".
 
+**Prompts in scenes (owner, 2026-10-13).** Voice descriptions, the sound line
+for each place, and style texts are the owner's words; until the owner sends
+them they are marked placeholders, and nothing is published with one.
+Per-shot and per-cue prompts (image, motion, sound effect) may be drafted by a
+model, and each recipe labels them model-drafted in `assist`, as image
+prompts are. Published scene assets use open-weight models only.
+
 **Recorded exception.** The house narration keeps 148 model-drafted spoken
 descriptions of screens, figures and lyric cards. Each is preceded by a tone
 and shown in Listen with the label "AI description ⓘ", which opens the details
