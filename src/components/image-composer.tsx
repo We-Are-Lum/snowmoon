@@ -2,13 +2,14 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
-import { authFetch, useAuth, webNameProof } from '~/lib/client-auth';
+import { authFetch, useAuth, useWalletSession, webNameProof } from '~/lib/client-auth';
 import { ADD_IMAGE_EVENT, deleteDraft, draftKey, loadDraft, saveDraft, type AddImageDetail } from '~/lib/images/client';
 import { IMAGES } from '~/lib/config';
 import { IMAGE_WORDING as W } from '~/lib/images/wording';
 import { mentions } from '~/lib/images/design-rules';
 import { ConsentScreen, PublishedTextField, PublishFlow, type PublishStep } from './publish-words';
 import { SignInButton } from './sign-in';
+import { WalletPanel, WalletSignInButton } from './wallet';
 import { AiLabel } from './recipe-sheet';
 import { AI_LABEL, readerImageView } from '~/lib/ai-declared';
 
@@ -35,6 +36,8 @@ type Status = {
   left?: number;
   publishesLeft?: number;
   perDay: number;
+  /** A wallet account: its balance pays for each image (owner, 2026-10-13). */
+  prepaid?: { balanceUsd: number; priceUsd: number; markup: number };
   maxBlocks: number;
   rules: string;
   model: { name: string; licence: string; host: string };
@@ -159,6 +162,8 @@ export function ImageComposer() {
 
 function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => void }) {
   const auth = useAuth();
+  const wallet = useWalletSession();
+  const signedIn = auth.kind === 'signed-in' || wallet !== null;
   const [range, setRange] = useState(initial);
   const [status, setStatus] = useState<Status | null>(null);
   const [prompt, setPrompt] = useState('');
@@ -190,7 +195,7 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
   }, [range.chapter, range.start, range.end]);
   useEffect(() => {
     void refresh();
-  }, [refresh, auth.kind]);
+  }, [refresh, auth.kind, wallet?.address]);
 
   // Focus in, Escape closes, focus back where it was.
   useEffect(() => {
@@ -320,11 +325,11 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
   const pickedFor = new Set(charChips.map((c) => c.entity));
   const madeStyle = status?.styles.find((s) => s.id === made.style) ?? null;
   const left = status?.left ?? 0;
-  const ready = auth.kind === 'signed-in' && status?.eligible !== false && status?.ready && status.consented;
+  const ready = signedIn && status?.eligible !== false && status?.ready && status.consented;
   const showDraft = view === 'draft' && draft !== null && !published;
   const previewing = step === 'preview' || step === 'publishing';
-  const by = auth.kind === 'signed-in' ? (auth.username ? `@${auth.username}` : `FID ${auth.fid}`) : 'you';
-  const count = (n: number) => `${n} of ${status?.perDay ?? 0} left today`;
+  const by = auth.kind === 'signed-in' ? (auth.username ? `@${auth.username}` : `FID ${auth.fid}`) : wallet ? wallet.short : 'you';
+  const count = (n: number) => (status?.prepaid ? W.prepaid.balance(status.prepaid.balanceUsd.toFixed(2), n) : `${n} of ${status?.perDay ?? 0} left today`);
   return (
     <div className="sheet-overlay ic-overlay" onClick={(e) => e.target === e.currentTarget && onClose()}>
       <div ref={sheet} className="recipe-sheet image-composer" role="dialog" aria-modal="true" aria-labelledby="composer-title">
@@ -376,10 +381,11 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
                 <p className="ic-done">
                   Published. <Link href={published}>See it</Link>
                 </p>
-              ) : auth.kind !== 'signed-in' ? (
+              ) : !signedIn ? (
                 <div className="ic-gate">
                   <p>Sign in to make an image.</p>
                   <SignInButton />
+                  {auth.kind === 'signed-out' && !auth.inApp && <WalletSignInButton />}
                 </div>
               ) : !status ? (
                 <p className="ic-note">…</p>
@@ -387,6 +393,16 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
                 <p className="ic-gate" role="status">{status.refusal ?? 'Image making is not open to this account.'}</p>
               ) : !status.ready ? (
                 <p className="ic-gate">Making images isn&apos;t set up on this deployment yet.</p>
+              ) : status.prepaid && !status.consented ? (
+                <>
+                  <WalletPanel onChange={() => void refresh()} />
+                  <div className="ic-gate">
+                    <p>Before your first image: how your prompt is published.</p>
+                    <button type="button" className="ic-primary" onClick={startConsent}>
+                      Read and agree
+                    </button>
+                  </div>
+                </>
               ) : !status.consented ? (
                 <div className="ic-gate">
                   <p>Before your first image: how your prompt is published.</p>
@@ -396,6 +412,7 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
                 </div>
               ) : (
                 <>
+                  {status.prepaid && <WalletPanel onChange={() => void refresh()} />}
                   <div className="ic-prompt">
                     <PublishedTextField id="ic-prompt" label={W.composer.promptLabel} value={prompt} onChange={setPrompt} rows={4} maxLength={600} />
                     <span className="ic-count" aria-hidden="true">
@@ -509,7 +526,7 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
           <div className={`ic-bar ic-bar-two${previewing ? ' is-preview' : ''}`}>
             {!previewing && (
               <button type="button" className="ic-secondary" onClick={generate} disabled={busy || !prompt.trim() || left <= 0}>
-                {busy ? 'Making it…' : 'Generate again'} · {W.draft.left(left)}
+                {busy ? 'Making it…' : 'Generate again'} · {status?.prepaid ? count(left) : W.draft.left(left)}
               </button>
             )}
             <PublishFlow

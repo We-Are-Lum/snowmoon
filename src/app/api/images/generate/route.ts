@@ -1,6 +1,6 @@
 import { createHash } from 'node:crypto';
 import { NextResponse } from 'next/server';
-import { getFid } from '~/lib/auth';
+import { getPerson } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { IMAGES } from '~/lib/config';
 import { hasConsented } from '~/lib/consent';
@@ -50,8 +50,9 @@ async function referencePicture(url: string, sha256: string) {
 const no = (error: string, status: number, extra: Record<string, unknown> = {}) => NextResponse.json({ error, ...extra }, { status });
 
 export async function POST(request: Request) {
-  const fid = await getFid(request);
-  if (fid === null) return NextResponse.json({ error: 'Sign in with Farcaster to make an image' }, { status: 401 });
+  // A Farcaster FID, or minus a wallet account's number (prepaid; owner, 2026-10-13).
+  const fid = await getPerson(request);
+  if (fid === null) return NextResponse.json({ error: 'Sign in to make an image' }, { status: 401 });
   if (!IMAGES.enabled) return no('Making images is switched off for now', 503);
   const sql = db();
   if (!sql || !process.env.FAL_KEY || !process.env.IMAGES_TICKET_SECRET) return no('Making images is not set up on this deployment', 503);
@@ -138,7 +139,7 @@ export async function POST(request: Request) {
     ...(imageSheets ? { sheets: imageSheets } : {}),
   });
   return NextResponse.json(
-    { ticket, image: `data:${made.contentType};base64,${made.bytes.toString('base64')}`, sha256, left: paid.left },
+    { ticket, image: `data:${made.contentType};base64,${made.bytes.toString('base64')}`, sha256, left: paid.left, ...(fid < 0 ? { prepaid: true } : {}) },
     { headers: { 'Cache-Control': 'no-store' } },
   );
 }

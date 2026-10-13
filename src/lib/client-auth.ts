@@ -12,6 +12,13 @@ import { sdk } from '@farcaster/miniapp-sdk';
  */
 const KEY = 'snowmoon.signin';
 const EVENT = 'snowmoon:signin';
+/**
+ * A wallet sign-in (owner, 2026-10-13; src/lib/wallet/session.ts) is kept apart: it is sent only to
+ * the routes that take one (WALLET_ROUTES), so everything else still treats the person as signed out
+ * of Farcaster. A Farcaster sign-in, when there is one, wins.
+ */
+const WALLET_KEY = 'snowmoon.wallet';
+const WALLET_ROUTES = ['/api/images/status', '/api/images/generate', '/api/images/publish', '/api/consent', '/api/wallet/'];
 
 interface WebSession {
   token: string;
@@ -67,11 +74,78 @@ export function signOut() {
   window.dispatchEvent(new Event(EVENT));
 }
 
+export interface WalletSessionState {
+  token: string;
+  address: string;
+  /** 0x1234…abcd, the byline. */
+  short: string;
+  exp: number;
+}
+
+function readWallet(): WalletSessionState | null {
+  try {
+    const s = JSON.parse(localStorage.getItem(WALLET_KEY) ?? 'null') as WalletSessionState | null;
+    return s && s.exp * 1000 > Date.now() + 120_000 ? s : null;
+  } catch {
+    return null;
+  }
+}
+
+export function saveWalletSession(token: string, address: string) {
+  const payload = JSON.parse(atob(token.split('.')[1].replace(/-/g, '+').replace(/_/g, '/'))) as { exp: number };
+  const a = address.toLowerCase();
+  try {
+    localStorage.setItem(WALLET_KEY, JSON.stringify({ token, address: a, short: `${a.slice(0, 6)}…${a.slice(-4)}`, exp: payload.exp }));
+  } catch {
+    /* storage blocked */
+  }
+  window.dispatchEvent(new Event(EVENT));
+}
+
+export function signOutWallet() {
+  try {
+    localStorage.removeItem(WALLET_KEY);
+  } catch {
+    /* nothing stored */
+  }
+  window.dispatchEvent(new Event(EVENT));
+}
+
+/** The wallet session, kept current across components and tabs; null when there is none (or inside a Farcaster app). */
+export function useWalletSession(): WalletSessionState | null {
+  const [state, setState] = useState<WalletSessionState | null>(null);
+  useEffect(() => {
+    let alive = true;
+    const check = async () => {
+      const w = (await inMiniApp()) || readSession() ? null : readWallet();
+      if (alive) setState(w);
+    };
+    void check();
+    const again = () => void check();
+    window.addEventListener(EVENT, again);
+    window.addEventListener('storage', again);
+    return () => {
+      alive = false;
+      window.removeEventListener(EVENT, again);
+      window.removeEventListener('storage', again);
+    };
+  }, []);
+  return state;
+}
+
 /** fetch with the person's token when there is one; a plain fetch otherwise. */
 export async function authFetch(url: string, init?: RequestInit): Promise<Response> {
   if (await inMiniApp()) return sdk.quickAuth.fetch(url, init);
   const s = readSession();
-  if (!s) return fetch(url, init);
+  if (!s) {
+    const w = WALLET_ROUTES.some((r) => url.startsWith(r)) ? readWallet() : null;
+    if (!w) return fetch(url, init);
+    const headers = new Headers(init?.headers);
+    headers.set('Authorization', `Bearer ${w.token}`);
+    const res = await fetch(url, { ...init, headers });
+    if (res.status === 401) signOutWallet();
+    return res;
+  }
   const headers = new Headers(init?.headers);
   headers.set('Authorization', `Bearer ${s.token}`);
   const res = await fetch(url, { ...init, headers });

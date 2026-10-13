@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getFid } from '~/lib/auth';
+import { getPerson } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { IMAGES } from '~/lib/config';
 import { hasConsented } from '~/lib/consent';
@@ -9,7 +9,9 @@ import { loadChapter } from '~/lib/book';
 import { blockFacts } from '~/lib/reading';
 import { storageReady } from '~/lib/images/store';
 import { keptValue } from '~/lib/images/neynar';
-import { GATE_WORDING } from '~/lib/images/gate';
+import { GATE_WORDING, openToEveryone } from '~/lib/images/gate';
+import { IMAGE_WORDING } from '~/lib/images/wording';
+import { balanceUsd, prepaidOpen, priceUsd } from '~/lib/wallet/credits';
 import { composerPicks, myPicks, startingStyleRetired, type MyPick } from '~/lib/images/designs';
 import { designByline } from '~/lib/images/byline';
 import { inPassage, sheetCharacter, sheetPlace, shorthandLine } from '~/lib/images/sheets';
@@ -28,7 +30,8 @@ const chip = (p: MyPick) => ({
  * picking is open to everyone signed in (owner, 2026-10-10), creating designs to invited FIDs only.
  */
 export async function GET(request: Request) {
-  const fid = await getFid(request);
+  // A Farcaster FID, or minus a wallet account's number (prepaid; owner, 2026-10-13).
+  const fid = await getPerson(request);
   const sql = db();
   const ready = Boolean(IMAGES.enabled && sql && process.env.FAL_KEY && process.env.IMAGES_TICKET_SECRET && storageReady());
   // The style's full text for this passage's setting: shown in full, since it becomes part of the public prompt (decision 7).
@@ -55,8 +58,17 @@ export async function GET(request: Request) {
   if (!sql) return NextResponse.json({ ...base, signedIn: true, fid, invited, eligible: invited ? true : null }, { headers: { 'Cache-Control': 'no-store' } });
   try {
     const [consented, left, publishes, kept, picks] = await Promise.all([
-      hasConsented(fid), generationsLeft(sql, fid), publishesLeft(sql, fid), invited ? Promise.resolve(null) : keptValue(sql, fid), myPicks(sql, fid),
+      hasConsented(fid), generationsLeft(sql, fid), publishesLeft(sql, fid), invited || fid < 0 ? Promise.resolve(null) : keptValue(sql, fid), myPicks(sql, fid),
     ]);
+    if (fid < 0) {
+      // A wallet account: no daily count and no Neynar score; its balance pays (owner, 2026-10-13).
+      const open = prepaidOpen() && openToEveryone().open;
+      const prepaid = { balanceUsd: await balanceUsd(sql, -fid), priceUsd: priceUsd(IMAGES.reserveUsd), markup: IMAGES.prepaid.markup };
+      return NextResponse.json(
+        { ...base, signedIn: true, fid, invited: false, eligible: open, refusal: open ? undefined : prepaidOpen() ? GATE_WORDING.notOpen : IMAGE_WORDING.prepaid.notOpen, consented, left, publishesLeft: publishes, picks: { styles: [], characters: [] }, prepaid },
+        { headers: { 'Cache-Control': 'no-store' } },
+      );
+    }
     const eligible = invited ? true : kept === null ? null : kept >= IMAGES.neynarMinScore;
     const refusal = eligible === false && kept !== null ? GATE_WORDING.below(kept) : undefined;
     // Picks are invited-only for now (2026-10-10): others are offered none, so no reference pictures either.

@@ -3,7 +3,7 @@ import type postgres from 'postgres';
 import { IMAGES } from '../config';
 import { checkPrompt } from './guard';
 import { ImageUnavailable, type Made } from './fal';
-import { perDay, recordGuard, reserve, settle, wordsCheckFits, type Spend } from './limits';
+import { fundedBy, perDay, recordGuard, refund, reserve, settle, wordsCheckFits, type Spend } from './limits';
 import { blockedName } from './rules';
 import { IMAGE_WORDING } from './wording';
 
@@ -17,6 +17,8 @@ import { IMAGE_WORDING } from './wording';
  * 4. the reservation replaced by the real costs; a picture the checker flags is dropped.
  * The caller has already checked sign-in, the off switch, setup, its input, consent and the gate
  * (gate.ts: invited FIDs, or a Neynar score of at least IMAGES.neynarMinScore), in that order.
+ * A wallet account (fid below zero) pays from its prepaid balance in step 1, and gets it back when
+ * the prompt check or the image model doesn't answer; a blocked prompt or a flagged image is paid for.
  */
 type Sql = postgres.Sql;
 
@@ -27,7 +29,10 @@ export type Paid =
 export const LIMIT_SAY = {
   limit: (n: number) => `You've made ${n} today. More tomorrow (00:00 UTC).`,
   spend: 'Image making has reached today’s spending limit for everyone. It comes back at 00:00 UTC.',
+  balance: IMAGE_WORDING.prepaid.lowBalance,
+  'prepaid-spend': IMAGE_WORDING.prepaid.dailyCap,
 } as const;
+const say = (refusal: keyof typeof LIMIT_SAY, fid: number) => (refusal === 'limit' ? LIMIT_SAY.limit(perDay(fid)) : LIMIT_SAY[refusal]);
 
 export async function paidPicture(
   sql: Sql,
@@ -36,34 +41,37 @@ export async function paidPicture(
   job: { checkText: string; spend?: Spend; make: () => Promise<Made> },
 ): Promise<Paid> {
   const spend = job.spend;
+  const funded = fundedBy(fid);
   const r = await reserve(sql, fid, spend);
-  if (!r.ok) return { ok: false, status: 429, error: r.refusal === 'limit' ? LIMIT_SAY.limit(perDay(fid)) : LIMIT_SAY.spend, extra: { reason: r.refusal } };
+  if (!r.ok) return { ok: false, status: 429, error: say(r.refusal, fid), extra: { reason: r.refusal } };
   const name = blockedName(job.checkText);
   if (name) {
-    await settle(sql, {}, spend);
+    await settle(sql, {}, spend, funded);
     return { ok: false, status: 422, error: 'No real people: the prompt names someone on the blocked list.', extra: { reason: 'blocked', category: 'real_person', left: r.left } };
   }
   let guard;
   try {
     guard = await checkPrompt(job.checkText, request);
   } catch (e) {
-    await settle(sql, {}, spend);
+    await settle(sql, {}, spend, funded);
+    await refund(sql, fid, spend);
     console.error('image prompt check failed', (e as Error).name);
     return { ok: false, status: 503, error: 'The prompt check did not answer. Try again in a moment.', extra: { left: r.left } };
   }
   if (!guard.allow) {
-    await settle(sql, { guard: { costUsd: guard.costUsd, provider: guard.provider, verdict: 'blocked' } }, spend);
+    await settle(sql, { guard: { costUsd: guard.costUsd, provider: guard.provider, verdict: 'blocked' } }, spend, funded);
     return { ok: false, status: 422, error: 'This prompt asks for something the rules don’t allow.', extra: { reason: 'blocked', category: guard.category, left: r.left } };
   }
   let made: Made;
   try {
     made = await job.make();
   } catch (e) {
-    await settle(sql, { guard: { costUsd: guard.costUsd, provider: guard.provider, verdict: 'ok' } }, spend);
+    await settle(sql, { guard: { costUsd: guard.costUsd, provider: guard.provider, verdict: 'ok' } }, spend, funded);
+    await refund(sql, fid, spend);
     console.error('image generation failed', e instanceof ImageUnavailable ? e.message : (e as Error).name);
     return { ok: false, status: 503, error: 'The image model did not answer. Try again in a moment.', extra: { left: r.left } };
   }
-  await settle(sql, { guard: { costUsd: guard.costUsd, provider: guard.provider, verdict: 'ok' }, image: { costUsd: made.costUsd, verdict: made.nsfw ? 'nsfw' : 'ok' } }, spend);
+  await settle(sql, { guard: { costUsd: guard.costUsd, provider: guard.provider, verdict: 'ok' }, image: { costUsd: made.costUsd, verdict: made.nsfw ? 'nsfw' : 'ok' } }, spend, funded);
   // Flagged by the host's safety checker: dropped here, never shown or stored.
   if (made.nsfw) return { ok: false, status: 422, error: 'The image was flagged by the safety checker and dropped.', extra: { reason: 'nsfw', left: r.left } };
   return { ok: true, made, left: r.left };

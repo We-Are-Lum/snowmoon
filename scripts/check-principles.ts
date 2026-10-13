@@ -943,21 +943,25 @@ add({
 // ---------------------------------------------------------------------------
 /** Shared sign-in wrappers routes may call instead of checking getFid themselves (P4a reads each one). */
 const P4A_WRAPPERS = [{ module: '~/lib/minpentai/play-server/route', file: 'src/lib/minpentai/play-server/route.ts', call: 'play' }];
-const P4A_EXEMPT = new Set(['src/app/api/auth/web/start/route.ts']);
+const P4A_EXEMPT = new Set(['src/app/api/auth/web/start/route.ts', 'src/app/api/wallet/sign-in/route.ts']);
 add({
   id: 'P4a',
   principle: 4,
-  name: 'every write API route requires a signed-in FID',
+  name: 'every write API route requires a signed-in FID (or, where named, a signed-in wallet)',
   load: async () => walk('src/app/api', /route\.tsx?$/).map((f) => ({ file: f, src: read(f) })),
   // Named exemption (owner instruction, 2026-10-08: website sign-in): the route that starts a sign-in
   // cannot require one. It writes nothing of ours; it opens a channel on Farcaster's relay.
+  // Named exemption (owner, 2026-10-13: wallet sign-in): the wallet sign-in route is the sign-in; it
+  // writes only the account row, and only for a signature checked against the wallet.
+  // getPerson (a FID or a wallet; image routes and consent) and getWallet (wallet routes) count as
+  // sign-in checks too: both answer null without a valid session, and the route answers 401.
   // A route may instead hand every request to a shared wrapper listed in P4A_WRAPPERS; it passes only
   // if it imports and calls that wrapper, and the wrapper itself checks getFid and answers 401.
   run: (routes) =>
     routes
       .filter((r: { file: string }) => !P4A_EXEMPT.has(r.file))
       .filter((r: { src: string }) => /export async function (POST|PUT|PATCH|DELETE)\b/.test(r.src))
-      .filter((r: { src: string }) => !(/getFid\(/.test(r.src) && /status: 401/.test(r.src)))
+      .filter((r: { src: string }) => !(/(getFid|getPerson|getWallet)\(/.test(r.src) && /status: 401/.test(r.src)))
       .filter((r: { src: string }) => !P4A_WRAPPERS.some((w) => r.src.includes(`from '${w.module}'`) && new RegExp(`\\b${w.call}\\(request,`).test(r.src) && /getFid\(/.test(read(w.file)) && /\b401\)/.test(read(w.file))))
       .map((r: { file: string }) => `${r.file}: writes without requiring sign-in`),
   plant: (routes) => {

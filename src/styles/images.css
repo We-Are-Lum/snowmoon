@@ -416,3 +416,13 @@ a.ia-button:hover { text-decoration: none; }
 .mi-from { display: inline-block; margin: 8px 0 0; font-family: var(--label); font-size: var(--text-label); line-height: 16px; color: var(--link); }
 .ip-make { display: block; width: fit-content; margin-top: 12px; }
 .as-quote .as-make { display: block; width: fit-content; margin: 0 0 6px; padding: 4px 0; text-transform: uppercase; letter-spacing: 0.04em; }
+
+/* Wallet sign-in and the prepaid balance (owner, 2026-10-13). */
+.wallet-sign-in { display: flex; flex-direction: column; gap: 6px; }
+.wallet-sign-in .ic-secondary { align-self: flex-start; }
+.wallet-panel { display: flex; flex-direction: column; gap: 8px; margin: 0 0 12px; }
+.wallet-panel p { margin: 0; }
+.wallet-balance { font-size: 16px; }
+.wallet-add { display: flex; flex-direction: column; gap: 8px; }
+.wallet-tokens, .wallet-packs { display: flex; flex-wrap: wrap; gap: 8px; }
+.wallet-tokens button, .wallet-packs button, .wallet-panel > .ic-secondary { width: auto; padding: 6px 14px; }

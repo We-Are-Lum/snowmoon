@@ -268,6 +268,39 @@ export const IMAGE_WORDING = {
       text: 'Text, exactly as added to prompts',
     },
   },
+  /** Wallet sign-in and prepaid generations (owner, 2026-10-13). Drafted by the coding agent. */
+  prepaid: {
+    signIn: 'Sign in with a wallet',
+    signInNote:
+      'Your wallet signs a message to sign in: nothing is sent and there is no fee. A wallet account pays for each image in advance. Your address, shortened, is the byline on images you publish.',
+    noWallet: 'No wallet found in this browser. Open this page in your wallet’s browser, or install a wallet extension.',
+    wrongSign: 'The wallet didn’t sign. Try again.',
+    balance: (usd: string, n: number) => `Balance $${usd} · about ${n} image${n === 1 ? '' : 's'}`,
+    price: (usd: string, markup: number) => `$${usd} an image: the estimated cost plus ${Math.round(markup * 100)}%`,
+    addFunds: 'Add funds',
+    notAddedYet: 'A payment from this wallet hasn’t been added yet.',
+    tryAgain: 'Try again',
+    signOut: 'sign out',
+    payWith: 'Pay in USDC or ETH on Base. It’s added to your balance once the payment confirms.',
+    terms:
+      'Funds can only be spent on images here: they can’t be withdrawn or moved. A blocked prompt or an image the safety checker drops is still paid for; if the prompt check or the image model doesn’t answer, it’s refunded.',
+    pay: (usd: number, token: 'USDC' | 'ETH') => `Pay $${usd} in ${token}`,
+    waiting: 'Waiting for the payment to confirm…',
+    added: (usd: string) => `Added $${usd} to your balance.`,
+    notOpen: 'Paying for images isn’t open yet.',
+    lowBalance: 'Your balance doesn’t cover this image. Add funds to keep going.',
+    dailyCap: 'Prepaid image making has reached today’s limit for everyone. It comes back at 00:00 UTC.',
+    claim: {
+      'not-found': 'That payment isn’t on Base yet. Try again in a moment.',
+      pending: 'That payment is still confirming. Try again in a moment.',
+      failed: 'That transaction failed onchain, so nothing was paid.',
+      old: 'That payment is too old to add here. Ask the maintainer.',
+      'not-to-us': 'That transaction didn’t pay this project’s address.',
+      'not-from-you': 'That payment came from a different wallet than the one signed in.',
+      'too-small': 'That payment is below the smallest amount added.',
+      already: 'That payment was already added.',
+    },
+  },
 } as const;
 
 /** One row per new string, by screen, for the draft-wording doc. {braces} are filled in by the app. */
@@ -283,6 +316,10 @@ export const IMAGE_WORDING_ROWS: { screen: string; where: string; text: string }
   { screen: 'Add an image · draft', where: 'src/components/image-composer.tsx', text: IMAGE_WORDING.draft.kept(24).replace('24', '{hours}') },
   { screen: 'Add an image · draft', where: 'src/components/image-composer.tsx', text: IMAGE_WORDING.draft.editPrompt },
   { screen: 'Add an image · draft', where: 'src/components/image-composer.tsx (action bar)', text: 'Generate again · {n} left' },
+  ...Object.entries(IMAGE_WORDING.prepaid as Record<string, unknown>).flatMap(([k, v]): { screen: string; where: string; text: string }[] =>
+    typeof v === 'string' ? [{ screen: 'Wallet and prepaid images', where: `src/lib/images/wording.ts (prepaid.${k})`, text: v }] : typeof v === 'object' ? Object.entries(v as Record<string, string>).map(([c, t]) => ({ screen: 'Wallet and prepaid images', where: `src/lib/images/wording.ts (prepaid.${k}.${c})`, text: t })) : [],
+  ),
+  { screen: 'Wallet and prepaid images', where: 'src/components/wallet-panel.tsx', text: 'Balance ${usd} · about {n} images / ${usd} an image: the estimated cost plus 30% / Pay ${usd} in {USDC|ETH} / Added ${usd} to your balance.' },
   { screen: 'Add an image · compose', where: 'src/components/image-composer.tsx (action bar, when a draft is kept)', text: IMAGE_WORDING.draft.back },
   { screen: 'Add an image · preview', where: 'src/components/image-composer.tsx (preview)', text: IMAGE_WORDING.preview.promptLabel },
   { screen: 'Image page', where: 'src/app/image/[id]/page.tsx (caption; "Open in reader →" is the assistant’s approved row 23, reused)', text: 'AI image · by {byline} (button: opens the recipe sheet) / {date} · Chapter {n} · ¶ {a–b} · Open in reader →' },

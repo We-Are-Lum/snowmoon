@@ -1,7 +1,7 @@
 import { createHash, randomUUID } from 'node:crypto';
 import { NextResponse } from 'next/server';
 import { revalidatePath } from 'next/cache';
-import { getFid } from '~/lib/auth';
+import { getPerson, getWallet } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { IMAGES, WORK_ID } from '~/lib/config';
 import { hasConsented } from '~/lib/consent';
@@ -9,6 +9,7 @@ import { publishesLeft } from '~/lib/images/limits';
 import { putPublic, storageReady } from '~/lib/images/store';
 import { readTicket, recipeAssist } from '~/lib/images/ticket';
 import { bylineName } from '~/lib/names';
+import { shortAddress } from '~/lib/wallet/session';
 
 /**
  * Publish a draft (section 5): the device sends back the image and its signed record. The
@@ -22,8 +23,9 @@ const no = (error: string, status: number) => NextResponse.json({ error }, { sta
 const isId = (s: unknown): s is string => typeof s === 'string' && /^[0-9a-f-]{36}$/.test(s);
 
 export async function POST(request: Request) {
-  const fid = await getFid(request);
-  if (fid === null) return NextResponse.json({ error: 'Sign in with Farcaster to publish' }, { status: 401 });
+  // A Farcaster FID, or minus a wallet account's number (owner, 2026-10-13).
+  const fid = await getPerson(request);
+  if (fid === null) return NextResponse.json({ error: 'Sign in to publish' }, { status: 401 });
   if (!IMAGES.enabled) return no('Publishing images is switched off for now', 503);
   const sql = db();
   if (!sql || !process.env.IMAGES_TICKET_SECRET || !storageReady()) return no('Publishing images is not set up on this deployment', 503);
@@ -56,7 +58,9 @@ export async function POST(request: Request) {
   }
 
   // The byline (decision 12): the relay's name signed at website sign-in, else Farcaster's public API.
-  const by = await bylineName(fid, body.nameProof);
+  // A wallet account's byline is its address, shortened (owner, 2026-10-13).
+  const wallet = fid < 0 ? getWallet(request) : null;
+  const by = wallet ? { name: shortAddress(wallet.address), source: 'wallet' as const } : await bylineName(fid, body.nameProof);
   const url = await putPublic(t.sha256, bytes, 'image/jpeg');
   const recipeId = randomUUID(), elementId = randomUUID(), versionId = randomUUID();
   await sql.begin(async (tx) => {

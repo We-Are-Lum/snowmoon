@@ -235,6 +235,15 @@ publishes anything a model made. Server routes that write require a verified
 Quick Auth FID. Anything published outside the app records whose action
 published it.
 
+**Allowed, recorded path: a signed-in wallet (owner, 2026-10-13).** Readers'
+images may also be made and published by a person signed in with a wallet
+(Sign-In with Ethereum, checked by our server; `src/lib/wallet/session.ts`).
+Only the image routes and consent take a wallet sign-in (`getPerson`); every
+other route still requires a Farcaster FID. In the image tables a wallet
+account's person number is minus its account number, so it never reads as a
+FID; its byline is its address, shortened. Wallet accounts don't get the free
+daily allowance or the Neynar check: they pay in advance for each image.
+
 **Allowed, recorded path: the maintainer via script.** Seeded images and
 narration may be published by the maintainer (FID 6786) running a publish
 script. The published index then records `published_by` with the FID, role
@@ -243,7 +252,8 @@ repo (the prompt log of the request that asked for it).
 
 **Checked by.**
 - `P4a`: every API route that writes (POST, PUT, PATCH, DELETE) calls `getFid`
-  and refuses without it (401), or hands the request to a shared wrapper that
+  (or `getPerson` / `getWallet` where a wallet sign-in is taken) and refuses
+  without it (401), or hands the request to a shared wrapper that
   does (listed in the check; today only Minpentai Play's `play()`, read each run). `npm run check:shipped` also confirms on the
   live site that save and like refuse anonymous requests.
 - `P4b`: the published image index and every narration index record
@@ -374,6 +384,13 @@ ratings and likes and serves the totals.
   migration 0007), so none can be joined to a person. `npm run test:chat`
   fails if one can. Residual: on a day when only one person asks, that day's
   totals are theirs.
+- Prepaid images (owner's exception, 2026-10-13, migration 0011): a wallet
+  account's payments (`studio.wallet_payments`, with the transaction hash) and
+  what each of its images cost it (`studio.wallet_debits`) are kept per account,
+  because a balance can't be kept otherwise; onchain, the payment is public
+  anyway. They are private (no public read; append-only for the app;
+  `npm run test:wallet`). `studio.image_costs` still has no person in it: it now
+  says only whether a day's costs were free or prepaid.
 
 ## 7. Payments never enter scoring or ordering. No token. The "not affiliated" line stays on the first screen.
 
@@ -386,7 +403,10 @@ words are his): <https://vitalik.eth.limo/snowmoon/>.
 *Inference, not endorsement.*
 
 **In this app.** Donations and sponsorship can fund generation; they never
-change a score, a sort or a default. There is no token. The first screen says
+change a score, a sort or a default. Prepaid images (owner, 2026-10-13): a
+wallet account buys images in advance with USDC or ETH on Base, at the
+estimated cost plus 30%. Paying buys images and nothing else: no place in any
+order, no score, no default. The balance can't be withdrawn or moved. There is no token. The first screen says
 the edition is independent, "not affiliated with the author", and that there
 is no token.
 

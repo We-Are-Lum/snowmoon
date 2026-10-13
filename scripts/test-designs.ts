@@ -181,7 +181,7 @@ const src = walk('src').map((f) => ({ f, t: read(f) }));
 const readsPicks = src.filter(({ t }) => /studio\.picks|myPicks\(|setPick\(|clearPick\(/.test(t)).map(({ f }) => f).sort();
 const allowed = ['src/app/api/designs/picks/route.ts', 'src/app/api/images/generate/route.ts', 'src/app/api/images/status/route.ts', 'src/lib/images/designs.ts'];
 check('only the picks route, the status and Generate read picks', JSON.stringify(readsPicks) === JSON.stringify(allowed), readsPicks.join(', '));
-for (const f of allowed.filter((f) => f.includes('/api/'))) check(`${f} reads picks only for the signed-in FID`, /getFid\(request\)/.test(read(f)) && !/myPicks\(\w+, (?!w\.fid|fid)/.test(read(f)));
+for (const f of allowed.filter((f) => f.includes('/api/'))) check(`${f} reads picks only for the signed-in person`, /(getFid|getPerson)\(request\)/.test(read(f)) && !/myPicks\(\w+, (?!w\.fid|fid)/.test(read(f)));
 const dsrc = read('src/lib/images/designs.ts');
 check('the picks queries always filter to one FID', [...dsrc.matchAll(/from studio\.picks[\s\S]{0,400}?where.{0,40}/g)].every((m) => /p\.fid = \$\{fid\}|fid = \$\{fid\}/.test(m[0])) && /delete from studio\.picks where fid = \$\{fid\}/.test(dsrc));
 check('nothing counts picks', !/count\([^)]*\)[^;]{0,200}studio\.picks/.test(dsrc) && !src.some(({ t }) => /picks?_count|pickCount|count\(.{0,40}pick/i.test(t)));

@@ -2,6 +2,8 @@ import 'server-only';
 import type postgres from 'postgres';
 import { IMAGES } from '../config';
 import { lookUp, shown } from './neynar';
+import { prepaidOpen } from '../wallet/credits';
+import { IMAGE_WORDING } from './wording';
 
 /**
  * Who may press Generate (decision 11, owner 2026-10-09), decided before anything is counted or
@@ -12,6 +14,9 @@ import { lookUp, shown } from './neynar';
  *   are in this build (APP_LEGAL_PAGES, set by next.config.ts from the page files themselves at
  *   build time) and report alerts are set up (SNOWMOON_ALERT_URL). Until both, they are refused.
  * - Then the Neynar user score, at least IMAGES.neynarMinScore. If Neynar can't be reached, refused.
+ * - Wallet accounts (fid below zero; owner, 2026-10-13): payment replaces the score. They wait for
+ *   the same launch order, and for prepaid to be open (IMAGES.prepaid.payTo set). Their balance is
+ *   checked when the Generate is counted (limits.ts).
  */
 type Sql = postgres.Sql;
 
@@ -25,7 +30,7 @@ export const GATE_WORDING = {
     `Image making is open to Farcaster accounts with a Neynar score of ${IMAGES.neynarMinScore} or more, to keep out spam accounts. Yours is ${shown(value)}. Reading, listening, saving cards and everything else still work.`,
 } as const;
 
-export type Gate = { ok: true } | { ok: false; status: 403 | 503; error: string; reason: 'not-open' | 'unreachable' | 'score' };
+export type Gate = { ok: true } | { ok: false; status: 403 | 503; error: string; reason: 'not-open' | 'unreachable' | 'score' | 'prepaid-closed' };
 
 /** The owner's launch order: both legal pages built, and the alert set. Names only in the log. */
 export function openToEveryone(): { open: boolean; missing: string[] } {
@@ -42,6 +47,7 @@ export async function mayGenerate(sql: Sql, fid: number): Promise<Gate> {
     console.error('images: not open to everyone yet; missing', launch.missing.join(', '));
     return { ok: false, status: 503, error: GATE_WORDING.notOpen, reason: 'not-open' };
   }
+  if (fid < 0) return prepaidOpen() ? { ok: true } : { ok: false, status: 503, error: IMAGE_WORDING.prepaid.notOpen, reason: 'prepaid-closed' };
   const r = await lookUp(sql, fid);
   if (!r.ok) {
     console.error('images: Neynar lookup failed', r.why);

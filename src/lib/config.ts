@@ -158,6 +158,33 @@ export const IMAGES = {
   publishesPerDay: 3,
   /** Across everyone, per UTC day (decision 10), kept apart from the assistant's. */
   dailySpendCapUsd: 2,
+  /**
+   * Wallet sign-in and prepaid generations (owner, 2026-10-13). A wallet account has no free daily
+   * count and no Neynar gate: each Generate is paid from its balance at the estimated cost (the
+   * worst case reserved for it) plus `markup`. Paid in USDC or ETH on Base to `payTo`; the app reads
+   * the payment onchain and credits it once. Prepaid spend has its own daily cap, apart from the free one.
+   * Off until `payTo` is set.
+   */
+  prepaid: {
+    enabled: true,
+    payTo: null as `0x${string}` | null,
+    markup: 0.3,
+    /** Suggested amounts in USD; any amount of at least minUsd is credited. */
+    packsUsd: [1, 5, 20] as readonly number[],
+    minUsd: 0.5,
+    dailyCapUsd: 25,
+    chainId: 8453,
+    /** Base's own public endpoint unless BASE_RPC_URL is set. */
+    rpcUrl: 'https://mainnet.base.org',
+    /** Circle's USDC on Base (6 decimals) and Chainlink's ETH/USD feed on Base (8 decimals), checked onchain 2026-10-13. */
+    usdc: '0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913' as `0x${string}`,
+    ethUsdFeed: '0x71041dddad3595F9CEd3DcCFBe3D1F4b0a16Bb70' as `0x${string}`,
+    confirmations: 3,
+    /** A payment older than this is not credited (ask the owner instead). */
+    maxAgeDays: 7,
+    /** A wallet sign-in lasts this long. */
+    sessionHours: 24,
+  },
   /** A draft's signed record is good for this long; after that, generate again. */
   ticketHours: 24,
   /** Readers' images: one report hides at once for these reasons; otherwise this many distinct reporters (decision 17). */
