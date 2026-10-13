@@ -1,0 +1,374 @@
+{
+  "made": "2026-10-13T07:00:33.874Z",
+  "code_version": {
+    "scripts/terrain-v5.ts": "0d9cfc85eb0fc9cb542abb368cb781c272d87f8579d9c7caf1c0a67347f2877e",
+    "scripts/terrain-v4.ts": "cad633f0abec25621ff7feb6780d0c6d4eef6cc5c2d5867626d7f877e93d5e38",
+    "scripts/lib/geotiff-lite.ts": "b439401048dbfe2c7c46b4dbce41979e1e7d13e4f33243919558844d019acdc0",
+    "scripts/lib/terrain-core.ts": "5140c0a7e5d4357c97b4a54c000c9654c406dd6f127e249b028ee0b23b6a36d0",
+    "scripts/lib/noise.ts": "ef2aba4f58c28e0cb002c0992ac3bd80dd99af8b1d4b4e5b5bf5d849047c2395",
+    "scripts/lib/raster-out.ts": "24e0822f47b2552285ca49efdc1583d933ea9c84bf1722a495ad14266757194e",
+    "scripts/lib/map-tests.ts": "925f5018db8e5284c2fac2e6474384d43324df3327a2883354ebb8f5370d4385"
+  },
+  "frame": "dzego",
+  "method": "Every source centre on a 1.5° grid (−58° to 76° latitude), every rotation in 15° steps, mirrored and not, at true scale; each placement scored by the weighted share of the book's constraints the real terrain already meets (each pin a group; book facts weigh twice what we placed), minus a penalty for famous coastlines in the frame. The best 1,500 are re-scored on the 1-arc-minute grid with denser targets and nudged by half a degree; the list keeps source centres at least 1,500 km apart.",
+  "core": {
+    "note": "Dzego's base: the frame outside a core of 230 km around 148.8°E 23.4°N (both cities), into which the core's real source is blended over about 200 km. Scored as above outside the core, plus how well the base's ground (land, shelf, slope, deep sea) matches the core's source around the blend. Bases showing a source another part of the map shows are skipped.",
+    "core_source": {
+      "lon": -72.745,
+      "lat": -45,
+      "rot": 150,
+      "mirror": true
+    }
+  },
+  "candidates": [
+    {
+      "rank": 1,
+      "score": 0.9407,
+      "fit": 0.9407,
+      "source_centre_lon_lat": [
+        -37.84,
+        -10
+      ],
+      "rotation_deg": 255,
+      "mirrored": false,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "Sadzu Du: several mountain pyramids behind a park, about half as tall as Pafogai Du's (Design's cue, c12-b30)": 1,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "the base matches Dzego's core around the blend": 0.881,
+        "(land, overall)": 1,
+        "(relief, overall)": 1,
+        "(blend, overall)": 0.881
+      }
+    },
+    {
+      "rank": 2,
+      "score": 0.9391,
+      "fit": 0.9391,
+      "source_centre_lon_lat": [
+        29.11,
+        -29.5
+      ],
+      "rotation_deg": 255,
+      "mirrored": false,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "Sadzu Du: several mountain pyramids behind a park, about half as tall as Pafogai Du's (Design's cue, c12-b30)": 1,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "the base matches Dzego's core around the blend": 0.878,
+        "(land, overall)": 1,
+        "(relief, overall)": 1,
+        "(blend, overall)": 0.878
+      }
+    },
+    {
+      "rank": 3,
+      "score": 0.9383,
+      "fit": 0.9383,
+      "source_centre_lon_lat": [
+        -77.878,
+        -8.5
+      ],
+      "rotation_deg": 0,
+      "mirrored": false,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "Sadzu Du: several mountain pyramids behind a park, about half as tall as Pafogai Du's (Design's cue, c12-b30)": 1,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "the base matches Dzego's core around the blend": 0.877,
+        "(land, overall)": 1,
+        "(relief, overall)": 1,
+        "(blend, overall)": 0.877
+      }
+    },
+    {
+      "rank": 4,
+      "score": 0.9365,
+      "fit": 0.9365,
+      "source_centre_lon_lat": [
+        -68.775,
+        -23.5
+      ],
+      "rotation_deg": 150,
+      "mirrored": true,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "Sadzu Du: several mountain pyramids behind a park, about half as tall as Pafogai Du's (Design's cue, c12-b30)": 1,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "the base matches Dzego's core around the blend": 0.873,
+        "(land, overall)": 1,
+        "(relief, overall)": 1,
+        "(blend, overall)": 0.873
+      }
+    },
+    {
+      "rank": 5,
+      "score": 0.9234,
+      "fit": 0.9234,
+      "source_centre_lon_lat": [
+        -47.595,
+        -25.5
+      ],
+      "rotation_deg": 255,
+      "mirrored": false,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "Sadzu Du: several mountain pyramids behind a park, about half as tall as Pafogai Du's (Design's cue, c12-b30)": 1,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "the base matches Dzego's core around the blend": 0.847,
+        "(land, overall)": 1,
+        "(relief, overall)": 1,
+        "(blend, overall)": 0.847
+      }
+    },
+    {
+      "rank": 6,
+      "score": 0.9202,
+      "fit": 0.9202,
+      "source_centre_lon_lat": [
+        124.722,
+        -32.5
+      ],
+      "rotation_deg": 300,
+      "mirrored": false,
+      "scale": 1,
+      "famous_coastlines_in_frame": [],
+      "constraint_fit": {
+        "Sadzu Du: several mountain pyramids behind a park, about half as tall as Pafogai Du's (Design's cue, c12-b30)": 1,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "the base matches Dzego's core around the blend": 0.84,
+        "(land, overall)": 1,
+        "(relief, overall)": 1,
+        "(blend, overall)": 0.84
+      }
+    },
+    {
+      "rank": 7,
+      "score": 0.9153,
+      "fit": 0.9468,
+      "source_centre_lon_lat": [
+        82.569,
+        19
+      ],
+      "rotation_deg": 15,
+      "mirrored": true,
+      "scale": 1,
+      "famous_coastlines_in_frame": [
+        "Indian subcontinent"
+      ],
+      "constraint_fit": {
+        "Sadzu Du: several mountain pyramids behind a park, about half as tall as Pafogai Du's (Design's cue, c12-b30)": 1,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "the base matches Dzego's core around the blend": 0.894,
+        "(land, overall)": 1,
+        "(relief, overall)": 1,
+        "(blend, overall)": 0.894
+      }
+    },
+    {
+      "rank": 8,
+      "score": 0.9128,
+      "fit": 0.9338,
+      "source_centre_lon_lat": [
+        -120.991,
+        38.5
+      ],
+      "rotation_deg": 120,
+      "mirrored": true,
+      "scale": 1,
+      "famous_coastlines_in_frame": [
+        "San Francisco Bay"
+      ],
+      "constraint_fit": {
+        "Sadzu Du: several mountain pyramids behind a park, about half as tall as Pafogai Du's (Design's cue, c12-b30)": 1,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "the base matches Dzego's core around the blend": 0.868,
+        "(land, overall)": 1,
+        "(relief, overall)": 1,
+        "(blend, overall)": 0.868
+      }
+    },
+    {
+      "rank": 9,
+      "score": 0.906,
+      "fit": 0.927,
+      "source_centre_lon_lat": [
+        -127.658,
+        52.5
+      ],
+      "rotation_deg": 105,
+      "mirrored": true,
+      "scale": 1,
+      "famous_coastlines_in_frame": [
+        "Vancouver Island"
+      ],
+      "constraint_fit": {
+        "Sadzu Du: several mountain pyramids behind a park, about half as tall as Pafogai Du's (Design's cue, c12-b30)": 1,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "the base matches Dzego's core around the blend": 0.854,
+        "(land, overall)": 1,
+        "(relief, overall)": 1,
+        "(blend, overall)": 0.854
+      }
+    },
+    {
+      "rank": 10,
+      "score": 0.889,
+      "fit": 0.9205,
+      "source_centre_lon_lat": [
+        67.263,
+        25
+      ],
+      "rotation_deg": 90,
+      "mirrored": true,
+      "scale": 1,
+      "famous_coastlines_in_frame": [
+        "Indian subcontinent"
+      ],
+      "constraint_fit": {
+        "Sadzu Du: several mountain pyramids behind a park, about half as tall as Pafogai Du's (Design's cue, c12-b30)": 1,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "the base matches Dzego's core around the blend": 0.841,
+        "(land, overall)": 1,
+        "(relief, overall)": 1,
+        "(blend, overall)": 0.841
+      }
+    },
+    {
+      "rank": 11,
+      "score": 0.8876,
+      "fit": 0.9296,
+      "source_centre_lon_lat": [
+        -145.735,
+        69
+      ],
+      "rotation_deg": 255,
+      "mirrored": true,
+      "scale": 1,
+      "famous_coastlines_in_frame": [
+        "Alaska"
+      ],
+      "constraint_fit": {
+        "Sadzu Du: several mountain pyramids behind a park, about half as tall as Pafogai Du's (Design's cue, c12-b30)": 1,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "the base matches Dzego's core around the blend": 0.859,
+        "(land, overall)": 1,
+        "(relief, overall)": 1,
+        "(blend, overall)": 0.859
+      }
+    },
+    {
+      "rank": 12,
+      "score": 0.884,
+      "fit": 0.9155,
+      "source_centre_lon_lat": [
+        -98.224,
+        26.5
+      ],
+      "rotation_deg": 345,
+      "mirrored": true,
+      "scale": 1,
+      "famous_coastlines_in_frame": [
+        "Gulf of Mexico"
+      ],
+      "constraint_fit": {
+        "Sadzu Du: several mountain pyramids behind a park, about half as tall as Pafogai Du's (Design's cue, c12-b30)": 1,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "the base matches Dzego's core around the blend": 0.831,
+        "(land, overall)": 1,
+        "(relief, overall)": 1,
+        "(blend, overall)": 0.831
+      }
+    },
+    {
+      "rank": 13,
+      "score": 0.8751,
+      "fit": 0.9171,
+      "source_centre_lon_lat": [
+        -40.394,
+        65
+      ],
+      "rotation_deg": 255,
+      "mirrored": false,
+      "scale": 1,
+      "famous_coastlines_in_frame": [
+        "Greenland"
+      ],
+      "constraint_fit": {
+        "Sadzu Du: several mountain pyramids behind a park, about half as tall as Pafogai Du's (Design's cue, c12-b30)": 1,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "the base matches Dzego's core around the blend": 0.834,
+        "(land, overall)": 1,
+        "(relief, overall)": 1,
+        "(blend, overall)": 0.834
+      }
+    },
+    {
+      "rank": 14,
+      "score": 0.8741,
+      "fit": 0.9161,
+      "source_centre_lon_lat": [
+        132.092,
+        44.5
+      ],
+      "rotation_deg": 30,
+      "mirrored": true,
+      "scale": 1,
+      "famous_coastlines_in_frame": [
+        "Japan"
+      ],
+      "constraint_fit": {
+        "Sadzu Du: several mountain pyramids behind a park, about half as tall as Pafogai Du's (Design's cue, c12-b30)": 1,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "the base matches Dzego's core around the blend": 0.832,
+        "(land, overall)": 1,
+        "(relief, overall)": 1,
+        "(blend, overall)": 0.832
+      }
+    },
+    {
+      "rank": 15,
+      "score": 0.869,
+      "fit": 0.932,
+      "source_centre_lon_lat": [
+        47.462,
+        6.5
+      ],
+      "rotation_deg": 0,
+      "mirrored": true,
+      "scale": 1,
+      "famous_coastlines_in_frame": [
+        "Red Sea",
+        "Horn of Africa"
+      ],
+      "constraint_fit": {
+        "Sadzu Du: several mountain pyramids behind a park, about half as tall as Pafogai Du's (Design's cue, c12-b30)": 1,
+        "Dzego is hilly (mountain pyramids)": 1,
+        "Dzego has coasts: 35–80% of the frame is land": 1,
+        "the base matches Dzego's core around the blend": 0.864,
+        "(land, overall)": 1,
+        "(relief, overall)": 1,
+        "(blend, overall)": 0.864
+      }
+    }
+  ]
+}

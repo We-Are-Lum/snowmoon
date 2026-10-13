@@ -105,6 +105,11 @@ const BAY_BOX: [number, number, number, number] = [95, 105, 290, 290];
 const NS_CORE: [number, number, number, number] = [-40, -40, 540, 280]; // includes the open water east of the peninsula and around Thaldur
 const nsBox = (() => { let a = Infinity, b = Infinity, c = -Infinity, d = -Infinity; for (const x of [NS_CORE[0], NS_CORE[2]]) for (const y of [NS_CORE[1], NS_CORE[3]]) { const [lo, la] = nsLL([x, y]); a = Math.min(a, lo); c = Math.max(c, lo); b = Math.min(b, la); d = Math.max(d, la); } return [a, b, c, d] as [number, number, number, number]; })();
 const bayBox = (() => { let a = Infinity, b = Infinity, c = -Infinity, d = -Infinity; for (const x of [BAY_BOX[0], BAY_BOX[2]]) for (const y of [BAY_BOX[1], BAY_BOX[3]]) { const [lo, la] = nsLL([x, y]); a = Math.min(a, lo); c = Math.max(c, lo); b = Math.min(b, la); d = Math.max(d, la); } return [a, b, c, d] as [number, number, number, number]; })();
+// Dzego: a real core around the two cities (Pafogai Du and Sadzu Du, both ours), blended into a different real land
+// mass, so the frame's outline is not one recognisable coast (owner, 2026-10-12: southern Chile read as Chile zoomed out)
+const DZ_CORE = { lon: 148.8, lat: 23.4, r: 230 }; // km
+const DZ_FEATHER = 200;
+const dzOut = (lo: number, la: number) => { const [x, y] = DZEGO.fromLL(lo, la), [cx, cy] = DZEGO.fromLL(DZ_CORE.lon, DZ_CORE.lat); return Math.hypot(x - cx, y - cy) - DZ_CORE.r; };
 const CENTRE: Record<FrameName, XY> = { region: [38, 51], dzego: [149, 23], northshore: [(nsBox[0] + nsBox[2]) / 2, (nsBox[1] + nsBox[3]) / 2], bay: [(bayBox[0] + bayBox[2]) / 2, (bayBox[1] + bayBox[3]) / 2] };
 /** Where a book point (lon, lat) of a frame comes from on the real globe. */
 export function toSource(frame: FrameName, xf: Xf, lon: number, lat: number): XY {
@@ -138,7 +143,7 @@ const FAMOUS: [string, number, [number, number][]][] = [
   ['Cuba', 1.5, [[-79, 21.5], [-76, 20.2], [-83, 22.5]]], ['Great Lakes', 2, [[-84, 45], [-87, 43], [-79, 43.5]]], ['Hudson Bay', 1.5, [[-85, 59], [-80, 55], [-90, 60]]], ['Cape Cod', 1, [[-70, 41.8]]],
   ['Chesapeake Bay', 1, [[-76, 38]]], ['San Francisco Bay', 1, [[-122.3, 37.8]]], ['Isthmus of Panama', 1, [[-80, 8.8]]], ['Yucatán', 1, [[-89, 20]]], ['Iceland', 2, [[-19, 65]]],
   ['Greenland', 2, [[-42, 72], [-50, 64], [-53, 70], [-60, 76], [-22, 70], [-35, 81], [-43, 60]]], ['Alaska', 2, [[-150, 61], [-160, 58], [-156, 71], [-165, 64]]], ['Aleutian Islands', 1.5, [[-175, 52], [178, 52], [-168, 53.5]]],
-  ['Canadian Arctic islands', 1.5, [[-100, 73], [-85, 70], [-110, 75], [-80, 75], [-90, 79]]], ['Tierra del Fuego', 1.5, [[-69, -54]]], ['Río de la Plata', 1, [[-57, -35]]], ['Svalbard', 1, [[17, 78]]],
+  ['Canadian Arctic islands', 1.5, [[-100, 73], [-85, 70], [-110, 75], [-80, 75], [-90, 79]]], ['Tierra del Fuego', 1.5, [[-69, -54]]], ['Península Valdés and the Patagonian gulfs', 1.5, [[-64, -42.5], [-65, -45.5], [-67.5, -49]]], ['Strait of Magellan', 1.5, [[-71, -53.5]]], ['Chiloé', 1, [[-73.9, -42.6]]], ['Taitao peninsula', 1, [[-75, -46.6]]], ['Río de la Plata', 1, [[-57, -35]]], ['Svalbard', 1, [[17, 78]]],
   ['Newfoundland', 1, [[-56, 49]]], ['Nova Scotia', 1, [[-63, 45]]], ['Vancouver Island', 1, [[-125.5, 49.6]]], ['Antarctic Peninsula', 1.5, [[-63, -66], [-60, -63]]], ['Kola peninsula', 1, [[36, 67.5]]],
   ['Tibetan Plateau and the Himalaya', 2, [[88, 31], [80, 34], [95, 31], [86, 28], [76, 36]]], ['Alps', 1.5, [[10, 46.5], [7, 45.8]]], ['Gulf of Guinea', 1.5, [[3, 4], [8, 4.3], [-2, 5], [9.5, 2]]],
   ['East African rift lakes', 1.5, [[30, -6], [34.5, -11], [29.5, -1]]], ['Lake Victoria', 1.5, [[33, -1]]], ['Bering Strait and Chukotka', 1.5, [[-169, 65.8], [-172, 64.5], [-175, 67]]], ['Gulf of Finland', 1, [[26, 60]]], ['Adriatic Sea', 1.5, [[15, 43]]], ['Aegean Sea', 1.5, [[25, 38.5]]], ['Gulf of California', 1.5, [[-111, 28]]], ['Lake Baikal', 1.5, [[108, 53.5]]],
@@ -173,6 +178,7 @@ function targetsFor(frame: FrameName, stride: number, cap = 120, regionXf?: Xf):
       const v = probe[j * f.w + i];
       if (v === 0 || Math.abs(v) <= 1) continue;
       if (frame === 'northshore') { const [lo, la] = f.toLL(f.x0 + i * f.dx, f.y0 + j * f.dy); if (!inNs(lo, la)) continue; }
+      if (frame === 'dzego' && regionXf) { const [lo, la] = f.toLL(f.x0 + i * f.dx, f.y0 + j * f.dy); if (dzOut(lo, la) <= 0) continue; }
       if (frame === 'bay') { const [lo, la] = f.toLL(f.x0 + i * f.dx, f.y0 + j * f.dy), [bx, by] = llToFrame('northshore', lo, la); if (bx < BAY_BOX[0] || bx > BAY_BOX[2] || by < BAY_BOX[1] || by > BAY_BOX[3]) continue; }
       cells.push([i, j, v > 0 ? 'land' : 'sea']);
     }
@@ -231,6 +237,17 @@ function targetsFor(frame: FrameName, stride: number, cap = 120, regionXf?: Xf):
     const gl = groups.push({ name: 'the battle map\'s land is hills, not high mountains (below 1,100 m)', weight: 2, kind: 'frac', provenance: 'book', cat: 'battle' }) - 1;
     const lb = regionPinsV5().find((p) => p.kind === 'land-box');
     if (lb && 'poly' in lb) for (let j = 0; j < f.h; j += stride) for (let i = 0; i < f.w; i += stride) { const x = f.x0 + i * f.dx, y = f.y0 + j * f.dy; if (pointInPoly(x, y, lb.poly)) add(gl, x, y, 'hills'); }
+  }
+  if (frame === 'dzego' && regionXf) {
+    // Dzego's base: around the core, the same kind of ground (land, shelf, slope or deep sea) as the core's real source
+    const gb = groups.push({ name: 'the base matches Dzego\'s core around the blend', weight: 1, kind: 'frac', provenance: 'placed by us', cat: 'blend' }) - 1;
+    const eg: Grid16 = { data: etopo(), w: ETOPO.w, h: ETOPO.h, res: ETOPO.res };
+    for (let j = 0; j < f.h; j += stride) for (let i = 0; i < f.w; i += stride) {
+      const x = f.x0 + i * f.dx, y = f.y0 + j * f.dy, [lo, la] = f.toLL(x, y), out = dzOut(lo, la);
+      if (out <= -40 || out > DZ_FEATHER + 40) continue;
+      const [sx, sy] = toSource('dzego', regionXf, lo, la);
+      add(gb, x, y, 'match', sampleGrid(eg, sx, sy));
+    }
   }
   if (frame === 'northshore' && regionXf) {
     // the blend ring: up to 250 km outside the patch, where it meets the chosen region window; the patch should have
@@ -295,7 +312,7 @@ function scoreXf(frame: FrameName, xf: Xf, T: { targets: Target[]; groups: Group
   // fewer than 80% of them on real land is cut to 40%
   // Northshore: the battle map (with the open water east of the peninsula) and, when a region is chosen, how well the
   // patch meets it around the blend
-  const share = frame === 'bay' ? { battle: 1, places: 0, sea: 0, land: 0, relief: 0, blend: 0 } : frame === 'northshore' ? { battle: 0.6, places: 0, sea: 0, land: 0, relief: 0, blend: 0.4 } : { battle: 0.05, places: 0.35, sea: 0.15, land: 0.15, relief: 0.3, blend: 0 };
+  const share = frame === 'dzego' && cw.blend ? { battle: 0, places: 0.1, sea: 0.1, land: 0.1, relief: 0.3, blend: 0.4 } : frame === 'bay' ? { battle: 1, places: 0, sea: 0, land: 0, relief: 0, blend: 0 } : frame === 'northshore' ? { battle: 0.6, places: 0, sea: 0, land: 0, relief: 0, blend: 0.4 } : { battle: 0.05, places: 0.35, sea: 0.15, land: 0.15, relief: 0.3, blend: 0 };
   let fit = 0, used = 0;
   // the battle map counts its seas and its land half and half, whatever the number of pins on each
   const hg = T.groups.findIndex((G) => G.name.startsWith('the battle map\'s land is hills'));
@@ -340,6 +357,26 @@ function shownTwice(nx: Xf, rx: Xf): number {
     if (Math.max(NS_CORE[0] - fx, fx - NS_CORE[2], NS_CORE[1] - fy, fy - NS_CORE[3], 0) * 2.6 > 250) dup++;
   }
   return dup / n;
+}
+/** Dzego's base: the share of its frame (outside the core) whose real source another part of the map already shows:
+ * the core's own source with its blend, the region window, the Northshore patch, the gulf. */
+let dzRefs: { core: Xf; region: Xf; ns: Xf; bay: Xf | null } | null = null;
+function dzShownElsewhere(bx: Xf): number {
+  if (!dzRefs) return 0;
+  let n = 0, dup = 0;
+  for (let la = 15.5; la < 31; la += 0.75) for (let lo = 138.5; lo < 160; lo += 0.75) {
+    if (dzOut(lo, la) <= 0) continue;
+    const [slo, sla] = toSource('dzego', bx, lo, la);
+    n++;
+    const [clo, cla] = toBook('dzego', dzRefs.core, slo, sla);
+    if (clo >= 130 && clo <= 168 && dzOut(clo, cla) < DZ_FEATHER + 100) { dup++; continue; }
+    const [rlo, rla] = toBook('region', dzRefs.region, slo, sla);
+    if (rlo >= -8 && rlo <= 84 && rla >= 36 && rla <= 66) { dup++; continue; }
+    const [nlo, nla] = toBook('northshore', dzRefs.ns, slo, sla), [fx, fy] = llToFrame('northshore', nlo, nla);
+    if (Math.max(NS_CORE[0] - fx, fx - NS_CORE[2], NS_CORE[1] - fy, fy - NS_CORE[3], 0) * 2.6 < 250) { dup++; continue; }
+    if (dzRefs.bay) { const [blo, bla] = toBook('bay', dzRefs.bay, slo, sla), [gx, gy] = llToFrame('northshore', blo, bla); if (gx >= BAY_BOX[0] - 40 && gx <= BAY_BOX[2] + 40 && gy >= BAY_BOX[1] - 40 && gy <= BAY_BOX[3] + 40) dup++; }
+  }
+  return n ? dup / n : 0;
 }
 type Cand = { xf: Xf; score: number; fit: number; famous: string[]; parts: Record<string, number> };
 function search(frame: FrameName, top: number, regionXf?: Xf): Cand[] {
@@ -388,6 +425,7 @@ function search(frame: FrameName, top: number, regionXf?: Xf): Cand[] {
     if (frame === 'northshore' && regionXf && shownTwice(c.xf, regionXf) > 0.02) continue;
     if (frame === 'bay' && bayShownElsewhere(c.xf) > 0.02) continue;
     if (frame === 'bay' && c.fit < 0.6) continue;
+    if (frame === 'dzego' && dzRefs && dzShownElsewhere(c.xf) > 0.02) continue;
     picked.push(c);
     if (picked.length >= Math.max(top, 30)) break;
   }
@@ -487,7 +525,7 @@ function longestStraight(lines: Pt[][], minKm: number, tol: number): { km: numbe
   }
   return { km: best, at, runs: runs.sort((a, b) => b.km - a.km) };
 }
-function seamChecks(fr: FrameRun, W: Float32Array, real0?: Float32Array, touched?: Uint8Array | null) {
+function seamChecks(fr: FrameRun, W: Float32Array, real0?: Float32Array, touched?: Uint8Array | null, F: Frame = REGION) {
   const g = fr.g, z = fr.z, checks: { check: string; ok: boolean; got: string }[] = [], numbers: Record<string, unknown> = {};
   const tol = 0.25 * g.dx; // km: a quarter of a cell
   for (const level of [0, -50, -200, -1000]) {
@@ -510,13 +548,13 @@ function seamChecks(fr: FrameRun, W: Float32Array, real0?: Float32Array, touched
       function angDiff(a: { from: Pt; to: Pt }, b: { from: Pt; to: Pt }) { const o = (q: { from: Pt; to: Pt }) => ((Math.atan2(q.to[1] - q.from[1], q.to[0] - q.from[0]) % Math.PI) + Math.PI) % Math.PI; const d = Math.abs(o(a) - o(b)); return Math.min(d, Math.PI - d); }
       const seam = r.runs.filter((x) => touches(x) && !inReal(x));
       checks.push({ check: `Seam: no straight run longer than 80 km in ${name} where the pipeline moved it (half the run or more)`, ok: !seam.length, got: seam.length ? `${seam.length} runs, longest ${Math.round(seam[0].km)} km` : 'none' });
-      const ll2 = (q: Pt) => { const y = q[1] / g.kmy, x = q[0] / g.kmx(0, y); return REGION.toLL(x, y).map((v) => Number(v.toFixed(1))); };
+      const ll2 = (q: Pt) => { const y = q[1] / g.kmy, x = q[0] / g.kmx(0, y); return F.toLL(x, y).map((v) => Number(v.toFixed(1))); };
       numbers[`seam_runs_over_80km_${level === 0 ? 'coast' : -level + 'm'}`] = seam.map((x) => ({ km: Math.round(x.km), from_lon_lat: ll2(x.from), to_lon_lat: ll2(x.to) }));
     }
-    const where = r.at ? (() => { const y = r.at[1] / g.kmy, x = r.at[0] / g.kmx(0, y); const [lo, la] = REGION.toLL(x, y); return ` (starting near ${lo.toFixed(1)}°, ${la.toFixed(1)}° in the book's frame)`; })() : '';
+    const where = r.at ? (() => { const y = r.at[1] / g.kmy, x = r.at[0] / g.kmx(0, y); const [lo, la] = F.toLL(x, y); return ` (starting near ${lo.toFixed(1)}°, ${la.toFixed(1)}° in the book's frame)`; })() : '';
     checks.push({ check: `Anywhere: no straight run longer than 80 km in ${name}`, ok: r.km <= 80, got: `longest straight run ${r.km.toFixed(0)} km${r.km > 80 ? where : ''}` });
     numbers[`longest_straight_km_${level === 0 ? 'coast' : -level + 'm'}`] = Number(r.km.toFixed(1));
-    const ll = (p: Pt) => { const y = p[1] / g.kmy, x = p[0] / g.kmx(0, y); return REGION.toLL(x, y).map((v) => Number(v.toFixed(1))); };
+    const ll = (p: Pt) => { const y = p[1] / g.kmy, x = p[0] / g.kmx(0, y); return F.toLL(x, y).map((v) => Number(v.toFixed(1))); };
     numbers[`straight_runs_over_80km_${level === 0 ? 'coast' : -level + 'm'}`] = r.runs.map((x) => ({ km: Math.round(x.km), from_lon_lat: ll(x.from), to_lon_lat: ll(x.to) }));
   }
   // right-angle corners: both legs straight for 20 km or more, meeting at 70–110°, in the coastline and the contours;
@@ -544,7 +582,7 @@ function seamChecks(fr: FrameRun, W: Float32Array, real0?: Float32Array, touched
       }
     }
     const moved = real0 ? (() => { const ch = new Uint8Array(z.length); for (let k = 0; k < z.length; k++) if ((touched ? touched[k] && (real0[k] >= level) !== (z[k] >= level) : (real0[k] >= level) !== (z[k] >= level)) || (W[k] > 0.02 && W[k] < 0.98)) ch[k] = 1; return corners.filter((c) => { const y = c[1] / g.kmy, x = c[0] / g.kmx(0, y), i = Math.round((x - g.x0) / g.dx), j = Math.round((y - g.y0) / g.dy); for (let b = -3; b <= 3; b++) for (let a2 = -3; a2 <= 3; a2++) { const ii = i + a2, jj = j + b; if (ii >= 0 && jj >= 0 && ii < g.w && jj < g.h && ch[jj * g.w + ii]) return true; } return false; }); })() : corners;
-    const ll3 = (q: Pt) => { const y = q[1] / g.kmy, x = q[0] / g.kmx(0, y); return REGION.toLL(x, y).map((v) => Number(v.toFixed(1))); };
+    const ll3 = (q: Pt) => { const y = q[1] / g.kmy, x = q[0] / g.kmx(0, y); return F.toLL(x, y).map((v) => Number(v.toFixed(1))); };
     checks.push({ check: `Seam: no right-angle corner (both legs straight for 20 km) in ${name} where the pipeline moved it`, ok: moved.length === 0, got: `${moved.length} (${corners.length} anywhere)` });
     numbers[`corners_${level === 0 ? 'coast' : -level + 'm'}`] = { moved: moved.map(ll3), anywhere: corners.length };
   }
@@ -563,16 +601,17 @@ function seamChecks(fr: FrameRun, W: Float32Array, real0?: Float32Array, touched
         if (hi - lo < (land ? 20 : 5)) flat[k] = 1;
       }
     }
-    // flat cells in clusters of 20 or more (about 200 km²)
+    // flat cells in clusters of about 200 km² or more
     const seen = new Uint8Array(z.length), clusters: { cells: number; at: number[] }[] = [];
     for (let s0 = 0; s0 < z.length; s0++) {
       if (!flat[s0] || seen[s0]) continue;
       const q = [s0]; seen[s0] = 1;
       for (let qi = 0; qi < q.length; qi++) { const k = q[qi], i = k % g.w, j = (k / g.w) | 0; for (const [a, b] of [[1, 0], [-1, 0], [0, 1], [0, -1]]) { const n = (j + b) * g.w + i + a; if (n >= 0 && n < z.length && flat[n] && !seen[n]) { seen[n] = 1; q.push(n); } } }
-      if (q.length >= 20) { const [x, y] = cxy(g, q[0]); clusters.push({ cells: q.length, at: REGION.toLL(x, y).map((v) => Number(v.toFixed(1))) }); }
+      // about 200 km² (20 region cells), whatever the cell size
+      if (q.length * g.dx * g.dx >= 195) { const [x, y] = cxy(g, q[0]); clusters.push({ cells: q.length, at: F.toLL(x, y).map((v) => Number(v.toFixed(1))) }); }
     }
     checks.push({ check: 'Seam: no needles (land or sea one cell, about 3 km, wide) where the pipeline changed the terrain', ok: needleMoved === 0, got: `${needleMoved} cells (${needleAny} anywhere, mostly real coast)` });
-    checks.push({ check: 'Seam: no flat stamped areas (moved by more than 30 m, almost no relief, 200 km² or more)', ok: clusters.length === 0, got: clusters.length ? `${clusters.length} areas, largest ${Math.max(...clusters.map((c) => c.cells)) * Math.round(g.dx * g.dx)} km²` : 'none' });
+    checks.push({ check: 'Seam: no flat stamped areas (moved by more than 30 m, almost no relief, 200 km² or more)', ok: clusters.length === 0, got: clusters.length ? `${clusters.length} areas, largest ${Math.round(Math.max(...clusters.map((c) => c.cells)) * g.dx * g.dx)} km²` : 'none' });
     numbers.needle_cells = { moved: needleMoved, anywhere: needleAny };
     numbers.flat_stamped_areas = clusters.sort((a, b) => b.cells - a.cells);
     writeFileSync('/tmp/geo/flat-areas.json', JSON.stringify(clusters.slice(0, 40)));
@@ -586,7 +625,7 @@ function seamChecks(fr: FrameRun, W: Float32Array, real0?: Float32Array, touched
       const band = W[k] > 0.02 && W[k] < 0.98;
       if (band !== inBand) continue;
       if (!inBand && W[k] >= 0.98) continue; // the patch itself is not the comparison
-      if (!inBand) { const [lo, la] = REGION.toLL(cxy(g, k)[0], cxy(g, k)[1]); if (lo < nsBox[0] - 15 || lo > nsBox[2] + 15 || la < nsBox[1] - 8 || la > nsBox[3] + 8) continue; }
+      if (!inBand) { const [lo, la] = F.toLL(cxy(g, k)[0], cxy(g, k)[1]); if (F === REGION ? lo < nsBox[0] - 15 || lo > nsBox[2] + 15 || la < nsBox[1] - 8 || la > nsBox[3] + 8 : dzOut(lo, la) > DZ_FEATHER + 300) continue; }
       for (const n of [k + 1, k + g.w]) if (z[n] < 0) out.push(Math.abs(z[n] - z[k]));
     }
     out.sort((a, b) => a - b);
@@ -595,7 +634,7 @@ function seamChecks(fr: FrameRun, W: Float32Array, real0?: Float32Array, touched
   const inB = steps(true), outB = steps(false);
   numbers.blend_band_depth_step_m = { p99: Math.round(inB.p99), max: Math.round(inB.max), pairs: inB.n };
   numbers.real_seabed_around_depth_step_m = { p99: Math.round(outB.p99), max: Math.round(outB.max), pairs: outB.n };
-  checks.push({ check: 'No sharp depth step across the Northshore blend (cell-to-cell steps within the real seabed\'s own range)', ok: inB.p99 <= 1.5 * outB.p99 && inB.max <= outB.max, got: `blend band: 99th percentile ${inB.p99.toFixed(0)} m, largest ${inB.max.toFixed(0)} m; real seabed around it: ${outB.p99.toFixed(0)} m, ${outB.max.toFixed(0)} m` });
+  checks.push({ check: (F === REGION ? 'No sharp depth step across the Northshore blend' : 'No sharp depth step across Dzego\'s blend') + ' (cell-to-cell steps within the real seabed\'s own range)', ok: inB.p99 <= 1.5 * outB.p99 && inB.max <= outB.max, got: `blend band: 99th percentile ${inB.p99.toFixed(0)} m, largest ${inB.max.toFixed(0)} m; real seabed around it: ${outB.p99.toFixed(0)} m, ${outB.max.toFixed(0)} m` });
   return { checks, numbers };
 }
 function pafogaiLakes(fr: FrameRun): number {
@@ -1341,8 +1380,41 @@ function blendNorthshore(zr: Float32Array, zp: Float32Array | null, core: [numbe
   return W;
 }
 
-export { applyAll as applyAllExport };
+/** Dzego: the core's real source (around both cities) blended into the base's over about DZ_FEATHER km, its edge wandering. */
+function blendDzego(zb: Float32Array, zp: Float32Array): Float32Array {
+  const nz = new Noise2(Number(args.dzseed ?? 5151)), W = new Float32Array(zb.length);
+  for (let k = 0; k < zb.length; k++) {
+    const [x, y] = cxy(DZEGO, k), [lo, la] = DZEGO.toLL(x, y);
+    const w = 1 - smooth((dzOut(lo, la) + 110 * nz.fbm(x / 90, y / 90, 4)) / DZ_FEATHER);
+    W[k] = Math.max(0, Math.min(1, w));
+    if (W[k] > 0) zb[k] = W[k] * zp[k] + (1 - W[k]) * zb[k];
+  }
+  return W;
+}
+export { applyAll as applyAllExport, blendDzego, dzOut, DZ_CORE, DZ_FEATHER, contourLines, longestStraight };
 export { search, scoreXf, targetsFor, realFrame, finishReal, coarsen, findHills, placeCity, cityHeights, srtmTile, tileName, regionPinsV5 };
+
+// ---- Dzego: the core around both cities from its real source (search-dzego.json, --dzego=N), and since the owner's
+// review of 2026-10-12, the rest of the frame from a different real land mass (search-dzego-base.json, --dzbase=N)
+type SearchCand = { rank: number; source_centre_lon_lat: XY; rotation_deg: number; mirrored: boolean; score: number; fit: number; famous_coastlines_in_frame: string[] };
+function buildDzego(sd: SearchCand[]) {
+  const xfOf = (c: SearchCand): Xf => ({ lon: c.source_centre_lon_lat[0], lat: c.source_centre_lon_lat[1], rot: c.rotation_deg, mirror: c.mirrored });
+  const dxf = xfOf(sd[Number(args.dzego ?? 1) - 1]);
+  const bases = existsSync(path.join(ROOT, REC, 'search-dzego-base.json')) ? JSON.parse(readFileSync(path.join(ROOT, REC, 'search-dzego-base.json'), 'utf8')).candidates as SearchCand[] : [];
+  const dbase = args.dzbase ? xfOf(bases[Number(args.dzbase) - 1]) : null;
+  const heights = () => { if (!dbase) return { z: realFrame('dzego', dxf), W: new Float32Array(DZEGO.w * DZEGO.h) }; const z = realFrame('dzego', dbase), W = blendDzego(z, realFrame('dzego', dxf)); return { z, W }; };
+  const dPinsAll = dzegoPins();
+  let h0 = heights(), real0 = Float32Array.from(h0.z);
+  let dzego = finishReal(DZEGO, h0.z, dPinsAll.filter((p) => p.kind !== 'river'), 51, 40000, 1000, [40, 50, 3, 500, 22], 3500, DZEGO.lat, DZEGO.toLL, DZEGO.render);
+  const [sl, sa] = LL(place(W, 'sadzu').at!), sadzu = DZEGO.fromLL(sl, sa);
+  let sadzuRiver = 'real drainage';
+  if (!dzego.hydro.rivers.some((rv) => rv.points.some((q) => kmDist(DZEGO, q, sadzu) < 12))) { h0 = heights(); real0 = Float32Array.from(h0.z); dzego = finishReal(DZEGO, h0.z, dPinsAll, 51, 40000, 1000, [40, 50, 3, 500, 22], 3500, DZEGO.lat, DZEGO.toLL, DZEGO.render); sadzuRiver = 'the book\'s pin, carved'; }
+  const dzSeam = dbase ? seamChecks(dzego, h0.W, real0, lastTouched, DZEGO) : null;
+  console.log('dzego built; Sadzu Du\'s river from', sadzuRiver, dbase ? `; base ${JSON.stringify(dbase)}` : '');
+  if (dzSeam) for (const x of dzSeam.checks) console.log(`  dzego ${x.ok ? 'ok  ' : 'FAIL'} ${x.check}: ${x.got}`);
+  if (dzSeam) for (const [k, v] of Object.entries(dzSeam.numbers)) if (k.startsWith('seam_runs') && (v as unknown[]).length) console.log(`  dzego ${k} ${JSON.stringify(v)}`);
+  return { dzego, dxf, dbase, sadzuRiver, dzSeam };
+}
 
 // ---- commands
 const isMain = /terrain-v5\.ts$/.test(process.argv[1] ?? '');
@@ -1379,11 +1451,16 @@ if (!isMain) {
     const R0 = JSON.parse(readFileSync(path.join(ROOT, REC, 'search-region.json'), 'utf8')).candidates[0], N0 = JSON.parse(readFileSync(path.join(ROOT, REC, 'search-northshore.json'), 'utf8')).candidates[Number(args.northshore ?? 1) - 1];
     bayRefs = { region: { lon: R0.source_centre_lon_lat[0], lat: R0.source_centre_lon_lat[1], rot: R0.rotation_deg, mirror: R0.mirrored }, ns: { lon: N0.source_centre_lon_lat[0], lat: N0.source_centre_lon_lat[1], rot: N0.rotation_deg, mirror: N0.mirrored } };
   }
-  const picked = search(frame, top, regionXf);
-  const file = path.join(ROOT, REC, `search-${frame}.json`);
+  // Dzego's base around a chosen core (--patch=N, a placement from search-dzego.json), written to search-dzego-base.json
+  const xfAt = (file: string, n: number): Xf => { const c = JSON.parse(readFileSync(path.join(ROOT, REC, file), 'utf8')).candidates[n - 1]; return { lon: c.source_centre_lon_lat[0], lat: c.source_centre_lon_lat[1], rot: c.rotation_deg, mirror: c.mirrored }; };
+  const patchXf = frame === 'dzego' && args.patch ? xfAt('search-dzego.json', Number(args.patch)) : undefined;
+  if (patchXf) dzRefs = { core: patchXf, region: xfAt('search-region.json', Number(args.region ?? 1)), ns: xfAt('search-northshore.json', Number(args.northshore ?? 6)), bay: xfAt('search-bay.json', Number(args.bay ?? 4)) };
+  const picked = search(frame, top, regionXf ?? patchXf);
+  const file = path.join(ROOT, REC, `search-${frame}${patchXf ? '-base' : ''}.json`);
   writeFileSync(file, JSON.stringify({
     made: new Date().toISOString(), code_version: codeVersion(), frame,
     method: 'Every source centre on a 1.5° grid (−58° to 76° latitude), every rotation in 15° steps, mirrored and not, at true scale; each placement scored by the weighted share of the book\'s constraints the real terrain already meets (each pin a group; book facts weigh twice what we placed), minus a penalty for famous coastlines in the frame. The best 1,500 are re-scored on the 1-arc-minute grid with denser targets and nudged by half a degree; the list keeps source centres at least 1,500 km apart.',
+    ...(patchXf ? { core: { note: `Dzego's base: the frame outside a core of ${DZ_CORE.r} km around ${DZ_CORE.lon}°E ${DZ_CORE.lat}°N (both cities), into which the core's real source is blended over about ${DZ_FEATHER} km. Scored as above outside the core, plus how well the base's ground (land, shelf, slope, deep sea) matches the core's source around the blend. Bases showing a source another part of the map shows are skipped.`, core_source: patchXf } } : {}),
     candidates: picked.map((c, n) => ({ rank: n + 1, score: Number(c.score.toFixed(4)), fit: Number(c.fit.toFixed(4)), source_centre_lon_lat: [Number(c.xf.lon.toFixed(3)), Number(c.xf.lat.toFixed(3))], rotation_deg: c.xf.rot, mirrored: c.xf.mirror, scale: 1, famous_coastlines_in_frame: c.famous, constraint_fit: c.parts })),
   }, null, 2) + '\n');
   for (const [n, c] of picked.entries()) console.log(`#${n + 1} score ${c.score.toFixed(3)} fit ${c.fit.toFixed(3)} centre ${c.xf.lon.toFixed(2)}, ${c.xf.lat.toFixed(2)} rot ${c.xf.rot} ${c.xf.mirror ? 'mirrored' : ''} famous: ${c.famous.join(', ') || 'none'}`);
@@ -1464,6 +1541,20 @@ if (!isMain) {
     console.log(`${kind} ${hill.lon.toFixed(3)}, ${hill.lat.toFixed(3)}: score ${r.fit.score.toFixed(2)} rot ${r.c.rot}${r.c.mirror ? ' mirrored' : ''} vscale ${r.c.vscale} hscale ${r.c.hscale}`, JSON.stringify(r.fit, (k, v) => (typeof v === 'number' ? Number(v.toFixed(2)) : v)), `${((Date.now() - t0) / 1000).toFixed(0)} s`);
   }
   writeFileSync(path.join(ROOT, REC, `city-${kind}.json`), JSON.stringify({ made: new Date().toISOString(), kind, results }, null, 2) + '\n');
+} else if (step === 'dzego') {
+  // Dzego alone, for comparing bases: npx tsx scripts/terrain-v5.ts dzego --dzbase=N (written to out/maps-v5/dzego-trial-N)
+  const sd = JSON.parse(readFileSync(path.join(ROOT, REC, 'search-dzego.json'), 'utf8')).candidates as SearchCand[];
+  const { dzego } = buildDzego(sd);
+  const dir = path.join(ROOT, OUT, `dzego-trial-${args.dzbase ?? 0}`);
+  const L2 = render(dzego, 4, 1), g = dzego.g;
+  for (const d of ['layers', 'data']) mkdirSync(path.join(dir, d), { recursive: true });
+  writeFileSync(path.join(dir, 'composite.png'), rgbPng(L2.composite));
+  writeFileSync(path.join(dir, 'layers/hillshade.png'), grey8Png(L2.w, L2.h, L2.hillshade));
+  writeFileSync(path.join(dir, 'data/height.png'), grey16Png(g.w, g.h, Uint16Array.from({ length: g.w * g.h }, (_, k) => { const j = g.h - 1 - Math.floor(k / g.w), i = k % g.w; return Math.max(0, Math.min(65535, Math.round(dzego.z[j * g.w + i] + 32768))); })));
+  writeFileSync(path.join(dir, 'data/biome.png'), grey8Png(g.w, g.h, Uint8Array.from({ length: g.w * g.h }, (_, k) => { const j = g.h - 1 - Math.floor(k / g.w), i = k % g.w; return dzego.clim.biome[j * g.w + i]; })));
+  writeFileSync(path.join(dir, 'data/rivers.json'), JSON.stringify({ rivers: dzego.hydro.rivers.map((rv) => ({ flow_km2: rv.flow_km2, points: rv.points.map((q) => dzego.toLL(q[0], q[1])) })) }));
+  writeFileSync(path.join(dir, 'data/meta.json'), JSON.stringify({ grid: { w: g.w, h: g.h, cell_km: g.dx } }));
+  console.log('wrote', dir);
 } else if (step === 'build') {
   const ranks = (args.candidates ?? '1,2,3,4,5').split(',').map(Number);
   const sr = JSON.parse(readFileSync(path.join(ROOT, REC, 'search-region.json'), 'utf8')).candidates as { rank: number; source_centre_lon_lat: XY; rotation_deg: number; mirrored: boolean; score: number; fit: number; famous_coastlines_in_frame: string[] }[];
@@ -1494,13 +1585,7 @@ if (!isMain) {
     return L2;
   };
   // Dzego: the best placement; Sadzu Du's river comes from the real drainage if there is one within 12 km, otherwise the book's pin is carved
-  const dxf = xfOf(sd[Number(args.dzego ?? 1) - 1]);
-  const dPinsAll = dzegoPins();
-  let dzego = finishReal(DZEGO, realFrame('dzego', dxf), dPinsAll.filter((p) => p.kind !== 'river'), 51, 40000, 1000, [40, 50, 3, 500, 22], 3500, DZEGO.lat, DZEGO.toLL, DZEGO.render);
-  const [sl, sa] = LL(place(W, 'sadzu').at!), sadzu = DZEGO.fromLL(sl, sa);
-  let sadzuRiver = 'real drainage';
-  if (!dzego.hydro.rivers.some((rv) => rv.points.some((q) => kmDist(DZEGO, q, sadzu) < 12))) { dzego = finishReal(DZEGO, realFrame('dzego', dxf), dPinsAll, 51, 40000, 1000, [40, 50, 3, 500, 22], 3500, DZEGO.lat, DZEGO.toLL, DZEGO.render); sadzuRiver = 'the book\'s pin, carved'; }
-  console.log('dzego built; Sadzu Du\'s river from', sadzuRiver);
+  const { dzego, dxf, dbase, sadzuRiver, dzSeam } = buildDzego(sd);
   // Meldan: a real lone hill; v4's invented mountain shape is dropped, the rest of its pins kept
   const mc = bestCity(cm, args.meldan);
   // Meldan: the 150 m smoothing on the city's plain (outside the mountain), feathered over 400 m; lighter elsewhere
@@ -1556,7 +1641,7 @@ if (!isMain) {
     const L2 = writeFrame(`candidate-${rank}/region`, region, 6, { dataset: 'ETOPO 2022', centre: c.source_centre_lon_lat, rotation_deg: c.rotation_deg, mirrored: c.mirrored, scale: 1 });
     sheet.push(downsample(L2.composite, 4));
   }
-  writeFrame('dzego', dzego, 4, { dataset: 'ETOPO 2022', centre: [dxf.lon, dxf.lat], rotation_deg: dxf.rot, mirrored: dxf.mirror, scale: 1 });
+  writeFrame('dzego', dzego, 4, { dataset: 'ETOPO 2022', centre: [dxf.lon, dxf.lat], rotation_deg: dxf.rot, mirrored: dxf.mirror, scale: 1, ...(dbase ? { core_km: DZ_CORE.r, core_centre_book: [DZ_CORE.lon, DZ_CORE.lat], blend_km: DZ_FEATHER, base: { centre: [dbase.lon, dbase.lat], rotation_deg: dbase.rot, mirrored: dbase.mirror, scale: 1, name: args.dzbasename ?? null } } : {}) });
   writeFrame('meldan', meldan, 4, { dataset: 'SRTM GL1 v003', placement: mc });
   writeFrame('pafogai-du', pafogai, 2.5, { dataset: 'SRTM GL1 v003', placement: pc });
   // the candidates on one sheet, two across, no source named
@@ -1574,7 +1659,7 @@ if (!isMain) {
     sources: JSON.parse(readFileSync(path.join(ROOT, REC, 'sources.json'), 'utf8')),
     region_candidates: ranks.map((rank) => { const c = sr[rank - 1]; return { rank, dataset: 'ETOPO 2022 v1, 60 arc-second surface elevation', source_centre_lon_lat: c.source_centre_lon_lat, source_box: sourceBox('region', xfOf(c)), rotation_deg: c.rotation_deg, mirrored: c.mirrored, scale: 1, search_score: c.score, constraint_fit: c.fit, famous_coastlines_in_frame: c.famous_coastlines_in_frame, tests: results[rank] }; }),
     northshore: { dataset: 'ETOPO 2022 v1, 60 arc-second surface elevation', note: 'the chapter 29 battle map\'s area (with the peninsula, Thaldur and Northglade\'s island) comes from its own real patch, feathered into each region candidate over about 220 km: no region-scale window matches the book\'s drawn coast there', source_centre_lon_lat: [nxf.lon, nxf.lat], source_box: sourceBox('northshore', nxf), rotation_deg: nxf.rot, mirrored: nxf.mirror, scale: 1 },
-    dzego: { dataset: 'ETOPO 2022 v1, 60 arc-second surface elevation', source_centre_lon_lat: [dxf.lon, dxf.lat], source_box: sourceBox('dzego', dxf), rotation_deg: dxf.rot, mirrored: dxf.mirror, scale: 1, sadzu_river: sadzuRiver },
+    dzego: { dataset: 'ETOPO 2022 v1, 60 arc-second surface elevation', source_centre_lon_lat: [dxf.lon, dxf.lat], source_box: sourceBox('dzego', dxf), rotation_deg: dxf.rot, mirrored: dxf.mirror, scale: 1, sadzu_river: sadzuRiver, ...(dbase ? { core: { note: `Since the owner's review of 2026-10-12 (southern Chile read as Chile zoomed out), this source shows only within ${DZ_CORE.r} km of ${DZ_CORE.lon}°E ${DZ_CORE.lat}°N, around both cities, blended over about ${DZ_FEATHER} km into the base below.`, radius_km: DZ_CORE.r, blend_km: DZ_FEATHER }, base: { source_centre_lon_lat: [dbase.lon, dbase.lat], source_box: sourceBox('dzego', dbase), rotation_deg: dbase.rot, mirrored: dbase.mirror, scale: 1, source_name: args.dzbasename ?? null }, seam_checks: dzSeam?.checks } : {}) },
     meldan: { dataset: 'SRTM GL1 v003 (1 arc-second)', hill_lon_lat: [Number(mc.lon.toFixed(5)), Number(mc.lat.toFixed(5))], rotation_deg: mc.rot, mirrored: mc.mirror, scale: mc.hscale, scale_note: 'real km per frame km', vertical_scale: mc.vscale, smoothing: 'a cross of five samples 30 m apart, then two box passes of about 150 m', note: 'v4\'s invented mountain shape is dropped; the hill is real' },
     'pafogai-du': { dataset: 'SRTM GL1 v003 (1 arc-second)', hill_lon_lat: [Number(pc.lon.toFixed(5)), Number(pc.lat.toFixed(5))], hill_placed_at_km: [pc.x0, pc.y0], rotation_deg: pc.rot, mirrored: pc.mirror, scale: pc.hscale, scale_note: 'real km per frame km', vertical_scale: pc.vscale, note: 'v4\'s invented massif is dropped; the grid, the path and the pyramid stay pinned' },
     book_test_changes: [

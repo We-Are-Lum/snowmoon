@@ -2,9 +2,9 @@
   "short_label": "AI map · by Snowmoon Party",
   "label": "Map made with AI-written code from real public elevation data, reshaped to fit the book. Sources in the recipe. Made by Snowmoon Party, not by the author. (Label accepted by the owner, 2026-10-12.) The heights are real, moved and possibly mirrored, then reshaped by code written by an AI model, Claude (the coding agent, a closed model); no image model. Every book fact is pinned.",
   "license": "Terrain for Snowmoon, the book by Vitalik Buterin, adapted from public-domain elevation data (see the recipe), 2026-10-12. GPL-3.0, like the book.",
-  "made": "2026-10-12T23:12:57.323Z",
+  "made": "2026-10-13T07:07:16.139Z",
   "code_version": {
-    "scripts/terrain-v5.ts": "d0dae40cf01d8666936dfb43c48db4ffbcc0ed34c4da050a64f8c0d6e4e1ad90",
+    "scripts/terrain-v5.ts": "0d9cfc85eb0fc9cb542abb368cb781c272d87f8579d9c7caf1c0a67347f2877e",
     "scripts/terrain-v4.ts": "cad633f0abec25621ff7feb6780d0c6d4eef6cc5c2d5867626d7f877e93d5e38",
     "scripts/lib/geotiff-lite.ts": "b439401048dbfe2c7c46b4dbce41979e1e7d13e4f33243919558844d019acdc0",
     "scripts/lib/terrain-core.ts": "5140c0a7e5d4357c97b4a54c000c9654c406dd6f127e249b028ee0b23b6a36d0",
@@ -175,7 +175,7 @@
           {
             "check": "Seam: no flat stamped areas (moved by more than 30 m, almost no relief, 200 km² or more)",
             "ok": false,
-            "got": "10 areas, largest 1830 km²"
+            "got": "10 areas, largest 1809 km²"
           },
           {
             "check": "No sharp depth step across the Northshore blend (cell-to-cell steps within the real seabed's own range)",
@@ -944,7 +944,7 @@
           "Seam: no straight run longer than 80 km in the 50 m depth contour where the pipeline moved it (half the run or more): 1 runs, longest 80 km",
           "Seam: no straight run longer than 80 km in the 200 m depth contour where the pipeline moved it (half the run or more): 4 runs, longest 123 km",
           "Seam: no needles (land or sea one cell, about 3 km, wide) where the pipeline changed the terrain: 183 cells (223 anywhere, mostly real coast)",
-          "Seam: no flat stamped areas (moved by more than 30 m, almost no relief, 200 km² or more): 10 areas, largest 1830 km²"
+          "Seam: no flat stamped areas (moved by more than 30 m, almost no relief, 200 km² or more): 10 areas, largest 1809 km²"
         ],
         "map_tests": "113 of 113 hold",
         "terrain_checks": [
@@ -1031,7 +1031,7 @@
           {
             "check": "Rivers run downhill to the sea or off the frame (Dzego)",
             "ok": true,
-            "got": "107 rivers, 0 climb; lakes 1421 cells"
+            "got": "124 rivers, 0 climb; lakes 1391 cells"
           },
           {
             "check": "Rivers run downhill to the sea or off the frame (Meldan)",
@@ -1096,7 +1096,7 @@
           {
             "check": "Dzego is hilly: mountain pyramids (c12-b30)",
             "ok": true,
-            "got": "61% of Dzego above 300 m"
+            "got": "86% of Dzego above 300 m"
           },
           {
             "check": "Sadzu Du has a small river by the town (c12-b31, c12-b107)",
@@ -1141,7 +1141,106 @@
     "rotation_deg": 150,
     "mirrored": true,
     "scale": 1,
-    "sadzu_river": "the book's pin, carved"
+    "sadzu_river": "real drainage",
+    "core": {
+      "note": "Since the owner's review of 2026-10-12 (southern Chile read as Chile zoomed out), this source shows only within 230 km of 148.8°E 23.4°N, around both cities, blended over about 200 km into the base below.",
+      "radius_km": 230,
+      "blend_km": 200
+    },
+    "base": {
+      "source_centre_lon_lat": [
+        29.11,
+        -29.5
+      ],
+      "source_box": {
+        "west": 17.74,
+        "south": -40.597,
+        "east": 41.835,
+        "north": -17.149,
+        "note": "the box around the frame's outline on the real globe (longitudes may wrap)"
+      },
+      "rotation_deg": 255,
+      "mirrored": false,
+      "scale": 1,
+      "source_name": "eastern South Africa and its neighbours: the coasts of the Eastern Cape (East London, Gqeberha) and southern Mozambique (Maputo), the highveld, Eswatini and south-eastern Botswana; Lesotho and Durban's coast fall under the Chilean core"
+    },
+    "seam_checks": [
+      {
+        "check": "Seam: no straight run longer than 80 km in the coastline where the pipeline moved it (half the run or more)",
+        "ok": true,
+        "got": "none"
+      },
+      {
+        "check": "Anywhere: no straight run longer than 80 km in the coastline",
+        "ok": false,
+        "got": "longest straight run 102 km (starting near 152.3°, 17.0° in the book's frame)"
+      },
+      {
+        "check": "Seam: no straight run longer than 80 km in the 50 m depth contour where the pipeline moved it (half the run or more)",
+        "ok": true,
+        "got": "none"
+      },
+      {
+        "check": "Anywhere: no straight run longer than 80 km in the 50 m depth contour",
+        "ok": false,
+        "got": "longest straight run 116 km (starting near 151.5°, 18.7° in the book's frame)"
+      },
+      {
+        "check": "Seam: no straight run longer than 80 km in the 200 m depth contour where the pipeline moved it (half the run or more)",
+        "ok": true,
+        "got": "none"
+      },
+      {
+        "check": "Anywhere: no straight run longer than 80 km in the 200 m depth contour",
+        "ok": false,
+        "got": "longest straight run 125 km (starting near 145.5°, 24.7° in the book's frame)"
+      },
+      {
+        "check": "Seam: no straight run longer than 80 km in the 1000 m depth contour where the pipeline moved it (half the run or more)",
+        "ok": true,
+        "got": "none"
+      },
+      {
+        "check": "Anywhere: no straight run longer than 80 km in the 1000 m depth contour",
+        "ok": true,
+        "got": "longest straight run 0 km"
+      },
+      {
+        "check": "Seam: no right-angle corner (both legs straight for 20 km) in the coastline where the pipeline moved it",
+        "ok": true,
+        "got": "0 (0 anywhere)"
+      },
+      {
+        "check": "Seam: no right-angle corner (both legs straight for 20 km) in the 50 m depth contour where the pipeline moved it",
+        "ok": true,
+        "got": "0 (0 anywhere)"
+      },
+      {
+        "check": "Seam: no right-angle corner (both legs straight for 20 km) in the 200 m depth contour where the pipeline moved it",
+        "ok": true,
+        "got": "0 (0 anywhere)"
+      },
+      {
+        "check": "Seam: no right-angle corner (both legs straight for 20 km) in the 1000 m depth contour where the pipeline moved it",
+        "ok": true,
+        "got": "0 (0 anywhere)"
+      },
+      {
+        "check": "Seam: no needles (land or sea one cell, about 3 km, wide) where the pipeline changed the terrain",
+        "ok": true,
+        "got": "0 cells (6 anywhere, mostly real coast)"
+      },
+      {
+        "check": "Seam: no flat stamped areas (moved by more than 30 m, almost no relief, 200 km² or more)",
+        "ok": true,
+        "got": "none"
+      },
+      {
+        "check": "No sharp depth step across Dzego's blend (cell-to-cell steps within the real seabed's own range)",
+        "ok": true,
+        "got": "blend band: 99th percentile 134 m, largest 436 m; real seabed around it: 106 m, 579 m"
+      }
+    ]
   },
   "meldan": {
     "dataset": "SRTM GL1 v003 (1 arc-second)",
@@ -1805,15 +1904,6 @@
     },
     {
       "frame": "dzego",
-      "kind": "river",
-      "why": "Sadzu Du: a small river between the town and the hall's pyramid (Design's cue, c12-b31, c12-b107); its course is ours",
-      "provenance": "book",
-      "lines": [
-        "wg-348"
-      ]
-    },
-    {
-      "frame": "dzego",
       "kind": "shape",
       "why": "The mountain the pyramid south of Pafogai Du was cut from",
       "provenance": "book",
@@ -1915,16 +2005,16 @@
       "out/maps-v5/candidate-1/region/data/biome.png": "7d5515825fff81dc15e4e315efc32fcb9dfc53893f47bebaf8c6443456ddc569",
       "out/maps-v5/candidate-1/region/data/rivers.json": "a05818f59b0fb726d3b68f7e0485b4094673270c12f1da45db14d75f210be5c9",
       "out/maps-v5/candidate-1/region/data/meta.json": "2e387d43ede4bc2ee264ca6484ba931275c62a86c0750fbe80a92d686fb3a8d3",
-      "out/maps-v5/dzego/composite.png": "695f1822102a581701a612aa3ee9e4f440ff7ebeb305b8279123364f9bd0acb1",
-      "out/maps-v5/dzego/layers/hillshade.png": "57697fa6c205e1fb3ca61adedd1113c8e0ebf457c1935028885e4b1db19af7d6",
-      "out/maps-v5/dzego/layers/tint.png": "1c38fe2229fe08cc01bd2e51ebca2a7fd573b4ad0bb11f23729d6fccb40ef861",
-      "out/maps-v5/dzego/layers/water.png": "546701c94bac2af823cef0ddb7e101c014c3e55570ade9e1191de20b757e91d6",
-      "out/maps-v5/dzego/layers/rivers.png": "1f221c9fd59b1289694bc22874d8ee3765fbab36d4bd1c8c6011b83014b757df",
-      "out/maps-v5/dzego/layers/forest.png": "9f6435b03106f18a41e889856081cbb4a9fc90e6927145bb2da58986baa87449",
-      "out/maps-v5/dzego/data/height.png": "fb4c0502ad8e769c7694ff202fb252df19eddec5bb2dc15a87ee690dc2c32ab6",
-      "out/maps-v5/dzego/data/biome.png": "06a2b31476791f276e76a8942ac99e1ecff8310ebbaf9660ca5e229199cc5edd",
-      "out/maps-v5/dzego/data/rivers.json": "9753ee77b9cb6e4f72bfcccd1ee562db12f36889429a4a5b5614c21918b99d26",
-      "out/maps-v5/dzego/data/meta.json": "ac5818a43696ff38f31d333c6971e04225742644199203ab1eccffe532dea99f",
+      "out/maps-v5/dzego/composite.png": "8dd9243ed28cb47aeea4f18c377813756ee963791eb7db74cd536462b309941f",
+      "out/maps-v5/dzego/layers/hillshade.png": "d2557beafe4bce2f34e7386e819447807b3c0384dfa4c871713bf51e3bfd27e5",
+      "out/maps-v5/dzego/layers/tint.png": "9bc28b0895af230269614338ef18405b6c3fbe0605717dc3be642d16b4741ac1",
+      "out/maps-v5/dzego/layers/water.png": "691a680f33b2c948b0e666bdfd5325cc9d53fa17b6639e04e16f2c30487d9867",
+      "out/maps-v5/dzego/layers/rivers.png": "263810293404e9f3a9a7864aa596b8509d9973922b74ac78d86b6e45eddb4aaa",
+      "out/maps-v5/dzego/layers/forest.png": "df3cab57fa38d39546b7774245b9213a5952345c858392f70ffca2e1d4ab78fc",
+      "out/maps-v5/dzego/data/height.png": "960a079952c40b4c0359fd6cd47162d2f9a438979bcddb203f0aa332d99ab487",
+      "out/maps-v5/dzego/data/biome.png": "df6fb36a161fd41e84bff0a5b2ffa2df816852765b0bf2d7b294095da3ab0eb3",
+      "out/maps-v5/dzego/data/rivers.json": "e103cca9923e2743fc6aaf3c3c900a06b7bb5a045dc96a6171b0cf4f8bd74a8c",
+      "out/maps-v5/dzego/data/meta.json": "8f0968cfc336066c63840a20ef6ae7a70b6f7708a63d1ef43ec2cc762ef3474f",
       "out/maps-v5/meldan/composite.png": "716b053882fb477d4d7beb590f42683f97b3deeca22172bfadbdd0bf25d6c531",
       "out/maps-v5/meldan/layers/hillshade.png": "5da7ec0418f0ad735bf25b4ece4f071fb5c1fc3ec9e106b385abfff88565c277",
       "out/maps-v5/meldan/layers/tint.png": "e80872543b2bf851f5168e81b568d0a329534adf333e071accc44d7364ee6b2b",

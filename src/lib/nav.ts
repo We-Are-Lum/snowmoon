@@ -26,6 +26,8 @@ export function navItems(last: number, adaptations: number): NavItem[] {
         { key: 'listen', label: 'Listen', href: `/chapter/${last}?view=listen` },
         // Opened from the reader, the link carries the reading place (?from=c3-b42) for "Back" (app-shell.tsx).
         { key: 'glossary', label: 'Glossary', href: '/glossary' },
+        // The world map (src/app/maps): one possible layout, AI-made from real elevation data.
+        { key: 'maps', label: 'Maps', href: '/maps' },
       ],
     },
     { key: 'assistant', label: 'Assistant', href: '/assistant' },

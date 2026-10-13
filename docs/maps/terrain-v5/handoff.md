@@ -14,7 +14,7 @@ Every height comes from public-domain elevation data (`sources.json`), carried b
 | Northshore (the battle map's area) | The coast of southern Tanzania, around Lindi, centred 41.36°E 9.5°S | 135°, yes |
 | The inner sea (the battle map's southern sea) | The head of the Shelikhov Gulf, northern Sea of Okhotsk, centred 157.84°E 59°N | 90°, yes |
 | Thaldur | Samar and Leyte, Philippines, which the 1–2 arc-minute grids join across the San Juanico Strait (about 2 km wide). Samar alone is about 13,400 km², Leyte about 7,400 km². | 90°, yes |
-| Dzego | The fjord coast of southern Chile, centred 72.75°W 45°S | 150°, yes |
+| Dzego | Its core around both cities: the fjord coast of southern Chile, centred 72.75°W 45°S. The rest: eastern South Africa, centred 29.11°E 29.5°S (since 2026-10-13) | 150°, yes; the rest 255°, no |
 | Meldan | A lone hill at 131.69°E 47.04°N (SRTM), scaled 1.75× across and 1.2× in height | 225°, yes |
 | Pafogai Du | A valley floor beside a 490 m massif at 121.93°W 49.21°N (SRTM) | 135°, no |
 
@@ -75,3 +75,25 @@ The owner reviewed the city previews; these are display and city-frame fixes onl
 - **City specks:** specks of ground just below sea level are lifted to 1 m.
 - **Region:** forest pins are feathered into the climate's own biome with lobed, patchy edges, so Meldan's woods are no longer a disc. The long east–west forest edge south of Northshore is the climate's boreal/temperate line, which follows latitude, not a pin; it is unchanged.
 - **Tests:** still 113/113 and 31/31; the lake and blend checks pass. Parliament is now 26 m (25 to 60 m required).
+
+## Dzego re-based, and the styled world map (2026-10-13, after Design's "World Map Styled")
+
+The owner's notes on Design's render (2026-10-12): southern Chile still read as Chile zoomed out (the coast "coming to a point plus the hook bay on the opposite coast"); "it all looks too natural", so towns and roads; and the intense river.
+
+**Dzego, re-based.** Chile now shows only as a core of 230 km around both cities (centred 148.8°E 23.4°N in the book's frame), blended over about 200 km into a different real land mass:
+- **The base:** eastern South Africa and its neighbours, centred 29.11°E 29.5°S, turned 255°, not mirrored. What shows: the coasts of the Eastern Cape (East London, Gqeberha) and southern Mozambique (Maputo), the highveld, Eswatini and south-eastern Botswana. Lesotho and Durban's coast fall under the Chilean core. Search: `search-dzego-base.json`, rank 2. It scored within 0.002 of rank 1 (north-east Brazil), and was chosen by eye: its coast curves into a broad bay, and a high plateau stands behind the core. Rank 5's coast (south-east Brazil) carries the Lagoa dos Patos, which some would recognise.
+- **How the base is chosen:** the search scores how well the base's ground (land, shelf, slope or deep sea) matches the core's source around the blend. It skips bases whose source another part of the map already shows.
+- **Famous coasts:** Patagonia's landmarks are now in the famous-coast list: Península Valdés and the gulfs, the Strait of Magellan, Chiloé and the Taitao peninsula. None is in the frame.
+- **Dzego's seam checks** all pass: no straight runs, corners, needles or flat stamped areas where the pipeline moved the terrain, and no sharp depth step across the blend. The flat-area check now measures area (about 200 km²) rather than counting cells, since Dzego's cells are smaller than the region's.
+- **Sadzu Du's river** now comes from the real drainage, not a carved pin.
+
+**The styled world map** (`/maps` on this branch; `scripts/maps-style.ts` bakes `public/maps/v5/`). It is drawn from the frozen layers; no shape moves.
+- **Land:** Design's palette and hillshade. Biome edges are blended and gently warped, not 3 km steps.
+- **Sea:** coloured by real depth, from a pale shelf to slate.
+- **The coast** is drawn from a land–sea field, so it is smooth at any zoom, and inland cells just below sea level are no longer drawn as coast.
+- **Rivers:** drawn from `rivers.json`, their width growing with the log of the catchment and capped. The intense river is the region's largest, draining about 3.55 million km² of real West and Central Africa (in effect the Congo), turned and mirrored. It is now a strong line, not a band.
+- **Towns and roads:** texture, invented by the same code and unnamed, so not from the book. They are placed on suitable ground: low, gentle slopes, by rivers and coasts, not on ice, tundra or alpine ground. They are joined by least-cost routes over the real relief, as a spanning tree plus a secondary network between the larger towns. The main roads between the United Cities follow the book's links (chapter 5's figure); their courses are ours. The railway from Meldan to Eldil and a railway between Pafogai Du and Sadzu Du are ours. The About panel says all this.
+- **Places:** set from the map's own frames (`world-view.json`), not calibrated by eye (Design's note 8).
+- **Spoilers:** as the glossary does it, the furthest chapter opened on this device limits what shows.
+
+**Found while building it, not fixed:** Arturia and Hapton (both placed by us) sit on small round pinned islets in open sea, and Imber on a round lobe of the coast. The "city on land" pins lifted a disc of land under each. Since their positions are ours, moving them onto the real coast would remove the islets; that would change `world.json` and its tests, so it waits for the owner.
