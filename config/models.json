@@ -272,15 +272,16 @@
         "on": "2026-10-13",
         "source": "https://huggingface.co/ResembleAI/chatterbox"
       },
-      "notes": "Speech-to-speech: a person's performance spoken in a voice sheet's voice. Part of the Chatterbox release ('Easy voice conversion script'); outputs carry the Perth watermark. The performer must have signed the voice consent first.",
-      "runs_on": "hosted",
+      "notes": "Speech-to-speech: a person's performance spoken in a voice sheet's voice. Part of the Chatterbox release ('Easy voice conversion script'); outputs carry the Perth watermark. The performer agrees to own-voice-v1 first. Performed takes are converted locally (chatterbox-tts, MIT, in .venv-voice) so a raw take never leaves the performer's machine; the hosted endpoint is used for a take only if its performer agrees (owner, 2026-10-13). Raw takes are never published; the recipe records their sha256.",
+      "runs_on": "local-queue",
       "hosted": {
         "host": "fal.ai",
         "endpoints": {
           "fal-ai/chatterbox/speech-to-speech": 0.015
         },
         "price_unit": "USD per minute of audio",
-        "price_seen": "2026-10-13"
+        "price_seen": "2026-10-13",
+        "note": "Not for performed takes unless the performer agrees for that take (owner, 2026-10-13)."
       },
       "model_record": "endpoint, date and request id (the host does not expose a weights revision)",
       "cost_usd_per_unit": null,

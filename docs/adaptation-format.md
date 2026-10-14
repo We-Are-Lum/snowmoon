@@ -138,11 +138,19 @@ renderer and the player read only the resolved file.
   voice. Synthetic voices are stock voices, voices designed from a written
   description (the owner's words), or a consenting person's performance
   converted into a designed voice, all through models on the allowlist.
-  A voice is never a clone of a real person who has not signed the voice
-  consent, and no prompt names a real person. A person who performs signs a
-  consent covering GPL release, derivatives, conversion into another voice
-  and publication of their raw takes; their raw take is kept beside the
-  converted stem (owner, 2026-10-13).
+  A voice is never a clone of a real person, and no prompt names a real
+  person.
+- **Performed lines.** A person may perform lines that are converted into a
+  character's voice. They first agree to the voice consent
+  (`own-voice-v1`, `config/consent.json`): the converted output is released
+  under GPL-3.0 and anyone may convert it further; their raw takes are not
+  released. Conversion runs on the performer's own machine, so a take never
+  leaves it; a hosted conversion model is used only if that performer agrees
+  to it for that take. Raw takes stay in a private folder outside the
+  repository and outside R2. The converted line is published as that line's
+  source; its recipe gives the model and revision, the settings, the
+  character's reference clip and the sha256 of the raw take, not the take
+  itself. This is a recorded exception to principle 1 (owner, 2026-10-13).
 - **Voice sheets.** Each character's voice is a voice sheet in
   `adaptations/<seed>/voices/`: the character, the description (the owner's
   words), the model, seed and a reference clip of about ten seconds,
