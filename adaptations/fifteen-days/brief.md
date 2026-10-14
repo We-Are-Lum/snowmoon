@@ -94,7 +94,7 @@ rivalry, its three hints of something more, her grief and her work for Den's peo
 
 ## 3. The cut in the owner's draft 1 (2026-10-14)
 
-There are seven beats, filled from the owner's draft 1 in `script.md`. They hold 605 words of dialogue and 50 of narration, about five minutes with the silent beats.
+There are seven beats, filled from the owner's draft 1 in `script.md`. They hold 605 words of dialogue and 44 of narration, about five minutes with the silent beats.
 
 1. **The walls hold** *(optional opener)*:
    - Deluin plays Kau; Bai and Zei watch from the waiting room.
@@ -127,20 +127,16 @@ There are seven beats, filled from the owner's draft 1 in `script.md`. They hold
 - **Bai at the tea** (old question 2): the middle path. She is at the table first, then moves to the next one.
 - **The ending** (old question 3): Bai's face.
 - **Narration's point of view** (old question 6): a light third-person narrator, outside all three.
-- **The look between Bai and Deluin** (old question 4): not in the draft. Instead, Bai glances back and Deluin invites her (see question 5).
+- **The look between Bai and Deluin** (old question 4): cut. "You can come too Bai!" does that job now (owner, 2026-10-14).
+- **The c19-b124 narration** (owner, 2026-10-14): cut to "That day was his last Minpentai game … the last day when things in his life were at least somewhat normal." and moved over Zei. The gate runs: the chant; ten fingers, then five; Deluin alone sends the message; cut to Zei walking to Bai's table at dusk, under the narration.
+- **The vigil card:** the place only, Pafogai Du, Dzego (c15-b48). The book gives that section no date.
 
 **Still open, for the owner:**
 1. **The hurt.** What did Zei do to Bai, and what did she do back? The draft only hints at it ("you know I hate you", "'Was.'"), which may be enough.
 2. **The title**, due Thursday evening: *A Door in the Wall*, *Fifteen Days*, or another.
 3. **Length.** The piece runs about five minutes, longer than the three the plan allowed. The menu exchange (beat 3) is 273 of the 605 dialogue words. What should be trimmed? (Draft open item 1.)
 4. **Kau.** Bai's "These other losers… They" is plural, but the semifinal has one opponent, Kau (c14-b90). Make it singular, or does it mean the whole field? (Item 2.)
-5. **The look.** Is it cut, or does it come back at Bai's glance in beat 5?
-6. **Dreadnaught.** Where is the band first set up? Options: leaking from Bai's headphones in the waiting room (beat 1), or in the corridor. (Item 3.)
-7. **Bai's interrogation.** Is it revealed here or later? (Item 4.)
-8. **The c19-b124 narration.** In the book, "his" means Zei, and "the semifinal against Gun" was Zei's game that morning. Over Deluin at the gate, a viewer will hear it about Deluin, and it contradicts the opener, where Deluin plays Kau. Choose one:
-   - (a) Put it over Zei walking back to Bai's table.
-   - (b) Cut it to "That day was his last Minpentai game … the last day when things in his life were at least somewhat normal." This stays verbatim, with the cut marked.
-   - (c) Drop it. The spoiler mark then returns to chapter 15. (Item 5.)
-9. **The vigil card's date.** "3724 Firemoon 17" comes from c15-b1, which heads the chapter's Freetown section. Pafogai Du (c15-b48) has no date of its own. Keep the date, or show only the place?
-10. **Voices not yet described.** The narrator and the robot waiter need your descriptions. So far your takes cover Bai and Deluin. Will you also perform Zei and the robot?
-11. **Deluin's chant.** In the book, all the contestants say "Dze go ba fau gie" in unison (c12-b93). In the draft, Deluin says it alone, to Zei, at the gate. Is that what you intend?
+5. **Dreadnaught.** Where is the band first set up? Options: leaking from Bai's headphones in the waiting room (beat 1), or in the corridor. (Item 3.)
+6. **Bai's interrogation.** Is it revealed here or later? (Item 4.)
+7. **Voices not yet described.** The narrator and the robot waiter need your descriptions. So far your takes cover Bai and Deluin. Will you also perform Zei and the robot?
+8. **Deluin's chant.** In the book, all the contestants say "Dze go ba fau gie" in unison (c12-b93). In the draft, Deluin says it alone, to Zei, at the gate. Is that what you intend?

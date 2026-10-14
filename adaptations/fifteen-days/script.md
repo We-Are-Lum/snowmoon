@@ -17,8 +17,8 @@ dialogue, a narrator, ambience and Foley. **Narrator:** light, third person; voi
 the voice test. **Voices:** a narrator, Zei, Deluin, Bai and the robot waiter; the characters'
 voices are designed voice sheets (`voices/`), converted from the owner's performances.
 **Point of view:** the house narrator, outside all three (draft 1).
-**Length:** 7 beats (the draft's opener and sections 1 to 6 are beats 1 to 7). Narration: 50 words,
-all the book's (beat 1: 25, beat 6: 25). Dialogue: 605 words, the owner's and the book's (beat 3's menu exchange is 273); 655 spoken in all,
+**Length:** 7 beats (the draft's opener and sections 1 to 6 are beats 1 to 7). Narration: 44 words,
+all the book's (beat 1: 25, beat 6: 19). Dialogue: 605 words, the owner's and the book's (beat 3's menu exchange is 273); 649 spoken in all,
 roughly five minutes with the silent beats (draft 1, open item 1).
 **Style:** to be picked from the style test.
 
@@ -30,7 +30,7 @@ roughly five minutes with the silent beats (draft 1, open item 1).
 - The question about Minpentai, Redshire's quirks, and the sugar-cube wall (beat 4).
 - Deluin's offer to pay for the trip, his invitation to Bai, and Dreadnaught (beat 5).
 - The gate: the chant, ten fingers then five, the message Deluin sends (beat 6).
-- The narration of `c19-b124` moved to the gate (beat 6; in the book it is about Zei, read later).
+- The narration of `c19-b124`, cut and moved over Zei at dusk (beat 6; in the book, Zei's record of the day, read in chapter 19).
 - Bai at the vigil; Zei turning the screen to her (beat 7; brief §4, question 3).
 
 ---
@@ -226,24 +226,24 @@ roughly five minutes with the silent beats (draft 1, open item 1).
 - **context:**
   - c12-b93: the contestants' chant, "Dze go ba fau gie".
   - c14-b32: the final is in fifteen days.
-  - c19-b124: the narration, moved here (see below).
+  - c19-b124: the narration, cut and moved here, over Zei (owner, 2026-10-14).
   - *(Invented: the gate at dusk, ten fingers then five, the message.)*
 - **book lines:**
   - `c12-b93` "Dze go ba fau gie"
-  - `c19-b124` That day was his last Minpentai game, the semifinal against Gun - the last day when things in his life were at least somewhat normal. *(in the book, about Zei)*
+  - `c19-b124` That day was his last Minpentai game … the last day when things in his life were at least somewhat normal. *(in the book, about Zei)*
 - **image:** Dusk at the courtyard's street gate, lamps coming on. Three shots. First, Deluin at the
-  gate holding up ten fingers, then five. Second, Zei walking back toward Bai's table. Third, close
-  on Deluin's thumbs over his hand device, the screen turned away from us. *(Invented.)*
+  gate holding up ten fingers, then five. Second, Deluin alone, close on his thumbs over his hand
+  device, the screen turned away from us. Third, Zei walking across the courtyard at dusk toward
+  Bai's table. *(Invented.)*
 - **lettering:** none (the message is never shown)
 - **narration:**
-  - `book c19-b124` That day was his last Minpentai game, the semifinal against Gun - the last day when things in his life were at least somewhat normal.
+  - `book c19-b124` That day was his last Minpentai game … the last day when things in his life were at least somewhat normal.
 - **dialogue:**
   *[Dusk at the courtyard gate, with the lamps coming on.] (drafted, from the beat plan)*
   - `book c12-b93` Deluin: "Dze go ba fau gie" *(the contestants' chant)*
   *[Ten fingers, then five.] (from the treatment)*
-  *[Zei turns and heads for Bai's table. No words.]*
   *[Deluin, alone, takes out his device, types a message we can't read, hesitates, and sends it.]*
-  *[Narration 1.]*
+  *[Cut to Zei walking to Bai's table at dusk. No words. Narration 1 over him.]*
 
 ## Beat 7 · The vigil
 
@@ -253,7 +253,6 @@ roughly five minutes with the silent beats (draft 1, open item 1).
 - **cost:** Zei lets Bai read the reply. *(Invented: brief §2.)*
 - **what changes:** Relief for Zei; for Bai, an escape that's slightly too lucky.
 - **context:**
-  - c15-b1: the date, Firemoon 17 (the chapter's heading, given for Freetown).
   - c15-b48: the place, Pafogai Du.
   - c15-b49–c15-b51: the fifth message; crying in the lobby restaurant; the tea refilled four times;
     the rice uneaten.
@@ -269,13 +268,14 @@ roughly five minutes with the silent beats (draft 1, open item 1).
   tea cup, his hand device lit. Second, Bai sitting down across from him without a word. Third, Zei
   turning his screen toward Bai; cut on her face. *(Invented: Bai.)*
 - **lettering:**
-  - `place-date, en` Pafogai Du, Dzego · 3724 Firemoon 17 (book: place c15-b48, date c15-b1).
+  - `place, en` Pafogai Du, Dzego (book, c15-b48). Place only: the book gives this section no date
+    (c15-b1's Firemoon 17 heads the Freetown section).
   - Zei's screen: the book's own screen blocks, captured from the reader's template
     (`scripts/capture-screen.ts`) and composited onto the device: his fifth message (c15-b50), the
     reply (c15-b53), then the first sentence of the next (c15-b55, cut marked `…` and recorded).
 - **narration:** *(empty until a person writes it)*
 - **dialogue:**
-  *[On screen: Pafogai Du, Dzego · 3724 Firemoon 17] (book: place c15-b48, date c15-b1)*
+  *[On screen: Pafogai Du, Dzego] (book, c15-b48)*
   *[Zei sits at a table in the lobby restaurant of his hotel. He's been crying. His tea has been refilled four times, and the rice and vegetables are untouched.] (book, c15-b51)*
   *[On his screen, his fifth message: "Are you okay????! Please tell me where you are."] (c15-b50)*
   *[Bai sits down across from him, without a word.]*

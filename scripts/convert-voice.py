@@ -28,6 +28,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 MODEL_ID = "chatterbox-vc"
+PEAK = 10 ** (-1 / 20)  # scale after the watermark so the peak sits at -1 dBFS; never raise the level
 
 
 def sha256(path: Path) -> str:
@@ -66,6 +67,10 @@ def main() -> None:
     import soundfile as sf
 
     vc = ChatterboxVC.from_local(str(wdir), args.device)
+    # The vocoder hard-clamps at ±0.99 and the watermark is added after it, so outputs clipped
+    # (14 Oct test: 221 samples flattened in 10 s). Lift the clamp, then scale after the watermark.
+    vc.s3gen.mel2wav.audio_limit = float("inf")
+    import numpy as np
     name = args.name or take.stem
     out = ROOT / "scenes-out" / args.seed / "voice-test"
     out.mkdir(parents=True, exist_ok=True)
@@ -78,8 +83,11 @@ def main() -> None:
         began = time.time()
         wav = vc.generate(str(take), target_voice_path=str(ref)).squeeze(0).numpy()
         took = time.time() - began
+        peak = float(np.abs(wav).max())
+        gain = min(1.0, PEAK / peak) if peak > 0 else 1.0
+        wav = (wav * gain).astype(np.float32)
         dst = out / f"{name}.{vid}.wav"
-        sf.write(dst, wav, vc.sr, subtype="PCM_16")
+        sf.write(dst, wav, vc.sr, subtype="FLOAT")
         rec = {
             "line": name, "voice": vid, "stand_in": args.stand_in,
             "model": MODEL_ID, "weights": model["weights"], "revision": rev, "license": model["license"],
@@ -87,7 +95,8 @@ def main() -> None:
             "take": {"sha256": take_sha, "duration_s": round(take_s, 2), "kept": "private, outside the repository; never copied or uploaded"},
             "reference": {"file": str(ref.relative_to(ROOT)), "sha256": sha256(ref), "recipe": str(ref_rec.relative_to(ROOT))},
             "watermark": "Perth (applied by Chatterbox to every output)",
-            "seconds_taken": round(took, 1), "sample_rate": vc.sr,
+            "seconds_taken": round(took, 1), "sample_rate": vc.sr, "format": "32-bit float WAV",
+            "level": {"vocoder_clamp": "lifted", "peak_before": round(peak, 4), "gain_db": round(20 * np.log10(gain), 2), "peak_after": round(float(np.abs(wav).max()), 4)},
             "file": str(dst.relative_to(ROOT)), "sha256": sha256(dst), "duration_s": round(len(wav) / vc.sr, 2),
             "made_at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "cost_usd": 0,
         }
