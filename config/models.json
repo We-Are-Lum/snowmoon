@@ -264,7 +264,7 @@
       "id": "chatterbox-vc",
       "kind": "voice-conversion",
       "repo": "ResembleAI/chatterbox",
-      "revision": null,
+      "revision": "5bb1f6ee58e50c3b8d408bc82a6d3740c2db6e18",
       "card_revision": "5bb1f6ee58e50c3b8d408bc82a6d3740c2db6e18",
       "license_line": "license: mit",
       "license_checked": {
@@ -287,7 +287,17 @@
       "cost_usd_per_unit": null,
       "license": "MIT",
       "open_weights": true,
-      "weights": "https://huggingface.co/ResembleAI/chatterbox"
+      "weights": "https://huggingface.co/ResembleAI/chatterbox",
+      "local": {
+        "package": "chatterbox-tts==0.1.7 (MIT), torch 2.6.0, setuptools<80 (Perth needs pkg_resources)",
+        "env": ".venv-voice (gitignored)",
+        "weights": {
+          "s3gen.safetensors": "2b78103c654207393955e4900aac14a12de8ef25f4b09424f1ef91941f161d4e",
+          "conds.pt": "6552d70568833628ba019c6b03459e77fe71ca197d5c560cef9411bee9d87f4e"
+        },
+        "weights_dir": ".voice-models/chatterbox/<revision> (gitignored), loaded with ChatterboxVC.from_local so the revision is pinned",
+        "tested": "2026-10-13 on the maintainer's M3 Mac (8 GB) with two macOS system voices, no person's recording: 3.3 s converted in 12 s on CPU (23 s on MPS), peak 1.3 GB; Perth watermark detected in the output (1.0) and not in the source (0.0)."
+      }
     },
     {
       "id": "moss-ttsd-v1",
