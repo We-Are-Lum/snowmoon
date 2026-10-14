@@ -86,8 +86,8 @@ export const CHAT = {
   messagesPerDay: 30,
   /** More answers a day for these FIDs (owner, 2026-10-14); the daily spend cap still applies to them. */
   messagesPerDayFor: { 6786: 1_000 } as Readonly<Record<number, number>>,
-  /** Total spend per UTC day across everyone, in USD. Test cap: $2 (owner instruction, Oct 7, 2026). */
-  dailySpendCapUsd: 2,
+  /** Total spend per UTC day across everyone, in USD. Launch cap: $5 (owner, 2026-10-14; was the $2 test cap of Oct 7). */
+  dailySpendCapUsd: 5,
   /** Search hits sent to the model, each with the blocks around it (see neighbours). */
   passages: 12,
   neighbours: { before: 2, after: 2 },

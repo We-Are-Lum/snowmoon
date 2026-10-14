@@ -7,7 +7,8 @@
       "site-images-designs": false,
       "site-images-designs-2": false,
       "site-local-fonts": false,
-      "site-styles-per-day": false
+      "site-styles-per-day": false,
+      "site-chat-owner-cap": false
     }
   }
 }

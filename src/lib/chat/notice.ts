@@ -21,20 +21,18 @@ export const NOTICE_REVIEW: {
   ownerReread: { words: string; on: string } | null;
 } = {
   /** Fingerprint of the chat's code, prompts and settings when the notice was last reread. */
-  reviewedFor: 'b19cb19144e89aba',
+  reviewedFor: '59561780885037dd',
   /** Who did that reread: the coding agent, or the owner. */
   by: 'owner (FID 6786)',
-  on: '2026-10-08',
+  on: '2026-10-14',
   note:
-    'Reread for migration 0007 (cost records without a person) and the owner\'s new words for items 3 and 4. Items 1 and 2 match ' +
-    'config/prompts/chat-ask.md. Item 3: both routes keep nothing (gateway: zero retention asked per request; Groq: Global ZDR and ' +
-    'Inference APIs ZDR enabled in the "Lum" organization, confirmed by the owner in the console on 2026-10-08). Item 4: chat_calls ' +
-    'keeps only questions (FID, time, model); chat_costs keeps daily totals with no FID, request id or time of day; true once 0007 is applied. ' +
-    '/about ("only a count and the cost"), the private box and the signed-out screen (owner\'s words on main) still hold. ' +
-    'Also covers main\'s device.ts change (chapters opened, kept on the device only). ' +
-    'The owner (FID 6786) reread and approved all four items as worded here on 2026-10-08, after applying 0007.',
+    'Reread by the owner (FID 6786) on 2026-10-14 ("Reread."), for two settings: CHAT.messagesPerDayFor (FID 6786: 1,000 answers ' +
+    'a day) and CHAT.dailySpendCapUsd raised from the $2 test cap to $5 for the launch. The words are unchanged: item 4 says the ' +
+    'app counts "the daily limit" without naming a number, and no item names the spend cap. chat_calls still keeps only FID, time ' +
+    'and model; chat_costs still keeps daily totals with no FID. /about, the private box and the signed-out screen are untouched. ' +
+    'Earlier: the owner reread and approved all four items as worded here on 2026-10-08, after applying 0007.',
   /** The words (noticeKey of the items as shown now) the owner last reread, and when. */
-  ownerReread: { words: '1x16ucc', on: '2026-10-08' },
+  ownerReread: { words: '1x16ucc', on: '2026-10-14' },
 };
 
 export function noticeItems({ host, provider, model }: { host: string | null; provider: string | null; model: string }): [string, string][] {
