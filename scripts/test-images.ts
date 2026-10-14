@@ -129,6 +129,11 @@ for (let i = 0; i < IMAGES.generationsPerDay - 1; i++) {
 check('the daily limit stops the 11th Generate', (await generationsLeft(S, 6787)) === 0 && !(await reserve(S, 6787)).ok);
 const { perDay, designsPerDay, imagePublishesPerDay } = await import('../src/lib/images/limits');
 check('FID 6786 has 10,000 Generates a day, everyone else the default', perDay(6786) === 10_000 && perDay(6787) === IMAGES.generationsPerDay);
+const { weekendOn } = await import('../src/lib/images/limits');
+check('the bounty weekend: 50 a day per person on 16 to 19 October UTC, 10 before and after',
+  perDay(6787, new Date('2026-10-16T00:00:00Z')) === 50 && perDay(6787, new Date('2026-10-19T23:59:59Z')) === 50 &&
+  perDay(6787, new Date('2026-10-15T23:59:59Z')) === 10 && perDay(6787, new Date('2026-10-20T00:00:00Z')) === 10 &&
+  weekendOn(new Date('2026-10-17T12:00:00Z')) && perDay(6786, new Date('2026-10-17T12:00:00Z')) === 10_000);
 check('FID 6786 may publish 1,000 styles or sheets a day, everyone else 3', designsPerDay(6786) === 1_000 && designsPerDay(6787) === 3);
 check('FID 6786 may publish 1,000 images a day, everyone else 3', imagePublishesPerDay(6786) === 1_000 && imagePublishesPerDay(6787) === 3);
 for (let i = 0; i < IMAGES.generationsPerDay + 1; i++) {

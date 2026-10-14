@@ -1,6 +1,7 @@
 import 'server-only';
 import type postgres from 'postgres';
 import { IMAGES } from '../config';
+import { alertPrepaid } from './alert';
 import { balanceUsd, debit, priceUsd } from '../wallet/credits';
 
 /**
@@ -13,18 +14,34 @@ import { balanceUsd, debit, priceUsd } from '../wallet/credits';
  *
  * Wallet accounts (person number below zero; owner, 2026-10-13) are prepaid instead: no daily count;
  * each Generate is paid from the balance at priceUsd(its worst case), and its costs are counted as
- * 'prepaid' in image_costs, against IMAGES.prepaid.dailyCapUsd rather than the free cap.
+ * 'prepaid' in image_costs, against IMAGES.prepaid.safetyCapUsd rather than the free cap. A wallet's
+ * Generates are also counted in image_asks under its (negative) id, for its own daily count,
+ * IMAGES.prepaid.perDay (owner, 2026-10-14).
  */
 type Sql = postgres.Sql;
 const TODAY = `(now() at time zone 'utc')::date`;
 
-export type Refusal = 'limit' | 'spend' | 'balance' | 'prepaid-spend';
+export type Refusal = 'limit' | 'spend' | 'balance' | 'prepaid-spend' | 'wallet-limit';
 export type Funded = 'free' | 'prepaid';
 export const fundedBy = (fid: number): Funded => (fid < 0 ? 'prepaid' : 'free');
 
-/** This person's daily Generate count: IMAGES.perDayFor if they are on it, else IMAGES.generationsPerDay. */
-export function perDay(fid: number): number {
-  return IMAGES.perDayFor[fid] ?? IMAGES.generationsPerDay;
+/** Whether `now` falls on one of the bounty weekend's UTC days (IMAGES.weekend). */
+export function weekendOn(now: Date = new Date()): boolean {
+  const day = now.toISOString().slice(0, 10);
+  return day >= IMAGES.weekend.fromUtcDay && day <= IMAGES.weekend.toUtcDay;
+}
+
+/**
+ * This person's daily Generate count: IMAGES.perDayFor if they are on it; a wallet account's
+ * IMAGES.prepaid.perDay; on the bounty weekend IMAGES.weekend.perDay; else IMAGES.generationsPerDay.
+ */
+export function perDay(fid: number, now: Date = new Date()): number {
+  return IMAGES.perDayFor[fid] ?? (fid < 0 ? IMAGES.prepaid.perDay : weekendOn(now) ? IMAGES.weekend.perDay : IMAGES.generationsPerDay);
+}
+
+async function asksToday(sql: Sql, fid: number): Promise<number> {
+  const [r] = await sql`select count(*)::int as n from studio.image_asks where fid = ${fid} and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
+  return r?.n ?? 0;
 }
 
 /** How many images this person may publish a day: IMAGES.publishesPerDayFor if they are on it, else IMAGES.publishesPerDay. */
@@ -37,11 +54,11 @@ export function designsPerDay(fid: number): number {
   return IMAGES.designs.publishesPerDayFor[fid] ?? IMAGES.designs.publishesPerDay;
 }
 
-/** For a wallet account: how many text-to-image Generates its balance pays for. */
+/** How many Generates are left today; for a wallet account, also no more than its balance pays for. */
 export async function generationsLeft(sql: Sql, fid: number): Promise<number> {
-  if (fid < 0) return Math.floor((await balanceUsd(sql, -fid)) / priceUsd(IMAGES.reserveUsd));
-  const [r] = await sql`select count(*)::int as n from studio.image_asks where fid = ${fid} and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
-  return Math.max(0, perDay(fid) - (r?.n ?? 0));
+  const byCount = Math.max(0, perDay(fid) - (await asksToday(sql, fid)));
+  if (fid < 0) return Math.min(byCount, Math.floor((await balanceUsd(sql, -fid)) / priceUsd(IMAGES.reserveUsd)));
+  return byCount;
 }
 
 export async function publishesLeft(sql: Sql, fid: number): Promise<number> {
@@ -62,19 +79,34 @@ const DEFAULT_SPEND: Spend = { model: IMAGES.model, reserveUsd: IMAGES.reserveUs
  * sample and a sheet's view are Generates too (step 4): the same count, the same caps.
  */
 export async function reserve(sql: Sql, fid: number, spend: Spend = DEFAULT_SPEND): Promise<{ ok: true; left: number } | { ok: false; refusal: Refusal }> {
+  const r = await reserveIn(sql, fid, spend);
+  // The prepaid circuit breaker's alerts, outside the lock; an alert never stops a Generate.
+  if (r.ok && r.crossed) for (const share of r.crossed) await alertPrepaid(sql, share);
+  return r.ok ? { ok: true, left: r.left } : r;
+}
+
+async function reserveIn(sql: Sql, fid: number, spend: Spend): Promise<{ ok: true; left: number; crossed?: number[] } | { ok: false; refusal: Refusal }> {
   return sql.begin(async (tx) => {
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.images.spend'))`;
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.images.fid'), ${fid}::int)`;
     if (fid < 0) {
       const t = tx as unknown as Sql;
       const price = priceUsd(spend.reserveUsd);
+      const asked = await asksToday(t, fid);
+      if (asked >= perDay(fid)) return { ok: false as const, refusal: 'wallet-limit' as const };
       const balance = await balanceUsd(t, -fid);
       if (balance < price) return { ok: false as const, refusal: 'balance' as const };
       const [paid] = await tx`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${tx.unsafe(TODAY)} and funded = 'prepaid'`;
-      if (paid.usd + spend.reserveUsd > IMAGES.prepaid.dailyCapUsd) return { ok: false as const, refusal: 'prepaid-spend' as const };
+      const cap = IMAGES.prepaid.safetyCapUsd;
+      if (paid.usd + spend.reserveUsd > cap) return { ok: false as const, refusal: 'prepaid-spend' as const };
       await debit(t, -fid, price);
+      await tx`insert into studio.image_asks (fid) values (${fid})`;
       await addCost(t, 'prepaid', 'reserved', spend.model.id, '', '', 1, spend.reserveUsd);
-      return { ok: true as const, left: Math.floor((balance - price) / priceUsd(IMAGES.reserveUsd)) };
+      // Shares of the circuit breaker this reservation reaches; the last one before the cap counts as 100%.
+      const after = paid.usd + spend.reserveUsd;
+      const crossed = IMAGES.prepaid.alertAt.filter((a) => paid.usd < a * cap && (after >= a * cap || (a === 1 && after + spend.reserveUsd > cap)));
+      const left = Math.min(perDay(fid) - asked - 1, Math.floor((balance - price) / priceUsd(IMAGES.reserveUsd)));
+      return { ok: true as const, left, crossed };
     }
     const left = await generationsLeft(tx as unknown as Sql, fid);
     if (left <= 0) return { ok: false as const, refusal: 'limit' as const };

@@ -66,3 +66,36 @@ export async function alertReports(sql: Sql): Promise<'sent' | 'unset' | 'none-w
     return 'failed';
   }
 }
+
+export const prepaidAlertBody = (share: number) =>
+  `Snowmoon: prepaid images reached ${Math.round(share * 100)}% of today's $${IMAGES.prepaid.safetyCapUsd} safety cap`;
+
+/**
+ * The prepaid circuit breaker's alerts (owner, 2026-10-14): one ntfy push at each share of
+ * IMAGES.prepaid.safetyCapUsd, at most once per UTC day per share across every server (claimed in
+ * studio.alert_state as 'prepaid-50' or 'prepaid-100', migration 0012). Only the share and the cap:
+ * no wallet, amount per person or prompt. Never throws.
+ */
+export async function alertPrepaid(sql: Sql, share: number): Promise<'sent' | 'unset' | 'already' | 'failed'> {
+  const url = process.env.SNOWMOON_ALERT_URL;
+  if (!url) {
+    console.log('prepaid alert: SNOWMOON_ALERT_URL not set');
+    return 'unset';
+  }
+  try {
+    const kind = `prepaid-${Math.round(share * 100)}`;
+    const [claimed] = await sql`
+      insert into studio.alert_state (kind, sent_at) values (${kind}, now())
+      on conflict (kind) do update set sent_at = now()
+      where studio.alert_state.sent_at < date_trunc('day', now() at time zone 'utc') at time zone 'utc'
+      returning sent_at::text as t`;
+    if (!claimed) return 'already';
+    const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'text/plain' }, body: prepaidAlertBody(share), signal: AbortSignal.timeout(5000) });
+    if (res.ok) return 'sent';
+    console.error('prepaid alert: HTTP', res.status);
+  } catch (e) {
+    // Before migration 0012 the claim itself fails (alert_state allows only 'reports').
+    console.error('prepaid alert: failed', (e as { code?: string }).code ?? (e as Error).name);
+  }
+  return 'failed';
+}

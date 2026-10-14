@@ -142,16 +142,55 @@ check('a Generate stays paid for when nothing comes back (no refunds)', Math.abs
 const debitSigns = await sql`select count(*)::int as n from studio.wallet_debits where usd <= 0`;
 check('no debit is ever negative', debitSigns[0].n === 0);
 const asks = await sql`select count(*)::int as n from studio.image_asks where fid = ${-acct}`;
-check('a wallet Generate is not counted against a daily limit', asks[0].n === 0);
+check('a wallet Generate is counted for its own daily limit, under the wallet account', asks[0].n === 1);
 const [costs] = await sql`select coalesce(sum(cost_usd) filter (where funded = 'prepaid'), 0)::float8 as prepaid, coalesce(sum(cost_usd) filter (where funded = 'free'), 0)::float8 as free from studio.image_costs`;
 check('prepaid costs are counted apart, still with no person', costs.prepaid > 0 && costs.free === 0, JSON.stringify(costs));
 await sql`insert into studio.image_costs (funded, kind, model, provider, verdict, calls, cost_usd) values ('free', 'image', 'test', 'fal.ai', 'ok', 1, ${IMAGES.dailySpendCapUsd})`;
 const freeStopped = await reserve(S, 6787);
 const paidGoes = await reserve(S, -acct);
 check('the free cap stops free Generates but not paying ones', !freeStopped.ok && freeStopped.refusal === 'spend' && paidGoes.ok, JSON.stringify({ freeStopped, paidGoes }));
-await sql`insert into studio.image_costs (funded, kind, model, provider, verdict, calls, cost_usd) values ('prepaid', 'image', 'test', 'fal.ai', 'ok', 1, ${IMAGES.prepaid.dailyCapUsd})`;
-const capped = await reserve(S, -acct);
-check('prepaid spend has its own daily cap', !capped.ok && capped.refusal === 'prepaid-spend', JSON.stringify(capped));
+
+// Per wallet: 300 a day, counted like a free account's; another wallet is not affected (owner, 2026-10-14).
+const { perDay, publishesLeft } = await import('../src/lib/images/limits');
+check('a wallet may make 300 a day', perDay(-acct) === 300 && IMAGES.prepaid.perDay === 300);
+const rich = await accountFor(S, '0x' + 'ab'.repeat(20));
+await credit(S, rich, { txHash: '0x' + '11'.repeat(32), token: 'USDC', amount: 100_000_000n, usd: 100, blockNumber: 101n });
+const second = await accountFor(S, '0x' + 'cd'.repeat(20));
+await credit(S, second, { txHash: '0x' + '22'.repeat(32), token: 'USDC', amount: 5_000_000n, usd: 5, blockNumber: 102n });
+await sql`insert into studio.image_asks (fid) select ${-rich} from generate_series(1, 299)`;
+const r300 = await reserve(S, -rich);
+const r301 = await reserve(S, -rich);
+const otherGoes = await reserve(S, -second);
+check('the 300th Generate goes, the 301st is refused with its own reason', r300.ok && !r301.ok && r301.refusal === 'wallet-limit', JSON.stringify({ r300, r301 }));
+check('a refused Generate is not charged', !r301.ok && Math.abs((await balanceUsd(S, rich)) - (100 - price)) < 1e-6);
+check('one wallet at its limit does not stop another', otherGoes.ok);
+check('generationsLeft says 0 for a wallet at its limit, whatever its balance', (await generationsLeft(S, -rich)) === 0);
+const { LIMIT_SAY } = await import('../src/lib/images/paid');
+check('the wallet limit has a clear message', /300 images today/.test(LIMIT_SAY['wallet-limit'](300)) && /balance is kept/.test(LIMIT_SAY['wallet-limit'](300)));
+// Publishes: the same 3 a day for a wallet account.
+await sql`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') on conflict do nothing`;
+for (let i = 0; i < IMAGES.publishesPerDay; i++) await sql`insert into studio.elements (work_id, element_type, created_by_fid) values ('snowmoon', 'image', ${-second})`;
+check('a wallet account may publish 3 images a day, like anyone', (await publishesLeft(S, -second)) === 0 && IMAGES.publishesPerDay === 3);
+
+// The site-wide circuit breaker: $200 a day across every wallet, alerts at 50% and 100%, once each.
+check('the circuit breaker is $200 a day', IMAGES.prepaid.safetyCapUsd === 200);
+const sent: string[] = [];
+const realFetch = globalThis.fetch;
+globalThis.fetch = (async (_u: unknown, init?: { body?: unknown }) => { sent.push(String(init?.body)); return new Response('ok'); }) as typeof fetch;
+process.env.SNOWMOON_ALERT_URL = 'https://ntfy.invalid/test';
+const [sofar] = await sql`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = (now() at time zone 'utc')::date and funded = 'prepaid'`;
+await sql`insert into studio.image_costs (funded, kind, model, provider, verdict, calls, cost_usd) values ('prepaid', 'image', 'half', 'fal.ai', 'ok', 1, ${100 - sofar.usd - IMAGES.reserveUsd / 2})`;
+const half = await reserve(S, -second);
+const halfAgain = await reserve(S, -second);
+check('the 50% alert goes once', half.ok && halfAgain.ok && sent.length === 1 && /50% of today's \$200/.test(sent[0]), JSON.stringify(sent));
+await sql`insert into studio.image_costs (funded, kind, model, provider, verdict, calls, cost_usd) values ('prepaid', 'image', 'full', 'fal.ai', 'ok', 1, ${100 - IMAGES.reserveUsd * 3})`;
+const last = await reserve(S, -second);
+const capped = await reserve(S, -second);
+check('the last Generate before the cap sends the 100% alert', last.ok && sent.length === 2 && /100%/.test(sent[1]), JSON.stringify(sent));
+check('then prepaid is refused for everyone', !capped.ok && capped.refusal === 'prepaid-spend', JSON.stringify(capped));
+check('the alerts name no wallet, amount or person', sent.every((b) => !/0x|FID|\$\d+\.\d/.test(b)));
+globalThis.fetch = realFetch;
+delete process.env.SNOWMOON_ALERT_URL;
 
 // --- Private, and append-only --------------------------------------------------------------
 await sql`reset role`;

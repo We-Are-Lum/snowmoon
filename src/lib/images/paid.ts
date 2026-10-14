@@ -31,8 +31,12 @@ export const LIMIT_SAY = {
   spend: 'Image making has reached today’s spending limit for everyone. It comes back at 00:00 UTC.',
   balance: IMAGE_WORDING.prepaid.lowBalance,
   'prepaid-spend': IMAGE_WORDING.prepaid.dailyCap,
+  'wallet-limit': IMAGE_WORDING.prepaid.walletDaily,
 } as const;
-const say = (refusal: keyof typeof LIMIT_SAY, fid: number) => (refusal === 'limit' ? LIMIT_SAY.limit(perDay(fid)) : LIMIT_SAY[refusal]);
+const say = (refusal: keyof typeof LIMIT_SAY, fid: number) => {
+  const s = LIMIT_SAY[refusal];
+  return typeof s === 'function' ? s(perDay(fid)) : s;
+};
 
 export async function paidPicture(
   sql: Sql,

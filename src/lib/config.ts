@@ -155,13 +155,19 @@ export const IMAGES = {
   maxBlocks: 8,
   /** Per person per UTC day; blocked attempts count (decisions 10 and 16). */
   generationsPerDay: 10,
+  /**
+   * The bounty weekend (owner, 2026-10-14): a higher daily count per person on these UTC days, inclusive
+   * (Friday 16 October, when the entry goes up, to Monday 19 October UTC, which covers Sunday night
+   * Pacific when the bounty closes). The site-wide spend cap stays the real limit.
+   */
+  weekend: { perDay: 50, fromUtcDay: '2026-10-16', toUtcDay: '2026-10-19' },
   /** A higher daily Generate count for these FIDs (owner, 2026-10-13; very high for 6786, 2026-10-14); the daily spend cap still applies to them. */
   perDayFor: { 6786: 10_000 } as Readonly<Record<number, number>>,
   publishesPerDay: 3,
   /** More image publishes a day for these FIDs (owner, 2026-10-14). */
   publishesPerDayFor: { 6786: 1_000 } as Readonly<Record<number, number>>,
-  /** Across everyone, per UTC day (decision 10), kept apart from the assistant's. */
-  dailySpendCapUsd: 2,
+  /** Across everyone, per UTC day (decision 10), kept apart from the assistant's. Launch cap: $15 (owner, 2026-10-14; was the $2 test cap). */
+  dailySpendCapUsd: 15,
   /**
    * Wallet sign-in and prepaid generations (owner, 2026-10-13). A wallet account has no free daily
    * count and no Neynar gate: each Generate is paid from its balance at the estimated cost (the
@@ -177,7 +183,14 @@ export const IMAGES = {
     /** Suggested amounts in USD; any amount of at least minUsd is credited. */
     packsUsd: [1, 5, 20] as readonly number[],
     minUsd: 0.5,
-    dailyCapUsd: 25,
+    /** Generates per wallet account per UTC day, counted in studio.image_asks like a free account's (owner, 2026-10-14). */
+    perDay: 300,
+    /**
+     * A circuit breaker across every wallet account, per UTC day (owner, 2026-10-14; replaces the $25
+     * site-wide cap). An ntfy alert goes to SNOWMOON_ALERT_URL at each share of it, once a day.
+     */
+    safetyCapUsd: 200,
+    alertAt: [0.5, 1] as readonly number[],
     chainId: 8453,
     /** Base's own public endpoint unless BASE_RPC_URL is set. */
     rpcUrl: 'https://mainnet.base.org',
