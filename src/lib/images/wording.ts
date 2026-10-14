@@ -290,8 +290,8 @@ export const IMAGE_WORDING = {
     notOpen: 'Paying for images isn’t open yet.',
     lowBalance: 'Your balance doesn’t cover this image. Add funds to keep going.',
     dailyCap: 'Prepaid image making has reached today’s limit for everyone. It comes back at 00:00 UTC.',
-    /** Draft (2026-10-14): a wallet has made its daily count. Its balance is untouched. */
-    walletDaily: (n: number) => `This wallet has made ${n} images today, the most for one day. Your balance is kept; more tomorrow (00:00 UTC).`,
+    /** The owner's words (2026-10-14): a wallet has made its daily count. */
+    walletDaily: (n: number) => `This wallet has reached today’s limit of ${n} images. Your balance is untouched; you can make more after 00:00 UTC.`,
     claim: {
       'not-found': 'That payment isn’t on Base yet. Try again in a moment.',
       pending: 'That payment is still confirming. Try again in a moment.',

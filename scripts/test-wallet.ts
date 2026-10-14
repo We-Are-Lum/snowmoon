@@ -166,7 +166,7 @@ check('a refused Generate is not charged', !r301.ok && Math.abs((await balanceUs
 check('one wallet at its limit does not stop another', otherGoes.ok);
 check('generationsLeft says 0 for a wallet at its limit, whatever its balance', (await generationsLeft(S, -rich)) === 0);
 const { LIMIT_SAY } = await import('../src/lib/images/paid');
-check('the wallet limit has a clear message', /300 images today/.test(LIMIT_SAY['wallet-limit'](300)) && /balance is kept/.test(LIMIT_SAY['wallet-limit'](300)));
+check('the wallet limit has a clear message', LIMIT_SAY['wallet-limit'](300) === 'This wallet has reached today’s limit of 300 images. Your balance is untouched; you can make more after 00:00 UTC.');
 // Publishes: the same 3 a day for a wallet account.
 await sql`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') on conflict do nothing`;
 for (let i = 0; i < IMAGES.publishesPerDay; i++) await sql`insert into studio.elements (work_id, element_type, created_by_fid) values ('snowmoon', 'image', ${-second})`;

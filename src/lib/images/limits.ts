@@ -25,10 +25,10 @@ export type Refusal = 'limit' | 'spend' | 'balance' | 'prepaid-spend' | 'wallet-
 export type Funded = 'free' | 'prepaid';
 export const fundedBy = (fid: number): Funded => (fid < 0 ? 'prepaid' : 'free');
 
-/** Whether `now` falls on one of the bounty weekend's UTC days (IMAGES.weekend). */
+/** Whether `now` is inside the bounty weekend (IMAGES.weekend: from, inclusive, until, exclusive). */
 export function weekendOn(now: Date = new Date()): boolean {
-  const day = now.toISOString().slice(0, 10);
-  return day >= IMAGES.weekend.fromUtcDay && day <= IMAGES.weekend.toUtcDay;
+  const t = now.getTime();
+  return t >= Date.parse(IMAGES.weekend.from) && t < Date.parse(IMAGES.weekend.until);
 }
 
 /**

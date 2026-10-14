@@ -156,11 +156,11 @@ export const IMAGES = {
   /** Per person per UTC day; blocked attempts count (decisions 10 and 16). */
   generationsPerDay: 10,
   /**
-   * The bounty weekend (owner, 2026-10-14): a higher daily count per person on these UTC days, inclusive
-   * (Friday 16 October, when the entry goes up, to Monday 19 October UTC, which covers Sunday night
-   * Pacific when the bounty closes). The site-wide spend cap stays the real limit.
+   * The bounty weekend (owner, 2026-10-14): a higher daily count per person from Friday 16 October
+   * 00:00 UTC, when the entry goes up, until the bounty closes (Sunday 11:59pm Pacific, so 07:00 UTC
+   * on Monday 19 October). Counts stay per UTC day. The site-wide spend cap stays the real limit.
    */
-  weekend: { perDay: 50, fromUtcDay: '2026-10-16', toUtcDay: '2026-10-19' },
+  weekend: { perDay: 50, from: '2026-10-16T00:00:00Z', until: '2026-10-19T07:00:00Z' },
   /** A higher daily Generate count for these FIDs (owner, 2026-10-13; very high for 6786, 2026-10-14); the daily spend cap still applies to them. */
   perDayFor: { 6786: 10_000 } as Readonly<Record<number, number>>,
   publishesPerDay: 3,
