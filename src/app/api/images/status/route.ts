@@ -52,7 +52,7 @@ export async function GET(request: Request) {
     maxCharacters: IMAGES.designs.maxCharacters,
   };
   const editModel = { name: IMAGES.editModel.name, licence: IMAGES.editModel.licence, host: IMAGES.editModel.host };
-  const base = { label: IMAGES.label, model: IMAGES.model, editModel, rules: RULES, perDay: IMAGES.generationsPerDay, publishesPerDay: IMAGES.publishesPerDay, maxBlocks: IMAGES.maxBlocks, styles, ready, inPassage: passageSheets };
+  const base = { label: IMAGES.label, model: IMAGES.model, editModel, rules: RULES, perDay: IMAGES.generationsPerDay, publishesPerDay: IMAGES.publishesPerDay, maxBlocks: IMAGES.maxBlocks, styles, ready, inPassage: passageSheets, walletSignIn: prepaidOpen() };
   if (fid === null) return NextResponse.json({ ...base, signedIn: false }, { headers: { 'Cache-Control': 'no-store' } });
   const invited = IMAGES.invited.includes(fid);
   if (!sql) return NextResponse.json({ ...base, signedIn: true, fid, invited, eligible: invited ? true : null }, { headers: { 'Cache-Control': 'no-store' } });

@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server';
 import { domain } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { verifySignIn } from '~/lib/wallet/chain';
-import { accountFor } from '~/lib/wallet/credits';
+import { accountFor, prepaidOpen } from '~/lib/wallet/credits';
 import { signSession } from '~/lib/wallet/session';
 
 /**
@@ -17,6 +17,8 @@ const no = (error: string, status: number) => NextResponse.json({ error }, { sta
 export async function POST(request: Request) {
   const sql = db();
   if (!sql || !process.env.IMAGES_TICKET_SECRET) return no('Wallet sign-in is not set up on this deployment', 503);
+  // Offered only once paying is open: no address is kept before then.
+  if (!prepaidOpen()) return no('Wallet sign-in isn’t open yet', 503);
   const body = (await request.json().catch(() => ({}))) as { message?: unknown; signature?: unknown };
   if (typeof body.message !== 'string' || body.message.length > 2000 || typeof body.signature !== 'string' || !/^0x[0-9a-fA-F]+$/.test(body.signature)) return no('Bad request', 400);
   const address = await verifySignIn(body.message, body.signature as `0x${string}`, domain(request));

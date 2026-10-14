@@ -38,6 +38,8 @@ type Status = {
   perDay: number;
   /** A wallet account: its balance pays for each image (owner, 2026-10-13). */
   prepaid?: { balanceUsd: number; priceUsd: number; markup: number };
+  /** Wallet sign-in is offered only once paying is open (IMAGES.prepaid.payTo set). */
+  walletSignIn?: boolean;
   maxBlocks: number;
   rules: string;
   model: { name: string; licence: string; host: string };
@@ -385,7 +387,7 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
                 <div className="ic-gate">
                   <p>Sign in to make an image.</p>
                   <SignInButton />
-                  {auth.kind === 'signed-out' && !auth.inApp && <WalletSignInButton />}
+                  {auth.kind === 'signed-out' && !auth.inApp && status?.walletSignIn && <WalletSignInButton />}
                 </div>
               ) : !status ? (
                 <p className="ic-note">…</p>
