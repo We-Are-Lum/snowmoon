@@ -406,7 +406,8 @@ words are his): <https://vitalik.eth.limo/snowmoon/>.
 change a score, a sort or a default. Prepaid images (owner, 2026-10-13): a
 wallet account buys images in advance with USDC or ETH on Base, at the
 estimated cost plus 30%. Paying buys images and nothing else: no place in any
-order, no score, no default. The balance can't be withdrawn or moved. There is no token. The first screen says
+order, no score, no default. Payment is for the service (image generation) and
+is final: no refunds; nothing is held for anyone to withdraw. There is no token. The first screen says
 the edition is independent, "not affiliated with the author", and that there
 is no token.
 

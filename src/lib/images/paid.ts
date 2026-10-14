@@ -3,7 +3,7 @@ import type postgres from 'postgres';
 import { IMAGES } from '../config';
 import { checkPrompt } from './guard';
 import { ImageUnavailable, type Made } from './fal';
-import { fundedBy, perDay, recordGuard, refund, reserve, settle, wordsCheckFits, type Spend } from './limits';
+import { fundedBy, perDay, recordGuard, reserve, settle, wordsCheckFits, type Spend } from './limits';
 import { blockedName } from './rules';
 import { IMAGE_WORDING } from './wording';
 
@@ -17,8 +17,8 @@ import { IMAGE_WORDING } from './wording';
  * 4. the reservation replaced by the real costs; a picture the checker flags is dropped.
  * The caller has already checked sign-in, the off switch, setup, its input, consent and the gate
  * (gate.ts: invited FIDs, or a Neynar score of at least IMAGES.neynarMinScore), in that order.
- * A wallet account (fid below zero) pays from its prepaid balance in step 1, and gets it back when
- * the prompt check or the image model doesn't answer; a blocked prompt or a flagged image is paid for.
+ * A wallet account (fid below zero) pays for the Generate from its prepaid balance in step 1. Payment
+ * is final (owner, 2026-10-13): no refunds, whatever the outcome.
  */
 type Sql = postgres.Sql;
 
@@ -54,7 +54,6 @@ export async function paidPicture(
     guard = await checkPrompt(job.checkText, request);
   } catch (e) {
     await settle(sql, {}, spend, funded);
-    await refund(sql, fid, spend);
     console.error('image prompt check failed', (e as Error).name);
     return { ok: false, status: 503, error: 'The prompt check did not answer. Try again in a moment.', extra: { left: r.left } };
   }
@@ -67,7 +66,6 @@ export async function paidPicture(
     made = await job.make();
   } catch (e) {
     await settle(sql, { guard: { costUsd: guard.costUsd, provider: guard.provider, verdict: 'ok' } }, spend, funded);
-    await refund(sql, fid, spend);
     console.error('image generation failed', e instanceof ImageUnavailable ? e.message : (e as Error).name);
     return { ok: false, status: 503, error: 'The image model did not answer. Try again in a moment.', extra: { left: r.left } };
   }

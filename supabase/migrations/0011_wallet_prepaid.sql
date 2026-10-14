@@ -13,8 +13,8 @@
 --    by its transaction hash so a payment is credited once. The amount in USD is fixed when it is
 --    credited (USDC 1:1; ETH at Chainlink's ETH/USD price at the payment's block).
 -- 3. studio.wallet_debits: what each prepaid Generate cost the account (the estimate plus the
---    markup, IMAGES.prepaid), and refunds (negative) when nothing was made through no fault of
---    the person. Balance = payments - debits.
+--    markup, IMAGES.prepaid). Payment is final: no refunds (owner, 2026-10-13).
+--    Balance = payments - debits: generations paid for and not yet used.
 --    Owner's exception, 2026-10-13: for prepaid accounts, money IS linked to a person (it has to be,
 --    to keep a balance). image_costs still has no person in it.
 -- 4. studio.image_costs gets `funded` ('free' or 'prepaid'), part of its key, so the free daily
@@ -63,13 +63,13 @@ revoke update, delete, truncate, references, trigger on studio.wallet_payments f
 grant select, insert on studio.wallet_payments to studio_writer;
 
 -- ---------------------------------------------------------------------------
--- 3. Spends and refunds.
+-- 3. What each Generate cost.
 -- ---------------------------------------------------------------------------
 
 create table studio.wallet_debits (
   id bigint generated always as identity primary key,
   account_id bigint not null references studio.wallet_accounts(id),
-  usd numeric(12, 6) not null check (usd <> 0),
+  usd numeric(12, 6) not null check (usd > 0),
   at timestamptz not null default now()
 );
 create index wallet_debits_account on studio.wallet_debits (account_id);

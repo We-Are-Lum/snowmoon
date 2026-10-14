@@ -12,7 +12,7 @@
  * - Payments read from Base: USDC to us from this wallet; ETH priced at the block; from someone else,
  *   to someone else, failed, still confirming, too old, too small; nothing when payTo isn't set.
  * - The balance: a payment is credited once; a Generate is paid at the estimate plus the markup; an
- *   empty balance is refused; a refund gives it back; prepaid costs are counted apart from free ones,
+ *   empty balance is refused; there are no refunds, even when nothing comes back; prepaid costs are counted apart from free ones,
  *   so the free daily cap doesn't stop a paying account and prepaid spend has its own cap.
  * - Nothing new is publicly readable; payments and debits can't be changed or deleted.
  */
@@ -121,7 +121,7 @@ await server.start();
 const sql = postgres(`postgres://studio_writer@127.0.0.1:${PORT}/postgres`, { prepare: false, max: 1 });
 await sql`set role studio_writer`;
 const { accountFor, balanceUsd, credit, priceUsd } = await import('../src/lib/wallet/credits');
-const { reserve, settle, refund, generationsLeft } = await import('../src/lib/images/limits');
+const { reserve, settle, generationsLeft } = await import('../src/lib/images/limits');
 type Sql = Parameters<typeof reserve>[0];
 const S = sql as unknown as Sql;
 
@@ -137,8 +137,9 @@ check('$1 pays for this many images', (await generationsLeft(S, -acct)) === Math
 const r1 = await reserve(S, -acct);
 check('a Generate is paid from the balance', r1.ok && Math.abs((await balanceUsd(S, acct)) - (1 - price)) < 1e-6);
 await settle(S, { guard: { costUsd: 0.0001, provider: 'groq', verdict: 'ok' } }, undefined, 'prepaid');
-await refund(S, -acct);
-check('a refund gives it back', (await balanceUsd(S, acct)) === 1);
+check('a Generate stays paid for when nothing comes back (no refunds)', Math.abs((await balanceUsd(S, acct)) - (1 - price)) < 1e-6);
+const debitSigns = await sql`select count(*)::int as n from studio.wallet_debits where usd <= 0`;
+check('no debit is ever negative', debitSigns[0].n === 0);
 const asks = await sql`select count(*)::int as n from studio.image_asks where fid = ${-acct}`;
 check('a wallet Generate is not counted against a daily limit', asks[0].n === 0);
 const [costs] = await sql`select coalesce(sum(cost_usd) filter (where funded = 'prepaid'), 0)::float8 as prepaid, coalesce(sum(cost_usd) filter (where funded = 'free'), 0)::float8 as free from studio.image_costs`;

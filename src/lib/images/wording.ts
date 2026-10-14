@@ -283,7 +283,7 @@ export const IMAGE_WORDING = {
     signOut: 'sign out',
     payWith: 'Pay in USDC or ETH on Base. It’s added to your balance once the payment confirms.',
     terms:
-      'Funds can only be spent on images here: they can’t be withdrawn or moved. A blocked prompt or an image the safety checker drops is still paid for; if the prompt check or the image model doesn’t answer, it’s refunded.',
+      'You’re paying for image generation on this site. Each Generate is charged when you press it, whatever comes back, including a blocked prompt or an image the safety checker drops. No refunds.',
     pay: (usd: number, token: 'USDC' | 'ETH') => `Pay $${usd} in ${token}`,
     waiting: 'Waiting for the payment to confirm…',
     added: (usd: string) => `Added $${usd} to your balance.`,

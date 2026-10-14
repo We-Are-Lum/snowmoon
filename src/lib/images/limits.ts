@@ -106,11 +106,6 @@ export async function settle(
   });
 }
 
-/** A wallet account's money back when nothing was made through no fault of theirs (a check or the model didn't answer). */
-export async function refund(sql: Sql, fid: number, spend: Spend = DEFAULT_SPEND) {
-  if (fid < 0) await debit(sql, -fid, -priceUsd(spend.reserveUsd));
-}
-
 async function addCost(sql: Sql, funded: Funded, kind: string, model: string, provider: string, verdict: string, calls: number, usd: number) {
   await sql`insert into studio.image_costs (funded, kind, model, provider, verdict, calls, cost_usd)
     values (${funded}, ${kind}, ${model}, ${provider}, ${verdict}, ${calls}, ${usd})

@@ -37,7 +37,7 @@ export async function credit(sql: Sql, account: number, p: { txHash: string; tok
   return rows.length > 0;
 }
 
-/** A spend (positive) or a refund (negative). */
+/** What a Generate cost the account. Final: there are no refunds (owner, 2026-10-13). */
 export async function debit(sql: Sql, account: number, usd: number) {
   await sql`insert into studio.wallet_debits (account_id, usd) values (${account}, ${usd})`;
 }
