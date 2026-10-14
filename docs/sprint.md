@@ -45,7 +45,7 @@ All ten test models' pinned card revisions are still current, and every licence 
 5. **Chatterbox Turbo tags**: `[sigh]` and `[gasp]` are only in fal's schema; the card names `[cough]`, `[laugh]`, `[chuckle]`.
 6. **Wan 2.2's card links a LICENSE.txt that isn't in the Hugging Face repo**; the GitHub copy is plain Apache-2.0.
 7. **LongCat-Video and LongCat-Video-Avatar** grant no Meituan trademark or patent rights (a line beyond MIT).
-8. **The Perth watermark** is confirmed in the local code for Chatterbox and Turbo; no fal page says whether hosted outputs carry it.
+8. **The Perth watermark** is applied in the local code for Chatterbox and Turbo, but can't be verified: Perth's detector scores clean audio as watermarked (a sine 0.98, the owner's raw take 0.67, which rounds to 1; test of 2026-10-14). No fal page says whether hosted outputs carry it.
 9. Wan on fal has its safety checkers off by default; most other endpoints have them on.
 10. Every fal endpoint is listed as commercial-use; fal's own terms of service were not read.
 

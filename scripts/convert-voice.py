@@ -4,7 +4,8 @@ Stage 2, performed lines (docs/adaptation-format.md; consent own-voice-v1): a pe
 converted on their own machine, so the take never leaves it. Chatterbox speech-to-speech (MIT,
 open weights, on the allowlist as chatterbox-vc) runs from the pinned local weights in
 .voice-models/chatterbox/<revision>, checked against config/models.json's sha256 before loading.
-Every output carries Chatterbox's Perth watermark.
+Chatterbox applies its Perth watermark to every output; Perth's detector can't confirm it (it scores
+clean speech as watermarked), so recipes record it as applied, not verified.
 
 The take is read where it lies and never copied. A take inside this repository is refused, so a
 raw recording can't be committed by accident; --stand-in allows a synthetic source made for
@@ -28,6 +29,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 MODEL_ID = "chatterbox-vc"
+WATERMARK = {"applied": "Perth implicit watermark, applied in Chatterbox's own code (ChatterboxVC.generate calls PerthImplicitWatermarker.apply_watermark on every output)", "verified": False, "detector": "not evidence: on 2026-10-14 Perth's detector scored clean audio as watermarked (a 220 Hz sine 0.98; the owner's raw take 0.67, which rounds to 1), though clean white noise scored 0.00 and freshly watermarked speech 1.00, also after -5.3 dB of gain. A score of 1.00 here is consistent with the watermark but does not prove it."}
 PEAK = 10 ** (-1 / 20)  # scale after the watermark so the peak sits at -1 dBFS; never raise the level
 
 
@@ -94,7 +96,7 @@ def main() -> None:
             "weights_sha256": model["local"]["weights"], "runs_on": f"the performer's machine ({args.device})",
             "take": {"sha256": take_sha, "duration_s": round(take_s, 2), "kept": "private, outside the repository; never copied or uploaded"},
             "reference": {"file": str(ref.relative_to(ROOT)), "sha256": sha256(ref), "recipe": str(ref_rec.relative_to(ROOT))},
-            "watermark": "Perth (applied by Chatterbox to every output)",
+            "watermark": WATERMARK,
             "seconds_taken": round(took, 1), "sample_rate": vc.sr, "format": "32-bit float WAV",
             "level": {"vocoder_clamp": "lifted", "peak_before": round(peak, 4), "gain_db": round(20 * np.log10(gain), 2), "peak_after": round(float(np.abs(wav).max()), 4)},
             "file": str(dst.relative_to(ROOT)), "sha256": sha256(dst), "duration_s": round(len(wav) / vc.sr, 2),

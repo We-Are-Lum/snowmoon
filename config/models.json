@@ -272,7 +272,7 @@
         "on": "2026-10-13",
         "source": "https://huggingface.co/ResembleAI/chatterbox"
       },
-      "notes": "Speech-to-speech: a person's performance spoken in a voice sheet's voice. Part of the Chatterbox release ('Easy voice conversion script'); outputs carry the Perth watermark. The performer agrees to own-voice-v1 first. Performed takes are converted locally (chatterbox-tts, MIT, in .venv-voice) so a raw take never leaves the performer's machine; the hosted endpoint is used for a take only if its performer agrees (owner, 2026-10-13). Raw takes are never published; the recipe records their sha256.",
+      "notes": "Speech-to-speech: a person's performance spoken in a voice sheet's voice. Part of the Chatterbox release ('Easy voice conversion script'); Chatterbox applies the Perth watermark to every output, though Perth's detector can't confirm it (it scores clean speech as watermarked; test of 2026-10-14). The performer agrees to own-voice-v1 first. Performed takes are converted locally (chatterbox-tts, MIT, in .venv-voice) so a raw take never leaves the performer's machine; the hosted endpoint is used for a take only if its performer agrees (owner, 2026-10-13). Raw takes are never published; the recipe records their sha256.",
       "runs_on": "local-queue",
       "hosted": {
         "host": "fal.ai",
