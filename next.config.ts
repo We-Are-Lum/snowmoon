@@ -46,6 +46,11 @@ const nextConfig: NextConfig = {
       './node_modules/@fontsource/dm-mono/files/dm-mono-latin-*-normal.woff',
     ],
   },
+  // The end card's "make your own" link (owner, 2026-10-14): the repository for now; temporary (307),
+  // since /make may become a page of its own.
+  async redirects() {
+    return [{ source: '/make', destination: 'https://github.com/We-Are-Lum/snowmoon', permanent: false }];
+  },
 };
 
 export default nextConfig;
