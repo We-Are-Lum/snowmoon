@@ -6,7 +6,9 @@
       "site-images-everyone": false,
       "site-images-designs": false,
       "site-images-designs-2": false,
-      "site-local-fonts": false
+      "site-local-fonts": false,
+      "scenes-sound": false,
+      "dog-dawn-comic": false
     }
   }
 }
