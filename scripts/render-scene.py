@@ -35,7 +35,7 @@ from datetime import datetime, timezone
 from pathlib import Path
 
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageDraw, ImageFont
 
 ROOT = Path(__file__).resolve().parent.parent
 LETTER_SCALE = 2
@@ -97,6 +97,52 @@ class Shot:
         return frame.convert("RGB")
 
 
+FONTS = ROOT / "node_modules" / "@fontsource"
+CARD_FACES = {"title": FONTS / "crimson-pro" / "files" / "crimson-pro-latin-600-normal.woff",
+              "text": FONTS / "crimson-pro" / "files" / "crimson-pro-latin-400-normal.woff",
+              "label": FONTS / "dm-mono" / "files" / "dm-mono-latin-500-normal.woff"}
+CARD_PAPER, CARD_INK, CARD_MUTED = (22, 21, 19), (236, 232, 223), (163, 157, 145)
+
+
+def wrap(d: ImageDraw.ImageDraw, text: str, font, width: int) -> list[str]:
+    lines, cur = [], ""
+    for word in text.split():
+        trial = f"{cur} {word}".strip()
+        if d.textlength(trial, font=font) <= width or not cur:
+            cur = trial
+        else:
+            lines.append(cur)
+            cur = word
+    return lines + ([cur] if cur else [])
+
+
+def end_card(spec: dict, size: tuple[int, int]) -> Image.Image:
+    """The end card, drawn in code from adaptations/<seed>/end-card.json: title, labelled sections, links."""
+    W, H = size
+    img = Image.new("RGB", size, CARD_PAPER)
+    d = ImageDraw.Draw(img)
+    s = H / 1080
+    f_title = ImageFont.truetype(str(CARD_FACES["title"]), round(64 * s))
+    f_text = ImageFont.truetype(str(CARD_FACES["text"]), round(30 * s))
+    f_label = ImageFont.truetype(str(CARD_FACES["label"]), round(19 * s))
+    x, y, width = round(160 * s), round(110 * s), W - round(320 * s)
+    d.text((x, y), spec["title"], font=f_title, fill=CARD_INK)
+    y += round(110 * s)
+    for sec in spec["sections"]:
+        d.text((x, y), sec["label"].upper(), font=f_label, fill=CARD_MUTED)
+        y += round(30 * s)
+        for line in wrap(d, sec["text"], f_text, width):
+            d.text((x, y), line, font=f_text, fill=CARD_INK)
+            y += round(38 * s)
+        y += round(18 * s)
+    y = max(y, H - round(150 * s))
+    for link in spec["links"]:
+        d.text((x, y), link["label"].upper(), font=f_label, fill=CARD_MUTED)
+        d.text((x + round(330 * s), y - round(6 * s)), link["shown"], font=f_text, fill=CARD_INK)
+        y += round(44 * s)
+    return img
+
+
 def loudness(path: Path) -> dict:
     r = subprocess.run(["ffmpeg", "-hide_banner", "-i", str(path), "-map", "0:a", "-af", "ebur128=peak=true", "-f", "null", "-"],
                        capture_output=True, text=True)
@@ -132,6 +178,11 @@ def main() -> None:
         if sha256(ROOT / sh.s["image"]) != sh.s["image_sha256"]:
             raise SystemExit(f"shot {sh.s['id']}: {sh.s['image']} is not the image the timeline names")
 
+    card = R.get("end_card")
+    card_img = end_card(json.loads((ROOT / card["file"]).read_text()), out_size) if card else None
+    if card and sha256(ROOT / card["file"]) != card["file_sha256"]:
+        raise SystemExit("the end card changed since the mix; run scripts/mix-scene.py first")
+
     t0 = args.t0 or 0.0
     t1 = min(args.t1 or R["duration_s"], R["duration_s"])
     preview = args.t0 is not None or args.t1 is not None
@@ -148,6 +199,11 @@ def main() -> None:
     n0, n1 = round(t0 * fps), round(t1 * fps)
     for n in range(n0, n1):
         t = n / fps
+        if card and t >= card["start"]:
+            a = (t - card["start"]) / max(1e-6, card["fade_s"])
+            frame = card_img if a >= 1 else Image.blend(shots[-1].at(t), card_img, a)
+            ff.stdin.write(np.asarray(frame, dtype=np.uint8).tobytes())
+            continue
         i = max(k for k, sh in enumerate(shots) if sh.s["start"] <= t + 1e-9) if t >= shots[0].s["start"] else 0
         frame = shots[i].at(t)
         tr = shots[i].s.get("transition", {"type": "cut"})

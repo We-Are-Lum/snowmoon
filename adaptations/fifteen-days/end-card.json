@@ -1,0 +1,16 @@
+{
+  "about": "The end card and the video description for Fifteen Days (owner, 2026-10-14: AI declaration; credits: words by the owner, voices converted from the owner's performance, models; GPL v3; the repo link; the make-your-own-entry link). DRAFT wording by the coding agent; the owner rewrites or approves it. The model lines must match the scene's recipes before publication.",
+  "draft": true,
+  "title": "Fifteen Days",
+  "sections": [
+    {"label": "AI declaration", "text": "The pictures, the voices and the sound effects were made with open-weight AI models. Every word was written by a person."},
+    {"label": "Words", "text": "Written by naaate, from Snowmoon by Vitalik Buterin."},
+    {"label": "Voices", "text": "Performed by naaate and converted into designed character voices with Chatterbox (MIT). Voices designed with Qwen3-TTS VoiceDesign (Apache-2.0). Narration: Kokoro (Apache-2.0)."},
+    {"label": "Pictures", "text": "Z-Image Turbo (Apache-2.0), from written character and place sheets. Lettering drawn in code."},
+    {"label": "Licence", "text": "GPL v3, like the book. Every script, voice, picture, sound and timeline that made this is yours to copy, change and remake."}
+  ],
+  "links": [
+    {"label": "Source", "shown": "github.com/We-Are-Lum/snowmoon", "url": "https://github.com/We-Are-Lum/snowmoon"},
+    {"label": "Make your own", "shown": "snowmoon.party/make", "url": "https://snowmoon.party/make"}
+  ]
+}

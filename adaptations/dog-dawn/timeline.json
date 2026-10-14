@@ -669,5 +669,10 @@
       },
       "fade_s": 0.4
     }
-  ]
+  ],
+  "end_card": {
+    "file": "adaptations/fifteen-days/end-card.json",
+    "seconds": 8,
+    "fade_s": 0.8
+  }
 }

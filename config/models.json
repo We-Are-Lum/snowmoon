@@ -392,10 +392,15 @@
       "hosted": {
         "host": "fal.ai",
         "endpoints": {
-          "fal-ai/kandinsky5-pro/image-to-video": 0.2
+          "fal-ai/kandinsky5-pro/image-to-video": 0.04
         },
-        "price_unit": "USD per video (5 s)",
-        "price_seen": "2026-10-13"
+        "price_unit": "USD per video second at 512P (fixed 5 s clips: $0.20 a clip); 1024P is $0.12 a second ($0.60 a clip)",
+        "price_seen": "2026-10-14",
+        "prices_by_resolution": {
+          "512P": 0.04,
+          "1024P": 0.12
+        },
+        "price_source": "https://fal.ai/models/fal-ai/kandinsky5-pro/image-to-video"
       },
       "model_record": "endpoint, date and request id (the host does not expose a weights revision)",
       "cost_usd_per_unit": null,
@@ -453,10 +458,16 @@
       "hosted": {
         "host": "fal.ai",
         "endpoints": {
-          "fal-ai/longcat-single-avatar/image-audio-to-video": 0.15
+          "fal-ai/longcat-single-avatar/image-audio-to-video": 0.3
         },
-        "price_unit": "USD per unit (fal's unit, not stated; confirmed on the first test's invoice)",
-        "price_seen": "2026-10-13"
+        "price_unit": "USD per video second at 720p ($0.15 at 480p), as fal's page states. fal's schema says 720p is 4 units a second and 480p 1, which would make 720p $0.60 a second: budget at the higher figure until an invoice settles it",
+        "price_seen": "2026-10-14",
+        "prices_by_resolution": {
+          "480p": 0.15,
+          "720p": 0.3,
+          "720p_if_schema_units": 0.6
+        },
+        "price_source": "https://fal.ai/models/fal-ai/longcat-single-avatar/image-audio-to-video"
       },
       "model_record": "endpoint, date and request id (the host does not expose a weights revision)"
     }

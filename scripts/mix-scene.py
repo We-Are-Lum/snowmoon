@@ -7,7 +7,8 @@ lettering record is placed by an anchor, never a fixed start:
 A negative offset overlaps the anchor (J-cuts and L-cuts). A cue lasts as long as its stem, unless
 it has "until" (a bed loops to fill it when "loop" is true). "@end" is the end of the last cue that
 is not a bed, plus the timeline's tail_s. A shot runs from its "at" to the next shot's start; the
-last runs to "@end". A dissolve starts at the incoming shot's start and lasts its seconds.
+last runs to "@end". An optional "end_card" ({"file", "seconds"}) follows "@end"; the mix is silent
+under it unless a bed's "until" reaches past "@end". A dissolve starts at the incoming shot's start and lasts its seconds.
 
 Levels are the track's level_db plus the cue's own level_db (default 0); fade_in and fade_out are
 in seconds. The premix is normalised in two passes with ffmpeg's loudnorm, as the podcast is
@@ -134,7 +135,14 @@ def resolve(timeline: dict, stems: dict[str, Path]) -> dict:
         if l["shot"] not in shot_ids:
             raise SystemExit(f"lettering {l['id']}: unknown shot {l['shot']!r}")
         lettering.append({**{k: v for k, v in l.items() if k != "at"}, "start": round(r.point(l["at"]), 3)})
-    return {"duration_s": round(end, 3), "video": timeline["video"], "cues": cues, "shots": shots, "lettering": lettering}
+    card = None
+    if timeline.get("end_card"):
+        # The end card follows the last shot: its text comes from its own file (never the timeline), drawn by the renderer.
+        ec = timeline["end_card"]
+        card = {"file": ec["file"], "file_sha256": sha256(ROOT / ec["file"]), "start": round(end, 3), "end": round(end + ec["seconds"], 3),
+                "fade_s": ec.get("fade_s", 0.8)}
+        end += ec["seconds"]
+    return {"duration_s": round(end, 3), "video": timeline["video"], "cues": cues, "shots": shots, "lettering": lettering, "end_card": card}
 
 
 def mix(resolved: dict, stems: dict[str, Path]) -> np.ndarray:
