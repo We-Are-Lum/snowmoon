@@ -1,6 +1,7 @@
 # Seed brief: Fifteen Days
 
-> **Spoilers through chapter 15.** Nothing here comes from chapter 16 or later.
+> **Spoilers through chapter 19** while the script's beat 6 narration (c19-b124) is in; everything
+> else here stays inside chapter 15.
 > **Model-drafted** (by the coding agent, 2026-10-14) from the owner's notes *Fifteen Days, second
 > version* and the book's text. Structure and citations only: every published word of the piece is
 > the owner's. Anything not in the book is marked **invented**.
@@ -75,37 +76,71 @@ menu, the invitation, the pictures, the speech, the joke) and the vigil's reply.
 rivalry, its three hints of something more, her grief and her work for Den's people.
 
 **Invented (owner's decisions, 2026-10-14):**
-- Bai and Zei share an old, unforgiven hurt. Which one is still open (question 1).
+- Bai and Zei share an old, unforgiven hurt. Which one is still open (§4, question 1).
 - Deluin was quietly asked, by his parents' circle, to get close to the best young players. Soft:
-  networking he half believes in, not espionage. He doesn't know the invasion's date. (The book's
-  later chapters bear on this; this brief stays inside chapter 15.)
+  networking he half believes in, not espionage. He doesn't know the invasion's date.
 - Bai is suspicious of Deluin. Each of his tells has an innocent reading; nothing is confirmed.
-- Bai is present at the tea, watching from across the courtyard (the owner's pick between watching
-  and the middle path is still open: question 3).
+- Bai is present at the tea, at the table and then at the next one (draft 1: the middle path).
 - The sugar-cube wall with a door in it, the look between Bai and Deluin, the message Deluin sends at
   the gate, and Bai at the vigil.
 
 **No canon:** nothing here becomes a fact of the edition; it is one reader's version.
 
-## 3. The Friday cut (proposed, not approved)
+### Chapter 19 (only the narration at the gate)
 
-About three minutes, six beats, an optional opener with no dialogue. From the sprint plan, section 4:
+| What | Blocks |
+|---|---|
+| "That day was his last Minpentai game, the semifinal against Gun"; Zei's record of the day | c19-b124 |
 
-0. *(Optional)* A still of Deluin's walls holding, one narrated line.
-1. The corridor: Deluin's tea invitation, then Bai's warning (invented).
-2. The run and the menu, Bai watching from across the courtyard (invented).
-3. The question and the sugar wall (invented).
-4. Redshire, fifteen days, and the look between Bai and Deluin (the look is invented).
-5. The gate, and the message Deluin sends (invented).
-6. The vigil, the reply, and Bai's face (Bai's presence is invented).
+## 3. The cut in the owner's draft 1 (2026-10-14)
 
-Roughly 200 to 300 words of dialogue and about 100 of narration, all the owner's.
+There are seven beats, filled from the owner's draft 1 in `script.md`. They hold 605 words of dialogue and 50 of narration, about five minutes with the silent beats.
 
-## 4. Open questions for the owner
+1. **The walls hold** *(optional opener)*:
+   - Deluin plays Kau; Bai and Zei watch from the waiting room.
+   - Two narrated lines from the book (c14-b91, c14-b94).
+2. **The corridor:**
+   - Zei and Deluin compliment each other and agree on tea for later.
+   - Bai voices her doubt ("He's your competition, remember?").
+3. **The café:**
+   - Bai is already laughing at the table with Deluin.
+   - The robot and the menu, in the book's own words (c14-b105–c14-b119).
+   - Bai makes an excuse and moves to the next table.
+4. **The question and the sugar wall:**
+   - "Why does Dzego like Minpentai so much?"
+   - Redshire's quirks, and the flicked cube.
+5. **Redshire and fifteen days:**
+   - The invitation; "about fifteen days".
+   - Deluin offers to pay, and invites Bai; Dreadnaught.
+6. **The gate:**
+   - The chant (c12-b93); ten fingers, then five.
+   - Deluin sends a message.
+   - Narration from c19-b124.
+7. **The vigil:**
+   - Zei's fifth message; Bai sits down.
+   - The replies (c15-b50, c15-b53, c15-b55).
+   - Zei turns the screen to Bai; cut on her face.
 
-1. What did Zei do to Bai, and what did she do back? (The notes favour "he left when she let him in".)
-2. Bai at the tea: watching from nearby, or the middle path (she sits down, then leaves)?
-3. The ending: Bai's face, Su's line (c15-b82–c15-b83), or silence?
-4. Does Deluin smile at Bai when their eyes meet?
-5. The title: *A Door in the Wall*, *Fifteen Days*, or another.
-6. Narration's point of view: the house narrator outside all three, or nearer one of them?
+## 4. Questions, as the draft leaves them
+
+**Settled by draft 1:**
+- **Bai at the tea** (old question 2): the middle path. She is at the table first, then moves to the next one.
+- **The ending** (old question 3): Bai's face.
+- **Narration's point of view** (old question 6): a light third-person narrator, outside all three.
+- **The look between Bai and Deluin** (old question 4): not in the draft. Instead, Bai glances back and Deluin invites her (see question 5).
+
+**Still open, for the owner:**
+1. **The hurt.** What did Zei do to Bai, and what did she do back? The draft only hints at it ("you know I hate you", "'Was.'"), which may be enough.
+2. **The title**, due Thursday evening: *A Door in the Wall*, *Fifteen Days*, or another.
+3. **Length.** The piece runs about five minutes, longer than the three the plan allowed. The menu exchange (beat 3) is 273 of the 605 dialogue words. What should be trimmed? (Draft open item 1.)
+4. **Kau.** Bai's "These other losers… They" is plural, but the semifinal has one opponent, Kau (c14-b90). Make it singular, or does it mean the whole field? (Item 2.)
+5. **The look.** Is it cut, or does it come back at Bai's glance in beat 5?
+6. **Dreadnaught.** Where is the band first set up? Options: leaking from Bai's headphones in the waiting room (beat 1), or in the corridor. (Item 3.)
+7. **Bai's interrogation.** Is it revealed here or later? (Item 4.)
+8. **The c19-b124 narration.** In the book, "his" means Zei, and "the semifinal against Gun" was Zei's game that morning. Over Deluin at the gate, a viewer will hear it about Deluin, and it contradicts the opener, where Deluin plays Kau. Choose one:
+   - (a) Put it over Zei walking back to Bai's table.
+   - (b) Cut it to "That day was his last Minpentai game … the last day when things in his life were at least somewhat normal." This stays verbatim, with the cut marked.
+   - (c) Drop it. The spoiler mark then returns to chapter 15. (Item 5.)
+9. **The vigil card's date.** "3724 Firemoon 17" comes from c15-b1, which heads the chapter's Freetown section. Pafogai Du (c15-b48) has no date of its own. Keep the date, or show only the place?
+10. **Voices not yet described.** The narrator and the robot waiter need your descriptions. So far your takes cover Bai and Deluin. Will you also perform Zei and the robot?
+11. **Deluin's chant.** In the book, all the contestants say "Dze go ba fau gie" in unison (c12-b93). In the draft, Deluin says it alone, to Zei, at the gate. Is that what you intend?

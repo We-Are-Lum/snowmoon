@@ -1,199 +1,286 @@
 # Fifteen Days: script
 
 > **Structure drafted by the coding agent (Claude, a closed model). Not approved.**
-> Drafted on 2026-10-14 from `brief.md` §3 (the six-beat Friday cut, with the optional opener) in the
-> beat format of `docs/adaptation-format.md`. The agent wrote no narration and no dialogue: those
-> fields are empty until the owner's writing sheet arrives. Book lines are candidates, verbatim from
-> the cited blocks. Images are inputs to the image model, never published as text.
+> Words: the owner's **draft 1** (FID 6786, 2026-10-14), a working draft the owner will edit. Every
+> narration and dialogue line is either the book's, verbatim and tagged with its block, or the
+> owner's, tagged `by FID 6786 on 2026-10-14`. Directions in square brackets are the owner's notes
+> unless marked *(book, …)*, *(drafted)* (the agent's suggestion, for the owner to keep, change or
+> cut) or *(from the treatment)*. The structure fields (who, wants, in the way, cost, what changes,
+> context, book lines, image, lettering) are model-drafted; images are inputs to the image model,
+> never published as text.
 >
-> **Spoilers through chapter 15.** Working title (brief §4, question 5).
+> **Spoilers through chapter 19** while the beat 6 narration (`c19-b124`) is in; without it,
+> chapter 15. Working title (brief §4, question 5).
 
 **Stage:** animatic with voices (stages 2 and 3): stills with camera moves, performed and converted
-dialogue, a narrator, ambience and Foley. **Narrator:** to be chosen in the voice test.
-**Characters' voices:** designed voice sheets (`voices/`), converted from the owner's performances.
-**Point of view:** open (brief §4, question 6).
-**Length:** 6 beats and an optional opener; about three minutes. Narration written so far: 0 words
-(at most 25 per beat). Dialogue: 0 of roughly 200 to 300 words.
-**Style:** to be picked from the style test (round one: 23 styles).
+dialogue, a narrator, ambience and Foley. **Narrator:** light, third person; voice to be chosen in
+the voice test. **Voices:** a narrator, Zei, Deluin, Bai and the robot waiter; the characters'
+voices are designed voice sheets (`voices/`), converted from the owner's performances.
+**Point of view:** the house narrator, outside all three (draft 1).
+**Length:** 7 beats (the draft's opener and sections 1 to 6 are beats 1 to 7). Narration: 50 words,
+all the book's (beat 1: 25, beat 6: 25). Dialogue: 605 words, the owner's and the book's (beat 3's menu exchange is 273); 655 spoken in all,
+roughly five minutes with the silent beats (draft 1, open item 1).
+**Style:** to be picked from the style test.
 
 **What is invented** (brief §2):
-- Bai and Zei's old, unforgiven hurt (beats 2, 3, 5, 7; brief §4, question 1).
-- Deluin's quiet assignment and his tells (beats 4, 5, 6).
-- Bai's warning in the corridor (beat 2).
-- Bai watching from across the courtyard (beats 3, 4, 5; brief §4, question 2).
-- The question, and the wall of sugar cubes with a door in it (beat 4).
-- The look between Bai and Deluin (beat 5; brief §4, question 4).
-- The gate, the message Deluin sends, ten fingers then five (beat 6).
-- Bai at the vigil (beat 7; brief §4, question 3).
+- Bai in the waiting room beside Zei, and her lines about Deluin (beat 1).
+- Zei and Bai in the corridor, and Bai's doubt about Deluin (beat 2).
+- Bai already laughing at the table with Deluin; her excuse and move to the next table (beat 3; the
+  middle path, brief §4, question 2).
+- The question about Minpentai, Redshire's quirks, and the sugar-cube wall (beat 4).
+- Deluin's offer to pay for the trip, his invitation to Bai, and Dreadnaught (beat 5).
+- The gate: the chant, ten fingers then five, the message Deluin sends (beat 6).
+- The narration of `c19-b124` moved to the gate (beat 6; in the book it is about Zei, read later).
+- Bai at the vigil; Zei turning the screen to her (beat 7; brief §4, question 3).
 
 ---
 
 ## Beat 1 · The walls hold (optional opener)
 
-- **who:** Zei, watching; Deluin, on the big rendering
-- **wants:** Zei wants to understand how Deluin plays.
-- **in the way:** Nothing yet; this is the calm before the day turns personal.
-- **cost:** None. *(Invented: the opener exists only to show Deluin's defence before we meet him.)*
-- **what changes:** We know Deluin as a player before we know him as a person.
+- **who:** Deluin and Kau, in the hall; Zei and Bai, in the waiting room *(Invented: Bai)*
+- **wants:** Bai wants Zei to stop admiring Deluin.
+- **in the way:** Deluin plays exactly the patient game Zei plays.
+- **cost:** None yet. *(Invented: Bai's needling is the first hint she doesn't trust him.)*
+- **what changes:** We know Deluin as a player, and Bai as his doubter, before we meet him.
 - **context:**
-  - c14-b90: Zei, in the waiting room, impressed by Deluin's walls and glider factories.
-  - c14-b93: Kau reduced to hiding behind the southern shrine.
+  - c14-b1: the place and date, Sadzu Du, Firemoon 10.
+  - c14-b90–c14-b94: Zei watches Deluin against Kau; walls; ten thousand two hundred turns.
+  - *(Invented: Bai in the waiting room; the book has Zei there alone.)*
 - **book lines:**
-  - `c14-b90` From the beginning, Zei was surprised, and impressed, by Deluin's strategy.
-  - `c14-b90` Deluin spent all his attention early on to use the resources in the rock formations near his north and northeast to build walls.
-- **image:** The players' waiting room, dim. Zei, from his design board profile, sits forward on a
-  bench, lit by a huge screen showing a dark game field where a ring of luminous walls holds against
-  streams of small glowing gliders. No people on the screen; no writing.
-- **lettering:** none
-- **narration:** *(empty until a person writes it)*
-- **dialogue:** *(empty until a person writes it)*
+  - `c14-b90` Zei sat in the waiting room, watching the game between Deluin and Kau.
+  - `c14-b91` Deluin did not build any mobile symbol-carrying spaceships. Instead, he simply fortified.
+  - `c14-b92` Looks like Deluin had also managed to figure out that he needed to be more patient.
+  - `c14-b94` Ten thousand two hundred turns into the game, Deluin was announced the winner.
+- **image:** Two shots. First, the hall: Deluin and Kau at their stations, poker faces; Kau sweating,
+  Deluin calm and cool; above them a huge screen with a dark game field where a ring of luminous
+  walls holds against streams of small glowing gliders. Second, the players' waiting room, dim: Zei
+  and Bai, from their design board profiles, side by side watching the board; a small trash can
+  beside Bai. No writing on any screen.
+- **lettering:** `place-date, en` Sadzu Du, Dzego · 3724 Firemoon 10 (book, c14-b1), on the first shot.
+- **narration:**
+  - `book c14-b91` Deluin did not build any mobile symbol-carrying spaceships. Instead, he simply fortified. *(optional)*
+  - `book c14-b94` Ten thousand two hundred turns into the game, Deluin was announced the winner.
+- **dialogue:**
+  *[On screen: Sadzu Du, Dzego · 3724 Firemoon 10] (book, c14-b1)*
+  *[The hall. Deluin's semifinal against Kau. Faces thinking hard, poker faces; Kau sweating; Deluin calm and cool.]*
+  *[Narration 1, optional.]*
+  *[The waiting room. Bai and Zei are watching the board.]*
+  - `by FID 6786 on 2026-10-14` Zei: You'd think after making it this far, they'd stop underestimating the foreigner.
+  - `by FID 6786 on 2026-10-14` Bai: It wouldn't be so annoying if he wasn't so damned pretty.
+  *[Zei gives her a look, eyebrow raised.]*
+  - `by FID 6786 on 2026-10-14` Bai: Way too fake for me.
+  *[Bai spits something into the nearby trash can.]*
+  - `by FID 6786 on 2026-10-14` Zei: Such patience...
+  - `by FID 6786 on 2026-10-14` Bai: Yeah, a total wimp, just like you. But it gets you guys the W.
+  *[Bai gives the board a serious look.]*
+  - `by FID 6786 on 2026-10-14` Bai: These other losers are toast. They should already throw in the towel, but don't even know it yet.
+  *[Narration 2.]*
 
 ## Beat 2 · The corridor
 
-- **who:** Zei, Deluin; then Bai *(Invented: Bai's presence and warning)*
-- **wants:** Zei wants to meet the player he admired; Bai wants Zei to see what she sees.
-- **in the way:** Zei hears Bai's warning only as her usual meanness. *(Invented.)*
-- **cost:** Zei answers with something that touches the old wound; Bai takes it without flinching
-  where he can see. *(Invented: brief §2, the old hurt.)*
-- **what changes:** The tea is set, and a doubt is planted that Zei refuses to hold.
+- **who:** Zei, Deluin, Bai *(Invented: Bai)*
+- **wants:** Zei wants Deluin as a friend; Bai wants Zei to keep his guard up.
+- **in the way:** Zei hears Bai's doubt as her usual meanness.
+- **cost:** Bai is reminded she is no longer in the competition ("'Was.'"). *(Invented.)*
+- **what changes:** The tea is set, and Bai's doubt is spoken.
 - **context:**
   - c14-b95–c14-b100: Deluin steps out of the elevator; compliments; "Do you want to get tea later?"
   - c14-b23: Bai has watched a practice game between Gun and Deluin.
-  - c14-b16: Bai's own joke that morning, about not being a spy.
-  - *(Invented: Bai's warning, "he did this with me too", brief §2.)*
+  - *(Invented: Bai in the corridor; her doubt, brief §2.)*
 - **book lines:**
   - `c14-b95` Deluin stepped out from the elevator.
-  - `c14-b96` "That was a really impressive job, Deluin."
   - `c14-b97` "Thanks! I was impressed that the walls held out so well. Now I'm excited to see how you handled your game."
   - `c14-b98` "Oh - my style was much uglier than yours. Though I also basically won by playing defense."
   - `c14-b99` "Do you want to get tea later?" *(the book doesn't say who asks)*
-  - `c14-b100` "Sure!"
-- **image:** A quiet corridor inside the arena's mountain, rock walls finished with clean panels.
-  Deluin walks away, easy and bright, toward the far end. In the foreground Bai, from her design board
-  profile, has stepped out of a doorway beside Zei; she speaks low, he looks past her.
-  *(Invented: Bai in the corridor.)*
+- **image:** A quiet corridor inside the arena's mountain, rock walls finished with clean panels, an
+  elevator door. Two shots. First, Deluin steps out to Zei and Bai, easy and bright. Second, Deluin
+  walks away toward the far end; in the foreground Bai gives Zei a hard look. *(Invented: Bai.)*
 - **lettering:** none
 - **narration:** *(empty until a person writes it)*
-- **dialogue:** *(empty until a person writes it)*
+- **dialogue:**
+  *[Deluin comes out. Zei and Bai are there.] (drafted)*
+  - `by FID 6786 on 2026-10-14` Zei: Deluin! Good job out there.
+  - `by FID 6786 on 2026-10-14` Deluin: Thanks! The walls held out. I haven't yet watched your replay, but will be sure to tonight.
+  - `by FID 6786 on 2026-10-14` Zei: Please ignore the ugly style. I also won by defense though... For most of the game it just looks like I'm running scared.
+  - `by FID 6786 on 2026-10-14` Deluin: Patience often does, until you win. Hey, do you want to get tea later? I'll be at the courtyard in a longhour.
+  - `by FID 6786 on 2026-10-14` Zei: Sure, that works well for me!
+  - `by FID 6786 on 2026-10-14` Deluin: Bai, you're welcome too.
+  *[She shrugs, with a disgruntled look on her face. Deluin goes. Bai gives Zei a hard look.]*
+  - `by FID 6786 on 2026-10-14` Zei: You gonna come? Should be fun!
+  - `by FID 6786 on 2026-10-14` Bai: He's your competition, remember?
+  - `by FID 6786 on 2026-10-14` Zei: Take it easy, you're my competition too.
+  - `by FID 6786 on 2026-10-14` Bai: 'Was.' And you know I hate you, and know all your tricks anyway.
+  *[She says it with a smile, and continues.]*
+  - `by FID 6786 on 2026-10-14` Bai: But this guy, we don't know anything about this guy.
+  - `by FID 6786 on 2026-10-14` Zei: So let's get to know him, it will be fun! Maybe he won't be so fake after all.
 
-## Beat 3 · The run and the menu
+## Beat 3 · The café
 
-- **who:** Zei, Deluin, the robot waiter; Bai, across the courtyard *(Invented)*
+- **who:** Zei, Deluin, Bai, the robot waiter
 - **wants:** Zei wants to be the expert at his own table; Deluin wants to be liked.
-- **in the way:** Deluin reads the new glyphs before Zei can, and lectures him about his own language.
-- **cost:** A small chill under the charm. *(Invented: Bai's pen stops.)*
-- **what changes:** The friendship starts, with Deluin a step ahead.
+- **in the way:** Deluin reads the new glyphs, and lectures Zei about his own language.
+- **cost:** Bai, who was laughing with Deluin, leaves the table. *(Invented: the middle path.)*
+- **what changes:** Deluin is "almost a local"; Bai watches from the next table.
 - **context:**
-  - c14-b102–c14-b107: Deluin already at a table with a tea; Zei runs; the robot; the menu appears.
-  - c14-b114, c14-b118: the glyph reform; Deluin "in a lecturing tone".
-  - c14-b9: Bai mocking the restaurant robots that morning.
-  - *(Invented: Deluin at the table facing the entrance; Bai alone at the far edge with her notes.)*
+  - c14-b102–c14-b104: Deluin already in the courtyard with a tea; Zei runs to him.
+  - c14-b105–c14-b119: the robot, the menu, Dzegoban version nine, Deluin's lecture.
+  - *(Invented: Bai at the table first, her excuse and her move, brief §4, question 2.)*
 - **book lines:**
-  - `c14-b102` Deluin was sitting in the courtyard drinking a tea. As soon as Zei saw him, he started running to greet him.
-  - `c14-b103` "Deluin, good to see you!"
+  - `c14-b102` As soon as Zei saw him, he started running to greet him.
   - `c14-b105` A robot immediately slid up to their table.
-  - `c14-b106` "jie mo kai tu jie hei ja ma?" *(the robot)*
   - `c14-b107` A menu appeared.
-  - `c14-b118` "Zei, the whole point of Dzegoban is that there's only 256 roots, you can learn it in less than a month, and you don't get all the nuances but you can make your way around just fine." *(Deluin, "in a lecturing tone")*
-- **image:** The courtyard café (design board place), late afternoon. Zei, mid-run, crosses toward a
-  small table where Deluin sits with a tea, facing the entrance; a little wheeled robot with a screen
-  face rolls up. Far back at the courtyard's edge, small in the frame, Bai sits alone with a notebook.
-  *(Invented: the table facing the entrance; Bai.)*
-- **lettering:** the menu's glyphs, if shown: drawn in code from the book's Dzegoban only
-  (c14-b106 is the robot's phrase); otherwise none.
+  - `c14-b112` He immediately realized he was talking to a foreigner, and followed up:
+- **image:** The courtyard, early evening. Three shots. First, Zei running across it, pulling up
+  short: Bai already at the table with Deluin, both laughing. Second, the robot waiter beside the
+  table, and the menu (the book's own glyph picture, c14-b108, composited). Third, Bai at the
+  adjoining table with headphones on, handheld out, her back half turned. *(Invented: Bai.)*
+- **lettering:** the menu is the book's image (c14-b108), composited, never redrawn by the model.
 - **narration:** *(empty until a person writes it)*
-- **dialogue:** *(empty until a person writes it)*
+- **dialogue:**
+  *[The courtyard, early evening. Zei runs across it, and pulls up short. Bai is already at the table with Deluin, and they're laughing; they were just making a joke about Zei that even got Bai laughing.]*
+  - `by FID 6786 on 2026-10-14` Deluin: Zei, we were just talking about you!
+  *[Zei sits.] (drafted)*
+  *[A robot slides up to the table.] (book, c14-b105)*
+  - `book c14-b106` Robot: "jie mo kai tu jie hei ja ma?"
+  *[A menu appears: the book's own glyph picture.] (book, c14-b107–c14-b108)*
+  - `book c14-b109` Zei: "Whoa"
+  - `book c14-b110` Deluin: "What is it?"
+  - `book c14-b111` Zei: "I think these are some of the new symbols they're A/B testing for Dzegoban version nine."
+  *[He realises he's talking to a foreigner.] (book, c14-b112)*
+  - `book c14-b113` Zei: "Have you heard of Dzegoban version nine?"
+  - `book c14-b114` Deluin: "Oh yeah I had a couple people mention it to me. Making the language visual. Bringing back hieroglyphs for the individual roots, but pronunciation perfectly readable from the glyph. And also another layer where they're trying to make the grammar look more like math."
+  - `book c14-b115` Zei: "Yeah, so I'm trying to parse this. The cup is water - 'ja'. I see two unusual things about the cup. More straight horizontal lines than usual, and the three diagonal lines on the right. Maybe those are the pronunciation markers? One for the consonant, one for the vowel?"
+  - `book c14-b116` Deluin: "Top right is 'kai'. The unusual things I see are ... the extra vertical vein on the left, and then the transition to veins being more and more squiggly on the right? Although ... I'm not sure if I would make the images so detailed, when they often have different meanings depending on context."
+  - `book c14-b117` Zei: "Wait, you know Dzegoban?"
+  - `book c14-b118` Deluin: "Zei, the whole point of Dzegoban is that there's only 256 roots, you can learn it in less than a month, and you don't get all the nuances but you can make your way around just fine." *(in a lecturing tone, book)*
+  - `book c14-b119` Zei: "I'm impressed, you're almost a local already."
+  *[Bai whips round with a half-baked excuse.]*
+  - `by FID 6786 on 2026-10-14` Bai: Actually, I don't think I want anything, plus I've got a lot to catch up on. Zei, when you're done, come get me, I want to go over some strategies I've been thinking about with you.
+  *[She spins round to the adjoining table, puts on headphones, and whips out her handheld.]*
 
 ## Beat 4 · The question and the sugar wall
 
-- **who:** Zei, Deluin; Bai, watching *(all invented)*
-- **wants:** Deluin wants one answer (who trains Zei, or what the priests teach); Zei wants to keep
-  his secret and the afternoon both.
-- **in the way:** Zei deflects with a joke; his fingers open and close under the table. *(Invented.)*
-- **cost:** For a moment Deluin forgets he's working, and laughs properly. *(Invented: brief §2.)*
-- **what changes:** Both are hiding something, and the friendship forms in the gap between their secrets.
+- **who:** Zei, Deluin; Bai, at the next table
+- **wants:** Deluin wants to understand Dzego; Zei wants to know where Deluin comes from.
+- **in the way:** Nothing, yet; this is the warmest moment of the day.
+- **cost:** None. *(Invented: the flicked cube opens a door in Deluin's wall.)*
+- **what changes:** They laugh together; Zei has found Deluin's love of walls.
 - **context:**
-  - c14-b90, c14-b97: walls, the game both of them play.
-  - *(Invented: the question, the sugar-cube wall with a door in it, Bai seeing Zei laugh.)*
-- **book lines:** none; the book has no such exchange.
-- **image:** Close on the table between them: a small wall of sugar cubes, one cube flicked out of the
-  bottom row so the wall stands with a door in it; Deluin's hand still near it, Zei's fingers half
-  curled at the table's edge. Two cups of tea. *(Invented.)*
+  - c14-b126–c14-b127: Redshire's care for natural beauty.
+  - *(Invented: the question, Redshire's quirks, the sugar wall, the flick.)*
+- **book lines:**
+  - `c14-b127` Even beautiful nature takes so much human work to maintain.
+- **image:** Close on the table between them: tea poured, a small wall of sugar cubes Deluin has
+  built; Zei's finger flicking one cube out of the bottom row so the wall stands with a door in it;
+  both laughing. *(Invented.)*
 - **lettering:** none
 - **narration:** *(empty until a person writes it)*
-- **dialogue:** *(empty until a person writes it)*
+- **dialogue:**
+  *[Tea poured. Deluin is building a little wall of sugar cubes.] (drafted, from the beat plan)*
+  - `by FID 6786 on 2026-10-14` Deluin: Why does Dzego like Minpentai so much?
+  - `by FID 6786 on 2026-10-14` Zei: Kids get into it pretty young here, with the whole family involved. One of our quirks I guess, just like the language. Does Redshire have any quirks?
+  - `by FID 6786 on 2026-10-14` Deluin: Sure.... we care a lot about natural beauty, and have maybe an unnatural obsession with old styles. Less cameras, more castles.
+  - `by FID 6786 on 2026-10-14` Zei: I see where you got your love of walls then.
+  *[Deluin looks down at the sugar cubes, and smiles.]*
+  - `by FID 6786 on 2026-10-14` Deluin: Yes. Simple, straightforward, useful.
+  *[Zei flicks out the door. They both laugh.]*
 
-## Beat 5 · Redshire, fifteen days, and the look
+## Beat 5 · Redshire and fifteen days
 
-- **who:** Zei, Deluin; Bai, watching *(Invented)*
+- **who:** Zei, Deluin, Bai
 - **wants:** Deluin wants Zei to come to Redshire; Zei wants to go and can't afford it.
 - **in the way:** Money, and a final that hasn't been played.
-- **cost:** A promise made inside a rivalry. *(Invented: Bai hears the word Redshire, the trip she
-  once tried to give him, c4-b156, c5-b9.)*
-- **what changes:** Zei has a reason to win; Deluin and Bai have seen each other watching.
+- **cost:** Deluin offers his winnings, inside a rivalry; Bai, invited too, answers with noise.
+  *(Invented: Bai hears the word Redshire, the trip she once tried to give him, c4-b156, c5-b9.)*
+- **what changes:** Zei has a reason to win; Bai has heard the invitation.
 - **context:**
-  - c14-b120–c14-b124: the invitation, "Send me pictures", the pictures of Redshire.
-  - c14-b126–c14-b127: beautiful nature takes human work.
-  - c14-b128–c14-b130: "fifteen days"; Deluin's snap-back.
+  - c14-b120: the invitation, for his parents' birthdays.
+  - c14-b121, c14-b128–c14-b130: no money; "fifteen days"; Deluin's snap-back.
   - c4-b156, c5-b9: Zei asked Bai to take him to Redshire; drones grounded the flights.
-  - *(Invented: the look between Bai and Deluin, brief §4, question 4.)*
+  - *(Invented: Deluin's offer to Bai, Dreadnaught.)*
 - **book lines:**
-  - `c14-b120` "Well, wanna come to Redshire with me tomorrow?
-  - `c14-b122` "But I'm super curious to see what Redshire is like! Send me pictures."
-  - `c14-b124` He saw castles, pine forests, large pristine grasslands, red-colored mountains with their tops covered in snow, and one giant icy waterfall.
-  - `c14-b128` "I'll let you know as soon as I can afford to go."
+  - `c14-b120` Well, wanna come to Redshire with me tomorrow? I have to fly back for my mom and dad's birthdays
   - `c14-b129` "Hopefully that will be in fifteen days" *(Zei, joking)*
   - `c14-b130` "Because I use my championship winnings to pay for you to go" *(Deluin, playfully)*
-- **image:** Two shots. First, Deluin's hand device held between them, its screen a picture of red
-  mountains, pines and a giant icy waterfall (a picture on a screen, no interface writing). Second,
-  over Zei's shoulder as he laughs: Deluin's eyes have gone past him to the far edge of the
-  courtyard, where Bai looks back. *(Invented: the look.)*
+- **image:** Two shots. First, Zei laughing, glancing at his watch; Deluin across from him. Second,
+  over their table to the next one: Bai pulling one side of her headphones off, mid-shout.
 - **lettering:** none
 - **narration:** *(empty until a person writes it)*
-- **dialogue:** *(empty until a person writes it)*
+- **dialogue:**
+  - `by FID 6786 on 2026-10-14` Deluin: Why don't you come visit. My parents just told me I need to come back for an early birthday celebration for them. You can come with me!
+  - `by FID 6786 on 2026-10-14` Zei: Oh... budget will be pretty tight for... about fifteen days. *(looks at his watch before "about"; says it with a smile)*
+  - `by FID 6786 on 2026-10-14` Deluin: Oh yeah, then I can use some of my winnings to pay for your trip.
+  *[Bai glances back at them.]*
+  - `by FID 6786 on 2026-10-14` Deluin: You can come too Bai! *(loudly)*
+  *[Bai makes a big show of pulling off one side of her headphones. The loud, angry band blares.]*
+  - `by FID 6786 on 2026-10-14` Bai: What?!! Dreadnaught!! It's good! *(points at the headphones before "It's good!")*
 
 ## Beat 6 · The gate
 
-- **who:** Zei, Deluin *(all invented)*
-- **wants:** Deluin wants to leave as the friend he has just become; he also has to report. *(Invented.)*
-- **in the way:** What he was asked to do. *(Invented: brief §2, the assignment.)*
+- **who:** Zei, Deluin, Bai *(all invented)*
+- **wants:** Deluin wants to leave as the friend he has just become; he also has a message to send.
+  *(Invented: brief §2, the assignment.)*
+- **in the way:** What he was asked to do. *(Invented.)*
 - **cost:** He hesitates before he sends. *(Invented.)*
 - **what changes:** For the only time, we are on Deluin's side of a secret, and can't read it.
 - **context:**
-  - c14-b120: he flies back tomorrow, for his parents' birthdays.
-  - c14-b129: fifteen days.
-  - *(Invented: the gate at dusk, ten fingers then five, the message, brief §3 beat 5.)*
-- **book lines:** none; the book ends the tea at c14-b130.
-- **image:** Dusk at the courtyard's street gate, lamps coming on. Deluin, in his cream tunic, walks
-  into the street; in a second shot, close on his thumbs over a hand device, the screen turned away
-  from us. *(Invented.)*
+  - c12-b93: the contestants' chant, "Dze go ba fau gie".
+  - c14-b32: the final is in fifteen days.
+  - c19-b124: the narration, moved here (see below).
+  - *(Invented: the gate at dusk, ten fingers then five, the message.)*
+- **book lines:**
+  - `c12-b93` "Dze go ba fau gie"
+  - `c19-b124` That day was his last Minpentai game, the semifinal against Gun - the last day when things in his life were at least somewhat normal. *(in the book, about Zei)*
+- **image:** Dusk at the courtyard's street gate, lamps coming on. Three shots. First, Deluin at the
+  gate holding up ten fingers, then five. Second, Zei walking back toward Bai's table. Third, close
+  on Deluin's thumbs over his hand device, the screen turned away from us. *(Invented.)*
 - **lettering:** none (the message is never shown)
-- **narration:** *(empty until a person writes it)*
-- **dialogue:** *(empty until a person writes it)*
+- **narration:**
+  - `book c19-b124` That day was his last Minpentai game, the semifinal against Gun - the last day when things in his life were at least somewhat normal.
+- **dialogue:**
+  *[Dusk at the courtyard gate, with the lamps coming on.] (drafted, from the beat plan)*
+  - `book c12-b93` Deluin: "Dze go ba fau gie" *(the contestants' chant)*
+  *[Ten fingers, then five.] (from the treatment)*
+  *[Zei turns and heads for Bai's table. No words.]*
+  *[Deluin, alone, takes out his device, types a message we can't read, hesitates, and sends it.]*
+  *[Narration 1.]*
 
 ## Beat 7 · The vigil
 
 - **who:** Zei; Deluin, on the other end of a message; Bai *(Invented: Bai at the table)*
 - **wants:** Zei wants to know Deluin is alive.
 - **in the way:** Redshire has been invaded; no answer comes.
-- **cost:** Zei lets Bai read the reply, the first time in years he lets her in. *(Invented: brief §2.)*
+- **cost:** Zei lets Bai read the reply. *(Invented: brief §2.)*
 - **what changes:** Relief for Zei; for Bai, an escape that's slightly too lucky.
 - **context:**
+  - c15-b1: the date, Firemoon 17 (the chapter's heading, given for Freetown).
+  - c15-b48: the place, Pafogai Du.
   - c15-b49–c15-b51: the fifth message; crying in the lobby restaurant; the tea refilled four times;
     the rice uneaten.
-  - c15-b53, c15-b55, c15-b72: Deluin's replies.
-  - *(Invented: Bai sits down and says nothing; the robot pours her a tea; Zei turns the screen to her;
-    the ending, brief §4, question 3.)*
+  - c15-b53–c15-b55: Deluin's replies; Zei breathes out.
+  - *(Invented: Bai sits down and says nothing; Zei turns the screen to her; the ending, brief §4,
+    question 3.)*
 - **book lines:**
-  - `c15-b49` Zei anxiously tapped buttons on his hand device, and sent off a message for a fifth time.
   - `c15-b51` He sat crying at a table in the lobby restaurant of his hotel.
   - `c15-b51` He had drunk the tea quickly; the robot had already refilled it four times.
-- **image:** The hotel lobby restaurant (design board place) in the evening, nearly empty. Close on Zei
-  at his table, an untouched bowl of rice and a tea cup, his thumb on his hand device. A second shot:
-  Bai seated across from him, a robot pouring her a tea; Zei turning his screen toward her.
-  *(Invented: Bai.)*
-- **lettering:** the reply on Zei's screen is the book's own screen block (c15-b53, c15-b55), captured
-  from the reader's template (`scripts/capture-screen.ts`) and composited onto the device; a cut is
-  marked `…` and recorded.
+  - `c15-b54` He breathed a sigh of relief.
+- **image:** The hotel lobby restaurant (design board place) in the evening, nearly empty. Three
+  shots. First, close on Zei at his table, eyes red, an untouched bowl of rice and vegetables and a
+  tea cup, his hand device lit. Second, Bai sitting down across from him without a word. Third, Zei
+  turning his screen toward Bai; cut on her face. *(Invented: Bai.)*
+- **lettering:**
+  - `place-date, en` Pafogai Du, Dzego · 3724 Firemoon 17 (book: place c15-b48, date c15-b1).
+  - Zei's screen: the book's own screen blocks, captured from the reader's template
+    (`scripts/capture-screen.ts`) and composited onto the device: his fifth message (c15-b50), the
+    reply (c15-b53), then the first sentence of the next (c15-b55, cut marked `…` and recorded).
 - **narration:** *(empty until a person writes it)*
-- **dialogue:** *(empty until a person writes it)*
+- **dialogue:**
+  *[On screen: Pafogai Du, Dzego · 3724 Firemoon 17] (book: place c15-b48, date c15-b1)*
+  *[Zei sits at a table in the lobby restaurant of his hotel. He's been crying. His tea has been refilled four times, and the rice and vegetables are untouched.] (book, c15-b51)*
+  *[On his screen, his fifth message: "Are you okay????! Please tell me where you are."] (c15-b50)*
+  *[Bai sits down across from him, without a word.]*
+  *[A reply: "Don't worry, I am alive. Though it looks like I'm not going to be getting back to Dzego anytime soon."] (c15-b53)*
+  *[Zei breathes out.] (book, c15-b54)*
+  *[Then: "I found a way to send messages out."] (c15-b55, first sentence)*
+  *[Zei turns the screen to Bai. She reads it. Cut on her face.]*
+  *[END]*
