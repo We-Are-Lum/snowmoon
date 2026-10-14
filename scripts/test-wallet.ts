@@ -91,6 +91,7 @@ function base(o: { status?: string; logs?: unknown[]; head?: bigint; ageDays?: n
     readContract: async () => [1n, 250000000000n, 0n, 0n, 1n], // $2,500.00000000
   } as unknown as PublicClient;
 }
+P.payTo = null;
 check('nothing is read while payTo is not set', !(await readPayment(hash, me.address, base({ logs: [usdcLog(me.address, US, 5_000_000n)] }))).ok);
 P.payTo = US;
 const u = await readPayment(hash, me.address, base({ logs: [usdcLog(me.address, US, 5_000_000n)] }));

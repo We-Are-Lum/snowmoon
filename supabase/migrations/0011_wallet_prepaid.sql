@@ -1,4 +1,6 @@
 -- 0011_wallet_prepaid.sql — wallet sign-in and prepaid generations (owner, 2026-10-13).
+-- APPLIED on production by the owner, 2026-10-13 (dry run, then commit; the four tables RLS on, no
+-- anon or authenticated reads, columns as expected). Change what it creates in a new migration.
 --
 -- MUST RUN AS postgres (the role that owns the `studio` schema), in the
 -- Supabase SQL Editor. Requires 0001–0010. Dry run first: paste everything, but replace the

@@ -167,7 +167,8 @@ export const IMAGES = {
    */
   prepaid: {
     enabled: true,
-    payTo: null as `0x${string}` | null,
+    /** The owner's receiving wallet on Base (owner, 2026-10-13). */
+    payTo: '0x4FEA94B8947926DdD3c02f4e133357B547F74FfA' as `0x${string}` | null,
     markup: 0.3,
     /** Suggested amounts in USD; any amount of at least minUsd is credited. */
     packsUsd: [1, 5, 20] as readonly number[],
