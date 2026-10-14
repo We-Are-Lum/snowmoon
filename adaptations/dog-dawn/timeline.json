@@ -1,0 +1,673 @@
+{
+  "about": "TEST TIMELINE, placeholders only: exercises the mixer and renderer on the dog-dawn panels before real audio exists. Voice lines are Kokoro reading placeholder text; beds and Foley are synthesised in code (scripts/scene-placeholders.py). Never published. Model-drafted.",
+  "seed": "dog-dawn",
+  "placeholder": true,
+  "video": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30
+  },
+  "loudness": {
+    "integrated_lufs": -16,
+    "true_peak_db": -1,
+    "lra": 11
+  },
+  "tail_s": 2.0,
+  "tracks": {
+    "voice": {
+      "level_db": 0
+    },
+    "bed": {
+      "level_db": -22
+    },
+    "foley": {
+      "level_db": -10
+    },
+    "music": {
+      "level_db": -16
+    }
+  },
+  "cues": [
+    {
+      "id": "b01-1",
+      "track": "voice",
+      "stem": "scenes-out/dog-dawn/stems/b01-1.wav",
+      "at": {
+        "cue": "@start",
+        "offset": 1.2
+      },
+      "placeholder": {
+        "kind": "voice",
+        "text": "Placeholder narration for beat one. The owner's words go here.",
+        "voice": "am_michael"
+      }
+    },
+    {
+      "id": "b02-1",
+      "track": "voice",
+      "stem": "scenes-out/dog-dawn/stems/b02-1.wav",
+      "at": {
+        "cue": "b01-1",
+        "edge": "end",
+        "offset": 0.9
+      },
+      "placeholder": {
+        "kind": "voice",
+        "text": "Placeholder narration for beat two. The owner's words go here.",
+        "voice": "am_michael"
+      }
+    },
+    {
+      "id": "b03-1",
+      "track": "voice",
+      "stem": "scenes-out/dog-dawn/stems/b03-1.wav",
+      "at": {
+        "cue": "b02-1",
+        "edge": "end",
+        "offset": 0.9
+      },
+      "placeholder": {
+        "kind": "voice",
+        "text": "Placeholder narration for beat three. The owner's words go here.",
+        "voice": "am_michael"
+      }
+    },
+    {
+      "id": "b03-2",
+      "track": "voice",
+      "stem": "scenes-out/dog-dawn/stems/b03-2.wav",
+      "at": {
+        "cue": "b03-1",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "placeholder": {
+        "kind": "voice",
+        "text": "A longer placeholder for beat three, so the timeline is tested with lines of different lengths and the cut lands where the audio says.",
+        "voice": "bf_emma"
+      }
+    },
+    {
+      "id": "b04-1",
+      "track": "voice",
+      "stem": "scenes-out/dog-dawn/stems/b04-1.wav",
+      "at": {
+        "cue": "b03-2",
+        "edge": "end",
+        "offset": 0.9
+      },
+      "placeholder": {
+        "kind": "voice",
+        "text": "Placeholder narration for beat four. The owner's words go here.",
+        "voice": "am_michael"
+      }
+    },
+    {
+      "id": "b05-1",
+      "track": "voice",
+      "stem": "scenes-out/dog-dawn/stems/b05-1.wav",
+      "at": {
+        "cue": "b04-1",
+        "edge": "end",
+        "offset": 0.9
+      },
+      "placeholder": {
+        "kind": "voice",
+        "text": "Placeholder narration for beat five. The owner's words go here.",
+        "voice": "am_michael"
+      }
+    },
+    {
+      "id": "b06-1",
+      "track": "voice",
+      "stem": "scenes-out/dog-dawn/stems/b06-1.wav",
+      "at": {
+        "cue": "b05-1",
+        "edge": "end",
+        "offset": 0.9
+      },
+      "placeholder": {
+        "kind": "voice",
+        "text": "Placeholder narration for beat six. The owner's words go here.",
+        "voice": "am_michael"
+      }
+    },
+    {
+      "id": "b06-2",
+      "track": "voice",
+      "stem": "scenes-out/dog-dawn/stems/b06-2.wav",
+      "at": {
+        "cue": "b06-1",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "placeholder": {
+        "kind": "voice",
+        "text": "A longer placeholder for beat six, so the timeline is tested with lines of different lengths and the cut lands where the audio says.",
+        "voice": "bf_emma"
+      }
+    },
+    {
+      "id": "b07-1",
+      "track": "voice",
+      "stem": "scenes-out/dog-dawn/stems/b07-1.wav",
+      "at": {
+        "cue": "b06-2",
+        "edge": "end",
+        "offset": 0.9
+      },
+      "placeholder": {
+        "kind": "voice",
+        "text": "Placeholder narration for beat seven. The owner's words go here.",
+        "voice": "am_michael"
+      }
+    },
+    {
+      "id": "b08-1",
+      "track": "voice",
+      "stem": "scenes-out/dog-dawn/stems/b08-1.wav",
+      "at": {
+        "cue": "b07-1",
+        "edge": "end",
+        "offset": 0.9
+      },
+      "placeholder": {
+        "kind": "voice",
+        "text": "Placeholder narration for beat eight. The owner's words go here.",
+        "voice": "am_michael"
+      }
+    },
+    {
+      "id": "b09-1",
+      "track": "voice",
+      "stem": "scenes-out/dog-dawn/stems/b09-1.wav",
+      "at": {
+        "cue": "b08-1",
+        "edge": "end",
+        "offset": 0.9
+      },
+      "placeholder": {
+        "kind": "voice",
+        "text": "Placeholder narration for beat nine. The owner's words go here.",
+        "voice": "am_michael"
+      }
+    },
+    {
+      "id": "b09-2",
+      "track": "voice",
+      "stem": "scenes-out/dog-dawn/stems/b09-2.wav",
+      "at": {
+        "cue": "b09-1",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "placeholder": {
+        "kind": "voice",
+        "text": "A longer placeholder for beat nine, so the timeline is tested with lines of different lengths and the cut lands where the audio says.",
+        "voice": "bf_emma"
+      }
+    },
+    {
+      "id": "b10-1",
+      "track": "voice",
+      "stem": "scenes-out/dog-dawn/stems/b10-1.wav",
+      "at": {
+        "cue": "b09-2",
+        "edge": "end",
+        "offset": 0.9
+      },
+      "placeholder": {
+        "kind": "voice",
+        "text": "Placeholder narration for beat ten. The owner's words go here.",
+        "voice": "am_michael"
+      }
+    },
+    {
+      "id": "bed-crystal",
+      "track": "bed",
+      "stem": "scenes-out/dog-dawn/stems/bed-crystal.wav",
+      "at": {
+        "cue": "@start"
+      },
+      "until": {
+        "cue": "b04-1",
+        "edge": "start",
+        "offset": -0.2
+      },
+      "loop": true,
+      "fade_in": 1.2,
+      "fade_out": 1.2,
+      "placeholder": {
+        "kind": "bed",
+        "sound": "hum",
+        "seconds": 45
+      }
+    },
+    {
+      "id": "bed-forest",
+      "track": "bed",
+      "stem": "scenes-out/dog-dawn/stems/bed-forest.wav",
+      "at": {
+        "cue": "b04-1",
+        "edge": "start",
+        "offset": -1.4
+      },
+      "until": {
+        "cue": "b09-1",
+        "edge": "start",
+        "offset": -0.2
+      },
+      "loop": true,
+      "fade_in": 1.2,
+      "fade_out": 1.2,
+      "placeholder": {
+        "kind": "bed",
+        "sound": "wind",
+        "seconds": 45
+      }
+    },
+    {
+      "id": "bed-room",
+      "track": "bed",
+      "stem": "scenes-out/dog-dawn/stems/bed-room.wav",
+      "at": {
+        "cue": "b09-1",
+        "edge": "start",
+        "offset": -1.4
+      },
+      "until": {
+        "cue": "@end"
+      },
+      "loop": true,
+      "fade_in": 1.2,
+      "fade_out": 1.2,
+      "placeholder": {
+        "kind": "bed",
+        "sound": "room",
+        "seconds": 45
+      }
+    },
+    {
+      "id": "fx-05-whoosh",
+      "track": "foley",
+      "stem": "scenes-out/dog-dawn/stems/fx-05-whoosh.wav",
+      "at": {
+        "cue": "b05-1",
+        "edge": "start",
+        "offset": -0.5
+      },
+      "placeholder": {
+        "kind": "foley",
+        "sound": "whoosh"
+      }
+    },
+    {
+      "id": "fx-08-thud",
+      "track": "foley",
+      "stem": "scenes-out/dog-dawn/stems/fx-08-thud.wav",
+      "at": {
+        "cue": "b08-1",
+        "edge": "end",
+        "offset": 0.1
+      },
+      "placeholder": {
+        "kind": "foley",
+        "sound": "thud"
+      }
+    },
+    {
+      "id": "fx-09-chime",
+      "track": "foley",
+      "stem": "scenes-out/dog-dawn/stems/fx-09-chime.wav",
+      "at": {
+        "cue": "b09-1",
+        "edge": "start",
+        "offset": -0.9
+      },
+      "placeholder": {
+        "kind": "foley",
+        "sound": "chime"
+      }
+    },
+    {
+      "id": "fx-10-click",
+      "track": "foley",
+      "stem": "scenes-out/dog-dawn/stems/fx-10-click.wav",
+      "at": {
+        "cue": "b10-1",
+        "edge": "end",
+        "offset": 0.4
+      },
+      "placeholder": {
+        "kind": "foley",
+        "sound": "click"
+      }
+    }
+  ],
+  "shots": [
+    {
+      "id": "s01a",
+      "image": "images-out/ab-test/ab-e-01-a2.png",
+      "image_sha256": "dc802d35825bdc10c68df80db8a20651d97379669b7a6fa66959f9a3ed9acb79",
+      "at": {
+        "cue": "@start"
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s02a",
+      "image": "images-out/ab-test/ab-e-02-a1.png",
+      "image_sha256": "84b36d1102b516a7d604020b42d5c94503522d7abdeaa5a0c8fe3022bc2935df",
+      "at": {
+        "cue": "b02-1",
+        "edge": "start",
+        "offset": -0.6
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "pan",
+        "from": {
+          "x": 0.42,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "to": {
+          "x": 0.58,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s03a",
+      "image": "images-out/ab-test/ab-e-03-a2.png",
+      "image_sha256": "7ba0694b8fc184ec9f73ea60fd74b2df2719cd498fd4367d553cc8de3ca9a8dc",
+      "at": {
+        "cue": "b03-1",
+        "edge": "start",
+        "offset": -0.6
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s04a",
+      "image": "images-out/adaptation-dog-dawn/dd-04-a1.graded.png",
+      "image_sha256": "df898783337657bdb33b67d85a7c7a7aaa0b9484c269e279d53912840f8344c6",
+      "at": {
+        "cue": "b04-1",
+        "edge": "start",
+        "offset": -0.6
+      },
+      "transition": {
+        "type": "dissolve",
+        "seconds": 0.8
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.55,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.48,
+          "y": 0.5,
+          "zoom": 1.18
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s05a",
+      "image": "images-out/ab-test/ab-e-05-a4.png",
+      "image_sha256": "f6bb7240f18c610174d9c71de471cc641ce9d3016c2495de095ec95db2630856",
+      "at": {
+        "cue": "b05-1",
+        "edge": "start",
+        "offset": -0.6
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "pull",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.2
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.02
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s06a",
+      "image": "images-out/adaptation-dog-dawn/dd-06-a1.graded.png",
+      "image_sha256": "e83c77eba588b5fd83dd9e8149c479a57480cd32bc4d2745e5255f78ef9555a7",
+      "at": {
+        "cue": "b06-1",
+        "edge": "start",
+        "offset": -0.6
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "pan",
+        "from": {
+          "x": 0.6,
+          "y": 0.45,
+          "zoom": 1.15
+        },
+        "to": {
+          "x": 0.4,
+          "y": 0.5,
+          "zoom": 1.15
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s07a",
+      "image": "images-out/adaptation-dog-dawn/dd-sheet-dog.png",
+      "image_sha256": "1c9538dd4e0eec77eafb4a4ddb37ab49ea4c1fa4d2f74493d70a384849e1b037",
+      "at": {
+        "cue": "b07-1",
+        "edge": "start",
+        "offset": -0.6
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.1
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s08a",
+      "image": "images-out/adaptation-dog-dawn/dd-07-a2.png",
+      "image_sha256": "ae06c2ac8e0db1b2c3fc6874e072454fbcba148c959ec452f869b845a4a21a41",
+      "at": {
+        "cue": "b08-1",
+        "edge": "start",
+        "offset": -0.6
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.45,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.15
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s08b",
+      "image": "images-out/adaptation-dog-dawn/dd-07-a2-overlay.png",
+      "image_sha256": "57e8c859d3d4e2a3cb97cf4bf7de1f831ca26e2d89ceaa2d2dd7275e5bbe2b50",
+      "at": {
+        "cue": "b08-1",
+        "edge": "middle"
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.45,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.15
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s09a",
+      "image": "images-out/ab-test/ab-e-09-a2.screen-cut.png",
+      "image_sha256": "ab8f1d38222184320f4919f127853ca7c14c933f9924cd60bf909b66a0366ed0",
+      "at": {
+        "cue": "b09-1",
+        "edge": "start",
+        "offset": -0.6
+      },
+      "transition": {
+        "type": "dissolve",
+        "seconds": 0.8
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.06
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.06
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s10a",
+      "image": "images-out/adaptation-dog-dawn/dd-09-a1.png",
+      "image_sha256": "bc77355df9da057f32fe203759f86c3a663e7350ca64885c0701729e8dcc944e",
+      "at": {
+        "cue": "b10-1",
+        "edge": "start",
+        "offset": -0.6
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.55,
+          "y": 0.45,
+          "zoom": 1.2
+        },
+        "ease": "inout"
+      }
+    }
+  ],
+  "lettering": [
+    {
+      "id": "L-dog-1",
+      "shot": "s08a",
+      "job_file": "content/snowmoon/illustrations/adaptation-dog-dawn.json",
+      "job": "dd-07-a1",
+      "item": 0,
+      "at": {
+        "cue": "b08-1",
+        "edge": "start",
+        "offset": 0.8
+      },
+      "fade_s": 0.4
+    },
+    {
+      "id": "L-dog-2",
+      "shot": "s08a",
+      "job_file": "content/snowmoon/illustrations/adaptation-dog-dawn.json",
+      "job": "dd-07-a1",
+      "item": 1,
+      "at": {
+        "cue": "b08-1",
+        "edge": "start",
+        "offset": 1.4
+      },
+      "fade_s": 0.4
+    }
+  ]
+}
