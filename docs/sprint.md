@@ -53,16 +53,12 @@ The allowlist was not changed; items 1 and 2 need a reviewed correction.
 
 ## In progress
 
-- Nothing running.
+- Voice test on the owner's takes (2026-10-14): converted locally to WAV in ~/snowmoon-takes (outside the repo), then into the matching voices with Chatterbox on CPU. Each 48-second take takes about 8 minutes per voice. Cross-voice conversions (Bai's take as Deluin and so on) were dropped after the first one, to save time.
 
 ## Waiting for the owner
 
-0. New this round: [style 2] and [style 3], the takes' [file] (no ~/snowmoon-takes folder exists yet), and [your answers] to the brief's questions were still placeholders. The end card names the owner "naaate" and links snowmoon.party/make, which doesn't exist yet: confirm both. The Privacy Policy (src/lib/legal.ts) doesn't mention wallets, and the launch caps now count a wallet's Generates under its account: the policy needs a wallet section before or with that merge (Terms and Privacy change only after the owner's reread). P1c: change the check to accept styles' embedded sample recipes?
-
-1. The style for the piece: the message said "[style]", unfilled.
-2. The two test lines for voice conversion: the message said "[path]", unfilled, and no recent recording is in Downloads or on the Desktop. When they're in a private folder, one command converts them: `.venv-voice/bin/python scripts/convert-voice.py fifteen-days --take <file> --voices zei deluin bai`.
-3. The Assistant notice reread (words unchanged), so `site-chat-owner-cap` can record it.
-4. P1c fails on production: two published element versions have no recipe (227626d9-…, 6cbf8e03-…), new since 10 October. Reading them needs the owner's OK for a production database read.
-5. Fifteen Days brief questions (brief section 4): the old hurt, Bai at the tea, the ending, the smile, the title, the narrator's point of view.
-6. The final video's AI declaration: an end card listing what was generated and with which models, or only the description and the page? Principle 2 asks for a label wherever generated media plays.
-7. Correct the allowlist prices for LongCat-Video-Avatar and Kandinsky (model cards, items 1 and 2)?
+1. Round two of the style test: the owner's stars on the style page.
+2. Fifteen Days draft 1 is in script.md (a361539). The questions it leaves are in brief.md section 4, among them the c19-b124 narration (its "his" is Zei, and its "Gun" clashes with Deluin's opponent Kau), the length (about 5 minutes), and voice descriptions for the narrator and the robot.
+3. The end-card wording, with the script.
+4. The wallet privacy draft reread, then 0012, then the site-launch-caps merge when the owner says.
+5. Merge status for site-styles-per-day and site-chat-owner-cap.
