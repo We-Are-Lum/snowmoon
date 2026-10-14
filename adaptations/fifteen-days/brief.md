@@ -1,6 +1,6 @@
 # Seed brief: Fifteen Days
 
-> **Spoilers through chapter 19** while the script's beat 6 narration (c19-b124) is in; everything
+> **Spoilers through chapter 19** while the script's beat 6 on-screen line (after c19-b124) is in; everything
 > else here stays inside chapter 15.
 > **Model-drafted** (by the coding agent, 2026-10-14) from the owner's notes *Fifteen Days, second
 > version* and the book's text. Structure and citations only: every published word of the piece is
@@ -94,11 +94,10 @@ rivalry, its three hints of something more, her grief and her work for Den's peo
 
 ## 3. The cut in the owner's draft 1 (2026-10-14)
 
-There are seven beats, filled from the owner's draft 1 in `script.md`. They hold 605 words of dialogue and 44 of narration, about five minutes with the silent beats.
+There are seven beats, from the owner's edit of draft 1 in `script.md`. They hold 507 words of dialogue and no narration: picture and dialogue carry the piece. That's about four minutes with the silent beats.
 
 1. **The walls hold** *(optional opener)*:
    - Deluin plays Kau; Bai and Zei watch from the waiting room.
-   - Two narrated lines from the book (c14-b91, c14-b94).
 2. **The corridor:**
    - Zei and Deluin compliment each other and agree on tea for later.
    - Bai voices her doubt ("He's your competition, remember?").
@@ -115,7 +114,7 @@ There are seven beats, filled from the owner's draft 1 in `script.md`. They hold
 6. **The gate:**
    - The chant (c12-b93); ten fingers, then five.
    - Deluin sends a message.
-   - Narration from c19-b124.
+   - On screen, over Zei walking to Bai's table: the owner's line after c19-b124.
 7. **The vigil:**
    - Zei's fifth message; Bai sits down.
    - The replies (c15-b50, c15-b53, c15-b55).
@@ -126,17 +125,26 @@ There are seven beats, filled from the owner's draft 1 in `script.md`. They hold
 **Settled by draft 1:**
 - **Bai at the tea** (old question 2): the middle path. She is at the table first, then moves to the next one.
 - **The ending** (old question 3): Bai's face.
-- **Narration's point of view** (old question 6): a light third-person narrator, outside all three.
+- **Narration** (old question 6): none. Picture and dialogue carry the piece, and the narrator voice is out of the cast (owner's edit). The cut narration is kept in §5.
 - **The look between Bai and Deluin** (old question 4): cut. "You can come too Bai!" does that job now (owner, 2026-10-14).
-- **The c19-b124 narration** (owner, 2026-10-14): cut to "That day was his last Minpentai game … the last day when things in his life were at least somewhat normal." and moved over Zei. The gate runs: the chant; ten fingers, then five; Deluin alone sends the message; cut to Zei walking to Bai's table at dusk, under the narration.
+- **The c19-b124 line** (owner, 2026-10-14): now on-screen text in the owner's words, "That day was his last Minpentai game- the last day when his life was somewhat normal.", over Zei walking to Bai's table. The gate runs: the chant; ten fingers, then five; Deluin alone sends the message; cut to Zei walking to Bai's table at dusk, with the line on screen.
+- **Kau:** singular now, "That other loser is toast" (owner's edit).
 - **The vigil card:** the place only, Pafogai Du, Dzego (c15-b48). The book gives that section no date.
 
 **Still open, for the owner:**
 1. **The hurt.** What did Zei do to Bai, and what did she do back? The draft only hints at it ("you know I hate you", "'Was.'"), which may be enough.
 2. **The title**, due Thursday evening: *A Door in the Wall*, *Fifteen Days*, or another.
-3. **Length.** The piece runs about five minutes, longer than the three the plan allowed. The menu exchange (beat 3) is 273 of the 605 dialogue words. What should be trimmed? (Draft open item 1.)
-4. **Kau.** Bai's "These other losers… They" is plural, but the semifinal has one opponent, Kau (c14-b90). Make it singular, or does it mean the whole field? (Item 2.)
-5. **Dreadnaught.** Where is the band first set up? Options: leaking from Bai's headphones in the waiting room (beat 1), or in the corridor. (Item 3.)
-6. **Bai's interrogation.** Is it revealed here or later? (Item 4.)
-7. **Voices not yet described.** The narrator and the robot waiter need your descriptions. So far your takes cover Bai and Deluin. Will you also perform Zei and the robot?
+3. **Length.** About four minutes after the edit (507 words), against the plan's three. Trim further, or keep?
+4. **Dreadnaught.** Where is the band first set up? Options: leaking from Bai's headphones in the waiting room (beat 1), or in the corridor. (Item 3.)
+5. **Bai's interrogation.** Is it revealed here or later? (Item 4.)
+6. **Voices not yet described.** The robot waiter needs your description. So far your takes cover Bai and Deluin. Will you also perform Zei and the robot?
+7. **The empty Zei line** after "Zei sits" in beat 3: kept as a placeholder direction for now. Keep it, or remove it?
 8. **Deluin's chant.** In the book, all the contestants say "Dze go ba fau gie" in unison (c12-b93). In the draft, Deluin says it alone, to Zei, at the gate. Is that what you intend?
+
+## 5. Audiobook notes (outside the script)
+
+Narration cut from the piece in the owner's edit (2026-10-14), kept here for an audio-only version.
+Not spoken in the video.
+
+- After the hall, before the waiting room: `c14-b91` "Deluin did not build any mobile symbol-carrying spaceships. Instead, he simply fortified."
+- At the end of the opener: `c14-b94` "Ten thousand two hundred turns into the game, Deluin was announced the winner."

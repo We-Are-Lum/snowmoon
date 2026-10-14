@@ -1,25 +1,28 @@
 # Fifteen Days: script
 
 > **Structure drafted by the coding agent (Claude, a closed model). Not approved.**
-> Words: the owner's **draft 1** (FID 6786, 2026-10-14), a working draft the owner will edit. Every
-> narration and dialogue line is either the book's, verbatim and tagged with its block, or the
-> owner's, tagged `by FID 6786 on 2026-10-14`. Directions in square brackets are the owner's notes
-> unless marked *(book, …)*, *(drafted)* (the agent's suggestion, for the owner to keep, change or
-> cut) or *(from the treatment)*. The structure fields (who, wants, in the way, cost, what changes,
+> Words: **draft 1, the owner's edit** (FID 6786, 2026-10-14, from the owner's Google Doc copy of
+> 15:06). Every spoken line is either the book's, verbatim and tagged with its block, or the
+> owner's, tagged `by FID 6786 on 2026-10-14`; a line the owner reworked from the book is the
+> owner's, noted *(after c…)*. Directions in square brackets are picture notes, not spoken: the
+> owner's unless marked *(book, …)*, *(drafted)* (the agent's suggestion, for the owner to keep,
+> change or cut) or *(from the treatment)*. There is no narrator; the cut narration is kept in
+> `brief.md` §5, audiobook notes. The structure fields (who, wants, in the way, cost, what changes,
 > context, book lines, image, lettering) are model-drafted; images are inputs to the image model,
 > never published as text.
 >
-> **Spoilers through chapter 19** while the beat 6 narration (`c19-b124`) is in; without it,
-> chapter 15. Working title (brief §4, question 5).
+> **Spoilers through chapter 19** while beat 6's on-screen line (after `c19-b124`) is in; without
+> it, chapter 15. Working title (brief §4, question 5).
 
 **Stage:** animatic with voices (stages 2 and 3): stills with camera moves, performed and converted
-dialogue, a narrator, ambience and Foley. **Narrator:** light, third person; voice to be chosen in
-the voice test. **Voices:** a narrator, Zei, Deluin, Bai and the robot waiter; the characters'
-voices are designed voice sheets (`voices/`), converted from the owner's performances.
-**Point of view:** the house narrator, outside all three (draft 1).
-**Length:** 7 beats (the draft's opener and sections 1 to 6 are beats 1 to 7). Narration: 44 words,
-all the book's (beat 1: 25, beat 6: 19). Dialogue: 605 words, the owner's and the book's (beat 3's menu exchange is 273); 649 spoken in all,
-roughly five minutes with the silent beats (draft 1, open item 1).
+dialogue, ambience and Foley. **No narrator:** picture and dialogue carry the piece (owner,
+2026-10-14). **Voices:** Zei, Deluin, Bai and the robot waiter; the characters' voices are designed
+voice sheets (`voices/`), converted from the owner's performances.
+**Point of view:** outside all three; the camera, with one on-screen line in beat 6.
+**Length:** 7 beats (the draft's opener and sections 1 to 6 are beats 1 to 7). Spoken: 507 words of
+dialogue, 441 the owner's and 66 the book's (beat 3, the café, is 176); no narration. One on-screen
+line of 15 words (beat 6). Roughly three and a half minutes of speech at an even pace, about four
+with the silent beats; measured from the audio once it's recorded.
 **Style:** to be picked from the style test.
 
 **What is invented** (brief §2):
@@ -30,7 +33,7 @@ roughly five minutes with the silent beats (draft 1, open item 1).
 - The question about Minpentai, Redshire's quirks, and the sugar-cube wall (beat 4).
 - Deluin's offer to pay for the trip, his invitation to Bai, and Dreadnaught (beat 5).
 - The gate: the chant, ten fingers then five, the message Deluin sends (beat 6).
-- The narration of `c19-b124`, cut and moved over Zei at dusk (beat 6; in the book, Zei's record of the day, read in chapter 19).
+- The on-screen line after `c19-b124`, over Zei at dusk (beat 6; in the book, Zei's record of the day, read in chapter 19).
 - Bai at the vigil; Zei turning the screen to her (beat 7; brief §4, question 3).
 
 ---
@@ -53,17 +56,14 @@ roughly five minutes with the silent beats (draft 1, open item 1).
   - `c14-b94` Ten thousand two hundred turns into the game, Deluin was announced the winner.
 - **image:** Two shots. First, the hall: Deluin and Kau at their stations, poker faces; Kau sweating,
   Deluin calm and cool; above them a huge screen with a dark game field where a ring of luminous
-  walls holds against streams of small glowing gliders. Second, the players' waiting room, dim: Zei
+  walls holds against streams of small glowing gliders that crash into the symbols. Second, the players' waiting room, dim: Zei
   and Bai, from their design board profiles, side by side watching the board; a small trash can
   beside Bai. No writing on any screen.
 - **lettering:** `place-date, en` Sadzu Du, Dzego · 3724 Firemoon 10 (book, c14-b1), on the first shot.
-- **narration:**
-  - `book c14-b91` Deluin did not build any mobile symbol-carrying spaceships. Instead, he simply fortified. *(optional)*
-  - `book c14-b94` Ten thousand two hundred turns into the game, Deluin was announced the winner.
+- **narration:** *(empty until a person writes it)*
 - **dialogue:**
   *[On screen: Sadzu Du, Dzego · 3724 Firemoon 10] (book, c14-b1)*
-  *[The hall. Deluin's semifinal against Kau. Faces thinking hard, poker faces; Kau sweating; Deluin calm and cool.]*
-  *[Narration 1, optional.]*
+  *[The hall. Deluin's semifinal against Kau. Gliders and all zooming around the board, crashing into symbols. Faces thinking hard, poker faces; Kau sweating; Deluin calm and cool.]*
   *[The waiting room. Bai and Zei are watching the board.]*
   - `by FID 6786 on 2026-10-14` Zei: You'd think after making it this far, they'd stop underestimating the foreigner.
   - `by FID 6786 on 2026-10-14` Bai: It wouldn't be so annoying if he wasn't so damned pretty.
@@ -71,10 +71,9 @@ roughly five minutes with the silent beats (draft 1, open item 1).
   - `by FID 6786 on 2026-10-14` Bai: Way too fake for me.
   *[Bai spits something into the nearby trash can.]*
   - `by FID 6786 on 2026-10-14` Zei: Such patience...
-  - `by FID 6786 on 2026-10-14` Bai: Yeah, a total wimp, just like you. But it gets you guys the W.
-  *[Bai gives the board a serious look.]*
-  - `by FID 6786 on 2026-10-14` Bai: These other losers are toast. They should already throw in the towel, but don't even know it yet.
-  *[Narration 2.]*
+  - `by FID 6786 on 2026-10-14` Bai: A total wimp, just like you. But it gets you guys the W.
+  *[Bai finally gives the board a serious look. Studying it]*
+  - `by FID 6786 on 2026-10-14` Bai: That other loser is toast. He should already throw in the towel, but doesn't even know it yet.
 
 ## Beat 2 · The corridor
 
@@ -99,10 +98,10 @@ roughly five minutes with the silent beats (draft 1, open item 1).
 - **narration:** *(empty until a person writes it)*
 - **dialogue:**
   *[Deluin comes out. Zei and Bai are there.] (drafted)*
-  - `by FID 6786 on 2026-10-14` Zei: Deluin! Good job out there.
+  - `by FID 6786 on 2026-10-14` Zei: Good job out there.
   - `by FID 6786 on 2026-10-14` Deluin: Thanks! The walls held out. I haven't yet watched your replay, but will be sure to tonight.
   - `by FID 6786 on 2026-10-14` Zei: Please ignore the ugly style. I also won by defense though... For most of the game it just looks like I'm running scared.
-  - `by FID 6786 on 2026-10-14` Deluin: Patience often does, until you win. Hey, do you want to get tea later? I'll be at the courtyard in a longhour.
+  - `by FID 6786 on 2026-10-14` Deluin: Patience often does, until you win. Hey, do you want to get tea later? I'll be at the courtyard in about a longhour.
   - `by FID 6786 on 2026-10-14` Zei: Sure, that works well for me!
   - `by FID 6786 on 2026-10-14` Deluin: Bai, you're welcome too.
   *[She shrugs, with a disgruntled look on her face. Deluin goes. Bai gives Zei a hard look.]*
@@ -140,6 +139,7 @@ roughly five minutes with the silent beats (draft 1, open item 1).
   *[The courtyard, early evening. Zei runs across it, and pulls up short. Bai is already at the table with Deluin, and they're laughing; they were just making a joke about Zei that even got Bai laughing.]*
   - `by FID 6786 on 2026-10-14` Deluin: Zei, we were just talking about you!
   *[Zei sits.] (drafted)*
+  *[Zei: a line to come.] (placeholder: the owner's edit has an empty Zei line here)*
   *[A robot slides up to the table.] (book, c14-b105)*
   - `book c14-b106` Robot: "jie mo kai tu jie hei ja ma?"
   *[A menu appears: the book's own glyph picture.] (book, c14-b107–c14-b108)*
@@ -148,11 +148,11 @@ roughly five minutes with the silent beats (draft 1, open item 1).
   - `book c14-b111` Zei: "I think these are some of the new symbols they're A/B testing for Dzegoban version nine."
   *[He realises he's talking to a foreigner.] (book, c14-b112)*
   - `book c14-b113` Zei: "Have you heard of Dzegoban version nine?"
-  - `book c14-b114` Deluin: "Oh yeah I had a couple people mention it to me. Making the language visual. Bringing back hieroglyphs for the individual roots, but pronunciation perfectly readable from the glyph. And also another layer where they're trying to make the grammar look more like math."
-  - `book c14-b115` Zei: "Yeah, so I'm trying to parse this. The cup is water - 'ja'. I see two unusual things about the cup. More straight horizontal lines than usual, and the three diagonal lines on the right. Maybe those are the pronunciation markers? One for the consonant, one for the vowel?"
-  - `book c14-b116` Deluin: "Top right is 'kai'. The unusual things I see are ... the extra vertical vein on the left, and then the transition to veins being more and more squiggly on the right? Although ... I'm not sure if I would make the images so detailed, when they often have different meanings depending on context."
+  - `book c14-b114` Deluin: "… I had a couple people mention it to me. Making the language visual. …"
+  - `by FID 6786 on 2026-10-14` Zei: "Hmmm. More straight horizontal lines than usual, and the three diagonal lines on the right. probably pronunciation markers?" *(after c14-b115; looking over the menu after "Hmmm")*
+  - `by FID 6786 on 2026-10-14` Deluin: "Top right is 'kai' right? ... the extra vertical vein on the left is unusual. Although ... I'm not sure if I would make the images so detailed, when they often have different meanings depending on context." *(after c14-b116)*
   - `book c14-b117` Zei: "Wait, you know Dzegoban?"
-  - `book c14-b118` Deluin: "Zei, the whole point of Dzegoban is that there's only 256 roots, you can learn it in less than a month, and you don't get all the nuances but you can make your way around just fine." *(in a lecturing tone, book)*
+  - `by FID 6786 on 2026-10-14` Deluin: "Zei, the whole point of Dzegoban is that you can learn it in less than a month." *(after c14-b118; in a lecturing tone)*
   - `book c14-b119` Zei: "I'm impressed, you're almost a local already."
   *[Bai whips round with a half-baked excuse.]*
   - `by FID 6786 on 2026-10-14` Bai: Actually, I don't think I want anything, plus I've got a lot to catch up on. Zei, when you're done, come get me, I want to go over some strategies I've been thinking about with you.
@@ -170,16 +170,17 @@ roughly five minutes with the silent beats (draft 1, open item 1).
   - *(Invented: the question, Redshire's quirks, the sugar wall, the flick.)*
 - **book lines:**
   - `c14-b127` Even beautiful nature takes so much human work to maintain.
-- **image:** Close on the table between them: tea poured, a small wall of sugar cubes Deluin has
-  built; Zei's finger flicking one cube out of the bottom row so the wall stands with a door in it;
+- **image:** Close on the table between them: tea poured, Deluin's stack of sugar cubes grown into a
+  small wall; Zei's finger flicking one cube out of the bottom row so the wall stands with a door in it;
   both laughing. *(Invented.)*
 - **lettering:** none
 - **narration:** *(empty until a person writes it)*
 - **dialogue:**
-  *[Tea poured. Deluin is building a little wall of sugar cubes.] (drafted, from the beat plan)*
+  *[Tea poured. Deluin starts stacking sugar cubes.]*
   - `by FID 6786 on 2026-10-14` Deluin: Why does Dzego like Minpentai so much?
   - `by FID 6786 on 2026-10-14` Zei: Kids get into it pretty young here, with the whole family involved. One of our quirks I guess, just like the language. Does Redshire have any quirks?
   - `by FID 6786 on 2026-10-14` Deluin: Sure.... we care a lot about natural beauty, and have maybe an unnatural obsession with old styles. Less cameras, more castles.
+  *[Deluin's stack has turned into a little wall of sugar cubes.]*
   - `by FID 6786 on 2026-10-14` Zei: I see where you got your love of walls then.
   *[Deluin looks down at the sugar cubes, and smiles.]*
   - `by FID 6786 on 2026-10-14` Deluin: Yes. Simple, straightforward, useful.
@@ -208,7 +209,8 @@ roughly five minutes with the silent beats (draft 1, open item 1).
 - **narration:** *(empty until a person writes it)*
 - **dialogue:**
   - `by FID 6786 on 2026-10-14` Deluin: Why don't you come visit. My parents just told me I need to come back for an early birthday celebration for them. You can come with me!
-  - `by FID 6786 on 2026-10-14` Zei: Oh... budget will be pretty tight for... about fifteen days. *(looks at his watch before "about"; says it with a smile)*
+  - `by FID 6786 on 2026-10-14` Zei: Oh... budget will be pretty tight for... about fifteen days. *(looks at his watch before "about")*
+  *[He says it with a smile.]*
   - `by FID 6786 on 2026-10-14` Deluin: Oh yeah, then I can use some of my winnings to pay for your trip.
   *[Bai glances back at them.]*
   - `by FID 6786 on 2026-10-14` Deluin: You can come too Bai! *(loudly)*
@@ -226,7 +228,7 @@ roughly five minutes with the silent beats (draft 1, open item 1).
 - **context:**
   - c12-b93: the contestants' chant, "Dze go ba fau gie".
   - c14-b32: the final is in fifteen days.
-  - c19-b124: the narration, cut and moved here, over Zei (owner, 2026-10-14).
+  - c19-b124: Zei's record of the day; the owner's on-screen line is after it (owner, 2026-10-14).
   - *(Invented: the gate at dusk, ten fingers then five, the message.)*
 - **book lines:**
   - `c12-b93` "Dze go ba fau gie"
@@ -235,15 +237,17 @@ roughly five minutes with the silent beats (draft 1, open item 1).
   gate holding up ten fingers, then five. Second, Deluin alone, close on his thumbs over his hand
   device, the screen turned away from us. Third, Zei walking across the courtyard at dusk toward
   Bai's table. *(Invented.)*
-- **lettering:** none (the message is never shown)
-- **narration:**
-  - `book c19-b124` That day was his last Minpentai game … the last day when things in his life were at least somewhat normal.
+- **lettering:**
+  - `on-screen, en` That day was his last Minpentai game- the last day when his life was somewhat normal.
+    (by FID 6786 on 2026-10-14, after c19-b124), over the third shot, Zei walking to Bai's table.
+  - Deluin's message is never shown.
+- **narration:** *(empty until a person writes it)*
 - **dialogue:**
   *[Dusk at the courtyard gate, with the lamps coming on.] (drafted, from the beat plan)*
   - `book c12-b93` Deluin: "Dze go ba fau gie" *(the contestants' chant)*
   *[Ten fingers, then five.] (from the treatment)*
   *[Deluin, alone, takes out his device, types a message we can't read, hesitates, and sends it.]*
-  *[Cut to Zei walking to Bai's table at dusk. No words. Narration 1 over him.]*
+  *[Cut to Zei walking to Bai's table at dusk. No words. On screen: "That day was his last Minpentai game- the last day when his life was somewhat normal."] (after c19-b124)*
 
 ## Beat 7 · The vigil
 
@@ -264,7 +268,7 @@ roughly five minutes with the silent beats (draft 1, open item 1).
   - `c15-b51` He had drunk the tea quickly; the robot had already refilled it four times.
   - `c15-b54` He breathed a sigh of relief.
 - **image:** The hotel lobby restaurant (design board place) in the evening, nearly empty. Three
-  shots. First, close on Zei at his table, eyes red, an untouched bowl of rice and vegetables and a
+  shots. First, close on Zei at his table, upset, distraught, an untouched bowl of rice and vegetables and a
   tea cup, his hand device lit. Second, Bai sitting down across from him without a word. Third, Zei
   turning his screen toward Bai; cut on her face. *(Invented: Bai.)*
 - **lettering:**
@@ -276,7 +280,7 @@ roughly five minutes with the silent beats (draft 1, open item 1).
 - **narration:** *(empty until a person writes it)*
 - **dialogue:**
   *[On screen: Pafogai Du, Dzego] (book, c15-b48)*
-  *[Zei sits at a table in the lobby restaurant of his hotel. He's been crying. His tea has been refilled four times, and the rice and vegetables are untouched.] (book, c15-b51)*
+  *[Zei sits at a table in the lobby restaurant of his hotel. He's seems upset. Distraught. His tea has been refilled four times, and the rice and vegetables are untouched.] (after c15-b51)*
   *[On his screen, his fifth message: "Are you okay????! Please tell me where you are."] (c15-b50)*
   *[Bai sits down across from him, without a word.]*
   *[A reply: "Don't worry, I am alive. Though it looks like I'm not going to be getting back to Dzego anytime soon."] (c15-b53)*
