@@ -5,7 +5,7 @@ import { getPerson, getWallet } from '~/lib/auth';
 import { db } from '~/lib/db';
 import { IMAGES, WORK_ID } from '~/lib/config';
 import { hasConsented } from '~/lib/consent';
-import { publishesLeft } from '~/lib/images/limits';
+import { imagePublishesPerDay, publishesLeft } from '~/lib/images/limits';
 import { putPublic, storageReady } from '~/lib/images/store';
 import { readTicket, recipeAssist } from '~/lib/images/ticket';
 import { bylineName } from '~/lib/names';
@@ -46,7 +46,7 @@ export async function POST(request: Request) {
   const uses = [...new Set([...(t.designs ?? []).map((d) => d.versionId), ...(Array.isArray(body.uses) ? body.uses.filter(isId) : [])])].slice(0, 8);
   const remixedFrom = Array.isArray(body.remixedFrom) ? body.remixedFrom.filter(isId).slice(0, 4) : [];
   if (!(await hasConsented(fid))) return no('Agree to how your words are published first', 403);
-  if ((await publishesLeft(sql, fid)) <= 0) return no(`You can publish ${IMAGES.publishesPerDay} images a day. More tomorrow (00:00 UTC).`, 429);
+  if ((await publishesLeft(sql, fid)) <= 0) return no(`You can publish ${imagePublishesPerDay(fid)} images a day. More tomorrow (00:00 UTC).`, 429);
   const [dup] = await sql`select 1 from studio.element_versions where asset_sha256 = ${t.sha256} limit 1`;
   if (dup) return no('This image is already published', 409);
   // Links must point at published work: 'uses' at design versions, 'remixed_from' at images.

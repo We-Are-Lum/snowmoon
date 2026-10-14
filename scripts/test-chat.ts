@@ -275,6 +275,8 @@ try {
     check(`message ${CHAT.messagesPerDay + 1} in a day is refused`, last === 'limit', last);
     const [{ n }] = await sql`select count(*)::int as n from studio.chat_calls where fid = ${fid} and kind = 'ask'`;
     check(`exactly ${CHAT.messagesPerDay} questions counted`, n === CHAT.messagesPerDay, String(n));
+    const { messagesPerDay } = await import('../src/lib/chat/limits');
+    check('FID 6786 has 1,000 answers a day, everyone else the default', messagesPerDay(6786) === 1_000 && messagesPerDay(105) === CHAT.messagesPerDay);
   }
   {
     // Spend is shared by everyone: fill the day close to the cap with one big recorded call.

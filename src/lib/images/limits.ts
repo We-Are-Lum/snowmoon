@@ -27,6 +27,11 @@ export function perDay(fid: number): number {
   return IMAGES.perDayFor[fid] ?? IMAGES.generationsPerDay;
 }
 
+/** How many images this person may publish a day: IMAGES.publishesPerDayFor if they are on it, else IMAGES.publishesPerDay. */
+export function imagePublishesPerDay(fid: number): number {
+  return IMAGES.publishesPerDayFor[fid] ?? IMAGES.publishesPerDay;
+}
+
 /** How many styles or sheets this person may publish a day: IMAGES.designs.publishesPerDayFor if they are on it, else IMAGES.designs.publishesPerDay. */
 export function designsPerDay(fid: number): number {
   return IMAGES.designs.publishesPerDayFor[fid] ?? IMAGES.designs.publishesPerDay;
@@ -42,7 +47,7 @@ export async function generationsLeft(sql: Sql, fid: number): Promise<number> {
 export async function publishesLeft(sql: Sql, fid: number): Promise<number> {
   const [r] = await sql`select count(*)::int as n from studio.elements
     where element_type = 'image' and created_by_fid = ${fid} and created_at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
-  return Math.max(0, IMAGES.publishesPerDay - (r?.n ?? 0));
+  return Math.max(0, imagePublishesPerDay(fid) - (r?.n ?? 0));
 }
 
 /** Which model a Generate uses, and its worst case: the text-to-image model unless given (step 4: the edit model). */

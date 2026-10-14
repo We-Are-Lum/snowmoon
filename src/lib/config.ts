@@ -84,6 +84,8 @@ export const CHAT = {
   } as Record<string, { input: number; output: number }>,
   /** Answers per FID per UTC day (refusals and held-back answers count). */
   messagesPerDay: 30,
+  /** More answers a day for these FIDs (owner, 2026-10-14); the daily spend cap still applies to them. */
+  messagesPerDayFor: { 6786: 1_000 } as Readonly<Record<number, number>>,
   /** Total spend per UTC day across everyone, in USD. Test cap: $2 (owner instruction, Oct 7, 2026). */
   dailySpendCapUsd: 2,
   /** Search hits sent to the model, each with the blocks around it (see neighbours). */
@@ -153,9 +155,11 @@ export const IMAGES = {
   maxBlocks: 8,
   /** Per person per UTC day; blocked attempts count (decisions 10 and 16). */
   generationsPerDay: 10,
-  /** A higher daily Generate count for these FIDs (owner, 2026-10-13); the daily spend cap still applies to them. */
-  perDayFor: { 6786: 300 } as Readonly<Record<number, number>>,
+  /** A higher daily Generate count for these FIDs (owner, 2026-10-13; very high for 6786, 2026-10-14); the daily spend cap still applies to them. */
+  perDayFor: { 6786: 10_000 } as Readonly<Record<number, number>>,
   publishesPerDay: 3,
+  /** More image publishes a day for these FIDs (owner, 2026-10-14). */
+  publishesPerDayFor: { 6786: 1_000 } as Readonly<Record<number, number>>,
   /** Across everyone, per UTC day (decision 10), kept apart from the assistant's. */
   dailySpendCapUsd: 2,
   /**
@@ -222,8 +226,8 @@ export const IMAGES = {
     samplesMax: 4,
     /** A sheet needs its front view; side and back are optional. */
     publishesPerDay: 3,
-    /** More styles or sheets a day for these FIDs (owner, 2026-10-13). */
-    publishesPerDayFor: { 6786: 30 } as Readonly<Record<number, number>>,
+    /** More styles or sheets a day for these FIDs (owner, 2026-10-13; very high for 6786, 2026-10-14). */
+    publishesPerDayFor: { 6786: 1_000 } as Readonly<Record<number, number>>,
     /** At most this many picked characters' sheets are added to one image. */
     maxCharacters: 3,
   },

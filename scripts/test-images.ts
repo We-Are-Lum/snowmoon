@@ -127,14 +127,15 @@ for (let i = 0; i < IMAGES.generationsPerDay - 1; i++) {
   if (r.ok) await settle(S, {});
 }
 check('the daily limit stops the 11th Generate', (await generationsLeft(S, 6787)) === 0 && !(await reserve(S, 6787)).ok);
-const { perDay, designsPerDay } = await import('../src/lib/images/limits');
-check('FID 6786 has 300 a day, everyone else the default', perDay(6786) === 300 && perDay(6787) === IMAGES.generationsPerDay);
-check('FID 6786 may publish 30 styles or sheets a day, everyone else 3', designsPerDay(6786) === 30 && designsPerDay(6787) === 3);
+const { perDay, designsPerDay, imagePublishesPerDay } = await import('../src/lib/images/limits');
+check('FID 6786 has 10,000 Generates a day, everyone else the default', perDay(6786) === 10_000 && perDay(6787) === IMAGES.generationsPerDay);
+check('FID 6786 may publish 1,000 styles or sheets a day, everyone else 3', designsPerDay(6786) === 1_000 && designsPerDay(6787) === 3);
+check('FID 6786 may publish 1,000 images a day, everyone else 3', imagePublishesPerDay(6786) === 1_000 && imagePublishesPerDay(6787) === 3);
 for (let i = 0; i < IMAGES.generationsPerDay + 1; i++) {
   const r = await reserve(S, 6786);
   if (r.ok) await settle(S, {});
 }
-check('FID 6786 is not stopped at the default count', (await generationsLeft(S, 6786)) === 300 - IMAGES.generationsPerDay - 1);
+check('FID 6786 is not stopped at the default count', (await generationsLeft(S, 6786)) === 10_000 - IMAGES.generationsPerDay - 1);
 await sql`insert into studio.image_costs (kind, model, provider, verdict, calls, cost_usd) values ('image', 'test', 'fal.ai', 'ok', 1, ${IMAGES.dailySpendCapUsd})`;
 const r3 = await reserve(S, 7);
 check('the day\'s spend cap stops a Generate', !r3.ok && r3.refusal === 'spend', JSON.stringify(r3));

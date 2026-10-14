@@ -18,6 +18,11 @@ export function worstCaseUsd(maxAnswerTokens: number, maxGuardTokens: number, in
   return inputTokens * a.input + maxAnswerTokens * a.output + inputTokens * g.input + maxGuardTokens * g.output;
 }
 
+/** This person's daily answers: CHAT.messagesPerDayFor if they are on it, else CHAT.messagesPerDay. */
+export function messagesPerDay(fid: number): number {
+  return CHAT.messagesPerDayFor[fid] ?? CHAT.messagesPerDay;
+}
+
 export async function usedToday(sql: postgres.Sql, fid: number): Promise<number> {
   const [r] = await sql`select count(*)::int as n from studio.chat_calls where fid = ${fid} and kind = 'ask' and at >= date_trunc('day', now() at time zone 'utc') at time zone 'utc'`;
   return r.n as number;
@@ -38,11 +43,11 @@ export async function reserve(sql: postgres.Sql, fid: number, worstUsd: number):
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.chat.spend'))`;
     await tx`select pg_advisory_xact_lock(hashtext(${'snowmoon.chat.fid.' + fid}))`;
     const used = await usedToday(tx as unknown as postgres.Sql, fid);
-    if (used >= CHAT.messagesPerDay) return { ok: false as const, reason: 'limit' as const };
+    if (used >= messagesPerDay(fid)) return { ok: false as const, reason: 'limit' as const };
     const spent = await spentToday(tx as unknown as postgres.Sql);
     if (spent + worstUsd > CHAT.dailySpendCapUsd) return { ok: false as const, reason: 'spend' as const };
     await tx`insert into studio.chat_calls (fid, kind, model) values (${fid}, 'ask', ${CHAT.model})`;
-    return { ok: true as const, left: CHAT.messagesPerDay - used - 1 };
+    return { ok: true as const, left: messagesPerDay(fid) - used - 1 };
   });
 }
 
