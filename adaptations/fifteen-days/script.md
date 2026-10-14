@@ -139,7 +139,6 @@ with the silent beats; measured from the audio once it's recorded.
   *[The courtyard, early evening. Zei runs across it, and pulls up short. Bai is already at the table with Deluin, and they're laughing; they were just making a joke about Zei that even got Bai laughing.]*
   - `by FID 6786 on 2026-10-14` Deluin: Zei, we were just talking about you!
   *[Zei sits.] (drafted)*
-  *[Zei: a line to come.] (placeholder: the owner's edit has an empty Zei line here)*
   *[A robot slides up to the table.] (book, c14-b105)*
   - `book c14-b106` Robot: "jie mo kai tu jie hei ja ma?"
   *[A menu appears: the book's own glyph picture.] (book, c14-b107–c14-b108)*

@@ -128,6 +128,7 @@ There are seven beats, from the owner's edit of draft 1 in `script.md`. They hol
 - **Narration** (old question 6): none. Picture and dialogue carry the piece, and the narrator voice is out of the cast (owner's edit). The cut narration is kept in §5.
 - **The look between Bai and Deluin** (old question 4): cut. "You can come too Bai!" does that job now (owner, 2026-10-14).
 - **The c19-b124 line** (owner, 2026-10-14): now on-screen text in the owner's words, "That day was his last Minpentai game- the last day when his life was somewhat normal.", over Zei walking to Bai's table. The gate runs: the chant; ten fingers, then five; Deluin alone sends the message; cut to Zei walking to Bai's table at dusk, with the line on screen.
+- **The empty Zei line** after "Zei sits": removed (owner, 2026-10-14).
 - **Kau:** singular now, "That other loser is toast" (owner's edit).
 - **The vigil card:** the place only, Pafogai Du, Dzego (c15-b48). The book gives that section no date.
 
@@ -138,8 +139,7 @@ There are seven beats, from the owner's edit of draft 1 in `script.md`. They hol
 4. **Dreadnaught.** Where is the band first set up? Options: leaking from Bai's headphones in the waiting room (beat 1), or in the corridor. (Item 3.)
 5. **Bai's interrogation.** Is it revealed here or later? (Item 4.)
 6. **Voices not yet described.** The robot waiter needs your description. So far your takes cover Bai and Deluin. Will you also perform Zei and the robot?
-7. **The empty Zei line** after "Zei sits" in beat 3: kept as a placeholder direction for now. Keep it, or remove it?
-8. **Deluin's chant.** In the book, all the contestants say "Dze go ba fau gie" in unison (c12-b93). In the draft, Deluin says it alone, to Zei, at the gate. Is that what you intend?
+7. **Deluin's chant.** In the book, all the contestants say "Dze go ba fau gie" in unison (c12-b93). In the draft, Deluin says it alone, to Zei, at the gate. Is that what you intend?
 
 ## 5. Audiobook notes (outside the script)
 

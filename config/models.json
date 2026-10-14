@@ -296,7 +296,35 @@
           "conds.pt": "6552d70568833628ba019c6b03459e77fe71ca197d5c560cef9411bee9d87f4e"
         },
         "weights_dir": ".voice-models/chatterbox/<revision> (gitignored), loaded with ChatterboxVC.from_local so the revision is pinned",
-        "tested": "2026-10-13 on the maintainer's M3 Mac (8 GB) with two macOS system voices, no person's recording: 3.3 s converted in 12 s on CPU (23 s on MPS), peak 1.3 GB; Perth watermark detected in the output (1.0) and not in the source (0.0)."
+        "tested": "2026-10-13 on the maintainer's M3 Mac (8 GB) with two macOS system voices, no person's recording: 3.3 s converted in 12 s on CPU (23 s on MPS), peak 1.3 GB; Perth watermark detected in the output (1.0) and not in the source (0.0). (Perth's detector was later found to score clean speech as watermarked too, so that reading is not evidence; 2026-10-14.)"
+      }
+    },
+    {
+      "id": "whisper-small-en",
+      "kind": "transcription",
+      "repo": "ggerganov/whisper.cpp",
+      "revision": "5359861c739e955e79d9a303bcbc70fb988958b1",
+      "card_revision": "5359861c739e955e79d9a303bcbc70fb988958b1",
+      "license_line": "license: mit",
+      "license_checked": {
+        "by": "coding agent",
+        "on": "2026-10-14",
+        "source": "https://huggingface.co/ggerganov/whisper.cpp/blob/5359861c739e955e79d9a303bcbc70fb988958b1/README.md"
+      },
+      "notes": "OpenAI's Whisper small.en (MIT, code and weights), in whisper.cpp's ggml format. Used only on the maintainer's machine to find the spoken slates (\"line twelve\") and \"keep\" in performed takes, so each take can be cut and matched to its line. Its transcripts are working data: never published, never used as script text.",
+      "runs_on": "local",
+      "hosted": null,
+      "model_record": "repo, revision and the weights' sha256",
+      "cost_usd_per_unit": 0,
+      "license": "MIT",
+      "open_weights": true,
+      "weights": "https://huggingface.co/ggerganov/whisper.cpp/blob/5359861c739e955e79d9a303bcbc70fb988958b1/ggml-small.en.bin",
+      "local": {
+        "package": "whisper.cpp 1.9.2 (MIT), Homebrew whisper-cpp, whisper-cli",
+        "weights": {
+          "ggml-small.en.bin": "c6138d6d58ecc8322097e0f987c32f1be8bb0a18532a3f88f734d1bbf9c41e5d"
+        },
+        "weights_dir": ".voice-models/whisper (gitignored); the sha256 matches Hugging Face's X-Linked-ETag for the pinned revision"
       }
     },
     {

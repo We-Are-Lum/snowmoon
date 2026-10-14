@@ -13,6 +13,9 @@ testing (never a person's voice). The recipe records the take's sha256, never th
 
   /Users/nathan/snowmoon/.venv-voice/bin/python scripts/convert-voice.py fifteen-days \
       --take ~/Recordings/line-1.m4a --voices zei deluin bai [--name line-1]
+  /Users/nathan/snowmoon/.venv-voice/bin/python scripts/convert-voice.py fifteen-days --batch jobs.json
+
+A batch (from scripts/split-takes.py) loads the model once and writes scenes-out/<seed>/<out>/.
 
 Writes scenes-out/<seed>/voice-test/<name>.<voice>.wav (gitignored) and, beside it,
 <name>.<voice>.recipe.json: the model, revision, weight hashes, the reference clip and its
@@ -45,19 +48,30 @@ def duration(path: Path) -> float:
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("seed")
-    ap.add_argument("--take", required=True, type=Path)
-    ap.add_argument("--voices", nargs="+", required=True)
+    ap.add_argument("--take", type=Path)
+    ap.add_argument("--voices", nargs="+")
     ap.add_argument("--name", default=None)
+    ap.add_argument("--batch", type=Path, help="a JSON file {out, jobs: [{take, voice, name, line?}]}, e.g. from split-takes.py")
     ap.add_argument("--stand-in", action="store_true", help="the source is synthetic test audio, not a person's take")
-    ap.add_argument("--device", default="cpu", help="cpu (faster on an 8 GB M3 in the 13 October test) or mps")
+    ap.add_argument("--device", default="cpu", help="cpu (faster than mps on the 8 GB M3: 14 October test)")
     args = ap.parse_args()
 
-    take = args.take.expanduser().resolve()
-    if not take.exists():
-        raise SystemExit(f"no such take: {take}")
-    inside = ROOT.resolve() in take.parents or (Path("/Users/nathan/snowmoon").resolve() in take.parents)
-    if inside and not args.stand_in:
-        raise SystemExit("refused: the take is inside a repository folder; keep raw takes in a private folder outside it")
+    if args.batch:
+        batch = json.loads(args.batch.expanduser().read_text())
+        out_name, jobs = batch.get("out", "lines"), batch["jobs"]
+    elif args.take and args.voices:
+        out_name = "voice-test"
+        jobs = [{"take": str(args.take), "voice": v, "name": args.name or args.take.stem} for v in args.voices]
+    else:
+        raise SystemExit("give --take and --voices, or --batch")
+    for j in jobs:
+        take = Path(j["take"]).expanduser().resolve()
+        if not take.exists():
+            raise SystemExit(f"no such take: {take}")
+        inside = ROOT.resolve() in take.parents or (Path("/Users/nathan/snowmoon").resolve() in take.parents)
+        if inside and not args.stand_in:
+            raise SystemExit("refused: the take is inside a repository folder; keep raw takes in a private folder outside it")
+        j["take"] = take
     model = next(m for m in json.loads((ROOT / "config" / "models.json").read_text())["models"] if m["id"] == MODEL_ID)
     rev = model["revision"]
     wdir = Path("/Users/nathan/snowmoon/.voice-models/chatterbox") / rev
@@ -66,24 +80,28 @@ def main() -> None:
             raise SystemExit(f"{fname} does not match the pinned sha256 in config/models.json")
 
     from chatterbox.vc import ChatterboxVC
+    import numpy as np
     import soundfile as sf
 
     vc = ChatterboxVC.from_local(str(wdir), args.device)
     # The vocoder hard-clamps at ±0.99 and the watermark is added after it, so outputs clipped
     # (14 Oct test: 221 samples flattened in 10 s). Lift the clamp, then scale after the watermark.
     vc.s3gen.mel2wav.audio_limit = float("inf")
-    import numpy as np
-    name = args.name or take.stem
-    out = ROOT / "scenes-out" / args.seed / "voice-test"
+    out = ROOT / "scenes-out" / args.seed / out_name
     out.mkdir(parents=True, exist_ok=True)
-    take_sha, take_s = sha256(take), duration(take)
-    for vid in args.voices:
+    jobs.sort(key=lambda j: j["voice"])  # set each voice's reference once, not once per line
+    current = None
+    for i, j in enumerate(jobs, 1):
+        take, vid, name = j["take"], j["voice"], j["name"]
         ref = ROOT / "scenes-out" / args.seed / "voices" / f"{vid}.ref.wav"
         ref_rec = ROOT / "adaptations" / args.seed / "voices" / f"{vid}.recipe.json"
         if sha256(ref) != json.loads(ref_rec.read_text())["sha256"]:
             raise SystemExit(f"{vid}: the reference clip does not match its recipe")
+        if vid != current:
+            vc.set_target_voice(str(ref))
+            current = vid
         began = time.time()
-        wav = vc.generate(str(take), target_voice_path=str(ref)).squeeze(0).numpy()
+        wav = vc.generate(str(take)).squeeze(0).numpy()
         took = time.time() - began
         peak = float(np.abs(wav).max())
         gain = min(1.0, PEAK / peak) if peak > 0 else 1.0
@@ -92,9 +110,10 @@ def main() -> None:
         sf.write(dst, wav, vc.sr, subtype="FLOAT")
         rec = {
             "line": name, "voice": vid, "stand_in": args.stand_in,
+            **({"script_line": j["line"]} if j.get("line") else {}),
             "model": MODEL_ID, "weights": model["weights"], "revision": rev, "license": model["license"],
             "weights_sha256": model["local"]["weights"], "runs_on": f"the performer's machine ({args.device})",
-            "take": {"sha256": take_sha, "duration_s": round(take_s, 2), "kept": "private, outside the repository; never copied or uploaded"},
+            "take": {"sha256": sha256(take), "duration_s": round(duration(take), 2), "kept": "private, outside the repository; never copied or uploaded"},
             "reference": {"file": str(ref.relative_to(ROOT)), "sha256": sha256(ref), "recipe": str(ref_rec.relative_to(ROOT))},
             "watermark": WATERMARK,
             "seconds_taken": round(took, 1), "sample_rate": vc.sr, "format": "32-bit float WAV",
@@ -103,7 +122,7 @@ def main() -> None:
             "made_at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "cost_usd": 0,
         }
         (out / f"{name}.{vid}.recipe.json").write_text(json.dumps(rec, indent=2, ensure_ascii=False) + "\n")
-        print(f"{name} → {vid}: {dst.relative_to(ROOT)} ({rec['duration_s']} s, {took:.0f} s on {args.device})")
+        print(f"[{i}/{len(jobs)}] {name} → {vid}: {dst.relative_to(ROOT)} ({rec['duration_s']} s, {took:.0f} s on {args.device})", flush=True)
 
 
 if __name__ == "__main__":
