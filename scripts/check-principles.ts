@@ -497,6 +497,10 @@ add({
     const figures = [...ch1.matchAll(/<figure class="seed-image"[\s\S]*?<\/figure>/g)].map((m) => m[0]);
     if (!figures.length) problems.push('chapter 1: no seeded images found to check');
     figures.forEach((f, i) => problems.push(...aiLabelProblems(`chapter 1 image ${i + 1}`, f, 'image')));
+    // Beside the book's text, "not by the author" is shown, not only hidden, once per page (owner, 2026-10-15).
+    const shown = [...ch1.matchAll(/<span class="ai-not-author">([\s\S]*?)<\/span>/g)].map((m) => htmlText(m[1]));
+    if (shown.length !== 1 || !NOT_AUTHOR.test(shown[0] ?? '')) problems.push(`chapter 1: "not by the author" is shown ${shown.length} times beside the pictures, want once`);
+    if (shown.length && !figures[0]?.includes('class="ai-not-author"')) problems.push('chapter 1: "not by the author" is not beside the first picture');
     const credit = ch1.match(/<p class="[^"]*\bnarration-credit\b[^"]*">[\s\S]*?<\/p>/)?.[0] ?? '';
     problems.push(...aiLabelProblems('chapter 1 narration credit', credit, 'voice'));
     if (!/Synthetic narration/.test(aiLabels(credit).map((l) => l.hidden).join(' '))) problems.push('chapter 1: the narration credit does not say "Synthetic narration"');
@@ -551,6 +555,7 @@ add({
     c.sheets.push({ what: 'planted', whose: 'The project made it.' });
     c.readers[0].text = c.readers[0].text.replace(/<AiLabel\b/g, '<Caption');
     c.card = c.card.replace(/AI[- ]generated/gi, 'picture');
+    c.ch1 = c.ch1.replace(/<span class="ai-not-author">[\s\S]*?<\/span>/g, '');
     c.home = c.home.replace(/class="home-feed-empty"/g, 'class="home-feed-x"').replace(/class="ai-label"/g, 'class="by-line"');
   },
 });

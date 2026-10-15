@@ -14,7 +14,7 @@ import { loadIllustrations } from '~/lib/illustrations';
 import { QuoteShare } from '~/components/quote-share';
 import { ChapterView } from '~/components/chapter-view';
 import { AiLabel, RecipeLink } from '~/components/recipe-sheet';
-import { AI_LABEL } from '~/lib/ai-declared';
+import { AI_LABEL, NOT_AUTHOR_VISIBLE } from '~/lib/ai-declared';
 import { AddImageButton } from '~/components/reader-images';
 import { InfoLabel } from '~/components/info-label';
 import { LABELS } from '~/lib/labels';
@@ -83,6 +83,8 @@ export default async function ChapterPage({ params }: Props) {
   const narration = loadNarration(n);
   const images = loadIllustrations(n);
   const imageAt = new Map(images.map((im) => [im.idx, im]));
+  // The first picture on the page says "not by the author" where it can be seen (owner, 2026-10-15); readers' strips then don't.
+  const firstImageIdx = displayOrder(chapter.blocks).map((i) => chapter.blocks[i]).find((b) => imageAt.has(b.idx))?.idx ?? null;
   // Figures the site can play: the c4-b5 board runs the rule recovered from it on /minpentai/rule.
   const PLAYABLE: Record<string, string> = { 'c4-b5': '/minpentai/rule' };
   // Voting screens the reader can try (src/templates/live.ts). One "Draft wording" line per
@@ -186,6 +188,7 @@ export default async function ChapterPage({ params }: Props) {
                 <img src={image.url} alt={image.alt} width={image.width} height={image.height} loading="lazy" />
                 <figcaption className="block-caption">
                   ¶ {f.label} · <AiLabel kind="image" text={AI_LABEL.image} file={image.recipe} item={image.id} />
+                  {b.idx === firstImageIdx && <span className="ai-not-author"> · {NOT_AUTHOR_VISIBLE}</span>}
                   {image.lettering && (
                     <>
                       {' · '}

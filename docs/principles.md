@@ -137,7 +137,10 @@ in 25 words or fewer and records `written_by { fid, date }`.
   the player says the narration is synthetic; quote cards with an image label
   it as AI-generated. The glossary's "Hear it" clip (`/glossary/autobus` as
   served) carries the same voice label ("AI voice · by Snowmoon Party"), and its
-  recipe sheet is checked like the chapter's. The first-visit intro's images (its recipe and
+  recipe sheet is checked like the chapter's. Pictures carry a short "AI ⓘ" label, the
+  declaration on hover and in its accessible name (owner, 2026-10-15); on a chapter page, where
+  pictures sit beside the book's text, "not by the author" is also shown, once, beside the first
+  picture (owner, 2026-10-15). The first-visit intro's images (its recipe and
   record cards) carry the same image label (owner, 2026-10-10). The home page's "Just made"
   (`src/components/home-feed.tsx`) shows each reader's image with the same
   label, or its empty state.

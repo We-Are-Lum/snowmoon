@@ -7,7 +7,7 @@ import { openComposer } from '~/lib/images/client';
 import { byline } from '~/lib/images/byline';
 import { useCanAddImage } from '~/lib/images/can-add';
 import { IMAGE_WORDING as W } from '~/lib/images/wording';
-import { AI_LABEL, readerImageView } from '~/lib/ai-declared';
+import { AI_LABEL, NOT_AUTHOR_VISIBLE, readerImageView } from '~/lib/ai-declared';
 import { AiLabel } from './recipe-sheet';
 
 /**
@@ -52,11 +52,14 @@ export function ReaderImages({ chapter }: { chapter: number }) {
   // One "Draft wording" line on the chapter's screen: in the first strip that is open.
   const [open, setOpen] = useState<number[]>([]);
   const first = groups.map((g) => g.end).find((e) => open.includes(e));
+  // "not by the author", shown once per chapter page (owner, 2026-10-15): the first seeded image has it; with none, the first open strip.
+  const [seeded, setSeeded] = useState(true);
+  useEffect(() => setSeeded(Boolean(document.querySelector('.seed-image'))), [groups]);
   return (
     <>
       {groups.map((g) =>
         createPortal(
-          <Group chapter={chapter} images={g.images} draftLine={first === g.end} onToggle={(o) => setOpen((xs) => (o ? [...xs, g.end] : xs.filter((x) => x !== g.end)))} />,
+          <Group chapter={chapter} images={g.images} draftLine={first === g.end} notAuthor={!seeded && first === g.end} onToggle={(o) => setOpen((xs) => (o ? [...xs, g.end] : xs.filter((x) => x !== g.end)))} />,
           g.host,
           String(g.end),
         ),
@@ -65,7 +68,7 @@ export function ReaderImages({ chapter }: { chapter: number }) {
   );
 }
 
-function Group({ chapter, images, draftLine, onToggle }: { chapter: number; images: Img[]; draftLine: boolean; onToggle: (open: boolean) => void }) {
+function Group({ chapter, images, draftLine, notAuthor, onToggle }: { chapter: number; images: Img[]; draftLine: boolean; notAuthor: boolean; onToggle: (open: boolean) => void }) {
   const [open, setOpen] = useState(false);
   const can = useCanAddImage();
   const n = images.length;
@@ -94,7 +97,7 @@ function Group({ chapter, images, draftLine, onToggle }: { chapter: number; imag
         <>
           <p className="ri-order">{W.reader.order}</p>
           <ul className="ri-list" aria-label="Images by readers, most liked first, then newest">
-            {images.map((im) => (
+            {images.map((im, i) => (
               <li key={im.versionId}>
                 <Link href={`/image/${im.versionId}`}>
                   {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -105,7 +108,8 @@ function Group({ chapter, images, draftLine, onToggle }: { chapter: number; imag
                     kind="image"
                     text={AI_LABEL.imageBy(byline(im.byName, im.byFid))}
                     view={readerImageView({ versionId: im.versionId, by: byline(im.byName, im.byFid), prompt: im.userPrompt, chapter: im.chapter, where })}
-                  />{' '}
+                  />
+                  {notAuthor && i === 0 && <span className="ai-not-author"> · {NOT_AUTHOR_VISIBLE}</span>}{' '}
                   · {im.likes} {im.likes === 1 ? 'like' : 'likes'}
                 </p>
               </li>
