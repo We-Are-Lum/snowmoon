@@ -92,6 +92,9 @@ class Shot:
     def __init__(self, s: dict, out: tuple[int, int], letters: list[dict], L, stand_ins: bool = False):
         self.s, self.out = s, out
         self.stand_in = stand_ins and not (ROOT / s["image"]).exists()
+        if not self.stand_in and not (ROOT / s["image"]).exists():
+            raise SystemExit(f"shot {s['id']}: {s['image']} is not on this machine. Make the still, or, for a placeholder "
+                             "timeline such as dog-dawn's, add --stand-ins to draw a card in its place.")
         self.img = stand_in(s) if self.stand_in else Image.open(ROOT / s["image"]).convert("RGB")
         self.letters = []
         for l in letters:
