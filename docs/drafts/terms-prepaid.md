@@ -52,7 +52,11 @@ model doesn't answer, you aren't charged." (draft wording; not changed on the br
 **Prepaid images.** You can pay in USDC or ETH on Base to make images. Your balance is spent when you
 press Generate, including for a prompt the rules block or an image the safety checker drops. If our
 prompt check or the image model doesn't answer, the cost goes back to your balance. Otherwise payment
-is final: there are no refunds.
+is final: there are no refunds. If a payment reaches us but isn't added to your balance, paste its
+transaction hash on the balance screen, or send it to us, and we'll add it.
+*(The box is on branch `payment-recovery`, not merged. It adds a payment only if it came from the
+signed-in wallet and hasn't been added before, and only up to 7 days old; older ones, and anything
+sent to us, are added by hand, and there is no maintainer script for that yet.)*
 
 If we close, we'll give 30 days' notice and refund unused balances to the wallet that paid.
 *(The owner's words, to confirm at the reread. Nothing in the code does this yet: a closing refund
