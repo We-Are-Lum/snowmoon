@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useState, type ReactNode } from 'react';
+import { useEffect, useState } from 'react';
 import Link from 'next/link';
 import { openedChapters } from '~/lib/chat/device';
 import { IMAGE_WORDING } from '~/lib/images/wording';
@@ -9,7 +9,6 @@ import { BookLabel } from './design-sheets';
 /**
  * A character sheet's "What the book says" (Design 5a): the book's own words about the character,
  * only from chapters opened on this device, each linked to its place. Nothing a model wrote.
- * And the cover for a character first met past where the reader has got to.
  */
 const W = IMAGE_WORDING.designs;
 
@@ -43,22 +42,5 @@ export function BookQuotes({ name, quotes }: { name: string; quotes: { chapter: 
       )}
       <p className="dz-note">{W.page.bookNote}</p>
     </section>
-  );
-}
-
-/** A character or a place first met past where the reader has got to is covered until shown. */
-export function CharacterGate({ firstChapter, children, covered }: { firstChapter: number; children: ReactNode; covered?: string }) {
-  const furthest = useFurthest();
-  const [show, setShow] = useState(false);
-  if (furthest !== null && (firstChapter <= furthest || show)) return <>{children}</>;
-  return (
-    <div className="dz-main">
-      <div className="pictures-cover dz-cover">
-        <p>{covered ?? W.page.coveredPage(firstChapter)}</p>
-        <button type="button" className="pictures-show" onClick={() => setShow(true)} disabled={furthest === null}>
-          {W.index.showAnyway}
-        </button>
-      </div>
-    </div>
   );
 }

@@ -6,7 +6,7 @@ import { byline, designByline } from '~/lib/images/byline';
 import { wordDiff } from '~/lib/images/design-rules';
 import { bookCharacters, designByVersion, imagesBuiltOn, listDesigns, picturesOf } from '~/lib/images/designs';
 import { IMAGE_WORDING } from '~/lib/images/wording';
-import { BookQuotes, CharacterGate } from '~/components/design-book';
+import { BookQuotes } from '~/components/design-book';
 import { DesignBar } from '~/components/design-bar';
 
 /**
@@ -57,7 +57,7 @@ export default async function DesignPage({ params }: Props) {
   const built = await imagesBuiltOn(sql, d.elementId).catch(() => []);
   const others = await listDesigns(sql, d.kind, 'new', style ? undefined : d.entityId).catch(() => []);
   const pictures = style ? body.samples : (['front', 'side', 'back'] as const).map((k) => body.views[k]).filter((p): p is NonNullable<typeof p> => Boolean(p));
-  const crumb = style ? { href: '/images/designs', label: W.index.title } : { href: `/images/designs/character/${character?.slug ?? ''}`, label: d.entity };
+  const crumb = style ? { href: '/images/designs', label: W.index.tabStyles } : { href: `/images/designs/character/${character?.slug ?? ''}`, label: d.entity };
   const title = style ? body.title || d.entity : body.title || W.page.sheetBy(by);
 
   const main = (
@@ -199,7 +199,7 @@ export default async function DesignPage({ params }: Props) {
             ))}
           </ul>
         </nav>
-        {character ? <CharacterGate firstChapter={character.firstChapter}>{main}</CharacterGate> : main}
+        {main}
       </div>
     </div>
   );

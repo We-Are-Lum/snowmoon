@@ -443,6 +443,7 @@ const READER_IMAGE_FILES = [
  */
 const DESIGN_IMAGE_FILES = [
   'src/components/design-index.tsx',
+  'src/components/pictures-latest.tsx',
   'src/app/images/designs/[id]/page.tsx',
   'src/app/images/designs/character/[slug]/page.tsx',
   'src/components/design-form.tsx',
@@ -1097,7 +1098,7 @@ add({
 // ---------------------------------------------------------------------------
 // P6. No third-party requests; individual ratings not publicly readable.
 // ---------------------------------------------------------------------------
-const PAGES = ['/', '/chapter/1', '/chapter/30', '/about', '/cards', '/adaptations', '/adaptations/dog-dawn', '/share/1/4?img=c1-b005-toy-drone', '/images', '/moderate', '/glossary', '/glossary/zei', '/terms', '/privacy',
+const PAGES = ['/', '/chapter/1', '/chapter/30', '/about', '/cards', '/adaptations', '/adaptations/dog-dawn', '/share/1/4?img=c1-b005-toy-drone', '/images', '/moderate', '/glossary', '/glossary/zei', '/terms', '/privacy', '/images?show=moments',
   // Step 4: styles and character sheets.
   '/images/designs', '/images/designs?tab=characters', '/images/designs/character/gladias', '/images/picks'];
 add({

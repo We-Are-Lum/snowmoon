@@ -5,15 +5,19 @@ import { designByline } from '~/lib/images/byline';
 import { bookCharacters, listDesigns, sheetCounts, type DesignOrder } from '~/lib/images/designs';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { DesignIndex } from '~/components/design-index';
+import { PicturesMenu } from '~/components/pictures-menu';
 import { partsOf, placeFirstChapter, placeTitle, sheetPlaces } from '~/lib/images/sheets';
 
-export const metadata = { title: 'Styles & characters' };
+export async function generateMetadata({ searchParams }: { searchParams: Promise<{ tab?: string }> }) {
+  const tab = (await searchParams).tab;
+  return { title: tab === 'characters' ? 'Characters' : tab === 'places' ? 'Settings' : 'Styles' };
+}
 export const revalidate = 60;
 const W = IMAGE_WORDING.designs;
 
 /**
- * Styles and character sheets (step 4; Claude Design's 4-desktop index and the prototype's
- * library). Two tabs. Styles: readers' styles, newest first or most built on, the order always
+ * Styles, characters and settings (step 4; Claude Design's 4-desktop index and the prototype's
+ * library), chosen from Pictures' menu (owner, 2026-10-14). Styles: readers' styles, newest first or most built on, the order always
  * named. Characters: the book's characters, each with its sheets. Nothing is official or featured;
  * no pick is counted or shown here. Places (2026-10-10): the book's places as text sheets, in the
  * order the book first goes there.
@@ -30,8 +34,9 @@ export default async function Designs({ searchParams }: { searchParams: Promise<
       <p className="label ip-crumb">
         <Link href="/images">← Pictures</Link> · {IMAGES.label}
       </p>
-      <h1>{W.index.title}</h1>
-      <p>{tab === 'places' ? W.sheets.leadPlaces : W.index.lead}</p>
+      <h1>{tab === 'characters' ? W.index.tabCharacters : tab === 'places' ? W.index.tabPlaces : W.index.tabStyles}</h1>
+      <p>{tab === 'places' ? W.sheets.leadPlaces : tab === 'characters' ? W.index.leadCharacters : W.index.leadStyles}</p>
+      <PicturesMenu current={tab === 'places' ? 'settings' : tab} />
       <DesignIndex
         tab={tab}
         sort={sort}

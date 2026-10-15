@@ -5,7 +5,7 @@ import { db } from '~/lib/db';
 import { byline } from '~/lib/images/byline';
 import { bookCharacter, characterEntity, listDesigns, type DesignOrder } from '~/lib/images/designs';
 import { IMAGE_WORDING } from '~/lib/images/wording';
-import { BookQuotes, CharacterGate } from '~/components/design-book';
+import { BookQuotes } from '~/components/design-book';
 import { NewSheetLink } from '~/components/design-new-link';
 import { SheetImages, Shorthand } from '~/components/design-sheets';
 import { sheetCharacter } from '~/lib/images/sheets';
@@ -39,9 +39,9 @@ export default async function CharacterPage({ params, searchParams }: Props) {
   return (
     <div className="page prose pictures designs">
       <p className="label ip-crumb">
-        <Link href="/images/designs?tab=characters">← {W.index.title}</Link> · {IMAGES.label}
+        <Link href="/images/designs?tab=characters">← {W.index.tabCharacters}</Link> · {IMAGES.label}
       </p>
-      <CharacterGate firstChapter={c.firstChapter}>
+      <>
         <h1>{c.name}</h1>
         {sheet?.about && (
           <section className="dz-about">
@@ -88,7 +88,7 @@ export default async function CharacterPage({ params, searchParams }: Props) {
         <SheetImages images={images} />
         <p className="dz-footer">{W.index.footer}</p>
         <p className="as-draft ic-draftline">{IMAGE_WORDING.draftLine}</p>
-      </CharacterGate>
+      </>
     </div>
   );
 }
