@@ -59,7 +59,6 @@
 .home-feed-list li { display: grid; grid-template-columns: 64px 1fr auto; gap: 12px; align-items: center; padding: 8px 0; border-bottom: 1px solid var(--rule); }
 .home-feed-thumb { display: block; width: 64px; height: 64px; }
 .home-feed-thumb img { display: block; width: 64px; height: 64px; object-fit: cover; background: var(--soft); }
-.home-feed-cover { display: block; width: 64px; height: 64px; background: var(--cover); }
 .home-feed-body { display: flex; flex-direction: column; min-width: 0; }
 .home-feed-what { font-size: 17px; line-height: 1.25; }
 .home-feed-caption { margin: 0; text-transform: none; letter-spacing: var(--ls-label); }

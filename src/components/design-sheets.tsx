@@ -11,7 +11,7 @@ import { InfoLabel } from './info-label';
 /**
  * Character and place sheets as text (owner, 2026-10-10): this edition's shorthand, labelled
  * "Invented ⓘ" (drafted by the coding agent), and the images of the character or place, each
- * AI-labelled, covered past the furthest chapter opened on this device as the feed does.
+ * AI-labelled. The book's words about them stay limited to the chapters opened on this device.
  */
 const SH = IMAGE_WORDING.designs.sheets;
 
@@ -46,41 +46,28 @@ export type SheetImage = {
   recipe: { file: string; item: string } | null;
 };
 
+/** Not covered by chapter (owner, 2026-10-14: "stop hiding images from parts in the book you haven't read yet"). */
 export function SheetImages({ images }: { images: SheetImage[] }) {
-  const [furthest, setFurthest] = useState<number | null>(null);
-  const [shown, setShown] = useState<Set<string>>(new Set());
-  useEffect(() => setFurthest(Math.max(1, ...openedChapters())), []);
   return (
     <section className="dz-images" aria-label={SH.images}>
       <p className="dz-label">{SH.images}</p>
-      {furthest !== null && <p className="dz-note">{IMAGE_WORDING.feed.covered(furthest)}</p>}
       {images.length ? (
         <ul className="dz-image-list">
           {images.map((im) => {
-            const covered = (furthest === null || im.chapter > furthest) && !shown.has(im.key);
             return (
               <li key={im.key}>
-                {covered ? (
-                  <div className="pictures-cover">
-                    <p>{SH.coveredImage(im.chapter)}</p>
-                    <button type="button" className="pictures-show" onClick={() => setShown(new Set(shown).add(im.key))}>
-                      {IMAGE_WORDING.designs.index.showAnyway}
-                    </button>
-                  </div>
-                ) : (
-                  <Link href={im.href} className="pictures-image">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={im.url} alt={im.alt} width={1024} height={576} loading="lazy" />
-                  </Link>
-                )}
+                <Link href={im.href} className="pictures-image">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={im.url} alt={im.alt} width={1024} height={576} loading="lazy" />
+                </Link>
                 <p className="block-caption dz-image-caption">
                   Chapter {im.chapter}
-                  {im.where && !covered ? ` · ${im.where}` : ''} ·{' '}
+                  {im.where ? ` · ${im.where}` : ''} ·{' '}
                   {im.reader ? (
                     <AiLabel
                       kind="image"
                       text={AI_LABEL.imageBy(im.reader.by)}
-                      view={readerImageView({ versionId: im.reader.versionId, by: im.reader.by, prompt: covered ? undefined : im.reader.prompt, chapter: im.chapter, where: covered ? null : im.where, date: im.reader.date })}
+                      view={readerImageView({ versionId: im.reader.versionId, by: im.reader.by, prompt: im.reader.prompt, chapter: im.chapter, where: im.where, date: im.reader.date })}
                     />
                   ) : (
                     <AiLabel kind="image" text={AI_LABEL.image} file={im.recipe!.file} item={im.recipe!.item} />

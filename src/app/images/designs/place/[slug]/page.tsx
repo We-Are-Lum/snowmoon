@@ -5,7 +5,7 @@ import { IMAGE_WORDING } from '~/lib/images/wording';
 import { labelRange } from '~/lib/reading';
 import { partsOf, placeFirstChapter, placeTitle, sheetPlace } from '~/lib/images/sheets';
 import { sheetImages } from '~/lib/images/sheet-images';
-import { BookQuotes, CharacterGate } from '~/components/design-book';
+import { BookQuotes } from '~/components/design-book';
 import { Appears, SheetImages, Shorthand } from '~/components/design-sheets';
 
 /**
@@ -33,9 +33,9 @@ export default async function PlacePage({ params }: Props) {
   return (
     <div className="page prose pictures designs">
       <p className="label ip-crumb">
-        <Link href="/images/designs?tab=places">← {W.index.title}</Link> · {IMAGES.label}
+        <Link href="/images/designs?tab=places">← {W.index.tabPlaces}</Link> · {IMAGES.label}
       </p>
-      <CharacterGate firstChapter={first} covered={SH.coveredPlace(first)}>
+      <>
         <h1>{placeTitle(p.name)}</h1>
         {p.about && (
           <section className="dz-about">
@@ -56,7 +56,7 @@ export default async function PlacePage({ params }: Props) {
         <SheetImages images={images} />
         <p className="dz-footer">{W.index.footer}</p>
         <p className="as-draft ic-draftline">{IMAGE_WORDING.draftLine}</p>
-      </CharacterGate>
+      </>
     </div>
   );
 }

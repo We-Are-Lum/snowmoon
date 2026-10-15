@@ -19,7 +19,8 @@ import '../app/assistant/assistant.css';
 
 /**
  * The app's frame, from the clickable prototype (structure, spacing, type), with real controls:
- * - under 768px (phones, the Farcaster frame): a top bar "× Snowmoon ? ☰"; ? is About, ☰ opens the menu sheet;
+ * - under 768px (phones, the Farcaster frame): a top bar "Snowmoon ? ☰", the name on the left (owner, 2026-10-14;
+ *   the Farcaster host has its own close control); ? is About, ☰ opens the menu sheet;
  * - 768–1199px: the rail collapsed to its expand control, opening over the page;
  * - 1200px and up: the rail open (wordmark, collapse, the destinations, the chapters with their
  *   state, theme, account) and the assistant beside the page, always there unless closed.
@@ -32,13 +33,11 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
   const [railOpen, setRailOpen] = useState(false); // tablet overlay
   const [collapsed, setCollapsed] = useState(false); // desktop, remembered
   const [panel, setPanel] = useState(true);
-  const [inApp, setInApp] = useState(false);
   const [last, setLast] = useState(1);
   const [opened, setOpened] = useState<Set<number>>(new Set());
 
   useEffect(() => {
     void inMiniApp().then((yes) => {
-      setInApp(yes);
       if (yes) sdk.actions.ready().catch(() => {});
     });
     try {
@@ -94,13 +93,7 @@ export function AppShell({ chapters, adaptations, intro, children }: { chapters:
           <Link href={`/chapter/${last}`} className="topbar-icon" aria-label={`Back to Chapter ${last}`}>
             ←
           </Link>
-        ) : inApp ? (
-          <button type="button" className="topbar-icon" aria-label="Close Snowmoon" onClick={() => sdk.actions.close().catch(() => {})}>
-            ×
-          </button>
-        ) : (
-          <span className="topbar-icon" aria-hidden="true" />
-        )}
+        ) : null}
         {path.startsWith('/assistant') ? (
           <span className="topbar-title">Assistant</span>
         ) : (
