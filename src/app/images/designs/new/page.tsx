@@ -4,7 +4,7 @@ import { IMAGES } from '~/lib/config';
 import { db } from '~/lib/db';
 import { designByline } from '~/lib/images/byline';
 import { SAMPLE_SUBJECTS, VIEW_LINES } from '~/lib/images/design-rules';
-import { bookCharacter, bookCharacters, designByVersion } from '~/lib/images/designs';
+import { bookCharacter, bookCharacters, designByVersion, listDesigns } from '~/lib/images/designs';
 import { RULES } from '~/lib/images/rules';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { DesignForm } from '~/components/design-form';
@@ -28,6 +28,8 @@ export default async function NewDesign({ searchParams }: Props) {
   const character = kind === 'character' ? (src ? (bookCharacters().find((c) => c.name === src.entity) ?? null) : bookCharacter(q.character ?? '')) : null;
   if (kind === 'character' && !character) notFound();
   const mode = q.version && src ? 'version' : src ? 'fork' : 'create';
+  // A sheet's views are made in one of the published styles (owner, 2026-10-14).
+  const styles = kind === 'character' && sql ? await listDesigns(sql, 'style').catch(() => []) : [];
   const callName = character ? (character.name.split(' ').find((w) => !/^(Lord|General|Senator)$/.test(w)) ?? character.name) : '';
   const title = mode === 'fork' ? W.form.fork : mode === 'version' ? W.form.newVersion : kind === 'style' ? W.form.newStyle : W.form.newSheet(callName);
   return (
@@ -57,6 +59,7 @@ export default async function NewDesign({ searchParams }: Props) {
             : null
         }
         subjects={[...SAMPLE_SUBJECTS]}
+        styles={styles.map((s) => ({ versionId: s.versionId, title: s.title || s.entity, by: designByline(s.byName, s.byFid, s.byRole), text: s.text, thumb: s.thumb }))}
         viewLines={VIEW_LINES}
         rules={RULES}
         limits={{ ...IMAGES.designs }}

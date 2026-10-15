@@ -42,6 +42,7 @@ function picture(p: Pic | undefined, fid: number, text: string): { t: SampleTick
 const recipeOf = (t: SampleTicket): DesignPicture['recipe'] => ({
   prompt: t.prompt, model: t.model, endpoint: t.endpoint, host: t.host, settings: t.settings, seed: t.seed, request_id: t.requestId,
   cost_usd: Number(t.costUsd.toFixed(4)), made_at: t.at, width: t.width, height: t.height, ...(t.references ? { references: t.references } : {}),
+  ...(t.style ? { style: { version_id: t.style.versionId, title: t.style.title, text: t.style.text } } : {}),
   checks: { prompt: t.guard, host_safety_checker: 'passed' }, assist: SAMPLE_ASSIST as unknown as DesignPicture['recipe']['assist'],
 });
 
@@ -99,6 +100,11 @@ export async function POST(request: Request) {
       views[slot] = got;
     }
     if (!views.front) return no('Make the front view first', 400);
+    // Every view in one published style, the front's (owner, 2026-10-14).
+    const styleId = views.front.t.style?.versionId;
+    if (!styleId) return no('The front view was made without a style. Choose a style and make it again.', 400);
+    if (Object.values(views).some((x) => x!.t.style?.versionId !== styleId)) return no('The views were made in different styles. Make them again in one.', 400);
+    if (!(await designByVersion(sql, styleId))) return no('That style is no longer published. Choose another and make the views again.', 409);
     for (const slot of ['side', 'back'] as const) {
       if (views[slot] && !views[slot]!.t.references?.some((r) => r.sha256 === views.front!.t.sha256)) return no('A view was made from another front view. Make it again.', 400);
     }
@@ -127,6 +133,7 @@ export async function POST(request: Request) {
     by_name: by.name,
     by_name_source: by.source,
     assist: null,
+    ...(views.front ? { style: { version_id: views.front.t.style!.versionId, title: views.front.t.style!.title } } : {}),
   };
   try {
     const out = await makeDesign(sql, { fid, mode, kind, styleName: mode === 'create' && kind === 'style' ? title : undefined, character: character ?? undefined, fromVersionId: typeof body.from === 'string' ? body.from : undefined, body: design });

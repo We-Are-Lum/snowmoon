@@ -8,6 +8,7 @@ import { IMAGE_WORDING } from '~/lib/images/wording';
 import { ConsentScreen, PublishedTextField, PublishFlow } from './publish-words';
 import { SignInButton } from './sign-in';
 import { BookQuotes } from './design-book';
+import { useMyPicks } from './design-picks';
 
 /**
  * New style, new sheet, fork, or new version (step 4; Claude Design 4b, 4c, 5b). The name and the
@@ -15,11 +16,14 @@ import { BookQuotes } from './design-book';
  * first time goes through the same consent. Pictures (a style's samples, a sheet's views) are made
  * one at a time with the text as it is, each using one of today's generations; they stay on this
  * page until you publish or leave. Changing the text after making them marks them to make again,
- * since the server publishes only pictures made with exactly the text being published.
+ * since the server publishes only pictures made with exactly the text being published. A sheet's
+ * views are made in one of the published styles, chosen here (owner, 2026-10-14); changing it
+ * marks them to make again too. Your own style pick is chosen to start with.
  * "Preview and publish" shows the design as readers will see it first.
  */
 const W = IMAGE_WORDING.designs;
-type Pic = { ticket: string; image: string; text: string };
+type Pic = { ticket: string; image: string; text: string; style: string | null };
+type StyleOption = { versionId: string; title: string; by: string; text: string; thumb: string | null };
 type Status = { ready: boolean; invited?: boolean; consented?: boolean; left?: number; perDay: number; signedIn: boolean };
 type Wording = { version: string; line: string; title: string; text: string[]; sha256: string };
 type Props = {
@@ -28,6 +32,8 @@ type Props = {
   character: { slug: string; name: string; callName: string; quotes: { chapter: number; idx: number; quote: string }[]; firstChapter: number } | null;
   source: { versionId: string; title: string; entity: string; by: string; versionNo: number; text: string; drafted: boolean } | null;
   subjects: string[];
+  /** Published styles a sheet's views can be made in (newest first). */
+  styles: StyleOption[];
   viewLines: Record<ViewSlot, string>;
   rules: string;
   limits: { nameMaxChars: number; textMaxChars: number; samplesMin: number; samplesMax: number };
@@ -47,6 +53,13 @@ export function DesignForm(p: Props) {
   const [status, setStatus] = useState<Status | null>(null);
   const [consent, setConsent] = useState<Wording | null>(null);
   const [published, setPublished] = useState<string | null>(null);
+  const [viewStyle, setViewStyle] = useState<string | null>(null);
+  const picks = useMyPicks();
+  const pickedStyle = picks?.find((x) => x.kind === 'style' && p.styles.some((s) => s.versionId === x.versionId))?.versionId ?? null;
+  useEffect(() => {
+    if (pickedStyle) setViewStyle((v) => v ?? pickedStyle);
+  }, [pickedStyle]);
+  const chosen = p.styles.find((s) => s.versionId === viewStyle) ?? null;
 
   const refresh = useCallback(async () => {
     const res = await authFetch('/api/images/status').catch(() => null);
@@ -57,8 +70,9 @@ export function DesignForm(p: Props) {
   }, [refresh, auth.kind]);
 
   const clean = text.trim();
-  const fresh = (x: Pic | null | undefined): x is Pic => Boolean(x && x.text === clean);
+  const fresh = (x: Pic | null | undefined): x is Pic => Boolean(x && x.text === clean && (style || x.style === viewStyle));
   const stale = [...samples, ...Object.values(views)].some((x) => x && x.text !== clean);
+  const styleStale = !style && Object.values(views).some((x) => x && x.text === clean && x.style !== viewStyle);
   const made = style ? samples.filter(fresh) : (Object.values(views).filter(fresh) as Pic[]);
   const left = status?.left ?? 0;
   const enough = style ? made.length >= p.limits.samplesMin : fresh(views.front);
@@ -72,11 +86,11 @@ export function DesignForm(p: Props) {
       const res = await authFetch('/api/designs/sample', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ slot, index, text: clean, ...(front ? { front: { ticket: front.ticket, image: front.image } } : {}) }),
+        body: JSON.stringify({ slot, index, text: clean, ...(style ? {} : { style: viewStyle }), ...(front ? { front: { ticket: front.ticket, image: front.image } } : {}) }),
       });
       const out = (await res.json().catch(() => ({}))) as { ticket?: string; image?: string; error?: string };
       if (res.ok && out.ticket && out.image) {
-        const pic = { ticket: out.ticket, image: out.image, text: clean };
+        const pic = { ticket: out.ticket, image: out.image, text: clean, style: style ? null : viewStyle };
         if (slot === 'sample') setSamples((s) => s.map((x, i) => (i === index ? pic : x)));
         else setViews((v) => ({ ...v, [slot]: pic }));
       } else setNote(out.error ?? 'Could not make the picture');
@@ -125,6 +139,7 @@ export function DesignForm(p: Props) {
   const pictureFor = (slot: 'sample' | ViewSlot, i: number, pic: Pic | null | undefined, line: string) => {
     const key = slot === 'sample' ? `s${i}` : slot;
     const needsFront = (slot === 'side' || slot === 'back') && !fresh(views.front);
+    const needsStyle = slot !== 'sample' && !chosen;
     const label = slot === 'sample' ? W.form.subject(i + 1) : slot;
     return (
       <li key={key} className={`dz-slot${pic ? ' has-pic' : ''}${pic && !fresh(pic) ? ' is-stale' : ''}`}>
@@ -141,7 +156,7 @@ export function DesignForm(p: Props) {
           type="button"
           className="ic-link dz-slot-go"
           onClick={() => make(slot, i)}
-          disabled={!ready || busy !== null || !clean || left <= 0 || needsFront}
+          disabled={!ready || busy !== null || !clean || left <= 0 || needsFront || needsStyle}
           aria-label={`${pic ? W.form.again : W.form.generate}: ${label}`}
         >
           {busy === key ? W.form.making : pic ? W.form.again : W.form.generate}
@@ -207,6 +222,38 @@ export function DesignForm(p: Props) {
           )}
           <p className="ic-note">{W.form.sentTo}</p>
 
+          {!style && (
+            <fieldset className="dz-section dz-style-pick">
+              <legend className="dz-label">{W.form.viewStyle}</legend>
+              {p.styles.length ? (
+                <ul className="dz-rows">
+                  {p.styles.map((s) => (
+                    <li key={s.versionId}>
+                      <label className={`dz-row dz-style-option${viewStyle === s.versionId ? ' is-on' : ''}`}>
+                        <input type="radio" name="dz-view-style" value={s.versionId} checked={viewStyle === s.versionId} onChange={() => setViewStyle(s.versionId)} />
+                        {s.thumb ? (
+                          // eslint-disable-next-line @next/next/no-img-element
+                          <img className="dz-thumb" src={s.thumb} alt="" width={64} height={48} loading="lazy" />
+                        ) : (
+                          <span className="dz-thumb dz-thumb-empty" aria-hidden="true" />
+                        )}
+                        <span className="dz-row-text">
+                          <span className="dz-row-title">{s.title}</span>
+                          <span className="dz-row-meta">{s.by}</span>
+                          {s.thumb && <span className="dz-row-ai">Sample: AI-generated · not by the author</span>}
+                        </span>
+                      </label>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="ic-error">{W.form.viewStyleNone}</p>
+              )}
+              {chosen && <p className="dz-text dz-style-text">{chosen.text}</p>}
+              <p className="dz-note">{W.form.viewStyleNote}</p>
+            </fieldset>
+          )}
+
           <section className="dz-section" aria-label={style ? 'Sample images' : 'Views'}>
             <p className="dz-label">{style ? W.form.samples(p.limits.samplesMin, p.limits.samplesMax) : W.form.views}</p>
             <ul className={`dz-slots${style ? '' : ' is-views'}`}>
@@ -225,6 +272,8 @@ export function DesignForm(p: Props) {
             )}
             {!style && <p className="dz-note">{W.form.viewsShared}</p>}
             {stale && <p className="ic-error">{W.form.stale}</p>}
+            {styleStale && <p className="ic-error">{W.form.viewStyleChanged}</p>}
+            {!style && !chosen && p.styles.length > 0 && <p className="dz-note">{W.form.viewStyleFirst}</p>}
             <p className="dz-note">{W.form.left(left)}</p>
             <p className="dz-note">{W.form.promptIs(p.suffix)}</p>
             <p className="ic-model">
@@ -249,7 +298,7 @@ export function DesignForm(p: Props) {
           )}
           <div className="dz-publish">
             <PublishFlow
-              disabled={!enough || stale || busy !== null || (style && !title.trim())}
+              disabled={!enough || stale || styleStale || busy !== null || (style && !title.trim())}
               preview={
                 <div className="dz-preview">
                   <p className="dz-title">{title.trim() || (style ? '' : W.page.sheetBy(auth.kind === 'signed-in' && auth.username ? `@${auth.username}` : 'you'))}</p>
@@ -261,6 +310,7 @@ export function DesignForm(p: Props) {
                     ))}
                   </div>
                   <p className="dz-caption">{style ? W.page.samplesCaption : W.page.viewsCaption}</p>
+                  {!style && chosen && <p className="dz-meta">{W.page.madeInStyle(chosen.title)}</p>}
                   <p className="dz-label">{style ? W.page.styleText : W.page.sheetText(p.character?.callName ?? '')}</p>
                   <p className="dz-text">{clean}</p>
                 </div>

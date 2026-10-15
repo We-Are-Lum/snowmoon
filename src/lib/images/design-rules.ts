@@ -30,6 +30,16 @@ export function samplePrompt(subject: string, text: string): string {
   return [subject, text.trim(), IMAGES.suffix].filter(Boolean).join('\n\n');
 }
 
+/**
+ * The exact prompt for a sheet's view: the view line, the chosen style's text, the sheet's text, the
+ * no-words line. The same order as an image's prompt (rules.ts, finalPrompt: what, style, sheets).
+ * A view is always made in one of the published styles (owner, 2026-10-14): without one, the model
+ * draws realistic people, not the edition's look.
+ */
+export function viewPrompt(line: string, style: string, text: string): string {
+  return [line, style.trim(), text.trim(), IMAGES.suffix].filter(Boolean).join('\n\n');
+}
+
 /** Who drafted the fixed wording in a sample's prompt (recorded in the sample's recipe). */
 export const SAMPLE_ASSIST = { model: 'claude-coding-agent', drafted: ['sample subject or view line'], source: 'src/lib/images/design-rules.ts' } as const;
 

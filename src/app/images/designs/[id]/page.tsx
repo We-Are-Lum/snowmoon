@@ -90,6 +90,12 @@ export default async function DesignPage({ params }: Props) {
             ))}
           </div>
           <figcaption className="dz-caption">{style ? W.page.samplesCaption : W.page.viewsCaption}</figcaption>
+          {/* The style a sheet's views were made in (owner, 2026-10-14); its text is in each view's recipe. */}
+          {!style && body.style && (
+            <p className="dz-meta">
+              <Link href={`/images/designs/${body.style.version_id}`}>{W.page.madeInStyle(body.style.title)}</Link>
+            </p>
+          )}
         </figure>
       ) : (
         <p className="dz-meta dz-muted">{W.page.noPictures}</p>

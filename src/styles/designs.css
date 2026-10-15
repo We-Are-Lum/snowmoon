@@ -227,3 +227,9 @@ a.dz-fork:hover { text-decoration: none; }
 .ip-in-image { margin: 12px 0 0; font-size: 16px; line-height: 1.5; }
 .ip-in-image-key { font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; color: var(--muted); }
 .seed-in-image { font-family: var(--label); font-size: var(--text-label); }
+/* A sheet's style for its views (owner, 2026-10-14): one of the published styles, chosen as a radio. */
+.dz-style-pick { border: 0; padding: 0; margin: 0; min-width: 0; }
+.dz-style-option { cursor: pointer; }
+.dz-style-option input { flex: none; width: 22px; height: 22px; margin: 0 2px 0 0; accent-color: var(--ink); }
+.dz-style-option.is-on { box-shadow: inset 3px 0 0 var(--ink); }
+.dz-style-text { white-space: pre-wrap; color: var(--muted); }

@@ -104,6 +104,8 @@ export const IMAGE_WORDING = {
       drafted: 'The project’s starting style. Its text was drafted by the coding agent, a closed model.',
       samplesCaption: 'Sample images · AI-generated · not by the author',
       viewsCaption: 'Front, side, back · AI-generated · not by the author',
+      /** Model-drafted wording (2026-10-14). */
+      madeInStyle: (title: string) => `Views made in the style ${title}`,
       noPictures: 'No sample pictures yet.',
       styleText: 'Style text · added to prompts',
       sheetText: (name: string) => `Sheet text · added when ${name} is in a prompt`,
@@ -141,6 +143,12 @@ export const IMAGE_WORDING = {
       sheetName: 'Name (optional)',
       styleText: 'Style text · added to every prompt that uses it',
       sheetText: (name: string) => `Sheet text · added when ${name} is in a prompt`,
+      /** A sheet's style (owner, 2026-10-14: views must use one of the style guides). Model-drafted wording. */
+      viewStyle: 'Style for the views',
+      viewStyleNote: 'Each view is made in the style you choose: its text goes into the prompt before your sheet text. Your sheet shows which style its views used.',
+      viewStyleNone: 'No styles are published yet. Publish a style first.',
+      viewStyleFirst: 'Choose a style first.',
+      viewStyleChanged: 'The style changed since these views were made. Make them again.',
       yours: (v: number) => `Shaded words are yours; the rest is unchanged from v${v}.`,
       sentTo: 'Your text is sent to Groq to be checked (through Vercel AI Gateway when Groq is busy) and to fal.ai to make the pictures. It becomes public only if you publish.',
       samples: (min: number, max: number) => `Sample images · ${min} to ${max} · made with this text`,

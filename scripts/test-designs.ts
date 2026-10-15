@@ -35,13 +35,14 @@ function walk(dir: string): string[] {
 }
 
 // --- Pure rules ------------------------------------------------------------------
-const { wordDiff, mentions, samplePrompt, SAMPLE_SUBJECTS } = await import('../src/lib/images/design-rules');
+const { wordDiff, mentions, samplePrompt, viewPrompt, SAMPLE_SUBJECTS, VIEW_LINES } = await import('../src/lib/images/design-rules');
 const diff = wordDiff('Flat paper-cut layers, muted greens, no outlines', 'Flat paper-cut layers, deep blue and silver, no outlines');
 check('a fork shades only its own words', diff.filter((d) => d.changed).map((d) => d.text).join('|') === 'deep blue and silver,', JSON.stringify(diff));
 check('unchanged text has nothing shaded', wordDiff('a b c', 'a b c').every((d) => !d.changed));
 check('a passage names a character by a word of their name', mentions('Zei looked up.', 'Zei Leimin') && mentions('said General Lektor', 'General Lektor'));
 check('only whole words, case kept', !mentions('the minute', 'Min') && !mentions('Zeitgeist', 'Zei Leimin'));
 check('a sample prompt is subject, text, no-words line', samplePrompt(SAMPLE_SUBJECTS[0], 'Thin washes.') === `${SAMPLE_SUBJECTS[0]}\n\nThin washes.\n\n${IMAGES.suffix}`);
+check("a view's prompt is the view line, the style's text, the sheet's text, no-words line (a sheet is always made in a style)", viewPrompt(VIEW_LINES.front, 'Ink lines, flat colour.', 'Eighteen, slight.') === `${VIEW_LINES.front}\n\nInk lines, flat colour.\n\nEighteen, slight.\n\n${IMAGES.suffix}`);
 const { finalPrompt } = await import('../src/lib/images/rules');
 check('sheets come after the style, before the no-words line', finalPrompt('A path', 'STYLE', ['SHEET']) === `A path\n\nSTYLE\n\nSHEET\n\n${IMAGES.suffix}`);
 check('an image with no picks keeps the same prompt as before', finalPrompt('A path', null) === `A path\n\n${IMAGES.suffix}`);
@@ -112,7 +113,8 @@ check('designs published today are counted for the daily cap', (await D.designPu
 const zei = D.bookCharacter('zei')!;
 check('the book\'s characters are listed', D.bookCharacters().length >= 20 && zei.name === 'Zei Leimin');
 const s1 = await D.makeDesign(S, { fid: 300, mode: 'create', kind: 'character', character: zei, body: { ...body('', 'Eighteen, slight, short dark hair'), samples: [], views: { front: pic(7) } } });
-const s2 = await D.makeDesign(S, { fid: 301, mode: 'create', kind: 'character', character: zei, body: { ...body('', 'Tall, quick hands'), samples: [], views: { front: pic(8) } } });
+const s2 = await D.makeDesign(S, { fid: 301, mode: 'create', kind: 'character', character: zei, body: { ...body('', 'Tall, quick hands'), samples: [], views: { front: pic(8) }, style: { version_id: s1.versionId, title: 'Ink' } } });
+check("a sheet keeps the style its views were made in (owner, 2026-10-14)", (await D.designByVersion(S, s2.versionId))?.shown.body.style?.title === 'Ink');
 const ents = await sql`select count(*)::int as n from studio.entities where kind = 'character' and name = 'Zei Leimin'`;
 check('a character\'s entity is made once', ents[0].n === 1);
 check('both sheets list under the character', (await D.listDesigns(S, 'character', 'new', (await D.characterEntity(S, zei))!)).length === 2);
