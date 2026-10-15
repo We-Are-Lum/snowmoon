@@ -1,0 +1,133 @@
+{
+  "about": "Style test, round two (owner, 2026-10-14): the owner's starred styles (techno-vistas) on four more frames. Frame subjects are model-drafted test prompts, labelled, never published; style prompts are round one's; no artist or studio is named. Z-Image Turbo with no references, for comparison.",
+  "cap_usd": 1.0,
+  "models": {
+    "z": {
+      "name": "Z-Image Turbo",
+      "endpoint": "fal-ai/z-image/turbo",
+      "weights": "https://huggingface.co/Tongyi-MAI/Z-Image-Turbo",
+      "license": "Apache-2.0",
+      "price_usd_per_megapixel": 0.005,
+      "price_seen": "https://fal.ai/models/fal-ai/z-image/turbo, 2026-10-05",
+      "steps": 8
+    }
+  },
+  "styles": [
+    {
+      "slug": "techno-vistas",
+      "name": "Techno vistas",
+      "group": "in the repo",
+      "source": "content/snowmoon/designs/styles/techno-vistas.json",
+      "prompt": "Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers."
+    }
+  ],
+  "frames": [
+    {
+      "id": "f4-corridor",
+      "name": "The corridor, three together",
+      "seed": 404,
+      "cast": [
+        "deluin",
+        "zei",
+        "bai"
+      ],
+      "place": null,
+      "scene": "Three eighteen-year-olds stand together in a bright corridor outside a game hall just after a match: on the left the tall pale young man smiles, relaxed; in the middle the slim spiky-haired young man grins and talks with his hands; on the right the young woman folds her arms, unimpressed. Medium shot at eye level."
+    },
+    {
+      "id": "f5-menu",
+      "name": "The robot's menu",
+      "seed": 505,
+      "cast": [
+        "zei",
+        "deluin"
+      ],
+      "place": "courtyard-cafe",
+      "scene": "At a small table in an open-air courtyard cafe, two young men lean over a glowing menu screen held up by a little wheeled serving robot; the spiky-haired one stares at it in wonder, the tall pale one looks on, curious. The screen shows only abstract glowing shapes. Medium close shot."
+    },
+    {
+      "id": "f6-headphones",
+      "name": "Bai: \"Dreadnaught!\"",
+      "seed": 606,
+      "cast": [
+        "bai",
+        "zei",
+        "deluin"
+      ],
+      "place": "courtyard-cafe",
+      "scene": "At a cafe table a young woman pulls one side of a pair of big headphones away from her ear and shouts across to the next table, grinning, a handheld game device in her other hand; behind her, softer, two young men at the next table turn to look. Medium shot."
+    },
+    {
+      "id": "f7-gate",
+      "name": "The gate at dusk",
+      "seed": 707,
+      "cast": [
+        "deluin",
+        "zei"
+      ],
+      "place": "courtyard-cafe",
+      "scene": "Dusk at the gate of an open-air courtyard cafe, the lamps just coming on. The tall pale young man stands alone in the foreground looking down at a small handheld device in his hand, his thumb hovering; far behind him, the slim spiky-haired young man walks away toward a table. Wide shot."
+    }
+  ],
+  "jobs": [
+    {
+      "id": "r2z-techno-vistas-f4-corridor",
+      "model": "z",
+      "beat": "f4-corridor",
+      "attempt": 1,
+      "style": "techno-vistas",
+      "frame": "f4-corridor",
+      "prompt": "Three eighteen-year-olds stand together in a bright corridor outside a game hall just after a match: on the left the tall pale young man smiles, relaxed; in the middle the slim spiky-haired young man grins and talks with his hands; on the right the young woman folds her arms, unimpressed. Medium shot at eye level.\n\nDetailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.\n\nThe people: A young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots. A young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head. A young woman of about eighteen, tall and athletic, dark brown skin, hair pulled into a high puffy ponytail dyed magenta at the ends, a confident sly grin, wearing a lime-green modular shell vest with a bulky angular collar and reflective piping, a white seamless sleeveless bodysuit with glowing magenta seams, black wide gathered trousers with segmented knees, chunky black boots with glowing soles and a hip pouch.\n\nNo text, no lettering, no signs with words, no logos, no numbers.",
+      "seed": 404,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "r2z-techno-vistas-f5-menu",
+      "model": "z",
+      "beat": "f5-menu",
+      "attempt": 1,
+      "style": "techno-vistas",
+      "frame": "f5-menu",
+      "prompt": "At a small table in an open-air courtyard cafe, two young men lean over a glowing menu screen held up by a little wheeled serving robot; the spiky-haired one stares at it in wonder, the tall pale one looks on, curious. The screen shows only abstract glowing shapes. Medium close shot.\n\nDetailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.\n\nThe people: A young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head. A young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots. The place: a small open-air courtyard cafe enclosed by low, dense shop buildings, with scattered small tables and stools beneath a shade tree and strings of little lights, a playful cartoon animal mural on one wall, glowing blank shop panels in pink and cyan, a little wheeled serving robot with a screen face, and an open entrance onto a busy street with a lamp post.\n\nNo text, no lettering, no signs with words, no logos, no numbers.",
+      "seed": 505,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "r2z-techno-vistas-f6-headphones",
+      "model": "z",
+      "beat": "f6-headphones",
+      "attempt": 1,
+      "style": "techno-vistas",
+      "frame": "f6-headphones",
+      "prompt": "At a cafe table a young woman pulls one side of a pair of big headphones away from her ear and shouts across to the next table, grinning, a handheld game device in her other hand; behind her, softer, two young men at the next table turn to look. Medium shot.\n\nDetailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.\n\nThe people: A young woman of about eighteen, tall and athletic, dark brown skin, hair pulled into a high puffy ponytail dyed magenta at the ends, a confident sly grin, wearing a lime-green modular shell vest with a bulky angular collar and reflective piping, a white seamless sleeveless bodysuit with glowing magenta seams, black wide gathered trousers with segmented knees, chunky black boots with glowing soles and a hip pouch. A young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head. A young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots. The place: a small open-air courtyard cafe enclosed by low, dense shop buildings, with scattered small tables and stools beneath a shade tree and strings of little lights, a playful cartoon animal mural on one wall, glowing blank shop panels in pink and cyan, a little wheeled serving robot with a screen face, and an open entrance onto a busy street with a lamp post.\n\nNo text, no lettering, no signs with words, no logos, no numbers.",
+      "seed": 606,
+      "width": 1024,
+      "height": 576
+    },
+    {
+      "id": "r2z-techno-vistas-f7-gate",
+      "model": "z",
+      "beat": "f7-gate",
+      "attempt": 1,
+      "style": "techno-vistas",
+      "frame": "f7-gate",
+      "prompt": "Dusk at the gate of an open-air courtyard cafe, the lamps just coming on. The tall pale young man stands alone in the foreground looking down at a small handheld device in his hand, his thumb hovering; far behind him, the slim spiky-haired young man walks away toward a table. Wide shot.\n\nDetailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.\n\nThe people: A young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots. A young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head. The place: a small open-air courtyard cafe enclosed by low, dense shop buildings, with scattered small tables and stools beneath a shade tree and strings of little lights, a playful cartoon animal mural on one wall, glowing blank shop panels in pink and cyan, a little wheeled serving robot with a screen face, and an open entrance onto a busy street with a lamp post.\n\nNo text, no lettering, no signs with words, no logos, no numbers.",
+      "seed": 707,
+      "width": 1024,
+      "height": 576
+    }
+  ],
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent",
+    "drafted": [
+      "frame subjects",
+      "motion prompt",
+      "reference choices"
+    ],
+    "note": "test prompts for a style test, never published; the style prompts are round one's",
+    "see": "config/models.json drafting; principle 3"
+  }
+}

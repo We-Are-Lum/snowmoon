@@ -1,0 +1,52 @@
+{
+  "about": "Style test, round two (owner, 2026-10-14): the owner's starred styles (techno-vistas) on four more frames. Frame subjects are model-drafted test prompts, labelled, never published; style prompts are round one's; no artist or studio is named. Z-Image Turbo with no references, for comparison.",
+  "models": {
+    "z": {
+      "name": "Z-Image Turbo",
+      "endpoint": "fal-ai/z-image/turbo",
+      "weights": "https://huggingface.co/Tongyi-MAI/Z-Image-Turbo",
+      "license": "Apache-2.0",
+      "price_usd_per_megapixel": 0.005,
+      "price_seen": "https://fal.ai/models/fal-ai/z-image/turbo, 2026-10-05",
+      "steps": 8
+    }
+  },
+  "images": [
+    {
+      "id": "r2z-techno-vistas-f7-gate",
+      "beat": "f7-gate",
+      "attempt": 1,
+      "compare_with": null,
+      "host": "fal.ai",
+      "endpoint": "fal-ai/z-image/turbo",
+      "model": "Z-Image Turbo",
+      "weights": "https://huggingface.co/Tongyi-MAI/Z-Image-Turbo",
+      "license": "Apache-2.0",
+      "weights_revision": "not exposed by the host; the endpoint as served on the date below",
+      "request_id": "01a13d6e-b98c-7770-ba25-23f79ad1405a",
+      "served_at": "2026-10-15T02:40:33+00:00",
+      "prompt": "Dusk at the gate of an open-air courtyard cafe, the lamps just coming on. The tall pale young man stands alone in the foreground looking down at a small handheld device in his hand, his thumb hovering; far behind him, the slim spiky-haired young man walks away toward a table. Wide shot.\n\nDetailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.\n\nThe people: A young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots. A young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head. The place: a small open-air courtyard cafe enclosed by low, dense shop buildings, with scattered small tables and stools beneath a shade tree and strings of little lights, a playful cartoon animal mural on one wall, glowing blank shop panels in pink and cyan, a little wheeled serving robot with a screen face, and an open entrance onto a busy street with a lamp post.\n\nNo text, no lettering, no signs with words, no logos, no numbers.",
+      "seed": 707,
+      "steps": 8,
+      "width": 1024,
+      "height": 576,
+      "enable_prompt_expansion": false,
+      "safety_checker": "host default (on)",
+      "has_nsfw_concepts": [
+        false
+      ],
+      "timings": {
+        "inference": 1.3096996450003644,
+        "safety_checker": 0.01689049600099679
+      },
+      "price_usd_per_megapixel": 0.005,
+      "price_seen": "https://fal.ai/models/fal-ai/z-image/turbo, 2026-10-05",
+      "cost_usd": 0.005,
+      "cost_basis": "the larger of real megapixels and 1 MP, times the listed price",
+      "file": "images-out/style-test-2/r2z-techno-vistas-f7-gate.png",
+      "sha256": "716ce9cea6ec5c2fd01d107c6e263c8f603965705173f1e82fccb11d56f4fd7d"
+    }
+  ],
+  "spent_usd": 0.005,
+  "generated_at": "2026-10-15T02:40:33+00:00"
+}

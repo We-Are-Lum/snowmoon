@@ -8,7 +8,7 @@ anyone can see where things are. Newest first within each section. Model-drafted
 - While the owner is out: merge nothing to main, publish nothing, no spend over $5.
 - Questions go in "Waiting for the owner" below; work carries on with the next task.
 - Published words (narration, dialogue, voice descriptions, sound lines, styles) are the owner's. Per-shot and per-cue prompts may be model-drafted and are labelled.
-- Open-weight models only for published assets. Fifteen Days carries spoilers through chapter 15.
+- Open-weight models only for published assets. Fifteen Days carries spoilers through chapter 19 while the c19 on-screen line is in.
 
 ## Done
 
@@ -53,12 +53,24 @@ The allowlist was not changed; items 1 and 2 need a reviewed correction.
 
 ## In progress
 
+- Overnight 14 to 15 October (owner away; the Mac kept awake with caffeinate until about 10:20 on the 15th):
+  - Recording from the phone: the recording sheet is copied to iCloud Drive/snowmoon-takes/. `scripts/watch-takes.py` watches iCloud Drive/snowmoon-takes/full/. Each beat-<n> file that has finished syncing is copied to ~/snowmoon-takes/full/. Once nothing new has arrived for 30 minutes, the files are split and converted. Each iCloud copy is deleted after a run that finished. A re-recorded beat replaces the older file, which is kept in full/replaced/. Log: ~/snowmoon-takes/full/takes/watch.log.
+  - Style test round two: the style page is checked for stars at :07 and :37 past each hour. When there are one to three favourites, `scripts/style-round-two.py` runs:
+    - four new frames per style (corridor, robot menu, Bai's headphones, gate at dusk) on FLUX.2 klein, locally, with the cast v2 character sheets as face references, about 7 minutes a frame;
+    - the same frames on Z-Image without references, for comparison;
+    - a 5-second LongCat 480p motion test per style;
+    - a phone page, published private;
+    - a $1 cap. A test of one frame, one Z frame and one clip in techno-vistas cost $0.03.
+    The frame subjects and the motion prompt are model-drafted test prompts, labelled.
 - Voice test on the owner's takes (2026-10-14): converted locally to WAV in ~/snowmoon-takes (outside the repo), then into the matching voices with Chatterbox on CPU. Each 48-second take takes about 8 minutes per voice. Cross-voice conversions (Bai's take as Deluin and so on) were dropped after the first one, to save time.
 
 ## Waiting for the owner
 
-1. Round two of the style test: the owner's stars on the style page.
-2. Fifteen Days draft 1 is in script.md (a361539). The questions it leaves are in brief.md section 4, among them the c19-b124 narration (its "his" is Zei, and its "Gun" clashes with Deluin's opponent Kau), the length (about 5 minutes), and voice descriptions for the narrator and the robot.
+1. Round two of the style test: the owner's stars on the style page (starts on its own once there are one to three; see In progress).
+2. Fifteen Days: the questions still open are in brief.md section 4 (the hurt, the title, length about 4 minutes, where Dreadnaught is set up, Bai's interrogation, the robot's voice and who performs Zei and the robot, Deluin's solo chant).
 3. The end-card wording, with the script.
 4. The wallet privacy draft reread, then 0012, then the site-launch-caps merge when the owner says.
 5. Merge status for site-styles-per-day and site-chat-owner-cap.
+6. Question: round two's motion tests use the cheapest model on the allowlist, LongCat distilled at 480p ($0.025 a clip). In the test clip, Deluin bends down and drops his device instead of tapping it. Should the winning style also get a clip on Kandinsky 5 at 512P ($0.20 a clip) or Wan 2.2 ($0.40 for 5 s) for comparison? Not started.
+7. Question: klein, with the face references, still draws lettering-like marks on shop signs despite "no text" in the prompt. Should signs be left blank by a clean-up pass (the letter-images step), or should the prompt name blank signs? Not started.
+8. Question: when you've picked the style, will you write its description in your words, or should I draft one from the prompt for your edit? Published style text is yours.

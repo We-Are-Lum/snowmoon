@@ -1,0 +1,43 @@
+{
+  "about": "One cheap motion test per style (round two). The prompt is model-drafted, labelled; never published.",
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent",
+    "drafted": [
+      "frame subjects",
+      "motion prompt",
+      "reference choices"
+    ],
+    "note": "test prompts for a style test, never published; the style prompts are round one's",
+    "see": "config/models.json drafting; principle 3"
+  },
+  "clips": [
+    {
+      "id": "r2m-techno-vistas",
+      "style": "techno-vistas",
+      "from_frame": {
+        "file": "images-out/fifteen-days-round-two/r2-techno-vistas-f7-gate.png",
+        "sha256": "5c72349c1b41a96c1c084c9ef2385d30e726cc26dbfd77b16267aaf462c64d69"
+      },
+      "host": "fal.ai",
+      "endpoint": "fal-ai/longcat-video/distilled/image-to-video/480p",
+      "weights": "https://huggingface.co/meituan-longcat/LongCat-Video",
+      "license": "MIT",
+      "weights_revision": "not exposed by the host; the endpoint as served on the date below",
+      "request_id": "01a13d6e-e1cd-7d41-a6b6-a729e232eb44",
+      "served_at": "2026-10-15T02:45:58+00:00",
+      "prompt": "The young man in the foreground hesitates, then taps the device once and lowers it; far behind him the other young man keeps walking away; the lamps glow a little brighter. Still camera, gentle natural movement.",
+      "seed": 7,
+      "num_frames": 75,
+      "fps": 15,
+      "enable_prompt_expansion": false,
+      "safety_checker": "host default (on)",
+      "price_usd_per_second": 0.005,
+      "price_seen": "config/models.json longcat-video, 2026-10-13",
+      "cost_usd": 0.025,
+      "cost_basis": "seconds of video (at least 5) times the listed price",
+      "file": "images-out/style-test-2-motion/r2m-techno-vistas.mp4",
+      "sha256": "985c663382be377717cccde99973b5403aba9f246f30518deceabf4912e4e3d6"
+    }
+  ]
+}
