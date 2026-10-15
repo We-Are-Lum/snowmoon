@@ -10,6 +10,23 @@ anyone can see where things are. Newest first within each section. Model-drafted
 - Published words (narration, dialogue, voice descriptions, sound lines, styles) are the owner's. Per-shot and per-cue prompts may be model-drafted and are labelled.
 - Open-weight models only for published assets. Fifteen Days carries spoilers through chapter 19 while the c19 on-screen line is in.
 
+## Thursday 15 October
+
+- **Set `BASE_RPC_URL` to a real Base RPC provider** (the owner picks it; the key or URL goes into
+  Vercel only), then name that provider in the privacy wallet draft's section 7
+  (`docs/drafts/privacy-wallets.md`). Why (read 2026-10-15, branch `site-launch-caps`): payments
+  are checked through `mainnet.base.org`, Base's public endpoint. If it rate-limits us, a payment
+  that went through isn't lost, but it isn't added either:
+  - a failed receipt read is reported as "not on Base yet" (`readPayment` turns any error into
+    `not-found`), and other read errors return 503; both say "retry";
+  - the browser retries 20 times, 3 seconds apart (about a minute, `claim`), then shows "A payment
+    from this wallet hasn't been added yet. Try again";
+  - the payment's hash is kept only in that browser (`snowmoon.wallet.pending`); nothing on the
+    server records it until it's credited, and nothing retries it on its own;
+  - lost to the site (still in the project's address onchain) if the person clears the browser,
+    switches device, or waits more than 7 days (`maxAgeDays`; then "Ask the maintainer"); there is
+    no way to paste a hash and no maintainer script to credit one by hand.
+
 ## Done
 
 - 2026-10-14: **Style test, round one**: 23 styles (9 from the repo, 6 forks and 4 bigger swings from the image ideas doc, 4 new) x 3 frames (the café two-shot, Bai alone watching, the vigil close-up), same subject and seed per frame, Z-Image Turbo via the owner pipeline, $0.345 of a $2 cap. Owner-only page with favourites: https://claude.ai/artifact/41FYkzf29asiwEhhEHWqUv. Test prompts model-drafted and labelled; no artist or studio named.
