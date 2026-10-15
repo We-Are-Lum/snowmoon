@@ -28,7 +28,7 @@ export default async function Designs({ searchParams }: { searchParams: Promise<
   const sort: DesignOrder = q.sort === 'built' ? 'built' : 'new';
   const sql = db();
   const styles = sql && tab === 'styles' ? await listDesigns(sql, 'style', sort).catch(() => []) : [];
-  const counts = sql && tab === 'characters' ? await sheetCounts(sql).catch(() => new Map<string, number>()) : new Map<string, number>();
+  const counts = sql && tab !== 'styles' ? await sheetCounts(sql, tab === 'places' ? 'location' : 'character').catch(() => new Map<string, number>()) : new Map<string, number>();
   return (
     <div className="page prose pictures designs">
       <p className="label ip-crumb">
@@ -51,7 +51,7 @@ export default async function Designs({ searchParams }: { searchParams: Promise<
         }))}
         characters={bookCharacters().map((c) => ({ slug: c.slug, name: c.name, firstChapter: c.firstChapter, sheets: counts.get(c.name) ?? 0 }))}
         places={sheetPlaces()
-          .map((p) => ({ slug: p.slug, name: placeTitle(p.name), firstChapter: placeFirstChapter(p), scenes: new Set(partsOf(p.slug).map((s) => `${s.chapter}-${s.scene}`)).size }))
+          .map((p) => ({ slug: p.slug, name: placeTitle(p.name), firstChapter: placeFirstChapter(p), scenes: new Set(partsOf(p.slug).map((s) => `${s.chapter}-${s.scene}`)).size, sheets: counts.get(placeTitle(p.name)) ?? 0 }))
           .sort((a, b) => a.firstChapter - b.firstChapter || a.name.localeCompare(b.name))}
       />
     </div>

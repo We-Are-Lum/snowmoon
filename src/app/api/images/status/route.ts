@@ -12,7 +12,7 @@ import { keptValue } from '~/lib/images/neynar';
 import { GATE_WORDING, openToEveryone } from '~/lib/images/gate';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { balanceUsd, prepaidOpen, priceUsd } from '~/lib/wallet/credits';
-import { composerPicks, myPicks, startingStyleRetired, type MyPick } from '~/lib/images/designs';
+import { composerPicks, listDesigns, myPicks, startingStyleRetired, type MyPick } from '~/lib/images/designs';
 import { designByline } from '~/lib/images/byline';
 import { inPassage, sheetCharacter, sheetPlace, shorthandLine } from '~/lib/images/sheets';
 
@@ -41,7 +41,15 @@ export async function GET(request: Request) {
   const setting = ch && i >= 0 ? (blockFacts(ch.blocks)[i]?.setting ?? null) : null;
   // Decision 13: once "Techno vistas" is published as a design, the file option is retired; it is then a style like any other.
   const retired = sql ? await startingStyleRetired(sql).catch(() => false) : false;
-  const styles = retired ? [] : [{ id: 'techno-vistas', name: 'Techno vistas', text: styleText('techno-vistas', setting) }];
+  // Every image is made in a style (owner, 2026-10-14): the starting style while it is offered, then every published style,
+  // the project's own first, each with its full text (it becomes part of the public prompt).
+  const designs = sql ? await listDesigns(sql, 'style').catch(() => []) : [];
+  const styles = [
+    ...(retired ? [] : [{ id: 'techno-vistas', name: 'Techno vistas', text: styleText('techno-vistas', setting), by: null as string | null, drafted: true }]),
+    ...[...designs.filter((d) => d.byRole === 'maintainer'), ...designs.filter((d) => d.byRole !== 'maintainer')].map((d) => ({
+      id: d.versionId, name: d.title || d.entity, text: d.text, by: `${designByline(d.byName, d.byFid, d.byRole)} v${d.versionNo}`, drafted: Boolean(d.assist),
+    })),
+  ];
   // "In this passage" (2026-10-10): the characters it names and its scene's place, with the exact shorthand text Generate would add.
   const end = Number(q.get('end') ?? q.get('start'));
   const found = ch && i >= 0 && Number.isInteger(end) ? inPassage(ch.chapter, Number(q.get('start')), end) : { characters: [], place: null };
@@ -65,7 +73,7 @@ export async function GET(request: Request) {
       const open = prepaidOpen() && openToEveryone().open;
       const prepaid = { balanceUsd: await balanceUsd(sql, -fid), priceUsd: priceUsd(IMAGES.reserveUsd), markup: IMAGES.prepaid.markup };
       return NextResponse.json(
-        { ...base, signedIn: true, fid, invited: false, eligible: open, refusal: open ? undefined : prepaidOpen() ? GATE_WORDING.notOpen : IMAGE_WORDING.prepaid.notOpen, consented, left, publishesLeft: publishes, picks: { styles: [], characters: [] }, prepaid },
+        { ...base, signedIn: true, fid, invited: false, eligible: open, refusal: open ? undefined : prepaidOpen() ? GATE_WORDING.notOpen : IMAGE_WORDING.prepaid.notOpen, consented, left, publishesLeft: publishes, picks: { styles: [], characters: [], places: [] }, prepaid },
         { headers: { 'Cache-Control': 'no-store' } },
       );
     }
@@ -74,7 +82,7 @@ export async function GET(request: Request) {
     // Picks are invited-only for now (2026-10-10): others are offered none, so no reference pictures either.
     const offered = composerPicks(invited ? picks : []);
     // Every picked style, newest pick first; the composer starts with that one, for this image only (decision 3).
-    const mine = { styles: offered.styles.map(chip), characters: offered.characters.map(chip) };
+    const mine = { styles: offered.styles.map(chip), characters: offered.characters.map(chip), places: offered.places.map(chip) };
     return NextResponse.json({ ...base, perDay: perDay(fid), signedIn: true, fid, invited, eligible, refusal, consented, left, publishesLeft: publishes, picks: mine }, { headers: { 'Cache-Control': 'no-store' } });
   } catch (e) {
     console.error('images status failed', (e as { code?: string }).code ?? (e as Error).name);

@@ -1171,10 +1171,10 @@ try {
       await page.evaluate(() => getSelection()!.removeAllRanges());
       await page.locator('.scene-label .add-image').first().click();
       await page.waitForSelector('.image-composer textarea');
-      // The project's starting style is chosen by default (owner, 2026-10-10); None is still there.
+      // The project's starting style is chosen by default (owner, 2026-10-10); there is no None: every image is made in a style (owner, 2026-10-14).
       const styleChecked = await page.locator('.ic-style input[type="radio"]').evaluateAll((els) => els.map((e) => ({ on: (e as HTMLInputElement).checked, label: (e.parentElement?.textContent ?? '').trim() })));
       if (!styleChecked.find((x) => x.on)?.label.startsWith('Techno vistas')) fail(`/chapter/1 (${scheme}): the composer does not start with the project's style chosen (${JSON.stringify(styleChecked)})`);
-      if (!styleChecked.some((x) => x.label.startsWith('None'))) fail(`/chapter/1 (${scheme}): the composer has no "None" style`);
+      if (styleChecked.some((x) => x.label.startsWith('None'))) fail(`/chapter/1 (${scheme}): the composer offers "None" for the style`);
       if (!(await page.locator('.ic-style-text').count())) fail(`/chapter/1 (${scheme}): the chosen style's text is not shown`);
       // "In this passage" (2026-10-10): the character and the place, chosen to start, their text in full; one removed.
       {

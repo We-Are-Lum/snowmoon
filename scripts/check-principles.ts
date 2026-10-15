@@ -445,7 +445,8 @@ const DESIGN_IMAGE_FILES = [
   'src/components/design-index.tsx',
   'src/components/pictures-latest.tsx',
   'src/app/images/designs/[id]/page.tsx',
-  'src/app/images/designs/character/[slug]/page.tsx',
+  // A character's or a place's sheet rows (2026-10-14: moved out of the character page).
+  'src/components/sheet-list.tsx',
   'src/components/design-form.tsx',
   'src/components/my-picks.tsx',
   'src/components/moderate-queue.tsx',

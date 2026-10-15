@@ -6,7 +6,8 @@ import { db } from '~/lib/db';
 import { IMAGES } from '~/lib/config';
 import { hasConsented } from '~/lib/consent';
 import type { DesignBody, DesignPicture } from '~/lib/element-body';
-import { SAMPLE_ASSIST } from '~/lib/images/design-rules';
+import { SAMPLE_ASSIST, viewLinesFor } from '~/lib/images/design-rules';
+import { placeFirstChapter, placeTitle, sheetPlace } from '~/lib/images/sheets';
 import { bookCharacter, characterNameClash, CHARACTER_NAME_REFUSAL, designByVersion, designPublishesToday, makeDesign, MakeRefused, styleNameTaken, type DesignKind, type MakeMode } from '~/lib/images/designs';
 import { blockedName } from '~/lib/images/rules';
 import { mayGenerate } from '~/lib/images/gate';
@@ -53,14 +54,14 @@ export async function POST(request: Request) {
   if (!IMAGES.invited.includes(fid)) return no(IMAGE_WORDING.designs.form.notInvited, 403);
   const sql = db();
   if (!sql || !process.env.IMAGES_TICKET_SECRET || !storageReady()) return no('Publishing styles and sheets is not set up on this deployment', 503);
-  let body: { mode?: unknown; kind?: unknown; title?: unknown; text?: unknown; character?: unknown; from?: unknown; samples?: unknown; views?: unknown; nameProof?: unknown };
+  let body: { mode?: unknown; kind?: unknown; title?: unknown; text?: unknown; character?: unknown; place?: unknown; from?: unknown; samples?: unknown; views?: unknown; nameProof?: unknown };
   try {
     body = await request.json();
   } catch {
     return no('Bad request', 400);
   }
   const mode = (['create', 'fork', 'version'] as const).find((m) => m === body.mode) as MakeMode | undefined;
-  const kind = (['style', 'character'] as const).find((k) => k === body.kind) as DesignKind | undefined;
+  const kind = (['style', 'character', 'location'] as const).find((k) => k === body.kind) as DesignKind | undefined;
   if (!mode || !kind) return no('Bad request', 400);
   const text = typeof body.text === 'string' ? body.text.trim() : '';
   const title = typeof body.title === 'string' ? body.title.trim().replace(/\s+/g, ' ') : '';
@@ -71,6 +72,10 @@ export async function POST(request: Request) {
   if (named) return no('No real people: the name or text names someone on the blocked list.', 422);
   const character = kind === 'character' && mode === 'create' ? bookCharacter(String(body.character ?? '')) : null;
   if (kind === 'character' && mode === 'create' && !character) return no('Choose one of the book’s characters', 400);
+  // A place sheet (2026-10-14): one of the book's places, named as the project's place files name it.
+  const placeSheet = kind === 'location' && mode === 'create' ? sheetPlace(String(body.place ?? '')) : null;
+  if (kind === 'location' && mode === 'create' && !placeSheet) return no('Choose one of the book’s places', 400);
+  const place = placeSheet ? { name: placeTitle(placeSheet.name), setting: placeSheet.setting, firstChapter: placeFirstChapter(placeSheet) } : null;
   if (!(await hasConsented(fid))) return no('Agree to how your words are published first', 403);
   // The name's model check is paid: the same gate as Generate first (invited FIDs pass it without a lookup).
   const gate = await mayGenerate(sql, fid);
@@ -97,6 +102,8 @@ export async function POST(request: Request) {
       const got = picture(v[slot], fid, text);
       if (typeof got === 'string') return no(got, 400);
       if (got.t.slot !== slot) return no('Bad picture', 400);
+      // Made with this kind's view line: a character's views on a character sheet, a place's on a place sheet.
+      if (got.t.subject !== viewLinesFor(kind === 'location' ? 'location' : 'character')[slot]) return no('A view was made for another kind of sheet. Make it again here.', 400);
       views[slot] = got;
     }
     if (!views.front) return no('Make the front view first', 400);
@@ -136,7 +143,7 @@ export async function POST(request: Request) {
     ...(views.front ? { style: { version_id: views.front.t.style!.versionId, title: views.front.t.style!.title } } : {}),
   };
   try {
-    const out = await makeDesign(sql, { fid, mode, kind, styleName: mode === 'create' && kind === 'style' ? title : undefined, character: character ?? undefined, fromVersionId: typeof body.from === 'string' ? body.from : undefined, body: design });
+    const out = await makeDesign(sql, { fid, mode, kind, styleName: mode === 'create' && kind === 'style' ? title : undefined, character: character ?? undefined, place: place ?? undefined, fromVersionId: typeof body.from === 'string' ? body.from : undefined, body: design });
     revalidatePath('/images/designs');
     return NextResponse.json({ versionId: out.versionId, page: `/images/designs/${out.versionId}` });
   } catch (e) {

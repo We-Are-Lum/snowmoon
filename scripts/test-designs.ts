@@ -35,7 +35,7 @@ function walk(dir: string): string[] {
 }
 
 // --- Pure rules ------------------------------------------------------------------
-const { wordDiff, mentions, samplePrompt, viewPrompt, SAMPLE_SUBJECTS, VIEW_LINES } = await import('../src/lib/images/design-rules');
+const { wordDiff, mentions, samplePrompt, viewPrompt, viewLinesFor, SAMPLE_SUBJECTS, VIEW_LINES } = await import('../src/lib/images/design-rules');
 const diff = wordDiff('Flat paper-cut layers, muted greens, no outlines', 'Flat paper-cut layers, deep blue and silver, no outlines');
 check('a fork shades only its own words', diff.filter((d) => d.changed).map((d) => d.text).join('|') === 'deep blue and silver,', JSON.stringify(diff));
 check('unchanged text has nothing shaded', wordDiff('a b c', 'a b c').every((d) => !d.changed));
@@ -117,6 +117,18 @@ const s2 = await D.makeDesign(S, { fid: 301, mode: 'create', kind: 'character', 
 check("a sheet keeps the style its views were made in (owner, 2026-10-14)", (await D.designByVersion(S, s2.versionId))?.shown.body.style?.title === 'Ink');
 const ents = await sql`select count(*)::int as n from studio.entities where kind = 'character' and name = 'Zei Leimin'`;
 check('a character\'s entity is made once', ents[0].n === 1);
+// Place sheets (owner, 2026-10-14): one of the book's places, its entity of kind 'location', listed, counted and picked as a character's are.
+const autobus = { name: 'Autobus', setting: 'veridia', firstChapter: 1 };
+const pl1 = await D.makeDesign(S, { fid: 300, mode: 'create', kind: 'location', place: autobus, body: { ...body('', 'Long, low, glass roof'), samples: [], views: { front: pic(9) }, style: { version_id: s1.versionId, title: 'Ink' } } });
+const pl2 = await D.makeDesign(S, { fid: 301, mode: 'create', kind: 'location', place: autobus, body: { ...body('', 'Green seats'), samples: [], views: { front: pic(10) } } });
+const placeId = await D.placeEntity(S, 'Autobus');
+check("a place's entity is made once, of kind 'location'", placeId !== null && (await sql`select count(*)::int as n from studio.entities where kind = 'location' and name = 'Autobus'`)[0].n === 1);
+check("both place sheets list under the place", (await D.listDesigns(S, 'location', 'new', placeId!)).length === 2 && (await D.sheetCounts(S, 'location')).get('Autobus') === 2);
+check("place sheets are not counted as characters' sheets", !(await D.sheetCounts(S)).has('Autobus'));
+await D.setPick(S, 44, pl1.versionId);
+check('a picked place sheet is offered when making an image', D.composerPicks(await D.myPicks(S, 44)).places.map((x) => x.versionId).join() === pl1.versionId);
+check("a fork of a place sheet stays on the place", (await D.makeDesign(S, { fid: 302, mode: 'fork', kind: 'location', fromVersionId: pl2.versionId, body: body('', 'Green seats, worn') })).versionId.length === 36);
+check("a place sheet's views have their own lines", viewLinesFor('location').front !== viewLinesFor('character').front && /no people/.test(viewLinesFor('location').front));
 check('both sheets list under the character', (await D.listDesigns(S, 'character', 'new', (await D.characterEntity(S, zei))!)).length === 2);
 check('sheet counts are of published sheets', (await D.sheetCounts(S)).get('Zei Leimin') === 2);
 check('a covered character starts where the book first names them (decision 19)', zei.firstChapter === 2 && D.bookCharacter('min')!.firstChapter === 5 && D.bookCharacter('ephelion')!.firstChapter === 3);

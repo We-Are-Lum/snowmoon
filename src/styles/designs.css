@@ -233,3 +233,4 @@ a.dz-fork:hover { text-decoration: none; }
 .dz-style-option input { flex: none; width: 22px; height: 22px; margin: 0 2px 0 0; accent-color: var(--ink); }
 .dz-style-option.is-on { box-shadow: inset 3px 0 0 var(--ink); }
 .dz-style-text { white-space: pre-wrap; color: var(--muted); }
+.dz-slots.is-place .dz-slot img, .dz-slots.is-place .dz-slot-empty { aspect-ratio: 16 / 9; }

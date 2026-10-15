@@ -6,6 +6,7 @@ import { byline, designByline } from '~/lib/images/byline';
 import { wordDiff } from '~/lib/images/design-rules';
 import { bookCharacters, designByVersion, imagesBuiltOn, listDesigns, picturesOf } from '~/lib/images/designs';
 import { IMAGE_WORDING } from '~/lib/images/wording';
+import { placeTitle, sheetPlaces } from '~/lib/images/sheets';
 import { BookQuotes } from '~/components/design-book';
 import { DesignBar } from '~/components/design-bar';
 
@@ -57,7 +58,9 @@ export default async function DesignPage({ params }: Props) {
   const built = await imagesBuiltOn(sql, d.elementId).catch(() => []);
   const others = await listDesigns(sql, d.kind, 'new', style ? undefined : d.entityId).catch(() => []);
   const pictures = style ? body.samples : (['front', 'side', 'back'] as const).map((k) => body.views[k]).filter((p): p is NonNullable<typeof p> => Boolean(p));
-  const crumb = style ? { href: '/images/designs', label: W.index.tabStyles } : { href: `/images/designs/character/${character?.slug ?? ''}`, label: d.entity };
+  // A place sheet (2026-10-14) goes back to its place's page.
+  const place = d.kind === 'location' ? (sheetPlaces().find((x) => placeTitle(x.name) === d.entity) ?? null) : null;
+  const crumb = style ? { href: '/images/designs', label: W.index.tabStyles } : place ? { href: `/images/designs/place/${place.slug}`, label: d.entity } : { href: `/images/designs/character/${character?.slug ?? ''}`, label: d.entity };
   const title = style ? body.title || d.entity : body.title || W.page.sheetBy(by);
 
   const main = (
@@ -89,7 +92,7 @@ export default async function DesignPage({ params }: Props) {
               <img key={p.sha256} src={p.url} alt={`AI-generated ${style ? 'sample' : (['front', 'side', 'back'] as const).filter((k) => body.views[k])[i] + ' view'}, not by the author`} width={p.recipe.width} height={p.recipe.height} loading="lazy" />
             ))}
           </div>
-          <figcaption className="dz-caption">{style ? W.page.samplesCaption : W.page.viewsCaption}</figcaption>
+          <figcaption className="dz-caption">{style ? W.page.samplesCaption : place ? W.page.placeViewsCaption : W.page.viewsCaption}</figcaption>
           {/* The style a sheet's views were made in (owner, 2026-10-14); its text is in each view's recipe. */}
           {!style && body.style && (
             <p className="dz-meta">

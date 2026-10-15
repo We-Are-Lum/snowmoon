@@ -22,6 +22,8 @@ export interface Draft {
   style: string | null;
   /** Step 4: picked character sheets added for this image, and whether their views went as references. */
   characters?: string[];
+  /** A picked setting sheet added for this image (2026-10-14). */
+  place?: string | null;
   reference?: boolean;
   /** Sheets as text (2026-10-10): the characters and place chosen from "In this passage". */
   sheets?: { characters: string[]; place: string | null };

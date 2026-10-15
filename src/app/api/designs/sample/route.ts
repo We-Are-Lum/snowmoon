@@ -8,7 +8,7 @@ import { makeEdit, makeImage } from '~/lib/images/fal';
 import { mayGenerate } from '~/lib/images/gate';
 import { paidPicture } from '~/lib/images/paid';
 import { IMAGE_WORDING } from '~/lib/images/wording';
-import { SAMPLE_SUBJECTS, VIEW_LINES, samplePrompt, viewPrompt } from '~/lib/images/design-rules';
+import { SAMPLE_SUBJECTS, samplePrompt, viewLinesFor, viewPrompt } from '~/lib/images/design-rules';
 import { designByVersion } from '~/lib/images/designs';
 import { readSampleTicket, signSampleTicket } from '~/lib/images/ticket';
 
@@ -34,7 +34,7 @@ export async function POST(request: Request) {
   const sql = db();
   if (!sql || !process.env.FAL_KEY || !process.env.IMAGES_TICKET_SECRET) return no('Making images is not set up on this deployment', 503);
 
-  let body: { slot?: unknown; index?: unknown; text?: unknown; style?: unknown; front?: { ticket?: unknown; image?: unknown } };
+  let body: { slot?: unknown; index?: unknown; kind?: unknown; text?: unknown; style?: unknown; front?: { ticket?: unknown; image?: unknown } };
   try {
     body = await request.json();
   } catch {
@@ -66,22 +66,25 @@ export async function POST(request: Request) {
     const m = typeof body.front?.image === 'string' ? body.front.image.match(/^data:image\/jpeg;base64,(.+)$/) : null;
     if (!t || !m || t.fid !== fid || t.slot !== 'front') return no('Make the front view first', 400);
     if (t.text !== text) return no('The text changed since the front view was made. Make the front view again.', 409, { reason: 'stale' });
+    if (t.subject !== viewLinesFor(body.kind === 'location' ? 'location' : 'character').front) return no('Make the front view first', 400);
     if (t.style?.versionId !== style!.versionId) return no('The style changed since the front view was made. Make the front view again.', 409, { reason: 'stale' });
     const bytes = Buffer.from(m[1], 'base64');
     if (createHash('sha256').update(bytes).digest('hex') !== t.sha256) return no('The front view is not the one its record describes', 400);
     front = { bytes, sha256: t.sha256 };
   }
 
-  const subject = slot === 'sample' ? SAMPLE_SUBJECTS[index] : VIEW_LINES[slot];
+  // A character's views, or a place's (2026-10-14): the same slots, other lines.
+  const subject = slot === 'sample' ? SAMPLE_SUBJECTS[index] : viewLinesFor(body.kind === 'location' ? 'location' : 'character')[slot];
   const prompt = style ? viewPrompt(subject, style.text, text) : samplePrompt(subject, text);
-  const size = slot === 'sample' ? IMAGES.size : IMAGES.viewSize;
+  // A place's views are wide, like a sample or a moment; a character's are upright.
+  const size = slot === 'sample' || body.kind === 'location' ? IMAGES.size : IMAGES.viewSize;
   const edit = front !== null;
   const spend = edit ? { model: IMAGES.editModel, reserveUsd: IMAGES.editReserveUsd(1) } : undefined;
   const model = edit ? IMAGES.editModel : IMAGES.model;
   const paid = await paidPicture(sql, fid, request, {
     checkText: prompt,
     spend,
-    make: () => (front ? makeEdit(prompt, [{ bytes: front.bytes, contentType: 'image/jpeg', ...IMAGES.viewSize }], size) : makeImage(prompt, size)),
+    make: () => (front ? makeEdit(prompt, [{ bytes: front.bytes, contentType: 'image/jpeg', ...size }], size) : makeImage(prompt, size)),
   });
   if (!paid.ok) return no(paid.error, paid.status, paid.extra);
   const made = paid.made;

@@ -13,7 +13,7 @@ import { useMyPicks } from './design-picks';
 const W = IMAGE_WORDING.designs;
 type StyleRow = { versionId: string; elementId: string; entityId: string; title: string; meta: string; drafted: boolean; thumb: string | null };
 type CharacterRow = { slug: string; name: string; firstChapter: number; sheets: number };
-type PlaceRow = { slug: string; name: string; firstChapter: number; scenes: number };
+type PlaceRow = { slug: string; name: string; firstChapter: number; scenes: number; sheets: number };
 
 export function DesignIndex({ tab, sort, styles, characters, places }: { tab: 'styles' | 'characters' | 'places'; sort: 'new' | 'built'; styles: StyleRow[]; characters: CharacterRow[]; places: PlaceRow[] }) {
   const canMake = useCanMakeDesigns();
@@ -76,7 +76,7 @@ export function DesignIndex({ tab, sort, styles, characters, places }: { tab: 's
                 <Link href={`/images/designs/place/${p.slug}`} className="dz-row">
                   <span className="dz-row-text">
                     <span className="dz-row-title">{p.name}</span>
-                    <span className="dz-row-meta">{W.sheets.scenes(p.scenes)}</span>
+                    <span className="dz-row-meta">{W.sheets.scenes(p.scenes)} · {W.index.sheets(p.sheets)}</span>
                   </span>
                 </Link>
               </li>

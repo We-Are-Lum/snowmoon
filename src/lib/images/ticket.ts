@@ -57,7 +57,7 @@ export interface TicketSheets {
 
 export interface TicketDesign {
   versionId: string;
-  kind: 'style' | 'character';
+  kind: 'style' | 'character' | 'location';
   /** The style's or the character's name (the entity). */
   entity: string;
   title: string;

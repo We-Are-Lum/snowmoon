@@ -10,7 +10,7 @@ import { Moment, type MomentItem } from './image-feed';
  */
 const W = IMAGE_WORDING.feed;
 
-export type DesignItem = { versionId: string; kind: 'character' | 'style'; title: string; entity: string; meta: string; date: string; thumb: string | null };
+export type DesignItem = { versionId: string; kind: 'character' | 'location' | 'style'; title: string; entity: string; meta: string; date: string; thumb: string | null };
 export type LatestItem = { type: 'moment'; at: string; moment: MomentItem } | { type: 'design'; at: string; design: DesignItem };
 
 export function PicturesLatest({ items, empty }: { items: LatestItem[]; empty: React.ReactNode }) {
@@ -38,7 +38,7 @@ export function PicturesLatest({ items, empty }: { items: LatestItem[]; empty: R
                 </Link>
                 <p className="pictures-row">
                   <span>
-                    {it.design.kind === 'character' ? `${W.kind.character} · ${it.design.entity}` : W.kind.style} · {it.design.title}
+                    {it.design.kind === 'character' ? `${W.kind.character} · ${it.design.entity}` : it.design.kind === 'location' ? `${W.kind.place} · ${it.design.entity}` : W.kind.style} · {it.design.title}
                   </span>
                   <span className="pictures-date">{it.design.date}</span>
                 </p>

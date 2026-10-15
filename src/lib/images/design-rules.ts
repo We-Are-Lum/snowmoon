@@ -25,6 +25,23 @@ export const VIEW_LINES: Record<ViewSlot, string> = {
   back: 'The same person as in the reference picture, full body, standing, seen from behind, plain light grey background. Keep the hair and clothes the same.',
 };
 
+/**
+ * A place sheet's views (owner, 2026-10-14: places work as characters do), in the same three slots:
+ * a wide view made from the text, then two more made from it with the edit model. No people, so
+ * the place reads as a setting any scene can use.
+ */
+export const PLACE_VIEW_LINES: Record<ViewSlot, string> = {
+  front: 'Place reference picture: a wide view of the whole place, eye level, daytime, no people.',
+  side: 'The same place as in the reference picture, seen from another side, eye level, daytime, no people. Keep the buildings, plants and materials the same.',
+  back: 'The same place as in the reference picture, a closer view of one part of it, daytime, no people. Keep the buildings, plants and materials the same.',
+};
+/** What each slot is called on the screen. */
+export const VIEW_NAMES: Record<'character' | 'location', Record<ViewSlot, string>> = {
+  character: { front: 'front', side: 'side', back: 'back' },
+  location: { front: 'wide', side: 'other side', back: 'closer' },
+};
+export const viewLinesFor = (kind: 'character' | 'location') => (kind === 'location' ? PLACE_VIEW_LINES : VIEW_LINES);
+
 /** The exact prompt for a sample or a view: the fixed subject, the design's text, the no-words line. */
 export function samplePrompt(subject: string, text: string): string {
   return [subject, text.trim(), IMAGES.suffix].filter(Boolean).join('\n\n');

@@ -11,7 +11,9 @@ import { IMAGE_WORDING } from './wording';
  * that exist; no migration:
  * - a style is a studio.entities row of kind 'style' (its name, unique per work); a character is
  *   a kind 'character' row for one of the book's characters (content/snowmoon/designs/characters),
- *   made when its first sheet is published, never named by a reader;
+ *   made when its first sheet is published, never named by a reader; a place is a kind 'location'
+ *   row for one of the book's places (content/snowmoon/designs/locations), made the same way
+ *   (owner, 2026-10-14: place sheets work as character sheets do);
  * - a design is a studio.elements row (element_type 'design') on that entity, by the FID that made
  *   it; each version an element_versions row whose body is DesignBody (title, text, samples, views);
  * - a fork is a new design element on the same entity whose v1 has a 'remixed_from' link to the
@@ -23,7 +25,8 @@ import { IMAGE_WORDING } from './wording';
  * Read with the app's role (studio_writer), so every public query filters to published work itself.
  */
 type Sql = postgres.Sql;
-export type DesignKind = 'style' | 'character';
+/** 'location' is a place sheet (studio.entities' kind for a place). */
+export type DesignKind = 'style' | 'character' | 'location';
 export type DesignOrder = 'new' | 'built';
 
 export interface DesignRow {
@@ -217,10 +220,16 @@ export async function characterEntity(sql: Sql, c: BookCharacter): Promise<strin
   return r ? String(r.id) : null;
 }
 
-/** Published sheets per character entity name (a count of published work; never of picks). */
-export async function sheetCounts(sql: Sql): Promise<Map<string, number>> {
+/** A place's entity row, if one exists yet (one is made with its first sheet). */
+export async function placeEntity(sql: Sql, name: string): Promise<string | null> {
+  const [r] = await sql`select id from studio.entities where work_id = ${WORK_ID} and kind = 'location' and name = ${name}`;
+  return r ? String(r.id) : null;
+}
+
+/** Published sheets per character (or place) entity name (a count of published work; never of picks). */
+export async function sheetCounts(sql: Sql, kind: 'character' | 'location' = 'character'): Promise<Map<string, number>> {
   const rows = await sql`select en.name, count(*)::int as n from studio.elements e join studio.entities en on en.id = e.entity_id
-    where e.element_type = 'design' and e.status = 'published' and en.kind = 'character' and e.work_id = ${WORK_ID} group by en.name`;
+    where e.element_type = 'design' and e.status = 'published' and en.kind = ${kind} and e.work_id = ${WORK_ID} group by en.name`;
   return new Map(rows.map((r) => [String(r.name), Number(r.n)]));
 }
 
@@ -236,6 +245,8 @@ export interface MakeInput {
   styleName?: string;
   /** create a sheet: the book character. */
   character?: BookCharacter;
+  /** create a place sheet: the book's place (its name as the project's place files give it). */
+  place?: { name: string; setting: string | null; firstChapter: number };
   /** fork: the version it comes from. version: a version of your own design. */
   fromVersionId?: string;
   body: DesignBody;
@@ -289,6 +300,12 @@ export async function makeDesign(sql: Sql, m: MakeInput): Promise<{ versionId: s
       entityId = found
         ? String(found.id)
         : String((await t`insert into studio.entities ${t({ work_id: WORK_ID, kind: 'character', name: m.character.name, setting: m.character.setting, first_chapter: m.character.firstChapter })} returning id`)[0].id);
+    } else if (m.mode === 'create' && m.kind === 'location') {
+      if (!m.place) throw new MakeRefused(400, 'Choose one of the book’s places');
+      const [found] = await t`select id from studio.entities where work_id = ${WORK_ID} and kind = 'location' and name = ${m.place.name}`;
+      entityId = found
+        ? String(found.id)
+        : String((await t`insert into studio.entities ${t({ work_id: WORK_ID, kind: 'location', name: m.place.name, setting: m.place.setting, first_chapter: m.place.firstChapter })} returning id`)[0].id);
     } else {
       if (!isId(m.fromVersionId)) throw new MakeRefused(400, 'No such design');
       const [src] = await t`select v.id, v.element_id, e.entity_id, e.created_by_fid, en.kind from studio.element_versions v
@@ -395,12 +412,12 @@ export async function clearPick(sql: Sql, fid: number, entityId: string): Promis
 
 /**
  * The person's picks the composer offers (decision 3, 2026-10-09): every picked style, newest pick
- * first (that one is chosen to start with, for this image only), and each picked character.
- * Hidden ones drop out.
+ * first (that one is chosen to start with, for this image only), each picked character, and each
+ * picked place (2026-10-14). Hidden ones drop out.
  */
-export function composerPicks(picks: MyPick[]): { styles: MyPick[]; characters: MyPick[] } {
+export function composerPicks(picks: MyPick[]): { styles: MyPick[]; characters: MyPick[]; places: MyPick[] } {
   const live = picks.filter((p) => p.available);
-  return { styles: live.filter((p) => p.kind === 'style'), characters: live.filter((p) => p.kind === 'character') };
+  return { styles: live.filter((p) => p.kind === 'style'), characters: live.filter((p) => p.kind === 'character'), places: live.filter((p) => p.kind === 'location') };
 }
 
 // ---------------------------------------------------------------------------------------------

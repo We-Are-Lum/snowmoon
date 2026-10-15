@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useState } from 'react';
 import Link from 'next/link';
 import { authFetch, useAuth, webNameProof } from '~/lib/client-auth';
-import { wordDiff, type ViewSlot } from '~/lib/images/design-rules';
+import { VIEW_NAMES, wordDiff, type ViewSlot } from '~/lib/images/design-rules';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { ConsentScreen, PublishedTextField, PublishFlow } from './publish-words';
 import { SignInButton } from './sign-in';
@@ -28,8 +28,10 @@ type Status = { ready: boolean; invited?: boolean; consented?: boolean; left?: n
 type Wording = { version: string; line: string; title: string; text: string[]; sha256: string };
 type Props = {
   mode: 'create' | 'fork' | 'version';
-  kind: 'style' | 'character';
+  kind: 'style' | 'character' | 'location';
   character: { slug: string; name: string; callName: string; quotes: { chapter: number; idx: number; quote: string }[]; firstChapter: number } | null;
+  /** A place sheet's place (2026-10-14): its views are made with the place lines. */
+  place: { slug: string; name: string; quotes: { chapter: number; idx: number; quote: string }[] } | null;
   source: { versionId: string; title: string; entity: string; by: string; versionNo: number; text: string; drafted: boolean } | null;
   subjects: string[];
   /** Published styles a sheet's views can be made in (newest first). */
@@ -86,7 +88,7 @@ export function DesignForm(p: Props) {
       const res = await authFetch('/api/designs/sample', {
         method: 'POST',
         headers: { 'content-type': 'application/json' },
-        body: JSON.stringify({ slot, index, text: clean, ...(style ? {} : { style: viewStyle }), ...(front ? { front: { ticket: front.ticket, image: front.image } } : {}) }),
+        body: JSON.stringify({ slot, index, kind: p.kind, text: clean, ...(style ? {} : { style: viewStyle }), ...(front ? { front: { ticket: front.ticket, image: front.image } } : {}) }),
       });
       const out = (await res.json().catch(() => ({}))) as { ticket?: string; image?: string; error?: string };
       if (res.ok && out.ticket && out.image) {
@@ -112,6 +114,7 @@ export function DesignForm(p: Props) {
         title: title.trim(),
         text: clean,
         character: p.character?.slug,
+        place: p.place?.slug,
         from: p.source?.versionId,
         samples: style ? made.map((x) => ({ ticket: x.ticket, image: x.image })) : undefined,
         views: style ? undefined : Object.fromEntries(Object.entries(views).filter(([, x]) => fresh(x)).map(([k, x]) => [k, { ticket: x!.ticket, image: x!.image }])),
@@ -140,12 +143,12 @@ export function DesignForm(p: Props) {
     const key = slot === 'sample' ? `s${i}` : slot;
     const needsFront = (slot === 'side' || slot === 'back') && !fresh(views.front);
     const needsStyle = slot !== 'sample' && !chosen;
-    const label = slot === 'sample' ? W.form.subject(i + 1) : slot;
+    const label = slot === 'sample' ? W.form.subject(i + 1) : VIEW_NAMES[p.kind === 'location' ? 'location' : 'character'][slot];
     return (
       <li key={key} className={`dz-slot${pic ? ' has-pic' : ''}${pic && !fresh(pic) ? ' is-stale' : ''}`}>
         {pic ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={pic.image} alt={`AI-generated ${slot === 'sample' ? 'sample' : `${slot} view`}, not by the author`} width={slot === 'sample' ? 1024 : 576} height={slot === 'sample' ? 576 : 768} />
+          <img src={pic.image} alt={`AI-generated ${slot === 'sample' ? 'sample' : `${label} view`}, not by the author`} width={slot === 'sample' || p.kind === 'location' ? 1024 : 576} height={slot === 'sample' || p.kind === 'location' ? 576 : 768} />
         ) : (
           <span className="dz-slot-empty" aria-hidden="true" />
         )}
@@ -182,6 +185,7 @@ export function DesignForm(p: Props) {
         </div>
       )}
       {p.character && <BookQuotes name={p.character.name} quotes={p.character.quotes} />}
+      {p.place && <BookQuotes name={p.place.name} quotes={p.place.quotes} />}
 
       {auth.kind !== 'signed-in' ? (
         <div className="ic-gate">
@@ -207,7 +211,7 @@ export function DesignForm(p: Props) {
             <PublishedTextField id="dz-name" label={style ? W.form.name : W.form.sheetName} value={title} onChange={(v) => setTitle(v.replace(/\n/g, ' '))} rows={1} maxLength={p.limits.nameMaxChars} />
           </div>
           <div className="dz-text-field">
-            <PublishedTextField id="dz-text" label={style ? W.form.styleText : W.form.sheetText(p.character?.callName ?? '')} value={text} onChange={setText} rows={4} maxLength={p.limits.textMaxChars} />
+            <PublishedTextField id="dz-text" label={style ? W.form.styleText : W.form.sheetText(p.character?.callName ?? p.place?.name ?? '')} value={text} onChange={setText} rows={4} maxLength={p.limits.textMaxChars} />
             <span className="ic-count" aria-hidden="true">
               {text.length} / {p.limits.textMaxChars}
             </span>
@@ -256,7 +260,7 @@ export function DesignForm(p: Props) {
 
           <section className="dz-section" aria-label={style ? 'Sample images' : 'Views'}>
             <p className="dz-label">{style ? W.form.samples(p.limits.samplesMin, p.limits.samplesMax) : W.form.views}</p>
-            <ul className={`dz-slots${style ? '' : ' is-views'}`}>
+            <ul className={`dz-slots${style ? '' : ' is-views'}${p.kind === 'location' ? ' is-place' : ''}`}>
               {style
                 ? samples.map((x, i) => pictureFor('sample', i, x, p.subjects[i]))
                 : (['front', 'side', 'back'] as const).map((k, i) => pictureFor(k, i, views[k], p.viewLines[k]))}
@@ -265,7 +269,7 @@ export function DesignForm(p: Props) {
               <ul className="dz-view-lines">
                 {(['front', 'side', 'back'] as const).map((k) => (
                   <li key={k}>
-                    <span className="dz-slot-name">{k}</span> {p.viewLines[k]}
+                    <span className="dz-slot-name">{VIEW_NAMES[p.kind === 'location' ? 'location' : 'character'][k]}</span> {p.viewLines[k]}
                   </li>
                 ))}
               </ul>
@@ -309,9 +313,9 @@ export function DesignForm(p: Props) {
                       <img key={x.ticket.slice(-12)} src={x.image} alt="" />
                     ))}
                   </div>
-                  <p className="dz-caption">{style ? W.page.samplesCaption : W.page.viewsCaption}</p>
+                  <p className="dz-caption">{style ? W.page.samplesCaption : p.kind === 'location' ? W.page.placeViewsCaption : W.page.viewsCaption}</p>
                   {!style && chosen && <p className="dz-meta">{W.page.madeInStyle(chosen.title)}</p>}
-                  <p className="dz-label">{style ? W.page.styleText : W.page.sheetText(p.character?.callName ?? '')}</p>
+                  <p className="dz-label">{style ? W.page.styleText : W.page.sheetText(p.character?.callName ?? p.place?.name ?? '')}</p>
                   <p className="dz-text">{clean}</p>
                 </div>
               }

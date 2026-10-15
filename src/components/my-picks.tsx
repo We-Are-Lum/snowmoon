@@ -34,6 +34,7 @@ export function MyPicks() {
 
   const styles = (picks ?? []).filter((p) => p.kind === 'style');
   const chars = (picks ?? []).filter((p) => p.kind === 'character');
+  const places = (picks ?? []).filter((p) => p.kind === 'location');
   const clear = async (p: PickView) => {
     await changePick('DELETE', { entityId: p.entityId });
     setNote(W.page.cleared);
@@ -52,10 +53,10 @@ export function MyPicks() {
             {nameOf(p)} v{p.versionNo}
           </Link>
           <span className="dz-row-meta">
-            {!p.available ? W.picks.hidden : p.kind === 'style' ? (i === 0 ? W.picks.used : W.picks.alsoOffered) : W.picks.charUsed(p.entity.split(' ')[0])}
+            {!p.available ? W.picks.hidden : p.kind === 'style' ? (i === 0 ? W.picks.used : W.picks.alsoOffered) : p.kind === 'location' ? W.picks.placeUsed : W.picks.charUsed(p.entity.split(' ')[0])}
           </span>
           <span className="dz-pick-actions">
-            <Link href={p.kind === 'style' ? '/images/designs' : '/images/designs?tab=characters'}>{W.picks.change}</Link>
+            <Link href={p.kind === 'style' ? '/images/designs' : p.kind === 'location' ? '/images/designs?tab=places' : '/images/designs?tab=characters'}>{W.picks.change}</Link>
             <button type="button" onClick={() => clear(p)}>
               {W.picks.clear}
             </button>
@@ -84,6 +85,8 @@ export function MyPicks() {
             {styles.length ? <ul className="dz-pick-list">{styles.map(row)}</ul> : <p className="dz-empty-row">{W.picks.noStyle}</p>}
             <p className="dz-label">{W.picks.characters}</p>
             {chars.length ? <ul className="dz-pick-list">{chars.map(row)}</ul> : <p className="dz-empty-row">{W.picks.noCharacters}</p>}
+            <p className="dz-label">{W.picks.places}</p>
+            {places.length ? <ul className="dz-pick-list">{places.map(row)}</ul> : <p className="dz-empty-row">{W.picks.noPlaces}</p>}
             <p className="dz-note">{W.picks.nobody}</p>
           </div>
           {comparing?.newer && <Compare pick={comparing} onDone={(msg) => { setComparing(null); setNote(msg); }} />}
