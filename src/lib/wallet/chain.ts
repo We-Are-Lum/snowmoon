@@ -15,6 +15,10 @@ let client: PublicClient | null = null;
 export function chain(): PublicClient {
   return (client ??= createPublicClient({ chain: base, transport: http(process.env.BASE_RPC_URL || P.rpcUrl, { timeout: 10_000 }) }) as PublicClient);
 }
+/** Tests only (scripts/test-wallet.ts): read Base through a stub. */
+export function useChainForTests(c: PublicClient) {
+  client = c;
+}
 
 /** The address that signed this Sign-In with Ethereum message, if it is for us, current, and really signed. */
 export async function verifySignIn(message: string, signature: `0x${string}`, domain: string, client: PublicClient = chain()): Promise<`0x${string}` | null> {

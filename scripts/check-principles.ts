@@ -305,6 +305,14 @@ add({
         if (/<textarea\b/.test(text)) problems.push(`${file}: the search box must be a single-line search input`);
         continue;
       }
+      if (file.endsWith('components/tx-hash-field.tsx')) {
+        // The balance screen's payment hash (owner, 2026-10-15): sent to our server to look up on Base, never published by us.
+        for (const [what, re] of [['sent to us to look up on Base', /Sent to us to look up on Base/], ['never published', /Never published by us/], ['described to screen readers', /aria-describedby/]] as const)
+          if (!re.test(text)) problems.push(`${file}: the payment hash box must say it is ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the payment hash box must not send its text anywhere itself`);
+        if (/<textarea\b/.test(text)) problems.push(`${file}: the payment hash box must be a single-line input`);
+        continue;
+      }
       for (const m of text.matchAll(/<textarea\b|<input\b(?![^>]*type=["'](?:hidden|checkbox|radio|range|submit|button|file)["'])[^>]*>/g)) {
         problems.push(`${file}: a bare text box; use PublishedTextField so the publication line shows (${m[0].slice(0, 40)})`);
       }
