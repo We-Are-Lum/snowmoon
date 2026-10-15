@@ -129,7 +129,8 @@ export const IMAGES = {
    * and kept a day per FID (studio.image_scores, migration 0010). If Neynar can't be reached, no one
    * outside the invited list may generate. Invited FIDs skip the lookup.
    */
-  invited: [6786] as readonly number[],
+  // 6852 is @luisotravez (owner, 2026-10-15).
+  invited: [6786, 6852] as readonly number[],
   /** The one place the threshold lives. */
   neynarMinScore: 0.7,
   /** How long a looked-up Neynar user value is kept before it is asked again. */
