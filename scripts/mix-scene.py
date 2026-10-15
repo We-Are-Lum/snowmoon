@@ -21,7 +21,7 @@ Outputs:
     adaptations/<seed>/mix/recipe.json, or scenes-out/<seed>/mix/recipe.json for a placeholder timeline
   The renderer reads only the resolved timeline in that recipe.
 
-  /Users/nathan/snowmoon/.venv-voice/bin/python scripts/mix-scene.py dog-dawn
+  python scripts/mix-scene.py dog-dawn   (numpy and soundfile, plus ffmpeg on the PATH)
 """
 
 import hashlib
@@ -128,7 +128,7 @@ def resolve(timeline: dict, stems: dict[str, Path]) -> dict:
         if i and starts[i] <= starts[i - 1]:
             raise SystemExit(f"shot {s['id']} starts before the shot it follows")
         shots.append({**{k: v for k, v in s.items() if k != "at"}, "start": round(starts[i], 3), "end": round(stop, 3),
-                      "image_sha256_now": sha256(ROOT / s["image"])})
+                      "image_sha256_now": sha256(ROOT / s["image"]) if (ROOT / s["image"]).exists() else None})
     shot_ids = {s["id"] for s in shots}
     lettering = []
     for l in timeline.get("lettering", []):

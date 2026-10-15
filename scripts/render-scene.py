@@ -21,7 +21,11 @@ with +faststart. The render recipe (inputs by sha256, settings, command, the out
 measured duration and loudness) goes next to the mix recipe's folder: adaptations/<seed>/video/
 recipe.json, or scenes-out/<seed>/video/recipe.json for a placeholder timeline.
 
-  /Users/nathan/snowmoon/.venv-voice/bin/python scripts/render-scene.py dog-dawn [--from 50 --to 70]
+  python scripts/render-scene.py dog-dawn [--from 50 --to 70] [--stand-ins]
+
+--stand-ins (placeholder timelines only): a still that isn't on this machine (the dog-dawn panels
+are gitignored) is drawn as a grey card naming the shot and the missing file, so the whole chain
+runs from a fresh clone. The recipe marks each one; a real scene refuses the flag.
 """
 
 import argparse
@@ -67,10 +71,28 @@ def frame_box(size: tuple[int, int], f: dict, aspect: float) -> tuple[float, flo
     return (cx - w / 2, cy - h / 2, cx + w / 2, cy + h / 2)
 
 
+def stand_in(s: dict) -> Image.Image:
+    """A grey card for a still that isn't on this machine (--stand-ins, placeholder timelines only)."""
+    img = Image.new("RGB", (1920, 1080), (96, 100, 108))
+    d = ImageDraw.Draw(img)
+    try:
+        big, small = ImageFont.truetype(str(CARD_FACES["label"]), 64), ImageFont.truetype(str(CARD_FACES["label"]), 32)
+    except OSError:
+        big = small = ImageFont.load_default()
+    for x in range(0, 1920, 120):  # a grid, so camera moves show
+        d.line([(x, 0), (x, 1080)], fill=(110, 114, 122), width=2)
+    for y in range(0, 1080, 120):
+        d.line([(0, y), (1920, y)], fill=(110, 114, 122), width=2)
+    d.text((960, 470), f"STAND-IN · shot {s['id']}", font=big, fill=(240, 240, 240), anchor="mm")
+    d.text((960, 570), f"missing: {s['image']}", font=small, fill=(220, 220, 220), anchor="mm")
+    return img
+
+
 class Shot:
-    def __init__(self, s: dict, out: tuple[int, int], letters: list[dict], L):
+    def __init__(self, s: dict, out: tuple[int, int], letters: list[dict], L, stand_ins: bool = False):
         self.s, self.out = s, out
-        self.img = Image.open(ROOT / s["image"]).convert("RGB")
+        self.stand_in = stand_ins and not (ROOT / s["image"]).exists()
+        self.img = stand_in(s) if self.stand_in else Image.open(ROOT / s["image"]).convert("RGB")
         self.letters = []
         for l in letters:
             jobs = json.loads((ROOT / l["job_file"]).read_text())
@@ -157,10 +179,13 @@ def main() -> None:
     ap.add_argument("seed")
     ap.add_argument("--from", dest="t0", type=float, default=None, help="render only from this second (a preview)")
     ap.add_argument("--to", dest="t1", type=float, default=None, help="render only to this second (a preview)")
+    ap.add_argument("--stand-ins", action="store_true", help="placeholder timelines only: draw a card for a still that isn't on this machine")
     args = ap.parse_args()
     seed = args.seed
     timeline = json.loads((ROOT / "adaptations" / seed / "timeline.json").read_text())
     placeholder = bool(timeline.get("placeholder"))
+    if args.stand_ins and not placeholder:
+        raise SystemExit("--stand-ins is for placeholder timelines only; a real scene renders its own stills")
     mix_rec_path = (ROOT / "scenes-out" / seed / "mix" if placeholder else ROOT / "adaptations" / seed / "mix") / "recipe.json"
     mix_rec = json.loads(mix_rec_path.read_text())
     if mix_rec["timeline_sha256"] != sha256(ROOT / "adaptations" / seed / "timeline.json"):
@@ -173,8 +198,11 @@ def main() -> None:
     out_size, fps = (v["width"], v["height"]), v["fps"]
 
     L = letter_module()
-    shots = [Shot(s, out_size, [l for l in R["lettering"] if l["shot"] == s["id"]], L) for s in R["shots"]]
+    shots = [Shot(s, out_size, [l for l in R["lettering"] if l["shot"] == s["id"]], L, args.stand_ins) for s in R["shots"]]
     for sh in shots:
+        if sh.stand_in:
+            print(f"shot {sh.s['id']}: stand-in card ({sh.s['image']} is not on this machine)")
+            continue
         if sha256(ROOT / sh.s["image"]) != sh.s["image_sha256"]:
             raise SystemExit(f"shot {sh.s['id']}: {sh.s['image']} is not the image the timeline names")
 
@@ -230,7 +258,7 @@ def main() -> None:
         "placeholder": placeholder,
         "mix_recipe": str(mix_rec_path.relative_to(ROOT)), "mix_recipe_sha256": sha256(mix_rec_path),
         "mix": {"file": mix_rec["output"]["file"], "sha256": mix_rec["output"]["sha256"]},
-        "images": [{"shot": sh.s["id"], "file": sh.s["image"], "sha256": sh.s["image_sha256"]} for sh in shots],
+        "images": [{"shot": sh.s["id"], "file": sh.s["image"], "sha256": sh.s["image_sha256"], **({"stand_in": True} if sh.stand_in else {})} for sh in shots],
         "settings": {"width": out_size[0], "height": out_size[1], "fps": fps, "resample": "Lanczos, one pass per frame from the source",
                      "lettering_scale": LETTER_SCALE, "codec": "H.264 crf 18 preset slow yuv420p + AAC 256k"},
         "script": "scripts/render-scene.py",
