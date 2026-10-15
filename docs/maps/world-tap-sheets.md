@@ -192,7 +192,7 @@ Placed by us. Its neighbors are the book's (c5-b46); its position is ours, moved
 
 ## Hapton
 
-Placed by us. Its neighbors are the book's (c5-b46); its position is ours, moved as little as possible from the book's diagram.
+Placed by us. Its neighbors are the book's (c5-b46); its position is ours, moved as little as possible from the book's diagram. Moved about 50 km (layout units) onto the coast on 2026-10-15: it sat in the sea on the v5 terrain.
 
 - wg-379: Each United City gives a share of the votes in its parliament to its neighbors. (c22-b49)
 - wg-380: The co-governance diagram links fifteen cities: Silverbeach–Mabuli, Silverbeach–Inglewore, Mabuli–Freetown, Inglewore–Hapton, Inglewore–Deplexi, Hapton–Imber, Hapton–Deplexi, Imber–Arturia, Imber–Deplexi, Arturia–Redshire, Arturia–Petersvil, Redshire–Petersvil, Redshire–Devanvil, Petersvil–Devanvil, Petersvil–Iptak, Deplexi–Freetown, Deplexi–Devanvil, Freetown–Devanvil, Freetown–Ondak, Devanvil–Ondak, Ondak–Iptak, Ondak–Mantak, Ondak–Belpaki, Iptak–Mantak, Iptak–Belpaki and Mantak–Belpaki. (c5-b46, c5-b47)

@@ -1207,16 +1207,13 @@
       "id": "hapton",
       "name": "Hapton",
       "shape": "point",
-      "at": [
-        -1330,
-        -120
-      ],
+      "at": [-1320, -170],
       "provenance": "placed by us",
       "lines": [
         "wg-379",
         "wg-380"
       ],
-      "note": "Its neighbors are the book's (c5-b46); its position is ours, moved as little as possible from the book's diagram.",
+      "note": "Its neighbors are the book's (c5-b46); its position is ours, moved as little as possible from the book's diagram. Moved about 50 km (layout units) onto the coast on 2026-10-15: it sat in the sea on the v5 terrain.",
       "frame": "uc"
     },
     {

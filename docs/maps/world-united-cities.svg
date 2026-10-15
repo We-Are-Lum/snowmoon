@@ -71,7 +71,7 @@
 <circle cx="782.8" cy="206.2" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
 <circle cx="548.5" cy="345.6" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
 <circle cx="329.1" cy="269.8" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
-<circle cx="182.6" cy="218.3" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
+<circle cx="188.8" cy="233.5" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
 <circle cx="376.3" cy="330.4" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
 <circle cx="238.5" cy="354.7" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
 <circle cx="144.3" cy="445.6" r="3.5" fill="#fff" stroke="#222" stroke-dasharray="5,3"/>
@@ -113,7 +113,7 @@
 <text x="787.8" y="202.2" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Petersvil</text>
 <text x="553.5" y="341.6" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Devanvil</text>
 <text x="334.1" y="265.8" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Imber</text>
-<text x="187.6" y="214.3" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Hapton</text>
+<text x="193.8" y="229.5" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Hapton</text>
 <text x="381.3" y="326.4" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Deplexi</text>
 <text x="243.5" y="350.7" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Inglewore</text>
 <text x="149.3" y="441.6" fill="#555" font-style="italic" stroke="#fff" stroke-width="3" paint-order="stroke">Silverbeach</text>

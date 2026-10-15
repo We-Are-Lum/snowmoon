@@ -24,7 +24,7 @@ const read = (f: string) => readFileSync(path.join(ROOT, f), 'utf8');
 
 const guide = JSON.parse(read('content/snowmoon/world-guide.json')) as { lines: { id: string; section: string; text: string }[] };
 const geo = guide.lines.filter((l) => l.section === 'geography');
-const maps: MapFile[] = readdirSync(path.join(ROOT, DIR)).filter((f) => f.endsWith('.json')).sort().map((f) => JSON.parse(read(`${DIR}/${f}`)));
+const maps: MapFile[] = readdirSync(path.join(ROOT, DIR)).filter((f) => f.endsWith('.json')).sort().map((f) => JSON.parse(read(`${DIR}/${f}`))).filter((m) => Array.isArray(m.tests)); // world-view.json is the page's view data, not a map
 
 function check(): string[] {
   const bad: string[] = [];

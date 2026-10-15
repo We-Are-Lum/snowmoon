@@ -23,7 +23,7 @@ The book does not say where these are, so we chose. Everything else on this map 
 - **Petersvil** [petersvil]: Its neighbors are the book's (c5-b46); its position is ours, moved as little as possible from the book's diagram. (lines wg-379, wg-380)
 - **Devanvil** [devanvil]: Its neighbors are the book's (c5-b46); its position is ours, moved as little as possible from the book's diagram. (lines wg-379, wg-380)
 - **Imber** [imber]: Its neighbors are the book's (c5-b46); its position is ours, moved as little as possible from the book's diagram. (lines wg-379, wg-380)
-- **Hapton** [hapton]: Its neighbors are the book's (c5-b46); its position is ours, moved as little as possible from the book's diagram. (lines wg-379, wg-380)
+- **Hapton** [hapton]: Its neighbors are the book's (c5-b46); its position is ours, moved as little as possible from the book's diagram. Moved about 50 km (layout units) onto the coast on 2026-10-15: it sat in the sea on the v5 terrain. (lines wg-379, wg-380)
 - **Deplexi** [deplexi]: Its neighbors are the book's (c5-b46); its position is ours, moved as little as possible from the book's diagram. (lines wg-379, wg-380)
 - **Inglewore** [inglewore]: Its neighbors are the book's (c5-b46); its position is ours, moved as little as possible from the book's diagram. (lines wg-379, wg-380)
 - **Silverbeach** [silverbeach]: Farther from Redshire than Freetown (c15-b25). (lines wg-379, wg-380, wg-382, wg-383)

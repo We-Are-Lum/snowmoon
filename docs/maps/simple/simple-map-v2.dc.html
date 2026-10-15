@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="design_doc_mode" content="canvas">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Crimson+Pro:ital,wght@0,400;0,500;1,400&family=DM+Mono:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>body{margin:0;background:#D9D5CC;-webkit-font-smoothing:antialiased}a{color:#2E5A3A;text-decoration:none}a:hover{color:#1D1D1B;text-decoration:underline}</style>
+</helmet>
+<div style="padding:56px;display:flex;flex-direction:column;gap:44px;font-family:'Crimson Pro',serif;color:#1D1D1B">
+  <header style="display:flex;flex-direction:column;gap:10px;max-width:1000px">
+    <div style="font-family:'DM Mono',monospace;font-size:13px;letter-spacing:.08em;color:#5E5A52">SNOWMOON · SIMPLE MAP v2 · DRAFT</div>
+    <div style="font-size:42px;line-height:1.1">Where things are</div>
+    <div style="font-size:18px;line-height:1.5;color:#4A463F;text-wrap:pretty">The real coastlines, seas, lakes, forests and high ground, traced from the frozen terrain and then simplified. Nothing is moved. Countries are tinted bands inside their borders, and cities sit where the layout data puts them. Earlier version: <a href="SimpleMap.dc.html">v1</a>. Detailed view: <a href="World Map Styled.dc.html">terrain map</a>.</div>
+    <div style="display:flex;flex-wrap:wrap;gap:10px 24px;font-family:'DM Mono',monospace;font-size:12px;color:#4A463F;align-items:center">
+      <span style="display:flex;gap:7px;align-items:center"><span style="width:10px;height:10px;background:#1D1D1B"></span>from the book: filled square, upright name</span>
+      <span style="display:flex;gap:7px;align-items:center;font-style:italic"><span style="width:10px;height:10px;border:2px solid #1D1D1B;border-radius:50%;box-sizing:border-box"></span>placed by us: hollow ring, italic name</span>
+      <span style="display:flex;gap:7px;align-items:center"><span style="width:22px;border-top:2px dashed #1D1D1B"></span>border placed by us</span>
+    </div>
+  </header>
+  <sc-for list="{{ groups }}" as="gr" hint-placeholder-count="2">
+    <section style="display:flex;flex-direction:column;gap:18px">
+      <div style="font-family:'DM Mono',monospace;font-size:13px;color:#5E5A52">{{ gr.title }}</div>
+      <div style="display:flex;flex-wrap:wrap;gap:44px;align-items:flex-start">
+        <sc-for list="{{ gr.frames }}" as="f" hint-placeholder-count="2">
+          <div id="{{ f.id }}" data-screen-label="{{ f.label }}" style="display:flex;flex-direction:column;gap:10px;width:{{ f.w }}px">
+            <div style="display:flex;gap:10px;align-items:center"><span style="font-family:'DM Mono',monospace;font-size:13px;background:#1D1D1B;color:#F4F2ED;padding:3px 9px;border-radius:3px">{{ f.badge }}</span><span style="font-size:17px">{{ f.caption }}</span></div>
+            <div style="width:{{ f.w }}px;background:#F4F2ED;border:1px solid #1D1D1B;display:flex;flex-direction:column">
+              <div style="position:relative;width:{{ f.w }}px;height:{{ f.h }}px;overflow:hidden;background:#B3C6C9">
+                <img src="maps/simple/region-ext.svg" alt="" style="position:absolute;left:{{ f.ix }}px;top:{{ f.iy }}px;width:{{ f.iw }}px;height:{{ f.ih }}px;max-width:none"></img>
+                <sc-if value="{{ f.ext }}" hint-placeholder-val="{{ false }}">
+                  <div style="position:absolute;left:0;right:0;top:{{ f.nTop }}px;height:0;border-top:1.5px dashed #6A675F;opacity:.7"></div>
+                  <div style="position:absolute;left:0;right:0;top:{{ f.sTop }}px;height:0;border-top:1.5px dashed #6A675F;opacity:.7"></div>
+                  <div style="position:absolute;left:12px;top:{{ f.nLab }}px;max-width:{{ f.labW }}px;background:rgba(244,242,237,.95);border:1px dashed #1D1D1B;padding:5px 8px;font-family:'DM Mono',monospace;font-size:10px;line-height:1.45;font-style:italic">{{ f.nTxt }}</div>
+                  <div style="position:absolute;left:12px;top:{{ f.sLab }}px;max-width:{{ f.labW }}px;background:rgba(244,242,237,.95);border:1px dashed #1D1D1B;padding:5px 8px;font-family:'DM Mono',monospace;font-size:10px;line-height:1.45;font-style:italic">{{ f.sTxt }}</div>
+                </sc-if>
+                <sc-for list="{{ f.areas }}" as="a" hint-placeholder-count="0"><span onClick="{{ a.on }}" style="position:absolute;left:{{ a.x }}px;top:{{ a.y }}px;transform:translate(-50%,-50%);font-family:'DM Mono',monospace;font-size:{{ a.fs }}px;letter-spacing:{{ a.ls }};font-weight:500;font-style:{{ a.it }};color:{{ a.col }};white-space:nowrap;cursor:pointer;text-shadow:0 0 3px #F4F2ED,0 0 3px #F4F2ED,0 0 6px #F4F2ED">{{ a.t }}</span></sc-for>
+                <sc-for list="{{ f.dots }}" as="d" hint-placeholder-count="0"><span onClick="{{ d.on }}" style="position:absolute;left:{{ d.x }}px;top:{{ d.y }}px;width:{{ d.s }}px;height:{{ d.s }}px;transform:translate(-50%,-50%);box-sizing:border-box;background:{{ d.bg }};border:{{ d.bw }}px solid #1D1D1B;border-radius:{{ d.rad }};box-shadow:0 0 0 {{ d.ring }}px {{ d.ringC }};cursor:pointer"></span></sc-for>
+                <sc-for list="{{ f.labels }}" as="l" hint-placeholder-count="0"><span onClick="{{ l.on }}" style="position:absolute;left:{{ l.x }}px;top:{{ l.y }}px;transform:translate({{ l.tx }},-50%);font-family:'DM Mono',monospace;font-size:{{ l.fs }}px;font-style:{{ l.it }};color:{{ l.col }};background:{{ l.bg }};padding:0 2px;white-space:nowrap;cursor:pointer;text-shadow:{{ l.sh }}">{{ l.t }}</span></sc-for>
+                <sc-for list="{{ f.edges }}" as="e" hint-placeholder-count="0"><span style="position:absolute;left:{{ e.x }}px;top:{{ e.y }}px;transform:translate(-50%,0);font-family:'DM Mono',monospace;font-size:{{ e.fs }}px;font-style:italic;background:rgba(244,242,237,.92);border:1px dashed #1D1D1B;padding:2px 6px;white-space:nowrap">{{ e.t }}</span></sc-for>
+                <sc-if value="{{ f.hasInset }}" hint-placeholder-val="{{ false }}">
+                  <div style="position:absolute;right:8px;top:{{ f.inset.top }}px;width:{{ f.inset.w }}px;background:#F4F2ED;border:1px dashed #1D1D1B;display:flex;flex-direction:column">
+                    <div style="padding:4px 7px;font-family:'DM Mono',monospace;font-size:{{ f.inset.fs }}px;letter-spacing:.06em;border-bottom:1px dashed #1D1D1B">DZEGO · HALFWAY ROUND THE WORLD</div>
+                    <div style="position:relative;width:{{ f.inset.w }}px;height:{{ f.inset.h }}px;overflow:hidden">
+                      <img src="maps/simple/dzego-base.svg" alt="" style="position:absolute;left:{{ f.inset.ix }}px;top:{{ f.inset.iy }}px;width:{{ f.inset.iw }}px;height:{{ f.inset.ih }}px;max-width:none"></img>
+                      <sc-for list="{{ f.inset.dots }}" as="d" hint-placeholder-count="0"><span onClick="{{ d.on }}" style="position:absolute;left:{{ d.x }}px;top:{{ d.y }}px;width:{{ d.s }}px;height:{{ d.s }}px;transform:translate(-50%,-50%);box-sizing:border-box;background:{{ d.bg }};border:{{ d.bw }}px solid #1D1D1B;border-radius:{{ d.rad }};box-shadow:0 0 0 {{ d.ring }}px {{ d.ringC }};cursor:pointer"></span></sc-for>
+                      <sc-for list="{{ f.inset.labels }}" as="l" hint-placeholder-count="0"><span onClick="{{ l.on }}" style="position:absolute;left:{{ l.x }}px;top:{{ l.y }}px;transform:translate({{ l.tx }},-50%);font-family:'DM Mono',monospace;font-size:{{ l.fs }}px;font-style:{{ l.it }};color:{{ l.col }};background:{{ l.bg }};padding:0 2px;white-space:nowrap;cursor:pointer;text-shadow:{{ l.sh }}">{{ l.t }}</span></sc-for>
+                    </div>
+                    <div style="padding:4px 7px;font-family:'DM Mono',monospace;font-size:{{ f.inset.fs }}px;line-height:1.4;font-style:italic;border-top:1px dashed #1D1D1B">(draft) The book doesn't say where Dzego lies relative to the United Cities.</div>
+                  </div>
+                </sc-if>
+                <span style="position:absolute;left:8px;bottom:8px;background:rgba(244,242,237,.95);border:1px solid #1D1D1B;border-radius:2px;padding:3px 6px;font-family:'DM Mono',monospace;font-size:10px">AI map · by Snowmoon Party ⓘ</span>
+              </div>
+              <div style="border-top:1px solid #1D1D1B;padding:9px 12px;min-height:54px;box-sizing:border-box;display:flex;flex-direction:column;gap:4px;font-family:'DM Mono',monospace">
+                <sc-if value="{{ f.hasSel }}" hint-placeholder-val="{{ false }}">
+                  <div style="display:flex;gap:8px;align-items:center;flex-wrap:wrap"><span style="font-family:'Crimson Pro',serif;font-size:20px;font-style:{{ f.sel.it }}">{{ f.sel.name }}</span><span style="font-size:9px;border:1px {{ f.sel.line }} #1D1D1B;background:{{ f.sel.bg }};color:{{ f.sel.fg }};padding:2px 6px">{{ f.sel.tag }}</span><span onClick="{{ f.clear }}" style="margin-left:auto;cursor:pointer;font-size:12px;color:#6A675F">✕</span></div>
+                  <span style="font-size:11px;line-height:1.5;color:#2A2A26">{{ f.sel.note }}</span>
+                </sc-if>
+                <sc-if value="{{ f.noSel }}" hint-placeholder-val="{{ true }}"><span style="font-size:11px;line-height:1.5;color:#4A463F">Tap a place. The coast, seas and high ground follow the terrain. The countries' borders are ours.</span></sc-if>
+              </div>
+            </div>
+          </div>
+        </sc-for>
+      </div>
+    </section>
+  </sc-for>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const RW = 2048, RH = 1061;
+const VIEWS = { world: [0, -780, 2048, 1560], all: [0, 0, 2048, 1061], west: [0, 120, 1100, 1040], uc: [1240, 180, 2048, 1061] };
+const TIER = { glasscrown: 1, messalia: 2, haragmir: 2, redshire_islands: 2, meldan: 1, redshire: 1, northglade: 1, eldil: 2, arturia: 2, freetown: 2, telten: 2, petersvil: 3 };
+const AREAS = [
+  { id: 'veridia', t: 'VERIDIA', k: 1 }, { id: 'uc_continent', t: 'UNITED CITIES', k: 1 }, { id: 'arctic', t: 'ARCTIC EMPIRE', k: 1, at: [1120, -420] },
+  { id: 'northshore', t: 'NORTHSHORE', k: 2 }, { id: 'thaldur', t: 'THALDUR', k: 2 },
+];
+const FRAMES = [
+  { g: 0, id: 'w1', badge: 'W1', caption: 'Every region · the drawn terrain, the Arctic beyond it, Dzego far east', w: 1100, h: 1180, view: 'world', tier: 2, inset: true, ext: true },
+  { g: 1, id: 'w2', badge: 'W2', caption: 'Phone · every region', w: 390, h: 470, view: 'world', tier: 1, inset: false, dzChip: true, ext: true, small: true },
+  { g: 0, id: 'd1', badge: 'D1', caption: 'Desktop · the whole layout, every city', w: 1100, h: 640, view: 'all', tier: 3, inset: true },
+  { g: 1, id: 'p1', badge: 'P1', caption: 'Phone · whole layout · countries and main cities', w: 390, h: 340, view: 'all', tier: 1, inset: true, small: true },
+  { g: 1, id: 'p2', badge: 'P2', caption: 'Phone · Veridia and Northshore · Meldan tapped', w: 390, h: 420, view: 'west', tier: 2, sel: 'meldan', small: true },
+  { g: 1, id: 'p3', badge: 'P3', caption: 'Phone · the United Cities', w: 390, h: 420, view: 'uc', tier: 3, small: true },
+];
+const GROUPS = ['DESKTOP', 'PHONE · 390 WIDE · BESIDE THE READER OR FULL SCREEN'];
+class Component extends DCLogic {
+  state = { sel: {}, R: null, D: null };
+  async componentDidMount() {
+    const [R, D] = await Promise.all([fetch('maps/simple/region-places.json').then(r => r.json()), fetch('maps/simple/dzego-places.json').then(r => r.json())]);
+    this.setState({ R: R.places, D });
+  }
+  fit(view, w, h, iw0, ih0, contain) { const [x0, y0, x1, y1] = view, cw = x1 - x0, chh = y1 - y0; let s = (contain ? Math.min : Math.max)(w / cw, h / chh), ox = -(x0 + cw / 2) * s + w / 2, oy = -(y0 + chh / 2) * s + h / 2;
+    if (!contain) { s = Math.max(s, w / iw0, h / ih0); ox = -(x0 + cw / 2) * s + w / 2; oy = -(y0 + chh / 2) * s + h / 2; ox = Math.min(0, Math.max(w - iw0 * s, ox)); oy = Math.min(0, Math.max(h - ih0 * s, oy)); } return { s, ox, oy, iw: iw0 * s, ih: ih0 * s, P: (x, y) => [ox + x * s, oy + y * s] }; }
+  marks(places, T, w, h, f, fid, opt) {
+    const sel = this.state.sel[fid] ?? f.sel, dots = [], labels = [], boxes = (opt.pre || []).slice(), fs = opt.fs, block = opt.block;
+    const pick = id => this.setState(s => ({ sel: { ...s.sel, [fid]: s.sel[fid] === id ? null : id } }));
+    const pts = places.filter(p => p.shape === 'point' && !p.hide).map(p => ({ p, xy: T.P(...p.pts[0]) })).filter(({ xy }) => xy[0] > 4 && xy[1] > 4 && xy[0] < w - 4 && xy[1] < h - 4 && !(block && xy[0] > block[0] - 6 && xy[1] < block[3] + 6 && xy[1] > block[1] - 6));
+    pts.sort((a, b) => (b.p.id === sel) - (a.p.id === sel) || (TIER[a.p.id] || 3) - (TIER[b.p.id] || 3));
+    pts.forEach(({ p, xy }) => {
+      const book = p.prov === 'book', on = p.id === sel, isl = p.id === 'redshire_islands', s = isl ? 0 : opt.dot;
+      if (isl) { const r = 22 * T.s + 6; dots.push({ x: xy[0] + 2 * T.s, y: xy[1] + 14 * T.s, s: 2 * r, bg: 'transparent', bw: 0, rad: '50%', ring: on ? 2 : 0, ringC: '#1D1D1B', on: () => pick(p.id) }); }
+      else dots.push({ x: xy[0], y: xy[1], s, bg: book ? '#1D1D1B' : '#F4F2ED', bw: book ? 0 : 2, rad: book ? '0' : '50%', ring: on ? 3 : 1.5, ringC: on ? '#1D1D1B' : '#F4F2ED', on: () => pick(p.id) });
+      if (!on && (TIER[p.id] || 3) > opt.tier) return;
+      const tw = p.name.length * fs * 0.62 + 6; let x = xy[0] + s / 2 + 4, tx = '0';
+      if (x + tw > w - 6 || (block && x + tw > block[0] && xy[1] > block[1] - fs && xy[1] < block[3] + fs)) { x = xy[0] - s / 2 - 4; tx = '-100%'; }
+      const bx = tx === '0' ? [x, xy[1] - fs * .7, x + tw, xy[1] + fs * .7] : [x - tw, xy[1] - fs * .7, x, xy[1] + fs * .7];
+      let fit = b => !(block && b[2] > block[0] && b[1] < block[3] && b[3] > block[1]) && (on || !boxes.some(o => b[0] < o[2] && b[2] > o[0] && b[1] < o[3] && b[3] > o[1])) && b[0] > 2 && b[2] < w - 2;
+      let bx2 = bx;
+      if (!fit(bx2)) { const fl = tx === '0' ? [xy[0] - s / 2 - 4 - tw, bx[1], xy[0] - s / 2 - 4, bx[3]] : [xy[0] + s / 2 + 4, bx[1], xy[0] + s / 2 + 4 + tw, bx[3]];
+        let vy = 0;
+        if (fit(fl)) { bx2 = fl; if (tx === '0') { x = xy[0] - s / 2 - 4; tx = '-100%'; } else { x = xy[0] + s / 2 + 4; tx = '0'; } }
+        else {
+          const cx0 = Math.max(tw / 2 + 4, Math.min(w - tw / 2 - 4, xy[0]));
+          const alt = [-1, 1].map(m => m * (s / 2 + fs * .9)).map(dy => [cx0 - tw / 2, xy[1] + dy - fs * .7, cx0 + tw / 2, xy[1] + dy + fs * .7, dy]).find(b => fit(b));
+          if (!alt) return; bx2 = alt.slice(0, 4); vy = alt[4]; x = cx0; tx = '-50%';
+        }
+        if (vy) { boxes.push(bx2); labels.push({ x, y: xy[1] + vy, tx, t: p.name, fs, it: book ? 'normal' : 'italic', col: on ? '#F4F2ED' : '#1D1D1B', bg: on ? '#1D1D1B' : 'transparent', sh: on ? 'none' : '0 0 3px #F4F2ED,0 0 3px #F4F2ED,0 0 5px #F4F2ED', on: () => pick(p.id) }); return; } }
+      boxes.push(bx2);
+      labels.push({ x, y: xy[1], tx, t: p.name, fs, it: book ? 'normal' : 'italic', col: on ? '#F4F2ED' : '#1D1D1B', bg: on ? '#1D1D1B' : 'transparent', sh: on ? 'none' : '0 0 3px #F4F2ED,0 0 3px #F4F2ED,0 0 5px #F4F2ED', on: () => pick(p.id) });
+    });
+    return { dots, labels, boxes };
+  }
+  renderVals() {
+    const { R, D } = this.state;
+    if (!R || !D) return { groups: GROUPS.map(t => ({ title: t, frames: [] })) };
+    const byId = id => R.find(p => p.id === id) || D.places.find(p => p.id === id);
+    const frames = FRAMES.map(f => {
+      const T = this.fit(VIEWS[f.view], f.w, f.h, RW, RH, f.ext), fs = f.small ? 11 : 12;
+      const pick = id => this.setState(s => ({ sel: { ...s.sel, [f.id]: s.sel[f.id] === id ? null : id } }));
+      const iwB = f.inset ? Math.round(f.w * (f.small ? .3 : .22)) : 0, ihB = f.inset ? Math.round(iwB * (f.small ? .62 : .72)) + (f.small ? 76 : 96) : 0;
+      const T0 = T.P(0, 0)[1], insTop = f.ext && f.small ? Math.max(8, Math.round(T0 - ihB - 8)) : 8;
+      const block = f.inset ? [f.w - 8 - iwB, insTop - 8, f.w, insTop + ihB] : null;
+      const areas = AREAS.filter(a => a.k <= (f.small && f.view === 'all' ? 1 : 2)).map(a => {
+        const p = byId(a.id); let c = a.at; if (!c) { const xs = p.pts.map(q => q[0]), ys = p.pts.map(q => q[1]); c = [(Math.min(...xs) + Math.max(...xs)) / 2, (Math.min(...ys) + Math.max(...ys)) / 2]; if (a.id === 'veridia') c = [c[0] + 40, c[1] + 120]; if (a.id === 'uc_continent') c = [c[0] + 60, c[1] + 40]; }
+        const [x, y] = T.P(...c), big = a.k === 1, afs = big ? (f.small ? 12 : 16) : (f.small ? 9 : 11);
+        const hw = a.t.length * afs * (big ? .85 : .75) / 2 + 4, bb = [x - hw, y - afs * .8, x + hw, y + afs * .8];
+        const vis = bb[0] > 4 && y > 10 && bb[2] < f.w - 4 && y < f.h - 10 && !(block && bb[2] > block[0] && bb[1] < block[3] && bb[3] > block[1]);
+        return { x, y, t: a.t, fs: afs, ls: big ? '.22em' : '.14em', it: p.prov === 'book' ? 'normal' : 'italic', col: big ? '#3E3B35' : '#4A463F', on: () => pick(a.id), vis, bb };
+      }).filter(a => a.vis);
+      const hitB = (a, b) => a[0] < b[2] && a[2] > b[0] && a[1] < b[3] && a[3] > b[1];
+      const dotB = R.filter(p => p.shape === 'point' && !p.hide).map(p => { const [x, y] = T.P(...p.pts[0]); return [x - 7, y - 7, x + 7, y + 7]; });
+      const glE = byId('glasscrown'); if (glE) { let [gx] = T.P(...glE.pts[0]); gx = Math.min(gx, f.w - (f.inset ? Math.round(f.w * (f.small ? .3 : .22)) : 0) - 110); const gw = 24 * (f.small ? 9 : 10) * .62; dotB.push([gx - gw / 2 - 8, 4, gx + gw / 2 + 8, 30]); }
+      const kept = [];
+      areas.forEach(a => {
+        if (kept.some(k => hitB(k.bb, a.bb))) return;
+        if (dotB.some(d => hitB(d, a.bb))) {
+          const alt = [-1, 1, -2, 2].map(m => m * a.fs * 1.4).map(dy => [a.bb[0], a.bb[1] + dy, a.bb[2], a.bb[3] + dy, dy]).find(b => !dotB.some(d => hitB(d, b)) && !kept.some(k => hitB(k.bb, b)) && b[1] > 4 && b[3] < f.h - 4);
+          if (!alt) { if (a.fs < 12) return; } else { a.y += alt[4]; a.bb = alt.slice(0, 4); }
+        }
+        kept.push(a);
+      });
+      const sid0 = this.state.sel[f.id] !== undefined ? this.state.sel[f.id] : f.sel;
+      const M = this.marks(R, T, f.w, f.h, f, f.id, { fs, dot: f.small ? 9 : 10, tier: f.ext && f.small ? Math.max(f.tier, 2) : f.tier, pre: kept.map(a => a.bb), block });
+      const selL = sid0 && M.labels.find(l => l.bg !== 'transparent');
+      const areasOut = kept.filter(a => { if (!selL) return true; const w2 = selL.t.length * fs * .62 + 6, sb = selL.tx === '0' ? [selL.x, selL.y - fs * .7, selL.x + w2, selL.y + fs * .7] : [selL.x - w2, selL.y - fs * .7, selL.x, selL.y + fs * .7]; return !hitB(sb, a.bb); });
+      areas.length = 0; areasOut.forEach(a => areas.push(a));
+      const edges = [], iwPre = f.inset ? Math.round(f.w * (f.small ? .3 : .22)) : 0;
+      const gl = byId('glasscrown'); if (gl) { let [x] = T.P(...gl.pts[0]); x = Math.min(x, f.w - iwPre - 110); if (x > 40 && x < f.w - 40) edges.push({ x, y: 8, t: '↑ Glasscrown, far north', fs: f.small ? 9 : 10 }); }
+      if (f.ext) edges.length = 0;
+      if (f.dzChip) edges.push({ x: f.w - 92, y: Math.round(T.P(0, 0)[1]) - 28, t: '→ Dzego, half the world away', fs: 9 });
+      const ms = byId('messalia'); if (ms && f.view !== 'west' && !f.ext) { let [x] = T.P(...ms.pts[0]); x = Math.max(x, f.small ? 285 : 330); if (x > 40 && x < f.w - 40) edges.push({ x, y: f.h - (f.small ? 26 : 30), t: '↓ Messalia, Haragmir · south', fs: f.small ? 9 : 10 }); }
+      let inset = null;
+      if (f.inset) {
+        const iw = iwPre, ih = Math.round(iw * (f.small ? .62 : .72)), TI = this.fit([200, 150, 1340, 1030], iw, ih, D.W, D.H);
+        const IM = this.marks(D.places, TI, iw, ih, f, f.id, { fs: f.small ? 9 : 11, dot: f.small ? 7 : 9, tier: 3 });
+        inset = { top: insTop, w: iw, h: ih, ix: TI.ox, iy: TI.oy, iw: TI.iw, ih: TI.ih, dots: IM.dots, labels: IM.labels, fs: f.small ? 8 : 10 };
+      }
+      const sid = this.state.sel[f.id] !== undefined ? this.state.sel[f.id] : f.sel, sp = sid && byId(sid), book = sp && sp.prov === 'book';
+      const nTop = T.P(0, 0)[1], sTop = T.P(0, RH)[1], sSea = Math.max(0, T.P(216, 0)[0]);
+      return { ...f, ext: !!f.ext, sSea, nTop, nLab: f.small ? nTop - 30 : Math.max(8, nTop - 34), nTxt: f.small ? 'above: drawn by us' : 'Above the dashed line: the Arctic coast and its islands, drawn by us. Below it: the frozen terrain.', sTxt: f.small ? 'below the line: drawn by us' : 'Below the dashed line: the land going south, drawn by us.', labW: f.inset ? Math.min(300, f.w - (f.inset ? Math.round(f.w * (f.small ? .3 : .22)) : 0) - 36) : 300, sTop, sLab: sTop + 10, label: `${f.badge} ${f.caption}`, base: 'maps/simple/region-base.svg', rivers: 'maps/simple/region-rivers.png', ix: T.ox, iy: T.oy - 780 * T.s, iw: T.iw, ih: 2340 * T.s,
+        dots: M.dots, labels: M.labels, areas, edges, hasInset: !!inset, inset: inset || {},
+        hasSel: !!sp, noSel: !sp, sel: sp ? { name: sp.name, it: book ? 'normal' : 'italic', tag: book ? 'FROM THE BOOK' : 'PLACED BY US', line: book ? 'solid' : 'dashed', bg: book ? '#1D1D1B' : 'transparent', fg: book ? '#F4F2ED' : '#1D1D1B', note: (sp.note || '') + (sp.id === 'redshire_islands' ? ' The gulf and the islands are drawn by us on top of the terrain, south-west of Redshire.' : '') } : {},
+        clear: () => this.setState(s => ({ sel: { ...s.sel, [f.id]: null } })) };
+    });
+    return { groups: GROUPS.map((t, g) => ({ title: t, frames: frames.filter(f => f.g === g) })) };
+  }
+}
+</script>
+</body>
+</html>

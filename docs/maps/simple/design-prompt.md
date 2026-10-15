@@ -1,0 +1,15 @@
+Paste this to the build session (attach `maps/simple/overlay-for-build.json` and `maps/simple/region-ext.svg`):
+
+---
+
+Claude Design has drawn an overlay on top of the frozen v5 region terrain for the simple "where things are" map. The terrain files are unchanged. Please fold the overlay into the terrain generator, then run the 112 map tests before anything ships.
+
+The overlay is in `overlay-for-build.json`. It uses region pixels (the 2048 × 1061 grid at 3.14365 km per px, y down). y < 0 is north of the grid and y > 1061 is south of it. Everything in it is **placed by us**.
+
+1. **The Redshire gulf and Redshire's south islands (wg-386, c4-b73).** In the current terrain, the `redshire_gulf` polygon is mostly land, and `redshire_islands` sits on land. The overlay carves the gulf as sea (the `carved` loops) and puts five small islands inside it, around (1806, 511) (the `added` loops). Check the existing tests: islands inside `redshire_gulf`, bearing 135–225° from Redshire, a sea ring around them, and sea between Redshire and Arturia (wg-388). Also check that the UC frame transform puts the gulf where the terrain's gulf actually is. My placement may be off, since Arturia and the gulf both landed near the coast.
+2. **Arctic coast, north of the grid.** The Arctic mainland's south coast runs about 600–1150 km north of Northshore and the United Cities, along a fractal line (`arctic_land`). A strait of open sea separates it from the grid, with an archipelago of about 11 islands in it. Glasscrown (c31-b44, polar night) is well inland. Please extend the elevation grid north to cover it, or generate this area as its own frame, with ice and tundra biomes.
+3. **Land south of the grid.** The terrain's south edge is land from x = 216 to 2048, so the continent continues south (`south_land`). Its coast curves south-east from the sea in the south-west corner, with a southern coast at about y 1500–1550. Messalia and Haragmir are on land, at least 60 px inland. There are six islands off the south-west coast. Please extend the grid south to cover this, so the map no longer ends on a cut edge.
+4. **Two points in the sea.** Hapton (1198, 481) and the hidden Group Center start (316, 341) sit in the sea. The overlay adds a small land disk (12 px radius) under each. Better fixes would be to move Hapton a little onto the coast (its neighbours are the book's, c5-b46, and its position is ours), and to check the Group Center start against the c29 battle map.
+5. **Rivers and borders on the simple map.** Rivers are computed from `height.png` by priority-flood drainage. Each has a flow threshold and widens with flow, and sources within 4 cells of the sea are dropped. Borders grow out from each country's polygon and cost more to cross where the land is high. They cannot cross the book's border river (c30-b73). Thaldur and Telten fall in the Arctic. If you'd rather these came from the generator, the method is in `SimpleMap v2.dc.html` and the scripts noted in this prompt.
+
+Afterwards, please send back the new region layers (biome, height, rivers) plus any test that fails, and I'll restyle from those.
