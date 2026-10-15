@@ -72,6 +72,20 @@ def main() -> None:
     log(f"watching {inbox} -> {dest}")
     while True:
         now = time.time()
+        # Recordings saved straight into --dir as "Beat-2.m4a" or "beat-2 2.m4a" get the name the pipeline reads.
+        for q in sorted(dest.iterdir()):
+            m = NAME.match(q.name)
+            if q.is_file() and m and q.name != f"beat-{int(m[1])}.{m[2].lower()}":
+                target = dest / f"beat-{int(m[1])}.{m[2].lower()}"
+                if target.exists() and not target.samefile(q):
+                    if q.name not in asked:
+                        log(f"{q.name}: not renamed, {target.name} already exists")
+                        asked.add(q.name)
+                    continue
+                tmp = q.with_name(f".renaming-{q.name}")  # two steps: the Mac's disk ignores case, so Beat-1 and beat-1 are one name
+                q.rename(tmp)
+                tmp.rename(target)
+                log(f"renamed {q.name} -> {target.name}")
         for p in sorted(inbox.iterdir()) if inbox.exists() else []:
             if p.name.startswith(".") and p.name.endswith(".icloud"):
                 if p.name not in asked:

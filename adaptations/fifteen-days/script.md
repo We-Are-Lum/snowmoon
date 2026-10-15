@@ -2,7 +2,8 @@
 
 > **Structure drafted by the coding agent (Claude, a closed model). Not approved.**
 > Words: **draft 1, the owner's edit** (FID 6786, 2026-10-14, from the owner's Google Doc copy of
-> 15:06). Every spoken line is either the book's, verbatim and tagged with its block, or the
+> 15:06), **as performed** (2026-10-15: the owner rewrote lines while recording and asked for the
+> script to match the performance; those lines are tagged `by FID 6786 on 2026-10-15`). Every spoken line is either the book's, verbatim and tagged with its block, or the
 > owner's, tagged `by FID 6786 on 2026-10-14`; a line the owner reworked from the book is the
 > owner's, noted *(after c…)*. Directions in square brackets are picture notes, not spoken: the
 > owner's unless marked *(book, …)*, *(drafted)* (the agent's suggestion, for the owner to keep,
@@ -19,10 +20,10 @@ dialogue, ambience and Foley. **No narrator:** picture and dialogue carry the pi
 2026-10-14). **Voices:** Zei, Deluin, Bai and the robot waiter; the characters' voices are designed
 voice sheets (`voices/`), converted from the owner's performances.
 **Point of view:** outside all three; the camera, with one on-screen line in beat 6.
-**Length:** 7 beats (the draft's opener and sections 1 to 6 are beats 1 to 7). Spoken: 507 words of
-dialogue, 441 the owner's and 66 the book's (beat 3, the café, is 176); no narration. One on-screen
-line of 15 words (beat 6). Roughly three and a half minutes of speech at an even pace, about four
-with the silent beats; measured from the audio once it's recorded.
+**Length:** 7 beats (the draft's opener and sections 1 to 6 are beats 1 to 7). Spoken, as performed: 549 words
+of dialogue, 508 the owner's and 41 the book's (beat 3, the café, is 170); no narration. One
+on-screen line of 15 words (beat 6). The chosen takes run 3 min 57 s with their pauses (2026-10-15),
+so about four and a half minutes with the silent shots.
 **Style:** to be picked from the style test.
 
 **What is invented** (brief §2):
@@ -68,12 +69,12 @@ with the silent beats; measured from the audio once it's recorded.
   - `by FID 6786 on 2026-10-14` Zei: You'd think after making it this far, they'd stop underestimating the foreigner.
   - `by FID 6786 on 2026-10-14` Bai: It wouldn't be so annoying if he wasn't so damned pretty.
   *[Zei gives her a look, eyebrow raised.]*
-  - `by FID 6786 on 2026-10-14` Bai: Way too fake for me.
+  - `by FID 6786 on 2026-10-15` Bai: Nah, way too fake for me.
   *[Bai spits something into the nearby trash can.]*
   - `by FID 6786 on 2026-10-14` Zei: Such patience...
-  - `by FID 6786 on 2026-10-14` Bai: A total wimp, just like you. But it gets you guys the W.
+  - `by FID 6786 on 2026-10-15` Bai: Total wimp, just like you. But it gets you guys the W.
   *[Bai finally gives the board a serious look. Studying it]*
-  - `by FID 6786 on 2026-10-14` Bai: That other loser is toast. He should already throw in the towel, but doesn't even know it yet.
+  - `by FID 6786 on 2026-10-15` Bai: That other loser's toast. He should have already thrown in the towel, but doesn't even know it yet.
 
 ## Beat 2 · The corridor
 
@@ -99,19 +100,19 @@ with the silent beats; measured from the audio once it's recorded.
 - **dialogue:**
   *[Deluin comes out. Zei and Bai are there.] (drafted)*
   - `by FID 6786 on 2026-10-14` Zei: Good job out there.
-  - `by FID 6786 on 2026-10-14` Deluin: Thanks! The walls held out. I haven't yet watched your replay, but will be sure to tonight.
-  - `by FID 6786 on 2026-10-14` Zei: Please ignore the ugly style. I also won by defense though... For most of the game it just looks like I'm running scared.
+  - `by FID 6786 on 2026-10-15` Deluin: Thanks. Yeah, the walls held out. Haven't yet watched your replay, but will be sure to tonight.
+  - `by FID 6786 on 2026-10-15` Zei: Yeah, please ignore the ugly style. I also won by defense though, but for most of the game it just looks like I'm running scared.
   - `by FID 6786 on 2026-10-14` Deluin: Patience often does, until you win. Hey, do you want to get tea later? I'll be at the courtyard in about a longhour.
-  - `by FID 6786 on 2026-10-14` Zei: Sure, that works well for me!
-  - `by FID 6786 on 2026-10-14` Deluin: Bai, you're welcome too.
+  - `by FID 6786 on 2026-10-15` Zei: Sure, yeah, that works well for me!
+  - `by FID 6786 on 2026-10-15` Deluin: Great, I'll see you then. Bai, you're welcome to come too.
   *[She shrugs, with a disgruntled look on her face. Deluin goes. Bai gives Zei a hard look.]*
-  - `by FID 6786 on 2026-10-14` Zei: You gonna come? Should be fun!
+  - `by FID 6786 on 2026-10-15` Zei: See you. So are you gonna come? Should be fun! *("See you." to Deluin as he goes; the rest to Bai)*
   - `by FID 6786 on 2026-10-14` Bai: He's your competition, remember?
   - `by FID 6786 on 2026-10-14` Zei: Take it easy, you're my competition too.
   - `by FID 6786 on 2026-10-14` Bai: 'Was.' And you know I hate you, and know all your tricks anyway.
   *[She says it with a smile, and continues.]*
-  - `by FID 6786 on 2026-10-14` Bai: But this guy, we don't know anything about this guy.
-  - `by FID 6786 on 2026-10-14` Zei: So let's get to know him, it will be fun! Maybe he won't be so fake after all.
+  - `by FID 6786 on 2026-10-15` Bai: Deluin? We don't know anything about this guy.
+  - `by FID 6786 on 2026-10-15` Zei: So let's get to know him, it'll be fun! Maybe he won't be so fake after all.
 
 ## Beat 3 · The café
 
@@ -137,24 +138,25 @@ with the silent beats; measured from the audio once it's recorded.
 - **narration:** *(empty until a person writes it)*
 - **dialogue:**
   *[The courtyard, early evening. Zei runs across it, and pulls up short. Bai is already at the table with Deluin, and they're laughing; they were just making a joke about Zei that even got Bai laughing.]*
-  - `by FID 6786 on 2026-10-14` Deluin: Zei, we were just talking about you!
+  *[He waves them over.] (the owner's note while recording, 2026-10-15)*
+  - `by FID 6786 on 2026-10-15` Deluin: Hey, over here! We were just talking about you!
   *[Zei sits.] (drafted)*
   *[A robot slides up to the table.] (book, c14-b105)*
   - `book c14-b106` Robot: "jie mo kai tu jie hei ja ma?"
   *[A menu appears: the book's own glyph picture.] (book, c14-b107–c14-b108)*
   - `book c14-b109` Zei: "Whoa"
   - `book c14-b110` Deluin: "What is it?"
-  - `book c14-b111` Zei: "I think these are some of the new symbols they're A/B testing for Dzegoban version nine."
+  - `by FID 6786 on 2026-10-15` Zei: "I think these are some of the new symbols that they're A/B testing for the Dzegoban version nine." *(after c14-b111)*
   *[He realises he's talking to a foreigner.] (book, c14-b112)*
-  - `book c14-b113` Zei: "Have you heard of Dzegoban version nine?"
+  - `by FID 6786 on 2026-10-15` Zei: "Have you heard about version nine?" *(after c14-b113)*
   - `book c14-b114` Deluin: "… I had a couple people mention it to me. Making the language visual. …"
   - `by FID 6786 on 2026-10-14` Zei: "Hmmm. More straight horizontal lines than usual, and the three diagonal lines on the right. probably pronunciation markers?" *(after c14-b115; looking over the menu after "Hmmm")*
-  - `by FID 6786 on 2026-10-14` Deluin: "Top right is 'kai' right? ... the extra vertical vein on the left is unusual. Although ... I'm not sure if I would make the images so detailed, when they often have different meanings depending on context." *(after c14-b116)*
+  - `by FID 6786 on 2026-10-15` Deluin: "Top right is 'kai', right? The extra vertical vein on the left is unusual, although I'm not sure I would make the images so detailed when they have such different meanings, depending on the context." *(after c14-b116)*
   - `book c14-b117` Zei: "Wait, you know Dzegoban?"
-  - `by FID 6786 on 2026-10-14` Deluin: "Zei, the whole point of Dzegoban is that you can learn it in less than a month." *(after c14-b118; in a lecturing tone)*
+  - `by FID 6786 on 2026-10-15` Deluin: "The whole point of Dzegoban is that you can learn it in less than a month." *(after c14-b118; in a lecturing tone)*
   - `book c14-b119` Zei: "I'm impressed, you're almost a local already."
   *[Bai whips round with a half-baked excuse.]*
-  - `by FID 6786 on 2026-10-14` Bai: Actually, I don't think I want anything, plus I've got a lot to catch up on. Zei, when you're done, come get me, I want to go over some strategies I've been thinking about with you.
+  - `by FID 6786 on 2026-10-15` Bai: Actually, I don't think I want anything. Plus, I've got a lot to catch up on. Zei, when you're done, come get me. I want to go over some things with you.
   *[She spins round to the adjoining table, puts on headphones, and whips out her handheld.]*
 
 ## Beat 4 · The question and the sugar wall
@@ -176,9 +178,9 @@ with the silent beats; measured from the audio once it's recorded.
 - **narration:** *(empty until a person writes it)*
 - **dialogue:**
   *[Tea poured. Deluin starts stacking sugar cubes.]*
-  - `by FID 6786 on 2026-10-14` Deluin: Why does Dzego like Minpentai so much?
-  - `by FID 6786 on 2026-10-14` Zei: Kids get into it pretty young here, with the whole family involved. One of our quirks I guess, just like the language. Does Redshire have any quirks?
-  - `by FID 6786 on 2026-10-14` Deluin: Sure.... we care a lot about natural beauty, and have maybe an unnatural obsession with old styles. Less cameras, more castles.
+  - `by FID 6786 on 2026-10-15` Deluin: So while visiting, I've been wondering about the differences between home and here. And I've been wondering, why does Dzego like Minpentai so much?
+  - `by FID 6786 on 2026-10-15` Zei: Kids get into it pretty young here, I guess. Whole family involved, it's a big thing. One of our quirks, just like the language. Does Redshire have any quirks?
+  - `by FID 6786 on 2026-10-15` Deluin: Sure. Yeah, we have our fair share. We care a lot about natural beauty, and maybe have an unnatural obsession with old styles. Less cameras, more castles, that kind of thing.
   *[Deluin's stack has turned into a little wall of sugar cubes.]*
   - `by FID 6786 on 2026-10-14` Zei: I see where you got your love of walls then.
   *[Deluin looks down at the sugar cubes, and smiles.]*
@@ -207,14 +209,14 @@ with the silent beats; measured from the audio once it's recorded.
 - **lettering:** none
 - **narration:** *(empty until a person writes it)*
 - **dialogue:**
-  - `by FID 6786 on 2026-10-14` Deluin: Why don't you come visit. My parents just told me I need to come back for an early birthday celebration for them. You can come with me!
-  - `by FID 6786 on 2026-10-14` Zei: Oh... budget will be pretty tight for... about fifteen days. *(looks at his watch before "about")*
+  - `by FID 6786 on 2026-10-15` Deluin: Why don't you come visit? My parents just told me I need to come back for an early birthday celebration for them, so you can come with me!
+  - `by FID 6786 on 2026-10-15` Zei: Well, budget will be pretty tight for... about fifteen days. *(looks at his watch before "about")*
   *[He says it with a smile.]*
-  - `by FID 6786 on 2026-10-14` Deluin: Oh yeah, then I can use some of my winnings to pay for your trip.
+  - `by FID 6786 on 2026-10-15` Deluin: Oh yeah, then I can use some of my winnings to pay for your trip, right?
   *[Bai glances back at them.]*
-  - `by FID 6786 on 2026-10-14` Deluin: You can come too Bai! *(loudly)*
+  - `by FID 6786 on 2026-10-15` Deluin: You're welcome to come too, Bai! *(loudly)*
   *[Bai makes a big show of pulling off one side of her headphones. The loud, angry band blares.]*
-  - `by FID 6786 on 2026-10-14` Bai: What?!! Dreadnaught!! It's good! *(points at the headphones before "It's good!")*
+  - `by FID 6786 on 2026-10-15` Bai: What?!! Dreadnaught!! It's good! You should check it out. *(points at the headphones before "It's good!")*
 
 ## Beat 6 · The gate
 

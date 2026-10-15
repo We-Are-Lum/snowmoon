@@ -328,6 +328,74 @@
       }
     },
     {
+      "id": "ace-step-1.5",
+      "kind": "music",
+      "repo": "ACE-Step/Ace-Step1.5",
+      "revision": "19671f406d603126926c1b7e2adc169acbcade22",
+      "card_revision": "19671f406d603126926c1b7e2adc169acbcade22",
+      "license_line": "license: mit",
+      "license_checked": {
+        "by": "coding agent",
+        "on": "2026-10-15",
+        "source": "https://huggingface.co/ACE-Step/Ace-Step1.5/blob/19671f406d603126926c1b7e2adc169acbcade22/README.md"
+      },
+      "notes": "Approved by the owner on 2026-10-15 for the Dreadnaught clip (instrumental, a wordless scream). The card: 'You can strictly use the generated music for commercial purposes', trained on 'Professionally licensed music tracks'. Uses the 2B turbo DiT (acestep-v15-turbo), its VAE, and two component models with their own lines: Qwen/Qwen3-Embedding-0.6B (text encoder, 'license: apache-2.0', revision as bundled in this repo; upstream 97b0c614) and ACE-Step/acestep-5Hz-lm-0.6B (the planning language model, 'license: mit', revision 148d8ea0225bdab342ee1ae3a354275ccd60ca80). The 1.7B language model in the repo is not used. Runs from the ACE-Step-1.5 code (MIT, github.com/ace-step/ACE-Step-1.5 at ca1e85fe), kept outside the repository. Prompts describe qualities; no artist or band is named.",
+      "runs_on": "local",
+      "hosted": null,
+      "model_record": "repo, revision, components and the weights' sha256",
+      "cost_usd_per_unit": 0,
+      "license": "MIT",
+      "open_weights": true,
+      "weights": "https://huggingface.co/ACE-Step/Ace-Step1.5/tree/19671f406d603126926c1b7e2adc169acbcade22",
+      "components": [
+        {
+          "repo": "ACE-Step/acestep-5Hz-lm-0.6B",
+          "revision": "148d8ea0225bdab342ee1ae3a354275ccd60ca80",
+          "license_line": "license: mit",
+          "open_weights": true
+        },
+        {
+          "repo": "Qwen/Qwen3-Embedding-0.6B",
+          "revision": "bundled in ACE-Step/Ace-Step1.5 at 19671f40 (upstream 97b0c614be4d77ee51c0cef4e5f07c00f9eb65b3)",
+          "license_line": "license: apache-2.0",
+          "open_weights": true
+        }
+      ],
+      "local": {
+        "package": "ACE-Step-1.5 code at ca1e85fe9430179831e6bc6be790c332190a3866 (MIT), in ~/acestep-1.5 with its own uv environment",
+        "weights": {},
+        "weights_dir": "~/acestep-1.5/checkpoints (outside the repository)"
+      }
+    },
+    {
+      "id": "ace-step-v1-fal",
+      "kind": "music",
+      "repo": "ACE-Step/ACE-Step-v1-3.5B",
+      "revision": null,
+      "card_revision": "82cd0d7b6322bd28cd4e830fe675ddb6180ce36c",
+      "license_line": "license: apache-2.0",
+      "license_checked": {
+        "by": "coding agent",
+        "on": "2026-10-15",
+        "source": "https://huggingface.co/ACE-Step/ACE-Step-v1-3.5B"
+      },
+      "notes": "The owner's fallback for the Dreadnaught clip (2026-10-15: 'If it doesn't fit in 8 GB, use ACE-Step v1 on fal (under $1)'). Used because the Mac's connection fetched ACE-Step 1.5's weights at about 75 KB/s, so the local run couldn't happen today. Owner cap $1.",
+      "runs_on": "hosted",
+      "hosted": {
+        "host": "fal.ai",
+        "endpoints": {
+          "fal-ai/ace-step": 0.0002
+        },
+        "price_unit": "USD per second of audio",
+        "price_seen": "2026-10-15 (research note; fal's page lists no price, so each clip is costed at a $0.01 floor)"
+      },
+      "model_record": "endpoint, date and request id (the host does not expose a weights revision)",
+      "cost_usd_per_unit": null,
+      "license": "Apache-2.0",
+      "open_weights": true,
+      "weights": "https://huggingface.co/ACE-Step/ACE-Step-v1-3.5B"
+    },
+    {
       "id": "moss-ttsd-v1",
       "kind": "speech",
       "repo": "OpenMOSS-Team/MOSS-TTSD-v1.0",
@@ -524,6 +592,31 @@
     {
       "repo": "Qwen/Qwen-Image-2.1",
       "reason": "Qwen Research License: \"for non-commercial purposes only\" (https://huggingface.co/Qwen/Qwen-Image-2.1/raw/main/LICENSE, checked 2026-10-05)"
+    },
+    {
+      "repo": "facebook/musicgen-large",
+      "reason": "license: cc-by-nc-4.0 (non-commercial weights; all MusicGen sizes)",
+      "checked": "2026-10-15"
+    },
+    {
+      "repo": "hkchengrex/MMAudio",
+      "reason": "license: cc-by-nc-4.0 for the weights (only the code is MIT), though fal lists its endpoint as commercial use",
+      "checked": "2026-10-15"
+    },
+    {
+      "repo": "declare-lab/TangoFlux",
+      "reason": "the README says 'for non-commercial research use only'",
+      "checked": "2026-10-15"
+    },
+    {
+      "repo": "cvssp/audioldm2",
+      "reason": "license: cc-by-nc-sa-4.0",
+      "checked": "2026-10-15"
+    },
+    {
+      "repo": "HKUSTAudio/AudioX",
+      "reason": "license: cc-by-nc-4.0",
+      "checked": "2026-10-15"
     }
   ],
   "drafting": [

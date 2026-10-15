@@ -53,6 +53,10 @@ The allowlist was not changed; items 1 and 2 need a reviewed correction.
 
 ## In progress
 
+- 2026-10-15: **The takes.** All six beats recorded. The automatic slate reader failed (Whisper hears "line twenty-two" as "9/22"), so the coding agent matched takes to lines from the full ordered transcript (`scripts/cut-takes.py`, `~/snowmoon-takes/full/takes/assign.json`). All 41 voiced lines and four laughs are converted; listen in `~/snowmoon-takes/full/listen/` (flagged first). The robot isn't converted (no voice sheet).
+- 2026-10-15: **Script as performed.** The owner approved the 25 wording changes; 24 applied (tagged `by FID 6786 on 2026-10-15`; book lines b111 and b113 reworded become the owner's, "after"). Pending: "Hope to see you there! Bai." (line 12), "Ooh, hmm" or "Whoa" (line 21), and the four unclear words.
+- 2026-10-15: **Dreadnaught**: four 12-second versions on ACE-Step v1 (fal, $0.04; the owner's fallback, because the Mac fetched ACE-Step 1.5's weights at about 75 KB/s). **Sound effects**: `sound-effects.md`, 33 effects, 66 CC0 Freesound candidates, `scripts/add-sound.py` records each sound's source URL, licence and author. Stability not used (owner).
+- 2026-10-15: **Shot list drafted** (`shots.json`, labelled): 41 shots, 37 to draw, 4 book inserts; motion candidates s01, s13, s25, s32. `scripts/make-shots.py <style>` draws them the moment a style is picked (about 7 minutes a frame locally, so roughly 4 hours for all 37).
 - Overnight 14 to 15 October (owner away; the Mac kept awake with caffeinate until about 10:20 on the 15th):
   - Recording from the phone: the recording sheet is copied to iCloud Drive/snowmoon-takes/. `scripts/watch-takes.py` watches iCloud Drive/snowmoon-takes/full/. Each beat-<n> file that has finished syncing is copied to ~/snowmoon-takes/full/. Once nothing new has arrived for 30 minutes, the files are split and converted. Each iCloud copy is deleted after a run that finished. A re-recorded beat replaces the older file, which is kept in full/replaced/. Log: ~/snowmoon-takes/full/takes/watch.log.
   - Style test round two: the style page is checked for stars at :07 and :37 past each hour. When there are one to three favourites, `scripts/style-round-two.py` runs:
@@ -66,7 +70,7 @@ The allowlist was not changed; items 1 and 2 need a reviewed correction.
 
 ## Waiting for the owner
 
-1. Round two of the style test: the owner's stars on the style page (starts on its own once there are one to three; see In progress).
+1. Round two of the style test: the owner's top three styles, named in chat (2026-10-15: polling the page stopped at the owner's word; round two runs as soon as they're named).
 2. Fifteen Days: the questions still open are in brief.md section 4 (the hurt, the title, length about 4 minutes, where Dreadnaught is set up, Bai's interrogation, the robot's voice and who performs Zei and the robot, Deluin's solo chant).
 3. The end-card wording, with the script.
 4. The wallet privacy draft reread, then 0012, then the site-launch-caps merge when the owner says.
@@ -74,3 +78,4 @@ The allowlist was not changed; items 1 and 2 need a reviewed correction.
 6. Question: round two's motion tests use the cheapest model on the allowlist, LongCat distilled at 480p ($0.025 a clip). In the test clip, Deluin bends down and drops his device instead of tapping it. Should the winning style also get a clip on Kandinsky 5 at 512P ($0.20 a clip) or Wan 2.2 ($0.40 for 5 s) for comparison? Not started.
 7. Question: klein, with the face references, still draws lettering-like marks on shop signs despite "no text" in the prompt. Should signs be left blank by a clean-up pass (the letter-images step), or should the prompt name blank signs? Not started.
 8. Question: when you've picked the style, will you write its description in your words, or should I draft one from the prompt for your edit? Published style text is yours.
+9. Question (sound, 2026-10-15): for the Dreadnaught clip, ACE-Step 1.5 (MIT, trained on licensed music, runs locally through MLX; about 5 GB of weights)? For the sound effects, Stable Audio 3 small-sfx: this one needs your signup, because its Community Licence asks commercial users to register with Stability AI and to credit "Powered by Stability AI". MusicGen, MMAudio, TangoFlux, AudioLDM2 and AudioX are out (their weights are non-commercial). Not started.
