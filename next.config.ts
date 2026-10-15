@@ -39,6 +39,8 @@ const nextConfig: NextConfig = {
       './content/snowmoon/recipes/**',
       // The style a reader may add to an image prompt (src/lib/images/rules.ts).
       './content/snowmoon/designs/styles/**',
+      // A glossary word's share card (src/app/api/glossary-card) reads the glossary on request.
+      './content/snowmoon/glossary.json',
       './config/**',
       './adaptations/**',
       './node_modules/@fontsource/crimson-pro/files/crimson-pro-latin-*-normal.woff',
