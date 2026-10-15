@@ -11,8 +11,9 @@ describes it:
   {"kind": "foley", "sound": "click" | "whoosh" | "chime" | "thud"}
 Writes scenes-out/<seed>/stems/<cue id>.wav (gitignored), mono, 24 kHz, 16-bit.
 
-  /Users/nathan/snowmoon-summary/.venv/bin/python scripts/scene-placeholders.py dog-dawn
-  (any environment with kokoro, numpy and soundfile)
+  python scripts/scene-placeholders.py dog-dawn            voices read by Kokoro (needs kokoro, torch)
+  python scripts/scene-placeholders.py dog-dawn --quick    voices as soft tones, one per word (numpy and
+                                                           soundfile only; no model, no download)
 """
 
 import importlib.util
@@ -88,15 +89,31 @@ def foley(sound: str) -> np.ndarray:
     return fade(x / (np.abs(x).max() + 1e-9) * 0.8, 0.005)
 
 
+def tone_voice(text: str) -> np.ndarray:
+    """--quick: a stand-in for a spoken line, one soft tone per word at about 2.6 words a second."""
+    out = []
+    for i, _ in enumerate(text.split()):
+        n = int(0.3 * SR)
+        t = np.arange(n) / SR
+        f = 180 + 40 * ((i * 7) % 5)
+        out += [np.sin(2 * np.pi * f * t) * np.sin(np.pi * t / t[-1]) * 0.4, np.zeros(int(0.085 * SR))]
+    return fade(np.concatenate(out).astype(np.float32))
+
+
 def main() -> None:
     seed = sys.argv[1]
+    quick = "--quick" in sys.argv[2:]
     timeline = json.loads((ROOT / "adaptations" / seed / "timeline.json").read_text())
     out = ROOT / "scenes-out" / seed / "stems"
     out.mkdir(parents=True, exist_ok=True)
     cues = [c for c in timeline["cues"] if c.get("placeholder")]
 
     voices = [c for c in cues if c["placeholder"]["kind"] == "voice"]
-    if voices:
+    if voices and quick:
+        for c in voices:
+            sf.write(out / f"{c['id']}.wav", tone_voice(c["placeholder"]["text"]), SR, subtype="PCM_16")
+            print(f"voice {c['id']} (tones): {c['placeholder']['text']}")
+    elif voices:
         N = narrate_module()
         from huggingface_hub import hf_hub_download
         from kokoro import KModel, KPipeline

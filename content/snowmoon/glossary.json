@@ -9,9 +9,9 @@
  },
  "sources": {
   "pronunciation_sha256": "81a5c2fe59fda14824d8465b630ca3bf07b205c08518250999699b51eaff317d",
-  "review_sha256": "542b04576db995f3128ee4379f99d1854f6faf6cd072aa8e07985e84db873de6",
+  "review_sha256": "f48465fffee279bb53b025abdf59ca2c4d2992890065d4b3efc4ad17e4575efb",
   "text_blocks_sha256": "14cce96f6da8a69258a2e77ee5f7540d7dbeb7ab8895b4ef377415b9dfbe2d76",
-  "entities_sha256": "39c8e44ccbf42a7971ccf12b0f628113b47d913ec1585294fee5a1bb210e1413",
+  "entities_sha256": "b2a410905b332901fec15779a58b8ab35cd7011ee5861b14dd099f8149659aa3",
   "narration_sha256": "4152445eac7a5423d4f3f09034a046f5045ee9617a8becf13de6d8641e7c880c",
   "narration_voice": "kokoro-af_heart"
  },
