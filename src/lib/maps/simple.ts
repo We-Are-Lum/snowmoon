@@ -1,11 +1,11 @@
 /**
  * The simple map's logic (src/components/simple-map.tsx; Claude Design's SimpleMap v2), kept apart from
- * React so scripts/test-maps-simple.ts can run it: the views, the fit, the spoiler rule, the label layout
- * and the "Suggest a change" link.
+ * React so scripts/test-maps-simple.ts can run it: the views, the fit, the label layout and the
+ * "Suggest a change" link.
  */
 export type Pt = [number, number];
-export type SimplePlace = { id: string; name: string; kind: 'city' | 'area'; prov: 'book' | 'placed'; at: Pt; note: string; first: number; tier: number };
-export type SimpleEdge = { id: string; name: string; text: string; side: 'top' | 'right'; at: number; first: number; prov: 'placed'; note: string };
+export type SimplePlace = { id: string; name: string; kind: 'city' | 'area'; prov: 'book' | 'placed'; at: Pt; note: string; tier: number };
+export type SimpleEdge = { id: string; name: string; text: string; side: 'top' | 'right'; at: number; prov: 'placed'; note: string };
 export type SimpleView = { grid: { w: number; h: number; km_per_px: number }; image: string; places: SimplePlace[]; edges: SimpleEdge[] };
 
 export type ViewKey = 'all' | 'west' | 'uc';
@@ -33,16 +33,8 @@ export function fit(box: [number, number, number, number], w: number, h: number,
   return { s, ox, oy, P: ([x, y]: Pt): Pt => [ox + x * s, oy + y * s] };
 }
 
-/**
- * The spoiler rule the site already uses (the glossary and the terrain map): the furthest chapter opened
- * on this device. A place whose first world guide line comes later shows as "?" until the reader asks.
- */
-export const status = (first: number, limit: number, revealed: boolean): 'shown' | 'hidden' | 'revealed' => (first <= limit ? 'shown' : revealed ? 'revealed' : 'hidden');
-export const shownName = (p: { name: string; first: number }, limit: number, revealed: boolean) => (status(p.first, limit, revealed) === 'hidden' ? '?' : p.name);
-export const edgeText = (e: SimpleEdge, limit: number, revealed: boolean) => {
-  const arrow = e.side === 'top' ? '↑' : '→';
-  return status(e.first, limit, revealed) === 'hidden' ? `${arrow} ${e.side === 'top' ? 'Far north: a place from a later chapter' : 'Far away: a place from a later chapter'}` : `${arrow} ${e.text}`;
-};
+/** An edge label: an arrow pointing off the map, then the place. */
+export const edgeText = (e: SimpleEdge) => `${e.side === 'top' ? '↑' : '→'} ${e.text}`;
 
 /** A new GitHub issue with the place filled in. Nothing is sent from the site; GitHub opens. */
 export function suggestUrl(repo: string, p: { id: string; name: string }) {

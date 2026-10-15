@@ -6,13 +6,15 @@
 .sm-head { display: flex; flex-direction: column; gap: 8px; }
 .sm-head .label { margin: 0; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); }
 .sm-title { margin: 0; font-size: 34px; line-height: 1.1; font-weight: 400; }
+.sm-title-row { display: flex; flex-wrap: wrap; gap: 8px 16px; align-items: center; }
+.sm-info { font: inherit; font-family: var(--label); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; min-height: 32px; padding: 0 10px; border: 1px solid var(--ink); background: var(--paper); color: var(--ink); cursor: pointer; display: inline-flex; gap: 6px; align-items: center; }
+.sm-info[aria-expanded='true'] { background: var(--ink); color: var(--paper); }
+.sm-about { border: 1px dashed var(--ink); padding: 12px 14px; display: flex; flex-direction: column; gap: 8px; max-width: 760px; font-size: 17px; line-height: 1.5; }
+.sm-about p { margin: 0; }
+.sm-about-links { display: flex; flex-wrap: wrap; gap: 6px 18px; font-family: var(--label); font-size: 12px; }
+.sm-about-links a, .sm-about .sm-link { color: var(--link); }
+.sm-about .sm-link { font: inherit; background: none; border: 0; padding: 0; cursor: pointer; text-decoration: underline; }
 .sm-intro { margin: 0; font-size: 18px; line-height: 1.5; max-width: 760px; }
-.sm-key { margin: 0; padding: 0; list-style: none; display: flex; flex-wrap: wrap; gap: 6px 22px; font-family: var(--label); font-size: 12px; }
-.sm-key li { display: flex; gap: 7px; align-items: center; }
-.sm-key li.is-ours { font-style: italic; }
-.sm-k-book { width: 10px; height: 10px; background: var(--ink); }
-.sm-k-ours { width: 10px; height: 10px; border: 2px solid var(--ink); border-radius: 50%; box-sizing: border-box; }
-.sm-k-border { width: 22px; border-top: 2px dashed var(--ink); }
 
 .sm-tabs { display: flex; flex-wrap: wrap; }
 .sm-tab { font-family: var(--label); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; min-height: 32px; padding: 0 10px; margin-left: -1px; border: 1px solid var(--ink); background: var(--paper); color: var(--ink); cursor: pointer; }
@@ -26,15 +28,13 @@
 .sm-map button { font: inherit; color: inherit; background: none; border: 0; padding: 0; margin: 0; cursor: pointer; }
 .sm-area { position: absolute; transform: translate(-50%, -50%); font-family: var(--label); font-weight: 500; letter-spacing: 0.14em; color: #4A463F; white-space: nowrap; text-shadow: 0 0 3px #F4F2ED, 0 0 3px #F4F2ED, 0 0 6px #F4F2ED; }
 .sm-map .sm-area.is-big { letter-spacing: 0.22em; color: #3E3B35; }
-.sm-map .sm-area.is-ours { font-style: italic; }
 .sm-map .sm-dot { position: absolute; transform: translate(-50%, -50%); box-sizing: border-box; box-shadow: 0 0 0 1.5px #F4F2ED; }
-.sm-map .sm-dot.is-book { background: #1D1D1B; }
-.sm-map .sm-dot.is-ours { background: #F4F2ED; border: 2px solid #1D1D1B; border-radius: 50%; }
-.sm-map .sm-dot.is-islands { border-radius: 50%; box-shadow: none; }
+.sm-map .sm-dot { background: #F4F2ED; border: 2px solid #1D1D1B; border-radius: 50%; }
 .sm-map .sm-dot.is-on { box-shadow: 0 0 0 3px #1D1D1B; }
-.sm-map .sm-dot.is-later { background: #F4F2ED; border: 2px dotted #1D1D1B; border-radius: 50%; }
+/* Redshire's islands: a tap area over the drawn islands, invisible until chosen */
+.sm-map .sm-dot.is-islands { background: transparent; border: 0; box-shadow: none; }
+.sm-map .sm-dot.is-islands.is-on { border: 2px dashed #1D1D1B; }
 .sm-map .sm-label { position: absolute; font-family: var(--label); font-size: 12px; line-height: 1.2; padding: 0 2px; white-space: nowrap; text-shadow: 0 0 3px #F4F2ED, 0 0 3px #F4F2ED, 0 0 5px #F4F2ED; }
-.sm-map .sm-label.is-ours { font-style: italic; }
 .sm-map .sm-label.is-on { background: #1D1D1B; color: #F4F2ED; text-shadow: none; }
 .sm-left { transform: translate(0, -50%); }
 .sm-right { transform: translate(-100%, -50%); }
@@ -49,18 +49,13 @@
 .sm-map .sm-ai { position: absolute; left: 8px; bottom: 8px; background: rgba(244, 242, 237, 0.95); border: 1px solid #1D1D1B; border-radius: 2px; padding: 3px 6px; font-family: var(--label); font-size: 12px; }
 
 .sm-sheet { border-top: 1px solid #1D1D1B; padding: 10px 12px; min-height: 58px; display: flex; flex-direction: column; gap: 6px; font-family: var(--label); font-size: 12px; line-height: 1.5; }
-.sm-place, .sm-cover { display: flex; flex-direction: column; gap: 6px; }
+.sm-place { display: flex; flex-direction: column; gap: 6px; }
 .sm-row { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
 .sm-name { font-family: var(--reading); font-size: 20px; }
-.sm-name.is-ours { font-style: italic; }
-.sm-tag { font-size: 12px; text-transform: uppercase; letter-spacing: 0.04em; border: 1px dashed #1D1D1B; padding: 1px 6px; }
-.sm-tag.is-book { border-style: solid; background: #1D1D1B; color: #F4F2ED; }
 .sm-sheet button { font: inherit; color: inherit; background: none; border: 0; padding: 0; cursor: pointer; }
 .sm-sheet .sm-x { margin-left: auto; font-size: 14px; color: #6A675F; min-width: 24px; min-height: 24px; }
 .sm-note { margin: 0; color: #2A2A26; }
 .sm-sheet .sm-link, .sm-suggest { color: #2E5A3A; text-decoration: underline; text-underline-offset: 2px; align-self: flex-start; }
-.sm-sheet .sm-btn { border: 1px solid #1D1D1B; padding: 6px 12px; min-height: 32px; text-transform: uppercase; letter-spacing: 0.04em; }
-.sm-sheet .sm-btn.is-ink { background: #1D1D1B; color: #F4F2ED; }
 
 @media (max-width: 699px) {
   .sm { padding: 16px 16px 32px; }

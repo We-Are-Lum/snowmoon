@@ -12,16 +12,15 @@
  * - The Redshire gulf and its islands: the islands are land, cut off from the mainland, inside the gulf,
  *   135–225° from Redshire, with sea all round them; there is sea between Redshire and Arturia; the gulf's
  *   water reaches the open sea; Redshire and Arturia are on land.
- * - Late-book places follow the site's spoiler rule (the furthest chapter opened): each place's first
- *   chapter is its earliest world guide line; past the reader's chapter its name is "?" and Glasscrown's
- *   and Dzego's edge labels don't name them.
+ * - Nothing is hidden by chapter (owner, 2026-10-15); the ⓘ "About this map" says the map is invented, not
+ *   by the author, and subject to change, names the book's two figures, and links the recipe.
  * - Only the terrain grid is drawn; "Suggest a change" opens a new GitHub issue with the place filled in.
  */
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import sharp from 'sharp';
 import { REPO_URL } from '../src/lib/config';
-import { edgeText, shownName, status, suggestUrl, type SimpleView } from '../src/lib/maps/simple';
+import { edgeText, suggestUrl, type SimpleView } from '../src/lib/maps/simple';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const read = (f: string) => readFileSync(path.join(ROOT, f), 'utf8');
@@ -142,22 +141,17 @@ const gulfSea = seg.find(([x, y]) => !land(x, y))!;
 const flood = gulfSea ? seaFrom(gulfSea) : { open: false, n: 0 };
 check('the gulf\'s water reaches the open sea (not a lake)', flood.open, `${flood.n} sea px reached`);
 
-// --- Late-book places and the spoiler rule ------------------------------------------------------------
-const wv = JSON.parse(read('content/snowmoon/maps/world-view.json')).places as { id: string; lines: string[] }[];
-const fromCh = new Map((JSON.parse(read('content/snowmoon/world-guide.json')).lines as { id: string; from_chapter: number }[]).map((l) => [l.id, l.from_chapter]));
-const firstOf = (id: string) => { const ls = wv.find((p) => p.id === id)?.lines ?? []; return ls.length ? Math.min(...ls.map((l) => fromCh.get(l) ?? 99)) : 0; };
-const wrongFirst = [...view.places, ...view.edges].filter((p) => p.first !== firstOf(p.id));
-check('every place\'s first chapter is its earliest world guide line', wrongFirst.length === 0, wrongFirst.map((p) => `${p.id} ${p.first}≠${firstOf(p.id)}`).join(', '));
-const late = view.places.filter((p) => p.first > 5);
-check('there are late-book places to hide (Thaldur, Eldil, Telten…)', late.length >= 4, late.map((p) => p.id).join(', '));
-check('at chapter 1, every later place is named "?"', view.places.every((p) => (p.first > 1 ? shownName(p, 1, false) === '?' : shownName(p, 1, false) === p.name)));
-check('a reader past a place\'s chapter sees its name', view.places.every((p) => shownName(p, Math.max(1, p.first), false) === p.name));
-check('"Show anyway" shows it; nothing else does', view.places.every((p) => status(p.first, 1, true) !== 'hidden'));
-const gl = view.edges.find((e) => e.id === 'glasscrown')!, dz = view.edges.find((e) => e.id === 'dzego')!;
-check('Glasscrown\'s edge label keeps its name back before chapter 31', gl.first === 31 && !edgeText(gl, 30, false).includes('Glasscrown') && edgeText(gl, 31, false).includes('Glasscrown'), edgeText(gl, 30, false));
-check('Dzego\'s edge label keeps its name back before chapter 24', dz.first === 24 && !edgeText(dz, 23, false).includes('Dzego') && edgeText(dz, 24, false).includes('Dzego'), edgeText(dz, 23, false));
+// --- Nothing hidden; the map says what it is (owner, 2026-10-15) -----------------------------------------
 const comp2 = read('src/components/simple-map.tsx');
-check('the page names places only through the spoiler rule', /shownName\(p, limit/.test(comp2) && /edgeText\(e, limit/.test(comp2) && /st\(p\) !== 'hidden'/.test(comp2) && /curSt === 'hidden'/.test(comp2) && /openedChapters\(\)/.test(comp2));
+check('nothing is hidden by chapter: the page reads no reading progress and has no "?" placeholder', !/openedChapters|read-to|Show anyway|later chapter/.test(comp2) && !before.view.includes('"first"'));
+check('every place is shown by its own name', /aria-label=\{p\.name\}/.test(comp2) && /name: \(p\) => p\.name/.test(comp2));
+check('Glasscrown and Dzego\'s edge labels name them', edgeText(view.edges.find((e) => e.id === 'glasscrown')!).includes('Glasscrown') && edgeText(view.edges.find((e) => e.id === 'dzego')!).includes('Dzego'));
+check('no book-vs-ours key or tags on the page', !/sm-key|From the book|Placed by us|sm-tag/.test(comp2));
+check('the ⓘ "About this map" says it is invented, not by the author, and subject to change', /About this map/.test(comp2) && /Invented by Snowmoon Party, not by the author\./.test(comp2) && /It will change/.test(comp2));
+check('it names the book\'s two figures (c29-b34, c5-b46) instead of claiming the book has none', /battle map in chapter 29/.test(comp2) && /United Cities connect in chapter 5/.test(comp2));
+const page = read('src/app/maps/page.tsx');
+check('it links the terrain\'s recipe, which exists in the repository', /terrain-v5\/recipe\.json/.test(page) && /data\.links\.recipe/.test(comp2) && Boolean(read('content/snowmoon/maps/terrain-v5/recipe.json')));
+check('the AI label is on the map and opens the same panel', /data\.shortLabel\} ⓘ/.test(comp2) && /toggleAbout/.test(comp2));
 
 // --- Only the grid; the issue link -------------------------------------------------------------------------
 check('the base is cropped to the terrain grid', svg.slice(0, 400).includes(`viewBox="0 0 ${W} ${H}"`));
@@ -173,4 +167,4 @@ if (failures.length) {
   console.error(`SIMPLE MAP TESTS FAILED (${failures.length}, ${passed} passed):\n- ${failures.join('\n- ')}`);
   process.exit(1);
 }
-console.log(`simple map tests passed: ${passed} checks (built files, cities on land, Hapton, hidden stays hidden, the Redshire gulf and islands, spoilers, grid only, the issue link)`);
+console.log(`simple map tests passed: ${passed} checks (built files, cities on land, Hapton, hidden stays hidden, the Redshire gulf and islands, nothing hidden, the About panel, grid only, the issue link)`);
