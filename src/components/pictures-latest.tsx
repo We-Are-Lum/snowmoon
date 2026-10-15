@@ -1,6 +1,7 @@
 import Link from 'next/link';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { Moment, type MomentItem } from './image-feed';
+import { AiTag } from './ai-tag';
 
 /**
  * Pictures' front page (owner, 2026-10-14: "the feed shows updates in all of them"): the newest
@@ -43,8 +44,12 @@ export function PicturesLatest({ items, empty }: { items: LatestItem[]; empty: R
                   <span className="pictures-date">{it.design.date}</span>
                 </p>
                 <p className="pictures-caption pictures-design-meta">
+                  {it.design.thumb && (
+                    <>
+                      <AiTag what={it.design.kind === 'style' ? 'Sample' : 'Views'} />{' '}
+                    </>
+                  )}
                   {it.design.meta}
-                  {it.design.thumb ? ' · Sample: AI-generated · not by the author' : ''}
                 </p>
               </li>
             ),

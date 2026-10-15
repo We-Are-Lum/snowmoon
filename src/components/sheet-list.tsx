@@ -3,6 +3,7 @@ import { byline } from '~/lib/images/byline';
 import type { DesignOrder, DesignRow } from '~/lib/images/designs';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { NewSheetLink } from './design-new-link';
+import { AiTag } from './ai-tag';
 
 /**
  * Readers' sheets for one of the book's characters or places (step 4; places 2026-10-14): newest
@@ -38,7 +39,7 @@ export function SheetList({ href, sort, sheets, kind, slug, name }: { href: stri
                 <span className="dz-row-text">
                   <span className="dz-row-title">{s.title || W.page.sheetBy(byline(s.byName, s.byFid))}</span>
                   <span className="dz-row-meta">{W.index.rowMeta(byline(s.byName, s.byFid), s.versionNo)}</span>
-                  {s.thumb && <span className="dz-row-ai">Views: AI-generated · not by the author</span>}
+                  {s.thumb && <span className="dz-row-ai"><AiTag what="Views" /></span>}
                 </span>
               </Link>
             </li>

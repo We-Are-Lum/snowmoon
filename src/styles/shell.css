@@ -204,6 +204,16 @@
    button that opens the sheet. Built plainly; Claude Design is drawing it. */
 .ai-label { display: inline; margin: 0; padding: 0; border: 0; background: none; font: inherit; letter-spacing: inherit; text-transform: inherit; color: var(--link); cursor: pointer; }
 .ai-label:hover { text-decoration: underline; text-underline-offset: 0.15em; }
+/* An AI picture's label: "AI ⓘ", the declaration on hover or focus (owner, 2026-10-15). */
+.ai-label[data-ai='image'], .ai-tag { position: relative; display: inline-flex; align-items: center; gap: 3px; vertical-align: baseline; }
+.ai-tag { font-family: var(--label); font-size: var(--text-label); color: var(--muted); cursor: help; }
+.ai-tag:focus-visible, .ai-label[data-ai='image']:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.ai-tag-tip {
+  position: absolute; left: 0; bottom: calc(100% + 6px); z-index: 40; width: max-content; max-width: min(240px, 70vw); padding: 6px 8px;
+  border-radius: var(--radius); background: var(--ink); color: var(--paper); font-family: var(--label); font-size: 12px; line-height: 1.35;
+  letter-spacing: 0; text-transform: none; white-space: normal; text-align: left; display: none; pointer-events: none;
+}
+.ai-tag:hover .ai-tag-tip, .ai-tag:focus .ai-tag-tip, .ai-label:hover .ai-tag-tip, .ai-label:focus-visible .ai-tag-tip { display: block; }
 /* In the page as served and read aloud, but not drawn. */
 .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; overflow: hidden; clip: rect(0 0 0 0); clip-path: inset(50%); white-space: nowrap; border: 0; }
 

@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { useCanMakeDesigns } from '~/lib/images/can-add';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { useMyPicks } from './design-picks';
+import { AiTag } from './ai-tag';
 
 /**
  * Styles, characters or settings (step 4; Pictures' menu above it chooses which): the order named, rows. Your own picks are marked
@@ -53,7 +54,7 @@ export function DesignIndex({ tab, sort, styles, characters, places }: { tab: 's
                     <span className="dz-row-text">
                       <span className="dz-row-title">{s.title}</span>
                       <span className="dz-row-meta">{s.meta}</span>
-                      {s.thumb && <span className="dz-row-ai">Sample: AI-generated · not by the author</span>}
+                      {s.thumb && <span className="dz-row-ai"><AiTag what="Sample" /></span>}
                       {s.drafted && <span className="dz-row-ai">{W.index.drafted}</span>}
                       {pickedElements.has(s.elementId) && <span className="dz-row-pick">{W.index.yourPick}</span>}
                     </span>

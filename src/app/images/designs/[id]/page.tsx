@@ -9,6 +9,7 @@ import { IMAGE_WORDING } from '~/lib/images/wording';
 import { placeTitle, sheetPlaces } from '~/lib/images/sheets';
 import { BookQuotes } from '~/components/design-book';
 import { DesignBar } from '~/components/design-bar';
+import { AiTag } from '~/components/ai-tag';
 
 /**
  * A style or a character sheet (step 4; Claude Design 4a, 5a and 4-desktop): its name, version and
@@ -92,7 +93,9 @@ export default async function DesignPage({ params }: Props) {
               <img key={p.sha256} src={p.url} alt={`AI-generated ${style ? 'sample' : (['front', 'side', 'back'] as const).filter((k) => body.views[k])[i] + ' view'}, not by the author`} width={p.recipe.width} height={p.recipe.height} loading="lazy" />
             ))}
           </div>
-          <figcaption className="dz-caption">{style ? W.page.samplesCaption : place ? W.page.placeViewsCaption : W.page.viewsCaption}</figcaption>
+          <figcaption className="dz-caption">
+            {style ? W.page.samplesCaption : place ? W.page.placeViewsCaption : W.page.viewsCaption} <AiTag />
+          </figcaption>
           {/* The style a sheet's views were made in (owner, 2026-10-14); its text is in each view's recipe. */}
           {!style && body.style && (
             <p className="dz-meta">
@@ -201,7 +204,7 @@ export default async function DesignPage({ params }: Props) {
                   <span className="dz-row-text">
                     <span className="dz-row-title">{o.title || (style ? o.entity : W.page.sheetBy(byline(o.byName, o.byFid)))}</span>
                     <span className="dz-row-meta">{W.index.rowMeta(designByline(o.byName, o.byFid, o.byRole), o.versionNo)}</span>
-                    {o.thumb && <span className="dz-row-ai">{style ? 'Sample' : 'Views'}: AI-generated · not by the author</span>}
+                    {o.thumb && <span className="dz-row-ai"><AiTag what={style ? 'Sample' : 'Views'} /></span>}
                   </span>
                 </Link>
               </li>

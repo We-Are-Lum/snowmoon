@@ -530,7 +530,11 @@ add({
     for (const r of readers as { file: string; text: string }[]) {
       if (!/<AiLabel\b[\s\S]*?\bkind="image"[\s\S]*?\btext=\{AI_LABEL\.(image|imageBy)\b/.test(r.text)) problems.push(`${r.file}: a reader's image is shown without the AI label`);
     }
+    // A design screen says it in words, or uses AiTag ("AI ⓘ", owner 2026-10-15), whose own words are checked here.
+    const tag = code('src/components/ai-tag.tsx');
+    if (!AI_GENERATED.test(tag) || !NOT_AUTHOR.test(tag)) problems.push('src/components/ai-tag.tsx: the AI tag does not say "AI-generated" and "not by the author"');
     for (const r of designs as { file: string; text: string }[]) {
+      if (/<AiTag\b/.test(r.text)) continue;
       if (!AI_GENERATED.test(r.text)) problems.push(`${r.file}: a style's sample or a sheet's view is shown without "AI-generated"`);
       if (!NOT_AUTHOR.test(r.text)) problems.push(`${r.file}: a style's sample or a sheet's view is shown without "not by the author"`);
     }

@@ -7,6 +7,7 @@ import { wordDiff } from '~/lib/images/design-rules';
 import { IMAGE_WORDING } from '~/lib/images/wording';
 import { changePick, useMyPicks, type PickView } from './design-picks';
 import { SignInButton } from './sign-in';
+import { AiTag } from './ai-tag';
 
 /**
  * My picks (Design 6): private, dashed, "only you". Your style picks (the newest one is what the
@@ -138,7 +139,9 @@ function Compare({ pick, onDone }: { pick: PickView; onDone: (msg: string | null
           <figcaption className="dz-caption">{W.picks.newLabel(pick.newer!.versionNo, (newer?.createdAt ?? pick.newer!.createdAt).slice(0, 10))}</figcaption>
         </figure>
       </div>
-      <p className="dz-caption">{W.page.samplesCaption}</p>
+      <p className="dz-caption">
+        {W.page.samplesCaption} <AiTag />
+      </p>
       {newer && (
         <p className="dz-text">
           {wordDiff(pick.text, newer.text).map((d, i) => (d.changed ? <mark key={i}>{d.text}</mark> : <span key={i}>{d.text}</span>))}

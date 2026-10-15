@@ -52,6 +52,9 @@ export function RecipeLink({ file, item, children = 'Recipe' }: { file: string; 
  * button, so it is part of its accessible name and crawlers read it (check:principles P2b).
  * Without JavaScript the recipe is a plain link beside it. Built plainly; Design restyles it.
  */
+/** Who made an image, from its label text ("AI image · by @name"). */
+const byOf = (text: string) => text.match(/·\s*by\s+(.+)$/)?.[1] ?? null;
+
 export function AiLabel({
   kind,
   text,
@@ -78,10 +81,26 @@ export function AiLabel({
         data-item={item || undefined}
         onClick={() => setOpen(true)}
       >
-        {text}
+        {kind === 'image' ? (
+          // An image shows "AI ⓘ"; who made it and the declaration on hover or focus (owner, 2026-10-15).
+          <>
+            <span aria-hidden="true">AI</span>
+            <svg className="info-i" width="14" height="14" viewBox="0 0 12 12" aria-hidden="true">
+              <circle cx="6" cy="6" r="5.25" fill="none" stroke="currentColor" strokeWidth="1.2" />
+              <path d="M6 5.2v3.6M6 3.2v.9" stroke="currentColor" strokeWidth="1.3" strokeLinecap="round" />
+            </svg>
+            <span className="ai-tag-tip" aria-hidden="true">
+              {' '}
+              {AI_DECLARED.image}
+              {byOf(text) ? ` · by ${byOf(text)}` : ''} · {AI_OPENS}
+            </span>
+          </>
+        ) : (
+          text
+        )}
         <span className="sr-only">
           {' '}
-          ({AI_DECLARED[kind]}. {AI_OPENS})
+          ({AI_DECLARED[kind]}{kind === 'image' && byOf(text) ? `, by ${byOf(text)}` : ''}. {AI_OPENS})
         </span>
       </button>
       {fallback && (

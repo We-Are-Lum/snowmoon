@@ -9,6 +9,7 @@ import { ConsentScreen, PublishedTextField, PublishFlow } from './publish-words'
 import { SignInButton } from './sign-in';
 import { BookQuotes } from './design-book';
 import { useMyPicks } from './design-picks';
+import { AiTag } from './ai-tag';
 
 /**
  * New style, new sheet, fork, or new version (step 4; Claude Design 4b, 4c, 5b). The name and the
@@ -244,7 +245,7 @@ export function DesignForm(p: Props) {
                         <span className="dz-row-text">
                           <span className="dz-row-title">{s.title}</span>
                           <span className="dz-row-meta">{s.by}</span>
-                          {s.thumb && <span className="dz-row-ai">Sample: AI-generated · not by the author</span>}
+                          {s.thumb && <span className="dz-row-ai"><AiTag what="Sample" /></span>}
                         </span>
                       </label>
                     </li>
@@ -313,7 +314,9 @@ export function DesignForm(p: Props) {
                       <img key={x.ticket.slice(-12)} src={x.image} alt="" />
                     ))}
                   </div>
-                  <p className="dz-caption">{style ? W.page.samplesCaption : p.kind === 'location' ? W.page.placeViewsCaption : W.page.viewsCaption}</p>
+                  <p className="dz-caption">
+                    {style ? W.page.samplesCaption : p.kind === 'location' ? W.page.placeViewsCaption : W.page.viewsCaption} <AiTag />
+                  </p>
                   {!style && chosen && <p className="dz-meta">{W.page.madeInStyle(chosen.title)}</p>}
                   <p className="dz-label">{style ? W.page.styleText : W.page.sheetText(p.character?.callName ?? p.place?.name ?? '')}</p>
                   <p className="dz-text">{clean}</p>
