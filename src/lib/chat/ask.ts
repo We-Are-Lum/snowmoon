@@ -2,6 +2,7 @@ import type postgres from 'postgres';
 import { CHAT } from '../config';
 import { renderMarkdown } from '../render';
 import { blocksById, labels, retrieve, type Passage } from './retrieve';
+import { glossaryWords, type GlossaryLink } from './glossary';
 import { blockIdOk, chapterOf, sanitizeReply, type Part } from './sanitize';
 import { record, reserve, worstCaseUsd } from './limits';
 
@@ -29,12 +30,15 @@ export interface Quote {
   html: string;
 }
 
+/** Glossary entries the question names, within the chapter limit: the reply points to them first. Absent in replies saved before 2026-10-14. */
+type Glossary = { glossary?: GlossaryLink[] };
+
 export type AskResult =
-  | { state: 'answer'; parts: Part[]; quotes: Quote[]; heldBack: boolean; left: number; guard: 'ok' | 'none'; dropped: number; regenerated: boolean }
-  | { state: 'held'; heldBack: true; left: number }
+  | ({ state: 'answer'; parts: Part[]; quotes: Quote[]; heldBack: boolean; left: number; guard: 'ok' | 'none'; dropped: number; regenerated: boolean } & Glossary)
+  | ({ state: 'held'; heldBack: true; left: number } & Glossary)
   | { state: 'declined'; left: number }
   /** The answer's claims were not all supported by the passages it cited: shown as "the passages don't say". */
-  | { state: 'unsupported'; heldBack: boolean; left: number }
+  | ({ state: 'unsupported'; heldBack: boolean; left: number } & Glossary)
   | { state: 'limit' }
   | { state: 'spend' };
 
@@ -100,33 +104,39 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
   const slot = await reserve(sql, fid, worstCaseUsd(2 * ANSWER_TOKENS + SEARCH_TOKENS, 6 * GUARD_TOKENS, 24000));
   if (!slot.ok) return { state: slot.reason };
 
+  // Glossary words: their entries are pointed to first, and a misspelled one is searched as the book spells it.
+  // The model and the guards see a correction only to a word that appears by the limit.
+  const words = await glossaryWords(sql, input.question, input.limit);
+  const glossary = words.links;
+  const question = words.correctedWithin;
+
   let retrieved;
   try {
-    const terms = CHAT.searchTerms && deps.searchPrompt ? await searchTerms(deps, input.question) : '';
-    const dense = deps.dense ? await deps.dense(input.question, input.limit) : undefined;
-    retrieved = await retrieve(sql, terms ? `${input.question} ${terms}` : input.question, input.limit, input.attached, dense ? { dense } : {});
+    const terms = CHAT.searchTerms && deps.searchPrompt ? await searchTerms(deps, question) : '';
+    const dense = deps.dense ? await deps.dense(question, input.limit) : undefined;
+    retrieved = await retrieve(sql, terms ? `${words.corrected} ${terms}` : words.corrected, input.limit, input.attached, dense ? { dense } : {});
   } catch (e) {
     throw new AskError((e as Error).message);
   }
   const { passages, heldBack } = retrieved;
-  if (!passages.length && heldBack) return { state: 'held', heldBack: true, left: slot.left };
+  if (!passages.length && heldBack) return { state: 'held', heldBack: true, left: slot.left, glossary };
 
   const messages: Message[] = [
     { role: 'system', content: deps.systemPrompt.replace('{{LIMIT}}', String(input.limit)) },
     ...input.history!.map((h) => ({ role: h.role, content: h.text })),
-    { role: 'user', content: `Passages from chapters 1–${input.limit}:\n${passagesText(passages)}\n\nQuestion: ${input.question}` },
+    { role: 'user', content: `Passages from chapters 1–${input.limit}:\n${passagesText(passages)}\n\nQuestion: ${question}` },
   ];
   const allowed = new Set(passages.map((p) => p.id));
 
   // Answer, then the guard; on a flag, one retry with a reminder. The flagged answer is never shown or sent back.
   let clean = await answerOnce(deps, messages, allowed);
-  let verdict = await guard(deps, input.question, clean.shown);
+  let verdict = await guard(deps, question, clean.shown);
   let regenerated = false;
   if (verdict.verdict === 'flagged') {
     regenerated = true;
     const reminder = deps.reminder.replace('{{REASON}}', verdict.reason || 'it read as writing for them');
     clean = await answerOnce(deps, [...messages, { role: 'user', content: reminder }], allowed);
-    verdict = await guard(deps, input.question, clean.shown);
+    verdict = await guard(deps, question, clean.shown);
   }
   if (verdict.verdict === 'flagged') return { state: 'declined', left: slot.left };
 
@@ -143,8 +153,8 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
 
   // The second guard question: every claim supported by the passages it cites? If not, or no verdict, it isn't shown.
   if (deps.supportPolicy) {
-    const supported = await supportCheck(deps, input.question, clean.shown, blocks, input.limit);
-    if (!supported) return { state: 'unsupported', heldBack, left: slot.left };
+    const supported = await supportCheck(deps, question, clean.shown, blocks, input.limit);
+    if (!supported) return { state: 'unsupported', heldBack, left: slot.left, glossary };
   }
   const parts = clean.parts.filter((p) => p.type === 'text' || found.has(p.id));
   return {
@@ -155,6 +165,7 @@ export async function ask(deps: AskDeps, raw: AskInput): Promise<AskResult> {
     left: slot.left,
     guard: verdict.verdict === 'ok' ? 'ok' : 'none',
     regenerated,
+    glossary,
     dropped: clean.dropped.length + clean.cites.filter((c) => !found.has(c)).length,
   };
 }

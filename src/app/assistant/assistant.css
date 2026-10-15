@@ -137,6 +137,9 @@
 .as-signed-out .as-signin { width: 100%; margin-top: 6px; padding: 14px; }
 .panel .as:has(.as-signed-out) { justify-content: center; padding: 0 30px 24px; }
 .as-note { color: var(--muted); font-size: 16px; }
+/* The glossary entries a question names, above the reply. */
+.as-glossary { margin: 0 0 var(--space-2); }
+.as-glossary a { color: var(--ink); }
 
 /* 1d as in the prototype: the two kinds side by side; planning and pictures shown as coming. */
 .as-kinds { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0 0 16px; }
