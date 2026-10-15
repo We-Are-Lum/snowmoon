@@ -78,14 +78,14 @@ const DEFAULT_SPEND: Spend = { model: IMAGES.model, reserveUsd: IMAGES.reserveUs
  * Counts this Generate and reserves its worst case, or says which cap it would pass. A style's
  * sample and a sheet's view are Generates too (step 4): the same count, the same caps.
  */
-export async function reserve(sql: Sql, fid: number, spend: Spend = DEFAULT_SPEND): Promise<{ ok: true; left: number } | { ok: false; refusal: Refusal }> {
+export async function reserve(sql: Sql, fid: number, spend: Spend = DEFAULT_SPEND): Promise<{ ok: true; left: number; debitId?: number } | { ok: false; refusal: Refusal }> {
   const r = await reserveIn(sql, fid, spend);
   // The prepaid circuit breaker's alerts, outside the lock; an alert never stops a Generate.
   if (r.ok && r.crossed) for (const share of r.crossed) await alertPrepaid(sql, share);
-  return r.ok ? { ok: true, left: r.left } : r;
+  return r.ok ? { ok: true, left: r.left, debitId: r.debitId } : r;
 }
 
-async function reserveIn(sql: Sql, fid: number, spend: Spend): Promise<{ ok: true; left: number; crossed?: number[] } | { ok: false; refusal: Refusal }> {
+async function reserveIn(sql: Sql, fid: number, spend: Spend): Promise<{ ok: true; left: number; crossed?: number[]; debitId?: number } | { ok: false; refusal: Refusal }> {
   return sql.begin(async (tx) => {
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.images.spend'))`;
     await tx`select pg_advisory_xact_lock(hashtext('snowmoon.images.fid'), ${fid}::int)`;
@@ -99,14 +99,14 @@ async function reserveIn(sql: Sql, fid: number, spend: Spend): Promise<{ ok: tru
       const [paid] = await tx`select coalesce(sum(cost_usd), 0)::float8 as usd from studio.image_costs where day = ${tx.unsafe(TODAY)} and funded = 'prepaid'`;
       const cap = IMAGES.prepaid.safetyCapUsd;
       if (paid.usd + spend.reserveUsd > cap) return { ok: false as const, refusal: 'prepaid-spend' as const };
-      await debit(t, -fid, price);
+      const debitId = await debit(t, -fid, price);
       await tx`insert into studio.image_asks (fid) values (${fid})`;
       await addCost(t, 'prepaid', 'reserved', spend.model.id, '', '', 1, spend.reserveUsd);
       // Shares of the circuit breaker this reservation reaches; the last one before the cap counts as 100%.
       const after = paid.usd + spend.reserveUsd;
       const crossed = IMAGES.prepaid.alertAt.filter((a) => paid.usd < a * cap && (after >= a * cap || (a === 1 && after + spend.reserveUsd > cap)));
       const left = Math.min(perDay(fid) - asked - 1, Math.floor((balance - price) / priceUsd(IMAGES.reserveUsd)));
-      return { ok: true as const, left, crossed };
+      return { ok: true as const, left, crossed, debitId };
     }
     const left = await generationsLeft(tx as unknown as Sql, fid);
     if (left <= 0) return { ok: false as const, refusal: 'limit' as const };

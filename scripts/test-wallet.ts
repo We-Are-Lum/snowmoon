@@ -172,6 +172,46 @@ await sql`insert into studio.works values ('snowmoon','Snowmoon','GPL-3.0','x') 
 for (let i = 0; i < IMAGES.publishesPerDay; i++) await sql`insert into studio.elements (work_id, element_type, created_by_fid) values ('snowmoon', 'image', ${-second})`;
 check('a wallet account may publish 3 images a day, like anyone', (await publishesLeft(S, -second)) === 0 && IMAGES.publishesPerDay === 3);
 
+// --- Our failures are credited back; blocked and dropped stay charged (owner, 2026-10-14) -----
+{
+  const { paidPicture } = await import('../src/lib/images/paid');
+  const { refund } = await import('../src/lib/wallet/credits');
+  const who = await accountFor(S, '0x00000000000000000000000000000000000000aa');
+  await credit(S, who, { txHash: '0x' + 'ab'.repeat(32), token: 'USDC', amount: 1_000_000n, usd: 1, blockNumber: 1n });
+  const req = new Request('http://localhost/api/images/generate');
+  const ok = async () => ({ allow: true, category: null, costUsd: 0.0001, provider: 'groq' });
+  const down = async (): Promise<never> => { throw new Error('timeout'); };
+  const made = (nsfw: boolean) => async () => ({ bytes: Buffer.from(''), contentType: 'image/png', seed: 1, requestId: 'r', nsfw, costUsd: 0.005, settings: {} });
+  const bal = () => balanceUsd(S, who);
+  const near = (a: number, b: number) => Math.abs(a - b) < 1e-6;
+
+  const checkDown = await paidPicture(sql, -who, req, { checkText: 'a quiet café', check: down, make: made(false) });
+  check('the prompt check not answering costs nothing', !checkDown.ok && checkDown.status === 503 && near(await bal(), 1), String(await bal()));
+  const modelDown = await paidPicture(sql, -who, req, { checkText: 'a quiet café', check: ok, make: down });
+  check('the image model not answering costs nothing', !modelDown.ok && modelDown.status === 503 && near(await bal(), 1), String(await bal()));
+  const blockedName = await paidPicture(sql, -who, req, { checkText: 'Vitalik Buterin at a café', check: ok, make: made(false) });
+  check('a prompt naming someone on the blocked list stays charged', !blockedName.ok && near(await bal(), 1 - price), String(await bal()));
+  const blockedRule = await paidPicture(sql, -who, req, { checkText: 'a quiet café', check: async () => ({ allow: false, category: 'violence', costUsd: 0.0001, provider: 'groq' }), make: made(false) });
+  check('a prompt the check blocks stays charged', !blockedRule.ok && near(await bal(), 1 - 2 * price), String(await bal()));
+  const dropped = await paidPicture(sql, -who, req, { checkText: 'a quiet café', check: ok, make: made(true) });
+  check('an image the safety checker drops stays charged', !dropped.ok && near(await bal(), 1 - 3 * price), String(await bal()));
+  const good = await paidPicture(sql, -who, req, { checkText: 'a quiet café', check: ok, make: made(false) });
+  check('an image that comes back is charged once', good.ok && near(await bal(), 1 - 4 * price), String(await bal()));
+  const refunds = await sql`select reason, usd::float8 as usd from studio.wallet_refunds where account_id = ${who} order by id`;
+  check('each outage is credited back once, for the whole price, with its reason',
+    refunds.length === 2 && refunds[0].reason === 'check-unavailable' && refunds[1].reason === 'model-unavailable' && refunds.every((x) => near(x.usd, price)),
+    JSON.stringify(refunds));
+  const [lastDebit] = await sql`select id::int as id from studio.wallet_debits where account_id = ${who} order by id limit 1`;
+  check('a debit is never credited back twice', !(await refund(S, lastDebit.id, 'check-unavailable')) && near(await bal(), 1 - 4 * price));
+  let badReason = false;
+  try { await refund(S, lastDebit.id + 1000, 'blocked' as never); } catch { badReason = true; }
+  const [none] = await sql`select count(*)::int as n from studio.wallet_refunds where reason not in ('check-unavailable', 'model-unavailable')`;
+  check('no refund reason other than our two failures exists', none.n === 0, String(badReason));
+  const free = await paidPicture(sql, 6786, req, { checkText: 'a quiet café', check: down, make: made(false) });
+  const [freeRefunds] = await sql`select count(*)::int as n from studio.wallet_refunds`;
+  check('a free Generate that fails writes no refund', !free.ok && freeRefunds.n === 2);
+}
+
 // The site-wide circuit breaker: $200 a day across every wallet, alerts at 50% and 100%, once each.
 check('the circuit breaker is $200 a day', IMAGES.prepaid.safetyCapUsd === 200);
 const sent: string[] = [];
@@ -195,13 +235,13 @@ delete process.env.SNOWMOON_ALERT_URL;
 // --- Private, and append-only --------------------------------------------------------------
 await sql`reset role`;
 const readable = await sql`select c.relname as t from pg_class c join pg_namespace n on n.oid = c.relnamespace
-  where n.nspname = 'studio' and c.relname in ('wallet_accounts', 'wallet_payments', 'wallet_debits')
+  where n.nspname = 'studio' and c.relname in ('wallet_accounts', 'wallet_payments', 'wallet_debits', 'wallet_refunds')
   and (has_table_privilege('anon', c.oid, 'select') or has_table_privilege('authenticated', c.oid, 'select'))`;
 check('no wallet table is publicly readable', readable.length === 0, readable.map((r) => r.t).join(', '));
 const writable = await sql`select c.relname as t from pg_class c join pg_namespace n on n.oid = c.relnamespace
-  where n.nspname = 'studio' and c.relname in ('wallet_accounts', 'wallet_payments', 'wallet_debits')
+  where n.nspname = 'studio' and c.relname in ('wallet_accounts', 'wallet_payments', 'wallet_debits', 'wallet_refunds')
   and (has_table_privilege('studio_writer', c.oid, 'update') or has_table_privilege('studio_writer', c.oid, 'delete'))`;
-check('accounts, payments and debits are append-only for the app', writable.length === 0, writable.map((r) => r.t).join(', '));
+check('accounts, payments, debits and refunds are append-only for the app', writable.length === 0, writable.map((r) => r.t).join(', '));
 
 await sql.end();
 await server.stop();

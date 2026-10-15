@@ -207,7 +207,7 @@ process.env.APP_LEGAL_PAGES = 'terms+privacy';
   check('the gate comes before the count and the reservation', at('await mayGenerate(') > 0 && at('await mayGenerate(') < at('await paidPicture('));
   const paidSrc = readFileSync(path.join(ROOT, 'src/lib/images/paid.ts'), 'utf8');
   const pat = (s: string) => paidSrc.indexOf(s);
-  check('the gate comes before the prompt check and the image model', at('await mayGenerate(') < at('makeImage(prompt)') && pat('await reserve(') > 0 && pat('await reserve(') < pat('checkPrompt(job.checkText') && pat('checkPrompt(job.checkText') < pat('await job.make()'));
+  check('the gate comes before the prompt check and the image model', at('await mayGenerate(') < at('makeImage(prompt)') && pat('await reserve(') > 0 && pat('await reserve(') < pat('(job.check ?? checkPrompt)(job.checkText') && pat('(job.check ?? checkPrompt)(job.checkText') < pat('await job.make()'));
   // Samples and views for designs: invited FIDs only (owner, 2026-10-10), then the same gate before anything is paid.
   const sample = readFileSync(path.join(ROOT, 'src/app/api/designs/sample/route.ts'), 'utf8');
   const sat = (s: string) => sample.indexOf(s);

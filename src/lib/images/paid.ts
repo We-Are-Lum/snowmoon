@@ -6,6 +6,7 @@ import { ImageUnavailable, type Made } from './fal';
 import { fundedBy, perDay, recordGuard, reserve, settle, wordsCheckFits, type Spend } from './limits';
 import { blockedName } from './rules';
 import { IMAGE_WORDING } from './wording';
+import { refund, type RefundReason } from '../wallet/credits';
 
 /**
  * Every paid picture goes through here, in this order (docs/proposals/add-an-image.md, section 5;
@@ -17,8 +18,10 @@ import { IMAGE_WORDING } from './wording';
  * 4. the reservation replaced by the real costs; a picture the checker flags is dropped.
  * The caller has already checked sign-in, the off switch, setup, its input, consent and the gate
  * (gate.ts: invited FIDs, or a Neynar score of at least IMAGES.neynarMinScore), in that order.
- * A wallet account (fid below zero) pays for the Generate from its prepaid balance in step 1. Payment
- * is final (owner, 2026-10-13): no refunds, whatever the outcome.
+ * A wallet account (fid below zero) pays for the Generate from its prepaid balance in step 1. When the
+ * failure is ours, the prompt check or the image model not answering, the payment is credited back
+ * (owner, 2026-10-14; migration 0013). A blocked prompt or a dropped image stays charged, as the
+ * payment screen says (owner, 2026-10-13).
  */
 type Sql = postgres.Sql;
 
@@ -42,12 +45,21 @@ export async function paidPicture(
   sql: Sql,
   fid: number,
   request: Request,
-  job: { checkText: string; spend?: Spend; make: () => Promise<Made> },
+  job: { checkText: string; spend?: Spend; make: () => Promise<Made>; check?: typeof checkPrompt },
 ): Promise<Paid> {
   const spend = job.spend;
   const funded = fundedBy(fid);
   const r = await reserve(sql, fid, spend);
   if (!r.ok) return { ok: false, status: 429, error: say(r.refusal, fid), extra: { reason: r.refusal } };
+  // Our failure: the wallet's debit is credited back. A refund that fails (0013 not applied) is logged.
+  const giveBack = async (reason: RefundReason) => {
+    if (r.debitId === undefined) return;
+    try {
+      await refund(sql, r.debitId, reason);
+    } catch (e) {
+      console.error('wallet refund failed', reason, (e as Error).name);
+    }
+  };
   const name = blockedName(job.checkText);
   if (name) {
     await settle(sql, {}, spend, funded);
@@ -55,9 +67,10 @@ export async function paidPicture(
   }
   let guard;
   try {
-    guard = await checkPrompt(job.checkText, request);
+    guard = await (job.check ?? checkPrompt)(job.checkText, request);
   } catch (e) {
     await settle(sql, {}, spend, funded);
+    await giveBack('check-unavailable');
     console.error('image prompt check failed', (e as Error).name);
     return { ok: false, status: 503, error: 'The prompt check did not answer. Try again in a moment.', extra: { left: r.left } };
   }
@@ -70,6 +83,7 @@ export async function paidPicture(
     made = await job.make();
   } catch (e) {
     await settle(sql, { guard: { costUsd: guard.costUsd, provider: guard.provider, verdict: 'ok' } }, spend, funded);
+    await giveBack('model-unavailable');
     console.error('image generation failed', e instanceof ImageUnavailable ? e.message : (e as Error).name);
     return { ok: false, status: 503, error: 'The image model did not answer. Try again in a moment.', extra: { left: r.left } };
   }
