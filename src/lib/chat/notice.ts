@@ -38,7 +38,8 @@ export const NOTICE_REVIEW: {
     'Also covers main\'s device.ts change (chapters opened, kept on the device only). ' +
     'The owner (FID 6786) reread and approved all four items as worded here on 2026-10-08, after applying 0007.',
   /** The words (noticeKey of the items as shown now) the owner last reread, and when. */
-  ownerReread: { words: '1x16ucc', on: '2026-10-08' },
+  // 2026-10-15: item 3's heading "(not the Grok of X)", the owner's addition, reread as shown ("ok good").
+  ownerReread: { words: '1xrxl4h', on: '2026-10-15' },
 };
 
 export function noticeItems({ host, provider, model }: { host: string | null; provider: string | null; model: string }): [string, string][] {

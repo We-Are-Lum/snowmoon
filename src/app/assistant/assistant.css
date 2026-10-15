@@ -126,7 +126,8 @@
 }
 .as-check input:checked { box-shadow: inset 0 0 0 11px var(--card), inset 0 0 0 13px var(--ink), inset 0 0 0 16px var(--card), inset 0 0 0 22px var(--ink); }
 .as-check input:focus-visible { outline: 2px solid var(--ink); outline-offset: -8px; }
-.as-sheet .as-actions { justify-content: space-between; margin-top: var(--space-3); }
+/* Continue stays in view when the notice is taller than the screen (the 424 × 695 Farcaster frame): the sheet scrolls under it. */
+.as-sheet .as-actions { position: sticky; bottom: 0; justify-content: space-between; margin-top: var(--space-3); padding: 10px 0; background: var(--paper); }
 
 /* 9d */
 /* 9d, as in the prototype: centred in the panel. */
