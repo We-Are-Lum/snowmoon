@@ -21,11 +21,15 @@ export const NOTICE_REVIEW: {
   ownerReread: { words: string; on: string } | null;
 } = {
   /** Fingerprint of the chat's code, prompts and settings when the notice was last reread. */
-  reviewedFor: 'b19cb19144e89aba',
+  reviewedFor: '57f17a6164748a5c',
   /** Who did that reread: the coding agent, or the owner. */
   by: 'owner (FID 6786)',
-  on: '2026-10-08',
+  on: '2026-10-14',
   note:
+    'Reread by the owner (FID 6786) on 2026-10-14 ("Stamp it"), words unchanged, for the glossary pointers ' +
+    '(src/lib/chat/glossary.ts), citation ids written with other dashes (sanitize.ts) and two added lines in ' +
+    'config/prompts/chat-ask.md: no new service receives questions and nothing new is kept. The coding agent ' +
+    'reread /about and the private box too; they still hold. Previous reread (owner, 2026-10-08): ' +
     'Reread for migration 0007 (cost records without a person) and the owner\'s new words for items 3 and 4. Items 1 and 2 match ' +
     'config/prompts/chat-ask.md. Item 3: both routes keep nothing (gateway: zero retention asked per request; Groq: Global ZDR and ' +
     'Inference APIs ZDR enabled in the "Lum" organization, confirmed by the owner in the console on 2026-10-08). Item 4: chat_calls ' +
@@ -42,7 +46,8 @@ export function noticeItems({ host, provider, model }: { host: string | null; pr
     ['It helps you read', 'Ask about the book. Answers point to the passages they rest on, with chapter and ¶, and show the book’s own words.'],
     ['It won’t write for you', 'No dialogue, narration or description. It gives context and commentary only.'],
     [
-      `Your messages go to ${provider}`,
+      // Owner, 2026-10-14: "(this is groq, not the grok of X)".
+      `Your messages go to ${provider}${provider === 'Groq' ? ' (not the Grok of X)' : ''}`,
       host
         ? `${provider} runs ${model}, an open-weights model. When ${provider} is busy, a message goes through ${host} to ${provider} instead. Both are set to keep nothing, and this app keeps no copy of your messages.`
         : `${provider} runs ${model}, an open-weights model, and is set to keep nothing. This app keeps no copy of your messages.`,
