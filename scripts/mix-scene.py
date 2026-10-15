@@ -5,7 +5,8 @@ lettering record is placed by an anchor, never a fixed start:
   "at":    {"cue": "<id>" | "@start" | "@end", "edge": "start" | "middle" | "end", "offset": seconds}
   "until": the same form; for beds and other cues that run between two points
 A negative offset overlaps the anchor (J-cuts and L-cuts). A cue lasts as long as its stem, unless
-it has "until" (a bed loops to fill it when "loop" is true). "@end" is the end of the last cue that
+it has "until" (a bed loops to fill it when "loop" is true, each repeat crossfaded into the next over
+"loop_xfade_s", default 1.5 s). "@end" is the end of the last cue that
 is not a bed, plus the timeline's tail_s. A shot runs from its "at" to the next shot's start; the
 last runs to "@end". An optional "end_card" ({"file", "seconds"}) follows "@end"; the mix is silent
 under it unless a bed's "until" reaches past "@end". A dissolve starts at the incoming shot's start and lasts its seconds.
@@ -145,6 +146,19 @@ def resolve(timeline: dict, stems: dict[str, Path]) -> dict:
     return {"duration_s": round(end, 3), "video": timeline["video"], "cues": cues, "shots": shots, "lettering": lettering, "end_card": card}
 
 
+def loop_xfade(x: np.ndarray, n: int, xf_s: float) -> np.ndarray:
+    """Repeat a bed to n samples, crossfading each repeat into the next over xf_s (equal power), so no seam clicks."""
+    k = min(int(xf_s * SR), len(x) // 3)
+    if k <= 0:
+        return np.tile(x, n // len(x) + 1)[:n]
+    t = np.linspace(0, np.pi / 2, k, dtype=np.float32)
+    fin, fout = np.sin(t), np.cos(t)
+    out = x.copy()
+    while len(out) < n:
+        out = np.concatenate([out[:-k], out[-k:] * fout + x[:k] * fin, x[k:]])
+    return out[:n]
+
+
 def mix(resolved: dict, stems: dict[str, Path]) -> np.ndarray:
     total = int(round(resolved["duration_s"] * SR))
     out = np.zeros(total, np.float32)
@@ -152,7 +166,7 @@ def mix(resolved: dict, stems: dict[str, Path]) -> np.ndarray:
         x = load(stems[c["id"]])
         n = int(round((c["end"] - c["start"]) * SR))
         if c["loop"] and len(x) < n:
-            x = np.tile(x, n // len(x) + 1)
+            x = loop_xfade(x, n, c.get("loop_xfade_s", 1.5))
         x = x[:n].copy()
         for key, sl in (("fade_in", slice(None)), ("fade_out", slice(None, None, -1))):
             k = min(int(c[key] * SR), len(x))

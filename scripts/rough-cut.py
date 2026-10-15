@@ -7,14 +7,15 @@ Reads script.md's lines (recording-lines.json), the converted lines in scenes-ou
 drafted shot list (shots.json) and the music recipe, and writes:
 - scenes-out/<seed>/stems/<ref>.wav: each line with its location's acoustics (ROOMS below, ffmpeg
   filters: a short early-reflection pattern and a gentle band limit; outdoor places nearly dry), and
-  silent stems for the drafted holds of the wordless shots;
+  silent stems for the drafted holds of the wordless shots, and each location's bed (CC0, from
+  sounds/recipe.json), looped with crossfades and crossfaded into the next at each change of place;
 - scenes-out/<seed>/cards/<shot>.png: a stand-in card per shot (its number, name and drafted subject,
   or the book insert it stands for) until the stills are drawn;
 - adaptations/<seed>/timeline.json, marked "placeholder" (stand-in cards): every line chained after
   the one before (0.35 s inside a beat, 1.6 s between beats), shots on their anchors from shots.json,
   the chosen music cue, and the laugh. Its mix and render recipes stay in scenes-out/.
 The robot has no voice sheet yet: its line is the owner's take with a simple robotic filter, a
-stand-in, never published. Beds are left out until the owner has downloaded them.
+stand-in, never published. A bed that isn't downloaded yet is left out (the gate uses the café, darker, until its own arrive).
 """
 
 import hashlib
@@ -126,8 +127,36 @@ def main() -> None:
     ffmpeg(lp, ldst, ROOMS["courtyard café, open air"])
     cues.append({"id": "laugh", "track": "voice", "stem": str(ldst.relative_to(ROOT)), "at": {"cue": "b3-1", "edge": "start", "offset": -2.6},
                  "level_db": -4, "note": "Deluin laughing at the table as Zei arrives (the owner's take, the agent's pick of four)"})
+    # Location beds (CC0, sounds/recipe.json): each runs from its location's first shot to the next
+    # location's, looped with crossfades, and crossfades into the next bed over XF seconds at the cut.
+    sounds = {x["effect"]: x for x in json.loads((adir / "sounds" / "recipe.json").read_text())["sounds"]} if (adir / "sounds" / "recipe.json").exists() else {}
+    XF = 1.5
+    def bed(cid, effect, start, until, level, af="anull", note=None):
+        src = sounds.get(effect)
+        if not src:
+            return
+        dst = stems / f"{cid}.wav"
+        ffmpeg(ROOT / src["file"], dst, af)
+        cues.append({"id": cid, "track": "bed", "stem": str(dst.relative_to(ROOT)), "loop": True, "loop_xfade_s": 1.5,
+                     "at": start, "until": until, "level_db": level, "fade_in": XF, "fade_out": XF,
+                     "source": {"effect": effect, "url": src["source"].get("url"), "author": src["source"].get("author"), "licence": src["source"]["licence"]},
+                     **({"note": note} if note else {})})
+    cut = lambda cue, off: {"cue": cue, "edge": "start", "offset": off}
+    h, w = XF / 2, XF / 2
+    bed("bed-hall", "bed: match hall", {"cue": "@start", "offset": 0}, cut("b1-1", -0.6 + h), 4)
+    bed("bed-hall-wall", "bed: match hall", cut("b1-1", -0.6 - w), cut("b2-1", -1.4 + h), -4, "lowpass=f=450,volume=0.8",
+        note="the game through the waiting-room wall (drafted: the owner hasn't decided yet)")
+    bed("bed-waiting", "bed: waiting room", cut("b1-1", -0.6 - w), cut("b2-1", -1.4 + h), -2)
+    bed("bed-corridor", "bed: corridor", cut("b2-1", -1.4 - w), cut("b3-1", -3.0 + h), -2)
+    bed("bed-cafe", "bed: courtyard café", cut("b3-1", -3.0 - w), cut("b6-1", -1.5 + h), 0)
+    if "bed: gate at dusk" in sounds:
+        bed("bed-gate", "bed: gate at dusk", cut("b6-1", -1.5 - w), cut("hold-s34", 0 + h), -2)
+    else:
+        bed("bed-gate", "bed: courtyard café", cut("b6-1", -1.5 - w), cut("hold-s34", 0 + h), -6, "lowpass=f=1800",
+            note="stand-in until the gate-at-dusk recordings are in: the café, quieter and darker")
+    bed("bed-lobby", "bed: lobby restaurant", cut("hold-s34", 0 - w), {"cue": "@end", "offset": 0}, -2)
     timeline = {
-        "about": "Fifteen Days rough cut (2026-10-15): the owner's performances converted into the character voices, each location's acoustics, Dreadnaught v3, stand-in cards for the drafted shots. Line gaps, shot anchors, holds and acoustics are drafted by the coding agent. Beds are left out until the owner has downloaded them.",
+        "about": "Fifteen Days rough cut (2026-10-15): the owner's performances converted into the character voices, each location's acoustics, Dreadnaught v3, stand-in cards for the drafted shots. Line gaps, shot anchors, holds and acoustics are drafted by the coding agent. A bed that isn't downloaded yet is left out (the gate uses the café, darker, until its own arrive).",
         "seed": seed, "placeholder": True, "placeholder_reason": "stand-in cards until the stills are drawn",
         "video": {"width": 1920, "height": 1080, "fps": 30}, "loudness": {"integrated_lufs": -16, "true_peak_db": -1, "lra": 11},
         "tail_s": 2.0, "tracks": {"voice": {"level_db": 0}, "hold": {"level_db": -60}, "bed": {"level_db": -24}, "foley": {"level_db": -10}, "music": {"level_db": -16}},

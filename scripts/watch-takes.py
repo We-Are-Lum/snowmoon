@@ -21,6 +21,7 @@ Raw takes stay outside the repository; a --dir inside it is refused. The log is 
 
 import argparse
 import hashlib
+import json
 import re
 import shutil
 import subprocess
@@ -67,7 +68,12 @@ def main() -> None:
     seen: dict[str, tuple[int, float]] = {}   # inbox name -> (size, first time seen at that size)
     pending: dict[Path, str] = {}             # inbox file -> sha256 of its copy, waiting for a run
     last_arrival = 0.0
-    done_sig = None
+    # What was processed survives a restart: the last processed set of recordings is kept in takes/,
+    # so restarting the watcher never reprocesses (and overwrites) work that is already done.
+    state = dest / "takes" / "watch-state.json"
+    done_sig = tuple(tuple(x) for x in json.loads(state.read_text())["processed"]) if state.exists() else None
+    if done_sig is None and (dest / "takes" / "manifest.json").exists():
+        done_sig = tuple(sorted((q.name, q.stat().st_mtime) for q in dest.iterdir() if q.is_file() and re.match(r"beat-\d+\.", q.name)))
     asked: set[str] = set()
     log(f"watching {inbox} -> {dest}")
     while True:
@@ -124,6 +130,13 @@ def main() -> None:
         busy = subprocess.run(["pgrep", "-f", "scripts/illustrate.py"], capture_output=True).returncode == 0
         if sig and sig != done_sig and not busy and now - last_arrival >= args.quiet * 60 and not any(
                 now - mt < args.quiet * 60 for _, mt in sig):
+            if (dest / "takes" / "assign.json").exists():
+                # Takes were matched to lines by hand (cut-takes.py); an automatic split would overwrite them.
+                log("new or changed recording, but the takes were matched by hand (takes/assign.json): not reprocessed; "
+                    "match the new takes, then run scripts/cut-takes.py")
+                done_sig = sig
+                state.write_text(json.dumps({"processed": [list(x) for x in sig]}) + "\n")
+                continue
             stamp = datetime.now().strftime("%Y%m%d-%H%M%S")
             log(f"processing {len(sig)} recording(s): {', '.join(n for n, _ in sig)}")
             r = subprocess.run([str(ROOT / "scripts" / "takes-overnight.sh"), args.seed, str(dest), "0"], capture_output=True, text=True)
@@ -134,6 +147,7 @@ def main() -> None:
             for line in r.stdout.splitlines():
                 log(f"  {line}")
             done_sig = sig
+            state.write_text(json.dumps({"processed": [list(x) for x in sig]}) + "\n")
             if "== " in text and text.rstrip().splitlines()[-1].startswith("== ") and "done" in text.rstrip().splitlines()[-1]:
                 for p, h in list(pending.items()):
                     if p.exists() and sha256(p) == h:

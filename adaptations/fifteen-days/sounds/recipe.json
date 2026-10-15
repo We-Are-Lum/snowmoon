@@ -1,0 +1,85 @@
+{
+  "about": "Every sound effect used, with where it came from: a CC0 Freesound sound (source URL, licence, author) or the owner's own recording. No generated sound effects (owner, 2026-10-15).",
+  "sounds": [
+    {
+      "effect": "bed: match hall",
+      "source": {
+        "kind": "freesound",
+        "url": "https://freesound.org/people/klankbeeld/sounds/171462/",
+        "id": 171462,
+        "title": "people ambience large hall 02.wav",
+        "author": "klankbeeld",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page",
+        "licence_checked": "2026-10-15, from the sound's own page (sound-effects.md)"
+      },
+      "file": "scenes-out/fifteen-days/sfx/bed-match-hall.wav",
+      "sha256": "48df429cf324bc6d2ee4dc647c951aff03509abd304c3b0af1d0e447a035634d",
+      "duration_s": 174.93,
+      "added_at": "2026-10-15T23:21:31+00:00"
+    },
+    {
+      "effect": "bed: courtyard café",
+      "source": {
+        "kind": "freesound",
+        "url": "https://freesound.org/people/Anya_Media/sounds/437462/",
+        "id": 437462,
+        "title": "OUTSIDE QUIET CAFE : RESTAURANT, CROCKERY…",
+        "author": "Anya_Media",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page",
+        "licence_checked": "2026-10-15, from the sound's own page (sound-effects.md)"
+      },
+      "file": "scenes-out/fifteen-days/sfx/bed-courtyard-caf.mp3",
+      "sha256": "7e365e71fcc3b92d50afddd68c96e51eb26748b2831516d708ab4840671493e0",
+      "duration_s": 147.05,
+      "added_at": "2026-10-15T23:21:32+00:00"
+    },
+    {
+      "effect": "bed: waiting room",
+      "source": {
+        "kind": "freesound",
+        "url": "https://freesound.org/people/gchase/sounds/144046/",
+        "id": 144046,
+        "title": "Room_Tone_Ambience_Medium_Control_Low_Hum.wav",
+        "author": "gchase",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page",
+        "licence_checked": "2026-10-15, from the sound's own page (sound-effects.md)"
+      },
+      "file": "scenes-out/fifteen-days/sfx/bed-waiting-room.wav",
+      "sha256": "4c53ec0fad307fa72fcf244ff2136a93ff7096ec7ff8a75df0172003bb8f3962",
+      "duration_s": 133.87,
+      "added_at": "2026-10-15T23:32:33+00:00"
+    },
+    {
+      "effect": "bed: corridor",
+      "source": {
+        "kind": "freesound",
+        "url": "https://freesound.org/people/sturmankin/sounds/272317/",
+        "id": 272317,
+        "title": "concrete_silence.wav",
+        "author": "sturmankin",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page",
+        "licence_checked": "2026-10-15, from the sound's own page (sound-effects.md)"
+      },
+      "file": "scenes-out/fifteen-days/sfx/bed-corridor.wav",
+      "sha256": "5113ed3bdf10528d24c2049547be07b46201a32d87abebbff84cb594a0af2ceb",
+      "duration_s": 109.44,
+      "added_at": "2026-10-15T23:32:34+00:00"
+    },
+    {
+      "effect": "bed: lobby restaurant",
+      "source": {
+        "kind": "freesound",
+        "url": "https://freesound.org/people/Berwitz/sounds/263584/",
+        "id": 263584,
+        "title": "Small Restaurant atmosphere.wav",
+        "author": "Berwitz",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page",
+        "licence_checked": "2026-10-15, from the sound's own page (sound-effects.md)"
+      },
+      "file": "scenes-out/fifteen-days/sfx/bed-lobby-restaurant.wav",
+      "sha256": "7eb38f5a19d7a0526687dd5f24f595c11d0061b4fe110d5f774c74d99a0dd028",
+      "duration_s": 137.66,
+      "added_at": "2026-10-15T23:32:34+00:00"
+    }
+  ]
+}
