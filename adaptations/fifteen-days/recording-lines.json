@@ -18,8 +18,8 @@
       "beat": 1,
       "beat_title": "The walls hold (optional opener)",
       "speaker": "Bai",
-      "text": "It wouldn't be so annoying if he wasn't so damned pretty.",
-      "tag": "by FID 6786 on 2026-10-14",
+      "text": "It wouldn't be so annoying if he wasn't so damn pretty.",
+      "tag": "by FID 6786 on 2026-10-15",
       "note": null,
       "moment": null
     },
@@ -128,7 +128,7 @@
       "beat": 2,
       "beat_title": "The corridor",
       "speaker": "Deluin",
-      "text": "Great, I'll see you then. Bai, you're welcome to come too.",
+      "text": "Great, I'll see you then. Bai, you're welcome to come too. Hope to see you there! Bai.",
       "tag": "by FID 6786 on 2026-10-15",
       "note": null,
       "moment": null
@@ -172,8 +172,8 @@
       "beat": 2,
       "beat_title": "The corridor",
       "speaker": "Bai",
-      "text": "'Was.' And you know I hate you, and know all your tricks anyway.",
-      "tag": "by FID 6786 on 2026-10-14",
+      "text": "'Was.' And you know I hate you. You can know all your tricks anyway.",
+      "tag": "by FID 6786 on 2026-10-15",
       "note": null,
       "moment": null
     },
@@ -227,9 +227,9 @@
       "beat": 3,
       "beat_title": "The café",
       "speaker": "Zei",
-      "text": "Whoa",
-      "tag": "book c14-b109",
-      "note": null,
+      "text": "Ooh, hmm.",
+      "tag": "by FID 6786 on 2026-10-15",
+      "note": "after c14-b109",
       "moment": "A menu appears: the book's own glyph picture."
     },
     {
@@ -381,8 +381,8 @@
       "beat": 4,
       "beat_title": "The question and the sugar wall",
       "speaker": "Zei",
-      "text": "I see where you got your love of walls then.",
-      "tag": "by FID 6786 on 2026-10-14",
+      "text": "I see where you get your love of walls then.",
+      "tag": "by FID 6786 on 2026-10-15",
       "note": null,
       "moment": "Deluin's stack has turned into a little wall of sugar cubes."
     },

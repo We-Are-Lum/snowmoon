@@ -67,7 +67,7 @@ so about four and a half minutes with the silent shots.
   *[The hall. Deluin's semifinal against Kau. Gliders and all zooming around the board, crashing into symbols. Faces thinking hard, poker faces; Kau sweating; Deluin calm and cool.]*
   *[The waiting room. Bai and Zei are watching the board.]*
   - `by FID 6786 on 2026-10-14` Zei: You'd think after making it this far, they'd stop underestimating the foreigner.
-  - `by FID 6786 on 2026-10-14` Bai: It wouldn't be so annoying if he wasn't so damned pretty.
+  - `by FID 6786 on 2026-10-15` Bai: It wouldn't be so annoying if he wasn't so damn pretty.
   *[Zei gives her a look, eyebrow raised.]*
   - `by FID 6786 on 2026-10-15` Bai: Nah, way too fake for me.
   *[Bai spits something into the nearby trash can.]*
@@ -104,12 +104,12 @@ so about four and a half minutes with the silent shots.
   - `by FID 6786 on 2026-10-15` Zei: Yeah, please ignore the ugly style. I also won by defense though, but for most of the game it just looks like I'm running scared.
   - `by FID 6786 on 2026-10-14` Deluin: Patience often does, until you win. Hey, do you want to get tea later? I'll be at the courtyard in about a longhour.
   - `by FID 6786 on 2026-10-15` Zei: Sure, yeah, that works well for me!
-  - `by FID 6786 on 2026-10-15` Deluin: Great, I'll see you then. Bai, you're welcome to come too.
+  - `by FID 6786 on 2026-10-15` Deluin: Great, I'll see you then. Bai, you're welcome to come too. Hope to see you there! Bai.
   *[She shrugs, with a disgruntled look on her face. Deluin goes. Bai gives Zei a hard look.]*
   - `by FID 6786 on 2026-10-15` Zei: See you. So are you gonna come? Should be fun! *("See you." to Deluin as he goes; the rest to Bai)*
   - `by FID 6786 on 2026-10-14` Bai: He's your competition, remember?
   - `by FID 6786 on 2026-10-14` Zei: Take it easy, you're my competition too.
-  - `by FID 6786 on 2026-10-14` Bai: 'Was.' And you know I hate you, and know all your tricks anyway.
+  - `by FID 6786 on 2026-10-15` Bai: 'Was.' And you know I hate you. You can know all your tricks anyway.
   *[She says it with a smile, and continues.]*
   - `by FID 6786 on 2026-10-15` Bai: Deluin? We don't know anything about this guy.
   - `by FID 6786 on 2026-10-15` Zei: So let's get to know him, it'll be fun! Maybe he won't be so fake after all.
@@ -144,7 +144,7 @@ so about four and a half minutes with the silent shots.
   *[A robot slides up to the table.] (book, c14-b105)*
   - `book c14-b106` Robot: "jie mo kai tu jie hei ja ma?"
   *[A menu appears: the book's own glyph picture.] (book, c14-b107–c14-b108)*
-  - `book c14-b109` Zei: "Whoa"
+  - `by FID 6786 on 2026-10-15` Zei: "Ooh, hmm." *(after c14-b109)*
   - `book c14-b110` Deluin: "What is it?"
   - `by FID 6786 on 2026-10-15` Zei: "I think these are some of the new symbols that they're A/B testing for the Dzegoban version nine." *(after c14-b111)*
   *[He realises he's talking to a foreigner.] (book, c14-b112)*
@@ -182,7 +182,7 @@ so about four and a half minutes with the silent shots.
   - `by FID 6786 on 2026-10-15` Zei: Kids get into it pretty young here, I guess. Whole family involved, it's a big thing. One of our quirks, just like the language. Does Redshire have any quirks?
   - `by FID 6786 on 2026-10-15` Deluin: Sure. Yeah, we have our fair share. We care a lot about natural beauty, and maybe have an unnatural obsession with old styles. Less cameras, more castles, that kind of thing.
   *[Deluin's stack has turned into a little wall of sugar cubes.]*
-  - `by FID 6786 on 2026-10-14` Zei: I see where you got your love of walls then.
+  - `by FID 6786 on 2026-10-15` Zei: I see where you get your love of walls then.
   *[Deluin looks down at the sugar cubes, and smiles.]*
   - `by FID 6786 on 2026-10-14` Deluin: Yes. Simple, straightforward, useful.
   *[Zei flicks out the door. They both laugh.]*

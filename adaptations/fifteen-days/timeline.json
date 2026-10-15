@@ -1,0 +1,1886 @@
+{
+  "about": "Fifteen Days rough cut (2026-10-15): the owner's performances converted into the character voices, each location's acoustics, Dreadnaught v3, stand-in cards for the drafted shots. Line gaps, shot anchors, holds and acoustics are drafted by the coding agent. Beds are left out until the owner has downloaded them.",
+  "seed": "fifteen-days",
+  "placeholder": true,
+  "placeholder_reason": "stand-in cards until the stills are drawn",
+  "video": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30
+  },
+  "loudness": {
+    "integrated_lufs": -16,
+    "true_peak_db": -1,
+    "lra": 11
+  },
+  "tail_s": 2.0,
+  "tracks": {
+    "voice": {
+      "level_db": 0
+    },
+    "hold": {
+      "level_db": -60
+    },
+    "bed": {
+      "level_db": -24
+    },
+    "foley": {
+      "level_db": -10
+    },
+    "music": {
+      "level_db": -16
+    }
+  },
+  "rooms": {
+    "waiting room": "highpass=f=90,aecho=0.85:0.55:18|31:0.16|0.10,lowpass=f=9000",
+    "rock corridor": "highpass=f=80,aecho=0.85:0.7:37|71|113:0.26|0.17|0.10",
+    "courtyard café, open air": "highpass=f=70,aecho=0.9:0.6:14:0.06",
+    "street gate at dusk": "highpass=f=70,aecho=0.9:0.6:55:0.08"
+  },
+  "cues": [
+    {
+      "id": "b1-1",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b1-1.wav",
+      "at": {
+        "cue": "@start",
+        "offset": 9.0
+      },
+      "room": "waiting room",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L01-b1-1.zei.wav"
+      }
+    },
+    {
+      "id": "b1-2",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b1-2.wav",
+      "at": {
+        "cue": "b1-1",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "waiting room",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L02-b1-2.bai.wav"
+      }
+    },
+    {
+      "id": "b1-3",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b1-3.wav",
+      "at": {
+        "cue": "b1-2",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "waiting room",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L03-b1-3.bai.wav"
+      }
+    },
+    {
+      "id": "b1-4",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b1-4.wav",
+      "at": {
+        "cue": "b1-3",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "waiting room",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L04-b1-4.zei.wav"
+      }
+    },
+    {
+      "id": "b1-5",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b1-5.wav",
+      "at": {
+        "cue": "b1-4",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "waiting room",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L05-b1-5.bai.wav"
+      }
+    },
+    {
+      "id": "b1-6",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b1-6.wav",
+      "at": {
+        "cue": "b1-5",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "waiting room",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L06-b1-6.bai.wav"
+      }
+    },
+    {
+      "id": "b2-1",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b2-1.wav",
+      "at": {
+        "cue": "b1-6",
+        "edge": "end",
+        "offset": 1.6
+      },
+      "room": "rock corridor",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L07-b2-1.zei.wav"
+      }
+    },
+    {
+      "id": "b2-2",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b2-2.wav",
+      "at": {
+        "cue": "b2-1",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "rock corridor",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L08-b2-2.deluin.wav"
+      }
+    },
+    {
+      "id": "b2-3",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b2-3.wav",
+      "at": {
+        "cue": "b2-2",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "rock corridor",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L09-b2-3.zei.wav"
+      }
+    },
+    {
+      "id": "b2-4",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b2-4.wav",
+      "at": {
+        "cue": "b2-3",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "rock corridor",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L10-b2-4.deluin.wav"
+      }
+    },
+    {
+      "id": "b2-5",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b2-5.wav",
+      "at": {
+        "cue": "b2-4",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "rock corridor",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L11-b2-5.zei.wav"
+      }
+    },
+    {
+      "id": "b2-6",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b2-6.wav",
+      "at": {
+        "cue": "b2-5",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "rock corridor",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L12-b2-6.deluin.wav"
+      }
+    },
+    {
+      "id": "b2-7",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b2-7.wav",
+      "at": {
+        "cue": "b2-6",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "rock corridor",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L13-b2-7.zei.wav"
+      }
+    },
+    {
+      "id": "b2-8",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b2-8.wav",
+      "at": {
+        "cue": "b2-7",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "rock corridor",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L14-b2-8.bai.wav"
+      }
+    },
+    {
+      "id": "b2-9",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b2-9.wav",
+      "at": {
+        "cue": "b2-8",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "rock corridor",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L15-b2-9.zei.wav"
+      }
+    },
+    {
+      "id": "b2-10",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b2-10.wav",
+      "at": {
+        "cue": "b2-9",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "rock corridor",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L16-b2-10.bai.wav"
+      }
+    },
+    {
+      "id": "b2-11",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b2-11.wav",
+      "at": {
+        "cue": "b2-10",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "rock corridor",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L17-b2-11.bai.wav"
+      }
+    },
+    {
+      "id": "b2-12",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b2-12.wav",
+      "at": {
+        "cue": "b2-11",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "rock corridor",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L18-b2-12.zei.wav"
+      }
+    },
+    {
+      "id": "b3-1",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b3-1.wav",
+      "at": {
+        "cue": "b2-12",
+        "edge": "end",
+        "offset": 1.6
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L19-b3-1.deluin.wav"
+      }
+    },
+    {
+      "id": "b3-2",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b3-2.wav",
+      "at": {
+        "cue": "b3-1",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "stand_in": "the owner's take with a robotic filter (no voice sheet yet); never published"
+      }
+    },
+    {
+      "id": "b3-3",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b3-3.wav",
+      "at": {
+        "cue": "b3-2",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L21-b3-3.zei.wav"
+      }
+    },
+    {
+      "id": "b3-4",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b3-4.wav",
+      "at": {
+        "cue": "b3-3",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L22-b3-4.deluin.wav"
+      }
+    },
+    {
+      "id": "b3-5",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b3-5.wav",
+      "at": {
+        "cue": "b3-4",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L23-b3-5.zei.wav"
+      }
+    },
+    {
+      "id": "b3-6",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b3-6.wav",
+      "at": {
+        "cue": "b3-5",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L24-b3-6.zei.wav"
+      }
+    },
+    {
+      "id": "b3-7",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b3-7.wav",
+      "at": {
+        "cue": "b3-6",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L25-b3-7.deluin.wav"
+      }
+    },
+    {
+      "id": "b3-8",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b3-8.wav",
+      "at": {
+        "cue": "b3-7",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L26-b3-8.zei.wav"
+      }
+    },
+    {
+      "id": "b3-9",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b3-9.wav",
+      "at": {
+        "cue": "b3-8",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L27-b3-9.deluin.wav"
+      }
+    },
+    {
+      "id": "b3-10",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b3-10.wav",
+      "at": {
+        "cue": "b3-9",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L28-b3-10.zei.wav"
+      }
+    },
+    {
+      "id": "b3-11",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b3-11.wav",
+      "at": {
+        "cue": "b3-10",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L29-b3-11.deluin.wav"
+      }
+    },
+    {
+      "id": "b3-12",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b3-12.wav",
+      "at": {
+        "cue": "b3-11",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L30-b3-12.zei.wav"
+      }
+    },
+    {
+      "id": "b3-13",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b3-13.wav",
+      "at": {
+        "cue": "b3-12",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L31-b3-13.bai.wav"
+      }
+    },
+    {
+      "id": "b4-1",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b4-1.wav",
+      "at": {
+        "cue": "b3-13",
+        "edge": "end",
+        "offset": 1.6
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L32-b4-1.deluin.wav"
+      }
+    },
+    {
+      "id": "b4-2",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b4-2.wav",
+      "at": {
+        "cue": "b4-1",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L33-b4-2.zei.wav"
+      }
+    },
+    {
+      "id": "b4-3",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b4-3.wav",
+      "at": {
+        "cue": "b4-2",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L34-b4-3.deluin.wav"
+      }
+    },
+    {
+      "id": "b4-4",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b4-4.wav",
+      "at": {
+        "cue": "b4-3",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L35-b4-4.zei.wav"
+      }
+    },
+    {
+      "id": "b4-5",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b4-5.wav",
+      "at": {
+        "cue": "b4-4",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L36-b4-5.deluin.wav"
+      }
+    },
+    {
+      "id": "b5-1",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b5-1.wav",
+      "at": {
+        "cue": "b4-5",
+        "edge": "end",
+        "offset": 1.6
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L37-b5-1.deluin.wav"
+      }
+    },
+    {
+      "id": "b5-2",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b5-2.wav",
+      "at": {
+        "cue": "b5-1",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L38-b5-2.zei.wav"
+      }
+    },
+    {
+      "id": "b5-3",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b5-3.wav",
+      "at": {
+        "cue": "b5-2",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L39-b5-3.deluin.wav"
+      }
+    },
+    {
+      "id": "b5-4",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b5-4.wav",
+      "at": {
+        "cue": "b5-3",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L40-b5-4.deluin.wav"
+      }
+    },
+    {
+      "id": "b5-5",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b5-5.wav",
+      "at": {
+        "cue": "b5-4",
+        "edge": "end",
+        "offset": 0.35
+      },
+      "room": "courtyard café, open air",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L41-b5-5.bai.wav"
+      }
+    },
+    {
+      "id": "b6-1",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/b6-1.wav",
+      "at": {
+        "cue": "b5-5",
+        "edge": "end",
+        "offset": 1.6
+      },
+      "room": "street gate at dusk",
+      "source": {
+        "converted": "scenes-out/fifteen-days/lines/L42-b6-1.deluin.wav"
+      }
+    },
+    {
+      "id": "hold-s31",
+      "track": "hold",
+      "stem": "scenes-out/fifteen-days/stems/hold-s31.wav",
+      "at": {
+        "cue": "b6-1",
+        "edge": "end",
+        "offset": 1.0
+      }
+    },
+    {
+      "id": "hold-s32",
+      "track": "hold",
+      "stem": "scenes-out/fifteen-days/stems/hold-s32.wav",
+      "at": {
+        "cue": "hold-s31",
+        "edge": "end",
+        "offset": 0
+      }
+    },
+    {
+      "id": "hold-s33",
+      "track": "hold",
+      "stem": "scenes-out/fifteen-days/stems/hold-s33.wav",
+      "at": {
+        "cue": "hold-s32",
+        "edge": "end",
+        "offset": 0
+      }
+    },
+    {
+      "id": "hold-s34",
+      "track": "hold",
+      "stem": "scenes-out/fifteen-days/stems/hold-s34.wav",
+      "at": {
+        "cue": "hold-s33",
+        "edge": "end",
+        "offset": 0
+      }
+    },
+    {
+      "id": "hold-s35",
+      "track": "hold",
+      "stem": "scenes-out/fifteen-days/stems/hold-s35.wav",
+      "at": {
+        "cue": "hold-s34",
+        "edge": "end",
+        "offset": 0
+      }
+    },
+    {
+      "id": "hold-s36",
+      "track": "hold",
+      "stem": "scenes-out/fifteen-days/stems/hold-s36.wav",
+      "at": {
+        "cue": "hold-s35",
+        "edge": "end",
+        "offset": 0
+      }
+    },
+    {
+      "id": "hold-s37",
+      "track": "hold",
+      "stem": "scenes-out/fifteen-days/stems/hold-s37.wav",
+      "at": {
+        "cue": "hold-s36",
+        "edge": "end",
+        "offset": 0
+      }
+    },
+    {
+      "id": "hold-s38",
+      "track": "hold",
+      "stem": "scenes-out/fifteen-days/stems/hold-s38.wav",
+      "at": {
+        "cue": "hold-s37",
+        "edge": "end",
+        "offset": 0
+      }
+    },
+    {
+      "id": "hold-s39",
+      "track": "hold",
+      "stem": "scenes-out/fifteen-days/stems/hold-s39.wav",
+      "at": {
+        "cue": "hold-s38",
+        "edge": "end",
+        "offset": 0
+      }
+    },
+    {
+      "id": "hold-s40",
+      "track": "hold",
+      "stem": "scenes-out/fifteen-days/stems/hold-s40.wav",
+      "at": {
+        "cue": "hold-s39",
+        "edge": "end",
+        "offset": 0
+      }
+    },
+    {
+      "id": "hold-s41",
+      "track": "hold",
+      "stem": "scenes-out/fifteen-days/stems/hold-s41.wav",
+      "at": {
+        "cue": "hold-s40",
+        "edge": "end",
+        "offset": 0
+      }
+    },
+    {
+      "id": "dreadnaught",
+      "track": "music",
+      "stem": "scenes-out/fifteen-days/music/dreadnaught-v3-fal.wav",
+      "at": {
+        "cue": "b5-5",
+        "edge": "start",
+        "offset": -1.2
+      },
+      "level_db": 4,
+      "fade_in": 0.15,
+      "fade_out": 2.0,
+      "note": "Dreadnaught v3 (owner's pick), blaring as Bai pulls off one side of her headphones; sits under her line"
+    },
+    {
+      "id": "laugh",
+      "track": "voice",
+      "stem": "scenes-out/fifteen-days/stems/laugh.wav",
+      "at": {
+        "cue": "b3-1",
+        "edge": "start",
+        "offset": -2.6
+      },
+      "level_db": -4,
+      "note": "Deluin laughing at the table as Zei arrives (the owner's take, the agent's pick of four)"
+    }
+  ],
+  "shots": [
+    {
+      "id": "s01",
+      "image": "scenes-out/fifteen-days/cards/s01.png",
+      "image_sha256": "7ada6d47177d10947d615a8d42a7d9210661eb3b7fb70f758132966a891af28f",
+      "at": {
+        "cue": "@start",
+        "edge": "start",
+        "offset": 0.0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.15
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s02",
+      "image": "scenes-out/fifteen-days/cards/s02.png",
+      "image_sha256": "2211716683a0cf17162c43faad2c151fa9b1ac28ec6a3d80aa79634a34ac0968",
+      "at": {
+        "cue": "@start",
+        "edge": "start",
+        "offset": 5.0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s03",
+      "image": "scenes-out/fifteen-days/cards/s03.png",
+      "image_sha256": "4385acfb02e7a7238c789c2b1f67e1d62b66ba06a3c8e550954ba0d6537bfc29",
+      "at": {
+        "cue": "b1-1",
+        "edge": "start",
+        "offset": -0.6
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "pan",
+        "from": {
+          "x": 0.42,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "to": {
+          "x": 0.58,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s04",
+      "image": "scenes-out/fifteen-days/cards/s04.png",
+      "image_sha256": "175b2087ad303ec7efe96f84aaa230dac0e27507339f08217a4ae634b3dd64fd",
+      "at": {
+        "cue": "b1-3",
+        "edge": "start",
+        "offset": -0.4
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s05",
+      "image": "scenes-out/fifteen-days/cards/s05.png",
+      "image_sha256": "4075a121bda709d24d1ebd0fc8bc4cf2b4495800b7bd19254b1df2a6523b26dc",
+      "at": {
+        "cue": "b1-3",
+        "edge": "end",
+        "offset": 0.2
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s06",
+      "image": "scenes-out/fifteen-days/cards/s06.png",
+      "image_sha256": "3f1781355a067bc790d18b05821ac45bc127dd70e968e2aae1f9f8681d43eeaf",
+      "at": {
+        "cue": "b1-6",
+        "edge": "start",
+        "offset": -0.4
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.1
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s07",
+      "image": "scenes-out/fifteen-days/cards/s07.png",
+      "image_sha256": "4eb16acca2601d5cb95fe4f87e7ee7ec5a7bb12dd342ec345f781bda5be8e3b2",
+      "at": {
+        "cue": "b2-1",
+        "edge": "start",
+        "offset": -1.4
+      },
+      "transition": {
+        "type": "dissolve",
+        "seconds": 0.8
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s08",
+      "image": "scenes-out/fifteen-days/cards/s08.png",
+      "image_sha256": "3f44255cafefe01574124487db25cc18a8dd4369a04d5dc4b77431f15f2d6c8c",
+      "at": {
+        "cue": "b2-2",
+        "edge": "start",
+        "offset": -0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "pan",
+        "from": {
+          "x": 0.42,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "to": {
+          "x": 0.58,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s09",
+      "image": "scenes-out/fifteen-days/cards/s09.png",
+      "image_sha256": "de1757b457d1a01cc243de85e5a114cbfcb5857f8c02ce874a62ba2a9a98a391",
+      "at": {
+        "cue": "b2-6",
+        "edge": "start",
+        "offset": -0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s10",
+      "image": "scenes-out/fifteen-days/cards/s10.png",
+      "image_sha256": "b9570e7f541861c894368a49dc47a2ed8b0927e3b44eef628d9fea4d1d860a14",
+      "at": {
+        "cue": "b2-8",
+        "edge": "start",
+        "offset": -0.6
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.1
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s11",
+      "image": "scenes-out/fifteen-days/cards/s11.png",
+      "image_sha256": "1505ea6ed205854fb595ceb7e240154cc51191137843cfdc081071a801be668b",
+      "at": {
+        "cue": "b2-10",
+        "edge": "start",
+        "offset": -0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s12",
+      "image": "scenes-out/fifteen-days/cards/s12.png",
+      "image_sha256": "20589a3709712731631994b931b8d091de7c58160177360f5e9e63770c3c7890",
+      "at": {
+        "cue": "b2-12",
+        "edge": "start",
+        "offset": -0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "pan",
+        "from": {
+          "x": 0.58,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "to": {
+          "x": 0.42,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s13",
+      "image": "scenes-out/fifteen-days/cards/s13.png",
+      "image_sha256": "e1b858923b31f3395fee907a65f029d6c714b565c8a109b3c4c23b43c49bcf47",
+      "at": {
+        "cue": "b3-1",
+        "edge": "start",
+        "offset": -3.0
+      },
+      "transition": {
+        "type": "dissolve",
+        "seconds": 0.8
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s14",
+      "image": "scenes-out/fifteen-days/cards/s14.png",
+      "image_sha256": "fc15068df06154b3c29fd2cc3ae29d3f0f724afadf07636d1014c7fae3a3133b",
+      "at": {
+        "cue": "b3-1",
+        "edge": "start",
+        "offset": -0.2
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s15",
+      "image": "scenes-out/fifteen-days/cards/s15.png",
+      "image_sha256": "6848df1d0a167fb0b348d3900ec7fb88ace06e6428fd7903f52c6e1730fb81f5",
+      "at": {
+        "cue": "b3-2",
+        "edge": "start",
+        "offset": -0.8
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "pan",
+        "from": {
+          "x": 0.42,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "to": {
+          "x": 0.58,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s16",
+      "image": "scenes-out/fifteen-days/cards/s16.png",
+      "image_sha256": "98b979b5077bd984f0087b6497d5ac9670b975c6c15fcc0d316d9e12b9015078",
+      "at": {
+        "cue": "b3-3",
+        "edge": "start",
+        "offset": -0.4
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s17",
+      "image": "scenes-out/fifteen-days/cards/s17.png",
+      "image_sha256": "f76c18e8acf344dff458e6bd4a5ba6d2697a16333371321b8452740c70c67feb",
+      "at": {
+        "cue": "b3-5",
+        "edge": "start",
+        "offset": -0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s18",
+      "image": "scenes-out/fifteen-days/cards/s18.png",
+      "image_sha256": "6ddcd16641acdc9077ba91c8c0244b5187cf31c1ca1eda4e8ddd6ef1a22ef955",
+      "at": {
+        "cue": "b3-9",
+        "edge": "start",
+        "offset": -0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "pan",
+        "from": {
+          "x": 0.58,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "to": {
+          "x": 0.42,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s19",
+      "image": "scenes-out/fifteen-days/cards/s19.png",
+      "image_sha256": "b84cbc0c11cedf8c59d75a888338bd494a8d59d6dac5b39a2d02a186128356f7",
+      "at": {
+        "cue": "b3-13",
+        "edge": "start",
+        "offset": -0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s20",
+      "image": "scenes-out/fifteen-days/cards/s20.png",
+      "image_sha256": "cfa81c50c1feb6106ed47666faeea406e0b0c6b262cb98c499832e425e24ca9b",
+      "at": {
+        "cue": "b3-13",
+        "edge": "end",
+        "offset": 0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.1
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s21",
+      "image": "scenes-out/fifteen-days/cards/s21.png",
+      "image_sha256": "39e0441003b5b06ece91e5a7599c8cc69adcec469c487739a49aee76ed3bce9d",
+      "at": {
+        "cue": "b4-1",
+        "edge": "start",
+        "offset": -1.2
+      },
+      "transition": {
+        "type": "dissolve",
+        "seconds": 0.8
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.1
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s22",
+      "image": "scenes-out/fifteen-days/cards/s22.png",
+      "image_sha256": "7fbfba6a18f9659aab0a18ac5d654629dd6cf7c8eaf25d3c2e189383c2507cd6",
+      "at": {
+        "cue": "b4-2",
+        "edge": "start",
+        "offset": -0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "pan",
+        "from": {
+          "x": 0.42,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "to": {
+          "x": 0.58,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s23",
+      "image": "scenes-out/fifteen-days/cards/s23.png",
+      "image_sha256": "e9f7bb68c3a72e404203b46b89d9c252f51b83098ee2d61a1f016398b41056e6",
+      "at": {
+        "cue": "b4-3",
+        "edge": "end",
+        "offset": 0.2
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.15
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s24",
+      "image": "scenes-out/fifteen-days/cards/s24.png",
+      "image_sha256": "52a21448855b27e8a7963113ff9ce4a8470f3ee2bb223dca275372eecedd8812",
+      "at": {
+        "cue": "b4-5",
+        "edge": "start",
+        "offset": -0.5
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s25",
+      "image": "scenes-out/fifteen-days/cards/s25.png",
+      "image_sha256": "4db32e4c00c12d7639f8826640f02c56bd4687daf8451fe0de8a12cd6b301b83",
+      "at": {
+        "cue": "b4-5",
+        "edge": "end",
+        "offset": 0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s26",
+      "image": "scenes-out/fifteen-days/cards/s26.png",
+      "image_sha256": "144af05806180049f26b826754f6daeacd7f96760726c889599e5b647cd1066f",
+      "at": {
+        "cue": "b5-1",
+        "edge": "start",
+        "offset": -0.4
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "pan",
+        "from": {
+          "x": 0.42,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "to": {
+          "x": 0.58,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s27",
+      "image": "scenes-out/fifteen-days/cards/s27.png",
+      "image_sha256": "fbbc3a60db63833b6dc6fba51a9144f4c360f06c6b6680b45972435cdf9c9752",
+      "at": {
+        "cue": "b5-2",
+        "edge": "start",
+        "offset": -0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s28",
+      "image": "scenes-out/fifteen-days/cards/s28.png",
+      "image_sha256": "338364d3e39ca1c8ae1d3eeda12a128b689dc6cb4424c2347b983898950b2e00",
+      "at": {
+        "cue": "b5-3",
+        "edge": "end",
+        "offset": 0.1
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s29",
+      "image": "scenes-out/fifteen-days/cards/s29.png",
+      "image_sha256": "03f6bc458ec30af28e81ca2a9da0e870cde3dc0d779104662a8b749945188a5b",
+      "at": {
+        "cue": "b5-5",
+        "edge": "start",
+        "offset": -0.6
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s30",
+      "image": "scenes-out/fifteen-days/cards/s30.png",
+      "image_sha256": "50d9054c4f1fcda1691caa3086b96e85262b863bc4d31a3a5b9926bf7d3fd1ed",
+      "at": {
+        "cue": "b6-1",
+        "edge": "start",
+        "offset": -1.5
+      },
+      "transition": {
+        "type": "dissolve",
+        "seconds": 1.0
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.06
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s31",
+      "image": "scenes-out/fifteen-days/cards/s31.png",
+      "image_sha256": "d001afc6ceaa96a4b26ae7f3e3bd5f194745eb49ca92ef3406544fc8b289cfc5",
+      "at": {
+        "cue": "hold-s31",
+        "edge": "start",
+        "offset": 0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s32",
+      "image": "scenes-out/fifteen-days/cards/s32.png",
+      "image_sha256": "2cb7c78edde346c165c814611d29ac3b7671d17b4d238c6ba618f50aa3a1cb2d",
+      "at": {
+        "cue": "hold-s32",
+        "edge": "start",
+        "offset": 0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.15
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s33",
+      "image": "scenes-out/fifteen-days/cards/s33.png",
+      "image_sha256": "7706731ed9e7555342922cd3d1ccee573ae5aaabc8d973f74b8e432bce0f7789",
+      "at": {
+        "cue": "hold-s33",
+        "edge": "start",
+        "offset": 0
+      },
+      "transition": {
+        "type": "dissolve",
+        "seconds": 0.8
+      },
+      "move": {
+        "kind": "pan",
+        "from": {
+          "x": 0.42,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "to": {
+          "x": 0.58,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s34",
+      "image": "scenes-out/fifteen-days/cards/s34.png",
+      "image_sha256": "54414ae040587280aebd6d760752785ff10d78a008b7161ba01e41ea0de8d2d2",
+      "at": {
+        "cue": "hold-s34",
+        "edge": "start",
+        "offset": 0
+      },
+      "transition": {
+        "type": "dissolve",
+        "seconds": 1.2
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.1
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s35",
+      "image": "scenes-out/fifteen-days/cards/s35.png",
+      "image_sha256": "b45107b70b49d9e31ab6a196ecaef5d72940a7f795c07f7d80e8962c2bbd8873",
+      "at": {
+        "cue": "hold-s35",
+        "edge": "start",
+        "offset": 0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s36",
+      "image": "scenes-out/fifteen-days/cards/s36.png",
+      "image_sha256": "a50819ff5d291a795d7d629b5dbc3ad2182d00b753bcb99a5f488915ef252929",
+      "at": {
+        "cue": "hold-s36",
+        "edge": "start",
+        "offset": 0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s37",
+      "image": "scenes-out/fifteen-days/cards/s37.png",
+      "image_sha256": "42be1f215973e68d1fc06dfc948e913a86a7c368e461d85506aaef0eac891ea2",
+      "at": {
+        "cue": "hold-s37",
+        "edge": "start",
+        "offset": 0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s38",
+      "image": "scenes-out/fifteen-days/cards/s38.png",
+      "image_sha256": "1f3a2c3c464fc6f442290267428b37a6685c5297f070f1a2fb4704e5b3461e9c",
+      "at": {
+        "cue": "hold-s38",
+        "edge": "start",
+        "offset": 0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s39",
+      "image": "scenes-out/fifteen-days/cards/s39.png",
+      "image_sha256": "05851a351ff093ceab15b1cdf3894ba9e1a0c66555c632b487e7a30f23bbef31",
+      "at": {
+        "cue": "hold-s39",
+        "edge": "start",
+        "offset": 0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s40",
+      "image": "scenes-out/fifteen-days/cards/s40.png",
+      "image_sha256": "ca438f1d6dcb8a049297881622176e0da25417405b478b1bd04cef2e86f8aa7b",
+      "at": {
+        "cue": "hold-s40",
+        "edge": "start",
+        "offset": 0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      }
+    },
+    {
+      "id": "s41",
+      "image": "scenes-out/fifteen-days/cards/s41.png",
+      "image_sha256": "1d8f8f0f4d22bc4be369d75f77b3ca04e14904ae1fcd9317b6c4a55338396bd6",
+      "at": {
+        "cue": "hold-s41",
+        "edge": "start",
+        "offset": 0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      }
+    }
+  ],
+  "lettering": [],
+  "end_card": {
+    "file": "adaptations/fifteen-days/end-card.json",
+    "seconds": 8,
+    "fade_s": 0.8
+  }
+}

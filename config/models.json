@@ -339,7 +339,7 @@
         "on": "2026-10-15",
         "source": "https://huggingface.co/ACE-Step/Ace-Step1.5/blob/19671f406d603126926c1b7e2adc169acbcade22/README.md"
       },
-      "notes": "Approved by the owner on 2026-10-15 for the Dreadnaught clip (instrumental, a wordless scream). The card: 'You can strictly use the generated music for commercial purposes', trained on 'Professionally licensed music tracks'. Uses the 2B turbo DiT (acestep-v15-turbo), its VAE, and two component models with their own lines: Qwen/Qwen3-Embedding-0.6B (text encoder, 'license: apache-2.0', revision as bundled in this repo; upstream 97b0c614) and ACE-Step/acestep-5Hz-lm-0.6B (the planning language model, 'license: mit', revision 148d8ea0225bdab342ee1ae3a354275ccd60ca80). The 1.7B language model in the repo is not used. Runs from the ACE-Step-1.5 code (MIT, github.com/ace-step/ACE-Step-1.5 at ca1e85fe), kept outside the repository. Prompts describe qualities; no artist or band is named.",
+      "notes": "NOT USED (owner, 2026-10-15: 'we're using v3 from fal'; the local run was stopped to free the Mac). Approved by the owner on 2026-10-15 for the Dreadnaught clip (instrumental, a wordless scream). The card: 'You can strictly use the generated music for commercial purposes', trained on 'Professionally licensed music tracks'. Uses the 2B turbo DiT (acestep-v15-turbo), its VAE, and two component models with their own lines: Qwen/Qwen3-Embedding-0.6B (text encoder, 'license: apache-2.0', revision as bundled in this repo; upstream 97b0c614) and ACE-Step/acestep-5Hz-lm-0.6B (the planning language model, 'license: mit', revision 148d8ea0225bdab342ee1ae3a354275ccd60ca80). The 1.7B language model in the repo is not used. Runs from the ACE-Step-1.5 code (MIT, github.com/ace-step/ACE-Step-1.5 at ca1e85fe), kept outside the repository. Prompts describe qualities; no artist or band is named.",
       "runs_on": "local",
       "hosted": null,
       "model_record": "repo, revision, components and the weights' sha256",
@@ -363,7 +363,13 @@
       ],
       "local": {
         "package": "ACE-Step-1.5 code at ca1e85fe9430179831e6bc6be790c332190a3866 (MIT), in ~/acestep-1.5 with its own uv environment",
-        "weights": {},
+        "weights": {
+          "Qwen3-Embedding-0.6B/model.safetensors": "0437e45c94563b09e13cb7a64478fc406947a93cb34a7e05870fc8dcd48e23fd",
+          "acestep-5Hz-lm-0.6B/model.safetensors": "5d92a60806e2e88c04de58ddc6dde93f2bc8f1336162b3ad5853886c9bcc6b82",
+          "acestep-v15-turbo/model.safetensors": "3f6e0797fad420a39bd33979eb6e840e30989e34a3794e843d23b60ec6e422d7",
+          "acestep-v15-turbo/silence_latent.pt": "a778e9dd942f5e8b2c09c55370782d318834432b03dabbcdf70e6ed49ad6358b",
+          "vae/diffusion_pytorch_model.safetensors": "da17edb604c40deaf09e9b24974e590d1ca83a374070e5d0884cfa4bed9a99b0"
+        },
         "weights_dir": "~/acestep-1.5/checkpoints (outside the repository)"
       }
     },

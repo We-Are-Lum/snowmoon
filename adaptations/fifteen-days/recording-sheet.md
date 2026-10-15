@@ -13,14 +13,14 @@ out; the chosen take of each line is converted into its character's voice; the o
 in `~/snowmoon-takes/full/takes/`, outside the repository, in case you want to swap one.
 Lines that can't be matched are flagged.
 
-42 lines, 549 words, in 6 files.
+42 lines, 557 words, in 6 files.
 
 ## beat-1 · The walls hold (optional opener)
 
 **1.** (one) **ZEI**: You'd think after making it this far, they'd stop underestimating the foreigner.  
 <sub>The waiting room. Bai and Zei are watching the board.</sub>
 
-**2.** (two) **BAI**: It wouldn't be so annoying if he wasn't so damned pretty.  
+**2.** (two) **BAI**: It wouldn't be so annoying if he wasn't so damn pretty.  
 <sub>straight after line 1</sub>
 
 **3.** (three) **BAI**: Nah, way too fake for me.  
@@ -53,7 +53,7 @@ Lines that can't be matched are flagged.
 **11.** (eleven) **ZEI**: Sure, yeah, that works well for me!  
 <sub>straight after line 10</sub>
 
-**12.** (twelve) **DELUIN**: Great, I'll see you then. Bai, you're welcome to come too.  
+**12.** (twelve) **DELUIN**: Great, I'll see you then. Bai, you're welcome to come too. Hope to see you there! Bai.  
 <sub>straight after line 11</sub>
 
 **13.** (thirteen) **ZEI**: See you. So are you gonna come? Should be fun! *("See you." to Deluin as he goes; the rest to Bai)*  
@@ -65,7 +65,7 @@ Lines that can't be matched are flagged.
 **15.** (fifteen) **ZEI**: Take it easy, you're my competition too.  
 <sub>straight after line 14</sub>
 
-**16.** (sixteen) **BAI**: 'Was.' And you know I hate you, and know all your tricks anyway.  
+**16.** (sixteen) **BAI**: 'Was.' And you know I hate you. You can know all your tricks anyway.  
 <sub>straight after line 15</sub>
 
 **17.** (seventeen) **BAI**: Deluin? We don't know anything about this guy.  
@@ -83,7 +83,7 @@ Lines that can't be matched are flagged.
 **20.** (twenty) **ROBOT**: jie mo kai tu jie hei ja ma? *(no voice sheet yet: recorded, not converted)*  
 <sub>A robot slides up to the table.</sub>
 
-**21.** (twenty-one) **ZEI**: Whoa  
+**21.** (twenty-one) **ZEI**: Ooh, hmm.  
 <sub>A menu appears: the book's own glyph picture.</sub>
 
 **22.** (twenty-two) **DELUIN**: What is it?  
@@ -128,7 +128,7 @@ Lines that can't be matched are flagged.
 **34.** (thirty-four) **DELUIN**: Sure. Yeah, we have our fair share. We care a lot about natural beauty, and maybe have an unnatural obsession with old styles. Less cameras, more castles, that kind of thing.  
 <sub>straight after line 33</sub>
 
-**35.** (thirty-five) **ZEI**: I see where you got your love of walls then.  
+**35.** (thirty-five) **ZEI**: I see where you get your love of walls then.  
 <sub>Deluin's stack has turned into a little wall of sugar cubes.</sub>
 
 **36.** (thirty-six) **DELUIN**: Yes. Simple, straightforward, useful.  
