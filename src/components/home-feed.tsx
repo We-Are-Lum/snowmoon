@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from 'react';
 import Link from 'next/link';
-import { openedChapters } from '~/lib/chat/device';
 import { AI_LABEL, readerImageView } from '~/lib/ai-declared';
 import { HOME_TEXT as H } from '~/lib/home';
 import { AiLabel } from './recipe-sheet';
@@ -10,9 +9,8 @@ import { AiLabel } from './recipe-sheet';
 /**
  * "Just made": readers' published images, newest first, from the same query as /images (feed(),
  * src/lib/images/data.ts), each with the same AI label. Only what exists: images (Design's sample also
- * had styles, character sheets and planning threads, which this edition does not have yet). An image
- * from a chapter past the furthest one opened on this device is covered, as on /images; its row gives
- * the chapter only. The time is served as a date and shown as "n min ago" once loaded.
+ * had styles, character sheets and planning threads, which this edition does not have yet). Nothing is
+ * covered by chapter (owner, 2026-10-14). The time is served as a date and shown as "n min ago" once loaded.
  */
 export type HomeFeedItem = { versionId: string; url: string; chapter: number; where: string | null; by: string; at: string; alt: string; prompt: string };
 
@@ -26,12 +24,8 @@ function ago(iso: string, now: number): string {
 }
 
 export function HomeFeed({ items, unavailable }: { items: HomeFeedItem[]; unavailable: boolean }) {
-  const [furthest, setFurthest] = useState<number | null>(null);
   const [now, setNow] = useState<number | null>(null);
-  useEffect(() => {
-    setFurthest(Math.max(1, ...openedChapters()));
-    setNow(Date.now());
-  }, []);
+  useEffect(() => setNow(Date.now()), []);
   return (
     <section className="home-card home-feed" aria-labelledby="home-feed-head">
       <div className="home-card-head">
@@ -43,28 +37,23 @@ export function HomeFeed({ items, unavailable }: { items: HomeFeedItem[]; unavai
       {items.length ? (
         <ul className="home-feed-list" aria-label="Newest first">
           {items.map((im) => {
-            const covered = furthest === null || im.chapter > furthest;
             const date = im.at.slice(0, 10);
             return (
               <li key={im.versionId}>
-                <Link href={`/image/${im.versionId}`} className="home-feed-thumb" aria-label={covered ? `An image from chapter ${im.chapter}` : im.alt}>
-                  {covered ? (
-                    <span className="home-feed-cover" aria-hidden="true" />
-                  ) : (
-                    // eslint-disable-next-line @next/next/no-img-element
-                    <img src={im.url} alt="" width={64} height={64} loading="lazy" />
-                  )}
+                <Link href={`/image/${im.versionId}`} className="home-feed-thumb" aria-label={im.alt}>
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={im.url} alt="" width={64} height={64} loading="lazy" />
                 </Link>
                 <div className="home-feed-body">
                   <span className="home-feed-what">
                     Chapter {im.chapter}
-                    {im.where && !covered ? ` · ${im.where}` : ''}
+                    {im.where ? ` · ${im.where}` : ''}
                   </span>
                   <p className="block-caption home-feed-caption">
                     <AiLabel
                       kind="image"
                       text={AI_LABEL.imageBy(im.by)}
-                      view={readerImageView({ versionId: im.versionId, by: im.by, prompt: covered ? undefined : im.prompt, chapter: im.chapter, where: covered ? null : im.where, date })}
+                      view={readerImageView({ versionId: im.versionId, by: im.by, prompt: im.prompt, chapter: im.chapter, where: im.where, date })}
                     />
                   </p>
                 </div>

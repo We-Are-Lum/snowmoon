@@ -385,7 +385,7 @@ function LiveMatch({ id, onDone, onMatch }: { id: string; onDone: () => void; on
             <p className="mp-label">{ruleLine}</p>
             <MinpentaiTags tags={['rules', 'draft']} />
           </div>
-          <div className="mp-foot row"><span className="mp-label mp-pts">{pts} OF 8 PTS LEFT</span><button className="mp-btn primary flex" onClick={() => placeTurn(mineDrawn, true)}>END TURN</button></div>
+          <div className="mp-foot"><button className="mp-btn primary" onClick={() => placeTurn(mineDrawn, true)}>END TURN</button></div>
         </>
       )}
       {!showMatched && act && m.ended && (
@@ -458,7 +458,7 @@ function LiveMatch({ id, onDone, onMatch }: { id: string; onDone: () => void; on
       ) : (
         <div className="mp-split" style={{ flexDirection: 'column' }}>
           <div className="mp-boardarea" style={{ flex: 'none', padding: 0 }}>
-            <PlayBoard bd={bd} label={label}>
+            <PlayBoard bd={bd} label={label} foot={showMatched || m.paused ? undefined : act && !m.ended ? <span className="mp-pts">{pts} OF 8 PTS LEFT</span> : act ? `WAITING FOR @${opp.toUpperCase()} · ${fmt(msLeft ?? 0)}` : phase === 'run' ? (nextAt >= MAXS ? 'NO MORE TURNS · ENDS AT STEP 96' : `NEXT TURN AT STEP ${nextAt}`) : undefined}>
               <div className="mp-strip" aria-hidden="true">{strip}</div>
               {phase !== 'over' && !replay && <button className="mp-fsgo" title="Full screen" aria-label="Full screen" onClick={() => setFs(true)}>⤢</button>}
               {showMatched && <div className="mp-banner" aria-hidden="true"><span className="mp-banner-dz">MU GU GEI TAU FA</span><span className="mp-banner-en">The battle begins in fifty ticks.</span></div>}

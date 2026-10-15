@@ -204,7 +204,6 @@
 .pictures-sort { display: flex; gap: 14px; margin: 0; font-family: var(--label); font-size: var(--text-label); line-height: 16px; text-transform: uppercase; }
 .pictures-sort a { display: flex; align-items: center; min-height: 44px; margin-bottom: -1px; color: var(--muted); border-bottom: 1px solid transparent; text-decoration: none; }
 .pictures-sort a[aria-current='page'] { color: var(--ink); border-bottom-color: var(--ink); }
-.pictures-covered { padding: 6px 0; font-family: var(--label); font-size: var(--text-label); line-height: 16px; text-transform: uppercase; color: var(--muted); }
 .pictures-list { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 16px; }
 .pictures-list li { display: flex; flex-direction: column; gap: 6px; }
 .pictures-image { display: block; }
@@ -212,18 +211,27 @@
 .pictures-row { display: flex; justify-content: space-between; gap: 12px; margin: 0; font-family: var(--label); font-size: var(--text-label); line-height: 1.5; text-transform: uppercase; color: var(--ink); }
 .pictures-date { flex: none; color: var(--muted); }
 .pictures-caption { margin: 0; line-height: 1.5; text-transform: uppercase; }
-/* A spoiler, covered: an ink tile that gives the chapter only. */
-.pictures-cover {
-  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 10px; aspect-ratio: 16 / 9; padding: 0 30px;
-  background: var(--cover); color: var(--cover-ink); text-align: center; font-size: 16px; line-height: 1.35;
-}
-.pictures-cover p { margin: 0; }
 .pictures-show {
   min-height: 44px; padding: 0 14px; border: 1px solid var(--cover-ink); border-radius: var(--radius); background: transparent; color: var(--cover-ink); cursor: pointer;
   font-family: var(--label); font-size: var(--text-label); line-height: 16px; text-transform: uppercase;
 }
 .pictures-show:focus-visible { outline: 2px solid var(--cover-ink); outline-offset: 2px; }
 .pictures-empty { color: var(--muted); }
+/* Pictures' four choices (owner, 2026-10-14): two by two on a phone, one row from 768px. */
+.pictures-menu { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 16px 0 20px; }
+.pictures-menu a { display: flex; flex-direction: column; gap: 2px; min-height: 64px; padding: 10px 12px; border: 1px solid var(--rule); border-radius: var(--radius); color: var(--ink); text-decoration: none; box-sizing: border-box; }
+.pictures-menu a[aria-current='page'] { border-color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
+.pictures-menu a:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.pictures-menu-label { font-family: var(--label); font-size: var(--text-label); line-height: 16px; text-transform: uppercase; }
+.pictures-menu-hint { font-size: 15px; line-height: 1.3; color: var(--muted); }
+@media (min-width: 768px) { .pictures-menu { grid-template-columns: repeat(4, 1fr); } }
+/* The mixed feed: a moment's setting, and a character sheet's or a style's sample. */
+.pictures-setting { margin: 0; font-family: var(--label); font-size: var(--text-label); line-height: 1.5; text-transform: uppercase; color: var(--muted); }
+.pictures-design { display: block; color: var(--ink); text-decoration: none; }
+.pictures-design img { aspect-ratio: 16 / 9; object-fit: cover; }
+.pictures-design-text { display: flex; align-items: center; justify-content: center; aspect-ratio: 16 / 9; padding: 0 24px; background: var(--soft); font-size: 22px; text-align: center; }
+.pictures-design:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.pictures-design-meta { font-family: var(--label); font-size: var(--text-label); color: var(--muted); }
 @media (min-width: 768px) {
   .page.pictures { max-width: 1100px; }
   .pictures h1 + p { max-width: var(--measure); }

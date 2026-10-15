@@ -33,7 +33,7 @@ coding agent and its helpers are in `docs/prompts/`.
   and every lettered image has a matching record in `lettering.json`.
 - `P1b`: every published narration file (each block and each chapter) matches
   its committed narration recipe.
-- `P1c`: in the database, every version of a published element has a recipe
+- `P1c`: in the database, every version of a published element has a recipe; a style or character sheet keeps one inside its body for each of its pictures instead, and passes only when it has pictures and every one names its prompt and model (owner, 2026-10-14)
   (reads the live database when `STUDIO_DATABASE_URL` is set).
 - `P1d`: a signed-out visitor reaches the exact prompt of every published
   image and narration: the chapter page links the recipe (and the lettering

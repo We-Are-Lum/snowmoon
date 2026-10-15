@@ -30,6 +30,7 @@ import postgres from 'postgres';
 import { ask, AskError, type Complete } from '../src/lib/chat/ask';
 import { retrieve } from '../src/lib/chat/retrieve';
 import { sanitizeReply } from '../src/lib/chat/sanitize';
+import { glossaryWords } from '../src/lib/chat/glossary';
 import { CHAT } from '../src/lib/config';
 import { providerOptions, servedBy, servingAllowed } from '../src/lib/chat/provider';
 
@@ -102,6 +103,28 @@ try {
     const far = sanitizeReply('Too wide [c1-b2–c1-b90].', allowed);
     check('a range too wide keeps only its ends, which must be allowed', far.cites.length === 0 && far.dropped.length === 2, JSON.stringify(far));
     check('a short quoted word stays', q.parts.some((p) => p.type === 'text' && p.text.includes('"Sure!"')));
+    // gpt-oss sometimes writes ids with a non-breaking hyphen, in parentheses: (c1‑b20‑c1‑b21).
+    const nb = sanitizeReply('A board game (c1\u2011b20\u2011c1\u2011b21). Later [c1\u2011b21].', allowed);
+    check('an id written with another dash is still a citation', JSON.stringify(nb.cites) === JSON.stringify(['c1-b20', 'c1-b21']) && nb.dropped.length === 0, JSON.stringify(nb));
+  }
+
+  // --- Glossary words in the question ---------------------------------------
+  {
+    // Minpentai first appears in chapter 2; "minpetai" is one letter off and not a word of the book.
+    const g = await glossaryWords(sql, 'everything about the game of minpetai', 32);
+    check('a misspelled glossary word is corrected', g.corrected.endsWith('game of Minpentai') && g.correctedWithin === g.corrected, JSON.stringify(g));
+    check('the corrected word is pointed to in the glossary', JSON.stringify(g.links) === JSON.stringify([{ slug: 'minpentai', term: 'Minpentai' }]), JSON.stringify(g.links));
+    const early = await glossaryWords(sql, 'everything about the game of minpetai', 1);
+    check('no glossary entry past the limit is pointed to', early.links.length === 0, JSON.stringify(early.links));
+    check('the model sees no correction to a word past the limit', early.correctedWithin.endsWith('minpetai') && early.corrected.endsWith('Minpentai'), JSON.stringify(early));
+    const named = await glossaryWords(sql, 'Why did gladias go to Redshire, and who is Pafogai Du?', 32);
+    check('people and places are not pointed to; a longer name wins over the shorter one inside it', named.links.map((l) => l.slug).join(',') === 'pafogai-du', JSON.stringify(named.links));
+    const lower = await glossaryWords(sql, 'who is pafogai du, and how is minpentai played?', 32);
+    check('glossary words are found in any case, in the order asked', lower.links.map((l) => l.slug).join(',') === 'pafogai-du,minpentai', JSON.stringify(lower.links));
+    const plain = await glossaryWords(sql, 'What is the theme of Snowmoon? Is a fin a min? Which menu number does he order?', 32);
+    check("the book's title, short lower-case words and an alias in lower case are not glossary links", plain.links.map((l) => l.slug).join(',') === '', JSON.stringify(plain.links));
+    const book = await glossaryWords(sql, 'what does the herald say', 32);
+    check('a word the book uses is not corrected', book.corrected === 'what does the herald say', JSON.stringify(book));
   }
 
   // --- Whole questions, with a stand-in model --------------------------------
@@ -202,6 +225,17 @@ try {
     const [{ n }] = await sql`select coalesce(sum(calls), 0)::int as n from studio.chat_costs where kind = 'search'`;
     check('the search-words call is counted in the cost totals', n >= 1, String(n));
     searchText = '';
+  }
+
+  {
+    // A misspelled glossary word: searched and asked about as the book spells it, and its entry pointed to.
+    calls.length = 0;
+    answerText = 'Commentary.';
+    const res = await ask(deps(113), { question: 'tell me about minpetai', limit: 12 });
+    const answerCall = calls.find((c) => c.model === CHAT.model && c.user.startsWith('Passages'))!;
+    check('the model is asked about the word as the book spells it', answerCall.user.endsWith('Question: tell me about Minpentai'), answerCall.user.slice(-60));
+    check('the passages sent mention it', /Minpentai/.test(answerCall.user.split('Question:')[0]));
+    check('the reply points to its glossary entry', res.state === 'answer' && res.glossary?.[0]?.slug === 'minpentai', JSON.stringify(res).slice(0, 200));
   }
 
   {

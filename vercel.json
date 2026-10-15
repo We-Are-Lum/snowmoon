@@ -9,7 +9,8 @@
       "site-local-fonts": false,
       "site-styles-per-day": false,
       "site-chat-owner-cap": false,
-      "site-launch-caps": false
+      "site-launch-caps": false,
+      "site-make-p1c": false
     }
   }
 }

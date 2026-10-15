@@ -27,8 +27,18 @@ export const IMAGE_WORDING = {
   preview: {
     promptLabel: 'Prompt, published in full',
   },
+  /** Pictures' menu and front page (owner, 2026-10-14: four clear choices; the feed shows all of them). Model-drafted wording. */
   feed: {
-    covered: (n: number) => `Spoilers covered after ch ${n}`,
+    menu: [
+      { key: 'moments', label: 'Moments', hint: 'Images of passages' },
+      { key: 'characters', label: 'Characters', hint: 'How the people look' },
+      { key: 'settings', label: 'Settings', hint: 'Where it happens' },
+      { key: 'styles', label: 'Styles', hint: 'Looks to build on' },
+    ],
+    latest: 'Newest first · moments, character sheets and styles',
+    kind: { moment: 'Moment', character: 'Character sheet', style: 'Style' },
+    setting: 'Setting:',
+    momentsLead: 'Images readers made for passages of the book, each shown with the passage it is of.',
   },
   reader: {
     order: 'Most liked first, then newest',
@@ -67,11 +77,11 @@ export const IMAGE_WORDING = {
   /** Step 4: styles, character sheets, forks, "use as my …" and My picks (docs/proposals/style-guides-and-sheets.md). */
   designs: {
     index: {
-      title: 'Styles & characters',
-      lead: 'Styles and character sheets readers made. The text of each one is added, in full, to the prompts that use it.',
+      leadStyles: 'Styles readers made. The text of each one is added, in full, to the prompts that use it.',
+      leadCharacters: 'The book’s characters, each with the sheets readers made of how they look. A sheet’s text is added, in full, to the prompts that use it.',
       tabStyles: 'Styles',
       tabCharacters: 'Characters',
-      tabPlaces: 'Places',
+      tabPlaces: 'Settings',
       newest: 'Newest first',
       built: 'Most built on',
       newStyle: '+ New style',
@@ -79,8 +89,6 @@ export const IMAGE_WORDING = {
       noStyles: 'No styles yet.',
       rowMeta: (by: string, v: number) => `${by} · v${v}`,
       sheets: (n: number) => (n === 0 ? 'No sheet yet' : n === 1 ? '1 sheet' : `${n} sheets`),
-      coveredRow: (ch: number) => `A character from chapter ${ch}, past where you’ve read.`,
-      showAnyway: 'Show anyway',
       yourPick: '○ Your pick',
       sampleAi: 'Sample: AI-generated · not by the author',
       viewAi: 'Views: AI-generated · not by the author',
@@ -88,7 +96,6 @@ export const IMAGE_WORDING = {
       drafted: 'Text drafted by the coding agent, a closed model',
       bookOrder: 'In the order the book first tells of them',
       myPicksLink: 'My picks →',
-      stylesLink: 'Styles & characters →',
     },
     page: {
       meta: (v: number, of: number, by: string, date: string) => `v${v} of ${of} · by ${by} · ${date}`,
@@ -120,7 +127,6 @@ export const IMAGE_WORDING = {
       bookTitle: 'What the book says · from the chapters you’ve read',
       bookNote: 'The book’s own words. Anything a sheet adds is its maker’s invention.',
       bookNone: 'Nothing yet in the chapters you’ve read.',
-      coveredPage: (ch: number) => `This character first appears in chapter ${ch}, past where you’ve read.`,
       howMade: 'How the pictures were made',
       pictureRecipe: (i: number) => `Picture ${i}`,
     },
@@ -225,9 +231,7 @@ export const IMAGE_WORDING = {
     sheets: {
       leadPlaces: 'The places the book’s scenes happen in. Each has what the book says, and this edition’s shorthand for how it looks.',
       placesOrder: 'In the order the book first goes there',
-      coveredPlaceRow: (ch: number) => `A place from chapter ${ch}, past where you’ve read.`,
       scenes: (n: number) => (n === 0 ? 'Not yet tied to a scene' : n === 1 ? 'In 1 scene' : `In ${n} scenes`),
-      coveredPlace: (ch: number) => `This place first appears in chapter ${ch}, past where you’ve read.`,
       summaryNote: 'Summary drafted by the coding agent, a closed model.',
       shorthandTitle: 'This edition’s shorthand',
       shorthandNote: 'Added to an image’s prompt when it is in the passage, and published with it. Drafted by the coding agent, a closed model; not from the book.',
@@ -249,7 +253,6 @@ export const IMAGE_WORDING = {
       noImages: 'No images yet.',
       seeded: 'This edition’s image',
       imageOf: (ch: number) => `Chapter ${ch} · AI-generated image · not by the author`,
-      coveredImage: (ch: number) => `From chapter ${ch}, past where you’ve read.`,
       inThisImage: 'In this image',
       inPassage: 'In this passage · change for this image only',
       character: 'Character',
@@ -334,7 +337,6 @@ export const IMAGE_WORDING_ROWS: { screen: string; where: string; text: string }
   { screen: 'Image page', where: 'src/app/image/[id]/page.tsx (caption; "Open in reader →" is the assistant’s approved row 23, reused)', text: 'AI image · by {byline} (button: opens the recipe sheet) / {date} · Chapter {n} · ¶ {a–b} · Open in reader →' },
   { screen: 'Image page', where: 'src/app/image/[id]/page.tsx (crumb)', text: '← Pictures · Trial' },
   { screen: 'Images by readers (in the chapter)', where: 'src/components/reader-images.tsx (bar)', text: '{n} images by readers · ¶ {a–b} · show ▾ / hide ▴' },
-  { screen: 'Pictures (feed)', where: 'src/components/image-feed.tsx (order strip)', text: IMAGE_WORDING.feed.covered(3).replace('3', '{n}') },
   { screen: 'Images by readers (in the chapter)', where: 'src/components/reader-images.tsx (order, now visible)', text: IMAGE_WORDING.reader.order },
   { screen: 'Make an image', where: 'src/components/image-create.tsx (heading)', text: IMAGE_WORDING.create.title },
   { screen: 'Make an image', where: 'src/components/image-create.tsx', text: IMAGE_WORDING.create.intro },

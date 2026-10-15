@@ -11,6 +11,7 @@ import { PrivateTextField } from './private-text-field';
 import { CHAT } from '~/lib/config';
 import { OWNER_WORDING } from '~/lib/wording';
 import type { AskResult, Quote } from '~/lib/chat/ask';
+import type { GlossaryLink } from '~/lib/chat/glossary';
 import { noticeItems, noticeKey } from '~/lib/chat/notice';
 import type { Part } from '~/lib/chat/sanitize';
 import {
@@ -198,6 +199,22 @@ function Answer({ parts, quotes }: { parts: Part[]; quotes: Quote[] }) {
   return <div className="as-answer">{out}</div>;
 }
 
+/** The glossary entries the question names, before the answer (owner, 2026-10-14). Only words that appear by the thread's limit. */
+function GlossaryLinks({ links }: { links?: GlossaryLink[] }) {
+  if (!links?.length) return null;
+  return (
+    <p className="as-glossary">
+      <span className="as-label">Glossary</span>{' '}
+      {links.map((l, i) => (
+        <span key={l.slug}>
+          {i ? ', ' : ''}
+          <Link href={`/glossary/${l.slug}`}>{l.term}</Link>
+        </span>
+      ))}
+    </p>
+  );
+}
+
 function ChapterPicker({ from, value, onChange, label }: { from: number; value: number; onChange: (n: number) => void; label: string }) {
   return (
     <label className="as-picker">
@@ -220,6 +237,7 @@ function Reply({ m, thread, onShow }: { m: AnsweredMessage; thread: Thread; onSh
   if (r.state === 'answer')
     return (
       <div className="as-reply">
+        <GlossaryLinks links={r.glossary} />
         <p className="as-label">Assistant · commentary</p>
         <Answer parts={r.parts} quotes={r.quotes} />
         {r.heldBack && !hidden && (
@@ -242,6 +260,7 @@ function Reply({ m, thread, onShow }: { m: AnsweredMessage; thread: Thread; onSh
   if (r.state === 'held')
     return (
       <div className="as-reply as-held">
+        <GlossaryLinks links={r.glossary} />
         <p className="as-label">Held back · needs chapters after {thread.limit}</p>
         <p>Up to chapter {thread.limit}, the book doesn’t say. A fuller answer uses later chapters.</p>
         {!hidden && (
@@ -272,6 +291,7 @@ function Reply({ m, thread, onShow }: { m: AnsweredMessage; thread: Thread; onSh
   if (r.state === 'unsupported')
     return (
       <div className="as-reply">
+        <GlossaryLinks links={r.glossary} />
         <p className="as-label">Assistant · the passages don’t say</p>
         <p>The passages found for this question don’t say. Try asking another way, or include more chapters.</p>
         {r.heldBack && <p className="as-note">Later chapters may say more.</p>}

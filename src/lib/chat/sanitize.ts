@@ -44,7 +44,8 @@ export function blockIdOk(id: string): boolean {
 }
 
 export function sanitizeReply(raw: string, allowed: ReadonlySet<string>): Sanitized {
-  let text = raw.replace(/<think>[\s\S]*?<\/think>/g, '').trim();
+  // An id written with another dash (c4‑b126, a non-breaking hyphen, as the model sometimes does) is still an id.
+  let text = raw.replace(/<think>[\s\S]*?<\/think>/g, '').trim().replace(/\bc(\d+)[‐‑‒–—]b(\d+)/g, 'c$1-b$2');
   let quotesRemoved = 0;
   text = text.replace(QUOTED, (m, inner: string) => {
     if (inner.trim().split(/\s+/).length >= MIN_QUOTE_WORDS) {

@@ -21,18 +21,33 @@ export const NOTICE_REVIEW: {
   ownerReread: { words: string; on: string } | null;
 } = {
   /** Fingerprint of the chat's code, prompts and settings when the notice was last reread. */
-  reviewedFor: '59561780885037dd',
+  reviewedFor: 'dadd0a22b013bdd7',
   /** Who did that reread: the coding agent, or the owner. */
-  by: 'owner (FID 6786)',
-  on: '2026-10-14',
+  by: 'agent',
+  on: '2026-10-15',
   note:
+    'Stamped by the coding agent on 2026-10-15 when the launch caps (site-chat-owner-cap) were merged with main: both sides ' +
+    'were reread by the owner on 2026-10-14 and the shown words are main\'s, reread on 2026-10-15 (P6f). ' +
     'Reread by the owner (FID 6786) on 2026-10-14 ("Reread."), for two settings: CHAT.messagesPerDayFor (FID 6786: 1,000 answers ' +
     'a day) and CHAT.dailySpendCapUsd raised from the $2 test cap to $5 for the launch. The words are unchanged: item 4 says the ' +
     'app counts "the daily limit" without naming a number, and no item names the spend cap. chat_calls still keeps only FID, time ' +
     'and model; chat_costs still keeps daily totals with no FID. /about, the private box and the signed-out screen are untouched. ' +
-    'Earlier: the owner reread and approved all four items as worded here on 2026-10-08, after applying 0007.',
+    'Earlier: the owner reread and approved all four items as worded here on 2026-10-08, after applying 0007. ' +
+    'Merged on 2026-10-15 with main\'s reread, below. ' +
+    'Reread by the owner (FID 6786) on 2026-10-14 ("Stamp it"), words unchanged, for the glossary pointers ' +
+    '(src/lib/chat/glossary.ts), citation ids written with other dashes (sanitize.ts) and two added lines in ' +
+    'config/prompts/chat-ask.md: no new service receives questions and nothing new is kept. The coding agent ' +
+    'reread /about and the private box too; they still hold. Previous reread (owner, 2026-10-08): ' +
+    'Reread for migration 0007 (cost records without a person) and the owner\'s new words for items 3 and 4. Items 1 and 2 match ' +
+    'config/prompts/chat-ask.md. Item 3: both routes keep nothing (gateway: zero retention asked per request; Groq: Global ZDR and ' +
+    'Inference APIs ZDR enabled in the "Lum" organization, confirmed by the owner in the console on 2026-10-08). Item 4: chat_calls ' +
+    'keeps only questions (FID, time, model); chat_costs keeps daily totals with no FID, request id or time of day; true once 0007 is applied. ' +
+    '/about ("only a count and the cost"), the private box and the signed-out screen (owner\'s words on main) still hold. ' +
+    'Also covers main\'s device.ts change (chapters opened, kept on the device only). ' +
+    'The owner (FID 6786) reread and approved all four items as worded here on 2026-10-08, after applying 0007.',
   /** The words (noticeKey of the items as shown now) the owner last reread, and when. */
-  ownerReread: { words: '1x16ucc', on: '2026-10-14' },
+  // 2026-10-15: item 3's heading "(not the Grok of X)", the owner's addition, reread as shown ("ok good").
+  ownerReread: { words: '1xrxl4h', on: '2026-10-15' },
 };
 
 export function noticeItems({ host, provider, model }: { host: string | null; provider: string | null; model: string }): [string, string][] {
@@ -40,7 +55,8 @@ export function noticeItems({ host, provider, model }: { host: string | null; pr
     ['It helps you read', 'Ask about the book. Answers point to the passages they rest on, with chapter and ¶, and show the book’s own words.'],
     ['It won’t write for you', 'No dialogue, narration or description. It gives context and commentary only.'],
     [
-      `Your messages go to ${provider}`,
+      // Owner, 2026-10-14: "(this is groq, not the grok of X)".
+      `Your messages go to ${provider}${provider === 'Groq' ? ' (not the Grok of X)' : ''}`,
       host
         ? `${provider} runs ${model}, an open-weights model. When ${provider} is busy, a message goes through ${host} to ${provider} instead. Both are set to keep nothing, and this app keeps no copy of your messages.`
         : `${provider} runs ${model}, an open-weights model, and is set to keep nothing. This app keeps no copy of your messages.`,

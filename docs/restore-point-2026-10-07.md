@@ -279,3 +279,9 @@ The summaries of 24 places and of Deluin describe only the place or the person; 
 Production builds of b8d5afc failed in next/font/google; the three fonts now come from src/fonts through next/font/local. To undo (back to `1885342`, the last build that served):
 
     vercel rollback dpl_GgL2SeDzfVcrJiMyRhpvJbneyo2G --scope nates-projects-d1780cff
+
+## 2026-10-14: /make redirect and P1c for styles (branch site-make-p1c)
+
+/make redirects to the repository for now (temporary); P1c accepts a style or sheet whose pictures all carry recipes in its body. To undo (back to `d5ee436`):
+
+    vercel rollback dpl_43vhSk9dVopRRnkkzkrmzpLSUScG --scope nates-projects-d1780cff

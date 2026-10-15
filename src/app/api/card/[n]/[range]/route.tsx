@@ -1,8 +1,7 @@
-import { readFileSync } from 'node:fs';
-import path from 'node:path';
 import { ImageResponse } from 'next/og';
 import sharp from 'sharp';
 import { resolveQuote } from '~/lib/quote';
+import { loadFonts, typeset } from '~/lib/card-type';
 
 /**
  * A quote card: 1200×800 (3:2, the shape Farcaster uses for embeds). The image,
@@ -15,19 +14,6 @@ export const runtime = 'nodejs';
 
 const W = 1200;
 const H = 800;
-const FONT_DIR = path.join(process.cwd(), 'node_modules/@fontsource');
-const font = (pkg: string, file: string) => readFileSync(path.join(FONT_DIR, pkg, 'files', file));
-let fonts: { name: string; data: Buffer; weight: 400 | 500; style: 'normal' | 'italic' }[] | null = null;
-function loadFonts() {
-  fonts ??= [
-    { name: 'Crimson Pro', data: font('crimson-pro', 'crimson-pro-latin-400-normal.woff'), weight: 400, style: 'normal' },
-    { name: 'Crimson Pro', data: font('crimson-pro', 'crimson-pro-latin-400-italic.woff'), weight: 400, style: 'italic' },
-    { name: 'Crimson Pro', data: font('crimson-pro', 'crimson-pro-latin-500-normal.woff'), weight: 500, style: 'normal' },
-    { name: 'DM Mono', data: font('dm-mono', 'dm-mono-latin-400-normal.woff'), weight: 400, style: 'normal' },
-  ];
-  return fonts;
-}
-
 const ACCENT: Record<string, { light: string; dark: string }> = {
   veridia: { light: '#2E5A3A', dark: '#8DB58A' },
   dzego: { light: '#B3306E', dark: '#F08DB8' },
@@ -37,16 +23,6 @@ const ACCENT: Record<string, { light: string; dark: string }> = {
 function quoteSize(len: number, withImage: boolean): number {
   if (withImage) return len < 70 ? 46 : len < 130 ? 40 : len < 200 ? 34 : 30;
   return len < 90 ? 60 : len < 160 ? 50 : len < 260 ? 42 : 36;
-}
-
-/** Curly quotes and apostrophes; wrap in quotation marks unless the text already starts with one (dialogue). */
-function typeset(text: string): string {
-  let open = true;
-  const t = text
-    .replace(/(\w)'(\w)/g, '$1\u2019$2')
-    .replace(/'/g, '\u2019')
-    .replace(/"/g, () => ((open = !open) ? '\u201D' : '\u201C'));
-  return /^[\u201C\u2018]/.test(t) ? t : `\u201C${t}\u201D`;
 }
 
 /** Image cards have less room: shorten at a word boundary. */

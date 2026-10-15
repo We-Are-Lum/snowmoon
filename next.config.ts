@@ -39,12 +39,19 @@ const nextConfig: NextConfig = {
       './content/snowmoon/recipes/**',
       // The style a reader may add to an image prompt (src/lib/images/rules.ts).
       './content/snowmoon/designs/styles/**',
+      // A glossary word's share card (src/app/api/glossary-card) reads the glossary on request.
+      './content/snowmoon/glossary.json',
       './config/**',
       './adaptations/**',
       './node_modules/@fontsource/crimson-pro/files/crimson-pro-latin-*-normal.woff',
       './node_modules/@fontsource/crimson-pro/files/crimson-pro-latin-*-italic.woff',
       './node_modules/@fontsource/dm-mono/files/dm-mono-latin-*-normal.woff',
     ],
+  },
+  // The end card's "make your own" link (owner, 2026-10-14): the repository for now; temporary (307),
+  // since /make may become a page of its own.
+  async redirects() {
+    return [{ source: '/make', destination: 'https://github.com/We-Are-Lum/snowmoon', permanent: false }];
   },
 };
 

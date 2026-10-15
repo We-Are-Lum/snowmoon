@@ -1056,9 +1056,16 @@ try {
     await open(page, '/cards');
     await checkFloors(page, '/cards', scheme);
     // Readers' images (slice 1): the feed for everyone; "Add an image" only for a signed-in, invited FID.
+    // Pictures' front page (owner, 2026-10-14): the four choices, then the newest of all of them; "Most liked" is on Moments.
     await open(page, '/images');
     await checkFloors(page, '/images', scheme);
-    if (!(await page.getByText('Most liked').isVisible())) fail('/images: no "Most liked" order');
+    const choices = (await page.locator('.pictures-menu .pictures-menu-label').allTextContents()).join(' | ');
+    if (choices !== 'Moments | Characters | Settings | Styles') fail(`/images: the menu reads ${choices}`);
+    if (await page.locator('.pictures-cover').count()) fail('/images: an image is covered');
+    await open(page, '/images?show=moments');
+    await checkFloors(page, '/images?show=moments', scheme);
+    if (!(await page.getByText('Most liked').isVisible())) fail('/images?show=moments: no "Most liked" order');
+    if ((await page.locator('.pictures-menu a[aria-current="page"] .pictures-menu-label').textContent()) !== 'Moments') fail('/images?show=moments: Moments is not marked in the menu');
     await checkMakeImage(page, scheme);
     await checkGlossary(page, scheme);
     // Styles and character sheets (step 4): readable signed out; making and picking only for invited FIDs.

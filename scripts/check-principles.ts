@@ -136,21 +136,38 @@ add({
 add({
   id: 'P1c',
   principle: 1,
-  name: 'in the database, every version of a published element has a recipe',
+  name: 'in the database, every version of a published element has a recipe (a style or sheet: every one of its pictures)',
   load: async () => {
     const url = process.env.STUDIO_DATABASE_URL;
-    if (!url) return { rows: [] as { id: string; recipe_id: string | null }[], skipped: true };
+    type Row = { id: string; recipe_id: string | null; element_type: string; body: unknown };
+    if (!url) return { rows: [] as Row[], skipped: true };
     const sql = postgres(url, { prepare: false, max: 1 });
-    const rows = await sql<{ id: string; recipe_id: string | null }[]>`
-      select v.id, v.recipe_id from studio.element_versions v join studio.elements e on e.id = v.element_id where e.status = 'published'`;
+    const rows = await sql<Row[]>`
+      select v.id, v.recipe_id, e.element_type, v.body from studio.element_versions v join studio.elements e on e.id = v.element_id where e.status = 'published'`;
     await sql.end();
     return { rows: [...rows], skipped: false };
   },
-  run: ({ rows, skipped }) =>
-    skipped ? ['skipped: STUDIO_DATABASE_URL not set'] : rows.filter((r: { recipe_id: string | null }) => !r.recipe_id).map((r: { id: string }) => `version ${r.id} has no recipe`),
+  // A style or character sheet (element_type 'design') keeps a recipe inside its body for each of its
+  // pictures (samples, views) rather than a recipe_id (owner, 2026-10-14): it passes only when it has
+  // at least one picture and every picture's recipe names its prompt and model. Anything else needs recipe_id.
+  run: ({ rows, skipped }) => {
+    if (skipped) return ['skipped: STUDIO_DATABASE_URL not set'];
+    const pictures = (body: unknown) => {
+      const b = (body ?? {}) as { samples?: unknown; views?: unknown };
+      const views = b.views && typeof b.views === 'object' ? Object.values(b.views as Record<string, unknown>) : [];
+      return [...(Array.isArray(b.samples) ? b.samples : []), ...views] as { recipe?: { prompt?: string; model?: string } }[];
+    };
+    const inBody = (r: { element_type: string; body: unknown }) => {
+      const ps = pictures(r.body);
+      return r.element_type === 'design' && ps.length > 0 && ps.every((p) => !!p?.recipe?.prompt && !!p?.recipe?.model);
+    };
+    return rows.filter((r: { recipe_id: string | null }) => !r.recipe_id && !inBody(r as never)).map((r: { id: string }) => `version ${r.id} has no recipe`);
+  },
   plant: (c) => {
     c.skipped = false;
-    c.rows.push({ id: 'planted', recipe_id: null });
+    // A version with neither kind of recipe, and a style whose second sample has none.
+    c.rows.push({ id: 'planted', recipe_id: null, element_type: 'image', body: {} });
+    c.rows.push({ id: 'planted-style', recipe_id: null, element_type: 'design', body: { samples: [{ recipe: { prompt: 'p', model: 'm' } }, {}] } });
   },
 });
 
@@ -434,6 +451,7 @@ const READER_IMAGE_FILES = [
  */
 const DESIGN_IMAGE_FILES = [
   'src/components/design-index.tsx',
+  'src/components/pictures-latest.tsx',
   'src/app/images/designs/[id]/page.tsx',
   'src/app/images/designs/character/[slug]/page.tsx',
   'src/components/design-form.tsx',
@@ -1088,7 +1106,7 @@ add({
 // ---------------------------------------------------------------------------
 // P6. No third-party requests; individual ratings not publicly readable.
 // ---------------------------------------------------------------------------
-const PAGES = ['/', '/chapter/1', '/chapter/30', '/about', '/cards', '/adaptations', '/adaptations/dog-dawn', '/share/1/4?img=c1-b005-toy-drone', '/images', '/moderate', '/glossary', '/glossary/zei', '/terms', '/privacy',
+const PAGES = ['/', '/chapter/1', '/chapter/30', '/about', '/cards', '/adaptations', '/adaptations/dog-dawn', '/share/1/4?img=c1-b005-toy-drone', '/images', '/moderate', '/glossary', '/glossary/zei', '/terms', '/privacy', '/images?show=moments',
   // Step 4: styles and character sheets.
   '/images/designs', '/images/designs?tab=characters', '/images/designs/character/gladias', '/images/picks'];
 add({

@@ -9,7 +9,10 @@
 import { useEffect, useRef, useState } from 'react';
 import type { BoardView, Cell } from '~/lib/minpentai/play-game/board';
 
-export function PlayBoard({ bd, label, fitHeight = false, children }: { bd: BoardView; label: string; fitHeight?: boolean; children?: React.ReactNode }) {
+/** Height of the line under the grid (points left, or when the next turn is), inside the black box. */
+const FOOT = 32;
+
+export function PlayBoard({ bd, label, fitHeight = false, foot, children }: { bd: BoardView; label: string; fitHeight?: boolean; foot?: React.ReactNode; children?: React.ReactNode }) {
   const [focus, setFocus] = useState(0);
   const grid = useRef<HTMLDivElement>(null);
   const wrap = useRef<HTMLDivElement>(null);
@@ -30,7 +33,7 @@ export function PlayBoard({ bd, label, fitHeight = false, children }: { bd: Boar
     return () => ro?.disconnect();
   }, []);
   const fitW = room ? Math.floor(room.w / bd.cols) - 2 : bd.cs;
-  const fitH = fitHeight && room && room.h > 40 ? Math.floor(room.h / rows) - 2 : bd.cs;
+  const fitH = fitHeight && room && room.h > 40 ? Math.floor((room.h - (foot ? FOOT : 0)) / rows) - 2 : bd.cs;
   const cs = Math.max(12, Math.min(bd.cs, fitW, fitH));
   const k = cs / bd.cs;
   const move = (i: number) => {
@@ -80,6 +83,7 @@ export function PlayBoard({ bd, label, fitHeight = false, children }: { bd: Boar
           </div>
         ))}
       </div>
+      {foot && <div className="mp-board-foot" style={{ height: FOOT }}>{foot}</div>}
       {children}
     </div>
   );

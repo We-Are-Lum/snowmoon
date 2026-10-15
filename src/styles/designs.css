@@ -6,10 +6,6 @@
    ratio (16:9 samples, 3:4 views) rather than Design's hatched frames. Same type, spacing and touch
    rules as the frame (src/styles/shell.css) and the image screens (images.css). */
 .designs h1 + p { max-width: var(--measure); }
-.dz-tabs { display: flex; flex-wrap: wrap; gap: 0 16px; margin: 0; border-bottom: 1px solid var(--rule); font-family: var(--label); font-size: var(--text-label); line-height: 16px; text-transform: uppercase; }
-.dz-tabs a, .dz-tab-coming { display: flex; align-items: center; min-height: 44px; margin-bottom: -1px; color: var(--muted); border-bottom: 1px solid transparent; text-decoration: none; }
-.dz-tabs a[aria-current='page'] { color: var(--ink); border-bottom-color: var(--ink); }
-.dz-tabs a:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .dz-strip { margin-bottom: 0; }
 .dz-order { margin: 0; padding: 14px 0; font-family: var(--label); font-size: var(--text-label); line-height: 16px; text-transform: uppercase; color: var(--ink); }
 .dz-new { display: flex; align-items: center; min-height: 44px; font-family: var(--label); font-size: var(--text-label); line-height: 16px; text-transform: uppercase; color: var(--link); text-decoration: none; }
@@ -26,9 +22,6 @@ a.dz-row[aria-current='page'] { margin: 0 -10px; padding: 12px 10px; background:
 .dz-row-title { font-family: var(--reading); font-size: 18px; line-height: 1.25; color: var(--ink); }
 .dz-row-meta, .dz-row-ai, .dz-row-pick { font-family: var(--label); font-size: var(--text-label); line-height: 1.5; color: var(--muted); }
 .dz-row-pick { color: var(--link); text-transform: uppercase; }
-.dz-covered { align-items: center; justify-content: space-between; }
-.dz-show { flex: none; min-height: 44px; padding: 0 12px; border: 1px solid var(--rule); border-radius: var(--radius); background: transparent; color: var(--ink); cursor: pointer; font-family: var(--label); font-size: var(--text-label); text-transform: uppercase; }
-.dz-show:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
 .dz-footer, .dz-links { margin: 14px 0 0; font-family: var(--label); font-size: var(--text-label); line-height: 1.5; color: var(--muted); }
 .dz-links a { display: inline-flex; align-items: center; min-height: 44px; text-transform: uppercase; text-decoration: none; }
 
@@ -82,7 +75,6 @@ a.dz-row[aria-current='page'] { margin: 0 -10px; padding: 12px 10px; background:
 .dz-book q { font-style: italic; }
 .dz-ref { font-family: var(--label); font-size: var(--text-label); color: var(--link); text-decoration: none; white-space: nowrap; }
 .designs .dz-book { margin: 0 0 12px; }
-.dz-cover { margin: 10px 0; }
 /* The action bar: "Use as my …" 2fr, Fork 1fr; Report or Hide this below, as on an image. */
 .dz-bar { display: flex; flex-direction: column; gap: 8px; margin-top: 4px; padding-top: 10px; border-top: 1px solid var(--rule); }
 .dz-bar-row { display: grid; grid-template-columns: 2fr 1fr; gap: 8px; align-items: start; padding-top: 10px; border-top: 1px solid var(--rule); }
