@@ -212,7 +212,7 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
           {v.hdrDark && (
             <div className="mp-fsbar">
               <button onClick={v.exitFS}>✕ EXIT FULL SCREEN · ESC</button>
-              <span className="mp-fsbar-mid">{v.hTitleCaps} · {v.strip}</span>
+              <span className="mp-fsbar-mid">{v.hTitleCaps} · {v.strip}{v.pAct && ` · ${v.ptsShort}`}</span>
               <button onClick={v.togglePanel}>{v.panelLabel}</button>
               {v.hasRight && <button onClick={v.hRightClick} aria-label="Match menu">{v.hRight}</button>}
             </div>
@@ -245,7 +245,7 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
           ) : (
             <div className="mp-split" style={{ flexDirection: L.dir as 'row' | 'column' }}>
               <div className="mp-boardarea" style={{ flex: L.bflex, padding: L.bpad }}>
-                <PlayBoard bd={v.bd} label={boardLabel} fitHeight={rowLayout}>
+                <PlayBoard bd={v.bd} label={boardLabel} fitHeight={rowLayout} foot={v.pAct ? <span className="mp-pts">{v.ptsTxt}</span> : v.pRun ? v.runHead : undefined}>
                   {v.hdrLight && <div className="mp-strip" aria-hidden="true">{v.strip}</div>}
                   {v.fsBtn && <button className="mp-fsgo" title="Full screen" aria-label="Full screen" onClick={v.enterFS}>⤢</button>}
                 </PlayBoard>
@@ -281,7 +281,7 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
                         <p className="mp-label">{v.ruleLine}</p>
                         <MinpentaiTags tags={['rules', 'draft']} />
                       </div>
-                      <div className="mp-foot row"><span className="mp-label mp-pts">{v.ptsTxt}</span><button className="mp-btn primary flex" onClick={v.endTurn}>{v.endLabel}</button></div>
+                      <div className="mp-foot"><button className="mp-btn primary" onClick={v.endTurn}>{v.endLabel}</button></div>
                     </>
                   )}
                   {v.pRun && (
