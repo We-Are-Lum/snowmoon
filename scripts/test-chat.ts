@@ -118,7 +118,9 @@ try {
     check('no glossary entry past the limit is pointed to', early.links.length === 0, JSON.stringify(early.links));
     check('the model sees no correction to a word past the limit', early.correctedWithin.endsWith('minpetai') && early.corrected.endsWith('Minpentai'), JSON.stringify(early));
     const named = await glossaryWords(sql, 'Why did gladias go to Redshire, and who is Pafogai Du?', 32);
-    check('glossary words are found in any case, in the order asked, a longer name over the shorter one inside it', named.links.map((l) => l.slug).join(',') === 'gladias,redshire,pafogai-du', JSON.stringify(named.links));
+    check('people and places are not pointed to; a longer name wins over the shorter one inside it', named.links.map((l) => l.slug).join(',') === 'pafogai-du', JSON.stringify(named.links));
+    const lower = await glossaryWords(sql, 'who is pafogai du, and how is minpentai played?', 32);
+    check('glossary words are found in any case, in the order asked', lower.links.map((l) => l.slug).join(',') === 'pafogai-du,minpentai', JSON.stringify(lower.links));
     const plain = await glossaryWords(sql, 'What is the theme of Snowmoon? Is a fin a min? Which menu number does he order?', 32);
     check("the book's title, short lower-case words and an alias in lower case are not glossary links", plain.links.map((l) => l.slug).join(',') === '', JSON.stringify(plain.links));
     const book = await glossaryWords(sql, 'what does the herald say', 32);

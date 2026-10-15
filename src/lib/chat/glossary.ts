@@ -16,13 +16,14 @@ interface Entry {
   slug: string;
   term: string;
   aliases: string[];
+  kind: string;
   first_chapter: number;
 }
 
 /** "Snowmoon" in a question is almost always the book, not the month. */
 const ENTRIES = (glossary.terms as Entry[])
   .filter((t) => t.term !== WORK.title)
-  .map((t) => ({ slug: t.slug, term: t.term, chapter: t.first_chapter, forms: [t.term, ...t.aliases] }));
+  .map((t) => ({ slug: t.slug, term: t.term, kind: t.kind, chapter: t.first_chapter, forms: [t.term, ...t.aliases] }));
 
 /** Terms this long match in any case; shorter ones only as written ("Min", "Fin" and "Den" are English words in lower case). Other forms only as written ("Order" for the Order of Steering). */
 const ANY_CASE_FROM = 5;
@@ -30,6 +31,13 @@ const ANY_CASE_FROM = 5;
 const SHORT_LOWER = 4;
 /** A typo is only looked for in words this long, against single-word forms this long. */
 const TYPO_FROM = 6;
+/**
+ * Kinds of entry pointed to: the book's invented words (Dzegoban, coinages, its calendar, brands).
+ * People, places and groups are named in most questions, so a pointer to them would be on nearly
+ * every reply (47 of 50 fresh questions); they are still corrected when misspelled. Owner, 2026-10-14:
+ * "make the decisions you think are best".
+ */
+const LINK_KINDS = new Set(['dzegoban', 'coinage', 'time', 'brand', 'adjective']);
 /** At most this many entries are pointed to. */
 const MAX_LINKS = 3;
 
@@ -91,7 +99,7 @@ export async function glossaryWords(sql: postgres.Sql, question: string, limit: 
   const slugs = [...new Set(named.sort((a, b) => a.start - b.start).map((n) => n.slug))];
   const links = slugs
     .map((slug) => ENTRIES.find((e) => e.slug === slug)!)
-    .filter((e) => e.chapter <= limit)
+    .filter((e) => e.chapter <= limit && LINK_KINDS.has(e.kind))
     .slice(0, MAX_LINKS)
     .map((e) => ({ slug: e.slug, term: e.term }));
   return { corrected, correctedWithin, links };
