@@ -46,9 +46,11 @@ Records of what images cost the project overall are kept as daily totals, withou
 **Section 6 (What you publish), add:** If you publish an image while signed in with a wallet, it is
 credited to a shortened form of your address (for example 0x4FEA…4FfA).
 
-**Section 7 (Outside services), add:** To check a payment, our server asks Base's public network
-about that transaction. Your wallet app talks to Base when you pay; that's between you and your
-wallet.
+**Section 7 (Outside services), add:** Base's public endpoint (mainnet.base.org) receives the
+transaction hash when our server checks a payment, and is asked for the ETH price when you pay in
+ETH. The request comes from our server, not your device. Signing in and paying use the wallet already
+in your browser or wallet app; we use no wallet-connection service. Your wallet app and the network
+it uses see what you sign and send; that's between you and your wallet.
 
 **Section 9 (Keeping and deleting), add:** Wallet accounts, payments and costs are kept while the
 account is used, like other account records, until you ask us to erase them. What is on the
@@ -69,7 +71,7 @@ blockchain stays there.
 | Address and payments are public onchain | true | a property of the chain (Base, `chainId` 8453) |
 | Overall costs kept as daily totals without the account | true | `studio.image_costs` has no account column; `funded` says only free or prepaid |
 | Published images credited to a shortened address | true | `shortAddress` (`0x1234…abcd`), `src/app/api/images/publish/route.ts` |
-| Our server asks Base's public network about the transaction | true | `IMAGES.prepaid.rpcUrl` (`https://mainnet.base.org`) unless `BASE_RPC_URL` is set (`src/lib/wallet/chain.ts`); if the owner sets `BASE_RPC_URL` to a provider, section 7 should name it |
+| mainnet.base.org gets the hash (and the ETH price read) from our server; no wallet-connection service | true | `IMAGES.prepaid.rpcUrl` (`https://mainnet.base.org`); `BASE_RPC_URL` is not set in Vercel (names checked 2026-10-15), so the server uses it (`src/lib/wallet/chain.ts`). The browser reaches only the injected wallet (`window.ethereum`, viem `custom` transport, `src/lib/wallet/client.ts`); no WalletConnect, Reown or Coinbase SDK in `package.json`. Base's docs list the endpoint but don't say who operates it, so the line names no operator. If `BASE_RPC_URL` is ever set, section 7 must name that provider |
 | Kept until erased | true | wallet tables are append-only for the app (`test:wallet`, "append-only"); erasure by the maintainer, `docs/removal.md` |
 | Not checked here | — | Whether the site ever shows the full address anywhere (I found only `shortAddress`); the pending payment hash kept in the browser (`localStorage['snowmoon.wallet.pending']`) until it's credited, which the draft doesn't mention |
 
