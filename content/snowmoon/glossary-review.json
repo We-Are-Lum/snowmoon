@@ -52,6 +52,7 @@
  "entity_covered": [
   { "name": "Veridian Privacy Robe", "by": "privacy robe" },
   { "name": "Zei Leimin", "by": "Zei" },
-  { "name": "Bai Jahen", "by": "Bai" }
+  { "name": "Bai Jahen", "by": "Bai" },
+  { "name": "Deluin Arctic", "by": "Deluin", "why": "assumption (coding agent, 2026-10-15, for the owner): a fragment of the invented location name \"Deluin's Arctic command post\" (dog-dawn), not a book term" }
  ]
 }
