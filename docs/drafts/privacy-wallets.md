@@ -34,7 +34,9 @@ pay for making images. Then we keep:
   block) against your account. Each image you make records what it cost you. Your balance is your
   payments minus those costs.
 - **How many images you make each day,** under your wallet account, to count the daily limit of
-  300 per wallet. We keep the count and the time, not what you asked for.
+  300 per wallet. Each Generate adds a record of its time, kept until you ask us to erase it
+  (section 9). Images you publish are kept with their prompt (sections 4 and 6); the services that
+  receive your prompts are in section 7.
 
 Your sign-in is kept in your browser for 24 hours. Your wallet address and your payments to us are public on
 the blockchain: anyone can see a transaction from your address to ours, and we can't hide or remove
@@ -62,7 +64,7 @@ blockchain stays there.
 | Payment recorded: hash, token, amount, USD value at crediting, block | true | `studio.wallet_payments (tx_hash, account_id, chain_id, token, amount, usd, block_number, credited_at)`, 0011 |
 | Each image records what it cost you | true | `studio.wallet_debits (account_id, usd, at)`, written by `reserve` (`src/lib/images/limits.ts`) |
 | Balance = payments minus costs | true | `balanceUsd`, `src/lib/wallet/credits.ts` |
-| Daily count of 300 per wallet; count and time, not the prompt | true **after `site-launch-caps`** | `studio.image_asks (fid, at)` with the account's negative number; `IMAGES.prepaid.perDay`; before that branch, wallet Generates are not counted |
+| Daily count of 300 per wallet; a record of each Generate's time, kept until erased; prompts kept only with published images | true **after `site-launch-caps`** | `studio.image_asks (fid, at)` with the account's negative number, append-only, no automatic deletion (`0008_images.sql:44`; `privacy-fact-check.md` 9.1); `IMAGES.prepaid.perDay`. Generate stores no prompt (no insert besides `image_asks` and `image_costs` in `generate/route.ts`, `paid.ts`, `limits.ts`, `guard.ts`); publish writes the prompt into `studio.recipes` (`publish/route.ts:67`). Before that branch, wallet Generates are not counted. The earlier "not what you asked for" read as "we keep no prompts" and was removed |
 | Sign-in kept in the browser for 24 hours | true | `localStorage['snowmoon.wallet']`; token lifetime `IMAGES.prepaid.sessionHours` (24); nothing stored server-side for sessions |
 | Address and payments are public onchain | true | a property of the chain (Base, `chainId` 8453) |
 | Overall costs kept as daily totals without the account | true | `studio.image_costs` has no account column; `funded` says only free or prepaid |
