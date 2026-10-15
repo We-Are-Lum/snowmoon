@@ -3,7 +3,8 @@
 **Copy of `docs/legal/privacy-wallet-draft.md` on `site-launch-caps` (41009a7), revised on
 `remote-oct14` on 2026-10-14 after the owner's reread of chunk 1:** the wallet signs more than the
 sign-in message (the payment is a transaction it signs), and the address being public onchain is now
-said outright. The `site-launch-caps` copy is unchanged.
+said outright. "Payment is final: there are no refunds" moved to a Terms draft
+(`docs/drafts/terms-prepaid.md`) for the owner to decide. The `site-launch-caps` copy is unchanged.
 
 Drafted by the coding agent on 2026-10-14 for the owner's reread. **Not in `src/lib/legal.ts`** and
 not shown on the site. After the reread, the owner's words go into the Privacy Policy (and its
@@ -31,7 +32,7 @@ pay for making images. Then we keep:
 - **Your payments and your balance.** When you pay in USDC or ETH on Base, we record the
   transaction (its hash, the token, the amount, its value in US dollars when we credited it, and the
   block) against your account. Each image you make records what it cost you. Your balance is your
-  payments minus those costs. Payment is final: there are no refunds.
+  payments minus those costs.
 - **How many images you make each day,** under your wallet account, to count the daily limit of
   300 per wallet. We keep the count and the time, not what you asked for.
 
@@ -61,7 +62,6 @@ blockchain stays there.
 | Payment recorded: hash, token, amount, USD value at crediting, block | true | `studio.wallet_payments (tx_hash, account_id, chain_id, token, amount, usd, block_number, credited_at)`, 0011 |
 | Each image records what it cost you | true | `studio.wallet_debits (account_id, usd, at)`, written by `reserve` (`src/lib/images/limits.ts`) |
 | Balance = payments minus costs | true | `balanceUsd`, `src/lib/wallet/credits.ts` |
-| No refunds | true | owner, 2026-10-13; `settle` never credits back (`test:wallet`, "stays paid for when nothing comes back") |
 | Daily count of 300 per wallet; count and time, not the prompt | true **after `site-launch-caps`** | `studio.image_asks (fid, at)` with the account's negative number; `IMAGES.prepaid.perDay`; before that branch, wallet Generates are not counted |
 | Sign-in kept in the browser for 24 hours | true | `localStorage['snowmoon.wallet']`; token lifetime `IMAGES.prepaid.sessionHours` (24); nothing stored server-side for sessions |
 | Address and payments are public onchain | true | a property of the chain (Base, `chainId` 8453) |
