@@ -333,7 +333,7 @@ export class PlayController {
       v.hasBack = true; v.hPad = '0'; v.hBack = m.mode === 'ladder' ? go({ scr: 'ladder' }) : go({ scr: 'home', tab: 'play' });
       v.stDesc = m.mode === 'practice' ? 'A simple rival. It fires gliders at towers it has seen and never defends. Nothing is saved.' : RUNGS[m.rung!]!.d + ' It sees only what its towers light.';
       const rec = prog.rec[m.rung!] || { tries: 0 };
-      v.stNote = m.mode === 'practice' ? 'The outlines on the right are where Amber starts. Starts are mirrored, so you know them.' : (m.rung! >= 4 ? 'This rung uses the new rule too. ' : 'This rung ignores the new rule; you can use it. ') + (rec.tries ? `Tries so far: ${rec.tries}.` : 'Win once to open the next rung.');
+      v.stNote = m.mode === 'practice' ? 'The outlines on the right are where Amber starts. Starts are mirrored, so you know them.' : ruleNote(m.rule, m.rung!) + (rec.tries ? `Tries so far: ${rec.tries}.` : 'Win once to open the next rung.');
     }
     if (scr === 'match' && m) {
       const w = m.w, act = m.phase === 'act', vis = lit(w, 'C', m.R), pend = act ? m.pend.C : [], dots = new Set<number>();
@@ -437,3 +437,13 @@ export interface PlayView {
   fpStarts?: { label: string; click: () => void; ok: boolean }[]; fpRules?: { label: string; on: boolean; v: string; click: () => void }[]; fpSee?: { label: string; on: boolean; click: () => void }[]; copyLink?: () => void;
 }
 export { fmt };
+
+/**
+ * The start screen's word on the new rule, for a ladder rung. Design's mockup said rungs 1–3
+ * ignore it, but every rung pays the same glider cost, sees as far, and acts as often as you;
+ * only diagonal flight is left to rungs 4 and 5 (game.ts, botPlan). Owner ruling, 2026-10-14:
+ * "it never does". Model-drafted wording.
+ */
+export function ruleNote(rule: RuleId, rung: number) {
+  return rule === 'diag' && rung < 4 ? 'This rung plays by the new rule too, but never flies diagonally; you can. ' : 'This rung plays by the new rule too. ';
+}

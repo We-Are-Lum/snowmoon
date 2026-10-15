@@ -25,7 +25,7 @@ import path from 'node:path';
 import vm from 'node:vm';
 import { isDeepStrictEqual } from 'node:util';
 import * as G from '../src/lib/minpentai/play-game/game';
-import { PlayController, type Env, type PlayView } from '../src/lib/minpentai/play-game/controller';
+import { PlayController, ruleNote, type Env, type PlayView } from '../src/lib/minpentai/play-game/controller';
 
 const ROOT = path.resolve(import.meta.dirname, '..');
 const html = readFileSync(path.join(ROOT, 'docs/design/minpentai-play-prototype.dc.html'), 'utf8');
@@ -162,10 +162,16 @@ function port() {
 }
 
 /* ---------- 2. whole matches ---------- */
+/** The one sentence the port changes on purpose (controller.ts, ruleNote; owner ruling 2026-10-14): Design's start note, corrected. */
+function designNote(v: Any) {
+  const rung = Number(/^Rung (\d)/.exec(v.hTitle ?? '')?.[1]);
+  const rule = (Object.keys(G.RULES) as G.RuleId[]).find((k) => G.RULES[k] === v.ruleText);
+  return typeof v.stNote === 'string' && rule && rung ? v.stNote.replace(/^This rung (uses the new rule too|ignores the new rule; you can use it)\. /, ruleNote(rule, rung)) : v.stNote;
+}
 function compareView(dv: Any, pv: PlayView, what: string) {
   const pick = (v: Any) => ({
     strip: v.strip, msg: v.msg, ruleLine: v.ruleLine, ptsTxt: v.ptsTxt, ptsShort: v.ptsShort, runHead: v.runHead, runMsg: v.runMsg, ffLabel: v.ffLabel, ffShort: v.ffShort,
-    hTitle: (v.hTitle ?? '') + (v.hSample ?? ''), hRight: v.hRight, ruleText: v.ruleText, stDesc: v.stDesc, stNote: v.stNote,
+    hTitle: (v.hTitle ?? '') + (v.hSample ?? ''), hRight: v.hRight, ruleText: v.ruleText, stDesc: v.stDesc, stNote: v === dv ? designNote(v) : v.stNote,
     resB: v.resB, resWhy: v.resWhy, resNote: v.resNote, resCard: !!v.resCard, resCardN: v.resCardN, resCardT: v.resCardT, resCardD: v.resCardD,
     resBtns: v.resBtns?.map((b: Any) => b.label), leaveLabel: v.leaveLabel, resignText: v.resignText,
     pAct: v.pAct, pRun: v.pRun, pResult: v.pResult, pStart: v.pStart, pReplay: v.pReplay, pFree: v.pFree, port: v.port, fsBtn: v.fsBtn,
