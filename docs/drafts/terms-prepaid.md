@@ -36,8 +36,8 @@ logged, and the person sees the same error as before. A Generate credited back s
 the wallet's 300 a day, as a failed free Generate counts toward the 10. `test:wallet` checks all
 five cases, and 9 of its checks fail if the refund is removed.
 
-The payment screen's line would then need "including an outage" left out, as now, and could add:
-"If our prompt check or the image model doesn't answer, you aren't charged." (draft wording)
+The payment screen (`IMAGE_WORDING.prepaid.terms`) could then add: "If our prompt check or the image
+model doesn't answer, you aren't charged." (draft wording; not changed on the branch)
 
 ## Decisions for the owner
 
