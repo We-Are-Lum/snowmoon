@@ -13,7 +13,10 @@
       "id": "H01",
       "scene": "hall",
       "size": "EWS, from the standing overlook, below the ceiling",
-      "who": [],
+      "who": [
+        "D",
+        "K"
+      ],
       "action": "The hall from the top: tiers of a varied crowd falling away to the floor; over the floor, the tutorial's holograms in two colours (cyan and amber), glowing towers, streams of gliders and ships, walls building; big screens hanging above show the two players' faces in close-up; far apart at opposite edges, two small sunken pits with one player in each.",
       "line": null,
       "look": "-",
@@ -266,11 +269,13 @@
     {
       "id": "C02",
       "scene": "corridor",
-      "size": "MS",
+      "size": "MS, from behind Zei and Bai",
       "who": [
-        "D"
+        "D",
+        "Z",
+        "B"
       ],
-      "action": "The elevator doors slide open; {D} steps out, sees them, and brightens.",
+      "action": "From behind {Z} and {B}, standing in the foreground: the elevator doors slide open and {D} steps out, sees them, and brightens.",
       "line": null,
       "look": "R",
       "dur_s": 3,
@@ -482,7 +487,8 @@
       "size": "EWS establishing, high from the west",
       "who": [
         "D",
-        "B"
+        "B",
+        "R"
       ],
       "action": "The courtyard café at night: close-set tables full of people eating and talking, the shade tree hung with little lights, megastructures above the rooftops; at the table for four in the middle, {D} and {B}, small, laughing.",
       "line": null,
@@ -577,9 +583,12 @@
       "scene": "courtyard",
       "size": "MS",
       "who": [
-        "R"
+        "R",
+        "D",
+        "B",
+        "Z"
       ],
-      "action": "{R} glides up beside the table.",
+      "action": "{R} glides up beside the wide table where {D} and {B} sit across from each other, well apart, and {Z} sits at the end.",
       "line": null,
       "look": "-",
       "dur_s": 2,

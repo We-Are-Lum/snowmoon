@@ -1,0 +1,274 @@
+{
+  "about": "Fifteen Days pre-production, steps 1-2 again (owner's notes, 2026-10-16 evening): faces with fixed smiles (Bai from C, Deluin from C older, Zei from B), a Kau face sheet for the screens, the hall with a standing ring and an empty floor, the overlook railing fixed. Text DRAFTED by the coding agent.",
+  "out": "images-out/preprod/step3",
+  "ledger": "images-out/preprod/ledger-s34.json",
+  "cap_usd": 1.0,
+  "style": "",
+  "jobs": [
+    {
+      "id": "face2-bai-a",
+      "prompt": "Redraw the face reference sheet in the reference image: the same six heads of the same person in two rows of three on the same plain mid-grey background, framed from the top of the head to the collarbone. Top row, neutral: facing the viewer, three-quarter turned left, profile facing left. Bottom row, facing the viewer: a smile, an annoyed frown, surprise. The smile is a natural, gentle closed-mouth smile with the cheeks lifting slightly, never a wide toothy grin. Keep her face, skin and haircut, and fix these: she must read clearly as a young woman in every view, with feminine features, defined brows and lashes, fuller lips; she is visibly of mixed Black and East Asian heritage, with deep warm brown skin; in all six heads, including the ones facing the viewer, the sides of her head are shaved close and her tall high ponytail dyed magenta rises clearly above and behind her head; strange dangly earrings made of small geometric shapes (no letters); the fine geometric line tattoo on her neck. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos anywhere.",
+      "refs": [
+        "images-out/preprod/refs-small/face-bai-c.png"
+      ],
+      "width": 1536,
+      "height": 1024,
+      "seed": 12101
+    },
+    {
+      "id": "face2-bai-b",
+      "prompt": "Redraw the face reference sheet in the reference image: the same six heads of the same person in two rows of three on the same plain mid-grey background, framed from the top of the head to the collarbone. Top row, neutral: facing the viewer, three-quarter turned left, profile facing left. Bottom row, facing the viewer: a smile, an annoyed frown, surprise. The smile is a natural, gentle closed-mouth smile with the cheeks lifting slightly, never a wide toothy grin. Keep her face, skin and haircut, and fix these: she must read clearly as a young woman in every view, with feminine features, defined brows and lashes, fuller lips; she is visibly of mixed Black and East Asian heritage, with deep warm brown skin; in all six heads, including the ones facing the viewer, the sides of her head are shaved close and her tall high ponytail dyed magenta rises clearly above and behind her head; strange dangly earrings made of small geometric shapes (no letters); the fine geometric line tattoo on her neck. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos anywhere.",
+      "refs": [
+        "images-out/preprod/refs-small/face-bai-c.png"
+      ],
+      "width": 1536,
+      "height": 1024,
+      "seed": 12102
+    },
+    {
+      "id": "face2-deluin-a",
+      "prompt": "Redraw the face reference sheet in the reference image: the same six heads of the same person in two rows of three on the same plain mid-grey background, framed from the top of the head to the collarbone. Top row, neutral: facing the viewer, three-quarter turned left, profile facing left. Bottom row, facing the viewer: a smile, an annoyed frown, surprise. The smile is a natural, gentle closed-mouth smile with the cheeks lifting slightly, never a wide toothy grin. Keep the same face, hair and colouring, but make him look a few years older, an older teenager of about nineteen or twenty: a slightly longer, leaner face, a firmer jaw, a little more definition under the cheekbones. Warm, kind and approachable, but a little removed: his smile is polite and does not quite reach his calm eyes. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos anywhere.",
+      "refs": [
+        "images-out/preprod/refs-small/face-deluin-c.png"
+      ],
+      "width": 1536,
+      "height": 1024,
+      "seed": 12201
+    },
+    {
+      "id": "face2-deluin-b",
+      "prompt": "Redraw the face reference sheet in the reference image: the same six heads of the same person in two rows of three on the same plain mid-grey background, framed from the top of the head to the collarbone. Top row, neutral: facing the viewer, three-quarter turned left, profile facing left. Bottom row, facing the viewer: a smile, an annoyed frown, surprise. The smile is a natural, gentle closed-mouth smile with the cheeks lifting slightly, never a wide toothy grin. Keep the same face, hair and colouring, but make him look a few years older, an older teenager of about nineteen or twenty: a slightly longer, leaner face, a firmer jaw, a little more definition under the cheekbones. Warm, kind and approachable, but a little removed: his smile is polite and does not quite reach his calm eyes. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos anywhere.",
+      "refs": [
+        "images-out/preprod/refs-small/face-deluin-c.png"
+      ],
+      "width": 1536,
+      "height": 1024,
+      "seed": 12202
+    },
+    {
+      "id": "face2-zei-a",
+      "prompt": "Redraw the face reference sheet in the reference image: the same six heads of the same person in two rows of three on the same plain mid-grey background, framed from the top of the head to the collarbone. Top row, neutral: facing the viewer, three-quarter turned left, profile facing left. Bottom row, facing the viewer: a smile, an annoyed frown, surprise. The smile is a natural, gentle closed-mouth smile with the cheeks lifting slightly, never a wide toothy grin. Keep the same face, hair with its blue streak, and dark brown eyes exactly; only make the smile natural. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos anywhere.",
+      "refs": [
+        "images-out/preprod/refs-small/face-zei-b.png"
+      ],
+      "width": 1536,
+      "height": 1024,
+      "seed": 12301
+    },
+    {
+      "id": "face2-zei-b",
+      "prompt": "Redraw the face reference sheet in the reference image: the same six heads of the same person in two rows of three on the same plain mid-grey background, framed from the top of the head to the collarbone. Top row, neutral: facing the viewer, three-quarter turned left, profile facing left. Bottom row, facing the viewer: a smile, an annoyed frown, surprise. The smile is a natural, gentle closed-mouth smile with the cheeks lifting slightly, never a wide toothy grin. Keep the same face, hair with its blue streak, and dark brown eyes exactly; only make the smile natural. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos anywhere.",
+      "refs": [
+        "images-out/preprod/refs-small/face-zei-b.png"
+      ],
+      "width": 1536,
+      "height": 1024,
+      "seed": 12302
+    },
+    {
+      "id": "face2-kau",
+      "prompt": "Face reference sheet on a plain flat mid-grey background with no scenery: six heads of the same person in two rows of three, framed from the top of the head to the collarbone. Top row, neutral: facing the viewer, three-quarter turned left, profile facing left. Bottom row, facing the viewer: tense concentration with sweat on his brow, a grimace, a natural closed-mouth smile. The person: a stocky young man of about eighteen with a shaved head, dark brown skin and a broad face, a plain charcoal collar. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos anywhere.",
+      "width": 1536,
+      "height": 1024,
+      "seed": 12401
+    },
+    {
+      "id": "hall5-a",
+      "prompt": "The same game hall as reference image 1, seen from high on the outside rim, the ceiling cropped out of the picture. Around the very top of the hall runs a wide standing ring: a broad walkway circling the whole hall behind a waist-high railing, crowded with standing spectators. Below it, the seated tiers of a varied crowd fall to the floor. The open floor holds no people at all: only the game, in the style of reference image 2, in cyan and amber: glowing holograms of gliders, little ships and walls of cubes, and identical black posts, all exactly the same height, each riding a small robotic base, with glowing cube clusters on top. Two big plain glowing screens hang above the floor, empty and blank, a soft even light. At opposite edges of the floor, two small sunken pits, each holding one player at a console, below floor level. No signs, no icons, no pictograms anywhere. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No text, no lettering, no numbers, no logos anywhere.",
+      "refs": [
+        "images-out/preprod/refs-small/hall4-b.png",
+        "images-out/preprod/refs-small/holo-towers-cyan.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 12501,
+      "note": "holograms after the tutorial (broadcast imagined); faces on the screens composited from the cards"
+    },
+    {
+      "id": "hall5-b",
+      "prompt": "The same game hall as reference image 1, seen from high on the outside rim, the ceiling cropped out of the picture. Around the very top of the hall runs a wide standing ring: a broad walkway circling the whole hall behind a waist-high railing, crowded with standing spectators. Below it, the seated tiers of a varied crowd fall to the floor. The open floor holds no people at all: only the game, in the style of reference image 2, in cyan and amber: glowing holograms of gliders, little ships and walls of cubes, and identical black posts, all exactly the same height, each riding a small robotic base, with glowing cube clusters on top. Two big plain glowing screens hang above the floor, empty and blank, a soft even light. At opposite edges of the floor, two small sunken pits, each holding one player at a console, below floor level. No signs, no icons, no pictograms anywhere. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No text, no lettering, no numbers, no logos anywhere.",
+      "refs": [
+        "images-out/preprod/refs-small/hall4-b.png",
+        "images-out/preprod/refs-small/holo-towers-cyan.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 12502,
+      "note": "holograms after the tutorial (broadcast imagined); faces on the screens composited from the cards"
+    },
+    {
+      "id": "overlook5-a",
+      "prompt": "The same standing ring at the top of the game hall as reference image 1: a wide walkway with a waist-high metal railing in the foreground. The railing is one straight, continuous rail drawn in correct perspective, running from the near left of the picture away to a single vanishing point, its upright posts evenly spaced and shrinking evenly with distance, the walkway floor parallel to it. A few ordinary standing spectators along it. Just below the railing, the seated tiers; far below, the floor with the cyan and amber holograms and the identical posts on robotic bases, nobody standing on the floor; two big blank glowing screens across the hall. No signs, no icons, no pictograms anywhere. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No text, no lettering, no numbers, no logos anywhere.",
+      "refs": [
+        "images-out/preprod/refs-small/gallery4-a.png",
+        "images-out/preprod/refs-small/holo-towers-cyan.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 12601
+    },
+    {
+      "id": "overlook5-b",
+      "prompt": "The same standing ring at the top of the game hall as reference image 1: a wide walkway with a waist-high metal railing in the foreground. The railing is one straight, continuous rail drawn in correct perspective, running from the near left of the picture away to a single vanishing point, its upright posts evenly spaced and shrinking evenly with distance, the walkway floor parallel to it. A few ordinary standing spectators along it. Just below the railing, the seated tiers; far below, the floor with the cyan and amber holograms and the identical posts on robotic bases, nobody standing on the floor; two big blank glowing screens across the hall. No signs, no icons, no pictograms anywhere. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No text, no lettering, no numbers, no logos anywhere.",
+      "refs": [
+        "images-out/preprod/refs-small/gallery4-a.png",
+        "images-out/preprod/refs-small/holo-towers-cyan.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 12602
+    },
+    {
+      "id": "face2-bai-c",
+      "prompt": "Keep everything about her from the reference image, and fix the three heads in the bottom row, which face the viewer: in each of them her hair must clearly be the same as in the top row: both sides shaved close, and on top a thick band of hair swept back into a tall magenta ponytail whose top rises clearly above the crown of her head, with its long magenta tail swinging out beside her neck. She reads unmistakably as a young woman: feminine features, defined brows and lashes, fuller lips, the strange geometric dangly earrings. Closed-mouth gentle smile in the smile view. Redraw the face reference sheet: the same six heads of the same person in two rows of three on the same plain mid-grey background, framed from the top of the head to the collarbone. Top row, neutral: facing the viewer, three-quarter turned left, profile facing left. Bottom row, facing the viewer: a smile, an annoyed frown, surprise. The smile is a natural, gentle closed-mouth smile with the cheeks lifting slightly, never a wide toothy grin. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos anywhere.",
+      "refs": [
+        "images-out/preprod/refs-small/face2-bai-b.png"
+      ],
+      "width": 1536,
+      "height": 1024,
+      "seed": 12111
+    },
+    {
+      "id": "face2-bai-d",
+      "prompt": "Keep everything about her from the reference image, and fix the three heads in the bottom row, which face the viewer: in each of them her hair must clearly be the same as in the top row: both sides shaved close, and on top a thick band of hair swept back into a tall magenta ponytail whose top rises clearly above the crown of her head, with its long magenta tail swinging out beside her neck. She reads unmistakably as a young woman: feminine features, defined brows and lashes, fuller lips, the strange geometric dangly earrings. Closed-mouth gentle smile in the smile view. Redraw the face reference sheet: the same six heads of the same person in two rows of three on the same plain mid-grey background, framed from the top of the head to the collarbone. Top row, neutral: facing the viewer, three-quarter turned left, profile facing left. Bottom row, facing the viewer: a smile, an annoyed frown, surprise. The smile is a natural, gentle closed-mouth smile with the cheeks lifting slightly, never a wide toothy grin. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos anywhere.",
+      "refs": [
+        "images-out/preprod/refs-small/face2-bai-b.png"
+      ],
+      "width": 1536,
+      "height": 1024,
+      "seed": 12112
+    },
+    {
+      "id": "bai-front-neutral",
+      "prompt": "A single head-and-shoulders portrait on a plain flat mid-grey background, the young woman from the reference image now turned to face the viewer directly. Her hair exactly as in the reference: both sides of her head shaved close, a thick band of magenta hair on top swept straight back into a tall high ponytail; because she faces us, the ponytail's magenta tuft rises clearly above the crown of her head and its long tail falls forward over one shoulder, so the magenta ponytail is plainly visible from the front. Deep warm brown skin, visibly mixed Black and East Asian, feminine features, defined brows and lashes, fuller lips, strange geometric dangly earrings, a fine geometric line tattoo on her neck, a plain dark crew-neck collar. Expression: calm and neutral. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos.",
+      "refs": [
+        "images-out/preprod/refs-small/bai-side-views.png"
+      ],
+      "width": 768,
+      "height": 768,
+      "seed": 12121
+    },
+    {
+      "id": "bai-front-smile",
+      "prompt": "A single head-and-shoulders portrait on a plain flat mid-grey background, the young woman from the reference image now turned to face the viewer directly. Her hair exactly as in the reference: both sides of her head shaved close, a thick band of magenta hair on top swept straight back into a tall high ponytail; because she faces us, the ponytail's magenta tuft rises clearly above the crown of her head and its long tail falls forward over one shoulder, so the magenta ponytail is plainly visible from the front. Deep warm brown skin, visibly mixed Black and East Asian, feminine features, defined brows and lashes, fuller lips, strange geometric dangly earrings, a fine geometric line tattoo on her neck, a plain dark crew-neck collar. Expression: a gentle, sly closed-mouth smile. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos.",
+      "refs": [
+        "images-out/preprod/refs-small/bai-side-views.png"
+      ],
+      "width": 768,
+      "height": 768,
+      "seed": 12122
+    },
+    {
+      "id": "bai-front-frown",
+      "prompt": "A single head-and-shoulders portrait on a plain flat mid-grey background, the young woman from the reference image now turned to face the viewer directly. Her hair exactly as in the reference: both sides of her head shaved close, a thick band of magenta hair on top swept straight back into a tall high ponytail; because she faces us, the ponytail's magenta tuft rises clearly above the crown of her head and its long tail falls forward over one shoulder, so the magenta ponytail is plainly visible from the front. Deep warm brown skin, visibly mixed Black and East Asian, feminine features, defined brows and lashes, fuller lips, strange geometric dangly earrings, a fine geometric line tattoo on her neck, a plain dark crew-neck collar. Expression: an annoyed frown. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos.",
+      "refs": [
+        "images-out/preprod/refs-small/bai-side-views.png"
+      ],
+      "width": 768,
+      "height": 768,
+      "seed": 12123
+    },
+    {
+      "id": "bai-front-surprise",
+      "prompt": "A single head-and-shoulders portrait on a plain flat mid-grey background, the young woman from the reference image now turned to face the viewer directly. Her hair exactly as in the reference: both sides of her head shaved close, a thick band of magenta hair on top swept straight back into a tall high ponytail; because she faces us, the ponytail's magenta tuft rises clearly above the crown of her head and its long tail falls forward over one shoulder, so the magenta ponytail is plainly visible from the front. Deep warm brown skin, visibly mixed Black and East Asian, feminine features, defined brows and lashes, fuller lips, strange geometric dangly earrings, a fine geometric line tattoo on her neck, a plain dark crew-neck collar. Expression: wide-eyed surprise. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos.",
+      "refs": [
+        "images-out/preprod/refs-small/bai-side-views.png"
+      ],
+      "width": 768,
+      "height": 768,
+      "seed": 12124
+    },
+    {
+      "id": "hall6-a",
+      "prompt": "Reference image 1 is a rough layout sketch: follow it exactly for the camera framing and where everything stands; draw nothing of the sketch itself, none of its plain lines or white background. Reference image 2 shows the game hall's look and its glowing holograms. A vast round game hall inside a mountain, the ceiling out of the picture. Across the top, a wide standing ring: a broad walkway circling the hall behind a waist-high railing, crowded with standing spectators. Below it, seated tiers of a varied crowd in plain, muted everyday clothes. The open floor holds no people at all: only cyan and amber holograms of gliders, little ships and walls of cubes, and identical black posts, all exactly the same height, each on a small robotic base, glowing cube clusters on top. Two big blank screens hang above the floor, plain soft white light, nothing on them. At opposite edges of the floor, two small sunken pits, a player at a console in each, below floor level. No signs, no icons, no pictograms anywhere. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No text, no lettering, no numbers, no logos.",
+      "refs": [
+        "images-out/preprod/sketch/plate-hall.png",
+        "images-out/preprod/refs-small/hall4-b.png",
+        "images-out/preprod/refs-small/holo-towers-cyan.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 13101,
+      "note": "holograms after the tutorial (broadcast imagined); faces composited onto the screens"
+    },
+    {
+      "id": "overlook6-a",
+      "prompt": "Reference image 1 is a rough layout sketch: follow it exactly for the camera framing and where everything stands; draw nothing of the sketch itself, none of its plain lines or white background. Reference image 2 shows the game hall's look. The standing ring at the top of the hall: a wide walkway with one straight, continuous waist-high metal railing running from the near left away to a single vanishing point, its posts evenly spaced and shrinking evenly with distance, the walkway and the wall above following the same lines; a few ordinary spectators in plain, muted clothes standing along it. Below the railing, seated tiers; far below, the floor with cyan and amber holograms and identical posts on robotic bases, nobody on the floor; two big blank screens across the hall. No signs, no icons, no pictograms anywhere. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No text, no lettering, no numbers, no logos.",
+      "refs": [
+        "images-out/preprod/sketch/plate-overlook.png",
+        "images-out/preprod/refs-small/hall4-b.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 13111
+    },
+    {
+      "id": "hall6-b",
+      "prompt": "Reference image 1 is a rough layout sketch: follow it exactly for the camera framing and where everything stands; draw nothing of the sketch itself, none of its plain lines or white background. Reference image 2 shows the game hall's look and its glowing holograms. A vast round game hall inside a mountain, the ceiling out of the picture. Across the top, a wide standing ring: a broad walkway circling the hall behind a waist-high railing, crowded with standing spectators. Below it, seated tiers of a varied crowd in plain, muted everyday clothes. The open floor holds no people at all: only cyan and amber holograms of gliders, little ships and walls of cubes, and identical black posts, all exactly the same height, each on a small robotic base, glowing cube clusters on top. Two big blank screens hang above the floor, plain soft white light, nothing on them. At opposite edges of the floor, two small sunken pits, a player at a console in each, below floor level. No signs, no icons, no pictograms anywhere. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No text, no lettering, no numbers, no logos.",
+      "refs": [
+        "images-out/preprod/sketch/plate-hall.png",
+        "images-out/preprod/refs-small/hall4-b.png",
+        "images-out/preprod/refs-small/holo-towers-cyan.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 13102,
+      "note": "holograms after the tutorial (broadcast imagined); faces composited onto the screens"
+    },
+    {
+      "id": "overlook6-b",
+      "prompt": "Reference image 1 is a rough layout sketch: follow it exactly for the camera framing and where everything stands; draw nothing of the sketch itself, none of its plain lines or white background. Reference image 2 shows the game hall's look. The standing ring at the top of the hall: a wide walkway with one straight, continuous waist-high metal railing running from the near left away to a single vanishing point, its posts evenly spaced and shrinking evenly with distance, the walkway and the wall above following the same lines; a few ordinary spectators in plain, muted clothes standing along it. Below the railing, seated tiers; far below, the floor with cyan and amber holograms and identical posts on robotic bases, nobody on the floor; two big blank screens across the hall. No signs, no icons, no pictograms anywhere. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No text, no lettering, no numbers, no logos.",
+      "refs": [
+        "images-out/preprod/sketch/plate-overlook.png",
+        "images-out/preprod/refs-small/hall4-b.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 13112
+    },
+    {
+      "id": "overlook7-a",
+      "prompt": "Reference image 1 is a rough layout sketch: follow it exactly for the camera framing and where everything stands; draw nothing of the sketch itself, none of its plain lines or white background. Reference image 2 is the same game hall seen from across: the same standing ring, tiers, posts and holograms, the same screens with the two players' faces. The standing ring at the top of the hall: a wide walkway with one straight, continuous waist-high metal railing running from the near left away to a single vanishing point, its posts evenly spaced and shrinking evenly with distance, the walkway and the wall above following the same lines; a few ordinary spectators in plain, muted clothes standing along it. Below the railing, seated tiers; far below, the floor with cyan and amber holograms and identical posts on robotic bases, nobody on the floor; two big blank screens across the hall. No signs, no icons, no pictograms anywhere. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No text, no lettering, no numbers, no logos.",
+      "refs": [
+        "images-out/preprod/sketch/plate-overlook2.png",
+        "images-out/preprod/places-final/hall.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 13201
+    },
+    {
+      "id": "overlook7-b",
+      "prompt": "Reference image 1 is a rough layout sketch: follow it exactly for the camera framing and where everything stands; draw nothing of the sketch itself, none of its plain lines or white background. Reference image 2 is the same game hall seen from across: the same standing ring, tiers, posts and holograms, the same screens with the two players' faces. The standing ring at the top of the hall: a wide walkway with one straight, continuous waist-high metal railing running from the near left away to a single vanishing point, its posts evenly spaced and shrinking evenly with distance, the walkway and the wall above following the same lines; a few ordinary spectators in plain, muted clothes standing along it. Below the railing, seated tiers; far below, the floor with cyan and amber holograms and identical posts on robotic bases, nobody on the floor; two big blank screens across the hall. No signs, no icons, no pictograms anywhere. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No text, no lettering, no numbers, no logos.",
+      "refs": [
+        "images-out/preprod/sketch/plate-overlook2.png",
+        "images-out/preprod/places-final/hall.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 13202
+    },
+    {
+      "id": "overlook8-a",
+      "prompt": "Reference image 1 is a rough layout sketch: follow it exactly for the camera framing and where everything stands; draw nothing of the sketch itself, none of its plain lines or white background. Reference image 2 shows only the look of the glowing holograms. The camera stands on the walkway itself, close to the railing, looking along it; the railing fills the left half of the picture, large and near. The standing ring at the top of the hall: a wide walkway with one straight, continuous waist-high metal railing running from the near left away to a single vanishing point, its posts evenly spaced and shrinking evenly with distance, the walkway and the wall above following the same lines; a few ordinary spectators in plain, muted clothes standing along it. Below the railing, seated tiers; far below, the floor with cyan and amber holograms and identical posts on robotic bases, nobody on the floor; two big blank screens across the hall. No signs, no icons, no pictograms anywhere. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No text, no lettering, no numbers, no logos.",
+      "refs": [
+        "images-out/preprod/sketch/plate-overlook2.png",
+        "images-out/preprod/refs-small/holo-towers-cyan.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 13301
+    },
+    {
+      "id": "overlook8-b",
+      "prompt": "Reference image 1 is a rough layout sketch: follow it exactly for the camera framing and where everything stands; draw nothing of the sketch itself, none of its plain lines or white background. Reference image 2 shows only the look of the glowing holograms. The camera stands on the walkway itself, close to the railing, looking along it; the railing fills the left half of the picture, large and near. The standing ring at the top of the hall: a wide walkway with one straight, continuous waist-high metal railing running from the near left away to a single vanishing point, its posts evenly spaced and shrinking evenly with distance, the walkway and the wall above following the same lines; a few ordinary spectators in plain, muted clothes standing along it. Below the railing, seated tiers; far below, the floor with cyan and amber holograms and identical posts on robotic bases, nobody on the floor; two big blank screens across the hall. No signs, no icons, no pictograms anywhere. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. No text, no lettering, no numbers, no logos.",
+      "refs": [
+        "images-out/preprod/sketch/plate-overlook2.png",
+        "images-out/preprod/refs-small/holo-towers-cyan.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 13302
+    }
+  ]
+}

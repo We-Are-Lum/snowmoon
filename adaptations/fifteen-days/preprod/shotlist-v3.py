@@ -25,7 +25,7 @@ G["lobby"] = G["lobby"] + " A camera outside on the street can look in through t
 E = {}  # id -> fields to replace
 def e(id, **kw): E[id] = kw
 # The hall, rebuilt after the owner's notes on H01-H04.
-e("H01", size="EWS, from the standing overlook, below the ceiling", action="The hall from the top: tiers of a varied crowd falling away to the floor; over the floor, the tutorial's holograms in two colours (cyan and amber), glowing towers, streams of gliders and ships, walls building; big screens hanging above show the two players' faces in close-up; far apart at opposite edges, two small sunken pits with one player in each.", purpose="Establish the hall, its tiers, the holograms, the screens, and the players' isolation. Place and date on screen (c14-b1).")
+e("H01", who=["D", "K"], size="EWS, from the standing overlook, below the ceiling", action="The hall from the top: tiers of a varied crowd falling away to the floor; over the floor, the tutorial's holograms in two colours (cyan and amber), glowing towers, streams of gliders and ships, walls building; big screens hanging above show the two players' faces in close-up; far apart at opposite edges, two small sunken pits with one player in each.", purpose="Establish the hall, its tiers, the holograms, the screens, and the players' isolation. Place and date on screen (c14-b1).")
 e("H02", size="WS, low among the towers", action="Down among the game: physical tower pillars on small robotic bases rolling to new places, holographic gliders and ships shooting around them in cyan and amber, a holographic wall building itself; the tiers rising beyond.", purpose="The game as the audience sees it (broadcast imagined).")
 e("H03", size="MS, high angle looking down into his pit", action="{D} in his sunken pit at a large glowing console, glasses on a long cable running behind him, calm and cool; the crowd's tiers rise high above him; on a big screen above, his own face in close-up.", purpose="Deluin: alone in a hole, watched by a thousand.")
 e("H04", composite="tutorial board (two colours, mostly blacked out)", action="Deluin's console screen: the tutorial's flat board in two colours, most of it blacked out; only his own corner and a ring of walls show.", purpose="What a player sees: almost nothing. Composited from the tutorial, never drawn.")
@@ -44,6 +44,7 @@ e("G08", size="EWS POV, straight down over the railing", action="Straight down p
 e("G09", size="CU, side-on profile", action="{B} glances sideways at him, wry.")
 e("G10", size="WS side two-shot", action="{B} sets the gadget on the rail and leans out over the railing to study the board below; {Z} straightens and turns to watch her.")
 # The corridor: everyone stands; extremes.
+e("C02", who=["D", "Z", "B"], size="MS, from behind Zei and Bai", action="From behind {Z} and {B}, standing in the foreground: the elevator doors slide open and {D} steps out, sees them, and brightens.")
 e("C01", size="EWS, down the length of the corridor", action="The long round-topped stone corridor with a row of elevator doors, a few people passing far off; near one elevator {Z} stands waiting, shifting on his feet; {B} leans against the opposite wall, arms crossed, looking away.")
 e("C03", size="CU, three-quarter", action="{Z}, standing, eager, half a step toward him.")
 e("C04", size="CU, low three-quarter", action="{D}, standing in the elevator doorway, easy and friendly.")
@@ -53,9 +54,11 @@ e("C08", size="ECU", action="{Z}'s grin, delighted.")
 e("C10", size="ECU", action="{B}'s shrug and a sour twist of her mouth.")
 e("C11", size="EWS", action="{D}, small, walking away down the long corridor, back to us; {Z} in the foreground, standing, lifts a hand.")
 # The cafe: the wide table; varied close-up angles.
+e("F01", who=["D", "B", "R"])
 e("F05", size="WS side two-shot", action="{D} and {B} laughing across the wide table, plenty of room between them; {D} spots someone and waves.")
 e("F06", size="WS", action="{Z} drags a chair to the end of the table and drops into it.")
 e("F07", size="WS three-shot from the west, waist-up", action="All three at the wide table, well apart: {D} on the left (north side), {B} on the right (south side), {Z} at the far end between them, at right angles.")
+e("F08", who=["R", "D", "B", "Z"], action="{R} glides up beside the wide table where {D} and {B} sit across from each other, well apart, and {Z} sits at the end.")
 e("F09", size="CU", action="{R} beside the table, its face screen kind, tray level.")
 e("F11", size="ECU, high angle", action="{Z}'s eyes over the top of the paper-thin menu, looking down at it.")
 e("F13", size="CU, low three-quarter", action="{Z}, the menu in his hands, explaining.")
