@@ -138,10 +138,19 @@ export function Learn({ start, onScreen, onFree, free = false }: { start: number
   }, [wantsGL, noGL]);
   useEffect(() => () => { sceneRef.current?.dispose(); sceneRef.current = null; }, []);
   useEffect(() => {
-    const el = stageRef.current;
-    if (!el || typeof ResizeObserver === 'undefined') return;
-    const ro = new ResizeObserver(() => sceneRef.current?.resize());
+    const host = stageRef.current, el = host?.closest<HTMLElement>('.ml-stage');
+    if (!host || !el || typeof ResizeObserver === 'undefined') return;
+    // The lesson board's size at a whole-number scale of its drawing in device pixels (learn.css, desktop only).
+    const crisp = () => {
+      const dpr = window.devicePixelRatio || 1, s = Math.floor(Math.min((el.clientWidth * dpr) / 780, (el.clientHeight * dpr) / 520));
+      if (s < 1) { delete el.dataset.crisp; return; }
+      el.dataset.crisp = '';
+      el.style.setProperty('--ml-bw', `${(780 * s) / dpr}px`);
+      el.style.setProperty('--ml-bh', `${(520 * s) / dpr}px`);
+    };
+    const ro = new ResizeObserver(() => { sceneRef.current?.resize(); crisp(); });
     ro.observe(el);
+    crisp();
     return () => ro.disconnect();
   }, []);
 

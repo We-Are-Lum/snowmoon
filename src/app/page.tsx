@@ -58,7 +58,7 @@ export default async function Home() {
   ];
   const more = [
     { href: '/assistant', name: 'Assistant', what: 'Ask about the book, privately', meta: '→' },
-    { href: '/minpentai', name: 'Minpentai', what: 'The game from the book', meta: 'Learn · play →' },
+    { href: '/minpentai?mode=learn', name: 'Minpentai', what: 'The game from the book', meta: 'Learn · play →' },
     { href: '/images', name: 'Pictures', what: 'Images readers made for passages, each with how it was made', meta: 'Trial →' },
   ];
   const row = (r: (typeof book)[number]) => (

@@ -12,7 +12,7 @@ import type { BoardView, Cell } from '~/lib/minpentai/play-game/board';
 /** Height of the line under the grid (points left, or when the next turn is), inside the black box. */
 const FOOT = 32;
 
-export function PlayBoard({ bd, label, fitHeight = false, foot, children }: { bd: BoardView; label: string; fitHeight?: boolean; foot?: React.ReactNode; children?: React.ReactNode }) {
+export function PlayBoard({ bd, label, fitHeight = false, grow = false, foot, children }: { bd: BoardView; label: string; fitHeight?: boolean; /** Desktop: squares grow past Design's size to fill the room (whole pixels, so crisp). */ grow?: boolean; foot?: React.ReactNode; children?: React.ReactNode }) {
   const [focus, setFocus] = useState(0);
   const grid = useRef<HTMLDivElement>(null);
   const wrap = useRef<HTMLDivElement>(null);
@@ -34,7 +34,7 @@ export function PlayBoard({ bd, label, fitHeight = false, foot, children }: { bd
   }, []);
   const fitW = room ? Math.floor(room.w / bd.cols) - 2 : bd.cs;
   const fitH = fitHeight && room && room.h > 40 ? Math.floor((room.h - (foot ? FOOT : 0)) / rows) - 2 : bd.cs;
-  const cs = Math.max(12, Math.min(bd.cs, fitW, fitH));
+  const cs = Math.max(12, grow && room ? Math.min(fitW, fitHeight ? fitH : fitW, 96) : Math.min(bd.cs, fitW, fitH));
   const k = cs / bd.cs;
   const move = (i: number) => {
     const n = Math.max(0, Math.min(bd.cells.length - 1, i));

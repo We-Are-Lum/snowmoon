@@ -153,8 +153,8 @@ export function HomeMinpentai() {
           links={[{ href: '/minpentai/rule', label: "The rule recovered from the book's figure →" }]}
         />
       </div>
-      {/* Always Learn from its start, the 8-screen broadcast (owner, 2026-10-16); /minpentai alone sends a returning visitor to Play. */}
-      <Link href="/minpentai?lesson=1" className="home-btn home-btn-line">
+      {/* Learn where this device left it, or from its start, the 8-screen broadcast (owner, 2026-10-16). */}
+      <Link href="/minpentai?mode=learn" className="home-btn home-btn-line">
         {H.game.play}
       </Link>
     </section>

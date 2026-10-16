@@ -226,3 +226,45 @@ html.ml-in-app .ml-foot { padding-bottom: max(14px, env(safe-area-inset-bottom),
 .mr-tools button[aria-pressed='true'] { background: var(--btn); color: var(--btn-ink); }
 .mr-tools button:disabled { color: var(--muted); cursor: default; }
 .mr :is(button, a):focus-visible { outline: 2px solid #46D7E8; outline-offset: 2px; }
+
+/* Desktop (owner, 2026-10-16): bigger, by the width the page actually has (beside the rail and, when open, the
+   assistant), so a container query, never under 768px (the phone stays Design's). The mini app is full screen and
+   is left out: containment would change what its fixed frame is placed against. */
+@media (min-width: 768px) {
+  /* The game takes the page's full width here, not the reading measure (Play too, play.css's frame fills it). */
+  .page.minpentai:has(.ml-learn, .mp-play) { max-width: none; }
+  html:not(.ml-in-app) .minpentai:has(.ml-learn) { container-type: inline-size; }
+}
+/* Room for one wider column: the stage grows with the width, the text and buttons below it. */
+@container (min-width: 600px) {
+  .ml-learn {
+    --ml-h: max(560px, calc(100dvh - var(--ml-top, 0px) - 48px));
+    width: min(100%, 680px); height: var(--ml-h); margin: 24px auto;
+  }
+  .ml-stage { height: auto; aspect-ratio: 3 / 2; max-height: calc(var(--ml-h) * 0.55); }
+}
+/* Room for two columns: the game on the left, as large as fits (about 63%); the lesson and its buttons on the right. */
+@container (min-width: 880px) {
+  .ml-learn {
+    display: grid; width: calc(100% - 48px); max-width: 1320px;
+    grid-template-columns: minmax(0, 63fr) minmax(300px, 37fr);
+    grid-template-rows: auto auto auto auto minmax(0, 1fr) auto;
+    grid-template-areas: 'bar bar' 'stage body' 'tools body' 'palette body' '. body' '. foot';
+  }
+  .ml-learn-bar { grid-area: bar; }
+  .ml-stage {
+    grid-area: stage; justify-self: center; max-height: none;
+    /* The column's width, or less where the frame is short: the tools and palette keep their room under it. */
+    width: min(100%, calc((var(--ml-h) - 45px - 120px) * 1.5));
+  }
+  .ml-tools { grid-area: tools; }
+  .ml-palette { grid-area: palette; }
+  .ml-body { grid-area: body; min-height: 0; border-left: 1px solid var(--rule); }
+  .ml-foot { grid-area: foot; border-left: 1px solid var(--rule); }
+}
+/* The lesson board at a whole-number scale of its 780 × 520 drawing, in device pixels (learn.tsx sets the size),
+   so no square is ever smoothed. Where even 1 × does not fit, it fits the stage as before. */
+@container (min-width: 600px) {
+  .ml-stage[data-crisp] .ml-board { width: var(--ml-bw); height: var(--ml-bh); aspect-ratio: auto; max-height: none; }
+  .ml-stage[data-crisp] .ml-board-canvas { image-rendering: pixelated; }
+}

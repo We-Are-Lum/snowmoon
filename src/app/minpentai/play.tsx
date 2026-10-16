@@ -116,7 +116,8 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
     return () => ro?.disconnect();
   }, []);
   const stack = v.desk && narrow && !v.fs;
-  const L = stack ? { ...v.L, dir: 'column', bflex: 'none', bpad: '16px', pflex: '1', pw: '100%', pbl: '0' } : v.L;
+  // Wide (owner, 2026-10-16): the panel takes about 37% and the board grows into the rest, beyond Design's 44 px squares.
+  const L = stack ? { ...v.L, dir: 'column', bflex: 'none', bpad: '16px', pflex: '1', pw: '100%', pbl: '0' } : v.desk && !v.fs ? { ...v.L, pw: 'clamp(320px, 37%, 460px)' } : v.L;
   const rowLayout = L.dir === 'row';
   const boardLabel = `Minpentai board, ${v.strip.toLowerCase()}`;
   const cls = ['mp-play', v.desk ? 'is-desk' : 'is-phone', v.fs ? 'is-fs' : '', v.port ? 'is-port' : ''].filter(Boolean).join(' ');
@@ -245,7 +246,7 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
           ) : (
             <div className="mp-split" style={{ flexDirection: L.dir as 'row' | 'column' }}>
               <div className="mp-boardarea" style={{ flex: L.bflex, padding: L.bpad }}>
-                <PlayBoard bd={v.bd} label={boardLabel} fitHeight={rowLayout} foot={v.pAct ? <span className="mp-pts">{v.ptsTxt}</span> : v.pRun ? v.runHead : undefined}>
+                <PlayBoard bd={v.bd} label={boardLabel} fitHeight={rowLayout} grow={v.desk && rowLayout} foot={v.pAct ? <span className="mp-pts">{v.ptsTxt}</span> : v.pRun ? v.runHead : undefined}>
                   {v.hdrLight && <div className="mp-strip" aria-hidden="true">{v.strip}</div>}
                   {v.fsBtn && <button className="mp-fsgo" title="Full screen" aria-label="Full screen" onClick={v.enterFS}>⤢</button>}
                 </PlayBoard>
