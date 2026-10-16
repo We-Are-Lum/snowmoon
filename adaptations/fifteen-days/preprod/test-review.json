@@ -1,0 +1,11 @@
+{
+  "about": "The coding agent's look at the 8-shot courtyard test (2026-10-16). place / costume / face = consistency with the references; blocking = the floor plan and framing asked for.",
+  "T1": {"verdict": "fail", "place": "yes", "costume": "yes", "face": "yes", "blocking": "no", "note": "Doubles: a second magenta-haired woman, a second orange jacket and a second cream tunic at another table. The wide table and who sits where are ignored."},
+  "T2": {"verdict": "pass", "place": "yes", "costume": "yes", "face": "yes", "blocking": "yes", "note": "Deluin, low three-quarter, the polite smile that stays out of his eyes."},
+  "T3": {"verdict": "fail", "place": "yes", "costume": "yes", "face": "partly", "blocking": "no", "note": "Not an extreme close-up; Zei's eyes came out blue; lettering on the menu (the real menu is the book's picture, composited)."},
+  "T4": {"verdict": "pass", "place": "yes", "costume": "yes", "face": "yes", "blocking": "yes", "note": "Bai in profile, tattoos and haircut right; small text lines on her menu."},
+  "T5": {"verdict": "fail", "place": "yes", "costume": "yes", "face": "yes", "blocking": "partly", "note": "Over the shoulder works, but Deluin appears twice (foreground and across the table)."},
+  "T6": {"verdict": "partial", "place": "yes", "costume": "yes", "face": "yes", "blocking": "no", "note": "Not top-down and not an extreme close-up; his face is in it. Absent-minded hands do read."},
+  "T7": {"verdict": "partial", "place": "yes", "costume": "yes", "face": "yes", "blocking": "no", "note": "Both look right, but Bai is beside Zei at the same table, not small at her own table behind him."},
+  "T8": {"verdict": "fail", "place": "yes", "costume": "yes", "face": "partly", "blocking": "no", "note": "Robot C is right; a fourth person at the table; the seating isn't the plan's."}
+}
