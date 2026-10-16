@@ -9,6 +9,7 @@ sent and received (the reply at the vigil matters most, so it has three versions
 appearing and the menu tablet's taps, and the robot waiter's beeps and its glide. Every sound is written to
 scenes-out/<seed>/sfx/device-<name>.wav (48 kHz, 24-bit), and its recipe (this script's sha256, the
 settings, the output's sha256) to adaptations/<seed>/sounds/recipe.json, source kind "synthesized in code".
+They peak at -18 dBFS, quiet by design: the owner's note on 2026-10-16 was that they would stick out.
 The same settings always give the same file: the only randomness is numpy's generator with a fixed seed.
 """
 
@@ -79,7 +80,7 @@ def room(x: np.ndarray, rng, wet=0.18, decay=0.6) -> np.ndarray:
     return (1 - wet) * y + wet * tail
 
 
-def finish(x: np.ndarray, rng, wet=0.18, peak_db=-6.0) -> np.ndarray:
+def finish(x: np.ndarray, rng, wet=0.18, peak_db=-18.0) -> np.ndarray:
     y = room(x, rng, wet)
     fade = int(0.01 * SR)
     y[-fade:] *= np.linspace(1, 0, fade)

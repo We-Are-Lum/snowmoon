@@ -41,21 +41,24 @@ def svg(body, h=260):
 def plans() -> dict:
     P = {}
     P["hall"] = svg(
-        '<ellipse cx="210" cy="135" rx="200" ry="118" class="tier"/><ellipse cx="210" cy="135" rx="150" ry="80" class="floor"/>'
-        + txt(210, 30, "tiers: a varied crowd on every side") + txt(210, 250, "gallery railing above the north tiers (Zei, Bai)", "lab")
-        + '<circle cx="210" cy="135" r="38" class="holo"/>' + txt(210, 132, "holograms") + txt(210, 145, "(for the audience)")
-        + '<rect x="58" y="120" width="34" height="30" rx="4" class="pod"/><rect x="328" y="120" width="34" height="30" rx="4" class="pod"/>'
-        + person(80, 135, "D", "W") + person(340, 135, "K", "E")
-        + txt(75, 170, "Deluin's pod") + txt(345, 170, "Kau's pod")
-        + '<line x1="20" y1="135" x2="58" y2="135" class="path"/><line x1="362" y1="135" x2="400" y2="135" class="path"/>'
-        + txt(210, 222, "players face the walls, backs to the holograms: they can't see them or each other", "lab small"))
+        '<ellipse cx="210" cy="135" rx="205" ry="122" class="tier"/><ellipse cx="210" cy="135" rx="178" ry="102" class="tier2"/>'
+        '<ellipse cx="210" cy="135" rx="150" ry="80" class="floor"/>'
+        + txt(210, 20, "standing overlook at the top, with a railing (Zei, Bai: north)") + person(190, 26, "Z", "S", "Z") + person(232, 26, "B", "S", "B")
+        + txt(210, 46, "second tier, seated", "lab small") + txt(210, 240, "good seats near the floor", "lab small")
+        + '<circle cx="210" cy="135" r="42" class="holo"/>' + txt(210, 130, "holograms and") + txt(210, 142, "towers on robotic bases")
+        + '<rect x="190" y="70" width="40" height="12" class="screen"/>' + txt(210, 66, "big screens: the players' faces", "lab small")
+        + '<circle cx="78" cy="135" r="17" class="pit"/><circle cx="342" cy="135" r="17" class="pit"/>'
+        + person(78, 135, "D", "W") + person(342, 135, "K", "E")
+        + txt(78, 168, "Deluin's pit") + txt(342, 168, "Kau's pit")
+        + txt(210, 222, "players sunk in pits, facing outward: they can't see the holograms or each other", "lab small"))
     P["gallery"] = svg(
-        '<rect x="20" y="20" width="380" height="40" class="wall"/>' + txt(210, 44, "rock wall, doors to the corridor")
-        + '<line x1="20" y1="110" x2="400" y2="110" class="rail"/>' + txt(395, 104, "railing", "lab", "end")
-        + person(170, 92, "Z", "S") + person(245, 92, "B", "S")
-        + "".join(f'<circle cx="{x}" cy="{y}" r="5" class="crowd"/>' for y in (128, 146) for x in range(35, 400, 22))
-        + txt(210, 172, "the crowd, seated just below the railing") + '<rect x="20" y="186" width="380" height="54" class="cam"/>'
-        + txt(210, 205, "cameras on the hall side: Zei looks right to Bai, Bai left to Zei") + txt(210, 222, "far below: the holograms on the floor", "lab small"))
+        '<rect x="20" y="16" width="380" height="34" class="wall"/>' + txt(210, 37, "standing room at the top of the hall; doors to the corridor")
+        + '<line x1="20" y1="100" x2="400" y2="100" class="rail"/>' + txt(395, 94, "railing", "lab", "end")
+        + person(170, 80, "Z", "S") + person(245, 80, "B", "S") + "".join(f'<circle cx="{x}" cy="64" r="5" class="crowd"/>' for x in (40, 62, 330, 352, 374))
+        + "".join(f'<circle cx="{x}" cy="{y}" r="5" class="crowd"/>' for y in (118, 134) for x in range(35, 400, 22))
+        + txt(210, 156, "second tier, seated just below the railing") + txt(210, 172, "good seats further down; the holograms and screens across the hall", "lab small")
+        + '<rect x="20" y="186" width="380" height="54" class="cam"/>'
+        + txt(210, 210, "cameras on the hall side: Zei looks right to Bai, Bai left to Zei"))
     P["corridor"] = svg(
         '<rect x="150" y="10" width="120" height="240" class="floor"/>' + "".join(f'<rect x="141" y="{y}" width="9" height="26" class="door"/>' for y in (40, 90, 140, 190))
         + txt(135, 108, "elevators", "lab", "end") + person(176, 103, "D", "E") + person(232, 113, "Z", "W") + person(258, 140, "B", "W", "B")
@@ -65,9 +68,9 @@ def plans() -> dict:
     P["courtyard"] = svg(
         '<rect x="10" y="10" width="400" height="240" class="floor"/>' + '<rect x="0" y="10" width="62" height="240" class="cam"/>'
         + txt(32, 140, "cameras", "lab") + txt(32, 153, "this side", "lab")
-        + '<rect x="160" y="105" width="110" height="46" rx="3" class="table"/>' + txt(215, 132, "table for four", "lab small")
-        + person(200, 92, "D", "S") + person(200, 165, "B", "N") + person(288, 128, "Z", "W")
-        + '<line x1="200" y1="92" x2="288" y2="128" class="axis"/>' + '<circle cx="345" cy="128" r="16" class="table"/>' + txt(345, 160, "Bai's table later", "lab")
+        + '<rect x="150" y="98" width="130" height="64" rx="3" class="table"/>' + txt(215, 134, "wide table for four", "lab small")
+        + person(200, 84, "D", "S") + person(200, 176, "B", "N") + person(298, 130, "Z", "W")
+        + '<line x1="200" y1="84" x2="298" y2="130" class="axis"/>' + '<circle cx="345" cy="128" r="16" class="table"/>' + txt(345, 160, "Bai's table later", "lab")
         + "".join(f'<circle cx="{x}" cy="{y}" r="12" class="table dim"/>' for x, y in ((100, 50), (150, 215), (260, 45), (300, 210), (110, 190), (370, 60)))
         + '<rect x="380" y="10" width="30" height="22" class="gate"/>' + txt(372, 26, "gate", "lab", "end") + '<circle cx="80" cy="120" r="18" class="tree"/>' + txt(80, 124, "tree", "lab small")
         + txt(215, 244, "Deluin looks right, Zei left; Bai behind Zei once she moves", "lab small"))
@@ -83,7 +86,8 @@ def plans() -> dict:
         + '<rect x="360" y="70" width="40" height="110" class="counter"/>' + person(345, 125, "R", "W") + txt(380, 195, "robot's counter", "lab")
         + "".join(f'<rect x="{x}" y="{y}" width="34" height="24" rx="2" class="table dim"/>' for x, y in ((230, 40), (230, 180), (110, 200), (110, 40)))
         + '<rect x="190" y="242" width="60" height="8" class="door"/>' + txt(220, 236, "entrance", "lab")
-        + txt(125, 175, "Zei looks left, Bai right", "lab small"))
+        + txt(125, 175, "Zei looks left, Bai right", "lab small")
+        + '<rect x="0" y="100" width="10" height="60" class="cam"/>' + txt(12, 96, "street camera, through the glass", "lab small", "start"))
     return P
 
 
@@ -98,7 +102,7 @@ def main() -> None:
     seed, out = sys.argv[1], Path(sys.argv[2])
     adir = ROOT / "adaptations" / seed / "preprod"
     pre = ROOT / "images-out" / "preprod"
-    sl = json.loads((adir / "shotlist-v2.json").read_text())
+    sl = json.loads((adir / "shotlist-v3.json").read_text())
     cast = json.loads((pre / "cast" / "recipe.json").read_text())["images"]
     places = json.loads((pre / "places" / "recipe.json").read_text())["images"]
     thumbs = json.loads((pre / "thumbs" / "recipe.json").read_text())["images"]
