@@ -1,6 +1,6 @@
 {
   "job_file": "adaptations/fifteen-days/style-test-2/fifteen-days-round-two.json",
-  "generated_at": "2026-10-15T02:40:10+00:00",
+  "generated_at": "2026-10-15T23:59:35+00:00",
   "model": {
     "repo": "black-forest-labs/FLUX.2-klein-4B",
     "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
@@ -41,6 +41,272 @@
         }
       ],
       "generation_seconds": 413.0
+    },
+    {
+      "id": "r2-techno-vistas-f4-corridor",
+      "chapter": null,
+      "idx": null,
+      "file": "r2-techno-vistas-f4-corridor.png",
+      "sha256": "5adeb3a3a6f7edae6593f8c91dcde4e50eceb6c055ac3d6ae667762c1ae0498e",
+      "prompt": "Three eighteen-year-olds stand together in a bright corridor outside a game hall just after a match: on the left the tall pale young man smiles, relaxed; in the middle the slim spiky-haired young man grins and talks with his hands; on the right the young woman folds her arms, unimpressed. Medium shot at eye level. Reference image 1 shows a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 3 shows a young woman of about eighteen, tall and athletic, dark brown skin, hair pulled into a high puffy ponytail dyed magenta at the ends, a confident sly grin, wearing a lime-green modular shell vest with a bulky angular collar and reflective piping, a white seamless sleeveless bodysuit with glowing magenta seams, black wide gathered trousers with segmented knees, chunky black boots with glowing soles and a hip pouch; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
+      "seed": 404,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin-sheet.png",
+          "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+        },
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "bai-sheet.png",
+          "sha256": "21def33df4f734aa8979a2bb152d88b443d511b940eaae0c4a67347f900db73e"
+        }
+      ],
+      "generation_seconds": 311.7
+    },
+    {
+      "id": "r2-techno-vistas-f5-menu",
+      "chapter": null,
+      "idx": null,
+      "file": "r2-techno-vistas-f5-menu.png",
+      "sha256": "5e97120298496789bb9a0f63b5b444c7cb821e022249706b7b2769c69b23dc84",
+      "prompt": "At a small table in an open-air courtyard cafe, two young men lean over a glowing menu screen held up by a little wheeled serving robot; the spiky-haired one stares at it in wonder, the tall pale one looks on, curious. The screen shows only abstract glowing shapes. Medium close shot. The place: a small open-air courtyard cafe enclosed by low, dense shop buildings, with scattered small tables and stools beneath a shade tree and strings of little lights, a playful cartoon animal mural on one wall, glowing blank shop panels in pink and cyan, a little wheeled serving robot with a screen face, and an open entrance onto a busy street with a lamp post. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 2 shows a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
+      "seed": 505,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "deluin-sheet.png",
+          "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+        }
+      ],
+      "generation_seconds": 262.2
+    },
+    {
+      "id": "r2-techno-vistas-f6-headphones",
+      "chapter": null,
+      "idx": null,
+      "file": "r2-techno-vistas-f6-headphones.png",
+      "sha256": "7b08d447fd1cd55c89580a541e81f641c2bf697b345de59192c3aeb1e856e059",
+      "prompt": "At a cafe table a young woman pulls one side of a pair of big headphones away from her ear and shouts across to the next table, grinning, a handheld game device in her other hand; behind her, softer, two young men at the next table turn to look. Medium shot. The place: a small open-air courtyard cafe enclosed by low, dense shop buildings, with scattered small tables and stools beneath a shade tree and strings of little lights, a playful cartoon animal mural on one wall, glowing blank shop panels in pink and cyan, a little wheeled serving robot with a screen face, and an open entrance onto a busy street with a lamp post. Reference image 1 shows a young woman of about eighteen, tall and athletic, dark brown skin, hair pulled into a high puffy ponytail dyed magenta at the ends, a confident sly grin, wearing a lime-green modular shell vest with a bulky angular collar and reflective piping, a white seamless sleeveless bodysuit with glowing magenta seams, black wide gathered trousers with segmented knees, chunky black boots with glowing soles and a hip pouch; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 3 shows a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, rich mechanical and architectural detail kept to the middle and far distance, vast airy compositions with big pastel skies and enormous elegant megastructures on the horizon, cel-shaded flat color with soft hard-edged shadows, clean and bright and hopeful, cinematic wide-angle perspective, no text, no lettering, no writing, no logos, no numbers.",
+      "seed": 606,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "bai-sheet.png",
+          "sha256": "21def33df4f734aa8979a2bb152d88b443d511b940eaae0c4a67347f900db73e"
+        },
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "deluin-sheet.png",
+          "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+        }
+      ],
+      "generation_seconds": 936.0
+    },
+    {
+      "id": "r2-fork-night-f4-corridor",
+      "chapter": null,
+      "idx": null,
+      "file": "r2-fork-night-f4-corridor.png",
+      "sha256": "53f714e06541aec44c2c2b0a8b9c75729e359beca4a31cb11f6d670499a0a55d",
+      "prompt": "Three eighteen-year-olds stand together in a bright corridor outside a game hall just after a match: on the left the tall pale young man smiles, relaxed; in the middle the slim spiky-haired young man grins and talks with his hands; on the right the young woman folds her arms, unimpressed. Medium shot at eye level. Reference image 1 shows a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 3 shows a young woman of about eighteen, tall and athletic, dark brown skin, hair pulled into a high puffy ponytail dyed magenta at the ends, a confident sly grin, wearing a lime-green modular shell vest with a bulky angular collar and reflective piping, a white seamless sleeveless bodysuit with glowing magenta seams, black wide gathered trousers with segmented knees, chunky black boots with glowing soles and a hip pouch; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, rich mechanical detail picked out by the lights, clear readable faces and hands.",
+      "seed": 404,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin-sheet.png",
+          "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+        },
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "bai-sheet.png",
+          "sha256": "21def33df4f734aa8979a2bb152d88b443d511b940eaae0c4a67347f900db73e"
+        }
+      ],
+      "generation_seconds": 763.9
+    },
+    {
+      "id": "r2-fork-night-f5-menu",
+      "chapter": null,
+      "idx": null,
+      "file": "r2-fork-night-f5-menu.png",
+      "sha256": "cc799706040a3e7fa2159132c9405aa7a402fab8aa99ac67473491bf6a69d663",
+      "prompt": "At a small table in an open-air courtyard cafe, two young men lean over a glowing menu screen held up by a little wheeled serving robot; the spiky-haired one stares at it in wonder, the tall pale one looks on, curious. The screen shows only abstract glowing shapes. Medium close shot. The place: a small open-air courtyard cafe enclosed by low, dense shop buildings, with scattered small tables and stools beneath a shade tree and strings of little lights, a playful cartoon animal mural on one wall, glowing blank shop panels in pink and cyan, a little wheeled serving robot with a screen face, and an open entrance onto a busy street with a lamp post. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 2 shows a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, rich mechanical detail picked out by the lights, clear readable faces and hands.",
+      "seed": 505,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "deluin-sheet.png",
+          "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+        }
+      ],
+      "generation_seconds": 617.2
+    },
+    {
+      "id": "r2-fork-night-f6-headphones",
+      "chapter": null,
+      "idx": null,
+      "file": "r2-fork-night-f6-headphones.png",
+      "sha256": "87be832aab80caff944c7c5bc22f2c7bd83160c57760f2ddcc067e99ee780094",
+      "prompt": "At a cafe table a young woman pulls one side of a pair of big headphones away from her ear and shouts across to the next table, grinning, a handheld game device in her other hand; behind her, softer, two young men at the next table turn to look. Medium shot. The place: a small open-air courtyard cafe enclosed by low, dense shop buildings, with scattered small tables and stools beneath a shade tree and strings of little lights, a playful cartoon animal mural on one wall, glowing blank shop panels in pink and cyan, a little wheeled serving robot with a screen face, and an open entrance onto a busy street with a lamp post. Reference image 1 shows a young woman of about eighteen, tall and athletic, dark brown skin, hair pulled into a high puffy ponytail dyed magenta at the ends, a confident sly grin, wearing a lime-green modular shell vest with a bulky angular collar and reflective piping, a white seamless sleeveless bodysuit with glowing magenta seams, black wide gathered trousers with segmented knees, chunky black boots with glowing soles and a hip pouch; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 3 shows a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, rich mechanical detail picked out by the lights, clear readable faces and hands.",
+      "seed": 606,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "bai-sheet.png",
+          "sha256": "21def33df4f734aa8979a2bb152d88b443d511b940eaae0c4a67347f900db73e"
+        },
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "deluin-sheet.png",
+          "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+        }
+      ],
+      "generation_seconds": 681.5
+    },
+    {
+      "id": "r2-fork-night-f7-gate",
+      "chapter": null,
+      "idx": null,
+      "file": "r2-fork-night-f7-gate.png",
+      "sha256": "f1716d1b6a292f70984cf1c1e444cbf74465c109d9e1c9569ba38d22d1e7ce3d",
+      "prompt": "Dusk at the gate of an open-air courtyard cafe, the lamps just coming on. The tall pale young man stands alone in the foreground looking down at a small handheld device in his hand, his thumb hovering; far behind him, the slim spiky-haired young man walks away toward a table. Wide shot. The place: a small open-air courtyard cafe enclosed by low, dense shop buildings, with scattered small tables and stools beneath a shade tree and strings of little lights, a playful cartoon animal mural on one wall, glowing blank shop panels in pink and cyan, a little wheeled serving robot with a screen face, and an open entrance onto a busy street with a lamp post. Reference image 1 shows a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, rich mechanical detail picked out by the lights, clear readable faces and hands.",
+      "seed": 707,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin-sheet.png",
+          "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+        },
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        }
+      ],
+      "generation_seconds": 517.8
+    },
+    {
+      "id": "r2-new-screen-print-f4-corridor",
+      "chapter": null,
+      "idx": null,
+      "file": "r2-new-screen-print-f4-corridor.png",
+      "sha256": "2a158dd90a1d1d927b627a9100b86dc5aad96a42dfa9ea2e1d353d91043d967a",
+      "prompt": "Three eighteen-year-olds stand together in a bright corridor outside a game hall just after a match: on the left the tall pale young man smiles, relaxed; in the middle the slim spiky-haired young man grins and talks with his hands; on the right the young woman folds her arms, unimpressed. Medium shot at eye level. Reference image 1 shows a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 3 shows a young woman of about eighteen, tall and athletic, dark brown skin, hair pulled into a high puffy ponytail dyed magenta at the ends, a confident sly grin, wearing a lime-green modular shell vest with a bulky angular collar and reflective piping, a white seamless sleeveless bodysuit with glowing magenta seams, black wide gathered trousers with segmented knees, chunky black boots with glowing soles and a hip pouch; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Limited-palette screen print: three to four flat ink colours layered with slight misregistration, bold simplified shapes, visible paper texture, halftone-free solid areas, crisp edges, warm off-white paper showing through.",
+      "seed": 404,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin-sheet.png",
+          "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+        },
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "bai-sheet.png",
+          "sha256": "21def33df4f734aa8979a2bb152d88b443d511b940eaae0c4a67347f900db73e"
+        }
+      ],
+      "generation_seconds": 533.6
+    },
+    {
+      "id": "r2-new-screen-print-f5-menu",
+      "chapter": null,
+      "idx": null,
+      "file": "r2-new-screen-print-f5-menu.png",
+      "sha256": "046ee5268956d1835ecc5599e3fdc89f30a1b55af10bea30bc5343e8553b2365",
+      "prompt": "At a small table in an open-air courtyard cafe, two young men lean over a glowing menu screen held up by a little wheeled serving robot; the spiky-haired one stares at it in wonder, the tall pale one looks on, curious. The screen shows only abstract glowing shapes. Medium close shot. The place: a small open-air courtyard cafe enclosed by low, dense shop buildings, with scattered small tables and stools beneath a shade tree and strings of little lights, a playful cartoon animal mural on one wall, glowing blank shop panels in pink and cyan, a little wheeled serving robot with a screen face, and an open entrance onto a busy street with a lamp post. Reference image 1 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 2 shows a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Limited-palette screen print: three to four flat ink colours layered with slight misregistration, bold simplified shapes, visible paper texture, halftone-free solid areas, crisp edges, warm off-white paper showing through.",
+      "seed": 505,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "deluin-sheet.png",
+          "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+        }
+      ],
+      "generation_seconds": 444.8
+    },
+    {
+      "id": "r2-new-screen-print-f6-headphones",
+      "chapter": null,
+      "idx": null,
+      "file": "r2-new-screen-print-f6-headphones.png",
+      "sha256": "4914d27f88984c2416b4b97f1ffda0c88f7f2354356fdff3a5f29ef6eb4f6ea4",
+      "prompt": "At a cafe table a young woman pulls one side of a pair of big headphones away from her ear and shouts across to the next table, grinning, a handheld game device in her other hand; behind her, softer, two young men at the next table turn to look. Medium shot. The place: a small open-air courtyard cafe enclosed by low, dense shop buildings, with scattered small tables and stools beneath a shade tree and strings of little lights, a playful cartoon animal mural on one wall, glowing blank shop panels in pink and cyan, a little wheeled serving robot with a screen face, and an open entrance onto a busy street with a lamp post. Reference image 1 shows a young woman of about eighteen, tall and athletic, dark brown skin, hair pulled into a high puffy ponytail dyed magenta at the ends, a confident sly grin, wearing a lime-green modular shell vest with a bulky angular collar and reflective piping, a white seamless sleeveless bodysuit with glowing magenta seams, black wide gathered trousers with segmented knees, chunky black boots with glowing soles and a hip pouch; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Reference image 3 shows a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Limited-palette screen print: three to four flat ink colours layered with slight misregistration, bold simplified shapes, visible paper texture, halftone-free solid areas, crisp edges, warm off-white paper showing through.",
+      "seed": 606,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "bai-sheet.png",
+          "sha256": "21def33df4f734aa8979a2bb152d88b443d511b940eaae0c4a67347f900db73e"
+        },
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        },
+        {
+          "file": "deluin-sheet.png",
+          "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+        }
+      ],
+      "generation_seconds": 520.5
+    },
+    {
+      "id": "r2-new-screen-print-f7-gate",
+      "chapter": null,
+      "idx": null,
+      "file": "r2-new-screen-print-f7-gate.png",
+      "sha256": "67b8edc886ce96e8fe8da386a727b823de0e1597c318a8d8d368b6924c756722",
+      "prompt": "Dusk at the gate of an open-air courtyard cafe, the lamps just coming on. The tall pale young man stands alone in the foreground looking down at a small handheld device in his hand, his thumb hovering; far behind him, the slim spiky-haired young man walks away toward a table. Wide shot. The place: a small open-air courtyard cafe enclosed by low, dense shop buildings, with scattered small tables and stools beneath a shade tree and strings of little lights, a playful cartoon animal mural on one wall, glowing blank shop panels in pink and cyan, a little wheeled serving robot with a screen face, and an open entrance onto a busy street with a lamp post. Reference image 1 shows a young man of about eighteen, tall and long-limbed, pale skin, wavy shoulder-length light-brown hair, grey-green eyes and a calm, slightly serious face, wearing a thick cream cable-knit sweater cut as a long asymmetric tunic with a high folded collar and a light grey hood, dark green slim segmented trousers, a narrow dark sash and sturdy brown seamless boots; keep the same face, hair, build and clothing. Reference image 2 shows a young man of eighteen, slim and of medium height, light golden-tan skin, spiky jet-black hair with one electric-blue streak and quick dark eyes, wearing a cropped asymmetric orange shell jacket with one long sleeve and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered into ankle cuffs, chunky white sneakers with glowing soles, a thin band around his throat and clear visor glasses pushed up on his head; keep the same face, hair, build and clothing. Each person from a reference image appears exactly once; everyone else in the scene looks clearly different from them. A single continuous picture, not split into panels. Limited-palette screen print: three to four flat ink colours layered with slight misregistration, bold simplified shapes, visible paper texture, halftone-free solid areas, crisp edges, warm off-white paper showing through.",
+      "seed": 707,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin-sheet.png",
+          "sha256": "3edf7878c7001438c4c7133005517cba0d1679bed4988fadc58947d428934384"
+        },
+        {
+          "file": "zei-sheet.png",
+          "sha256": "cd6e71769d0d468bbfc5dbb4269aa62b14a92efaa45aef33bfc1b9fd0ba8d867"
+        }
+      ],
+      "generation_seconds": 304.9
     }
   ],
   "assist": {

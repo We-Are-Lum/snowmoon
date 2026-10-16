@@ -80,6 +80,22 @@
       "sha256": "7eb38f5a19d7a0526687dd5f24f595c11d0061b4fe110d5f774c74d99a0dd028",
       "duration_s": 137.66,
       "added_at": "2026-10-15T23:32:34+00:00"
+    },
+    {
+      "effect": "bed: gate at dusk",
+      "source": {
+        "kind": "freesound",
+        "url": "https://freesound.org/people/softwalls/sounds/385104/",
+        "id": 385104,
+        "title": "XY_City hum_Night_River_ambience.wav",
+        "author": "softwalls",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page",
+        "licence_checked": "2026-10-15, from the sound's own page (sound-effects.md)"
+      },
+      "file": "scenes-out/fifteen-days/sfx/bed-gate-at-dusk.wav",
+      "sha256": "7484b2a30cb43937ad763533cde5fa982b66b8ed45d81356efdcb6401a88477f",
+      "duration_s": 215.64,
+      "added_at": "2026-10-15T23:53:47+00:00"
     }
   ]
 }

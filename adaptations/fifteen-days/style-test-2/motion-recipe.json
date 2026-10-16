@@ -38,6 +38,60 @@
       "cost_basis": "seconds of video (at least 5) times the listed price",
       "file": "images-out/style-test-2-motion/r2m-techno-vistas.mp4",
       "sha256": "985c663382be377717cccde99973b5403aba9f246f30518deceabf4912e4e3d6"
+    },
+    {
+      "id": "r2m-fork-night",
+      "style": "fork-night",
+      "from_frame": {
+        "file": "images-out/fifteen-days-round-two/r2-fork-night-f7-gate.png",
+        "sha256": "f1716d1b6a292f70984cf1c1e444cbf74465c109d9e1c9569ba38d22d1e7ce3d"
+      },
+      "host": "fal.ai",
+      "endpoint": "fal-ai/longcat-video/distilled/image-to-video/480p",
+      "weights": "https://huggingface.co/meituan-longcat/LongCat-Video",
+      "license": "MIT",
+      "weights_revision": "not exposed by the host; the endpoint as served on the date below",
+      "request_id": "01a14201-d443-71f3-8bf7-cad312e23d73",
+      "served_at": "2026-10-16T00:03:42+00:00",
+      "prompt": "The young man in the foreground hesitates, then taps the device once and lowers it; far behind him the other young man keeps walking away; the lamps glow a little brighter. Still camera, gentle natural movement.",
+      "seed": 7,
+      "num_frames": 75,
+      "fps": 15,
+      "enable_prompt_expansion": false,
+      "safety_checker": "host default (on)",
+      "price_usd_per_second": 0.005,
+      "price_seen": "config/models.json longcat-video, 2026-10-13",
+      "cost_usd": 0.025,
+      "cost_basis": "seconds of video (at least 5) times the listed price",
+      "file": "images-out/style-test-2-motion/r2m-fork-night.mp4",
+      "sha256": "ba9034844f5d7c857bf76a6a0045bc4252946f6ced60742eac4d2856963eca4f"
+    },
+    {
+      "id": "r2m-new-screen-print",
+      "style": "new-screen-print",
+      "from_frame": {
+        "file": "images-out/fifteen-days-round-two/r2-new-screen-print-f7-gate.png",
+        "sha256": "67b8edc886ce96e8fe8da386a727b823de0e1597c318a8d8d368b6924c756722"
+      },
+      "host": "fal.ai",
+      "endpoint": "fal-ai/longcat-video/distilled/image-to-video/480p",
+      "weights": "https://huggingface.co/meituan-longcat/LongCat-Video",
+      "license": "MIT",
+      "weights_revision": "not exposed by the host; the endpoint as served on the date below",
+      "request_id": "01a14205-8eef-7cd0-af22-9447e7fdbf5c",
+      "served_at": "2026-10-16T00:04:43+00:00",
+      "prompt": "The young man in the foreground hesitates, then taps the device once and lowers it; far behind him the other young man keeps walking away; the lamps glow a little brighter. Still camera, gentle natural movement.",
+      "seed": 7,
+      "num_frames": 75,
+      "fps": 15,
+      "enable_prompt_expansion": false,
+      "safety_checker": "host default (on)",
+      "price_usd_per_second": 0.005,
+      "price_seen": "config/models.json longcat-video, 2026-10-13",
+      "cost_usd": 0.025,
+      "cost_basis": "seconds of video (at least 5) times the listed price",
+      "file": "images-out/style-test-2-motion/r2m-new-screen-print.mp4",
+      "sha256": "4108c2a76f8bfc509e04043e9d312e9bc6c38244c61d8f3a88967b4ef70b494e"
     }
   ]
 }

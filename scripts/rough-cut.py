@@ -154,6 +154,8 @@ def main() -> None:
     else:
         bed("bed-gate", "bed: courtyard café", cut("b6-1", -1.5 - w), cut("hold-s34", 0 + h), -6, "lowpass=f=1800",
             note="stand-in until the gate-at-dusk recordings are in: the café, quieter and darker")
+    bed("bed-gate-birds", "bed: gate birds", cut("b6-1", -1.5 - w), cut("hold-s34", 0 + h), -8,
+        note="evening birds layered over the city hum at the gate")
     bed("bed-lobby", "bed: lobby restaurant", cut("hold-s34", 0 - w), {"cue": "@end", "offset": 0}, -2)
     timeline = {
         "about": "Fifteen Days rough cut (2026-10-15): the owner's performances converted into the character voices, each location's acoustics, Dreadnaught v3, stand-in cards for the drafted shots. Line gaps, shot anchors, holds and acoustics are drafted by the coding agent. A bed that isn't downloaded yet is left out (the gate uses the café, darker, until its own arrive).",
