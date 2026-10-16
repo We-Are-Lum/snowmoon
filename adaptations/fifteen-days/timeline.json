@@ -1,5 +1,5 @@
 {
-  "about": "Fifteen Days rough cut (2026-10-15): the owner's performances converted into the character voices, each location's acoustics, Dreadnaught v3, stand-in cards for the drafted shots. Line gaps, shot anchors, holds and acoustics are drafted by the coding agent. Beds are left out until the owner has downloaded them.",
+  "about": "Fifteen Days rough cut (2026-10-15): the owner's performances converted into the character voices, each location's acoustics, Dreadnaught v3, stand-in cards for the drafted shots. Line gaps, shot anchors, holds and acoustics are drafted by the coding agent. A bed that isn't downloaded yet is left out (the gate uses the café, darker, until its own arrive).",
   "seed": "fifteen-days",
   "placeholder": true,
   "placeholder_reason": "stand-in cards until the stills are drawn",
@@ -760,6 +760,187 @@
       },
       "level_db": -4,
       "note": "Deluin laughing at the table as Zei arrives (the owner's take, the agent's pick of four)"
+    },
+    {
+      "id": "bed-hall",
+      "track": "bed",
+      "stem": "scenes-out/fifteen-days/stems/bed-hall.wav",
+      "loop": true,
+      "loop_xfade_s": 1.5,
+      "at": {
+        "cue": "@start",
+        "offset": 0
+      },
+      "until": {
+        "cue": "b1-1",
+        "edge": "start",
+        "offset": 0.15000000000000002
+      },
+      "level_db": 4,
+      "fade_in": 1.5,
+      "fade_out": 1.5,
+      "source": {
+        "effect": "bed: match hall",
+        "url": "https://freesound.org/people/klankbeeld/sounds/171462/",
+        "author": "klankbeeld",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+      }
+    },
+    {
+      "id": "bed-hall-wall",
+      "track": "bed",
+      "stem": "scenes-out/fifteen-days/stems/bed-hall-wall.wav",
+      "loop": true,
+      "loop_xfade_s": 1.5,
+      "at": {
+        "cue": "b1-1",
+        "edge": "start",
+        "offset": -1.35
+      },
+      "until": {
+        "cue": "b2-1",
+        "edge": "start",
+        "offset": -0.6499999999999999
+      },
+      "level_db": -4,
+      "fade_in": 1.5,
+      "fade_out": 1.5,
+      "source": {
+        "effect": "bed: match hall",
+        "url": "https://freesound.org/people/klankbeeld/sounds/171462/",
+        "author": "klankbeeld",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+      },
+      "note": "the game through the waiting-room wall (drafted: the owner hasn't decided yet)"
+    },
+    {
+      "id": "bed-waiting",
+      "track": "bed",
+      "stem": "scenes-out/fifteen-days/stems/bed-waiting.wav",
+      "loop": true,
+      "loop_xfade_s": 1.5,
+      "at": {
+        "cue": "b1-1",
+        "edge": "start",
+        "offset": -1.35
+      },
+      "until": {
+        "cue": "b2-1",
+        "edge": "start",
+        "offset": -0.6499999999999999
+      },
+      "level_db": -2,
+      "fade_in": 1.5,
+      "fade_out": 1.5,
+      "source": {
+        "effect": "bed: waiting room",
+        "url": "https://freesound.org/people/gchase/sounds/144046/",
+        "author": "gchase",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+      }
+    },
+    {
+      "id": "bed-corridor",
+      "track": "bed",
+      "stem": "scenes-out/fifteen-days/stems/bed-corridor.wav",
+      "loop": true,
+      "loop_xfade_s": 1.5,
+      "at": {
+        "cue": "b2-1",
+        "edge": "start",
+        "offset": -2.15
+      },
+      "until": {
+        "cue": "b3-1",
+        "edge": "start",
+        "offset": -2.25
+      },
+      "level_db": -2,
+      "fade_in": 1.5,
+      "fade_out": 1.5,
+      "source": {
+        "effect": "bed: corridor",
+        "url": "https://freesound.org/people/sturmankin/sounds/272317/",
+        "author": "sturmankin",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+      }
+    },
+    {
+      "id": "bed-cafe",
+      "track": "bed",
+      "stem": "scenes-out/fifteen-days/stems/bed-cafe.wav",
+      "loop": true,
+      "loop_xfade_s": 1.5,
+      "at": {
+        "cue": "b3-1",
+        "edge": "start",
+        "offset": -3.75
+      },
+      "until": {
+        "cue": "b6-1",
+        "edge": "start",
+        "offset": -0.75
+      },
+      "level_db": 0,
+      "fade_in": 1.5,
+      "fade_out": 1.5,
+      "source": {
+        "effect": "bed: courtyard café",
+        "url": "https://freesound.org/people/Anya_Media/sounds/437462/",
+        "author": "Anya_Media",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+      }
+    },
+    {
+      "id": "bed-gate",
+      "track": "bed",
+      "stem": "scenes-out/fifteen-days/stems/bed-gate.wav",
+      "loop": true,
+      "loop_xfade_s": 1.5,
+      "at": {
+        "cue": "b6-1",
+        "edge": "start",
+        "offset": -2.25
+      },
+      "until": {
+        "cue": "hold-s34",
+        "edge": "start",
+        "offset": 0.75
+      },
+      "level_db": -2,
+      "fade_in": 1.5,
+      "fade_out": 1.5,
+      "source": {
+        "effect": "bed: gate at dusk",
+        "url": "https://freesound.org/people/softwalls/sounds/385104/",
+        "author": "softwalls",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+      }
+    },
+    {
+      "id": "bed-lobby",
+      "track": "bed",
+      "stem": "scenes-out/fifteen-days/stems/bed-lobby.wav",
+      "loop": true,
+      "loop_xfade_s": 1.5,
+      "at": {
+        "cue": "hold-s34",
+        "edge": "start",
+        "offset": -0.75
+      },
+      "until": {
+        "cue": "@end",
+        "offset": 0
+      },
+      "level_db": -2,
+      "fade_in": 1.5,
+      "fade_out": 1.5,
+      "source": {
+        "effect": "bed: lobby restaurant",
+        "url": "https://freesound.org/people/Berwitz/sounds/263584/",
+        "author": "Berwitz",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+      }
     }
   ],
   "shots": [
