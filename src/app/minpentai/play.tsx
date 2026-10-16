@@ -116,8 +116,8 @@ export function Play({ start, onLearn }: { start: 'home' | 'free' | 'ladder' | '
     return () => ro?.disconnect();
   }, []);
   const stack = v.desk && narrow && !v.fs;
-  // Wide (owner, 2026-10-16): the panel takes about 37% and the board grows into the rest, beyond Design's 44 px squares.
-  const L = stack ? { ...v.L, dir: 'column', bflex: 'none', bpad: '16px', pflex: '1', pw: '100%', pbl: '0' } : v.desk && !v.fs ? { ...v.L, pw: 'clamp(320px, 37%, 460px)' } : v.L;
+  // Wide (owner, 2026-10-16): the panel takes about 30% and the board grows into the rest, beyond Design's 44 px squares.
+  const L = stack ? { ...v.L, dir: 'column', bflex: 'none', bpad: '16px', pflex: '1', pw: '100%', pbl: '0' } : v.desk && !v.fs ? { ...v.L, pw: 'clamp(300px, 30%, 400px)' } : v.L;
   const rowLayout = L.dir === 'row';
   const boardLabel = `Minpentai board, ${v.strip.toLowerCase()}`;
   const cls = ['mp-play', v.desk ? 'is-desk' : 'is-phone', v.fs ? 'is-fs' : '', v.port ? 'is-port' : ''].filter(Boolean).join(' ');

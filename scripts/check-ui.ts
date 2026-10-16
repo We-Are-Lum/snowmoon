@@ -1339,10 +1339,11 @@ try {
         await checkFloors(page, `${path} @${width}`, scheme);
         const wide = await page.evaluate(() => document.documentElement.scrollWidth - innerWidth);
         if (wide > 1) fail(`${path} @${width} (${scheme}): scrolls sideways by ${wide}px`);
-        const measure = await page.evaluate(() => {
-          const el = document.querySelector('main .page.chapter, main .page') as HTMLElement | null;
+        // Minpentai is a game page as wide as the window allows (owner, 2026-10-16); its reading column is the lesson text.
+        const measure = await page.evaluate((game) => {
+          const el = document.querySelector(game ? 'main .ml-body, main .mp-panel' : 'main .page.chapter, main .page') as HTMLElement | null;
           return el ? el.getBoundingClientRect().width : 0;
-        });
+        }, path === '/minpentai');
         if (measure > 700) fail(`${path} @${width}: the reading column is ${Math.round(measure)}px wide`);
         // Home is Design's wide page (no .page column): its hero text keeps Design's 780px measure.
         if (path === '/') {

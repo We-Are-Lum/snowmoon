@@ -1,6 +1,7 @@
 /**
  * 2D drawing for Learn Minpentai, ported from Design's mockup (docs/design/minpentai-intro-v3.dc.html):
- *   drawBoard  -> Component.drawBoard (script lines 807–848): the lesson board, 780 × 520 backing
+ *   drawBoard  -> Component.drawBoard (script lines 807–848): the lesson board, drawn in Design's 780 × 520
+ *                 units at any whole-number size of its canvas (desktop, 2026-10-16: learn.tsx sizes it)
  *   drawView   -> Component.drawView (657–669): what one player sees, under each player cam
  *   drawFlat   -> drawView without the sight clip: the whole field from above, used only when
  *                 WebGL is missing (Design's note asks for "the flat match view" there)
@@ -15,10 +16,13 @@ export function drawBoard(c: HTMLCanvasElement | null, L: LState, cellsOn: boole
   if (!c) return false;
   const g = c.getContext('2d');
   if (!g) return false;
+  // Design's units: 780 × 520, whatever the canvas's own size.
+  const CW = 780, CH = 520;
+  g.setTransform(c.width / CW, 0, 0, c.height / CH, 0, 0);
   g.fillStyle = '#060608';
-  g.fillRect(0, 0, c.width, c.height);
+  g.fillRect(0, 0, CW, CH);
   if (isCells(L)) {
-    const d = L.def, z = d.zoom, cols = BW / z, rows = BH / z, cq = c.width / cols, [vx, vy] = d.view, b = L.s;
+    const d = L.def, z = d.zoom, cols = BW / z, rows = BH / z, cq = CW / cols, [vx, vy] = d.view, b = L.s;
     for (let j = 0; j < rows; j++) {
       for (let i = 0; i < cols; i++) {
         const k = ((vy + j) % BH) * BW + ((vx + i) % BW), X = i * cq, Y = j * cq;
@@ -28,7 +32,7 @@ export function drawBoard(c: HTMLCanvasElement | null, L: LState, cellsOn: boole
     }
     return true;
   }
-  const d = L.def, s = L.s, cp = c.width / PW;
+  const d = L.def, s = L.s, cp = CW / PW;
   const fr = L.fogR || d.fog, seen = (x: number, y: number) => !fr || near(s, x, y, fr);
   const zone = d.place === 'palette' && (d.practice ? L.phase === 'act' : s.turn === 0);
   for (let y = 0; y < PH; y++) {

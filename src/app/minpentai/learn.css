@@ -262,9 +262,8 @@ html.ml-in-app .ml-foot { padding-bottom: max(14px, env(safe-area-inset-bottom),
   .ml-body { grid-area: body; min-height: 0; border-left: 1px solid var(--rule); }
   .ml-foot { grid-area: foot; border-left: 1px solid var(--rule); }
 }
-/* The lesson board at a whole-number scale of its 780 × 520 drawing, in device pixels (learn.tsx sets the size),
-   so no square is ever smoothed. Where even 1 × does not fit, it fits the stage as before. */
+/* The lesson board with each square a whole number of screen pixels, drawn at that size (learn.tsx, learn-draw.ts),
+   so no square is ever smoothed. */
 @container (min-width: 600px) {
   .ml-stage[data-crisp] .ml-board { width: var(--ml-bw); height: var(--ml-bh); aspect-ratio: auto; max-height: none; }
-  .ml-stage[data-crisp] .ml-board-canvas { image-rendering: pixelated; }
 }
