@@ -80,7 +80,7 @@ export const HOME_TEXT = {
     // Where the book has the game: Zei's last match, in chapter 4 (c4-b4–b7). Design's "the game the boy is
     // playing in chapter 1" is not in the book: the boy in chapter 1 (c1-b6) is flying a toy drone.
     caption: 'Zei studies a board from his last Minpentai game in chapter 4 (c4-b5, c4-b7). This board plays the Learn game against itself: both sides are its computer player.',
-    play: 'Play Minpentai →',
+    play: 'Learn how to play →',
     pause: 'Pause',
     resume: 'Play',
   },
