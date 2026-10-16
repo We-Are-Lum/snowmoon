@@ -14,8 +14,9 @@ drafted shot list (shots.json) and the music recipe, and writes:
 - adaptations/<seed>/timeline.json, marked "placeholder" (stand-in cards): every line chained after
   the one before (0.35 s inside a beat, 1.6 s between beats), shots on their anchors from shots.json,
   the chosen music cue, and the laugh. Its mix and render recipes stay in scenes-out/.
-The robot has no voice sheet yet: its line is the owner's take with a simple robotic filter, a
-stand-in, never published. A bed that isn't downloaded yet is left out (the gate uses the café, darker, until its own arrive).
+The robot's line is the owner's take converted into the robot's designed voice (voices/robot.json,
+the owner's description); a line with no converted file falls back to the take with a robotic filter,
+a stand-in, never published. The gate is the city hum alone (owner, 2026-10-15). A bed that isn't downloaded yet is left out (the gate uses the café, darker, until its own arrive).
 """
 
 import hashlib
@@ -49,6 +50,26 @@ def sha256(p: Path) -> str:
 
 def ffmpeg(src: Path, dst: Path, af: str) -> None:
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(src), "-af", af, "-ar", "48000", "-ac", "1", "-c:a", "pcm_f32le", str(dst)], check=True)
+
+
+# The book's own pictures and screens (scripts/capture-screen.ts, scenes-out/<seed>/inserts/), on a night-dark frame.
+INSERTS = {"s16": "c14-b108", "s35": "c15-b50", "s37": "c15-b53", "s39": "c15-b55"}
+# Shots with no frame that passed the review (owner's rule: redraw doubles, extras dressed like the cast, lettering).
+UNRESOLVED = {"s28"}
+
+
+def insert_frame(src: Path, dst: Path) -> None:
+    img = Image.open(src).convert("RGB")
+    W, H = 1920, 1080
+    k = min(W * 0.8 / img.width, H * 0.8 / img.height)
+    img = img.resize((round(img.width * k), round(img.height * k)), Image.LANCZOS)
+    frame = Image.new("RGB", (W, H), (12, 14, 28))
+    # The capture's corners outside its rounded frame are the page's white: leave them out.
+    from PIL import ImageDraw as _D
+    mask = Image.new("L", img.size, 0)
+    _D.Draw(mask).rounded_rectangle([0, 0, img.width - 1, img.height - 1], radius=round(min(img.size) * 0.05), fill=255)
+    frame.paste(img, ((W - img.width) // 2, (H - img.height) // 2), mask)
+    frame.save(dst)
 
 
 def card(path: Path, shot: dict) -> None:
@@ -105,9 +126,22 @@ def main() -> None:
             subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "lavfi", "-i", "anullsrc=r=48000:cl=mono", "-t", str(s["hold_s"]), "-c:a", "pcm_f32le", str(dst)], check=True)
     # Shots: anchors from shots.json; a shot anchored to the shot before starts at that shot's hold cue.
     tl_shots, hold_prev = [], None
+    style = json.loads((adir / "style.json").read_text()) if (adir / "style.json").exists() else None
+    drawn = {}
+    if style and (adir / f"shots-{style['slug']}" / "recipe.json").exists():
+        drawn = {e["shot"]: e for e in json.loads((adir / f"shots-{style['slug']}" / "recipe.json").read_text())["images"]
+                 if not e.get("rejected")}
     for s in shots:
-        png = cards / f"{s['id']}.png"
-        card(png, s)
+        if s["id"] in UNRESOLVED:
+            continue  # no acceptable frame yet: the shot before holds instead
+        if s["id"] in drawn:
+            png = ROOT / drawn[s["id"]]["file"]
+        elif s.get("insert") and (out / "inserts" / f"{INSERTS[s['id']]}.png").exists():
+            png = cards / f"{s['id']}.png"
+            insert_frame(out / "inserts" / f"{INSERTS[s['id']]}.png", png)
+        else:
+            png = cards / f"{s['id']}.png"
+            card(png, s)
         if s["at"]["cue"].startswith("s"):
             hold_id = f"hold-{s['id']}"
             prev_hold = f"hold-{s['at']['cue']}"
@@ -170,12 +204,10 @@ def main() -> None:
     else:
         bed("bed-gate", "bed: courtyard café", cut("b6-1", -1.5 - w), cut("hold-s34", 0 + h), -6, "lowpass=f=1800",
             note="stand-in until the gate-at-dusk recordings are in: the café, quieter and darker")
-    bed("bed-gate-birds", "bed: gate birds", cut("b6-1", -1.5 - w), cut("hold-s34", 0 + h), -8,
-        note="evening birds layered over the city hum at the gate")
     bed("bed-lobby", "bed: lobby restaurant", cut("hold-s34", 0 - w), {"cue": "@end", "offset": 0}, -2)
     timeline = {
         "about": "Fifteen Days rough cut (2026-10-15): the owner's performances converted into the character voices, each location's acoustics, Dreadnaught v3, stand-in cards for the drafted shots. Line gaps, shot anchors, holds and acoustics are drafted by the coding agent. A bed that isn't downloaded yet is left out (the gate uses the café, darker, until its own arrive).",
-        "seed": seed, "placeholder": True, "placeholder_reason": "stand-in cards until the stills are drawn",
+        "seed": seed, "placeholder": True, "placeholder_reason": "the stills are in a DRAFT style awaiting the owner's approval; s28 has no accepted frame yet",
         "video": {"width": 1920, "height": 1080, "fps": 30}, "loudness": {"integrated_lufs": -16, "true_peak_db": -1, "lra": 11},
         "tail_s": 2.0, "tracks": {"voice": {"level_db": 0}, "hold": {"level_db": -60}, "bed": {"level_db": -24}, "foley": {"level_db": -10}, "music": {"level_db": -16}},
         "rooms": ROOMS, "cues": cues, "shots": tl_shots, "lettering": [],

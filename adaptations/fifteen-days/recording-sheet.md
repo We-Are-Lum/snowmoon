@@ -13,7 +13,7 @@ out; the chosen take of each line is converted into its character's voice; the o
 in `~/snowmoon-takes/full/takes/`, outside the repository, in case you want to swap one.
 Lines that can't be matched are flagged.
 
-42 lines, 557 words, in 6 files.
+42 lines, 556 words, in 6 files.
 
 ## beat-1 · The walls hold (optional opener)
 
@@ -83,7 +83,7 @@ Lines that can't be matched are flagged.
 **20.** (twenty) **ROBOT**: jie mo kai tu jie hei ja ma? *(no voice sheet yet: recorded, not converted)*  
 <sub>A robot slides up to the table.</sub>
 
-**21.** (twenty-one) **ZEI**: Ooh, hmm.  
+**21.** (twenty-one) **ZEI**: Whoa *(the book's line restored, owner 2026-10-15; the "Whoa" take)*  
 <sub>A menu appears: the book's own glyph picture.</sub>
 
 **22.** (twenty-two) **DELUIN**: What is it?  

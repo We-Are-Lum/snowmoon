@@ -20,8 +20,8 @@ dialogue, ambience and Foley. **No narrator:** picture and dialogue carry the pi
 2026-10-14). **Voices:** Zei, Deluin, Bai and the robot waiter; the characters' voices are designed
 voice sheets (`voices/`), converted from the owner's performances.
 **Point of view:** outside all three; the camera, with one on-screen line in beat 6.
-**Length:** 7 beats (the draft's opener and sections 1 to 6 are beats 1 to 7). Spoken, as performed: 549 words
-of dialogue, 508 the owner's and 41 the book's (beat 3, the café, is 170); no narration. One
+**Length:** 7 beats (the draft's opener and sections 1 to 6 are beats 1 to 7). Spoken, as performed: 548 words
+of dialogue, 506 the owner's and 42 the book's (beat 3, the café, is 169); no narration. One
 on-screen line of 15 words (beat 6). The chosen takes run 3 min 57 s with their pauses (2026-10-15),
 so about four and a half minutes with the silent shots.
 **Style:** to be picked from the style test.
@@ -144,7 +144,7 @@ so about four and a half minutes with the silent shots.
   *[A robot slides up to the table.] (book, c14-b105)*
   - `book c14-b106` Robot: "jie mo kai tu jie hei ja ma?"
   *[A menu appears: the book's own glyph picture.] (book, c14-b107–c14-b108)*
-  - `by FID 6786 on 2026-10-15` Zei: "Ooh, hmm." *(after c14-b109)*
+  - `book c14-b109` Zei: "Whoa" *(the book's line restored, owner 2026-10-15; the "Whoa" take)*
   - `book c14-b110` Deluin: "What is it?"
   - `by FID 6786 on 2026-10-15` Zei: "I think these are some of the new symbols that they're A/B testing for the Dzegoban version nine." *(after c14-b111)*
   *[He realises he's talking to a foreigner.] (book, c14-b112)*

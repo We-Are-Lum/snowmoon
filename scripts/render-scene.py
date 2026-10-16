@@ -153,15 +153,20 @@ def end_card(spec: dict, size: tuple[int, int]) -> Image.Image:
     x, y, width = round(160 * s), round(110 * s), W - round(320 * s)
     d.text((x, y), spec["title"], font=f_title, fill=CARD_INK)
     y += round(110 * s)
+    if spec.get("subtitle"):
+        d.text((x, y - round(24 * s)), spec["subtitle"], font=f_text, fill=CARD_MUTED)
+        y += round(40 * s)
     for sec in spec["sections"]:
-        d.text((x, y), sec["label"].upper(), font=f_label, fill=CARD_MUTED)
-        y += round(30 * s)
-        for line in wrap(d, sec["text"], f_text, width):
-            d.text((x, y), line, font=f_text, fill=CARD_INK)
-            y += round(38 * s)
+        if sec.get("label"):
+            d.text((x, y), sec["label"].upper(), font=f_label, fill=CARD_MUTED)
+            y += round(30 * s)
+        font = ImageFont.truetype(str(CARD_FACES["title"]), round(40 * s)) if sec.get("strong") else f_text
+        for line in wrap(d, sec["text"], font, width):
+            d.text((x, y), line, font=font, fill=CARD_INK)
+            y += round((52 if sec.get("strong") else 38) * s)
         y += round(18 * s)
     y = max(y, H - round(150 * s))
-    for link in spec["links"]:
+    for link in [l for l in spec["links"] if l.get("card", True)]:
         d.text((x, y), link["label"].upper(), font=f_label, fill=CARD_MUTED)
         d.text((x + round(330 * s), y - round(6 * s)), link["shown"], font=f_text, fill=CARD_INK)
         y += round(44 * s)

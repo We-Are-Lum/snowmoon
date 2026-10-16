@@ -1,16 +1,15 @@
 {
-  "about": "The end card and the video description for Fifteen Days (owner, 2026-10-14: AI declaration; credits: words by the owner, voices converted from the owner's performance, models; GPL v3; the repo link; the make-your-own-entry link). DRAFT wording by the coding agent; the owner rewrites or approves it. The model lines must match the scene's recipes before publication.",
-  "draft": true,
+  "about": "The end card and the video description for Fifteen Days: option B, \"The invitation\", from docs/drafts/friday-post.md on friday-drafts, chosen by the owner (2026-10-15, relayed from session snowmoon-a6). The card's words are the option as drafted; the owner may still reword them. The model lines in the description must match the scene's recipes before publication.",
+  "draft": false,
+  "option": "B",
   "title": "Fifteen Days",
+  "subtitle": "one scene from Snowmoon by Vitalik Buterin",
   "sections": [
-    {"label": "AI declaration", "text": "The pictures, the voices and the sound effects were made with open-weight AI models. Every word was written by a person."},
-    {"label": "Words", "text": "Written by naaate, from Snowmoon by Vitalik Buterin."},
-    {"label": "Voices", "text": "Performed by naaate and converted into designed character voices with Chatterbox (MIT). Voices designed with Qwen3-TTS VoiceDesign (Apache-2.0). Narration: Kokoro (Apache-2.0)."},
-    {"label": "Pictures", "text": "Z-Image Turbo (Apache-2.0), from written character and place sheets. Lettering drawn in code."},
-    {"label": "Licence", "text": "GPL v3, like the book. Every script, voice, picture, sound and timeline that made this is yours to copy, change and remake."}
+    {"text": "Words by naaate and the book. Voices AI-converted from naaate's performances. Pictures made with open-weight AI. All labelled."},
+    {"text": "This is one scene. Make the next.", "strong": true},
+    {"text": "Everything that made it is GPL v3: github.com/We-Are-Lum/snowmoon"}
   ],
   "links": [
-    {"label": "Source", "shown": "github.com/We-Are-Lum/snowmoon", "url": "https://github.com/We-Are-Lum/snowmoon"},
-    {"label": "Make your own", "shown": "snowmoon.party/make", "url": "https://snowmoon.party/make"}
+    {"label": "Source", "shown": "github.com/We-Are-Lum/snowmoon", "url": "https://github.com/We-Are-Lum/snowmoon", "card": false}
   ]
 }

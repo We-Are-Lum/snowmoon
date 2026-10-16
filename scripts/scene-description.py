@@ -13,9 +13,9 @@ ROOT = Path(__file__).resolve().parent.parent
 def main() -> None:
     seed = sys.argv[1]
     card = json.loads((ROOT / "adaptations" / seed / "end-card.json").read_text())
-    lines = [card["title"], ""]
+    lines = [card["title"] + (f" · {card['subtitle']}" if card.get("subtitle") else ""), ""]
     for s in card["sections"]:
-        lines += [f"{s['label']}: {s['text']}", ""]
+        lines += [f"{s['label']}: {s['text']}" if s.get("label") else s["text"], ""]
     lines += [f"{l['label']}: {l['url']}" for l in card["links"]]
     out = ROOT / "scenes-out" / seed / "video"
     out.mkdir(parents=True, exist_ok=True)
