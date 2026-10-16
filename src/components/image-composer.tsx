@@ -386,8 +386,10 @@ function Sheet({ initial, onClose }: { initial: AddImageDetail; onClose: () => v
               ) : !signedIn ? (
                 <div className="ic-gate">
                   <p>Sign in to make an image.</p>
-                  <SignInButton />
+                  {/* On the website the wallet comes first, Farcaster second (owner, 2026-10-16). */}
                   {auth.kind === 'signed-out' && !auth.inApp && status?.walletSignIn && <WalletSignInButton />}
+                  <SignInButton />
+                  {auth.kind === 'signed-out' && !auth.inApp && <p className="ic-note">{W.signIn.farcasterNote(IMAGES.generationsPerDay)}</p>}
                 </div>
               ) : !status ? (
                 <p className="ic-note">…</p>

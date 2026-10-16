@@ -43,6 +43,13 @@ export const IMAGE_WORDING = {
   reader: {
     order: 'Most liked first, then newest',
   },
+  /**
+   * Under "Sign in with Farcaster" in the composer's sign-in step, on the website (owner, 2026-10-16:
+   * the wallet first, Farcaster second). The Neynar threshold is not named here. Model-drafted wording.
+   */
+  signIn: {
+    farcasterNote: (perDay: number) => `Established Farcaster accounts can make up to ${perDay} images a day for free.`,
+  },
   /** "Make an image" (/images/new, 2026-10-10): choose a passage, then the composer. Model-drafted wording. */
   create: {
     title: 'Make an image',
@@ -319,6 +326,7 @@ export const IMAGE_WORDING_ROWS: { screen: string; where: string; text: string }
   { screen: 'Add an image · draft', where: 'src/components/image-composer.tsx', text: IMAGE_WORDING.draft.kept(24).replace('24', '{hours}') },
   { screen: 'Add an image · draft', where: 'src/components/image-composer.tsx', text: IMAGE_WORDING.draft.editPrompt },
   { screen: 'Add an image · draft', where: 'src/components/image-composer.tsx (action bar)', text: 'Generate again · {n} left' },
+  { screen: 'Add an image · sign in', where: 'src/components/image-composer.tsx (under Sign in with Farcaster, website only)', text: IMAGE_WORDING.signIn.farcasterNote(10).replace('10', '{per day}') },
   ...Object.entries(IMAGE_WORDING.prepaid as Record<string, unknown>).flatMap(([k, v]): { screen: string; where: string; text: string }[] =>
     typeof v === 'string' ? [{ screen: 'Wallet and prepaid images', where: `src/lib/images/wording.ts (prepaid.${k})`, text: v }] : typeof v === 'object' ? Object.entries(v as Record<string, string>).map(([c, t]) => ({ screen: 'Wallet and prepaid images', where: `src/lib/images/wording.ts (prepaid.${k}.${c})`, text: t })) : [],
   ),
