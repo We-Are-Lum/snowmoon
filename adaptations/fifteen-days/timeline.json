@@ -787,6 +787,83 @@
       }
     },
     {
+      "id": "hall-swell",
+      "track": "foley",
+      "stem": "scenes-out/fifteen-days/stems/hall-swell.wav",
+      "at": {
+        "cue": "@start",
+        "offset": 1.0
+      },
+      "level_db": -8,
+      "fade_in": 0.05,
+      "fade_out": 0.3,
+      "note": "the audience murmurs as the gliders crash into Deluin's walls",
+      "source": {
+        "effect": "hall: crowd swell",
+        "url": "https://freesound.org/people/craigsmith/sounds/438370/",
+        "author": "craigsmith",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+      }
+    },
+    {
+      "id": "hall-gasp",
+      "track": "foley",
+      "stem": "scenes-out/fifteen-days/stems/hall-gasp.wav",
+      "at": {
+        "cue": "@start",
+        "offset": 5.0
+      },
+      "level_db": -10,
+      "fade_in": 0.05,
+      "fade_out": 0.3,
+      "note": "a gasp as Kau's attack breaks on the walls (c4-b134)",
+      "source": {
+        "effect": "hall: gasp",
+        "url": "https://freesound.org/people/HowardV/sounds/264376/",
+        "author": "HowardV",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+      }
+    },
+    {
+      "id": "hall-drone",
+      "track": "foley",
+      "stem": "scenes-out/fifteen-days/stems/hall-drone.wav",
+      "at": {
+        "cue": "@start",
+        "offset": 0.3
+      },
+      "level_db": -16,
+      "fade_in": 0.05,
+      "fade_out": 0.3,
+      "note": "an anti-cheat drone passes (c4-b81), heard faintly",
+      "source": {
+        "effect": "hall: drone",
+        "url": "https://freesound.org/people/Sadiquecat/sounds/677833/",
+        "author": "Sadiquecat",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+      }
+    },
+    {
+      "id": "hall-alarm",
+      "track": "foley",
+      "stem": "scenes-out/fifteen-days/stems/hall-alarm.wav",
+      "at": {
+        "cue": "b1-6",
+        "edge": "start",
+        "offset": 1.5
+      },
+      "level_db": -14,
+      "fade_in": 0.05,
+      "fade_out": 0.3,
+      "note": "the alarm buzz near the game's end (c14-b86), through the wall",
+      "source": {
+        "effect": "hall: alarm",
+        "url": "https://freesound.org/people/magnuswaker/sounds/641416/",
+        "author": "magnuswaker",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page"
+      }
+    },
+    {
       "id": "bed-hall-wall",
       "track": "bed",
       "stem": "scenes-out/fifteen-days/stems/bed-hall-wall.wav",
