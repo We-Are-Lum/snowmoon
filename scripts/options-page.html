@@ -1,0 +1,84 @@
+<title>Fifteen Days Shot Picks</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+/* Layout: one row per shot in script order, current frame first, options beside it; a sticky tally on top. */
+:root{--bg:#f3f2f7;--fg:#1b1a2b;--muted:#5d5a78;--line:#d6d3e6;--panel:#e9e7f2;--accent:#5b3fd1;--bad:#b42340;
+--display:"Chakra Petch",system-ui,sans-serif;--body:"Source Serif 4",Georgia,serif;--mono:"JetBrains Mono",ui-monospace,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d0e1c;--fg:#e9e7f5;--muted:#a19dc0;--line:#2b2a46;--panel:#16172b;--accent:#a996ff;--bad:#ff6b85;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d0e1c;--fg:#e9e7f5;--muted:#a19dc0;--line:#2b2a46;--panel:#16172b;--accent:#a996ff;--bad:#ff6b85;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:16px/1.5 var(--body);padding-inline:16px;padding-block:0 48px}
+main{max-width:1200px;margin:0 auto;display:grid;gap:28px}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:2;background:var(--bg);border-bottom:1px solid var(--line);padding-block:12px;display:flex;flex-wrap:wrap;gap:8px 20px;align-items:baseline}
+h1{font-family:var(--display);font-weight:600;font-size:clamp(22px,4vw,32px);margin:0;text-wrap:balance}
+.tally,.status{font-family:var(--mono);font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.intro{max-width:68ch;margin:0;color:var(--muted)}
+section{display:grid;gap:8px}
+section h2{font-family:var(--display);font-weight:500;font-size:18px;margin:0;display:flex;gap:10px;align-items:baseline;flex-wrap:wrap}
+section h2 .id{font-family:var(--mono);font-size:14px;color:var(--accent)}
+section h2 .chosen{font-family:var(--mono);font-size:12px;color:var(--muted);font-weight:400}
+.row{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:10px}
+button.opt{all:unset;cursor:pointer;display:grid;gap:4px;border-radius:6px;padding:4px;outline:2px solid transparent;min-width:0}
+button.opt img{width:100%;height:auto;display:block;border-radius:4px}
+button.opt span{font-family:var(--mono);font-size:12px;color:var(--muted)}
+button.opt[aria-pressed="true"]{outline-color:var(--accent);background:var(--panel)}
+button.opt[aria-pressed="true"] span{color:var(--accent)}
+button.opt:focus-visible{outline-color:var(--fg)}
+button.opt:disabled{cursor:not-allowed;opacity:.45}
+button.opt:disabled span{color:var(--bad)}
+</style>
+<main>
+<header class="top"><h1>Fifteen Days shot picks</h1><span class="tally" id="tally"></span><span class="status" id="status">connecting…</span></header>
+<p class="intro">For each shot, tap the frame you want in the cut. Unpicked shots keep the current frame. Greyed options failed a check (a doubled person, lettering, an extra limb) and can't be picked. __NOPTS__ options drawn overnight, __NOK__ pass. The style text is still a draft for your approval.</p>
+<div id="shots" style="display:grid;gap:28px"></div>
+</main>
+<script>
+const DATA = __DATA__;
+const picks = {};
+const root = document.getElementById('shots');
+function render() {
+  root.textContent = '';
+  let chosen = 0;
+  for (const s of DATA) {
+    const sec = document.createElement('section');
+    const h = document.createElement('h2');
+    const id = document.createElement('span'); id.className = 'id'; id.textContent = s.id;
+    const nm = document.createElement('span'); nm.textContent = (s.name || '') + ' · beat ' + s.beat;
+    const ch = document.createElement('span'); ch.className = 'chosen';
+    const pick = picks[s.id] || (s.items[0] && s.items[0].key === 'current' && !s.items[0].bad ? 'current' : null);
+    if (picks[s.id]) chosen++;
+    ch.textContent = picks[s.id] ? 'picked: ' + picks[s.id] : (pick ? 'keeps current' : 'needs a pick');
+    h.append(id, nm, ch);
+    const row = document.createElement('div'); row.className = 'row';
+    for (const it of s.items) {
+      const b = document.createElement('button'); b.className = 'opt'; b.type = 'button';
+      b.setAttribute('aria-pressed', String(pick === it.key));
+      b.disabled = Boolean(it.bad) && it.key !== 'current';
+      const img = document.createElement('img'); img.src = it.img; img.alt = s.id + ' ' + it.label; img.loading = 'lazy';
+      const lab = document.createElement('span'); lab.textContent = it.label + (it.bad ? ' — ' + it.bad : '');
+      b.append(img, lab);
+      b.addEventListener('click', () => choose(s.id, it.key));
+      row.append(b);
+    }
+    sec.append(h, row); root.append(sec);
+  }
+  document.getElementById('tally').textContent = chosen + ' of ' + DATA.length + ' picked';
+}
+let db = null;
+async function choose(shot, key) {
+  picks[shot] = key; render();
+  if (!db) return;
+  try { await db.doc('picks/' + shot).set({ pick: key, at: new Date().toISOString() }); setStatus('saved'); }
+  catch (e) { setStatus('not saved: ' + (e && e.code || 'error') + '. Tell Claude your picks in chat.'); }
+}
+function setStatus(t) { document.getElementById('status').textContent = t; }
+render();
+(async () => {
+  try { db = window.claude ? await window.claude.use('db') : null; } catch (e) { db = null; }
+  if (!db) { setStatus('picks can’t be saved in this view; tell Claude your picks in chat'); return; }
+  setStatus('picks save as you tap');
+  db.collection('picks').onSnapshot(snap => {
+    for (const d of snap.docs) { const v = d.data(); if (v && v.pick) picks[d.id] = v.pick; }
+    render();
+  }, e => setStatus('not connected: ' + e.code));
+})();
+</script>

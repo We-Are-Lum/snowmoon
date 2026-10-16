@@ -1,15 +1,27 @@
 {
-  "about": "The end card and the video description for Fifteen Days: option B, \"The invitation\", from docs/drafts/friday-post.md on friday-drafts, chosen by the owner (2026-10-15, relayed from session snowmoon-a6). The card's words are the option as drafted; the owner may still reword them. The model lines in the description must match the scene's recipes before publication.",
+  "about": "The end card and the video description for Fifteen Days: option B, \"The invitation\", from docs/drafts/friday-post.md on friday-drafts, chosen by the owner (2026-10-15, relayed from session snowmoon-a6). The card's words are the option as drafted; the owner may still reword them. The model lines in the description must match the scene's recipes before publication. \"Everything we made for it\" is the owner's wording (2026-10-15), since the raw takes stay private and the beds are CC0.",
   "draft": false,
   "option": "B",
   "title": "Fifteen Days",
   "subtitle": "one scene from Snowmoon by Vitalik Buterin",
   "sections": [
-    {"text": "Words by naaate and the book. Voices AI-converted from naaate's performances. Pictures made with open-weight AI. All labelled."},
-    {"text": "This is one scene. Make the next.", "strong": true},
-    {"text": "Everything that made it is GPL v3: github.com/We-Are-Lum/snowmoon"}
+    {
+      "text": "Words by naaate and the book. Voices AI-converted from naaate's performances. Pictures made with open-weight AI. All labelled."
+    },
+    {
+      "text": "This is one scene. Make the next.",
+      "strong": true
+    },
+    {
+      "text": "Everything we made for it is GPL v3: github.com/We-Are-Lum/snowmoon"
+    }
   ],
   "links": [
-    {"label": "Source", "shown": "github.com/We-Are-Lum/snowmoon", "url": "https://github.com/We-Are-Lum/snowmoon", "card": false}
+    {
+      "label": "Source",
+      "shown": "github.com/We-Are-Lum/snowmoon",
+      "url": "https://github.com/We-Are-Lum/snowmoon",
+      "card": false
+    }
   ]
 }

@@ -131,10 +131,14 @@ def main() -> None:
     if style and (adir / f"shots-{style['slug']}" / "recipe.json").exists():
         drawn = {e["shot"]: e for e in json.loads((adir / f"shots-{style['slug']}" / "recipe.json").read_text())["images"]
                  if not e.get("rejected")}
+    # The owner's picks among the night's options (adaptations/<seed>/picks.json: {"<shot>": {"file": ...}}).
+    picks = json.loads((adir / "picks.json").read_text())["picks"] if (adir / "picks.json").exists() else {}
     for s in shots:
-        if s["id"] in UNRESOLVED:
+        if s["id"] in picks and picks[s["id"]].get("file"):
+            png = ROOT / picks[s["id"]]["file"]
+        elif s["id"] in UNRESOLVED:
             continue  # no acceptable frame yet: the shot before holds instead
-        if s["id"] in drawn:
+        elif s["id"] in drawn:
             png = ROOT / drawn[s["id"]]["file"]
         elif s.get("insert") and (out / "inserts" / f"{INSERTS[s['id']]}.png").exists():
             png = cards / f"{s['id']}.png"
