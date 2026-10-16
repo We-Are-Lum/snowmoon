@@ -1,7 +1,7 @@
 {
   "about": "Fifteen Days pre-production, steps 1-2 again (owner's notes, 2026-10-16 evening): faces with fixed smiles (Bai from C, Deluin from C older, Zei from B), a Kau face sheet for the screens, the hall with a standing ring and an empty floor, the overlook railing fixed. Text DRAFTED by the coding agent.",
   "out": "images-out/preprod/step3",
-  "ledger": "images-out/preprod/ledger-s34.json",
+  "ledger": "images-out/preprod/ledger-s5.json",
   "cap_usd": 1.0,
   "style": "",
   "jobs": [
@@ -269,6 +269,46 @@
       "width": 1536,
       "height": 864,
       "seed": 13302
+    },
+    {
+      "id": "bai-front2-neutral",
+      "prompt": "A single head-and-shoulders portrait on a plain flat mid-grey background of the young woman in the reference image, now turned to face the viewer directly. Match the reference exactly: the same warm medium-brown skin tone (not darker), the same face; the same haircut: both sides of the head shaved close and clearly visible as short stubble above the ears, a narrow band of magenta hair on top swept straight back into a tall high magenta ponytail whose tuft shows above the crown, its tail falling behind one shoulder. Feminine features, defined brows and lashes, fuller lips, the same geometric dangly earrings and neck tattoo, a plain dark crew-neck collar. Expression: calm and neutral. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos.",
+      "refs": [
+        "images-out/preprod/refs-small/bai-side-views.png"
+      ],
+      "width": 768,
+      "height": 768,
+      "seed": 14121
+    },
+    {
+      "id": "bai-front2-smile",
+      "prompt": "A single head-and-shoulders portrait on a plain flat mid-grey background of the young woman in the reference image, now turned to face the viewer directly. Match the reference exactly: the same warm medium-brown skin tone (not darker), the same face; the same haircut: both sides of the head shaved close and clearly visible as short stubble above the ears, a narrow band of magenta hair on top swept straight back into a tall high magenta ponytail whose tuft shows above the crown, its tail falling behind one shoulder. Feminine features, defined brows and lashes, fuller lips, the same geometric dangly earrings and neck tattoo, a plain dark crew-neck collar. Expression: a gentle, sly closed-mouth smile. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos.",
+      "refs": [
+        "images-out/preprod/refs-small/bai-side-views.png"
+      ],
+      "width": 768,
+      "height": 768,
+      "seed": 14122
+    },
+    {
+      "id": "bai-front2-frown",
+      "prompt": "A single head-and-shoulders portrait on a plain flat mid-grey background of the young woman in the reference image, now turned to face the viewer directly. Match the reference exactly: the same warm medium-brown skin tone (not darker), the same face; the same haircut: both sides of the head shaved close and clearly visible as short stubble above the ears, a narrow band of magenta hair on top swept straight back into a tall high magenta ponytail whose tuft shows above the crown, its tail falling behind one shoulder. Feminine features, defined brows and lashes, fuller lips, the same geometric dangly earrings and neck tattoo, a plain dark crew-neck collar. Expression: an annoyed frown. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos.",
+      "refs": [
+        "images-out/preprod/refs-small/bai-side-views.png"
+      ],
+      "width": 768,
+      "height": 768,
+      "seed": 14123
+    },
+    {
+      "id": "bai-front2-surprise",
+      "prompt": "A single head-and-shoulders portrait on a plain flat mid-grey background of the young woman in the reference image, now turned to face the viewer directly. Match the reference exactly: the same warm medium-brown skin tone (not darker), the same face; the same haircut: both sides of the head shaved close and clearly visible as short stubble above the ears, a narrow band of magenta hair on top swept straight back into a tall high magenta ponytail whose tuft shows above the crown, its tail falling behind one shoulder. Feminine features, defined brows and lashes, fuller lips, the same geometric dangly earrings and neck tattoo, a plain dark crew-neck collar. Expression: wide-eyed surprise. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos.",
+      "refs": [
+        "images-out/preprod/refs-small/bai-side-views.png"
+      ],
+      "width": 768,
+      "height": 768,
+      "seed": 14124
     }
   ]
 }

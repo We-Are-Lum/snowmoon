@@ -1,0 +1,3204 @@
+{
+  "F07": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "centre"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "left",
+        "x": 0.303,
+        "y": 0.334,
+        "facing": "facing screen-right, in profile",
+        "dist": 4.48,
+        "visible": true
+      },
+      "B": {
+        "side": "right",
+        "x": 0.689,
+        "y": 0.364,
+        "facing": "facing screen-left, in profile",
+        "dist": 4.22,
+        "visible": true
+      },
+      "Z": {
+        "side": "centre",
+        "x": 0.523,
+        "y": 0.343,
+        "facing": "toward the camera",
+        "dist": 5.74,
+        "visible": true
+      }
+    }
+  },
+  "F08": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "right"
+      },
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "centre"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "R": {
+        "side": "left",
+        "x": 0.253,
+        "y": 0.309,
+        "facing": "facing screen-right, in profile",
+        "dist": 5.28,
+        "visible": true
+      },
+      "D": {
+        "side": "centre",
+        "x": 0.425,
+        "y": 0.362,
+        "facing": "toward the camera",
+        "dist": 5.08,
+        "visible": true
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.64,
+        "y": 0.436,
+        "facing": "away from the camera, seen from behind",
+        "dist": 3.6,
+        "visible": true
+      },
+      "Z": {
+        "side": "right",
+        "x": 0.692,
+        "y": 0.38,
+        "facing": "toward the camera",
+        "dist": 5.35,
+        "visible": true
+      }
+    }
+  },
+  "S04": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "centre"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.255,
+        "facing": "toward the camera",
+        "dist": 0.95,
+        "visible": true
+      },
+      "B": {
+        "side": "right",
+        "x": 0.82,
+        "y": 0.507,
+        "facing": "facing screen-left, in profile",
+        "dist": 3.1,
+        "visible": true
+      }
+    }
+  },
+  "F17": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "right"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "left",
+        "x": 0.174,
+        "y": 0.448,
+        "facing": "facing screen-right, in profile",
+        "dist": 0.7,
+        "visible": true
+      },
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.38,
+        "facing": "toward the camera",
+        "dist": 2.41,
+        "visible": true
+      }
+    }
+  },
+  "F26": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "left",
+        "x": 0.151,
+        "y": 0.526,
+        "facing": "toward the camera",
+        "dist": 0.7,
+        "visible": true
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.399,
+        "facing": "facing screen-left, in profile",
+        "dist": 2.87,
+        "visible": true
+      }
+    }
+  },
+  "D01": {
+    "landmarks": [
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "right"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "centre"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.409,
+        "facing": "toward the camera",
+        "dist": 6.44,
+        "visible": true
+      },
+      "Z": {
+        "side": "right",
+        "x": 0.679,
+        "y": 0.439,
+        "facing": "facing screen-left, in profile",
+        "dist": 5.3,
+        "visible": true
+      }
+    }
+  },
+  "S02": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "centre"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "right",
+        "x": 3.662,
+        "y": 1.321,
+        "facing": "toward the camera",
+        "dist": 0.79,
+        "visible": false
+      }
+    }
+  },
+  "R06": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "left"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "right"
+      },
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "centre"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "B": {
+        "side": "right",
+        "x": 0.806,
+        "y": 0.373,
+        "facing": "away from the camera, seen from behind",
+        "dist": 1.33,
+        "visible": true
+      }
+    }
+  },
+  "F01": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "right"
+      },
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "centre"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "centre"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.489,
+        "y": 0.442,
+        "facing": "toward the camera",
+        "dist": 11.45,
+        "visible": true
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.588,
+        "y": 0.49,
+        "facing": "facing screen-left, in profile",
+        "dist": 10.43,
+        "visible": true
+      },
+      "R": {
+        "side": "centre",
+        "x": 0.404,
+        "y": 0.651,
+        "facing": "away from the camera, seen from behind",
+        "dist": 7,
+        "visible": true
+      }
+    }
+  },
+  "F02": {
+    "landmarks": [
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.23,
+        "facing": "toward the camera",
+        "dist": 2,
+        "visible": true
+      }
+    }
+  },
+  "F03": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "right"
+      },
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.624,
+        "y": 0.373,
+        "facing": "away from the camera, seen from behind",
+        "dist": 8.08,
+        "visible": true
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.394,
+        "y": 0.38,
+        "facing": "toward the camera",
+        "dist": 9.39,
+        "visible": true
+      }
+    }
+  },
+  "F04": {
+    "landmarks": [
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.23,
+        "facing": "toward the camera",
+        "dist": 2,
+        "visible": true
+      }
+    }
+  },
+  "F05": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.249,
+        "facing": "toward the camera",
+        "dist": 0.92,
+        "visible": true
+      }
+    }
+  },
+  "F06": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "right"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.178,
+        "facing": "toward the camera",
+        "dist": 1.2,
+        "visible": true
+      }
+    }
+  },
+  "F09": {
+    "landmarks": [
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "R": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.076,
+        "facing": "toward the camera",
+        "dist": 0.93,
+        "visible": true
+      }
+    }
+  },
+  "F11": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.414,
+        "facing": "toward the camera",
+        "dist": 0.65,
+        "visible": true
+      }
+    }
+  },
+  "F13": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "centre"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.26,
+        "facing": "toward the camera",
+        "dist": 0.96,
+        "visible": true
+      }
+    }
+  },
+  "F14": {
+    "landmarks": [
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "B": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.249,
+        "facing": "toward the camera",
+        "dist": 0.92,
+        "visible": true
+      }
+    }
+  },
+  "F15": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.249,
+        "facing": "toward the camera",
+        "dist": 0.92,
+        "visible": true
+      }
+    }
+  },
+  "F16": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "left"
+      },
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.249,
+        "facing": "toward the camera",
+        "dist": 0.92,
+        "visible": true
+      }
+    }
+  },
+  "F18": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.305,
+        "facing": "toward the camera",
+        "dist": 1.01,
+        "visible": true
+      }
+    }
+  },
+  "F19": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.343,
+        "facing": "toward the camera",
+        "dist": 0.49,
+        "visible": true
+      }
+    }
+  },
+  "F20": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "centre"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.249,
+        "facing": "toward the camera",
+        "dist": 0.92,
+        "visible": true
+      }
+    }
+  },
+  "F21": {
+    "landmarks": [
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "centre"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.266,
+        "facing": "toward the camera",
+        "dist": 0.98,
+        "visible": true
+      }
+    }
+  },
+  "F22": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "centre"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.249,
+        "facing": "toward the camera",
+        "dist": 0.92,
+        "visible": true
+      }
+    }
+  },
+  "F23": {
+    "landmarks": [
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "B": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.249,
+        "facing": "toward the camera",
+        "dist": 0.92,
+        "visible": true
+      }
+    }
+  },
+  "F24": {
+    "landmarks": [
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "B": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.249,
+        "facing": "toward the camera",
+        "dist": 0.92,
+        "visible": true
+      }
+    }
+  },
+  "F25": {
+    "landmarks": [
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.343,
+        "facing": "toward the camera",
+        "dist": 0.49,
+        "visible": true
+      }
+    }
+  },
+  "S01": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "R": {
+        "side": "right",
+        "x": 3.587,
+        "y": 4.59,
+        "facing": "toward the camera",
+        "dist": 0.88,
+        "visible": false
+      }
+    }
+  },
+  "S03": {
+    "landmarks": [
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.14,
+        "facing": "toward the camera",
+        "dist": 0.65,
+        "visible": true
+      }
+    }
+  },
+  "S05": {
+    "landmarks": [
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "centre"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.249,
+        "facing": "toward the camera",
+        "dist": 0.92,
+        "visible": true
+      }
+    }
+  },
+  "S06": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "right",
+        "x": 2.634,
+        "y": 0.801,
+        "facing": "toward the camera",
+        "dist": 0.96,
+        "visible": false
+      }
+    }
+  },
+  "S07": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "left"
+      },
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.249,
+        "facing": "toward the camera",
+        "dist": 0.92,
+        "visible": true
+      }
+    }
+  },
+  "S08": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.343,
+        "facing": "toward the camera",
+        "dist": 0.49,
+        "visible": true
+      }
+    }
+  },
+  "S09": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "right"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "right"
+      },
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "S10": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "centre"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.296,
+        "facing": "toward the camera",
+        "dist": 0.99,
+        "visible": true
+      }
+    }
+  },
+  "S11": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.305,
+        "facing": "toward the camera",
+        "dist": 1.01,
+        "visible": true
+      }
+    }
+  },
+  "S12": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "left"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "right"
+      },
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "right",
+        "x": 0.86,
+        "y": -0.103,
+        "facing": "toward the camera",
+        "dist": 1.54,
+        "visible": true
+      },
+      "D": {
+        "side": "left",
+        "x": -1.389,
+        "y": -1.392,
+        "facing": "toward the camera",
+        "dist": 1.11,
+        "visible": false
+      }
+    }
+  },
+  "S12b": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "right"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "right"
+      },
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "S13": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "right"
+      },
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.631,
+        "y": 0.432,
+        "facing": "toward the camera",
+        "dist": 5.92,
+        "visible": true
+      },
+      "D": {
+        "side": "centre",
+        "x": 0.368,
+        "y": 0.411,
+        "facing": "toward the camera",
+        "dist": 5.92,
+        "visible": true
+      }
+    }
+  },
+  "S14": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "B": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.249,
+        "facing": "facing screen-left, in profile",
+        "dist": 0.92,
+        "visible": true
+      }
+    }
+  },
+  "R01": {
+    "landmarks": [
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "centre"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.26,
+        "facing": "toward the camera",
+        "dist": 0.96,
+        "visible": true
+      }
+    }
+  },
+  "R02": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "centre"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.249,
+        "facing": "toward the camera",
+        "dist": 0.92,
+        "visible": true
+      },
+      "B": {
+        "side": "right",
+        "x": 0.824,
+        "y": 0.28,
+        "facing": "facing screen-left, in profile",
+        "dist": 3.09,
+        "visible": true
+      }
+    }
+  },
+  "R03": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.548,
+        "y": -2.551,
+        "facing": "toward the camera",
+        "dist": 0.48,
+        "visible": false
+      }
+    }
+  },
+  "R04": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "centre"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.249,
+        "facing": "toward the camera",
+        "dist": 0.92,
+        "visible": true
+      }
+    }
+  },
+  "R05": {
+    "landmarks": [
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "centre"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.249,
+        "facing": "toward the camera",
+        "dist": 0.92,
+        "visible": true
+      }
+    }
+  },
+  "R07": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "left"
+      },
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.178,
+        "facing": "toward the camera",
+        "dist": 1.2,
+        "visible": true
+      }
+    }
+  },
+  "R08": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "B": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.23,
+        "facing": "facing screen-left, in profile",
+        "dist": 2,
+        "visible": true
+      }
+    }
+  },
+  "R09": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "B": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.249,
+        "facing": "facing screen-left, in profile",
+        "dist": 0.92,
+        "visible": true
+      }
+    }
+  },
+  "R10": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "right"
+      },
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.631,
+        "y": 0.432,
+        "facing": "toward the camera",
+        "dist": 5.92,
+        "visible": true
+      },
+      "D": {
+        "side": "centre",
+        "x": 0.368,
+        "y": 0.411,
+        "facing": "toward the camera",
+        "dist": 5.92,
+        "visible": true
+      }
+    }
+  },
+  "D02": {
+    "landmarks": [
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.249,
+        "facing": "toward the camera",
+        "dist": 0.92,
+        "visible": true
+      }
+    }
+  },
+  "D03": {
+    "landmarks": [
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.23,
+        "facing": "toward the camera",
+        "dist": 2,
+        "visible": true
+      }
+    }
+  },
+  "D04": {
+    "landmarks": [
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "centre"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.23,
+        "facing": "toward the camera",
+        "dist": 2,
+        "visible": true
+      }
+    }
+  },
+  "D05": {
+    "landmarks": [
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "right"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "centre"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "left",
+        "x": -0.018,
+        "y": 0.397,
+        "facing": "facing screen-left, in profile",
+        "dist": 6.29,
+        "visible": true
+      },
+      "Z": {
+        "side": "right",
+        "x": 0.679,
+        "y": 0.439,
+        "facing": "facing screen-left, in profile",
+        "dist": 5.3,
+        "visible": true
+      }
+    }
+  },
+  "D06": {
+    "landmarks": [
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.515,
+        "y": 0.401,
+        "facing": "away from the camera, seen from behind",
+        "dist": 5.66,
+        "visible": true
+      }
+    }
+  },
+  "D07": {
+    "landmarks": [
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.349,
+        "facing": "toward the camera",
+        "dist": 0.5,
+        "visible": true
+      }
+    }
+  },
+  "D08": {
+    "landmarks": [
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "left",
+        "x": -0.211,
+        "y": 3.231,
+        "facing": "toward the camera",
+        "dist": 0.47,
+        "visible": false
+      }
+    }
+  },
+  "D09": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.425,
+        "y": 0.336,
+        "facing": "facing screen-right, in profile",
+        "dist": 10.01,
+        "visible": true
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.624,
+        "y": 0.388,
+        "facing": "facing screen-left, in profile",
+        "dist": 10.09,
+        "visible": true
+      }
+    }
+  },
+  "D10": {
+    "landmarks": [
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "B": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.23,
+        "facing": "facing screen-left, in profile",
+        "dist": 2,
+        "visible": true
+      }
+    }
+  },
+  "plate-A": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "centre"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "plate-B": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "right"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {}
+  },
+  "plate-C": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "centre"
+      },
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "centre"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {}
+  },
+  "plate-D": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "plate-E": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "plate-G": {
+    "landmarks": [
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "right"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "centre"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "plate-S": {
+    "landmarks": [
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "plate-courtyard-A": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "centre"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "plate-courtyard-B": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "right"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {}
+  },
+  "plate-courtyard-C": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "centre"
+      },
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "centre"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {}
+  },
+  "plate-courtyard-D": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "plate-courtyard-E": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the wide table",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "plate-courtyard-G": {
+    "landmarks": [
+      {
+        "id": "gate",
+        "name": "the street gate, dark metal bars",
+        "side": "right"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "centre"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "plate-courtyard-S": {
+    "landmarks": [
+      {
+        "id": "tree",
+        "name": "the shade tree hung with little lights",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's serving counter by the west wall",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "wallN",
+        "name": "the shop fronts with windows glowing pink and cyan",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      },
+      {
+        "id": "lamp",
+        "name": "a street lamp by the gate",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  }
+}

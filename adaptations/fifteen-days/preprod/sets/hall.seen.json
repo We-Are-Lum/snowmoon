@@ -1,0 +1,1068 @@
+{
+  "H01": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "centre"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "centre"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "centre"
+      },
+      {
+        "id": "posts",
+        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "side": "centre"
+      },
+      {
+        "id": "holo",
+        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "side": "centre"
+      },
+      {
+        "id": "pitD",
+        "name": "Deluin's sunken pit at the edge of the floor",
+        "side": "left"
+      },
+      {
+        "id": "pitK",
+        "name": "Kau's sunken pit at the edge of the floor",
+        "side": "centre"
+      },
+      {
+        "id": "screens",
+        "name": "two big screens hung over the hall, showing the two players' faces",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "left",
+        "x": 0.311,
+        "y": 0.778,
+        "facing": "facing screen-left, in profile",
+        "dist": 15.89,
+        "visible": true
+      },
+      "K": {
+        "side": "centre",
+        "x": 0.632,
+        "y": 0.509,
+        "facing": "away from the camera, seen from behind",
+        "dist": 25.3,
+        "visible": true
+      }
+    }
+  },
+  "H03": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "left"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "left"
+      },
+      {
+        "id": "posts",
+        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "side": "left"
+      },
+      {
+        "id": "holo",
+        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "side": "left"
+      },
+      {
+        "id": "pitD",
+        "name": "Deluin's sunken pit at the edge of the floor",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.555,
+        "y": 0.474,
+        "facing": "away from the camera, seen from behind",
+        "dist": 2.78,
+        "visible": true
+      }
+    }
+  },
+  "G02": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "centre"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "centre"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "centre"
+      },
+      {
+        "id": "posts",
+        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "side": "centre"
+      },
+      {
+        "id": "holo",
+        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "side": "centre"
+      },
+      {
+        "id": "pitD",
+        "name": "Deluin's sunken pit at the edge of the floor",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "right",
+        "x": 0.7,
+        "y": -0.003,
+        "facing": "away from the camera, seen from behind",
+        "dist": 2.4,
+        "visible": true
+      },
+      "B": {
+        "side": "left",
+        "x": 0.339,
+        "y": -0.013,
+        "facing": "away from the camera, seen from behind",
+        "dist": 2.35,
+        "visible": true
+      }
+    }
+  },
+  "G03": {
+    "landmarks": [
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "right"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.273,
+        "facing": "toward the camera",
+        "dist": 1,
+        "visible": true
+      }
+    }
+  },
+  "plate-W": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "centre"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "centre"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "centre"
+      },
+      {
+        "id": "posts",
+        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "side": "centre"
+      },
+      {
+        "id": "holo",
+        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "side": "centre"
+      },
+      {
+        "id": "screens",
+        "name": "two big screens hung over the hall, showing the two players' faces",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "G11": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "left"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "left"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "B": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.249,
+        "facing": "toward the camera",
+        "dist": 0.92,
+        "visible": true
+      },
+      "Z": {
+        "side": "right",
+        "x": 0.642,
+        "y": 0.288,
+        "facing": "toward the camera",
+        "dist": 1.77,
+        "visible": true
+      }
+    }
+  },
+  "H02": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "centre"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "centre"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "centre"
+      },
+      {
+        "id": "posts",
+        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "side": "centre"
+      },
+      {
+        "id": "holo",
+        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "side": "centre"
+      },
+      {
+        "id": "pitK",
+        "name": "Kau's sunken pit at the edge of the floor",
+        "side": "right"
+      },
+      {
+        "id": "screens",
+        "name": "two big screens hung over the hall, showing the two players' faces",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "H05": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "left"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "left"
+      },
+      {
+        "id": "posts",
+        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "side": "left"
+      },
+      {
+        "id": "holo",
+        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "side": "left"
+      },
+      {
+        "id": "pitD",
+        "name": "Deluin's sunken pit at the edge of the floor",
+        "side": "left"
+      },
+      {
+        "id": "pitK",
+        "name": "Kau's sunken pit at the edge of the floor",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "K": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.343,
+        "facing": "toward the camera",
+        "dist": 0.49,
+        "visible": true
+      }
+    }
+  },
+  "H06": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "right"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "right"
+      },
+      {
+        "id": "posts",
+        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "side": "right"
+      },
+      {
+        "id": "holo",
+        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "side": "right"
+      }
+    ],
+    "people": {}
+  },
+  "G01": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "centre"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "centre"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "centre"
+      },
+      {
+        "id": "posts",
+        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "side": "centre"
+      },
+      {
+        "id": "holo",
+        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "side": "centre"
+      },
+      {
+        "id": "screens",
+        "name": "two big screens hung over the hall, showing the two players' faces",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.486,
+        "y": 0.475,
+        "facing": "facing screen-left, in profile",
+        "dist": 13.29,
+        "visible": true
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.525,
+        "y": 0.414,
+        "facing": "facing screen-left, in profile",
+        "dist": 12.51,
+        "visible": true
+      }
+    }
+  },
+  "G04": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "centre"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "centre"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "centre"
+      },
+      {
+        "id": "posts",
+        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "side": "centre"
+      },
+      {
+        "id": "holo",
+        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "side": "centre"
+      },
+      {
+        "id": "pitK",
+        "name": "Kau's sunken pit at the edge of the floor",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "B": {
+        "side": "right",
+        "x": 5.189,
+        "y": -40.243,
+        "facing": "toward the camera",
+        "dist": 0.63,
+        "visible": false
+      }
+    }
+  },
+  "G05": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "left"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "left"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "B": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.249,
+        "facing": "toward the camera",
+        "dist": 0.92,
+        "visible": true
+      }
+    }
+  },
+  "G06": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "right"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "right"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "right"
+      },
+      {
+        "id": "screens",
+        "name": "two big screens hung over the hall, showing the two players' faces",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.343,
+        "facing": "toward the camera",
+        "dist": 0.49,
+        "visible": true
+      }
+    }
+  },
+  "G07": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "centre"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "centre"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "centre"
+      },
+      {
+        "id": "holo",
+        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "B": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.178,
+        "facing": "toward the camera",
+        "dist": 1.2,
+        "visible": true
+      }
+    }
+  },
+  "G08": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "centre"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "centre"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "centre"
+      },
+      {
+        "id": "posts",
+        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "side": "centre"
+      },
+      {
+        "id": "holo",
+        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "side": "centre"
+      },
+      {
+        "id": "pitD",
+        "name": "Deluin's sunken pit at the edge of the floor",
+        "side": "centre"
+      }
+    ],
+    "people": {}
+  },
+  "G09": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "left"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "left"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "B": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.249,
+        "facing": "facing screen-right, in profile",
+        "dist": 0.92,
+        "visible": true
+      }
+    }
+  },
+  "G10": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "centre"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "centre"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "centre"
+      },
+      {
+        "id": "holo",
+        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.411,
+        "y": 0.423,
+        "facing": "facing screen-right, in profile",
+        "dist": 5.88,
+        "visible": true
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.589,
+        "y": 0.419,
+        "facing": "toward the camera",
+        "dist": 5.88,
+        "visible": true
+      }
+    }
+  },
+  "H07": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "centre"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "centre"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "centre"
+      },
+      {
+        "id": "posts",
+        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "side": "centre"
+      },
+      {
+        "id": "holo",
+        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "side": "centre"
+      },
+      {
+        "id": "pitK",
+        "name": "Kau's sunken pit at the edge of the floor",
+        "side": "right"
+      },
+      {
+        "id": "screens",
+        "name": "two big screens hung over the hall, showing the two players' faces",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "H08": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "right"
+      },
+      {
+        "id": "posts",
+        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "side": "right"
+      },
+      {
+        "id": "holo",
+        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "side": "right"
+      },
+      {
+        "id": "pitD",
+        "name": "Deluin's sunken pit at the edge of the floor",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.348,
+        "facing": "toward the camera",
+        "dist": 1.14,
+        "visible": true
+      }
+    }
+  },
+  "plate-A": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "centre"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "centre"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "centre"
+      },
+      {
+        "id": "posts",
+        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "side": "centre"
+      },
+      {
+        "id": "holo",
+        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "side": "centre"
+      },
+      {
+        "id": "pitD",
+        "name": "Deluin's sunken pit at the edge of the floor",
+        "side": "left"
+      },
+      {
+        "id": "pitK",
+        "name": "Kau's sunken pit at the edge of the floor",
+        "side": "centre"
+      },
+      {
+        "id": "screens",
+        "name": "two big screens hung over the hall, showing the two players' faces",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "plate-B": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "centre"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "centre"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "centre"
+      },
+      {
+        "id": "posts",
+        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "side": "centre"
+      },
+      {
+        "id": "holo",
+        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "side": "centre"
+      },
+      {
+        "id": "pitK",
+        "name": "Kau's sunken pit at the edge of the floor",
+        "side": "right"
+      },
+      {
+        "id": "screens",
+        "name": "two big screens hung over the hall, showing the two players' faces",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "plate-P": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "left"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "left"
+      },
+      {
+        "id": "posts",
+        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "side": "left"
+      },
+      {
+        "id": "holo",
+        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "side": "left"
+      },
+      {
+        "id": "pitD",
+        "name": "Deluin's sunken pit at the edge of the floor",
+        "side": "centre"
+      }
+    ],
+    "people": {}
+  },
+  "plate-V": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "centre"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "centre"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "centre"
+      },
+      {
+        "id": "posts",
+        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "side": "centre"
+      },
+      {
+        "id": "holo",
+        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "side": "centre"
+      },
+      {
+        "id": "pitD",
+        "name": "Deluin's sunken pit at the edge of the floor",
+        "side": "centre"
+      }
+    ],
+    "people": {}
+  },
+  "plate-hall-A": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "centre"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "centre"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "centre"
+      },
+      {
+        "id": "posts",
+        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "side": "centre"
+      },
+      {
+        "id": "holo",
+        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "side": "centre"
+      },
+      {
+        "id": "pitD",
+        "name": "Deluin's sunken pit at the edge of the floor",
+        "side": "left"
+      },
+      {
+        "id": "pitK",
+        "name": "Kau's sunken pit at the edge of the floor",
+        "side": "centre"
+      },
+      {
+        "id": "screens",
+        "name": "two big screens hung over the hall, showing the two players' faces",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "plate-hall-B": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "centre"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "centre"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "centre"
+      },
+      {
+        "id": "posts",
+        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "side": "centre"
+      },
+      {
+        "id": "holo",
+        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "side": "centre"
+      },
+      {
+        "id": "pitK",
+        "name": "Kau's sunken pit at the edge of the floor",
+        "side": "right"
+      },
+      {
+        "id": "screens",
+        "name": "two big screens hung over the hall, showing the two players' faces",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "plate-hall-P": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "left"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "left"
+      },
+      {
+        "id": "posts",
+        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "side": "left"
+      },
+      {
+        "id": "holo",
+        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "side": "left"
+      },
+      {
+        "id": "pitD",
+        "name": "Deluin's sunken pit at the edge of the floor",
+        "side": "centre"
+      }
+    ],
+    "people": {}
+  },
+  "plate-hall-W": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "centre"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "centre"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "centre"
+      },
+      {
+        "id": "posts",
+        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "side": "centre"
+      },
+      {
+        "id": "holo",
+        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "side": "centre"
+      },
+      {
+        "id": "screens",
+        "name": "two big screens hung over the hall, showing the two players' faces",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "plate-hall-V": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "centre"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "centre"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "centre"
+      },
+      {
+        "id": "posts",
+        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "side": "centre"
+      },
+      {
+        "id": "holo",
+        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "side": "centre"
+      },
+      {
+        "id": "pitD",
+        "name": "Deluin's sunken pit at the edge of the floor",
+        "side": "centre"
+      }
+    ],
+    "people": {}
+  }
+}

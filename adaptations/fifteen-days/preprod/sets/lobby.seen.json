@@ -1,0 +1,470 @@
+{
+  "L01": {
+    "landmarks": [
+      {
+        "id": "room",
+        "name": "the warm, plain walls of the hotel lobby restaurant",
+        "side": "right"
+      },
+      {
+        "id": "window",
+        "name": "tall windows along the west wall, the night city outside",
+        "side": "centre"
+      },
+      {
+        "id": "ztable",
+        "name": "his table by the window, a bowl and a tea cup on it",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the dark street outside",
+        "side": "left"
+      },
+      {
+        "id": "streetlamp",
+        "name": "a street lamp outside",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.541,
+        "y": 0.463,
+        "facing": "away from the camera, seen from behind",
+        "dist": 6.17,
+        "visible": true
+      },
+      "R": {
+        "side": "left",
+        "x": -4.424,
+        "y": 0.523,
+        "facing": "toward the camera",
+        "dist": 4.32,
+        "visible": false
+      }
+    }
+  },
+  "L01b": {
+    "landmarks": [
+      {
+        "id": "room",
+        "name": "the warm, plain walls of the hotel lobby restaurant",
+        "side": "centre"
+      },
+      {
+        "id": "window",
+        "name": "tall windows along the west wall, the night city outside",
+        "side": "centre"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's counter on the east wall",
+        "side": "centre"
+      },
+      {
+        "id": "ztable",
+        "name": "his table by the window, a bowl and a tea cup on it",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the dark street outside",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.52,
+        "y": 0.439,
+        "facing": "toward the camera",
+        "dist": 7.43,
+        "visible": true
+      }
+    }
+  },
+  "L05": {
+    "landmarks": [
+      {
+        "id": "room",
+        "name": "the warm, plain walls of the hotel lobby restaurant",
+        "side": "right"
+      },
+      {
+        "id": "window",
+        "name": "tall windows along the west wall, the night city outside",
+        "side": "left"
+      },
+      {
+        "id": "ztable",
+        "name": "his table by the window, a bowl and a tea cup on it",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the dark street outside",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "B": {
+        "side": "left",
+        "x": 0.275,
+        "y": 0.316,
+        "facing": "facing screen-right, in profile",
+        "dist": 2.6,
+        "visible": true
+      },
+      "Z": {
+        "side": "right",
+        "x": 0.725,
+        "y": 0.321,
+        "facing": "facing screen-left, in profile",
+        "dist": 2.6,
+        "visible": true
+      }
+    }
+  },
+  "L02": {
+    "landmarks": [
+      {
+        "id": "room",
+        "name": "the warm, plain walls of the hotel lobby restaurant",
+        "side": "right"
+      },
+      {
+        "id": "window",
+        "name": "tall windows along the west wall, the night city outside",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's counter on the east wall",
+        "side": "right"
+      },
+      {
+        "id": "ztable",
+        "name": "his table by the window, a bowl and a tea cup on it",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the dark street outside",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.279,
+        "facing": "toward the camera",
+        "dist": 0.96,
+        "visible": true
+      }
+    }
+  },
+  "L04": {
+    "landmarks": [
+      {
+        "id": "room",
+        "name": "the warm, plain walls of the hotel lobby restaurant",
+        "side": "right"
+      },
+      {
+        "id": "window",
+        "name": "tall windows along the west wall, the night city outside",
+        "side": "centre"
+      },
+      {
+        "id": "ztable",
+        "name": "his table by the window, a bowl and a tea cup on it",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the dark street outside",
+        "side": "right"
+      },
+      {
+        "id": "streetlamp",
+        "name": "a street lamp outside",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "R": {
+        "side": "right",
+        "x": 0.695,
+        "y": 0.165,
+        "facing": "facing screen-left, in profile",
+        "dist": 2.29,
+        "visible": true
+      },
+      "Z": {
+        "side": "left",
+        "x": 0.31,
+        "y": 0.357,
+        "facing": "away from the camera, seen from behind",
+        "dist": 2.3,
+        "visible": true
+      }
+    }
+  },
+  "L06": {
+    "landmarks": [
+      {
+        "id": "room",
+        "name": "the warm, plain walls of the hotel lobby restaurant",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's counter on the east wall",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the dark street outside",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.343,
+        "facing": "toward the camera",
+        "dist": 0.49,
+        "visible": true
+      }
+    }
+  },
+  "L08": {
+    "landmarks": [
+      {
+        "id": "room",
+        "name": "the warm, plain walls of the hotel lobby restaurant",
+        "side": "right"
+      },
+      {
+        "id": "window",
+        "name": "tall windows along the west wall, the night city outside",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's counter on the east wall",
+        "side": "right"
+      },
+      {
+        "id": "street",
+        "name": "the dark street outside",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.249,
+        "facing": "toward the camera",
+        "dist": 0.92,
+        "visible": true
+      }
+    }
+  },
+  "L10": {
+    "landmarks": [
+      {
+        "id": "room",
+        "name": "the warm, plain walls of the hotel lobby restaurant",
+        "side": "left"
+      },
+      {
+        "id": "window",
+        "name": "tall windows along the west wall, the night city outside",
+        "side": "centre"
+      },
+      {
+        "id": "ztable",
+        "name": "his table by the window, a bowl and a tea cup on it",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the dark street outside",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "right",
+        "x": 0.793,
+        "y": 0.459,
+        "facing": "away from the camera, seen from behind",
+        "dist": 0.7,
+        "visible": true
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.35,
+        "facing": "toward the camera",
+        "dist": 1.93,
+        "visible": true
+      }
+    }
+  },
+  "L11": {
+    "landmarks": [
+      {
+        "id": "room",
+        "name": "the warm, plain walls of the hotel lobby restaurant",
+        "side": "left"
+      },
+      {
+        "id": "window",
+        "name": "tall windows along the west wall, the night city outside",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the dark street outside",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "B": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.343,
+        "facing": "toward the camera",
+        "dist": 0.49,
+        "visible": true
+      }
+    }
+  },
+  "plate-I": {
+    "landmarks": [
+      {
+        "id": "room",
+        "name": "the warm, plain walls of the hotel lobby restaurant",
+        "side": "right"
+      },
+      {
+        "id": "window",
+        "name": "tall windows along the west wall, the night city outside",
+        "side": "centre"
+      },
+      {
+        "id": "ztable",
+        "name": "his table by the window, a bowl and a tea cup on it",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the dark street outside",
+        "side": "left"
+      },
+      {
+        "id": "streetlamp",
+        "name": "a street lamp outside",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "plate-O": {
+    "landmarks": [
+      {
+        "id": "room",
+        "name": "the warm, plain walls of the hotel lobby restaurant",
+        "side": "centre"
+      },
+      {
+        "id": "window",
+        "name": "tall windows along the west wall, the night city outside",
+        "side": "centre"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's counter on the east wall",
+        "side": "centre"
+      },
+      {
+        "id": "ztable",
+        "name": "his table by the window, a bowl and a tea cup on it",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the dark street outside",
+        "side": "right"
+      }
+    ],
+    "people": {}
+  },
+  "plate-lobby-I": {
+    "landmarks": [
+      {
+        "id": "room",
+        "name": "the warm, plain walls of the hotel lobby restaurant",
+        "side": "right"
+      },
+      {
+        "id": "window",
+        "name": "tall windows along the west wall, the night city outside",
+        "side": "centre"
+      },
+      {
+        "id": "ztable",
+        "name": "his table by the window, a bowl and a tea cup on it",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the dark street outside",
+        "side": "left"
+      },
+      {
+        "id": "streetlamp",
+        "name": "a street lamp outside",
+        "side": "left"
+      }
+    ],
+    "people": {}
+  },
+  "plate-lobby-O": {
+    "landmarks": [
+      {
+        "id": "room",
+        "name": "the warm, plain walls of the hotel lobby restaurant",
+        "side": "centre"
+      },
+      {
+        "id": "window",
+        "name": "tall windows along the west wall, the night city outside",
+        "side": "centre"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's counter on the east wall",
+        "side": "centre"
+      },
+      {
+        "id": "ztable",
+        "name": "his table by the window, a bowl and a tea cup on it",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the dark street outside",
+        "side": "right"
+      }
+    ],
+    "people": {}
+  }
+}

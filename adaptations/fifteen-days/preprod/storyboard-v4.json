@@ -1,0 +1,4175 @@
+{
+  "about": "Fifteen Days, storyboard v4: every shot placed in a grey-box set with its own camera (DRAFTED by the coding agent, 2026-10-16).",
+  "geography": {
+    "hall": "A round hall inside the mountain, seen below its ceiling: good seats in tiers near the floor, a second tier above, and a standing overlook with a railing at the very top (where Zei and Bai watch). Deluin's sunken pit at the west edge of the floor, Kau's at the east, each facing outward with the crowd's tiers rising above them; neither can see the holograms. Over the floor, the tutorial's holograms and physical towers on robotic bases; above, big screens show each player's face. Deluin always faces screen-right, Kau screen-left.",
+    "gallery": "The standing overlook at the top of the hall: Zei and Bai stand at the railing, Zei on the left, Bai on the right, facing the floor (south); the second tier seated just below them, the good seats further down; the holograms and the players' big screens across the hall. Cameras stay on the hall side of the railing for singles.",
+    "corridor": "The elevator doors are on the west wall. Deluin steps out of the elevator on the left of frame and faces right; Zei faces left; Bai leans on the east wall behind Zei. After Deluin leaves (north, away down the corridor), Zei and Bai walk south toward the camera, Zei on the left, Bai on the right.",
+    "courtyard": "A wide table for four (room to spare between them) runs east-west in the middle of the courtyard. Deluin sits on its north side, Bai across from him on the south side, and Zei pulls a chair to the east end, at right angles to both. Cameras stay on the west side: Deluin looks screen-right, Zei screen-left, Bai (at the table) screen-left. Bai's later table is a small round table just east of the end, behind Zei, so she is in the background of Zei's singles and of the side two-shots. The street gate is at the north-east corner.",
+    "gate": "The gate at the courtyard's north-east corner, the street beyond. Deluin on the street side, left of frame, facing right; Zei inside the gate, right of frame, facing left (the café's directions kept).",
+    "lobby": "Zei's table by the tall windows (west). Zei sits on the east side facing the window, looking screen-left; Bai sits across from him on the window side, looking screen-right. The robot's counter is on the east wall; the lobby entrance south. A camera outside on the street can look in through the tall window at Zei's table."
+  },
+  "shots": [
+    {
+      "id": "H01",
+      "scene": "hall",
+      "size": "EWS, from the standing overlook, below the ceiling",
+      "who": [
+        "D",
+        "K"
+      ],
+      "action": "The hall from the top: tiers of a varied crowd falling away to the floor; over the floor, the tutorial's holograms in two colours (cyan and amber), glowing towers, streams of gliders and ships, walls building; big screens hanging above show the two players' faces in close-up; far apart at opposite edges, two small sunken pits with one player in each.",
+      "line": null,
+      "look": "-",
+      "dur_s": 4,
+      "purpose": "Establish the hall, its tiers, the holograms, the screens, and the players' isolation. Place and date on screen (c14-b1).",
+      "set": "hall",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              -8.4,
+              0
+            ],
+            "face": "W",
+            "pose": "seated",
+            "y": -1.1
+          },
+          "K": {
+            "at": [
+              8.4,
+              0
+            ],
+            "face": "E",
+            "pose": "seated",
+            "y": -1.1
+          }
+        },
+        "fov": 62,
+        "cam": [
+          -11.5,
+          10.2,
+          12.0
+        ],
+        "look": [
+          1.0,
+          2.0,
+          -2.0
+        ],
+        "plate": "plate-hall-A"
+      }
+    },
+    {
+      "id": "H02",
+      "scene": "hall",
+      "size": "WS, low among the towers",
+      "who": [],
+      "action": "Down among the game: physical tower pillars on small robotic bases rolling to new places, holographic gliders and ships shooting around them in cyan and amber, a holographic wall building itself; the tiers rising beyond.",
+      "line": null,
+      "look": "-",
+      "dur_s": 3,
+      "purpose": "The game as the audience sees it (broadcast imagined).",
+      "set": "hall",
+      "camera": {
+        "people": {},
+        "fov": 50,
+        "cam": [
+          -4.0,
+          0.9,
+          6.8
+        ],
+        "look": [
+          1.5,
+          1.8,
+          -1.5
+        ],
+        "plate": "plate-hall-B"
+      }
+    },
+    {
+      "id": "H03",
+      "scene": "hall",
+      "size": "MS, high angle looking down into his pit",
+      "who": [
+        "D"
+      ],
+      "action": "{D} in his sunken pit at a large glowing console, glasses on a long cable running behind him, calm and cool; the crowd's tiers rise high above him; on a big screen above, his own face in close-up.",
+      "line": null,
+      "look": "R",
+      "dur_s": 3,
+      "purpose": "Deluin: alone in a hole, watched by a thousand.",
+      "set": "hall",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              -8.4,
+              0
+            ],
+            "face": "W",
+            "pose": "seated",
+            "y": -1.1
+          }
+        },
+        "fov": 46,
+        "cam": [
+          -6.6,
+          2.0,
+          1.2
+        ],
+        "look": [
+          -8.9,
+          -0.2,
+          0
+        ],
+        "plate": "plate-hall-P"
+      }
+    },
+    {
+      "id": "H04",
+      "scene": "hall",
+      "size": "INSERT",
+      "who": [],
+      "action": "Deluin's console screen: the tutorial's flat board in two colours, most of it blacked out; only his own corner and a ring of walls show.",
+      "line": null,
+      "look": "-",
+      "dur_s": 2,
+      "purpose": "What a player sees: almost nothing. Composited from the tutorial, never drawn.",
+      "composite": "tutorial board (two colours, mostly blacked out)",
+      "set": "hall",
+      "camera": null
+    },
+    {
+      "id": "H05",
+      "scene": "hall",
+      "size": "ECU",
+      "who": [
+        "K"
+      ],
+      "action": "{K}'s face in his pit, sweat beading under the cabled glasses, jaw tight, console glow from below.",
+      "line": null,
+      "look": "L",
+      "dur_s": 3,
+      "purpose": "Kau: under pressure. Faces the other way to Deluin.",
+      "set": "hall",
+      "camera": {
+        "people": {
+          "K": {
+            "at": [
+              8.4,
+              0
+            ],
+            "face": "E",
+            "pose": "seated",
+            "y": -1.1
+          }
+        },
+        "fov": 36,
+        "cam": [
+          8.868328157299976,
+          0.1699999999999999,
+          0.15216904260722458
+        ],
+        "look": [
+          8.4,
+          0.1499999999999999,
+          0
+        ]
+      }
+    },
+    {
+      "id": "H06",
+      "scene": "hall",
+      "size": "WS, audience cutaway",
+      "who": [],
+      "action": "The good seats near the floor: a varied crowd of many ages, builds and skin tones in clothes of many colours, an old man leaning forward on his cane, a mother pointing for her child, two teens whispering; hologram light on their faces.",
+      "line": null,
+      "look": "-",
+      "dur_s": 3,
+      "purpose": "A real, mixed crowd, not a uniform one.",
+      "set": "hall",
+      "camera": {
+        "people": {},
+        "fov": 40,
+        "cam": [
+          3.0,
+          1.4,
+          4.0
+        ],
+        "look": [
+          9.5,
+          3.5,
+          9.0
+        ]
+      }
+    },
+    {
+      "id": "G01",
+      "scene": "gallery",
+      "size": "EWS, from the floor looking up",
+      "who": [
+        "Z",
+        "B"
+      ],
+      "action": "Far above the crowded tiers, at the top of the hall, the standing overlook and its railing: {Z} and {B}, tiny, leaning on it among a few other standing people.",
+      "line": null,
+      "look": "-",
+      "dur_s": 3,
+      "purpose": "Establish where Zei and Bai watch from.",
+      "set": "hall",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              -1.1,
+              -0.6
+            ],
+            "face": "W",
+            "pose": "standing",
+            "y": 7.6
+          },
+          "B": {
+            "at": [
+              -1.1,
+              0.6
+            ],
+            "face": "W",
+            "pose": "standing",
+            "y": 7.6
+          }
+        },
+        "fov": 42,
+        "cam": [
+          -7.0,
+          1.6,
+          8.5
+        ],
+        "look": [
+          -1.2,
+          8.6,
+          0
+        ]
+      }
+    },
+    {
+      "id": "G02",
+      "scene": "gallery",
+      "size": "WS two-shot from behind",
+      "who": [
+        "Z",
+        "B"
+      ],
+      "action": "From behind, at the overlook railing: {Z} on the left leans forward, absorbed in the holograms far below; {B} on the right, half turned away, head down over something in her hands; the whole hall below them.",
+      "line": null,
+      "look": "-",
+      "dur_s": 3,
+      "purpose": "They're together, but only he is watching.",
+      "set": "hall",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              -1.1,
+              -0.6
+            ],
+            "face": "W",
+            "pose": "standing",
+            "y": 7.6
+          },
+          "B": {
+            "at": [
+              -1.1,
+              0.6
+            ],
+            "face": "W",
+            "pose": "standing",
+            "y": 7.6
+          }
+        },
+        "fov": 48,
+        "cam": [
+          1.2,
+          9.3,
+          0.1
+        ],
+        "look": [
+          -6.0,
+          6.0,
+          0
+        ]
+      }
+    },
+    {
+      "id": "G03",
+      "scene": "gallery",
+      "size": "CU, low angle from the hall side",
+      "who": [
+        "Z"
+      ],
+      "action": "{Z} leaning on his forearms on the railing, eyes on the game below, admiring; hologram light on his face.",
+      "line": "b1-1 Zei: You'd think after making it this far…",
+      "look": "down",
+      "dur_s": 4,
+      "purpose": "Zei admires Deluin.",
+      "set": "hall",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              -1.1,
+              -0.6
+            ],
+            "face": "W",
+            "pose": "standing",
+            "y": 7.6
+          }
+        },
+        "fov": 36,
+        "cam": [
+          -1.978115294937453,
+          8.8996,
+          -0.3146830451114539
+        ],
+        "look": [
+          -1.1,
+          9.1296,
+          -0.6
+        ]
+      }
+    },
+    {
+      "id": "G04",
+      "scene": "gallery",
+      "size": "ECU INSERT",
+      "who": [
+        "B"
+      ],
+      "action": "{B}'s fingers prying open a small electronic gadget with a tiny tool on the flat top of the railing: a little circuit board and wires.",
+      "line": null,
+      "look": "-",
+      "dur_s": 2,
+      "purpose": "Bai's idle tinkering (the owner's change).",
+      "set": "hall",
+      "camera": {
+        "people": {
+          "B": {
+            "at": [
+              -1.1,
+              0.6
+            ],
+            "face": "W",
+            "pose": "standing",
+            "y": 7.6
+          }
+        },
+        "fov": 44,
+        "cam": [
+          -1.7011586416038027,
+          9.11,
+          0.6442415536401374
+        ],
+        "look": [
+          -1.55,
+          8.66,
+          0.6
+        ]
+      }
+    },
+    {
+      "id": "G05",
+      "scene": "gallery",
+      "size": "CU, three-quarter from her right",
+      "who": [
+        "B"
+      ],
+      "action": "{B} at the railing, eyes on her gadget, not looking up, dry.",
+      "line": "b1-2 Bai: It wouldn't be so annoying if he wasn't so damn pretty.",
+      "look": "down",
+      "dur_s": 3,
+      "purpose": "",
+      "set": "hall",
+      "camera": {
+        "people": {
+          "B": {
+            "at": [
+              -1.1,
+              0.6
+            ],
+            "face": "W",
+            "pose": "standing",
+            "y": 7.6
+          }
+        },
+        "fov": 36,
+        "cam": [
+          -1.8996056384008757,
+          9.266399999999999,
+          0.13834746942371196
+        ],
+        "look": [
+          -1.1,
+          9.1464,
+          0.6
+        ]
+      }
+    },
+    {
+      "id": "G06",
+      "scene": "gallery",
+      "size": "ECU",
+      "who": [
+        "Z"
+      ],
+      "action": "{Z}'s eyes turn to her, one eyebrow raised.",
+      "line": null,
+      "look": "R",
+      "dur_s": 2,
+      "purpose": "Zei's look (script).",
+      "set": "hall",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              -1.1,
+              -0.6
+            ],
+            "face": "S",
+            "pose": "standing",
+            "y": 7.6
+          }
+        },
+        "fov": 36,
+        "cam": [
+          -1.2521690426072247,
+          9.2496,
+          -0.1316718427000252
+        ],
+        "look": [
+          -1.1,
+          9.2296,
+          -0.6
+        ]
+      }
+    },
+    {
+      "id": "G07",
+      "scene": "gallery",
+      "size": "MCU",
+      "who": [
+        "B"
+      ],
+      "action": "{B} snaps the gadget's casing shut and shrugs, without looking at him.",
+      "line": "b1-3 Bai: Nah, way too fake for me.",
+      "look": "down",
+      "dur_s": 2,
+      "purpose": "Replaces the spit.",
+      "set": "hall",
+      "camera": {
+        "people": {
+          "B": {
+            "at": [
+              -1.1,
+              0.6
+            ],
+            "face": "W",
+            "pose": "standing",
+            "y": 7.6
+          }
+        },
+        "fov": 36,
+        "cam": [
+          -2.2279098385091656,
+          9.266399999999999,
+          1.0105256081533351
+        ],
+        "look": [
+          -1.1,
+          9.0464,
+          0.6
+        ]
+      }
+    },
+    {
+      "id": "G08",
+      "scene": "gallery",
+      "size": "EWS POV, straight down over the railing",
+      "who": [],
+      "action": "Straight down past the crowd's heads to the floor far below: the holographic ring of walls holding against streams of gliders.",
+      "line": "b1-4 Zei: Such patience… (over)",
+      "look": "-",
+      "dur_s": 3,
+      "purpose": "What Zei admires.",
+      "set": "hall",
+      "camera": {
+        "people": {},
+        "fov": 55,
+        "cam": [
+          -1.4,
+          9.2,
+          0
+        ],
+        "look": [
+          -4.0,
+          0,
+          0.3
+        ],
+        "plate": "plate-hall-V"
+      }
+    },
+    {
+      "id": "G09",
+      "scene": "gallery",
+      "size": "CU, side-on profile",
+      "who": [
+        "B"
+      ],
+      "action": "{B} glances sideways at him, wry.",
+      "line": "b1-5 Bai: Total wimp, just like you. But it gets you guys the W.",
+      "look": "L",
+      "dur_s": 4,
+      "purpose": "",
+      "set": "hall",
+      "camera": {
+        "people": {
+          "B": {
+            "at": [
+              -1.1,
+              0.6
+            ],
+            "face": "W",
+            "pose": "standing",
+            "y": 7.6
+          }
+        },
+        "fov": 36,
+        "cam": [
+          -1.2603302412997988,
+          9.266399999999999,
+          -0.30927798261846784
+        ],
+        "look": [
+          -1.1,
+          9.1464,
+          0.6
+        ]
+      }
+    },
+    {
+      "id": "G10",
+      "scene": "gallery",
+      "size": "WS side two-shot",
+      "who": [
+        "Z",
+        "B"
+      ],
+      "action": "{B} sets the gadget on the rail and leans out over the railing to study the board below; {Z} straightens and turns to watch her.",
+      "line": null,
+      "look": "-",
+      "dur_s": 3,
+      "purpose": "The game catches her eye.",
+      "set": "hall",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              -1.1,
+              -0.6
+            ],
+            "face": "S",
+            "pose": "standing",
+            "y": 7.6
+          },
+          "B": {
+            "at": [
+              -1.15,
+              0.6
+            ],
+            "face": "W",
+            "pose": "standing",
+            "y": 7.6
+          }
+        },
+        "fov": 36,
+        "cam": [
+          -6.967529279956937,
+          9.488,
+          -0.24343871999820488
+        ],
+        "look": [
+          -1.125,
+          8.988,
+          0.0
+        ]
+      }
+    },
+    {
+      "id": "G11",
+      "scene": "gallery",
+      "size": "CU",
+      "who": [
+        "B",
+        "Z"
+      ],
+      "action": "{B}'s face lit from below by the holograms, eyes narrowed, studying the pieces; {Z} soft in the background over her shoulder, watching her.",
+      "line": "b1-6 Bai: That other loser's toast…",
+      "look": "down",
+      "dur_s": 5,
+      "purpose": "Bai reads the game better than she lets on.",
+      "set": "hall",
+      "camera": {
+        "people": {
+          "B": {
+            "at": [
+              -1.1,
+              0.6
+            ],
+            "face": "W",
+            "pose": "standing",
+            "y": 7.6
+          },
+          "Z": {
+            "at": [
+              -0.35,
+              1.05
+            ],
+            "face": "W",
+            "pose": "standing",
+            "y": 7.6
+          }
+        },
+        "fov": 36,
+        "cam": [
+          -2.0031286303117724,
+          9.266399999999999,
+          0.4080340835951732
+        ],
+        "look": [
+          -1.1,
+          9.1464,
+          0.6
+        ]
+      }
+    },
+    {
+      "id": "H07",
+      "scene": "hall",
+      "size": "WS",
+      "who": [],
+      "action": "The holographic walls stand as the last gliders break; the crowd rises in a swell of noise; the big screen cuts to Deluin's face.",
+      "line": null,
+      "look": "-",
+      "dur_s": 3,
+      "purpose": "Deluin wins (c14-b94). Alarm, crowd swell, no announcer words.",
+      "set": "hall",
+      "camera": {
+        "people": {},
+        "fov": 50,
+        "cam": [
+          -4.0,
+          0.9,
+          6.8
+        ],
+        "look": [
+          1.5,
+          1.8,
+          -1.5
+        ],
+        "plate": "plate-hall-B"
+      }
+    },
+    {
+      "id": "H08",
+      "scene": "hall",
+      "size": "CU, high angle into the pit",
+      "who": [
+        "D"
+      ],
+      "action": "{D} lifts the glasses off; the cable falls behind his arm; a small private smile.",
+      "line": null,
+      "look": "R",
+      "dur_s": 2,
+      "purpose": "",
+      "set": "hall",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              -8.4,
+              0
+            ],
+            "face": "W",
+            "pose": "seated",
+            "y": -1.1
+          }
+        },
+        "fov": 36,
+        "cam": [
+          -9.278115294937454,
+          0.9246,
+          0.2853169548885461
+        ],
+        "look": [
+          -8.4,
+          0.1046,
+          0
+        ]
+      }
+    },
+    {
+      "id": "C01",
+      "scene": "corridor",
+      "size": "EWS, down the length of the corridor",
+      "who": [
+        "Z",
+        "B"
+      ],
+      "action": "The long round-topped stone corridor with a row of elevator doors, a few people passing far off; near one elevator {Z} stands waiting, shifting on his feet; {B} leans against the opposite wall, arms crossed, looking away.",
+      "line": null,
+      "look": "-",
+      "dur_s": 3,
+      "purpose": "Why they're here: waiting for Deluin to come up.",
+      "set": "corridor",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              0.15,
+              -7.2
+            ],
+            "face": "W",
+            "pose": "standing"
+          },
+          "B": {
+            "at": [
+              0.8,
+              -4.6
+            ],
+            "face": "W",
+            "pose": "standing"
+          }
+        },
+        "fov": 50,
+        "cam": [
+          0.5,
+          1.6,
+          2.5
+        ],
+        "look": [
+          -0.2,
+          1.4,
+          -10
+        ],
+        "plate": "plate-corridor-N"
+      }
+    },
+    {
+      "id": "C02",
+      "scene": "corridor",
+      "size": "MS, from behind Zei and Bai",
+      "who": [
+        "D",
+        "Z",
+        "B"
+      ],
+      "action": "From behind {Z} and {B}, standing in the foreground: the elevator doors slide open and {D} steps out, sees them, and brightens.",
+      "line": null,
+      "look": "R",
+      "dur_s": 3,
+      "purpose": "",
+      "set": "corridor",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              -0.55,
+              -6.0
+            ],
+            "face": "E",
+            "pose": "standing"
+          },
+          "Z": {
+            "at": [
+              0.35,
+              -6.6
+            ],
+            "face": "W",
+            "pose": "standing"
+          },
+          "B": {
+            "at": [
+              0.8,
+              -4.6
+            ],
+            "face": "NW",
+            "pose": "standing"
+          }
+        },
+        "fov": 46,
+        "cam": [
+          0.95,
+          1.65,
+          -3.0
+        ],
+        "look": [
+          -0.6,
+          1.5,
+          -6.2
+        ]
+      }
+    },
+    {
+      "id": "C03",
+      "scene": "corridor",
+      "size": "CU, three-quarter",
+      "who": [
+        "Z"
+      ],
+      "action": "{Z}, standing, eager, half a step toward him.",
+      "line": "b2-1 Zei: Good job out there.",
+      "look": "L",
+      "dur_s": 2,
+      "purpose": "",
+      "set": "corridor",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              0.35,
+              -6.6
+            ],
+            "face": "W",
+            "pose": "standing"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          -0.14350551295596498,
+          1.6496,
+          -5.819651011000826
+        ],
+        "look": [
+          0.35,
+          1.5295999999999998,
+          -6.6
+        ]
+      }
+    },
+    {
+      "id": "C04",
+      "scene": "corridor",
+      "size": "CU, low three-quarter",
+      "who": [
+        "D"
+      ],
+      "action": "{D}, standing in the elevator doorway, easy and friendly.",
+      "line": "b2-2 Deluin: Thanks. Yeah, the walls held out…",
+      "look": "R",
+      "dur_s": 4,
+      "purpose": "",
+      "set": "corridor",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              -0.55,
+              -6.0
+            ],
+            "face": "E",
+            "pose": "standing"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.36013195636691586,
+          1.5176,
+          -6.155409323882746
+        ],
+        "look": [
+          -0.55,
+          1.6976,
+          -6.0
+        ]
+      }
+    },
+    {
+      "id": "C05",
+      "scene": "corridor",
+      "size": "CU",
+      "who": [
+        "Z"
+      ],
+      "action": "{Z}, standing, a self-deprecating grin, rubbing the back of his neck.",
+      "line": "b2-3 Zei: Yeah, please ignore the ugly style…",
+      "look": "L",
+      "dur_s": 4,
+      "purpose": "",
+      "set": "corridor",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              0.35,
+              -6.6
+            ],
+            "face": "W",
+            "pose": "standing"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          -0.14350551295596498,
+          1.6496,
+          -5.819651011000826
+        ],
+        "look": [
+          0.35,
+          1.5295999999999998,
+          -6.6
+        ]
+      }
+    },
+    {
+      "id": "C06",
+      "scene": "corridor",
+      "size": "WS, past Zei's shoulder",
+      "who": [
+        "B",
+        "Z"
+      ],
+      "action": "{B} small against the far wall, standing, arms crossed, looking off down the corridor, bored; {Z}'s shoulder soft in the foreground.",
+      "line": null,
+      "look": "-",
+      "dur_s": 2,
+      "purpose": "Bai's disinterest.",
+      "set": "corridor",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              0.35,
+              -6.6
+            ],
+            "face": "W",
+            "pose": "standing"
+          },
+          "B": {
+            "at": [
+              0.8,
+              -4.6
+            ],
+            "face": "NW",
+            "pose": "standing"
+          }
+        },
+        "fov": 38,
+        "cam": [
+          0.5597560975609756,
+          1.7496,
+          -7.26219512195122
+        ],
+        "look": [
+          0.8,
+          1.4964,
+          -4.6
+        ]
+      }
+    },
+    {
+      "id": "C07",
+      "scene": "corridor",
+      "size": "MCU",
+      "who": [
+        "D"
+      ],
+      "action": "{D} asks.",
+      "line": "b2-4 Deluin: Patience often does, until you win. Hey, do you want to get tea later?…",
+      "look": "R",
+      "dur_s": 5,
+      "purpose": "",
+      "set": "corridor",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              -0.55,
+              -6.0
+            ],
+            "face": "E",
+            "pose": "standing"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.6331715432769907,
+          1.8176,
+          -6.20203212104757
+        ],
+        "look": [
+          -0.55,
+          1.5976000000000001,
+          -6.0
+        ]
+      }
+    },
+    {
+      "id": "C08",
+      "scene": "corridor",
+      "size": "ECU",
+      "who": [
+        "Z"
+      ],
+      "action": "{Z}'s grin, delighted.",
+      "line": "b2-5 Zei: Sure, yeah, that works well for me!",
+      "look": "L",
+      "dur_s": 2,
+      "purpose": "",
+      "set": "corridor",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              0.35,
+              -6.6
+            ],
+            "face": "W",
+            "pose": "standing"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.006018714038650397,
+          1.6496,
+          -6.247631506294383
+        ],
+        "look": [
+          0.35,
+          1.6296,
+          -6.6
+        ]
+      }
+    },
+    {
+      "id": "C09",
+      "scene": "corridor",
+      "size": "OTS from behind Bai",
+      "who": [
+        "D",
+        "B"
+      ],
+      "action": "Over {B}'s shoulder, {D} turns to her, open and warm.",
+      "line": "b2-6 Deluin: Great, I'll see you then. Bai, you're welcome to come too…",
+      "look": "R",
+      "dur_s": 4,
+      "purpose": "",
+      "set": "corridor",
+      "camera": {
+        "people": {
+          "B": {
+            "at": [
+              0.8,
+              -4.6
+            ],
+            "face": "NW",
+            "pose": "standing"
+          },
+          "D": {
+            "at": [
+              -0.55,
+              -6.0
+            ],
+            "face": "E",
+            "pose": "standing"
+          }
+        },
+        "fov": 38,
+        "cam": [
+          0.9645358389532994,
+          1.7664,
+          -3.9251459730431075
+        ],
+        "look": [
+          -0.55,
+          1.6476000000000002,
+          -6.0
+        ]
+      }
+    },
+    {
+      "id": "C10",
+      "scene": "corridor",
+      "size": "ECU",
+      "who": [
+        "B"
+      ],
+      "action": "{B}'s shrug and a sour twist of her mouth.",
+      "line": null,
+      "look": "L",
+      "dur_s": 2,
+      "purpose": "",
+      "set": "corridor",
+      "camera": {
+        "people": {
+          "B": {
+            "at": [
+              0.8,
+              -4.6
+            ],
+            "face": "NW",
+            "pose": "standing"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.39195771895912723,
+          1.6663999999999999,
+          -4.875659531543806
+        ],
+        "look": [
+          0.8,
+          1.6463999999999999,
+          -4.6
+        ]
+      }
+    },
+    {
+      "id": "C11",
+      "scene": "corridor",
+      "size": "EWS",
+      "who": [
+        "D",
+        "Z"
+      ],
+      "action": "{D}, small, walking away down the long corridor, back to us; {Z} in the foreground, standing, lifts a hand.",
+      "line": "b2-7 Zei: See you.",
+      "look": "-",
+      "dur_s": 3,
+      "purpose": "",
+      "set": "corridor",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              -0.1,
+              -15
+            ],
+            "face": "N",
+            "pose": "standing"
+          },
+          "Z": {
+            "at": [
+              0.35,
+              -6.6
+            ],
+            "face": "N",
+            "pose": "standing"
+          }
+        },
+        "fov": 46,
+        "cam": [
+          0.75,
+          1.7,
+          -3.6
+        ],
+        "look": [
+          -0.1,
+          1.5,
+          -15
+        ]
+      }
+    },
+    {
+      "id": "C12",
+      "scene": "corridor",
+      "size": "MS walk-and-talk, tracking ahead of them",
+      "who": [
+        "Z",
+        "B"
+      ],
+      "action": "{Z} and {B} walk the other way toward camera, other people passing; he turns to her, hopeful.",
+      "line": "b2-7 Zei: So are you gonna come? Should be fun!",
+      "look": "-",
+      "dur_s": 3,
+      "purpose": "They walk because they're leaving.",
+      "set": "corridor",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              -0.4,
+              0.5
+            ],
+            "face": "S",
+            "pose": "standing"
+          },
+          "B": {
+            "at": [
+              0.4,
+              0.5
+            ],
+            "face": "S",
+            "pose": "standing"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.0,
+          1.688,
+          2.574842834050733
+        ],
+        "look": [
+          0.0,
+          1.388,
+          0.5
+        ]
+      }
+    },
+    {
+      "id": "C13",
+      "scene": "corridor",
+      "size": "MCU walking",
+      "who": [
+        "B"
+      ],
+      "action": "{B} walking, not looking at him.",
+      "line": "b2-8 Bai: He's your competition, remember?",
+      "look": "L",
+      "dur_s": 2,
+      "purpose": "",
+      "set": "corridor",
+      "camera": {
+        "people": {
+          "B": {
+            "at": [
+              0.4,
+              0.5
+            ],
+            "face": "S",
+            "pose": "standing"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.9072672540008996,
+          1.6663999999999999,
+          1.5878381367528092
+        ],
+        "look": [
+          0.4,
+          1.4464,
+          0.5
+        ]
+      }
+    },
+    {
+      "id": "C14",
+      "scene": "corridor",
+      "size": "MCU walking",
+      "who": [
+        "Z"
+      ],
+      "action": "{Z} walking, teasing.",
+      "line": "b2-9 Zei: Take it easy, you're my competition too.",
+      "look": "R",
+      "dur_s": 2,
+      "purpose": "",
+      "set": "corridor",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              -0.4,
+              0.5
+            ],
+            "face": "S",
+            "pose": "standing"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          -0.9072672540008996,
+          1.6496,
+          1.5878381367528092
+        ],
+        "look": [
+          -0.4,
+          1.4296,
+          0.5
+        ]
+      }
+    },
+    {
+      "id": "C15",
+      "scene": "corridor",
+      "size": "CU walking",
+      "who": [
+        "B"
+      ],
+      "action": "{B} walking, a sly smile.",
+      "line": "b2-10 Bai: 'Was.' And you know I hate you…",
+      "look": "L",
+      "dur_s": 4,
+      "purpose": "Same angle as C13: continuity.",
+      "set": "corridor",
+      "camera": {
+        "people": {
+          "B": {
+            "at": [
+              0.4,
+              0.5
+            ],
+            "face": "S",
+            "pose": "standing"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.790205580000692,
+          1.6663999999999999,
+          1.33679856673293
+        ],
+        "look": [
+          0.4,
+          1.5463999999999998,
+          0.5
+        ]
+      }
+    },
+    {
+      "id": "C16",
+      "scene": "corridor",
+      "size": "CU walking",
+      "who": [
+        "B"
+      ],
+      "action": "{B} walking; the smile drops, serious.",
+      "line": "b2-11 Bai: Deluin? We don't know anything about this guy.",
+      "look": "L",
+      "dur_s": 3,
+      "purpose": "",
+      "set": "corridor",
+      "camera": {
+        "people": {
+          "B": {
+            "at": [
+              0.4,
+              0.5
+            ],
+            "face": "S",
+            "pose": "standing"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.790205580000692,
+          1.6663999999999999,
+          1.33679856673293
+        ],
+        "look": [
+          0.4,
+          1.5463999999999998,
+          0.5
+        ]
+      }
+    },
+    {
+      "id": "C17",
+      "scene": "corridor",
+      "size": "MS two-shot walking",
+      "who": [
+        "Z",
+        "B"
+      ],
+      "action": "{Z} grins and nudges her shoulder with his; {B} rolls her eyes, half smiling.",
+      "line": "b2-12 Zei: So let's get to know him…",
+      "look": "-",
+      "dur_s": 4,
+      "purpose": "",
+      "set": "corridor",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              -0.4,
+              0.5
+            ],
+            "face": "S",
+            "pose": "standing"
+          },
+          "B": {
+            "at": [
+              0.4,
+              0.5
+            ],
+            "face": "S",
+            "pose": "standing"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.0,
+          1.688,
+          2.574842834050733
+        ],
+        "look": [
+          0.0,
+          1.388,
+          0.5
+        ]
+      }
+    },
+    {
+      "id": "F01",
+      "scene": "courtyard",
+      "size": "EWS establishing, high from the west",
+      "who": [
+        "D",
+        "B",
+        "R"
+      ],
+      "action": "The courtyard café at night: close-set tables full of people eating and talking, the shade tree hung with little lights, megastructures above the rooftops; at the table for four in the middle, {D} and {B}, small, laughing.",
+      "line": null,
+      "look": "-",
+      "dur_s": 4,
+      "purpose": "Establish the courtyard and the table.",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              0,
+              -0.95
+            ],
+            "face": "S",
+            "pose": "seated"
+          },
+          "B": {
+            "at": [
+              0,
+              0.95
+            ],
+            "face": "N",
+            "pose": "seated"
+          },
+          "R": {
+            "at": [
+              -4.2,
+              1.4
+            ],
+            "face": "E",
+            "pose": "robot"
+          }
+        },
+        "fov": 44,
+        "cam": [
+          -8.5,
+          4.6,
+          6.0
+        ],
+        "look": [
+          1.0,
+          0.4,
+          -1.5
+        ]
+      }
+    },
+    {
+      "id": "F02",
+      "scene": "courtyard",
+      "size": "MS",
+      "who": [
+        "Z"
+      ],
+      "action": "{Z} steps in through the courtyard's street gate, scanning the tables.",
+      "line": null,
+      "look": "-",
+      "dur_s": 2,
+      "purpose": "Him looking around.",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              6.3,
+              -6.0
+            ],
+            "face": "SW",
+            "pose": "standing"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          4.567782740863574,
+          1.6496,
+          -4.999903899142669
+        ],
+        "look": [
+          6.3,
+          1.3296,
+          -6.0
+        ]
+      }
+    },
+    {
+      "id": "F03",
+      "scene": "courtyard",
+      "size": "POV, long lens between diners",
+      "who": [
+        "D",
+        "B"
+      ],
+      "action": "Across the courtyard, between other diners: {D} and {B} at their table, laughing together.",
+      "line": null,
+      "look": "-",
+      "dur_s": 2,
+      "purpose": "What he sees: they're already friends.",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              0,
+              -0.95
+            ],
+            "face": "S",
+            "pose": "seated"
+          },
+          "B": {
+            "at": [
+              0,
+              0.95
+            ],
+            "face": "N",
+            "pose": "seated"
+          }
+        },
+        "fov": 22,
+        "cam": [
+          6.3,
+          1.6296,
+          -6.0
+        ],
+        "look": [
+          0,
+          0.9,
+          0
+        ]
+      }
+    },
+    {
+      "id": "F04",
+      "scene": "courtyard",
+      "size": "MS",
+      "who": [
+        "Z"
+      ],
+      "action": "{Z} weaving quickly between the crowded tables, half running, slowing as he nears.",
+      "line": null,
+      "look": "-",
+      "dur_s": 2,
+      "purpose": "He hurries, but not at the table.",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              3.6,
+              -2.6
+            ],
+            "face": "SW",
+            "pose": "standing"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          1.7872102320160204,
+          1.6496,
+          -1.7546822485640472
+        ],
+        "look": [
+          3.6,
+          1.3296,
+          -2.6
+        ]
+      }
+    },
+    {
+      "id": "F05",
+      "scene": "courtyard",
+      "size": "CU",
+      "who": [
+        "D"
+      ],
+      "action": "{D} at the wide table, laughing, turns and waves someone over with a big smile.",
+      "line": "b3-1 Deluin: Hey, over here! We were just talking about you!",
+      "look": "R",
+      "dur_s": 3,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              0,
+              -0.95
+            ],
+            "face": "NE",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.42325549224749554,
+          1.3246000000000002,
+          -1.7705772506183024
+        ],
+        "look": [
+          0,
+          1.2046000000000001,
+          -0.95
+        ]
+      }
+    },
+    {
+      "id": "F06",
+      "scene": "courtyard",
+      "size": "MCU",
+      "who": [
+        "Z"
+      ],
+      "action": "{Z} pulls out the chair at the end of the table and drops into it.",
+      "line": null,
+      "look": "-",
+      "dur_s": 2,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              1.9,
+              -0.45
+            ],
+            "face": "W",
+            "pose": "standing"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.7720901614908346,
+          1.6496,
+          -0.8605256081533352
+        ],
+        "look": [
+          1.9,
+          1.4296,
+          -0.45
+        ]
+      }
+    },
+    {
+      "id": "F07",
+      "scene": "courtyard",
+      "size": "WS three-shot from the west, waist-up",
+      "who": [
+        "D",
+        "B",
+        "Z"
+      ],
+      "action": "All three at the wide table, well apart: {D} on the left (north side), {B} on the right (south side), {Z} at the far end between them, at right angles.",
+      "line": null,
+      "look": "-",
+      "dur_s": 2,
+      "purpose": "The table's geography, used for every later shot.",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              0,
+              -0.95
+            ],
+            "face": "S",
+            "pose": "seated"
+          },
+          "B": {
+            "at": [
+              0,
+              0.95
+            ],
+            "face": "N",
+            "pose": "seated"
+          },
+          "Z": {
+            "at": [
+              1.5,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          -4.2,
+          1.5,
+          0.6
+        ],
+        "look": [
+          0.35,
+          0.85,
+          0
+        ]
+      }
+    },
+    {
+      "id": "F08",
+      "scene": "courtyard",
+      "size": "MS",
+      "who": [
+        "R",
+        "D",
+        "B",
+        "Z"
+      ],
+      "action": "{R} glides up beside the wide table where {D} and {B} sit across from each other, well apart, and {Z} sits at the end.",
+      "line": null,
+      "look": "-",
+      "dur_s": 2,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "R": {
+            "at": [
+              -0.9,
+              -1.6
+            ],
+            "face": "SE",
+            "pose": "robot"
+          },
+          "D": {
+            "at": [
+              0,
+              -0.95
+            ],
+            "face": "S",
+            "pose": "seated"
+          },
+          "B": {
+            "at": [
+              0,
+              0.95
+            ],
+            "face": "N",
+            "pose": "seated"
+          },
+          "Z": {
+            "at": [
+              1.5,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          }
+        },
+        "fov": 40,
+        "cam": [
+          -2.6,
+          1.75,
+          3.4
+        ],
+        "look": [
+          0.2,
+          0.9,
+          -0.4
+        ]
+      }
+    },
+    {
+      "id": "F09",
+      "scene": "courtyard",
+      "size": "CU",
+      "who": [
+        "R"
+      ],
+      "action": "{R} beside the table, its face screen kind, tray level.",
+      "line": "b3-2 Robot: jie mo kai tu jie hei ja ma?",
+      "look": "-",
+      "dur_s": 3,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "R": {
+            "at": [
+              -0.9,
+              -1.6
+            ],
+            "face": "SE",
+            "pose": "robot"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          -0.48089157358542306,
+          1.42,
+          -0.777453399373019
+        ],
+        "look": [
+          -0.9,
+          1.2999999999999998,
+          -1.6
+        ]
+      }
+    },
+    {
+      "id": "F11",
+      "scene": "courtyard",
+      "size": "ECU, high angle",
+      "who": [
+        "Z"
+      ],
+      "action": "{Z}'s eyes over the top of the paper-thin menu, looking down at it.",
+      "line": "b3-3 Zei: Whoa / b3-4 Deluin: What is it? (over)",
+      "look": "down",
+      "dur_s": 2,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              1.5,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          1.031671842700025,
+          1.6965999999999999,
+          0.15216904260722458
+        ],
+        "look": [
+          1.5,
+          1.2266,
+          0
+        ]
+      }
+    },
+    {
+      "id": "F12",
+      "scene": "courtyard",
+      "size": "INSERT",
+      "who": [],
+      "action": "The menu: the book's own glyph picture on the paper-thin tablet.",
+      "line": null,
+      "look": "-",
+      "dur_s": 3,
+      "purpose": "",
+      "composite": "c14-b108 (the book's menu picture, a short insert)",
+      "set": "courtyard",
+      "camera": null
+    },
+    {
+      "id": "F13",
+      "scene": "courtyard",
+      "size": "CU, low three-quarter",
+      "who": [
+        "Z"
+      ],
+      "action": "{Z}, the menu in his hands, explaining.",
+      "line": "b3-5 Zei: I think these are some of the new symbols…",
+      "look": "L",
+      "dur_s": 5,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              1.5,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.5864765098775577,
+          0.9965999999999999,
+          -0.1340412956684414
+        ],
+        "look": [
+          1.5,
+          1.1265999999999998,
+          0
+        ]
+      }
+    },
+    {
+      "id": "F14",
+      "scene": "courtyard",
+      "size": "CU",
+      "who": [
+        "B"
+      ],
+      "action": "{B}, close, glances around the courtyard, then down at her paper-thin menu, unimpressed.",
+      "line": null,
+      "look": "L",
+      "dur_s": 2,
+      "purpose": "Bai, left out.",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "B": {
+            "at": [
+              0,
+              0.95
+            ],
+            "face": "N",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          -0.19743895516245275,
+          1.2544,
+          0.04805205530788992
+        ],
+        "look": [
+          0,
+          1.1343999999999999,
+          0.95
+        ]
+      }
+    },
+    {
+      "id": "F15",
+      "scene": "courtyard",
+      "size": "CU, frontal",
+      "who": [
+        "Z"
+      ],
+      "action": "{Z} realises he's talking to a foreigner, turns to him.",
+      "line": "b3-6 Zei: Have you heard about version nine?",
+      "look": "L",
+      "dur_s": 2,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              1.5,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.6588116489137427,
+          1.2466,
+          -0.38064996249408223
+        ],
+        "look": [
+          1.5,
+          1.1265999999999998,
+          0
+        ]
+      }
+    },
+    {
+      "id": "F16",
+      "scene": "courtyard",
+      "size": "CU, three-quarter from Zei's side",
+      "who": [
+        "D"
+      ],
+      "action": "{D}, menu in hand, modest.",
+      "line": "b3-7 Deluin: … I had a couple people mention it to me…",
+      "look": "R",
+      "dur_s": 5,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              0,
+              -0.95
+            ],
+            "face": "S",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.5116544315924025,
+          1.3246000000000002,
+          -0.18142861191570625
+        ],
+        "look": [
+          0,
+          1.2046000000000001,
+          -0.95
+        ]
+      }
+    },
+    {
+      "id": "F17",
+      "scene": "courtyard",
+      "size": "OTS from behind Deluin",
+      "who": [
+        "Z",
+        "D"
+      ],
+      "action": "Over {D}'s shoulder: {Z}, menu in hand, eyes going between the menu and him.",
+      "line": "b3-8 Zei: Hmmm. More straight horizontal lines than usual…",
+      "look": "L",
+      "dur_s": 5,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              0,
+              -0.95
+            ],
+            "face": "S",
+            "pose": "seated"
+          },
+          "Z": {
+            "at": [
+              1.5,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          }
+        },
+        "fov": 38,
+        "cam": [
+          -0.6941596737470578,
+          1.4246000000000003,
+          -0.9753445722666267
+        ],
+        "look": [
+          1.5,
+          1.0766,
+          0
+        ]
+      }
+    },
+    {
+      "id": "F18",
+      "scene": "courtyard",
+      "size": "CU, high angle",
+      "who": [
+        "D"
+      ],
+      "action": "{D} leaning over his menu, reading it closely.",
+      "line": "b3-9 Deluin: Top right is 'kai', right?…",
+      "look": "R",
+      "dur_s": 5,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              0,
+              -0.95
+            ],
+            "face": "S",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.5116544315924025,
+          1.7746000000000002,
+          -0.18142861191570625
+        ],
+        "look": [
+          0,
+          1.2046000000000001,
+          -0.95
+        ]
+      }
+    },
+    {
+      "id": "F19",
+      "scene": "courtyard",
+      "size": "ECU",
+      "who": [
+        "Z"
+      ],
+      "action": "{Z}'s eyebrows rising as he listens.",
+      "line": "b3-9 (continues)",
+      "look": "L",
+      "dur_s": 4,
+      "purpose": "Reaction during a long line.",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              1.5,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          1.0382975692504477,
+          1.2466,
+          -0.17122367210156497
+        ],
+        "look": [
+          1.5,
+          1.2266,
+          0
+        ]
+      }
+    },
+    {
+      "id": "F20",
+      "scene": "courtyard",
+      "size": "CU",
+      "who": [
+        "Z"
+      ],
+      "action": "{Z}, astonished.",
+      "line": "b3-10 Zei: Wait, you know Dzegoban?",
+      "look": "L",
+      "dur_s": 2,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              1.5,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.5864765098775577,
+          1.2466,
+          -0.1340412956684414
+        ],
+        "look": [
+          1.5,
+          1.1265999999999998,
+          0
+        ]
+      }
+    },
+    {
+      "id": "F21",
+      "scene": "courtyard",
+      "size": "CU, low angle",
+      "who": [
+        "D"
+      ],
+      "action": "{D}, a mock-stern face with a playful smile, no gestures: a joking lecture.",
+      "line": "b3-11 Deluin: The whole point of Dzegoban…",
+      "look": "R",
+      "dur_s": 5,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              0,
+              -0.95
+            ],
+            "face": "S",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.5116544315924025,
+          1.0246000000000002,
+          -0.18142861191570625
+        ],
+        "look": [
+          0,
+          1.2046000000000001,
+          -0.95
+        ]
+      }
+    },
+    {
+      "id": "F22",
+      "scene": "courtyard",
+      "size": "CU, three-quarter",
+      "who": [
+        "Z"
+      ],
+      "action": "{Z}, impressed and a bit put out.",
+      "line": "b3-12 Zei: I'm impressed, you're almost a local already.",
+      "look": "L",
+      "dur_s": 3,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              1.5,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.5864765098775577,
+          1.2466,
+          -0.1340412956684414
+        ],
+        "look": [
+          1.5,
+          1.1265999999999998,
+          0
+        ]
+      }
+    },
+    {
+      "id": "F23",
+      "scene": "courtyard",
+      "size": "CU, from across the table",
+      "who": [
+        "B"
+      ],
+      "action": "{B} puts her menu down on the table.",
+      "line": "b3-13 Bai: Actually, I don't think I want anything…",
+      "look": "L",
+      "dur_s": 4,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "B": {
+            "at": [
+              0,
+              0.95
+            ],
+            "face": "N",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          -0.16033024129979853,
+          1.2544,
+          0.04072201738153214
+        ],
+        "look": [
+          0,
+          1.1343999999999999,
+          0.95
+        ]
+      }
+    },
+    {
+      "id": "F24",
+      "scene": "courtyard",
+      "size": "CU",
+      "who": [
+        "B"
+      ],
+      "action": "{B}, standing now, headphones in hand, to Zei.",
+      "line": "b3-13 Bai: Zei, when you're done, come get me…",
+      "look": "L",
+      "dur_s": 4,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "B": {
+            "at": [
+              0.55,
+              1.35
+            ],
+            "face": "NE",
+            "pose": "standing"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.7282971777464337,
+          1.6663999999999999,
+          0.444073759979534
+        ],
+        "look": [
+          0.55,
+          1.5463999999999998,
+          1.35
+        ]
+      }
+    },
+    {
+      "id": "F25",
+      "scene": "courtyard",
+      "size": "ECU",
+      "who": [
+        "Z"
+      ],
+      "action": "{Z} nods, a bit confused.",
+      "line": null,
+      "look": "R",
+      "dur_s": 2,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              1.5,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          1.139074383789463,
+          1.2466,
+          0.33499161185175
+        ],
+        "look": [
+          1.5,
+          1.2266,
+          0
+        ]
+      }
+    },
+    {
+      "id": "F26",
+      "scene": "courtyard",
+      "size": "MS past Zei, soft foreground",
+      "who": [
+        "B",
+        "Z"
+      ],
+      "action": "Behind {Z}, {B} sits at the small round table, puts on big headphones and takes out her handheld.",
+      "line": null,
+      "look": "-",
+      "dur_s": 3,
+      "purpose": "Bai's table, fixed for the rest of the scene.",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              1.5,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          },
+          "B": {
+            "at": [
+              3.3,
+              1.35
+            ],
+            "face": "N",
+            "pose": "seated"
+          }
+        },
+        "fov": 38,
+        "cam": [
+          0.81,
+          1.3466,
+          -0.08000000000000007
+        ],
+        "look": [
+          3.3,
+          1.0844,
+          1.35
+        ]
+      }
+    },
+    {
+      "id": "S01",
+      "scene": "courtyard",
+      "size": "ECU INSERT, top-down",
+      "who": [
+        "R"
+      ],
+      "action": "From above: the robot's hand pours tea from a pot into two cups on the wide table.",
+      "line": null,
+      "look": "-",
+      "dur_s": 3,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "R": {
+            "at": [
+              0.9,
+              -1.0
+            ],
+            "face": "S",
+            "pose": "robot"
+          }
+        },
+        "fov": 44,
+        "cam": [
+          0.808155724407908,
+          1.23,
+          -0.18154233803470463
+        ],
+        "look": [
+          0.95,
+          0.78,
+          -0.25
+        ]
+      }
+    },
+    {
+      "id": "S02",
+      "scene": "courtyard",
+      "size": "ECU INSERT",
+      "who": [
+        "D"
+      ],
+      "action": "Very close: {D}'s fingers, his cream cable-knit sleeve showing, absent-mindedly setting one white sugar cube on another.",
+      "line": null,
+      "look": "-",
+      "dur_s": 2,
+      "purpose": "Absent-minded: his eyes aren't on it.",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              0.1,
+              -0.85
+            ],
+            "face": "S",
+            "pose": "seated"
+          }
+        },
+        "fov": 44,
+        "cam": [
+          0.3933931399954449,
+          1.16,
+          -0.14712299743774065
+        ],
+        "look": [
+          0.5,
+          0.82,
+          -0.2
+        ]
+      }
+    },
+    {
+      "id": "S03",
+      "scene": "courtyard",
+      "size": "CU, tight",
+      "who": [
+        "D"
+      ],
+      "action": "{D}, close, eyes on Zei, not on his hands.",
+      "line": "b4-1 Deluin: So while visiting, I've been wondering…",
+      "look": "R",
+      "dur_s": 6,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              0,
+              -0.95
+            ],
+            "face": "S",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.3581581021146818,
+          1.3246000000000002,
+          -0.41200002834099436
+        ],
+        "look": [
+          0,
+          1.2046000000000001,
+          -0.95
+        ]
+      }
+    },
+    {
+      "id": "S04",
+      "scene": "courtyard",
+      "size": "CU, low three-quarter",
+      "who": [
+        "Z",
+        "B"
+      ],
+      "action": "{Z}; behind him, small and soft, {B} at her table with headphones on.",
+      "line": "b4-2 Zei: Kids get into it pretty young here…",
+      "look": "L",
+      "dur_s": 6,
+      "purpose": "Bai in the background.",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              1.5,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          },
+          "B": {
+            "at": [
+              3.3,
+              1.35
+            ],
+            "face": "N",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.5864765098775577,
+          1.0466,
+          -0.1340412956684414
+        ],
+        "look": [
+          1.5,
+          1.1265999999999998,
+          0
+        ]
+      }
+    },
+    {
+      "id": "S05",
+      "scene": "courtyard",
+      "size": "CU, profile",
+      "who": [
+        "D"
+      ],
+      "action": "{D}, warm, thinking about home.",
+      "line": "b4-3 Deluin: Sure. Yeah, we have our fair share…",
+      "look": "R",
+      "dur_s": 6,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              0,
+              -0.95
+            ],
+            "face": "S",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          -0.2752975833689741,
+          1.3246000000000002,
+          -0.0686921783274782
+        ],
+        "look": [
+          0,
+          1.2046000000000001,
+          -0.95
+        ]
+      }
+    },
+    {
+      "id": "S06",
+      "scene": "courtyard",
+      "size": "ECU INSERT",
+      "who": [
+        "D"
+      ],
+      "action": "Very close on the white sugar cubes, {D}'s fingertips setting another on top: the stack is becoming a little wall.",
+      "line": "b4-3 (continues)",
+      "look": "-",
+      "dur_s": 3,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              0,
+              -0.95
+            ],
+            "face": "S",
+            "pose": "seated"
+          }
+        },
+        "fov": 44,
+        "cam": [
+          0.4309751849366714,
+          1.05,
+          -0.14587413143269035
+        ],
+        "look": [
+          0.5,
+          0.83,
+          -0.18
+        ]
+      }
+    },
+    {
+      "id": "S07",
+      "scene": "courtyard",
+      "size": "CU, frontal",
+      "who": [
+        "D"
+      ],
+      "action": "{D}: 'Less cameras, more castles.'",
+      "line": "b4-3 (continues)",
+      "look": "R",
+      "dur_s": 5,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              0,
+              -0.95
+            ],
+            "face": "S",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.7036807918150249,
+          1.3246000000000002,
+          -0.3522328386566035
+        ],
+        "look": [
+          0,
+          1.2046000000000001,
+          -0.95
+        ]
+      }
+    },
+    {
+      "id": "S08",
+      "scene": "courtyard",
+      "size": "ECU",
+      "who": [
+        "Z"
+      ],
+      "action": "{Z}'s eyes drop to the table; a smile starts.",
+      "line": null,
+      "look": "down",
+      "dur_s": 2,
+      "purpose": "Zei noticing.",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              1.5,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          1.0382975692504477,
+          1.2466,
+          -0.17122367210156497
+        ],
+        "look": [
+          1.5,
+          1.2266,
+          0
+        ]
+      }
+    },
+    {
+      "id": "S09",
+      "scene": "courtyard",
+      "size": "INSERT",
+      "who": [],
+      "action": "A neat little wall of white sugar cubes between two tea cups.",
+      "line": null,
+      "look": "-",
+      "dur_s": 2,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {},
+        "fov": 40,
+        "cam": [
+          0.12350100874548064,
+          0.8799999999999999,
+          0.006141101276234379
+        ],
+        "look": [
+          0.5,
+          0.82,
+          -0.18
+        ]
+      }
+    },
+    {
+      "id": "S10",
+      "scene": "courtyard",
+      "size": "CU, high angle",
+      "who": [
+        "Z"
+      ],
+      "action": "{Z}, amused.",
+      "line": "b4-4 Zei: I see where you get your love of walls then.",
+      "look": "L",
+      "dur_s": 3,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              1.5,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.5864765098775577,
+          1.6465999999999998,
+          -0.1340412956684414
+        ],
+        "look": [
+          1.5,
+          1.1265999999999998,
+          0
+        ]
+      }
+    },
+    {
+      "id": "S11",
+      "scene": "courtyard",
+      "size": "CU, high angle",
+      "who": [
+        "D"
+      ],
+      "action": "{D} looks down at the cubes as if for the first time, and smiles.",
+      "line": "b4-5 Deluin: Yes. Simple, straightforward, useful.",
+      "look": "down",
+      "dur_s": 3,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              0,
+              -0.95
+            ],
+            "face": "S",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.5116544315924025,
+          1.7746000000000002,
+          -0.18142861191570625
+        ],
+        "look": [
+          0,
+          1.2046000000000001,
+          -0.95
+        ]
+      }
+    },
+    {
+      "id": "S12",
+      "scene": "courtyard",
+      "size": "ECU INSERT, from the side",
+      "who": [
+        "Z",
+        "D"
+      ],
+      "action": "From the side, low at table height: both their hands by the little wall of sugar cubes; {Z}'s finger flicks one cube out of the bottom row and it goes flying.",
+      "line": null,
+      "look": "-",
+      "dur_s": 2,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              1.5,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          },
+          "D": {
+            "at": [
+              0,
+              -0.95
+            ],
+            "face": "S",
+            "pose": "seated"
+          }
+        },
+        "fov": 40,
+        "cam": [
+          0.006965606690510329,
+          0.8999999999999999,
+          0.06375620405221172
+        ],
+        "look": [
+          0.5,
+          0.82,
+          -0.18
+        ]
+      }
+    },
+    {
+      "id": "S12b",
+      "scene": "courtyard",
+      "size": "ECU INSERT",
+      "who": [],
+      "action": "The little wall of sugar cubes, now with a doorway in its bottom row.",
+      "line": null,
+      "look": "-",
+      "dur_s": 2,
+      "purpose": "The door in the wall (owner's note).",
+      "set": "courtyard",
+      "camera": {
+        "people": {},
+        "fov": 40,
+        "cam": [
+          0.12350100874548064,
+          0.8799999999999999,
+          0.006141101276234379
+        ],
+        "look": [
+          0.5,
+          0.82,
+          -0.18
+        ]
+      }
+    },
+    {
+      "id": "S13",
+      "scene": "courtyard",
+      "size": "WS side two-shot",
+      "who": [
+        "Z",
+        "D"
+      ],
+      "action": "{Z} and {D} both laughing, at right angles at the wide table.",
+      "line": null,
+      "look": "-",
+      "dur_s": 3,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              1.5,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          },
+          "D": {
+            "at": [
+              0,
+              -0.95
+            ],
+            "face": "S",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          -2.378769865405589,
+          1.5156,
+          4.465162945377246
+        ],
+        "look": [
+          0.75,
+          1.0156,
+          -0.475
+        ]
+      }
+    },
+    {
+      "id": "S14",
+      "scene": "courtyard",
+      "size": "CU cutaway",
+      "who": [
+        "B"
+      ],
+      "action": "{B} at her table, headphones on, handheld in her hands, looking straight ahead; her eyes slide toward them.",
+      "line": null,
+      "look": "R",
+      "dur_s": 2,
+      "purpose": "Bai, listening while pretending not to.",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "B": {
+            "at": [
+              3.3,
+              1.35
+            ],
+            "face": "N",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          2.399889883627655,
+          1.2544,
+          1.1443449141058601
+        ],
+        "look": [
+          3.3,
+          1.1343999999999999,
+          1.35
+        ]
+      }
+    },
+    {
+      "id": "R01",
+      "scene": "courtyard",
+      "size": "CU, low three-quarter",
+      "who": [
+        "D"
+      ],
+      "action": "{D}, leaning in, eager and inviting.",
+      "line": "b5-1 Deluin: Why don't you come visit?…",
+      "look": "R",
+      "dur_s": 6,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              0,
+              -0.95
+            ],
+            "face": "S",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.5116544315924025,
+          1.0746000000000002,
+          -0.18142861191570625
+        ],
+        "look": [
+          0,
+          1.2046000000000001,
+          -0.95
+        ]
+      }
+    },
+    {
+      "id": "R02",
+      "scene": "courtyard",
+      "size": "CU",
+      "who": [
+        "Z",
+        "B"
+      ],
+      "action": "{Z}, a little embarrassed; {B} small and soft behind him.",
+      "line": "b5-2 Zei: Well, budget will be pretty tight for…",
+      "look": "L",
+      "dur_s": 3,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              1.5,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          },
+          "B": {
+            "at": [
+              3.3,
+              1.35
+            ],
+            "face": "N",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.5864765098775577,
+          1.2466,
+          -0.1340412956684414
+        ],
+        "look": [
+          1.5,
+          1.1265999999999998,
+          0
+        ]
+      }
+    },
+    {
+      "id": "R03",
+      "scene": "courtyard",
+      "size": "ECU INSERT",
+      "who": [
+        "Z"
+      ],
+      "action": "{Z}'s wrist: he turns it to glance at his watch.",
+      "line": null,
+      "look": "-",
+      "dur_s": 2,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              1.5,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          }
+        },
+        "fov": 44,
+        "cam": [
+          1.0561286671483057,
+          1.3,
+          0.18408813917939107
+        ],
+        "look": [
+          1.2,
+          0.85,
+          0.12
+        ]
+      }
+    },
+    {
+      "id": "R04",
+      "scene": "courtyard",
+      "size": "CU",
+      "who": [
+        "Z"
+      ],
+      "action": "{Z}, smiling.",
+      "line": "b5-2 Zei: …about fifteen days.",
+      "look": "L",
+      "dur_s": 3,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              1.5,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.5864765098775577,
+          1.2466,
+          -0.1340412956684414
+        ],
+        "look": [
+          1.5,
+          1.1265999999999998,
+          0
+        ]
+      }
+    },
+    {
+      "id": "R05",
+      "scene": "courtyard",
+      "size": "CU, profile",
+      "who": [
+        "D"
+      ],
+      "action": "{D}, playful.",
+      "line": "b5-3 Deluin: Oh yeah, then I can use some of my winnings…",
+      "look": "R",
+      "dur_s": 4,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              0,
+              -0.95
+            ],
+            "face": "S",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          -0.2752975833689741,
+          1.3246000000000002,
+          -0.0686921783274782
+        ],
+        "look": [
+          0,
+          1.2046000000000001,
+          -0.95
+        ]
+      }
+    },
+    {
+      "id": "R06",
+      "scene": "courtyard",
+      "size": "CU, from behind her table",
+      "who": [
+        "B"
+      ],
+      "action": "{B} glances back over her shoulder, absent-mindedly.",
+      "line": null,
+      "look": "L",
+      "dur_s": 2,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "B": {
+            "at": [
+              3.3,
+              1.35
+            ],
+            "face": "N",
+            "pose": "seated"
+          }
+        },
+        "fov": 40,
+        "cam": [
+          3.75,
+          1.25,
+          2.6
+        ],
+        "look": [
+          1.2,
+          1.0,
+          -0.3
+        ]
+      }
+    },
+    {
+      "id": "R07",
+      "scene": "courtyard",
+      "size": "MCU",
+      "who": [
+        "D"
+      ],
+      "action": "{D} leans out and calls across, loudly.",
+      "line": "b5-4 Deluin: You're welcome to come too, Bai!",
+      "look": "R",
+      "dur_s": 2,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              0,
+              -0.95
+            ],
+            "face": "S",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          0.620435691685912,
+          1.3246000000000002,
+          0.0775073874370249
+        ],
+        "look": [
+          0,
+          1.1046000000000002,
+          -0.95
+        ]
+      }
+    },
+    {
+      "id": "R08",
+      "scene": "courtyard",
+      "size": "MS",
+      "who": [
+        "B"
+      ],
+      "action": "{B} makes a big show of pulling one side of her headphones off; loud music blares.",
+      "line": "b5-5 Bai: What?!!",
+      "look": "L",
+      "dur_s": 2,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "B": {
+            "at": [
+              3.3,
+              1.35
+            ],
+            "face": "N",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          1.3497614145265855,
+          1.2544,
+          0.9044139805626972
+        ],
+        "look": [
+          3.3,
+          0.9343999999999999,
+          1.35
+        ]
+      }
+    },
+    {
+      "id": "R09",
+      "scene": "courtyard",
+      "size": "CU",
+      "who": [
+        "B"
+      ],
+      "action": "{B} points at the headphones, then pops them back on, playing it off as if she can't hear them.",
+      "line": "b5-5 Bai: Dreadnaught!! It's good! You should check it out.",
+      "look": "L",
+      "dur_s": 4,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "B": {
+            "at": [
+              3.3,
+              1.35
+            ],
+            "face": "N",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          2.399889883627655,
+          1.2544,
+          1.1443449141058601
+        ],
+        "look": [
+          3.3,
+          1.1343999999999999,
+          1.35
+        ]
+      }
+    },
+    {
+      "id": "R10",
+      "scene": "courtyard",
+      "size": "WS side two-shot",
+      "who": [
+        "Z",
+        "D"
+      ],
+      "action": "{Z} and {D} exchange an amused look.",
+      "line": null,
+      "look": "-",
+      "dur_s": 2,
+      "purpose": "",
+      "optional": true,
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              1.5,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          },
+          "D": {
+            "at": [
+              0,
+              -0.95
+            ],
+            "face": "S",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          -2.378769865405589,
+          1.5156,
+          4.465162945377246
+        ],
+        "look": [
+          0.75,
+          1.0156,
+          -0.475
+        ]
+      }
+    },
+    {
+      "id": "D01",
+      "scene": "gate",
+      "size": "WS establishing",
+      "who": [
+        "D",
+        "Z"
+      ],
+      "action": "The courtyard's street gate at dusk, lamps coming on; {D} and {Z} walk to it.",
+      "line": null,
+      "look": "-",
+      "dur_s": 3,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              6.5,
+              -8.0
+            ],
+            "face": "S",
+            "pose": "standing"
+          },
+          "Z": {
+            "at": [
+              6.5,
+              -6.2
+            ],
+            "face": "N",
+            "pose": "standing"
+          }
+        },
+        "fov": 42,
+        "cam": [
+          2.0,
+          1.6,
+          -3.4
+        ],
+        "look": [
+          6.5,
+          1.4,
+          -8.0
+        ],
+        "plate": "plate-courtyard-G"
+      }
+    },
+    {
+      "id": "D02",
+      "scene": "gate",
+      "size": "CU",
+      "who": [
+        "D"
+      ],
+      "action": "{D} at the gate, on the street side, turns back to Zei.",
+      "line": "b6-1 Deluin: Dze go ba fau gie",
+      "look": "R",
+      "dur_s": 3,
+      "purpose": "The contestants' chant (c12-b93).",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              6.5,
+              -8.0
+            ],
+            "face": "S",
+            "pose": "standing"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          6.124457998891905,
+          1.8176,
+          -7.15651885536564
+        ],
+        "look": [
+          6.5,
+          1.6976,
+          -8.0
+        ]
+      }
+    },
+    {
+      "id": "D03",
+      "scene": "gate",
+      "size": "MS",
+      "who": [
+        "D"
+      ],
+      "action": "{D} holds up both open hands, ten fingers, then lowers one hand: five. One clear gesture: fifteen.",
+      "line": null,
+      "look": "R",
+      "dur_s": 3,
+      "purpose": "Fifteen: the days to the final (c14-b32).",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              6.5,
+              -8.0
+            ],
+            "face": "S",
+            "pose": "standing"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          5.6863256642657936,
+          1.8176,
+          -6.172457519958887
+        ],
+        "look": [
+          6.5,
+          1.4976,
+          -8.0
+        ]
+      }
+    },
+    {
+      "id": "D04",
+      "scene": "gate",
+      "size": "MS",
+      "who": [
+        "Z"
+      ],
+      "action": "{Z} mirrors it, grinning: ten fingers, then five.",
+      "line": null,
+      "look": "L",
+      "dur_s": 3,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              6.5,
+              -6.2
+            ],
+            "face": "N",
+            "pose": "standing"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          5.6863256642657936,
+          1.6496,
+          -8.027542480041113
+        ],
+        "look": [
+          6.5,
+          1.3296,
+          -6.2
+        ]
+      }
+    },
+    {
+      "id": "D05",
+      "scene": "gate",
+      "size": "WS",
+      "who": [
+        "D",
+        "Z"
+      ],
+      "action": "{D} walks out under the lamps into the street, back to us; {Z} small at the gate.",
+      "line": null,
+      "look": "-",
+      "dur_s": 3,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              3.0,
+              -9.6
+            ],
+            "face": "W",
+            "pose": "standing"
+          },
+          "Z": {
+            "at": [
+              6.5,
+              -6.2
+            ],
+            "face": "N",
+            "pose": "standing"
+          }
+        },
+        "fov": 42,
+        "cam": [
+          2.0,
+          1.6,
+          -3.4
+        ],
+        "look": [
+          6.5,
+          1.4,
+          -8.0
+        ],
+        "plate": "plate-courtyard-G"
+      }
+    },
+    {
+      "id": "D06",
+      "scene": "gate",
+      "size": "EWS",
+      "who": [
+        "D"
+      ],
+      "action": "{D}, small and alone in the long street, stops under a lamp and takes out his small device.",
+      "line": null,
+      "look": "-",
+      "dur_s": 2,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              3.0,
+              -9.6
+            ],
+            "face": "W",
+            "pose": "standing"
+          }
+        },
+        "fov": 42,
+        "cam": [
+          8.6,
+          1.6,
+          -10.4
+        ],
+        "look": [
+          2.5,
+          1.4,
+          -9.4
+        ],
+        "plate": "plate-courtyard-S"
+      }
+    },
+    {
+      "id": "D07",
+      "scene": "gate",
+      "size": "ECU",
+      "who": [
+        "D"
+      ],
+      "action": "{D}'s face lit by the screen, hesitating.",
+      "line": null,
+      "look": "down",
+      "dur_s": 3,
+      "purpose": "",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              3.0,
+              -9.6
+            ],
+            "face": "W",
+            "pose": "standing"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          2.531671842700025,
+          1.9176000000000002,
+          -9.447830957392775
+        ],
+        "look": [
+          3.0,
+          1.7976,
+          -9.6
+        ]
+      }
+    },
+    {
+      "id": "D08",
+      "scene": "gate",
+      "size": "INSERT",
+      "who": [
+        "D"
+      ],
+      "action": "His thumbs hover over the device, its screen turned away from us, then press: sent.",
+      "line": null,
+      "look": "-",
+      "dur_s": 3,
+      "purpose": "The message is never shown.",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "D": {
+            "at": [
+              3.0,
+              -9.6
+            ],
+            "face": "W",
+            "pose": "standing"
+          }
+        },
+        "fov": 44,
+        "cam": [
+          2.653815276338717,
+          1.5499999999999998,
+          -9.498272427856541
+        ],
+        "look": [
+          2.75,
+          1.15,
+          -9.6
+        ]
+      }
+    },
+    {
+      "id": "D09",
+      "scene": "courtyard",
+      "size": "EWS, high",
+      "who": [
+        "Z",
+        "B"
+      ],
+      "action": "At dusk, {Z} walks back across the emptying courtyard toward {B}'s small table; she sits alone, headphones on.",
+      "line": null,
+      "look": "-",
+      "dur_s": 5,
+      "purpose": "On-screen line (after c19-b124).",
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              1.8,
+              -1.2
+            ],
+            "face": "SE",
+            "pose": "standing"
+          },
+          "B": {
+            "at": [
+              3.3,
+              1.35
+            ],
+            "face": "N",
+            "pose": "seated"
+          }
+        },
+        "fov": 46,
+        "cam": [
+          -5.5,
+          4.6,
+          5.0
+        ],
+        "look": [
+          2.0,
+          0.4,
+          0
+        ]
+      }
+    },
+    {
+      "id": "D10",
+      "scene": "courtyard",
+      "size": "MS",
+      "who": [
+        "B"
+      ],
+      "action": "{B} looks up as he arrives.",
+      "line": null,
+      "look": "L",
+      "dur_s": 2,
+      "purpose": "",
+      "optional": true,
+      "set": "courtyard",
+      "camera": {
+        "people": {
+          "B": {
+            "at": [
+              3.3,
+              1.35
+            ],
+            "face": "N",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          1.6720654305044935,
+          1.2544,
+          0.18732787148362262
+        ],
+        "look": [
+          3.3,
+          0.9343999999999999,
+          1.35
+        ]
+      }
+    },
+    {
+      "id": "L01",
+      "scene": "lobby",
+      "size": "WS establishing",
+      "who": [
+        "Z",
+        "R"
+      ],
+      "action": "The hotel lobby restaurant late at night, nearly empty; {Z} alone at a table by the tall windows; {R} by the counter.",
+      "line": null,
+      "look": "-",
+      "dur_s": 4,
+      "purpose": "Place on screen (c15-b48).",
+      "set": "lobby",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              -3.35,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          },
+          "R": {
+            "at": [
+              4.4,
+              0.6
+            ],
+            "face": "W",
+            "pose": "robot"
+          }
+        },
+        "fov": 46,
+        "cam": [
+          1.5,
+          1.5,
+          3.8
+        ],
+        "look": [
+          -4.6,
+          1.0,
+          -0.4
+        ],
+        "plate": "plate-lobby-I"
+      }
+    },
+    {
+      "id": "L01b",
+      "scene": "lobby",
+      "size": "WS, from the street outside, through the tall window",
+      "who": [
+        "Z"
+      ],
+      "action": "From the dark street outside, through the tall window: {Z} alone at his table in the warm, empty lobby restaurant, small, head down over his device.",
+      "line": null,
+      "look": "-",
+      "dur_s": 4,
+      "purpose": "Seen from outside: alone (owner's note).",
+      "set": "lobby",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              -3.35,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          }
+        },
+        "fov": 40,
+        "cam": [
+          -10.5,
+          1.6,
+          2.0
+        ],
+        "look": [
+          -4.0,
+          1.0,
+          0
+        ],
+        "plate": "plate-lobby-O"
+      }
+    },
+    {
+      "id": "L02",
+      "scene": "lobby",
+      "size": "CU",
+      "who": [
+        "Z"
+      ],
+      "action": "{Z}, distraught, tapping his device again; an untouched bowl of rice and vegetables and a tea cup in front of him.",
+      "line": null,
+      "look": "down",
+      "dur_s": 3,
+      "purpose": "",
+      "set": "lobby",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              -3.35,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          -4.228115294937453,
+          1.5466,
+          0.2853169548885461
+        ],
+        "look": [
+          -3.35,
+          1.1265999999999998,
+          0
+        ]
+      }
+    },
+    {
+      "id": "L03",
+      "scene": "lobby",
+      "size": "INSERT",
+      "who": [],
+      "action": "His device's screen: his fifth message.",
+      "line": null,
+      "look": "-",
+      "dur_s": 3,
+      "purpose": "",
+      "composite": "c15-b50",
+      "set": "lobby",
+      "camera": null
+    },
+    {
+      "id": "L04",
+      "scene": "lobby",
+      "size": "MS",
+      "who": [
+        "R",
+        "Z"
+      ],
+      "action": "{R} refills his tea; he doesn't look up.",
+      "line": null,
+      "look": "-",
+      "dur_s": 3,
+      "purpose": "Refilled four times (c15-b51).",
+      "set": "lobby",
+      "camera": {
+        "people": {
+          "R": {
+            "at": [
+              -3.6,
+              -0.95
+            ],
+            "face": "S",
+            "pose": "robot"
+          },
+          "Z": {
+            "at": [
+              -3.35,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          -1.3160229291000314,
+          1.5633,
+          -1.0431518607631496
+        ],
+        "look": [
+          -3.475,
+          1.0633,
+          -0.475
+        ]
+      }
+    },
+    {
+      "id": "L05",
+      "scene": "lobby",
+      "size": "MS",
+      "who": [
+        "B",
+        "Z"
+      ],
+      "action": "{B} sits down across from him, without a word.",
+      "line": null,
+      "look": "R",
+      "dur_s": 3,
+      "purpose": "",
+      "set": "lobby",
+      "camera": {
+        "people": {
+          "B": {
+            "at": [
+              -4.65,
+              0
+            ],
+            "face": "E",
+            "pose": "seated"
+          },
+          "Z": {
+            "at": [
+              -3.35,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          -4.0,
+          1.4805,
+          2.5071017578113026
+        ],
+        "look": [
+          -4.0,
+          0.9804999999999999,
+          0.0
+        ]
+      }
+    },
+    {
+      "id": "L06",
+      "scene": "lobby",
+      "size": "ECU",
+      "who": [
+        "Z"
+      ],
+      "action": "{Z}'s eyes lift to her.",
+      "line": null,
+      "look": "L",
+      "dur_s": 2,
+      "purpose": "",
+      "set": "lobby",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              -3.35,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          -3.831668602832945,
+          1.2466,
+          0.10238182208257429
+        ],
+        "look": [
+          -3.35,
+          1.2266,
+          0
+        ]
+      }
+    },
+    {
+      "id": "L07",
+      "scene": "lobby",
+      "size": "INSERT",
+      "who": [],
+      "action": "The device lights up: the reply.",
+      "line": null,
+      "look": "-",
+      "dur_s": 4,
+      "purpose": "The reply chime.",
+      "composite": "c15-b53",
+      "set": "lobby",
+      "camera": null
+    },
+    {
+      "id": "L08",
+      "scene": "lobby",
+      "size": "CU",
+      "who": [
+        "Z"
+      ],
+      "action": "{Z} breathes out, eyes closing.",
+      "line": null,
+      "look": "down",
+      "dur_s": 3,
+      "purpose": "",
+      "set": "lobby",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              -3.35,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          -4.228115294937453,
+          1.2466,
+          0.2853169548885461
+        ],
+        "look": [
+          -3.35,
+          1.1265999999999998,
+          0
+        ]
+      }
+    },
+    {
+      "id": "L09",
+      "scene": "lobby",
+      "size": "INSERT",
+      "who": [],
+      "action": "The next message.",
+      "line": null,
+      "look": "-",
+      "dur_s": 3,
+      "purpose": "",
+      "composite": "c15-b55",
+      "set": "lobby",
+      "camera": null
+    },
+    {
+      "id": "L10",
+      "scene": "lobby",
+      "size": "OTS from behind Zei",
+      "who": [
+        "Z",
+        "B"
+      ],
+      "action": "Over {Z}'s shoulder: he turns the screen to {B}.",
+      "line": null,
+      "look": "R",
+      "dur_s": 2,
+      "purpose": "",
+      "set": "lobby",
+      "camera": {
+        "people": {
+          "Z": {
+            "at": [
+              -3.35,
+              0
+            ],
+            "face": "W",
+            "pose": "seated"
+          },
+          "B": {
+            "at": [
+              -4.65,
+              0
+            ],
+            "face": "E",
+            "pose": "seated"
+          }
+        },
+        "fov": 38,
+        "cam": [
+          -2.75,
+          1.3466,
+          0.35
+        ],
+        "look": [
+          -4.65,
+          1.0844,
+          0
+        ]
+      }
+    },
+    {
+      "id": "L11",
+      "scene": "lobby",
+      "size": "ECU",
+      "who": [
+        "B"
+      ],
+      "action": "{B}'s eyes reading the screen; her face unreadable.",
+      "line": null,
+      "look": "R",
+      "dur_s": 4,
+      "purpose": "Cut on her face.",
+      "set": "lobby",
+      "camera": {
+        "people": {
+          "B": {
+            "at": [
+              -4.65,
+              0
+            ],
+            "face": "E",
+            "pose": "seated"
+          }
+        },
+        "fov": 36,
+        "cam": [
+          -4.168331397167055,
+          1.2544,
+          0.10238182208257429
+        ],
+        "look": [
+          -4.65,
+          1.2344,
+          0
+        ]
+      }
+    }
+  ]
+}
