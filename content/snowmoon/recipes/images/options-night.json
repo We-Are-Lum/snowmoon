@@ -1,0 +1,679 @@
+{
+  "job_file": "adaptations/fifteen-days/options-night.json",
+  "generated_at": "2026-10-16T07:52:34+00:00",
+  "model": {
+    "repo": "black-forest-labs/FLUX.2-klein-4B",
+    "revision": "e7b7dc27f91deacad38e78976d1f2b499d76a294",
+    "license": "apache-2.0",
+    "runtime": "mflux",
+    "mflux_version": "0.20.0",
+    "quantize_bits": 4
+  },
+  "settings": {
+    "steps": 4,
+    "guidance": 1.0
+  },
+  "cost_usd": 0,
+  "host": {
+    "platform": "macOS-26.5.1-arm64-arm-64bit",
+    "machine": "arm64"
+  },
+  "model_load_seconds": 0.6,
+  "images": [
+    {
+      "id": "s28-o1",
+      "chapter": null,
+      "idx": null,
+      "file": "s28-o1.png",
+      "sha256": "efe90bd35b364a4a0aba5c06e54cde71311d32b2282216d9accbf23cd56f49be",
+      "prompt": "Over-the-shoulder two-shot: in the foreground, seen from behind and a little out of focus, the spiky-haired young man sits at a cafe table; at the next table the young woman sits with big headphones on her ears and glances back over her shoulder at him. Medium shot. Exactly two main people: reference image 1 is the young woman (a magenta ponytail and a lime-green vest); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7281,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "bai.png",
+          "sha256": "255dbc865840cffbee3fb36707082b14676f7425d1419bb1f44d3af483db3eac"
+        },
+        {
+          "file": "zei.png",
+          "sha256": "ec4afe4e6f5ea930de23700219665316ceb0defd705c6c53aa45f7360db94e20"
+        }
+      ],
+      "generation_seconds": 167.9
+    },
+    {
+      "id": "s28-o2",
+      "chapter": null,
+      "idx": null,
+      "file": "s28-o2.png",
+      "sha256": "ec1c85ed67324e767d6d410d346190f429accd7161599f4c26706edafd6ee9ac",
+      "prompt": "Over-the-shoulder two-shot: in the foreground, seen from behind and a little out of focus, the spiky-haired young man sits at a cafe table; at the next table the young woman sits with big headphones on her ears and glances back over her shoulder at him. Medium shot. Exactly two main people: reference image 1 is the young woman (a magenta ponytail and a lime-green vest); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7282,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "bai.png",
+          "sha256": "255dbc865840cffbee3fb36707082b14676f7425d1419bb1f44d3af483db3eac"
+        },
+        {
+          "file": "zei.png",
+          "sha256": "ec4afe4e6f5ea930de23700219665316ceb0defd705c6c53aa45f7360db94e20"
+        }
+      ],
+      "generation_seconds": 190.9
+    },
+    {
+      "id": "s28-o3",
+      "chapter": null,
+      "idx": null,
+      "file": "s28-o3.png",
+      "sha256": "0cc3e6bed4bf3e4dc5ffa4b4fc52089ee626c862ec796bac1e427e1f85342965",
+      "prompt": "Over-the-shoulder two-shot: in the foreground, seen from behind and a little out of focus, the spiky-haired young man sits at a cafe table; at the next table the young woman sits with big headphones on her ears and glances back over her shoulder at him. Medium shot. Exactly two main people: reference image 1 is the young woman (a magenta ponytail and a lime-green vest); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7283,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "bai.png",
+          "sha256": "255dbc865840cffbee3fb36707082b14676f7425d1419bb1f44d3af483db3eac"
+        },
+        {
+          "file": "zei.png",
+          "sha256": "ec4afe4e6f5ea930de23700219665316ceb0defd705c6c53aa45f7360db94e20"
+        }
+      ],
+      "generation_seconds": 187.2
+    },
+    {
+      "id": "s28-o4",
+      "chapter": null,
+      "idx": null,
+      "file": "s28-o4.png",
+      "sha256": "c120739bb08eaf21d7035897e51ea7940ef3363ebc3e33a48755d980091cc325",
+      "prompt": "Over-the-shoulder two-shot: in the foreground, seen from behind and a little out of focus, the spiky-haired young man sits at a cafe table; at the next table the young woman sits with big headphones on her ears and glances back over her shoulder at him. Medium shot. Exactly two main people: reference image 1 is the young woman (a magenta ponytail and a lime-green vest); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7284,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "bai.png",
+          "sha256": "255dbc865840cffbee3fb36707082b14676f7425d1419bb1f44d3af483db3eac"
+        },
+        {
+          "file": "zei.png",
+          "sha256": "ec4afe4e6f5ea930de23700219665316ceb0defd705c6c53aa45f7360db94e20"
+        }
+      ],
+      "generation_seconds": 184.0
+    },
+    {
+      "id": "s05-o1",
+      "chapter": null,
+      "idx": null,
+      "file": "s05-o1.png",
+      "sha256": "c28b18d596195d5e0a66e4e78d9e9fac82a696844e6a2a58e664434a88f3436b",
+      "prompt": "Seated on the low stone bench, the young woman leans sideways mid-motion and spits something into a small bin beside her, nonchalant, her eyes still on the wall screen. Medium shot from a low angle. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7051,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "bai.png",
+          "sha256": "255dbc865840cffbee3fb36707082b14676f7425d1419bb1f44d3af483db3eac"
+        }
+      ],
+      "generation_seconds": 170.9
+    },
+    {
+      "id": "s05-o2",
+      "chapter": null,
+      "idx": null,
+      "file": "s05-o2.png",
+      "sha256": "e9ed33c9a14cc0d17f3b0f476d9d78a5aa9f66b448aa69eb97940003705b76e1",
+      "prompt": "Seated on the low stone bench, the young woman leans sideways mid-motion and spits something into a small bin beside her, nonchalant, her eyes still on the wall screen. Medium shot from a low angle. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7052,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "bai.png",
+          "sha256": "255dbc865840cffbee3fb36707082b14676f7425d1419bb1f44d3af483db3eac"
+        }
+      ],
+      "generation_seconds": 182.0
+    },
+    {
+      "id": "s05-o3",
+      "chapter": null,
+      "idx": null,
+      "file": "s05-o3.png",
+      "sha256": "4c46183ac7e812083e20676b7509fb02906af91b2158ef952e791024a0fa08bc",
+      "prompt": "Seated on the low stone bench, the young woman leans sideways mid-motion and spits something into a small bin beside her, nonchalant, her eyes still on the wall screen. Medium shot from a low angle. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7053,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "bai.png",
+          "sha256": "255dbc865840cffbee3fb36707082b14676f7425d1419bb1f44d3af483db3eac"
+        }
+      ],
+      "generation_seconds": 187.6
+    },
+    {
+      "id": "s05-o4",
+      "chapter": null,
+      "idx": null,
+      "file": "s05-o4.png",
+      "sha256": "9bc00d1927b552434046bf73825a9809251888b160ac4f6d1ab153e4a31842b2",
+      "prompt": "Seated on the low stone bench, the young woman leans sideways mid-motion and spits something into a small bin beside her, nonchalant, her eyes still on the wall screen. Medium shot from a low angle. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7054,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "bai.png",
+          "sha256": "255dbc865840cffbee3fb36707082b14676f7425d1419bb1f44d3af483db3eac"
+        }
+      ],
+      "generation_seconds": 184.9
+    },
+    {
+      "id": "s14-o1",
+      "chapter": null,
+      "idx": null,
+      "file": "s14-o1.png",
+      "sha256": "d203814f22f2fd47e7d8976b7918b907b8f5935dfd90a73d8922f2d3d794c123",
+      "prompt": "Both seated at a small cafe table: the tall pale young man half turns in his chair, one arm raised mid-wave, calling someone over with a big smile; beside him the young woman is still laughing, a hand over her mouth. Medium two-shot. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7141,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin.png",
+          "sha256": "c484ca77c27d663829c614ff2f5d8964a585133e7d938f9bdd99646f14c1d207"
+        },
+        {
+          "file": "bai.png",
+          "sha256": "255dbc865840cffbee3fb36707082b14676f7425d1419bb1f44d3af483db3eac"
+        }
+      ],
+      "generation_seconds": 187.4
+    },
+    {
+      "id": "s14-o2",
+      "chapter": null,
+      "idx": null,
+      "file": "s14-o2.png",
+      "sha256": "44d2485b3f9a9b04a1d1cd549e3ca9584700fab899d4bbad1f9c8101aa24a041",
+      "prompt": "Both seated at a small cafe table: the tall pale young man half turns in his chair, one arm raised mid-wave, calling someone over with a big smile; beside him the young woman is still laughing, a hand over her mouth. Medium two-shot. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7142,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin.png",
+          "sha256": "c484ca77c27d663829c614ff2f5d8964a585133e7d938f9bdd99646f14c1d207"
+        },
+        {
+          "file": "bai.png",
+          "sha256": "255dbc865840cffbee3fb36707082b14676f7425d1419bb1f44d3af483db3eac"
+        }
+      ],
+      "generation_seconds": 188.4
+    },
+    {
+      "id": "s14-o3",
+      "chapter": null,
+      "idx": null,
+      "file": "s14-o3.png",
+      "sha256": "da66f8cb3c3bf6e4d6f1488a5bfb20445f54ce7bb629f037b422454783c4a760",
+      "prompt": "Both seated at a small cafe table: the tall pale young man half turns in his chair, one arm raised mid-wave, calling someone over with a big smile; beside him the young woman is still laughing, a hand over her mouth. Medium two-shot. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7143,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin.png",
+          "sha256": "c484ca77c27d663829c614ff2f5d8964a585133e7d938f9bdd99646f14c1d207"
+        },
+        {
+          "file": "bai.png",
+          "sha256": "255dbc865840cffbee3fb36707082b14676f7425d1419bb1f44d3af483db3eac"
+        }
+      ],
+      "generation_seconds": 197.5
+    },
+    {
+      "id": "s14-o4",
+      "chapter": null,
+      "idx": null,
+      "file": "s14-o4.png",
+      "sha256": "0718b18d5c6912bb31ea17556d3d6a7b1d6b0077b6dc5649890c9eadff69daef",
+      "prompt": "Both seated at a small cafe table: the tall pale young man half turns in his chair, one arm raised mid-wave, calling someone over with a big smile; beside him the young woman is still laughing, a hand over her mouth. Medium two-shot. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7144,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin.png",
+          "sha256": "c484ca77c27d663829c614ff2f5d8964a585133e7d938f9bdd99646f14c1d207"
+        },
+        {
+          "file": "bai.png",
+          "sha256": "255dbc865840cffbee3fb36707082b14676f7425d1419bb1f44d3af483db3eac"
+        }
+      ],
+      "generation_seconds": 186.4
+    },
+    {
+      "id": "s20-o1",
+      "chapter": null,
+      "idx": null,
+      "file": "s20-o1.png",
+      "sha256": "b1f3d982155c66e0da84654895289d173a7e45f6a60d5bb83e9c6e9023413d20",
+      "prompt": "Seated at a cafe table, the young woman pulls big headphones over her ears with both hands, a small handheld device on the table in front of her, her back half turned to the table behind. Medium shot from the side. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7201,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "bai.png",
+          "sha256": "255dbc865840cffbee3fb36707082b14676f7425d1419bb1f44d3af483db3eac"
+        }
+      ],
+      "generation_seconds": 171.2
+    },
+    {
+      "id": "s20-o2",
+      "chapter": null,
+      "idx": null,
+      "file": "s20-o2.png",
+      "sha256": "e72a0045e64903c030f2acf230d1c370c6b880863a5180790dddf792bc35d941",
+      "prompt": "Seated at a cafe table, the young woman pulls big headphones over her ears with both hands, a small handheld device on the table in front of her, her back half turned to the table behind. Medium shot from the side. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7202,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "bai.png",
+          "sha256": "255dbc865840cffbee3fb36707082b14676f7425d1419bb1f44d3af483db3eac"
+        }
+      ],
+      "generation_seconds": 174.8
+    },
+    {
+      "id": "s20-o3",
+      "chapter": null,
+      "idx": null,
+      "file": "s20-o3.png",
+      "sha256": "b37707e2da87165fdc800ff8bee385b32882c46fecd6b94887d0efc6a98ba5fe",
+      "prompt": "Seated at a cafe table, the young woman pulls big headphones over her ears with both hands, a small handheld device on the table in front of her, her back half turned to the table behind. Medium shot from the side. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7203,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "bai.png",
+          "sha256": "255dbc865840cffbee3fb36707082b14676f7425d1419bb1f44d3af483db3eac"
+        }
+      ],
+      "generation_seconds": 168.2
+    },
+    {
+      "id": "s20-o4",
+      "chapter": null,
+      "idx": null,
+      "file": "s20-o4.png",
+      "sha256": "21cc2f982082cf48814d800d005b2b08265eec6ebf11919e13aa6f27e9c4ac80",
+      "prompt": "Seated at a cafe table, the young woman pulls big headphones over her ears with both hands, a small handheld device on the table in front of her, her back half turned to the table behind. Medium shot from the side. Exactly one main person: reference image 1 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7204,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "bai.png",
+          "sha256": "255dbc865840cffbee3fb36707082b14676f7425d1419bb1f44d3af483db3eac"
+        }
+      ],
+      "generation_seconds": 172.3
+    },
+    {
+      "id": "s26-o1",
+      "chapter": null,
+      "idx": null,
+      "file": "s26-o1.png",
+      "sha256": "25263d1fa89b8e4115bd0862cee9b6db004fa61eb4f10ddf24d6123cf8364473",
+      "prompt": "Over-the-shoulder shot across a small cafe table: the tall pale young man, seated, leans forward on his elbows, eager and inviting; in the foreground the spiky-haired young man, seated, seen from behind his shoulder, listens. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7261,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin.png",
+          "sha256": "c484ca77c27d663829c614ff2f5d8964a585133e7d938f9bdd99646f14c1d207"
+        },
+        {
+          "file": "zei.png",
+          "sha256": "ec4afe4e6f5ea930de23700219665316ceb0defd705c6c53aa45f7360db94e20"
+        }
+      ],
+      "generation_seconds": 181.2
+    },
+    {
+      "id": "s26-o2",
+      "chapter": null,
+      "idx": null,
+      "file": "s26-o2.png",
+      "sha256": "b3bf4792676976b75373df0bd32fa50e75eb8dfe675206f925482c6dc35a3636",
+      "prompt": "Over-the-shoulder shot across a small cafe table: the tall pale young man, seated, leans forward on his elbows, eager and inviting; in the foreground the spiky-haired young man, seated, seen from behind his shoulder, listens. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7262,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin.png",
+          "sha256": "c484ca77c27d663829c614ff2f5d8964a585133e7d938f9bdd99646f14c1d207"
+        },
+        {
+          "file": "zei.png",
+          "sha256": "ec4afe4e6f5ea930de23700219665316ceb0defd705c6c53aa45f7360db94e20"
+        }
+      ],
+      "generation_seconds": 188.0
+    },
+    {
+      "id": "s26-o3",
+      "chapter": null,
+      "idx": null,
+      "file": "s26-o3.png",
+      "sha256": "a41a1ab1ccc7b10d97817155b4a2318bc377af2598004186aba52a7345bf3ef0",
+      "prompt": "Over-the-shoulder shot across a small cafe table: the tall pale young man, seated, leans forward on his elbows, eager and inviting; in the foreground the spiky-haired young man, seated, seen from behind his shoulder, listens. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7263,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin.png",
+          "sha256": "c484ca77c27d663829c614ff2f5d8964a585133e7d938f9bdd99646f14c1d207"
+        },
+        {
+          "file": "zei.png",
+          "sha256": "ec4afe4e6f5ea930de23700219665316ceb0defd705c6c53aa45f7360db94e20"
+        }
+      ],
+      "generation_seconds": 186.7
+    },
+    {
+      "id": "s26-o4",
+      "chapter": null,
+      "idx": null,
+      "file": "s26-o4.png",
+      "sha256": "14116d5635446b48089d3c3c1b5b64f164ddd7cfefa04e8ce5cf412fd5e30111",
+      "prompt": "Over-the-shoulder shot across a small cafe table: the tall pale young man, seated, leans forward on his elbows, eager and inviting; in the foreground the spiky-haired young man, seated, seen from behind his shoulder, listens. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); reference image 2 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7264,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin.png",
+          "sha256": "c484ca77c27d663829c614ff2f5d8964a585133e7d938f9bdd99646f14c1d207"
+        },
+        {
+          "file": "zei.png",
+          "sha256": "ec4afe4e6f5ea930de23700219665316ceb0defd705c6c53aa45f7360db94e20"
+        }
+      ],
+      "generation_seconds": 203.4
+    },
+    {
+      "id": "s27-o1",
+      "chapter": null,
+      "idx": null,
+      "file": "s27-o1.png",
+      "sha256": "b3fd9801384132a9d045f94d189b8322ab2180d2a825846e7b69f3fc485eb7f7",
+      "prompt": "Seated at the cafe table, the spiky-haired young man laughs and turns his wrist to glance at the watch on it. Medium close-up. Exactly one main person: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7271,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei.png",
+          "sha256": "ec4afe4e6f5ea930de23700219665316ceb0defd705c6c53aa45f7360db94e20"
+        }
+      ],
+      "generation_seconds": 174.9
+    },
+    {
+      "id": "s27-o2",
+      "chapter": null,
+      "idx": null,
+      "file": "s27-o2.png",
+      "sha256": "3d5f70b6ae6cb468ab89d5243818ab074dcd3e3d6da1a4730594ea1156147b87",
+      "prompt": "Seated at the cafe table, the spiky-haired young man laughs and turns his wrist to glance at the watch on it. Medium close-up. Exactly one main person: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7272,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei.png",
+          "sha256": "ec4afe4e6f5ea930de23700219665316ceb0defd705c6c53aa45f7360db94e20"
+        }
+      ],
+      "generation_seconds": 178.9
+    },
+    {
+      "id": "s27-o3",
+      "chapter": null,
+      "idx": null,
+      "file": "s27-o3.png",
+      "sha256": "1c10c866786dfefba7272f86fae80c3b42f57284b8abea56e6c11aeea03b224a",
+      "prompt": "Seated at the cafe table, the spiky-haired young man laughs and turns his wrist to glance at the watch on it. Medium close-up. Exactly one main person: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7273,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei.png",
+          "sha256": "ec4afe4e6f5ea930de23700219665316ceb0defd705c6c53aa45f7360db94e20"
+        }
+      ],
+      "generation_seconds": 176.4
+    },
+    {
+      "id": "s27-o4",
+      "chapter": null,
+      "idx": null,
+      "file": "s27-o4.png",
+      "sha256": "f5f670858538b631283f01c3e0aea2f4b8b54800155b12237fb4fe555bc1a85f",
+      "prompt": "Seated at the cafe table, the spiky-haired young man laughs and turns his wrist to glance at the watch on it. Medium close-up. Exactly one main person: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people. The place: a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7274,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei.png",
+          "sha256": "ec4afe4e6f5ea930de23700219665316ceb0defd705c6c53aa45f7360db94e20"
+        }
+      ],
+      "generation_seconds": 174.5
+    },
+    {
+      "id": "s01-o1",
+      "chapter": null,
+      "idx": null,
+      "file": "s01-o1.png",
+      "sha256": "0d5bbce746b90b6aa80367ff8470261969a2a1c5209a7f2d85fa531e30811dfe",
+      "prompt": "Wide shot of the vast game hall, its dark tiers packed with a crowd of small, plainly dressed spectators. In the middle of the floor two game stations face each other across a glowing board: the tall pale young man sits at one, calm and cool, seen from behind and to one side; across the board, facing him, sits his opponent, a young man in plain dark clothes, sweating. Overhead the enormous display shows a ring of luminous walls holding against streams of small glowing gliders. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, an enormous glowing display hung overhead showing the game as a dark field of tiny glowing dots, walls and gliders, hand-sized drones hovering, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7011,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin.png",
+          "sha256": "c484ca77c27d663829c614ff2f5d8964a585133e7d938f9bdd99646f14c1d207"
+        }
+      ],
+      "generation_seconds": 164.5
+    },
+    {
+      "id": "s01-o2",
+      "chapter": null,
+      "idx": null,
+      "file": "s01-o2.png",
+      "sha256": "34c84421c3b92c04778ffc860928efcf5256804dbe19cace6e9b4c24940a3d70",
+      "prompt": "Wide shot of the vast game hall, its dark tiers packed with a crowd of small, plainly dressed spectators. In the middle of the floor two game stations face each other across a glowing board: the tall pale young man sits at one, calm and cool, seen from behind and to one side; across the board, facing him, sits his opponent, a young man in plain dark clothes, sweating. Overhead the enormous display shows a ring of luminous walls holding against streams of small glowing gliders. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, an enormous glowing display hung overhead showing the game as a dark field of tiny glowing dots, walls and gliders, hand-sized drones hovering, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7012,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin.png",
+          "sha256": "c484ca77c27d663829c614ff2f5d8964a585133e7d938f9bdd99646f14c1d207"
+        }
+      ],
+      "generation_seconds": 159.8
+    },
+    {
+      "id": "s01-o3",
+      "chapter": null,
+      "idx": null,
+      "file": "s01-o3.png",
+      "sha256": "7cfe94dfa75313fe5a7c47a047afbae088a7f4d6e83ef8a2c44fbbb80d9c04cd",
+      "prompt": "Wide shot of the vast game hall, its dark tiers packed with a crowd of small, plainly dressed spectators. In the middle of the floor two game stations face each other across a glowing board: the tall pale young man sits at one, calm and cool, seen from behind and to one side; across the board, facing him, sits his opponent, a young man in plain dark clothes, sweating. Overhead the enormous display shows a ring of luminous walls holding against streams of small glowing gliders. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, an enormous glowing display hung overhead showing the game as a dark field of tiny glowing dots, walls and gliders, hand-sized drones hovering, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7013,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin.png",
+          "sha256": "c484ca77c27d663829c614ff2f5d8964a585133e7d938f9bdd99646f14c1d207"
+        }
+      ],
+      "generation_seconds": 175.2
+    },
+    {
+      "id": "s01-o4",
+      "chapter": null,
+      "idx": null,
+      "file": "s01-o4.png",
+      "sha256": "c50a19c054abacc5fcaf434f83ad6900ee1e80fe1b04c6921ae9cdca1d78dc5a",
+      "prompt": "Wide shot of the vast game hall, its dark tiers packed with a crowd of small, plainly dressed spectators. In the middle of the floor two game stations face each other across a glowing board: the tall pale young man sits at one, calm and cool, seen from behind and to one side; across the board, facing him, sits his opponent, a young man in plain dark clothes, sweating. Overhead the enormous display shows a ring of luminous walls holding against streams of small glowing gliders. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, an enormous glowing display hung overhead showing the game as a dark field of tiny glowing dots, walls and gliders, hand-sized drones hovering, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7014,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin.png",
+          "sha256": "c484ca77c27d663829c614ff2f5d8964a585133e7d938f9bdd99646f14c1d207"
+        }
+      ],
+      "generation_seconds": 170.3
+    },
+    {
+      "id": "s02-o1",
+      "chapter": null,
+      "idx": null,
+      "file": "s02-o1.png",
+      "sha256": "a467427e90035fc4011201577a497535f9acbfa4dea8d6a24ec929daff5081b3",
+      "prompt": "Medium close-up of the tall pale young man seated at his game station, calm and cool, the board's glow on his face; across the board behind him, out of focus, his opponent in plain dark clothes wipes sweat from his brow; beyond, the crowd in the dark tiers. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, an enormous glowing display hung overhead showing the game as a dark field of tiny glowing dots, walls and gliders, hand-sized drones hovering, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7021,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin.png",
+          "sha256": "c484ca77c27d663829c614ff2f5d8964a585133e7d938f9bdd99646f14c1d207"
+        }
+      ],
+      "generation_seconds": 169.2
+    },
+    {
+      "id": "s02-o2",
+      "chapter": null,
+      "idx": null,
+      "file": "s02-o2.png",
+      "sha256": "d141d76d92f4b8cf4c94ec1a19ad64ac814bf4ac9e962eb30c6b82e2d0925e44",
+      "prompt": "Medium close-up of the tall pale young man seated at his game station, calm and cool, the board's glow on his face; across the board behind him, out of focus, his opponent in plain dark clothes wipes sweat from his brow; beyond, the crowd in the dark tiers. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, an enormous glowing display hung overhead showing the game as a dark field of tiny glowing dots, walls and gliders, hand-sized drones hovering, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7022,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin.png",
+          "sha256": "c484ca77c27d663829c614ff2f5d8964a585133e7d938f9bdd99646f14c1d207"
+        }
+      ],
+      "generation_seconds": 169.0
+    },
+    {
+      "id": "s02-o3",
+      "chapter": null,
+      "idx": null,
+      "file": "s02-o3.png",
+      "sha256": "de32b06a6cf3cf6d0901a9fb6516bb00ab7bf26888e72c22456f93a83e7c6a24",
+      "prompt": "Medium close-up of the tall pale young man seated at his game station, calm and cool, the board's glow on his face; across the board behind him, out of focus, his opponent in plain dark clothes wipes sweat from his brow; beyond, the crowd in the dark tiers. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, an enormous glowing display hung overhead showing the game as a dark field of tiny glowing dots, walls and gliders, hand-sized drones hovering, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7023,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin.png",
+          "sha256": "c484ca77c27d663829c614ff2f5d8964a585133e7d938f9bdd99646f14c1d207"
+        }
+      ],
+      "generation_seconds": 175.1
+    },
+    {
+      "id": "s02-o4",
+      "chapter": null,
+      "idx": null,
+      "file": "s02-o4.png",
+      "sha256": "c4d0ef4d8ed3c465ac0f3bc1a47f0340ae2b8ffe0da201a12b72ef1688e4520a",
+      "prompt": "Medium close-up of the tall pale young man seated at his game station, calm and cool, the board's glow on his face; across the board behind him, out of focus, his opponent in plain dark clothes wipes sweat from his brow; beyond, the crowd in the dark tiers. Exactly two main people: reference image 1 is the tall pale young man (wavy light-brown hair and a cream cable-knit sweater); his opponent has no reference image and looks nothing like him. Each appears exactly once; only one person has wavy light-brown hair and a cream cable-knit sweater. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people. The place: a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, an enormous glowing display hung overhead showing the game as a dark field of tiny glowing dots, walls and gliders, hand-sized drones hovering, thin beams of light crossing the air. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7024,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "deluin.png",
+          "sha256": "c484ca77c27d663829c614ff2f5d8964a585133e7d938f9bdd99646f14c1d207"
+        }
+      ],
+      "generation_seconds": 158.7
+    },
+    {
+      "id": "s03-o1",
+      "chapter": null,
+      "idx": null,
+      "file": "s03-o1.png",
+      "sha256": "74380992d5e074fde46623b5159b08e826eeb2bb5dbed2c728fb06540a204e5d",
+      "prompt": "The slim spiky-haired young man and the young woman sit side by side on a low stone bench, watching the big wall screen showing the game; a small bin stands beside her. Medium two-shot. Exactly two main people: reference image 1 is the spiky-haired young man (spiky black hair with a blue streak and an orange jacket); reference image 2 is the young woman (a magenta ponytail and a lime-green vest). Each appears exactly once; only one person has spiky black hair with a blue streak and an orange jacket. only one person has a magenta ponytail and a lime-green vest. Use the reference images only for each person's face, hair and costume: do not copy their standing pose, their framing or the plain background of the reference. Frame it like a still from a film, the people caught mid-action. No other people anywhere in the picture. The place: a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light. No letters, words, digits or logos anywhere; signs show at most one simple pictogram. No cartoon murals, nothing resembling a known character. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+      "seed": 7031,
+      "width": 1024,
+      "height": 576,
+      "references": [
+        {
+          "file": "zei.png",
+          "sha256": "ec4afe4e6f5ea930de23700219665316ceb0defd705c6c53aa45f7360db94e20"
+        },
+        {
+          "file": "bai.png",
+          "sha256": "255dbc865840cffbee3fb36707082b14676f7425d1419bb1f44d3af483db3eac"
+        }
+      ],
+      "generation_seconds": 184.8
+    }
+  ],
+  "assist": {
+    "model": "claude-coding-agent",
+    "drafted": [
+      "subjects",
+      "framing",
+      "people counts",
+      "place text"
+    ]
+  }
+}

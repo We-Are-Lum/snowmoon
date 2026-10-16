@@ -56,6 +56,34 @@ SUBJECTS = {
     "s02": ("hall", "crowd", ["deluin"],
             "Medium close-up of the tall pale young man seated at his game station, calm and cool, the board's glow on his face; across the board behind him, out of focus, his opponent in plain dark clothes wipes sweat from his brow; beyond, the crowd in the dark tiers."),
 }
+# Round two (after the night's list): the game as the book and this edition show it, passed on by session Favicon
+# at the owner's request (2026-10-15). The hall shots get the broadcast and the book's cabled glasses (c4-b82); the
+# waiting-room shots get the flat board, and no windows (the room is windowless). Round one's s02 opponents all came
+# out as a copy of the tall young man, so the opponent is now described as unlike him as possible. DRAFTED.
+KAU = "his opponent, a stocky young man with a shaved head, dark skin and a plain charcoal tunic"
+ROUND2 = [
+    ("s01", 5, 3, "hall", "crowd", ["deluin"],
+     "Wide shot of the vast game hall, its dark tiers packed with a crowd of small, plainly dressed spectators. On the floor two "
+     "large glowing game consoles face each other: at one sits the tall pale young man, calm and cool, seen from behind and to one "
+     "side, wearing glasses attached to a long cable that runs behind him; at the other, facing him, sits " + KAU + ", sweating, "
+     "also wearing cabled glasses. Overhead hangs {broadcast}."),
+    ("s02", 5, 4, "hall", "crowd", ["deluin"],
+     "Medium close-up of the tall pale young man seated at a large glowing game console, calm and cool, wearing glasses attached "
+     "to a long cable that runs behind him, the console's glow on his face; behind him, out of focus at the other console, sits "
+     + KAU + ", wiping sweat from his brow; beyond, the crowd in the dark tiers and part of {broadcast}."),
+    ("s03", 3, 2, "waiting", "none", ["zei", "bai"],
+     "The slim spiky-haired young man and the young woman sit side by side on a low stone bench, watching the big wall screen, "
+     "which shows {board}; a small bin stands beside her. Medium two-shot. The room has no windows."),
+    ("s04", 3, 2, "waiting", "none", ["zei", "bai"],
+     "Both sitting on the low stone bench: the slim spiky-haired young man turns to the young woman beside him with one eyebrow "
+     "raised; she keeps her eyes on the wall screen, which shows {board}, unimpressed. Medium close two-shot. The room has no windows."),
+    ("s06", 3, 2, "waiting", "none", ["bai"],
+     "The young woman finally gives the wall screen a serious look, studying it, chin on her hand, its glow on her face; the "
+     "screen shows {board}. Close-up. The room has no windows."),
+    ("s05", 5, 2, "waiting", "none", ["bai"],
+     "Seated on the low stone bench, the young woman leans sideways mid-motion and spits into a small bin beside her, nonchalant, "
+     "her eyes still on the wall screen, which shows {board}. Medium shot from a low angle. The room has no windows; nothing in her mouth."),
+]
 OTHERS = {"crowd": "The tiers are full of spectators: many small people in plain dark clothes, none of them looking like the main people.",
           "cafe": "A few other people sit at other tables, small and plainly dressed in dark clothes, none of them looking like the main people."}
 DEADLINE = (7, 0)
@@ -116,6 +144,37 @@ def build(seed: str) -> tuple[Path, list[dict]]:
     job_file = adir / "options-night.json"
     job_file.write_text(json.dumps({
         "about": "Fifteen Days, new shot options (owner's notes, 2026-10-15 night). Prompts DRAFTED by the coding agent from shots.json and the owner's notes; people described, never named.",
+        "style": {"prompt": style["prompt"]}, "style_draft": style.get("draft", True), "jobs": jobs,
+        "assist": {"model": "claude-coding-agent", "drafted": ["subjects", "framing", "people counts", "place text"]}},
+        indent=2, ensure_ascii=False) + "\n")
+    return job_file, jobs
+
+
+def build2(seed: str) -> tuple[Path, list[dict]]:
+    """Round two: options-night2.json, numbered on from round one's options."""
+    adir = ROOT / "adaptations" / seed
+    style = json.loads((adir / "style.json").read_text())
+    places = json.loads((adir / "shots.json").read_text())["places"]
+    # Shortened from shots.json's game_broadcast (the local text encoder reads a limited length), and the hall's
+    # own display left out of its place text so the two screens don't fight.
+    fill = {"broadcast": "an enormous screen showing the game as a low-lit 3D view of a dark field: a base on a circle of coloured "
+                         "light in each corner, thin black pillar towers topped by glowing cube clusters, rings of light on the floor, "
+                         "small lit drones; beside it, smaller screens show the two players' faces",
+            "board": places["game_screen"]["text"].replace("the game shown as ", "the game as ")}
+    places = {**places, "hall": {**places["hall"], "text": "a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, thin beams of light crossing the air"}}
+    jobs = []
+    for sid, first, n, setting, others, cast, subject in ROUND2:
+        s = {"setting": setting, "others": others, "cast": cast, "subject": subject.format(**fill)}
+        prompt = compose(s, places, style, sid in ("s01", "s02"))
+        for k in range(first, first + n):
+            jobs.append({"id": f"{sid}-o{k}", "shot": sid, "prompt": prompt, "characters": [],
+                         "references": [f"cast/front/{c}" for c in cast], "cast": cast,
+                         "seed": 7000 + int(sid[1:]) * 10 + k, "width": 1024, "height": 576})
+    job_file = adir / "options-night2.json"
+    job_file.write_text(json.dumps({
+        "about": "Fifteen Days, new shot options, round two: the game on the hall's broadcast and the waiting room's screen, the book's cabled glasses (c4-b82). "
+                 "The 3D broadcast is this edition's invention ('broadcast imagined'); the flat board is closest to the book's 'large detailed map' (c4-b114). "
+                 "Prompts DRAFTED by the coding agent; people described, never named.",
         "style": {"prompt": style["prompt"]}, "style_draft": style.get("draft", True), "jobs": jobs,
         "assist": {"model": "claude-coding-agent", "drafted": ["subjects", "framing", "people counts", "place text"]}},
         indent=2, ensure_ascii=False) + "\n")
@@ -220,8 +279,14 @@ def main() -> None:
     ap.add_argument("seed")
     ap.add_argument("--build", action="store_true")
     ap.add_argument("--drive", action="store_true")
+    ap.add_argument("--round2", action="store_true", help="write round two's job file (options-night2.json)")
     args = ap.parse_args()
-    if args.drive:
+    if args.round2:
+        job_file, jobs = build2(args.seed)
+        print(f"{job_file.relative_to(ROOT)}: {len(jobs)} options")
+        for j in jobs[::3]:
+            print(j["id"], j["references"], "\n ", j["prompt"], "\n")
+    elif args.drive:
         drive(args.seed)
     else:
         job_file, jobs = build(args.seed)

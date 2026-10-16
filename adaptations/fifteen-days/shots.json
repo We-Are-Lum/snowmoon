@@ -1531,6 +1531,29 @@
         "c15-b51",
         "c15-b90"
       ]
+    },
+    "game_screen": {
+      "text": "the game shown as a flat board: a near-black square grid with ring-shaped towers (a glowing circle with a dark centre) in cyan and amber, chevron-shaped gliders flying in straight lines with a trail of small dots, small squares in each player's colour, and grey rocks",
+      "source": "closest to the book's 'large detailed map' the crowd watches (c4-b114); the colours and shapes are this edition's (the site's flat board, ~/snowmoon-refs/minpentai/1-flat-board-playing-itself.jpg). No HUD or lettering.",
+      "book": [
+        "c4-b114"
+      ],
+      "invented": "colours and shapes"
+    },
+    "game_broadcast": {
+      "text": "an enormous screen showing the game as a cool, low-lit 3D view of a dark field: each corner a player's base on a big circle of light in their colour (cyan, amber, pink, violet), towers as thin black pillars topped by glowing cube clusters with a halo, rings of light on the floor, clusters of coloured squares at their bases, dark grey blocks in the middle, and small lit drones flying between them; beside it, smaller screens show the players' faces in their glasses",
+      "source": "this edition's invention ('broadcast imagined'): the site's Minpentai broadcast design (docs/design/minpentai-intro-v3.dc.html; ~/snowmoon-refs/minpentai/2-, 4-, 5-), passed on by session Favicon at the owner's request, 2026-10-15. The book has only a giant hall inside a mountain, over a thousand people watching, and 'a large detailed map' (c4-b114). No HUD or lettering.",
+      "book": [
+        "c4-b114"
+      ],
+      "invented": "the 3D broadcast, drones, players' faces on screen"
+    },
+    "console": {
+      "text": "he sits at a large glowing game console wearing glasses attached to a long cable that runs behind him",
+      "source": "book c4-b82: 'A tray slid out from under the game console, offering glasses attached to a long cable.' The coloured rims on the site's drawings are this edition's.",
+      "book": [
+        "c4-b82"
+      ]
     }
   }
 }

@@ -3,7 +3,7 @@
   .venv-image/bin/python scripts/options-page.py fifteen-days <out-dir>
 
 Reads the current frames (adaptations/<seed>/shots-<style>/recipe.json), the night's options
-(images-out/options-night/manifest.json, local, and adaptations/<seed>/options-night-fal.json, fal), and
+(images-out/options-night/ and options-night2/ manifest.json, local, and adaptations/<seed>/options-night-fal.json, fal), and
 the coding agent's review of them (adaptations/<seed>/options-night-review.json: {"<option id>": "why it
 fails"}); a failed option is shown greyed with the reason and can't be picked. Writes <out-dir>/index.html
 and <out-dir>/img/*.jpg. The page keeps each pick in its db (picks/<shot>: {"pick": "current" | "<option id>"}).
@@ -24,11 +24,14 @@ def main() -> None:
     adir = ROOT / "adaptations" / seed
     style = json.loads((adir / "style.json").read_text())
     cur = {e["shot"]: e for e in json.loads((adir / f"shots-{style['slug']}" / "recipe.json").read_text())["images"] if not e.get("rejected")}
-    opts = {}
-    m = ROOT / "images-out" / "options-night" / "manifest.json"
-    if m.exists():
-        for e in json.loads(m.read_text())["images"]:
-            opts[e["id"]] = ROOT / "images-out" / "options-night" / e["file"]
+    opts, tag = {}, {}
+    for run in ("options-night", "options-night2"):  # round two: the broadcast, the flat board, the cabled glasses
+        m = ROOT / "images-out" / run / "manifest.json"
+        if m.exists():
+            for e in json.loads(m.read_text())["images"]:
+                opts[e["id"]] = ROOT / "images-out" / run / e["file"]
+                if run == "options-night2" and e["id"][:3] in ("s01", "s02"):
+                    tag[e["id"]] = "broadcast imagined"  # the 3D broadcast is this edition's invention, not the book's
     f = adir / "options-night-fal.json"
     if f.exists():
         for e in json.loads(f.read_text())["images"]:
@@ -50,7 +53,7 @@ def main() -> None:
             note = "no accepted frame" if sid == "s28" else ""
             row["items"].append({"key": "current", "img": thumb(ROOT / cur[sid]["file"], f"{sid}-current"), "label": "current", "bad": note})
         for oid in sorted(k for k in opts if k.startswith(sid + "-o")):
-            row["items"].append({"key": oid, "img": thumb(opts[oid], oid), "label": oid.split("-")[1], "bad": review.get(oid, "")})
+            row["items"].append({"key": oid, "img": thumb(opts[oid], oid), "label": oid.split("-")[1] + (f" · {tag[oid]}" if oid in tag else ""), "bad": review.get(oid, "")})
         data.append(row)
     files = sorted(p.name for p in (outdir / "img").iterdir())
     n_opts = sum(len(r["items"]) - 1 for r in data)
