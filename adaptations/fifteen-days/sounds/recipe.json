@@ -1,5 +1,5 @@
 {
-  "about": "Every sound effect used, with where it came from: a CC0 Freesound sound (source URL, licence, author) or the owner's own recording. No generated sound effects (owner, 2026-10-15).",
+  "about": "Every sound effect used, with where it came from: a CC0 Freesound sound (source URL, licence, author), the owner's own recording, or a device sound synthesized in code by scripts/synth-device-sounds.py (owner, 2026-10-16). No AI-generated sound effects.",
   "sounds": [
     {
       "effect": "bed: match hall",
@@ -96,6 +96,235 @@
       "sha256": "7484b2a30cb43937ad763533cde5fa982b66b8ed45d81356efdcb6401a88477f",
       "duration_s": 215.64,
       "added_at": "2026-10-15T23:53:47+00:00"
+    },
+    {
+      "effect": "device: message-received-a",
+      "what": "the reply arrives (vigil): three soft rising bells, 1 - 11/8 - 7/4",
+      "source": {
+        "kind": "synthesized in code",
+        "script": "scripts/synth-device-sounds.py",
+        "script_sha256": "bd7c766e49a9714f1c4ad56d468f72b2784c7d17f255abae1f2f09d824ecec98",
+        "rng_seed": 16102026,
+        "licence": "GPL-3.0, with the code that makes it"
+      },
+      "file": "scenes-out/fifteen-days/sfx/device-message-received-a.wav",
+      "sha256": "d6e1e8f307bb52ee1ee8524717ff9d04883b9911d80d2c1264890c6f96379b5b",
+      "duration_s": 2.8,
+      "added_at": "2026-10-16T17:20:13+00:00"
+    },
+    {
+      "effect": "device: message-received-b",
+      "what": "the reply arrives (vigil): two bells a 7/4 apart over a low warm pad",
+      "source": {
+        "kind": "synthesized in code",
+        "script": "scripts/synth-device-sounds.py",
+        "script_sha256": "bd7c766e49a9714f1c4ad56d468f72b2784c7d17f255abae1f2f09d824ecec98",
+        "rng_seed": 16102026,
+        "licence": "GPL-3.0, with the code that makes it"
+      },
+      "file": "scenes-out/fifteen-days/sfx/device-message-received-b.wav",
+      "sha256": "69d071b72ee4d4cd50e98090ce6ae4918bdb0f42c805f3039e1de63815f18d6a",
+      "duration_s": 3.0,
+      "added_at": "2026-10-16T17:20:15+00:00"
+    },
+    {
+      "effect": "device: message-received-c",
+      "what": "the reply arrives (vigil): a single slow bloom, three notes struck together and swelling",
+      "source": {
+        "kind": "synthesized in code",
+        "script": "scripts/synth-device-sounds.py",
+        "script_sha256": "bd7c766e49a9714f1c4ad56d468f72b2784c7d17f255abae1f2f09d824ecec98",
+        "rng_seed": 16102026,
+        "licence": "GPL-3.0, with the code that makes it"
+      },
+      "file": "scenes-out/fifteen-days/sfx/device-message-received-c.wav",
+      "sha256": "2f792d8acfb77c2b526d370dd95ccf3198f13256e087aaac59c4e285741c7c15",
+      "duration_s": 3.2,
+      "added_at": "2026-10-16T17:20:17+00:00"
+    },
+    {
+      "effect": "device: message-sent",
+      "what": "a message sent (Zei's fifth message; Deluin at the gate): an airy upward glide and a small bell",
+      "source": {
+        "kind": "synthesized in code",
+        "script": "scripts/synth-device-sounds.py",
+        "script_sha256": "bd7c766e49a9714f1c4ad56d468f72b2784c7d17f255abae1f2f09d824ecec98",
+        "rng_seed": 16102026,
+        "licence": "GPL-3.0, with the code that makes it"
+      },
+      "file": "scenes-out/fifteen-days/sfx/device-message-sent.wav",
+      "sha256": "b596c83039c97ad33f5eca3fe53bd727b9379705c2c2cc99f5afa71397002821",
+      "duration_s": 1.6,
+      "added_at": "2026-10-16T17:20:18+00:00"
+    },
+    {
+      "effect": "device: menu-appears",
+      "what": "the menu appears on the paper-thin tablet: a soft bloom of air and two bells",
+      "source": {
+        "kind": "synthesized in code",
+        "script": "scripts/synth-device-sounds.py",
+        "script_sha256": "bd7c766e49a9714f1c4ad56d468f72b2784c7d17f255abae1f2f09d824ecec98",
+        "rng_seed": 16102026,
+        "licence": "GPL-3.0, with the code that makes it"
+      },
+      "file": "scenes-out/fifteen-days/sfx/device-menu-appears.wav",
+      "sha256": "2fd09d137eb8756b563184dde9fc6acc17515f820cd626ea14ab65a42e653ed5",
+      "duration_s": 1.9,
+      "added_at": "2026-10-16T17:20:19+00:00"
+    },
+    {
+      "effect": "device: menu-tap-1",
+      "what": "a finger tap on the menu tablet: a tiny soft tick with a pitched glint",
+      "source": {
+        "kind": "synthesized in code",
+        "script": "scripts/synth-device-sounds.py",
+        "script_sha256": "bd7c766e49a9714f1c4ad56d468f72b2784c7d17f255abae1f2f09d824ecec98",
+        "rng_seed": 16102026,
+        "licence": "GPL-3.0, with the code that makes it"
+      },
+      "file": "scenes-out/fifteen-days/sfx/device-menu-tap-1.wav",
+      "sha256": "6fe01e684261bc4471c02f229134d5a43bff915262707b240efd67ce2805ffdf",
+      "duration_s": 0.85,
+      "added_at": "2026-10-16T17:20:19+00:00"
+    },
+    {
+      "effect": "device: menu-tap-2",
+      "what": "a finger tap on the menu tablet: a tiny soft tick with a pitched glint",
+      "source": {
+        "kind": "synthesized in code",
+        "script": "scripts/synth-device-sounds.py",
+        "script_sha256": "bd7c766e49a9714f1c4ad56d468f72b2784c7d17f255abae1f2f09d824ecec98",
+        "rng_seed": 16102026,
+        "licence": "GPL-3.0, with the code that makes it"
+      },
+      "file": "scenes-out/fifteen-days/sfx/device-menu-tap-2.wav",
+      "sha256": "9c379edbac6523e3de795ea0ba036ee78b20b8755110d8a567af9fb6e17b5bb9",
+      "duration_s": 0.85,
+      "added_at": "2026-10-16T17:20:20+00:00"
+    },
+    {
+      "effect": "device: menu-tap-3",
+      "what": "a finger tap on the menu tablet: a tiny soft tick with a pitched glint",
+      "source": {
+        "kind": "synthesized in code",
+        "script": "scripts/synth-device-sounds.py",
+        "script_sha256": "bd7c766e49a9714f1c4ad56d468f72b2784c7d17f255abae1f2f09d824ecec98",
+        "rng_seed": 16102026,
+        "licence": "GPL-3.0, with the code that makes it"
+      },
+      "file": "scenes-out/fifteen-days/sfx/device-menu-tap-3.wav",
+      "sha256": "3de14fd6256eb10109c7ea136f89e2407db505376c74646c7b34efc8c753413c",
+      "duration_s": 0.85,
+      "added_at": "2026-10-16T17:20:20+00:00"
+    },
+    {
+      "effect": "device: robot-greet",
+      "what": "the robot's greeting before it speaks: a friendly rising two-note chirp",
+      "source": {
+        "kind": "synthesized in code",
+        "script": "scripts/synth-device-sounds.py",
+        "script_sha256": "bd7c766e49a9714f1c4ad56d468f72b2784c7d17f255abae1f2f09d824ecec98",
+        "rng_seed": 16102026,
+        "licence": "GPL-3.0, with the code that makes it"
+      },
+      "file": "scenes-out/fifteen-days/sfx/device-robot-greet.wav",
+      "sha256": "d7a1cba96da0cc459b4a142460635ef4114cfb5cffad6533fc11fb4b26ecc4f6",
+      "duration_s": 1.3,
+      "added_at": "2026-10-16T17:20:21+00:00"
+    },
+    {
+      "effect": "device: robot-acknowledge",
+      "what": "the robot acknowledges: a soft falling two-note chirp",
+      "source": {
+        "kind": "synthesized in code",
+        "script": "scripts/synth-device-sounds.py",
+        "script_sha256": "bd7c766e49a9714f1c4ad56d468f72b2784c7d17f255abae1f2f09d824ecec98",
+        "rng_seed": 16102026,
+        "licence": "GPL-3.0, with the code that makes it"
+      },
+      "file": "scenes-out/fifteen-days/sfx/device-robot-acknowledge.wav",
+      "sha256": "5c45504c9dd73e2e796973f1b4c2a2b68bd2820c1a44849207d6969bb3578908",
+      "duration_s": 1.2,
+      "added_at": "2026-10-16T17:20:21+00:00"
+    },
+    {
+      "effect": "device: robot-glide",
+      "what": "the robot glides up to the table: a smooth low hum and a faint whir, 3 s, fading in and out",
+      "source": {
+        "kind": "synthesized in code",
+        "script": "scripts/synth-device-sounds.py",
+        "script_sha256": "bd7c766e49a9714f1c4ad56d468f72b2784c7d17f255abae1f2f09d824ecec98",
+        "rng_seed": 16102026,
+        "licence": "GPL-3.0, with the code that makes it"
+      },
+      "file": "scenes-out/fifteen-days/sfx/device-robot-glide.wav",
+      "sha256": "acc556225f71dd6d26e54d9e2e87b62974f8837da8581208d6b799a670b92125",
+      "duration_s": 3.6,
+      "added_at": "2026-10-16T17:20:25+00:00"
+    },
+    {
+      "effect": "hall: crowd swell",
+      "source": {
+        "kind": "freesound",
+        "url": "https://freesound.org/people/craigsmith/sounds/438370/",
+        "id": 438370,
+        "title": "G28-11-Mixed CrowdWalla - Some Reactions.wav",
+        "author": "craigsmith",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page",
+        "licence_checked": "2026-10-15, from the sound's own page (sound-effects.md)"
+      },
+      "file": "scenes-out/fifteen-days/sfx/hall-crowd-swell.wav",
+      "sha256": "bcd2614f9606e4874538e606845869badca43640a0dc788f1fa88107dcadc7cf",
+      "duration_s": 107.5,
+      "added_at": "2026-10-16T17:20:36+00:00"
+    },
+    {
+      "effect": "hall: alarm",
+      "source": {
+        "kind": "freesound",
+        "url": "https://freesound.org/people/magnuswaker/sounds/641416/",
+        "id": 641416,
+        "title": "Soft Warning Buzzer",
+        "author": "magnuswaker",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page",
+        "licence_checked": "2026-10-15, from the sound's own page (sound-effects.md)"
+      },
+      "file": "scenes-out/fifteen-days/sfx/hall-alarm.wav",
+      "sha256": "0ff2d530bc6aeed99f8671e11170ba36b4d92e5311e9c220a3401e1b8e429724",
+      "duration_s": 0.66,
+      "added_at": "2026-10-16T17:20:36+00:00"
+    },
+    {
+      "effect": "hall: gasp",
+      "source": {
+        "kind": "freesound",
+        "url": "https://freesound.org/people/HowardV/sounds/264376/",
+        "id": 264376,
+        "title": "small crowd gasp shock surprise",
+        "author": "HowardV",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page",
+        "licence_checked": "2026-10-15, from the sound's own page (sound-effects.md)"
+      },
+      "file": "scenes-out/fifteen-days/sfx/hall-gasp.wav",
+      "sha256": "07b6e5f9d9d9147c073ff0e76e816c18b4f7923b36f5df6cde01f6a1621c1c32",
+      "duration_s": 8.62,
+      "added_at": "2026-10-16T17:20:36+00:00"
+    },
+    {
+      "effect": "hall: drone",
+      "source": {
+        "kind": "freesound",
+        "url": "https://freesound.org/people/Sadiquecat/sounds/677833/",
+        "id": 677833,
+        "title": "Tiny Hawk 2 short flight.wav",
+        "author": "Sadiquecat",
+        "licence": "Creative Commons 0 (CC0 1.0), as shown on the sound's page",
+        "licence_checked": "2026-10-15, from the sound's own page (sound-effects.md)"
+      },
+      "file": "scenes-out/fifteen-days/sfx/hall-drone.wav",
+      "sha256": "be34e7ba50fe7df3cbe8b6a097f87feb4920e04a2106763675357fc99fe54f97",
+      "duration_s": 45.24,
+      "added_at": "2026-10-16T17:20:36+00:00"
     }
   ]
 }

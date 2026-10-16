@@ -1,0 +1,126 @@
+{
+  "about": "Fifteen Days pre-production (owner's re-shoot notes, 2026-10-16): face sheets separate from costume sheets, the robot. Descriptions DRAFTED by the coding agent from the owner's notes; the book describes none of the three leads' looks.",
+  "out": "images-out/preprod/cast",
+  "ledger": "images-out/preprod/ledger.json",
+  "cap_usd": 5.0,
+  "style": "",
+  "jobs": [
+    {
+      "id": "face-zei-a",
+      "prompt": "Face reference sheet on a plain flat mid-grey background with no scenery: six heads of the same person in two rows of three, all the same size, framed from the top of the head to the collarbone, even soft lighting. Top row, neutral expression: facing the viewer, a three-quarter view turned to the left, and a side profile facing left. Bottom row, all facing the viewer: a warm open smile, an annoyed frown, wide-eyed surprise. Every head is clearly the same person with the same hair. Only a plain dark crew-neck collar shows at the neck, no costume, no accessories on the head. The person: a young man of eighteen, slim, of racially ambiguous mixed heritage: light golden-tan skin, dark expressive eyes with a hint of an epicanthic fold, a narrow nose, quick lively features, spiky jet-black hair with one electric-blue streak. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos anywhere.",
+      "width": 1536,
+      "height": 1024,
+      "seed": 9101,
+      "note": "words only"
+    },
+    {
+      "id": "face-zei-b",
+      "prompt": "Face reference sheet on a plain flat mid-grey background with no scenery: six heads of the same person in two rows of three, all the same size, framed from the top of the head to the collarbone, even soft lighting. Top row, neutral expression: facing the viewer, a three-quarter view turned to the left, and a side profile facing left. Bottom row, all facing the viewer: a warm open smile, an annoyed frown, wide-eyed surprise. Every head is clearly the same person with the same hair. Only a plain dark crew-neck collar shows at the neck, no costume, no accessories on the head. The person: a young man of eighteen, slim, of racially ambiguous mixed heritage: light golden-tan skin, dark expressive eyes with a hint of an epicanthic fold, a narrow nose, quick lively features, spiky jet-black hair with one electric-blue streak. Keep the face and hair of the person in the reference image, nothing else from it. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos anywhere.",
+      "refs": [
+        "images-out/cast/front/zei.png"
+      ],
+      "width": 1536,
+      "height": 1024,
+      "seed": 9202,
+      "note": "with the old front view, for continuity"
+    },
+    {
+      "id": "costume-zei",
+      "prompt": "Costume reference sheet on a plain flat off-white background with no scenery: the outfit worn by a plain featureless smooth grey mannequin with no face and no hair, shown twice side by side, a front view and a back view, standing straight, with the footwear and any small accessories laid out below. The outfit: a cropped asymmetric orange shell jacket with one long and one short sleeve, angular reflective panels and a tall split collar, a black seamless high-neck bodysuit with thin glowing cyan seams, wide segmented grey trousers gathered at the ankle, white chunky trainers, a slim black wristwatch. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos anywhere.",
+      "width": 1536,
+      "height": 1024,
+      "seed": 9403
+    },
+    {
+      "id": "face-bai-a",
+      "prompt": "Face reference sheet on a plain flat mid-grey background with no scenery: six heads of the same person in two rows of three, all the same size, framed from the top of the head to the collarbone, even soft lighting. Top row, neutral expression: facing the viewer, a three-quarter view turned to the left, and a side profile facing left. Bottom row, all facing the viewer: a warm open smile, an annoyed frown, wide-eyed surprise. Every head is clearly the same person with the same hair. Only a plain dark crew-neck collar shows at the neck, no costume, no accessories on the head. The person: a young woman of about eighteen, athletic, of racially ambiguous mixed heritage: warm light-brown skin, dark brown almond-shaped eyes, a few faint freckles across the nose, full eyebrows, a sly self-assured look, thick dark-brown hair pulled into a high puffy ponytail dyed magenta toward the ends. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos anywhere.",
+      "width": 1536,
+      "height": 1024,
+      "seed": 9104,
+      "note": "words only"
+    },
+    {
+      "id": "face-bai-b",
+      "prompt": "Face reference sheet on a plain flat mid-grey background with no scenery: six heads of the same person in two rows of three, all the same size, framed from the top of the head to the collarbone, even soft lighting. Top row, neutral expression: facing the viewer, a three-quarter view turned to the left, and a side profile facing left. Bottom row, all facing the viewer: a warm open smile, an annoyed frown, wide-eyed surprise. Every head is clearly the same person with the same hair. Only a plain dark crew-neck collar shows at the neck, no costume, no accessories on the head. The person: a young woman of about eighteen, athletic, of racially ambiguous mixed heritage: warm light-brown skin, dark brown almond-shaped eyes, a few faint freckles across the nose, full eyebrows, a sly self-assured look, thick dark-brown hair pulled into a high puffy ponytail dyed magenta toward the ends. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos anywhere.",
+      "width": 1536,
+      "height": 1024,
+      "seed": 9305,
+      "note": "words only, second seed"
+    },
+    {
+      "id": "costume-bai",
+      "prompt": "Costume reference sheet on a plain flat off-white background with no scenery: the outfit worn by a plain featureless smooth grey mannequin with no face and no hair, shown twice side by side, a front view and a back view, standing straight, with the footwear and any small accessories laid out below. The outfit: a lime-green modular shell vest with a bulky angular collar and reflective piping, a white seamless sleeveless bodysuit with glowing magenta seams, black wide gathered trousers with segmented knees, chunky black boots with glowing soles, a small waist pouch. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos anywhere.",
+      "width": 1536,
+      "height": 1024,
+      "seed": 9406
+    },
+    {
+      "id": "face-deluin-a",
+      "prompt": "Face reference sheet on a plain flat mid-grey background with no scenery: six heads of the same person in two rows of three, all the same size, framed from the top of the head to the collarbone, even soft lighting. Top row, neutral expression: facing the viewer, a three-quarter view turned to the left, and a side profile facing left. Bottom row, all facing the viewer: a warm open smile, an annoyed frown, wide-eyed surprise. Every head is clearly the same person with the same hair. Only a plain dark crew-neck collar shows at the neck, no costume, no accessories on the head. The person: a young man of eighteen, tall and long-limbed, fair skin in warm natural tones, grey-green eyes, light-brown wavy shoulder-length hair, a calm, slightly serious, open face. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos anywhere.",
+      "width": 1536,
+      "height": 1024,
+      "seed": 9107,
+      "note": "words only"
+    },
+    {
+      "id": "face-deluin-b",
+      "prompt": "Face reference sheet on a plain flat mid-grey background with no scenery: six heads of the same person in two rows of three, all the same size, framed from the top of the head to the collarbone, even soft lighting. Top row, neutral expression: facing the viewer, a three-quarter view turned to the left, and a side profile facing left. Bottom row, all facing the viewer: a warm open smile, an annoyed frown, wide-eyed surprise. Every head is clearly the same person with the same hair. Only a plain dark crew-neck collar shows at the neck, no costume, no accessories on the head. The person: a young man of eighteen, tall and long-limbed, fair skin in warm natural tones, grey-green eyes, light-brown wavy shoulder-length hair, a calm, slightly serious, open face. Keep the face and hair of the person in the reference image, nothing else from it. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos anywhere.",
+      "refs": [
+        "images-out/cast/front/deluin.png"
+      ],
+      "width": 1536,
+      "height": 1024,
+      "seed": 9208,
+      "note": "with the old front view, for continuity"
+    },
+    {
+      "id": "costume-deluin",
+      "prompt": "Costume reference sheet on a plain flat off-white background with no scenery: the outfit worn by a plain featureless smooth grey mannequin with no face and no hair, shown twice side by side, a front view and a back view, standing straight, with the footwear and any small accessories laid out below. The outfit: a long cream cable-knit wool tunic reaching mid-thigh with a soft hood worn down, belted at the waist with a plain leather belt, dark green wool trousers, brown leather boots, no zips, drawstrings, pockets or logos. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos anywhere.",
+      "width": 1536,
+      "height": 1024,
+      "seed": 9409
+    },
+    {
+      "id": "robot-a",
+      "prompt": "Design sheet on a plain flat off-white background with no scenery: one service robot shown three times side by side at the same size, a front view, a side view and a back view, plus a small close-up of its open compartment. The robot is humanoid in shape and about the height of a short adult: a rounded head with a soft dark face screen showing two simple kind glowing eyes, slim shoulders, a torso with a hinged storage compartment in its chest, two jointed arms holding a flat serving tray level in front of it; instead of legs, a smooth tapered column ending in a low gliding base, so it slides rather than walks. Matte warm-white and pale-grey shell panels, thin cyan light strips, small honest signs of wear: utilitarian but friendly and personal, a kind helper. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos anywhere.",
+      "width": 1536,
+      "height": 1024,
+      "seed": 9501
+    },
+    {
+      "id": "robot-b",
+      "prompt": "Design sheet on a plain flat off-white background with no scenery: one service robot shown three times side by side at the same size, a front view, a side view and a back view, plus a small close-up of its open compartment. The robot is humanoid in shape and about the height of a short adult: a rounded head with a soft dark face screen showing two simple kind glowing eyes, slim shoulders, a torso with a hinged storage compartment in its chest, two jointed arms holding a flat serving tray level in front of it; instead of legs, a smooth tapered column ending in a low gliding base, so it slides rather than walks. Matte warm-white and pale-grey shell panels, thin cyan light strips, small honest signs of wear: utilitarian but friendly and personal, a kind helper. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos anywhere.",
+      "width": 1536,
+      "height": 1024,
+      "seed": 9502
+    },
+    {
+      "id": "robot-c",
+      "prompt": "Design sheet on a plain flat off-white background with no scenery: one service robot shown three times side by side at the same size, a front view, a side view and a back view, plus a small close-up of its open compartment. The robot is humanoid in shape and about the height of a short adult: a rounded head with a soft dark face screen showing two simple kind glowing eyes, slim shoulders, a torso with a hinged storage compartment in its chest, two jointed arms holding a flat serving tray level in front of it; instead of legs, a smooth tapered column ending in a low gliding base, so it slides rather than walks. Matte warm-white and pale-grey shell panels, thin cyan light strips, small honest signs of wear: utilitarian but friendly and personal, a kind helper. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces. No text, no lettering, no numbers, no logos anywhere.",
+      "width": 1536,
+      "height": 1024,
+      "seed": 9503
+    },
+    {
+      "id": "robot2-a",
+      "prompt": "Design sheet on a plain flat off-white background with no scenery: one service robot shown twice side by side at the same size, a three-quarter front view and a side view, plus a small close-up of its chest compartment opened. The robot has a humanoid upper body and NO LEGS AT ALL: from the waist down its body narrows into one smooth tapered column, like a long skirt, ending in a wide low round gliding base that floats just above the floor, so it slides rather than walks; in both views the same column and no legs. Upper body about the height of a short adult: a rounded head with a soft dark face screen showing two simple kind glowing eyes, slim shoulders, a torso with a hinged storage compartment in its chest, two jointed arms holding a flat serving tray level in front of it. Matte warm-white and pale-grey shell panels, thin cyan light strips, small honest signs of wear: utilitarian but friendly and personal, a kind helper. No text, no lettering, no numbers, no logos anywhere. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces.",
+      "width": 1536,
+      "height": 1024,
+      "seed": 9601
+    },
+    {
+      "id": "robot2-b",
+      "prompt": "Design sheet on a plain flat off-white background with no scenery: one service robot shown twice side by side at the same size, a three-quarter front view and a side view, plus a small close-up of its chest compartment opened. The robot has a humanoid upper body and NO LEGS AT ALL: from the waist down its body narrows into one smooth tapered column, like a long skirt, ending in a wide low round gliding base that floats just above the floor, so it slides rather than walks; in both views the same column and no legs. Upper body about the height of a short adult: a rounded head with a soft dark face screen showing two simple kind glowing eyes, slim shoulders, a torso with a hinged storage compartment in its chest, two jointed arms holding a flat serving tray level in front of it. Matte warm-white and pale-grey shell panels, thin cyan light strips, small honest signs of wear: utilitarian but friendly and personal, a kind helper. No text, no lettering, no numbers, no logos anywhere. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces.",
+      "width": 1536,
+      "height": 1024,
+      "seed": 9602
+    },
+    {
+      "id": "robot2-c",
+      "prompt": "Design sheet on a plain flat off-white background with no scenery: one service robot shown twice side by side at the same size, a three-quarter front view and a side view, plus a small close-up of its chest compartment opened. The robot has a humanoid upper body and NO LEGS AT ALL: from the waist down its body narrows into one smooth tapered column, like a long skirt, ending in a wide low round gliding base that floats just above the floor, so it slides rather than walks; in both views the same column and no legs. Upper body about the height of a short adult: a rounded head with a soft dark face screen showing two simple kind glowing eyes, slim shoulders, a torso with a hinged storage compartment in its chest, two jointed arms holding a flat serving tray level in front of it. Matte warm-white and pale-grey shell panels, thin cyan light strips, small honest signs of wear: utilitarian but friendly and personal, a kind helper. No text, no lettering, no numbers, no logos anywhere. Detailed science fiction comic art: precise fine uniform linework, cel-shaded flat color, clear readable faces.",
+      "width": 1536,
+      "height": 1024,
+      "seed": 9603
+    }
+  ]
+}

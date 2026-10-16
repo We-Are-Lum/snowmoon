@@ -185,19 +185,22 @@ def main() -> None:
     # The live game in the hall (beat 1), each placed only once its CC0 file is recorded in sounds/recipe.json.
     # Positions are drafted: the swell and gasp land on the shots of the board, the drone passes over the
     # waiting room, the alarm buzz (c14-b86) comes under Bai's last line, as the game nears its end.
-    def fx(cid, effect, at, level, note):
+    def fx(cid, effect, at, level, note, dur, af="anull", fade=0.6):
+        # Each effect is cut to its moment (dur seconds, faded out over `fade`), so a long file can't run on into the next place.
         src = sounds.get(effect)
         if not src:
             return
         dst = stems / f"{cid}.wav"
-        ffmpeg(ROOT / src["file"], dst, "anull")
+        ffmpeg(ROOT / src["file"], dst, f"{af},atrim=0:{dur},afade=t=out:st={max(dur - fade, 0)}:d={fade}")
         cues.append({"id": cid, "track": "foley", "stem": str(dst.relative_to(ROOT)), "at": at, "level_db": level,
                      "fade_in": 0.05, "fade_out": 0.3, "note": note,
                      "source": {"effect": effect, "url": src["source"].get("url"), "author": src["source"].get("author"), "licence": src["source"]["licence"]}})
-    fx("hall-swell", "hall: crowd swell", {"cue": "@start", "offset": 1.5}, -8, "the audience murmurs as the gliders crash into Deluin's walls")
-    fx("hall-gasp", "hall: gasp", {"cue": "@start", "offset": 5.5}, -10, "a gasp as Kau's attack breaks on the walls (c4-b134)")
-    fx("hall-drone", "hall: drone", cut("b1-2", -0.4), -16, "an anti-cheat drone passes (c4-b81), heard faintly")
-    fx("hall-alarm", "hall: alarm", cut("b1-6", 1.5), -14, "the alarm buzz near the game's end (c14-b86), through the wall")
+    # The hall shots run to the cut to the waiting room (b1-1, -0.6); the swell, gasp and drone stay inside them.
+    fx("hall-swell", "hall: crowd swell", {"cue": "@start", "offset": 1.0}, -8, "the audience murmurs as the gliders crash into Deluin's walls", 7.0, fade=1.5)
+    fx("hall-gasp", "hall: gasp", {"cue": "@start", "offset": 5.0}, -10, "a gasp as Kau's attack breaks on the walls (c4-b134)", 2.5)
+    fx("hall-drone", "hall: drone", {"cue": "@start", "offset": 0.3}, -16, "an anti-cheat drone passes (c4-b81), heard faintly", 4.5, fade=1.5)
+    fx("hall-alarm", "hall: alarm", cut("b1-6", 1.5), -14, "the alarm buzz near the game's end (c14-b86), through the wall", 1.0,
+       af="lowpass=f=900", fade=0.2)
     bed("bed-hall-wall", "bed: match hall", cut("b1-1", -0.6 - w), cut("b2-1", -1.4 + h), -4, "lowpass=f=450,volume=0.8",
         note="the game through the waiting-room wall (drafted: the owner hasn't decided yet)")
     bed("bed-waiting", "bed: waiting room", cut("b1-1", -0.6 - w), cut("b2-1", -1.4 + h), -2)
