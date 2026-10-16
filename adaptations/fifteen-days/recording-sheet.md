@@ -13,7 +13,7 @@ out; the chosen take of each line is converted into its character's voice; the o
 in `~/snowmoon-takes/full/takes/`, outside the repository, in case you want to swap one.
 Lines that can't be matched are flagged.
 
-42 lines, 556 words, in 6 files.
+42 lines, 557 words, in 6 files.
 
 ## beat-1 · The walls hold (optional opener)
 
@@ -65,7 +65,7 @@ Lines that can't be matched are flagged.
 **15.** (fifteen) **ZEI**: Take it easy, you're my competition too.  
 <sub>straight after line 14</sub>
 
-**16.** (sixteen) **BAI**: 'Was.' And you know I hate you. You can know all your tricks anyway.  
+**16.** (sixteen) **BAI**: 'Was.' And you know I hate you. And I know all your tricks already anyway. *(re-recorded 2026-10-16; the script follows the performance)*  
 <sub>straight after line 15</sub>
 
 **17.** (seventeen) **BAI**: Deluin? We don't know anything about this guy.  
@@ -80,7 +80,7 @@ Lines that can't be matched are flagged.
 **19.** (nineteen) **DELUIN**: Hey, over here! We were just talking about you!  
 <sub>He waves them over.</sub>
 
-**20.** (twenty) **ROBOT**: jie mo kai tu jie hei ja ma? *(no voice sheet yet: recorded, not converted)*  
+**20.** (twenty) **ROBOT**: jie mo kai tu jie hei ja ma?  
 <sub>A robot slides up to the table.</sub>
 
 **21.** (twenty-one) **ZEI**: Whoa *(the book's line restored, owner 2026-10-15; the "Whoa" take)*  

@@ -20,8 +20,8 @@ dialogue, ambience and Foley. **No narrator:** picture and dialogue carry the pi
 2026-10-14). **Voices:** Zei, Deluin, Bai and the robot waiter; the characters' voices are designed
 voice sheets (`voices/`), converted from the owner's performances.
 **Point of view:** outside all three; the camera, with one on-screen line in beat 6.
-**Length:** 7 beats (the draft's opener and sections 1 to 6 are beats 1 to 7). Spoken, as performed: 548 words
-of dialogue, 506 the owner's and 42 the book's (beat 3, the café, is 169); no narration. One
+**Length:** 7 beats (the draft's opener and sections 1 to 6 are beats 1 to 7). Spoken, as performed: 549 words
+of dialogue, 507 the owner's and 42 the book's (beat 3, the café, is 169); no narration. One
 on-screen line of 15 words (beat 6). The chosen takes run 3 min 57 s with their pauses (2026-10-15),
 so about four and a half minutes with the silent shots.
 **Style:** to be picked from the style test.
@@ -109,7 +109,7 @@ so about four and a half minutes with the silent shots.
   - `by FID 6786 on 2026-10-15` Zei: See you. So are you gonna come? Should be fun! *("See you." to Deluin as he goes; the rest to Bai)*
   - `by FID 6786 on 2026-10-14` Bai: He's your competition, remember?
   - `by FID 6786 on 2026-10-14` Zei: Take it easy, you're my competition too.
-  - `by FID 6786 on 2026-10-15` Bai: 'Was.' And you know I hate you. You can know all your tricks anyway.
+  - `by FID 6786 on 2026-10-16` Bai: 'Was.' And you know I hate you. And I know all your tricks already anyway. *(re-recorded 2026-10-16; the script follows the performance)*
   *[She says it with a smile, and continues.]*
   - `by FID 6786 on 2026-10-15` Bai: Deluin? We don't know anything about this guy.
   - `by FID 6786 on 2026-10-15` Zei: So let's get to know him, it'll be fun! Maybe he won't be so fake after all.
