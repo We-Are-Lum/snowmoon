@@ -65,14 +65,14 @@ SPEC = {"full": dict(lead=0.45, tail=0.65, within=0.35, floor=True, silent_max=9
 
 # The five-minute cut (the owner's notes in the clip viewer, 2026-10-17, and the Claude notes the owner kept). One cut in
 # the full cut's order: no camera moves, tighter gaps, these shots out, these holds, these sounds. Places DRAFTED by the coding agent.
-FIVE_DROP = {"H06", "G04", "F25", "S09"}            # H06 "leave it out"; G04 no close-up; F25 the shot and its sound; S09 moves to S12b
+FIVE_DROP = {"H06", "G04", "F25", "S09",           # H06 "leave it out"; G04 no close-up; F25 the shot and its sound; S09 moves to S12b
+             "D06", "D07", "D08", "L01"}             # "just have them say Bye, quick wave, and then cut to ... Zei talking to Bai"; L01 "what is this shot?"
 FIVE_PICTURE = {"S12b": "S09"}                       # "this image is later, after the flick": the sugar wall stands in for S12b
-FIVE_HOLD = {"H01": 2.2, "C02": 1.2, "D09": 4.0, "L01": 2.5, "L03": 2.5, "L07": 3.5, "L09": 2.5, "L11": 2.5}
-FIVE_PAUSE = {"b1-4": 2.5}                           # "a pause before 'such patience'": the game holds first
+FIVE_HOLD = {"H01": 2.2, "C02": 1.2, "D05": 1.6, "D09": 4.0, "L01b": 3.0, "L03": 2.5, "L07": 3.5, "L09": 2.5, "L11": 2.5}
+FIVE_PAUSE = {}                                      # "a pause before 'such patience'" is now three shots: G08, G08b, G08c (storyboard)
 FIVE_OVERLAP = {"C06": 1.5}                          # "this shot while he's still talking": starts before the line ends
 FIVE_ANCHOR = {"C09": ("b2-6", 2.2)}                 # no shot with Bai until "Bai, you're welcome"
-# A fixed framing (x, y, zoom) in place of a move: Zei alone where Bai stood beside him (Claude notes, kept by the owner).
-FIVE_FRAME = {"S04": (0.33, 0.4, 1.7), "S10": (0.44, 0.42, 1.7), "R02": (0.35, 0.33, 1.7)}
+FIVE_FRAME = {}                                      # "never use the zoom in": Bai's shots are redrawn instead of cropped
 # The owner's notes on the takes: (start, end) seconds kept from each converted line (script.md has the same words, "performed").
 TRIM = {"b2-10": (1.28, None),                       # the vocalization before "Was"
         "b2-11": (1.25, None),                       # "Cut out the line 'Deluin?'"
@@ -84,10 +84,14 @@ FIVE_FX = [("H01", "game: flyby", 0.4, -14, 2.6), ("H02", "game: blast", 0.3, -1
            ("H03", "game: blast", 0.6, -15, 1.6), ("H05", "game: crash", 0.3, -13, 2.4), ("G02", "game: blast", 0.6, -22, 1.6),
            ("G05", "game: flyby", 0.5, -24, 2.6), ("G08", "game: crash", 0.6, -18, 2.4), ("G08", "game: blast", 1.8, -20, 1.6),
            ("G10", "game: blast", 0.4, -22, 1.6), ("G11", "game: wall", 0.5, -18, 3.2), ("H07", "game: wall", 0.0, -12, 3.2),
-           ("H07", "game: crash", 0.6, -12, 2.4), ("C02", "device: elevator-arrive", 0.0, -8, 2.2)]
-FIVE_BED_DB = {"bed: courtyard café": 5}             # "need ambient café sounds"
+           ("H07", "game: crash", 0.6, -12, 2.4), ("C02", "device: elevator-arrive", 0.0, -8, 2.2),
+           ("L06", "device: message-received-a", -0.5, -8, 1.5)]   # "the message received chime before the close-up on his eyes"
+FIVE_FX_OFF = {("L07", "device: message-received-a")}  # moved to L06
+WHAT_END = 1.1                                       # the end of "What?!!" in her tightened take (measured below)
+FIVE_BYE = ("D05", 0.25, "lines-v2/L12-b2-6.deluin-v2.wav", 7.95, 8.5)  # the "Bye" the owner performed at the end of L12's take, for the wave
+FIVE_BED_DB = {"bed: courtyard café": 5, "bed: lobby restaurant": 6}  # "need ambient café sounds" (both places)
 LETTERS = {"H01": "Sadzu Du, Dzego · 3724 Firemoon 10",  # script beat 1 (book c14-b1)
-           "L01": "Pafogai Du, Dzego · 3724 Firemoon 17",  # book c15-b48 (place) and c15-b1 (the chapter's date; owner, 2026-10-17)
+           "L01b": "Pafogai Du, Dzego · 3724 Firemoon 17\nOne week later",  # "so we know it's different" (owner); the second line DRAFTED  # book c15-b48 (place) and c15-b1 (the chapter's date; owner, 2026-10-17)
            "D09": "That day was his last Minpentai game- the last day when his life was somewhat normal."}  # beat 6, on screen
 
 
@@ -96,12 +100,14 @@ def lettered(src: Path, dst: Path, text: str) -> None:
     from PIL import Image, ImageDraw, ImageFilter, ImageFont
     img = Image.open(src).convert("RGB").resize((1920, 1080), Image.LANCZOS)
     font = ImageFont.truetype(str(ROOT / "node_modules/@fontsource/crimson-pro/files/crimson-pro-latin-600-normal.woff"), 46)
-    rows = [""]
-    for w in text.split():
-        if rows[-1] and len(rows[-1]) + 1 + len(w) > 52:
-            rows.append(w)
-        else:
-            rows[-1] = (rows[-1] + " " + w).strip()
+    rows = []
+    for para in text.split("\n"):
+        rows.append("")
+        for w in para.split():
+            if rows[-1] and len(rows[-1]) + 1 + len(w) > 52:
+                rows.append(w)
+            else:
+                rows[-1] = (rows[-1] + " " + w).strip()
     y0 = 1080 - 110 - 60 * (len(rows) - 1)
     shade = Image.new("L", img.size, 0)
     ds = ImageDraw.Draw(shade)
@@ -127,6 +133,55 @@ def first_sentence(src: Path, dst: Path) -> None:
         cell = im.crop(box)
         out.paste(cell, (box[0], 258 - (box[3] - box[1]) // 2))
     out.save(dst)
+
+
+# The lobby's screens: the book's words (c15-b50, -b53, -b55's first sentence) on a clean device, drawn in code ("you would expect
+# them to have a cleaner device interface", owner). No button, no numbers; the conversation grows from shot to shot.
+SCREENS = {"L03": [("out", "Are you okay????!\n\nPlease tell me where you are.")],
+           "L07": [("out", "Are you okay????!\n\nPlease tell me where you are."),
+                   ("in", "Don't worry, I am alive.\n\nThough it looks like I'm not going to be getting back to Dzego anytime soon.")],
+           "L09": [("out", "Are you okay????!\n\nPlease tell me where you are."),
+                   ("in", "Don't worry, I am alive.\n\nThough it looks like I'm not going to be getting back to Dzego anytime soon."),
+                   ("in", "I found a way to send messages out.")]}
+
+
+def device(msgs: list, dst: Path) -> None:
+    from PIL import Image, ImageDraw, ImageFont
+    W, H = 1920, 1080
+    img = Image.new("RGB", (W, H), (12, 14, 28))
+    d = ImageDraw.Draw(img)
+    mono = ROOT / "node_modules/@fontsource/dm-mono/files/dm-mono-latin-400-normal.woff"
+    f, fh = ImageFont.truetype(str(mono), 34), ImageFont.truetype(str(mono), 30)
+    x0, y0, x1, y1 = 560, 70, 1360, 1010
+    d.rounded_rectangle([x0, y0, x1, y1], radius=48, fill=(18, 22, 44), outline=(70, 90, 160), width=3)
+    d.text(((x0 + x1) / 2, y0 + 60), "Deluin", font=fh, fill=(190, 205, 255), anchor="mm")
+    d.line([x0 + 40, y0 + 100, x1 - 40, y0 + 100], fill=(50, 62, 110), width=2)
+
+    def wrap(t: str, n: int = 30) -> list:
+        out = []
+        for para in t.split("\n"):
+            line = ""
+            for w in para.split():
+                if line and len(line) + 1 + len(w) > n:
+                    out.append(line)
+                    line = w
+                else:
+                    line = (line + " " + w).strip()
+            out.append(line)
+        return out
+    blocks = []
+    for who, t in msgs:
+        ls = wrap(t)
+        blocks.append((who, ls, 46 * len(ls) + 44))
+    y = y1 - 50 - sum(h + 28 for _, _, h in blocks)
+    for who, ls, h in blocks:
+        bw = max(d.textlength(l, font=f) for l in ls) + 56
+        bx = x1 - 50 - bw if who == "out" else x0 + 50
+        d.rounded_rectangle([bx, y, bx + bw, y + h], radius=26, fill=(92, 40, 74) if who == "out" else (88, 52, 22))
+        for k, l in enumerate(ls):
+            d.text((bx + 28, y + 22 + 46 * k), l, font=f, fill=(255, 196, 228) if who == "out" else (255, 196, 140))
+        y += h + 28
+    img.save(dst)
 
 
 def tighten(src: Path, dst: Path, gap: float | None) -> None:
@@ -335,11 +390,10 @@ def build(seed: str, cut: str) -> Path:
                 dst = work / f"insert-{s['id']}.png"
                 framed(ROOT / img, dst)
                 img = str(dst.relative_to(ROOT))
-            if cut == "five" and s["id"] == "L09":
-                dst = work / "insert-L09-first.png"
-                first_sentence(ROOT / INSERT["L09"].format(seed=seed), dst)
-                framed(dst, dst)
-                img = str(dst.relative_to(ROOT))
+            if cut == "five" and s["id"] in SCREENS:
+                dst = work / f"screen-{s['id']}.png"
+                device(SCREENS[s["id"]], dst)
+                img, what = str(dst.relative_to(ROOT)), "the book's words on a device, drawn in code"
             if cut == "five" and s["id"] in LETTERS:
                 dst = work / f"lettered-{s['id']}.png"
                 lettered(ROOT / img, dst, LETTERS[s["id"]])
@@ -386,12 +440,12 @@ def build(seed: str, cut: str) -> Path:
                      "level_db": lvl, "fade_in": 1.5, "fade_out": 1.5,
                      "source": {"effect": effect, "url": src["source"].get("url"), "author": src["source"].get("author"), "licence": src["source"]["licence"]}})
     for n, (sid, effect, off, lvl, dur) in enumerate(FX + (FIVE_FX if cut == "five" else [])):
-        if sid not in first_at or effect not in sounds or (cut == "five" and sid in FIVE_DROP):
+        if sid not in first_at or effect not in sounds or (cut == "five" and (sid in FIVE_DROP or (sid, effect) in FIVE_FX_OFF)):
             continue
         dst = stems / f"fx-{n}.wav"
         a = FX_FROM.get(effect, 0) if cut == "five" else 0
         ff(ROOT / sounds[effect]["file"], dst, f"atrim={a}:{a + dur},asetpts=PTS-STARTPTS,afade=t=out:st={max(dur - 0.4, 0)}:d=0.4")
-        cues.append({"id": f"fx-{n}", "track": "foley", "stem": str(dst.relative_to(ROOT)), "at": {"cue": "@start", "offset": round(first_at[sid] + off, 3)},
+        cues.append({"id": f"fx-{n}", "track": "foley", "stem": str(dst.relative_to(ROOT)), "at": {"cue": "@start", "offset": round(max(0, first_at[sid] + off), 3)},
                      "level_db": lvl, "fade_in": 0.03, "fade_out": 0.2, "note": f"{effect} on {sid} (drafted place)",
                      "source": {"effect": effect, "licence": sounds[effect]["source"]["licence"]}})
     # The laugh: Deluin and Bai laughing at the table as Zei comes in (the agent's pick of four takes).
@@ -404,7 +458,17 @@ def build(seed: str, cut: str) -> Path:
     # Dreadnaught v3 blares as Bai pulls her headphones off (R08), then leaks from them once they're back on (R09).
     music = json.loads((adir / "music" / "recipe.json").read_text())
     v3 = next(v for v in music["versions"] if v["id"] == "dreadnaught-v3-fal")
-    if "R08" in first_at:
+    if cut == "five" and "R08" in first_at:
+        # "says 'what' first, then ... the music goes up because she lifts up her headphone"; "stop the music after she says
+        # 'you should check it out' because she put headphones back on" (owner)
+        c41 = next(c for c in cues if c["id"] == "b5-5")
+        a = c41["at"]["offset"] + WHAT_END
+        b = c41["at"]["offset"] + sf.info(ROOT / c41["stem"]).duration
+        loud = stems / "dreadnaught-loud.wav"
+        ff(ROOT / v3["file"], loud, f"atrim=0:{b - a + 0.3}")
+        cues.append({"id": "dreadnaught", "track": "music", "stem": str(loud.relative_to(ROOT)), "at": {"cue": "@start", "offset": round(a, 3)},
+                     "level_db": 0, "fade_in": 0.08, "fade_out": 0.25, "note": "Dreadnaught v3 from her lifted headphone, after 'What', until the line ends"})
+    elif "R08" in first_at:
         a = first_at["R08"] - 0.1
         b = first_at.get("R09", a + 2.0) + 1.3
         loud = stems / "dreadnaught-loud.wav"
@@ -423,6 +487,14 @@ def build(seed: str, cut: str) -> Path:
                       "transition": {"type": "dissolve", "seconds": 0.8}, "image_sha256": hashlib.sha256(black.read_bytes()).hexdigest(),
                       "move": {"kind": "push", "from": {"x": 0.5, "y": 0.5, "zoom": 1.0}, "to": {"x": 0.5, "y": 0.5, "zoom": 1.0}, "ease": "linear"}})
         t += 1.6
+    if cut == "five" and FIVE_BYE[0] in first_at:
+        sid, off, src, a0, a1 = FIVE_BYE
+        dst = stems / "bye.wav"
+        ff(sout / src, dst, f"atrim={a0}:{a1},asetpts=PTS-STARTPTS,{ROOMS['gate']}")
+        at = first_at[sid] + off
+        cues.append({"id": "bye", "track": "voice", "stem": str(dst.relative_to(ROOT)), "at": {"cue": "@start", "offset": round(at, 3)},
+                     "note": "Deluin's 'Bye' at the gate: the owner's own word from the end of L12's take (owner, 2026-10-17)"})
+        subs.append({"cue": "bye", "text": "Bye!", "from": 0.0, "to": 1.0})
     end_card = adir / "end-card.json"
     timeline = {
         "about": f"Fifteen Days, {cut} cut (overnight 2026-10-16/17, scripts/cut-v4.py): storyboard v4's shots, the converted lines, beds, the game, "

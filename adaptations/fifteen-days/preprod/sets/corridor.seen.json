@@ -202,12 +202,12 @@
       {
         "id": "vault",
         "name": "the round-topped corridor of polished pale stone, no windows",
-        "side": "left"
+        "side": "centre"
       },
       {
         "id": "elevators",
         "name": "a row of sleek elevator doors in the left-hand wall",
-        "side": "right"
+        "side": "left"
       }
     ],
     "people": {
@@ -215,7 +215,7 @@
         "side": "centre",
         "x": 0.5,
         "y": 0.178,
-        "facing": "toward the camera",
+        "facing": "facing screen-left, in profile",
         "dist": 1.2,
         "visible": true
       }
@@ -351,7 +351,7 @@
         "side": "centre",
         "x": 0.5,
         "y": 0.178,
-        "facing": "toward the camera",
+        "facing": "facing screen-left, in profile",
         "dist": 1.2,
         "visible": true
       }
@@ -363,11 +363,6 @@
         "id": "vault",
         "name": "the round-topped corridor of polished pale stone, no windows",
         "side": "left"
-      },
-      {
-        "id": "elevators",
-        "name": "a row of sleek elevator doors in the left-hand wall",
-        "side": "left"
       }
     ],
     "people": {
@@ -375,7 +370,7 @@
         "side": "centre",
         "x": 0.5,
         "y": 0.178,
-        "facing": "toward the camera",
+        "facing": "facing screen-right, in profile",
         "dist": 1.2,
         "visible": true
       }
@@ -520,5 +515,264 @@
       }
     ],
     "people": {}
+  },
+  "cov-corridor-EST": {
+    "landmarks": [
+      {
+        "id": "vault",
+        "name": "the round-topped corridor of polished pale stone, no windows",
+        "side": "centre"
+      },
+      {
+        "id": "elevators",
+        "name": "a row of sleek elevator doors in the left-hand wall",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.543,
+        "y": 0.437,
+        "facing": "facing screen-left, in profile",
+        "dist": 9.53,
+        "visible": true
+      },
+      "Z": {
+        "side": "centre",
+        "x": 0.473,
+        "y": 0.458,
+        "facing": "toward the camera",
+        "dist": 9.5,
+        "visible": true
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.456,
+        "y": 0.456,
+        "facing": "toward the camera",
+        "dist": 10.62,
+        "visible": true
+      }
+    }
+  },
+  "cov-corridor-MASTER": {
+    "landmarks": [
+      {
+        "id": "vault",
+        "name": "the round-topped corridor of polished pale stone, no windows",
+        "side": "centre"
+      },
+      {
+        "id": "elevators",
+        "name": "a row of sleek elevator doors in the left-hand wall",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "right",
+        "x": 0.643,
+        "y": 0.306,
+        "facing": "facing screen-left, in profile",
+        "dist": 3.09,
+        "visible": true
+      },
+      "Z": {
+        "side": "left",
+        "x": 0.358,
+        "y": 0.391,
+        "facing": "facing screen-right, in profile",
+        "dist": 3.09,
+        "visible": true
+      },
+      "B": {
+        "side": "left",
+        "x": 0.333,
+        "y": 0.374,
+        "facing": "toward the camera",
+        "dist": 4.23,
+        "visible": true
+      }
+    }
+  },
+  "cov-corridor-OTS-Z": {
+    "landmarks": [
+      {
+        "id": "vault",
+        "name": "the round-topped corridor of polished pale stone, no windows",
+        "side": "left"
+      },
+      {
+        "id": "elevators",
+        "name": "a row of sleek elevator doors in the left-hand wall",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.339,
+        "facing": "toward the camera",
+        "dist": 1.41,
+        "visible": true
+      },
+      "Z": {
+        "side": "left",
+        "x": -0.117,
+        "y": 0.768,
+        "facing": "away from the camera, seen from behind",
+        "dist": 0.54,
+        "visible": false
+      },
+      "B": {
+        "side": "left",
+        "x": -2.434,
+        "y": 0.69,
+        "facing": "toward the camera",
+        "dist": 1.5,
+        "visible": false
+      }
+    }
+  },
+  "cov-corridor-OTS-D": {
+    "landmarks": [
+      {
+        "id": "vault",
+        "name": "the round-topped corridor of polished pale stone, no windows",
+        "side": "right"
+      },
+      {
+        "id": "elevators",
+        "name": "a row of sleek elevator doors in the left-hand wall",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "right",
+        "x": 1.146,
+        "y": -0.107,
+        "facing": "away from the camera, seen from behind",
+        "dist": 0.54,
+        "visible": false
+      },
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.34,
+        "facing": "toward the camera",
+        "dist": 1.41,
+        "visible": true
+      },
+      "B": {
+        "side": "right",
+        "x": 0.977,
+        "y": 0.294,
+        "facing": "toward the camera",
+        "dist": 2.23,
+        "visible": true
+      }
+    }
+  },
+  "cov-corridor-CU-B": {
+    "landmarks": [
+      {
+        "id": "vault",
+        "name": "the round-topped corridor of polished pale stone, no windows",
+        "side": "right"
+      },
+      {
+        "id": "elevators",
+        "name": "a row of sleek elevator doors in the left-hand wall",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "right",
+        "x": 4.467,
+        "y": 1.879,
+        "facing": "facing screen-left, in profile",
+        "dist": 0.9,
+        "visible": false
+      },
+      "Z": {
+        "side": "left",
+        "x": -1.046,
+        "y": 0.335,
+        "facing": "toward the camera",
+        "dist": 1.28,
+        "visible": false
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.322,
+        "facing": "toward the camera",
+        "dist": 1.24,
+        "visible": true
+      }
+    }
+  },
+  "cov-walk-CU-Z": {
+    "landmarks": [
+      {
+        "id": "vault",
+        "name": "the round-topped corridor of polished pale stone, no windows",
+        "side": "right"
+      },
+      {
+        "id": "elevators",
+        "name": "a row of sleek elevator doors in the left-hand wall",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.322,
+        "facing": "toward the camera",
+        "dist": 1.16,
+        "visible": true
+      },
+      "B": {
+        "side": "right",
+        "x": 1.5,
+        "y": 0.21,
+        "facing": "toward the camera",
+        "dist": 0.75,
+        "visible": false
+      }
+    }
+  },
+  "cov-walk-CU-B": {
+    "landmarks": [
+      {
+        "id": "vault",
+        "name": "the round-topped corridor of polished pale stone, no windows",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "left",
+        "x": -0.496,
+        "y": 0.325,
+        "facing": "toward the camera",
+        "dist": 0.75,
+        "visible": false
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.322,
+        "facing": "toward the camera",
+        "dist": 1.16,
+        "visible": true
+      }
+    }
   }
 }

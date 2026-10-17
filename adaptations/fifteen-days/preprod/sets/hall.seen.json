@@ -69,13 +69,8 @@
         "side": "right"
       },
       {
-        "id": "ring",
-        "name": "the standing ring around the top of the hall, crowded behind a railing",
-        "side": "right"
-      },
-      {
         "id": "posts",
-        "name": "a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top",
+        "name": "a few slim towers made only of light, drifting across the floor on small glowing gliding discs, glowing cube clusters on top",
         "side": "right"
       },
       {
@@ -87,20 +82,15 @@
         "id": "pitD",
         "name": "Deluin's sunken pit at the edge of the floor",
         "side": "centre"
-      },
-      {
-        "id": "pitK",
-        "name": "Kau's sunken pit at the edge of the floor",
-        "side": "right"
       }
     ],
     "people": {
       "D": {
         "side": "centre",
-        "x": 0.429,
-        "y": 0.653,
-        "facing": "toward the camera",
-        "dist": 5.38,
+        "x": 0.5,
+        "y": 0.234,
+        "facing": "facing screen-left, in profile",
+        "dist": 0.92,
         "visible": true
       }
     }
@@ -385,36 +375,26 @@
         "side": "centre"
       },
       {
-        "id": "posts",
-        "name": "a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top",
-        "side": "centre"
-      },
-      {
         "id": "holo",
         "name": "the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber",
         "side": "centre"
-      },
-      {
-        "id": "screens",
-        "name": "two big screens hung over the hall, showing the two players' faces",
-        "side": "left"
       }
     ],
     "people": {
       "Z": {
-        "side": "centre",
-        "x": 0.486,
-        "y": 0.475,
-        "facing": "facing screen-left, in profile",
-        "dist": 13.29,
+        "side": "left",
+        "x": 0.284,
+        "y": 0.315,
+        "facing": "toward the camera",
+        "dist": 2.49,
         "visible": true
       },
       "B": {
-        "side": "centre",
-        "x": 0.525,
-        "y": 0.414,
-        "facing": "facing screen-left, in profile",
-        "dist": 12.51,
+        "side": "right",
+        "x": 0.716,
+        "y": 0.304,
+        "facing": "toward the camera",
+        "dist": 2.49,
         "visible": true
       }
     }
@@ -468,31 +448,39 @@
       {
         "id": "tiers",
         "name": "tiers of seats rising all around the hall, full of a varied crowd",
-        "side": "left"
+        "side": "centre"
       },
       {
         "id": "ring",
         "name": "the standing ring around the top of the hall, crowded behind a railing",
-        "side": "left"
+        "side": "centre"
       },
       {
         "id": "walkway",
         "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
-        "side": "left"
+        "side": "centre"
       },
       {
         "id": "holo",
         "name": "the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber",
-        "side": "left"
+        "side": "centre"
       }
     ],
     "people": {
-      "B": {
-        "side": "centre",
-        "x": 0.5,
-        "y": 0.249,
+      "Z": {
+        "side": "left",
+        "x": 0.284,
+        "y": 0.315,
         "facing": "toward the camera",
-        "dist": 0.92,
+        "dist": 2.49,
+        "visible": true
+      },
+      "B": {
+        "side": "right",
+        "x": 0.716,
+        "y": 0.304,
+        "facing": "toward the camera",
+        "dist": 2.49,
         "visible": true
       }
     }
@@ -502,40 +490,6 @@
       {
         "id": "tiers",
         "name": "tiers of seats rising all around the hall, full of a varied crowd",
-        "side": "right"
-      },
-      {
-        "id": "ring",
-        "name": "the standing ring around the top of the hall, crowded behind a railing",
-        "side": "right"
-      },
-      {
-        "id": "walkway",
-        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
-        "side": "right"
-      },
-      {
-        "id": "screens",
-        "name": "two big screens hung over the hall, showing the two players' faces",
-        "side": "left"
-      }
-    ],
-    "people": {
-      "Z": {
-        "side": "centre",
-        "x": 0.5,
-        "y": 0.343,
-        "facing": "toward the camera",
-        "dist": 0.49,
-        "visible": true
-      }
-    }
-  },
-  "G07": {
-    "landmarks": [
-      {
-        "id": "tiers",
-        "name": "tiers of seats rising all around the hall, full of a varied crowd",
         "side": "centre"
       },
       {
@@ -555,12 +509,62 @@
       }
     ],
     "people": {
+      "Z": {
+        "side": "left",
+        "x": 0.284,
+        "y": 0.315,
+        "facing": "toward the camera",
+        "dist": 2.49,
+        "visible": true
+      },
+      "B": {
+        "side": "right",
+        "x": 0.716,
+        "y": 0.304,
+        "facing": "toward the camera",
+        "dist": 2.49,
+        "visible": true
+      }
+    }
+  },
+  "G07": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "left"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "left"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "left"
+      },
+      {
+        "id": "holo",
+        "name": "the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "left",
+        "x": 0.216,
+        "y": 0.455,
+        "facing": "away from the camera, seen from behind",
+        "dist": 0.7,
+        "visible": true
+      },
       "B": {
         "side": "centre",
         "x": 0.5,
-        "y": 0.178,
+        "y": 0.342,
         "facing": "toward the camera",
-        "dist": 1.2,
+        "dist": 1.84,
         "visible": true
       }
     }
@@ -605,31 +609,39 @@
       {
         "id": "tiers",
         "name": "tiers of seats rising all around the hall, full of a varied crowd",
-        "side": "left"
+        "side": "centre"
       },
       {
         "id": "ring",
         "name": "the standing ring around the top of the hall, crowded behind a railing",
-        "side": "left"
+        "side": "centre"
       },
       {
         "id": "walkway",
         "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
-        "side": "left"
+        "side": "centre"
       },
       {
         "id": "holo",
         "name": "the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber",
-        "side": "left"
+        "side": "centre"
       }
     ],
     "people": {
+      "Z": {
+        "side": "left",
+        "x": 0.284,
+        "y": 0.315,
+        "facing": "toward the camera",
+        "dist": 2.49,
+        "visible": true
+      },
       "B": {
-        "side": "centre",
-        "x": 0.5,
-        "y": 0.249,
-        "facing": "facing screen-right, in profile",
-        "dist": 0.92,
+        "side": "right",
+        "x": 0.716,
+        "y": 0.304,
+        "facing": "toward the camera",
+        "dist": 2.49,
         "visible": true
       }
     }
@@ -659,19 +671,19 @@
     ],
     "people": {
       "Z": {
-        "side": "centre",
-        "x": 0.411,
-        "y": 0.423,
+        "side": "left",
+        "x": 0.285,
+        "y": 0.318,
         "facing": "facing screen-right, in profile",
-        "dist": 5.88,
+        "dist": 2.5,
         "visible": true
       },
       "B": {
-        "side": "centre",
-        "x": 0.589,
-        "y": 0.419,
+        "side": "right",
+        "x": 0.716,
+        "y": 0.307,
         "facing": "toward the camera",
-        "dist": 5.88,
+        "dist": 2.5,
         "visible": true
       }
     }
@@ -695,7 +707,7 @@
       },
       {
         "id": "posts",
-        "name": "a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top",
+        "name": "a few slim towers made only of light, drifting across the floor on small glowing gliding discs, glowing cube clusters on top",
         "side": "centre"
       },
       {
@@ -714,7 +726,16 @@
         "side": "left"
       }
     ],
-    "people": {}
+    "people": {
+      "D": {
+        "side": "left",
+        "x": -0.914,
+        "y": 0.813,
+        "facing": "facing screen-left, in profile",
+        "dist": 8.12,
+        "visible": false
+      }
+    }
   },
   "H08": {
     "landmarks": [
@@ -725,7 +746,7 @@
       },
       {
         "id": "posts",
-        "name": "a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top",
+        "name": "a few slim towers made only of light, drifting across the floor on small glowing gliding discs, glowing cube clusters on top",
         "side": "right"
       },
       {
@@ -743,9 +764,9 @@
       "D": {
         "side": "centre",
         "x": 0.5,
-        "y": 0.338,
-        "facing": "toward the camera",
-        "dist": 1.14,
+        "y": 0.234,
+        "facing": "facing screen-left, in profile",
+        "dist": 0.92,
         "visible": true
       }
     }
@@ -1174,5 +1195,282 @@
       }
     ],
     "people": {}
+  },
+  "H03b": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "centre"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "centre"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "centre"
+      },
+      {
+        "id": "posts",
+        "name": "a few slim towers made only of light, drifting across the floor on small glowing gliding discs, glowing cube clusters on top",
+        "side": "centre"
+      },
+      {
+        "id": "holo",
+        "name": "the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber",
+        "side": "centre"
+      },
+      {
+        "id": "pitD",
+        "name": "Deluin's sunken pit at the edge of the floor",
+        "side": "centre"
+      },
+      {
+        "id": "screens",
+        "name": "two big screens hung over the hall, showing the two players' faces",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.463,
+        "y": 0.659,
+        "facing": "away from the camera, seen from behind",
+        "dist": 19.36,
+        "visible": true
+      }
+    }
+  },
+  "G08b": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "left"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "left"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "left"
+      },
+      {
+        "id": "posts",
+        "name": "a few slim towers made only of light, drifting across the floor on small glowing gliding discs, glowing cube clusters on top",
+        "side": "centre"
+      },
+      {
+        "id": "holo",
+        "name": "the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber",
+        "side": "left"
+      },
+      {
+        "id": "pitD",
+        "name": "Deluin's sunken pit at the edge of the floor",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "left",
+        "x": -4.806,
+        "y": -26.96,
+        "facing": "away from the camera, seen from behind",
+        "dist": 0.84,
+        "visible": false
+      }
+    }
+  },
+  "G08c": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "right"
+      },
+      {
+        "id": "posts",
+        "name": "a few slim towers made only of light, drifting across the floor on small glowing gliding discs, glowing cube clusters on top",
+        "side": "right"
+      },
+      {
+        "id": "holo",
+        "name": "the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber",
+        "side": "right"
+      },
+      {
+        "id": "pitD",
+        "name": "Deluin's sunken pit at the edge of the floor",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "D": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.178,
+        "facing": "facing screen-left, in profile",
+        "dist": 1.2,
+        "visible": true
+      }
+    }
+  },
+  "G08d": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "left"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "left"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "left"
+      },
+      {
+        "id": "holo",
+        "name": "the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.249,
+        "facing": "facing screen-right, in profile",
+        "dist": 0.92,
+        "visible": true
+      }
+    }
+  },
+  "cov-overlook-OTS-Z": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "left"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "left"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "left",
+        "x": 0.13,
+        "y": 0.404,
+        "facing": "away from the camera, seen from behind",
+        "dist": 0.83,
+        "visible": true
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.376,
+        "facing": "toward the camera",
+        "dist": 1.95,
+        "visible": true
+      }
+    }
+  },
+  "cov-overlook-CU-Z": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "right"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "right"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "right"
+      },
+      {
+        "id": "screens",
+        "name": "two big screens hung over the hall, showing the two players' faces",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.322,
+        "facing": "toward the camera",
+        "dist": 1.24,
+        "visible": true
+      },
+      "B": {
+        "side": "right",
+        "x": 3.866,
+        "y": -0.093,
+        "facing": "toward the camera",
+        "dist": 0.64,
+        "visible": false
+      }
+    }
+  },
+  "cov-overlook-CU-B": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "left"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "left"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "left",
+        "x": -2.83,
+        "y": 0.237,
+        "facing": "toward the camera",
+        "dist": 0.63,
+        "visible": false
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.322,
+        "facing": "toward the camera",
+        "dist": 1.24,
+        "visible": true
+      }
+    }
   }
 }

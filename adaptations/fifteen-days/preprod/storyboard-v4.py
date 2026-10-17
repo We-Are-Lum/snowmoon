@@ -179,7 +179,10 @@ def solve(s, setdef):
         mid = [sum(h[i] for h in hs) / len(hs) for i in range(3)]
         span = max(math.hypot(a[0] - b[0], a[2] - b[2]) for a in hs for b in hs) if len(hs) > 1 else 0
         d = max(dist_for(size if size in VIS else "MS"), (span + 1.6) / (2 * math.tan(math.radians(FOV / 2)) * 1.78))
-        if spec.get("mode") == "front":
+        if spec.get("front"):  # from the side they face (the overlook: out over the hall)
+            f = FACEV[pos[ws[0]]["face"]]
+            cam = [mid[0] + f[0] * d, mid[1] + 0.05, mid[2] + f[1] * d]
+        elif spec.get("mode") == "front":
             f = FACEV[pos[ws[0]]["face"]]
             cam = [mid[0] + f[0] * d, mid[1] + 0.05, mid[2] + f[1] * d]
         else:
@@ -215,6 +218,51 @@ def solve(s, setdef):
     return {**shot, "cam": [c[0], y, c[1]], "look": [h[0], look_y, h[2]]}
 
 
+def direct(s, cam, setdef):
+    """Screen direction for the owner's 2026-10-17 frames: Zei on the left looking right, Deluin and Bai on the right looking left.
+    If the solved camera breaks it, the camera is mirrored across the vertical plane through the people (or the subject's
+    eyeline), which swaps left and right and keeps the framing."""
+    spec = SPEC.get(s["id"], {})
+    if "setup" in spec or "cam" in spec or "insert" in spec:
+        return
+    pos = {}
+    for st in spec.get("state", STATE[s["id"][0]]):
+        for w, p in setdef["states"][st].items():
+            pos[w] = {**p, "who": w}
+    for w, p in spec.get("people", {}).items():
+        pos[w] = {**p, "who": w}
+    c, l = cam["cam"], cam["look"]
+    f = norm((l[0] - c[0], l[2] - c[2]))
+    right = (-f[1], f[0])
+    sx = lambda p: (p[0] - c[0]) * right[0] + (p[2] - c[2]) * right[1]
+    group = spec.get("pair") or spec.get("ots")
+    if group:
+        hs = {w: head(pos[w]) for w in group}
+        if "Z" not in hs:
+            return
+        ok = all(sx(hs["Z"]) < sx(h) for w, h in hs.items() if w != "Z")
+        a, b = hs[group[0]], hs[group[-1]]
+        u = norm((b[0] - a[0], b[2] - a[2]))
+        P = ((a[0] + b[0]) / 2, (a[2] + b[2]) / 2)
+    else:
+        w = next(x for x in s["who"] if x != "R") if any(x != "R" for x in s["who"]) else "R"
+        if w not in pos or w == "R":
+            return
+        h = head(pos[w])
+        partner = spec.get("partner")
+        t = head(pos[partner]) if isinstance(partner, str) and partner in pos else \
+            [h[0] + FACEV[pos[w]["face"]][0] * 2, h[1], h[2] + FACEV[pos[w]["face"]][1] * 2]
+        ok = sx(t) > sx(h) if w == "Z" else sx(t) < sx(h)
+        u = norm((t[0] - h[0], t[2] - h[2]))
+        P = (h[0], h[2])
+    if ok:
+        return
+    v = (c[0] - P[0], c[2] - P[1])
+    d = v[0] * u[0] + v[1] * u[1]
+    m = (P[0] + 2 * d * u[0] - v[0], P[1] + 2 * d * u[1] - v[1])
+    cam["cam"] = [round(m[0], 3), c[1], round(m[1], 3)]
+
+
 def bai_behind(s, cam, setdef):
     """Zei's single with Bai small behind him: the camera on the line from her table through his head."""
     pos = {**setdef["states"]["seated"], **setdef["states"]["bai-away"]}
@@ -233,6 +281,113 @@ def bai_behind(s, cam, setdef):
     s["bai_bg"] = True
 
 
+# --- the owner's notes in the clip viewer (2026-10-17): 35 frames redrawn for the five-minute cut. Screen direction for these:
+# Zei on the left of frame looking right; Deluin and Bai on the right looking left; from F26 on Bai sits at her own back table.
+# Two-shots and over-the-shoulders instead of singles, and no straight-on singles (turned 40 degrees off the eyeline). DRAFTED.
+def v5(sid, after=None, **kw):
+    if sid not in shots:
+        shots[sid] = {"id": sid, "scene": shots[after]["scene"], "line": None, "look": "-", "dur_s": 2}
+        order.insert(order.index(after) + 1, sid)
+    shots[sid].update({k: v for k, v in kw.items() if k != "spec"})
+    SPEC[sid] = kw.get("spec", {})
+    V5.add(sid)
+
+
+V5 = set()
+v5("H03", size="CU, side-on", who=["D"], action="{D} sits low in his small sunken pit at a large glowing console, the cabled glasses on, calm and focused on the game; hologram light on his face.",
+   spec={"mode": "face", "turn": 60})
+v5("H03b", after="H03", size="WS", who=["D"], action="The arena: the glowing hologram play floor with its walls and gliders, the crowded tiers rising around it, and above the floor one huge screen showing {D}'s calm face in close-up.",
+   purpose="The arena with him on the screen (owner).", spec={"setup": "A"})
+v5("H07", size="WS", who=["D"], action="The holographic walls stand as the last gliders break against them in bursts of light; the crowd in the tiers rises; above the floor the huge screen shows {D}'s face, calm.",
+   spec={"setup": "B"})
+v5("H08", size="CU, side-on", who=["D"], action="{D} in his pit lifts the cabled glasses off his face with one hand, the other hand empty on the console; the cable falls behind his arm; a small private closed-mouth smile.",
+   spec={"mode": "face", "turn": 60})
+WALK = {"Z": {"at": [-1.1, -0.6], "face": "W", "pose": "standing", "y": 7.6}, "B": {"at": [-1.1, 0.6], "face": "W", "pose": "standing", "y": 7.6}}
+v5("G01", size="MS two-shot, from the front, low", who=["Z", "B"], action="High on the overlook, seen from out over the hall: {Z} on the left leans on his forearms on the railing, looking down at the game far below; {B} on the right leans on the railing beside him, eyes down on a small electronic gadget she works on with both hands. Two arms each.",
+   spec={"pair": ["Z", "B"], "front": True})
+v5("G05", size="MS two-shot, from the front", who=["Z", "B"], line="b1-2 Bai: It wouldn't be so annoying…", action="At the overlook railing, seen from out over the hall: {Z} on the left leans on the railing watching the game below; {B} on the right is bent over the small gadget she is working on, not looking up, dry.",
+   spec={"pair": ["Z", "B"], "front": True})
+v5("G06", size="MS two-shot, from the front", who=["Z", "B"], action="At the overlook railing: {Z} on the left turns his head to look at her, one eyebrow raised; {B} on the right still looks down at her gadget.",
+   spec={"pair": ["Z", "B"], "front": True})
+v5("G07", size="OTS over Zei's shoulder", who=["Z", "B"], action="Over {Z}'s shoulder: {B} snaps the gadget's casing shut and looks up at him, shrugging.",
+   spec={"state": ["walkway-turned"], "ots": ["Z", "B"], "people": {"B": {"at": [-1.15, 0.6], "face": "N", "pose": "standing", "y": 7.6}}})
+shots["G08"]["line"] = None  # "a pause before 'such patience'": the game, then Deluin playing, then Zei close on the line
+v5("G08b", after="G08", size="OTS over Zei's shoulder, looking down", who=["Z"], action="Over {Z}'s shoulder at the railing, looking down past the crowd's heads to the game far below: the glowing hologram floor, walls holding against streams of gliders.",
+   spec={"cam": [-0.55, 8.75, -0.95], "look": [-9.0, 0.0, 0.2], "fov": 46})
+v5("G08c", after="G08b", size="MCU, side-on", who=["D"], action="{D} in his sunken pit at the glowing console, playing: eyes on the board, hands still, patient, unhurried.",
+   spec={"state": ["game"], "mode": "face", "turn": 60, "high": 0.15})
+v5("G08d", after="G08c", size="CU", who=["Z"], line="b1-4 Zei: Such patience…", action="{Z} at the railing, close, looking down at the game, admiring, a small closed-mouth smile; hologram light from below.",
+   spec={"mode": "face", "turn": 60})
+v5("G09", size="MS two-shot, from the front", who=["Z", "B"], line="b1-5 Bai: Total wimp, just like you…", action="At the overlook railing: {B} on the right glances sideways at him, wry, still working on the gadget in her hands; {Z} on the left looks down at the game.",
+   spec={"pair": ["Z", "B"], "front": True})
+v5("G10", size="MS two-shot, side-on", who=["Z", "B"], action="{B} on the right straightens from her gadget, sets it on the rail and leans far out over the railing to study the board below; {Z} on the left beside her watches her.",
+   spec={"state": ["walkway-turned"], "pair": ["Z", "B"]})
+v5("C01", size="EWS, down the corridor", who=["Z", "B"], action="The long round-topped stone corridor deep under the hall, a row of metal elevator doors along one wall; {Z} and {B} at their real size, standing waiting by the elevators in the middle distance. Nobody else.",
+   spec={"state": ["waiting"], "setup": "N"})
+v5("C07", size="MCU, three-quarter", who=["D"], action="{D} standing in the open elevator doorway, turned three-quarters, looking toward the left of the frame at Zei, easy and asking. The picture fills the whole frame: no borders, no bars.",
+   spec={"partner": "Z", "turn": 55})
+v5("C09", size="OTS over Bai's shoulder", who=["B", "D"], action="Over {B}'s shoulder: {D} at the elevator turns to her, open and warm. Nobody else in the corridor.",
+   spec={"ots": ["B", "D"]})
+v5("C13", size="MCU walking, three-quarter", who=["B"], action="{B} walking, serious and worried about him, not smiling, eyes ahead, looking a little toward the left of the frame.",
+   spec={"state": ["walking"], "mode": "face", "turn": -60})
+v5("C14", size="MCU walking, three-quarter", who=["Z"], action="{Z} walking, teasing, a closed-mouth smile, turned three-quarters toward the right of the frame where she walks.",
+   spec={"state": ["walking"], "mode": "face", "turn": 60})
+v5("F01", size="EWS establishing, high", who=["D", "B"], action="The courtyard café at night from high in a corner: string lights over the courtyard, small trees, the street gate, the long rectangular wooden table in the middle with {D} and {B} small at it, sitting across from each other; the megastructure skyline beyond. Nobody else.",
+   spec={"cam": [-8.5, 4.6, 6.0], "look": [1.0, 0.4, -1.5], "fov": 44})
+v5("F05", size="MS two-shot", who=["D", "B"], action="{D} and {B} at the long rectangular table, sitting across from each other; {D} turns toward the left of the frame and raises one hand to wave someone over, a soft closed-mouth laugh; {B} looks over the same way.",
+   spec={"cam": [3.6, 1.35, -0.2], "look": [0.0, 0.85, 0.0], "fov": 40})
+v5("F08", size="MS", who=["R", "D", "B", "Z"], action="{R} glides up beside the long rectangular table where {D} and {B} sit across from each other and {Z} sits at the end.", spec=SPEC["F08"])
+v5("F09", size="MCU", who=["R"], action="{R} beside the table, its face screen kind, holding its tray level.", spec={"mode": "face", "turn": 55})
+v5("F14", size="MS three-shot", who=["Z", "D", "B"], action="All three at the long rectangular table: {Z} at the end on the left, {D} and {B} sitting across from each other; {B} looks down at her thin glowing menu, unimpressed.",
+   spec={"state": ["seated", "talking"], "pair": ["Z", "D", "B"]})
+v5("F17", size="MS two-shot", who=["Z", "D"], line="b3-8 Zei: Hmmm. More straight horizontal lines…", action="{Z} on the left at the end of the table looks down at the thin glowing menu in his hands; {D} on the right, still sitting, leans over toward him to look at it.",
+   spec={"state": ["seated", "talking"], "pair": ["Z", "D"]})
+v5("F18", size="MS two-shot", who=["Z", "D"], line="b3-9 Deluin: Top right is 'kai', right?…", action="Both still sitting: {D} on the right leans in and points at the thin glowing menu in {Z}'s hands; {Z} on the left holds it out toward him.",
+   spec={"state": ["seated", "talking"], "pair": ["Z", "D"]})
+v5("F20", size="MS two-shot, side-on", who=["Z", "D"], line="b3-10 Zei: Wait, you know Dzegoban?", action="{Z} on the left, astonished, turns to {D} on the right, who sits easy, menu in hand.",
+   spec={"state": ["seated", "talking"], "pair": ["Z", "D"]})
+v5("F23", size="MS three-shot", who=["Z", "D", "B"], line="b3-13 Bai: Actually, I don't think I want anything…", action="{B} puts her thin menu down on the long rectangular table; {Z} on the left and {D} both look at her.",
+   spec={"state": ["seated", "talking"], "pair": ["Z", "D", "B"]})
+v5("F24", size="MCU, three-quarter", who=["B"], action="{B}, standing now, big headphones in her hand, looking down toward the left of the frame at Zei: serious, a straight face, not smiling.",
+   spec={"state": ["seated", "bai-standing"], "partner": "Z", "turn": 55})
+v5("F26", size="MS two-shot, Bai far behind", who=["Z", "D", "B"], action="{Z} on the left and {D} on the right together at the long rectangular table; far behind them, small, {B} sits alone at a small round table in the background, putting on big headphones.",
+   spec={"state": ["seated", "bai-back", "talking"], "pair": ["Z", "D"]})
+v5("S01", size="MS", who=["R", "Z", "D"], action="{R} pours tea from a pot into two cups on the long rectangular table while {Z} on the left and {D} on the right keep talking, not looking at it.",
+   spec={"state": ["seated", "bai-back", "talking"], "pair": ["Z", "D"], "people": {"R": {"at": [0.75, -0.9], "face": "S", "pose": "robot"}}})
+# "imagine the camera doesn't actually move that much, just cuts between views": one camera for each person's singles at the table
+ZEI_CU = {"state": ["seated", "bai-back", "talking"], "partner": "D", "turn": 55}
+DELUIN_CU = {"state": ["seated", "bai-back", "talking"], "partner": "Z", "turn": 80}
+v5("S04", size="MCU, three-quarter", who=["Z"], action="{Z} sits at the end of the long rectangular table, turned three-quarters toward the right of the frame, talking to Deluin.",
+   spec=ZEI_CU)
+v5("S05", size="MCU, three-quarter", who=["D"], action="{D} sitting at the long rectangular table, warm, thinking about home, turned three-quarters toward the left of the frame where Zei sits.",
+   spec=DELUIN_CU)
+v5("S10", size="MS two-shot", who=["Z", "D", "B"], action="{Z} on the left, amused, and {D} on the right at the long rectangular table; far behind them, small, {B} at her back table with headphones on.",
+   spec={"state": ["seated", "bai-back", "talking"], "pair": ["Z", "D"]})
+
+# --- the owner's second batch (2026-10-17): the end of the café, the gate, the lobby
+v5("R01", size="MCU, three-quarter", who=["D"], action="{D} sitting at the long rectangular table, leaning in, eager and inviting, turned three-quarters toward the left of the frame where Zei sits.", spec=DELUIN_CU)
+v5("R02", size="MCU, three-quarter", who=["Z"], action="{Z} sitting at the end of the long rectangular table, smiling with his mouth closed, a little embarrassed, looking toward the right of the frame at Deluin.", spec=ZEI_CU)
+v5("R03", size="MCU, three-quarter", who=["Z"], action="{Z} at the table glances down at the watch on his wrist, smiling with his mouth closed.", spec=ZEI_CU)
+v5("R04", size="MCU, three-quarter", who=["Z"], action="{Z} at the table, smiling with his mouth closed, looking toward the right of the frame at Deluin.", spec=ZEI_CU)
+v5("R05", size="MCU, three-quarter", who=["D"], action="{D} still sitting at the long rectangular table, playful, plain conversation, turned three-quarters toward the left of the frame where Zei sits.", spec=DELUIN_CU)
+v5("R06", size="MCU, Bai near, the two far behind", who=["B", "Z", "D"], action="{B} alone at her small round table in the foreground, big headphones on, glancing sideways out of the corner of her eye; far behind her, small and soft, {Z} and {D} talk at the long rectangular table.",
+   spec={"state": ["seated", "bai-back", "talking"], "partner": "Z", "turn": 30})
+v5("R07", size="WS, all three", who=["Z", "D", "B"], action="{D} on the right leans out and waves across the courtyard to {B}; {Z} on the left at the end of the long rectangular table; {B} small, apart at her own small round table, big headphones on.",
+   spec={"state": ["seated", "bai-back", "talking"], "pair": ["Z", "D"], "people": {}, "wide": True})
+v5("R08", size="MS", who=["B"], action="{B} at her small round table turns around in her chair toward the left of the frame and lifts one side of her big headphones off one ear.",
+   spec={"state": ["seated", "bai-back", "talking"], "partner": "Z", "turn": 35, "mode": "ms"})
+v5("D04", size="MS two-shot", who=["Z", "D"], action="At the courtyard's street gate at dusk: {Z} on the left mirrors {D}'s gesture with both arms up, a closed-mouth smile: ten fingers, then five; {D} on the right watches. Both arms and hands clearly drawn.",
+   spec={"pair": ["Z", "D"]})
+v5("D05", size="MS two-shot", who=["Z", "D"], action="At the gate under the lamps: {D} on the right, already turning to go into the street, gives a quick wave goodbye; {Z} on the left waves back.",
+   spec={"pair": ["Z", "D"]})
+v5("D09", size="MS two-shot, dusk", who=["Z", "B"], action="At dusk in the emptying courtyard: {Z} on the left walks up to {B}'s small round table and talks to her; {B} on the right, seated, headphones around her neck, looks up at him.",
+   spec={"state": ["dusk-walk"], "pair": ["Z", "B"]})
+v5("L05", size="MS two-shot", who=["Z", "B"], action="The hotel lobby restaurant late at night: {Z} on the left at his table, worried, not smiling; {B} on the right sits down across from him carefully, concerned and caring, not smiling, without a word.",
+   spec={"state": ["together"], "pair": ["Z", "B"]})
+v5("L06", size="ECU", who=["Z"], action="{Z}'s eyes, very close, looking down at the device in his hands as it lights up; worried, not smiling.",
+   spec={"state": ["together"], "mode": "face", "turn": 30, "high": 0.1})
+BAI_BG -= {"S04", "S10", "F26", "R02", "R04"}
+
 out = {}
 board = []
 setdefs = {n: json.loads((SETS / f"{n}.json").read_text()) for n in ("hall", "corridor", "courtyard", "lobby")}
@@ -243,6 +398,8 @@ for sid in order:
         board.append({**s, "set": sname, "camera": None})
         continue
     cam = solve(s, setdefs[sname])
+    if sid in V5:
+        direct(s, cam, setdefs[sname])
     if sid in BAI_BG and sid != "F26":
         bai_behind(s, cam, setdefs[sname])
     elif sid == "F26":

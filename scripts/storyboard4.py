@@ -84,11 +84,18 @@ def main() -> None:
     ap.add_argument("--shots", nargs="*")
     ap.add_argument("--stage", choices=["AB", "K", "Q"], default="AB")
     ap.add_argument("--from-a", type=int, help="K: restyle this attempt's A picture (default: the same attempt)")
+    ap.add_argument("--board", default="storyboard-v4", help="'coverage': the frames of coverage-board.json (scripts/coverage-plan.py): one A per layout, one K per frame")
     args = ap.parse_args()
     seed, att = args.seed, args.attempt
     adir = ROOT / "adaptations" / seed / "preprod"
     sets = adir / "sets"
-    board = json.loads((adir / "storyboard-v4.json").read_text())["shots"]
+    if args.board == "coverage":
+        cb = json.loads((adir / "coverage-board.json").read_text())
+        board = [{"id": fid, "layout": f["layout"], "set": f["set"], "size": f["size"], "who": f["who"], "action": f["action"],
+                  "camera": cb["layouts"][f["layout"]]["camera"]} for fid, f in cb["frames"].items() if f.get("layout")]
+    else:
+        board = json.loads((adir / "storyboard-v4.json").read_text())["shots"]
+    a_done = set()
     style = json.loads((ROOT / "adaptations" / seed / "style.json").read_text())
     approved = json.loads((adir / "plates-approved.json").read_text()) if (adir / "plates-approved.json").exists() else {}
     seen = {n: json.loads((sets / f"{n}.seen.json").read_text()) for n in ("hall", "corridor", "courtyard", "lobby")}
@@ -114,7 +121,8 @@ def main() -> None:
         plate = s.get("plate_override") if s.get("plate_override") in approved else best[1] if best else None
         sz = s["size"].split(",")[0].split(" ")[0]
         sz = "INSERT" if "INSERT" in s["size"] else sz
-        sn = seen[n].get(s["id"], {"people": {}, "landmarks": []})
+        lay = s.get("layout", s["id"])
+        sn = seen[n].get(lay, {"people": {}, "landmarks": []})
         people = [w for w in s["who"] if w != "R"]
         WHO = {**DESC, "R": "the serving robot"}
         action = s["action"].replace("wide table", "long rectangular table")
@@ -170,10 +178,10 @@ def main() -> None:
         cards = ["cards2/cast.png"] if three else [CARD[w] for w in people]
         card_refs = [small(PRE / "cards2" / "cast.png", PRE / "cards-small" / "cast.png", 560)] if three else \
                     [small(PRE / CARD[w], PRE / "cards-small" / Path(CARD[w]).name, 900) for w in people]
-        frames = {m: small(PRE / "set" / f"{s['id']}{x}.png", adir / "set-frames" / f"{s['id']}{x}.png", 768 if m == "depth" else 640)
+        frames = {m: small(PRE / "set" / f"{lay}{x}.png", adir / "set-frames" / f"{lay}{x}.png", 768 if m == "depth" else 640)
                   for m, x in (("depth", ".depth"), ("look", ".look"))}
         layers = {"set": layer(str((sets / f"{n}.json").relative_to(ROOT))),
-                  "camera": {"file": str((sets / f"{n}.shots.json").relative_to(ROOT)), "key": s["id"], **cam}}
+                  "camera": {"file": str((sets / f"{n}.shots.json").relative_to(ROOT)), "key": lay, **cam}}
         card_layers = [layer(r, source=layer(f"images-out/preprod/{c}")) for r, c in zip(card_refs, cards)]
 
         def card_words(first: int, word: str) -> list:
@@ -185,18 +193,19 @@ def main() -> None:
 
         # A: depth map + cards (Qwen-Image-Edit-2509 takes at most three pictures)
         a_refs = [frames["depth"]] + card_refs
-        if len(a_refs) <= 3:
+        if len(a_refs) <= 3 and lay not in a_done and not (PRE / "pass3" / f"{lay}-A{att}.png").exists():
+            a_done.add(lay)
             a = [COMIC] + core + ([FACES] if people and sz != "INSERT" else []) + ["Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, "
                                   "lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands "
                                   "there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. "
                                   "Draw nothing grey from it."] + card_words(2, "Picture") + tail + \
                 ["Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights."]
-            jobs["A"].append({"id": f"{s['id']}-A{att}", "shot": s["id"], "approach": "A", "attempt": att, "engine": "qwen", "prompt": " ".join(a), "refs": a_refs,
+            jobs["A"].append({"id": f"{lay}-A{att}", "shot": s["id"], "approach": "A", "attempt": att, "engine": "qwen", "prompt": " ".join(a), "refs": a_refs,
                               "width": 1024, "height": 576, "seed": 31000 + 100 * att + i,
-                              "layers": {**layers, "set_frame": layer(frames["depth"], mode="depth", rendered_from=f"images-out/preprod/set/{s['id']}.depth.png"),
+                              "layers": {**layers, "set_frame": layer(frames["depth"], mode="depth", rendered_from=f"images-out/preprod/set/{lay}.depth.png"),
                                          "plate": None, "cards": card_layers}})
         # K: the A picture restyled, faces held to the cards
-        apic = PRE / "pass3" / f"{s['id']}-A{args.from_a or att}.png"
+        apic = PRE / "pass3" / f"{lay}-A{args.from_a or att}.png"
         close = sz in ("CU", "ECU", "INSERT", "MCU") and att > 1  # from attempt 2: no wide place picture for close shots (it widened them)
         if args.stage == "K" and apic.exists():
             look = PRE / approved[plate] if plate and not close else PRE / "swatch" / f"{n}.png"
@@ -216,7 +225,7 @@ def main() -> None:
                     k.insert(3, f"Reference image 3 is {DESC['Z']}: copy only his face, hair, skin and clothes.")
             jobs["K"].append({"id": f"{s['id']}-K{att}", "shot": s["id"], "approach": "A", "attempt": att, "prompt": " ".join(k),
                               "refs": [str(apic.relative_to(ROOT)), lref] + [r for r, _ in kc], "width": 1024, "height": 576, "seed": 34000 + 100 * att + i,
-                              "layers": {**layers, "set_frame": layer(frames["depth"], mode="depth", rendered_from=f"images-out/preprod/set/{s['id']}.depth.png"),
+                              "layers": {**layers, "set_frame": layer(frames["depth"], mode="depth", rendered_from=f"images-out/preprod/set/{lay}.depth.png"),
                                          "stage1": layer(str(apic.relative_to(ROOT)), engine="qwen-image-edit-2509"),
                                          "plate": layer(lref, plate=plate, source=layer(str(look.relative_to(ROOT)))),
                                          "cards": [c for c in card_layers if c["file"] in {r for r, _ in kc}]}})
@@ -228,7 +237,7 @@ def main() -> None:
                  "outlines, cel-shaded colour.", FACES3 if people and sz != "INSERT" else ""] + card_words(2, "Picture") + tail
             jobs["Q"].append({"id": f"{s['id']}-Q{att}", "shot": s["id"], "approach": "A", "attempt": att, "engine": "qwen", "prompt": " ".join(x for x in q if x),
                               "refs": [str(apic.relative_to(ROOT))] + card_refs, "width": 1024, "height": 576, "seed": 36000 + 100 * att + i,
-                              "layers": {**layers, "set_frame": layer(frames["depth"], mode="depth", rendered_from=f"images-out/preprod/set/{s['id']}.depth.png"),
+                              "layers": {**layers, "set_frame": layer(frames["depth"], mode="depth", rendered_from=f"images-out/preprod/set/{lay}.depth.png"),
                                          "stage1": layer(str(apic.relative_to(ROOT)), engine="qwen-image-edit-2509"), "plate": None, "cards": card_layers}})
         # B: readable render + plate + cards (FLUX.2 klein edit)
         if plate:
@@ -244,12 +253,12 @@ def main() -> None:
                 card_words(3, "Reference image") + tail
             jobs["B"].append({"id": f"{s['id']}-B{att}", "shot": s["id"], "approach": "B", "attempt": att, "prompt": " ".join(b),
                               "refs": [frames["look"], pref] + card_refs, "width": 1024, "height": 576, "seed": 32000 + 100 * att + i,
-                              "layers": {**layers, "set_frame": layer(frames["look"], mode="readable", rendered_from=f"images-out/preprod/set/{s['id']}.look.png"),
+                              "layers": {**layers, "set_frame": layer(frames["look"], mode="readable", rendered_from=f"images-out/preprod/set/{lay}.look.png"),
                                          "plate": layer(pref, plate=plate, source=layer(str(psrc.relative_to(ROOT)))), "cards": card_layers}})
         s["prompt_A"] = jobs["A"][-1]["prompt"] if jobs["A"] and jobs["A"][-1]["shot"] == s["id"] else None
         s["prompt_B"] = jobs["B"][-1]["prompt"] if jobs["B"] and jobs["B"][-1]["shot"] == s["id"] else None
         s["plate"] = plate
-    if args.stage == "AB":
+    if args.stage == "AB" and args.board != "coverage":
         (adir / "storyboard4.json").write_text(json.dumps({"about": "Storyboard frames with exact prompts per approach (scripts/storyboard4.py).", "shots": board},
                                                       indent=2, ensure_ascii=False) + "\n")
     for ap_, js in jobs.items():

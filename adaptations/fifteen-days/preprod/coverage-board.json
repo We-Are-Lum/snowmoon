@@ -1,0 +1,4002 @@
+{
+ "about": "Coverage board (scripts/coverage-plan.py from coverage.json): layouts, frames (setup x variant), sequence. DRAFTED.",
+ "layouts": {
+  "H07": {
+   "id": "H07",
+   "set": "hall",
+   "camera": {
+    "people": {
+     "D": {
+      "at": [
+       -8.4,
+       0
+      ],
+      "face": "W",
+      "pose": "seated",
+      "y": -1.1
+     }
+    },
+    "fov": 50,
+    "cam": [
+     -4.0,
+     0.9,
+     6.8
+    ],
+    "look": [
+     1.5,
+     1.8,
+     -1.5
+    ],
+    "plate": "plate-hall-B"
+   },
+   "size": "WS",
+   "existing": true
+  },
+  "H03b": {
+   "id": "H03b",
+   "set": "hall",
+   "camera": {
+    "people": {
+     "D": {
+      "at": [
+       -8.4,
+       0
+      ],
+      "face": "W",
+      "pose": "seated",
+      "y": -1.1
+     }
+    },
+    "fov": 64,
+    "cam": [
+     10.0,
+     5.5,
+     3.0
+    ],
+    "look": [
+     -6.0,
+     4.199999999999999,
+     -1.0
+    ],
+    "plate": "plate-hall-A"
+   },
+   "size": "WS",
+   "existing": true
+  },
+  "G08c": {
+   "id": "G08c",
+   "set": "hall",
+   "camera": {
+    "people": {
+     "D": {
+      "at": [
+       -8.4,
+       0
+      ],
+      "face": "W",
+      "pose": "seated",
+      "y": -1.1
+     }
+    },
+    "fov": 36,
+    "cam": [
+     -9.0,
+     0.3746,
+     1.039
+    ],
+    "look": [
+     -8.4,
+     0.004599999999999993,
+     0
+    ]
+   },
+   "size": "MCU, side-on",
+   "existing": true
+  },
+  "G05": {
+   "id": "G05",
+   "set": "hall",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       -1.1,
+       -0.6
+      ],
+      "face": "W",
+      "pose": "standing",
+      "y": 7.6
+     },
+     "B": {
+      "at": [
+       -1.1,
+       0.6
+      ],
+      "face": "W",
+      "pose": "standing",
+      "y": 7.6
+     }
+    },
+    "fov": 36,
+    "cam": [
+     -3.5206499730591885,
+     9.288,
+     0.0
+    ],
+    "look": [
+     -1.1,
+     8.988,
+     0.0
+    ]
+   },
+   "size": "MS two-shot, from the front",
+   "existing": true
+  },
+  "cov-overlook-OTS-Z": {
+   "id": "cov-overlook-OTS-Z",
+   "set": "hall",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       -1.1,
+       -0.6
+      ],
+      "face": 0.0,
+      "pose": "standing",
+      "y": 7.6
+     },
+     "B": {
+      "at": [
+       -1.1,
+       0.6
+      ],
+      "face": 180.0,
+      "pose": "standing",
+      "y": 7.6
+     }
+    },
+    "cam": [
+     -1.55,
+     9.288,
+     -1.3
+    ],
+    "look": [
+     -1.1,
+     9.1664,
+     0.6
+    ],
+    "fov": 30
+   },
+   "size": "OTS"
+  },
+  "cov-overlook-CU-Z": {
+   "id": "cov-overlook-CU-Z",
+   "set": "hall",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       -1.1,
+       -0.6
+      ],
+      "face": 0.0,
+      "pose": "standing",
+      "y": 7.6
+     },
+     "B": {
+      "at": [
+       -1.1,
+       0.6
+      ],
+      "face": "W",
+      "pose": "standing",
+      "y": 7.6
+     }
+    },
+    "cam": [
+     -1.722,
+     9.25,
+     0.477
+    ],
+    "look": [
+     -1.1,
+     9.169599999999999,
+     -0.6
+    ],
+    "fov": 28
+   },
+   "size": "CU"
+  },
+  "cov-overlook-CU-B": {
+   "id": "cov-overlook-CU-B",
+   "set": "hall",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       -1.1,
+       -0.6
+      ],
+      "face": "W",
+      "pose": "standing",
+      "y": 7.6
+     },
+     "B": {
+      "at": [
+       -1.1,
+       0.6
+      ],
+      "face": 180.0,
+      "pose": "standing",
+      "y": 7.6
+     }
+    },
+    "cam": [
+     -1.722,
+     9.266,
+     -0.477
+    ],
+    "look": [
+     -1.1,
+     9.186399999999999,
+     0.6
+    ],
+    "fov": 28
+   },
+   "size": "CU"
+  },
+  "cov-corridor-EST": {
+   "id": "cov-corridor-EST",
+   "set": "corridor",
+   "camera": {
+    "people": {
+     "D": {
+      "at": [
+       -0.6,
+       -6.0
+      ],
+      "face": 90.0,
+      "pose": "standing"
+     },
+     "Z": {
+      "at": [
+       0.4,
+       -6.0
+      ],
+      "face": "N",
+      "pose": "standing"
+     },
+     "B": {
+      "at": [
+       0.7,
+       -4.9
+      ],
+      "face": "N",
+      "pose": "standing"
+     }
+    },
+    "cam": [
+     0.1,
+     1.7,
+     -15.5
+    ],
+    "look": [
+     0.0,
+     1.3,
+     -5.0
+    ],
+    "fov": 46
+   },
+   "size": "EWS"
+  },
+  "cov-corridor-MASTER": {
+   "id": "cov-corridor-MASTER",
+   "set": "corridor",
+   "camera": {
+    "people": {
+     "D": {
+      "at": [
+       -0.6,
+       -6.0
+      ],
+      "face": 90.0,
+      "pose": "standing"
+     },
+     "Z": {
+      "at": [
+       0.4,
+       -6.0
+      ],
+      "face": -90.0,
+      "pose": "standing"
+     },
+     "B": {
+      "at": [
+       0.7,
+       -4.9
+      ],
+      "face": -130.2,
+      "pose": "standing"
+     }
+    },
+    "cam": [
+     -0.1,
+     1.764,
+     -9.051
+    ],
+    "look": [
+     -0.09999999999999998,
+     1.4636,
+     -6.0
+    ],
+    "fov": 36
+   },
+   "size": "MS two-shot"
+  },
+  "cov-corridor-OTS-Z": {
+   "id": "cov-corridor-OTS-Z",
+   "set": "corridor",
+   "camera": {
+    "people": {
+     "D": {
+      "at": [
+       -0.6,
+       -6.0
+      ],
+      "face": 90.0,
+      "pose": "standing"
+     },
+     "Z": {
+      "at": [
+       0.4,
+       -6.0
+      ],
+      "face": -90.0,
+      "pose": "standing"
+     },
+     "B": {
+      "at": [
+       0.7,
+       -4.9
+      ],
+      "face": -130.2,
+      "pose": "standing"
+     }
+    },
+    "cam": [
+     0.75,
+     1.764,
+     -6.4
+    ],
+    "look": [
+     -0.6,
+     1.7176,
+     -6.0
+    ],
+    "fov": 32
+   },
+   "size": "OTS"
+  },
+  "cov-corridor-OTS-D": {
+   "id": "cov-corridor-OTS-D",
+   "set": "corridor",
+   "camera": {
+    "people": {
+     "D": {
+      "at": [
+       -0.6,
+       -6.0
+      ],
+      "face": 90.0,
+      "pose": "standing"
+     },
+     "Z": {
+      "at": [
+       0.4,
+       -6.0
+      ],
+      "face": -90.0,
+      "pose": "standing"
+     },
+     "B": {
+      "at": [
+       0.7,
+       -4.9
+      ],
+      "face": -130.2,
+      "pose": "standing"
+     }
+    },
+    "cam": [
+     -0.95,
+     1.764,
+     -6.4
+    ],
+    "look": [
+     0.4,
+     1.5495999999999999,
+     -6.0
+    ],
+    "fov": 32
+   },
+   "size": "OTS"
+  },
+  "cov-corridor-CU-B": {
+   "id": "cov-corridor-CU-B",
+   "set": "corridor",
+   "camera": {
+    "people": {
+     "D": {
+      "at": [
+       -0.6,
+       -6.0
+      ],
+      "face": 90.0,
+      "pose": "standing"
+     },
+     "Z": {
+      "at": [
+       0.4,
+       -6.0
+      ],
+      "face": -90.0,
+      "pose": "standing"
+     },
+     "B": {
+      "at": [
+       0.7,
+       -4.9
+      ],
+      "face": -130.2,
+      "pose": "standing"
+     }
+    },
+    "cam": [
+     -0.524,
+     1.666,
+     -5.121
+    ],
+    "look": [
+     0.7,
+     1.5863999999999998,
+     -4.9
+    ],
+    "fov": 28
+   },
+   "size": "CU"
+  },
+  "cov-walk-CU-Z": {
+   "id": "cov-walk-CU-Z",
+   "set": "corridor",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       -0.4,
+       0.5
+      ],
+      "face": 90.0,
+      "pose": "standing"
+     },
+     "B": {
+      "at": [
+       0.4,
+       0.5
+      ],
+      "face": "S",
+      "pose": "standing"
+     }
+    },
+    "cam": [
+     0.486,
+     1.65,
+     1.244
+    ],
+    "look": [
+     -0.4,
+     1.5695999999999999,
+     0.5
+    ],
+    "fov": 30
+   },
+   "size": "CU"
+  },
+  "cov-walk-CU-B": {
+   "id": "cov-walk-CU-B",
+   "set": "corridor",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       -0.4,
+       0.5
+      ],
+      "face": "S",
+      "pose": "standing"
+     },
+     "B": {
+      "at": [
+       0.4,
+       0.5
+      ],
+      "face": -90.0,
+      "pose": "standing"
+     }
+    },
+    "cam": [
+     -0.486,
+     1.666,
+     1.244
+    ],
+    "look": [
+     0.4,
+     1.5863999999999998,
+     0.5
+    ],
+    "fov": 30
+   },
+   "size": "CU"
+  },
+  "F01": {
+   "id": "F01",
+   "set": "courtyard",
+   "camera": {
+    "people": {
+     "D": {
+      "at": [
+       0,
+       -0.95
+      ],
+      "face": "S",
+      "pose": "seated"
+     },
+     "B": {
+      "at": [
+       0,
+       0.95
+      ],
+      "face": "N",
+      "pose": "seated"
+     }
+    },
+    "fov": 44,
+    "cam": [
+     -8.5,
+     4.6,
+     6.0
+    ],
+    "look": [
+     1.0,
+     0.4,
+     -1.5
+    ]
+   },
+   "size": "EWS establishing, high",
+   "existing": true
+  },
+  "cov-cafe-MASTER-wave": {
+   "id": "cov-cafe-MASTER-wave",
+   "set": "courtyard",
+   "camera": {
+    "people": {
+     "D": {
+      "at": [
+       0,
+       -0.95
+      ],
+      "face": 57.7,
+      "pose": "seated"
+     },
+     "B": {
+      "at": [
+       0,
+       0.95
+      ],
+      "face": "N",
+      "pose": "seated"
+     }
+    },
+    "cam": [
+     2.747,
+     1.755,
+     -3.548
+    ],
+    "look": [
+     0.5,
+     1.0052,
+     0.0
+    ],
+    "fov": 50
+   },
+   "size": "MS two-shot"
+  },
+  "cov-cafe-MASTER-robot": {
+   "id": "cov-cafe-MASTER-robot",
+   "set": "courtyard",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       1.5,
+       0
+      ],
+      "face": -122.3,
+      "pose": "seated"
+     },
+     "D": {
+      "at": [
+       0,
+       -0.95
+      ],
+      "face": 57.7,
+      "pose": "seated"
+     },
+     "B": {
+      "at": [
+       0,
+       0.95
+      ],
+      "face": "N",
+      "pose": "seated"
+     },
+     "R": {
+      "at": [
+       0.75,
+       0.8
+      ],
+      "face": "N",
+      "pose": "robot"
+     }
+    },
+    "cam": [
+     2.747,
+     1.755,
+     -3.548
+    ],
+    "look": [
+     0.5,
+     1.0052,
+     0.0
+    ],
+    "fov": 50
+   },
+   "size": "MS two-shot"
+  },
+  "cov-cafe-MASTER": {
+   "id": "cov-cafe-MASTER",
+   "set": "courtyard",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       1.5,
+       0
+      ],
+      "face": -122.3,
+      "pose": "seated"
+     },
+     "D": {
+      "at": [
+       0,
+       -0.95
+      ],
+      "face": 57.7,
+      "pose": "seated"
+     },
+     "B": {
+      "at": [
+       0,
+       0.95
+      ],
+      "face": "N",
+      "pose": "seated"
+     }
+    },
+    "cam": [
+     2.747,
+     1.755,
+     -3.548
+    ],
+    "look": [
+     0.5,
+     1.0052,
+     0.0
+    ],
+    "fov": 50
+   },
+   "size": "MS two-shot"
+  },
+  "cov-cafe-MASTER-apart": {
+   "id": "cov-cafe-MASTER-apart",
+   "set": "courtyard",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       1.5,
+       0
+      ],
+      "face": -122.3,
+      "pose": "seated"
+     },
+     "D": {
+      "at": [
+       0,
+       -0.95
+      ],
+      "face": 57.7,
+      "pose": "seated"
+     },
+     "B": {
+      "at": [
+       3.3,
+       1.35
+      ],
+      "face": "N",
+      "pose": "seated"
+     },
+     "R": {
+      "at": [
+       0.75,
+       0.8
+      ],
+      "face": "N",
+      "pose": "robot"
+     }
+    },
+    "cam": [
+     3.847,
+     1.755,
+     -3.415
+    ],
+    "look": [
+     1.5999999999999999,
+     1.0052,
+     0.1333333333333334
+    ],
+    "fov": 50
+   },
+   "size": "MS two-shot"
+  },
+  "cov-cafe-MASTER-laugh": {
+   "id": "cov-cafe-MASTER-laugh",
+   "set": "courtyard",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       1.5,
+       0
+      ],
+      "face": -122.3,
+      "pose": "seated"
+     },
+     "D": {
+      "at": [
+       0,
+       -0.95
+      ],
+      "face": 57.7,
+      "pose": "seated"
+     },
+     "B": {
+      "at": [
+       3.3,
+       1.35
+      ],
+      "face": "N",
+      "pose": "seated"
+     }
+    },
+    "cam": [
+     3.847,
+     1.755,
+     -3.415
+    ],
+    "look": [
+     1.5999999999999999,
+     1.0052,
+     0.1333333333333334
+    ],
+    "fov": 50,
+    "props": [
+     {
+      "shape": "box",
+      "p": [
+       0.42,
+       0.7875,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.446,
+       0.7875,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.472,
+       0.7875,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.498,
+       0.7875,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.524,
+       0.7875,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.55,
+       0.7875,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.42,
+       0.8125,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.446,
+       0.8125,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.472,
+       0.8125,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.498,
+       0.8125,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.524,
+       0.8125,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.55,
+       0.8125,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     }
+    ]
+   },
+   "size": "MS two-shot"
+  },
+  "cov-cafe-MASTER-call": {
+   "id": "cov-cafe-MASTER-call",
+   "set": "courtyard",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       1.5,
+       0
+      ],
+      "face": -122.3,
+      "pose": "seated"
+     },
+     "D": {
+      "at": [
+       0,
+       -0.95
+      ],
+      "face": 57.7,
+      "pose": "seated"
+     },
+     "B": {
+      "at": [
+       3.3,
+       1.35
+      ],
+      "face": "N",
+      "pose": "seated"
+     }
+    },
+    "cam": [
+     3.847,
+     1.755,
+     -3.415
+    ],
+    "look": [
+     1.5999999999999999,
+     1.0052,
+     0.1333333333333334
+    ],
+    "fov": 50
+   },
+   "size": "MS two-shot"
+  },
+  "cov-cafe-OTS-Z": {
+   "id": "cov-cafe-OTS-Z",
+   "set": "courtyard",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       1.5,
+       0
+      ],
+      "face": -122.3,
+      "pose": "seated"
+     },
+     "D": {
+      "at": [
+       0,
+       -0.95
+      ],
+      "face": 57.7,
+      "pose": "seated"
+     },
+     "B": {
+      "at": [
+       0,
+       0.95
+      ],
+      "face": "N",
+      "pose": "seated"
+     }
+    },
+    "cam": [
+     2.374,
+     1.316,
+     0.021
+    ],
+    "look": [
+     0,
+     1.2246000000000001,
+     -0.95
+    ],
+    "fov": 32
+   },
+   "size": "OTS"
+  },
+  "cov-cafe-OTS-D": {
+   "id": "cov-cafe-OTS-D",
+   "set": "courtyard",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       1.5,
+       0
+      ],
+      "face": -122.3,
+      "pose": "seated"
+     },
+     "D": {
+      "at": [
+       0,
+       -0.95
+      ],
+      "face": 57.7,
+      "pose": "seated"
+     },
+     "B": {
+      "at": [
+       0,
+       0.95
+      ],
+      "face": "N",
+      "pose": "seated"
+     }
+    },
+    "cam": [
+     -0.393,
+     1.316,
+     -1.731
+    ],
+    "look": [
+     1.5,
+     1.1465999999999998,
+     0
+    ],
+    "fov": 32
+   },
+   "size": "OTS"
+  },
+  "cov-cafe-OTS-D-talk": {
+   "id": "cov-cafe-OTS-D-talk",
+   "set": "courtyard",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       1.5,
+       0
+      ],
+      "face": -122.3,
+      "pose": "seated"
+     },
+     "D": {
+      "at": [
+       0,
+       -0.95
+      ],
+      "face": 57.7,
+      "pose": "seated"
+     },
+     "B": {
+      "at": [
+       3.3,
+       1.35
+      ],
+      "face": "N",
+      "pose": "seated"
+     }
+    },
+    "cam": [
+     -0.393,
+     1.316,
+     -1.731
+    ],
+    "look": [
+     1.5,
+     1.1465999999999998,
+     0
+    ],
+    "fov": 32
+   },
+   "size": "OTS"
+  },
+  "cov-cafe-CU-Z": {
+   "id": "cov-cafe-CU-Z",
+   "set": "courtyard",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       1.5,
+       0
+      ],
+      "face": -122.3,
+      "pose": "seated"
+     },
+     "D": {
+      "at": [
+       0,
+       -0.95
+      ],
+      "face": 57.7,
+      "pose": "seated"
+     },
+     "B": {
+      "at": [
+       3.3,
+       1.35
+      ],
+      "face": "N",
+      "pose": "seated"
+     }
+    },
+    "cam": [
+     0.923,
+     1.247,
+     -1.101
+    ],
+    "look": [
+     1.5,
+     1.1665999999999999,
+     0
+    ],
+    "fov": 28
+   },
+   "size": "CU"
+  },
+  "cov-cafe-CU-D": {
+   "id": "cov-cafe-CU-D",
+   "set": "courtyard",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       1.5,
+       0
+      ],
+      "face": -122.3,
+      "pose": "seated"
+     },
+     "D": {
+      "at": [
+       0,
+       -0.95
+      ],
+      "face": 57.7,
+      "pose": "seated"
+     },
+     "B": {
+      "at": [
+       3.3,
+       1.35
+      ],
+      "face": "N",
+      "pose": "seated"
+     }
+    },
+    "cam": [
+     1.242,
+     1.325,
+     -0.899
+    ],
+    "look": [
+     0,
+     1.2446000000000002,
+     -0.95
+    ],
+    "fov": 28
+   },
+   "size": "CU"
+  },
+  "cov-cafe-CU-B": {
+   "id": "cov-cafe-CU-B",
+   "set": "courtyard",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       1.5,
+       0
+      ],
+      "face": -122.3,
+      "pose": "seated"
+     },
+     "D": {
+      "at": [
+       0,
+       -0.95
+      ],
+      "face": 57.7,
+      "pose": "seated"
+     },
+     "B": {
+      "at": [
+       0,
+       0.95
+      ],
+      "face": 122.3,
+      "pose": "seated"
+     }
+    },
+    "cam": [
+     0.577,
+     1.254,
+     -0.151
+    ],
+    "look": [
+     0,
+     1.1743999999999999,
+     0.95
+    ],
+    "fov": 28
+   },
+   "size": "CU"
+  },
+  "cov-cafe-CU-B-standing": {
+   "id": "cov-cafe-CU-B-standing",
+   "set": "courtyard",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       1.5,
+       0
+      ],
+      "face": -122.3,
+      "pose": "seated"
+     },
+     "D": {
+      "at": [
+       0,
+       -0.95
+      ],
+      "face": 57.7,
+      "pose": "seated"
+     },
+     "B": {
+      "at": [
+       0.55,
+       1.35
+      ],
+      "face": 144.9,
+      "pose": "standing"
+     }
+    },
+    "cam": [
+     0.661,
+     1.666,
+     0.112
+    ],
+    "look": [
+     0.55,
+     1.5863999999999998,
+     1.35
+    ],
+    "fov": 28
+   },
+   "size": "CU"
+  },
+  "cov-cafe-BAI": {
+   "id": "cov-cafe-BAI",
+   "set": "courtyard",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       1.5,
+       0
+      ],
+      "face": -122.3,
+      "pose": "seated"
+     },
+     "D": {
+      "at": [
+       0,
+       -0.95
+      ],
+      "face": 57.7,
+      "pose": "seated"
+     },
+     "B": {
+      "at": [
+       3.3,
+       1.35
+      ],
+      "face": "N",
+      "pose": "seated"
+     }
+    },
+    "cam": [
+     2.594,
+     1.254,
+     0.342
+    ],
+    "look": [
+     3.3,
+     1.1743999999999999,
+     1.35
+    ],
+    "fov": 36
+   },
+   "size": "MCU"
+  },
+  "cov-cafe-SUGAR-stack": {
+   "id": "cov-cafe-SUGAR-stack",
+   "set": "courtyard",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       1.5,
+       0
+      ],
+      "face": -122.3,
+      "pose": "seated"
+     },
+     "D": {
+      "at": [
+       0,
+       -0.95
+      ],
+      "face": 57.7,
+      "pose": "seated"
+     },
+     "B": {
+      "at": [
+       0,
+       0.95
+      ],
+      "face": "N",
+      "pose": "seated"
+     }
+    },
+    "cam": [
+     0.683,
+     0.89,
+     -0.484
+    ],
+    "look": [
+     0.49,
+     0.79,
+     -0.18
+    ],
+    "fov": 40,
+    "props": [
+     {
+      "shape": "box",
+      "p": [
+       0.472,
+       0.7875,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.498,
+       0.7875,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.472,
+       0.8125,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     }
+    ]
+   },
+   "size": "ECU INSERT"
+  },
+  "cov-cafe-SUGAR": {
+   "id": "cov-cafe-SUGAR",
+   "set": "courtyard",
+   "camera": {
+    "people": {},
+    "cam": [
+     0.683,
+     0.89,
+     -0.484
+    ],
+    "look": [
+     0.49,
+     0.79,
+     -0.18
+    ],
+    "fov": 40,
+    "props": [
+     {
+      "shape": "box",
+      "p": [
+       0.42,
+       0.7875,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.446,
+       0.7875,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.472,
+       0.7875,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.498,
+       0.7875,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.524,
+       0.7875,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.55,
+       0.7875,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.42,
+       0.8125,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.446,
+       0.8125,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.472,
+       0.8125,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.498,
+       0.8125,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.524,
+       0.8125,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.55,
+       0.8125,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     }
+    ]
+   },
+   "size": "ECU INSERT"
+  },
+  "cov-cafe-SUGAR-flick": {
+   "id": "cov-cafe-SUGAR-flick",
+   "set": "courtyard",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       1.5,
+       0
+      ],
+      "face": -122.3,
+      "pose": "seated"
+     },
+     "D": {
+      "at": [
+       0,
+       -0.95
+      ],
+      "face": 57.7,
+      "pose": "seated"
+     },
+     "B": {
+      "at": [
+       0,
+       0.95
+      ],
+      "face": "N",
+      "pose": "seated"
+     }
+    },
+    "cam": [
+     0.683,
+     0.89,
+     -0.484
+    ],
+    "look": [
+     0.49,
+     0.79,
+     -0.18
+    ],
+    "fov": 40,
+    "props": [
+     {
+      "shape": "box",
+      "p": [
+       0.42,
+       0.7875,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.446,
+       0.7875,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.472,
+       0.7875,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.498,
+       0.7875,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.524,
+       0.7875,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.55,
+       0.7875,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.42,
+       0.8125,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.446,
+       0.8125,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.472,
+       0.8125,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.498,
+       0.8125,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.524,
+       0.8125,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.55,
+       0.8125,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     }
+    ]
+   },
+   "size": "ECU INSERT"
+  },
+  "cov-cafe-SUGAR-door": {
+   "id": "cov-cafe-SUGAR-door",
+   "set": "courtyard",
+   "camera": {
+    "people": {},
+    "cam": [
+     0.683,
+     0.89,
+     -0.484
+    ],
+    "look": [
+     0.49,
+     0.79,
+     -0.18
+    ],
+    "fov": 40,
+    "props": [
+     {
+      "shape": "box",
+      "p": [
+       0.42,
+       0.7875,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.446,
+       0.7875,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.498,
+       0.7875,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.524,
+       0.7875,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.55,
+       0.7875,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.42,
+       0.8125,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.446,
+       0.8125,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.472,
+       0.8125,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.498,
+       0.8125,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.524,
+       0.8125,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     },
+     {
+      "shape": "box",
+      "p": [
+       0.55,
+       0.8125,
+       -0.18
+      ],
+      "s": [
+       0.025,
+       0.025,
+       0.025
+      ],
+      "c": 16777215
+     }
+    ]
+   },
+   "size": "ECU INSERT"
+  },
+  "cov-cafe-WATCH": {
+   "id": "cov-cafe-WATCH",
+   "set": "courtyard",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       1.5,
+       0
+      ],
+      "face": -122.3,
+      "pose": "seated"
+     },
+     "D": {
+      "at": [
+       0,
+       -0.95
+      ],
+      "face": 57.7,
+      "pose": "seated"
+     },
+     "B": {
+      "at": [
+       0,
+       0.95
+      ],
+      "face": "N",
+      "pose": "seated"
+     }
+    },
+    "cam": [
+     1.364,
+     1.65,
+     -0.001
+    ],
+    "look": [
+     1.3,
+     0.8,
+     0.1
+    ],
+    "fov": 34
+   },
+   "size": "ECU INSERT"
+  },
+  "cov-gate-MASTER": {
+   "id": "cov-gate-MASTER",
+   "set": "courtyard",
+   "camera": {
+    "people": {
+     "D": {
+      "at": [
+       5.6,
+       -8.6
+      ],
+      "face": 90.0,
+      "pose": "standing"
+     },
+     "Z": {
+      "at": [
+       7.2,
+       -8.6
+      ],
+      "face": -90.0,
+      "pose": "standing"
+     }
+    },
+    "cam": [
+     6.4,
+     1.764,
+     -12.0
+    ],
+    "look": [
+     6.4,
+     1.4636,
+     -8.6
+    ],
+    "fov": 40
+   },
+   "size": "MS two-shot"
+  },
+  "cov-gate-CU-D": {
+   "id": "cov-gate-CU-D",
+   "set": "courtyard",
+   "camera": {
+    "people": {
+     "D": {
+      "at": [
+       5.6,
+       -8.6
+      ],
+      "face": 90.0,
+      "pose": "standing"
+     },
+     "Z": {
+      "at": [
+       7.2,
+       -8.6
+      ],
+      "face": -90.0,
+      "pose": "standing"
+     }
+    },
+    "cam": [
+     6.677,
+     1.818,
+     -9.222
+    ],
+    "look": [
+     5.6,
+     1.7376,
+     -8.6
+    ],
+    "fov": 28
+   },
+   "size": "CU"
+  },
+  "cov-gate-CU-Z": {
+   "id": "cov-gate-CU-Z",
+   "set": "courtyard",
+   "camera": {
+    "people": {
+     "D": {
+      "at": [
+       5.6,
+       -8.6
+      ],
+      "face": 90.0,
+      "pose": "standing"
+     },
+     "Z": {
+      "at": [
+       7.2,
+       -8.6
+      ],
+      "face": -90.0,
+      "pose": "standing"
+     }
+    },
+    "cam": [
+     6.123,
+     1.65,
+     -9.222
+    ],
+    "look": [
+     7.2,
+     1.5695999999999999,
+     -8.6
+    ],
+    "fov": 28
+   },
+   "size": "CU"
+  },
+  "cov-dusk-MASTER": {
+   "id": "cov-dusk-MASTER",
+   "set": "courtyard",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       2.55,
+       1.75
+      ],
+      "face": 118.1,
+      "pose": "standing"
+     },
+     "B": {
+      "at": [
+       3.3,
+       1.35
+      ],
+      "face": -61.9,
+      "pose": "seated"
+     }
+    },
+    "cam": [
+     4.337,
+     1.482,
+     4.197
+    ],
+    "look": [
+     2.925,
+     1.182,
+     1.55
+    ],
+    "fov": 40
+   },
+   "size": "MS two-shot"
+  },
+  "cov-lobby-CU-Z-distraught": {
+   "id": "cov-lobby-CU-Z-distraught",
+   "set": "lobby",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       -3.35,
+       0
+      ],
+      "face": -90.0,
+      "pose": "seated"
+     }
+    },
+    "cam": [
+     -4.427,
+     1.247,
+     -0.622
+    ],
+    "look": [
+     -3.35,
+     1.1665999999999999,
+     0
+    ],
+    "fov": 28
+   },
+   "size": "CU"
+  },
+  "cov-lobby-CU-Z": {
+   "id": "cov-lobby-CU-Z",
+   "set": "lobby",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       -3.35,
+       0
+      ],
+      "face": -90.0,
+      "pose": "seated"
+     },
+     "B": {
+      "at": [
+       -4.65,
+       0
+      ],
+      "face": 90.0,
+      "pose": "seated"
+     }
+    },
+    "cam": [
+     -4.427,
+     1.247,
+     -0.622
+    ],
+    "look": [
+     -3.35,
+     1.1665999999999999,
+     0
+    ],
+    "fov": 28
+   },
+   "size": "CU"
+  },
+  "cov-lobby-MASTER-refill": {
+   "id": "cov-lobby-MASTER-refill",
+   "set": "lobby",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       -3.35,
+       0
+      ],
+      "face": -90.0,
+      "pose": "seated"
+     },
+     "R": {
+      "at": [
+       -3.6,
+       0.85
+      ],
+      "face": "N",
+      "pose": "robot"
+     }
+    },
+    "cam": [
+     -4.0,
+     1.28,
+     -3.4
+    ],
+    "look": [
+     -4.0,
+     0.9804999999999999,
+     0.0
+    ],
+    "fov": 44
+   },
+   "size": "MS two-shot"
+  },
+  "cov-lobby-MASTER": {
+   "id": "cov-lobby-MASTER",
+   "set": "lobby",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       -3.35,
+       0
+      ],
+      "face": -90.0,
+      "pose": "seated"
+     },
+     "B": {
+      "at": [
+       -4.65,
+       0
+      ],
+      "face": 90.0,
+      "pose": "seated"
+     }
+    },
+    "cam": [
+     -4.0,
+     1.28,
+     -3.4
+    ],
+    "look": [
+     -4.0,
+     0.9804999999999999,
+     0.0
+    ],
+    "fov": 44
+   },
+   "size": "MS two-shot"
+  },
+  "cov-lobby-OTS-Z": {
+   "id": "cov-lobby-OTS-Z",
+   "set": "lobby",
+   "camera": {
+    "people": {
+     "Z": {
+      "at": [
+       -3.35,
+       0
+      ],
+      "face": -90.0,
+      "pose": "seated"
+     },
+     "B": {
+      "at": [
+       -4.65,
+       0
+      ],
+      "face": 90.0,
+      "pose": "seated"
+     }
+    },
+    "cam": [
+     -2.65,
+     1.28,
+     -0.45
+    ],
+    "look": [
+     -4.65,
+     1.1543999999999999,
+     0
+    ],
+    "fov": 32
+   },
+   "size": "OTS"
+  }
+ },
+ "frames": {
+  "cov-game-EST": {
+   "scene": "game",
+   "setup": "EST",
+   "variant": "",
+   "reuse": "images-out/preprod/pass3/H01-Q3.png",
+   "framed": false
+  },
+  "cov-game-FLOOR-live": {
+   "scene": "game",
+   "setup": "FLOOR",
+   "variant": "live",
+   "reuse": "images-out/preprod/pass3/H02-B2.png",
+   "framed": false
+  },
+  "cov-game-FLOOR-hold": {
+   "scene": "game",
+   "setup": "FLOOR",
+   "variant": "hold",
+   "layout": "H07",
+   "action": "The holographic walls stand as the last gliders break against them in bursts of light; the crowd in the tiers rises; the huge screen above the floor shows {D}'s calm face.",
+   "who": [
+    "D"
+   ],
+   "size": "WS",
+   "set": "hall"
+  },
+  "cov-game-SCREEN-face": {
+   "scene": "game",
+   "setup": "SCREEN",
+   "variant": "face",
+   "layout": "H03b",
+   "action": "The arena: the glowing hologram play floor with its walls and gliders, the crowded tiers rising around it, and above the floor one huge screen showing {D}'s calm face in close-up.",
+   "who": [
+    "D"
+   ],
+   "size": "WS",
+   "set": "hall"
+  },
+  "cov-game-PIT-D-playing": {
+   "scene": "game",
+   "setup": "PIT-D",
+   "variant": "playing",
+   "layout": "G08c",
+   "action": "{D} in his sunken pit at the glowing console, playing: eyes on the board, hands still, patient, unhurried.",
+   "who": [
+    "D"
+   ],
+   "size": "MCU, side-on",
+   "set": "hall"
+  },
+  "cov-game-PIT-D-glasses": {
+   "scene": "game",
+   "setup": "PIT-D",
+   "variant": "glasses",
+   "layout": "G08c",
+   "action": "{D} in his sunken pit lifts the cabled glasses off his face with one hand, the other hand empty on the console; a small private closed-mouth smile.",
+   "who": [
+    "D"
+   ],
+   "size": "MCU, side-on",
+   "set": "hall"
+  },
+  "cov-game-PIT-K": {
+   "scene": "game",
+   "setup": "PIT-K",
+   "variant": "",
+   "reuse": "images-out/preprod/pass3/H05-K6.png",
+   "framed": false
+  },
+  "cov-overlook-MASTER-watch": {
+   "scene": "overlook",
+   "setup": "MASTER",
+   "variant": "watch",
+   "layout": "G05",
+   "action": "At the overlook railing, seen from out over the hall: {Z} on the left leans on the railing watching the game far below, admiring; {B} on the right is bent over the small gadget she is working on, not looking up.",
+   "who": [
+    "Z",
+    "B"
+   ],
+   "size": "MS two-shot, from the front",
+   "set": "hall"
+  },
+  "cov-overlook-MASTER-lean": {
+   "scene": "overlook",
+   "setup": "MASTER",
+   "variant": "lean",
+   "layout": "G05",
+   "action": "At the overlook railing: {B} on the right has set her gadget on the rail and leans out over the railing studying the board below; {Z} on the left watches the game.",
+   "who": [
+    "Z",
+    "B"
+   ],
+   "size": "MS two-shot, from the front",
+   "set": "hall"
+  },
+  "cov-overlook-OTS-Z-dry": {
+   "scene": "overlook",
+   "setup": "OTS-Z",
+   "variant": "dry",
+   "layout": "cov-overlook-OTS-Z",
+   "action": "Over {Z}'s shoulder: {B}, the gadget in her hands, glances at him, dry, unimpressed.",
+   "who": [
+    "Z",
+    "B"
+   ],
+   "size": "OTS",
+   "set": "hall"
+  },
+  "cov-overlook-OTS-Z-shrug": {
+   "scene": "overlook",
+   "setup": "OTS-Z",
+   "variant": "shrug",
+   "layout": "cov-overlook-OTS-Z",
+   "action": "Over {Z}'s shoulder: {B} snaps the gadget's casing shut and shrugs, looking up at him.",
+   "who": [
+    "Z",
+    "B"
+   ],
+   "size": "OTS",
+   "set": "hall"
+  },
+  "cov-overlook-OTS-Z-wry": {
+   "scene": "overlook",
+   "setup": "OTS-Z",
+   "variant": "wry",
+   "layout": "cov-overlook-OTS-Z",
+   "action": "Over {Z}'s shoulder: {B} glances sideways at him, wry, a small closed-mouth smile.",
+   "who": [
+    "Z",
+    "B"
+   ],
+   "size": "OTS",
+   "set": "hall"
+  },
+  "cov-overlook-CU-Z-eyebrow": {
+   "scene": "overlook",
+   "setup": "CU-Z",
+   "variant": "eyebrow",
+   "layout": "cov-overlook-CU-Z",
+   "action": "{Z} close, one eyebrow raised, eyes turned toward her.",
+   "who": [
+    "Z"
+   ],
+   "size": "CU",
+   "set": "hall"
+  },
+  "cov-overlook-CU-Z-admire": {
+   "scene": "overlook",
+   "setup": "CU-Z",
+   "variant": "admire",
+   "layout": "cov-overlook-CU-Z",
+   "action": "{Z} close, looking down at the game below, admiring, a small closed-mouth smile; hologram light from below.",
+   "who": [
+    "Z"
+   ],
+   "size": "CU",
+   "set": "hall"
+  },
+  "cov-overlook-CU-B-toast": {
+   "scene": "overlook",
+   "setup": "CU-B",
+   "variant": "toast",
+   "layout": "cov-overlook-CU-B",
+   "action": "{B} close, leaning over the railing, face lit from below by the holograms, eyes narrowed, studying the pieces, serious.",
+   "who": [
+    "B"
+   ],
+   "size": "CU",
+   "set": "hall"
+  },
+  "cov-overlook-POV": {
+   "scene": "overlook",
+   "setup": "POV",
+   "variant": "",
+   "reuse": "images-out/preprod/pass3/G08-K2.png",
+   "framed": false
+  },
+  "cov-corridor-EST-wait": {
+   "scene": "corridor",
+   "setup": "EST",
+   "variant": "wait",
+   "layout": "cov-corridor-EST",
+   "action": "The long round-topped stone corridor deep under the hall, a row of metal elevator doors along the right wall; {Z} and {B} at their real size, standing waiting by the elevators in the middle distance. Nobody else.",
+   "who": [
+    "Z",
+    "B"
+   ],
+   "size": "EWS",
+   "set": "corridor"
+  },
+  "cov-corridor-MASTER-arrive": {
+   "scene": "corridor",
+   "setup": "MASTER",
+   "variant": "arrive",
+   "layout": "cov-corridor-MASTER",
+   "action": "The elevator doors stand open; {D} on the right steps out of the elevator, easy and friendly; {Z} on the left, standing, eager, half a step toward him; {B} behind {Z}, arms crossed, bored.",
+   "who": [
+    "Z",
+    "B",
+    "D"
+   ],
+   "size": "MS two-shot",
+   "set": "corridor"
+  },
+  "cov-corridor-OTS-Z-easy": {
+   "scene": "corridor",
+   "setup": "OTS-Z",
+   "variant": "easy",
+   "layout": "cov-corridor-OTS-Z",
+   "action": "Over {Z}'s shoulder: {D} in the elevator doorway, easy and friendly, talking.",
+   "who": [
+    "Z",
+    "D"
+   ],
+   "size": "OTS",
+   "set": "corridor"
+  },
+  "cov-corridor-OTS-Z-warm": {
+   "scene": "corridor",
+   "setup": "OTS-Z",
+   "variant": "warm",
+   "layout": "cov-corridor-OTS-Z",
+   "action": "Over {Z}'s shoulder: {D} in the elevator doorway, open and warm, asking.",
+   "who": [
+    "Z",
+    "D"
+   ],
+   "size": "OTS",
+   "set": "corridor"
+  },
+  "cov-corridor-OTS-D-eager": {
+   "scene": "corridor",
+   "setup": "OTS-D",
+   "variant": "eager",
+   "layout": "cov-corridor-OTS-D",
+   "action": "Over {D}'s shoulder: {Z}, standing, eager; behind him {B} stands with her arms crossed, bored.",
+   "who": [
+    "Z",
+    "B",
+    "D"
+   ],
+   "size": "OTS",
+   "set": "corridor"
+  },
+  "cov-corridor-OTS-D-sheepish": {
+   "scene": "corridor",
+   "setup": "OTS-D",
+   "variant": "sheepish",
+   "layout": "cov-corridor-OTS-D",
+   "action": "Over {D}'s shoulder: {Z}, a small self-deprecating closed-mouth smile, rubbing the back of his neck; behind him {B} with her arms crossed.",
+   "who": [
+    "Z",
+    "B",
+    "D"
+   ],
+   "size": "OTS",
+   "set": "corridor"
+  },
+  "cov-corridor-OTS-D-delighted": {
+   "scene": "corridor",
+   "setup": "OTS-D",
+   "variant": "delighted",
+   "layout": "cov-corridor-OTS-D",
+   "action": "Over {D}'s shoulder: {Z}, delighted, a warm closed-mouth smile; behind him {B} with her arms crossed.",
+   "who": [
+    "Z",
+    "B",
+    "D"
+   ],
+   "size": "OTS",
+   "set": "corridor"
+  },
+  "cov-corridor-CU-B-sour": {
+   "scene": "corridor",
+   "setup": "CU-B",
+   "variant": "sour",
+   "layout": "cov-corridor-CU-B",
+   "action": "{B} close, a shrug and a sour twist of her mouth, arms crossed.",
+   "who": [
+    "B"
+   ],
+   "size": "CU",
+   "set": "corridor"
+  },
+  "cov-walk-MASTER": {
+   "scene": "walk",
+   "setup": "MASTER",
+   "variant": "",
+   "reuse": "images-out/preprod/pass3/C17-K4.png",
+   "framed": false
+  },
+  "cov-walk-CU-Z-tease": {
+   "scene": "walk",
+   "setup": "CU-Z",
+   "variant": "tease",
+   "layout": "cov-walk-CU-Z",
+   "action": "{Z} walking, close, turned three-quarters toward her on the right of the frame, teasing, a closed-mouth smile.",
+   "who": [
+    "Z"
+   ],
+   "size": "CU",
+   "set": "corridor"
+  },
+  "cov-walk-CU-Z-hopeful": {
+   "scene": "walk",
+   "setup": "CU-Z",
+   "variant": "hopeful",
+   "layout": "cov-walk-CU-Z",
+   "action": "{Z} walking, close, turned toward her, hopeful, a closed-mouth smile.",
+   "who": [
+    "Z"
+   ],
+   "size": "CU",
+   "set": "corridor"
+  },
+  "cov-walk-CU-B-serious": {
+   "scene": "walk",
+   "setup": "CU-B",
+   "variant": "serious",
+   "layout": "cov-walk-CU-B",
+   "action": "{B} walking, close, eyes ahead, serious and worried about him, not smiling.",
+   "who": [
+    "B"
+   ],
+   "size": "CU",
+   "set": "corridor"
+  },
+  "cov-walk-CU-B-sly": {
+   "scene": "walk",
+   "setup": "CU-B",
+   "variant": "sly",
+   "layout": "cov-walk-CU-B",
+   "action": "{B} walking, close, a sly closed-mouth smile, glancing toward him on the left of the frame.",
+   "who": [
+    "B"
+   ],
+   "size": "CU",
+   "set": "corridor"
+  },
+  "cov-cafe-EST-night": {
+   "scene": "cafe",
+   "setup": "EST",
+   "variant": "night",
+   "layout": "F01",
+   "action": "The courtyard café at night from high in a corner: string lights over the courtyard, small trees, the street gate, the long rectangular wooden table in the middle with {D} and {B} small at it, sitting across from each other; the megastructure skyline beyond. Nobody else.",
+   "who": [
+    "B",
+    "D"
+   ],
+   "size": "EWS establishing, high",
+   "set": "courtyard"
+  },
+  "cov-cafe-MASTER-wave": {
+   "scene": "cafe",
+   "setup": "MASTER",
+   "variant": "wave",
+   "layout": "cov-cafe-MASTER-wave",
+   "action": "At the long rectangular table: {D} on the right turns and raises one hand to wave someone over, a soft closed-mouth laugh; {B} across from him looks over too; the chair at the left end is empty.",
+   "who": [
+    "B",
+    "D"
+   ],
+   "size": "MS two-shot",
+   "set": "courtyard"
+  },
+  "cov-cafe-MASTER-robot": {
+   "scene": "cafe",
+   "setup": "MASTER",
+   "variant": "robot",
+   "layout": "cov-cafe-MASTER-robot",
+   "action": "All three at the long rectangular table: {Z} at the left end, {D} on the right, {B} across from him; {R} beside the table, its face screen kind, holding a tray.",
+   "who": [
+    "Z",
+    "B",
+    "D",
+    "R"
+   ],
+   "size": "MS two-shot",
+   "set": "courtyard"
+  },
+  "cov-cafe-MASTER-menus": {
+   "scene": "cafe",
+   "setup": "MASTER",
+   "variant": "menus",
+   "layout": "cov-cafe-MASTER",
+   "action": "All three at the long rectangular table, each with a thin glowing menu: {D} on the right, still sitting, leans over toward {Z} on the left to look at his menu and points at it; {B} looks down at hers, unimpressed.",
+   "who": [
+    "Z",
+    "B",
+    "D"
+   ],
+   "size": "MS two-shot",
+   "set": "courtyard"
+  },
+  "cov-cafe-MASTER-up": {
+   "scene": "cafe",
+   "setup": "MASTER",
+   "variant": "up",
+   "layout": "cov-cafe-MASTER",
+   "action": "All three at the long rectangular table: {B} puts her thin menu down and stands; {Z} on the left and {D} on the right both look at her.",
+   "who": [
+    "Z",
+    "B",
+    "D"
+   ],
+   "size": "MS two-shot",
+   "set": "courtyard"
+  },
+  "cov-cafe-MASTER-apart": {
+   "scene": "cafe",
+   "setup": "MASTER",
+   "variant": "apart",
+   "layout": "cov-cafe-MASTER-apart",
+   "action": "{Z} on the left and {D} on the right at the long rectangular table, talking; far behind, small, {B} sits alone at a small round table and puts on big headphones; {R} pours tea from a pot into two cups on the long table.",
+   "who": [
+    "Z",
+    "B",
+    "D",
+    "R"
+   ],
+   "size": "MS two-shot",
+   "set": "courtyard"
+  },
+  "cov-cafe-MASTER-laugh": {
+   "scene": "cafe",
+   "setup": "MASTER",
+   "variant": "laugh",
+   "layout": "cov-cafe-MASTER-laugh",
+   "action": "{Z} on the left and {D} on the right at the long rectangular table, both laughing with closed mouths; a little wall of sugar cubes between their cups; far behind, small, {B} at her small round table with headphones on.",
+   "who": [
+    "Z",
+    "B",
+    "D"
+   ],
+   "size": "MS two-shot",
+   "set": "courtyard"
+  },
+  "cov-cafe-MASTER-call": {
+   "scene": "cafe",
+   "setup": "MASTER",
+   "variant": "call",
+   "layout": "cov-cafe-MASTER-call",
+   "action": "{D} on the right leans out and waves across the courtyard to {B}, small and apart at her small round table with big headphones on; {Z} on the left watches.",
+   "who": [
+    "Z",
+    "B",
+    "D"
+   ],
+   "size": "MS two-shot",
+   "set": "courtyard"
+  },
+  "cov-cafe-OTS-Z-talk": {
+   "scene": "cafe",
+   "setup": "OTS-Z",
+   "variant": "talk",
+   "layout": "cov-cafe-OTS-Z",
+   "action": "Over {Z}'s shoulder: {D} at the long table, talking, easy and warm.",
+   "who": [
+    "Z",
+    "D"
+   ],
+   "size": "OTS",
+   "set": "courtyard"
+  },
+  "cov-cafe-OTS-Z-menu": {
+   "scene": "cafe",
+   "setup": "OTS-Z",
+   "variant": "menu",
+   "layout": "cov-cafe-OTS-Z",
+   "action": "Over {Z}'s shoulder: {D} at the long table, a thin glowing menu in hand, modest.",
+   "who": [
+    "Z",
+    "D"
+   ],
+   "size": "OTS",
+   "set": "courtyard"
+  },
+  "cov-cafe-OTS-Z-stern": {
+   "scene": "cafe",
+   "setup": "OTS-Z",
+   "variant": "stern",
+   "layout": "cov-cafe-OTS-Z",
+   "action": "Over {Z}'s shoulder: {D}, a mock-stern face with a playful closed-mouth smile: a joking lecture.",
+   "who": [
+    "Z",
+    "D"
+   ],
+   "size": "OTS",
+   "set": "courtyard"
+  },
+  "cov-cafe-OTS-Z-eager": {
+   "scene": "cafe",
+   "setup": "OTS-Z",
+   "variant": "eager",
+   "layout": "cov-cafe-OTS-Z",
+   "action": "Over {Z}'s shoulder: {D} leans in, eager and inviting, smiling with his mouth closed.",
+   "who": [
+    "Z",
+    "D"
+   ],
+   "size": "OTS",
+   "set": "courtyard"
+  },
+  "cov-cafe-OTS-D-whoa": {
+   "scene": "cafe",
+   "setup": "OTS-D",
+   "variant": "whoa",
+   "layout": "cov-cafe-OTS-D",
+   "action": "Over {D}'s shoulder: {Z} at the end of the table, eyes on the thin glowing menu in his hands, surprised.",
+   "who": [
+    "Z",
+    "D"
+   ],
+   "size": "OTS",
+   "set": "courtyard"
+  },
+  "cov-cafe-OTS-D-explain": {
+   "scene": "cafe",
+   "setup": "OTS-D",
+   "variant": "explain",
+   "layout": "cov-cafe-OTS-D",
+   "action": "Over {D}'s shoulder: {Z}, the thin glowing menu in his hands, explaining, keen.",
+   "who": [
+    "Z",
+    "D"
+   ],
+   "size": "OTS",
+   "set": "courtyard"
+  },
+  "cov-cafe-OTS-D-astonished": {
+   "scene": "cafe",
+   "setup": "OTS-D",
+   "variant": "astonished",
+   "layout": "cov-cafe-OTS-D",
+   "action": "Over {D}'s shoulder: {Z}, astonished, turned to him.",
+   "who": [
+    "Z",
+    "D"
+   ],
+   "size": "OTS",
+   "set": "courtyard"
+  },
+  "cov-cafe-OTS-D-talk": {
+   "scene": "cafe",
+   "setup": "OTS-D",
+   "variant": "talk",
+   "layout": "cov-cafe-OTS-D-talk",
+   "action": "Over {D}'s shoulder: {Z} talking, relaxed; far behind him, small, {B} at her small round table with headphones on.",
+   "who": [
+    "Z",
+    "B",
+    "D"
+   ],
+   "size": "OTS",
+   "set": "courtyard"
+  },
+  "cov-cafe-OTS-D-smile": {
+   "scene": "cafe",
+   "setup": "OTS-D",
+   "variant": "smile",
+   "layout": "cov-cafe-OTS-D-talk",
+   "action": "Over {D}'s shoulder: {Z}, amused, a closed-mouth smile; far behind him, small, {B} at her small round table with headphones on.",
+   "who": [
+    "Z",
+    "B",
+    "D"
+   ],
+   "size": "OTS",
+   "set": "courtyard"
+  },
+  "cov-cafe-OTS-D-watch": {
+   "scene": "cafe",
+   "setup": "OTS-D",
+   "variant": "watch",
+   "layout": "cov-cafe-OTS-D-talk",
+   "action": "Over {D}'s shoulder: {Z}, a little embarrassed, smiling with his mouth closed, glances down at the watch on his wrist; far behind him, small, {B} at her small round table.",
+   "who": [
+    "Z",
+    "B",
+    "D"
+   ],
+   "size": "OTS",
+   "set": "courtyard"
+  },
+  "cov-cafe-CU-Z-amused": {
+   "scene": "cafe",
+   "setup": "CU-Z",
+   "variant": "amused",
+   "layout": "cov-cafe-CU-Z",
+   "action": "{Z} close, amused, a closed-mouth smile, looking toward the right of the frame at Deluin.",
+   "who": [
+    "Z"
+   ],
+   "size": "CU",
+   "set": "courtyard"
+  },
+  "cov-cafe-CU-D-warm": {
+   "scene": "cafe",
+   "setup": "CU-D",
+   "variant": "warm",
+   "layout": "cov-cafe-CU-D",
+   "action": "{D} close, warm, thinking about home, looking toward the left of the frame at Zei.",
+   "who": [
+    "D"
+   ],
+   "size": "CU",
+   "set": "courtyard"
+  },
+  "cov-cafe-CU-D-cubes": {
+   "scene": "cafe",
+   "setup": "CU-D",
+   "variant": "cubes",
+   "layout": "cov-cafe-CU-D",
+   "action": "{D} close, looking down at the table as if seeing something for the first time, a small closed-mouth smile.",
+   "who": [
+    "D"
+   ],
+   "size": "CU",
+   "set": "courtyard"
+  },
+  "cov-cafe-CU-B-menu": {
+   "scene": "cafe",
+   "setup": "CU-B",
+   "variant": "menu",
+   "layout": "cov-cafe-CU-B",
+   "action": "{B} close, glancing down at her thin glowing menu, unimpressed.",
+   "who": [
+    "B"
+   ],
+   "size": "CU",
+   "set": "courtyard"
+  },
+  "cov-cafe-CU-B-standing": {
+   "scene": "cafe",
+   "setup": "CU-B",
+   "variant": "standing",
+   "layout": "cov-cafe-CU-B-standing",
+   "action": "{B}, standing now, big headphones in her hand, looking down toward the left of the frame at Zei: serious, a straight face, not smiling.",
+   "who": [
+    "B"
+   ],
+   "size": "CU",
+   "set": "courtyard"
+  },
+  "cov-cafe-BAI-sideeye": {
+   "scene": "cafe",
+   "setup": "BAI",
+   "variant": "sideeye",
+   "layout": "cov-cafe-BAI",
+   "action": "{B} at her small round table, big headphones on, a handheld in her hands, glancing sideways out of the corner of her eye toward the left of the frame.",
+   "who": [
+    "B"
+   ],
+   "size": "MCU",
+   "set": "courtyard"
+  },
+  "cov-cafe-BAI-what": {
+   "scene": "cafe",
+   "setup": "BAI",
+   "variant": "what",
+   "layout": "cov-cafe-BAI",
+   "action": "{B} at her small round table turns in her chair toward the left of the frame and lifts one side of her big headphones off one ear, loudly.",
+   "who": [
+    "B"
+   ],
+   "size": "MCU",
+   "set": "courtyard"
+  },
+  "cov-cafe-MENU": {
+   "scene": "cafe",
+   "setup": "MENU",
+   "variant": "",
+   "reuse": "scenes-out/fifteen-days/inserts/c14-b108.png",
+   "framed": true
+  },
+  "cov-cafe-SUGAR-stack": {
+   "scene": "cafe",
+   "setup": "SUGAR",
+   "variant": "stack",
+   "layout": "cov-cafe-SUGAR-stack",
+   "action": "Very close at table height: {D}'s fingers, his cream cable-knit sleeve showing, absent-mindedly setting one small white sugar cube on another between two tea cups.",
+   "who": [
+    "D"
+   ],
+   "size": "ECU INSERT",
+   "set": "courtyard"
+  },
+  "cov-cafe-SUGAR-wall": {
+   "scene": "cafe",
+   "setup": "SUGAR",
+   "variant": "wall",
+   "layout": "cov-cafe-SUGAR",
+   "action": "Very close at table height: a neat little wall of small white sugar cubes, two rows high, between two tea cups on the wooden table.",
+   "who": [],
+   "size": "ECU INSERT",
+   "set": "courtyard"
+  },
+  "cov-cafe-SUGAR-flick": {
+   "scene": "cafe",
+   "setup": "SUGAR",
+   "variant": "flick",
+   "layout": "cov-cafe-SUGAR-flick",
+   "action": "Very close at table height: a finger flicks one small white sugar cube out of the bottom row of the little wall between two tea cups; the cube flies.",
+   "who": [],
+   "size": "ECU INSERT",
+   "set": "courtyard"
+  },
+  "cov-cafe-SUGAR-door": {
+   "scene": "cafe",
+   "setup": "SUGAR",
+   "variant": "door",
+   "layout": "cov-cafe-SUGAR-door",
+   "action": "Very close at table height: the little wall of small white sugar cubes between two tea cups, now with one cube missing from the middle of the bottom row: a doorway.",
+   "who": [],
+   "size": "ECU INSERT",
+   "set": "courtyard"
+  },
+  "cov-cafe-WATCH-watch": {
+   "scene": "cafe",
+   "setup": "WATCH",
+   "variant": "watch",
+   "layout": "cov-cafe-WATCH",
+   "action": "Very close: {Z}'s wrist, orange jacket sleeve pushed back, as he turns it to glance at a plain round watch.",
+   "who": [
+    "Z"
+   ],
+   "size": "ECU INSERT",
+   "set": "courtyard"
+  },
+  "cov-gate-MASTER-fingers": {
+   "scene": "gate",
+   "setup": "MASTER",
+   "variant": "fingers",
+   "layout": "cov-gate-MASTER",
+   "action": "At the courtyard's street gate at dusk, the lamps coming on: {D} on the right holds up both open hands, ten fingers, then lowers one: five; {Z} on the left mirrors it, a closed-mouth smile. Both arms and hands clearly drawn.",
+   "who": [
+    "Z",
+    "D"
+   ],
+   "size": "MS two-shot",
+   "set": "courtyard"
+  },
+  "cov-gate-MASTER-wave": {
+   "scene": "gate",
+   "setup": "MASTER",
+   "variant": "wave",
+   "layout": "cov-gate-MASTER",
+   "action": "At the street gate at dusk: {D} on the right, turning to go into the street, gives a quick wave goodbye; {Z} on the left waves back.",
+   "who": [
+    "Z",
+    "D"
+   ],
+   "size": "MS two-shot",
+   "set": "courtyard"
+  },
+  "cov-gate-CU-D-chant": {
+   "scene": "gate",
+   "setup": "CU-D",
+   "variant": "chant",
+   "layout": "cov-gate-CU-D",
+   "action": "{D} close at the gate at dusk, chanting playfully, looking toward the left of the frame at Zei.",
+   "who": [
+    "D"
+   ],
+   "size": "CU",
+   "set": "courtyard"
+  },
+  "cov-gate-CU-Z-smile": {
+   "scene": "gate",
+   "setup": "CU-Z",
+   "variant": "smile",
+   "layout": "cov-gate-CU-Z",
+   "action": "{Z} close at the gate at dusk, a closed-mouth smile, looking toward the right of the frame at Deluin.",
+   "who": [
+    "Z"
+   ],
+   "size": "CU",
+   "set": "courtyard"
+  },
+  "cov-dusk-MASTER-talk": {
+   "scene": "dusk",
+   "setup": "MASTER",
+   "variant": "talk",
+   "layout": "cov-dusk-MASTER",
+   "action": "At dusk in the emptying courtyard: {Z} on the left stands at {B}'s small round table and talks to her; {B} on the right, seated, headphones around her neck, looks up at him.",
+   "who": [
+    "Z",
+    "B"
+   ],
+   "size": "MS two-shot",
+   "set": "courtyard"
+  },
+  "cov-lobby-EST": {
+   "scene": "lobby",
+   "setup": "EST",
+   "variant": "",
+   "reuse": "images-out/preprod/pass3/L01b-K6.png",
+   "framed": false
+  },
+  "cov-lobby-CU-Z-distraught": {
+   "scene": "lobby",
+   "setup": "CU-Z",
+   "variant": "distraught",
+   "layout": "cov-lobby-CU-Z-distraught",
+   "action": "{Z} close at his table in the hotel lobby restaurant late at night, distraught, tapping his device; an untouched bowl of rice and vegetables and a tea cup.",
+   "who": [
+    "Z"
+   ],
+   "size": "CU",
+   "set": "lobby"
+  },
+  "cov-lobby-CU-Z-down": {
+   "scene": "lobby",
+   "setup": "CU-Z",
+   "variant": "down",
+   "layout": "cov-lobby-CU-Z-distraught",
+   "action": "{Z}'s face close, eyes looking down at the device in his hands as it lights up; worried, not smiling.",
+   "who": [
+    "Z"
+   ],
+   "size": "CU",
+   "set": "lobby"
+  },
+  "cov-lobby-CU-Z-relief": {
+   "scene": "lobby",
+   "setup": "CU-Z",
+   "variant": "relief",
+   "layout": "cov-lobby-CU-Z",
+   "action": "{Z} close, eyes closing, breathing out in relief, his device in his hands.",
+   "who": [
+    "Z"
+   ],
+   "size": "CU",
+   "set": "lobby"
+  },
+  "cov-lobby-MASTER-refill": {
+   "scene": "lobby",
+   "setup": "MASTER",
+   "variant": "refill",
+   "layout": "cov-lobby-MASTER-refill",
+   "action": "The hotel lobby restaurant late at night, nearly empty: {Z} on the left at his table, distraught; {R} refills his tea cup; he doesn't look up.",
+   "who": [
+    "Z",
+    "R"
+   ],
+   "size": "MS two-shot",
+   "set": "lobby"
+  },
+  "cov-lobby-MASTER-sits": {
+   "scene": "lobby",
+   "setup": "MASTER",
+   "variant": "sits",
+   "layout": "cov-lobby-MASTER",
+   "action": "The hotel lobby restaurant late at night: {Z} on the left at his table, worried, not smiling; {B} on the right sits down across from him carefully, concerned and caring, without a word.",
+   "who": [
+    "Z",
+    "B"
+   ],
+   "size": "MS two-shot",
+   "set": "lobby"
+  },
+  "cov-lobby-OTS-Z-turns": {
+   "scene": "lobby",
+   "setup": "OTS-Z",
+   "variant": "turns",
+   "layout": "cov-lobby-OTS-Z",
+   "action": "Over {Z}'s shoulder: he turns his glowing device to show {B}; {B} across the table leans in to read it, her face unreadable.",
+   "who": [
+    "Z",
+    "B"
+   ],
+   "size": "OTS",
+   "set": "lobby"
+  },
+  "cov-lobby-SCREEN": {
+   "scene": "lobby",
+   "setup": "SCREEN",
+   "variant": "",
+   "code": true
+  }
+ },
+ "sequence": [
+  {
+   "setup": "EST",
+   "s": 2.2,
+   "letter": "Sadzu Du, Dzego · 3724 Firemoon 10",
+   "fx": [
+    [
+     "game: flyby",
+     0.4,
+     -14,
+     2.6
+    ]
+   ],
+   "why": "the place-and-date card needs reading time",
+   "scene": "game"
+  },
+  {
+   "setup": "FLOOR",
+   "v": "live",
+   "s": 1.4,
+   "fx": [
+    [
+     "game: blast",
+     0.2,
+     -12,
+     1.6
+    ],
+    [
+     "game: flyby",
+     0.8,
+     -16,
+     2.6
+    ]
+   ],
+   "scene": "game"
+  },
+  {
+   "setup": "PIT-D",
+   "v": "playing",
+   "s": 1.3,
+   "fx": [
+    [
+     "game: blast",
+     0.5,
+     -15,
+     1.6
+    ]
+   ],
+   "scene": "game"
+  },
+  {
+   "setup": "PIT-K",
+   "s": 1.3,
+   "fx": [
+    [
+     "game: crash",
+     0.3,
+     -13,
+     2.4
+    ]
+   ],
+   "scene": "game"
+  },
+  {
+   "setup": "SCREEN",
+   "v": "face",
+   "s": 1.4,
+   "fx": [
+    [
+     "hall: crowd swell",
+     0.0,
+     -10,
+     3.0
+    ]
+   ],
+   "scene": "game"
+  },
+  {
+   "line": "b1-1",
+   "setup": "MASTER",
+   "v": "watch",
+   "scene": "overlook"
+  },
+  {
+   "line": "b1-2",
+   "setup": "OTS-Z",
+   "v": "dry",
+   "scene": "overlook"
+  },
+  {
+   "setup": "CU-Z",
+   "v": "eyebrow",
+   "s": 1.0,
+   "why": "his reaction to 'so damn pretty'",
+   "scene": "overlook"
+  },
+  {
+   "line": "b1-3",
+   "setup": "OTS-Z",
+   "v": "shrug",
+   "scene": "overlook"
+  },
+  {
+   "setup": "POV",
+   "s": 1.5,
+   "why": "the owner: a pause and the game below before 'such patience'",
+   "fx": [
+    [
+     "game: crash",
+     0.4,
+     -18,
+     2.4
+    ]
+   ],
+   "scene": "overlook"
+  },
+  {
+   "setup": "game/PIT-D",
+   "v": "playing",
+   "s": 1.2,
+   "fx": [
+    [
+     "game: blast",
+     0.3,
+     -20,
+     1.6
+    ]
+   ],
+   "scene": "overlook"
+  },
+  {
+   "line": "b1-4",
+   "setup": "CU-Z",
+   "v": "admire",
+   "scene": "overlook"
+  },
+  {
+   "line": "b1-5",
+   "setup": "OTS-Z",
+   "v": "wry",
+   "scene": "overlook"
+  },
+  {
+   "setup": "MASTER",
+   "v": "lean",
+   "s": 1.2,
+   "why": "the owner: her leaning over the railing before 'toast'",
+   "fx": [
+    [
+     "game: blast",
+     0.3,
+     -22,
+     1.6
+    ]
+   ],
+   "scene": "overlook"
+  },
+  {
+   "line": "b1-6",
+   "setup": "CU-B",
+   "v": "toast",
+   "fx": [
+    [
+     "game: wall",
+     1.0,
+     -18,
+     3.2
+    ]
+   ],
+   "scene": "overlook"
+  },
+  {
+   "setup": "game/FLOOR",
+   "v": "hold",
+   "s": 1.5,
+   "fx": [
+    [
+     "hall: crowd swell",
+     0.0,
+     -6,
+     4.0
+    ],
+    [
+     "game: crash",
+     0.4,
+     -12,
+     2.4
+    ]
+   ],
+   "scene": "overlook"
+  },
+  {
+   "setup": "game/PIT-D",
+   "v": "glasses",
+   "s": 1.4,
+   "scene": "overlook"
+  },
+  {
+   "setup": "EST",
+   "v": "wait",
+   "s": 1.4,
+   "fx": [
+    [
+     "device: elevator-arrive",
+     0.3,
+     -8,
+     2.2
+    ]
+   ],
+   "scene": "corridor"
+  },
+  {
+   "setup": "MASTER",
+   "v": "arrive",
+   "s": 1.0,
+   "scene": "corridor"
+  },
+  {
+   "line": "b2-1",
+   "setup": "OTS-D",
+   "v": "eager",
+   "scene": "corridor"
+  },
+  {
+   "line": "b2-2",
+   "setup": "OTS-Z",
+   "v": "easy",
+   "scene": "corridor"
+  },
+  {
+   "line": "b2-3",
+   "setup": "OTS-D",
+   "v": "sheepish",
+   "scene": "corridor"
+  },
+  {
+   "setup": "CU-B",
+   "v": "sour",
+   "s": 1.0,
+   "over": 1.0,
+   "why": "the owner: this shot while he's still talking, so Deluin answers sooner",
+   "scene": "corridor"
+  },
+  {
+   "line": "b2-4",
+   "setup": "OTS-Z",
+   "v": "warm",
+   "scene": "corridor"
+  },
+  {
+   "line": "b2-5",
+   "setup": "OTS-D",
+   "v": "delighted",
+   "scene": "corridor"
+  },
+  {
+   "line": "b2-6",
+   "setup": "OTS-Z",
+   "v": "warm",
+   "cut_at": {
+    "setup": "CU-B",
+    "v": "sour",
+    "after": 2.2,
+    "why": "no shot with Bai until 'Bai, you're welcome'"
+   },
+   "scene": "corridor"
+  },
+  {
+   "line": "b2-7",
+   "setup": "OTS-D",
+   "v": "delighted",
+   "scene": "corridor"
+  },
+  {
+   "line": "b2-8",
+   "setup": "CU-B",
+   "v": "serious",
+   "pre": {
+    "setup": "MASTER",
+    "s": 1.2,
+    "why": "re-establish: they turn and walk"
+   },
+   "scene": "walk"
+  },
+  {
+   "line": "b2-9",
+   "setup": "CU-Z",
+   "v": "tease",
+   "scene": "walk"
+  },
+  {
+   "line": "b2-10",
+   "setup": "CU-B",
+   "v": "sly",
+   "scene": "walk"
+  },
+  {
+   "line": "b2-11",
+   "setup": "CU-B",
+   "v": "serious",
+   "scene": "walk"
+  },
+  {
+   "line": "b2-12",
+   "setup": "MASTER",
+   "scene": "walk"
+  },
+  {
+   "setup": "EST",
+   "v": "night",
+   "s": 1.5,
+   "why": "establish",
+   "scene": "cafe"
+  },
+  {
+   "line": "b3-1",
+   "setup": "MASTER",
+   "v": "wave",
+   "laugh": -0.3,
+   "scene": "cafe"
+  },
+  {
+   "setup": "MASTER",
+   "v": "robot",
+   "s": 1.0,
+   "why": "re-establish: Zei sits, the robot arrives",
+   "fx": [
+    [
+     "device: robot-glide",
+     0.0,
+     -8,
+     2.5
+    ],
+    [
+     "device: robot-greet",
+     0.6,
+     -10,
+     1.2
+    ]
+   ],
+   "scene": "cafe"
+  },
+  {
+   "line": "b3-2",
+   "setup": "MASTER",
+   "v": "robot",
+   "scene": "cafe"
+  },
+  {
+   "line": "b3-3",
+   "setup": "OTS-D",
+   "v": "whoa",
+   "fx": [
+    [
+     "device: menu-appears",
+     -0.3,
+     -10,
+     1.5
+    ]
+   ],
+   "scene": "cafe"
+  },
+  {
+   "line": "b3-4",
+   "setup": "OTS-Z",
+   "v": "menu",
+   "scene": "cafe"
+  },
+  {
+   "setup": "MENU",
+   "s": 2.0,
+   "why": "the menu matters: hold to read it",
+   "scene": "cafe"
+  },
+  {
+   "line": "b3-5",
+   "setup": "OTS-D",
+   "v": "explain",
+   "fx": [
+    [
+     "device: menu-tap-1",
+     1.2,
+     -14,
+     0.5
+    ]
+   ],
+   "scene": "cafe"
+  },
+  {
+   "setup": "CU-B",
+   "v": "menu",
+   "s": 1.0,
+   "why": "Bai, left out",
+   "scene": "cafe"
+  },
+  {
+   "line": "b3-6",
+   "setup": "OTS-D",
+   "v": "explain",
+   "scene": "cafe"
+  },
+  {
+   "line": "b3-7",
+   "setup": "OTS-Z",
+   "v": "menu",
+   "scene": "cafe"
+  },
+  {
+   "line": "b3-8",
+   "setup": "MASTER",
+   "v": "menus",
+   "fx": [
+    [
+     "device: menu-tap-2",
+     1.8,
+     -14,
+     0.5
+    ]
+   ],
+   "scene": "cafe"
+  },
+  {
+   "line": "b3-9",
+   "setup": "OTS-Z",
+   "v": "menu",
+   "fx": [
+    [
+     "device: menu-tap-3",
+     1.0,
+     -14,
+     0.5
+    ]
+   ],
+   "scene": "cafe"
+  },
+  {
+   "line": "b3-10",
+   "setup": "OTS-D",
+   "v": "astonished",
+   "scene": "cafe"
+  },
+  {
+   "line": "b3-11",
+   "setup": "OTS-Z",
+   "v": "stern",
+   "scene": "cafe"
+  },
+  {
+   "line": "b3-12",
+   "setup": "OTS-D",
+   "v": "astonished",
+   "scene": "cafe"
+  },
+  {
+   "line": "b3-13",
+   "setup": "MASTER",
+   "v": "up",
+   "cut_at": {
+    "setup": "CU-B",
+    "v": "standing",
+    "after": 2.6,
+    "why": "she stands for 'come get me'"
+   },
+   "scene": "cafe"
+  },
+  {
+   "setup": "MASTER",
+   "v": "apart",
+   "s": 1.5,
+   "why": "re-establish: Bai moves to her table; the tea is poured as they talk",
+   "fx": [
+    [
+     "device: robot-glide",
+     0.0,
+     -12,
+     2.0
+    ]
+   ],
+   "scene": "cafe"
+  },
+  {
+   "line": "b4-1",
+   "setup": "OTS-Z",
+   "v": "talk",
+   "cut_at": {
+    "setup": "SUGAR",
+    "v": "stack",
+    "after": 4.0,
+    "back": 1.2
+   },
+   "scene": "cafe"
+  },
+  {
+   "line": "b4-2",
+   "setup": "OTS-D",
+   "v": "talk",
+   "scene": "cafe"
+  },
+  {
+   "line": "b4-3",
+   "setup": "CU-D",
+   "v": "warm",
+   "cut_at": {
+    "setup": "SUGAR",
+    "v": "wall",
+    "after": 6.0,
+    "back": 1.2
+   },
+   "scene": "cafe"
+  },
+  {
+   "line": "b4-4",
+   "setup": "CU-Z",
+   "v": "amused",
+   "scene": "cafe"
+  },
+  {
+   "line": "b4-5",
+   "setup": "CU-D",
+   "v": "cubes",
+   "scene": "cafe"
+  },
+  {
+   "setup": "SUGAR",
+   "v": "flick",
+   "s": 1.2,
+   "scene": "cafe"
+  },
+  {
+   "setup": "SUGAR",
+   "v": "door",
+   "s": 1.2,
+   "scene": "cafe"
+  },
+  {
+   "setup": "MASTER",
+   "v": "laugh",
+   "s": 1.3,
+   "scene": "cafe"
+  },
+  {
+   "setup": "BAI",
+   "v": "sideeye",
+   "s": 1.1,
+   "scene": "cafe"
+  },
+  {
+   "line": "b5-1",
+   "setup": "OTS-Z",
+   "v": "eager",
+   "scene": "cafe"
+  },
+  {
+   "line": "b5-2",
+   "setup": "OTS-D",
+   "v": "watch",
+   "cut_at": {
+    "setup": "WATCH",
+    "v": "watch",
+    "after": 2.2,
+    "back": 1.0
+   },
+   "scene": "cafe"
+  },
+  {
+   "line": "b5-3",
+   "setup": "OTS-Z",
+   "v": "eager",
+   "scene": "cafe"
+  },
+  {
+   "setup": "BAI",
+   "v": "sideeye",
+   "s": 1.0,
+   "scene": "cafe"
+  },
+  {
+   "line": "b5-4",
+   "setup": "MASTER",
+   "v": "call",
+   "scene": "cafe"
+  },
+  {
+   "line": "b5-5",
+   "setup": "BAI",
+   "v": "what",
+   "music": true,
+   "scene": "cafe"
+  },
+  {
+   "line": "b6-1",
+   "setup": "MASTER",
+   "v": "fingers",
+   "pre": {
+    "setup": "MASTER",
+    "v": "fingers",
+    "s": 0.6
+   },
+   "scene": "gate"
+  },
+  {
+   "setup": "CU-Z",
+   "v": "smile",
+   "s": 1.2,
+   "why": "he mirrors it",
+   "scene": "gate"
+  },
+  {
+   "setup": "MASTER",
+   "v": "wave",
+   "s": 1.4,
+   "bye": true,
+   "scene": "gate"
+  },
+  {
+   "setup": "MASTER",
+   "v": "talk",
+   "s": 4.0,
+   "letter": "That day was his last Minpentai game- the last day when his life was somewhat normal.",
+   "why": "the on-screen line needs reading time",
+   "scene": "dusk"
+  },
+  {
+   "setup": "EST",
+   "s": 3.0,
+   "letter": "Pafogai Du, Dzego · 3724 Firemoon 17\nOne week later",
+   "why": "the place card needs reading time",
+   "scene": "lobby"
+  },
+  {
+   "setup": "CU-Z",
+   "v": "distraught",
+   "s": 1.4,
+   "scene": "lobby"
+  },
+  {
+   "setup": "SCREEN",
+   "v": "L03",
+   "s": 2.5,
+   "why": "his fifth message, to read",
+   "fx": [
+    [
+     "device: message-sent",
+     1.2,
+     -9,
+     1.2
+    ]
+   ],
+   "scene": "lobby"
+  },
+  {
+   "setup": "MASTER",
+   "v": "refill",
+   "s": 1.4,
+   "fx": [
+    [
+     "device: robot-glide",
+     0.0,
+     -14,
+     2.0
+    ]
+   ],
+   "scene": "lobby"
+  },
+  {
+   "setup": "MASTER",
+   "v": "sits",
+   "s": 1.5,
+   "scene": "lobby"
+  },
+  {
+   "setup": "CU-Z",
+   "v": "down",
+   "s": 1.2,
+   "fx": [
+    [
+     "device: message-received-a",
+     -0.5,
+     -8,
+     1.5
+    ]
+   ],
+   "why": "the chime, then his eyes",
+   "scene": "lobby"
+  },
+  {
+   "setup": "SCREEN",
+   "v": "L07",
+   "s": 3.5,
+   "why": "the reply, to read",
+   "scene": "lobby"
+  },
+  {
+   "setup": "CU-Z",
+   "v": "relief",
+   "s": 1.5,
+   "scene": "lobby"
+  },
+  {
+   "setup": "SCREEN",
+   "v": "L09",
+   "s": 2.5,
+   "fx": [
+    [
+     "device: message-received-b",
+     0.2,
+     -8,
+     1.5
+    ]
+   ],
+   "why": "the next message, to read",
+   "scene": "lobby"
+  },
+  {
+   "setup": "OTS-Z",
+   "v": "turns",
+   "s": 2.5,
+   "why": "cut on her face, reading",
+   "scene": "lobby"
+  }
+ ]
+}
