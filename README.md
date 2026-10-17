@@ -208,14 +208,11 @@ What a fork cannot do yet:
   and sounds. They live in `images-out/` and `scenes-out/`, which are not in the repository
   until the maintainer publishes them. `scripts/coverage-plan.py fifteen-days` does run; it only
   plans.
-- **Run some scripts as written.** A few (`set-render.mjs`, `cut-coverage.py`, `cut-v4.py`,
-  `convert-voice.py`, `design-voice.py`, `split-takes.py` and others) name paths on the
-  maintainer's Mac, such as `/Users/nathan/snowmoon/.venv-voice/bin/python`. Use your own Python
-  (the `.venv-scene` from the guide) instead. In `scripts/set-render.mjs`, import `playwright-core`
-  by name and point `THREE_DIR` at `node_modules/three`; it also needs a browser
-  (`npx playwright-core install chromium`).
-- **Convert a performance into a character's voice.** `convert-voice.py` needs the Chatterbox
-  weights on your machine, at a path you set in the script.
+- **Convert a performance into a character's voice** without the Chatterbox weights on your
+  machine. Scripts look for shared tools in the checkout (or set `SNOWMOON_VOICE_PY`,
+  `SNOWMOON_IMAGE_PY`, `SNOWMOON_VOICE_MODELS`, `SNOWMOON_NODE_MODULES`; see
+  `scripts/snowmoon_paths.py`). `scripts/set-render.mjs` also needs a browser:
+  `npx playwright-core install chromium`.
 
 The licence asks that what you share stays GPL-3.0, with its source. This edition also keeps its
 own rules, and anything shown on snowmoon.party will follow them:
