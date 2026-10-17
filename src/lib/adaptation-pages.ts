@@ -205,6 +205,11 @@ export async function handleFor(person: Person): Promise<string | null> {
   if (person < 0) return walletAddress(-person);
   const name = await lookupName(person);
   if (name) return name.toLowerCase();
+  // Farcaster didn't answer (or has no name for them): the name we last saw on this person, which
+  // resolveHandle accepts while Farcaster is down. Without this, /<id> and old fixed links 404 then.
+  const seen = await fromTables((sql) => sql<{ fname: string }[]>`
+    select fname from studio.account_names where person = ${person} order by seen_at desc limit 1`);
+  if (seen?.[0]) return seen[0].fname;
   return Object.entries(STATIC.names).find(([, fid]) => fid === person)?.[0] ?? null;
 }
 

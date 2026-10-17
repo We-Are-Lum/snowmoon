@@ -62,6 +62,10 @@ const v2 = (await pg.query<{ id: number }>(`select id from studio.adaptation_ver
 await pg.query(`insert into studio.adaptation_pages (person, adaptation_id, version_id) values ($1, 1, $2)`, [walletPerson, v2]);
 await pg.exec(`insert into studio.account_names (fname, person) values ('oldnaaate', 6786)`);
 const a2 = (await pg.query<{ id: number }>(`insert into studio.adaptations (owner_person, title) values (6786, 'Second Scene') returning id`)).rows[0].id;
+// A third adaptation by FID 7777, whose name we saw as @zeiwriter, for when Farcaster doesn't answer.
+const a3 = (await pg.query<{ id: number }>(`insert into studio.adaptations (owner_person, title) values (7777, 'Third Scene') returning id`)).rows[0].id;
+await pg.query(`insert into studio.adaptation_versions (adaptation_id, author_person, recipe) values ($1, 7777, '{"video_url": null}')`, [a3]);
+await pg.exec(`insert into studio.account_names (fname, person) values ('zeiwriter', 7777)`);
 // From here on the site talks to the database as the production role.
 await pg.exec('set role studio_writer');
 
@@ -72,9 +76,11 @@ await dbServer.start();
 // --- Farcaster's name API, stood in ------------------------------------------------------
 const NAMES: Record<string, number> = { naaate: 6786 };
 const asked: string[] = [];
+let farcasterDown = false;
 const stub = createHttp((req, res) => {
   const u = new URL(req.url ?? '/', 'http://stub');
   asked.push(u.pathname + u.search);
+  if (farcasterDown) return (res.writeHead(503), res.end());
   const send = (status: number, body: unknown) => (res.writeHead(status, { 'content-type': 'application/json' }), res.end(JSON.stringify(body)));
   if (u.pathname === '/v2/user-by-username') {
     const name = u.searchParams.get('username') ?? '';
@@ -146,6 +152,19 @@ async function record(n: number, name: string, url: string, expected: string, pa
   results.push({ n, name, url, expected, got: { ...got, finalUrl: local(page.url()), text }, pass, screenshot: path.join(OUT, file) });
   if (!pass) failures.push(`${n} ${name}: expected ${expected}; got ${JSON.stringify({ ...got, finalUrl: local(page.url()), text: short(text, 200) })}`);
   console.log(`  ${pass ? 'PASS' : 'FAIL'} ${n} ${name}`);
+}
+
+// 11 (run first, before the site has cached any name). Farcaster isn't answering: /<id> still finds
+// the owner's page under the name we last saw on them, and that page still shows.
+{
+  farcasterDown = true;
+  const h = await head(`/${a3}`);
+  const h2 = await head(`/@zeiwriter/${a3}`);
+  farcasterDown = false;
+  const pass = h.status === 307 && h.location === `/@zeiwriter/${a3}` && h2.status === 200;
+  results.push({ n: 11, name: 'Farcaster not answering', url: `/${a3}`, expected: `307 to /@zeiwriter/${a3} (the name last seen on FID 7777), and that page 200`, got: { status: h.status, finalUrl: h.location ?? '', text: '', pageStatus: h2.status }, pass, screenshot: '' });
+  if (!pass) failures.push(`11 Farcaster not answering: /${a3} gave ${h.status} ${h.location}; /@zeiwriter/${a3} gave ${h2.status}`);
+  console.log(`  ${pass ? 'PASS' : 'FAIL'} 11 Farcaster not answering`);
 }
 
 const browser = await chromium.launch({ channel: 'chrome', args: ['--disable-features=LocalNetworkAccessChecks,BlockInsecurePrivateNetworkRequests,PrivateNetworkAccessForNavigations'] });
@@ -366,6 +385,7 @@ try {
   if (who.rows[0].u !== 'studio_writer') failures.push(`the session was ${who.rows[0].u}, not studio_writer`);
   if (!asked.some((a) => a.startsWith('/v2/user-by-username?username=oldnaaate'))) failures.push('the rename was not looked up on the stand-in');
 } finally {
+  results.sort((x, y) => x.n - y.n);
   writeFileSync(path.join(OUT, 'results.json'), JSON.stringify(results, null, 1) + '\n');
   await browser.close();
   next.kill();
