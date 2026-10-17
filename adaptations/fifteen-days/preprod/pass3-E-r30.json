@@ -1,0 +1,141 @@
+{
+ "about": "Fifteen Days v6: Zei's early close-ups redrawn on the left looking right, outdoors in the courtyard, a plain menu; Bai's 'What?!' retried with a surprised face and the cup lifted (owner's answers, 2026-10-17 late). Reference sent at 1344x752. DRAFTED prompts.",
+ "out": "images-out/preprod/pass3",
+ "ledger": "images-out/preprod/ledger-s7.json",
+ "cap_usd": 25.0,
+ "style": "",
+ "jobs": [
+  {
+   "id": "cov-cafe-CU-Z0-whoa-E30",
+   "shot": "cov-cafe-CU-Z0-whoa",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-CU-Z0-explain-K13.png"
+   ],
+   "prompt": "Change the background: he now sits outdoors in the open stone-paved courtyard of a small caf\u00e9 at night, with no window, glass, pillar or frame around him; behind him a leafy tree hung with warm string lights, low old houses with lit windows, and pale pyramid-shaped towers against a purple starry sky; a wooden table and empty wooden chairs. He stays on the left side of the frame, his body and face turned toward the right of the frame. His eyes are down on the glowing menu he holds in both hands, surprised: eyebrows raised, mouth a little open. The thin glowing menu in his hands is plain soft light, with no lines, bars, letters or marks on it. Keep him exactly as he is drawn: the same young man, face, black hair with its one blue streak, orange jacket with its zip and badge, black shirt, the same drawing style, line work and colours, the same camera distance and crop; do not zoom, crop or shift him. Nobody else anywhere. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 30
+  },
+  {
+   "id": "cov-cafe-CU-Z0-whoa-E31",
+   "shot": "cov-cafe-CU-Z0-whoa",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-CU-Z0-explain-K13.png"
+   ],
+   "prompt": "Change the background: he now sits outdoors in the open stone-paved courtyard of a small caf\u00e9 at night, with no window, glass, pillar or frame around him; behind him a leafy tree hung with warm string lights, low old houses with lit windows, and pale pyramid-shaped towers against a purple starry sky; a wooden table and empty wooden chairs. He stays on the left side of the frame, his body and face turned toward the right of the frame. His eyes are down on the glowing menu he holds in both hands, surprised: eyebrows raised, mouth a little open. The thin glowing menu in his hands is plain soft light, with no lines, bars, letters or marks on it. Keep him exactly as he is drawn: the same young man, face, black hair with its one blue streak, orange jacket with its zip and badge, black shirt, the same drawing style, line work and colours, the same camera distance and crop; do not zoom, crop or shift him. Nobody else anywhere. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 31
+  },
+  {
+   "id": "cov-cafe-CU-Z0-listen-E30",
+   "shot": "cov-cafe-CU-Z0-listen",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-CU-Z0-explain-K13.png"
+   ],
+   "prompt": "Change the background: he now sits outdoors in the open stone-paved courtyard of a small caf\u00e9 at night, with no window, glass, pillar or frame around him; behind him a leafy tree hung with warm string lights, low old houses with lit windows, and pale pyramid-shaped towers against a purple starry sky; a wooden table and empty wooden chairs. He stays on the left side of the frame, his body and face turned toward the right of the frame. He looks up from the menu toward the right of the frame, a little surprised, eyebrows raised, the thin glowing menu still in his hands. The thin glowing menu in his hands is plain soft light, with no lines, bars, letters or marks on it. Keep him exactly as he is drawn: the same young man, face, black hair with its one blue streak, orange jacket with its zip and badge, black shirt, the same drawing style, line work and colours, the same camera distance and crop; do not zoom, crop or shift him. Nobody else anywhere. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 30
+  },
+  {
+   "id": "cov-cafe-CU-Z0-listen-E31",
+   "shot": "cov-cafe-CU-Z0-listen",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-CU-Z0-explain-K13.png"
+   ],
+   "prompt": "Change the background: he now sits outdoors in the open stone-paved courtyard of a small caf\u00e9 at night, with no window, glass, pillar or frame around him; behind him a leafy tree hung with warm string lights, low old houses with lit windows, and pale pyramid-shaped towers against a purple starry sky; a wooden table and empty wooden chairs. He stays on the left side of the frame, his body and face turned toward the right of the frame. He looks up from the menu toward the right of the frame, a little surprised, eyebrows raised, the thin glowing menu still in his hands. The thin glowing menu in his hands is plain soft light, with no lines, bars, letters or marks on it. Keep him exactly as he is drawn: the same young man, face, black hair with its one blue streak, orange jacket with its zip and badge, black shirt, the same drawing style, line work and colours, the same camera distance and crop; do not zoom, crop or shift him. Nobody else anywhere. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 31
+  },
+  {
+   "id": "cov-cafe-CU-Z0-explain-E30",
+   "shot": "cov-cafe-CU-Z0-explain",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-CU-Z0-explain-K13.png"
+   ],
+   "prompt": "Change the background: he now sits outdoors in the open stone-paved courtyard of a small caf\u00e9 at night, with no window, glass, pillar or frame around him; behind him a leafy tree hung with warm string lights, low old houses with lit windows, and pale pyramid-shaped towers against a purple starry sky; a wooden table and empty wooden chairs. He stays on the left side of the frame, his body and face turned toward the right of the frame. He holds the thin glowing menu and talks keenly, looking toward the right of the frame. The thin glowing menu in his hands is plain soft light, with no lines, bars, letters or marks on it. Keep him exactly as he is drawn: the same young man, face, black hair with its one blue streak, orange jacket with its zip and badge, black shirt, the same drawing style, line work and colours, the same camera distance and crop; do not zoom, crop or shift him. Nobody else anywhere. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 30
+  },
+  {
+   "id": "cov-cafe-CU-Z0-explain-E31",
+   "shot": "cov-cafe-CU-Z0-explain",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-CU-Z0-explain-K13.png"
+   ],
+   "prompt": "Change the background: he now sits outdoors in the open stone-paved courtyard of a small caf\u00e9 at night, with no window, glass, pillar or frame around him; behind him a leafy tree hung with warm string lights, low old houses with lit windows, and pale pyramid-shaped towers against a purple starry sky; a wooden table and empty wooden chairs. He stays on the left side of the frame, his body and face turned toward the right of the frame. He holds the thin glowing menu and talks keenly, looking toward the right of the frame. The thin glowing menu in his hands is plain soft light, with no lines, bars, letters or marks on it. Keep him exactly as he is drawn: the same young man, face, black hair with its one blue streak, orange jacket with its zip and badge, black shirt, the same drawing style, line work and colours, the same camera distance and crop; do not zoom, crop or shift him. Nobody else anywhere. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 31
+  },
+  {
+   "id": "cov-cafe-CU-Z0-astonished-E30",
+   "shot": "cov-cafe-CU-Z0-astonished",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-CU-Z0-explain-K13.png"
+   ],
+   "prompt": "Change the background: he now sits outdoors in the open stone-paved courtyard of a small caf\u00e9 at night, with no window, glass, pillar or frame around him; behind him a leafy tree hung with warm string lights, low old houses with lit windows, and pale pyramid-shaped towers against a purple starry sky; a wooden table and empty wooden chairs. He stays on the left side of the frame, his body and face turned toward the right of the frame. He is astonished: eyebrows high, eyes wide, mouth open, looking toward the right of the frame; his hands are lowered out of the frame and hold nothing. Keep him exactly as he is drawn: the same young man, face, black hair with its one blue streak, orange jacket with its zip and badge, black shirt, the same drawing style, line work and colours, the same camera distance and crop; do not zoom, crop or shift him. Nobody else anywhere. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 30
+  },
+  {
+   "id": "cov-cafe-CU-Z0-astonished-E31",
+   "shot": "cov-cafe-CU-Z0-astonished",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-CU-Z0-explain-K13.png"
+   ],
+   "prompt": "Change the background: he now sits outdoors in the open stone-paved courtyard of a small caf\u00e9 at night, with no window, glass, pillar or frame around him; behind him a leafy tree hung with warm string lights, low old houses with lit windows, and pale pyramid-shaped towers against a purple starry sky; a wooden table and empty wooden chairs. He stays on the left side of the frame, his body and face turned toward the right of the frame. He is astonished: eyebrows high, eyes wide, mouth open, looking toward the right of the frame; his hands are lowered out of the frame and hold nothing. Keep him exactly as he is drawn: the same young man, face, black hair with its one blue streak, orange jacket with its zip and badge, black shirt, the same drawing style, line work and colours, the same camera distance and crop; do not zoom, crop or shift him. Nobody else anywhere. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 31
+  },
+  {
+   "id": "cov-cafe-BAI-what-E30",
+   "shot": "cov-cafe-BAI-what",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-what-R27.png"
+   ],
+   "prompt": "Her face turns surprised as she calls out: eyebrows raised high, eyes wide, mouth open. Her raised hand lifts the headphone ear cup right off her ear and holds it out away from her head, so a clear gap shows between the ear cup and her ear. Her other hand stays on the table with the phone. Exactly two arms and two hands, one set of headphones. Keep the drawing, colours, camera, framing and crop exactly as they are; she keeps her hair, vest, tattoos and her head turned over her shoulder in profile toward the left. Nobody else anywhere. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 30
+  },
+  {
+   "id": "cov-cafe-BAI-what-E31",
+   "shot": "cov-cafe-BAI-what",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-what-R27.png"
+   ],
+   "prompt": "Her face turns surprised as she calls out: eyebrows raised high, eyes wide, mouth open. Her raised hand lifts the headphone ear cup right off her ear and holds it out away from her head, so a clear gap shows between the ear cup and her ear. Her other hand stays on the table with the phone. Exactly two arms and two hands, one set of headphones. Keep the drawing, colours, camera, framing and crop exactly as they are; she keeps her hair, vest, tattoos and her head turned over her shoulder in profile toward the left. Nobody else anywhere. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 31
+  },
+  {
+   "id": "cov-cafe-BAI-what-E32",
+   "shot": "cov-cafe-BAI-what",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-what-R27.png"
+   ],
+   "prompt": "Her face turns surprised as she calls out: eyebrows raised high, eyes wide, mouth open. Her raised hand lifts the headphone ear cup right off her ear and holds it out away from her head, so a clear gap shows between the ear cup and her ear. Her other hand stays on the table with the phone. Exactly two arms and two hands, one set of headphones. Keep the drawing, colours, camera, framing and crop exactly as they are; she keeps her hair, vest, tattoos and her head turned over her shoulder in profile toward the left. Nobody else anywhere. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 32
+  }
+ ]
+}
