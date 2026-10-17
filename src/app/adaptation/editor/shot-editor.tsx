@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import type { SetStage, ShotCamera, PersonSpec } from './set3d';
+import { ForkTextField } from '~/components/fork-text-field';
 
 /**
  * The live shot editor (owner, 2026-10-17: "Ship a live editor on the site by Sunday"; boards 1-3 of
@@ -466,12 +467,19 @@ function Editor({
                 (shot.lines.length ? (
                   shot.lines.map((l) => (
                     <div key={l.cue} className="ed-line">
-                      <label className="label" htmlFor={`ed-line-${l.cue}`}>
-                        {l.speaker ?? 'Line'} · {l.cue} · {l.by.kind === 'book' ? <>the book, {l.by.cite}</> : l.by.kind === 'person' ? <>by @{l.by.handle}{l.by.on ? `, ${l.by.on}` : ''}</> : 'author unknown'}
-                      </label>
-                      <textarea id={`ed-line-${l.cue}`} rows={2} value={lineText[l.cue] ?? ''} onChange={(e) => setLineText({ ...lineText, [l.cue]: e.target.value })} />
+                      <ForkTextField
+                        id={`ed-line-${l.cue}`}
+                        rows={2}
+                        value={lineText[l.cue] ?? ''}
+                        onChange={(v) => setLineText({ ...lineText, [l.cue]: v })}
+                        label={
+                          <>
+                            {l.speaker ?? 'Line'} · {l.cue} · {l.by.kind === 'book' ? <>the book, {l.by.cite}</> : l.by.kind === 'person' ? <>by @{l.by.handle}{l.by.on ? `, ${l.by.on}` : ''}</> : 'author unknown'}
+                          </>
+                        }
+                      />
                       <p className="ed-help">
-                        {l.by.kind === 'book' ? "The book's own words." : `@${l.by.kind === 'person' ? l.by.handle : '?'}'s words, as performed.`} Your edit stays in this browser and goes into your fork file, credited to you. Models never write lines.
+                        {l.by.kind === 'book' ? "The book's own words." : `@${l.by.kind === 'person' ? l.by.handle : '?'}'s words, as performed.`} An edit is yours, credited to you in your fork. Models never write lines.
                       </p>
                     </div>
                   ))
@@ -519,12 +527,8 @@ function Editor({
               {tab === 'Prompt' &&
                 (shot.recipe?.prompt ? (
                   <div className="ed-line">
-                    <label className="label" htmlFor="ed-prompt">
-                      Prompt for {shot.recipe.id} {promptChanged ? '· edited' : ''}
-                    </label>
-                    <textarea id="ed-prompt" rows={10} value={prompt} onChange={(e) => setPrompt(e.target.value)} />
+                    <ForkTextField id="ed-prompt" rows={10} value={prompt} onChange={setPrompt} label={<>Prompt for {shot.recipe.id} {promptChanged ? '· edited' : ''}</>} />
                     <div className="ed-row">
-                      <p className="ed-help">Editable here only: it stays in this browser and goes into your fork file.</p>
                       <button type="button" className="ed-small" onClick={() => setPrompt(shot.recipe!.prompt!)} disabled={!promptChanged}>
                         Reset
                       </button>
