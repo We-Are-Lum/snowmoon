@@ -1,0 +1,111 @@
+{
+  "about": "Fifteen Days pre-production, step 2: the 8-shot courtyard consistency test (owner, 2026-10-16). Every reference in: the courtyard plate (with robot C), one face-and-costume card per person, the floor plan in words. Bai's and Deluin's faces are provisional. Prompts DRAFTED by the coding agent; people described, never named.",
+  "out": "images-out/preprod/test",
+  "ledger": "images-out/preprod/ledger-s12.json",
+  "cap_usd": 1.0,
+  "style": "",
+  "jobs": [
+    {
+      "id": "T1",
+      "prompt": "Extreme wide establishing shot from high on the west side of the courtyard: the spiky-haired young man walks in through the far gate, looking around; at the wide table the tall young man and the young woman are laughing together, well apart across it; the serving robot glides between tables; other diners all around. The table: one wide rectangular table for four with plenty of room between the chairs; the tall young man sits on its far side, the young woman across from him on the near side, and the spiky-haired young man at its right-hand end, at right angles to both; a small round table for one stands just beyond that end. Reference image 1 is the place: draw this same courtyard cafe, its buildings, tree, string lights, skyline and its serving robot exactly. Reference image 2 is the slim young man with spiky black hair with a blue streak and an orange cropped jacket: copy only that person's face, hair, skin and clothes from it, never the sheet's layout, poses or grey background. Reference image 3 is the thin, wiry young woman with deep brown skin, shaved sides and a tall magenta ponytail, a lime-green vest and tattooed arms: copy only that person's face, hair, skin and clothes from it, never the sheet's layout, poses or grey background. Reference image 4 is the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic: copy only that person's face, hair, skin and clothes from it, never the sheet's layout, poses or grey background. Exactly three main people, each appearing once. Any other diners are small, far off and plainly dressed. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/refs-small/courtyard3-b.png",
+        "images-out/preprod/cards/zei.png",
+        "images-out/preprod/cards/bai.png",
+        "images-out/preprod/cards/deluin.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 11001,
+      "note": "courtyard consistency test; Bai and Deluin faces PROVISIONAL (face-bai-c, face-deluin-c)"
+    },
+    {
+      "id": "T2",
+      "prompt": "Close-up from a low three-quarter angle: the tall young man seated at the table, looking toward screen right, a polite, gentle smile that doesn't reach his calm eyes; the string lights soft behind him. Framed from the chest up. Reference image 1 is the place: draw this same courtyard cafe, its buildings, tree, string lights, skyline and its serving robot exactly. Reference image 2 is the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic: copy only that person's face, hair, skin and clothes from it, never the sheet's layout, poses or grey background. Exactly one main person in the picture, appearing once. Any other diners are small, far off and plainly dressed. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/refs-small/courtyard3-b.png",
+        "images-out/preprod/cards/deluin.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 11002,
+      "note": "courtyard consistency test; Bai and Deluin faces PROVISIONAL (face-bai-c, face-deluin-c)"
+    },
+    {
+      "id": "T3",
+      "prompt": "Extreme close-up from a high angle: the spiky-haired young man's eyes and brows just above the top edge of a paper-thin glowing tablet menu he holds, looking down at it in wonder. Reference image 1 is the place: draw this same courtyard cafe, its buildings, tree, string lights, skyline and its serving robot exactly. Reference image 2 is the slim young man with spiky black hair with a blue streak and an orange cropped jacket: copy only that person's face, hair, skin and clothes from it, never the sheet's layout, poses or grey background. Exactly one main person in the picture, appearing once. Any other diners are small, far off and plainly dressed. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/refs-small/courtyard3-b.png",
+        "images-out/preprod/cards/zei.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 11003,
+      "note": "courtyard consistency test; Bai and Deluin faces PROVISIONAL (face-bai-c, face-deluin-c)"
+    },
+    {
+      "id": "T4",
+      "prompt": "Close-up in profile: the young woman seated at the table, holding a paper-thin tablet menu, her eyes flicking up from it toward screen left, unimpressed and unhappy. Framed from the chest up. Reference image 1 is the place: draw this same courtyard cafe, its buildings, tree, string lights, skyline and its serving robot exactly. Reference image 2 is the thin, wiry young woman with deep brown skin, shaved sides and a tall magenta ponytail, a lime-green vest and tattooed arms: copy only that person's face, hair, skin and clothes from it, never the sheet's layout, poses or grey background. Exactly one main person in the picture, appearing once. Any other diners are small, far off and plainly dressed. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/refs-small/courtyard3-b.png",
+        "images-out/preprod/cards/bai.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 11004,
+      "note": "courtyard consistency test; Bai and Deluin faces PROVISIONAL (face-bai-c, face-deluin-c)"
+    },
+    {
+      "id": "T5",
+      "prompt": "Over-the-shoulder shot from behind the tall young man: his shoulder and wavy hair soft and out of focus in the left foreground; in focus, at the right-hand end of the wide table, the spiky-haired young man holds a paper-thin menu and looks toward screen left at him, explaining. The table: one wide rectangular table for four with plenty of room between the chairs; the tall young man sits on its far side, the young woman across from him on the near side, and the spiky-haired young man at its right-hand end, at right angles to both; a small round table for one stands just beyond that end. Reference image 1 is the place: draw this same courtyard cafe, its buildings, tree, string lights, skyline and its serving robot exactly. Reference image 2 is the slim young man with spiky black hair with a blue streak and an orange cropped jacket: copy only that person's face, hair, skin and clothes from it, never the sheet's layout, poses or grey background. Reference image 3 is the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic: copy only that person's face, hair, skin and clothes from it, never the sheet's layout, poses or grey background. Exactly two main people, each appearing once. Any other diners are small, far off and plainly dressed. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/refs-small/courtyard3-b.png",
+        "images-out/preprod/cards/zei.png",
+        "images-out/preprod/cards/deluin.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 11005,
+      "note": "courtyard consistency test; Bai and Deluin faces PROVISIONAL (face-bai-c, face-deluin-c)"
+    },
+    {
+      "id": "T6",
+      "prompt": "Extreme close-up from directly above the table: the tall young man's long fingers, the cuff of his cream cable-knit sleeve showing, absent-mindedly setting one white sugar cube on top of another between two tea cups; a small bowl of sugar cubes. Reference image 1 is the place: draw this same courtyard cafe, its buildings, tree, string lights, skyline and its serving robot exactly. Reference image 2 is the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic: copy only that person's face, hair, skin and clothes from it, never the sheet's layout, poses or grey background. Exactly one main person in the picture, appearing once. Any other diners are small, far off and plainly dressed. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/refs-small/courtyard3-b.png",
+        "images-out/preprod/cards/deluin.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 11006,
+      "note": "courtyard consistency test; Bai and Deluin faces PROVISIONAL (face-bai-c, face-deluin-c)"
+    },
+    {
+      "id": "T7",
+      "prompt": "Close-up from a low angle: the spiky-haired young man at the end of the table, looking toward screen left; behind him, small and soft in the background at the small round table, the young woman sits alone with big headphones on and a handheld device, not looking at him. Framed from the chest up. Reference image 1 is the place: draw this same courtyard cafe, its buildings, tree, string lights, skyline and its serving robot exactly. Reference image 2 is the slim young man with spiky black hair with a blue streak and an orange cropped jacket: copy only that person's face, hair, skin and clothes from it, never the sheet's layout, poses or grey background. Reference image 3 is the thin, wiry young woman with deep brown skin, shaved sides and a tall magenta ponytail, a lime-green vest and tattooed arms: copy only that person's face, hair, skin and clothes from it, never the sheet's layout, poses or grey background. Exactly two main people, each appearing once. Any other diners are small, far off and plainly dressed. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/refs-small/courtyard3-b.png",
+        "images-out/preprod/cards/zei.png",
+        "images-out/preprod/cards/bai.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 11007,
+      "note": "courtyard consistency test; Bai and Deluin faces PROVISIONAL (face-bai-c, face-deluin-c)"
+    },
+    {
+      "id": "T8",
+      "prompt": "Wide shot from the west, everyone framed from the waist up: the serving robot from reference image 1 stands beside the wide table holding out paper-thin tablet menus; the tall young man and the young woman sit across from each other, well apart; the spiky-haired young man at the end. The table: one wide rectangular table for four with plenty of room between the chairs; the tall young man sits on its far side, the young woman across from him on the near side, and the spiky-haired young man at its right-hand end, at right angles to both; a small round table for one stands just beyond that end. Reference image 1 is the place: draw this same courtyard cafe, its buildings, tree, string lights, skyline and its serving robot exactly. Reference image 2 is the slim young man with spiky black hair with a blue streak and an orange cropped jacket: copy only that person's face, hair, skin and clothes from it, never the sheet's layout, poses or grey background. Reference image 3 is the thin, wiry young woman with deep brown skin, shaved sides and a tall magenta ponytail, a lime-green vest and tattooed arms: copy only that person's face, hair, skin and clothes from it, never the sheet's layout, poses or grey background. Reference image 4 is the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic: copy only that person's face, hair, skin and clothes from it, never the sheet's layout, poses or grey background. Exactly three main people, each appearing once. Any other diners are small, far off and plainly dressed. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/refs-small/courtyard3-b.png",
+        "images-out/preprod/cards/zei.png",
+        "images-out/preprod/cards/bai.png",
+        "images-out/preprod/cards/deluin.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 11008,
+      "note": "courtyard consistency test; Bai and Deluin faces PROVISIONAL (face-bai-c, face-deluin-c)"
+    }
+  ]
+}

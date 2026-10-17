@@ -1,0 +1,279 @@
+<title>Fifteen Days Pre-production</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+/* Layout: one long review sheet in production order (cast, robot, places, sound, shots); each section ends in a verdict row the owner fills in. */
+:root{--bg:#f3f2f7;--fg:#1b1a2b;--muted:#5d5a78;--line:#d6d3e6;--panel:#e9e7f2;--accent:#5b3fd1;--ok:#1d7a4b;--bad:#b42340;
+--zei:#e8771e;--bai:#8cc63f;--deluin:#d9cfb8;--kau:#8a8a99;--robot:#bfe9f0;
+--display:"Chakra Petch",system-ui,sans-serif;--body:"Source Serif 4",Georgia,serif;--mono:"JetBrains Mono",ui-monospace,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d0e1c;--fg:#e9e7f5;--muted:#a19dc0;--line:#2b2a46;--panel:#16172b;--accent:#a996ff;--ok:#5fd39a;--bad:#ff6b85;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d0e1c;--fg:#e9e7f5;--muted:#a19dc0;--line:#2b2a46;--panel:#16172b;--accent:#a996ff;--ok:#5fd39a;--bad:#ff6b85;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:16px/1.55 var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 64px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+main{max-width:1200px;margin:0 auto;display:grid;gap:44px}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:3;background:var(--bg);border-bottom:1px solid var(--line);padding-block:12px;display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline}
+header.top nav{display:flex;flex-wrap:wrap;gap:4px 14px;font:13px var(--mono)}
+header.top nav a{color:var(--muted);text-decoration:none}header.top nav a:hover,header.top nav a:focus-visible{color:var(--accent)}
+h1{font:600 clamp(22px,4vw,32px)/1.15 var(--display);margin:0;text-wrap:balance}
+h2{font:600 24px/1.2 var(--display);margin:0;text-wrap:balance}
+h3{font:500 18px/1.25 var(--display);margin:0}
+.status{font:13px var(--mono);color:var(--muted)}
+p{margin:0;max-width:68ch}.muted{color:var(--muted)}
+section{display:grid;gap:16px}
+.eyebrow{font:12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+ul.flags{margin:0;padding-left:20px;display:grid;gap:6px;max-width:75ch}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+figure{margin:0;display:grid;gap:6px;min-width:0}figure img{width:100%;height:auto;border-radius:4px;display:block;background:var(--panel)}
+figcaption{font:12px var(--mono);color:var(--muted)}
+button.pick{all:unset;cursor:pointer;display:grid;gap:6px;padding:5px;border-radius:6px;outline:2px solid transparent;min-width:0}
+button.pick[aria-pressed="true"]{outline-color:var(--accent);background:var(--panel)}
+button.pick:focus-visible{outline-color:var(--fg)}
+button.pick span{font:12px var(--mono);color:var(--muted)}button.pick[aria-pressed="true"] span{color:var(--accent)}
+.verdict{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start;border-top:1px dashed var(--line);padding-top:10px}
+.verdict button{font:13px var(--mono);padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--fg);cursor:pointer}
+.verdict button[aria-pressed="true"].ok{background:var(--ok);border-color:var(--ok);color:var(--bg)}
+.verdict button[aria-pressed="true"].bad{background:var(--bad);border-color:var(--bad);color:var(--bg)}
+.verdict button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+textarea{flex:1 1 280px;min-height:38px;font:14px/1.4 var(--body);color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:7px 9px;resize:vertical}
+.place{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:16px;align-items:start}
+@media (max-width:760px){.place{grid-template-columns:1fr}}
+.plan{width:100%;height:auto;background:var(--panel);border-radius:6px}
+.plan .floor{fill:var(--bg);stroke:var(--line)}.plan .tier{fill:var(--panel);stroke:var(--line)}.plan .holo{fill:none;stroke:var(--accent);stroke-dasharray:3 3}
+.plan .pod,.plan .table,.plan .counter{fill:var(--panel);stroke:var(--muted)}.plan .table.dim{opacity:.5}.plan .wall{fill:var(--panel);stroke:var(--line)}
+.plan .rail,.plan .wallline{stroke:var(--fg);stroke-width:3}.plan .crowd{fill:var(--muted);opacity:.45}.plan .cam{fill:var(--accent);opacity:.1}
+.plan .door,.plan .gate,.plan .glass{fill:var(--accent);opacity:.35}.plan .street{fill:var(--panel)}.plan .tree{fill:var(--ok);opacity:.3}.plan .lamp{fill:#f2c14e}
+.plan .path,.plan .move{stroke:var(--accent);stroke-width:1.5;fill:none;stroke-dasharray:5 4}.plan .axis{stroke:var(--bad);stroke-width:1.5;stroke-dasharray:6 4}
+.plan .lab{font:10px var(--mono);fill:var(--muted)}.plan .small{font-size:9px}.plan .pl{font:600 10px var(--mono);text-anchor:middle;fill:#1b1a2b}
+.plan .p circle{stroke:#1b1a2b;stroke-width:.8}.plan .tick{stroke:var(--fg);stroke-width:2}
+.plan .p-zei circle{fill:var(--zei)}.plan .p-bai circle{fill:var(--bai)}.plan .p-deluin circle{fill:var(--deluin)}.plan .p-kau circle{fill:var(--kau)}.plan .p-robot circle{fill:var(--robot)}
+.legend{font:12px var(--mono);color:var(--muted)}
+.audio{display:grid;gap:10px}
+.voicegroup{display:grid;gap:8px;padding-block:6px}
+.voiceopt{display:grid;grid-template-columns:minmax(0,220px) 1fr;gap:6px 12px;align-items:center}
+@media (max-width:600px){.voiceopt{grid-template-columns:1fr}}
+.voiceopt .players{display:flex;flex-wrap:wrap;gap:8px}
+.voiceopt .players button{font:13px var(--mono);padding:6px 10px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--fg);cursor:pointer}
+.voiceopt .players button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
+.voiceopt .choose{font:13px var(--mono);padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--fg);cursor:pointer;justify-self:start}
+.voiceopt .choose[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.sound{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;border-bottom:1px solid var(--line);padding-block:8px}
+.sound code{font:13px var(--mono);min-width:12ch}.sound span{flex:1 1 260px;color:var(--muted);font-size:14px}
+.sound button{font:13px var(--mono);padding:5px 12px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--fg);cursor:pointer}
+.scene{display:grid;gap:12px}
+.geo{font-size:14px;color:var(--muted);max-width:90ch}
+.shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr));gap:14px}
+.shot{display:grid;gap:5px;align-content:start;min-width:0}
+.shot img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:4px;background:var(--panel)}
+.shot .id{font:600 13px var(--mono);color:var(--accent);display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.shot .id .sz{color:var(--muted);font-weight:400}
+.shot .act{font-size:14px;line-height:1.4}
+.shot .line{font:italic 13px/1.35 var(--body);color:var(--muted)}
+.shot .meta{font:11px var(--mono);color:var(--muted)}
+.shot details summary{font:12px var(--mono);color:var(--muted);cursor:pointer}
+.shot details textarea{width:100%;margin-top:4px}
+.tag{font:11px var(--mono);padding:1px 6px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.tag.opt{border-color:var(--accent);color:var(--accent)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<main>
+<header class="top"><h1>Fifteen Days pre-production</h1><nav><a href="#cast">Cast</a><a href="#robot">Robot</a><a href="#places">Places</a><a href="#voices">Voices</a><a href="#sounds">Device sounds</a><a href="#shots">Shot list</a></nav><span class="status" id="status">connecting…</span></header>
+
+<section>
+<p>Everything you asked to see before any final shot is drawn. Pick an option where there are several, then mark each section <b>Approve</b> or <b>Needs changes</b> with a note. Your marks save as you go, and I read them before drawing anything. All of it is drafted by me and labelled; nothing is final until you approve it.</p>
+<ul class="flags">
+<li><b>The book describes none of the three leads' looks</b> (searched chapters 1–31): their faces and builds are this edition's, so making Bai mixed-race and all three more racially ambiguous conflicts with nothing in the text.</li>
+<li><b>One conflict with an earlier decision of yours:</b> Deluin's fixed description (your decision of 5 October) says "fair skin in warm, natural tones". I kept it, since he is the foreigner from Redshire. If "more ambiguous" should include him, say so on his row.</li>
+<li><b>The book supports your hall:</b> players come down in elevator pods into a dark room of over a thousand people and walk a lit path to "a giant game console with a chair"; the other players are only "silhouettes … in the distance" (c4-b78–b80). The glasses on a long cable are the book's (c4-b82). The 3D holograms are this edition's invention (broadcast imagined).</li>
+<li><b>The corridor has no windows in the book</b> ("without the windows", c4-b59), and is round-topped. The overnight corridor frames all showed windows; the new references fix that.</li>
+<li><b>The robot slides</b> in the book ("a robot immediately slid up", c14-b105), so the design is humanoid above the waist on a gliding column.</li>
+<li><b>The gallery replaces the waiting room</b> (your note). The book has Zei watch from a waiting room (c14-b90); that line is context, never spoken, so nothing in the script changes.</li>
+<li><b>Ten fingers, then five</b> is fifteen: the days until the final (c14-b32), so the goodbye means "see you at the final". Shot D03 makes it one clear gesture, and Zei mirrors it in D04.</li>
+</ul>
+<p class="muted" id="spend"></p>
+</section>
+
+<section id="cast">
+<div class="eyebrow">Cast · faces separate from costumes</div>
+<h2>New cast sheets</h2>
+<p class="muted">Each face sheet: front, three-quarter and profile, neutral; then a smile, a frown and surprise. Costumes are on a faceless mannequin, so shots take faces and costumes from separate references and stop copying the sheets' standing pose.</p>
+<div id="castRows" class="grid2"></div>
+</section>
+
+<section id="robot">
+<div class="eyebrow">Design sheet</div>
+<h2>The service robot</h2>
+<p class="muted">Humanoid upper body with a tray and a chest compartment, gliding on a column: utilitarian, friendly and personal. Pick one.</p>
+<div class="grid3" id="robotPicks"></div>
+<div class="verdict" data-item="robot"></div>
+</section>
+
+<section id="places">
+<div class="eyebrow">Establishing frames and floor plans</div>
+<h2>Places</h2>
+<p class="muted">Each place: two establishing frames (pick one; it becomes the reference for every shot there) and a floor plan of where everyone is and which side the cameras stay on. <span class="legend">Dots: Zei orange, Bai green, Deluin cream, Kau grey, robot blue; the tick shows which way each faces. The red dashed line is the 180° line; the tinted band is the camera side.</span></p>
+<div id="placeRows" style="display:grid;gap:32px"></div>
+</section>
+
+<section id="voices">
+<div class="eyebrow">Your note: Bai less deep and more feminine; Zei and Deluin more unlike each other and you</div>
+<h2>Voices</h2>
+<p>I found that the converter takes pitch and timbre from the voice sheet, not from your recording (shifting your take's pitch first changed almost nothing), so I drafted new voice sheets. Your rhythm and timing stay; Zei's lines are 5% quicker and Deluin's 6% slower to pull them apart. Bai's lines also have less low end. Same lines, current and new; pick one per character.</p>
+<div id="voiceRows" style="display:grid;gap:22px"></div>
+</section>
+
+<section id="sounds">
+<div class="eyebrow">Synthesized in code, one family for every Dzego device</div>
+<h2>Device sounds</h2>
+<p class="muted">Soft bells tuned to intervals a piano can't play (11/8 and 7/4), so they sound gentle but not of our world. The reply chime at the vigil has three versions: pick one.</p>
+<div id="soundRows" class="audio"></div>
+<div class="verdict" data-item="sounds"></div>
+</section>
+
+<section id="shots">
+<div class="eyebrow">Shot list v2 · <span id="shotCount"></span></div>
+<h2>Shots, with storyboard thumbnails</h2>
+<p class="muted">Coverage by standard film grammar: an establishing shot per scene; singles in shot/reverse-shot with matching eyelines and looking room; over-the-shoulders; two-shots from the front and from behind; inserts of hands, sugar, the menu and screens; reaction shots; and regular cutaways to Bai in the café. Seated shots are framed from the waist up. Thumbnails are quick sketches for framing only, drawn without references, so faces and costumes in them mean nothing. Lines are the takes you recorded; shot lengths will follow them in the edit.</p>
+<div id="sceneRows" style="display:grid;gap:40px"></div>
+</section>
+</main>
+<script>
+const DATA = __DATA__;
+const state = {};           // item -> {pick, status, note}
+let db = null;
+const $ = (t, a = {}, ...kids) => { const e = document.createElement(t); for (const [k, v] of Object.entries(a)) { if (k === 'class') e.className = v; else if (k === 'text') e.textContent = v; else e.setAttribute(k, v); } e.append(...kids); return e; };
+function setStatus(t) { document.getElementById('status').textContent = t; }
+async function save(item, patch) {
+  state[item] = { ...(state[item] || {}), ...patch };
+  refresh();
+  if (!db) return;
+  try { await db.doc('review/' + item).set({ ...state[item], at: new Date().toISOString() }); setStatus('saved'); }
+  catch (e) { setStatus('not saved (' + ((e && e.code) || 'error') + '); tell Claude in chat'); }
+}
+const refreshers = [];
+function refresh() { for (const f of refreshers) f(); }
+
+function verdict(el, item) {
+  const ok = $('button', { class: 'ok', type: 'button', text: 'Approve' });
+  const bad = $('button', { class: 'bad', type: 'button', text: 'Needs changes' });
+  const note = $('textarea', { id: 'note-' + item, placeholder: 'Note (what to change)', rows: '1' });
+  ok.onclick = () => save(item, { status: state[item]?.status === 'ok' ? null : 'ok' });
+  bad.onclick = () => save(item, { status: state[item]?.status === 'change' ? null : 'change' });
+  note.addEventListener('change', () => save(item, { note: note.value }));
+  el.append(ok, bad, note);
+  refreshers.push(() => {
+    ok.setAttribute('aria-pressed', String(state[item]?.status === 'ok'));
+    bad.setAttribute('aria-pressed', String(state[item]?.status === 'change'));
+    if (document.activeElement !== note) note.value = state[item]?.note || '';
+  });
+}
+function picks(container, item, options) {
+  for (const o of options) {
+    const b = $('button', { class: 'pick', type: 'button' }, $('img', { src: o.img, alt: o.label, loading: 'lazy' }), $('span', { text: o.label }));
+    b.onclick = () => save(item, { pick: state[item]?.pick === o.key ? null : o.key });
+    container.append(b);
+    refreshers.push(() => b.setAttribute('aria-pressed', String(state[item]?.pick === o.key)));
+  }
+}
+
+// Cast
+const CAST = [['zei', 'Zei', 'Light golden-tan skin, dark eyes, spiky black hair with a blue streak; racially ambiguous.', ['words only', 'kept closer to the old face']],
+              ['bai', 'Bai', 'Warm light-brown skin, almond eyes, a few freckles, magenta-tipped high ponytail; mixed-race, racially ambiguous.', ['option A', 'option B']],
+              ['deluin', 'Deluin', 'Fair skin in warm tones, grey-green eyes, wavy light-brown hair (your 5 October description).', ['words only', 'kept closer to the old face']]];
+const castRows = document.getElementById('castRows');
+for (const [id, name, desc, labels] of CAST) {
+  const card = $('div', { style: 'display:grid;gap:10px;min-width:0' }, $('h3', { text: name }), $('p', { class: 'muted', text: desc }));
+  const row = $('div', { class: 'grid2' }); picks(row, 'face-' + id, [{ key: 'a', img: `img/face-${id}-a.jpg`, label: 'face · ' + labels[0] }, { key: 'b', img: `img/face-${id}-b.jpg`, label: 'face · ' + labels[1] }]);
+  card.append(row, $('figure', {}, $('img', { src: `img/costume-${id}.jpg`, alt: name + ' costume', loading: 'lazy' }), $('figcaption', { text: 'costume, front and back' })));
+  const v = $('div', { class: 'verdict' }); verdict(v, 'cast-' + id); card.append(v);
+  castRows.append(card);
+}
+picks(document.getElementById('robotPicks'), 'robot', ['a', 'b', 'c'].map(k => ({ key: k, img: `img/robot2-${k}.jpg`, label: 'robot ' + k.toUpperCase() })));
+verdict(document.querySelector('[data-item="robot"]'), 'robot');
+
+// Places
+const PLACES = [['hall', 'The hall'], ['gallery', 'The gallery railing'], ['corridor', 'The corridor and elevators'], ['courtyard', 'The courtyard café'], ['gate', 'The gate at dusk'], ['lobby', 'The lobby restaurant']];
+const ALT = { hall: ['est2-hall-a', 'est2-hall-b'], gallery: ['est2-gallery-a', 'est2-gallery-b'], corridor: ['est2-corridor-a', 'est2-corridor-b'], courtyard: ['est-courtyard-a', 'est-courtyard-b'], gate: ['est2-gate-a', 'est2-gate-b'], lobby: ['est-lobby-b', 'est-lobby-a'] };
+const placeRows = document.getElementById('placeRows');
+for (const [id, name] of PLACES) {
+  const left = $('div', { class: 'grid2' }); picks(left, 'place-' + id, ALT[id].map((f, i) => ({ key: f, img: `img/${f}.jpg`, label: 'frame ' + 'AB'[i] })));
+  const right = $('div', { style: 'display:grid;gap:8px;min-width:0' }); right.innerHTML = DATA.plans[id];
+  right.append($('p', { class: 'geo', text: DATA.geography[id] }));
+  const v = $('div', { class: 'verdict' }); verdict(v, 'place-' + id + '-ok');
+  placeRows.append($('div', { style: 'display:grid;gap:10px' }, $('h3', { text: name }), $('div', { class: 'place' }, left, right), v));
+}
+
+// Voices
+let playing = null;
+function play(btn, src) {
+  if (playing) { playing.a.pause(); playing.b.setAttribute('aria-pressed', 'false'); if (playing.b === btn) { playing = null; return; } }
+  const a = new Audio(src); a.play().catch(() => setStatus('tap again to play')); btn.setAttribute('aria-pressed', 'true');
+  a.onended = () => { btn.setAttribute('aria-pressed', 'false'); playing = null; }; playing = { a, b: btn };
+}
+const voiceRows = document.getElementById('voiceRows');
+for (const g of DATA.voices) {
+  const box = $('div', { class: 'voicegroup' }, $('h3', { text: g.name }));
+  for (const o of g.options) {
+    const players = $('div', { class: 'players' });
+    o.srcs.forEach((s, i) => { const b = $('button', { type: 'button', 'aria-pressed': 'false', text: '▶ line ' + (i + 1) }); b.onclick = () => play(b, s); players.append(b); });
+    const choose = $('button', { class: 'choose', type: 'button', text: o.label });
+    choose.onclick = () => save('voice-' + g.id, { pick: state['voice-' + g.id]?.pick === o.key ? null : o.key });
+    refreshers.push(() => choose.setAttribute('aria-pressed', String(state['voice-' + g.id]?.pick === o.key)));
+    box.append($('div', { class: 'voiceopt' }, choose, players));
+  }
+  const v = $('div', { class: 'verdict' }); verdict(v, 'voice-' + g.id + '-ok'); box.append(v);
+  voiceRows.append(box);
+}
+
+// Device sounds
+const soundRows = document.getElementById('soundRows');
+for (const s of DATA.sounds) {
+  const b = $('button', { type: 'button', 'aria-pressed': 'false', text: '▶ play' }); b.onclick = () => play(b, s.src);
+  const row = $('div', { class: 'sound' }, $('code', { text: s.id.replace('device-', '') }), $('span', { text: s.what }), b);
+  if (s.id.startsWith('device-message-received')) {
+    const k = s.id.slice(-1); const c = $('button', { type: 'button', text: 'use this reply chime' });
+    c.onclick = () => save('reply-chime', { pick: state['reply-chime']?.pick === k ? null : k });
+    refreshers.push(() => { c.setAttribute('aria-pressed', String(state['reply-chime']?.pick === k)); c.style.borderColor = state['reply-chime']?.pick === k ? 'var(--accent)' : ''; c.style.color = state['reply-chime']?.pick === k ? 'var(--accent)' : ''; });
+    row.append(c);
+  }
+  soundRows.append(row);
+}
+verdict(document.querySelector('[data-item="sounds"]'), 'sounds');
+
+// Shots
+const SCENES = [['hall', 'Beat 1 · the hall', ['H']], ['gallery', 'Beat 1 · the gallery', ['G']], ['corridor', 'Beat 2 · the corridor', ['C']], ['courtyard', 'Beats 3–5 · the café', ['F', 'S', 'R']], ['gate', 'Beat 6 · the gate', ['D']], ['lobby', 'Beat 7 · the vigil', ['L']]];
+const LOOK = { L: 'looks screen-left', R: 'looks screen-right', down: 'looks down', '-': '' };
+const WHO = { Z: 'Zei', B: 'Bai', D: 'Deluin', K: 'Kau', R: 'robot' };
+const total = DATA.shots.length, secs = DATA.shots.reduce((a, s) => a + s.dur_s, 0), opt = DATA.shots.filter(s => s.optional).length;
+document.getElementById('shotCount').textContent = `${total} shots (${opt} optional), about ${Math.floor(secs / 60)} min ${secs % 60} s`;
+const sceneRows = document.getElementById('sceneRows');
+for (const [key, title, prefixes] of SCENES) {
+  const list = DATA.shots.filter(s => prefixes.includes(s.id[0]) && (key !== 'hall' || s.scene === 'hall') && (key !== 'courtyard' || s.id[0] !== 'D'));
+  if (key === 'gate') list.push(...DATA.shots.filter(s => s.id[0] === 'D' && !list.includes(s)));
+  const grid = $('div', { class: 'shots' });
+  for (const s of list) {
+    const who = s.who.map(w => WHO[w]).join(', ');
+    const nm = s.action.replace(/\{([ZBDKR])\}/g, (_, k) => WHO[k]);
+    const card = $('div', { class: 'shot' },
+      $('img', { src: `img/thumb-${s.id}.jpg`, alt: s.id + ' storyboard', loading: 'lazy' }),
+      $('div', { class: 'id' }, s.id, $('span', { class: 'sz', text: s.size }), ...(s.optional ? [$('span', { class: 'tag opt', text: 'optional' })] : []), ...(s.composite ? [$('span', { class: 'tag', text: 'book image ' + s.composite })] : [])),
+      $('div', { class: 'act', text: nm }));
+    if (s.line) card.append($('div', { class: 'line', text: s.line }));
+    card.append($('div', { class: 'meta', text: [who, LOOK[s.look], s.dur_s + ' s', s.purpose].filter(Boolean).join(' · ') }));
+    const d = $('details', {}, $('summary', { text: 'note on ' + s.id })); const ta = $('textarea', { id: 'shotnote-' + s.id, rows: '2', placeholder: 'What to change in this shot' });
+    ta.addEventListener('change', () => save('shot-' + s.id, { note: ta.value }));
+    refreshers.push(() => { if (document.activeElement !== ta) ta.value = state['shot-' + s.id]?.note || ''; if (state['shot-' + s.id]?.note) d.open = true; });
+    d.append(ta); card.append(d); grid.append(card);
+  }
+  const v = $('div', { class: 'verdict' }); verdict(v, 'shots-' + key);
+  sceneRows.append($('div', { class: 'scene' }, $('h3', { text: title }), $('p', { class: 'geo', text: DATA.geography[key] }), grid, v));
+}
+document.getElementById('spend').textContent = `Spent on fal for this pre-production: $${DATA.spent.toFixed(2)} of $${DATA.cap.toFixed(0)}, plus $0.45 for the new voice sheets.`;
+refresh();
+(async () => {
+  try { db = window.claude ? await window.claude.use('db') : null; } catch (e) { db = null; }
+  if (!db) { setStatus('marks can’t be saved in this view; tell Claude in chat'); return; }
+  setStatus('marks save as you go');
+  db.collection('review').onSnapshot(snap => { for (const d of snap.docs) { const v = d.data(); if (v) state[d.id] = v; } refresh(); }, e => setStatus('not connected: ' + e.code));
+})();
+</script>

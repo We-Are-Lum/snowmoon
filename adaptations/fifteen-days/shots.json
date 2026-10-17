@@ -1,0 +1,1559 @@
+{
+  "about": "Fifteen Days: shot list, DRAFTED by the coding agent from script.md's picture notes (2026-10-15), for the owner to keep, change or cut. Plan for Friday (owner): stills with camera moves, cuts and dissolves (scripts/render-scene.py); no motion for Friday (owner, 2026-10-15). Each shot is anchored to a line (b<beat>-<n>) or to the shot before it; hold_s is a drafted length for silent shots. Subjects are model-drafted image prompts (labelled; never published as text); the people are drawn with the cast v2 sheets as references (FLUX.2 klein, local) and described, never named. Inserts are the book's own pictures and screens, composited, never generated. Revised 2026-10-15 at the owner's direction: every shot names exactly who is in it and how many; only those people's sheets are passed as references; background people are small, distant and in plain dark clothes; places come from the book.",
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent",
+    "drafted": [
+      "shot choices",
+      "subjects",
+      "framing",
+      "moves",
+      "transitions",
+      "timing anchors",
+      "motion candidates"
+    ]
+  },
+  "style": null,
+  "shots": [
+    {
+      "id": "s01",
+      "beat": 1,
+      "name": "The hall",
+      "at": {
+        "cue": "@start",
+        "edge": "start",
+        "offset": 0.0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.15
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "deluin"
+      ],
+      "place": "minpentai-arena",
+      "subject": "Inside the vast game hall, seen from behind and to one side: the tall pale young man sits alone, calm and cool, at a glowing game station, facing the enormous overhead display where a ring of luminous walls holds against streams of small glowing gliders crashing into them. The tiers of seats around him are dark and empty. Wide shot.",
+      "lettering": "place-date (book, c14-b1)",
+      "setting": "hall",
+      "others": "none",
+      "people": 1
+    },
+    {
+      "id": "s02",
+      "beat": 1,
+      "name": "Deluin calm, Kau sweating",
+      "at": {
+        "cue": "@start",
+        "edge": "start",
+        "offset": 5.0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "deluin"
+      ],
+      "place": "minpentai-arena",
+      "subject": "Close on the tall pale young man at his glowing game station, calm and cool, eyes up on the display, its light on his face. Medium close-up.",
+      "setting": "hall",
+      "others": "none",
+      "people": 1
+    },
+    {
+      "id": "s03",
+      "beat": 1,
+      "name": "The waiting room",
+      "at": {
+        "cue": "b1-1",
+        "edge": "start",
+        "offset": -0.6
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "pan",
+        "from": {
+          "x": 0.42,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "to": {
+          "x": 0.58,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "zei",
+        "bai"
+      ],
+      "place": "players-waiting-room",
+      "subject": "The slim spiky-haired young man and the young woman sit side by side on a low stone bench, watching the big wall screen showing the game; a small bin stands beside her. Medium two-shot.",
+      "setting": "waiting",
+      "others": "none",
+      "people": 2
+    },
+    {
+      "id": "s04",
+      "beat": 1,
+      "name": "Zei's look",
+      "at": {
+        "cue": "b1-3",
+        "edge": "start",
+        "offset": -0.4
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "zei",
+        "bai"
+      ],
+      "place": "players-waiting-room",
+      "subject": "Both sitting on the low stone bench: the slim spiky-haired young man turns to the young woman beside him with one eyebrow raised; she keeps her eyes on the wall screen, unimpressed. Medium close two-shot.",
+      "setting": "waiting",
+      "others": "none",
+      "people": 2
+    },
+    {
+      "id": "s05",
+      "beat": 1,
+      "name": "The spit",
+      "at": {
+        "cue": "b1-3",
+        "edge": "end",
+        "offset": 0.2
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "bai"
+      ],
+      "place": "players-waiting-room",
+      "subject": "The young woman leans over from the stone bench and spits something into a small bin beside her, nonchalant. Medium shot.",
+      "setting": "waiting",
+      "others": "none",
+      "people": 1
+    },
+    {
+      "id": "s06",
+      "beat": 1,
+      "name": "Bai studies the board",
+      "at": {
+        "cue": "b1-6",
+        "edge": "start",
+        "offset": -0.4
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.1
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "bai"
+      ],
+      "place": "players-waiting-room",
+      "subject": "The young woman finally gives the game on the wall screen a serious look, studying it, chin on her hand, the screen's glow on her face. Close-up.",
+      "setting": "waiting",
+      "others": "none",
+      "people": 1
+    },
+    {
+      "id": "s07",
+      "beat": 2,
+      "name": "The elevator",
+      "at": {
+        "cue": "b2-1",
+        "edge": "start",
+        "offset": -1.4
+      },
+      "transition": {
+        "type": "dissolve",
+        "seconds": 0.8
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "deluin",
+        "zei",
+        "bai"
+      ],
+      "place": null,
+      "subject": "Elevator doors slide open and the tall pale young man steps out, easy and bright, toward the slim spiky-haired young man and the young woman, who stand waiting in the corridor. Wide shot.",
+      "setting": "corridor",
+      "others": "none",
+      "people": 3
+    },
+    {
+      "id": "s08",
+      "beat": 2,
+      "name": "Two players",
+      "at": {
+        "cue": "b2-2",
+        "edge": "start",
+        "offset": -0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "pan",
+        "from": {
+          "x": 0.42,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "to": {
+          "x": 0.58,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "deluin",
+        "zei"
+      ],
+      "place": null,
+      "subject": "In the corridor the tall pale young man and the slim spiky-haired young man talk face to face, friendly and a little shy. Medium two-shot.",
+      "setting": "corridor",
+      "others": "none",
+      "people": 2
+    },
+    {
+      "id": "s09",
+      "beat": 2,
+      "name": "The invitation",
+      "at": {
+        "cue": "b2-6",
+        "edge": "start",
+        "offset": -0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "deluin",
+        "bai"
+      ],
+      "place": null,
+      "subject": "In the corridor the tall pale young man turns to the young woman with an open, friendly smile; she shrugs with a disgruntled look. Medium two-shot.",
+      "setting": "corridor",
+      "others": "none",
+      "people": 2
+    },
+    {
+      "id": "s10",
+      "beat": 2,
+      "name": "Deluin goes",
+      "at": {
+        "cue": "b2-8",
+        "edge": "start",
+        "offset": -0.6
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.1
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "bai",
+        "zei"
+      ],
+      "place": null,
+      "subject": "In the empty corridor, the young woman gives the slim spiky-haired young man a hard look; he looks back, sheepish. The corridor stretches away behind them, empty. Medium two-shot. (Redrafted: the tall pale young man has already gone; three people in one shot kept getting mixed up.)",
+      "setting": "corridor",
+      "others": "none",
+      "people": 2
+    },
+    {
+      "id": "s11",
+      "beat": 2,
+      "name": "'Was.'",
+      "at": {
+        "cue": "b2-10",
+        "edge": "start",
+        "offset": -0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "bai"
+      ],
+      "place": null,
+      "subject": "The young woman says something sharp with a smile, one hand on her hip. Medium close-up.",
+      "setting": "corridor",
+      "others": "none",
+      "people": 1
+    },
+    {
+      "id": "s12",
+      "beat": 2,
+      "name": "Let's get to know him",
+      "at": {
+        "cue": "b2-12",
+        "edge": "start",
+        "offset": -0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "pan",
+        "from": {
+          "x": 0.58,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "to": {
+          "x": 0.42,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "zei",
+        "bai"
+      ],
+      "place": null,
+      "subject": "The slim spiky-haired young man grins and nudges the young woman, who rolls her eyes but half smiles. Medium two-shot.",
+      "setting": "corridor",
+      "others": "none",
+      "people": 2
+    },
+    {
+      "id": "s13",
+      "beat": 3,
+      "name": "Zei runs across the courtyard",
+      "at": {
+        "cue": "b3-1",
+        "edge": "start",
+        "offset": -3.0
+      },
+      "transition": {
+        "type": "dissolve",
+        "seconds": 0.8
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "zei",
+        "deluin",
+        "bai"
+      ],
+      "place": "courtyard-cafe",
+      "subject": "The slim spiky-haired young man runs into the courtyard and pulls up short; at a small table the tall pale young man and the young woman are already sitting together, both laughing. Wide shot.",
+      "setting": "courtyard",
+      "others": "none",
+      "people": 3
+    },
+    {
+      "id": "s14",
+      "beat": 3,
+      "name": "Over here",
+      "at": {
+        "cue": "b3-1",
+        "edge": "start",
+        "offset": -0.2
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "deluin",
+        "bai"
+      ],
+      "place": "courtyard-cafe",
+      "subject": "At a small cafe table the tall pale young man waves toward us with a big smile, calling someone over; the young woman beside him is still laughing quietly. Medium two-shot.",
+      "setting": "courtyard",
+      "others": "none",
+      "people": 2
+    },
+    {
+      "id": "s15",
+      "beat": 3,
+      "name": "The robot",
+      "at": {
+        "cue": "b3-2",
+        "edge": "start",
+        "offset": -0.8
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "pan",
+        "from": {
+          "x": 0.42,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "to": {
+          "x": 0.58,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "zei",
+        "deluin"
+      ],
+      "place": "courtyard-cafe",
+      "subject": "A plain, boxy little wheeled serving robot with a flat tray on top and a small dark screen for a face slides up to the small cafe table where the two young men sit. Medium shot.",
+      "setting": "courtyard",
+      "others": "none",
+      "people": 2
+    },
+    {
+      "id": "s16",
+      "beat": 3,
+      "name": "The menu",
+      "at": {
+        "cue": "b3-3",
+        "edge": "start",
+        "offset": -0.4
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      },
+      "cast": [],
+      "place": null,
+      "subject": null,
+      "insert": "the book's own menu picture (c14-b108), composited, never redrawn",
+      "people": 0
+    },
+    {
+      "id": "s17",
+      "beat": 3,
+      "name": "New symbols",
+      "at": {
+        "cue": "b3-5",
+        "edge": "start",
+        "offset": -0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "zei",
+        "deluin"
+      ],
+      "place": "courtyard-cafe",
+      "subject": "The two young men lean over the screen of a plain, boxy little wheeled serving robot with a flat tray on top and a small dark screen for a face at their table; the spiky-haired one stares at it in wonder, the tall pale one curious. The robot's screen shows four rounded square tiles, each with one simple pale-blue line drawing on dark blue: a cup, a leaf, a small animal face, a fish. Medium close shot.",
+      "setting": "courtyard",
+      "others": "none",
+      "people": 2
+    },
+    {
+      "id": "s18",
+      "beat": 3,
+      "name": "The lecture",
+      "at": {
+        "cue": "b3-9",
+        "edge": "start",
+        "offset": -0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "pan",
+        "from": {
+          "x": 0.58,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "to": {
+          "x": 0.42,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "deluin",
+        "zei"
+      ],
+      "place": "courtyard-cafe",
+      "subject": "At the cafe table the tall pale young man explains with one finger raised, a little lecturing; the spiky-haired young man watches him, impressed and a bit put out. Medium two-shot.",
+      "setting": "courtyard",
+      "others": "none",
+      "people": 2
+    },
+    {
+      "id": "s19",
+      "beat": 3,
+      "name": "Bai's excuse",
+      "at": {
+        "cue": "b3-13",
+        "edge": "start",
+        "offset": -0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "bai",
+        "zei"
+      ],
+      "place": "courtyard-cafe",
+      "subject": "The young woman whips round from the cafe table, already getting up, with a half-baked excuse; the spiky-haired young man, seated, looks up at her. Medium two-shot.",
+      "setting": "courtyard",
+      "others": "none",
+      "people": 2
+    },
+    {
+      "id": "s20",
+      "beat": 3,
+      "name": "The next table",
+      "at": {
+        "cue": "b3-13",
+        "edge": "end",
+        "offset": 0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.1
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "bai"
+      ],
+      "place": "courtyard-cafe",
+      "subject": "At a cafe table the young woman puts on big headphones and pulls out a small handheld device, her back half turned to the table behind her. Medium shot.",
+      "setting": "courtyard",
+      "others": "none",
+      "people": 1
+    },
+    {
+      "id": "s21",
+      "beat": 4,
+      "name": "Tea and sugar",
+      "at": {
+        "cue": "b4-1",
+        "edge": "start",
+        "offset": -1.2
+      },
+      "transition": {
+        "type": "dissolve",
+        "seconds": 0.8
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.1
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "deluin",
+        "zei"
+      ],
+      "place": "courtyard-cafe",
+      "subject": "Seen from above a small cafe table: tea in two cups; the tall pale young man starts stacking white sugar cubes as he talks, the spiky-haired young man across from him. Close shot.",
+      "setting": "courtyard",
+      "others": "none",
+      "people": 2
+    },
+    {
+      "id": "s22",
+      "beat": 4,
+      "name": "Kids get into it young",
+      "at": {
+        "cue": "b4-2",
+        "edge": "start",
+        "offset": -0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "pan",
+        "from": {
+          "x": 0.42,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "to": {
+          "x": 0.58,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "zei",
+        "deluin"
+      ],
+      "place": "courtyard-cafe",
+      "subject": "The spiky-haired young man talks with his hands, warm and easy; across the table the tall pale young man listens, a growing stack of white sugar cubes in front of him. Medium two-shot.",
+      "setting": "courtyard",
+      "others": "none",
+      "people": 2
+    },
+    {
+      "id": "s23",
+      "beat": 4,
+      "name": "The wall",
+      "at": {
+        "cue": "b4-3",
+        "edge": "end",
+        "offset": 0.2
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.15
+        },
+        "ease": "inout"
+      },
+      "cast": [],
+      "place": "courtyard-cafe",
+      "subject": "Close on a small cafe table at night: a neat little wall of white sugar cubes stands between two tea cups, string lights soft in the background. Extreme close-up, no people.",
+      "setting": "courtyard",
+      "others": "none",
+      "people": 0
+    },
+    {
+      "id": "s24",
+      "beat": 4,
+      "name": "Deluin smiles",
+      "at": {
+        "cue": "b4-5",
+        "edge": "start",
+        "offset": -0.5
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "deluin"
+      ],
+      "place": "courtyard-cafe",
+      "subject": "The tall pale young man sits at a small cafe table, both hands resting on the table either side of a little wall of white sugar cubes, looking down at it and smiling. Close-up.",
+      "setting": "courtyard",
+      "others": "none",
+      "people": 1
+    },
+    {
+      "id": "s25",
+      "beat": 4,
+      "name": "The door",
+      "at": {
+        "cue": "b4-5",
+        "edge": "end",
+        "offset": 0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "zei",
+        "deluin"
+      ],
+      "place": "courtyard-cafe",
+      "subject": "Seen from across a small cafe table: the spiky-haired young man, seated, flicks one sugar cube out of the bottom row of a little wall of sugar cubes, leaving a doorway; the tall pale young man, seated opposite, laughs with him. Medium close two-shot.",
+      "setting": "courtyard",
+      "others": "none",
+      "people": 2
+    },
+    {
+      "id": "s26",
+      "beat": 5,
+      "name": "Come visit",
+      "at": {
+        "cue": "b5-1",
+        "edge": "start",
+        "offset": -0.4
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "pan",
+        "from": {
+          "x": 0.42,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "to": {
+          "x": 0.58,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "deluin",
+        "zei"
+      ],
+      "place": "courtyard-cafe",
+      "subject": "The tall pale young man leans in across the cafe table, eager, inviting; the spiky-haired young man listens. Medium two-shot.",
+      "setting": "courtyard",
+      "others": "none",
+      "people": 2
+    },
+    {
+      "id": "s27",
+      "beat": 5,
+      "name": "Fifteen days",
+      "at": {
+        "cue": "b5-2",
+        "edge": "start",
+        "offset": -0.3
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "zei"
+      ],
+      "place": "courtyard-cafe",
+      "subject": "The spiky-haired young man laughs and glances at the watch on his wrist. Medium close-up.",
+      "setting": "courtyard",
+      "others": "none",
+      "people": 1
+    },
+    {
+      "id": "s28",
+      "beat": 5,
+      "name": "Bai glances back",
+      "at": {
+        "cue": "b5-3",
+        "edge": "end",
+        "offset": 0.1
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "bai",
+        "zei"
+      ],
+      "place": "courtyard-cafe",
+      "subject": "Over the shoulder of the spiky-haired young man, seen from behind at his cafe table in the foreground: at the next table the young woman, wearing big headphones, glances back at him. Over-the-shoulder shot. (Redrafted: two people, not three, which kept getting mixed up.)",
+      "setting": "courtyard",
+      "others": "none",
+      "people": 2
+    },
+    {
+      "id": "s29",
+      "beat": 5,
+      "name": "Dreadnaught!",
+      "at": {
+        "cue": "b5-5",
+        "edge": "start",
+        "offset": -0.6
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "bai"
+      ],
+      "place": "courtyard-cafe",
+      "subject": "The young woman makes a big show of pulling one side of her big headphones off, mid-shout, pointing across at the next table, a small handheld device in her other hand. Medium shot.",
+      "setting": "courtyard",
+      "others": "none",
+      "people": 1
+    },
+    {
+      "id": "s30",
+      "beat": 6,
+      "name": "Ten fingers",
+      "at": {
+        "cue": "b6-1",
+        "edge": "start",
+        "offset": -1.5
+      },
+      "transition": {
+        "type": "dissolve",
+        "seconds": 1.0
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.06
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "deluin",
+        "zei"
+      ],
+      "place": "courtyard-cafe",
+      "subject": "At the cafe's street gate, the tall pale young man holds up both hands with all ten fingers spread wide toward the spiky-haired young man, smiling. Medium two-shot.",
+      "hold_s": 3.0,
+      "setting": "gate",
+      "others": "none",
+      "people": 2
+    },
+    {
+      "id": "s31",
+      "beat": 6,
+      "name": "Five",
+      "at": {
+        "cue": "s30",
+        "edge": "end",
+        "offset": 0.0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "deluin"
+      ],
+      "place": "courtyard-cafe",
+      "subject": "At the street gate the tall pale young man holds up one open hand with all five fingers spread wide, palm toward us, smiling. Medium close-up from the waist up.",
+      "hold_s": 2.5,
+      "setting": "gate",
+      "others": "none",
+      "people": 1
+    },
+    {
+      "id": "s32",
+      "beat": 6,
+      "name": "The message",
+      "at": {
+        "cue": "s31",
+        "edge": "end",
+        "offset": 0.0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.15
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "deluin"
+      ],
+      "place": "courtyard-cafe",
+      "subject": "Close-up, framed from the chest up: the tall pale young man stands alone at the street gate, looking down at a small handheld device held in both hands, thumbs hovering over it, its screen turned away from us; he hesitates.",
+      "hold_s": 5.0,
+      "setting": "gate",
+      "others": "none",
+      "people": 1
+    },
+    {
+      "id": "s33",
+      "beat": 6,
+      "name": "Zei walks to Bai's table",
+      "at": {
+        "cue": "s32",
+        "edge": "end",
+        "offset": 0.0
+      },
+      "transition": {
+        "type": "dissolve",
+        "seconds": 0.8
+      },
+      "move": {
+        "kind": "pan",
+        "from": {
+          "x": 0.42,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "to": {
+          "x": 0.58,
+          "y": 0.5,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "zei",
+        "bai"
+      ],
+      "place": "courtyard-cafe",
+      "subject": "The spiky-haired young man walks across the courtyard toward the young woman, who sits alone at a small table, the string lights glowing. Wide shot.",
+      "hold_s": 7.0,
+      "lettering": "on-screen line (owner's, after c19-b124)",
+      "setting": "courtyard",
+      "others": "none",
+      "people": 2
+    },
+    {
+      "id": "s34",
+      "beat": 7,
+      "name": "The vigil",
+      "at": {
+        "cue": "s33",
+        "edge": "end",
+        "offset": 0.5
+      },
+      "transition": {
+        "type": "dissolve",
+        "seconds": 1.2
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.1
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "zei"
+      ],
+      "place": "hotel-lobby-restaurant",
+      "subject": "The spiky-haired young man sits alone at a table, upset, distraught; in front of him an untouched bowl of rice and vegetables, a tea cup, and his small handheld device, its screen lit. Medium close shot.",
+      "hold_s": 5.0,
+      "lettering": "place (book, c15-b48)",
+      "setting": "lobby",
+      "others": "none",
+      "people": 1
+    },
+    {
+      "id": "s35",
+      "beat": 7,
+      "name": "The fifth message",
+      "at": {
+        "cue": "s34",
+        "edge": "end",
+        "offset": 0.0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      },
+      "cast": [],
+      "place": null,
+      "subject": null,
+      "hold_s": 3.5,
+      "insert": "the book's screen block c15-b50, captured and composited onto the device",
+      "people": 0
+    },
+    {
+      "id": "s36",
+      "beat": 7,
+      "name": "Bai sits down",
+      "at": {
+        "cue": "s35",
+        "edge": "end",
+        "offset": 0.0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "bai",
+        "zei"
+      ],
+      "place": "hotel-lobby-restaurant",
+      "subject": "The young woman sits down across the table from the spiky-haired young man without a word. Medium two-shot.",
+      "hold_s": 4.0,
+      "setting": "lobby",
+      "others": "none",
+      "people": 2
+    },
+    {
+      "id": "s37",
+      "beat": 7,
+      "name": "The reply",
+      "at": {
+        "cue": "s36",
+        "edge": "end",
+        "offset": 0.0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      },
+      "cast": [],
+      "place": null,
+      "subject": null,
+      "hold_s": 5.0,
+      "insert": "the book's screen block c15-b53, captured and composited",
+      "people": 0
+    },
+    {
+      "id": "s38",
+      "beat": 7,
+      "name": "He breathes out",
+      "at": {
+        "cue": "s37",
+        "edge": "end",
+        "offset": 0.0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "zei"
+      ],
+      "place": "hotel-lobby-restaurant",
+      "subject": "Close-up of his face, from the shoulders up, seated at the table: the spiky-haired young man breathes out in relief, eyes closed.",
+      "hold_s": 3.0,
+      "setting": "lobby",
+      "others": "none",
+      "people": 1
+    },
+    {
+      "id": "s39",
+      "beat": 7,
+      "name": "Messages out",
+      "at": {
+        "cue": "s38",
+        "edge": "end",
+        "offset": 0.0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      },
+      "cast": [],
+      "place": null,
+      "subject": null,
+      "hold_s": 3.5,
+      "insert": "the book's screen block c15-b55, first sentence, captured and composited (cut marked)",
+      "people": 0
+    },
+    {
+      "id": "s40",
+      "beat": 7,
+      "name": "He turns the screen",
+      "at": {
+        "cue": "s39",
+        "edge": "end",
+        "offset": 0.0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "hold",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.04
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.08
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "zei",
+        "bai"
+      ],
+      "place": "hotel-lobby-restaurant",
+      "subject": "At the table the spiky-haired young man turns his small handheld device's screen toward the young woman across from him. Medium two-shot.",
+      "hold_s": 2.5,
+      "setting": "lobby",
+      "others": "none",
+      "people": 2
+    },
+    {
+      "id": "s41",
+      "beat": 7,
+      "name": "Bai's face",
+      "at": {
+        "cue": "s40",
+        "edge": "end",
+        "offset": 0.0
+      },
+      "transition": {
+        "type": "cut"
+      },
+      "move": {
+        "kind": "push",
+        "from": {
+          "x": 0.5,
+          "y": 0.5,
+          "zoom": 1.0
+        },
+        "to": {
+          "x": 0.5,
+          "y": 0.48,
+          "zoom": 1.12
+        },
+        "ease": "inout"
+      },
+      "cast": [
+        "bai"
+      ],
+      "place": "hotel-lobby-restaurant",
+      "subject": "Close-up of her face, from the shoulders up, seated at the table: the young woman reads a small handheld screen, its light on her face; her expression neutral and unreadable, not smiling. Her vest has no markings.",
+      "hold_s": 4.0,
+      "setting": "lobby",
+      "others": "none",
+      "people": 1
+    }
+  ],
+  "places": {
+    "about": "Each setting drawn from what the book describes (cited); DRAFTED wording by the coding agent. No cartoon murals; signs show pictograms only.",
+    "hall": {
+      "text": "a vast dark game hall hollowed inside a mountain pyramid, steep tiers of seats rising into shadow, an enormous glowing display hung overhead showing the game as a dark field of tiny glowing dots, walls and gliders, hand-sized drones hovering, thin beams of light crossing the air",
+      "book": [
+        "c4-b61",
+        "c14-b30",
+        "c14-b86"
+      ]
+    },
+    "waiting": {
+      "text": "a windowless players' waiting room carved deep inside a mountain pyramid, polished pale stone walls and a vaulted round-topped ceiling, a doorway of stone bricks curving into an arch whose top bears a carved emblem of two horizontal arms meeting in the middle with clashing fists, sleek elevator doors in one wall, low stone benches, a big wall screen showing the game, warm indirect light",
+      "book": [
+        "c4-b61",
+        "c12-b65",
+        "c14-b90",
+        "c14-b95"
+      ]
+    },
+    "corridor": {
+      "text": "a quiet corridor deep inside a mountain pyramid, rough rock walls finished with clean pale panels, a row of sleek elevator doors, cool indirect light",
+      "book": [
+        "c14-b95"
+      ]
+    },
+    "courtyard": {
+      "text": "a small open-air courtyard cafe at night, enclosed by low dense shop buildings with plain walls, small tables and stools under a shade tree hung with strings of little lights, shop windows glowing softly pink and cyan, with no signs above them, little wheeled serving robots, and far above the rooftops enormous megastructures and towering stone mountain pyramids with lit windows against the night sky",
+      "book": [
+        "c4-b2",
+        "c7-b2",
+        "c14-b102",
+        "c14-b105",
+        "c12-b30"
+      ]
+    },
+    "gate": {
+      "text": "the open street gate of a courtyard cafe at night, a lamp post glowing, a quiet street beyond lined with plain building fronts with no signs, and on the horizon enormous megastructures and a towering stone mountain pyramid with lit windows",
+      "book": [
+        "c18-b69",
+        "c12-b30"
+      ]
+    },
+    "lobby": {
+      "text": "a modest, cozy hotel lobby restaurant late at night, warm wooden tables and chairs, soft lamps, a glowing strip of light along one wall, plain walls, a little wheeled serving robot, a sealed car-docking door at the edge of the lobby, and through tall windows far-off megastructures glowing against the night",
+      "book": [
+        "c14-b6",
+        "c15-b51",
+        "c15-b90"
+      ]
+    },
+    "game_screen": {
+      "text": "the game shown as a flat board: a near-black square grid with ring-shaped towers (a glowing circle with a dark centre) in cyan and amber, chevron-shaped gliders flying in straight lines with a trail of small dots, small squares in each player's colour, and grey rocks",
+      "source": "closest to the book's 'large detailed map' the crowd watches (c4-b114); the colours and shapes are this edition's (the site's flat board, ~/snowmoon-refs/minpentai/1-flat-board-playing-itself.jpg). No HUD or lettering.",
+      "book": [
+        "c4-b114"
+      ],
+      "invented": "colours and shapes"
+    },
+    "game_broadcast": {
+      "text": "an enormous screen showing the game as a cool, low-lit 3D view of a dark field: each corner a player's base on a big circle of light in their colour (cyan, amber, pink, violet), towers as thin black pillars topped by glowing cube clusters with a halo, rings of light on the floor, clusters of coloured squares at their bases, dark grey blocks in the middle, and small lit drones flying between them; beside it, smaller screens show the players' faces in their glasses",
+      "source": "this edition's invention ('broadcast imagined'): the site's Minpentai broadcast design (docs/design/minpentai-intro-v3.dc.html; ~/snowmoon-refs/minpentai/2-, 4-, 5-), passed on by session Favicon at the owner's request, 2026-10-15. The book has only a giant hall inside a mountain, over a thousand people watching, and 'a large detailed map' (c4-b114). No HUD or lettering.",
+      "book": [
+        "c4-b114"
+      ],
+      "invented": "the 3D broadcast, drones, players' faces on screen"
+    },
+    "console": {
+      "text": "he sits at a large glowing game console wearing glasses attached to a long cable that runs behind him",
+      "source": "book c4-b82: 'A tray slid out from under the game console, offering glasses attached to a long cable.' The coloured rims on the site's drawings are this edition's.",
+      "book": [
+        "c4-b82"
+      ]
+    }
+  }
+}

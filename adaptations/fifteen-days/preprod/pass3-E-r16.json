@@ -1,0 +1,57 @@
+{
+ "about": "Fifteen Days v5: the two approved frames with extra figures, edited to remove them (owner, 2026-10-17 pass). DRAFTED prompts.",
+ "out": "images-out/preprod/pass3",
+ "ledger": "images-out/preprod/ledger-s7.json",
+ "cap_usd": 25.0,
+ "style": "",
+ "jobs": [
+  {
+   "id": "cov-cafe-CU-D-warm-E16",
+   "shot": "cov-cafe-CU-D-warm",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/pass3/cov-cafe-CU-D-warm-K9.png"
+   ],
+   "prompt": "Remove the small white robot standing at the serving counter on the left side of the picture, behind the young man; the counter is there with nobody at it. Nobody else anywhere in the courtyard. Keep everything else exactly as it is: the same drawing, colours, line work, camera, crop and lighting; the main people unchanged in face, hair, clothes, pose and expression. No letters, words or numbers.",
+   "width": 1024,
+   "height": 576,
+   "seed": 16
+  },
+  {
+   "id": "cov-lobby-MASTER-sits-E16",
+   "shot": "cov-lobby-MASTER-sits",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/pass3/cov-lobby-MASTER-sits-K11.png"
+   ],
+   "prompt": "Remove every background figure: the people standing outside behind the big windows and the people by the far tables near the windows. The far tables and chairs are empty, the windows show only the night city skyline and the empty street. Only the two people seated at the front table remain. Keep everything else exactly as it is: the same drawing, colours, line work, camera, crop and lighting; the main people unchanged in face, hair, clothes, pose and expression. No letters, words or numbers.",
+   "width": 1024,
+   "height": 576,
+   "seed": 16
+  },
+  {
+   "id": "cov-cafe-CU-D-warm-E17",
+   "shot": "cov-cafe-CU-D-warm",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/pass3/cov-cafe-CU-D-warm-K9.png"
+   ],
+   "prompt": "Remove the small white robot standing at the serving counter on the left side of the picture, behind the young man; the counter is there with nobody at it. Nobody else anywhere in the courtyard. Keep everything else exactly as it is: the same drawing, colours, line work, camera, crop and lighting; the main people unchanged in face, hair, clothes, pose and expression. No letters, words or numbers.",
+   "width": 1024,
+   "height": 576,
+   "seed": 17
+  },
+  {
+   "id": "cov-lobby-MASTER-sits-E17",
+   "shot": "cov-lobby-MASTER-sits",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/pass3/cov-lobby-MASTER-sits-K11.png"
+   ],
+   "prompt": "Remove every background figure: the people standing outside behind the big windows and the people by the far tables near the windows. The far tables and chairs are empty, the windows show only the night city skyline and the empty street. Only the two people seated at the front table remain. Keep everything else exactly as it is: the same drawing, colours, line work, camera, crop and lighting; the main people unchanged in face, hair, clothes, pose and expression. No letters, words or numbers.",
+   "width": 1024,
+   "height": 576,
+   "seed": 17
+  }
+ ]
+}

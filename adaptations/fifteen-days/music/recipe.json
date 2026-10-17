@@ -1,0 +1,117 @@
+{
+  "cue": "dreadnaught",
+  "about": "Dreadnaught, the band in Bai's headphones (beat 5). The owner, 2026-10-15: instrumental with a harsh wordless scream, 10-15 seconds, so it sits under Bai's \"Dreadnaught!!\" instead of competing with it; four versions to pick from. Captions describe qualities; no artist or band is named.",
+  "assist": {
+    "model": "claude-coding-agent",
+    "by": "the coding agent",
+    "drafted": [
+      "captions",
+      "the scream marking",
+      "seeds"
+    ],
+    "note": "per-cue prompts, model-drafted and labelled (principles: per-cue prompts may be drafted); the owner picks a version",
+    "see": "config/models.json drafting; principle 3"
+  },
+  "versions": [
+    {
+      "id": "dreadnaught-v1-fal",
+      "caption": "aggressive metalcore and industrial techno hybrid, down-tuned heavily distorted guitars, pounding four-on-the-floor techno kick with blast-beat snare fills, gritty distorted synth bass, glitchy electronic stabs, one harsh wordless screamed vocal, raw, loud and angry",
+      "lyrics": "[inst]\n[Scream]\nAaaaaaaaaaah!",
+      "seed": 1101,
+      "duration_requested": 12,
+      "settings": {
+        "number_of_steps": 27
+      },
+      "model": "ace-step-v1-fal",
+      "repo": "ACE-Step/ACE-Step-v1-3.5B",
+      "license": "Apache-2.0",
+      "host": "fal.ai",
+      "endpoint": "fal-ai/ace-step",
+      "weights_revision": "not exposed by the host; the endpoint as served on the date below",
+      "request_id": "01a140bc-f3d2-72f1-9958-055ec8c8f861",
+      "seconds_taken": 32.2,
+      "file": "scenes-out/fifteen-days/music/dreadnaught-v1-fal.wav",
+      "sha256": "e3622bc0025f5889e8aaa091a4372e024367050e421171d54925b3e0bbe53257",
+      "duration_s": 11.98,
+      "made_at": "2026-10-15T18:05:18+00:00",
+      "cost_usd": 0.01,
+      "cost_basis": "seconds requested times the listed $0.0002, at least $0.01 a clip"
+    },
+    {
+      "id": "dreadnaught-v2-fal",
+      "caption": "aggressive metalcore and industrial techno hybrid, down-tuned heavily distorted guitars, pounding four-on-the-floor techno kick with blast-beat snare fills, gritty distorted synth bass, glitchy electronic stabs, one harsh wordless screamed vocal, raw, loud and angry",
+      "lyrics": "[inst]\n[Scream]\nAaaaaaaaaaah!",
+      "seed": 2202,
+      "duration_requested": 12,
+      "settings": {
+        "number_of_steps": 27
+      },
+      "model": "ace-step-v1-fal",
+      "repo": "ACE-Step/ACE-Step-v1-3.5B",
+      "license": "Apache-2.0",
+      "host": "fal.ai",
+      "endpoint": "fal-ai/ace-step",
+      "weights_revision": "not exposed by the host; the endpoint as served on the date below",
+      "request_id": "01a140bd-707f-7a61-bf5d-1187941ab00f",
+      "seconds_taken": 41.5,
+      "file": "scenes-out/fifteen-days/music/dreadnaught-v2-fal.wav",
+      "sha256": "b7dd7d7ed86f320e955035d1b1de86842648c41b955eb3d62d57fee6083849e5",
+      "duration_s": 11.98,
+      "made_at": "2026-10-15T18:05:59+00:00",
+      "cost_usd": 0.01,
+      "cost_basis": "seconds requested times the listed $0.0002, at least $0.01 a clip"
+    },
+    {
+      "id": "dreadnaught-v3-fal",
+      "caption": "frantic electronic hardcore with heavy metal guitars, fast distorted techno kick, chugging palm-muted down-tuned riffs, screeching synth leads, bitcrushed glitch fills, a harsh wordless scream over the top, chaotic and furious",
+      "lyrics": "[inst]\n[Scream]\nRaaaaaaaaaagh!",
+      "seed": 3303,
+      "duration_requested": 12,
+      "settings": {
+        "number_of_steps": 27
+      },
+      "model": "ace-step-v1-fal",
+      "repo": "ACE-Step/ACE-Step-v1-3.5B",
+      "license": "Apache-2.0",
+      "host": "fal.ai",
+      "endpoint": "fal-ai/ace-step",
+      "weights_revision": "not exposed by the host; the endpoint as served on the date below",
+      "request_id": "01a140be-12c8-7971-9de6-613deba15f20",
+      "seconds_taken": 13.9,
+      "file": "scenes-out/fifteen-days/music/dreadnaught-v3-fal.wav",
+      "sha256": "d73d96cda79401d3a7f7e96964baaecb7d8f067deda1116080ee621ae69c04cf",
+      "duration_s": 11.98,
+      "made_at": "2026-10-15T18:06:13+00:00",
+      "cost_usd": 0.01,
+      "cost_basis": "seconds requested times the listed $0.0002, at least $0.01 a clip"
+    },
+    {
+      "id": "dreadnaught-v4-fal",
+      "caption": "frantic electronic hardcore with heavy metal guitars, fast distorted techno kick, chugging palm-muted down-tuned riffs, screeching synth leads, bitcrushed glitch fills, a harsh wordless scream over the top, chaotic and furious",
+      "lyrics": "[inst]\n[Scream]\nRaaaaaaaaaagh!",
+      "seed": 4404,
+      "duration_requested": 12,
+      "settings": {
+        "number_of_steps": 27
+      },
+      "model": "ace-step-v1-fal",
+      "repo": "ACE-Step/ACE-Step-v1-3.5B",
+      "license": "Apache-2.0",
+      "host": "fal.ai",
+      "endpoint": "fal-ai/ace-step",
+      "weights_revision": "not exposed by the host; the endpoint as served on the date below",
+      "request_id": "01a140be-492f-78a3-9b1f-8e43024802dc",
+      "seconds_taken": 71.3,
+      "file": "scenes-out/fifteen-days/music/dreadnaught-v4-fal.wav",
+      "sha256": "7ff770cd16a03964cdfdbab1211b2ae450d88e8521cc04022fef3138ebf44776",
+      "duration_s": 11.98,
+      "made_at": "2026-10-15T18:07:24+00:00",
+      "cost_usd": 0.01,
+      "cost_basis": "seconds requested times the listed $0.0002, at least $0.01 a clip"
+    }
+  ],
+  "ledger": {
+    "cap_usd": 1.0,
+    "spent_usd": 0.04
+  }
+}

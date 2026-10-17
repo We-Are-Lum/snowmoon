@@ -1,0 +1,63 @@
+{
+  "about": "Fifteen Days pre-production, second consistency test (owner, 2026-10-16): T1, T3, T5, T8 again as storyboard shots F01, F11, F17, F08, each with its code-drawn layout sketch, the courtyard plate and the new cards; prompts exactly as the full pass will send them.",
+  "out": "images-out/preprod/test2",
+  "ledger": "images-out/preprod/ledger-s34.json",
+  "cap_usd": 1.0,
+  "style": "",
+  "jobs": [
+    {
+      "id": "T1b",
+      "prompt": "Extreme wide shot (EWS establishing, high from the west). The courtyard café at night: close-set tables full of people eating and talking, the shade tree hung with little lights, megastructures above the rooftops; at the table for four in the middle, the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic and the thin, wiry young woman with deep brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms, small, laughing. Reference image 1 is a rough layout sketch: follow it exactly for the camera framing, where each person is, how big they are in the frame and which way they face, and where the furniture stands; draw nothing of the sketch itself, none of its plain lines or white background. Reference image 2 is the place: draw the same courtyard, its architecture, light and skyline. Reference image 3 is the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. Reference image 4 is the thin, wiry young woman with deep brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. Exactly two main people, each appearing once. Every other person in the picture is an ordinary background figure in plain, muted everyday clothes with ordinary hair: no orange jackets, no magenta hair, no cream knitwear, nobody who looks like the main people. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/sketch/F01.png",
+        "images-out/preprod/places-final/courtyard.png",
+        "images-out/preprod/cards2/deluin.png",
+        "images-out/preprod/cards2/bai.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 13001,
+      "note": "second test = storyboard shot F01; faces PROVISIONAL (Bai assembled sheet, Deluin face2-a, Zei face2-b)"
+    },
+    {
+      "id": "T3b",
+      "prompt": "Extreme close-up (ECU, high angle). the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped jacket's eyes over the top of the paper-thin menu, looking down at it. Reference image 1 is a rough layout sketch: follow it exactly for the camera framing, where each person is, how big they are in the frame and which way they face, and where the furniture stands; draw nothing of the sketch itself, none of its plain lines or white background. Reference image 2 is the place: draw the same courtyard, its architecture, light and skyline. Reference image 3 is the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped jacket: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. Exactly one main person in the picture, appearing once. Every other person in the picture is an ordinary background figure in plain, muted everyday clothes with ordinary hair: no orange jackets, no magenta hair, no cream knitwear, nobody who looks like the main people. The spiky-haired young man's eyes are dark brown. Menus and devices show only soft blank light, no writing. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/sketch/F11.png",
+        "images-out/preprod/places-final/courtyard.png",
+        "images-out/preprod/cards2/zei.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 13002,
+      "note": "second test = storyboard shot F11; faces PROVISIONAL (Bai assembled sheet, Deluin face2-a, Zei face2-b)"
+    },
+    {
+      "id": "T5b",
+      "prompt": "Over-the-shoulder shot (OTS from behind Deluin). Over the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic's shoulder: the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped jacket, menu in hand, eyes going between the menu and him. Reference image 1 is a rough layout sketch: follow it exactly for the camera framing, where each person is, how big they are in the frame and which way they face, and where the furniture stands; draw nothing of the sketch itself, none of its plain lines or white background. Reference image 2 is the place: draw the same courtyard, its architecture, light and skyline. Reference image 3 is the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped jacket: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. Reference image 4 is the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background. Exactly two main people, each appearing once. Every other person in the picture is an ordinary background figure in plain, muted everyday clothes with ordinary hair: no orange jackets, no magenta hair, no cream knitwear, nobody who looks like the main people. The spiky-haired young man's eyes are dark brown. Menus and devices show only soft blank light, no writing. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/sketch/F17.png",
+        "images-out/preprod/places-final/courtyard.png",
+        "images-out/preprod/cards2/zei.png",
+        "images-out/preprod/cards2/deluin.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 13003,
+      "note": "second test = storyboard shot F17; faces PROVISIONAL (Bai assembled sheet, Deluin face2-a, Zei face2-b)"
+    },
+    {
+      "id": "T8b",
+      "prompt": "Medium shot (MS). the serving robot glides up beside the wide table where the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic and the thin, wiry young woman with deep brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms sit across from each other, well apart, and the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped jacket sits at the end. Reference image 1 is a rough layout sketch: follow it exactly for the camera framing, where each person is, how big they are in the frame and which way they face, and where the furniture stands; draw nothing of the sketch itself, none of its plain lines or white background. Reference image 2 is the place: draw the same courtyard, its architecture, light and skyline. Reference image 3 shows the three main people, one per row: the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped jacket; the thin, wiry young woman with deep brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms; the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic. Copy only their faces, hair, skin and clothes, never the sheet's layout, poses or grey background. Exactly three main people, each appearing once. Every other person in the picture is an ordinary background figure in plain, muted everyday clothes with ordinary hair: no orange jackets, no magenta hair, no cream knitwear, nobody who looks like the main people. The spiky-haired young man's eyes are dark brown. Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands. Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere. No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character.",
+      "refs": [
+        "images-out/preprod/sketch/F08.png",
+        "images-out/preprod/places-final/courtyard.png",
+        "images-out/preprod/cards2/cast.png"
+      ],
+      "width": 1536,
+      "height": 864,
+      "seed": 13004,
+      "note": "second test = storyboard shot F08; faces PROVISIONAL (Bai assembled sheet, Deluin face2-a, Zei face2-b)"
+    }
+  ]
+}

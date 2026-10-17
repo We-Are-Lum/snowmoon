@@ -1,0 +1,250 @@
+<title>Fifteen Days Consistency Test</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400&display=swap">
+<style>
+/* Layout: the test first (the decision the owner is making), then what fed it: cast, places and plans, the tutorial references, shot list v3, sound. Each block ends in a verdict row. */
+:root{--bg:#f3f2f7;--fg:#1b1a2b;--muted:#5d5a78;--line:#d6d3e6;--panel:#e9e7f2;--accent:#5b3fd1;--ok:#1d7a4b;--bad:#b42340;
+--zei:#e8771e;--bai:#8cc63f;--deluin:#d9cfb8;--kau:#8a8a99;--robot:#bfe9f0;
+--display:"Chakra Petch",system-ui,sans-serif;--body:"Source Serif 4",Georgia,serif;--mono:"JetBrains Mono",ui-monospace,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d0e1c;--fg:#e9e7f5;--muted:#a19dc0;--line:#2b2a46;--panel:#16172b;--accent:#a996ff;--ok:#5fd39a;--bad:#ff6b85;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d0e1c;--fg:#e9e7f5;--muted:#a19dc0;--line:#2b2a46;--panel:#16172b;--accent:#a996ff;--ok:#5fd39a;--bad:#ff6b85;color-scheme:dark}
+body{background:var(--bg);color:var(--fg);font:16px/1.55 var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:0 64px}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--bg)}
+main{max-width:1200px;margin:0 auto;display:grid;gap:44px}
+header.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:3;background:var(--bg);border-bottom:1px solid var(--line);padding-block:12px;display:flex;flex-wrap:wrap;gap:6px 18px;align-items:baseline}
+header.top nav{display:flex;flex-wrap:wrap;gap:4px 14px;font:13px var(--mono)}
+header.top nav a{color:var(--muted);text-decoration:none}header.top nav a:hover,header.top nav a:focus-visible{color:var(--accent)}
+h1{font:600 clamp(22px,4vw,32px)/1.15 var(--display);margin:0;text-wrap:balance}
+h2{font:600 24px/1.2 var(--display);margin:0;text-wrap:balance}
+h3{font:500 18px/1.25 var(--display);margin:0}
+.status{font:13px var(--mono);color:var(--muted)}
+p{margin:0;max-width:68ch}.muted{color:var(--muted)}
+section{display:grid;gap:16px}
+.eyebrow{font:12px var(--mono);letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+ul.flags{margin:0;padding-left:20px;display:grid;gap:6px;max-width:75ch}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:16px}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:14px}
+figure{margin:0;display:grid;gap:6px;min-width:0}figure img{width:100%;height:auto;border-radius:4px;display:block;background:var(--panel)}
+figcaption{font:12px var(--mono);color:var(--muted)}
+button.pick{all:unset;cursor:pointer;display:grid;gap:6px;padding:5px;border-radius:6px;outline:2px solid transparent;min-width:0}
+button.pick[aria-pressed="true"]{outline-color:var(--accent);background:var(--panel)}
+button.pick:focus-visible{outline-color:var(--fg)}
+button.pick span{font:12px var(--mono);color:var(--muted)}button.pick[aria-pressed="true"] span{color:var(--accent)}
+.verdict{display:flex;flex-wrap:wrap;gap:8px;align-items:flex-start;border-top:1px dashed var(--line);padding-top:10px}
+.verdict button{font:13px var(--mono);padding:6px 12px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--fg);cursor:pointer}
+.verdict button[aria-pressed="true"].ok{background:var(--ok);border-color:var(--ok);color:var(--bg)}
+.verdict button[aria-pressed="true"].bad{background:var(--bad);border-color:var(--bad);color:var(--bg)}
+.verdict button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+textarea{flex:1 1 280px;min-height:38px;font:14px/1.4 var(--body);color:var(--fg);background:var(--panel);border:1px solid var(--line);border-radius:6px;padding:7px 9px;resize:vertical}
+.place{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:16px;align-items:start}
+@media (max-width:760px){.place{grid-template-columns:1fr}}
+.plan{width:100%;height:auto;background:var(--panel);border-radius:6px}
+.plan .tier2{fill:var(--panel);stroke:var(--line);opacity:.7}.plan .pit{fill:var(--line);stroke:var(--fg)}.plan .screen{fill:var(--accent);opacity:.5}
+.plan .floor{fill:var(--bg);stroke:var(--line)}.plan .tier{fill:var(--panel);stroke:var(--line)}.plan .holo{fill:none;stroke:var(--accent);stroke-dasharray:3 3}
+.plan .pod,.plan .table,.plan .counter{fill:var(--panel);stroke:var(--muted)}.plan .table.dim{opacity:.5}.plan .wall{fill:var(--panel);stroke:var(--line)}
+.plan .rail,.plan .wallline{stroke:var(--fg);stroke-width:3}.plan .crowd{fill:var(--muted);opacity:.45}.plan .cam{fill:var(--accent);opacity:.1}
+.plan .door,.plan .gate,.plan .glass{fill:var(--accent);opacity:.35}.plan .street{fill:var(--panel)}.plan .tree{fill:var(--ok);opacity:.3}.plan .lamp{fill:#f2c14e}
+.plan .path,.plan .move{stroke:var(--accent);stroke-width:1.5;fill:none;stroke-dasharray:5 4}.plan .axis{stroke:var(--bad);stroke-width:1.5;stroke-dasharray:6 4}
+.plan .lab{font:10px var(--mono);fill:var(--muted)}.plan .small{font-size:9px}.plan .pl{font:600 10px var(--mono);text-anchor:middle;fill:#1b1a2b}
+.plan .p circle{stroke:#1b1a2b;stroke-width:.8}.plan .tick{stroke:var(--fg);stroke-width:2}
+.plan .p-zei circle{fill:var(--zei)}.plan .p-bai circle{fill:var(--bai)}.plan .p-deluin circle{fill:var(--deluin)}.plan .p-kau circle{fill:var(--kau)}.plan .p-robot circle{fill:var(--robot)}
+.legend{font:12px var(--mono);color:var(--muted)}
+.audio{display:grid;gap:10px}
+.voicegroup{display:grid;gap:8px;padding-block:6px}
+.voiceopt{display:grid;grid-template-columns:minmax(0,220px) 1fr;gap:6px 12px;align-items:center}
+@media (max-width:600px){.voiceopt{grid-template-columns:1fr}}
+.voiceopt .players{display:flex;flex-wrap:wrap;gap:8px}
+.voiceopt .players button{font:13px var(--mono);padding:6px 10px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--fg);cursor:pointer}
+.voiceopt .players button[aria-pressed="true"]{border-color:var(--accent);color:var(--accent)}
+.voiceopt .choose{font:13px var(--mono);padding:6px 10px;border-radius:999px;border:1px solid var(--line);background:transparent;color:var(--fg);cursor:pointer;justify-self:start}
+.voiceopt .choose[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--bg)}
+.sound{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;border-bottom:1px solid var(--line);padding-block:8px}
+.sound code{font:13px var(--mono);min-width:12ch}.sound span{flex:1 1 260px;color:var(--muted);font-size:14px}
+.sound button{font:13px var(--mono);padding:5px 12px;border-radius:6px;border:1px solid var(--line);background:var(--panel);color:var(--fg);cursor:pointer}
+.scene{display:grid;gap:12px}
+.geo{font-size:14px;color:var(--muted);max-width:90ch}
+.shots{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,270px),1fr));gap:14px}
+.shot{display:grid;gap:5px;align-content:start;min-width:0}
+.shot img{width:100%;aspect-ratio:16/9;object-fit:cover;border-radius:4px;background:var(--panel)}
+.shot .id{font:600 13px var(--mono);color:var(--accent);display:flex;gap:8px;align-items:baseline;flex-wrap:wrap}
+.shot .id .sz{color:var(--muted);font-weight:400}
+.shot .act{font-size:14px;line-height:1.4}
+.shot .line{font:italic 13px/1.35 var(--body);color:var(--muted)}
+.shot .meta{font:11px var(--mono);color:var(--muted)}
+.shot details summary{font:12px var(--mono);color:var(--muted);cursor:pointer}
+.shot details textarea{width:100%;margin-top:4px}
+.tag{font:11px var(--mono);padding:1px 6px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.tag.opt{border-color:var(--accent);color:var(--accent)}
+.test{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:14px;align-items:start;padding-block:10px;border-bottom:1px solid var(--line)}
+@media (max-width:760px){.test{grid-template-columns:1fr}}
+.test img.main{width:100%;height:auto;border-radius:4px;display:block}
+.refs{display:flex;flex-wrap:wrap;gap:6px}.refs img{height:64px;width:auto;border-radius:3px;border:1px solid var(--line)}
+.checks{display:flex;flex-wrap:wrap;gap:6px}.chip{font:12px var(--mono);padding:2px 8px;border-radius:999px;border:1px solid var(--line);color:var(--muted)}
+.chip.yes{border-color:var(--ok);color:var(--ok)}.chip.no{border-color:var(--bad);color:var(--bad)}.chip.partly{border-color:#c98a1a;color:#c98a1a}
+.verdict-tag{font:600 12px var(--mono);text-transform:uppercase;letter-spacing:.06em}.verdict-tag.pass{color:var(--ok)}.verdict-tag.fail{color:var(--bad)}.verdict-tag.partial{color:#c98a1a}
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:6px}
+table{border-collapse:collapse;width:100%;font-size:14px;min-width:760px}th,td{text-align:left;vertical-align:top;padding:6px 8px;border-bottom:1px solid var(--line)}
+th{font:12px var(--mono);color:var(--muted);text-transform:uppercase;letter-spacing:.05em;position:sticky;top:0;background:var(--bg)}
+td.id{font:600 13px var(--mono);color:var(--accent);white-space:nowrap}td.sz{font:12px var(--mono);color:var(--muted)}tr.changed td.id::after{content:" ●";color:#c98a1a}tr.new td.id::after{content:" new";font-weight:400;color:var(--ok)}
+.plan-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:14px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+<main>
+<header class="top"><h1>Fifteen Days consistency test</h1><nav><a href="#test">Test</a><a href="#next">Next</a><a href="#cast">Cast</a><a href="#places">Places</a><a href="#tutorial">Tutorial</a><a href="#shots">Shot list v3</a><a href="#sound">Sound</a></nav><span class="status" id="status">connecting…</span></header>
+
+<section>
+<p><b>The short answer:</b> the place, the costumes and the robot hold in all eight shots, and faces hold when one person is in the shot. With two or three people the model draws extra copies of them, and it ignores the seating and the extreme framing written into the prompt. Mark each shot below, then read the proposed fix.</p>
+<p class="muted" id="spend"></p>
+</section>
+
+<section id="test">
+<div class="eyebrow">Step 2 · 8 courtyard shots, every reference in</div>
+<h2>The consistency test</h2>
+<p class="muted">Each shot had the courtyard frame (with robot C) as reference 1, and one card per person in it (face sheet beside costume), as many as fit: the model takes at most four. The floor plan went in as words. Bai's and Deluin's faces are provisional (Bai C, Deluin C below). My verdict is beside each shot; yours goes in the row under it.</p>
+<div id="testRows"></div>
+</section>
+
+<section id="next">
+<div class="eyebrow">Proposal · nothing drawn until you say</div>
+<h2>How I'd fix what broke</h2>
+<ul class="flags">
+<li><b>Framing and blocking from the storyboard, not from words.</b> Draw each shot's quick sketch first (cheap, no references), then pass the sketch as the layout reference with the place and the cards. The model follows a picture's composition far better than a sentence: that fixes the extreme close-ups, the top-down insert, and Bai at her own table behind Zei.</li>
+<li><b>Never more than two people drawn together.</b> For three-person wides, draw the people small and far, with one combined cast card instead of three (one reference slot), and the sketch for where they sit. If doubles still appear, draw the wide without the leads and composite them in from their singles.</li>
+<li><b>Words that fought the references, removed.</b> Eye colour goes into every prompt with Zei in it ("dark brown eyes"); menus are always blank glowing tablets, since the real menu is the book's picture, composited (F12).</li>
+<li><b>A second small test before the full pass:</b> the four failed shots again (T1, T3, T5, T8), about $0.15, inside what's left of the $1.</li>
+</ul>
+<div class="verdict" data-item="fix-plan"></div>
+</section>
+
+<section id="cast">
+<div class="eyebrow">Step 1 · cast</div>
+<h2>Bai and Deluin, redrawn</h2>
+<p class="muted">Bai: thin and wiry, Black and East Asian, deep brown skin, an extreme haircut, geometric tattoos on her neck and arms (shapes only, no letters). Deluin: warm and approachable, a polite smile that doesn't reach his calm eyes. C was used in the test; pick the final face here.</p>
+<div id="castRows" style="display:grid;gap:26px"></div>
+</section>
+
+<section id="places">
+<div class="eyebrow">Step 1 · places and floor plans</div>
+<h2>Places, after your notes</h2>
+<p class="muted">The first option in each row is the one I'd use. The hall's ceiling is cropped out of hall A; the holograms follow the tutorial in two colours. The courtyard has robot C and the wide table; the gate takes the café's skyline; the lobby keeps B's mood, with the shot from the street. <span class="legend">Plans: Zei orange, Bai green, Deluin cream, Kau grey, robot blue; ticks show facing; red dashes are the 180° line; the tinted band is the camera side.</span></p>
+<div id="placeRows" style="display:grid;gap:32px"></div>
+</section>
+
+<section id="tutorial">
+<div class="eyebrow">Our Minpentai tutorial · snowmoon.party/minpentai, lessons 1–8</div>
+<h2>Hologram and board references</h2>
+<p class="muted">Stills from the site's Learn page (src/app/minpentai/broadcast-scene.ts and learn-draw.ts), with the captions and scoreboard cut off. The flat board is recoloured to two players (cyan and amber, for Deluin and Kau) and, for the console, mostly blacked out like the tutorial's "sight" lesson; that console screen is composited into H04, not drawn. As you said, the tutorial board is for learning: the tournament board can be bigger, so these set the look, not the size.</p>
+<div class="grid3" id="tutRows"></div>
+</section>
+
+<section id="shots">
+<div class="eyebrow">Shot list v3 · your notes applied</div>
+<h2>Shot list v3</h2>
+<p class="muted" id="sizeLine"></p>
+<div class="tablewrap"><table><thead><tr><th>Shot</th><th>Size</th><th>Who</th><th>Action</th><th>Line</th></tr></thead><tbody id="shotRows"></tbody></table></div>
+<div class="verdict" data-item="shots-v3"></div>
+</section>
+
+<section id="sound">
+<div class="eyebrow">Sound</div>
+<h2>Quieter devices, voices waiting on your re-record</h2>
+<p class="muted">The device sounds now peak at −18 dBFS (your note: they'd stick out). Your voice picks are saved: Zei on the new sheet with no speed-up, Deluin on the new sheet 6% slower, Bai on the current sheet with less low end. The 10 lines on the re-record sheet get converted as soon as the file lands in your takes folder.</p>
+<div class="audio" id="soundRows"></div>
+</section>
+</main>
+<script>
+const DATA = __DATA__;
+const state = {}; let db = null;
+const $ = (t, a = {}, ...kids) => { const e = document.createElement(t); for (const [k, v] of Object.entries(a)) { if (k === 'class') e.className = v; else if (k === 'text') e.textContent = v; else e.setAttribute(k, v); } e.append(...kids); return e; };
+function setStatus(t) { document.getElementById('status').textContent = t; }
+const refreshers = []; function refresh() { for (const f of refreshers) f(); }
+async function save(item, patch) {
+  state[item] = { ...(state[item] || {}), ...patch }; refresh();
+  if (!db) return;
+  try { await db.doc('review/' + item).set({ ...state[item], at: new Date().toISOString() }); setStatus('saved'); }
+  catch (e) { setStatus('not saved (' + ((e && e.code) || 'error') + '); tell Claude in chat'); }
+}
+function verdict(el, item) {
+  const ok = $('button', { class: 'ok', type: 'button', text: 'Approve' }), bad = $('button', { class: 'bad', type: 'button', text: 'Needs changes' });
+  const note = $('textarea', { id: 'note-' + item, placeholder: 'Note', rows: '1' });
+  ok.onclick = () => save(item, { status: state[item]?.status === 'ok' ? null : 'ok' });
+  bad.onclick = () => save(item, { status: state[item]?.status === 'change' ? null : 'change' });
+  note.addEventListener('change', () => save(item, { note: note.value }));
+  el.append(ok, bad, note);
+  refreshers.push(() => { ok.setAttribute('aria-pressed', String(state[item]?.status === 'ok')); bad.setAttribute('aria-pressed', String(state[item]?.status === 'change')); if (document.activeElement !== note) note.value = state[item]?.note || ''; });
+}
+function picks(container, item, options) {
+  for (const o of options) {
+    const b = $('button', { class: 'pick', type: 'button' }, $('img', { src: o.img, alt: o.label, loading: 'lazy' }), $('span', { text: o.label }));
+    b.onclick = () => save(item, { pick: state[item]?.pick === o.key ? null : o.key });
+    container.append(b); refreshers.push(() => b.setAttribute('aria-pressed', String(state[item]?.pick === o.key)));
+  }
+}
+// The test
+const testRows = document.getElementById('testRows');
+for (const t of DATA.test) {
+  const r = t.review;
+  const checks = $('div', { class: 'checks' }, ...['place', 'costume', 'face', 'blocking'].map(k => $('span', { class: 'chip ' + r[k], text: k + ': ' + r[k] })));
+  const right = $('div', { style: 'display:grid;gap:8px;min-width:0' },
+    $('div', {}, $('span', { class: 'verdict-tag ' + r.verdict, text: t.id + ' · my verdict: ' + r.verdict })),
+    $('p', { text: r.note }), checks,
+    $('details', {}, $('summary', { class: 'muted', text: 'what was asked' }), $('p', { class: 'muted', style: 'font-size:14px', text: t.prompt })),
+    $('div', { class: 'eyebrow', text: 'references used' }), $('div', { class: 'refs' }, ...t.refs.map(s => $('img', { src: s, alt: 'reference', loading: 'lazy' }))));
+  const v = $('div', { class: 'verdict' }); verdict(v, 'test-' + t.id); right.append(v);
+  testRows.append($('div', { class: 'test' }, $('img', { class: 'main', src: t.img, alt: t.id, loading: 'lazy' }), right));
+}
+verdict(document.querySelector('[data-item="fix-plan"]'), 'fix-plan');
+// Cast
+const CAST = [['bai', 'Bai', [['face-bai-c', 'face C (used in the test)'], ['face-bai-d', 'face D']], ['figure-bai', 'figure, tattoos and costume']],
+              ['deluin', 'Deluin', [['face-deluin-c', 'face C (used in the test)'], ['face-deluin-d', 'face D (closer to the old face)']], ['costume-deluin', 'costume']],
+              ['zei', 'Zei (approved)', [['face-zei-b', 'face B, approved']], ['costume-zei', 'costume']]];
+const castRows = document.getElementById('castRows');
+for (const [id, name, faces, extra] of CAST) {
+  const row = $('div', { class: 'grid3' }); picks(row, 'face-' + id, faces.map(([k, l]) => ({ key: k, img: DATA.cast[k], label: l })));
+  row.append($('figure', {}, $('img', { src: DATA.cast[extra[0]], alt: extra[1], loading: 'lazy' }), $('figcaption', { text: extra[1] })));
+  const v = $('div', { class: 'verdict' }); verdict(v, 'cast-' + id);
+  castRows.append($('div', { style: 'display:grid;gap:10px' }, $('h3', { text: name }), row, v));
+}
+// Places
+const PLACES = [['hall', 'The hall', ['hall4-a-crop', 'hall4-b', 'hall3-b']], ['gallery', 'The standing overlook', ['gallery4-a', 'gallery4-b']], ['corridor', 'The corridor (your pick: B)', ['est2-corridor-b']],
+                ['courtyard', 'The courtyard café', ['courtyard3-b', 'courtyard3-a']], ['gate', 'The gate at dusk', ['gate3-a', 'gate3-b']], ['lobby', 'The lobby restaurant', ['lobby3-a', 'lobby4-out-a', 'lobby4-out-b']]];
+const LABEL = { 'hall4-a-crop': 'A, ceiling cropped', 'hall4-b': 'B', 'hall3-b': 'C', 'gallery4-a': 'A', 'gallery4-b': 'B', 'est2-corridor-b': 'B (picked)', 'courtyard3-b': 'A', 'courtyard3-a': 'B', 'gate3-a': 'A', 'gate3-b': 'B',
+  'lobby3-a': 'establishing, B\'s mood', 'lobby4-out-a': 'from the street A', 'lobby4-out-b': 'from the street B' };
+const placeRows = document.getElementById('placeRows');
+for (const [id, name, keys] of PLACES) {
+  const left = $('div', { class: 'grid2' }); picks(left, 'place2-' + id, keys.map(k => ({ key: k, img: DATA.places[k], label: LABEL[k] })));
+  const right = $('div', { style: 'display:grid;gap:8px;min-width:0' }); right.innerHTML = DATA.plans[id]; right.append($('p', { class: 'geo', text: DATA.geography[id] }));
+  const v = $('div', { class: 'verdict' }); verdict(v, 'place2-' + id + '-ok');
+  placeRows.append($('div', { style: 'display:grid;gap:10px' }, $('h3', { text: name }), $('div', { class: 'place' }, left, right), v));
+}
+// Tutorial
+const TUT = { 'holo-towers-cyan': 'towers and gliders', 'holo-towers-pink-amber': 'glowing towers, close', 'holo-gliders-burst': 'a tower destroyed', 'holo-field-wide': 'the whole field', 'board-flat-2p': 'flat board, two players', 'board-console-fog': 'a player\'s console: mostly blacked out' };
+const tut = document.getElementById('tutRows');
+for (const [k, l] of Object.entries(TUT)) tut.append($('figure', {}, $('img', { src: DATA.refs[k], alt: l, loading: 'lazy' }), $('figcaption', { text: l })));
+// Shots
+const WHO = { Z: 'Zei', B: 'Bai', D: 'Deluin', K: 'Kau', R: 'robot' };
+const s = DATA.sizes; document.getElementById('sizeLine').textContent = `${DATA.shots.length} shots. Extreme close-ups ${s.ECU || 0}, close-ups ${s.CU || 0}, wides ${(s.WS || 0)} and extreme wides ${s.EWS || 0}; medium shots down to ${(s.MS || 0) + (s.MCU || 0)} from 55. ● changed from v2.`;
+const tb = document.getElementById('shotRows');
+for (const x of DATA.shots) {
+  const tr = $('tr', { class: x.changed }, $('td', { class: 'id', text: x.id }), $('td', { class: 'sz', text: x.size }), $('td', { text: x.who.map(w => WHO[w]).join(', ') }),
+    $('td', { text: x.action.replace(/\{([ZBDKR])\}/g, (_, k) => WHO[k]) + (x.composite ? ' [composited: ' + x.composite + ']' : '') }), $('td', { class: 'muted', text: x.line || '' }));
+  tb.append(tr);
+}
+verdict(document.querySelector('[data-item="shots-v3"]'), 'shots-v3');
+// Sound
+let playing = null;
+function play(btn, src) {
+  if (playing) { playing.a.pause(); playing.b.setAttribute('aria-pressed', 'false'); if (playing.b === btn) { playing = null; return; } }
+  const a = new Audio(src); a.play().catch(() => setStatus('tap again to play')); btn.setAttribute('aria-pressed', 'true'); a.onended = () => { btn.setAttribute('aria-pressed', 'false'); playing = null; }; playing = { a, b: btn };
+}
+const sr = document.getElementById('soundRows');
+for (const x of DATA.sounds) { const b = $('button', { type: 'button', 'aria-pressed': 'false', text: '▶ play' }); b.onclick = () => play(b, x.src); sr.append($('div', { class: 'sound' }, $('code', { text: x.id.replace('device-', '') }), $('span', { text: 'at the new, quieter level' }), b)); }
+document.getElementById('spend').textContent = `Spent on steps 1 and 2: $${DATA.spent.toFixed(2)} of your $${DATA.cap.toFixed(2)}.`;
+refresh();
+(async () => {
+  try { db = window.claude ? await window.claude.use('db') : null; } catch (e) { db = null; }
+  if (!db) { setStatus('marks can’t be saved in this view; tell Claude in chat'); return; }
+  setStatus('marks save as you go');
+  db.collection('review').onSnapshot(snap => { for (const d of snap.docs) { const v = d.data(); if (v) state[d.id] = v; } refresh(); }, e => setStatus('not connected: ' + e.code));
+})();
+</script>

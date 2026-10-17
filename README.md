@@ -8,8 +8,9 @@ prompt, script, and piece of data used to make it is in this repository.
 Working title. Licensed GPL-3.0, the same as the book. See
 [ATTRIBUTION.md](ATTRIBUTION.md).
 
-**Status: Milestone 1 plus brief v4.** Scaffold, ingest, and reader; not
-yet deployed. See [docs/SNOWMOON-BUILD-BRIEF.md](docs/SNOWMOON-BUILD-BRIEF.md)
+Live at [snowmoon.party](https://snowmoon.party). To make your own scene from the book with
+this pipeline, start with [docs/make-a-scene.md](docs/make-a-scene.md). See
+[docs/SNOWMOON-BUILD-BRIEF.md](docs/SNOWMOON-BUILD-BRIEF.md)
 for the full plan, [docs/design/](docs/design/) for the design direction, and
 [docs/prompts/](docs/prompts/) for the prompts used to build it.
 `docs/SNOWMOON-CHAPTER-NOTES.md` contains full-book spoilers.
@@ -21,7 +22,13 @@ npm install
 npm run ingest -- --offline   # re-parse the committed source HTML into content/snowmoon/text/
 npm run check:ingest          # 32 chapters, exact text coverage, byte-identical re-run
 npm run build && npm start    # reader at http://localhost:3000
+npm run typecheck             # TypeScript
+npm run check:principles      # the principles' checks; 7 need the live database or Vercel and are skipped without keys
 ```
+
+Each `test:*` and `check:*` script in `package.json` runs on its own; none needs a key except
+where its header says so. `check:ui`, `check:miniapp` and `check:podcast` need the app running
+(`npm start`) and take `-- --url=http://localhost:3000`.
 
 `npm run ingest` (without `--offline`) re-fetches the 32 chapters from the
 source site and updates `content/snowmoon/source/` if the author has changed

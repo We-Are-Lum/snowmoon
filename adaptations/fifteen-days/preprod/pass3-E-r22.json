@@ -1,0 +1,33 @@
+{
+ "about": "Fifteen Days v5: Bai's 'What?!' as a turn, from the cleaned side-glance frame (the K18 'what' picture was flagged by fal's content checker). DRAFTED prompts. Second try: the first put her hand to her chin.",
+ "out": "images-out/preprod/pass3",
+ "ledger": "images-out/preprod/ledger-s7.json",
+ "cap_usd": 25.0,
+ "style": "",
+ "jobs": [
+  {
+   "id": "cov-cafe-BAI-what-E25",
+   "shot": "cov-cafe-BAI-what",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-sideeye-E19.png"
+   ],
+   "prompt": "She takes one hand off the phone and reaches up to the headphones, pulling the nearer ear cup off her ear so it sits up on her head; her other hand still holds the phone on the table. Exactly two arms and two hands. Keep the drawing, colours, camera, framing and crop exactly as they are; she keeps her face, hair, vest, tattoos and her head turned over her shoulder in profile. Nobody else anywhere. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 25
+  },
+  {
+   "id": "cov-cafe-BAI-what-E26",
+   "shot": "cov-cafe-BAI-what",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-sideeye-E19.png"
+   ],
+   "prompt": "She takes one hand off the phone and reaches up to the headphones, pulling the nearer ear cup off her ear so it sits up on her head; her other hand still holds the phone on the table. Exactly two arms and two hands. Keep the drawing, colours, camera, framing and crop exactly as they are; she keeps her face, hair, vest, tattoos and her head turned over her shoulder in profile. Nobody else anywhere. No letters or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 26
+  }
+ ]
+}

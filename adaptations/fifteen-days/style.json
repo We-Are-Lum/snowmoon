@@ -1,0 +1,18 @@
+{
+  "about": "Fifteen Days picture style. DRAFTED by the coding agent (2026-10-15) for the owner's approval, from the owner's direction: start from round one's fork-night, add the megastructures on the horizon from techno-vistas, and the owner's line, quoted below. Prompts describe qualities, never artists or studios.",
+  "draft": true,
+  "slug": "night-megastructures",
+  "from": [
+    "fork-night",
+    "techno-vistas"
+  ],
+  "owner_direction": "Night. Big buildings and megastructures in the background. It should feel like another time and place, not the Earth we know.",
+  "owner_direction_by": "owner (2026-10-15, relayed from session snowmoon-a6, word for word)",
+  "prompt": "Detailed science fiction comic art at night: precise fine uniform linework, cel-shaded flat color, a deep blue and violet night with glowing practical lights, pools of warm and cool light on faces and surfaces, crisp silhouettes, clear readable faces and hands. Wherever the sky shows, enormous megastructures and towering buildings fill the far distance and the horizon, their lit windows and beacons glowing against the night, rich mechanical and architectural detail kept to the middle and far distance. Another time and place, not the Earth we know: unfamiliar architecture, no recognisable landmarks, vehicles or brands.",
+  "signs": "Shop fronts and walls carry no lettered signs at all: at most a plain glowing panel with one single large simple pictogram (a cup, a leaf, a bowl) and nothing else. Screens show only abstract shapes. No letters, words, digits or numbers anywhere.",
+  "others": {
+    "none": "No other people anywhere in the picture.",
+    "distant": "Any other people are small and far in the background, in plain dark clothes, and look nothing like the main people."
+  },
+  "no_text": "No text, no lettering, no writing, no logos, no numbers. No cartoon murals or cartoon animals, and nothing that resembles a known character."
+}
