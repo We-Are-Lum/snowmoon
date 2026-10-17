@@ -1,23 +1,28 @@
-"""Storyboard v4 prompts: each shot's exact prompt and references, from its grey-box set render.
+"""Storyboard frames: each shot's exact prompt and references, from its 3D set, in two approaches (owner, 2026-10-16 night).
 
-  .venv-image/bin/python scripts/storyboard4.py fifteen-days
+  .venv-image/bin/python scripts/storyboard4.py fifteen-days [--attempt N] [--shots ID ...]
 
-Reads adaptations/<seed>/preprod/storyboard-v4.json, the sets' seen.json (from scripts/set-render.mjs: the
-landmarks each camera sees, each person's screen side and facing) and the plates. For every drawn shot:
-  layout reference = the set render with mannequins, labels stripped (images-out/preprod/set/<id>.png), sent small;
-  place reference  = the plate of the nearest camera setup (an approved plate wins over a nearer unapproved one);
-  people           = one face-and-costume card each, or one three-person card; the robot in words only, never a card.
-The prompt names only the landmarks that shot's camera sees, and where each person is in frame and which way they
-face, in the set's own terms. Writes adaptations/<seed>/preprod/storyboard4.json and the small layout copies, which
-are committed in adaptations/<seed>/preprod/set-frames/ (shaded and outline, so a fork can swap either). Each shot and
-job carries its layers: the set and camera it came from, its set frame, plate and cards, each by sha256; fal-batch.py
-copies them into the frame's recipe.
+Reads adaptations/<seed>/preprod/storyboard-v4.json, the sets' seen.json (from scripts/set-render.mjs: the landmarks each
+camera sees, each person's screen side and facing), the shot renders and the chosen plates (plates-approved.json:
+{plate id: file under images-out/preprod/}). For every drawn shot:
+  A  Qwen-Image-Edit-2509 (native depth conditions): picture 1 = the shot's depth map (human-shaped mannequins on chairs),
+     then one card per main person, or the three-person card. Then (job "K", written once the A picture exists) a FLUX.2
+     [klein] restyle: reference 1 = the A picture (geometry, poses), reference 2 = the plate (or the set's swatch), then the
+     cards again, into the night comic look with the faces held to the cards.
+  B  FLUX.2 [klein] edit: reference 1 = the readable render (textured, shadowed, each main person in their clothes' colours),
+     reference 2 = the chosen plate, then the cards.
+The robot is in words only, never a card. The prompt names only the landmarks that shot's camera sees, and where each person
+is in frame and which way they face. Nobody is named. Plates hold no people: Bai, when she sits small behind Zei, is drawn
+from her card in the frame like everyone else.
+The small copies sent to the model are committed in adaptations/<seed>/preprod/set-frames/ (depth, readable). Each job
+carries its layers (set, camera and mannequins, set frame, plate, cards, each by sha256); fal-batch.py copies them into the
+frame's recipe. Writes storyboard4.json and pass3-A-r<N>.json, pass3-B-r<N>.json (attempt N; seeds differ per attempt).
 """
 
+import argparse
 import hashlib
 import json
 import math
-import sys
 from pathlib import Path
 
 from PIL import Image
@@ -28,6 +33,7 @@ DESC = {"Z": "the slim young man with spiky black hair with one blue streak, dar
         "B": "the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms",
         "D": "the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic",
         "K": "the stocky young man with a shaved head and dark brown skin in a plain charcoal tunic"}
+COLOUR = {"Z": "orange", "B": "lime green", "D": "cream", "K": "charcoal"}
 ROBOT = ("the serving robot: a machine, not a person: a rounded white head with a dark face screen showing two small kind glowing eyes, slim white shoulders and jointed arms holding a flat tray, "
          "and no legs: below the waist a smooth white column down to a round gliding base")
 NO_ICONS = ("No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, "
@@ -37,8 +43,13 @@ SIZE = {"EWS": "Extreme wide shot", "WS": "Wide shot", "MS": "Medium shot", "MCU
         "INSERT": "Insert close-up", "OTS": "Over-the-shoulder shot", "POV": "Point-of-view shot"}
 CROWD = ("Every other person is an ordinary background figure in plain, muted everyday clothes with ordinary hair: no orange jackets, no magenta hair, "
          "no cream knitwear, nobody who looks like the main people.")
+NO_DINERS = "The other tables in the courtyard are empty: no other diners."
 FACES = "Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing."
 TABLE = "The table they share is a long rectangular wooden table, never round."
+GROUND = "Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table."
+COMIC = "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph."
+NIGHT = ("At night: deep blue and violet darkness, pools of warm and cool glowing light, rich saturated colour everywhere; no grey or white "
+         "surfaces, no daylight.")
 SIDE = {"left": "on the left of the frame", "right": "on the right of the frame", "centre": "in the middle of the frame"}
 
 
@@ -62,112 +73,150 @@ def fwd(c):
 
 
 def main() -> None:
-    seed = sys.argv[1]
+    ap = argparse.ArgumentParser()
+    ap.add_argument("seed")
+    ap.add_argument("--attempt", type=int, default=1)
+    ap.add_argument("--shots", nargs="*")
+    ap.add_argument("--stage", choices=["AB", "K"], default="AB")
+    args = ap.parse_args()
+    seed, att = args.seed, args.attempt
     adir = ROOT / "adaptations" / seed / "preprod"
     sets = adir / "sets"
     board = json.loads((adir / "storyboard-v4.json").read_text())["shots"]
     style = json.loads((ROOT / "adaptations" / seed / "style.json").read_text())
-    # the owner's approved plates: {plate id: option letter}; the pass waits for these
     approved = json.loads((adir / "plates-approved.json").read_text()) if (adir / "plates-approved.json").exists() else {}
-    line = set(json.loads((adir / "pass-line.json").read_text())) if (adir / "pass-line.json").exists() else set()
     seen = {n: json.loads((sets / f"{n}.seen.json").read_text()) for n in ("hall", "corridor", "courtyard", "lobby")}
     shotsj = {n: json.loads((sets / f"{n}.shots.json").read_text()) for n in seen}
-    for s in board:
+    jobs = {"A": [], "B": [], "K": []}
+    for i, s in enumerate(board):
         if s.get("composite") or not s.get("camera"):
             s["prompt"], s["refs"] = None, []
             continue
         n = s["set"]
         cam = s["camera"]
-        # the nearest setup's plate: direction first, then distance; an approved plate is preferred
+        # the nearest setup's plate (direction first, then distance) among the plates that exist
         best = None
         for pid, pc in shotsj[n].items():
-            if not pid.startswith("plate-"):
+            if not pid.startswith("plate-") or pid not in approved:
                 continue
             if n == "courtyard" and s["id"][0] != "D" and pid.endswith(("-G", "-S")):
                 continue
-            f1, f2 = fwd(cam), fwd(pc)
-            ang = math.degrees(math.acos(max(-1, min(1, sum(a * b for a, b in zip(f1, f2))))))
-            d = math.dist(cam["cam"], pc["cam"])
-            score = ang + 4 * d - (40 if approved.get(pid) else 0)
+            ang = math.degrees(math.acos(max(-1, min(1, sum(a * b for a, b in zip(fwd(cam), fwd(pc)))))))
+            score = ang + 4 * math.dist(cam["cam"], pc["cam"])
             if best is None or score < best[0]:
                 best = (score, pid)
-        plate = "plate-courtyard-B-bai" if s.get("bai_bg") else (s.get("plate_override") or best[1])
-        plate_src = PRE / "plates2" / f"{plate}-{approved[plate]}.png" if approved.get(plate) else next(
-            p for p in (PRE / "plates" / f"{plate}.png", PRE / "plates2" / f"{plate}-e.png") if p.exists())  # before approval: round one
+        plate = s.get("plate_override") if s.get("plate_override") in approved else best[1] if best else None
         sz = s["size"].split(",")[0].split(" ")[0]
         sz = "INSERT" if "INSERT" in s["size"] else sz
         sn = seen[n].get(s["id"], {"people": {}, "landmarks": []})
         people = [w for w in s["who"] if w != "R"]
-        carded = [w for w in people if not (w == "B" and s.get("bai_bg"))]
-        lay = "line" if s["id"] in line else ""
-        frames = {m: small(PRE / "set" / f"{s['id']}{x}.png", adir / "set-frames" / f"{s['id']}{x}.png", 512) for m, x in (("shaded", ""), ("line", ".line"))}
-        refs = [frames["line" if lay else "shaded"], small(plate_src, PRE / "plates-small" / f"{plate_src.stem}.png", 640)]
-        if len(carded) >= 3:
-            refs.append(small(PRE / "cards2" / "cast.png", PRE / "cards-small" / "cast.png", 560))
-        else:
-            refs += [small(PRE / CARD[w], PRE / "cards-small" / Path(CARD[w]).name, 900) for w in carded]
-        cards = [CARD[w] for w in carded] if len(carded) < 3 else ["cards2/cast.png"]
-        s["layers"] = {
-            "set": layer(str((sets / f"{n}.json").relative_to(ROOT))),
-            "camera": {"file": str((sets / f"{n}.shots.json").relative_to(ROOT)), "key": s["id"], **cam},
-            "set_frame": layer(refs[0], mode="line" if lay else "shaded", rendered_from=f"images-out/preprod/set/{s['id']}{'.line' if lay else ''}.png"),
-            "plate": layer(refs[1], plate=plate, option=approved.get(plate), source=layer(str(plate_src.relative_to(ROOT)))),
-            "cards": [layer(r, source=layer(f"images-out/preprod/{c}")) for r, c in zip(refs[2:], cards)]}
         WHO = {**DESC, "R": "the serving robot"}
         action = s["action"].replace("wide table", "long rectangular table")
         for k, v in WHO.items():
             action = action.replace("{" + k + "}", v)
-        parts = [f"{SIZE.get(sz, '')} ({s['size']}). {action}",
-                 ("Reference image 1 is a plain outline drawing on white of a 3D layout" if lay else "Reference image 1 is a plain grey 3D layout render") +
-                 " taken from this exact camera: copy its framing, height, angle and perspective, where each person sits or stands, "
-                 "how big each is in the frame and which way each faces, and where the table, chairs, railing, doors and walls stand; draw nothing of its " +
-                 ("bare outlines, white background" if lay else "grey blocks") + " or simple figures as they are.",
-                 "Reference image 2 shows how the place looks: its materials, colours and light. The finished picture is fully coloured and lit like that place picture, never grey."]
-        if s.get("bai_bg"):
-            parts.append("Reference image 2 already shows " + DESC["B"] + " at her small round table, headphones on: keep her exactly as she is there, small and soft in the "
-                         "background, and add only the other main person.")
-        if len(carded) >= 3:
-            parts.append("Reference image 3 shows the three main people, one per row: " + "; ".join(DESC[w] for w in ("Z", "B", "D")) +
-                         ". Copy only their faces, hair, skin and clothes, never the sheet's layout, poses or grey background.")
-        else:
-            for i, w in enumerate(carded, 3):
-                parts.append(f"Reference image {i} is {DESC[w]}: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background.")
+        core = [f"{SIZE.get(sz, '')} ({s['size']}). {action}"]
         where = []
         for w in s["who"]:
             p = sn["people"].get(w)
-            if p and p.get("visible") and sz not in ("INSERT",):
+            if p and p.get("visible") and sz != "INSERT":
                 where.append(f"{'the robot' if w == 'R' else DESC[w].split(' with ')[0]} is {SIDE[p['side']]}, {p['facing']}")
+        tail = []
         if where:
-            parts.append("In this frame: " + "; ".join(where) + ".")
+            tail.append("In this frame: " + "; ".join(where) + ".")
         if "R" in s["who"]:
-            parts.append("The robot is " + ROBOT + ".")
+            tail.append("The robot is " + ROBOT + ".")
         if people:
-            n_ = len(people)
-            parts.append({1: "Exactly one main person, appearing once.", 2: "Exactly two main people, each appearing once.", 3: "Exactly three main people, each appearing once."}[min(n_, 3)] + " " + CROWD)
+            tail.append({1: "Exactly one main person, appearing once.", 2: "Exactly two main people, each appearing once.", 3: "Exactly three main people, each appearing once."}[min(len(people), 3)] + " " + CROWD)
+            if sz != "INSERT":
+                tail.append(GROUND)
+        if n == "courtyard":
+            tail.append(NO_DINERS)
         lms = [l["name"] for l in sn.get("landmarks", []) if l.get("name")]
         if lms and sz not in ("ECU", "INSERT"):
-            parts.append("Behind them, as the layout shows: " + "; ".join(lms) + ".")
+            tail.append("Behind them, as the layout shows: " + "; ".join(lms) + ".")
         if any("rectangular" in l for l in lms) or "rectangular table" in action:
-            parts.append(TABLE)
-        if [w for w in people if w != "R"] and sz not in ("INSERT",):
-            parts.append(FACES)
+            tail.append(TABLE)
+        if people and sz != "INSERT":
+            tail.append(FACES)
         if "Z" in people:
-            parts.append("The spiky-haired young man's eyes are dark brown.")
+            tail.append("The spiky-haired young man's eyes are dark brown.")
         if "menu" in s["action"] or "device" in s["action"]:
-            parts.append("Menus and devices show only soft blank light, no writing.")
+            tail.append("Menus and devices show only soft blank light, no writing.")
         st = style["prompt"].split(" Wherever the sky shows")[0] if n in ("hall", "corridor") else style["prompt"]
         signs = NO_ICONS if n in ("hall", "corridor") else style["signs"]
-        parts += [st, signs, style["no_text"]]
-        s["prompt"], s["refs"], s["plate"] = " ".join(parts), refs, plate
-    (adir / "storyboard4.json").write_text(json.dumps({"about": "Storyboard v4 with exact prompts and references (scripts/storyboard4.py).", "shots": board}, indent=2, ensure_ascii=False) + "\n")
-    # the full pass: one attempt per shot at 1024x576 (as the café tests), under the shared $5 cap
-    seeds = json.loads((adir / "pass-seeds.json").read_text()) if (adir / "pass-seeds.json").exists() else {}
-    jobs = [{"id": s["id"], "prompt": s["prompt"], "refs": s["refs"], "width": 1024, "height": 576, "seed": seeds.get(s["id"], 17000 + i), "layers": s["layers"]}
-            for i, s in enumerate(board) if s["prompt"]]
-    (adir / "pass-jobs.json").write_text(json.dumps({"about": "Fifteen Days storyboard frames, the full pass (owner, 2026-10-16): scripts/storyboard4.py. Prompts DRAFTED by the coding agent.",
-                                                     "out": "images-out/preprod/pass", "ledger": "images-out/preprod/ledger-s6.json", "cap_usd": 5.0, "style": "", "jobs": jobs},
-                                                    indent=2, ensure_ascii=False) + "\n")
-    print(sum(1 for s in board if s["prompt"]), "prompts")
+        tail += [st, signs, style["no_text"]]
+        three = len(people) >= 3
+        cards = ["cards2/cast.png"] if three else [CARD[w] for w in people]
+        card_refs = [small(PRE / "cards2" / "cast.png", PRE / "cards-small" / "cast.png", 560)] if three else \
+                    [small(PRE / CARD[w], PRE / "cards-small" / Path(CARD[w]).name, 900) for w in people]
+        frames = {m: small(PRE / "set" / f"{s['id']}{x}.png", adir / "set-frames" / f"{s['id']}{x}.png", 768 if m == "depth" else 640)
+                  for m, x in (("depth", ".depth"), ("look", ".look"))}
+        layers = {"set": layer(str((sets / f"{n}.json").relative_to(ROOT))),
+                  "camera": {"file": str((sets / f"{n}.shots.json").relative_to(ROOT)), "key": s["id"], **cam}}
+        card_layers = [layer(r, source=layer(f"images-out/preprod/{c}")) for r, c in zip(card_refs, cards)]
+
+        def card_words(first: int, word: str) -> list:
+            if three:
+                return [f"{word} {first} shows the three main people, one per row: " + "; ".join(DESC[w] for w in ("Z", "B", "D")) +
+                        ". Copy only their faces, hair, skin and clothes, never the sheet's layout, poses or grey background."]
+            return [f"{word} {k} is {DESC[w]}: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background."
+                    for k, w in enumerate(people, first)]
+
+        # A: depth map + cards (Qwen-Image-Edit-2509 takes at most three pictures)
+        a_refs = [frames["depth"]] + card_refs
+        if len(a_refs) <= 3:
+            a = [COMIC] + core + ([FACES] if people and sz != "INSERT" else []) + ["Picture 1 is a depth map of this exact frame rendered from a 3D model (near is light, far is dark): follow its camera, angle, "
+                                  "lens and perspective exactly; every person, chair, table, wall and railing goes exactly where and as big as its shape stands "
+                                  "there, people sitting on the chairs and standing on the floor; the simple mannequin shapes are only where the people go. "
+                                  "Draw nothing grey from it."] + card_words(2, "Picture") + tail + \
+                ["Draw it as a finished comic panel: inked outlines, painted flat colour, glowing lights."]
+            jobs["A"].append({"id": f"{s['id']}-A{att}", "shot": s["id"], "approach": "A", "attempt": att, "engine": "qwen", "prompt": " ".join(a), "refs": a_refs,
+                              "width": 1024, "height": 576, "seed": 31000 + 100 * att + i,
+                              "layers": {**layers, "set_frame": layer(frames["depth"], mode="depth", rendered_from=f"images-out/preprod/set/{s['id']}.depth.png"),
+                                         "plate": None, "cards": card_layers}})
+        # K: the A picture restyled, faces held to the cards
+        apic = PRE / "pass3" / f"{s['id']}-A{att}.png"
+        if args.stage == "K" and apic.exists():
+            look = PRE / approved[plate] if plate else PRE / "swatch" / f"{n}.png"
+            lref = small(look, PRE / "plates-small" / f"{look.stem}.png", 640)
+            k = ["Redraw reference image 1 as a finished, detailed hand-drawn science fiction comic book panel at night: keep its camera, perspective, every "
+                 "person's position, pose, gesture, expression and size, and every table, chair and wall exactly as they are; nobody is added or removed.",
+                 f"Reference image 2 shows how the place looks{'' if plate else ' (samples)'}: take its colours, materials and night light; it has nobody in it."] +                 card_words(3, "Reference image") + ["Each main person's face, hair, skin and clothes match their reference exactly."] + tail
+            jobs["K"].append({"id": f"{s['id']}-K{att}", "shot": s["id"], "approach": "A", "attempt": att, "prompt": " ".join(k),
+                              "refs": [str(apic.relative_to(ROOT)), lref] + card_refs, "width": 1024, "height": 576, "seed": 34000 + 100 * att + i,
+                              "layers": {**layers, "set_frame": layer(frames["depth"], mode="depth", rendered_from=f"images-out/preprod/set/{s['id']}.depth.png"),
+                                         "stage1": layer(str(apic.relative_to(ROOT)), engine="qwen-image-edit-2509"),
+                                         "plate": layer(lref, plate=plate, source=layer(str(look.relative_to(ROOT)))), "cards": card_layers}})
+        # B: readable render + plate + cards (FLUX.2 klein edit)
+        if plate:
+            psrc = PRE / approved[plate]
+            pref = small(psrc, PRE / "plates-small" / f"{psrc.stem}.png", 640)
+            colours = "; ".join(f"the {COLOUR[w]} figure is {DESC[w].split(' with ')[0]}" for w in people)
+            b = core + ["Reference image 1 is a simple 3D model of this exact frame, textured and lit: copy its framing, height, angle and perspective, where each "
+                        "person sits or stands and how big each is, which way each faces, and where the table, chairs, railing, doors and walls stand; people sit "
+                        "on the chairs and stand on the floor exactly as there. Its figures are only mannequins coloured by who they are" +
+                        (f" ({colours})" if colours else "") + "; draw real people, never mannequins.",
+                        "Reference image 2 shows how the place looks: its materials, colours and light. The finished picture is fully coloured and lit like that "
+                        "place picture, never grey; the place picture has nobody in it, and the people come only from the other references."] + \
+                card_words(3, "Reference image") + tail
+            jobs["B"].append({"id": f"{s['id']}-B{att}", "shot": s["id"], "approach": "B", "attempt": att, "prompt": " ".join(b),
+                              "refs": [frames["look"], pref] + card_refs, "width": 1024, "height": 576, "seed": 32000 + 100 * att + i,
+                              "layers": {**layers, "set_frame": layer(frames["look"], mode="readable", rendered_from=f"images-out/preprod/set/{s['id']}.look.png"),
+                                         "plate": layer(pref, plate=plate, source=layer(str(psrc.relative_to(ROOT)))), "cards": card_layers}})
+        s["prompt_A"] = jobs["A"][-1]["prompt"] if jobs["A"] and jobs["A"][-1]["shot"] == s["id"] else None
+        s["prompt_B"] = jobs["B"][-1]["prompt"] if jobs["B"] and jobs["B"][-1]["shot"] == s["id"] else None
+        s["plate"] = plate
+    if args.stage == "AB":
+        (adir / "storyboard4.json").write_text(json.dumps({"about": "Storyboard frames with exact prompts per approach (scripts/storyboard4.py).", "shots": board},
+                                                      indent=2, ensure_ascii=False) + "\n")
+    for ap_, js in jobs.items():
+        if (args.stage == "K") != (ap_ == "K"):
+            continue
+        js = [j for j in js if not args.shots or j["shot"] in args.shots]
+        (adir / f"pass3-{ap_}-r{att}.json").write_text(json.dumps({
+            "about": f"Fifteen Days storyboard frames, approach {ap_}, attempt {att} (owner, 2026-10-16 night): scripts/storyboard4.py. Prompts DRAFTED by the coding agent.",
+            "out": "images-out/preprod/pass3", "ledger": "images-out/preprod/ledger-s6.json", "cap_usd": 40.0, "style": "", "jobs": js}, indent=2, ensure_ascii=False) + "\n")
+        print(ap_, att, len(js), "jobs")
 
 
 if __name__ == "__main__":

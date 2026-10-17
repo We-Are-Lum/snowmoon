@@ -12,19 +12,36 @@ let SHOTS = SET.shots || {}; try { const r2 = await fetch(`/set/${q.get('set')}.
 const SHOT = SHOTS[q.get('shot')];
 const LABELS = q.get('labels') === '1';
 const LINE = q.get('line') === '1';   // outlines on white, for the model when shaded blocks leak their grey
+const DEPTH = q.get('depth') === '1'; // a depth map (near light, far dark) for a depth ControlNet; no lines, no holograms
+const LOOK = q.get('look') === '1';   // readable: textured floors, walls and wood, shadows, people in their clothes' colours
+const EMPTY = q.get('empty') === '1'; // no people at all (plates): no crowds, no diners, nobody from the shot
 const W = 1536, H = 864;
 const r = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
 r.setSize(W, H); r.setPixelRatio(1); document.body.prepend(r.domElement);
-const BG = LINE ? 0xffffff : 0xf4f4f6;
-const scene = new THREE.Scene(); scene.background = new THREE.Color(BG); scene.fog = SET.fog ? new THREE.Fog(BG, SET.fog[0], SET.fog[1]) : null;
+const BG = LINE ? 0xffffff : DEPTH ? 0x000000 : LOOK ? 0xdfe6ee : 0xf4f4f6;
+if (LOOK) { r.shadowMap.enabled = true; r.shadowMap.type = THREE.PCFSoftShadowMap; }
+const scene = new THREE.Scene(); scene.background = new THREE.Color(BG); scene.fog = SET.fog && !DEPTH ? new THREE.Fog(BG, SET.fog[0], SET.fog[1]) : null;
 scene.add(new THREE.HemisphereLight(0xffffff, 0x9a9aa2, 2.2));
 const sun = new THREE.DirectionalLight(0xffffff, 1.4); sun.position.set(-6, 10, 4); scene.add(sun);
-const grey = c => LINE ? new THREE.MeshBasicMaterial({ color: 0xffffff, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 }) : new THREE.MeshLambertMaterial({ color: c });
+if (LOOK) { sun.castShadow = true; sun.shadow.mapSize.set(2048, 2048); const sc = sun.shadow.camera; sc.left = sc.bottom = -22; sc.right = sc.top = 22; sc.far = 80; sun.shadow.bias = -0.0008; sun.position.set(-9, 16, 7); }
+// textures drawn on a canvas, for the readable renders
+function tex(kind, rep = 1) {
+  const c = document.createElement('canvas'); c.width = c.height = 256; const g = c.getContext('2d');
+  const P = { floor: ['#b9ad9c', '#8f8476'], wood: ['#9a6a43', '#6e4628'], wall: ['#e2d6c4', '#cbbda8'], stone: ['#d9d6cf', '#b9b5ac'] }[kind];
+  g.fillStyle = P[0]; g.fillRect(0, 0, 256, 256); g.strokeStyle = P[1];
+  if (kind === 'floor') { g.lineWidth = 3; for (let i = 0; i <= 256; i += 64) { g.beginPath(); g.moveTo(i, 0); g.lineTo(i, 256); g.moveTo(0, i); g.lineTo(256, i); g.stroke(); } }
+  else if (kind === 'wood') { g.lineWidth = 2; for (let i = 0; i < 40; i++) { const y = (i * 53) % 256; g.globalAlpha = 0.35; g.beginPath(); g.moveTo(0, y); g.bezierCurveTo(80, y + 6, 170, y - 6, 256, y + 2); g.stroke(); } }
+  else { g.globalAlpha = 0.18; for (let i = 0; i < 900; i++) { g.fillStyle = i % 2 ? P[1] : '#ffffff'; g.fillRect((i * 97) % 256, (i * 61) % 256, 3, 3); } }
+  const t = new THREE.CanvasTexture(c); t.wrapS = t.wrapT = THREE.RepeatWrapping; t.repeat.set(rep, rep); t.colorSpace = THREE.SRGBColorSpace; return t;
+}
+const grey = (c, kind, rep) => LINE ? new THREE.MeshBasicMaterial({ color: 0xffffff, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 })
+  : LOOK && kind ? new THREE.MeshLambertMaterial({ map: tex(kind, rep) }) : new THREE.MeshLambertMaterial({ color: c });
 const EDGE = new THREE.LineBasicMaterial({ color: LINE ? 0x111114 : 0x3a3a40 });
 const HULL = new THREE.MeshBasicMaterial({ color: 0x111114, side: THREE.BackSide });
 const landmarks = [];   // {name, obj}
 function add(mesh, edges = true, parent = scene) {
-  parent.add(mesh);
+  parent.add(mesh); if (LOOK) { mesh.castShadow = true; mesh.receiveShadow = true; }
+  if (DEPTH || LOOK) edges = false;
   if (edges) { const e = new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry, 25), EDGE); e.position.copy(mesh.position); e.rotation.copy(mesh.rotation); e.scale.copy(mesh.scale); parent.add(e); }
   if (edges && LINE) {  // a silhouette: a slightly larger back-facing black hull behind the white surface
     mesh.geometry.computeBoundingBox(); const sz = mesh.geometry.boundingBox.getSize(new THREE.Vector3());
@@ -37,14 +54,24 @@ function box(w, h, d, x, y, z, c = 0xd8d8dc, parent) { const m = new THREE.Mesh(
 function cyl(rt, rb, h, x, y, z, c = 0xd8d8dc, seg = 24, parent) { const m = new THREE.Mesh(new THREE.CylinderGeometry(rt, rb, h, seg), grey(c)); m.position.set(x, y, z); return add(m, true, parent); }
 const FACE = { N: Math.PI, S: 0, E: Math.PI / 2, W: -Math.PI / 2, NE: 3 * Math.PI / 4, NW: -3 * Math.PI / 4, SE: Math.PI / 4, SW: -Math.PI / 4 };
 // ground with a faint grid, so depth reads
-add(new THREE.Mesh(new THREE.PlaneGeometry(SET.ground.w, SET.ground.d).rotateX(-Math.PI / 2), grey(0xe6e6ea)), false);
-const grid = new THREE.GridHelper(Math.max(SET.ground.w, SET.ground.d), Math.max(SET.ground.w, SET.ground.d), 0xc4c4ca, 0xc4c4ca); grid.position.y = 0.002; if (!LINE) scene.add(grid);
+{ const gm = new THREE.Mesh(new THREE.PlaneGeometry(SET.ground.w, SET.ground.d).rotateX(-Math.PI / 2), grey(0xe6e6ea, SET.floor || 'floor', Math.max(SET.ground.w, SET.ground.d) / 1.2)); gm.position.y = SET.ground.y || 0; add(gm, false); }
+const grid = new THREE.GridHelper(Math.max(SET.ground.w, SET.ground.d), Math.max(SET.ground.w, SET.ground.d), 0xc4c4ca, 0xc4c4ca); grid.position.y = 0.002; if (!LINE && !DEPTH && !LOOK) scene.add(grid);
 
-function chair(x, z, face, parent = scene) {
-  const g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = FACE[face]; parent.add(g);
-  box(0.45, 0.05, 0.45, 0, 0.45, 0, 0xcfcfd4, g); box(0.45, 0.5, 0.05, 0, 0.72, -0.22, 0xcfcfd4, g);
-  for (const [a, b] of [[-.19, -.19], [.19, -.19], [-.19, .19], [.19, .19]]) box(0.04, 0.45, 0.04, a, 0.225, b, 0xbdbdc3, g);
+const CHAIRS = [];
+function chair(x, z, face, parent = scene, y = 0) {
+  const g = new THREE.Group(); g.position.set(x, y, z); g.rotation.y = FACE[face] ?? 0; parent.add(g); CHAIRS.push([x, z]);
+  const wb = (w, h, d, px, py, pz) => { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), grey(0xcfcfd4, 'wood', 0.5)); m.position.set(px, py, pz); return add(m, true, g); };
+  wb(0.45, 0.05, 0.45, 0, 0.45, 0); wb(0.45, 0.04, 0.05, 0, 0.88, -0.22); wb(0.45, 0.04, 0.05, 0, 0.7, -0.22);
+  for (const [a, b] of [[-.2, -.2], [.2, -.2], [-.2, .2], [.2, .2]]) wb(0.04, 0.45, 0.04, a, 0.225, b);
+  for (const a of [-.2, .2]) wb(0.04, 0.45, 0.04, a, 0.67, -0.22);
   return g;
+}
+// a human-shaped mannequin: capsules for limbs and body, a head on a neck; seated people get a chair if none is there
+const CLOTHES = { Z: [0xe8771e, 0x2b2b33, 0x7a5236], B: [0x9bd13a, 0x3a3340, 0x8a5a3c], D: [0xe6dcc4, 0xb8ab90, 0xd8b496], K: [0x4a4a52, 0x3a3a42, 0x5a3c2a], x: [0x8d97a6, 0x5d6470, 0xc49a7c] };
+function limb(a, b, rad, col, parent) {
+  const A = new THREE.Vector3(...a), B = new THREE.Vector3(...b), len = A.distanceTo(B);
+  const m = new THREE.Mesh(new THREE.CapsuleGeometry(rad, Math.max(0.01, len), 4, 10), grey(col)); m.position.copy(A).add(B).multiplyScalar(0.5);
+  m.quaternion.setFromUnitVectors(new THREE.Vector3(0, 1, 0), B.clone().sub(A).normalize()); return add(m, true, parent);
 }
 function person(who, at, face, pose, h = 1.0, col = 0xb9b9c0, y0 = 0) {
   const g = new THREE.Group(); g.position.set(at[0], y0, at[1]); g.rotation.y = FACE[face] ?? 0; scene.add(g);
@@ -54,24 +81,35 @@ function person(who, at, face, pose, h = 1.0, col = 0xb9b9c0, y0 = 0) {
     box(0.2, 0.12, 0.02, 0, 1.4, 0.14, 0x55555c, g); box(0.6, 0.03, 0.34, 0, 0.98, 0.32, 0x9a9aa2, g);
     return { g, head: new THREE.Vector3(at[0], y0 + 1.55, at[1]) };
   }
-  const s = h; const seated = pose === 'seated' || pose === 'seated-low';
-  const hip = seated ? 0.47 : 0.9 * s;
-  if (seated) { box(0.36 * s, 0.14, 0.46, 0, hip, 0.18, col, g); box(0.13, 0.45, 0.13, -0.1 * s, 0.24, 0.4, col, g); box(0.13, 0.45, 0.13, 0.1 * s, 0.24, 0.4, col, g); }
-  else { box(0.14, 0.88 * s, 0.16, -0.1 * s, 0.44 * s, 0, col, g); box(0.14, 0.88 * s, 0.16, 0.1 * s, 0.44 * s, 0, col, g); }
-  box(0.42 * s, 0.58 * s, 0.24, 0, hip + 0.33 * s, 0, col, g);                    // torso
-  box(0.1, 0.5 * s, 0.1, -0.27 * s, hip + 0.36 * s, 0.12, col, g); box(0.1, 0.5 * s, 0.1, 0.27 * s, hip + 0.36 * s, 0.12, col, g); // arms forward
-  const hy = hip + 0.78 * s;
-  const head = new THREE.Mesh(new THREE.SphereGeometry(0.12 * s, 20, 14), grey(col)); head.position.set(0, hy, 0); add(head, true, g);
-  const nose = new THREE.Mesh(new THREE.ConeGeometry(0.035, 0.09, 10).rotateX(Math.PI / 2), grey(0x8a8a92)); nose.position.set(0, hy, 0.13 * s); g.add(nose); // which way they face
+  const s = h * 1.0; const seated = pose === 'seated' || pose === 'seated-low';
+  const [top, legs, skin] = LOOK ? (CLOTHES[who] || CLOTHES.x) : [col, col, col];
+  const hip = seated ? 0.5 : 0.92 * s, sh = hip + 0.52 * s, hy = sh + 0.24 * s;
+  if (seated) {
+    if (!EMPTY && !CHAIRS.some(c => Math.hypot(c[0] - at[0], c[1] - at[1]) < 0.55)) chair(at[0], at[1], face, scene, y0);
+    for (const sx of [-0.1, 0.1]) { limb([sx * s, hip, 0.02], [sx * s, hip, 0.44], 0.065 * s, legs, g); limb([sx * s, hip, 0.46], [sx * s, 0.06, 0.5], 0.055 * s, legs, g); }
+    for (const sx of [-0.2, 0.2]) { limb([sx * s, sh - 0.02, 0], [sx * 1.05 * s, sh - 0.27 * s, 0.1], 0.045 * s, top, g); limb([sx * 1.05 * s, sh - 0.27 * s, 0.1], [sx * 0.8 * s, sh - 0.3 * s, 0.38], 0.04 * s, skin, g); }
+  } else {
+    for (const sx of [-0.1, 0.1]) limb([sx * s, hip, 0], [sx * s, 0.06, 0.02], 0.065 * s, legs, g);
+    for (const sx of [-0.21, 0.21]) limb([sx * s, sh - 0.02, 0], [sx * 1.12 * s, hip - 0.05, 0.03], 0.045 * s, top, g);
+  }
+  limb([0, hip + 0.05, 0], [0, sh - 0.08 * s, 0], 0.15 * s, top, g);                                  // body
+  limb([0, sh - 0.04, 0], [0, sh + 0.08 * s, 0], 0.05 * s, skin, g);                                   // neck
+  const head = new THREE.Mesh(new THREE.SphereGeometry(0.11 * s, 20, 14), grey(skin)); head.scale.set(0.9, 1.12, 1); head.position.set(0, hy, 0); add(head, true, g);
+  const nose = new THREE.Mesh(new THREE.ConeGeometry(0.025, 0.06, 10).rotateX(Math.PI / 2), grey(skin)); nose.position.set(0, hy, 0.11 * s); add(nose, false, g); // which way they face
   return { g, head: new THREE.Vector3(at[0], y0 + hy + 0.05, at[1]) };
 }
 // generic shapes, for sets built in Python (scripts/build-sets.py): {kind:'group', id, landmark, prims:[{shape, p, s|r|h|pts, ry, c, edges, glow}]}
 function prim(pr, parent) {
-  const c = pr.glow && LABELS && !LINE ? pr.glow : (pr.c ?? 0xd2d2d8); let m;
-  if (pr.shape === 'box') m = new THREE.Mesh(new THREE.BoxGeometry(...pr.s), grey(c));
+  const c = pr.glow && (LABELS || LOOK) && !LINE ? pr.glow : (pr.c ?? 0xd2d2d8); let m;
+  if (pr.shape === 'box') m = new THREE.Mesh(new THREE.BoxGeometry(...pr.s), grey(c, pr.tex, pr.rep));
   else if (pr.shape === 'cyl') m = new THREE.Mesh(new THREE.CylinderGeometry(pr.rt ?? pr.r, pr.r, pr.h, pr.seg ?? 20, 1, !!pr.open, pr.t0 ?? 0, pr.tl ?? Math.PI * 2), grey(c));
   else if (pr.shape === 'sphere') m = new THREE.Mesh(new THREE.SphereGeometry(pr.r, 16, 10), grey(c));
   else if (pr.shape === 'cone') m = new THREE.Mesh(new THREE.ConeGeometry(pr.r, pr.h, pr.seg ?? 4), grey(c));
+  else if (pr.shape === 'disc') {  // a flat round floor with round holes cut in it (the hall's pits)
+    const sh = new THREE.Shape(); sh.absarc(0, 0, pr.r, 0, Math.PI * 2, false);
+    for (const [hx, hz, hr] of pr.holes || []) { const h = new THREE.Path(); h.absarc(hx, -hz, hr, 0, Math.PI * 2, true); sh.holes.push(h); }
+    m = new THREE.Mesh(new THREE.ShapeGeometry(sh, 64).rotateX(-Math.PI / 2), grey(c, pr.tex, pr.rep)); m.material.side = THREE.DoubleSide;
+  }
   else if (pr.shape === 'line') { const l = new THREE.Line(new THREE.BufferGeometry().setFromPoints(pr.pts.map(q => new THREE.Vector3(...q))), EDGE); parent.add(l); return l; }
   if (pr.open) m.material.side = THREE.DoubleSide;
   m.position.set(...pr.p); if (pr.ry) m.rotation.y = pr.ry; if (pr.rx) m.rotation.x = pr.rx; if (pr.rz) m.rotation.z = pr.rz;
@@ -81,18 +119,19 @@ function prim(pr, parent) {
 for (const o of SET.objects) {
   let obj = null;
   if (o.kind === 'group') { const g = new THREE.Group(); scene.add(g); for (const pr of o.prims) prim(pr, g); obj = g; }
+  if ((o.kind === 'crowd') && EMPTY) continue;
   if (o.kind === 'crowd') { const g = new THREE.Group(); scene.add(g); for (const q of o.at) person('x', [q[0], q[2]], q[3] || 'N', q[4] || 'seated', 0.95, 0xe0e0e4).g.position.y = q[1]; obj = g; }
-  if (o.kind === 'table') { obj = box(o.size[0], 0.05, o.size[1], o.at[0], o.h, o.at[1], 0xd2d2d8); for (const [a, b] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) box(0.06, o.h, 0.06, o.at[0] + a * (o.size[0] / 2 - 0.1), o.h / 2, o.at[1] + b * (o.size[1] / 2 - 0.1)); }
+  if (o.kind === 'table') { { const m = new THREE.Mesh(new THREE.BoxGeometry(o.size[0], 0.05, o.size[1]), grey(0xd2d2d8, 'wood', 1)); m.position.set(o.at[0], o.h, o.at[1]); obj = add(m); } for (const [a, b] of [[-1, -1], [1, -1], [-1, 1], [1, 1]]) box(0.06, o.h, 0.06, o.at[0] + a * (o.size[0] / 2 - 0.1), o.h / 2, o.at[1] + b * (o.size[1] / 2 - 0.1)); }
   else if (o.kind === 'roundtable') {
-    obj = cyl(o.r, o.r, 0.04, o.at[0], o.h, o.at[1], 0xd2d2d8); cyl(0.04, 0.04, o.h, o.at[0], o.h / 2, o.at[1]);
-    for (let i = 0; i < (o.diners || 0); i++) { const a = i * Math.PI + 0.6; person('x', [o.at[0] + Math.cos(a) * 0.75, o.at[1] + Math.sin(a) * 0.75], 'N', 'seated', 0.95, 0xe0e0e4).g.lookAt(o.at[0], 0, o.at[1]); }
+    { const m = new THREE.Mesh(new THREE.CylinderGeometry(o.r, o.r, 0.04, 28), grey(0xd2d2d8, 'wood', 1)); m.position.set(o.at[0], o.h, o.at[1]); obj = add(m); } cyl(0.04, 0.04, o.h, o.at[0], o.h / 2, o.at[1]);
+    for (let i = 0; i < (EMPTY ? 0 : o.diners || 0); i++) { const a = i * Math.PI + 0.6; person('x', [o.at[0] + Math.cos(a) * 0.75, o.at[1] + Math.sin(a) * 0.75], 'N', 'seated', 0.95, 0xe0e0e4).g.lookAt(o.at[0], 0, o.at[1]); }
   }
   else if (o.kind === 'chair') chair(o.at[0], o.at[1], o.face);
   else if (o.kind === 'tree') { cyl(0.18, 0.25, 2.6, o.at[0], 1.3, o.at[1], 0xb8b8be); const c = new THREE.Mesh(new THREE.IcosahedronGeometry(1.7, 1), grey(0xcacad0)); c.position.set(o.at[0], 3.4, o.at[1]); obj = add(c); }
   else if (o.kind === 'gate') { obj = box(o.w, 2.4, 0.08, o.at[0], 1.2, o.at[1], 0x9d9da5); for (let i = 0; i < 9; i++) box(0.04, 2.4, 0.1, o.at[0] - o.w / 2 + i * o.w / 8, 1.2, o.at[1] + 0.05, 0x6d6d75); }
   else if (o.kind === 'wall') {
     const [x1, z1] = o.from, [x2, z2] = o.to, len = Math.hypot(x2 - x1, z2 - z1), ang = Math.atan2(z2 - z1, x2 - x1);
-    const w = new THREE.Mesh(new THREE.BoxGeometry(len, o.h, 0.2), grey(0xc9c9cf)); w.position.set((x1 + x2) / 2, o.h / 2, (z1 + z2) / 2); w.rotation.y = -ang; obj = add(w);
+    const w = new THREE.Mesh(new THREE.BoxGeometry(len, o.h, 0.2), grey(0xc9c9cf, 'wall', 2)); w.position.set((x1 + x2) / 2, o.h / 2, (z1 + z2) / 2); w.rotation.y = -ang; obj = add(w);
     for (let i = 0; i < o.windows; i++) { const t = (i + 0.5) / o.windows; const win = new THREE.Mesh(new THREE.BoxGeometry(len / o.windows * 0.6, 1.4, 0.24), grey(0xa9a9b2)); win.position.set(x1 + (x2 - x1) * t, 1.3, z1 + (z2 - z1) * t); win.rotation.y = -ang; add(win); }
   }
   else if (o.kind === 'counter') obj = box(o.size[0], 1.0, o.size[1], o.at[0], 0.5, o.at[1], 0xbfbfc6);
@@ -104,7 +143,7 @@ for (const o of SET.objects) {
 const COL = { Z: 0xe8a06a, B: 0xa9d07a, D: 0xd9cfb8, K: 0x9a9aa6, R: 0x9fd4de };
 const HEIGHT = { Z: 0.97, B: 0.98, D: 1.07, K: 1.0, R: 1 };
 const people = {};
-for (const [who, spec] of Object.entries(SHOT.people)) {
+for (const [who, spec] of Object.entries(EMPTY ? {} : SHOT.people || {})) {
   const s = spec === 'seated' ? { ...SET.people?.seated?.[who], pose: 'seated' } : (spec === 'later' ? SET.people?.later?.[who] : spec);
 
   people[who] = { ...person(who, s.at, s.face, s.pose || 'standing', HEIGHT[who], LABELS ? COL[who] : 0x9a9aa2, s.y || 0), face: s.face, at: s.at };
@@ -112,6 +151,19 @@ for (const [who, spec] of Object.entries(SHOT.people)) {
 // camera
 const cam = new THREE.PerspectiveCamera(SHOT.fov, W / H, 0.05, 200);
 cam.position.set(...SHOT.cam); cam.lookAt(...SHOT.look); cam.updateMatrixWorld();
+if (DEPTH) {
+  // pass 1: log depth into 8 bits, read back, take the 2nd and 98th percentiles; pass 2: normalised disparity, near white
+  const vs = 'varying float vd; void main(){ vec4 mv = modelViewMatrix * vec4(position,1.0); vd = -mv.z; gl_Position = projectionMatrix * mv; }';
+  const enc = new THREE.ShaderMaterial({ vertexShader: vs, fragmentShader: 'varying float vd; void main(){ float v = clamp(log(vd/0.2)/log(1000.0),0.0,1.0); gl_FragColor = vec4(v,v,v,1.0); }', side: THREE.DoubleSide });
+  scene.overrideMaterial = enc; scene.background = new THREE.Color(0xffffff);
+  const rt = new THREE.WebGLRenderTarget(W, H); r.setRenderTarget(rt); r.render(scene, cam);
+  const px = new Uint8Array(W * H * 4); r.readRenderTargetPixels(rt, 0, 0, W, H, px); r.setRenderTarget(null);
+  const ds = []; for (let i = 0; i < px.length; i += 4 * 7) if (px[i] < 255) ds.push(0.2 * Math.pow(1000, px[i] / 255));
+  ds.sort((a, b) => a - b); const dmin = Math.max(0.15, ds[Math.floor(ds.length * 0.02)] || 0.5) * 0.85, dmax = (ds[Math.floor(ds.length * 0.98)] || 30) * 1.15;
+  scene.overrideMaterial = new THREE.ShaderMaterial({ vertexShader: vs, side: THREE.DoubleSide, uniforms: { a: { value: 1 / dmin }, b: { value: 1 / dmax } },
+    fragmentShader: 'uniform float a; uniform float b; varying float vd; void main(){ float v = clamp((1.0/vd - b)/(a - b), 0.0, 1.0); v = pow(v, 0.8); gl_FragColor = vec4(v,v,v,1.0); }' });
+  scene.background = new THREE.Color(0x000000);
+}
 r.render(scene, cam);
 // what the camera sees
 const proj = v => { const p = v.clone().project(cam); return { x: (p.x + 1) / 2, y: (1 - p.y) / 2, inFront: p.z < 1 && p.z > -1 }; };

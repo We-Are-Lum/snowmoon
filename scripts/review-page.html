@@ -62,6 +62,17 @@ pre.prompt{white-space:pre-wrap;word-break:break-word;font:12px/1.45 var(--mono)
 .thumbs{display:flex;gap:6px;align-items:center}.thumbs img{width:96px;height:auto;border:1px solid var(--line);border-radius:3px}
 .thumbs span{font:11px var(--mono);color:var(--muted)}
 .cards.wide{grid-template-columns:repeat(auto-fill,minmax(min(100%,420px),1fr))}
+.pick2{display:grid;gap:10px;border-top:1px solid var(--line);padding-top:14px}
+.pick2.picked{border-top:2px solid var(--ok)}.pick2.neither{border-top:2px solid var(--bad)}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:10px}
+.cand{display:grid;gap:6px;align-content:start;min-width:0}
+.cand .rev{font-size:13px;line-height:1.4;color:var(--muted)}
+.cand .rev b{font:600 11px var(--mono);letter-spacing:.05em;text-transform:uppercase}
+.cand .rev b.pass{color:var(--ok)}.cand .rev b.fail{color:var(--bad)}
+.summary{display:grid;gap:18px;background:var(--panel);border-radius:10px;padding:18px max(16px,2vw)}
+.summary h2{font-size:20px}.summary ul{margin:0;padding-left:20px;display:grid;gap:4px;max-width:80ch}
+.summary video{width:100%;max-width:720px;border-radius:6px;background:#000}
+.summary .vids{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,340px),1fr));gap:12px}
 </style>
 <main>
 <header class="top"><h1 id="h1"></h1><nav id="nav"></nav><span class="tally" id="tally"></span><span class="status" id="status">loading…</span></header>
@@ -88,6 +99,17 @@ function noteBox(item) {
 }
 document.getElementById('h1').textContent = DATA.title;
 document.getElementById('intro').append(...DATA.intro.map(t => $('p', { class: 'muted', text: t })));
+if (DATA.summary) {
+  const box = $('div', { class: 'summary' });
+  for (const sec of DATA.summary) {
+    const s = $('section', {}, $('h2', { text: sec.title }));
+    for (const para of sec.paras || []) s.append($('p', { text: para }));
+    if (sec.list) s.append($('ul', {}, ...sec.list.map(x => $('li', { text: x }))));
+    if (sec.videos) s.append($('div', { class: 'vids' }, ...sec.videos.map(v => $('figure', {}, $('video', { src: v.src, controls: '', preload: 'none', playsinline: '' }), $('figcaption', { text: v.label })))));
+    box.append(s);
+  }
+  document.getElementById('intro').append(box);
+}
 const ids = [];
 if (DATA.mode === 'plates') {
   const nav = document.getElementById('nav');
@@ -110,6 +132,39 @@ if (DATA.mode === 'plates') {
       card.append($('div', { class: 'head' }, $('span', { class: 'id', text: p.id.replace('plate-', '') }), $('span', { class: 'sz', text: p.what })),
         $('div', { class: 'layout' }, $('figure', {}, $('img', { src: p.set, alt: '3D layout for ' + p.id, loading: 'lazy' }), $('figcaption', { text: '3D set, this camera' + (p.uses ? ' · used by ' + p.uses : '') })), opts),
         $('div', { class: 'verdict' }, redo, noteBox(p.id)));
+      sec.append(card);
+    }
+    document.getElementById('rows').append(sec);
+  }
+} else if (DATA.mode === 'pick2') {
+  const nav = document.getElementById('nav');
+  for (const sc of DATA.scenes) {
+    const anchor = 's-' + sc.key; nav.append($('a', { href: '#' + anchor, text: sc.short }));
+    const sec = $('section', { class: 'scene', id: anchor }, $('header', {}, $('h2', { text: sc.title + ' · ' + sc.shots.length + ' shots' })));
+    for (const s of sc.shots) {
+      ids.push(s.id);
+      const card = $('article', { class: 'pick2', id: 'shot-' + s.id });
+      const head = $('div', { class: 'head' }, $('span', { class: 'id', text: s.id }), $('span', { class: 'sz', text: s.size }));
+      if (s.tag) head.append($('span', { class: 'tag comp', text: s.tag }));
+      card.append(head);
+      if (s.line) card.append($('div', { class: 'line', text: '“' + s.line + '”' }));
+      card.append($('div', { class: 'act', text: s.action }));
+      const two = $('div', { class: 'two' });
+      for (const c of s.cands) {
+        const b = $('button', { class: 'pick', type: 'button', 'aria-pressed': 'false' }, $('img', { src: c.img, alt: s.id + ' ' + c.key, loading: 'lazy' }), $('span', { text: c.label }));
+        b.onclick = () => save(s.id, { pick: state[s.id]?.pick === c.key ? null : c.key });
+        refreshers.push(() => b.setAttribute('aria-pressed', String(state[s.id]?.pick === c.key)));
+        const rev = $('div', { class: 'rev' });
+        if (c.verdict) rev.append($('b', { class: c.verdict, text: c.verdict === 'pass' ? 'reviewer: passes' : 'reviewer: fails' }), ' ');
+        rev.append(c.note || '');
+        two.append($('div', { class: 'cand' }, b, rev));
+      }
+      card.append(two);
+      if (s.frame) card.append($('div', { class: 'thumbs' }, $('img', { src: s.frame, alt: '3D layout for ' + s.id, loading: 'lazy' }), $('span', { text: '3D layout' })));
+      const nei = $('button', { class: 'bad', type: 'button', text: 'Neither' });
+      nei.onclick = () => save(s.id, { pick: state[s.id]?.pick === 'neither' ? null : 'neither' });
+      refreshers.push(() => { const k = state[s.id]?.pick; nei.setAttribute('aria-pressed', String(k === 'neither')); card.classList.toggle('picked', !!k && k !== 'neither'); card.classList.toggle('neither', k === 'neither'); });
+      card.append($('div', { class: 'verdict' }, nei, noteBox(s.id)));
       sec.append(card);
     }
     document.getElementById('rows').append(sec);
@@ -141,8 +196,8 @@ if (DATA.mode === 'plates') {
 }
 function tally() {
   let a = 0, b = 0;
-  for (const id of ids) { const s = state[id] || {}; if (DATA.mode === 'plates') { if (s.pick && s.pick !== 'redo') a++; else if (s.pick === 'redo') b++; } else { if (s.status === 'ok') a++; else if (s.status === 'change') b++; } }
-  document.getElementById('tally').textContent = DATA.mode === 'plates' ? `${a} picked · ${b} to redo · ${ids.length - a - b} unmarked` : `${a} OK · ${b} to change · ${ids.length - a - b} unmarked`;
+  for (const id of ids) { const s = state[id] || {}; if (DATA.mode === 'plates' || DATA.mode === 'pick2') { if (s.pick && s.pick !== 'redo' && s.pick !== 'neither') a++; else if (s.pick === 'redo' || s.pick === 'neither') b++; } else { if (s.status === 'ok') a++; else if (s.status === 'change') b++; } }
+  document.getElementById('tally').textContent = DATA.mode === 'plates' ? `${a} picked · ${b} to redo · ${ids.length - a - b} unmarked` : DATA.mode === 'pick2' ? `${a} picked · ${b} neither · ${ids.length - a - b} unmarked` : `${a} OK · ${b} to change · ${ids.length - a - b} unmarked`;
 }
 refresh();
 (async () => {

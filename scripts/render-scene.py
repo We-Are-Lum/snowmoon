@@ -22,6 +22,9 @@ measured duration and loudness) goes next to the mix recipe's folder: adaptation
 recipe.json, or scenes-out/<seed>/video/recipe.json for a placeholder timeline.
 
   python scripts/render-scene.py dog-dawn [--from 50 --to 70] [--stand-ins]
+  python scripts/render-scene.py fifteen-days --timeline scenes-out/fifteen-days/cuts/full/timeline.json
+    another cut, mixed by mix-scene.py --timeline: reads the recipe beside it, writes <name>.mp4 and
+    video-recipe.json there. The mix's subtitles, if any, are burned in (white, dark outline, lower third).
 
 --stand-ins (placeholder timelines only): a still that isn't on this machine (the dog-dawn panels
 are gitignored) is drawn as a grey card naming the shot and the missing file, so the whole chain
@@ -173,6 +176,21 @@ def end_card(spec: dict, size: tuple[int, int]) -> Image.Image:
     return img
 
 
+def subtitle_layer(text: str, size: tuple[int, int]) -> Image.Image:
+    """A subtitle drawn in code: white with a dark outline, centred in the lower third, at most two lines."""
+    W, H = size
+    layer = Image.new("RGBA", size, (0, 0, 0, 0))
+    d = ImageDraw.Draw(layer)
+    font = ImageFont.truetype("/System/Library/Fonts/Supplemental/Arial Bold.ttf", round(44 * H / 1080))
+    lines = wrap(d, text, font, round(W * 0.72))
+    lh = round(56 * H / 1080)
+    y = H - round(90 * H / 1080) - lh * len(lines)
+    for i, line in enumerate(lines):
+        d.text((W // 2, y + i * lh), line, font=font, fill=(255, 255, 255, 255), anchor="mt",
+               stroke_width=max(2, round(3 * H / 1080)), stroke_fill=(10, 10, 14, 235))
+    return layer
+
+
 def loudness(path: Path) -> dict:
     r = subprocess.run(["ffmpeg", "-hide_banner", "-i", str(path), "-map", "0:a", "-af", "ebur128=peak=true", "-f", "null", "-"],
                        capture_output=True, text=True)
@@ -188,15 +206,17 @@ def main() -> None:
     ap.add_argument("--from", dest="t0", type=float, default=None, help="render only from this second (a preview)")
     ap.add_argument("--to", dest="t1", type=float, default=None, help="render only to this second (a preview)")
     ap.add_argument("--stand-ins", action="store_true", help="placeholder timelines only: draw a card for a still that isn't on this machine")
+    ap.add_argument("--timeline", default=None, help="another cut's timeline (mixed with mix-scene.py --timeline)")
     args = ap.parse_args()
     seed = args.seed
-    timeline = json.loads((ROOT / "adaptations" / seed / "timeline.json").read_text())
+    tl_path = ROOT / args.timeline if args.timeline else ROOT / "adaptations" / seed / "timeline.json"
+    timeline = json.loads(tl_path.read_text())
     placeholder = bool(timeline.get("placeholder"))
     if args.stand_ins and not placeholder:
         raise SystemExit("--stand-ins is for placeholder timelines only; a real scene renders its own stills")
-    mix_rec_path = (ROOT / "scenes-out" / seed / "mix" if placeholder else ROOT / "adaptations" / seed / "mix") / "recipe.json"
+    mix_rec_path = (tl_path.parent if args.timeline else ROOT / "scenes-out" / seed / "mix" if placeholder else ROOT / "adaptations" / seed / "mix") / "recipe.json"
     mix_rec = json.loads(mix_rec_path.read_text())
-    if mix_rec["timeline_sha256"] != sha256(ROOT / "adaptations" / seed / "timeline.json"):
+    if mix_rec["timeline_sha256"] != sha256(tl_path):
         raise SystemExit("timeline.json changed since the mix; run scripts/mix-scene.py first")
     R = mix_rec["resolved"]
     mix_wav = ROOT / mix_rec["output"]["file"]
@@ -222,9 +242,11 @@ def main() -> None:
     t0 = args.t0 or 0.0
     t1 = min(args.t1 or R["duration_s"], R["duration_s"])
     preview = args.t0 is not None or args.t1 is not None
-    out_dir = ROOT / "scenes-out" / seed / "video"
+    out_dir = tl_path.parent if args.timeline else ROOT / "scenes-out" / seed / "video"
     out_dir.mkdir(parents=True, exist_ok=True)
-    out = out_dir / (f"{seed}-preview-{t0:g}-{t1:g}.mp4" if preview else f"{seed}.mp4")
+    name = tl_path.parent.name if args.timeline else seed
+    out = out_dir / (f"{name}-preview-{t0:g}-{t1:g}.mp4" if preview else f"{name}.mp4")
+    subs = [(s, subtitle_layer(s["text"], out_size)) for s in R.get("subtitles", [])]
     cmd = ["ffmpeg", "-y", "-hide_banner", "-loglevel", "error",
            "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{out_size[0]}x{out_size[1]}", "-r", str(fps), "-i", "-",
            "-ss", f"{t0:.3f}", "-t", f"{t1 - t0:.3f}", "-i", str(mix_wav),
@@ -246,6 +268,11 @@ def main() -> None:
         if tr["type"] == "dissolve" and i > 0 and t < shots[i].s["start"] + tr["seconds"]:
             a = (t - shots[i].s["start"]) / tr["seconds"]
             frame = Image.blend(shots[i - 1].at(t), frame, a)
+        for s_, layer in subs:
+            if s_["start"] <= t < s_["end"]:
+                frame = frame.convert("RGBA")
+                frame.alpha_composite(layer)
+                frame = frame.convert("RGB")
         ff.stdin.write(np.asarray(frame, dtype=np.uint8).tobytes())
         if (n - n0) % (fps * 10) == 0:
             print(f"  {t:6.1f} s / {t1:.1f} s ({time.time() - began:.0f} s elapsed)", flush=True)
@@ -279,9 +306,11 @@ def main() -> None:
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "cost_usd": 0,
     }
-    rec_dir = out_dir if placeholder else ROOT / "adaptations" / seed / "video"
+    rec_dir = out_dir if placeholder or args.timeline else ROOT / "adaptations" / seed / "video"
     rec_dir.mkdir(parents=True, exist_ok=True)
-    (rec_dir / "recipe.json").write_text(json.dumps(rec, indent=2, ensure_ascii=False) + "\n")
+    if subs:
+        rec["subtitles"] = {"burned_in": len(subs), "font": "Arial Bold (macOS system font)", "from": "the mix recipe's resolved subtitles"}
+    (rec_dir / ("video-recipe.json" if args.timeline else "recipe.json")).write_text(json.dumps(rec, indent=2, ensure_ascii=False) + "\n")
     print(f"video {out.relative_to(ROOT)}: {measured['duration_s']} s, {out_size[0]}x{out_size[1]} at {fps} fps, "
           f"{measured['loudness']['integrated_lufs']} LUFS; rendered in {rec['render_seconds']} s")
 

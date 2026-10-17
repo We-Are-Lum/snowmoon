@@ -23,6 +23,11 @@ Outputs:
   The renderer reads only the resolved timeline in that recipe.
 
   python scripts/mix-scene.py dog-dawn   (numpy and soundfile, plus ffmpeg on the PATH)
+  python scripts/mix-scene.py fifteen-days --timeline scenes-out/fifteen-days/cuts/full/timeline.json
+    another cut of the same scene: its mix and recipe go beside that timeline (<name>-mix.wav, recipe.json).
+
+Subtitles: an optional "subtitles" list ({"cue", "text", "from", "to"}: a voice cue's id, the words
+as the script has them, and the fraction of the cue they cover) is resolved to absolute times.
 """
 
 import hashlib
@@ -131,6 +136,11 @@ def resolve(timeline: dict, stems: dict[str, Path]) -> dict:
         shots.append({**{k: v for k, v in s.items() if k != "at"}, "start": round(starts[i], 3), "end": round(stop, 3),
                       "image_sha256_now": sha256(ROOT / s["image"]) if (ROOT / s["image"]).exists() else None})
     shot_ids = {s["id"] for s in shots}
+    subtitles = []
+    for sub in timeline.get("subtitles", []):
+        s, e = r.start(sub["cue"]), r.end(sub["cue"])
+        a, b = s + (e - s) * sub.get("from", 0.0), s + (e - s) * sub.get("to", 1.0)
+        subtitles.append({"cue": sub["cue"], "text": sub["text"], "start": round(a, 3), "end": round(b, 3)})
     lettering = []
     for l in timeline.get("lettering", []):
         if l["shot"] not in shot_ids:
@@ -143,7 +153,8 @@ def resolve(timeline: dict, stems: dict[str, Path]) -> dict:
         card = {"file": ec["file"], "file_sha256": sha256(ROOT / ec["file"]), "start": round(end, 3), "end": round(end + ec["seconds"], 3),
                 "fade_s": ec.get("fade_s", 0.8)}
         end += ec["seconds"]
-    return {"duration_s": round(end, 3), "video": timeline["video"], "cues": cues, "shots": shots, "lettering": lettering, "end_card": card}
+    return {"duration_s": round(end, 3), "video": timeline["video"], "cues": cues, "shots": shots, "lettering": lettering, "end_card": card,
+            **({"subtitles": subtitles} if subtitles else {})}
 
 
 def loop_xfade(x: np.ndarray, n: int, xf_s: float) -> np.ndarray:
@@ -184,17 +195,19 @@ def mix(resolved: dict, stems: dict[str, Path]) -> np.ndarray:
 def main() -> None:
     seed = sys.argv[1]
     base = ROOT / "adaptations" / seed
-    tl_path = base / "timeline.json"
+    custom = sys.argv[3] if len(sys.argv) > 3 and sys.argv[2] == "--timeline" else None
+    tl_path = ROOT / custom if custom else base / "timeline.json"
     timeline = json.loads(tl_path.read_text())
     stems = {c["id"]: ROOT / c["stem"] for c in timeline["cues"]}
     missing = [cid for cid, p in stems.items() if not p.exists()]
     if missing:
         raise SystemExit("missing stems: " + ", ".join(missing))
-    work = ROOT / "scenes-out" / seed / "mix"
+    work = tl_path.parent if custom else ROOT / "scenes-out" / seed / "mix"
     work.mkdir(parents=True, exist_ok=True)
+    name = tl_path.parent.name if custom else seed
 
     resolved = resolve(timeline, stems)
-    premix = work / f"{seed}-premix.wav"
+    premix = work / f"{name}-premix.wav"
     sf.write(premix, mix(resolved, stems), SR, subtype="FLOAT")
 
     L = timeline.get("loudness", {"integrated_lufs": -16, "true_peak_db": -1, "lra": 11})
@@ -204,7 +217,7 @@ def main() -> None:
     m = loudnorm_json(probe.stderr)
     af = (f"{norm}:measured_I={m['input_i']}:measured_TP={m['input_tp']}:measured_LRA={m['input_lra']}"
           f":measured_thresh={m['input_thresh']}:offset={m['target_offset']}:linear=true:print_format=json")
-    out = work / f"{seed}-mix.wav"
+    out = work / f"{name}-mix.wav"
     cmd = ["ffmpeg", "-y", "-hide_banner", "-i", str(premix), "-af", af, "-ar", str(SR), "-ac", "2", "-c:a", "pcm_s24le", str(out)]
     run = subprocess.run(cmd, capture_output=True, text=True, check=True)
     after = loudnorm_json(run.stderr)
@@ -223,7 +236,7 @@ def main() -> None:
         "generated_at": datetime.now(timezone.utc).isoformat(timespec="seconds"),
         "cost_usd": 0,
     }
-    rec_dir = (work if timeline.get("placeholder") else base / "mix")
+    rec_dir = (work if timeline.get("placeholder") or custom else base / "mix")
     rec_dir.mkdir(parents=True, exist_ok=True)
     (rec_dir / "recipe.json").write_text(json.dumps(rec, indent=2, ensure_ascii=False) + "\n")
     premix.unlink()

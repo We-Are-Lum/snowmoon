@@ -572,6 +572,34 @@
         "price_source": "https://fal.ai/models/fal-ai/longcat-single-avatar/image-audio-to-video"
       },
       "model_record": "endpoint, date and request id (the host does not expose a weights revision)"
+    },
+    {
+      "id": "qwen-image-edit-2509",
+      "kind": "image",
+      "repo": "Qwen/Qwen-Image-Edit-2509",
+      "revision": null,
+      "license_line": "License: apache-2.0",
+      "license_text": "Qwen-Image is licensed under Apache 2.0.",
+      "license_checked": {
+        "by": "coding agent, overnight 2026-10-16; PROVISIONAL until the owner confirms",
+        "on": "2026-10-16",
+        "source": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509"
+      },
+      "notes": "Added overnight for approach A (depth/edge control) after fal's Z-Image Turbo ControlNet endpoint was found to ignore its control image (even fal's own example). The card: \"Native Support for ControlNet: Including depth maps, edge maps, keypoint maps, and more.\" Multi-image edit (up to three pictures). Not the excluded Qwen-Image-2.1 (research license).",
+      "runs_on": "hosted",
+      "hosted": {
+        "host": "fal.ai",
+        "endpoints": {
+          "fal-ai/qwen-image-edit-2509": 0.03
+        },
+        "price_unit": "USD per megapixel",
+        "price_seen": "2026-10-16 (fal pricing API)"
+      },
+      "model_record": "endpoint, date and request id (the host does not expose a weights revision)",
+      "cost_usd_per_unit": null,
+      "license": "Apache-2.0",
+      "open_weights": true,
+      "weights": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509"
     }
   ],
   "candidates": [

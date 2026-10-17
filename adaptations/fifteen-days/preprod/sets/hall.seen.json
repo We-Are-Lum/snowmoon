@@ -18,45 +18,45 @@
       },
       {
         "id": "posts",
-        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "name": "a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top",
         "side": "centre"
       },
       {
         "id": "holo",
-        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "name": "the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber",
         "side": "centre"
       },
       {
         "id": "pitD",
         "name": "Deluin's sunken pit at the edge of the floor",
-        "side": "left"
+        "side": "centre"
       },
       {
         "id": "pitK",
         "name": "Kau's sunken pit at the edge of the floor",
-        "side": "right"
+        "side": "centre"
       },
       {
         "id": "screens",
         "name": "two big screens hung over the hall, showing the two players' faces",
-        "side": "centre"
+        "side": "right"
       }
     ],
     "people": {
       "D": {
-        "side": "left",
-        "x": 0.333,
-        "y": 0.549,
-        "facing": "facing screen-left, in profile",
-        "dist": 26.01,
+        "side": "centre",
+        "x": 0.415,
+        "y": 0.438,
+        "facing": "away from the camera, seen from behind",
+        "dist": 28.58,
         "visible": true
       },
       "K": {
-        "side": "right",
-        "x": 0.666,
-        "y": 0.551,
-        "facing": "facing screen-right, in profile",
-        "dist": 26.04,
+        "side": "centre",
+        "x": 0.629,
+        "y": 0.814,
+        "facing": "toward the camera",
+        "dist": 17.25,
         "visible": true
       }
     }
@@ -66,36 +66,41 @@
       {
         "id": "tiers",
         "name": "tiers of seats rising all around the hall, full of a varied crowd",
-        "side": "left"
+        "side": "right"
       },
       {
         "id": "ring",
         "name": "the standing ring around the top of the hall, crowded behind a railing",
-        "side": "left"
+        "side": "right"
       },
       {
         "id": "posts",
-        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
-        "side": "left"
+        "name": "a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top",
+        "side": "right"
       },
       {
         "id": "holo",
-        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
-        "side": "left"
+        "name": "the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber",
+        "side": "right"
       },
       {
         "id": "pitD",
         "name": "Deluin's sunken pit at the edge of the floor",
         "side": "centre"
+      },
+      {
+        "id": "pitK",
+        "name": "Kau's sunken pit at the edge of the floor",
+        "side": "right"
       }
     ],
     "people": {
       "D": {
         "side": "centre",
-        "x": 0.555,
-        "y": 0.474,
-        "facing": "away from the camera, seen from behind",
-        "dist": 2.78,
+        "x": 0.429,
+        "y": 0.653,
+        "facing": "toward the camera",
+        "dist": 5.38,
         "visible": true
       }
     }
@@ -119,12 +124,12 @@
       },
       {
         "id": "posts",
-        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "name": "a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top",
         "side": "centre"
       },
       {
         "id": "holo",
-        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "name": "the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber",
         "side": "centre"
       },
       {
@@ -227,6 +232,11 @@
         "id": "walkway",
         "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
         "side": "left"
+      },
+      {
+        "id": "holo",
+        "name": "the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber",
+        "side": "left"
       }
     ],
     "people": {
@@ -267,12 +277,12 @@
       },
       {
         "id": "posts",
-        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "name": "a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top",
         "side": "centre"
       },
       {
         "id": "holo",
-        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "name": "the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber",
         "side": "centre"
       },
       {
@@ -302,12 +312,12 @@
       },
       {
         "id": "posts",
-        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "name": "a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top",
         "side": "left"
       },
       {
         "id": "holo",
-        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "name": "the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber",
         "side": "left"
       },
       {
@@ -325,7 +335,7 @@
       "K": {
         "side": "centre",
         "x": 0.5,
-        "y": 0.343,
+        "y": 0.312,
         "facing": "toward the camera",
         "dist": 0.49,
         "visible": true
@@ -346,12 +356,12 @@
       },
       {
         "id": "posts",
-        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "name": "a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top",
         "side": "right"
       },
       {
         "id": "holo",
-        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "name": "the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber",
         "side": "right"
       }
     ],
@@ -376,12 +386,12 @@
       },
       {
         "id": "posts",
-        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "name": "a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top",
         "side": "centre"
       },
       {
         "id": "holo",
-        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "name": "the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber",
         "side": "centre"
       },
       {
@@ -428,12 +438,12 @@
       },
       {
         "id": "posts",
-        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "name": "a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top",
         "side": "centre"
       },
       {
         "id": "holo",
-        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "name": "the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber",
         "side": "centre"
       },
       {
@@ -468,6 +478,11 @@
       {
         "id": "walkway",
         "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "left"
+      },
+      {
+        "id": "holo",
+        "name": "the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber",
         "side": "left"
       }
     ],
@@ -535,7 +550,7 @@
       },
       {
         "id": "holo",
-        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "name": "the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber",
         "side": "centre"
       }
     ],
@@ -569,12 +584,12 @@
       },
       {
         "id": "posts",
-        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "name": "a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top",
         "side": "centre"
       },
       {
         "id": "holo",
-        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "name": "the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber",
         "side": "centre"
       },
       {
@@ -600,6 +615,11 @@
       {
         "id": "walkway",
         "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "left"
+      },
+      {
+        "id": "holo",
+        "name": "the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber",
         "side": "left"
       }
     ],
@@ -633,7 +653,7 @@
       },
       {
         "id": "holo",
-        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "name": "the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber",
         "side": "centre"
       }
     ],
@@ -675,12 +695,12 @@
       },
       {
         "id": "posts",
-        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "name": "a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top",
         "side": "centre"
       },
       {
         "id": "holo",
-        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "name": "the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber",
         "side": "centre"
       },
       {
@@ -705,12 +725,12 @@
       },
       {
         "id": "posts",
-        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "name": "a few slim, light hologram towers on small gliding bases, drifting across the floor, glowing cube clusters on top",
         "side": "right"
       },
       {
         "id": "holo",
-        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "name": "the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber",
         "side": "right"
       },
       {
@@ -723,7 +743,7 @@
       "D": {
         "side": "centre",
         "x": 0.5,
-        "y": 0.348,
+        "y": 0.338,
         "facing": "toward the camera",
         "dist": 1.14,
         "visible": true

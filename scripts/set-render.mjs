@@ -8,8 +8,10 @@ import path from 'node:path';
 import { chromium } from '/Users/nathan/snowmoon/node_modules/playwright-core/index.mjs';
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
-const args = process.argv.slice(2); const LINE = args.includes('--line');
-const [seed, setName, ...only] = args.filter(a => a !== '--line');
+// --depth writes <shot>.depth.png (a depth map for the depth ControlNet); --look writes <shot>.look.png (readable: textures, shadows,
+// people in their clothes' colours); --empty adds .empty to the name and draws nobody (plates).
+const args = process.argv.slice(2); const LINE = args.includes('--line'), DEPTH = args.includes('--depth'), LOOK = args.includes('--look'), EMPTY = args.includes('--empty');
+const [seed, setName, ...only] = args.filter(a => !a.startsWith('--'));
 const setDir = path.join(ROOT, 'adaptations', seed, 'preprod', 'sets');
 const SET = JSON.parse(fs.readFileSync(path.join(setDir, `${setName}.json`), 'utf8'));
 const out = path.join(ROOT, 'images-out', 'preprod', 'set'); fs.mkdirSync(out, { recursive: true });
@@ -32,11 +34,12 @@ const seen = fs.existsSync(seenPath) ? JSON.parse(fs.readFileSync(seenPath, 'utf
 const shotsPath = path.join(setDir, `${setName}.shots.json`);
 const ALL = { ...(SET.shots || {}), ...(fs.existsSync(shotsPath) ? JSON.parse(fs.readFileSync(shotsPath, 'utf8')) : {}) };
 for (const shot of (only.length ? only : Object.keys(ALL))) {
-  for (const mode of LINE ? ['line'] : ['labels', 'plain']) {
-    await p.goto(`http://localhost:${port}/?set=${setName}&shot=${shot}&labels=${mode === 'labels' ? 1 : 0}&line=${mode === 'line' ? 1 : 0}`);
-    await p.waitForFunction(() => document.title === 'done', null, { timeout: 120000 });
-    await p.screenshot({ path: path.join(out, `${shot}${mode === 'labels' ? '.labelled' : mode === 'line' ? '.line' : ''}.png`) });
-    if (mode === 'plain') seen[shot] = await p.evaluate(() => window.RESULT);
+  const modes = [...(LINE ? ['line'] : []), ...(DEPTH ? ['depth'] : []), ...(LOOK ? ['look'] : [])];
+  for (const mode of modes.length ? modes : ['labels', 'plain']) {
+    await p.goto(`http://localhost:${port}/?set=${setName}&shot=${shot}&labels=${mode === 'labels' ? 1 : 0}&${mode}=1&empty=${EMPTY ? 1 : 0}`);
+    await p.waitForFunction(() => document.title === 'done', null, { timeout: 180000 });
+    await p.screenshot({ path: path.join(out, `${shot}${mode === 'labels' ? '.labelled' : mode === 'plain' ? '' : '.' + mode}${EMPTY ? '.empty' : ''}.png`) });
+    if (mode === 'plain' && !EMPTY) seen[shot] = await p.evaluate(() => window.RESULT);
   }
   process.stdout.write(shot + ' ');
 }

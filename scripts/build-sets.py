@@ -56,6 +56,8 @@ def courtyard() -> dict:
         group("lamp", [cyl([5.0, 1.8, -8.4], 0.06, 3.6, 0x77777f), {"shape": "sphere", "p": [5.0, 3.7, -8.4], "r": 0.22, "c": 0xe8e8ee}], "a street lamp by the gate"),
     ]
     for o in s["objects"]:
+        if o.get("diners"):
+            o["diners"] = 0  # the owner (2026-10-16): no people on plates; diners only at the frame stage, far back, or not at all
         if o.get("landmark") == "the wide table":
             o["landmark"] = "the long rectangular wooden table"  # the owner: F17 came out round
     s["ground"] = {"w": 30, "d": 30}
@@ -118,27 +120,38 @@ def hall() -> dict:
     ringcrowd = [[round(math.cos(k / 70 * 6.2832) * (R1 + 1.1), 2), TOP, round(math.sin(k / 70 * 6.2832) * (R1 + 1.1), 2), "N", "standing"] for k in range(70)]
     o.append({"kind": "crowd", "id": "ringcrowd", "at": [[c[0], c[1], c[2], c[3], c[4]] for c in ringcrowd]})
     walk = [box([0, TOP - 0.15, 0], [3.2, 0.3, 2 * R1 + 2], 0x9c9ca6)]  # darker than the ring, so it reads
+    # the owner (2026-10-16): the walkway must read as passing over the top: a deep girder under the deck, open air below it
+    walk += [box([sx * 1.45, TOP - 0.75, 0], [0.18, 0.9, 2 * R1 + 2], 0x84848e) for sx in (-1, 1)]
+    walk += [box([0, TOP - 1.15, z], [3.0, 0.12, 0.14], 0x84848e, edges=False) for z in range(-15, 16, 2)]
     walk += railing(-1.6, -R1, -1.6, R1, TOP, 26) + railing(1.6, -R1, 1.6, R1, TOP, 26)
     o.append(group("walkway", walk, "the broad walkway spanning the hall high above the floor, with a railing on each side"))
     o.append({"kind": "crowd", "id": "walkcrowd", "at": [[1.2, TOP, z, "E", "standing"] for z in (-9, -6.5, -3, 4, 7.5, 10.5)] + [[-1.2, TOP, z, "W", "standing"] for z in (-10, -7, 3.5, 6, 9.5)]})
-    # the floor: identical posts on robotic bases, holograms of gliders, ships and walls
-    posts = []
-    for i, (x, z) in enumerate([(x, z) for x in (-5, -2.5, 0, 2.5, 5) for z in (-5, -2.5, 0, 2.5, 5) if x * x + z * z < 40]):
-        posts += [cyl([x, 0.12, z], 0.45, 0.24, 0xa8a8b0), cyl([x, 1.3, z], 0.12, 2.1, 0x55555c), box([x, 2.55, z], [0.5, 0.4, 0.5], 0xe2e2e8, glow=0x9fe3ef if i % 2 else 0xf2c46a)]
-    o.append(group("posts", posts, "identical black posts on small robotic bases, glowing cube clusters on top"))
+    # the owner (2026-10-16): the play space is all glowing holograms; towers are light and mobile, never heavy fixed pillars
+    towers = []
+    for i, (x, z) in enumerate([(-4.5, -3.0), (-1.5, 4.2), (2.2, -4.6), (4.8, 2.4), (0.6, 0.4), (-5.6, 3.6), (5.6, -2.2)]):
+        hgt = 1.4 + (i * 7 % 5) * 0.35
+        towers += [cyl([x, 0.06, z], 0.26, 0.08, 0xe8e8ee, glow=0x9fe3ef, holo=True), cyl([x, 0.16 + hgt / 2, z], 0.05, hgt, 0xe8e8ee, edges=False, glow=0x9fe3ef, holo=True),
+                   box([x, 0.3 + hgt, z], [0.42, 0.42, 0.42], 0xe8e8ee, glow=0x9fe3ef if i % 2 else 0xf2c46a, holo=True, ry=i * 0.7)]
+    o.append(group("posts", towers, "a few slim towers made only of light, drifting across the floor on small glowing gliding discs, glowing cube clusters on top"))
     holo = []
     for i in range(40):
         a, rr, y = i * 2.4, 2 + (i * 37 % 50) / 10, 1.2 + (i * 13 % 30) / 10
-        holo.append(box([math.cos(a) * rr, y, math.sin(a) * rr], [0.35, 0.12, 0.2], 0xe8e8ee, glow=0x9fe3ef if i % 3 else 0xf2c46a, ry=a, edges=False))
+        holo.append(box([math.cos(a) * rr, y, math.sin(a) * rr], [0.35, 0.12, 0.2], 0xe8e8ee, glow=0x9fe3ef if i % 3 else 0xf2c46a, ry=a, edges=False, holo=True))
+    for i in range(14):  # gliders streaking, each with a long light trail behind it
+        a, rr, y = i * 0.9 + 0.3, 3 + (i * 29 % 60) / 10, 1.0 + (i * 17 % 35) / 10
+        x, z = math.cos(a) * rr, math.sin(a) * rr
+        holo.append(box([x, y, z], [0.5, 0.06, 0.25], 0xf4f4f8, glow=0xf2c46a if i % 2 else 0x9fe3ef, ry=-a, edges=False, holo=True))
+        holo.append(box([x - math.sin(a) * 1.6, y, z + math.cos(a) * 1.6], [0.05, 0.03, 3.2], 0xf4f4f8, glow=0x9fe3ef, ry=-a, edges=False, holo=True))
     for k in range(6):
-        holo.append(box([-3 + k * 0.42, 0.45, 3.6], [0.4, 0.9, 0.4], 0xe8e8ee, glow=0x9fe3ef))
-    o.append(group("holo", holo, "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor"))
-    o.append(group("floor", [cyl([0, -0.02, 0], R0, 0.04, 0xdedee3, seg=64, edges=False)] +
+        holo.append(box([-3 + k * 0.42, 0.45, 3.6], [0.4, 0.9, 0.4], 0xe8e8ee, glow=0x9fe3ef, holo=True))
+    o.append(group("holo", holo, "the whole play space alive with glowing holograms: gliders streaking past with light trails, little ships and walls of light cubes in cyan and amber"))
+    o.append(group("floor", [{"shape": "disc", "p": [0, 0.0, 0], "r": R0, "holes": [[-8.4, 0, 1.6], [8.4, 0, 1.6]], "c": 0xdedee3, "edges": False, "tex": "stone", "rep": 8}] +
                    [{"shape": "line", "pts": [[math.cos(k / 48 * 6.2832) * rr, 0.01, math.sin(k / 48 * 6.2832) * rr] for k in range(49)]} for rr in (3, 6, 9)]))
     # the pits, sunk at the west and east edges of the floor, each with a console
     for id, x, face in (("pitD", -8.4, "W"), ("pitK", 8.4, "E")):
         sx = -1 if x < 0 else 1
-        o.append(group(id, [cyl([x, -0.6, 0], 1.6, 1.2, 0x9c9ca4, seg=32, open=True), box([x + sx * 0.75, -0.2, 0], [0.5, 0.9, 1.3], 0xb0b0b8)],
+        o.append(group(id, [cyl([x, -0.6, 0], 1.6, 1.2, 0x9c9ca4, seg=32, open=True), cyl([x, -1.2, 0], 1.6, 0.04, 0x8a8a92, seg=32),
+                            cyl([x, 0.03, 0], 1.68, 0.06, 0xe8e8ee, seg=32, open=True, glow=0x9fe3ef), box([x + sx * 0.75, -0.75, 0], [0.5, 0.9, 1.3], 0xb0b0b8)],
                        "Deluin's sunken pit at the edge of the floor" if x < 0 else "Kau's sunken pit at the edge of the floor"))
     # the two big screens, side by side on the north side, facing the hall
     o.append(group("screens", [box([-3.2, 11.5, -11.5], [5.6, 3.2, 0.2], 0xf2f2f5), box([3.2, 11.5, -11.5], [5.6, 3.2, 0.2], 0xf2f2f5),
@@ -146,7 +159,7 @@ def hall() -> dict:
                    "two big screens hung over the hall, showing the two players' faces"))
     return {
         "about": "The Minpentai hall as a grey-box set: tiers all round, the standing ring at the top, the broad walkway across the middle (owner, 2026-10-16), the floor of posts and holograms with nobody on it, the two pits, two big screens.",
-        "ground": {"w": 40, "d": 40}, "objects": o, "fog": [30, 70],
+        "ground": {"w": 40, "d": 40, "y": -1.25}, "objects": o, "fog": [30, 70],
         "states": {
             "game": {"D": {"at": [-8.4, 0], "face": "W", "pose": "seated", "y": -1.1}, "K": {"at": [8.4, 0], "face": "E", "pose": "seated", "y": -1.1}},
             "walkway": {"Z": {"at": [-1.1, -0.6], "face": "W", "pose": "standing", "y": TOP}, "B": {"at": [-1.1, 0.6], "face": "W", "pose": "standing", "y": TOP}},
@@ -154,10 +167,10 @@ def hall() -> dict:
         },
         "axis": {"cam_side": [-20, 6]},
         "setups": {
-            "A": {"what": "the whole hall from high above the south end of the walkway, which runs away across the middle, a pit on each side", "cam": [0.0, TOP + 7.0, 20.0], "look": [0.0, 0.0, -3.0], "fov": 60},
-            "B": {"what": "low on the floor among the posts", "cam": [-4.0, 0.9, 6.8], "look": [1.5, 1.8, -1.5], "fov": 50},
-            "P": {"what": "down into Deluin's pit, the tiers rising behind", "cam": [-6.6, 2.0, 1.2], "look": [-8.9, -0.2, 0], "fov": 46},
-            "W": {"what": "the walkway from the air beside it, the floor below", "cam": [-6.5, TOP + 1.4, 2.5], "look": [-1.1, TOP + 1.0, 0], "fov": 42},
+            "A": {"what": "the whole hall from high on the east side, the walkway crossing the frame high over the glowing floor, open air beneath it, a pit at each end of the floor", "cam": [10.0, TOP - 2.1, 3.0], "look": [-6.0, TOP - 3.4, -1.0], "fov": 64},
+            "B": {"what": "low on the floor among the drifting hologram towers", "cam": [-4.0, 0.9, 6.8], "look": [1.5, 1.8, -1.5], "fov": 50},
+            "P": {"what": "down into Deluin's pit in the middle of a live game, gliders streaking over the floor beyond with light trails, the tiers rising behind", "cam": [-11.2, 4.4, 2.0], "look": [-6.2, -0.6, -0.3], "fov": 52},
+            "W": {"what": "the walkway from the air beside it, the floor below", "cam": [-6.5, TOP + 1.4, 2.5], "look": [-1.1, TOP - 2.2, 0], "fov": 46},
             "V": {"what": "straight down from the walkway's railing to the floor", "cam": [-1.4, TOP + 1.6, 0], "look": [-4.0, 0, 0.3], "fov": 55},
         },
     }
