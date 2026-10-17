@@ -141,9 +141,17 @@ async function noteName(fname: string, fid: number): Promise<void> {
     on conflict (fname) do update set person = excluded.person, seen_at = now()`).catch(() => undefined);
 }
 
-async function walletExists(id: number): Promise<boolean> {
-  const rows = await fromTables((sql) => sql<{ id: string }[]>`select id from studio.wallet_accounts where id = ${id}`);
-  return !!rows?.length;
+/** A wallet account's handle is its full address, lowercase: 42 characters, so never a Farcaster name (16 at most; owner, 2026-10-17). */
+const ADDRESS = /^0x[0-9a-f]{40}$/;
+
+async function walletByAddress(address: string): Promise<number | null> {
+  const rows = await fromTables((sql) => sql<{ id: string }[]>`select id from studio.wallet_accounts where address = ${address}`);
+  return rows?.length ? Number(rows[0].id) : null;
+}
+
+async function walletAddress(id: number): Promise<string | null> {
+  const rows = await fromTables((sql) => sql<{ address: string }[]>`select address from studio.wallet_accounts where id = ${id}`);
+  return rows?.[0]?.address ?? null;
 }
 
 export type Resolved =
@@ -156,11 +164,16 @@ export type Resolved =
  * names.ts), since links are kept by FID and a name can change hands.
  * - An fname Farcaster knows: that FID. A different spelling of it (case) redirects to the canonical one.
  * - An fname Farcaster no longer knows, but we saw it on someone who has since renamed: redirect to the new name.
- * - Digits that are no fname: a wallet account's id (the account is person minus that id).
+ * - A full 0x address: a wallet account (the account is person minus its id). Checksum case redirects to lowercase.
  */
 export async function resolveHandle(raw: string): Promise<Resolved> {
   const handle = decodeURIComponent(raw).replace(/^@/, '');
   const name = handle.toLowerCase();
+  if (ADDRESS.test(name)) {
+    const id = await walletByAddress(name);
+    if (id === null) return { kind: 'none' };
+    return name === handle ? { kind: 'person', person: -id, handle } : { kind: 'redirect', handle: name };
+  }
   if (!NAME.test(name)) return { kind: 'none' };
   const found = await lookupFid(name);
   if (found.fid) {
@@ -175,13 +188,12 @@ export async function resolveHandle(raw: string): Promise<Resolved> {
     const now = await lookupName(seen);
     if (now && now !== name) return { kind: 'redirect', handle: now };
   }
-  if (/^\d{1,12}$/.test(name) && (await walletExists(Number(name)))) return { kind: 'person', person: -Number(name), handle: name };
   return { kind: 'none' };
 }
 
-/** The handle for a person's URLs: their Farcaster name, or a wallet account's id. Null for a FID with no name. */
+/** The handle for a person's URLs: their Farcaster name, or a wallet account's full address. Null for a FID with no name. */
 export async function handleFor(person: Person): Promise<string | null> {
-  if (person < 0) return String(-person);
+  if (person < 0) return walletAddress(-person);
   const name = await lookupName(person);
   if (name) return name.toLowerCase();
   return Object.entries(STATIC.names).find(([, fid]) => fid === person)?.[0] ?? null;

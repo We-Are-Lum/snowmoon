@@ -18,7 +18,7 @@ Tensions first. Each needs the owner's ruling where it says **Decide**.
    screen, a person's page shows their **chosen version** (the mockup's own words: "@naaate's
    chosen version"); the table is `studio.adaptation_pages`; the checkbox is **"Show it on my
    page"**. Same behaviour, and `P5a` passes. In this document "featured" means the owner's term.
-   *Decide:* keep this naming, or amend P5 to allow a person choosing what their own page shows.
+   **Ruled (owner, 2026-10-17):** keep "chosen version"; P5 stays as is.
 2. **`/<id>` makes one person's choice the default (P5 review question).** `/1` sends everyone to
    the root owner's chosen version. P5 asks "does any default reflect a person's choice rather than
    a stated rule?" The stated rule here is "`/<id>` is the page of the person who started it",
@@ -42,12 +42,10 @@ Tensions first. Each needs the owner's ruling where it says **Decide**.
    holder's page (usually "Nothing here yet"). This comes with name-based links. Fixed links are
    safer: `/@<anyone>/1/v/<n>` redirects to the version's author under their current name, so
    `/v/<n>` links survive renames and reassignment.
-6. **Wallet accounts and numeric names.** The spec gives wallet accounts `/@<account-id>/<id>`,
-   but an fname may be all digits ("12"), so `/@12/1` is ambiguous. Built: an fname wins, then a
-   wallet account. So a wallet account's links break if someone registers that number as an fname.
-   *Decide:* a form that can't be an fname, e.g. `/@0x<address>/<id>` (42 characters, longer than
-   any fname; the address is already its public byline, shortened), or `/@~<account-id>/<id>`
-   (`~` is not allowed in fnames). Also: a FID with no fname has no `/@` URL yet.
+6. **Wallet accounts.** **Ruled (owner, 2026-10-17):** `/@<full 0x address>/<id>`. A 42-character
+   address can't be a Farcaster name (16 at most), so it never clashes. Built: the address in
+   lowercase; a checksum-case address redirects to it. The address is already public as the
+   account's byline (shortened). Still open: a FID with no fname has no `/@` URL yet.
 7. **Slugs.** `/@naaate/1-anything` serves the page and ignores the slug, so anyone can make a link
    whose words say something the page doesn't (`/@naaate/1-the-real-ending`). The page sets its
    canonical link without the slug, and the site never makes slugs itself. *Decide:* keep ignoring
@@ -65,8 +63,8 @@ Tensions first. Each needs the owner's ruling where it says **Decide**.
     it must say so too ("AI voice"). *Owner to confirm the label.*
 11. **Spoilers.** The seed brief says spoilers through chapter 19 (beat 6's on-screen line), and
     the page shows that. The seed pages in `/adaptations` keep the piece behind a "Show the
-    adaptation" gate; this page shows the player straight away, as the mockup does. *Decide:* add
-    the same gate here, or not.
+    adaptation" gate; this page shows the player straight away, as the mockup does.
+    **Ruled (owner, 2026-10-17):** no spoiler gate for Sunday.
 12. **P4 (a signed-in action publishes).** The publish route (later) will require a signed-in FID
     or wallet (`getPerson`), like every write route. For Sunday there is no publish route: the
     owner's version is a static entry and a seed row.
@@ -126,7 +124,7 @@ starts with `@`. From now on, all-digit top-level paths are reserved for adaptat
    redirects to Farcaster's spelling.
 2. Not found, but we saw this name on a FID before: ask Farcaster for that FID's name now; if it
    changed, redirect to `/@<new name>/…`. If Farcaster didn't answer, use the name we saw.
-3. All digits and not an fname: a wallet account with that id.
+3. A full `0x` address (40 hex digits): the wallet account with that address (lowercase; other case redirects).
 4. Otherwise 404.
 
 **What a page shows** (`shownVersion`): the version in the person's `adaptation_pages` row, if
