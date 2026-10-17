@@ -1120,8 +1120,7 @@
     {
      "setup": "MASTER",
      "v": "wave",
-     "s": 1.4,
-     "bye": true
+     "s": 1.4
     }
    ]
   },
@@ -1266,7 +1265,7 @@
     {
      "setup": "EST",
      "s": 3.0,
-     "letter": "Pafogai Du, Dzego · 3724 Firemoon 17\nOne week later",
+     "letter": "Pafogai Du, Dzego · 3724 Firemoon 17",
      "why": "the place card needs reading time"
     },
     {

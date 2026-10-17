@@ -91,7 +91,7 @@ WHAT_END = 1.1                                       # the end of "What?!!" in h
 FIVE_BYE = ("D05", 0.25, "lines-v2/L12-b2-6.deluin-v2.wav", 7.95, 8.5)  # the "Bye" the owner performed at the end of L12's take, for the wave
 FIVE_BED_DB = {"bed: courtyard café": 5, "bed: lobby restaurant": 6}  # "need ambient café sounds" (both places)
 LETTERS = {"H01": "Sadzu Du, Dzego · 3724 Firemoon 10",  # script beat 1 (book c14-b1)
-           "L01b": "Pafogai Du, Dzego · 3724 Firemoon 17\nOne week later",  # "so we know it's different" (owner); the second line DRAFTED  # book c15-b48 (place) and c15-b1 (the chapter's date; owner, 2026-10-17)
+           "L01b": "Pafogai Du, Dzego · 3724 Firemoon 17",  # book c15-b48 (Zei's section's dateline, place only) and c15-b1 (the chapter's date); no drafted line (owner, 2026-10-17)
            "D09": "That day was his last Minpentai game- the last day when his life was somewhat normal."}  # beat 6, on screen
 
 
