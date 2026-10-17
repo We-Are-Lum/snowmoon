@@ -3,7 +3,7 @@
     "landmarks": [
       {
         "id": "table4",
-        "name": "the wide table",
+        "name": "the long rectangular wooden table",
         "side": "centre"
       },
       {
@@ -30,6 +30,11 @@
         "id": "lights",
         "name": "strings of little warm lights overhead",
         "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
       },
       {
         "id": "street",
@@ -73,7 +78,7 @@
     "landmarks": [
       {
         "id": "table4",
-        "name": "the wide table",
+        "name": "the long rectangular wooden table",
         "side": "centre"
       },
       {
@@ -99,6 +104,11 @@
       {
         "id": "lights",
         "name": "strings of little warm lights overhead",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
         "side": "centre"
       },
       {
@@ -167,12 +177,12 @@
       {
         "id": "wallE",
         "name": "the low buildings on the east side, windows glowing",
-        "side": "centre"
+        "side": "left"
       },
       {
         "id": "skyline",
         "name": "the megastructures and mountain pyramids above the rooftops",
-        "side": "right"
+        "side": "centre"
       },
       {
         "id": "lights",
@@ -184,17 +194,17 @@
       "Z": {
         "side": "centre",
         "x": 0.5,
-        "y": 0.255,
+        "y": 0.266,
         "facing": "toward the camera",
-        "dist": 0.95,
+        "dist": 1,
         "visible": true
       },
       "B": {
         "side": "right",
-        "x": 0.82,
-        "y": 0.507,
+        "x": 0.649,
+        "y": 0.511,
         "facing": "facing screen-left, in profile",
-        "dist": 3.1,
+        "dist": 3.21,
         "visible": true
       }
     }
@@ -203,7 +213,7 @@
     "landmarks": [
       {
         "id": "table4",
-        "name": "the wide table",
+        "name": "the long rectangular wooden table",
         "side": "right"
       },
       {
@@ -225,6 +235,11 @@
         "id": "lights",
         "name": "strings of little warm lights overhead",
         "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
       },
       {
         "id": "props",
@@ -354,7 +369,7 @@
     "landmarks": [
       {
         "id": "table4",
-        "name": "the wide table",
+        "name": "the long rectangular wooden table",
         "side": "centre"
       },
       {
@@ -365,6 +380,11 @@
       {
         "id": "lights",
         "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
         "side": "right"
       },
       {
@@ -393,7 +413,7 @@
     "landmarks": [
       {
         "id": "table4",
-        "name": "the wide table",
+        "name": "the long rectangular wooden table",
         "side": "left"
       },
       {
@@ -419,6 +439,11 @@
       {
         "id": "lights",
         "name": "strings of little warm lights overhead",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
         "side": "centre"
       },
       {
@@ -452,7 +477,7 @@
     "landmarks": [
       {
         "id": "table4",
-        "name": "the wide table",
+        "name": "the long rectangular wooden table",
         "side": "centre"
       },
       {
@@ -493,6 +518,11 @@
       {
         "id": "lights",
         "name": "strings of little warm lights overhead",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
         "side": "centre"
       },
       {
@@ -581,7 +611,7 @@
     "landmarks": [
       {
         "id": "table4",
-        "name": "the wide table",
+        "name": "the long rectangular wooden table",
         "side": "centre"
       },
       {
@@ -618,6 +648,11 @@
         "id": "lights",
         "name": "strings of little warm lights overhead",
         "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
       },
       {
         "id": "street",
@@ -697,7 +732,7 @@
     "landmarks": [
       {
         "id": "table4",
-        "name": "the wide table",
+        "name": "the long rectangular wooden table",
         "side": "left"
       },
       {
@@ -719,6 +754,11 @@
         "id": "lights",
         "name": "strings of little warm lights overhead",
         "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
       },
       {
         "id": "street",
@@ -945,7 +985,7 @@
     "landmarks": [
       {
         "id": "table4",
-        "name": "the wide table",
+        "name": "the long rectangular wooden table",
         "side": "left"
       },
       {
@@ -994,7 +1034,7 @@
     "landmarks": [
       {
         "id": "table4",
-        "name": "the wide table",
+        "name": "the long rectangular wooden table",
         "side": "left"
       },
       {
@@ -1261,7 +1301,7 @@
     "landmarks": [
       {
         "id": "table4",
-        "name": "the wide table",
+        "name": "the long rectangular wooden table",
         "side": "left"
       },
       {
@@ -1273,6 +1313,11 @@
         "id": "lights",
         "name": "strings of little warm lights overhead",
         "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
       },
       {
         "id": "street",
@@ -1383,7 +1428,7 @@
     "landmarks": [
       {
         "id": "table4",
-        "name": "the wide table",
+        "name": "the long rectangular wooden table",
         "side": "left"
       },
       {
@@ -1394,6 +1439,11 @@
       {
         "id": "lights",
         "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
         "side": "right"
       },
       {
@@ -1422,7 +1472,7 @@
     "landmarks": [
       {
         "id": "table4",
-        "name": "the wide table",
+        "name": "the long rectangular wooden table",
         "side": "left"
       },
       {
@@ -1505,7 +1555,7 @@
     "landmarks": [
       {
         "id": "table4",
-        "name": "the wide table",
+        "name": "the long rectangular wooden table",
         "side": "right"
       },
       {
@@ -1532,6 +1582,11 @@
         "id": "lights",
         "name": "strings of little warm lights overhead",
         "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
       },
       {
         "id": "wallN",
@@ -1566,7 +1621,7 @@
       {
         "id": "wallE",
         "name": "the low buildings on the east side, windows glowing",
-        "side": "centre"
+        "side": "left"
       },
       {
         "id": "skyline",
@@ -1583,9 +1638,17 @@
       "Z": {
         "side": "centre",
         "x": 0.5,
-        "y": 0.296,
+        "y": 0.302,
         "facing": "toward the camera",
-        "dist": 0.99,
+        "dist": 1.04,
+        "visible": true
+      },
+      "B": {
+        "side": "right",
+        "x": 0.66,
+        "y": -0.111,
+        "facing": "facing screen-left, in profile",
+        "dist": 3.22,
         "visible": true
       }
     }
@@ -1594,7 +1657,7 @@
     "landmarks": [
       {
         "id": "table4",
-        "name": "the wide table",
+        "name": "the long rectangular wooden table",
         "side": "left"
       },
       {
@@ -1638,7 +1701,7 @@
     "landmarks": [
       {
         "id": "table4",
-        "name": "the wide table",
+        "name": "the long rectangular wooden table",
         "side": "left"
       },
       {
@@ -1665,6 +1728,11 @@
         "id": "lights",
         "name": "strings of little warm lights overhead",
         "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
       },
       {
         "id": "wallN",
@@ -1710,7 +1778,7 @@
     "landmarks": [
       {
         "id": "table4",
-        "name": "the wide table",
+        "name": "the long rectangular wooden table",
         "side": "right"
       },
       {
@@ -1737,6 +1805,11 @@
         "id": "lights",
         "name": "strings of little warm lights overhead",
         "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "right"
       },
       {
         "id": "wallN",
@@ -1765,7 +1838,7 @@
     "landmarks": [
       {
         "id": "table4",
-        "name": "the wide table",
+        "name": "the long rectangular wooden table",
         "side": "centre"
       },
       {
@@ -1792,6 +1865,11 @@
         "id": "lights",
         "name": "strings of little warm lights overhead",
         "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
       },
       {
         "id": "wallN",
@@ -1916,11 +1994,16 @@
       {
         "id": "wallE",
         "name": "the low buildings on the east side, windows glowing",
-        "side": "centre"
+        "side": "left"
       },
       {
         "id": "skyline",
         "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
         "side": "right"
       }
     ],
@@ -1928,17 +2011,17 @@
       "Z": {
         "side": "centre",
         "x": 0.5,
-        "y": 0.249,
+        "y": 0.261,
         "facing": "toward the camera",
-        "dist": 0.92,
+        "dist": 0.97,
         "visible": true
       },
       "B": {
         "side": "right",
-        "x": 0.824,
-        "y": 0.28,
+        "x": 0.651,
+        "y": 0.291,
         "facing": "facing screen-left, in profile",
-        "dist": 3.09,
+        "dist": 3.2,
         "visible": true
       }
     }
@@ -1947,7 +2030,7 @@
     "landmarks": [
       {
         "id": "table4",
-        "name": "the wide table",
+        "name": "the long rectangular wooden table",
         "side": "left"
       },
       {
@@ -1959,6 +2042,11 @@
         "id": "lights",
         "name": "strings of little warm lights overhead",
         "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
       },
       {
         "id": "street",
@@ -1992,11 +2080,16 @@
       {
         "id": "wallE",
         "name": "the low buildings on the east side, windows glowing",
-        "side": "centre"
+        "side": "left"
       },
       {
         "id": "skyline",
         "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "centre"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
         "side": "right"
       }
     ],
@@ -2004,9 +2097,17 @@
       "Z": {
         "side": "centre",
         "x": 0.5,
-        "y": 0.249,
+        "y": 0.261,
         "facing": "toward the camera",
-        "dist": 0.92,
+        "dist": 0.97,
+        "visible": true
+      },
+      "B": {
+        "side": "right",
+        "x": 0.651,
+        "y": 0.291,
+        "facing": "facing screen-left, in profile",
+        "dist": 3.2,
         "visible": true
       }
     }
@@ -2059,7 +2160,7 @@
     "landmarks": [
       {
         "id": "table4",
-        "name": "the wide table",
+        "name": "the long rectangular wooden table",
         "side": "left"
       },
       {
@@ -2161,7 +2262,7 @@
     "landmarks": [
       {
         "id": "table4",
-        "name": "the wide table",
+        "name": "the long rectangular wooden table",
         "side": "centre"
       },
       {
@@ -2188,6 +2289,11 @@
         "id": "lights",
         "name": "strings of little warm lights overhead",
         "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
       },
       {
         "id": "wallN",
@@ -2489,7 +2595,7 @@
     "landmarks": [
       {
         "id": "table4",
-        "name": "the wide table",
+        "name": "the long rectangular wooden table",
         "side": "centre"
       },
       {
@@ -2521,6 +2627,11 @@
         "id": "lights",
         "name": "strings of little warm lights overhead",
         "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
       },
       {
         "id": "wallN",
@@ -2900,7 +3011,7 @@
     "landmarks": [
       {
         "id": "table4",
-        "name": "the wide table",
+        "name": "the long rectangular wooden table",
         "side": "centre"
       },
       {
@@ -2939,6 +3050,11 @@
         "side": "left"
       },
       {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
         "id": "wallN",
         "name": "the shop fronts with windows glowing pink and cyan",
         "side": "left"
@@ -2965,7 +3081,7 @@
     "landmarks": [
       {
         "id": "table4",
-        "name": "the wide table",
+        "name": "the long rectangular wooden table",
         "side": "right"
       },
       {
@@ -2992,6 +3108,11 @@
         "id": "props",
         "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
         "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
       }
     ],
     "people": {}
@@ -3000,7 +3121,7 @@
     "landmarks": [
       {
         "id": "table4",
-        "name": "the wide table",
+        "name": "the long rectangular wooden table",
         "side": "centre"
       },
       {
@@ -3029,6 +3150,11 @@
         "side": "right"
       },
       {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
         "id": "wallN",
         "name": "the shop fronts with windows glowing pink and cyan",
         "side": "right"
@@ -3050,7 +3176,7 @@
     "landmarks": [
       {
         "id": "table4",
-        "name": "the wide table",
+        "name": "the long rectangular wooden table",
         "side": "centre"
       },
       {
@@ -3077,6 +3203,11 @@
         "id": "props",
         "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
         "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
       }
     ],
     "people": {}
@@ -3085,7 +3216,7 @@
     "landmarks": [
       {
         "id": "table4",
-        "name": "the wide table",
+        "name": "the long rectangular wooden table",
         "side": "centre"
       },
       {
@@ -3102,6 +3233,11 @@
         "id": "lights",
         "name": "strings of little warm lights overhead",
         "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "left"
       },
       {
         "id": "street",
@@ -3200,5 +3336,54 @@
       }
     ],
     "people": {}
+  },
+  "plate-courtyard-B-bai": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "right"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "centre"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "B": {
+        "side": "centre",
+        "x": 0.575,
+        "y": 0.394,
+        "facing": "facing screen-left, in profile",
+        "dist": 5.55,
+        "visible": true
+      }
+    }
   }
 }

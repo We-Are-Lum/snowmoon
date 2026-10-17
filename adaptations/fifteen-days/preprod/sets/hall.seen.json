@@ -34,29 +34,29 @@
       {
         "id": "pitK",
         "name": "Kau's sunken pit at the edge of the floor",
-        "side": "centre"
+        "side": "right"
       },
       {
         "id": "screens",
         "name": "two big screens hung over the hall, showing the two players' faces",
-        "side": "left"
+        "side": "centre"
       }
     ],
     "people": {
       "D": {
         "side": "left",
-        "x": 0.311,
-        "y": 0.778,
+        "x": 0.333,
+        "y": 0.549,
         "facing": "facing screen-left, in profile",
-        "dist": 15.89,
+        "dist": 26.01,
         "visible": true
       },
       "K": {
-        "side": "centre",
-        "x": 0.632,
-        "y": 0.509,
-        "facing": "away from the camera, seen from behind",
-        "dist": 25.3,
+        "side": "right",
+        "x": 0.666,
+        "y": 0.551,
+        "facing": "facing screen-right, in profile",
+        "dist": 26.04,
         "visible": true
       }
     }
@@ -915,12 +915,12 @@
       {
         "id": "pitK",
         "name": "Kau's sunken pit at the edge of the floor",
-        "side": "centre"
+        "side": "right"
       },
       {
         "id": "screens",
         "name": "two big screens hung over the hall, showing the two players' faces",
-        "side": "left"
+        "side": "centre"
       }
     ],
     "people": {}
@@ -1061,6 +1061,96 @@
         "id": "pitD",
         "name": "Deluin's sunken pit at the edge of the floor",
         "side": "centre"
+      }
+    ],
+    "people": {}
+  },
+  "_top": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "centre"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "centre"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "centre"
+      },
+      {
+        "id": "posts",
+        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "side": "centre"
+      },
+      {
+        "id": "holo",
+        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "side": "centre"
+      },
+      {
+        "id": "pitD",
+        "name": "Deluin's sunken pit at the edge of the floor",
+        "side": "centre"
+      },
+      {
+        "id": "pitK",
+        "name": "Kau's sunken pit at the edge of the floor",
+        "side": "centre"
+      },
+      {
+        "id": "screens",
+        "name": "two big screens hung over the hall, showing the two players' faces",
+        "side": "right"
+      }
+    ],
+    "people": {}
+  },
+  "_low": {
+    "landmarks": [
+      {
+        "id": "tiers",
+        "name": "tiers of seats rising all around the hall, full of a varied crowd",
+        "side": "centre"
+      },
+      {
+        "id": "ring",
+        "name": "the standing ring around the top of the hall, crowded behind a railing",
+        "side": "centre"
+      },
+      {
+        "id": "walkway",
+        "name": "the broad walkway spanning the hall high above the floor, with a railing on each side",
+        "side": "centre"
+      },
+      {
+        "id": "posts",
+        "name": "identical black posts on small robotic bases, glowing cube clusters on top",
+        "side": "centre"
+      },
+      {
+        "id": "holo",
+        "name": "glowing holograms of gliders, little ships and walls of cubes in cyan and amber over the floor",
+        "side": "centre"
+      },
+      {
+        "id": "pitD",
+        "name": "Deluin's sunken pit at the edge of the floor",
+        "side": "left"
+      },
+      {
+        "id": "pitK",
+        "name": "Kau's sunken pit at the edge of the floor",
+        "side": "centre"
+      },
+      {
+        "id": "screens",
+        "name": "two big screens hung over the hall, showing the two players' faces",
+        "side": "left"
       }
     ],
     "people": {}

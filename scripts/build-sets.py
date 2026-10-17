@@ -55,6 +55,9 @@ def courtyard() -> dict:
               "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table"),
         group("lamp", [cyl([5.0, 1.8, -8.4], 0.06, 3.6, 0x77777f), {"shape": "sphere", "p": [5.0, 3.7, -8.4], "r": 0.22, "c": 0xe8e8ee}], "a street lamp by the gate"),
     ]
+    for o in s["objects"]:
+        if o.get("landmark") == "the wide table":
+            o["landmark"] = "the long rectangular wooden table"  # the owner: F17 came out round
     s["ground"] = {"w": 30, "d": 30}
     s["states"] = {
         "seated": {"D": {"at": [0, -0.95], "face": "S", "pose": "seated"}, "B": {"at": [0, 0.95], "face": "N", "pose": "seated"},
@@ -72,6 +75,9 @@ def courtyard() -> dict:
     s["setups"] = {
         "A": {"what": "wide, from the west", "cam": [-6.2, 1.9, 1.4], "look": [0.6, 0.8, -0.3], "fov": 40},
         "B": {"what": "toward Zei and Bai's later table (from behind Deluin's side)", "cam": [-1.4, 1.25, -1.6], "look": [3.0, 0.9, 0.6], "fov": 40},
+        # the owner: Zei with Bai small behind him is drawn on this plate, Bai already at her small table, headphones on
+        "B-bai": {"what": "as B, with Bai already at her small table, headphones on", "cam": [-1.4, 1.25, -1.6], "look": [3.0, 0.9, 0.6], "fov": 40,
+                  "people": {"B": {"at": [3.3, 1.35], "face": "N", "pose": "seated"}}},
         "C": {"what": "toward Deluin, the tree and the west side (from Zei's side)", "cam": [2.6, 1.25, 0.9], "look": [-2.5, 1.0, -1.6], "fov": 40},
         "D": {"what": "toward Bai across the table (from Deluin's side)", "cam": [-0.6, 1.25, -2.4], "look": [0.6, 0.9, 3.0], "fov": 40},
         "E": {"what": "the tabletop from above", "cam": [-0.3, 2.1, -0.6], "look": [0.35, 0.75, 0.05], "fov": 40},
@@ -111,7 +117,7 @@ def hall() -> dict:
     o.append(group("ring", ring, "the standing ring around the top of the hall, crowded behind a railing"))
     ringcrowd = [[round(math.cos(k / 70 * 6.2832) * (R1 + 1.1), 2), TOP, round(math.sin(k / 70 * 6.2832) * (R1 + 1.1), 2), "N", "standing"] for k in range(70)]
     o.append({"kind": "crowd", "id": "ringcrowd", "at": [[c[0], c[1], c[2], c[3], c[4]] for c in ringcrowd]})
-    walk = [box([0, TOP - 0.15, 0], [3.2, 0.3, 2 * R1 + 2], 0xc4c4ca)]
+    walk = [box([0, TOP - 0.15, 0], [3.2, 0.3, 2 * R1 + 2], 0x9c9ca6)]  # darker than the ring, so it reads
     walk += railing(-1.6, -R1, -1.6, R1, TOP, 26) + railing(1.6, -R1, 1.6, R1, TOP, 26)
     o.append(group("walkway", walk, "the broad walkway spanning the hall high above the floor, with a railing on each side"))
     o.append({"kind": "crowd", "id": "walkcrowd", "at": [[1.2, TOP, z, "E", "standing"] for z in (-9, -6.5, -3, 4, 7.5, 10.5)] + [[-1.2, TOP, z, "W", "standing"] for z in (-10, -7, 3.5, 6, 9.5)]})
@@ -148,7 +154,7 @@ def hall() -> dict:
         },
         "axis": {"cam_side": [-20, 6]},
         "setups": {
-            "A": {"what": "the whole hall from the standing ring on the south-west, the walkway crossing the frame", "cam": [-11.5, TOP + 2.6, 12.0], "look": [1.0, 2.0, -2.0], "fov": 62},
+            "A": {"what": "the whole hall from high above the south end of the walkway, which runs away across the middle, a pit on each side", "cam": [0.0, TOP + 7.0, 20.0], "look": [0.0, 0.0, -3.0], "fov": 60},
             "B": {"what": "low on the floor among the posts", "cam": [-4.0, 0.9, 6.8], "look": [1.5, 1.8, -1.5], "fov": 50},
             "P": {"what": "down into Deluin's pit, the tiers rising behind", "cam": [-6.6, 2.0, 1.2], "look": [-8.9, -0.2, 0], "fov": 46},
             "W": {"what": "the walkway from the air beside it, the floor below", "cam": [-6.5, TOP + 1.4, 2.5], "look": [-1.1, TOP + 1.0, 0], "fov": 42},

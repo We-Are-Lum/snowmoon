@@ -1,6 +1,6 @@
 // Render shots from a grey-box set: a labelled frame for the owner and a plain one (no labels) for the model.
 //   node scripts/set-render.mjs <seed> <set> [shot ...]
-// Writes images-out/preprod/set/<shot>.labelled.png and <shot>.png, and adaptations/<seed>/preprod/sets/<set>.seen.json
+// With --line, writes only <shot>.line.png (outlines on white). Otherwise writes images-out/preprod/set/<shot>.labelled.png and <shot>.png, and adaptations/<seed>/preprod/sets/<set>.seen.json
 // (per shot: the landmarks the camera sees, and each person's screen side and facing).
 import http from 'node:http';
 import fs from 'node:fs';
@@ -8,7 +8,8 @@ import path from 'node:path';
 import { chromium } from '/Users/nathan/snowmoon/node_modules/playwright-core/index.mjs';
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
-const [seed, setName, ...only] = process.argv.slice(2);
+const args = process.argv.slice(2); const LINE = args.includes('--line');
+const [seed, setName, ...only] = args.filter(a => a !== '--line');
 const setDir = path.join(ROOT, 'adaptations', seed, 'preprod', 'sets');
 const SET = JSON.parse(fs.readFileSync(path.join(setDir, `${setName}.json`), 'utf8'));
 const out = path.join(ROOT, 'images-out', 'preprod', 'set'); fs.mkdirSync(out, { recursive: true });
@@ -31,11 +32,11 @@ const seen = fs.existsSync(seenPath) ? JSON.parse(fs.readFileSync(seenPath, 'utf
 const shotsPath = path.join(setDir, `${setName}.shots.json`);
 const ALL = { ...(SET.shots || {}), ...(fs.existsSync(shotsPath) ? JSON.parse(fs.readFileSync(shotsPath, 'utf8')) : {}) };
 for (const shot of (only.length ? only : Object.keys(ALL))) {
-  for (const labels of [1, 0]) {
-    await p.goto(`http://localhost:${port}/?set=${setName}&shot=${shot}&labels=${labels}`);
-    await p.waitForFunction(() => document.title === 'done', null, { timeout: 60000 });
-    await p.screenshot({ path: path.join(out, `${shot}${labels ? '.labelled' : ''}.png`) });
-    if (!labels) seen[shot] = await p.evaluate(() => window.RESULT);
+  for (const mode of LINE ? ['line'] : ['labels', 'plain']) {
+    await p.goto(`http://localhost:${port}/?set=${setName}&shot=${shot}&labels=${mode === 'labels' ? 1 : 0}&line=${mode === 'line' ? 1 : 0}`);
+    await p.waitForFunction(() => document.title === 'done', null, { timeout: 120000 });
+    await p.screenshot({ path: path.join(out, `${shot}${mode === 'labels' ? '.labelled' : mode === 'line' ? '.line' : ''}.png`) });
+    if (mode === 'plain') seen[shot] = await p.evaluate(() => window.RESULT);
   }
   process.stdout.write(shot + ' ');
 }

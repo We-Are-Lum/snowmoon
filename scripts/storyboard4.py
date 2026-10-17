@@ -26,11 +26,15 @@ DESC = {"Z": "the slim young man with spiky black hair with one blue streak, dar
         "K": "the stocky young man with a shaved head and dark brown skin in a plain charcoal tunic"}
 ROBOT = ("the serving robot: a machine, not a person: a rounded white head with a dark face screen showing two small kind glowing eyes, slim white shoulders and jointed arms holding a flat tray, "
          "and no legs: below the waist a smooth white column down to a round gliding base")
+NO_ICONS = ("No signs, no panels with pictograms, no icons, no symbols anywhere: walls are bare. Screens show only what the shot describes, "
+            "or are blank and softly glowing. No letters, words, digits or numbers anywhere.")
 CARD = {"Z": "cards2/zei.png", "B": "cards2/bai.png", "D": "cards2/deluin.png", "K": "cards2/kau.png"}
 SIZE = {"EWS": "Extreme wide shot", "WS": "Wide shot", "MS": "Medium shot", "MCU": "Medium close-up", "CU": "Close-up", "ECU": "Extreme close-up",
         "INSERT": "Insert close-up", "OTS": "Over-the-shoulder shot", "POV": "Point-of-view shot"}
 CROWD = ("Every other person is an ordinary background figure in plain, muted everyday clothes with ordinary hair: no orange jackets, no magenta hair, "
          "no cream knitwear, nobody who looks like the main people.")
+FACES = "Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing."
+TABLE = "The table they share is a long rectangular wooden table, never round."
 SIDE = {"left": "on the left of the frame", "right": "on the right of the frame", "centre": "in the middle of the frame"}
 
 
@@ -55,7 +59,9 @@ def main() -> None:
     sets = adir / "sets"
     board = json.loads((adir / "storyboard-v4.json").read_text())["shots"]
     style = json.loads((ROOT / "adaptations" / seed / "style.json").read_text())
+    # the owner's approved plates: {plate id: option letter}; the pass waits for these
     approved = json.loads((adir / "plates-approved.json").read_text()) if (adir / "plates-approved.json").exists() else {}
+    line = set(json.loads((adir / "pass-line.json").read_text())) if (adir / "pass-line.json").exists() else set()
     seen = {n: json.loads((sets / f"{n}.seen.json").read_text()) for n in ("hall", "corridor", "courtyard", "lobby")}
     shotsj = {n: json.loads((sets / f"{n}.shots.json").read_text()) for n in seen}
     for s in board:
@@ -77,30 +83,39 @@ def main() -> None:
             score = ang + 4 * d - (40 if approved.get(pid) else 0)
             if best is None or score < best[0]:
                 best = (score, pid)
-        plate = s.get("plate_override") or best[1]
+        plate = "plate-courtyard-B-bai" if s.get("bai_bg") else (s.get("plate_override") or best[1])
+        plate_src = PRE / "plates2" / f"{plate}-{approved[plate]}.png" if approved.get(plate) else next(
+            p for p in (PRE / "plates" / f"{plate}.png", PRE / "plates2" / f"{plate}-e.png") if p.exists())  # before approval: round one
         sz = s["size"].split(",")[0].split(" ")[0]
         sz = "INSERT" if "INSERT" in s["size"] else sz
         sn = seen[n].get(s["id"], {"people": {}, "landmarks": []})
         people = [w for w in s["who"] if w != "R"]
-        refs = [small(PRE / "set" / f"{s['id']}.png", PRE / "set-small" / f"{s['id']}.png", 512),
-                small(PRE / "plates" / f"{plate}.png", PRE / "plates-small" / f"{plate}.png", 640)]
-        if len(people) >= 3:
+        carded = [w for w in people if not (w == "B" and s.get("bai_bg"))]
+        lay = "line" if s["id"] in line else ""
+        refs = [small(PRE / "set" / f"{s['id']}{'.line' if lay else ''}.png", PRE / "set-small" / f"{s['id']}{'.line' if lay else ''}.png", 512),
+                small(plate_src, PRE / "plates-small" / f"{plate_src.stem}.png", 640)]
+        if len(carded) >= 3:
             refs.append(small(PRE / "cards2" / "cast.png", PRE / "cards-small" / "cast.png", 560))
         else:
-            refs += [small(PRE / CARD[w], PRE / "cards-small" / Path(CARD[w]).name, 900) for w in people]
+            refs += [small(PRE / CARD[w], PRE / "cards-small" / Path(CARD[w]).name, 900) for w in carded]
         WHO = {**DESC, "R": "the serving robot"}
-        action = s["action"]
+        action = s["action"].replace("wide table", "long rectangular table")
         for k, v in WHO.items():
             action = action.replace("{" + k + "}", v)
         parts = [f"{SIZE.get(sz, '')} ({s['size']}). {action}",
-                 "Reference image 1 is a plain grey 3D layout render taken from this exact camera: copy its framing, height, angle and perspective, where each person sits or stands, "
-                 "how big each is in the frame and which way each faces, and where the table, chairs, railing, doors and walls stand; draw nothing of its grey blocks or simple figures as they are.",
-                 "Reference image 2 shows how the place looks: its materials, colours and light."]
-        if len(people) >= 3:
+                 ("Reference image 1 is a plain outline drawing on white of a 3D layout" if lay else "Reference image 1 is a plain grey 3D layout render") +
+                 " taken from this exact camera: copy its framing, height, angle and perspective, where each person sits or stands, "
+                 "how big each is in the frame and which way each faces, and where the table, chairs, railing, doors and walls stand; draw nothing of its " +
+                 ("bare outlines, white background" if lay else "grey blocks") + " or simple figures as they are.",
+                 "Reference image 2 shows how the place looks: its materials, colours and light. The finished picture is fully coloured and lit like that place picture, never grey."]
+        if s.get("bai_bg"):
+            parts.append("Reference image 2 already shows " + DESC["B"] + " at her small round table, headphones on: keep her exactly as she is there, small and soft in the "
+                         "background, and add only the other main person.")
+        if len(carded) >= 3:
             parts.append("Reference image 3 shows the three main people, one per row: " + "; ".join(DESC[w] for w in ("Z", "B", "D")) +
                          ". Copy only their faces, hair, skin and clothes, never the sheet's layout, poses or grey background.")
         else:
-            for i, w in enumerate(people, 3):
+            for i, w in enumerate(carded, 3):
                 parts.append(f"Reference image {i} is {DESC[w]}: copy only that person's face, hair, skin and clothes, never the sheet's layout, poses or grey background.")
         where = []
         for w in s["who"]:
@@ -117,14 +132,26 @@ def main() -> None:
         lms = [l["name"] for l in sn.get("landmarks", []) if l.get("name")]
         if lms and sz not in ("ECU", "INSERT"):
             parts.append("Behind them, as the layout shows: " + "; ".join(lms) + ".")
+        if any("rectangular" in l for l in lms) or "rectangular table" in action:
+            parts.append(TABLE)
+        if [w for w in people if w != "R"] and sz not in ("INSERT",):
+            parts.append(FACES)
         if "Z" in people:
             parts.append("The spiky-haired young man's eyes are dark brown.")
         if "menu" in s["action"] or "device" in s["action"]:
             parts.append("Menus and devices show only soft blank light, no writing.")
         st = style["prompt"].split(" Wherever the sky shows")[0] if n in ("hall", "corridor") else style["prompt"]
-        parts += [st, style["signs"], style["no_text"]]
+        signs = NO_ICONS if n in ("hall", "corridor") else style["signs"]
+        parts += [st, signs, style["no_text"]]
         s["prompt"], s["refs"], s["plate"] = " ".join(parts), refs, plate
     (adir / "storyboard4.json").write_text(json.dumps({"about": "Storyboard v4 with exact prompts and references (scripts/storyboard4.py).", "shots": board}, indent=2, ensure_ascii=False) + "\n")
+    # the full pass: one attempt per shot at 1024x576 (as the café tests), under the shared $5 cap
+    seeds = json.loads((adir / "pass-seeds.json").read_text()) if (adir / "pass-seeds.json").exists() else {}
+    jobs = [{"id": s["id"], "prompt": s["prompt"], "refs": s["refs"], "width": 1024, "height": 576, "seed": seeds.get(s["id"], 17000 + i)}
+            for i, s in enumerate(board) if s["prompt"]]
+    (adir / "pass-jobs.json").write_text(json.dumps({"about": "Fifteen Days storyboard frames, the full pass (owner, 2026-10-16): scripts/storyboard4.py. Prompts DRAFTED by the coding agent.",
+                                                     "out": "images-out/preprod/pass", "ledger": "images-out/preprod/ledger-s6.json", "cap_usd": 5.0, "style": "", "jobs": jobs},
+                                                    indent=2, ensure_ascii=False) + "\n")
     print(sum(1 for s in board if s["prompt"]), "prompts")
 
 

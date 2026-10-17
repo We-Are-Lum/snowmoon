@@ -22,7 +22,7 @@ order = [s["id"] for s in v3["shots"]]
 
 # --- the owner's notes on the storyboard (2026-10-16) ---
 order.remove("F10")
-shots["F05"].update(size="CU", who=["D"], action="{D} at the wide table, laughing, turns and waves someone over with a big smile.")
+shots["F05"].update(size="CU", who=["D"], action="{D} at the long rectangular table, a soft closed-mouth laugh, turns and raises one hand to wave someone over.")
 shots["F06"].update(size="MCU", who=["Z"], action="{Z} pulls out the chair at the end of the table and drops into it.")
 shots["F12"].update(composite="c14-b108 (the book's menu picture, a short insert)")
 shots["F14"].update(size="CU", action="{B}, close, glances around the courtyard, then down at her paper-thin menu, unimpressed.")
@@ -33,6 +33,12 @@ shots["S06"].update(size="ECU INSERT", action="Very close on the white sugar cub
 shots["S12"].update(size="ECU INSERT, from the side", who=["Z", "D"], action="From the side, low at table height: both their hands by the little wall of sugar cubes; {Z}'s finger flicks one cube out of the bottom row and it goes flying.")
 i = order.index("S12")
 order.insert(i + 1, "S12b")
+# the owner (2026-10-16): no open grins in any prompt unless the owner asks for one
+for sid, a in (("C05", "{Z}, standing, a small self-deprecating closed-mouth smile, rubbing the back of his neck."),
+               ("C08", "{Z}'s face, delighted, a warm closed-mouth smile."),
+               ("C17", "{Z} smiles, mouth closed, and nudges her shoulder with his; {B} rolls her eyes, half smiling."),
+               ("D04", "{Z} mirrors it with a closed-mouth smile: ten fingers, then five.")):
+    shots[sid]["action"] = a
 shots["S12b"] = {"id": "S12b", "scene": "courtyard", "size": "ECU INSERT", "who": [], "action": "The little wall of sugar cubes, now with a doorway in its bottom row.", "line": None, "look": "-", "dur_s": 2, "purpose": "The door in the wall (owner's note)."}
 
 # --- where each shot is, and how its camera is found ---
@@ -77,6 +83,10 @@ SPEC = {  # id: {state, cam, partner, mode, people overrides}
     "L05": {"state": ["together"], "pair": ["B", "Z"]}, "L06": {"state": ["together"], "partner": "B"}, "L08": {"mode": "face"}, "L10": {"state": ["together"], "ots": ["Z", "B"]},
     "L11": {"state": ["together"], "partner": "Z"},
 }
+# the owner: Zei with Bai small behind him (S04, R02, F26 and any others) is drawn on the plate from setup B with
+# Bai already at her table. Zei's singles in the later café scenes sit on the line from Bai's table through Zei,
+# turned a little so she shows beside his head, small; F26 is over Zei's shoulder onto her.
+BAI_BG = {"S04", "R02", "S10", "R04", "F26"}
 # who sits where per shot when the shot's "who" leaves people out of the frame they'd still be in: draw only who is listed.
 
 VIS = {"ECU": 0.32, "CU": 0.6, "MCU": 0.78, "MS": 1.3, "OTS": 1.0, "WS": 3.8, "EWS": 12, "POV": 2.0}
@@ -205,6 +215,24 @@ def solve(s, setdef):
     return {**shot, "cam": [c[0], y, c[1]], "look": [h[0], look_y, h[2]]}
 
 
+def bai_behind(s, cam, setdef):
+    """Zei's single with Bai small behind him: the camera on the line from her table through his head."""
+    pos = {**setdef["states"]["seated"], **setdef["states"]["bai-away"]}
+    z = head({**pos["Z"], "who": "Z"})
+    b = (pos["B"]["at"][0], pos["B"]["at"][1])
+    size = s["size"].split(",")[0].split(" ")[0]
+    d = dist_for(size if size in VIS else "CU") * 1.05
+    base = norm((z[0] - b[0], z[2] - b[1]))
+    c = side_pick(base, z, d, setdef["axis"]["cam_side"], 14)
+    cam["cam"] = [round(c[0], 3), cam["cam"][1], round(c[1], 3)]
+    cam["look"] = [z[0], cam["look"][1], z[2]]
+    cam["people"]["B"] = {k: v for k, v in pos["B"].items()}
+    cam["plate"] = "plate-courtyard-B-bai"
+    if "B" not in s["who"]:
+        s["who"] = s["who"] + ["B"]
+    s["bai_bg"] = True
+
+
 out = {}
 board = []
 setdefs = {n: json.loads((SETS / f"{n}.json").read_text()) for n in ("hall", "corridor", "courtyard", "lobby")}
@@ -215,12 +243,16 @@ for sid in order:
         board.append({**s, "set": sname, "camera": None})
         continue
     cam = solve(s, setdefs[sname])
+    if sid in BAI_BG and sid != "F26":
+        bai_behind(s, cam, setdefs[sname])
+    elif sid == "F26":
+        cam["plate"], s["bai_bg"] = "plate-courtyard-B-bai", True
     out.setdefault(sname, {})[sid] = cam
     board.append({**s, "set": sname, "camera": cam})
 # the plates: each setup's camera, the set empty of the main people
 for sname, sd in setdefs.items():
     for k, su in sd["setups"].items():
-        out.setdefault(sname, {})[f"plate-{sname}-{k}"] = {"cam": su["cam"], "look": su["look"], "fov": su["fov"], "people": {}}
+        out.setdefault(sname, {})[f"plate-{sname}-{k}"] = {"cam": su["cam"], "look": su["look"], "fov": su["fov"], "people": su.get("people", {})}
 for sname, sh in out.items():
     (SETS / f"{sname}.shots.json").write_text(json.dumps(sh, indent=1) + "\n")
 (HERE / "storyboard-v4.json").write_text(json.dumps({"about": __doc__.strip().splitlines()[0], "geography": v3["geography"], "shots": board}, indent=2, ensure_ascii=False) + "\n")

@@ -9971,7 +9971,7 @@
       0.3,
       34.0
      ],
-     "c": 12895434
+     "c": 10263718
     },
     {
      "shape": "line",
@@ -13459,18 +13459,18 @@
  },
  "setups": {
   "A": {
-   "what": "the whole hall from the standing ring on the south-west, the walkway crossing the frame",
+   "what": "the whole hall from high above the south end of the walkway, which runs away across the middle, a pit on each side",
    "cam": [
-    -11.5,
-    10.2,
-    12.0
+    0.0,
+    14.6,
+    20.0
    ],
    "look": [
-    1.0,
-    2.0,
-    -2.0
+    0.0,
+    0.0,
+    -3.0
    ],
-   "fov": 62
+   "fov": 60
   },
   "B": {
    "what": "low on the floor among the posts",

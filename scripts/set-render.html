@@ -11,18 +11,26 @@ const SET = await (await fetch(`/set/${q.get('set')}.json`)).json();
 let SHOTS = SET.shots || {}; try { const r2 = await fetch(`/set/${q.get('set')}.shots.json`); if (r2.ok) SHOTS = { ...SHOTS, ...(await r2.json()) }; } catch (e) {}
 const SHOT = SHOTS[q.get('shot')];
 const LABELS = q.get('labels') === '1';
+const LINE = q.get('line') === '1';   // outlines on white, for the model when shaded blocks leak their grey
 const W = 1536, H = 864;
 const r = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
 r.setSize(W, H); r.setPixelRatio(1); document.body.prepend(r.domElement);
-const scene = new THREE.Scene(); scene.background = new THREE.Color(0xf4f4f6); scene.fog = SET.fog ? new THREE.Fog(0xf4f4f6, SET.fog[0], SET.fog[1]) : null;
+const BG = LINE ? 0xffffff : 0xf4f4f6;
+const scene = new THREE.Scene(); scene.background = new THREE.Color(BG); scene.fog = SET.fog ? new THREE.Fog(BG, SET.fog[0], SET.fog[1]) : null;
 scene.add(new THREE.HemisphereLight(0xffffff, 0x9a9aa2, 2.2));
 const sun = new THREE.DirectionalLight(0xffffff, 1.4); sun.position.set(-6, 10, 4); scene.add(sun);
-const grey = c => new THREE.MeshLambertMaterial({ color: c });
-const EDGE = new THREE.LineBasicMaterial({ color: 0x3a3a40 });
+const grey = c => LINE ? new THREE.MeshBasicMaterial({ color: 0xffffff, polygonOffset: true, polygonOffsetFactor: 1, polygonOffsetUnits: 1 }) : new THREE.MeshLambertMaterial({ color: c });
+const EDGE = new THREE.LineBasicMaterial({ color: LINE ? 0x111114 : 0x3a3a40 });
+const HULL = new THREE.MeshBasicMaterial({ color: 0x111114, side: THREE.BackSide });
 const landmarks = [];   // {name, obj}
 function add(mesh, edges = true, parent = scene) {
   parent.add(mesh);
   if (edges) { const e = new THREE.LineSegments(new THREE.EdgesGeometry(mesh.geometry, 25), EDGE); e.position.copy(mesh.position); e.rotation.copy(mesh.rotation); e.scale.copy(mesh.scale); parent.add(e); }
+  if (edges && LINE) {  // a silhouette: a slightly larger back-facing black hull behind the white surface
+    mesh.geometry.computeBoundingBox(); const sz = mesh.geometry.boundingBox.getSize(new THREE.Vector3());
+    const h = new THREE.Mesh(mesh.geometry, HULL); h.position.copy(mesh.position); h.rotation.copy(mesh.rotation);
+    h.scale.set(1 + 0.03 / Math.max(sz.x, 0.02), 1 + 0.03 / Math.max(sz.y, 0.02), 1 + 0.03 / Math.max(sz.z, 0.02)); parent.add(h);
+  }
   return mesh;
 }
 function box(w, h, d, x, y, z, c = 0xd8d8dc, parent) { const m = new THREE.Mesh(new THREE.BoxGeometry(w, h, d), grey(c)); m.position.set(x, y, z); return add(m, true, parent); }
@@ -30,7 +38,7 @@ function cyl(rt, rb, h, x, y, z, c = 0xd8d8dc, seg = 24, parent) { const m = new
 const FACE = { N: Math.PI, S: 0, E: Math.PI / 2, W: -Math.PI / 2, NE: 3 * Math.PI / 4, NW: -3 * Math.PI / 4, SE: Math.PI / 4, SW: -Math.PI / 4 };
 // ground with a faint grid, so depth reads
 add(new THREE.Mesh(new THREE.PlaneGeometry(SET.ground.w, SET.ground.d).rotateX(-Math.PI / 2), grey(0xe6e6ea)), false);
-const grid = new THREE.GridHelper(Math.max(SET.ground.w, SET.ground.d), Math.max(SET.ground.w, SET.ground.d), 0xc4c4ca, 0xc4c4ca); grid.position.y = 0.002; scene.add(grid);
+const grid = new THREE.GridHelper(Math.max(SET.ground.w, SET.ground.d), Math.max(SET.ground.w, SET.ground.d), 0xc4c4ca, 0xc4c4ca); grid.position.y = 0.002; if (!LINE) scene.add(grid);
 
 function chair(x, z, face, parent = scene) {
   const g = new THREE.Group(); g.position.set(x, 0, z); g.rotation.y = FACE[face]; parent.add(g);
@@ -59,7 +67,7 @@ function person(who, at, face, pose, h = 1.0, col = 0xb9b9c0, y0 = 0) {
 }
 // generic shapes, for sets built in Python (scripts/build-sets.py): {kind:'group', id, landmark, prims:[{shape, p, s|r|h|pts, ry, c, edges, glow}]}
 function prim(pr, parent) {
-  const c = pr.glow && LABELS ? pr.glow : (pr.c ?? 0xd2d2d8); let m;
+  const c = pr.glow && LABELS && !LINE ? pr.glow : (pr.c ?? 0xd2d2d8); let m;
   if (pr.shape === 'box') m = new THREE.Mesh(new THREE.BoxGeometry(...pr.s), grey(c));
   else if (pr.shape === 'cyl') m = new THREE.Mesh(new THREE.CylinderGeometry(pr.rt ?? pr.r, pr.r, pr.h, pr.seg ?? 20, 1, !!pr.open, pr.t0 ?? 0, pr.tl ?? Math.PI * 2), grey(c));
   else if (pr.shape === 'sphere') m = new THREE.Mesh(new THREE.SphereGeometry(pr.r, 16, 10), grey(c));
