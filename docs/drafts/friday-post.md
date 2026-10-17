@@ -88,6 +88,8 @@ repo root works now.
 >
 > Every layer is already open in the repo: script, voices, 3D sets, cameras, prompts, frames, sound, timeline. GPL v3. github.com/We-Are-Lum/snowmoon
 
+"Fork the next shot (editor prototype below)." is approved (owner, 2026-10-17).
+
 Embeds (the cast's two, not in the text):
 1. the video: `https://snowmoon.party/@naaate/1` (the scene page; shows the video once it is live);
 2. the editor prototype: `https://claude.ai/artifact/NAuaFhUtoQKx8zHuANxwhU`.
