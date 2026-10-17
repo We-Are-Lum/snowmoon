@@ -178,17 +178,44 @@ blocked. Reading never requires signing in.
 of a scene. *Snowmoon* is by Vitalik Buterin; this edition is independent and not affiliated with
 him. Anything you make from it is GPL-3.0 too.
 
+You need Node 22 or later. For the scene steps (4 and 5) you also need Python 3.10 or later,
+[uv](https://docs.astral.sh/uv/) and ffmpeg. Steps 1 to 4 need no keys and cost nothing; they take
+about 30 minutes (the clone is about 100 MB).
+
 1. Fork [We-Are-Lum/snowmoon](https://github.com/We-Are-Lum/snowmoon) on GitHub and clone your fork.
 2. `npm install`, then `npm run build && npm start` runs the reader at http://localhost:3000.
-   No keys are needed to read, build or run the tests.
+   No keys are needed to read or build. The tests and checks run without keys too, with two
+   exceptions: `npm run check:principles` skips 7 checks that need the live database or Vercel,
+   and its P6a check fails on `--url=http://localhost:3000`, because a local reader loads media
+   from media.snowmoon.party.
 3. A scene lives in `adaptations/<seed>/`. The format is
    [docs/adaptation-format.md](docs/adaptation-format.md): a `brief.md`, then a `script.md` that people
-   write, and a log of what was made. Add your seed to `config/adaptations.json` and run
-   `npm run check:adaptations`.
-4. The guide to making a whole scene (timeline, mix and video render, with an example that runs
-   with no keys) is `docs/make-a-scene.md` on the
-   [`fork-ready`](https://github.com/We-Are-Lum/snowmoon/tree/fork-ready) branch. It is not merged
-   into `main` yet, and neither are the mix and render scripts it uses.
+   write, and a log of what was made. Add your seed to `config/adaptations.json` (copy an entry:
+   `slug`, `title`, `line`, `spoilers_through`, and `video_url` as `null`) and run
+   `npm run check:adaptations`. To see your seed at http://localhost:3000/adaptations, set
+   `ADAPTATIONS = { visible: true }` in `src/lib/config.ts`; it is off on this site for now.
+4. [docs/make-a-scene.md](docs/make-a-scene.md) is the guide to making a whole scene: timeline,
+   mix and video. Its example (`dog-dawn`) runs with no keys and makes an 87-second video with grey
+   stand-in pictures in about two minutes.
+5. Pictures and voices made by models cost money. Stills and designed voices run on fal.ai and
+   need your own `FAL_KEY` in `.env.local`: about $0.09 to design a voice and a few cents a still.
+   Fifteen Days cost about $42 in all (about $1 of voices, the rest stills and tests). Stills can
+   also run free on an Apple Silicon Mac (`scripts/illustrate.py`).
+
+What a fork cannot do yet:
+
+- **Re-cut Fifteen Days.** `scripts/cut-coverage.py` needs the scene's pictures, converted voices
+  and sounds. They live in `images-out/` and `scenes-out/`, which are not in the repository
+  until the maintainer publishes them. `scripts/coverage-plan.py fifteen-days` does run; it only
+  plans.
+- **Run some scripts as written.** A few (`set-render.mjs`, `cut-coverage.py`, `cut-v4.py`,
+  `convert-voice.py`, `design-voice.py`, `split-takes.py` and others) name paths on the
+  maintainer's Mac, such as `/Users/nathan/snowmoon/.venv-voice/bin/python`. Use your own Python
+  (the `.venv-scene` from the guide) instead. In `scripts/set-render.mjs`, import `playwright-core`
+  by name and point `THREE_DIR` at `node_modules/three`; it also needs a browser
+  (`npx playwright-core install chromium`).
+- **Convert a performance into a character's voice.** `convert-voice.py` needs the Chatterbox
+  weights on your machine, at a path you set in the script.
 
 The licence asks that what you share stays GPL-3.0, with its source. This edition also keeps its
 own rules, and anything shown on snowmoon.party will follow them:
