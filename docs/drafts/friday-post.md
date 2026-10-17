@@ -77,19 +77,22 @@ repo root works now.
   game sounds synthesized in code (`scripts/synth-device-sounds.py`). No AI-generated sound.
 - Camera and edit follow written coverage rules (`docs/coverage.md`); the plan, every setup's camera and its layout
   frame are files (`adaptations/fifteen-days/preprod/coverage.json`, `scripts/coverage-plan.py`).
-- **Only true after "publish":** the frames and cut aren't pushed yet, so "every layer is already open" holds once
-  `scenes-sound` is pushed and merged. The editor link is a prototype (a mockup, owner 2026-10-17), and both posts say so.
+- **Only true after "publish":** `scenes-sound` is pushed as a branch (2026-10-17) but not merged, so "every layer is
+  already open in the repo" holds on main only after the merge. The editor link is a prototype (a mockup, owner 2026-10-17), and both posts say so.
 
 ## Farcaster cast (under 320 characters)
 
-> Fifteen Days: one scene from Vitalik's Snowmoon. [video link]
-> 
-> Fork the next shot (editor prototype): https://claude.ai/artifact/NAuaFhUtoQKx8zHuANxwhU
-> 
-> Every layer is already open in the repo: script, voices, 3D sets, cameras, prompts, frames, sound, timeline. GPL v3. [repo link]
+> Fifteen Days: one scene from Vitalik's Snowmoon.
+>
+> Fork the next shot (editor prototype below).
+>
+> Every layer is already open in the repo: script, voices, 3D sets, cameras, prompts, frames, sound, timeline. GPL v3. github.com/We-Are-Lum/snowmoon
 
-311 characters with a 23-character video link, the 50-character editor prototype link and
-`github.com/We-Are-Lum/snowmoon` (counted 2026-10-17); 9 to spare. Count again with the real links.
+Embeds (the cast's two, not in the text):
+1. the video: `https://snowmoon.party/@naaate/1` (the scene page; shows the video once it is live);
+2. the editor prototype: `https://claude.ai/artifact/NAuaFhUtoQKx8zHuANxwhU`.
+
+243 characters of text, the repo link included (counted 2026-10-17); 77 to spare.
 
 ## Bounty post (longer)
 
