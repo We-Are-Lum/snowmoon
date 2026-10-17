@@ -1,7 +1,7 @@
 # Friday: end card, cast and bounty post (DRAFTS for Nate to rewrite or approve)
 
 **Updated 2026-10-17 (owner's note):** the cast and the bounty post now lead with the scene and "fork the next shot"
-(the editor prototype's link, coming from Claude), and say every layer is already open in the repo. The end-card
+(now the live editor's link; the prototype is "where it's going"), and say every layer is already open in the repo. The end-card
 options below are unchanged (option B is in the film).
 
 Drafted by the coding agent on 2026-10-15. Every line here goes out under Nate's name or inside the
@@ -78,23 +78,31 @@ repo root works now.
 - Camera and edit follow written coverage rules (`docs/coverage.md`); the plan, every setup's camera and its layout
   frame are files (`adaptations/fifteen-days/preprod/coverage.json`, `scripts/coverage-plan.py`).
 - **Only true after "publish":** `scenes-sound` is pushed as a branch (2026-10-17) but not merged, so "every layer is
-  already open in the repo" holds on main only after the merge. The editor link is a prototype (a mockup, owner 2026-10-17), and both posts say so.
+  already open in the repo" holds on main only after the merge. The live editor (read and play: move the camera and people, play the lines, save fork.json; Generate and publish
+  come next) is at /@naaate/1/shot/<shot> once published (publish step "editor live"); the prototype is linked as
+  "where it's going". `[video link]` can be `https://snowmoon.party/@naaate/1` (the scene page plays version 1).
 
 ## Farcaster cast (under 320 characters)
 
+**Updated 2026-10-17 late (owner: "'Fork the next shot' links the live editor, and the prototype link becomes 'where
+it's going'"). DRAFT:** the approved line said "(editor prototype below)"; it now reads "(live editor below)", and
+the prototype moves into the text as "Where it's going". Both changes are drafts for the owner's OK.
+
 > Fifteen Days: one scene from Vitalik's Snowmoon.
 >
-> Fork the next shot (editor prototype below).
+> Fork the next shot (live editor below).
 >
 > Every layer is already open in the repo: script, voices, 3D sets, cameras, prompts, frames, sound, timeline. GPL v3. github.com/We-Are-Lum/snowmoon
-
-"Fork the next shot (editor prototype below)." is approved (owner, 2026-10-17).
+>
+> Where it's going: claude.ai/artifact/NAuaFhUtoQKx8zHuANxwhU
 
 Embeds (the cast's two, not in the text):
-1. the video: `https://snowmoon.party/@naaate/1` (the scene page; shows the video once it is live);
-2. the editor prototype: `https://claude.ai/artifact/NAuaFhUtoQKx8zHuANxwhU`.
+1. the scene: `https://snowmoon.party/@naaate/1` (the page with the video);
+2. the live editor: `https://snowmoon.party/@naaate/1/shot/first` (opens on the first shot with a camera and a line;
+   FORK on the scene page goes to the same place).
 
-243 characters of text, the repo link included (counted 2026-10-17); 77 to spare.
+299 characters of text, the repo and prototype links included (counted 2026-10-17); 21 to spare.
+Earlier approved line, for reference: "Fork the next shot (editor prototype below)." (owner, 2026-10-17).
 
 ## Bounty post (longer)
 
@@ -104,8 +112,10 @@ Embeds (the cast's two, not in the text):
 >
 > [One line on the scene, in Nate's words.]
 >
-> **Fork the next shot.** Editor prototype: https://claude.ai/artifact/NAuaFhUtoQKx8zHuANxwhU
-> Pick a shot, change it, and make the next one. You don't have to start from nothing: every layer of this scene is
+> **Fork the next shot.** Live editor: https://snowmoon.party/@naaate/1/shot/first
+> Pick a shot, move its camera and people, play its lines, and save your fork. Where it's going (a prototype of the
+> whole editor): https://claude.ai/artifact/NAuaFhUtoQKx8zHuANxwhU
+> You don't have to start from nothing: every layer of this scene is
 > already open in the repo, under GPL v3 like the book.
 >
 > **Every layer, open:**
