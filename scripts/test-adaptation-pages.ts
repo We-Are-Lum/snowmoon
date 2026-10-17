@@ -19,8 +19,9 @@
  *
  * Checks: /@naaate/1, /@naaate/1/v/1, /1, a renamed name, a slug, a wallet address (and its
  * checksum case), "nothing here yet", SHARE and copy link, the cast composer (website and inside a
- * Farcaster client), and the phone width. The video is a placeholder (video_url null), so the
- * player says it isn't published yet; that is expected.
+ * Farcaster client), and the phone width. Version 1's video and poster are named on media.snowmoon.party
+ * (uploaded in publish step (b)); the browser here is refused anything outside the local site, so the
+ * check reads the player's src and poster rather than playing it.
  */
 import path from 'node:path';
 import { mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
@@ -194,12 +195,13 @@ try {
     const page = await newPage(browser);
     const res = await page.goto(BASE + url);
     const t = await mainText(page);
+    const player = await page.locator('video.scene-video').evaluate((v) => ({ src: v.getAttribute('src'), poster: v.getAttribute('poster') })).catch(() => null);
     const canonical = await page.locator('link[rel="canonical"]').getAttribute('href').catch(() => null);
     const embedRaw = await page.locator('meta[name="fc:miniapp"]').getAttribute('content').catch(() => null);
     const embed = embedRaw ? (JSON.parse(embedRaw) as { button?: { title?: string; action?: { url?: string } } }) : null;
     const headOk = canonical === `${PUBLIC}/@naaate/1` && embed?.button?.action?.url === `${PUBLIC}/@naaate/1` && embed?.button?.title === 'Watch it';
-    const pass = headOk && h.status === 200 && res?.status() === 200 && /Fifteen Days/i.test(t) && /@naaate.s chosen version/i.test(t) && /The video is not published yet/i.test(t) && /Version 1 /i.test(t) && /AI-generated, not by the author/i.test(t);
-    await record(1, 'owner page', url, `200; title Fifteen Days; @naaate's chosen version; version 1; the AI label; the video not published yet (placeholder); canonical and fc:miniapp embed point at ${PUBLIC}/@naaate/1`, page, { status: h.status, canonical, embedUrl: embed?.button?.action?.url ?? null }, pass);
+    const pass = headOk && h.status === 200 && res?.status() === 200 && /Fifteen Days/i.test(t) && /@naaate.s chosen version/i.test(t) && player?.src === 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-f76a3312e1fd.mp4' && player?.poster === 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-poster-3caad9b75656.jpg' && /Version 1 /i.test(t) && /AI-generated, not by the author/i.test(t);
+    await record(1, 'owner page', url, `200; title Fifteen Days; @naaate's chosen version; version 1; the AI label; the player plays v1's cut from media.snowmoon.party with the café master as its poster; canonical and fc:miniapp embed point at ${PUBLIC}/@naaate/1`, page, { status: h.status, player, canonical, embedUrl: embed?.button?.action?.url ?? null }, pass);
     await page.context().close();
   }
 

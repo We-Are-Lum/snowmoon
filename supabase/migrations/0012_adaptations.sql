@@ -167,13 +167,14 @@ revoke execute on function studio.adaptation_version_fixed() from public;
 -- ---------------------------------------------------------------------------
 
 insert into studio.adaptations (id, owner_person, title) values (1, 6786, 'Fifteen Days');
--- PLACEHOLDER: video_url and poster_url are null until the owner's cut is published
--- on media.snowmoon.party. Versions are append-only, so publish the cut as a new version (2)
--- and point the owner's page at it, rather than editing this row.
+-- The cut is on version 1 itself (owner, 2026-10-17: nothing is public yet, so /@naaate/1/v/1 is the
+-- exact cut the posts link to): v5 of the coverage cut, sha256 f76a3312…, and the café master as
+-- its poster, both named by their sha256 on media.snowmoon.party and uploaded in publish step (b)
+-- (npm run publish:scene-video). Versions are append-only from here on.
 insert into studio.adaptation_versions (id, adaptation_id, parent_version_id, author_person, recipe)
 values (1, 1, null, 6786, jsonb_build_object(
-  'video_url', null,
-  'poster_url', null,
+  'video_url', 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-f76a3312e1fd.mp4',
+  'poster_url', 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-poster-3caad9b75656.jpg',
   'recipe_url', 'https://github.com/We-Are-Lum/snowmoon/tree/main/adaptations/fifteen-days',
   'ai_label', 'Pictures: AI-generated, not by the author · Voices: @naaate''s performances, AI-converted.',  -- owner's wording, approved 2026-10-17
   'after_chapter', 14,

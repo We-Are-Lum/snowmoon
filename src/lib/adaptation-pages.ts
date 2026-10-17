@@ -47,8 +47,8 @@ export interface Version {
 /**
  * Sunday's fallback (owner, 2026-10-17): adaptation 1 is Fifteen Days, by FID 6786 (@naaate), and
  * the owner's page shows version 1. The same rows are seeded by 0012.
- * PLACEHOLDER: video_url is null until the owner's cut is published on media.snowmoon.party;
- * until then the page says the video isn't published yet.
+ * The cut and its poster are named by their sha256 on media.snowmoon.party and uploaded in publish
+ * step (b) (npm run publish:scene-video); until then the player finds nothing there.
  */
 const STATIC = {
   adaptations: [{ id: 1, owner: 6786, title: 'Fifteen Days' }] as Adaptation[],
@@ -59,8 +59,8 @@ const STATIC = {
       parentId: null,
       author: 6786,
       recipe: {
-        video_url: null,
-        poster_url: null,
+        video_url: 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-f76a3312e1fd.mp4',
+        poster_url: 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-poster-3caad9b75656.jpg',
         // The scene's recipe folder on main (owner, 2026-10-17); it loads once scenes-sound is merged.
         recipe_url: 'https://github.com/We-Are-Lum/snowmoon/tree/main/adaptations/fifteen-days',
         // The owner's wording (approved 2026-10-17): keeps P2b's standard "AI-generated, not by the author". No watermark claims.
