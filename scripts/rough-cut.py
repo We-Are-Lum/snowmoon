@@ -1,6 +1,6 @@
 """Build an adaptation's rough cut: the converted lines in each location's acoustics, music, stand-in cards.
 
-  /Users/nathan/snowmoon/.venv-image/bin/python scripts/rough-cut.py fifteen-days
+  python scripts/rough-cut.py fifteen-days
   then: python scripts/mix-scene.py fifteen-days && python scripts/render-scene.py fifteen-days
 
 Reads script.md's lines (recording-lines.json), the converted lines in scenes-out/<seed>/lines/, the

@@ -26,9 +26,10 @@ from datetime import datetime, timedelta, timezone
 from pathlib import Path
 
 from PIL import Image
+from snowmoon_paths import IMAGE_PY  # the shared tools, for a fork or a worktree
 
 ROOT = Path(__file__).resolve().parent.parent
-IMG_PY = "/Users/nathan/snowmoon/.venv-image/bin/python"
+IMG_PY = IMAGE_PY
 _spec = importlib.util.spec_from_file_location("fal_shots", ROOT / "scripts" / "fal-shots.py")
 fs = importlib.util.module_from_spec(_spec)
 _spec.loader.exec_module(fs)

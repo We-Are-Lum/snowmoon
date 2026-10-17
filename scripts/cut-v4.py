@@ -1,7 +1,7 @@
 """Build the Fifteen Days cuts from storyboard v4: Full (every shot), Tight (about 3:00-3:30, close-up-heavy) and Five
 (about five minutes, from the owner's notes in the clip viewer, 2026-10-17: no camera moves, tighter gaps, trims, sounds).
 
-  /Users/nathan/snowmoon/.venv-voice/bin/python scripts/cut-v4.py fifteen-days [full|tight|both|five] [--render]
+  python scripts/cut-v4.py fifteen-days [full|tight|both|five] [--render]
 
 Per cut, writes scenes-out/<seed>/cuts/<cut>/timeline.json (every time absolute, from @start), its stems,
 and, with --render, runs scripts/mix-scene.py and scripts/render-scene.py on it: <cut>.mp4 beside it,
@@ -26,6 +26,7 @@ import sys
 from pathlib import Path
 
 import soundfile as sf
+from snowmoon_paths import VOICE_PY  # the shared tools, for a fork or a worktree
 
 ROOT = Path(__file__).resolve().parent.parent
 PRE = ROOT / "images-out" / "preprod"
@@ -526,7 +527,7 @@ def main() -> None:
         tl = build(seed, cut)
         if "--render" in sys.argv:
             rel = str(tl.relative_to(ROOT))
-            py = "/Users/nathan/snowmoon/.venv-voice/bin/python"
+            py = VOICE_PY
             subprocess.run([py, "scripts/mix-scene.py", seed, "--timeline", rel], cwd=ROOT, check=True)
             subprocess.run([py, "scripts/render-scene.py", seed, "--timeline", rel], cwd=ROOT, check=True)
             out = tl.parent / f"{cut}.mp4"

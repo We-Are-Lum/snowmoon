@@ -16,9 +16,10 @@ import json
 import subprocess
 import time
 from pathlib import Path
+from snowmoon_paths import IMAGE_PY  # the shared tools, for a fork or a worktree
 
 ROOT = Path(__file__).resolve().parent.parent
-IMG_PY = "/Users/nathan/snowmoon/.venv-image/bin/python"
+IMG_PY = IMAGE_PY
 NO_TEXT = "No text, no lettering, no signs with words, no logos, no numbers."
 
 

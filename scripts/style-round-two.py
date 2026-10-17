@@ -27,10 +27,11 @@ import sys
 import time
 from datetime import datetime, timezone
 from pathlib import Path
+from snowmoon_paths import IMAGE_PY  # the shared tools, for a fork or a worktree
 
 ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT / "scripts"))
-IMG_PY = "/Users/nathan/snowmoon/.venv-image/bin/python"
+IMG_PY = IMAGE_PY
 DESIGNS = ROOT / "content" / "snowmoon" / "designs"
 LONGCAT = {"endpoint": "fal-ai/longcat-video/distilled/image-to-video/480p", "price_usd_per_second": 0.005,
            "price_seen": "config/models.json longcat-video, 2026-10-13", "weights": "https://huggingface.co/meituan-longcat/LongCat-Video",

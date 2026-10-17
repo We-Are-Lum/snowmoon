@@ -1,6 +1,6 @@
 """A 45-60 s trailer for the cast, cut from the rendered coverage cut (owner, 2026-10-17: "propose the moments, no new words").
 
-  /Users/nathan/snowmoon/.venv-voice/bin/python scripts/cut-trailer.py <seed>
+  python scripts/cut-trailer.py <seed>
 
 Reads scenes-out/<seed>/cuts/coverage/timeline.json and cuts/coverage.mp4, takes the MOMENTS below (each from one shot or
 line to another, or the first seconds of a line), joins them with short audio and picture fades, and ends on a title card

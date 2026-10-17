@@ -31,6 +31,7 @@ from pathlib import Path
 
 import numpy as np
 import soundfile as sf
+from snowmoon_paths import MAIN, VOICE_MODELS  # the shared tools, for a fork or a worktree
 
 ROOT = Path(__file__).resolve().parent.parent
 MODEL_ID = "whisper-small-en"
@@ -278,10 +279,10 @@ def main() -> None:
     ap.add_argument("--stand-in", action="store_true", help="test recordings made with synthetic voices")
     args = ap.parse_args()
     src = args.dir.expanduser().resolve()
-    if (ROOT.resolve() in src.parents or Path("/Users/nathan/snowmoon").resolve() in src.parents) and not args.stand_in:
+    if (ROOT.resolve() in src.parents or MAIN in src.parents) and not args.stand_in:
         raise SystemExit("refused: recordings must stay in a private folder outside the repository")
     model_rec = next(m for m in json.loads((ROOT / "config" / "models.json").read_text())["models"] if m["id"] == MODEL_ID)
-    model = Path("/Users/nathan/snowmoon/.voice-models/whisper/ggml-small.en.bin")
+    model = VOICE_MODELS / "whisper" / "ggml-small.en.bin"
     if sha256(model) != model_rec["local"]["weights"]["ggml-small.en.bin"]:
         raise SystemExit("the Whisper weights don't match the pinned sha256 in config/models.json")
     lines = json.loads((ROOT / "adaptations" / args.seed / "recording-lines.json").read_text())["lines"]

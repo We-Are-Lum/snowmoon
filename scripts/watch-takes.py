@@ -28,6 +28,7 @@ import subprocess
 import time
 from datetime import datetime
 from pathlib import Path
+from snowmoon_paths import MAIN  # the shared tools, for a fork or a worktree
 
 ROOT = Path(__file__).resolve().parent.parent
 NAME = re.compile(r"^beat-(\d+)(?: \d+)?\.([A-Za-z0-9]+)$", re.I)
@@ -54,7 +55,7 @@ def main() -> None:
     ap.add_argument("--quiet", type=float, default=30, help="minutes with no new recording before processing")
     args = ap.parse_args()
     inbox, dest = args.inbox.expanduser(), args.dir.expanduser().resolve()
-    if ROOT.resolve() in dest.parents or Path("/Users/nathan/snowmoon").resolve() in dest.parents:
+    if ROOT.resolve() in dest.parents or MAIN in dest.parents:
         raise SystemExit("refused: --dir is inside a repository folder")
     (dest / "takes").mkdir(parents=True, exist_ok=True)
     logf = dest / "takes" / "watch.log"

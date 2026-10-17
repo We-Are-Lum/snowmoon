@@ -16,7 +16,7 @@ adaptations/<seed>/voices/<id>.recipe.json: host, endpoint, the exact descriptio
 settings, the host's request id, the price as listed, the cost, and the clip's sha256. The ledger
 of every call is scenes-out/<seed>/voices/ledger.json.
 
-  /Users/nathan/snowmoon/.venv-voice/bin/python scripts/design-voice.py fifteen-days zei deluin bai [--cap 1]
+  python scripts/design-voice.py fifteen-days zei deluin bai [--cap 1]
 """
 
 import argparse

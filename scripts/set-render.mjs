@@ -5,9 +5,13 @@
 import http from 'node:http';
 import fs from 'node:fs';
 import path from 'node:path';
-import { chromium } from '/Users/nathan/snowmoon/node_modules/playwright-core/index.mjs';
+import { execSync } from 'node:child_process';
 
 const ROOT = path.resolve(path.dirname(new URL(import.meta.url).pathname), '..');
+// node_modules is the main checkout's (a git worktree shares it; for a plain clone it is the clone's own), or SNOWMOON_NODE_MODULES.
+const MAIN = (() => { try { return path.dirname(path.resolve(ROOT, execSync('git rev-parse --git-common-dir', { cwd: ROOT }).toString().trim())); } catch { return ROOT; } })();
+const NODE = process.env.SNOWMOON_NODE_MODULES || path.join(MAIN, 'node_modules');
+const { chromium } = await import(path.join(NODE, 'playwright-core', 'index.mjs'));
 // --depth writes <shot>.depth.png (a depth map for the depth ControlNet); --look writes <shot>.look.png (readable: textures, shadows,
 // people in their clothes' colours); --empty adds .empty to the name and draws nobody (plates).
 const args = process.argv.slice(2); const LINE = args.includes('--line'), DEPTH = args.includes('--depth'), LOOK = args.includes('--look'), EMPTY = args.includes('--empty');
@@ -15,7 +19,7 @@ const [seed, setName, ...only] = args.filter(a => !a.startsWith('--'));
 const setDir = path.join(ROOT, 'adaptations', seed, 'preprod', 'sets');
 const SET = JSON.parse(fs.readFileSync(path.join(setDir, `${setName}.json`), 'utf8'));
 const out = path.join(ROOT, 'images-out', 'preprod', 'set'); fs.mkdirSync(out, { recursive: true });
-const THREE_DIR = '/Users/nathan/snowmoon/node_modules/three';
+const THREE_DIR = path.join(NODE, 'three');
 const server = http.createServer((req, res) => {
   const u = new URL(req.url, 'http://x'); let f;
   if (u.pathname === '/') f = path.join(ROOT, 'scripts', 'set-render.html');

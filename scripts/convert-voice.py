@@ -11,9 +11,9 @@ The take is read where it lies and never copied. A take inside this repository i
 raw recording can't be committed by accident; --stand-in allows a synthetic source made for
 testing (never a person's voice). The recipe records the take's sha256, never the take.
 
-  /Users/nathan/snowmoon/.venv-voice/bin/python scripts/convert-voice.py fifteen-days \
+  python scripts/convert-voice.py fifteen-days \
       --take ~/Recordings/line-1.m4a --voices zei deluin bai [--name line-1]
-  /Users/nathan/snowmoon/.venv-voice/bin/python scripts/convert-voice.py fifteen-days --batch jobs.json
+  python scripts/convert-voice.py fifteen-days --batch jobs.json
 
 A batch (from scripts/split-takes.py) loads the model once and writes scenes-out/<seed>/<out>/.
 
@@ -29,6 +29,7 @@ import subprocess
 import time
 from datetime import datetime, timezone
 from pathlib import Path
+from snowmoon_paths import MAIN, VOICE_MODELS  # the shared tools, for a fork or a worktree
 
 ROOT = Path(__file__).resolve().parent.parent
 MODEL_ID = "chatterbox-vc"
@@ -68,13 +69,13 @@ def main() -> None:
         take = Path(j["take"]).expanduser().resolve()
         if not take.exists():
             raise SystemExit(f"no such take: {take}")
-        inside = ROOT.resolve() in take.parents or (Path("/Users/nathan/snowmoon").resolve() in take.parents)
+        inside = ROOT.resolve() in take.parents or (MAIN in take.parents)
         if inside and not args.stand_in:
             raise SystemExit("refused: the take is inside a repository folder; keep raw takes in a private folder outside it")
         j["take"] = take
     model = next(m for m in json.loads((ROOT / "config" / "models.json").read_text())["models"] if m["id"] == MODEL_ID)
     rev = model["revision"]
-    wdir = Path("/Users/nathan/snowmoon/.voice-models/chatterbox") / rev
+    wdir = VOICE_MODELS / "chatterbox" / rev
     for fname, want in model["local"]["weights"].items():
         if sha256(wdir / fname) != want:
             raise SystemExit(f"{fname} does not match the pinned sha256 in config/models.json")

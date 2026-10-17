@@ -1,6 +1,6 @@
 """Cut performed takes from a hand-checked assignment, when the automatic slate reader can't follow a session.
 
-  /Users/nathan/snowmoon/.venv-voice/bin/python scripts/cut-takes.py fifteen-days [--dir ~/snowmoon-takes/full]
+  python scripts/cut-takes.py fifteen-days [--dir ~/snowmoon-takes/full]
 
 scripts/split-takes.py finds the utterances (pauses) and transcribes each one locally. Here the takes are
 matched to lines from <dir>/takes/assign.json instead of from the spoken slates: for each line, the
@@ -21,6 +21,7 @@ from pathlib import Path
 
 import importlib.util
 import soundfile as sf
+from snowmoon_paths import MAIN  # the shared tools, for a fork or a worktree
 
 ROOT = Path(__file__).resolve().parent.parent
 _spec = importlib.util.spec_from_file_location("split_takes", ROOT / "scripts" / "split-takes.py")
@@ -35,7 +36,7 @@ def main() -> None:
     ap.add_argument("--dir", type=Path, default=Path("~/snowmoon-takes/full"))
     args = ap.parse_args()
     src = args.dir.expanduser().resolve()
-    if ROOT.resolve() in src.parents or Path("/Users/nathan/snowmoon").resolve() in src.parents:
+    if ROOT.resolve() in src.parents or MAIN in src.parents:
         raise SystemExit("refused: recordings must stay in a private folder outside the repository")
     outdir = src / "takes"
     assign = json.loads((outdir / "assign.json").read_text())

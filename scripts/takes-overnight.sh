@@ -13,7 +13,7 @@ SEED=${1:?seed}
 DIR=${2:-$HOME/snowmoon-takes/full}
 QUIET=${3:-30}
 ROOT=$(cd "$(dirname "$0")/.." && pwd)
-PY=/Users/nathan/snowmoon/.venv-voice/bin/python
+PY=$(python3 -c "import sys; sys.path.insert(0, \"$(dirname "$0")\"); from snowmoon_paths import VOICE_PY; print(VOICE_PY)")
 TEST=${STAND_IN:+--stand-in}  # STAND_IN=1 for a test with synthetic voices
 mkdir -p "$DIR"
 until ls "$DIR"/beat-* >/dev/null 2>&1 && [ -z "$(find "$DIR" -maxdepth 1 -name 'beat-*' -mmin -"$QUIET")" ]; do sleep 60; done
