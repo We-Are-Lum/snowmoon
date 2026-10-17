@@ -171,3 +171,36 @@ which sends the token as `Authorization: Bearer …`. The server verifies it on
 every request (`src/lib/auth.ts`). There are no cookies, because on Farcaster
 web the app runs in a cross-site iframe where third-party cookies may be
 blocked. Reading never requires signing in.
+
+## How to fork
+
+*Draft.* Everything here is GPL-3.0, like the book, so you may fork it and make your own version
+of a scene. *Snowmoon* is by Vitalik Buterin; this edition is independent and not affiliated with
+him. Anything you make from it is GPL-3.0 too.
+
+1. Fork [We-Are-Lum/snowmoon](https://github.com/We-Are-Lum/snowmoon) on GitHub and clone your fork.
+2. `npm install`, then `npm run build && npm start` runs the reader at http://localhost:3000.
+   No keys are needed to read, build or run the tests.
+3. A scene lives in `adaptations/<seed>/`. The format is
+   [docs/adaptation-format.md](docs/adaptation-format.md): a `brief.md`, then a `script.md` that people
+   write, and a log of what was made. Add your seed to `config/adaptations.json` and run
+   `npm run check:adaptations`.
+4. The guide to making a whole scene (timeline, mix and video render, with an example that runs
+   with no keys) is `docs/make-a-scene.md` on the
+   [`fork-ready`](https://github.com/We-Are-Lum/snowmoon/tree/fork-ready) branch. It is not merged
+   into `main` yet, and neither are the mix and render scripts it uses.
+
+The licence asks that what you share stays GPL-3.0, with its source. This edition also keeps its
+own rules, and anything shown on snowmoon.party will follow them:
+
+- The book's text is never altered. A book line is quoted exactly, at its block.
+- People write every published word (narration, dialogue). A model may draft structure, labelled
+  as model-drafted.
+- AI use is declared where it appears, and every model-made file has a public recipe with its
+  exact prompt.
+- Link the book and this repository.
+
+[docs/principles.md](docs/principles.md) explains these rules and the checks behind them.
+
+Publishing a fork on snowmoon.party, and an editor that forks a scene in the app, are not built
+yet. For now, a fork lives in your own repository.
