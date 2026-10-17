@@ -581,7 +581,7 @@
       "license_line": "License: apache-2.0",
       "license_text": "Qwen-Image is licensed under Apache 2.0.",
       "license_checked": {
-        "by": "coding agent, overnight 2026-10-16; PROVISIONAL until the owner confirms",
+        "by": "coding agent, overnight 2026-10-16; confirmed by the owner 2026-10-17 (Apache-2.0)",
         "on": "2026-10-16",
         "source": "https://huggingface.co/Qwen/Qwen-Image-Edit-2509"
       },

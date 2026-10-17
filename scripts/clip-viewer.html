@@ -1,0 +1,217 @@
+<title>Fifteen Days clips</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Clip viewer for the Fifteen Days cuts: the video, one comment box and the comment list on the left; the playing shot
+   (frame options, line, script text, reviewer's notes) on the right; one column on a phone. Same palette as the frames page. */
+:root{--bg:#f3f2f7;--fg:#1b1a2b;--muted:#5d5a78;--line:#d6d3e6;--panel:#e9e7f2;--paper:#ffffff;--accent:#5b3fd1;--claude:#a85a1f;--ok:#1d7a4b;--bad:#b42340;
+--display:"Chakra Petch",system-ui,sans-serif;--body:"Source Serif 4",Georgia,serif;--mono:"JetBrains Mono",ui-monospace,monospace}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0d0e1c;--fg:#e9e7f5;--muted:#a19dc0;--line:#2b2a46;--panel:#16172b;--paper:#1c1d33;--accent:#a996ff;--claude:#f0a868;--ok:#5fd39a;--bad:#ff6b85;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0d0e1c;--fg:#e9e7f5;--muted:#a19dc0;--line:#2b2a46;--panel:#16172b;--paper:#1c1d33;--accent:#a996ff;--claude:#f0a868;--ok:#5fd39a;--bad:#ff6b85;color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--fg);font:15px/1.5 var(--body);padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:12px 48px}
+.app{max-width:1600px;margin:0 auto;display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:24px;align-items:start}
+@media (max-width:900px){.app{grid-template-columns:1fr}}
+.left{display:grid;gap:10px;min-width:0}
+.top{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px}
+h1{font:600 22px/1.15 var(--display);margin:0}
+.status{font:12px var(--mono);color:var(--muted)}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden}
+.seg button{font:12px var(--mono);padding:6px 12px;border:0;background:transparent;color:var(--fg);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--accent);color:var(--bg)}
+video{width:100%;aspect-ratio:16/9;max-width:100%;background:#000;border-radius:6px;display:block}
+.say{display:flex;gap:8px;align-items:flex-end}
+.say .at{font:12px var(--mono);color:var(--muted);white-space:nowrap;padding-bottom:10px;font-variant-numeric:tabular-nums}
+textarea{flex:1;min-width:0;min-height:42px;font:15px/1.4 var(--body);color:var(--fg);background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:9px 10px;resize:vertical}
+textarea:focus{outline:2px solid var(--accent);outline-offset:0;border-color:transparent}
+.btn{font:13px var(--mono);padding:8px 14px;border-radius:6px;border:1px solid var(--line);background:var(--paper);color:var(--fg);cursor:pointer;min-height:40px}
+.btn:focus-visible,.seg button:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.keys{font:12px var(--mono);color:var(--muted)}
+.list{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.list li{display:grid;grid-template-columns:4.2em 3.6em minmax(0,1fr) auto;gap:8px;align-items:baseline;padding:6px 6px;border-radius:5px;cursor:pointer}
+.list li:hover,.list li:focus-visible{background:var(--panel);outline:none}
+.list li.here{background:var(--panel)}
+.list .t{font:12px var(--mono);color:var(--accent);font-variant-numeric:tabular-nums}
+.list .s{font:12px var(--mono);color:var(--muted)}
+.list .x{white-space:pre-wrap;word-break:break-word}
+.list li.claude .x::before{content:"Claude · ";font:500 12px var(--mono);color:var(--claude)}
+.list li.claude{border-left:2px solid var(--claude)}
+.list .del{font:11px var(--mono);border:0;background:transparent;color:var(--muted);cursor:pointer;padding:2px 4px}
+.list .del:hover{color:var(--bad)}
+.list li.other .t{color:var(--muted)}
+h2{font:500 15px var(--display);margin:4px 0 0}
+.shot{display:grid;gap:14px;min-width:0;position:sticky;top:calc(env(safe-area-inset-top,0px) + 12px)}
+@media (max-width:900px){.shot{position:static}}
+.head{border-top:3px solid var(--fg);padding-top:8px}
+.head .id{font:600 26px/1.1 var(--display)}.head .id small{font:13px var(--mono);color:var(--muted);margin-left:8px}
+.head .meta{font:13px var(--mono);color:var(--muted)}
+.opts{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:8px}
+.opt{all:unset;cursor:pointer;display:grid;gap:4px;align-content:start;padding:5px;border-radius:6px;outline:2px solid transparent;min-width:0}
+.opt img{width:100%;height:auto;border-radius:4px;display:block}
+.opt span{font:11px var(--mono);color:var(--muted)}
+.opt[aria-pressed="true"]{outline-color:var(--accent);background:var(--panel)}.opt[aria-pressed="true"] span{color:var(--accent)}
+.opt:focus-visible{outline-color:var(--fg)}
+.flag{font:600 11px var(--mono);letter-spacing:.05em;text-transform:uppercase}.flag.pass{color:var(--ok)}.flag.fail{color:var(--bad)}
+.ln{border-left:3px solid var(--accent);padding-left:10px}
+.ln .who{font:500 13px var(--display)}.ln .who span{font:12px var(--mono);color:var(--muted)}
+.muted{color:var(--muted);font-size:14px}
+.rev{font-size:14px;color:var(--muted);margin:0}.rev b{font:500 12px var(--mono);color:var(--fg)}
+p{margin:0;max-width:70ch}
+</style>
+<div class="app">
+  <section class="left" aria-label="Player and comments">
+    <div class="top"><h1>Fifteen Days clips</h1><div class="seg" role="group" aria-label="Cut" id="cuts"></div><span class="status" id="status">loading…</span></div>
+    <video id="v" controls playsinline preload="auto"></video>
+    <form class="say" id="say"><span class="at" id="at">0:00.0</span><textarea id="box" rows="1" placeholder="Pause and type a comment. Enter saves." aria-label="Comment at this moment"></textarea><button class="btn" type="submit">Save</button></form>
+    <div class="keys">Space plays and pauses · ← → step shot to shot · Shift+Enter for a new line · Esc back to the video</div>
+    <h2 id="lh">Comments</h2>
+    <ul class="list" id="list"></ul>
+  </section>
+  <section class="shot" id="shot" aria-live="polite"></section>
+</div>
+<script>
+const DATA = __DATA__;
+const $ = id => document.getElementById(id);
+const v = $("v");
+let CUT = "tight", D = DATA.cuts[CUT], cur = -1, db = null, loading = 0;
+const notes = new Map(), picks = new Map();
+
+const fmt = t => { t = Math.max(0, t); const m = Math.floor(t / 60), s = t - m * 60; return m + ":" + (s < 10 ? "0" : "") + s.toFixed(1); };
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"}[c]));
+const setStatus = s => { $("status").textContent = s; };
+const shotAt = t => { const s = D.shots; for (let i = s.length - 1; i >= 0; i--) if (t >= s[i].t0 - 0.001) return i; return 0; };
+
+// The cut's fMP4 segments, appended in order through Media Source, play as one video.
+async function load(cut, at) {
+  const my = ++loading;
+  CUT = cut; D = DATA.cuts[cut]; cur = -1;
+  for (const b of $("cuts").children) b.setAttribute("aria-pressed", b.dataset.cut === cut);
+  setStatus("loading video…"); paintList();
+  const base = "vid/" + cut + "/";
+  const MS = window.ManagedMediaSource || window.MediaSource;
+  if (!MS || !MS.isTypeSupported(D.codec)) { setStatus("this browser can't play the cut here; use Chrome or Safari on the Mac"); return; }
+  const ms = new MS();
+  if (window.ManagedMediaSource) v.disableRemotePlayback = true;
+  v.src = URL.createObjectURL(ms);
+  await new Promise(r => ms.addEventListener("sourceopen", r, {once: true}));
+  const sb = ms.addSourceBuffer(D.codec);
+  const append = buf => new Promise((res, rej) => { sb.addEventListener("updateend", res, {once: true}); sb.addEventListener("error", rej, {once: true}); sb.appendBuffer(buf); });
+  try {
+    await append(await (await fetch(base + "init.mp4")).arrayBuffer());
+    for (const [i, f] of D.segs.entries()) {
+      const buf = await (await fetch(base + f)).arrayBuffer();
+      if (my !== loading) return;
+      await append(buf);
+      if (i === 0) ready(at);
+      if (i < D.segs.length - 1) setStatus(`loading video ${i + 1}/${D.segs.length}`);
+    }
+    if (ms.readyState === "open") ms.endOfStream();
+    setStatus(db ? "comments save as you go" : "comments not connected");
+  } catch (e) { setStatus("the video didn't load: " + (e && e.message || e)); }
+}
+function ready(at) {
+  const go = () => { v.currentTime = at || 0; update(true); };
+  if (v.readyState >= 1) go(); else v.addEventListener("loadedmetadata", go, {once: true});
+}
+
+// The panel: the shot under the playhead.
+function render() {
+  const s = D.shots[cur]; if (!s) return;
+  const lines = D.lines.filter(l => l.t0 < s.t1 && l.t1 > s.t0);
+  const mine = picks.get(s.id);
+  const chosen = mine || (s.opts.find(o => o.in_cut) || {}).key;
+  $("shot").innerHTML = `<header class="head"><div class="id">${esc(s.id)}<small>${cur + 1} of ${D.shots.length} · ${esc(s.scene)}</small></div>
+    <div class="meta">${esc(s.size)}${s.size ? " · " : ""}${fmt(s.t0)}–${fmt(s.t1)}</div></header>
+    ${s.opts.length ? `<div class="opts" role="group" aria-label="Frame options">${s.opts.map(o => `<button class="opt" data-pick="${esc(o.key)}" aria-pressed="${o.key === chosen}">
+        <img src="${o.img}" alt="${esc(o.key)}"><span>${esc(o.key)}${o.in_cut ? " · in the cut" : ""}${o.key === mine ? " · your pick" : ""}${o.verdict ? ` · <b class="flag ${o.verdict}">${o.verdict}</b> ${o.score ?? "?"}/10` : ""}</span></button>`).join("")}</div>` : ""}
+    ${lines.length ? lines.map(l => `<div class="ln"><div class="who">${esc(l.who)} <span>${esc(l.L)} · ${fmt(l.t0)}</span></div><p>${esc(l.text)}</p></div>`).join("") : `<p class="muted">No line in this shot.</p>`}
+    <p>${esc(s.action)}</p>
+    ${s.opts.filter(o => o.note).map(o => `<p class="rev"><b>Reviewer on ${esc(o.key)}:</b> ${esc(o.note)}</p>`).join("")}`;
+}
+$("shot").addEventListener("click", async e => {
+  const b = e.target.closest("[data-pick]"); if (!b) return;
+  const s = D.shots[cur]; const key = b.dataset.pick;
+  if (!db) { setStatus("not connected: the pick wasn't saved"); return; }
+  const old = picks.get(s.id); picks.set(s.id, key); render();
+  try { await db.doc("picks/" + s.id).set({pick: key, at: new Date().toISOString()}); setStatus("picked " + key); }
+  catch (err) { old ? picks.set(s.id, old) : picks.delete(s.id); render(); setStatus("pick not saved: " + (err.code || err.message)); }
+});
+
+// Comments: one box, one list.
+function paintList() {
+  const order = Object.fromEntries(D.shots.map((s, i) => [s.id, i]));
+  const rows = [...notes.entries()].sort((a, b) => {
+    const ta = a[1].cut === CUT ? a[1].t : (D.shots[order[a[1].shot]]?.t0 ?? 1e9), tb = b[1].cut === CUT ? b[1].t : (D.shots[order[b[1].shot]]?.t0 ?? 1e9);
+    return ta - tb; });
+  $("lh").textContent = rows.length ? `Comments (${rows.length})` : "Comments";
+  const here = D.shots[cur]?.id;
+  $("list").innerHTML = rows.length ? rows.map(([id, n]) => `<li tabindex="0" data-id="${id}" class="${n.by === "claude" ? "claude" : ""}${n.cut !== CUT ? " other" : ""}${n.shot === here ? " here" : ""}">
+      <span class="t">${n.cut === CUT ? fmt(n.t) : n.cut}</span><span class="s">${esc(n.shot)}</span><span class="x">${esc(n.text)}</span>
+      <button class="del" data-del="${id}" aria-label="Delete this comment">delete</button></li>`).join("")
+    : `<li class="muted">No comments yet.</li>`;
+}
+function jump(id) {
+  const n = notes.get(id); if (!n) return;
+  if (n.cut === CUT) seek(n.t); else { const s = D.shots.find(x => x.id === n.shot); if (s) seek(s.t0 + 0.02); }
+}
+$("list").addEventListener("click", async e => {
+  const del = e.target.closest("[data-del]");
+  if (del) {
+    if (!del.dataset.armed) { del.dataset.armed = "1"; del.textContent = "sure?"; setTimeout(() => { if (del.isConnected) { delete del.dataset.armed; del.textContent = "delete"; } }, 3000); return; }
+    const id = del.dataset.del, old = notes.get(id); notes.delete(id); paintList();
+    try { await db.doc("notes/" + id).delete(); setStatus("deleted"); } catch (err) { notes.set(id, old); paintList(); setStatus("not deleted: " + (err.code || err.message)); }
+    return;
+  }
+  const li = e.target.closest("li[data-id]"); if (li) jump(li.dataset.id);
+});
+$("list").addEventListener("keydown", e => { const li = e.target.closest("li[data-id]"); if (li && e.key === "Enter") jump(li.dataset.id); });
+$("say").addEventListener("submit", async e => {
+  e.preventDefault();
+  const text = $("box").value.trim(), s = D.shots[cur]; if (!text || !s) return;
+  if (!db) { setStatus("not connected: the comment wasn't saved"); return; }
+  const id = Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+  const n = {cut: CUT, shot: s.id, t: Math.round(v.currentTime * 10) / 10, text, at: new Date().toISOString(), by: "owner"};
+  notes.set(id, n); $("box").value = ""; paintList(); setStatus("saving…");
+  try { await db.doc("notes/" + id).set(n); setStatus("saved at " + fmt(n.t) + " · " + s.id); }
+  catch (err) { notes.delete(id); $("box").value = text; paintList(); setStatus("not saved: " + (err.code || err.message)); }
+});
+$("box").addEventListener("keydown", e => {
+  if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); $("say").requestSubmit(); }
+  else if (e.key === "Escape") { e.preventDefault(); $("box").blur(); }
+});
+$("box").addEventListener("input", () => { if (!v.paused) v.pause(); });
+
+// Playhead and keys.
+function seek(t) { v.currentTime = Math.max(0, Math.min(D.dur - 0.05, t)); update(true); }
+function update(force) {
+  const t = v.currentTime, i = shotAt(t);
+  $("at").textContent = fmt(t);
+  if (i !== cur || force === true && cur < 0) { cur = i; render(); paintList(); }
+}
+let raf = 0;
+const tick = () => { update(); raf = v.paused ? 0 : requestAnimationFrame(tick); };
+v.addEventListener("play", () => { if (!raf) raf = requestAnimationFrame(tick); });
+v.addEventListener("pause", () => update());
+v.addEventListener("seeked", () => update());
+v.addEventListener("timeupdate", () => { if (v.paused) update(); });
+window.addEventListener("keydown", e => {
+  const a = document.activeElement;
+  if (a && (a.tagName === "TEXTAREA" || a.tagName === "INPUT") || e.metaKey || e.ctrlKey || e.altKey) return;
+  if (e.key === " ") { if (a && a.tagName === "BUTTON") return; e.preventDefault(); v.paused ? v.play() : v.pause(); }
+  else if (e.key === "ArrowLeft") { e.preventDefault(); const s = D.shots[cur]; seek(v.currentTime - s.t0 > 1 ? s.t0 + 0.02 : D.shots[Math.max(0, cur - 1)].t0 + 0.02); }
+  else if (e.key === "ArrowRight") { e.preventDefault(); seek(D.shots[Math.min(D.shots.length - 1, cur + 1)].t0 + 0.02); }
+}, true);
+
+$("cuts").innerHTML = Object.entries(DATA.cuts).map(([k, c]) => `<button data-cut="${k}" aria-pressed="false">${k === "tight" ? "Tight" : "Full"} ${fmt(c.dur).replace(/\.\d$/, "")}</button>`).join("");
+$("cuts").onclick = e => { const b = e.target.closest("button"); if (!b || b.dataset.cut === CUT) return;
+  const id = D.shots[cur]?.id; v.pause(); const nx = DATA.cuts[b.dataset.cut].shots.find(s => s.id === id); load(b.dataset.cut, nx ? nx.t0 + 0.02 : 0); };
+load("tight", 0);
+(async () => {
+  try { db = window.claude ? await window.claude.use("db") : null; } catch (e) { db = null; }
+  if (!db) { setStatus("comments not connected: open this page on claude.ai to save"); return; }
+  db.collection("notes").onSnapshot(snap => { notes.clear(); for (const d of snap.docs) { const n = d.data(); if (n) notes.set(d.id, n); } paintList(); },
+    e => setStatus("comments disconnected: " + e.code));
+  db.collection("picks").onSnapshot(snap => { picks.clear(); for (const d of snap.docs) { const p = d.data(); if (p && p.pick) picks.set(d.id, p.pick); } render(); },
+    e => setStatus("picks disconnected: " + e.code));
+})();
+</script>
