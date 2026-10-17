@@ -76,20 +76,20 @@ repo root works now.
 - Sound: CC0 recordings from Freesound (each credited in `adaptations/fifteen-days/sounds/recipe.json`) and device and
   game sounds synthesized in code (`scripts/synth-device-sounds.py`). No AI-generated sound.
 - Camera and edit follow written coverage rules (`docs/coverage.md`); the plan, every setup's camera and its layout
-  frame are files (`adaptations/fifteen-days/preprod/coverage.json`, `scripts/coverage.py`).
+  frame are files (`adaptations/fifteen-days/preprod/coverage.json`, `scripts/coverage-plan.py`).
 - **Only true after "publish":** the frames and cut aren't pushed yet, so "every layer is already open" holds once
-  `scenes-sound` is pushed and merged. The editor link doesn't exist yet: [editor link] stays a placeholder until Claude sends it.
+  `scenes-sound` is pushed and merged. The editor link is a prototype (a mockup, owner 2026-10-17), and both posts say so.
 
 ## Farcaster cast (under 320 characters)
 
 > Fifteen Days: one scene from Vitalik's Snowmoon. [video link]
 > 
-> Fork the next shot: [editor link]
+> Fork the next shot (editor prototype): https://claude.ai/artifact/NAuaFhUtoQKx8zHuANxwhU
 > 
 > Every layer is already open in the repo: script, voices, 3D sets, cameras, prompts, frames, sound, timeline. GPL v3. [repo link]
 
-190 characters without the links; 273 with a 23-character video link, a 30-character editor link and
-`github.com/We-Are-Lum/snowmoon` (counted 2026-10-17). Count again with the real links.
+311 characters with a 23-character video link, the 50-character editor prototype link and
+`github.com/We-Are-Lum/snowmoon` (counted 2026-10-17); 9 to spare. Count again with the real links.
 
 ## Bounty post (longer)
 
@@ -99,7 +99,7 @@ repo root works now.
 >
 > [One line on the scene, in Nate's words.]
 >
-> **Fork the next shot.** [editor link]
+> **Fork the next shot.** Editor prototype: https://claude.ai/artifact/NAuaFhUtoQKx8zHuANxwhU
 > Pick a shot, change it, and make the next one. You don't have to start from nothing: every layer of this scene is
 > already open in the repo, under GPL v3 like the book.
 >
