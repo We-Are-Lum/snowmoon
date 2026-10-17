@@ -1,0 +1,88 @@
+/* Adaptation scene pages (/@<fname>/<id>). From the owner's mockup (boards "1 · Scene page" and
+   "8 · Phone: watch"), in the site's own tokens and floors: Crimson Pro and DM Mono only, text 12px,
+   tap targets 44px. The mockup's Instrument Sans helper lines are set in Crimson Pro here, since the
+   site keeps Instrument Sans for in-world Veridian screens (check:ui). */
+
+.scene {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: var(--space-5) var(--gutter) 64px;
+}
+
+.scene-top { display: flex; flex-wrap: wrap; gap: 28px; align-items: flex-start; }
+.scene-watch { flex: 999 1 560px; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.scene-side { flex: 1 1 320px; min-width: 0; display: flex; flex-direction: column; gap: 18px; }
+
+.scene-video { display: block; width: 100%; aspect-ratio: 16 / 9; background: var(--night); }
+.scene-video-empty { display: grid; place-items: center; color: var(--night-body); font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase; padding: 0 var(--space-4); text-align: center; }
+
+.scene-under { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px 16px; color: var(--muted); text-transform: uppercase; }
+
+.scene .label { text-transform: uppercase; }
+.scene-head { display: flex; flex-direction: column; gap: 8px; border-top: 2px solid var(--ink); padding-top: 12px; }
+.scene-where { color: var(--link); overflow-wrap: anywhere; }
+.scene-muted { color: var(--muted); }
+.scene-title { margin: 0; font-weight: 400; font-size: var(--text-display); line-height: 1; }
+
+.scene-facts { margin: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 16px; font-size: 16px; }
+.scene-facts dt { color: var(--muted); }
+.scene-facts dd { margin: 0; }
+
+/* The buttons. Desktop: one column, SHARE, its panel, FORK, MAKE YOUR OWN. */
+.scene-actions { display: flex; flex-direction: column; gap: 10px; }
+.scene-btn {
+  display: flex; flex-direction: column; align-items: flex-start; gap: 2px;
+  width: 100%; min-height: 64px; padding: 10px 18px; box-sizing: border-box;
+  border-radius: var(--radius); text-align: left; text-decoration: none; cursor: pointer;
+  font-family: var(--label); font-size: 15px; letter-spacing: var(--ls-label); text-transform: uppercase;
+}
+.scene-btn:hover { text-decoration: none; }
+.scene-btn-sub { font-family: var(--reading); font-size: 15px; letter-spacing: 0; text-transform: none; line-height: 1.3; }
+.scene-share { border: 0; background: var(--btn); color: var(--btn-ink); }
+.scene-share .scene-btn-sub { color: var(--rule); }
+.scene-fork { border: 2px solid var(--ink); color: var(--ink); }
+.scene-fork .scene-btn-sub { color: var(--body); }
+.scene-soon { border: 1px dashed var(--muted); background: transparent; color: var(--body); cursor: default; }
+:where(.scene-btn, .scene-small):focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+
+.scene-share-panel {
+  display: flex; flex-direction: column; gap: 10px; padding: 14px;
+  background: var(--card); border: 1px solid var(--rule); color: var(--body); font-size: 16px; line-height: 1.4;
+}
+.scene-link {
+  display: flex; align-items: center; min-height: var(--tap); padding: 0 10px; border-radius: var(--radius);
+  border: 1px solid var(--faint); background: var(--paper); color: var(--ink);
+  font-family: var(--label); font-size: 14px; overflow-wrap: anywhere;
+}
+.scene-link-inline { font-family: var(--label); font-size: 14px; color: var(--ink); overflow-wrap: anywhere; }
+.scene-share-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.scene-small {
+  min-height: var(--tap); padding: 0 14px; border-radius: var(--radius); cursor: pointer;
+  border: 1px solid var(--ink); background: transparent; color: var(--ink);
+  font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase;
+}
+.scene-small-solid { border: 0; background: var(--btn); color: var(--btn-ink); }
+.scene-small-quiet { border-color: var(--faint); color: var(--body); }
+.scene-fixed { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding-top: 10px; border-top: 1px solid var(--rule); }
+.scene-fixed > span:first-child { flex: 1 1 160px; }
+
+.scene-latest { display: inline-flex; align-items: center; min-height: var(--tap); }
+.scene-provenance { margin-top: var(--space-6); }
+.scene-nothing h1 { font-weight: 400; }
+
+/* Phone: the player edge to edge, SHARE and FORK side by side, the panel under them, then MAKE YOUR OWN. */
+@media (max-width: 719px) {
+  .scene { padding-top: 0; }
+  .scene-top { gap: 18px; }
+  .scene-watch { margin: 0 calc(-1 * var(--gutter)); }
+  .scene-under { padding: 0 var(--gutter); }
+  .scene-title { font-size: 36px; line-height: 1.05; }
+  .scene-head { border-top: 0; padding-top: 0; }
+  .scene-actions { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .scene-btn { min-height: 56px; align-items: center; justify-content: center; text-align: center; font-size: 14px; padding: 8px 10px; }
+  .scene-btn .scene-btn-sub { display: none; }
+  .scene-share { order: 1; }
+  .scene-fork { order: 2; }
+  .scene-share-panel { order: 3; grid-column: 1 / -1; }
+  .scene-soon { order: 4; grid-column: 1 / -1; min-height: 52px; font-size: 13px; }
+}

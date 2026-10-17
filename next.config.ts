@@ -53,6 +53,16 @@ const nextConfig: NextConfig = {
   async redirects() {
     return [{ source: '/make', destination: 'https://github.com/We-Are-Lum/snowmoon', permanent: false }];
   },
+  // Adaptation pages (docs/proposals/adaptation-urls.md). A folder named `@…` is a parallel-route slot
+  // in the App Router, so the public /@<fname>/… URLs are rewritten to /adaptation/<id>/by/<fname>/….
+  // These run after the app's own pages and files, so no existing route is shadowed; /<id> is digits only.
+  async rewrites() {
+    return [
+      { source: '/@:handle/:id/v/:n', destination: '/adaptation/:id/by/:handle/v/:n' },
+      { source: '/@:handle/:id', destination: '/adaptation/:id/by/:handle' },
+      { source: '/:id(\\d{1,9})', destination: '/adaptation/:id' },
+    ];
+  },
 };
 
 export default nextConfig;
