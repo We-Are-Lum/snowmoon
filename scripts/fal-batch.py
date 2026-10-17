@@ -8,7 +8,7 @@ The job file: {"about": ..., "out": "images-out/<dir>", "ledger": "images-out/<d
 is costed before it is made (listed price x (output MP, at least 1, + every reference's MP), as fal-shots.py does)
 and refused if the ledger would pass the cap; the cap is shared by every job file that names the same ledger.
 Each picture's recipe (endpoint, weights, prompt, seed, size, references and their sha256, request id, cost,
-output sha256) goes to <out>/recipe.json. The key comes from FAL_KEY (environment or .env.local), on stdin only.
+output sha256, and the job's layers when it has them) goes to <out>/recipe.json. The key comes from FAL_KEY (environment or .env.local), on stdin only.
 """
 
 import argparse
@@ -89,7 +89,8 @@ def main() -> None:
                 "served_at": datetime.now(timezone.utc).isoformat(timespec="seconds"), "prompt": prompt,
                 "seed": res.get("seed", body["seed"]), "width": img.get("width"), "height": img.get("height"),
                 "references": [{"file": str(r.relative_to(ROOT)), "sha256": fs.sha256(r)} for r in refs],
-                "cost_usd": cost, "file": str(path.relative_to(ROOT)), "sha256": fs.sha256(path), **({"note": j["note"]} if j.get("note") else {})}
+                "cost_usd": cost, "file": str(path.relative_to(ROOT)), "sha256": fs.sha256(path), **({"note": j["note"]} if j.get("note") else {}),
+                **({"layers": j["layers"]} if j.get("layers") else {})}
             recipe["spent_usd_ledger"] = ledger["spent_usd"]
             recipe_p.write_text(json.dumps(recipe, indent=2, ensure_ascii=False) + "\n")
             print(f"{j['id']}: ${cost}, ledger ${ledger['spent_usd']:.4f}", flush=True)

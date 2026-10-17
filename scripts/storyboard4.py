@@ -8,9 +8,13 @@ landmarks each camera sees, each person's screen side and facing) and the plates
   place reference  = the plate of the nearest camera setup (an approved plate wins over a nearer unapproved one);
   people           = one face-and-costume card each, or one three-person card; the robot in words only, never a card.
 The prompt names only the landmarks that shot's camera sees, and where each person is in frame and which way they
-face, in the set's own terms. Writes adaptations/<seed>/preprod/storyboard4.json and the small layout copies.
+face, in the set's own terms. Writes adaptations/<seed>/preprod/storyboard4.json and the small layout copies, which
+are committed in adaptations/<seed>/preprod/set-frames/ (shaded and outline, so a fork can swap either). Each shot and
+job carries its layers: the set and camera it came from, its set frame, plate and cards, each by sha256; fal-batch.py
+copies them into the frame's recipe.
 """
 
+import hashlib
 import json
 import math
 import sys
@@ -45,6 +49,10 @@ def small(src: Path, dst: Path, w: int) -> str:
         im.thumbnail((w, w))
         im.save(dst)
     return str(dst.relative_to(ROOT))
+
+
+def layer(rel: str, **kw) -> dict:
+    return {"file": rel, "sha256": hashlib.sha256((ROOT / rel).read_bytes()).hexdigest(), **kw}
 
 
 def fwd(c):
@@ -92,12 +100,19 @@ def main() -> None:
         people = [w for w in s["who"] if w != "R"]
         carded = [w for w in people if not (w == "B" and s.get("bai_bg"))]
         lay = "line" if s["id"] in line else ""
-        refs = [small(PRE / "set" / f"{s['id']}{'.line' if lay else ''}.png", PRE / "set-small" / f"{s['id']}{'.line' if lay else ''}.png", 512),
-                small(plate_src, PRE / "plates-small" / f"{plate_src.stem}.png", 640)]
+        frames = {m: small(PRE / "set" / f"{s['id']}{x}.png", adir / "set-frames" / f"{s['id']}{x}.png", 512) for m, x in (("shaded", ""), ("line", ".line"))}
+        refs = [frames["line" if lay else "shaded"], small(plate_src, PRE / "plates-small" / f"{plate_src.stem}.png", 640)]
         if len(carded) >= 3:
             refs.append(small(PRE / "cards2" / "cast.png", PRE / "cards-small" / "cast.png", 560))
         else:
             refs += [small(PRE / CARD[w], PRE / "cards-small" / Path(CARD[w]).name, 900) for w in carded]
+        cards = [CARD[w] for w in carded] if len(carded) < 3 else ["cards2/cast.png"]
+        s["layers"] = {
+            "set": layer(str((sets / f"{n}.json").relative_to(ROOT))),
+            "camera": {"file": str((sets / f"{n}.shots.json").relative_to(ROOT)), "key": s["id"], **cam},
+            "set_frame": layer(refs[0], mode="line" if lay else "shaded", rendered_from=f"images-out/preprod/set/{s['id']}{'.line' if lay else ''}.png"),
+            "plate": layer(refs[1], plate=plate, option=approved.get(plate), source=layer(str(plate_src.relative_to(ROOT)))),
+            "cards": [layer(r, source=layer(f"images-out/preprod/{c}")) for r, c in zip(refs[2:], cards)]}
         WHO = {**DESC, "R": "the serving robot"}
         action = s["action"].replace("wide table", "long rectangular table")
         for k, v in WHO.items():
@@ -147,7 +162,7 @@ def main() -> None:
     (adir / "storyboard4.json").write_text(json.dumps({"about": "Storyboard v4 with exact prompts and references (scripts/storyboard4.py).", "shots": board}, indent=2, ensure_ascii=False) + "\n")
     # the full pass: one attempt per shot at 1024x576 (as the café tests), under the shared $5 cap
     seeds = json.loads((adir / "pass-seeds.json").read_text()) if (adir / "pass-seeds.json").exists() else {}
-    jobs = [{"id": s["id"], "prompt": s["prompt"], "refs": s["refs"], "width": 1024, "height": 576, "seed": seeds.get(s["id"], 17000 + i)}
+    jobs = [{"id": s["id"], "prompt": s["prompt"], "refs": s["refs"], "width": 1024, "height": 576, "seed": seeds.get(s["id"], 17000 + i), "layers": s["layers"]}
             for i, s in enumerate(board) if s["prompt"]]
     (adir / "pass-jobs.json").write_text(json.dumps({"about": "Fifteen Days storyboard frames, the full pass (owner, 2026-10-16): scripts/storyboard4.py. Prompts DRAFTED by the coding agent.",
                                                      "out": "images-out/preprod/pass", "ledger": "images-out/preprod/ledger-s6.json", "cap_usd": 5.0, "style": "", "jobs": jobs},
