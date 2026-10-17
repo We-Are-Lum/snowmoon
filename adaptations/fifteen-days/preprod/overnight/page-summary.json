@@ -113,7 +113,16 @@
    "Tight is longer than the 3:00 to 3:30 you asked for. All 42 lines alone run about 3:41 with pauses trimmed to 0.3 s, so getting under 3:30 means dropping lines (beat 1 is marked optional in the script). I didn't drop any: that's your call.",
    "The videos below are small previews. The full-quality files are scenes-out/fifteen-days/cuts/full.mp4 and tight.mp4 on the Mac."
   ],
-  "videos": []
+  "videos": [
+   {
+    "src": "vid/fifteen-days-tight-preview.mp4",
+    "label": "Tight · 4:34 · 61 shots (preview, 480p)"
+   },
+   {
+    "src": "vid/fifteen-days-full-preview.mp4",
+    "label": "Full · 7:31 · 106 shots (preview, 360p)"
+   }
+  ]
  },
  {
   "title": "Voices (my pick; you confirm)",

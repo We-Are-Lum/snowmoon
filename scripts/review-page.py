@@ -85,7 +85,7 @@ def main() -> None:
         odir = adir / "overnight"
         picks = json.loads((odir / "frames-picks.json").read_text())
         review = json.loads((odir / "frames-review.json").read_text())
-        name = {"K": "A · depth-guided, klein finish", "Q": "A · depth-guided, Qwen finish", "B": "B · readable set"}
+        name = {"K": "A · depth-guided, klein finish", "Q": "A · depth-guided, Qwen finish", "B": "B · readable set", "C": "A · cropped in and refined"}
         scenes = []
         for pre, key, title, short in SCENES:
             shots = []
@@ -104,8 +104,7 @@ def main() -> None:
                                   "verdict": "pass" if v.get("pass") else "fail", "note": v.get("note", "")})
                 if not cands:
                     continue
-                shots.append({"id": s["id"], "size": s["size"], "line": s.get("line"), "action": act, "cands": cands,
-                              "frame": jpg(PRE / "set" / f"{s['id']}.look.png", out, f"{s['id']}.set.jpg", 300)})
+                shots.append({"id": s["id"], "size": s["size"], "line": s.get("line"), "action": act, "cands": cands})
             scenes.append({"key": key, "title": title, "short": short, "shots": shots})
         summary = json.loads((odir / "page-summary.json").read_text()) if (odir / "page-summary.json").exists() else []
         for sec in summary:  # pictures named by repo path become small copies beside the page; videos are copied as they are

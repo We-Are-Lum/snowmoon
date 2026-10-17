@@ -48,7 +48,8 @@ Tracks:
 - 01:30 Final: 75/103 shots with a passing frame, 48 with two. Best frames: 82 approach A (klein finish), 13 B, 5 crop, 3 Qwen finish. Spend ~$40.40 (recipes) vs ledger $40.70.
 - 01:30 cut-v4.py tight cut now prefers passing close shots and drops failing wordless beats (approach C). Rendering both cuts with the top pick per shot.
 
+- 01:50 Cuts rendered with the top pick per shot: full 7:31 (106 shots), tight 4:34 (61 shots). Previews (<14 MB) on the frames page.
+- 01:50 Frames page published (private): https://claude.ai/artifact/VmPdhc3csmQaErVFhgmncB — db collection frames2 (empty, checked).
+
 ## Next
-- Preview videos (<15 MB) for the page; build the frames page (review-page.py pick2) and publish it as a private artifact with the db (collection frames2).
-- Commit locally (no push): scripts, sets, set frames, sent plates/cards (adaptations/.../preprod/sent), recipes, overnight notes.
-- After the owner picks: read db frames2, write cut-pictures.json from the picks, re-render cuts, commit the picked frames (exact files) locally.
+- When the owner has picked: read db frames2, write cut-pictures.json from the picks, re-render the cuts (CUTS.md), and commit the picked frames (the exact files) locally. Push only on "publish".
