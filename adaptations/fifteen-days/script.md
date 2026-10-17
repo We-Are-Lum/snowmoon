@@ -104,14 +104,14 @@ so about four and a half minutes with the silent shots.
   - `by FID 6786 on 2026-10-15` Zei: Yeah, please ignore the ugly style. I also won by defense though, but for most of the game it just looks like I'm running scared.
   - `by FID 6786 on 2026-10-14` Deluin: Patience often does, until you win. Hey, do you want to get tea later? I'll be at the courtyard in about a longhour.
   - `by FID 6786 on 2026-10-15` Zei: Sure, yeah, that works well for me!
-  - `by FID 6786 on 2026-10-15` Deluin: Great, I'll see you then. Bai, you're welcome to come too. Hope to see you there! Bai.
+  - `by FID 6786 on 2026-10-15` Deluin: Great, I'll see you then. Bai, you're welcome to come too. Hope to see you there! *(performed, 2026-10-17: the trailing "Bye" cut)*
   *[She shrugs, with a disgruntled look on her face. Deluin goes. Bai gives Zei a hard look.]*
   - `by FID 6786 on 2026-10-15` Zei: See you. So are you gonna come? Should be fun! *("See you." to Deluin as he goes; the rest to Bai)*
   - `by FID 6786 on 2026-10-14` Bai: He's your competition, remember?
   - `by FID 6786 on 2026-10-14` Zei: Take it easy, you're my competition too.
   - `by FID 6786 on 2026-10-16` Bai: 'Was.' And you know I hate you. And I know all your tricks already anyway. *(re-recorded 2026-10-16; the script follows the performance)*
   *[She says it with a smile, and continues.]*
-  - `by FID 6786 on 2026-10-15` Bai: Deluin? We don't know anything about this guy.
+  - `by FID 6786 on 2026-10-15` Bai: We don't know anything about this guy. *(performed, 2026-10-17: "Deluin?" cut)*
   - `by FID 6786 on 2026-10-15` Zei: So let's get to know him, it'll be fun! Maybe he won't be so fake after all.
 
 ## Beat 3 · The café
@@ -153,7 +153,7 @@ so about four and a half minutes with the silent shots.
   - `by FID 6786 on 2026-10-14` Zei: "Hmmm. More straight horizontal lines than usual, and the three diagonal lines on the right. probably pronunciation markers?" *(after c14-b115; looking over the menu after "Hmmm")*
   - `by FID 6786 on 2026-10-15` Deluin: "Top right is 'kai', right? The extra vertical vein on the left is unusual, although I'm not sure I would make the images so detailed when they have such different meanings, depending on the context." *(after c14-b116)*
   - `book c14-b117` Zei: "Wait, you know Dzegoban?"
-  - `by FID 6786 on 2026-10-15` Deluin: "The whole point of Dzegoban is that you can learn it in less than a month." *(after c14-b118; in a lecturing tone)*
+  - `by FID 6786 on 2026-10-15` Deluin: "Zei, the whole point of Dzegoban is that you can learn it in less than a month." *(after c14-b118; in a lecturing tone; performed, 2026-10-17: "Zei," added as performed)*
   - `book c14-b119` Zei: "I'm impressed, you're almost a local already."
   *[Bai whips round with a half-baked excuse.]*
   - `by FID 6786 on 2026-10-15` Bai: Actually, I don't think I want anything. Plus, I've got a lot to catch up on. Zei, when you're done, come get me. I want to go over some things with you.
@@ -273,14 +273,14 @@ so about four and a half minutes with the silent shots.
   tea cup, his hand device lit. Second, Bai sitting down across from him without a word. Third, Zei
   turning his screen toward Bai; cut on her face. *(Invented: Bai.)*
 - **lettering:**
-  - `place, en` Pafogai Du, Dzego (book, c15-b48). Place only: the book gives this section no date
-    (c15-b1's Firemoon 17 heads the Freetown section).
+  - `place-date, en` Pafogai Du, Dzego · 3724 Firemoon 17 (book: the place from c15-b48, the date from c15-b1,
+    the chapter's dateline). The date shows a week has passed (owner, 2026-10-17).
   - Zei's screen: the book's own screen blocks, captured from the reader's template
     (`scripts/capture-screen.ts`) and composited onto the device: his fifth message (c15-b50), the
     reply (c15-b53), then the first sentence of the next (c15-b55, cut marked `…` and recorded).
 - **narration:** *(empty until a person writes it)*
 - **dialogue:**
-  *[On screen: Pafogai Du, Dzego] (book, c15-b48)*
+  *[On screen: Pafogai Du, Dzego · 3724 Firemoon 17] (book, c15-b48 and c15-b1)*
   *[Zei sits at a table in the lobby restaurant of his hotel. He's seems upset. Distraught. His tea has been refilled four times, and the rice and vegetables are untouched.] (after c15-b51)*
   *[On his screen, his fifth message: "Are you okay????! Please tell me where you are."] (c15-b50)*
   *[Bai sits down across from him, without a word.]*

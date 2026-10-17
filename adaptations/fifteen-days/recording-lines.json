@@ -128,9 +128,9 @@
       "beat": 2,
       "beat_title": "The corridor",
       "speaker": "Deluin",
-      "text": "Great, I'll see you then. Bai, you're welcome to come too. Hope to see you there! Bai.",
+      "text": "Great, I'll see you then. Bai, you're welcome to come too. Hope to see you there!",
       "tag": "by FID 6786 on 2026-10-15",
-      "note": null,
+      "note": "performed, 2026-10-17: the trailing \"Bye\" cut",
       "moment": null
     },
     {
@@ -183,9 +183,9 @@
       "beat": 2,
       "beat_title": "The corridor",
       "speaker": "Bai",
-      "text": "Deluin? We don't know anything about this guy.",
+      "text": "We don't know anything about this guy.",
       "tag": "by FID 6786 on 2026-10-15",
-      "note": null,
+      "note": "performed, 2026-10-17: \"Deluin?\" cut",
       "moment": "She says it with a smile, and continues."
     },
     {
@@ -315,9 +315,9 @@
       "beat": 3,
       "beat_title": "The café",
       "speaker": "Deluin",
-      "text": "The whole point of Dzegoban is that you can learn it in less than a month.",
+      "text": "Zei, the whole point of Dzegoban is that you can learn it in less than a month.",
       "tag": "by FID 6786 on 2026-10-15",
-      "note": "after c14-b118; in a lecturing tone",
+      "note": "after c14-b118; in a lecturing tone; performed, 2026-10-17: \"Zei,\" added as performed",
       "moment": null
     },
     {

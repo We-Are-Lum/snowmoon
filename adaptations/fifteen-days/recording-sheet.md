@@ -13,7 +13,7 @@ out; the chosen take of each line is converted into its character's voice; the o
 in `~/snowmoon-takes/full/takes/`, outside the repository, in case you want to swap one.
 Lines that can't be matched are flagged.
 
-42 lines, 557 words, in 6 files.
+42 lines, 556 words, in 6 files.
 
 ## beat-1 · The walls hold (optional opener)
 
@@ -53,7 +53,7 @@ Lines that can't be matched are flagged.
 **11.** (eleven) **ZEI**: Sure, yeah, that works well for me!  
 <sub>straight after line 10</sub>
 
-**12.** (twelve) **DELUIN**: Great, I'll see you then. Bai, you're welcome to come too. Hope to see you there! Bai.  
+**12.** (twelve) **DELUIN**: Great, I'll see you then. Bai, you're welcome to come too. Hope to see you there! *(performed, 2026-10-17: the trailing "Bye" cut)*  
 <sub>straight after line 11</sub>
 
 **13.** (thirteen) **ZEI**: See you. So are you gonna come? Should be fun! *("See you." to Deluin as he goes; the rest to Bai)*  
@@ -68,7 +68,7 @@ Lines that can't be matched are flagged.
 **16.** (sixteen) **BAI**: 'Was.' And you know I hate you. And I know all your tricks already anyway. *(re-recorded 2026-10-16; the script follows the performance)*  
 <sub>straight after line 15</sub>
 
-**17.** (seventeen) **BAI**: Deluin? We don't know anything about this guy.  
+**17.** (seventeen) **BAI**: We don't know anything about this guy. *(performed, 2026-10-17: "Deluin?" cut)*  
 <sub>She says it with a smile, and continues.</sub>
 
 **18.** (eighteen) **ZEI**: So let's get to know him, it'll be fun! Maybe he won't be so fake after all.  
@@ -107,7 +107,7 @@ Lines that can't be matched are flagged.
 **28.** (twenty-eight) **ZEI**: Wait, you know Dzegoban?  
 <sub>straight after line 27</sub>
 
-**29.** (twenty-nine) **DELUIN**: The whole point of Dzegoban is that you can learn it in less than a month. *(in a lecturing tone)*  
+**29.** (twenty-nine) **DELUIN**: Zei, the whole point of Dzegoban is that you can learn it in less than a month. *(in a lecturing tone; performed, 2026-10-17: "Zei," added as performed)*  
 <sub>straight after line 28</sub>
 
 **30.** (thirty) **ZEI**: I'm impressed, you're almost a local already.  

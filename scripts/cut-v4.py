@@ -73,14 +73,11 @@ FIVE_OVERLAP = {"C06": 1.5}                          # "this shot while he's sti
 FIVE_ANCHOR = {"C09": ("b2-6", 2.2)}                 # no shot with Bai until "Bai, you're welcome"
 # A fixed framing (x, y, zoom) in place of a move: Zei alone where Bai stood beside him (Claude notes, kept by the owner).
 FIVE_FRAME = {"S04": (0.33, 0.4, 1.7), "S10": (0.44, 0.42, 1.7), "R02": (0.35, 0.33, 1.7)}
-# The owner's notes on the takes: (start, end) seconds kept from each converted line, and the subtitles that follow them.
+# The owner's notes on the takes: (start, end) seconds kept from each converted line (script.md has the same words, "performed").
 TRIM = {"b2-10": (1.28, None),                       # the vocalization before "Was"
         "b2-11": (1.25, None),                       # "Cut out the line 'Deluin?'"
         "b2-6": (None, 6.75),                        # "this is Bye, not Bai, and we can cut it"
         "b3-2": (2.40, None)}                        # the robot: only the last of the two readings
-SUB_TEXT = {"b2-11": "We don't know anything about this guy.",
-            "b2-6": "Great, I'll see you then. Bai, you're welcome to come too. Hope to see you there!",
-            "b3-11": "Zei, the whole point of Dzegoban is that you can learn it in less than a month."}  # as performed
 ROBOT_FX = "tremolo=f=55:d=0.35,aecho=0.6:0.5:7:0.4"   # "you can also create robot synthesized voice here" (drafted)
 FX_FROM = {"hall: crowd swell": 2.5}                 # skip the announcer's "number 11" at the start of the swell
 FIVE_FX = [("H01", "game: flyby", 0.4, -14, 2.6), ("H02", "game: blast", 0.3, -12, 1.6), ("H02", "game: flyby", 1.0, -16, 2.6),
@@ -90,7 +87,7 @@ FIVE_FX = [("H01", "game: flyby", 0.4, -14, 2.6), ("H02", "game: blast", 0.3, -1
            ("H07", "game: crash", 0.6, -12, 2.4), ("C02", "device: elevator-arrive", 0.0, -8, 2.2)]
 FIVE_BED_DB = {"bed: courtyard café": 5}             # "need ambient café sounds"
 LETTERS = {"H01": "Sadzu Du, Dzego · 3724 Firemoon 10",  # script beat 1 (book c14-b1)
-           "L01": "Pafogai Du, Dzego",                   # script beat 7 (book c15-b48): place only, the book gives no date
+           "L01": "Pafogai Du, Dzego · 3724 Firemoon 17",  # book c15-b48 (place) and c15-b1 (the chapter's date; owner, 2026-10-17)
            "D09": "That day was his last Minpentai game- the last day when his life was somewhat normal."}  # beat 6, on screen
 
 
@@ -321,7 +318,7 @@ def build(seed: str, cut: str) -> Path:
         for r, l, src, dst, off, d in placed:
             cues.append({"id": r, "track": "voice", "stem": str(dst.relative_to(ROOT)), "at": {"cue": "@start", "offset": round(t + P["lead"] + off, 3)},
                          "room": SCENE_ROOM[scene], "source": {"converted": str(src.relative_to(ROOT)), "voice": VOICE[l["speaker"]][1]}})
-            pieces = chunks(SUB_TEXT.get(r, l["text"]) if cut == "five" else l["text"])
+            pieces = chunks(l["text"])
             total = sum(len(p) for p in pieces)
             acc = 0
             for p in pieces:
