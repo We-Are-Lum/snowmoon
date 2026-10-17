@@ -1,5 +1,9 @@
 # Friday: end card, cast and bounty post (DRAFTS for Nate to rewrite or approve)
 
+**Updated 2026-10-17 (owner's note):** the cast and the bounty post now lead with the scene and "fork the next shot"
+(the editor prototype's link, coming from Claude), and say every layer is already open in the repo. The end-card
+options below are unchanged (option B is in the film).
+
 Drafted by the coding agent on 2026-10-15. Every line here goes out under Nate's name or inside the
 film, so all of it is a draft. Facts are taken only from what was checked in the repo tonight
 (`docs/drafts/overnight-report.md`); anything still open is in [square brackets].
@@ -64,47 +68,57 @@ The "make your own" link should go to `docs/make-a-scene.md` once `fork-ready` i
 <https://github.com/We-Are-Lum/snowmoon/blob/main/docs/make-a-scene.md>. Until then it 404s; the
 repo root works now.
 
+## Facts added 2026-10-17 (checked in branch scenes-sound)
+
+- Pictures: depth-guided from grey-box 3D sets with Qwen-Image-Edit-2509, finished with FLUX.2 [klein] 4B; both
+  open weights, Apache-2.0 (`config/models.json`; Qwen confirmed by the owner on 2026-10-17).
+- Voices: Nate's performances converted with Chatterbox VC (MIT), on his own computer.
+- Sound: CC0 recordings from Freesound (each credited in `adaptations/fifteen-days/sounds/recipe.json`) and device and
+  game sounds synthesized in code (`scripts/synth-device-sounds.py`). No AI-generated sound.
+- Camera and edit follow written coverage rules (`docs/coverage.md`); the plan, every setup's camera and its layout
+  frame are files (`adaptations/fifteen-days/preprod/coverage.json`, `scripts/coverage.py`).
+- **Only true after "publish":** the frames and cut aren't pushed yet, so "every layer is already open" holds once
+  `scenes-sound` is pushed and merged. The editor link doesn't exist yet: [editor link] stays a placeholder until Claude sends it.
+
 ## Farcaster cast (under 320 characters)
 
-> Fifteen Days, one scene from Vitalik's Snowmoon for the poidh bounty. My words and the book's, my
-> voice AI-converted into the characters', open-weight AI pictures, all labelled. Everything that
-> made it is GPL v3. Fork it and make the next scene: [video link] [repo link]
+> Fifteen Days: one scene from Vitalik's Snowmoon. [video link]
+> 
+> Fork the next shot: [editor link]
+> 
+> Every layer is already open in the repo: script, voices, 3D sets, cameras, prompts, frames, sound, timeline. GPL v3. [repo link]
 
-246 characters before the links; 308 with a 23-character video link and
-`github.com/We-Are-Lum/snowmoon` (counted 2026-10-15). Count again with the real links.
+190 characters without the links; 273 with a 23-character video link, a 30-character editor link and
+`github.com/We-Are-Lum/snowmoon` (counted 2026-10-17). Count again with the real links.
 
 ## Bounty post (longer)
 
-> **Fifteen Days**, a scene from *Snowmoon* by Vitalik Buterin
+> **Fifteen Days**, one scene from *Snowmoon* by Vitalik Buterin
 >
 > [video link]
 >
-> Zei and Deluin, fifteen days before their final. [One line on the scene, in Nate's words.]
+> [One line on the scene, in Nate's words.]
 >
-> **What's in it.** The words are mine and the book's: 34 lines I wrote and 9 taken verbatim from
-> the novel, each tagged in the script with its source. I performed the voices and converted them
-> into designed character voices with Chatterbox, an open-weight model, on my own computer. The
-> pictures were made with [model], also open weights. Everything AI made is labelled as AI.
+> **Fork the next shot.** [editor link]
+> Pick a shot, change it, and make the next one. You don't have to start from nothing: every layer of this scene is
+> already open in the repo, under GPL v3 like the book.
 >
-> **Make your own.** This entry is an invitation. Everything that made it is public under GPL v3,
-> like the book:
-> - the script, with every line's author;
-> - the timeline: every voice line, sound, shot, camera move and cut, timed from the audio;
-> - a recipe for every file a model made: the model, the exact prompt, the settings and the
->   output's hash;
-> - the model allowlist, with each licence quoted from its card;
-> - the mixer and renderer, as scripts.
+> **Every layer, open:**
+> - the script, with every line's author (34 lines I wrote, 9 from the novel, each tagged);
+> - the voices: my performances converted into the characters' voices with Chatterbox, an open-weight model, on my own
+>   computer, each with its recipe (my raw recordings stay private);
+> - the 3D grey-box sets, every camera, and the coverage rules the cameras follow;
+> - for every picture: the layout frame sent to the model, the exact prompt, the model and settings, and the output's hash
+>   (Qwen-Image-Edit-2509 and FLUX.2 [klein] 4B, open weights);
+> - the sound: CC0 recordings, credited, and device sounds made in code;
+> - the timeline, the mixer and the renderer, as scripts.
 >
-> A fresh clone renders our example scene to a 1080p video with no keys and no AI models, so you
-> can see the whole pipeline work before you spend anything. The guide walks through writing a
-> script, casting voices, adding sound and stills, mixing and rendering:
-> [link to docs/make-a-scene.md]
+> A fresh clone renders our example scene to a 1080p video with no keys and no AI models, so you can see the pipeline
+> work before you spend anything: [link to docs/make-a-scene.md]
 >
-> My raw voice recordings aren't published, for privacy; the converted lines are.
+> Everything AI made is labelled as AI.
 >
-> Pick a scene. Fork the repo. Make the next one.
->
-> *Snowmoon* is by Vitalik Buterin: <https://vitalik.eth.limo/snowmoon/>. This is an independent
-> fan project, not affiliated with him.
+> *Snowmoon* is by Vitalik Buterin: <https://vitalik.eth.limo/snowmoon/>. This is an independent fan project, not
+> affiliated with him.
 >
 > Repo: <https://github.com/We-Are-Lum/snowmoon>
