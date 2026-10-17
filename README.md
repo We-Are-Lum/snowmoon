@@ -127,6 +127,7 @@ runs the migration and permission tests in an in-memory Postgres.
 | `npm run check:ingest` | Ingest checks (fails on any problem) |
 | `npm run seed:text` | Upsert `studio.works` and `studio.text_blocks` |
 | `npm run test:db` | Migration and permission tests (PGlite) |
+| `npm run test:adaptation-pages` | Adaptation pages end to end against an in-memory database with every migration and a stand-in for Farcaster's name API; screenshots and `results.json` (`-- --out=DIR`) |
 | `npm run test:render` | Rendering rules: ¶ labels, settings, default templates, figure sizing |
 | `npm run check:ui -- --url=…` | Reader floors in Chrome at 390px: 12px text, 44px targets, fonts, colours, first screen, first-visit intro and its replay |
 | `npm run check:intro -- [--url=…]` | First-visit intro (`config/intro.json`): five cards, live cards point at real pages, card 1 keeps the independence and no-token line |
