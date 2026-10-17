@@ -105,6 +105,7 @@ if (DATA.summary) {
     const s = $('section', {}, $('h2', { text: sec.title }));
     for (const para of sec.paras || []) s.append($('p', { text: para }));
     if (sec.list) s.append($('ul', {}, ...sec.list.map(x => $('li', { text: x }))));
+    if (sec.images) s.append($('div', { class: 'vids' }, ...sec.images.map(v => $('figure', {}, $('img', { src: v.src, alt: v.label, loading: 'lazy' }), $('figcaption', { text: v.label })))));
     if (sec.videos) s.append($('div', { class: 'vids' }, ...sec.videos.map(v => $('figure', {}, $('video', { src: v.src, controls: '', preload: 'none', playsinline: '' }), $('figcaption', { text: v.label })))));
     box.append(s);
   }

@@ -179,12 +179,19 @@ def build(seed: str, cut: str) -> Path:
         units.append({"shots": list(range(i, j + 1)), "lines": order})
         i = j + 1
 
+    # approach C (owner, 2026-10-16 night): the tight cut leans on frames that passed review; a wordless beat whose best frame
+    # failed is left out, and a line's span prefers its close shots that passed
+    od = ROOT / "adaptations" / seed / "preprod" / "overnight"
+    rv = json.loads((od / "frames-review.json").read_text()) if (od / "frames-review.json").exists() else {}
+    fpk = json.loads((od / "frames-picks.json").read_text()) if (od / "frames-picks.json").exists() else {}
+    passing = {k for k, v in fpk.items() if v and rv.get(v[0], {}).get("pass")}
+
     def keep(s: dict) -> bool:
         if s.get("optional"):
             return False
         if cut == "full":
             return True
-        return s["id"] in TIGHT_SILENT
+        return s["id"] in TIGHT_SILENT and (s["id"] in passing or s["id"] not in fpk)
 
     cues, shots, subs, notes = [], [], [], []
     t = 0.0
@@ -195,7 +202,7 @@ def build(seed: str, cut: str) -> Path:
         kept = [s for s in ss if keep(s) or u["lines"]]
         if u["lines"] and cut == "tight":  # a line's span keeps its close shots, and its wide only if there is nothing else
             close = [s for s in ss if any(re.search(rf"\b{c}\b", s["size"].upper()) for c in CLOSE)]
-            kept = close or ss[:1]
+            kept = [s for s in close if s["id"] in passing] or close or ss[:1]
         if not kept:
             continue
         scene = ss[0]["scene"]

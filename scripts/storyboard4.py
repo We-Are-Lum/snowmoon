@@ -29,7 +29,7 @@ from PIL import Image
 
 ROOT = Path(__file__).resolve().parent.parent
 PRE = ROOT / "images-out" / "preprod"
-DESC = {"Z": "the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped jacket",
+DESC = {"Z": "the slim young man with spiky black hair with one blue streak, dark brown eyes and an orange cropped zip jacket over a black top",
         "B": "the thin, wiry young woman with warm brown skin, shaved sides, a tall magenta ponytail, dangly geometric earrings, a lime-green vest and tattooed arms",
         "D": "the tall young man with wavy shoulder-length light-brown hair and a long cream cable-knit tunic",
         "K": "the stocky young man with a shaved head and dark brown skin in a plain charcoal tunic"}
@@ -44,7 +44,12 @@ SIZE = {"EWS": "Extreme wide shot", "WS": "Wide shot", "MS": "Medium shot", "MCU
 CROWD = ("Every other person is an ordinary background figure in plain, muted everyday clothes with ordinary hair: no orange jackets, no magenta hair, "
          "no cream knitwear, nobody who looks like the main people.")
 NO_DINERS = "The other tables in the courtyard are empty: no other diners."
+# attempt 1 invited crowds everywhere; from attempt 2 only the hall has one (the owner: no diners, or far back)
+NOBODY = {"courtyard": "Nobody else in the picture at all: no other diners, no passers-by, no figures in the windows.",
+          "corridor": "Nobody else in the corridor at all.", "lobby": "Nobody else in the lobby at all, apart from what the shot describes."}
 FACES = "Faces stay soft and natural: smiles and laughs are closed-mouthed, never open-mouthed grins, no teeth showing."
+FACES3 = ("Every mouth is closed, lips together: smiles and laughs are small closed-lip smiles, no teeth visible at all, never a grin. "
+          "Faces stay soft and natural.")  # from attempt 3: open grins kept coming back
 TABLE = "The table they share is a long rectangular wooden table, never round."
 GROUND = "Everyone stands on the ground or sits on a chair at their real size: nobody floats, nobody sits or stands on a table."
 COMIC = "A hand-drawn science fiction comic book panel, ink linework and flat cel-shaded colour, not a 3D render, not a photograph."
@@ -77,7 +82,8 @@ def main() -> None:
     ap.add_argument("seed")
     ap.add_argument("--attempt", type=int, default=1)
     ap.add_argument("--shots", nargs="*")
-    ap.add_argument("--stage", choices=["AB", "K"], default="AB")
+    ap.add_argument("--stage", choices=["AB", "K", "Q"], default="AB")
+    ap.add_argument("--from-a", type=int, help="K: restyle this attempt's A picture (default: the same attempt)")
     args = ap.parse_args()
     seed, att = args.seed, args.attempt
     adir = ROOT / "adaptations" / seed / "preprod"
@@ -87,7 +93,7 @@ def main() -> None:
     approved = json.loads((adir / "plates-approved.json").read_text()) if (adir / "plates-approved.json").exists() else {}
     seen = {n: json.loads((sets / f"{n}.seen.json").read_text()) for n in ("hall", "corridor", "courtyard", "lobby")}
     shotsj = {n: json.loads((sets / f"{n}.shots.json").read_text()) for n in seen}
-    jobs = {"A": [], "B": [], "K": []}
+    jobs = {"A": [], "B": [], "K": [], "Q": []}
     for i, s in enumerate(board):
         if s.get("composite") or not s.get("camera"):
             s["prompt"], s["refs"] = None, []
@@ -126,11 +132,14 @@ def main() -> None:
         if "R" in s["who"]:
             tail.append("The robot is " + ROBOT + ".")
         if people:
-            tail.append({1: "Exactly one main person, appearing once.", 2: "Exactly two main people, each appearing once.", 3: "Exactly three main people, each appearing once."}[min(len(people), 3)] + " " + CROWD)
+            tail.append({1: "Exactly one main person, appearing once.", 2: "Exactly two main people, each appearing once.", 3: "Exactly three main people, each appearing once."}[min(len(people), 3)] + " " +
+                        (CROWD if n == "hall" or att == 1 else NOBODY[n]))
             if sz != "INSERT":
                 tail.append(GROUND)
-        if n == "courtyard":
+        if n == "courtyard" and att == 1:
             tail.append(NO_DINERS)
+        elif n != "hall" and att > 1 and not people:
+            tail.append(NOBODY[n])
         lms = [l["name"] for l in sn.get("landmarks", []) if l.get("name")]
         if lms and sz not in ("ECU", "INSERT"):
             tail.append("Behind them, as the layout shows: " + "; ".join(lms) + ".")
@@ -138,12 +147,24 @@ def main() -> None:
             tail.append(TABLE)
         if people and sz != "INSERT":
             tail.append(FACES)
+        if s.get("bai_bg") and att > 2:  # the reviewers: the restyle kept bringing her forward, big
+            tail.insert(0, "The young woman with the magenta ponytail is small and far behind him, at her own small round table in the background, "
+                           "about a fifth of the frame's height, exactly where reference image 1 has her; she is never beside him.")
+        for w, pp in cam.get("people", {}).items():
+            if isinstance(pp, dict) and pp.get("y", 0) < 0 and att > 2:
+                tail.insert(0, f"{DESC[w].split(' with ')[0][0].upper() + DESC[w].split(' with ')[0][1:]} sits low inside a small round sunken pit at the "
+                               "edge of the play floor, only his upper body above its rim, at a glowing console.")
         if "Z" in people:
             tail.append("The spiky-haired young man's eyes are dark brown.")
         if "menu" in s["action"] or "device" in s["action"]:
-            tail.append("Menus and devices show only soft blank light, no writing.")
+            tail.append("Menus and devices show only soft blank light, no writing." if att < 5 else
+                        "Every menu is a thin glass tablet glowing with soft blank light, never paper; every screen and device shows only soft blank "
+                        "light: no writing, no letters, no symbols at all.")
         st = style["prompt"].split(" Wherever the sky shows")[0] if n in ("hall", "corridor") else style["prompt"]
         signs = NO_ICONS if n in ("hall", "corridor") else style["signs"]
+        if att >= 5 and n not in ("hall", "corridor"):  # neon signs kept spelling letters
+            signs = ("Shop windows and panels glow plainly, at most with one simple pictogram (a cup, a leaf, a bowl); no lettered signs at all. "
+                     "No letters, words, digits or numbers anywhere.")
         tail += [st, signs, style["no_text"]]
         three = len(people) >= 3
         cards = ["cards2/cast.png"] if three else [CARD[w] for w in people]
@@ -175,24 +196,46 @@ def main() -> None:
                               "layers": {**layers, "set_frame": layer(frames["depth"], mode="depth", rendered_from=f"images-out/preprod/set/{s['id']}.depth.png"),
                                          "plate": None, "cards": card_layers}})
         # K: the A picture restyled, faces held to the cards
-        apic = PRE / "pass3" / f"{s['id']}-A{att}.png"
+        apic = PRE / "pass3" / f"{s['id']}-A{args.from_a or att}.png"
+        close = sz in ("CU", "ECU", "INSERT", "MCU") and att > 1  # from attempt 2: no wide place picture for close shots (it widened them)
         if args.stage == "K" and apic.exists():
-            look = PRE / approved[plate] if plate else PRE / "swatch" / f"{n}.png"
+            look = PRE / approved[plate] if plate and not close else PRE / "swatch" / f"{n}.png"
             lref = small(look, PRE / "plates-small" / f"{look.stem}.png", 640)
-            k = ["Redraw reference image 1 as a finished, detailed hand-drawn science fiction comic book panel at night: keep its camera, perspective, every "
+            k = ([core[0], f"Keep reference image 1's exact framing and crop: the same {SIZE.get(sz, 'shot').lower()}, nothing added outside its edges, "
+                  "never widen the view."] + ([FACES3 if att > 2 else FACES] if people and sz != "INSERT" else []) if att > 1 else []) + \
+                ["Redraw reference image 1 as a finished, detailed hand-drawn science fiction comic book panel at night: keep its camera, perspective, every "
                  "person's position, pose, gesture, expression and size, and every table, chair and wall exactly as they are; nobody is added or removed.",
-                 f"Reference image 2 shows how the place looks{'' if plate else ' (samples)'}: take its colours, materials and night light; it has nobody in it."] +                 card_words(3, "Reference image") + ["Each main person's face, hair, skin and clothes match their reference exactly."] + tail
+                 f"Reference image 2 shows how the place looks{'' if plate and not close else ' (samples)'}: take its colours, materials and night light; it has nobody in it."] + \
+                card_words(3, "Reference image") + ["Each main person's face, hair, skin and clothes match their reference exactly."] + tail
+            # from attempt 5: no cards for extreme close-ups and inserts (they pulled the view wide), and no Bai card where she sits small
+            # behind (it brought her forward or doubled her); faces then come from the A picture, which was drawn from the cards
+            kc = [(r, w) for r, w in zip(card_refs, cards) if not (att >= 5 and (sz in ("ECU", "INSERT") or (s.get("bai_bg") and "bai" in w)))]
+            if len(kc) != len(card_refs):
+                k = [x for x in k if not x.startswith("Reference image 3") and not x.startswith("Reference image 4") and "match their reference" not in x]
+                if kc:
+                    k.insert(3, f"Reference image 3 is {DESC['Z']}: copy only his face, hair, skin and clothes.")
             jobs["K"].append({"id": f"{s['id']}-K{att}", "shot": s["id"], "approach": "A", "attempt": att, "prompt": " ".join(k),
-                              "refs": [str(apic.relative_to(ROOT)), lref] + card_refs, "width": 1024, "height": 576, "seed": 34000 + 100 * att + i,
+                              "refs": [str(apic.relative_to(ROOT)), lref] + [r for r, _ in kc], "width": 1024, "height": 576, "seed": 34000 + 100 * att + i,
                               "layers": {**layers, "set_frame": layer(frames["depth"], mode="depth", rendered_from=f"images-out/preprod/set/{s['id']}.depth.png"),
                                          "stage1": layer(str(apic.relative_to(ROOT)), engine="qwen-image-edit-2509"),
-                                         "plate": layer(lref, plate=plate, source=layer(str(look.relative_to(ROOT)))), "cards": card_layers}})
+                                         "plate": layer(lref, plate=plate, source=layer(str(look.relative_to(ROOT)))),
+                                         "cards": [c for c in card_layers if c["file"] in {r for r, _ in kc}]}})
+        # Q (from attempt 3): the A picture restyled by Qwen-Image-Edit-2509 itself, which holds framing best; at most three pictures
+        if args.stage == "Q" and apic.exists() and len(card_refs) <= 2:
+            q = [COMIC, core[0], f"Picture 1 is this exact frame: keep its framing and crop (the same {SIZE.get(sz, 'shot').lower()}), camera, perspective, "
+                 "and every person's position, pose, gesture and size exactly; nothing added outside its edges, nobody added or removed. Redraw it as a "
+                 "finished, detailed hand-drawn comic book panel at night: deep blue and violet darkness, pools of warm and cool glowing light, inked "
+                 "outlines, cel-shaded colour.", FACES3 if people and sz != "INSERT" else ""] + card_words(2, "Picture") + tail
+            jobs["Q"].append({"id": f"{s['id']}-Q{att}", "shot": s["id"], "approach": "A", "attempt": att, "engine": "qwen", "prompt": " ".join(x for x in q if x),
+                              "refs": [str(apic.relative_to(ROOT))] + card_refs, "width": 1024, "height": 576, "seed": 36000 + 100 * att + i,
+                              "layers": {**layers, "set_frame": layer(frames["depth"], mode="depth", rendered_from=f"images-out/preprod/set/{s['id']}.depth.png"),
+                                         "stage1": layer(str(apic.relative_to(ROOT)), engine="qwen-image-edit-2509"), "plate": None, "cards": card_layers}})
         # B: readable render + plate + cards (FLUX.2 klein edit)
         if plate:
-            psrc = PRE / approved[plate]
+            psrc = PRE / approved[plate] if not close else PRE / "swatch" / f"{n}.png"
             pref = small(psrc, PRE / "plates-small" / f"{psrc.stem}.png", 640)
             colours = "; ".join(f"the {COLOUR[w]} figure is {DESC[w].split(' with ')[0]}" for w in people)
-            b = core + ["Reference image 1 is a simple 3D model of this exact frame, textured and lit: copy its framing, height, angle and perspective, where each "
+            b = core + ([FACES3 if att > 2 else FACES] if att > 1 and people and sz != "INSERT" else []) + ["Reference image 1 is a simple 3D model of this exact frame, textured and lit: copy its framing, height, angle and perspective, where each "
                         "person sits or stands and how big each is, which way each faces, and where the table, chairs, railing, doors and walls stand; people sit "
                         "on the chairs and stand on the floor exactly as there. Its figures are only mannequins coloured by who they are" +
                         (f" ({colours})" if colours else "") + "; draw real people, never mannequins.",
@@ -210,7 +253,7 @@ def main() -> None:
         (adir / "storyboard4.json").write_text(json.dumps({"about": "Storyboard frames with exact prompts per approach (scripts/storyboard4.py).", "shots": board},
                                                       indent=2, ensure_ascii=False) + "\n")
     for ap_, js in jobs.items():
-        if (args.stage == "K") != (ap_ == "K"):
+        if (args.stage in ("K", "Q")) != (ap_ in ("K", "Q")) or (args.stage in ("K", "Q") and ap_ != args.stage):
             continue
         js = [j for j in js if not args.shots or j["shot"] in args.shots]
         (adir / f"pass3-{ap_}-r{att}.json").write_text(json.dumps({

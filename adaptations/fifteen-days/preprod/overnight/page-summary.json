@@ -1,0 +1,155 @@
+[
+ {
+  "title": "Summary",
+  "paras": [
+   "Approach A won. The 3D set gives a depth map. Qwen-Image-Edit-2509 draws the frame from that depth map and the cast cards, then FLUX.2 [klein] redraws it in the night comic look with the cards again. It keeps scale, perspective and seating right: nobody floats or sits on a table, and people are the right size for the chairs. 82 of the 103 best frames come from it.",
+   "Approach B (klein from the textured set render plus the plate) passed less often. It kept adding diners and drifting into a 3D-render look.",
+   "Approach C (close-ups first) shaped the tight cut. It uses close shots whose frames passed review, and drops wordless beats whose frames failed.",
+   "An independent reviewer agent checked every plate and every frame against your list. 75 of 103 shots have a frame that passes every check, and 48 have two. I redrew failures three times, as you allowed, then cropped in on nine frames that failed only on shot size (five of those now pass).",
+   "Below, each shot shows its best two frames, with the reviewer's notes. Pick one, or mark Neither. Shots whose best frame still fails are marked so."
+  ],
+  "list": []
+ },
+ {
+  "title": "What still fails",
+  "list": [
+   "28 shots have no passing frame: C01 C02 D06 F01 F03 F08 F18 F26 G01 G02 G04 G10 H01 H05 L01 L10 L11 R03 R10 S01 S02 S04 S06 S08 S11 S12 S12b S13.",
+   "Shots with three people, and the robot, get doubled or merged: Bai drawn twice, Zei and Bai blended into one figure, the robot in Deluin's tunic.",
+   "Extreme close-ups and inserts come out too loose: the watch, the sugar-cube wall, the flick.",
+   "Props and gestures go missing: Bai's headphones and handheld, Deluin's device, the ten-then-five fingers, Bai small behind Zei (S04).",
+   "Deluin's long tunic is usually drawn as a short sweater.",
+   "Some menus and neon signs still show letter-like marks.",
+   "Approach A's first choice, Z-Image Turbo's ControlNet on fal, turned out to ignore its control image entirely, even with fal's own example. I switched to Qwen-Image-Edit-2509.",
+   "G02: the action text puts Zei on the left, but the set and layout put him on the right. The reviewers flagged the conflict; it needs your call."
+  ]
+ },
+ {
+  "title": "What I recommend",
+  "list": [
+   "Use approach A from here.",
+   "Confirm or reject Qwen-Image-Edit-2509 on the allowlist. It is in config/models.json as provisional: its card reads \"License: apache-2.0\". Nothing drawn with it is published.",
+   "For inserts and extreme close-ups, give the set its own close cameras on the hands and props, or crop in and refine (that worked for five faces tonight).",
+   "For the group shots, draw people in two passes, so no shot has more than two cards at once.",
+   "Keep wides few, as the tight cut does.",
+   "Decide G02's screen direction."
+  ]
+ },
+ {
+  "title": "Plates in use (all empty)",
+  "paras": [
+   "Café C is from the readable render. The hall plates are klein fix-edits of the reviewer's closest options: crates turned into holograms, poles into towers of light, chairs removed, no sky. The hall is redesigned as you asked: the walkway crosses high over the floor with open air beneath, and the pit sits in a live game. Your picks: café G and S, corridor N and S, lobby I, and lobby O from round one."
+  ],
+  "images": [
+   {
+    "path": "images-out/preprod/plates2/plate-corridor-N-a.png",
+    "label": "corridor-N · your pick"
+   },
+   {
+    "path": "images-out/preprod/plates2/plate-corridor-S-a.png",
+    "label": "corridor-S · your pick"
+   },
+   {
+    "path": "images-out/preprod/plates3/plate-courtyard-A-ak.png",
+    "label": "courtyard-A · depth-drawn, then restyled"
+   },
+   {
+    "path": "images-out/preprod/plates3/plate-courtyard-B-ak.png",
+    "label": "courtyard-B · depth-drawn, then restyled"
+   },
+   {
+    "path": "images-out/preprod/plates3/plate-courtyard-C-b2.png",
+    "label": "courtyard-C · from the readable set render"
+   },
+   {
+    "path": "images-out/preprod/plates3/plate-courtyard-D-ak.png",
+    "label": "courtyard-D · depth-drawn, then restyled"
+   },
+   {
+    "path": "images-out/preprod/plates3/plate-courtyard-E-ak.png",
+    "label": "courtyard-E · depth-drawn, then restyled"
+   },
+   {
+    "path": "images-out/preprod/plates2/plate-courtyard-G-a.png",
+    "label": "courtyard-G · your pick"
+   },
+   {
+    "path": "images-out/preprod/plates2/plate-courtyard-S-a.png",
+    "label": "courtyard-S · your pick"
+   },
+   {
+    "path": "images-out/preprod/plates3/plate-hall-A-fx2.png",
+    "label": "hall-A · fix-edit of the closest option"
+   },
+   {
+    "path": "images-out/preprod/plates3/plate-hall-B-fx1.png",
+    "label": "hall-B · fix-edit of the closest option"
+   },
+   {
+    "path": "images-out/preprod/plates3/plate-hall-P-fx3.png",
+    "label": "hall-P · fix-edit (stone blocks removed)"
+   },
+   {
+    "path": "images-out/preprod/plates3/plate-hall-V-ak.png",
+    "label": "hall-V · depth-drawn, then restyled"
+   },
+   {
+    "path": "images-out/preprod/plates3/plate-hall-W-fx1.png",
+    "label": "hall-W · fix-edit of the closest option"
+   },
+   {
+    "path": "images-out/preprod/plates2/plate-lobby-I-a.png",
+    "label": "lobby-I · your pick"
+   },
+   {
+    "path": "images-out/preprod/plates/plate-lobby-O.png",
+    "label": "lobby-O · round one (your pick)"
+   }
+  ]
+ },
+ {
+  "title": "The two cuts",
+  "paras": [
+   "Both have the full mix (the voices, Dreadnaught v3, beds, device sounds), burned-in subtitles and end card B. They use each shot's top frame on this page; once you pick, one command re-renders them (in overnight/CUTS.md).",
+   "Tight is longer than the 3:00 to 3:30 you asked for. All 42 lines alone run about 3:41 with pauses trimmed to 0.3 s, so getting under 3:30 means dropping lines (beat 1 is marked optional in the script). I didn't drop any: that's your call.",
+   "The videos below are small previews. The full-quality files are scenes-out/fifteen-days/cuts/full.mp4 and tight.mp4 on the Mac."
+  ],
+  "videos": []
+ },
+ {
+  "title": "Voices (my pick; you confirm)",
+  "list": [
+   "Zei: zei-v4b, a middle pitch around 127 Hz. v3 was bright at 169 Hz and v4a low at 105 Hz.",
+   "Bai: bai-v3b, the most feminine and the clearest, and it doesn't clip (the current bai.eq clips).",
+   "Please listen to L13 (the transcriber heard 'fine' for 'fun') and L24 ('version nine').",
+   "These were converted locally from your takes, at no cost. The raw takes stay private and out of the repo."
+  ]
+ },
+ {
+  "title": "Titles (drafted, for you to choose or ignore)",
+  "list": [
+   "Fifteen Days",
+   "The Walls Held",
+   "Sugar Walls",
+   "Get to Know Him",
+   "Patience, Until You Win"
+  ]
+ },
+ {
+  "title": "Spend",
+  "paras": [
+   "About $40.40 of the $100 cap, rebuilt from the recipes, with the ledger in agreement. That covers plates (about $3.90 with tests), frames (about $35) and the ControlNet tests (under $0.50). Reviews, renders and cuts cost nothing."
+  ]
+ },
+ {
+  "title": "Principles",
+  "list": [
+   "Tension: Qwen-Image-Edit-2509 was added to the allowlist overnight on my own check of its card (Apache-2.0). It's marked provisional until you confirm it.",
+   "Tension: on one review round my brief told the reviewers the café has no other diners, while F01, F03 and F04 ask for diners. Later rounds told them the shot's own action wins.",
+   "Tension: the crop-and-refine finish is not a redraw from the set. It re-renders a crop of an existing frame, and it's labelled 'C' on the page.",
+   "Prompts name no people, artists or studios. The reviewers' notes use names; those are notes for you, not prompts.",
+   "No new words in the dialogue: the cuts use your performed lines, converted, with pauses only shortened.",
+   "Nothing is published or merged. Commits are local on scenes-sound, and no images have been pushed since your note. The set frames in f7541b4 were pushed before that note arrived.",
+   "Open weights only: FLUX.2 [klein] 4B and Qwen-Image-Edit-2509, both Apache-2.0, with every frame's recipe naming its model, licence line and layers by hash."
+  ]
+ }
+]

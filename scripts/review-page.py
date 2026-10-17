@@ -80,6 +80,48 @@ def main() -> None:
                           "a is drawn from the shaded set render, b from an outline drawing of the same set; c and d are retries with the view spelled out. "
                           "Options that drew the wrong view, or Bai big or twice, are left out. Round one is shown last where it exists."],
                 "groups": [{"key": k, "title": titles[k], "note": notes[k], "items": list(groups[k].values())} for k in ("courtyard", "hall", "corridor", "lobby") if k in groups]}
+    elif mode == "pick2":
+        # the overnight frames (owner, 2026-10-16 night): the best two of each shot, with the reviewer agent's notes
+        odir = adir / "overnight"
+        picks = json.loads((odir / "frames-picks.json").read_text())
+        review = json.loads((odir / "frames-review.json").read_text())
+        name = {"K": "A · depth-guided, klein finish", "Q": "A · depth-guided, Qwen finish", "B": "B · readable set"}
+        scenes = []
+        for pre, key, title, short in SCENES:
+            shots = []
+            for s in board:
+                if s["id"][0] != pre or s.get("composite"):
+                    continue
+                act = s["action"]
+                for k, v in {"{Z}": "Zei", "{B}": "Bai", "{D}": "Deluin", "{K}": "Kau", "{R}": "the robot"}.items():
+                    act = act.replace(k, v)
+                cands = []
+                for cid in picks.get(s["id"], []):
+                    v = review.get(cid, {})
+                    tag = cid.rsplit("-", 1)[1]
+                    cands.append({"key": cid, "img": jpg(PRE / "pass3" / f"{cid}.png", out, f"{cid}.jpg", 1000),
+                                  "label": f"{name[tag[0]]}, attempt {tag[1:]} · reviewer {v.get('score', '?')}/10",
+                                  "verdict": "pass" if v.get("pass") else "fail", "note": v.get("note", "")})
+                if not cands:
+                    continue
+                shots.append({"id": s["id"], "size": s["size"], "line": s.get("line"), "action": act, "cands": cands,
+                              "frame": jpg(PRE / "set" / f"{s['id']}.look.png", out, f"{s['id']}.set.jpg", 300)})
+            scenes.append({"key": key, "title": title, "short": short, "shots": shots})
+        summary = json.loads((odir / "page-summary.json").read_text()) if (odir / "page-summary.json").exists() else []
+        for sec in summary:  # pictures named by repo path become small copies beside the page; videos are copied as they are
+            for im in sec.get("images", []):
+                if "path" in im:
+                    im["src"] = jpg(ROOT / im.pop("path"), out, Path(im["label"].split(" ")[0]).name + ".jpg", 900)
+            for v in sec.get("videos", []):
+                if "path" in v:
+                    dst = out / "vid" / Path(v["path"]).name
+                    dst.parent.mkdir(parents=True, exist_ok=True)
+                    dst.write_bytes((ROOT / v.pop("path")).read_bytes())
+                    v["src"] = f"vid/{dst.name}"
+        data = {"mode": "pick2", "coll": "frames2", "title": "Fifteen Days frames",
+                "intro": ["The best two frames of each shot, side by side, with the reviewer agent's notes (an agent that did not draw them). "
+                          "Tap the one you want, or Neither; a comment says what to change. Your picks save as you go."],
+                "summary": summary, "scenes": scenes}
     else:
         scenes = []
         for pre, key, title, short in SCENES:
