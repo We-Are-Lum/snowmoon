@@ -72,6 +72,8 @@
 .scene-provenance { margin-top: var(--space-6); }
 .scene-nothing h1 { font-weight: 400; }
 .scene-nothing p { overflow-wrap: anywhere; }
+/* A wallet address in a capitals label keeps its lowercase (owner, 2026-10-17). */
+.scene-addr { text-transform: none; }
 
 /* Phone: the player edge to edge, SHARE and FORK side by side, the panel under them, then MAKE YOUR OWN. */
 @media (max-width: 719px) {

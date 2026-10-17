@@ -77,12 +77,22 @@ export async function sceneMetadata(params: SceneParams): Promise<Metadata> {
   };
 }
 
+/** A handle (or a link holding one) inside a capitals label: a wallet address stays lowercase, as it is typed (owner, 2026-10-17). */
+function Handle({ handle, text }: { handle: string; text?: string }) {
+  const shown = text ?? `@${handle}`;
+  return /^0x/.test(handle) ? <span className="scene-addr">{shown}</span> : <>{shown}</>;
+}
+
 export function NothingHere({ title, handle }: { title?: string; handle?: string }) {
   return (
     <div className="page prose scene-nothing">
       {title && <h1>{title}</h1>}
       <p>Nothing here yet.</p>
-      {handle && title && <p className="label">@{handle} has no version of this to show.</p>}
+      {handle && title && (
+        <p className="label">
+          <Handle handle={handle} /> has no version of this to show.
+        </p>
+      )}
       <p>
         <Link href="/">Back to the book</Link>
       </p>
@@ -123,13 +133,11 @@ export function ScenePage({ adaptation, version, handle, fixed }: { adaptation: 
             <span className="label scene-where">
               {fixed ? (
                 <>
-                  {host}
-                  {fixedPath} · this version, fixed
+                  <Handle handle={handle} text={`${host}${fixedPath}`} /> · this version, fixed
                 </>
               ) : (
                 <>
-                  {host}
-                  {latestPath} · @{handle}&rsquo;s chosen version
+                  <Handle handle={handle} text={`${host}${latestPath}`} /> · <Handle handle={handle} />&rsquo;s chosen version
                 </>
               )}
             </span>
@@ -169,7 +177,7 @@ export function ScenePage({ adaptation, version, handle, fixed }: { adaptation: 
           {fixed && (
             <p className="label">
               <Link className="scene-latest" href={latestPath}>
-                See @{handle}&rsquo;s latest chosen version
+                See <Handle handle={handle} />&rsquo;s latest chosen version
               </Link>
             </p>
           )}

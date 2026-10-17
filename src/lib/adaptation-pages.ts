@@ -141,13 +141,21 @@ async function seenName(fname: string): Promise<number | null> {
   return STATIC.names[fname] ?? null;
 }
 
-/** Remember the name a person had, only for people who have published a version (so it can't fill up). */
-async function noteName(fname: string, fid: number): Promise<void> {
-  await fromTables((sql) => sql`
-    insert into studio.account_names (fname, person)
-    select ${fname}, ${fid}
-    where exists (select 1 from studio.adaptation_versions where author_person = ${fid})
-    on conflict (fname) do update set person = excluded.person, seen_at = now()`).catch(() => undefined);
+/**
+ * Remember a person's Farcaster name, so links made before a rename still find them. Only when they
+ * sign in (or publish): viewing /@someone/1 stores nothing about a person who never used the site
+ * (owner, 2026-10-17). Errors are ignored: sign-in never waits on this.
+ */
+export async function rememberName(fid: number, username?: string | null): Promise<void> {
+  try {
+    const name = (username ?? (await lookupName(fid)))?.toLowerCase();
+    if (!name || !NAME.test(name)) return;
+    await fromTables((sql) => sql`
+      insert into studio.account_names (fname, person) values (${name}, ${fid})
+      on conflict (fname) do update set person = excluded.person, seen_at = now()`);
+  } catch {
+    /* not remembered */
+  }
 }
 
 /** A wallet account's handle is its full address, lowercase: 42 characters, so never a Farcaster name (16 at most; owner, 2026-10-17). */
@@ -186,7 +194,6 @@ export async function resolveHandle(raw: string): Promise<Resolved> {
   if (!NAME.test(name)) return { kind: 'none' };
   const found = await lookupFid(name);
   if (found.fid) {
-    void noteName(name, found.fid);
     const canonical = found.username ?? name;
     return canonical === handle ? { kind: 'person', person: found.fid, handle } : { kind: 'redirect', handle: canonical };
   }

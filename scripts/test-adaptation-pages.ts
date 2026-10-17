@@ -257,6 +257,8 @@ try {
     const page = await newPage(browser);
     await page.goto(BASE + `/@${WALLET_CHECKSUM}/1`);
     const t = await mainText(page);
+    // The address as shown, after CSS: lowercase in the capitals label too (owner, 2026-10-17).
+    const where = await page.evaluate(() => (document.querySelector('.scene-where') as HTMLElement | null)?.innerText ?? '');
     // The 42-character handle stays inside its column (desktop here, phone below).
     const overflow = await page.evaluate(() => Array.from(document.querySelectorAll('.scene-facts dd, .scene-where, .scene-btn-sub')).filter((e) => e.scrollWidth > e.clientWidth + 1 || e.getBoundingClientRect().right > (document.querySelector('.scene') as HTMLElement).getBoundingClientRect().right + 1).map((e) => e.className || e.tagName));
     const phone = await newPage(browser, { width: 390, height: 844 });
@@ -267,8 +269,8 @@ try {
     const pass =
       overflow.length === 0 && phoneSideways <= 0 &&
       h.status === 200 && [307, 308].includes(hc.status) && hc.location === url && local(page.url()) === url &&
-      new RegExp(`Version ${v2} .*forked from version 1`, 'i').test(t) && t.toLowerCase().includes(`@${WALLET}`);
-    await record(6, 'wallet address', `/@${WALLET_CHECKSUM}/1 and ${url}`, `checksum case redirects to ${url}; that page shows the wallet's version ${v2}, forked from version 1; the address stays inside its column (desktop) and the page has no sideways scroll at 390px`, page, { status: h.status, checksumStatus: hc.status, checksumLocation: hc.location, overflowing: overflow, phoneSidewaysPx: phoneSideways }, pass);
+      new RegExp(`Version ${v2} .*forked from version 1`, 'i').test(t) && t.includes(`@${WALLET}`) && where.includes(`/@${WALLET}/1`) && where.includes(`@${WALLET}`);
+    await record(6, 'wallet address', `/@${WALLET_CHECKSUM}/1 and ${url}`, `checksum case redirects to ${url}; that page shows the wallet's version ${v2}, forked from version 1; the address shows lowercase, in the capitals label too; it stays inside its column (desktop) and the page has no sideways scroll at 390px`, page, { status: h.status, checksumStatus: hc.status, checksumLocation: hc.location, label: where, overflowing: overflow, phoneSidewaysPx: phoneSideways }, pass);
     await page.context().close();
   }
 
@@ -398,7 +400,11 @@ try {
     await page.context().close();
   }
 
-  // The site read and wrote as studio_writer, and remembered the name it resolved (noteName).
+  // The site read as studio_writer, and viewing pages stored no names: only the four seeded
+  // (owner, 2026-10-17: names are remembered at sign-in or publish, never on a page view).
+  const names = await pg.query<{ fname: string }>('select fname from studio.account_names order by fname');
+  const seeded = 'naaate,oldie,oldnaaate,zeiwriter';
+  if (names.rows.map((r) => r.fname).join(',') !== seeded) failures.push(`viewing pages stored names: ${names.rows.map((r) => r.fname).join(',')} (expected ${seeded})`);
   const who = await pg.query<{ u: string }>('select current_user as u');
   if (who.rows[0].u !== 'studio_writer') failures.push(`the session was ${who.rows[0].u}, not studio_writer`);
   if (!asked.some((a) => a.startsWith('/v2/user-by-username?username=oldnaaate'))) failures.push('the rename was not looked up on the stand-in');
