@@ -1,6 +1,6 @@
 import 'server-only';
 import { db } from './db';
-import { lookupFid, lookupName, NAME } from './names';
+import { forgetName, lookupFid, lookupName, NAME } from './names';
 
 /**
  * Adaptation pages: /@<fname>/<id>, /@<fname>/<id>/v/<n>, /<id> (docs/proposals/adaptation-urls.md).
@@ -194,7 +194,13 @@ export async function resolveHandle(raw: string): Promise<Resolved> {
   if (seen) {
     // Farcaster didn't answer: trust the name we saw. It answered "no such name": the person renamed.
     if (found.failed) return name === handle ? { kind: 'person', person: seen, handle } : { kind: 'redirect', handle: name };
-    const now = await lookupName(seen);
+    let now = await lookupName(seen);
+    // Our cached name for that FID is the one Farcaster just said is gone: the cache predates the
+    // rename (names.ts keeps a FID's name a day), so ask again rather than 404 until it expires.
+    if (now === name) {
+      forgetName(seen);
+      now = await lookupName(seen);
+    }
     if (now && now !== name) return { kind: 'redirect', handle: now };
   }
   return { kind: 'none' };

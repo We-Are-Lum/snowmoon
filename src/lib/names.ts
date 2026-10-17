@@ -60,6 +60,10 @@ const DAY = 86400_000;
 export async function lookupName(fid: number): Promise<string | null> {
   return (await lookup(fid)).name;
 }
+/** Drop the cached name for a FID, so the next lookupName asks Farcaster again (after a rename). */
+export function forgetName(fid: number): void {
+  cache.delete(fid);
+}
 /** The lookup, and, when Farcaster has a name for this FID that doesn't fit NAME, that name (`unfit`). */
 async function lookup(fid: number): Promise<{ name: string | null; unfit: string | null }> {
   const hit = cache.get(fid);

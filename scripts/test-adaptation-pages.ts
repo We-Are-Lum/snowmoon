@@ -66,6 +66,10 @@ const a2 = (await pg.query<{ id: number }>(`insert into studio.adaptations (owne
 const a3 = (await pg.query<{ id: number }>(`insert into studio.adaptations (owner_person, title) values (7777, 'Third Scene') returning id`)).rows[0].id;
 await pg.query(`insert into studio.adaptation_versions (adaptation_id, author_person, recipe) values ($1, 7777, '{"video_url": null}')`, [a3]);
 await pg.exec(`insert into studio.account_names (fname, person) values ('zeiwriter', 7777)`);
+// A fourth by FID 8888, @oldie, who renames to @newie during the test (check 12).
+const a4 = (await pg.query<{ id: number }>(`insert into studio.adaptations (owner_person, title) values (8888, 'Fourth Scene') returning id`)).rows[0].id;
+await pg.query(`insert into studio.adaptation_versions (adaptation_id, author_person, recipe) values ($1, 8888, '{"video_url": null}')`, [a4]);
+await pg.exec(`insert into studio.account_names (fname, person) values ('oldie', 8888)`);
 // From here on the site talks to the database as the production role.
 await pg.exec('set role studio_writer');
 
@@ -74,7 +78,7 @@ const dbServer = new PGLiteSocketServer({ db: pg, port: dbPort, host: '127.0.0.1
 await dbServer.start();
 
 // --- Farcaster's name API, stood in ------------------------------------------------------
-const NAMES: Record<string, number> = { naaate: 6786 };
+const NAMES: Record<string, number> = { naaate: 6786, oldie: 8888 };
 const asked: string[] = [];
 let farcasterDown = false;
 const stub = createHttp((req, res) => {
@@ -165,6 +169,20 @@ async function record(n: number, name: string, url: string, expected: string, pa
   results.push({ n: 11, name: 'Farcaster not answering', url: `/${a3}`, expected: `307 to /@zeiwriter/${a3} (the name last seen on FID 7777), and that page 200`, got: { status: h.status, finalUrl: h.location ?? '', text: '', pageStatus: h2.status }, pass, screenshot: '' });
   if (!pass) failures.push(`11 Farcaster not answering: /${a3} gave ${h.status} ${h.location}; /@zeiwriter/${a3} gave ${h2.status}`);
   console.log(`  ${pass ? 'PASS' : 'FAIL'} 11 Farcaster not answering`);
+}
+
+// 12. A rename while the site still holds the old name for that FID (cached a day in names.ts):
+// /<id> is visited first (the site caches FID 8888 = @oldie), then @oldie renames to @newie.
+// A link with the old name must redirect to the new one, not 404 until the cache expires.
+{
+  const before = await head(`/${a4}`);
+  delete NAMES.oldie;
+  NAMES.newie = 8888;
+  const h = await head(`/@oldie/${a4}`);
+  const pass = before.location === `/@oldie/${a4}` && [307, 308].includes(h.status) && h.location === `/@newie/${a4}`;
+  results.push({ n: 12, name: 'rename with a warm name cache', url: `/@oldie/${a4}`, expected: `redirect to /@newie/${a4}`, got: { status: h.status, finalUrl: h.location ?? '', text: '', before: before.location }, pass, screenshot: '' });
+  if (!pass) failures.push(`12 rename with a warm cache: /${a4} went to ${before.location}; /@oldie/${a4} gave ${h.status} ${h.location}`);
+  console.log(`  ${pass ? 'PASS' : 'FAIL'} 12 rename with a warm name cache`);
 }
 
 const browser = await chromium.launch({ channel: 'chrome', args: ['--disable-features=LocalNetworkAccessChecks,BlockInsecurePrivateNetworkRequests,PrivateNetworkAccessForNavigations'] });
