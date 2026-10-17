@@ -1,7 +1,7 @@
 """Build the Fifteen Days clip viewer from scripts/clip-viewer.html: both cuts as playable video, and beside the
 video, the playing shot's frame options (tap to pick), its line, its script text and the reviewer's notes; one comment box.
 
-  /Users/nathan/snowmoon/.venv-voice/bin/python scripts/clip-viewer.py fifteen-days <out-dir>
+  python scripts/clip-viewer.py fifteen-days <out-dir>
 
 <out-dir>/vid/<cut>/ must already hold the cut as fMP4 HLS segments (init.mp4, sNN.m4s, index.m3u8); the page plays
 them through Media Source, so they run as one continuous video. Comments save to the artifact's db, collection "notes",
@@ -62,7 +62,24 @@ def main() -> None:
     rec = {l["ref"]: l for l in json.loads((ROOT / "adaptations" / seed / "recording-lines.json").read_text())["lines"]}
     for r_, l_ in rec.items():
         speaker.setdefault(r_, l_["speaker"])
-    for cut in [c for c in sys.argv[3:]] or ("tight", "full"):
+    argv = sys.argv[3:]
+    report = None
+    if "--report" in argv:  # a report shown at the top (title, blocks, changes before/after, page tests); its images are copied in
+        k = argv.index("--report")
+        report = json.loads(Path(argv[k + 1]).read_text())
+        argv = argv[:k] + argv[k + 2:]
+        for c in report.get("changes", []):
+            for side in ("before", "after"):
+                c[side] = jpg(ROOT / c[side], out, 900)
+        for t in report.get("tests", []):
+            if t.get("img"):
+                src = Path(t["img"])
+                dst = out / "img" / ("test-" + src.stem + ".png")
+                dst.parent.mkdir(parents=True, exist_ok=True)
+                dst.write_bytes(src.read_bytes())
+                t["img"] = str(dst.relative_to(out))
+    LABELS = {"coverage": "v4", "coverage-v5": "v5"}
+    for cut in argv or ("tight", "full"):
         cdir = ROOT / "scenes-out" / seed / "cuts" / cut
         tl = json.loads((cdir / "timeline.json").read_text())
         dur = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0",
@@ -108,8 +125,8 @@ def main() -> None:
         shots.append({"id": "END", "t0": card_at, "t1": round(dur, 3), "scene": "End card", "size": "", "action": "End card B, \"The invitation\".", "opts": []})
         init = out / "vid" / cut / "init.mp4"
         segs = [ln for ln in (out / "vid" / cut / "index.m3u8").read_text().splitlines() if ln and not ln.startswith("#")]
-        cuts[cut] = {"dur": round(dur, 3), "codec": codec(init), "segs": segs, "shots": shots, "lines": lines}
-    data = {"seed": seed, "title": "Fifteen Days clips", "cuts": cuts}
+        cuts[cut] = {"label": LABELS.get(cut), "dur": round(dur, 3), "codec": codec(init), "segs": segs, "shots": shots, "lines": lines}
+    data = {"seed": seed, "title": "Fifteen Days clips", "cuts": cuts, "report": report}
     page = (ROOT / "scripts" / "clip-viewer.html").read_text().replace("__DATA__", json.dumps(data, ensure_ascii=False))
     (out / "index.html").write_text(page)
     n = sum(1 for p in out.rglob("*") if p.is_file() and p.name != "index.html")

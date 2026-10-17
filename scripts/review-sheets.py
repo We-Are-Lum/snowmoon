@@ -3,6 +3,9 @@
   .venv-image/bin/python scripts/review-sheets.py fifteen-days plates <out-dir>            one sheet per plate: every option, labelled
   .venv-image/bin/python scripts/review-sheets.py fifteen-days frames <out-dir> [id ...]   one sheet per frame: the frame, its cards, its layout
   .venv-image/bin/python scripts/review-sheets.py fifteen-days coverage <out-dir> [id ...] the same for the coverage frames (coverage-board.json)
+  .venv-image/bin/python scripts/review-sheets.py fifteen-days figures <out-dir> [file ...]  extra and background figures: each picked coverage
+      frame (or each file given) cut into four overlapping quarters, enlarged, so a small figure far behind can't hide (added
+      2026-10-17 after the reviewer missed a small robot behind Deluin)
 
 Writes <out-dir>/<id>.jpg and <out-dir>/manifest.json (per sheet: what the picture must show). The checklist is the owner's
 (2026-10-16 night).
@@ -49,8 +52,60 @@ def fit(p: Path, w: int, h: int) -> Image.Image:
     return im
 
 
+FIGURE_CHECKS = [
+    "count EVERY figure in the picture, however small, partial, blurred or far away: people, robots, silhouettes, people seen "
+    "through windows or glass, reflections, figures on screens or posters, statues and mannequins",
+    "compare with who should be there (expected below); any figure not expected is a failure, unless the place allows it (the "
+    "tournament hall's crowd in the tiers)",
+    "no main person appears twice (a double or a look-alike in the background)",
+]
+PLACE_ALLOWS = {"hall": "a crowd in the tiers and players in other pits are fine; nobody else on the walkway",
+                "courtyard": "nobody else at all: no diners, passers-by, staff or robots (unless the serving robot is expected)",
+                "corridor": "nobody else at all", "lobby": "nobody else at all, inside or outside the windows"}
+
+
+def figures(seed: str, out: Path, files: list) -> None:
+    """Sheets for the extra-figure check: the frame cut into four overlapping quarters, each enlarged."""
+    adir = ROOT / "adaptations" / seed / "preprod"
+    cb = json.loads((adir / "coverage-board.json").read_text())["frames"]
+    if not files:
+        files = list(json.loads((adir / "overnight" / "coverage-pictures.json").read_text()).values())
+    man = {"checklist": FIGURE_CHECKS, "sheets": {}}
+    for rel in files:
+        f = ROOT / rel
+        cid = f.stem
+        fid = cid.rsplit("-", 1)[0]
+        s = cb.get(fid)
+        if not s:
+            continue
+        im = Image.open(f).convert("RGB")
+        w, h = im.size
+        cw, ch = int(w * 0.58), int(h * 0.58)
+        Q = 1000
+        qh = round(Q * ch / cw)
+        sheet = Image.new("RGB", (2 * Q + 12, 2 * (qh + 36) + 4), "white")
+        d = ImageDraw.Draw(sheet)
+        for k, (x0, y0, lab) in enumerate([(0, 0, "top left"), (w - cw, 0, "top right"), (0, h - ch, "bottom left"), (w - cw, h - ch, "bottom right")]):
+            q = im.crop((x0, y0, x0 + cw, y0 + ch)).resize((Q, qh), Image.LANCZOS)
+            x, y = (k % 2) * (Q + 12), (k // 2) * (qh + 36)
+            d.text((x + 6, y + 4), f"{cid}: {lab} (enlarged)", fill="black", font=font(24))
+            sheet.paste(q, (x, y + 34))
+        sheet.save(out / f"{cid}.jpg", quality=86)
+        whole = out / f"{cid}.whole.jpg"
+        im.save(whole, quality=86)
+        exp = [NAMES[w] for w in s["who"]]
+        man["sheets"][cid] = {"sheet": str(out / f"{cid}.jpg"), "whole": str(whole), "layout": str(PRE / "set" / f"{s['layout']}.look.png"),
+                              "action": s["action"], "set": s["set"], "expected": exp, "expected_count": len(exp),
+                              "place_allows": PLACE_ALLOWS.get(s["set"], "nobody else")}
+    (out / "manifest.json").write_text(json.dumps(man, indent=1, ensure_ascii=False))
+    print(len(man["sheets"]), "figure sheets")
+
+
 def main() -> None:
     seed, mode, out = sys.argv[1], sys.argv[2], Path(sys.argv[3])
+    if mode == "figures":
+        out.mkdir(parents=True, exist_ok=True)
+        return figures(seed, out, sys.argv[4:])
     only = set(sys.argv[4:])
     out.mkdir(parents=True, exist_ok=True)
     adir = ROOT / "adaptations" / seed / "preprod"

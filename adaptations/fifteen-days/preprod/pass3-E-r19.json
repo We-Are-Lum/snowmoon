@@ -1,0 +1,57 @@
+{
+ "about": "Fifteen Days v5: Bai's turn (K18), cleaned: a background figure removed, and her headphones for 'What?!'. DRAFTED prompts.",
+ "out": "images-out/preprod/pass3",
+ "ledger": "images-out/preprod/ledger-s7.json",
+ "cap_usd": 25.0,
+ "style": "",
+ "jobs": [
+  {
+   "id": "cov-cafe-BAI-sideeye-E19",
+   "shot": "cov-cafe-BAI-sideeye",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-sideeye-K18.png"
+   ],
+   "prompt": "Remove the grey standing figure by the counter in the far background in the middle of the picture; the counter and stools are there with nobody at them. Nobody else anywhere in the courtyard. Keep everything else exactly as it is: the same drawing, colours, line work and lighting, exactly the same camera, framing and crop (do not zoom, crop, shift or widen the view); the young woman keeps her face, hair, vest, tattoos, pose and her head turned over her shoulder. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 19
+  },
+  {
+   "id": "cov-cafe-BAI-sideeye-E20",
+   "shot": "cov-cafe-BAI-sideeye",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-sideeye-K18.png"
+   ],
+   "prompt": "Remove the grey standing figure by the counter in the far background in the middle of the picture; the counter and stools are there with nobody at them. Nobody else anywhere in the courtyard. Keep everything else exactly as it is: the same drawing, colours, line work and lighting, exactly the same camera, framing and crop (do not zoom, crop, shift or widen the view); the young woman keeps her face, hair, vest, tattoos, pose and her head turned over her shoulder. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 20
+  },
+  {
+   "id": "cov-cafe-BAI-what-E19",
+   "shot": "cov-cafe-BAI-what",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-what-K18.png"
+   ],
+   "prompt": "She wears big dark over-ear headphones like a dark band over her head; her raised hand is lifting the near ear cup up off her ear. Her mouth is slightly open as she calls out, no teeth showing. Nobody else anywhere in the courtyard. Keep everything else exactly as it is: the same drawing, colours, line work and lighting, exactly the same camera, framing and crop (do not zoom, crop, shift or widen the view); the young woman keeps her face, hair, vest, tattoos, pose and her head turned over her shoulder. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 19
+  },
+  {
+   "id": "cov-cafe-BAI-what-E20",
+   "shot": "cov-cafe-BAI-what",
+   "engine": "qwen",
+   "refs": [
+    "images-out/preprod/edit-src/cov-cafe-BAI-what-K18.png"
+   ],
+   "prompt": "She wears big dark over-ear headphones like a dark band over her head; her raised hand is lifting the near ear cup up off her ear. Her mouth is slightly open as she calls out, no teeth showing. Nobody else anywhere in the courtyard. Keep everything else exactly as it is: the same drawing, colours, line work and lighting, exactly the same camera, framing and crop (do not zoom, crop, shift or widen the view); the young woman keeps her face, hair, vest, tattoos, pose and her head turned over her shoulder. No letters, words or numbers.",
+   "width": 1344,
+   "height": 752,
+   "seed": 20
+  }
+ ]
+}

@@ -1,6 +1,8 @@
 """A 45-60 s trailer for the cast, cut from the rendered coverage cut (owner, 2026-10-17: "propose the moments, no new words").
 
-  python scripts/cut-trailer.py <seed>
+  python scripts/cut-trailer.py <seed> [--name v5]
+
+--name v5 cuts the same moments from cuts/coverage-v5.mp4 and writes trailer-v5.mp4 and trailer-v5.json (the first stays).
 
 Reads scenes-out/<seed>/cuts/coverage/timeline.json and cuts/coverage.mp4, takes the MOMENTS below (each from one shot or
 line to another, or the first seconds of a line), joins them with short audio and picture fades, and ends on a title card
@@ -31,8 +33,10 @@ CARD = ["Fifteen Days", "one scene from Snowmoon by Vitalik Buterin", "Fork the 
 
 def main() -> None:
     seed = sys.argv[1]
+    name = sys.argv[sys.argv.index("--name") + 1] if "--name" in sys.argv else None
+    cov, tag = "coverage" + (f"-{name}" if name else ""), (f"-{name}" if name else "")
     cuts = ROOT / "scenes-out" / seed / "cuts"
-    tl = json.loads((cuts / "coverage" / "timeline.json").read_text())
+    tl = json.loads((cuts / cov / "timeline.json").read_text())
     import soundfile as sf
     voice = {c["id"]: (c["at"]["offset"], c["at"]["offset"] + sf.info(ROOT / c["stem"]).duration) for c in tl["cues"] if c["track"] == "voice"}
     shots = tl["shots"]
@@ -60,9 +64,9 @@ def main() -> None:
         out.append({"what": what, "from": round(t0, 2), "to": round(t1, 2)})
         t_after = t0
     total = sum(m["to"] - m["from"] for m in out) + 4.0
-    work = cuts / "trailer"
+    work = cuts / f"trailer{tag}"
     work.mkdir(exist_ok=True)
-    src = cuts / "coverage.mp4"
+    src = cuts / f"{cov}.mp4"
     parts = []
     for k, m in enumerate(out):
         p = work / f"p{k:02d}.mp4"
@@ -86,9 +90,9 @@ def main() -> None:
     parts.append(pc)
     lst = work / "list.txt"
     lst.write_text("".join(f"file '{p}'\n" for p in parts))
-    dst = cuts / "trailer.mp4"
+    dst = cuts / f"trailer{tag}.mp4"
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0", "-i", str(lst), "-c", "copy", str(dst)], check=True)
-    (cuts / "trailer.json").write_text(json.dumps({"about": "Trailer moments (DRAFTED by the coding agent), times in the coverage cut.", "moments": out, "card": CARD}, indent=1) + "\n")
+    (cuts / f"trailer{tag}.json").write_text(json.dumps({"about": "Trailer moments (DRAFTED by the coding agent), times in the coverage cut.", "moments": out, "card": CARD}, indent=1) + "\n")
     print(f"trailer: {len(out)} moments, about {total:.0f} s -> {dst.relative_to(ROOT)}")
     for m in out:
         print(f"  {m['from']:7.2f}-{m['to']:7.2f}  {m['what']}")

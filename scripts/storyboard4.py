@@ -278,7 +278,7 @@ def main() -> None:
         js = [j for j in js if not args.shots or j["shot"] in args.shots]
         (adir / f"pass3-{ap_}-r{att}.json").write_text(json.dumps({
             "about": f"Fifteen Days storyboard frames, approach {ap_}, attempt {att} (owner, 2026-10-16 night): scripts/storyboard4.py. Prompts DRAFTED by the coding agent.",
-            "out": "images-out/preprod/pass3", "ledger": "images-out/preprod/ledger-s6.json", "cap_usd": 40.0, "style": "", "jobs": js}, indent=2, ensure_ascii=False) + "\n")
+            "out": "images-out/preprod/pass3", "ledger": "images-out/preprod/ledger-s7.json", "cap_usd": 25.0, "style": "", "jobs": js}, indent=2, ensure_ascii=False) + "\n")
         print(ap_, att, len(js), "jobs")
 
 

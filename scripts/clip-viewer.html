@@ -57,7 +57,25 @@ h2{font:500 15px var(--display);margin:4px 0 0}
 .muted{color:var(--muted);font-size:14px}
 .rev{font-size:14px;color:var(--muted);margin:0}.rev b{font:500 12px var(--mono);color:var(--fg)}
 p{margin:0;max-width:70ch}
+.report{max-width:1600px;margin:0 auto 22px;display:grid;gap:14px;border-bottom:1px solid var(--line);padding-bottom:18px}
+.report h1{font:600 24px/1.15 var(--display)}
+.report .when{font:12px var(--mono);color:var(--muted)}
+.rgrid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,300px),1fr));gap:12px 24px}
+.rblock h3{font:600 14px var(--display);margin:0 0 4px;letter-spacing:.02em;text-transform:uppercase}
+.rblock ul{margin:0;padding-left:1.1em;display:grid;gap:4px}
+.rblock.decide h3{color:var(--claude)}.rblock.wrong h3{color:var(--bad)}.rblock.done h3{color:var(--ok)}
+details.rmore{border:1px solid var(--line);border-radius:6px;padding:8px 12px;background:var(--paper)}
+details.rmore summary{cursor:pointer;font:500 14px var(--display)}
+.chg{display:grid;gap:14px;margin-top:10px}
+.chg .row{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;align-items:start}
+.chg .row figure{margin:0;display:grid;gap:3px;min-width:0}.chg .row img{width:100%;height:auto;border-radius:4px}
+.chg .row figcaption{font:11px var(--mono);color:var(--muted)}
+.chg .cap{grid-column:1/-1;font-size:14px}.chg .cap b{font:600 13px var(--mono)}
+.tests{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:12px;margin-top:10px}
+.tests figure{margin:0;display:grid;gap:4px;min-width:0}.tests img{width:100%;height:auto;border:1px solid var(--line);border-radius:4px}
+.tests figcaption{font-size:13px}.tests figcaption b{font:600 11px var(--mono)}
 </style>
+<section class="report" id="report" hidden></section>
 <div class="app">
   <section class="left" aria-label="Player and comments">
     <div class="top"><h1>Fifteen Days clips</h1><div class="seg" role="group" aria-label="Cut" id="cuts"></div><span class="status" id="status">loading…</span></div>
@@ -202,10 +220,22 @@ window.addEventListener("keydown", e => {
   else if (e.key === "ArrowRight") { e.preventDefault(); seek(D.shots[Math.min(D.shots.length - 1, cur + 1)].t0 + 0.02); }
 }, true);
 
-$("cuts").innerHTML = Object.entries(DATA.cuts).map(([k, c]) => `<button data-cut="${k}" aria-pressed="false">${({tight: "Tight", full: "Full", coverage: "Coverage"})[k] || k} ${fmt(c.dur).replace(/\.\d$/, "")}</button>`).join("");
+$("cuts").innerHTML = Object.entries(DATA.cuts).map(([k, c]) => `<button data-cut="${k}" aria-pressed="false">${(c.label || ({tight: "Tight", full: "Full", coverage: "Coverage"})[k] || k)} ${fmt(c.dur).replace(/\.\d$/, "")}</button>`).join("");
 $("cuts").onclick = e => { const b = e.target.closest("button"); if (!b || b.dataset.cut === CUT) return;
   const id = D.shots[cur]?.id; v.pause(); const nx = DATA.cuts[b.dataset.cut].shots.find(s => s.id === id); load(b.dataset.cut, nx ? nx.t0 + 0.02 : 0); };
 load(CUT, 0);
+// The report at the top: what changed, what's still wrong, decisions; changed shots before and after; page tests.
+(() => {
+  const R = DATA.report; if (!R) return;
+  const li = xs => "<ul>" + xs.map(x => "<li>" + esc(x) + "</li>").join("") + "</ul>";
+  let h = `<div><h1>${esc(R.title)}</h1><div class="when">${esc(R.when || "")}</div></div><div class="rgrid">` +
+    (R.blocks || []).map(b => `<div class="rblock ${esc(b.kind || "")}"><h3>${esc(b.h)}</h3>${li(b.items)}</div>`).join("") + "</div>";
+  if (R.changes && R.changes.length) h += `<details class="rmore"><summary>Changed shots in v5 (${R.changes.length}), before and after</summary><div class="chg">` +
+    R.changes.map(c => `<div class="row"><div class="cap"><b>${esc(c.id)}</b> · ${esc(c.why)}</div><figure><img src="${esc(c.before)}" alt="${esc(c.id)} in v4" loading="lazy"><figcaption>v4 · ${esc(c.before_label || "")}</figcaption></figure><figure><img src="${esc(c.after)}" alt="${esc(c.id)} in v5" loading="lazy"><figcaption>v5 · ${esc(c.after_label || "")}</figcaption></figure></div>`).join("") + "</div></details>";
+  if (R.tests && R.tests.length) h += `<details class="rmore"><summary>Scene page tests on a local database (${R.tests.filter(t => t.pass).length} of ${R.tests.length} pass)</summary><div class="tests">` +
+    R.tests.map(t => `<figure>${t.img ? `<img src="${esc(t.img)}" alt="${esc(t.name)}" loading="lazy">` : ""}<figcaption><b class="flag ${t.pass ? "pass" : "fail"}">${t.pass ? "pass" : "fail"}</b> ${esc(t.name)}${t.note ? " · " + esc(t.note) : ""}</figcaption></figure>`).join("") + "</div></details>";
+  $("report").innerHTML = h; $("report").hidden = false;
+})();
 (async () => {
   try { db = window.claude ? await window.claude.use("db") : null; } catch (e) { db = null; }
   if (!db) { setStatus("comments not connected: open this page on claude.ai to save"); return; }

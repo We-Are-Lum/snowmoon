@@ -2125,7 +2125,7 @@
    "setup": "BAI",
    "variant": "sideeye",
    "layout": "cov-cafe-BAI",
-   "action": "{B} at her small round table, big headphones on, a handheld in her hands, glancing sideways out of the corner of her eye toward the left of the frame.",
+   "action": "{B} sits at her small round table with her back to us, big headphones on, a handheld in her hands, and turns her head back over her left shoulder toward the left of the frame, glancing sideways out of the corner of her eye; her face in profile over her shoulder.",
    "who": [
     "B"
    ],
@@ -2139,7 +2139,7 @@
    "setup": "BAI",
    "variant": "what",
    "layout": "cov-cafe-BAI",
-   "action": "{B} at her small round table turns in her chair toward the left of the frame and lifts one side of her big headphones off one ear, loudly.",
+   "action": "{B} twists round in her chair, her back to us, head and shoulders turned toward the left of the frame, lifting one side of her big headphones off one ear as she calls out; her face in profile over her shoulder.",
    "who": [
     "B"
    ],

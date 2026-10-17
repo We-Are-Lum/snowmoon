@@ -1,6 +1,10 @@
 """Cut a scene from its coverage plan (docs/coverage.md; scripts/coverage-plan.py writes coverage-board.json).
 
-  /Users/nathan/snowmoon/.venv-voice/bin/python scripts/cut-coverage.py <seed> [--render]
+  python scripts/cut-coverage.py <seed> [--render] [--name v5]
+
+--name v5 builds another version beside the first (cuts/coverage-v5/, cuts/coverage-v5.mp4) with the same plan, timing,
+words and audio, and pictures from overnight/coverage-pictures.json overlaid by overnight/coverage-pictures-v5.json
+(the frames changed in that version). The first cut's files are not touched.
 
 Writes scenes-out/<seed>/cuts/coverage/timeline.json and, with --render, mixes and renders it to cuts/coverage.mp4.
 The edit follows the rules: picture cuts on the dialogue, with the next speaker's voice starting just before the cut when the
@@ -19,6 +23,7 @@ import sys
 from pathlib import Path
 
 import soundfile as sf
+from snowmoon_paths import VOICE_PY  # the shared tools, for a fork or a worktree
 
 ROOT = Path(__file__).resolve().parent.parent
 spec = importlib.util.spec_from_file_location("cutv4", ROOT / "scripts" / "cut-v4.py")
@@ -48,7 +53,10 @@ def main() -> None:
     sounds = {x["effect"]: x for x in json.loads((adir / "sounds" / "recipe.json").read_text())["sounds"]}
     pk = pre / "overnight" / "coverage-pictures.json"
     picks = json.loads(pk.read_text()) if pk.exists() else {}
-    work = sout / "cuts" / "coverage"
+    name = sys.argv[sys.argv.index("--name") + 1] if "--name" in sys.argv else None
+    if name:
+        picks.update(json.loads((pre / "overnight" / f"coverage-pictures-{name}.json").read_text()))
+    work = sout / "cuts" / ("coverage" + (f"-{name}" if name else ""))
     stems = work / "stems"
     stems.mkdir(parents=True, exist_ok=True)
 
@@ -237,11 +245,11 @@ def main() -> None:
         print("  ", x)
     if "--render" in sys.argv:
         rel = str((work / "timeline.json").relative_to(ROOT))
-        py = "/Users/nathan/snowmoon/.venv-voice/bin/python"
+        py = VOICE_PY
         subprocess.run([py, "scripts/mix-scene.py", seed, "--timeline", rel], cwd=ROOT, check=True)
         subprocess.run([py, "scripts/render-scene.py", seed, "--timeline", rel], cwd=ROOT, check=True)
-        (work.parent / "coverage.mp4").write_bytes((work / "coverage.mp4").read_bytes())
-        print("wrote", (work.parent / "coverage.mp4").relative_to(ROOT))
+        (work.parent / f"{work.name}.mp4").write_bytes((work / f"{work.name}.mp4").read_bytes())
+        print("wrote", (work.parent / f"{work.name}.mp4").relative_to(ROOT))
 
 
 if __name__ == "__main__":

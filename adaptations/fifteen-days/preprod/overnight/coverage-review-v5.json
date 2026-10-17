@@ -1,0 +1,533 @@
+{
+ "about": "v5 candidates (edits and Bai's turn), two independent reviews each: the picture checklist (reviewer-brief-v5) and the extra-figure check (reviewer-brief-figures.md), 2026-10-17 night. The picks are in coverage-pictures-v5.json.",
+ "picture": {
+  "cov-cafe-BAI-sideeye-E19": {
+   "pass": false,
+   "score": 6,
+   "fails": [
+    "style"
+   ],
+   "note": "The turn reads well: her back is to us, her face is in profile over her shoulder toward the left, there's one pair of headphones, the hands are right and the skyline shows. But there is a white strip down the left edge (about 1% of the width) and a thinner one on the right. Her table is small and square, not round."
+  },
+  "cov-cafe-BAI-sideeye-E20": {
+   "pass": true,
+   "score": 7,
+   "fails": [],
+   "note": "The same good turn as E19: back to us, profile over her shoulder toward the left, a closed-mouth half smile, one pair of headphones, handheld in her hands, and the café and skyline correct. This one has only a hairline of white at the left edge. Her table is square where the action asks for a small round one."
+  },
+  "cov-cafe-BAI-what-E25": {
+   "pass": false,
+   "score": 3,
+   "fails": [
+    "action",
+    "hands",
+    "doubled"
+   ],
+   "note": "She has a third arm: both hands hold the handheld at the table while a tattooed arm reaches up to lift a headphone cup. There also look to be two sets of ear cups, one over her ear and one lifted above her head. She has a calm closed-mouth smile rather than calling out, and there is a white strip on the left edge."
+  },
+  "cov-cafe-BAI-what-E26": {
+   "pass": false,
+   "score": 5,
+   "fails": [
+    "action"
+   ],
+   "note": "The turn is right and her serious profile could read as reacting, with clean hands and one pair of headphones. But nothing lifts a headphone cup and she is not calling out, so it looks like the sideeye frame with a frown. There is also a white strip on the left edge and her table is square."
+  },
+  "cov-cafe-CU-D-warm-E16": {
+   "pass": false,
+   "score": 6,
+   "fails": [
+    "size"
+   ],
+   "note": "Deluin is right: cream cable-knit, light-brown hair, a warm closed-mouth look toward the left in three-quarter. The courtyard is empty, the tables are rectangular and the skyline shows. But it is a chest-up medium close-up with lots of background, not a close-up, and his hair is straighter than on the card."
+  },
+  "cov-cafe-CU-D-warm-E17": {
+   "pass": false,
+   "score": 6,
+   "fails": [
+    "size"
+   ],
+   "note": "Practically the same as E16: right person, look and direction, but framed chest-up as a medium close-up rather than a close-up."
+  },
+  "cov-cafe-CU-Z0-whoa-E16": {
+   "pass": false,
+   "score": 4,
+   "fails": [
+    5,
+    8,
+    "size",
+    "action"
+   ],
+   "note": "Zei's look and the surprise are good, but he sits on the right of the frame facing screen-left, against the owner's rule. He is indoors behind big windows, not out in the courtyard at the end of the long table. The menu shows rows of fake text lines rather than blank light, and the framing is a medium close-up."
+  },
+  "cov-cafe-CU-Z0-whoa-E17": {
+   "pass": false,
+   "score": 4,
+   "fails": [
+    5,
+    8,
+    "size",
+    "action"
+   ],
+   "note": "Practically the same as E16: wrong screen direction, an indoor café rather than the courtyard, lines like text on the menu, and medium close-up framing."
+  },
+  "cov-cafe-SUGAR-flick-E16": {
+   "pass": true,
+   "score": 6,
+   "fails": [],
+   "note": "A good table-height insert: a two-row wall of sugar cubes between two white cups and a finger knocking out a bottom cube. No letters (the sign is only a leaf icon). The cube is only nudged, not flying, and the background reads as an interior with window frames more than the open courtyard."
+  },
+  "cov-cafe-SUGAR-flick-E17": {
+   "pass": true,
+   "score": 6,
+   "fails": [],
+   "note": "Practically the same as E16: the wall, the cups and the finger on a bottom cube are right, but the cube does not fly and the backdrop looks indoor."
+  },
+  "cov-cafe-SUGAR-stack-E16": {
+   "pass": false,
+   "score": 5,
+   "fails": [
+    7,
+    "action"
+   ],
+   "note": "Deluin's hand and cream cable-knit sleeve are right and the hand is clean. But only one cup shows, not two with the cubes between them. The finger presses a cube on the table instead of setting one on top of another, and the skyline is a generic modern city rather than the megastructure."
+  },
+  "cov-cafe-SUGAR-stack-E17": {
+   "pass": false,
+   "score": 5,
+   "fails": [
+    7,
+    "action"
+   ],
+   "note": "Practically the same as E16: right sleeve and hand, but one cup instead of two, no cube being set on another, and a generic skyline."
+  },
+  "cov-game-SCREEN-face-E18": {
+   "pass": true,
+   "score": 7,
+   "fails": [],
+   "note": "A good arena wide shot: the glowing hologram floor with gliders, crowded tiers, Deluin from behind in his sunken pit, no sky, and the big screen showing his calm closed-mouth face. The screen sits in the top-right corner rather than over the floor, and the crowd is a little sparse and small."
+  },
+  "cov-game-SCREEN-face-E19": {
+   "pass": true,
+   "score": 7,
+   "fails": [],
+   "note": "The same as E18 with a plainer black ceiling, and every check met. E18's ceiling detail gives slightly more sense of the hall; otherwise they are equal."
+  },
+  "cov-lobby-MASTER-sits-E18": {
+   "pass": true,
+   "score": 8,
+   "fails": [],
+   "note": "Strong frame: Zei on the left in profile facing right, worried; Bai on the right in profile facing left, serious and caring. Each sits on a chair at a rectangular table, the late-night lobby restaurant is empty and there is skyline through the glass. She is already seated rather than sitting down."
+  },
+  "cov-lobby-MASTER-sits-E19": {
+   "pass": true,
+   "score": 8,
+   "fails": [],
+   "note": "The same as E18 with a door on the right wall, and every check met. The two are interchangeable."
+  },
+  "cov-overlook-OTS-Z-shrug-E16": {
+   "pass": true,
+   "score": 6,
+   "fails": [],
+   "note": "A correct over-the-shoulder: Zei from behind on the left, Bai on the right in three-quarter looking up at him with a small closed smile, the hall behind and no sky. Hands count right, but Zei's hand is also on the gadget, and there is no shrug or snapping shut, only her holding it."
+  },
+  "cov-overlook-OTS-Z-shrug-E17": {
+   "pass": true,
+   "score": 6,
+   "fails": [],
+   "note": "The same staging as E16 with a neutral face and a glowing console panel in front. Direction and hands are right, but there is still no visible shrug."
+  },
+  "cov-overlook-OTS-Z-wry-E16": {
+   "pass": true,
+   "score": 8,
+   "fails": [],
+   "note": "Very good: over Zei's shoulder on the left, Bai on the right glancing at him with a wry, small closed-mouth smile. Her vest, ponytail and tattoos match the card, she has two arms, and the hall has its glowing holograms and no sky."
+  },
+  "cov-overlook-OTS-Z-wry-E17": {
+   "pass": true,
+   "score": 7,
+   "fails": [],
+   "note": "The same as E16 plus a bright hologram ring at her feet, which is busy and pulls the eye from her face. E16 is the cleaner pick."
+  },
+  "cov-cafe-BAI-sideeye-R20": {
+   "pass": true,
+   "score": 8,
+   "fails": [],
+   "note": "Works as the turn: Bai's back is to us and her face is in profile over her shoulder, looking left. She matches the card, has two arms with both hands on the handheld, wears one set of headphones and has a small closed-mouth smirk; there are no white bars and no other people. Small issues: her table reads as a rounded square, not round, and the retouched lower-left pane of the first window has a slightly crisp patch edge and a very faint arc, though it passes at normal size."
+  },
+  "cov-cafe-BAI-what-R27": {
+   "pass": true,
+   "score": 6,
+   "fails": [],
+   "note": "Same good turn and profile looking left, with one hand on the headphone cup and the other holding the handheld; one set of headphones, no white bars, nobody else. Weaker on action and anatomy: she presses the cup rather than lifting it, her calm closed smile does not read as reacting or calling out, and the raised arm comes from a rounded skin bulge in front of the near shoulder, so it is unclear which arm it is. The retouched pane shows a faint arc ghost when enlarged."
+  }
+ },
+ "figures": {
+  "cov-cafe-CU-D-warm-E16": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Deluin, wavy light-brown hair, cream cable-knit turtleneck",
+     "where": "top right and bottom right, foreground",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Only Deluin; courtyard, tables, windows and gate are empty."
+  },
+  "cov-cafe-CU-D-warm-E17": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Deluin, wavy light-brown hair, cream cable-knit turtleneck",
+     "where": "top right and bottom right, foreground",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Only Deluin; nobody in the windows, street or at the tables."
+  },
+  "cov-lobby-MASTER-sits-E18": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei, orange jacket, black hair with blue streak",
+     "where": "left half, at the table",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Bai, magenta ponytail, lime vest",
+     "where": "right half, across the table",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Just Zei and Bai; empty chairs and nobody visible through the windows."
+  },
+  "cov-lobby-MASTER-sits-E19": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei, orange jacket, black hair with blue streak",
+     "where": "left half, at the table",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Bai, magenta ponytail, lime vest",
+     "where": "right half, across the table",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Just Zei and Bai; the dark blocky shape at the far right edge is window framing, not a person."
+  },
+  "cov-overlook-OTS-Z-wry-E16": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei from behind, orange jacket, blue streak",
+     "where": "top left and bottom left, foreground",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Bai, magenta ponytail, lime vest",
+     "where": "top right and bottom right",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Over-the-shoulder Zei and Bai only; the small shapes on the floor are game gliders and the tiers are empty."
+  },
+  "cov-overlook-OTS-Z-wry-E17": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei from behind, orange jacket, blue streak",
+     "where": "top left and bottom left, foreground",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Bai, magenta ponytail, lime vest",
+     "where": "top right and bottom right",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Zei and Bai only; the small shapes on the floor are gliders, nobody else on the walkway."
+  },
+  "cov-overlook-OTS-Z-shrug-E16": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei from behind, orange jacket, blue streak",
+     "where": "left half, foreground",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Bai, magenta ponytail, lime vest, seated with gadget",
+     "where": "right half",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Zei and Bai only; tiers and walkway empty."
+  },
+  "cov-overlook-OTS-Z-shrug-E17": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei from behind, orange jacket, blue streak",
+     "where": "left half, foreground",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Bai, magenta ponytail, lime vest, seated with gadget",
+     "where": "right half",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Zei and Bai only; the small shape mid-floor is a glider, not a person."
+  },
+  "cov-cafe-SUGAR-flick-E16": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei's arm and front of his orange jacket (zip and chest), finger flicking the cube",
+     "where": "top left and top right, centre",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Only Zei's arm and jacket front, as expected for this insert; nobody in the background street."
+  },
+  "cov-cafe-SUGAR-flick-E17": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei's arm and front of his orange jacket (zip and chest), finger flicking the cube",
+     "where": "top left and top right, centre",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Only Zei's arm and jacket front, as expected; background is empty."
+  },
+  "cov-cafe-SUGAR-stack-E16": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Deluin's hand, cream cable-knit sleeve and a bit of his hair",
+     "where": "top right and bottom right",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Only Deluin's hand and sleeve; the lit windows and skyline hold nobody."
+  },
+  "cov-cafe-SUGAR-stack-E17": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Deluin's hand, cream cable-knit sleeve and a bit of his hair",
+     "where": "top right and bottom right",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Only Deluin's hand and sleeve; nobody in the windows or skyline."
+  },
+  "cov-game-SCREEN-face-E18": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Deluin from behind at his console in the pit",
+     "where": "bottom left and bottom right, centre",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Deluin's face on the big screen",
+     "where": "top right, screen",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "seated crowd in the tiers",
+     "where": "all four quarters, the tiers",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Deluin in the pit plus his face on the screen as the action asks, crowd only in the tiers; nobody on the floor or in the far pit."
+  },
+  "cov-game-SCREEN-face-E19": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Deluin from behind at his console in the pit",
+     "where": "bottom left and bottom right, centre",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "Deluin's face on the big screen",
+     "where": "top right, screen",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "seated crowd in the tiers",
+     "where": "all four quarters, the tiers",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Deluin in the pit plus his face on the screen, crowd only in the tiers; floor and far pit empty."
+  },
+  "cov-cafe-CU-Z0-whoa-E16": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei, orange jacket, blue streak, holding glowing menu",
+     "where": "top right and bottom right",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Only Zei; the street through the window and the empty chairs hold nobody."
+  },
+  "cov-cafe-CU-Z0-whoa-E17": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Zei, orange jacket, blue streak, holding glowing menu",
+     "where": "top right and bottom right",
+     "expected": true,
+     "certainty": "clear"
+    }
+   ],
+   "note": "Only Zei; nobody outside the window or at other tables."
+  },
+  "cov-cafe-BAI-sideeye-E19": {
+   "pass": false,
+   "figures": [
+    {
+     "what": "Bai, magenta ponytail, lime vest, headphones",
+     "where": "centre right, foreground",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "dark rounded head-shaped silhouette behind the glass",
+     "where": "top left quarter, lower-left pane of the leftmost lit window on the building",
+     "expected": false,
+     "certainty": "possible"
+    }
+   ],
+   "note": "A head-shaped shadow sits in the lower-left pane of the leftmost lit window and reads as someone inside looking out."
+  },
+  "cov-cafe-BAI-sideeye-E20": {
+   "pass": false,
+   "figures": [
+    {
+     "what": "Bai, magenta ponytail, lime vest, headphones",
+     "where": "centre right, foreground",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "dark rounded head-shaped silhouette behind the glass",
+     "where": "top left quarter, lower-left pane of the leftmost lit window on the building",
+     "expected": false,
+     "certainty": "possible"
+    }
+   ],
+   "note": "Same head-shaped shadow in the leftmost lit window as E19; it reads as a person inside."
+  },
+  "cov-cafe-BAI-what-E25": {
+   "pass": false,
+   "figures": [
+    {
+     "what": "Bai, magenta ponytail, lime vest, both hands on the handheld",
+     "where": "centre, foreground",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "a third arm with a different coloured geometric tattoo, lifting the headphones from behind her head",
+     "where": "top right and bottom right, behind her ponytail",
+     "expected": false,
+     "certainty": "clear"
+    },
+    {
+     "what": "dark rounded head-shaped silhouette behind the glass",
+     "where": "top left quarter, lower-left pane of the leftmost lit window",
+     "expected": false,
+     "certainty": "possible"
+    }
+   ],
+   "note": "Bai's two hands stay on the handheld while a third, differently tattooed arm lifts the headphones (looks like someone else's arm), and the head-shaped shadow is in the left window too."
+  },
+  "cov-cafe-BAI-what-E26": {
+   "pass": false,
+   "figures": [
+    {
+     "what": "Bai, magenta ponytail, lime vest, headphones",
+     "where": "centre right, foreground",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "dark rounded head-shaped silhouette behind the glass",
+     "where": "top left quarter, lower-left pane of the leftmost lit window",
+     "expected": false,
+     "certainty": "possible"
+    }
+   ],
+   "note": "Same head-shaped shadow in the leftmost lit window; it reads as a person inside."
+  },
+  "cov-cafe-BAI-sideeye-R20": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Bai, back to camera, head in profile",
+     "where": "centre, across all four quarters",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "very faint curved tone in the retouched lower-left pane of the first lit window (leftover of the removed head silhouette)",
+     "where": "top-left quarter, left building, first window, lower-left pane",
+     "expected": false,
+     "certainty": "possible"
+    }
+   ],
+   "note": "Only Bai is there. The retouched window pane has only a barely visible curve that does not read as a person, and the windows, gate, far wall, balcony line and towers are empty."
+  },
+  "cov-cafe-BAI-what-R27": {
+   "pass": true,
+   "figures": [
+    {
+     "what": "Bai, back to camera, hand at headphone cup",
+     "where": "centre, across all four quarters",
+     "expected": true,
+     "certainty": "clear"
+    },
+    {
+     "what": "faint pale arc in the retouched lower-left pane of the first lit window (leftover of the removed head silhouette)",
+     "where": "top-left quarter, left building, first window, lower-left pane",
+     "expected": false,
+     "certainty": "possible"
+    }
+   ],
+   "note": "Only Bai is there. The retouched pane still shows a faint arc when enlarged, a little more than in R20, but at full-frame size it does not read as a head. Flatten it once more if convenient."
+  }
+ }
+}
