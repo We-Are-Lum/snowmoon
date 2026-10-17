@@ -3,7 +3,7 @@ import Link from 'next/link';
 import type { Metadata } from 'next';
 import { APP_NAME, REPO_URL, adaptationPagesShown, appUrl } from '~/lib/config';
 import { PAPER } from '~/lib/tokens';
-import { type Adaptation, type Version, getAdaptation, getVersion, handleFor, ownMedia, parseId, resolveHandle, shownVersion } from '~/lib/adaptation-pages';
+import { type Adaptation, type Version, getAdaptation, getVersion, handleFor, ownMedia, parseId, resolveHandle, shownVersion, titleSlug } from '~/lib/adaptation-pages';
 import { SceneActions } from '~/components/scene-actions';
 import './scene.css';
 
@@ -32,6 +32,11 @@ export const loadScene = cache(async ({ id: idSeg, handle: raw, n }: SceneParams
   if (who.kind === 'none') return { kind: 'not-found' };
   const tail = n === undefined ? idSeg : `${id}/v/${n}`;
   if (who.kind === 'redirect') return { kind: 'redirect', to: `/@${who.handle}/${tail}` };
+  // Words after the id redirect to the current title's (owner, 2026-10-17); a bare id stays bare.
+  const words = `${id}-${titleSlug(adaptation.title)}`;
+  if (n === undefined && decodeURIComponent(idSeg) !== String(id) && decodeURIComponent(idSeg) !== words) {
+    return { kind: 'redirect', to: `/@${who.handle}/${words}` };
+  }
 
   if (n === undefined) {
     const version = await shownVersion(who.person, id);

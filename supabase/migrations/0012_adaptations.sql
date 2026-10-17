@@ -130,7 +130,7 @@ create policy public_read on studio.adaptation_versions for select using (not hi
 create policy public_read on studio.adaptation_pages for select using (
   exists (select 1 from studio.adaptation_versions v where v.id = version_id and not v.hidden)
 );
-create policy public_read on studio.account_names for select using (true);
+-- No public read: past names are private, used only by the server to redirect (owner, 2026-10-17).
 
 create policy writer_read on studio.adaptations for select to studio_writer using (true);
 create policy writer_insert on studio.adaptations for insert to studio_writer with check (true);
@@ -149,6 +149,8 @@ create policy writer_update on studio.account_names for update to studio_writer 
 revoke insert, update, delete, truncate, references, trigger on
   studio.adaptations, studio.adaptation_versions, studio.adaptation_pages, studio.account_names
   from anon, authenticated;
+-- Past names are private (owner, 2026-10-17): no public read at all, only the server's writer role.
+revoke select on studio.account_names from anon, authenticated;
 -- The writer never deletes; a version is hidden, never removed.
 revoke delete, truncate, references, trigger on
   studio.adaptations, studio.adaptation_versions, studio.adaptation_pages, studio.account_names
@@ -164,15 +166,15 @@ revoke execute on function studio.adaptation_version_fixed() from public;
 -- ---------------------------------------------------------------------------
 
 insert into studio.adaptations (id, owner_person, title) values (1, 6786, 'Fifteen Days');
--- PLACEHOLDER: video_url, poster_url and recipe_url are null until the owner's cut is published
+-- PLACEHOLDER: video_url and poster_url are null until the owner's cut is published
 -- on media.snowmoon.party. Versions are append-only, so publish the cut as a new version (2)
 -- and point the owner's page at it, rather than editing this row.
 insert into studio.adaptation_versions (id, adaptation_id, parent_version_id, author_person, recipe)
 values (1, 1, null, 6786, jsonb_build_object(
   'video_url', null,
   'poster_url', null,
-  'recipe_url', null,
-  'ai_label', 'Pictures: AI-generated, not by the author',
+  'recipe_url', 'https://github.com/We-Are-Lum/snowmoon/tree/main/adaptations/fifteen-days',
+  'ai_label', 'Pictures: AI-generated · Voices: @naaate''s performances, AI-converted.',  -- DRAFT for the owner's OK
   'after_chapter', 14,
   'spoilers_through', 19
 ));

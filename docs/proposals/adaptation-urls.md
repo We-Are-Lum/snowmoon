@@ -22,8 +22,8 @@ Tensions first. Each needs the owner's ruling where it says **Decide**.
 2. **`/<id>` makes one person's choice the default (P5 review question).** `/1` sends everyone to
    the root owner's chosen version. P5 asks "does any default reflect a person's choice rather than
    a stated rule?" The stated rule here is "`/<id>` is the page of the person who started it",
-   which is a rule, but in effect the starter's cut is what a bare link shows. *Decide:* keep it,
-   or make `/<id>` a list of everyone's chosen versions (newest first, labelled as such).
+   which is a rule, but in effect the starter's cut is what a bare link shows.
+   **Ruled (owner, 2026-10-17):** `/1` goes to the owner's chosen version (as built).
 3. **Looking up the name on each request (P6, privacy, caching, rate limits).** `/@naaate/1` asks
    Farcaster's public API (`api.farcaster.xyz/v2/user-by-username`, the service the site already
    uses for bylines) for the FID. It runs on our server only, so the visitor's browser makes no
@@ -34,10 +34,10 @@ Tensions first. Each needs the owner's ruling where it says **Decide**.
    answer, we fall back on names we have seen (below). Farcaster is already named on the Privacy
    page; it may want one line saying names in links are looked up there.
 4. **A record of names (privacy).** To redirect after a rename, the site keeps
-   `studio.account_names` (name → FID, when seen), publicly readable, and only for people who have
-   published a version. That keeps a name someone has since left behind. The same mapping was
-   public on Farcaster when we saw it. *Decide:* keep it public, make it private (the server is the
-   only reader anyway), or drop the rename redirect.
+   `studio.account_names` (name → FID, when seen), only for people who have published a version.
+   That keeps a name someone has since left behind. **Ruled (owner, 2026-10-17):** private, used
+   only to redirect. Built: no public read policy, and select revoked from anon and authenticated;
+   only the server's writer role reads it.
 5. **Names change hands.** If @bon renames and someone else takes "bon", `/@bon/1` becomes the new
    holder's page (usually "Nothing here yet"). This comes with name-based links. Fixed links are
    safer: `/@<anyone>/1/v/<n>` redirects to the version's author under their current name, so
@@ -46,21 +46,24 @@ Tensions first. Each needs the owner's ruling where it says **Decide**.
    address can't be a Farcaster name (16 at most), so it never clashes. Built: the address in
    lowercase; a checksum-case address redirects to it. The address is already public as the
    account's byline (shortened). Still open: a FID with no fname has no `/@` URL yet.
-7. **Slugs.** `/@naaate/1-anything` serves the page and ignores the slug, so anyone can make a link
-   whose words say something the page doesn't (`/@naaate/1-the-real-ending`). The page sets its
-   canonical link without the slug, and the site never makes slugs itself. *Decide:* keep ignoring
-   them, or redirect any slug to the bare `/@naaate/1`.
+7. **Slugs.** **Ruled (owner, 2026-10-17):** words after the id redirect to the current title's
+   slug, so `/@naaate/1-the-real-ending` goes to `/@naaate/1-fifteen-days`, and a link made before
+   a retitle follows the new title. A bare `/@naaate/1` stays bare. Fixed `/v/<n>` links take no words.
 8. **What "hidden" means.** A version is hidden by its author, or by a moderator (P5: moderators
    can hide and nothing else). Hidden is not deleted: versions are append-only, only `hidden`
    changes. A hidden version is not publicly readable (RLS), its page and fixed link say "Nothing
    here yet", and a page that chose it falls back to the person's latest public version under that
    root, else "Nothing here yet". Erasure is separate (`docs/removal.md`).
 9. **Recipes (P1).** Every published generated asset needs a public recipe with its exact prompt.
-   Version 1 is seeded with `recipe_url: null`; the page says "Recipe: Not published yet". The cut
-   must not go live without its recipe link.
+   **Ruled (owner, 2026-10-17):** version 1's recipe link is the scene's recipe folder on main,
+   `https://github.com/We-Are-Lum/snowmoon/tree/main/adaptations/fifteen-days`. It loads only once
+   `scenes-sound` is merged, so checking that it loads is part of going live.
 10. **AI declared where it appears (P2).** Under the player, the version's `ai_label`. Seeded from
-    the mockup: "Pictures: AI-generated, not by the author". If the cut's voices are model-made,
-    it must say so too ("AI voice"). *Owner to confirm the label.*
+    **Owner's wording (2026-10-17), a DRAFT for their OK:** "Pictures: AI-generated · Voices:
+    @naaate's performances, AI-converted." No watermark claims.
+    *Tension:* P2b's house wording for pictures is "AI-generated, not by the author"; this label
+    drops "not by the author". When the page joins P2b (go-live step 4), either the check accepts
+    this label for adaptation pages or the label keeps those words.
 11. **Spoilers.** The seed brief says spoilers through chapter 19 (beat 6's on-screen line), and
     the page shows that. The seed pages in `/adaptations` keep the piece behind a "Show the
     adaptation" gate; this page shows the player straight away, as the mockup does.
@@ -192,8 +195,7 @@ into the seed and `STATIC`.
 
 ## To go live (on the owner's "publish")
 
-1. Real `video_url` (on `media.snowmoon.party`), `poster_url` and `recipe_url`; confirm the AI
-   label.
+1. Real `video_url` (on `media.snowmoon.party`) and `poster_url`; the owner's OK on the AI label.
 2. Apply 0012 (dry run first), or ship on `STATIC`.
 3. `ADAPTATION_PAGES.live = true`.
 4. Add `/@naaate/1` to the pages `check:principles` P6a loads, and its AI label to P2b.

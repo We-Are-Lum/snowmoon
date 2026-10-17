@@ -58,7 +58,16 @@ const STATIC = {
       adaptationId: 1,
       parentId: null,
       author: 6786,
-      recipe: { video_url: null, poster_url: null, recipe_url: null, ai_label: 'Pictures: AI-generated, not by the author', after_chapter: 14, spoilers_through: 19 },
+      recipe: {
+        video_url: null,
+        poster_url: null,
+        // The scene's recipe folder on main (owner, 2026-10-17); it loads once scenes-sound is merged.
+        recipe_url: 'https://github.com/We-Are-Lum/snowmoon/tree/main/adaptations/fifteen-days',
+        // DRAFT for the owner's OK (owner's wording, 2026-10-17). No watermark claims.
+        ai_label: "Pictures: AI-generated · Voices: @naaate's performances, AI-converted.",
+        after_chapter: 14,
+        spoilers_through: 19,
+      },
       createdAt: '2026-10-18',
       hidden: false,
     },
@@ -199,7 +208,12 @@ export async function handleFor(person: Person): Promise<string | null> {
   return Object.entries(STATIC.names).find(([, fid]) => fid === person)?.[0] ?? null;
 }
 
-/** "1-fifteen-days" → 1. The slug after the id is ignored. */
+/** "Fifteen Days" → "fifteen-days": the words a page's link carries after its id. */
+export function titleSlug(title: string): string {
+  return title.toLowerCase().normalize('NFKD').replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
+}
+
+/** "1-fifteen-days" → 1. Words after the id redirect to the current title's (scene-page.tsx). */
 export function parseId(segment: string): number | null {
   const m = /^(\d{1,9})(?:-[a-z0-9-]*)?$/i.exec(decodeURIComponent(segment));
   return m ? Number(m[1]) : null;
