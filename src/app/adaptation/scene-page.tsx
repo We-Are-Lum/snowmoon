@@ -1,9 +1,10 @@
 import { cache } from 'react';
 import Link from 'next/link';
 import type { Metadata } from 'next';
-import { APP_NAME, REPO_URL, adaptationPagesShown, appUrl } from '~/lib/config';
+import { APP_NAME, adaptationPagesShown, appUrl } from '~/lib/config';
 import { PAPER } from '~/lib/tokens';
 import { type Adaptation, type Version, getAdaptation, getVersion, handleFor, ownMedia, parseId, resolveHandle, shownVersion, titleSlug } from '~/lib/adaptation-pages';
+import { ShotStrip } from './editor/shot-strip';
 import { SceneActions } from '~/components/scene-actions';
 import './scene.css';
 
@@ -172,7 +173,7 @@ export function ScenePage({ adaptation, version, handle, fixed }: { adaptation: 
             title={adaptation.title}
             latestUrl={`${appUrl()}${latestPath}`}
             fixedUrl={`${appUrl()}${fixedPath}`}
-            forkUrl={`${REPO_URL}#how-to-fork`}
+            forkUrl={`${latestPath}/shot/first`}
           />
           {fixed && (
             <p className="label">
@@ -183,6 +184,8 @@ export function ScenePage({ adaptation, version, handle, fixed }: { adaptation: 
           )}
         </div>
       </section>
+
+      <ShotStrip dataUrl={`/editor/${adaptation.id}/v${version.id}/data.json`} scenePath={latestPath} />
 
       <p className="provenance scene-provenance">
         Snowmoon by Vitalik Buterin, GPL v3. An independent adaptation, not affiliated with the author.

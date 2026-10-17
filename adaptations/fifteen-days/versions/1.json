@@ -1,0 +1,17 @@
+{
+ "about": "Version 1 of Fifteen Days: the files it was made from, all committed. The live editor (scripts/editor-data.mjs, /@<name>/1/shot/<shot>) reads only these, so it works the same on any fork.",
+ "adaptation": 1,
+ "version": 1,
+ "seed": "fifteen-days",
+ "title": "Fifteen Days",
+ "cut": "scenes-out/fifteen-days/cuts/coverage-v5",
+ "timeline": "scenes-out/fifteen-days/cuts/coverage-v5/timeline.json",
+ "frames_recipe": "adaptations/fifteen-days/preprod/overnight/frames-recipe.json",
+ "picks": ["adaptations/fifteen-days/preprod/overnight/coverage-pictures.json", "adaptations/fifteen-days/preprod/overnight/coverage-pictures-v5.json"],
+ "board": "adaptations/fifteen-days/preprod/coverage-board.json",
+ "lines": "adaptations/fifteen-days/recording-lines.json",
+ "sets": "adaptations/fifteen-days/preprod/sets",
+ "sent": "adaptations/fifteen-days/preprod/sent",
+ "set_frames": "adaptations/fifteen-days/preprod/set-frames",
+ "author": {"fid": 6786, "handle": "naaate"}
+}

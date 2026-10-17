@@ -1,0 +1,48 @@
+import { notFound, redirect } from 'next/navigation';
+import type { Metadata } from 'next';
+import { NothingHere, loadScene, type SceneParams } from '../../../../../scene-page';
+import { ShotEditor } from '../../../../../editor/shot-editor';
+import { EDITOR_PROTOTYPE_URL, REPO_URL, appUrl } from '~/lib/config';
+import '../../../../../editor/editor.css';
+
+/**
+ * /@<fname>/<id>/shot/<shot>: the live shot editor for that person's chosen version (rewritten here
+ * by next.config.ts). Read and play only: the shot's data comes from the version's committed files
+ * (public/editor/<id>/v<n>/, made by scripts/editor-data.mjs), so a preview without the production
+ * database and any fork show the same editor.
+ */
+export const dynamic = 'force-dynamic';
+
+type Props = { params: Promise<SceneParams & { shot: string }> };
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const p = await params;
+  const s = await loadScene(p);
+  if (s.kind !== 'scene') return { title: 'Nothing here yet', robots: { index: false } };
+  return { title: `Shot ${decodeURIComponent(p.shot)} · ${s.adaptation.title} · @${s.handle}`, robots: { index: false } };
+}
+
+export default async function ShotPage({ params }: Props) {
+  const p = await params;
+  const shot = decodeURIComponent(p.shot);
+  if (!/^[\w-]{1,40}$/.test(shot)) notFound();
+  const s = await loadScene(p);
+  if (s.kind === 'redirect') redirect(`${s.to.replace(/-[a-z0-9-]*$/, '')}/shot/${shot}`);
+  if (s.kind === 'not-found') notFound();
+  if (s.kind === 'hidden') return <NothingHere />;
+  if (s.kind === 'nothing') return <NothingHere title={s.adaptation.title} handle={s.handle} />;
+  const scenePath = `/@${s.handle}/${s.adaptation.id}`;
+  return (
+    <ShotEditor
+      dataUrl={`/editor/${s.adaptation.id}/v${s.version.id}/data.json`}
+      shotId={shot}
+      handle={s.handle}
+      scenePath={scenePath}
+      aiLabel={s.version.recipe.ai_label ?? null}
+      recipeUrl={s.version.recipe.recipe_url ?? null}
+      prototypeUrl={EDITOR_PROTOTYPE_URL}
+      forkGuideUrl={`${REPO_URL}#how-to-fork`}
+      versionUrl={`${appUrl()}${scenePath}/v/${s.version.id}`}
+    />
+  );
+}
