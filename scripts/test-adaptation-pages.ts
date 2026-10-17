@@ -406,7 +406,9 @@ try {
   // --- The live editor (owner, 2026-10-17): read and play only, from the version's committed files.
   const ED = '/@naaate/1/shot/46-b4-1';
   const outside: string[] = [];
-  const watchOutside = (page: Page) => page.on('request', (r) => !r.url().startsWith(BASE) && !r.url().startsWith('data:') && !r.url().startsWith('blob:') && outside.push(r.url()));
+  // The site's own media domain (version 1's video and poster) is the site's, as P6a allows; anything else is outside.
+  const ownMedia = (u: string) => /^https:\/\/([a-z0-9-]+\.)?snowmoon\.party\//.test(u);
+  const watchOutside = (page: Page) => page.on('request', (r) => !r.url().startsWith(BASE) && !r.url().startsWith('data:') && !r.url().startsWith('blob:') && !ownMedia(r.url()) && outside.push(r.url()));
   type Stage = { screenOf(k: string): { x: number; y: number } | null };
   const handleAt = async (page: Page, kind: string) => {
     const box = await page.locator('canvas.ed-orbit').boundingBox();
