@@ -174,7 +174,7 @@ values (1, 1, null, 6786, jsonb_build_object(
   'video_url', null,
   'poster_url', null,
   'recipe_url', 'https://github.com/We-Are-Lum/snowmoon/tree/main/adaptations/fifteen-days',
-  'ai_label', 'Pictures: AI-generated · Voices: @naaate''s performances, AI-converted.',  -- DRAFT for the owner's OK
+  'ai_label', 'Pictures: AI-generated, not by the author · Voices: @naaate''s performances, AI-converted.',  -- owner's wording, approved 2026-10-17
   'after_chapter', 14,
   'spoilers_through', 19
 ));

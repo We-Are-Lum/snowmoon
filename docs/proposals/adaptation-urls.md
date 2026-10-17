@@ -59,11 +59,8 @@ Tensions first. Each needs the owner's ruling where it says **Decide**.
    `https://github.com/We-Are-Lum/snowmoon/tree/main/adaptations/fifteen-days`. It loads only once
    `scenes-sound` is merged, so checking that it loads is part of going live.
 10. **AI declared where it appears (P2).** Under the player, the version's `ai_label`. Seeded from
-    **Owner's wording (2026-10-17), a DRAFT for their OK:** "Pictures: AI-generated · Voices:
-    @naaate's performances, AI-converted." No watermark claims.
-    *Tension:* P2b's house wording for pictures is "AI-generated, not by the author"; this label
-    drops "not by the author". When the page joins P2b (go-live step 4), either the check accepts
-    this label for adaptation pages or the label keeps those words.
+    **Ruled (owner, 2026-10-17):** "Pictures: AI-generated, not by the author · Voices: @naaate's performances, AI-converted." It keeps P2b's
+    standard wording, so the check needs no exception. No watermark claims.
 11. **Spoilers.** The seed brief says spoilers through chapter 19 (beat 6's on-screen line), and
     the page shows that. The seed pages in `/adaptations` keep the piece behind a "Show the
     adaptation" gate; this page shows the player straight away, as the mockup does.
@@ -195,7 +192,7 @@ into the seed and `STATIC`.
 
 ## To go live (on the owner's "publish")
 
-1. Real `video_url` (on `media.snowmoon.party`) and `poster_url`; the owner's OK on the AI label.
+1. Real `video_url` (on `media.snowmoon.party`) and `poster_url`.
 2. Apply 0012 (dry run first), or ship on `STATIC`.
 3. `ADAPTATION_PAGES.live = true`.
 4. Add `/@naaate/1` to the pages `check:principles` P6a loads, and its AI label to P2b.

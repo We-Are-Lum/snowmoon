@@ -63,8 +63,8 @@ const STATIC = {
         poster_url: null,
         // The scene's recipe folder on main (owner, 2026-10-17); it loads once scenes-sound is merged.
         recipe_url: 'https://github.com/We-Are-Lum/snowmoon/tree/main/adaptations/fifteen-days',
-        // DRAFT for the owner's OK (owner's wording, 2026-10-17). No watermark claims.
-        ai_label: "Pictures: AI-generated · Voices: @naaate's performances, AI-converted.",
+        // The owner's wording (approved 2026-10-17): keeps P2b's standard "AI-generated, not by the author". No watermark claims.
+        ai_label: "Pictures: AI-generated, not by the author · Voices: @naaate's performances, AI-converted.",
         after_chapter: 14,
         spoilers_through: 19,
       },
