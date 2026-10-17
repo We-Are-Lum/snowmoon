@@ -23,7 +23,8 @@
 --    "featured"; it is named "pages" here because principle 5 (P5a) forbids that word as a
 --    schema field. See the proposal, section "Principles".
 -- 4. studio.account_names: the Farcaster names we have seen for a person, so a link with an
---    old name can still find them and redirect to the new one after a rename.
+--    old name can still find them and redirect to the new one after a rename. Written only when
+--    someone signs in or publishes, never when a page is viewed (owner, 2026-10-17).
 -- 5. Seed: adaptation 1, "Fifteen Days", owned by FID 6786 (the owner, @naaate; SYSTEM_FID
 --    in src/lib/config.ts), its first version, and the owner's page pointing at it.
 --    The video URL in the seed is a PLACEHOLDER (null) until the cut is published.

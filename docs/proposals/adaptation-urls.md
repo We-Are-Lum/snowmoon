@@ -34,7 +34,8 @@ Tensions first. Each needs the owner's ruling where it says **Decide**.
    answer, we fall back on names we have seen (below). Farcaster is already named on the Privacy
    page; it may want one line saying names in links are looked up there.
 4. **A record of names (privacy).** To redirect after a rename, the site keeps
-   `studio.account_names` (name → FID, when seen), only for people who have published a version.
+   `studio.account_names` (name → FID), written only when someone signs in or publishes, never on a
+   page view (owner, 2026-10-17: viewing /@someone/1 stores nothing about a person who never used the site).
    That keeps a name someone has since left behind. **Ruled (owner, 2026-10-17):** private, used
    only to redirect. Built: no public read policy, and select revoked from anon and authenticated;
    only the server's writer role reads it.
