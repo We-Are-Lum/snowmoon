@@ -1,6 +1,7 @@
-"""Build the Fifteen Days cuts from storyboard v4: Full (every shot) and Tight (about 3:00-3:30, close-up-heavy).
+"""Build the Fifteen Days cuts from storyboard v4: Full (every shot), Tight (about 3:00-3:30, close-up-heavy) and Five
+(about five minutes, from the owner's notes in the clip viewer, 2026-10-17: no camera moves, tighter gaps, trims, sounds).
 
-  /Users/nathan/snowmoon/.venv-voice/bin/python scripts/cut-v4.py fifteen-days [full|tight|both] [--render]
+  /Users/nathan/snowmoon/.venv-voice/bin/python scripts/cut-v4.py fifteen-days [full|tight|both|five] [--render]
 
 Per cut, writes scenes-out/<seed>/cuts/<cut>/timeline.json (every time absolute, from @start), its stems,
 and, with --render, runs scripts/mix-scene.py and scripts/render-scene.py on it: <cut>.mp4 beside it,
@@ -59,7 +60,76 @@ TIGHT_SILENT = {"H01", "G02", "H08", "C01", "F06", "F07", "F12", "S02", "S09", "
 CLOSE = ("CU", "ECU", "MCU", "INSERT", "OTS", "POV")
 # gap: a pause inside a performance longer than this is shortened to it (the words and their order never change).
 SPEC = {"full": dict(lead=0.45, tail=0.65, within=0.35, floor=True, silent_max=99, silent_min=0, min_shot=1.2, gap=None),
-        "tight": dict(lead=0.1, tail=0.25, within=0.1, floor=False, silent_max=1.4, silent_min=1.2, min_shot=1.0, gap=0.3)}
+        "tight": dict(lead=0.1, tail=0.25, within=0.1, floor=False, silent_max=1.4, silent_min=1.2, min_shot=1.0, gap=0.3),
+        "five": dict(lead=0.1, tail=0.25, within=0.12, floor=False, silent_max=1.5, silent_min=1.0, min_shot=1.0, gap=0.35)}
+
+# The five-minute cut (the owner's notes in the clip viewer, 2026-10-17, and the Claude notes the owner kept). One cut in
+# the full cut's order: no camera moves, tighter gaps, these shots out, these holds, these sounds. Places DRAFTED by the coding agent.
+FIVE_DROP = {"H06", "G04", "F25", "S09"}            # H06 "leave it out"; G04 no close-up; F25 the shot and its sound; S09 moves to S12b
+FIVE_PICTURE = {"S12b": "S09"}                       # "this image is later, after the flick": the sugar wall stands in for S12b
+FIVE_HOLD = {"H01": 2.2, "C02": 1.2, "D09": 4.0, "L01": 2.5, "L03": 2.5, "L07": 3.5, "L09": 2.5, "L11": 2.5}
+FIVE_PAUSE = {"b1-4": 2.5}                           # "a pause before 'such patience'": the game holds first
+FIVE_OVERLAP = {"C06": 1.5}                          # "this shot while he's still talking": starts before the line ends
+FIVE_ANCHOR = {"C09": ("b2-6", 2.2)}                 # no shot with Bai until "Bai, you're welcome"
+# A fixed framing (x, y, zoom) in place of a move: Zei alone where Bai stood beside him (Claude notes, kept by the owner).
+FIVE_FRAME = {"S04": (0.33, 0.4, 1.7), "S10": (0.44, 0.42, 1.7), "R02": (0.35, 0.33, 1.7)}
+# The owner's notes on the takes: (start, end) seconds kept from each converted line, and the subtitles that follow them.
+TRIM = {"b2-10": (1.28, None),                       # the vocalization before "Was"
+        "b2-11": (1.25, None),                       # "Cut out the line 'Deluin?'"
+        "b2-6": (None, 6.75),                        # "this is Bye, not Bai, and we can cut it"
+        "b3-2": (2.40, None)}                        # the robot: only the last of the two readings
+SUB_TEXT = {"b2-11": "We don't know anything about this guy.",
+            "b2-6": "Great, I'll see you then. Bai, you're welcome to come too. Hope to see you there!",
+            "b3-11": "Zei, the whole point of Dzegoban is that you can learn it in less than a month."}  # as performed
+ROBOT_FX = "tremolo=f=55:d=0.35,aecho=0.6:0.5:7:0.4"   # "you can also create robot synthesized voice here" (drafted)
+FX_FROM = {"hall: crowd swell": 2.5}                 # skip the announcer's "number 11" at the start of the swell
+FIVE_FX = [("H01", "game: flyby", 0.4, -14, 2.6), ("H02", "game: blast", 0.3, -12, 1.6), ("H02", "game: flyby", 1.0, -16, 2.6),
+           ("H03", "game: blast", 0.6, -15, 1.6), ("H05", "game: crash", 0.3, -13, 2.4), ("G02", "game: blast", 0.6, -22, 1.6),
+           ("G05", "game: flyby", 0.5, -24, 2.6), ("G08", "game: crash", 0.6, -18, 2.4), ("G08", "game: blast", 1.8, -20, 1.6),
+           ("G10", "game: blast", 0.4, -22, 1.6), ("G11", "game: wall", 0.5, -18, 3.2), ("H07", "game: wall", 0.0, -12, 3.2),
+           ("H07", "game: crash", 0.6, -12, 2.4), ("C02", "device: elevator-arrive", 0.0, -8, 2.2)]
+FIVE_BED_DB = {"bed: courtyard café": 5}             # "need ambient café sounds"
+LETTERS = {"H01": "Sadzu Du, Dzego · 3724 Firemoon 10",  # script beat 1 (book c14-b1)
+           "L01": "Pafogai Du, Dzego",                   # script beat 7 (book c15-b48): place only, the book gives no date
+           "D09": "That day was his last Minpentai game- the last day when his life was somewhat normal."}  # beat 6, on screen
+
+
+def lettered(src: Path, dst: Path, text: str) -> None:
+    """On-screen words baked into a still (the cut has no camera moves, so they stay put): lower left, white, soft shadow."""
+    from PIL import Image, ImageDraw, ImageFilter, ImageFont
+    img = Image.open(src).convert("RGB").resize((1920, 1080), Image.LANCZOS)
+    font = ImageFont.truetype(str(ROOT / "node_modules/@fontsource/crimson-pro/files/crimson-pro-latin-600-normal.woff"), 46)
+    rows = [""]
+    for w in text.split():
+        if rows[-1] and len(rows[-1]) + 1 + len(w) > 52:
+            rows.append(w)
+        else:
+            rows[-1] = (rows[-1] + " " + w).strip()
+    y0 = 1080 - 110 - 60 * (len(rows) - 1)
+    shade = Image.new("L", img.size, 0)
+    ds = ImageDraw.Draw(shade)
+    for i, r in enumerate(rows):
+        ds.text((96, y0 + 60 * i), r, font=font, fill=200)
+    img.paste((0, 0, 0), (0, 0), shade.filter(ImageFilter.GaussianBlur(6)))
+    d = ImageDraw.Draw(img)
+    for i, r in enumerate(rows):
+        d.text((96, y0 + 60 * i), r, font=font, fill=(244, 240, 230))
+    img.save(dst)
+
+
+def first_sentence(src: Path, dst: Path) -> None:
+    """c15-b55's screen block cut to its first sentence (Claude note, kept): the rows above "Some Arctic soldier" and the
+    block's bottom edge, with the sender and number cells moved up into the shorter row."""
+    from PIL import Image
+    im = Image.open(src).convert("RGB")
+    top, bottom = im.crop((0, 0, im.width, 340)), im.crop((0, im.height - 52, im.width, im.height))
+    out = Image.new("RGB", (im.width, 340 + 52))
+    out.paste(top, (0, 0))
+    out.paste(bottom, (0, 340))
+    for box in ((52, 770, 418, 850), (424, 790, 506, 840), (1349, 770, 1532, 850)):  # Deluin, the arrow, 84714
+        cell = im.crop(box)
+        out.paste(cell, (box[0], 258 - (box[3] - box[1]) // 2))
+    out.save(dst)
 
 
 def tighten(src: Path, dst: Path, gap: float | None) -> None:
@@ -189,6 +259,8 @@ def build(seed: str, cut: str) -> Path:
     def keep(s: dict) -> bool:
         if s.get("optional"):
             return False
+        if cut == "five":
+            return s["id"] not in FIVE_DROP
         if cut == "full":
             return True
         return s["id"] in TIGHT_SILENT and (s["id"] in passing or s["id"] not in fpk)
@@ -199,7 +271,7 @@ def build(seed: str, cut: str) -> Path:
     first_at = {}
     for u in units:
         ss = [board[k] for k in u["shots"]]
-        kept = [s for s in ss if keep(s) or u["lines"]]
+        kept = [s for s in ss if keep(s) or (u["lines"] and cut != "five")]
         if u["lines"] and cut == "tight":  # a line's span keeps its close shots, and its wide only if there is nothing else
             close = [s for s in ss if any(re.search(rf"\b{c}\b", s["size"].upper()) for c in CLOSE)]
             kept = [s for s in close if s["id"] in passing] or close or ss[:1]
@@ -216,10 +288,20 @@ def build(seed: str, cut: str) -> Path:
                 raise SystemExit(f"no converted line {src.relative_to(ROOT)}")
             dst = stems / f"{r}.wav"
             tight = stems / f"{r}.tight.wav"
-            tighten(src, tight, P["gap"])
-            ff(tight, dst, ROOMS[SCENE_ROOM[scene]])
+            take = src
+            if cut == "five" and r in TRIM:  # the owner's trims, before the pauses are tightened
+                a, b = TRIM[r]
+                take = stems / f"{r}.trim.wav"
+                ff(src, take, f"atrim=start={a or 0}" + (f":end={b}" if b else "") + ",asetpts=PTS-STARTPTS")
+            tighten(take, tight, P["gap"])
+            room = ROOMS[SCENE_ROOM[scene]]
+            ff(tight, dst, f"{ROBOT_FX},{room}" if cut == "five" and l["speaker"] == "Robot" else room)
             tight.unlink()
+            if take != src:
+                take.unlink()
             d = sf.info(dst).duration
+            if cut == "five":
+                voice_t += FIVE_PAUSE.get(r, 0)
             placed.append((r, l, src, dst, voice_t, d))
             voice_t += d + P["within"]
         voice_t -= P["within"] if placed else 0
@@ -231,18 +313,24 @@ def build(seed: str, cut: str) -> Path:
             length = max(length, P["min_shot"] * len(kept))
         else:
             length = min(max(weights[0], P["silent_min"]), P["silent_max"])
+            if cut == "five":
+                length = FIVE_HOLD.get(kept[0]["id"], length)
+                back = FIVE_OVERLAP.get(kept[0]["id"], 0)
+                t -= back
+                length += back
         for r, l, src, dst, off, d in placed:
             cues.append({"id": r, "track": "voice", "stem": str(dst.relative_to(ROOT)), "at": {"cue": "@start", "offset": round(t + P["lead"] + off, 3)},
                          "room": SCENE_ROOM[scene], "source": {"converted": str(src.relative_to(ROOT)), "voice": VOICE[l["speaker"]][1]}})
-            pieces = chunks(l["text"])
+            pieces = chunks(SUB_TEXT.get(r, l["text"]) if cut == "five" else l["text"])
             total = sum(len(p) for p in pieces)
             acc = 0
             for p in pieces:
                 subs.append({"cue": r, "text": p, "from": round(acc / total, 4), "to": round((acc + len(p)) / total, 4)})
                 acc += len(p)
         acc = t
+        unit_shots = []
         for s, w in zip(kept, weights):
-            img, what = picture(seed, s, picks)
+            img, what = picture(seed, {**s, "id": FIVE_PICTURE[s["id"]]} if cut == "five" and s["id"] in FIVE_PICTURE else s, picks)
             if not img:
                 notes.append(f"{s['id']}: no picture; dropped")
                 continue
@@ -250,18 +338,38 @@ def build(seed: str, cut: str) -> Path:
                 dst = work / f"insert-{s['id']}.png"
                 framed(ROOT / img, dst)
                 img = str(dst.relative_to(ROOT))
+            if cut == "five" and s["id"] == "L09":
+                dst = work / "insert-L09-first.png"
+                first_sentence(ROOT / INSERT["L09"].format(seed=seed), dst)
+                framed(dst, dst)
+                img = str(dst.relative_to(ROOT))
+            if cut == "five" and s["id"] in LETTERS:
+                dst = work / f"lettered-{s['id']}.png"
+                lettered(ROOT / img, dst, LETTERS[s["id"]])
+                img = str(dst.relative_to(ROOT))
             push = 0.06 if what != "the book's own picture" else 0.03
+            move = {"kind": "push", "from": {"x": 0.5, "y": 0.5, "zoom": 1.0}, "to": {"x": 0.5, "y": 0.47, "zoom": 1.0 + push}, "ease": "inout"}
+            if cut == "five":  # "no panning or zooming on any of the stills"
+                x, y, z = FIVE_FRAME.get(s["id"], (0.5, 0.5, 1.0))
+                move = {"kind": "push", "from": {"x": x, "y": y, "zoom": z}, "to": {"x": x, "y": y, "zoom": z}, "ease": "linear"}
             shots.append({"id": s["id"], "image": img, "picture": what, "at": {"cue": "@start", "offset": round(acc, 3)},
-                          "transition": {"type": "cut"},
-                          "move": {"kind": "push", "from": {"x": 0.5, "y": 0.5, "zoom": 1.0}, "to": {"x": 0.5, "y": 0.47, "zoom": 1.0 + push}, "ease": "inout"}})
+                          "transition": {"type": "cut"}, "move": move})
+            unit_shots.append(shots[-1])
             first_at.setdefault(s["id"], acc)
             acc += length * w / sum(weights)
+        if cut == "five":
+            for sh in unit_shots:
+                if sh["id"] in FIVE_ANCHOR:
+                    ref, off = FIVE_ANCHOR[sh["id"]]
+                    at = next((c["at"]["offset"] for c in cues if c["id"] == ref), None)
+                    if at is not None:
+                        sh["at"]["offset"] = round(at + off, 3)
         for s in ss:  # a shot the cut leaves out still places its sounds, at its unit's start
             first_at.setdefault(s["id"], t)
         if beds and beds[-1][0] == BEDS[scene][0]:
             beds[-1][2] = t + length
         else:
-            beds.append([BEDS[scene][0], t, t + length, BEDS[scene][1]])
+            beds.append([BEDS[scene][0], t, t + length, BEDS[scene][1] + (FIVE_BED_DB.get(BEDS[scene][0], 0) if cut == "five" else 0)])
         t += length
 
     import hashlib
@@ -280,11 +388,12 @@ def build(seed: str, cut: str) -> Path:
                      "at": {"cue": "@start", "offset": round(max(0, a - 0.75), 3)}, "until": {"cue": "@start", "offset": round(b + 0.75, 3)},
                      "level_db": lvl, "fade_in": 1.5, "fade_out": 1.5,
                      "source": {"effect": effect, "url": src["source"].get("url"), "author": src["source"].get("author"), "licence": src["source"]["licence"]}})
-    for n, (sid, effect, off, lvl, dur) in enumerate(FX):
-        if sid not in first_at or effect not in sounds:
+    for n, (sid, effect, off, lvl, dur) in enumerate(FX + (FIVE_FX if cut == "five" else [])):
+        if sid not in first_at or effect not in sounds or (cut == "five" and sid in FIVE_DROP):
             continue
         dst = stems / f"fx-{n}.wav"
-        ff(ROOT / sounds[effect]["file"], dst, f"atrim=0:{dur},afade=t=out:st={max(dur - 0.4, 0)}:d=0.4")
+        a = FX_FROM.get(effect, 0) if cut == "five" else 0
+        ff(ROOT / sounds[effect]["file"], dst, f"atrim={a}:{a + dur},asetpts=PTS-STARTPTS,afade=t=out:st={max(dur - 0.4, 0)}:d=0.4")
         cues.append({"id": f"fx-{n}", "track": "foley", "stem": str(dst.relative_to(ROOT)), "at": {"cue": "@start", "offset": round(first_at[sid] + off, 3)},
                      "level_db": lvl, "fade_in": 0.03, "fade_out": 0.2, "note": f"{effect} on {sid} (drafted place)",
                      "source": {"effect": effect, "licence": sounds[effect]["source"]["licence"]}})
@@ -309,6 +418,14 @@ def build(seed: str, cut: str) -> Path:
         ff(ROOT / v3["file"], leak, f"atrim={b - a}:12,asetpts=PTS-STARTPTS,lowpass=f=1400,highpass=f=300")
         cues.append({"id": "dreadnaught-leak", "track": "music", "stem": str(leak.relative_to(ROOT)), "at": {"cue": "@start", "offset": round(b, 3)},
                      "level_db": -12, "fade_in": 0.2, "fade_out": 1.5, "note": "the same, leaking thin from her headphones once they're back on"})
+    if cut == "five":  # "fade to black and the end card, with no overlap"
+        from PIL import Image
+        black = work / "black.png"
+        Image.new("RGB", (1920, 1080), (0, 0, 0)).save(black)
+        shots.append({"id": "BLACK", "image": str(black.relative_to(ROOT)), "picture": "black", "at": {"cue": "@start", "offset": round(t, 3)},
+                      "transition": {"type": "dissolve", "seconds": 0.8}, "image_sha256": hashlib.sha256(black.read_bytes()).hexdigest(),
+                      "move": {"kind": "push", "from": {"x": 0.5, "y": 0.5, "zoom": 1.0}, "to": {"x": 0.5, "y": 0.5, "zoom": 1.0}, "ease": "linear"}})
+        t += 1.6
     end_card = adir / "end-card.json"
     timeline = {
         "about": f"Fifteen Days, {cut} cut (overnight 2026-10-16/17, scripts/cut-v4.py): storyboard v4's shots, the converted lines, beds, the game, "
@@ -334,6 +451,7 @@ def build(seed: str, cut: str) -> Path:
 def main() -> None:
     seed = sys.argv[1]
     which = next((a for a in sys.argv[2:] if a in ("full", "tight", "both")), "both")
+    which = next((a for a in sys.argv[2:] if a in ("full", "tight", "both", "five")), "both")
     cuts = ["full", "tight"] if which == "both" else [which]
     for cut in cuts:
         tl = build(seed, cut)

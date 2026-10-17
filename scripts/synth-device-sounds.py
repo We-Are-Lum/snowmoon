@@ -129,6 +129,34 @@ def sounds(rng) -> dict:
     return out
 
 
+def game_sounds(rng) -> dict:
+    """The live Minpentai game heard from the overlook, and the corridor's elevator (owner's notes, 2026-10-17): synthesized
+    blasts, fly-bys, crashes and wall hums, so the battle reads as electronic, never as a sports broadcast. Their own
+    generator (seed 17102026), so adding them leaves every earlier device sound byte-identical."""
+    f = lambda r, o=1.0: BASE * R[r] * o
+    out = {}
+    x = t(0.9)
+    zap = np.sin(2 * np.pi * np.cumsum(f("2", 4) * np.exp(-x / 0.08) + 90) / SR) * env(len(x), 0.002, 0.18)
+    out["game-blast"] = ("a hologram blast in the game below: a fast falling zap, a noise burst and a low thump", place(
+        1.0, (0.0, zap, 0.6), (0.0, air(0.5, 300, 5000, rng, attack=0.002, decay=0.12), 0.7),
+        (0.02, glide(110, 45, 0.6, attack=0.003, decay=0.15), 0.9)))
+    out["game-flyby"] = ("a glider passing over the board: a filtered whoosh that rises and falls, with a doppler hum", place(
+        2.0, (0.0, air(2.0, 400, 3000, rng, attack=0.9, decay=0.35), 0.8),
+        (0.0, glide(f("1", 0.5), f("1", 0.35), 2.0, attack=0.9, decay=0.4), 0.35)))
+    crash = air(1.6, 80, 2500, rng, attack=0.003, decay=0.45)
+    debris = place(1.6, *[(0.05 + 0.09 * k + 0.03 * rng.random(), air(0.08, 1500, 8000, rng, attack=0.001, decay=0.02), 0.5 - 0.04 * k) for k in range(10)])
+    out["game-crash"] = ("a glider breaking against a wall: a heavy noise crash, a sub drop and scattering glassy debris", place(
+        1.8, (0.0, crash, 0.9), (0.0, glide(70, 35, 1.2, attack=0.002, decay=0.4), 1.0), (0.0, debris, 0.6)))
+    x = t(2.5)
+    hum = sum(np.sin(2 * np.pi * f(r, 0.5) * x * (1 + 0.002 * k)) for k, r in enumerate(("1", "3/2", "7/4")))
+    out["game-wall"] = ("a holographic wall rising: a swelling three-note hum with a shimmer", place(
+        2.6, (0.0, hum * env(len(x), 0.6, 0.9) / 3, 0.8), (0.3, air(2.0, 3000, 9000, rng, attack=0.5, decay=0.5), 0.25)))
+    out["elevator-arrive"] = ("the corridor's elevator arriving: one soft two-tone chime and the doors' airy slide", place(
+        2.2, (0.0, bell(f("3/2", 2), 1.2, decay=0.45, bright=0.2), 0.7), (0.32, bell(f("1", 2), 1.4, decay=0.55, bright=0.2), 0.7),
+        (0.75, air(1.2, 200, 1800, rng, attack=0.25, decay=0.35), 0.35)))
+    return out
+
+
 def main() -> None:
     seed = sys.argv[1]
     rng = np.random.default_rng(16102026)
@@ -140,15 +168,18 @@ def main() -> None:
                     "the owner's own recording, or a device sound synthesized in code by scripts/synth-device-sounds.py "
                     "(owner, 2026-10-16). No AI-generated sound effects.")
     me = Path(__file__).read_bytes()
-    for name, (what, x) in sounds(rng).items():
-        y = finish(x, rng, wet=0.12 if name.startswith(("menu-tap", "robot-glide")) else 0.2)
+    rng2 = np.random.default_rng(17102026)
+    made = [(n, w, x, rng) for n, (w, x) in sounds(rng).items()] + [(n, w, x, rng2) for n, (w, x) in game_sounds(rng2).items()]
+    for name, what, x, g in made:
+        y = finish(x, g, wet=0.12 if name.startswith(("menu-tap", "robot-glide")) else 0.3 if name.startswith("game") else 0.2,
+                   peak_db=-12.0 if name.startswith("game") else -18.0)
         path = dst / f"device-{name}.wav"
         sf.write(path, y, SR, subtype="PCM_24")
-        effect = f"device: {name}"
+        effect = f"game: {name[5:]}" if name.startswith("game-") else f"device: {name}"
         rec["sounds"] = [s for s in rec["sounds"] if s["effect"] != effect]
         rec["sounds"].append({"effect": effect, "what": what,
                               "source": {"kind": "synthesized in code", "script": "scripts/synth-device-sounds.py",
-                                         "script_sha256": hashlib.sha256(me).hexdigest(), "rng_seed": 16102026,
+                                         "script_sha256": hashlib.sha256(me).hexdigest(), "rng_seed": 17102026 if g is rng2 else 16102026,
                                          "licence": "GPL-3.0, with the code that makes it"},
                               "file": str(path.relative_to(ROOT)), "sha256": hashlib.sha256(path.read_bytes()).hexdigest(),
                               "duration_s": round(len(y) / SR, 2), "added_at": datetime.now(timezone.utc).isoformat(timespec="seconds")})
