@@ -224,6 +224,15 @@ def main() -> None:
                 who = [w for w in "ZBDKR" if "{" + w + "}" in var.get("action", "")]
                 frames[fid] = {"scene": sc["id"], "setup": key, "variant": vk, "layout": lid, "action": var.get("action", ""), "who": who,
                                "size": layouts[lid]["size"], "set": layouts[lid]["set"]}
+                # for the prompts: who is the near shoulder (drawn once, from behind), who looks which way, who is far behind
+                if k == "ots":
+                    frames[fid]["over"], frames[fid]["subject"] = st["over"], st["onto"]
+                elif k in ("cu", "single"):
+                    frames[fid]["subject"] = st["who"]
+                if frames[fid].get("subject"):
+                    frames[fid]["look"] = "right" if frames[fid]["subject"] in left else "left"
+                if "far behind" in var.get("action", "") or "sits far" in var.get("action", ""):
+                    frames[fid]["far"] = "B"
         # rules: count setups per beat, 180 line, establish first, wordless length
         beat, used = None, {}
         for i, it in enumerate(sc["sequence"]):

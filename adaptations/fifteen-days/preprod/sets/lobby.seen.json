@@ -688,5 +688,39 @@
         "visible": true
       }
     }
+  },
+  "cov-lobby-CU-Z-down": {
+    "landmarks": [
+      {
+        "id": "room",
+        "name": "the warm, plain walls of the hotel lobby restaurant",
+        "side": "left"
+      },
+      {
+        "id": "window",
+        "name": "tall windows along the west wall, the night city outside",
+        "side": "left"
+      },
+      {
+        "id": "counter",
+        "name": "the robot's counter on the east wall",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the dark street outside",
+        "side": "left"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.305,
+        "facing": "toward the camera",
+        "dist": 1.24,
+        "visible": true
+      }
+    }
   }
 }

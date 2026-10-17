@@ -483,45 +483,6 @@
   "fov": 50,
   "people": {}
  },
- "cov-corridor-EST": {
-  "people": {
-   "D": {
-    "at": [
-     -0.6,
-     -6.0
-    ],
-    "face": 90.0,
-    "pose": "standing"
-   },
-   "Z": {
-    "at": [
-     0.4,
-     -6.0
-    ],
-    "face": "N",
-    "pose": "standing"
-   },
-   "B": {
-    "at": [
-     0.7,
-     -4.9
-    ],
-    "face": "N",
-    "pose": "standing"
-   }
-  },
-  "cam": [
-   0.1,
-   1.7,
-   -15.5
-  ],
-  "look": [
-   0.0,
-   1.3,
-   -5.0
-  ],
-  "fov": 46
- },
  "cov-corridor-MASTER": {
   "people": {
    "D": {

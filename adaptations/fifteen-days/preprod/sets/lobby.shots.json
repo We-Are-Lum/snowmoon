@@ -268,7 +268,7 @@
   "fov": 40,
   "people": {}
  },
- "cov-lobby-CU-Z-distraught": {
+ "cov-lobby-CU-Z-down": {
   "people": {
    "Z": {
     "at": [
@@ -321,37 +321,6 @@
    0
   ],
   "fov": 28
- },
- "cov-lobby-MASTER-refill": {
-  "people": {
-   "Z": {
-    "at": [
-     -3.35,
-     0
-    ],
-    "face": -90.0,
-    "pose": "seated"
-   },
-   "R": {
-    "at": [
-     -3.6,
-     0.85
-    ],
-    "face": "N",
-    "pose": "robot"
-   }
-  },
-  "cam": [
-   -4.0,
-   1.28,
-   -3.4
-  ],
-  "look": [
-   -4.0,
-   0.9804999999999999,
-   0.0
-  ],
-  "fov": 44
  },
  "cov-lobby-MASTER": {
   "people": {

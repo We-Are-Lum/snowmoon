@@ -58,7 +58,11 @@ def main() -> None:
         if m:
             speaker[m[1]] = m[2]
     cuts = {}
-    for cut in ("tight", "full"):
+    covb = json.loads((adir / "coverage-board.json").read_text()) if (adir / "coverage-board.json").exists() else {"frames": {}}
+    rec = {l["ref"]: l for l in json.loads((ROOT / "adaptations" / seed / "recording-lines.json").read_text())["lines"]}
+    for r_, l_ in rec.items():
+        speaker.setdefault(r_, l_["speaker"])
+    for cut in [c for c in sys.argv[3:]] or ("tight", "full"):
         cdir = ROOT / "scenes-out" / seed / "cuts" / cut
         tl = json.loads((cdir / "timeline.json").read_text())
         dur = float(subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0",
@@ -78,12 +82,15 @@ def main() -> None:
             t0 = sh["at"]["offset"]
             t1 = tl["shots"][i + 1]["at"]["offset"] if i + 1 < len(tl["shots"]) else card_at
             s = board.get(sh["id"], {})
+            fr = covb["frames"].get(sh.get("frame", ""), {})
+            if fr:  # the coverage cut: one frame per setup and expression
+                s = {"size": fr.get("size", ""), "action": fr.get("action", "") or fr.get("setup", "")}
             act = s.get("action", "")
             for k, v in NAMES.items():
                 act = act.replace(k, v)
             img = ROOT / sh["image"]
             opts = []
-            for cid in picks.get(sh["id"], []):
+            for cid in ([] if fr or sh.get("frame") else picks.get(sh["id"], [])):
                 f = ROOT / "images-out" / "preprod" / "pass3" / f"{cid}.png"
                 if not f.exists():
                     continue
@@ -93,7 +100,8 @@ def main() -> None:
             if not any(o["in_cut"] for o in opts):
                 opts.insert(0, {"key": img.stem, "img": jpg(img, out), "label": sh.get("picture", ""), "verdict": "", "score": None,
                                 "note": "", "in_cut": True})
-            shots.append({"id": sh["id"], "t0": round(t0, 3), "t1": round(t1, 3), "scene": SCENE.get(sh["id"][0], ""),
+            shots.append({"id": sh.get("frame", sh["id"]).replace("cov-", ""), "t0": round(t0, 3), "t1": round(t1, 3),
+                          "scene": fr.get("scene", "") or SCENE.get(sh["id"][0], ""),
                           "size": s.get("size", ""), "action": act,
                           "move": sh.get("move", {}).get("kind", ""), "zoom": sh.get("move", {}).get("to", {}).get("zoom"),
                           "opts": opts})

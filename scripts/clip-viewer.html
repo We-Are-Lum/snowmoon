@@ -73,7 +73,7 @@ p{margin:0;max-width:70ch}
 const DATA = __DATA__;
 const $ = id => document.getElementById(id);
 const v = $("v");
-let CUT = "tight", D = DATA.cuts[CUT], cur = -1, db = null, loading = 0;
+let CUT = Object.keys(DATA.cuts)[0], D = DATA.cuts[CUT], cur = -1, db = null, loading = 0;
 const notes = new Map(), picks = new Map();
 
 const fmt = t => { t = Math.max(0, t); const m = Math.floor(t / 60), s = t - m * 60; return m + ":" + (s < 10 ? "0" : "") + s.toFixed(1); };
@@ -202,10 +202,10 @@ window.addEventListener("keydown", e => {
   else if (e.key === "ArrowRight") { e.preventDefault(); seek(D.shots[Math.min(D.shots.length - 1, cur + 1)].t0 + 0.02); }
 }, true);
 
-$("cuts").innerHTML = Object.entries(DATA.cuts).map(([k, c]) => `<button data-cut="${k}" aria-pressed="false">${k === "tight" ? "Tight" : "Full"} ${fmt(c.dur).replace(/\.\d$/, "")}</button>`).join("");
+$("cuts").innerHTML = Object.entries(DATA.cuts).map(([k, c]) => `<button data-cut="${k}" aria-pressed="false">${({tight: "Tight", full: "Full", coverage: "Coverage"})[k] || k} ${fmt(c.dur).replace(/\.\d$/, "")}</button>`).join("");
 $("cuts").onclick = e => { const b = e.target.closest("button"); if (!b || b.dataset.cut === CUT) return;
   const id = D.shots[cur]?.id; v.pause(); const nx = DATA.cuts[b.dataset.cut].shots.find(s => s.id === id); load(b.dataset.cut, nx ? nx.t0 + 0.02 : 0); };
-load("tight", 0);
+load(CUT, 0);
 (async () => {
   try { db = window.claude ? await window.claude.use("db") : null; } catch (e) { db = null; }
   if (!db) { setStatus("comments not connected: open this page on claude.ai to save"); return; }

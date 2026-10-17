@@ -2,6 +2,7 @@
 
   .venv-image/bin/python scripts/review-sheets.py fifteen-days plates <out-dir>            one sheet per plate: every option, labelled
   .venv-image/bin/python scripts/review-sheets.py fifteen-days frames <out-dir> [id ...]   one sheet per frame: the frame, its cards, its layout
+  .venv-image/bin/python scripts/review-sheets.py fifteen-days coverage <out-dir> [id ...] the same for the coverage frames (coverage-board.json)
 
 Writes <out-dir>/<id>.jpg and <out-dir>/manifest.json (per sheet: what the picture must show). The checklist is the owner's
 (2026-10-16 night).
@@ -75,7 +76,12 @@ def main() -> None:
             sname, k = pid.split("-")[1], pid.split("-", 2)[2]
             man["sheets"][pid] = {"sheet": str(out / f"{pid}.jpg"), "options": opts, "view": sets[sname]["setups"][k]["what"], "set": sname}
     else:
-        board = {s["id"]: s for s in json.loads((adir / "storyboard4.json").read_text())["shots"]}
+        if mode == "coverage":  # the coverage frames (scripts/coverage-plan.py): each frame's own action, its layout's frame
+            cb = json.loads((adir / "coverage-board.json").read_text())
+            board = {fid: {"id": fid, "layout": f["layout"], "who": f["who"], "size": f["size"], "action": f["action"], "set": f["set"]}
+                     for fid, f in cb["frames"].items() if f.get("layout")}
+        else:
+            board = {s["id"]: s for s in json.loads((adir / "storyboard4.json").read_text())["shots"]}
         seen = {n: json.loads((adir / "sets" / f"{n}.seen.json").read_text()) for n in ("courtyard", "hall", "corridor", "lobby")}
         for f in sorted((PRE / "pass3").glob("*.png")):
             fid = f.stem
@@ -89,7 +95,7 @@ def main() -> None:
             sheet.paste(fit(f, 1000, 563), (0, 40))
             d.text((8, 4), f"{fid}  (frame)", fill="black", font=font(26))
             y = 40
-            lay = PRE / "set" / f"{sid}.look.png"
+            lay = PRE / "set" / f"{s.get('layout', sid)}.look.png"
             if lay.exists():
                 d.text((1010, 4), "layout", fill="black", font=font(22))
                 im = fit(lay, 390, 220)
@@ -102,7 +108,7 @@ def main() -> None:
                 d.text((1010, y + 2), "card " + w, fill="white", font=font(18))
                 y += im.size[1] + 4
             sheet.save(out / f"{fid}.jpg", quality=82)
-            sn = seen[s["set"]].get(sid, {}).get("people", {})
+            sn = seen[s["set"]].get(s.get("layout", sid), {}).get("people", {})
             man["sheets"][fid] = {"sheet": str(out / f"{fid}.jpg"), "shot": sid, "size": s["size"], "action": s["action"], "set": s["set"],
                                   "who": [NAMES[w] for w in s["who"]], "main_people_count": len(ppl),
                                   "placement": {w: f"{p['side']} of frame, {p['facing']}" for w, p in sn.items() if p.get("visible")},

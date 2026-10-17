@@ -6567,5 +6567,170 @@
         "visible": true
       }
     }
+  },
+  "cov-cafe-MASTER-up": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "centre"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallW",
+        "name": "the low buildings on the west side, windows glowing",
+        "side": "right"
+      },
+      {
+        "id": "counter",
+        "name": "a plain serving counter by the west wall, nobody at it",
+        "side": "right"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "right"
+      },
+      {
+        "id": "lights",
+        "name": "strings of little warm lights overhead",
+        "side": "right"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "left"
+      },
+      {
+        "id": "props",
+        "name": "two tea cups, a little sugar bowl and a small wall of sugar cubes on the table",
+        "side": "centre"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.362,
+        "y": 0.447,
+        "facing": "facing screen-right, in profile",
+        "dist": 3.79,
+        "visible": true
+      },
+      "D": {
+        "side": "right",
+        "x": 0.653,
+        "y": 0.425,
+        "facing": "facing screen-left, in profile",
+        "dist": 3.8,
+        "visible": true
+      },
+      "B": {
+        "side": "centre",
+        "x": 0.445,
+        "y": 0.32,
+        "facing": "toward the camera",
+        "dist": 5.45,
+        "visible": true
+      }
+    }
+  },
+  "cov-cafe-CU-Z0": {
+    "landmarks": [
+      {
+        "id": "table4",
+        "name": "the long rectangular wooden table",
+        "side": "right"
+      },
+      {
+        "id": "baitable",
+        "name": "a small round table for one",
+        "side": "left"
+      },
+      {
+        "id": "wallE",
+        "name": "the low buildings on the east side, windows glowing",
+        "side": "left"
+      },
+      {
+        "id": "skyline",
+        "name": "the megastructures and mountain pyramids above the rooftops",
+        "side": "left"
+      },
+      {
+        "id": "street",
+        "name": "the quiet street beyond the gate, plain building fronts with no signs",
+        "side": "right"
+      }
+    ],
+    "people": {
+      "Z": {
+        "side": "centre",
+        "x": 0.5,
+        "y": 0.305,
+        "facing": "toward the camera",
+        "dist": 1.24,
+        "visible": true
+      },
+      "D": {
+        "side": "left",
+        "x": -2.82,
+        "y": 1.145,
+        "facing": "toward the camera",
+        "dist": 0.94,
+        "visible": false
+      },
+      "B": {
+        "side": "right",
+        "x": 1.944,
+        "y": 0.301,
+        "facing": "toward the camera",
+        "dist": 2.25,
+        "visible": false
+      }
+    }
   }
 }

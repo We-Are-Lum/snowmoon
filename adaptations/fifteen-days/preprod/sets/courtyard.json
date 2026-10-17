@@ -118,7 +118,7 @@
   {
    "id": "counter",
    "kind": "counter",
-   "landmark": "the robot's serving counter by the west wall",
+   "landmark": "a plain serving counter by the west wall, nobody at it",
    "at": [
     -7.2,
     2.5

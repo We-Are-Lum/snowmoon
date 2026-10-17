@@ -92,6 +92,7 @@ def main() -> None:
     if args.board == "coverage":
         cb = json.loads((adir / "coverage-board.json").read_text())
         board = [{"id": fid, "layout": f["layout"], "set": f["set"], "size": f["size"], "who": f["who"], "action": f["action"],
+                  "over": f.get("over"), "subject": f.get("subject"), "look": f.get("look"), "bai_bg": f.get("far") == "B",
                   "camera": cb["layouts"][f["layout"]]["camera"]} for fid, f in cb["frames"].items() if f.get("layout")]
     else:
         board = json.loads((adir / "storyboard-v4.json").read_text())["shots"]
@@ -132,13 +133,20 @@ def main() -> None:
         where = []
         for w in s["who"]:
             p = sn["people"].get(w)
-            if p and p.get("visible") and sz != "INSERT":
+            if w == s.get("over"):  # the near shoulder of an over-the-shoulder: once, from behind, at the frame's edge
+                where.append(f"{DESC[w].split(' with ')[0]} is seen only from behind in the near foreground, the back of the head and one shoulder "
+                             f"at the {SIDE[p['side']].split(' of ')[0].replace('in the middle', 'side')} edge of the frame, soft; he or she appears only once")
+            elif w == s.get("subject") and s.get("look"):  # coverage: never straight at the camera
+                where.append(f"{DESC[w].split(' with ')[0]} is turned three-quarters, looking toward the {s['look']} of the frame, never straight at the camera")
+            elif p and p.get("visible") and sz != "INSERT":
                 where.append(f"{'the robot' if w == 'R' else DESC[w].split(' with ')[0]} is {SIDE[p['side']]}, {p['facing']}")
         tail = []
         if where:
             tail.append("In this frame: " + "; ".join(where) + ".")
         if "R" in s["who"]:
             tail.append("The robot is " + ROBOT + ".")
+        elif s.get("layout"):  # coverage frames kept gaining a robot or a stranger in the background
+            tail.append("No robot and no other people anywhere in the picture" + (", apart from the crowd in the tiers." if n == "hall" else "."))
         if people:
             tail.append({1: "Exactly one main person, appearing once.", 2: "Exactly two main people, each appearing once.", 3: "Exactly three main people, each appearing once."}[min(len(people), 3)] + " " +
                         (CROWD if n == "hall" or att == 1 else NOBODY[n]))
@@ -219,10 +227,13 @@ def main() -> None:
             # from attempt 5: no cards for extreme close-ups and inserts (they pulled the view wide), and no Bai card where she sits small
             # behind (it brought her forward or doubled her); faces then come from the A picture, which was drawn from the cards
             kc = [(r, w) for r, w in zip(card_refs, cards) if not (att >= 5 and (sz in ("ECU", "INSERT") or (s.get("bai_bg") and "bai" in w)))]
+            if s.get("over") and not three:  # the near shoulder's card made the model draw that person twice
+                kc = [(r, w) for r, w in kc if Path(CARD[s["over"]]).name not in w]
             if len(kc) != len(card_refs):
                 k = [x for x in k if not x.startswith("Reference image 3") and not x.startswith("Reference image 4") and "match their reference" not in x]
-                if kc:
-                    k.insert(3, f"Reference image 3 is {DESC['Z']}: copy only his face, hair, skin and clothes.")
+                back = {Path(v).name: w for w, v in CARD.items()}
+                for i, (_, cw) in enumerate(kc, 3):
+                    k.insert(i, f"Reference image {i} is {DESC[back[Path(cw).name]]}: copy only that person's face, hair, skin and clothes.")
             jobs["K"].append({"id": f"{s['id']}-K{att}", "shot": s["id"], "approach": "A", "attempt": att, "prompt": " ".join(k),
                               "refs": [str(apic.relative_to(ROOT)), lref] + [r for r, _ in kc], "width": 1024, "height": 576, "seed": 34000 + 100 * att + i,
                               "layers": {**layers, "set_frame": layer(frames["depth"], mode="depth", rendered_from=f"images-out/preprod/set/{lay}.depth.png"),
