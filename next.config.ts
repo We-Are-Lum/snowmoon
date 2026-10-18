@@ -50,6 +50,9 @@ const nextConfig: NextConfig = {
       './node_modules/@fontsource/crimson-pro/files/crimson-pro-latin-*-italic.woff',
       './node_modules/@fontsource/dm-mono/files/dm-mono-latin-*-normal.woff',
     ],
+    // Remix's Generate reads the shot (its prompt, plate and cast cards) from the editor's data,
+    // made at build time from committed files (scripts/editor-data.mjs): only those, not the voices.
+    '/api/remix/**': ['./public/editor/*/v*/data.json', './public/editor/*/v*/plates/**', './public/editor/*/v*/cards/**'],
   },
   // The end card's "make your own" link (owner, 2026-10-14): the repository for now; temporary (307),
   // since /make may become a page of its own.

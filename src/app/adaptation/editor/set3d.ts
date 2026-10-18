@@ -397,10 +397,68 @@ export class SetStage {
     return { x: ((v.x + 1) / 2) * this.orbitCanvas.clientWidth, y: ((1 - v.y) / 2) * this.orbitCanvas.clientHeight };
   }
 
-  /** The shot camera's view as a PNG data URL (for the fork file's preview). */
+  /** The shot camera's view as a PNG data URL. */
   snapshot(): string {
     this.shotR.render(this.scene, this.shotCam);
     return this.shotCanvas.toDataURL('image/png');
+  }
+
+  /**
+   * What Generate sends (Remix): the shot camera's view at a fixed size, as the grey layout and as
+   * a depth map (near light, far dark), drawn the way scripts/set-render.html drew the set frames
+   * the version's frames were made from (log depth, 2nd and 98th percentiles, normalised
+   * disparity). The handles are never in either. PNG data URLs.
+   */
+  layoutPictures(width: number, height: number): { layout: string; depth: string } {
+    const canvas = document.createElement('canvas');
+    canvas.width = width;
+    canvas.height = height;
+    const r = new THREE.WebGLRenderer({ canvas, antialias: true, preserveDrawingBuffer: true });
+    r.setPixelRatio(1);
+    r.setSize(width, height, false);
+    const cam = this.shotCam.clone();
+    cam.aspect = width / height;
+    cam.updateProjectionMatrix();
+    this.frustum.visible = false;
+    const background = this.scene.background;
+    try {
+      r.render(this.scene, cam);
+      const layout = canvas.toDataURL('image/png');
+      const vs = 'varying float vd; void main(){ vec4 mv = modelViewMatrix * vec4(position,1.0); vd = -mv.z; gl_Position = projectionMatrix * mv; }';
+      this.scene.overrideMaterial = new THREE.ShaderMaterial({
+        vertexShader: vs,
+        fragmentShader: 'varying float vd; void main(){ float v = clamp(log(vd/0.2)/log(1000.0),0.0,1.0); gl_FragColor = vec4(v,v,v,1.0); }',
+        side: THREE.DoubleSide,
+      });
+      this.scene.background = new THREE.Color(0xffffff);
+      const rt = new THREE.WebGLRenderTarget(width, height);
+      r.setRenderTarget(rt);
+      r.render(this.scene, cam);
+      const px = new Uint8Array(width * height * 4);
+      r.readRenderTargetPixels(rt, 0, 0, width, height, px);
+      r.setRenderTarget(null);
+      rt.dispose();
+      const ds: number[] = [];
+      for (let i = 0; i < px.length; i += 4 * 7) if (px[i] < 255) ds.push(0.2 * Math.pow(1000, px[i] / 255));
+      ds.sort((a, b) => a - b);
+      const dmin = Math.max(0.15, ds[Math.floor(ds.length * 0.02)] || 0.5) * 0.85;
+      const dmax = (ds[Math.floor(ds.length * 0.98)] || 30) * 1.15;
+      this.scene.overrideMaterial = new THREE.ShaderMaterial({
+        vertexShader: vs,
+        side: THREE.DoubleSide,
+        uniforms: { a: { value: 1 / dmin }, b: { value: 1 / dmax } },
+        fragmentShader: 'uniform float a; uniform float b; varying float vd; void main(){ float v = clamp((1.0/vd - b)/(a - b), 0.0, 1.0); v = pow(v, 0.8); gl_FragColor = vec4(v,v,v,1.0); }',
+      });
+      this.scene.background = new THREE.Color(0x000000);
+      r.render(this.scene, cam);
+      return { layout, depth: canvas.toDataURL('image/png') };
+    } finally {
+      this.scene.overrideMaterial = null;
+      this.scene.background = background;
+      this.frustum.visible = true;
+      r.dispose();
+      this.render();
+    }
   }
 
   private emit() {
