@@ -20,7 +20,8 @@
  * Checks: /@naaate/1 (version 2, the GPT cut), /@naaate/1/v/1 (version 1, the open-weight cut), /1, a renamed name, a slug, a wallet address (and its
  * checksum case), "nothing here yet", SHARE and copy link, the cast composer (website and inside a
  * Farcaster client), the phone width, and the live shot editor (13-17: loading, playing (nothing is saved:
- * no fork file, no download), the layers, a phone with a touch drag, and the scene page's links into it, REMIX and the recipe). Version 1's video
+ * no fork file, no download), the layers, a phone with a touch drag, and the scene page's links into it, REMIX and the recipe; on /@naaate/1 the editor
+ * shows version 2's own GPT frames and labels), and 18: version 1's own editor at /@naaate/1/v/1/shot/<shot>. Version 1's video
  * and poster are named on media.snowmoon.party (uploaded in publish step (b)); the browser here is
  * refused anything outside the local site, so the check reads the player's src and poster rather than playing it.
  */
@@ -209,19 +210,21 @@ try {
         'any https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-58da1b6d582e.mp4',
       ]);
     // The closed model is named with its maker, the date and that it is closed, in the label and the recipe line;
-    // the shot strip and Remix say the editor has version 1's shots.
+    // the shot strip shows version 2's own GPT pictures (2026-10-18), so no "version 1's shots" note is left.
     const strip = await page.locator('.scene-shots h2').innerText({ timeout: 10000 }).catch(() => '');
+    const thumbs = await page.locator('.scene-shot img').evaluateAll((els) => els.map((e) => (e as HTMLImageElement).getAttribute('src') ?? ''));
     const closedOk =
       /AI-generated with GPT Image \(OpenAI, a closed model\), not by the author/i.test(t) &&
       /Inputs open, model closed: the pictures by GPT Image 2\.5 Sunburst \(OpenAI, a closed model\), 2026-10-18/i.test(t) &&
-      /Version 1.s shots and recipes, in the editor/i.test(t) && /The editor has version 1.s shots for now/i.test(t) && /Version 1.s shots, open-weight pictures/i.test(strip) &&
+      /Read it/i.test(t) && !/version 1.s shots/i.test(t) && /^Every shot/i.test(strip) &&
+      thumbs.length > 70 && thumbs.every((u) => u.startsWith('/editor/1/v2/thumbs/')) &&
       !/remixed from/i.test(t);
     const canonical = await page.locator('link[rel="canonical"]').getAttribute('href').catch(() => null);
     const embedRaw = await page.locator('meta[name="fc:miniapp"]').getAttribute('content').catch(() => null);
     const embed = embedRaw ? (JSON.parse(embedRaw) as { button?: { title?: string; action?: { url?: string } } }) : null;
     const headOk = canonical === `${PUBLIC}/@naaate/1` && embed?.button?.action?.url === `${PUBLIC}/@naaate/1` && embed?.button?.title === 'Watch it';
     const pass = headOk && sourcesOk && h.status === 200 && res?.status() === 200 && /Fifteen Days/i.test(t) && /@naaate.s chosen version/i.test(t) && player?.src === 'https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-58da1b6d582e.mp4' && player?.poster === 'https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-poster-shown-4fc80109065b.jpg' && /Version 2 /i.test(t) && closedOk;
-    await record(1, 'owner page', url, `200; title Fifteen Days; @naaate's chosen version; version 2 (the GPT cut, no parent); its AI label naming GPT Image (OpenAI, a closed model); "Inputs open, model closed" with the model, maker and date; the shot strip, the recipe link and Remix say the editor has version 1's shots; the player plays v2's cut from media.snowmoon.party (its 720p copy on phones, its re-wrapped copy wider, the cut last) with the no-text GPT triptych as its poster; canonical and fc:miniapp embed point at ${PUBLIC}/@naaate/1`, page, { status: h.status, player, strip, canonical, embedUrl: embed?.button?.action?.url ?? null }, pass);
+    await record(1, 'owner page', url, `200; title Fifteen Days; @naaate's chosen version; version 2 (the GPT cut, no parent); its AI label naming GPT Image (OpenAI, a closed model); "Inputs open, model closed" with the model, maker and date; the shot strip shows version 2's own GPT pictures and the recipe link reads "Read it" (no "version 1's shots" note); the player plays v2's cut from media.snowmoon.party (its 720p copy on phones, its re-wrapped copy wider, the cut last) with the no-text GPT triptych as its poster; canonical and fc:miniapp embed point at ${PUBLIC}/@naaate/1`, page, { status: h.status, player, strip, thumbs: thumbs.slice(0, 2), canonical, embedUrl: embed?.button?.action?.url ?? null }, pass);
     await page.context().close();
   }
 
@@ -237,6 +240,11 @@ try {
       .evaluate((v) => ({ src: v.getAttribute('data-cut') ?? v.getAttribute('src'), poster: v.getAttribute('poster'), sources: [...v.querySelectorAll('source')].map((s) => `${s.getAttribute('media') ?? 'any'} ${s.getAttribute('src')}`) }))
       .catch(() => null);
     const strip = await page.locator('.scene-shots h2').innerText({ timeout: 10000 }).catch(() => '');
+    // Its own editor: every shot, the recipe and Remix open /@naaate/1/v/1/shot/<shot>, with version 1's own frames.
+    const links = await page.locator('.scene-shot').evaluateAll((els) => els.map((e) => (e as HTMLAnchorElement).getAttribute('href') ?? ''));
+    const thumbs = await page.locator('.scene-shot img').evaluateAll((els) => els.map((e) => (e as HTMLImageElement).getAttribute('src') ?? ''));
+    const recipeHref = await page.locator('.scene-facts a').getAttribute('href');
+    const ownEditor = links.length === 85 && links.every((h) => /^\/@naaate\/1\/v\/1\/shot\/[\w-]+$/.test(h)) && thumbs.every((u) => u.startsWith('/editor/1/v1/thumbs/')) && recipeHref === '/@naaate/1/v/1/shot/first#recipe';
     const v1Ok =
       player?.src === 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-9391f90d6dca.mp4' &&
       player?.poster === 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-poster-3caad9b75656.jpg' &&
@@ -247,8 +255,8 @@ try {
           'any https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-9391f90d6dca.mp4',
         ]) &&
       /Version 1 /i.test(t) && /Pictures: AI-generated, not by the author/i.test(t) && !/closed model/i.test(t) && /^Every shot/i.test(strip) && /Read it/i.test(t);
-    const pass = h.status === 200 && /this version, fixed/i.test(t) && /See @naaate.s latest chosen version/i.test(t) && v1Ok;
-    await record(2, 'fixed version', url, "200; 'this version, fixed'; a link to the latest chosen version; it plays version 1, the open-weight cut (its copies, its poster, its own AI label, no closed model named), with every shot of its own under it", page, { status: h.status, player, strip }, pass);
+    const pass = h.status === 200 && /this version, fixed/i.test(t) && /See @naaate.s latest chosen version/i.test(t) && v1Ok && ownEditor;
+    await record(2, 'fixed version', url, "200; 'this version, fixed'; a link to the latest chosen version; it plays version 1, the open-weight cut (its copies, its poster, its own AI label, no closed model named), with every shot of its own under it, each (and the recipe link) opening version 1's own editor at /@naaate/1/v/1/shot/<shot>", page, { status: h.status, player, strip, shotLinks: links.length, firstLink: links[0] ?? null, recipeHref }, pass);
     await page.context().close();
   }
 
@@ -479,6 +487,7 @@ try {
     });
     await page.waitForFunction(() => Array.from(document.querySelectorAll('.ed-pair img')).every((i) => (i as HTMLImageElement).complete), null, { timeout: 10000 }).catch(() => {});
     const imgs = await page.locator('.ed-pair img').evaluateAll((els) => els.map((e) => (e as HTMLImageElement).naturalWidth));
+    const frameSrc = await page.locator('.ed-pair img').first().getAttribute('src');
     const recipe = await page.getByRole('link', { name: /The recipe/ }).getAttribute('href');
     const github = await page.locator('.ed a[href*="github.com"]').count();
     const proto = await page.getByRole('link', { name: /where it.s going/i }).count();
@@ -488,11 +497,14 @@ try {
     const pass =
       res?.status() === 200 && layoutDrawn && imgs.length === 2 && imgs.every((w) => w > 0) &&
       recipe === '#recipe' && github === 0 && proto === 0 && gen === 'true' &&
-      /Remixing opens this week/.test(t) && !/fork/i.test(t) && /Remix makes an AI frame from your camera/i.test(t) && /AI-generated, not by the author/i.test(t) &&
-      // /@naaate/1 is version 2, but the editor has version 1's shots: version 1's own label, no closed model named.
-      !/closed model/i.test(t) && /in version 1\b/i.test(t) &&
+      /Remixing opens this week/.test(t) && !/fork/i.test(t) && /Remix makes an AI frame from your camera/i.test(t) &&
+      // /@naaate/1 is version 2, the GPT cut: its own GPT frame, its AI label, the recipe line and the frame's own label name the closed model.
+      frameSrc === '/editor/1/v2/frames/cov-cafe-OTS-Z-talk-K7-g1.jpg' && /in version 2\b/i.test(t) &&
+      /Pictures: AI-generated with GPT Image \(OpenAI, a closed model\), not by the author/i.test(t) &&
+      /Inputs open, model closed: the pictures by GPT Image 2\.5 Sunburst \(OpenAI, a closed model\), 2026-10-18/i.test(t) &&
+      /The shot.s frame · version 2 · AI-generated with GPT Image 2\.5 Sunburst \(OpenAI, a closed model\), not by the author/i.test(t) &&
       /why does Dzego like Minpentai so much/.test(t) && f.small.length === 0 && f.tiny.length === 0;
-    await record(13, 'editor loads a shot', ED, 'the 3D set and the live layout draw; the frame and its set frame load; Generate is disabled ("Remixing opens this week.") where Remix is not set up, as in this test (no image key); the banner names Remix; no "fork" anywhere; version 1\'s shots with version 1\'s AI label (the page\'s chosen version is 2, whose pictures the editor does not have), the recipe link (on the site, #recipe; no GitHub link) and the prototype link as "where it\'s going"; no text under 12px, no control under 44px', page, { status: res?.status() ?? null, layoutDrawn, images: imgs, recipe, githubLinks: github, proto, generateDisabled: gen, under12px: f.small, under44px: f.tiny }, pass);
+    await record(13, 'editor loads a shot', ED, 'the 3D set and the live layout draw; the frame and its set frame load; Generate is disabled ("Remixing opens this week.") where Remix is not set up, as in this test (no image key); the banner names Remix; no "fork" anywhere; version 2\'s own GPT frame, with its AI label, "Inputs open, model closed" with the model, maker and date, and the frame\'s own label naming the closed model; the recipe link (on the site, #recipe; no GitHub link) and the prototype link as "where it\'s going"; no text under 12px, no control under 44px', page, { status: res?.status() ?? null, layoutDrawn, images: imgs, frameSrc, recipe, githubLinks: github, proto, generateDisabled: gen, under12px: f.small, under44px: f.tiny }, pass);
     await page.context().close();
   }
 
@@ -535,11 +547,11 @@ try {
     const forkControls = await page.getByRole('button', { name: /fork/i }).count();
     const pass =
       !!d0 && !!c0 && before !== after && /changed/i.test(caption) && /edited/i.test(promptLabel) && forkControls === 0 && downloads.length === 0;
-    // A preset, then reset: back to version 1.
+    // A preset, then reset: back to version 2 (the page's chosen version).
     await page.getByRole('button', { name: /^MASTER-wave/ }).click();
-    await page.getByRole('button', { name: /^Reset to version 1/ }).click();
+    await page.getByRole('button', { name: /^Reset to version 2/ }).click();
     const resetCaption = await page.locator('.ed-look figcaption').first().innerText();
-    await record(14, 'editor play, nothing saved', ED, 'dragging Bai and the camera, the field of view and a turn change the live layout; the prompt and the line edit in the browser; no fork control and no download; Reset returns to version 1', page, { status: 200, dragged: { bai: d0, camera: c0 }, layoutChanged: before !== after, caption, promptLabel, forkControls, downloads: downloads.length, resetCaption }, pass && /as version 1/i.test(resetCaption));
+    await record(14, 'editor play, nothing saved', ED, 'dragging Bai and the camera, the field of view and a turn change the live layout; the prompt and the line edit in the browser; no fork control and no download; Reset returns to version 2', page, { status: 200, dragged: { bai: d0, camera: c0 }, layoutChanged: before !== after, caption, promptLabel, forkControls, downloads: downloads.length, resetCaption }, pass && /as version 2/i.test(resetCaption));
     await page.context().close();
   }
 
@@ -567,8 +579,10 @@ try {
     const pass =
       !!src && /\/voice\/b4-1\.wav$/.test(src) && a?.status === 200 && /audio/.test(a.headers.get('content-type') ?? '') && played.duration > 1 && played.time > 0 &&
       /raw take stays private/i.test(voiceText) && pics.length >= 2 && pics.every((w) => w > 0) &&
-      /46a381d0a0111486f8b5b2cfd6e4c169f6f61b66219ce8827f2c92425e2bc51f/.test(rt) && /Apache-2\.0/.test(rt) && /seed \d+/.test(rt) && /\$0\.\d{4}/.test(rt);
-    await record(15, 'editor layers', `${ED} (Voice, Picture, Recipe)`, 'VOICE plays the converted line b4-1 from this site; PICTURE shows the plate and the cast cards; RECIPE gives the frame\'s sha256, the models and licences, seeds and cost', page, { status: 200, voice: src, voiceStatus: a?.status ?? null, played, pictures: pics }, pass);
+      // Version 2's frame: its GPT picture's sha256 (as in its recipe and the cut), the closed model with its maker, its licence, the date and the cost.
+      /d8ad958b2e1377f8bac125b1cb93627a3ac01ab532b358591eb3bf9118d406e9/.test(rt) && /GPT Image 2\.5 Sunburst \(OpenAI, a closed model\) · proprietary \(OpenAI\); weights not published/.test(rt) &&
+      /2026-10-18/.test(rt) && /Inputs open, model closed/.test(rt) && /\$0\.\d{4}/.test(rt) && /adaptations\/fifteen-days\/preprod\/gpt\/frames\/cov-cafe-OTS-Z-talk-K7-g1\.png/.test(rt);
+    await record(15, 'editor layers', `${ED} (Voice, Picture, Recipe)`, 'VOICE plays the converted line b4-1 from this site; PICTURE shows the plate and the cast cards; RECIPE gives the GPT frame\'s sha256 and committed file, the closed model with its maker and licence, the date and cost', page, { status: 200, voice: src, voiceStatus: a?.status ?? null, played, pictures: pics }, pass);
     await page.context().close();
   }
 
@@ -616,6 +630,27 @@ try {
     const landed = local(page.url());
     const pass = links.length === 85 && links.every((h) => /^\/@naaate\/1\/shot\/[\w-]+$/.test(h ?? '')) && remixHref === '/@naaate/1/shot/first' && recipeHref === '/@naaate/1/shot/first#recipe' && github === 0 && !/\bfork/i.test(sceneText) && /^\/@naaate\/1\/shot\/(?!first)[\w-]+$/.test(landed);
     await record(17, 'scene page to the editor', '/@naaate/1', 'all 85 shots link to /@naaate/1/shot/<shot>; REMIX opens the editor on the first shot with a camera and a line, and the address shows that shot; the Recipe link opens its RECIPE tab on the site; no GitHub link and no "fork" in the page', page, { status: 200, shotLinks: links.length, remixHref, recipeHref, githubLinks: github, landed }, pass);
+    await page.context().close();
+  }
+  // 18. Version 1's fixed link keeps its own editor: version 1's open-weight frames, its label, no closed model named.
+  {
+    const url = '/@naaate/1/v/1/shot/48-b4-1';
+    const page = await newPage(browser, { width: 1280, height: 900 });
+    watchOutside(page);
+    const res = await page.goto(BASE + url);
+    await page.locator('canvas.ed-layout').waitFor();
+    await page.waitForTimeout(800);
+    const frameSrc = await page.locator('.ed-pair img').first().getAttribute('src');
+    const t = await mainText(page);
+    const back = await page.getByRole('link', { name: /^Next|^Shot \d+/ }).first().getAttribute('href').catch(() => null);
+    await page.getByRole('tab', { name: 'Recipe' }).click();
+    const rt = await page.locator('.ed-pane').innerText();
+    const pass =
+      res?.status() === 200 && frameSrc === '/editor/1/v1/frames/cov-cafe-OTS-Z-talk-K7.jpg' && /in version 1\b/i.test(t) &&
+      /Pictures: AI-generated, not by the author/i.test(t) && !/closed model/i.test(t) && !/GPT/.test(t) &&
+      /^\/@naaate\/1\/v\/1\/shot\/[\w-]+$/.test(back ?? '') &&
+      /46a381d0a0111486f8b5b2cfd6e4c169f6f61b66219ce8827f2c92425e2bc51f/.test(rt) && /Apache-2\.0/.test(rt) && /seed \d+/.test(rt);
+    await record(18, "version 1's own editor", url, "version 1's open-weight frame (sha256 46a381d0…, Apache-2.0, a seed), version 1's AI label, no closed model or GPT named; its shot links stay under /@naaate/1/v/1", page, { status: res?.status() ?? null, frameSrc, shotLink: back }, pass);
     await page.context().close();
   }
   if (outside.length) failures.push(`the editor asked for things outside the site: ${[...new Set(outside)].slice(0, 5).join(', ')}`);

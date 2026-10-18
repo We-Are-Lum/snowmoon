@@ -31,6 +31,7 @@ interface Status {
   free: boolean;
   model: { name: string; licence: string; host: string };
   shot: { id: string; remixable: boolean; pictures: number } | null;
+  drawnFrom?: { version: number; versionModel: { name: string; maker: string } | null } | null;
   ownWordsMaxChars: number;
   layout: { width: number; height: number };
   walletSignIn: boolean;
@@ -124,6 +125,11 @@ export function RemixPanel({
   const by = auth.kind === 'signed-in' ? (auth.username ? `@${auth.username}` : `FID ${auth.fid}`) : wallet ? wallet.short : 'you';
   const left = status?.prepaid ? `Balance $${status.prepaid.balanceUsd.toFixed(2)} · $${status.prepaid.priceUsd.toFixed(4)} a frame` : status?.left !== undefined ? `${status.left} of ${status.perDay ?? 10} left today` : '';
   const frames = status?.frames ?? [];
+  // The version's pictures were drawn by a closed model, Remix by the open-weight one (owner, 2026-10-18: "all the pictures in
+  // the remix aren't the ChatGPT images so might be confusing"). DRAFT wording.
+  const differs = status?.drawnFrom
+    ? `This version\u2019s pictures were drawn by ${status.drawnFrom.versionModel ? `${status.drawnFrom.versionModel.name} (${status.drawnFrom.versionModel.maker}, a closed model)` : 'another model'}. Remix draws with ${status.model.name} (${status.model.licence}), from version ${status.drawnFrom.version}\u2019s prompt and pictures for this shot, so your frame will look different from them.`
+    : null;
 
   // Not set up here (no keys, no database: a preview, or switched off): the shot still plays; Remix is announced.
   if (status && (!status.ready || !status.shot?.remixable))
@@ -135,6 +141,7 @@ export function RemixPanel({
         <p id="ed-gen-note" className="ed-help">
           {!status.shot?.remixable && status.ready ? 'This shot has no camera to remix from: try another shot.' : REMIX_SOON}
         </p>
+        {differs && status.ready && <p className="ed-help ed-remix-model">{differs}</p>}
       </div>
     );
 
@@ -144,6 +151,7 @@ export function RemixPanel({
         <span className="label">Remix shot {shotN} · from your camera</span>
         <span className="label ed-muted">{left}</span>
       </div>
+      {differs && <p className="ed-help ed-remix-model">{differs}</p>}
       {!status ? (
         <p className="ed-help">…</p>
       ) : !signedIn ? (
@@ -174,7 +182,7 @@ export function RemixPanel({
           {status.prepaid && status.prepaid.balanceUsd < status.prepaid.priceUsd && <WalletPanel onChange={() => void refresh()} />}
           <PublishedTextField id="ed-remix-words" label="What to change, in your words" value={words} onChange={setWords} rows={3} maxLength={status.ownWordsMaxChars} />
           <p className="ed-help">
-            Sent with the camera you set (as a depth picture), this shot&rsquo;s cast cards and plate, and the shot&rsquo;s own prompt (the Prompt tab shows it; edits there stay in this browser). Made with {status.model.name} ({status.model.licence}) on {status.model.host}. Your frame is saved to your remix of this shot, public at its own link, with your words and {by}.
+            Sent with the camera you set (as a depth picture), this shot&rsquo;s cast cards and plate, and {status.drawnFrom ? <>version {status.drawnFrom.version}&rsquo;s prompt for this shot</> : <>the shot&rsquo;s own prompt (the Prompt tab shows it; edits there stay in this browser)</>}. Made with {status.model.name} ({status.model.licence}) on {status.model.host}. Your frame is saved to your remix of this shot, public at its own link, with your words and {by}.
           </p>
           <div className="ed-generate">
             <button type="button" className="ed-btn" onClick={generate} disabled={busy || !words.trim()}>

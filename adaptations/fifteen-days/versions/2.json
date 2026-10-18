@@ -42,8 +42,13 @@
   "what": "the same three GPT close-ups as \"poster\" (keyart 1536\u00d7864 masters of cov-gate-CU-Z-smile-K7-g1, cov-corridor-CU-B-sour-K9-g1 and cov-cafe-CU-D-warm-E16-g2), each cropped to its full height and 506 px wide around the face (centres 0.48, 0.48, 0.52 of the width), scaled to a 632\u00d71080 panel (Lanczos), 12 px cream gaps, no text; 1920\u00d71080 JPEG, quality 90, made with Pillow"
  },
  "editor": {
-  "reads_version": 1,
-  "why": "The live editor and Remix read a version's committed pictures and recipes (scripts/editor-data.mjs). Version 2's pictures are not committed on main, so the editor stays on version 1's shots for now, and says so."
+  "builds_on": 1,
+  "why": "The live editor and Remix read a version's committed pictures and recipes (scripts/editor-data.mjs). Version 2 is version 1's cut with its pictures redrawn, so its editor data is version 1's shots, sets, cameras, lines and voices with version 2's own pictures (frames, below: each GPT picture as the gateway sent it back, named after its recipe, sha256 as in its recipe and in the cut's timeline) and recipes (2026-10-18; until then the editor showed version 1's shots and said so).",
+  "frames": "adaptations/fifteen-days/preprod/gpt/frames",
+  "recipes": "adaptations/fifteen-days/preprod/gpt/recipes",
+  "plan": "adaptations/fifteen-days/preprod/gpt/plan.json",
+  "figure_check": "adaptations/fifteen-days/preprod/gpt/figure-check.json",
+  "model": "gpt-image-2.5-sunburst"
  },
  "author": {
   "fid": 6786,

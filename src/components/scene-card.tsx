@@ -6,12 +6,13 @@ import { AiLabel } from './recipe-sheet';
 import { posterFor } from '~/lib/scene-delivery';
 import type { RecipeView } from '~/lib/recipe-view';
 
-/** Each version's poster recipe, in short; version 1's shots' full recipes are in the live editor's RECIPE tab (on the site, no GitHub). Draft wording. */
+/** Each version's poster recipe, in short; each version's shots' full recipes are in its live editor's RECIPE tab (on the site, no GitHub). Draft wording. */
 const POSTER_V1: RecipeView = {
   file: 'adaptations/fifteen-days/versions/1.json',
-  github: '/@naaate/1/shot/first#recipe',
+  // Version 1's own editor (its fixed link's), since the chosen version is 2 (2026-10-18).
+  github: '/@naaate/1/v/1/shot/first#recipe',
   whose: 'AI-generated picture, not by the author. Fifteen Days is by @naaate.',
-  full: { href: '/@naaate/1/shot/first#recipe', text: 'Every shot\u2019s recipe, in the live editor' },
+  full: { href: '/@naaate/1/v/1/shot/first#recipe', text: 'Every shot\u2019s recipe, in the live editor' },
   what: 'The poster of Fifteen Days, version 1: the caf\u00e9 master frame.',
   model: { name: 'Qwen-Image-Edit-2509, finished with FLUX.2 [klein] 4B', licence: 'Apache-2.0', where: 'fal.ai' },
   prompt: null,
@@ -23,8 +24,8 @@ const POSTER_V2: RecipeView = {
   file: 'adaptations/fifteen-days/versions/2.json',
   github: 'adaptations/fifteen-days/versions/2.json',
   whose: 'AI-generated picture, not by the author. Fifteen Days is by @naaate.',
-  // Its per-picture recipes aren't on the site yet (the editor has version 1's shots): the file is named below.
-  full: null,
+  // Every shot's recipe, its GPT picture and every picture sent with it, in the live editor (2026-10-18).
+  full: { href: '/@naaate/1/v/2/shot/first#recipe', text: 'Every shot\u2019s recipe, in the live editor' },
   what: 'The poster of Fifteen Days, version 2 (the GPT version): three GPT Image close-ups (Zei, Bai, Deluin) side by side, cropped in code, no text.',
   model: { name: 'GPT Image 2.5 Sunburst (OpenAI), a closed model, on 2026-10-18; inputs open, model closed', licence: "proprietary: OpenAI's terms; weights not published", where: 'on the Vercel AI Gateway, a hosted service' },
   prompt: null,

@@ -63,7 +63,8 @@ export default async function RemixFramePage({ params }: Props) {
     cost_usd?: number;
     test?: string;
   };
-  const shotPath = handle ? `/@${handle}/${f.adaptationId}/shot/${f.shotId}` : null;
+  // The shot in its own version's editor (a fixed link): a frame of version 1 opens version 1's frames, whatever the chosen version is.
+  const shotPath = handle ? `/@${handle}/${f.adaptationId}/v/${f.versionId}/shot/${f.shotId}` : null;
   const who = byline(f);
   if (f.hidden)
     return (
