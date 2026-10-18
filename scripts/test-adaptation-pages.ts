@@ -454,9 +454,9 @@ try {
     const pass =
       res?.status() === 200 && layoutDrawn && imgs.length === 2 && imgs.every((w) => w > 0) &&
       recipe === '#recipe' && github === 0 && proto === 'https://claude.ai/artifact/NAuaFhUtoQKx8zHuANxwhU' && gen === 'true' &&
-      /Remixing opens this week/.test(t) && !/fork/i.test(t) && /Generate and publish come next/i.test(t) && /AI-generated, not by the author/i.test(t) &&
+      /Remixing opens this week/.test(t) && !/fork/i.test(t) && /Remix makes an AI frame from your camera/i.test(t) && /AI-generated, not by the author/i.test(t) &&
       /why does Dzego like Minpentai so much/.test(t) && f.small.length === 0 && f.tiny.length === 0;
-    await record(13, 'editor loads a shot', ED, 'the 3D set and the live layout draw; the frame and its set frame load; Generate is disabled ("Remixing opens this week."); no "fork" anywhere; the AI label, the recipe link (on the site, #recipe; no GitHub link) and the prototype link as "where it\'s going"; no text under 12px, no control under 44px', page, { status: res?.status() ?? null, layoutDrawn, images: imgs, recipe, githubLinks: github, proto, generateDisabled: gen, under12px: f.small, under44px: f.tiny }, pass);
+    await record(13, 'editor loads a shot', ED, 'the 3D set and the live layout draw; the frame and its set frame load; Generate is disabled ("Remixing opens this week.") where Remix is not set up, as in this test (no image key); the banner names Remix; no "fork" anywhere; the AI label, the recipe link (on the site, #recipe; no GitHub link) and the prototype link as "where it\'s going"; no text under 12px, no control under 44px', page, { status: res?.status() ?? null, layoutDrawn, images: imgs, recipe, githubLinks: github, proto, generateDisabled: gen, under12px: f.small, under44px: f.tiny }, pass);
     await page.context().close();
   }
 

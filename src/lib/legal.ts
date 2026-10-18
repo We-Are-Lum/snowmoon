@@ -43,7 +43,9 @@ export const LEGAL: {
     // With Remix (the Remix items the owner reread on 2026-10-18): terms if3grj, privacy b1is2e.
     // The baseline's words were terms 5wwopt, privacy 1wfmhnv.
     terms: { words: 'if3grj', on: '2026-10-18', by: 'FID 6786' },
-    privacy: { words: 'b1is2e', on: '2026-10-18', by: 'FID 6786' },
+    // Plus one sentence the drafted list missed (Privacy §4, images): "your name (Farcaster name or wallet
+    // address)", the owner's own words for tonight's publish (2026-10-18), so the page stays true for wallet accounts.
+    privacy: { words: '1smezv1', on: '2026-10-18', by: 'FID 6786' },
   },
 };
 
