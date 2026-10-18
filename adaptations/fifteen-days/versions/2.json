@@ -34,6 +34,13 @@
   "sha256": "7c2ea36f0b07f7771fb445a4dbd7e6635d38af11fcc482ce0c5bbe50a08af95a",
   "what": "the triptych (owner's pick A, 2026-10-18): the GPT close-ups cov-gate-CU-Z-smile-K7-g1, cov-corridor-CU-B-sour-K9-g1 and cov-cafe-CU-D-warm-E16-g2, each cropped to a 632×850 panel around the face, 12 px gaps, over a 230 px cream title bar: 'Fifteen Days' (Crimson Pro 600, 150 px) and 'BASED ON VITALIK / BUTERIN’S SNOWMOON' (DM Mono 26 px), the share image's words; 1920×1080 JPEG, quality 90, made with Pillow"
  },
+ "poster_shown": {
+  "file": "adaptations/fifteen-days/versions/2-poster-shown.jpg",
+  "sha256": "4fc80109065bfa4b8aa35334f865f518fc96aa4b4b33dd7860c11b492e79ee0f",
+  "url": "https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-poster-shown-4fc80109065b.jpg",
+  "why": "The home card prints 'Fifteen Days' under the poster, so the titled triptych doubled the title (owner, 2026-10-18: 'Probably best if starting image is just the 3 of them no text'). A published version's recipe is fixed (0012: only hidden can change), so the recipe keeps naming \"poster\" and the site shows this one in its place (src/lib/scene-delivery.ts), as it does the delivery copies.",
+  "what": "the same three GPT close-ups as \"poster\" (keyart 1536\u00d7864 masters of cov-gate-CU-Z-smile-K7-g1, cov-corridor-CU-B-sour-K9-g1 and cov-cafe-CU-D-warm-E16-g2), each cropped to its full height and 506 px wide around the face (centres 0.48, 0.48, 0.52 of the width), scaled to a 632\u00d71080 panel (Lanczos), 12 px cream gaps, no text; 1920\u00d71080 JPEG, quality 90, made with Pillow"
+ },
  "editor": {
   "reads_version": 1,
   "why": "The live editor and Remix read a version's committed pictures and recipes (scripts/editor-data.mjs). Version 2's pictures are not committed on main, so the editor stays on version 1's shots for now, and says so."

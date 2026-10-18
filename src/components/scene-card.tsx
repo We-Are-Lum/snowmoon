@@ -3,6 +3,7 @@ import '../styles/home.css';
 import { ownMedia, shownVersion } from '~/lib/adaptation-pages';
 import { AI_LABEL } from '~/lib/ai-declared';
 import { AiLabel } from './recipe-sheet';
+import { posterFor } from '~/lib/scene-delivery';
 import type { RecipeView } from '~/lib/recipe-view';
 
 /** Each version's poster recipe, in short; version 1's shots' full recipes are in the live editor's RECIPE tab (on the site, no GitHub). Draft wording. */
@@ -24,16 +25,21 @@ const POSTER_V2: RecipeView = {
   whose: 'AI-generated picture, not by the author. Fifteen Days is by @naaate.',
   // Its per-picture recipes aren't on the site yet (the editor has version 1's shots): the file is named below.
   full: null,
-  what: 'The poster of Fifteen Days, version 2 (the GPT version): three GPT Image close-ups (Zei, Bai, Deluin) side by side, with the title drawn in code.',
+  what: 'The poster of Fifteen Days, version 2 (the GPT version): three GPT Image close-ups (Zei, Bai, Deluin) side by side, cropped in code, no text.',
   model: { name: 'GPT Image 2.5 Sunburst (OpenAI), a closed model, on 2026-10-18; inputs open, model closed', licence: "proprietary: OpenAI's terms; weights not published", where: 'on the Vercel AI Gateway, a hosted service' },
   prompt: null,
   inputs: [
     { label: 'Its pictures', value: 'adaptations/fifteen-days/preprod/gpt/recipes/: cov-gate-CU-Z-smile-K7-g1, cov-corridor-CU-B-sour-K9-g1 and cov-cafe-CU-D-warm-E16-g2, each with its prompt and every picture sent, by sha256' },
-    { label: 'How it was put together', value: 'adaptations/fifteen-days/versions/2.json, "poster": the crops, the title bar and its words (from the share image)' },
+    { label: 'How it was put together', value: 'adaptations/fifteen-days/versions/2.json, "poster_shown": the crops (the recipe\u2019s "poster" is the same three with a title bar, taken off for the home card)' },
   ],
   published: { by: '@naaate', when: '2026-10-18' },
 };
 const POSTERS: Record<number, RecipeView> = { 1: POSTER_V1, 2: POSTER_V2 };
+/** Each poster's alt text. Draft wording. */
+const POSTER_ALT: Record<number, string> = {
+  1: 'Fifteen Days: in the caf\u00e9, Deluin waves Zei over while Bai sits at the table',
+  2: 'Fifteen Days: Zei smiling, Bai frowning, arms crossed, and Deluin looking on warmly, side by side',
+};
 
 /**
  * The published scene, as a card: Fifteen Days, the owner's chosen version (version 2 from 2026-10-18), on the home page and at the top of
@@ -42,7 +48,7 @@ const POSTERS: Record<number, RecipeView> = { 1: POSTER_V1, 2: POSTER_V2 };
  */
 export async function SceneCard({ as = 'home' }: { as?: 'home' | 'list' }) {
   const v = await Promise.race([shownVersion(6786, 1), new Promise<null>((r) => setTimeout(() => r(null), 2000))]).catch(() => null);
-  const poster = ownMedia(v?.recipe.poster_url);
+  const poster = posterFor(ownMedia(v?.recipe.video_url), ownMedia(v?.recipe.poster_url));
   const label = v?.recipe.ai_label ?? null;
   return (
     <section className={`home-card scene-card scene-card-${as}`} aria-labelledby={`scene-card-${as}`}>
@@ -53,7 +59,7 @@ export async function SceneCard({ as = 'home' }: { as?: 'home' | 'list' }) {
       <Link href="/@naaate/1" className="scene-card-link">
         {poster && (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={poster} alt="Fifteen Days: in the café, Deluin waves Zei over while Bai sits at the table" width={1280} height={720} />
+          <img src={poster} alt={POSTER_ALT[v?.id ?? 1] ?? POSTER_ALT[1]} width={1280} height={720} />
         )}
         <span className="scene-card-title">Fifteen Days</span>
         <span className="scene-card-by">by @naaate · spoilers through chapter 19</span>

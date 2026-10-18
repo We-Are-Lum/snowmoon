@@ -4,7 +4,7 @@ import type { Metadata } from 'next';
 import { APP_NAME, adaptationPagesShown, appUrl } from '~/lib/config';
 import { PAPER } from '~/lib/tokens';
 import { type Adaptation, type Version, editorVersion, getAdaptation, getVersion, handleFor, ownMedia, parseId, resolveHandle, shownVersion, titleSlug } from '~/lib/adaptation-pages';
-import { deliveryFor } from '~/lib/scene-delivery';
+import { deliveryFor, posterFor } from '~/lib/scene-delivery';
 import { ShotStrip } from './editor/shot-strip';
 import { SceneActions } from '~/components/scene-actions';
 import './scene.css';
@@ -70,7 +70,7 @@ export async function sceneMetadata(params: SceneParams): Promise<Metadata> {
   if (s.kind !== 'scene' && s.kind !== 'nothing') return { title: 'Nothing here yet', robots: { index: false } };
   const path = s.kind === 'scene' && s.fixed ? `/@${s.handle}/${s.adaptation.id}/v/${s.version.id}` : `/@${s.handle}/${s.adaptation.id}`;
   const url = `${appUrl()}${path}`;
-  const image = (s.kind === 'scene' && ownMedia(s.version.recipe.poster_url)) || `${appUrl()}/embed.png`;
+  const image = (s.kind === 'scene' && posterFor(ownMedia(s.version.recipe.video_url), ownMedia(s.version.recipe.poster_url))) || `${appUrl()}/embed.png`;
   const share = SHARE_IMAGES[s.adaptation.id]?.handle === s.handle ? SHARE_IMAGES[s.adaptation.id] : null;
   const embed = JSON.stringify({
     version: '1',
@@ -118,7 +118,7 @@ export async function ScenePage({ adaptation, version, handle, fixed }: { adapta
   const fixedPath = `${latestPath}/v/${version.id}`;
   const host = appUrl().replace(/^https?:\/\//, '');
   const video = ownMedia(version.recipe.video_url);
-  const poster = ownMedia(version.recipe.poster_url) ?? undefined;
+  const poster = posterFor(video, ownMedia(version.recipe.poster_url)) ?? undefined;
   const delivery = deliveryFor(video);
   const r = version.recipe;
   // The live editor, the shot strip and Remix read a version's committed pictures; version 2's aren't

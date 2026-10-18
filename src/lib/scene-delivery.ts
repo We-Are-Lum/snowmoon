@@ -8,7 +8,11 @@
  *   cut's (ffmpeg streamhash, checked by npm run publish:scene-video).
  * - phone: a 1280×720 encode of the cut for screens up to 800px wide, same fragments; the audio is the
  *   cut's own stream, copied.
- * How each is made, and its sha256: adaptations/fifteen-days/versions/<n>.json, "delivery".
+ * - poster (only where it differs from the recipe's): the picture shown before play. Version 2's recipe names
+ *   the triptych with the title bar; the home card already prints the title under it, so the page shows the
+ *   same three close-ups without any text (owner, 2026-10-18: "Probably best if starting image is just the 3
+ *   of them no text"). A published version's recipe is fixed (0012), so this is not a new version.
+ * How each is made, and its sha256: adaptations/fifteen-days/versions/<n>.json, "delivery" and "poster_shown".
  * Files are named by their sha256 on media.snowmoon.party, like the cut.
  */
 export interface Delivery {
@@ -16,6 +20,8 @@ export interface Delivery {
   phone: string;
   /** For wider screens. */
   wide: string;
+  /** The poster shown in place of the recipe's, when there is one. */
+  poster?: string;
 }
 
 const BY_CUT: Record<string, Delivery> = {
@@ -27,9 +33,15 @@ const BY_CUT: Record<string, Delivery> = {
   'https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-58da1b6d582e.mp4': {
     phone: 'https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-phone-3f91cf56859f.mp4',
     wide: 'https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-wide-b64332cf553c.mp4',
+    poster: 'https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-poster-shown-4fc80109065b.jpg',
   },
 };
 
 export function deliveryFor(cutUrl: string | null): Delivery | null {
   return (cutUrl && BY_CUT[cutUrl]) || null;
+}
+
+/** The poster to show for a version: its shown poster if it has one, else the recipe's. */
+export function posterFor(cutUrl: string | null, recipePoster: string | null): string | null {
+  return deliveryFor(cutUrl)?.poster ?? recipePoster;
 }
