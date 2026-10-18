@@ -4,6 +4,7 @@ import type { Metadata } from 'next';
 import { APP_NAME, adaptationPagesShown, appUrl } from '~/lib/config';
 import { PAPER } from '~/lib/tokens';
 import { type Adaptation, type Version, getAdaptation, getVersion, handleFor, ownMedia, parseId, resolveHandle, shownVersion, titleSlug } from '~/lib/adaptation-pages';
+import { deliveryFor } from '~/lib/scene-delivery';
 import { ShotStrip } from './editor/shot-strip';
 import { SceneActions } from '~/components/scene-actions';
 import './scene.css';
@@ -118,6 +119,7 @@ export function ScenePage({ adaptation, version, handle, fixed }: { adaptation: 
   const host = appUrl().replace(/^https?:\/\//, '');
   const video = ownMedia(version.recipe.video_url);
   const poster = ownMedia(version.recipe.poster_url) ?? undefined;
+  const delivery = deliveryFor(video);
   const r = version.recipe;
 
   return (
@@ -125,7 +127,16 @@ export function ScenePage({ adaptation, version, handle, fixed }: { adaptation: 
       <section className="scene-top" aria-label="The scene">
         <div className="scene-watch">
           {video ? (
-            <video className="scene-video" src={video} poster={poster} controls preload="metadata" playsInline aria-label={`${adaptation.title}, version ${version.id}`} />
+            delivery ? (
+              // The same cut, packaged to start sooner (src/lib/scene-delivery.ts); the cut itself is the last source.
+              <video className="scene-video" poster={poster} controls preload="metadata" playsInline aria-label={`${adaptation.title}, version ${version.id}`} data-cut={video}>
+                <source src={delivery.phone} type="video/mp4" media="(max-width: 800px)" />
+                <source src={delivery.wide} type="video/mp4" />
+                <source src={video} type="video/mp4" />
+              </video>
+            ) : (
+              <video className="scene-video" src={video} poster={poster} controls preload="metadata" playsInline aria-label={`${adaptation.title}, version ${version.id}`} />
+            )
           ) : (
             <div className="scene-video scene-video-empty" role="img" aria-label="The video is not published yet">
               <span>The video is not published yet.</span>
