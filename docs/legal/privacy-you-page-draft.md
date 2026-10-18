@@ -28,6 +28,23 @@ What the branch changes about what is shown publicly or sent elsewhere:
 6. **Hiding a scene.** A person can now hide their own published scene versions themselves, at once,
    as they can images, Remix frames and storyboards.
 
+## The owner's decisions (2026-10-19, relayed by snowmoon-d2)
+
+- **Profile: scenes only for now.** Line A below is written for the full profile. For this merge it
+  becomes A0 (scenes only). The listing of Remix frames and storyboards, and line A as written, wait
+  for consent v5, which ships with Remix on GPT Image so everyone is asked again once, not twice
+  (`PROFILE_LISTS_REMIXES` in `src/lib/you-flags.ts`, off).
+- **Basenames: yes, with line B.** Built, but switched off (`SHOW_BASENAMES`, off) until a wording
+  covers them. Consent v4 says a wallet account is shown with "its address shortened". That conflict is
+  with the owner; line B goes in only when Basenames are switched on.
+- **Profile pictures: yes, with line B2.**
+- **0015: yes.** Dry run first, then applied before this merges, so line D applies.
+
+### A0. Section 6, "What you publish." — for this merge (scenes only). DRAFT
+
+"Your public page, at /@ followed by your Farcaster name (or, for a wallet account, its address), lists
+the scenes you have published here and not hidden. It is not offered to search engines."
+
 ## The lines, and where each goes in `src/lib/legal.ts` (PRIVACY)
 
 ### A. Section 6, "What you publish." — append after the existing paragraph's last sentence ("See the Terms, sections 5 and 7.")

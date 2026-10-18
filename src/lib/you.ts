@@ -8,6 +8,7 @@ import { allMyFrames, shownFramesBy, type Frame } from './remix/frames';
 import { boardsBy, type Storyboard } from './remix/storyboards';
 import { posterFor } from './scene-delivery';
 import { basenameOf } from './wallet/basename';
+import { PROFILE_LISTS_REMIXES, SHOW_BASENAMES } from './you-flags';
 import { shortAddress } from './wallet/session';
 
 /**
@@ -44,7 +45,7 @@ export async function whoIs(person: Person, walletAddress?: string | null): Prom
     return { kind: 'farcaster', name: username ? `@${username}` : handle ? `@${handle}` : `FID ${person}`, handle, fid: person, username: username ?? handle };
   }
   const address = (walletAddress ?? (await handleFor(person).catch(() => null)) ?? '').toLowerCase();
-  const basename = address ? await basenameOf(address) : null;
+  const basename = SHOW_BASENAMES && address ? await basenameOf(address) : null;
   const short = address ? shortAddress(address) : 'a wallet account';
   return { kind: 'wallet', name: basename ?? short, handle: address || null, address: address || undefined, basename, short };
 }
@@ -232,7 +233,8 @@ export async function publicWork(person: Person, handle: string): Promise<Public
     if (v && !v.hidden) scenes.push({ ...sceneItem({ ...v, title: a.title }, handle), latestPath: `/@${handle}/${a.id}` });
   }
   const sql = db();
-  if (!sql) return { scenes, frames: [], boards: [] };
+  // Scenes only, until consent v5 (src/lib/you-flags.ts).
+  if (!sql || !PROFILE_LISTS_REMIXES) return { scenes, frames: [], boards: [] };
   const [frames, boards] = await Promise.all([orNone(() => shownFramesBy(sql, person, 60)), orNone(() => boardsBy(sql, person, { hidden: false, limit: 30 }))]);
   const t = await titles([...frames.map((f) => f.adaptationId), ...boards.map((b) => b.adaptationId)]);
   return {
@@ -240,4 +242,12 @@ export async function publicWork(person: Person, handle: string): Promise<Public
     frames: frames.filter((f) => !f.hidden).map((f) => frameItem(f, t.get(f.adaptationId) ?? 'a scene')),
     boards: boards.filter((b) => !b.hidden).map((b) => boardItem(b, t.get(b.adaptationId) ?? 'a scene')),
   };
+}
+
+/** The handle of a person's public profile, if it has anything on it (so a byline never links to a page that isn't there). */
+export async function profileHandle(person: Person): Promise<string | null> {
+  const handle = await handleFor(person).catch(() => null);
+  if (!handle) return null;
+  const w = await publicWork(person, handle).catch(() => null);
+  return w && (w.scenes.length || w.frames.length || w.boards.length) ? handle : null;
 }

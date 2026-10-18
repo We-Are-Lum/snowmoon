@@ -39,6 +39,7 @@
  *      and a wallet, the You page shows both accounts, the wallet panel and both accounts' work, and
  *      Hide on the wallet's frame uses the wallet's own token.
  */
+import { PROFILE_LISTS_REMIXES, SHOW_BASENAMES } from '../src/lib/you-flags';
 import path from 'node:path';
 import { mkdirSync, mkdtempSync, readdirSync, readFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
@@ -224,7 +225,7 @@ try {
   const you = async (token: string) => (await (await api('/api/you', token)).json()) as YouJson;
   {
     const j = await you(tokenA);
-    check('Y2 A is named by Basename first', j.who.kind === 'wallet' && j.who.name === BASENAME && j.who.basename === BASENAME && j.who.address === A && j.who.handle === A, JSON.stringify(j.who));
+    check(SHOW_BASENAMES ? 'Y2 A is named by Basename first' : 'Y2 A is named by its shortened address (Basenames off)', j.who.kind === 'wallet' && (SHOW_BASENAMES ? j.who.name === BASENAME && j.who.basename === BASENAME : j.who.name !== BASENAME && !j.who.basename && !JSON.stringify(j).includes(BASENAME)) && j.who.address === A && j.who.handle === A, JSON.stringify(j.who));
     const sceneIds = j.work.scenes.map((s) => s.versionId).sort();
     check('Y2 A’s scenes, and only A’s', JSON.stringify(sceneIds) === JSON.stringify([vA, vA2, vA3].sort()), JSON.stringify(sceneIds));
     check('Y2 A’s frames, hidden marked, none of B’s', j.work.frames.length === 2 && j.work.frames.find((f) => f.id === fA2)?.hidden === true && !j.work.frames.some((f) => f.id === fB));
@@ -255,11 +256,11 @@ try {
     const p = await html(`/@${A}`);
     const has = (s: string) => p.text.includes(s);
     check('Y4 /@A is a page', p.status === 200, String(p.status));
-    check('Y4 /@A shows A’s scene, frame and storyboard', has(`/@${A}/1`) && has(`/remix/${fA}`) && has(`/storyboard/${sA}`));
+    check(PROFILE_LISTS_REMIXES ? 'Y4 /@A shows A’s scene, frame and storyboard' : 'Y4 /@A shows A’s scenes only (frames and storyboards wait for consent v5)', has(`/@${A}/1`) && (PROFILE_LISTS_REMIXES ? has(`/remix/${fA}`) && has(`/storyboard/${sA}`) : !has(`/remix/`) && !has(`/storyboard/`)));
     check('Y4 /@A shows nothing hidden', !has(fA2) && !has(sA2) && !has('A HIDDEN'));
     check('Y4 /@A shows nothing of B’s', !has(fB) && !has(sB) && !has('B OWN') && !has(B));
     check('Y4 /@A shows no pictures, prompts or balance', !has(iA) && !has('footbridge between') && !/Balance|wallet_payments/.test(p.text));
-    check('Y4 /@A names A by Basename', has(BASENAME));
+    check(SHOW_BASENAMES ? 'Y4 /@A names A by Basename' : 'Y4 /@A shows no Basename (off)', SHOW_BASENAMES ? has(BASENAME) : !has(BASENAME));
     check('Y4 /@A is not offered to search engines', /<meta name="robots" content="noindex/.test(p.text));
     const nobody = await html(`/@0x${'9'.repeat(40)}`);
     const quiet = await html(`/@${C}`);
@@ -358,7 +359,7 @@ try {
         await page.goto(BASE + '/you', { waitUntil: 'networkidle' });
         await page.locator('.wallet-balance').waitFor({ timeout: 15000 }).catch(() => {});
         const t = await page.locator('main.you').innerText();
-        check(`Y7 (${scheme}) the account: Basename, address, public page, Sign out`, t.includes(BASENAME) && t.includes(A) && t.includes(`/@${A}`) && /Sign out/i.test(t));
+        check(`Y7 (${scheme}) the account: Basename, address, public page, Sign out`, (SHOW_BASENAMES ? t.includes(BASENAME) : !t.includes(BASENAME)) && t.includes(A) && t.includes(`/@${A}`) && /Sign out/i.test(t));
         check(`Y7 (${scheme}) the wallet: balance, price, Add funds, transaction-hash box, frame price`, /Balance \$5/.test(t) && /an image/.test(t) && /Add funds/i.test(t) && /Add a payment by its transaction hash/.test(t) && /a Remix frame/.test(t), t.slice(0, 600));
         check(`Y7 (${scheme}) the four lists`, /Scenes · 3/i.test(t) && /Remix frames · 2/i.test(t) && /Storyboards · 2/i.test(t) && /Pictures · 2/i.test(t), t.match(/(Scenes|Remix frames|Storyboards|Pictures) · \d/gi)?.join(', '));
         const unlabeled = await page.evaluate(() =>
@@ -449,7 +450,7 @@ try {
         await both.waitForURL('**/you', { timeout: 10000 }).catch(() => {});
         await both.locator('.wallet-balance').waitFor({ timeout: 15000 }).catch(() => {});
         const t = await both.locator('main.you').innerText();
-        check(`Y9 (${scheme}) both signed in: both accounts, and the wallet panel`, t.includes('@naaate') && t.includes('6786') && t.includes(A) && t.includes(BASENAME) && /Balance \$5/.test(t) && /Add funds/i.test(t) && /Add a payment by its transaction hash/.test(t) && /Sign out of this wallet/i.test(t), t.slice(0, 400));
+        check(`Y9 (${scheme}) both signed in: both accounts, and the wallet panel`, t.includes('@naaate') && t.includes('6786') && t.includes(A) && (SHOW_BASENAMES ? t.includes(BASENAME) : !t.includes(BASENAME)) && /Balance \$5/.test(t) && /Add funds/i.test(t) && /Add a payment by its transaction hash/.test(t) && /Sign out of this wallet/i.test(t), t.slice(0, 400));
         check(`Y9 (${scheme}) both signed in: the work of both is listed`, /Scenes · 5/i.test(t) && /Remix frames · 2/i.test(t), t.match(/(Scenes|Remix frames) · \d/gi)?.join(', '));
         await shot(both, `you-both-signed-in-${scheme}`, true);
         if (scheme === 'light') {

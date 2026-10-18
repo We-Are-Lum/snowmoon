@@ -243,7 +243,7 @@ try {
     // Its own editor: every shot, the recipe and Remix open /@naaate/1/v/1/shot/<shot>, with version 1's own frames.
     const links = await page.locator('.scene-shot').evaluateAll((els) => els.map((e) => (e as HTMLAnchorElement).getAttribute('href') ?? ''));
     const thumbs = await page.locator('.scene-shot img').evaluateAll((els) => els.map((e) => (e as HTMLImageElement).getAttribute('src') ?? ''));
-    const recipeHref = await page.locator('.scene-facts a').getAttribute('href');
+    const recipeHref = await page.locator('.scene-facts a[href*="#recipe"]').getAttribute('href');
     const ownEditor = links.length === 85 && links.every((h) => /^\/@naaate\/1\/v\/1\/shot\/[\w-]+$/.test(h)) && thumbs.every((u) => u.startsWith('/editor/1/v1/thumbs/')) && recipeHref === '/@naaate/1/v/1/shot/first#recipe';
     const v1Ok =
       player?.src === 'https://media.snowmoon.party/scenes/fifteen-days/v1/fifteen-days-9391f90d6dca.mp4' &&

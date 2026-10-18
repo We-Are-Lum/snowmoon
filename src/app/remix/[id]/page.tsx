@@ -1,3 +1,4 @@
+import { profileHandle } from '~/lib/you';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import Link from 'next/link';
@@ -28,7 +29,7 @@ async function load(id: string) {
   const [v] = await sql`select author_person from studio.adaptation_versions where id = ${f.versionId}`;
   const handle = v ? await handleFor(Number(v.author_person)) : null;
   // The maker's public profile, which the byline links to (owner, 2026-10-18).
-  const maker = await handleFor(f.person).catch(() => null);
+  const maker = await profileHandle(f.person);
   return { f, title: adaptation?.title ?? 'a scene', handle, maker };
 }
 

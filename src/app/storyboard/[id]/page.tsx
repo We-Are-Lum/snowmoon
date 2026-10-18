@@ -1,3 +1,4 @@
+import { profileHandle } from '~/lib/you';
 import { notFound } from 'next/navigation';
 import type { Metadata } from 'next';
 import Link from 'next/link';
@@ -25,7 +26,7 @@ async function load(id: string) {
   const [adaptation, version, frames] = await Promise.all([getAdaptation(b.adaptationId), getVersion(b.versionId), boardFrames(sql, b)]);
   const handle = version ? await handleFor(version.author) : null;
   // The maker's public profile, which the byline links to (owner, 2026-10-18).
-  const maker = await handleFor(b.person).catch(() => null);
+  const maker = await profileHandle(b.person);
   const by = b.byName ? (b.person < 0 ? b.byName : `@${b.byName}`) : b.person > 0 ? `FID ${b.person}` : 'a wallet account';
   return { b, title: adaptation?.title ?? 'a scene', version, handle, frames, by, maker };
 }
