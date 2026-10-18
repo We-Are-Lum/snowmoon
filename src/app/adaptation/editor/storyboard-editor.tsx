@@ -196,6 +196,7 @@ export function StoryboardEditor({ dataUrl, scenePath, aiLabel, mixUrl }: { data
                     {(l.takes ?? []).map((t) => (
                       <option key={t.id} value={t.id}>
                         Voice {t.voice}
+                        {t.inVersion ? ` · the take in version ${data.version}` : ''}
                       </option>
                     ))}
                   </select>
