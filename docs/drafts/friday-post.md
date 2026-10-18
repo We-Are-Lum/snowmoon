@@ -85,8 +85,8 @@ repo root works now.
 ## Farcaster cast (under 320 characters)
 
 **Updated 2026-10-17 late (owner: "'Fork the next shot' links the live editor, and the prototype link becomes 'where
-it's going'"). DRAFT:** the approved line said "(editor prototype below)"; it now reads "(live editor below)", and
-the prototype moves into the text as "Where it's going". Both changes are drafts for the owner's OK.
+it's going'").** "Fork the next shot (live editor below)." is approved (owner, 2026-10-18 ~00:20 UTC); "Where it's
+going" with the prototype link in the text is part of the same change.
 
 > Fifteen Days: one scene from Vitalik's Snowmoon.
 >
