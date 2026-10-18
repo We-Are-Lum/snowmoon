@@ -481,13 +481,13 @@ try {
     const imgs = await page.locator('.ed-pair img').evaluateAll((els) => els.map((e) => (e as HTMLImageElement).naturalWidth));
     const recipe = await page.getByRole('link', { name: /The recipe/ }).getAttribute('href');
     const github = await page.locator('.ed a[href*="github.com"]').count();
-    const proto = await page.getByRole('link', { name: /where it.s going/i }).getAttribute('href');
+    const proto = await page.getByRole('link', { name: /where it.s going/i }).count();
     const gen = await page.getByRole('button', { name: 'Generate' }).getAttribute('aria-disabled');
     const t = await mainText(page);
     const f = await floors(page);
     const pass =
       res?.status() === 200 && layoutDrawn && imgs.length === 2 && imgs.every((w) => w > 0) &&
-      recipe === '#recipe' && github === 0 && proto === 'https://claude.ai/artifact/NAuaFhUtoQKx8zHuANxwhU' && gen === 'true' &&
+      recipe === '#recipe' && github === 0 && proto === 0 && gen === 'true' &&
       /Remixing opens this week/.test(t) && !/fork/i.test(t) && /Remix makes an AI frame from your camera/i.test(t) && /AI-generated, not by the author/i.test(t) &&
       // /@naaate/1 is version 2, but the editor has version 1's shots: version 1's own label, no closed model named.
       !/closed model/i.test(t) && /in version 1\b/i.test(t) &&

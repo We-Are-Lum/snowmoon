@@ -15,8 +15,6 @@ export const WORK = {
 
 export const APP_NAME = 'Snowmoon Living Edition';
 export const REPO_URL = 'https://github.com/We-Are-Lum/snowmoon';
-/** The full editor prototype (a design canvas shared by link), linked from the live editor as "where it's going" (owner, 2026-10-17). */
-export const EDITOR_PROTOTYPE_URL = 'https://claude.ai/artifact/NAuaFhUtoQKx8zHuANxwhU';
 /** Where the podcast is listed. Spotify: the show the owner added through Spotify for Creators (2026-10-09). */
 export const PODCAST_LINKS = { feed: '/podcast.xml', spotify: 'https://open.spotify.com/show/0J9O3tKC3BI4buQ8Hry3YN' } as const;
 

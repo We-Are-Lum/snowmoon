@@ -2,7 +2,6 @@ import { notFound, redirect } from 'next/navigation';
 import type { Metadata } from 'next';
 import { NothingHere, loadScene, type SceneParams } from '../../../../../scene-page';
 import { ShotEditor } from '../../../../../editor/shot-editor';
-import { EDITOR_PROTOTYPE_URL } from '~/lib/config';
 import { editorVersion } from '~/lib/adaptation-pages';
 import '../../../../../editor/editor.css';
 import '../../../../../../remix/remix.css';
@@ -43,7 +42,6 @@ export default async function ShotPage({ params }: Props) {
       handle={s.handle}
       scenePath={scenePath}
       aiLabel={ed.recipe.ai_label ?? null}
-      prototypeUrl={EDITOR_PROTOTYPE_URL}
     />
   );
 }
