@@ -308,12 +308,12 @@ add({
         if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the private box must not send its text anywhere itself`);
         continue;
       }
-      if (file.endsWith('components/fork-text-field.tsx')) {
-        // The live shot editor (2026-10-17): the prompt and a line, kept in the browser and saved only into the
-        // visitor's own fork.json; never sent or published by the site.
-        for (const [what, re] of [['kept on this device', /Kept on this device/], ['only in the fork file', /only in your fork file/], ['never sent or published', /Never sent or published by this site/], ['described to screen readers', /aria-describedby/]] as const)
-          if (!re.test(text)) problems.push(`${file}: the fork box must say it is ${what}`);
-        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the fork box must not send its text anywhere itself`);
+      if (file.endsWith('components/local-text-field.tsx')) {
+        // The live shot editor (2026-10-17): the prompt and a line, kept in this browser only (the fork file
+        // was removed, owner 2026-10-18); never saved, sent or published by the site.
+        for (const [what, re] of [['kept in this browser only', /Kept in this browser only/], ['never saved, sent or published', /Never saved, sent or published by this site/], ['described to screen readers', /aria-describedby/]] as const)
+          if (!re.test(text)) problems.push(`${file}: the editor's box must say it is ${what}`);
+        if (/fetch\(|supabase|\/api\//.test(text)) problems.push(`${file}: the editor's box must not send its text anywhere itself`);
         continue;
       }
       if (file.endsWith('components/search-field.tsx')) {

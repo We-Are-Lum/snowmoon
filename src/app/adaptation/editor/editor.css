@@ -1,7 +1,7 @@
 /* The live shot editor (/@<fname>/<id>/shot/<shot>). From the editor prototype's boards 2 and 3, in the
    site's own tokens and floors: Crimson Pro and DM Mono only, text 12px at least, tap targets 44px.
-   Desktop: the 3D set and its controls on the left, the live layout, the frames, the layers and
-   MAKE MY FORK on the right. Phone: the same, stacked; the 3D set takes touch drags. */
+   Desktop: the 3D set and its controls on the left, the live layout, the frames and the layers on
+   the right. Phone: the same, stacked; the 3D set takes touch drags. */
 
 .ed { max-width: 1280px; margin: 0 auto; padding: var(--space-4) var(--gutter) 64px; display: flex; flex-direction: column; gap: 18px; }
 .ed .label { text-transform: uppercase; }
@@ -82,8 +82,6 @@
 .ed-chain ul { margin: 4px 0 0; padding-left: 18px; font-size: 14px; }
 .ed-hash { font-size: 14px; }
 
-.ed-fork { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; padding-top: 12px; border-top: 2px solid var(--ink); }
-.ed-fork .ed-help { flex: 1 1 100%; }
 
 @media (max-width: 899px) {
   .ed-grid { grid-template-columns: minmax(0, 1fr); }

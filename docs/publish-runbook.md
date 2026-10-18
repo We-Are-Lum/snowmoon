@@ -139,7 +139,9 @@ terminal with a privileged key."
 ## (e2) Editor live
 
 Merge editor-live. That adds the live shot editor at `/@<name>/<id>/shot/<shot>`, the scene page's
-shot links, FORK pointing at the editor, and the narrower function tracing.
+shot links, REMIX pointing at the editor (Fork renamed Remix, the fork file removed, the recipe on the site;
+owner, 2026-10-18), and the narrower function tracing. Generate stays disabled ("Remixing opens this week."): Remix
+lands later as its own merge, after the owner's Terms and Privacy reread.
 
     cd $MAIN
     git fetch origin && git merge --no-ff origin/editor-live
@@ -153,6 +155,11 @@ that it ran:
 
     curl -s https://snowmoon.party/editor/1/v1/data.json | head -c 120     # {"about":"Made by scripts/editor-data.mjs …
 
+## (e3) Terms and Privacy
+
+Only after the owner's reread: the baseline, account and wallet lines the owner approved for this publish (the
+list is in the viewer, "Tomorrow's publish"). The texts describe only what the site does that day.
+
 ## (f) Check that it all loads
 
     curl -s -o /dev/null -w '%{http_code}\n' https://snowmoon.party/@naaate/1                    # 200
@@ -164,16 +171,19 @@ that it ran:
     curl -s -o /dev/null -w '%{http_code}\n' https://snowmoon.party/editor/1/v1/voice/b4-1.wav   # 200
     curl -s -o /dev/null -w '%{http_code}\n' https://github.com/We-Are-Lum/snowmoon/tree/main/adaptations/fifteen-days   # 200
 
-Then open `/@naaate/1` on a phone and press play, open FORK, drag the set, and save a fork. Then run
+Then open `/@naaate/1` on a phone and press play, open REMIX, drag the set, and open the RECIPE tab from the
+scene page's Recipe link. Then run
 `npm run check:principles` from `$MAIN`; all 47 checks should run there.
 
 ## (g) Post
 
 The drafts are in `docs/drafts/friday-post.md` on branch `friday-drafts-scene`.
 
-The cast is 299 characters. Its two embeds:
+The cast is 261 characters. Its two embeds:
 - `https://snowmoon.party/@naaate/1`;
 - `https://snowmoon.party/@naaate/1/shot/first`, the live editor.
+
+The cast has no GitHub link (owner, 2026-10-18); the bounty post keeps one "Source (GPL-3.0)" link.
 
 The prototype is in the text as "Where it's going". The bounty post is beside it. Both are drafts
 for the owner's OK.
