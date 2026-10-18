@@ -1,0 +1,42 @@
+/* A remix frame's page (/remix/<id>) and the editor's Remix panel: the site's tokens and floors (text at
+   least 12px, tap targets 44px), as the shot editor's own CSS. */
+.rx { max-width: 960px; margin: 0 auto; padding: var(--space-4) var(--gutter) 64px; display: flex; flex-direction: column; gap: 16px; }
+.rx .label { text-transform: uppercase; }
+.rx-kicker { color: var(--muted); }
+.rx-title { margin: 0; font-weight: 400; font-size: var(--text-h1); line-height: 1.1; }
+.rx-fig { margin: 0; display: flex; flex-direction: column; gap: 6px; }
+.rx-fig img { display: block; width: 100%; height: auto; max-width: 100%; background: var(--card); }
+.rx-fig figcaption { color: var(--muted); }
+.rx-words blockquote { margin: 4px 0 0; padding-left: 12px; border-left: 3px solid var(--ink); font-size: 19px; line-height: 1.4; color: var(--ink); overflow-wrap: anywhere; }
+.rx-share { display: flex; flex-direction: column; gap: 8px; padding: 12px; border: 1px solid var(--rule); border-radius: var(--radius); min-width: 0; }
+.rx-link { font-family: var(--label); font-size: 13px; overflow-wrap: anywhere; color: var(--body); }
+.rx-row { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.rx-btn {
+  min-height: var(--tap); padding: 0 14px; border-radius: var(--radius); cursor: pointer;
+  border: 1px solid var(--faint); background: var(--paper); color: var(--ink);
+  font-family: var(--label); font-size: var(--text-label); letter-spacing: var(--ls-label); text-transform: uppercase;
+}
+.rx-btn-solid { background: var(--btn); color: var(--btn-ink); border-color: var(--btn); }
+.rx-btn:disabled { opacity: 0.55; cursor: default; }
+.rx-btn:focus-visible { outline: 2px solid var(--link); outline-offset: 2px; }
+.rx-note { margin: 0; font-size: 14px; color: var(--body); }
+.rx a { color: var(--link); }
+.rx-recipe { border: 1px solid var(--rule); border-radius: var(--radius); padding: 12px; background: var(--card); display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+.rx-recipe summary { cursor: pointer; min-height: var(--tap); display: flex; align-items: center; }
+.rx-recipe dl { margin: 0; display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 6px 12px; }
+.rx-recipe dd { margin: 0; overflow-wrap: anywhere; }
+.rx-recipe code { font-family: var(--label); font-size: 12px; overflow-wrap: anywhere; }
+.rx-pics { margin: 0; padding-left: 0; list-style: none; display: flex; flex-direction: column; gap: 6px; font-size: 14px; overflow-wrap: anywhere; }
+.rx-prompt { margin: 0; font-size: 14px; line-height: 1.45; white-space: pre-wrap; overflow-wrap: anywhere; color: var(--body); }
+@media (max-width: 519px) { .rx-recipe dl { grid-template-columns: minmax(0, 1fr); } }
+
+/* The shot editor's Remix panel. */
+.ed-remix { display: flex; flex-direction: column; gap: 12px; padding: 14px; border: 2px solid var(--ink); border-radius: var(--radius); min-width: 0; }
+.ed-remix-head { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 6px; }
+.ed-remix textarea { min-height: 88px; }
+.ed-remix-count { color: var(--muted); }
+.ed-mine { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 12px; }
+.ed-mine figure { margin: 0; display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.ed-mine img { display: block; width: 100%; height: auto; background: var(--card); }
+.ed-mine figcaption { font-size: 14px; color: var(--body); overflow-wrap: anywhere; }
+.ed-mine .is-hidden { opacity: 0.5; }

@@ -4,14 +4,16 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import type { SetStage, ShotCamera, PersonSpec } from './set3d';
 import { LocalTextField } from '~/components/local-text-field';
+import { RemixPanel } from './remix-panel';
 
 /**
  * The live shot editor (owner, 2026-10-17: "Ship a live editor on the site by Sunday"; boards 1-3 of
  * the editor prototype). Read and play only: it reads a version's committed files (made into
  * public/editor/<id>/v<n>/ by scripts/editor-data.mjs), moves the camera and the people in the 3D
  * set, plays the converted lines, and lets the visitor edit the prompt and the line in this browser
- * only. Nothing is uploaded, stored or charged. Named Remix (owner, 2026-10-18): Generate opens with Remix,
- * as its own merge; until then it is shown, disabled, as "Remixing opens this week." The recipe is on the
+ * only, until Remix: Generate (remix-panel.tsx) makes a frame from the camera the person set and saves it
+ * to their remix of the shot; where Remix isn't set up (no keys or database, as on a preview) it is shown,
+ * disabled, as "Remixing opens this week." Named Remix (owner, 2026-10-18). The recipe is on the
  * site (the RECIPE tab, also opened by #recipe); the repository is only the footer's Source link.
  */
 
@@ -246,7 +248,7 @@ function Editor({
   return (
     <div className="ed">
       <p className="ed-banner label">
-        Live editor · read and play: nothing here generates, uploads or charges · Generate and publish come next ·{' '}
+        Live editor · move the camera and the people, play the lines · Remix makes an AI frame from your camera, saved to your remix ·{' '}
         <a href={prototypeUrl}>where it&rsquo;s going</a>
       </p>
 
@@ -405,14 +407,15 @@ function Editor({
             </a>
           </p>
 
-          <div className="ed-generate">
-            <button type="button" className="ed-btn ed-btn-off" aria-disabled="true" aria-describedby="ed-gen-note" onClick={(e) => e.preventDefault()}>
-              Generate
-            </button>
-            <p id="ed-gen-note" className="ed-help">
-              Remixing opens this week.
-            </p>
-          </div>
+          <RemixPanel
+            adaptation={data.adaptation}
+            version={data.version}
+            shotId={shot.id}
+            shotN={shot.n}
+            title={data.title}
+            depth={(w, h) => stageRef.current?.layoutPictures(w, h).depth ?? null}
+            camera={cam}
+          />
 
           <div className="ed-tabs" id="ed-tabs">
             <div role="tablist" aria-label="Layers" className="ed-tablist">
