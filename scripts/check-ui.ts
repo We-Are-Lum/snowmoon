@@ -50,6 +50,10 @@
  *   checkout's production build a second time (.next, so build first) on a free port against an
  *   in-memory database with two published readers' images (scripts/fixtures/reader-images-db.ts);
  *   sign-in, the composer's status and the queue are mocked in the browser.
+ * - The account at the foot of the rail and the menu sheet (owner, 2026-10-18): signed out it offers "Sign in with
+ *   Farcaster", then "Sign in with a wallet" (the editor's button, with its note); a wallet session (planted in
+ *   storage, nothing signed) shows its shortened address and a Sign out that ends it; a Farcaster session shows
+ *   the Farcaster name and no wallet option.
  * - The footer line (owner's legal starter, 2026-10-09) reads exactly as written, with Terms, Privacy
  *   and Source linked, at the foot of About, in the menu sheet and at the bottom of the rail; not on a
  *   phone's reading screen. /terms and /privacy meet the floors.
@@ -257,6 +261,32 @@ async function checkAssistant(page: Page, scheme: string) {
 }
 
 const LEGAL_LINE = 'Snowmoon Party · operated by Lum LLC · independent, not affiliated with the author · book and adaptations GPL v3 · Terms · Privacy · Source';
+const WALLET_ADDRESS = '0x1234567890abcdef1234567890abcdef12345678';
+/** A wallet session in storage, as saveWalletSession keeps it (src/lib/client-auth.ts); never sent anywhere here. */
+const plantWallet = (address: string) => {
+  const body = btoa(JSON.stringify({ sub: 'w', exp: 4102444800 })).replace(/=+$/, '');
+  localStorage.setItem('snowmoon.wallet', JSON.stringify({ token: `x.${body}.y`, address, short: `${address.slice(0, 6)}…${address.slice(-4)}`, exp: 4102444800 }));
+};
+/** The account inside `within` (src/components/app-shell.tsx Account): signed out, Farcaster then a wallet, both shown. */
+async function checkAccountSignedOut(page: Page, within: string, where: string) {
+  const acct = page.locator(`${within} .account`);
+  await acct.locator('button', { hasText: 'Sign in with a wallet' }).waitFor({ timeout: 10000 }).catch(() => {});
+  const names = await acct.locator('button').evaluateAll((els) => els.filter((e) => (e as HTMLElement).offsetParent !== null).map((e) => e.textContent?.trim()));
+  if (names.join(' | ') !== 'Sign in with Farcaster | Sign in with a wallet') fail(`${where}: signed out, the account offers "${names.join(' | ')}" (want Farcaster, then a wallet)`);
+  if (!(await acct.locator('.wallet-sign-in .ic-note').isVisible())) fail(`${where}: the wallet sign-in's note is not shown`);
+}
+/** With a wallet session: the shortened address and a Sign out that ends it (back to both options). */
+async function checkAccountWallet(page: Page, within: string, where: string) {
+  const acct = page.locator(`${within} .account`);
+  const short = `${WALLET_ADDRESS.slice(0, 6)}…${WALLET_ADDRESS.slice(-4)}`;
+  await acct.locator('.account-name', { hasText: short }).waitFor({ timeout: 10000 }).catch(() => fail(`${where}: a wallet session does not show ${short}`));
+  if (await acct.locator('button', { hasText: /Sign in/ }).count()) fail(`${where}: a wallet session still offers sign-in`);
+  await acct.locator('button', { hasText: 'Sign out' }).click();
+  const left = await page.evaluate(() => localStorage.getItem('snowmoon.wallet'));
+  if (left) fail(`${where}: Sign out leaves the wallet session in storage`);
+  await checkAccountSignedOut(page, within, `${where} (after Sign out)`);
+}
+
 /** The footer line inside `within`: the starter's words exactly, shown, with its three links. */
 async function checkLegalLine(page: Page, within: string, where: string, scheme: string) {
   const line = page.locator(`${within} .legal-line`).first();
@@ -1376,6 +1406,12 @@ try {
         // Signed out: the assistant panel is there, with what it does and a sign-in button.
         await page.waitForSelector('.panel .as-signed-out button');
         await shot(page, `desktop-${width}-chapter`, scheme);
+        await checkAccountSignedOut(page, '.rail', `@${width} rail`);
+        await shot(page, `desktop-${width}-account-signed-out`, scheme);
+        await page.evaluate(plantWallet, WALLET_ADDRESS);
+        await open(page, '/chapter/1');
+        await shot(page, `desktop-${width}-account-wallet`, scheme);
+        await checkAccountWallet(page, '.rail', `@${width} rail`);
         // Listen view.
         await open(page, '/chapter/1?view=listen');
         await page.waitForSelector('.listen-pane .listen-progress');
@@ -1397,6 +1433,7 @@ try {
         await open(page, '/chapter/1');
         await page.waitForSelector('.panel .as-start');
         await checkFloors(page, `/chapter/1 @${width} (signed in)`, scheme);
+        if ((await page.locator('.rail .account-name').textContent()) !== '@check' || (await page.locator('.rail .account button', { hasText: 'wallet' }).count())) fail(`@${width}: signed in with Farcaster, the rail does not show @check alone`);
         await shot(page, `desktop-${width}-signed-in`, scheme);
         await page.unroute('**/api/chat/status');
       }
@@ -1414,7 +1451,19 @@ try {
     await page.waitForSelector('.menu-sheet');
     await checkFloors(page, '/chapter/1 @390 (menu)', scheme);
     await checkLegalLine(page, '.menu-sheet', '@390 menu', scheme);
+    await checkAccountSignedOut(page, '.menu-sheet', '@390 menu');
+    await page.locator('.menu-sheet .account').scrollIntoViewIfNeeded();
     await shot(page, 'phone-390-menu', scheme);
+    await page.keyboard.press('Escape');
+    // A wallet session in the menu, then Sign out (nothing signed: the session is planted in storage).
+    await page.evaluate(plantWallet, WALLET_ADDRESS);
+    await open(page, '/chapter/1');
+    await page.click('.topbar-icon[aria-label="Menu"]');
+    await page.waitForSelector('.menu-sheet');
+    await page.locator('.menu-sheet .account').scrollIntoViewIfNeeded();
+    await checkFloors(page, '/chapter/1 @390 (menu, wallet)', scheme);
+    await shot(page, 'phone-390-menu-wallet', scheme);
+    await checkAccountWallet(page, '.menu-sheet', '@390 menu');
     await page.keyboard.press('Escape');
     if (await page.locator('.menu-sheet').count()) fail('@390: Escape does not close the menu');
     // A link to another site opens in a new tab and leaves this one where it was (owner, 2026-10-08).
