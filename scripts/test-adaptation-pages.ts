@@ -32,6 +32,7 @@ import { createServer as createHttp } from 'node:http';
 import { createServer as createNet } from 'node:net';
 import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
+import { failOnProtocolErrors, gatePglite } from './lib/pglite-gate';
 import { build } from 'esbuild';
 import { chromium, type Browser, type Frame, type Page } from 'playwright-core';
 
@@ -77,6 +78,8 @@ await pg.exec(`insert into studio.account_names (fname, person) values ('oldie',
 await pg.exec('set role studio_writer');
 
 const dbPort = await freePort();
+// The site and this test share PGlite's one session: direct queries wait for the site's Sync (scripts/lib/pglite-gate.ts).
+failOnProtocolErrors(gatePglite(pg), 'test:adaptation-pages');
 const dbServer = new PGLiteSocketServer({ db: pg, port: dbPort, host: '127.0.0.1' });
 await dbServer.start();
 

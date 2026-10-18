@@ -34,6 +34,7 @@ import { spawn } from 'node:child_process';
 import { createServer as createNet } from 'node:net';
 import { PGlite } from '@electric-sql/pglite';
 import { PGLiteSocketServer } from '@electric-sql/pglite-socket';
+import { gatePglite } from './lib/pglite-gate';
 import postgres from 'postgres';
 import { chromium, type Browser, type Page } from 'playwright-core';
 
@@ -69,6 +70,8 @@ await pg.query(`insert into studio.wallet_payments (tx_hash, account_id, chain_i
 await pg.query(`insert into studio.contributor_consents (fid, kind, consent_text_sha256) values ($1, 'own_words', $2)`, [-other, (await import('../src/lib/consent')).consentWording().sha256]);
 await pg.exec('set role studio_writer');
 const dbPort = await freePort();
+// The site and this test share PGlite's one session: direct queries wait for the site's Sync (scripts/lib/pglite-gate.ts).
+const pgGate = gatePglite(pg);
 const dbServer = new PGLiteSocketServer({ db: pg, port: dbPort, host: '127.0.0.1' });
 await dbServer.start();
 const DB_URL = `postgres://studio_writer@127.0.0.1:${dbPort}/postgres`;
@@ -408,6 +411,9 @@ try {
   await sql.end({ timeout: 1 }).catch(() => {});
   await dbServer.stop().catch(() => {});
 }
+// The test database's one session was never interleaved (scripts/lib/pglite-gate.ts; docs/db-interleave.md).
+check('DB', 'no Postgres protocol error (08P01) reached the site: the test\u2019s own queries never split one of the site\u2019s', pgGate.protocolErrors().length === 0, { errors: pgGate.protocolErrors(), waits: pgGate.waits() });
+console.log(`[pglite-gate] waits ${JSON.stringify(pgGate.waits())}, protocol errors ${pgGate.protocolErrors().length}`);
 console.log(`\n${results.filter((r) => r.pass).length} of ${results.length} pass; screenshots in ${OUT}`);
 if (failures.length) {
   console.log('\nFAILURES:\n- ' + failures.join('\n- '));
