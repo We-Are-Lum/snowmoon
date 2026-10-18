@@ -24,10 +24,13 @@ const POSTER_V2: RecipeView = {
   whose: 'AI-generated picture, not by the author. Fifteen Days is by @naaate.',
   // Its per-picture recipes aren't on the site yet (the editor has version 1's shots): the file is named below.
   full: null,
-  what: 'The poster of Fifteen Days, version 2 (the GPT version): the caf\u00e9 master frame.',
+  what: 'The poster of Fifteen Days, version 2 (the GPT version): three GPT Image close-ups (Zei, Bai, Deluin) side by side, with the title drawn in code.',
   model: { name: 'GPT Image 2.5 Sunburst (OpenAI), a closed model, on 2026-10-18; inputs open, model closed', licence: "proprietary: OpenAI's terms; weights not published", where: 'on the Vercel AI Gateway, a hosted service' },
   prompt: null,
-  inputs: [{ label: 'Its recipe', value: 'adaptations/fifteen-days/preprod/gpt/recipes/cov-cafe-MASTER-wave-K7-g1.recipe.json: the prompt and every picture sent, by sha256' }],
+  inputs: [
+    { label: 'Its pictures', value: 'adaptations/fifteen-days/preprod/gpt/recipes/: cov-gate-CU-Z-smile-K7-g1, cov-corridor-CU-B-sour-K9-g1 and cov-cafe-CU-D-warm-E16-g2, each with its prompt and every picture sent, by sha256' },
+    { label: 'How it was put together', value: 'adaptations/fifteen-days/versions/2.json, "poster": the crops, the title bar and its words (from the share image)' },
+  ],
   published: { by: '@naaate', when: '2026-10-18' },
 };
 const POSTERS: Record<number, RecipeView> = { 1: POSTER_V1, 2: POSTER_V2 };

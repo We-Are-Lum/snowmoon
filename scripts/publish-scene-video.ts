@@ -13,7 +13,7 @@
  *
  * Version 1 of Fifteen Days (owner, 2026-10-17: publish v5 as is; poster = the café master).
  * Version 2 of Fifteen Days (owner, 2026-10-18: "Chat gpt version is so much better. Let's go with that one";
- * the GPT cut as is, pictures by GPT Image 2.5 Sunburst (OpenAI, a closed model); poster = its café master).
+ * the GPT cut as is, pictures by GPT Image 2.5 Sunburst (OpenAI, a closed model); poster = the triptych of three GPT close-ups, owner's pick A).
  */
 import { readFile } from 'node:fs/promises';
 import { existsSync } from 'node:fs';
@@ -60,9 +60,9 @@ const VERSIONS: Record<number, PublishedVersion> = {
     // The GPT cut as committed on scenes-sound (cc9590d), faststart, and its sha256.
     mp4: 'scenes-out/fifteen-days/cuts/coverage-v6-gpt/coverage-v6-gpt.mp4',
     mp4Sha256: '58da1b6d582ec1061a823b9f3f8e8da753bb355674a180eb3418f7c4ef8f9079',
-    // The GPT café master, as a JPEG (the same bytes as scenes-out/fifteen-days/cuts/coverage-v6-gpt/poster.jpg).
+    // The triptych: three GPT close-ups side by side with the title bar drawn in code (owner's pick A, 2026-10-18).
     poster: 'adaptations/fifteen-days/versions/2-poster.jpg',
-    posterSha256: '5d38a729cda4b8814fef455056aa8fa21a4efd6fea2d3a9a85de0d6fb1c803f5',
+    posterSha256: '7c2ea36f0b07f7771fb445a4dbd7e6635d38af11fcc482ce0c5bbe50a08af95a',
     // Delivery copies, made as version 1's (adaptations/fifteen-days/versions/2.json "delivery").
     wide: 'scenes-out/fifteen-days/cuts/coverage-v6-gpt/delivery/wide.mp4',
     wideSha256: 'b64332cf553ca4164770833281519733508a19a82439157140ab04d0ce0555bc',

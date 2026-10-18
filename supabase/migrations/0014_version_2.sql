@@ -26,7 +26,7 @@ begin;
 insert into studio.adaptation_versions (id, adaptation_id, parent_version_id, author_person, recipe)
 values (2, 1, null, 6786, jsonb_build_object(
   'video_url', 'https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-58da1b6d582e.mp4',
-  'poster_url', 'https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-poster-5d38a729cda4.jpg',
+  'poster_url', 'https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-poster-7c2ea36f0b07.jpg',
   'recipe_url', 'https://github.com/We-Are-Lum/snowmoon/tree/main/adaptations/fifteen-days',
   -- DRAFT wording for the owner to approve (2026-10-18).
   'ai_label', 'Pictures: AI-generated with GPT Image (OpenAI, a closed model), not by the author · Voices: @naaate''s performances, AI-converted.',
@@ -53,7 +53,7 @@ begin
     select 1 from studio.adaptation_versions
     where id = 2 and adaptation_id = 1 and parent_version_id is null and author_person = 6786
       and recipe->>'video_url' = 'https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-58da1b6d582e.mp4'
-      and recipe->>'poster_url' = 'https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-poster-5d38a729cda4.jpg'
+      and recipe->>'poster_url' = 'https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-poster-7c2ea36f0b07.jpg'
   ) then
     raise exception 'version 2 is not the GPT cut: stopping, nothing changed';
   end if;

@@ -101,7 +101,7 @@ const STATIC = {
       author: 6786,
       recipe: {
         video_url: 'https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-58da1b6d582e.mp4',
-        poster_url: 'https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-poster-5d38a729cda4.jpg',
+        poster_url: 'https://media.snowmoon.party/scenes/fifteen-days/v2/fifteen-days-poster-7c2ea36f0b07.jpg',
         recipe_url: 'https://github.com/We-Are-Lum/snowmoon/tree/main/adaptations/fifteen-days',
         // DRAFT wording for the owner to approve (2026-10-18).
         ai_label: "Pictures: AI-generated with GPT Image (OpenAI, a closed model), not by the author · Voices: @naaate's performances, AI-converted.",

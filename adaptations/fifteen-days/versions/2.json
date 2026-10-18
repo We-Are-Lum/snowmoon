@@ -31,8 +31,8 @@
  "timeline": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/timeline.json",
  "poster": {
   "file": "adaptations/fifteen-days/versions/2-poster.jpg",
-  "sha256": "5d38a729cda4b8814fef455056aa8fa21a4efd6fea2d3a9a85de0d6fb1c803f5",
-  "what": "the GPT café master (cov-cafe-MASTER-wave-K7-g1)"
+  "sha256": "7c2ea36f0b07f7771fb445a4dbd7e6635d38af11fcc482ce0c5bbe50a08af95a",
+  "what": "the triptych (owner's pick A, 2026-10-18): the GPT close-ups cov-gate-CU-Z-smile-K7-g1, cov-corridor-CU-B-sour-K9-g1 and cov-cafe-CU-D-warm-E16-g2, each cropped to a 632×850 panel around the face, 12 px gaps, over a 230 px cream title bar: 'Fifteen Days' (Crimson Pro 600, 150 px) and 'BASED ON VITALIK / BUTERIN’S SNOWMOON' (DM Mono 26 px), the share image's words; 1920×1080 JPEG, quality 90, made with Pillow"
  },
  "editor": {
   "reads_version": 1,
