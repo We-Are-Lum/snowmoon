@@ -29,7 +29,7 @@ export function navItems(last: number, adaptations: number): NavItem[] {
       ],
     },
     { key: 'assistant', label: 'Assistant', href: '/assistant' },
-    { key: 'adaptations', label: 'Adaptations', href: '/adaptations', meta: String(adaptations) },
+    { key: 'adaptations', label: 'Adaptations', href: '/adaptations', meta: adaptations ? 'Watch · remix' : undefined },
     { key: 'minpentai', label: 'Minpentai', href: '/minpentai', meta: 'Learn · play' },
     { key: 'pictures', label: 'Pictures', href: '/images', meta: 'Trial' },
   ];
