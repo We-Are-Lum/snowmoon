@@ -47,13 +47,16 @@
   "wide": {
    "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/delivery/wide.mp4",
    "sha256": "b64332cf553ca4164770833281519733508a19a82439157140ab04d0ce0555bc",
-   "same_as_cut": "video and audio streams bit-identical (ffmpeg -f streamhash, checked by npm run publish:scene-video)"
+   "same_as_cut": "video and audio streams bit-identical (ffmpeg -f streamhash: video 8c7343e0…, audio 829cca4c…, the same audio as version 1)",
+   "made": "ffmpeg -i coverage-v6-gpt.mp4 -map 0 -c copy -movflags +frag_keyframe+empty_moov+default_base_moof+global_sidx -frag_duration 1000000 wide.mp4"
   },
   "phone": {
    "file": "scenes-out/fifteen-days/cuts/coverage-v6-gpt/delivery/phone.mp4",
    "sha256": "3f91cf56859fb3d2a680852b06bee2e8155d787ce9b32eb05d9b0db116700372",
    "what": "1280x720 H.264, the cut's audio",
-   "for": "screens up to 800px wide"
+   "for": "screens up to 800px wide",
+   "made": "ffmpeg -i coverage-v6-gpt.mp4 -map 0 -vf scale=1280:720:flags=lanczos -c:v libx264 -profile:v high -preset slow -crf 24 -maxrate 900k -bufsize 1800k -g 60 -keyint_min 30 -pix_fmt yuv420p -c:a copy, with the same fragment flags as wide (ffmpeg 9.0.1)",
+   "video_rate": "0.76 Mb/s measured from its packets (the stream header's 1.49 Mb/s is a figure fragmented files report wrongly)"
   }
  }
 }
