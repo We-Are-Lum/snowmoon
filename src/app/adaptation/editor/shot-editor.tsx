@@ -109,14 +109,12 @@ export function ShotEditor({
   handle,
   scenePath,
   aiLabel,
-  prototypeUrl,
 }: {
   dataUrl: string;
   shotId: string;
   handle: string;
   scenePath: string;
   aiLabel: string | null;
-  prototypeUrl: string;
 }) {
   const [data, setData] = useState<EditorData | null>(null);
   const [failed, setFailed] = useState(false);
@@ -163,7 +161,6 @@ export function ShotEditor({
       handle={handle}
       scenePath={scenePath}
       aiLabel={aiLabel}
-      prototypeUrl={prototypeUrl}
     />
   );
 }
@@ -176,7 +173,6 @@ function Editor({
   handle,
   scenePath,
   aiLabel,
-  prototypeUrl,
 }: {
   data: EditorData;
   shot: Shot;
@@ -185,7 +181,6 @@ function Editor({
   handle: string;
   scenePath: string;
   aiLabel: string | null;
-  prototypeUrl: string;
 }) {
   const orbitRef = useRef<HTMLCanvasElement>(null);
   const shotRef = useRef<HTMLCanvasElement>(null);
@@ -249,8 +244,7 @@ function Editor({
   return (
     <div className="ed">
       <p className="ed-banner label">
-        Live editor · move the camera and the people, play the lines · Remix makes an AI frame from your camera, saved to your remix ·{' '}
-        <a href={prototypeUrl}>where it&rsquo;s going</a>
+        Live editor · move the camera and the people, play the lines · Remix makes an AI frame from your camera, saved to your remix
       </p>
 
       <header className="ed-head">
