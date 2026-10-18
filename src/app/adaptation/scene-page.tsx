@@ -153,7 +153,25 @@ export async function ScenePage({ adaptation, version, handle, fixed }: { adapta
               Version {version.id} · {version.createdAt}
               {version.parentId !== null && ` · remixed from version ${version.parentId}`}
             </span>
-            {r.ai_label && <span>{r.ai_label}</span>}
+            {/* The AI label stays in sight, short; its full wording and the recipe open from it (owner, 2026-10-18: "too much text"). */}
+            <details className="scene-ai">
+              <summary>
+                AI-made{r.closed_model ? ' · closed model' : ''} · recipe <span className="scene-ai-icon" aria-hidden="true">i</span>
+              </summary>
+              <div className="scene-ai-body">
+                {r.ai_label && <p>{r.ai_label}</p>}
+                {r.closed_model && (
+                  // A closed model is named with its maker, the date and that it is closed (owner, 2026-10-18). DRAFT wording.
+                  <p className="scene-closed">
+                    Inputs open, model closed: {r.closed_model.made} by {r.closed_model.name} ({r.closed_model.maker}, a closed model), {r.closed_model.date}.
+                  </p>
+                )}
+                <p>
+                  {/* On the site (owner, 2026-10-18: no GitHub in the flow): every shot's recipe, in the editor. */}
+                  <Link href={`${editorPath}/shot/first#recipe`}>{otherShots ? `Version ${ed.id}\u2019s shots and recipes, in the editor` : 'Read the recipe'}</Link>
+                </p>
+              </div>
+            </details>
           </div>
         </div>
 
@@ -189,19 +207,6 @@ export async function ScenePage({ adaptation, version, handle, fixed }: { adapta
             <div>
               <dt className="label">Licence</dt>
               <dd>GPL-3.0</dd>
-            </div>
-            <div>
-              <dt className="label">Recipe</dt>
-              <dd>
-                {r.closed_model && (
-                  // A closed model is named with its maker, the date and that it is closed (owner, 2026-10-18). DRAFT wording.
-                  <span className="scene-closed">
-                    Inputs open, model closed: {r.closed_model.made} by {r.closed_model.name} ({r.closed_model.maker}, a closed model), {r.closed_model.date}.{' '}
-                  </span>
-                )}
-                {/* On the site (owner, 2026-10-18: no GitHub in the flow): every shot's recipe, in the editor. */}
-                <Link href={`${editorPath}/shot/first#recipe`}>{otherShots ? `Version ${ed.id}\u2019s shots and recipes, in the editor` : 'Read it'}</Link>
-              </dd>
             </div>
           </dl>
 
